@@ -1,0 +1,18 @@
+{
+    "version": "1.0.0",
+    "name": "react-native-art-svg",
+    "description": "react native svg library based on `ART`",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:magicismight/react-native-art-svg.git"
+    },
+    "main": "./Svg.js",
+    "keywords": [
+        "react-component",
+        "react-native",
+        "ios",
+        "android",
+        "svg",
+        "art"
+    ]
+}
