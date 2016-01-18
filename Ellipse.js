@@ -1,12 +1,14 @@
 import React, {
     Component,
-    PropTypes
+    PropTypes,
+    ART
 } from 'react-native';
-import {
+import fillFilter from './lib/fillFilter';
+
+let {
     Surface,
     Shape
-} from 'ReactNativeART';
-import fillFilter from './lib/fillFilter';
+} = ART;
 
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired;
 class Ellipse extends Component{
