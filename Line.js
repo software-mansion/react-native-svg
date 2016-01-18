@@ -1,13 +1,14 @@
 import React, {
     Component,
-    PropTypes
+    PropTypes,
+    ART
 } from 'react-native';
-import {
+
+let {
     Surface,
     Shape,
     Group
-} from 'ReactNativeART';
-
+} = ART;
 
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired;
 

@@ -1,12 +1,16 @@
+import {
+    ART
+} from 'react-native';
 import Circle from './Circle';
 import Ellipse from './Ellipse';
 import Polygon from './Polygon';
 import Polyline from './Polyline';
-import {
+
+let {
     Surface,
     Shape,
     Group
-} from 'ReactNativeART';
+} = ART;
 
 export {
     Surface as Svg,

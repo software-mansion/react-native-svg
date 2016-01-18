@@ -1,11 +1,13 @@
 import React, {
     Component,
-    PropTypes
+    PropTypes,
+    ART
 } from 'react-native';
-import {
+let {
     Surface,
     Shape
-} from 'ReactNativeART';
+} = ART;
+
 
 
 class Polyline extends Component{

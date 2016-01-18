@@ -1,12 +1,13 @@
 import React, {
     Component,
-    PropTypes
+    PropTypes,
+    ART
 } from 'react-native';
-import {
+let {
     Surface,
     Shape,
     Group
-} from 'ReactNativeART';
+} = ART;
 import fillFilter from './lib/fillFilter';
 
 class Polygon extends Component{
