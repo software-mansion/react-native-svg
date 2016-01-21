@@ -5,6 +5,7 @@ import * as Ellipse from './examples/Ellipse';
 import * as Line from './examples/Line';
 import * as Polygon from './examples/Polygon';
 import * as Polyline from './examples/Polyline';
+import * as Path from './examples/Path';
 
 export {
     Svg,
@@ -13,5 +14,6 @@ export {
     Ellipse,
     Line,
     Polygon,
-    Polyline
+    Polyline,
+    Path
 };
