@@ -3,12 +3,9 @@ import React, {
     PropTypes,
     ART
 } from 'react-native';
-let {
-    Surface,
-    Shape,
-    Group
-} = ART;
-import fillFilter from './lib/fillFilter';
+import fillFilter from '../lib/fillFilter';
+import strokeFilter from '../lib/strokeFilter';
+import Path from './Path';
 
 class Polygon extends Component{
     static displayName = 'Polygon';
@@ -18,9 +15,8 @@ class Polygon extends Component{
     render() {
         let props = this.props;
         let d = 'M' + props.points.trim().replace(/\s+/g, 'L') + 'z';
-        return <Shape
+        return <Path
             {...props}
-            fill={fillFilter(props)}
             points={null}
             d={d}
         />;
