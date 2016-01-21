@@ -36,6 +36,7 @@ class StrokeCircle extends Component{
                 r="45"
                 stroke="purple"
                 strokeWidth="2.5"
+                fill={null}
             />
         </Svg>;
     }
