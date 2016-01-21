@@ -3,16 +3,16 @@ import React, {
     PropTypes,
     ART
 } from 'react-native';
-import fillFilter from './lib/fillFilter';
+import fillFilter from '../lib/fillFilter';
+import strokeFilter from '../lib/strokeFilter';
 
 let {
-    Surface,
     Shape
 } = ART;
 
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired;
 class Ellipse extends Component{
-    static displayName = 'Polygon';
+    static displayName = 'Ellipse';
     static propTypes = {
         cx: propType,
         cy: propType,
@@ -20,6 +20,7 @@ class Ellipse extends Component{
         ry: propType
     };
     render() {
+        let {props} = this;
         let {cx, cy, rx, ry} = this.props;
         let d = `
             M ${cx - rx} ${cy}
@@ -28,8 +29,11 @@ class Ellipse extends Component{
             Z
         `;
         return <Shape
-            {...this.props}
-            fill={fillFilter(this.props)}
+            {...props}
+            fill={fillFilter(props)}
+            stroke={strokeFilter(props)}
+            strokeCap={null}
+            strokeJoin={null}
             cx={null}
             cy={null}
             rx={null}
