@@ -9,7 +9,7 @@ let {
 } = ART;
 
 import strokeFilter from '../lib/strokeFilter';
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired;
+let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 class Line extends Component{
     static displayName = 'Line';
     static propTypes = {

@@ -8,7 +8,7 @@ import fillFilter from '../lib/fillFilter';
 import strokeFilter from '../lib/strokeFilter';
 import Path from './Path';
 
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired;
+let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 
 function processRadius(radius) {
     radius = +radius;

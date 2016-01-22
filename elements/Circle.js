@@ -4,7 +4,7 @@ import React, {
 } from 'react-native';
 import Ellipse from './Ellipse';
 
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired;
+let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 class Circle extends Component{
     static displayName = 'Circle';
     static propTypes = {

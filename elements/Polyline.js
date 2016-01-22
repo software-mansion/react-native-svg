@@ -11,7 +11,7 @@ import fillFilter from '../lib/fillFilter';
 class Polyline extends Component{
     static displayName = 'Polyline';
     static propTypes = {
-        points: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+        points: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         strokeLinecap: PropTypes.oneOf(['butt', 'square', 'round']),
         strokeCap: PropTypes.oneOf(['butt', 'square', 'round']),
         strokeLinejoin: PropTypes.oneOf(['miter', 'bevel', 'round']),
