@@ -42,7 +42,7 @@ class FourSidePolygon extends Component{
     }
 }
 
-class StrarPolygon extends Component{
+class StarPolygon extends Component{
     static title = 'Use the <Polygon /> element to create a star';
     render() {
         return <Svg
@@ -55,6 +55,26 @@ class StrarPolygon extends Component{
                     fill="lime"
                     stroke="purple"
                     strokeWidth="5"
+                />
+            </Group>
+        </Svg>;
+    }
+}
+
+class EvenOddPolygon extends Component{
+    static title = 'Change the fill-rule property to "evenodd"';
+    render() {
+        return <Svg
+            height="105"
+            width="105"
+        >
+            <Group scale="0.5">
+                <Polygon
+                    points="100,10 40,198 190,78 10,78 160,198"
+                    fill="lime"
+                    stroke="purple"
+                    strokeWidth="5"
+                    fillRule="evenodd"
                 />
             </Group>
         </Svg>;
@@ -75,7 +95,7 @@ const icon = <Svg
     </Group>
 </Svg>;
 
-const samples = [PolygonExample, FourSidePolygon, StrarPolygon];
+const samples = [PolygonExample, FourSidePolygon, StarPolygon, EvenOddPolygon];
 
 export {
     icon,

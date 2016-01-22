@@ -10,7 +10,7 @@ let {
     Shape
 } = ART;
 
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired;
+let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 class Ellipse extends Component{
     static displayName = 'Ellipse';
     static propTypes = {

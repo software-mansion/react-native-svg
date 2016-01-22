@@ -17,16 +17,14 @@ import React, {
     Easing
 } from 'react-native';
 
-import * as elements from 'react-native-art-svg';
-import * as examples from './examples';
-import _ from 'lodash';
-import Modal from 'react-native-root-modal';
-
-let {
+import {
     Svg,
     Circle,
     Line
-} = elements;
+} from 'react-native-art-svg';
+import * as examples from './examples';
+import _ from 'lodash';
+import Modal from 'react-native-root-modal';
 
 const hairline = 1 / PixelRatio.get();
 
@@ -108,7 +106,8 @@ const styles = StyleSheet.create({
     }
 });
 
-const names = _.filter(_.map(elements, (ele, key) => key), (name) => name !== 'default');
+
+const names = ['Svg', 'Circle', 'Ellipse', 'G', 'Path', 'Polygon', 'Polyline', 'Line', 'Rect'];
 
 class ArtSvgExample extends Component {
     constructor() {

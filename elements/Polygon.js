@@ -10,7 +10,7 @@ import Path from './Path';
 class Polygon extends Component{
     static displayName = 'Polygon';
     static propTypes = {
-        points: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+        points: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     };
     render() {
         let props = this.props;
