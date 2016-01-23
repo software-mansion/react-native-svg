@@ -9,6 +9,7 @@ import * as Path from './examples/Path';
 import * as Text from './examples/Text';
 import * as G from './examples/G';
 import * as Stroking from './examples/Stroking';
+import * as Use from './examples/Use';
 
 export {
     Svg,
@@ -21,5 +22,6 @@ export {
     Path,
     Text,
     Stroking,
-    G
+    G,
+    Use
 };

@@ -6,6 +6,7 @@ import React, {
 
 import fillFilter from '../lib/fillFilter';
 import strokeFilter from '../lib/strokeFilter';
+import transformFilter from '../lib/transformFilter';
 import Path from './Path';
 
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
@@ -82,17 +83,17 @@ class Rect extends Component{
              h ${-width}
              Z
         `;
-
         return <Path
             {...props}
-            x={rx ? +rx:  null}
-            y={null}
             rx={null}
             ry={null}
             width={null}
             height={null}
             {...strokeFilter(props)}
             fill={fillFilter(props)}
+            {...transformFilter(props)}
+            x={null}
+            y={null}
             d={d}
         />;
     }

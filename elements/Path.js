@@ -1,12 +1,14 @@
 import React, {
     ART,
     Component,
-    PropTypes
+    PropTypes,
+    cloneElement
 } from 'react-native';
 
 let {
     Shape
 } = ART;
+import Defs from './Defs';
 
 import fillFilter from '../lib/fillFilter';
 import strokeFilter from '../lib/strokeFilter';
@@ -25,12 +27,16 @@ class Path extends Component{
     };
     render() {
         let {props} = this;
-
-        return <Shape
+        let element = <Shape
             {...props}
             {...strokeFilter(props)}
             fill={fillFilter(props)}
+            id={null}
         />;
+        if (this.props.id) {
+            Defs.set(this.props.id + ':' + this.props.svgId, <Path {...this.props} id={null} />);
+        }
+        return element;
     }
 }
 
