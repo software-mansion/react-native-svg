@@ -83,15 +83,15 @@ class BezierCurve extends Component{
                 </G>
                 <G
                     fontSize="30"
-                    fontFamily="sans-serif"
                     fill="black"
                     stroke="none"
                     textAnchor="middle"
                 >
                     <Text x="100" y="350" dx="-30">A</Text>
-                    <Text x="250" y="50" dy="-10">B</Text>
-                    <Text x="400" y="350" dx="30">C</Text>
+                    <Text x="250" y="50" dy="-50">B</Text>
+                    <Text x="400" y="350" dx="10">C</Text>
                 </G>
+
             </G>
         </Svg>;
     }

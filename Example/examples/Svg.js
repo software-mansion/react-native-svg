@@ -35,6 +35,35 @@ class SvgExample extends Component{
     }
 }
 
+class SvgViewbox extends Component{
+    static title = 'SVG with `viewbox` prop';
+    render() {
+        return <Svg
+            height="100"
+            width="100"
+            viewbox="30 30 70 70"
+        >
+            <Circle
+                cx="50"
+                cy="50"
+                r="45"
+                stroke="blue"
+                strokeWidth="2.5"
+                fill="green"
+            />
+            <Rect
+                x="15"
+                y="15"
+                width="70"
+                height="70"
+                stroke="red"
+                strokeWidth="2"
+                fill="yellow"
+            />
+        </Svg>;
+    }
+}
+
 class SvgOpacity extends Component{
     static title = 'SVG with `opacity` prop';
     render() {

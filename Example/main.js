@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
 });
 
 
-const names = ['Svg', 'Circle', 'Ellipse', 'G', 'Path', 'Polygon', 'Polyline', 'Line', 'Rect'];
+const names = ['Svg', 'Circle', 'Ellipse', 'G', 'Text', 'Path', 'Polygon', 'Polyline', 'Line', 'Rect'];
 
 class ArtSvgExample extends Component {
     constructor() {
@@ -157,7 +157,7 @@ class ArtSvgExample extends Component {
         Animated.timing(this.state.scale, {
             toValue: 0,
             easing: Easing.in(Easing.back(2))
-        }).start(() => this.setState({
+        }).start(({finished}) => finished && this.setState({
             modal: false,
             content: null
         }));
