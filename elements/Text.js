@@ -10,6 +10,7 @@ let {
 
 import fillFilter from '../lib/fillFilter';
 import strokeFilter from '../lib/strokeFilter';
+import transformFilter from '../lib/transformFilter';
 
 const fontFamily = '"Helvetica Neue", "Helvetica", Arial';
 class Text extends Component{
@@ -32,28 +33,18 @@ class Text extends Component{
             y = props.dy ? +props.y + (+props.dy) : +props.y;
         }
 
-        let coords = props.origin ? props.origin.split(',') : [];
-
-        let originX = coords.length === 2 ? coords[0] : props.originX;
-        let originY = coords.length === 2 ? coords[1] :props.originY;
-
         return  <ARTText
             {...props}
+            {...transformFilter(props)}
+            {...strokeFilter(props)}
+            fill={fillFilter(props)}
             font={{
                 fontSize: props.fontSize || 12,
                 fontFamily: props.fontFamily || fontFamily,
                 fontWeight: props.fontWeight,
                 fontStyle: props.fontStyle
             }}
-            rotation={props.rotation || props.rotate || 0}
-            scale={props.scale || 1}
-            originX={originX}
-            originY={originY}
-            strokeCap={props.strokeLinecap || props.strokeCap || 'square'}
-            strokeJoin={props.strokeLinejoin || props.strokeJoin || 'miter'}
             alignment={props.textAnchor || props.alignment}
-            fill={fillFilter(props)}
-            stroke={strokeFilter(props)}
             x={x}
             y={y}
         />;

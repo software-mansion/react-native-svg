@@ -3,7 +3,7 @@ import React, {
     PropTypes
 } from 'react-native';
 import Ellipse from './Ellipse';
-
+import strokeFilter from '../lib/strokeFilter';
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 class Circle extends Component{
     static displayName = 'Circle';
@@ -12,9 +12,15 @@ class Circle extends Component{
         cy: propType,
         r: propType
     };
+    static defaultProps = {
+        cx: 0,
+        ct: 0
+    };
+
     render() {
         return <Ellipse
             {...this.props}
+            {...strokeFilter(this.props)}
             r={null}
             rx={this.props.r}
             ry={this.props.r}

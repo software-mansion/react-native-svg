@@ -8,7 +8,7 @@ import _ from 'lodash';
 let {
     Surface,
     Group
-    } = ART;
+} = ART;
 
 function extractViewbox({viewbox, width, height, preserveAspectRatio}) {
     if (!viewbox || !width || !height) {
@@ -77,6 +77,8 @@ class Svg extends Component{
         opacity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         viewbox: PropTypes.string,
         // TODO: complete other values of preserveAspectRatio
+        // http://www.justinmccandless.com/demos/viewbox/index.html
+        // http://tutorials.jenkov.com/svg/svg-viewport-view-box.html
         preserveAspectRatio: PropTypes.string // preserveAspectRatio only supports 'none' for now
     };
 
@@ -96,14 +98,14 @@ class Svg extends Component{
             ]}
             >
                 {(!scaleX || !scaleY) ? null :
-                    <Group
-                        x={viewbox.x}
-                        y={viewbox.y}
-                        scaleX={scaleX}
-                        scaleY={scaleY}
-                    >
-                        {this.props.children}
-                    </Group>}
+                <Group
+                    x={viewbox.x}
+                    y={viewbox.y}
+                    scaleX={scaleX}
+                    scaleY={scaleY}
+                >
+                    {this.props.children}
+                </Group>}
             </Surface>;
         }
 

@@ -17,6 +17,8 @@ class Polygon extends Component{
         let d = 'M' + props.points.trim().replace(/\s+/g, 'L') + 'z';
         return <Path
             {...props}
+            {...strokeFilter(props)}
+            fill={fillFilter(props)}
             points={null}
             d={d}
         />;
