@@ -1,7 +1,9 @@
 import React, {
     ART,
     Component,
-    PropTypes
+    PropTypes,
+    Children,
+    cloneElement
 } from 'react-native';
 
 import _ from 'lodash';
@@ -71,6 +73,8 @@ function extractViewbox({viewbox, width, height, preserveAspectRatio}) {
     return false;
 }
 
+let id = 0;
+
 class Svg extends Component{
     static displayName = 'Svg';
     static propType = {
@@ -80,6 +84,20 @@ class Svg extends Component{
         // http://www.justinmccandless.com/demos/viewbox/index.html
         // http://tutorials.jenkov.com/svg/svg-viewport-view-box.html
         preserveAspectRatio: PropTypes.string // preserveAspectRatio only supports 'none' for now
+    };
+
+    constructor() {
+        super(...arguments);
+        id++;
+        this.id = id;
+    }
+
+    getChildren = () => {
+        return Children.map(this.props.children, child => {
+            return cloneElement(child, {
+                svgId: this.id
+            });
+        });
     };
 
     render() {
@@ -104,7 +122,7 @@ class Svg extends Component{
                     scaleX={scaleX}
                     scaleY={scaleY}
                 >
-                    {this.props.children}
+                    {this.getChildren()}
                 </Group>}
             </Surface>;
         }
@@ -118,7 +136,7 @@ class Svg extends Component{
                 }
             ]}
         >
-            {this.props.children}
+            {this.getChildren()}
         </Surface>;
     }
 }

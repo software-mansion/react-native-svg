@@ -7,6 +7,7 @@ import React, {
 let {
     Text:ARTText
 } = ART;
+import Defs from './Defs';
 
 import fillFilter from '../lib/fillFilter';
 import strokeFilter from '../lib/strokeFilter';
@@ -33,7 +34,7 @@ class Text extends Component{
             y = props.dy ? +props.y + (+props.dy) : +props.y;
         }
 
-        return  <ARTText
+        let element = <ARTText
             {...props}
             {...transformFilter(props)}
             {...strokeFilter(props)}
@@ -47,7 +48,12 @@ class Text extends Component{
             alignment={props.textAnchor || props.alignment}
             x={x}
             y={y}
+            id={null}
         />;
+        if (this.props.id) {
+            Defs.set(this.props.id + ':' + this.props.svgId, <Text {...this.props} id={null} />);
+        }
+        return element;
     }
 }
 

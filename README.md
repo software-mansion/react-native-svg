@@ -1,6 +1,7 @@
 ### react-native-art-svg
 
 
+
 TODO:
 1. fill-rule:evenodd
 2. gradients
@@ -9,20 +10,14 @@ TODO:
 
 elements:
 1.defs
-
 2.tref !
 3.tspan !
-
 4.clipPath (wait for official todo)
-
-6.glyph ? missing-glyph?
-
-7.linearGradient
-
+5.glyph ? missing-glyph?
+6.linearGradient
+7.radialGradient
 8.marker?
 9.pattern
-10.radialGradient
+10.textPath
 11.stop
 12.symbol
-13.use
-14.textPath

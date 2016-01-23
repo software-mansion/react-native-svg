@@ -22,8 +22,8 @@ class Circle extends Component{
             {...this.props}
             {...strokeFilter(this.props)}
             r={null}
-            rx={this.props.r}
-            ry={this.props.r}
+            rx={+this.props.r}
+            ry={+this.props.r}
         />
     }
 }

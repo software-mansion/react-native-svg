@@ -9,6 +9,8 @@ let {
     Group
 } = ART;
 
+import Defs from './Defs';
+
 const transformProps = {
     scale: null,
     scaleX: null,
@@ -29,19 +31,23 @@ class G extends Component{
     constructor() {
         super(...arguments);
         this.children = Children.map(this.props.children, child => cloneElement(child, {
-            id: null,
             ...this.props,
             ...transformProps,
-            children: child.children,
-            ...child.props
+            ...child.props,
+            id: null
         }));
     };
 
     render() {
-        return <Group
+        let element = <Group
             {...this.props}
             {...transformFilter(this.props)}
+            id={null}
         >{this.children}</Group>;
+        if (this.props.id) {
+            Defs.set(this.props.id + ':' + this.props.svgId, <G {...this.props} id={null} />);
+        }
+        return element;
     }
 }
 
