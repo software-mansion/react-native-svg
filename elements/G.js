@@ -21,6 +21,8 @@ const transformProps = {
     originY: null
 };
 
+import transformFilter from '../lib/transformFilter';
+
 class G extends Component{
     static displayName = 'G';
 
@@ -38,6 +40,7 @@ class G extends Component{
     render() {
         return <Group
             {...this.props}
+            {...transformFilter(this.props)}
         >{this.children}</Group>;
     }
 }
