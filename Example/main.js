@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
 });
 
 
-const names = ['Svg', 'Circle', 'Ellipse', 'G', 'Text', 'Path', 'Polygon', 'Polyline', 'Line', 'Rect'];
+const names = ['Svg', 'Stroking', 'Path', 'Line', 'Rect', 'Polygon', 'Polyline', 'Circle', 'Ellipse', 'G', 'Text'];
 
 class ArtSvgExample extends Component {
     constructor() {

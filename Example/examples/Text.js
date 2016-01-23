@@ -85,6 +85,8 @@ const icon = <Svg
         fontSize="14"
         fontWeight="bold"
         textAnchor="center"
+        fill="none"
+        stroke="blue"
     >字</Text>
 </Svg>;
 

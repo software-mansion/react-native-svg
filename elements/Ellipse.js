@@ -31,7 +31,7 @@ class Ellipse extends Component{
         return <Shape
             {...props}
             fill={fillFilter(props)}
-            stroke={strokeFilter(props)}
+            {...strokeFilter(props)}
             strokeCap={null}
             strokeJoin={null}
             cx={null}

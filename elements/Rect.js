@@ -91,6 +91,8 @@ class Rect extends Component{
             ry={null}
             width={null}
             height={null}
+            {...strokeFilter(props)}
+            fill={fillFilter(props)}
             d={d}
         />;
     }

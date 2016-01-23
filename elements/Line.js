@@ -31,8 +31,7 @@ class Line extends Component{
             x2={null}
             y2={null}
             fill={null}
-            stroke={strokeFilter(props)}
-            strokeCap={props.strokeLinecap || props.strokeCap || 'square'}
+            {...strokeFilter(props)}
             d={d}
         />;
     }

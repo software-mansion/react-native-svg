@@ -20,16 +20,16 @@ class Path extends Component{
         strokeLinecap: PropTypes.oneOf(['butt', 'square', 'round']),
         strokeCap: PropTypes.oneOf(['butt', 'square', 'round']),
         strokeLinejoin: PropTypes.oneOf(['miter', 'bevel', 'round']),
-        strokeJoin: PropTypes.oneOf(['miter', 'bevel', 'round'])
+        strokeJoin: PropTypes.oneOf(['miter', 'bevel', 'round']),
+        strokeDasharray: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)])
     };
     render() {
         let {props} = this;
+
         return <Shape
             {...props}
-            strokeCap={props.strokeLinecap || props.strokeCap || 'square'}
-            strokeJoin={props.strokeLinejoin || props.strokeJoin || 'miter'}
+            {...strokeFilter(props)}
             fill={fillFilter(props)}
-            stroke={strokeFilter(props)}
         />;
     }
 }
