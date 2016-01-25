@@ -5,10 +5,6 @@ import React, {
 } from 'react-native';
 import Path from './Path';
 
-
-import strokeFilter from '../lib/strokeFilter';
-import fillFilter from '../lib/fillFilter';
-import transformFilter from '../lib/transformFilter';
 class Polyline extends Component{
     static displayName = 'Polyline';
     static propTypes = {

@@ -8,6 +8,8 @@ import React, {
 let {Group} = ART;
 let map = {};
 
+import LinearGradient from './LinearGradient';
+import RadialGradient from './RadialGradient';
 let onlyChild = Children.only;
 
 class DefsItem extends Component{
@@ -81,6 +83,11 @@ class Defs extends Component{
 
     getChildren = () => {
         return Children.map(this.props.children, child => {
+            if (child.type === LinearGradient || child.type === RadialGradient) {
+                return cloneElement(child, {
+                    svgId: this.props.svgId
+                });
+            }
             if (child.props.id) {
                 return <DefsItem {...child.props} svgId={this.props.svgId}>{child}</DefsItem>;
             }

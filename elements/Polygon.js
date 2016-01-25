@@ -3,8 +3,6 @@ import React, {
     PropTypes,
     ART
 } from 'react-native';
-import fillFilter from '../lib/fillFilter';
-import strokeFilter from '../lib/strokeFilter';
 import Path from './Path';
 
 class Polygon extends Component{

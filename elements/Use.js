@@ -1,9 +1,9 @@
 import React, {
     Component,
     PropTypes,
-    ART
+    ART,
+    cloneElement
 } from 'react-native';
-
 import Defs from './Defs';
 class Use extends Component{
     static displayName = 'Use';
