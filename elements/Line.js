@@ -31,7 +31,6 @@ class Line extends Component{
             x2={null}
             y2={null}
             fill={null}
-            {...strokeFilter(props)}
             d={d}
         />;
     }

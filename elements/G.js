@@ -4,11 +4,9 @@ import React, {
     Children,
     cloneElement
 } from 'react-native';
-
 let {
     Group
 } = ART;
-
 import Defs from './Defs';
 
 const transformProps = {
@@ -28,9 +26,8 @@ import transformFilter from '../lib/transformFilter';
 class G extends Component{
     static displayName = 'G';
 
-    constructor() {
-        super(...arguments);
-        this.children = Children.map(this.props.children, child => cloneElement(child, {
+    getChildren = () => {
+        return Children.map(this.props.children, child => cloneElement(child, {
             ...this.props,
             ...transformProps,
             ...child.props,
@@ -39,15 +36,21 @@ class G extends Component{
     };
 
     render() {
-        let element = <Group
-            {...this.props}
-            {...transformFilter(this.props)}
-            id={null}
-        >{this.children}</Group>;
         if (this.props.id) {
-            Defs.set(this.props.id + ':' + this.props.svgId, <G {...this.props} id={null} />);
+            return <Defs.Item
+                id={this.props.id}
+                svgId={this.props.svgId}
+                visible={true}
+            >
+                <G {...this.props} id={null} />
+            </Defs.Item>;
+        } else {
+            return <Group
+                {...this.props}
+                {...transformFilter(this.props)}
+                id={null}
+            >{this.getChildren()}</Group>;
         }
-        return element;
     }
 }
 

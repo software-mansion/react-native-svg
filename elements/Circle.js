@@ -14,13 +14,12 @@ class Circle extends Component{
     };
     static defaultProps = {
         cx: 0,
-        ct: 0
+        cy: 0
     };
 
     render() {
         return <Ellipse
             {...this.props}
-            {...strokeFilter(this.props)}
             r={null}
             rx={+this.props.r}
             ry={+this.props.r}

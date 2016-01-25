@@ -4,7 +4,6 @@ import React, {
     PropTypes,
     cloneElement
 } from 'react-native';
-
 let {
     Shape
 } = ART;
@@ -12,6 +11,7 @@ import Defs from './Defs';
 
 import fillFilter from '../lib/fillFilter';
 import strokeFilter from '../lib/strokeFilter';
+import transformFilter from '../lib/transformFilter';
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 class Path extends Component{
     static displayName = 'Path';
@@ -27,16 +27,22 @@ class Path extends Component{
     };
     render() {
         let {props} = this;
-        let element = <Shape
+        if (props.id) {
+            return <Defs.Item
+                id={props.id}
+                svgId={props.svgId}
+                visible={true}
+            >
+                <Path {...props} id={null} />
+            </Defs.Item>;
+        }
+        return <Shape
             {...props}
             {...strokeFilter(props)}
+            {...transformFilter(props)}
             fill={fillFilter(props)}
             id={null}
         />;
-        if (this.props.id) {
-            Defs.set(this.props.id + ':' + this.props.svgId, <Path {...this.props} id={null} />);
-        }
-        return element;
     }
 }
 
