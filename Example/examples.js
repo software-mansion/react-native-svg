@@ -10,6 +10,7 @@ import * as Text from './examples/Text';
 import * as G from './examples/G';
 import * as Stroking from './examples/Stroking';
 import * as Use from './examples/Use';
+import * as Symbol from './examples/Symbol';
 import * as Gradients from './examples/Gradients';
 
 export {
@@ -25,5 +26,6 @@ export {
     Stroking,
     G,
     Use,
+    Symbol,
     Gradients
 };
