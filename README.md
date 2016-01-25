@@ -5,13 +5,8 @@
 TODO:
 
 1. fill-rule:evenodd
-2. gradients
-4. other elements
-5. animations https://github.com/maxwellito/vivus
-
-elements:
-
-1. clipPath (wait for official complete)
-2. textPath (wait for official complete)
-3. symbol
-4. pattern
+2. clipPath (wait for official supports)
+3. textPath (wait for official supports)
+4. symbol
+5. pattern
+6. animations https://github.com/maxwellito/vivus
