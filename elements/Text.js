@@ -3,6 +3,7 @@ import React, {
     Component,
     PropTypes
 } from 'react-native';
+
 let {
     Text:ARTText
 } = ART;
@@ -38,6 +39,7 @@ class Text extends Component{
                 id={this.props.id}
                 svgId={this.props.svgId}
                 visible={true}
+                text={true}
             >
                 <Text {...this.props} id={null} />
             </Defs.Item>;

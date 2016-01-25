@@ -10,6 +10,7 @@ import * as Text from './examples/Text';
 import * as G from './examples/G';
 import * as Stroking from './examples/Stroking';
 import * as Use from './examples/Use';
+import * as Gradients from './examples/Gradients';
 
 export {
     Svg,
@@ -23,5 +24,6 @@ export {
     Text,
     Stroking,
     G,
-    Use
+    Use,
+    Gradients
 };

@@ -14,10 +14,13 @@ import G from './elements/G';
 import Text from './elements/Text';
 import Use from './elements/Use';
 import Defs from './elements/Defs';
+import LinearGradient from './elements/LinearGradient';
+import RadialGradient from './elements/RadialGradient';
+import Stop from './elements/Stop';
 
 let {
     Group
-    } = ART;
+} = ART;
 
 export {
     Svg,
@@ -32,7 +35,10 @@ export {
     Line,
     Rect,
     Use,
-    Defs
+    Defs,
+    LinearGradient,
+    RadialGradient,
+    Stop
 };
 
 export default Svg;

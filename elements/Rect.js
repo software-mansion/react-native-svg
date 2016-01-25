@@ -4,9 +4,6 @@ import React, {
     ART
 } from 'react-native';
 
-import fillFilter from '../lib/fillFilter';
-import strokeFilter from '../lib/strokeFilter';
-import transformFilter from '../lib/transformFilter';
 import Path from './Path';
 
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
