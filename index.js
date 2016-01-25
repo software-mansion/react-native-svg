@@ -13,6 +13,7 @@ import Path from './elements/Path';
 import G from './elements/G';
 import Text from './elements/Text';
 import Use from './elements/Use';
+import Symbol  from './elements/Symbol';
 import Defs from './elements/Defs';
 import LinearGradient from './elements/LinearGradient';
 import RadialGradient from './elements/RadialGradient';
@@ -35,6 +36,7 @@ export {
     Line,
     Rect,
     Use,
+    Symbol,
     Defs,
     LinearGradient,
     RadialGradient,

@@ -72,6 +72,7 @@ class SvgViewbox extends Component{
             height="100"
             width="100"
             viewbox="40 20 100 40"
+            preserveAspectRatio="none"
         >
             <Rect x="0" y="0" width="100" height="100" fill="black" />
             <Circle cx="50" cy="50" r="30" fill="yellow" />
