@@ -13,10 +13,10 @@ import extractViewbox from '../lib/extractViewbox';
 class ViewBox extends Component{
     static displayName = 'ViewBox';
     static propType = {
-        transform: PropTypes.bool
+        shouldTransform: PropTypes.bool
     };
     static defaultProps = {
-        transform: false
+        shouldTransform: false
     };
 
     render() {
@@ -32,12 +32,14 @@ class ViewBox extends Component{
             y = viewbox.y;
         }
         return <G
+            {...this.props}
             x={x}
             y={y}
             scaleX={scaleX}
             scaleY={scaleY}
-            id={this.props.id}
-            svgId={this.props.svgId}
+            preserveAspectRatio={null}
+            viewbox={null}
+            preserveAspectRatio={null}
         >
             {(!scaleX || !scaleY) ? null : this.props.children}
         </G>

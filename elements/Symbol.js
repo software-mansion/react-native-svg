@@ -19,10 +19,9 @@ class Symbol extends Component{
             svgId={props.svgId}
         >
             <ViewBox
+                {...props}
                 viewbox={props.viewbox}
                 preserveAspectRatio={props.preserveAspectRatio}
-                width={props.width}
-                height={props.height}
                 shouldTransform={true}
             >
                 {props.children}

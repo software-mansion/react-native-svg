@@ -15,7 +15,7 @@ class SymbolExample extends Component{
             height="150"
             width="110"
         >
-            <Symbol id="symbol" viewbox="0 0 150 110">
+            <Symbol id="symbol" viewbox="0 0 150 110" width="100" height="50">
                 <Circle cx="50" cy="50" r="40" strokeWidth="8" stroke="red" fill="red"/>
                 <Circle cx="90" cy="60" r="40" strokeWidth="8" stroke="green" fill="white"/>
             </Symbol>
@@ -24,8 +24,6 @@ class SymbolExample extends Component{
                 href="#symbol"
                 x="0"
                 y="0"
-                width="100"
-                height="50"
             />
             <Use
                 href="#symbol"
@@ -41,7 +39,6 @@ class SymbolExample extends Component{
                 width="50"
                 height="25"
             />
-
         </Svg>;
     }
 }
