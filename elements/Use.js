@@ -1,13 +1,10 @@
 import React, {
     Component,
     PropTypes,
-    ART,
-    cloneElement
+    ART
 } from 'react-native';
-let {Group} = ART;
+
 import Defs from './Defs';
-import transformFilter from '../lib/transformFilter';
-let idReg = /^#(.+)/;
 class Use extends Component{
     static displayName = 'Use';
     static propType = {
@@ -15,22 +12,7 @@ class Use extends Component{
     };
 
     render() {
-        let href = this.props.href;
-        if (href) {
-            let matched = href.match(idReg);
-            if (matched) {
-                let template = Defs.get(matched[1] + ':' + this.props.svgId);
-                if (template) {
-                    let props = {
-                        ...this.props,
-                        href: null
-                    };
-                    return cloneElement(template, props);
-                }
-            }
-
-        }
-        return <Group />;
+        return <Defs.Use {...this.props} />;
     }
 }
 

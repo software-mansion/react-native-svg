@@ -5,10 +5,7 @@ import React, {
 } from 'react-native';
 import fillFilter from '../lib/fillFilter';
 import strokeFilter from '../lib/strokeFilter';
-
-let {
-    Shape
-} = ART;
+import Path from './Path';
 
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 class Ellipse extends Component{
@@ -28,10 +25,8 @@ class Ellipse extends Component{
             a ${rx}, ${ry} 0 1, 0 ${-rx * 2}, 0
             Z
         `;
-        return <Shape
+        return <Path
             {...props}
-            fill={fillFilter(props)}
-            {...strokeFilter(props)}
             strokeCap={null}
             strokeJoin={null}
             cx={null}

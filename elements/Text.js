@@ -3,7 +3,6 @@ import React, {
     Component,
     PropTypes
 } from 'react-native';
-
 let {
     Text:ARTText
 } = ART;
@@ -34,7 +33,16 @@ class Text extends Component{
             y = props.dy ? +props.y + (+props.dy) : +props.y;
         }
 
-        let element = <ARTText
+        if (this.props.id) {
+            return <Defs.Item
+                id={this.props.id}
+                svgId={this.props.svgId}
+                visible={true}
+            >
+                <Text {...this.props} id={null} />
+            </Defs.Item>;
+        }
+        return <ARTText
             {...props}
             {...transformFilter(props)}
             {...strokeFilter(props)}
@@ -50,10 +58,6 @@ class Text extends Component{
             y={y}
             id={null}
         />;
-        if (this.props.id) {
-            Defs.set(this.props.id + ':' + this.props.svgId, <Text {...this.props} id={null} />);
-        }
-        return element;
     }
 }
 

@@ -8,6 +8,7 @@ import Path from './Path';
 
 import strokeFilter from '../lib/strokeFilter';
 import fillFilter from '../lib/fillFilter';
+import transformFilter from '../lib/transformFilter';
 class Polyline extends Component{
     static displayName = 'Polyline';
     static propTypes = {
@@ -22,8 +23,6 @@ class Polyline extends Component{
         let d = 'M' + props.points.trim().replace(/\s+/g, 'L');
         return <Path
             {...props}
-            {...strokeFilter(props)}
-            fill={fillFilter(props)}
             points={null}
             d={d}
         />;

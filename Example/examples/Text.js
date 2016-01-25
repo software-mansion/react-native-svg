@@ -47,12 +47,34 @@ class TextRotate extends Component{
                 x="126"
                 y="24"
                 fill="#f60"
-                rotate="16"
+                rotate="78"
                 scale="1.36"
+                origin="20, 0"
             >I love SVG</Text>
         </Svg>;
     }
 }
+
+class TextStroke extends Component{
+    static title = 'Stroke the text';
+    render() {
+        return <Svg
+            height="60"
+            width="200"
+        >
+            <Text
+                fill="none"
+                stroke="purple"
+                fontSize="20"
+                fontWeight="bold"
+                x="100"
+                y="20"
+                alignment="center"
+            >STROKED TEXT</Text>
+        </Svg>;
+    }
+}
+
 
 // TODO: wait for official done
 class TextPath extends Component{
@@ -90,7 +112,7 @@ const icon = <Svg
     >字</Text>
 </Svg>;
 
-const samples = [TextExample, TextRotate];
+const samples = [TextExample, TextRotate, TextStroke];
 
 export {
     icon,

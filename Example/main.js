@@ -23,9 +23,7 @@ import {
     Line
 } from 'react-native-art-svg';
 import * as examples from './examples';
-import _ from 'lodash';
 import Modal from 'react-native-root-modal';
-
 const hairline = 1 / PixelRatio.get();
 
 const styles = StyleSheet.create({
@@ -105,7 +103,6 @@ const styles = StyleSheet.create({
         color: '#666'
     }
 });
-
 
 const names = ['Svg', 'Stroking', 'Path', 'Line', 'Rect', 'Polygon', 'Polyline', 'Circle', 'Ellipse', 'G', 'Text', 'Use'];
 
