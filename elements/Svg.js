@@ -43,26 +43,14 @@ class Svg extends Component{
     render() {
         let {props} = this;
         let opacity = +props.opacity;
-        if (props.viewbox) {
-            return <Surface
-                {...props}
-                style={[
-                    props.style,
-                    !isNaN(opacity) && {
-                        opacity: opacity
-                    }
-                ]}
-            >
-                <ViewBox
-                    viewbox={props.viewbox}
-                    preserveAspectRatio={props.preserveAspectRatio}
-                    width={props.width}
-                    height={props.height}
-                >
-                    {this.getChildren()}
-                </ViewBox>
-            </Surface>;
-        }
+        let content = props.viewbox ? <ViewBox
+            viewbox={props.viewbox}
+            preserveAspectRatio={props.preserveAspectRatio}
+            width={props.width}
+            height={props.height}
+        >
+            {this.getChildren()}
+        </ViewBox> : this.getChildren();
 
         return <Surface
             {...props}
@@ -73,7 +61,7 @@ class Svg extends Component{
                 }
             ]}
         >
-            {this.getChildren()}
+            {content}
         </Surface>;
     }
 }
