@@ -1,5 +1,5 @@
 {
-    "version": "1.0.3",
+    "version": "1.0.5",
     "name": "react-native-art-svg",
     "description": "react native svg library based on `ART`",
     "repository": {
@@ -17,6 +17,7 @@
         "VML"
     ],
     "dependencies": {
-        "color": "^0.11.1"
+        "color": "^0.11.1",
+        "svgpath": "^2.1.5"
     }
 }

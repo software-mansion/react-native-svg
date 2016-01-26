@@ -8,7 +8,8 @@ import Svg, {
     RadialGradient,
     Stop,
     Ellipse,
-    Circle
+    Circle,
+    Text
 } from 'react-native-art-svg';
 
 class LinearGradientHorizontal extends Component{
@@ -20,8 +21,8 @@ class LinearGradientHorizontal extends Component{
         >
             <Defs>
                 <LinearGradient id="grad" x1="0" y1="0" x2="170" y2="0">
-                    <Stop offset="0%" stopColor="rgb(255,255,0)" stopOpacity="0" />
-                    <Stop offset="100%" stopColor="red" stopOpacity="1" />
+                    <Stop offset="0" stopColor="rgb(255,255,0)" stopOpacity="0" />
+                    <Stop offset="1" stopColor="red" stopOpacity="1" />
                 </LinearGradient>
             </Defs>
             <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad)" />
@@ -47,6 +48,26 @@ class LinearGradientVertical  extends Component{
     }
 }
 
+class LinearGradientPercent extends Component{
+    static title = 'Define a linear gradient in percent unit';
+    render() {
+        return <Svg
+            height="150"
+            width="300"
+        >
+            <Defs>
+                <LinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <Stop offset="0%" stopColor="rgb(255,255,0)" stopOpacity="0" />
+                    <Stop offset="100%" stopColor="red" stopOpacity="1" />
+                </LinearGradient>
+            </Defs>
+            <Text x="25" y="70" fill="#333">x1=0%</Text>
+            <Text x="235" y="70" fill="#333">x2=100%</Text>
+            <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad)" />
+        </Svg>;
+    }
+}
+
 class RadialGradientExample  extends Component{
     static title = 'Define an ellipse with a radial gradient from yellow to purple';
     render() {
@@ -57,12 +78,12 @@ class RadialGradientExample  extends Component{
             <Defs>
                 <RadialGradient id="grad" cx="150" cy="75" rx="85" ry="55" fx="150" fy="75">
                     <Stop
-                        offset="0%"
+                        offset="0"
                         stopColor="#ff0"
                         stopOpacity="1"
                     />
                     <Stop
-                        offset="100%"
+                        offset="1"
                         stopColor="#83a"
                         stopOpacity="1"
                     />
@@ -73,7 +94,7 @@ class RadialGradientExample  extends Component{
     }
 }
 
-class RadialGradientExample2  extends Component{
+class RadialGradientPart extends Component{
     static title = 'Define another ellipse with a radial gradient from white to blue';
     render() {
         return <Svg
@@ -82,6 +103,32 @@ class RadialGradientExample2  extends Component{
         >
             <Defs>
                 <RadialGradient id="grad" cx="60" cy="45" rx="34" ry="33" fx="150" fy="75">
+                    <Stop
+                        offset="0%"
+                        stopColor="#fff"
+                        stopOpacity="1"
+                    />
+                    <Stop
+                        offset="100%"
+                        stopColor="#00f"
+                        stopOpacity="1"
+                    />
+                </RadialGradient>
+            </Defs>
+            <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad)" />
+        </Svg>;
+    }
+}
+
+class RadialGradientPercent extends Component{
+    static title = 'Define a radial gradient in percent unit';
+    render() {
+        return <Svg
+            height="150"
+            width="300"
+        >
+            <Defs>
+                <RadialGradient id="grad" cx="50%" cy="50%" rx="50%" ry="50%" fx="50%" fy="50%">
                     <Stop
                         offset="0%"
                         stopColor="#fff"
@@ -113,7 +160,7 @@ const icon = <Svg
 </Svg>;
 
 
-const samples = [LinearGradientHorizontal, LinearGradientVertical, RadialGradientExample, RadialGradientExample2];
+const samples = [LinearGradientHorizontal, LinearGradientVertical, LinearGradientPercent, RadialGradientExample, RadialGradientPercent, RadialGradientPart];
 
 export {
     icon,

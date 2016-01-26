@@ -44,6 +44,8 @@ class Text extends Component{
                 <Text {...this.props} id={null} />
             </Defs.Item>;
         }
+
+        // TODO: support percent gradients
         return <ARTText
             {...props}
             {...transformFilter(props)}

@@ -8,6 +8,7 @@ let {
     Shape
 } = ART;
 import Defs from './Defs';
+import calculateBoundingBox from '../lib/calculateBoundingBox';
 
 import fillFilter from '../lib/fillFilter';
 import strokeFilter from '../lib/strokeFilter';
@@ -25,6 +26,23 @@ class Path extends Component{
         strokeJoin: PropTypes.oneOf(['miter', 'bevel', 'round']),
         strokeDasharray: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)])
     };
+
+    _dimensions = null;
+
+    componentWillReceiveProps = nextProps => {
+        if (nextProps.d !== this.props.d) {
+            this._dimensions = null;
+        }
+    };
+
+    getBoundingBox = () => {
+        if (!this._dimensions) {
+            this._dimensions =  calculateBoundingBox(this.props.d);
+        }
+
+        return this._dimensions;
+    };
+
     render() {
         let {props} = this;
         if (props.id) {
@@ -40,7 +58,7 @@ class Path extends Component{
             {...props}
             {...strokeFilter(props)}
             {...transformFilter(props)}
-            fill={fillFilter(props)}
+            fill={fillFilter.call(this, props)}
             id={null}
         />;
     }
