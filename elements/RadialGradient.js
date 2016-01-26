@@ -9,6 +9,8 @@ let {
     RadialGradient: ARTRadialGradient
 } = ART;
 import {set, remove} from '../lib/fillFilter';
+import percentFactory from '../lib/percentFactory';
+import percentToFloat from '../lib/percentToFloat';
 import Stop from './Stop';
 import Color from 'color';
 let percentReg = /^(\-?\d+(?:\.\d+)?)(%?)$/;
@@ -60,17 +62,30 @@ class RadialGradient extends Component{
         let stops = {};
         Children.forEach(this.props.children, child => {
             if (child.type === Stop && child.props.stopColor && child.props.offset) {
-
                 // convert percent to float.
-                let matched = child.props.offset.match(percentReg);
-                let offset = matched[2] ? matched[1] / 100 : matched[1];
+                let offset = percentToFloat(child.props.offset);
 
                 // add stop
                 stops[offset] = Color(child.props.stopColor).alpha(+child.props.stopOpacity).rgbaString();
 
-                // TODO: convert percent to float.
-                set(this.id, new ARTRadialGradient(stops, fx, fy, rx, ry, cx, cy));
 
+                let factories = percentFactory(fx, fy, rx, ry, cx, cy);
+                if (factories) {
+                    set(this.id, function (boundingBox) {
+                        let {x1,y1,width, height} = boundingBox;
+                        return new ARTRadialGradient(
+                            stops,
+                            x1 + factories[0](width),
+                            y1 + factories[1](height),
+                            factories[2](width),
+                            factories[3](height),
+                            x1 + factories[4](width),
+                            y1 + factories[5](height)
+                        );
+                    });
+                } else {
+                    set(this.id, new ARTRadialGradient(stops, fx, fy, rx, ry, cx, cy));
+                }
             } else {
                 console.warn(`'RadialGradient' can only receive 'Stop' elements as children`);
             }

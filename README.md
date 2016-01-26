@@ -18,3 +18,7 @@
 3. textPath (wait for official supports)
 4. pattern
 5. animations https://github.com/maxwellito/vivus
+
+### Thanks
+[SVG bounding Algorithm](https://github.com/icons8/svg-path-bounding-box)
+[Circle drawing with svg arc path](http://stackoverflow.com/questions/5737975/circle-drawing-with-svgs-arc-path/10477334#10477334)
