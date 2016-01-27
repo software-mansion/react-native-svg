@@ -6,6 +6,7 @@
         "type": "git",
         "url": "https://github.com/magicismight/react-native-art-svg"
     },
+    "license": "MIT",
     "main": "./index.js",
     "keywords": [
         "react-component",
