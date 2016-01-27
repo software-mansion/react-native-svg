@@ -55,7 +55,8 @@ import Svg,{
     Symbol,
     Text,
     Use,
-    Defs
+    Defs,
+    Stop
 } from 'react-native-art-svg';
 
 class SvgExample extends Component {
@@ -211,7 +212,7 @@ An ellipse is closely related to a circle. The difference is that an ellipse has
 
 ##### Line
 
-The <Line /> element is an SVG basic shape, used to create a line connecting two points.
+The <Line> element is an SVG basic shape, used to create a line connecting two points.
 
 ```
 <Svg
@@ -240,7 +241,7 @@ The <Line /> element is an SVG basic shape, used to create a line connecting two
 
 ##### Polygon
 
-The <Polygon /> element is used to create a graphic that contains at least three sides.
+The <Polygon> element is used to create a graphic that contains at least three sides.
 Polygons are made of straight lines, and the shape is "closed" (all the lines connect up).
 
 ```
@@ -265,7 +266,7 @@ Polygons are made of straight lines, and the shape is "closed" (all the lines co
 
 ##### Polyline
 
-The <Polyline /> element is used to create any shape that consists of only straight lines:
+The <Polyline> element is used to create any shape that consists of only straight lines:
 
 ```
 <Svg
@@ -289,7 +290,7 @@ The <Polyline /> element is used to create any shape that consists of only strai
 
 ##### Path
 
-The <path> element is used to define a path.
+The <Path> element is used to define a path.
 The following commands are available for path data:
 
   * M = moveto
@@ -322,7 +323,7 @@ The following commands are available for path data:
 
 ##### Text
 
-The <text> element is used to define a text.
+The <Text> element is used to define a text.
 
 ```
 <Svg
@@ -342,6 +343,206 @@ The <text> element is used to define a text.
 ```
 
 ![Rect](./screenShoots/text.png)
+
+##### G
+
+The <G> element is a container used to group other SVG elements. Transformations applied to the g element are performed on all of its child elements, and any of its attributes are inherited by its child elements. It can also group multiple elements to be referenced later with the [&lt;Use /&gt;](#use) element.
+
+```
+<Svg
+    height="100"
+    width="200"
+>
+    <G
+        rotate="50"
+        origin="100, 50"
+    >
+        <Line
+            x1="60"
+            y1="10"
+            x2="140"
+            y2="10"
+            stroke="#060"
+        />
+
+        <Rect
+            x="60"
+            y="20"
+            height="50"
+            width="80"
+            stroke="#060"
+            fill="#060"
+        />
+
+        <Text
+            x="100"
+            y="75"
+            stroke="#600"
+            fill="#600"
+            textAnchor="center"
+        >
+            Text grouped with shapes</Text>
+    </G>
+</Svg>
+```
+![G](./screenShoots/g.png)
+
+<h5 id="use">Use</h5>
+
+The <Use> element can reuse an SVG shape from elsewhere in the SVG document, including <G> elements and <Symbol> elements. The reused shape can be defined inside the [&lt;Defs&gt;](#defs) element (which makes the shape invisible until used) or outside.
+
+```
+<Svg
+    height="100"
+    width="300"
+>
+    <Defs>
+        <G id="shape">
+            <G>
+                <Circle cx="50" cy="50" r="50" />
+                <Rect x="50" y="50" width="50" height="50" />
+                <Circle cx="50" cy="50" r="5" fill="blue" />
+            </G>
+        </G>
+    </Defs>
+    <Use href="#shape" x="20" y="0"/>
+    <Use href="#shape" x="170"y="0" />
+</Svg>
+```
+
+This example shows a <G> element defined inside a [&lt;Defs&gt;](#defs) element. This makes the <G> invisible unless referenced by a <Use> element.
+
+Before the <G> element can be referenced, it must have an ID set on it via its id attribute. The <Use> element references the <G> element via its href prop. Notice the # in front of the ID in the prop value.
+
+The <Use> element specifies where to show the reused shapes via its x and y props. Notice that the shapes inside the <G> element are located at 0,0. That is done because their position is added to the position specified in the <Use> element.
+
+![use](./screenShoots/use.png)
+
+
+##### Symbol
+
+The SVG <Symbol> element is used to define reusable symbols. The shapes nested inside a <Symbol> are not displayed unless referenced by a <Use> element.
+
+```
+<Svg
+    height="150"
+    width="110"
+>
+    <Symbol id="symbol" viewbox="0 0 150 110" width="100" height="50">
+        <Circle cx="50" cy="50" r="40" strokeWidth="8" stroke="red" fill="red"/>
+        <Circle cx="90" cy="60" r="40" strokeWidth="8" stroke="green" fill="white"/>
+    </Symbol>
+
+    <Use
+        href="#symbol"
+        x="0"
+        y="0"
+    />
+    <Use
+        href="#symbol"
+        x="0"
+        y="50"
+        width="75"
+        height="38"
+    />
+    <Use
+        href="#symbol"
+        x="0"
+        y="100"
+        width="50"
+        height="25"
+    />
+</Svg>
+```
+
+![symbol](./screenShoots/symbol.png)
+
+<h5 id="defs">Defs</h5>
+
+The <Defs> element is used to embed definitions that can be reused inside an SVG image. For instance, you can group SVG shapes together and reuse them as a single shape.
+
+##### LinearGradient
+
+The <LinearGradient> element is used to define a linear gradient.
+The <LinearGradient> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
+
+Linear gradients can be defined as horizontal, vertical or angular gradients:
+
+  * Horizontal gradients are created when y1 and y2 are equal and x1 and x2 differ
+  * Vertical gradients are created when x1 and x2 are equal and y1 and y2 differ
+  * Angular gradients are created when x1 and x2 differ and y1 and y2 differ
+
+```
+<Svg
+    height="150"
+    width="300"
+>
+    <Defs>
+        <LinearGradient id="grad" x1="0" y1="0" x2="170" y2="0">
+            <Stop offset="0" stopColor="rgb(255,255,0)" stopOpacity="0" />
+            <Stop offset="1" stopColor="red" stopOpacity="1" />
+        </LinearGradient>
+    </Defs>
+    <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad)" />
+</Svg>
+```
+
+Code explanation:
+
+  * The id attribute of the <linearGradient> tag defines a unique name for the gradient
+  * The x1, x2, y1,y2 attributes of the <linearGradient> tag define the start and end position of the gradient
+  * The color range for a gradient can be composed of two or more colors. Each color is specified with a <Stop> tag. The offset attribute is used to define where the gradient color begin and end
+  * The fill attribute links the ellipse element to the gradient
+
+![LinearGradient](./screenShoots/lineargradient.png)
+
+*NOTICE:*
+LinearGradient also supports percentage as prop:
+```
+<LinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <Stop offset="0%" stopColor="rgb(255,255,0)" stopOpacity="0" />
+    <Stop offset="100%" stopColor="red" stopOpacity="1" />
+</LinearGradient>
+```
+This result is same as the example before.
+But I recommend you to use exact number instead, it has more performance advantages while using number instead of percentage.
+
+##### RadialGradient
+
+The <RadialGradient> element is used to define a radial gradient.
+The <RadialGradient> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
+
+```
+<Svg
+    height="150"
+    width="300"
+>
+    <Defs>
+        <RadialGradient id="grad" cx="150" cy="75" rx="85" ry="55" fx="150" fy="75">
+            <Stop
+                offset="0"
+                stopColor="#ff0"
+                stopOpacity="1"
+            />
+            <Stop
+                offset="1"
+                stopColor="#83a"
+                stopOpacity="1"
+            />
+        </RadialGradient>
+    </Defs>
+    <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad)" />
+</Svg>
+```
+
+Code explanation:
+
+  * The id attribute of the <radialGradient> tag defines a unique name for the gradient
+  * The cx, cy and r attributes define the outermost circle and the fx and fy define the innermost circle
+  * The color range for a gradient can be composed of two or more colors. Each color is specified with a <stop> tag. The offset attribute is used to define where the gradient color begin and end
+  * The fill attribute links the ellipse element to the gradient
+
+![RadialGradient](./screenShoots/radialgradient.png)
 
 #### Run example:
 
@@ -364,4 +565,6 @@ npm install
 
 * [SVG bounding Algorithm](https://github.com/icons8/svg-path-bounding-box)
 * [Circle drawing with svg arc path](http://stackoverflow.com/questions/5737975/circle-drawing-with-svgs-arc-path/10477334#10477334)
-* [w3schools.com SVG Tutorial](http://www.w3schools.com/svg/)  
+* [w3schools.com SVG Tutorial](http://www.w3schools.com/svg/)
+* [SVG Tutorial](http://tutorials.jenkov.com/svg/index.html)
+* [MDN](https://developer.mozilla.org/en/docs/Web/SVG)
