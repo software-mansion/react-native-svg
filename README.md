@@ -102,7 +102,7 @@ strokeWidth     | 1          | The strokeWidth prop specifies the width of the o
 strokeOpacity   | 1          | The strokeOpacity prop specifies the opacity of the outline on the current object.
 strokeLinecap   | 'square'   | The strokeLinecap prop specifies the shape to be used at the end of open subpaths when they are stroked.
 strokeLinejoin  | 'miter'    | The strokeLinejoin prop specifies the shape to be used at the corners of paths or basic shapes when they are stroked.
-strokeDasharray | '[]'       | The strokeDasharray prop controls the pattern of dashes and gaps used to stroke paths.
+strokeDasharray | []       | The strokeDasharray prop controls the pattern of dashes and gaps used to stroke paths.
 strokeDashoffset| null       | The strokeDashoffset prop specifies the distance into the dash pattern to start the dash.
 x               | 0          | Translate distance on x-axis.
 y               | 0          | Translate distance on y-axis.
@@ -362,6 +362,6 @@ npm install
 
 #### Thanks:
 
-[SVG bounding Algorithm](https://github.com/icons8/svg-path-bounding-box)
-[Circle drawing with svg arc path](http://stackoverflow.com/questions/5737975/circle-drawing-with-svgs-arc-path/10477334#10477334)
-[w3schools.com SVG Tutorial](http://www.w3schools.com/svg/)
+* [SVG bounding Algorithm](https://github.com/icons8/svg-path-bounding-box)
+* [Circle drawing with svg arc path](http://stackoverflow.com/questions/5737975/circle-drawing-with-svgs-arc-path/10477334#10477334)
+* [w3schools.com SVG Tutorial](http://www.w3schools.com/svg/)  
