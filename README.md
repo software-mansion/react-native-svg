@@ -115,7 +115,7 @@ originY         | 0          | Transform originY coordinates for the current obj
 
 #### Supported elements:
 
-- Svg
+##### Svg
 
 ```
 <Svg
@@ -130,7 +130,7 @@ originY         | 0          | Transform originY coordinates for the current obj
 </Svg>;
 ```
 
-- Rect
+##### Rect
 
 The <Rect> element is used to create a rectangle and variations of a rectangle shape:
 
@@ -153,7 +153,7 @@ The <Rect> element is used to create a rectangle and variations of a rectangle s
 
 ![Rect](./screenShoots/rect.png)
 
-- Circle
+##### Circle
 
 The <Circle> element is used to create a circle:
 
@@ -178,7 +178,7 @@ The <Circle> element is used to create a circle:
   * The cx and cy attributes define the x and y coordinates of the center of the circle. If cx and cy are omitted, the circle's center is set to (0,0)
   * The r attribute defines the radius of the circle
 
-- Ellipse
+##### Ellipse
 
 The <Ellipse> element is used to create an ellipse.
 
@@ -209,7 +209,7 @@ An ellipse is closely related to a circle. The difference is that an ellipse has
   * The rx attribute defines the horizontal radius
   * The ry attribute defines the vertical radius
 
-- Line
+##### Line
 
 The <Line /> element is an SVG basic shape, used to create a line connecting two points.
 
@@ -238,7 +238,7 @@ The <Line /> element is an SVG basic shape, used to create a line connecting two
   * The x2 attribute defines the end of the line on the x-axis
   * The y2 attribute defines the end of the line on the y-axis
 
-- Polygon
+##### Polygon
 
 The <Polygon /> element is used to create a graphic that contains at least three sides.
 Polygons are made of straight lines, and the shape is "closed" (all the lines connect up).
@@ -263,7 +263,7 @@ Polygons are made of straight lines, and the shape is "closed" (all the lines co
 
   * The points attribute defines the x and y coordinates for each corner of the polygon
 
-- Polyline
+##### Polyline
 
 The <Polyline /> element is used to create any shape that consists of only straight lines:
 
@@ -287,7 +287,7 @@ The <Polyline /> element is used to create any shape that consists of only strai
 
   * The points attribute defines the x and y coordinates for each point of the polyline
 
-- Path
+##### Path
 
 The <path> element is used to define a path.
 The following commands are available for path data:
@@ -320,7 +320,7 @@ The following commands are available for path data:
 ![Rect](./screenShoots/path.png)
 
 
-- Text
+##### Text
 
 The <text> element is used to define a text.
 
