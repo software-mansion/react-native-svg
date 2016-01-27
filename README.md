@@ -98,13 +98,15 @@ This will draw a graphics like this
 Name            | Default    | Description
 ----------------|------------|--------------
 fill            | '#000'     | The fill prop refers to the color inside the shape.
+fillOpacity     | 1          | This prop specifies the opacity of the color or the content the current object is filled with.
 stroke          | 'none'     | The stroke prop controls how the outline of a shape appears.
 strokeWidth     | 1          | The strokeWidth prop specifies the width of the outline on the current object.
 strokeOpacity   | 1          | The strokeOpacity prop specifies the opacity of the outline on the current object.
 strokeLinecap   | 'square'   | The strokeLinecap prop specifies the shape to be used at the end of open subpaths when they are stroked.
 strokeLinejoin  | 'miter'    | The strokeLinejoin prop specifies the shape to be used at the corners of paths or basic shapes when they are stroked.
-strokeDasharray | []       | The strokeDasharray prop controls the pattern of dashes and gaps used to stroke paths.
+strokeDasharray | []         | The strokeDasharray prop controls the pattern of dashes and gaps used to stroke paths.
 strokeDashoffset| null       | The strokeDashoffset prop specifies the distance into the dash pattern to start the dash.
+strokeOpacity   | 1          | The strokeOpacity prop specifies the opacity of the outline on the current object.
 x               | 0          | Translate distance on x-axis.
 y               | 0          | Translate distance on y-axis.
 rotate          | 0          | Rotation degree value on the current object.
@@ -154,6 +156,12 @@ The <Rect> element is used to create a rectangle and variations of a rectangle s
 
 ![Rect](./screenShoots/rect.png)
 
+  Code explanation:
+
+  * The width and height props of the <Rect> element define the height and the width of the rectangle
+  * The x prop defines the left position of the rectangle (e.g. x="25" places the rectangle 25 px from the left margin)
+  * The y prop defines the top position of the rectangle (e.g. y="5" places the rectangle 5 px from the top margin)
+
 ##### Circle
 
 The <Circle> element is used to create a circle:
@@ -176,12 +184,12 @@ The <Circle> element is used to create a circle:
 
   Code explanation:
 
-  * The cx and cy attributes define the x and y coordinates of the center of the circle. If cx and cy are omitted, the circle's center is set to (0,0)
-  * The r attribute defines the radius of the circle
+  * The cx and cy props define the x and y coordinates of the center of the circle. If cx and cy are omitted, the circle's center is set to (0,0)
+  * The r prop defines the radius of the circle
 
 ##### Ellipse
 
-The <Ellipse> element is used to create an ellipse.  
+The <Ellipse> element is used to create an ellipse.
 
 An ellipse is closely related to a circle. The difference is that an ellipse has an x and a y radius that differs from each other, while a circle has equal x and y radius
 
@@ -205,10 +213,10 @@ An ellipse is closely related to a circle. The difference is that an ellipse has
 
   Code explanation:
 
-  * The cx attribute defines the x coordinate of the center of the ellipse
-  * The cy attribute defines the y coordinate of the center of the ellipse
-  * The rx attribute defines the horizontal radius
-  * The ry attribute defines the vertical radius
+  * The cx prop defines the x coordinate of the center of the ellipse
+  * The cy prop defines the y coordinate of the center of the ellipse
+  * The rx prop defines the horizontal radius
+  * The ry prop defines the vertical radius
 
 ##### Line
 
@@ -234,14 +242,15 @@ The <Line> element is an SVG basic shape, used to create a line connecting two p
 
   Code explanation:
 
-  * The x1 attribute defines the start of the line on the x-axis
-  * The y1 attribute defines the start of the line on the y-axis
-  * The x2 attribute defines the end of the line on the x-axis
-  * The y2 attribute defines the end of the line on the y-axis
+  * The x1 prop defines the start of the line on the x-axis
+  * The y1 prop defines the start of the line on the y-axis
+  * The x2 prop defines the end of the line on the x-axis
+  * The y2 prop defines the end of the line on the y-axis
 
 ##### Polygon
 
 The <Polygon> element is used to create a graphic that contains at least three sides.
+
 Polygons are made of straight lines, and the shape is "closed" (all the lines connect up).
 
 ```
@@ -262,7 +271,7 @@ Polygons are made of straight lines, and the shape is "closed" (all the lines co
 
   Code explanation:
 
-  * The points attribute defines the x and y coordinates for each corner of the polygon
+  * The points prop defines the x and y coordinates for each corner of the polygon
 
 ##### Polyline
 
@@ -286,11 +295,12 @@ The <Polyline> element is used to create any shape that consists of only straigh
 
   Code explanation:
 
-  * The points attribute defines the x and y coordinates for each point of the polyline
+  * The points prop defines the x and y coordinates for each point of the polyline
 
 ##### Path
 
 The <Path> element is used to define a path.
+
 The following commands are available for path data:
 
   * M = moveto
@@ -346,7 +356,7 @@ The <Text> element is used to define a text.
 
 ##### G
 
-The <G> element is a container used to group other SVG elements. Transformations applied to the g element are performed on all of its child elements, and any of its attributes are inherited by its child elements. It can also group multiple elements to be referenced later with the [&lt;Use /&gt;](#use) element.
+The <G> element is a container used to group other SVG elements. Transformations applied to the g element are performed on all of its child elements, and any of its props are inherited by its child elements. It can also group multiple elements to be referenced later with the [&lt;Use /&gt;](#use) element.
 
 ```
 <Svg
@@ -390,6 +400,7 @@ The <G> element is a container used to group other SVG elements. Transformations
 <h5 id="use">Use</h5>
 
 The <Use> element can reuse an SVG shape from elsewhere in the SVG document, including <G> elements and <Symbol> elements.
+
 The reused shape can be defined inside the [&lt;Defs&gt;](#defs) element (which makes the shape invisible until used) or outside.
 
 ```
@@ -413,7 +424,7 @@ The reused shape can be defined inside the [&lt;Defs&gt;](#defs) element (which 
 
 This example shows a <G> element defined inside a [&lt;Defs&gt;](#defs) element. This makes the <G> invisible unless referenced by a <Use> element.
 
-Before the <G> element can be referenced, it must have an ID set on it via its id attribute. The <Use> element references the <G> element via its `href` prop. Notice the # in front of the ID in the prop value.
+Before the <G> element can be referenced, it must have an ID set on it via its id prop. The <Use> element references the <G> element via its `href` prop. Notice the # in front of the ID in the prop value.
 
 The <Use> element specifies where to show the reused shapes via its x and y props. Notice that the shapes inside the <G> element are located at 0,0. That is done because their position is added to the position specified in the <Use> element.
 
@@ -490,10 +501,10 @@ Linear gradients can be defined as horizontal, vertical or angular gradients:
 
 Code explanation:
 
-  * The id attribute of the <linearGradient> tag defines a unique name for the gradient
-  * The x1, x2, y1,y2 attributes of the <linearGradient> tag define the start and end position of the gradient
-  * The color range for a gradient can be composed of two or more colors. Each color is specified with a <Stop> tag. The offset attribute is used to define where the gradient color begin and end
-  * The fill attribute links the ellipse element to the gradient
+  * The id prop of the <LinearGradient> tag defines a unique name for the gradient
+  * The x1, x2, y1,y2 props of the <LinearGradient> tag define the start and end position of the gradient
+  * The color range for a gradient can be composed of two or more colors. Each color is specified with a <Stop> tag. The offset prop is used to define where the gradient color begin and end
+  * The fill prop links the ellipse element to the gradient
 
 ![LinearGradient](./screenShoots/lineargradient.png)
 
@@ -506,6 +517,7 @@ LinearGradient also supports percentage as prop:
 </LinearGradient>
 ```
 This result is same as the example before.
+
 But I recommend you to use exact number instead, it has more performance advantages while using number instead of percentage.
 
 ##### RadialGradient
@@ -538,10 +550,10 @@ The <RadialGradient> element must be nested within a [&lt;Defs&gt;](#defs) tag. 
 
 Code explanation:
 
-  * The id attribute of the <radialGradient> tag defines a unique name for the gradient
-  * The cx, cy and r attributes define the outermost circle and the fx and fy define the innermost circle
-  * The color range for a gradient can be composed of two or more colors. Each color is specified with a <stop> tag. The offset attribute is used to define where the gradient color begin and end
-  * The fill attribute links the ellipse element to the gradient
+  * The id prop of the <radialGradient> tag defines a unique name for the gradient
+  * The cx, cy and r props define the outermost circle and the fx and fy define the innermost circle
+  * The color range for a gradient can be composed of two or more colors. Each color is specified with a <stop> tag. The offset prop is used to define where the gradient color begin and end
+  * The fill prop links the ellipse element to the gradient
 
 ![RadialGradient](./screenShoots/radialgradient.png)
 
