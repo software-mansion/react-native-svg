@@ -181,7 +181,7 @@ The <Circle> element is used to create a circle:
 
 ##### Ellipse
 
-The <Ellipse> element is used to create an ellipse.
+The <Ellipse> element is used to create an ellipse.  
 
 An ellipse is closely related to a circle. The difference is that an ellipse has an x and a y radius that differs from each other, while a circle has equal x and y radius
 
@@ -389,7 +389,8 @@ The <G> element is a container used to group other SVG elements. Transformations
 
 <h5 id="use">Use</h5>
 
-The <Use> element can reuse an SVG shape from elsewhere in the SVG document, including <G> elements and <Symbol> elements. The reused shape can be defined inside the [&lt;Defs&gt;](#defs) element (which makes the shape invisible until used) or outside.
+The <Use> element can reuse an SVG shape from elsewhere in the SVG document, including <G> elements and <Symbol> elements.
+The reused shape can be defined inside the [&lt;Defs&gt;](#defs) element (which makes the shape invisible until used) or outside.
 
 ```
 <Svg
@@ -412,7 +413,7 @@ The <Use> element can reuse an SVG shape from elsewhere in the SVG document, inc
 
 This example shows a <G> element defined inside a [&lt;Defs&gt;](#defs) element. This makes the <G> invisible unless referenced by a <Use> element.
 
-Before the <G> element can be referenced, it must have an ID set on it via its id attribute. The <Use> element references the <G> element via its href prop. Notice the # in front of the ID in the prop value.
+Before the <G> element can be referenced, it must have an ID set on it via its id attribute. The <Use> element references the <G> element via its `href` prop. Notice the # in front of the ID in the prop value.
 
 The <Use> element specifies where to show the reused shapes via its x and y props. Notice that the shapes inside the <G> element are located at 0,0. That is done because their position is added to the position specified in the <Use> element.
 
