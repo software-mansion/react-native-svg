@@ -42,7 +42,20 @@ There is an easy example
 
 ```
 import Svg,{
-    Circle
+    Circle,
+    Ellipse,
+    G,
+    LinearGradient,
+    RadialGradient,
+    Line,
+    Path,
+    Polygon,
+    Polyline,
+    Rect,
+    Symbol,
+    Text,
+    Use,
+    Defs
 } from 'react-native-art-svg';
 
 class SvgExample extends Component {
@@ -102,6 +115,233 @@ originY         | 0          | Transform originY coordinates for the current obj
 
 #### Supported elements:
 
+- Svg
+
+```
+<Svg
+    height="100"
+    width="100"
+>
+    <Rect x="0" y="0" width="100" height="100" fill="black" />
+    <Circle cx="50" cy="50" r="30" fill="yellow" />
+    <Circle cx="40" cy="40" r="4" fill="black" />
+    <Circle cx="60" cy="40" r="4" fill="black" />
+    <Path d="M 40 60 A 10 10 0 0 0 60 60" stroke="black" />
+</Svg>;
+```
+
+- Rect
+
+The <Rect> element is used to create a rectangle and variations of a rectangle shape:
+
+```
+<Svg
+    width="200"
+    height="60"
+>
+    <Rect
+        x="25"
+        y="5"
+        width="150"
+        height="50"
+        fill="rgb(0,0,255)"
+        strokeWidth="3"
+        stroke="rgb(0,0,0)"
+    />
+</Svg>
+```
+
+![Rect](./screenShoots/rect.png)
+
+- Circle
+
+The <Circle> element is used to create a circle:
+
+```
+<Svg
+    height="100"
+    width="100"
+>
+    <Circle
+        cx="50"
+        cy="50"
+        r="50"
+        fill="pink"
+    />
+</Svg>
+```
+
+![Rect](./screenShoots/circle.png)
+
+  Code explanation:
+
+  * The cx and cy attributes define the x and y coordinates of the center of the circle. If cx and cy are omitted, the circle's center is set to (0,0)
+  * The r attribute defines the radius of the circle
+
+- Ellipse
+
+The <Ellipse> element is used to create an ellipse.
+
+An ellipse is closely related to a circle. The difference is that an ellipse has an x and a y radius that differs from each other, while a circle has equal x and y radius
+
+```
+<Svg
+    height="100"
+    width="110"
+>
+    <Ellipse
+        cx="55"
+        cy="55"
+        rx="50"
+        ry="30"
+        stroke="purple"
+        strokeWidth="2"
+        fill="yellow"
+    />
+</Svg>
+```
+![Rect](./screenShoots/ellipse.png)
+
+  Code explanation:
+
+  * The cx attribute defines the x coordinate of the center of the ellipse
+  * The cy attribute defines the y coordinate of the center of the ellipse
+  * The rx attribute defines the horizontal radius
+  * The ry attribute defines the vertical radius
+
+- Line
+
+The <Line /> element is an SVG basic shape, used to create a line connecting two points.
+
+```
+<Svg
+    height="100"
+    width="100"
+>
+    <Line
+        x1="0"
+        y1="0"
+        x2="100"
+        y2="100"
+        stroke="red"
+        strokeWidth="2"
+    />
+</Svg>
+```
+
+![Rect](./screenShoots/line.png)
+
+  Code explanation:
+
+  * The x1 attribute defines the start of the line on the x-axis
+  * The y1 attribute defines the start of the line on the y-axis
+  * The x2 attribute defines the end of the line on the x-axis
+  * The y2 attribute defines the end of the line on the y-axis
+
+- Polygon
+
+The <Polygon /> element is used to create a graphic that contains at least three sides.
+Polygons are made of straight lines, and the shape is "closed" (all the lines connect up).
+
+```
+<Svg
+    height="100"
+    width="100"
+>
+    <Polygon
+        points="40,5 70,80 25,95"
+        fill="lime"
+        stroke="purple"
+        strokeWidth="1"
+    />
+</Svg>
+```
+
+![Rect](./screenShoots/polygon.png)
+
+  Code explanation:
+
+  * The points attribute defines the x and y coordinates for each corner of the polygon
+
+- Polyline
+
+The <Polyline /> element is used to create any shape that consists of only straight lines:
+
+```
+<Svg
+    height="100"
+    width="100"
+>
+    <Polyline
+        points="10,10 20,12 30,20 40,60 60,70 95,90"
+        fill="none"
+        stroke="black"
+        strokeWidth="3"
+    />
+</Svg>
+```
+
+![Rect](./screenShoots/polyline.png)
+
+  Code explanation:
+
+  * The points attribute defines the x and y coordinates for each point of the polyline
+
+- Path
+
+The <path> element is used to define a path.
+The following commands are available for path data:
+
+  * M = moveto
+  * L = lineto
+  * H = horizontal lineto
+  * V = vertical lineto
+  * C = curveto
+  * S = smooth curveto
+  * Q = quadratic Bézier curve
+  * T = smooth quadratic Bézier curveto
+  * A = elliptical Arc
+  * Z = closepath
+`Note:` All of the commands above can also be expressed with lower letters. Capital letters means absolutely positioned, lower cases means relatively positioned.
+
+```
+<Svg
+    height="100"
+    width="100"
+>
+    <Path
+        d="M25 10 L98 65 L70 25 L16 77 L11 30 L0 4 L90 50 L50 10 L11 22 L77 95 L20 25"
+        fill="none"
+        stroke="red"
+    />
+</Svg>
+```
+
+![Rect](./screenShoots/path.png)
+
+
+- Text
+
+The <text> element is used to define a text.
+
+```
+<Svg
+    height="60"
+    width="200"
+>
+    <Text
+        fill="none"
+        stroke="purple"
+        fontSize="20"
+        fontWeight="bold"
+        x="100"
+        y="20"
+        alignment="center"
+    >STROKED TEXT</Text>
+</Svg>
+```
+
+![Rect](./screenShoots/text.png)
 
 #### Run example:
 
@@ -124,3 +364,4 @@ npm install
 
 [SVG bounding Algorithm](https://github.com/icons8/svg-path-bounding-box)
 [Circle drawing with svg arc path](http://stackoverflow.com/questions/5737975/circle-drawing-with-svgs-arc-path/10477334#10477334)
+[w3schools.com SVG Tutorial](http://www.w3schools.com/svg/)
