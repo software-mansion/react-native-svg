@@ -186,7 +186,15 @@ const icon = <Svg
 </Svg>;
 
 
-const samples = [LinearGradientHorizontal, LinearGradientVertical, LinearGradientPercent, RadialGradientExample, RadialGradientPercent, RadialGradientPart, FillGradientWithOpacity];
+const samples = [
+    LinearGradientHorizontal,
+    LinearGradientVertical,
+    LinearGradientPercent,
+    RadialGradientExample,
+    RadialGradientPercent,
+    RadialGradientPart,
+    FillGradientWithOpacity
+];
 
 export {
     icon,

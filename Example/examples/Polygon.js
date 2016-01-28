@@ -95,7 +95,7 @@ const icon = <Svg
     </Group>
 </Svg>;
 
-const samples = [PolygonExample, FourSidePolygon, StarPolygon, EvenOddPolygon];
+const samples = [PolygonExample, FourSidePolygon, StarPolygon];
 
 export {
     icon,
