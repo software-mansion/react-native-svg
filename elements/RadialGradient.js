@@ -5,17 +5,12 @@ import React, {
     Children
 } from 'react-native';
 let {
-    Group,
     RadialGradient: ARTRadialGradient
 } = ART;
-import {set, remove} from '../lib/fillFilter';
-import percentFactory from '../lib/percentFactory';
-import percentToFloat from '../lib/percentToFloat';
-import Stop from './Stop';
-import Color from 'color';
-let percentReg = /^(\-?\d+(?:\.\d+)?)(%?)$/;
+import stopsOpacity from '../lib/stopsOpacity';
+import Gradient from './Gradient';
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
-class RadialGradient extends Component{
+class RadialGradient extends Gradient{
     static displayName = 'RadialGradient';
     static propTypes = {
         fx: propType,
@@ -26,22 +21,6 @@ class RadialGradient extends Component{
         cy: propType,
         r: propType,
         id: PropTypes.string
-    };
-
-    constructor() {
-        super(...arguments);
-        this.id = this.props.id + ':' + this.props.svgId;
-    }
-
-    componentWillReceiveProps = nextProps => {
-        let id = nextProps.id + ':' + nextProps.svgId;
-        if (id !== this.id) {
-            remove(this.id);
-        }
-    };
-
-    componentWillUnmount = () => {
-        remove(this.id);
     };
 
     render() {
@@ -55,42 +34,28 @@ class RadialGradient extends Component{
             r
         } = this.props;
 
-        // TODO: render differently from svg in html
         if (r) {
             rx = ry = +r;
         }
-        let stops = {};
-        Children.forEach(this.props.children, child => {
-            if (child.type === Stop && child.props.stopColor && child.props.offset) {
-                // convert percent to float.
-                let offset = percentToFloat(child.props.offset);
-
-                // add stop
-                stops[offset] = Color(child.props.stopColor).alpha(+child.props.stopOpacity).rgbaString();
-
-
-                let factories = percentFactory(fx, fy, rx, ry, cx, cy);
-                if (factories) {
-                    set(this.id, function (boundingBox) {
-                        let {x1,y1,width, height} = boundingBox;
-                        return new ARTRadialGradient(
-                            stops,
-                            x1 + factories[0](width),
-                            y1 + factories[1](height),
-                            factories[2](width),
-                            factories[3](height),
-                            x1 + factories[4](width),
-                            y1 + factories[5](height)
-                        );
-                    });
-                } else {
-                    set(this.id, new ARTRadialGradient(stops, fx, fy, rx, ry, cx, cy));
-                }
-            } else {
-                console.warn(`'RadialGradient' can only receive 'Stop' elements as children`);
+        let gradientProps = [fx, fy, rx, ry, cx, cy];
+        return super.render(
+            gradientProps,
+            function (factories, stops, boundingBox, opacity) {
+                let {x1,y1,width, height} = boundingBox;
+                return new ARTRadialGradient(
+                    stopsOpacity(stops, opacity),
+                    x1 + factories[0](width),
+                    y1 + factories[1](height),
+                    factories[2](width),
+                    factories[3](height),
+                    x1 + factories[4](width),
+                    y1 + factories[5](height)
+                );
+            },
+            function (stops, opacity) {
+                return new ARTRadialGradient(stopsOpacity(stops, opacity), ...gradientProps);
             }
-        });
-        return <Group />;
+        );
     }
 }
 
