@@ -75,7 +75,7 @@ class DefsUse extends Component{
     }
 }
 
-// TODO: more details should be handled(different Svg namespace、(remove, add, update) Defs children)
+// TODO: defination scope, global or local?
 class Defs extends Component{
     static displayName = 'Defs';
     static Item = DefsItem;
