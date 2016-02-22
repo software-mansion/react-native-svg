@@ -16,6 +16,7 @@ class SymbolElement extends Component{
         let {props} = this;
         return <Defs.Item
             id={props.id}
+            svgId={props.svgId}
         >
             <ViewBox
                 {...props}
