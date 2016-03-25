@@ -39,7 +39,6 @@ class ViewBox extends Component{
             scaleY={scaleY}
             preserveAspectRatio={null}
             viewbox={null}
-            preserveAspectRatio={null}
         >
             {(!scaleX || !scaleY) ? null : this.props.children}
         </G>
