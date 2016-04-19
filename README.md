@@ -572,6 +572,8 @@ npm install
 3. textPath ([wait for official supports](https://github.com/facebook/react-native/blob/master/Libraries/ART/ARTText.m#L56))
 4. pattern ([wait for official supports](https://github.com/facebook/react-native/blob/master/Libraries/ART/ReactNativeART.js#L332))
 5. [animations](https://github.com/gorangajic/react-svg-morph)
+6. isolated from ART\`s dependency
+
 
 #### Thanks:
 

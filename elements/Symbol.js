@@ -1,7 +1,6 @@
 import React, {
     Component,
-    PropTypes,
-    ART
+    PropTypes
 } from 'react-native';
 
 import ViewBox from './ViewBox';

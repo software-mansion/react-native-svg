@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "react-native": "^0.18.1",
-    "react-native-art-svg": "^1.0.8",
+    "react-native-art-svg": "../",
     "react-native-root-modal": "^1.0.3"
   }
 }

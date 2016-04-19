@@ -1,11 +1,7 @@
 import React, {
     Component,
-    PropTypes,
-    ART
+    PropTypes
 } from 'react-native';
-let {
-    Group
-} = ART;
 class Stop extends Component{
     static displayName = 'Stop';
     static propTypes = {

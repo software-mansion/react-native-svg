@@ -1,16 +1,16 @@
 import React, {
-    ART,
     Component,
     PropTypes,
     Children,
-    cloneElement
+    cloneElement,
+    ART
 } from 'react-native';
 import extractViewbox from '../lib/extractViewbox';
 import ViewBox from './ViewBox';
 import _ from 'lodash';
+
 let {
-    Surface,
-    Group
+    Surface
 } = ART;
 
 let id = 0;
@@ -54,6 +54,7 @@ class Svg extends Component{
 
         return <Surface
             {...props}
+            ref="svg"
             style={[
                 props.style,
                 !isNaN(opacity) && {

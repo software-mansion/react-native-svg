@@ -1,12 +1,7 @@
 import React, {
     Component,
-    PropTypes,
-    ART
+    PropTypes
 } from 'react-native';
-
-let {
-    Shape,
-} = ART;
 
 import G from './G';
 import extractViewbox from '../lib/extractViewbox';

@@ -1,10 +1,9 @@
 import React, {
     Component,
-    PropTypes,
-    ART
+    PropTypes
 } from 'react-native';
 import Path from './Path';
-
+import strokeFilter from '../lib/strokeFilter';
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 class Ellipse extends Component{
     static displayName = 'Ellipse';
@@ -25,8 +24,6 @@ class Ellipse extends Component{
         `;
         return <Path
             {...props}
-            strokeCap={null}
-            strokeJoin={null}
             cx={null}
             cy={null}
             rx={null}

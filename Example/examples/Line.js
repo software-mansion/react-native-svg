@@ -8,6 +8,7 @@ import Svg, {
 
 class LineExample extends Component{
     static title = 'Line';
+
     render() {
         return <Svg
             height="100"

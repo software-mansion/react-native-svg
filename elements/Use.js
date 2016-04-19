@@ -1,7 +1,6 @@
 import React, {
     Component,
     PropTypes,
-    ART,
     cloneElement
 } from 'react-native';
 import Defs from './Defs';
