@@ -32,7 +32,7 @@ class Svg extends Component{
         this.id = id;
     }
 
-    getChildren = () => {
+    getChildren = function(){
         return Children.map(this.props.children, child => {
             return cloneElement(child, {
                 svgId: this.id
