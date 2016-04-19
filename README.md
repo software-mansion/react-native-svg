@@ -573,6 +573,7 @@ npm install
 4. pattern ([wait for official supports](https://github.com/facebook/react-native/blob/master/Libraries/ART/ReactNativeART.js#L332))
 5. [animations](https://github.com/gorangajic/react-svg-morph)
 6. isolated from ART\`s dependency
+7. fix propTypes
 
 
 #### Thanks:

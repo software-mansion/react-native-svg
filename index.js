@@ -1,5 +1,4 @@
 import React, {
-    ART,
     Component
 } from 'react-native';
 import Rect from './elements/Rect';
@@ -19,15 +18,10 @@ import LinearGradient from './elements/LinearGradient';
 import RadialGradient from './elements/RadialGradient';
 import Stop from './elements/Stop';
 
-let {
-    Group
-} = ART;
-
 export {
     Svg,
     Circle,
     Ellipse,
-    Group,
     G,
     Text,
     Path,

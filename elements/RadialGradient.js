@@ -1,26 +1,53 @@
 import React, {
     Component,
     PropTypes,
-    ART,
     Children
 } from 'react-native';
-let {
-    RadialGradient: ARTRadialGradient
-} = ART;
 import stopsOpacity from '../lib/stopsOpacity';
+import numberProp from '../lib/numberProp';
 import Gradient from './Gradient';
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
+import {RADIAL_GRADIENT} from '../lib/extractBrush';
+import {insertDoubleColorStopsIntoArray} from '../lib/insertProcessor';
+
+
+function RadialGradientGenerator(stops, fx, fy, rx, ry, cx, cy) {
+    if (ry == null) {
+        ry = rx;
+    }
+    if (cx == null) {
+        cx = fx;
+    }
+    if (cy == null) {
+        cy = fy;
+    }
+    if (fx == null) {
+        // As a convenience we allow the whole radial gradient to cover the
+        // bounding box. We should consider dropping this API.
+        fx = fy = rx = ry = cx = cy = 0.5;
+        this._bb = true;
+    } else {
+        this._bb = false;
+    }
+    // The ART API expects the radial gradient to be repeated at the edges.
+    // To simulate this we render the gradient twice as large and add double
+    // color stops. Ideally this API would become more restrictive so that this
+    // extra work isn't needed.
+    var brushData = [RADIAL_GRADIENT, +fx, +fy, +rx * 2, +ry * 2, +cx, +cy];
+    insertDoubleColorStopsIntoArray(stops, brushData, 7);
+    this._brush = brushData;
+}
+
 class RadialGradient extends Gradient{
     static displayName = 'RadialGradient';
     static propTypes = {
-        fx: propType,
-        fy: propType,
-        rx: propType,
-        ry: propType,
-        cx: propType,
-        cy: propType,
-        r: propType,
-        id: PropTypes.string
+        fx: numberProp,
+        fy: numberProp,
+        rx: numberProp,
+        ry: numberProp,
+        cx: numberProp,
+        cy: numberProp,
+        r: numberProp,
+        id: PropTypes.string.isRequired
     };
 
     render() {
@@ -34,15 +61,12 @@ class RadialGradient extends Gradient{
             r
         } = this.props;
 
-        if (r) {
-            rx = ry = +r;
-        }
-        let gradientProps = [fx, fy, rx, ry, cx, cy];
+        let gradientProps = [fx, fy, rx || r, ry || r, cx, cy];
         return super.render(
             gradientProps,
             function (factories, stops, boundingBox, opacity) {
                 let {x1,y1,width, height} = boundingBox;
-                return new ARTRadialGradient(
+                return new RadialGradientGenerator(
                     stopsOpacity(stops, opacity),
                     x1 + factories[0](width),
                     y1 + factories[1](height),
@@ -53,7 +77,7 @@ class RadialGradient extends Gradient{
                 );
             },
             function (stops, opacity) {
-                return new ARTRadialGradient(stopsOpacity(stops, opacity), ...gradientProps);
+                return new RadialGradientGenerator(stopsOpacity(stops, opacity), ...gradientProps);
             }
         );
     }

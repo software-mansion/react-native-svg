@@ -112,7 +112,7 @@ const icon = <Svg
     >字</Text>
 </Svg>;
 
-const samples = [TextExample, TextRotate, TextStroke];
+const samples = [TextExample, TextRotate, TextStroke, TextPath];
 
 export {
     icon,
