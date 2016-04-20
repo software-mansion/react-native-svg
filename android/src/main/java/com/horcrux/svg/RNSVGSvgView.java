@@ -17,13 +17,13 @@ import android.graphics.Canvas;
 import android.view.View;
 
 /**
- * Custom {@link View} implementation that draws an RNSVGSurface React view and its children.
+ * Custom {@link View} implementation that draws an RNSVGSvg React view and its children.
  */
-public class RNSVGSurfaceView extends View {
+public class RNSVGSvgView extends View {
 
   private @Nullable Bitmap mBitmap;
 
-  public RNSVGSurfaceView(Context context) {
+  public RNSVGSvgView(Context context) {
     super(context);
   }
 

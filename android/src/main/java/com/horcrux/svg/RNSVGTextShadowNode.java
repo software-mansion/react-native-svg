@@ -23,7 +23,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 /**
  * Shadow node for virtual RNSVGText view
  */
-public class RNSVGTextShadowNode extends RNSVGShapeShadowNode {
+public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
 
   private static final String PROP_LINES = "lines";
 

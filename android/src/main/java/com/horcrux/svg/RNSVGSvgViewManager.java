@@ -17,18 +17,18 @@ import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 
 /**
- * ViewManager for RNSVGSurfaceView React views. Renders as a {@link RNSVGSurfaceView} and handles
+ * ViewManager for RNSVGSvgView React views. Renders as a {@link RNSVGSvgView} and handles
  * invalidating the native view on shadow view updates happening in the underlying tree.
  */
-public class RNSVGSurfaceViewManager extends
-    BaseViewManager<RNSVGSurfaceView, RNSVGSurfaceViewShadowNode> {
+public class RNSVGSvgViewManager extends
+    BaseViewManager<RNSVGSvgView, RNSVGSvgViewShadowNode> {
 
-  private static final String REACT_CLASS = "RNSVGSurfaceView";
+  private static final String REACT_CLASS = "RNSVGSvgView";
 
   private static final CSSNode.MeasureFunction MEASURE_FUNCTION = new CSSNode.MeasureFunction() {
     @Override
     public void measure(CSSNode node, float width, float height, MeasureOutput measureOutput) {
-      throw new IllegalStateException("SurfaceView should have explicit width and height set");
+      throw new IllegalStateException("SvgView should have explicit width and height set");
     }
   };
 
@@ -38,24 +38,24 @@ public class RNSVGSurfaceViewManager extends
   }
 
   @Override
-  public RNSVGSurfaceViewShadowNode createShadowNodeInstance() {
-    RNSVGSurfaceViewShadowNode node = new RNSVGSurfaceViewShadowNode();
+  public RNSVGSvgViewShadowNode createShadowNodeInstance() {
+    RNSVGSvgViewShadowNode node = new RNSVGSvgViewShadowNode();
     node.setMeasureFunction(MEASURE_FUNCTION);
     return node;
   }
 
   @Override
-  public Class<RNSVGSurfaceViewShadowNode> getShadowNodeClass() {
-    return RNSVGSurfaceViewShadowNode.class;
+  public Class<RNSVGSvgViewShadowNode> getShadowNodeClass() {
+    return RNSVGSvgViewShadowNode.class;
   }
 
   @Override
-  protected RNSVGSurfaceView createViewInstance(ThemedReactContext reactContext) {
-    return new RNSVGSurfaceView(reactContext);
+  protected RNSVGSvgView createViewInstance(ThemedReactContext reactContext) {
+    return new RNSVGSvgView(reactContext);
   }
 
   @Override
-  public void updateExtraData(RNSVGSurfaceView root, Object extraData) {
+  public void updateExtraData(RNSVGSvgView root, Object extraData) {
     root.setBitmap((Bitmap) extraData);
   }
 }

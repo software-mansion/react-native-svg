@@ -22,7 +22,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ReactShadowNode;
 
 /**
- * Base class for RNSVGView virtual nodes: {@link RNSVGGroupShadowNode}, {@link RNSVGShapeShadowNode} and
+ * Base class for RNSVGView virtual nodes: {@link RNSVGGroupShadowNode}, {@link RNSVGPathShadowNode} and
  * indirectly for {@link RNSVGTextShadowNode}.
  */
 public abstract class RNSVGVirtualNode extends ReactShadowNode {

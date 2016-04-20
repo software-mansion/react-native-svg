@@ -21,5 +21,8 @@
         "color": "^0.11.1",
         "svgpath": "^2.1.5",
         "lodash": "^4.0.0"
+    },
+    "peerDependencies": {
+        "react-native": "^0.24.0"
     }
 }

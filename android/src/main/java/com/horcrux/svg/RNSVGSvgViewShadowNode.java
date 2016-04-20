@@ -17,9 +17,9 @@ import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
 
 /**
- * Shadow node for RNSVG virtual tree root - RNSVGSurfaceView
+ * Shadow node for RNSVG virtual tree root - RNSVGSvgView
  */
-public class RNSVGSurfaceViewShadowNode extends LayoutShadowNode {
+public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
 
   @Override
   public boolean isVirtual() {
@@ -38,7 +38,7 @@ public class RNSVGSurfaceViewShadowNode extends LayoutShadowNode {
   }
 
   private Object drawOutput() {
-    // TODO(7255985): Use TextureView and pass Surface from the view to draw on it asynchronously
+    // TODO(7255985): Use TextureView and pass Svg from the view to draw on it asynchronously
     // instead of passing the bitmap (which is inefficient especially in terms of memory usage)
     Bitmap bitmap = Bitmap.createBitmap(
         (int) getLayoutWidth(),

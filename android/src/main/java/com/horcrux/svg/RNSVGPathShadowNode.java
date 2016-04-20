@@ -23,9 +23,9 @@ import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
- * Shadow node for virtual RNSVGShape view
+ * Shadow node for virtual RNSVGPath view
  */
-public class RNSVGShapeShadowNode extends RNSVGVirtualNode {
+public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
   private static final int CAP_BUTT = 0;
   private static final int CAP_ROUND = 1;
@@ -50,7 +50,7 @@ public class RNSVGShapeShadowNode extends RNSVGVirtualNode {
   private int mStrokeJoin = JOIN_ROUND;
 
   @ReactProp(name = "d")
-  public void setShapePath(@Nullable ReadableArray shapePath) {
+  public void setPath(@Nullable ReadableArray shapePath) {
     float[] pathData = PropHelper.toFloatArray(shapePath);
     mPath = createPath(pathData);
     markUpdated();
@@ -99,7 +99,7 @@ public class RNSVGShapeShadowNode extends RNSVGVirtualNode {
       saveAndSetupCanvas(canvas);
       if (mPath == null) {
         throw new JSApplicationIllegalArgumentException(
-            "Shapes should have a valid path (d) prop");
+            "Paths should have a valid path (d) prop");
       }
       if (setupStrokePaint(paint, opacity)) {
         canvas.drawPath(mPath, paint);
