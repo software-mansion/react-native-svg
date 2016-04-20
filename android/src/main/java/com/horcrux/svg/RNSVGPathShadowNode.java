@@ -11,7 +11,6 @@ package com.horcrux.svg;
 
 import javax.annotation.Nullable;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -31,8 +30,6 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-import java.util.Arrays;
-
 /**
  * Shadow node for virtual RNSVGPath view
  */
@@ -45,6 +42,9 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private static final int JOIN_BEVEL = 2;
     private static final int JOIN_MITER = 0;
     private static final int JOIN_ROUND = 1;
+
+    private static final int RULE_EVENODD = 0;
+    private static final int RULE_NONZERO = 1;
 
     private static final int PATH_TYPE_ARC = 4;
     private static final int PATH_TYPE_CLOSE = 1;
@@ -59,6 +59,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private float mStrokeWidth = 1;
     private int mStrokeLinecap = CAP_ROUND;
     private int mStrokeLinejoin = JOIN_ROUND;
+    private int mFillRule = RULE_NONZERO;
 
     private Point mPaint;
 
@@ -84,6 +85,13 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     @ReactProp(name = "fill")
     public void setFill(@Nullable ReadableArray fillColors) {
         mFillColor = PropHelper.toFloatArray(fillColors);
+        markUpdated();
+    }
+
+
+    @ReactProp(name = "fillRule", defaultInt = RULE_NONZERO)
+    public void setFillRule(int fillRule) {
+        mFillRule = fillRule;
         markUpdated();
     }
 
@@ -114,10 +122,10 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                 throw new JSApplicationIllegalArgumentException(
                     "Paths should have a valid path (d) prop");
             }
-            if (setupStrokePaint(paint, opacity)) {
+            if (setupFillPaint(paint, opacity)) {
                 canvas.drawPath(mPath, paint);
             }
-            if (setupFillPaint(paint, opacity)) {
+            if (setupStrokePaint(paint, opacity)) {
                 canvas.drawPath(mPath, paint);
             }
             restoreCanvas(canvas);
@@ -164,6 +172,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                 throw new JSApplicationIllegalArgumentException(
                     "strokeLinejoin " + mStrokeLinejoin + " unrecognized");
         }
+
         paint.setStrokeWidth(mStrokeWidth * mScale);
         paint.setARGB(
             (int) (mStrokeColor.length > 3 ? mStrokeColor[3] * opacity * 255 : opacity * 255),
@@ -174,6 +183,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
             // TODO(6352067): Support dashes
             FLog.w(ReactConstants.TAG, "RNSVG: Dashes are not supported yet!");
         }
+
         return true;
     }
 
@@ -185,7 +195,11 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         for (int i = 0; i < stopsCount; i++) {
             int half = stopsCount / 2;
 
+            // stops keep in a order like this
+            // 0 1 2 3 4 9 8 7 6 5
+
             stops[i] = value[startStops + (i < half ? i : (half + (stopsCount - i) - 1))];
+
             stopsColors[i] = Color.argb(
                     (int) (value[startColorsPosition + i * 4 + 3] * 255),
                     (int) (value[startColorsPosition + i * 4] * 255),
@@ -239,6 +253,9 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                     stops = new float[stopsCount];
                     parseGradientStops(mFillColor, stopsCount, stops, stopsColors, 7);
 
+                    float focusX = mFillColor[1];
+                    float focusY = mFillColor[2];
+
                     float radius = mFillColor[3];
                     float radiusRatio = mFillColor[4] / radius;
                     Shader radialGradient = new RadialGradient(
@@ -286,6 +303,18 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
      */
     private Path createPath(float[] data) {
         Path path = new Path();
+        switch (mFillRule) {
+            case RULE_EVENODD:
+                path.setFillType(Path.FillType.EVEN_ODD);
+                break;
+            case RULE_NONZERO:
+                //path.setFillType(Path.FillType.INVERSE_WINDING);
+                break;
+            default:
+                throw new JSApplicationIllegalArgumentException(
+                    "fillRule " + mFillRule + " unrecognized");
+        }
+
         path.moveTo(0, 0);
         int i = 0;
         while (i < data.length) {
