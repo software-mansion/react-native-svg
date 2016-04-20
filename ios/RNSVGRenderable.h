@@ -11,11 +11,13 @@
 
 #import "RNSVGBrush.h"
 #import "RNSVGCGFloatArray.h"
+#import "RNSVGCGFillRule.h"
 #import "RNSVGNode.h"
 
 @interface RNSVGRenderable : RNSVGNode
 
 @property (nonatomic, strong) RNSVGBrush *fill;
+@property (nonatomic, assign) RNSVGCGFillRule fillRule;
 @property (nonatomic, assign) CGColorRef stroke;
 @property (nonatomic, assign) CGFloat strokeWidth;
 @property (nonatomic, assign) CGLineCap strokeLinecap;

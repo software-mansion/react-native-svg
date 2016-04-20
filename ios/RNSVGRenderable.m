@@ -17,6 +17,12 @@
   _fill = fill;
 }
 
+- (void)setFillRule:(RNSVGCGFillRule)fillRule
+{
+    [self invalidate];
+    _fillRule = fillRule;
+}
+
 - (void)setStroke:(CGColorRef)stroke
 {
   if (stroke == _stroke) {

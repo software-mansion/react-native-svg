@@ -13,11 +13,13 @@
 #import "RNSVGCGFloatArray.h"
 #import "RNSVGTextFrame.h"
 #import "RCTConvert.h"
+#import "RNSVGCGFillRule.h"
 
 @interface RCTConvert (RNSVG)
 
 + (CGPathRef)CGPath:(id)json;
 + (CTTextAlignment)CTTextAlignment:(id)json;
++ (RNSVGCGFillRule)ARTCGFillRule:(id)json;
 + (RNSVGTextFrame)RNSVGTextFrame:(id)json;
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;

@@ -10,6 +10,7 @@
 #import "RNSVGRenderableManager.h"
 
 #import "RCTConvert+RNSVG.h"
+#import "RNSVGCGFillRule.h"
 
 @implementation RNSVGRenderableManager
 
@@ -24,6 +25,7 @@ RCT_EXPORT_VIEW_PROPERTY(strokeWidth, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(strokeLinecap, CGLineCap)
 RCT_EXPORT_VIEW_PROPERTY(strokeLinejoin, CGLineJoin)
 RCT_EXPORT_VIEW_PROPERTY(fill, RNSVGBrush)
+RCT_EXPORT_VIEW_PROPERTY(fillRule, RNSVGCGFillRule)
 RCT_EXPORT_VIEW_PROPERTY(stroke, CGColor)
 RCT_EXPORT_VIEW_PROPERTY(strokeDash, RNSVGCGFloatArray)
 
