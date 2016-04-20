@@ -182,23 +182,15 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
    */
     private static void parseGradientStops(float[] value, int stopsCount, float[] stops, int[] stopsColors, int startColorsPosition) {
         int startStops = value.length - stopsCount;
-        int offset = 0;
         for (int i = 0; i < stopsCount; i++) {
-            int index;
+            int half = stopsCount / 2;
 
-            if (i % 2 == 0) {
-                index = i / 2;
-            } else {
-                index = stopsCount + offset - i;
-                offset++;
-            }
-
-            stops[i] = value[startStops + index];
+            stops[i] = value[startStops + (i < half ? i : (half + (stopsCount - i) - 1))];
             stopsColors[i] = Color.argb(
-                    (int) (value[startColorsPosition + 3 + index * 4] * 255),
-                    (int) (value[startColorsPosition + index * 4] * 255),
-                    (int) (value[startColorsPosition + 1 + index * 4] * 255),
-                    (int) (value[startColorsPosition + 2 + index * 4] * 255));
+                    (int) (value[startColorsPosition + i * 4 + 3] * 255),
+                    (int) (value[startColorsPosition + i * 4] * 255),
+                    (int) (value[startColorsPosition + i * 4 + 1] * 255),
+                    (int) (value[startColorsPosition + i * 4 + 2] * 255));
 
         }
     }

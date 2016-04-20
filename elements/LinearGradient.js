@@ -66,7 +66,6 @@ class LinearGradient extends Gradient{
                 );
             },
             function (stops, opacity) {
-                console.log(stopsOpacity(stops, opacity), ...gradientProps);
                 return new LinearGradientGenerator(stopsOpacity(stops, opacity), ...gradientProps);
             }
         );
