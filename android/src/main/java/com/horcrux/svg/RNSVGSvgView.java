@@ -21,25 +21,25 @@ import android.view.View;
  */
 public class RNSVGSvgView extends View {
 
-  private @Nullable Bitmap mBitmap;
+    private @Nullable Bitmap mBitmap;
 
-  public RNSVGSvgView(Context context) {
-    super(context);
-  }
-
-  public void setBitmap(Bitmap bitmap) {
-    if (mBitmap != null) {
-      mBitmap.recycle();
+    public RNSVGSvgView(Context context) {
+        super(context);
     }
-    mBitmap = bitmap;
-    invalidate();
-  }
 
-  @Override
-  protected void onDraw(Canvas canvas) {
-    super.onDraw(canvas);
-    if (mBitmap != null) {
-      canvas.drawBitmap(mBitmap, 0, 0, null);
+    public void setBitmap(Bitmap bitmap) {
+        if (mBitmap != null) {
+            mBitmap.recycle();
+        }
+        mBitmap = bitmap;
+        invalidate();
     }
-  }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (mBitmap != null) {
+            canvas.drawBitmap(mBitmap, 0, 0, null);
+        }
+    }
 }

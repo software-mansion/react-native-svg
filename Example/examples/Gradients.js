@@ -83,6 +83,11 @@ class RadialGradientExample  extends Component{
                         stopOpacity="1"
                     />
                     <Stop
+                        offset="0.3"
+                        stopColor="#000"
+                        stopOpacity="1"
+                    />
+                    <Stop
                         offset="1"
                         stopColor="#83a"
                         stopOpacity="1"
@@ -120,33 +125,6 @@ class RadialGradientPercent extends Component{
     }
 }
 
-class FillGradientWithOpacity extends Component{
-    static title = 'Fill a radial gradient with fillOpacity prop';
-    render() {
-        return <Svg
-            height="150"
-            width="300"
-        >
-            <Defs>
-                <RadialGradient id="grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                    <Stop
-                        offset="0%"
-                        stopColor="#fff"
-                        stopOpacity="1"
-                    />
-                    <Stop
-                        offset="100%"
-                        stopColor="#00f"
-                        stopOpacity="1"
-                    />
-                </RadialGradient>
-            </Defs>
-            <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad)" fillOpacity="0.2" />
-        </Svg>;
-    }
-}
-
-
 class RadialGradientPart extends Component{
     static title = 'Define another ellipse with a radial gradient from white to blue';
     render() {
@@ -173,6 +151,32 @@ class RadialGradientPart extends Component{
     }
 }
 
+
+class FillGradientWithOpacity extends Component{
+    static title = 'Fill a radial gradient with fillOpacity prop';
+    render() {
+        return <Svg
+            height="150"
+            width="300"
+        >
+            <Defs>
+                <RadialGradient id="grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                    <Stop
+                        offset="0%"
+                        stopColor="#fff"
+                        stopOpacity="1"
+                    />
+                    <Stop
+                        offset="100%"
+                        stopColor="#00f"
+                        stopOpacity="1"
+                    />
+                </RadialGradient>
+            </Defs>
+            <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad)" fillOpacity="0.2" />
+        </Svg>;
+    }
+}
 
 const icon = <Svg
     height="20"

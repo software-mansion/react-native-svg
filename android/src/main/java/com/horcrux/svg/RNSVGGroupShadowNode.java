@@ -9,6 +9,7 @@
 
 package com.horcrux.svg;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
@@ -17,23 +18,23 @@ import android.graphics.Paint;
  */
 public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
 
-  @Override
-  public boolean isVirtual() {
-    return true;
-  }
-
-  public void draw(Canvas canvas, Paint paint, float opacity) {
-    opacity *= mOpacity;
-    if (opacity > MIN_OPACITY_FOR_DRAW) {
-      saveAndSetupCanvas(canvas);
-      // TODO(6352006): apply clipping (iOS doesn't do it yet, it seems to cause issues)
-      for (int i = 0; i < getChildCount(); i++) {
-        RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
-        child.draw(canvas, paint, opacity);
-        child.markUpdateSeen();
-      }
-
-      restoreCanvas(canvas);
+    @Override
+    public boolean isVirtual() {
+        return true;
     }
-  }
+
+    public void draw(Canvas canvas, Paint paint, float opacity) {
+        opacity *= mOpacity;
+        if (opacity > MIN_OPACITY_FOR_DRAW) {
+            saveAndSetupCanvas(canvas);
+            // TODO(6352006): apply clipping (iOS doesn't do it yet, it seems to cause issues)
+            for (int i = 0; i < getChildCount(); i++) {
+                RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
+                child.draw(canvas, paint, opacity);
+                child.markUpdateSeen();
+            }
+
+            restoreCanvas(canvas);
+        }
+    }
 }

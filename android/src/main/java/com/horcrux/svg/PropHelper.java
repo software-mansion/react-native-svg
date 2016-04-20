@@ -49,5 +49,6 @@ import com.facebook.react.bridge.ReadableArray;
             into[i] = (float) value.getDouble(i);
         }
         return value.size();
+
     }
 }
