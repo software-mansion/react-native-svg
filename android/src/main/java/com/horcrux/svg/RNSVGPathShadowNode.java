@@ -20,6 +20,7 @@ import android.graphics.RectF;
 
 import android.graphics.Color;
 import android.graphics.LinearGradient;
+import android.graphics.Region;
 import android.graphics.Shader;
 import android.graphics.Matrix;
 import android.util.Log;
@@ -43,14 +44,8 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private static final int JOIN_MITER = 0;
     private static final int JOIN_ROUND = 1;
 
-    private static final int RULE_EVENODD = 0;
-    private static final int RULE_NONZERO = 1;
-
-    private static final int PATH_TYPE_ARC = 4;
-    private static final int PATH_TYPE_CLOSE = 1;
-    private static final int PATH_TYPE_CURVETO = 3;
-    private static final int PATH_TYPE_LINETO = 2;
-    private static final int PATH_TYPE_MOVETO = 0;
+    private static final int FILL_RULE_EVENODD = 0;
+    private static final int FILL_RULE_NONZERO = 1;
 
     protected @Nullable Path mPath;
     private @Nullable float[] mStrokeColor;
@@ -59,14 +54,26 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private float mStrokeWidth = 1;
     private int mStrokeLinecap = CAP_ROUND;
     private int mStrokeLinejoin = JOIN_ROUND;
-    private int mFillRule = RULE_NONZERO;
+    private int mFillRule = FILL_RULE_NONZERO;
 
     private Point mPaint;
 
     @ReactProp(name = "d")
     public void setPath(@Nullable ReadableArray shapePath) {
         float[] pathData = PropHelper.toFloatArray(shapePath);
-        mPath = createPath(pathData);
+        Path path = new Path();
+        switch (mFillRule) {
+            case FILL_RULE_EVENODD:
+                path.setFillType(Path.FillType.EVEN_ODD);
+                break;
+            case FILL_RULE_NONZERO:
+                break;
+            default:
+                throw new JSApplicationIllegalArgumentException(
+                    "fillRule " + mFillRule + " unrecognized");
+        }
+
+        mPath = super.createPath(pathData, path);
         markUpdated();
     }
 
@@ -89,7 +96,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     }
 
 
-    @ReactProp(name = "fillRule", defaultInt = RULE_NONZERO)
+    @ReactProp(name = "fillRule", defaultInt = FILL_RULE_NONZERO)
     public void setFillRule(int fillRule) {
         mFillRule = fillRule;
         markUpdated();
@@ -122,12 +129,19 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                 throw new JSApplicationIllegalArgumentException(
                     "Paths should have a valid path (d) prop");
             }
+
+            if (mClipPath != null) {
+                canvas.clipPath(mClipPath, Region.Op.REPLACE);
+
+            }
+
             if (setupFillPaint(paint, opacity)) {
                 canvas.drawPath(mPath, paint);
             }
             if (setupStrokePaint(paint, opacity)) {
                 canvas.drawPath(mPath, paint);
             }
+
             restoreCanvas(canvas);
         }
         markUpdateSeen();
@@ -253,7 +267,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                     stops = new float[stopsCount];
                     parseGradientStops(mFillColor, stopsCount, stops, stopsColors, 7);
 
-                    // TODO:
+                    // TODO: support focus
                     float focusX = mFillColor[1];
                     float focusY = mFillColor[2];
 
@@ -269,18 +283,9 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                     );
 
                     Matrix radialMatrix = new Matrix();
-                    float [] rawMatrix = new float[9];
-                    rawMatrix[0] = 1;
-                    rawMatrix[1] = 0;
-                    rawMatrix[2] = 0;
-                    rawMatrix[3] = 0;
-                    rawMatrix[4] = radiusRatio;
-                    rawMatrix[5] = 0;
-                    rawMatrix[6] = 0;
-                    rawMatrix[7] = 0;
-                    rawMatrix[8] = 1;
 
-                    radialMatrix.setValues(rawMatrix);
+                    // seems like a bug here?
+                    radialMatrix.preScale(1f, radiusRatio);
                     radialGradient.setLocalMatrix(radialMatrix);
                     paint.setShader(radialGradient);
                     break;
@@ -291,75 +296,5 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Creates a {@link Path} from an array of instructions constructed by JS
-     * (see RNSVGSerializablePath.js). Each instruction starts with a type (see PATH_TYPE_*) followed
-     * by arguments for that instruction. For example, to create a line the instruction will be
-     * 2 (PATH_LINE_TO), x, y. This will draw a line from the last draw point (or 0,0) to x,y.
-     *
-     * @param data the array of instructions
-     * @return the {@link Path} that can be drawn to a canvas
-     */
-    private Path createPath(float[] data) {
-        Path path = new Path();
-        switch (mFillRule) {
-            case RULE_EVENODD:
-                path.setFillType(Path.FillType.EVEN_ODD);
-                break;
-            case RULE_NONZERO:
-                //path.setFillType(Path.FillType.INVERSE_WINDING);
-                break;
-            default:
-                throw new JSApplicationIllegalArgumentException(
-                    "fillRule " + mFillRule + " unrecognized");
-        }
-
-        path.moveTo(0, 0);
-        int i = 0;
-        while (i < data.length) {
-            int type = (int) data[i++];
-            switch (type) {
-                case PATH_TYPE_MOVETO:
-                    path.moveTo(data[i++] * mScale, data[i++] * mScale);
-                    break;
-                case PATH_TYPE_CLOSE:
-                    path.close();
-                    break;
-                case PATH_TYPE_LINETO:
-                    path.lineTo(data[i++] * mScale, data[i++] * mScale);
-                    break;
-                case PATH_TYPE_CURVETO:
-                    path.cubicTo(
-                        data[i++] * mScale,
-                        data[i++] * mScale,
-                        data[i++] * mScale,
-                        data[i++] * mScale,
-                        data[i++] * mScale,
-                        data[i++] * mScale);
-                    break;
-                case PATH_TYPE_ARC:
-                {
-                    float x = data[i++] * mScale;
-                    float y = data[i++] * mScale;
-                    float r = data[i++] * mScale;
-                    float start = (float) Math.toDegrees(data[i++]);
-                    float end = (float) Math.toDegrees(data[i++]);
-                    boolean clockwise = data[i++] == 0f;
-                    if (!clockwise) {
-                        end = 360 - end;
-                    }
-                    float sweep = start - end;
-                    RectF oval = new RectF(x - r, y - r, x + r, y + r);
-                    path.addArc(oval, start, sweep);
-                    break;
-                }
-                default:
-                    throw new JSApplicationIllegalArgumentException(
-                        "Unrecognized drawing instruction " + type);
-            }
-        }
-        return path;
     }
 }
