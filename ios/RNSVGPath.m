@@ -36,6 +36,10 @@
         if ([self.fill applyFillColor:context]) {
             mode = self.fillRule == kRNSVGCGFCRuleEvenodd ? kCGPathEOFill : kCGPathFill;
         } else {
+            if (self.clipPath) {
+                [self clip:context];
+            }
+            
             CGContextSaveGState(context);
             CGContextAddPath(context, self.d);
             CGContextClip(context);

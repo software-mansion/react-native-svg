@@ -3,8 +3,10 @@ import React, {
 } from 'react-native';
 
 import Svg, {
-    GlipPath,
+    ClipPath,
     Defs,
+    RadialGradient,
+    Stop,
     Line,
     Rect,
     Text,
@@ -18,12 +20,26 @@ class ClipPathExample extends Component{
             height="100"
             width="100"
         >
+            <Defs>
+                <RadialGradient id="grad" cx="50%" cy="50%" rx="50%" ry="50%" fx="50%" fy="50%">
+                    <Stop
+                        offset="0%"
+                        stopColor="#fff"
+                        stopOpacity="1"
+                    />
+                    <Stop
+                        offset="100%"
+                        stopColor="#00f"
+                        stopOpacity="1"
+                    />
+                </RadialGradient>
+            </Defs>
             <Rect
                 x="0"
                 y="0"
                 width="100"
                 height="100"
-                fill="red"
+                fill="url(#grad)"
                 clipPath="M50,5L20,99L95,39L5,39L80,99z"
             />
         </Svg>;
@@ -31,7 +47,7 @@ class ClipPathExample extends Component{
 }
 
 class ClipRulePathExample extends Component{
-    static title = 'Clip by set clip-path with a path data';
+    static title = 'Clip a group with clipRule="evenodd"';
     render() {
         return <Svg
             height="100"
