@@ -106,7 +106,7 @@ const icon = <Svg
     />
 </Svg>;
 
-const samples = [SvgExample, SvgOpacity ,SvgViewbox];
+const samples = [SvgExample, SvgOpacity, SvgViewbox];
 
 export {
     icon,

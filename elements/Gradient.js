@@ -1,13 +1,10 @@
 import React, {
     Component,
     PropTypes,
-    ART,
     Children
 } from 'react-native';
-let {
-    Group
-} = ART;
-import {set, remove} from '../lib/fillFilter';
+import {NativeGroup} from './G';
+import {set, remove} from '../lib/extract/extractFill';
 import percentFactory from '../lib/percentFactory';
 import percentToFloat from '../lib/percentToFloat';
 import Stop from './Stop';
@@ -51,7 +48,7 @@ class RadialGradient extends Component{
                 console.warn(`'RadialGradient' can only receive 'Stop' elements as children`);
             }
         });
-        return <Group />;
+        return <NativeGroup />;
     }
 }
 

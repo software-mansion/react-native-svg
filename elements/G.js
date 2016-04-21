@@ -1,13 +1,12 @@
 import React, {
-    ART,
     Component,
     Children,
-    cloneElement
+    cloneElement,
+    requireNativeComponent
 } from 'react-native';
-let {
-    Group
-} = ART;
+import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
 import Defs from './Defs';
+import {GroupAttributes} from '../lib/attributes';
 
 const transformProps = {
     scale: null,
@@ -21,7 +20,12 @@ const transformProps = {
     originY: null
 };
 
-import transformFilter from '../lib/transformFilter';
+const clipProps = {
+    clipPath: null,
+    clipRule: null
+};
+
+import extractProps from '../lib/extract/extractProps';
 
 class G extends Component{
     static displayName = 'G';
@@ -30,6 +34,7 @@ class G extends Component{
         return Children.map(this.props.children, child => cloneElement(child, {
             ...this.props,
             ...transformProps,
+            ...clipProps,
             ...child.props,
             id: null
         }));
@@ -42,16 +47,27 @@ class G extends Component{
                 svgId={this.props.svgId}
                 visible={true}
             >
-                <G {...this.props} id={null} />
+                <G
+                    {...this.props}
+                    id={null}
+                />
             </Defs.Item>;
         } else {
-            return <Group
-                {...this.props}
-                {...transformFilter(this.props)}
-                id={null}
-            >{this.getChildren()}</Group>;
+            return <NativeGroup
+                {...extractProps(this.props, {transform: true})}
+            >
+                {this.getChildren()}
+            </NativeGroup>;
         }
     }
 }
 
+var NativeGroup = createReactNativeComponentClass({
+    validAttributes: GroupAttributes,
+    uiViewClassName: 'RNSVGGroup'
+});
+
 export default G;
+export {
+    NativeGroup
+}

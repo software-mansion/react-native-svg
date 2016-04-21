@@ -1,23 +1,49 @@
 import React, {
     Component,
     PropTypes,
-    ART,
     Children
 } from 'react-native';
-let {
-    LinearGradient: ARTLinearGradient
-} = ART;
+
 import stopsOpacity from '../lib/stopsOpacity';
+import numberProp from '../lib/numberProp';
 import Gradient from './Gradient';
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
+import {LINEAR_GRADIENT} from '../lib/extract/extractBrush';
+import insertColorStopsIntoArray from '../lib/insertProcessor';
+
+function LinearGradientGenerator(stops, x1, y1, x2, y2) {
+    var type = LINEAR_GRADIENT;
+
+    if (arguments.length < 5) {
+        var angle = ((x1 == null) ? 270 : x1) * Math.PI / 180;
+
+        var x = Math.cos(angle);
+        var y = -Math.sin(angle);
+        var l = (Math.abs(x) + Math.abs(y)) / 2;
+
+        x *= l; y *= l;
+
+        x1 = 0.5 - x;
+        x2 = 0.5 + x;
+        y1 = 0.5 - y;
+        y2 = 0.5 + y;
+        this._bb = true;
+    } else {
+        this._bb = false;
+    }
+    var brushData = [type, +x1, +y1, +x2, +y2];
+    insertColorStopsIntoArray(stops, brushData, 5);
+    this._brush = brushData;
+}
+
+
 class LinearGradient extends Gradient{
     static displayName = 'LinearGradient';
     static propTypes = {
-        x1: propType,
-        x2: propType,
-        y1: propType,
-        y2: propType,
-        id: PropTypes.string
+        x1: numberProp,
+        x2: numberProp,
+        y1: numberProp,
+        y2: numberProp,
+        id: PropTypes.string.isRequired
     };
 
     render() {
@@ -31,7 +57,7 @@ class LinearGradient extends Gradient{
         return super.render(
             gradientProps,
             function (factories, stops, boundingBox, opacity) {
-                return new ARTLinearGradient(
+                return new LinearGradientGenerator(
                     stopsOpacity(stops, opacity),
                     factories[0](boundingBox.width),
                     factories[1](boundingBox.height),
@@ -40,11 +66,11 @@ class LinearGradient extends Gradient{
                 );
             },
             function (stops, opacity) {
-                return new ARTLinearGradient(stopsOpacity(stops, opacity), ...gradientProps);
+                return new LinearGradientGenerator(stopsOpacity(stops, opacity), ...gradientProps);
             }
         );
     }
 }
 
 export default LinearGradient;
-
+export {LinearGradientGenerator};

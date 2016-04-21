@@ -1,22 +1,23 @@
 import React, {
-    ART,
     Component,
     PropTypes,
+    requireNativeComponent,
     cloneElement
 } from 'react-native';
-let {
-    Shape
-} = ART;
-import Defs from './Defs';
-import calculateBoundingBox from '../lib/calculateBoundingBox';
 
-import fillFilter from '../lib/fillFilter';
-import strokeFilter from '../lib/strokeFilter';
-import transformFilter from '../lib/transformFilter';
+import Defs from './Defs';
+import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
+import calculateBoundingBox from '../lib/calculateBoundingBox';
+import extractProps from '../lib/extract/extractProps';
+import SerializablePath from 'react-native/Libraries/ART/ARTSerializablePath';
+import {PathAttributes} from '../lib/attributes';
+
+
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 class Path extends Component{
     static displayName = 'Path';
     static propTypes = {
+        visible: PropTypes.bool,
         d: PropTypes.string,
         x: propType,
         y: propType,
@@ -26,6 +27,8 @@ class Path extends Component{
         strokeJoin: PropTypes.oneOf(['miter', 'bevel', 'round']),
         strokeDasharray: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)])
     };
+
+    static getPath = props => props.d;
 
     _dimensions = null;
 
@@ -54,14 +57,21 @@ class Path extends Component{
                 <Path {...props} id={null} />
             </Defs.Item>;
         }
-        return <Shape
-            {...props}
-            {...strokeFilter(props)}
-            {...transformFilter(props)}
-            fill={fillFilter.call(this, props)}
-            id={null}
-        />;
+
+        let d = new SerializablePath(props.d).toJSON();
+
+        return (
+            <NativePath
+                {...extractProps.call(this, props)}
+                d={d}
+            />
+        );
     }
 }
+
+let NativePath = createReactNativeComponentClass({
+    validAttributes: PathAttributes,
+    uiViewClassName: 'RNSVGPath'
+});
 
 export default Path;

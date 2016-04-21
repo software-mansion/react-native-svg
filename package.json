@@ -1,7 +1,7 @@
 {
-    "version": "1.1.1",
-    "name": "react-native-art-svg",
-    "description": "react native svg library based on `ART`",
+    "version": "1.0.0",
+    "name": "react-native-svg",
+    "description": "react native svg library",
     "repository": {
         "type": "git",
         "url": "https://github.com/magicismight/react-native-art-svg"
@@ -21,5 +21,8 @@
         "color": "^0.11.1",
         "svgpath": "^2.1.5",
         "lodash": "^4.0.0"
+    },
+    "peerDependencies": {
+        "react-native": "^0.24.0"
     }
 }

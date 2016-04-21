@@ -3,7 +3,6 @@ import React, {
     PropTypes
 } from 'react-native';
 import Path from './Path';
-import strokeFilter from '../lib/strokeFilter';
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 class Ellipse extends Component{
     static displayName = 'Ellipse';
@@ -13,21 +12,22 @@ class Ellipse extends Component{
         rx: propType,
         ry: propType
     };
-    render() {
-        let {props} = this;
-        let {cx, cy, rx, ry} = this.props;
-        let d = `
+
+    static getPath = props => {
+        let {cx, cy, rx, ry} = props;
+        return `
             M ${cx - rx} ${cy}
             a ${rx}, ${ry} 0 1, 0 ${rx * 2}, 0
             a ${rx}, ${ry} 0 1, 0 ${-rx * 2}, 0
             Z
         `;
+    };
+
+    render() {
+        let {props} = this;
+        let d = Ellipse.getPath(this.props);
         return <Path
             {...props}
-            cx={null}
-            cy={null}
-            rx={null}
-            ry={null}
             d={d}
         />;
     }

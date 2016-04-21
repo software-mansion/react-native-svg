@@ -1,40 +1,23 @@
-### react-native-art-svg
+### react-native-svg
 
 ------------------------
 
-`react-native-art-svg` is built to provide a SVG interface to react native on both iOS and Android which is based on *ART*
+`react-native-svg` is built to provide a SVG interface to react native on both iOS and Android
 
 #### Features
 
 1. Supports most of SVG elements and properties(Rect, Circle, Line, Polyline, Polygon, G ...).
-2. 100% based on ReactNative`s ART library
-3. Easy to convert SVG code into ReactNative code.
+2. Easy to convert SVG code into ReactNative code.
 
-![example](./screenShoots/art-svg.gif)
+
 
 #### Install
 
-`npm install react-native-art-svg`
+```
+npm install react-native-svg --save
+rnpm link react-native-svg
+```
 
-##### On iOS we should add import `ART` library into your project
-
-To add ART.xcodeproj find the file located in react-native/Libraries/ART/ART.xcodeproj and just drag it over to the Libraries section in XCode. That should look like so
-
-![Add ART.xcodeproj to Libraries](./screenShoots/addXcodeproj.png)
-
-Next we’ll link the binary.
-
-With the root project selected on the left, select `Build Phases` from the center view. There will be a section called “Link Binary With Libraries”, expand it, press the + and select `libART.a`
-
-Like so
-
-![Link binary](./screenShoots/linkBinary.png)
-
-([Getting react art running on react native](http://browniefed.com/blog/2015/05/03/getting-react-art-running-on-react-native/))
-
-##### On android
-
-react-native\`s `ART` for android is shipped within react-native@0.18.0
 
 #### Usage
 
@@ -57,7 +40,7 @@ import Svg,{
     Use,
     Defs,
     Stop
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class SvgExample extends Component {
     render() {
@@ -573,6 +556,7 @@ npm install
 4. pattern ([wait for official supports](https://github.com/facebook/react-native/blob/master/Libraries/ART/ReactNativeART.js#L332))
 5. [animations](https://github.com/gorangajic/react-svg-morph)
 6. isolated from ART\`s dependency
+7. fix propTypes
 
 
 #### Thanks:

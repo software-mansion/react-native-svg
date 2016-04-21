@@ -1,15 +1,15 @@
 import React, {
     Children,
     Component,
-    ART,
     cloneElement,
     PropTypes
 } from 'react-native';
-let {Group} = ART;
+import {NativeGroup} from './G';
 let map = {};
 
 import LinearGradient from './LinearGradient';
 import RadialGradient from './RadialGradient';
+import ClipPath from './ClipPath';
 let onlyChild = Children.only;
 
 class DefsItem extends Component{
@@ -44,7 +44,7 @@ class DefsItem extends Component{
     };
 
     render() {
-        return this.props.visible ? onlyChild(this.props.children) : <Group />;
+        return this.props.visible ? onlyChild(this.props.children) : <NativeGroup />;
     }
 }
 
@@ -71,7 +71,7 @@ class DefsUse extends Component{
         }
 
         console.warn(`Invalid href: '${href}' for Use element.\n Please check if '${href}' if defined`);
-        return <Group />;
+        return <NativeGroup />;
     }
 }
 
@@ -83,21 +83,26 @@ class Defs extends Component{
 
     getChildren = () => {
         return Children.map(this.props.children, child => {
-            if (child.type === LinearGradient || child.type === RadialGradient) {
+            let {type} = child;
+
+            if (type === LinearGradient || type === RadialGradient || type === ClipPath) {
                 return cloneElement(child, {
                     svgId: this.props.svgId
                 });
             }
             if (child.props.id) {
-                return <DefsItem {...child.props} svgId={this.props.svgId}>{child}</DefsItem>;
+                return <DefsItem
+                    {...child.props}
+                    svgId={this.props.svgId}
+                >{child}</DefsItem>;
             }
         });
     };
 
     render() {
-        return <Group>
+        return <NativeGroup>
             {this.getChildren()}
-        </Group>;
+        </NativeGroup>;
     }
 }
 

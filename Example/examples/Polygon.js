@@ -4,7 +4,7 @@ import React, {
 
 import Svg, {
     Polygon,
-    Group
+    G
 } from 'react-native-art-svg';
 
 class PolygonExample extends Component{
@@ -49,14 +49,14 @@ class StarPolygon extends Component{
             height="105"
             width="105"
         >
-            <Group scale="0.5">
+            <G scale="0.5">
                 <Polygon
                     points="100,10 40,198 190,78 10,78 160,198"
                     fill="lime"
                     stroke="purple"
                     strokeWidth="5"
                 />
-            </Group>
+            </G>
         </Svg>;
     }
 }
@@ -68,7 +68,7 @@ class EvenOddPolygon extends Component{
             height="105"
             width="105"
         >
-            <Group scale="0.5">
+            <G scale="0.5">
                 <Polygon
                     points="100,10 40,198 190,78 10,78 160,198"
                     fill="lime"
@@ -76,7 +76,7 @@ class EvenOddPolygon extends Component{
                     strokeWidth="5"
                     fillRule="evenodd"
                 />
-            </Group>
+            </G>
         </Svg>;
     }
 }
@@ -85,17 +85,17 @@ const icon = <Svg
     height="20"
     width="20"
 >
-    <Group scale="0.1">
+    <G scale="0.1">
         <Polygon
             points="100,10 40,198 190,78 10,78 160,198"
             fill="lime"
             stroke="purple"
             strokeWidth="10"
         />
-    </Group>
+    </G>
 </Svg>;
 
-const samples = [PolygonExample, FourSidePolygon, StarPolygon];
+const samples = [PolygonExample, FourSidePolygon, StarPolygon, EvenOddPolygon];
 
 export {
     icon,

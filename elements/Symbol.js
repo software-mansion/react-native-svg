@@ -5,7 +5,7 @@ import React, {
 
 import ViewBox from './ViewBox';
 import Defs from './Defs';
-import extractViewbox from '../lib/extractViewbox';
+import extractViewbox from '../lib/extract/extractViewbox';
 class SymbolElement extends Component{
     static displayName = 'Symbol';
     static propType = {
