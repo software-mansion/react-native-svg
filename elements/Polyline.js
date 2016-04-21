@@ -13,13 +13,12 @@ class Polyline extends Component{
         strokeLinejoin: PropTypes.oneOf(['miter', 'bevel', 'round']),
         strokeJoin: PropTypes.oneOf(['miter', 'bevel', 'round'])
     };
+    static getPath = props => (`M${props.points.trim().replace(/\s+/g, 'L')}`);
+
     render() {
-        let props = this.props;
-        let d = 'M' + props.points.trim().replace(/\s+/g, 'L');
         return <Path
-            {...props}
-            points={null}
-            d={d}
+            {...this.props}
+            d={Polyline.getPath(this.props)}
         />;
     }
 }

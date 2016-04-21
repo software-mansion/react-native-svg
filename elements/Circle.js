@@ -16,10 +16,16 @@ class Circle extends Component{
         cy: 0
     };
 
+    static getPath = props => Ellipse.getPath({
+        cx: props.cx,
+        cy: props.cy,
+        rx: props.r,
+        ry: props.r
+    });
+
     render() {
         return <Ellipse
             {...this.props}
-            r={null}
             rx={+this.props.r}
             ry={+this.props.r}
         />

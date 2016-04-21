@@ -9,6 +9,7 @@ let map = {};
 
 import LinearGradient from './LinearGradient';
 import RadialGradient from './RadialGradient';
+import ClipPath from './ClipPath';
 let onlyChild = Children.only;
 
 class DefsItem extends Component{
@@ -82,7 +83,9 @@ class Defs extends Component{
 
     getChildren = () => {
         return Children.map(this.props.children, child => {
-            if (child.type === LinearGradient || child.type === RadialGradient) {
+            let {type} = child;
+
+            if (type === LinearGradient || type === RadialGradient || type === ClipPath) {
                 return cloneElement(child, {
                     svgId: this.props.svgId
                 });

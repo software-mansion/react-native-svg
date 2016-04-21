@@ -9,13 +9,12 @@ class Polygon extends Component{
     static propTypes = {
         points: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     };
+    static getPath = props => (`M${props.points.trim().replace(/\s+/g, 'L')}z`);
+
     render() {
-        let props = this.props;
-        let d = 'M' + props.points.trim().replace(/\s+/g, 'L') + 'z';
         return <Path
-            {...props}
-            points={null}
-            d={d}
+            {...this.props}
+            d={Polygon.getPath(this.props)}
         />;
     }
 }

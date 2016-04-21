@@ -7,13 +7,15 @@ import Svg, {
     Defs,
     RadialGradient,
     Stop,
-    Line,
     Rect,
     Text,
-    G
+    Ellipse,
+    G,
+    Polygon,
+    Circle
 } from 'react-native-art-svg';
 
-class ClipPathExample extends Component{
+class ClipPathAttr extends Component{
     static title = 'Clip by set clip-path with a path data';
     render() {
         return <Svg
@@ -46,7 +48,7 @@ class ClipPathExample extends Component{
     }
 }
 
-class ClipRulePathExample extends Component{
+class ClipRule extends Component{
     static title = 'Clip a group with clipRule="evenodd"';
     render() {
         return <Svg
@@ -86,6 +88,46 @@ class ClipRulePathExample extends Component{
                     fill="green"
                 />
             </G>
+        </Svg>;
+    }
+}
+
+
+class ClipPathElement extends Component{
+    static title = 'Clip by set clip-path with a path data';
+    render() {
+        return <Svg
+            height="100"
+            width="100"
+        >
+            <Defs>
+                <RadialGradient id="grad" cx="50%" cy="50%" rx="50%" ry="50%" fx="50%" fy="50%">
+                    <Stop
+                        offset="0%"
+                        stopColor="#ff0"
+                        stopOpacity="1"
+                    />
+                    <Stop
+                        offset="100%"
+                        stopColor="#00f"
+                        stopOpacity="1"
+                    />
+                </RadialGradient>
+                <ClipPath id="clip">
+                    <Circle cx="30" cy="30" r="20"/>
+                    <Ellipse cx="60" cy="70" rx="20" ry="10" />
+                    <Rect x="65" y="15" width="30" height="30" />
+                    <Polygon points="20,60 20,80 50,70" />
+                </ClipPath>
+            </Defs>
+            <Rect
+                x="0"
+                y="0"
+                width="100"
+                height="100"
+                fill="url(#grad)"
+                clipPath="url(#clip)"
+            />
         </Svg>;
     }
 }
@@ -132,7 +174,7 @@ const icon = <Svg
     </G>
 </Svg>;
 
-const samples = [ClipPathExample, ClipRulePathExample];
+const samples = [ClipPathAttr, ClipRule, ClipPathElement];
 
 export {
     icon,

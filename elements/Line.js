@@ -18,16 +18,15 @@ class Line extends Component{
         strokeCap: PropTypes.oneOf(['butt', 'square', 'round'])
     };
 
-
-    _convertPath = (props = this.props) => {
-        return `M${props.x1},${props.y1}L${props.x2},${props.y2}Z`;
-    };
+    static getPath = (props) => (
+        `M${props.x1},${props.y1}L${props.x2},${props.y2}Z`
+    );
 
     render() {
         return <Path
             {...this.props}
             ref="shape"
-            d={this._convertPath()}
+            d={Line.getPath(this.props)}
         />;
     }
 }

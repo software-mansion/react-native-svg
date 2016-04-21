@@ -28,6 +28,8 @@ class Path extends Component{
         strokeDasharray: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)])
     };
 
+    static getPath = props => props.d;
+
     _dimensions = null;
 
     componentWillReceiveProps = nextProps => {

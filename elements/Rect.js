@@ -12,6 +12,38 @@ function processRadius(radius) {
     return radius || 0;
 }
 
+function getR(props) {
+    let {
+        width,
+        height,
+        rx,
+        ry
+    } = props;
+
+    rx = processRadius(rx);
+    ry = processRadius(ry);
+
+    if ((rx && !ry) || (ry && !rx)) {
+        if (rx) {
+            ry = rx;
+        } else {
+            rx = ry;
+        }
+    }
+
+    if (rx > width / 2) {
+        rx = width / 2;
+    }
+    if (ry > height / 2) {
+        ry = height / 2;
+    }
+
+    return {
+        rx,
+        ry
+    };
+}
+
 class Rect extends Component{
     static displayName = 'Rect';
     static propTypes = {
@@ -32,36 +64,23 @@ class Rect extends Component{
         rx: 0,
         ry: 0
     };
-    render() {
-        let {props} = this;
+    static getPath = (props, r) => {
         let {
             x,
             y,
             width,
-            height,
-            rx,
-            ry
+            height
         } = props;
 
-        rx = processRadius(rx);
-        ry = processRadius(ry);
+        if (!r) {
+            r = getR(props);
 
-        if ((rx && !ry) || (ry && !rx)) {
-            if (rx) {
-                ry = rx;
-            } else {
-                rx = ry;
-            }
         }
+        
+        let {rx, ry} = r;
 
-        if (rx > width / 2) {
-            rx = width / 2;
-        }
-        if (ry > height / 2) {
-            ry = height / 2;
-        }
 
-        let d = (rx || ry) ? `
+        return (rx || ry) ? `
             M ${x}, ${y}
             h ${width - 2 * rx}
             a ${rx},${ry} 0 0 1 ${rx},${ry}
@@ -79,15 +98,17 @@ class Rect extends Component{
              h ${-width}
              Z
         `;
+    };
+
+    render() {
+        let r = getR(this.props);
         return <Path
-            {...props}
-            rx={null}
-            ry={null}
+            {...this.props}
             width={null}
             height={null}
-            x={rx || null}
+            x={r.rx || null}
             y={null}
-            d={d}
+            d={Rect.getPath(this.props, r)}
         />;
     }
 }
