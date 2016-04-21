@@ -549,14 +549,11 @@ npm install
 ```
 
 #### TODO:
-
-1. fillRule="evenodd" ([ART do not support fillRule](https://github.com/facebook/react-native/pull/5477))
-2. clipPath ([wait for official supports](https://github.com/facebook/react-native/blob/master/Libraries/ART/ARTGroup.m#L16))
-3. textPath ([wait for official supports](https://github.com/facebook/react-native/blob/master/Libraries/ART/ARTText.m#L56))
-4. pattern ([wait for official supports](https://github.com/facebook/react-native/blob/master/Libraries/ART/ReactNativeART.js#L332))
-5. [animations](https://github.com/gorangajic/react-svg-morph)
-6. isolated from ART\`s dependency
-7. fix propTypes
+1. add native method for elements
+2. textPath
+3. pattern
+4. [morph animations](https://github.com/gorangajic/react-svg-morph)
+5. fix propTypes
 
 
 #### Thanks:
