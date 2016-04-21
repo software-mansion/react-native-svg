@@ -71,6 +71,8 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
 
         // only set up the canvas if we have something to draw
         saveAndSetupCanvas(canvas);
+        clip(canvas, paint);
+
         String[] lines = new String[linesProp.size()];
         for (int i = 0; i < lines.length; i++) {
             lines[i] = linesProp.getString(i);

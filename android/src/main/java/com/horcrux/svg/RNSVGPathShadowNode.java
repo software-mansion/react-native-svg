@@ -130,10 +130,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                     "Paths should have a valid path (d) prop");
             }
 
-            if (mClipPath != null) {
-                canvas.clipPath(mClipPath, Region.Op.REPLACE);
-
-            }
+            clip(canvas, paint);
 
             if (setupFillPaint(paint, opacity)) {
                 canvas.drawPath(mPath, paint);

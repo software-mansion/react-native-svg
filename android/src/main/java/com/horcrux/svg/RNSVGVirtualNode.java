@@ -17,6 +17,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.util.Log;
 
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
@@ -205,5 +206,12 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
             }
         }
         return path;
+    }
+
+    protected void clip(Canvas canvas, Paint paint) {
+        if (mClipPath != null) {
+            canvas.clipPath(mClipPath, Region.Op.REPLACE);
+            canvas.saveLayer(0f, 0f, 0f, 0f, paint, Canvas.CLIP_SAVE_FLAG);
+        }
     }
 }

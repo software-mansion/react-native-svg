@@ -36,6 +36,12 @@ class ClipPathAttr extends Component{
                     />
                 </RadialGradient>
             </Defs>
+            <Circle
+                cx="50"
+                cy="50"
+                r="30"
+                fill="red"
+            />
             <Rect
                 x="0"
                 y="0"

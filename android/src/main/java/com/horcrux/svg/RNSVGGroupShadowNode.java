@@ -30,9 +30,7 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             saveAndSetupCanvas(canvas);
 
-            if (mClipPath != null) {
-                canvas.clipPath(mClipPath, Region.Op.REPLACE);
-            }
+            clip(canvas, paint);
 
             for (int i = 0; i < getChildCount(); i++) {
                 RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
