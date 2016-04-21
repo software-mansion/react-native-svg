@@ -24,19 +24,21 @@ import {
 } from 'react-native-art-svg';
 import * as examples from './examples';
 import Modal from 'react-native-root-modal';
-const hairline = 1 / PixelRatio.get();
+const hairline = StyleSheet.hairlineWidth;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5FCFF',
         paddingTop: 20,
         alignItems: 'center',
         overflow: 'hidden'
     },
     content: {
+        flex: 1,
+        alignSelf: 'stretch'
+    },
+    contentContainer: {
         alignSelf: 'stretch',
-        alignItems: 'center',
         borderTopWidth: hairline,
         borderTopColor: '#ccc',
         borderBottomWidth: hairline,
@@ -104,7 +106,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const names = ['Svg', 'Stroking', 'Path', 'Line', 'Rect', 'Polygon', 'Polyline', 'Circle', 'Ellipse', 'G', 'Text', 'Use', 'Symbol', 'Gradients'];
+const names = ['Svg', 'Stroking', 'Path', 'Line', 'Rect', 'Polygon', 'Polyline', 'Circle', 'Ellipse', 'G', 'Text', 'Use', 'Symbol', 'Gradients', 'Clipping'];
 
 class ArtSvgExample extends Component {
     constructor() {
@@ -184,7 +186,9 @@ class ArtSvgExample extends Component {
     };
 
     render() {
-        return <View style={styles.container}>
+        return <View
+            style={styles.container}
+        >
             <Animated.Modal
                 visible={this.state.modal}
                 style={[styles.modal, {
@@ -237,9 +241,12 @@ class ArtSvgExample extends Component {
             <Text style={styles.welcome}>
                 SVG by ART!
             </Text>
-            <View style={styles.content}>
+            <ScrollView
+                style={styles.content}
+                contentContainerStyle={styles.contentContainer}
+            >
                 {this.getExamples()}
-            </View>
+            </ScrollView>
         </View>;
     }
 }

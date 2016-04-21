@@ -1,10 +1,9 @@
 /**
- * Copyright (c) 2015-present, Facebook, Inc.
+ * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT-style license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 #import "RCTConvert+RNSVG.h"
@@ -14,7 +13,7 @@
 #import "RNSVGRadialGradient.h"
 #import "RNSVGSolidColor.h"
 #import "RCTLog.h"
-#import "RNSVGCGFillRule.h"
+#import "RNSVGCGFCRule.h"
 
 @implementation RCTConvert (RNSVG)
 
@@ -73,10 +72,10 @@ RCT_ENUM_CONVERTER(CTTextAlignment, (@{
   @"justify": @(kCTTextAlignmentJustified),
 }), kCTTextAlignmentNatural, integerValue)
 
-RCT_ENUM_CONVERTER(RNSVGCGFillRule, (@{
-  @"evenodd": @(kARTCGFillRuleEvenodd),
-  @"nonzero": @(kARTCGFillRuleNonzero),
-}), kARTCGFillRuleEvenodd, intValue)
+RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
+  @"evenodd": @(kRNSVGCGFCRuleEvenodd),
+  @"nonzero": @(kRNSVGCGFCRuleNonzero),
+}), kRNSVGCGFCRuleNonzero, intValue)
 
 // This takes a tuple of text lines and a font to generate a CTLine for each text line.
 // This prepares everything for rendering a frame of text in RNSVGText.

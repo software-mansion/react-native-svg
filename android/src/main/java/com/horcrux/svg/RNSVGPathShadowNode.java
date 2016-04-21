@@ -253,6 +253,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                     stops = new float[stopsCount];
                     parseGradientStops(mFillColor, stopsCount, stops, stopsColors, 7);
 
+                    // TODO:
                     float focusX = mFillColor[1];
                     float focusY = mFillColor[2];
 

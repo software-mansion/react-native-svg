@@ -6,17 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGSvgViewManager.h"
-
-#import "RNSVGSvgView.h"
-
-@implementation RNSVGSvgViewManager
-
-RCT_EXPORT_MODULE()
-
-- (UIView *)view
-{
-  return [RNSVGSvgView new];
-}
-
-@end
+typedef CF_ENUM(int32_t, RNSVGCGFCRule) {
+    kRNSVGCGFCRuleEvenodd,
+    kRNSVGCGFCRuleNonzero
+};

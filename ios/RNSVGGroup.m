@@ -1,10 +1,9 @@
 /**
- * Copyright (c) 2015-present, Facebook, Inc.
+ * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT-style license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 #import "RNSVGGroup.h"
@@ -13,10 +12,10 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
-// TO-DO: Clipping rectangle
-  for (RNSVGNode *node in self.subviews) {
-    [node renderTo:context];
-  }
+    [self clip:context];
+    for (RNSVGNode *node in self.subviews) {
+        [node renderTo:context];
+    }
 }
 
 @end

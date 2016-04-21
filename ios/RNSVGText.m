@@ -1,10 +1,9 @@
 /**
- * Copyright (c) 2015-present, Facebook, Inc.
+ * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT-style license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 #import "RNSVGText.h"
@@ -54,7 +53,8 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
   }
 
   // to-do: draw along a path
-
+  // to-do: fill-rule
+  // to-do: clip
   CGTextDrawingMode mode = kCGTextStroke;
   if (self.fill) {
     if ([self.fill applyFillColor:context]) {

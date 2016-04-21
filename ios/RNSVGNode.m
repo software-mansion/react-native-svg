@@ -1,10 +1,9 @@
 /**
- * Copyright (c) 2015-present, Facebook, Inc.
+ * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT-style license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 #import "RNSVGNode.h"
@@ -15,62 +14,94 @@
 
 - (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index
 {
-  [self invalidate];
-  [super insertSubview:subview atIndex:index];
+    [self invalidate];
+    [super insertSubview:subview atIndex:index];
 }
 
 - (void)removeFromSuperview
 {
-  [self invalidate];
-  [super removeFromSuperview];
+    [self invalidate];
+    [super removeFromSuperview];
 }
 
 - (void)setOpacity:(CGFloat)opacity
 {
-  [self invalidate];
-  _opacity = opacity;
+    [self invalidate];
+    _opacity = opacity;
 }
 
 - (void)setTransform:(CGAffineTransform)transform
 {
-  [self invalidate];
-  super.transform = transform;
+    [self invalidate];
+    super.transform = transform;
 }
 
 - (void)invalidate
 {
-  id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
-  [container invalidate];
+    id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
+    [container invalidate];
 }
 
 - (void)renderTo:(CGContextRef)context
 {
-  if (self.opacity <= 0) {
-    // Nothing to paint
-    return;
-  }
-  if (self.opacity >= 1) {
-    // Just paint at full opacity
+    float opacity = self.opacity;
+    BOOL transparent = NO;
+    if (opacity <= 0) {
+        // Nothing to paint
+        return;
+    }
+    if (opacity >= 1) {
+        opacity = 1;
+        transparent = YES;
+    }
+    
+    // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.transform);
-    CGContextSetAlpha(context, 1);
+    CGContextSetAlpha(context, opacity);
+    if (transparent) {
+        CGContextBeginTransparencyLayer(context, NULL);
+        
+    }
     [self renderLayerTo:context];
+    if (transparent) {
+        CGContextEndTransparencyLayer(context);
+    }
     CGContextRestoreGState(context);
-    return;
-  }
-  // This needs to be painted on a layer before being composited.
-  CGContextSaveGState(context);
-  CGContextConcatCTM(context, self.transform);
-  CGContextSetAlpha(context, self.opacity);
-  CGContextBeginTransparencyLayer(context, NULL);
-  [self renderLayerTo:context];
-  CGContextEndTransparencyLayer(context);
-  CGContextRestoreGState(context);
 }
+
+- (void)setClipPath:(CGPathRef)clipPath
+{
+    if (clipPath == _clipPath) {
+        return;
+    }
+    [self invalidate];
+    CGPathRelease(_clipPath);
+    _clipPath = CGPathRetain(clipPath);
+}
+
+
+- (void)dealloc
+{
+    CGPathRelease(_clipPath);
+}
+
 
 - (void)renderLayerTo:(CGContextRef)context
 {
-  // abstract
+    // abstract
+}
+
+- (void)clip:(CGContextRef)context
+{
+    if (self.clipPath) {
+        CGContextAddPath(context, self.clipPath);
+        if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
+            CGContextEOClip(context);
+        } else {
+            CGContextClip(context);
+        }
+    }
 }
 
 @end
