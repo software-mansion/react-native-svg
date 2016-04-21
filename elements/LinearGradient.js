@@ -8,7 +8,7 @@ import stopsOpacity from '../lib/stopsOpacity';
 import numberProp from '../lib/numberProp';
 import Gradient from './Gradient';
 import {LINEAR_GRADIENT} from '../lib/extract/extractBrush';
-import {insertColorStopsIntoArray} from '../lib/insertProcessor';
+import insertColorStopsIntoArray from '../lib/insertProcessor';
 
 function LinearGradientGenerator(stops, x1, y1, x2, y2) {
     var type = LINEAR_GRADIENT;

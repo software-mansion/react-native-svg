@@ -7,7 +7,7 @@ import stopsOpacity from '../lib/stopsOpacity';
 import numberProp from '../lib/numberProp';
 import Gradient from './Gradient';
 import {RADIAL_GRADIENT} from '../lib/extract/extractBrush';
-import {insertDoubleColorStopsIntoArray} from '../lib/insertProcessor';
+import insertColorStopsIntoArray from '../lib/insertProcessor';
 
 
 function RadialGradientGenerator(stops, fx, fy, rx, ry, cx, cy) {
@@ -33,7 +33,7 @@ function RadialGradientGenerator(stops, fx, fy, rx, ry, cx, cy) {
     // color stops. Ideally this API would become more restrictive so that this
     // extra work isn't needed.
     var brushData = [RADIAL_GRADIENT, +fx, +fy, +rx * 2, +ry * 2, +cx, +cy];
-    insertDoubleColorStopsIntoArray(stops, brushData, 7);
+    insertColorStopsIntoArray(stops, brushData, 7, 0.5);
     this._brush = brushData;
 }
 

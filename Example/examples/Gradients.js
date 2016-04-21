@@ -9,7 +9,8 @@ import Svg, {
     Stop,
     Ellipse,
     Circle,
-    Text
+    Text,
+    Rect
 } from 'react-native-art-svg';
 
 class LinearGradientHorizontal extends Component{
@@ -85,6 +86,11 @@ class RadialGradientExample  extends Component{
                     <Stop
                         offset="0.3"
                         stopColor="#000"
+                        stopOpacity="1"
+                    />
+                    <Stop
+                        offset="0.7"
+                        stopColor="#0f0"
                         stopOpacity="1"
                     />
                     <Stop
@@ -178,6 +184,32 @@ class FillGradientWithOpacity extends Component{
     }
 }
 
+class FillGradientInRect extends Component{
+    static title = 'Fill a radial gradient inside a rect';
+    render() {
+        return <Svg
+            height="150"
+            width="300"
+        >
+            <Defs>
+                <RadialGradient id="grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                    <Stop
+                        offset="0%"
+                        stopColor="#fff"
+                        stopOpacity="1"
+                    />
+                    <Stop
+                        offset="100%"
+                        stopColor="#00f"
+                        stopOpacity="1"
+                    />
+                </RadialGradient>
+            </Defs>
+            <Rect x="0" y="0" width="300" height="150" fill="url(#grad)" />
+        </Svg>;
+    }
+}
+
 const icon = <Svg
     height="20"
     width="20"
@@ -199,7 +231,8 @@ const samples = [
     RadialGradientExample,
     RadialGradientPercent,
     RadialGradientPart,
-    FillGradientWithOpacity
+    FillGradientWithOpacity,
+    FillGradientInRect
 ];
 
 export {

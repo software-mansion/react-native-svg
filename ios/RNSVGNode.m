@@ -54,14 +54,14 @@
         opacity = 1;
         transparent = YES;
     }
-    
+
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.transform);
     CGContextSetAlpha(context, opacity);
     if (transparent) {
         CGContextBeginTransparencyLayer(context, NULL);
-        
+
     }
     [self renderLayerTo:context];
     if (transparent) {
