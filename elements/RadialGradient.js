@@ -6,7 +6,7 @@ import React, {
 import stopsOpacity from '../lib/stopsOpacity';
 import numberProp from '../lib/numberProp';
 import Gradient from './Gradient';
-import {RADIAL_GRADIENT} from '../lib/extractBrush';
+import {RADIAL_GRADIENT} from '../lib/extract/extractBrush';
 import {insertDoubleColorStopsIntoArray} from '../lib/insertProcessor';
 
 
@@ -84,4 +84,4 @@ class RadialGradient extends Gradient{
 }
 
 export default RadialGradient;
-
+export {RadialGradientGenerator};

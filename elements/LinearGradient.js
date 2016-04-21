@@ -7,7 +7,7 @@ import React, {
 import stopsOpacity from '../lib/stopsOpacity';
 import numberProp from '../lib/numberProp';
 import Gradient from './Gradient';
-import {LINEAR_GRADIENT} from '../lib/extractBrush';
+import {LINEAR_GRADIENT} from '../lib/extract/extractBrush';
 import {insertColorStopsIntoArray} from '../lib/insertProcessor';
 
 function LinearGradientGenerator(stops, x1, y1, x2, y2) {
@@ -73,4 +73,4 @@ class LinearGradient extends Gradient{
 }
 
 export default LinearGradient;
-
+export {LinearGradientGenerator};

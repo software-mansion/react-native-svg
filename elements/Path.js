@@ -8,7 +8,7 @@ import React, {
 import Defs from './Defs';
 import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
 import calculateBoundingBox from '../lib/calculateBoundingBox';
-import extractProps from '../lib/extractProps';
+import extractProps from '../lib/extract/extractProps';
 import SerializablePath from 'react-native/Libraries/ART/ARTSerializablePath';
 import {PathAttributes} from '../lib/attributes';
 

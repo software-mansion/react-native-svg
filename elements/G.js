@@ -19,7 +19,13 @@ const transformProps = {
     originX: null,
     originY: null
 };
-import extractProps from '../lib/extractProps';
+
+const clipProps = {
+    clipPath: null,
+    clipRule: null
+};
+
+import extractProps from '../lib/extract/extractProps';
 
 class G extends Component{
     static displayName = 'G';
@@ -28,6 +34,7 @@ class G extends Component{
         return Children.map(this.props.children, child => cloneElement(child, {
             ...this.props,
             ...transformProps,
+            ...clipProps,
             ...child.props,
             id: null
         }));
@@ -54,6 +61,7 @@ class G extends Component{
         }
     }
 }
+
 var NativeGroup = createReactNativeComponentClass({
     validAttributes: GroupAttributes,
     uiViewClassName: 'RNSVGGroup'

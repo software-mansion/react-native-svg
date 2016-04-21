@@ -6,7 +6,7 @@ import React, {
     View,
     requireNativeComponent
 } from 'react-native';
-import extractViewbox from '../lib/extractViewbox';
+import extractViewbox from '../lib/extract/extractViewbox';
 import ViewBox from './ViewBox';
 import _ from 'lodash';
 

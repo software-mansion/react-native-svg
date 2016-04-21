@@ -3,8 +3,8 @@ import React, {
 } from 'react-native';
 import Defs from './Defs';
 import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
-import extractProps from '../lib/extractProps';
-import extractText from '../lib/extractText';
+import extractProps from '../lib/extract/extractProps';
+import extractText from '../lib/extract/extractText';
 import {TextAttributes} from '../lib/attributes';
 import numberProp from '../lib/numberProp';
 
