@@ -4,7 +4,7 @@ import React, {
 
 import Svg, {
     Ellipse
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class EllipseExample extends Component{
     static title = 'Ellipse';

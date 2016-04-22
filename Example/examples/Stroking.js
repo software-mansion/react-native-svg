@@ -5,7 +5,7 @@ import React, {
 import Svg, {
     Path,
     G
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class StrokeExample extends Component{
     static title = 'The stroke property defines the color of a line, text or outline of an element';

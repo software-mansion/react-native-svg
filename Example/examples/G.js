@@ -8,7 +8,7 @@ import Svg, {
     Line,
     Rect,
     Text
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class GExample extends Component{
     static title = 'G children props inherit';

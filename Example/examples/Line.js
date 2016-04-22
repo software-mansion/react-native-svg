@@ -4,7 +4,7 @@ import React, {
 
 import Svg, {
     Line
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class LineExample extends Component{
     static title = 'Line';

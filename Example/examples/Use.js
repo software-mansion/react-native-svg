@@ -9,7 +9,7 @@ import Svg, {
     Rect,
     Circle,
     Polyline
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class UseExample extends Component{
     static title = 'Reuse svg code';

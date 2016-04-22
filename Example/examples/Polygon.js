@@ -5,7 +5,7 @@ import React, {
 import Svg, {
     Polygon,
     G
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class PolygonExample extends Component{
     static title = 'The following example creates a polygon with three sides';

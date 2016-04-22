@@ -11,7 +11,7 @@ import Svg, {
     Circle,
     Text,
     Rect
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class LinearGradientHorizontal extends Component{
     static title = 'Define an ellipse with a horizontal linear gradient from yellow to red';

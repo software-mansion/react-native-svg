@@ -4,7 +4,7 @@ import React, {
 
 import Svg, {
     Text
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class TextExample extends Component{
     static title = 'Text';

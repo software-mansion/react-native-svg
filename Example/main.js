@@ -21,7 +21,7 @@ import {
     Svg,
     Circle,
     Line
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 import * as examples from './examples';
 import Modal from 'react-native-root-modal';
 const hairline = StyleSheet.hairlineWidth;

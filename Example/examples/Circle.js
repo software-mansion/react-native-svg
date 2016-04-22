@@ -4,7 +4,7 @@ import React, {
 
 import Svg, {
     Circle
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class CircleExample extends Component{
     static title = 'Circle';

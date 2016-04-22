@@ -6,7 +6,7 @@ import Svg, {
     Symbol,
     Circle,
     Use
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class SymbolExample extends Component{
     static title = 'Symbol example';

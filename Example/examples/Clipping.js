@@ -13,7 +13,7 @@ import Svg, {
     G,
     Polygon,
     Circle
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class ClipPathAttr extends Component{
     static title = 'Clip by set clip-path with a path data';

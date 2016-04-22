@@ -4,7 +4,7 @@ import React, {
 
 import Svg, {
     Rect
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class RectExample extends Component{
     static title = 'Rect';

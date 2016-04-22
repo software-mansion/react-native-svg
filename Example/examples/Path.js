@@ -7,7 +7,7 @@ import Svg, {
     G,
     Circle,
     Text
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class PathExample extends Component{
     static title = 'Path';

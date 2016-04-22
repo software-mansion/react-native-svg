@@ -4,7 +4,7 @@ import React, {
 
 import Svg, {
     Polyline
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class PolylineExample extends Component{
     static title = 'The <Polyline> element is used to create any shape that consists of only straight lines';
