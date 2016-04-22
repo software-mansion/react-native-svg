@@ -53,14 +53,13 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
     }
     
     // to-do: draw along a path
-    // to-do: fill-rule
-    // to-do: clip
     CGTextDrawingMode mode = kCGTextStroke;
+    
     if (self.fill) {
         if ([self.fill applyFillColor:context]) {
             mode = kCGTextFill;
         } else {
-            
+            [self clip: context];
             for (int i = 0; i < frame.count; i++) {
                 CGContextSaveGState(context);
                 // Inverse the coordinate space since CoreText assumes a bottom-up coordinate space
@@ -80,9 +79,7 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
         }
     }
     if (self.stroke) {
-        if ([self.stroke applyStrokeColor:context] == NO) {
-            [self.stroke paint:context];
-        }
+        [self.stroke applyStrokeColor:context];
         
         CGContextSetLineWidth(context, self.strokeWidth);
         CGContextSetLineCap(context, self.strokeLinecap);
@@ -97,7 +94,7 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
     }
     
     CGContextSetTextDrawingMode(context, mode);
-    
+    [self clip:context];
     // Inverse the coordinate space since CoreText assumes a bottom-up coordinate space
     CGContextScaleCTM(context, 1.0, -1.0);
     for (int i = 0; i < frame.count; i++) {

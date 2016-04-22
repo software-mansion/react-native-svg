@@ -3,7 +3,11 @@ import React, {
 } from 'react-native';
 
 import Svg, {
-    Text
+    Text,
+    LinearGradient,
+    Stop,
+    Defs,
+    ClipPath
 } from 'react-native-svg';
 
 class TextExample extends Component{
@@ -55,6 +59,34 @@ class TextRotate extends Component{
     }
 }
 
+class TextFill extends Component{
+    static title = 'Fill the text with LinearGradient';
+    render() {
+        return <Svg
+            height="60"
+            width="200"
+        >
+            <Defs>
+                <LinearGradient id="grad" x1="0" y1="0" x2="200" y2="0">
+                    <Stop offset="0%" stopColor="rgb(255,255,0)" stopOpacity="0" />
+                    <Stop offset="100%" stopColor="red" stopOpacity="1" />
+                </LinearGradient>
+            </Defs>
+
+            <Text
+                fill="url(#grad)"
+                stroke="purple"
+                fontSize="20"
+                fontWeight="bold"
+                x="100"
+                y="20"
+                textAnchor="center"
+            >FILL TEXT</Text>
+        </Svg>;
+    }
+}
+
+// TODO: not supported
 class TextStroke extends Component{
     static title = 'Stroke the text';
     render() {
@@ -62,21 +94,28 @@ class TextStroke extends Component{
             height="60"
             width="200"
         >
+            <Defs>
+                <LinearGradient id="grad" x1="0" y1="0" x2="100" y2="0">
+                    <Stop offset="100%" stopColor="rgb(255,255,0)" stopOpacity="0" />
+                    <Stop offset="0%" stopColor="red" stopOpacity="1" />
+                </LinearGradient>
+            </Defs>
+
             <Text
+                stroke="url(#grad)"
+                strokeWidth="4"
                 fill="none"
-                stroke="purple"
                 fontSize="20"
                 fontWeight="bold"
                 x="100"
                 y="20"
-                alignment="center"
-            >STROKED TEXT</Text>
+                textAnchor="center"
+            >STROKE TEXT</Text>
         </Svg>;
     }
 }
 
 
-// TODO: wait for official done
 class TextPath extends Component{
     static title = 'Transform the text';
     render() {
@@ -112,7 +151,7 @@ const icon = <Svg
     >字</Text>
 </Svg>;
 
-const samples = [TextExample, TextRotate, TextStroke, TextPath];
+const samples = [TextExample, TextRotate, TextFill, TextPath];
 
 export {
     icon,

@@ -9,7 +9,9 @@ import Svg, {
     Defs,
     Stop,
     RadialGradient,
-    Polyline
+    Polyline,
+    ClipPath,
+    Circle
 } from 'react-native-svg';
 
 class StrokeExample extends Component{
@@ -25,34 +27,21 @@ class StrokeExample extends Component{
     }
 }
 
-class StrokeWidth extends Component{
-    static title = 'The stroke property defines the color of a line, text or outline of an element';
-    render() {
-        return <Svg height="80" width="225">
-            <G fill="none" stroke="black">
-                <Path strokeWidth="2" d="M5 20 l215 0" />
-                <Path strokeWidth="4" d="M5 40 l215 0" />
-                <Path strokeWidth="6" d="M5 60 l215 0" />
-            </G>
-        </Svg>;
-    }
-}
-
 class StrokeLinecap extends Component{
     static title = 'The stroke-linecap property defines different types of endings to an open path';
     render() {
         return <Svg height="80" width="225">
-            <G fill="none" stroke="black" strokeWidth="6">
-                <Path strokeLinecap="butt" d="M5 20 l215 0" />
-                <Path strokeLinecap="round" d="M5 40 l215 0" />
-                <Path strokeLinecap="square" d="M5 60 l215 0" />
+            <G fill="none" stroke="black">
+                <Path strokeLinecap="butt" strokeWidth="2" d="M5 20 l215 0" />
+                <Path strokeLinecap="round" strokeWidth="4" d="M5 40 l215 0" />
+                <Path strokeLinecap="square" strokeWidth="6" d="M5 60 l215 0" />
             </G>
         </Svg>;
     }
 }
 
 class StrokeDasharray  extends Component{
-    static title = 'The stroke-linecap property defines different types of endings to an open path';
+    static title = 'strokeDasharray';
     render() {
         return <Svg height="80" width="225">
             <G fill="none" stroke="black" strokeWidth="4">
@@ -65,7 +54,7 @@ class StrokeDasharray  extends Component{
 }
 
 class StrokePattern  extends Component{
-    static title = 'Stroke with gradient.';
+    static title = 'Advanced stroke example.';
     render() {
         return <Svg height="80" width="200">
             <Defs>
@@ -81,6 +70,9 @@ class StrokePattern  extends Component{
                         stopOpacity="1"
                     />
                 </RadialGradient>
+                <ClipPath id="clip">
+                    <Circle r="96" cx="100" cy="40" />
+                </ClipPath>
             </Defs>
             <Rect
                 x="5"
@@ -91,6 +83,7 @@ class StrokePattern  extends Component{
                 stroke="url(#grad)"
                 strokeWidth="5"
                 strokeDasharray="10"
+                clipPath="url(#clip)"
             />
 
             <Polyline
@@ -117,7 +110,7 @@ const icon = <Svg
     </G>
 </Svg>;
 
-const samples = [StrokeExample, StrokeWidth, StrokeLinecap, StrokeDasharray, StrokePattern];
+const samples = [StrokeExample, StrokeLinecap, StrokeDasharray, StrokePattern];
 
 export {
     icon,

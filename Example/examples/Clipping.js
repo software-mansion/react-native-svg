@@ -138,6 +138,39 @@ class ClipPathElement extends Component{
     }
 }
 
+class TextClipping extends Component{
+    static title = 'Transform the text';
+    render() {
+        return <Svg
+            height="60"
+            width="200"
+        >
+            <Defs>
+                <ClipPath id="clip">
+                    <Circle cx="-60" cy="15" r="10"/>
+                    <Circle cx="-40" cy="15" r="10"/>
+                    <Circle cx="-20" cy="15" r="10"/>
+                    <Circle cx="0" cy="15" r="10"/>
+                    <Circle cx="20" cy="15" r="10"/>
+                    <Circle cx="40" cy="15" r="10"/>
+                    <Circle cx="60" cy="15" r="10"/>
+                </ClipPath>
+            </Defs>
+            <Text
+                x="100"
+                y="30"
+                fill="red"
+                fontSize="22"
+                fontWeight="bold"
+                fill="red"
+                stroke="blue"
+                textAnchor="center"
+                clipPath="url(#clip)"
+            >NOT THE FACE</Text>
+        </Svg>;
+    }
+}
+
 const icon = <Svg
     height="20"
     width="20"
@@ -180,7 +213,7 @@ const icon = <Svg
     </G>
 </Svg>;
 
-const samples = [ClipPathAttr, ClipRule, ClipPathElement];
+const samples = [ClipPathAttr, ClipRule, ClipPathElement, TextClipping];
 
 export {
     icon,
