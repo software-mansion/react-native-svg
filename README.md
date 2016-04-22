@@ -1,14 +1,21 @@
-### react-native-svg
+## react-native-svg
 
 ------------------------
 
 `react-native-svg` is built to provide a SVG interface to react native on both iOS and Android
 
-#### Features
+# IMPORTANT：
+
+`react-native-art-svg` has changed name to **`react-native-svg`**(*thanks for [@Brent Vatne](https://github.com/brentvatne) handing over me this npm package.*).
+
+And furthermore:
+`react-native-svg` **NO LONGER rely on ReactNativeART**, it has its own native code dependency now (which is based on ReactNativeART code but support more SVG features)
+
+
+### Features
 
 1. Supports most of SVG elements and properties(Rect, Circle, Line, Polyline, Polygon, G ...).
 2. Easy to convert SVG code into ReactNative code.
-
 
 
 #### Install
@@ -554,6 +561,7 @@ npm install
 3. pattern
 4. [morph animations](https://github.com/gorangajic/react-svg-morph)
 5. fix propTypes
+6. more Text features support
 
 
 #### Thanks:
