@@ -185,7 +185,7 @@ class FillGradientWithOpacity extends Component{
 }
 
 class FillGradientInRect extends Component{
-    static title = 'Fill a radial gradient inside a rect';
+    static title = 'Fill a radial gradient inside a rect and stroke it';
     render() {
         return <Svg
             height="150"
@@ -205,7 +205,7 @@ class FillGradientInRect extends Component{
                     />
                 </RadialGradient>
             </Defs>
-            <Rect x="0" y="0" width="300" height="150" fill="url(#grad)" />
+            <Rect x="5" y="5" width="290" height="130" fill="url(#grad)" stroke="pink" strokeWidth="5" />
         </Svg>;
     }
 }

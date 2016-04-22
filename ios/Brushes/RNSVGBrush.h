@@ -24,6 +24,8 @@
  */
 - (BOOL)applyFillColor:(CGContextRef)context;
 
+- (BOOL)applyStrokeColor:(CGContextRef)context;
+
 /**
  * paint fills the context with a brush. The context is assumed to
  * be clipped.

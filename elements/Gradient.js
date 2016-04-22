@@ -4,7 +4,7 @@ import React, {
     Children
 } from 'react-native';
 import {NativeGroup} from './G';
-import {set, remove} from '../lib/extract/extractFill';
+import {set, remove} from '../lib/extract/patterns';
 import percentFactory from '../lib/percentFactory';
 import percentToFloat from '../lib/percentToFloat';
 import Stop from './Stop';

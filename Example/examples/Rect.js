@@ -21,6 +21,7 @@ class RectExample extends Component{
                 fill="rgb(0,0,255)"
                 strokeWidth="3"
                 stroke="rgb(0,0,0)"
+                strokeDasharray="5,10"
             />
         </Svg>;
     }
@@ -39,10 +40,10 @@ class RectStrokeFill extends Component{
                 width="75"
                 height="75"
                 fill="blue"
-                fillOpacity="0.1"
-                stroke="pink"
+                fillOpacity="0.5"
+                stroke="red"
                 strokeWidth="5"
-                strokeOpacity="0.9"
+                strokeOpacity="0.5"
             />
         </Svg>;
     }

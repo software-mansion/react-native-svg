@@ -4,7 +4,12 @@ import React, {
 
 import Svg, {
     Path,
-    G
+    Rect,
+    G,
+    Defs,
+    Stop,
+    RadialGradient,
+    Polyline
 } from 'react-native-svg';
 
 class StrokeExample extends Component{
@@ -59,6 +64,48 @@ class StrokeDasharray  extends Component{
     }
 }
 
+class StrokePattern  extends Component{
+    static title = 'Stroke with gradient.';
+    render() {
+        return <Svg height="80" width="200">
+            <Defs>
+                <RadialGradient id="grad" cx="50%" cy="50%" rx="80%" ry="80%" fx="50%" fy="50%">
+                    <Stop
+                        offset="50%"
+                        stopColor="#fff"
+                        stopOpacity="1"
+                    />
+                    <Stop
+                        offset="100%"
+                        stopColor="#f00"
+                        stopOpacity="1"
+                    />
+                </RadialGradient>
+            </Defs>
+            <Rect
+                x="5"
+                y="5"
+                height="70"
+                width="190"
+                fill="blue"
+                stroke="url(#grad)"
+                strokeWidth="5"
+                strokeDasharray="10"
+            />
+
+            <Polyline
+                strokeDasharray="20,10,5,5,5,10"
+                points="10,10 20,12 30,20 40,60 60,70 90,55"
+                fill="none"
+                stroke="url(#grad)"
+                strokeLinecap="round"
+                strokeWidth="5"
+            />
+        </Svg>;
+    }
+}
+
+
 const icon = <Svg
     height="20"
     width="20"
@@ -70,7 +117,7 @@ const icon = <Svg
     </G>
 </Svg>;
 
-const samples = [StrokeExample, StrokeWidth, StrokeLinecap, StrokeDasharray];
+const samples = [StrokeExample, StrokeWidth, StrokeLinecap, StrokeDasharray, StrokePattern];
 
 export {
     icon,

@@ -17,7 +17,7 @@
 
 @property (nonatomic, strong) RNSVGBrush *fill;
 @property (nonatomic, assign) RNSVGCGFCRule fillRule;
-@property (nonatomic, assign) CGColorRef stroke;
+@property (nonatomic, strong) RNSVGBrush *stroke;
 @property (nonatomic, assign) CGFloat strokeWidth;
 @property (nonatomic, assign) CGLineCap strokeLinecap;
 @property (nonatomic, assign) CGLineJoin strokeLinejoin;

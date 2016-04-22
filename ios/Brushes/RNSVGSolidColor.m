@@ -13,26 +13,32 @@
 
 @implementation RNSVGSolidColor
 {
-  CGColorRef _color;
+    CGColorRef _color;
 }
 
 - (instancetype)initWithArray:(NSArray<NSNumber *> *)array
 {
-  if ((self = [super initWithArray:array])) {
-    _color = CGColorRetain([RCTConvert CGColor:array offset:1]);
-  }
-  return self;
+    if ((self = [super initWithArray:array])) {
+        _color = CGColorRetain([RCTConvert CGColor:array offset:1]);
+    }
+    return self;
 }
 
 - (void)dealloc
 {
-  CGColorRelease(_color);
+    CGColorRelease(_color);
 }
 
 - (BOOL)applyFillColor:(CGContextRef)context
 {
-  CGContextSetFillColorWithColor(context, _color);
-  return YES;
+    CGContextSetFillColorWithColor(context, _color);
+    return YES;
+}
+
+- (BOOL)applyStrokeColor:(CGContextRef)context
+{
+    CGContextSetStrokeColorWithColor(context, _color);
+    return YES;
 }
 
 @end

@@ -32,10 +32,13 @@
     }
     
     CGPathDrawingMode mode = kCGPathStroke;
+    BOOL fillColor = YES;
+    
     if (self.fill) {
-        if ([self.fill applyFillColor:context]) {
-            mode = self.fillRule == kRNSVGCGFCRuleEvenodd ? kCGPathEOFill : kCGPathFill;
-        } else {
+        mode = self.fillRule == kRNSVGCGFCRuleEvenodd ? kCGPathEOFill : kCGPathFill;
+        fillColor = [self.fill applyFillColor:context];
+        
+        if (!fillColor) {
             if (self.clipPath) {
                 [self clip:context];
             }
@@ -51,23 +54,46 @@
         }
     }
     if (self.stroke) {
-        CGContextSetStrokeColorWithColor(context, self.stroke);
         CGContextSetLineWidth(context, self.strokeWidth);
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);
         RNSVGCGFloatArray dash = self.strokeDash;
+        
+        // TODO: render as web svgs do
         if (dash.count) {
             CGContextSetLineDash(context, 0, dash.array, dash.count);
         }
-        if (mode == kCGPathFill) {
-            mode = kCGPathFillStroke;
-        } else if (mode == kCGPathEOFill) {
-            mode = kCGPathEOFillStroke;
+        
+        if (!fillColor) {
+            CGContextAddPath(context, self.d);
+            CGContextReplacePathWithStrokedPath(context);
+            CGContextClip(context);
+        }
+        
+        if ([self.stroke applyStrokeColor:context]) {
+
+            if (mode == kCGPathFill) {
+                mode = kCGPathFillStroke;
+            } else if (mode == kCGPathEOFill) {
+                mode = kCGPathEOFillStroke;
+            }
+        } else {
+            // draw fill
+            [self clip:context];
+            CGContextAddPath(context, self.d);
+            CGContextDrawPath(context, mode);
+            
+            // draw stroke
+            CGContextAddPath(context, self.d);
+            CGContextReplacePathWithStrokedPath(context);
+            CGContextClip(context);
+            [self.stroke paint:context];
+            
+            return;
         }
     }
     
     [self clip:context];
-    
     CGContextAddPath(context, self.d);
     CGContextDrawPath(context, mode);
 }

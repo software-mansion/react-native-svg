@@ -16,14 +16,10 @@
     _fill = fill;
 }
 
-- (void)setStroke:(CGColorRef)stroke
+- (void)setStroke:(RNSVGBrush *)stroke
 {
-    if (stroke == _stroke) {
-        return;
-    }
     [self invalidate];
-    CGColorRelease(_stroke);
-    _stroke = CGColorRetain(stroke);
+    _stroke = stroke;
 }
 
 - (void)setStrokeWidth:(CGFloat)strokeWidth
@@ -58,7 +54,6 @@
 
 - (void)dealloc
 {
-    CGColorRelease(_stroke);
     if (_strokeDash.array) {
         free(_strokeDash.array);
     }
