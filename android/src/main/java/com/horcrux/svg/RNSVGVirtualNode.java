@@ -52,6 +52,9 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
     private static final int CLIP_RULE_NONZERO = 1;
     protected final float mScale;
     private float[] mClipData;
+    private int mClipRule;
+    private boolean mClipRuleSet;
+    private boolean mClipDataSet;
 
     public RNSVGVirtualNode() {
         mScale = DisplayMetricsHolder.getWindowDisplayMetrics().density;
@@ -93,24 +96,16 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
     @ReactProp(name = "clipPath")
     public void setClipPath(@Nullable ReadableArray clipPath) {
         mClipData = PropHelper.toFloatArray(clipPath);
+        mClipDataSet = true;
+        setupClip();
         markUpdated();
     }
 
     @ReactProp(name = "clipRule", defaultInt = CLIP_RULE_NONZERO)
     public void setClipRule(int clipRule) {
-        Path path = new Path();
-        switch (clipRule) {
-            case CLIP_RULE_EVENODD:
-                path.setFillType(Path.FillType.EVEN_ODD);
-                break;
-            case CLIP_RULE_NONZERO:
-                break;
-            default:
-                throw new JSApplicationIllegalArgumentException(
-                    "clipRule " + clipRule + " unrecognized");
-        }
-
-        mClipPath = createPath(mClipData, path);
+        mClipRule = clipRule;
+        mClipRuleSet = true;
+        setupClip();
         markUpdated();
     }
 
@@ -133,6 +128,24 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
             mMatrix = null;
         }
         markUpdated();
+    }
+
+    private void setupClip() {
+        if (mClipDataSet && mClipRuleSet) {
+            Path path = new Path();
+            switch (mClipRule) {
+                case CLIP_RULE_EVENODD:
+                    path.setFillType(Path.FillType.EVEN_ODD);
+                    break;
+                case CLIP_RULE_NONZERO:
+                    break;
+                default:
+                    throw new JSApplicationIllegalArgumentException(
+                        "clipRule " + mClipRule + " unrecognized");
+            }
+
+            mClipPath = createPath(mClipData, path);
+        }
     }
 
     protected void setupMatrix() {
@@ -163,7 +176,9 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
     protected Path createPath(float[] data, Path path) {
         path.moveTo(0, 0);
         int i = 0;
+
         while (i < data.length) {
+
             int type = (int) data[i++];
             switch (type) {
                 case PATH_TYPE_MOVETO:

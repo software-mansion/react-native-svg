@@ -131,7 +131,10 @@ class TextPath extends Component{
                     C 20 10 30  0 40 10
                     C 50 20 60 30 70 20
                     C 80 10 90 10 90 10
+                    C 110 20 120 30 120 20
+                    C 140 10 150 10 150 10
                 `}
+                y="20"
             >We go up, then we go down, then up again</Text>
         </Svg>;
     }

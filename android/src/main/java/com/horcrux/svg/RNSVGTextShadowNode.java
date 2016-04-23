@@ -13,9 +13,11 @@ import javax.annotation.Nullable;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 
+import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -41,6 +43,7 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
 
     private @Nullable ReadableMap mFrame;
     private int mTextAlignment = TEXT_ALIGNMENT_LEFT;
+    private Path mPath;
 
     @ReactProp(name = "frame")
     public void setFrame(@Nullable ReadableMap frame) {
@@ -50,6 +53,14 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
     @ReactProp(name = "alignment", defaultInt = TEXT_ALIGNMENT_LEFT)
     public void setAlignment(int alignment) {
         mTextAlignment = alignment;
+    }
+
+    @ReactProp(name = "path")
+    public void setPath(@Nullable ReadableArray textPath) {
+        float[] pathData = PropHelper.toFloatArray(textPath);
+        Path path = new Path();
+        mPath = super.createPath(pathData, path);
+        markUpdated();
     }
 
     @Override

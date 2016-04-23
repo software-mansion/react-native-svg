@@ -32,9 +32,9 @@ class StrokeLinecap extends Component{
     render() {
         return <Svg height="80" width="225">
             <G fill="none" stroke="black">
-                <Path strokeLinecap="butt" strokeWidth="2" d="M5 20 l215 0" />
-                <Path strokeLinecap="round" strokeWidth="4" d="M5 40 l215 0" />
-                <Path strokeLinecap="square" strokeWidth="6" d="M5 60 l215 0" />
+                <Path strokeLinecap="butt" strokeWidth="8" d="M5 20 l215 0" />
+                <Path strokeLinecap="round" strokeWidth="8" d="M5 40 l215 0" />
+                <Path strokeLinecap="square" strokeWidth="8" d="M5 60 l215 0" />
             </G>
         </Svg>;
     }

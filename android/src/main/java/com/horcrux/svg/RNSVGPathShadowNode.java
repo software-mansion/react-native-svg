@@ -12,6 +12,7 @@ package com.horcrux.svg;
 import javax.annotation.Nullable;
 
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -144,6 +145,38 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         markUpdateSeen();
     }
 
+    /*
+   * sorting stops and stopsColors from array
+   */
+    private static void parseGradientStops(float[] value, int stopsCount, float[] stops, int[] stopsColors, int startColorsPosition) {
+        int startStops = value.length - stopsCount;
+        for (int i = 0; i < stopsCount; i++) {
+            stops[i] = value[startStops + i];
+            stopsColors[i] = Color.argb(
+                    (int) (value[startColorsPosition + i * 4 + 3] * 255),
+                    (int) (value[startColorsPosition + i * 4] * 255),
+                    (int) (value[startColorsPosition + i * 4 + 1] * 255),
+                    (int) (value[startColorsPosition + i * 4 + 2] * 255));
+
+        }
+    }
+
+
+    /**
+     * Sets up {@link #mPaint} according to the props set on a shadow view. Returns {@code true}
+     * if the fill should be drawn, {@code false} if not.
+     */
+    protected boolean setupFillPaint(Paint paint, float opacity) {
+        if (mFillColor != null && mFillColor.length > 0) {
+            paint.reset();
+            paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+            paint.setStyle(Paint.Style.FILL);
+            setupPaint(paint, opacity, mFillColor);
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Sets up {@link #mPaint} according to the props set on a shadow view. Returns {@code true}
      * if the stroke should be drawn, {@code false} if not.
@@ -185,107 +218,79 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         }
 
         paint.setStrokeWidth(mStrokeWidth * mScale);
-        paint.setARGB(
-            (int) (mStrokeColor.length > 3 ? mStrokeColor[3] * opacity * 255 : opacity * 255),
-            (int) (mStrokeColor[0] * 255),
-            (int) (mStrokeColor[1] * 255),
-            (int) (mStrokeColor[2] * 255));
+
+        setupPaint(paint, opacity, mStrokeColor);
+
         if (mStrokeDash != null && mStrokeDash.length > 0) {
-            // TODO(6352067): Support dashes
-            FLog.w(ReactConstants.TAG, "RNSVG: Dashes are not supported yet!");
+            // todo: dashoffset
+            paint.setPathEffect(new DashPathEffect(mStrokeDash, 0));
         }
 
         return true;
     }
 
-    /*
-   * sorting stops and stopsColors from array
-   */
-    private static void parseGradientStops(float[] value, int stopsCount, float[] stops, int[] stopsColors, int startColorsPosition) {
-        int startStops = value.length - stopsCount;
-        for (int i = 0; i < stopsCount; i++) {
-            stops[i] = value[startStops + i];
-            stopsColors[i] = Color.argb(
-                    (int) (value[startColorsPosition + i * 4 + 3] * 255),
-                    (int) (value[startColorsPosition + i * 4] * 255),
-                    (int) (value[startColorsPosition + i * 4 + 1] * 255),
-                    (int) (value[startColorsPosition + i * 4 + 2] * 255));
 
-        }
-    }
-
-
-    /**
-     * Sets up {@link #mPaint} according to the props set on a shadow view. Returns {@code true}
-     * if the fill should be drawn, {@code false} if not.
-     */
-    protected boolean setupFillPaint(Paint paint, float opacity) {
+    private void setupPaint(Paint paint, float opacity, float[] colors) {
         int stopsCount;
         int [] stopsColors;
         float [] stops;
-        if (mFillColor != null && mFillColor.length > 0) {
-            paint.reset();
-            paint.setFlags(Paint.ANTI_ALIAS_FLAG);
-            paint.setStyle(Paint.Style.FILL);
-            int colorType = (int) mFillColor[0];
-            switch (colorType) {
-                case 0:
-                    paint.setARGB(
-                        (int) (mFillColor.length > 4 ? mFillColor[4] * opacity * 255 : opacity * 255),
-                        (int) (mFillColor[1] * 255),
-                        (int) (mFillColor[2] * 255),
-                        (int) (mFillColor[3] * 255));
-                    break;
-                case 1:
-                    stopsCount = (mFillColor.length - 5) / 5;
-                    stopsColors = new int [stopsCount];
-                    stops = new float[stopsCount];
 
-                    parseGradientStops(mFillColor, stopsCount, stops, stopsColors, 5);
-                    paint.setShader(
-                        new LinearGradient(
-                            mFillColor[1] * mScale,
-                            mFillColor[2] * mScale,
-                            mFillColor[3] * mScale,
-                            mFillColor[4] * mScale,
-                            stopsColors,
-                            stops,
-                            Shader.TileMode.CLAMP));
-                    break;
-                case 2:
-                    stopsCount = (mFillColor.length - 7) / 5;
-                    stopsColors = new int [stopsCount];
-                    stops = new float[stopsCount];
-                    parseGradientStops(mFillColor, stopsCount, stops, stopsColors, 7);
+        int colorType = (int) colors[0];
+        switch (colorType) {
+            case 0:
+                paint.setARGB(
+                    (int) (colors.length > 4 ? colors[4] * opacity * 255 : opacity * 255),
+                    (int) (colors[1] * 255),
+                    (int) (colors[2] * 255),
+                    (int) (colors[3] * 255));
+                break;
+            case 1:
+                stopsCount = (colors.length - 5) / 5;
+                stopsColors = new int [stopsCount];
+                stops = new float[stopsCount];
 
-                    // TODO: support focus
-                    float focusX = mFillColor[1];
-                    float focusY = mFillColor[2];
-
-                    float radius = mFillColor[3];
-                    float radiusRatio = mFillColor[4] / radius;
-                    Shader radialGradient = new RadialGradient(
-                        mFillColor[5] * mScale,
-                        mFillColor[6] * mScale / radiusRatio,
-                        radius * mScale,
+                parseGradientStops(colors, stopsCount, stops, stopsColors, 5);
+                paint.setShader(
+                    new LinearGradient(
+                        colors[1] * mScale,
+                        colors[2] * mScale,
+                        colors[3] * mScale,
+                        colors[4] * mScale,
                         stopsColors,
                         stops,
-                        Shader.TileMode.CLAMP
-                    );
+                        Shader.TileMode.CLAMP));
+                break;
+            case 2:
+                stopsCount = (colors.length - 7) / 5;
+                stopsColors = new int [stopsCount];
+                stops = new float[stopsCount];
+                parseGradientStops(colors, stopsCount, stops, stopsColors, 7);
 
-                    Matrix radialMatrix = new Matrix();
+                // TODO: support focus
+                float focusX = colors[1];
+                float focusY = colors[2];
 
-                    // seems like a bug here?
-                    radialMatrix.preScale(1f, radiusRatio);
-                    radialGradient.setLocalMatrix(radialMatrix);
-                    paint.setShader(radialGradient);
-                    break;
-                default:
-                    // TODO: Support pattern.
-                    FLog.w(ReactConstants.TAG, "RNSVG: Color type " + colorType + " not supported!");
-            }
-            return true;
+                float radius = colors[3];
+                float radiusRatio = colors[4] / radius;
+                Shader radialGradient = new RadialGradient(
+                    colors[5] * mScale,
+                    colors[6] * mScale / radiusRatio,
+                    radius * mScale,
+                    stopsColors,
+                    stops,
+                    Shader.TileMode.CLAMP
+                );
+
+                Matrix radialMatrix = new Matrix();
+
+                // seems like a bug here?
+                radialMatrix.preScale(1f, radiusRatio);
+                radialGradient.setLocalMatrix(radialMatrix);
+                paint.setShader(radialGradient);
+                break;
+            default:
+                // TODO: Support pattern.
+                FLog.w(ReactConstants.TAG, "RNSVG: Color type " + colorType + " not supported!");
         }
-        return false;
     }
 }
