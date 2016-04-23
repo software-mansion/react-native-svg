@@ -57,6 +57,25 @@ class PolylineFill extends Component{
     }
 }
 
+class PolylineFillStroke extends Component{
+    static title = 'Stroke Polyline with strokeLinecap and strokeLinejoin';
+    render() {
+        return <Svg
+            height="100"
+            width="100"
+        >
+            <Polyline
+                points="10,10 30,10 30,60 60,70 95,90"
+                fill="none"
+                stroke="blue"
+                strokeWidth="5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </Svg>;
+    }
+}
+
 const icon = <Svg
     height="20"
     width="20"
@@ -69,7 +88,7 @@ const icon = <Svg
     />
 </Svg>;
 
-const samples = [PolylineExample, StraightLines, PolylineFill];
+const samples = [PolylineExample, StraightLines, PolylineFill, PolylineFillStroke];
 
 export {
     icon,
