@@ -14,18 +14,16 @@ class Line extends Component{
         x2: propType,
         y1: propType,
         y2: propType,
-        strokeLinecap: PropTypes.oneOf(['butt', 'square', 'round']),
-        strokeCap: PropTypes.oneOf(['butt', 'square', 'round'])
+        strokeLinecap: PropTypes.oneOf(['butt', 'square', 'round'])
     };
 
     static getPath = (props) => (
-        `M${props.x1},${props.y1}L${props.x2},${props.y2}Z`
+        `M${props.x1},${props.y1} L${props.x2},${props.y2}`
     );
 
     render() {
         return <Path
             {...this.props}
-            ref="shape"
             d={Line.getPath(this.props)}
         />;
     }

@@ -26,6 +26,45 @@ class LineExample extends Component{
     }
 }
 
+class LineWithStrokeLinecap extends Component{
+    static title = 'Line';
+
+    render() {
+        return <Svg
+            height="100"
+            width="200"
+        >
+            <Line
+                x1="40"
+                y1="10"
+                x2="160"
+                y2="10"
+                stroke="red"
+                strokeWidth="10"
+                strokeLinecap="round"
+            />
+            <Line
+                x1="40"
+                y1="40"
+                x2="160"
+                y2="40"
+                stroke="red"
+                strokeWidth="10"
+                strokeLinecap="butt"
+            />
+            <Line
+                x1="40"
+                y1="80"
+                x2="160"
+                y2="80"
+                stroke="red"
+                strokeWidth="10"
+                strokeLinecap="square"
+            />
+        </Svg>;
+    }
+}
+
 const icon = <Svg
     height="20"
     width="20"
@@ -40,7 +79,7 @@ const icon = <Svg
     />
 </Svg>;
 
-const samples = [LineExample];
+const samples = [LineExample, LineWithStrokeLinecap];
 
 export {
     icon,
