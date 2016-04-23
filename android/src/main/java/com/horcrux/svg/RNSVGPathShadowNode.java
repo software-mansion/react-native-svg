@@ -57,25 +57,31 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private int mStrokeLinecap = CAP_ROUND;
     private int mStrokeLinejoin = JOIN_ROUND;
     private int mFillRule = FILL_RULE_NONZERO;
-
+    private boolean mFillRuleSet;
+    private boolean mPathSet;
+    private float[] mShapePath;
     private Point mPaint;
 
     @ReactProp(name = "d")
     public void setPath(@Nullable ReadableArray shapePath) {
-        float[] pathData = PropHelper.toFloatArray(shapePath);
-        Path path = new Path();
-        switch (mFillRule) {
-            case FILL_RULE_EVENODD:
-                path.setFillType(Path.FillType.EVEN_ODD);
-                break;
-            case FILL_RULE_NONZERO:
-                break;
-            default:
-                throw new JSApplicationIllegalArgumentException(
-                    "fillRule " + mFillRule + " unrecognized");
-        }
+        mShapePath = PropHelper.toFloatArray(shapePath);
+        mPathSet = true;
+        setupPath();
+        markUpdated();
+    }
 
-        mPath = super.createPath(pathData, path);
+    @ReactProp(name = "fill")
+    public void setFill(@Nullable ReadableArray fillColors) {
+        mFillColor = PropHelper.toFloatArray(fillColors);
+        markUpdated();
+    }
+
+
+    @ReactProp(name = "fillRule", defaultInt = FILL_RULE_NONZERO)
+    public void setFillRule(int fillRule) {
+        mFillRule = fillRule;
+        mFillRuleSet = true;
+        setupPath();
         markUpdated();
     }
 
@@ -100,20 +106,6 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     @ReactProp(name = "strokeDashoffset", defaultFloat = 0f)
     public void setStrokeDashoffset(float strokeWidth) {
         mStrokeDashoffset = strokeWidth * mScale;
-        markUpdated();
-    }
-
-
-    @ReactProp(name = "fill")
-    public void setFill(@Nullable ReadableArray fillColors) {
-        mFillColor = PropHelper.toFloatArray(fillColors);
-        markUpdated();
-    }
-
-
-    @ReactProp(name = "fillRule", defaultInt = FILL_RULE_NONZERO)
-    public void setFillRule(int fillRule) {
-        mFillRule = fillRule;
         markUpdated();
     }
 
@@ -157,6 +149,26 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
             restoreCanvas(canvas);
         }
         markUpdateSeen();
+    }
+
+    private void setupPath() {
+        // init path after both fillRule and path have been set
+        if (mFillRuleSet && mPathSet) {
+            Path path = new Path();
+
+            switch (mFillRule) {
+                case FILL_RULE_EVENODD:
+                    path.setFillType(Path.FillType.EVEN_ODD);
+                    break;
+                case FILL_RULE_NONZERO:
+                    break;
+                default:
+                    throw new JSApplicationIllegalArgumentException(
+                        "fillRule " + mFillRule + " unrecognized");
+            }
+
+            mPath = super.createPath(mShapePath, path);
+        }
     }
 
     /*
