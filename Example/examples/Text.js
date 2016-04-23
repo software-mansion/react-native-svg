@@ -87,7 +87,7 @@ class TextFill extends Component{
     }
 }
 
-// TODO: not supported
+// TODO: iOS not support text stroke with pattern
 class TextStroke extends Component{
     static title = 'Stroke the text';
     render() {
@@ -101,12 +101,11 @@ class TextStroke extends Component{
                     <Stop offset="0%" stopColor="#000" stopOpacity="1" />
                 </LinearGradient>
             </Defs>
-            <Rect x="0" y="0" width="200" height="60" fill="blue" />
             <Text
                 stroke="url(#grad)"
-                strokeWidth="4"
+                strokeWidth="2"
                 fill="none"
-                fontSize="20"
+                fontSize="30"
                 fontWeight="bold"
                 x="100"
                 y="20"
@@ -155,7 +154,7 @@ const icon = <Svg
     >字</Text>
 </Svg>;
 
-const samples = [TextExample, TextRotate, TextFill, TextPath];
+const samples = [TextExample, TextRotate, TextStroke, TextFill, TextPath];
 
 export {
     icon,
