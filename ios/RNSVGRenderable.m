@@ -40,16 +40,16 @@
     _strokeLinejoin = strokeLinejoin;
 }
 
-- (void)setStrokeDash:(RNSVGCGFloatArray)strokeDash
+- (void)setStrokeDash:(RNSVGCGFloatArray)strokeDasharray
 {
-    if (strokeDash.array == _strokeDash.array) {
+    if (strokeDasharray.array == _strokeDasharray.array) {
         return;
     }
-    if (_strokeDash.array) {
-        free(_strokeDash.array);
+    if (_strokeDasharray.array) {
+        free(_strokeDasharray.array);
     }
     [self invalidate];
-    _strokeDash = strokeDash;
+    _strokeDasharray = strokeDasharray;
 }
 
 - (void)setStrokeDashoffset:(CGFloat)strokeDashoffset
@@ -60,8 +60,8 @@
 
 - (void)dealloc
 {
-    if (_strokeDash.array) {
-        free(_strokeDash.array);
+    if (_strokeDasharray.array) {
+        free(_strokeDasharray.array);
     }
 }
 
