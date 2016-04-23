@@ -87,13 +87,19 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
     @ReactProp(name = "strokeDasharray")
     public void setStrokeDash(@Nullable ReadableArray strokeDasharray) {
+
         mStrokeDasharray = PropHelper.toFloatArray(strokeDasharray);
+        if (mStrokeDasharray != null && mStrokeDasharray.length > 0) {
+            for (int i = 0; i < mStrokeDasharray.length; i++) {
+                mStrokeDasharray[i] = mStrokeDasharray[i] * mScale;
+            }
+        }
         markUpdated();
     }
 
     @ReactProp(name = "strokeDashoffset", defaultFloat = 0f)
     public void setStrokeDashoffset(float strokeWidth) {
-        mStrokeDashoffset = strokeWidth;
+        mStrokeDashoffset = strokeWidth * mScale;
         markUpdated();
     }
 
