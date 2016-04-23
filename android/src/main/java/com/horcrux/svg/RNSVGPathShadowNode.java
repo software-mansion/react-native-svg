@@ -53,6 +53,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private @Nullable float[] mFillColor;
     private @Nullable float[] mStrokeDash;
     private float mStrokeWidth = 1;
+    private float mStrokeDashoffset = 0;
     private int mStrokeLinecap = CAP_ROUND;
     private int mStrokeLinejoin = JOIN_ROUND;
     private int mFillRule = FILL_RULE_NONZERO;
@@ -89,6 +90,13 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         mStrokeDash = PropHelper.toFloatArray(strokeDash);
         markUpdated();
     }
+
+    @ReactProp(name = "strokeDashoffset", defaultFloat = 0f)
+    public void setStrokeDashoffset(float strokeWidth) {
+        mStrokeDashoffset = strokeWidth;
+        markUpdated();
+    }
+
 
     @ReactProp(name = "fill")
     public void setFill(@Nullable ReadableArray fillColors) {
@@ -222,8 +230,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         setupPaint(paint, opacity, mStrokeColor);
 
         if (mStrokeDash != null && mStrokeDash.length > 0) {
-            // todo: dashoffset
-            paint.setPathEffect(new DashPathEffect(mStrokeDash, 0));
+            paint.setPathEffect(new DashPathEffect(mStrokeDash, mStrokeDashoffset));
         }
 
         return true;

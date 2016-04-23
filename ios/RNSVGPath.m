@@ -59,9 +59,8 @@
         CGContextSetLineJoin(context, self.strokeLinejoin);
         RNSVGCGFloatArray dash = self.strokeDash;
         
-        // TODO: render as web svgs do
         if (dash.count) {
-            CGContextSetLineDash(context, 0, dash.array, dash.count);
+            CGContextSetLineDash(context, self.strokeDashoffset, dash.array, dash.count);
         }
         
         if (!fillColor) {

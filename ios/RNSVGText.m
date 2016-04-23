@@ -84,8 +84,9 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);
         RNSVGCGFloatArray dash = self.strokeDash;
+        
         if (dash.count) {
-            CGContextSetLineDash(context, 0, dash.array, dash.count);
+            CGContextSetLineDash(context, self.strokeDashoffset, dash.array, dash.count);
         }
         
         if (![self.stroke applyStrokeColor:context]) {

@@ -11,7 +11,8 @@ import Svg, {
     RadialGradient,
     Polyline,
     ClipPath,
-    Circle
+    Circle,
+    Text
 } from 'react-native-svg';
 
 class StrokeExample extends Component{
@@ -28,7 +29,7 @@ class StrokeExample extends Component{
 }
 
 class StrokeLinecap extends Component{
-    static title = 'The stroke-linecap property defines different types of endings to an open path';
+    static title = 'The strokeLinecap property defines different types of endings to an open path';
     render() {
         return <Svg height="80" width="225">
             <G fill="none" stroke="black">
@@ -49,6 +50,36 @@ class StrokeDasharray  extends Component{
                 <Path strokeDasharray="10,10" d="M5 40 l215 0" />
                 <Path strokeDasharray="20,10,5,5,5,10" d="M5 60 l215 0" />
             </G>
+        </Svg>;
+    }
+}
+
+class StrokeDashoffset extends Component{
+    static title = 'the strokeDashoffset attribute specifies the distance into the dash pattern to start the dash.';
+    render() {
+        return <Svg height="80" width="200">
+            <Circle
+                cx="100"
+                cy="40"
+                r="35"
+                strokeWidth="5"
+                stroke="red"
+                fill="none"
+                strokeDasharray="100"
+                strokeDashoffset="100"
+            />
+            <Text
+                stroke="blue"
+                strokeWidth="1"
+                fill="none"
+                fontSize="20"
+                fontWeight="bold"
+                x="100"
+                y="40"
+                textAnchor="center"
+                strokeDasharray="100"
+                strokeDashoffset="60"
+            >STROKE</Text>
         </Svg>;
     }
 }
@@ -110,7 +141,7 @@ const icon = <Svg
     </G>
 </Svg>;
 
-const samples = [StrokeExample, StrokeLinecap, StrokeDasharray, StrokePattern];
+const samples = [StrokeExample, StrokeLinecap, StrokeDasharray, StrokeDashoffset, StrokePattern];
 
 export {
     icon,

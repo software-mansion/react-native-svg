@@ -52,6 +52,12 @@
     _strokeDash = strokeDash;
 }
 
+- (void)setStrokeDashoffset:(CGFloat)strokeDashoffset
+{
+    [self invalidate];
+    _strokeDashoffset = strokeDashoffset;
+}
+
 - (void)dealloc
 {
     if (_strokeDash.array) {
