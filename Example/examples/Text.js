@@ -7,7 +7,8 @@ import Svg, {
     LinearGradient,
     Stop,
     Defs,
-    ClipPath
+    ClipPath,
+    Rect
 } from 'react-native-svg';
 
 class TextExample extends Component{
@@ -96,11 +97,11 @@ class TextStroke extends Component{
         >
             <Defs>
                 <LinearGradient id="grad" x1="0" y1="0" x2="100" y2="0">
-                    <Stop offset="100%" stopColor="rgb(255,255,0)" stopOpacity="0" />
-                    <Stop offset="0%" stopColor="red" stopOpacity="1" />
+                    <Stop offset="100%" stopColor="#fff" stopOpacity="0" />
+                    <Stop offset="0%" stopColor="#000" stopOpacity="1" />
                 </LinearGradient>
             </Defs>
-
+            <Rect x="0" y="0" width="200" height="60" fill="blue" />
             <Text
                 stroke="url(#grad)"
                 strokeWidth="4"

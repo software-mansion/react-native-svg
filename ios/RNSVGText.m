@@ -78,9 +78,8 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
             }
         }
     }
+    
     if (self.stroke) {
-        [self.stroke applyStrokeColor:context];
-        
         CGContextSetLineWidth(context, self.strokeWidth);
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);
@@ -88,8 +87,40 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
         if (dash.count) {
             CGContextSetLineDash(context, 0, dash.array, dash.count);
         }
-        if (mode == kCGTextFill) {
-            mode = kCGTextFillStroke;
+        
+        if (![self.stroke applyStrokeColor:context]) {
+            // TODO: stroke text with pattern
+            
+//            CGContextSetTextDrawingMode(context, kCGTextStrokeClip);
+//            CGContextSetStrokeColorWithColor(context, [[UIColor redColor] CGColor]);
+//            CGContextSetFillColorWithColor(context, [[UIColor whiteColor] CGColor]);
+//            CGRect rect = CGContextGetClipBoundingBox(context);
+//            
+//            CGContextScaleCTM(context, 1.0, -1.0);
+//            for (int i = 0; i < frame.count; i++) {
+//                [self renderLineTo:context atIndex:i];
+//                [self.stroke paint:context];
+//            }
+//            CGContextScaleCTM(context, 1.0, -1.0);
+//            //[self.stroke paint:context];
+//            
+//            CGImageRef image = CGBitmapContextCreateImage(context);
+//            
+//            CGImageRef mask = CGImageMaskCreate(CGImageGetWidth(image), CGImageGetHeight(image), CGImageGetBitsPerComponent(image), CGImageGetBitsPerPixel(image), CGImageGetBytesPerRow(image), CGImageGetDataProvider(image), CGImageGetDecode(image), CGImageGetShouldInterpolate(image));
+//            //CFRelease(image);
+//            
+//            CGContextSaveGState(context);
+//            //CGContextClearRect(context, rect);
+//            //CGContextClipToMask(context, rect, mask);
+//            [self.stroke paint:context];
+//            CFRelease(mask);
+//            //CGContextRestoreGState(context);
+//            
+//            return;
+        } else {
+            if (mode == kCGTextFill) {
+                mode = kCGTextFillStroke;
+            }
         }
     }
     
