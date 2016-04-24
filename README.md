@@ -563,6 +563,8 @@ npm install
 5. fix propTypes
 6. more Text features support
 7. support percent props
+8. Pattern element
+9. Image element
 
 
 #### Thanks:

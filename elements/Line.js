@@ -1,7 +1,6 @@
 import React, {
     Component,
-    PropTypes,
-    ReactNativeBaseComponent
+    PropTypes
 } from 'react-native';
 import Path from './Path';
 
