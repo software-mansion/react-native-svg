@@ -45,14 +45,15 @@
 - (void)renderTo:(CGContextRef)context
 {
     float opacity = self.opacity;
-    BOOL transparent = NO;
+
     if (opacity <= 0) {
         // Nothing to paint
         return;
     }
-    if (opacity >= 1) {
+
+    BOOL transparent = opacity < 1;
+    if (!transparent) {
         opacity = 1;
-        transparent = YES;
     }
 
     // This needs to be painted on a layer before being composited.
@@ -61,7 +62,6 @@
     CGContextSetAlpha(context, opacity);
     if (transparent) {
         CGContextBeginTransparencyLayer(context, NULL);
-
     }
     [self renderLayerTo:context];
     if (transparent) {
