@@ -92,7 +92,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     }
 
     @ReactProp(name = "strokeDasharray")
-    public void setStrokeDash(@Nullable ReadableArray strokeDasharray) {
+    public void setStrokeDasharray(@Nullable ReadableArray strokeDasharray) {
 
         mStrokeDasharray = PropHelper.toFloatArray(strokeDasharray);
         if (mStrokeDasharray != null && mStrokeDasharray.length > 0) {
