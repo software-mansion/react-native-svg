@@ -7,7 +7,12 @@ import G from './G';
 import extractViewbox from '../lib/extract/extractViewbox';
 class ViewBox extends Component{
     static displayName = 'ViewBox';
-
+    static propType = {
+        shouldTransform: PropTypes.bool
+    };
+    static defaultProps = {
+        shouldTransform: false
+    };
     render() {
         let viewbox = extractViewbox(this.props);
         let scaleX = 1;

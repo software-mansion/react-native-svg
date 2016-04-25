@@ -21,6 +21,7 @@ class SymbolElement extends Component{
                 {...props}
                 viewbox={props.viewbox}
                 preserveAspectRatio={props.preserveAspectRatio}
+                shouldTransform={true}
             >
                 {props.children}
             </ViewBox>
