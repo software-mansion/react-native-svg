@@ -13,7 +13,10 @@ import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/
 const CIRCLE = 0;
 
 /**
+ * coord props
  *
+ * algorithm for radius in percentage
+ * radius = Math.sqrt(Math.pow((width*percent), 2) + Math.pow((height*percent), 2)) / Math.sqrt(2);
  */
 const CIRCLE_COORDS = ['cx', 'cy', 'r'];
 
