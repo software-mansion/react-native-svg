@@ -18,8 +18,8 @@
 
 @interface RNSVGNode : UIView
 
+@property (nonatomic, assign) CGRect rect;
 @property (nonatomic, assign) CGFloat opacity;
-
 @property (nonatomic, assign) CGPathRef clipPath;
 @property (nonatomic, assign) RNSVGCGFCRule clipRule;
 

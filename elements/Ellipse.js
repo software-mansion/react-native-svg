@@ -2,35 +2,32 @@ import React, {
     Component,
     PropTypes
 } from 'react-native';
-import Path from './Path';
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
-class Ellipse extends Component{
+import Shape, {ELLIPSE} from './Shape';
+import {ellipseProps, pathProps} from '../lib/props';
+
+class Ellipse extends Shape{
     static displayName = 'Ellipse';
     static propTypes = {
-        cx: propType,
-        cy: propType,
-        rx: propType,
-        ry: propType
+        ...pathProps,
+        ...ellipseProps
     };
 
-    static getPath = props => {
-        let {cx, cy, rx, ry} = props;
-        return `
-            M ${cx - rx} ${cy}
-            a ${rx}, ${ry} 0 1, 0 ${rx * 2}, 0
-            a ${rx}, ${ry} 0 1, 0 ${-rx * 2}, 0
-            Z
-        `;
+    static defaultProps = {
+        cx: 0,
+        cy: 0,
+        rx: 0,
+        ry: 0
     };
 
-    render() {
-        let {props} = this;
-        let d = Ellipse.getPath(this.props);
-        return <Path
-            {...props}
-            d={d}
-        />;
-    }
+    static contextTypes = {
+        ...ellipseProps,
+        isInGroup: PropTypes.bool
+    };
+
+    constructor() {
+        super(...arguments);
+        this.type = ELLIPSE;
+    };
 }
 
 export default Ellipse;

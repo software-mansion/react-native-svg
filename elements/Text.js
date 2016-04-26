@@ -6,7 +6,7 @@ import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/
 import extractProps from '../lib/extract/extractProps';
 import extractText from '../lib/extract/extractText';
 import {TextAttributes} from '../lib/attributes';
-import numberProp from '../lib/numberProp';
+import {numberProp} from '../lib/props';
 
 class Text extends Component{
     static displayName = 'Text';

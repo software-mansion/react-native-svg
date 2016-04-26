@@ -2,42 +2,34 @@ import React, {
     Component,
     Children,
     cloneElement,
+    PropTypes,
     requireNativeComponent
 } from 'react-native';
 import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
 import Defs from './Defs';
+import _ from 'lodash';
 import {GroupAttributes} from '../lib/attributes';
-
-const transformProps = {
-    scale: null,
-    scaleX: null,
-    scaleY: null,
-    rotate: null,
-    transform: null,
-    x: null,
-    y: null,
-    originX: null,
-    originY: null
-};
-
-const clipProps = {
-    clipPath: null,
-    clipRule: null
-};
+import {numberProp, shapeProps} from '../lib/props';
 
 import extractProps from '../lib/extract/extractProps';
 
 class G extends Component{
     static displayName = 'G';
 
-    getChildren = () => {
-        return Children.map(this.props.children, child => cloneElement(child, {
-            ...this.props,
-            ...transformProps,
-            ...clipProps,
-            ...child.props,
-            id: null
-        }));
+    static childContextTypes = {
+        svgId: numberProp,
+        isInGroup: PropTypes.bool,
+        ...shapeProps
+    };
+
+    getChildContext = () => {
+        return _.reduce(shapeProps, (props, value, key) => {
+            props[key] = this.props[key];
+            return props;
+        }, {
+            svgId: this.props.svgId,
+            isInGroup: true
+        });
     };
 
     render() {
@@ -56,7 +48,7 @@ class G extends Component{
             return <NativeGroup
                 {...extractProps(this.props, {transform: true})}
             >
-                {this.getChildren()}
+                {this.props.children}
             </NativeGroup>;
         }
     }

@@ -4,7 +4,7 @@ import React, {
     Children
 } from 'react-native';
 import stopsOpacity from '../lib/stopsOpacity';
-import numberProp from '../lib/numberProp';
+import {numberProp} from '../lib/props';
 import Gradient from './Gradient';
 import {RADIAL_GRADIENT} from '../lib/extract/extractBrush';
 import insertColorStopsIntoArray from '../lib/insertProcessor';
