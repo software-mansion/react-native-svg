@@ -9,7 +9,7 @@ import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/
 import Defs from './Defs';
 import _ from 'lodash';
 import {GroupAttributes} from '../lib/attributes';
-import {numberProp, shapeProps} from '../lib/props';
+import {numberProp, contextProps, textProps} from '../lib/props';
 
 import extractProps from '../lib/extract/extractProps';
 
@@ -19,11 +19,11 @@ class G extends Component{
     static childContextTypes = {
         svgId: numberProp,
         isInGroup: PropTypes.bool,
-        ...shapeProps
+        ...contextProps
     };
 
     getChildContext = () => {
-        return _.reduce(shapeProps, (props, value, key) => {
+        return _.reduce(contextProps, (props, value, key) => {
             props[key] = this.props[key];
             return props;
         }, {

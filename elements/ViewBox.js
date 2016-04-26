@@ -20,6 +20,7 @@ class ViewBox extends Component{
             x = viewbox.x;
             y = viewbox.y;
         }
+
         return <G
             {...this.props}
             x={x}

@@ -164,7 +164,7 @@ class TextClipping extends Component{
                 fontWeight="bold"
                 fill="red"
                 stroke="blue"
-                textAnchor="center"
+                textAnchor="middle"
                 clipPath="url(#clip)"
             >NOT THE FACE</Text>
         </Svg>;

@@ -76,7 +76,7 @@ class StrokeDashoffset extends Component{
                 fontWeight="bold"
                 x="100"
                 y="40"
-                textAnchor="center"
+                textAnchor="middle"
                 strokeDasharray="100"
                 strokeDashoffset="60"
             >STROKE</Text>

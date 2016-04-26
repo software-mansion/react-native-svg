@@ -5,7 +5,6 @@ import React, {
 } from 'react-native';
 import {NativeGroup} from './G';
 import {set, remove} from '../lib/extract/patterns';
-import percentFactory from '../lib/percentFactory';
 import percentToFloat from '../lib/percentToFloat';
 import Stop from './Stop';
 import Color from 'color';
@@ -28,7 +27,7 @@ class RadialGradient extends Component{
         remove(this.id);
     };
 
-    render(distanceProps, fromPercent, fromNumber) {
+    render(generator) {
         let stops = {};
         Children.forEach(this.props.children, child => {
             if (child.type === Stop && child.props.stopColor && child.props.offset) {
@@ -37,13 +36,7 @@ class RadialGradient extends Component{
 
                 // add stop
                 stops[offset] = Color(child.props.stopColor).alpha(+child.props.stopOpacity);
-
-                let factories = percentFactory(...distanceProps);
-                if (factories) {
-                    set(this.id, fromPercent.bind(null, factories, stops));
-                } else {
-                    set(this.id, fromNumber.bind(null, stops));
-                }
+                set(this.id, generator.bind(null, stops));
             } else {
                 console.warn(`'RadialGradient' can only receive 'Stop' elements as children`);
             }

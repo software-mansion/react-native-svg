@@ -22,7 +22,7 @@ class TextExample extends Component{
                 x="50"
                 y="9"
                 fill="red"
-                textAnchor="center"
+                textAnchor="middle"
             >I love SVG!</Text>
         </Svg>;
     }
@@ -81,7 +81,7 @@ class TextFill extends Component{
                 fontWeight="bold"
                 x="100"
                 y="20"
-                textAnchor="center"
+                textAnchor="middle"
             >FILL TEXT</Text>
         </Svg>;
     }
@@ -109,7 +109,7 @@ class TextStroke extends Component{
                 fontWeight="bold"
                 x="100"
                 y="20"
-                textAnchor="center"
+                textAnchor="middle"
             >STROKE TEXT</Text>
         </Svg>;
     }
@@ -148,7 +148,7 @@ const icon = <Svg
         y="2"
         fontSize="14"
         fontWeight="bold"
-        textAnchor="center"
+        textAnchor="middle"
         fill="none"
         stroke="blue"
     >字</Text>

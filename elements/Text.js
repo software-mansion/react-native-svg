@@ -1,23 +1,40 @@
 import React, {
-    Component
+    Component,
+    PropTypes
 } from 'react-native';
 import Defs from './Defs';
 import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
 import extractProps from '../lib/extract/extractProps';
 import extractText from '../lib/extract/extractText';
 import {TextAttributes} from '../lib/attributes';
-import {numberProp} from '../lib/props';
+import {numberProp, textProps, fillProps, strokeProps, pathProps} from '../lib/props';
 
 class Text extends Component{
     static displayName = 'Text';
     static propTypes = {
-        x: numberProp,
-        y: numberProp,
         dx: numberProp,
-        dy: numberProp
+        dy: numberProp,
+        ...textProps,
+        ...fillProps,
+        ...strokeProps,
+        ...pathProps
     };
+
+    static contextTypes = {
+        ...textProps,
+        ...fillProps,
+        ...strokeProps,
+        isInGroup: PropTypes.bool
+    };
+
     render() {
         let {props} = this;
+
+        if (this.context.isInGroup) {
+            props = _.defaults(this.context, props, {
+                isInGroup: null
+            });
+        }
 
         let x = 0;
         if (props.x) {

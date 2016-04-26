@@ -11,28 +11,7 @@ import insertColorStopsIntoArray from '../lib/insertProcessor';
 
 
 function RadialGradientGenerator(stops, fx, fy, rx, ry, cx, cy) {
-    if (ry == null) {
-        ry = rx;
-    }
-    if (cx == null) {
-        cx = fx;
-    }
-    if (cy == null) {
-        cy = fy;
-    }
-    if (fx == null) {
-        // As a convenience we allow the whole radial gradient to cover the
-        // bounding box. We should consider dropping this API.
-        fx = fy = rx = ry = cx = cy = 0.5;
-        this._bb = true;
-    } else {
-        this._bb = false;
-    }
-    // The ART API expects the radial gradient to be repeated at the edges.
-    // To simulate this we render the gradient twice as large and add double
-    // color stops. Ideally this API would become more restrictive so that this
-    // extra work isn't needed.
-    var brushData = [RADIAL_GRADIENT, +fx, +fy, +rx * 2, +ry * 2, +cx, +cy];
+    var brushData = [RADIAL_GRADIENT, fx, fy, rx, ry, cx, cy];
     insertColorStopsIntoArray(stops, brushData, 7, 0.5);
     this._brush = brushData;
 }
@@ -60,24 +39,10 @@ class RadialGradient extends Gradient{
             cy,
             r
         } = this.props;
-
-        let gradientProps = [fx, fy, rx || r, ry || r, cx, cy];
         return super.render(
-            gradientProps,
-            function (factories, stops, boundingBox, opacity) {
-                let {x1,y1,width, height} = boundingBox;
-                return new RadialGradientGenerator(
-                    stopsOpacity(stops, opacity),
-                    x1 + factories[0](width),
-                    y1 + factories[1](height),
-                    factories[2](width),
-                    factories[3](height),
-                    x1 + factories[4](width),
-                    y1 + factories[5](height)
-                );
-            },
-            function (stops, opacity) {
-                return new RadialGradientGenerator(stopsOpacity(stops, opacity), ...gradientProps);
+            (stops, opacity) => {
+
+                return new RadialGradientGenerator(stopsOpacity(stops, opacity), ...[fx, fy, rx || r, ry || r, cx, cy]);
             }
         );
     }
