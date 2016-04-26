@@ -3,7 +3,7 @@ import React, {
     PropTypes
 } from 'react-native';
 import Shape, {RECT} from './Shape';
-import {rectProps, pathProps} from '../lib/props';
+import {rectProps, pathProps, fillProps, strokeProps} from '../lib/props';
 
 class Rect extends Shape{
     static displayName = 'Rect';
@@ -12,16 +12,9 @@ class Rect extends Shape{
         ...rectProps
     };
 
-    static defaultProps = {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        rx: 0,
-        ry: 0
-    };
-
     static contextTypes = {
+        ...fillProps,
+        ...strokeProps,
         ...rectProps,
         isInGroup: PropTypes.bool
     };

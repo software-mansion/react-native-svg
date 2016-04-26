@@ -61,11 +61,10 @@ class DefsUse extends Component{
             if (matched) {
                 let template = map[matched[1] + ':' + this.props.svgId];
                 if (template) {
-                    let props = {
+                    return cloneElement(template, {
                         ...this.props,
                         href: null
-                    };
-                    return cloneElement(template, props);
+                    });
                 }
             }
         }

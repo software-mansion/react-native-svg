@@ -30,6 +30,7 @@ class GExample extends Component{
                 <Circle
                     cx="25"
                     cy="75"
+                    stroke="red"
                 />
                 <Circle
                     cx="50"
@@ -39,6 +40,7 @@ class GExample extends Component{
                 <Circle
                     cx="75"
                     cy="25"
+                    stroke="red"
                 />
                 <Circle
                     cx="75"

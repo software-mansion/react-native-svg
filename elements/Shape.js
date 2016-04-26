@@ -51,7 +51,7 @@ class Shape extends Component{
         let props = this.props;
 
         if (this.context.isInGroup) {
-            props = _.defaults(this.context, props, {
+            props = _.defaults({}, props, this.context, {
                 isInGroup: null
             });
         }
@@ -59,7 +59,6 @@ class Shape extends Component{
         let shape = new SerializableShape(props, COORD_PROPS[this.type]).toJSON();
 
         return <NativePath
-            {...props}
             {...extractProps(this.type === 3 ? {
                 ...props,
                 x: null,

@@ -41,7 +41,7 @@
             CGFloat cy = [self getActualProp:@"cy" relative:height];
             CGFloat rx = [self getActualProp:@"rx" relative:height];
             CGFloat ry = [self getActualProp:@"ry" relative:height];
-            CGPathAddEllipseInRect(path, nil, CGRectMake(cx - rx / 2, cy - ry / 2, rx * 2, ry * 2));
+            CGPathAddEllipseInRect(path, nil, CGRectMake(cx - rx, cy - ry, rx * 2, ry * 2));
             break;
         }
         case 2:

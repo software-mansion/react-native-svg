@@ -3,7 +3,7 @@ import React, {
     PropTypes
 } from 'react-native';
 import Shape, {ELLIPSE} from './Shape';
-import {ellipseProps, pathProps} from '../lib/props';
+import {ellipseProps, pathProps, fillProps, strokeProps} from '../lib/props';
 
 class Ellipse extends Shape{
     static displayName = 'Ellipse';
@@ -12,14 +12,9 @@ class Ellipse extends Shape{
         ...ellipseProps
     };
 
-    static defaultProps = {
-        cx: 0,
-        cy: 0,
-        rx: 0,
-        ry: 0
-    };
-
     static contextTypes = {
+        ...fillProps,
+        ...strokeProps,
         ...ellipseProps,
         isInGroup: PropTypes.bool
     };

@@ -3,7 +3,7 @@ import React, {
     PropTypes
 } from 'react-native';
 import Shape, {CIRCLE} from './Shape';
-import {circleProps, pathProps} from '../lib/props';
+import {circleProps, pathProps, fillProps, strokeProps} from '../lib/props';
 import _ from 'lodash';
 
 class Circle extends Shape{
@@ -13,13 +13,9 @@ class Circle extends Shape{
         ...circleProps
     };
 
-    static defaultProps = {
-        cx: 0,
-        cy: 0,
-        r: 0
-    };
-
     static contextTypes = {
+        ...fillProps,
+        ...strokeProps,
         ...circleProps,
         isInGroup: PropTypes.bool
     };

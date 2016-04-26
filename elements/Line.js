@@ -3,7 +3,7 @@ import React, {
     PropTypes
 } from 'react-native';
 import Shape, {LINE} from './Shape';
-import {lineProps, pathProps} from '../lib/props';
+import {lineProps, pathProps, fillProps, strokeProps} from '../lib/props';
 
 class Line extends Shape{
     static displayName = 'Line';
@@ -12,14 +12,9 @@ class Line extends Shape{
         ...lineProps
     };
 
-    static defaultProps = {
-        x1: 0,
-        x2: 0,
-        y1: 0,
-        y2: 0
-    };
-
     static contextTypes = {
+        ...fillProps,
+        ...strokeProps,
         ...lineProps,
         isInGroup: PropTypes.bool
     };
