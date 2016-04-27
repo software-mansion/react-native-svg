@@ -16,7 +16,6 @@ class Path extends Component{
     static displayName = 'Path';
 
     static propTypes = {
-        visible: PropTypes.bool,
         d: PropTypes.string,
         ...pathProps
     };

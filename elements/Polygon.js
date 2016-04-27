@@ -3,18 +3,19 @@ import React, {
     PropTypes
 } from 'react-native';
 import Path from './Path';
+import {pathProps} from '../lib/props';
 
 class Polygon extends Component{
     static displayName = 'Polygon';
     static propTypes = {
-        points: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        ...pathProps,
+        points: PropTypes.string
     };
-    static getPath = props => (`M${props.points.trim().replace(/\s+/g, 'L')}z`);
 
     render() {
         return <Path
             {...this.props}
-            d={Polygon.getPath(this.props)}
+            d={`M${this.props.points.trim().replace(/\s+/g, 'L')}z`}
         />;
     }
 }
