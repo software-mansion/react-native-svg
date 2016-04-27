@@ -22,9 +22,6 @@
         "svgpath": "^2.1.5",
         "lodash": "^4.0.0"
     },
-    "scripts": {
-        "postinstall": "rnpm link react-native-svg"
-    },
     "nativePackage": true,
     "rnpm": {
         "ios": {
