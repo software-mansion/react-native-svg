@@ -11,13 +11,15 @@
 
 @implementation RNSVGShape
 
-- (void)dealloc
-{
-    
-}
-
 - (void)renderLayerTo:(CGContextRef)context
 {
+    self.d = [self getPath: context];
+    [super renderLayerTo:context];
+}
+
+- (CGPathRef)getPath:(CGContextRef)context
+{
+    
     int type = [[self.shape objectForKey:@"type"] intValue];
     CGRect box = CGContextGetClipBoundingBox(context);
     CGMutablePathRef path = CGPathCreateMutable();
@@ -39,7 +41,7 @@
             CGFloat value = [[prop objectForKey:@"value"] floatValue];
             if ([[prop objectForKey:@"percentage"] integerValue] == 1) {
                 r = sqrt(pow((width * value), 2) + pow((height * value), 2)) / sqrt(2);
-
+                
             } else {
                 r = value;
             }
@@ -104,13 +106,9 @@
             RCTLogError(@"Invalid Shape type %d at %@", type, self.shape);
             //CGPathRelease(path);
             
-            
     }
     
-    self.d = path;
-    [super renderLayerTo:context];
-    //NSLog(@"%@", NSStringFromCGRect(box));
-    //NSLog(@"%@", self.shape);
+    return path;
 }
 
 - (CGFloat)getActualProp:(NSString *)name relative:(float)relative

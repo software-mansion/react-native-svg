@@ -13,8 +13,7 @@
 #import "RNSVGCGFCRule.h"
 
 @interface RNSVGGroup : RNSVGNode <RNSVGContainer>
+@property (nonatomic, strong) NSString *asClipPath; // Current group is a <ClipPath /> element and asClipPath is its id.
 
-@property (nonatomic, assign) CGPathRef clipPath;
-@property (nonatomic, assign) RNSVGCGFCRule clipRule;
 
 @end

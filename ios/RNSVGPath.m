@@ -39,9 +39,7 @@
         fillColor = [self.fill applyFillColor:context];
         
         if (!fillColor) {
-            if (self.clipPath) {
-                [self clip:context];
-            }
+            [self clip:context];
             
             CGContextSaveGState(context);
             CGContextAddPath(context, self.d);
@@ -95,6 +93,11 @@
     [self clip:context];
     CGContextAddPath(context, self.d);
     CGContextDrawPath(context, mode);
+}
+
+- (CGPathRef)getPath:(CGContextRef)context
+{
+    return self.d;
 }
 
 @end

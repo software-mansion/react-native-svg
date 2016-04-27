@@ -47,6 +47,7 @@ class G extends Component{
         } else {
             return <NativeGroup
                 {...extractProps(this.props, {transform: true})}
+                asClipPath={this.props.asClipPath}
             >
                 {this.props.children}
             </NativeGroup>;

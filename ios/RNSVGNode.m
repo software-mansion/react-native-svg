@@ -10,6 +10,8 @@
 
 #import "RNSVGContainer.h"
 
+static NSMutableDictionary *ClipPaths;
+
 @implementation RNSVGNode
 
 - (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index
@@ -72,12 +74,28 @@
 
 - (void)setClipPath:(CGPathRef)clipPath
 {
+    if (_clipPath == clipPath) {
+        return;
+    }
+    [self invalidate];
+    CGPathRelease(_clipPath);
+    _clipPath = CGPathRetain(clipPath);
+}
+
+
+-(void)defineClipPath:(CGPathRef)clipPath clipPathId:(NSString *)clipPathId
+{
     if (clipPath == _clipPath) {
         return;
     }
     [self invalidate];
     CGPathRelease(_clipPath);
     _clipPath = CGPathRetain(clipPath);
+    if (ClipPaths == NULL) {
+        ClipPaths = [[NSMutableDictionary alloc] init];
+    }
+    
+    [ClipPaths setValue:[NSValue valueWithPointer:_clipPath] forKey:clipPathId];
 }
 
 - (void)dealloc
@@ -91,15 +109,29 @@
     // abstract
 }
 
+- (CGPathRef)getPath: (CGContextRef) context
+{
+    // abstract
+    return CGPathCreateMutable();
+}
+
 - (void)clip:(CGContextRef)context
 {
+    CGPathRef clipPath = nil;
+    
     if (self.clipPath) {
-        CGContextAddPath(context, self.clipPath);
-        if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
-            CGContextEOClip(context);
-        } else {
-            CGContextClip(context);
-        }
+        clipPath = self.clipPath;
+    } else if (self.clipPathId) {
+        clipPath = [[ClipPaths valueForKey:self.clipPathId] pointerValue];
+    } else {
+        return;
+    }
+    
+    CGContextAddPath(context, clipPath);
+    if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
+        CGContextEOClip(context);
+    } else {
+        CGContextClip(context);
     }
 }
 

@@ -213,7 +213,7 @@ const icon = <Svg
     </G>
 </Svg>;
 
-const samples = [ClipPathAttr, ClipRule];//, ClipPathElement, TextClipping
+const samples = [ClipPathAttr, ClipRule, ClipPathElement, TextClipping];
 
 export {
     icon,

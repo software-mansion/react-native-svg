@@ -28,26 +28,13 @@ class ClipPath extends Component{
         remove(this.id);
     };
 
-    _combinePaths = children => {
-        // TODO: combine g elements and their children
-        // TODO: combine text elements
-        Children.forEach(children, child => {
-            let {props, type: {getPath}} = child;
-
-            if (getPath) {
-                this._path += getPath(props);
-            }
-
-            this._combinePaths(props.children);
-        });
-    };
-
-    _path = '';
-
     render() {
-        this._combinePaths(this.props.children);
-        set(this.id, this._path);
-        return <NativeGroup />;
+        set(this.id, this.id);
+
+        return <NativeGroup
+            asClipPath={this.id}
+            opacity={1}
+        >{this.props.children}</NativeGroup>;
     }
 }
 

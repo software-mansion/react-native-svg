@@ -564,7 +564,7 @@ npm install
 6. more Text features support
 7. Pattern element
 8. Image element
-
+9. calculate bounding box only if necessary.
 
 #### Thanks:
 

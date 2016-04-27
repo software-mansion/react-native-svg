@@ -58,7 +58,7 @@ class Shape extends Component{
 
         let shape = new SerializableShape(props, COORD_PROPS[this.type]).toJSON();
 
-        return <NativePath
+        return <NativeShape
             {...extractProps(this.type === 3 ? {
                 ...props,
                 x: null,
@@ -72,7 +72,7 @@ class Shape extends Component{
     };
 }
 
-let NativePath = createReactNativeComponentClass({
+let NativeShape = createReactNativeComponentClass({
     validAttributes: ShapeAttributes,
     uiViewClassName: 'RNSVGShape'
 });
