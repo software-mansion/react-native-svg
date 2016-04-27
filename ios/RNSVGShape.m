@@ -30,20 +30,7 @@
             // draw circle
             CGFloat cx = [self getActualProp:@"cx" relative:width];
             CGFloat cy = [self getActualProp:@"cy" relative:height];
-            
-            
-            CGFloat r;
-            // radius in percentage calculate formula:
-            // radius = sqrt(pow((width*percent), 2) + pow((height*percent), 2)) / sqrt(2)
-            NSDictionary *prop = [self.shape objectForKey:@"r"];
-            CGFloat value = [[prop objectForKey:@"value"] floatValue];
-            if ([[prop objectForKey:@"percentage"] integerValue] == 1) {
-                r = sqrt(pow((width * value), 2) + pow((height * value), 2)) / sqrt(2);
-
-            } else {
-                r = value;
-            }
-            
+            CGFloat r = [self getActualProp:@"r" relative:height];
             CGPathAddArc(path, nil, cx, cy, r, -M_PI, M_PI, YES);
             break;
         }

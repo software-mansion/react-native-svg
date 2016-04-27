@@ -14,10 +14,10 @@ class RectExample extends Component{
             height="60"
         >
             <Rect
-                x="5%"
-                y="5%"
-                width="90%"
-                height="90%"
+                x="25"
+                y="5"
+                width="150"
+                height="50"
                 fill="rgb(0,0,255)"
                 strokeWidth="3"
                 stroke="rgb(0,0,0)"

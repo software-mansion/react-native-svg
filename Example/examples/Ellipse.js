@@ -14,10 +14,10 @@ class EllipseExample extends Component{
             width="110"
         >
             <Ellipse
-                cx="50%"
-                cy="50%"
-                rx="45%"
-                ry="30%"
+                cx="55"
+                cy="55"
+                rx="50"
+                ry="30"
                 stroke="purple"
                 strokeWidth="2"
                 fill="yellow"

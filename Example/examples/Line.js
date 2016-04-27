@@ -15,10 +15,10 @@ class LineExample extends Component{
             width="100"
         >
             <Line
-                x1="10%"
-                y1="10%"
-                x2="90%"
-                y2="90%"
+                x1="0"
+                y1="0"
+                x2="100"
+                y2="100"
                 stroke="red"
                 strokeWidth="2"
             />

@@ -11,12 +11,12 @@ class CircleExample extends Component{
     render() {
         return <Svg
             height="100"
-            width="140"
+            width="100"
         >
             <Circle
-                cx="50%"
-                cy="50%"
-                r="40%"
+                cx="50"
+                cy="50"
+                r="50"
                 fill="pink"
             />
         </Svg>;
