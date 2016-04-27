@@ -27,6 +27,7 @@ public class RNSVGRenderableViewManager extends ViewManager<View, ReactShadowNod
     /* package */ static final String CLASS_GROUP = "RNSVGGroup";
     /* package */ static final String CLASS_SVG = "RNSVGPath";
     /* package */ static final String CLASS_TEXT = "RNSVGText";
+    /* package */ static final String CLASS_SHAPE = "RNSVGShape";
 
     private final String mClassName;
 
@@ -40,6 +41,10 @@ public class RNSVGRenderableViewManager extends ViewManager<View, ReactShadowNod
 
     public static RNSVGRenderableViewManager createRNSVGTextViewManager() {
         return new RNSVGRenderableViewManager(CLASS_TEXT);
+    }
+
+    public static RNSVGRenderableViewManager createRNSVGShapeViewManager() {
+        return new RNSVGRenderableViewManager(CLASS_SHAPE);
     }
 
     private RNSVGRenderableViewManager(String className) {
@@ -57,6 +62,8 @@ public class RNSVGRenderableViewManager extends ViewManager<View, ReactShadowNod
             return new RNSVGGroupShadowNode();
         } else if (mClassName == CLASS_SVG) {
             return new RNSVGPathShadowNode();
+        } else if (mClassName == CLASS_SHAPE) {
+            return new RNSVGShapeShadowNode();
         } else if (mClassName == CLASS_TEXT) {
             return new RNSVGTextShadowNode();
         } else {
@@ -70,9 +77,11 @@ public class RNSVGRenderableViewManager extends ViewManager<View, ReactShadowNod
             return RNSVGGroupShadowNode.class;
         } else if (mClassName == CLASS_SVG) {
             return RNSVGPathShadowNode.class;
+        } else if (mClassName == CLASS_SHAPE) {
+            return RNSVGShapeShadowNode.class;
         } else if (mClassName == CLASS_TEXT) {
             return RNSVGTextShadowNode.class;
-        } else {
+        }else {
             throw new IllegalStateException("Unexpected type " + mClassName);
         }
     }

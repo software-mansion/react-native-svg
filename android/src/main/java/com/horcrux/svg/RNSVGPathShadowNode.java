@@ -17,6 +17,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RadialGradient;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 import android.graphics.Color;
@@ -48,9 +49,9 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private static final int FILL_RULE_EVENODD = 0;
     private static final int FILL_RULE_NONZERO = 1;
 
-    protected @Nullable Path mPath;
-    private @Nullable float[] mStrokeColor;
-    private @Nullable float[] mFillColor;
+    protected Path mPath;
+    private @Nullable ReadableArray mStrokeColor;
+    private @Nullable ReadableArray mFillColor;
     private @Nullable float[] mStrokeDasharray;
     private float mStrokeWidth = 1;
     private float mStrokeDashoffset = 0;
@@ -60,6 +61,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private boolean mFillRuleSet;
     private boolean mPathSet;
     private float[] mShapePath;
+    protected RectF mContentBoundingBox;
     private Point mPaint;
 
     @ReactProp(name = "d")
@@ -72,7 +74,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
     @ReactProp(name = "fill")
     public void setFill(@Nullable ReadableArray fillColors) {
-        mFillColor = PropHelper.toFloatArray(fillColors);
+        mFillColor = fillColors;
         markUpdated();
     }
 
@@ -87,7 +89,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
     @ReactProp(name = "stroke")
     public void setStroke(@Nullable ReadableArray strokeColors) {
-        mStrokeColor = PropHelper.toFloatArray(strokeColors);
+        mStrokeColor = strokeColors;
         markUpdated();
     }
 
@@ -139,10 +141,10 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
             clip(canvas, paint);
 
-            if (setupFillPaint(paint, opacity)) {
+            if (setupFillPaint(paint, opacity, null)) {
                 canvas.drawPath(mPath, paint);
             }
-            if (setupStrokePaint(paint, opacity)) {
+            if (setupStrokePaint(paint, opacity, null)) {
                 canvas.drawPath(mPath, paint);
             }
 
@@ -168,21 +170,24 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
             }
 
             mPath = super.createPath(mShapePath, path);
+            RectF box = new RectF();
+            mPath.computeBounds(box, true);
+            mContentBoundingBox = box;
         }
     }
 
-    /*
+  /**
    * sorting stops and stopsColors from array
    */
-    private static void parseGradientStops(float[] value, int stopsCount, float[] stops, int[] stopsColors, int startColorsPosition) {
-        int startStops = value.length - stopsCount;
+    private static void parseGradientStops(ReadableArray value, int stopsCount, float[] stops, int[] stopsColors, int startColorsPosition) {
+        int startStops = value.size() - stopsCount;
         for (int i = 0; i < stopsCount; i++) {
-            stops[i] = value[startStops + i];
+            stops[i] = (float)value.getDouble(startStops + i);
             stopsColors[i] = Color.argb(
-                    (int) (value[startColorsPosition + i * 4 + 3] * 255),
-                    (int) (value[startColorsPosition + i * 4] * 255),
-                    (int) (value[startColorsPosition + i * 4 + 1] * 255),
-                    (int) (value[startColorsPosition + i * 4 + 2] * 255));
+                    (int) (value.getDouble(startColorsPosition + i * 4 + 3) * 255),
+                    (int) (value.getDouble(startColorsPosition + i * 4) * 255),
+                    (int) (value.getDouble(startColorsPosition + i * 4 + 1) * 255),
+                    (int) (value.getDouble(startColorsPosition + i * 4 + 2) * 255));
 
         }
     }
@@ -192,12 +197,12 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
      * Sets up {@link #mPaint} according to the props set on a shadow view. Returns {@code true}
      * if the fill should be drawn, {@code false} if not.
      */
-    protected boolean setupFillPaint(Paint paint, float opacity) {
-        if (mFillColor != null && mFillColor.length > 0) {
+    protected boolean setupFillPaint(Paint paint, float opacity, @Nullable RectF box) {
+        if (mFillColor != null && mFillColor.size() > 0) {
             paint.reset();
             paint.setFlags(Paint.ANTI_ALIAS_FLAG);
             paint.setStyle(Paint.Style.FILL);
-            setupPaint(paint, opacity, mFillColor);
+            setupPaint(paint, opacity, mFillColor, box);
             return true;
         }
         return false;
@@ -207,8 +212,8 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
      * Sets up {@link #mPaint} according to the props set on a shadow view. Returns {@code true}
      * if the stroke should be drawn, {@code false} if not.
      */
-    protected boolean setupStrokePaint(Paint paint, float opacity) {
-        if (mStrokeWidth == 0 || mStrokeColor == null || mStrokeColor.length == 0) {
+    protected boolean setupStrokePaint(Paint paint, float opacity, @Nullable  RectF box) {
+        if (mStrokeWidth == 0 || mStrokeColor == null || mStrokeColor.size() == 0) {
             return false;
         }
         paint.reset();
@@ -244,8 +249,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         }
 
         paint.setStrokeWidth(mStrokeWidth * mScale);
-
-        setupPaint(paint, opacity, mStrokeColor);
+        setupPaint(paint, opacity, mStrokeColor, box);
 
         if (mStrokeDasharray != null && mStrokeDasharray.length > 0) {
             paint.setPathEffect(new DashPathEffect(mStrokeDasharray, mStrokeDashoffset));
@@ -255,67 +259,73 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     }
 
 
-    private void setupPaint(Paint paint, float opacity, float[] colors) {
-        int stopsCount;
-        int [] stopsColors;
-        float [] stops;
+    private void setupPaint(Paint paint, float opacity, ReadableArray colors, @Nullable RectF box) {
+        int colorType = colors.getInt(0);
+        if (colorType == 0) {
+            // solid color
+            paint.setARGB(
+                (int) (colors.size() > 4 ? colors.getDouble(4) * opacity * 255 : opacity * 255),
+                (int) (colors.getDouble(1) * 255),
+                (int) (colors.getDouble(2) * 255),
+                (int) (colors.getDouble(3) * 255));
+        } else if (colorType == 1 || colorType == 2) {
+            if (box == null) {
+                box = mContentBoundingBox;
+            }
 
-        int colorType = (int) colors[0];
-        switch (colorType) {
-            case 0:
-                paint.setARGB(
-                    (int) (colors.length > 4 ? colors[4] * opacity * 255 : opacity * 255),
-                    (int) (colors[1] * 255),
-                    (int) (colors[2] * 255),
-                    (int) (colors[3] * 255));
-                break;
-            case 1:
-                stopsCount = (colors.length - 5) / 5;
-                stopsColors = new int [stopsCount];
-                stops = new float[stopsCount];
+            int startColorsPosition = colorType == 1 ? 5 : 7;
 
-                parseGradientStops(colors, stopsCount, stops, stopsColors, 5);
+            int stopsCount = (colors.size() - startColorsPosition) / 5;
+            int [] stopsColors = new int [stopsCount];
+            float [] stops = new float[stopsCount];
+            float height = box.height();
+            float width = box.width();
+            float midX = box.centerX();
+            float midY = box.centerY();
+            float offsetX = (midX - width / 2);
+            float offsetY = (midY - height / 2);
+
+            parseGradientStops(colors, stopsCount, stops, stopsColors, startColorsPosition);
+
+            if (colorType == 1) {
+                float x1 = PropHelper.fromPercentageToFloat(colors.getString(1), width, offsetX, mScale);
+                float y1 = PropHelper.fromPercentageToFloat(colors.getString(2), height, offsetY, mScale);
+                float x2 = PropHelper.fromPercentageToFloat(colors.getString(3), width, offsetX, mScale);
+                float y2 = PropHelper.fromPercentageToFloat(colors.getString(4), height, offsetY, mScale);
                 paint.setShader(
                     new LinearGradient(
-                        colors[1] * mScale,
-                        colors[2] * mScale,
-                        colors[3] * mScale,
-                        colors[4] * mScale,
+                        x1,
+                        y1,
+                        x2,
+                        y2,
                         stopsColors,
                         stops,
                         Shader.TileMode.CLAMP));
-                break;
-            case 2:
-                stopsCount = (colors.length - 7) / 5;
-                stopsColors = new int [stopsCount];
-                stops = new float[stopsCount];
-                parseGradientStops(colors, stopsCount, stops, stopsColors, 7);
-
-                // TODO: support focus
-                float focusX = colors[1];
-                float focusY = colors[2];
-
-                float radius = colors[3];
-                float radiusRatio = colors[4] / radius;
+            } else {
+                float rx = PropHelper.fromPercentageToFloat(colors.getString(3), width, 0f, mScale);
+                float ry = PropHelper.fromPercentageToFloat(colors.getString(4), height, 0f, mScale);
+                float cx = PropHelper.fromPercentageToFloat(colors.getString(5), width, offsetX, mScale);
+                float cy = PropHelper.fromPercentageToFloat(colors.getString(6), height, offsetY, mScale) / (ry / rx);
+                // TODO: do not support focus point.
+                float fx = PropHelper.fromPercentageToFloat(colors.getString(1), width, offsetX, mScale);
+                float fy = PropHelper.fromPercentageToFloat(colors.getString(2), height, offsetY, mScale) / (ry / rx);
                 Shader radialGradient = new RadialGradient(
-                    colors[5] * mScale,
-                    colors[6] * mScale / radiusRatio,
-                    radius * mScale,
+                    cx,
+                    cy,
+                    rx,
                     stopsColors,
                     stops,
                     Shader.TileMode.CLAMP
                 );
 
                 Matrix radialMatrix = new Matrix();
-
-                // seems like a bug here?
-                radialMatrix.preScale(1f, radiusRatio);
+                radialMatrix.preScale(1f, ry / rx);
                 radialGradient.setLocalMatrix(radialMatrix);
                 paint.setShader(radialGradient);
-                break;
-            default:
-                // TODO: Support pattern.
-                FLog.w(ReactConstants.TAG, "RNSVG: Color type " + colorType + " not supported!");
+            }
+        } else {
+            // TODO: Support pattern.
+            FLog.w(ReactConstants.TAG, "RNSVG: Color type " + colorType + " not supported!");
         }
     }
 }

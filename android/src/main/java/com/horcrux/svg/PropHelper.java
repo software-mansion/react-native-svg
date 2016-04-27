@@ -9,9 +9,14 @@
 
 package com.horcrux.svg;
 
+import android.util.Log;
+
 import javax.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableArray;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Contains static helper methods for accessing props.
@@ -50,5 +55,21 @@ import com.facebook.react.bridge.ReadableArray;
         }
         return value.size();
 
+    }
+    /**
+     * Converts percentage string into actual based on a relative number
+     *
+     * @param percentage percentage string
+     * @param relative relative number
+     * @return actual float based on relative number
+     */
+  /*package*/ static float fromPercentageToFloat(String percentage, float relative, float offset, float scale) {
+        Pattern pattern = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$");
+        Matcher matched = pattern.matcher(percentage);
+        if (matched.matches()) {
+            return Float.valueOf(matched.group(1)) / 100 * relative + offset;
+        } else {
+            return Float.valueOf(percentage) * scale;
+        }
     }
 }

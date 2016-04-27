@@ -562,9 +562,8 @@ npm install
 4. [morph animations](https://github.com/gorangajic/react-svg-morph)
 5. fix propTypes
 6. more Text features support
-7. support percent props
-8. Pattern element
-9. Image element
+7. Pattern element
+8. Image element
 
 
 #### Thanks:

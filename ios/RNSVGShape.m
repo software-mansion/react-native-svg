@@ -58,7 +58,6 @@
         case 3:
         {
             // draw rect
-            CGPathMoveToPoint(path, NULL, 0, 0);
             CGFloat x = [self getActualProp:@"x" relative:width];
             CGFloat y = [self getActualProp:@"y" relative:height];
             CGFloat w = [self getActualProp:@"width" relative:width];

@@ -63,9 +63,9 @@
     CGFloat rx = [self getActualProp:2 relative:width offset:0];
     CGFloat ry = [self getActualProp:3 relative:height offset:0];
     CGFloat fx = [self getActualProp:0 relative:width offset:offsetX];
-    CGFloat fy = [self getActualProp:1 relative:height offset:offsetY] / (ry / rx); // fx == fy
+    CGFloat fy = [self getActualProp:1 relative:height offset:offsetY] / (ry / rx);
     CGFloat cx = [self getActualProp:4 relative:width offset:offsetX];
-    CGFloat cy = [self getActualProp:5 relative:height offset:offsetY] / (ry / rx); // rx == ry
+    CGFloat cy = [self getActualProp:5 relative:height offset:offsetY] / (ry / rx);
     
     CGAffineTransform transform = CGAffineTransformMakeScale(1, ry / rx);
     CGContextConcatCTM(context, transform);
