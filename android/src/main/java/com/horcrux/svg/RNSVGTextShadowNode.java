@@ -61,8 +61,8 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
     @ReactProp(name = "path")
     public void setPath(@Nullable ReadableArray textPath) {
         float[] pathData = PropHelper.toFloatArray(textPath);
-        Path path = new Path();
-        mPath = super.createPath(pathData, path);
+        mPath = new Path();
+        super.createPath(pathData, mPath);
         markUpdated();
     }
 

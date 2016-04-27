@@ -48,8 +48,6 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
     private static final int FILL_RULE_EVENODD = 0;
     private static final int FILL_RULE_NONZERO = 1;
-
-    protected Path mPath;
     private @Nullable ReadableArray mStrokeColor;
     private @Nullable ReadableArray mFillColor;
     private @Nullable float[] mStrokeDasharray;
@@ -59,14 +57,15 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private int mStrokeLinejoin = JOIN_ROUND;
     private int mFillRule = FILL_RULE_NONZERO;
     private boolean mFillRuleSet;
+    protected Path mPath;
     private boolean mPathSet;
-    private float[] mShapePath;
+    private float[] mD;
     protected RectF mContentBoundingBox;
     private Point mPaint;
 
     @ReactProp(name = "d")
     public void setPath(@Nullable ReadableArray shapePath) {
-        mShapePath = PropHelper.toFloatArray(shapePath);
+        mD = PropHelper.toFloatArray(shapePath);
         mPathSet = true;
         setupPath();
         markUpdated();
@@ -156,20 +155,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private void setupPath() {
         // init path after both fillRule and path have been set
         if (mFillRuleSet && mPathSet) {
-            Path path = new Path();
-
-            switch (mFillRule) {
-                case FILL_RULE_EVENODD:
-                    path.setFillType(Path.FillType.EVEN_ODD);
-                    break;
-                case FILL_RULE_NONZERO:
-                    break;
-                default:
-                    throw new JSApplicationIllegalArgumentException(
-                        "fillRule " + mFillRule + " unrecognized");
-            }
-
-            mPath = super.createPath(mShapePath, path);
+            mPath = getPath(null);
             RectF box = new RectF();
             mPath.computeBounds(box, true);
             mContentBoundingBox = box;
@@ -327,5 +313,21 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
             // TODO: Support pattern.
             FLog.w(ReactConstants.TAG, "RNSVG: Color type " + colorType + " not supported!");
         }
+    }
+
+    protected Path getPath(@Nullable Canvas canvas) {
+        Path path = new Path();
+        switch (mFillRule) {
+            case FILL_RULE_EVENODD:
+                path.setFillType(Path.FillType.EVEN_ODD);
+                break;
+            case FILL_RULE_NONZERO:
+                break;
+            default:
+                throw new JSApplicationIllegalArgumentException(
+                    "fillRule " + mFillRule + " unrecognized");
+        }
+        super.createPath(mD, path);
+        return path;
     }
 }

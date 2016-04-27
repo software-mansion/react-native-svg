@@ -565,6 +565,7 @@ npm install
 7. Pattern element
 8. Image element
 9. calculate bounding box only if necessary.
+10. alignment to textAnchor
 
 #### Thanks:
 

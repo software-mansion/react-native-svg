@@ -19,29 +19,35 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
+import android.view.View;
 
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
+import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ReactShadowNode;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Base class for RNSVGView virtual nodes: {@link RNSVGGroupShadowNode}, {@link RNSVGPathShadowNode} and
  * indirectly for {@link RNSVGTextShadowNode}.
  */
 public abstract class RNSVGVirtualNode extends ReactShadowNode {
+    protected static Map<String, Path> CLIP_PATHS = new HashMap<>();
 
     protected static final float MIN_OPACITY_FOR_DRAW = 0.01f;
 
     private static final float[] sMatrixData = new float[9];
     private static final float[] sRawMatrix = new float[9];
-
+    private @Nullable String mDefinedClipPathId;
     protected float mOpacity = 1f;
     private @Nullable Matrix mMatrix = new Matrix();
-
     protected @Nullable Path mClipPath;
-
+    private @Nullable String mClipPathId;
     private static final int PATH_TYPE_ARC = 4;
     private static final int PATH_TYPE_CLOSE = 1;
     private static final int PATH_TYPE_CURVETO = 3;
@@ -101,6 +107,12 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
         markUpdated();
     }
 
+    @ReactProp(name = "clipPathId")
+    public void setClipPathId(String clipPathId) {
+        mClipPathId = clipPathId;
+        markUpdated();
+    }
+
     @ReactProp(name = "clipRule", defaultInt = CLIP_RULE_NONZERO)
     public void setClipRule(int clipRule) {
         mClipRule = clipRule;
@@ -132,10 +144,10 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
 
     private void setupClip() {
         if (mClipDataSet && mClipRuleSet) {
-            Path path = new Path();
+            mClipPath = new Path();
             switch (mClipRule) {
                 case CLIP_RULE_EVENODD:
-                    path.setFillType(Path.FillType.EVEN_ODD);
+                    mClipPath.setFillType(Path.FillType.EVEN_ODD);
                     break;
                 case CLIP_RULE_NONZERO:
                     break;
@@ -144,7 +156,7 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
                         "clipRule " + mClipRule + " unrecognized");
             }
 
-            mClipPath = createPath(mClipData, path);
+            createPath(mClipData, mClipPath);
         }
     }
 
@@ -185,9 +197,9 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
      * 2 (PATH_LINE_TO), x, y. This will draw a line from the last draw point (or 0,0) to x,y.
      *
      * @param data the array of instructions
-     * @return the {@link Path} that can be drawn to a canvas
+     * @param path the {@link Path} that can be drawn to a canvas
      */
-    protected Path createPath(float[] data, Path path) {
+    protected void createPath(float[] data, Path path) {
         path.moveTo(0, 0);
         int i = 0;
 
@@ -242,13 +254,32 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
                         "Unrecognized drawing instruction " + type);
             }
         }
-        return path;
     }
 
     protected void clip(Canvas canvas, Paint paint) {
+        Path clip = null;
         if (mClipPath != null) {
-            canvas.clipPath(mClipPath, Region.Op.REPLACE);
+            clip = mClipPath;
+        } else if (mClipPathId != null) {
+            clip = CLIP_PATHS.get(mClipPathId);
+        }
+
+        if (clip != null) {
+            canvas.clipPath(clip, Region.Op.REPLACE);
             canvas.saveLayer(0f, 0f, 0f, 0f, paint, Canvas.CLIP_SAVE_FLAG);
         }
     }
+
+    protected void defineClipPath(Path clipPath, String clipPathId) {
+        CLIP_PATHS.put(clipPathId, clipPath);
+        mDefinedClipPathId = clipPathId;
+    }
+
+    protected void finalize() {
+        if (mDefinedClipPathId != null) {
+            CLIP_PATHS.remove(mDefinedClipPathId);
+        }
+    }
+
+    abstract protected Path getPath(Canvas canvas);
 }
