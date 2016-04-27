@@ -13,6 +13,9 @@
 static NSMutableDictionary *ClipPaths;
 
 @implementation RNSVGNode
+{
+    NSString *definedClipPathId;
+}
 
 - (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index
 {
@@ -94,13 +97,16 @@ static NSMutableDictionary *ClipPaths;
     if (ClipPaths == NULL) {
         ClipPaths = [[NSMutableDictionary alloc] init];
     }
-    
+    definedClipPathId = clipPathId;
     [ClipPaths setValue:[NSValue valueWithPointer:_clipPath] forKey:clipPathId];
 }
 
 - (void)dealloc
 {
     CGPathRelease(_clipPath);
+    if (definedClipPathId) {
+        [ClipPaths removeObjectForKey:definedClipPathId];
+    }
 }
 
 
