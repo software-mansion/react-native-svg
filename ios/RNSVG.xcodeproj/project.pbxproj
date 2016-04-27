@@ -25,6 +25,8 @@
 		10A062FF1CC732020000CEEF /* RNSVGSvgViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 10A062FD1CC732020000CEEF /* RNSVGSvgViewManager.m */; };
 		10A063041CC7320C0000CEEF /* RNSVGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 10A063011CC7320C0000CEEF /* RNSVGPath.m */; };
 		10A063051CC7320C0000CEEF /* RNSVGSvgView.m in Sources */ = {isa = PBXBuildFile; fileRef = 10A063031CC7320C0000CEEF /* RNSVGSvgView.m */; };
+		10C068671CCF0F87007C6982 /* RNSVGShape.m in Sources */ = {isa = PBXBuildFile; fileRef = 10C068651CCF0F87007C6982 /* RNSVGShape.m */; };
+		10C0686A1CCF1061007C6982 /* RNSVGShapeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 10C068691CCF1061007C6982 /* RNSVGShapeManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -80,6 +82,10 @@
 		10A063011CC7320C0000CEEF /* RNSVGPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGPath.m; sourceTree = "<group>"; };
 		10A063021CC7320C0000CEEF /* RNSVGSvgView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGSvgView.h; sourceTree = "<group>"; };
 		10A063031CC7320C0000CEEF /* RNSVGSvgView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGSvgView.m; sourceTree = "<group>"; };
+		10C068641CCF0F87007C6982 /* RNSVGShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGShape.h; sourceTree = SOURCE_ROOT; };
+		10C068651CCF0F87007C6982 /* RNSVGShape.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGShape.m; sourceTree = SOURCE_ROOT; };
+		10C068681CCF1061007C6982 /* RNSVGShapeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGShapeManager.h; sourceTree = "<group>"; };
+		10C068691CCF1061007C6982 /* RNSVGShapeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGShapeManager.m; sourceTree = "<group>"; };
 		10FEAC6A1CC7D05200F1C23C /* RNSVGCGFCRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGCGFCRule.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,10 +110,12 @@
 				0CF68ADC1AF0549300FF9E5C /* RNSVGContainer.h */,
 				0CF68ADD1AF0549300FF9E5C /* RNSVGGroup.h */,
 				0CF68ADE1AF0549300FF9E5C /* RNSVGGroup.m */,
-				0CF68ADF1AF0549300FF9E5C /* RNSVGNode.h */,
-				0CF68AE01AF0549300FF9E5C /* RNSVGNode.m */,
+				10C068641CCF0F87007C6982 /* RNSVGShape.h */,
+				10C068651CCF0F87007C6982 /* RNSVGShape.m */,
 				10A063001CC7320C0000CEEF /* RNSVGPath.h */,
 				10A063011CC7320C0000CEEF /* RNSVGPath.m */,
+				0CF68ADF1AF0549300FF9E5C /* RNSVGNode.h */,
+				0CF68AE01AF0549300FF9E5C /* RNSVGNode.m */,
 				10A063021CC7320C0000CEEF /* RNSVGSvgView.h */,
 				10A063031CC7320C0000CEEF /* RNSVGSvgView.m */,
 				0CF68AE11AF0549300FF9E5C /* RNSVGRenderable.h */,
@@ -149,6 +157,8 @@
 		0CF68AF81AF0549300FF9E5C /* ViewManagers */ = {
 			isa = PBXGroup;
 			children = (
+				10C068681CCF1061007C6982 /* RNSVGShapeManager.h */,
+				10C068691CCF1061007C6982 /* RNSVGShapeManager.m */,
 				10A062FA1CC732020000CEEF /* RNSVGPathManager.h */,
 				10A062FB1CC732020000CEEF /* RNSVGPathManager.m */,
 				10A062FC1CC732020000CEEF /* RNSVGSvgViewManager.h */,
@@ -220,6 +230,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10C068671CCF0F87007C6982 /* RNSVGShape.m in Sources */,
 				0CF68B161AF0549300FF9E5C /* RNSVGTextManager.m in Sources */,
 				10A063041CC7320C0000CEEF /* RNSVGPath.m in Sources */,
 				0CF68B111AF0549300FF9E5C /* RNSVGGroupManager.m in Sources */,
@@ -233,6 +244,7 @@
 				10A063051CC7320C0000CEEF /* RNSVGSvgView.m in Sources */,
 				0CF68B071AF0549300FF9E5C /* RNSVGRenderable.m in Sources */,
 				0CF68B101AF0549300FF9E5C /* RCTConvert+RNSVG.m in Sources */,
+				10C0686A1CCF1061007C6982 /* RNSVGShapeManager.m in Sources */,
 				10A062FE1CC732020000CEEF /* RNSVGPathManager.m in Sources */,
 				0CF68B061AF0549300FF9E5C /* RNSVGNode.m in Sources */,
 				0CF68B0F1AF0549300FF9E5C /* RNSVGSolidColor.m in Sources */,

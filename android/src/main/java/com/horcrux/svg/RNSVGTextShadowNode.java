@@ -14,8 +14,11 @@ import javax.annotation.Nullable;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
@@ -89,7 +92,11 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
             lines[i] = linesProp.getString(i);
         }
         String text = TextUtils.join("\n", lines);
-        if (setupStrokePaint(paint, opacity)) {
+
+        Rect bound = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bound);
+        RectF box = new RectF(bound);
+        if (setupStrokePaint(paint, opacity, box)) {
             applyTextPropertiesToPaint(paint);
             if (mPath == null) {
                 canvas.drawText(text, 0, -paint.ascent(), paint);
@@ -97,7 +104,7 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
                 canvas.drawTextOnPath(text, mPath, 0, 0, paint);
             }
         }
-        if (setupFillPaint(paint, opacity)) {
+        if (setupFillPaint(paint, opacity, box)) {
             applyTextPropertiesToPaint(paint);
             if (mPath == null) {
                 canvas.drawText(text, 0, -paint.ascent(), paint);

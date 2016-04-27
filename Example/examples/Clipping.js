@@ -164,7 +164,7 @@ class TextClipping extends Component{
                 fontWeight="bold"
                 fill="red"
                 stroke="blue"
-                textAnchor="center"
+                textAnchor="middle"
                 clipPath="url(#clip)"
             >NOT THE FACE</Text>
         </Svg>;
@@ -213,7 +213,7 @@ const icon = <Svg
     </G>
 </Svg>;
 
-const samples = [ClipPathAttr, ClipRule, ClipPathElement, TextClipping];
+const samples = [ClipPathAttr, ClipRule];//, ClipPathElement, TextClipping
 
 export {
     icon,

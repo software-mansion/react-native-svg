@@ -22,7 +22,7 @@
 {
   CGContextRef context = UIGraphicsGetCurrentContext();
   for (RNSVGNode *node in self.subviews) {
-    [node renderTo:context];
+      [node renderTo:context];
   }
 }
 

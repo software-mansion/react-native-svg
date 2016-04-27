@@ -22,7 +22,7 @@ class TextExample extends Component{
                 x="50"
                 y="9"
                 fill="red"
-                textAnchor="center"
+                textAnchor="middle"
             >I love SVG!</Text>
         </Svg>;
     }
@@ -60,6 +60,34 @@ class TextRotate extends Component{
     }
 }
 
+// TODO: iOS not support text stroke with pattern
+class TextStroke extends Component{
+    static title = 'Stroke the text';
+    render() {
+        return <Svg
+            height="60"
+            width="200"
+        >
+            <Defs>
+                <LinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <Stop offset="100%" stopColor="red" stopOpacity="1" />
+                    <Stop offset="0%" stopColor="#000" stopOpacity="0.5" />
+                </LinearGradient>
+            </Defs>
+            <Text
+                stroke="url(#grad)"
+                strokeWidth="2"
+                fill="none"
+                fontSize="30"
+                fontWeight="bold"
+                x="100"
+                y="20"
+                textAnchor="middle"
+            >STROKE TEXT</Text>
+        </Svg>;
+    }
+}
+
 class TextFill extends Component{
     static title = 'Fill the text with LinearGradient';
     render() {
@@ -68,8 +96,8 @@ class TextFill extends Component{
             width="200"
         >
             <Defs>
-                <LinearGradient id="grad" x1="0" y1="0" x2="200" y2="0">
-                    <Stop offset="0%" stopColor="rgb(255,255,0)" stopOpacity="0" />
+                <LinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <Stop offset="0%" stopColor="rgb(255,255,0)" stopOpacity="0.5" />
                     <Stop offset="100%" stopColor="red" stopOpacity="1" />
                 </LinearGradient>
             </Defs>
@@ -81,36 +109,8 @@ class TextFill extends Component{
                 fontWeight="bold"
                 x="100"
                 y="20"
-                textAnchor="center"
+                textAnchor="middle"
             >FILL TEXT</Text>
-        </Svg>;
-    }
-}
-
-// TODO: iOS not support text stroke with pattern
-class TextStroke extends Component{
-    static title = 'Stroke the text';
-    render() {
-        return <Svg
-            height="60"
-            width="200"
-        >
-            <Defs>
-                <LinearGradient id="grad" x1="0" y1="0" x2="100" y2="0">
-                    <Stop offset="100%" stopColor="#fff" stopOpacity="0" />
-                    <Stop offset="0%" stopColor="#000" stopOpacity="1" />
-                </LinearGradient>
-            </Defs>
-            <Text
-                stroke="url(#grad)"
-                strokeWidth="2"
-                fill="none"
-                fontSize="30"
-                fontWeight="bold"
-                x="100"
-                y="20"
-                textAnchor="center"
-            >STROKE TEXT</Text>
         </Svg>;
     }
 }
@@ -148,13 +148,19 @@ const icon = <Svg
         y="2"
         fontSize="14"
         fontWeight="bold"
-        textAnchor="center"
+        textAnchor="middle"
         fill="none"
         stroke="blue"
     >字</Text>
 </Svg>;
 
-const samples = [TextExample, TextRotate, TextStroke, TextFill, TextPath];
+const samples = [
+    TextExample,
+    TextRotate,
+    TextStroke,
+    TextFill,
+    TextPath
+];
 
 export {
     icon,

@@ -2,34 +2,28 @@ import React, {
     Component,
     PropTypes
 } from 'react-native';
-import Ellipse from './Ellipse';
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
-class Circle extends Component{
+import Shape, {CIRCLE} from './Shape';
+import {circleProps, pathProps, fillProps, strokeProps} from '../lib/props';
+import _ from 'lodash';
+
+class Circle extends Shape{
     static displayName = 'Circle';
     static propTypes = {
-        cx: propType,
-        cy: propType,
-        r: propType
-    };
-    static defaultProps = {
-        cx: 0,
-        cy: 0
+        ...pathProps,
+        ...circleProps
     };
 
-    static getPath = props => Ellipse.getPath({
-        cx: props.cx,
-        cy: props.cy,
-        rx: props.r,
-        ry: props.r
-    });
+    static contextTypes = {
+        ...fillProps,
+        ...strokeProps,
+        ...circleProps,
+        isInGroup: PropTypes.bool
+    };
 
-    render() {
-        return <Ellipse
-            {...this.props}
-            rx={+this.props.r}
-            ry={+this.props.r}
-        />
-    }
+    constructor() {
+        super(...arguments);
+        this.type = CIRCLE;
+    };
 }
 
 export default Circle;

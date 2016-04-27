@@ -1,34 +1,31 @@
 import React, {
     Component,
     PropTypes,
-    requireNativeComponent,
-    cloneElement
+    requireNativeComponent
 } from 'react-native';
 
 import Defs from './Defs';
 import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
-import calculateBoundingBox from '../lib/calculateBoundingBox';
 import extractProps from '../lib/extract/extractProps';
 import SerializablePath from 'react-native/Libraries/ART/ARTSerializablePath';
 import {PathAttributes} from '../lib/attributes';
-
+import {pathProps} from '../lib/props';
 
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 class Path extends Component{
     static displayName = 'Path';
+
     static propTypes = {
         visible: PropTypes.bool,
         d: PropTypes.string,
-        x: propType,
-        y: propType,
-        strokeLinecap: PropTypes.oneOf(['butt', 'square', 'round']),
-        strokeCap: PropTypes.oneOf(['butt', 'square', 'round']),
-        strokeLinejoin: PropTypes.oneOf(['miter', 'bevel', 'round']),
-        strokeJoin: PropTypes.oneOf(['miter', 'bevel', 'round']),
-        strokeDasharray: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)])
+        ...pathProps
     };
 
-    static getPath = props => props.d;
+    static contextTypes = {
+        ...pathProps,
+        isInGroup: PropTypes.bool
+    };
+
 
     _dimensions = null;
 
@@ -38,16 +35,15 @@ class Path extends Component{
         }
     };
 
-    getBoundingBox = () => {
-        if (!this._dimensions) {
-            this._dimensions =  calculateBoundingBox(this.props.d);
-        }
-
-        return this._dimensions;
-    };
-
     render() {
         let {props} = this;
+
+        if (this.context.isInGroup) {
+            props = _.defaults(this.context, props, {
+                isInGroup: null
+            });
+        }
+
         if (props.id) {
             return <Defs.Item
                 id={props.id}
@@ -62,7 +58,7 @@ class Path extends Component{
 
         return (
             <NativePath
-                {...extractProps.call(this, props)}
+                {...extractProps(props)}
                 d={d}
             />
         );

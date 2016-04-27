@@ -20,14 +20,14 @@
 + (CGPathRef)CGPath:(id)json
 {
     NSArray *arr = [self NSNumberArray:json];
-    
+
     NSUInteger count = [arr count];
-    
+
 #define NEXT_VALUE [self double:arr[i++]]
-    
+
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, 0, 0);
-    
+
     @try {
         NSUInteger i = 0;
         while (i < count) {
@@ -60,7 +60,7 @@
         CGPathRelease(path);
         return NULL;
     }
-    
+
     return (CGPathRef)CFAutorelease(path);
 }
 
@@ -84,25 +84,25 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
     NSDictionary *dict = [self NSDictionary:json];
     RNSVGTextFrame frame;
     frame.count = 0;
-    
+
     NSArray *lines = [self NSArray:dict[@"lines"]];
     NSUInteger lineCount = [lines count];
     if (lineCount == 0) {
         return frame;
     }
-    
+
     NSDictionary *fontDict = dict[@"font"];
     CTFontRef font = (__bridge CTFontRef)[self UIFont:nil withFamily:fontDict[@"fontFamily"] size:fontDict[@"fontSize"] weight:fontDict[@"fontWeight"] style:fontDict[@"fontStyle"] scaleMultiplier:1.0];
     if (!font) {
         return frame;
     }
-    
+
     // Create a dictionary for this font
     CFDictionaryRef attributes = (__bridge CFDictionaryRef)@{
                                                              (NSString *)kCTFontAttributeName: (__bridge id)font,
                                                              (NSString *)kCTForegroundColorFromContextAttributeName: @YES
                                                              };
-    
+
     // Set up text frame with font metrics
     CGFloat size = CTFontGetSize(font);
     frame.count = lineCount;
@@ -110,18 +110,18 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
     frame.lineHeight = size * 1.1; // Base on RNSVG canvas line height estimate
     frame.lines = malloc(sizeof(CTLineRef) * lineCount);
     frame.widths = malloc(sizeof(CGFloat) * lineCount);
-    
+
     [lines enumerateObjectsUsingBlock:^(NSString *text, NSUInteger i, BOOL *stop) {
-        
+
         CFStringRef string = (__bridge CFStringRef)text;
         CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
         CTLineRef line = CTLineCreateWithAttributedString(attrString);
         CFRelease(attrString);
-        
+
         frame.lines[i] = line;
         frame.widths[i] = CTLineGetTypographicBounds(line, NULL, NULL, NULL);
     }];
-    
+
     return frame;
 }
 
@@ -129,11 +129,11 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
 {
     NSArray *arr = [self NSNumberArray:json];
     NSUInteger count = arr.count;
-    
+
     RNSVGCGFloatArray array;
     array.count = count;
     array.array = NULL;
-    
+
     if (count) {
         // Ideally, these arrays should already use the same memory layout.
         // In that case we shouldn't need this new malloc.
@@ -142,7 +142,7 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
             array.array[i] = [arr[i] doubleValue];
         }
     }
-    
+
     return array;
 }
 
@@ -150,7 +150,7 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
 {
     NSArray *arr = [self NSArray:json];
     NSUInteger type = [self NSUInteger:arr.firstObject];
-    
+
     switch (type) {
         case 0: // solid color
             // These are probably expensive allocations since it's often the same value.
@@ -161,6 +161,8 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
         case 2: // radial gradient
             return [[RNSVGRadialGradient alloc] initWithArray:arr];
         case 3: // pattern
+            // TODO:
+            return nil;
             return [[RNSVGPattern alloc] initWithArray:arr];
         default:
             RCTLogError(@"Unknown brush type: %zd", type);

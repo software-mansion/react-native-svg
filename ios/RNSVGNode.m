@@ -80,7 +80,6 @@
     _clipPath = CGPathRetain(clipPath);
 }
 
-
 - (void)dealloc
 {
     CGPathRelease(_clipPath);

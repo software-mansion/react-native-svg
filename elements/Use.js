@@ -1,7 +1,6 @@
 import React, {
     Component,
-    PropTypes,
-    cloneElement
+    PropTypes
 } from 'react-native';
 import Defs from './Defs';
 class Use extends Component{
