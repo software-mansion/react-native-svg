@@ -10,6 +10,9 @@
 #import <Foundation/Foundation.h>
 
 @interface RNSVGBrush : NSObject
+{
+    NSArray *_points;
+}
 
 /* @abstract */
 - (instancetype)initWithArray:(NSArray *)data NS_DESIGNATED_INITIALIZER;
@@ -25,6 +28,8 @@
 - (BOOL)applyFillColor:(CGContextRef)context;
 
 - (BOOL)applyStrokeColor:(CGContextRef)context;
+
+- (CGFloat)getActualProp:(int)percent relative:(CGFloat)relative offset:(CGFloat)offset;
 
 /**
  * paint fills the context with a brush. The context is assumed to

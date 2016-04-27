@@ -12,7 +12,7 @@ import insertColorStopsIntoArray from '../lib/insertProcessor';
 
 function RadialGradientGenerator(stops, fx, fy, rx, ry, cx, cy) {
     var brushData = [RADIAL_GRADIENT, fx, fy, rx, ry, cx, cy];
-    insertColorStopsIntoArray(stops, brushData, 7, 0.5);
+    insertColorStopsIntoArray(stops, brushData, 7);
     this._brush = brushData;
 }
 

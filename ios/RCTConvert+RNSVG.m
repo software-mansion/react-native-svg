@@ -161,6 +161,8 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
         case 2: // radial gradient
             return [[RNSVGRadialGradient alloc] initWithArray:arr];
         case 3: // pattern
+            // TODO:
+            return nil;
             return [[RNSVGPattern alloc] initWithArray:arr];
         default:
             RCTLogError(@"Unknown brush type: %zd", type);

@@ -13,36 +13,47 @@
 
 @implementation RNSVGLinearGradient
 {
-  CGGradientRef _gradient;
-  CGPoint _startPoint;
-  CGPoint _endPoint;
+    CGGradientRef _gradient;
 }
 
-- (instancetype)initWithArray:(NSArray<NSNumber *> *)array
+- (instancetype)initWithArray:(NSArray *)array
 {
-  if ((self = [super initWithArray:array])) {
-    if (array.count < 5) {
-      RCTLogError(@"-[%@ %@] expects 5 elements, received %@",
-                  self.class, NSStringFromSelector(_cmd), array);
-      return nil;
+    if ((self = [super initWithArray:array])) {
+        if (array.count < 5) {
+            RCTLogError(@"-[%@ %@] expects 5 elements, received %@",
+                        self.class, NSStringFromSelector(_cmd), array);
+            return nil;
+        }
+        
+        _points = [array subarrayWithRange:NSMakeRange(1, 4)];
+        _gradient = CGGradientRetain([RCTConvert CGGradient:array offset:5]);
     }
-    _startPoint = [RCTConvert CGPoint:array offset:1];
-    _endPoint = [RCTConvert CGPoint:array offset:3];
-    _gradient = CGGradientRetain([RCTConvert CGGradient:array offset:5]);
-  }
-  return self;
+    return self;
 }
 
 - (void)dealloc
 {
-  CGGradientRelease(_gradient);
+    CGGradientRelease(_gradient);
 }
 
 - (void)paint:(CGContextRef)context
 {
-  CGGradientDrawingOptions extendOptions =
+    CGGradientDrawingOptions extendOptions =
     kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
-  CGContextDrawLinearGradient(context, _gradient, _startPoint, _endPoint, extendOptions);
+    
+    CGRect box = CGContextGetClipBoundingBox(context);
+    float height = CGRectGetHeight(box);
+    float width = CGRectGetWidth(box);
+    float midX = CGRectGetMidX(box);
+    float midY = CGRectGetMidY(box);
+    float offsetX = (midX - width / 2);
+    float offsetY = (midY - height / 2);
+    
+    CGFloat x1 = [self getActualProp:0 relative:width offset:offsetX];
+    CGFloat y1 = [self getActualProp:1 relative:height offset:offsetY];
+    CGFloat x2 = [self getActualProp:2 relative:width offset:offsetX];
+    CGFloat y2 = [self getActualProp:3 relative:height offset:offsetY];
+    CGContextDrawLinearGradient(context, _gradient, CGPointMake(x1, y1), CGPointMake(x2, y2), extendOptions);
 }
 
 @end

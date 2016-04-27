@@ -31,7 +31,7 @@
             CGFloat cx = [self getActualProp:@"cx" relative:width];
             CGFloat cy = [self getActualProp:@"cy" relative:height];
             CGFloat r = [self getActualProp:@"r" relative:height];
-            CGPathAddArc(path, nil, cx, cy, r, 0, 2*M_PI, YES);
+            CGPathAddArc(path, nil, cx, cy, r, -M_PI, M_PI, YES);
             break;
         }
         case 1:

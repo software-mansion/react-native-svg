@@ -29,6 +29,30 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     return NO;
 }
 
+- (CGFloat)getActualProp:(int)index relative:(CGFloat)relative offset:(CGFloat)offset
+{
+    id coord = [_points objectAtIndex:index];
+    
+    if ([coord isKindOfClass:[NSString class]]) {
+        __block float matched = [coord floatValue];
+        NSString *percentage = (NSString *)coord;
+        NSRegularExpression *regex = [[NSRegularExpression alloc] initWithPattern:@"^(\\-?\\d+(?:\\.\\d+)?)%$" options:0 error:NULL];
+        [regex enumerateMatchesInString:percentage
+                                options:0
+                                  range:NSMakeRange(0, percentage.length)
+                             usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
+         {
+             
+             matched = [[percentage substringWithRange:NSMakeRange(result.range.location, result.range.length)] floatValue];
+             matched = matched / 100 * relative + offset;
+         }];
+        
+        return matched;
+    } else {
+        return [coord floatValue];
+    }
+}
+
 - (void)paint:(CGContextRef)context
 {
     // abstract
