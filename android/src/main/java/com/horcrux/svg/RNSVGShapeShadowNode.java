@@ -14,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.ReadableMap;
@@ -51,7 +52,18 @@ public class RNSVGShapeShadowNode extends RNSVGPathShadowNode {
                     // TODO:
                     float cx = getActualProp("cx", width);
                     float cy = getActualProp("cy", height);
-                    float r = getActualProp("r", width);
+
+                    float r;
+                    ReadableMap value = mShape.getMap("r");
+                    if (value.getBoolean("percentage")) {
+                        float percent = (float)value.getDouble("value");
+                        float powX = (float)Math.pow((width * percent), 2);
+                        float powY = (float)Math.pow((height*percent), 2);
+                        r = (float)Math.sqrt(powX + powY) / (float)Math.sqrt(2);
+                    } else {
+                        r =  (float)value.getDouble("value") * mScale;
+                    }
+
                     mPath.addCircle(cx, cy, r, Path.Direction.CW);
                     break;
                 }
@@ -120,7 +132,7 @@ public class RNSVGShapeShadowNode extends RNSVGPathShadowNode {
             ReadableMap value = mShape.getMap(name);
 
             if (value.getBoolean("percentage")) {
-                return (float)value.getDouble("value") * relative * mScale;
+                return (float)value.getDouble("value") * relative;
             } else {
                 return (float)value.getDouble("value") * mScale;
             }

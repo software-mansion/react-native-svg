@@ -568,8 +568,6 @@ npm install
 
 #### Thanks:
 
-* [SVG bounding Algorithm](https://github.com/icons8/svg-path-bounding-box)
-* [Circle drawing with svg arc path](http://stackoverflow.com/questions/5737975/circle-drawing-with-svgs-arc-path/10477334#10477334)
 * [w3schools.com SVG Tutorial](http://www.w3schools.com/svg/)
 * [SVG Tutorial](http://tutorials.jenkov.com/svg/index.html)
 * [MDN](https://developer.mozilla.org/en/docs/Web/SVG)
