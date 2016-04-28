@@ -20,8 +20,16 @@ And furthermore:
 
 #### Install
 
+1. Install library from npm.
+
 ```
 npm install react-native-svg --save
+```
+
+2 . Link native code  
+If you haven\`t installed `rnpm`, you can run `npm i rnpm -g` first.
+
+```
 rnpm link react-native-svg
 ```
 
@@ -557,13 +565,11 @@ npm install
 
 #### TODO:
 1. add native method for elements
-2. textPath
-3. pattern
-4. [morph animations](https://github.com/gorangajic/react-svg-morph)
-5. more Text features support
-6. Pattern element
-7. Image element
-8. calculate bounding box only if necessary.
+2. textPath (iOS)
+3. more Text features support
+4. Pattern element
+5. Image element
+6. calculate bounding box only if necessary.
 
 #### Thanks:
 
