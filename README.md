@@ -560,12 +560,10 @@ npm install
 2. textPath
 3. pattern
 4. [morph animations](https://github.com/gorangajic/react-svg-morph)
-5. fix propTypes
-6. more Text features support
-7. Pattern element
-8. Image element
-9. calculate bounding box only if necessary.
-10. alignment to textAnchor
+5. more Text features support
+6. Pattern element
+7. Image element
+8. calculate bounding box only if necessary.
 
 #### Thanks:
 
