@@ -35,9 +35,6 @@ npm-debug.log
 
 # webstorm
 #
-android/app/src/main/assets/index.android.bundle
-ios/marry/assets
-ios/marry/main.jsbundle
 *.iml
 
 # unfinished documents
