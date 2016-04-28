@@ -41,12 +41,10 @@
             CGFloat value = [[prop objectForKey:@"value"] floatValue];
             if ([[prop objectForKey:@"percentage"] integerValue] == 1) {
                 r = sqrt(pow((width * value), 2) + pow((height * value), 2)) / sqrt(2);
-                
             } else {
                 r = value;
             }
-            
-            CGPathAddArc(path, nil, cx, cy, r, -M_PI, M_PI, YES);
+            CGPathAddArc(path, nil, cx, cy, r, 0, 2*M_PI, YES);
             break;
         }
         case 1:
