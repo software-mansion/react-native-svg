@@ -42,25 +42,29 @@ class Svg extends Component{
     };
 
     measureInWindow = (...args) => {
-        this.refs.root.measureInWindow(...args);
+        this.root.measureInWindow(...args);
     };
 
     measure = (...args) => {
-        this.refs.root.measure(...args);
+        this.root.measure(...args);
     };
 
     measureLayout = (...args) => {
-        this.refs.root.measureLayout(...args);
+        this.root.measureLayout(...args);
     };
 
     setNativeProps = (...args) => {
-        this.refs.root.setNativeProps(...args);
+        this.root.setNativeProps(...args);
     };
 
     render() {
         let {props} = this;
         let opacity = +props.opacity;
-        let content = props.viewbox ? <ViewBox
+        let width = +props.width;
+        let height = +props.height;
+        let flexLayout = !isNaN(width) || !isNaN(height);
+
+        let content = (props.viewbox && !flexLayout) ? <ViewBox
             viewbox={props.viewbox}
             preserveAspectRatio={props.preserveAspectRatio}
             width={props.width}
@@ -69,18 +73,18 @@ class Svg extends Component{
             {this.getChildren()}
         </ViewBox> : this.getChildren();
 
-        let width = +props.width || 0;
-        let height = +props.height || 0;
-
         return (
             <NativeSvgView
-                ref="root"
+                ref={ele => this.root = ele}
                 style={[
                     props.style,
                     !isNaN(opacity) && {
                         opacity
                     },
-                    {width, height}
+                    !flexLayout && {
+                        width,
+                        height
+                    }
                 ]}
             >
                 {content}

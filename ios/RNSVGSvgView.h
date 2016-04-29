@@ -11,5 +11,4 @@
 #import "RNSVGContainer.h"
 
 @interface RNSVGSvgView : UIView <RNSVGContainer>
-
 @end

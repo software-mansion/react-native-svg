@@ -11,13 +11,13 @@ class EllipseExample extends Component{
     render() {
         return <Svg
             height="100"
-            width="110"
+            width="200"
         >
             <Ellipse
                 cx="50%"
                 cy="50%"
                 rx="45%"
-                ry="30%"
+                ry="40%"
                 stroke="purple"
                 strokeWidth="2"
                 fill="yellow"

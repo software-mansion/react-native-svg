@@ -15,20 +15,20 @@
 
 - (void)invalidate
 {
-  [self setNeedsDisplay];
+    [self setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect
 {
-  CGContextRef context = UIGraphicsGetCurrentContext();
-  for (RNSVGNode *node in self.subviews) {
-      [node renderTo:context];
-  }
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    for (RNSVGNode *node in self.subviews) {
+        [node renderTo:context];
+    }
 }
 
 - (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
 {
-  self.backgroundColor = inheritedBackgroundColor;
+    self.backgroundColor = inheritedBackgroundColor;
 }
 
 @end

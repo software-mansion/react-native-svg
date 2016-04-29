@@ -1,11 +1,26 @@
 import React, {
-    Component
+    Component,
+    StyleSheet,
+    View
 } from 'react-native';
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        height: 100,
+        width: 200
+    },
+    svg: {
+        flex: 1,
+        alignSelf: 'stretch'
+    }
+});
 
 import Svg, {
     Circle,
     Rect,
-    Path
+    Path,
+    Line
 } from 'react-native-svg';
 
 class SvgExample extends Component{
@@ -83,6 +98,41 @@ class SvgViewbox extends Component{
     }
 }
 
+class SvgLayout extends Component{
+    static title = 'SVG with flex layout';
+    render() {
+        return <View style={styles.container}>
+            <Svg style={styles.svg}>
+                <Rect
+                    width="80%"
+                    height="80%"
+                    x="10%"
+                    y="10%"
+                    fill="purple"
+                    stroke="yellow"
+                    strokeWidth="4"
+                />
+                <Line
+                    x1="10%"
+                    y1="10%"
+                    x2="90%"
+                    y2="90%"
+                    stroke="yellow"
+                    strokeWidth="4"
+                />
+                <Line
+                    x1="10%"
+                    y1="90%"
+                    x2="90%"
+                    y2="10%"
+                    stroke="yellow"
+                    strokeWidth="4"
+                />
+            </Svg>
+        </View>;
+    }
+}
+
 const icon = <Svg
     height="20"
     width="20"
@@ -106,7 +156,7 @@ const icon = <Svg
     />
 </Svg>;
 
-const samples = [SvgExample, SvgOpacity, SvgViewbox];
+const samples = [SvgExample, SvgOpacity, SvgViewbox, SvgLayout];
 
 export {
     icon,

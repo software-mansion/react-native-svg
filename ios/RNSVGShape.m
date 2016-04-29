@@ -52,7 +52,7 @@
             // draw ellipse
             CGFloat cx = [self getActualProp:@"cx" relative:width];
             CGFloat cy = [self getActualProp:@"cy" relative:height];
-            CGFloat rx = [self getActualProp:@"rx" relative:height];
+            CGFloat rx = [self getActualProp:@"rx" relative:width];
             CGFloat ry = [self getActualProp:@"ry" relative:height];
             CGPathAddEllipseInRect(path, nil, CGRectMake(cx - rx, cy - ry, rx * 2, ry * 2));
             break;
@@ -60,9 +60,9 @@
         case 2:
         {
             // draw line
-            CGFloat x1 = [self getActualProp:@"x1" relative:height];
+            CGFloat x1 = [self getActualProp:@"x1" relative:width];
             CGFloat y1 = [self getActualProp:@"y1" relative:height];
-            CGFloat x2 = [self getActualProp:@"x2" relative:height];
+            CGFloat x2 = [self getActualProp:@"x2" relative:width];
             CGFloat y2 = [self getActualProp:@"y2" relative:height];
             CGPathMoveToPoint(path, nil, x1, y1);
             CGPathAddLineToPoint(path, nil, x2, y2);
