@@ -62,7 +62,7 @@ class Svg extends Component{
         let opacity = +props.opacity;
         let width = +props.width;
         let height = +props.height;
-        let flexLayout = !isNaN(width) || !isNaN(height);
+        let flexLayout = isNaN(width) || isNaN(height);
 
         let content = (props.viewbox && !flexLayout) ? <ViewBox
             viewbox={props.viewbox}
@@ -83,7 +83,8 @@ class Svg extends Component{
                     },
                     !flexLayout && {
                         width,
-                        height
+                        height,
+                        flex: 0
                     }
                 ]}
             >
