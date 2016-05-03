@@ -7,7 +7,7 @@ import React, {
 import Defs from './Defs';
 import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
 import extractProps from '../lib/extract/extractProps';
-import SerializablePath from 'react-native/Libraries/ART/ARTSerializablePath';
+import SerializablePath from '../lib/SerializablePath';
 import {PathAttributes} from '../lib/attributes';
 import {pathProps} from '../lib/props';
 
