@@ -2,6 +2,8 @@
 
 ------------------------
 
+[![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
+
 `react-native-svg` is built to provide a SVG interface to react native on both iOS and Android
 
 # IMPORTANT：
@@ -26,7 +28,7 @@ And furthermore:
 npm install react-native-svg --save
 ```
 
-2 . Link native code  
+2 . Link native code
 If you haven\`t installed `rnpm`, you can run `npm i rnpm -g` first.
 
 ```
