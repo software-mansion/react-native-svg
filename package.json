@@ -4,7 +4,7 @@
     "description": "react native svg library",
     "repository": {
         "type": "git",
-        "url": "https://github.com/magicismight/react-native-art-svg"
+        "url": "https://github.com/magicismight/react-native-svg"
     },
     "license": "MIT",
     "main": "./index.js",
