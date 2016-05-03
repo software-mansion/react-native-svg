@@ -1,7 +1,5 @@
 ## react-native-svg
 
-------------------------
-
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 
 `react-native-svg` is built to provide a SVG interface to react native on both iOS and Android
