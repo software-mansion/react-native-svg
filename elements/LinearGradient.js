@@ -1,7 +1,5 @@
 import React, {
-    Component,
-    PropTypes,
-    Children
+    PropTypes
 } from 'react-native';
 
 import stopsOpacity from '../lib/stopsOpacity';

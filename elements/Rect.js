@@ -1,5 +1,4 @@
 import React, {
-    Component,
     PropTypes
 } from 'react-native';
 import Shape, {RECT} from './Shape';
@@ -22,9 +21,7 @@ class Rect extends Shape{
     constructor() {
         super(...arguments);
         this.type = RECT;
-    };
-
-
+    }
 }
 
 export default Rect;

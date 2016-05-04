@@ -1,8 +1,6 @@
 import React, {
-    Component,
-    PropTypes
+    Component
 } from 'react-native';
-import Path from './Path';
 import _ from 'lodash';
 import extractProps from '../lib/extract/extractProps';
 import {ShapeAttributes} from '../lib/attributes';
@@ -69,7 +67,7 @@ class Shape extends Component{
                 type: this.type
             }}
         />;
-    };
+    }
 }
 
 let NativeShape = createReactNativeComponentClass({

@@ -1,15 +1,12 @@
 import React, {
     Component,
-    Children,
-    cloneElement,
-    PropTypes,
-    requireNativeComponent
+    PropTypes
 } from 'react-native';
 import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
 import Defs from './Defs';
 import _ from 'lodash';
 import {GroupAttributes} from '../lib/attributes';
-import {numberProp, contextProps, textProps} from '../lib/props';
+import {numberProp, contextProps} from '../lib/props';
 
 import extractProps from '../lib/extract/extractProps';
 
@@ -63,4 +60,4 @@ var NativeGroup = createReactNativeComponentClass({
 export default G;
 export {
     NativeGroup
-}
+};

@@ -1,9 +1,8 @@
 import React, {
     Component,
-    PropTypes,
-    requireNativeComponent
+    PropTypes
 } from 'react-native';
-
+import _ from 'lodash';
 import Defs from './Defs';
 import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
 import extractProps from '../lib/extract/extractProps';
@@ -11,7 +10,6 @@ import SerializablePath from '../lib/SerializablePath';
 import {PathAttributes} from '../lib/attributes';
 import {pathProps} from '../lib/props';
 
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 class Path extends Component{
     static displayName = 'Path';
 

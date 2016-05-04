@@ -23,7 +23,7 @@ class SymbolElement extends Component{
             >
                 {props.children}
             </ViewBox>
-        </Defs.Item>
+        </Defs.Item>;
     }
 }
 

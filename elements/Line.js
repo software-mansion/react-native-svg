@@ -1,5 +1,4 @@
 import React, {
-    Component,
     PropTypes
 } from 'react-native';
 import Shape, {LINE} from './Shape';
@@ -22,7 +21,7 @@ class Line extends Shape{
     constructor() {
         super(...arguments);
         this.type = LINE;
-    };
+    }
 }
 
 export default Line;

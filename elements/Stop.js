@@ -8,6 +8,7 @@ class Stop extends Component{
         stopColor: PropTypes.string,
         stopOpacity: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     };
+
     render() {
         return null;
     }

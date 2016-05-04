@@ -1,5 +1,4 @@
 import React, {
-    Component,
     PropTypes
 } from 'react-native';
 import Shape, {ELLIPSE} from './Shape';
@@ -22,7 +21,7 @@ class Ellipse extends Shape{
     constructor() {
         super(...arguments);
         this.type = ELLIPSE;
-    };
+    }
 }
 
 export default Ellipse;

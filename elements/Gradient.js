@@ -1,6 +1,5 @@
 import React, {
     Component,
-    PropTypes,
     Children
 } from 'react-native';
 import {NativeGroup} from './G';

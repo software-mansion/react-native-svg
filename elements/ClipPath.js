@@ -1,7 +1,6 @@
 import React, {
     Component,
-    PropTypes,
-    Children
+    PropTypes
 } from 'react-native';
 import {NativeGroup} from './G';
 import {set, remove} from '../lib/extract/extractClipping';

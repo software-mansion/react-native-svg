@@ -7,8 +7,6 @@ import React, {
     requireNativeComponent
 } from 'react-native';
 import ViewBox from './ViewBox';
-import _ from 'lodash';
-
 
 // Svg - Root node of all Svg elements
 let id = 0;

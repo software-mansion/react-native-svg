@@ -21,6 +21,11 @@
         "color": "^0.11.1",
         "lodash": "^4.0.0"
     },
+    "devDependencies": {
+        "babel-eslint": "^6.0.0",
+        "eslint": "^2.5.3",
+        "eslint-plugin-react": "^4.2.1"
+    },
     "nativePackage": true,
     "rnpm": {
         "ios": {

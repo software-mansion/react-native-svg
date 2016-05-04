@@ -1,6 +1,5 @@
 import React, {
-    Component,
-    PropTypes
+    Component
 } from 'react-native';
 
 import G from './G';
@@ -31,7 +30,7 @@ class ViewBox extends Component{
             viewbox={null}
         >
             {(!scaleX || !scaleY) ? null : this.props.children}
-        </G>
+        </G>;
     }
 }
 

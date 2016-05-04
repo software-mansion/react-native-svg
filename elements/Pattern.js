@@ -5,7 +5,7 @@ import React, {
 
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 
-class Image extends Component{
+class Pattern extends Component{
     static displayName = 'Pattern';
     static propTypes = {
         x1: propType,
