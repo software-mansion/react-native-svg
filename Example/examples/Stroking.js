@@ -146,4 +146,4 @@ const samples = [StrokeExample, StrokeLinecap, StrokeDasharray, StrokeDashoffset
 export {
     icon,
     samples
-}
+};

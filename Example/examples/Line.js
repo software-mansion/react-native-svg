@@ -84,4 +84,4 @@ const samples = [LineExample, LineWithStrokeLinecap];
 export {
     icon,
     samples
-}
+};

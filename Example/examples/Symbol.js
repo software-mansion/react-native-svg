@@ -73,4 +73,4 @@ const samples = [SymbolExample];
 export {
     icon,
     samples
-}
+};

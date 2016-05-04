@@ -218,4 +218,4 @@ const samples = [ClipPathAttr, ClipRule, ClipPathElement, TextClipping];
 export {
     icon,
     samples
-}
+};

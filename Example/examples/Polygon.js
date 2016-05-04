@@ -100,4 +100,4 @@ const samples = [PolygonExample, FourSidePolygon, StarPolygon, EvenOddPolygon];
 export {
     icon,
     samples
-}
+};

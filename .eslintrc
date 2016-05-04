@@ -208,7 +208,7 @@
         "react/jsx-boolean-value": 0,
         "react/jsx-no-undef": 1,
         "react/jsx-sort-props": 0,
-        "react/jsx-uses-react": 0,
+        "react/jsx-uses-react": 1,
         "react/jsx-uses-vars": 1,
         "react/no-did-mount-set-state": [1, "allow-in-func"],
         "react/no-did-update-set-state": [1, "allow-in-func"],

@@ -10,7 +10,6 @@ import React, {
     Text,
     View,
     ScrollView,
-    PixelRatio,
     TouchableHighlight,
     TouchableOpacity,
     Animated,
@@ -181,7 +180,7 @@ class ArtSvgExample extends Component {
                     {icon}
                     <Text style={styles.title}>{name}</Text>
                 </View>
-            </TouchableHighlight>
+            </TouchableHighlight>;
         });
     };
 

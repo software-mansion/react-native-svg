@@ -1,6 +1,7 @@
 import React, {
     Component
 } from 'react-native';
+import './Path'; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`, maybe cyclic dependencies issue
 import _ from 'lodash';
 import extractProps from '../lib/extract/extractProps';
 import {ShapeAttributes} from '../lib/attributes';

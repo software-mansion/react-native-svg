@@ -130,4 +130,4 @@ const samples = [GExample, GTransform];
 export {
     icon,
     samples
-}
+};

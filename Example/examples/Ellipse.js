@@ -73,4 +73,4 @@ const samples = [EllipseExample, PileEllipses, CombinedEllipses];
 export {
     icon,
     samples
-}
+};

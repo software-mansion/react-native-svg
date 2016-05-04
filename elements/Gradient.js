@@ -7,7 +7,7 @@ import {set, remove} from '../lib/extract/patterns';
 import percentToFloat from '../lib/percentToFloat';
 import Stop from './Stop';
 import Color from 'color';
-class RadialGradient extends Component{
+class Gradient extends Component{
     static displayName = 'Gradient';
 
     constructor() {
@@ -37,12 +37,12 @@ class RadialGradient extends Component{
                 stops[offset] = Color(child.props.stopColor).alpha(+child.props.stopOpacity);
                 set(this.id, generator.bind(null, stops));
             } else {
-                console.warn(`'RadialGradient' can only receive 'Stop' elements as children`);
+                console.warn(`'Gradient' can only receive 'Stop' elements as children`);
             }
         });
         return <NativeGroup />;
     }
 }
 
-export default RadialGradient;
+export default Gradient;
 

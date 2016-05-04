@@ -114,4 +114,4 @@ const samples = [PathExample, UnclosedPath, BezierCurve];
 export {
     icon,
     samples
-}
+};

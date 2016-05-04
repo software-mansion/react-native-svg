@@ -93,4 +93,4 @@ const samples = [PolylineExample, StraightLines, PolylineFill, PolylineFillStrok
 export {
     icon,
     samples
-}
+};

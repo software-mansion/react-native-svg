@@ -81,4 +81,4 @@ const samples = [CircleExample, StrokeCircle, StrokeOpacityCircle];
 export {
     icon,
     samples
-}
+};

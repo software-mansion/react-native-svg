@@ -1,6 +1,3 @@
-import React, {
-    Component
-} from 'react-native';
 import Rect from './elements/Rect';
 import Circle from './elements/Circle';
 import Ellipse from './elements/Ellipse';

@@ -1,4 +1,4 @@
-import React, {
+import {
     PropTypes
 } from 'react-native';
 import Shape, {CIRCLE} from './Shape';

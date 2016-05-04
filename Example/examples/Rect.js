@@ -134,6 +134,6 @@ const samples = [RectExample, RectStrokeFill, RoundedRect, EllipseRect, RoundOve
 export {
     icon,
     samples
-}
+};
 
 

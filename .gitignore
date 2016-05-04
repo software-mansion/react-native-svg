@@ -4,7 +4,7 @@
 
 # Xcode
 #
-build/
+build
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -23,13 +23,13 @@ project.xcworkspace
 
 # Android/IJ
 #
-.idea/
+.idea
 .gradle
 local.properties
 
 # node.js
 #
-node_modules/
+node_modules
 npm-debug.log
 
 

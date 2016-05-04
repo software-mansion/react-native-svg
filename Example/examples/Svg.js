@@ -161,4 +161,4 @@ const samples = [SvgExample, SvgOpacity, SvgViewbox, SvgLayout];
 export {
     icon,
     samples
-}
+};

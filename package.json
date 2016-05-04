@@ -17,6 +17,9 @@
         "ART",
         "VML"
     ],
+    "scripts": {
+        "lint": "eslint ./"
+    },
     "dependencies": {
         "color": "^0.11.1",
         "lodash": "^4.0.0"

@@ -6,9 +6,7 @@ import Svg, {
     Text,
     LinearGradient,
     Stop,
-    Defs,
-    ClipPath,
-    Rect
+    Defs
 } from 'react-native-svg';
 
 class TextExample extends Component{
@@ -165,4 +163,4 @@ const samples = [
 export {
     icon,
     samples
-}
+};
