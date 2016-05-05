@@ -2,10 +2,8 @@ import React, {
     Component,
     PropTypes
 } from 'react-native';
-import {NativeGroup} from './G';
 import extractProps from '../lib/extract/extractProps';
 import {ImageAttributes} from '../lib/attributes';
-import Rect from './Rect';
 import {numberProp} from '../lib/props';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
