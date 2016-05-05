@@ -1,11 +1,11 @@
 import React, {
     Component
 } from 'react-native';
-import './Path'; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`, maybe cyclic dependencies issue
+import './Path'; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`
 import _ from 'lodash';
 import extractProps from '../lib/extract/extractProps';
 import {ShapeAttributes} from '../lib/attributes';
-import SerializableShape from '../lib/SerializableShape';
+import formatPercentageProps from '../lib/formatPercentageProps';
 import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
 import {circleProps, ellipseProps, lineProps, rectProps} from '../lib/props';
 
@@ -55,8 +55,6 @@ class Shape extends Component{
             });
         }
 
-        let shape = new SerializableShape(props, COORD_PROPS[this.type]).toJSON();
-
         return <NativeShape
             {...extractProps(this.type === 3 ? {
                 ...props,
@@ -64,7 +62,7 @@ class Shape extends Component{
                 y: null
             } : props)}
             shape={{
-                ...shape,
+                ...formatPercentageProps(props, COORD_PROPS[this.type]),
                 type: this.type
             }}
         />;

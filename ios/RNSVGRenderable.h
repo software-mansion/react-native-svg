@@ -24,4 +24,6 @@
 @property (nonatomic, assign) RNSVGCGFloatArray strokeDasharray;
 @property (nonatomic, assign) CGFloat strokeDashoffset;
 
+- (CGFloat)getActualProp:(NSDictionary *) prop relative:(float)relative;
+
 @end

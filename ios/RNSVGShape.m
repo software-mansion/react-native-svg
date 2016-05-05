@@ -112,12 +112,7 @@
 - (CGFloat)getActualProp:(NSString *)name relative:(float)relative
 {
     NSDictionary *prop = [self.shape objectForKey:name];
-    CGFloat value = [[prop objectForKey:@"value"] floatValue];
-    if ([[prop objectForKey:@"percentage"] integerValue] == 1) {
-        return relative * value;
-    } else {
-        return value;
-    }
+    return [super getActualProp:prop relative:relative];
 }
 
 @end
