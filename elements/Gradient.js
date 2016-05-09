@@ -29,13 +29,15 @@ class Gradient extends Component{
     render(generator) {
         let stops = {};
         Children.forEach(this.props.children, child => {
-            if (child.type === Stop && child.props.stopColor && child.props.offset) {
-                // convert percent to float.
-                let offset = percentToFloat(child.props.offset);
+            if (child.type === Stop) {
+                if (child.props.stopColor && child.props.offset) {
+                    // convert percent to float.
+                    let offset = percentToFloat(child.props.offset);
 
-                // add stop
-                stops[offset] = Color(child.props.stopColor).alpha(+child.props.stopOpacity);
-                set(this.id, generator.bind(null, stops));
+                    // add stop
+                    stops[offset] = Color(child.props.stopColor).alpha(+child.props.stopOpacity);
+                    set(this.id, generator.bind(null, stops));
+                }
             } else {
                 console.warn(`'Gradient' can only receive 'Stop' elements as children`);
             }
