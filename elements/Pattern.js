@@ -1,7 +1,4 @@
-import {
-    Component,
-    PropTypes
-} from 'react-native';
+import {Component, PropTypes} from 'react';
 
 let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 

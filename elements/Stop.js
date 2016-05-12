@@ -1,7 +1,4 @@
-import {
-    Component,
-    PropTypes
-} from 'react-native';
+import {Component, PropTypes} from 'react';
 class Stop extends Component{
     static displayName = 'Stop';
     static propTypes = {

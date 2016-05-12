@@ -1,12 +1,10 @@
-import React, {
-    Component
-} from 'react-native';
+import React, {Component} from 'react';
 import './Path'; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`
 import _ from 'lodash';
 import extractProps from '../lib/extract/extractProps';
 import {ShapeAttributes} from '../lib/attributes';
 import formatPercentageProps from '../lib/formatPercentageProps';
-import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import {circleProps, ellipseProps, lineProps, rectProps} from '../lib/props';
 
 /**

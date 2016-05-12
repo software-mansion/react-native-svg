@@ -1,7 +1,4 @@
-import React, {
-    Component,
-    PropTypes
-} from 'react-native';
+import React, {Component, PropTypes} from 'react';
 import {NativeGroup} from './G';
 import {set, remove} from '../lib/extract/extractClipping';
 

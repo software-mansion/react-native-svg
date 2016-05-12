@@ -1,7 +1,4 @@
-import React, {
-    Component,
-    PropTypes
-} from 'react-native';
+import React, {Component, PropTypes} from 'react';
 
 import ViewBox from './ViewBox';
 import Defs from './Defs';

@@ -1,7 +1,4 @@
-import React, {
-    Component,
-    PropTypes
-} from 'react-native';
+import React, {Component, PropTypes} from 'react';
 import Path from './Path';
 import {pathProps} from '../lib/props';
 
