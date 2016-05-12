@@ -3,7 +3,7 @@ import extractProps from '../lib/extract/extractProps';
 import {ImageAttributes} from '../lib/attributes';
 import {numberProp} from '../lib/props';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
-import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
 import formatPercentageProps from '../lib/formatPercentageProps';
 
 class Image extends Component{
