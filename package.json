@@ -34,8 +34,5 @@
         "ios": {
             "project": "ios/RNSVG.xcodeproj"
         }
-    },
-    "peerDependencies": {
-        "react-native": "^0.25.0"
     }
 }
