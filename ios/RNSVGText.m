@@ -46,114 +46,73 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
 
 - (void)renderLayerTo:(CGContextRef)context
 {
-    RNSVGTextFrame frame = self.textFrame;
+    self.d = [self getPath: context];
     
-    if ((!self.fill && !self.stroke) || !frame.count) {
-        return;
-    }
-    
-    // to-do: draw along a path
-    CGTextDrawingMode mode = kCGTextStroke;
-    
-    if (self.fill) {
-        if ([self.fill applyFillColor:context]) {
-            mode = kCGTextFill;
-        } else {
-            [self clip: context];
-            for (int i = 0; i < frame.count; i++) {
-                CGContextSaveGState(context);
-                // Inverse the coordinate space since CoreText assumes a bottom-up coordinate space
-                CGContextScaleCTM(context, 1.0, -1.0);
-                CGContextSetTextDrawingMode(context, kCGTextClip);
-                [self renderLineTo:context atIndex:i];
-                // Inverse the coordinate space back to the original before filling
-                CGContextScaleCTM(context, 1.0, -1.0);
-                [self.fill paint:context];
-                // Restore the state so that the next line can be clipped separately
-                CGContextRestoreGState(context);
-            }
-            
-            if (!self.stroke) {
-                return;
-            }
-        }
-    }
-    
-    if (self.stroke) {
-        CGContextSetLineWidth(context, self.strokeWidth);
-        CGContextSetLineCap(context, self.strokeLinecap);
-        CGContextSetLineJoin(context, self.strokeLinejoin);
-        RNSVGCGFloatArray dash = self.strokeDasharray;
-        
-        if (dash.count) {
-            CGContextSetLineDash(context, self.strokeDashoffset, dash.array, dash.count);
-        }
-        
-        if (![self.stroke applyStrokeColor:context]) {
-            // TODO: stroke text with pattern
-            
-//            CGContextSetTextDrawingMode(context, kCGTextStrokeClip);
-//            CGContextSetStrokeColorWithColor(context, [[UIColor redColor] CGColor]);
-//            CGContextSetFillColorWithColor(context, [[UIColor whiteColor] CGColor]);
-//            CGRect rect = CGContextGetClipBoundingBox(context);
-//            
-//            CGContextScaleCTM(context, 1.0, -1.0);
-//            for (int i = 0; i < frame.count; i++) {
-//                [self renderLineTo:context atIndex:i];
-//                [self.stroke paint:context];
-//            }
-//            CGContextScaleCTM(context, 1.0, -1.0);
-//            //[self.stroke paint:context];
-//            
-//            CGImageRef image = CGBitmapContextCreateImage(context);
-//            
-//            CGImageRef mask = CGImageMaskCreate(CGImageGetWidth(image), CGImageGetHeight(image), CGImageGetBitsPerComponent(image), CGImageGetBitsPerPixel(image), CGImageGetBytesPerRow(image), CGImageGetDataProvider(image), CGImageGetDecode(image), CGImageGetShouldInterpolate(image));
-//            //CFRelease(image);
-//            
-//            CGContextSaveGState(context);
-//            //CGContextClearRect(context, rect);
-//            //CGContextClipToMask(context, rect, mask);
-//            [self.stroke paint:context];
-//            CFRelease(mask);
-//            //CGContextRestoreGState(context);
-//            
-//            return;
-        } else {
-            if (mode == kCGTextFill) {
-                mode = kCGTextFillStroke;
-            }
-        }
-    }
-    
-    CGContextSetTextDrawingMode(context, mode);
-    [self clip:context];
-    // Inverse the coordinate space since CoreText assumes a bottom-up coordinate space
-    CGContextScaleCTM(context, 1.0, -1.0);
-    for (int i = 0; i < frame.count; i++) {
-        [self renderLineTo:context atIndex:i];
-    }
+    [super renderLayerTo:context];
 }
 
-- (void)renderLineTo:(CGContextRef)context atIndex:(int)index
+- (CGPathRef)getPath:(CGContextRef)context
 {
+    CGMutablePathRef path = CGPathCreateMutable();
     RNSVGTextFrame frame = self.textFrame;
-    CGFloat shift;
-    switch (self.alignment) {
-        case kCTTextAlignmentRight:
-            shift = frame.widths[index];
-            break;
-        case kCTTextAlignmentCenter:
-            shift = (frame.widths[index] / 2);
-            break;
-        default:
-            shift = 0;
-            break;
+    
+    for (int i = 0; i < frame.count; i++) {
+        CGFloat shift;
+        switch (self.alignment) {
+            case kCTTextAlignmentRight:
+                shift = frame.widths[i];
+                break;
+            case kCTTextAlignmentCenter:
+                shift = (frame.widths[i] / 2);
+                break;
+            default:
+                shift = 0;
+                break;
+        }
+        // We should consider snapping this shift to device pixels to improve rendering quality
+        // when a line has subpixel width.
+        CGAffineTransform offset = CGAffineTransformMakeTranslation(-shift, frame.baseLine + frame.lineHeight * i);
+        CGPathAddPath(path, &offset, [self setLinePath:frame.lines[i]]);
     }
-    // We should consider snapping this shift to device pixels to improve rendering quality
-    // when a line has subpixel width.
-    CGContextSetTextPosition(context, -shift, -frame.baseLine - frame.lineHeight * index);
-    CTLineRef line = frame.lines[index];
-    CTLineDraw(line, context);
+    
+    return path;
+}
+
+- (CGPathRef)setLinePath:(CTLineRef)line
+{
+    CGAffineTransform upsideDown = CGAffineTransformMakeScale(1.0, -1.0);
+    CGMutablePathRef path = CGPathCreateMutable();
+    RNSVGGlyphCache *cache = [[RNSVGGlyphCache alloc] init];
+    CTLineGetGlyphRuns(line);
+    CFArrayRef glyphRuns = CTLineGetGlyphRuns(line);
+    CFIndex runCount = CFArrayGetCount(glyphRuns);
+    CFIndex glyphIndex = 0;
+    for(CFIndex i = 0; i < runCount; ++i)
+    {
+        
+        // For each run, we need to get the glyphs, their font (to get the path) and their locations.
+        CTRunRef run = CFArrayGetValueAtIndex(glyphRuns, i);
+        CFIndex runGlyphCount = CTRunGetGlyphCount(run);
+        CGPoint positions[runGlyphCount];
+        CGGlyph glyphs[runGlyphCount];
+        
+        // Grab the glyphs, positions, and font
+        CTRunGetPositions(run, CFRangeMake(0, 0), positions);
+        CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
+        CFDictionaryRef attributes = CTRunGetAttributes(run);
+        CTFontRef runFont = CFDictionaryGetValue(attributes, kCTFontAttributeName);
+        
+        for(CFIndex j = 0; j < runGlyphCount; ++j, ++glyphIndex) {
+            CGPathRef letter = [cache pathForGlyph:glyphs[j] fromFont:runFont];
+            CGPoint point = positions[j];
+            if (letter != NULL) {
+                CGAffineTransform transform = CGAffineTransformTranslate(upsideDown, point.x, point.y);
+                CGPathAddPath(path, &transform, letter);
+            }
+        }
+    }
+    
+    return path;
 }
 
 @end

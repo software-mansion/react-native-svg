@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RNSVGRenderable.h"
+#import "RNSVGPath.h"
 #import "RNSVGTextFrame.h"
+#import "RNSVGGlyphCache.h"
 
-@interface RNSVGText : RNSVGRenderable
+@interface RNSVGText : RNSVGPath
 
 @property (nonatomic, assign) CTTextAlignment alignment;
 @property (nonatomic, assign) RNSVGTextFrame textFrame;
