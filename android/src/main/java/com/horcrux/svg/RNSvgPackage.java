@@ -31,6 +31,7 @@ public class RNSvgPackage implements ReactPackage {
             RNSVGRenderableViewManager.createRNSVGPathViewManager(),
             RNSVGRenderableViewManager.createRNSVGTextViewManager(),
             RNSVGRenderableViewManager.createRNSVGShapeViewManager(),
+            RNSVGRenderableViewManager.createRNSVGImageViewManager(),
             new RNSVGSvgViewManager());
     }
 
