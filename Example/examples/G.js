@@ -8,7 +8,7 @@ import Svg, {
     Line,
     Rect,
     Text
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class GExample extends Component{
     static title = 'G children props inherit';
@@ -30,6 +30,7 @@ class GExample extends Component{
                 <Circle
                     cx="25"
                     cy="75"
+                    stroke="red"
                 />
                 <Circle
                     cx="50"
@@ -39,6 +40,7 @@ class GExample extends Component{
                 <Circle
                     cx="75"
                     cy="25"
+                    stroke="red"
                 />
                 <Circle
                     cx="75"
@@ -82,7 +84,7 @@ class GTransform extends Component{
                     y="75"
                     stroke="#600"
                     fill="#600"
-                    textAnchor="center"
+                    textAnchor="middle"
                 >
                     Text grouped with shapes</Text>
             </G>
@@ -128,4 +130,4 @@ const samples = [GExample, GTransform];
 export {
     icon,
     samples
-}
+};

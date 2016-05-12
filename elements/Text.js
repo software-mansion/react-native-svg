@@ -1,29 +1,38 @@
-import React, {
-    ART,
-    Component,
-    PropTypes
-} from 'react-native';
-
-let {
-    Text:ARTText
-} = ART;
+import React, {Component, PropTypes} from 'react';
 import Defs from './Defs';
+import _ from 'lodash';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import extractProps from '../lib/extract/extractProps';
+import extractText from '../lib/extract/extractText';
+import {TextAttributes} from '../lib/attributes';
+import {numberProp, textProps, fillProps, strokeProps, pathProps} from '../lib/props';
 
-import fillFilter from '../lib/fillFilter';
-import strokeFilter from '../lib/strokeFilter';
-import transformFilter from '../lib/transformFilter';
-
-const fontFamily = '"Helvetica Neue", "Helvetica", Arial';
 class Text extends Component{
     static displayName = 'Text';
     static propTypes = {
-        strokeLinecap: PropTypes.oneOf(['butt', 'square', 'round']),
-        strokeCap: PropTypes.oneOf(['butt', 'square', 'round']),
-        strokeLinejoin: PropTypes.oneOf(['miter', 'bevel', 'round']),
-        strokeJoin: PropTypes.oneOf(['miter', 'bevel', 'round'])
+        dx: numberProp,
+        dy: numberProp,
+        ...textProps,
+        ...fillProps,
+        ...strokeProps,
+        ...pathProps
     };
+
+    static contextTypes = {
+        ...textProps,
+        ...fillProps,
+        ...strokeProps,
+        isInGroup: PropTypes.bool
+    };
+
     render() {
         let {props} = this;
+
+        if (this.context.isInGroup) {
+            props = _.defaults(this.context, props, {
+                isInGroup: null
+            });
+        }
 
         let x = 0;
         if (props.x) {
@@ -44,25 +53,19 @@ class Text extends Component{
                 <Text {...this.props} id={null} />
             </Defs.Item>;
         }
-
         // TODO: support percent gradients
-        return <ARTText
-            {...props}
-            {...transformFilter(props)}
-            {...strokeFilter(props)}
-            fill={fillFilter(props)}
-            font={{
-                fontSize: props.fontSize || 12,
-                fontFamily: props.fontFamily || fontFamily,
-                fontWeight: props.fontWeight,
-                fontStyle: props.fontStyle
-            }}
-            alignment={props.textAnchor || props.alignment}
-            x={x}
-            y={y}
-            id={null}
-        />;
+        return (
+            <NativeText
+                {...extractProps({...props, x, y})}
+                {...extractText(props)}
+            />
+        );
     }
 }
+
+let NativeText = createReactNativeComponentClass({
+    validAttributes: TextAttributes,
+    uiViewClassName: 'RNSVGText'
+});
 
 export default Text;

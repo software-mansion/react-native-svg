@@ -1,31 +1,25 @@
-import React, {
-    ART,
-    Component,
-    PropTypes,
-    cloneElement
-} from 'react-native';
-let {
-    Shape
-} = ART;
+import React, {Component, PropTypes} from 'react';
+import _ from 'lodash';
 import Defs from './Defs';
-import calculateBoundingBox from '../lib/calculateBoundingBox';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import extractProps from '../lib/extract/extractProps';
+import SerializablePath from '../lib/SerializablePath';
+import {PathAttributes} from '../lib/attributes';
+import {pathProps} from '../lib/props';
 
-import fillFilter from '../lib/fillFilter';
-import strokeFilter from '../lib/strokeFilter';
-import transformFilter from '../lib/transformFilter';
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
 class Path extends Component{
     static displayName = 'Path';
+
     static propTypes = {
         d: PropTypes.string,
-        x: propType,
-        y: propType,
-        strokeLinecap: PropTypes.oneOf(['butt', 'square', 'round']),
-        strokeCap: PropTypes.oneOf(['butt', 'square', 'round']),
-        strokeLinejoin: PropTypes.oneOf(['miter', 'bevel', 'round']),
-        strokeJoin: PropTypes.oneOf(['miter', 'bevel', 'round']),
-        strokeDasharray: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)])
+        ...pathProps
     };
+
+    static contextTypes = {
+        ...pathProps,
+        isInGroup: PropTypes.bool
+    };
+
 
     _dimensions = null;
 
@@ -35,16 +29,15 @@ class Path extends Component{
         }
     };
 
-    getBoundingBox = () => {
-        if (!this._dimensions) {
-            this._dimensions =  calculateBoundingBox(this.props.d);
-        }
-
-        return this._dimensions;
-    };
-
     render() {
         let {props} = this;
+
+        if (this.context.isInGroup) {
+            props = _.defaults(this.context, props, {
+                isInGroup: null
+            });
+        }
+
         if (props.id) {
             return <Defs.Item
                 id={props.id}
@@ -54,14 +47,21 @@ class Path extends Component{
                 <Path {...props} id={null} />
             </Defs.Item>;
         }
-        return <Shape
-            {...props}
-            {...strokeFilter(props)}
-            {...transformFilter(props)}
-            fill={fillFilter.call(this, props)}
-            id={null}
-        />;
+
+        let d = new SerializablePath(props.d).toJSON();
+
+        return (
+            <NativePath
+                {...extractProps(props)}
+                d={d}
+            />
+        );
     }
 }
+
+let NativePath = createReactNativeComponentClass({
+    validAttributes: PathAttributes,
+    uiViewClassName: 'RNSVGPath'
+});
 
 export default Path;

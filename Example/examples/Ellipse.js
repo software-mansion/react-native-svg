@@ -4,20 +4,20 @@ import React, {
 
 import Svg, {
     Ellipse
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class EllipseExample extends Component{
     static title = 'Ellipse';
     render() {
         return <Svg
             height="100"
-            width="110"
+            width="200"
         >
             <Ellipse
-                cx="55"
-                cy="55"
-                rx="50"
-                ry="30"
+                cx="50%"
+                cy="50%"
+                rx="45%"
+                ry="40%"
                 stroke="purple"
                 strokeWidth="2"
                 fill="yellow"
@@ -73,4 +73,4 @@ const samples = [EllipseExample, PileEllipses, CombinedEllipses];
 export {
     icon,
     samples
-}
+};

@@ -1,26 +1,18 @@
-import React, {
-    Component,
-    PropTypes,
-    ART
-} from 'react-native';
+import React, {Component, PropTypes} from 'react';
 import Path from './Path';
+import {pathProps} from '../lib/props';
 
 class Polyline extends Component{
     static displayName = 'Polyline';
     static propTypes = {
-        points: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        strokeLinecap: PropTypes.oneOf(['butt', 'square', 'round']),
-        strokeCap: PropTypes.oneOf(['butt', 'square', 'round']),
-        strokeLinejoin: PropTypes.oneOf(['miter', 'bevel', 'round']),
-        strokeJoin: PropTypes.oneOf(['miter', 'bevel', 'round'])
+        ...pathProps,
+        points: PropTypes.string
     };
+
     render() {
-        let props = this.props;
-        let d = 'M' + props.points.trim().replace(/\s+/g, 'L');
         return <Path
-            {...props}
-            points={null}
-            d={d}
+            {...this.props}
+            d={`M${this.props.points.trim().replace(/\s+/g, 'L')}`}
         />;
     }
 }

@@ -1,38 +1,29 @@
-import React, {
-    ART,
-    Component,
-    Children,
-    cloneElement
-} from 'react-native';
-let {
-    Group
-} = ART;
+import React, {Component, PropTypes} from 'react';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import Defs from './Defs';
+import _ from 'lodash';
+import {GroupAttributes} from '../lib/attributes';
+import {numberProp, contextProps} from '../lib/props';
 
-const transformProps = {
-    scale: null,
-    scaleX: null,
-    scaleY: null,
-    rotate: null,
-    transform: null,
-    x: null,
-    y: null,
-    originX: null,
-    originY: null
-};
-
-import transformFilter from '../lib/transformFilter';
+import extractProps from '../lib/extract/extractProps';
 
 class G extends Component{
     static displayName = 'G';
 
-    getChildren = () => {
-        return Children.map(this.props.children, child => cloneElement(child, {
-            ...this.props,
-            ...transformProps,
-            ...child.props,
-            id: null
-        }));
+    static childContextTypes = {
+        svgId: numberProp,
+        isInGroup: PropTypes.bool,
+        ...contextProps
+    };
+
+    getChildContext = () => {
+        return _.reduce(contextProps, (props, value, key) => {
+            props[key] = this.props[key];
+            return props;
+        }, {
+            svgId: this.props.svgId,
+            isInGroup: true
+        });
     };
 
     render() {
@@ -42,16 +33,28 @@ class G extends Component{
                 svgId={this.props.svgId}
                 visible={true}
             >
-                <G {...this.props} id={null} />
+                <G
+                    {...this.props}
+                    id={null}
+                />
             </Defs.Item>;
         } else {
-            return <Group
-                {...this.props}
-                {...transformFilter(this.props)}
-                id={null}
-            >{this.getChildren()}</Group>;
+            return <NativeGroup
+                {...extractProps(this.props, {transform: true})}
+                asClipPath={this.props.asClipPath}
+            >
+                {this.props.children}
+            </NativeGroup>;
         }
     }
 }
 
+var NativeGroup = createReactNativeComponentClass({
+    validAttributes: GroupAttributes,
+    uiViewClassName: 'RNSVGGroup'
+});
+
 export default G;
+export {
+    NativeGroup
+};

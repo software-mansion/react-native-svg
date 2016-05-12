@@ -9,8 +9,9 @@ import Svg, {
     Stop,
     Ellipse,
     Circle,
-    Text
-} from 'react-native-art-svg';
+    Text,
+    Rect
+} from 'react-native-svg';
 
 class LinearGradientHorizontal extends Component{
     static title = 'Define an ellipse with a horizontal linear gradient from yellow to red';
@@ -83,34 +84,18 @@ class RadialGradientExample  extends Component{
                         stopOpacity="1"
                     />
                     <Stop
+                        offset="0.3"
+                        stopColor="#000"
+                        stopOpacity="1"
+                    />
+                    <Stop
+                        offset="0.7"
+                        stopColor="#0f0"
+                        stopOpacity="1"
+                    />
+                    <Stop
                         offset="1"
                         stopColor="#83a"
-                        stopOpacity="1"
-                    />
-                </RadialGradient>
-            </Defs>
-            <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad)" />
-        </Svg>;
-    }
-}
-
-class RadialGradientPart extends Component{
-    static title = 'Define another ellipse with a radial gradient from white to blue';
-    render() {
-        return <Svg
-            height="150"
-            width="300"
-        >
-            <Defs>
-                <RadialGradient id="grad" cx="60" cy="45" rx="34" ry="33" fx="150" fy="75">
-                    <Stop
-                        offset="0%"
-                        stopColor="#fff"
-                        stopOpacity="1"
-                    />
-                    <Stop
-                        offset="100%"
-                        stopColor="#00f"
                         stopOpacity="1"
                     />
                 </RadialGradient>
@@ -146,6 +131,33 @@ class RadialGradientPercent extends Component{
     }
 }
 
+class RadialGradientPart extends Component{
+    static title = 'Define another ellipse with a radial gradient from white to blue';
+    render() {
+        return <Svg
+            height="150"
+            width="300"
+        >
+            <Defs>
+                <RadialGradient id="grad" cx="20%" cy="30%" r="30%" fx="50%" fy="50%">
+                    <Stop
+                        offset="0%"
+                        stopColor="#fff"
+                        stopOpacity="0"
+                    />
+                    <Stop
+                        offset="100%"
+                        stopColor="#00f"
+                        stopOpacity="1"
+                    />
+                </RadialGradient>
+            </Defs>
+            <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad)" />
+        </Svg>;
+    }
+}
+
+
 class FillGradientWithOpacity extends Component{
     static title = 'Fill a radial gradient with fillOpacity prop';
     render() {
@@ -154,7 +166,7 @@ class FillGradientWithOpacity extends Component{
             width="300"
         >
             <Defs>
-                <RadialGradient id="grad" cx="50%" cy="50%" rx="50%" ry="50%" fx="50%" fy="50%">
+                <RadialGradient id="grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                     <Stop
                         offset="0%"
                         stopColor="#fff"
@@ -168,6 +180,32 @@ class FillGradientWithOpacity extends Component{
                 </RadialGradient>
             </Defs>
             <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad)" fillOpacity="0.2" />
+        </Svg>;
+    }
+}
+
+class FillGradientInRect extends Component{
+    static title = 'Fill a radial gradient inside a rect and stroke it';
+    render() {
+        return <Svg
+            height="150"
+            width="300"
+        >
+            <Defs>
+                <RadialGradient id="grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                    <Stop
+                        offset="0%"
+                        stopColor="#fff"
+                        stopOpacity="1"
+                    />
+                    <Stop
+                        offset="100%"
+                        stopColor="#00f"
+                        stopOpacity="1"
+                    />
+                </RadialGradient>
+            </Defs>
+            <Rect x="5" y="5" width="290" height="130" fill="url(#grad)" stroke="pink" strokeWidth="5" />
         </Svg>;
     }
 }
@@ -193,7 +231,8 @@ const samples = [
     RadialGradientExample,
     RadialGradientPercent,
     RadialGradientPart,
-    FillGradientWithOpacity
+    FillGradientWithOpacity,
+    FillGradientInRect
 ];
 
 export {

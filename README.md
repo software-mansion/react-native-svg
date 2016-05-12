@@ -1,40 +1,39 @@
-### react-native-art-svg
+## react-native-svg
 
-------------------------
+[![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
+[![Build Status](https://travis-ci.org/magicismight/react-native-svg.svg?branch=master)](https://travis-ci.org/magicismight/react-native-svg)
 
-`react-native-art-svg` is built to provide a SVG interface to react native on both iOS and Android which is based on *ART*
+`react-native-svg` is built to provide a SVG interface to react native on both iOS and Android
 
-#### Features
+# IMPORTANT：
+
+`react-native-art-svg` has changed name to **`react-native-svg`**(*thanks for [@Brent Vatne](https://github.com/brentvatne) handing over me this npm package.*).
+
+And furthermore:
+`react-native-svg` **NO LONGER rely on ReactNativeART**, it has its own native code dependency now (which is based on ReactNativeART code but support more SVG features)
+
+
+### Features
 
 1. Supports most of SVG elements and properties(Rect, Circle, Line, Polyline, Polygon, G ...).
-2. 100% based on ReactNative`s ART library
-3. Easy to convert SVG code into ReactNative code.
+2. Easy to convert SVG code into ReactNative code.
 
-![example](./screenShoots/art-svg.gif)
 
 #### Install
 
-`npm install react-native-art-svg`
+1. Install library from npm.
 
-##### On iOS we should add import `ART` library into your project
+```
+npm install react-native-svg --save
+```
 
-To add ART.xcodeproj find the file located in react-native/Libraries/ART/ART.xcodeproj and just drag it over to the Libraries section in XCode. That should look like so
+2 . Link native code
+If you haven\`t installed `rnpm`, you can run `npm i rnpm -g` first.
 
-![Add ART.xcodeproj to Libraries](./screenShoots/addXcodeproj.png)
+```
+rnpm link react-native-svg
+```
 
-Next we’ll link the binary.
-
-With the root project selected on the left, select `Build Phases` from the center view. There will be a section called “Link Binary With Libraries”, expand it, press the + and select `libART.a`
-
-Like so
-
-![Link binary](./screenShoots/linkBinary.png)
-
-([Getting react art running on react native](http://browniefed.com/blog/2015/05/03/getting-react-art-running-on-react-native/))
-
-##### On android
-
-react-native\`s `ART` for android is shipped within react-native@0.18.0
 
 #### Usage
 
@@ -57,7 +56,7 @@ import Svg,{
     Use,
     Defs,
     Stop
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class SvgExample extends Component {
     render() {
@@ -566,17 +565,15 @@ npm install
 ```
 
 #### TODO:
-
-1. fillRule="evenodd" ([ART do not support fillRule](https://github.com/facebook/react-native/pull/5477))
-2. clipPath ([wait for official supports](https://github.com/facebook/react-native/blob/master/Libraries/ART/ARTGroup.m#L16))
-3. textPath ([wait for official supports](https://github.com/facebook/react-native/blob/master/Libraries/ART/ARTText.m#L56))
-4. pattern ([wait for official supports](https://github.com/facebook/react-native/blob/master/Libraries/ART/ReactNativeART.js#L332))
-5. [animations](https://github.com/gorangajic/react-svg-morph)
+1. add native method for elements
+2. textPath (iOS)
+3. more Text features support
+4. Pattern element
+5. Image element
+6. calculate bounding box only if necessary.
 
 #### Thanks:
 
-* [SVG bounding Algorithm](https://github.com/icons8/svg-path-bounding-box)
-* [Circle drawing with svg arc path](http://stackoverflow.com/questions/5737975/circle-drawing-with-svgs-arc-path/10477334#10477334)
 * [w3schools.com SVG Tutorial](http://www.w3schools.com/svg/)
 * [SVG Tutorial](http://tutorials.jenkov.com/svg/index.html)
 * [MDN](https://developer.mozilla.org/en/docs/Web/SVG)

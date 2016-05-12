@@ -9,7 +9,7 @@ import Svg, {
     Rect,
     Circle,
     Polyline
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class UseExample extends Component{
     static title = 'Reuse svg code';
@@ -30,7 +30,7 @@ class UseExample extends Component{
             <Use href="#shape" x="20" y="0"/>
             <Use href="#shape" x="170"y="0" />
         </Svg>;
-    };
+    }
 }
 
 class UseShapes extends Component{
@@ -47,7 +47,7 @@ class UseShapes extends Component{
             <Use href="#shape" x="110" y="0" stroke="#0ff" fill="#8a3" rotation="45" origin="25, 25"/>
             <Use href="#shape" x="150" y="50" stroke="#0f0" fill="none"/>
         </Svg>;
-    };
+    }
 }
 
 const icon = <Svg
@@ -68,4 +68,4 @@ const samples = [UseExample, UseShapes];
 export {
     icon,
     samples
-}
+};

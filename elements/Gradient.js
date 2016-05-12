@@ -1,18 +1,10 @@
-import React, {
-    Component,
-    PropTypes,
-    ART,
-    Children
-} from 'react-native';
-let {
-    Group
-} = ART;
-import {set, remove} from '../lib/fillFilter';
-import percentFactory from '../lib/percentFactory';
+import React, {Children, Component} from 'react';
+import {NativeGroup} from './G';
+import {set, remove} from '../lib/extract/patterns';
 import percentToFloat from '../lib/percentToFloat';
 import Stop from './Stop';
 import Color from 'color';
-class RadialGradient extends Component{
+class Gradient extends Component{
     static displayName = 'Gradient';
 
     constructor() {
@@ -31,29 +23,25 @@ class RadialGradient extends Component{
         remove(this.id);
     };
 
-    render(distanceProps, fromPercent, fromNumber) {
+    render(generator) {
         let stops = {};
         Children.forEach(this.props.children, child => {
-            if (child.type === Stop && child.props.stopColor && child.props.offset) {
-                // convert percent to float.
-                let offset = percentToFloat(child.props.offset);
+            if (child.type === Stop) {
+                if (child.props.stopColor && child.props.offset) {
+                    // convert percent to float.
+                    let offset = percentToFloat(child.props.offset);
 
-                // add stop
-                stops[offset] = Color(child.props.stopColor).alpha(+child.props.stopOpacity);
-
-                let factories = percentFactory(...distanceProps);
-                if (factories) {
-                    set(this.id, fromPercent.bind(null, factories, stops));
-                } else {
-                    set(this.id, fromNumber.bind(null, stops));
+                    // add stop
+                    stops[offset] = Color(child.props.stopColor).alpha(+child.props.stopOpacity);
+                    set(this.id, generator.bind(null, stops));
                 }
             } else {
-                console.warn(`'RadialGradient' can only receive 'Stop' elements as children`);
+                console.warn(`'Gradient' can only receive 'Stop' elements as children`);
             }
         });
-        return <Group />;
+        return <NativeGroup />;
     }
 }
 
-export default RadialGradient;
+export default Gradient;
 

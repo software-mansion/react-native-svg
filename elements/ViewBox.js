@@ -1,23 +1,9 @@
-import React, {
-    Component,
-    PropTypes,
-    ART
-} from 'react-native';
-
-let {
-    Shape,
-} = ART;
+import React, {Component} from 'react';
 
 import G from './G';
-import extractViewbox from '../lib/extractViewbox';
+import extractViewbox from '../lib/extract/extractViewbox';
 class ViewBox extends Component{
     static displayName = 'ViewBox';
-    static propType = {
-        shouldTransform: PropTypes.bool
-    };
-    static defaultProps = {
-        shouldTransform: false
-    };
 
     render() {
         let viewbox = extractViewbox(this.props);
@@ -31,6 +17,7 @@ class ViewBox extends Component{
             x = viewbox.x;
             y = viewbox.y;
         }
+
         return <G
             {...this.props}
             x={x}
@@ -39,10 +26,9 @@ class ViewBox extends Component{
             scaleY={scaleY}
             preserveAspectRatio={null}
             viewbox={null}
-            preserveAspectRatio={null}
         >
             {(!scaleX || !scaleY) ? null : this.props.children}
-        </G>
+        </G>;
     }
 }
 

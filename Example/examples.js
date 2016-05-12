@@ -12,6 +12,8 @@ import * as Stroking from './examples/Stroking';
 import * as Use from './examples/Use';
 import * as Symbol from './examples/Symbol';
 import * as Gradients from './examples/Gradients';
+import * as Clipping from './examples/Clipping';
+import * as Image from './examples/Image';
 
 export {
     Svg,
@@ -27,5 +29,7 @@ export {
     G,
     Use,
     Symbol,
-    Gradients
+    Gradients,
+    Clipping,
+    Image
 };

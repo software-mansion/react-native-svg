@@ -4,7 +4,7 @@ import React, {
 
 import Svg, {
     Rect
-} from 'react-native-art-svg';
+} from 'react-native-svg';
 
 class RectExample extends Component{
     static title = 'Rect';
@@ -14,13 +14,14 @@ class RectExample extends Component{
             height="60"
         >
             <Rect
-                x="25"
-                y="5"
-                width="150"
-                height="50"
+                x="5%"
+                y="5%"
+                width="90%"
+                height="90%"
                 fill="rgb(0,0,255)"
                 strokeWidth="3"
                 stroke="rgb(0,0,0)"
+                strokeDasharray="5,10"
             />
         </Svg>;
     }
@@ -39,10 +40,10 @@ class RectStrokeFill extends Component{
                 width="75"
                 height="75"
                 fill="blue"
-                fillOpacity="0.1"
-                stroke="pink"
+                fillOpacity="0.5"
+                stroke="red"
                 strokeWidth="5"
-                strokeOpacity="0.9"
+                strokeOpacity="0.5"
             />
         </Svg>;
     }
@@ -133,6 +134,6 @@ const samples = [RectExample, RectStrokeFill, RoundedRect, EllipseRect, RoundOve
 export {
     icon,
     samples
-}
+};
 
 

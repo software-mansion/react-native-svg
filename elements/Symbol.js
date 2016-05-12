@@ -1,12 +1,7 @@
-import React, {
-    Component,
-    PropTypes,
-    ART
-} from 'react-native';
+import React, {Component, PropTypes} from 'react';
 
 import ViewBox from './ViewBox';
 import Defs from './Defs';
-import extractViewbox from '../lib/extractViewbox';
 class SymbolElement extends Component{
     static displayName = 'Symbol';
     static propType = {
@@ -22,11 +17,10 @@ class SymbolElement extends Component{
                 {...props}
                 viewbox={props.viewbox}
                 preserveAspectRatio={props.preserveAspectRatio}
-                shouldTransform={true}
             >
                 {props.children}
             </ViewBox>
-        </Defs.Item>
+        </Defs.Item>;
     }
 }
 

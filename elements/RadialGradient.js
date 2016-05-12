@@ -1,26 +1,28 @@
-import React, {
-    Component,
-    PropTypes,
-    ART,
-    Children
-} from 'react-native';
-let {
-    RadialGradient: ARTRadialGradient
-} = ART;
+import {PropTypes} from 'react';
 import stopsOpacity from '../lib/stopsOpacity';
+import {numberProp} from '../lib/props';
 import Gradient from './Gradient';
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
+import {RADIAL_GRADIENT} from '../lib/extract/extractBrush';
+import insertColorStopsIntoArray from '../lib/insertProcessor';
+
+
+function RadialGradientGenerator(stops, fx, fy, rx, ry, cx, cy) {
+    var brushData = [RADIAL_GRADIENT, fx, fy, rx, ry, cx, cy];
+    insertColorStopsIntoArray(stops, brushData, 7);
+    this._brush = brushData;
+}
+
 class RadialGradient extends Gradient{
     static displayName = 'RadialGradient';
     static propTypes = {
-        fx: propType,
-        fy: propType,
-        rx: propType,
-        ry: propType,
-        cx: propType,
-        cy: propType,
-        r: propType,
-        id: PropTypes.string
+        fx: numberProp,
+        fy: numberProp,
+        rx: numberProp,
+        ry: numberProp,
+        cx: numberProp,
+        cy: numberProp,
+        r: numberProp,
+        id: PropTypes.string.isRequired
     };
 
     render() {
@@ -33,31 +35,14 @@ class RadialGradient extends Gradient{
             cy,
             r
         } = this.props;
-
-        if (r) {
-            rx = ry = +r;
-        }
-        let gradientProps = [fx, fy, rx, ry, cx, cy];
         return super.render(
-            gradientProps,
-            function (factories, stops, boundingBox, opacity) {
-                let {x1,y1,width, height} = boundingBox;
-                return new ARTRadialGradient(
-                    stopsOpacity(stops, opacity),
-                    x1 + factories[0](width),
-                    y1 + factories[1](height),
-                    factories[2](width),
-                    factories[3](height),
-                    x1 + factories[4](width),
-                    y1 + factories[5](height)
-                );
-            },
-            function (stops, opacity) {
-                return new ARTRadialGradient(stopsOpacity(stops, opacity), ...gradientProps);
+            (stops, opacity) => {
+
+                return new RadialGradientGenerator(stopsOpacity(stops, opacity), ...[fx, fy, rx || r, ry || r, cx, cy]);
             }
         );
     }
 }
 
 export default RadialGradient;
-
+export {RadialGradientGenerator};

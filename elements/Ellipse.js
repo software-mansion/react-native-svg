@@ -1,38 +1,24 @@
-import React, {
-    Component,
-    PropTypes,
-    ART
-} from 'react-native';
-import Path from './Path';
+import {PropTypes} from 'react';
+import Shape, {ELLIPSE} from './Shape';
+import {ellipseProps, pathProps, fillProps, strokeProps} from '../lib/props';
 
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
-class Ellipse extends Component{
+class Ellipse extends Shape{
     static displayName = 'Ellipse';
     static propTypes = {
-        cx: propType,
-        cy: propType,
-        rx: propType,
-        ry: propType
+        ...pathProps,
+        ...ellipseProps
     };
-    render() {
-        let {props} = this;
-        let {cx, cy, rx, ry} = this.props;
-        let d = `
-            M ${cx - rx} ${cy}
-            a ${rx}, ${ry} 0 1, 0 ${rx * 2}, 0
-            a ${rx}, ${ry} 0 1, 0 ${-rx * 2}, 0
-            Z
-        `;
-        return <Path
-            {...props}
-            strokeCap={null}
-            strokeJoin={null}
-            cx={null}
-            cy={null}
-            rx={null}
-            ry={null}
-            d={d}
-        />;
+
+    static contextTypes = {
+        ...fillProps,
+        ...strokeProps,
+        ...ellipseProps,
+        isInGroup: PropTypes.bool
+    };
+
+    constructor() {
+        super(...arguments);
+        this.type = ELLIPSE;
     }
 }
 

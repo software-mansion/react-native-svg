@@ -1,24 +1,17 @@
-import React, {
-    ART,
-    Component,
-    PropTypes,
-    Children,
-    cloneElement
-} from 'react-native';
-import extractViewbox from '../lib/extractViewbox';
+import React, {Children, Component, cloneElement, PropTypes} from 'react';
+import {View, requireNativeComponent} from "react-native";
 import ViewBox from './ViewBox';
-import _ from 'lodash';
-let {
-    Surface,
-    Group
-} = ART;
 
+// Svg - Root node of all Svg elements
 let id = 0;
 
 class Svg extends Component{
     static displayName = 'Svg';
-    static propType = {
+    static propTypes = {
+        ...View.propTypes,
         opacity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         viewbox: PropTypes.string,
         // TODO: complete other values of preserveAspectRatio
         // http://www.justinmccandless.com/demos/viewbox/index.html
@@ -40,10 +33,30 @@ class Svg extends Component{
         });
     };
 
+    measureInWindow = (...args) => {
+        this.root.measureInWindow(...args);
+    };
+
+    measure = (...args) => {
+        this.root.measure(...args);
+    };
+
+    measureLayout = (...args) => {
+        this.root.measureLayout(...args);
+    };
+
+    setNativeProps = (...args) => {
+        this.root.setNativeProps(...args);
+    };
+
     render() {
         let {props} = this;
         let opacity = +props.opacity;
-        let content = props.viewbox ? <ViewBox
+        let width = +props.width;
+        let height = +props.height;
+        let flexLayout = isNaN(width) || isNaN(height);
+
+        let content = (props.viewbox && !flexLayout) ? <ViewBox
             viewbox={props.viewbox}
             preserveAspectRatio={props.preserveAspectRatio}
             width={props.width}
@@ -52,18 +65,27 @@ class Svg extends Component{
             {this.getChildren()}
         </ViewBox> : this.getChildren();
 
-        return <Surface
-            {...props}
-            style={[
-                props.style,
-                !isNaN(opacity) && {
-                    opacity: opacity
-                }
-            ]}
-        >
-            {content}
-        </Surface>;
+        return (
+            <NativeSvgView
+                ref={ele => this.root = ele}
+                style={[
+                    props.style,
+                    !isNaN(opacity) && {
+                        opacity
+                    },
+                    !flexLayout && {
+                        width,
+                        height,
+                        flex: 0
+                    }
+                ]}
+            >
+                {content}
+            </NativeSvgView>
+        );
     }
 }
+
+const NativeSvgView = requireNativeComponent('RNSVGSvgView', Svg);
 
 export default Svg;

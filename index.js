@@ -1,7 +1,3 @@
-import React, {
-    ART,
-    Component
-} from 'react-native';
 import Rect from './elements/Rect';
 import Circle from './elements/Circle';
 import Ellipse from './elements/Ellipse';
@@ -18,16 +14,12 @@ import Defs from './elements/Defs';
 import LinearGradient from './elements/LinearGradient';
 import RadialGradient from './elements/RadialGradient';
 import Stop from './elements/Stop';
-
-let {
-    Group
-} = ART;
+import ClipPath from './elements/ClipPath';
 
 export {
     Svg,
     Circle,
     Ellipse,
-    Group,
     G,
     Text,
     Path,
@@ -40,7 +32,8 @@ export {
     Defs,
     LinearGradient,
     RadialGradient,
-    Stop
+    Stop,
+    ClipPath
 };
 
 export default Svg;

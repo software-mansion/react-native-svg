@@ -1,38 +1,24 @@
-import React, {
-    Component,
-    PropTypes,
-    ART
-} from 'react-native';
+import {PropTypes} from 'react';
+import Shape, {LINE} from './Shape';
+import {lineProps, pathProps, fillProps, strokeProps} from '../lib/props';
 
-let {
-    Shape,
-} = ART;
-
-import strokeFilter from '../lib/strokeFilter';
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
-class Line extends Component{
+class Line extends Shape{
     static displayName = 'Line';
     static propTypes = {
-        x1: propType,
-        x2: propType,
-        y1: propType,
-        y2: propType,
-        strokeLinecap: PropTypes.oneOf(['butt', 'square', 'round']),
-        strokeCap: PropTypes.oneOf(['butt', 'square', 'round'])
+        ...pathProps,
+        ...lineProps
     };
-    render() {
-        let {props} = this;
-        let d = `M${props.x1},${props.y1}L${props.x2},${props.y2}Z`;
 
-        return <Shape
-            {...props}
-            x1={null}
-            y1={null}
-            x2={null}
-            y2={null}
-            fill={null}
-            d={d}
-        />;
+    static contextTypes = {
+        ...fillProps,
+        ...strokeProps,
+        ...lineProps,
+        isInGroup: PropTypes.bool
+    };
+
+    constructor() {
+        super(...arguments);
+        this.type = LINE;
     }
 }
 
