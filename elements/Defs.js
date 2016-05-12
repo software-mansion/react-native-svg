@@ -1,9 +1,4 @@
-import React, {
-    Children,
-    Component,
-    cloneElement,
-    PropTypes
-} from 'react-native';
+import React, {Children, Component, cloneElement, PropTypes} from 'react';
 import {NativeGroup} from './G';
 let map = {};
 

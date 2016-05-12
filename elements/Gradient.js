@@ -1,7 +1,4 @@
-import React, {
-    Component,
-    Children
-} from 'react-native';
+import React, {Children, Component} from 'react';
 import {NativeGroup} from './G';
 import {set, remove} from '../lib/extract/patterns';
 import percentToFloat from '../lib/percentToFloat';

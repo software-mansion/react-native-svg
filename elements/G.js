@@ -1,8 +1,5 @@
-import React, {
-    Component,
-    PropTypes
-} from 'react-native';
-import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
+import React, {Component, PropTypes} from 'react';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import Defs from './Defs';
 import _ from 'lodash';
 import {GroupAttributes} from '../lib/attributes';

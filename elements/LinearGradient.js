@@ -1,6 +1,4 @@
-import {
-    PropTypes
-} from 'react-native';
+import {PropTypes} from 'react';
 
 import stopsOpacity from '../lib/stopsOpacity';
 import {numberProp} from '../lib/props';

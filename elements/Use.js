@@ -1,7 +1,4 @@
-import React, {
-    Component,
-    PropTypes
-} from 'react-native';
+import React, {Component, PropTypes} from 'react';
 import Defs from './Defs';
 class Use extends Component{
     static displayName = 'Use';

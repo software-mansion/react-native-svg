@@ -1,6 +1,4 @@
-import {
-    PropTypes
-} from 'react-native';
+import {PropTypes} from 'react';
 import Shape, {LINE} from './Shape';
 import {lineProps, pathProps, fillProps, strokeProps} from '../lib/props';
 
