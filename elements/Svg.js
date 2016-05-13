@@ -1,5 +1,5 @@
 import React, {Children, Component, cloneElement, PropTypes} from 'react';
-import {View, requireNativeComponent} from "react-native";
+import {View, requireNativeComponent} from 'react-native';
 import ViewBox from './ViewBox';
 
 // Svg - Root node of all Svg elements
