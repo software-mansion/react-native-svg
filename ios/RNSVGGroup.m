@@ -26,7 +26,8 @@
 {
     CGMutablePathRef path = CGPathCreateMutable();
     for (RNSVGNode *node in self.subviews) {
-        CGPathAddPath(path, nil, [node getPath:context]);
+        CGAffineTransform transform = node.transform;
+        CGPathAddPath(path, &transform, [node getPath:context]);
     }
     
     return path;

@@ -124,6 +124,13 @@ class ClipPathElement extends Component{
                     <Ellipse cx="60" cy="70" rx="20" ry="10" />
                     <Rect x="65" y="15" width="30" height="30" />
                     <Polygon points="20,60 20,80 50,70" />
+                    <Text
+                        x="50"
+                        y="30"
+                        fontSize="32"
+                        fonWeight="bold"
+                        textAnchor="middle"
+                    >Q</Text>
                 </ClipPath>
             </Defs>
             <Rect

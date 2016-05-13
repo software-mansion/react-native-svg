@@ -7,7 +7,7 @@
  */
 
 #import <Foundation/Foundation.h>
-
+#import "UIBezierPath-Points.h"
 #import "RNSVGPath.h"
 #import "RNSVGTextFrame.h"
 #import "RNSVGGlyphCache.h"
@@ -16,5 +16,6 @@
 
 @property (nonatomic, assign) CTTextAlignment alignment;
 @property (nonatomic, assign) RNSVGTextFrame textFrame;
+@property (nonatomic, assign) CGPathRef path;
 
 @end
