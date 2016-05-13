@@ -23,10 +23,12 @@ class GExample extends Component{
                 stroke="pink"
                 strokeWidth="3"
             >
-                <Circle
-                    cx="25"
-                    cy="25"
-                />
+                <G>
+                    <Circle
+                        cx="25"
+                        cy="25"
+                    />
+                </G>
                 <Circle
                     cx="25"
                     cy="75"

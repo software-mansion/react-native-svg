@@ -10,7 +10,8 @@ import Svg, {
     Ellipse,
     Circle,
     Text,
-    Rect
+    Rect,
+    G
 } from 'react-native-svg';
 
 class LinearGradientHorizontal extends Component{
@@ -32,7 +33,7 @@ class LinearGradientHorizontal extends Component{
 }
 
 class LinearGradientVertical  extends Component{
-    static title = 'Define an ellipse with a horizontal linear gradient from yellow to red';
+    static title = 'Define an ellipse with a vertical linear gradient from yellow to red';
     render() {
         return <Svg
             height="150"
@@ -44,7 +45,11 @@ class LinearGradientVertical  extends Component{
                     <Stop offset="100%" stopColor="red" stopOpacity="1" />
                 </LinearGradient>
             </Defs>
-            <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad)" />
+            <G>
+                <G>
+                    <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad)" />
+                </G>
+            </G>
         </Svg>;
     }
 }

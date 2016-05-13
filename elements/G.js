@@ -10,6 +10,11 @@ import extractProps from '../lib/extract/extractProps';
 class G extends Component{
     static displayName = 'G';
 
+    static contextTypes = {
+        svgId: numberProp,
+        ...contextProps
+    };
+
     static childContextTypes = {
         svgId: numberProp,
         isInGroup: PropTypes.bool,
@@ -17,13 +22,16 @@ class G extends Component{
     };
 
     getChildContext = () => {
-        return _.reduce(contextProps, (props, value, key) => {
-            props[key] = this.props[key];
+        let context = _.reduce(contextProps, (props, value, key) => {
+            if (!_.isNil(this.props[key])) {
+                props[key] = this.props[key];
+            }
             return props;
         }, {
-            svgId: this.props.svgId,
+            svgId: this.props.svgId || this.context.svgId,
             isInGroup: true
         });
+        return _.defaults({}, this.context, context);
     };
 
     render() {
