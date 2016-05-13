@@ -566,11 +566,10 @@ npm install
 
 #### TODO:
 1. add native method for elements
-2. textPath (iOS)
-3. more Text features support
-4. Pattern element
-5. Image element
-6. calculate bounding box only if necessary.
+2. more Text features support
+3. Pattern element
+4. Image element (Android)
+5. calculate bounding box only if necessary.
 
 #### Thanks:
 
