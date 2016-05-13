@@ -345,7 +345,7 @@ The <Text> element is used to define a text.
         fontWeight="bold"
         x="100"
         y="20"
-        alignment="center"
+        textAnchor="middle"
     >STROKED TEXT</Text>
 </Svg>
 ```
@@ -387,7 +387,7 @@ The <G> element is a container used to group other SVG elements. Transformations
             y="75"
             stroke="#600"
             fill="#600"
-            textAnchor="center"
+            textAnchor="middle"
         >
             Text grouped with shapes</Text>
     </G>
