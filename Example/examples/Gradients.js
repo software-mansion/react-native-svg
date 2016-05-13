@@ -39,7 +39,7 @@ class LinearGradientVertical  extends Component{
             width="300"
         >
             <Defs>
-                <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="150">
+                <LinearGradient id="grad" x1={0} y1={0} x2={0} y2={150}>
                     <Stop offset="0%" stopColor="rgb(255,255,0)" stopOpacity="0" />
                     <Stop offset="100%" stopColor="red" stopOpacity="1" />
                 </LinearGradient>
