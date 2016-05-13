@@ -9,6 +9,7 @@ import Path from './elements/Path';
 import G from './elements/G';
 import Text from './elements/Text';
 import Use from './elements/Use';
+import Image from './elements/Image';
 import Symbol  from './elements/Symbol';
 import Defs from './elements/Defs';
 import LinearGradient from './elements/LinearGradient';
@@ -28,6 +29,7 @@ export {
     Line,
     Rect,
     Use,
+    Image,
     Symbol,
     Defs,
     LinearGradient,
