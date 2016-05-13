@@ -68,52 +68,64 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
-        if (mFrame == null) {
-            return;
-        }
+
         opacity *= mOpacity;
         if (opacity <= MIN_OPACITY_FOR_DRAW) {
             return;
         }
-        if (!mFrame.hasKey(PROP_LINES)) {
-            return;
-        }
-        ReadableArray linesProp = mFrame.getArray(PROP_LINES);
-        if (linesProp == null || linesProp.size() == 0) {
+
+        String text = formatText();
+        if (text == null) {
             return;
         }
 
         // only set up the canvas if we have something to draw
         saveAndSetupCanvas(canvas);
         clip(canvas, paint);
+        RectF box = getBox(paint, text);
 
-        String[] lines = new String[linesProp.size()];
-        for (int i = 0; i < lines.length; i++) {
-            lines[i] = linesProp.getString(i);
-        }
-        String text = TextUtils.join("\n", lines);
-
-        Rect bound = new Rect();
-        paint.getTextBounds(text, 0, text.length(), bound);
-        RectF box = new RectF(bound);
         if (setupStrokePaint(paint, opacity, box)) {
             applyTextPropertiesToPaint(paint);
             if (mPath == null) {
                 canvas.drawText(text, 0, -paint.ascent(), paint);
             } else {
-                canvas.drawTextOnPath(text, mPath, 0, 0, paint);
+                canvas.drawTextOnPath(text, mPath, 0, -paint.ascent(), paint);
             }
         }
         if (setupFillPaint(paint, opacity, box)) {
             applyTextPropertiesToPaint(paint);
+
             if (mPath == null) {
                 canvas.drawText(text, 0, -paint.ascent(), paint);
             } else {
-                canvas.drawTextOnPath(text, mPath, 0, 0, paint);
+                canvas.drawTextOnPath(text, mPath, 0, -paint.ascent(), paint);
             }
         }
         restoreCanvas(canvas);
         markUpdateSeen();
+    }
+
+    private String formatText() {
+        if (mFrame == null || !mFrame.hasKey(PROP_LINES)) {
+            return null;
+        }
+
+        ReadableArray linesProp = mFrame.getArray(PROP_LINES);
+        if (linesProp == null || linesProp.size() == 0) {
+            return null;
+        }
+
+        String[] lines = new String[linesProp.size()];
+        for (int i = 0; i < lines.length; i++) {
+            lines[i] = linesProp.getString(i);
+        }
+        return TextUtils.join("\n", lines);
+    }
+
+    private RectF getBox(Paint paint, String text) {
+        Rect bound = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bound);
+        return new RectF(bound);
     }
 
     private void applyTextPropertiesToPaint(Paint paint) {
@@ -157,5 +169,22 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
                 }
             }
         }
+    }
+
+    protected Path getPath(Canvas canvas, Paint paint) {
+        Path path = new Path();
+
+        String text = formatText();
+        if (text == null) {
+            return path;
+        }
+        
+        if (setupFillPaint(paint, 1.0f, getBox(paint, text))) {
+            applyTextPropertiesToPaint(paint);
+            paint.getTextPath(text, 0, text.length(), 0, -paint.ascent(), path);
+            path.transform(mMatrix);
+        }
+
+        return path;
     }
 }

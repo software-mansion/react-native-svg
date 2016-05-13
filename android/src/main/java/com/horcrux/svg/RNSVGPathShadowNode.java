@@ -155,7 +155,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private void setupPath() {
         // init path after both fillRule and path have been set
         if (mFillRuleSet && mPathSet) {
-            mPath = getPath(null);
+            mPath = getPath(null, null);
             RectF box = new RectF();
             mPath.computeBounds(box, true);
             mContentBoundingBox = box;
@@ -315,7 +315,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         }
     }
 
-    protected Path getPath(@Nullable Canvas canvas) {
+    protected Path getPath(@Nullable Canvas canvas, @Nullable Paint paint) {
         Path path = new Path();
         switch (mFillRule) {
             case FILL_RULE_EVENODD:

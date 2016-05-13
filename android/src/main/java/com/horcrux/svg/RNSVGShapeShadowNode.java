@@ -41,7 +41,7 @@ public class RNSVGShapeShadowNode extends RNSVGPathShadowNode {
     public void draw(Canvas canvas, Paint paint, float opacity) {
 
         if (mShape != null) {
-            mPath = getPath(canvas);
+            mPath = getPath(canvas, paint);
             RectF shapeBox = new RectF();
             mPath.computeBounds(shapeBox, true);
             mContentBoundingBox = shapeBox;
@@ -64,7 +64,7 @@ public class RNSVGShapeShadowNode extends RNSVGPathShadowNode {
     }
 
     @Override
-    protected Path getPath(Canvas canvas) {
+    protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
 
         int type = mShape.getInt("type");

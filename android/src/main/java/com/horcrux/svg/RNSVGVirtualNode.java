@@ -45,7 +45,7 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
     private static final float[] sRawMatrix = new float[9];
     private @Nullable String mDefinedClipPathId;
     protected float mOpacity = 1f;
-    private @Nullable Matrix mMatrix = new Matrix();
+    protected  @Nullable Matrix mMatrix = new Matrix();
     protected @Nullable Path mClipPath;
     private @Nullable String mClipPathId;
     private static final int PATH_TYPE_ARC = 4;
@@ -281,5 +281,5 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
         }
     }
 
-    abstract protected Path getPath(Canvas canvas);
+    abstract protected Path getPath(Canvas canvas, Paint paint);
 }

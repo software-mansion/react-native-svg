@@ -47,18 +47,18 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
                     child.markUpdateSeen();
                 }
             } else {
-                defineClipPath(getPath(canvas), mAsClipPath);
+                defineClipPath(getPath(canvas, paint), mAsClipPath);
             }
             restoreCanvas(canvas);
         }
     }
 
     @Override
-    protected Path getPath(Canvas canvas) {
+    protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
         for (int i = 0; i < getChildCount(); i++) {
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
-            path.addPath(child.getPath(canvas));
+            path.addPath(child.getPath(canvas, paint));
         }
         return path;
     }
