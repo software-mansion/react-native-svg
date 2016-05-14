@@ -102,7 +102,6 @@
         }
         default:
             RCTLogError(@"Invalid Shape type %d at %@", type, self.shape);
-            //CGPathRelease(path);
             
     }
     

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
+import {requireNativeComponent} from 'react-native';
 import Defs from './Defs';
 import _ from 'lodash';
-import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
 import extractProps from '../lib/extract/extractProps';
 import extractText from '../lib/extract/extractText';
 import {TextAttributes} from '../lib/attributes';
@@ -53,9 +53,9 @@ class Text extends Component{
                 <Text {...this.props} id={null} />
             </Defs.Item>;
         }
-        // TODO: support percent gradients
+
         return (
-            <NativeText
+            <RNSVGText
                 {...extractProps({...props, x, y})}
                 {...extractText(props)}
             />
@@ -63,9 +63,8 @@ class Text extends Component{
     }
 }
 
-let NativeText = createReactNativeComponentClass({
-    validAttributes: TextAttributes,
-    uiViewClassName: 'RNSVGText'
+const RNSVGText = requireNativeComponent('RNSVGText', null, {
+    nativeOnly: TextAttributes
 });
 
 export default Text;

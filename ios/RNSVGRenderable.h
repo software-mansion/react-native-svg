@@ -23,6 +23,7 @@
 @property (nonatomic, assign) CGLineJoin strokeLinejoin;
 @property (nonatomic, assign) RNSVGCGFloatArray strokeDasharray;
 @property (nonatomic, assign) CGFloat strokeDashoffset;
+@property (nonatomic, assign) CGMutablePathRef nodeArea;
 
 - (CGFloat)getActualProp:(NSDictionary *) prop relative:(float)relative;
 

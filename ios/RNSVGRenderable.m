@@ -10,6 +10,15 @@
 
 @implementation RNSVGRenderable
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _nodeArea = CGPathCreateMutable();
+    }
+    return self;
+}
+
 - (void)setFill:(RNSVGBrush *)fill
 {
     [self invalidate];
@@ -60,6 +69,7 @@
 
 - (void)dealloc
 {
+    CGPathRelease(_nodeArea);
     if (_strokeDasharray.array) {
         free(_strokeDasharray.array);
     }
@@ -91,6 +101,16 @@
     }
 }
 
+// hitTest delagate
+- (UIView *)hitTest:(CGPoint)point
+          withEvent:(UIEvent *)event
+{
+    if (self.nodeArea != NULL && CGPathContainsPoint(self.nodeArea, nil, point, NO)) {
+        return self;
+    } else {
+        return nil;
+    }
+}
 
 - (void)renderLayerTo:(CGContextRef)context
 {

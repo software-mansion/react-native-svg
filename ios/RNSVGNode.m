@@ -50,7 +50,7 @@ static NSMutableDictionary *ClipPaths;
 - (void)renderTo:(CGContextRef)context
 {
     float opacity = self.opacity;
-
+    
     if (opacity <= 0) {
         // Nothing to paint
         return;
@@ -60,7 +60,7 @@ static NSMutableDictionary *ClipPaths;
     if (!transparent) {
         opacity = 1;
     }
-
+    
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.transform);
@@ -101,20 +101,6 @@ static NSMutableDictionary *ClipPaths;
     [ClipPaths setValue:[NSValue valueWithPointer:_clipPath] forKey:clipPathId];
 }
 
-- (void)dealloc
-{
-    CGPathRelease(_clipPath);
-    if (definedClipPathId) {
-        [ClipPaths removeObjectForKey:definedClipPathId];
-    }
-}
-
-
-- (void)renderLayerTo:(CGContextRef)context
-{
-    // abstract
-}
-
 - (CGPathRef)getPath: (CGContextRef) context
 {
     // abstract
@@ -138,6 +124,24 @@ static NSMutableDictionary *ClipPaths;
         CGContextEOClip(context);
     } else {
         CGContextClip(context);
+    }
+}
+
+- (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
+{
+    self.backgroundColor = inheritedBackgroundColor;
+}
+
+- (void)renderLayerTo:(CGContextRef)context
+{
+    // abstract
+}
+
+- (void)dealloc
+{
+    CGPathRelease(_clipPath);
+    if (definedClipPathId) {
+        [ClipPaths removeObjectForKey:definedClipPathId];
     }
 }
 

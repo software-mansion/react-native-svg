@@ -16,17 +16,17 @@ RCT_EXPORT_MODULE()
 
 - (RNSVGNode *)node
 {
-  return [RNSVGNode new];
+    return [RNSVGNode new];
 }
 
 - (UIView *)view
 {
-  return [self node];
+    return [self node];
 }
 
 - (RCTShadowView *)shadowView
 {
-  return nil;
+    return nil;
 }
 
 RCT_EXPORT_VIEW_PROPERTY(opacity, CGFloat)

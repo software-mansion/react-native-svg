@@ -570,6 +570,10 @@ npm install
 3. Pattern element
 4. Image element (Android)
 5. calculate bounding box only if necessary.
+6. miterLimit
+7. move percentage convert and context bounding box to renderable
+8. implement touchable elements ()
+9. implement Animated elements
 
 #### Thanks:
 

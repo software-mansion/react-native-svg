@@ -67,6 +67,12 @@ class Svg extends Component{
 
         return (
             <NativeSvgView
+                {...props}
+                opacity={null}
+                width={null}
+                height={null}
+                viewbox={null}
+                preserveAspectRatio={null}
                 ref={ele => this.root = ele}
                 style={[
                     props.style,
@@ -86,6 +92,6 @@ class Svg extends Component{
     }
 }
 
-const NativeSvgView = requireNativeComponent('RNSVGSvgView', Svg);
+const NativeSvgView = requireNativeComponent('RNSVGSvgView', null);
 
 export default Svg;

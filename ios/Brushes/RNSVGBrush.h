@@ -8,6 +8,7 @@
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
+#import "RNSVGPercentageConverter.h"
 
 @interface RNSVGBrush : NSObject
 {
@@ -28,8 +29,6 @@
 - (BOOL)applyFillColor:(CGContextRef)context;
 
 - (BOOL)applyStrokeColor:(CGContextRef)context;
-
-- (CGFloat)getActualProp:(int)percent relative:(CGFloat)relative offset:(CGFloat)offset;
 
 /**
  * paint fills the context with a brush. The context is assumed to
