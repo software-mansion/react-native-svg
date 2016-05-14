@@ -1,6 +1,6 @@
 import React, {
     Component
-} from 'react-native';
+} from 'react';
 
 import Svg, {
     Rect

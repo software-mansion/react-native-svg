@@ -3,9 +3,8 @@
  * https://github.com/facebook/react-native
  */
 'use strict';
-import React, {
+import {
     AppRegistry,
-    Component,
     StyleSheet,
     Text,
     View,
@@ -15,6 +14,8 @@ import React, {
     Animated,
     Easing
 } from 'react-native';
+
+import React, {Component} from 'react';
 
 import {
     Svg,
