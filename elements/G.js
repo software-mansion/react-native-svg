@@ -1,8 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
 import Defs from './Defs';
 import _ from 'lodash';
-import {GroupAttributes} from '../lib/attributes';
+import createNativeComponent from '../lib/createNativeComponent';
 import {numberProp, contextProps} from '../lib/props';
 
 import extractProps from '../lib/extract/extractProps';
@@ -47,22 +46,19 @@ class G extends Component{
                 />
             </Defs.Item>;
         } else {
-            return <NativeGroup
+            return <RNSVGGroup
                 {...extractProps(this.props, {transform: true})}
                 asClipPath={this.props.asClipPath}
             >
                 {this.props.children}
-            </NativeGroup>;
+            </RNSVGGroup>;
         }
     }
 }
 
-var NativeGroup = createReactNativeComponentClass({
-    validAttributes: GroupAttributes,
-    uiViewClassName: 'RNSVGGroup'
-});
+const RNSVGGroup = createNativeComponent('RNSVGGroup');
 
 export default G;
 export {
-    NativeGroup
+    RNSVGGroup as NativeGroup
 };

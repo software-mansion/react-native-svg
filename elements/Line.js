@@ -1,9 +1,8 @@
 import React, {PropTypes, Component} from 'react';
 import extractProps from '../lib/extract/extractProps';
-import {RenderableAttributes} from '../lib/attributes';
-import {requireNativeComponent} from 'react-native';
+import createNativeComponent from '../lib/createNativeComponent';
 import mergeContext from '../lib/mergeContext';
-import {lineProps, pathProps, fillProps, strokeProps} from '../lib/props';
+import {lineProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
 
 class Line extends Component{
     static displayName = 'Line';
@@ -16,7 +15,8 @@ class Line extends Component{
         ...fillProps,
         ...strokeProps,
         ...lineProps,
-        isInGroup: PropTypes.bool
+        isInGroup: PropTypes.bool,
+        svgId: numberProp
     };
 
     render() {
@@ -31,5 +31,6 @@ class Line extends Component{
     }
 }
 
-const RNSVGLine = requireNativeComponent('RNSVGLine', null);
+const RNSVGLine = createNativeComponent('RNSVGLine');
+
 export default Line;

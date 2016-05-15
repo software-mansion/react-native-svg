@@ -1,10 +1,9 @@
 import React, {PropTypes, Component} from 'react';
 import './Path'; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`
 import extractProps from '../lib/extract/extractProps';
-import {RenderableAttributes} from '../lib/attributes';
-import {requireNativeComponent} from 'react-native';
+import createNativeComponent from '../lib/createNativeComponent';
 import mergeContext from '../lib/mergeContext';
-import {rectProps, pathProps, fillProps, strokeProps} from '../lib/props';
+import {rectProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
 
 class Rect extends Component{
     static displayName = 'Rect';
@@ -17,7 +16,8 @@ class Rect extends Component{
         ...fillProps,
         ...strokeProps,
         ...rectProps,
-        isInGroup: PropTypes.bool
+        isInGroup: PropTypes.bool,
+        svgId: numberProp
     };
 
     render() {
@@ -39,6 +39,6 @@ class Rect extends Component{
     }
 }
 
-const RNSVGRect = requireNativeComponent('RNSVGRect', null);
+const RNSVGRect = createNativeComponent('RNSVGRect');
 
 export default Rect;

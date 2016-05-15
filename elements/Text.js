@@ -1,11 +1,11 @@
 import React, {Component, PropTypes} from 'react';
-import {requireNativeComponent} from 'react-native';
+import createNativeComponent from '../lib/createNativeComponent';
 import Defs from './Defs';
 import _ from 'lodash';
 import extractProps from '../lib/extract/extractProps';
 import extractText from '../lib/extract/extractText';
-import {TextAttributes} from '../lib/attributes';
 import {numberProp, textProps, fillProps, strokeProps, pathProps} from '../lib/props';
+
 
 class Text extends Component{
     static displayName = 'Text';
@@ -22,7 +22,8 @@ class Text extends Component{
         ...textProps,
         ...fillProps,
         ...strokeProps,
-        isInGroup: PropTypes.bool
+        isInGroup: PropTypes.bool,
+        svgId: numberProp
     };
 
     render() {
@@ -63,8 +64,6 @@ class Text extends Component{
     }
 }
 
-const RNSVGText = requireNativeComponent('RNSVGText', null, {
-    nativeOnly: TextAttributes
-});
+const RNSVGText = createNativeComponent('RNSVGText');
 
 export default Text;

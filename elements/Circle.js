@@ -1,9 +1,8 @@
 import React, {PropTypes, Component} from 'react';
 import extractProps from '../lib/extract/extractProps';
-import {RenderableAttributes} from '../lib/attributes';
-import {requireNativeComponent} from 'react-native';
+import createNativeComponent from '../lib/createNativeComponent';
 import mergeContext from '../lib/mergeContext';
-import {circleProps, pathProps, fillProps, strokeProps} from '../lib/props';
+import {circleProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
 import _ from 'lodash';
 
@@ -18,7 +17,8 @@ class Circle extends Component{
         ...fillProps,
         ...strokeProps,
         ...circleProps,
-        isInGroup: PropTypes.bool
+        isInGroup: PropTypes.bool,
+        svgId: numberProp
     };
 
     //constructor() {
@@ -47,8 +47,6 @@ class Circle extends Component{
     }
 }
 
-
-
-const RNSVGCircle = requireNativeComponent('RNSVGCircle', null);
+const RNSVGCircle = createNativeComponent('RNSVGCircle');
 
 export default Circle;

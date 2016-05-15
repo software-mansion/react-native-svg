@@ -1,9 +1,8 @@
 import React, {PropTypes, Component} from 'react';
 import extractProps from '../lib/extract/extractProps';
-import {RenderableAttributes} from '../lib/attributes';
-import {requireNativeComponent} from 'react-native';
+import createNativeComponent from '../lib/createNativeComponent';
 import mergeContext from '../lib/mergeContext';
-import {ellipseProps, pathProps, fillProps, strokeProps} from '../lib/props';
+import {ellipseProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
 
 
 class Ellipse extends Component{
@@ -17,11 +16,13 @@ class Ellipse extends Component{
         ...fillProps,
         ...strokeProps,
         ...ellipseProps,
-        isInGroup: PropTypes.bool
+        isInGroup: PropTypes.bool,
+        svgId: numberProp
     };
 
     render() {
         let props = mergeContext(this.props, this.context);
+        console.log(props);
         return <RNSVGEllipse
             {...extractProps(props)}
             cx={props.cx.toString()}
@@ -32,5 +33,6 @@ class Ellipse extends Component{
     }
 }
 
-const RNSVGEllipse = requireNativeComponent('RNSVGEllipse', null);
+const RNSVGEllipse = createNativeComponent('RNSVGEllipse');
+
 export default Ellipse;

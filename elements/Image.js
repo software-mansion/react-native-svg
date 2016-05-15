@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import {requireNativeComponent} from 'react-native';
 import extractProps from '../lib/extract/extractProps';
-import {ImageAttributes} from '../lib/attributes';
+import createNativeComponent from '../lib/createNativeComponent';
 import {numberProp} from '../lib/props';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
@@ -31,6 +30,6 @@ class Image extends Component{
     }
 }
 
-const RNSVGImage = requireNativeComponent('RNSVGImage', null);
+const RNSVGImage = createNativeComponent('RNSVGImage');
 
 export default Image;
