@@ -70,9 +70,4 @@
     return path;
 }
 
-- (CGFloat)getActualProp:(NSString *)name relative:(float)relative
-{
-    return 0;
-}
-
 @end

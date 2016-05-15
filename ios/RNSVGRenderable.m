@@ -91,16 +91,6 @@
     CGContextRestoreGState(context);
 }
 
-- (CGFloat)getActualProp:(NSDictionary *) prop relative:(float)relative
-{
-    CGFloat value = [[prop objectForKey:@"value"] floatValue];
-    if ([[prop objectForKey:@"percentage"] integerValue] == 1) {
-        return relative * value;
-    } else {
-        return value;
-    }
-}
-
 // hitTest delagate
 - (UIView *)hitTest:(CGPoint)point
           withEvent:(UIEvent *)event
