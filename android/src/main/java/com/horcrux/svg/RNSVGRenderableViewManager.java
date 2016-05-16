@@ -9,7 +9,6 @@
 
 package com.horcrux.svg;
 
-import android.content.Context;
 import android.view.View;
 
 //import com.facebook.react.uimanager.ReactStylesDiffMap;
@@ -27,8 +26,11 @@ public class RNSVGRenderableViewManager extends ViewManager<View, ReactShadowNod
     /* package */ static final String CLASS_GROUP = "RNSVGGroup";
     /* package */ static final String CLASS_SVG = "RNSVGPath";
     /* package */ static final String CLASS_TEXT = "RNSVGText";
-    /* package */ static final String CLASS_SHAPE = "RNSVGShape";
     /* package */ static final String CLASS_IMAGE = "RNSVGImage";
+    /* package */ static final String CLASS_CIRCLE = "RNSVGCircle";
+    /* package */ static final String CLASS_ELLIPSE = "RNSVGEllipse";
+    /* package */ static final String CLASS_LINE = "RNSVGLine";
+    /* package */ static final String CLASS_RECT = "RNSVGRect";
 
     private final String mClassName;
 
@@ -44,12 +46,24 @@ public class RNSVGRenderableViewManager extends ViewManager<View, ReactShadowNod
         return new RNSVGRenderableViewManager(CLASS_TEXT);
     }
 
-    public static RNSVGRenderableViewManager createRNSVGShapeViewManager() {
-        return new RNSVGRenderableViewManager(CLASS_SHAPE);
-    }
-
     public static RNSVGRenderableViewManager createRNSVGImageViewManager() {
         return new RNSVGRenderableViewManager(CLASS_IMAGE);
+    }
+
+    public static RNSVGRenderableViewManager createRNSVGCircleViewManager() {
+        return new RNSVGRenderableViewManager(CLASS_CIRCLE);
+    }
+
+    public static RNSVGRenderableViewManager createRNSVGEllipseViewManager() {
+        return new RNSVGRenderableViewManager(CLASS_ELLIPSE);
+    }
+
+    public static RNSVGRenderableViewManager createRNSVGLineViewManager() {
+        return new RNSVGRenderableViewManager(CLASS_LINE);
+    }
+
+    public static RNSVGRenderableViewManager createRNSVGRectViewManager() {
+        return new RNSVGRenderableViewManager(CLASS_RECT);
     }
 
     private RNSVGRenderableViewManager(String className) {
@@ -67,8 +81,14 @@ public class RNSVGRenderableViewManager extends ViewManager<View, ReactShadowNod
             return new RNSVGGroupShadowNode();
         } else if (mClassName == CLASS_SVG) {
             return new RNSVGPathShadowNode();
-        } else if (mClassName == CLASS_SHAPE) {
-            return new RNSVGShapeShadowNode();
+        } else if (mClassName == CLASS_CIRCLE) {
+            return new RNSVGCircleShadowNode();
+        } else if (mClassName == CLASS_ELLIPSE) {
+            return new RNSVGEllipseShadowNode();
+        } else if (mClassName == CLASS_LINE) {
+            return new RNSVGLineShadowNode();
+        } else if (mClassName == CLASS_RECT) {
+            return new RNSVGRectShadowNode();
         } else if (mClassName == CLASS_TEXT) {
             return new RNSVGTextShadowNode();
         } else if (mClassName == CLASS_IMAGE) {
@@ -84,8 +104,14 @@ public class RNSVGRenderableViewManager extends ViewManager<View, ReactShadowNod
             return RNSVGGroupShadowNode.class;
         } else if (mClassName == CLASS_SVG) {
             return RNSVGPathShadowNode.class;
-        } else if (mClassName == CLASS_SHAPE) {
-            return RNSVGShapeShadowNode.class;
+        } else if (mClassName == CLASS_CIRCLE) {
+            return RNSVGCircleShadowNode.class;
+        } else if (mClassName == CLASS_ELLIPSE) {
+            return RNSVGEllipseShadowNode.class;
+        } else if (mClassName == CLASS_LINE) {
+            return RNSVGLineShadowNode.class;
+        } else if (mClassName == CLASS_RECT) {
+            return RNSVGRectShadowNode.class;
         } else if (mClassName == CLASS_TEXT) {
             return RNSVGTextShadowNode.class;
         } else if (mClassName == CLASS_IMAGE) {

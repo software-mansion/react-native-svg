@@ -9,8 +9,6 @@
 
 package com.horcrux.svg;
 
-import android.app.Activity;
-
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
@@ -29,8 +27,11 @@ public class RNSvgPackage implements ReactPackage {
         return Arrays.<ViewManager>asList(
             RNSVGRenderableViewManager.createRNSVGGroupViewManager(),
             RNSVGRenderableViewManager.createRNSVGPathViewManager(),
+            RNSVGRenderableViewManager.createRNSVGCircleViewManager(),
+            RNSVGRenderableViewManager.createRNSVGEllipseViewManager(),
+            RNSVGRenderableViewManager.createRNSVGLineViewManager(),
+            RNSVGRenderableViewManager.createRNSVGRectViewManager(),
             RNSVGRenderableViewManager.createRNSVGTextViewManager(),
-            RNSVGRenderableViewManager.createRNSVGShapeViewManager(),
             RNSVGRenderableViewManager.createRNSVGImageViewManager(),
             new RNSVGSvgViewManager());
     }
@@ -44,6 +45,4 @@ public class RNSvgPackage implements ReactPackage {
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Collections.emptyList();
     }
-
-
 }

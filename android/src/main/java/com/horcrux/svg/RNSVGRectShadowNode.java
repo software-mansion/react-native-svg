@@ -1,0 +1,122 @@
+/**
+ * Copyright (c) 2015-present, Horcrux.
+ * All rights reserved.
+ *
+ * This source code is licensed under the MIT-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+package com.horcrux.svg;
+
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Rect;
+import android.graphics.RectF;
+
+import com.facebook.common.logging.FLog;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.common.ReactConstants;
+import com.facebook.react.uimanager.annotations.ReactProp;
+
+import javax.annotation.Nullable;
+
+/**
+ * Shadow node for virtual RNSVGPath view
+ */
+public class RNSVGRectShadowNode extends RNSVGPathShadowNode {
+
+    private String mX;
+
+    private String mY;
+
+    private String mWidth;
+
+    private String mHeight;
+
+    private String mRx;
+
+    private String mRy;
+
+
+    @ReactProp(name = "x")
+    public void setX(String x) {
+        mX = x;
+        markUpdated();
+    }
+
+    @ReactProp(name = "y")
+    public void setY(String y) {
+        mY = y;
+        markUpdated();
+    }
+
+    @ReactProp(name = "width")
+    public void setWidth(String width) {
+        mWidth = width;
+        markUpdated();
+    }
+
+
+    @ReactProp(name = "height")
+    public void setHeight(String height) {
+        mHeight = height;
+        markUpdated();
+    }
+
+
+    @ReactProp(name = "rx")
+    public void setRx(String rx) {
+        mRx = rx;
+        markUpdated();
+    }
+
+    @ReactProp(name = "ry")
+    public void setRy(String ry) {
+        mRy = ry;
+        markUpdated();
+    }
+
+    @Override
+    public void draw(Canvas canvas, Paint paint, float opacity) {
+        mPath = getPath(canvas, paint);
+        super.draw(canvas, paint, opacity);
+    }
+
+    @Override
+    protected Path getPath(Canvas canvas, Paint paint) {
+        Path path = new Path();
+
+        Rect box = canvas.getClipBounds();
+        float height = box.height();
+        float width = box.width();
+
+        float x = PropHelper.fromPercentageToFloat(mX, width, 0, mScale);
+        float y = PropHelper.fromPercentageToFloat(mY, height, 0, mScale);
+        float w = PropHelper.fromPercentageToFloat(mWidth, width, 0, mScale);
+        float h = PropHelper.fromPercentageToFloat(mHeight, height, 0, mScale);
+        float rx = PropHelper.fromPercentageToFloat(mRx, width, 0, mScale);
+        float ry = PropHelper.fromPercentageToFloat(mRy, height, 0, mScale);
+
+        if (rx != 0 || ry != 0) {
+            if (rx == 0) {
+                rx = ry;
+            } else if (ry == 0) {
+                ry = rx;
+            }
+
+            if (rx > w / 2) {
+                rx = w / 2;
+            }
+
+            if (ry > h / 2) {
+                ry = h / 2;
+            }
+            path.addRoundRect(new RectF(x, y, x + w, y + h), rx, ry, Path.Direction.CW);
+        } else {
+            path.addRect(x, y, x + w, y + h,  Path.Direction.CW);
+        }
+        return path;
+    }
+}

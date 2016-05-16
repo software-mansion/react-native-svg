@@ -78,7 +78,6 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
                     bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                 }
             } catch (Exception e) {
-                Log.e("URI", "" + e);
             }
 
             return bitmap;
@@ -132,7 +131,6 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
         canvas.saveLayer(0f, 0f, 0f, 0f, paint, Canvas.ALL_SAVE_FLAG);
-        Log.e("Count", "" + canvas.getSaveCount());
         loadBitmap(getResourceDrawableId(getThemedContext(), null), canvas, paint);
     }
 

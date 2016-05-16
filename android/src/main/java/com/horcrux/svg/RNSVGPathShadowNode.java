@@ -60,7 +60,6 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     protected Path mPath;
     private boolean mPathSet;
     private float[] mD;
-    protected RectF mContentBoundingBox;
     private Point mPaint;
 
     @ReactProp(name = "d")
@@ -158,7 +157,6 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
             mPath = getPath(null, null);
             RectF box = new RectF();
             mPath.computeBounds(box, true);
-            mContentBoundingBox = box;
         }
     }
 
@@ -256,7 +254,8 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                 (int) (colors.getDouble(3) * 255));
         } else if (colorType == 1 || colorType == 2) {
             if (box == null) {
-                box = mContentBoundingBox;
+                box = new RectF();
+                mPath.computeBounds(box, true);
             }
 
             int startColorsPosition = colorType == 1 ? 5 : 7;
@@ -293,8 +292,8 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                 float cx = PropHelper.fromPercentageToFloat(colors.getString(5), width, offsetX, mScale);
                 float cy = PropHelper.fromPercentageToFloat(colors.getString(6), height, offsetY, mScale) / (ry / rx);
                 // TODO: do not support focus point.
-                float fx = PropHelper.fromPercentageToFloat(colors.getString(1), width, offsetX, mScale);
-                float fy = PropHelper.fromPercentageToFloat(colors.getString(2), height, offsetY, mScale) / (ry / rx);
+                //float fx = PropHelper.fromPercentageToFloat(colors.getString(1), width, offsetX) * mScale;
+                //float fy = PropHelper.fromPercentageToFloat(colors.getString(2), height, offsetY) * mScale / (ry / rx);
                 Shader radialGradient = new RadialGradient(
                     cx,
                     cy,

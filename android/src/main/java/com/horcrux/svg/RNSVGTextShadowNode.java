@@ -20,7 +20,6 @@ import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -178,7 +177,7 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
         if (text == null) {
             return path;
         }
-        
+
         if (setupFillPaint(paint, 1.0f, getBox(paint, text))) {
             applyTextPropertiesToPaint(paint);
             paint.getTextPath(text, 0, text.length(), 0, -paint.ascent(), path);
