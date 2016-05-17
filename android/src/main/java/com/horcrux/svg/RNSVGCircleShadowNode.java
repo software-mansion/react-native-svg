@@ -70,13 +70,14 @@ public class RNSVGCircleShadowNode extends RNSVGPathShadowNode {
         float cx = PropHelper.fromPercentageToFloat(mCx, width, 0, mScale);
         float cy = PropHelper.fromPercentageToFloat(mCy, height, 0, mScale);
 
-        float r = Float.parseFloat(mR);
+        float r;
         if (PropHelper.isPercentage(mR)) {
+            r = PropHelper.fromPercentageToFloat(mR, 1, 0, 1);
             float powX = (float)Math.pow((width * r), 2);
             float powY = (float)Math.pow((height * r), 2);
             r = (float)Math.sqrt(powX + powY) / (float)Math.sqrt(2);
         } else {
-            r =  r * mScale;
+            r =  Float.parseFloat(mR) * mScale;
         }
 
         path.addCircle(cx, cy, r, Path.Direction.CW);
