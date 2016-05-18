@@ -67,6 +67,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     protected float mWidth = 0;
     protected float mHeight = 0;
+    protected boolean mTouchable;
 
     public RNSVGVirtualNode() {
         mScale = DisplayMetricsHolder.getWindowDisplayMetrics().density;
@@ -140,6 +141,12 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         } else {
             mMatrix = null;
         }
+        markUpdated();
+    }
+
+    @ReactProp(name = "touchable", defaultBoolean = false)
+    public void setTouchable(boolean touchable) {
+        mTouchable = touchable;
         markUpdated();
     }
 
@@ -279,6 +286,10 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     protected void defineClipPath(Path clipPath, String clipPathId) {
         CLIP_PATHS.put(clipPathId, clipPath);
         mDefinedClipPathId = clipPathId;
+    }
+
+    public boolean isTouchable() {
+        return mTouchable;
     }
 
     abstract protected Path getPath(Canvas canvas, Paint paint);

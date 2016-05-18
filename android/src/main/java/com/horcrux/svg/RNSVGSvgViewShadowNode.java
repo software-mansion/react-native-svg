@@ -23,6 +23,8 @@ import com.facebook.react.uimanager.UIViewOperationQueue;
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
  */
 public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
+    public boolean touchable = false;
+
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
         super.onCollectExtraUpdates(uiUpdater);
@@ -46,12 +48,20 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
             child.setDimensions(width, height);
             child.draw(canvas, paint, 1f);
             child.markUpdateSeen();
+
+            if (child.isTouchable() && !touchable) {
+                touchable = true;
+            }
         }
-        
+
         return bitmap;
     }
 
     public int hitTest(Point point, ViewGroup view) {
+        if (!touchable) {
+            return -1;
+        }
+
         int count = getChildCount();
         int viewTag = -1;
         for (int i = count - 1; i >= 0; i--) {

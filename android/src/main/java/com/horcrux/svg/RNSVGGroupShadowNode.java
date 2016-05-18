@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
@@ -37,12 +38,18 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             saveAndSetupCanvas(canvas);
             clip(canvas, paint);
+            RNSVGSvgViewShadowNode svg = getSvgView();
+
             if (mAsClipPath == null) {
                 for (int i = 0; i < getChildCount(); i++) {
                     RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
                     child.setDimensions(mWidth, mHeight);
                     child.draw(canvas, paint, opacity);
                     child.markUpdateSeen();
+
+                    if (child.isTouchable() && !svg.touchable) {
+                        svg.touchable = true;
+                    }
                 }
             } else {
                 defineClipPath(getPath(canvas, paint), mAsClipPath);
@@ -54,6 +61,7 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
+
         for (int i = 0; i < getChildCount(); i++) {
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
             path.addPath(child.getPath(canvas, paint));
@@ -78,5 +86,14 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
         }
 
         return viewTag;
+    }
+
+    private RNSVGSvgViewShadowNode getSvgView() {
+        ReactShadowNode parent = getParent();
+
+        while (!(parent instanceof RNSVGSvgViewShadowNode)) {
+            parent = parent.getParent();
+        }
+        return (RNSVGSvgViewShadowNode)parent;
     }
 }

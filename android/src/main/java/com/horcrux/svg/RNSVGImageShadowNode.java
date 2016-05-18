@@ -15,6 +15,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -72,10 +74,15 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
         // Once complete, see if ImageView is still around and set bitmap.
         @Override
         protected void onPostExecute(@Nullable Bitmap bitmap) {
-
             if (bitmap != null) {
+                float x = PropHelper.fromPercentageToFloat(mX, mWidth, 0, mScale);
+                float y = PropHelper.fromPercentageToFloat(mY, mHeight, 0, mScale);
+                float w = PropHelper.fromPercentageToFloat(mW, mWidth, 0, mScale);
+                float h = PropHelper.fromPercentageToFloat(mH, mHeight, 0, mScale);
+
+                clip(mCanvas, mPaint);
                 mCanvas.restoreToCount(1);
-                mCanvas.drawBitmap(bitmap, 0f, 0f, mPaint);
+                mCanvas.drawBitmap(bitmap, null, new Rect((int)x, (int)y, (int)(x + w), (int)(y + h)), null);
                 mCanvas.restoreToCount(2);
             }
         }
