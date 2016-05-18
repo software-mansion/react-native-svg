@@ -15,5 +15,5 @@
 @interface RNSVGGroup : RNSVGNode <RNSVGContainer>
 @property (nonatomic, strong) NSString *asClipPath; // Current group is a <ClipPath /> element and asClipPath is its id.
 
-
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 @end

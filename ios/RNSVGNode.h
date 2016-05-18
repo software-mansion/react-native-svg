@@ -39,6 +39,8 @@
  */
 - (void)clip:(CGContextRef)context;
 
+- (CGPathRef)getClipPath;
+
 /**
  * define <ClipPath></ClipPath> content as clipPath template.
  */
@@ -49,4 +51,6 @@
  */
 - (CGPathRef)getPath: (CGContextRef) context;
 
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 @end

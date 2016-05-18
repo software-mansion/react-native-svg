@@ -33,4 +33,18 @@
     return path;
 }
 
+// hitTest delagate
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
+        UIView *view = [node hitTest: point withEvent:event];
+        
+        if (view != NULL) {
+            return view;
+        }
+    }
+    return nil;
+}
+
 @end

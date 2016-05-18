@@ -35,10 +35,10 @@ static NSMutableDictionary *ClipPaths;
     _opacity = opacity;
 }
 
-- (void)setTransform:(CGAffineTransform)transform
+- (void)setTrans:(CGAffineTransform)trans
 {
     [self invalidate];
-    super.transform = transform;
+    super.transform = trans;
 }
 
 - (void)invalidate
@@ -107,7 +107,7 @@ static NSMutableDictionary *ClipPaths;
     return CGPathCreateMutable();
 }
 
-- (void)clip:(CGContextRef)context
+- (CGPathRef)getClipPath
 {
     CGPathRef clipPath = nil;
     
@@ -115,17 +115,25 @@ static NSMutableDictionary *ClipPaths;
         clipPath = self.clipPath;
     } else if (self.clipPathId) {
         clipPath = [[ClipPaths valueForKey:self.clipPathId] pointerValue];
-    } else {
-        return;
     }
     
-    CGContextAddPath(context, clipPath);
-    if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
-        CGContextEOClip(context);
-    } else {
-        CGContextClip(context);
+    return clipPath;
+}
+
+- (void)clip:(CGContextRef)context
+{
+    CGPathRef clipPath  = [self getClipPath];
+    
+    if (clipPath != NULL) {
+        CGContextAddPath(context, [self getClipPath]);
+        if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
+            CGContextEOClip(context);
+        } else {
+            CGContextClip(context);
+        }
     }
 }
+
 
 - (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
 {
@@ -135,6 +143,12 @@ static NSMutableDictionary *ClipPaths;
 - (void)renderLayerTo:(CGContextRef)context
 {
     // abstract
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+{
+    // abstract
+    return nil;
 }
 
 - (void)dealloc

@@ -92,11 +92,15 @@
 }
 
 // hitTest delagate
-- (UIView *)hitTest:(CGPoint)point
-          withEvent:(UIEvent *)event
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
+    CGPathRef clipPath  = [self getClipPath];
     if (self.nodeArea != NULL && CGPathContainsPoint(self.nodeArea, nil, point, NO)) {
-        return self;
+        if (clipPath == NULL) {
+            return self;
+        } else {
+            return CGPathContainsPoint(clipPath, nil, point, NO) ? self : nil;
+        }
     } else {
         return nil;
     }

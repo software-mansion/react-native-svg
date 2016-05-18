@@ -25,4 +25,6 @@
 @property (nonatomic, assign) CGFloat strokeDashoffset;
 @property (nonatomic, assign) CGMutablePathRef nodeArea;
 
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+
 @end

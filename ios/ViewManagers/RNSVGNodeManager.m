@@ -30,7 +30,7 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_EXPORT_VIEW_PROPERTY(opacity, CGFloat)
-RCT_EXPORT_VIEW_PROPERTY(transform, CGAffineTransform)
+RCT_EXPORT_VIEW_PROPERTY(trans, CGAffineTransform)
 RCT_EXPORT_VIEW_PROPERTY(clipPathId, NSString)
 
 @end
