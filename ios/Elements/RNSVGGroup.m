@@ -13,9 +13,15 @@
 - (void)renderLayerTo:(CGContextRef)context
 {
     if (self.asClipPath == NULL) {
+        RNSVGSvgView* svg = [self getSvgView];
         [self clip:context];
+        
         for (RNSVGNode *node in self.subviews) {
             [node renderTo:context];
+            
+            if (node.touchable && !svg.touchable) {
+                self.touchable = YES;
+            }
         }
     } else {
         [self defineClipPath:[self getPath:context] clipPathId:self.asClipPath];
@@ -29,7 +35,6 @@
         CGAffineTransform transform = node.transform;
         CGPathAddPath(path, &transform, [node getPath:context]);
     }
-    
     return path;
 }
 
@@ -39,12 +44,21 @@
 {
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
         UIView *view = [node hitTest: point withEvent:event];
-        
         if (view != NULL) {
             return view;
         }
     }
     return nil;
+}
+
+- (RNSVGSvgView *)getSvgView
+{
+    UIView *parent = self.superview;
+    while ([parent class] != [RNSVGSvgView class]) {
+        parent = parent.superview;
+    }
+    
+    return (RNSVGSvgView *)parent;
 }
 
 @end

@@ -23,6 +23,7 @@
 @property (nonatomic, assign) RNSVGCGFCRule clipRule;
 @property (nonatomic, assign) CGPathRef clipPath; // convert clipPath="M0,0 L0,10 L10,10z" into path
 @property (nonatomic, strong) NSString *clipPathId; // use clipPath="url(#clip)" as ClipPath
+@property (nonatomic, assign) BOOL touchable;
 
 - (void)invalidate;
 - (void)renderTo:(CGContextRef)context;
@@ -53,4 +54,5 @@
 
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+
 @end

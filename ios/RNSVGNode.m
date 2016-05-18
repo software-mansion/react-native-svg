@@ -7,7 +7,6 @@
  */
 
 #import "RNSVGNode.h"
-
 #import "RNSVGContainer.h"
 
 static NSMutableDictionary *ClipPaths;

@@ -22,7 +22,6 @@ class Ellipse extends Component{
 
     render() {
         let props = mergeContext(this.props, this.context);
-        console.log(props);
         return <RNSVGEllipse
             {...extractProps(props)}
             cx={props.cx.toString()}

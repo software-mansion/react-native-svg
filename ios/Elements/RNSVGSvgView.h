@@ -11,4 +11,7 @@
 #import "RNSVGContainer.h"
 
 @interface RNSVGSvgView : UIView <RNSVGContainer>
+
+@property (nonatomic, assign) BOOL touchable;
+
 @end
