@@ -263,10 +263,8 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     }
 
     protected void clip(Canvas canvas, Paint paint) {
-        Path clip = null;
-        if (mClipPath != null) {
-            clip = mClipPath;
-        } else if (mClipPathId != null) {
+        Path clip = mClipPath;
+        if (clip == null && mClipPathId != null) {
             clip = CLIP_PATHS.get(mClipPathId);
         }
 
@@ -293,6 +291,15 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     }
 
     abstract protected Path getPath(Canvas canvas, Paint paint);
+
+    protected RNSVGSvgViewShadowNode getSvgShadowNode() {
+        ReactShadowNode parent = getParent();
+
+        while (!(parent instanceof RNSVGSvgViewShadowNode)) {
+            parent = parent.getParent();
+        }
+        return (RNSVGSvgViewShadowNode)parent;
+    }
 
     protected void finalize() {
         if (mDefinedClipPathId != null) {

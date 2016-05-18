@@ -14,7 +14,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
@@ -40,16 +42,18 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
     private String mH;
     private ReadableMap mSrc;
     private Uri mUri;
+    private Bitmap mBitmap;
     private boolean mLocalImage;
     private class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
         private final Canvas mCanvas;
         private final Paint mPaint;
-        private int data = 0;
-
-        public BitmapWorkerTask(Canvas canvas, Paint paint) {
+        private RNSVGSvgViewShadowNode mSvgShadowNode;
+        public BitmapWorkerTask(Canvas canvas, Paint paint, RNSVGSvgViewShadowNode node) {
             // Use a WeakReference to ensure the ImageView can be garbage collected
             mCanvas = canvas;
             mPaint = paint;
+            mSvgShadowNode = node;
+            mSvgShadowNode.mBitmapCount++;
         }
 
         // Decode image in background.
@@ -75,15 +79,11 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
         @Override
         protected void onPostExecute(@Nullable Bitmap bitmap) {
             if (bitmap != null) {
-                float x = PropHelper.fromPercentageToFloat(mX, mWidth, 0, mScale);
-                float y = PropHelper.fromPercentageToFloat(mY, mHeight, 0, mScale);
-                float w = PropHelper.fromPercentageToFloat(mW, mWidth, 0, mScale);
-                float h = PropHelper.fromPercentageToFloat(mH, mHeight, 0, mScale);
-
-                clip(mCanvas, mPaint);
-                mCanvas.restoreToCount(1);
-                mCanvas.drawBitmap(bitmap, null, new Rect((int)x, (int)y, (int)(x + w), (int)(y + h)), null);
-                mCanvas.restoreToCount(2);
+                mBitmap = bitmap;
+                mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                mPaint.reset();
+                mSvgShadowNode.mBitmapCount--;
+                mSvgShadowNode.drawChildren(mCanvas, mPaint, mWidth, mHeight);
             }
         }
     }
@@ -141,12 +141,27 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
-        canvas.saveLayer(0f, 0f, 0f, 0f, paint, Canvas.ALL_SAVE_FLAG);
-        loadBitmap(getResourceDrawableId(getThemedContext(), null), canvas, paint);
+        RNSVGSvgViewShadowNode node = getSvgShadowNode();
+        if (mBitmap != null) {
+            // TODO: fixme
+            // clip(canvas, paint);
+            float x = PropHelper.fromPercentageToFloat(mX, mWidth, 0, mScale);
+            float y = PropHelper.fromPercentageToFloat(mY, mHeight, 0, mScale);
+            float w = PropHelper.fromPercentageToFloat(mW, mWidth, 0, mScale);
+            float h = PropHelper.fromPercentageToFloat(mH, mHeight, 0, mScale);
+            canvas.drawBitmap(mBitmap, null, new Rect((int) x, (int) y, (int) (x + w), (int)(y + h)), null);
+
+            if (node.mBitmapCount == 0) {
+                mBitmap.recycle();
+            }
+        } else {
+            loadBitmap(getResourceDrawableId(getThemedContext(), null), canvas, paint, node);
+        }
     }
 
-    public void loadBitmap(int resId, Canvas canvas, Paint paint) {
-        BitmapWorkerTask task = new BitmapWorkerTask(canvas, paint);
+    public void loadBitmap(int resId, Canvas canvas, Paint paint, RNSVGSvgViewShadowNode node) {
+
+        BitmapWorkerTask task = new BitmapWorkerTask(canvas, paint, node);
         task.execute(resId);
     }
 

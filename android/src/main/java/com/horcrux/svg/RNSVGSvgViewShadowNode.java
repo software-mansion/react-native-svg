@@ -11,8 +11,10 @@ package com.horcrux.svg;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.ViewGroup;
 
@@ -25,6 +27,8 @@ import com.facebook.react.uimanager.UIViewOperationQueue;
 public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
     public boolean touchable = false;
 
+    public int mBitmapCount = 0;
+
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
         super.onCollectExtraUpdates(uiUpdater);
@@ -32,8 +36,6 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
     }
 
     private Object drawOutput() {
-        // TODO(7255985): Use TextureView and pass Svg from the view to draw on it asynchronously
-        // instead of passing the bitmap (which is inefficient especially in terms of memory usage)
         float width = (int) getLayoutWidth();
         float height = (int) getLayoutHeight();
         Bitmap bitmap = Bitmap.createBitmap(
@@ -43,18 +45,22 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
 
+        drawChildren(canvas, paint, width, height);
+
+        return bitmap;
+    }
+
+    public void drawChildren(Canvas canvas, Paint paint, float width, float height) {
         for (int i = 0; i < getChildCount(); i++) {
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
             child.setDimensions(width, height);
             child.draw(canvas, paint, 1f);
-            child.markUpdateSeen();
+            //child.markUpdateSeen();
 
             if (child.isTouchable() && !touchable) {
                 touchable = true;
             }
         }
-
-        return bitmap;
     }
 
     public int hitTest(Point point, ViewGroup view) {
