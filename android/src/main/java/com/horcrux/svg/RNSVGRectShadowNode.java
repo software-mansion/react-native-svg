@@ -31,9 +31,9 @@ public class RNSVGRectShadowNode extends RNSVGPathShadowNode {
 
     private String mY;
 
-    private String mWidth;
+    private String mW;
 
-    private String mHeight;
+    private String mH;
 
     private String mRx;
 
@@ -54,14 +54,14 @@ public class RNSVGRectShadowNode extends RNSVGPathShadowNode {
 
     @ReactProp(name = "width")
     public void setWidth(String width) {
-        mWidth = width;
+        mW = width;
         markUpdated();
     }
 
 
     @ReactProp(name = "height")
     public void setHeight(String height) {
-        mHeight = height;
+        mH = height;
         markUpdated();
     }
 
@@ -88,16 +88,12 @@ public class RNSVGRectShadowNode extends RNSVGPathShadowNode {
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
 
-        Rect box = canvas.getClipBounds();
-        float height = box.height();
-        float width = box.width();
-
-        float x = PropHelper.fromPercentageToFloat(mX, width, 0, mScale);
-        float y = PropHelper.fromPercentageToFloat(mY, height, 0, mScale);
-        float w = PropHelper.fromPercentageToFloat(mWidth, width, 0, mScale);
-        float h = PropHelper.fromPercentageToFloat(mHeight, height, 0, mScale);
-        float rx = PropHelper.fromPercentageToFloat(mRx, width, 0, mScale);
-        float ry = PropHelper.fromPercentageToFloat(mRy, height, 0, mScale);
+        float x = PropHelper.fromPercentageToFloat(mX, mWidth, 0, mScale);
+        float y = PropHelper.fromPercentageToFloat(mY, mHeight, 0, mScale);
+        float w = PropHelper.fromPercentageToFloat(mW, mWidth, 0, mScale);
+        float h = PropHelper.fromPercentageToFloat(mH, mHeight, 0, mScale);
+        float rx = PropHelper.fromPercentageToFloat(mRx, mWidth, 0, mScale);
+        float ry = PropHelper.fromPercentageToFloat(mRy, mHeight, 0, mScale);
 
         if (rx != 0 || ry != 0) {
             if (rx == 0) {

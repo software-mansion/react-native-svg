@@ -11,14 +11,18 @@ package com.horcrux.svg;
 
 import javax.annotation.Nullable;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -84,24 +88,24 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
         RectF box = getBox(paint, text);
 
         if (setupStrokePaint(paint, opacity, box)) {
-            applyTextPropertiesToPaint(paint);
-            if (mPath == null) {
-                canvas.drawText(text, 0, -paint.ascent(), paint);
-            } else {
-                canvas.drawTextOnPath(text, mPath, 0, -paint.ascent(), paint);
-            }
+            drawText(canvas, paint, text);
         }
         if (setupFillPaint(paint, opacity, box)) {
-            applyTextPropertiesToPaint(paint);
-
-            if (mPath == null) {
-                canvas.drawText(text, 0, -paint.ascent(), paint);
-            } else {
-                canvas.drawTextOnPath(text, mPath, 0, -paint.ascent(), paint);
-            }
+            drawText(canvas, paint, text);
         }
+
         restoreCanvas(canvas);
         markUpdateSeen();
+    }
+
+    private void drawText(Canvas canvas, Paint paint, String text) {
+        applyTextPropertiesToPaint(paint);
+
+        if (mPath == null) {
+            canvas.drawText(text, 0, -paint.ascent(), paint);
+        } else {
+            canvas.drawTextOnPath(text, mPath, 0, -paint.ascent(), paint);
+        }
     }
 
     private String formatText() {
@@ -170,6 +174,8 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
         }
     }
 
+
+    @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
 
@@ -178,6 +184,7 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
             return path;
         }
 
+        // TODO: get path while TextPath is set.
         if (setupFillPaint(paint, 1.0f, getBox(paint, text))) {
             applyTextPropertiesToPaint(paint);
             paint.getTextPath(text, 0, text.length(), 0, -paint.ascent(), path);
@@ -185,5 +192,44 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
         }
 
         return path;
+    }
+
+    @Override
+    public int hitTest(Point point, View view) {
+        Bitmap bitmap = Bitmap.createBitmap(
+            (int) mWidth,
+            (int) mHeight,
+            Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        canvas.concat(mMatrix);
+
+        // todo clip detect
+
+        String text = formatText();
+        if (text == null) {
+            return -1;
+        }
+
+        Paint paint = new Paint();
+        clip(canvas, paint);
+        setHitTestFill(paint);
+        drawText(canvas, paint, text);
+
+        if (setHitTestStroke(paint)) {
+            drawText(canvas, paint, text);
+        }
+
+        canvas.setBitmap(bitmap);
+        try {
+            if (bitmap.getPixel(point.x, point.y) != 0) {
+                return view.getId();
+            }
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            bitmap.recycle();
+        }
+        return -1;
     }
 }

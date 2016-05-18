@@ -10,27 +10,27 @@
 package com.horcrux.svg;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.facebook.csslayout.CSSNode;
 import com.facebook.csslayout.MeasureOutput;
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.ViewGroupManager;
+
+import java.util.ArrayList;
 
 /**
  * ViewManager for RNSVGSvgView React views. Renders as a {@link RNSVGSvgView} and handles
  * invalidating the native view on shadow view updates happening in the underlying tree.
  */
-public class RNSVGSvgViewManager extends
-    BaseViewManager<RNSVGSvgView, RNSVGSvgViewShadowNode> {
+public class RNSVGSvgViewManager extends ViewGroupManager<RNSVGSvgView> {
 
     private static final String REACT_CLASS = "RNSVGSvgView";
 
-    private static final CSSNode.MeasureFunction MEASURE_FUNCTION = new CSSNode.MeasureFunction() {
-        @Override
-        public void measure(CSSNode node, float width, float height, MeasureOutput measureOutput) {
-            throw new IllegalStateException("SvgView should have explicit width and height set");
-        }
-    };
+    // TODO: use an ArrayList to connect RNSVGSvgViewShadowNode with RNSVGSvgView, not sure if there will be a race condition.
+    // TODO: find a better way to replace this
+    private ArrayList<RNSVGSvgViewShadowNode> SvgShadowNodes = new ArrayList<>();
 
     @Override
     public String getName() {
@@ -40,7 +40,7 @@ public class RNSVGSvgViewManager extends
     @Override
     public RNSVGSvgViewShadowNode createShadowNodeInstance() {
         RNSVGSvgViewShadowNode node = new RNSVGSvgViewShadowNode();
-        node.setMeasureFunction(MEASURE_FUNCTION);
+        SvgShadowNodes.add(node);
         return node;
     }
 
@@ -51,7 +51,9 @@ public class RNSVGSvgViewManager extends
 
     @Override
     protected RNSVGSvgView createViewInstance(ThemedReactContext reactContext) {
-        return new RNSVGSvgView(reactContext);
+        RNSVGSvgViewShadowNode shadowNode = SvgShadowNodes.get(0);
+        SvgShadowNodes.remove(0);
+        return new RNSVGSvgView(reactContext, shadowNode);
     }
 
     @Override

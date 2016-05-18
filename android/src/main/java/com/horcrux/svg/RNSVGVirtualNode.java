@@ -16,19 +16,21 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
+import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ReactShadowNode;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,18 +38,19 @@ import java.util.Map;
  * Base class for RNSVGView virtual nodes: {@link RNSVGGroupShadowNode}, {@link RNSVGPathShadowNode} and
  * indirectly for {@link RNSVGTextShadowNode}.
  */
-public abstract class RNSVGVirtualNode extends ReactShadowNode {
+public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     protected static Map<String, Path> CLIP_PATHS = new HashMap<>();
 
     protected static final float MIN_OPACITY_FOR_DRAW = 0.01f;
 
     private static final float[] sMatrixData = new float[9];
     private static final float[] sRawMatrix = new float[9];
-    private @Nullable String mDefinedClipPathId;
     protected float mOpacity = 1f;
     protected  @Nullable Matrix mMatrix = new Matrix();
+
+    private @Nullable String mDefinedClipPathId;
     protected @Nullable Path mClipPath;
-    private @Nullable String mClipPathId;
+    protected @Nullable String mClipPathId;
     private static final int PATH_TYPE_ARC = 4;
     private static final int PATH_TYPE_CLOSE = 1;
     private static final int PATH_TYPE_CURVETO = 3;
@@ -62,13 +65,11 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
     private boolean mClipRuleSet;
     private boolean mClipDataSet;
 
+    protected float mWidth = 0;
+    protected float mHeight = 0;
+
     public RNSVGVirtualNode() {
         mScale = DisplayMetricsHolder.getWindowDisplayMetrics().density;
-    }
-
-    @Override
-    public boolean isVirtual() {
-        return true;
     }
 
     public abstract void draw(Canvas canvas, Paint paint, float opacity);
@@ -127,8 +128,8 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "transform")
-    public void setTransform(@Nullable ReadableArray transformArray) {
+    @ReactProp(name = "trans")
+    public void setTrans(@Nullable ReadableArray transformArray) {
         if (transformArray != null) {
             int matrixSize = PropHelper.toFloatArray(transformArray, sMatrixData);
             if (matrixSize == 6) {
@@ -155,7 +156,6 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
                     throw new JSApplicationIllegalArgumentException(
                         "clipRule " + mClipRule + " unrecognized");
             }
-
             createPath(mClipData, mClipPath);
         }
     }
@@ -204,7 +204,6 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
         int i = 0;
 
         while (i < data.length) {
-
             int type = (int) data[i++];
             switch (type) {
                 case PATH_TYPE_MOVETO:
@@ -270,16 +269,23 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
         }
     }
 
+    public void setDimensions(float width, float height) {
+        mWidth = width;
+        mHeight = height;
+    }
+
+    abstract public int hitTest(Point point, View view);
+
     protected void defineClipPath(Path clipPath, String clipPathId) {
         CLIP_PATHS.put(clipPathId, clipPath);
         mDefinedClipPathId = clipPathId;
     }
+
+    abstract protected Path getPath(Canvas canvas, Paint paint);
 
     protected void finalize() {
         if (mDefinedClipPathId != null) {
             CLIP_PATHS.remove(mDefinedClipPathId);
         }
     }
-
-    abstract protected Path getPath(Canvas canvas, Paint paint);
 }

@@ -12,7 +12,10 @@ package com.horcrux.svg;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -29,12 +32,6 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
         markUpdated();
     }
 
-
-    @Override
-    public boolean isVirtual() {
-        return true;
-    }
-
     public void draw(Canvas canvas, Paint paint, float opacity) {
         opacity *= mOpacity;
         if (opacity > MIN_OPACITY_FOR_DRAW) {
@@ -43,6 +40,7 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
             if (mAsClipPath == null) {
                 for (int i = 0; i < getChildCount(); i++) {
                     RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
+                    child.setDimensions(mWidth, mHeight);
                     child.draw(canvas, paint, opacity);
                     child.markUpdateSeen();
                 }
@@ -61,5 +59,24 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
             path.addPath(child.getPath(canvas, paint));
         }
         return path;
+    }
+
+    @Override
+    public int hitTest(Point point, View view) {
+        // TODO: run hit test only if necessary
+        // TODO: ClipPath never run hitTest
+        if (mClipPathId == null) {
+            return -1;
+        }
+
+        int viewTag = -1;
+        for (int i = getChildCount() - 1; i >= 0; i--) {
+            viewTag = ((RNSVGVirtualNode) getChildAt(i)).hitTest(point, ((ViewGroup) view).getChildAt(i));
+            if (viewTag != -1) {
+                break;
+            }
+        }
+
+        return viewTag;
     }
 }

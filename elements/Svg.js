@@ -1,9 +1,15 @@
 import React, {Children, Component, cloneElement, PropTypes} from 'react';
-import {View, requireNativeComponent} from 'react-native';
+import {View, requireNativeComponent, StyleSheet} from 'react-native';
 import ViewBox from './ViewBox';
 
 // Svg - Root node of all Svg elements
 let id = 0;
+
+const styles = StyleSheet.create({
+    svg: {
+        backgroundColor: 'transparent'
+    }
+});
 
 class Svg extends Component{
     static displayName = 'Svg';
@@ -75,6 +81,7 @@ class Svg extends Component{
                 preserveAspectRatio={null}
                 ref={ele => this.root = ele}
                 style={[
+                    styles.svg,
                     props.style,
                     !isNaN(opacity) && {
                         opacity

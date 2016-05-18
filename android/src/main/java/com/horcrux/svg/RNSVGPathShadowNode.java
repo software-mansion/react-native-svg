@@ -11,6 +11,7 @@ package com.horcrux.svg;
 
 import javax.annotation.Nullable;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
@@ -26,6 +27,8 @@ import android.graphics.Region;
 import android.graphics.Shader;
 import android.graphics.Matrix;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
@@ -53,14 +56,14 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private @Nullable float[] mStrokeDasharray;
     private float mStrokeWidth = 1;
     private float mStrokeDashoffset = 0;
-    private int mStrokeLinecap = CAP_ROUND;
-    private int mStrokeLinejoin = JOIN_ROUND;
-    private int mFillRule = FILL_RULE_NONZERO;
+    private Paint.Cap mStrokeLinecap = Paint.Cap.ROUND;
+    private Paint.Join mStrokeLinejoin = Paint.Join.ROUND;
+    private Path.FillType mFillRule = Path.FillType.WINDING;
     private boolean mFillRuleSet;
     protected Path mPath;
     private boolean mPathSet;
     private float[] mD;
-    private Point mPaint;
+
 
     @ReactProp(name = "d")
     public void setPath(@Nullable ReadableArray shapePath) {
@@ -79,7 +82,17 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
     @ReactProp(name = "fillRule", defaultInt = FILL_RULE_NONZERO)
     public void setFillRule(int fillRule) {
-        mFillRule = fillRule;
+        switch (fillRule) {
+            case FILL_RULE_EVENODD:
+                mFillRule = Path.FillType.EVEN_ODD;
+                break;
+            case FILL_RULE_NONZERO:
+                break;
+            default:
+                throw new JSApplicationIllegalArgumentException(
+                    "fillRule " + mFillRule + " unrecognized");
+        }
+
         mFillRuleSet = true;
         setupPath();
         markUpdated();
@@ -117,13 +130,39 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
     @ReactProp(name = "strokeLinecap", defaultInt = CAP_ROUND)
     public void setStrokeLinecap(int strokeLinecap) {
-        mStrokeLinecap = strokeLinecap;
+        switch (strokeLinecap) {
+            case CAP_BUTT:
+                mStrokeLinecap = Paint.Cap.BUTT;
+                break;
+            case CAP_SQUARE:
+                mStrokeLinecap = Paint.Cap.SQUARE;
+                break;
+            case CAP_ROUND:
+                mStrokeLinecap = Paint.Cap.ROUND;
+                break;
+            default:
+                throw new JSApplicationIllegalArgumentException(
+                    "strokeLinecap " + mStrokeLinecap + " unrecognized");
+        }
         markUpdated();
     }
 
     @ReactProp(name = "strokeLinejoin", defaultInt = JOIN_ROUND)
     public void setStrokeLinejoin(int strokeLinejoin) {
-        mStrokeLinejoin = strokeLinejoin;
+        switch (strokeLinejoin) {
+            case JOIN_MITER:
+                mStrokeLinejoin = Paint.Join.MITER;
+                break;
+            case JOIN_BEVEL:
+                mStrokeLinejoin = Paint.Join.BEVEL;
+                break;
+            case JOIN_ROUND:
+                mStrokeLinejoin = Paint.Join.ROUND;
+                break;
+            default:
+                throw new JSApplicationIllegalArgumentException(
+                    "strokeLinejoin " + mStrokeLinejoin + " unrecognized");
+        }
         markUpdated();
     }
 
@@ -178,7 +217,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
 
     /**
-     * Sets up {@link #mPaint} according to the props set on a shadow view. Returns {@code true}
+     * Sets up paint according to the props set on a shadow view. Returns {@code true}
      * if the fill should be drawn, {@code false} if not.
      */
     protected boolean setupFillPaint(Paint paint, float opacity, @Nullable RectF box) {
@@ -193,7 +232,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     }
 
     /**
-     * Sets up {@link #mPaint} according to the props set on a shadow view. Returns {@code true}
+     * Sets up paint according to the props set on a shadow view. Returns {@code true}
      * if the stroke should be drawn, {@code false} if not.
      */
     protected boolean setupStrokePaint(Paint paint, float opacity, @Nullable  RectF box) {
@@ -203,35 +242,8 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         paint.reset();
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.STROKE);
-        switch (mStrokeLinecap) {
-            case CAP_BUTT:
-                paint.setStrokeCap(Paint.Cap.BUTT);
-                break;
-            case CAP_SQUARE:
-                paint.setStrokeCap(Paint.Cap.SQUARE);
-                break;
-            case CAP_ROUND:
-                paint.setStrokeCap(Paint.Cap.ROUND);
-                break;
-            default:
-                throw new JSApplicationIllegalArgumentException(
-                    "strokeLinecap " + mStrokeLinecap + " unrecognized");
-        }
-        switch (mStrokeLinejoin) {
-            case JOIN_MITER:
-                paint.setStrokeJoin(Paint.Join.MITER);
-                break;
-            case JOIN_BEVEL:
-                paint.setStrokeJoin(Paint.Join.BEVEL);
-                break;
-            case JOIN_ROUND:
-                paint.setStrokeJoin(Paint.Join.ROUND);
-                break;
-            default:
-                throw new JSApplicationIllegalArgumentException(
-                    "strokeLinejoin " + mStrokeLinejoin + " unrecognized");
-        }
-
+        paint.setStrokeCap(mStrokeLinecap);
+        paint.setStrokeJoin(mStrokeLinejoin);
         paint.setStrokeWidth(mStrokeWidth * mScale);
         setupPaint(paint, opacity, mStrokeColor, box);
 
@@ -312,21 +324,67 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
             // TODO: Support pattern.
             FLog.w(ReactConstants.TAG, "RNSVG: Color type " + colorType + " not supported!");
         }
+
     }
 
     protected Path getPath(@Nullable Canvas canvas, @Nullable Paint paint) {
         Path path = new Path();
-        switch (mFillRule) {
-            case FILL_RULE_EVENODD:
-                path.setFillType(Path.FillType.EVEN_ODD);
-                break;
-            case FILL_RULE_NONZERO:
-                break;
-            default:
-                throw new JSApplicationIllegalArgumentException(
-                    "fillRule " + mFillRule + " unrecognized");
-        }
+        path.setFillType(mFillRule);
         super.createPath(mD, path);
         return path;
+    }
+
+    @Override
+    public int hitTest(Point point, View view) {
+        Bitmap bitmap = Bitmap.createBitmap(
+            (int) mWidth,
+            (int) mHeight,
+            Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        canvas.concat(mMatrix);
+
+        Paint paint = new Paint();
+        clip(canvas, paint);
+        setHitTestFill(paint);
+        canvas.drawPath(mPath, paint);
+
+        if (setHitTestStroke(paint)) {
+            canvas.drawPath(mPath, paint);
+        }
+
+        canvas.setBitmap(bitmap);
+        try {
+            if (bitmap.getPixel(point.x, point.y) != 0) {
+                return view.getId();
+            }
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            bitmap.recycle();
+        }
+        return -1;
+    }
+
+    protected void setHitTestFill(Paint paint) {
+        paint.reset();
+        paint.setARGB(255, 0, 0, 0);
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        paint.setStyle(Paint.Style.FILL);
+    }
+
+    protected boolean setHitTestStroke(Paint paint) {
+        if (mStrokeWidth == 0) {
+            return false;
+        }
+
+        paint.reset();
+        paint.setARGB(255, 0, 0, 0);
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(mStrokeWidth * mScale);
+        paint.setStrokeCap(mStrokeLinecap);
+        paint.setStrokeJoin(mStrokeLinejoin);
+        return true;
     }
 }
