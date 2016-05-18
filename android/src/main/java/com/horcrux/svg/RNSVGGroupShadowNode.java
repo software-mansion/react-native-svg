@@ -65,7 +65,7 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
     public int hitTest(Point point, View view) {
         // TODO: run hit test only if necessary
         // TODO: ClipPath never run hitTest
-        if (mClipPathId == null) {
+        if (mAsClipPath != null) {
             return -1;
         }
 
