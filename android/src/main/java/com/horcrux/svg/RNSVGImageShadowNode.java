@@ -11,35 +11,18 @@ package com.horcrux.svg;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Shader;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.facebook.common.logging.FLog;
 import com.facebook.common.util.UriUtil;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
-
-
-import java.lang.ref.WeakReference;
 import java.net.URL;
 
 import javax.annotation.Nullable;
@@ -49,7 +32,10 @@ import javax.annotation.Nullable;
  */
 public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
 
-    private ReadableMap mLayout;
+    private String mX;
+    private String mY;
+    private String mW;
+    private String mH;
     private ReadableMap mSrc;
     private Uri mUri;
     private boolean mLocalImage;
@@ -78,7 +64,6 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
                     bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                 }
             } catch (Exception e) {
-                Log.e("URI", "" + e);
             }
 
             return bitmap;
@@ -96,9 +81,27 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
         }
     }
 
-    @ReactProp(name = "layout")
-    public void setLayout(@Nullable ReadableMap layout) {
-        mLayout = layout;
+    @ReactProp(name = "x")
+    public void setX(String x) {
+        mX = x;
+        markUpdated();
+    }
+
+    @ReactProp(name = "y")
+    public void setY(String y) {
+        mY = y;
+        markUpdated();
+    }
+
+    @ReactProp(name = "width")
+    public void setWidth(String width) {
+        mW = width;
+        markUpdated();
+    }
+
+    @ReactProp(name = "height")
+    public void seHeight(String height) {
+        mH = height;
         markUpdated();
     }
 
@@ -132,7 +135,6 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
         canvas.saveLayer(0f, 0f, 0f, 0f, paint, Canvas.ALL_SAVE_FLAG);
-        Log.e("Count", "" + canvas.getSaveCount());
         loadBitmap(getResourceDrawableId(getThemedContext(), null), canvas, paint);
     }
 
