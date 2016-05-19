@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import Defs from './Defs';
 import _ from 'lodash';
-import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import extractProps from '../lib/extract/extractProps';
 import extractText from '../lib/extract/extractText';
 import {TextAttributes} from '../lib/attributes';

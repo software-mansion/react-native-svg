@@ -4,7 +4,7 @@ import _ from 'lodash';
 import extractProps from '../lib/extract/extractProps';
 import {ShapeAttributes} from '../lib/attributes';
 import formatPercentageProps from '../lib/formatPercentageProps';
-import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import {circleProps, ellipseProps, lineProps, rectProps} from '../lib/props';
 
 /**
