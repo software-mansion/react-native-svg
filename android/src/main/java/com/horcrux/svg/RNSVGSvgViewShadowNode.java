@@ -13,12 +13,16 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.ViewGroup;
 
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
@@ -28,6 +32,8 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
     private int mCounter = 0;
 
     private boolean mTouchable = false;
+
+    private static final Map<String, Path> mDefinedClipPaths = new HashMap<>();
 
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
@@ -53,7 +59,6 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
             child.setupDimensions(canvas);
             child.draw(canvas, paint, 1f);
-            //child.markUpdateSeen();
 
             if (child.isTouchable() && !mTouchable) {
                 mTouchable = true;
@@ -82,6 +87,19 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         }
 
         return viewTag;
+    }
+
+    public void defineClipPath(Path clipPath, String clipPathId) {
+        mDefinedClipPaths.put(clipPathId, clipPath);
+    }
+
+    // TODO: remove unmounted clipPath
+    public void removeClipPath(String clipPathId) {
+        mDefinedClipPaths.remove(clipPathId);
+    }
+
+    public Path getDefinedClipPath(String clipPathId) {
+        return mDefinedClipPaths.get(clipPathId);
     }
 
     public void increaseCounter() {

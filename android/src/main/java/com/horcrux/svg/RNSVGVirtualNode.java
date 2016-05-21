@@ -39,7 +39,6 @@ import java.util.Map;
  * indirectly for {@link RNSVGTextShadowNode}.
  */
 public abstract class RNSVGVirtualNode extends LayoutShadowNode {
-    private static final Map<String, Path> CLIP_PATHS = new HashMap<>();
 
     protected static final float MIN_OPACITY_FOR_DRAW = 0.01f;
 
@@ -48,7 +47,6 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     protected float mOpacity = 1f;
     protected  @Nullable Matrix mMatrix = new Matrix();
 
-    private @Nullable String mDefinedClipPathId;
     protected @Nullable Path mClipPath;
     protected @Nullable String mClipPathId;
     private static final int PATH_TYPE_ARC = 4;
@@ -67,6 +65,8 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     protected boolean mTouchable;
     protected int mWidth;
     protected int mHeight;
+
+    private RNSVGSvgViewShadowNode mSvgShadowNode;
 
     public RNSVGVirtualNode() {
         mScale = DisplayMetricsHolder.getWindowDisplayMetrics().density;
@@ -267,7 +267,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     protected void clip(Canvas canvas, Paint paint) {
         Path clip = mClipPath;
         if (clip == null && mClipPathId != null) {
-            clip = CLIP_PATHS.get(mClipPathId);
+            clip = getSvgShadowNode().getDefinedClipPath(mClipPathId);
         }
 
         if (clip != null) {
@@ -278,11 +278,6 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     abstract public int hitTest(Point point, View view);
 
-    protected void defineClipPath(Path clipPath, String clipPathId) {
-        CLIP_PATHS.put(clipPathId, clipPath);
-        mDefinedClipPathId = clipPathId;
-    }
-
     public boolean isTouchable() {
         return mTouchable;
     }
@@ -290,6 +285,10 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     abstract protected Path getPath(Canvas canvas, Paint paint);
 
     protected RNSVGSvgViewShadowNode getSvgShadowNode() {
+        if (mSvgShadowNode != null) {
+            return mSvgShadowNode;
+        }
+
         ReactShadowNode parent = getParent();
 
         while (!(parent instanceof RNSVGSvgViewShadowNode)) {
@@ -299,18 +298,12 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
                 parent = parent.getParent();
             }
         }
-        return (RNSVGSvgViewShadowNode)parent;
+        mSvgShadowNode = (RNSVGSvgViewShadowNode) parent;
+        return mSvgShadowNode;
     }
 
     protected void setupDimensions(Canvas canvas) {
         mWidth = canvas.getWidth();
         mHeight = canvas.getHeight();
-    }
-
-
-    protected void finalize() {
-        if (mDefinedClipPathId != null) {
-            CLIP_PATHS.remove(mDefinedClipPathId);
-        }
     }
 }

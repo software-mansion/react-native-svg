@@ -29,7 +29,6 @@ class ClipPath extends Component{
 
         return <NativeGroup
             asClipPath={this.id}
-            opacity={1}
         >{this.props.children}</NativeGroup>;
     }
 }

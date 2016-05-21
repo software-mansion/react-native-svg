@@ -35,27 +35,28 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
 
     public void draw(Canvas canvas, Paint paint, float opacity) {
         opacity *= mOpacity;
-        if (opacity > MIN_OPACITY_FOR_DRAW) {
-            int count = saveAndSetupCanvas(canvas);
-            clip(canvas, paint);
-            RNSVGSvgViewShadowNode svg = getSvgShadowNode();
+        RNSVGSvgViewShadowNode svg = getSvgShadowNode();
 
-            if (mAsClipPath == null) {
+        if (mAsClipPath == null) {
+            if (opacity > MIN_OPACITY_FOR_DRAW) {
+                int count = saveAndSetupCanvas(canvas);
+                clip(canvas, paint);
+
                 for (int i = 0; i < getChildCount(); i++) {
                     RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
                     child.setupDimensions(canvas);
                     child.draw(canvas, paint, opacity);
-                    //child.markUpdateSeen();
 
                     if (child.isTouchable()) {
                         svg.enableTouchEvents();
                     }
                 }
-            } else {
-                defineClipPath(getPath(canvas, paint), mAsClipPath);
+
+                restoreCanvas(canvas, count);
             }
 
-            restoreCanvas(canvas, count);
+        } else {
+            svg.defineClipPath(getPath(canvas, paint), mAsClipPath);
         }
     }
 
