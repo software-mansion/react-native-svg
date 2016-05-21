@@ -9,6 +9,7 @@ import Svg, {
 class CircleExample extends Component{
     static title = 'Circle';
     render() {
+
         return <Svg
             height="100"
             width="140"

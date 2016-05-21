@@ -3,8 +3,6 @@ import extractProps from '../lib/extract/extractProps';
 import createNativeComponent from '../lib/createNativeComponent';
 import mergeContext from '../lib/mergeContext';
 import {circleProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
-import SvgTouchableMixin from '../lib/SvgTouchableMixin';
-import _ from 'lodash';
 
 class Circle extends Component{
     static displayName = 'Circle';
