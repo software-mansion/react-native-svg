@@ -30,5 +30,6 @@ RCT_EXPORT_VIEW_PROPERTY(clipPath, CGPath)
 RCT_EXPORT_VIEW_PROPERTY(clipRule, RNSVGCGFCRule)
 RCT_EXPORT_VIEW_PROPERTY(strokeDasharray, RNSVGCGFloatArray)
 RCT_EXPORT_VIEW_PROPERTY(strokeDashoffset, CGFloat)
+RCT_EXPORT_VIEW_PROPERTY(strokeMiterlimit, CGFloat)
 
 @end

@@ -12,6 +12,9 @@
 #import "RCTLog.h"
 
 @implementation RNSVGSvgView
+{
+    NSMutableDictionary *clipPaths;
+}
 
 - (void)invalidate
 {
@@ -39,6 +42,26 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     return self.touchable ? [super hitTest:point withEvent:event] : nil;
+}
+
+- (void)defineClipPath:(CGPathRef)clipPath clipPathId:(NSString *)clipPathId
+{
+    if (clipPaths == NULL) {
+        clipPaths = [[NSMutableDictionary alloc] init];
+    }
+    [clipPaths setValue:[NSValue valueWithPointer:clipPath] forKey:clipPathId];
+}
+
+- (void)removeClipPath:(NSString *)clipPathId
+{
+    if (clipPaths != NULL) {
+        [clipPaths removeObjectForKey:clipPathId];
+    }
+}
+
+- (CGPathRef)getDefinedClipPath:(NSString *)clipPathId
+{
+    return [[clipPaths valueForKey:clipPathId] pointerValue];
 }
 
 @end

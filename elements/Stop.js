@@ -1,9 +1,15 @@
 import {Component, PropTypes} from 'react';
+import {numberProp} from '../lib/props';
+
 class Stop extends Component{
     static displayName = 'Stop';
     static propTypes = {
         stopColor: PropTypes.string,
-        stopOpacity: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        stopOpacity: numberProp
+    };
+
+    static defaultProps = {
+        stopOpacity: 1
     };
 
     render() {

@@ -81,6 +81,10 @@
     // add hit area
     CGPathAddPath(self.nodeArea, nil, CGPathCreateWithRect(CGRectMake(x, y, w, h), nil));
     
+    if (self.opacity == 0) {
+        return;
+    }
+    
     [self clip:context];
     CGContextSaveGState(context);
     CGContextTranslateCTM(context, 0, h);

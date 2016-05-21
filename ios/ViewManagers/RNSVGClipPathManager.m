@@ -6,21 +6,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGGroupManager.h"
-#import "RNSVGCGFCRule.h"
-#import "RNSVGGroup.h"
+#import "RNSVGClipPathManager.h"
+#import "RNSVGClipPath.h"
 
-@implementation RNSVGGroupManager
+@implementation RNSVGClipPathManager
 
 RCT_EXPORT_MODULE()
 
 - (RNSVGNode *)node
 {
-  return [RNSVGGroup new];
+  return [RNSVGClipPath new];
 }
 
-
-RCT_EXPORT_VIEW_PROPERTY(clipPath, CGPath)
-RCT_EXPORT_VIEW_PROPERTY(clipRule, RNSVGCGFCRule)
+RCT_EXPORT_VIEW_PROPERTY(name, NSString)
 
 @end

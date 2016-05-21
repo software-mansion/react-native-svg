@@ -8,13 +8,9 @@
 
 #import "RNSVGNode.h"
 #import "RNSVGContainer.h"
-
-static NSMutableDictionary *ClipPaths;
+#import "RNSVGClipPath.h"
 
 @implementation RNSVGNode
-{
-    NSString *definedClipPathId;
-}
 
 - (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index
 {
@@ -30,6 +26,16 @@ static NSMutableDictionary *ClipPaths;
 
 - (void)setOpacity:(CGFloat)opacity
 {
+    if (opacity == _opacity) {
+        return;
+    }
+    
+    if (opacity < 0) {
+        opacity = 0;
+    } else if (opacity > 1) {
+        opacity = 1;
+    }
+    
     [self invalidate];
     _opacity = opacity;
 }
@@ -49,16 +55,8 @@ static NSMutableDictionary *ClipPaths;
 - (void)renderTo:(CGContextRef)context
 {
     float opacity = self.opacity;
-    
-    if (opacity <= 0) {
-        // Nothing to paint
-        return;
-    }
 
     BOOL transparent = opacity < 1;
-    if (!transparent) {
-        opacity = 1;
-    }
     
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
@@ -84,22 +82,6 @@ static NSMutableDictionary *ClipPaths;
     _clipPath = CGPathRetain(clipPath);
 }
 
-
--(void)defineClipPath:(CGPathRef)clipPath clipPathId:(NSString *)clipPathId
-{
-    if (clipPath == _clipPath) {
-        return;
-    }
-    [self invalidate];
-    CGPathRelease(_clipPath);
-    _clipPath = CGPathRetain(clipPath);
-    if (ClipPaths == NULL) {
-        ClipPaths = [[NSMutableDictionary alloc] init];
-    }
-    definedClipPathId = clipPathId;
-    [ClipPaths setValue:[NSValue valueWithPointer:_clipPath] forKey:clipPathId];
-}
-
 - (CGPathRef)getPath: (CGContextRef) context
 {
     // abstract
@@ -113,7 +95,7 @@ static NSMutableDictionary *ClipPaths;
     if (self.clipPath) {
         clipPath = self.clipPath;
     } else if (self.clipPathId) {
-        clipPath = [[ClipPaths valueForKey:self.clipPathId] pointerValue];
+        clipPath = [[self getSvgView] getDefinedClipPath:self.clipPathId];
     }
     
     return clipPath;
@@ -144,6 +126,16 @@ static NSMutableDictionary *ClipPaths;
     // abstract
 }
 
+- (RNSVGSvgView *)getSvgView
+{
+    UIView *parent = self.superview;
+    while ([parent class] != [RNSVGSvgView class]) {
+        parent = parent.superview;
+    }
+    
+    return (RNSVGSvgView *)parent;
+}
+
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 {
     // abstract
@@ -153,9 +145,6 @@ static NSMutableDictionary *ClipPaths;
 - (void)dealloc
 {
     CGPathRelease(_clipPath);
-    if (definedClipPathId) {
-        [ClipPaths removeObjectForKey:definedClipPathId];
-    }
 }
 
 @end

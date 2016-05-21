@@ -11,20 +11,16 @@
 @implementation RNSVGGroup
 
 - (void)renderLayerTo:(CGContextRef)context
-{
-    if (self.asClipPath == NULL) {
-        RNSVGSvgView* svg = [self getSvgView];
-        [self clip:context];
+{    
+    RNSVGSvgView* svg = [self getSvgView];
+    [self clip:context];
+    
+    for (RNSVGNode *node in self.subviews) {
+        [node renderTo:context];
         
-        for (RNSVGNode *node in self.subviews) {
-            [node renderTo:context];
-            
-            if (node.touchable && !svg.touchable) {
-                self.touchable = YES;
-            }
+        if (node.touchable && !svg.touchable) {
+            self.touchable = YES;
         }
-    } else {
-        [self defineClipPath:[self getPath:context] clipPathId:self.asClipPath];
     }
 }
 
@@ -51,14 +47,5 @@
     return nil;
 }
 
-- (RNSVGSvgView *)getSvgView
-{
-    UIView *parent = self.superview;
-    while ([parent class] != [RNSVGSvgView class]) {
-        parent = parent.superview;
-    }
-    
-    return (RNSVGSvgView *)parent;
-}
 
 @end

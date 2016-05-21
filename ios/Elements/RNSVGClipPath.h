@@ -7,13 +7,13 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-#import "RNSVGContainer.h"
-#import "RNSVGCGFCRule.h"
-#import "RNSVGSvgView.h"
-#import "RNSVGNode.h"
 
-@interface RNSVGGroup : RNSVGNode <RNSVGContainer>
+#import "RNSVGContainer.h"
+#import "RNSVGGroup.h"
+#import "RNSVGSvgView.h"
+
+@interface RNSVGClipPath : RNSVGGroup
+@property (nonatomic, strong) NSString *name;
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 

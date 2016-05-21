@@ -41,6 +41,7 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
     /* package */ static final String CLASS_ELLIPSE = "RNSVGEllipse";
     /* package */ static final String CLASS_LINE = "RNSVGLine";
     /* package */ static final String CLASS_RECT = "RNSVGRect";
+    /* package */ static final String CLASS_CLIP_PATH = "RNSVGClipPath";
 
     private final String mClassName;
 
@@ -76,6 +77,10 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
 
     public static RNSVGRenderableViewManager createRNSVGRectViewManager() {
         return new RNSVGRenderableViewManager(CLASS_RECT);
+    }
+
+    public static RNSVGRenderableViewManager createRNSVGClipPathViewManager() {
+        return new RNSVGRenderableViewManager(CLASS_CLIP_PATH);
     }
 
     private RNSVGRenderableViewManager(String className) {
@@ -114,6 +119,9 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
             case CLASS_IMAGE:
                 mVirtualNode = new RNSVGImageShadowNode();
                 break;
+            case CLASS_CLIP_PATH:
+                mVirtualNode = new RNSVGClipPathShadowNode();
+                break;
             default:
                 throw new IllegalStateException("Unexpected type " + mClassName);
         }
@@ -141,6 +149,8 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
                 return RNSVGTextShadowNode.class;
             case CLASS_IMAGE:
                 return RNSVGImageShadowNode.class;
+            case CLASS_CLIP_PATH:
+                return RNSVGClipPathShadowNode.class;
             default:
                 throw new IllegalStateException("Unexpected type " + mClassName);
         }

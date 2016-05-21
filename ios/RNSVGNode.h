@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "RNSVGCGFCRule.h"
+#import "RNSVGSvgView.h"
 
 /**
  * RNSVG nodes are implemented as empty UIViews but this is just an implementation detail to fit
@@ -43,16 +44,13 @@
 - (CGPathRef)getClipPath;
 
 /**
- * define <ClipPath></ClipPath> content as clipPath template.
- */
-- (void)defineClipPath:(CGPathRef)clipPath clipPathId:(NSString *)clipPathId;
-
-/**
  * getPath will return the path inside node as a ClipPath.
  */
 - (CGPathRef)getPath: (CGContextRef) context;
 
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+
+- (RNSVGSvgView *)getSvgView;
 
 @end

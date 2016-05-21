@@ -67,6 +67,12 @@
     _strokeDashoffset = strokeDashoffset;
 }
 
+- (void)setStrokeMiterlimit:(CGFloat)strokeMiterlimit
+{
+    [self invalidate];
+    _strokeMiterlimit = strokeMiterlimit;
+}
+
 - (void)dealloc
 {
     CGPathRelease(_nodeArea);

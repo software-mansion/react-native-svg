@@ -14,4 +14,13 @@
 
 @property (nonatomic, assign) BOOL touchable;
 
+/**
+ * define <ClipPath></ClipPath> content as clipPath template.
+ */
+- (void)defineClipPath:(CGPathRef)clipPath clipPathId:(NSString *)clipPathId;
+
+- (void)removeClipPath:(NSString *)clipPathId;
+
+- (CGPathRef)getDefinedClipPath:(NSString *)clipPathId;
+
 @end

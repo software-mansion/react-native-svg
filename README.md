@@ -568,12 +568,8 @@ npm install
 1. add native method for elements
 2. more Text features support
 3. Pattern element
-4. Image element (Android)
-5. calculate bounding box only if necessary.
-6. miterLimit
-7. move percentage convert and context bounding box to renderable
-8. implement touchable elements ()
-9. implement Animated elements
+4. implement touchable elements
+5. implement Animated elements
 
 #### Thanks:
 

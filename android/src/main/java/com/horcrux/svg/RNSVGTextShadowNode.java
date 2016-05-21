@@ -73,29 +73,27 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
     public void draw(Canvas canvas, Paint paint, float opacity) {
 
         opacity *= mOpacity;
-        if (opacity <= MIN_OPACITY_FOR_DRAW) {
-            return;
-        }
+        if (opacity > MIN_OPACITY_FOR_DRAW) {
+            String text = formatText();
+            if (text == null) {
+                return;
+            }
 
-        String text = formatText();
-        if (text == null) {
-            return;
-        }
+            // only set up the canvas if we have something to draw
+            int count = saveAndSetupCanvas(canvas);
+            clip(canvas, paint);
+            RectF box = getBox(paint, text);
 
-        // only set up the canvas if we have something to draw
-        int count = saveAndSetupCanvas(canvas);
-        clip(canvas, paint);
-        RectF box = getBox(paint, text);
+            if (setupStrokePaint(paint, opacity, box)) {
+                drawText(canvas, paint, text);
+            }
+            if (setupFillPaint(paint, opacity, box)) {
+                drawText(canvas, paint, text);
+            }
 
-        if (setupStrokePaint(paint, opacity, box)) {
-            drawText(canvas, paint, text);
+            restoreCanvas(canvas, count);
+            markUpdateSeen();
         }
-        if (setupFillPaint(paint, opacity, box)) {
-            drawText(canvas, paint, text);
-        }
-
-        restoreCanvas(canvas, count);
-        markUpdateSeen();
     }
 
     private void drawText(Canvas canvas, Paint paint, String text) {

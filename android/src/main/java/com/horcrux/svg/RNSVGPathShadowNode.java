@@ -51,10 +51,12 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
     private static final int FILL_RULE_EVENODD = 0;
     private static final int FILL_RULE_NONZERO = 1;
+
     private @Nullable ReadableArray mStrokeColor;
     private @Nullable ReadableArray mFillColor;
     private @Nullable float[] mStrokeDasharray;
     private float mStrokeWidth = 1;
+    private float mStrokeMiterlimit = 4;
     private float mStrokeDashoffset = 0;
     private Paint.Cap mStrokeLinecap = Paint.Cap.ROUND;
     private Paint.Join mStrokeLinejoin = Paint.Join.ROUND;
@@ -126,6 +128,12 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         markUpdated();
     }
 
+    @ReactProp(name = "strokeMiterlimit", defaultFloat = 4f)
+    public void setStrokeMiterlimit(float strokeMiterlimit) {
+        mStrokeMiterlimit = strokeMiterlimit;
+        markUpdated();
+    }
+
     @ReactProp(name = "strokeLinecap", defaultInt = CAP_ROUND)
     public void setStrokeLinecap(int strokeLinecap) {
         switch (strokeLinecap) {
@@ -185,8 +193,8 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
             }
 
             restoreCanvas(canvas, count);
+            markUpdateSeen();
         }
-        markUpdateSeen();
     }
 
     private void setupPath() {
@@ -243,6 +251,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeCap(mStrokeLinecap);
         paint.setStrokeJoin(mStrokeLinejoin);
+        paint.setStrokeMiter(mStrokeMiterlimit * mScale);
         paint.setStrokeWidth(mStrokeWidth * mScale);
         setupPaint(paint, opacity, mStrokeColor, box);
 

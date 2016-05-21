@@ -31,11 +31,21 @@
         return;
     }
     
-    CGPathDrawingMode mode = kCGPathStroke;
-    BOOL fillColor = YES;
-    
     // Add path to nodeArea
     CGPathAddPath(self.nodeArea, nil, _d);
+    
+    if (self.stroke) {
+        // Add stroke to nodeArea
+        CGPathRef strokePath = CGPathCreateCopyByStrokingPath(_d, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
+        CGPathAddPath(self.nodeArea, nil, strokePath);
+    }
+    
+    if (self.opacity == 0) {
+        return;
+    }
+    
+    CGPathDrawingMode mode = kCGPathStroke;
+    BOOL fillColor = YES;
     
     if (self.fill) {
         mode = self.fillRule == kRNSVGCGFCRuleEvenodd ? kCGPathEOFill : kCGPathFill;
@@ -55,10 +65,6 @@
         }
     }
     if (self.stroke) {
-        // Add stroke to nodeArea
-        CGPathRef strokePath = CGPathCreateCopyByStrokingPath(_d, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, 0);
-        CGPathAddPath(self.nodeArea, nil, strokePath);
-        
         CGContextSetLineWidth(context, self.strokeWidth);
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);

@@ -17,46 +17,30 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.react.uimanager.ReactShadowNode;
-import com.facebook.react.uimanager.annotations.ReactProp;
-
 /**
  * Shadow node for virtual RNSVGGroup view
  */
 public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
 
-    private String mAsClipPath = null;
-
-    @ReactProp(name = "asClipPath")
-    public void setAsClipPath(String asClipPath) {
-        mAsClipPath = asClipPath;
-        markUpdated();
-    }
-
     public void draw(Canvas canvas, Paint paint, float opacity) {
         opacity *= mOpacity;
         RNSVGSvgViewShadowNode svg = getSvgShadowNode();
 
-        if (mAsClipPath == null) {
-            if (opacity > MIN_OPACITY_FOR_DRAW) {
-                int count = saveAndSetupCanvas(canvas);
-                clip(canvas, paint);
+        if (opacity > MIN_OPACITY_FOR_DRAW) {
+            int count = saveAndSetupCanvas(canvas);
+            clip(canvas, paint);
 
-                for (int i = 0; i < getChildCount(); i++) {
-                    RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
-                    child.setupDimensions(canvas);
-                    child.draw(canvas, paint, opacity);
+            for (int i = 0; i < getChildCount(); i++) {
+                RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
+                child.setupDimensions(canvas);
+                child.draw(canvas, paint, opacity);
 
-                    if (child.isTouchable()) {
-                        svg.enableTouchEvents();
-                    }
+                if (child.isTouchable()) {
+                    svg.enableTouchEvents();
                 }
-
-                restoreCanvas(canvas, count);
             }
 
-        } else {
-            svg.defineClipPath(getPath(canvas, paint), mAsClipPath);
+            restoreCanvas(canvas, count);
         }
     }
 
@@ -74,11 +58,6 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
 
     @Override
     public int hitTest(Point point, View view) {
-
-        if (mAsClipPath != null) {
-            return -1;
-        }
-
         int viewTag = -1;
         for (int i = getChildCount() - 1; i >= 0; i--) {
             viewTag = ((RNSVGVirtualNode) getChildAt(i)).hitTest(point, ((ViewGroup) view).getChildAt(i));
