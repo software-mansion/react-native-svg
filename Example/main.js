@@ -1,8 +1,10 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * Sample React Native App for react-native-svg library
+ * https://github.com/magicismight/react-native-svg/tree/master/Example
  */
 'use strict';
+import React, {Component} from 'react';
+
 import {
     AppRegistry,
     StyleSheet,
@@ -14,8 +16,6 @@ import {
     Animated,
     Easing
 } from 'react-native';
-
-import React, {Component} from 'react';
 
 import {
     Svg,
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
 
 const names = ['Svg', 'Stroking', 'Path', 'Line', 'Rect', 'Polygon', 'Polyline', 'Circle', 'Ellipse', 'G', 'Text', 'Use', 'Symbol', 'Gradients', 'Clipping', 'Image'];
 
-class ArtSvgExample extends Component {
+class SvgExample extends Component {
     constructor() {
         super(...arguments);
         this.state = {
@@ -239,7 +239,7 @@ class ArtSvgExample extends Component {
                 </View>
             </Animated.Modal>
             <Text style={styles.welcome}>
-                SVG by ART!
+                SVG library for React Native
             </Text>
             <ScrollView
                 style={styles.content}
@@ -251,4 +251,4 @@ class ArtSvgExample extends Component {
     }
 }
 
-AppRegistry.registerComponent('ArtSvgExample', () => ArtSvgExample);
+AppRegistry.registerComponent('ArtSvgExample', () => SvgExample);

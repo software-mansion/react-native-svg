@@ -36,25 +36,26 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
     public void draw(Canvas canvas, Paint paint, float opacity) {
         opacity *= mOpacity;
         if (opacity > MIN_OPACITY_FOR_DRAW) {
-            saveAndSetupCanvas(canvas);
+            int count = saveAndSetupCanvas(canvas);
             clip(canvas, paint);
             RNSVGSvgViewShadowNode svg = getSvgShadowNode();
 
             if (mAsClipPath == null) {
                 for (int i = 0; i < getChildCount(); i++) {
                     RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
-                    child.setDimensions(mWidth, mHeight);
+                    child.setupDimensions(canvas);
                     child.draw(canvas, paint, opacity);
                     //child.markUpdateSeen();
 
-                    if (child.isTouchable() && !svg.touchable) {
-                        svg.touchable = true;
+                    if (child.isTouchable()) {
+                        svg.enableTouchEvents();
                     }
                 }
             } else {
                 defineClipPath(getPath(canvas, paint), mAsClipPath);
             }
-            restoreCanvas(canvas);
+
+            restoreCanvas(canvas, count);
         }
     }
 
@@ -64,6 +65,7 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
 
         for (int i = 0; i < getChildCount(); i++) {
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
+            child.setupDimensions(canvas);
             path.addPath(child.getPath(canvas, paint));
         }
         return path;
@@ -71,8 +73,7 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
 
     @Override
     public int hitTest(Point point, View view) {
-        // TODO: run hit test only if necessary
-        // TODO: ClipPath never run hitTest
+
         if (mAsClipPath != null) {
             return -1;
         }

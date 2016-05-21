@@ -14,7 +14,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.ViewGroup;
 
@@ -25,9 +24,10 @@ import com.facebook.react.uimanager.UIViewOperationQueue;
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
  */
 public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
-    public boolean touchable = false;
 
-    public int mBitmapCount = 0;
+    private int mCounter = 0;
+
+    private boolean mTouchable = false;
 
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
@@ -36,35 +36,39 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
     }
 
     private Object drawOutput() {
-        float width = (int) getLayoutWidth();
-        float height = (int) getLayoutHeight();
         Bitmap bitmap = Bitmap.createBitmap(
-            (int) width,
-            (int) height,
+            (int) getLayoutWidth(),
+            (int) getLayoutHeight(),
             Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
 
-        drawChildren(canvas, paint, width, height);
+        drawChildren(canvas, paint);
 
         return bitmap;
     }
 
-    public void drawChildren(Canvas canvas, Paint paint, float width, float height) {
+    public void drawChildren(Canvas canvas, Paint paint) {
         for (int i = 0; i < getChildCount(); i++) {
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
-            child.setDimensions(width, height);
+            child.setupDimensions(canvas);
             child.draw(canvas, paint, 1f);
             //child.markUpdateSeen();
 
-            if (child.isTouchable() && !touchable) {
-                touchable = true;
+            if (child.isTouchable() && !mTouchable) {
+                mTouchable = true;
             }
         }
     }
 
+    public void enableTouchEvents() {
+        if (!mTouchable) {
+            mTouchable = true;
+        }
+    }
+
     public int hitTest(Point point, ViewGroup view) {
-        if (!touchable) {
+        if (!mTouchable) {
             return -1;
         }
 
@@ -78,5 +82,17 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         }
 
         return viewTag;
+    }
+
+    public void increaseCounter() {
+        mCounter++;
+    }
+
+    public void decreaseCounter() {
+        mCounter--;
+    }
+
+    public boolean isCounterEmpty() {
+        return mCounter == 0;
     }
 }

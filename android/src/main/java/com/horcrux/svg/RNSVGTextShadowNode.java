@@ -83,7 +83,7 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
         }
 
         // only set up the canvas if we have something to draw
-        saveAndSetupCanvas(canvas);
+        int count = saveAndSetupCanvas(canvas);
         clip(canvas, paint);
         RectF box = getBox(paint, text);
 
@@ -94,7 +94,7 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
             drawText(canvas, paint, text);
         }
 
-        restoreCanvas(canvas);
+        restoreCanvas(canvas, count);
         markUpdateSeen();
     }
 
@@ -197,14 +197,14 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
     @Override
     public int hitTest(Point point, View view) {
         Bitmap bitmap = Bitmap.createBitmap(
-            (int) mWidth,
-            (int) mHeight,
+            mWidth,
+            mHeight,
             Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);
-        canvas.concat(mMatrix);
-
-        // todo clip detect
+        if (mMatrix != null) {
+            canvas.concat(mMatrix);
+        }
 
         String text = formatText();
         if (text == null) {

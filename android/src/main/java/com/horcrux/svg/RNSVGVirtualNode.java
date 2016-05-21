@@ -39,7 +39,7 @@ import java.util.Map;
  * indirectly for {@link RNSVGTextShadowNode}.
  */
 public abstract class RNSVGVirtualNode extends LayoutShadowNode {
-    protected static Map<String, Path> CLIP_PATHS = new HashMap<>();
+    private static final Map<String, Path> CLIP_PATHS = new HashMap<>();
 
     protected static final float MIN_OPACITY_FOR_DRAW = 0.01f;
 
@@ -64,10 +64,9 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     private int mClipRule;
     private boolean mClipRuleSet;
     private boolean mClipDataSet;
-
-    protected float mWidth = 0;
-    protected float mHeight = 0;
     protected boolean mTouchable;
+    protected int mWidth;
+    protected int mHeight;
 
     public RNSVGVirtualNode() {
         mScale = DisplayMetricsHolder.getWindowDisplayMetrics().density;
@@ -84,11 +83,14 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
      *
      * @param canvas the canvas to set up
      */
-    protected final void saveAndSetupCanvas(Canvas canvas) {
+    protected final int saveAndSetupCanvas(Canvas canvas) {
+        int count = canvas.getSaveCount();
         canvas.save();
         if (mMatrix != null) {
             canvas.concat(mMatrix);
         }
+
+        return count;
     }
 
     /**
@@ -97,8 +99,8 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
      *
      * @param canvas the canvas to restore
      */
-    protected void restoreCanvas(Canvas canvas) {
-        canvas.restore();
+    protected void restoreCanvas(Canvas canvas, int count) {
+        canvas.restoreToCount(count);
     }
 
     @ReactProp(name = "clipPath")
@@ -274,11 +276,6 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         }
     }
 
-    public void setDimensions(float width, float height) {
-        mWidth = width;
-        mHeight = height;
-    }
-
     abstract public int hitTest(Point point, View view);
 
     protected void defineClipPath(Path clipPath, String clipPathId) {
@@ -296,10 +293,20 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         ReactShadowNode parent = getParent();
 
         while (!(parent instanceof RNSVGSvgViewShadowNode)) {
-            parent = parent.getParent();
+            if (parent == null) {
+                return null;
+            } else {
+                parent = parent.getParent();
+            }
         }
         return (RNSVGSvgViewShadowNode)parent;
     }
+
+    protected void setupDimensions(Canvas canvas) {
+        mWidth = canvas.getWidth();
+        mHeight = canvas.getHeight();
+    }
+
 
     protected void finalize() {
         if (mDefinedClipPathId != null) {

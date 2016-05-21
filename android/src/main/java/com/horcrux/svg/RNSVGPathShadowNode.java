@@ -61,14 +61,12 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     private Path.FillType mFillRule = Path.FillType.WINDING;
     private boolean mFillRuleSet;
     protected Path mPath;
-    private boolean mPathSet;
     private float[] mD;
 
 
     @ReactProp(name = "d")
     public void setPath(@Nullable ReadableArray shapePath) {
         mD = PropHelper.toFloatArray(shapePath);
-        mPathSet = true;
         setupPath();
         markUpdated();
     }
@@ -169,8 +167,9 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
         opacity *= mOpacity;
+
         if (opacity > MIN_OPACITY_FOR_DRAW) {
-            saveAndSetupCanvas(canvas);
+            int count = saveAndSetupCanvas(canvas);
             if (mPath == null) {
                 throw new JSApplicationIllegalArgumentException(
                     "Paths should have a valid path (d) prop");
@@ -185,17 +184,17 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                 canvas.drawPath(mPath, paint);
             }
 
-            restoreCanvas(canvas);
+            restoreCanvas(canvas, count);
         }
         markUpdateSeen();
     }
 
     private void setupPath() {
         // init path after both fillRule and path have been set
-        if (mFillRuleSet && mPathSet) {
-            mPath = getPath(null, null);
-            RectF box = new RectF();
-            mPath.computeBounds(box, true);
+        if (mFillRuleSet && mD != null) {
+            mPath = new Path();
+            mPath.setFillType(mFillRule);
+            super.createPath(mD, mPath);
         }
     }
 
@@ -327,27 +326,29 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
     }
 
-    protected Path getPath(@Nullable Canvas canvas, @Nullable Paint paint) {
-        Path path = new Path();
-        path.setFillType(mFillRule);
-        super.createPath(mD, path);
-        return path;
+    @Override
+    protected Path getPath(Canvas canvas, Paint paint) {
+        return mPath;
     }
 
     @Override
     public int hitTest(Point point, View view) {
         Bitmap bitmap = Bitmap.createBitmap(
-            (int) mWidth,
-            (int) mHeight,
+            mWidth,
+            mHeight,
             Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);
-        canvas.concat(mMatrix);
+        if (mMatrix != null) {
+            canvas.concat(mMatrix);
+        }
 
         Paint paint = new Paint();
         clip(canvas, paint);
         setHitTestFill(paint);
         canvas.drawPath(mPath, paint);
+
+
 
         if (setHitTestStroke(paint)) {
             canvas.drawPath(mPath, paint);

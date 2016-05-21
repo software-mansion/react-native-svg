@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -24,8 +25,10 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.facebook.common.logging.FLog;
 import com.facebook.common.util.UriUtil;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import java.net.URL;
 
@@ -40,10 +43,11 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
     private String mY;
     private String mW;
     private String mH;
-    private ReadableMap mSrc;
     private Uri mUri;
     private Bitmap mBitmap;
     private boolean mLocalImage;
+    private boolean mLoading;
+
     private class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
         private final Canvas mCanvas;
         private final Paint mPaint;
@@ -53,7 +57,7 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
             mCanvas = canvas;
             mPaint = paint;
             mSvgShadowNode = node;
-            mSvgShadowNode.mBitmapCount++;
+            mSvgShadowNode.increaseCounter();
         }
 
         // Decode image in background.
@@ -70,6 +74,7 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
                     bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                 }
             } catch (Exception e) {
+                FLog.w(ReactConstants.TAG, "RNSVG: load Image load failed!:" + e.getMessage());
             }
 
             return bitmap;
@@ -80,10 +85,10 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
         protected void onPostExecute(@Nullable Bitmap bitmap) {
             if (bitmap != null) {
                 mBitmap = bitmap;
+                mSvgShadowNode.decreaseCounter();
                 mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                 mPaint.reset();
-                mSvgShadowNode.mBitmapCount--;
-                mSvgShadowNode.drawChildren(mCanvas, mPaint, mWidth, mHeight);
+                mSvgShadowNode.drawChildren(mCanvas, mPaint);
             }
         }
     }
@@ -114,8 +119,6 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
 
     @ReactProp(name = "src")
     public void setSrc(@Nullable ReadableMap src) {
-        mSrc = src;
-
         if (src != null) {
             String uri = src.getString("uri");
             if (uri != null) {
@@ -143,24 +146,28 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
     public void draw(Canvas canvas, Paint paint, float opacity) {
         RNSVGSvgViewShadowNode node = getSvgShadowNode();
         if (mBitmap != null) {
-            // TODO: fixme
-            // clip(canvas, paint);
+            int count = saveAndSetupCanvas(canvas);
+
+            clip(canvas, paint);
             float x = PropHelper.fromPercentageToFloat(mX, mWidth, 0, mScale);
             float y = PropHelper.fromPercentageToFloat(mY, mHeight, 0, mScale);
             float w = PropHelper.fromPercentageToFloat(mW, mWidth, 0, mScale);
             float h = PropHelper.fromPercentageToFloat(mH, mHeight, 0, mScale);
             canvas.drawBitmap(mBitmap, null, new Rect((int) x, (int) y, (int) (x + w), (int)(y + h)), null);
 
-            if (node.mBitmapCount == 0) {
+            restoreCanvas(canvas, count);
+            markUpdateSeen();
+
+            if (node.isCounterEmpty()) {
                 mBitmap.recycle();
             }
-        } else {
+        } else if (!mLoading) {
+            mLoading = true;
             loadBitmap(getResourceDrawableId(getThemedContext(), null), canvas, paint, node);
         }
     }
 
     public void loadBitmap(int resId, Canvas canvas, Paint paint, RNSVGSvgViewShadowNode node) {
-
         BitmapWorkerTask task = new BitmapWorkerTask(canvas, paint, node);
         task.execute(resId);
     }

@@ -49,6 +49,14 @@ class ClipPathAttr extends Component{
                 height="100"
                 fill="url(#grad)"
                 clipPath="M50,5L20,99L95,39L5,39L80,99z"
+                onStartShouldSetResponder={() => alert("1111111")}
+            />
+            <Rect
+                x="40%"
+                y="0"
+                width="20%"
+                height="20%"
+                fill="pink"
             />
         </Svg>;
     }
