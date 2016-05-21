@@ -8,12 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RNSVGContainer.h"
-#import "RNSVGNode.h"
-#import "RNSVGCGFCRule.h"
+#import "RNSVGRenderable.h"
+#import "RNSVGPath.h"
 
-@interface RNSVGGroup : RNSVGNode <RNSVGContainer>
-@property (nonatomic, strong) NSString *asClipPath; // Current group is a <ClipPath /> element and asClipPath is its id.
+@interface RNSVGCircle : RNSVGPath
 
+@property (nonatomic, strong) NSString* cx;
+@property (nonatomic, strong) NSString* cy;
+@property (nonatomic, strong) NSString* r;
 
 @end
+

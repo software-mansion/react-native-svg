@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {NativeGroup} from './G';
 import {set, remove} from '../lib/extract/extractClipping';
+import createNativeComponent from '../lib/createNativeComponent';
 
 class ClipPath extends Component{
     static displayName = 'ClipPath';
@@ -26,13 +27,13 @@ class ClipPath extends Component{
 
     render() {
         set(this.id, this.id);
-
-        return <NativeGroup
-            asClipPath={this.id}
-            opacity={1}
-        >{this.props.children}</NativeGroup>;
+        return <RNSVGClipPath
+            name={this.id}
+        >{this.props.children}</RNSVGClipPath>;
     }
 }
+
+const RNSVGClipPath = createNativeComponent('RNSVGClipPath');
 
 export default ClipPath;
 

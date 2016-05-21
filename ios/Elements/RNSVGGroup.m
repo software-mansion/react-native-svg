@@ -11,14 +11,16 @@
 @implementation RNSVGGroup
 
 - (void)renderLayerTo:(CGContextRef)context
-{
-    if (self.asClipPath == NULL) {
-        [self clip:context];
-        for (RNSVGNode *node in self.subviews) {
-            [node renderTo:context];
+{    
+    RNSVGSvgView* svg = [self getSvgView];
+    [self clip:context];
+    
+    for (RNSVGNode *node in self.subviews) {
+        [node renderTo:context];
+        
+        if (node.touchable && !svg.touchable) {
+            self.touchable = YES;
         }
-    } else {
-        [self defineClipPath:[self getPath:context] clipPathId:self.asClipPath];
     }
 }
 
@@ -29,8 +31,21 @@
         CGAffineTransform transform = node.transform;
         CGPathAddPath(path, &transform, [node getPath:context]);
     }
-    
     return path;
 }
+
+// hitTest delagate
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
+        UIView *view = [node hitTest: point withEvent:event];
+        if (view != NULL) {
+            return view;
+        }
+    }
+    return nil;
+}
+
 
 @end

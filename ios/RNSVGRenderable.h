@@ -21,9 +21,11 @@
 @property (nonatomic, assign) CGFloat strokeWidth;
 @property (nonatomic, assign) CGLineCap strokeLinecap;
 @property (nonatomic, assign) CGLineJoin strokeLinejoin;
+@property (nonatomic, assign) CGFloat strokeMiterlimit;
 @property (nonatomic, assign) RNSVGCGFloatArray strokeDasharray;
 @property (nonatomic, assign) CGFloat strokeDashoffset;
+@property (nonatomic, assign) CGMutablePathRef nodeArea;
 
-- (CGFloat)getActualProp:(NSDictionary *) prop relative:(float)relative;
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 
 @end

@@ -7,7 +7,6 @@
  */
 
 #import "RNSVGSvgViewManager.h"
-
 #import "RNSVGSvgView.h"
 
 @implementation RNSVGSvgViewManager

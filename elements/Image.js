@@ -1,10 +1,9 @@
 import React, {Component, PropTypes} from 'react';
 import extractProps from '../lib/extract/extractProps';
-import {ImageAttributes} from '../lib/attributes';
+import createNativeComponent from '../lib/createNativeComponent';
 import {numberProp} from '../lib/props';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
-import createReactNativeComponentClass from 'react-native/Libraries/ReactNative/createReactNativeComponentClass';
-import formatPercentageProps from '../lib/formatPercentageProps';
+
 
 class Image extends Component{
     static displayName = 'Image';
@@ -19,18 +18,18 @@ class Image extends Component{
 
 
     render() {
+        let {props} = this;
         return <RNSVGImage
-            {...extractProps(this.props, {transform: true})}
-            layout={formatPercentageProps(this.props, ['x', 'y', 'width', 'height'])}
-            src={resolveAssetSource(this.props.href)}
+            {...extractProps(props, {transform: true, responder: true})}
+            x={props.x.toString()}
+            y={props.y.toString()}
+            width={props.width.toString()}
+            height={props.height.toString()}
+            src={resolveAssetSource(props.href)}
         />;
     }
 }
 
-let RNSVGImage = createReactNativeComponentClass({
-    validAttributes: ImageAttributes,
-    uiViewClassName: 'RNSVGImage'
-});
-
+const RNSVGImage = createNativeComponent('RNSVGImage');
 
 export default Image;

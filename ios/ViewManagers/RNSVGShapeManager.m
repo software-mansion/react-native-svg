@@ -17,7 +17,7 @@ RCT_EXPORT_MODULE()
 
 - (RNSVGRenderable *)node
 {
-  return [RNSVGShape new];
+    return [RNSVGShape new];
 }
 
 RCT_EXPORT_VIEW_PROPERTY(shape, NSDictionary)

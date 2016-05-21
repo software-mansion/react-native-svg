@@ -12,54 +12,60 @@ package com.horcrux.svg;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.util.Log;
-
-import com.facebook.react.uimanager.annotations.ReactProp;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Shadow node for virtual RNSVGGroup view
  */
 public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
 
-    private String mAsClipPath = null;
-
-    @ReactProp(name = "asClipPath")
-    public void setAsClipPath(String asClipPath) {
-        mAsClipPath = asClipPath;
-        markUpdated();
-    }
-
-
-    @Override
-    public boolean isVirtual() {
-        return true;
-    }
-
     public void draw(Canvas canvas, Paint paint, float opacity) {
         opacity *= mOpacity;
+        RNSVGSvgViewShadowNode svg = getSvgShadowNode();
+
         if (opacity > MIN_OPACITY_FOR_DRAW) {
-            saveAndSetupCanvas(canvas);
+            int count = saveAndSetupCanvas(canvas);
             clip(canvas, paint);
-            if (mAsClipPath == null) {
-                for (int i = 0; i < getChildCount(); i++) {
-                    RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
-                    child.draw(canvas, paint, opacity);
-                    child.markUpdateSeen();
+
+            for (int i = 0; i < getChildCount(); i++) {
+                RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
+                child.setupDimensions(canvas);
+                child.draw(canvas, paint, opacity);
+
+                if (child.isTouchable()) {
+                    svg.enableTouchEvents();
                 }
-            } else {
-                defineClipPath(getPath(canvas, paint), mAsClipPath);
             }
-            restoreCanvas(canvas);
+
+            restoreCanvas(canvas, count);
         }
     }
 
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
+
         for (int i = 0; i < getChildCount(); i++) {
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
+            child.setupDimensions(canvas);
             path.addPath(child.getPath(canvas, paint));
         }
         return path;
+    }
+
+    @Override
+    public int hitTest(Point point, View view) {
+        int viewTag = -1;
+        for (int i = getChildCount() - 1; i >= 0; i--) {
+            viewTag = ((RNSVGVirtualNode) getChildAt(i)).hitTest(point, ((ViewGroup) view).getChildAt(i));
+            if (viewTag != -1) {
+                break;
+            }
+        }
+
+        return viewTag;
     }
 }

@@ -7,15 +7,10 @@
  */
 
 #import "RNSVGNode.h"
-
 #import "RNSVGContainer.h"
-
-static NSMutableDictionary *ClipPaths;
+#import "RNSVGClipPath.h"
 
 @implementation RNSVGNode
-{
-    NSString *definedClipPathId;
-}
 
 - (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index
 {
@@ -31,14 +26,24 @@ static NSMutableDictionary *ClipPaths;
 
 - (void)setOpacity:(CGFloat)opacity
 {
+    if (opacity == _opacity) {
+        return;
+    }
+    
+    if (opacity < 0) {
+        opacity = 0;
+    } else if (opacity > 1) {
+        opacity = 1;
+    }
+    
     [self invalidate];
     _opacity = opacity;
 }
 
-- (void)setTransform:(CGAffineTransform)transform
+- (void)setTrans:(CGAffineTransform)trans
 {
     [self invalidate];
-    super.transform = transform;
+    super.transform = trans;
 }
 
 - (void)invalidate
@@ -51,16 +56,8 @@ static NSMutableDictionary *ClipPaths;
 {
     float opacity = self.opacity;
 
-    if (opacity <= 0) {
-        // Nothing to paint
-        return;
-    }
-
     BOOL transparent = opacity < 1;
-    if (!transparent) {
-        opacity = 1;
-    }
-
+    
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.transform);
@@ -85,60 +82,69 @@ static NSMutableDictionary *ClipPaths;
     _clipPath = CGPathRetain(clipPath);
 }
 
-
--(void)defineClipPath:(CGPathRef)clipPath clipPathId:(NSString *)clipPathId
-{
-    if (clipPath == _clipPath) {
-        return;
-    }
-    [self invalidate];
-    CGPathRelease(_clipPath);
-    _clipPath = CGPathRetain(clipPath);
-    if (ClipPaths == NULL) {
-        ClipPaths = [[NSMutableDictionary alloc] init];
-    }
-    definedClipPathId = clipPathId;
-    [ClipPaths setValue:[NSValue valueWithPointer:_clipPath] forKey:clipPathId];
-}
-
-- (void)dealloc
-{
-    CGPathRelease(_clipPath);
-    if (definedClipPathId) {
-        [ClipPaths removeObjectForKey:definedClipPathId];
-    }
-}
-
-
-- (void)renderLayerTo:(CGContextRef)context
-{
-    // abstract
-}
-
 - (CGPathRef)getPath: (CGContextRef) context
 {
     // abstract
     return CGPathCreateMutable();
 }
 
-- (void)clip:(CGContextRef)context
+- (CGPathRef)getClipPath
 {
     CGPathRef clipPath = nil;
     
     if (self.clipPath) {
         clipPath = self.clipPath;
     } else if (self.clipPathId) {
-        clipPath = [[ClipPaths valueForKey:self.clipPathId] pointerValue];
-    } else {
-        return;
+        clipPath = [[self getSvgView] getDefinedClipPath:self.clipPathId];
     }
     
-    CGContextAddPath(context, clipPath);
-    if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
-        CGContextEOClip(context);
-    } else {
-        CGContextClip(context);
+    return clipPath;
+}
+
+- (void)clip:(CGContextRef)context
+{
+    CGPathRef clipPath  = [self getClipPath];
+    
+    if (clipPath != NULL) {
+        CGContextAddPath(context, [self getClipPath]);
+        if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
+            CGContextEOClip(context);
+        } else {
+            CGContextClip(context);
+        }
     }
+}
+
+
+- (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
+{
+    self.backgroundColor = inheritedBackgroundColor;
+}
+
+- (void)renderLayerTo:(CGContextRef)context
+{
+    // abstract
+}
+
+- (RNSVGSvgView *)getSvgView
+{
+    UIView *parent = self.superview;
+    while ([parent class] != [RNSVGSvgView class]) {
+        parent = parent.superview;
+    }
+    
+    return (RNSVGSvgView *)parent;
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+{
+    // abstract
+    return nil;
+}
+
+- (void)dealloc
+{
+    CGPathRelease(_clipPath);
 }
 
 @end

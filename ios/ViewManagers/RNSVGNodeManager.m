@@ -16,21 +16,22 @@ RCT_EXPORT_MODULE()
 
 - (RNSVGNode *)node
 {
-  return [RNSVGNode new];
+    return [RNSVGNode new];
 }
 
 - (UIView *)view
 {
-  return [self node];
+    return [self node];
 }
 
 - (RCTShadowView *)shadowView
 {
-  return nil;
+    return nil;
 }
 
 RCT_EXPORT_VIEW_PROPERTY(opacity, CGFloat)
-RCT_EXPORT_VIEW_PROPERTY(transform, CGAffineTransform)
+RCT_EXPORT_VIEW_PROPERTY(trans, CGAffineTransform)
 RCT_EXPORT_VIEW_PROPERTY(clipPathId, NSString)
+RCT_EXPORT_VIEW_PROPERTY(touchable, BOOL)
 
 @end

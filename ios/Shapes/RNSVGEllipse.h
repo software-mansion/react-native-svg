@@ -9,11 +9,11 @@
 #import <Foundation/Foundation.h>
 
 #import "RNSVGRenderable.h"
+#import "RNSVGPath.h"
 
-@interface RNSVGImage : RNSVGRenderable
-@property (nonatomic, strong) NSDictionary* layout;
-@property (nonatomic, assign) id src;
-
-- (CGFloat)getActualProp:(NSString *)name relative:(float)relative;
-
+@interface RNSVGEllipse : RNSVGPath
+@property (nonatomic, strong) NSString* cx;
+@property (nonatomic, strong) NSString* cy;
+@property (nonatomic, strong) NSString* rx;
+@property (nonatomic, strong) NSString* ry;
 @end

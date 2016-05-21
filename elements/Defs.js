@@ -12,6 +12,7 @@ class DefsItem extends Component{
     static propType = {
         visible: PropTypes.bool
     };
+
     static defaultProps = {
         visible: false
     };
@@ -75,16 +76,11 @@ class Defs extends Component{
     static Item = DefsItem;
     static Use = DefsUse;
 
-    shouldRender = false;
     getChildren = () => {
         return Children.map(this.props.children, child => {
             let {type} = child;
 
             if (type === LinearGradient || type === RadialGradient || type === ClipPath) {
-                if (type === ClipPath) {
-                    this.shouldRender = true;
-                }
-
                 return cloneElement(child, {
                     svgId: this.props.svgId
                 });
@@ -99,10 +95,7 @@ class Defs extends Component{
     };
 
     render() {
-        let children = this.getChildren();
-        return <NativeGroup opacity={this.shouldRender ? 1 : 0}>
-            {children}
-        </NativeGroup>;
+        return <NativeGroup>{this.getChildren()}</NativeGroup>;
     }
 }
 

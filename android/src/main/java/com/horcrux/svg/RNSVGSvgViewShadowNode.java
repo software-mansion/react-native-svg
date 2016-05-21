@@ -11,25 +11,29 @@ package com.horcrux.svg;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
+import android.util.Log;
+import android.view.ViewGroup;
 
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
  */
 public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
 
-    @Override
-    public boolean isVirtual() {
-        return false;
-    }
+    private int mCounter = 0;
 
-    @Override
-    public boolean isVirtualAnchor() {
-        return true;
-    }
+    private boolean mTouchable = false;
+
+    private static final Map<String, Path> mDefinedClipPaths = new HashMap<>();
 
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
@@ -38,19 +42,75 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
     }
 
     private Object drawOutput() {
-        // TODO(7255985): Use TextureView and pass Svg from the view to draw on it asynchronously
-        // instead of passing the bitmap (which is inefficient especially in terms of memory usage)
         Bitmap bitmap = Bitmap.createBitmap(
             (int) getLayoutWidth(),
             (int) getLayoutHeight(),
             Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
+
+        drawChildren(canvas, paint);
+
+        return bitmap;
+    }
+
+    public void drawChildren(Canvas canvas, Paint paint) {
         for (int i = 0; i < getChildCount(); i++) {
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
+            child.setupDimensions(canvas);
             child.draw(canvas, paint, 1f);
-            child.markUpdateSeen();
+
+            if (child.isTouchable() && !mTouchable) {
+                mTouchable = true;
+            }
         }
-        return bitmap;
+    }
+
+    public void enableTouchEvents() {
+        if (!mTouchable) {
+            mTouchable = true;
+        }
+    }
+
+    public int hitTest(Point point, ViewGroup view) {
+        if (!mTouchable) {
+            return -1;
+        }
+
+        int count = getChildCount();
+        int viewTag = -1;
+        for (int i = count - 1; i >= 0; i--) {
+            viewTag = ((RNSVGVirtualNode) getChildAt(i)).hitTest(point, view.getChildAt(i));
+            if (viewTag != -1) {
+                break;
+            }
+        }
+
+        return viewTag;
+    }
+
+    public void defineClipPath(Path clipPath, String clipPathId) {
+        mDefinedClipPaths.put(clipPathId, clipPath);
+    }
+
+    // TODO: remove unmounted clipPath
+    public void removeClipPath(String clipPathId) {
+        mDefinedClipPaths.remove(clipPathId);
+    }
+
+    public Path getDefinedClipPath(String clipPathId) {
+        return mDefinedClipPaths.get(clipPathId);
+    }
+
+    public void increaseCounter() {
+        mCounter++;
+    }
+
+    public void decreaseCounter() {
+        mCounter--;
+    }
+
+    public boolean isCounterEmpty() {
+        return mCounter == 0;
     }
 }

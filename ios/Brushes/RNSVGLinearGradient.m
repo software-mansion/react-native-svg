@@ -49,10 +49,11 @@
     float offsetX = (midX - width / 2);
     float offsetY = (midY - height / 2);
     
-    CGFloat x1 = [self getActualProp:0 relative:width offset:offsetX];
-    CGFloat y1 = [self getActualProp:1 relative:height offset:offsetY];
-    CGFloat x2 = [self getActualProp:2 relative:width offset:offsetX];
-    CGFloat y2 = [self getActualProp:3 relative:height offset:offsetY];
+    RNSVGPercentageConverter* convert = [[RNSVGPercentageConverter alloc] init];
+    CGFloat x1 = [convert stringToFloat:(NSString *)[_points objectAtIndex:0] relative:width offset:offsetX];
+    CGFloat y1 = [convert stringToFloat:(NSString *)[_points objectAtIndex:1] relative:height offset:offsetY];
+    CGFloat x2 = [convert stringToFloat:(NSString *)[_points objectAtIndex:2] relative:width offset:offsetX];
+    CGFloat y2 = [convert stringToFloat:(NSString *)[_points objectAtIndex:3] relative:height offset:offsetY];
     CGContextDrawLinearGradient(context, _gradient, CGPointMake(x1, y1), CGPointMake(x2, y2), extendOptions);
 }
 

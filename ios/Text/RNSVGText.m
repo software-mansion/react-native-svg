@@ -12,12 +12,6 @@
 
 @implementation RNSVGText
 
-- (void)setAlignment:(CTTextAlignment)alignment
-{
-    [self invalidate];
-    _alignment = alignment;
-}
-
 static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
 {
     if (frame.count) {
@@ -28,6 +22,12 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
         free(frame.lines);
         free(frame.widths);
     }
+}
+
+- (void)setAlignment:(CTTextAlignment)alignment
+{
+    [self invalidate];
+    _alignment = alignment;
 }
 
 - (void)setTextFrame:(RNSVGTextFrame)frame

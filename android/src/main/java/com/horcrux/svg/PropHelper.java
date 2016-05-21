@@ -56,20 +56,33 @@ import java.util.regex.Pattern;
         return value.size();
 
     }
+
+
     /**
      * Converts percentage string into actual based on a relative number
      *
      * @param percentage percentage string
      * @param relative relative number
+     * @param offset offset number
      * @return actual float based on relative number
      */
   /*package*/ static float fromPercentageToFloat(String percentage, float relative, float offset, float scale) {
-        Pattern pattern = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$");
-        Matcher matched = pattern.matcher(percentage);
+        Matcher matched =  Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$").matcher(percentage);
         if (matched.matches()) {
             return Float.valueOf(matched.group(1)) / 100 * relative + offset;
         } else {
             return Float.valueOf(percentage) * scale;
         }
+    }
+    /**
+     * Judge given string is a percentage-like string or not.
+     *
+     * @param string percentage string
+     * @return string is percentage-like or not.
+     */
+
+  /*package*/ static boolean isPercentage(String string) {
+        Pattern pattern = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$");
+        return pattern.matcher(string).matches();
     }
 }

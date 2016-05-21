@@ -31,6 +31,19 @@
         return;
     }
     
+    // Add path to nodeArea
+    CGPathAddPath(self.nodeArea, nil, _d);
+    
+    if (self.stroke) {
+        // Add stroke to nodeArea
+        CGPathRef strokePath = CGPathCreateCopyByStrokingPath(_d, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
+        CGPathAddPath(self.nodeArea, nil, strokePath);
+    }
+    
+    if (self.opacity == 0) {
+        return;
+    }
+    
     CGPathDrawingMode mode = kCGPathStroke;
     BOOL fillColor = YES;
     
@@ -68,7 +81,6 @@
         }
         
         if ([self.stroke applyStrokeColor:context]) {
-
             if (mode == kCGPathFill) {
                 mode = kCGPathFillStroke;
             } else if (mode == kCGPathEOFill) {

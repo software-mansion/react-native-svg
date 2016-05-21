@@ -16,19 +16,21 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
+import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ReactShadowNode;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,18 +38,17 @@ import java.util.Map;
  * Base class for RNSVGView virtual nodes: {@link RNSVGGroupShadowNode}, {@link RNSVGPathShadowNode} and
  * indirectly for {@link RNSVGTextShadowNode}.
  */
-public abstract class RNSVGVirtualNode extends ReactShadowNode {
-    protected static Map<String, Path> CLIP_PATHS = new HashMap<>();
+public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     protected static final float MIN_OPACITY_FOR_DRAW = 0.01f;
 
     private static final float[] sMatrixData = new float[9];
     private static final float[] sRawMatrix = new float[9];
-    private @Nullable String mDefinedClipPathId;
     protected float mOpacity = 1f;
     protected  @Nullable Matrix mMatrix = new Matrix();
+
     protected @Nullable Path mClipPath;
-    private @Nullable String mClipPathId;
+    protected @Nullable String mClipPathId;
     private static final int PATH_TYPE_ARC = 4;
     private static final int PATH_TYPE_CLOSE = 1;
     private static final int PATH_TYPE_CURVETO = 3;
@@ -61,14 +62,14 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
     private int mClipRule;
     private boolean mClipRuleSet;
     private boolean mClipDataSet;
+    protected boolean mTouchable;
+    protected int mWidth;
+    protected int mHeight;
+
+    private RNSVGSvgViewShadowNode mSvgShadowNode;
 
     public RNSVGVirtualNode() {
         mScale = DisplayMetricsHolder.getWindowDisplayMetrics().density;
-    }
-
-    @Override
-    public boolean isVirtual() {
-        return true;
     }
 
     public abstract void draw(Canvas canvas, Paint paint, float opacity);
@@ -82,11 +83,14 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
      *
      * @param canvas the canvas to set up
      */
-    protected final void saveAndSetupCanvas(Canvas canvas) {
+    protected final int saveAndSetupCanvas(Canvas canvas) {
+        int count = canvas.getSaveCount();
         canvas.save();
         if (mMatrix != null) {
             canvas.concat(mMatrix);
         }
+
+        return count;
     }
 
     /**
@@ -95,8 +99,8 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
      *
      * @param canvas the canvas to restore
      */
-    protected void restoreCanvas(Canvas canvas) {
-        canvas.restore();
+    protected void restoreCanvas(Canvas canvas, int count) {
+        canvas.restoreToCount(count);
     }
 
     @ReactProp(name = "clipPath")
@@ -127,8 +131,8 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "transform")
-    public void setTransform(@Nullable ReadableArray transformArray) {
+    @ReactProp(name = "trans")
+    public void setTrans(@Nullable ReadableArray transformArray) {
         if (transformArray != null) {
             int matrixSize = PropHelper.toFloatArray(transformArray, sMatrixData);
             if (matrixSize == 6) {
@@ -139,6 +143,12 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
         } else {
             mMatrix = null;
         }
+        markUpdated();
+    }
+
+    @ReactProp(name = "touchable", defaultBoolean = false)
+    public void setTouchable(boolean touchable) {
+        mTouchable = touchable;
         markUpdated();
     }
 
@@ -155,7 +165,6 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
                     throw new JSApplicationIllegalArgumentException(
                         "clipRule " + mClipRule + " unrecognized");
             }
-
             createPath(mClipData, mClipPath);
         }
     }
@@ -204,7 +213,6 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
         int i = 0;
 
         while (i < data.length) {
-
             int type = (int) data[i++];
             switch (type) {
                 case PATH_TYPE_MOVETO:
@@ -257,11 +265,9 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
     }
 
     protected void clip(Canvas canvas, Paint paint) {
-        Path clip = null;
-        if (mClipPath != null) {
-            clip = mClipPath;
-        } else if (mClipPathId != null) {
-            clip = CLIP_PATHS.get(mClipPathId);
+        Path clip = mClipPath;
+        if (clip == null && mClipPathId != null) {
+            clip = getSvgShadowNode().getDefinedClipPath(mClipPathId);
         }
 
         if (clip != null) {
@@ -270,16 +276,34 @@ public abstract class RNSVGVirtualNode extends ReactShadowNode {
         }
     }
 
-    protected void defineClipPath(Path clipPath, String clipPathId) {
-        CLIP_PATHS.put(clipPathId, clipPath);
-        mDefinedClipPathId = clipPathId;
-    }
+    abstract public int hitTest(Point point, View view);
 
-    protected void finalize() {
-        if (mDefinedClipPathId != null) {
-            CLIP_PATHS.remove(mDefinedClipPathId);
-        }
+    public boolean isTouchable() {
+        return mTouchable;
     }
 
     abstract protected Path getPath(Canvas canvas, Paint paint);
+
+    protected RNSVGSvgViewShadowNode getSvgShadowNode() {
+        if (mSvgShadowNode != null) {
+            return mSvgShadowNode;
+        }
+
+        ReactShadowNode parent = getParent();
+
+        while (!(parent instanceof RNSVGSvgViewShadowNode)) {
+            if (parent == null) {
+                return null;
+            } else {
+                parent = parent.getParent();
+            }
+        }
+        mSvgShadowNode = (RNSVGSvgViewShadowNode) parent;
+        return mSvgShadowNode;
+    }
+
+    protected void setupDimensions(Canvas canvas) {
+        mWidth = canvas.getWidth();
+        mHeight = canvas.getHeight();
+    }
 }

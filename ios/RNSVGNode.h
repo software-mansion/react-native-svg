@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "RNSVGCGFCRule.h"
+#import "RNSVGSvgView.h"
 
 /**
  * RNSVG nodes are implemented as empty UIViews but this is just an implementation detail to fit
@@ -23,6 +24,7 @@
 @property (nonatomic, assign) RNSVGCGFCRule clipRule;
 @property (nonatomic, assign) CGPathRef clipPath; // convert clipPath="M0,0 L0,10 L10,10z" into path
 @property (nonatomic, strong) NSString *clipPathId; // use clipPath="url(#clip)" as ClipPath
+@property (nonatomic, assign) BOOL touchable;
 
 - (void)invalidate;
 - (void)renderTo:(CGContextRef)context;
@@ -39,14 +41,16 @@
  */
 - (void)clip:(CGContextRef)context;
 
-/**
- * define <ClipPath></ClipPath> content as clipPath template.
- */
-- (void)defineClipPath:(CGPathRef)clipPath clipPathId:(NSString *)clipPathId;
+- (CGPathRef)getClipPath;
 
 /**
  * getPath will return the path inside node as a ClipPath.
  */
 - (CGPathRef)getPath: (CGContextRef) context;
+
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+
+- (RNSVGSvgView *)getSvgView;
 
 @end

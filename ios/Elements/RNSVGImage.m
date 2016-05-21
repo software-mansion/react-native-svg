@@ -25,13 +25,40 @@
     [self invalidate];
 }
 
-- (void)setLayout:(NSDictionary *)layout
+- (void)setX:(NSString *)x
 {
-    if (layout == _layout) {
+    if (x == _x) {
         return;
     }
-    _layout = layout;
     [self invalidate];
+    _x = x;
+}
+
+- (void)setY:(NSString *)y
+{
+    if (y == _y) {
+        return;
+    }
+    [self invalidate];
+    _y = y;
+}
+
+- (void)setWidth:(NSString *)width
+{
+    if (width == _width) {
+        return;
+    }
+    [self invalidate];
+    _width = width;
+}
+
+- (void)setHeight:(NSString *)height
+{
+    if (height == _height) {
+        return;
+    }
+    [self invalidate];
+    _height = height;
 }
 
 - (void)dealloc
@@ -45,23 +72,26 @@
     float height = CGRectGetHeight(box);
     float width = CGRectGetWidth(box);
     
-    CGFloat x = [self getActualProp:@"x" relative:width];
-    CGFloat y = [self getActualProp:@"y" relative:height];
-    CGFloat w = [self getActualProp:@"width" relative:width];
-    CGFloat h = [self getActualProp:@"height" relative:height];
+    RNSVGPercentageConverter* convert = [[RNSVGPercentageConverter alloc] init];
+    CGFloat x = [convert stringToFloat:self.x relative:width offset:0];
+    CGFloat y = [convert stringToFloat:self.y relative:height offset:0];
+    CGFloat w = [convert stringToFloat:self.width relative:width offset:0];
+    CGFloat h = [convert stringToFloat:self.height relative:height offset:0];
+    
+    // add hit area
+    CGPathAddPath(self.nodeArea, nil, CGPathCreateWithRect(CGRectMake(x, y, w, h), nil));
+    
+    if (self.opacity == 0) {
+        return;
+    }
+    
     [self clip:context];
     CGContextSaveGState(context);
     CGContextTranslateCTM(context, 0, h);
     CGContextScaleCTM(context, 1.0, -1.0);
     CGContextDrawImage(context, CGRectMake(x, -y, w, h), image);
     CGContextRestoreGState(context);
-}
-
-- (CGFloat)getActualProp:(NSString *)name relative:(float)relative
-{
-    NSDictionary *prop = [self.layout objectForKey:name];
-    return [super getActualProp:prop relative:relative];
-
+    
 }
 
 @end

@@ -14,6 +14,6 @@
 // wrapping these in an Obj-C class or some ARC hackery to get refcounting.
 
 typedef struct {
-  size_t count;
-  CGFloat *array;
+    size_t count;
+    CGFloat *array;
 } RNSVGCGFloatArray;

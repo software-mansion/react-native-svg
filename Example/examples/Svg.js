@@ -1,8 +1,11 @@
-import React, {
-    Component,
+import {
     StyleSheet,
     View
 } from 'react-native';
+
+import React, {
+    Component
+} from 'react';
 
 const styles = StyleSheet.create({
     container: {

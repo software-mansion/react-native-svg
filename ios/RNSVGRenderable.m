@@ -10,6 +10,15 @@
 
 @implementation RNSVGRenderable
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _nodeArea = CGPathCreateMutable();
+    }
+    return self;
+}
+
 - (void)setFill:(RNSVGBrush *)fill
 {
     [self invalidate];
@@ -58,8 +67,15 @@
     _strokeDashoffset = strokeDashoffset;
 }
 
+- (void)setStrokeMiterlimit:(CGFloat)strokeMiterlimit
+{
+    [self invalidate];
+    _strokeMiterlimit = strokeMiterlimit;
+}
+
 - (void)dealloc
 {
+    CGPathRelease(_nodeArea);
     if (_strokeDasharray.array) {
         free(_strokeDasharray.array);
     }
@@ -81,16 +97,20 @@
     CGContextRestoreGState(context);
 }
 
-- (CGFloat)getActualProp:(NSDictionary *) prop relative:(float)relative
+// hitTest delagate
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    CGFloat value = [[prop objectForKey:@"value"] floatValue];
-    if ([[prop objectForKey:@"percentage"] integerValue] == 1) {
-        return relative * value;
+    CGPathRef clipPath  = [self getClipPath];
+    if (self.nodeArea != NULL && CGPathContainsPoint(self.nodeArea, nil, point, NO)) {
+        if (clipPath == NULL) {
+            return self;
+        } else {
+            return CGPathContainsPoint(clipPath, nil, point, NO) ? self : nil;
+        }
     } else {
-        return value;
+        return nil;
     }
 }
-
 
 - (void)renderLayerTo:(CGContextRef)context
 {
