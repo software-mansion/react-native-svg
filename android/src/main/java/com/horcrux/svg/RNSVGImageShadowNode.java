@@ -9,29 +9,28 @@
 
 package com.horcrux.svg;
 
-import android.content.ContentResolver;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.provider.MediaStore;
 import android.util.Log;
 
+import com.facebook.common.executors.CallerThreadExecutor;
+import com.facebook.common.references.CloseableReference;
+import com.facebook.datasource.DataSource;
 import com.facebook.common.logging.FLog;
-import com.facebook.common.util.UriUtil;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipeline;
+import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
+import com.facebook.imagepipeline.image.CloseableImage;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import java.net.URL;
-
 import javax.annotation.Nullable;
 
 /**
@@ -45,53 +44,7 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
     private String mH;
     private Uri mUri;
     private Bitmap mBitmap;
-    private boolean mLocalImage;
     private boolean mLoading;
-
-    private class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
-        private final Canvas mCanvas;
-        private final Paint mPaint;
-        private RNSVGSvgViewShadowNode mSvgShadowNode;
-        public BitmapWorkerTask(Canvas canvas, Paint paint, RNSVGSvgViewShadowNode node) {
-            // Use a WeakReference to ensure the ImageView can be garbage collected
-            mCanvas = canvas;
-            mPaint = paint;
-            mSvgShadowNode = node;
-            mSvgShadowNode.increaseCounter();
-        }
-
-        // Decode image in background.
-        @Override
-        protected Bitmap doInBackground(Integer... params) {
-            Bitmap bitmap= null;
-
-            try {
-                if (mLocalImage) {
-                    ContentResolver resolver = getThemedContext().getContentResolver();
-                    bitmap = MediaStore.Images.Media.getBitmap(resolver, mUri);
-                } else {
-                    URL url = new URL(mUri.toString());
-                    bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                }
-            } catch (Exception e) {
-                FLog.w(ReactConstants.TAG, "RNSVG: load Image load failed!:" + e.getMessage());
-            }
-
-            return bitmap;
-        }
-
-        // Once complete, see if ImageView is still around and set bitmap.
-        @Override
-        protected void onPostExecute(@Nullable Bitmap bitmap) {
-            if (bitmap != null) {
-                mBitmap = bitmap;
-                mSvgShadowNode.decreaseCounter();
-                mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                mPaint.reset();
-                mSvgShadowNode.drawChildren(mCanvas, mPaint);
-            }
-        }
-    }
 
     @ReactProp(name = "x")
     public void setX(String x) {
@@ -120,26 +73,15 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
     @ReactProp(name = "src")
     public void setSrc(@Nullable ReadableMap src) {
         if (src != null) {
-            String uri = src.getString("uri");
-            if (uri != null) {
-                try {
-                    mUri = Uri.parse(uri);
-                    // Verify scheme is set, so that relative uri (used by static resources) are not handled.
-                    if (mUri.getScheme() == null) {
-                        mUri = null;
-                    }
-                } catch (Exception e) {
-                    // ignore malformed uri, then attempt to extract resource ID.
-                }
-                if (mUri == null) {
-                    mUri = getResourceDrawableUri(getThemedContext(), uri);
-                    mLocalImage = true;
-                } else {
-                    mLocalImage = false;
-                }
+            String uriString = src.getString("uri");
+
+            if (uriString == null || uriString.isEmpty()) {
+                //TODO: give warning about this
+                return;
             }
+
+            mUri = Uri.parse(uriString);
         }
-        markUpdated();
     }
 
     @Override
@@ -157,37 +99,36 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
 
             restoreCanvas(canvas, count);
             markUpdateSeen();
-
-            if (node.isCounterEmpty()) {
-                mBitmap.recycle();
-            }
         } else if (!mLoading) {
             mLoading = true;
-            loadBitmap(getResourceDrawableId(getThemedContext(), null), canvas, paint, node);
+            loadBitmap(canvas, paint, node);
         }
     }
 
-    public void loadBitmap(int resId, Canvas canvas, Paint paint, RNSVGSvgViewShadowNode node) {
-        BitmapWorkerTask task = new BitmapWorkerTask(canvas, paint, node);
-        task.execute(resId);
-    }
+    public void loadBitmap(final Canvas canvas, final Paint paint, final RNSVGSvgViewShadowNode node) {
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(mUri).build();
 
-    private static int getResourceDrawableId(Context context, @Nullable String name) {
-        if (name == null || name.isEmpty()) {
-            return 0;
-        }
-        return context.getResources().getIdentifier(
-            name.toLowerCase().replace("-", "_"),
-            "drawable",
-            context.getPackageName());
-    }
+        ImagePipeline imagePipeline = Fresco.getImagePipeline();
+        DataSource<CloseableReference<CloseableImage>>
+            dataSource = imagePipeline.fetchDecodedImage(request, getThemedContext());
+        dataSource.subscribe(new BaseBitmapDataSubscriber() {
+                                 @Override
+                                 public void onNewResultImpl(@Nullable Bitmap bitmap) {
+                                     if (bitmap != null) {
+                                         mBitmap = bitmap;
+                                         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                                         paint.reset();
+                                         node.drawChildren(canvas, paint);
+                                     }
+                                 }
 
-
-    private static Uri getResourceDrawableUri(Context context, @Nullable String name) {
-        int resId = getResourceDrawableId(context, name);
-        return resId > 0 ? new Uri.Builder()
-            .scheme(UriUtil.LOCAL_RESOURCE_SCHEME)
-            .path(String.valueOf(resId))
-            .build() : Uri.EMPTY;
+                                 @Override
+                                 public void onFailureImpl(DataSource dataSource) {
+                                     // No cleanup required here.
+                                     // TODO: more details about this failure
+                                     FLog.w(ReactConstants.TAG, "RNSVG: load Image load failed!:");
+                                 }
+                             },
+            CallerThreadExecutor.getInstance());
     }
 }

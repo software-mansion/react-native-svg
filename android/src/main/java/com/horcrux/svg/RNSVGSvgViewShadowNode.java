@@ -29,8 +29,6 @@ import java.util.Map;
  */
 public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
 
-    private int mCounter = 0;
-
     private boolean mTouchable = false;
 
     private static final Map<String, Path> mDefinedClipPaths = new HashMap<>();
@@ -100,17 +98,5 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
 
     public Path getDefinedClipPath(String clipPathId) {
         return mDefinedClipPaths.get(clipPathId);
-    }
-
-    public void increaseCounter() {
-        mCounter++;
-    }
-
-    public void decreaseCounter() {
-        mCounter--;
-    }
-
-    public boolean isCounterEmpty() {
-        return mCounter == 0;
     }
 }

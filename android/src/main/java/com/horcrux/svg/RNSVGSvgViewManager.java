@@ -12,9 +12,6 @@ package com.horcrux.svg;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.facebook.csslayout.CSSNode;
-import com.facebook.csslayout.MeasureOutput;
-import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 
