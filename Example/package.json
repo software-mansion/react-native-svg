@@ -6,9 +6,9 @@
         "start": "react-native start"
     },
     "dependencies": {
-        "react-native": "^0.25.1",
-        "react-native-svg": "../",
-        "react-native-root-modal": "^1.0.3",
-        "react": "^0.14.5"
+        "react": "^15.1.0",
+        "react-native": "^0.27.0",
+        "react-native-root-modal": "^1.0.4",
+        "react-native-svg": "../"
     }
 }
