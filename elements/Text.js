@@ -1,13 +1,13 @@
-import React, {Component, PropTypes} from 'react';
+import React, {PropTypes} from 'react';
 import createNativeComponent from '../lib/createNativeComponent';
 import Defs from './Defs';
-import _ from 'lodash';
 import extractProps from '../lib/extract/extractProps';
 import extractText from '../lib/extract/extractText';
+import mergeContext from '../lib/mergeContext';
 import {numberProp, textProps, fillProps, strokeProps, pathProps} from '../lib/props';
+import Shape from './Shape';
 
-
-class Text extends Component{
+class Text extends Shape {
     static displayName = 'Text';
     static propTypes = {
         dx: numberProp,
@@ -27,13 +27,7 @@ class Text extends Component{
     };
 
     render() {
-        let {props} = this;
-
-        if (this.context.isInGroup) {
-            props = _.defaults(this.context, props, {
-                isInGroup: null
-            });
-        }
+        let props = mergeContext(this.props, this.context);
 
         let x = 0;
         if (props.x) {

@@ -1,11 +1,11 @@
-import React, {PropTypes, Component} from 'react';
-import extractProps from '../lib/extract/extractProps';
+import React, {PropTypes} from 'react';
 import createNativeComponent from '../lib/createNativeComponent';
 import mergeContext from '../lib/mergeContext';
+import Shape from './Shape';
 import {ellipseProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
 
 
-class Ellipse extends Component{
+class Ellipse extends Shape{
     static displayName = 'Ellipse';
     static propTypes = {
         ...pathProps,
@@ -23,7 +23,7 @@ class Ellipse extends Component{
     render() {
         let props = mergeContext(this.props, this.context);
         return <RNSVGEllipse
-            {...extractProps(props)}
+            {...this.extractProps(props)}
             cx={props.cx.toString()}
             cy={props.cy.toString()}
             rx={props.rx.toString()}

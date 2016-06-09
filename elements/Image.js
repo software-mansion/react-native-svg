@@ -1,11 +1,11 @@
-import React, {Component, PropTypes} from 'react';
-import extractProps from '../lib/extract/extractProps';
+import React, {PropTypes} from 'react';
 import createNativeComponent from '../lib/createNativeComponent';
 import {numberProp} from '../lib/props';
+import Shape from './Shape';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 
-class Image extends Component{
+class Image extends Shape {
     static displayName = 'Image';
     static propTypes = {
         x: numberProp,
@@ -20,7 +20,7 @@ class Image extends Component{
     render() {
         let {props} = this;
         return <RNSVGImage
-            {...extractProps(props, {transform: true, responder: true})}
+            {...this.extractProps(props, {transform: true, responder: true})}
             x={props.x.toString()}
             y={props.y.toString()}
             width={props.width.toString()}

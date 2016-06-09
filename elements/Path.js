@@ -1,12 +1,12 @@
-import React, {Component, PropTypes} from 'react';
-import _ from 'lodash';
+import React, {PropTypes} from 'react';
 import Defs from './Defs';
-import extractProps from '../lib/extract/extractProps';
 import SerializablePath from '../lib/SerializablePath';
 import createNativeComponent from '../lib/createNativeComponent';
+import mergeContext from '../lib/mergeContext';
+import Shape from './Shape';
 import {pathProps, numberProp} from '../lib/props';
 
-class Path extends Component{
+class Path extends Shape {
     static displayName = 'Path';
 
     static propTypes = {
@@ -30,13 +30,7 @@ class Path extends Component{
     };
 
     render() {
-        let {props} = this;
-
-        if (this.context.isInGroup) {
-            props = _.defaults(this.context, props, {
-                isInGroup: null
-            });
-        }
+        let props = mergeContext(this.props, this.context);
 
         if (props.id) {
             return <Defs.Item
@@ -49,10 +43,9 @@ class Path extends Component{
         }
 
         let d = new SerializablePath(props.d).toJSON();
-
         return (
             <RNSVGPath
-                {...extractProps(props)}
+                {...this.extractProps(props)}
                 d={d}
             />
         );

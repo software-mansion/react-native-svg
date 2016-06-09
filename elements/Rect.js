@@ -1,11 +1,11 @@
-import React, {PropTypes, Component} from 'react';
+import React, {PropTypes} from 'react';
 import './Path'; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`
-import extractProps from '../lib/extract/extractProps';
 import createNativeComponent from '../lib/createNativeComponent';
 import mergeContext from '../lib/mergeContext';
 import {rectProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
+import Shape from './Shape';
 
-class Rect extends Component{
+class Rect extends Shape {
     static displayName = 'Rect';
     static propTypes = {
         ...pathProps,
@@ -24,7 +24,7 @@ class Rect extends Component{
         let props = mergeContext(this.props, this.context);
 
         return <RNSVGRect
-            {...extractProps({
+            {...this.extractProps({
                 ...props,
                 x: null,
                 y: null
