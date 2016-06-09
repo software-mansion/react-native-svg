@@ -13,8 +13,6 @@ class Text extends Shape {
         dx: numberProp,
         dy: numberProp,
         ...textProps,
-        ...fillProps,
-        ...strokeProps,
         ...pathProps
     };
 

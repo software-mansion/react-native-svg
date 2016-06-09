@@ -6,7 +6,7 @@ class Polygon extends Component{
     static displayName = 'Polygon';
     static propTypes = {
         ...pathProps,
-        points: PropTypes.string
+        points: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
     };
 
     render() {

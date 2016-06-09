@@ -2,15 +2,13 @@ import React, {PropTypes} from 'react';
 import createNativeComponent from '../lib/createNativeComponent';
 import Shape from './Shape';
 import mergeContext from '../lib/mergeContext';
-import {circleProps, pathProps, fillProps, strokeProps, numberProp, touchableProps, responderProps} from '../lib/props';
+import {circleProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
 
 class Circle extends Shape {
     static displayName = 'Circle';
     static propTypes = {
         ...pathProps,
-        ...circleProps,
-        ...touchableProps,
-        ...responderProps
+        ...circleProps
     };
 
     static contextTypes = {

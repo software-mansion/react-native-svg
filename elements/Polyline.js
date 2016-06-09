@@ -6,7 +6,7 @@ class Polyline extends Component{
     static displayName = 'Polyline';
     static propTypes = {
         ...pathProps,
-        points: PropTypes.string
+        points: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
     };
 
     render() {

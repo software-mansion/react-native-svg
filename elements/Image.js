@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import createNativeComponent from '../lib/createNativeComponent';
-import {numberProp} from '../lib/props';
+import {numberProp, touchableProps, responderProps} from '../lib/props';
 import Shape from './Shape';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
@@ -12,7 +12,9 @@ class Image extends Shape {
         y: numberProp,
         width: numberProp,
         height: numberProp,
-        href: PropTypes.number.isRequired
+        href: PropTypes.number.isRequired,
+        ...responderProps,
+        ...touchableProps
         //preserveAspectRatio: PropTypes.string
     };
 
