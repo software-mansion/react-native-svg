@@ -4,6 +4,7 @@
  */
 'use strict';
 import React, {Component} from 'react';
+import {Dimensions} from 'react-native';
 
 import {
     AppRegistry,
@@ -42,7 +43,10 @@ const styles = StyleSheet.create({
         borderTopWidth: hairline,
         borderTopColor: '#ccc',
         borderBottomWidth: hairline,
-        borderBottomColor: '#ccc'
+        borderBottomColor: '#ccc',
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        marginHorizontal: 10
     },
     welcome: {
         padding: 10,
@@ -51,14 +55,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     link: {
-        marginHorizontal: 10,
-        alignSelf: 'stretch'
+        alignSelf: 'stretch',
+        width: Dimensions.get('window').width / 2 - 10
     },
     title: {
         marginLeft: 10
     },
     cell: {
-        height: 30,
+        height: 40,
         paddingHorizontal: 10,
         alignSelf: 'stretch',
         alignItems: 'center',
@@ -241,12 +245,11 @@ class SvgExample extends Component {
             <Text style={styles.welcome}>
                 SVG library for React Native
             </Text>
-            <ScrollView
-                style={styles.content}
-                contentContainerStyle={styles.contentContainer}
+            <View
+                style={styles.contentContainer}
             >
                 {this.getExamples()}
-            </ScrollView>
+            </View>
         </View>;
     }
 }
