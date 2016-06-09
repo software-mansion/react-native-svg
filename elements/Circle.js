@@ -1,12 +1,16 @@
-import React, {PropTypes, Component} from 'react';
-import extractProps from '../lib/extract/extractProps';
+import React, {PropTypes} from 'react';
 import createNativeComponent from '../lib/createNativeComponent';
+import Shape from './Shape';
 import mergeContext from '../lib/mergeContext';
-import {circleProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
+import {circleProps, pathProps, fillProps, strokeProps, numberProp, touchableProps, responderProps} from '../lib/props';
 
+class Circle extends Shape {
     static displayName = 'Circle';
     static propTypes = {
         ...pathProps,
+        ...circleProps,
+        ...touchableProps,
+        ...responderProps
     };
 
     static contextTypes = {
@@ -20,6 +24,7 @@ import {circleProps, pathProps, fillProps, strokeProps, numberProp} from '../lib
     render() {
         let props = mergeContext(this.props, this.context);
         return <RNSVGCircle
+            {...this.extractProps(props)}
             cx={props.cx.toString()}
             cy={props.cy.toString()}
             r={props.r.toString()}
