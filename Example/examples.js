@@ -14,6 +14,7 @@ import * as Symbol from './examples/Symbol';
 import * as Gradients from './examples/Gradients';
 import * as Clipping from './examples/Clipping';
 import * as Image from './examples/Image';
+import * as TouchEvents from './examples/TouchEvents';
 
 export {
     Svg,
@@ -31,5 +32,6 @@ export {
     Symbol,
     Gradients,
     Clipping,
-    Image
+    Image,
+    TouchEvents
 };
