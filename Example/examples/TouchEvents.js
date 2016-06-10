@@ -9,7 +9,7 @@ import Svg, {
 } from 'react-native-svg';
 
 class PressExample extends Component {
-    static title = 'Press on the red circle and long press on rectangle to trigger the events';
+    static title = 'Press on the red circle or long press on the blue rectangle to trigger the events';
 
     render () {
         return <Svg
