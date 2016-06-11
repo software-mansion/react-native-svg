@@ -4,7 +4,6 @@
 
 # Xcode
 #
-build
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -19,6 +18,7 @@ xcuserdata
 DerivedData
 *.hmap
 *.ipa
+gradle
 project.xcworkspace
 
 # Android/IJ
