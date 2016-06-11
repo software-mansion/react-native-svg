@@ -12,7 +12,7 @@
 
 @interface RNSVGSvgView : UIView <RNSVGContainer>
 
-@property (nonatomic, assign) BOOL touchable;
+@property (nonatomic, assign) BOOL responsible;
 
 /**
  * define <ClipPath></ClipPath> content as clipPath template.

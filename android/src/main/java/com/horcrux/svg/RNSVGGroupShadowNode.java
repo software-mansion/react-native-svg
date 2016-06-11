@@ -35,7 +35,7 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
                 child.setupDimensions(canvas);
                 child.draw(canvas, paint, opacity);
 
-                if (child.isTouchable()) {
+                if (child.isResponsible()) {
                     svg.enableTouchEvents();
                 }
             }

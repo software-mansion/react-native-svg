@@ -18,8 +18,8 @@
     for (RNSVGNode *node in self.subviews) {
         [node renderTo:context];
         
-        if (node.touchable && !svg.touchable) {
-            self.touchable = YES;
+        if (node.responsible && !svg.responsible) {
+            self.responsible = YES;
         }
     }
 }

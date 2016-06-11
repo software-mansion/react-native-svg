@@ -62,7 +62,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     private int mClipRule;
     private boolean mClipRuleSet;
     private boolean mClipDataSet;
-    protected boolean mTouchable;
+    protected boolean mResponsible;
     protected int mWidth;
     protected int mHeight;
 
@@ -146,9 +146,9 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "touchable", defaultBoolean = false)
-    public void setTouchable(boolean touchable) {
-        mTouchable = touchable;
+    @ReactProp(name = "responsible", defaultBoolean = false)
+    public void setResponsible(boolean responsible) {
+        mResponsible = responsible;
         markUpdated();
     }
 
@@ -278,8 +278,8 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     abstract public int hitTest(Point point, View view);
 
-    public boolean isTouchable() {
-        return mTouchable;
+    public boolean isResponsible() {
+        return mResponsible;
     }
 
     abstract protected Path getPath(Canvas canvas, Paint paint);

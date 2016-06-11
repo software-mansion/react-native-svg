@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
 
-    private boolean mTouchable = false;
+    private boolean mResponsible = false;
 
     private static final Map<String, Path> mDefinedClipPaths = new HashMap<>();
 
@@ -58,20 +58,20 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
             child.setupDimensions(canvas);
             child.draw(canvas, paint, 1f);
 
-            if (child.isTouchable() && !mTouchable) {
-                mTouchable = true;
+            if (child.isResponsible() && !mResponsible) {
+                mResponsible = true;
             }
         }
     }
 
     public void enableTouchEvents() {
-        if (!mTouchable) {
-            mTouchable = true;
+        if (!mResponsible) {
+            mResponsible = true;
         }
     }
 
     public int hitTest(Point point, ViewGroup view) {
-        if (!mTouchable) {
+        if (!mResponsible) {
             return -1;
         }
 

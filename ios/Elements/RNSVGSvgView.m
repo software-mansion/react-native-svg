@@ -28,8 +28,8 @@
     for (RNSVGNode *node in self.subviews) {
         [node renderTo:context];
         
-        if (node.touchable && !self.touchable) {
-            self.touchable = YES;
+        if (node.responsible && !self.responsible) {
+            self.responsible = YES;
         }
     }
 }
@@ -41,7 +41,7 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    return self.touchable ? [super hitTest:point withEvent:event] : nil;
+    return self.responsible ? [super hitTest:point withEvent:event] : nil;
 }
 
 - (void)defineClipPath:(CGPathRef)clipPath clipPathId:(NSString *)clipPathId
