@@ -15,7 +15,8 @@
         "android",
         "SVG",
         "ART",
-        "VML"
+        "VML",
+        "gradient"
     ],
     "scripts": {
         "lint": "eslint ./"
