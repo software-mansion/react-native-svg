@@ -12,16 +12,22 @@
 
 @implementation RNSVGNode
 
-- (void)insertSubview:(UIView *)subview atIndex:(NSInteger)index
+- (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
 {
+    [super insertReactSubview:subview atIndex:atIndex];
+    [self insertSubview:subview atIndex:atIndex];
     [self invalidate];
-    [super insertSubview:subview atIndex:index];
 }
 
-- (void)removeFromSuperview
+- (void)removeReactSubview:(UIView *)subview
 {
+    [super removeReactSubview:subview];
     [self invalidate];
-    [super removeFromSuperview];
+}
+
+- (void)didUpdateReactSubviews
+{
+    // Do nothing, as subviews are inserted by insertReactSubview:
 }
 
 - (void)setOpacity:(CGFloat)opacity

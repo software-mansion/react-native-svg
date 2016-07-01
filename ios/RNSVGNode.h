@@ -6,8 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "UIView+React.h"
 #import "RNSVGCGFCRule.h"
 #import "RNSVGSvgView.h"
 
