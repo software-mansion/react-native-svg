@@ -29,6 +29,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.TouchTargetHelper;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.events.TouchEvent;
+import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
 import com.facebook.react.uimanager.events.TouchEventType;
 import com.facebook.react.views.view.ReactClippingViewGroup;
 import com.facebook.react.uimanager.events.EventDispatcher;
@@ -45,6 +46,9 @@ public class RNSVGSvgView extends ViewGroup {
     private RNSVGSvgViewShadowNode mSvgViewShadowNode;
 
     private int mTargetTag;
+
+    private final TouchEventCoalescingKeyHelper mTouchEventCoalescingKeyHelper =
+            new TouchEventCoalescingKeyHelper();
 
     public RNSVGSvgView(Context context, RNSVGSvgViewShadowNode shadowNode) {
         super(context);
@@ -98,7 +102,8 @@ public class RNSVGSvgView extends ViewGroup {
                     TouchEventType.START,
                     ev,
                     ev.getX(),
-                    ev.getX()));
+                    ev.getX(),
+                    mTouchEventCoalescingKeyHelper));
         } else if (mTargetTag == -1) {
             // All the subsequent action types are expected to be called after ACTION_DOWN thus target
             // is supposed to be set for them.
@@ -116,7 +121,8 @@ public class RNSVGSvgView extends ViewGroup {
                     TouchEventType.END,
                     ev,
                     ev.getX(),
-                   ev.getY()));
+                    ev.getY(),
+                    mTouchEventCoalescingKeyHelper));
             mTargetTag = -1;
         } else if (action == MotionEvent.ACTION_MOVE) {
             // Update pointer position for current gesture
@@ -127,7 +133,8 @@ public class RNSVGSvgView extends ViewGroup {
                     TouchEventType.MOVE,
                     ev,
                     ev.getX(),
-                    ev.getY()));
+                    ev.getY(),
+                    mTouchEventCoalescingKeyHelper));
         } else if (action == MotionEvent.ACTION_POINTER_DOWN) {
             // New pointer goes down, this can only happen after ACTION_DOWN is sent for the first pointer
             eventDispatcher.dispatchEvent(
@@ -137,7 +144,8 @@ public class RNSVGSvgView extends ViewGroup {
                     TouchEventType.START,
                     ev,
                     ev.getX(),
-                    ev.getY()));
+                    ev.getY(),
+                    mTouchEventCoalescingKeyHelper));
         } else if (action == MotionEvent.ACTION_POINTER_UP) {
             // Exactly onw of the pointers goes up
             eventDispatcher.dispatchEvent(
@@ -147,7 +155,8 @@ public class RNSVGSvgView extends ViewGroup {
                     TouchEventType.END,
                     ev,
                     ev.getX(),
-                    ev.getY()));
+                    ev.getY(),
+                    mTouchEventCoalescingKeyHelper));
         } else if (action == MotionEvent.ACTION_CANCEL) {
             dispatchCancelEvent(ev, eventDispatcher);
             mTargetTag = -1;
@@ -177,6 +186,7 @@ public class RNSVGSvgView extends ViewGroup {
                 TouchEventType.CANCEL,
                 androidEvent,
                 androidEvent.getX(),
-                androidEvent.getY()));
+                androidEvent.getY(),
+                mTouchEventCoalescingKeyHelper));
     }
 }
