@@ -1,4 +1,5 @@
 {
+    "version": "3.0.0-rc",
     "name": "react-native-svg",
     "description": "react native svg library",
     "repository": {
