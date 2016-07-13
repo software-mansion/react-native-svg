@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     link: {
+        height: 40,
         alignSelf: 'stretch',
         width: Dimensions.get('window').width / 2 - 10
     },
@@ -143,7 +144,8 @@ class SvgExample extends Component {
             let samples = example.samples;
             this.state.scale.setValue(0);
             Animated.spring(this.state.scale, {
-                toValue: 1
+                toValue: 1,
+                useNativeDriver: true
             }).start();
 
             this.setState({
