@@ -20,9 +20,14 @@ class Line extends Shape {
         svgId: numberProp
     };
 
+    setNativeProps = (...args) => {
+        this.root.setNativeProps(...args);
+    };
+
     render() {
         let props = mergeContext(this.props, this.context);
         return <RNSVGLine
+            ref={ele => this.root = ele}
             {...this.extractProps(props)}
             x1={props.x1.toString()}
             y1={props.y1.toString()}

@@ -20,9 +20,14 @@ class Circle extends Shape {
         svgId: numberProp
     };
 
+    setNativeProps = (...args) => {
+        this.root.setNativeProps(...args);
+    };
+
     render() {
         let props = mergeContext(this.props, this.context);
         return <RNSVGCircle
+            ref={ele => this.root = ele}
             {...this.extractProps(props)}
             cx={props.cx.toString()}
             cy={props.cy.toString()}

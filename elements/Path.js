@@ -30,6 +30,14 @@ class Path extends Shape {
         }
     };
 
+    setNativeProps = (...args) => {
+        this.getNativeElement().setNativeProps(...args);
+    };
+
+    getNativeElement = () => {
+        return this.refs.root || this.root;
+    };
+
     render() {
         let props = mergeContext(this.props, this.context);
 
@@ -39,13 +47,18 @@ class Path extends Shape {
                 svgId={props.svgId}
                 visible={true}
             >
-                <Path {...props} id={null} />
+                <Path
+                    ref={ele => this.root = ele.refs.root}
+                    {...props}
+                    id={null}
+                />
             </Defs.Item>;
         }
 
         let d = new SerializablePath(props.d).toJSON();
         return (
             <RNSVGPath
+                ref="root"
                 {...this.extractProps(props)}
                 d={d}
             />

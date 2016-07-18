@@ -25,6 +25,14 @@ class Text extends Shape {
         svgId: numberProp
     };
 
+    setNativeProps = (...args) => {
+        this.getNativeElement().setNativeProps(...args);
+    };
+
+    getNativeElement = () => {
+        return this.refs.root || this.root;
+    };
+
     render() {
         let props = mergeContext(this.props, this.context);
 
@@ -39,6 +47,7 @@ class Text extends Shape {
 
         if (this.props.id) {
             return <Defs.Item
+                ref={ele => this.root = ele.refs.root}
                 id={this.props.id}
                 svgId={this.props.svgId}
                 visible={true}
@@ -50,6 +59,7 @@ class Text extends Shape {
 
         return (
             <RNSVGText
+                ref="root"
                 {...extractProps({...props, x, y})}
                 {...extractText(props)}
             />

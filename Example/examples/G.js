@@ -7,7 +7,8 @@ import Svg, {
     Circle,
     Line,
     Rect,
-    Text
+    Text,
+    Use
 } from 'react-native-svg';
 
 class GExample extends Component{
@@ -63,6 +64,7 @@ class GTransform extends Component{
             <G
                 rotate="50"
                 origin="100, 50"
+                id="group"
             >
                 <Line
                     x1="60"
@@ -90,6 +92,7 @@ class GTransform extends Component{
                 >
                     Text grouped with shapes</Text>
             </G>
+            <Use href="#group" x="5" rotate="0" />
         </Svg>;
     }
 }

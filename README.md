@@ -569,6 +569,7 @@ npm install
 2. more Text features support
 3. Pattern element
 4. implement Animated elements
+5. refactor defs element (cannot use id prop for shape elements)
 
 #### Thanks:
 

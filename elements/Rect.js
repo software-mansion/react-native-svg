@@ -21,10 +21,15 @@ class Rect extends Shape {
         svgId: numberProp
     };
 
+    setNativeProps = (...args) => {
+        this.root.setNativeProps(...args);
+    };
+
     render() {
         let props = mergeContext(this.props, this.context);
 
         return <RNSVGRect
+            ref={ele => this.root = ele}
             {...this.extractProps({
                 ...props,
                 x: null,

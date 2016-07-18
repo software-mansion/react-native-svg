@@ -33,6 +33,14 @@ class G extends Component{
         return _.defaults({}, this.context, context);
     };
 
+    setNativeProps = (...args) => {
+        this.getNativeElement().setNativeProps(...args);
+    };
+
+    getNativeElement = () => {
+        return this.refs.root || this.root;
+    };
+
     render() {
         if (this.props.id) {
             return <Defs.Item
@@ -42,12 +50,14 @@ class G extends Component{
             >
                 <G
                     {...this.props}
+                    ref={ele => this.root = ele.refs.root}
                     id={null}
                 />
             </Defs.Item>;
         } else {
             return <RNSVGGroup
                 {...extractProps(this.props, {transform: true})}
+                ref="root"
                 asClipPath={this.props.asClipPath}
             >
                 {this.props.children}

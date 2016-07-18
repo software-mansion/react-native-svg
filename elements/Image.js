@@ -19,10 +19,14 @@ class Image extends Shape {
         //preserveAspectRatio: PropTypes.string
     };
 
+    setNativeProps = (...args) => {
+        this.root.setNativeProps(...args);
+    };
 
     render() {
         let {props} = this;
         return <RNSVGImage
+            ref={ele => this.root = ele}
             {...this.extractProps(props, {transform: true, responder: true})}
             x={props.x.toString()}
             y={props.y.toString()}

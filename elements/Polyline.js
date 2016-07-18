@@ -9,8 +9,13 @@ class Polyline extends Component{
         points: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
     };
 
+    setNativeProps = (...args) => {
+        this.root.getNativeElement().setNativeProps(...args);
+    };
+
     render() {
         return <Path
+            ref={ele => this.root = ele}
             {...this.props}
             d={`M${this.props.points.trim().replace(/\s+/g, 'L')}`}
         />;
