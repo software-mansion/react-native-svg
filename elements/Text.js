@@ -1,10 +1,11 @@
 import React, {PropTypes} from 'react';
-import createNativeComponent from '../lib/createNativeComponent';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import Defs from './Defs';
 import extractProps from '../lib/extract/extractProps';
 import extractText from '../lib/extract/extractText';
 import mergeContext from '../lib/mergeContext';
 import {numberProp, textProps, fillProps, strokeProps, pathProps} from '../lib/props';
+import {TextAttributes} from '../lib/attributes';
 import Shape from './Shape';
 
 class Text extends Shape {
@@ -56,6 +57,9 @@ class Text extends Shape {
     }
 }
 
-const RNSVGText = createNativeComponent('RNSVGText');
+const RNSVGText = createReactNativeComponentClass({
+    validAttributes: TextAttributes,
+    uiViewClassName: 'RNSVGText'
+});
 
 export default Text;

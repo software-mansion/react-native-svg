@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react';
 import './Path'; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`
-import createNativeComponent from '../lib/createNativeComponent';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import mergeContext from '../lib/mergeContext';
 import {rectProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
+import {RectAttributes} from '../lib/attributes';
 import Shape from './Shape';
 
 class Rect extends Shape {
@@ -39,6 +40,9 @@ class Rect extends Shape {
     }
 }
 
-const RNSVGRect = createNativeComponent('RNSVGRect');
+const RNSVGRect = createReactNativeComponentClass({
+    validAttributes: RectAttributes,
+    uiViewClassName: 'RNSVGRect'
+});
 
 export default Rect;

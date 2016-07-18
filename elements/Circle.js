@@ -1,7 +1,8 @@
 import React, {PropTypes} from 'react';
-import createNativeComponent from '../lib/createNativeComponent';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import Shape from './Shape';
 import mergeContext from '../lib/mergeContext';
+import {CircleAttributes} from '../lib/attributes';
 import {circleProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
 
 class Circle extends Shape {
@@ -30,6 +31,11 @@ class Circle extends Shape {
     }
 }
 
-const RNSVGCircle = createNativeComponent('RNSVGCircle');
+
+
+const RNSVGCircle = createReactNativeComponentClass({
+    validAttributes: CircleAttributes,
+    uiViewClassName: 'RNSVGCircle'
+});
 
 export default Circle;

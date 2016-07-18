@@ -1,7 +1,8 @@
 import React, {PropTypes} from 'react';
 import Defs from './Defs';
 import SerializablePath from '../lib/SerializablePath';
-import createNativeComponent from '../lib/createNativeComponent';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import {PathAttributes} from '../lib/attributes';
 import mergeContext from '../lib/mergeContext';
 import Shape from './Shape';
 import {pathProps, numberProp} from '../lib/props';
@@ -52,6 +53,9 @@ class Path extends Shape {
     }
 }
 
-const RNSVGPath = createNativeComponent('RNSVGPath');
+const RNSVGPath = createReactNativeComponentClass({
+    validAttributes: PathAttributes,
+    uiViewClassName: 'RNSVGPath'
+});
 
 export default Path;

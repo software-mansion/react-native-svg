@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
-import createNativeComponent from '../lib/createNativeComponent';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import {LineAttributes} from '../lib/attributes';
 import mergeContext from '../lib/mergeContext';
 import Shape from './Shape';
 import {lineProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
@@ -31,6 +32,9 @@ class Line extends Shape {
     }
 }
 
-const RNSVGLine = createNativeComponent('RNSVGLine');
+const RNSVGLine = createReactNativeComponentClass({
+    validAttributes: LineAttributes,
+    uiViewClassName: 'RNSVGLine'
+});
 
 export default Line;

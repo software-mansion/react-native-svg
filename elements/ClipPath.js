@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {set, remove} from '../lib/extract/extractClipping';
-import createNativeComponent from '../lib/createNativeComponent';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import {ClipPathAttributes} from '../lib/attributes';
 
 class ClipPath extends Component{
     static displayName = 'ClipPath';
@@ -32,7 +33,10 @@ class ClipPath extends Component{
     }
 }
 
-const RNSVGClipPath = createNativeComponent('RNSVGClipPath');
+const RNSVGClipPath = createReactNativeComponentClass({
+    validAttributes: ClipPathAttributes,
+    uiViewClassName: 'RNSVGClipPath'
+});
 
 export default ClipPath;
 

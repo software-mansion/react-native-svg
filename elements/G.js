@@ -1,9 +1,9 @@
 import React, {Component, PropTypes} from 'react';
 import Defs from './Defs';
 import _ from 'lodash';
-import createNativeComponent from '../lib/createNativeComponent';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import {numberProp, contextProps} from '../lib/props';
-
+import {GroupAttributes} from '../lib/attributes';
 import extractProps from '../lib/extract/extractProps';
 
 class G extends Component{
@@ -56,7 +56,10 @@ class G extends Component{
     }
 }
 
-const RNSVGGroup = createNativeComponent('RNSVGGroup');
+const RNSVGGroup = createReactNativeComponentClass({
+    validAttributes: GroupAttributes,
+    uiViewClassName: 'RNSVGGroup'
+});
 
 export default G;
 export {

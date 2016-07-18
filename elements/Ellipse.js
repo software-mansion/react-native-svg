@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react';
-import createNativeComponent from '../lib/createNativeComponent';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import mergeContext from '../lib/mergeContext';
 import Shape from './Shape';
 import {ellipseProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
-
+import {EllipseAttributes} from '../lib/attributes';
 
 class Ellipse extends Shape{
     static displayName = 'Ellipse';
@@ -32,6 +32,9 @@ class Ellipse extends Shape{
     }
 }
 
-const RNSVGEllipse = createNativeComponent('RNSVGEllipse');
+const RNSVGEllipse = createReactNativeComponentClass({
+    validAttributes: EllipseAttributes,
+    uiViewClassName: 'RNSVGEllipse'
+});
 
 export default Ellipse;

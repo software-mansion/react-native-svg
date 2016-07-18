@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
-import createNativeComponent from '../lib/createNativeComponent';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import {ImageAttributes} from '../lib/attributes';
 import {numberProp, touchableProps, responderProps} from '../lib/props';
 import Shape from './Shape';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
@@ -32,6 +33,9 @@ class Image extends Shape {
     }
 }
 
-const RNSVGImage = createNativeComponent('RNSVGImage');
+const RNSVGImage = createReactNativeComponentClass({
+    validAttributes: ImageAttributes,
+    uiViewClassName: 'RNSVGImage'
+});
 
 export default Image;
