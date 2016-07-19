@@ -35,13 +35,13 @@
     if (opacity == _opacity) {
         return;
     }
-    
+
     if (opacity < 0) {
         opacity = 0;
     } else if (opacity > 1) {
         opacity = 1;
     }
-    
+
     [self invalidate];
     _opacity = opacity;
 }
@@ -63,7 +63,7 @@
     float opacity = self.opacity;
 
     BOOL transparent = opacity < 1;
-    
+
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.transform);
@@ -97,20 +97,20 @@
 - (CGPathRef)getClipPath
 {
     CGPathRef clipPath = nil;
-    
+
     if (self.clipPath) {
         clipPath = self.clipPath;
-    } else if (self.clipPathId) {
-        clipPath = [[self getSvgView] getDefinedClipPath:self.clipPathId];
+    } else if (self.clipPathRef) {
+        clipPath = [[self getSvgView] getDefinedClipPath:self.clipPathRef];
     }
-    
+
     return clipPath;
 }
 
 - (void)clip:(CGContextRef)context
 {
     CGPathRef clipPath  = [self getClipPath];
-    
+
     if (clipPath != NULL) {
         CGContextAddPath(context, [self getClipPath]);
         if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
@@ -138,7 +138,7 @@
     while ([parent class] != [RNSVGSvgView class]) {
         parent = parent.superview;
     }
-    
+
     return (RNSVGSvgView *)parent;
 }
 

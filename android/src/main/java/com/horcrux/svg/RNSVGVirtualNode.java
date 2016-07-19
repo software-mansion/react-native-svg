@@ -111,9 +111,9 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "clipPathId")
-    public void setClipPathId(String clipPathId) {
-        mClipPathId = clipPathId;
+    @ReactProp(name = "clipPathRef")
+    public void setClipPathId(String clipPathRef) {
+        mClipPathId = clipPathRef;
         markUpdated();
     }
 

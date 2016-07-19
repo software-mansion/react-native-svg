@@ -42,10 +42,10 @@
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
+
     for (RNSVGNode *node in self.subviews) {
         [node renderTo:context];
-        
+
         if (node.responsible && !self.responsible) {
             self.responsible = YES;
         }
@@ -62,24 +62,24 @@
     return self.responsible ? [super hitTest:point withEvent:event] : nil;
 }
 
-- (void)defineClipPath:(CGPathRef)clipPath clipPathId:(NSString *)clipPathId
+- (void)defineClipPath:(CGPathRef)clipPath clipPathRef:(NSString *)clipPathRef
 {
     if (clipPaths == NULL) {
         clipPaths = [[NSMutableDictionary alloc] init];
     }
-    [clipPaths setValue:[NSValue valueWithPointer:clipPath] forKey:clipPathId];
+    [clipPaths setValue:[NSValue valueWithPointer:clipPath] forKey:clipPathRef];
 }
 
-- (void)removeClipPath:(NSString *)clipPathId
+- (void)removeClipPath:(NSString *)clipPathRef
 {
     if (clipPaths != NULL) {
-        [clipPaths removeObjectForKey:clipPathId];
+        [clipPaths removeObjectForKey:clipPathRef];
     }
 }
 
-- (CGPathRef)getDefinedClipPath:(NSString *)clipPathId
+- (CGPathRef)getDefinedClipPath:(NSString *)clipPathRef
 {
-    return [[clipPaths valueForKey:clipPathId] pointerValue];
+    return [[clipPaths valueForKey:clipPathRef] pointerValue];
 }
 
 @end

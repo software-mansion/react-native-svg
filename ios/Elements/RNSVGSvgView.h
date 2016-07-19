@@ -17,10 +17,10 @@
 /**
  * define <ClipPath></ClipPath> content as clipPath template.
  */
-- (void)defineClipPath:(CGPathRef)clipPath clipPathId:(NSString *)clipPathId;
+- (void)defineClipPath:(CGPathRef)clipPath clipPathRef:(NSString *)clipPathId;
 
-- (void)removeClipPath:(NSString *)clipPathId;
+- (void)removeClipPath:(NSString *)clipPathRef;
 
-- (CGPathRef)getDefinedClipPath:(NSString *)clipPathId;
+- (CGPathRef)getDefinedClipPath:(NSString *)clipPathRef;
 
 @end

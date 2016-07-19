@@ -12,7 +12,7 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
-    [[self getSvgView] defineClipPath:[self getPath:context] clipPathId:self.name];
+    [[self getSvgView] defineClipPath:[self getPath:context] clipPathRef:self.name];
 }
 
 // hitTest delagate

@@ -87,16 +87,16 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         return viewTag;
     }
 
-    public void defineClipPath(Path clipPath, String clipPathId) {
-        mDefinedClipPaths.put(clipPathId, clipPath);
+    public void defineClipPath(Path clipPath, String clipPathRef) {
+        mDefinedClipPaths.put(clipPathRef, clipPath);
     }
 
     // TODO: remove unmounted clipPath
-    public void removeClipPath(String clipPathId) {
-        mDefinedClipPaths.remove(clipPathId);
+    public void removeClipPath(String clipPathRef) {
+        mDefinedClipPaths.remove(clipPathRef);
     }
 
-    public Path getDefinedClipPath(String clipPathId) {
-        return mDefinedClipPaths.get(clipPathId);
+    public Path getDefinedClipPath(String clipPathRef) {
+        return mDefinedClipPaths.get(clipPathRef);
     }
 }
