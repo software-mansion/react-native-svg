@@ -48,7 +48,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     protected  @Nullable Matrix mMatrix = new Matrix();
 
     protected @Nullable Path mClipPath;
-    protected @Nullable String mClipPathId;
+    protected @Nullable String mClipPathRef;
     private static final int PATH_TYPE_ARC = 4;
     private static final int PATH_TYPE_CLOSE = 1;
     private static final int PATH_TYPE_CURVETO = 3;
@@ -112,8 +112,8 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     }
 
     @ReactProp(name = "clipPathRef")
-    public void setClipPathId(String clipPathRef) {
-        mClipPathId = clipPathRef;
+    public void setClipPathRef(String clipPathRef) {
+        mClipPathRef = clipPathRef;
         markUpdated();
     }
 
@@ -266,8 +266,8 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     protected void clip(Canvas canvas, Paint paint) {
         Path clip = mClipPath;
-        if (clip == null && mClipPathId != null) {
-            clip = getSvgShadowNode().getDefinedClipPath(mClipPathId);
+        if (clip == null && mClipPathRef != null) {
+            clip = getSvgShadowNode().getDefinedClipPath(mClipPathRef);
         }
 
         if (clip != null) {
