@@ -46,10 +46,10 @@
     _opacity = opacity;
 }
 
-- (void)setTrans:(CGAffineTransform)trans
+- (void)setTransform:(CGAffineTransform)transform
 {
     [self invalidate];
-    super.transform = trans;
+    super.transform = transform;
 }
 
 - (void)invalidate

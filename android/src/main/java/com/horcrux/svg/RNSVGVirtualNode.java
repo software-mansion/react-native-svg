@@ -131,7 +131,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "trans")
+    @ReactProp(name = "transform")
     public void setTrans(@Nullable ReadableArray transformArray) {
         if (transformArray != null) {
             int matrixSize = PropHelper.toFloatArray(transformArray, sMatrixData);
