@@ -56,7 +56,7 @@
 
 - (BOOL) isPercentage:(NSString *) string
 {
-    return [percentageRegularExpression firstMatchInString:string options:0 range:NSMakeRange(0, [string length])] != NULL;
+    return [percentageRegularExpression firstMatchInString:string options:0 range:NSMakeRange(0, [string length])] != nil;
 }
 
 @end

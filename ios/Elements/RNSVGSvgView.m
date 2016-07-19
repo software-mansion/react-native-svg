@@ -13,7 +13,8 @@
 
 @implementation RNSVGSvgView
 {
-    NSMutableDictionary *clipPaths;
+    NSMutableDictionary<NSString *, NSValue *> *clipPaths;
+    NSMutableDictionary<NSString *, RNSVGNode *> *templates;
 }
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
@@ -42,8 +43,9 @@
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-
+    
     for (RNSVGNode *node in self.subviews) {
+        [node saveDefination:context];
         [node renderTo:context];
 
         if (node.responsible && !self.responsible) {
@@ -64,7 +66,7 @@
 
 - (void)defineClipPath:(CGPathRef)clipPath clipPathRef:(NSString *)clipPathRef
 {
-    if (clipPaths == NULL) {
+    if (!clipPaths) {
         clipPaths = [[NSMutableDictionary alloc] init];
     }
     [clipPaths setValue:[NSValue valueWithPointer:clipPath] forKey:clipPathRef];
@@ -72,14 +74,34 @@
 
 - (void)removeClipPath:(NSString *)clipPathRef
 {
-    if (clipPaths != NULL) {
+    if (clipPaths) {
         [clipPaths removeObjectForKey:clipPathRef];
     }
 }
 
 - (CGPathRef)getDefinedClipPath:(NSString *)clipPathRef
 {
-    return [[clipPaths valueForKey:clipPathRef] pointerValue];
+    return clipPaths ? [[clipPaths valueForKey:clipPathRef] pointerValue] : nil;
+}
+
+- (void)defineTemplate:(RNSVGNode *)template templateRef:(NSString *)templateRef
+{
+    if (!templates) {
+        templates = [[NSMutableDictionary alloc] init];
+    }
+    [templates setObject:template forKey:templateRef];
+}
+
+- (void)removeTemplate:(NSString *)tempalteRef
+{
+    if (templates) {
+        [templates removeObjectForKey:tempalteRef];
+    }
+}
+
+- (RNSVGNode *)getDefinedTemplate:(NSString *)tempalteRef
+{
+    return templates ? [templates objectForKey:tempalteRef] : nil;
 }
 
 @end

@@ -6,8 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGRenderableManager.h"
+#import "RCTViewManager.h"
 
-@interface RNSVGShapeManager : RNSVGRenderableManager
+@interface RNSVGDefinationManager : RCTViewManager
 
 @end
+
+#import "RNSVGNode.h"

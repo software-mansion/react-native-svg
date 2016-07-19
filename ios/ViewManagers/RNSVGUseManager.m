@@ -6,20 +6,19 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGShapeManager.h"
+#import "RNSVGUseManager.h"
+#import "RNSVGUse.h"
 
-#import "RNSVGShape.h"
-#import "RCTConvert+RNSVG.h"
-
-@implementation RNSVGShapeManager
+@implementation RNSVGUseManager
 
 RCT_EXPORT_MODULE()
 
-- (RNSVGRenderable *)node
+- (RNSVGNode *)node
 {
-    return [RNSVGShape new];
+  return [RNSVGUse new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(shape, NSDictionary)
+
+RCT_EXPORT_VIEW_PROPERTY(href, NSString)
 
 @end

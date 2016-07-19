@@ -15,9 +15,7 @@ class Ellipse extends Shape{
     static contextTypes = {
         ...fillProps,
         ...strokeProps,
-        ...ellipseProps,
-        isInGroup: PropTypes.bool,
-        svgId: numberProp
+        ...ellipseProps
     };
 
     setNativeProps = (...args) => {

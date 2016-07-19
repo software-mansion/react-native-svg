@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react';
-import Defs from './Defs';
 import SerializablePath from '../lib/SerializablePath';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import {PathAttributes} from '../lib/attributes';
@@ -16,9 +15,7 @@ class Path extends Shape {
     };
 
     static contextTypes = {
-        ...pathProps,
-        isInGroup: PropTypes.bool,
-        svgId: numberProp
+        ...pathProps
     };
 
 
@@ -31,34 +28,16 @@ class Path extends Shape {
     };
 
     setNativeProps = (...args) => {
-        this.getNativeElement().setNativeProps(...args);
-    };
-
-    getNativeElement = () => {
-        return this.refs.root || this.root;
+        this.root.setNativeProps(...args);
     };
 
     render() {
         let props = mergeContext(this.props, this.context);
 
-        if (props.id) {
-            return <Defs.Item
-                id={props.id}
-                svgId={props.svgId}
-                visible={true}
-            >
-                <Path
-                    ref={ele => this.root = ele.refs.root}
-                    {...props}
-                    id={null}
-                />
-            </Defs.Item>;
-        }
-
         let d = new SerializablePath(props.d).toJSON();
         return (
             <RNSVGPath
-                ref="root"
+                ref={ele => this.root = ele}
                 {...this.extractProps(props)}
                 d={d}
             />

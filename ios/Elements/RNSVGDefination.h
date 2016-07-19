@@ -6,13 +6,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import <Foundation/Foundation.h>
+#import "RNSVGNode.h"
 
-#import "RNSVGContainer.h"
-#import "RNSVGGroup.h"
-#import "RNSVGSvgView.h"
+/**
+ * RNSVG defination are implemented as abstract UIViews for all elements inside Defs.
+ */
 
-@interface RNSVGClipPath : RNSVGGroup
+@interface RNSVGDefination : RNSVGNode
+
+- (void)renderTo:(CGContextRef)context;
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 

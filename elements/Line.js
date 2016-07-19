@@ -15,9 +15,7 @@ class Line extends Shape {
     static contextTypes = {
         ...fillProps,
         ...strokeProps,
-        ...lineProps,
-        isInGroup: PropTypes.bool,
-        svgId: numberProp
+        ...lineProps
     };
 
     setNativeProps = (...args) => {

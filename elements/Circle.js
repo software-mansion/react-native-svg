@@ -15,9 +15,7 @@ class Circle extends Shape {
     static contextTypes = {
         ...fillProps,
         ...strokeProps,
-        ...circleProps,
-        isInGroup: PropTypes.bool,
-        svgId: numberProp
+        ...circleProps
     };
 
     setNativeProps = (...args) => {

@@ -101,8 +101,8 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     CGPathRef clipPath  = [self getClipPath];
-    if (self.nodeArea != NULL && CGPathContainsPoint(self.nodeArea, nil, point, NO)) {
-        if (clipPath == NULL) {
+    if (self.nodeArea && CGPathContainsPoint(self.nodeArea, nil, point, NO)) {
+        if (!clipPath) {
             return self;
         } else {
             return CGPathContainsPoint(clipPath, nil, point, NO) ? self : nil;
@@ -110,6 +110,40 @@
     } else {
         return nil;
     }
+}
+
+- (void)mergeProperties:(__kindof RNSVGNode *)target
+{
+    RNSVGRenderable* renderableTarget = target;
+    
+    if (renderableTarget.fill) {
+        self.fill = renderableTarget.fill;
+    }
+    if (renderableTarget.fillRule) {
+        self.fillRule = renderableTarget.fillRule;
+    }
+    if (renderableTarget.stroke) {
+        self.stroke = renderableTarget.stroke;
+    }
+    if (renderableTarget.strokeWidth) {
+        self.strokeWidth = renderableTarget.strokeWidth;
+    }
+    if (renderableTarget.strokeLinecap) {
+        self.strokeLinecap = renderableTarget.strokeLinecap;
+    }
+    if (renderableTarget.strokeLinejoin) {
+        self.strokeLinejoin = renderableTarget.strokeLinejoin;
+    }
+    if (renderableTarget.strokeMiterlimit) {
+        self.strokeMiterlimit = renderableTarget.strokeMiterlimit;
+    }
+    if (renderableTarget.strokeDasharray.count != 0) {
+        self.strokeDasharray = renderableTarget.strokeDasharray;
+    }
+    if (renderableTarget.strokeDashoffset) {
+        self.strokeDashoffset = renderableTarget.strokeDashoffset;
+    }
+    [super mergeProperties:target];
 }
 
 - (void)renderLayerTo:(CGContextRef)context

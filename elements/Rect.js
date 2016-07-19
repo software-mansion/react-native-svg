@@ -16,9 +16,7 @@ class Rect extends Shape {
     static contextTypes = {
         ...fillProps,
         ...strokeProps,
-        ...rectProps,
-        isInGroup: PropTypes.bool,
-        svgId: numberProp
+        ...rectProps
     };
 
     setNativeProps = (...args) => {

@@ -30,6 +30,17 @@
     // Do nothing, as subviews are inserted by insertReactSubview:
 }
 
+- (void)invalidate
+{
+    id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
+    [container invalidate];
+}
+
+- (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
+{
+    self.backgroundColor = inheritedBackgroundColor;
+}
+
 - (void)setOpacity:(CGFloat)opacity
 {
     if (opacity == _opacity) {
@@ -50,12 +61,6 @@
 {
     [self invalidate];
     super.transform = transform;
-}
-
-- (void)invalidate
-{
-    id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
-    [container invalidate];
 }
 
 - (void)renderTo:(CGContextRef)context
@@ -111,7 +116,7 @@
 {
     CGPathRef clipPath  = [self getClipPath];
 
-    if (clipPath != NULL) {
+    if (clipPath) {
         CGContextAddPath(context, [self getClipPath]);
         if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
             CGContextEOClip(context);
@@ -121,31 +126,66 @@
     }
 }
 
-
-- (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
-{
-    self.backgroundColor = inheritedBackgroundColor;
-}
-
 - (void)renderLayerTo:(CGContextRef)context
 {
     // abstract
-}
-
-- (RNSVGSvgView *)getSvgView
-{
-    UIView *parent = self.superview;
-    while ([parent class] != [RNSVGSvgView class]) {
-        parent = parent.superview;
-    }
-
-    return (RNSVGSvgView *)parent;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 {
     // abstract
     return nil;
+}
+
+- (RNSVGSvgView *)getSvgView
+{
+    UIView *parent = self.superview;
+    while (parent && [parent class] != [RNSVGSvgView class]) {
+        parent = parent.superview;
+    }
+    
+    return (RNSVGSvgView *)parent;
+}
+
+- (void)willRemoveFromSuperView
+{
+    if (self.subviews) {
+        for (RNSVGNode *node in self.subviews) {
+            [node willRemoveFromSuperView];
+        }
+    }
+    [self removeDefination];
+    [super removeFromSuperview];
+}
+
+/**
+ * reverse removeFromSuperview calling order.
+ * calling it from subviews to superview.
+ */
+- (void)removeFromSuperview
+{
+    [self willRemoveFromSuperView];
+}
+
+- (void)saveDefination:(CGContextRef)context
+{
+    if (self.name) {
+        RNSVGSvgView* svg = [self getSvgView];
+        [svg defineTemplate:self templateRef:self.name];
+    }
+}
+
+- (void)removeDefination
+{
+    if (self.name) {
+        [[self getSvgView] removeTemplate:self.name];
+    }
+}
+
+
+- (void)mergeProperties:(__kindof RNSVGNode *)target
+{
+    self.opacity = target.opacity * self.opacity;
 }
 
 - (void)dealloc

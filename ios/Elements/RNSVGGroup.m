@@ -7,6 +7,7 @@
  */
 
 #import "RNSVGGroup.h"
+#import <objc/runtime.h>
 
 @implementation RNSVGGroup
 
@@ -35,17 +36,39 @@
 }
 
 // hitTest delagate
-
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
         UIView *view = [node hitTest: point withEvent:event];
-        if (view != NULL) {
+        if (view) {
             return view;
         }
     }
     return nil;
 }
 
+- (void)saveDefination:(CGContextRef)context
+{
+    if (self.name) {
+        RNSVGSvgView* svg = [self getSvgView];
+        [svg defineTemplate:self templateRef:self.name];
+    }
+    
+    for (RNSVGNode *node in self.subviews) {
+        [node saveDefination:context];
+    }
+}
+
+- (void)willRemoveSubview:(UIView *)subview
+{
+    [super willRemoveSubview:subview];
+}
+
+- (void)mergeProperties:(__kindof RNSVGNode *)target
+{
+    for (RNSVGNode *node in self.subviews) {
+        [node mergeProperties:target];
+    }
+}
 
 @end

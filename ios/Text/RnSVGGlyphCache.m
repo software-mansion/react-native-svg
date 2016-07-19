@@ -13,7 +13,7 @@
 -(id)init
 {
     self = [super init];
-    if(self != nil)
+    if(self)
     {
         cache = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, NULL, &kCFTypeDictionaryValueCallBacks);
     }
@@ -29,7 +29,7 @@
 {
     // First we lookup the font to get to its glyph dictionary
     CFMutableDictionaryRef glyphDict = (CFMutableDictionaryRef)CFDictionaryGetValue(cache, font);
-    if(glyphDict == NULL)
+    if(!glyphDict)
     {
         // And if this font hasn't been seen before, we'll create and set the dictionary for it
         glyphDict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, NULL, &kCFTypeDictionaryValueCallBacks);
@@ -38,11 +38,11 @@
     }
     // Next we try to get a path for the given glyph from the glyph dictionary
     CGPathRef path = (CGPathRef)CFDictionaryGetValue(glyphDict, (const void *)(uintptr_t)glyph);
-    if(path == NULL)
+    if(!path)
     {
         // If the path hasn't been seen before, then we'll create the path from the font & glyph and cache it.
         path = CTFontCreatePathForGlyph(font, glyph, NULL);
-        if(path == NULL)
+        if(!path)
         {
             // If a glyph does not have a path, then we need a placeholder to set in the dictionary
             path = (CGPathRef)kCFNull;

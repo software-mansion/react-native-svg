@@ -81,7 +81,7 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
         }
         // We should consider snapping this shift to device pixels to improve rendering quality
         // when a line has subpixel width.
-        CGAffineTransform offset = CGAffineTransformMakeTranslation(-shift, frame.baseLine + frame.lineHeight * i + (self.path == NULL ? 0 : -frame.lineHeight));
+        CGAffineTransform offset = CGAffineTransformMakeTranslation(-shift, frame.baseLine + frame.lineHeight * i + (self.path ? -frame.lineHeight : 0));
         CGPathAddPath(path, &offset, [self setLinePath:frame.lines[i]]);
     }
     
@@ -115,11 +115,11 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
         for(CFIndex j = 0; j < runGlyphCount; ++j, ++glyphIndex) {
             CGPathRef letter = [cache pathForGlyph:glyphs[j] fromFont:runFont];
             CGPoint point = positions[j];
-            if (letter != NULL) {
+            if (letter) {
                 CGAffineTransform transform;
                 
                 // draw glyphs along path
-                if (self.path != NULL) {
+                if (self.path) {
                     CGPoint slope;
                     CGRect bounding = CGPathGetBoundingBox(letter);
                     UIBezierPath* path = [UIBezierPath bezierPathWithCGPath:self.path];

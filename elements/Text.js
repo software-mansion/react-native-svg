@@ -20,17 +20,11 @@ class Text extends Shape {
     static contextTypes = {
         ...textProps,
         ...fillProps,
-        ...strokeProps,
-        isInGroup: PropTypes.bool,
-        svgId: numberProp
+        ...strokeProps
     };
 
     setNativeProps = (...args) => {
-        this.getNativeElement().setNativeProps(...args);
-    };
-
-    getNativeElement = () => {
-        return this.refs.root || this.root;
+        this.root.setNativeProps(...args);
     };
 
     render() {
@@ -45,21 +39,9 @@ class Text extends Shape {
             y = props.dy ? +props.y + (+props.dy) : +props.y;
         }
 
-        if (this.props.id) {
-            return <Defs.Item
-                ref={ele => this.root = ele.refs.root}
-                id={this.props.id}
-                svgId={this.props.svgId}
-                visible={true}
-                text={true}
-            >
-                <Text {...this.props} id={null} />
-            </Defs.Item>;
-        }
-
         return (
             <RNSVGText
-                ref="root"
+                ref={ele => this.root = ele}
                 {...extractProps({...props, x, y})}
                 {...extractText(props)}
             />
