@@ -36,15 +36,12 @@
  */
 - (void)renderLayerTo:(CGContextRef)context;
 
+- (void)renderClip:(CGContextRef)context;
+
 /**
  * clip node by clipPath or clipPathRef.
  */
 - (void)clip:(CGContextRef)context;
-
-/**
- * get clip path for current node.
- */
-- (CGPathRef)getClipPath;
 
 /**
  * getPath will return the path inside node as a ClipPath.
@@ -70,8 +67,13 @@
 - (void)removeDefination;
 
 /**
- * merge owned properties into target element`s properties
+ * Just for template node to merge target node`s properties into owned properties
  */
-- (void)mergeProperties:(__kindof RNSVGNode *)target;
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList;
+
+/**
+ * Just for template node to reset all owned properties once after rendered.
+ */
+- (void)resetProperties;
 
 @end

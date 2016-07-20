@@ -7,15 +7,17 @@ import {EllipseAttributes} from '../lib/attributes';
 
 class Ellipse extends Shape{
     static displayName = 'Ellipse';
+
     static propTypes = {
         ...pathProps,
         ...ellipseProps
     };
 
-    static contextTypes = {
-        ...fillProps,
-        ...strokeProps,
-        ...ellipseProps
+    static defaultProps = {
+        cx: 0,
+        cy: 0,
+        rx: 0,
+        ry: 0
     };
 
     setNativeProps = (...args) => {

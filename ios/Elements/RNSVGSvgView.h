@@ -19,13 +19,13 @@
 /**
  * define <ClipPath></ClipPath> content as clipPath template.
  */
-- (void)defineClipPath:(CGPathRef)clipPath clipPathRef:(NSString *)clipPathRef;
+- (void)defineClipPath:(__kindof RNSVGNode *)clipPath clipPathRef:(NSString *)clipPathRef;
 
 - (void)removeClipPath:(NSString *)clipPathRef;
 
-- (CGPathRef)getDefinedClipPath:(NSString *)clipPathRef;
+- (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathRef;
 
-- (void)defineTemplate:(RNSVGNode *)template templateRef:(NSString *)templateRef;
+- (void)defineTemplate:(__kindof RNSVGNode *)template templateRef:(NSString *)templateRef;
 
 - (void)removeTemplate:(NSString *)tempalteRef;
 

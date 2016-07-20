@@ -8,15 +8,19 @@ import Shape from './Shape';
 
 class Rect extends Shape {
     static displayName = 'Rect';
+
     static propTypes = {
         ...pathProps,
         ...rectProps
     };
 
-    static contextTypes = {
-        ...fillProps,
-        ...strokeProps,
-        ...rectProps
+    static defaultProps = {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        rx: 0,
+        ry: 0
     };
 
     setNativeProps = (...args) => {
@@ -37,8 +41,8 @@ class Rect extends Shape {
             y={props.y.toString()}
             width={props.width.toString()}
             height={props.height.toString()}
-            rx={props.rx ? props.rx.toString() : '0'}
-            ry={props.ry ? props.ry.toString() : '0'}
+            rx={props.rx.toString()}
+            ry={props.ry.toString()}
         />;
     }
 }

@@ -13,7 +13,7 @@
 
 @implementation RNSVGSvgView
 {
-    NSMutableDictionary<NSString *, NSValue *> *clipPaths;
+    NSMutableDictionary<NSString *, RNSVGNode *> *clipPaths;
     NSMutableDictionary<NSString *, RNSVGNode *> *templates;
 }
 
@@ -64,12 +64,12 @@
     return self.responsible ? [super hitTest:point withEvent:event] : nil;
 }
 
-- (void)defineClipPath:(CGPathRef)clipPath clipPathRef:(NSString *)clipPathRef
+- (void)defineClipPath:(__kindof RNSVGNode *)clipPath clipPathRef:(NSString *)clipPathRef
 {
     if (!clipPaths) {
         clipPaths = [[NSMutableDictionary alloc] init];
     }
-    [clipPaths setValue:[NSValue valueWithPointer:clipPath] forKey:clipPathRef];
+    [clipPaths setObject:clipPath forKey:clipPathRef];
 }
 
 - (void)removeClipPath:(NSString *)clipPathRef
@@ -79,9 +79,9 @@
     }
 }
 
-- (CGPathRef)getDefinedClipPath:(NSString *)clipPathRef
+- (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathRef
 {
-    return clipPaths ? [[clipPaths valueForKey:clipPathRef] pointerValue] : nil;
+    return clipPaths ? [clipPaths objectForKey:clipPathRef] : nil;
 }
 
 - (void)defineTemplate:(RNSVGNode *)template templateRef:(NSString *)templateRef

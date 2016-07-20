@@ -7,15 +7,16 @@ import {circleProps, pathProps, fillProps, strokeProps, numberProp} from '../lib
 
 class Circle extends Shape {
     static displayName = 'Circle';
+
     static propTypes = {
         ...pathProps,
         ...circleProps
     };
 
-    static contextTypes = {
-        ...fillProps,
-        ...strokeProps,
-        ...circleProps
+    static defaultProps = {
+        cx: 0,
+        cy: 0,
+        r: 0
     };
 
     setNativeProps = (...args) => {

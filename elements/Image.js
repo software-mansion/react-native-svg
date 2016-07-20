@@ -11,12 +11,19 @@ class Image extends Shape {
     static propTypes = {
         x: numberProp,
         y: numberProp,
-        width: numberProp,
-        height: numberProp,
+        width: numberProp.isRequired,
+        height: numberProp.isRequired,
         href: PropTypes.number.isRequired,
         ...responderProps,
         ...touchableProps
         //preserveAspectRatio: PropTypes.string
+    };
+
+    static defaultProps = {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
     };
 
     setNativeProps = (...args) => {

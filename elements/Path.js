@@ -10,21 +10,8 @@ class Path extends Shape {
     static displayName = 'Path';
 
     static propTypes = {
-        d: PropTypes.string,
+        d: PropTypes.string.isRequired,
         ...pathProps
-    };
-
-    static contextTypes = {
-        ...pathProps
-    };
-
-
-    _dimensions = null;
-
-    componentWillReceiveProps = nextProps => {
-        if (nextProps.d !== this.props.d) {
-            this._dimensions = null;
-        }
     };
 
     setNativeProps = (...args) => {

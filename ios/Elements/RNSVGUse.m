@@ -10,12 +10,22 @@
 
 @implementation RNSVGUse
 
+- (void)setMergeList:(NSArray<NSString *> *)mergeList
+{
+    if (mergeList == _mergeList) {
+        return;
+    }
+    _mergeList = mergeList;
+    [self invalidate];
+}
+
 - (void)renderLayerTo:(CGContextRef)context
 {
     RNSVGNode* template = [[self getSvgView] getDefinedTemplate:self.href];
     if (template) {
-        [template mergeProperties:self];
+        [template mergeProperties:self mergeList:self.mergeList];
         [template renderTo:context];
+        [template resetProperties];
     } else if (self.href) {
         // TODO: calling yellow box here
         RCTLogWarn(@"`Use` element expected a pre-defined svg template as `href` prop, template named: %@ is not defined.", self.href);

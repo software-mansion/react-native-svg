@@ -10,14 +10,14 @@
 
 @implementation RNSVGClipPath
 
-- (void)saveDefination:(CGContextRef)context
-{
-    [[self getSvgView] defineClipPath:[self getPath:context] clipPathRef:self.name];
-}
-
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     return nil;
+}
+
+- (void)saveDefination:(CGContextRef)context
+{
+    [[self getSvgView] defineClipPath:self clipPathRef:self.name];
 }
 
 - (void)removeDefination

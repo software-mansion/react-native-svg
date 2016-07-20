@@ -15,5 +15,7 @@
 @interface RNSVGUse : RNSVGRenderable
 
 @property (nonatomic, strong) NSString *href;
+@property (nonatomic, copy) NSArray<NSString *> *mergeList;
+
 
 @end

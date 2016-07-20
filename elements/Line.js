@@ -7,15 +7,17 @@ import {lineProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/p
 
 class Line extends Shape {
     static displayName = 'Line';
+
     static propTypes = {
         ...pathProps,
         ...lineProps
     };
 
-    static contextTypes = {
-        ...fillProps,
-        ...strokeProps,
-        ...lineProps
+    static defaultProps = {
+        x1: 0,
+        y1: 0,
+        x2: 0,
+        y2: 0
     };
 
     setNativeProps = (...args) => {

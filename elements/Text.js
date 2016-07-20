@@ -10,6 +10,7 @@ import Shape from './Shape';
 
 class Text extends Shape {
     static displayName = 'Text';
+
     static propTypes = {
         dx: numberProp,
         dy: numberProp,
@@ -17,10 +18,9 @@ class Text extends Shape {
         ...pathProps
     };
 
-    static contextTypes = {
-        ...textProps,
-        ...fillProps,
-        ...strokeProps
+    static defaultProps = {
+        dx: 0,
+        dy: 0
     };
 
     setNativeProps = (...args) => {

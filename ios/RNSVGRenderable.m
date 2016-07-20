@@ -9,6 +9,10 @@
 #import "RNSVGRenderable.h"
 
 @implementation RNSVGRenderable
+{
+    NSMutableDictionary *originProperties;
+    NSArray *changedList;
+}
 
 - (id)init
 {
@@ -93,6 +97,7 @@
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.transform);
     CGContextSetAlpha(context, self.opacity);
+    [self renderClip:context];
     [self renderLayerTo:context];
     CGContextRestoreGState(context);
 }
@@ -100,7 +105,7 @@
 // hitTest delagate
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    CGPathRef clipPath  = [self getClipPath];
+    CGPathRef clipPath  = self.clipPath;
     if (self.nodeArea && CGPathContainsPoint(self.nodeArea, nil, point, NO)) {
         if (!clipPath) {
             return self;
@@ -112,38 +117,33 @@
     }
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
 {
-    RNSVGRenderable* renderableTarget = target;
     
-    if (renderableTarget.fill) {
-        self.fill = renderableTarget.fill;
+    if (mergeList.count == 0) {
+        return;
     }
-    if (renderableTarget.fillRule) {
-        self.fillRule = renderableTarget.fillRule;
+    
+    originProperties = [[NSMutableDictionary alloc] init];
+    
+    changedList = mergeList;
+    for (NSString *key in mergeList) {
+        [originProperties setValue:[self valueForKey:key] forKey:key];
+        [self setValue:[target valueForKey:key] forKey:key];
     }
-    if (renderableTarget.stroke) {
-        self.stroke = renderableTarget.stroke;
+    
+    [super mergeProperties:target mergeList:mergeList];
+}
+
+- (void)resetProperties
+{
+    if (changedList) {
+        for (NSString *key in changedList) {
+            [self setValue:[originProperties valueForKey:key] forKey:key];
+        }
     }
-    if (renderableTarget.strokeWidth) {
-        self.strokeWidth = renderableTarget.strokeWidth;
-    }
-    if (renderableTarget.strokeLinecap) {
-        self.strokeLinecap = renderableTarget.strokeLinecap;
-    }
-    if (renderableTarget.strokeLinejoin) {
-        self.strokeLinejoin = renderableTarget.strokeLinejoin;
-    }
-    if (renderableTarget.strokeMiterlimit) {
-        self.strokeMiterlimit = renderableTarget.strokeMiterlimit;
-    }
-    if (renderableTarget.strokeDasharray.count != 0) {
-        self.strokeDasharray = renderableTarget.strokeDasharray;
-    }
-    if (renderableTarget.strokeDashoffset) {
-        self.strokeDashoffset = renderableTarget.strokeDashoffset;
-    }
-    [super mergeProperties:target];
+    [super resetProperties];
+    changedList = nil;
 }
 
 - (void)renderLayerTo:(CGContextRef)context

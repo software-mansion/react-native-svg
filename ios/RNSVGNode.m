@@ -11,6 +11,9 @@
 #import "RNSVGClipPath.h"
 
 @implementation RNSVGNode
+{
+    CGFloat originOpacity;
+}
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
 {
@@ -66,7 +69,7 @@
 - (void)renderTo:(CGContextRef)context
 {
     float opacity = self.opacity;
-
+    
     BOOL transparent = opacity < 1;
 
     // This needs to be painted on a layer before being composited.
@@ -76,11 +79,20 @@
     if (transparent) {
         CGContextBeginTransparencyLayer(context, NULL);
     }
+    [self renderClip:context];
     [self renderLayerTo:context];
     if (transparent) {
         CGContextEndTransparencyLayer(context);
     }
+    
     CGContextRestoreGState(context);
+}
+
+- (void)renderClip:(CGContextRef)context
+{
+    if (self.clipPathRef) {
+        self.clipPath = [[[self getSvgView] getDefinedClipPath:self.clipPathRef] getPath:context];
+    }
 }
 
 - (void)setClipPath:(CGPathRef)clipPath
@@ -99,25 +111,12 @@
     return CGPathCreateMutable();
 }
 
-- (CGPathRef)getClipPath
-{
-    CGPathRef clipPath = nil;
-
-    if (self.clipPath) {
-        clipPath = self.clipPath;
-    } else if (self.clipPathRef) {
-        clipPath = [[self getSvgView] getDefinedClipPath:self.clipPathRef];
-    }
-
-    return clipPath;
-}
-
 - (void)clip:(CGContextRef)context
 {
-    CGPathRef clipPath  = [self getClipPath];
+    CGPathRef clipPath  = self.clipPath;
 
     if (clipPath) {
-        CGContextAddPath(context, [self getClipPath]);
+        CGContextAddPath(context, clipPath);
         if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
             CGContextEOClip(context);
         } else {
@@ -182,10 +181,15 @@
     }
 }
 
-
-- (void)mergeProperties:(__kindof RNSVGNode *)target
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
 {
+    originOpacity = self.opacity;
     self.opacity = target.opacity * self.opacity;
+}
+
+- (void)resetProperties
+{
+    self.opacity = originOpacity;
 }
 
 - (void)dealloc

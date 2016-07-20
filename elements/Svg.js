@@ -30,15 +30,6 @@ class Svg extends Component{
         id++;
         this.id = id;
     }
-
-    getChildren = () => {
-        return Children.map(this.props.children, child => {
-            return cloneElement(child, {
-                svgId: this.id
-            });
-        });
-    };
-
     measureInWindow = (...args) => {
         this.root.measureInWindow(...args);
     };
@@ -67,9 +58,7 @@ class Svg extends Component{
             preserveAspectRatio={props.preserveAspectRatio}
             width={props.width}
             height={props.height}
-        >
-            {this.getChildren()}
-        </ViewBox> : this.getChildren();
+        >{props.children}</ViewBox> : props.children;
 
         return (
             <NativeSvgView

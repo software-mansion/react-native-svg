@@ -64,10 +64,17 @@
     [super willRemoveSubview:subview];
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
 {
     for (RNSVGNode *node in self.subviews) {
-        [node mergeProperties:target];
+        [node mergeProperties:target mergeList:mergeList];
+    }
+}
+
+- (void)resetProperties
+{
+    for (RNSVGNode *node in self.subviews) {
+        [node resetProperties];
     }
 }
 
