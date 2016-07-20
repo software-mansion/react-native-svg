@@ -7,7 +7,7 @@
  */
 
 #import <UIKit/UIKit.h>
-
+#import "RNSVGBrushCOnverter.h"
 #import "RNSVGContainer.h"
 
 @class RNSVGNode;
@@ -25,10 +25,18 @@
 
 - (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathRef;
 
+
 - (void)defineTemplate:(__kindof RNSVGNode *)template templateRef:(NSString *)templateRef;
 
 - (void)removeTemplate:(NSString *)tempalteRef;
 
 - (RNSVGNode *)getDefinedTemplate:(NSString *)tempalteRef;
+
+
+- (void)defineBrushConverter:(RNSVGBrushConverter *)brushConverter brushConverterRef:(NSString *)brushConverterRef;
+
+- (void)removeBrushConverter:(NSString *)brushConverterRef;
+
+- (RNSVGBrushConverter *)getDefinedBrushConverter:(NSString *)brushConverterRef;
 
 @end

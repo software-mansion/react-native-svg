@@ -6,8 +6,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGBrush.h"
-
-@interface RNSVGLinearGradient : RNSVGBrush
-
-@end
+typedef enum {
+    kRNSVGLinearGradient,
+    kRNSVGRadialGradient,
+    kRNSVGPattern
+} RNSVGBrushType;

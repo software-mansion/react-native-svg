@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react';
 import SerializablePath from '../lib/SerializablePath';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import {PathAttributes} from '../lib/attributes';
-import mergeContext from '../lib/mergeContext';
 import Shape from './Shape';
 import {pathProps, numberProp} from '../lib/props';
 
@@ -10,8 +9,8 @@ class Path extends Shape {
     static displayName = 'Path';
 
     static propTypes = {
-        d: PropTypes.string.isRequired,
-        ...pathProps
+        ...pathProps,
+        d: PropTypes.string.isRequired
     };
 
     setNativeProps = (...args) => {
@@ -19,7 +18,7 @@ class Path extends Shape {
     };
 
     render() {
-        let props = mergeContext(this.props, this.context);
+        let props = this.props;
 
         let d = new SerializablePath(props.d).toJSON();
         return (

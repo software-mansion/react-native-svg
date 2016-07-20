@@ -15,6 +15,7 @@
 {
     NSMutableDictionary<NSString *, RNSVGNode *> *clipPaths;
     NSMutableDictionary<NSString *, RNSVGNode *> *templates;
+    NSMutableDictionary<NSString *, RNSVGBrushConverter *> *brushConverters;
 }
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
@@ -102,6 +103,27 @@
 - (RNSVGNode *)getDefinedTemplate:(NSString *)tempalteRef
 {
     return templates ? [templates objectForKey:tempalteRef] : nil;
+}
+
+
+- (void)defineBrushConverter:(RNSVGBrushConverter *)brushConverter brushConverterRef:(NSString *)brushConverterRef
+{
+    if (!brushConverters) {
+        brushConverters = [[NSMutableDictionary alloc] init];
+    }
+    [brushConverters setObject:brushConverter forKey:brushConverterRef];
+}
+
+- (void)removeBrushConverter:(NSString *)brushConverterRef
+{
+    if (brushConverters) {
+        [brushConverters removeObjectForKey:brushConverterRef];
+    }
+}
+
+- (RNSVGBrushConverter *)getDefinedBrushConverter:(NSString *)brushConverterRef
+{
+    return brushConverters ? [brushConverters objectForKey:brushConverterRef] : nil;
 }
 
 @end

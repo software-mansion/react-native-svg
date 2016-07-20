@@ -1,8 +1,7 @@
 import React, {PropTypes} from 'react';
 import './Path'; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
-import mergeContext from '../lib/mergeContext';
-import {rectProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
+import {pathProps, numberProp} from '../lib/props';
 import {RectAttributes} from '../lib/attributes';
 import Shape from './Shape';
 
@@ -11,7 +10,12 @@ class Rect extends Shape {
 
     static propTypes = {
         ...pathProps,
-        ...rectProps
+        x: numberProp.isRequired,
+        y: numberProp.isRequired,
+        width: numberProp.isRequired,
+        height: numberProp.isRequired,
+        rx: numberProp,
+        ry: numberProp
     };
 
     static defaultProps = {
@@ -28,7 +32,7 @@ class Rect extends Shape {
     };
 
     render() {
-        let props = mergeContext(this.props, this.context);
+        let props = this.props;
 
         return <RNSVGRect
             ref={ele => this.root = ele}

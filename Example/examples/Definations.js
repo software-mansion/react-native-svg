@@ -9,7 +9,10 @@ import Svg, {
     Use,
     Rect,
     Circle,
-    ClipPath
+    ClipPath,
+    LinearGradient,
+    RadialGradient,
+    Stop
 } from 'react-native-svg';
 
 class DefsExample extends Component{
@@ -27,10 +30,21 @@ class DefsExample extends Component{
                 <ClipPath id="clip">
                     <Circle r="20%" cx="0" cy="0" />
                 </ClipPath>
+                <LinearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <Stop offset="0%" stopColor="yellow" />
+                    <Stop offset="50%" stopColor="red" />
+                    <Stop offset="100%" stopColor="blue" />
+                </LinearGradient>
+                <RadialGradient id="radial" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                    <Stop offset="0%" stopColor="yellow" />
+                    <Stop offset="50%" stopColor="red" />
+                    <Stop offset="100%" stopColor="blue" />
+                </RadialGradient>
             </Defs>
-            <Use href="url(#path)" x="0" fill="blue" opacity="0.5"   />
-            <Use href="url(#path)" x="20" y="5" fill="#8a3" />
-            <Use href="url(#path)" x="30" clipPath="url(#clip)" />
+            <Use href="url(#path)" x="0" fill="blue" opacity="0.2" />
+            <Use href="url(#path)" x="20" y="5" fill="url(#linear)" />
+            <Use href="url(#path)" x="50" clipPath="url(#clip)" fillOpacity="0.6" />
+            <Use href="url(#path)" x="-10" y="20" fill="red"  fill="url(#radial)" />
         </Svg>;
     }
 }

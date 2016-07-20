@@ -56,7 +56,7 @@
     CGFloat cy = [convert stringToFloat:self.cy relative:height offset:0];
     CGFloat r;
     
-    // radius in percentage calculate formula:
+    // radius percentage calculate formula:
     // radius = sqrt(pow((width*percent), 2) + pow((height*percent), 2)) / sqrt(2)
     
     if ([convert isPercentage:self.r]) {

@@ -49,7 +49,7 @@
     
     if (self.fill) {
         mode = self.fillRule == kRNSVGCGFCRuleEvenodd ? kCGPathEOFill : kCGPathFill;
-        fillColor = [self.fill applyFillColor:context];
+        fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
         
         if (!fillColor) {
             [self clip:context];
@@ -57,7 +57,8 @@
             CGContextSaveGState(context);
             CGContextAddPath(context, self.d);
             CGContextClip(context);
-            [self.fill paint:context];
+            RNSVGBrushConverter *brushConverter = [[self getSvgView] getDefinedBrushConverter:[self.fill brushRef]];
+            [self.fill paint:context opacity:self.strokeOpacity brushConverter:brushConverter];
             CGContextRestoreGState(context);
             if (!self.stroke) {
                 return;
@@ -80,7 +81,7 @@
             CGContextClip(context);
         }
         
-        if ([self.stroke applyStrokeColor:context]) {
+        if ([self.stroke applyStrokeColor:context opacity:self.strokeOpacity]) {
             if (mode == kCGPathFill) {
                 mode = kCGPathFillStroke;
             } else if (mode == kCGPathEOFill) {
@@ -96,8 +97,8 @@
             CGContextAddPath(context, self.d);
             CGContextReplacePathWithStrokedPath(context);
             CGContextClip(context);
-            [self.stroke paint:context];
-            
+            RNSVGBrushConverter *brushConverter = [[self getSvgView] getDefinedBrushConverter:[self.stroke brushRef]];
+            [self.stroke paint:context opacity:self.strokeOpacity brushConverter:brushConverter];
             return;
         }
     }

@@ -7,12 +7,13 @@
  */
 
 #import <QuartzCore/QuartzCore.h>
-
-#import "RNSVGBrush.h"
+#import "RCTConvert+RNSVG.h"
 #import "RNSVGCGFloatArray.h"
 #import "RNSVGTextFrame.h"
 #import "RCTConvert.h"
 #import "RNSVGCGFCRule.h"
+
+@class RNSVGBrush;
 
 @interface RCTConvert (RNSVG)
 

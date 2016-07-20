@@ -3,8 +3,7 @@ import createReactNativeComponentClass from 'react/lib/createReactNativeComponen
 import Defs from './Defs';
 import extractProps from '../lib/extract/extractProps';
 import extractText from '../lib/extract/extractText';
-import mergeContext from '../lib/mergeContext';
-import {numberProp, textProps, fillProps, strokeProps, pathProps} from '../lib/props';
+import {numberProp, pathProps} from '../lib/props';
 import {TextAttributes} from '../lib/attributes';
 import Shape from './Shape';
 
@@ -12,10 +11,17 @@ class Text extends Shape {
     static displayName = 'Text';
 
     static propTypes = {
+        ...pathProps,
         dx: numberProp,
         dy: numberProp,
-        ...textProps,
-        ...pathProps
+        textAnchor: PropTypes.oneOf(['start', 'middle', 'end']),
+        path: PropTypes.string,
+        fontFamily: PropTypes.string,
+        fontSize: numberProp,
+        fontWeight: PropTypes.string,
+        fontStyle: PropTypes.string,
+        font: PropTypes.object,
+        lines: numberProp
     };
 
     static defaultProps = {
@@ -28,7 +34,7 @@ class Text extends Shape {
     };
 
     render() {
-        let props = mergeContext(this.props, this.context);
+        let props = this.props;
 
         let x = 0;
         if (props.x) {

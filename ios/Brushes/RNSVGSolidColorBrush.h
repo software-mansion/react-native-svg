@@ -6,12 +6,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGNode.h"
+#import "RNSVGBrush.h"
 
-/**
- * RNSVG defination are implemented as abstract UIViews for all elements inside Defs.
- */
-
-@interface RNSVGDefination : RNSVGNode
+@interface RNSVGSolidColorBrush : RNSVGBrush
 
 @end

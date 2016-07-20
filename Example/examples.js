@@ -18,5 +18,22 @@ import * as Definations from './examples/Definations';
 import * as TouchEvents from './examples/TouchEvents';
 
 export {
+    Svg,
+    Rect,
+    Circle,
+    Ellipse,
+    Line,
+    Polygon,
+    Polyline,
+    Path,
+    Text,
+    Stroking,
+    G,
+    //Use,
+    //Symbol,
+    Gradients,
+    Clipping,
+    Image,
+    TouchEvents,
     Definations
 };

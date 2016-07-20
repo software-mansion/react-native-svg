@@ -8,10 +8,9 @@
 
 #import "RCTConvert+RNSVG.h"
 
-#import "RNSVGLinearGradient.h"
+#import "RNSVGBaseBrush.h"
 #import "RNSVGPattern.h"
-#import "RNSVGRadialGradient.h"
-#import "RNSVGSolidColor.h"
+#import "RNSVGSolidColorBrush.h"
 #import "RCTLog.h"
 #import "RNSVGCGFCRule.h"
 
@@ -155,15 +154,9 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
         case 0: // solid color
             // These are probably expensive allocations since it's often the same value.
             // We should memoize colors but look ups may be just as expensive.
-            return [[RNSVGSolidColor alloc] initWithArray:arr];
-        case 1: // linear gradient
-            return [[RNSVGLinearGradient alloc] initWithArray:arr];
-        case 2: // radial gradient
-            return [[RNSVGRadialGradient alloc] initWithArray:arr];
-        case 3: // pattern
-            // TODO:
-            return nil;
-            return [[RNSVGPattern alloc] initWithArray:arr];
+            return [[RNSVGSolidColorBrush alloc] initWithArray:arr];
+        case 1: // brush
+            return [[RNSVGBaseBrush alloc] initWithArray:arr];
         default:
             RCTLogError(@"Unknown brush type: %zd", type);
             return nil;

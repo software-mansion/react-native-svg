@@ -9,13 +9,13 @@ import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 class Image extends Shape {
     static displayName = 'Image';
     static propTypes = {
+        ...responderProps,
+        ...touchableProps,
         x: numberProp,
         y: numberProp,
         width: numberProp.isRequired,
         height: numberProp.isRequired,
-        href: PropTypes.number.isRequired,
-        ...responderProps,
-        ...touchableProps
+        href: PropTypes.number.isRequired
         //preserveAspectRatio: PropTypes.string
     };
 

@@ -19,7 +19,6 @@ class GExample extends Component{
             width="100"
         >
             <G
-                r="11"
                 fill="purple"
                 stroke="pink"
                 strokeWidth="3"
@@ -28,26 +27,31 @@ class GExample extends Component{
                     <Circle
                         cx="25"
                         cy="25"
+                        r="11"
                     />
                 </G>
                 <Circle
                     cx="25"
                     cy="75"
+                    r="11"
                     stroke="red"
                 />
                 <Circle
                     cx="50"
                     cy="50"
+                    r="11"
                     fill="green"
                 />
                 <Circle
                     cx="75"
                     cy="25"
+                    r="11"
                     stroke="red"
                 />
                 <Circle
                     cx="75"
                     cy="75"
+                    r="11"
                 />
             </G>
         </Svg>;
@@ -92,7 +96,7 @@ class GTransform extends Component{
                 >
                     Text grouped with shapes</Text>
             </G>
-            <Use href="#group" x="5" rotate="0" />
+            <Use href="url(#group)" x="5" rotate="0" />
         </Svg>;
     }
 }

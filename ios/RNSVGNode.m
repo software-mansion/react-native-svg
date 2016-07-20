@@ -105,6 +105,16 @@
     _clipPath = CGPathRetain(clipPath);
 }
 
+- (void)setClipPathRef:(NSString *)clipPathRef
+{
+    if (_clipPathRef == clipPathRef) {
+        return;
+    }
+    [self invalidate];
+    self.clipPath = nil;
+    _clipPathRef = clipPathRef;
+}
+
 - (CGPathRef)getPath: (CGContextRef) context
 {
     // abstract
