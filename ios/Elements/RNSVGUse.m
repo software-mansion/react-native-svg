@@ -23,21 +23,12 @@
 {
     RNSVGNode* template = [[self getSvgView] getDefinedTemplate:self.href];
     if (template) {
-        CGFloat opacity = self.opacity;
-        BOOL transparent = opacity < 1;
-        
-        if (transparent) {
-            CGContextBeginTransparencyLayer(context, NULL);
-        }
-        
+        [self beginTransparencyLayer:context];
         [self clip:context];
         [template mergeProperties:self mergeList:self.mergeList];
         [template renderTo:context];
         [template resetProperties];
-        
-        if (transparent) {
-            CGContextEndTransparencyLayer(context);
-        }
+        [self endTransparencyLayer:context];
     } else if (self.href) {
         // TODO: calling yellow box here
         RCTLogWarn(@"`Use` element expected a pre-defined svg template as `href` prop, template named: %@ is not defined.", self.href);

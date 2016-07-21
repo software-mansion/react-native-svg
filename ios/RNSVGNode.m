@@ -11,6 +11,9 @@
 #import "RNSVGClipPath.h"
 
 @implementation RNSVGNode
+{
+    BOOL transparent;
+}
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
 {
@@ -52,8 +55,9 @@
     } else if (opacity > 1) {
         opacity = 1;
     }
-
+    
     [self invalidate];
+    transparent = opacity < 1;
     _opacity = opacity;
 }
 
@@ -63,27 +67,33 @@
     super.transform = transform;
 }
 
+- (void)beginTransparencyLayer:(CGContextRef)context
+{
+    if (transparent) {
+        CGContextBeginTransparencyLayer(context, NULL);
+    }
+}
+
+- (void)endTransparencyLayer:(CGContextRef)context
+{
+    if (transparent) {
+        CGContextEndTransparencyLayer(context);
+    }
+}
+
 - (void)renderTo:(CGContextRef)context
 {
     float opacity = self.opacity;
     
-    BOOL transparent = opacity < 1;
-
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.transform);
     CGContextSetAlpha(context, opacity);
     
-    if (transparent) {
-        CGContextBeginTransparencyLayer(context, NULL);
-    }
-    
+    [self beginTransparencyLayer:context];
     [self renderClip:context];
     [self renderLayerTo:context];
-    
-    if (transparent) {
-        CGContextEndTransparencyLayer(context);
-    }
+    [self endTransparencyLayer:context];
     
     CGContextRestoreGState(context);
 }

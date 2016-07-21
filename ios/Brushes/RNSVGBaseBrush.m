@@ -28,6 +28,11 @@
 
 - (void)paint:(CGContextRef)context opacity:(CGFloat)opacity brushConverter:(RNSVGBrushConverter *)brushConverter
 {
+    BOOL transparency = opacity < 1;
+    if (transparency) {
+        CGContextSetAlpha(context, opacity);
+        CGContextBeginTransparencyLayer(context, NULL);
+    }
     
     if (brushConverter.type == kRNSVGLinearGradient) {
         [brushConverter drawLinearGradient:context];
@@ -35,6 +40,10 @@
         [brushConverter drawRidialGradient:context];
     } else if (brushConverter.type == kRNSVGPattern) {
         // todo:
+    }
+    
+    if (transparency) {
+        CGContextEndTransparencyLayer(context);
     }
 }
 

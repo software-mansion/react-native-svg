@@ -76,4 +76,8 @@
  */
 - (void)resetProperties;
 
+- (void)beginTransparencyLayer:(CGContextRef)context;
+
+- (void)endTransparencyLayer:(CGContextRef)context;
+
 @end

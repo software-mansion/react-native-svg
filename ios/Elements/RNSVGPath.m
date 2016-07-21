@@ -59,7 +59,7 @@
             CGContextAddPath(context, self.d);
             CGContextClip(context);
             RNSVGBrushConverter *brushConverter = [[self getSvgView] getDefinedBrushConverter:[self.fill brushRef]];
-            [self.fill paint:context opacity:self.strokeOpacity brushConverter:brushConverter];
+            [self.fill paint:context opacity:self.fillOpacity brushConverter:brushConverter];
             CGContextRestoreGState(context);
             if (!self.stroke) {
                 return;

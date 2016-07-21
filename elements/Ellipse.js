@@ -28,6 +28,7 @@ class Ellipse extends Shape{
 
     render() {
         let props = this.props;
+
         return <RNSVGEllipse
             ref={ele => this.root = ele}
             {...this.extractProps(props)}

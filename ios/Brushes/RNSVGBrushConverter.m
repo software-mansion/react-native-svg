@@ -58,6 +58,7 @@
     
     CGAffineTransform transform = CGAffineTransformMakeScale(1, ry / rx);
     CGContextConcatCTM(context, transform);
+    
     CGContextDrawRadialGradient(context, gradient, CGPointMake(fx, fy), 0, CGPointMake(cx, cy), rx, extendOptions);
     CGGradientRelease(gradient);
 }
