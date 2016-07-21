@@ -76,7 +76,7 @@ void getPointsFromBezier(void *info, const CGPathElement *element)
 {
     // Use total length to calculate the percent of path consumed at each control point
     NSArray *points = self.points;
-    int pointCount = points.count;
+    NSUInteger pointCount = points.count;
     
     float totalPointLength = self.length;
     float distanceTravelled = 0.0f;

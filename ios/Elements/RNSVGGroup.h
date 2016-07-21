@@ -15,6 +15,8 @@
 
 @interface RNSVGGroup : RNSVGNode <RNSVGContainer>
 
+@property (nonatomic, copy) NSArray<NSString *> *mergeList;
+
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 
 @end

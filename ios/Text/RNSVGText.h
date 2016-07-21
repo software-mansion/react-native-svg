@@ -10,7 +10,6 @@
 #import "UIBezierPath-Points.h"
 #import "RNSVGPath.h"
 #import "RNSVGTextFrame.h"
-#import "RNSVGGlyphCache.h"
 
 @interface RNSVGText : RNSVGPath
 

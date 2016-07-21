@@ -14,6 +14,7 @@
 {
     CGImageRef image;
 }
+
 - (void)setSrc:(id)src
 {
     if (src == _src) {
@@ -79,7 +80,10 @@
     CGFloat h = [convert stringToFloat:self.height relative:height offset:0];
     
     // add hit area
-    CGPathAddPath(self.nodeArea, nil, CGPathCreateWithRect(CGRectMake(x, y, w, h), nil));
+    self.hitArea = CGPathCreateMutable();
+    CGPathRef rect = CGPathCreateWithRect(CGRectMake(x, y, w, h), nil);
+    CGPathAddPath(self.hitArea, nil, rect);
+    CGPathRelease(rect);
     
     if (self.opacity == 0) {
         return;

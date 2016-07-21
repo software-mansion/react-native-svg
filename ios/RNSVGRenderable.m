@@ -16,11 +16,22 @@
 
 - (id)init
 {
-    self = [super init];
-    if (self) {
-        _nodeArea = CGPathCreateMutable();
+    if (self = [super init]) {
+        _fillOpacity = 1;
+        _strokeOpacity = 1;
+        _strokeWidth = 1;
     }
     return self;
+}
+
+- (void)setHitArea:(CGMutablePathRef)hitArea
+{
+    if (hitArea == _hitArea) {
+        return;
+    }
+    [self invalidate];
+    CGPathRelease(_hitArea);
+    _hitArea = hitArea;
 }
 
 - (void)setFill:(RNSVGBrush *)fill
@@ -79,7 +90,7 @@
 
 - (void)dealloc
 {
-    CGPathRelease(_nodeArea);
+    CGPathRelease(_hitArea);
     if (_strokeDasharray.array) {
         free(_strokeDasharray.array);
     }
@@ -106,7 +117,7 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     CGPathRef clipPath  = self.clipPath;
-    if (self.nodeArea && CGPathContainsPoint(self.nodeArea, nil, point, NO)) {
+    if (self.hitArea && CGPathContainsPoint(self.hitArea, nil, point, NO)) {
         if (!clipPath) {
             return self;
         } else {
@@ -131,8 +142,6 @@
         [originProperties setValue:[self valueForKey:key] forKey:key];
         [self setValue:[target valueForKey:key] forKey:key];
     }
-    
-    [super mergeProperties:target mergeList:mergeList];
 }
 
 - (void)resetProperties

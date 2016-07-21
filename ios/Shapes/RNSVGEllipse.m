@@ -67,7 +67,7 @@
     CGFloat rx = [convert stringToFloat:self.rx relative:width offset:0];
     CGFloat ry = [convert stringToFloat:self.ry relative:height offset:0];
     CGPathAddEllipseInRect(path, nil, CGRectMake(cx - rx, cy - ry, rx * 2, ry * 2));
-    return path;
+    return (CGPathRef)CFAutorelease(path);
 }
 
 @end

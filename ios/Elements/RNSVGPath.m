@@ -31,13 +31,14 @@
         return;
     }
     
-    // Add path to nodeArea
-    CGPathAddPath(self.nodeArea, nil, _d);
+    // Add path to hitArea
+    self.hitArea = CGPathCreateMutableCopy(_d);
     
     if (self.stroke) {
-        // Add stroke to nodeArea
+        // Add stroke to hitArea
         CGPathRef strokePath = CGPathCreateCopyByStrokingPath(_d, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
-        CGPathAddPath(self.nodeArea, nil, strokePath);
+        CGPathAddPath(self.hitArea, nil, strokePath);
+        CGPathRelease(strokePath);
     }
     
     if (self.opacity == 0) {

@@ -19,8 +19,6 @@ RCT_EXPORT_MODULE()
   return [RNSVGGroup new];
 }
 
-
-RCT_EXPORT_VIEW_PROPERTY(clipPath, CGPath)
-RCT_EXPORT_VIEW_PROPERTY(clipRule, RNSVGCGFCRule)
+RCT_EXPORT_VIEW_PROPERTY(mergeList, NSArray<NSString *>)
 
 @end

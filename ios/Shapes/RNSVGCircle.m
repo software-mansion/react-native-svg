@@ -67,7 +67,7 @@
     }
     
     CGPathAddArc(path, nil, cx, cy, r, 0, 2*M_PI, YES);
-    return path;
+    return (CGPathRef)CFAutorelease(path);
 }
 
 @end

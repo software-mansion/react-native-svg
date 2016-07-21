@@ -32,7 +32,7 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
 
 - (void)setTextFrame:(RNSVGTextFrame)frame
 {
-    if (frame.lines != _textFrame.lines) {
+    if (frame.lines == _textFrame.lines) {
         RNSVGFreeTextFrame(_textFrame);
     }
     [self invalidate];
@@ -82,25 +82,25 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
         // We should consider snapping this shift to device pixels to improve rendering quality
         // when a line has subpixel width.
         CGAffineTransform offset = CGAffineTransformMakeTranslation(-shift, frame.baseLine + frame.lineHeight * i + (self.path ? -frame.lineHeight : 0));
-        CGPathAddPath(path, &offset, [self setLinePath:frame.lines[i]]);
+        
+        CGMutablePathRef line = [self setLinePath:frame.lines[i]];
+        CGPathAddPath(path, &offset, line);
+        CGPathRelease(line);
     }
     
-    return path;
+    return (CGPathRef)CFAutorelease(path);
 }
 
-- (CGPathRef)setLinePath:(CTLineRef)line
+- (CGMutablePathRef)setLinePath:(CTLineRef)line
 {
-    
     CGAffineTransform upsideDown = CGAffineTransformMakeScale(1.0, -1.0);
     CGMutablePathRef path = CGPathCreateMutable();
-    RNSVGGlyphCache *cache = [[RNSVGGlyphCache alloc] init];
     CTLineGetGlyphRuns(line);
     CFArrayRef glyphRuns = CTLineGetGlyphRuns(line);
     CFIndex runCount = CFArrayGetCount(glyphRuns);
     CFIndex glyphIndex = 0;
-    for(CFIndex i = 0; i < runCount; ++i)
-    {
-        
+    
+    for(CFIndex i = 0; i < runCount; ++i) {
         // For each run, we need to get the glyphs, their font (to get the path) and their locations.
         CTRunRef run = CFArrayGetValueAtIndex(glyphRuns, i);
         CFIndex runGlyphCount = CTRunGetGlyphCount(run);
@@ -112,9 +112,11 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
         CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
         CFDictionaryRef attributes = CTRunGetAttributes(run);
         CTFontRef runFont = CFDictionaryGetValue(attributes, kCTFontAttributeName);
+        
         for(CFIndex j = 0; j < runGlyphCount; ++j, ++glyphIndex) {
-            CGPathRef letter = [cache pathForGlyph:glyphs[j] fromFont:runFont];
+            CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[j], nil);
             CGPoint point = positions[j];
+            
             if (letter) {
                 CGAffineTransform transform;
                 
@@ -122,23 +124,29 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
                 if (self.path) {
                     CGPoint slope;
                     CGRect bounding = CGPathGetBoundingBox(letter);
-                    UIBezierPath* path = [UIBezierPath bezierPathWithCGPath:self.path];
-                    CGFloat percentConsumed = (point.x + bounding.size.width) / path.length;
+                    UIBezierPath* pathAlong = [UIBezierPath bezierPathWithCGPath:self.path];
+                    CGFloat percentConsumed = (point.x + bounding.size.width) / pathAlong.length;
                     if (percentConsumed >= 1.0f) {
+                        CGPathRelease(letter);
                         continue;
                     }
         
-                    CGPoint targetPoint = [path pointAtPercent:percentConsumed withSlope: &slope];
+                    CGPoint targetPoint = [pathAlong pointAtPercent:percentConsumed withSlope: &slope];
                     float angle = atan(slope.y / slope.x); //  + M_PI;
-                    if (slope.x < 0) angle += M_PI; // going left, update the angle
+                    if (slope.x < 0) {
+                        angle += M_PI; // going left, update the angle
+                    }
                     transform = CGAffineTransformMakeTranslation(targetPoint.x - bounding.size.width, targetPoint.y);
                     transform = CGAffineTransformRotate(transform, angle);
                     transform = CGAffineTransformScale(transform, 1.0, -1.0);
                 } else {
                     transform = CGAffineTransformTranslate(upsideDown, point.x, point.y);
                 }
+                
                 CGPathAddPath(path, &transform, letter);
             }
+            
+            CGPathRelease(letter);
         }
     }
     

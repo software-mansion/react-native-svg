@@ -11,9 +11,6 @@
 #import "RNSVGClipPath.h"
 
 @implementation RNSVGNode
-{
-    CGFloat originOpacity;
-}
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
 {
@@ -76,11 +73,14 @@
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.transform);
     CGContextSetAlpha(context, opacity);
+    
     if (transparent) {
         CGContextBeginTransparencyLayer(context, NULL);
     }
+    
     [self renderClip:context];
     [self renderLayerTo:context];
+    
     if (transparent) {
         CGContextEndTransparencyLayer(context);
     }
@@ -118,7 +118,7 @@
 - (CGPathRef)getPath: (CGContextRef) context
 {
     // abstract
-    return CGPathCreateMutable();
+    return (CGPathRef)CFAutorelease(CGPathCreateMutable());
 }
 
 - (void)clip:(CGContextRef)context
@@ -193,13 +193,12 @@
 
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
 {
-    originOpacity = self.opacity;
-    self.opacity = target.opacity * self.opacity;
+    // abstract
 }
 
 - (void)resetProperties
 {
-    self.opacity = originOpacity;
+    // abstract
 }
 
 - (void)dealloc

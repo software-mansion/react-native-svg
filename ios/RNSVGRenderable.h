@@ -26,7 +26,7 @@
 @property (nonatomic, assign) CGFloat strokeMiterlimit;
 @property (nonatomic, assign) RNSVGCGFloatArray strokeDasharray;
 @property (nonatomic, assign) CGFloat strokeDashoffset;
-@property (nonatomic, assign) CGMutablePathRef nodeArea;
+@property (nonatomic, assign) CGMutablePathRef hitArea;
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 

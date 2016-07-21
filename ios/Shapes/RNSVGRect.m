@@ -109,7 +109,7 @@
         CGPathAddRect(path, nil, CGRectMake(x, y, w, h));
     }
     
-    return path;
+    return (CGPathRef)CFAutorelease(path);
 }
 
 @end

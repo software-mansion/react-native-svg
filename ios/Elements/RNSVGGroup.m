@@ -17,6 +17,7 @@
     [self clip:context];
     
     for (RNSVGNode *node in self.subviews) {
+        //[node mergeProperties:self mergeList:self.mergeList];
         [node renderTo:context];
         
         if (node.responsible && !svg.responsible) {
@@ -32,7 +33,7 @@
         CGAffineTransform transform = node.transform;
         CGPathAddPath(path, &transform, [node getPath:context]);
     }
-    return path;
+    return (CGPathRef)CFAutorelease(path);
 }
 
 // hitTest delagate

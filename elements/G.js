@@ -4,6 +4,7 @@ import createReactNativeComponentClass from 'react/lib/createReactNativeComponen
 import {transformProps} from '../lib/props';
 import {GroupAttributes} from '../lib/attributes';
 import extractProps from '../lib/extract/extractProps';
+import reusableProps from '../lib/reusableProps';
 
 class G extends Component{
     static displayName = 'G';
@@ -15,10 +16,18 @@ class G extends Component{
     };
 
     render() {
+        let {props} = this;
+
+        let extractedProps = extractProps(props, {
+            stroke: true,
+            fill: true,
+            transform: true
+        });
+
         return <RNSVGGroup
-            {...extractProps(this.props, {transform: true})}
+            {...extractedProps}
             ref={ele => this.root = ele}
-            asClipPath={this.props.asClipPath}
+            mergeList={reusableProps(extractedProps, props)}
         >
             {this.props.children}
         </RNSVGGroup>;

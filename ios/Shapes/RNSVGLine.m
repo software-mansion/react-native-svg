@@ -69,7 +69,7 @@
     CGPathMoveToPoint(path, nil, x1, y1);
     CGPathAddLineToPoint(path, nil, x2, y2);
     
-    return path;
+    return (CGPathRef)CFAutorelease(path);
 }
 
 @end

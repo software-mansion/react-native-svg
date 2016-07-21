@@ -1,10 +1,11 @@
 import {PropTypes} from 'react';
 import {pathProps} from '../lib/props';
-import {UseAttributes, RenderableOnlyAttributes} from '../lib/attributes';
+import {UseAttributes} from '../lib/attributes';
 import Shape from './Shape';
 import React from 'react';
 import patternReg from '../lib/extract/patternReg';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import reusableProps from '../lib/reusableProps';
 import _ from 'lodash';
 
 class Defs extends Shape {
@@ -33,8 +34,6 @@ class Defs extends Shape {
             console.warn('Invalid `href` prop for `Use` element, expected a href like `"url(#id)"`, but got: "' + props.href + '"');
         }
 
-        let mergeList = [];
-
         let extractedProps = this.extractProps(props, {
             stroke: true,
             fill: true,
@@ -42,26 +41,10 @@ class Defs extends Shape {
             transform: true
         });
 
-        Object.keys(RenderableOnlyAttributes).forEach(name => {
-
-            if (!_.isNil(props[name])) {
-                // clipPath prop may provide `clipPathRef` as native prop
-                if (name === 'clipPath') {
-                    if (extractedProps[name]) {
-                        mergeList.push(name);
-                    } else if (extractedProps.clipPathRef) {
-                        mergeList.push('clipPathRef');
-                    }
-                } else {
-                    mergeList.push(name);
-                }
-            }
-        });
-
         return <RNSVGUse
             ref={ele => this.root = ele}
             {...extractedProps}
-            mergeList={mergeList}
+            mergeList={reusableProps(extractedProps, props)}
             href={href}
         >{props.children}</RNSVGUse>;
     }

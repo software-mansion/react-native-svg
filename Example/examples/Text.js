@@ -28,6 +28,7 @@ class TextExample extends Component{
 
 class TextRotate extends Component{
     static title = 'Transform the text';
+
     render() {
         return <Svg
             height="60"
@@ -115,13 +116,31 @@ class TextFill extends Component{
 
 
 class TextPath extends Component{
-    static title = 'Transform the text';
+    static title = 'Draw text along path';
+
+    constructor(...args) {
+        super(...args);
+        this.state = {
+            key: 0
+        };
+    }
+
+    componentDidMount() {
+        let self = this;
+        //setInterval(function () {
+        //    self.setState({
+        //        key: self.state.key + 1
+        //    });
+        //}, 50);
+    }
+
     render() {
         return <Svg
             height="60"
             width="200"
         >
             <Text
+                key={this.state.key}
                 fill="red"
                 path={`
                     M 10 20
