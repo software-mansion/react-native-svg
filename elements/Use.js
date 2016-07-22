@@ -5,7 +5,6 @@ import Shape from './Shape';
 import React from 'react';
 import patternReg from '../lib/extract/patternReg';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
-import reusableProps from '../lib/reusableProps';
 import _ from 'lodash';
 
 class Defs extends Shape {
@@ -44,7 +43,6 @@ class Defs extends Shape {
         return <RNSVGUse
             ref={ele => this.root = ele}
             {...extractedProps}
-            mergeList={reusableProps(extractedProps, props)}
             href={href}
         >{props.children}</RNSVGUse>;
     }

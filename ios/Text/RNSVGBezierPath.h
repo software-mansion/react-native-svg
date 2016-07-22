@@ -6,14 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGRenderable.h"
 
-/**
- * RNSVG defination are implemented as abstract UIViews for all elements inside Defs.
- */
+#import <UIKit/UIKit.h>
 
-@interface RNSVGUse : RNSVGRenderable
+@interface RNSVGBezierPath : NSObject
 
-@property (nonatomic, strong) NSString *href;
+- (instancetype)initWithBezierCurves:(NSArray *)bezierCurves;
+- (CGAffineTransform)transformAtDistance:(CGFloat)distance;
 
 @end

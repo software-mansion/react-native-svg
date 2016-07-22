@@ -11,11 +11,9 @@
 #import "RNSVGContainer.h"
 #import "RNSVGCGFCRule.h"
 #import "RNSVGSvgView.h"
-#import "RNSVGNode.h"
+#import "RNSVGRenderable.h"
 
-@interface RNSVGGroup : RNSVGNode <RNSVGContainer>
-
-@property (nonatomic, copy) NSArray<NSString *> *mergeList;
+@interface RNSVGGroup : RNSVGRenderable <RNSVGContainer>
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 

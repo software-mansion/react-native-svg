@@ -67,14 +67,21 @@
 - (void)removeDefination;
 
 /**
- * Just for template node to merge target node`s properties into owned properties
+ * just for template node to merge target node`s properties into owned properties
  */
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList;
 
 /**
- * Just for template node to reset all owned properties once after rendered.
+ * just for template node to reset all owned properties once after rendered.
  */
 - (void)resetProperties;
+
+/**
+ * inherit properties from parent g element
+ */
+- (void)inheritProperties:(__kindof RNSVGNode *)parent inheritedList:(NSArray<NSString *> *)inheritedList;
+
+- (void)inheritProperty:(__kindof RNSVGNode *)parent propName:(NSString *)propName;
 
 - (void)beginTransparencyLayer:(CGContextRef)context;
 

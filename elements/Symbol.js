@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 
 import ViewBox from './ViewBox';
-import Defs from './Defs';
+import G from './G';
+
 class SymbolElement extends Component{
     static displayName = 'Symbol';
     static propType = {
@@ -9,10 +10,8 @@ class SymbolElement extends Component{
     };
     render() {
         let {props} = this;
-        return <Defs.Item
-            id={props.id}
-            svgId={props.svgId}
-        >
+
+        return <G id={props.id}>
             <ViewBox
                 {...props}
                 viewbox={props.viewbox}
@@ -20,7 +19,7 @@ class SymbolElement extends Component{
             >
                 {props.children}
             </ViewBox>
-        </Defs.Item>;
+        </G>;
     }
 }
 

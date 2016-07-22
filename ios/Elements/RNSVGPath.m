@@ -66,6 +66,7 @@
             }
         }
     }
+    
     if (self.stroke) {
         CGContextSetLineWidth(context, self.strokeWidth);
         CGContextSetLineCap(context, self.strokeLinecap);

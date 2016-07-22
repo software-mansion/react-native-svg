@@ -18,6 +18,8 @@ class ViewBox extends Component{
             y = viewbox.y;
         }
 
+
+        console.log(viewbox);
         return <G
             {...this.props}
             x={x}
@@ -26,6 +28,7 @@ class ViewBox extends Component{
             scaleY={scaleY}
             preserveAspectRatio={null}
             viewbox={null}
+            id={null}
         >
             {(!scaleX || !scaleY) ? null : this.props.children}
         </G>;

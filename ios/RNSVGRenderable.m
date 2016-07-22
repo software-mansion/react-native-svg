@@ -88,6 +88,15 @@
     _strokeMiterlimit = strokeMiterlimit;
 }
 
+- (void)setPropList:(NSArray<NSString *> *)propList
+{
+    if (propList == _propList) {
+        return;
+    }
+    _propList = propList;
+    [self invalidate];
+}
+
 - (void)dealloc
 {
     CGPathRelease(_hitArea);
@@ -131,16 +140,27 @@
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
 {
     
+    [self mergeProperties:target mergeList:mergeList inherited:NO];
+}
+
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited
+{
     if (mergeList.count == 0) {
         return;
     }
     
-    originProperties = [[NSMutableDictionary alloc] init];
+    if (!inherited) {
+        originProperties = [[NSMutableDictionary alloc] init];
+        changedList = mergeList;
+    }
     
-    changedList = mergeList;
     for (NSString *key in mergeList) {
-        [originProperties setValue:[self valueForKey:key] forKey:key];
-        [self setValue:[target valueForKey:key] forKey:key];
+        if (inherited) {
+            [self inheritProperty:target propName:key];
+        } else {
+            [originProperties setValue:[self valueForKey:key] forKey:key];
+            [self setValue:[target valueForKey:key] forKey:key];
+        }
     }
 }
 
@@ -153,6 +173,23 @@
     }
     [super resetProperties];
     changedList = nil;
+}
+
+- (void)inheritProperty:(__kindof RNSVGNode *)parent propName:(NSString *)propName
+{
+    if (![self.propList containsObject:propName]) {
+        // add prop to propList
+        NSMutableArray *copy = [self.propList mutableCopy];
+        [copy addObject:propName];
+        self.propList = [copy copy];
+        
+        [self setValue:[parent valueForKey:propName] forKey:propName];
+    }
+}
+
+- (void)inheritProperties:(__kindof RNSVGNode *)parent inheritedList:(NSArray<NSString *> *)inheritedList
+{
+    [self mergeProperties:parent mergeList:inheritedList inherited:YES];
 }
 
 - (void)renderLayerTo:(CGContextRef)context

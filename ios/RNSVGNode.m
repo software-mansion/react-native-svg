@@ -211,6 +211,16 @@
     // abstract
 }
 
+- (void)inheritProperty:(__kindof RNSVGNode *)parent propName:(NSString *)propName
+{
+    // abstract
+}
+
+- (void)inheritProperties:(__kindof RNSVGNode *)parent inheritedList:(NSArray<NSString *> *)inheritedList;
+{
+    // abstract
+}
+
 - (void)dealloc
 {
     CGPathRelease(_clipPath);

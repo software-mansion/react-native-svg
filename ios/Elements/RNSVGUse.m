@@ -10,14 +10,16 @@
 
 @implementation RNSVGUse
 
-- (void)setMergeList:(NSArray<NSString *> *)mergeList
+- (void)setHref:(NSString *)href
 {
-    if (mergeList == _mergeList) {
+    if (href == _href) {
         return;
     }
-    _mergeList = mergeList;
+    
     [self invalidate];
+    _href = href;
 }
+
 
 - (void)renderLayerTo:(CGContextRef)context
 {
@@ -25,7 +27,7 @@
     if (template) {
         [self beginTransparencyLayer:context];
         [self clip:context];
-        [template mergeProperties:self mergeList:self.mergeList];
+        [template mergeProperties:self mergeList:self.propList];
         [template renderTo:context];
         [template resetProperties];
         [self endTransparencyLayer:context];

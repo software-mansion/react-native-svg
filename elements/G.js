@@ -4,7 +4,6 @@ import createReactNativeComponentClass from 'react/lib/createReactNativeComponen
 import {transformProps} from '../lib/props';
 import {GroupAttributes} from '../lib/attributes';
 import extractProps from '../lib/extract/extractProps';
-import reusableProps from '../lib/reusableProps';
 
 class G extends Component{
     static displayName = 'G';
@@ -27,7 +26,6 @@ class G extends Component{
         return <RNSVGGroup
             {...extractedProps}
             ref={ele => this.root = ele}
-            mergeList={reusableProps(extractedProps, props)}
         >
             {this.props.children}
         </RNSVGGroup>;

@@ -19,7 +19,7 @@ class StrokeExample extends Component{
     static title = 'The stroke property defines the color of a line, text or outline of an element';
     render() {
         return <Svg height="80" width="225">
-            <G fill="none">
+            <G>
                 <Path stroke="red" d="M5 20 l215 0" />
                 <Path stroke="black" d="M5 40 l215 0" />
                 <Path stroke="blue" d="M5 60 l215 0" />
@@ -32,10 +32,12 @@ class StrokeLinecap extends Component{
     static title = 'The strokeLinecap property defines different types of endings to an open path';
     render() {
         return <Svg height="80" width="225">
-            <G fill="none" stroke="black">
-                <Path strokeLinecap="butt" strokeWidth="8" d="M5 20 l215 0" />
-                <Path strokeLinecap="round" strokeWidth="8" d="M5 40 l215 0" />
-                <Path strokeLinecap="square" strokeWidth="8" d="M5 60 l215 0" />
+            <G stroke="red">
+                <G strokeWidth="8">
+                    <Path strokeLinecap="butt" d="M5 20 l215 0" />
+                    <Path strokeLinecap="round" d="M5 40 l215 0" />
+                    <Path strokeLinecap="square" d="M5 60 l215 0" />
+                </G>
             </G>
         </Svg>;
     }
@@ -142,7 +144,6 @@ const icon = <Svg
 </Svg>;
 
 const samples = [StrokeExample, StrokeLinecap, StrokeDasharray, StrokeDashoffset, StrokePattern];
-
 export {
     icon,
     samples

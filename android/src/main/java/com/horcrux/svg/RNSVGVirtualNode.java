@@ -49,7 +49,6 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     protected @Nullable Path mClipPath;
     protected @Nullable String mClipPathRef;
-    private static final int PATH_TYPE_ARC = 4;
     private static final int PATH_TYPE_CLOSE = 1;
     private static final int PATH_TYPE_CURVETO = 3;
     private static final int PATH_TYPE_LINETO = 2;
@@ -233,30 +232,6 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
                         data[i++] * mScale,
                         data[i++] * mScale);
                     break;
-                case PATH_TYPE_ARC:
-                {
-                    float x = data[i++] * mScale;
-                    float y = data[i++] * mScale;
-                    float r = data[i++] * mScale;
-                    float start = (float) Math.toDegrees(data[i++]);
-                    float end = (float) Math.toDegrees(data[i++]);
-
-                    boolean clockwise = data[i++] == 1f;
-                    float sweep = end - start;
-                    if (Math.abs(sweep) > 360) {
-                        sweep = 360;
-                    } else {
-                        sweep = modulus(sweep, 360);
-                    }
-                    if (!clockwise && sweep < 360) {
-                        start = end;
-                        sweep = 360 - sweep;
-                    }
-
-                    RectF oval = new RectF(x - r, y - r, x + r, y + r);
-                    path.addArc(oval, start, sweep);
-                    break;
-                }
                 default:
                     throw new JSApplicationIllegalArgumentException(
                         "Unrecognized drawing instruction " + type);

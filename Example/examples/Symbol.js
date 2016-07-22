@@ -21,19 +21,19 @@ class SymbolExample extends Component{
             </Symbol>
 
             <Use
-                href="#symbol"
+                href="url(#symbol)"
                 x="0"
                 y="0"
             />
             <Use
-                href="#symbol"
+                href="url(#symbol)"
                 x="0"
                 y="50"
                 width="75"
                 height="38"
             />
             <Use
-                href="#symbol"
+                href="url(#symbol)"
                 x="0"
                 y="100"
                 width="50"
@@ -53,14 +53,14 @@ const icon = <Svg
     </Symbol>
 
     <Use
-        href="#symbol"
+        href="url(#symbol)"
         x="0"
         y="0"
         width="20"
         height="10"
     />
     <Use
-        href="#symbol"
+        href="url(#symbol)"
         x="0"
         y="12"
         width="20"

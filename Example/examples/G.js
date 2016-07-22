@@ -68,6 +68,7 @@ class GTransform extends Component{
             <G
                 rotate="50"
                 origin="100, 50"
+                scale="0.75"
                 id="group"
             >
                 <Line
@@ -96,7 +97,7 @@ class GTransform extends Component{
                 >
                     Text grouped with shapes</Text>
             </G>
-            <Use href="url(#group)" x="5" rotate="0" />
+            <Use href="url(#group)" x="5" y="20" rotate="-50" stroke="red" />
         </Svg>;
     }
 }
@@ -106,30 +107,35 @@ const icon = <Svg
     width="20"
 >
     <G
-        r="3"
         fill="purple"
         stroke="pink"
+        strokeWidth="1"
     >
         <Circle
             cx="5"
             cy="5"
+            r="3"
         />
         <Circle
             cx="5"
             cy="15"
+            r="3"
         />
         <Circle
             cx="10"
             cy="10"
             fill="green"
+            r="3"
         />
         <Circle
             cx="15"
             cy="5"
+            r="3"
         />
         <Circle
             cx="15"
             cy="15"
+            r="3"
         />
     </G>
 </Svg>;

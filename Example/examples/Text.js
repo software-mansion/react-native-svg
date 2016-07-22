@@ -6,7 +6,9 @@ import Svg, {
     Text,
     LinearGradient,
     Stop,
-    Defs
+    Defs,
+    Path,
+    G
 } from 'react-native-svg';
 
 class TextExample extends Component{
@@ -119,22 +121,33 @@ class TextPath extends Component{
     static title = 'Draw text along path';
 
     render() {
-        return <Svg
-            height="60"
-            width="200"
-        >
-            <Text
-                fill="red"
-                path={`
-                    M 10 20
+        const path = `
+                    M 0 20
+                    h 10
                     C 20 10 30  0 40 10
                     C 50 20 60 30 70 20
                     C 80 10 90 10 90 10
                     C 110 20 120 30 120 20
                     C 140 10 150 10 150 10
-                `}
-                y="20"
-            >We go up, then we go down, then up again</Text>
+                    a 50 50 0 1 1 20 110
+                `;
+
+        return <Svg
+            height="60"
+            width="200"
+        >
+            <G y="20">
+                <Text
+                    fill="blue"
+                    path={path}
+                >We go up, then we go down, then up again</Text>
+                <Path
+                    d={path}
+                    fill="none"
+                    stroke="red"
+                    strokeWidth="1"
+                />
+            </G>
         </Svg>;
     }
 }

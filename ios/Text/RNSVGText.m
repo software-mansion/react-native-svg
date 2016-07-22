@@ -7,7 +7,7 @@
  */
 
 #import "RNSVGText.h"
-
+#import "RNSVGBezierPath.h"
 #import <CoreText/CoreText.h>
 
 @implementation RNSVGText
@@ -39,19 +39,17 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
     _textFrame = frame;
 }
 
-- (void)setPath:(CGPathRef)path
+- (void)setPath:(NSArray *)path
 {
     if (path == _path) {
         return;
     }
     [self invalidate];
-    CGPathRelease(_path);
-    _path = CGPathRetain(path);
+    _path = path;
 }
 
 - (void)dealloc
 {
-    CGPathRelease(_path);
     RNSVGFreeTextFrame(_textFrame);
 }
 
@@ -95,59 +93,41 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
 {
     CGAffineTransform upsideDown = CGAffineTransformMakeScale(1.0, -1.0);
     CGMutablePathRef path = CGPathCreateMutable();
-    CTLineGetGlyphRuns(line);
-    CFArrayRef glyphRuns = CTLineGetGlyphRuns(line);
-    CFIndex runCount = CFArrayGetCount(glyphRuns);
-    CFIndex glyphIndex = 0;
     
-    for(CFIndex i = 0; i < runCount; ++i) {
-        // For each run, we need to get the glyphs, their font (to get the path) and their locations.
-        CTRunRef run = CFArrayGetValueAtIndex(glyphRuns, i);
-        CFIndex runGlyphCount = CTRunGetGlyphCount(run);
-        CGPoint positions[runGlyphCount];
-        CGGlyph glyphs[runGlyphCount];
+    CFArrayRef glyphRuns = CTLineGetGlyphRuns(line);
+    CTRunRef run = CFArrayGetValueAtIndex(glyphRuns, 0);
+    
+    CFIndex runGlyphCount = CTRunGetGlyphCount(run);
+    CGPoint positions[runGlyphCount];
+    CGGlyph glyphs[runGlyphCount];
+    
+    // Grab the glyphs, positions, and font
+    CTRunGetPositions(run, CFRangeMake(0, 0), positions);
+    CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
+    CFDictionaryRef attributes = CTRunGetAttributes(run);
+    CTFontRef runFont = CFDictionaryGetValue(attributes, kCTFontAttributeName);
+    
+    RNSVGBezierPath *bezierPath = [[RNSVGBezierPath alloc] initWithBezierCurves:self.path];
+    
+    for(CFIndex i = 0; i < runGlyphCount; ++i) {
+        CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[i], nil);
+        CGPoint point = positions[i];
         
-        // Grab the glyphs, positions, and font
-        CTRunGetPositions(run, CFRangeMake(0, 0), positions);
-        CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
-        CFDictionaryRef attributes = CTRunGetAttributes(run);
-        CTFontRef runFont = CFDictionaryGetValue(attributes, kCTFontAttributeName);
-        
-        for(CFIndex j = 0; j < runGlyphCount; ++j, ++glyphIndex) {
-            CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[j], nil);
-            CGPoint point = positions[j];
+        if (letter) {
+            CGAffineTransform transform;
             
-            if (letter) {
-                CGAffineTransform transform;
-                
-                // draw glyphs along path
-                if (self.path) {
-                    CGPoint slope;
-                    CGRect bounding = CGPathGetBoundingBox(letter);
-                    UIBezierPath* pathAlong = [UIBezierPath bezierPathWithCGPath:self.path];
-                    CGFloat percentConsumed = (point.x + bounding.size.width) / pathAlong.length;
-                    if (percentConsumed >= 1.0f) {
-                        CGPathRelease(letter);
-                        continue;
-                    }
-        
-                    CGPoint targetPoint = [pathAlong pointAtPercent:percentConsumed withSlope: &slope];
-                    float angle = atan(slope.y / slope.x); //  + M_PI;
-                    if (slope.x < 0) {
-                        angle += M_PI; // going left, update the angle
-                    }
-                    transform = CGAffineTransformMakeTranslation(targetPoint.x - bounding.size.width, targetPoint.y);
-                    transform = CGAffineTransformRotate(transform, angle);
-                    transform = CGAffineTransformScale(transform, 1.0, -1.0);
-                } else {
-                    transform = CGAffineTransformTranslate(upsideDown, point.x, point.y);
-                }
-                
-                CGPathAddPath(path, &transform, letter);
+            // draw glyphs along path
+            if (self.path) {
+                transform = [bezierPath transformAtDistance:point.x];
+                transform = CGAffineTransformScale(transform, 1.0, -1.0);
+            } else {
+                transform = CGAffineTransformTranslate(upsideDown, point.x, point.y);
             }
             
-            CGPathRelease(letter);
+            CGPathAddPath(path, &transform, letter);
         }
+        
+        CGPathRelease(letter);
     }
     
     return path;
