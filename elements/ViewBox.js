@@ -1,38 +1,73 @@
-import React, {Component} from 'react';
-
+import React, {Component, PropTypes} from 'react';
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import {ViewBoxAttributes} from '../lib/attributes';
 import G from './G';
-import extractViewbox from '../lib/extract/extractViewbox';
+import _ from 'lodash';
+
+const meetOrSliceTypes = {
+    meet: 0,
+    slice: 1,
+    none: 2
+};
+
+const alignEnum = _.reduce([
+    'xMinMin', 'xMidYMin', 'xMaxYMin',
+    'xMinYMid', 'xMidYMid', 'xMaxYMid',
+    'xMinYMax', 'xMidYMax', 'xMaxYMax',
+    'none'
+], (prev, name) => {
+    prev[name] = name;
+    return prev;
+}, {});
+
+const numberRegExp = /^\d*\.?\d*%?$/;
+const spacesRegExp = /\s+/;
+
 class ViewBox extends Component{
     static displayName = 'ViewBox';
 
+    static propTypes = {
+        viewBox: PropTypes.string.isRequired,
+        preserveAspectRatio: PropTypes.string
+    };
+
+    static defaultProps = {
+        preserveAspectRatio: 'xMidYMid meet'
+    };
+
     render() {
-        let viewbox = extractViewbox(this.props);
-        let scaleX = 1;
-        let scaleY = 1;
-        let x = 0;
-        let y = 0;
-        if (viewbox) {
-            scaleX = viewbox.scaleX;
-            scaleY = viewbox.scaleY;
-            x = viewbox.x;
-            y = viewbox.y;
+        let {viewBox, preserveAspectRatio} = this.props;
+
+        let params = viewBox.trim().split(spacesRegExp);
+
+        if (params.length !== 4 || !_.some(params, param => param && numberRegExp.test(param))) {
+            console.warn('`viewBox` expected a string like `minX minY width height`, but got:' + viewBox);
+            return <G>
+                {this.props.children}
+            </G>
         }
 
+        let modes = preserveAspectRatio.trim().split(spacesRegExp);
 
-        console.log(viewbox);
-        return <G
-            {...this.props}
-            x={x}
-            y={y}
-            scaleX={scaleX}
-            scaleY={scaleY}
-            preserveAspectRatio={null}
-            viewbox={null}
-            id={null}
+        let meetOrSlice = meetOrSliceTypes[modes[1]] || 0;
+        let align = alignEnum[modes[0]] || 'xMidYMid';
+        return <RNSVGViewBox
+            minX={params[0]}
+            minY={params[1]}
+            vbWidth={params[2]}
+            vbHeight={params[3]}
+            align={align}
+            meetOrSlice={meetOrSlice}
         >
-            {(!scaleX || !scaleY) ? null : this.props.children}
-        </G>;
+            {this.props.children}
+        </RNSVGViewBox>
     }
 }
+
+const RNSVGViewBox = createReactNativeComponentClass({
+    validAttributes: ViewBoxAttributes,
+    uiViewClassName: 'RNSVGViewBox'
+});
+
 
 export default ViewBox;

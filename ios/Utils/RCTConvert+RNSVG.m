@@ -13,6 +13,7 @@
 #import "RNSVGSolidColorBrush.h"
 #import "RCTLog.h"
 #import "RNSVGCGFCRule.h"
+#import "RNSVGVBMOS.h"
 
 @implementation RCTConvert (RNSVG)
 
@@ -72,6 +73,13 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
                                      @"evenodd": @(kRNSVGCGFCRuleEvenodd),
                                      @"nonzero": @(kRNSVGCGFCRuleNonzero),
                                      }), kRNSVGCGFCRuleNonzero, intValue)
+
+RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
+                                     @"meet": @(kRNSVGVBMOSMeet),
+                                     @"slice": @(kRNSVGVBMOSSlice),
+                                     @"none": @(kRNSVGVBMOSNone)
+                                     }), kRNSVGVBMOSMeet, intValue)
+
 
 // This takes a tuple of text lines and a font to generate a CTLine for each text line.
 // This prepares everything for rendering a frame of text in RNSVGText.

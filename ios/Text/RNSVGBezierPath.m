@@ -7,7 +7,7 @@
  */
 
 /**
- * based on
+ * based on CurvyText by iosptl: https://github.com/iosptl/ios7ptl/blob/master/ch21-Text/CurvyText/CurvyText/CurvyTextView.m
  */
 
 #import "RNSVGBezierPath.h"

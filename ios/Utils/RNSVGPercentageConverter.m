@@ -10,13 +10,24 @@
 
 @implementation RNSVGPercentageConverter
 {
+    CGFloat _relative;
+    CGFloat _offset;
     NSRegularExpression *percentageRegularExpression;
+}
+
+- (instancetype) initWithRelativeAndOffset:(CGFloat)relative offset:(CGFloat)offset
+{
+    if (self = [super init]) {
+        _relative = relative;
+        _offset = offset;
+        percentageRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"^(\\-?\\d+(?:\\.\\d+)?)%$" options:0 error:nil];
+    }
+    return self;
 }
 
 - (id)init
 {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         percentageRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"^(\\-?\\d+(?:\\.\\d+)?)%$" options:0 error:nil];
     }
     return self;
@@ -27,20 +38,29 @@
     return percentageRegularExpression;
 }
 
-- (float) stringToFloat:(NSString *)percentage relative:(float)relative offset:(float)offset
+- (CGFloat) stringToFloat:(NSString *)string
 {
-    if ([self isPercentage:percentage] == NO) {
-        return [percentage floatValue];
+    return [self stringToFloat:string relative:_relative offset:_offset];
+}
+
+- (CGFloat) stringToFloat:(NSString *)string relative:(CGFloat)relative offset:(CGFloat)offset
+{
+    if ([self isPercentage:string] == NO) {
+        return [string floatValue];
     } else {
-        return [self percentageToFloat:percentage relative:relative offset:offset];
+        return [self percentageToFloat:string relative:relative offset:offset];
     }
 }
 
-- (float) percentageToFloat:(NSString *)percentage relative:(float)relative offset:(float)offset
+- (CGFloat) percentageToFloat:(NSString *)percentage
 {
+    return [self percentageToFloat:percentage relative:_relative offset:_offset];
+}
 
+- (CGFloat) percentageToFloat:(NSString *)percentage relative:(CGFloat)relative offset:(CGFloat)offset
+{
+    __block CGFloat matched;
     
-    __block float matched;
     [percentageRegularExpression enumerateMatchesInString:percentage
                                                   options:0
                                                     range:NSMakeRange(0, percentage.length)

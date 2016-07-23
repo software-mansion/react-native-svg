@@ -7,11 +7,17 @@
  */
 
 #import "RNSVGRenderable.h"
+#import "RNSVGPercentageConverter.h"
 
 @implementation RNSVGRenderable
 {
-    NSMutableDictionary *originProperties;
-    NSArray *changedList;
+    NSMutableDictionary *_originProperties;
+    NSArray *_changedList;
+    RNSVGPercentageConverter *_widthConverter;
+    RNSVGPercentageConverter *_heightConverter;
+    CGFloat _contextWidth;
+    CGFloat _contextHeight;
+    CGRect _boundingBox;
 }
 
 - (id)init
@@ -137,6 +143,44 @@
     }
 }
 
+
+- (void)setBoundingBox:(CGContextRef)context
+{
+    _boundingBox = CGContextGetClipBoundingBox(context);
+    _widthConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:CGRectGetWidth(_boundingBox) offset:0];
+    _heightConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:CGRectGetHeight(_boundingBox) offset:0];
+}
+
+- (CGFloat)getWidthRelatedValue:(NSString *)string
+{
+    return [_widthConverter stringToFloat:string];
+}
+
+- (CGFloat)getHeightRelatedValue:(NSString *)string
+{
+    return [_heightConverter stringToFloat:string];
+}
+
+- (CGFloat)getContextWidth
+{
+    return CGRectGetWidth(_boundingBox);
+}
+
+- (CGFloat)getContextHeight
+{
+    return CGRectGetHeight(_boundingBox);
+}
+
+- (CGFloat)getContextX
+{
+    return CGRectGetMinX(_boundingBox);
+}
+
+- (CGFloat)getContextY
+{
+    return CGRectGetMinY(_boundingBox);
+}
+
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
 {
     
@@ -150,15 +194,15 @@
     }
     
     if (!inherited) {
-        originProperties = [[NSMutableDictionary alloc] init];
-        changedList = mergeList;
+        _originProperties = [[NSMutableDictionary alloc] init];
+        _changedList = mergeList;
     }
     
     for (NSString *key in mergeList) {
         if (inherited) {
             [self inheritProperty:target propName:key];
         } else {
-            [originProperties setValue:[self valueForKey:key] forKey:key];
+            [_originProperties setValue:[self valueForKey:key] forKey:key];
             [self setValue:[target valueForKey:key] forKey:key];
         }
     }
@@ -166,13 +210,13 @@
 
 - (void)resetProperties
 {
-    if (changedList) {
-        for (NSString *key in changedList) {
-            [self setValue:[originProperties valueForKey:key] forKey:key];
+    if (_changedList) {
+        for (NSString *key in _changedList) {
+            [self setValue:[_originProperties valueForKey:key] forKey:key];
         }
     }
     [super resetProperties];
-    changedList = nil;
+    _changedList = nil;
 }
 
 - (void)inheritProperty:(__kindof RNSVGNode *)parent propName:(NSString *)propName

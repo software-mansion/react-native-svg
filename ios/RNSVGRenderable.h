@@ -29,6 +29,19 @@
 @property (nonatomic, assign) CGMutablePathRef hitArea;
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+- (void)setBoundingBox:(CGContextRef)context;
+
+- (CGFloat)getWidthRelatedValue:(NSString *)string;
+
+- (CGFloat)getHeightRelatedValue:(NSString *)string;
+
+- (CGFloat)getContextWidth;
+
+- (CGFloat)getContextHeight;
+
+- (CGFloat)getContextX;
+
+- (CGFloat)getContextY;
+
 
 @end

@@ -55,17 +55,12 @@
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-
+    [self setBoundingBox:context];
     CGMutablePathRef path = CGPathCreateMutable();
-    CGRect box = CGContextGetClipBoundingBox(context);
-    float height = CGRectGetHeight(box);
-    float width = CGRectGetWidth(box);
-    
-    RNSVGPercentageConverter* convert = [[RNSVGPercentageConverter alloc] init];
-    CGFloat cx = [convert stringToFloat:self.cx relative:width offset:0];
-    CGFloat cy = [convert stringToFloat:self.cy relative:height offset:0];
-    CGFloat rx = [convert stringToFloat:self.rx relative:width offset:0];
-    CGFloat ry = [convert stringToFloat:self.ry relative:height offset:0];
+    CGFloat cx = [self getWidthRelatedValue:self.cx];
+    CGFloat cy = [self getHeightRelatedValue:self.cy];
+    CGFloat rx = [self getWidthRelatedValue:self.rx];
+    CGFloat ry = [self getHeightRelatedValue:self.ry];
     CGPathAddEllipseInRect(path, nil, CGRectMake(cx - rx, cy - ry, rx * 2, ry * 2));
     return (CGPathRef)CFAutorelease(path);
 }

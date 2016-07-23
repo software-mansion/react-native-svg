@@ -7,7 +7,6 @@
  */
 
 #import "RNSVGGroup.h"
-#import <objc/runtime.h>
 
 @implementation RNSVGGroup
 

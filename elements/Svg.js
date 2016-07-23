@@ -18,11 +18,9 @@ class Svg extends Component{
         opacity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        viewbox: PropTypes.string,
-        // TODO: complete other values of preserveAspectRatio
-        // http://www.justinmccandless.com/demos/viewbox/index.html
-        // http://tutorials.jenkov.com/svg/svg-viewport-view-box.html
-        preserveAspectRatio: PropTypes.string // preserveAspectRatio only supports 'none' for now
+        // more detail https://svgwg.org/svg2-draft/coords.html#ViewBoxAttribute
+        viewBox: PropTypes.string,
+        preserveAspectRatio: PropTypes.string
     };
 
     constructor() {
@@ -51,13 +49,25 @@ class Svg extends Component{
         let opacity = +props.opacity;
         let width = +props.width;
         let height = +props.height;
-        let flexLayout = isNaN(width) || isNaN(height);
+        let viewBox = props.viewBox;
+        let dimensions;
 
-        let content = (props.viewbox && !flexLayout) ? <ViewBox
-            viewbox={props.viewbox}
+        if (width && height) {
+            dimensions = {
+                width,
+                height,
+                flex: 0
+            }
+        }
+
+        if (props.viewbox) {
+            viewBox = props.viewbox;
+            console.warn('Prop `viewbox` is deprecated. please use `viewBox` instead.');
+        }
+
+        let content = viewBox ? <ViewBox
+            viewBox={viewBox}
             preserveAspectRatio={props.preserveAspectRatio}
-            width={props.width}
-            height={props.height}
         >{props.children}</ViewBox> : props.children;
 
         return (
@@ -66,7 +76,7 @@ class Svg extends Component{
                 opacity={null}
                 width={null}
                 height={null}
-                viewbox={null}
+                viewBox={null}
                 preserveAspectRatio={null}
                 ref={ele => this.root = ele}
                 style={[
@@ -75,11 +85,7 @@ class Svg extends Component{
                     !isNaN(opacity) && {
                         opacity
                     },
-                    !flexLayout && {
-                        width,
-                        height,
-                        flex: 0
-                    }
+                    dimensions
                 ]}
             >
                 {content}

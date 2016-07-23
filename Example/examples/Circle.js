@@ -78,7 +78,6 @@ const icon = <Svg
 </Svg>;
 
 const samples = [CircleExample, StrokeCircle, StrokeOpacityCircle];
-
 export {
     icon,
     samples

@@ -7,14 +7,21 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface RNSVGPercentageConverter : NSObject
 
 - (NSRegularExpression *) getPercentageRegularExpression;
 
-- (float) percentageToFloat:(NSString *)percentage relative:(float)relative offset:(float)offset;
+- (instancetype) initWithRelativeAndOffset:(CGFloat)relative offset:(CGFloat)offset;
 
-- (float) stringToFloat:(NSString *)string relative:(float)relative offset:(float)offset;
+- (CGFloat) percentageToFloat:(NSString *)percentage relative:(CGFloat)relative offset:(CGFloat)offset;
+
+- (CGFloat) percentageToFloat:(NSString *)percentage;
+
+- (CGFloat) stringToFloat:(NSString *)string relative:(CGFloat)relative offset:(CGFloat)offset;
+
+- (CGFloat) stringToFloat:(NSString *)string;
 
 - (BOOL) isPercentage:(NSString *) string;
 

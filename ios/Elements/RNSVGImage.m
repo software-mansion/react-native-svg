@@ -69,33 +69,37 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
-    CGRect box = CGContextGetClipBoundingBox(context);
-    float height = CGRectGetHeight(box);
-    float width = CGRectGetWidth(box);
-    
-    RNSVGPercentageConverter* convert = [[RNSVGPercentageConverter alloc] init];
-    CGFloat x = [convert stringToFloat:self.x relative:width offset:0];
-    CGFloat y = [convert stringToFloat:self.y relative:height offset:0];
-    CGFloat w = [convert stringToFloat:self.width relative:width offset:0];
-    CGFloat h = [convert stringToFloat:self.height relative:height offset:0];
-    
+    CGRect rect = [self getRect:context];
     // add hit area
     self.hitArea = CGPathCreateMutable();
-    CGPathRef rect = CGPathCreateWithRect(CGRectMake(x, y, w, h), nil);
-    CGPathAddPath(self.hitArea, nil, rect);
-    CGPathRelease(rect);
-    
-    if (self.opacity == 0) {
-        return;
-    }
-    
+    CGPathRef path = CGPathCreateWithRect(rect, nil);
+    CGPathAddPath(self.hitArea, nil, path);
+    CGPathRelease(path);
     [self clip:context];
+    
     CGContextSaveGState(context);
-    CGContextTranslateCTM(context, 0, h);
+    CGContextTranslateCTM(context, 0, rect.size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
-    CGContextDrawImage(context, CGRectMake(x, -y, w, h), image);
+    CGContextDrawImage(context, rect, image);
     CGContextRestoreGState(context);
     
+}
+
+- (CGRect)getRect:(CGContextRef)context
+{
+    [self setBoundingBox:context];
+    CGFloat x = [self getWidthRelatedValue:self.x];
+    CGFloat y = [self getHeightRelatedValue:self.y];
+    CGFloat width = [self getWidthRelatedValue:self.width];
+    CGFloat height = [self getHeightRelatedValue:self.height];
+    return CGRectMake(x, y, width, height);
+}
+
+- (CGPathRef)getPath:(CGContextRef)context
+{
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddRect(path, nil, [self getRect:context]);
+    return (CGPathRef)CFAutorelease(path);
 }
 
 @end
