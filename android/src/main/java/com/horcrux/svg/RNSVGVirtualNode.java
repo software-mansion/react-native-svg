@@ -69,7 +69,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     private RNSVGSvgViewShadowNode mSvgShadowNode;
 
     public RNSVGVirtualNode() {
-        mScale = DisplayMetricsHolder.getWindowDisplayMetrics().density;
+        mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
     }
 
     public abstract void draw(Canvas canvas, Paint paint, float opacity);

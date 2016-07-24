@@ -18,6 +18,7 @@ import android.graphics.Point;
 import android.util.Log;
 import android.view.ViewGroup;
 
+import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
 
@@ -52,7 +53,17 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         return bitmap;
     }
 
-    public void drawChildren(Canvas canvas, Paint paint) {
+    /**
+     * Draw all of the child nodes of this root node
+     *
+     * This method is synchronized since
+     * {@link com.horcrux.svg.RNSVGImageShadowNode#loadImage(ImageRequest, Canvas, Paint)} calls it
+     * asynchronously after images have loaded and are ready to be drawn.
+     *
+     * @param canvas
+     * @param paint
+     */
+    public synchronized void drawChildren(Canvas canvas, Paint paint) {
         for (int i = 0; i < getChildCount(); i++) {
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
             child.setupDimensions(canvas);
