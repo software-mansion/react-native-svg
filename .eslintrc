@@ -187,7 +187,6 @@
         "space-in-brackets": 0,          // require or disallow spaces inside brackets (off by default)
         "space-in-parens": 0,            // require or disallow spaces inside parentheses (off by default)
         "space-infix-ops": 1,            // require spaces around operators
-        "space-return-throw-case": 1,    // require a space after return, throw, and case
         "space-unary-ops": [1, { "words": true, "nonwords": false }], // require or disallow spaces before/after unary operators (words on by default, nonwords off by default)
         "max-nested-callbacks": 0,       // specify the maximum depth callbacks can be nested (off by default)
         "one-var": 0,                    // allow just one var statement per function (off by default)

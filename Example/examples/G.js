@@ -97,7 +97,7 @@ class GTransform extends Component{
                 >
                     Text grouped with shapes</Text>
             </G>
-            <Use href="url(#group)" x="5" y="20" rotate="-50" stroke="red" />
+            <Use href="#group" x="5" y="20" rotate="-50" stroke="red" opacity="0.5" />
         </Svg>;
     }
 }

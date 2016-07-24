@@ -8,8 +8,12 @@
 
 #import <math.h>
 #import "RNSVGViewBox.h"
+#import "RNSVGUse.h"
 
 @implementation RNSVGViewBox
+{
+    BOOL _fromSymbol;
+}
 
 - (void)renderTo:(CGContextRef)context
 {
@@ -25,8 +29,8 @@
     // Let e-x, e-y, e-width, e-height be the position and size of the element respectively.
     CGFloat eX = [self getContextX];
     CGFloat eY = [self getContextY];
-    CGFloat eWidth = [self getContextWidth];
-    CGFloat eHeight = [self getContextHeight];
+    CGFloat eWidth = self.width ? [self getWidthRelatedValue:self.width] : [self getContextWidth];
+    CGFloat eHeight = self.height ? [self getHeightRelatedValue:self.height] : [self getContextHeight];
     
     // Let align be the align value of preserveAspectRatio, or 'xMidyMid' if preserveAspectRatio is not defined.
     NSString *align = self.align;
@@ -91,12 +95,27 @@
             translateY -= eHeight / scaleY - vbHeight;
         }
     }
-    
+
     CGAffineTransform transform = CGAffineTransformMakeScale(scaleX, scaleY);
-    transform = CGAffineTransformTranslate(transform, -translateX, -translateY);
-    
+    transform = CGAffineTransformTranslate(transform, -translateX * (_fromSymbol ? scaleX : 1), -translateY * (_fromSymbol ? scaleY : 1));
     CGContextConcatCTM(context, transform);
     [super renderTo:context];
+}
+
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
+{
+    if ([target isKindOfClass:[RNSVGUse class]]) {
+        RNSVGUse *use = target;
+        _fromSymbol = YES;
+        self.width = use.width;
+        self.height = use.height;
+    }
+}
+
+- (void)resetProperties
+{
+    self.width = self.height = nil;
+    _fromSymbol = NO;
 }
 
 @end

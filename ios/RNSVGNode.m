@@ -12,7 +12,15 @@
 
 @implementation RNSVGNode
 {
-    BOOL transparent;
+    BOOL _transparent;
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        self.opacity = 1;
+    }
+    return self;
 }
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
@@ -57,7 +65,7 @@
     }
     
     [self invalidate];
-    transparent = opacity < 1;
+    _transparent = opacity < 1;
     _opacity = opacity;
 }
 
@@ -69,14 +77,14 @@
 
 - (void)beginTransparencyLayer:(CGContextRef)context
 {
-    if (transparent) {
+    if (_transparent) {
         CGContextBeginTransparencyLayer(context, NULL);
     }
 }
 
 - (void)endTransparencyLayer:(CGContextRef)context
 {
-    if (transparent) {
+    if (_transparent) {
         CGContextEndTransparencyLayer(context);
     }
 }

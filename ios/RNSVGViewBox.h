@@ -17,5 +17,7 @@
 @property (nonatomic, strong) NSString *vbHeight;
 @property (nonatomic, strong) NSString *align;
 @property (nonatomic, assign) RNSVGVBMOS meetOrSlice;
+@property (nonatomic, strong) NSString *width;
+@property (nonatomic, strong) NSString *height;
 
 @end

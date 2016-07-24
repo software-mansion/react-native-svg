@@ -27,8 +27,8 @@ class UseExample extends Component{
                     </G>
                 </G>
             </Defs>
-            <Use href="url(#shape)" x="20" y="0"/>
-            <Use href="url(#shape)" x="170"y="0" />
+            <Use href="#shape" x="20" y="0"/>
+            <Use href="#shape" x="170"y="0" />
         </Svg>;
     }
 }
@@ -43,9 +43,9 @@ class UseShapes extends Component{
             <G id="shape">
                 <Rect x="0" y="0" width="50" height="50" />
             </G>
-            <Use href="url(#shape)" x="75" y="50" fill="#0f0"/>
-            <Use href="url(#shape)" x="110" y="0" stroke="#0ff" fill="#8a3" rotation="45" origin="25, 25"/>
-            <Use href="url(#shape)" x="150" y="50" stroke="#0f0" fill="none"/>
+            <Use href="#shape" x="75" y="50" fill="#0f0"/>
+            <Use href="#shape" x="110" y="0" stroke="#0ff" fill="#8a3" rotation="45" origin="25, 25"/>
+            <Use href="#shape" x="150" y="50" stroke="#0f0" fill="none"/>
         </Svg>;
     }
 }
@@ -60,7 +60,7 @@ const icon = <Svg
         stroke="#8a3"
         id="line"
     />
-    <Use href="url(#line)" x="10" stroke="#3a8" />
+    <Use href="#line" x="10" stroke="#3a8" />
 </Svg>;
 
 const samples = [UseExample, UseShapes];
