@@ -92,34 +92,33 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
         if (inMemoryCache) {
             tryRender(request, canvas, paint, opacity);
         } else if (!mLoading) {
-            loadImage(request, canvas, paint);
+            loadBitmap(request, canvas, paint);
         }
     }
 
-    private void loadImage(@Nonnull final ImageRequest request, @Nonnull final Canvas canvas, @Nonnull final Paint paint) {
+    private void loadBitmap(@Nonnull final ImageRequest request, @Nonnull final Canvas canvas, @Nonnull final Paint paint) {
         final DataSource<CloseableReference<CloseableImage>> dataSource
                 = Fresco.getImagePipeline().fetchDecodedImage(request, getThemedContext());
 
-        dataSource.subscribe(
-                new BaseBitmapDataSubscriber() {
-                    @Override
-                    public void onNewResultImpl(@Nullable Bitmap bitmap) {
-                        if (bitmap != null) {
-                            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                            paint.reset();
-                            getSvgShadowNode().drawChildren(canvas, paint);
-                            mLoading = false;
-                        }
-                    }
+        dataSource.subscribe(new BaseBitmapDataSubscriber() {
+                                 @Override
+                                 public void onNewResultImpl(@Nullable Bitmap bitmap) {
+                                     if (bitmap != null) {
+                                         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                                         paint.reset();
+                                         getSvgShadowNode().drawChildren(canvas, paint);
+                                         mLoading = false;
+                                     }
+                                 }
 
-                    @Override
-                    public void onFailureImpl(DataSource dataSource) {
-                        // No cleanup required here.
-                        // TODO: more details about this failure
-                        mLoading = false;
-                        FLog.w(ReactConstants.TAG, dataSource.getFailureCause(), "RNSVG: fetchDecodedImage failed!");
-                    }
-                },
+                                 @Override
+                                 public void onFailureImpl(DataSource dataSource) {
+                                     // No cleanup required here.
+                                     // TODO: more details about this failure
+                                     mLoading = false;
+                                     FLog.w(ReactConstants.TAG, dataSource.getFailureCause(), "RNSVG: fetchDecodedImage failed!");
+                                 }
+                             },
                 UiThreadImmediateExecutorService.getInstance()
         );
     }
