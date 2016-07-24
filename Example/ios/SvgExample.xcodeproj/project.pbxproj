@@ -561,6 +561,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = cn.horcrux.RNSvgExample;
 				PRODUCT_NAME = SvgExample;
 			};
 			name = Debug;
@@ -580,6 +581,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = cn.horcrux.RNSvgExample;
 				PRODUCT_NAME = SvgExample;
 			};
 			name = Release;
