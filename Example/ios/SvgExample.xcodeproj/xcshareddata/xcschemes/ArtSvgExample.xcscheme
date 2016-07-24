@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "ArtSvgExample.app"
-               BlueprintName = "ArtSvgExample"
-               ReferencedContainer = "container:ArtSvgExample.xcodeproj">
+               BuildableName = "SvgExample.app"
+               BlueprintName = "SvgExample"
+               ReferencedContainer = "container:SvgExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "ArtSvgExampleTests.xctest"
-               BlueprintName = "ArtSvgExampleTests"
-               ReferencedContainer = "container:ArtSvgExample.xcodeproj">
+               BuildableName = "SvgExampleTests.xctest"
+               BlueprintName = "SvgExampleTests"
+               ReferencedContainer = "container:SvgExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "ArtSvgExampleTests.xctest"
-               BlueprintName = "ArtSvgExampleTests"
-               ReferencedContainer = "container:ArtSvgExample.xcodeproj">
+               BuildableName = "SvgExampleTests.xctest"
+               BlueprintName = "SvgExampleTests"
+               ReferencedContainer = "container:SvgExample.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,9 +57,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "ArtSvgExample.app"
-            BlueprintName = "ArtSvgExample"
-            ReferencedContainer = "container:ArtSvgExample.xcodeproj">
+            BuildableName = "SvgExample.app"
+            BlueprintName = "SvgExample"
+            ReferencedContainer = "container:SvgExample.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -77,9 +77,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "ArtSvgExample.app"
-            BlueprintName = "ArtSvgExample"
-            ReferencedContainer = "container:ArtSvgExample.xcodeproj">
+            BuildableName = "SvgExample.app"
+            BlueprintName = "SvgExample"
+            ReferencedContainer = "container:SvgExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -96,9 +96,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "ArtSvgExample.app"
-            BlueprintName = "ArtSvgExample"
-            ReferencedContainer = "container:ArtSvgExample.xcodeproj">
+            BuildableName = "SvgExample.app"
+            BlueprintName = "SvgExample"
+            ReferencedContainer = "container:SvgExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

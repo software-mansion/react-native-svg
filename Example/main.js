@@ -257,4 +257,4 @@ class SvgExample extends Component {
     }
 }
 
-AppRegistry.registerComponent('ArtSvgExample', () => SvgExample);
+AppRegistry.registerComponent('SvgExample', () => SvgExample);
