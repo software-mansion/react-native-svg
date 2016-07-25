@@ -9,22 +9,11 @@
 
 package com.horcrux.svg;
 
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 
 //import com.facebook.react.uimanager.ReactStylesDiffMap;
-import com.facebook.react.common.SystemClock;
-import com.facebook.react.touch.JSResponderHandler;
-import com.facebook.react.touch.ReactInterceptingViewGroup;
-import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.ViewGroupManager;
-import com.facebook.react.uimanager.ViewManager;
-import com.facebook.react.uimanager.events.EventDispatcher;
-import com.facebook.react.uimanager.events.TouchEvent;
 
 /**
  * ViewManager for all shadowed RNSVG views: Group, Path and Text. Since these never get rendered
@@ -42,6 +31,8 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
     /* package */ static final String CLASS_LINE = "RNSVGLine";
     /* package */ static final String CLASS_RECT = "RNSVGRect";
     /* package */ static final String CLASS_CLIP_PATH = "RNSVGClipPath";
+    /* package */ static final String CLASS_DEFS = "RNSVGDefs";
+    /* package */ static final String CLASS_USE = "RNSVGUse";
 
     private final String mClassName;
 
@@ -83,6 +74,15 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
         return new RNSVGRenderableViewManager(CLASS_CLIP_PATH);
     }
 
+    public static RNSVGRenderableViewManager createRNSVGDefsViewManager() {
+        return new RNSVGRenderableViewManager(CLASS_DEFS);
+    }
+
+    public static RNSVGRenderableViewManager createRNSVGUseViewManager() {
+        return new RNSVGRenderableViewManager(CLASS_USE);
+    }
+
+
     private RNSVGRenderableViewManager(String className) {
         mClassName = className;
     }
@@ -122,6 +122,12 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
             case CLASS_CLIP_PATH:
                 mVirtualNode = new RNSVGClipPathShadowNode();
                 break;
+            case CLASS_DEFS:
+                mVirtualNode = new RNSVGDefsShadowNode();
+                break;
+            case CLASS_USE:
+                mVirtualNode = new RNSVGUseShadowNode();
+                break;
             default:
                 throw new IllegalStateException("Unexpected type " + mClassName);
         }
@@ -151,6 +157,10 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
                 return RNSVGImageShadowNode.class;
             case CLASS_CLIP_PATH:
                 return RNSVGClipPathShadowNode.class;
+            case CLASS_DEFS:
+                return RNSVGDefsShadowNode.class;
+            case CLASS_USE:
+                return RNSVGUseShadowNode.class;
             default:
                 throw new IllegalStateException("Unexpected type " + mClassName);
         }

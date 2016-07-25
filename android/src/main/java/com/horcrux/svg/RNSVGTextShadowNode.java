@@ -186,7 +186,6 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
         if (setupFillPaint(paint, 1.0f, getBox(paint, text))) {
             applyTextPropertiesToPaint(paint);
             paint.getTextPath(text, 0, text.length(), 0, -paint.ascent(), path);
-            path.transform(mMatrix);
         }
 
         return path;

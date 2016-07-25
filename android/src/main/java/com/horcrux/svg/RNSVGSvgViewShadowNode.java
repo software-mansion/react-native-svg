@@ -31,7 +31,9 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
 
     private boolean mResponsible = false;
 
-    private static final Map<String, Path> mDefinedClipPaths = new HashMap<>();
+    private static final Map<String, RNSVGVirtualNode> mDefinedClipPaths = new HashMap<>();
+
+    private static final Map<String, RNSVGVirtualNode> mDefinedTemplates = new HashMap<>();
 
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
@@ -56,6 +58,7 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         for (int i = 0; i < getChildCount(); i++) {
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
             child.setupDimensions(canvas);
+            child.saveDefinition();
             child.draw(canvas, paint, 1f);
 
             if (child.isResponsible() && !mResponsible) {
@@ -87,16 +90,28 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         return viewTag;
     }
 
-    public void defineClipPath(Path clipPath, String clipPathRef) {
+    public void defineClipPath(RNSVGVirtualNode clipPath, String clipPathRef) {
         mDefinedClipPaths.put(clipPathRef, clipPath);
     }
 
-    // TODO: remove unmounted clipPath
     public void removeClipPath(String clipPathRef) {
         mDefinedClipPaths.remove(clipPathRef);
     }
 
-    public Path getDefinedClipPath(String clipPathRef) {
+    public RNSVGVirtualNode getDefinedClipPath(String clipPathRef) {
         return mDefinedClipPaths.get(clipPathRef);
     }
+
+    public void defineTemplate(RNSVGVirtualNode template, String templateRef) {
+        mDefinedTemplates.put(templateRef, template);
+    }
+
+    public void removeTemplate(String templateRef) {
+        mDefinedTemplates.remove(templateRef);
+    }
+
+    public RNSVGVirtualNode getDefinedTemplate(String templateRef) {
+        return mDefinedTemplates.get(templateRef);
+    }
+
 }

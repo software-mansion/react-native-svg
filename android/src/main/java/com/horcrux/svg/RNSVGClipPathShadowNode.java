@@ -23,17 +23,14 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  */
 public class RNSVGClipPathShadowNode extends RNSVGGroupShadowNode {
 
-    private String mName = null;
-
-    @ReactProp(name = "name")
-    public void setName(String name) {
-        mName = name;
-        markUpdated();
+    @Override
+    protected void saveDefinition() {
+        getSvgShadowNode().defineClipPath(this, mName);
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
-        getSvgShadowNode().defineClipPath(getPath(canvas, paint), mName);
+    protected void removeDefinition() {
+        getSvgShadowNode().removeClipPath(mName);
     }
 
     @Override
