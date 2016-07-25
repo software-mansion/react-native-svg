@@ -69,6 +69,11 @@
     _opacity = opacity;
 }
 
+- (void)setTrans:(CGAffineTransform)trans
+{
+    self.transform = trans;
+}
+
 - (void)setTransform:(CGAffineTransform)transform
 {
     [self invalidate];

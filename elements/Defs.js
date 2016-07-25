@@ -7,13 +7,13 @@ class Defs extends Component {
     static displayName = 'Defs';
 
     render() {
-        return <RNSVGDefination>{this.props.children}</RNSVGDefination>;
+        return <RNSVGDefs>{this.props.children}</RNSVGDefs>;
     }
 }
 
-const RNSVGDefination = createReactNativeComponentClass({
+const RNSVGDefs = createReactNativeComponentClass({
     validAttributes: {},
-    uiViewClassName: 'RNSVGDefination'
+    uiViewClassName: 'RNSVGDefs'
 });
 
 export default Defs;

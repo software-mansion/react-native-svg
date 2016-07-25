@@ -23,7 +23,7 @@
 @property (nonatomic, assign) CGPathRef clipPath; // convert clipPath="M0,0 L0,10 L10,10z" into path
 @property (nonatomic, strong) NSString *clipPathRef; // use clipPath="url(#clip)" as ClipPath
 @property (nonatomic, assign) BOOL responsible;
-
+@property (nonatomic, assign) CGAffineTransform trans;
 
 - (void)invalidate;
 

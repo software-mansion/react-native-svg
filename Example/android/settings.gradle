@@ -1,4 +1,4 @@
-rootProject.name = 'ArtSvgExample'
+rootProject.name = 'SvgExample'
 
 include ':app'
 include ':react-native-svg'
