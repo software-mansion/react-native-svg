@@ -47,7 +47,7 @@
     return nil;
 }
 
-- (void)saveDefination:(CGContextRef)context
+- (void)saveDefinition
 {
     if (self.name) {
         RNSVGSvgView* svg = [self getSvgView];
@@ -55,7 +55,7 @@
     }
     
     for (RNSVGNode *node in self.subviews) {
-        [node saveDefination:context];
+        [node saveDefinition];
     }
 }
 

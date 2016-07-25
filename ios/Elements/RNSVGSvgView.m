@@ -46,7 +46,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     for (RNSVGNode *node in self.subviews) {
-        [node saveDefination:context];
+        [node saveDefinition];
         [node renderTo:context];
 
         if (node.responsible && !self.responsible) {

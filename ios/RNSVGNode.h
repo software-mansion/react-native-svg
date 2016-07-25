@@ -59,7 +59,7 @@
 /**
  * save element`s defination into svg element.
  */
-- (void)saveDefination:(CGContextRef)context;
+- (void)saveDefinition;
 
 /**
  * remove element`s defination from svg element.

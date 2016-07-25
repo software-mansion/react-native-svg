@@ -199,7 +199,7 @@
     [self willRemoveFromSuperView];
 }
 
-- (void)saveDefination:(CGContextRef)context
+- (void)saveDefinition
 {
     if (self.name) {
         RNSVGSvgView* svg = [self getSvgView];

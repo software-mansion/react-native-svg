@@ -24,7 +24,7 @@
     return nil;
 }
 
-- (void)saveDefination:(CGContextRef)context
+- (void)saveDefinition
 {
     RNSVGBrushConverter *converter = [[RNSVGBrushConverter alloc] init];
     converter.colors = self.gradient;

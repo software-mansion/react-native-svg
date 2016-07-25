@@ -14,7 +14,7 @@
 - (void)renderTo:(CGContextRef)context
 {
     for (RNSVGNode *node in self.subviews) {
-        [node saveDefination: context];
+        [node saveDefinition];
     }
 }
 

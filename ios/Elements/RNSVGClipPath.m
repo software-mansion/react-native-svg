@@ -15,7 +15,7 @@
     return nil;
 }
 
-- (void)saveDefination:(CGContextRef)context
+- (void)saveDefinition
 {
     [[self getSvgView] defineClipPath:self clipPathRef:self.name];
 }
