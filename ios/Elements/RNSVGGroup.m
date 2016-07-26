@@ -16,7 +16,7 @@
     [self clip:context];
     
     for (RNSVGNode *node in self.subviews) {
-        [node inheritProperties:self inheritedList:self.propList];
+        [node mergeProperties:self mergeList:self.propList inherited:YES];
         [node renderTo:context];
         
         if (node.responsible && !svg.responsible) {
@@ -75,13 +75,6 @@
 {
     for (RNSVGNode *node in self.subviews) {
         [node resetProperties];
-    }
-}
-
-- (void)inheritProperties:(__kindof RNSVGNode *)parent inheritedList:(NSArray<NSString *> *)inheritedList;
-{
-    for (NSString *key in inheritedList) {
-        [self inheritProperty:parent propName:key];
     }
 }
 

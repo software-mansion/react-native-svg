@@ -11,7 +11,7 @@ const meetOrSliceTypes = {
 };
 
 const alignEnum = _.reduce([
-    'xMinMin', 'xMidYMin', 'xMaxYMin',
+    'xMinYMin', 'xMidYMin', 'xMaxYMin',
     'xMinYMid', 'xMidYMid', 'xMaxYMid',
     'xMinYMax', 'xMidYMax', 'xMaxYMax',
     'none'
@@ -36,7 +36,7 @@ class ViewBox extends Component{
     };
 
     render() {
-        let {viewBox, preserveAspectRatio} = this.props;
+        let {viewBox, preserveAspectRatio, name} = this.props;
 
         let params = viewBox.trim().split(spacesRegExp);
 
@@ -51,7 +51,9 @@ class ViewBox extends Component{
 
         let meetOrSlice = meetOrSliceTypes[modes[1]] || 0;
         let align = alignEnum[modes[0]] || 'xMidYMid';
+
         return <RNSVGViewBox
+            name={name}
             minX={params[0]}
             minY={params[1]}
             vbWidth={params[2]}

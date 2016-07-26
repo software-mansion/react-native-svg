@@ -91,10 +91,10 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
             int count = saveAndSetupCanvas(canvas);
 
             clip(canvas, paint);
-            float x = PropHelper.fromPercentageToFloat(mX, mWidth, 0, mScale);
-            float y = PropHelper.fromPercentageToFloat(mY, mHeight, 0, mScale);
-            float w = PropHelper.fromPercentageToFloat(mW, mWidth, 0, mScale);
-            float h = PropHelper.fromPercentageToFloat(mH, mHeight, 0, mScale);
+            float x = PropHelper.fromPercentageToFloat(mX, mCanvasWidth, 0, mScale);
+            float y = PropHelper.fromPercentageToFloat(mY, mCanvasHeight, 0, mScale);
+            float w = PropHelper.fromPercentageToFloat(mW, mCanvasWidth, 0, mScale);
+            float h = PropHelper.fromPercentageToFloat(mH, mCanvasHeight, 0, mScale);
             canvas.drawBitmap(mBitmap, null, new Rect((int) x, (int) y, (int) (x + w), (int)(y + h)), null);
 
             restoreCanvas(canvas, count);

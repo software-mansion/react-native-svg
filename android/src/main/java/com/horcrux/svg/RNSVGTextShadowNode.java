@@ -194,8 +194,8 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
     @Override
     public int hitTest(Point point, View view) {
         Bitmap bitmap = Bitmap.createBitmap(
-            mWidth,
-            mHeight,
+            mCanvasWidth,
+            mCanvasHeight,
             Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);

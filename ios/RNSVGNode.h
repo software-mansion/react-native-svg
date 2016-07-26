@@ -71,17 +71,12 @@
  */
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList;
 
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited;
+
 /**
  * just for template node to reset all owned properties once after rendered.
  */
 - (void)resetProperties;
-
-/**
- * inherit properties from parent g element
- */
-- (void)inheritProperties:(__kindof RNSVGNode *)parent inheritedList:(NSArray<NSString *> *)inheritedList;
-
-- (void)inheritProperty:(__kindof RNSVGNode *)parent propName:(NSString *)propName;
 
 - (void)beginTransparencyLayer:(CGContextRef)context;
 

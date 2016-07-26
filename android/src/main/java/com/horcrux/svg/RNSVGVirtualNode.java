@@ -17,6 +17,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
@@ -66,8 +67,10 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     private boolean mClipRuleSet;
     private boolean mClipDataSet;
     protected boolean mResponsible;
-    protected int mWidth;
-    protected int mHeight;
+    protected int mCanvasX;
+    protected int mCanvasY;
+    protected int mCanvasWidth;
+    protected int mCanvasHeight;
     protected String mName;
 
     private RNSVGSvgViewShadowNode mSvgShadowNode;
@@ -292,8 +295,12 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     }
 
     protected void setupDimensions(Canvas canvas) {
-        mWidth = canvas.getWidth();
-        mHeight = canvas.getHeight();
+        // TODO: not sure this is a right way to get canvas boundingBox
+        Rect mCanvasClipBounds = canvas.getClipBounds();
+        mCanvasX = mCanvasClipBounds.left;
+        mCanvasY = mCanvasClipBounds.top;
+        mCanvasWidth = canvas.getWidth();
+        mCanvasHeight = canvas.getHeight();
     }
 
     protected void saveDefinition() {

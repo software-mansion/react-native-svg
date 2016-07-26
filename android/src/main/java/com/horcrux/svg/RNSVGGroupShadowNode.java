@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
 
     public void draw(Canvas canvas, Paint paint, float opacity) {
-        opacity *= mOpacity;
         RNSVGSvgViewShadowNode svg = getSvgShadowNode();
 
         if (opacity > MIN_OPACITY_FOR_DRAW) {
@@ -36,6 +35,7 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
             for (int i = 0; i < getChildCount(); i++) {
                 RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
                 child.setupDimensions(canvas);
+
                 child.mergeProperties(this, mPropList, true);
                 child.draw(canvas, paint, opacity * mOpacity);
 

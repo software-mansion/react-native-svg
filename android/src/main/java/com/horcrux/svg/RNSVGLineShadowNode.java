@@ -68,10 +68,10 @@ public class RNSVGLineShadowNode extends RNSVGPathShadowNode {
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
-        float x1 = PropHelper.fromPercentageToFloat(mX1, mWidth, 0, mScale);
-        float y1 = PropHelper.fromPercentageToFloat(mY1, mHeight, 0, mScale);
-        float x2 = PropHelper.fromPercentageToFloat(mX2, mWidth, 0, mScale);
-        float y2 = PropHelper.fromPercentageToFloat(mY2, mHeight, 0, mScale);
+        float x1 = PropHelper.fromPercentageToFloat(mX1, mCanvasWidth, 0, mScale);
+        float y1 = PropHelper.fromPercentageToFloat(mY1, mCanvasHeight, 0, mScale);
+        float x2 = PropHelper.fromPercentageToFloat(mX2, mCanvasWidth, 0, mScale);
+        float y2 = PropHelper.fromPercentageToFloat(mY2, mCanvasHeight, 0, mScale);
 
         path.moveTo(x1, y1);
         path.lineTo(x2, y2);

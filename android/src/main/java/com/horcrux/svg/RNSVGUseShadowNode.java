@@ -47,6 +47,14 @@ public class RNSVGUseShadowNode extends RNSVGPathShadowNode {
         markUpdated();
     }
 
+    public String getWidth() {
+        return mWidth;
+    }
+
+    public String getHeight() {
+        return mHeight;
+    }
+
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
         RNSVGVirtualNode template = getSvgShadowNode().getDefinedTemplate(mHref);

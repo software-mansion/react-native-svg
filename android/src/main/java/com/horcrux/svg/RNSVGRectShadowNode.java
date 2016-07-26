@@ -87,12 +87,12 @@ public class RNSVGRectShadowNode extends RNSVGPathShadowNode {
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
-        float x = PropHelper.fromPercentageToFloat(mX, mWidth, 0, mScale);
-        float y = PropHelper.fromPercentageToFloat(mY, mHeight, 0, mScale);
-        float w = PropHelper.fromPercentageToFloat(mW, mWidth, 0, mScale);
-        float h = PropHelper.fromPercentageToFloat(mH, mHeight, 0, mScale);
-        float rx = PropHelper.fromPercentageToFloat(mRx, mWidth, 0, mScale);
-        float ry = PropHelper.fromPercentageToFloat(mRy, mHeight, 0, mScale);
+        float x = PropHelper.fromPercentageToFloat(mX, mCanvasWidth, 0, mScale);
+        float y = PropHelper.fromPercentageToFloat(mY, mCanvasHeight, 0, mScale);
+        float w = PropHelper.fromPercentageToFloat(mW, mCanvasWidth, 0, mScale);
+        float h = PropHelper.fromPercentageToFloat(mH, mCanvasHeight, 0, mScale);
+        float rx = PropHelper.fromPercentageToFloat(mRx, mCanvasWidth, 0, mScale);
+        float ry = PropHelper.fromPercentageToFloat(mRy, mCanvasHeight, 0, mScale);
 
         if (rx != 0 || ry != 0) {
             if (rx == 0) {

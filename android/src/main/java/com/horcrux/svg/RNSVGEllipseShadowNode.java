@@ -63,10 +63,10 @@ public class RNSVGEllipseShadowNode extends RNSVGPathShadowNode {
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
-        float cx = PropHelper.fromPercentageToFloat(mCx, mWidth, 0, mScale);
-        float cy = PropHelper.fromPercentageToFloat(mCy, mHeight, 0, mScale);
-        float rx = PropHelper.fromPercentageToFloat(mRx, mWidth, 0, mScale);
-        float ry = PropHelper.fromPercentageToFloat(mRy, mHeight, 0, mScale);
+        float cx = PropHelper.fromPercentageToFloat(mCx, mCanvasWidth, 0, mScale);
+        float cy = PropHelper.fromPercentageToFloat(mCy, mCanvasHeight, 0, mScale);
+        float rx = PropHelper.fromPercentageToFloat(mRx, mCanvasWidth, 0, mScale);
+        float ry = PropHelper.fromPercentageToFloat(mRy, mCanvasHeight, 0, mScale);
         RectF oval = new RectF(cx - rx, cy - ry, cx + rx, cy + ry);
         path.addOval(oval, Path.Direction.CW);
 

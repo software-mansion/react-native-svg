@@ -215,7 +215,6 @@
             [self setValue:[_originProperties valueForKey:key] forKey:key];
         }
     }
-    [super resetProperties];
     _changedList = nil;
 }
 
@@ -229,11 +228,6 @@
         
         [self setValue:[parent valueForKey:propName] forKey:propName];
     }
-}
-
-- (void)inheritProperties:(__kindof RNSVGNode *)parent inheritedList:(NSArray<NSString *> *)inheritedList
-{
-    [self mergeProperties:parent mergeList:inheritedList inherited:YES];
 }
 
 - (void)renderLayerTo:(CGContextRef)context

@@ -20,16 +20,17 @@ class SymbolElement extends Component{
         }
 
         let content = viewBox ? <ViewBox
+            name={props.id}
             viewBox={viewBox}
             preserveAspectRatio={props.preserveAspectRatio}
         >
             {props.children}
-        </ViewBox> : props.children;
+        </ViewBox> : <G id={props.id}>
+            {props.children}
+        </G>;
 
         return <Defs>
-            <G id={props.id}>
-                {content}
-            </G>
+            {content}
         </Defs>;
     }
 }

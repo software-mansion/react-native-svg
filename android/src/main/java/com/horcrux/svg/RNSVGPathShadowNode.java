@@ -78,7 +78,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
     private ArrayList<String> mChangedList;
     private ArrayList<Object> mOriginProperties;
-    protected ReadableArray mPropList;
+    protected ReadableArray mPropList = new JavaOnlyArray();;
 
     @ReactProp(name = "d")
     public void setPath(@Nullable ReadableArray shapePath) {
@@ -381,8 +381,8 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     @Override
     public int hitTest(Point point, View view) {
         Bitmap bitmap = Bitmap.createBitmap(
-            mWidth,
-            mHeight,
+            mCanvasWidth,
+            mCanvasHeight,
             Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);

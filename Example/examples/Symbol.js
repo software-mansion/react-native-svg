@@ -5,7 +5,8 @@ import React, {
 import Svg, {
     Symbol,
     Circle,
-    Use
+    Use,
+    Rect
 } from 'react-native-svg';
 
 class SymbolExample extends Component{
