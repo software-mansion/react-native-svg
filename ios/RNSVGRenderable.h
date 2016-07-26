@@ -16,16 +16,32 @@
 @interface RNSVGRenderable : RNSVGNode
 
 @property (nonatomic, strong) RNSVGBrush *fill;
+@property (nonatomic, assign) CGFloat fillOpacity;
 @property (nonatomic, assign) RNSVGCGFCRule fillRule;
 @property (nonatomic, strong) RNSVGBrush *stroke;
+@property (nonatomic, assign) CGFloat strokeOpacity;
 @property (nonatomic, assign) CGFloat strokeWidth;
 @property (nonatomic, assign) CGLineCap strokeLinecap;
 @property (nonatomic, assign) CGLineJoin strokeLinejoin;
 @property (nonatomic, assign) CGFloat strokeMiterlimit;
 @property (nonatomic, assign) RNSVGCGFloatArray strokeDasharray;
 @property (nonatomic, assign) CGFloat strokeDashoffset;
-@property (nonatomic, assign) CGMutablePathRef nodeArea;
+@property (nonatomic, assign) CGMutablePathRef hitArea;
+@property (nonatomic, copy) NSArray<NSString *> *propList;
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+- (void)setBoundingBox:(CGContextRef)context;
+
+- (CGFloat)getWidthRelatedValue:(NSString *)string;
+
+- (CGFloat)getHeightRelatedValue:(NSString *)string;
+
+- (CGFloat)getContextWidth;
+
+- (CGFloat)getContextHeight;
+
+- (CGFloat)getContextX;
+
+- (CGFloat)getContextY;
+
 
 @end

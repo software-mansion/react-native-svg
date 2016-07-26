@@ -19,19 +19,18 @@
 
 RCT_NOT_IMPLEMENTED(- (instancetype)init)
 
-- (BOOL)applyFillColor:(CGContextRef)context
+- (BOOL)applyFillColor:(CGContextRef)context opacity:(CGFloat)opacity
 {
     return NO;
 }
 
-- (BOOL)applyStrokeColor:(CGContextRef)context
+- (BOOL)applyStrokeColor:(CGContextRef)context opacity:(CGFloat)opacity
 {
     return NO;
 }
 
-- (void)paint:(CGContextRef)context
+- (void)paint:(CGContextRef)context opacity:(CGFloat)opacity brushConverter:(RNSVGBrushConverter *)brushConverter
 {
     // abstract
 }
-
 @end

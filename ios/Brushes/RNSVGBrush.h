@@ -9,11 +9,14 @@
 #import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
 #import "RNSVGPercentageConverter.h"
+#import "RNSVGBrushConverter.h"
 
 @interface RNSVGBrush : NSObject
 {
     NSArray *_points;
 }
+
+@property (nonatomic, strong) NSString* brushRef;
 
 /* @abstract */
 - (instancetype)initWithArray:(NSArray *)data NS_DESIGNATED_INITIALIZER;
@@ -26,15 +29,15 @@
  * return NO and paint gets called instead.
  * @abstract
  */
-- (BOOL)applyFillColor:(CGContextRef)context;
+- (BOOL)applyFillColor:(CGContextRef)context opacity:(CGFloat)opacity;
 
-- (BOOL)applyStrokeColor:(CGContextRef)context;
+- (BOOL)applyStrokeColor:(CGContextRef)context opacity:(CGFloat)opacity;
 
 /**
  * paint fills the context with a brush. The context is assumed to
  * be clipped.
  * @abstract
  */
-- (void)paint:(CGContextRef)context;
+- (void)paint:(CGContextRef)context opacity:(CGFloat)opacity brushConverter:(RNSVGBrushConverter *)brushConverter;
 
 @end

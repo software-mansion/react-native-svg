@@ -19,21 +19,15 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.common.SystemClock;
-import com.facebook.react.touch.OnInterceptTouchEventListener;
-import com.facebook.react.touch.ReactInterceptingViewGroup;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.TouchTargetHelper;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.events.TouchEvent;
 import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
 import com.facebook.react.uimanager.events.TouchEventType;
-import com.facebook.react.views.view.ReactClippingViewGroup;
 import com.facebook.react.uimanager.events.EventDispatcher;
-import com.facebook.react.uimanager.events.NativeGestureUtil;
 
 // NativeGestureUtil.notifyNativeGestureStarted
 /**

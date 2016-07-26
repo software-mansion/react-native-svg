@@ -1,41 +1,44 @@
-import {PropTypes} from 'react';
-import stopsOpacity from '../lib/stopsOpacity';
+import React, {PropTypes} from 'react';
 import {numberProp} from '../lib/props';
 import Gradient from './Gradient';
-import {LINEAR_GRADIENT} from '../lib/extract/extractBrush';
-import insertColorStopsIntoArray from '../lib/insertProcessor';
-
-function LinearGradientGenerator(stops, x1, y1, x2, y2) {
-    let brushData = [LINEAR_GRADIENT, ...[x1, y1, x2, y2].map(prop => prop.toString())];
-    insertColorStopsIntoArray(stops, brushData, 5);
-    this._brush = brushData;
-}
-
+import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import {LinearGradientAttributes} from '../lib/attributes';
 
 class LinearGradient extends Gradient{
     static displayName = 'LinearGradient';
     static propTypes = {
-        x1: numberProp,
-        x2: numberProp,
-        y1: numberProp,
-        y2: numberProp,
+        x1: numberProp.isRequired,
+        x2: numberProp.isRequired,
+        y1: numberProp.isRequired,
+        y2: numberProp.isRequired,
         id: PropTypes.string.isRequired
     };
 
+    static defaultProps = {
+        x1: '0%',
+        y1: '0%',
+        x2: '100%',
+        y2: '0%'
+    };
+
     render() {
-        let {
-            x1,
-            y1,
-            x2,
-            y2
-        } = this.props;
-        return super.render(
-            (stops, opacity) => {
-                return new LinearGradientGenerator(stopsOpacity(stops, opacity), ...[x1, y1, x2, y2]);
-            }
-        );
+        let {props} = this;
+        return <RNSVGLinearGradient
+            x1={props.x1.toString()}
+            y1={props.y1.toString()}
+            x2={props.x2.toString()}
+            y2={props.y2.toString()}
+            gradient={this.getGradient()}
+            name={props.id}
+        />;
+
     }
 }
 
+const RNSVGLinearGradient = createReactNativeComponentClass({
+    validAttributes: LinearGradientAttributes,
+    uiViewClassName: 'RNSVGLinearGradient'
+});
+
+
 export default LinearGradient;
-export {LinearGradientGenerator};

@@ -55,21 +55,16 @@
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-
+    [self setBoundingBox:context];
     CGMutablePathRef path = CGPathCreateMutable();
-    CGRect box = CGContextGetClipBoundingBox(context);
-    float height = CGRectGetHeight(box);
-    float width = CGRectGetWidth(box);
-    
-    RNSVGPercentageConverter* convert = [[RNSVGPercentageConverter alloc] init];
-    CGFloat x1 = [convert stringToFloat:self.x1 relative:width offset:0];
-    CGFloat y1 = [convert stringToFloat:self.y1 relative:height offset:0];
-    CGFloat x2 = [convert stringToFloat:self.x2 relative:width offset:0];
-    CGFloat y2 = [convert stringToFloat:self.y2 relative:height offset:0];
+    CGFloat x1 = [self getWidthRelatedValue:self.x1];
+    CGFloat y1 = [self getHeightRelatedValue:self.y1];
+    CGFloat x2 = [self getWidthRelatedValue:self.x2];
+    CGFloat y2 = [self getHeightRelatedValue:self.y2];
     CGPathMoveToPoint(path, nil, x1, y1);
     CGPathAddLineToPoint(path, nil, x2, y2);
     
-    return path;
+    return (CGPathRef)CFAutorelease(path);
 }
 
 @end

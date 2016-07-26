@@ -9,14 +9,21 @@ import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 class Image extends Shape {
     static displayName = 'Image';
     static propTypes = {
+        ...responderProps,
+        ...touchableProps,
         x: numberProp,
         y: numberProp,
-        width: numberProp,
-        height: numberProp,
-        href: PropTypes.number.isRequired,
-        ...responderProps,
-        ...touchableProps
+        width: numberProp.isRequired,
+        height: numberProp.isRequired,
+        href: PropTypes.number.isRequired
         //preserveAspectRatio: PropTypes.string
+    };
+
+    static defaultProps = {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
     };
 
     setNativeProps = (...args) => {
@@ -27,7 +34,7 @@ class Image extends Shape {
         let {props} = this;
         return <RNSVGImage
             ref={ele => this.root = ele}
-            {...this.extractProps(props, {transform: true, responder: true})}
+            {...this.extractProps(props, {responder: true})}
             x={props.x.toString()}
             y={props.y.toString()}
             width={props.width.toString()}

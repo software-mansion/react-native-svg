@@ -39,7 +39,7 @@
 // Note: This could use applyFillColor with a pattern. This could be more efficient but
 // to do that, we need to calculate our own user space CTM.
 
-- (void)paint:(CGContextRef)context
+- (void)paint:(CGContextRef)context opacity:(CGFloat)opacity brushConverter:(RNSVGBrushConverter *)brushConverter;
 {
   CGContextDrawTiledImage(context, _rect, _image);
 }

@@ -13,8 +13,5 @@
 #import "RNSVGSvgView.h"
 
 @interface RNSVGClipPath : RNSVGGroup
-@property (nonatomic, strong) NSString *name;
-
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 
 @end

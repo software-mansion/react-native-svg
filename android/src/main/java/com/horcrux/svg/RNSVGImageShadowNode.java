@@ -16,12 +16,15 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.net.Uri;
-
+import android.util.Log;
 import com.facebook.common.executors.UiThreadImmediateExecutorService;
 import com.facebook.common.logging.FLog;
+import com.facebook.common.executors.CallerThreadExecutor;
 import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.DataSource;
+import com.facebook.common.logging.FLog;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipeline;
 import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.facebook.imagepipeline.image.CloseableBitmap;
 import com.facebook.imagepipeline.image.CloseableImage;
@@ -30,7 +33,6 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -89,8 +91,9 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
         final ImageRequest request = ImageRequestBuilder.newBuilderWithSource(mUri).build();
         final boolean inMemoryCache = Fresco.getImagePipeline().isInBitmapMemoryCache(request);
 
+
         if (inMemoryCache) {
-            tryRender(request, canvas, paint, opacity);
+            tryRender(request, canvas, paint, opacity * mOpacity);
         } else if (!mLoading) {
             loadBitmap(request, canvas, paint);
         }
@@ -98,7 +101,7 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
 
     private void loadBitmap(@Nonnull final ImageRequest request, @Nonnull final Canvas canvas, @Nonnull final Paint paint) {
         final DataSource<CloseableReference<CloseableImage>> dataSource
-                = Fresco.getImagePipeline().fetchDecodedImage(request, getThemedContext());
+            = Fresco.getImagePipeline().fetchDecodedImage(request, getThemedContext());
 
         dataSource.subscribe(new BaseBitmapDataSubscriber() {
                                  @Override
@@ -106,8 +109,8 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
                                      if (bitmap != null) {
                                          canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                                          paint.reset();
-                                         getSvgShadowNode().drawChildren(canvas, paint);
                                          mLoading = false;
+                                         getSvgShadowNode().drawChildren(canvas, paint);
                                      }
                                  }
 
@@ -119,7 +122,7 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
                                      FLog.w(ReactConstants.TAG, dataSource.getFailureCause(), "RNSVG: fetchDecodedImage failed!");
                                  }
                              },
-                UiThreadImmediateExecutorService.getInstance()
+            UiThreadImmediateExecutorService.getInstance()
         );
     }
 
@@ -127,20 +130,21 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
         final int count = saveAndSetupCanvas(canvas);
 
         clip(canvas, paint);
-        float x = PropHelper.fromPercentageToFloat(mX, mWidth, 0, mScale);
-        float y = PropHelper.fromPercentageToFloat(mY, mHeight, 0, mScale);
-        float w = PropHelper.fromPercentageToFloat(mW, mWidth, 0, mScale);
-        float h = PropHelper.fromPercentageToFloat(mH, mHeight, 0, mScale);
-        canvas.drawBitmap(bitmap, null, new Rect((int) x, (int) y, (int) (x + w), (int) (y + h)), paint);
+        float x = PropHelper.fromPercentageToFloat(mX, mCanvasWidth, 0, mScale);
+        float y = PropHelper.fromPercentageToFloat(mY, mCanvasHeight, 0, mScale);
+        float w = PropHelper.fromPercentageToFloat(mW, mCanvasWidth, 0, mScale);
+        float h = PropHelper.fromPercentageToFloat(mH, mCanvasHeight, 0, mScale);
+        Paint alphaPaint = new Paint();
+
+        alphaPaint.setAlpha((int) (opacity * 255));
+        canvas.drawBitmap(bitmap, null, new Rect((int) x, (int) y, (int) (x + w), (int) (y + h)), alphaPaint);
 
         restoreCanvas(canvas, count);
-        markUpdateSeen();
     }
 
     private void tryRender(@Nonnull final ImageRequest request, @Nonnull final Canvas canvas, @Nonnull final Paint paint, final float opacity) {
-        // Fresco.getImagePipeline().prefetchToBitmapCache(request, getThemedContext());
         final DataSource<CloseableReference<CloseableImage>> dataSource
-                = Fresco.getImagePipeline().fetchImageFromBitmapCache(request, getThemedContext());
+            = Fresco.getImagePipeline().fetchImageFromBitmapCache(request, getThemedContext());
 
         try {
             final CloseableReference<CloseableImage> imageReference = dataSource.getResult();

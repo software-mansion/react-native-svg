@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RNSVGRenderable.h"
 #import "RNSVGPath.h"
 
 @interface RNSVGEllipse : RNSVGPath

@@ -9,31 +9,22 @@
 
 package com.horcrux.svg;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.view.View;
-import android.view.ViewGroup;
-
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
  * Shadow node for virtual RNSVGClipPath view
  */
 public class RNSVGClipPathShadowNode extends RNSVGGroupShadowNode {
 
-    private String mName = null;
-
-    @ReactProp(name = "name")
-    public void setName(String name) {
-        mName = name;
-        markUpdated();
+    @Override
+    protected void saveDefinition() {
+        getSvgShadowNode().defineClipPath(this, mName);
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
-        getSvgShadowNode().defineClipPath(getPath(canvas, paint), mName);
+    protected void removeDefinition() {
+        getSvgShadowNode().removeClipPath(mName);
     }
 
     @Override

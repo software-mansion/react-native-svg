@@ -16,6 +16,7 @@
     [self clip:context];
     
     for (RNSVGNode *node in self.subviews) {
+        [node mergeProperties:self mergeList:self.propList inherited:YES];
         [node renderTo:context];
         
         if (node.responsible && !svg.responsible) {
@@ -31,21 +32,50 @@
         CGAffineTransform transform = node.transform;
         CGPathAddPath(path, &transform, [node getPath:context]);
     }
-    return path;
+    return (CGPathRef)CFAutorelease(path);
 }
 
 // hitTest delagate
-
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
         UIView *view = [node hitTest: point withEvent:event];
-        if (view != NULL) {
+        if (view) {
             return view;
         }
     }
     return nil;
 }
 
+- (void)saveDefinition
+{
+    if (self.name) {
+        RNSVGSvgView* svg = [self getSvgView];
+        [svg defineTemplate:self templateRef:self.name];
+    }
+    
+    for (RNSVGNode *node in self.subviews) {
+        [node saveDefinition];
+    }
+}
+
+- (void)willRemoveSubview:(UIView *)subview
+{
+    [super willRemoveSubview:subview];
+}
+
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
+{
+    for (RNSVGNode *node in self.subviews) {
+        [node mergeProperties:target mergeList:mergeList];
+    }
+}
+
+- (void)resetProperties
+{
+    for (RNSVGNode *node in self.subviews) {
+        [node resetProperties];
+    }
+}
 
 @end

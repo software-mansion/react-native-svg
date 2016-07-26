@@ -13,7 +13,9 @@
 
 @implementation RNSVGSvgView
 {
-    NSMutableDictionary *clipPaths;
+    NSMutableDictionary<NSString *, RNSVGNode *> *clipPaths;
+    NSMutableDictionary<NSString *, RNSVGNode *> *templates;
+    NSMutableDictionary<NSString *, RNSVGBrushConverter *> *brushConverters;
 }
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
@@ -42,8 +44,9 @@
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-
+    
     for (RNSVGNode *node in self.subviews) {
+        [node saveDefinition];
         [node renderTo:context];
 
         if (node.responsible && !self.responsible) {
@@ -62,24 +65,65 @@
     return self.responsible ? [super hitTest:point withEvent:event] : nil;
 }
 
-- (void)defineClipPath:(CGPathRef)clipPath clipPathRef:(NSString *)clipPathRef
+- (void)defineClipPath:(__kindof RNSVGNode *)clipPath clipPathRef:(NSString *)clipPathRef
 {
-    if (clipPaths == NULL) {
+    if (!clipPaths) {
         clipPaths = [[NSMutableDictionary alloc] init];
     }
-    [clipPaths setValue:[NSValue valueWithPointer:clipPath] forKey:clipPathRef];
+    [clipPaths setObject:clipPath forKey:clipPathRef];
 }
 
 - (void)removeClipPath:(NSString *)clipPathRef
 {
-    if (clipPaths != NULL) {
+    if (clipPaths) {
         [clipPaths removeObjectForKey:clipPathRef];
     }
 }
 
-- (CGPathRef)getDefinedClipPath:(NSString *)clipPathRef
+- (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathRef
 {
-    return [[clipPaths valueForKey:clipPathRef] pointerValue];
+    return clipPaths ? [clipPaths objectForKey:clipPathRef] : nil;
+}
+
+- (void)defineTemplate:(RNSVGNode *)template templateRef:(NSString *)templateRef
+{
+    if (!templates) {
+        templates = [[NSMutableDictionary alloc] init];
+    }
+    [templates setObject:template forKey:templateRef];
+}
+
+- (void)removeTemplate:(NSString *)tempalteRef
+{
+    if (templates) {
+        [templates removeObjectForKey:tempalteRef];
+    }
+}
+
+- (RNSVGNode *)getDefinedTemplate:(NSString *)tempalteRef
+{
+    return templates ? [templates objectForKey:tempalteRef] : nil;
+}
+
+
+- (void)defineBrushConverter:(RNSVGBrushConverter *)brushConverter brushConverterRef:(NSString *)brushConverterRef
+{
+    if (!brushConverters) {
+        brushConverters = [[NSMutableDictionary alloc] init];
+    }
+    [brushConverters setObject:brushConverter forKey:brushConverterRef];
+}
+
+- (void)removeBrushConverter:(NSString *)brushConverterRef
+{
+    if (brushConverters) {
+        [brushConverters removeObjectForKey:brushConverterRef];
+    }
+}
+
+- (RNSVGBrushConverter *)getDefinedBrushConverter:(NSString *)brushConverterRef
+{
+    return brushConverters ? [brushConverters objectForKey:brushConverterRef] : nil;
 }
 
 @end

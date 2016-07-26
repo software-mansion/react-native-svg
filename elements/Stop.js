@@ -9,6 +9,7 @@ class Stop extends Component{
     };
 
     static defaultProps = {
+        stopColor: '#000',
         stopOpacity: 1
     };
 

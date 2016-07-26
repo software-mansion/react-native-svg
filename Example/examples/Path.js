@@ -11,6 +11,7 @@ import Svg, {
 
 class PathExample extends Component{
     static title = 'Path';
+
     render() {
         return <Svg
             height="100"

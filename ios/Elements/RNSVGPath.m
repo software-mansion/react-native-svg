@@ -31,13 +31,14 @@
         return;
     }
     
-    // Add path to nodeArea
-    CGPathAddPath(self.nodeArea, nil, _d);
+    // Add path to hitArea
+    self.hitArea = CGPathCreateMutableCopy(_d);
     
     if (self.stroke) {
-        // Add stroke to nodeArea
+        // Add stroke to hitArea
         CGPathRef strokePath = CGPathCreateCopyByStrokingPath(_d, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
-        CGPathAddPath(self.nodeArea, nil, strokePath);
+        CGPathAddPath(self.hitArea, nil, strokePath);
+        CGPathRelease(strokePath);
     }
     
     if (self.opacity == 0) {
@@ -49,7 +50,7 @@
     
     if (self.fill) {
         mode = self.fillRule == kRNSVGCGFCRuleEvenodd ? kCGPathEOFill : kCGPathFill;
-        fillColor = [self.fill applyFillColor:context];
+        fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
         
         if (!fillColor) {
             [self clip:context];
@@ -57,13 +58,15 @@
             CGContextSaveGState(context);
             CGContextAddPath(context, self.d);
             CGContextClip(context);
-            [self.fill paint:context];
+            RNSVGBrushConverter *brushConverter = [[self getSvgView] getDefinedBrushConverter:[self.fill brushRef]];
+            [self.fill paint:context opacity:self.fillOpacity brushConverter:brushConverter];
             CGContextRestoreGState(context);
             if (!self.stroke) {
                 return;
             }
         }
     }
+    
     if (self.stroke) {
         CGContextSetLineWidth(context, self.strokeWidth);
         CGContextSetLineCap(context, self.strokeLinecap);
@@ -80,7 +83,7 @@
             CGContextClip(context);
         }
         
-        if ([self.stroke applyStrokeColor:context]) {
+        if ([self.stroke applyStrokeColor:context opacity:self.strokeOpacity]) {
             if (mode == kCGPathFill) {
                 mode = kCGPathFillStroke;
             } else if (mode == kCGPathEOFill) {
@@ -96,8 +99,8 @@
             CGContextAddPath(context, self.d);
             CGContextReplacePathWithStrokedPath(context);
             CGContextClip(context);
-            [self.stroke paint:context];
-            
+            RNSVGBrushConverter *brushConverter = [[self getSvgView] getDefinedBrushConverter:[self.stroke brushRef]];
+            [self.stroke paint:context opacity:self.strokeOpacity brushConverter:brushConverter];
             return;
         }
     }

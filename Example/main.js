@@ -111,7 +111,8 @@ const styles = StyleSheet.create({
     }
 });
 
-const names = ['Svg', 'Stroking', 'Path', 'Line', 'Rect', 'Polygon', 'Polyline', 'Circle', 'Ellipse', 'G', 'Text', 'Use', 'Symbol', 'Gradients', 'Clipping', 'Image', 'TouchEvents'];
+const names = ['Svg', 'Stroking', 'Path', 'Line', 'Rect', 'Polygon', 'Polyline', 'Circle', 'Ellipse', 'G', 'Text', 'Use', 'Symbol', 'Gradients', 'Clipping', 'Image', 'TouchEvents', 'Definations'];
+//const names = ['Definations'];
 
 class SvgExample extends Component {
     constructor() {
@@ -256,4 +257,4 @@ class SvgExample extends Component {
     }
 }
 
-AppRegistry.registerComponent('ArtSvgExample', () => SvgExample);
+AppRegistry.registerComponent('SvgExample', () => SvgExample);

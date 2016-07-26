@@ -19,8 +19,4 @@ RCT_EXPORT_MODULE()
   return [RNSVGGroup new];
 }
 
-
-RCT_EXPORT_VIEW_PROPERTY(clipPath, CGPath)
-RCT_EXPORT_VIEW_PROPERTY(clipRule, RNSVGCGFCRule)
-
 @end

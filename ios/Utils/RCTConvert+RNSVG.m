@@ -8,26 +8,26 @@
 
 #import "RCTConvert+RNSVG.h"
 
-#import "RNSVGLinearGradient.h"
+#import "RNSVGBaseBrush.h"
 #import "RNSVGPattern.h"
-#import "RNSVGRadialGradient.h"
-#import "RNSVGSolidColor.h"
+#import "RNSVGSolidColorBrush.h"
 #import "RCTLog.h"
 #import "RNSVGCGFCRule.h"
+#import "RNSVGVBMOS.h"
 
 @implementation RCTConvert (RNSVG)
 
 + (CGPathRef)CGPath:(id)json
 {
     NSArray *arr = [self NSNumberArray:json];
-
+    
     NSUInteger count = [arr count];
-
+    
 #define NEXT_VALUE [self double:arr[i++]]
-
+    
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, 0, 0);
-
+    
     @try {
         NSUInteger i = 0;
         while (i < count) {
@@ -45,9 +45,6 @@
                 case 3:
                     CGPathAddCurveToPoint(path, NULL, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE);
                     break;
-                case 4:
-                    CGPathAddArc(path, NULL, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE == 0);
-                    break;
                 default:
                     RCTLogError(@"Invalid CGPath type %zd at element %zd of %@", type, i, arr);
                     CGPathRelease(path);
@@ -60,7 +57,7 @@
         CGPathRelease(path);
         return NULL;
     }
-
+    
     return (CGPathRef)CFAutorelease(path);
 }
 
@@ -77,6 +74,13 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
                                      @"nonzero": @(kRNSVGCGFCRuleNonzero),
                                      }), kRNSVGCGFCRuleNonzero, intValue)
 
+RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
+                                     @"meet": @(kRNSVGVBMOSMeet),
+                                     @"slice": @(kRNSVGVBMOSSlice),
+                                     @"none": @(kRNSVGVBMOSNone)
+                                     }), kRNSVGVBMOSMeet, intValue)
+
+
 // This takes a tuple of text lines and a font to generate a CTLine for each text line.
 // This prepares everything for rendering a frame of text in RNSVGText.
 + (RNSVGTextFrame)RNSVGTextFrame:(id)json
@@ -84,25 +88,25 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
     NSDictionary *dict = [self NSDictionary:json];
     RNSVGTextFrame frame;
     frame.count = 0;
-
+    
     NSArray *lines = [self NSArray:dict[@"lines"]];
     NSUInteger lineCount = [lines count];
     if (lineCount == 0) {
         return frame;
     }
-
+    
     NSDictionary *fontDict = dict[@"font"];
     CTFontRef font = (__bridge CTFontRef)[self UIFont:nil withFamily:fontDict[@"fontFamily"] size:fontDict[@"fontSize"] weight:fontDict[@"fontWeight"] style:fontDict[@"fontStyle"] scaleMultiplier:1.0];
     if (!font) {
         return frame;
     }
-
+    
     // Create a dictionary for this font
     CFDictionaryRef attributes = (__bridge CFDictionaryRef)@{
                                                              (NSString *)kCTFontAttributeName: (__bridge id)font,
                                                              (NSString *)kCTForegroundColorFromContextAttributeName: @YES
                                                              };
-
+    
     // Set up text frame with font metrics
     CGFloat size = CTFontGetSize(font);
     frame.count = lineCount;
@@ -110,18 +114,18 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
     frame.lineHeight = size * 1.1; // Base on RNSVG canvas line height estimate
     frame.lines = malloc(sizeof(CTLineRef) * lineCount);
     frame.widths = malloc(sizeof(CGFloat) * lineCount);
-
+    
     [lines enumerateObjectsUsingBlock:^(NSString *text, NSUInteger i, BOOL *stop) {
-
+        
         CFStringRef string = (__bridge CFStringRef)text;
         CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
         CTLineRef line = CTLineCreateWithAttributedString(attrString);
         CFRelease(attrString);
-
+        
         frame.lines[i] = line;
         frame.widths[i] = CTLineGetTypographicBounds(line, NULL, NULL, NULL);
     }];
-
+    
     return frame;
 }
 
@@ -129,11 +133,11 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
 {
     NSArray *arr = [self NSNumberArray:json];
     NSUInteger count = arr.count;
-
+    
     RNSVGCGFloatArray array;
     array.count = count;
     array.array = NULL;
-
+    
     if (count) {
         // Ideally, these arrays should already use the same memory layout.
         // In that case we shouldn't need this new malloc.
@@ -142,7 +146,7 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
             array.array[i] = [arr[i] doubleValue];
         }
     }
-
+    
     return array;
 }
 
@@ -150,24 +154,75 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
 {
     NSArray *arr = [self NSArray:json];
     NSUInteger type = [self NSUInteger:arr.firstObject];
-
+    
     switch (type) {
         case 0: // solid color
             // These are probably expensive allocations since it's often the same value.
             // We should memoize colors but look ups may be just as expensive.
-            return [[RNSVGSolidColor alloc] initWithArray:arr];
-        case 1: // linear gradient
-            return [[RNSVGLinearGradient alloc] initWithArray:arr];
-        case 2: // radial gradient
-            return [[RNSVGRadialGradient alloc] initWithArray:arr];
-        case 3: // pattern
-            // TODO:
-            return nil;
-            return [[RNSVGPattern alloc] initWithArray:arr];
+            return [[RNSVGSolidColorBrush alloc] initWithArray:arr];
+        case 1: // brush
+            return [[RNSVGBaseBrush alloc] initWithArray:arr];
         default:
             RCTLogError(@"Unknown brush type: %zd", type);
             return nil;
     }
+}
+
++ (NSArray *)RNSVGBezier:(id)json
+{
+    NSArray *arr = [self NSNumberArray:json];
+    
+    NSMutableArray<NSArray *> *beziers = [[NSMutableArray alloc] init];
+    
+    NSUInteger count = [arr count];
+    
+#define NEXT_VALUE [self double:arr[i++]]
+    @try {
+        NSValue *startPoint = [NSValue valueWithCGPoint: CGPointMake(0, 0)];
+        NSUInteger i = 0;
+        while (i < count) {
+            NSUInteger type = [arr[i++] unsignedIntegerValue];
+            switch (type) {
+                case 0:
+                {
+                    startPoint = [NSValue valueWithCGPoint: CGPointMake(NEXT_VALUE, NEXT_VALUE)];
+                    [beziers addObject: @[startPoint]];
+                    break;
+                }
+                case 1:
+                    [beziers addObject: @[]];
+                    break;
+                case 2:
+                {
+                    double x = NEXT_VALUE;
+                    double y = NEXT_VALUE;
+                    NSValue * destination = [NSValue valueWithCGPoint:CGPointMake(x, y)];
+                    [beziers addObject: @[
+                                          destination,
+                                          startPoint,
+                                          destination
+                                          ]];
+                    break;
+                }
+                case 3:
+                    [beziers addObject: @[
+                                          [NSValue valueWithCGPoint:CGPointMake(NEXT_VALUE, NEXT_VALUE)],
+                                          [NSValue valueWithCGPoint:CGPointMake(NEXT_VALUE, NEXT_VALUE)],
+                                          [NSValue valueWithCGPoint:CGPointMake(NEXT_VALUE, NEXT_VALUE)],
+                                          ]];
+                    break;
+                default:
+                    RCTLogError(@"Invalid RNSVGBezier type %zd at element %zd of %@", type, i, arr);
+                    return NULL;
+            }
+        }
+    }
+    @catch (NSException *exception) {
+        RCTLogError(@"Invalid RNSVGBezier format: %@", arr);
+        return NULL;
+    }
+    
+    return beziers;
 }
 
 + (CGPoint)CGPoint:(id)json offset:(NSUInteger)offset

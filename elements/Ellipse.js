@@ -1,23 +1,25 @@
 import React, {PropTypes} from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
-import mergeContext from '../lib/mergeContext';
 import Shape from './Shape';
-import {ellipseProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
+import {pathProps, numberProp} from '../lib/props';
 import {EllipseAttributes} from '../lib/attributes';
 
 class Ellipse extends Shape{
     static displayName = 'Ellipse';
+
     static propTypes = {
         ...pathProps,
-        ...ellipseProps
+        cx: numberProp.isRequired,
+        cy: numberProp.isRequired,
+        rx: numberProp.isRequired,
+        ry: numberProp.isRequired
     };
 
-    static contextTypes = {
-        ...fillProps,
-        ...strokeProps,
-        ...ellipseProps,
-        isInGroup: PropTypes.bool,
-        svgId: numberProp
+    static defaultProps = {
+        cx: 0,
+        cy: 0,
+        rx: 0,
+        ry: 0
     };
 
     setNativeProps = (...args) => {
@@ -25,7 +27,8 @@ class Ellipse extends Shape{
     };
 
     render() {
-        let props = mergeContext(this.props, this.context);
+        let props = this.props;
+
         return <RNSVGEllipse
             ref={ele => this.root = ele}
             {...this.extractProps(props)}

@@ -73,21 +73,14 @@
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-
+    [self setBoundingBox:context];
     CGMutablePathRef path = CGPathCreateMutable();
-    
-    CGRect box = CGContextGetClipBoundingBox(context);
-    float height = CGRectGetHeight(box);
-    float width = CGRectGetWidth(box);
-    
-    RNSVGPercentageConverter* convert = [[RNSVGPercentageConverter alloc] init];
-    CGFloat x = [convert stringToFloat:self.x relative:width offset:0];
-    CGFloat y = [convert stringToFloat:self.y relative:height offset:0];
-    CGFloat w = [convert stringToFloat:self.width relative:width offset:0];
-    CGFloat h = [convert stringToFloat:self.height relative:height offset:0];
-    CGFloat rx = [convert stringToFloat:self.rx relative:width offset:0];
-    CGFloat ry = [convert stringToFloat:self.ry relative:height offset:0];
-    
+    CGFloat x = [self getWidthRelatedValue:self.x];
+    CGFloat y = [self getHeightRelatedValue:self.y];
+    CGFloat width = [self getWidthRelatedValue:self.width];
+    CGFloat height = [self getHeightRelatedValue:self.height];
+    CGFloat rx = [self getWidthRelatedValue:self.rx];
+    CGFloat ry = [self getHeightRelatedValue:self.ry];
     
     if (rx != 0 || ry != 0) {
         if (rx == 0) {
@@ -96,20 +89,20 @@
             ry = rx;
         }
         
-        if (rx > w / 2) {
-            rx = w / 2;
+        if (rx > width / 2) {
+            rx = width / 2;
         }
         
-        if (ry > h / 2) {
-            ry = h / 2;
+        if (ry > height / 2) {
+            ry = height / 2;
         }
         
-        CGPathAddRoundedRect(path, nil, CGRectMake(x, y, w, h), rx, ry);
+        CGPathAddRoundedRect(path, nil, CGRectMake(x, y, width, height), rx, ry);
     } else {
-        CGPathAddRect(path, nil, CGRectMake(x, y, w, h));
+        CGPathAddRect(path, nil, CGRectMake(x, y, width, height));
     }
     
-    return path;
+    return (CGPathRef)CFAutorelease(path);
 }
 
 @end

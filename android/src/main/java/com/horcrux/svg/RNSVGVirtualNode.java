@@ -11,28 +11,23 @@ package com.horcrux.svg;
 
 import javax.annotation.Nullable;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.RectF;
+import android.graphics.Rect;
 import android.graphics.Region;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
-import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ReactShadowNode;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Base class for RNSVGView virtual nodes: {@link RNSVGGroupShadowNode}, {@link RNSVGPathShadowNode} and
@@ -49,7 +44,6 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     protected @Nullable Path mClipPath;
     protected @Nullable String mClipPathRef;
-    private static final int PATH_TYPE_ARC = 4;
     private static final int PATH_TYPE_CLOSE = 1;
     private static final int PATH_TYPE_CURVETO = 3;
     private static final int PATH_TYPE_LINETO = 2;
@@ -63,8 +57,11 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     private boolean mClipRuleSet;
     private boolean mClipDataSet;
     protected boolean mResponsible;
-    protected int mWidth;
-    protected int mHeight;
+    protected int mCanvasX;
+    protected int mCanvasY;
+    protected int mCanvasWidth;
+    protected int mCanvasHeight;
+    protected String mName;
 
     private RNSVGSvgViewShadowNode mSvgShadowNode;
 
@@ -111,6 +108,13 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         markUpdated();
     }
 
+    @ReactProp(name = "name")
+    public void setName(String name) {
+        mName = name;
+        markUpdated();
+    }
+
+
     @ReactProp(name = "clipPathRef")
     public void setClipPathRef(String clipPathRef) {
         mClipPathRef = clipPathRef;
@@ -155,6 +159,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     private void setupClip() {
         if (mClipDataSet && mClipRuleSet) {
             mClipPath = new Path();
+
             switch (mClipRule) {
                 case CLIP_RULE_EVENODD:
                     mClipPath.setFillType(Path.FillType.EVEN_ODD);
@@ -233,30 +238,6 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
                         data[i++] * mScale,
                         data[i++] * mScale);
                     break;
-                case PATH_TYPE_ARC:
-                {
-                    float x = data[i++] * mScale;
-                    float y = data[i++] * mScale;
-                    float r = data[i++] * mScale;
-                    float start = (float) Math.toDegrees(data[i++]);
-                    float end = (float) Math.toDegrees(data[i++]);
-
-                    boolean clockwise = data[i++] == 1f;
-                    float sweep = end - start;
-                    if (Math.abs(sweep) > 360) {
-                        sweep = 360;
-                    } else {
-                        sweep = modulus(sweep, 360);
-                    }
-                    if (!clockwise && sweep < 360) {
-                        start = end;
-                        sweep = 360 - sweep;
-                    }
-
-                    RectF oval = new RectF(x - r, y - r, x + r, y + r);
-                    path.addArc(oval, start, sweep);
-                    break;
-                }
                 default:
                     throw new JSApplicationIllegalArgumentException(
                         "Unrecognized drawing instruction " + type);
@@ -267,7 +248,8 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     protected void clip(Canvas canvas, Paint paint) {
         Path clip = mClipPath;
         if (clip == null && mClipPathRef != null) {
-            clip = getSvgShadowNode().getDefinedClipPath(mClipPathRef);
+            RNSVGVirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPathRef);
+            clip = node.getPath(canvas, paint);
         }
 
         if (clip != null) {
@@ -303,7 +285,30 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     }
 
     protected void setupDimensions(Canvas canvas) {
-        mWidth = canvas.getWidth();
-        mHeight = canvas.getHeight();
+        // TODO: not sure this is a right way to get canvas boundingBox
+        Rect mCanvasClipBounds = canvas.getClipBounds();
+        mCanvasX = mCanvasClipBounds.left;
+        mCanvasY = mCanvasClipBounds.top;
+        mCanvasWidth = canvas.getWidth();
+        mCanvasHeight = canvas.getHeight();
     }
+
+    protected void saveDefinition() {
+        if (mName != null) {
+            getSvgShadowNode().defineTemplate(this, mName);
+        }
+    }
+
+    protected void removeDefinition() {
+        if (mName != null) {
+            getSvgShadowNode().removeTemplate(mName);
+        }
+    }
+
+    abstract public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList, boolean inherited);
+
+    abstract public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList);
+
+    abstract public void resetProperties();
+
 }

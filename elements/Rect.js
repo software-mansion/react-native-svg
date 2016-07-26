@@ -1,24 +1,30 @@
 import React, {PropTypes} from 'react';
 import './Path'; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
-import mergeContext from '../lib/mergeContext';
-import {rectProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
+import {pathProps, numberProp} from '../lib/props';
 import {RectAttributes} from '../lib/attributes';
 import Shape from './Shape';
 
 class Rect extends Shape {
     static displayName = 'Rect';
+
     static propTypes = {
         ...pathProps,
-        ...rectProps
+        x: numberProp.isRequired,
+        y: numberProp.isRequired,
+        width: numberProp.isRequired,
+        height: numberProp.isRequired,
+        rx: numberProp,
+        ry: numberProp
     };
 
-    static contextTypes = {
-        ...fillProps,
-        ...strokeProps,
-        ...rectProps,
-        isInGroup: PropTypes.bool,
-        svgId: numberProp
+    static defaultProps = {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        rx: 0,
+        ry: 0
     };
 
     setNativeProps = (...args) => {
@@ -26,7 +32,7 @@ class Rect extends Shape {
     };
 
     render() {
-        let props = mergeContext(this.props, this.context);
+        let props = this.props;
 
         return <RNSVGRect
             ref={ele => this.root = ele}
@@ -39,8 +45,8 @@ class Rect extends Shape {
             y={props.y.toString()}
             width={props.width.toString()}
             height={props.height.toString()}
-            rx={props.rx ? props.rx.toString() : '0'}
-            ry={props.ry ? props.ry.toString() : '0'}
+            rx={props.rx.toString()}
+            ry={props.ry.toString()}
         />;
     }
 }

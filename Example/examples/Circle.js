@@ -37,7 +37,7 @@ class StrokeCircle extends Component{
                 r="45"
                 stroke="purple"
                 strokeWidth="2.5"
-                fill={null}
+                fill="none"
             />
         </Svg>;
     }
@@ -78,7 +78,6 @@ const icon = <Svg
 </Svg>;
 
 const samples = [CircleExample, StrokeCircle, StrokeOpacityCircle];
-
 export {
     icon,
     samples

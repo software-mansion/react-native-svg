@@ -7,12 +7,13 @@
  */
 
 #import <QuartzCore/QuartzCore.h>
-
-#import "RNSVGBrush.h"
+#import "RCTConvert+RNSVG.h"
 #import "RNSVGCGFloatArray.h"
 #import "RNSVGTextFrame.h"
 #import "RCTConvert.h"
 #import "RNSVGCGFCRule.h"
+
+@class RNSVGBrush;
 
 @interface RCTConvert (RNSVG)
 
@@ -23,6 +24,7 @@
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;
 
++ (NSArray *)RNSVGBezier:(id)json;
 + (CGPoint)CGPoint:(id)json offset:(NSUInteger)offset;
 + (CGRect)CGRect:(id)json offset:(NSUInteger)offset;
 + (CGColorRef)CGColor:(id)json offset:(NSUInteger)offset;

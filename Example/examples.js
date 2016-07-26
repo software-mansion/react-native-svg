@@ -14,6 +14,7 @@ import * as Symbol from './examples/Symbol';
 import * as Gradients from './examples/Gradients';
 import * as Clipping from './examples/Clipping';
 import * as Image from './examples/Image';
+import * as Definations from './examples/Definations';
 import * as TouchEvents from './examples/TouchEvents';
 
 export {
@@ -33,5 +34,6 @@ export {
     Gradients,
     Clipping,
     Image,
-    TouchEvents
+    TouchEvents,
+    Definations
 };

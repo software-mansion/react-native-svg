@@ -18,6 +18,4 @@ RCT_EXPORT_MODULE()
   return [RNSVGClipPath new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(name, NSString)
-
 @end

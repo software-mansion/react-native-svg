@@ -17,23 +17,25 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.react.bridge.ReadableArray;
+
 /**
  * Shadow node for virtual RNSVGGroup view
  */
-public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
+public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
 
     public void draw(Canvas canvas, Paint paint, float opacity) {
-        opacity *= mOpacity;
         RNSVGSvgViewShadowNode svg = getSvgShadowNode();
 
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             int count = saveAndSetupCanvas(canvas);
             clip(canvas, paint);
-
             for (int i = 0; i < getChildCount(); i++) {
                 RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
                 child.setupDimensions(canvas);
-                child.draw(canvas, paint, opacity);
+
+                child.mergeProperties(this, mPropList, true);
+                child.draw(canvas, paint, opacity * mOpacity);
 
                 if (child.isResponsible()) {
                     svg.enableTouchEvents();
@@ -67,5 +69,41 @@ public class RNSVGGroupShadowNode extends RNSVGVirtualNode {
         }
 
         return viewTag;
+    }
+
+    protected void saveDefinition() {
+        if (mName != null) {
+            getSvgShadowNode().defineTemplate(this, mName);
+        }
+
+        for (int i = getChildCount() - 1; i >= 0; i--) {
+            ((RNSVGVirtualNode) getChildAt(i)).saveDefinition();
+        }
+    }
+
+    protected void removeDefinition() {
+        if (mName != null) {
+            getSvgShadowNode().removeTemplate(mName);
+        }
+
+        for (int i = getChildCount() - 1; i >= 0; i--) {
+            ((RNSVGVirtualNode) getChildAt(i)).removeDefinition();
+        }
+    }
+
+    @Override
+    public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList) {
+        if (mergeList.size() != 0) {
+            for (int i = getChildCount() - 1; i >= 0; i--) {
+                ((RNSVGVirtualNode) getChildAt(i)).mergeProperties(target, mergeList);
+            }
+        }
+    }
+
+    @Override
+    public void resetProperties() {
+        for (int i = getChildCount() - 1; i >= 0; i--) {
+            ((RNSVGVirtualNode) getChildAt(i)).resetProperties();
+        }
     }
 }

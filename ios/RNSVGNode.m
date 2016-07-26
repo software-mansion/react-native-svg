@@ -11,6 +11,17 @@
 #import "RNSVGClipPath.h"
 
 @implementation RNSVGNode
+{
+    BOOL _transparent;
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        self.opacity = 1;
+    }
+    return self;
+}
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
 {
@@ -30,6 +41,17 @@
     // Do nothing, as subviews are inserted by insertReactSubview:
 }
 
+- (void)invalidate
+{
+    id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
+    [container invalidate];
+}
+
+- (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
+{
+    self.backgroundColor = inheritedBackgroundColor;
+}
+
 - (void)setOpacity:(CGFloat)opacity
 {
     if (opacity == _opacity) {
@@ -41,41 +63,59 @@
     } else if (opacity > 1) {
         opacity = 1;
     }
-
+    
     [self invalidate];
+    _transparent = opacity < 1;
     _opacity = opacity;
 }
 
 - (void)setTrans:(CGAffineTransform)trans
 {
-    [self invalidate];
-    super.transform = trans;
+    self.transform = trans;
 }
 
-- (void)invalidate
+- (void)setTransform:(CGAffineTransform)transform
 {
-    id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
-    [container invalidate];
+    [self invalidate];
+    super.transform = transform;
+}
+
+- (void)beginTransparencyLayer:(CGContextRef)context
+{
+    if (_transparent) {
+        CGContextBeginTransparencyLayer(context, NULL);
+    }
+}
+
+- (void)endTransparencyLayer:(CGContextRef)context
+{
+    if (_transparent) {
+        CGContextEndTransparencyLayer(context);
+    }
 }
 
 - (void)renderTo:(CGContextRef)context
 {
     float opacity = self.opacity;
-
-    BOOL transparent = opacity < 1;
-
+    
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.transform);
     CGContextSetAlpha(context, opacity);
-    if (transparent) {
-        CGContextBeginTransparencyLayer(context, NULL);
-    }
+    
+    [self beginTransparencyLayer:context];
+    [self renderClip:context];
     [self renderLayerTo:context];
-    if (transparent) {
-        CGContextEndTransparencyLayer(context);
-    }
+    [self endTransparencyLayer:context];
+    
     CGContextRestoreGState(context);
+}
+
+- (void)renderClip:(CGContextRef)context
+{
+    if (self.clipPathRef) {
+        self.clipPath = [[[self getSvgView] getDefinedClipPath:self.clipPathRef] getPath:context];
+    }
 }
 
 - (void)setClipPath:(CGPathRef)clipPath
@@ -88,31 +128,28 @@
     _clipPath = CGPathRetain(clipPath);
 }
 
+- (void)setClipPathRef:(NSString *)clipPathRef
+{
+    if (_clipPathRef == clipPathRef) {
+        return;
+    }
+    [self invalidate];
+    self.clipPath = nil;
+    _clipPathRef = clipPathRef;
+}
+
 - (CGPathRef)getPath: (CGContextRef) context
 {
     // abstract
-    return CGPathCreateMutable();
-}
-
-- (CGPathRef)getClipPath
-{
-    CGPathRef clipPath = nil;
-
-    if (self.clipPath) {
-        clipPath = self.clipPath;
-    } else if (self.clipPathRef) {
-        clipPath = [[self getSvgView] getDefinedClipPath:self.clipPathRef];
-    }
-
-    return clipPath;
+    return (CGPathRef)CFAutorelease(CGPathCreateMutable());
 }
 
 - (void)clip:(CGContextRef)context
 {
-    CGPathRef clipPath  = [self getClipPath];
+    CGPathRef clipPath  = self.clipPath;
 
-    if (clipPath != NULL) {
-        CGContextAddPath(context, [self getClipPath]);
+    if (clipPath) {
+        CGContextAddPath(context, clipPath);
         if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
             CGContextEOClip(context);
         } else {
@@ -121,31 +158,70 @@
     }
 }
 
-
-- (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
-{
-    self.backgroundColor = inheritedBackgroundColor;
-}
-
 - (void)renderLayerTo:(CGContextRef)context
 {
     // abstract
-}
-
-- (RNSVGSvgView *)getSvgView
-{
-    UIView *parent = self.superview;
-    while ([parent class] != [RNSVGSvgView class]) {
-        parent = parent.superview;
-    }
-
-    return (RNSVGSvgView *)parent;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
 {
     // abstract
     return nil;
+}
+
+- (RNSVGSvgView *)getSvgView
+{
+    UIView *parent = self.superview;
+    while (parent && [parent class] != [RNSVGSvgView class]) {
+        parent = parent.superview;
+    }
+    
+    return (RNSVGSvgView *)parent;
+}
+
+- (void)willRemoveFromSuperView
+{
+    if (self.subviews) {
+        for (RNSVGNode *node in self.subviews) {
+            [node willRemoveFromSuperView];
+        }
+    }
+    [self removeDefination];
+    [super removeFromSuperview];
+}
+
+/**
+ * reverse removeFromSuperview calling order.
+ * calling it from subviews to superview.
+ */
+- (void)removeFromSuperview
+{
+    [self willRemoveFromSuperView];
+}
+
+- (void)saveDefinition
+{
+    if (self.name) {
+        RNSVGSvgView* svg = [self getSvgView];
+        [svg defineTemplate:self templateRef:self.name];
+    }
+}
+
+- (void)removeDefination
+{
+    if (self.name) {
+        [[self getSvgView] removeTemplate:self.name];
+    }
+}
+
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
+{
+    // abstract
+}
+
+- (void)resetProperties
+{
+    // abstract
 }
 
 - (void)dealloc

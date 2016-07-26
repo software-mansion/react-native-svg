@@ -1,23 +1,25 @@
 import React, {PropTypes} from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import {LineAttributes} from '../lib/attributes';
-import mergeContext from '../lib/mergeContext';
 import Shape from './Shape';
-import {lineProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
+import {pathProps, numberProp} from '../lib/props';
 
 class Line extends Shape {
     static displayName = 'Line';
+
     static propTypes = {
         ...pathProps,
-        ...lineProps
+        x1: numberProp.isRequired,
+        x2: numberProp.isRequired,
+        y1: numberProp.isRequired,
+        y2: numberProp.isRequired
     };
 
-    static contextTypes = {
-        ...fillProps,
-        ...strokeProps,
-        ...lineProps,
-        isInGroup: PropTypes.bool,
-        svgId: numberProp
+    static defaultProps = {
+        x1: 0,
+        y1: 0,
+        x2: 0,
+        y2: 0
     };
 
     setNativeProps = (...args) => {
@@ -25,7 +27,7 @@ class Line extends Shape {
     };
 
     render() {
-        let props = mergeContext(this.props, this.context);
+        let props = this.props;
         return <RNSVGLine
             ref={ele => this.root = ele}
             {...this.extractProps(props)}

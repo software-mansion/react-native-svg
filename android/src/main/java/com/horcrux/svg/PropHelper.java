@@ -9,6 +9,13 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Color;
+import android.graphics.RectF;
+import android.graphics.Paint;
+import android.graphics.RadialGradient;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.Matrix;
 import android.util.Log;
 
 import javax.annotation.Nullable;
@@ -29,7 +36,10 @@ import java.util.regex.Pattern;
      * @return a {@code float[]} if converted successfully, or {@code null} if {@param value} was
      * {@code null}.
      */
-  /*package*/ static @Nullable float[] toFloatArray(@Nullable ReadableArray value) {
+  /*package*/
+    static
+    @Nullable
+    float[] toFloatArray(@Nullable ReadableArray value) {
         if (value != null) {
             float[] result = new float[value.size()];
             toFloatArray(value, result);
@@ -45,10 +55,11 @@ import java.util.regex.Pattern;
      * will not be converted.
      *
      * @param value input array
-     * @param into output array
+     * @param into  output array
      * @return number of items copied from input to the output array
      */
-  /*package*/ static int toFloatArray(ReadableArray value, float[] into) {
+  /*package*/
+    static int toFloatArray(ReadableArray value, float[] into) {
         int length = value.size() > into.length ? into.length : value.size();
         for (int i = 0; i < length; i++) {
             into[i] = (float) value.getDouble(i);
@@ -62,18 +73,20 @@ import java.util.regex.Pattern;
      * Converts percentage string into actual based on a relative number
      *
      * @param percentage percentage string
-     * @param relative relative number
-     * @param offset offset number
+     * @param relative   relative number
+     * @param offset     offset number
      * @return actual float based on relative number
      */
-  /*package*/ static float fromPercentageToFloat(String percentage, float relative, float offset, float scale) {
-        Matcher matched =  Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$").matcher(percentage);
+  /*package*/
+    static float fromPercentageToFloat(String percentage, float relative, float offset, float scale) {
+        Matcher matched = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$").matcher(percentage);
         if (matched.matches()) {
             return Float.valueOf(matched.group(1)) / 100 * relative + offset;
         } else {
             return Float.valueOf(percentage) * scale;
         }
     }
+
     /**
      * Judge given string is a percentage-like string or not.
      *
@@ -81,8 +94,101 @@ import java.util.regex.Pattern;
      * @return string is percentage-like or not.
      */
 
-  /*package*/ static boolean isPercentage(String string) {
+  /*package*/
+    static boolean isPercentage(String string) {
         Pattern pattern = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$");
         return pattern.matcher(string).matches();
+    }
+
+    /**
+     *
+     */
+  /*package*/ static class RNSVGBrush {
+
+        private GradientType mType = GradientType.LINEAR_GRADIENT;
+        private ReadableArray mPoints;
+        private ReadableArray mColors;
+
+        public RNSVGBrush(GradientType type, ReadableArray points, ReadableArray colors) {
+            mType = type;
+            mPoints = points;
+            mColors = colors;
+        }
+
+        public enum GradientType {
+            LINEAR_GRADIENT(0),
+            RADIAL_GRADIENT(1);
+
+            GradientType(int ni) {
+                nativeInt = ni;
+            }
+
+            final int nativeInt;
+        }
+
+        private static void parseGradientStops(ReadableArray value, int stopsCount, float[] stops, int[] stopsColors) {
+            int startStops = value.size() - stopsCount;
+            for (int i = 0; i < stopsCount; i++) {
+                stops[i] = (float) value.getDouble(startStops + i);
+                stopsColors[i] = Color.argb(
+                    (int) (value.getDouble(i * 4 + 3) * 255),
+                    (int) (value.getDouble(i * 4) * 255),
+                    (int) (value.getDouble(i * 4 + 1) * 255),
+                    (int) (value.getDouble(i * 4 + 2) * 255));
+
+            }
+        }
+
+        public void setupPaint(Paint paint, RectF box, float mScale) {
+            float height = box.height();
+            float width = box.width();
+            float midX = box.centerX();
+            float midY = box.centerY();
+            float offsetX = (midX - width / 2);
+            float offsetY = (midY - height / 2);
+
+
+            int stopsCount = mColors.size() / 5;
+            int[] stopsColors = new int[stopsCount];
+            float[] stops = new float[stopsCount];
+            parseGradientStops(mColors, stopsCount, stops, stopsColors);
+
+            if (mType == GradientType.LINEAR_GRADIENT) {
+                float x1 = PropHelper.fromPercentageToFloat(mPoints.getString(0), width, offsetX, mScale);
+                float y1 = PropHelper.fromPercentageToFloat(mPoints.getString(1), height, offsetY, mScale);
+                float x2 = PropHelper.fromPercentageToFloat(mPoints.getString(2), width, offsetX, mScale);
+                float y2 = PropHelper.fromPercentageToFloat(mPoints.getString(3), height, offsetY, mScale);
+                paint.setShader(
+                    new LinearGradient(
+                        x1,
+                        y1,
+                        x2,
+                        y2,
+                        stopsColors,
+                        stops,
+                        Shader.TileMode.CLAMP));
+            } else {
+                float rx = PropHelper.fromPercentageToFloat(mPoints.getString(2), width, 0f, mScale);
+                float ry = PropHelper.fromPercentageToFloat(mPoints.getString(3), height, 0f, mScale);
+                float cx = PropHelper.fromPercentageToFloat(mPoints.getString(4), width, offsetX, mScale);
+                float cy = PropHelper.fromPercentageToFloat(mPoints.getString(5), height, offsetY, mScale) / (ry / rx);
+                // TODO: support focus point.
+                //float fx = PropHelper.fromPercentageToFloat(mPoints.getString(0), width, offsetX) * mScale;
+                //float fy = PropHelper.fromPercentageToFloat(mPoints.getString(1), height, offsetY) * mScale / (ry / rx);
+                Shader radialGradient = new RadialGradient(
+                    cx,
+                    cy,
+                    rx,
+                    stopsColors,
+                    stops,
+                    Shader.TileMode.CLAMP
+                );
+
+                Matrix radialMatrix = new Matrix();
+                radialMatrix.preScale(1f, ry / rx);
+                radialGradient.setLocalMatrix(radialMatrix);
+                paint.setShader(radialGradient);
+            }
+        }
     }
 }

@@ -7,16 +7,37 @@
  */
 
 #import "RNSVGRenderable.h"
+#import "RNSVGPercentageConverter.h"
 
 @implementation RNSVGRenderable
+{
+    NSMutableDictionary *_originProperties;
+    NSArray *_changedList;
+    RNSVGPercentageConverter *_widthConverter;
+    RNSVGPercentageConverter *_heightConverter;
+    CGFloat _contextWidth;
+    CGFloat _contextHeight;
+    CGRect _boundingBox;
+}
 
 - (id)init
 {
-    self = [super init];
-    if (self) {
-        _nodeArea = CGPathCreateMutable();
+    if (self = [super init]) {
+        _fillOpacity = 1;
+        _strokeOpacity = 1;
+        _strokeWidth = 1;
     }
     return self;
+}
+
+- (void)setHitArea:(CGMutablePathRef)hitArea
+{
+    if (hitArea == _hitArea) {
+        return;
+    }
+    [self invalidate];
+    CGPathRelease(_hitArea);
+    _hitArea = hitArea;
 }
 
 - (void)setFill:(RNSVGBrush *)fill
@@ -73,9 +94,18 @@
     _strokeMiterlimit = strokeMiterlimit;
 }
 
+- (void)setPropList:(NSArray<NSString *> *)propList
+{
+    if (propList == _propList) {
+        return;
+    }
+    _propList = propList;
+    [self invalidate];
+}
+
 - (void)dealloc
 {
-    CGPathRelease(_nodeArea);
+    CGPathRelease(_hitArea);
     if (_strokeDasharray.array) {
         free(_strokeDasharray.array);
     }
@@ -93,6 +123,7 @@
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.transform);
     CGContextSetAlpha(context, self.opacity);
+    [self renderClip:context];
     [self renderLayerTo:context];
     CGContextRestoreGState(context);
 }
@@ -100,15 +131,102 @@
 // hitTest delagate
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    CGPathRef clipPath  = [self getClipPath];
-    if (self.nodeArea != NULL && CGPathContainsPoint(self.nodeArea, nil, point, NO)) {
-        if (clipPath == NULL) {
+    CGPathRef clipPath  = self.clipPath;
+    if (self.hitArea && CGPathContainsPoint(self.hitArea, nil, point, NO)) {
+        if (!clipPath) {
             return self;
         } else {
             return CGPathContainsPoint(clipPath, nil, point, NO) ? self : nil;
         }
     } else {
         return nil;
+    }
+}
+
+
+- (void)setBoundingBox:(CGContextRef)context
+{
+    _boundingBox = CGContextGetClipBoundingBox(context);
+    _widthConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:CGRectGetWidth(_boundingBox) offset:0];
+    _heightConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:CGRectGetHeight(_boundingBox) offset:0];
+}
+
+- (CGFloat)getWidthRelatedValue:(NSString *)string
+{
+    return [_widthConverter stringToFloat:string];
+}
+
+- (CGFloat)getHeightRelatedValue:(NSString *)string
+{
+    return [_heightConverter stringToFloat:string];
+}
+
+- (CGFloat)getContextWidth
+{
+    return CGRectGetWidth(_boundingBox);
+}
+
+- (CGFloat)getContextHeight
+{
+    return CGRectGetHeight(_boundingBox);
+}
+
+- (CGFloat)getContextX
+{
+    return CGRectGetMinX(_boundingBox);
+}
+
+- (CGFloat)getContextY
+{
+    return CGRectGetMinY(_boundingBox);
+}
+
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
+{
+    
+    [self mergeProperties:target mergeList:mergeList inherited:NO];
+}
+
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited
+{
+    if (mergeList.count == 0) {
+        return;
+    }
+    
+    if (!inherited) {
+        _originProperties = [[NSMutableDictionary alloc] init];
+        _changedList = mergeList;
+    }
+    
+    for (NSString *key in mergeList) {
+        if (inherited) {
+            [self inheritProperty:target propName:key];
+        } else {
+            [_originProperties setValue:[self valueForKey:key] forKey:key];
+            [self setValue:[target valueForKey:key] forKey:key];
+        }
+    }
+}
+
+- (void)resetProperties
+{
+    if (_changedList) {
+        for (NSString *key in _changedList) {
+            [self setValue:[_originProperties valueForKey:key] forKey:key];
+        }
+    }
+    _changedList = nil;
+}
+
+- (void)inheritProperty:(__kindof RNSVGNode *)parent propName:(NSString *)propName
+{
+    if (![self.propList containsObject:propName]) {
+        // add prop to propList
+        NSMutableArray *copy = [self.propList mutableCopy];
+        [copy addObject:propName];
+        self.propList = [copy copy];
+        
+        [self setValue:[parent valueForKey:propName] forKey:propName];
     }
 }
 

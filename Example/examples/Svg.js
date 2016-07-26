@@ -23,7 +23,8 @@ import Svg, {
     Circle,
     Rect,
     Path,
-    Line
+    Line,
+    G
 } from 'react-native-svg';
 
 class SvgExample extends Component{
@@ -84,19 +85,21 @@ class SvgOpacity extends Component{
 }
 
 class SvgViewbox extends Component{
-    static title = 'SVG with `viewbox="40 20 100 40"`';
+    static title = 'SVG with `viewBox="40 20 100 40" and preserveAspectRatio="none"`';
     render() {
         return <Svg
             height="100"
             width="100"
-            viewbox="40 20 100 40"
+            viewBox="40 20 100 40"
             preserveAspectRatio="none"
         >
-            <Rect x="0" y="0" width="100" height="100" fill="black" />
-            <Circle cx="50" cy="50" r="30" fill="yellow" />
-            <Circle cx="40" cy="40" r="4" fill="black" />
-            <Circle cx="60" cy="40" r="4" fill="black" />
-            <Path d="M 40 60 A 10 10 0 0 0 60 60" stroke="black" />
+            <G>
+                <Rect x="0" y="0" width="100" height="100" fill="red" />
+                <Circle cx="50" cy="50" r="30" fill="yellow" />
+                <Circle cx="40" cy="40" r="4" fill="black" />
+                <Circle cx="60" cy="40" r="4" fill="black" />
+                <Path d="M 40 60 A 10 10 0 0 0 60 60" stroke="black" />
+            </G>
         </Svg>;
     }
 }

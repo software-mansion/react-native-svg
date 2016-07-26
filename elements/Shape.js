@@ -12,8 +12,8 @@ class Shape extends Component {
         this.state = this.touchableGetInitialState();
     }
 
-    extractProps = (props) => {
-        let extractedProps = extractProps(props);
+    extractProps = (props, options = {stroke: true, fill: true, responder: true}) => {
+        let extractedProps = extractProps(props, options);
         if (extractedProps.touchable && !extractedProps.disabled) {
             _.assign(extractedProps, {
                 onStartShouldSetResponder: this.touchableHandleStartShouldSetResponder,

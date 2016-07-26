@@ -55,14 +55,14 @@ public class RNSVGCircleShadowNode extends RNSVGPathShadowNode {
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
-        float cx = PropHelper.fromPercentageToFloat(mCx, mWidth, 0, mScale);
-        float cy = PropHelper.fromPercentageToFloat(mCy, mHeight, 0, mScale);
+        float cx = PropHelper.fromPercentageToFloat(mCx, mCanvasWidth, 0, mScale);
+        float cy = PropHelper.fromPercentageToFloat(mCy, mCanvasHeight, 0, mScale);
 
         float r;
         if (PropHelper.isPercentage(mR)) {
             r = PropHelper.fromPercentageToFloat(mR, 1, 0, 1);
-            float powX = (float)Math.pow((mWidth * r), 2);
-            float powY = (float)Math.pow((mHeight * r), 2);
+            float powX = (float)Math.pow((mCanvasWidth * r), 2);
+            float powY = (float)Math.pow((mCanvasHeight * r), 2);
             r = (float)Math.sqrt(powX + powY) / (float)Math.sqrt(2);
         } else {
             r =  Float.parseFloat(mR) * mScale;

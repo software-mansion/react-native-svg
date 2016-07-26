@@ -3,38 +3,38 @@ import createReactNativeComponentClass from 'react/lib/createReactNativeComponen
 import Defs from './Defs';
 import extractProps from '../lib/extract/extractProps';
 import extractText from '../lib/extract/extractText';
-import mergeContext from '../lib/mergeContext';
-import {numberProp, textProps, fillProps, strokeProps, pathProps} from '../lib/props';
+import {numberProp, pathProps} from '../lib/props';
 import {TextAttributes} from '../lib/attributes';
 import Shape from './Shape';
 
 class Text extends Shape {
     static displayName = 'Text';
+
     static propTypes = {
+        ...pathProps,
         dx: numberProp,
         dy: numberProp,
-        ...textProps,
-        ...pathProps
+        textAnchor: PropTypes.oneOf(['start', 'middle', 'end']),
+        path: PropTypes.string,
+        fontFamily: PropTypes.string,
+        fontSize: numberProp,
+        fontWeight: PropTypes.string,
+        fontStyle: PropTypes.string,
+        font: PropTypes.object,
+        lines: numberProp
     };
 
-    static contextTypes = {
-        ...textProps,
-        ...fillProps,
-        ...strokeProps,
-        isInGroup: PropTypes.bool,
-        svgId: numberProp
+    static defaultProps = {
+        dx: 0,
+        dy: 0
     };
 
     setNativeProps = (...args) => {
-        this.getNativeElement().setNativeProps(...args);
-    };
-
-    getNativeElement = () => {
-        return this.refs.root || this.root;
+        this.root.setNativeProps(...args);
     };
 
     render() {
-        let props = mergeContext(this.props, this.context);
+        let props = this.props;
 
         let x = 0;
         if (props.x) {
@@ -45,21 +45,9 @@ class Text extends Shape {
             y = props.dy ? +props.y + (+props.dy) : +props.y;
         }
 
-        if (this.props.id) {
-            return <Defs.Item
-                ref={ele => this.root = ele.refs.root}
-                id={this.props.id}
-                svgId={this.props.svgId}
-                visible={true}
-                text={true}
-            >
-                <Text {...this.props} id={null} />
-            </Defs.Item>;
-        }
-
         return (
             <RNSVGText
-                ref="root"
+                ref={ele => this.root = ele}
                 {...extractProps({...props, x, y})}
                 {...extractText(props)}
             />

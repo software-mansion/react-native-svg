@@ -1,23 +1,23 @@
 import React, {PropTypes} from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import Shape from './Shape';
-import mergeContext from '../lib/mergeContext';
 import {CircleAttributes} from '../lib/attributes';
-import {circleProps, pathProps, fillProps, strokeProps, numberProp} from '../lib/props';
+import {pathProps, numberProp} from '../lib/props';
 
 class Circle extends Shape {
     static displayName = 'Circle';
+
     static propTypes = {
         ...pathProps,
-        ...circleProps
+        cx: numberProp.isRequired,
+        cy: numberProp.isRequired,
+        r: numberProp.isRequired
     };
 
-    static contextTypes = {
-        ...fillProps,
-        ...strokeProps,
-        ...circleProps,
-        isInGroup: PropTypes.bool,
-        svgId: numberProp
+    static defaultProps = {
+        cx: 0,
+        cy: 0,
+        r: 0
     };
 
     setNativeProps = (...args) => {
@@ -25,7 +25,7 @@ class Circle extends Shape {
     };
 
     render() {
-        let props = mergeContext(this.props, this.context);
+        let props = this.props;
         return <RNSVGCircle
             ref={ele => this.root = ele}
             {...this.extractProps(props)}

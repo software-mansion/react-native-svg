@@ -9,6 +9,7 @@ import Svg, {
 
 class PolygonExample extends Component{
     static title = 'The following example creates a polygon with three sides';
+
     render() {
         return <Svg
             height="100"
