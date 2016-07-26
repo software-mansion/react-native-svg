@@ -11,20 +11,11 @@ package com.horcrux.svg;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
-import android.view.View;
-import android.util.Log;
-
-import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.uimanager.annotations.ReactProp;
-
-import java.util.ArrayList;
 
 /**
  * Shadow node for virtual RNSVGPath view
  */
-public class RNSVGDefsShadowNode extends RNSVGVirtualNode {
+public class RNSVGDefsShadowNode extends RNSVGDefinitionShadowNode {
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
@@ -38,27 +29,4 @@ public class RNSVGDefsShadowNode extends RNSVGVirtualNode {
 
         restoreCanvas(canvas, count);
     }
-
-    @Override
-    public boolean isResponsible() {
-        return false;
-    }
-
-    protected Path getPath(Canvas canvas, Paint paint) {
-        return new Path();
-    }
-
-    @Override
-    public int hitTest(Point point, View view) {
-        return -1;
-    }
-
-    @Override
-    public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList, boolean inherited) {}
-
-    @Override
-    public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList) {}
-
-    @Override
-    public void resetProperties() {}
 }

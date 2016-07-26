@@ -63,7 +63,7 @@
     } else if (opacity > 1) {
         opacity = 1;
     }
-
+    
     [self invalidate];
     _transparent = opacity < 1;
     _opacity = opacity;
@@ -97,17 +97,17 @@
 - (void)renderTo:(CGContextRef)context
 {
     float opacity = self.opacity;
-
+    
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.transform);
     CGContextSetAlpha(context, opacity);
-
+    
     [self beginTransparencyLayer:context];
     [self renderClip:context];
     [self renderLayerTo:context];
     [self endTransparencyLayer:context];
-
+    
     CGContextRestoreGState(context);
 }
 
@@ -175,7 +175,7 @@
     while (parent && [parent class] != [RNSVGSvgView class]) {
         parent = parent.superview;
     }
-
+    
     return (RNSVGSvgView *)parent;
 }
 

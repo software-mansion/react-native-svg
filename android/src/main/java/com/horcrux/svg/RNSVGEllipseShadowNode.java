@@ -23,11 +23,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 public class RNSVGEllipseShadowNode extends RNSVGPathShadowNode {
 
     private String mCx;
-
     private String mCy;
-
     private String mRx;
-
     private String mRy;
 
     @ReactProp(name = "cx")

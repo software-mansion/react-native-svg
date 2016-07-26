@@ -19,8 +19,6 @@ import android.view.ViewGroup;
 
 import com.facebook.react.bridge.ReadableArray;
 
-import java.util.ArrayList;
-
 /**
  * Shadow node for virtual RNSVGGroup view
  */

@@ -11,33 +11,23 @@ package com.horcrux.svg;
 
 import javax.annotation.Nullable;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
-import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ReactShadowNode;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Base class for RNSVGView virtual nodes: {@link RNSVGGroupShadowNode}, {@link RNSVGPathShadowNode} and
@@ -76,7 +66,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     private RNSVGSvgViewShadowNode mSvgShadowNode;
 
     public RNSVGVirtualNode() {
-        mScale = DisplayMetricsHolder.getWindowDisplayMetrics().density;
+        mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
     }
 
     public abstract void draw(Canvas canvas, Paint paint, float opacity);

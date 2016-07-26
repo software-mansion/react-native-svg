@@ -17,18 +17,11 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.RadialGradient;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Region;
-import android.graphics.Shader;
-import android.graphics.Matrix;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
@@ -78,7 +71,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
     private ArrayList<String> mChangedList;
     private ArrayList<Object> mOriginProperties;
-    protected ReadableArray mPropList = new JavaOnlyArray();;
+    protected ReadableArray mPropList = new JavaOnlyArray();
 
     @ReactProp(name = "d")
     public void setPath(@Nullable ReadableArray shapePath) {
@@ -281,10 +274,11 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
      * if the stroke should be drawn, {@code false} if not.
      */
     protected boolean setupStrokePaint(Paint paint, float opacity, @Nullable  RectF box) {
+        paint.reset();
         if (mStrokeWidth == 0 || mStroke == null || mStroke.size() == 0) {
             return false;
         }
-        paint.reset();
+
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeCap(mStrokeLinecap);
@@ -310,62 +304,13 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                 (int) (colors.getDouble(1) * 255),
                 (int) (colors.getDouble(2) * 255),
                 (int) (colors.getDouble(3) * 255));
-        } else if (colorType == 1 || colorType == 2) {
+        } else if (colorType == 1) {
             if (box == null) {
                 box = new RectF();
                 mPath.computeBounds(box, true);
             }
-
-            int startColorsPosition = colorType == 1 ? 5 : 7;
-
-            int stopsCount = (colors.size() - startColorsPosition) / 5;
-            int [] stopsColors = new int [stopsCount];
-            float [] stops = new float[stopsCount];
-            float height = box.height();
-            float width = box.width();
-            float midX = box.centerX();
-            float midY = box.centerY();
-            float offsetX = (midX - width / 2);
-            float offsetY = (midY - height / 2);
-
-            parseGradientStops(colors, stopsCount, stops, stopsColors, startColorsPosition);
-
-            if (colorType == 1) {
-                float x1 = PropHelper.fromPercentageToFloat(colors.getString(1), width, offsetX, mScale);
-                float y1 = PropHelper.fromPercentageToFloat(colors.getString(2), height, offsetY, mScale);
-                float x2 = PropHelper.fromPercentageToFloat(colors.getString(3), width, offsetX, mScale);
-                float y2 = PropHelper.fromPercentageToFloat(colors.getString(4), height, offsetY, mScale);
-                paint.setShader(
-                    new LinearGradient(
-                        x1,
-                        y1,
-                        x2,
-                        y2,
-                        stopsColors,
-                        stops,
-                        Shader.TileMode.CLAMP));
-            } else {
-                float rx = PropHelper.fromPercentageToFloat(colors.getString(3), width, 0f, mScale);
-                float ry = PropHelper.fromPercentageToFloat(colors.getString(4), height, 0f, mScale);
-                float cx = PropHelper.fromPercentageToFloat(colors.getString(5), width, offsetX, mScale);
-                float cy = PropHelper.fromPercentageToFloat(colors.getString(6), height, offsetY, mScale) / (ry / rx);
-                // TODO: do not support focus point.
-                //float fx = PropHelper.fromPercentageToFloat(colors.getString(1), width, offsetX) * mScale;
-                //float fy = PropHelper.fromPercentageToFloat(colors.getString(2), height, offsetY) * mScale / (ry / rx);
-                Shader radialGradient = new RadialGradient(
-                    cx,
-                    cy,
-                    rx,
-                    stopsColors,
-                    stops,
-                    Shader.TileMode.CLAMP
-                );
-
-                Matrix radialMatrix = new Matrix();
-                radialMatrix.preScale(1f, ry / rx);
-                radialGradient.setLocalMatrix(radialMatrix);
-                paint.setShader(radialGradient);
-            }
+            PropHelper.RNSVGBrush brush = getSvgShadowNode().getDefinedBrush(colors.getString(1));
+            brush.setupPaint(paint, box, mScale);
         } else {
             // TODO: Support pattern.
             FLog.w(ReactConstants.TAG, "RNSVG: Color type " + colorType + " not supported!");
@@ -455,7 +400,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         for (int i = 0, size = mergeList.size(); i < size; i++) {
             try {
                 String fieldName = mergeList.getString(i);
-                Field field = target.getClass().getField(fieldName);
+                Field field = getClass().getField(fieldName);
                 Object value = field.get(target);
 
                 if (inherited) {
@@ -464,9 +409,9 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                         propList.pushString(fieldName);
                     }
                 } else {
-                    field.set(this, value);
-                    mOriginProperties.add(value);
+                    mOriginProperties.add(field.get(this));
                     mChangedList.add(fieldName);
+                    field.set(this, value);
                 }
             } catch (Exception e) {
                 throw new IllegalStateException(e);
@@ -497,6 +442,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
             }
 
             mChangedList = null;
+            mOriginProperties = null;
         }
     }
 

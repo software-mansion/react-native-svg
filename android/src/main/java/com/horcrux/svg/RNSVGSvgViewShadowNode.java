@@ -11,9 +11,7 @@ package com.horcrux.svg;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -30,10 +28,9 @@ import java.util.Map;
 public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
 
     private boolean mResponsible = false;
-
     private static final Map<String, RNSVGVirtualNode> mDefinedClipPaths = new HashMap<>();
-
     private static final Map<String, RNSVGVirtualNode> mDefinedTemplates = new HashMap<>();
+    private static final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
 
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
@@ -54,7 +51,17 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         return bitmap;
     }
 
-    public void drawChildren(Canvas canvas, Paint paint) {
+    /**
+     * Draw all of the child nodes of this root node
+     *
+     * This method is synchronized since
+     * {@link com.horcrux.svg.RNSVGImageShadowNode#loadImage(ImageRequest, Canvas, Paint)} calls it
+     * asynchronously after images have loaded and are ready to be drawn.
+     *
+     * @param canvas
+     * @param paint
+     */
+    public synchronized void drawChildren(Canvas canvas, Paint paint) {
         for (int i = 0; i < getChildCount(); i++) {
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
             child.setupDimensions(canvas);
@@ -114,4 +121,15 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         return mDefinedTemplates.get(templateRef);
     }
 
+    public void defineBrush(PropHelper.RNSVGBrush brush, String brushRef) {
+        mDefinedBrushes.put(brushRef, brush);
+    }
+
+    public void removeBrush(String brushRef) {
+        mDefinedBrushes.remove(brushRef);
+    }
+
+    public PropHelper.RNSVGBrush  getDefinedBrush(String brushRef) {
+        return mDefinedBrushes.get(brushRef);
+    }
 }

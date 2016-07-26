@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -22,7 +23,6 @@ import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -102,6 +102,9 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
         if (mPath == null) {
             canvas.drawText(text, 0, -paint.ascent(), paint);
         } else {
+            Matrix matrix = new Matrix();
+            matrix.setTranslate(0, -paint.getTextSize() * 1.1f);
+            mPath.transform(matrix);
             canvas.drawTextOnPath(text, mPath, 0, -paint.ascent(), paint);
         }
     }
@@ -186,6 +189,7 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
         if (setupFillPaint(paint, 1.0f, getBox(paint, text))) {
             applyTextPropertiesToPaint(paint);
             paint.getTextPath(text, 0, text.length(), 0, -paint.ascent(), path);
+            path.transform(mMatrix);
         }
 
         return path;

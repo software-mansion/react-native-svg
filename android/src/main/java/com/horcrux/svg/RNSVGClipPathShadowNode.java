@@ -9,14 +9,8 @@
 
 package com.horcrux.svg;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.view.View;
-import android.view.ViewGroup;
-
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
  * Shadow node for virtual RNSVGClipPath view

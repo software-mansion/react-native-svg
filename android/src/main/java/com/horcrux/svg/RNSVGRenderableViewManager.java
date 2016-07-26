@@ -11,7 +11,6 @@ package com.horcrux.svg;
 
 import android.view.ViewGroup;
 
-//import com.facebook.react.uimanager.ReactStylesDiffMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 
@@ -34,6 +33,8 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
     /* package */ static final String CLASS_DEFS = "RNSVGDefs";
     /* package */ static final String CLASS_USE = "RNSVGUse";
     /* package */ static final String CLASS_VIEW_BOX = "RNSVGViewBox";
+    /* package */ static final String CLASS_LINEAR_GRADIENT = "RNSVGLinearGradient";
+    /* package */ static final String CLASS_RADIAL_GRADIENT = "RNSVGRadialGradient";
 
     private final String mClassName;
 
@@ -87,6 +88,14 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
         return new RNSVGRenderableViewManager(CLASS_VIEW_BOX);
     }
 
+    public static RNSVGRenderableViewManager createRNSVGLinearGradientManager() {
+        return new RNSVGRenderableViewManager(CLASS_LINEAR_GRADIENT);
+    }
+
+    public static RNSVGRenderableViewManager createRNSVGRadialGradientManager() {
+        return new RNSVGRenderableViewManager(CLASS_RADIAL_GRADIENT);
+    }
+
     private RNSVGRenderableViewManager(String className) {
         mClassName = className;
     }
@@ -135,6 +144,12 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
             case CLASS_VIEW_BOX:
                 mVirtualNode = new RNSVGViewBoxShadowNode();
                 break;
+            case CLASS_LINEAR_GRADIENT:
+                mVirtualNode = new RNSVGLinearGradientShadowNode();
+                break;
+            case CLASS_RADIAL_GRADIENT:
+                mVirtualNode = new RNSVGRadialGradientShadowNode();
+                break;
             default:
                 throw new IllegalStateException("Unexpected type " + mClassName);
         }
@@ -170,6 +185,10 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
                 return RNSVGUseShadowNode.class;
             case CLASS_VIEW_BOX:
                 return RNSVGViewBoxShadowNode.class;
+            case CLASS_LINEAR_GRADIENT:
+                return RNSVGLinearGradientShadowNode.class;
+            case CLASS_RADIAL_GRADIENT:
+                return RNSVGRadialGradientShadowNode.class;
             default:
                 throw new IllegalStateException("Unexpected type " + mClassName);
         }

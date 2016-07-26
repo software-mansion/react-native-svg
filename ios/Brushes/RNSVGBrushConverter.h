@@ -17,6 +17,6 @@
 
 - (void) drawLinearGradient:(CGContextRef)context;
 
-- (void)drawRidialGradient:(CGContextRef)context;
+- (void) drawRidialGradient:(CGContextRef)context;
 
 @end
