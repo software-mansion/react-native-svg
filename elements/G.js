@@ -25,7 +25,9 @@ class G extends Component{
 
         return <RNSVGGroup
             {...extractedProps}
-            ref={ele => this.root = ele}
+            ref={ele => {
+                this.root = ele;
+            }}
         >
             {this.props.children}
         </RNSVGGroup>;
