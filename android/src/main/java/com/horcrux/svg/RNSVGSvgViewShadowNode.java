@@ -62,6 +62,10 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
      */
     public synchronized void drawChildren(Canvas canvas, Paint paint) {
         for (int i = 0; i < getChildCount(); i++) {
+            if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
+                continue;
+            }
+
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
             child.setupDimensions(canvas);
             child.saveDefinition();
@@ -87,6 +91,10 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         int count = getChildCount();
         int viewTag = -1;
         for (int i = count - 1; i >= 0; i--) {
+            if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
+                continue;
+            }
+
             viewTag = ((RNSVGVirtualNode) getChildAt(i)).hitTest(point, view.getChildAt(i));
             if (viewTag != -1) {
                 break;

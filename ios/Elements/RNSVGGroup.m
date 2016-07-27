@@ -16,11 +16,13 @@
     [self clip:context];
     
     for (RNSVGNode *node in self.subviews) {
-        [node mergeProperties:self mergeList:self.propList inherited:YES];
-        [node renderTo:context];
-        
-        if (node.responsible && !svg.responsible) {
-            self.responsible = YES;
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            [node mergeProperties:self mergeList:self.propList inherited:YES];
+            [node renderTo:context];
+            
+            if (node.responsible && !svg.responsible) {
+                self.responsible = YES;
+            }
         }
     }
 }
@@ -29,8 +31,10 @@
 {
     CGMutablePathRef path = CGPathCreateMutable();
     for (RNSVGNode *node in self.subviews) {
-        CGAffineTransform transform = node.transform;
-        CGPathAddPath(path, &transform, [node getPath:context]);
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            CGAffineTransform transform = node.transform;
+            CGPathAddPath(path, &transform, [node getPath:context]);
+        }
     }
     return (CGPathRef)CFAutorelease(path);
 }
@@ -39,9 +43,11 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
-        UIView *view = [node hitTest: point withEvent:event];
-        if (view) {
-            return view;
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            UIView *view = [node hitTest: point withEvent:event];
+            if (view) {
+                return view;
+            }
         }
     }
     return nil;
@@ -55,21 +61,27 @@
     }
     
     for (RNSVGNode *node in self.subviews) {
-        [node saveDefinition];
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            [node saveDefinition];
+        }
     }
 }
 
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
 {
     for (RNSVGNode *node in self.subviews) {
-        [node mergeProperties:target mergeList:mergeList];
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            [node mergeProperties:target mergeList:mergeList];
+        }
     }
 }
 
 - (void)resetProperties
 {
     for (RNSVGNode *node in self.subviews) {
-        [node resetProperties];
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            [node resetProperties];
+        }
     }
 }
 

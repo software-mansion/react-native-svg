@@ -31,6 +31,10 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
             int count = saveAndSetupCanvas(canvas);
             clip(canvas, paint);
             for (int i = 0; i < getChildCount(); i++) {
+                if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
+                    continue;
+                }
+
                 RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
                 child.setupDimensions(canvas);
 
@@ -51,6 +55,10 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
         Path path = new Path();
 
         for (int i = 0; i < getChildCount(); i++) {
+            if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
+                continue;
+            }
+
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
             child.setupDimensions(canvas);
             path.addPath(child.getPath(canvas, paint));
@@ -62,6 +70,10 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
     public int hitTest(Point point, View view) {
         int viewTag = -1;
         for (int i = getChildCount() - 1; i >= 0; i--) {
+            if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
+                continue;
+            }
+
             viewTag = ((RNSVGVirtualNode) getChildAt(i)).hitTest(point, ((ViewGroup) view).getChildAt(i));
             if (viewTag != -1) {
                 break;
@@ -77,6 +89,10 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
         }
 
         for (int i = getChildCount() - 1; i >= 0; i--) {
+            if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
+                continue;
+            }
+
             ((RNSVGVirtualNode) getChildAt(i)).saveDefinition();
         }
     }
@@ -85,6 +101,10 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
     public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList) {
         if (mergeList.size() != 0) {
             for (int i = getChildCount() - 1; i >= 0; i--) {
+                if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
+                    continue;
+                }
+
                 ((RNSVGVirtualNode) getChildAt(i)).mergeProperties(target, mergeList);
             }
         }
@@ -93,6 +113,10 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
     @Override
     public void resetProperties() {
         for (int i = getChildCount() - 1; i >= 0; i--) {
+            if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
+                continue;
+            }
+
             ((RNSVGVirtualNode) getChildAt(i)).resetProperties();
         }
     }

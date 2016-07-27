@@ -104,11 +104,21 @@ class SvgViewbox extends Component{
     }
 }
 
+class NullComponent extends Component {
+    render() {
+        return null;
+    }
+}
+
 class SvgLayout extends Component{
     static title = 'SVG with flex layout';
     render() {
         return <View style={styles.container}>
             <Svg style={styles.svg}>
+                <G>
+                    <NullComponent />
+                </G>
+                <NullComponent />
                 <Rect
                     width="80%"
                     height="80%"

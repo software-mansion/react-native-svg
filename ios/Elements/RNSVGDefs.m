@@ -14,7 +14,9 @@
 - (void)renderTo:(CGContextRef)context
 {
     for (RNSVGNode *node in self.subviews) {
-        [node saveDefinition];
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            [node saveDefinition];
+        }
     }
 }
 

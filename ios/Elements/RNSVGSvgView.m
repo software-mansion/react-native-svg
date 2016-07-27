@@ -49,11 +49,13 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     for (RNSVGNode *node in self.subviews) {
-        [node saveDefinition];
-        [node renderTo:context];
-
-        if (node.responsible && !self.responsible) {
-            self.responsible = YES;
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            [node saveDefinition];
+            [node renderTo:context];
+            
+            if (node.responsible && !self.responsible) {
+                self.responsible = YES;
+            }
         }
     }
 //    CGImageRef image = CGBitmapContextCreateImage(context);

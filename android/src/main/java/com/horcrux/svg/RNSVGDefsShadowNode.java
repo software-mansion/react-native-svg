@@ -23,6 +23,10 @@ public class RNSVGDefsShadowNode extends RNSVGDefinitionShadowNode {
         clip(canvas, paint);
 
         for (int i = 0; i < getChildCount(); i++) {
+            if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
+                continue;
+            }
+
             RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
             child.saveDefinition();
         }
