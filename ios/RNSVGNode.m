@@ -71,46 +71,8 @@
 
 - (void)setMatrix:(CGAffineTransform)matrix
 {
-    _matrix = matrix;
+    self.transform = matrix;
     [self invalidate];
-}
-
-- (void)beginTransparencyLayer:(CGContextRef)context
-{
-    if (_transparent) {
-        CGContextBeginTransparencyLayer(context, NULL);
-    }
-}
-
-- (void)endTransparencyLayer:(CGContextRef)context
-{
-    if (_transparent) {
-        CGContextEndTransparencyLayer(context);
-    }
-}
-
-- (void)renderTo:(CGContextRef)context
-{
-    float opacity = self.opacity;
-
-    // This needs to be painted on a layer before being composited.
-    CGContextSaveGState(context);
-    CGContextConcatCTM(context, self.matrix);
-    CGContextSetAlpha(context, opacity);
-
-    [self beginTransparencyLayer:context];
-    [self renderClip:context];
-    [self renderLayerTo:context];
-    [self endTransparencyLayer:context];
-
-    CGContextRestoreGState(context);
-}
-
-- (void)renderClip:(CGContextRef)context
-{
-    if (self.clipPathRef) {
-        self.clipPath = [[[self getSvgView] getDefinedClipPath:self.clipPathRef] getPath:context];
-    }
 }
 
 - (void)setClipPath:(CGPathRef)clipPath
@@ -133,10 +95,42 @@
     _clipPathRef = clipPathRef;
 }
 
-- (CGPathRef)getPath: (CGContextRef) context
+- (void)beginTransparencyLayer:(CGContextRef)context
 {
-    // abstract
-    return (CGPathRef)CFAutorelease(CGPathCreateMutable());
+    if (_transparent) {
+        CGContextBeginTransparencyLayer(context, NULL);
+    }
+}
+
+- (void)endTransparencyLayer:(CGContextRef)context
+{
+    if (_transparent) {
+        CGContextEndTransparencyLayer(context);
+    }
+}
+
+- (void)renderTo:(CGContextRef)context
+{
+    float opacity = self.opacity;
+
+    // This needs to be painted on a layer before being composited.
+    CGContextSaveGState(context);
+    CGContextConcatCTM(context, self.transform);
+    CGContextSetAlpha(context, opacity);
+
+    [self beginTransparencyLayer:context];
+    [self renderClip:context];
+    [self renderLayerTo:context];
+    [self endTransparencyLayer:context];
+
+    CGContextRestoreGState(context);
+}
+
+- (void)renderClip:(CGContextRef)context
+{
+    if (self.clipPathRef) {
+        self.clipPath = [[[self getSvgView] getDefinedClipPath:self.clipPathRef] getPath:context];
+    }
 }
 
 - (void)clip:(CGContextRef)context
@@ -152,6 +146,13 @@
         }
     }
 }
+
+- (CGPathRef)getPath: (CGContextRef) context
+{
+    // abstract
+    return nil;
+}
+
 
 - (void)renderLayerTo:(CGContextRef)context
 {

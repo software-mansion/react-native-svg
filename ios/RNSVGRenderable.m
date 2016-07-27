@@ -121,7 +121,7 @@
     // This is a terminal with only one painting. Therefore we don't need to paint this
     // off-screen. We can just composite it straight onto the buffer.
     CGContextSaveGState(context);
-    CGContextConcatCTM(context, self.matrix);
+    CGContextConcatCTM(context, self.transform);
     CGContextSetAlpha(context, self.opacity);
     [self renderClip:context];
     [self renderLayerTo:context];
