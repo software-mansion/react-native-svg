@@ -310,7 +310,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                 mPath.computeBounds(box, true);
             }
             PropHelper.RNSVGBrush brush = getSvgShadowNode().getDefinedBrush(colors.getString(1));
-            brush.setupPaint(paint, box, mScale);
+            brush.setupPaint(paint, box, mScale, opacity);
         } else {
             // TODO: Support pattern.
             FLog.w(ReactConstants.TAG, "RNSVG: Color type " + colorType + " not supported!");
