@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {View, requireNativeComponent, StyleSheet} from 'react-native';
 import ViewBox from './ViewBox';
+import _ from 'lodash';
 
 // Svg - Root node of all Svg elements
 let id = 0;
@@ -70,14 +71,11 @@ class Svg extends Component{
             preserveAspectRatio={props.preserveAspectRatio}
         >{props.children}</ViewBox> : props.children;
 
+        const nativeProps = _.omit(props, ['width', 'height', 'viewBox', 'preserveAspectRatio', 'opacity']);
+
         return (
             <NativeSvgView
-                {...props}
-                opacity={null}
-                width={null}
-                height={null}
-                viewBox={null}
-                preserveAspectRatio={null}
+                {...nativeProps}
                 ref={ele => {this.root = ele;}}
                 style={[
                     styles.svg,
