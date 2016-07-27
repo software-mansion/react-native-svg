@@ -1,4 +1,4 @@
-import React, {Children, Component, cloneElement, PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {View, requireNativeComponent, StyleSheet} from 'react-native';
 import ViewBox from './ViewBox';
 
@@ -57,7 +57,7 @@ class Svg extends Component{
                 width,
                 height,
                 flex: 0
-            }
+            };
         }
 
         if (props.viewbox) {
@@ -78,7 +78,7 @@ class Svg extends Component{
                 height={null}
                 viewBox={null}
                 preserveAspectRatio={null}
-                ref={ele => this.root = ele}
+                ref={ele => {this.root = ele;}}
                 style={[
                     styles.svg,
                     props.style,

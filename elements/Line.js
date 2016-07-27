@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import {LineAttributes} from '../lib/attributes';
 import Shape from './Shape';
@@ -29,7 +29,7 @@ class Line extends Shape {
     render() {
         let props = this.props;
         return <RNSVGLine
-            ref={ele => this.root = ele}
+            ref={ele => {this.root = ele;}}
             {...this.extractProps(props)}
             x1={props.x1.toString()}
             y1={props.y1.toString()}

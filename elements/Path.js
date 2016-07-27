@@ -3,7 +3,7 @@ import SerializablePath from '../lib/SerializablePath';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import {PathAttributes} from '../lib/attributes';
 import Shape from './Shape';
-import {pathProps, numberProp} from '../lib/props';
+import {pathProps} from '../lib/props';
 
 class Path extends Shape {
     static displayName = 'Path';
@@ -23,7 +23,7 @@ class Path extends Shape {
         let d = new SerializablePath(props.d).toJSON();
         return (
             <RNSVGPath
-                ref={ele => this.root = ele}
+                ref={ele => {this.root = ele;}}
                 {...this.extractProps(props)}
                 d={d}
             />

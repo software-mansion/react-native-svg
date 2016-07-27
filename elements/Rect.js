@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import './Path'; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import {pathProps, numberProp} from '../lib/props';
@@ -35,7 +35,7 @@ class Rect extends Shape {
         let props = this.props;
 
         return <RNSVGRect
-            ref={ele => this.root = ele}
+            ref={ele => {this.root = ele;}}
             {...this.extractProps({
                 ...props,
                 x: null,

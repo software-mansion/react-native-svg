@@ -1,4 +1,4 @@
-import React, {Children, Component} from 'react';
+import {Children, Component} from 'react';
 import percentToFloat from '../lib/percentToFloat';
 import Stop from './Stop';
 import Color from 'color';
@@ -20,7 +20,7 @@ class Gradient extends Component{
                     stops[offset] = Color(child.props.stopColor).alpha(extractOpacity(child.props.stopOpacity));
                 }
             } else {
-                console.warn(`'Gradient' can only receive 'Stop' elements as children`);
+                console.warn('\'Gradient\' can only receive \'Stop\' elements as children');
             }
         });
 

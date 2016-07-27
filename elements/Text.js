@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
-import Defs from './Defs';
 import extractProps from '../lib/extract/extractProps';
 import extractText from '../lib/extract/extractText';
 import {numberProp, pathProps} from '../lib/props';
@@ -47,7 +46,7 @@ class Text extends Shape {
 
         return (
             <RNSVGText
-                ref={ele => this.root = ele}
+                ref={ele => {this.root = ele;}}
                 {...extractProps({...props, x, y})}
                 {...extractText(props)}
             />

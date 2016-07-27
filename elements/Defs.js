@@ -1,6 +1,6 @@
 import React, {
     Component,
-} from 'react'
+} from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 
 class Defs extends Component {

@@ -25,7 +25,7 @@ class Polygon extends Component{
         }
 
         return <Path
-            ref={ele => this.root = ele}
+            ref={ele => {this.root = ele;}}
             {...this.props}
             d={`M${points.trim().replace(/\s+/g, 'L')}z`}
         />;

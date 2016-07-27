@@ -44,7 +44,7 @@ class ViewBox extends Component{
             console.warn('`viewBox` expected a string like `minX minY width height`, but got:' + viewBox);
             return <G>
                 {this.props.children}
-            </G>
+            </G>;
         }
 
         let modes = preserveAspectRatio.trim().split(spacesRegExp);
@@ -62,7 +62,7 @@ class ViewBox extends Component{
             meetOrSlice={meetOrSlice}
         >
             {this.props.children}
-        </RNSVGViewBox>
+        </RNSVGViewBox>;
     }
 }
 

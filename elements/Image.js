@@ -33,7 +33,7 @@ class Image extends Shape {
     render() {
         let {props} = this;
         return <RNSVGImage
-            ref={ele => this.root = ele}
+            ref={ele => {this.root = ele;}}
             {...this.extractProps(props, {responder: true})}
             x={props.x.toString()}
             y={props.y.toString()}

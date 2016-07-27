@@ -1,5 +1,4 @@
-import React, {Component, PropTypes} from 'react';
-import _ from 'lodash';
+import React, {Component} from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import {transformProps} from '../lib/props';
 import {GroupAttributes} from '../lib/attributes';
@@ -25,9 +24,7 @@ class G extends Component{
 
         return <RNSVGGroup
             {...extractedProps}
-            ref={ele => {
-                this.root = ele;
-            }}
+            ref={ele => {this.root = ele;}}
         >
             {this.props.children}
         </RNSVGGroup>;

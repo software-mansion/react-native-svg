@@ -4,7 +4,6 @@ import {UseAttributes} from '../lib/attributes';
 import Shape from './Shape';
 import React from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
-import _ from 'lodash';
 
 const idExpReg = /^#(.+)$/;
 class Use extends Shape {
@@ -43,7 +42,7 @@ class Use extends Shape {
         });
 
         return <RNSVGUse
-            ref={ele => this.root = ele}
+            ref={ele => {this.root = ele;}}
             {...extractedProps}
             href={href}
             width={props.width}

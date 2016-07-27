@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import Shape from './Shape';
 import {pathProps, numberProp} from '../lib/props';
@@ -30,7 +30,7 @@ class Ellipse extends Shape{
         let props = this.props;
 
         return <RNSVGEllipse
-            ref={ele => this.root = ele}
+            ref={ele => {this.root = ele;}}
             {...this.extractProps(props)}
             cx={props.cx.toString()}
             cy={props.cy.toString()}
