@@ -135,10 +135,10 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "trans")
-    public void setTrans(@Nullable ReadableArray transformArray) {
-        if (transformArray != null) {
-            int matrixSize = PropHelper.toFloatArray(transformArray, sMatrixData);
+    @ReactProp(name = "matrix")
+    public void setMatrix(@Nullable ReadableArray matrixArray) {
+        if (matrixArray != null) {
+            int matrixSize = PropHelper.toFloatArray(matrixArray, sMatrixData);
             if (matrixSize == 6) {
                 setupMatrix();
             } else if (matrixSize != -1) {

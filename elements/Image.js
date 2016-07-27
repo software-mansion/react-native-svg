@@ -34,7 +34,7 @@ class Image extends Shape {
         let {props} = this;
         return <RNSVGImage
             ref={ele => {this.root = ele;}}
-            {...this.extractProps(props, {responder: true})}
+            {...this.extractProps({...props, x: null, y: null}, {responder: true, transform: true})}
             x={props.x.toString()}
             y={props.y.toString()}
             width={props.width.toString()}

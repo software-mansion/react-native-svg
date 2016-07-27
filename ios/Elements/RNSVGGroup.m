@@ -29,7 +29,7 @@
 {
     CGMutablePathRef path = CGPathCreateMutable();
     for (RNSVGNode *node in self.subviews) {
-        CGAffineTransform transform = node.transform;
+        CGAffineTransform transform = node.matrix;
         CGPathAddPath(path, &transform, [node getPath:context]);
     }
     return (CGPathRef)CFAutorelease(path);
