@@ -67,8 +67,7 @@ class GTransform extends Component{
         >
             <G
                 rotate="50"
-                origin="100, 50"
-                scale="0.75"
+                origin="40, 30"
                 id="group"
             >
                 <Line
@@ -97,7 +96,7 @@ class GTransform extends Component{
                 >
                     Text grouped with shapes</Text>
             </G>
-            <Use href="#group" x="5" y="20" rotate="-50" stroke="red" opacity="0.5" />
+            <Use href="#group" x="5" y="40" rotate="-50" scale="0.75" stroke="red" opacity="0.5" />
         </Svg>;
     }
 }

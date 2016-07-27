@@ -9,12 +9,10 @@ import * as Path from './examples/Path';
 import * as Text from './examples/Text';
 import * as G from './examples/G';
 import * as Stroking from './examples/Stroking';
-import * as Use from './examples/Use';
-import * as Symbol from './examples/Symbol';
 import * as Gradients from './examples/Gradients';
 import * as Clipping from './examples/Clipping';
 import * as Image from './examples/Image';
-import * as Definations from './examples/Definations';
+import * as Reusable from './examples/Reusable';
 import * as TouchEvents from './examples/TouchEvents';
 
 export {
@@ -29,11 +27,9 @@ export {
     Text,
     Stroking,
     G,
-    Use,
-    Symbol,
     Gradients,
     Clipping,
     Image,
     TouchEvents,
-    Definations
+    Reusable
 };

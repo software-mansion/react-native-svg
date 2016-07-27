@@ -21,6 +21,8 @@ And furthermore:
 
 #### Install
 
+### note: react-native-svg >= 3.0 only support react-native >= 0.29.0
+
 1. Install library from npm.
 
 ```
@@ -28,7 +30,14 @@ npm install react-native-svg --save
 ```
 
 2 . Link native code
-If you haven\`t installed `rnpm`, you can run `npm i rnpm -g` first.
+
+```
+react-native link react-native-svg
+```
+react-native@0.29.0 and 0.29.1 cannot work with Android link properly:[here](https://github.com/facebook/react-native/pull/8612)
+
+
+Or use rnpm instead
 
 ```
 rnpm link react-native-svg
