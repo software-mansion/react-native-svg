@@ -12,7 +12,7 @@ class Shape extends Component {
         this.state = this.touchableGetInitialState();
     }
 
-    extractProps = (props, options = {stroke: true, fill: true, responder: true}) => {
+    extractProps = (props, options = {stroke: true, transform: true, fill: true, responder: true}) => {
         let extractedProps = extractProps(props, options);
         if (extractedProps.touchable && !extractedProps.disabled) {
             _.assign(extractedProps, {
