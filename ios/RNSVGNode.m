@@ -179,38 +179,11 @@
     return (RNSVGSvgView *)parent;
 }
 
-- (void)willRemoveFromSuperView
-{
-    if (self.subviews) {
-        for (RNSVGNode *node in self.subviews) {
-            [node willRemoveFromSuperView];
-        }
-    }
-    [self removeDefination];
-    [super removeFromSuperview];
-}
-
-/**
- * reverse removeFromSuperview calling order.
- * calling it from subviews to superview.
- */
-- (void)removeFromSuperview
-{
-    [self willRemoveFromSuperView];
-}
-
 - (void)saveDefinition
 {
     if (self.name) {
         RNSVGSvgView* svg = [self getSvgView];
         [svg defineTemplate:self templateRef:self.name];
-    }
-}
-
-- (void)removeDefination
-{
-    if (self.name) {
-        [[self getSvgView] removeTemplate:self.name];
     }
 }
 

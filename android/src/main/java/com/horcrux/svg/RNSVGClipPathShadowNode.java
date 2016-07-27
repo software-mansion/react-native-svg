@@ -23,11 +23,6 @@ public class RNSVGClipPathShadowNode extends RNSVGGroupShadowNode {
     }
 
     @Override
-    protected void removeDefinition() {
-        getSvgShadowNode().removeClipPath(mName);
-    }
-
-    @Override
     public int hitTest(Point point, View view) {
         return -1;
     }

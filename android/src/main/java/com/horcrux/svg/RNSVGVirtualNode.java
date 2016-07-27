@@ -299,16 +299,9 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         }
     }
 
-    protected void removeDefinition() {
-        if (mName != null) {
-            getSvgShadowNode().removeTemplate(mName);
-        }
-    }
-
     abstract public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList, boolean inherited);
 
     abstract public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList);
 
     abstract public void resetProperties();
-
 }

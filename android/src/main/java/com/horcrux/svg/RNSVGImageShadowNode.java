@@ -19,12 +19,10 @@ import android.net.Uri;
 import android.util.Log;
 import com.facebook.common.executors.UiThreadImmediateExecutorService;
 import com.facebook.common.logging.FLog;
-import com.facebook.common.executors.CallerThreadExecutor;
 import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.DataSource;
 import com.facebook.common.logging.FLog;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.imagepipeline.core.ImagePipeline;
 import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.facebook.imagepipeline.image.CloseableBitmap;
 import com.facebook.imagepipeline.image.CloseableImage;
@@ -91,7 +89,6 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
         final ImageRequest request = ImageRequestBuilder.newBuilderWithSource(mUri).build();
         final boolean inMemoryCache = Fresco.getImagePipeline().isInBitmapMemoryCache(request);
 
-
         if (inMemoryCache) {
             tryRender(request, canvas, paint, opacity * mOpacity);
         } else if (!mLoading) {
@@ -135,11 +132,12 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
         float w = PropHelper.fromPercentageToFloat(mW, mCanvasWidth, 0, mScale);
         float h = PropHelper.fromPercentageToFloat(mH, mCanvasHeight, 0, mScale);
         Paint alphaPaint = new Paint();
-
         alphaPaint.setAlpha((int) (opacity * 255));
+
         canvas.drawBitmap(bitmap, null, new Rect((int) x, (int) y, (int) (x + w), (int) (y + h)), alphaPaint);
 
         restoreCanvas(canvas, count);
+        markUpdateSeen();
     }
 
     private void tryRender(@Nonnull final ImageRequest request, @Nonnull final Canvas canvas, @Nonnull final Paint paint, final float opacity) {

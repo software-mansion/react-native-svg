@@ -43,6 +43,9 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    clipPaths = nil;
+    templates = nil;
+    brushConverters = nil;
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     for (RNSVGNode *node in self.subviews) {
@@ -53,6 +56,10 @@
             self.responsible = YES;
         }
     }
+//    CGImageRef image = CGBitmapContextCreateImage(context);
+//    NSData *imageData = UIImagePNGRepresentation([[UIImage alloc] initWithCGImage:image]);
+//    NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+//    NSLog(base64);
 }
 
 - (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
@@ -73,13 +80,6 @@
     [clipPaths setObject:clipPath forKey:clipPathRef];
 }
 
-- (void)removeClipPath:(NSString *)clipPathRef
-{
-    if (clipPaths) {
-        [clipPaths removeObjectForKey:clipPathRef];
-    }
-}
-
 - (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathRef
 {
     return clipPaths ? [clipPaths objectForKey:clipPathRef] : nil;
@@ -91,13 +91,6 @@
         templates = [[NSMutableDictionary alloc] init];
     }
     [templates setObject:template forKey:templateRef];
-}
-
-- (void)removeTemplate:(NSString *)tempalteRef
-{
-    if (templates) {
-        [templates removeObjectForKey:tempalteRef];
-    }
 }
 
 - (RNSVGNode *)getDefinedTemplate:(NSString *)tempalteRef
@@ -112,13 +105,6 @@
         brushConverters = [[NSMutableDictionary alloc] init];
     }
     [brushConverters setObject:brushConverter forKey:brushConverterRef];
-}
-
-- (void)removeBrushConverter:(NSString *)brushConverterRef
-{
-    if (brushConverters) {
-        [brushConverters removeObjectForKey:brushConverterRef];
-    }
 }
 
 - (RNSVGBrushConverter *)getDefinedBrushConverter:(NSString *)brushConverterRef

@@ -83,12 +83,4 @@ public class RNSVGRadialGradientShadowNode extends RNSVGDefinitionShadowNode {
             getSvgShadowNode().defineBrush(brush, mName);
         }
     }
-
-    @Override
-    protected void removeDefinition() {
-        if (mName != null) {
-            getSvgShadowNode().removeBrush(mName);
-        }
-    }
-
 }

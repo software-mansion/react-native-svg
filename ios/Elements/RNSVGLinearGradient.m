@@ -34,11 +34,5 @@
     converter.type = kRNSVGLinearGradient;
     [[self getSvgView] defineBrushConverter:converter brushConverterRef:self.name];
 }
-
-- (void)removeDefination
-{
-    [[self getSvgView] removeBrushConverter:self.name];
-}
-
 @end
 

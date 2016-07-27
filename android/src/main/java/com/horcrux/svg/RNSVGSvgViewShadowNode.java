@@ -47,7 +47,6 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         Paint paint = new Paint();
 
         drawChildren(canvas, paint);
-
         return bitmap;
     }
 
@@ -101,10 +100,6 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         mDefinedClipPaths.put(clipPathRef, clipPath);
     }
 
-    public void removeClipPath(String clipPathRef) {
-        mDefinedClipPaths.remove(clipPathRef);
-    }
-
     public RNSVGVirtualNode getDefinedClipPath(String clipPathRef) {
         return mDefinedClipPaths.get(clipPathRef);
     }
@@ -113,20 +108,12 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         mDefinedTemplates.put(templateRef, template);
     }
 
-    public void removeTemplate(String templateRef) {
-        mDefinedTemplates.remove(templateRef);
-    }
-
     public RNSVGVirtualNode getDefinedTemplate(String templateRef) {
         return mDefinedTemplates.get(templateRef);
     }
 
     public void defineBrush(PropHelper.RNSVGBrush brush, String brushRef) {
         mDefinedBrushes.put(brushRef, brush);
-    }
-
-    public void removeBrush(String brushRef) {
-        mDefinedBrushes.remove(brushRef);
     }
 
     public PropHelper.RNSVGBrush  getDefinedBrush(String brushRef) {

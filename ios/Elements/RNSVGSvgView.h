@@ -21,21 +21,13 @@
  */
 - (void)defineClipPath:(__kindof RNSVGNode *)clipPath clipPathRef:(NSString *)clipPathRef;
 
-- (void)removeClipPath:(NSString *)clipPathRef;
-
 - (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathRef;
-
 
 - (void)defineTemplate:(__kindof RNSVGNode *)template templateRef:(NSString *)templateRef;
 
-- (void)removeTemplate:(NSString *)tempalteRef;
-
 - (RNSVGNode *)getDefinedTemplate:(NSString *)tempalteRef;
 
-
 - (void)defineBrushConverter:(RNSVGBrushConverter *)brushConverter brushConverterRef:(NSString *)brushConverterRef;
-
-- (void)removeBrushConverter:(NSString *)brushConverterRef;
 
 - (RNSVGBrushConverter *)getDefinedBrushConverter:(NSString *)brushConverterRef;
 

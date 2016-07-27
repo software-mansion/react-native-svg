@@ -81,16 +81,6 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
         }
     }
 
-    protected void removeDefinition() {
-        if (mName != null) {
-            getSvgShadowNode().removeTemplate(mName);
-        }
-
-        for (int i = getChildCount() - 1; i >= 0; i--) {
-            ((RNSVGVirtualNode) getChildAt(i)).removeDefinition();
-        }
-    }
-
     @Override
     public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList) {
         if (mergeList.size() != 0) {

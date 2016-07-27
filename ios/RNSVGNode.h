@@ -62,11 +62,6 @@
 - (void)saveDefinition;
 
 /**
- * remove element`s defination from svg element.
- */
-- (void)removeDefination;
-
-/**
  * just for template node to merge target node`s properties into owned properties
  */
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList;

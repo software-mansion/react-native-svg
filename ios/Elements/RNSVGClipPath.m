@@ -20,13 +20,5 @@
     [[self getSvgView] defineClipPath:self clipPathRef:self.name];
 }
 
-- (void)removeDefination
-{
-    if (self.name) {
-        [[self getSvgView] removeClipPath: self.name];
-    }
-}
-
-
 
 @end

@@ -167,7 +167,7 @@ public class RNSVGViewBoxShadowNode extends RNSVGGroupShadowNode {
 
     @Override
     public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList) {
-        if (target.getClass() == RNSVGUseShadowNode.class) {
+        if (target instanceof RNSVGUseShadowNode) {
             mFromSymbol = true;
             mBoxWidth = ((RNSVGUseShadowNode)target).getWidth();
             mBoxHeight = ((RNSVGUseShadowNode)target).getHeight();
