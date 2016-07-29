@@ -10,12 +10,13 @@
 package com.horcrux.svg;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 
 import java.util.ArrayList;
+
+import javax.annotation.Nullable;
 
 /**
  * ViewManager for RNSVGSvgView React views. Renders as a {@link RNSVGSvgView} and handles
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 public class RNSVGSvgViewManager extends ViewGroupManager<RNSVGSvgView> {
 
     private static final String REACT_CLASS = "RNSVGSvgView";
+    private RNSVGSvgView svgView = null;
 
     // TODO: use an ArrayList to connect RNSVGSvgViewShadowNode with RNSVGSvgView, not sure if there will be a race condition.
     // TODO: find a better way to replace this
@@ -34,9 +36,14 @@ public class RNSVGSvgViewManager extends ViewGroupManager<RNSVGSvgView> {
         return REACT_CLASS;
     }
 
+    @Nullable
+    public RNSVGSvgView getSvgView() {
+        return this.svgView;
+    }
+
     @Override
     public RNSVGSvgViewShadowNode createShadowNodeInstance() {
-        RNSVGSvgViewShadowNode node = new RNSVGSvgViewShadowNode();
+        RNSVGSvgViewShadowNode node = new RNSVGSvgViewShadowNode(this);
         SvgShadowNodes.add(node);
         return node;
     }
@@ -50,7 +57,8 @@ public class RNSVGSvgViewManager extends ViewGroupManager<RNSVGSvgView> {
     protected RNSVGSvgView createViewInstance(ThemedReactContext reactContext) {
         RNSVGSvgViewShadowNode shadowNode = SvgShadowNodes.get(0);
         SvgShadowNodes.remove(0);
-        return new RNSVGSvgView(reactContext, shadowNode);
+        this.svgView = new RNSVGSvgView(reactContext, shadowNode);
+        return this.svgView;
     }
 
     @Override
