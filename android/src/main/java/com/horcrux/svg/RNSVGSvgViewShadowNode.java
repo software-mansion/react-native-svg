@@ -13,14 +13,18 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.util.Log;
+import android.graphics.Rect;
+import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 /**
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
@@ -31,6 +35,13 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
     private static final Map<String, RNSVGVirtualNode> mDefinedClipPaths = new HashMap<>();
     private static final Map<String, RNSVGVirtualNode> mDefinedTemplates = new HashMap<>();
     private static final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
+
+    @Nonnull private final RNSVGSvgViewManager viewManager;
+
+    public RNSVGSvgViewShadowNode(@Nonnull final RNSVGSvgViewManager viewManager) {
+        super();
+        this.viewManager = viewManager;
+    }
 
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
@@ -54,7 +65,7 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
      * Draw all of the child nodes of this root node
      *
      * This method is synchronized since
-     * {@link com.horcrux.svg.RNSVGImageShadowNode#loadImage(ImageRequest, Canvas, Paint)} calls it
+     * {@link com.horcrux.svg.RNSVGImageShadowNode#loadBitmap(ImageRequest, Canvas, Paint)} calls it
      * asynchronously after images have loaded and are ready to be drawn.
      *
      * @param canvas
@@ -73,6 +84,16 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
 
             if (child.isResponsible() && !mResponsible) {
                 mResponsible = true;
+            }
+        }
+    }
+
+    protected void invalidateView(@Nonnull final Rect dirtyRect) {
+        final RNSVGSvgView svgView = this.viewManager.getSvgView();
+        if (svgView != null) {
+            final View rootView = svgView.getRootView();
+            if (rootView != null) {
+                rootView.invalidate(dirtyRect);
             }
         }
     }

@@ -9,8 +9,6 @@
 
 package com.horcrux.svg;
 
-import javax.annotation.Nullable;
-
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -18,16 +16,16 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Region;
-import android.util.Log;
 import android.view.View;
 
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ReactShadowNode;
+import com.facebook.react.uimanager.annotations.ReactProp;
 
+import javax.annotation.Nullable;
 
 /**
  * Base class for RNSVGView virtual nodes: {@link RNSVGGroupShadowNode}, {@link RNSVGPathShadowNode} and
@@ -81,8 +79,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
      * @param canvas the canvas to set up
      */
     protected final int saveAndSetupCanvas(Canvas canvas) {
-        int count = canvas.getSaveCount();
-        canvas.save();
+        final int count = canvas.save();
         if (mMatrix != null) {
             canvas.concat(mMatrix);
         }
