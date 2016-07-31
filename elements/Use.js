@@ -34,12 +34,7 @@ class Use extends Shape {
             console.warn('Invalid `href` prop for `Use` element, expected a href like `"#id"`, but got: "' + props.href + '"');
         }
 
-        let extractedProps = this.extractProps(props, {
-            stroke: true,
-            fill: true,
-            responder: true,
-            transform: true
-        });
+        let extractedProps = this.extractProps(props);
 
         return <RNSVGUse
             ref={ele => {this.root = ele;}}

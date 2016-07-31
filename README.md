@@ -2,6 +2,7 @@
 
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 [![Build Status](https://travis-ci.org/magicismight/react-native-svg.svg?branch=master)](https://travis-ci.org/magicismight/react-native-svg)
+[![Known Vulnerabilities](https://snyk.io/test/npm/react-native-svg/badge.svg)](https://snyk.io/test/npm/react-native-svg)
 
 `react-native-svg` is built to provide a SVG interface to react native on both iOS and Android
 
@@ -575,10 +576,9 @@ npm install
 
 #### TODO:
 1. add native method for elements
-2. more Text features support
+2. more Text features support (textPath, tref, tspan)
 3. Pattern element
 4. implement Animated elements
-5. refactor defs element (cannot use id prop for shape elements)
 
 #### Thanks:
 

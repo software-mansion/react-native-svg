@@ -5,7 +5,8 @@ import React, {
 import Svg, {
     Circle,
     Path,
-    Rect
+    Rect,
+    G
 } from 'react-native-svg';
 
 class PressExample extends Component {
@@ -65,6 +66,19 @@ class HoverExample extends Component {
             />
         </Svg>;
     }
+}
+
+class GroupExample extends Component {
+    static title = 'Bind touch events callback on Group element';
+
+    render () {
+        return <Svg height="120" width="120">
+            <G onPress={() => alert('Pressed')}>
+                <Rect x="20" y="20" width="40" height="40" fill="yellow" />
+                <Circle cx="80" cy="80" r="30" fill="green" />
+            </G>
+        </Svg>;
+    }
 
 }
 
@@ -83,7 +97,8 @@ const icon = <Svg
 
 const samples = [
     PressExample,
-    HoverExample
+    HoverExample,
+    GroupExample
 ];
 
 export {

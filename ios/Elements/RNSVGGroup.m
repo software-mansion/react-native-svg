@@ -46,7 +46,7 @@
         if ([node isKindOfClass:[RNSVGNode class]]) {
             UIView *view = [node hitTest: point withEvent:event];
             if (view) {
-                return view;
+                return self;
             }
         }
     }

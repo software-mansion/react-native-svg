@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
+import React from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import Shape from './Shape';
 import {transformProps} from '../lib/props';
 import {GroupAttributes} from '../lib/attributes';
 import extractProps from '../lib/extract/extractProps';
 
-class G extends Component{
+class G extends Shape{
     static displayName = 'G';
 
     static propTypes = transformProps;
@@ -16,17 +17,11 @@ class G extends Component{
     render() {
         let {props} = this;
 
-        let extractedProps = extractProps(props, {
-            stroke: true,
-            fill: true,
-            transform: true
-        });
-
         return <RNSVGGroup
-            {...extractedProps}
+            {...this.extractProps(props)}
             ref={ele => {this.root = ele;}}
         >
-            {this.props.children}
+            {props.children}
         </RNSVGGroup>;
     }
 }
