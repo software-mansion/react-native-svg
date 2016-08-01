@@ -38,7 +38,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     private static final float[] sMatrixData = new float[9];
     private static final float[] sRawMatrix = new float[9];
     protected float mOpacity = 1f;
-    protected  @Nullable Matrix mMatrix = new Matrix();
+    protected Matrix mMatrix = new Matrix();
 
     protected @Nullable Path mClipPath;
     protected @Nullable String mClipPathRef;
@@ -80,10 +80,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
      */
     protected final int saveAndSetupCanvas(Canvas canvas) {
         final int count = canvas.save();
-        if (mMatrix != null) {
-            canvas.concat(mMatrix);
-        }
-
+        canvas.concat(mMatrix);
         return count;
     }
 
@@ -181,9 +178,6 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         sRawMatrix[6] = 0;
         sRawMatrix[7] = 0;
         sRawMatrix[8] = 1;
-        if (mMatrix == null) {
-            mMatrix = new Matrix();
-        }
         mMatrix.setValues(sRawMatrix);
     }
 
@@ -254,6 +248,8 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
             canvas.saveLayer(0f, 0f, 0f, 0f, paint, Canvas.CLIP_SAVE_FLAG);
         }
     }
+
+    abstract public int hitTest(Point point, View view, @Nullable Matrix matrix);
 
     abstract public int hitTest(Point point, View view);
 

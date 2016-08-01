@@ -10,6 +10,7 @@
 package com.horcrux.svg;
 
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -18,6 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.uimanager.ReactShadowNode;
+
+import java.security.PublicKey;
+
+import javax.annotation.Nullable;
 
 /**
  * Shadow node for virtual RNSVGGroup view
@@ -67,20 +73,36 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
     }
 
     @Override
-    public int hitTest(Point point, View view) {
+    public int hitTest(Point point, View view, @Nullable Matrix matrix) {
         int viewTag = -1;
+        Matrix combinedMatrix = new Matrix();
+
+        if (matrix != null) {
+            combinedMatrix.postConcat(matrix);
+        }
+
+        combinedMatrix.postConcat(mMatrix);
+
         for (int i = getChildCount() - 1; i >= 0; i--) {
-            if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
+            ReactShadowNode child = getChildAt(i);
+            if (!(child instanceof RNSVGVirtualNode)) {
                 continue;
             }
 
-            viewTag = ((RNSVGVirtualNode) getChildAt(i)).hitTest(point, ((ViewGroup) view).getChildAt(i));
+            RNSVGVirtualNode node = (RNSVGVirtualNode) child;
+
+            viewTag = node.hitTest(point, ((ViewGroup) view).getChildAt(i), combinedMatrix);
             if (viewTag != -1) {
-                break;
+                return node.isResponsible() ? viewTag : view.getId();
             }
         }
 
         return viewTag;
+    }
+
+    @Override
+    public int hitTest(Point point, View view) {
+        return this.hitTest(point, view, null);
     }
 
     protected void saveDefinition() {

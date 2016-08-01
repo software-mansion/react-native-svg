@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -326,23 +327,24 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     }
 
     @Override
-    public int hitTest(Point point, View view) {
+    public int hitTest(Point point, View view, @Nullable Matrix matrix) {
         Bitmap bitmap = Bitmap.createBitmap(
             mCanvasWidth,
             mCanvasHeight,
             Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);
-        if (mMatrix != null) {
-            canvas.concat(mMatrix);
+
+        if (matrix != null) {
+            canvas.concat(matrix);
         }
+
+        canvas.concat(mMatrix);
 
         Paint paint = new Paint();
         clip(canvas, paint);
         setHitTestFill(paint);
         canvas.drawPath(mPath, paint);
-
-
 
         if (setHitTestStroke(paint)) {
             canvas.drawPath(mPath, paint);
@@ -359,6 +361,11 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
             bitmap.recycle();
         }
         return -1;
+    }
+
+    @Override
+    public int hitTest(Point point, View view) {
+        return this.hitTest(point, view, null);
     }
 
     protected void setHitTestFill(Paint paint) {

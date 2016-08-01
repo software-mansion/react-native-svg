@@ -10,6 +10,7 @@
 package com.horcrux.svg;
 
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -29,17 +30,27 @@ public class RNSVGDefinitionShadowNode extends RNSVGVirtualNode {
         return false;
     }
 
+    @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         return null;
     }
 
+    @Override
+    public int hitTest(Point point, View view, Matrix matrix) {
+        return -1;
+    }
+
+    @Override
     public int hitTest(Point point, View view) {
         return -1;
     }
 
+    @Override
     public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList, boolean inherited) {}
 
+    @Override
     public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList) {}
 
+    @Override
     public void resetProperties() {}
 }

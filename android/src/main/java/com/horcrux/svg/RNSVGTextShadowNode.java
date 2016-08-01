@@ -49,7 +49,7 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
 
     private @Nullable ReadableMap mFrame;
     private int mTextAlignment = TEXT_ALIGNMENT_LEFT;
-    private Path mPath;
+    private Path mTextPath;
 
     @ReactProp(name = "frame")
     public void setFrame(@Nullable ReadableMap frame) {
@@ -64,14 +64,13 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
     @ReactProp(name = "path")
     public void setPath(@Nullable ReadableArray textPath) {
         float[] pathData = PropHelper.toFloatArray(textPath);
-        mPath = new Path();
-        super.createPath(pathData, mPath);
+        mTextPath = new Path();
+        super.createPath(pathData, mTextPath);
         markUpdated();
     }
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
-
         opacity *= mOpacity;
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             String text = formatText();
@@ -99,13 +98,13 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
     private void drawText(Canvas canvas, Paint paint, String text) {
         applyTextPropertiesToPaint(paint);
 
-        if (mPath == null) {
+        if (mTextPath == null) {
             canvas.drawText(text, 0, -paint.ascent(), paint);
         } else {
             Matrix matrix = new Matrix();
             matrix.setTranslate(0, -paint.getTextSize() * 1.1f);
-            mPath.transform(matrix);
-            canvas.drawTextOnPath(text, mPath, 0, -paint.ascent(), paint);
+            mTextPath.transform(matrix);
+            canvas.drawTextOnPath(text, mTextPath, 0, -paint.ascent(), paint);
         }
     }
 
@@ -175,7 +174,6 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
         }
     }
 
-
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
@@ -196,16 +194,19 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
     }
 
     @Override
-    public int hitTest(Point point, View view) {
+    public int hitTest(Point point, View view, @Nullable Matrix matrix) {
         Bitmap bitmap = Bitmap.createBitmap(
             mCanvasWidth,
             mCanvasHeight,
             Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);
-        if (mMatrix != null) {
-            canvas.concat(mMatrix);
+
+        if (matrix != null) {
+            canvas.concat(matrix);
         }
+
+        canvas.concat(mMatrix);
 
         String text = formatText();
         if (text == null) {
@@ -232,5 +233,11 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
             bitmap.recycle();
         }
         return -1;
+    }
+
+
+    @Override
+    public int hitTest(Point point, View view) {
+        return this.hitTest(point, view, null);
     }
 }

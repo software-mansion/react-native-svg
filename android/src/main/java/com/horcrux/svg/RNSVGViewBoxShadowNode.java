@@ -11,7 +11,6 @@ package com.horcrux.svg;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -160,8 +159,8 @@ public class RNSVGViewBoxShadowNode extends RNSVGGroupShadowNode {
 
         }
 
-        canvas.scale(scaleX, scaleY);
-        canvas.translate(-translateX * (mFromSymbol ? scaleX : 1), -translateY * (mFromSymbol ? scaleY : 1));
+        mMatrix.postScale(scaleX, scaleY);
+        mMatrix.postTranslate(-translateX * (mFromSymbol ? scaleX : 1), -translateY * (mFromSymbol ? scaleY : 1));
         super.draw(canvas, paint, opacity);
     }
 
