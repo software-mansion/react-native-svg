@@ -159,6 +159,7 @@ public class RNSVGViewBoxShadowNode extends RNSVGGroupShadowNode {
 
         }
 
+        mMatrix.reset();
         mMatrix.postScale(scaleX, scaleY);
         mMatrix.postTranslate(-translateX * (mFromSymbol ? scaleX : 1), -translateY * (mFromSymbol ? scaleY : 1));
         super.draw(canvas, paint, opacity);
