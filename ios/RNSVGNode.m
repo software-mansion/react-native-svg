@@ -188,6 +188,11 @@
     // abstract
 }
 
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited
+{
+    // abstract
+}
+
 - (void)resetProperties
 {
     // abstract
