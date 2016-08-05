@@ -127,17 +127,19 @@ class ClipPathElement extends Component{
                     />
                 </RadialGradient>
                 <ClipPath id="clip">
-                    <Circle cx="30" cy="30" r="20"/>
-                    <Ellipse cx="60" cy="70" rx="20" ry="10" />
-                    <Rect x="65" y="15" width="30" height="30" />
-                    <Polygon points="20,60 20,80 50,70" />
-                    <Text
-                        x="50"
-                        y="30"
-                        fontSize="32"
-                        fonWeight="bold"
-                        textAnchor="middle"
-                    >Q</Text>
+                    <G scale="0.9" x="10">
+                        <Circle cx="30" cy="30" r="20"/>
+                        <Ellipse cx="60" cy="70" rx="20" ry="10" />
+                        <Rect x="65" y="15" width="30" height="30" />
+                        <Polygon points="20,60 20,80 50,70" />
+                        <Text
+                            x="50"
+                            y="30"
+                            fontSize="32"
+                            fonWeight="bold"
+                            textAnchor="middle"
+                        >Q</Text>
+                    </G>
                 </ClipPath>
             </Defs>
             <Rect

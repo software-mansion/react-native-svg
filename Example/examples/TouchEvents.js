@@ -64,9 +64,9 @@ class HoverExample extends Component {
                 delayPressIn={0}
                 onPressIn={this.toggle}
                 onPressOut={this.toggle}
-                x="20"
+                x="0"
                 y="10"
-                scale="0.75"
+                scale="0.5"
             />
         </Svg>;
     }
@@ -80,12 +80,11 @@ class GroupExample extends Component {
             height="120"
             width="120"
             viewBox="0 0 240 240"
-            preserveAspectRatio="none"
         >
-            <G onPress={() => alert('Pressed')}>
+            <G  onPress={() => alert('Pressed')}>
+                <Circle cx="80" cy="80" r="30" fill="green" x="20" />
                 <Rect x="20" y="20" width="40" height="40" fill="yellow"/>
-                <Circle cx="80" cy="80" r="30" fill="green"/>
-                <Text fontWeight="bold" fontSize="40" x="100" y="100">H</Text>
+                <Text fontWeight="bold" fontSize="40" x="100" y="100" scale="2">H</Text>
             </G>
         </Svg>;
     }

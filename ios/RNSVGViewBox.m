@@ -96,9 +96,8 @@
         }
     }
 
-    CGAffineTransform transform = CGAffineTransformMakeScale(scaleX, scaleY);
-    transform = CGAffineTransformTranslate(transform, -translateX * (_fromSymbol ? scaleX : 1), -translateY * (_fromSymbol ? scaleY : 1));
-    CGContextConcatCTM(context, transform);
+    self.transform = CGAffineTransformScale(self.transform, scaleX, scaleY);
+    self.transform = CGAffineTransformTranslate(self.transform, -translateX * (_fromSymbol ? scaleX : 1), -translateY * (_fromSymbol ? scaleY : 1));
     [super renderTo:context];
 }
 

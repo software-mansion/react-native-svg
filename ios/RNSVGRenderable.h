@@ -30,17 +30,11 @@
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 
 - (void)setBoundingBox:(CGContextRef)context;
-
 - (CGFloat)getWidthRelatedValue:(NSString *)string;
-
 - (CGFloat)getHeightRelatedValue:(NSString *)string;
-
 - (CGFloat)getContextWidth;
-
 - (CGFloat)getContextHeight;
-
 - (CGFloat)getContextX;
-
 - (CGFloat)getContextY;
 
 
