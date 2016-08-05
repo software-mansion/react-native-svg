@@ -159,8 +159,11 @@ public class RNSVGViewBoxShadowNode extends RNSVGGroupShadowNode {
 
         }
 
-        mMatrix.postScale(scaleX, scaleY);
+        // The transform applied to content contained by the element is given by
+        // translate(translate-x, translate-y) scale(scale-x, scale-y).
         mMatrix.postTranslate(-translateX * (mFromSymbol ? scaleX : 1), -translateY * (mFromSymbol ? scaleY : 1));
+        mMatrix.postScale(scaleX, scaleY);
+        
         super.draw(canvas, paint, opacity);
     }
 
