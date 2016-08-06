@@ -64,7 +64,7 @@ class StrokeOpacityCircle extends Component{
 }
 
 class PieCircle extends Component{
-    static title = 'Draw a Pie shape with ';
+    static title = 'Draw a Pie shape with circle';
     render() {
         return <Svg
             height="100"
