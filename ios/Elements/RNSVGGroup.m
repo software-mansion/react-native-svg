@@ -11,15 +11,15 @@
 @implementation RNSVGGroup
 
 - (void)renderLayerTo:(CGContextRef)context
-{    
+{
     RNSVGSvgView* svg = [self getSvgView];
     [self clip:context];
-    
+
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
             [node mergeProperties:self mergeList:self.propList inherited:YES];
             [node renderTo:context];
-            
+
             if (node.responsible && !svg.responsible) {
                 self.responsible = YES;
             }
@@ -46,7 +46,11 @@
         if ([node isKindOfClass:[RNSVGNode class]]) {
             UIView *view = [node hitTest: point withEvent:event];
             if (view) {
-                return self;
+                if (node.responsible || node != view) {
+                    return view;
+                } else {
+                    return self;
+                }
             }
         }
     }
@@ -59,7 +63,7 @@
         RNSVGSvgView* svg = [self getSvgView];
         [svg defineTemplate:self templateRef:self.name];
     }
-    
+
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
             [node saveDefinition];
