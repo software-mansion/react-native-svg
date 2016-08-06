@@ -81,10 +81,12 @@ class GroupExample extends Component {
             width="120"
             viewBox="0 0 240 240"
         >
-            <G  onPress={() => alert('Pressed')}>
-                <Circle cx="80" cy="80" r="30" fill="green" x="20" />
-                <Rect x="20" y="20" width="40" height="40" fill="yellow"/>
-                <Text fontWeight="bold" fontSize="40" x="100" y="100" scale="2">H</Text>
+            <G>
+                <G  onPress={() => alert('Pressed')}>
+                    <Circle cx="80" cy="80" r="30" fill="green" x="20" />
+                    <Rect x="20" y="20" width="40" height="40" fill="yellow"/>
+                    <Text fontWeight="bold" fontSize="40" x="100" y="100" scale="2">H</Text>
+                </G>
             </G>
         </Svg>;
     }

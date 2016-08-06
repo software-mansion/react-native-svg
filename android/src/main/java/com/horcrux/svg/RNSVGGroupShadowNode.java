@@ -94,7 +94,7 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
             View childView = ((ViewGroup) view).getChildAt(i);
             viewTag = node.hitTest(point, childView, combinedMatrix);
             if (viewTag != -1) {
-                return (node.isResponsible() || (viewTag != childView.getId())) ? viewTag : view.getId();
+                return (node.isResponsible() || viewTag != childView.getId()) ? viewTag : view.getId();
             }
         }
 
