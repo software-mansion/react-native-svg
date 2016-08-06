@@ -35,6 +35,7 @@
     if (hitArea == _hitArea) {
         return;
     }
+
     [self invalidate];
     CGPathRelease(_hitArea);
     _hitArea = hitArea;
@@ -113,18 +114,16 @@
 
 - (void)renderTo:(CGContextRef)context
 {
-    if (self.opacity <= 0 || self.opacity >= 1 || (self.fill && self.stroke)) {
-        // If we have both fill and stroke, we will need to paint this using normal compositing
-        [super renderTo: context];
-        return;
-    }
-    // This is a terminal with only one painting. Therefore we don't need to paint this
-    // off-screen. We can just composite it straight onto the buffer.
+    // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.transform);
     CGContextSetAlpha(context, self.opacity);
+    
+    [self beginTransparencyLayer:context];
     [self renderClip:context];
     [self renderLayerTo:context];
+    [self endTransparencyLayer:context];
+
     CGContextRestoreGState(context);
 }
 
@@ -183,7 +182,7 @@
 
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
 {
-    
+
     [self mergeProperties:target mergeList:mergeList inherited:NO];
 }
 
@@ -192,12 +191,12 @@
     if (mergeList.count == 0) {
         return;
     }
-    
+
     if (!inherited) {
         _originProperties = [[NSMutableDictionary alloc] init];
         _changedList = mergeList;
     }
-    
+
     for (NSString *key in mergeList) {
         if (inherited) {
             [self inheritProperty:target propName:key];
@@ -225,7 +224,7 @@
         NSMutableArray *copy = [self.propList mutableCopy];
         [copy addObject:propName];
         self.propList = [copy copy];
-        
+
         [self setValue:[parent valueForKey:propName] forKey:propName];
     }
 }

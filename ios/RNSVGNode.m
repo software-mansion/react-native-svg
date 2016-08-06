@@ -111,19 +111,7 @@
 
 - (void)renderTo:(CGContextRef)context
 {
-    float opacity = self.opacity;
-
-    // This needs to be painted on a layer before being composited.
-    CGContextSaveGState(context);
-    CGContextConcatCTM(context, self.transform);
-    CGContextSetAlpha(context, opacity);
-
-    [self beginTransparencyLayer:context];
-    [self renderClip:context];
-    [self renderLayerTo:context];
-    [self endTransparencyLayer:context];
-
-    CGContextRestoreGState(context);
+    // abstract
 }
 
 - (void)renderClip:(CGContextRef)context

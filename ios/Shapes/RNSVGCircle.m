@@ -62,7 +62,7 @@
         r = [self.r floatValue];
     }
     
-    CGPathAddArc(path, nil, cx, cy, r, 0, 2*M_PI, YES);
+    CGPathAddArc(path, nil, cx, cy, r, 0, 2*M_PI, NO);
     return (CGPathRef)CFAutorelease(path);
 }
 
