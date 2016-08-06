@@ -63,6 +63,34 @@ class StrokeOpacityCircle extends Component{
     }
 }
 
+class PieCircle extends Component{
+    static title = 'Draw a Pie shape with ';
+    render() {
+        return <Svg
+            height="100"
+            width="100"
+        >
+            <Circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="#ddd"
+            />
+            <Circle
+                origin="50, 50"
+                rotate="-90"
+                cx="50"
+                cy="50"
+                r="20"
+                stroke="#0074d9"
+                strokeWidth="40"
+                fill="none"
+                strokeDasharray="80, 160"
+            />
+        </Svg>;
+    }
+}
+
 const icon = <Svg
     height="20"
     width="20"
@@ -77,7 +105,12 @@ const icon = <Svg
     />
 </Svg>;
 
-const samples = [CircleExample, StrokeCircle, StrokeOpacityCircle];
+const samples = [
+    CircleExample,
+    StrokeCircle,
+    StrokeOpacityCircle,
+    PieCircle
+];
 export {
     icon,
     samples
