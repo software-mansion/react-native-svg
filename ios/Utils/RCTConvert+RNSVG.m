@@ -26,7 +26,7 @@
 #define NEXT_VALUE [self double:arr[i++]]
     
     CGMutablePathRef path = CGPathCreateMutable();
-    CGPathMoveToPoint(path, NULL, 0, 0);
+    CGPathMoveToPoint(path, nil, 0, 0);
     
     @try {
         NSUInteger i = 0;
@@ -34,28 +34,28 @@
             NSUInteger type = [arr[i++] unsignedIntegerValue];
             switch (type) {
                 case 0:
-                    CGPathMoveToPoint(path, NULL, NEXT_VALUE, NEXT_VALUE);
+                    CGPathMoveToPoint(path, nil, NEXT_VALUE, NEXT_VALUE);
                     break;
                 case 1:
                     CGPathCloseSubpath(path);
                     break;
                 case 2:
-                    CGPathAddLineToPoint(path, NULL, NEXT_VALUE, NEXT_VALUE);
+                    CGPathAddLineToPoint(path, nil, NEXT_VALUE, NEXT_VALUE);
                     break;
                 case 3:
-                    CGPathAddCurveToPoint(path, NULL, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE);
+                    CGPathAddCurveToPoint(path, nil, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE);
                     break;
                 default:
                     RCTLogError(@"Invalid CGPath type %zd at element %zd of %@", type, i, arr);
                     CGPathRelease(path);
-                    return NULL;
+                    return nil;
             }
         }
     }
     @catch (NSException *exception) {
         RCTLogError(@"Invalid CGPath format: %@", arr);
         CGPathRelease(path);
-        return NULL;
+        return nil;
     }
     
     return (CGPathRef)CFAutorelease(path);
@@ -123,7 +123,7 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
         CFRelease(attrString);
         
         frame.lines[i] = line;
-        frame.widths[i] = CTLineGetTypographicBounds(line, NULL, NULL, NULL);
+        frame.widths[i] = CTLineGetTypographicBounds(line, nil, nil, nil);
     }];
     
     return frame;
@@ -136,7 +136,7 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
     
     RNSVGCGFloatArray array;
     array.count = count;
-    array.array = NULL;
+    array.array = nil;
     
     if (count) {
         // Ideally, these arrays should already use the same memory layout.
@@ -213,13 +213,13 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
                     break;
                 default:
                     RCTLogError(@"Invalid RNSVGBezier type %zd at element %zd of %@", type, i, arr);
-                    return NULL;
+                    return nil;
             }
         }
     }
     @catch (NSException *exception) {
         RCTLogError(@"Invalid RNSVGBezier format: %@", arr);
-        return NULL;
+        return nil;
     }
     
     return beziers;
@@ -256,7 +256,7 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
     NSArray *arr = [self NSArray:json];
     if (arr.count < offset + 4) {
         RCTLogError(@"Too few elements in array (expected at least %zd): %@", 4 + offset, arr);
-        return NULL;
+        return nil;
     }
     return [self CGColor:[arr subarrayWithRange:(NSRange){offset, 4}]];
 }
@@ -266,7 +266,7 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
     NSArray *arr = [self NSArray:json];
     if (arr.count < offset) {
         RCTLogError(@"Too few elements in array (expected at least %zd): %@", offset, arr);
-        return NULL;
+        return nil;
     }
     arr = [arr subarrayWithRange:(NSRange){offset, arr.count - offset}];
     RNSVGCGFloatArray colorsAndOffsets = [self RNSVGCGFloatArray:arr];

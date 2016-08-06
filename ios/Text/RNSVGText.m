@@ -53,12 +53,6 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
     RNSVGFreeTextFrame(_textFrame);
 }
 
-- (void)renderLayerTo:(CGContextRef)context
-{
-    self.d = [self getPath: context];
-    [super renderLayerTo:context];
-}
-
 - (CGPathRef)getPath:(CGContextRef)context
 {
     CGMutablePathRef path = CGPathCreateMutable();
@@ -123,6 +117,7 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
             } else {
                 transform = CGAffineTransformTranslate(upsideDown, point.x, point.y);
             }
+            
             
             CGPathAddPath(path, &transform, letter);
         }

@@ -95,9 +95,9 @@
             translateY -= eHeight / scaleY - vbHeight;
         }
     }
-
-    self.transform = CGAffineTransformScale(self.transform, scaleX, scaleY);
-    self.transform = CGAffineTransformTranslate(self.transform, -translateX * (_fromSymbol ? scaleX : 1), -translateY * (_fromSymbol ? scaleY : 1));
+    
+    self.matrix = CGAffineTransformMakeScale(scaleX, scaleY);
+    self.matrix = CGAffineTransformTranslate(self.matrix, -translateX * (_fromSymbol ? scaleX : 1), -translateY * (_fromSymbol ? scaleY : 1));
     [super renderTo:context];
 }
 

@@ -24,6 +24,7 @@
 @property (nonatomic, strong) NSString *clipPathRef; // use clipPath="url(#clip)" as ClipPath
 @property (nonatomic, assign) BOOL responsible;
 @property (nonatomic, assign) CGAffineTransform matrix;
+@property (nonatomic, assign) BOOL active;
 
 - (void)invalidate;
 
@@ -52,7 +53,7 @@
 /**
  * run hitTest
  */
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transfrom;
 
 - (RNSVGSvgView *)getSvgView;
 

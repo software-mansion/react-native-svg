@@ -30,7 +30,7 @@
     return self;
 }
 
-- (void)setHitArea:(CGMutablePathRef)hitArea
+- (void)setHitArea:(CGPathRef)hitArea
 {
     if (hitArea == _hitArea) {
         return;
@@ -38,7 +38,7 @@
 
     [self invalidate];
     CGPathRelease(_hitArea);
-    _hitArea = hitArea;
+    _hitArea = CGPathRetain(hitArea);
 }
 
 - (void)setFill:(RNSVGBrush *)fill
@@ -116,7 +116,7 @@
 {
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
-    CGContextConcatCTM(context, self.transform);
+    CGContextConcatCTM(context, self.matrix);
     CGContextSetAlpha(context, self.opacity);
     
     [self beginTransparencyLayer:context];
@@ -130,8 +130,22 @@
 // hitTest delagate
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    CGPathRef clipPath  = self.clipPath;
-    if (self.hitArea && CGPathContainsPoint(self.hitArea, nil, point, NO)) {
+    return [self hitTest:point withEvent:event withTransform:CGAffineTransformMakeRotation(0)];
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transfrom
+{
+    if (self.active) {
+        if (!event) {
+            self.active = NO;
+        }
+        return self;
+    }
+    
+    CGPathRef hitArea = CGPathCreateCopyByTransformingPath(self.hitArea, &transfrom);
+    CGPathRef clipPath = self.clipPath;
+    BOOL contains = CGPathContainsPoint(hitArea, nil, point, NO);
+    if (contains) {
         if (!clipPath) {
             return self;
         } else {
@@ -141,7 +155,6 @@
         return nil;
     }
 }
-
 
 - (void)setBoundingBox:(CGContextRef)context
 {

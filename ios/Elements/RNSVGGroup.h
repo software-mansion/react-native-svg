@@ -14,7 +14,4 @@
 #import "RNSVGRenderable.h"
 
 @interface RNSVGGroup : RNSVGRenderable <RNSVGContainer>
-
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
-
 @end

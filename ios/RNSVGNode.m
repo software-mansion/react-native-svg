@@ -69,12 +69,6 @@
     _opacity = opacity;
 }
 
-- (void)setMatrix:(CGAffineTransform)matrix
-{
-    self.transform = matrix;
-    [self invalidate];
-}
-
 - (void)setClipPath:(CGPathRef)clipPath
 {
     if (_clipPath == clipPath) {
@@ -147,7 +141,15 @@
     // abstract
 }
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event;
+// hitTest delagate
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    
+    // abstract
+    return nil;
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transfrom
 {
     // abstract
     return nil;

@@ -26,7 +26,7 @@
 @property (nonatomic, assign) CGFloat strokeMiterlimit;
 @property (nonatomic, assign) RNSVGCGFloatArray strokeDasharray;
 @property (nonatomic, assign) CGFloat strokeDashoffset;
-@property (nonatomic, assign) CGMutablePathRef hitArea;
+@property (nonatomic, assign) CGPathRef hitArea;
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 
 - (void)setBoundingBox:(CGContextRef)context;

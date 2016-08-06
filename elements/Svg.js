@@ -73,22 +73,20 @@ class Svg extends Component{
 
         const nativeProps = _.omit(props, ['width', 'height', 'viewBox', 'preserveAspectRatio', 'opacity']);
 
-        return (
-            <NativeSvgView
-                {...nativeProps}
-                ref={ele => {this.root = ele;}}
-                style={[
-                    styles.svg,
-                    props.style,
-                    !isNaN(opacity) && {
-                        opacity
-                    },
-                    dimensions
-                ]}
-            >
-                {content}
-            </NativeSvgView>
-        );
+        return <NativeSvgView
+            {...nativeProps}
+            ref={ele => {this.root = ele;}}
+            style={[
+                styles.svg,
+                props.style,
+                !isNaN(opacity) && {
+                    opacity
+                },
+                dimensions
+            ]}
+        >
+            {content}
+        </NativeSvgView>;
     }
 }
 

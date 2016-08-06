@@ -14,14 +14,14 @@
 {
     RNSVGSvgView* svg = [self getSvgView];
     [self clip:context];
-
+    
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
             [node mergeProperties:self mergeList:self.propList inherited:YES];
             [node renderTo:context];
-
+            
             if (node.responsible && !svg.responsible) {
-                self.responsible = YES;
+                svg.responsible = YES;
             }
         }
     }
@@ -32,21 +32,33 @@
     CGMutablePathRef path = CGPathCreateMutable();
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
-            CGAffineTransform transform = node.transform;
+            CGAffineTransform transform = node.matrix;
             CGPathAddPath(path, &transform, [node getPath:context]);
         }
     }
     return (CGPathRef)CFAutorelease(path);
 }
 
-// hitTest delagate
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transform
 {
+    CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
+    
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
-            UIView *view = [node hitTest: point withEvent:event];
+            if (event) {
+                node.active = NO;
+            }
+            
+            if (node.active) {
+                return node;
+            }
+
+            
+            UIView *view = [node hitTest: point withEvent:event withTransform:matrix];
+            
             if (view) {
-                if (node.responsible || node != view) {
+                node.active = YES;
+                if (node.responsible || (node != view)) {
                     return view;
                 } else {
                     return self;
@@ -63,7 +75,7 @@
         RNSVGSvgView* svg = [self getSvgView];
         [svg defineTemplate:self templateRef:self.name];
     }
-
+    
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
             [node saveDefinition];

@@ -56,18 +56,23 @@ class HoverExample extends Component {
 
     render () {
         return <Svg height="120" width="120">
-            <Path
-                d="M50,5L20,99L95,39L5,39L80,99z"
-                stroke={this.state.hover ? 'rgba(10, 10, 10, 0.5)' : 'black'}
-                fill={this.state.hover ? 'pink' : 'red'}
-                strokeWidth="6"
-                delayPressIn={0}
-                onPressIn={this.toggle}
-                onPressOut={this.toggle}
-                x="0"
-                y="10"
-                scale="0.5"
-            />
+            <G>
+                <G>
+                    <Path
+                        d="M50,5L20,99L95,39L5,39L80,99z"
+                        stroke={this.state.hover ? 'rgba(10, 10, 10, 0.5)' : 'black'}
+                        fill={this.state.hover ? 'pink' : 'red'}
+                        strokeWidth="6"
+                        delayPressIn={0}
+                        onPressIn={this.toggle}
+                        onPressOut={this.toggle}
+                        x="0"
+                        y="0"
+                        scale="1.2"
+                        opacity="0.3"
+                    />
+                </G>
+            </G>
         </Svg>;
     }
 }
@@ -82,10 +87,12 @@ class GroupExample extends Component {
             viewBox="0 0 240 240"
         >
             <G>
-                <G  onPress={() => alert('Pressed')}>
-                    <Circle cx="80" cy="80" r="30" fill="green" x="20" />
-                    <Rect x="20" y="20" width="40" height="40" fill="yellow"/>
-                    <Text fontWeight="bold" fontSize="40" x="100" y="100" scale="2">H</Text>
+                <G scale="1.4">
+                    <G>
+                        <Circle cx="80" cy="80" r="30" fill="green" x="20" scale="1.2"  onPress={() => alert('Pressed')}/>
+                        <Rect x="20" y="20" width="40" height="40" fill="yellow" />
+                        <Text fontWeight="bold" fontSize="40" x="100" y="100" scale="2">H</Text>
+                    </G>
                 </G>
             </G>
         </Svg>;

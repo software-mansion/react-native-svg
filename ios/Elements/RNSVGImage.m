@@ -71,10 +71,7 @@
 {
     CGRect rect = [self getRect:context];
     // add hit area
-    self.hitArea = CGPathCreateMutable();
-    CGPathRef path = CGPathCreateWithRect(rect, nil);
-    CGPathAddPath(self.hitArea, nil, path);
-    CGPathRelease(path);
+    self.hitArea = CGPathCreateWithRect(rect, nil);
     [self clip:context];
     
     CGContextSaveGState(context);
@@ -97,9 +94,7 @@
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, nil, [self getRect:context]);
-    return (CGPathRef)CFAutorelease(path);
+    return CGPathCreateWithRect([self getRect:context], nil);
 }
 
 @end

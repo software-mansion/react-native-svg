@@ -47,12 +47,6 @@
     _y2 = y2;
 }
 
-- (void)renderLayerTo:(CGContextRef)context
-{
-    self.d = [self getPath: context];
-    [super renderLayerTo:context];
-}
-
 - (CGPathRef)getPath:(CGContextRef)context
 {
     [self setBoundingBox:context];
