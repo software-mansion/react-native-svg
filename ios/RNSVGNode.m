@@ -69,6 +69,15 @@
     _opacity = opacity;
 }
 
+- (void)setMatrix:(CGAffineTransform)matrix
+{
+    if (CGAffineTransformEqualToTransform(matrix, _matrix)) {
+        return;
+    }
+    [self invalidate];
+    _matrix = matrix;
+}
+
 - (void)setClipPath:(CGPathRef)clipPath
 {
     if (_clipPath == clipPath) {
@@ -134,7 +143,6 @@
     // abstract
     return nil;
 }
-
 
 - (void)renderLayerTo:(CGContextRef)context
 {

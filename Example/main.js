@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const names = ['Svg', 'Stroking', 'Path', 'Line', 'Rect', 'Polygon', 'Polyline', 'Circle', 'Ellipse', 'G', 'Text', 'Gradients', 'Clipping', 'Image', 'TouchEvents', 'Reusable'];
+const names = ['Svg', 'Stroking', 'Path', 'Line', 'Rect', 'Polygon', 'Polyline', 'Circle', 'Ellipse', 'G', 'Text', 'Gradients', 'Clipping', 'Image', 'TouchEvents', 'PanResponder', 'Reusable'];
 
 class SvgExample extends Component {
     constructor() {
@@ -152,7 +152,8 @@ class SvgExample extends Component {
                 modal: true,
                 content: <View>
                     {this.getSamples(samples)}
-                </View>
+                </View>,
+                scroll: example.scroll !== false
             });
         }
     };
@@ -204,6 +205,7 @@ class SvgExample extends Component {
                 <ScrollView
                     style={styles.scroll}
                     contentContainerStyle={styles.scrollContent}
+                    scrollEnabled={this.state.scroll}
                 >
                     {this.state.content}
                 </ScrollView>
