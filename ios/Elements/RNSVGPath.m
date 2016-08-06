@@ -37,8 +37,6 @@
     }
     
     if ([self getSvgView].responsible) {
-        NSLog(@"asdasdasdsadas");
-        
         // Add path to hitArea
         CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
         if (self.stroke) {

@@ -44,13 +44,11 @@ class Text extends Shape {
             y = props.dy ? +props.y + (+props.dy) : +props.y;
         }
 
-        return (
-            <RNSVGText
-                ref={ele => {this.root = ele;}}
-                {...extractProps({...props, x, y})}
-                {...extractText(props)}
-            />
-        );
+        return <RNSVGText
+            ref={ele => {this.root = ele;}}
+            {...this.extractProps({...props, x, y})}
+            {...extractText(props)}
+        />;
     }
 }
 

@@ -54,7 +54,6 @@
                 return node;
             }
 
-            
             UIView *view = [node hitTest: point withEvent:event withTransform:matrix];
             
             if (view) {
