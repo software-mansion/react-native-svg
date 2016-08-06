@@ -50,12 +50,17 @@
     
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
-            [node saveDefinition];
-            [node renderTo:context];
-            
             if (node.responsible && !self.responsible) {
                 self.responsible = YES;
+                break;
             }
+        }
+    }
+    
+    for (RNSVGNode *node in self.subviews) {
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            [node saveDefinition];
+            [node renderTo:context];
         }
     }
 //    CGImageRef image = CGBitmapContextCreateImage(context);

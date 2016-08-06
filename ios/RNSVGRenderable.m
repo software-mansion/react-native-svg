@@ -145,6 +145,7 @@
     CGPathRef hitArea = CGPathCreateCopyByTransformingPath(self.hitArea, &transfrom);
     CGPathRef clipPath = self.clipPath;
     BOOL contains = CGPathContainsPoint(hitArea, nil, point, NO);
+    CGPathRelease(hitArea);
     if (contains) {
         if (!clipPath) {
             return self;

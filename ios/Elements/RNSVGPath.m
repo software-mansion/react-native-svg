@@ -28,24 +28,30 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
-    CGPathRef path = [self getPath:context];
+    if (!self.d) {
+        self.d = [self getPath:context];;
+    }
+    CGPathRef path = self.d;
     if ((!self.fill && !self.stroke) || !path) {
         return;
     }
     
-    // Add path to hitArea
-    CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
-    if (self.stroke) {
-        // Add stroke to hitArea
-        CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
-        CGPathAddPath(hitArea, nil, strokePath);
-        CGPathRelease(strokePath);
+    if ([self getSvgView].responsible) {
+        NSLog(@"asdasdasdsadas");
+        
+        // Add path to hitArea
+        CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
+        if (self.stroke) {
+            // Add stroke to hitArea
+            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
+            CGPathAddPath(hitArea, nil, strokePath);
+            CGPathRelease(strokePath);
+        }
+        
+        CGAffineTransform transform = self.matrix;
+        self.hitArea = CFAutorelease(CGPathCreateCopyByTransformingPath(hitArea, &transform));
+        CGPathRelease(hitArea);
     }
-    
-    CGAffineTransform transform = self.matrix;
-    self.hitArea = CGPathCreateCopyByTransformingPath(hitArea, &transform);
-
-    CGPathRelease(hitArea);
     
     if (self.opacity == 0) {
         return;

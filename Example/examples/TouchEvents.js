@@ -69,7 +69,6 @@ class HoverExample extends Component {
                         x="0"
                         y="0"
                         scale="1.2"
-                        opacity="0.3"
                     />
                 </G>
             </G>
@@ -87,9 +86,9 @@ class GroupExample extends Component {
             viewBox="0 0 240 240"
         >
             <G>
-                <G scale="1.4">
+                <G scale="1.4"  onPress={() => alert('Pressed')}>
                     <G>
-                        <Circle cx="80" cy="80" r="30" fill="green" x="20" scale="1.2"  onPress={() => alert('Pressed')}/>
+                        <Circle cx="80" cy="80" r="30" fill="green" x="20" scale="1.2"/>
                         <Rect x="20" y="20" width="40" height="40" fill="yellow" />
                         <Text fontWeight="bold" fontSize="40" x="100" y="100" scale="2">H</Text>
                     </G>

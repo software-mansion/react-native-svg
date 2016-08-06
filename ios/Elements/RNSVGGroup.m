@@ -15,27 +15,30 @@
     RNSVGSvgView* svg = [self getSvgView];
     [self clip:context];
     
-    for (RNSVGNode *node in self.subviews) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
-            [node mergeProperties:self mergeList:self.propList inherited:YES];
-            [node renderTo:context];
-            
-            if (node.responsible && !svg.responsible) {
-                svg.responsible = YES;
-            }
+    [self traverseSubviews:^(RNSVGNode *node) {
+        if (node.responsible && !svg.responsible) {
+            svg.responsible = YES;
+            return NO;
         }
-    }
+        return YES;
+    }];
+    
+    [self traverseSubviews:^(RNSVGNode *node) {
+        [node mergeProperties:self mergeList:self.propList inherited:YES];
+        [node renderTo:context];
+        return YES;
+    }];
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
     CGMutablePathRef path = CGPathCreateMutable();
-    for (RNSVGNode *node in self.subviews) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
-            CGAffineTransform transform = node.matrix;
-            CGPathAddPath(path, &transform, [node getPath:context]);
-        }
-    }
+    [self traverseSubviews:^(RNSVGNode *node) {
+        CGAffineTransform transform = node.matrix;
+        CGPathAddPath(path, &transform, [node getPath:context]);
+        return YES;
+    }];
+    
     return (CGPathRef)CFAutorelease(path);
 }
 
@@ -47,9 +50,7 @@
         if ([node isKindOfClass:[RNSVGNode class]]) {
             if (event) {
                 node.active = NO;
-            }
-            
-            if (node.active) {
+            } else if (node.active) {
                 return node;
             }
 
@@ -76,29 +77,39 @@
         [svg defineTemplate:self templateRef:self.name];
     }
     
-    for (RNSVGNode *node in self.subviews) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
-            [node saveDefinition];
-        }
-    }
+    [self traverseSubviews:^(RNSVGNode *node) {
+        [node saveDefinition];
+        return YES;
+    }];
+    
 }
 
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
 {
-    for (RNSVGNode *node in self.subviews) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
-            [node mergeProperties:target mergeList:mergeList];
-        }
-    }
+    [self traverseSubviews:^(RNSVGNode *node) {
+        [node mergeProperties:target mergeList:mergeList];
+        return YES;
+    }];
 }
 
 - (void)resetProperties
 {
+    [self traverseSubviews:^(RNSVGNode *node) {
+        [node resetProperties];
+        return YES;
+    }];
+}
+
+- (void)traverseSubviews:(BOOL (^)(RNSVGNode *node))block
+{
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
-            [node resetProperties];
+            if (!block(node)) {
+                break;
+            }
         }
     }
 }
+
 
 @end
