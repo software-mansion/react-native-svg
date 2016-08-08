@@ -45,6 +45,9 @@
                 case 3:
                     CGPathAddCurveToPoint(path, nil, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE);
                     break;
+                case 4:
+                    CGPathAddArc(path, NULL, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE == 0);
+                    break;
                 default:
                     RCTLogError(@"Invalid CGPath type %zd at element %zd of %@", type, i, arr);
                     CGPathRelease(path);
@@ -75,10 +78,10 @@ RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
                                      }), kRNSVGCGFCRuleNonzero, intValue)
 
 RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
-                                     @"meet": @(kRNSVGVBMOSMeet),
-                                     @"slice": @(kRNSVGVBMOSSlice),
-                                     @"none": @(kRNSVGVBMOSNone)
-                                     }), kRNSVGVBMOSMeet, intValue)
+                                  @"meet": @(kRNSVGVBMOSMeet),
+                                  @"slice": @(kRNSVGVBMOSSlice),
+                                  @"none": @(kRNSVGVBMOSNone)
+                                  }), kRNSVGVBMOSMeet, intValue)
 
 
 // This takes a tuple of text lines and a font to generate a CTLine for each text line.
@@ -223,19 +226,6 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
     }
     
     return beziers;
-}
-
-+ (CGPoint)CGPoint:(id)json offset:(NSUInteger)offset
-{
-    NSArray *arr = [self NSArray:json];
-    if (arr.count < offset + 2) {
-        RCTLogError(@"Too few elements in array (expected at least %zd): %@", 2 + offset, arr);
-        return CGPointZero;
-    }
-    return (CGPoint){
-        [self CGFloat:arr[offset]],
-        [self CGFloat:arr[offset + 1]],
-    };
 }
 
 + (CGRect)CGRect:(id)json offset:(NSUInteger)offset

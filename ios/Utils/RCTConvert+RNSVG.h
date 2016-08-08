@@ -25,7 +25,6 @@
 + (RNSVGBrush *)RNSVGBrush:(id)json;
 
 + (NSArray *)RNSVGBezier:(id)json;
-+ (CGPoint)CGPoint:(id)json offset:(NSUInteger)offset;
 + (CGRect)CGRect:(id)json offset:(NSUInteger)offset;
 + (CGColorRef)CGColor:(id)json offset:(NSUInteger)offset;
 + (CGGradientRef)CGGradient:(id)json offset:(NSUInteger)offset;
