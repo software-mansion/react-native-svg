@@ -30,48 +30,88 @@
     return self;
 }
 
-- (void)setHitArea:(CGPathRef)hitArea
-{
-    if (hitArea == _hitArea) {
-        return;
-    }
-
-    [self invalidate];
-    CGPathRelease(_hitArea);
-    _hitArea = CGPathRetain(hitArea);
-}
-
 - (void)setFill:(RNSVGBrush *)fill
 {
+    if (fill == _fill) {
+        return;
+    }
     [self invalidate];
     _fill = fill;
 }
 
+- (void)setFillOpacity:(CGFloat)fillOpacity
+{
+    if (fillOpacity == _fillOpacity) {
+        return;
+    }
+    [self invalidate];
+    _fillOpacity = fillOpacity;
+}
+
+- (void)setFillRule:(RNSVGCGFCRule)fillRule
+{
+    if (fillRule == _fillRule) {
+        return;
+    }
+    [self invalidate];
+    _fillRule = fillRule;
+}
+
 - (void)setStroke:(RNSVGBrush *)stroke
 {
+    if (stroke == _stroke) {
+        return;
+    }
     [self invalidate];
     _stroke = stroke;
 }
 
+- (void)setStrokeOpacity:(CGFloat)strokeOpacity
+{
+    if (strokeOpacity == _strokeOpacity) {
+        return;
+    }
+    [self invalidate];
+    _strokeOpacity = strokeOpacity;
+}
+
 - (void)setStrokeWidth:(CGFloat)strokeWidth
 {
+    if (strokeWidth == _strokeWidth) {
+        return;
+    }
     [self invalidate];
     _strokeWidth = strokeWidth;
 }
 
 - (void)setStrokeLinecap:(CGLineCap)strokeLinecap
 {
+    if (strokeLinecap == _strokeLinecap) {
+        return;
+    }
     [self invalidate];
     _strokeLinecap = strokeLinecap;
 }
 
 - (void)setStrokeJoin:(CGLineJoin)strokeLinejoin
 {
+    if (strokeLinejoin == _strokeLinejoin) {
+        return;
+    }
     [self invalidate];
     _strokeLinejoin = strokeLinejoin;
 }
 
-- (void)setStrokeDash:(RNSVGCGFloatArray)strokeDasharray
+- (void)setStrokeMiterlimit:(CGFloat)strokeMiterlimit
+{
+    if (strokeMiterlimit == _strokeMiterlimit) {
+        return;
+    }
+    [self invalidate];
+    _strokeMiterlimit = strokeMiterlimit;
+}
+
+- (void)setStrokeDasharray:(RNSVGCGFloatArray)strokeDasharray
 {
     if (strokeDasharray.array == _strokeDasharray.array) {
         return;
@@ -85,14 +125,22 @@
 
 - (void)setStrokeDashoffset:(CGFloat)strokeDashoffset
 {
+    if (strokeDashoffset == _strokeDashoffset) {
+        return;
+    }
     [self invalidate];
     _strokeDashoffset = strokeDashoffset;
 }
 
-- (void)setStrokeMiterlimit:(CGFloat)strokeMiterlimit
+- (void)setHitArea:(CGPathRef)hitArea
 {
+    if (hitArea == _hitArea) {
+        return;
+    }
+    
     [self invalidate];
-    _strokeMiterlimit = strokeMiterlimit;
+    CGPathRelease(_hitArea);
+    _hitArea = CGPathRetain(hitArea);
 }
 
 - (void)setPropList:(NSArray<NSString *> *)propList

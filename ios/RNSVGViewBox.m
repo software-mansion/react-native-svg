@@ -15,6 +15,60 @@
     BOOL _fromSymbol;
 }
 
+- (void)setMinX:(NSString *)minX
+{
+    if (minX == _minX) {
+        return;
+    }
+    [self invalidate];
+    _minX = minX;
+}
+
+- (void)setMinY:(NSString *)minY
+{
+    if (minY == _minY) {
+        return;
+    }
+    [self invalidate];
+    _minY = minY;
+}
+
+- (void)setVbHeight:(NSString *)vbHeight
+{
+    if (vbHeight == _vbHeight) {
+        return;
+    }
+    [self invalidate];
+    _vbHeight = vbHeight;
+}
+
+- (void)setVbWidth:(NSString *)vbWidth
+{
+    if (vbWidth == _vbWidth) {
+        return;
+    }
+    [self invalidate];
+    _vbWidth = vbWidth;
+}
+
+- (void)setAlign:(NSString *)align
+{
+    if (align == _align) {
+        return;
+    }
+    [self invalidate];
+    _align = align;
+}
+
+- (void)setMeetOrSlice:(RNSVGVBMOS)meetOrSlice
+{
+    if (meetOrSlice == _meetOrSlice) {
+        return;
+    }
+    [self invalidate];
+    _meetOrSlice = meetOrSlice;
+}
+
 - (void)renderTo:(CGContextRef)context
 {
     // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform
