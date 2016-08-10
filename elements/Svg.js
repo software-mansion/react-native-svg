@@ -1,7 +1,18 @@
-import React, {Component, PropTypes} from 'react';
-import {View, requireNativeComponent, StyleSheet} from 'react-native';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
+import {
+    View,
+    requireNativeComponent,
+    StyleSheet,
+    UIManager,
+    findNodeHandle,
+    NativeModules
+} from 'react-native';
 import ViewBox from './ViewBox';
 import _ from 'lodash';
+const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
 
 // Svg - Root node of all Svg elements
 let id = 0;
@@ -43,6 +54,10 @@ class Svg extends Component{
 
     setNativeProps = (...args) => {
         this.root.setNativeProps(...args);
+    };
+
+    toDataURL = (callback = _.noop) => {
+        RNSVGSvgViewManager.toDataURL(findNodeHandle(this.root), callback);
     };
 
     render() {

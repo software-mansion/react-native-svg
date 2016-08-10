@@ -16,6 +16,7 @@
     NSMutableDictionary<NSString *, RNSVGNode *> *clipPaths;
     NSMutableDictionary<NSString *, RNSVGNode *> *templates;
     NSMutableDictionary<NSString *, RNSVGBrushConverter *> *brushConverters;
+    CGRect _boundingBox;
 }
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
@@ -47,6 +48,7 @@
     templates = nil;
     brushConverters = nil;
     CGContextRef context = UIGraphicsGetCurrentContext();
+    _boundingBox = rect;
     
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
@@ -63,10 +65,17 @@
             [node renderTo:context];
         }
     }
-//    CGImageRef image = CGBitmapContextCreateImage(context);
-//    NSData *imageData = UIImagePNGRepresentation([[UIImage alloc] initWithCGImage:image]);
-//    NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-//    NSLog(base64);
+}
+
+- (NSString *)getDataURL
+{
+    UIGraphicsBeginImageContextWithOptions(_boundingBox.size, NO, 0);
+    [self drawRect:_boundingBox];
+    UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
+    NSData *imageData = UIImagePNGRepresentation(image);
+    NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    UIGraphicsEndImageContext();
+    return base64;
 }
 
 - (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
