@@ -24,12 +24,12 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_METHOD(toDataURL:(nonnull NSNumber *)reactTag callback:(RCTResponseSenderBlock)callback)
 {
     [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-        UIView *view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[RNSVGSvgView class]]) {
-            RCTLogError(@"Invalid svg returned frin registry, expecting RNSVGSvgView, got: %@", view);
-        } else {
+        __kindof UIView *view = viewRegistry[reactTag];
+        if ([view isKindOfClass:[RNSVGSvgView class]]) {
             RNSVGSvgView *svg = view;
             callback(@[[svg getDataURL]]);
+        } else {
+            RCTLogError(@"Invalid svg returned frin registry, expecting RNSVGSvgView, got: %@", view);
         }
     }];
 }

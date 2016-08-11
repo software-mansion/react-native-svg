@@ -44,11 +44,6 @@ public class RNSVGSvgView extends ViewGroup {
     private final TouchEventCoalescingKeyHelper mTouchEventCoalescingKeyHelper =
             new TouchEventCoalescingKeyHelper();
 
-    public RNSVGSvgView(Context context, RNSVGSvgViewShadowNode shadowNode) {
-        super(context);
-        mSvgViewShadowNode = shadowNode;
-    }
-
     public RNSVGSvgView(Context context) {
         super(context);
     }
@@ -84,6 +79,11 @@ public class RNSVGSvgView extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 
+    }
+
+    public void setShadowNode(RNSVGSvgViewShadowNode shadowNode) {
+        mSvgViewShadowNode = shadowNode;
+        shadowNode.setSvgView(this);
     }
 
     public void handleTouchEvent(MotionEvent ev, EventDispatcher eventDispatcher) {

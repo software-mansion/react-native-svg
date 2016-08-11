@@ -14,11 +14,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.react.uimanager.LayoutShadowNode;
+import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
 
 import java.util.HashMap;
@@ -32,16 +34,10 @@ import javax.annotation.Nonnull;
 public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
 
     private boolean mResponsible = false;
+    private RNSVGSvgView mSvgView;
     private static final Map<String, RNSVGVirtualNode> mDefinedClipPaths = new HashMap<>();
     private static final Map<String, RNSVGVirtualNode> mDefinedTemplates = new HashMap<>();
     private static final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
-
-    @Nonnull private final RNSVGSvgViewManager viewManager;
-
-    public RNSVGSvgViewShadowNode(@Nonnull final RNSVGSvgViewManager viewManager) {
-        super();
-        this.viewManager = viewManager;
-    }
 
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
@@ -84,16 +80,6 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
 
             if (child.isResponsible() && !mResponsible) {
                 mResponsible = true;
-            }
-        }
-    }
-
-    protected void invalidateView(@Nonnull final Rect dirtyRect) {
-        final RNSVGSvgView svgView = this.viewManager.getSvgView();
-        if (svgView != null) {
-            final View rootView = svgView.getRootView();
-            if (rootView != null) {
-                rootView.invalidate(dirtyRect);
             }
         }
     }
@@ -145,7 +131,15 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         mDefinedBrushes.put(brushRef, brush);
     }
 
-    public PropHelper.RNSVGBrush  getDefinedBrush(String brushRef) {
+    public PropHelper.RNSVGBrush getDefinedBrush(String brushRef) {
         return mDefinedBrushes.get(brushRef);
+    }
+
+    public void setSvgView(RNSVGSvgView svgView) {
+        mSvgView = svgView;
+    }
+
+    protected void invalidateView() {
+        mSvgView.invalidate();
     }
 }

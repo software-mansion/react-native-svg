@@ -110,8 +110,9 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
                                          paint.reset();
                                          mLoading.set(false);
 
-                                         getSvgShadowNode().drawChildren(canvas, paint);
-                                         getSvgShadowNode().invalidateView(getRect());
+                                         RNSVGSvgViewShadowNode svgShadowNode = getSvgShadowNode();
+                                         svgShadowNode.drawChildren(canvas, paint);
+                                         svgShadowNode.invalidateView();
                                      }
                                  }
 
