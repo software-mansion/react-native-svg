@@ -55,6 +55,7 @@ public class RNSVGSvgView extends ViewGroup {
 
     private @Nullable Bitmap mBitmap;
     private RCTEventEmitter mEventEmitter;
+    private EventDispatcher mEventDispatcher;
     private RNSVGSvgViewShadowNode mSvgViewShadowNode;
     private int mTargetTag;
 
@@ -68,6 +69,7 @@ public class RNSVGSvgView extends ViewGroup {
     public RNSVGSvgView(ReactContext reactContext) {
         super(reactContext);
         mEventEmitter = reactContext.getJSModule(RCTEventEmitter.class);
+        mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
     public void setBitmap(Bitmap bitmap) {
@@ -90,8 +92,7 @@ public class RNSVGSvgView extends ViewGroup {
     public boolean dispatchTouchEvent(MotionEvent event) {
         mTargetTag = mSvgViewShadowNode.hitTest(new Point((int) event.getX(), (int) event.getY()), this);
         if (mTargetTag != -1) {
-            EventDispatcher eventDispatcher = ((ThemedReactContext) this.getContext()).getNativeModule(UIManagerModule.class).getEventDispatcher();
-            handleTouchEvent(event, eventDispatcher);
+            handleTouchEvent(event);
             return true;
         }
 
@@ -108,18 +109,22 @@ public class RNSVGSvgView extends ViewGroup {
         shadowNode.setSvgView(this);
     }
 
-    public void handleTouchEvent(MotionEvent ev, EventDispatcher eventDispatcher) {
+    private void dispatch(MotionEvent ev, TouchEventType type) {
+        mEventDispatcher.dispatchEvent(
+            TouchEvent.obtain(
+                mTargetTag,
+                SystemClock.nanoTime(),
+                type,
+                ev,
+                ev.getX(),
+                ev.getX(),
+                mTouchEventCoalescingKeyHelper));
+    }
+
+    public void handleTouchEvent(MotionEvent ev) {
         int action = ev.getAction() & MotionEvent.ACTION_MASK;
         if (action == MotionEvent.ACTION_DOWN) {
-            eventDispatcher.dispatchEvent(
-                TouchEvent.obtain(
-                    mTargetTag,
-                    SystemClock.nanoTime(),
-                    TouchEventType.START,
-                    ev,
-                    ev.getX(),
-                    ev.getX(),
-                    mTouchEventCoalescingKeyHelper));
+            dispatch(ev, TouchEventType.START);
         } else if (mTargetTag == -1) {
             // All the subsequent action types are expected to be called after ACTION_DOWN thus target
             // is supposed to be set for them.
@@ -130,51 +135,20 @@ public class RNSVGSvgView extends ViewGroup {
         } else if (action == MotionEvent.ACTION_UP) {
             // End of the gesture. We reset target tag to -1 and expect no further event associated with
             // this gesture.
-            eventDispatcher.dispatchEvent(
-                TouchEvent.obtain(
-                    mTargetTag,
-                    SystemClock.nanoTime(),
-                    TouchEventType.END,
-                    ev,
-                    ev.getX(),
-                    ev.getY(),
-                    mTouchEventCoalescingKeyHelper));
+            dispatch(ev, TouchEventType.END);
             mTargetTag = -1;
         } else if (action == MotionEvent.ACTION_MOVE) {
             // Update pointer position for current gesture
-            eventDispatcher.dispatchEvent(
-                TouchEvent.obtain(
-                    mTargetTag,
-                    SystemClock.nanoTime(),
-                    TouchEventType.MOVE,
-                    ev,
-                    ev.getX(),
-                    ev.getY(),
-                    mTouchEventCoalescingKeyHelper));
+            dispatch(ev, TouchEventType.MOVE);
         } else if (action == MotionEvent.ACTION_POINTER_DOWN) {
             // New pointer goes down, this can only happen after ACTION_DOWN is sent for the first pointer
-            eventDispatcher.dispatchEvent(
-                TouchEvent.obtain(
-                    mTargetTag,
-                    SystemClock.nanoTime(),
-                    TouchEventType.START,
-                    ev,
-                    ev.getX(),
-                    ev.getY(),
-                    mTouchEventCoalescingKeyHelper));
+            dispatch(ev, TouchEventType.START);
         } else if (action == MotionEvent.ACTION_POINTER_UP) {
             // Exactly onw of the pointers goes up
-            eventDispatcher.dispatchEvent(
-                TouchEvent.obtain(
-                    mTargetTag,
-                    SystemClock.nanoTime(),
-                    TouchEventType.END,
-                    ev,
-                    ev.getX(),
-                    ev.getY(),
-                    mTouchEventCoalescingKeyHelper));
+            dispatch(ev, TouchEventType.END);
+            mTargetTag = -1;
         } else if (action == MotionEvent.ACTION_CANCEL) {
-            dispatchCancelEvent(ev, eventDispatcher);
+            dispatchCancelEvent(ev);
             mTargetTag = -1;
         } else {
             Log.w(
@@ -183,7 +157,7 @@ public class RNSVGSvgView extends ViewGroup {
         }
     }
 
-    private void dispatchCancelEvent(MotionEvent androidEvent, EventDispatcher eventDispatcher) {
+    private void dispatchCancelEvent(MotionEvent ev) {
         // This means the gesture has already ended, via some other CANCEL or UP event. This is not
         // expected to happen very often as it would mean some child View has decided to intercept the
         // touch stream and start a native gesture only upon receiving the UP/CANCEL event.
@@ -195,15 +169,7 @@ public class RNSVGSvgView extends ViewGroup {
             return;
         }
 
-        Assertions.assertNotNull(eventDispatcher).dispatchEvent(
-            TouchEvent.obtain(
-                mTargetTag,
-                SystemClock.nanoTime(),
-                TouchEventType.CANCEL,
-                androidEvent,
-                androidEvent.getX(),
-                androidEvent.getY(),
-                mTouchEventCoalescingKeyHelper));
+        dispatch(ev, TouchEventType.CANCEL);
     }
 
     public void onDataURL() {
