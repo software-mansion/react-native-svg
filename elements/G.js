@@ -3,7 +3,6 @@ import createReactNativeComponentClass from 'react/lib/createReactNativeComponen
 import Shape from './Shape';
 import {transformProps} from '../lib/props';
 import {GroupAttributes} from '../lib/attributes';
-import extractProps from '../lib/extract/extractProps';
 
 class G extends Shape{
     static displayName = 'G';

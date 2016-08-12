@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import ViewBox from './ViewBox';
 import _ from 'lodash';
-import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
 
 // Svg - Root node of all Svg elements
@@ -73,8 +72,8 @@ class Svg extends Component{
     };
 
     _onDataURL = (e) => {
-        let callback;
-        while (callback = this.onDataURLCallbacks.shift()) {
+        while (this.onDataURLCallbacks.length) {
+            let callback = this.onDataURLCallbacks.shift();
             callback(e.nativeEvent.base64);
         }
     };
