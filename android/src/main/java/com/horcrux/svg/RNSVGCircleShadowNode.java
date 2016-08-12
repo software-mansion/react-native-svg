@@ -12,7 +12,6 @@ package com.horcrux.svg;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.util.Log;
 
 import com.facebook.react.uimanager.annotations.ReactProp;
 

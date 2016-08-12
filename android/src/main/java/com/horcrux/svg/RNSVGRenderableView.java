@@ -13,8 +13,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-// NativeGestureUtil.notifyNativeGestureStarted
-
 /**
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its \children.
  */

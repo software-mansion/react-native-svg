@@ -11,7 +11,6 @@ package com.horcrux.svg;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.common.ReactConstants;

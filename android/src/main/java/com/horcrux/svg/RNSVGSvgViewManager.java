@@ -10,29 +10,16 @@
 package com.horcrux.svg;
 
 import android.graphics.Bitmap;
-import android.telecom.Call;
-import android.util.Log;
-
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.uimanager.BaseViewManager;
-import com.facebook.react.uimanager.LayoutShadowNode;
-import com.facebook.react.uimanager.ReactStylesDiffMap;
-import com.facebook.react.uimanager.SimpleViewManager;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
-import com.facebook.react.uimanager.ViewManagerPropertyUpdater;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
-import javax.security.auth.callback.Callback;
 
 /**
  * ViewManager for RNSVGSvgView React views. Renders as a {@link RNSVGSvgView} and handles
@@ -64,24 +51,24 @@ public class RNSVGSvgViewManager extends ViewGroupManager<RNSVGSvgView> {
     }
 
     @Override
+    @Nullable
+    public Map getExportedCustomDirectEventTypeConstants() {
+        MapBuilder.Builder builder = MapBuilder.builder();
+        for (RNSVGSvgView.Events event : RNSVGSvgView.Events.values()) {
+            builder.put(event.toString(), MapBuilder.of("registrationName", event.toString()));
+        }
+        return builder.build();
+    }
+
+    @Override
     public void receiveCommand(RNSVGSvgView root, int commandId, @Nullable ReadableArray args) {
         super.receiveCommand(root, commandId, args);
 
         switch (commandId) {
             case COMMAND_TO_DATA_URL:
-                toDataURL(root);
+                root.onDataURL();
                 break;
         }
-    }
-
-    private void toDataURL(RNSVGSvgView root) {
-        WritableMap event = Arguments.createMap();
-        event.putString("message", "MyMessage");
-        ReactContext reactContext = (ReactContext)root.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-            root.getId(),
-            "onDataURL",
-            event);
     }
 
 

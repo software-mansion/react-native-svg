@@ -21,24 +21,41 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.infer.annotation.Assertions;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.SystemClock;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.uimanager.events.TouchEvent;
 import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
 import com.facebook.react.uimanager.events.TouchEventType;
 import com.facebook.react.uimanager.events.EventDispatcher;
 
-// NativeGestureUtil.notifyNativeGestureStarted
 /**
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its \children.
  */
 public class RNSVGSvgView extends ViewGroup {
 
+    public enum Events {
+        EVENT_DATA_URL("onDataURL");
+
+        private final String mName;
+
+        Events(final String name) {
+            mName = name;
+        }
+
+        @Override
+        public String toString() {
+            return mName;
+        }
+    }
+
     private @Nullable Bitmap mBitmap;
-
+    private RCTEventEmitter mEventEmitter;
     private RNSVGSvgViewShadowNode mSvgViewShadowNode;
-
     private int mTargetTag;
 
     private final TouchEventCoalescingKeyHelper mTouchEventCoalescingKeyHelper =
@@ -46,6 +63,11 @@ public class RNSVGSvgView extends ViewGroup {
 
     public RNSVGSvgView(Context context) {
         super(context);
+    }
+
+    public RNSVGSvgView(ReactContext reactContext) {
+        super(reactContext);
+        mEventEmitter = reactContext.getJSModule(RCTEventEmitter.class);
     }
 
     public void setBitmap(Bitmap bitmap) {
@@ -182,5 +204,11 @@ public class RNSVGSvgView extends ViewGroup {
                 androidEvent.getX(),
                 androidEvent.getY(),
                 mTouchEventCoalescingKeyHelper));
+    }
+
+    public void onDataURL() {
+        WritableMap event = Arguments.createMap();
+        event.putString("base64", mSvgViewShadowNode.getBase64());
+        mEventEmitter.receiveEvent(getId(), Events.EVENT_DATA_URL.toString(), event);
     }
 }

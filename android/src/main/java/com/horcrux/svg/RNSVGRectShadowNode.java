@@ -15,8 +15,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-import javax.annotation.Nullable;
-
 /**
  * Shadow node for virtual RNSVGPath view
  */

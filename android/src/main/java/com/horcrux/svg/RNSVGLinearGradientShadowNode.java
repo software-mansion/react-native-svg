@@ -14,8 +14,6 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-import java.util.ArrayList;
-
 /**
  * Shadow node for virtual LinearGradient definition view
  */

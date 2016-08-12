@@ -13,20 +13,16 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
-import android.util.Log;
-import android.view.View;
+import android.util.Base64;
 import android.view.ViewGroup;
 
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.react.uimanager.LayoutShadowNode;
-import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
 
 /**
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
@@ -55,6 +51,15 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
 
         drawChildren(canvas, paint);
         return bitmap;
+    }
+
+    public String getBase64() {
+        Bitmap bitmap = (Bitmap)drawOutput();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bitmap.recycle();
+        byte[] bitmapBytes = stream.toByteArray();
+        return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
     }
 
     /**

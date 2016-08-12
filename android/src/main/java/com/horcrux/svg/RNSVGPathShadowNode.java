@@ -21,7 +21,6 @@ import android.graphics.Point;
 import android.graphics.RectF;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 
 import com.facebook.common.logging.FLog;

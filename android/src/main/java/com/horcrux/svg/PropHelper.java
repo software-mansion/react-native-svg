@@ -16,7 +16,6 @@ import android.graphics.RadialGradient;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.graphics.Matrix;
-import android.util.Log;
 
 import javax.annotation.Nullable;
 
