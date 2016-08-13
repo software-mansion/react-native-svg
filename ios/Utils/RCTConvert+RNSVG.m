@@ -99,7 +99,13 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
     }
     
     NSDictionary *fontDict = dict[@"font"];
-    CTFontRef font = (__bridge CTFontRef)[self UIFont:nil withFamily:fontDict[@"fontFamily"] size:fontDict[@"fontSize"] weight:fontDict[@"fontWeight"] style:fontDict[@"fontStyle"] scaleMultiplier:1.0];
+    NSString *fontFamily = fontDict[@"fontFamily"];
+    
+    if (![[UIFont familyNames] containsObject:fontFamily]) {
+        fontFamily = nil;
+    }
+    
+    CTFontRef font = (__bridge CTFontRef)[self UIFont:nil withFamily:fontFamily size:fontDict[@"fontSize"] weight:fontDict[@"fontWeight"] style:fontDict[@"fontStyle"] scaleMultiplier:1.0];
     if (!font) {
         return frame;
     }
@@ -262,12 +268,15 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
     RNSVGCGFloatArray colorsAndOffsets = [self RNSVGCGFloatArray:arr];
     size_t stops = colorsAndOffsets.count / 5;
     CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
+    
     CGGradientRef gradient = CGGradientCreateWithColorComponents(
                                                                  rgb,
                                                                  colorsAndOffsets.array,
                                                                  colorsAndOffsets.array + stops * 4,
                                                                  stops
                                                                  );
+    
+    
     CGColorSpaceRelease(rgb);
     free(colorsAndOffsets.array);
     return (CGGradientRef)CFAutorelease(gradient);

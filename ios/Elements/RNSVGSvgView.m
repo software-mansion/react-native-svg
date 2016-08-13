@@ -47,8 +47,8 @@
     clipPaths = nil;
     templates = nil;
     brushConverters = nil;
-    CGContextRef context = UIGraphicsGetCurrentContext();
     _boundingBox = rect;
+    CGContextRef context = UIGraphicsGetCurrentContext();
     
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
