@@ -40,18 +40,6 @@
     return self;
 }
 
-
-- (instancetype)initWithControlPoints:(CGPoint)P0 P1:(CGPoint)P1 P2:(CGPoint)P2 P3:(CGPoint)P3
-{
-    if (self = [super init]) {
-        _P0 = P0;
-        _P1 = P1;
-        _P2 = P2;
-        _P3 = P3;
-    }
-    return self;
-}
-
 static CGFloat Bezier(CGFloat t, CGFloat P0, CGFloat P1, CGFloat P2, CGFloat P3) {
     return (1-t)*(1-t)*(1-t)*P0+3*(1-t)*(1-t)*t*P1+3*(1-t)*t*t*P2+t*t*t*P3;
 }
