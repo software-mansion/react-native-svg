@@ -205,11 +205,11 @@
     }
 }
 
-- (void)setBoundingBox:(CGContextRef)context
+- (void)setBoundingBox:(CGRect)boundingBox
 {
-    _boundingBox = CGContextGetClipBoundingBox(context);
-    _widthConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:CGRectGetWidth(_boundingBox) offset:0];
-    _heightConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:CGRectGetHeight(_boundingBox) offset:0];
+    _boundingBox = boundingBox;
+    _widthConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:boundingBox.size.width offset:0];
+    _heightConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:boundingBox.size.height offset:0];
 }
 
 - (CGFloat)getWidthRelatedValue:(NSString *)string

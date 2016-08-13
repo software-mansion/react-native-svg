@@ -103,7 +103,7 @@ public class RNSVGRectShadowNode extends RNSVGPathShadowNode {
             }
             path.addRoundRect(new RectF(x, y, x + w, y + h), rx, ry, Path.Direction.CW);
         } else {
-            path.addRect(x, y, x + w, y + h,  Path.Direction.CW);
+            path.addRect(x, y, x + w, y + h, Path.Direction.CW);
         }
         return path;
     }

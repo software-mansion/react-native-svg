@@ -236,16 +236,21 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         }
     }
 
-    protected void clip(Canvas canvas, Paint paint) {
+    protected @Nullable Path getClipPath(Canvas canvas, Paint paint) {
         Path clip = mClipPath;
         if (clip == null && mClipPathRef != null) {
             RNSVGVirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPathRef);
             clip = node.getPath(canvas, paint);
         }
 
+        return clip;
+    }
+
+    protected void clip(Canvas canvas, Paint paint) {
+        Path clip = getClipPath(canvas, paint);
+
         if (clip != null) {
             canvas.clipPath(clip, Region.Op.REPLACE);
-            canvas.saveLayer(0f, 0f, 0f, 0f, paint, Canvas.CLIP_SAVE_FLAG);
         }
     }
 
@@ -284,6 +289,13 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         mCanvasY = mCanvasClipBounds.top;
         mCanvasWidth = canvas.getWidth();
         mCanvasHeight = canvas.getHeight();
+    }
+
+    protected void setupDimensions(Rect rect) {
+        mCanvasX = rect.left;
+        mCanvasY = rect.top;
+        mCanvasWidth = rect.width();
+        mCanvasHeight = rect.height();
     }
 
     protected void saveDefinition() {

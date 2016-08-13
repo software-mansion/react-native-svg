@@ -29,7 +29,7 @@
 @property (nonatomic, assign) CGPathRef hitArea;
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 
-- (void)setBoundingBox:(CGContextRef)context;
+- (void)setBoundingBox:(CGRect)boundingBox;
 - (CGFloat)getWidthRelatedValue:(NSString *)string;
 - (CGFloat)getHeightRelatedValue:(NSString *)string;
 - (CGFloat)getContextWidth;

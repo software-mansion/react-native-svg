@@ -71,8 +71,14 @@
 
 - (void)renderTo:(CGContextRef)context
 {
+    [self setBoundingBox:CGContextGetClipBoundingBox(context)];
+    self.matrix = [self getTransform];
+    [super renderTo:context];
+}
+
+- (CGAffineTransform)getTransform
+{
     // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform
-    [self setBoundingBox:context];
     
     // Let vb-x, vb-y, vb-width, vb-height be the min-x, min-y, width and height values of the viewBox attribute respectively.
     CGFloat vbX = [self getWidthRelatedValue:self.minX];
@@ -150,9 +156,8 @@
         }
     }
     
-    self.matrix = CGAffineTransformMakeScale(scaleX, scaleY);
-    self.matrix = CGAffineTransformTranslate(self.matrix, -translateX * (_fromSymbol ? scaleX : 1), -translateY * (_fromSymbol ? scaleY : 1));
-    [super renderTo:context];
+    CGAffineTransform transform = CGAffineTransformMakeScale(scaleX, scaleY);
+    return CGAffineTransformTranslate(transform, -translateX * (_fromSymbol ? scaleX : 1), -translateY * (_fromSymbol ? scaleY : 1));
 }
 
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList

@@ -40,7 +40,7 @@
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    [self setBoundingBox:context];
+    [self setBoundingBox:CGContextGetClipBoundingBox(context)];
     CGMutablePathRef path = CGPathCreateMutable();
     RNSVGPercentageConverter* convert = [[RNSVGPercentageConverter alloc] init];
     CGFloat cx = [self getWidthRelatedValue:self.cx];

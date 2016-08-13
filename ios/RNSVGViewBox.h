@@ -20,4 +20,6 @@
 @property (nonatomic, strong) NSString *width;
 @property (nonatomic, strong) NSString *height;
 
+- (CGAffineTransform)getTransform;
+
 @end

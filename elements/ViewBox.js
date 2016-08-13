@@ -73,3 +73,8 @@ const RNSVGViewBox = createReactNativeComponentClass({
 
 
 export default ViewBox;
+
+export {
+    meetOrSliceTypes,
+    alignEnum
+}

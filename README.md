@@ -579,7 +579,7 @@ npm install
 2. more Text features support (textPath, tref, tspan)
 3. Pattern element
 4. implement Animated elements
-5. more Image features support
+5. load Image from url
 
 #### Thanks:
 

@@ -10,6 +10,7 @@
 package com.horcrux.svg;
 
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 
 import com.facebook.react.bridge.ReadableArray;
@@ -85,8 +86,13 @@ public class RNSVGViewBoxShadowNode extends RNSVGGroupShadowNode {
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
-        // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform
         setupDimensions(canvas);
+        mMatrix = getTransform();
+        super.draw(canvas, paint, opacity);
+    }
+
+    public Matrix getTransform() {
+        // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform
 
         // Let vb-x, vb-y, vb-width, vb-height be the min-x, min-y, width and height values of the viewBox attribute respectively.
         float vbX = PropHelper.fromPercentageToFloat(mMinX, mCanvasWidth, 0, mScale);
@@ -134,7 +140,7 @@ public class RNSVGViewBoxShadowNode extends RNSVGGroupShadowNode {
             if (!mAlign.equals("none") && mMeetOrSlice == MOS_MEET) {
                 scaleX = scaleY = Math.min(scaleX, scaleY);
             } else if (!mAlign.equals("none") && mMeetOrSlice == MOS_SLICE) {
-                scaleX = scaleY = Math.min(scaleX, scaleY);
+                scaleX = scaleY = Math.max(scaleX, scaleY);
             }
 
             // If align contains 'xMid', minus (e-width / scale-x - vb-width) / 2 from transform-x.
@@ -161,10 +167,10 @@ public class RNSVGViewBoxShadowNode extends RNSVGGroupShadowNode {
 
         // The transform applied to content contained by the element is given by
         // translate(translate-x, translate-y) scale(scale-x, scale-y).
-        mMatrix.reset();
-        mMatrix.postTranslate(-translateX * (mFromSymbol ? scaleX : 1), -translateY * (mFromSymbol ? scaleY : 1));
-        mMatrix.postScale(scaleX, scaleY);
-        super.draw(canvas, paint, opacity);
+        Matrix transform = new Matrix();
+        transform.postTranslate(-translateX * (mFromSymbol ? scaleX : 1), -translateY * (mFromSymbol ? scaleY : 1));
+        transform.postScale(scaleX, scaleY);
+        return transform;
     }
 
     @Override
