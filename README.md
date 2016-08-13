@@ -581,6 +581,10 @@ npm install
 4. implement Animated elements
 5. load Image from url
 
+### Known issues:
+1. cannot set alpha channel for Gradient on iOS.
+2. cannot apply focus point of RadialGradient on Android. 
+
 #### Thanks:
 
 * [w3schools.com SVG Tutorial](http://www.w3schools.com/svg/)
