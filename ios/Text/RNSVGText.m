@@ -30,13 +30,11 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
     _alignment = alignment;
 }
 
-- (void)setTextFrame:(RNSVGTextFrame)frame
+- (void)setTextFrame:(RNSVGTextFrame)textFrame
 {
-    if (frame.lines == _textFrame.lines) {
-        RNSVGFreeTextFrame(_textFrame);
-    }
+    RNSVGFreeTextFrame(_textFrame);
     [self invalidate];
-    _textFrame = frame;
+    _textFrame = textFrame;
 }
 
 - (void)setPath:(NSArray *)path
@@ -99,6 +97,7 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
     CTRunGetPositions(run, CFRangeMake(0, 0), positions);
     CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
     CFDictionaryRef attributes = CTRunGetAttributes(run);
+    
     CTFontRef runFont = CFDictionaryGetValue(attributes, kCTFontAttributeName);
     
     RNSVGBezierPath *bezierPath = [[RNSVGBezierPath alloc] initWithBezierCurves:self.path];

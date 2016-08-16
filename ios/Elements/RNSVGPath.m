@@ -28,9 +28,8 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
-    if (!self.d) {
-        self.d = [self getPath:context];;
-    }
+    // todo: add detection if path has changed since last update.
+    self.d = [self getPath:context];
     CGPathRef path = self.d;
     if ((!self.fill && !self.stroke) || !path) {
         return;
