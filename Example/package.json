@@ -1,13 +1,13 @@
 {
-  "name": "ArtSvgExample",
-  "version": "0.0.1",
+  "name": "SvgExample",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "react-native start"
   },
   "dependencies": {
     "react": "^15.1.0",
-    "react-native": "^0.29.0",
+    "react-native": "^0.31.0",
     "react-native-root-modal": "^1.0.4",
     "react-native-svg": "../"
   }

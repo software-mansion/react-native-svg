@@ -1,4 +1,4 @@
-package com.artsvgexample;
+package com.svgexample;
 
 import com.facebook.react.ReactActivity;
 

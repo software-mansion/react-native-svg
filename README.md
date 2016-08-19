@@ -580,6 +580,7 @@ npm install
 3. Pattern element
 4. implement Animated elements
 5. load Image from url
+6. Mask element
 
 ### Known issues:
 1. cannot set alpha channel for Gradient on iOS.
