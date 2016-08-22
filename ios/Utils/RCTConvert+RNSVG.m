@@ -14,6 +14,7 @@
 #import "RCTLog.h"
 #import "RNSVGCGFCRule.h"
 #import "RNSVGVBMOS.h"
+#import "RCTFont.h"
 
 @implementation RCTConvert (RNSVG)
 
@@ -104,8 +105,9 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
     if (![[UIFont familyNames] containsObject:fontFamily]) {
         fontFamily = nil;
     }
-    
-    CTFontRef font = (__bridge CTFontRef)[self UIFont:nil withFamily:fontFamily size:fontDict[@"fontSize"] weight:fontDict[@"fontWeight"] style:fontDict[@"fontStyle"] scaleMultiplier:1.0];
+
+    CTFontRef font = (__bridge CTFontRef)[RCTFont updateFont:nil withFamily:fontFamily size:fontDict[@"fontSize"] weight:fontDict[@"fontWeight"] style:fontDict[@"fontStyle"]
+                                                      variant:nil scaleMultiplier:1.0];
     if (!font) {
         return frame;
     }
