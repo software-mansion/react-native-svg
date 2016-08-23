@@ -26,13 +26,13 @@ And furthermore:
 
 1. Install library from npm.
 
-```
+```bash
 npm install react-native-svg --save
 ```
 
 2 . Link native code
 
-```
+```bash
 react-native link react-native-svg
 ```
 react-native@0.29.0 and 0.29.1 cannot work with Android link properly:[here](https://github.com/facebook/react-native/pull/8612)
@@ -40,7 +40,7 @@ react-native@0.29.0 and 0.29.1 cannot work with Android link properly:[here](htt
 
 Or use rnpm instead
 
-```
+```bash
 rnpm link react-native-svg
 ```
 
@@ -49,7 +49,7 @@ rnpm link react-native-svg
 
 There is an easy example
 
-```
+```javascript
 import Svg,{
     Circle,
     Ellipse,
@@ -128,7 +128,7 @@ originY         | 0          | Transform originY coordinates for the current obj
 
 ##### Svg
 
-```
+```html
 <Svg
     height="100"
     width="100"
@@ -138,14 +138,14 @@ originY         | 0          | Transform originY coordinates for the current obj
     <Circle cx="40" cy="40" r="4" fill="black" />
     <Circle cx="60" cy="40" r="4" fill="black" />
     <Path d="M 40 60 A 10 10 0 0 0 60 60" stroke="black" />
-</Svg>;
+</Svg>
 ```
 
 ##### Rect
 
 The <Rect> element is used to create a rectangle and variations of a rectangle shape:
 
-```
+```html
 <Svg
     width="200"
     height="60"
@@ -174,7 +174,7 @@ The <Rect> element is used to create a rectangle and variations of a rectangle s
 
 The <Circle> element is used to create a circle:
 
-```
+```html
 <Svg
     height="100"
     width="100"
@@ -201,7 +201,7 @@ The <Ellipse> element is used to create an ellipse.
 
 An ellipse is closely related to a circle. The difference is that an ellipse has an x and a y radius that differs from each other, while a circle has equal x and y radius
 
-```
+```html
 <Svg
     height="100"
     width="110"
@@ -230,7 +230,7 @@ An ellipse is closely related to a circle. The difference is that an ellipse has
 
 The <Line> element is an SVG basic shape, used to create a line connecting two points.
 
-```
+```html
 <Svg
     height="100"
     width="100"
@@ -261,7 +261,7 @@ The <Polygon> element is used to create a graphic that contains at least three s
 
 Polygons are made of straight lines, and the shape is "closed" (all the lines connect up).
 
-```
+```html
 <Svg
     height="100"
     width="100"
@@ -285,7 +285,7 @@ Polygons are made of straight lines, and the shape is "closed" (all the lines co
 
 The <Polyline> element is used to create any shape that consists of only straight lines:
 
-```
+```html
 <Svg
     height="100"
     width="100"
@@ -323,7 +323,7 @@ The following commands are available for path data:
   * Z = closepath
 `Note:` All of the commands above can also be expressed with lower letters. Capital letters means absolutely positioned, lower cases means relatively positioned.
 
-```
+```html
 <Svg
     height="100"
     width="100"
@@ -343,7 +343,7 @@ The following commands are available for path data:
 
 The <Text> element is used to define a text.
 
-```
+```html
 <Svg
     height="60"
     width="200"
@@ -366,7 +366,7 @@ The <Text> element is used to define a text.
 
 The <G> element is a container used to group other SVG elements. Transformations applied to the g element are performed on all of its child elements, and any of its props are inherited by its child elements. It can also group multiple elements to be referenced later with the [&lt;Use /&gt;](#use) element.
 
-```
+```html
 <Svg
     height="100"
     width="200"
@@ -411,7 +411,7 @@ The <Use> element can reuse an SVG shape from elsewhere in the SVG document, inc
 
 The reused shape can be defined inside the [&lt;Defs&gt;](#defs) element (which makes the shape invisible until used) or outside.
 
-```
+```html
 <Svg
     height="100"
     width="300"
@@ -443,7 +443,7 @@ The <Use> element specifies where to show the reused shapes via its x and y prop
 
 The SVG <Symbol> element is used to define reusable symbols. The shapes nested inside a <Symbol> are not displayed unless referenced by a <Use> element.
 
-```
+```html
 <Svg
     height="150"
     width="110"
@@ -492,7 +492,7 @@ Linear gradients can be defined as horizontal, vertical or angular gradients:
   * Vertical gradients are created when x1 and x2 are equal and y1 and y2 differ
   * Angular gradients are created when x1 and x2 differ and y1 and y2 differ
 
-```
+```html
 <Svg
     height="150"
     width="300"
@@ -518,7 +518,7 @@ Code explanation:
 
 *NOTICE:*
 LinearGradient also supports percentage as prop:
-```
+```html
 <LinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
     <Stop offset="0%" stopColor="rgb(255,255,0)" stopOpacity="0" />
     <Stop offset="100%" stopColor="red" stopOpacity="1" />
@@ -533,7 +533,7 @@ But I recommend you to use exact number instead, it has more performance advanta
 The <RadialGradient> element is used to define a radial gradient.
 The <RadialGradient> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
 
-```
+```html
 <Svg
     height="150"
     width="300"
@@ -567,7 +567,7 @@ Code explanation:
 
 #### Run example:
 
-```
+```bash
 
 cd ./Example
 npm install
