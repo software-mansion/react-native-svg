@@ -199,7 +199,7 @@ class SvgExample extends Component {
             <Animated.Modal
                 visible={this.state.modal}
                 style={[styles.modal, {
-                    //transform: [{scale: this.state.scale}]
+                    transform: [{scale: this.state.scale}]
                 }]}
             >
                 <ScrollView
