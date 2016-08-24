@@ -13,13 +13,29 @@ import Svg, {
 
 class GExample extends Component{
     static title = 'G children props inherit';
+
+    constructor() {
+        super(...arguments);
+        this.state = {
+            fill: 'purple'
+        };
+    }
+
+    componentDidMount = () => {
+        setTimeout(() => {
+            this.setState({
+                fill: '#856'
+            });
+        }, 2000);
+    };
+
     render() {
         return <Svg
             height="100"
             width="100"
         >
             <G
-                fill="purple"
+                fill={this.state.fill}
                 stroke="pink"
                 strokeWidth="3"
             >
