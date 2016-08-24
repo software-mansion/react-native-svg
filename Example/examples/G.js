@@ -23,10 +23,16 @@ class GExample extends Component{
 
     componentDidMount = () => {
         setTimeout(() => {
-            this.setState({
-                fill: '#856'
-            });
+            if (!this._unmounted) {
+                this.setState({
+                    fill: '#856'
+                });
+            }
         }, 2000);
+    };
+
+    componentWillUnmount = () => {
+        this._unmounted = true;
     };
 
     render() {
