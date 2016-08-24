@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.infer.annotation.Assertions;
+import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
@@ -89,14 +90,14 @@ public class RNSVGSvgView extends ViewGroup {
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        mTargetTag = mSvgViewShadowNode.hitTest(new Point((int) event.getX(), (int) event.getY()), this);
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        mTargetTag = mSvgViewShadowNode.hitTest(new Point((int) ev.getX(), (int) ev.getY()), this);
+
         if (mTargetTag != -1) {
-            handleTouchEvent(event);
-            return true;
+            handleTouchEvent(ev);
         }
 
-        return super.dispatchTouchEvent(event);
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -109,7 +110,18 @@ public class RNSVGSvgView extends ViewGroup {
         shadowNode.setSvgView(this);
     }
 
+    private int getAbsoluteLeft(View view) {
+        View parent = (View) view.getParent();
+        return view.getLeft() - view.getScrollX() + (parent instanceof ReactRootView ? 0 : getAbsoluteLeft(parent));
+    }
+
+    private int getAbsoluteTop(View view) {
+        View parent = (View) view.getParent();
+        return view.getTop() - view.getScrollY() + (parent instanceof ReactRootView ? 0 : getAbsoluteTop(parent));
+    }
+
     private void dispatch(MotionEvent ev, TouchEventType type) {
+        ev.offsetLocation(getAbsoluteLeft(this), getAbsoluteTop(this));
         mEventDispatcher.dispatchEvent(
             TouchEvent.obtain(
                 mTargetTag,
@@ -117,7 +129,7 @@ public class RNSVGSvgView extends ViewGroup {
                 type,
                 ev,
                 ev.getX(),
-                ev.getX(),
+                ev.getY(),
                 mTouchEventCoalescingKeyHelper));
     }
 
