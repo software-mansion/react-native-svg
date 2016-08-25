@@ -585,7 +585,6 @@ npm install
 ### Known issues:
 1. cannot set alpha channel for Gradient on iOS.
 2. cannot apply focus point of RadialGradient on Android.
-3. onPanResponderMove on Android returns incorrect gestureState.
 
 #### Thanks:
 
