@@ -123,7 +123,6 @@ public class RNSVGSvgView extends ViewGroup {
         mEventDispatcher.dispatchEvent(
             TouchEvent.obtain(
                 mTargetTag,
-                SystemClock.nanoTime(),
                 type,
                 ev,
                 ev.getX(),
