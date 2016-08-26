@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 [![Build Status](https://travis-ci.org/magicismight/react-native-svg.svg?branch=master)](https://travis-ci.org/magicismight/react-native-svg)
-[![Known Vulnerabilities](https://snyk.io/test/npm/react-native-svg/badge.svg)](https://snyk.io/test/npm/react-native-svg)
+[![NPM](https://img.shields.io/npm/dm/react-native-svg.svg?style=flat-square)](https://www.npmjs.com/package/react-native-svg)
 
 `react-native-svg` is built to provide a SVG interface to react native on both iOS and Android
 
