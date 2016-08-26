@@ -576,7 +576,7 @@ npm install
 
 #### TODO:
 1. add native method for elements
-2. more Text features support (textPath, tref, tspan)
+2. more Text features support (textPath, tspan)
 3. Pattern element
 4. implement Animated elements
 5. load Image from url
