@@ -8,9 +8,6 @@
 
 # IMPORTANT：
 
-`react-native-art-svg` has changed name to **`react-native-svg`**(*thanks for [@Brent Vatne](https://github.com/brentvatne) handing over me this npm package.*).
-
-And furthermore:
 `react-native-svg` **NO LONGER rely on ReactNativeART**, it has its own native code dependency now (which is based on ReactNativeART code but support more SVG features)
 
 
@@ -22,7 +19,9 @@ And furthermore:
 
 #### Install
 
-### note: react-native-svg >= 3.0 only support react-native >= 0.29.0
+### note:
+react-native-svg >= 3.2.0 only supports react-native >= 0.29.0
+react-native-svg >= 4.2.0 only supports react-native >= 0.32.0
 
 1. Install library from npm.
 
