@@ -28,7 +28,11 @@ class Text extends Shape {
         let props = this.props;
         return <RNSVGText
             ref={ele => {this.root = ele;}}
-            {...this.extractProps({...props})}
+            {...this.extractProps({
+                ...props,
+                x: null,
+                y: null
+            })}
             {...extractText(props)}
         />;
     }

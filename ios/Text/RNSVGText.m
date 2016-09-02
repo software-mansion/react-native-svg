@@ -12,30 +12,30 @@
 
 @implementation RNSVGText
 
-static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
-{
-    if (frame.count) {
-        // We must release each line before freeing up this struct
-        for (int i = 0; i < frame.count; i++) {
-            CFRelease(frame.lines[i]);
-        }
-        free(frame.lines);
-        free(frame.widths);
-    }
-}
+//static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
+//{
+//    if (frame.count) {
+//        // We must release each line before freeing up this struct
+//        for (int i = 0; i < frame.count; i++) {
+//            CFRelease(frame.lines[i]);
+//        }
+//        free(frame.lines);
+//        free(frame.widths);
+//    }
+//}
 
 - (void)setAlignment:(CTTextAlignment)alignment
 {
     [self invalidate];
     _alignment = alignment;
 }
-
-- (void)setTextFrame:(RNSVGTextFrame)textFrame
-{
-    RNSVGFreeTextFrame(_textFrame);
-    [self invalidate];
-    _textFrame = textFrame;
-}
+//
+//- (void)setTextFrame:(RNSVGTextFrame)textFrame
+//{
+//    RNSVGFreeTextFrame(_textFrame);
+//    [self invalidate];
+//    _textFrame = textFrame;
+//}
 
 - (void)setPath:(NSArray *)path
 {
@@ -46,37 +46,37 @@ static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
     _path = path;
 }
 
-- (void)dealloc
-{
-    RNSVGFreeTextFrame(_textFrame);
-}
+//- (void)dealloc
+//{
+//    RNSVGFreeTextFrame(_textFrame);
+//}
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
     CGMutablePathRef path = CGPathCreateMutable();
-    RNSVGTextFrame frame = self.textFrame;
-    for (int i = 0; i < frame.count; i++) {
-        CGFloat shift;
-        CGFloat width = frame.widths[i];
-        switch (self.alignment) {
-            case kCTTextAlignmentRight:
-                shift = width;
-                break;
-            case kCTTextAlignmentCenter:
-                shift = width / 2;
-                break;
-            default:
-                shift = 0;
-                break;
-        }
-        // We should consider snapping this shift to device pixels to improve rendering quality
-        // when a line has subpixel width.
-        CGAffineTransform offset = CGAffineTransformMakeTranslation(-shift, frame.baseLine + frame.lineHeight * i + (self.path ? -frame.lineHeight : 0));
-        
-        CGMutablePathRef line = [self setLinePath:frame.lines[i]];
-        CGPathAddPath(path, &offset, line);
-        CGPathRelease(line);
-    }
+//    RNSVGTextFrame frame = self.textFrame;
+//    for (int i = 0; i < frame.count; i++) {
+//        CGFloat shift;
+//        CGFloat width = frame.widths[i];
+//        switch (self.alignment) {
+//            case kCTTextAlignmentRight:
+//                shift = width;
+//                break;
+//            case kCTTextAlignmentCenter:
+//                shift = width / 2;
+//                break;
+//            default:
+//                shift = 0;
+//                break;
+//        }
+//        // We should consider snapping this shift to device pixels to improve rendering quality
+//        // when a line has subpixel width.
+//        CGAffineTransform offset = CGAffineTransformMakeTranslation(-shift, frame.baseLine + frame.lineHeight * i + (self.path ? -frame.lineHeight : 0));
+//        
+//        CGMutablePathRef line = [self setLinePath:frame.lines[i]];
+//        CGPathAddPath(path, &offset, line);
+//        CGPathRelease(line);
+//    }
     
     return (CGPathRef)CFAutorelease(path);
 }

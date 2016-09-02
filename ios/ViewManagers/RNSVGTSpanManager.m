@@ -20,8 +20,7 @@ RCT_EXPORT_MODULE()
   return [RNSVGTSpan new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(alignment, CTTextAlignment)
-RCT_REMAP_VIEW_PROPERTY(frame, textFrame, RNSVGTextFrame)
+RCT_EXPORT_VIEW_PROPERTY(line, NSString)
 RCT_EXPORT_VIEW_PROPERTY(dx, NSString)
 RCT_EXPORT_VIEW_PROPERTY(dy, NSString)
 

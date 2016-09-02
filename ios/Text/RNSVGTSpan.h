@@ -10,10 +10,10 @@
 #import "RNSVGPath.h"
 #import "RNSVGTextFrame.h"
 
-@interface RNSVGText : RNSVGPath
+@interface RNSVGTSpan : RNSVGPath
 
-@property (nonatomic, assign) CTTextAlignment alignment;
-@property (nonatomic, assign) RNSVGTextFrame textFrame;
-@property (nonatomic, assign) NSString
+@property (nonatomic, assign) NSString *line;
+@property (nonatomic, assign) NSString *dx;
+@property (nonatomic, assign) NSString *dy;
 
 @end
