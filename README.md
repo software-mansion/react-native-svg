@@ -22,6 +22,7 @@
 ### note:
 react-native-svg >= 3.2.0 only supports react-native >= 0.29.0
 react-native-svg >= 4.2.0 only supports react-native >= 0.32.0
+react-native-svg >= 4.3.0 only supports react-native >= 0.33.0
 
 1. Install library from npm.
 
