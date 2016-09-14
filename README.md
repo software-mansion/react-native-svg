@@ -16,28 +16,28 @@
 
 *With Exponent, this is pre-installed. Jump ahead to [Usage](#Usage)*
 
-1. Install library from `npm`:
+1. Install library from `npm`
 
-```bash
-npm install react-native-svg --save
-```
+    ```bash
+    npm install react-native-svg --save
+    ```
 
-- react-native-svg >= 3.2.0 only supports react-native >= 0.29.0
-- react-native-svg >= 4.2.0 only supports react-native >= 0.32.0
-- react-native-svg >= 4.3.0 only supports react-native >= 0.33.0
-
+    - react-native-svg >= 3.2.0 only supports react-native >= 0.29.0
+    - react-native-svg >= 4.2.0 only supports react-native >= 0.32.0
+    - react-native-svg >= 4.3.0 only supports react-native >= 0.33.0
+    
 2. Link native code
 
-```bash
-react-native link react-native-svg
-```
-react-native@0.29.0 and 0.29.1 cannot work with Android link properly:[here](https://github.com/facebook/react-native/pull/8612)
+    ```bash
+    react-native link react-native-svg
+    ```
+    react-native@0.29.0 and 0.29.1 cannot work with Android link properly:[here](https://github.com/facebook/react-native/pull/8612)
 
-Or use `rnpm` instead:
+    Or use `rnpm` instead:
 
-```bash
-rnpm link react-native-svg
-```
+    ```bash
+    rnpm link react-native-svg
+    ```
 
 ### Usage
 
