@@ -1,25 +1,22 @@
 ## react-native-svg
 
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
-[![Build Status](https://travis-ci.org/magicismight/react-native-svg.svg?branch=master)](https://travis-ci.org/magicismight/react-native-svg)
 [![NPM](https://img.shields.io/npm/dm/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 
-`react-native-svg` is built to provide a SVG interface to react native on both iOS and Android
+`react-native-svg` is built to provide a SVG interface to react native on both iOS and Android.
 
-# IMPORTANT：
-
-`react-native-svg` **NO LONGER rely on ReactNativeART**, it has its own native code dependency now (which is based on ReactNativeART code but support more SVG features)
-
+[Check out the demo](https://getexponent.com/@rncommunity/react-native-svg-examples).
 
 ### Features
 
-1. Supports most of SVG elements and properties(Rect, Circle, Line, Polyline, Polygon, G ...).
-2. Easy to convert SVG code into ReactNative code.
+1. Supports most of SVG elements and properties (Rect, Circle, Line, Polyline, Polygon, G ...).
+2. Easy to convert SVG code into React Native code.
 
 
 #### Install
 
-### note:
+*With Exponent, this is pre-installed. Jump ahead to [Usage](#Usage)*
+
 react-native-svg >= 3.2.0 only supports react-native >= 0.29.0
 react-native-svg >= 4.2.0 only supports react-native >= 0.32.0
 react-native-svg >= 4.3.0 only supports react-native >= 0.33.0
@@ -43,7 +40,6 @@ Or use rnpm instead
 ```bash
 rnpm link react-native-svg
 ```
-
 
 #### Usage
 

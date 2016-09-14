@@ -1,0 +1,23 @@
+{
+  "name": "React Native SVG Examples",
+  "description": "react-native-svg is built to provide a SVG interface to react native on both iOS and Android. https://github.com/react-native-community/react-native-svg",
+  "slug": "react-native-svg-examples",
+  "sdkVersion": "10.0.0",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "primaryColor": "#cccccc",
+  "iconUrl": "https://s3.amazonaws.com/exp-brand-assets/ExponentEmptyManifest_192.png",
+  "notification": {
+    "iconUrl": "https://s3.amazonaws.com/exp-us-standard/placeholder-push-icon-blue-circle.png",
+    "color": "#000000"
+  },
+  "loading": {
+    "iconUrl": "https://s3.amazonaws.com/exp-brand-assets/ExponentEmptyManifest_192.png",
+    "hideExponentText": false
+  },
+  "packagerOpts": {
+    "assetExts": [
+      "ttf"
+    ]
+  }
+}

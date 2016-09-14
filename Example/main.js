@@ -3,6 +3,7 @@
  * https://github.com/magicismight/react-native-svg/tree/master/Example
  */
 'use strict';
+import Exponent from 'exponent';
 import React, {Component} from 'react';
 import {Dimensions} from 'react-native';
 
@@ -258,4 +259,5 @@ class SvgExample extends Component {
     }
 }
 
+AppRegistry.registerComponent('main', () => SvgExample);
 AppRegistry.registerComponent('SvgExample', () => SvgExample);
