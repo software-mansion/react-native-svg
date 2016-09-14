@@ -3,6 +3,8 @@
  * https://github.com/magicismight/react-native-svg/tree/master/Example
  */
 'use strict';
+
+// eslint-disable-next-line no-unused-vars
 import Exponent from 'exponent';
 import React, {Component} from 'react';
 import {Dimensions} from 'react-native';
@@ -24,8 +26,10 @@ import {
     Circle,
     Line
 } from 'react-native-svg';
+
 import * as examples from './examples';
-import Modal from 'react-native-root-modal';
+import 'react-native-root-modal';
+
 const hairline = StyleSheet.hairlineWidth;
 
 const styles = StyleSheet.create({
