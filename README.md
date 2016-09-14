@@ -7,18 +7,16 @@
 
 [Check out the demo](https://getexponent.com/@rncommunity/react-native-svg-examples).
 
-### Features
+## Features
 
-1. Supports most of SVG elements and properties (Rect, Circle, Line, Polyline, Polygon, G ...).
-2. Easy to convert SVG code into React Native code.
+1. Supports most SVG elements and properties (Rect, Circle, Line, Polyline, Polygon, G ...).
+2. Easy to convert SVG code into ReactNative code.
 
-
-#### Install
+### Installation
 
 *With Exponent, this is pre-installed. Jump ahead to [Usage](#Usage)*
 
-1. Install library from npm.
-
+1. Install library from `npm`:
 
 ```bash
 npm install react-native-svg --save
@@ -35,15 +33,19 @@ react-native link react-native-svg
 ```
 react-native@0.29.0 and 0.29.1 cannot work with Android link properly:[here](https://github.com/facebook/react-native/pull/8612)
 
-Or use rnpm instead
+Or use `rnpm` instead:
 
 ```bash
 rnpm link react-native-svg
 ```
 
-#### Usage
+### Usage
 
-There is an easy example
+Here's a simple example. To render output like this:
+
+![SVG example](./screenShoots/svg.png)
+
+Use the following code:
 
 ```javascript
 import Svg,{
@@ -92,13 +94,9 @@ class SvgExample extends Component {
         );
     }
 }
-
 ```
 
-This will draw a graphics like this
-![SVG example](./screenShoots/svg.png)
-
-#### Common props:
+### Common props:
 
 Name            | Default    | Description
 ----------------|------------|--------------
@@ -120,9 +118,9 @@ originX         | 0          | Transform originX coordinates for the current obj
 originY         | 0          | Transform originY coordinates for the current object.
 
 
-#### Supported elements:
+### Supported elements:
 
-##### Svg
+#### Svg
 
 ```html
 <Svg
@@ -137,9 +135,10 @@ originY         | 0          | Transform originY coordinates for the current obj
 </Svg>
 ```
 
-##### Rect
+### Rect
 
 The <Rect> element is used to create a rectangle and variations of a rectangle shape:
+
 
 ```html
 <Svg
@@ -162,9 +161,9 @@ The <Rect> element is used to create a rectangle and variations of a rectangle s
 
   Code explanation:
 
-  * The width and height props of the <Rect> element define the height and the width of the rectangle
-  * The x prop defines the left position of the rectangle (e.g. x="25" places the rectangle 25 px from the left margin)
-  * The y prop defines the top position of the rectangle (e.g. y="5" places the rectangle 5 px from the top margin)
+  * The width and height props of the <Rect> element define the height and the width of the rectangle.
+  * The x prop defines the left position of the rectangle (e.g. x="25" places the rectangle 25 px from the left margin).
+  * The y prop defines the top position of the rectangle (e.g. y="5" places the rectangle 5 px from the top margin).
 
 ##### Circle
 
@@ -191,11 +190,11 @@ The <Circle> element is used to create a circle:
   * The cx and cy props define the x and y coordinates of the center of the circle. If cx and cy are omitted, the circle's center is set to (0,0)
   * The r prop defines the radius of the circle
 
-##### Ellipse
+#### Ellipse
 
 The <Ellipse> element is used to create an ellipse.
 
-An ellipse is closely related to a circle. The difference is that an ellipse has an x and a y radius that differs from each other, while a circle has equal x and y radius
+An ellipse is closely related to a circle. The difference is that an ellipse has an x and a y radius that differs from each other, while a circle has equal x and y radius.
 
 ```html
 <Svg
@@ -215,14 +214,14 @@ An ellipse is closely related to a circle. The difference is that an ellipse has
 ```
 ![Rect](./screenShoots/ellipse.png)
 
-  Code explanation:
+Code explanation:
 
-  * The cx prop defines the x coordinate of the center of the ellipse
-  * The cy prop defines the y coordinate of the center of the ellipse
-  * The rx prop defines the horizontal radius
-  * The ry prop defines the vertical radius
+* The cx prop defines the x coordinate of the center of the ellipse
+* The cy prop defines the y coordinate of the center of the ellipse
+* The rx prop defines the horizontal radius
+* The ry prop defines the vertical radius
 
-##### Line
+#### Line
 
 The <Line> element is an SVG basic shape, used to create a line connecting two points.
 
@@ -244,18 +243,16 @@ The <Line> element is an SVG basic shape, used to create a line connecting two p
 
 ![Rect](./screenShoots/line.png)
 
-  Code explanation:
+Code explanation:
 
-  * The x1 prop defines the start of the line on the x-axis
-  * The y1 prop defines the start of the line on the y-axis
-  * The x2 prop defines the end of the line on the x-axis
-  * The y2 prop defines the end of the line on the y-axis
+* The x1 prop defines the start of the line on the x-axis.
+* The y1 prop defines the start of the line on the y-axis.
+* The x2 prop defines the end of the line on the x-axis.
+* The y2 prop defines the end of the line on the y-axis.
 
-##### Polygon
+#### Polygon
 
-The <Polygon> element is used to create a graphic that contains at least three sides.
-
-Polygons are made of straight lines, and the shape is "closed" (all the lines connect up).
+The <Polygon> element is used to create a graphic that contains at least three sides. Polygons are made of straight lines, and the shape is "closed" (all the lines connect up).
 
 ```html
 <Svg
@@ -273,11 +270,11 @@ Polygons are made of straight lines, and the shape is "closed" (all the lines co
 
 ![Rect](./screenShoots/polygon.png)
 
-  Code explanation:
+Code explanation:
 
-  * The points prop defines the x and y coordinates for each corner of the polygon
+* The points prop defines the x and y coordinates for each corner of the polygon
 
-##### Polyline
+#### Polyline
 
 The <Polyline> element is used to create any shape that consists of only straight lines:
 
@@ -297,11 +294,11 @@ The <Polyline> element is used to create any shape that consists of only straigh
 
 ![Rect](./screenShoots/polyline.png)
 
-  Code explanation:
+Code explanation:
 
-  * The points prop defines the x and y coordinates for each point of the polyline
+* The points prop defines the x and y coordinates for each point of the polyline
 
-##### Path
+#### Path
 
 The <Path> element is used to define a path.
 
@@ -317,6 +314,7 @@ The following commands are available for path data:
   * T = smooth quadratic Bézier curveto
   * A = elliptical Arc
   * Z = closepath
+
 `Note:` All of the commands above can also be expressed with lower letters. Capital letters means absolutely positioned, lower cases means relatively positioned.
 
 ```html
@@ -335,9 +333,9 @@ The following commands are available for path data:
 ![Rect](./screenShoots/path.png)
 
 
-##### Text
+#### Text
 
-The <Text> element is used to define a text.
+The <Text> element is used to define text.
 
 ```html
 <Svg
@@ -358,7 +356,7 @@ The <Text> element is used to define a text.
 
 ![Rect](./screenShoots/text.png)
 
-##### G
+#### G
 
 The <G> element is a container used to group other SVG elements. Transformations applied to the g element are performed on all of its child elements, and any of its props are inherited by its child elements. It can also group multiple elements to be referenced later with the [&lt;Use /&gt;](#use) element.
 
@@ -401,11 +399,9 @@ The <G> element is a container used to group other SVG elements. Transformations
 ```
 ![G](./screenShoots/g.png)
 
-<h5 id="use">Use</h5>
+#### Use
 
-The <Use> element can reuse an SVG shape from elsewhere in the SVG document, including <G> elements and <Symbol> elements.
-
-The reused shape can be defined inside the [&lt;Defs&gt;](#defs) element (which makes the shape invisible until used) or outside.
+The <Use> element can reuse an SVG shape from elsewhere in the SVG document, including <G> elements and <Symbol> elements. The reused shape can be defined inside the [&lt;Defs&gt;](#defs) element (which makes the shape invisible until used) or outside.
 
 ```html
 <Svg
@@ -435,7 +431,7 @@ The <Use> element specifies where to show the reused shapes via its x and y prop
 ![use](./screenShoots/use.png)
 
 
-##### Symbol
+#### Symbol
 
 The SVG <Symbol> element is used to define reusable symbols. The shapes nested inside a <Symbol> are not displayed unless referenced by a <Use> element.
 
@@ -473,11 +469,11 @@ The SVG <Symbol> element is used to define reusable symbols. The shapes nested i
 
 ![symbol](./screenShoots/symbol.png)
 
-<h5 id="defs">Defs</h5>
+#### Defs
 
 The <Defs> element is used to embed definitions that can be reused inside an SVG image. For instance, you can group SVG shapes together and reuse them as a single shape.
 
-##### LinearGradient
+#### LinearGradient
 
 The <LinearGradient> element is used to define a linear gradient.
 The <LinearGradient> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
@@ -520,14 +516,11 @@ LinearGradient also supports percentage as prop:
     <Stop offset="100%" stopColor="red" stopOpacity="1" />
 </LinearGradient>
 ```
-This result is same as the example before.
+This result is same as the example before. But it's recommend to use exact number instead; it has performance advantages over using percentages.
 
-But I recommend you to use exact number instead, it has more performance advantages while using number instead of percentage.
+#### RadialGradient
 
-##### RadialGradient
-
-The <RadialGradient> element is used to define a radial gradient.
-The <RadialGradient> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
+The <RadialGradient> element is used to define a radial gradient. The <RadialGradient> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
 
 ```html
 <Svg
@@ -561,7 +554,7 @@ Code explanation:
 
 ![RadialGradient](./screenShoots/radialgradient.png)
 
-#### Run example:
+### Run example:
 
 ```bash
 
@@ -570,19 +563,19 @@ npm install
 
 ```
 
-#### TODO:
-1. add native method for elements
-2. more Text features support (textPath, tspan)
-3. Pattern element
-4. implement Animated elements
-5. load Image from url
-6. Mask element
+### TODO:
+1. Add Native method for elements.
+2. More Text features support (textPath, tspan).
+3. Pattern element.
+4. Implement Animated elements.
+6. Mask element.
+5. Load Image from URL.
 
 ### Known issues:
-1. cannot set alpha channel for Gradient on iOS.
-2. cannot apply focus point of RadialGradient on Android.
+1. Unable to set alpha channel for Gradient on iOS.
+2. Unable to apply focus point of RadialGradient on Android.
 
-#### Thanks:
+### Thanks:
 
 * [w3schools.com SVG Tutorial](http://www.w3schools.com/svg/)
 * [SVG Tutorial](http://tutorials.jenkov.com/svg/index.html)
