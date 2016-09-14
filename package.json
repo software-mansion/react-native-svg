@@ -29,9 +29,9 @@
         "lodash": "^4.0.0"
     },
     "devDependencies": {
-        "babel-eslint": "^6.0.0",
-        "eslint": "^2.5.3",
-        "eslint-plugin-react": "^4.2.1"
+        "babel-eslint": "^6.1.2",
+        "eslint": "^2.13.1",
+        "eslint-plugin-react": "^4.3.0"
     },
     "nativePackage": true,
     "rnpm": {
