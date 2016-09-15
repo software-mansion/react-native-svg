@@ -558,8 +558,12 @@ Code explanation:
 
 ```bash
 
-cd ./Example
-npm install
+git clone https://github.com/magicismight/react-native-svg-example.git
+cd react-native-svg-example
+npm i
+
+# run Android: react-native run-android
+# run iOS: react-native run-ios
 
 ```
 
