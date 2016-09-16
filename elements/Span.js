@@ -28,7 +28,8 @@ class Span extends Shape {
 
     render() {
         let props = this.props;
-        return <RNSVGLine
+        return null;
+        return <RNSVGSpan
             ref={ele => {this.root = ele;}}
             {...this.extractProps(props)}
             x1={props.x1.toString()}

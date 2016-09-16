@@ -19,10 +19,6 @@ class TSpan extends Component {
         font: PropTypes.object
     };
 
-    setNativeProps = (...args) => {
-
-    };
-
     render() {
         return null;
     }

@@ -22,7 +22,7 @@ class Text extends Shape {
 
     render() {
         let props = this.props;
-        console.log(extractText(props));
+
         return <RNSVGText
             ref={ele => {this.root = ele;}}
             {...this.extractProps({
