@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import extractText from '../lib/extract/extractText';
-import {numberProp, pathProps} from '../lib/props';
+import {numberProp, pathProps, fontProps} from '../lib/props';
 import {TextAttributes} from '../lib/attributes';
 import Shape from './Shape';
 
@@ -10,14 +10,10 @@ class Text extends Shape {
 
     static propTypes = {
         ...pathProps,
+        ...fontProps,
         dx: numberProp,
         dy: numberProp,
-        textAnchor: PropTypes.oneOf(['start', 'middle', 'end']),
-        fontFamily: PropTypes.string,
-        fontSize: numberProp,
-        fontWeight: PropTypes.string,
-        fontStyle: PropTypes.string,
-        font: PropTypes.object
+        textAnchor: PropTypes.oneOf(['start', 'middle', 'end'])
     };
 
     setNativeProps = (...args) => {
@@ -26,6 +22,7 @@ class Text extends Shape {
 
     render() {
         let props = this.props;
+        console.log(extractText(props));
         return <RNSVGText
             ref={ele => {this.root = ele;}}
             {...this.extractProps({
