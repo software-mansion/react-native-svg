@@ -569,7 +569,7 @@ npm i
 
 ### TODO:
 1. Add Native method for elements.
-2. More Text features support (textPath, tspan).
+2. More Text features support (TextPath, TSpan).
 3. Pattern element.
 4. Implement Animated elements.
 6. Mask element.
