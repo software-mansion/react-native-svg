@@ -6,9 +6,11 @@
     "start": "react-native start"
   },
   "dependencies": {
-    "react": "^15.1.0",
-    "react-native": "^0.32.0",
+    "react": "15.3.1",
+    "react-native": "github:exponentjs/react-native#sdk-10.0.0",
     "react-native-root-modal": "^1.0.4",
-    "react-native-svg": "../"
-  }
+    "@exponent/vector-icons": "^1.0.1",
+    "exponent": "^10.0.0"
+  },
+  "main": "main.js"
 }

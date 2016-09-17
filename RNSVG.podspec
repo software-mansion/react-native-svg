@@ -11,6 +11,7 @@ Pod::Spec.new do |s|
   s.authors          = 'Horcrux Chen'
   s.source           = { :git => 'https://github.com/magicismight/react-native-svg.git', :tag => "v#{s.version}" }
   s.source_files     = 'ios/**/*.{h,m}'
-  s.framework        = 'React'
   s.requires_arc     = true
+  s.platform         = :ios, "7.0"
+  s.dependency         'React'  
 end

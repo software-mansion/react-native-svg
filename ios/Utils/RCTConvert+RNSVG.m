@@ -97,57 +97,6 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
     return (__bridge CTFontRef)[RCTFont updateFont:nil withFamily:fontFamily size:dict[@"fontSize"] weight:dict[@"fontWeight"] style:dict[@"fontStyle"]                                                     variant:nil scaleMultiplier:1.0];
 }
 
-// This takes a tuple of text lines and a font to generate a CTLine for each text line.
-// This prepares everything for rendering a frame of text in RNSVGText.
-//+ (RNSVGTextFrame)RNSVGTextFrame:(id)json
-//{
-//    NSDictionary *dict = [self NSDictionary:json];
-//    RNSVGTextFrame frame;
-//    frame.count = 0;
-//    
-//    NSArray *lines = [self NSArray:dict[@"lines"]];
-//    NSUInteger lineCount = [lines count];
-//    if (lineCount == 0) {
-//        return frame;
-//    }
-//    
-//    NSDictionary *fontDict = dict[@"font"];
-//    NSString *fontFamily = fontDict[@"fontFamily"];
-//    
-//    if (![[UIFont familyNames] containsObject:fontFamily]) {
-//        fontFamily = nil;
-//    }
-//    
-//    CTFontRef font = (__bridge CTFontRef)[RCTFont updateFont:nil withFamily:fontFamily size:fontDict[@"fontSize"] weight:fontDict[@"fontWeight"] style:fontDict[@"fontStyle"]                                                     variant:nil scaleMultiplier:1.0];
-//    
-//    // Create a dictionary for this font
-//    CFDictionaryRef attributes = (__bridge CFDictionaryRef)@{
-//                                                             (NSString *)kCTFontAttributeName: (__bridge id)font,
-//                                                             (NSString *)kCTForegroundColorFromContextAttributeName: @YES
-//                                                             };
-//    
-//    // Set up text frame with font metrics
-//    CGFloat size = CTFontGetSize(font);
-//    frame.count = lineCount;
-//    frame.baseLine = size; // estimate base line
-//    frame.lineHeight = size * 1.1; // Base on RNSVG canvas line height estimate
-//    frame.lines = malloc(sizeof(CTLineRef) * lineCount);
-//    frame.widths = malloc(sizeof(CGFloat) * lineCount);
-//    
-//    [lines enumerateObjectsUsingBlock:^(NSString *text, NSUInteger i, BOOL *stop) {
-//        
-//        CFStringRef string = (__bridge CFStringRef)text;
-//        CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
-//        CTLineRef line = CTLineCreateWithAttributedString(attrString);
-//        CFRelease(attrString);
-//        
-//        frame.lines[i] = line;
-//        frame.widths[i] = CTLineGetTypographicBounds(line, nil, nil, nil);
-//    }];
-//    
-//    return frame;
-//}
-
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json
 {
     NSArray *arr = [self NSNumberArray:json];
