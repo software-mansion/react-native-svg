@@ -17,6 +17,7 @@
 {
     [self setBoundingBox:CGContextGetClipBoundingBox(context)];
     CGMutablePathRef path = CGPathCreateMutable();
+    RNSVGText *text = [self getText];
     
     if (![self.content isEqualToString:@""]) {
         // Create a dictionary for this font
@@ -37,7 +38,6 @@
         CGFloat px = self.px ? [self getWidthRelatedValue:self.px] : 0;
         CGFloat py = self.py ? [self getHeightRelatedValue:self.py] : 0;
         
-        RNSVGText *text = [self getText];
         if (self.px) {
             text.offsetX = px;
         }
@@ -55,6 +55,9 @@
         
         CGPathAddPath(path, &offset, linePath);
         CGPathRelease(linePath);
+    } else {
+        text.offsetX += self.dx;
+        text.offsetY += self.dy;
     }
     
     return (CGPathRef)CFAutorelease(path);

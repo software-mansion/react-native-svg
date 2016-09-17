@@ -41,20 +41,30 @@
 {
     
     CGMutablePathRef path = CGPathCreateMutable();
-    CGPathRef collection = [super getPath:context];
-    CGFloat shift = [self getShift:context path:collection];
+    CGPathRef collection = [self getPathFromSuper:context];
     
+    // get alignment shift and Translate CGPath by it.
+    CGFloat shift = [self getShift:context path:collection];
     CGAffineTransform align = CGAffineTransformMakeTranslation(shift, 0);
     CGPathAddPath(path, &align, collection);
     CGPathRelease(collection);
     
+    
     return (CGPathRef)CFAutorelease(path);
+}
+
+- (CGPathRef)getPathFromSuper:(CGContextRef)context
+{
+    CGPathRef path = [super getPath:context];
+    // reset offsetX and offsetY
+    self.offsetX = self.offsetY = 0;
+    return path;
 }
 
 - (CGFloat)getShift:(CGContextRef)context path:(CGPathRef)path
 {
     if (!path) {
-        path = [super getPath:context];
+        path = [self getPathFromSuper:context];
     }
     
     CGFloat width = CGPathGetBoundingBox(path).size.width;
