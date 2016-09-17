@@ -13,5 +13,7 @@
 
 @property (nonatomic, assign) CTTextAlignment alignment;
 @property (nonatomic, copy) NSArray<NSArray *> *path;
+@property (nonatomic, assign) CGFloat offsetX;
+@property (nonatomic, assign) CGFloat offsetY;
 
 @end

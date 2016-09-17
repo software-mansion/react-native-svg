@@ -10,6 +10,7 @@
 #import "RNSVGSpan.h"
 #import "RNSVGBezierPath.h"
 
+@class RNSVGText;
 @implementation RNSVGSpan
 
 - (CGPathRef)getPath:(CGContextRef)context
@@ -36,13 +37,32 @@
         CGFloat px = self.px ? [self getWidthRelatedValue:self.px] : 0;
         CGFloat py = self.py ? [self getHeightRelatedValue:self.py] : 0;
         
-        CGAffineTransform offset = CGAffineTransformMakeTranslation(px, size + py);
+        RNSVGText *text = [self getText];
+        if (self.px) {
+            text.offsetX = px;
+        }
+        
+        if (self.py) {
+            text.offsetY = py + size * 1.1;
+        }
+        
+        text.offsetX += self.dx;
+        text.offsetY += self.dy;
+        
+        CGAffineTransform offset = CGAffineTransformMakeTranslation(text.offsetX, text.offsetY);
+        
+        text.offsetX += CTLineGetTypographicBounds(line, nil, nil, nil);
         
         CGPathAddPath(path, &offset, linePath);
         CGPathRelease(linePath);
     }
     
     return (CGPathRef)CFAutorelease(path);
+}
+
+- (RNSVGText *)getText
+{
+    return self.superview;
 }
 
 - (CGMutablePathRef)setLinePath:(CTLineRef)line

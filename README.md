@@ -581,6 +581,7 @@ npm install
 4. implement Animated elements
 5. load Image from url
 6. Mask element
+7. Fix rotate prop ON Text
 
 ### Known issues:
 1. cannot set alpha channel for Gradient on iOS.
