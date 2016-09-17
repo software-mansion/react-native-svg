@@ -39,9 +39,56 @@
 //    RNSVGFreeTextFrame(_textFrame);
 //}
 
+- (void)renderLayerTo:(CGContextRef)context
+{
+    CGFloat shift = [self getShift:context path:nil];
+    // translate path by alignment offset
+    CGContextSaveGState(context);
+    CGContextConcatCTM(context, CGAffineTransformMakeTranslation(-shift, 0));
+    [super renderLayerTo:context];
+    CGContextRestoreGState(context);
+}
+
 - (CGPathRef)getPath:(CGContextRef)context
 {
+    
     CGMutablePathRef path = CGPathCreateMutable();
+    CGPathRef collection = [super getPath:context];
+    CGFloat shift = [self getShift:context path:collection];
+    
+    CGAffineTransform align = CGAffineTransformMakeTranslation(shift, 0);
+    CGPathAddPath(path, &align, collection);
+    CGPathRelease(collection);
+    
+    return (CGPathRef)CFAutorelease(path);
+}
+
+- (CGFloat)getShift:(CGContextRef)context path:(CGPathRef)path
+{
+    if (!path) {
+        path = [super getPath:context];
+    }
+    
+    CGFloat width = CGPathGetBoundingBox(path).size.width;
+    CGFloat shift;
+    switch (self.alignment) {
+        case kCTTextAlignmentRight:
+            shift = width;
+            break;
+        case kCTTextAlignmentCenter:
+            shift = width / 2;
+            break;
+        default:
+            shift = 0;
+            break;
+    }
+    
+    return shift;
+}
+
+//- (CGPathRef)getPath:(CGContextRef)context
+//{
+//    CGMutablePathRef path = CGPathCreateMutable();
 //    RNSVGTextFrame frame = self.textFrame;
 //    for (int i = 0; i < frame.count; i++) {
 //        CGFloat shift;
@@ -66,59 +113,6 @@
 //        CGPathRelease(line);
 //    }
     
-    return (CGPathRef)CFAutorelease(path);
-}
-
-- (CGMutablePathRef)setLinePath:(CTLineRef)line
-{
-    CGAffineTransform upsideDown = CGAffineTransformMakeScale(1.0, -1.0);
-    CGMutablePathRef path = CGPathCreateMutable();
-    
-    CFArrayRef glyphRuns = CTLineGetGlyphRuns(line);
-    CTRunRef run = CFArrayGetValueAtIndex(glyphRuns, 0);
-    
-    CFIndex runGlyphCount = CTRunGetGlyphCount(run);
-    CGPoint positions[runGlyphCount];
-    CGGlyph glyphs[runGlyphCount];
-    
-    // Grab the glyphs, positions, and font
-    CTRunGetPositions(run, CFRangeMake(0, 0), positions);
-    CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
-    CFDictionaryRef attributes = CTRunGetAttributes(run);
-    
-    CTFontRef runFont = CFDictionaryGetValue(attributes, kCTFontAttributeName);
-    
-    RNSVGBezierPath *bezierPath = [[RNSVGBezierPath alloc] initWithBezierCurves:self.path];
-    
-    for(CFIndex i = 0; i < runGlyphCount; ++i) {
-        CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[i], nil);
-        CGPoint point = positions[i];
-        
-        if (letter) {
-            CGAffineTransform transform;
-            
-            // draw glyphs along path
-            if (self.path) {
-                transform = [bezierPath transformAtDistance:point.x];
-                
-                // break loop if line reaches the end of the Path.
-                if (!transform.a || !transform.d) {
-                    CGPathRelease(letter);
-                    break;
-                }
-                transform = CGAffineTransformScale(transform, 1.0, -1.0);
-            } else {
-                transform = CGAffineTransformTranslate(upsideDown, point.x, point.y);
-            }
-            
-            
-            CGPathAddPath(path, &transform, letter);
-        }
-        
-        CGPathRelease(letter);
-    }
-    
-    return path;
-}
-
+//    return (CGPathRef)CFAutorelease(path);
+//}
 @end

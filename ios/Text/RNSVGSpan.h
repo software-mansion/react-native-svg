@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
 #import "RNSVGPath.h"
-#import "RNSVGTextFrame.h"
 
 @interface RNSVGSpan : RNSVGPath
 
 @property (nonatomic, assign) CGFloat *dx;
 @property (nonatomic, assign) CGFloat *dy;
-@property (nonatomic, assign) NSString *px;
-@property (nonatomic, assign) NSString *py;
+@property (nonatomic, strong) NSString *px;
+@property (nonatomic, strong) NSString *py;
 @property (nonatomic, assign) CTFontRef font;
+@property (nonatomic, strong) NSString *content;
 
 @end

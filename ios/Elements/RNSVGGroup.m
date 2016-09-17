@@ -14,7 +14,6 @@
 {
     RNSVGSvgView* svg = [self getSvgView];
     [self clip:context];
-    
     [self traverseSubviews:^(RNSVGNode *node) {
         if (node.responsible && !svg.responsible) {
             svg.responsible = YES;
@@ -83,7 +82,7 @@
     
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
+- (void)mergeProperties:(RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
 {
     [self traverseSubviews:^(RNSVGNode *node) {
         [node mergeProperties:target mergeList:mergeList];
@@ -99,7 +98,7 @@
     }];
 }
 
-- (void)traverseSubviews:(BOOL (^)(RNSVGNode *node))block
+- (void)traverseSubviews:(BOOL (^)(__kindof RNSVGNode *node))block
 {
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {

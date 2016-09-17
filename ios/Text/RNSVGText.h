@@ -7,10 +7,9 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "RNSVGPath.h"
-#import "RNSVGTextFrame.h"
+#import "RNSVGGroup.h"
 
-@interface RNSVGText : RNSVGRenderable
+@interface RNSVGText : RNSVGGroup
 
 @property (nonatomic, assign) CTTextAlignment alignment;
 @property (nonatomic, copy) NSArray<NSArray *> *path;

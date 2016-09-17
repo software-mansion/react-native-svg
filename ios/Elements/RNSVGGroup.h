@@ -14,4 +14,5 @@
 #import "RNSVGRenderable.h"
 
 @interface RNSVGGroup : RNSVGRenderable <RNSVGContainer>
+
 @end

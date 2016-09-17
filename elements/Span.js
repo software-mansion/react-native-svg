@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import {SpanAttributes} from '../lib/attributes';
 import Shape from './Shape';
-import {numberProp} from '../lib/props';
+import {pathProps, numberProp, fontProps} from '../lib/props';
 
 
 // Span components are only for internal use for Text.
@@ -10,15 +10,26 @@ class Span extends Shape {
     static displayName = 'Span';
 
     static propTypes = {
-        content: PropTypes.string.isRequired,
-        dx: numberProp,
-        dy: numberProp,
-        px: numberProp,
-        py: numberProp
+        ...pathProps,
+        frame: PropTypes.shape({
+            content: PropTypes.string.isRequired,
+            dx: numberProp,
+            dy: numberProp,
+            px: numberProp,
+            py: numberProp,
+            font: PropTypes.shape(fontProps)
+        })
     };
 
     render() {
-        return <RNSVGSpan {...this.props}/>;
+        return <RNSVGSpan
+            {...this.extractProps({
+                ...this.props,
+                x: null,
+                y: null
+            })}
+            {...this.props.frame}
+        />;
     }
 }
 

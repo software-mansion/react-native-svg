@@ -30,6 +30,7 @@
 
 - (instancetype)initWithBezierCurves:(NSArray *)bezierCurves
 {
+    
     if (self = [super init]) {
         _bezierCurves = bezierCurves;
         _bezierIndex = 0;
