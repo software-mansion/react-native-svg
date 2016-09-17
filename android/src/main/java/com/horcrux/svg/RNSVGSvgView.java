@@ -109,13 +109,25 @@ public class RNSVGSvgView extends ViewGroup {
     }
 
     private int getAbsoluteLeft(View view) {
+        int left = view.getLeft() - view.getScrollX();
+
+        if (view.getParent() == view.getRootView() || view.getParent() instanceof ReactRootView) {
+            return left;
+        }
+
         View parent = (View) view.getParent();
-        return view.getLeft() - view.getScrollX() + (parent instanceof ReactRootView ? 0 : getAbsoluteLeft(parent));
+        return left + getAbsoluteLeft(parent);
     }
 
     private int getAbsoluteTop(View view) {
+        int top = view.getTop() - view.getScrollY();
+
+        if (view.getParent() == view.getRootView() || view.getParent() instanceof ReactRootView) {
+            return top;
+        }
+
         View parent = (View) view.getParent();
-        return view.getTop() - view.getScrollY() + (parent instanceof ReactRootView ? 0 : getAbsoluteTop(parent));
+        return top + getAbsoluteTop(parent);
     }
 
     private void dispatch(MotionEvent ev, TouchEventType type) {

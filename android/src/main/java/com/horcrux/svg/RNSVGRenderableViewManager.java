@@ -35,6 +35,7 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
     /* package */ static final String CLASS_VIEW_BOX = "RNSVGViewBox";
     /* package */ static final String CLASS_LINEAR_GRADIENT = "RNSVGLinearGradient";
     /* package */ static final String CLASS_RADIAL_GRADIENT = "RNSVGRadialGradient";
+    /* package */ static final String CLASS_SPAN = "RNSVGSpan";
 
     private final String mClassName;
 
@@ -96,6 +97,10 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
         return new RNSVGRenderableViewManager(CLASS_RADIAL_GRADIENT);
     }
 
+    public static RNSVGRenderableViewManager createRNSVGSpanManager() {
+        return new RNSVGRenderableViewManager(CLASS_SPAN);
+    }
+
     private RNSVGRenderableViewManager(String className) {
         mClassName = className;
     }
@@ -150,6 +155,9 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
             case CLASS_RADIAL_GRADIENT:
                 mVirtualNode = new RNSVGRadialGradientShadowNode();
                 break;
+            case CLASS_SPAN:
+                mVirtualNode = new RNSVGSpanShadowNode();
+                break;
             default:
                 throw new IllegalStateException("Unexpected type " + mClassName);
         }
@@ -189,6 +197,8 @@ public class RNSVGRenderableViewManager extends ViewGroupManager<ViewGroup> {
                 return RNSVGLinearGradientShadowNode.class;
             case CLASS_RADIAL_GRADIENT:
                 return RNSVGRadialGradientShadowNode.class;
+            case CLASS_SPAN:
+                return RNSVGSpanShadowNode.class;
             default:
                 throw new IllegalStateException("Unexpected type " + mClassName);
         }
