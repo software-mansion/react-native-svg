@@ -8,6 +8,6 @@
 
 #import "RNSVGRenderableManager.h"
 
-@interface RNSVGTSpanManager : RNSVGRenderableManager
+@interface RNSVGSpanManager : RNSVGRenderableManager
 
 @end

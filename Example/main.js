@@ -145,7 +145,7 @@ class SvgExample extends Component {
             this.state.scale.setValue(0);
             Animated.spring(this.state.scale, {
                 toValue: 1,
-                useNativeDriver: true
+                useNativeDriver: false
             }).start();
 
             this.setState({

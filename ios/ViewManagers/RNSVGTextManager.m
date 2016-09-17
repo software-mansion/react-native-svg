@@ -21,7 +21,6 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_EXPORT_VIEW_PROPERTY(alignment, CTTextAlignment)
-RCT_REMAP_VIEW_PROPERTY(frame, textFrame, RNSVGTextFrame)
 RCT_EXPORT_VIEW_PROPERTY(path, RNSVGBezier)
 
 @end

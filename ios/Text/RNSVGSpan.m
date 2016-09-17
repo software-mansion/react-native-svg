@@ -6,11 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGTSpan.h"
+#import "RNSVGSpan.h"
 #import "RNSVGBezierPath.h"
 #import <CoreText/CoreText.h>
 
-@implementation RNSVGTSpan
+@implementation RNSVGSpan
 
 - (CGPathRef)getPath:(CGContextRef)context
 {

@@ -12,18 +12,6 @@
 
 @implementation RNSVGText
 
-//static void RNSVGFreeTextFrame(RNSVGTextFrame frame)
-//{
-//    if (frame.count) {
-//        // We must release each line before freeing up this struct
-//        for (int i = 0; i < frame.count; i++) {
-//            CFRelease(frame.lines[i]);
-//        }
-//        free(frame.lines);
-//        free(frame.widths);
-//    }
-//}
-
 - (void)setAlignment:(CTTextAlignment)alignment
 {
     [self invalidate];

@@ -7,9 +7,9 @@
  */
 
 #import <QuartzCore/QuartzCore.h>
+#import <CoreText/CoreText.h>
 #import "RCTConvert+RNSVG.h"
 #import "RNSVGCGFloatArray.h"
-#import "RNSVGTextFrame.h"
 #import "RCTConvert.h"
 #import "RNSVGCGFCRule.h"
 
@@ -20,7 +20,7 @@
 + (CGPathRef)CGPath:(id)json;
 + (CTTextAlignment)CTTextAlignment:(id)json;
 + (RNSVGCGFCRule)RNSVGCGFCRule:(id)json;
-+ (RNSVGTextFrame)RNSVGTextFrame:(id)json;
++ (CTFontRef)RNSVGFont:(id)json;
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;
 
