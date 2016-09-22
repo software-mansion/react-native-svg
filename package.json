@@ -33,10 +33,5 @@
         "eslint": "^2.13.1",
         "eslint-plugin-react": "^4.3.0"
     },
-    "nativePackage": true,
-    "rnpm": {
-        "ios": {
-            "project": "ios/RNSVG.xcodeproj"
-        }
-    }
+    "nativePackage": true
 }
