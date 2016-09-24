@@ -331,6 +331,21 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
     @Override
     public int hitTest(Point point, View view, @Nullable Matrix matrix) {
+        //FLog.w(ReactConstants.TAG, "point("+point.x+","+point.y+") ["+mCanvasWidth+","+mCanvasHeight+"]");
+        RectF rectF = new RectF();
+        mPath.computeBounds(rectF, true);
+        //FLog.w(ReactConstants.TAG, "{l:"+rectF.left+",r:"+rectF.right+",t:"+rectF.top+",b:"+rectF.bottom+"}");
+        Region region = new Region();
+        region.setPath(mPath, new Region((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom));
+        if (region.contains(point.x, point.y)) {
+            return view.getId();
+        }else{
+            return -1;
+        }
+    }
+
+    @Override
+    public int hitTestOrigin(Point point, View view, @Nullable Matrix matrix) {
         Bitmap bitmap = Bitmap.createBitmap(
             mCanvasWidth,
             mCanvasHeight,
