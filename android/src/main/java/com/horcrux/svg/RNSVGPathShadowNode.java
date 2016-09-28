@@ -11,16 +11,7 @@ package com.horcrux.svg;
 
 import javax.annotation.Nullable;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.DashPathEffect;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.RectF;
-
-import android.graphics.Color;
+import android.graphics.*;
 import android.view.View;
 
 import com.facebook.common.logging.FLog;
@@ -344,7 +335,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         }
     }
 
-    @Override
+    //@Override
     public int hitTestOrigin(Point point, View view, @Nullable Matrix matrix) {
         Bitmap bitmap = Bitmap.createBitmap(
             mCanvasWidth,
