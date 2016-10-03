@@ -31,7 +31,8 @@
     "devDependencies": {
         "babel-eslint": "^6.1.2",
         "eslint": "^2.13.1",
-        "eslint-plugin-react": "^4.3.0"
+        "eslint-plugin-react": "^4.3.0",
+        "react-native": ">=0.33.0"
     },
     "nativePackage": true
 }
