@@ -53,6 +53,7 @@ public class RNSVGTextShadowNode extends RNSVGPathShadowNode {
     @ReactProp(name = "frame")
     public void setFrame(@Nullable ReadableMap frame) {
         mFrame = frame;
+        markUpdated();
     }
 
     @ReactProp(name = "alignment", defaultInt = TEXT_ALIGNMENT_LEFT)
