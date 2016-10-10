@@ -13,7 +13,7 @@ class Path extends Shape {
         d: React.PropTypes.oneOfType([
             React.PropTypes.string,
             React.PropTypes.instanceOf(SerializablePath)
-        ])
+        ]).isRequired
     };
 
     setNativeProps = (...args) => {
