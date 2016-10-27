@@ -554,6 +554,35 @@ Code explanation:
 
 ![RadialGradient](./screenShoots/radialgradient.png)
 
+#### Touch Events
+
+Touch events are supported in react-native-svg. These include:
+
+ - `disabled`
+ - `onPress`
+ - `onPressIn`
+ - `onPressOut`
+ - `onLongPress`
+ - `delayPressIn`
+ - `delayPressOut`
+ - `delayLongPress`
+
+You can use these events to provide interactivity to your react-native-svg components.
+
+```html
+<Circle
+    cx="50%"
+    cy="50%"
+    r="38%"
+    fill="red"
+    onPress={() => alert('Press on Circle')}
+/>
+```
+
+![TouchEvents](./screenShoots/touchevents.gif)
+
+For more examples of touch in action, checkout the [TouchEvents.js examples](Example/examples/TouchEvents.js).
+
 ### Run example:
 
 ```bash
