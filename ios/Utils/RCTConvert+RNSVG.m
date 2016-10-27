@@ -100,11 +100,7 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
     }
     
     NSDictionary *fontDict = dict[@"font"];
-    NSString *fontFamily = fontDict[@"fontFamily"];
-    
-    if (![[UIFont familyNames] containsObject:fontFamily]) {
-        fontFamily = nil;
-    }
+    NSString *fontFamily = fontDict[@"fontFamily"];   
 
     CTFontRef font = (__bridge CTFontRef)[RCTFont updateFont:nil withFamily:fontFamily size:fontDict[@"fontSize"] weight:fontDict[@"fontWeight"] style:fontDict[@"fontStyle"]
                                                       variant:nil scaleMultiplier:1.0];
