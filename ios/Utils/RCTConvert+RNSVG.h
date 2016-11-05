@@ -12,14 +12,17 @@
 #import "RNSVGCGFloatArray.h"
 #import "RCTConvert.h"
 #import "RNSVGCGFCRule.h"
+#import "RNSVGVBMOS.h"
+#import "RNSVGTextAnchor.h"
 
 @class RNSVGBrush;
 
 @interface RCTConvert (RNSVG)
 
 + (CGPathRef)CGPath:(id)json;
-+ (CTTextAlignment)CTTextAlignment:(id)json;
++ (RNSVGTextAnchor)RNSVGTextAnchor:(id)json;
 + (RNSVGCGFCRule)RNSVGCGFCRule:(id)json;
++ (RNSVGVBMOS)RNSVGVBMOS:(id)json;
 + (CTFontRef)RNSVGFont:(id)json;
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;

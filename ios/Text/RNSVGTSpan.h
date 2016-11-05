@@ -7,10 +7,11 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "RNSVGGroup.h"
-#import "RNSVGTextAnchor.h"
+#import <CoreText/CoreText.h>
+#import "RNSVGPath.h"
+#import "RNSVGText.h"
 
-@interface RNSVGText : RNSVGGroup
+@interface RNSVGTSpan : RNSVGPath
 
 @property (nonatomic, assign) RNSVGTextAnchor textAnchor;
 @property (nonatomic, assign) NSArray<NSNumber *> *deltaX;
@@ -18,8 +19,6 @@
 @property (nonatomic, strong) NSString *positionX;
 @property (nonatomic, strong) NSString *positionY;
 @property (nonatomic, assign) NSDictionary *font;
-
-@property (nonatomic, assign) CGFloat offsetX;
-@property (nonatomic, assign) CGFloat offsetY;
+@property (nonatomic, strong) NSString *content;
 
 @end

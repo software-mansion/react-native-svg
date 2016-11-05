@@ -6,53 +6,20 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGText.h"
+
+#import "RNSVGTSpan.h"
 #import "RNSVGBezierPath.h"
-#import "RCTConvert+RNSVG.h"
-#import <CoreText/CoreText.h>
 
-@implementation RNSVGText
+@class RNSVGText;
+@implementation RNSVGTSpan
 
-- (void)setTextAnchor:(RNSVGTextAnchor)textAnchor
-{
-    [self invalidate];
-    _textAnchor = textAnchor;
-}
-
-//- (void)renderLayerTo:(CGContextRef)context
-//{
-    //CGFloat shift = [self getShift:context path:nil];
-    // Translate path by alignment offset
-    //CGContextSaveGState(context);
-    //CGContextConcatCTM(context, CGAffineTransformMakeTranslation(-shift, 0));
-    //[super renderLayerTo:context];
-    //CGContextRestoreGState(context);
-//}
-
-//- (CGPathRef)getPath:(CGContextRef)context
-//{
-//    CGMutablePathRef path = CGPathCreateMutable();
-    
-//        CGPathRef collection = [self getPathFromSuper:context];
-//        
-//        // get alignment shift and Translate CGPath by it.
-//        CGFloat shift = [self getShift:context path:collection];
-//        CGAffineTransform align = CGAffineTransformMakeTranslation(shift, 0);
-//        CGPathAddPath(path, &align, collection);
-//        CGPathRelease(collection);
-    
-//    return (CGPathRef)CFAutorelease(path);
-//}
-
-- (CGPathRef)getContentPath:(CGContextRef)context
+- (CGPathRef)getPath:(CGContextRef)context
 {
     [self setBoundingBox:CGContextGetClipBoundingBox(context)];
     CGMutablePathRef path = CGPathCreateMutable();
     
 //    if (![self.content isEqualToString:@""]) {
-//        CGFontRef *font = [RCTConvert RNSVGFont:self.font];
-//        NSLog(@"font: %@", font);
-        // Create a dictionary for this font
+//        // Create a dictionary for this font
 //        CFDictionaryRef attributes = (__bridge CFDictionaryRef)@{
 //                                                                 (NSString *)kCTFontAttributeName: (__bridge id)self.font,
 //                                                                 (NSString *)kCTForegroundColorFromContextAttributeName: @YES
@@ -91,40 +58,47 @@
 //        text.offsetX += self.dx;
 //        text.offsetY += self.dy;
 //    }
+    
+    return (CGPathRef)CFAutorelease(path);
+}
 
+- (CGMutablePathRef)setLinePath:(CTLineRef)line
+{
+    CGAffineTransform upsideDown = CGAffineTransformMakeScale(1.0, -1.0);
+    CGMutablePathRef path = CGPathCreateMutable();
+    
+    CFArrayRef glyphRuns = CTLineGetGlyphRuns(line);
+    CTRunRef run = CFArrayGetValueAtIndex(glyphRuns, 0);
+    
+    CFIndex runGlyphCount = CTRunGetGlyphCount(run);
+    CGPoint positions[runGlyphCount];
+    CGGlyph glyphs[runGlyphCount];
+    
+    // Grab the glyphs, positions, and font
+    CTRunGetPositions(run, CFRangeMake(0, 0), positions);
+    CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
+    CFDictionaryRef attributes = CTRunGetAttributes(run);
+    
+    CTFontRef runFont = CFDictionaryGetValue(attributes, kCTFontAttributeName);
+    
+    for(CFIndex i = 0; i < runGlyphCount; ++i) {
+        CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[i], nil);
+        CGPoint point = positions[i];
+        
+        if (letter) {
+            CGAffineTransform transform;
+            
+            transform = CGAffineTransformTranslate(upsideDown, point.x, point.y);
+            
+            
+            CGPathAddPath(path, &transform, letter);
+        }
+        
+        CGPathRelease(letter);
+    }
     
     return path;
 }
 
-- (CGPathRef)getPathFromSuper:(CGContextRef)context
-{
-    CGPathRef path = [super getPath:context];
-    // reset offsetX and offsetY
-    self.offsetX = self.offsetY = 0;
-    return path;
-}
-
-//- (CGFloat)getShift:(CGContextRef)context path:(CGPathRef)path
-//{
-//    if (!path) {
-//        path = [self getPathFromSuper:context];
-//    }
-//    
-//    CGFloat width = CGPathGetBoundingBox(path).size.width;
-//    CGFloat shift;
-//    switch (self.alignment) {
-//        case kCTTextAlignmentRight:
-//            shift = width;
-//            break;
-//        case kCTTextAlignmentCenter:
-//            shift = width / 2;
-//            break;
-//        default:
-//            shift = 0;
-//            break;
-//    }
-//    
-//    return shift;
-//}
 
 @end

@@ -17,6 +17,7 @@ import RadialGradient from './elements/RadialGradient';
 import Stop from './elements/Stop';
 import ClipPath from './elements/ClipPath';
 import TSpan from './elements/TSpan';
+import TextPath from './elements/TextPath';
 
 export {
     Svg,
@@ -37,7 +38,8 @@ export {
     RadialGradient,
     Stop,
     ClipPath,
-    TSpan
+    TSpan,
+    TextPath
 };
 
 export default Svg;

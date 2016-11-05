@@ -12,8 +12,6 @@
 #import "RNSVGPattern.h"
 #import "RNSVGSolidColorBrush.h"
 #import "RCTLog.h"
-#import "RNSVGCGFCRule.h"
-#import "RNSVGVBMOS.h"
 #import "RCTFont.h"
 
 @implementation RCTConvert (RNSVG)
@@ -65,14 +63,6 @@
     return (CGPathRef)CFAutorelease(path);
 }
 
-RCT_ENUM_CONVERTER(CTTextAlignment, (@{
-                                       @"auto": @(kCTTextAlignmentNatural),
-                                       @"left": @(kCTTextAlignmentLeft),
-                                       @"center": @(kCTTextAlignmentCenter),
-                                       @"right": @(kCTTextAlignmentRight),
-                                       @"justify": @(kCTTextAlignmentJustified),
-                                       }), kCTTextAlignmentNatural, integerValue)
-
 RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
                                      @"evenodd": @(kRNSVGCGFCRuleEvenodd),
                                      @"nonzero": @(kRNSVGCGFCRuleNonzero),
@@ -84,15 +74,33 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
                                   @"none": @(kRNSVGVBMOSNone)
                                   }), kRNSVGVBMOSMeet, intValue)
 
+RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
+                                        @"auto": @(kRNSVGTextAnchorAuto),
+                                        @"start": @(kRNSVGTextAnchorStart),
+                                        @"middle": @(kRNSVGTextAnchorMiddle),
+                                        @"end": @(kRNSVGTextAnchorEnd)
+                                       }), kRNSVGTextAnchorAuto, intValue)
 
 + (CTFontRef)RNSVGFont:(id)json
 {
     NSDictionary *dict = [self NSDictionary:json];
     
     NSString *fontFamily = dict[@"fontFamily"];
-    if (![[UIFont familyNames] containsObject:fontFamily]) {
-        fontFamily = nil;
+    BOOL fontFound = NO;
+    NSArray *supportedFontFamilyNames = [UIFont familyNames];
+    
+    if ([supportedFontFamilyNames containsObject:fontFamily]) {
+        fontFound = YES;
+    } else {
+        for (NSString *fontFamilyName in supportedFontFamilyNames) {
+            if ([[UIFont fontNamesForFamilyName: fontFamilyName] containsObject:fontFamily]) {
+                fontFound = YES;
+                break;
+            }
+        }
     }
+    
+    fontFamily = fontFound ? fontFamily : nil;
     
     return (__bridge CTFontRef)[RCTFont updateFont:nil withFamily:fontFamily size:dict[@"fontSize"] weight:dict[@"fontWeight"] style:dict[@"fontStyle"]                                                     variant:nil scaleMultiplier:1.0];
 }

@@ -1,27 +1,43 @@
 import React, { PropTypes, Component } from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
-import {numberProp, pathProps} from '../lib/props';
-import {TSpanAttributes} from '../lib/attributes';
+import extractText from '../lib/extract/extractText';
+import {numberProp, pathProps, fontProps} from '../lib/props';
+import {TSpanAttibutes} from '../lib/attributes';
+import Shape from './Shape';
 
 // TSpan elements are shadow components
-class TSpan extends Component {
+class TSpan extends Shape {
     static displayName = 'TSpan';
 
     static propTypes = {
         ...pathProps,
+        ...fontProps,
         dx: numberProp,
         dy: numberProp,
-        textAnchor: PropTypes.oneOf(['start', 'middle', 'end']),
-        fontFamily: PropTypes.string,
-        fontSize: numberProp,
-        fontWeight: PropTypes.string,
-        fontStyle: PropTypes.string,
-        font: PropTypes.object
+        textAnchor: PropTypes.oneOf(['start', 'middle', 'end'])
+    };
+
+    setNativeProps = (...args) => {
+        this.root.setNativeProps(...args);
     };
 
     render() {
-        return null;
+        let props = this.props;
+        return <RNSVGTSpan
+            ref={ele => {this.root = ele;}}
+            {...this.extractProps({
+                ...props,
+                x: null,
+                y: null
+            })}
+            {...extractText(props)}
+        />;
     }
 }
+
+const RNSVGTSpan = createReactNativeComponentClass({
+    validAttributes: TSpanAttibutes,
+    uiViewClassName: 'RNSVGTSpan'
+});
 
 export default TSpan;

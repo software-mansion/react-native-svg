@@ -9,7 +9,8 @@ import Svg, {
     Defs,
     Path,
     G,
-    TSpan
+    TSpan,
+    TextPath
 } from 'react-native-svg';
 
 class TextExample extends Component{
@@ -133,11 +134,21 @@ class TextPath extends Component{
             height="60"
             width="200"
         >
+            <Defs>
+                <Path
+                    id="path"
+                    d={path}
+                />
+            </Defs>
             <G y="20">
                 <Text
                     fill="blue"
-                    path={path}
-                >We go up, then we go down, then up again</Text>
+                >
+                    <TextPath href="#path">
+                        We go up, then we go down,
+                        <TSpan fill="red">then up again</TSpan>
+                    </TextPath>
+                </Text>
                 <Path
                     d={path}
                     fill="none"

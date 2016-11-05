@@ -4,6 +4,7 @@ import extractText from '../lib/extract/extractText';
 import {numberProp, pathProps, fontProps} from '../lib/props';
 import {TextAttributes} from '../lib/attributes';
 import Shape from './Shape';
+import TSpan from './TSpan';
 
 class Text extends Shape {
     static displayName = 'Text';
@@ -21,7 +22,7 @@ class Text extends Shape {
     };
 
     render() {
-        let props = this.props;
+        const props = this.props;
 
         return <RNSVGText
             ref={ele => {this.root = ele;}}
@@ -30,7 +31,7 @@ class Text extends Shape {
                 x: null,
                 y: null
             })}
-            {...extractText(props)}
+            {...extractText(props, true)}
         />;
     }
 }
