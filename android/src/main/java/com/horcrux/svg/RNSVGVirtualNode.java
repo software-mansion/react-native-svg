@@ -27,10 +27,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-/**
- * Base class for RNSVGView virtual nodes: {@link RNSVGGroupShadowNode}, {@link RNSVGPathShadowNode} and
- * indirectly for {@link RNSVGTextShadowNode}.
- */
 public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     protected static final float MIN_OPACITY_FOR_DRAW = 0.01f;
@@ -42,6 +38,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     protected @Nullable Path mClipPath;
     protected @Nullable String mClipPathRef;
+
     private static final int PATH_TYPE_CLOSE = 1;
     private static final int PATH_TYPE_CURVETO = 3;
     private static final int PATH_TYPE_LINETO = 2;
@@ -49,6 +46,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     private static final int CLIP_RULE_EVENODD = 0;
     private static final int CLIP_RULE_NONZERO = 1;
+
     protected final float mScale;
     private float[] mClipData;
     private int mClipRule;
@@ -65,6 +63,11 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     public RNSVGVirtualNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
+    }
+
+    @Override
+    public boolean isVirtual() {
+        return true;
     }
 
     public abstract void draw(Canvas canvas, Paint paint, float opacity);
@@ -182,20 +185,6 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     }
 
     /**
-     * Returns the floor modulus of the float arguments. Java modulus will return a negative remainder
-     * when the divisor is negative. Modulus should always be positive. This mimics the behavior of
-     * Math.floorMod, introduced in Java 8.
-     */
-    private float modulus(float x, float y) {
-        float remainder = x % y;
-        float ret = remainder;
-        if (remainder < 0) {
-            ret += y;
-        }
-        return ret;
-    }
-
-    /**
      * Creates a {@link Path} from an array of instructions constructed by JS
      * (see RNSVGSerializablePath.js). Each instruction starts with a type (see PATH_TYPE_*) followed
      * by arguments for that instruction. For example, to create a line the instruction will be
@@ -254,9 +243,11 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         }
     }
 
-    abstract public int hitTest(Point point, View view, @Nullable Matrix matrix);
+    abstract public int hitTest(Point point, @Nullable Matrix matrix);
 
-    abstract public int hitTest(Point point, View view);
+    public int hitTest(Point point) {
+        return this.hitTest(point, null);
+    }
 
     public boolean isResponsible() {
         return mResponsible;

@@ -10,10 +10,15 @@
 package com.horcrux.svg;
 
 import android.graphics.Bitmap;
+import android.util.Log;
+import android.util.SparseArray;
+
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
+import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.ViewManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,14 +30,10 @@ import javax.annotation.Nullable;
  * ViewManager for RNSVGSvgView React views. Renders as a {@link RNSVGSvgView} and handles
  * invalidating the native view on shadow view updates happening in the underlying tree.
  */
-public class RNSVGSvgViewManager extends ViewGroupManager<RNSVGSvgView> {
+public class RNSVGSvgViewManager extends BaseViewManager<RNSVGSvgView, RNSVGSvgViewShadowNode> {
 
     private static final String REACT_CLASS = "RNSVGSvgView";
-    // TODO: use an ArrayList to connect RNSVGSvgViewShadowNode with RNSVGSvgView, not sure if there will be a race condition.
-    // TODO: find a better way to replace this
-    private ArrayList<RNSVGSvgViewShadowNode> mSvgShadowNodes = new ArrayList<>();
-
-    public static final int COMMAND_TO_DATA_URL = 100;
+    private static final int COMMAND_TO_DATA_URL = 100;
 
     @Override
     public String getName() {
@@ -71,28 +72,23 @@ public class RNSVGSvgViewManager extends ViewGroupManager<RNSVGSvgView> {
         }
     }
 
-
-    @Override
-    public RNSVGSvgViewShadowNode createShadowNodeInstance() {
-        RNSVGSvgViewShadowNode node = new RNSVGSvgViewShadowNode();
-        mSvgShadowNodes.add(node);
-        return node;
-    }
-
     @Override
     public Class<RNSVGSvgViewShadowNode> getShadowNodeClass() {
         return RNSVGSvgViewShadowNode.class;
     }
 
     @Override
+    public RNSVGSvgViewShadowNode createShadowNodeInstance() {
+        return new RNSVGSvgViewShadowNode();
+    }
+
+    @Override
     protected RNSVGSvgView createViewInstance(ThemedReactContext reactContext) {
-        RNSVGSvgView svgView = new RNSVGSvgView(reactContext);
-        svgView.setShadowNode(mSvgShadowNodes.remove(0));
-        return svgView;
+        return new RNSVGSvgView(reactContext);
     }
 
     @Override
     public void updateExtraData(RNSVGSvgView root, Object extraData) {
-        root.setBitmap((Bitmap) extraData);
+        root.setSurfaceTextureListener((RNSVGSvgViewShadowNode) extraData);
     }
 }

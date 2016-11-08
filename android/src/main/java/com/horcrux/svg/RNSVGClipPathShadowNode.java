@@ -9,9 +9,6 @@
 
 package com.horcrux.svg;
 
-import android.graphics.Point;
-import android.view.View;
-
 /**
  * Shadow node for virtual RNSVGClipPath view
  */
@@ -20,10 +17,5 @@ public class RNSVGClipPathShadowNode extends RNSVGGroupShadowNode {
     @Override
     protected void saveDefinition() {
         getSvgShadowNode().defineClipPath(this, mName);
-    }
-
-    @Override
-    public int hitTest(Point point, View view) {
-        return -1;
     }
 }

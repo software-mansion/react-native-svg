@@ -330,7 +330,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     }
 
     @Override
-    public int hitTest(Point point, View view, @Nullable Matrix matrix) {
+    public int hitTest(Point point, @Nullable Matrix matrix) {
         Bitmap bitmap = Bitmap.createBitmap(
             mCanvasWidth,
             mCanvasHeight,
@@ -356,19 +356,15 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         canvas.setBitmap(bitmap);
         try {
             if (bitmap.getPixel(point.x, point.y) != 0) {
-                return view.getId();
+                return getReactTag();
             }
         } catch (Exception e) {
+
             return -1;
         } finally {
             bitmap.recycle();
         }
         return -1;
-    }
-
-    @Override
-    public int hitTest(Point point, View view) {
-        return this.hitTest(point, view, null);
     }
 
     protected void setHitTestFill(Paint paint) {

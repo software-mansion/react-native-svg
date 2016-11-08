@@ -71,7 +71,7 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
     }
 
     @Override
-    public int hitTest(Point point, View view, @Nullable Matrix matrix) {
+    public int hitTest(Point point, @Nullable Matrix matrix) {
         int viewTag = -1;
         Matrix combinedMatrix = new Matrix();
 
@@ -89,19 +89,13 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
 
             RNSVGVirtualNode node = (RNSVGVirtualNode) child;
 
-            View childView = ((ViewGroup) view).getChildAt(i);
-            viewTag = node.hitTest(point, childView, combinedMatrix);
+            viewTag = node.hitTest(point, combinedMatrix);
             if (viewTag != -1) {
-                return (node.isResponsible() || viewTag != childView.getId()) ? viewTag : view.getId();
+                return (node.isResponsible() || viewTag != child.getReactTag()) ? viewTag : getReactTag();
             }
         }
 
         return viewTag;
-    }
-
-    @Override
-    public int hitTest(Point point, View view) {
-        return this.hitTest(point, view, null);
     }
 
     protected void saveDefinition() {

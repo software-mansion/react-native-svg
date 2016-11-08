@@ -36,12 +36,7 @@ public class RNSVGDefinitionShadowNode extends RNSVGVirtualNode {
     }
 
     @Override
-    public int hitTest(Point point, View view, Matrix matrix) {
-        return -1;
-    }
-
-    @Override
-    public int hitTest(Point point, View view) {
+    public int hitTest(Point point, Matrix matrix) {
         return -1;
     }
 
