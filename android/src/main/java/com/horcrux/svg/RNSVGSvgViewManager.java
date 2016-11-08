@@ -9,18 +9,11 @@
 
 package com.horcrux.svg;
 
-import android.graphics.Bitmap;
-import android.util.Log;
-import android.util.SparseArray;
-
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.ViewGroupManager;
-import com.facebook.react.uimanager.ViewManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

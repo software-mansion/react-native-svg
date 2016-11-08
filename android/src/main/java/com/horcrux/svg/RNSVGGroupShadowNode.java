@@ -14,8 +14,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.ReactShadowNode;
@@ -44,6 +42,7 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
 
                 child.mergeProperties(this, mOwnedPropList, true);
                 child.draw(canvas, paint, opacity * mOpacity);
+                child.markUpdateSeen();
 
                 if (child.isResponsible()) {
                     svg.enableTouchEvents();

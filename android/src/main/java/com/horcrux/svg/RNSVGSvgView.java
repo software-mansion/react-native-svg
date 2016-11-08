@@ -9,27 +9,17 @@
 
 package com.horcrux.svg;
 
-import javax.annotation.Nullable;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.TextureView;
 
 import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.touch.OnInterceptTouchEventListener;
-import com.facebook.react.touch.ReactInterceptingViewGroup;
-import com.facebook.react.uimanager.TouchTargetHelper;
 import com.facebook.react.uimanager.UIManagerModule;
-import com.facebook.react.uimanager.events.NativeGestureUtil;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.uimanager.events.TouchEvent;
 import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
@@ -136,7 +126,6 @@ public class RNSVGSvgView extends TextureView {
             dispatch(ev, TouchEventType.END);
             mTargetTag = -1;
         } else if (action == MotionEvent.ACTION_MOVE) {
-            Log.e("asdasd", "asdasd");
             // Update pointer position for current gesture
             dispatch(ev, TouchEventType.MOVE);
         } else if (action == MotionEvent.ACTION_POINTER_DOWN) {

@@ -10,13 +10,9 @@
 package com.horcrux.svg;
 
 import android.view.View;
-import android.view.ViewGroup;
 
-import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.LayoutShadowNode;
-import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewManager;
 
 /**

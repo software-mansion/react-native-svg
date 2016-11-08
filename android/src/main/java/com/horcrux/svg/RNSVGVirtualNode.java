@@ -16,7 +16,6 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Region;
-import android.view.View;
 
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
@@ -144,6 +143,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         } else {
             mMatrix = null;
         }
+
         markUpdated();
     }
 

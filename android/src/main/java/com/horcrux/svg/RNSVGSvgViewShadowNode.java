@@ -16,14 +16,12 @@ import android.graphics.Point;
 import android.util.Base64;
 import android.util.SparseArray;
 import android.view.TextureView;
-import android.view.ViewGroup;
 import android.graphics.Color;
 import android.view.Surface;
 import android.graphics.PorterDuff;
 import android.graphics.SurfaceTexture;
 
 import com.facebook.common.logging.FLog;
-import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ReactShadowNode;
@@ -100,6 +98,7 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode implements TextureV
             child.setupDimensions(canvas);
             child.saveDefinition();
             child.draw(canvas, paint, 1f);
+            child.markUpdateSeen();
 
             if (child.isResponsible() && !mResponsible) {
                 mResponsible = true;
