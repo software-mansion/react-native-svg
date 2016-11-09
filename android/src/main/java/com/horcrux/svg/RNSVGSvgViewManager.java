@@ -46,8 +46,9 @@ public class RNSVGSvgViewManager extends BaseViewManager<RNSVGSvgView, RNSVGSvgV
 
     @Override
     @Nullable
-    public Map getExportedCustomDirectEventTypeConstants() {
-        MapBuilder.Builder builder = MapBuilder.builder();
+    public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
+        MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
+
         for (RNSVGSvgView.Events event : RNSVGSvgView.Events.values()) {
             builder.put(event.toString(), MapBuilder.of("registrationName", event.toString()));
         }
