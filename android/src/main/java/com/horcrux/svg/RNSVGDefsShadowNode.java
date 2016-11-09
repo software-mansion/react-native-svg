@@ -20,7 +20,6 @@ public class RNSVGDefsShadowNode extends RNSVGDefinitionShadowNode {
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
         traverseChildren(new NodeRunnable() {
-            @Override
             public boolean run(RNSVGVirtualNode node) {
                 node.saveDefinition();
                 return true;

@@ -35,7 +35,6 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
             clip(canvas, paint);
 
             traverseChildren(new NodeRunnable() {
-                @Override
                 public boolean run(RNSVGVirtualNode node) {
                     node.setupDimensions(canvas);
 
@@ -59,7 +58,6 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
         final Path path = new Path();
 
         traverseChildren(new NodeRunnable() {
-            @Override
             public boolean run(RNSVGVirtualNode node) {
                 node.setupDimensions(canvas);
                 path.addPath(node.getPath(canvas, paint));
@@ -103,7 +101,6 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
         }
 
         traverseChildren(new NodeRunnable() {
-            @Override
             public boolean run(RNSVGVirtualNode node) {
                 node.saveDefinition();
                 return true;
@@ -114,7 +111,6 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
     @Override
     public void mergeProperties(final RNSVGVirtualNode target, final ReadableArray mergeList) {
         traverseChildren(new NodeRunnable() {
-            @Override
             public boolean run(RNSVGVirtualNode node) {
                 node.mergeProperties(target, mergeList);
                 return true;
@@ -125,7 +121,6 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
     @Override
     public void resetProperties() {
         traverseChildren(new NodeRunnable() {
-            @Override
             public boolean run(RNSVGVirtualNode node) {
                 node.resetProperties();
                 return true;
