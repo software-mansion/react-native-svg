@@ -274,11 +274,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     }
 
     protected void setupDimensions(Canvas canvas) {
-        Rect mCanvasClipBounds = canvas.getClipBounds();
-        mCanvasX = mCanvasClipBounds.left;
-        mCanvasY = mCanvasClipBounds.top;
-        mCanvasWidth = canvas.getWidth();
-        mCanvasHeight = canvas.getHeight();
+        setupDimensions(canvas.getClipBounds());
     }
 
     protected void setupDimensions(Rect rect) {
@@ -299,4 +295,21 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     abstract public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList);
 
     abstract public void resetProperties();
+
+    protected interface NodeRunnable {
+        boolean run(RNSVGVirtualNode node);
+    }
+
+    protected void traverseChildren(NodeRunnable runner) {
+        for (int i = 0; i < getChildCount(); i++) {
+            ReactShadowNode child = getChildAt(i);
+            if (!(child instanceof RNSVGVirtualNode)) {
+                continue;
+            }
+
+            if (!runner.run((RNSVGVirtualNode) child)) {
+                break;
+            }
+        }
+    }
 }

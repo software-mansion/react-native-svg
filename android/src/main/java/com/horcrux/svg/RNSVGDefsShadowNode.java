@@ -19,18 +19,12 @@ public class RNSVGDefsShadowNode extends RNSVGDefinitionShadowNode {
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
-        int count = saveAndSetupCanvas(canvas);
-        clip(canvas, paint);
-
-        for (int i = 0; i < getChildCount(); i++) {
-            if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
-                continue;
+        traverseChildren(new NodeRunnable() {
+            @Override
+            public boolean run(RNSVGVirtualNode node) {
+                node.saveDefinition();
+                return true;
             }
-
-            RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
-            child.saveDefinition();
-        }
-
-        restoreCanvas(canvas, count);
+        });
     }
 }
