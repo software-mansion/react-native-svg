@@ -34,6 +34,26 @@ public class RNSVGSvgViewManager extends BaseViewManager<RNSVGSvgView, RNSVGSvgV
     }
 
     @Override
+    public Class<RNSVGSvgViewShadowNode> getShadowNodeClass() {
+        return RNSVGSvgViewShadowNode.class;
+    }
+
+    @Override
+    public RNSVGSvgViewShadowNode createShadowNodeInstance() {
+        return new RNSVGSvgViewShadowNode();
+    }
+
+    @Override
+    protected RNSVGSvgView createViewInstance(ThemedReactContext reactContext) {
+        return new RNSVGSvgView(reactContext);
+    }
+
+    @Override
+    public void updateExtraData(RNSVGSvgView root, Object extraData) {
+        root.setSurfaceTextureListener((RNSVGSvgViewShadowNode) extraData);
+    }
+
+    @Override
     public @Nullable Map<String, Integer> getCommandsMap() {
         Map<String, Integer> commandsMap = super.getCommandsMap();
         if (commandsMap == null) {
@@ -64,25 +84,5 @@ public class RNSVGSvgViewManager extends BaseViewManager<RNSVGSvgView, RNSVGSvgV
                 root.onDataURL();
                 break;
         }
-    }
-
-    @Override
-    public Class<RNSVGSvgViewShadowNode> getShadowNodeClass() {
-        return RNSVGSvgViewShadowNode.class;
-    }
-
-    @Override
-    public RNSVGSvgViewShadowNode createShadowNodeInstance() {
-        return new RNSVGSvgViewShadowNode();
-    }
-
-    @Override
-    protected RNSVGSvgView createViewInstance(ThemedReactContext reactContext) {
-        return new RNSVGSvgView(reactContext);
-    }
-
-    @Override
-    public void updateExtraData(RNSVGSvgView root, Object extraData) {
-        root.setSurfaceTextureListener((RNSVGSvgViewShadowNode) extraData);
     }
 }
