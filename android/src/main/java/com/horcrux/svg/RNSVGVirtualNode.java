@@ -246,7 +246,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     abstract public int hitTest(Point point, @Nullable Matrix matrix);
 
     public int hitTest(Point point) {
-        return this.hitTest(point, null);
+        return hitTest(point, null);
     }
 
     public boolean isResponsible() {
