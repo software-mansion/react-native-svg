@@ -11,22 +11,14 @@ package com.horcrux.svg;
 
 import javax.annotation.Nullable;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Region;
-import android.graphics.Typeface;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**

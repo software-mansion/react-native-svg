@@ -19,14 +19,14 @@
 + (CGPathRef)CGPath:(id)json
 {
     NSArray *arr = [self NSNumberArray:json];
-    
+
     NSUInteger count = [arr count];
-    
+
 #define NEXT_VALUE [self double:arr[i++]]
-    
+
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, nil, 0, 0);
-    
+
     @try {
         NSUInteger i = 0;
         while (i < count) {
@@ -59,7 +59,7 @@
         CGPathRelease(path);
         return nil;
     }
-    
+
     return (CGPathRef)CFAutorelease(path);
 }
 
@@ -84,24 +84,35 @@ RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
 + (CTFontRef)RNSVGFont:(id)json
 {
     NSDictionary *dict = [self NSDictionary:json];
-    
-    NSString *fontFamily = dict[@"fontFamily"];
+
+    NSDictionary *fontDict = dict[@"font"];
+    NSString *fontFamily = fontDict[@"fontFamily"];
+
     BOOL fontFound = NO;
     NSArray *supportedFontFamilyNames = [UIFont familyNames];
-    
+
     if ([supportedFontFamilyNames containsObject:fontFamily]) {
-        fontFound = YES;
+      fontFound = YES;
     } else {
-        for (NSString *fontFamilyName in supportedFontFamilyNames) {
-            if ([[UIFont fontNamesForFamilyName: fontFamilyName] containsObject:fontFamily]) {
-                fontFound = YES;
-                break;
-            }
+      for (NSString *fontFamilyName in supportedFontFamilyNames) {
+        if ([[UIFont fontNamesForFamilyName: fontFamilyName] containsObject:fontFamily]) {
+          fontFound = YES;
+          break;
         }
+      }
     }
-    
+
     fontFamily = fontFound ? fontFamily : nil;
-    
+
+    CTFontRef font = (__bridge CTFontRef)[RCTFont updateFont:nil withFamily:fontFamily size:fontDict[@"fontSize"] weight:fontDict[@"fontWeight"] style:fontDict[@"fontStyle"]
+                                                      variant:nil scaleMultiplier:1.0];
+    if (!font) {
+        return frame;
+
+    }
+
+    fontFamily = fontFound ? fontFamily : nil;
+
     return (__bridge CTFontRef)[RCTFont updateFont:nil withFamily:fontFamily size:dict[@"fontSize"] weight:dict[@"fontWeight"] style:dict[@"fontStyle"]                                                     variant:nil scaleMultiplier:1.0];
 }
 
@@ -109,11 +120,11 @@ RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
 {
     NSArray *arr = [self NSNumberArray:json];
     NSUInteger count = arr.count;
-    
+
     RNSVGCGFloatArray array;
     array.count = count;
     array.array = nil;
-    
+
     if (count) {
         // Ideally, these arrays should already use the same memory layout.
         // In that case we shouldn't need this new malloc.
@@ -122,7 +133,7 @@ RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
             array.array[i] = [arr[i] doubleValue];
         }
     }
-    
+
     return array;
 }
 
@@ -130,7 +141,7 @@ RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
 {
     NSArray *arr = [self NSArray:json];
     NSUInteger type = [self NSUInteger:arr.firstObject];
-    
+
     switch (type) {
         case 0: // solid color
             // These are probably expensive allocations since it's often the same value.
@@ -147,11 +158,11 @@ RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
 + (NSArray *)RNSVGBezier:(id)json
 {
     NSArray *arr = [self NSNumberArray:json];
-    
+
     NSMutableArray<NSArray *> *beziers = [[NSMutableArray alloc] init];
-    
+
     NSUInteger count = [arr count];
-    
+
 #define NEXT_VALUE [self double:arr[i++]]
     @try {
         NSValue *startPoint = [NSValue valueWithCGPoint: CGPointMake(0, 0)];
@@ -197,7 +208,7 @@ RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
         RCTLogError(@"Invalid RNSVGBezier format: %@", arr);
         return nil;
     }
-    
+
     return beziers;
 }
 
@@ -235,15 +246,15 @@ RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
     RNSVGCGFloatArray colorsAndOffsets = [self RNSVGCGFloatArray:arr];
     size_t stops = colorsAndOffsets.count / 5;
     CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
-    
+
     CGGradientRef gradient = CGGradientCreateWithColorComponents(
                                                                  rgb,
                                                                  colorsAndOffsets.array,
                                                                  colorsAndOffsets.array + stops * 4,
                                                                  stops
                                                                  );
-    
-    
+
+
     CGColorSpaceRelease(rgb);
     free(colorsAndOffsets.array);
     return (CGGradientRef)CFAutorelease(gradient);
