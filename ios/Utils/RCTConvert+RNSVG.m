@@ -12,7 +12,6 @@
 #import "RNSVGPattern.h"
 #import "RNSVGSolidColorBrush.h"
 #import "RCTLog.h"
-#import "RCTFont.h"
 
 @implementation RCTConvert (RNSVG)
 
@@ -80,41 +79,6 @@ RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
                                         @"middle": @(kRNSVGTextAnchorMiddle),
                                         @"end": @(kRNSVGTextAnchorEnd)
                                        }), kRNSVGTextAnchorAuto, intValue)
-
-+ (CTFontRef)RNSVGFont:(id)json
-{
-    NSDictionary *dict = [self NSDictionary:json];
-
-    NSDictionary *fontDict = dict[@"font"];
-    NSString *fontFamily = fontDict[@"fontFamily"];
-
-    BOOL fontFound = NO;
-    NSArray *supportedFontFamilyNames = [UIFont familyNames];
-
-    if ([supportedFontFamilyNames containsObject:fontFamily]) {
-      fontFound = YES;
-    } else {
-      for (NSString *fontFamilyName in supportedFontFamilyNames) {
-        if ([[UIFont fontNamesForFamilyName: fontFamilyName] containsObject:fontFamily]) {
-          fontFound = YES;
-          break;
-        }
-      }
-    }
-
-    fontFamily = fontFound ? fontFamily : nil;
-
-    CTFontRef font = (__bridge CTFontRef)[RCTFont updateFont:nil withFamily:fontFamily size:fontDict[@"fontSize"] weight:fontDict[@"fontWeight"] style:fontDict[@"fontStyle"]
-                                                      variant:nil scaleMultiplier:1.0];
-    if (!font) {
-        return frame;
-
-    }
-
-    fontFamily = fontFound ? fontFamily : nil;
-
-    return (__bridge CTFontRef)[RCTFont updateFont:nil withFamily:fontFamily size:dict[@"fontSize"] weight:dict[@"fontWeight"] style:dict[@"fontStyle"]                                                     variant:nil scaleMultiplier:1.0];
-}
 
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json
 {

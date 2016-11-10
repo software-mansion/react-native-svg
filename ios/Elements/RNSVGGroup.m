@@ -21,12 +21,27 @@
         }
         return YES;
     }];
-
+    
     [self traverseSubviews:^(RNSVGNode *node) {
         [node mergeProperties:self mergeList:self.ownedPropList inherited:YES];
         [node renderTo:context];
+        
+        if ([node isKindOfClass: [RNSVGRenderable class]]) {
+            RNSVGRenderable *renderable = node;
+            [self concatLayoutBoundingBox:[renderable getLayoutBoundingBox]];
+        }
         return YES;
     }];
+}
+
+- (void)pathRenderLayerTo:(CGContextRef)context
+{
+    [super renderLayerTo:context];
+}
+
+- (void)concatLayoutBoundingBox:(CGRect)boundingBox
+{
+    [self setLayoutBoundingBox:CGRectUnion(boundingBox, [self getLayoutBoundingBox])];
 }
 
 - (CGPathRef)getPath:(CGContextRef)context

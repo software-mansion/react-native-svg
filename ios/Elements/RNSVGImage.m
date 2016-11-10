@@ -126,13 +126,15 @@
     viewBox.height = [NSString stringWithFormat:@"%f", rectHeight];
     viewBox.align = self.align;
     viewBox.meetOrSlice = self.meetOrSlice;
-    [viewBox setBoundingBox:CGRectMake(0, 0, rectWidth, rectHeight)];
-    CGAffineTransform transform = [viewBox getTransform];
     
+    [viewBox setContextBoundingBox:CGRectMake(0, 0, rectWidth, rectHeight)];
+    
+    CGAffineTransform transform = [viewBox getTransform];
     renderRect = CGRectApplyAffineTransform(renderRect, transform);
     renderRect = CGRectApplyAffineTransform(renderRect, CGAffineTransformMakeTranslation(rectX, rectY));
     
     CGContextClipToRect(context, rect);
+    [self setLayoutBoundingBox:rect];
     CGContextDrawImage(context, renderRect, _image);
     CGContextRestoreGState(context);
     
@@ -140,7 +142,7 @@
 
 - (CGRect)getRect:(CGContextRef)context
 {
-    [self setBoundingBox:CGContextGetClipBoundingBox(context)];
+    [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
     CGFloat x = [self getWidthRelatedValue:self.x];
     CGFloat y = [self getHeightRelatedValue:self.y];
     CGFloat width = [self getWidthRelatedValue:self.width];

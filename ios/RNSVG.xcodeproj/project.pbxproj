@@ -160,6 +160,7 @@
 		10FDEEB01D3FB60500A5C46C /* RNSVGBaseBrush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGBaseBrush.h; sourceTree = "<group>"; };
 		10FDEEB11D3FB60500A5C46C /* RNSVGBaseBrush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGBaseBrush.m; sourceTree = "<group>"; };
 		10FDEEB31D3FBED400A5C46C /* RNSVGBrushType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGBrushType.h; sourceTree = "<group>"; };
+		7F888B9C1DD378000038D083 /* RNSVGGlyphPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNSVGGlyphPoint.h; path = Utils/RNSVGGlyphPoint.h; sourceTree = "<group>"; };
 		7FF070191DC249BE000E28A0 /* RNSVGTextAnchor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGTextAnchor.h; path = Utils/RNSVGTextAnchor.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -327,6 +328,7 @@
 				1039D29B1CE72177001E90A8 /* RCTConvert+RNSVG.h */,
 				1039D29C1CE72177001E90A8 /* RCTConvert+RNSVG.m */,
 				1039D29E1CE72177001E90A8 /* RNSVGCGFloatArray.h */,
+				7F888B9C1DD378000038D083 /* RNSVGGlyphPoint.h */,
 			);
 			name = Utils;
 			sourceTree = "<group>";

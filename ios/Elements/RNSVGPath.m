@@ -32,6 +32,8 @@
     self.d = [self getPath:context];
     
     CGPathRef path = self.d;
+    [self setLayoutBoundingBox:CGPathGetBoundingBox(path)];
+    
     if ((!self.fill && !self.stroke) || !path) {
         return;
     }

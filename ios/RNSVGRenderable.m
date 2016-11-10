@@ -15,9 +15,8 @@
     NSArray *_changedList;
     RNSVGPercentageConverter *_widthConverter;
     RNSVGPercentageConverter *_heightConverter;
-    CGFloat _contextWidth;
-    CGFloat _contextHeight;
-    CGRect _boundingBox;
+    CGRect _contextBoundingBox;
+    CGRect _renderBoundingBox;
 }
 
 - (id)init
@@ -206,11 +205,28 @@
     }
 }
 
-- (void)setBoundingBox:(CGRect)boundingBox
+- (void)setContextBoundingBox:(CGRect)contextBoundingBox
 {
-    _boundingBox = boundingBox;
-    _widthConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:boundingBox.size.width offset:0];
-    _heightConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:boundingBox.size.height offset:0];
+    _contextBoundingBox = contextBoundingBox;
+    _widthConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:contextBoundingBox.size.width
+                                                                           offset:0];
+    _heightConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:contextBoundingBox.size.height
+                                                                            offset:0];
+}
+
+- (CGRect)getContextBoundingBox
+{
+    return _contextBoundingBox;
+}
+
+- (void)setLayoutBoundingBox:(CGRect)layoutBoundingBox
+{
+    _renderBoundingBox = layoutBoundingBox;
+}
+
+- (CGRect)getLayoutBoundingBox
+{
+    return _renderBoundingBox;
 }
 
 - (CGFloat)getWidthRelatedValue:(NSString *)string
@@ -221,26 +237,6 @@
 - (CGFloat)getHeightRelatedValue:(NSString *)string
 {
     return [_heightConverter stringToFloat:string];
-}
-
-- (CGFloat)getContextWidth
-{
-    return CGRectGetWidth(_boundingBox);
-}
-
-- (CGFloat)getContextHeight
-{
-    return CGRectGetHeight(_boundingBox);
-}
-
-- (CGFloat)getContextX
-{
-    return CGRectGetMinX(_boundingBox);
-}
-
-- (CGFloat)getContextY
-{
-    return CGRectGetMinY(_boundingBox);
 }
 
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList

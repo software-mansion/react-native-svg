@@ -23,7 +23,6 @@
 + (RNSVGTextAnchor)RNSVGTextAnchor:(id)json;
 + (RNSVGCGFCRule)RNSVGCGFCRule:(id)json;
 + (RNSVGVBMOS)RNSVGVBMOS:(id)json;
-+ (CTFontRef)RNSVGFont:(id)json;
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;
 

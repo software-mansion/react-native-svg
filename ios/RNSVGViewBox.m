@@ -71,7 +71,7 @@
 
 - (void)renderTo:(CGContextRef)context
 {
-    [self setBoundingBox:CGContextGetClipBoundingBox(context)];
+    [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
     self.matrix = [self getTransform];
     [super renderTo:context];
 }
@@ -87,10 +87,10 @@
     CGFloat vbHeight = [self getHeightRelatedValue:self.vbHeight];
     
     // Let e-x, e-y, e-width, e-height be the position and size of the element respectively.
-    CGFloat eX = [self getContextX];
-    CGFloat eY = [self getContextY];
-    CGFloat eWidth = self.width ? [self getWidthRelatedValue:self.width] : [self getContextWidth];
-    CGFloat eHeight = self.height ? [self getHeightRelatedValue:self.height] : [self getContextHeight];
+    CGFloat eX = [self getContextBoundingBox].origin.x;
+    CGFloat eY = [self getContextBoundingBox].origin.y;
+    CGFloat eWidth = self.width ? [self getWidthRelatedValue:self.width] : [self getContextBoundingBox].size.width;
+    CGFloat eHeight = self.height ? [self getHeightRelatedValue:self.height] : [self getContextBoundingBox].size.height;
     
     // Let align be the align value of preserveAspectRatio, or 'xMidyMid' if preserveAspectRatio is not defined.
     NSString *align = self.align;

@@ -8,6 +8,7 @@ import Svg from './elements/Svg';
 import Path from './elements/Path';
 import G from './elements/G';
 import Text from './elements/Text';
+import TSpan from './elements/TSpan';
 import Use from './elements/Use';
 import Image from './elements/Image';
 import Symbol  from './elements/Symbol';
@@ -16,8 +17,6 @@ import LinearGradient from './elements/LinearGradient';
 import RadialGradient from './elements/RadialGradient';
 import Stop from './elements/Stop';
 import ClipPath from './elements/ClipPath';
-import TSpan from './elements/TSpan';
-import TextPath from './elements/TextPath';
 
 export {
     Svg,
@@ -25,6 +24,7 @@ export {
     Ellipse,
     G,
     Text,
+    TSpan,
     Path,
     Polygon,
     Polyline,
@@ -37,9 +37,7 @@ export {
     LinearGradient,
     RadialGradient,
     Stop,
-    ClipPath,
-    TSpan,
-    TextPath
+    ClipPath
 };
 
 export default Svg;

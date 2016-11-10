@@ -11,14 +11,8 @@
 #import "RNSVGPath.h"
 #import "RNSVGText.h"
 
-@interface RNSVGTSpan : RNSVGPath
+@interface RNSVGTSpan : RNSVGText
 
-@property (nonatomic, assign) RNSVGTextAnchor textAnchor;
-@property (nonatomic, assign) NSArray<NSNumber *> *deltaX;
-@property (nonatomic, assign) NSArray<NSNumber *> *deltaY;
-@property (nonatomic, strong) NSString *positionX;
-@property (nonatomic, strong) NSString *positionY;
-@property (nonatomic, assign) NSDictionary *font;
 @property (nonatomic, strong) NSString *content;
 
 @end

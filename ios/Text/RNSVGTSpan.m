@@ -9,60 +9,59 @@
 
 #import "RNSVGTSpan.h"
 #import "RNSVGBezierPath.h"
+#import "RNSVGText.h"
 
-@class RNSVGText;
 @implementation RNSVGTSpan
+
+- (void)renderLayerTo:(CGContextRef)context
+{
+    if (self.content) {
+        [self pathRenderLayerTo:context];
+    } else {
+        [super renderLayerTo:context];
+    }
+}
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    [self setBoundingBox:CGContextGetClipBoundingBox(context)];
+    if (!self.content) {
+        return [self getTextGroupPath:context];
+    }
+    [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
     CGMutablePathRef path = CGPathCreateMutable();
     
-//    if (![self.content isEqualToString:@""]) {
-//        // Create a dictionary for this font
-//        CFDictionaryRef attributes = (__bridge CFDictionaryRef)@{
-//                                                                 (NSString *)kCTFontAttributeName: (__bridge id)self.font,
-//                                                                 (NSString *)kCTForegroundColorFromContextAttributeName: @YES
-//                                                                 };
-//        
-//        CFStringRef string = (__bridge CFStringRef)self.content;
-//        CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
-//        CTLineRef line = CTLineCreateWithAttributedString(attrString);
-//        CFRelease(attrString);
-//        
-//        CGMutablePathRef linePath = [self setLinePath:line];
-//        
-//        // Set up text frame with font metrics
-//        CGFloat size = CTFontGetSize(self.font);
-//        CGFloat px = self.px ? [self getWidthRelatedValue:self.px] : 0;
-//        CGFloat py = self.py ? [self getHeightRelatedValue:self.py] : 0;
-//        
-//        if (self.px) {
-//            text.offsetX = px;
-//        }
-//        
-//        if (self.py) {
-//            text.offsetY = py + size * 1.1;
-//        }
-//        
-//        text.offsetX += self.dx;
-//        text.offsetY += self.dy;
-//        
-//        CGAffineTransform offset = CGAffineTransformMakeTranslation(text.offsetX, text.offsetY);
-//        
-//        text.offsetX += CTLineGetTypographicBounds(line, nil, nil, nil);
-//        
-//        CGPathAddPath(path, &offset, linePath);
-//        CGPathRelease(linePath);
-//    } else {
-//        text.offsetX += self.dx;
-//        text.offsetY += self.dy;
-//    }
+    if ([self.content isEqualToString:@""]) {
+        RNSVGGlyphPoint computedPoint = [self getComputedGlyphPoint:0 glyphOffset:CGPointZero];
+        [self getTextRoot].lastX = computedPoint.x;
+        [self getTextRoot].lastY = computedPoint.y;
+        return path;
+    }
+    
+    CTFontRef font = [self getComputedFont];
+    // Create a dictionary for this font
+    CFDictionaryRef attributes = (__bridge CFDictionaryRef)@{
+                                                             (NSString *)kCTFontAttributeName: (__bridge id)font,
+                                                             (NSString *)kCTForegroundColorFromContextAttributeName: @YES
+                                                             };
+    
+    CFStringRef string = (__bridge CFStringRef)self.content;
+    CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
+    CTLineRef line = CTLineCreateWithAttributedString(attrString);
+    
+    CGMutablePathRef linePath = [self getLinePath:line];
+    CGAffineTransform offset = CGAffineTransformMakeTranslation(0, CTFontGetSize(font));
+    CGPathAddPath(path, &offset, linePath);
+    
+    // clean up
+    CFRelease(attrString);
+    CFRelease(line);
+    CGPathRelease(linePath);
+    [self resetTextPathAttributes];
     
     return (CGPathRef)CFAutorelease(path);
 }
 
-- (CGMutablePathRef)setLinePath:(CTLineRef)line
+- (CGMutablePathRef)getLinePath:(CTLineRef)line
 {
     CGAffineTransform upsideDown = CGAffineTransformMakeScale(1.0, -1.0);
     CGMutablePathRef path = CGPathCreateMutable();
@@ -81,22 +80,21 @@
     
     CTFontRef runFont = CFDictionaryGetValue(attributes, kCTFontAttributeName);
     
-    for(CFIndex i = 0; i < runGlyphCount; ++i) {
-        CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[i], nil);
-        CGPoint point = positions[i];
-        
-        if (letter) {
-            CGAffineTransform transform;
-            
-            transform = CGAffineTransformTranslate(upsideDown, point.x, point.y);
-            
-            
-            CGPathAddPath(path, &transform, letter);
+    CGFloat lineStartX;
+    CFIndex i;
+    for(i = 0; i < runGlyphCount; i++) {
+        RNSVGGlyphPoint computedPoint = [self getComputedGlyphPoint:i glyphOffset:positions[i]];
+        if (!i) {
+            lineStartX = computedPoint.x;
         }
         
+        CGAffineTransform transform = CGAffineTransformTranslate(upsideDown, computedPoint.x, -computedPoint.y);
+        CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[i], nil);
+        CGPathAddPath(path, &transform, letter);
         CGPathRelease(letter);
     }
     
+    [self getTextRoot].lastX = lineStartX + CGPathGetBoundingBox(path).size.width;
     return path;
 }
 

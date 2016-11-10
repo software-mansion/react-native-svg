@@ -30,13 +30,11 @@
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 @property (nonatomic, strong) NSMutableArray<NSString *> *ownedPropList;
 
-- (void)setBoundingBox:(CGRect)boundingBox;
+- (void)setContextBoundingBox:(CGRect)contextBoundingBox;
+- (CGRect)getContextBoundingBox;
+- (void)setLayoutBoundingBox:(CGRect)layoutBoundingBox;
+- (CGRect)getLayoutBoundingBox;
 - (CGFloat)getWidthRelatedValue:(NSString *)string;
 - (CGFloat)getHeightRelatedValue:(NSString *)string;
-- (CGFloat)getContextWidth;
-- (CGFloat)getContextHeight;
-- (CGFloat)getContextX;
-- (CGFloat)getContextY;
-
 
 @end

@@ -67,7 +67,7 @@
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    [self setBoundingBox:CGContextGetClipBoundingBox(context)];
+    [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
     CGMutablePathRef path = CGPathCreateMutable();
     CGFloat x = [self getWidthRelatedValue:self.x];
     CGFloat y = [self getHeightRelatedValue:self.y];

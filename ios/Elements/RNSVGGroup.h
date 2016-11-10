@@ -11,8 +11,10 @@
 #import "RNSVGContainer.h"
 #import "RNSVGCGFCRule.h"
 #import "RNSVGSvgView.h"
-#import "RNSVGRenderable.h"
+#import "RNSVGPath.h"
 
-@interface RNSVGGroup : RNSVGRenderable <RNSVGContainer>
+@interface RNSVGGroup : RNSVGPath <RNSVGContainer>
+
+- (void)pathRenderLayerTo:(CGContextRef)contex;
 
 @end

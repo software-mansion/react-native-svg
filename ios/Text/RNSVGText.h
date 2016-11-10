@@ -7,19 +7,27 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "RNSVGGlyphPoint.h"
 #import "RNSVGGroup.h"
 #import "RNSVGTextAnchor.h"
 
 @interface RNSVGText : RNSVGGroup
 
 @property (nonatomic, assign) RNSVGTextAnchor textAnchor;
-@property (nonatomic, assign) NSArray<NSNumber *> *deltaX;
-@property (nonatomic, assign) NSArray<NSNumber *> *deltaY;
+@property (nonatomic, strong) NSArray<NSNumber *> *deltaX;
+@property (nonatomic, strong) NSArray<NSNumber *> *deltaY;
 @property (nonatomic, strong) NSString *positionX;
 @property (nonatomic, strong) NSString *positionY;
-@property (nonatomic, assign) NSDictionary *font;
+@property (nonatomic, strong) NSDictionary *font;
 
-@property (nonatomic, assign) CGFloat offsetX;
-@property (nonatomic, assign) CGFloat offsetY;
+@property (nonatomic, assign) CGFloat lastX;
+@property (nonatomic, assign) CGFloat lastY;
+@property (nonatomic, assign) NSUInteger lastIndex;
+
+- (CTFontRef)getComputedFont;
+- (RNSVGGlyphPoint)getComputedGlyphPoint:(NSUInteger *)index glyphOffset:(CGPoint)glyphOffset;
+- (RNSVGText *)getTextRoot;
+- (CGPathRef)getTextGroupPath:(CGContextRef)context;
+- (void)resetTextPathAttributes;
 
 @end
