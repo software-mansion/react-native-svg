@@ -25,8 +25,8 @@
 - (void)renderLayerTo:(CGContextRef)context
 {
     CGContextSaveGState(context);
-    CGContextConcatCTM(context, CGAffineTransformMakeTranslation([self getShift:context path:nil], 0));
-    [super renderLayerTo:context];
+    CGAffineTransform transform = CGAffineTransformMakeTranslation([self getShift:context path:nil], 0);
+    [super renderLayerToWithTransform:context transform:transform];
     CGContextRestoreGState(context);
 }
 

@@ -12,8 +12,15 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
+    [self renderLayerToWithTransform:context transform:CGAffineTransformIdentity];
+}
+
+- (void)renderLayerToWithTransform:(CGContextRef)context transform:(CGAffineTransform)transform
+{
     RNSVGSvgView* svg = [self getSvgView];
     [self clip:context];
+    
+    CGContextConcatCTM(context, transform);
     [self traverseSubviews:^(RNSVGNode *node) {
         if (node.responsible && !svg.responsible) {
             svg.responsible = YES;

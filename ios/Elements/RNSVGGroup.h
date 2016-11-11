@@ -16,5 +16,6 @@
 @interface RNSVGGroup : RNSVGPath <RNSVGContainer>
 
 - (void)pathRenderLayerTo:(CGContextRef)contex;
+- (void)renderLayerToWithTransform:(CGContextRef)context transform:(CGAffineTransform)transform;
 
 @end
