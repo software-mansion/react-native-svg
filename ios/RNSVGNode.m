@@ -13,6 +13,7 @@
 @implementation RNSVGNode
 {
     BOOL _transparent;
+    CGPathRef _computedClipPath;
 }
 
 - (instancetype)init
@@ -78,24 +79,14 @@
     _matrix = matrix;
 }
 
-- (void)setClipPath:(CGPathRef)clipPath
+- (void)setClipPath:(NSString *)clipPath
 {
     if (_clipPath == clipPath) {
         return;
     }
     [self invalidate];
-    CGPathRelease(_clipPath);
-    _clipPath = CGPathRetain(clipPath);
-}
-
-- (void)setClipPathRef:(NSString *)clipPathRef
-{
-    if (_clipPathRef == clipPathRef) {
-        return;
-    }
-    [self invalidate];
-    self.clipPath = nil;
-    _clipPathRef = clipPathRef;
+    _clipPath = clipPath;
+    
 }
 
 - (void)beginTransparencyLayer:(CGContextRef)context
@@ -117,25 +108,36 @@
     // abstract
 }
 
-- (void)renderClip:(CGContextRef)context
-{
-    if (self.clipPathRef) {
-        self.clipPath = [[[self getSvgView] getDefinedClipPath:self.clipPathRef] getPath:context];
-    }
-}
-
 - (void)clip:(CGContextRef)context
 {
-    CGPathRef clipPath  = self.clipPath;
-
-    if (clipPath) {
-        CGContextAddPath(context, clipPath);
+    if (self.clipPath) {
+        CGPathRef clip = [[[self getSvgView] getDefinedClipPath:self.clipPath] getPath:context];
+        
+        if (!clip) {
+            // TODO: WARNING ABOUT THIS
+            return;
+        }
+        
+        CGContextAddPath(context, clip);
         if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
             CGContextEOClip(context);
         } else {
             CGContextClip(context);
         }
+
+        CGAffineTransform matrix = self.matrix;
+        [self computeClipPath:CGPathCreateCopyByTransformingPath(clip, &matrix)];
     }
+}
+
+- (CGPathRef)getComputedClipPath{
+    return _computedClipPath;
+}
+
+- (void)computeClipPath:(CGPathRef)computedClipPath
+{
+    CGPathRelease(_computedClipPath);
+    _computedClipPath = computedClipPath;
 }
 
 - (CGPathRef)getPath: (CGContextRef) context
@@ -149,10 +151,8 @@
     // abstract
 }
 
-// hitTest delagate
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    
     // abstract
     return nil;
 }
@@ -177,7 +177,7 @@
 {
     if (self.name) {
         RNSVGSvgView* svg = [self getSvgView];
-        [svg defineTemplate:self templateRef:self.name];
+        [svg defineTemplate:self templateName:self.name];
     }
 }
 
@@ -198,7 +198,7 @@
 
 - (void)dealloc
 {
-    CGPathRelease(_clipPath);
+    CGPathRelease(_computedClipPath);
 }
 
 @end

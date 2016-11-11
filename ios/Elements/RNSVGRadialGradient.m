@@ -30,7 +30,7 @@
     converter.colors = self.gradient;
     converter.points = @[self.fx, self.fy, self.rx, self.ry, self.cx, self.cy];
     converter.type = kRNSVGRadialGradient;
-    [[self getSvgView] defineBrushConverter:converter brushConverterRef:self.name];
+    [[self getSvgView] defineBrushConverter:converter brushConverterName:self.name];
 }
 
 @end

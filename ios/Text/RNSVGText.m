@@ -35,7 +35,6 @@
     CGMutablePathRef shape = [self getTextGroupPath:context];
     CGAffineTransform translation = CGAffineTransformMakeTranslation([self getShift:context path:shape], 0);
     CGMutablePathRef path = CGPathCreateCopyByTransformingPath(shape, &translation);
-    CGPathRelease(shape);
     return (CGPathRef)CFAutorelease(path);
 }
 

@@ -94,7 +94,7 @@
 {
     CGRect rect = [self getRect:context];
     // add hit area
-    self.hitArea = CFAutorelease(CGPathCreateWithRect(rect, nil));
+    self.hitArea = CGPathCreateWithRect(rect, nil);
     [self clip:context];
     
     CGContextSaveGState(context);
@@ -152,7 +152,7 @@
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    return CGPathCreateWithRect([self getRect:context], nil);
+    return (CGPathRef)CFAutorelease(CGPathCreateWithRect([self getRect:context], nil));
 }
 
 @end

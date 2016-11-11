@@ -20,8 +20,7 @@
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, assign) CGFloat opacity;
 @property (nonatomic, assign) RNSVGCGFCRule clipRule;
-@property (nonatomic, assign) CGPathRef clipPath; // convert clipPath="M0,0 L0,10 L10,10z" into path
-@property (nonatomic, strong) NSString *clipPathRef; // use clipPath="url(#clip)" as ClipPath
+@property (nonatomic, assign) NSString *clipPath;
 @property (nonatomic, assign) BOOL responsible;
 @property (nonatomic, assign) CGAffineTransform matrix;
 @property (nonatomic, assign) BOOL active;
@@ -37,10 +36,8 @@
  */
 - (void)renderLayerTo:(CGContextRef)context;
 
-- (void)renderClip:(CGContextRef)context;
-
 /**
- * clip node by clipPath or clipPathRef.
+ * clip node by clipPath
  */
 - (void)clip:(CGContextRef)context;
 
@@ -49,6 +46,10 @@
  */
 - (CGPathRef)getPath:(CGContextRef) context;
 
+/**
+ * getComputedClipPath will return the CGPathRef computed with clipPath
+ */
+- (CGPathRef)getComputedClipPath;
 
 /**
  * run hitTest

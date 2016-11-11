@@ -137,9 +137,8 @@
         return;
     }
     
-    [self invalidate];
     CGPathRelease(_hitArea);
-    _hitArea = CGPathRetain(hitArea);
+    _hitArea = CGPathRetain(CFAutorelease(hitArea));
 }
 
 - (void)setPropList:(NSArray<NSString *> *)propList
@@ -168,7 +167,6 @@
     CGContextSetAlpha(context, self.opacity);
     
     [self beginTransparencyLayer:context];
-    [self renderClip:context];
     [self renderLayerTo:context];
     [self endTransparencyLayer:context];
 
@@ -191,14 +189,14 @@
     }
 
     CGPathRef hitArea = CGPathCreateCopyByTransformingPath(self.hitArea, &transfrom);
-    CGPathRef clipPath = self.clipPath;
     BOOL contains = CGPathContainsPoint(hitArea, nil, point, NO);
     CGPathRelease(hitArea);
     if (contains) {
-        if (!clipPath) {
-            return self;
-        } else {
+        CGPathRef clipPath = [self getComputedClipPath];
+        if (clipPath) {
             return CGPathContainsPoint(clipPath, nil, point, NO) ? self : nil;
+        } else {
+            return self;
         }
     } else {
         return nil;

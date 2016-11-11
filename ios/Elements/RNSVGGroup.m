@@ -46,7 +46,7 @@
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    CGMutablePathRef path = CGPathCreateMutable();
+    CGMutablePathRef __block path = CGPathCreateMutable();
     [self traverseSubviews:^(RNSVGNode *node) {
         CGAffineTransform transform = node.matrix;
         CGPathAddPath(path, &transform, [node getPath:context]);
@@ -59,6 +59,11 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transform
 {
     CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
+    
+    CGPathRef clip = [self getComputedClipPath];
+    if (clip && !CGPathContainsPoint(clip, nil, point, NO)) {
+        return nil;
+    }
     
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
@@ -87,7 +92,7 @@
 {
     if (self.name) {
         RNSVGSvgView* svg = [self getSvgView];
-        [svg defineTemplate:self templateRef:self.name];
+        [svg defineTemplate:self templateName:self.name];
     }
     
     [self traverseSubviews:^(RNSVGNode *node) {

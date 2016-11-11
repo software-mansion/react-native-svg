@@ -17,7 +17,7 @@
 
 - (void)saveDefinition
 {
-    [[self getSvgView] defineClipPath:self clipPathRef:self.name];
+    [[self getSvgView] defineClipPath:self clipPathName:self.name];
 }
 
 

@@ -40,17 +40,17 @@
     
     if ([self getSvgView].responsible) {
         // Add path to hitArea
-        CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
+        CGMutablePathRef hitAreaPath = CGPathCreateMutableCopy(path);
         if (self.stroke) {
             // Add stroke to hitArea
-            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
-            CGPathAddPath(hitArea, nil, strokePath);
+            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitAreaPath, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
+            CGPathAddPath(hitAreaPath, nil, strokePath);
             CGPathRelease(strokePath);
         }
         
         CGAffineTransform transform = self.matrix;
-        self.hitArea = CFAutorelease(CGPathCreateCopyByTransformingPath(hitArea, &transform));
-        CGPathRelease(hitArea);
+        self.hitArea = CGPathCreateCopyByTransformingPath(hitAreaPath, &transform);
+        CGPathRelease(hitAreaPath);
     }
     
     if (self.opacity == 0) {
