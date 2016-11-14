@@ -9,11 +9,12 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.TextureView;
 
 import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.Arguments;
@@ -26,10 +27,12 @@ import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
 import com.facebook.react.uimanager.events.TouchEventType;
 import com.facebook.react.uimanager.events.EventDispatcher;
 
+import javax.annotation.Nullable;
+
 /**
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its \children.
  */
-public class RNSVGSvgView extends TextureView {
+public class RNSVGSvgView extends View {
     public enum Events {
         EVENT_DATA_URL("onDataURL");
 
@@ -45,6 +48,7 @@ public class RNSVGSvgView extends TextureView {
         }
     }
 
+    private @Nullable Bitmap mBitmap;
     private RCTEventEmitter mEventEmitter;
     private EventDispatcher mEventDispatcher;
     private int mTargetTag;
@@ -54,13 +58,28 @@ public class RNSVGSvgView extends TextureView {
 
     public RNSVGSvgView(ReactContext reactContext) {
         super(reactContext);
-        setOpaque(false);
         mEventEmitter = reactContext.getJSModule(RCTEventEmitter.class);
         mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
     private RNSVGSvgViewShadowNode getShadowNode() {
         return RNSVGSvgViewShadowNode.getShadowNodeByTag(getId());
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        if (mBitmap != null) {
+            mBitmap.recycle();
+        }
+        mBitmap = bitmap;
+        invalidate();
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (mBitmap != null) {
+            canvas.drawBitmap(mBitmap, 0, 0, null);
+        }
     }
 
     @Override

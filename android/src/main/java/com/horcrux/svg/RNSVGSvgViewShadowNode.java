@@ -15,16 +15,10 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Base64;
 import android.util.SparseArray;
-import android.view.TextureView;
 import android.graphics.Color;
 import android.view.Surface;
 import android.graphics.PorterDuff;
-import android.graphics.SurfaceTexture;
-
-import com.facebook.common.logging.FLog;
-import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.LayoutShadowNode;
-import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
 
 import javax.annotation.Nullable;
@@ -35,7 +29,7 @@ import java.util.Map;
 /**
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
  */
-public class RNSVGSvgViewShadowNode extends LayoutShadowNode implements TextureView.SurfaceTextureListener {
+public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
 
     private static final SparseArray<RNSVGSvgViewShadowNode> mTagToShadowNode = new SparseArray<>();
 
@@ -43,7 +37,6 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode implements TextureV
         return mTagToShadowNode.get(tag);
     }
 
-    private @Nullable Surface mSurface;
     private boolean mResponsible = false;
     private static final Map<String, RNSVGVirtualNode> mDefinedClipPaths = new HashMap<>();
     private static final Map<String, RNSVGVirtualNode> mDefinedTemplates = new HashMap<>();
@@ -62,27 +55,25 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode implements TextureV
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
         super.onCollectExtraUpdates(uiUpdater);
-        drawOutput();
-        uiUpdater.enqueueUpdateExtraData(getReactTag(), this);
+        uiUpdater.enqueueUpdateExtraData(getReactTag(), drawOutput());
+
     }
 
-    public void drawOutput() {
-        if (mSurface == null || !mSurface.isValid()) {
-            markChildrenUpdatesSeen(this);
-            return;
-        }
+    @Override
+    public void setReactTag(int reactTag) {
+        super.setReactTag(reactTag);
+        mTagToShadowNode.put(getReactTag(), this);
+    }
 
-        try {
-            Canvas canvas = mSurface.lockCanvas(null);
-            drawChildren(canvas);
+    public Object drawOutput() {
+        Bitmap bitmap = Bitmap.createBitmap(
+                (int) getLayoutWidth(),
+                (int) getLayoutHeight(),
+                Bitmap.Config.ARGB_8888);
 
-            if (mSurface != null) {
-                mSurface.unlockCanvasAndPost(canvas);
-            }
-
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            FLog.e(ReactConstants.TAG, e.getClass().getSimpleName() + " in Svg.unlockCanvasAndPost");
-        }
+        Canvas canvas = new Canvas(bitmap);
+        drawChildren(canvas);
+        return bitmap;
     }
 
     private void drawChildren(Canvas canvas) {
@@ -106,14 +97,6 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode implements TextureV
         }
     }
 
-    private void markChildrenUpdatesSeen(ReactShadowNode shadowNode) {
-        for (int i = 0; i < shadowNode.getChildCount(); i++) {
-            ReactShadowNode child = shadowNode.getChildAt(i);
-            child.markUpdateSeen();
-            markChildrenUpdatesSeen(child);
-        }
-    }
-
     public String getBase64() {
         Bitmap bitmap = Bitmap.createBitmap(
             (int) getLayoutWidth(),
@@ -127,27 +110,6 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode implements TextureV
         byte[] bitmapBytes = stream.toByteArray();
         return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
     }
-
-    @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        mSurface = new Surface(surface);
-        mTagToShadowNode.put(getReactTag(), this);
-        drawOutput();
-    }
-
-    @Override
-    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        mTagToShadowNode.remove(getReactTag());
-        surface.release();
-        mSurface = null;
-        return true;
-    }
-
-    @Override
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {}
-
-    @Override
-    public void onSurfaceTextureUpdated(SurfaceTexture surface) {}
 
     public void enableTouchEvents() {
         if (!mResponsible) {
@@ -198,5 +160,9 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode implements TextureV
 
     public PropHelper.RNSVGBrush getDefinedBrush(String brushRef) {
         return mDefinedBrushes.get(brushRef);
+    }
+
+    public void finalize() {
+        mTagToShadowNode.remove(getReactTag());
     }
 }

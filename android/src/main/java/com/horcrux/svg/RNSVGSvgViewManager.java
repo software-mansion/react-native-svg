@@ -9,6 +9,8 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Bitmap;
+
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.BaseViewManager;
@@ -50,7 +52,7 @@ public class RNSVGSvgViewManager extends BaseViewManager<RNSVGSvgView, RNSVGSvgV
 
     @Override
     public void updateExtraData(RNSVGSvgView root, Object extraData) {
-        root.setSurfaceTextureListener((RNSVGSvgViewShadowNode) extraData);
+        root.setBitmap((Bitmap) extraData);
     }
 
     @Override
