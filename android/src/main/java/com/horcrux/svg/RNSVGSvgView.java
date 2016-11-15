@@ -84,11 +84,14 @@ public class RNSVGSvgView extends View {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        mTargetTag = getShadowNode().hitTest(new Point((int) ev.getX(), (int) ev.getY()));
+        RNSVGSvgViewShadowNode svg = getShadowNode();
+        if (svg != null) {
+            mTargetTag = getShadowNode().hitTest(new Point((int) ev.getX(), (int) ev.getY()));
 
-        if (mTargetTag != -1) {
-            handleTouchEvent(ev);
-            return true;
+            if (mTargetTag != -1) {
+                handleTouchEvent(ev);
+                return true;
+            }
         }
 
         return super.dispatchTouchEvent(ev);
