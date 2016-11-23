@@ -28,7 +28,7 @@ public class RNSVGDefsShadowNode extends RNSVGDefinitionShadowNode {
         traverseChildren(new NodeRunnable() {
             public boolean run(RNSVGVirtualNode node) {
                 node.markUpdateSeen();
-                node.traverseChildren(this);
+                node.traverseChildren(NodeRunnable.this);
                 return true;
             }
         });
