@@ -25,12 +25,13 @@ public class RNSVGDefsShadowNode extends RNSVGDefinitionShadowNode {
                 return true;
             }
         });
-        traverseChildren(new NodeRunnable() {
+        NodeRunnable markUpdateSeenRecursive = new NodeRunnable() {
             public boolean run(RNSVGVirtualNode node) {
                 node.markUpdateSeen();
-                node.traverseChildren(NodeRunnable.this);
+                node.traverseChildren(this);
                 return true;
             }
-        });
+        };
+        traverseChildren(markUpdateSeenRecursive);
     }
 }
