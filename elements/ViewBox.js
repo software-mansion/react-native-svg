@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import {ViewBoxAttributes} from '../lib/attributes';
 import G from './G';
 import _ from 'lodash';

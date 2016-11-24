@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import SerializablePath from '../lib/SerializablePath';
-import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import {PathAttributes} from '../lib/attributes';
 import Shape from './Shape';
 import {pathProps} from '../lib/props';
