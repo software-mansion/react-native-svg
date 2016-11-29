@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
 import {ViewBoxAttributes} from '../lib/attributes';
 import G from './G';
-import _ from 'lodash';
 
 const meetOrSliceTypes = {
     meet: 0,
@@ -10,12 +9,12 @@ const meetOrSliceTypes = {
     none: 2
 };
 
-const alignEnum = _.reduce([
+const alignEnum = [
     'xMinYMin', 'xMidYMin', 'xMaxYMin',
     'xMinYMid', 'xMidYMid', 'xMaxYMid',
     'xMinYMax', 'xMidYMax', 'xMaxYMax',
     'none'
-], (prev, name) => {
+].reduce((prev, name) => {
     prev[name] = name;
     return prev;
 }, {});
@@ -36,11 +35,11 @@ class ViewBox extends Component{
     };
 
     render() {
-        let {viewBox, preserveAspectRatio, name} = this.props;
+        const {viewBox, preserveAspectRatio, name} = this.props;
 
         let params = viewBox.trim().split(spacesRegExp);
 
-        if (params.length !== 4 || !_.some(params, param => param && numberRegExp.test(param))) {
+        if (params.length !== 4 || ![params].some(param => param && numberRegExp.test(param))) {
             console.warn('`viewBox` expected a string like `minX minY width height`, but got:' + viewBox);
             return <G>
                 {this.props.children}
