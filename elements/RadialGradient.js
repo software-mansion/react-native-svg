@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {numberProp} from '../lib/props';
 import Gradient from './Gradient';
-import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import {RadialGradientAttributes} from '../lib/attributes';
 
 class RadialGradient extends Gradient{

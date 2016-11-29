@@ -3,7 +3,7 @@ import {pathProps, numberProp} from '../lib/props';
 import {UseAttributes} from '../lib/attributes';
 import Shape from './Shape';
 import React from 'react';
-import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 
 const idExpReg = /^#(.+)$/;
 class Use extends Shape {

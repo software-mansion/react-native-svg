@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import extractText from '../lib/extract/extractText';
 import {numberProp, pathProps} from '../lib/props';
 import {TextAttributes} from '../lib/attributes';
