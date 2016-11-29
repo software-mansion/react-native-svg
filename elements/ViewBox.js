@@ -39,7 +39,7 @@ class ViewBox extends Component{
 
         let params = viewBox.trim().split(spacesRegExp);
 
-        if (params.length !== 4 || ![params].some(param => param && numberRegExp.test(param))) {
+        if (params.length !== 4 || !params.some(param => param && numberRegExp.test(param))) {
             console.warn('`viewBox` expected a string like `minX minY width height`, but got:' + viewBox);
             return <G>
                 {this.props.children}
