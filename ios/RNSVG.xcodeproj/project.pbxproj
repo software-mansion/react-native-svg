@@ -514,7 +514,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(SRCROOT)/../../react-native/React/**",
+					"$(BUILT_PRODUCTS_DIR)/usr/local/include",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = RNSVG;
@@ -528,7 +528,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(SRCROOT)/../../react-native/React/**",
+					"$(BUILT_PRODUCTS_DIR)/usr/local/include",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = RNSVG;
