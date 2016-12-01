@@ -11,6 +11,9 @@ package com.horcrux.svg;
 
 import android.graphics.Bitmap;
 
+import com.facebook.csslayout.CSSMeasureMode;
+import com.facebook.csslayout.CSSNodeAPI;
+import com.facebook.csslayout.MeasureOutput;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.BaseViewManager;
@@ -29,6 +32,17 @@ public class RNSVGSvgViewManager extends BaseViewManager<RNSVGSvgView, RNSVGSvgV
 
     private static final String REACT_CLASS = "RNSVGSvgView";
     private static final int COMMAND_TO_DATA_URL = 100;
+    private static final CSSNodeAPI.MeasureFunction MEASURE_FUNCTION = new CSSNodeAPI.MeasureFunction() {
+        @Override
+        public long measure(
+                CSSNodeAPI node,
+                float width,
+                CSSMeasureMode widthMode,
+                float height,
+                CSSMeasureMode heightMode) {
+            throw new IllegalStateException("SvgView should have explicit width and height set");
+        }
+    };
 
     @Override
     public String getName() {
@@ -42,7 +56,9 @@ public class RNSVGSvgViewManager extends BaseViewManager<RNSVGSvgView, RNSVGSvgV
 
     @Override
     public RNSVGSvgViewShadowNode createShadowNodeInstance() {
-        return new RNSVGSvgViewShadowNode();
+        RNSVGSvgViewShadowNode node = new RNSVGSvgViewShadowNode();
+        node.setMeasureFunction(MEASURE_FUNCTION);
+        return node;
     }
 
     @Override
