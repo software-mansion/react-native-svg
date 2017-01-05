@@ -25,20 +25,20 @@ public class SvgPackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-            RenderableViewManager.createRNSVGGroupViewManager(),
-            RenderableViewManager.createRNSVGPathViewManager(),
-            RenderableViewManager.createRNSVGCircleViewManager(),
-            RenderableViewManager.createRNSVGEllipseViewManager(),
-            RenderableViewManager.createRNSVGLineViewManager(),
-            RenderableViewManager.createRNSVGRectViewManager(),
-            RenderableViewManager.createRNSVGTextViewManager(),
-            RenderableViewManager.createRNSVGImageViewManager(),
-            RenderableViewManager.createRNSVGClipPathViewManager(),
-            RenderableViewManager.createRNSVGDefsViewManager(),
-            RenderableViewManager.createRNSVGUseViewManager(),
-            RenderableViewManager.createRNSVGViewBoxViewManager(),
-            RenderableViewManager.createRNSVGLinearGradientManager(),
-            RenderableViewManager.createRNSVGRadialGradientManager(),
+            RenderableViewManager.createGroupViewManager(),
+            RenderableViewManager.createPathViewManager(),
+            RenderableViewManager.createCircleViewManager(),
+            RenderableViewManager.createEllipseViewManager(),
+            RenderableViewManager.createLineViewManager(),
+            RenderableViewManager.createRectViewManager(),
+            RenderableViewManager.createTextViewManager(),
+            RenderableViewManager.createImageViewManager(),
+            RenderableViewManager.createClipPathViewManager(),
+            RenderableViewManager.createDefsViewManager(),
+            RenderableViewManager.createUseViewManager(),
+            RenderableViewManager.createViewBoxViewManager(),
+            RenderableViewManager.createLinearGradientManager(),
+            RenderableViewManager.createRadialGradientManager(),
             new SvgViewManager());
     }
 

@@ -40,59 +40,59 @@ public class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
     private final String mClassName;
 
 
-    public static RenderableViewManager createRNSVGGroupViewManager() {
+    public static RenderableViewManager createGroupViewManager() {
         return new RenderableViewManager(CLASS_GROUP);
     }
 
-    public static RenderableViewManager createRNSVGPathViewManager() {
+    public static RenderableViewManager createPathViewManager() {
         return new RenderableViewManager(CLASS_PATH);
     }
 
-    public static RenderableViewManager createRNSVGTextViewManager() {
+    public static RenderableViewManager createTextViewManager() {
         return new RenderableViewManager(CLASS_TEXT);
     }
 
-    public static RenderableViewManager createRNSVGImageViewManager() {
+    public static RenderableViewManager createImageViewManager() {
         return new RenderableViewManager(CLASS_IMAGE);
     }
 
-    public static RenderableViewManager createRNSVGCircleViewManager() {
+    public static RenderableViewManager createCircleViewManager() {
         return new RenderableViewManager(CLASS_CIRCLE);
     }
 
-    public static RenderableViewManager createRNSVGEllipseViewManager() {
+    public static RenderableViewManager createEllipseViewManager() {
         return new RenderableViewManager(CLASS_ELLIPSE);
     }
 
-    public static RenderableViewManager createRNSVGLineViewManager() {
+    public static RenderableViewManager createLineViewManager() {
         return new RenderableViewManager(CLASS_LINE);
     }
 
-    public static RenderableViewManager createRNSVGRectViewManager() {
+    public static RenderableViewManager createRectViewManager() {
         return new RenderableViewManager(CLASS_RECT);
     }
 
-    public static RenderableViewManager createRNSVGClipPathViewManager() {
+    public static RenderableViewManager createClipPathViewManager() {
         return new RenderableViewManager(CLASS_CLIP_PATH);
     }
 
-    public static RenderableViewManager createRNSVGDefsViewManager() {
+    public static RenderableViewManager createDefsViewManager() {
         return new RenderableViewManager(CLASS_DEFS);
     }
 
-    public static RenderableViewManager createRNSVGUseViewManager() {
+    public static RenderableViewManager createUseViewManager() {
         return new RenderableViewManager(CLASS_USE);
     }
 
-    public static RenderableViewManager createRNSVGViewBoxViewManager() {
+    public static RenderableViewManager createViewBoxViewManager() {
         return new RenderableViewManager(CLASS_VIEW_BOX);
     }
 
-    public static RenderableViewManager createRNSVGLinearGradientManager() {
+    public static RenderableViewManager createLinearGradientManager() {
         return new RenderableViewManager(CLASS_LINEAR_GRADIENT);
     }
 
-    public static RenderableViewManager createRNSVGRadialGradientManager() {
+    public static RenderableViewManager createRadialGradientManager() {
         return new RenderableViewManager(CLASS_RADIAL_GRADIENT);
     }
 
