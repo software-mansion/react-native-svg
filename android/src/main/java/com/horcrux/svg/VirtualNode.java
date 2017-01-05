@@ -26,7 +26,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-public abstract class RNSVGVirtualNode extends LayoutShadowNode {
+public abstract class VirtualNode extends LayoutShadowNode {
 
     protected static final float MIN_OPACITY_FOR_DRAW = 0.01f;
 
@@ -58,9 +58,9 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     protected int mCanvasHeight;
     protected String mName;
 
-    private RNSVGSvgViewShadowNode mSvgShadowNode;
+    private SvgViewShadowNode mSvgShadowNode;
 
-    public RNSVGVirtualNode() {
+    public VirtualNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
     }
 
@@ -228,7 +228,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     protected @Nullable Path getClipPath(Canvas canvas, Paint paint) {
         Path clip = mClipPath;
         if (clip == null && mClipPathRef != null) {
-            RNSVGVirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPathRef);
+            VirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPathRef);
             clip = node.getPath(canvas, paint);
         }
 
@@ -255,21 +255,21 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     abstract protected Path getPath(Canvas canvas, Paint paint);
 
-    protected RNSVGSvgViewShadowNode getSvgShadowNode() {
+    protected SvgViewShadowNode getSvgShadowNode() {
         if (mSvgShadowNode != null) {
             return mSvgShadowNode;
         }
 
         ReactShadowNode parent = getParent();
 
-        while (!(parent instanceof RNSVGSvgViewShadowNode)) {
+        while (!(parent instanceof SvgViewShadowNode)) {
             if (parent == null) {
                 return null;
             } else {
                 parent = parent.getParent();
             }
         }
-        mSvgShadowNode = (RNSVGSvgViewShadowNode) parent;
+        mSvgShadowNode = (SvgViewShadowNode) parent;
         return mSvgShadowNode;
     }
 
@@ -290,24 +290,24 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         }
     }
 
-    abstract public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList, boolean inherited);
+    abstract public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited);
 
-    abstract public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList);
+    abstract public void mergeProperties(VirtualNode target, ReadableArray mergeList);
 
     abstract public void resetProperties();
 
     protected interface NodeRunnable {
-        boolean run(RNSVGVirtualNode node);
+        boolean run(VirtualNode node);
     }
 
     protected void traverseChildren(NodeRunnable runner) {
         for (int i = 0; i < getChildCount(); i++) {
             ReactShadowNode child = getChildAt(i);
-            if (!(child instanceof RNSVGVirtualNode)) {
+            if (!(child instanceof VirtualNode)) {
                 continue;
             }
 
-            if (!runner.run((RNSVGVirtualNode) child)) {
+            if (!runner.run((VirtualNode) child)) {
                 break;
             }
         }

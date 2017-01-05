@@ -25,10 +25,10 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 /**
- * ViewManager for RNSVGSvgView React views. Renders as a {@link RNSVGSvgView} and handles
+ * ViewManager for RNSVGSvgView React views. Renders as a {@link SvgView} and handles
  * invalidating the native view on shadow view updates happening in the underlying tree.
  */
-public class RNSVGSvgViewManager extends BaseViewManager<RNSVGSvgView, RNSVGSvgViewShadowNode> {
+public class SvgViewManager extends BaseViewManager<SvgView, SvgViewShadowNode> {
 
     private static final String REACT_CLASS = "RNSVGSvgView";
     private static final int COMMAND_TO_DATA_URL = 100;
@@ -50,24 +50,24 @@ public class RNSVGSvgViewManager extends BaseViewManager<RNSVGSvgView, RNSVGSvgV
     }
 
     @Override
-    public Class<RNSVGSvgViewShadowNode> getShadowNodeClass() {
-        return RNSVGSvgViewShadowNode.class;
+    public Class<SvgViewShadowNode> getShadowNodeClass() {
+        return SvgViewShadowNode.class;
     }
 
     @Override
-    public RNSVGSvgViewShadowNode createShadowNodeInstance() {
-        RNSVGSvgViewShadowNode node = new RNSVGSvgViewShadowNode();
+    public SvgViewShadowNode createShadowNodeInstance() {
+        SvgViewShadowNode node = new SvgViewShadowNode();
         node.setMeasureFunction(MEASURE_FUNCTION);
         return node;
     }
 
     @Override
-    protected RNSVGSvgView createViewInstance(ThemedReactContext reactContext) {
-        return new RNSVGSvgView(reactContext);
+    protected SvgView createViewInstance(ThemedReactContext reactContext) {
+        return new SvgView(reactContext);
     }
 
     @Override
-    public void updateExtraData(RNSVGSvgView root, Object extraData) {
+    public void updateExtraData(SvgView root, Object extraData) {
         root.setBitmap((Bitmap) extraData);
     }
 
@@ -87,14 +87,14 @@ public class RNSVGSvgViewManager extends BaseViewManager<RNSVGSvgView, RNSVGSvgV
     public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
         MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
 
-        for (RNSVGSvgView.Events event : RNSVGSvgView.Events.values()) {
+        for (SvgView.Events event : SvgView.Events.values()) {
             builder.put(event.toString(), MapBuilder.of("registrationName", event.toString()));
         }
         return builder.build();
     }
 
     @Override
-    public void receiveCommand(RNSVGSvgView root, int commandId, @Nullable ReadableArray args) {
+    public void receiveCommand(SvgView root, int commandId, @Nullable ReadableArray args) {
         super.receiveCommand(root, commandId, args);
 
         switch (commandId) {

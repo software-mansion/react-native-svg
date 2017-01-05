@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 /**
  * Shadow node for virtual RNSVGPath view
  */
-public class RNSVGPathShadowNode extends RNSVGVirtualNode {
+public class PathShadowNode extends VirtualNode {
 
     private static final int CAP_BUTT = 0;
     private static final int CAP_ROUND = 1;
@@ -389,7 +389,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     }
 
     @Override
-    public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList, boolean inherited) {
+    public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited) {
         if (mergeList.size() == 0) {
             return;
         }
@@ -428,7 +428,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     }
 
     @Override
-    public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList) {
+    public void mergeProperties(VirtualNode target, ReadableArray mergeList) {
         mergeProperties(target, mergeList, false);
     }
 

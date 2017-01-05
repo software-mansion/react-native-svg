@@ -19,7 +19,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 /**
  * Shadow node for virtual RNSVGPath view
  */
-public class RNSVGViewBoxShadowNode extends RNSVGGroupShadowNode {
+public class ViewBoxShadowNode extends GroupShadowNode {
 
     private static final int MOS_MEET = 0;
     private static final int MOS_SLICE = 1;
@@ -174,11 +174,11 @@ public class RNSVGViewBoxShadowNode extends RNSVGGroupShadowNode {
     }
 
     @Override
-    public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList) {
-        if (target instanceof RNSVGUseShadowNode) {
+    public void mergeProperties(VirtualNode target, ReadableArray mergeList) {
+        if (target instanceof UseShadowNode) {
             mFromSymbol = true;
-            mBoxWidth = ((RNSVGUseShadowNode)target).getWidth();
-            mBoxHeight = ((RNSVGUseShadowNode)target).getHeight();
+            mBoxWidth = ((UseShadowNode)target).getWidth();
+            mBoxHeight = ((UseShadowNode)target).getHeight();
         }
     }
 

@@ -17,7 +17,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 /**
  * Shadow node for virtual LinearGradient definition view
  */
-public class RNSVGRadialGradientShadowNode extends RNSVGDefinitionShadowNode {
+public class RadialGradientShadowNode extends DefinitionShadowNode {
     private String mFx;
     private String mFy;
     private String mRx;

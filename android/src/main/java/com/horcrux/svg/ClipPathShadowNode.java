@@ -21,7 +21,7 @@ import com.facebook.react.common.ReactConstants;
 /**
  * Shadow node for virtual RNSVGClipPath view
  */
-public class RNSVGClipPathShadowNode extends RNSVGGroupShadowNode {
+public class ClipPathShadowNode extends GroupShadowNode {
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
@@ -44,10 +44,10 @@ public class RNSVGClipPathShadowNode extends RNSVGGroupShadowNode {
     }
 
     @Override
-    public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList, boolean inherited) {}
+    public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited) {}
 
     @Override
-    public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList) {}
+    public void mergeProperties(VirtualNode target, ReadableArray mergeList) {}
 
     @Override
     public void resetProperties() {}

@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 /**
  * Shadow node for virtual RNSVGPath view
  */
-public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
+public class ImageShadowNode extends PathShadowNode {
 
     private String mX;
     private String mY;
@@ -178,7 +178,7 @@ public class RNSVGImageShadowNode extends RNSVGPathShadowNode {
             renderRect = new RectF(0, 0, (int)rectWidth, (int)(rectWidth / mImageRatio));
         }
 
-        RNSVGViewBoxShadowNode viewBox = new RNSVGViewBoxShadowNode();
+        ViewBoxShadowNode viewBox = new ViewBoxShadowNode();
         viewBox.setMinX("0");
         viewBox.setMinY("0");
         viewBox.setVbWidth(renderRect.width() / mScale + "");

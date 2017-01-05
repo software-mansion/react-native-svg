@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 /**
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its \children.
  */
-public class RNSVGSvgView extends View {
+public class SvgView extends View {
     public enum Events {
         EVENT_DATA_URL("onDataURL");
 
@@ -56,14 +56,14 @@ public class RNSVGSvgView extends View {
     private final TouchEventCoalescingKeyHelper mTouchEventCoalescingKeyHelper =
             new TouchEventCoalescingKeyHelper();
 
-    public RNSVGSvgView(ReactContext reactContext) {
+    public SvgView(ReactContext reactContext) {
         super(reactContext);
         mEventEmitter = reactContext.getJSModule(RCTEventEmitter.class);
         mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
-    private RNSVGSvgViewShadowNode getShadowNode() {
-        return RNSVGSvgViewShadowNode.getShadowNodeByTag(getId());
+    private SvgViewShadowNode getShadowNode() {
+        return SvgViewShadowNode.getShadowNodeByTag(getId());
     }
 
     public void setBitmap(Bitmap bitmap) {
@@ -84,7 +84,7 @@ public class RNSVGSvgView extends View {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        RNSVGSvgViewShadowNode svg = getShadowNode();
+        SvgViewShadowNode svg = getShadowNode();
         if (svg != null) {
             mTargetTag = getShadowNode().hitTest(new Point((int) ev.getX(), (int) ev.getY()));
 

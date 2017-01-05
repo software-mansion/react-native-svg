@@ -19,7 +19,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 /**
  * Shadow node for virtual RNSVGPath view
  */
-public class RNSVGUseShadowNode extends RNSVGPathShadowNode {
+public class UseShadowNode extends PathShadowNode {
 
     private String mHref;
     private String mWidth;
@@ -53,7 +53,7 @@ public class RNSVGUseShadowNode extends RNSVGPathShadowNode {
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
-        RNSVGVirtualNode template = getSvgShadowNode().getDefinedTemplate(mHref);
+        VirtualNode template = getSvgShadowNode().getDefinedTemplate(mHref);
 
         if (template != null) {
             int count = saveAndSetupCanvas(canvas);

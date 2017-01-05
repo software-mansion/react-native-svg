@@ -16,12 +16,10 @@ import android.graphics.Point;
 import android.util.Base64;
 import android.util.SparseArray;
 import android.graphics.Color;
-import android.view.Surface;
 import android.graphics.PorterDuff;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
 
-import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,17 +27,17 @@ import java.util.Map;
 /**
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
  */
-public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
+public class SvgViewShadowNode extends LayoutShadowNode {
 
-    private static final SparseArray<RNSVGSvgViewShadowNode> mTagToShadowNode = new SparseArray<>();
+    private static final SparseArray<SvgViewShadowNode> mTagToShadowNode = new SparseArray<>();
 
-    public static RNSVGSvgViewShadowNode getShadowNodeByTag(int tag) {
+    public static SvgViewShadowNode getShadowNodeByTag(int tag) {
         return mTagToShadowNode.get(tag);
     }
 
     private boolean mResponsible = false;
-    private static final Map<String, RNSVGVirtualNode> mDefinedClipPaths = new HashMap<>();
-    private static final Map<String, RNSVGVirtualNode> mDefinedTemplates = new HashMap<>();
+    private static final Map<String, VirtualNode> mDefinedClipPaths = new HashMap<>();
+    private static final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
     private static final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
 
     @Override
@@ -81,11 +79,11 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         Paint paint = new Paint();
 
         for (int i = 0; i < getChildCount(); i++) {
-            if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
+            if (!(getChildAt(i) instanceof VirtualNode)) {
                 continue;
             }
 
-            RNSVGVirtualNode child = (RNSVGVirtualNode) getChildAt(i);
+            VirtualNode child = (VirtualNode) getChildAt(i);
             child.setupDimensions(canvas);
             child.saveDefinition();
             child.draw(canvas, paint, 1f);
@@ -125,11 +123,11 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         int count = getChildCount();
         int viewTag = -1;
         for (int i = count - 1; i >= 0; i--) {
-            if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
+            if (!(getChildAt(i) instanceof VirtualNode)) {
                 continue;
             }
 
-            viewTag = ((RNSVGVirtualNode) getChildAt(i)).hitTest(point);
+            viewTag = ((VirtualNode) getChildAt(i)).hitTest(point);
             if (viewTag != -1) {
                 break;
             }
@@ -138,19 +136,19 @@ public class RNSVGSvgViewShadowNode extends LayoutShadowNode {
         return viewTag;
     }
 
-    public void defineClipPath(RNSVGVirtualNode clipPath, String clipPathRef) {
+    public void defineClipPath(VirtualNode clipPath, String clipPathRef) {
         mDefinedClipPaths.put(clipPathRef, clipPath);
     }
 
-    public RNSVGVirtualNode getDefinedClipPath(String clipPathRef) {
+    public VirtualNode getDefinedClipPath(String clipPathRef) {
         return mDefinedClipPaths.get(clipPathRef);
     }
 
-    public void defineTemplate(RNSVGVirtualNode template, String templateRef) {
+    public void defineTemplate(VirtualNode template, String templateRef) {
         mDefinedTemplates.put(templateRef, template);
     }
 
-    public RNSVGVirtualNode getDefinedTemplate(String templateRef) {
+    public VirtualNode getDefinedTemplate(String templateRef) {
         return mDefinedTemplates.get(templateRef);
     }
 
