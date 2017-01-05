@@ -11,9 +11,9 @@ package com.horcrux.svg;
 
 import android.graphics.Bitmap;
 
-import com.facebook.csslayout.CSSMeasureMode;
-import com.facebook.csslayout.CSSNodeAPI;
-import com.facebook.csslayout.MeasureOutput;
+import com.facebook.yoga.YogaMeasureMode;
+import com.facebook.yoga.YogaMeasureFunction;
+import com.facebook.yoga.YogaNodeAPI;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.BaseViewManager;
@@ -32,15 +32,15 @@ public class RNSVGSvgViewManager extends BaseViewManager<RNSVGSvgView, RNSVGSvgV
 
     private static final String REACT_CLASS = "RNSVGSvgView";
     private static final int COMMAND_TO_DATA_URL = 100;
-    private static final CSSNodeAPI.MeasureFunction MEASURE_FUNCTION = new CSSNodeAPI.MeasureFunction() {
+    private static final YogaMeasureFunction MEASURE_FUNCTION = new YogaMeasureFunction() {
         @Override
         public long measure(
-                CSSNodeAPI node,
+                YogaNodeAPI node,
                 float width,
-                CSSMeasureMode widthMode,
+                YogaMeasureMode widthMode,
                 float height,
-                CSSMeasureMode heightMode) {
-            throw new IllegalStateException("SvgView should have explicit width and height set");
+                YogaMeasureMode heightMode) {
+            throw new IllegalStateException("SurfaceView should have explicit width and height set");
         }
     };
 
