@@ -14,6 +14,7 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.TextureView;
 import android.view.View;
 
 import com.facebook.react.ReactRootView;
@@ -32,7 +33,7 @@ import javax.annotation.Nullable;
 /**
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its \children.
  */
-public class SvgView extends View {
+public class SvgView extends TextureView {
     public enum Events {
         EVENT_DATA_URL("onDataURL");
 
@@ -48,7 +49,6 @@ public class SvgView extends View {
         }
     }
 
-    private @Nullable Bitmap mBitmap;
     private RCTEventEmitter mEventEmitter;
     private EventDispatcher mEventDispatcher;
     private int mTargetTag;
@@ -58,28 +58,13 @@ public class SvgView extends View {
 
     public SvgView(ReactContext reactContext) {
         super(reactContext);
+        setOpaque(false);
         mEventEmitter = reactContext.getJSModule(RCTEventEmitter.class);
         mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
     private SvgViewShadowNode getShadowNode() {
         return SvgViewShadowNode.getShadowNodeByTag(getId());
-    }
-
-    public void setBitmap(Bitmap bitmap) {
-        if (mBitmap != null) {
-            mBitmap.recycle();
-        }
-        mBitmap = bitmap;
-        invalidate();
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        if (mBitmap != null) {
-            canvas.drawBitmap(mBitmap, 0, 0, null);
-        }
     }
 
     @Override

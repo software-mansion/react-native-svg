@@ -186,4 +186,8 @@ public class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
     public void updateExtraData(View root, Object extraData) {
         throw new IllegalStateException("SVG elements does not map into a native view");
     }
+
+    @Override
+    public void onDropViewInstance(View view) {
+    }
 }

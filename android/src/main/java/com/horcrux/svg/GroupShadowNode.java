@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 /**
  * Shadow node for virtual RNSVGGroup view
  */
-public class GroupShadowNode extends PathShadowNode {
+public class GroupShadowNode extends RenderableShadowNode {
 
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
         final SvgViewShadowNode svg = getSvgShadowNode();

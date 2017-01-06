@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 /**
  * Shadow node for virtual RNSVGPath view
  */
-public class ImageShadowNode extends PathShadowNode {
+public class ImageShadowNode extends RenderableShadowNode {
 
     private String mX;
     private String mY;
@@ -107,8 +107,7 @@ public class ImageShadowNode extends PathShadowNode {
 
     @Override
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
-        mPath = new Path();
-        mPath.addRect(new RectF(getRect()), Path.Direction.CW);
+        mPath = getPath(canvas, paint);
 
         if (!mLoading.get()) {
             final ImageRequest request = ImageRequestBuilder.newBuilderWithSource(mUri).build();
@@ -119,6 +118,13 @@ public class ImageShadowNode extends PathShadowNode {
                 loadBitmap(request, canvas, paint);
             }
         }
+    }
+
+    @Override
+    protected Path getPath(Canvas canvas, Paint paint) {
+        Path path = new Path();
+        path.addRect(new RectF(getRect()), Path.Direction.CW);
+        return path;
     }
 
     private void loadBitmap(ImageRequest request, final Canvas canvas, final Paint paint) {

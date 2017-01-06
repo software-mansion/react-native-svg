@@ -68,7 +68,7 @@ public class SvgViewManager extends BaseViewManager<SvgView, SvgViewShadowNode> 
 
     @Override
     public void updateExtraData(SvgView root, Object extraData) {
-        root.setBitmap((Bitmap) extraData);
+        root.setSurfaceTextureListener((SvgViewShadowNode) extraData);
     }
 
     @Override

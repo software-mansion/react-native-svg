@@ -13,11 +13,20 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.SurfaceTexture;
+import android.support.annotation.Nullable;
 import android.util.Base64;
+import android.util.Log;
 import android.util.SparseArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.view.Surface;
+import android.view.TextureView;
+
+import com.facebook.common.logging.FLog;
+import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.LayoutShadowNode;
+import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
 
 import java.io.ByteArrayOutputStream;
@@ -27,15 +36,18 @@ import java.util.Map;
 /**
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
  */
-public class SvgViewShadowNode extends LayoutShadowNode {
+public class SvgViewShadowNode extends LayoutShadowNode implements TextureView.SurfaceTextureListener {
 
     private static final SparseArray<SvgViewShadowNode> mTagToShadowNode = new SparseArray<>();
+    private @Nullable Surface mSurface;
 
     public static SvgViewShadowNode getShadowNodeByTag(int tag) {
         return mTagToShadowNode.get(tag);
     }
 
+    private boolean mHasPendingUpdates;
     private boolean mResponsible = false;
+
     private static final Map<String, VirtualNode> mDefinedClipPaths = new HashMap<>();
     private static final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
     private static final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
@@ -53,8 +65,8 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
         super.onCollectExtraUpdates(uiUpdater);
-        uiUpdater.enqueueUpdateExtraData(getReactTag(), drawOutput());
-
+        drawOutput();
+        uiUpdater.enqueueUpdateExtraData(getReactTag(), this);
     }
 
     @Override
@@ -63,16 +75,51 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         mTagToShadowNode.put(getReactTag(), this);
     }
 
-    public Object drawOutput() {
-        Bitmap bitmap = Bitmap.createBitmap(
-                (int) getLayoutWidth(),
-                (int) getLayoutHeight(),
-                Bitmap.Config.ARGB_8888);
+    public void drawOutput() {
+        if (mSurface == null || !mSurface.isValid()) {
+            markChildrenUpdatesSeen(this);
+            return;
+        }
 
-        Canvas canvas = new Canvas(bitmap);
-        drawChildren(canvas);
-        return bitmap;
+        try {
+            Canvas canvas = mSurface.lockCanvas(null);
+            drawChildren(canvas);
+
+            if (mSurface != null) {
+                mSurface.unlockCanvasAndPost(canvas);
+            }
+
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            FLog.e(ReactConstants.TAG, e.getClass().getSimpleName() + " in Svg.unlockCanvasAndPost");
+        }
     }
+
+    private void markChildrenUpdatesSeen(ReactShadowNode shadowNode) {
+        for (int i = 0; i < shadowNode.getChildCount(); i++) {
+            ReactShadowNode child = shadowNode.getChildAt(i);
+            child.markUpdateSeen();
+            markChildrenUpdatesSeen(child);
+        }
+    }
+
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        mSurface = new Surface(surface);
+        drawOutput();
+    }
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        surface.release();
+        mSurface = null;
+        return true;
+    }
+
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {}
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {}
 
     private void drawChildren(Canvas canvas) {
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
@@ -97,9 +144,9 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
     public String getBase64() {
         Bitmap bitmap = Bitmap.createBitmap(
-            (int) getLayoutWidth(),
-            (int) getLayoutHeight(),
-            Bitmap.Config.ARGB_8888);
+                (int) getLayoutWidth(),
+                (int) getLayoutHeight(),
+                Bitmap.Config.ARGB_8888);
 
         drawChildren(new Canvas(bitmap));
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
