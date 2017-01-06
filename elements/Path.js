@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react';
-import SerializablePath from '../lib/SerializablePath';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import {PathAttributes} from '../lib/attributes';
 import Shape from './Shape';
@@ -20,12 +19,11 @@ class Path extends Shape {
     render() {
         let props = this.props;
 
-        let d = new SerializablePath(props.d).toJSON();
         return (
             <RNSVGPath
                 ref={ele => {this.root = ele;}}
                 {...this.extractProps(props)}
-                d={d}
+                d={props.d}
             />
         );
     }
