@@ -19,7 +19,9 @@ class Image extends Shape {
         href: PropTypes.oneOfType([
             PropTypes.number,
             PropTypes.shape({
-                uri: PropTypes.string.isRequired
+                uri: PropTypes.string.isRequired,
+                width: PropTypes.number.isRequired,
+                height: PropTypes.number.isRequired
             })
         ]).isRequired,
         preserveAspectRatio: PropTypes.string
