@@ -16,7 +16,12 @@ class Image extends Shape {
         y: numberProp,
         width: numberProp.isRequired,
         height: numberProp.isRequired,
-        href: PropTypes.number.isRequired,
+        href: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.shape({
+                uri: PropTypes.string.isRequired
+            })
+        ]).isRequired,
         preserveAspectRatio: PropTypes.string
     };
 
