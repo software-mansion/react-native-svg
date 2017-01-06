@@ -20,7 +20,7 @@ class Image extends Shape {
             PropTypes.number,
             function(props, propName, componentName) {
                 if (Object.keys(props[propName]).length != 1 ||
-                    !/^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i.test(props[propName].uri)) {
+                    !/^\s*data:\/\/data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i.test(props[propName].uri)) {
                     return new Error(
                         'Invalid prop `' + propName + '` supplied to' +
                         ' `' + componentName + '`. Validation failed.'

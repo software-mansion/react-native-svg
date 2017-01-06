@@ -26,7 +26,14 @@
     _src = src;
     CGImageRelease(_image);
     RCTImageSource *source = [RCTConvert RCTImageSource:src];
-    _imageRatio = source.size.width / source.size.height;
+    if (source.size.width != 0 && source.size.height != 0)
+    {
+        _imageRatio = source.size.width / source.size.height;
+    }
+    else
+    {
+        _imageRatio = 0.0
+    }
     _image = CGImageRetain([RCTConvert CGImage:src]);
     [self invalidate];
 }
@@ -110,7 +117,7 @@
     CGFloat rectRatio = rectWidth / rectHeight;
     CGRect renderRect;
     
-    if (imageRatio == rectRatio) {
+    if (imageRatio == 0.0 || imageRatio == rectRatio) {
         renderRect = rect;
     } else if (imageRatio < rectRatio) {
         renderRect = CGRectMake(0, 0, rectHeight * imageRatio, rectHeight);
