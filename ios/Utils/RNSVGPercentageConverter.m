@@ -12,7 +12,7 @@
 {
     CGFloat _relative;
     CGFloat _offset;
-    NSRegularExpression *percentageRegularExpression;
+    NSRegularExpression *_percentageRegularExpression;
 }
 
 - (instancetype) initWithRelativeAndOffset:(CGFloat)relative offset:(CGFloat)offset
@@ -20,7 +20,7 @@
     if (self = [super init]) {
         _relative = relative;
         _offset = offset;
-        percentageRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"^(\\-?\\d+(?:\\.\\d+)?)%$" options:0 error:nil];
+        _percentageRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"^(\\-?\\d+(?:\\.\\d+)?)%$" options:0 error:nil];
     }
     return self;
 }
@@ -28,14 +28,14 @@
 - (id)init
 {
     if (self = [super init]) {
-        percentageRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"^(\\-?\\d+(?:\\.\\d+)?)%$" options:0 error:nil];
+        _percentageRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"^(\\-?\\d+(?:\\.\\d+)?)%$" options:0 error:nil];
     }
     return self;
 }
 
 - (NSRegularExpression *) getPercentageRegularExpression
 {
-    return percentageRegularExpression;
+    return _percentageRegularExpression;
 }
 
 - (CGFloat) stringToFloat:(NSString *)string
@@ -61,7 +61,7 @@
 {
     __block CGFloat matched;
     
-    [percentageRegularExpression enumerateMatchesInString:percentage
+    [_percentageRegularExpression enumerateMatchesInString:percentage
                                                   options:0
                                                     range:NSMakeRange(0, percentage.length)
                                                usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
@@ -76,7 +76,7 @@
 
 - (BOOL) isPercentage:(NSString *) string
 {
-    return [percentageRegularExpression firstMatchInString:string options:0 range:NSMakeRange(0, [string length])] != nil;
+    return [_percentageRegularExpression firstMatchInString:string options:0 range:NSMakeRange(0, [string length])] != nil;
 }
 
 @end

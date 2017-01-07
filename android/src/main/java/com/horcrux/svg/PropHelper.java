@@ -196,7 +196,7 @@ import java.util.regex.Pattern;
 
     static class PathParser {
         static private Pattern PATH_REG_EXP = Pattern.compile("[a-df-z]|[\\-+]?(?:[\\d.]e[\\-+]?|[^\\s\\-+,a-z])+", Pattern.CASE_INSENSITIVE);
-        static private Pattern DECICAL_REG_EXP = Pattern.compile("(\\.\\d+)(?=\\-?\\.)");
+        static private Pattern DECIMAL_REG_EXP = Pattern.compile("(\\.\\d+)(?=\\-?\\.)");
 
         private Matcher mMatcher;
         private Path mPath;
@@ -218,7 +218,7 @@ import java.util.regex.Pattern;
             mScale = scale;
             mString = d;
             mPath = new Path();
-            mMatcher = PATH_REG_EXP.matcher(DECICAL_REG_EXP.matcher(mString).replaceAll("$1,"));
+            mMatcher = PATH_REG_EXP.matcher(DECIMAL_REG_EXP.matcher(mString).replaceAll("$1,"));
 
             while (mMatcher.find() && mValid) {
                 executeCommand(mMatcher.group());
@@ -361,7 +361,7 @@ import java.util.regex.Pattern;
         }
 
         private void lineTo(float x, float y) {
-            setPendDown();
+            setPenDown();
             mPivotX = mPenX = x;
             mPivotY = mPenY = y;
             mPath.lineTo(x * mScale, y * mScale);
@@ -378,7 +378,7 @@ import java.util.regex.Pattern;
         }
 
         private void cubicTo(float c1x, float c1y, float c2x, float c2y, float ex, float ey) {
-            setPendDown();
+            setPenDown();
             mPenX = ex;
             mPenY = ey;
             mPath.cubicTo(c1x * mScale, c1y * mScale, c2x * mScale, c2y * mScale, ex * mScale, ey * mScale);
@@ -489,7 +489,7 @@ import java.util.regex.Pattern;
             x += tX;
             y += tY;
 
-            setPendDown();
+            setPenDown();
 
             mPenX = mPivotX = x;
             mPenY = mPivotY = y;
@@ -570,7 +570,7 @@ import java.util.regex.Pattern;
             }
         }
 
-        private void setPendDown() {
+        private void setPenDown() {
             if (!mPendDownSet) {
                 mPenDownX = mPenX;
                 mPenDownY = mPenY;

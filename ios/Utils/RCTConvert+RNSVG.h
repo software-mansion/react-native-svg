@@ -17,12 +17,13 @@
 
 @interface RCTConvert (RNSVG)
 
-+ (CGPathRef)CGPath:(id)json;
++ (CGPathRef)CGPath:(NSString *)d;
 + (CTTextAlignment)CTTextAlignment:(id)json;
 + (RNSVGCGFCRule)RNSVGCGFCRule:(id)json;
 + (RNSVGTextFrame)RNSVGTextFrame:(id)json;
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;
+
 
 + (NSArray *)RNSVGBezier:(id)json;
 + (CGRect)CGRect:(id)json offset:(NSUInteger)offset;
