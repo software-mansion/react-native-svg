@@ -45,8 +45,7 @@
             CGPathRelease(strokePath);
         }
         
-        CGAffineTransform transform = self.matrix;
-        self.hitArea = CFAutorelease(CGPathCreateCopyByTransformingPath(hitArea, &transform));
+        self.hitArea = CGPathCreateCopy(hitArea);
         CGPathRelease(hitArea);
     }
     

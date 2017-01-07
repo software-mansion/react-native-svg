@@ -45,12 +45,11 @@ public class SvgViewShadowNode extends LayoutShadowNode implements TextureView.S
         return mTagToShadowNode.get(tag);
     }
 
-    private boolean mHasPendingUpdates;
     private boolean mResponsible = false;
 
-    private static final Map<String, VirtualNode> mDefinedClipPaths = new HashMap<>();
-    private static final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
-    private static final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
+    private final Map<String, VirtualNode> mDefinedClipPaths = new HashMap<>();
+    private final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
+    private final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
 
     @Override
     public boolean isVirtual() {

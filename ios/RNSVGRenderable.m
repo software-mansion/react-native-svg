@@ -169,7 +169,6 @@
     CGContextSetAlpha(context, self.opacity);
     
     [self beginTransparencyLayer:context];
-    [self renderClip:context];
     [self renderLayerTo:context];
     [self endTransparencyLayer:context];
 
@@ -182,7 +181,7 @@
     return [self hitTest:point withEvent:event withTransform:CGAffineTransformMakeRotation(0)];
 }
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transfrom
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transform
 {
     if (self.active) {
         if (!event) {
@@ -190,16 +189,21 @@
         }
         return self;
     }
-
-    CGPathRef hitArea = CGPathCreateCopyByTransformingPath(self.hitArea, &transfrom);
-    CGPathRef clipPath = self.clipPath;
+    
+    CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
+    CGPathRef hitArea = CGPathCreateCopyByTransformingPath(self.hitArea, &matrix);
+    CGPathRef clipPath = [self getClipPath];
     BOOL contains = CGPathContainsPoint(hitArea, nil, point, NO);
     CGPathRelease(hitArea);
+    
     if (contains) {
         if (!clipPath) {
             return self;
         } else {
-            return CGPathContainsPoint(clipPath, nil, point, NO) ? self : nil;
+            clipPath = CGPathCreateCopyByTransformingPath(clipPath, &matrix);
+            BOOL result = CGPathContainsPoint(clipPath, nil, point, self.clipRule == kRNSVGCGFCRuleEvenodd);
+            CGPathRelease(clipPath);
+            return result ? self : nil;
         }
     } else {
         return nil;
