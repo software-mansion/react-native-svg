@@ -494,22 +494,34 @@ import java.util.regex.Pattern;
             mPenX = mPivotX = x;
             mPenY = mPivotY = y;
 
-            //arcToBezier(cx, cy, rx, ry, sa, ea, clockwise, rad);
             if (rx != ry || rad != 0f) {
                 arcToBezier(cx, cy, rx, ry, sa, ea, clockwise, rad);
             } else {
+
                 float start = (float) Math.toDegrees(sa);
                 float end = (float) Math.toDegrees(ea);
+                float sweep = Math.abs((start - end) % 360);
+
+                if (outer) {
+                    if (sweep < 180) {
+                        sweep = 360 - sweep;
+                    }
+                } else {
+                    if (sweep > 180) {
+                        sweep = 360 - sweep;
+                    }
+                }
 
                 if (!clockwise) {
-                    end = 360 - end;
+                    sweep = -sweep;
                 }
-                float sweep = start - end;
+
                 RectF oval = new RectF(
                         (cx - rx) * mScale,
                         (cy - rx) * mScale,
                         (cx + rx) * mScale,
                         (cy + rx) * mScale);
+
                 mPath.arcTo(oval, start, sweep);
             }
         }
