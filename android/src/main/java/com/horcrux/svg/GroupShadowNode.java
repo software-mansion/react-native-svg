@@ -109,16 +109,6 @@ public class GroupShadowNode extends RenderableShadowNode {
     }
 
     @Override
-    public void mergeProperties(final VirtualNode target, final ReadableArray mergeList, final boolean inherited) {
-        traverseChildren(new NodeRunnable() {
-            public boolean run(VirtualNode node) {
-                node.mergeProperties(target, mergeList, inherited);
-                return true;
-            }
-        });
-    }
-
-    @Override
     public void resetProperties() {
         traverseChildren(new NodeRunnable() {
             public boolean run(VirtualNode node) {
