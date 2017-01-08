@@ -24,6 +24,7 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.facebook.common.logging.FLog;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReadableArray;
@@ -72,10 +73,10 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     protected Path mPath;
 
-    private ArrayList<String> mChangedList;
+    private ReadableArray mLastMergedList;
     private ArrayList<Object> mOriginProperties;
     protected ReadableArray mPropList = new JavaOnlyArray();
-    protected WritableArray mOwnedPropList = new JavaOnlyArray();
+    protected WritableArray mAttributeList = new JavaOnlyArray();
 
     @ReactProp(name = "fill")
     public void setFill(@Nullable ReadableArray fill) {
@@ -136,7 +137,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
         markUpdated();
     }
 
-    @ReactProp(name = "strokeWidth", defaultFloat = 1f)
+    @ReactProp(name = "strokeWidth", defaultFloat = 0f)
     public void setStrokeWidth(float strokeWidth) {
         mStrokeWidth = strokeWidth;
         markUpdated();
@@ -188,18 +189,16 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     @ReactProp(name = "propList")
     public void setPropList(@Nullable ReadableArray propList) {
-        WritableArray copy = new JavaOnlyArray();
-
         if (propList != null) {
+            WritableArray copy = Arguments.createArray();
             for (int i = 0; i < propList.size(); i++) {
                 String fieldName = propertyNameToFieldName(propList.getString(i));
                 copy.pushString(fieldName);
-                mOwnedPropList.pushString(fieldName);
+                mAttributeList.pushString(fieldName);
             }
-
+            mPropList = copy;
         }
 
-        mPropList = copy;
         markUpdated();
     }
 
@@ -231,22 +230,6 @@ abstract public class RenderableShadowNode extends VirtualNode {
             markUpdateSeen();
         }
     }
-    /**
-     * sorting stops and stopsColors from array
-     */
-    private static void parseGradientStops(ReadableArray value, int stopsCount, float[] stops, int[] stopsColors, int startColorsPosition) {
-        int startStops = value.size() - stopsCount;
-        for (int i = 0; i < stopsCount; i++) {
-            stops[i] = (float)value.getDouble(startStops + i);
-            stopsColors[i] = Color.argb(
-                    (int) (value.getDouble(startColorsPosition + i * 4 + 3) * 255),
-                    (int) (value.getDouble(startColorsPosition + i * 4) * 255),
-                    (int) (value.getDouble(startColorsPosition + i * 4 + 1) * 255),
-                    (int) (value.getDouble(startColorsPosition + i * 4 + 2) * 255));
-
-        }
-    }
-
 
     /**
      * Sets up paint according to the props set on a shadow view. Returns {@code true}
@@ -379,20 +362,14 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     @Override
     public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited) {
+        mLastMergedList = mergeList;
+
         if (mergeList.size() == 0) {
             return;
         }
 
-        if (!inherited) {
-            mOriginProperties = new ArrayList<>();
-            mChangedList = new ArrayList<>();
-        }
-
-        WritableArray propList = new JavaOnlyArray();
-        for (int i = 0; i < mPropList.size(); i++) {
-            propList.pushString(mPropList.getString(i));
-        }
-        mOwnedPropList = propList;
+        mOriginProperties = new ArrayList<>();
+        resetAttributeList();
 
         for (int i = 0, size = mergeList.size(); i < size; i++) {
             try {
@@ -402,12 +379,12 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
                 if (inherited) {
                     if (!hasOwnProperty(fieldName)) {
+                        mAttributeList.pushString(fieldName);
+                        mOriginProperties.add(field.get(this));
                         field.set(this, value);
-                        propList.pushString(fieldName);
                     }
                 } else {
                     mOriginProperties.add(field.get(this));
-                    mChangedList.add(fieldName);
                     field.set(this, value);
                 }
             } catch (Exception e) {
@@ -423,18 +400,26 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     @Override
     public void resetProperties() {
-        if (mChangedList != null) {
+        if (mLastMergedList != null) {
             try {
-                for (int i = mChangedList.size() - 1; i >= 0; i--) {
-                    Field field = getClass().getField(mChangedList.get(i));
+                for (int i = mLastMergedList.size() - 1; i >= 0; i--) {
+                    Field field = getClass().getField(mLastMergedList.getString(i));
                     field.set(this, mOriginProperties.get(i));
                 }
             } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
 
-            mChangedList = null;
+            mLastMergedList = null;
             mOriginProperties = null;
+        }
+        resetAttributeList();
+    }
+
+    private void resetAttributeList() {
+        mAttributeList = Arguments.createArray();
+        for (int i = 0; i < mPropList.size(); i++) {
+            mAttributeList.pushString(mPropList.getString(i));
         }
     }
 
@@ -451,8 +436,8 @@ abstract public class RenderableShadowNode extends VirtualNode {
     }
 
     private boolean hasOwnProperty(String propName) {
-        for (int i = mOwnedPropList.size() - 1; i >= 0; i--) {
-            if (mOwnedPropList.getString(i).equals(propName)) {
+        for (int i = mAttributeList.size() - 1; i >= 0; i--) {
+            if (mAttributeList.getString(i).equals(propName)) {
                 return true;
             }
         }

@@ -60,7 +60,7 @@ public class UseShadowNode extends RenderableShadowNode {
             int count = saveAndSetupCanvas(canvas);
 
             clip(canvas, paint);
-            template.mergeProperties(this, mOwnedPropList);
+            template.mergeProperties(this, mAttributeList, true);
             template.draw(canvas, paint, opacity * mOpacity);
             template.resetProperties();
 

@@ -83,10 +83,10 @@
     
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited
 {
     [self traverseSubviews:^(RNSVGNode *node) {
-        [node mergeProperties:target mergeList:mergeList];
+        [node mergeProperties:target mergeList:mergeList inherited:inherited];
         return YES;
     }];
 }

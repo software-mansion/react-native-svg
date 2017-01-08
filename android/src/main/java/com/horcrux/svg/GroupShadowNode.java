@@ -38,7 +38,7 @@ public class GroupShadowNode extends RenderableShadowNode {
                 public boolean run(VirtualNode node) {
                     node.setupDimensions(canvas);
 
-                    node.mergeProperties(self, mOwnedPropList, true);
+                    node.mergeProperties(self, mAttributeList, true);
                     node.draw(canvas, paint, opacity * mOpacity);
                     node.markUpdateSeen();
 
@@ -109,10 +109,10 @@ public class GroupShadowNode extends RenderableShadowNode {
     }
 
     @Override
-    public void mergeProperties(final VirtualNode target, final ReadableArray mergeList) {
+    public void mergeProperties(final VirtualNode target, final ReadableArray mergeList, final boolean inherited) {
         traverseChildren(new NodeRunnable() {
             public boolean run(VirtualNode node) {
-                node.mergeProperties(target, mergeList);
+                node.mergeProperties(target, mergeList, inherited);
                 return true;
             }
         });
