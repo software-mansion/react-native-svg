@@ -21,105 +21,14 @@
     _d = CGPathRetain(d);
 }
 
-- (void)dealloc
-{
-    CGPathRelease(_d);
-}
-
-- (void)renderLayerTo:(CGContextRef)context
-{
-    // todo: add detection if path has changed since last update.
-    CGPathRef path = [self getPath:context];
-    if ((!self.fill && !self.stroke) || !path) {
-        return;
-    }
-    
-    if ([self getSvgView].responsible) {
-        // Add path to hitArea
-        CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
-        if (self.stroke && self.strokeWidth) {
-            // Add stroke to hitArea
-            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
-            CGPathAddPath(hitArea, nil, strokePath);
-            CGPathRelease(strokePath);
-        }
-        
-        self.hitArea = CFAutorelease(CGPathCreateCopy(hitArea));
-        CGPathRelease(hitArea);
-    }
-    
-    if (self.opacity == 0) {
-        return;
-    }
-    
-    CGPathDrawingMode mode = kCGPathStroke;
-    BOOL fillColor = YES;
-    
-    if (self.fill) {
-        mode = self.fillRule == kRNSVGCGFCRuleEvenodd ? kCGPathEOFill : kCGPathFill;
-        fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
-        
-        if (!fillColor) {
-            [self clip:context];
-            
-            CGContextSaveGState(context);
-            CGContextAddPath(context, path);
-            CGContextClip(context);
-            RNSVGBrushConverter *brushConverter = [[self getSvgView] getDefinedBrushConverter:[self.fill brushRef]];
-            [self.fill paint:context opacity:self.fillOpacity brushConverter:brushConverter];
-            CGContextRestoreGState(context);
-            if (!self.stroke) {
-                return;
-            }
-        }
-    }
-    
-    if (self.stroke && self.strokeWidth) {
-        CGContextSetLineWidth(context, self.strokeWidth);
-        CGContextSetLineCap(context, self.strokeLinecap);
-        CGContextSetLineJoin(context, self.strokeLinejoin);
-        RNSVGCGFloatArray dash = self.strokeDasharray;
-        
-        if (dash.count) {
-            CGContextSetLineDash(context, self.strokeDashoffset, dash.array, dash.count);
-        }
-        
-        if (!fillColor) {
-            CGContextAddPath(context, path);
-            CGContextReplacePathWithStrokedPath(context);
-            CGContextClip(context);
-        }
-        
-        if ([self.stroke applyStrokeColor:context opacity:self.strokeOpacity]) {
-            if (mode == kCGPathFill) {
-                mode = kCGPathFillStroke;
-            } else if (mode == kCGPathEOFill) {
-                mode = kCGPathEOFillStroke;
-            }
-        } else {
-            // draw fill
-            [self clip:context];
-            CGContextAddPath(context, path);
-            CGContextDrawPath(context, mode);
-            
-            // draw stroke
-            CGContextAddPath(context, path);
-            CGContextReplacePathWithStrokedPath(context);
-            CGContextClip(context);
-            RNSVGBrushConverter *brushConverter = [[self getSvgView] getDefinedBrushConverter:[self.stroke brushRef]];
-            [self.stroke paint:context opacity:self.strokeOpacity brushConverter:brushConverter];
-            return;
-        }
-    }
-    
-    [self clip:context];
-    CGContextAddPath(context, path);
-    CGContextDrawPath(context, mode);
-}
-
 - (CGPathRef)getPath:(CGContextRef)context
 {
     return self.d;
+}
+
+- (void)dealloc
+{
+    CGPathRelease(_d);
 }
 
 @end
