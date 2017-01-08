@@ -37,14 +37,6 @@ import java.util.Map;
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
  */
 public class SvgViewShadowNode extends LayoutShadowNode {
-
-    private static final SparseArray<SvgViewShadowNode> mTagToShadowNode = new SparseArray<>();
-    private @Nullable Surface mSurface;
-
-    public static SvgViewShadowNode getShadowNodeByTag(int tag) {
-        return mTagToShadowNode.get(tag);
-    }
-
     private boolean mResponsible = false;
 
     private final Map<String, VirtualNode> mDefinedClipPaths = new HashMap<>();
@@ -70,7 +62,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     @Override
     public void setReactTag(int reactTag) {
         super.setReactTag(reactTag);
-        mTagToShadowNode.put(getReactTag(), this);
+        SvgInstancesManager.registerShadowNode(this);
     }
 
     public Object drawOutput() {
@@ -168,9 +160,5 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
     public PropHelper.RNSVGBrush getDefinedBrush(String brushRef) {
         return mDefinedBrushes.get(brushRef);
-    }
-
-    public void finalize() {
-        mTagToShadowNode.remove(getReactTag());
     }
 }

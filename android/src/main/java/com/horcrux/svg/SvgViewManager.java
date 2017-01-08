@@ -62,6 +62,11 @@ public class SvgViewManager extends BaseViewManager<SvgView, SvgViewShadowNode> 
     }
 
     @Override
+    public void onDropViewInstance(SvgView view) {
+        SvgInstancesManager.unregisterInstance(view.getId());
+    }
+
+    @Override
     protected SvgView createViewInstance(ThemedReactContext reactContext) {
         return new SvgView(reactContext);
     }

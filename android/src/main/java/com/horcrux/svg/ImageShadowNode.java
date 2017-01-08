@@ -115,7 +115,7 @@ public class ImageShadowNode extends RenderableShadowNode {
             if (Fresco.getImagePipeline().isInBitmapMemoryCache(request)) {
                 tryRender(request, canvas, paint, opacity * mOpacity);
             } else {
-                loadBitmap(request, canvas, paint);
+                loadBitmap(request);
             }
         }
     }
@@ -127,7 +127,7 @@ public class ImageShadowNode extends RenderableShadowNode {
         return path;
     }
 
-    private void loadBitmap(ImageRequest request, final Canvas canvas, final Paint paint) {
+    private void loadBitmap(ImageRequest request) {
         final DataSource<CloseableReference<CloseableImage>> dataSource
             = Fresco.getImagePipeline().fetchDecodedImage(request, getThemedContext());
 
@@ -135,7 +135,8 @@ public class ImageShadowNode extends RenderableShadowNode {
                                  @Override
                                  public void onNewResultImpl(Bitmap bitmap) {
                                      mLoading.set(false);
-                                     getSvgShadowNode().drawOutput();
+                                     SvgViewShadowNode shadowNode = getSvgShadowNode();
+                                     shadowNode.markUpdated();
                                  }
 
                                  @Override

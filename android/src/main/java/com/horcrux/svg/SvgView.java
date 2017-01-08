@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
@@ -31,7 +32,7 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 import javax.annotation.Nullable;
 
 /**
- * Custom {@link View} implementation that draws an RNSVGSvg React view and its children.
+ * Custom {@link View} implementation that draws an RNSVGSvg React view and its \childrn.
  */
 public class SvgView extends View {
     public enum Events {
@@ -63,6 +64,12 @@ public class SvgView extends View {
         mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+        SvgInstancesManager.registerSvgView(this);
+    }
+
     public void setBitmap(Bitmap bitmap) {
         if (mBitmap != null) {
             mBitmap.recycle();
@@ -80,19 +87,16 @@ public class SvgView extends View {
     }
 
     private SvgViewShadowNode getShadowNode() {
-        return SvgViewShadowNode.getShadowNodeByTag(getId());
+        return SvgInstancesManager.getShadowNodeByTag(getId());
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        SvgViewShadowNode svg = getShadowNode();
-        if (svg != null) {
-            mTargetTag = getShadowNode().hitTest(new Point((int) ev.getX(), (int) ev.getY()));
+        mTargetTag = getShadowNode().hitTest(new Point((int) ev.getX(), (int) ev.getY()));
 
-            if (mTargetTag != -1) {
-                handleTouchEvent(ev);
-                return true;
-            }
+        if (mTargetTag != -1) {
+            handleTouchEvent(ev);
+            return true;
         }
 
         return super.dispatchTouchEvent(ev);
@@ -188,4 +192,6 @@ public class SvgView extends View {
         event.putString("base64", getShadowNode().getBase64());
         mEventEmitter.receiveEvent(getId(), Events.EVENT_DATA_URL.toString(), event);
     }
+
+
 }
