@@ -31,9 +31,9 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 import javax.annotation.Nullable;
 
 /**
- * Custom {@link View} implementation that draws an RNSVGSvg React view and its \children.
+ * Custom {@link View} implementation that draws an RNSVGSvg React view and its children.
  */
-public class SvgView extends TextureView {
+public class SvgView extends View {
     public enum Events {
         EVENT_DATA_URL("onDataURL");
 
@@ -49,6 +49,7 @@ public class SvgView extends TextureView {
         }
     }
 
+    private @Nullable Bitmap mBitmap;
     private RCTEventEmitter mEventEmitter;
     private EventDispatcher mEventDispatcher;
     private int mTargetTag;
@@ -58,9 +59,24 @@ public class SvgView extends TextureView {
 
     public SvgView(ReactContext reactContext) {
         super(reactContext);
-        setOpaque(false);
         mEventEmitter = reactContext.getJSModule(RCTEventEmitter.class);
         mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        if (mBitmap != null) {
+            mBitmap.recycle();
+        }
+        mBitmap = bitmap;
+        invalidate();
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (mBitmap != null) {
+            canvas.drawBitmap(mBitmap, 0, 0, null);
+        }
     }
 
     private SvgViewShadowNode getShadowNode() {

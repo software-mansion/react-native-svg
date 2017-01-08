@@ -36,7 +36,7 @@ import java.util.Map;
 /**
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
  */
-public class SvgViewShadowNode extends LayoutShadowNode implements TextureView.SurfaceTextureListener {
+public class SvgViewShadowNode extends LayoutShadowNode {
 
     private static final SparseArray<SvgViewShadowNode> mTagToShadowNode = new SparseArray<>();
     private @Nullable Surface mSurface;
@@ -64,8 +64,7 @@ public class SvgViewShadowNode extends LayoutShadowNode implements TextureView.S
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
         super.onCollectExtraUpdates(uiUpdater);
-        drawOutput();
-        uiUpdater.enqueueUpdateExtraData(getReactTag(), this);
+        uiUpdater.enqueueUpdateExtraData(getReactTag(), drawOutput());
     }
 
     @Override
@@ -74,51 +73,16 @@ public class SvgViewShadowNode extends LayoutShadowNode implements TextureView.S
         mTagToShadowNode.put(getReactTag(), this);
     }
 
-    public void drawOutput() {
-        if (mSurface == null || !mSurface.isValid()) {
-            markChildrenUpdatesSeen(this);
-            return;
-        }
+    public Object drawOutput() {
+        Bitmap bitmap = Bitmap.createBitmap(
+                (int) getLayoutWidth(),
+                (int) getLayoutHeight(),
+                Bitmap.Config.ARGB_8888);
 
-        try {
-            Canvas canvas = mSurface.lockCanvas(null);
-            drawChildren(canvas);
-
-            if (mSurface != null) {
-                mSurface.unlockCanvasAndPost(canvas);
-            }
-
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            FLog.e(ReactConstants.TAG, e.getClass().getSimpleName() + " in Svg.unlockCanvasAndPost");
-        }
+        Canvas canvas = new Canvas(bitmap);
+        drawChildren(canvas);
+        return bitmap;
     }
-
-    private void markChildrenUpdatesSeen(ReactShadowNode shadowNode) {
-        for (int i = 0; i < shadowNode.getChildCount(); i++) {
-            ReactShadowNode child = shadowNode.getChildAt(i);
-            child.markUpdateSeen();
-            markChildrenUpdatesSeen(child);
-        }
-    }
-
-    @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        mSurface = new Surface(surface);
-        drawOutput();
-    }
-
-    @Override
-    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        surface.release();
-        mSurface = null;
-        return true;
-    }
-
-    @Override
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {}
-
-    @Override
-    public void onSurfaceTextureUpdated(SurfaceTexture surface) {}
 
     private void drawChildren(Canvas canvas) {
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
