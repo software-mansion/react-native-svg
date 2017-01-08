@@ -116,7 +116,8 @@
 
 - (CGPathRef)getClipPath:(CGContextRef)context
 {
-    if (self.clipPath) {
+    if (self.clipPath && !_cachedClipPath) {
+        CGPathRelease(_cachedClipPath);
         _cachedClipPath = CGPathRetain([[[self getSvgView] getDefinedClipPath:self.clipPath] getPath:context]);
     }
     
@@ -125,7 +126,7 @@
 
 - (void)clip:(CGContextRef)context
 {
-    CGPathRef clipPath  = [self getClipPath:context];
+    CGPathRef clipPath = [self getClipPath:context];
 
     if (clipPath) {
         CGContextAddPath(context, clipPath);

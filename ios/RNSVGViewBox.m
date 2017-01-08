@@ -160,7 +160,7 @@
     return CGAffineTransformTranslate(transform, -translateX * (_fromSymbol ? scaleX : 1), -translateY * (_fromSymbol ? scaleY : 1));
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited
 {
     if ([target isKindOfClass:[RNSVGUse class]]) {
         RNSVGUse *use = target;
@@ -172,8 +172,10 @@
 
 - (void)resetProperties
 {
-    self.width = self.height = nil;
-    _fromSymbol = NO;
+    if (_fromSymbol) {
+        self.width = self.height = nil;
+        _fromSymbol = NO;
+    }
 }
 
 @end

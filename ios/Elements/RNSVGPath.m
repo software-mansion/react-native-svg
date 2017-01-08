@@ -29,8 +29,7 @@
 - (void)renderLayerTo:(CGContextRef)context
 {
     // todo: add detection if path has changed since last update.
-    self.d = [self getPath:context];
-    CGPathRef path = self.d;
+    CGPathRef path = [self getPath:context];
     if ((!self.fill && !self.stroke) || !path) {
         return;
     }
@@ -38,14 +37,14 @@
     if ([self getSvgView].responsible) {
         // Add path to hitArea
         CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
-        if (self.stroke) {
+        if (self.stroke && self.strokeWidth) {
             // Add stroke to hitArea
             CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
             CGPathAddPath(hitArea, nil, strokePath);
             CGPathRelease(strokePath);
         }
         
-        self.hitArea = CGPathCreateCopy(hitArea);
+        self.hitArea = CFAutorelease(CGPathCreateCopy(hitArea));
         CGPathRelease(hitArea);
     }
     
@@ -75,7 +74,7 @@
         }
     }
     
-    if (self.stroke) {
+    if (self.stroke && self.strokeWidth) {
         CGContextSetLineWidth(context, self.strokeWidth);
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);

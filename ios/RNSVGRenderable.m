@@ -12,7 +12,7 @@
 @implementation RNSVGRenderable
 {
     NSMutableDictionary *_originProperties;
-    NSArray *_changedList;
+    NSArray *_lastMergedList;
     RNSVGPercentageConverter *_widthConverter;
     RNSVGPercentageConverter *_heightConverter;
     CGFloat _contextWidth;
@@ -148,8 +148,8 @@
     if (propList == _propList) {
         return;
     }
+    _attributeList = [propList copy];
     _propList = propList;
-    self.ownedPropList = [propList mutableCopy];
     [self invalidate];
 }
 
@@ -191,18 +191,20 @@
     }
     
     CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
+    
     CGPathRef hitArea = CGPathCreateCopyByTransformingPath(self.hitArea, &matrix);
-    CGPathRef clipPath = [self getClipPath];
     BOOL contains = CGPathContainsPoint(hitArea, nil, point, NO);
     CGPathRelease(hitArea);
     
     if (contains) {
+        CGPathRef clipPath = [self getClipPath];
+        
         if (!clipPath) {
             return self;
         } else {
-            clipPath = CGPathCreateCopyByTransformingPath(clipPath, &matrix);
-            BOOL result = CGPathContainsPoint(clipPath, nil, point, self.clipRule == kRNSVGCGFCRuleEvenodd);
-            CGPathRelease(clipPath);
+            CGPathRef transformedClipPath = CGPathCreateCopyByTransformingPath(clipPath, &matrix);
+            BOOL result = CGPathContainsPoint(transformedClipPath, nil, point, self.clipRule == kRNSVGCGFCRuleEvenodd);
+            CGPathRelease(transformedClipPath);
             return result ? self : nil;
         }
     } else {
@@ -255,44 +257,38 @@
 
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited
 {
+    _lastMergedList = mergeList;
+    
     if (mergeList.count == 0) {
         return;
     }
     
-    self.ownedPropList = [self.propList mutableCopy];
+    NSMutableArray* attributeList = [self.propList mutableCopy];
     
-    if (!inherited) {
-        _originProperties = [[NSMutableDictionary alloc] init];
-        _changedList = mergeList;
-    }
+    _originProperties = [[NSMutableDictionary alloc] init];
     
     for (NSString *key in mergeList) {
         if (inherited) {
-            [self inheritProperty:target propName:key];
+            if (![attributeList containsObject:key]) {
+                [attributeList addObject:key];
+                [_originProperties setValue:[self valueForKey:key] forKey:key];
+                [self setValue:[target valueForKey:key] forKey:key];
+            }
         } else {
             [_originProperties setValue:[self valueForKey:key] forKey:key];
             [self setValue:[target valueForKey:key] forKey:key];
         }
     }
+    
+    _attributeList = [attributeList copy];
 }
 
 - (void)resetProperties
 {
-    if (_changedList) {
-        for (NSString *key in _changedList) {
-            [self setValue:[_originProperties valueForKey:key] forKey:key];
-        }
+    for (NSString *key in _lastMergedList) {
+        [self setValue:[_originProperties valueForKey:key] forKey:key];
     }
-    _changedList = nil;
-}
-
-- (void)inheritProperty:(__kindof RNSVGNode *)parent propName:(NSString *)propName
-{
-    if (![self.ownedPropList containsObject:propName]) {
-        // add prop to props
-        [self.ownedPropList addObject:propName];
-        [self setValue:[parent valueForKey:propName] forKey:propName];
-    }
+    _attributeList = [_propList copy];
 }
 
 - (void)renderLayerTo:(CGContextRef)context

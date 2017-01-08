@@ -24,7 +24,7 @@
     }];
 
     [self traverseSubviews:^(RNSVGNode *node) {
-        [node mergeProperties:self mergeList:self.ownedPropList inherited:YES];
+        [node mergeProperties:self mergeList:self.attributeList inherited:YES];
         [node renderTo:context];
         return YES;
     }];
