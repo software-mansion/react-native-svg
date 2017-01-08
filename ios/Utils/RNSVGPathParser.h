@@ -6,13 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#import <QuartzCore/QuartzCore.h>
 #import <Foundation/Foundation.h>
 
-#import "RNSVGPath.h"
+@interface RNSVGPathParser : NSObject
 
-@interface RNSVGEllipse : RNSVGRenderable
-@property (nonatomic, strong) NSString* cx;
-@property (nonatomic, strong) NSString* cy;
-@property (nonatomic, strong) NSString* rx;
-@property (nonatomic, strong) NSString* ry;
+- (instancetype) initWithPathString:(NSString *)d;
+- (CGPathRef)getPath;
+
 @end

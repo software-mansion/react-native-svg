@@ -19,7 +19,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 /**
  * Shadow node for virtual RNSVGPath view
  */
-public class EllipseShadowNode extends PathShadowNode {
+public class EllipseShadowNode extends RenderableShadowNode {
 
     private String mCx;
     private String mCy;
@@ -48,12 +48,6 @@ public class EllipseShadowNode extends PathShadowNode {
     public void setRy(String ry) {
         mRy = ry;
         markUpdated();
-    }
-
-    @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
-        mPath = getPath(canvas, paint);
-        super.draw(canvas, paint, opacity);
     }
 
     @Override

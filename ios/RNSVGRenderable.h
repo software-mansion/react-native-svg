@@ -28,7 +28,7 @@
 @property (nonatomic, assign) CGFloat strokeDashoffset;
 @property (nonatomic, assign) CGPathRef hitArea;
 @property (nonatomic, copy) NSArray<NSString *> *propList;
-@property (nonatomic, strong) NSMutableArray<NSString *> *ownedPropList;
+@property (nonatomic, strong) NSArray<NSString *> *attributeList;
 
 - (void)setBoundingBox:(CGRect)boundingBox;
 - (CGFloat)getWidthRelatedValue:(NSString *)string;

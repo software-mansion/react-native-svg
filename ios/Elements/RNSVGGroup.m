@@ -24,7 +24,7 @@
     }];
 
     [self traverseSubviews:^(RNSVGNode *node) {
-        [node mergeProperties:self mergeList:self.ownedPropList inherited:YES];
+        [node mergeProperties:self mergeList:self.attributeList inherited:YES];
         [node renderTo:context];
         return YES;
     }];
@@ -83,10 +83,10 @@
     
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
+- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited
 {
     [self traverseSubviews:^(RNSVGNode *node) {
-        [node mergeProperties:target mergeList:mergeList];
+        [node mergeProperties:target mergeList:mergeList inherited:inherited];
         return YES;
     }];
 }

@@ -13,6 +13,7 @@
 @implementation RNSVGNode
 {
     BOOL _transparent;
+    CGPathRef _cachedClipPath;
 }
 
 - (instancetype)init
@@ -78,24 +79,15 @@
     _matrix = matrix;
 }
 
-- (void)setClipPath:(CGPathRef)clipPath
+- (void)setClipPath:(NSString *)clipPath
 {
     if (_clipPath == clipPath) {
         return;
     }
+    CGPathRelease(_cachedClipPath);
+    _cachedClipPath = nil;
+    _clipPath = clipPath;
     [self invalidate];
-    CGPathRelease(_clipPath);
-    _clipPath = CGPathRetain(clipPath);
-}
-
-- (void)setClipPathRef:(NSString *)clipPathRef
-{
-    if (_clipPathRef == clipPathRef) {
-        return;
-    }
-    [self invalidate];
-    self.clipPath = nil;
-    _clipPathRef = clipPathRef;
 }
 
 - (void)beginTransparencyLayer:(CGContextRef)context
@@ -117,16 +109,24 @@
     // abstract
 }
 
-- (void)renderClip:(CGContextRef)context
+- (CGPathRef)getClipPath
 {
-    if (self.clipPathRef) {
-        self.clipPath = [[[self getSvgView] getDefinedClipPath:self.clipPathRef] getPath:context];
+    return _cachedClipPath;
+}
+
+- (CGPathRef)getClipPath:(CGContextRef)context
+{
+    if (self.clipPath && !_cachedClipPath) {
+        CGPathRelease(_cachedClipPath);
+        _cachedClipPath = CGPathRetain([[[self getSvgView] getDefinedClipPath:self.clipPath] getPath:context]);
     }
+    
+    return [self getClipPath];
 }
 
 - (void)clip:(CGContextRef)context
 {
-    CGPathRef clipPath  = self.clipPath;
+    CGPathRef clipPath = [self getClipPath:context];
 
     if (clipPath) {
         CGContextAddPath(context, clipPath);
@@ -209,7 +209,7 @@
 
 - (void)dealloc
 {
-    CGPathRelease(_clipPath);
+    CGPathRelease(_cachedClipPath);
 }
 
 @end

@@ -174,7 +174,7 @@ public class ViewBoxShadowNode extends GroupShadowNode {
     }
 
     @Override
-    public void mergeProperties(VirtualNode target, ReadableArray mergeList) {
+    public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited) {
         if (target instanceof UseShadowNode) {
             mFromSymbol = true;
             mBoxWidth = ((UseShadowNode)target).getWidth();

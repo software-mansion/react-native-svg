@@ -11,6 +11,7 @@ package com.horcrux.svg;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.common.ReactConstants;
@@ -19,7 +20,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 /**
  * Shadow node for virtual RNSVGPath view
  */
-public class UseShadowNode extends PathShadowNode {
+public class UseShadowNode extends RenderableShadowNode {
 
     private String mHref;
     private String mWidth;
@@ -59,7 +60,7 @@ public class UseShadowNode extends PathShadowNode {
             int count = saveAndSetupCanvas(canvas);
 
             clip(canvas, paint);
-            template.mergeProperties(this, mOwnedPropList);
+            template.mergeProperties(this, mAttributeList, true);
             template.draw(canvas, paint, opacity * mOpacity);
             template.resetProperties();
 
@@ -69,5 +70,11 @@ public class UseShadowNode extends PathShadowNode {
             FLog.w(ReactConstants.TAG, "`Use` element expected a pre-defined svg template as `href` prop, " +
                 "template named: " + mHref + " is not defined.");
         }
+    }
+
+    @Override
+    protected Path getPath(Canvas canvas, Paint paint) {
+        // todo:
+        return new Path();
     }
 }

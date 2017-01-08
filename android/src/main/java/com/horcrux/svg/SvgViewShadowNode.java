@@ -13,11 +13,20 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.SurfaceTexture;
+import android.support.annotation.Nullable;
 import android.util.Base64;
+import android.util.Log;
 import android.util.SparseArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.view.Surface;
+import android.view.TextureView;
+
+import com.facebook.common.logging.FLog;
+import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.LayoutShadowNode;
+import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
 
 import java.io.ByteArrayOutputStream;
@@ -30,15 +39,17 @@ import java.util.Map;
 public class SvgViewShadowNode extends LayoutShadowNode {
 
     private static final SparseArray<SvgViewShadowNode> mTagToShadowNode = new SparseArray<>();
+    private @Nullable Surface mSurface;
 
     public static SvgViewShadowNode getShadowNodeByTag(int tag) {
         return mTagToShadowNode.get(tag);
     }
 
     private boolean mResponsible = false;
-    private static final Map<String, VirtualNode> mDefinedClipPaths = new HashMap<>();
-    private static final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
-    private static final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
+
+    private final Map<String, VirtualNode> mDefinedClipPaths = new HashMap<>();
+    private final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
+    private final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
 
     @Override
     public boolean isVirtual() {
@@ -54,7 +65,6 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
         super.onCollectExtraUpdates(uiUpdater);
         uiUpdater.enqueueUpdateExtraData(getReactTag(), drawOutput());
-
     }
 
     @Override
@@ -97,9 +107,9 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
     public String getBase64() {
         Bitmap bitmap = Bitmap.createBitmap(
-            (int) getLayoutWidth(),
-            (int) getLayoutHeight(),
-            Bitmap.Config.ARGB_8888);
+                (int) getLayoutWidth(),
+                (int) getLayoutHeight(),
+                Bitmap.Config.ARGB_8888);
 
         drawChildren(new Canvas(bitmap));
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
