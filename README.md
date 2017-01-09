@@ -21,11 +21,15 @@
     ```bash
     npm install react-native-svg --save
     ```
-
+    
+    # NOTICE:
+    
     - react-native-svg >= 3.2.0 only supports react-native >= 0.29.0
     - react-native-svg >= 4.2.0 only supports react-native >= 0.32.0
     - react-native-svg >= 4.3.0 only supports react-native >= 0.33.0
-
+    - react-native-svg >= 4.4.0 only supports react-native >= 0.38.0 and react >= 15.4.0
+    - react-native-svg >= 4.5.0 only supports react-native >= 0.40.0 and react >= 15.4.0
+    
 2. Link native code
 
     ```bash

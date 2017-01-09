@@ -15,7 +15,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.ReactShadowNode;
 
 
@@ -24,21 +23,21 @@ import javax.annotation.Nullable;
 /**
  * Shadow node for virtual RNSVGGroup view
  */
-public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
+public class GroupShadowNode extends RenderableShadowNode {
 
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
-        final RNSVGSvgViewShadowNode svg = getSvgShadowNode();
-        final RNSVGVirtualNode self = this;
+        final SvgViewShadowNode svg = getSvgShadowNode();
+        final VirtualNode self = this;
 
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             int count = saveAndSetupCanvas(canvas);
             clip(canvas, paint);
 
             traverseChildren(new NodeRunnable() {
-                public boolean run(RNSVGVirtualNode node) {
+                public boolean run(VirtualNode node) {
                     node.setupDimensions(canvas);
 
-                    node.mergeProperties(self, mOwnedPropList, true);
+                    node.mergeProperties(self, mAttributeList, true);
                     node.draw(canvas, paint, opacity * mOpacity);
                     node.markUpdateSeen();
 
@@ -58,7 +57,7 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
         final Path path = new Path();
 
         traverseChildren(new NodeRunnable() {
-            public boolean run(RNSVGVirtualNode node) {
+            public boolean run(VirtualNode node) {
                 node.setupDimensions(canvas);
                 path.addPath(node.getPath(canvas, paint));
                 return true;
@@ -80,11 +79,11 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
 
         for (int i = getChildCount() - 1; i >= 0; i--) {
             ReactShadowNode child = getChildAt(i);
-            if (!(child instanceof RNSVGVirtualNode)) {
+            if (!(child instanceof VirtualNode)) {
                 continue;
             }
 
-            RNSVGVirtualNode node = (RNSVGVirtualNode) child;
+            VirtualNode node = (VirtualNode) child;
 
             int viewTag = node.hitTest(point, combinedMatrix);
             if (viewTag != -1) {
@@ -101,18 +100,8 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
         }
 
         traverseChildren(new NodeRunnable() {
-            public boolean run(RNSVGVirtualNode node) {
+            public boolean run(VirtualNode node) {
                 node.saveDefinition();
-                return true;
-            }
-        });
-    }
-
-    @Override
-    public void mergeProperties(final RNSVGVirtualNode target, final ReadableArray mergeList) {
-        traverseChildren(new NodeRunnable() {
-            public boolean run(RNSVGVirtualNode node) {
-                node.mergeProperties(target, mergeList);
                 return true;
             }
         });
@@ -121,7 +110,7 @@ public class RNSVGGroupShadowNode extends RNSVGPathShadowNode {
     @Override
     public void resetProperties() {
         traverseChildren(new NodeRunnable() {
-            public boolean run(RNSVGVirtualNode node) {
+            public boolean run(VirtualNode node) {
                 node.resetProperties();
                 return true;
             }

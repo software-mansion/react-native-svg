@@ -21,8 +21,10 @@ import android.graphics.Point;
 import android.graphics.RectF;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.facebook.common.logging.FLog;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReadableArray;
@@ -38,47 +40,43 @@ import java.util.regex.Pattern;
 /**
  * Shadow node for virtual RNSVGPath view
  */
-public class RNSVGPathShadowNode extends RNSVGVirtualNode {
+abstract public class RenderableShadowNode extends VirtualNode {
 
+    // strokeLinecap
     private static final int CAP_BUTT = 0;
     private static final int CAP_ROUND = 1;
     private static final int CAP_SQUARE = 2;
 
+    // strokeLinejoin
     private static final int JOIN_BEVEL = 2;
     private static final int JOIN_MITER = 0;
     private static final int JOIN_ROUND = 1;
 
+    // fillRule
     private static final int FILL_RULE_EVENODD = 0;
     private static final int FILL_RULE_NONZERO = 1;
 
     public @Nullable ReadableArray mStroke;
     public @Nullable float[] mStrokeDasharray;
+
     public float mStrokeWidth = 1;
     public float mStrokeOpacity = 1;
     public float mStrokeMiterlimit = 4;
     public float mStrokeDashoffset = 0;
+
     public Paint.Cap mStrokeLinecap = Paint.Cap.ROUND;
     public Paint.Join mStrokeLinejoin = Paint.Join.ROUND;
 
     public @Nullable ReadableArray mFill;
     public float mFillOpacity = 1;
     public Path.FillType mFillRule = Path.FillType.WINDING;
-    private boolean mFillRuleSet;
 
     protected Path mPath;
-    private float[] mD;
 
-    private ArrayList<String> mChangedList;
+    private ReadableArray mLastMergedList;
     private ArrayList<Object> mOriginProperties;
     protected ReadableArray mPropList = new JavaOnlyArray();
-    protected WritableArray mOwnedPropList = new JavaOnlyArray();
-
-    @ReactProp(name = "d")
-    public void setPath(@Nullable ReadableArray shapePath) {
-        mD = PropHelper.toFloatArray(shapePath);
-        setupPath();
-        markUpdated();
-    }
+    protected WritableArray mAttributeList = new JavaOnlyArray();
 
     @ReactProp(name = "fill")
     public void setFill(@Nullable ReadableArray fill) {
@@ -102,11 +100,10 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                 break;
             default:
                 throw new JSApplicationIllegalArgumentException(
-                    "fillRule " + mFillRule + " unrecognized");
+                        "fillRule " + mFillRule + " unrecognized");
         }
 
-        mFillRuleSet = true;
-        setupPath();
+        mPath = null;
         markUpdated();
     }
 
@@ -140,7 +137,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         markUpdated();
     }
 
-    @ReactProp(name = "strokeWidth", defaultFloat = 1f)
+    @ReactProp(name = "strokeWidth", defaultFloat = 0f)
     public void setStrokeWidth(float strokeWidth) {
         mStrokeWidth = strokeWidth;
         markUpdated();
@@ -166,7 +163,7 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                 break;
             default:
                 throw new JSApplicationIllegalArgumentException(
-                    "strokeLinecap " + mStrokeLinecap + " unrecognized");
+                        "strokeLinecap " + mStrokeLinecap + " unrecognized");
         }
         markUpdated();
     }
@@ -185,37 +182,40 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
                 break;
             default:
                 throw new JSApplicationIllegalArgumentException(
-                    "strokeLinejoin " + mStrokeLinejoin + " unrecognized");
+                        "strokeLinejoin " + mStrokeLinejoin + " unrecognized");
         }
         markUpdated();
     }
 
     @ReactProp(name = "propList")
     public void setPropList(@Nullable ReadableArray propList) {
-        WritableArray copy = new JavaOnlyArray();
-
         if (propList != null) {
+            WritableArray copy = Arguments.createArray();
             for (int i = 0; i < propList.size(); i++) {
                 String fieldName = propertyNameToFieldName(propList.getString(i));
                 copy.pushString(fieldName);
-                mOwnedPropList.pushString(fieldName);
+                mAttributeList.pushString(fieldName);
             }
-
+            mPropList = copy;
         }
 
-        mPropList = copy;
         markUpdated();
     }
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
+        if (mPath == null) {
+            mPath = getPath(canvas, paint);
+            mPath.setFillType(mFillRule);
+        }
+
         opacity *= mOpacity;
 
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             int count = saveAndSetupCanvas(canvas);
             if (mPath == null) {
                 throw new JSApplicationIllegalArgumentException(
-                    "Paths should have a valid path (d) prop");
+                        "Paths should have a valid path (d) prop");
             }
 
             clip(canvas, paint);
@@ -230,32 +230,6 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
             markUpdateSeen();
         }
     }
-
-    private void setupPath() {
-        // init path after both fillRule and path have been set
-        if (mFillRuleSet && mD != null) {
-            mPath = new Path();
-            mPath.setFillType(mFillRule);
-            super.createPath(mD, mPath);
-        }
-    }
-
-  /**
-   * sorting stops and stopsColors from array
-   */
-    private static void parseGradientStops(ReadableArray value, int stopsCount, float[] stops, int[] stopsColors, int startColorsPosition) {
-        int startStops = value.size() - stopsCount;
-        for (int i = 0; i < stopsCount; i++) {
-            stops[i] = (float)value.getDouble(startStops + i);
-            stopsColors[i] = Color.argb(
-                    (int) (value.getDouble(startColorsPosition + i * 4 + 3) * 255),
-                    (int) (value.getDouble(startColorsPosition + i * 4) * 255),
-                    (int) (value.getDouble(startColorsPosition + i * 4 + 1) * 255),
-                    (int) (value.getDouble(startColorsPosition + i * 4 + 2) * 255));
-
-        }
-    }
-
 
     /**
      * Sets up paint according to the props set on a shadow view. Returns {@code true}
@@ -303,10 +277,10 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
         if (colorType == 0) {
             // solid color
             paint.setARGB(
-                (int) (colors.size() > 4 ? colors.getDouble(4) * opacity * 255 : opacity * 255),
-                (int) (colors.getDouble(1) * 255),
-                (int) (colors.getDouble(2) * 255),
-                (int) (colors.getDouble(3) * 255));
+                    (int) (colors.size() > 4 ? colors.getDouble(4) * opacity * 255 : opacity * 255),
+                    (int) (colors.getDouble(1) * 255),
+                    (int) (colors.getDouble(2) * 255),
+                    (int) (colors.getDouble(3) * 255));
         } else if (colorType == 1) {
             if (box == null) {
                 box = new RectF();
@@ -323,17 +297,15 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
     }
 
-    @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
-        return mPath;
-    }
+
+    abstract protected Path getPath(Canvas canvas, Paint paint);
 
     @Override
     public int hitTest(Point point, @Nullable Matrix matrix) {
         Bitmap bitmap = Bitmap.createBitmap(
-            mCanvasWidth,
-            mCanvasHeight,
-            Bitmap.Config.ARGB_8888);
+                mCanvasWidth,
+                mCanvasHeight,
+                Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);
 
@@ -389,21 +361,15 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     }
 
     @Override
-    public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList, boolean inherited) {
+    public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited) {
+        mLastMergedList = mergeList;
+
         if (mergeList.size() == 0) {
             return;
         }
 
-        if (!inherited) {
-            mOriginProperties = new ArrayList<>();
-            mChangedList = new ArrayList<>();
-        }
-
-        WritableArray propList = new JavaOnlyArray();
-        for (int i = 0; i < mPropList.size(); i++) {
-            propList.pushString(mPropList.getString(i));
-        }
-        mOwnedPropList = propList;
+        mOriginProperties = new ArrayList<>();
+        resetAttributeList();
 
         for (int i = 0, size = mergeList.size(); i < size; i++) {
             try {
@@ -413,12 +379,12 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
 
                 if (inherited) {
                     if (!hasOwnProperty(fieldName)) {
+                        mAttributeList.pushString(fieldName);
+                        mOriginProperties.add(field.get(this));
                         field.set(this, value);
-                        propList.pushString(fieldName);
                     }
                 } else {
                     mOriginProperties.add(field.get(this));
-                    mChangedList.add(fieldName);
                     field.set(this, value);
                 }
             } catch (Exception e) {
@@ -428,24 +394,32 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     }
 
     @Override
-    public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList) {
+    public void mergeProperties(VirtualNode target, ReadableArray mergeList) {
         mergeProperties(target, mergeList, false);
     }
 
     @Override
     public void resetProperties() {
-        if (mChangedList != null) {
+        if (mLastMergedList != null) {
             try {
-                for (int i = mChangedList.size() - 1; i >= 0; i--) {
-                    Field field = getClass().getField(mChangedList.get(i));
+                for (int i = mLastMergedList.size() - 1; i >= 0; i--) {
+                    Field field = getClass().getField(mLastMergedList.getString(i));
                     field.set(this, mOriginProperties.get(i));
                 }
             } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
 
-            mChangedList = null;
+            mLastMergedList = null;
             mOriginProperties = null;
+        }
+        resetAttributeList();
+    }
+
+    private void resetAttributeList() {
+        mAttributeList = Arguments.createArray();
+        for (int i = 0; i < mPropList.size(); i++) {
+            mAttributeList.pushString(mPropList.getString(i));
         }
     }
 
@@ -462,8 +436,8 @@ public class RNSVGPathShadowNode extends RNSVGVirtualNode {
     }
 
     private boolean hasOwnProperty(String propName) {
-        for (int i = mOwnedPropList.size() - 1; i >= 0; i--) {
-            if (mOwnedPropList.getString(i).equals(propName)) {
+        for (int i = mAttributeList.size() - 1; i >= 0; i--) {
+            if (mAttributeList.getString(i).equals(propName)) {
                 return true;
             }
         }

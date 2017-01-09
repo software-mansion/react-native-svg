@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "UIView+React.h"
+#import <React/UIView+React.h>
 #import "RNSVGCGFCRule.h"
 #import "RNSVGSvgView.h"
 
@@ -20,7 +20,7 @@
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, assign) CGFloat opacity;
 @property (nonatomic, assign) RNSVGCGFCRule clipRule;
-@property (nonatomic, assign) NSString *clipPath;
+@property (nonatomic, strong) NSString *clipPath;
 @property (nonatomic, assign) BOOL responsible;
 @property (nonatomic, assign) CGAffineTransform matrix;
 @property (nonatomic, assign) BOOL active;
@@ -35,6 +35,10 @@
  * @abstract
  */
 - (void)renderLayerTo:(CGContextRef)context;
+
+- (CGPathRef)getClipPath;
+
+- (CGPathRef)getClipPath:(CGContextRef)context;
 
 /**
  * clip node by clipPath
@@ -78,5 +82,7 @@
 - (void)beginTransparencyLayer:(CGContextRef)context;
 
 - (void)endTransparencyLayer:(CGContextRef)context;
+
+- (void)traverseSubviews:(BOOL (^)(RNSVGNode *node))block;
 
 @end

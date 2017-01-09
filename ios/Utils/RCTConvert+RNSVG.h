@@ -10,7 +10,8 @@
 #import <CoreText/CoreText.h>
 #import "RCTConvert+RNSVG.h"
 #import "RNSVGCGFloatArray.h"
-#import "RCTConvert.h"
+#import "RNSVGTextFrame.h"
+#import <React/RCTConvert.h>
 #import "RNSVGCGFCRule.h"
 #import "RNSVGVBMOS.h"
 #import "RNSVGTextAnchor.h"
@@ -19,12 +20,18 @@
 
 @interface RCTConvert (RNSVG)
 
+<<<<<<< HEAD
 + (CGPathRef)CGPath:(id)json;
 + (RNSVGTextAnchor)RNSVGTextAnchor:(id)json;
+=======
++ (CGPathRef)CGPath:(NSString *)d;
++ (CTTextAlignment)CTTextAlignment:(id)json;
+>>>>>>> master
 + (RNSVGCGFCRule)RNSVGCGFCRule:(id)json;
 + (RNSVGVBMOS)RNSVGVBMOS:(id)json;
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;
+
 
 + (NSArray *)RNSVGBezier:(id)json;
 + (CGRect)CGRect:(id)json offset:(NSUInteger)offset;

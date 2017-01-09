@@ -11,55 +11,17 @@
 #import "RNSVGBaseBrush.h"
 #import "RNSVGPattern.h"
 #import "RNSVGSolidColorBrush.h"
-#import "RCTLog.h"
+#import <React/RCTLog.h>
+#import "RNSVGCGFCRule.h"
+#import "RNSVGVBMOS.h"
+#import <React/RCTFont.h>
+#import "RNSVGPathParser.h"
 
 @implementation RCTConvert (RNSVG)
 
-+ (CGPathRef)CGPath:(id)json
++ (CGPathRef)CGPath:(NSString *)d
 {
-    NSArray *arr = [self NSNumberArray:json];
-
-    NSUInteger count = [arr count];
-
-#define NEXT_VALUE [self double:arr[i++]]
-
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathMoveToPoint(path, nil, 0, 0);
-
-    @try {
-        NSUInteger i = 0;
-        while (i < count) {
-            NSUInteger type = [arr[i++] unsignedIntegerValue];
-            switch (type) {
-                case 0:
-                    CGPathMoveToPoint(path, nil, NEXT_VALUE, NEXT_VALUE);
-                    break;
-                case 1:
-                    CGPathCloseSubpath(path);
-                    break;
-                case 2:
-                    CGPathAddLineToPoint(path, nil, NEXT_VALUE, NEXT_VALUE);
-                    break;
-                case 3:
-                    CGPathAddCurveToPoint(path, nil, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE);
-                    break;
-                case 4:
-                    CGPathAddArc(path, NULL, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE, NEXT_VALUE == 0);
-                    break;
-                default:
-                    RCTLogError(@"Invalid CGPath type %zd at element %zd of %@", type, i, arr);
-                    CGPathRelease(path);
-                    return nil;
-            }
-        }
-    }
-    @catch (NSException *exception) {
-        RCTLogError(@"Invalid CGPath format: %@", arr);
-        CGPathRelease(path);
-        return nil;
-    }
-
-    return (CGPathRef)CFAutorelease(path);
+    return [[[RNSVGPathParser alloc] initWithPathString: d] getPath];
 }
 
 RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{

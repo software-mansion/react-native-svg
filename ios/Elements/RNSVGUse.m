@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 #import "RNSVGUse.h"
-#import "RCTLog.h"
+#import <React/RCTLog.h>
 
 @implementation RNSVGUse
 
@@ -27,7 +27,7 @@
     if (template) {
         [self beginTransparencyLayer:context];
         [self clip:context];
-        [template mergeProperties:self mergeList:self.ownedPropList];
+        [template mergeProperties:self mergeList:self.attributeList inherited:YES];
         [template renderTo:context];
         [template resetProperties];
         [self endTransparencyLayer:context];

@@ -12,18 +12,19 @@ package com.horcrux.svg;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 
 import com.facebook.react.uimanager.annotations.ReactProp;
-
 
 /**
  * Shadow node for virtual RNSVGPath view
  */
-public class RNSVGCircleShadowNode extends RNSVGPathShadowNode {
+public class EllipseShadowNode extends RenderableShadowNode {
 
     private String mCx;
     private String mCy;
-    private String mR;
+    private String mRx;
+    private String mRy;
 
     @ReactProp(name = "cx")
     public void setCx(String cx) {
@@ -37,16 +38,16 @@ public class RNSVGCircleShadowNode extends RNSVGPathShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "r")
-    public void setR(String r) {
-        mR = r;
+    @ReactProp(name = "rx")
+    public void setRx(String rx) {
+        mRx = rx;
         markUpdated();
     }
 
-    @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
-        mPath = getPath(canvas, paint);
-        super.draw(canvas, paint, opacity);
+    @ReactProp(name = "ry")
+    public void setRy(String ry) {
+        mRy = ry;
+        markUpdated();
     }
 
     @Override
@@ -54,18 +55,11 @@ public class RNSVGCircleShadowNode extends RNSVGPathShadowNode {
         Path path = new Path();
         float cx = PropHelper.fromPercentageToFloat(mCx, mCanvasWidth, 0, mScale);
         float cy = PropHelper.fromPercentageToFloat(mCy, mCanvasHeight, 0, mScale);
+        float rx = PropHelper.fromPercentageToFloat(mRx, mCanvasWidth, 0, mScale);
+        float ry = PropHelper.fromPercentageToFloat(mRy, mCanvasHeight, 0, mScale);
+        RectF oval = new RectF(cx - rx, cy - ry, cx + rx, cy + ry);
+        path.addOval(oval, Path.Direction.CW);
 
-        float r;
-        if (PropHelper.isPercentage(mR)) {
-            r = PropHelper.fromPercentageToFloat(mR, 1, 0, 1);
-            float powX = (float)Math.pow((mCanvasWidth * r), 2);
-            float powY = (float)Math.pow((mCanvasHeight * r), 2);
-            r = (float)Math.sqrt(powX + powY) / (float)Math.sqrt(2);
-        } else {
-            r =  Float.parseFloat(mR) * mScale;
-        }
-
-        path.addCircle(cx, cy, r, Path.Direction.CW);
         return path;
     }
 }

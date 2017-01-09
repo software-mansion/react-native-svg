@@ -19,7 +19,7 @@
 {
     RNSVGSvgView* svg = [self getSvgView];
     [self clip:context];
-    
+
     CGContextConcatCTM(context, transform);
     [self traverseSubviews:^(RNSVGNode *node) {
         if (node.responsible && !svg.responsible) {
@@ -28,11 +28,11 @@
         }
         return YES;
     }];
-    
+
     [self traverseSubviews:^(RNSVGNode *node) {
-        [node mergeProperties:self mergeList:self.ownedPropList inherited:YES];
+        [node mergeProperties:self mergeList:self.attributeList inherited:YES];
         [node renderTo:context];
-        
+
         if ([node isKindOfClass: [RNSVGRenderable class]]) {
             RNSVGRenderable *renderable = node;
             [self concatLayoutBoundingBox:[renderable getLayoutBoundingBox]];
@@ -59,19 +59,19 @@
         CGPathAddPath(path, &transform, [node getPath:context]);
         return YES;
     }];
-    
+
     return (CGPathRef)CFAutorelease(path);
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transform
 {
     CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
-    
+
     CGPathRef clip = [self getComputedClipPath];
     if (clip && !CGPathContainsPoint(clip, nil, point, NO)) {
         return nil;
     }
-    
+
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
             if (event) {
@@ -81,7 +81,7 @@
             }
 
             UIView *view = [node hitTest: point withEvent:event withTransform:matrix];
-            
+
             if (view) {
                 node.active = YES;
                 if (node.responsible || (node != view)) {
@@ -101,20 +101,12 @@
         RNSVGSvgView* svg = [self getSvgView];
         [svg defineTemplate:self templateName:self.name];
     }
-    
+
     [self traverseSubviews:^(RNSVGNode *node) {
         [node saveDefinition];
         return YES;
     }];
-    
-}
 
-- (void)mergeProperties:(RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
-{
-    [self traverseSubviews:^(RNSVGNode *node) {
-        [node mergeProperties:target mergeList:mergeList];
-        return YES;
-    }];
 }
 
 - (void)resetProperties
@@ -124,17 +116,5 @@
         return YES;
     }];
 }
-
-- (void)traverseSubviews:(BOOL (^)(__kindof RNSVGNode *node))block
-{
-    for (RNSVGNode *node in self.subviews) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
-            if (!block(node)) {
-                break;
-            }
-        }
-    }
-}
-
 
 @end

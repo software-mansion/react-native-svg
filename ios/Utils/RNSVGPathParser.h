@@ -6,11 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGNode.h"
-#import <React/RCTViewManager.h>
+#import <QuartzCore/QuartzCore.h>
+#import <Foundation/Foundation.h>
 
-@interface RNSVGNodeManager : RCTViewManager
+@interface RNSVGPathParser : NSObject
 
-- (RNSVGNode *)node;
+- (instancetype) initWithPathString:(NSString *)d;
+- (CGPathRef)getPath;
 
 @end

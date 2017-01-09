@@ -17,7 +17,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 /**
  * Shadow node for virtual RNSVGPath view
  */
-public class RNSVGLineShadowNode extends RNSVGPathShadowNode {
+public class LineShadowNode extends RenderableShadowNode {
 
     private String mX1;
     private String mY1;
@@ -46,12 +46,6 @@ public class RNSVGLineShadowNode extends RNSVGPathShadowNode {
     public void setY2(String y2) {
         mY2 = y2;
         markUpdated();
-    }
-
-    @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
-        mPath = getPath(canvas, paint);
-        super.draw(canvas, paint, opacity);
     }
 
     @Override

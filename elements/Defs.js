@@ -1,7 +1,7 @@
 import React, {
     Component,
 } from 'react';
-import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 
 class Defs extends Component {
     static displayName = 'Defs';

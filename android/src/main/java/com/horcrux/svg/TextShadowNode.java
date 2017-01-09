@@ -24,6 +24,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 /**
  * Shadow node for virtual RNSVGText view
  */
+
 public class RNSVGTextShadowNode extends RNSVGGroupShadowNode {
 
     private float mOffsetX = 0;

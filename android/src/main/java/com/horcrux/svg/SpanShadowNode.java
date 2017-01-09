@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 /**
  * Shadow node for virtual RNSVGPath view
  */
-public class RNSVGSpanShadowNode extends RNSVGPathShadowNode {
+public class SpanShadowNode extends PathShadowNode {
 
     private static final String PROP_FONT_FAMILY = "fontFamily";
     private static final String PROP_FONT_SIZE = "fontSize";

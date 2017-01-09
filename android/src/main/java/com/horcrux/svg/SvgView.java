@@ -9,11 +9,14 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.TextureView;
+import android.view.View;
 
 import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.Arguments;
@@ -26,10 +29,12 @@ import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
 import com.facebook.react.uimanager.events.TouchEventType;
 import com.facebook.react.uimanager.events.EventDispatcher;
 
+import javax.annotation.Nullable;
+
 /**
- * Custom {@link View} implementation that draws an RNSVGSvg React view and its \children.
+ * Custom {@link View} implementation that draws an RNSVGSvg React view and its \childrn.
  */
-public class RNSVGSvgView extends TextureView {
+public class SvgView extends View {
     public enum Events {
         EVENT_DATA_URL("onDataURL");
 
@@ -45,6 +50,7 @@ public class RNSVGSvgView extends TextureView {
         }
     }
 
+    private @Nullable Bitmap mBitmap;
     private RCTEventEmitter mEventEmitter;
     private EventDispatcher mEventDispatcher;
     private int mTargetTag;
@@ -52,15 +58,36 @@ public class RNSVGSvgView extends TextureView {
     private final TouchEventCoalescingKeyHelper mTouchEventCoalescingKeyHelper =
             new TouchEventCoalescingKeyHelper();
 
-    public RNSVGSvgView(ReactContext reactContext) {
+    public SvgView(ReactContext reactContext) {
         super(reactContext);
-        setOpaque(false);
         mEventEmitter = reactContext.getJSModule(RCTEventEmitter.class);
         mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
-    private RNSVGSvgViewShadowNode getShadowNode() {
-        return RNSVGSvgViewShadowNode.getShadowNodeByTag(getId());
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+        SvgInstancesManager.registerSvgView(this);
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        if (mBitmap != null) {
+            mBitmap.recycle();
+        }
+        mBitmap = bitmap;
+        invalidate();
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (mBitmap != null) {
+            canvas.drawBitmap(mBitmap, 0, 0, null);
+        }
+    }
+
+    private SvgViewShadowNode getShadowNode() {
+        return SvgInstancesManager.getShadowNodeByTag(getId());
     }
 
     @Override
@@ -165,4 +192,6 @@ public class RNSVGSvgView extends TextureView {
         event.putString("base64", getShadowNode().getBase64());
         mEventEmitter.receiveEvent(getId(), Events.EVENT_DATA_URL.toString(), event);
     }
+
+
 }

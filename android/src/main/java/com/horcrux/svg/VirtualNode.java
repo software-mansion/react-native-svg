@@ -17,8 +17,10 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Region;
 
+import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ReactShadowNode;
@@ -26,7 +28,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-public abstract class RNSVGVirtualNode extends LayoutShadowNode {
+public abstract class VirtualNode extends LayoutShadowNode {
 
     protected static final float MIN_OPACITY_FOR_DRAW = 0.01f;
 
@@ -35,8 +37,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     protected float mOpacity = 1f;
     protected Matrix mMatrix = new Matrix();
 
-    protected @Nullable Path mClipPath;
-    protected @Nullable String mClipPathRef;
+    protected @Nullable String mClipPath;
 
     private static final int PATH_TYPE_CLOSE = 1;
     private static final int PATH_TYPE_CURVETO = 3;
@@ -47,10 +48,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     private static final int CLIP_RULE_NONZERO = 1;
 
     protected final float mScale;
-    private float[] mClipData;
     private int mClipRule;
-    private boolean mClipRuleSet;
-    private boolean mClipDataSet;
     protected boolean mResponsible;
     protected int mCanvasX;
     protected int mCanvasY;
@@ -58,9 +56,9 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     protected int mCanvasHeight;
     protected String mName;
 
-    private RNSVGSvgViewShadowNode mSvgShadowNode;
+    private SvgViewShadowNode mSvgShadowNode;
 
-    public RNSVGVirtualNode() {
+    public VirtualNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
     }
 
@@ -96,14 +94,6 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         canvas.restoreToCount(count);
     }
 
-    @ReactProp(name = "clipPath")
-    public void setClipPath(@Nullable ReadableArray clipPath) {
-        mClipData = PropHelper.toFloatArray(clipPath);
-        mClipDataSet = true;
-        setupClip();
-        markUpdated();
-    }
-
     @ReactProp(name = "name")
     public void setName(String name) {
         mName = name;
@@ -111,17 +101,15 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     }
 
 
-    @ReactProp(name = "clipPathRef")
-    public void setClipPathRef(String clipPathRef) {
-        mClipPathRef = clipPathRef;
+    @ReactProp(name = "clipPath")
+    public void setClipPath(String clipPath) {
+        mClipPath = clipPath;
         markUpdated();
     }
 
     @ReactProp(name = "clipRule", defaultInt = CLIP_RULE_NONZERO)
-    public void setClipRule(int clipRule) {
+    public void clipRule(int clipRule) {
         mClipRule = clipRule;
-        mClipRuleSet = true;
-        setupClip();
         markUpdated();
     }
 
@@ -138,7 +126,7 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
             if (matrixSize == 6) {
                 setupMatrix();
             } else if (matrixSize != -1) {
-                throw new JSApplicationIllegalArgumentException("Transform matrices must be of size 6");
+                FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");
             }
         } else {
             mMatrix = null;
@@ -151,24 +139,6 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     public void setResponsible(boolean responsible) {
         mResponsible = responsible;
         markUpdated();
-    }
-
-    private void setupClip() {
-        if (mClipDataSet && mClipRuleSet) {
-            mClipPath = new Path();
-
-            switch (mClipRule) {
-                case CLIP_RULE_EVENODD:
-                    mClipPath.setFillType(Path.FillType.EVEN_ODD);
-                    break;
-                case CLIP_RULE_NONZERO:
-                    break;
-                default:
-                    throw new JSApplicationIllegalArgumentException(
-                        "clipRule " + mClipRule + " unrecognized");
-            }
-            createPath(mClipData, mClipPath);
-        }
     }
 
     protected void setupMatrix() {
@@ -226,13 +196,28 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
     }
 
     protected @Nullable Path getClipPath(Canvas canvas, Paint paint) {
-        Path clip = mClipPath;
-        if (clip == null && mClipPathRef != null) {
-            RNSVGVirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPathRef);
-            clip = node.getPath(canvas, paint);
+        if (mClipPath != null) {
+            VirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPath);
+
+            if (node != null) {
+                Path clipPath = node.getPath(canvas, paint);
+                switch (mClipRule) {
+                    case CLIP_RULE_EVENODD:
+                        clipPath.setFillType(Path.FillType.EVEN_ODD);
+                        break;
+                    case CLIP_RULE_NONZERO:
+                        break;
+                    default:
+                        FLog.w(ReactConstants.TAG, "RNSVG: clipRule: " + mClipRule + " unrecognized");
+                }
+
+                return clipPath;
+            } else {
+                FLog.w(ReactConstants.TAG, "RNSVG: Undefined clipPath: " + mClipPath);
+            }
         }
 
-        return clip;
+        return null;
     }
 
     protected void clip(Canvas canvas, Paint paint) {
@@ -255,21 +240,21 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
 
     abstract protected Path getPath(Canvas canvas, Paint paint);
 
-    protected RNSVGSvgViewShadowNode getSvgShadowNode() {
+    protected SvgViewShadowNode getSvgShadowNode() {
         if (mSvgShadowNode != null) {
             return mSvgShadowNode;
         }
 
         ReactShadowNode parent = getParent();
 
-        while (!(parent instanceof RNSVGSvgViewShadowNode)) {
+        while (!(parent instanceof SvgViewShadowNode)) {
             if (parent == null) {
                 return null;
             } else {
                 parent = parent.getParent();
             }
         }
-        mSvgShadowNode = (RNSVGSvgViewShadowNode) parent;
+        mSvgShadowNode = (SvgViewShadowNode) parent;
         return mSvgShadowNode;
     }
 
@@ -290,24 +275,24 @@ public abstract class RNSVGVirtualNode extends LayoutShadowNode {
         }
     }
 
-    abstract public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList, boolean inherited);
+    abstract public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited);
 
-    abstract public void mergeProperties(RNSVGVirtualNode target, ReadableArray mergeList);
+    abstract public void mergeProperties(VirtualNode target, ReadableArray mergeList);
 
     abstract public void resetProperties();
 
     protected interface NodeRunnable {
-        boolean run(RNSVGVirtualNode node);
+        boolean run(VirtualNode node);
     }
 
     protected void traverseChildren(NodeRunnable runner) {
         for (int i = 0; i < getChildCount(); i++) {
             ReactShadowNode child = getChildAt(i);
-            if (!(child instanceof RNSVGVirtualNode)) {
+            if (!(child instanceof VirtualNode)) {
                 continue;
             }
 
-            if (!runner.run((RNSVGVirtualNode) child)) {
+            if (!runner.run((VirtualNode) child)) {
                 break;
             }
         }

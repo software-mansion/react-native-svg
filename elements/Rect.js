@@ -1,6 +1,6 @@
 import React from 'react';
 import './Path'; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`
-import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import {pathProps, numberProp} from '../lib/props';
 import {RectAttributes} from '../lib/attributes';
 import Shape from './Shape';
