@@ -86,36 +86,36 @@
     CTFontRef runFont = CFDictionaryGetValue(attributes, kCTFontAttributeName);
     
     CGFloat lineStartX;
-    CGFloat lastX;
+    RNSVGGlyphPoint computedPoint;
     for(CFIndex i = 0; i < runGlyphCount; i++) {
-        RNSVGGlyphPoint computedPoint = [self getComputedGlyphPoint:i glyphOffset:positions[i]];
+        computedPoint = [self getComputedGlyphPoint:i glyphOffset:positions[i]];
         
         if (!i) {
             lineStartX = computedPoint.x;
-            lastX = lineStartX;
         }
+        
+        CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[i], nil);
         
         CGAffineTransform textPathTransform = [self getTextPathTransform:computedPoint.x];
         
         if (!textPathTransform.a || !textPathTransform.d) {
-            return path;
+            break;
         }
         
-        CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[i], nil);
         CGAffineTransform transform;
         
         if (_bezierPath) {
+            textPathTransform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(0, computedPoint.y), textPathTransform);
             transform = CGAffineTransformScale(textPathTransform, 1.0, -1.0);
         } else {
             transform = CGAffineTransformTranslate(upsideDown, computedPoint.x, -computedPoint.y);
         }
         
         CGPathAddPath(path, &transform, letter);
-        lastX += CGPathGetBoundingBox(letter).size.width;
         CGPathRelease(letter);
     }
     
-    [self getTextRoot].lastX = lastX;
+    [self getTextRoot].lastX = computedPoint.x;
     
     return path;
 }
