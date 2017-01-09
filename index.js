@@ -9,6 +9,7 @@ import Path from './elements/Path';
 import G from './elements/G';
 import Text from './elements/Text';
 import TSpan from './elements/TSpan';
+import TextPath from './elements/TextPath';
 import Use from './elements/Use';
 import Image from './elements/Image';
 import Symbol  from './elements/Symbol';
@@ -25,6 +26,7 @@ export {
     G,
     Text,
     TSpan,
+    TextPath,
     Path,
     Polygon,
     Polyline,

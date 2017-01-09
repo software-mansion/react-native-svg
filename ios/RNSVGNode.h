@@ -36,8 +36,14 @@
  */
 - (void)renderLayerTo:(CGContextRef)context;
 
+/**
+ * get clipPath from cache
+ */
 - (CGPathRef)getClipPath;
 
+/**
+ * get clipPath through context
+ */
 - (CGPathRef)getClipPath:(CGContextRef)context;
 
 /**
@@ -49,11 +55,6 @@
  * getPath will return the path inside node as a ClipPath.
  */
 - (CGPathRef)getPath:(CGContextRef) context;
-
-/**
- * getComputedClipPath will return the CGPathRef computed with clipPath
- */
-- (CGPathRef)getComputedClipPath;
 
 /**
  * run hitTest

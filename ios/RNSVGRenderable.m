@@ -137,8 +137,9 @@
         return;
     }
 
+    [self invalidate];
     CGPathRelease(_hitArea);
-    _hitArea = CGPathRetain(CFAutorelease(hitArea));
+    _hitArea = CGPathRetain(hitArea);
 }
 
 - (void)setPropList:(NSArray<NSString *> *)propList

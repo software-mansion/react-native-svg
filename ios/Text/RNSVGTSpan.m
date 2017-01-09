@@ -81,8 +81,7 @@
     CTFontRef runFont = CFDictionaryGetValue(attributes, kCTFontAttributeName);
     
     CGFloat lineStartX;
-    CFIndex i;
-    for(i = 0; i < runGlyphCount; i++) {
+    for(CFIndex i = 0; i < runGlyphCount; i++) {
         RNSVGGlyphPoint computedPoint = [self getComputedGlyphPoint:i glyphOffset:positions[i]];
         if (!i) {
             lineStartX = computedPoint.x;

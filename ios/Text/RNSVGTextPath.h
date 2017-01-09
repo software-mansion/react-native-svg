@@ -11,11 +11,8 @@
 #import "RNSVGPath.h"
 #import "RNSVGText.h"
 
-@interface RNSVGTextPath : RNSVGPath
+@interface RNSVGTextPath : RNSVGText
 
-@property (nonatomic, strong) NSString *positionX;
-@property (nonatomic, strong) NSString *positionY;
-@property (nonatomic, assign) CTFontRef font;
-@property (nonatomic, strong) NSString *content;
+@property (nonatomic, strong) NSString *href;
 
 @end

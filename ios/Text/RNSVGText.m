@@ -8,7 +8,7 @@
 
 #import "RNSVGText.h"
 #import "RNSVGBezierPath.h"
-#import "RCTFont.h"
+#import <React/RCTFont.h>
 #import <CoreText/CoreText.h>
 
 @implementation RNSVGText
@@ -66,11 +66,13 @@
 - (RNSVGTextAnchor)getComputedTextAnchor
 {
     RNSVGTextAnchor anchor = self.textAnchor;
-    RNSVGText *child = [self.subviews objectAtIndex:0];
-    
-    while (child.subviews.count && anchor == kRNSVGTextAnchorAuto) {
-        anchor = child.textAnchor;
-        child = [child.subviews objectAtIndex:0];
+    if (self.subviews.count > 0) {
+        RNSVGText *child = [self.subviews objectAtIndex:0];
+        
+        while (child.subviews.count && anchor == kRNSVGTextAnchorAuto) {
+            anchor = child.textAnchor;
+            child = [child.subviews objectAtIndex:0];
+        }
     }
     
     return anchor;

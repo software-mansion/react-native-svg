@@ -67,9 +67,16 @@
 {
     CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
 
-    CGPathRef clip = [self getComputedClipPath];
-    if (clip && !CGPathContainsPoint(clip, nil, point, NO)) {
-        return nil;
+    CGPathRef clip = [self getClipPath];
+    if (clip) {
+        CGPathRef transformedClipPath = CGPathCreateCopyByTransformingPath(clip, &matrix);
+        BOOL insideClipPath = CGPathContainsPoint(clip, nil, point, self.clipRule == kRNSVGCGFCRuleEvenodd);
+        CGPathRelease(transformedClipPath);
+        
+        if (!insideClipPath) {
+            return nil;
+        }
+        
     }
 
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {

@@ -1,10 +1,12 @@
 import React, {PropTypes} from 'react';
-import createReactNativeComponentClass from 'react/lib/createReactNativeComponentClass';
-import {UseAttributes} from '../lib/attributes';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
+import {TextPathAttributes} from '../lib/attributes';
+import extractText from '../lib/extract/extractText';
 import Shape from './Shape';
 import {pathProps, fontProps} from '../lib/props';
 
 const idExpReg = /^#(.+)$/;
+
 class TextPath extends Shape {
     static displayName = 'Span';
 
@@ -27,25 +29,16 @@ class TextPath extends Shape {
         if (!href) {
             console.warn('Invalid `href` prop for `TextPath` element, expected a href like `"#id"`, but got: "' + props.href + '"');
         }
-
+        
         return <RNSVGTextPath
             href={href}
-            {...this.extractProps({
-                ...props,
-                x: null,
-                y: null
-            })}
-            {...extractText({
-                ...props,
-                dx: null,
-                dy: null
-            })}
+            {...extractText({children: props.children})}
         />;
     }
 }
 
 const RNSVGTextPath = createReactNativeComponentClass({
-    validAttributes: UseAttributes,
+    validAttributes: TextPathAttributes,
     uiViewClassName: 'RNSVGTextPath'
 });
 
