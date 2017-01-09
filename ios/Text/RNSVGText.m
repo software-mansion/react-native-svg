@@ -7,7 +7,7 @@
  */
 
 #import "RNSVGText.h"
-#import "RNSVGBezierPath.h"
+#import "RNSVGTextPath.h"
 #import <React/RCTFont.h>
 #import <CoreText/CoreText.h>
 
@@ -24,33 +24,39 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
+    [self clip:context];
     CGContextSaveGState(context);
     CGAffineTransform transform = CGAffineTransformMakeTranslation([self getShift:context path:nil], 0);
-    [super renderLayerToWithTransform:context transform:transform];
+    CGContextConcatCTM(context, transform);
+    [self renderGroupTo:context];
+    [self resetTextPathAttributes];
     CGContextRestoreGState(context);
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    CGMutablePathRef shape = [self getTextGroupPath:context];
-    CGAffineTransform translation = CGAffineTransformMakeTranslation([self getShift:context path:shape], 0);
-    CGMutablePathRef path = CGPathCreateCopyByTransformingPath(shape, &translation);
-    return (CGPathRef)CFAutorelease(path);
+    CGPathRef path = [self getGroupPath:context];
+    CGAffineTransform transform = CGAffineTransformMakeTranslation([self getShift:context path:path], 0);
+    CGPathRef transformedPath = CGPathCreateCopyByTransformingPath(path, &transform);
+    
+    // check memory leaks here
+    //CGPathRelease(path);
+    return (CGPathRef)CFAutorelease(transformedPath);
 }
 
-- (CGPathRef)getTextGroupPath:(CGContextRef)context
+- (CGPathRef)getGroupPath:(CGContextRef)context
 {
-    CGPathRef path = [super getPath:context];
+    CGPathRef groupPath = [super getPath:context];
     [self resetTextPathAttributes];
-    return path;
+    return groupPath;
 }
 
 - (CGFloat)getShift:(CGContextRef)context path:(CGPathRef)path
 {
-    if (!path) {
-        path = [self getTextGroupPath:context];
+    if (path == nil) {
+        path = [self getGroupPath:context];
     }
-
+    
     CGFloat width = CGRectGetWidth(CGPathGetBoundingBox(path));
     
     switch ([self getComputedTextAnchor]) {
@@ -74,7 +80,6 @@
             child = [child.subviews objectAtIndex:0];
         }
     }
-    
     return anchor;
 }
 
@@ -112,7 +117,7 @@
 - (CTFontRef)getComputedFont
 {
     NSMutableDictionary *fontDict = [[NSMutableDictionary alloc] init];
-    [self traverseTextSuperviews:^(RNSVGText *node) {
+    [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
         return [self extendFontFromInheritedFont:fontDict inheritedFont:node.font];
     }];
     
@@ -132,38 +137,44 @@
     }
     fontFamily = fontFamilyFound ? fontFamily : nil;
     
-    return (__bridge CTFontRef)[RCTFont updateFont:nil withFamily:fontFamily size:fontDict[@"fontSize"] weight:fontDict[@"fontWeight"] style:fontDict[@"fontStyle"]                                                     variant:nil scaleMultiplier:1.0];
+    return (__bridge CTFontRef)[RCTFont updateFont:nil
+                                        withFamily:fontFamily
+                                              size:fontDict[@"fontSize"]
+                                            weight:fontDict[@"fontWeight"]
+                                             style:fontDict[@"fontStyle"]
+                                           variant:nil scaleMultiplier:1.0];
 }
 
 - (RNSVGGlyphPoint)getComputedGlyphPoint:(NSUInteger *)index glyphOffset:(CGPoint)glyphOffset
 {
-    RNSVGGlyphPoint __block point;
+    __block RNSVGGlyphPoint point;
     point.isDeltaXSet = point.isDeltaYSet = point.isPositionXSet = point.isPositionYSet = NO;
     
-    [self traverseTextSuperviews:^(RNSVGText *node) {
-        NSUInteger index = node.lastIndex;
-        
-        if (!point.isPositionXSet && node.positionX && !index) {
-            point.positionX = [self getWidthRelatedValue:node.positionX];
-            point.isPositionXSet = YES;
+    [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
+        if ([node class] != [RNSVGTextPath class]) {
+            NSUInteger index = node.lastIndex;
+            
+            if (!point.isPositionXSet && node.positionX && !index) {
+                point.positionX = [self getWidthRelatedValue:node.positionX];
+                point.isPositionXSet = YES;
+            }
+            
+            if (!point.isDeltaXSet && node.deltaX.count > index) {
+                point.deltaX = [[node.deltaX objectAtIndex:index] floatValue];
+                point.isDeltaXSet = YES;
+            }
+            
+            if (!point.isPositionYSet && node.positionY && !index) {
+                point.positionY = [self getHeightRelatedValue:node.positionY];
+                point.isPositionYSet = YES;
+            }
+            
+            if (!point.isDeltaYSet && node.deltaY.count > index) {
+                point.deltaY = [[node.deltaY objectAtIndex:index] floatValue];
+                point.isDeltaYSet = YES;
+            }
+            node.lastIndex++;
         }
-        
-        if (!point.isDeltaXSet && node.deltaX.count > index) {
-            point.deltaX = [[node.deltaX objectAtIndex:index] floatValue];
-            point.isDeltaXSet = YES;
-        }
-        
-        if (!point.isPositionYSet && node.positionY && !index) {
-            point.positionY = [self getHeightRelatedValue:node.positionY];
-            point.isPositionYSet = YES;
-        }
-        
-        if (!point.isDeltaYSet && node.deltaY.count > index) {
-            point.deltaY = [[node.deltaY objectAtIndex:index] floatValue];
-            point.isDeltaYSet = YES;
-        }
-        
-        node.lastIndex++;
         return YES;
     }];
     
@@ -192,14 +203,16 @@
     
     point.x = lastX + glyphOffset.x;
     point.y = lastY + glyphOffset.y;
-    
+
     return point;
 }
+
 
 - (void)traverseTextSuperviews:(BOOL (^)(__kindof RNSVGText *node))block
 {
     RNSVGText *targetView = self;
-    block(targetView);
+    block(self);
+    
     while (targetView && [targetView class] != [RNSVGText class]) {
         if (![targetView isKindOfClass:[RNSVGText class]]) {
             //todo: throw exception here

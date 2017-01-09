@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
-#import "RNSVGPath.h"
 #import "RNSVGText.h"
+#import "RNSVGBezierPath.h"
 
 @interface RNSVGTextPath : RNSVGText
 
 @property (nonatomic, strong) NSString *href;
+
+- (RNSVGBezierPath *)getBezierPath;
 
 @end

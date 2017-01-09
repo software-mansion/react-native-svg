@@ -9,26 +9,35 @@
 #import "RNSVGPath.h"
 
 @implementation RNSVGPath
+{
+    CGPathRef _path;
+}
 
-- (void)setD:(CGPathRef)d
+- (void)setD:(RNSVGPathParser *)d
 {
     if (d == _d) {
         return;
     }
 
     [self invalidate];
-    CGPathRelease(_d);
-    _d = CGPathRetain(d);
+    _d = d;
+    CGPathRelease(_path);
+    _path = CGPathRetain([d getPath]);
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    return self.d;
+    return _path;
+}
+
+- (NSArray *)getBezierCurves
+{
+    return [_d getBezierCurves];
 }
 
 - (void)dealloc
 {
-    CGPathRelease(_d);
+    CGPathRelease(_path);
 }
 
 @end

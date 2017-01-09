@@ -15,13 +15,12 @@
 #import "RNSVGCGFCRule.h"
 #import "RNSVGVBMOS.h"
 #import <React/RCTFont.h>
-#import "RNSVGPathParser.h"
 
 @implementation RCTConvert (RNSVG)
 
-+ (CGPathRef)CGPath:(NSString *)d
++ (RNSVGPathParser *)CGPath:(NSString *)d
 {
-    return [[[RNSVGPathParser alloc] initWithPathString: d] getPath];
+    return [[RNSVGPathParser alloc] initWithPathString: d];
 }
 
 RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{

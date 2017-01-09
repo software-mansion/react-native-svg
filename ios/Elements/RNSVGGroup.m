@@ -12,27 +12,21 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
-    [self renderLayerToWithTransform:context transform:CGAffineTransformIdentity];
+    [self clip:context];
+    [self renderGroupTo:context];
 }
 
-- (void)renderLayerToWithTransform:(CGContextRef)context transform:(CGAffineTransform)transform
+- (void)renderGroupTo:(CGContextRef)context
 {
     RNSVGSvgView* svg = [self getSvgView];
-    [self clip:context];
-
-    CGContextConcatCTM(context, transform);
     [self traverseSubviews:^(RNSVGNode *node) {
         if (node.responsible && !svg.responsible) {
             svg.responsible = YES;
-            return NO;
         }
-        return YES;
-    }];
-
-    [self traverseSubviews:^(RNSVGNode *node) {
+        
         [node mergeProperties:self mergeList:self.attributeList inherited:YES];
         [node renderTo:context];
-
+        
         if ([node isKindOfClass: [RNSVGRenderable class]]) {
             RNSVGRenderable *renderable = node;
             [self concatLayoutBoundingBox:[renderable getLayoutBoundingBox]];
@@ -41,7 +35,7 @@
     }];
 }
 
-- (void)pathRenderLayerTo:(CGContextRef)context
+- (void)renderPathTo:(CGContextRef)context
 {
     [super renderLayerTo:context];
 }

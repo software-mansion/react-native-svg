@@ -10,14 +10,30 @@
 #import "RNSVGTextPath.h"
 #import "RNSVGBezierPath.h"
 
-@class RNSVGText;
 @implementation RNSVGTextPath
+
+- (void)renderLayerTo:(CGContextRef)context
+{
+    [self renderGroupTo:context];
+}
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    CGMutablePathRef path = CGPathCreateMutable();
+    return [self getGroupPath:context];
+}
 
-    return (CGPathRef)CFAutorelease(path);
+- (RNSVGBezierPath *)getBezierPath
+{
+    RNSVGSvgView *svg = [self getSvgView];
+    RNSVGNode *template = [svg getDefinedTemplate:self.href];
+    
+    if ([template class] != [RNSVGPath class]) {
+        // warning about this.
+        return nil;
+    }
+    
+    RNSVGPath *path = template;
+    return [[RNSVGBezierPath alloc] initWithBezierCurves:[path getBezierCurves]];
 }
 
 @end

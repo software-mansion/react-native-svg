@@ -6,12 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import <QuartzCore/QuartzCore.h>
-#import <Foundation/Foundation.h>
+
+#import <UIKit/UIKit.h>
 
 @interface RNSVGPathParser : NSObject
 
 - (instancetype) initWithPathString:(NSString *)d;
 - (CGPathRef)getPath;
+- (NSArray *)getBezierCurves;
 
 @end
