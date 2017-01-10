@@ -17,54 +17,70 @@
 @implementation RNSVGBezierPath
 {
     NSArray<NSArray *> *_bezierCurves;
-    NSUInteger _bezierIndex;
-    CGFloat _offset;
-    CGFloat _lastX;
+    int _currentBezierIndex;
+    CGFloat _startOffset;
+    CGFloat _lastOffset;
+    CGFloat _lastRecord;
     CGFloat _lastDistance;
     CGPoint _lastPoint;
     CGPoint _P0;
     CGPoint _P1;
     CGPoint _P2;
     CGPoint _P3;
+    BOOL _reachedEnd;
 }
 
-- (instancetype)initWithBezierCurves:(NSArray *)bezierCurves
+- (instancetype)initWithBezierCurvesAndStartOffset:(NSArray<NSArray *> *)bezierCurves startOffset:(CGFloat)startOffset
 {
-    
     if (self = [super init]) {
         _bezierCurves = bezierCurves;
-        _bezierIndex = 0;
-        _offset = 0;
-        _lastX = 0;
-        _lastDistance = 0;
+        _currentBezierIndex = _lastOffset = _lastRecord = _lastDistance = 0;
+        _startOffset = startOffset;
+        [self setControlPoints];
     }
     return self;
 }
 
-static CGFloat Bezier(CGFloat t, CGFloat P0, CGFloat P1, CGFloat P2, CGFloat P3) {
+static CGAffineTransform getReachedEndTansform() {
+    return CGAffineTransformMakeScale(0, 1);
+}
+
+static CGAffineTransform getUnreadedTransform() {
+    return CGAffineTransformMakeScale(1, 0);
+}
+
++ (BOOL) hasReachedEnd:(CGAffineTransform)transform
+{
+    return transform.a == 0;
+}
+
++ (BOOL) hasReachedStart:(CGAffineTransform) transform
+{
+    return transform.d == 0;
+}
+
+static CGFloat calculateBezier(CGFloat t, CGFloat P0, CGFloat P1, CGFloat P2, CGFloat P3) {
     return (1-t)*(1-t)*(1-t)*P0+3*(1-t)*(1-t)*t*P1+3*(1-t)*t*t*P2+t*t*t*P3;
 }
 
-- (CGPoint)pointForOffset:(CGFloat)t {
-    CGFloat x = Bezier(t, _P0.x, _P1.x, _P2.x, _P3.x);
-    CGFloat y = Bezier(t, _P0.y, _P1.y, _P2.y, _P3.y);
+- (CGPoint)pointAtOffset:(CGFloat)t {
+    CGFloat x = calculateBezier(t, _P0.x, _P1.x, _P2.x, _P3.x);
+    CGFloat y = calculateBezier(t, _P0.y, _P1.y, _P2.y, _P3.y);
     return CGPointMake(x, y);
 }
 
-static CGFloat BezierPrime(CGFloat t, CGFloat P0, CGFloat P1, CGFloat P2, CGFloat P3) {
+static CGFloat calculateBezierPrime(CGFloat t, CGFloat P0, CGFloat P1, CGFloat P2, CGFloat P3) {
     return -3*(1-t)*(1-t)*P0+(3*(1-t)*(1-t)*P1)-(6*t*(1-t)*P1)-(3*t*t*P2)+(6*t*(1-t)*P2)+3*t*t*P3;
 }
 
-- (CGFloat)angleForOffset:(CGFloat)t {
-    CGFloat dx = BezierPrime(t, _P0.x, _P1.x, _P2.x, _P3.x);
-    CGFloat dy = BezierPrime(t, _P0.y, _P1.y, _P2.y, _P3.y);
+- (CGFloat)angleAtOffset:(CGFloat)t {
+    CGFloat dx = calculateBezierPrime(t, _P0.x, _P1.x, _P2.x, _P3.x);
+    CGFloat dy = calculateBezierPrime(t, _P0.y, _P1.y, _P2.y, _P3.y);
     return atan2(dy, dx);
 }
 
-static CGFloat Distance(CGPoint a, CGPoint b) {
-    CGFloat dx = a.x - b.x;
-    CGFloat dy = a.y - b.y;
-    return hypot(dx, dy);
+static CGFloat calculateDistance(CGPoint a, CGPoint b) {
+    return hypot(a.x - b.x, a.y - b.y);
 }
 
 // Simplistic routine to find the offset along Bezier that is
@@ -76,65 +92,66 @@ static CGFloat Distance(CGPoint a, CGPoint b) {
 // curve might loop back on leading to incorrect results. Tuning
 // kStep is good start.
 - (CGFloat)offsetAtDistance:(CGFloat)distance
-                 fromPoint:(CGPoint)point
-                 offset:(CGFloat)offset {
-    const CGFloat kStep = 0.0005; // 0.0001 - 0.001 work well
+                  fromPoint:(CGPoint)point
+                     offset:(CGFloat)offset {
+    
+    const CGFloat kStep = 0.001; // 0.0001 - 0.001 work well
     CGFloat newDistance = 0;
     CGFloat newOffset = offset + kStep;
     while (newDistance <= distance && newOffset < 1.0) {
         newOffset += kStep;
-        newDistance = Distance(point, [self pointForOffset:newOffset]);
+        newDistance = calculateDistance(point, [self pointAtOffset:newOffset]);
     }
-
+    
     _lastDistance = newDistance;
     return newOffset;
 }
 
 - (void)setControlPoints
 {
-    NSArray *bezier = [_bezierCurves objectAtIndex:_bezierIndex];
-    _bezierIndex++;
+    NSArray *bezier = [_bezierCurves objectAtIndex:_currentBezierIndex++];
+    
+    // set start point
     if (bezier.count == 1) {
-        _lastPoint = _P0 = [(NSValue *)[bezier objectAtIndex:0] CGPointValue];
+        _lastPoint = _P0 = [[bezier objectAtIndex:0] CGPointValue];
         [self setControlPoints];
     } else if (bezier.count == 3) {
-        _P1 = [(NSValue *)[bezier objectAtIndex:0] CGPointValue];
-        _P2 = [(NSValue *)[bezier objectAtIndex:1] CGPointValue];
-        _P3 = [(NSValue *)[bezier objectAtIndex:2] CGPointValue];
+        _P1 = [[bezier objectAtIndex:0] CGPointValue];
+        _P2 = [[bezier objectAtIndex:1] CGPointValue];
+        _P3 = [[bezier objectAtIndex:2] CGPointValue];
     }
 }
 
+
 - (CGAffineTransform)transformAtDistance:(CGFloat)distance
 {
-    if (_offset == 0) {
-        if (_bezierCurves.count == _bezierIndex) {
-            return CGAffineTransformMakeScale(0, 0);
-        } else {
-            [self setControlPoints];
-        }
+    distance += _startOffset;
+    if (_reachedEnd) {
+        return getReachedEndTansform();
+    } else if (distance < 0) {
+        return getUnreadedTransform();
     }
-
-    CGFloat offset = [self offsetAtDistance:distance - _lastX
+    
+    CGFloat offset = [self offsetAtDistance:distance - _lastRecord
                                   fromPoint:_lastPoint
-                                     offset:_offset];
-    CGPoint glyphPoint = [self pointForOffset:offset];
-    CGFloat angle = [self angleForOffset:offset];
-
+                                     offset:_lastOffset];
+    
     if (offset < 1) {
-        _offset = offset;
+        CGPoint glyphPoint = [self pointAtOffset:offset];
+        _lastOffset = offset;
         _lastPoint = glyphPoint;
+        _lastRecord = distance;
+        return CGAffineTransformRotate(CGAffineTransformMakeTranslation(glyphPoint.x, glyphPoint.y), [self angleAtOffset:offset]);
+    } else if (_bezierCurves.count == _currentBezierIndex) {
+        _reachedEnd = YES;
+        return getReachedEndTansform();
     } else {
-        _offset = 0;
+        _lastOffset = 0;
         _lastPoint = _P0 = _P3;
-        _lastX += _lastDistance;
-        return [self transformAtDistance:distance];
+        _lastRecord += _lastDistance;
+        [self setControlPoints];
+        return [self transformAtDistance:distance - _startOffset];
     }
-
-    _lastX = distance;
-    CGAffineTransform transform = CGAffineTransformMakeTranslation(glyphPoint.x, glyphPoint.y);
-    transform = CGAffineTransformRotate(transform, angle);
-
-    return transform;
 }
 
 @end

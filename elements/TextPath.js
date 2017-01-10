@@ -3,7 +3,7 @@ import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src
 import {TextPathAttributes} from '../lib/attributes';
 import extractText from '../lib/extract/extractText';
 import Shape from './Shape';
-import {pathProps, fontProps} from '../lib/props';
+import {pathProps, fontProps, numberProp} from '../lib/props';
 import TSpan from './TSpan';
 
 const idExpReg = /^#(.+)$/;
@@ -15,11 +15,11 @@ class TextPath extends Shape {
         ...pathProps,
         ...fontProps,
         href: PropTypes.string.isRequired,
-        textAnchor: PropTypes.oneOf(['start', 'middle', 'end'])
+        startOffset: numberProp
     };
 
     render() {
-        let {children, href, ...props} = this.props;
+        let {children, href, startOffset, ...props} = this.props;
         if (href) {
             let matched = href.match(idExpReg);
 
@@ -33,7 +33,10 @@ class TextPath extends Shape {
                         x: null,
                         y: null
                     })}
-                    {...extractText({children}, true)}
+                    {...extractText({
+                        children,
+                        startOffset
+                    }, true)}
                 />;
             }
         }

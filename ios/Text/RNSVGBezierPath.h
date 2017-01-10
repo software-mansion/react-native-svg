@@ -11,7 +11,10 @@
 
 @interface RNSVGBezierPath : NSObject
 
-- (instancetype)initWithBezierCurves:(NSArray *)bezierCurves;
++ (BOOL) hasReachedEnd:(CGAffineTransform)transform;
++ (BOOL) hasReachedStart:(CGAffineTransform) transform;
+
+- (instancetype)initWithBezierCurvesAndStartOffset:(NSArray<NSArray *> *)bezierCurves startOffset:(CGFloat)startOffset;
 - (CGAffineTransform)transformAtDistance:(CGFloat)distance;
 
 @end

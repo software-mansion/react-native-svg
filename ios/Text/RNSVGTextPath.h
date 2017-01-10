@@ -14,6 +14,7 @@
 @interface RNSVGTextPath : RNSVGText
 
 @property (nonatomic, strong) NSString *href;
+@property (nonatomic, strong) NSString *startOffset;
 
 - (RNSVGBezierPath *)getBezierPath;
 

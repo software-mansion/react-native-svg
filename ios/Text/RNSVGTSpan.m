@@ -32,8 +32,9 @@
     if (!self.content) {
         return [self getGroupPath:context];
     }
-    [self initialTextPath];
     [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
+    
+    [self initialTextPath];
     CGMutablePathRef path = CGPathCreateMutable();
     
     if ([self.content isEqualToString:@""]) {
@@ -98,8 +99,10 @@
         
         CGAffineTransform textPathTransform = [self getTextPathTransform:computedPoint.x];
         
-        if (!textPathTransform.a || !textPathTransform.d) {
+        if ([RNSVGBezierPath hasReachedEnd:textPathTransform]) {
             break;
+        } else if ([RNSVGBezierPath hasReachedStart:textPathTransform]) {
+            continue;
         }
         
         CGAffineTransform transform;

@@ -27,7 +27,6 @@
 - (CTFontRef)getComputedFont;
 - (RNSVGGlyphPoint)getComputedGlyphPoint:(NSUInteger *)index glyphOffset:(CGPoint)glyphOffset;
 - (RNSVGText *)getTextRoot;
-- (CGAffineTransform)getTextPathTransform:(CGFloat)distance;
 - (CGPathRef)getGroupPath:(CGContextRef)context;
 - (void)resetTextPathAttributes;
 - (void)traverseTextSuperviews:(BOOL (^)(__kindof RNSVGText *node))block;

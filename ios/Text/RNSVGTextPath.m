@@ -14,6 +14,7 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
+    [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
     [self renderGroupTo:context];
 }
 
@@ -33,7 +34,8 @@
     }
     
     RNSVGPath *path = template;
-    return [[RNSVGBezierPath alloc] initWithBezierCurves:[path getBezierCurves]];
+    CGFloat startOffset = [self getWidthRelatedValue:self.startOffset];
+    return [[RNSVGBezierPath alloc] initWithBezierCurvesAndStartOffset:[path getBezierCurves] startOffset:startOffset];
 }
 
 @end
