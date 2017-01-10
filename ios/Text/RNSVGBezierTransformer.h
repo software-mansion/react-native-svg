@@ -9,12 +9,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RNSVGBezierPath : NSObject
+@interface RNSVGBezierTransformer : NSObject
 
 + (BOOL) hasReachedEnd:(CGAffineTransform)transform;
 + (BOOL) hasReachedStart:(CGAffineTransform) transform;
 
 - (instancetype)initWithBezierCurvesAndStartOffset:(NSArray<NSArray *> *)bezierCurves startOffset:(CGFloat)startOffset;
-- (CGAffineTransform)transformAtDistance:(CGFloat)distance;
+- (CGAffineTransform)getTransformAtDistance:(CGFloat)distance;
 
 @end

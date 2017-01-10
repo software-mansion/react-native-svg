@@ -15,7 +15,7 @@
 		1023B4901D3DF4C40051496D /* RNSVGDefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 1023B48F1D3DF4C40051496D /* RNSVGDefs.m */; };
 		1023B4931D3DF5060051496D /* RNSVGUse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1023B4921D3DF5060051496D /* RNSVGUse.m */; };
 		1023B4961D3DF57D0051496D /* RNSVGUseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1023B4951D3DF57D0051496D /* RNSVGUseManager.m */; };
-		103371321D41C5C90028AF13 /* RNSVGBezierPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 103371311D41C5C90028AF13 /* RNSVGBezierPath.m */; };
+		103371321D41C5C90028AF13 /* RNSVGBezierTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 103371311D41C5C90028AF13 /* RNSVGBezierTransformer.m */; };
 		1039D2891CE71EB7001E90A8 /* RNSVGGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1039D2821CE71EB7001E90A8 /* RNSVGGroup.m */; };
 		1039D28A1CE71EB7001E90A8 /* RNSVGImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1039D2841CE71EB7001E90A8 /* RNSVGImage.m */; };
 		1039D28B1CE71EB7001E90A8 /* RNSVGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 1039D2861CE71EB7001E90A8 /* RNSVGPath.m */; };
@@ -86,8 +86,8 @@
 		1023B4921D3DF5060051496D /* RNSVGUse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGUse.m; path = Elements/RNSVGUse.m; sourceTree = "<group>"; };
 		1023B4941D3DF57D0051496D /* RNSVGUseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGUseManager.h; sourceTree = "<group>"; };
 		1023B4951D3DF57D0051496D /* RNSVGUseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGUseManager.m; sourceTree = "<group>"; };
-		103371311D41C5C90028AF13 /* RNSVGBezierPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGBezierPath.m; path = Text/RNSVGBezierPath.m; sourceTree = "<group>"; };
-		103371331D41D3400028AF13 /* RNSVGBezierPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGBezierPath.h; path = Text/RNSVGBezierPath.h; sourceTree = "<group>"; };
+		103371311D41C5C90028AF13 /* RNSVGBezierTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGBezierTransformer.m; path = Text/RNSVGBezierTransformer.m; sourceTree = "<group>"; };
+		103371331D41D3400028AF13 /* RNSVGBezierTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGBezierTransformer.h; path = Text/RNSVGBezierTransformer.h; sourceTree = "<group>"; };
 		1039D2811CE71EB7001E90A8 /* RNSVGGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGGroup.h; path = Elements/RNSVGGroup.h; sourceTree = "<group>"; };
 		1039D2821CE71EB7001E90A8 /* RNSVGGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGGroup.m; path = Elements/RNSVGGroup.m; sourceTree = "<group>"; };
 		1039D2831CE71EB7001E90A8 /* RNSVGImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGImage.h; path = Elements/RNSVGImage.h; sourceTree = "<group>"; };
@@ -98,7 +98,6 @@
 		1039D2881CE71EB7001E90A8 /* RNSVGSvgView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGSvgView.m; path = Elements/RNSVGSvgView.m; sourceTree = "<group>"; };
 		1039D28F1CE71EC2001E90A8 /* RNSVGText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGText.h; path = Text/RNSVGText.h; sourceTree = "<group>"; };
 		1039D2901CE71EC2001E90A8 /* RNSVGText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGText.m; path = Text/RNSVGText.m; sourceTree = "<group>"; };
-		1039D2911CE71EC2001E90A8 /* RNSVGTextFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGTextFrame.h; path = Text/RNSVGTextFrame.h; sourceTree = "<group>"; };
 		1039D29B1CE72177001E90A8 /* RCTConvert+RNSVG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RCTConvert+RNSVG.h"; path = "Utils/RCTConvert+RNSVG.h"; sourceTree = "<group>"; };
 		1039D29C1CE72177001E90A8 /* RCTConvert+RNSVG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RCTConvert+RNSVG.m"; path = "Utils/RCTConvert+RNSVG.m"; sourceTree = "<group>"; };
 		1039D29E1CE72177001E90A8 /* RNSVGCGFloatArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGCGFloatArray.h; path = Utils/RNSVGCGFloatArray.h; sourceTree = "<group>"; };
@@ -298,8 +297,8 @@
 				7F08CE9D1E23479700650F83 /* RNSVGTextPath.m */,
 				7F08CE9E1E23479700650F83 /* RNSVGTSpan.h */,
 				7F08CE9F1E23479700650F83 /* RNSVGTSpan.m */,
-				103371331D41D3400028AF13 /* RNSVGBezierPath.h */,
-				103371311D41C5C90028AF13 /* RNSVGBezierPath.m */,
+				103371331D41D3400028AF13 /* RNSVGBezierTransformer.h */,
+				103371311D41C5C90028AF13 /* RNSVGBezierTransformer.m */,
 				1039D28F1CE71EC2001E90A8 /* RNSVGText.h */,
 				1039D2901CE71EC2001E90A8 /* RNSVGText.m */,
 			);
@@ -429,7 +428,7 @@
 				10BA0D3E1CE74E3100887C2B /* RNSVGSvgViewManager.m in Sources */,
 				0CF68B0F1AF0549300FF9E5C /* RNSVGSolidColorBrush.m in Sources */,
 				10BA0D3A1CE74E3100887C2B /* RNSVGPathManager.m in Sources */,
-				103371321D41C5C90028AF13 /* RNSVGBezierPath.m in Sources */,
+				103371321D41C5C90028AF13 /* RNSVGBezierTransformer.m in Sources */,
 				10BA0D3C1CE74E3100887C2B /* RNSVGRenderableManager.m in Sources */,
 				10BEC1BD1D3F66F500FDCB19 /* RNSVGRadialGradient.m in Sources */,
 				10BEC1C31D3F680F00FDCB19 /* RNSVGRadialGradientManager.m in Sources */,

@@ -8,7 +8,7 @@
 
 
 #import "RNSVGTextPath.h"
-#import "RNSVGBezierPath.h"
+#import "RNSVGBezierTransformer.h"
 
 @implementation RNSVGTextPath
 
@@ -23,19 +23,20 @@
     return [self getGroupPath:context];
 }
 
-- (RNSVGBezierPath *)getBezierPath
+- (RNSVGBezierTransformer *)getBezierTransformer
 {
     RNSVGSvgView *svg = [self getSvgView];
     RNSVGNode *template = [svg getDefinedTemplate:self.href];
-    
+
     if ([template class] != [RNSVGPath class]) {
         // warning about this.
         return nil;
     }
-    
+
     RNSVGPath *path = template;
     CGFloat startOffset = [self getWidthRelatedValue:self.startOffset];
-    return [[RNSVGBezierPath alloc] initWithBezierCurvesAndStartOffset:[path getBezierCurves] startOffset:startOffset];
+    return [[RNSVGBezierTransformer alloc] initWithBezierCurvesAndStartOffset:[path getBezierCurves]
+                                                                  startOffset:startOffset];
 }
 
 @end

@@ -10,11 +10,9 @@
  * based on CurvyText by iosptl: https://github.com/iosptl/ios7ptl/blob/master/ch21-Text/CurvyText/CurvyText/CurvyTextView.m
  */
 
-#import "RNSVGBezierPath.h"
-#import <QuartzCore/QuartzCore.h>
-#import <CoreText/CoreText.h>
+#import "RNSVGBezierTransformer.h"
 
-@implementation RNSVGBezierPath
+@implementation RNSVGBezierTransformer
 {
     NSArray<NSArray *> *_bezierCurves;
     int _currentBezierIndex;
@@ -123,7 +121,7 @@ static CGFloat calculateDistance(CGPoint a, CGPoint b) {
 }
 
 
-- (CGAffineTransform)transformAtDistance:(CGFloat)distance
+- (CGAffineTransform)getTransformAtDistance:(CGFloat)distance
 {
     distance += _startOffset;
     if (_reachedEnd) {
@@ -150,7 +148,7 @@ static CGFloat calculateDistance(CGPoint a, CGPoint b) {
         _lastPoint = _P0 = _P3;
         _lastRecord += _lastDistance;
         [self setControlPoints];
-        return [self transformAtDistance:distance - _startOffset];
+        return [self getTransformAtDistance:distance - _startOffset];
     }
 }
 

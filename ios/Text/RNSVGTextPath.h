@@ -9,13 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
 #import "RNSVGText.h"
-#import "RNSVGBezierPath.h"
+#import "RNSVGBezierTransformer.h"
 
 @interface RNSVGTextPath : RNSVGText
 
 @property (nonatomic, strong) NSString *href;
 @property (nonatomic, strong) NSString *startOffset;
 
-- (RNSVGBezierPath *)getBezierPath;
+- (RNSVGBezierTransformer *)getBezierTransformer;
 
 @end
