@@ -59,7 +59,7 @@
         return;
     }
     
-    if (opacity < 0) {
+    if (opacity <= 0) {
         opacity = 0;
     } else if (opacity > 1) {
         opacity = 1;
