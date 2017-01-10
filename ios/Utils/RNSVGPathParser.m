@@ -271,8 +271,8 @@
     double tX = _penX;
     double tY = _penY;
     
-    ry = abs(ry == 0 ? (rx == 0 ? (y - tY) : rx) : ry);
-    rx = abs(rx == 0 ? (x - tX) : rx);
+    ry = fabs(ry == 0 ? (rx == 0 ? (y - tY) : rx) : ry);
+    rx = fabs(rx == 0 ? (x - tX) : rx);
     
     if (rx == 0 || ry == 0 || (x == tX && y == tY)) {
         [self lineTo:path x:x y:y];
@@ -352,7 +352,7 @@
         arc -= M_PI * 2;
     }
     
-    int n = ceil(abs(arc / (M_PI / 2)));
+    int n = ceil(fabs(arc / (M_PI / 2)));
     
     double step = arc / n;
     double k = (4 / 3) * tan(step / 4);
