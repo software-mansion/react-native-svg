@@ -7,9 +7,9 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "RNSVGGlyphPoint.h"
 #import "RNSVGGroup.h"
 #import "RNSVGTextAnchor.h"
+#import "RNSVGGlyphContext.h"
 
 @interface RNSVGText : RNSVGGroup
 
@@ -24,11 +24,13 @@
 @property (nonatomic, assign) CGFloat lastY;
 @property (nonatomic, assign) NSUInteger lastIndex;
 
-- (CTFontRef)getComputedFont;
-- (RNSVGGlyphPoint)getComputedGlyphPoint:(NSUInteger *)index glyphOffset:(CGPoint)glyphOffset;
 - (RNSVGText *)getTextRoot;
-- (CGPathRef)getGroupPath:(CGContextRef)context;
-- (void)resetTextPathAttributes;
-- (void)traverseTextSuperviews:(BOOL (^)(__kindof RNSVGText *node))block;
+- (void)releaseCachedPath;
+
+- (RNSVGGlyphContext *)getGlyphContext;
+- (void)pushGlyphContext;
+- (void)popGlyphContext;
+- (CTFontRef)getFontFromContext;
+- (CGPoint)getGlyphPointFromContext:(CGPoint)offset glyphWidth:(CGFloat)glyphWidth;
 
 @end

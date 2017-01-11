@@ -12,6 +12,7 @@
 #import "RNSVGCGFloatArray.h"
 #import "RNSVGCGFCRule.h"
 #import "RNSVGNode.h"
+#import "RNSVGPercentageConverter.h"
 
 @interface RNSVGRenderable : RNSVGNode
 
@@ -36,5 +37,7 @@
 - (CGRect)getLayoutBoundingBox;
 - (CGFloat)getWidthRelatedValue:(NSString *)string;
 - (CGFloat)getHeightRelatedValue:(NSString *)string;
+- (RNSVGPercentageConverter *)getWidthConverter;
+- (RNSVGPercentageConverter *)getHeightConverter;
 
 @end

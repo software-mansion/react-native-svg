@@ -18,11 +18,6 @@
     [self renderGroupTo:context];
 }
 
-- (CGPathRef)getPath:(CGContextRef)context
-{
-    return [self getGroupPath:context];
-}
-
 - (RNSVGBezierTransformer *)getBezierTransformer
 {
     RNSVGSvgView *svg = [self getSvgView];

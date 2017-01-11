@@ -7,7 +7,6 @@
  */
 
 #import "RNSVGRenderable.h"
-#import "RNSVGPercentageConverter.h"
 
 @implementation RNSVGRenderable
 {
@@ -306,6 +305,16 @@
                                                                            offset:0];
     _heightConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:contextBoundingBox.size.height
                                                                             offset:0];
+}
+
+- (RNSVGPercentageConverter *)getWidthConverter
+{
+    return _widthConverter;
+}
+
+- (RNSVGPercentageConverter *)getHeightConverter
+{
+    return _heightConverter;
 }
 
 - (CGRect)getContextBoundingBox
