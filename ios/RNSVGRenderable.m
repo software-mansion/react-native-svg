@@ -266,6 +266,10 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transform
 {
+    if (!_hitArea) {
+        return nil;
+    }
+    
     if (self.active) {
         if (!event) {
             self.active = NO;

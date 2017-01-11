@@ -29,8 +29,12 @@
     [self clip:context];
     CGContextSaveGState(context);
     [self setupGlyphContext:context];
-    CGAffineTransform transform = [self getAlignTransform:context];
+    CGPathRef path = [self getPath:context];
+    
+    CGAffineTransform transform = [self getAlignTransform:context path:path];
     CGContextConcatCTM(context, transform);
+    
+    [self setHitArea:path];
     [self renderGroupTo:context];
     [self releaseCachedPath];
     CGContextRestoreGState(context);
@@ -78,11 +82,6 @@
     [self pushGlyphContext];
     [super renderGroupTo:context];
     [self popGlyphContext];
-}
-
-- (CGAffineTransform)getAlignTransform:(CGContextRef)context
-{
-    return [self getAlignTransform:context path:[self getGroupPath:context]];
 }
 
 - (CGAffineTransform)getAlignTransform:(CGContextRef)context path:(CGPathRef)path

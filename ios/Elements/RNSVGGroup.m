@@ -59,6 +59,11 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transform
 {
+    UIView *hitSelf = [super hitTest:point withEvent:event withTransform:transform];
+    if (hitSelf) {
+        return hitSelf;
+    }
+    
     CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
 
     CGPathRef clip = [self getClipPath];
@@ -72,25 +77,23 @@
         }
         
     }
-
+    
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
-            if (event) {
-                node.active = NO;
-            } else if (node.active) {
-                return node;
-            }
-
-            UIView *view = [node hitTest: point withEvent:event withTransform:matrix];
-
-            if (view) {
-                node.active = YES;
-                if (node.responsible || (node != view)) {
-                    return view;
-                } else {
-                    return self;
-                }
-            }
+        if (![node isKindOfClass:[RNSVGNode class]]) {
+            continue;
+        }
+        
+        if (event) {
+            node.active = NO;
+        } else if (node.active) {
+            return node;
+        }
+        
+        UIView *hitChild = [node hitTest: point withEvent:event withTransform:matrix];
+        
+        if (hitChild) {
+            node.active = YES;
+            return (node.responsible || (node != hitChild)) ? hitChild : self;
         }
     }
     return nil;
