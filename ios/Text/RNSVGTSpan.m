@@ -34,6 +34,11 @@
     _cache = nil;
 }
 
+- (void)dealloc
+{
+    CGPathRelease(_cache);
+}
+
 - (CGPathRef)getPath:(CGContextRef)context
 {
     if (_cache) {
@@ -69,14 +74,14 @@
     CGMutablePathRef linePath = [self getLinePath:line];
     CGAffineTransform offset = CGAffineTransformMakeTranslation(0, _bezierTransformer ? 0 : CTFontGetSize(font) * 1.1);
     CGPathAddPath(path, &offset, linePath);
+    CGPathRelease(linePath);
     
-    _cache = CGPathRetain(CGPathCreateCopy(path));
+    _cache = CGPathRetain(CFAutorelease(CGPathCreateCopy(path)));
     [self popGlyphContext];
     
     // clean up
     CFRelease(attrString);
     CFRelease(line);
-    CGPathRelease(linePath);
     
     return (CGPathRef)CFAutorelease(path);
 }

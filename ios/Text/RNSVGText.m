@@ -29,15 +29,18 @@
     [self clip:context];
     CGContextSaveGState(context);
     [self setupGlyphContext:context];
-    CGPathRef path = [self getPath:context];
     
+    CGPathRef path = [self getGroupPath:context];
     CGAffineTransform transform = [self getAlignTransform:context path:path];
     CGContextConcatCTM(context, transform);
-    
-    [self setHitArea:path];
     [self renderGroupTo:context];
     [self releaseCachedPath];
     CGContextRestoreGState(context);
+    
+    
+    CGPathRef transformedPath = CGPathCreateCopyByTransformingPath(path, &transform);
+    [self setHitArea:transformedPath];
+    CGPathRelease(transformedPath);
 }
 
 - (void)setupGlyphContext:(CGContextRef)context
@@ -71,10 +74,9 @@
     [self setupGlyphContext:context];
     CGPathRef groupPath = [self getGroupPath:context];
     CGAffineTransform transform = [self getAlignTransform:context path:groupPath];
-    CGPathRef transformedPath = CGPathCreateCopyByTransformingPath(groupPath, &transform);
     [self releaseCachedPath];
     
-    return transformedPath;
+    return (CGPathRef)CFAutorelease(CGPathCreateCopyByTransformingPath(groupPath, &transform));
 }
 
 - (void)renderGroupTo:(CGContextRef)context

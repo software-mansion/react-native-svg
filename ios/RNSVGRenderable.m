@@ -252,7 +252,7 @@
             CGPathRelease(strokePath);
         }
         
-        _hitArea = CGPathRetain(CGPathCreateCopy(hitArea));
+        _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(hitArea)));
         CGPathRelease(hitArea);
     }
 
