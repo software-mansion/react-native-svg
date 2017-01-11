@@ -26,6 +26,7 @@
 
 - (RNSVGText *)getTextRoot;
 - (void)releaseCachedPath;
+- (CGPathRef)getGroupPath:(CGContextRef)context;
 
 - (RNSVGGlyphContext *)getGlyphContext;
 - (void)pushGlyphContext;

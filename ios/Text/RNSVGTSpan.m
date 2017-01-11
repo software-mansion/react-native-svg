@@ -42,10 +42,10 @@
     
     NSString *text = self.content;
     if (!text) {
-        return [super getPath:context];
+        return [self getGroupPath:context];
     }
     
-    [self initialTextPath];
+    [self setupTextPath];
     [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
     
     CGMutablePathRef path = CGPathCreateMutable();
@@ -53,7 +53,9 @@
     // append spacing
     text = [text stringByAppendingString:@" "];
     
+    [self pushGlyphContext];
     CTFontRef font = [self getFontFromContext];
+    
     // Create a dictionary for this font
     CFDictionaryRef attributes = (__bridge CFDictionaryRef)@{
                                                              (NSString *)kCTFontAttributeName: (__bridge id)font,
@@ -67,20 +69,20 @@
     CGMutablePathRef linePath = [self getLinePath:line];
     CGAffineTransform offset = CGAffineTransformMakeTranslation(0, _bezierTransformer ? 0 : CTFontGetSize(font) * 1.1);
     CGPathAddPath(path, &offset, linePath);
-
+    
+    _cache = CGPathRetain(CGPathCreateCopy(path));
+    [self popGlyphContext];
+    
     // clean up
     CFRelease(attrString);
     CFRelease(line);
     CGPathRelease(linePath);
-    
-    _cache = CGPathRetain(CGPathCreateCopy(path));
     
     return (CGPathRef)CFAutorelease(path);
 }
 
 - (CGMutablePathRef)getLinePath:(CTLineRef)line
 {
-    [self pushGlyphContext];
     CTRunRef run = CFArrayGetValueAtIndex(CTLineGetGlyphRuns(line), 0);
 
     CFIndex runGlyphCount = CTRunGetGlyphCount(run);
@@ -98,7 +100,7 @@
     for(CFIndex i = 0; i < runGlyphCount; i++) {
         CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[i], nil);
         
-        glyphPoint = [self getGlyphPointFromContext:positions[i] glyphWidth:CGPathGetBoundingBox(letter).size.width];
+        glyphPoint = [self getGlyphPointFromContext:positions[i] glyphWidth:CGRectGetWidth(CGPathGetBoundingBox(letter))];
         
         CGAffineTransform textPathTransform = [self getTextPathTransform:glyphPoint.x];
 
@@ -121,11 +123,10 @@
         CGPathRelease(letter);
     }
     
-    [self popGlyphContext];
     return path;
 }
 
-- (void)initialTextPath
+- (void)setupTextPath
 {
     __block RNSVGBezierTransformer *bezierTransformer;
     [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
@@ -136,7 +137,7 @@
         }
         return YES;
     }];
-
+    
     _bezierTransformer = bezierTransformer;
 }
 

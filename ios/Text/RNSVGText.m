@@ -26,12 +26,9 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
-    [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
-    _glyphContext = [[RNSVGGlyphContext alloc] initWithConverters:[self getWidthConverter]
-                                                  heightConverter:[self getHeightConverter]];
-    
     [self clip:context];
     CGContextSaveGState(context);
+    [self setupGlyphContext:context];
     CGAffineTransform transform = [self getAlignTransform:context];
     CGContextConcatCTM(context, transform);
     [self renderGroupTo:context];
@@ -39,6 +36,14 @@
     CGContextRestoreGState(context);
 }
 
+- (void)setupGlyphContext:(CGContextRef)context
+{
+    [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
+    _glyphContext = [[RNSVGGlyphContext alloc] initWithConverters:[self getWidthConverter]
+                                                  heightConverter:[self getHeightConverter]];
+}
+
+// release the cached CGPathRef for RNSVGTSpan
 - (void)releaseCachedPath
 {
     [self traverseSubviews:^BOOL(__kindof RNSVGNode *node) {
@@ -48,14 +53,22 @@
     }];
 }
 
-- (CGPathRef)getPath:(CGContextRef)context
+- (CGPathRef)getGroupPath:(CGContextRef)context
 {
     [self pushGlyphContext];
     CGPathRef groupPath = [super getPath:context];
     [self popGlyphContext];
     
+    return groupPath;
+}
+
+- (CGPathRef)getPath:(CGContextRef)context
+{
+    [self setupGlyphContext:context];
+    CGPathRef groupPath = [self getGroupPath:context];
     CGAffineTransform transform = [self getAlignTransform:context path:groupPath];
     CGPathRef transformedPath = CGPathCreateCopyByTransformingPath(groupPath, &transform);
+    [self releaseCachedPath];
     
     return transformedPath;
 }
@@ -69,7 +82,7 @@
 
 - (CGAffineTransform)getAlignTransform:(CGContextRef)context
 {
-    return [self getAlignTransform:context path:[self getPath:context]];
+    return [self getAlignTransform:context path:[self getGroupPath:context]];
 }
 
 - (CGAffineTransform)getAlignTransform:(CGContextRef)context path:(CGPathRef)path

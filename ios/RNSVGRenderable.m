@@ -17,6 +17,7 @@
     CGRect _contextBoundingBox;
     CGRect _renderBoundingBox;
     BOOL _fillEvenodd;
+    CGPathRef _hitArea;
 }
 
 - (id)init
@@ -132,17 +133,6 @@
     _strokeDashoffset = strokeDashoffset;
 }
 
-- (void)setHitArea:(CGPathRef)hitArea
-{
-    if (hitArea == _hitArea) {
-        return;
-    }
-    
-    [self invalidate];
-    CGPathRelease(_hitArea);
-    _hitArea = CGPathRetain(hitArea);
-}
-
 - (void)setPropList:(NSArray<NSString *> *)propList
 {
     if (propList == _propList) {
@@ -175,6 +165,7 @@
     CGContextRestoreGState(context);
 }
 
+
 - (void)renderLayerTo:(CGContextRef)context
 {
     BOOL shouldStroke = self.stroke && self.strokeWidth;
@@ -184,21 +175,7 @@
     }
     
     CGPathRef path = [self getPath:context];
-    
-    if ([self getSvgView].responsible) {
-        // Add path to hitArea
-        CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
-        
-        if (self.stroke && self.strokeWidth) {
-            // Add stroke to hitArea
-            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
-            CGPathAddPath(hitArea, nil, strokePath);
-            CGPathRelease(strokePath);
-        }
-        
-        self.hitArea = CFAutorelease(CGPathCreateCopy(hitArea));
-        CGPathRelease(hitArea);
-    }
+    [self setHitArea:path];
     
     if (self.opacity == 0) {
         return;
@@ -261,6 +238,25 @@
     CGContextDrawPath(context, mode);
 }
 
+- (void)setHitArea:(CGPathRef)path
+{
+    CGPathRelease(_hitArea);
+    if ([self getSvgView].responsible) {
+        // Add path to hitArea
+        CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
+        
+        if (self.stroke && self.strokeWidth) {
+            // Add stroke to hitArea
+            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
+            CGPathAddPath(hitArea, nil, strokePath);
+            CGPathRelease(strokePath);
+        }
+        
+        _hitArea = CGPathRetain(CGPathCreateCopy(hitArea));
+        CGPathRelease(hitArea);
+    }
+
+}
 
 // hitTest delagate
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
@@ -278,7 +274,7 @@
     }
     
     CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
-    CGPathRef hitArea = CGPathCreateCopyByTransformingPath(self.hitArea, &matrix);
+    CGPathRef hitArea = CGPathCreateCopyByTransformingPath(_hitArea, &matrix);
     BOOL contains = CGPathContainsPoint(hitArea, nil, point, NO);
     CGPathRelease(hitArea);
     

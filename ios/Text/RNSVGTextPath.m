@@ -34,4 +34,19 @@
                                                                   startOffset:startOffset];
 }
 
+- (CGPathRef)getPath:(CGContextRef)context
+{
+    return [self getGroupPath:context];
+}
+
+- (void)pushGlyphContext
+{
+    // TextPath do not affect the glyphContext
+}
+
+- (void)popGlyphContext
+{
+    // TextPath do not affect the glyphContext
+}
+
 @end

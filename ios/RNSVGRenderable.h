@@ -27,7 +27,6 @@
 @property (nonatomic, assign) CGFloat strokeMiterlimit;
 @property (nonatomic, assign) RNSVGCGFloatArray strokeDasharray;
 @property (nonatomic, assign) CGFloat strokeDashoffset;
-@property (nonatomic, assign) CGPathRef hitArea;
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 @property (nonatomic, strong) NSArray<NSString *> *attributeList;
 
@@ -39,5 +38,6 @@
 - (CGFloat)getHeightRelatedValue:(NSString *)string;
 - (RNSVGPercentageConverter *)getWidthConverter;
 - (RNSVGPercentageConverter *)getHeightConverter;
+- (void)setHitArea:(CGPathRef)path;
 
 @end
