@@ -31,7 +31,7 @@
     [self setupGlyphContext:context];
     
     CGPathRef path = [self getGroupPath:context];
-    CGAffineTransform transform = [self getAlignTransform:context path:path];
+    CGAffineTransform transform = [self getAlignTransform:path];
     CGContextConcatCTM(context, transform);
     [self renderGroupTo:context];
     [self releaseCachedPath];
@@ -73,7 +73,7 @@
 {
     [self setupGlyphContext:context];
     CGPathRef groupPath = [self getGroupPath:context];
-    CGAffineTransform transform = [self getAlignTransform:context path:groupPath];
+    CGAffineTransform transform = [self getAlignTransform:groupPath];
     [self releaseCachedPath];
     
     return (CGPathRef)CFAutorelease(CGPathCreateCopyByTransformingPath(groupPath, &transform));
@@ -86,7 +86,7 @@
     [self popGlyphContext];
 }
 
-- (CGAffineTransform)getAlignTransform:(CGContextRef)context path:(CGPathRef)path
+- (CGAffineTransform)getAlignTransform:(CGPathRef)path
 {
     CGFloat width = CGRectGetWidth(CGPathGetBoundingBox(path));
     CGFloat x = 0;
@@ -150,12 +150,6 @@
 - (void)popGlyphContext
 {
     [[[self getTextRoot] getGlyphContext] popContext];
-}
-
-- (CGPoint)getGlyphLineOffset
-{
-    RNSVGText *text = [self getTextRoot];
-    return CGPointMake(text.lastX, text.lastY);
 }
 
 - (CTFontRef)getFontFromContext

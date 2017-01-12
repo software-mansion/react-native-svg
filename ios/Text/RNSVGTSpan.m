@@ -107,17 +107,16 @@
         
         glyphPoint = [self getGlyphPointFromContext:positions[i] glyphWidth:CGRectGetWidth(CGPathGetBoundingBox(letter))];
         
-        CGAffineTransform textPathTransform = [self getTextPathTransform:glyphPoint.x];
-
-        if ([RNSVGBezierTransformer hasReachedEnd:textPathTransform]) {
-            break;
-        } else if ([RNSVGBezierTransformer hasReachedStart:textPathTransform]) {
-            continue;
-        }
-
+        CGAffineTransform textPathTransform = CGAffineTransformIdentity;
         CGAffineTransform transform;
-
         if (_bezierTransformer) {
+            textPathTransform = [_bezierTransformer getTransformAtDistance:glyphPoint.x];
+            if ([self textPathHasReachedEnd]) {
+                break;
+            } else if (![self textPathHasReachedStart]) {
+                continue;
+            }
+            
             textPathTransform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(0, glyphPoint.y), textPathTransform);
             transform = CGAffineTransformScale(textPathTransform, 1.0, -1.0);
         } else {
@@ -162,14 +161,14 @@
     }
 }
 
-- (CGAffineTransform)getTextPathTransform:(CGFloat)distance
+- (BOOL)textPathHasReachedEnd
 {
-    if (_bezierTransformer) {
-        return [_bezierTransformer getTransformAtDistance:distance];
-    }
+    return [_bezierTransformer hasReachedEnd];
+}
 
-    return CGAffineTransformIdentity;
-
+- (BOOL)textPathHasReachedStart
+{
+    return [_bezierTransformer hasReachedStart];
 }
 
 @end

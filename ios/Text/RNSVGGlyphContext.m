@@ -64,6 +64,11 @@
     [_locationContext removeLastObject];
     [_deltaXContext removeLastObject];
     [_deltaYContext removeLastObject];
+    [_xContext removeLastObject];
+    
+    if (_xContext.count) {
+        [_xContext replaceObjectAtIndex:_xContext.count - 1 withObject:x];
+    }
     
     if (_locationContext.count) {
         _currentLocation = [[_locationContext lastObject] CGPointValue];

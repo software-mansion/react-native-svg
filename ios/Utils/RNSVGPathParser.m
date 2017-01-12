@@ -168,17 +168,15 @@
 }
 
 - (void)lineTo:(CGPathRef)path x:(double)x y:(double)y{
+    NSValue * source = [NSValue valueWithCGPoint:CGPointMake(_pivotX, _pivotY)];
+    
     [self setPenDown];
     _pivotX = _penX = x;
     _pivotY = _penY = y;
     CGPathAddLineToPoint(path, nil, x, y);
     
     NSValue * destination = [NSValue valueWithCGPoint:CGPointMake(x, y)];
-    [_bezierCurves addObject: @[
-                          destination,
-                          _lastStartPoint,
-                          destination
-                          ]];
+    [_bezierCurves addObject: @[destination, destination, destination]];
 }
 
 - (void)curve:(CGPathRef)path c1x:(double)c1x c1y:(double)c1y c2x:(double)c2x c2y:(double)c2y ex:(double)ex ey:(double)ey
@@ -204,7 +202,6 @@
     _penX = ex;
     _penY = ey;
     CGPathAddCurveToPoint(path, nil, c1x, c1y, c2x, c2y, ex, ey);
-    
     
     [_bezierCurves addObject: @[
                           [NSValue valueWithCGPoint:CGPointMake(c1x, c1y)],
@@ -389,7 +386,7 @@
         _penY = _penDownY;
         _penDownSet = NO;
         CGPathCloseSubpath(path);
-        [_bezierCurves addObject: @[]];
+        [_bezierCurves addObject: @[_lastStartPoint, _lastStartPoint, _lastStartPoint]];
     }
 }
 

@@ -20,10 +20,6 @@
 @property (nonatomic, strong) NSString *positionY;
 @property (nonatomic, strong) NSDictionary *font;
 
-@property (nonatomic, assign) CGFloat lastX;
-@property (nonatomic, assign) CGFloat lastY;
-@property (nonatomic, assign) NSUInteger lastIndex;
-
 - (RNSVGText *)getTextRoot;
 - (void)releaseCachedPath;
 - (CGPathRef)getGroupPath:(CGContextRef)context;

@@ -14,6 +14,4 @@
 
 @property (nonatomic, strong) NSString *content;
 
-- (CGAffineTransform)getTextPathTransform:(CGFloat)distance;
-
 @end
