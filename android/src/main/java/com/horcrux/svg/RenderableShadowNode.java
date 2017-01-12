@@ -299,6 +299,10 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     @Override
     public int hitTest(Point point, @Nullable Matrix matrix) {
+        if (mPath == null) {
+            return -1;
+        }
+
         Bitmap bitmap = Bitmap.createBitmap(
                 mCanvasWidth,
                 mCanvasHeight,

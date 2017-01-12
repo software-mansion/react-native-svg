@@ -27,13 +27,14 @@ public class GroupShadowNode extends RenderableShadowNode {
 
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
         if (opacity > MIN_OPACITY_FOR_DRAW) {
+            int count = saveAndSetupCanvas(canvas);
             clip(canvas, paint);
             drawGroup(canvas, paint, opacity);
+            restoreCanvas(canvas, count);
         }
     }
 
     protected void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {
-        int count = saveAndSetupCanvas(canvas);
         final SvgViewShadowNode svg = getSvgShadowNode();
         final VirtualNode self = this;
         traverseChildren(new NodeRunnable() {
@@ -50,8 +51,6 @@ public class GroupShadowNode extends RenderableShadowNode {
                 return true;
             }
         });
-
-        restoreCanvas(canvas, count);
     }
 
     protected void drawPath(Canvas canvas, Paint paint, float opacity) {
@@ -75,6 +74,11 @@ public class GroupShadowNode extends RenderableShadowNode {
 
     @Override
     public int hitTest(final Point point, final @Nullable Matrix matrix) {
+        int hitSelf = super.hitTest(point, matrix);
+        if (hitSelf != -1) {
+            return hitSelf;
+        }
+
         Matrix combinedMatrix = new Matrix();
 
         if (matrix != null) {

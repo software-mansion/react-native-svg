@@ -92,7 +92,7 @@ public class TextShadowNode extends GroupShadowNode {
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             clip(canvas, paint);
 
-            final int count = canvas.save();
+            int count = canvas.save();
             setupGlyphContext(canvas);
 
             Path path = getGroupPath(canvas, paint);
@@ -101,10 +101,9 @@ public class TextShadowNode extends GroupShadowNode {
             drawGroup(canvas, paint, opacity);
             releaseCachedPath();
 
+            mPath = path;
             restoreCanvas(canvas, count);
             markUpdateSeen();
-
-            // todo: set hit area
         }
     }
 
@@ -113,15 +112,20 @@ public class TextShadowNode extends GroupShadowNode {
         setupGlyphContext(canvas);
         Path groupPath = getGroupPath(canvas, paint);
         Matrix matrix = getAlignMatrix(groupPath);
+        groupPath.transform(mMatrix);
         groupPath.transform(matrix);
 
         releaseCachedPath();
         return groupPath;
     }
 
+    @Override
     protected void drawGroup(Canvas canvas, Paint paint, float opacity) {
         pushGlyphContext();
+        int count = canvas.save();
+        canvas.concat(mMatrix);
         super.drawGroup(canvas, paint, opacity);
+        restoreCanvas(canvas, count);
         popGlyphContext();
     }
 
