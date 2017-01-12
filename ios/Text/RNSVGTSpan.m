@@ -50,8 +50,7 @@
         return [self getGroupPath:context];
     }
     
-    [self setupTextPath];
-    [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
+    [self setupTextPath:context];
     
     CGMutablePathRef path = CGPathCreateMutable();
     
@@ -130,12 +129,13 @@
     return path;
 }
 
-- (void)setupTextPath
+- (void)setupTextPath:(CGContextRef)context
 {
     __block RNSVGBezierTransformer *bezierTransformer;
     [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
         if ([node class] == [RNSVGTextPath class]) {
             RNSVGTextPath *textPath = node;
+            [node setContextBoundingBox:CGContextGetClipBoundingBox(context)];
             bezierTransformer = [node getBezierTransformer];
             return NO;
         }
