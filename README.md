@@ -603,12 +603,11 @@ npm i
 
 ### TODO:
 1. Add Native method for elements.
-2. More Text features support (TextPath, TSpan).
-3. Pattern element.
-4. Implement Animated elements.
-6. Mask element.
+2. Pattern element.
+3. Implement Animated elements.
+4. Mask element.
 5. Load Image from URL.
-7. Fix rotate prop ON Text
+6. Fix rotate prop on Text
 
 ### Known issues:
 1. Unable to set alpha channel for Gradient on iOS.
