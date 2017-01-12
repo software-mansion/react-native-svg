@@ -25,7 +25,7 @@
     if (self = [super init]) {
         _fillOpacity = 1;
         _strokeOpacity = 1;
-        _strokeWidth = 0;
+        _strokeWidth = 1;
     }
     return self;
 }
@@ -168,9 +168,7 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
-    BOOL shouldStroke = self.stroke && self.strokeWidth;
-    
-    if (!self.fill && !shouldStroke) {
+    if (!self.fill && !self.stroke) {
         return;
     }
     
@@ -199,13 +197,13 @@
              ];
             CGContextRestoreGState(context);
             
-            if (!shouldStroke) {
+            if (!self.stroke) {
                 return;
             }
         }
     }
     
-    if (shouldStroke) {
+    if (self.stroke) {
         CGContextSetLineWidth(context, self.strokeWidth);
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);
