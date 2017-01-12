@@ -7,7 +7,6 @@
  */
 
 #import "RNSVGRenderable.h"
-#import "RNSVGPercentageConverter.h"
 
 @implementation RNSVGRenderable
 {
@@ -15,9 +14,10 @@
     NSArray *_lastMergedList;
     RNSVGPercentageConverter *_widthConverter;
     RNSVGPercentageConverter *_heightConverter;
-    CGFloat _contextWidth;
-    CGFloat _contextHeight;
-    CGRect _boundingBox;
+    CGRect _contextBoundingBox;
+    CGRect _renderBoundingBox;
+    BOOL _fillEvenodd;
+    CGPathRef _hitArea;
 }
 
 - (id)init
@@ -25,7 +25,7 @@
     if (self = [super init]) {
         _fillOpacity = 1;
         _strokeOpacity = 1;
-        _strokeWidth = 0;
+        _strokeWidth = 1;
     }
     return self;
 }
@@ -54,6 +54,7 @@
         return;
     }
     [self invalidate];
+    _fillEvenodd = fillRule == kRNSVGCGFCRuleEvenodd;
     _fillRule = fillRule;
 }
 
@@ -132,17 +133,6 @@
     _strokeDashoffset = strokeDashoffset;
 }
 
-- (void)setHitArea:(CGPathRef)hitArea
-{
-    if (hitArea == _hitArea) {
-        return;
-    }
-    
-    [self invalidate];
-    CGPathRelease(_hitArea);
-    _hitArea = CGPathRetain(hitArea);
-}
-
 - (void)setPropList:(NSArray<NSString *> *)propList
 {
     if (propList == _propList) {
@@ -171,31 +161,19 @@
     [self beginTransparencyLayer:context];
     [self renderLayerTo:context];
     [self endTransparencyLayer:context];
-
+    
     CGContextRestoreGState(context);
 }
 
+
 - (void)renderLayerTo:(CGContextRef)context
 {
-    // todo: add detection if path has changed since last update.
-    CGPathRef path = [self getPath:context];
-    if ((!self.fill && !self.stroke) || !path) {
+    if (!self.fill && !self.stroke) {
         return;
     }
     
-    if ([self getSvgView].responsible) {
-        // Add path to hitArea
-        CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
-        if (self.stroke && self.strokeWidth) {
-            // Add stroke to hitArea
-            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
-            CGPathAddPath(hitArea, nil, strokePath);
-            CGPathRelease(strokePath);
-        }
-        
-        self.hitArea = CFAutorelease(CGPathCreateCopy(hitArea));
-        CGPathRelease(hitArea);
-    }
+    CGPathRef path = [self getPath:context];
+    [self setHitArea:path];
     
     if (self.opacity == 0) {
         return;
@@ -203,27 +181,29 @@
     
     CGPathDrawingMode mode = kCGPathStroke;
     BOOL fillColor = YES;
+    [self clip:context];
     
     if (self.fill) {
-        mode = self.fillRule == kRNSVGCGFCRuleEvenodd ? kCGPathEOFill : kCGPathFill;
+        mode = _fillEvenodd ? kCGPathEOFill : kCGPathFill;
         fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
         
         if (!fillColor) {
-            [self clip:context];
-            
             CGContextSaveGState(context);
             CGContextAddPath(context, path);
             CGContextClip(context);
-            RNSVGBrushConverter *brushConverter = [[self getSvgView] getDefinedBrushConverter:[self.fill brushRef]];
-            [self.fill paint:context opacity:self.fillOpacity brushConverter:brushConverter];
+            [self.fill paint:context
+                     opacity:self.fillOpacity
+              brushConverter:[[self getSvgView] getDefinedBrushConverter:self.fill.brushRef]
+             ];
             CGContextRestoreGState(context);
+            
             if (!self.stroke) {
                 return;
             }
         }
     }
     
-    if (self.stroke && self.strokeWidth) {
+    if (self.stroke) {
         CGContextSetLineWidth(context, self.strokeWidth);
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);
@@ -233,39 +213,48 @@
             CGContextSetLineDash(context, self.strokeDashoffset, dash.array, dash.count);
         }
         
-        if (!fillColor) {
+        BOOL strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
+        
+        if (!fillColor || !strokeColor) {
             CGContextAddPath(context, path);
             CGContextReplacePathWithStrokedPath(context);
             CGContextClip(context);
         }
         
-        if ([self.stroke applyStrokeColor:context opacity:self.strokeOpacity]) {
-            if (mode == kCGPathFill) {
-                mode = kCGPathFillStroke;
-            } else if (mode == kCGPathEOFill) {
-                mode = kCGPathEOFillStroke;
-            }
-        } else {
-            // draw fill
-            [self clip:context];
-            CGContextAddPath(context, path);
-            CGContextDrawPath(context, mode);
-            
-            // draw stroke
-            CGContextAddPath(context, path);
-            CGContextReplacePathWithStrokedPath(context);
-            CGContextClip(context);
-            RNSVGBrushConverter *brushConverter = [[self getSvgView] getDefinedBrushConverter:[self.stroke brushRef]];
-            [self.stroke paint:context opacity:self.strokeOpacity brushConverter:brushConverter];
+        if (!strokeColor) {
+            [self.stroke paint:context
+                       opacity:self.strokeOpacity
+                brushConverter:[[self getSvgView] getDefinedBrushConverter:self.stroke.brushRef]
+            ];
             return;
+        } else if (self.fill) {
+            mode = _fillEvenodd ? kCGPathEOFillStroke : kCGPathFillStroke;
         }
     }
     
-    [self clip:context];
     CGContextAddPath(context, path);
     CGContextDrawPath(context, mode);
 }
 
+- (void)setHitArea:(CGPathRef)path
+{
+    CGPathRelease(_hitArea);
+    if ([self getSvgView].responsible) {
+        // Add path to hitArea
+        CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
+        
+        if (self.stroke && self.strokeWidth) {
+            // Add stroke to hitArea
+            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
+            CGPathAddPath(hitArea, nil, strokePath);
+            CGPathRelease(strokePath);
+        }
+        
+        _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(hitArea)));
+        CGPathRelease(hitArea);
+    }
+
+}
 
 // hitTest delagate
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
@@ -275,6 +264,10 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transform
 {
+    if (!_hitArea) {
+        return nil;
+    }
+    
     if (self.active) {
         if (!event) {
             self.active = NO;
@@ -283,8 +276,7 @@
     }
     
     CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
-    
-    CGPathRef hitArea = CGPathCreateCopyByTransformingPath(self.hitArea, &matrix);
+    CGPathRef hitArea = CGPathCreateCopyByTransformingPath(_hitArea, &matrix);
     BOOL contains = CGPathContainsPoint(hitArea, nil, point, NO);
     CGPathRelease(hitArea);
     
@@ -304,11 +296,38 @@
     }
 }
 
-- (void)setBoundingBox:(CGRect)boundingBox
+- (void)setContextBoundingBox:(CGRect)contextBoundingBox
 {
-    _boundingBox = boundingBox;
-    _widthConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:boundingBox.size.width offset:0];
-    _heightConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:boundingBox.size.height offset:0];
+    _contextBoundingBox = contextBoundingBox;
+    _widthConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:contextBoundingBox.size.width
+                                                                           offset:0];
+    _heightConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:contextBoundingBox.size.height
+                                                                            offset:0];
+}
+
+- (RNSVGPercentageConverter *)getWidthConverter
+{
+    return _widthConverter;
+}
+
+- (RNSVGPercentageConverter *)getHeightConverter
+{
+    return _heightConverter;
+}
+
+- (CGRect)getContextBoundingBox
+{
+    return _contextBoundingBox;
+}
+
+- (void)setLayoutBoundingBox:(CGRect)layoutBoundingBox
+{
+    _renderBoundingBox = layoutBoundingBox;
+}
+
+- (CGRect)getLayoutBoundingBox
+{
+    return _renderBoundingBox;
 }
 
 - (CGFloat)getWidthRelatedValue:(NSString *)string
@@ -321,29 +340,9 @@
     return [_heightConverter stringToFloat:string];
 }
 
-- (CGFloat)getContextWidth
-{
-    return CGRectGetWidth(_boundingBox);
-}
-
-- (CGFloat)getContextHeight
-{
-    return CGRectGetHeight(_boundingBox);
-}
-
-- (CGFloat)getContextX
-{
-    return CGRectGetMinX(_boundingBox);
-}
-
-- (CGFloat)getContextY
-{
-    return CGRectGetMinY(_boundingBox);
-}
-
 - (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
 {
-
+    
     [self mergeProperties:target mergeList:mergeList inherited:NO];
 }
 

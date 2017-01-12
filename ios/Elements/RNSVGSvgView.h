@@ -19,12 +19,12 @@
 /**
  * define <ClipPath></ClipPath> content as clipPath template.
  */
-- (void)defineClipPath:(__kindof RNSVGNode *)clipPath clipPathRef:(NSString *)clipPathRef;
-- (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathRef;
-- (void)defineTemplate:(__kindof RNSVGNode *)template templateRef:(NSString *)templateRef;
-- (RNSVGNode *)getDefinedTemplate:(NSString *)tempalteRef;
-- (void)defineBrushConverter:(RNSVGBrushConverter *)brushConverter brushConverterRef:(NSString *)brushConverterRef;
-- (RNSVGBrushConverter *)getDefinedBrushConverter:(NSString *)brushConverterRef;
+- (void)defineClipPath:(__kindof RNSVGNode *)clipPath clipPathName:(NSString *)clipPathName;
+- (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathName;
+- (void)defineTemplate:(__kindof RNSVGNode *)template templateName:(NSString *)templateName;
+- (RNSVGNode *)getDefinedTemplate:(NSString *)templateName;
+- (void)defineBrushConverter:(RNSVGBrushConverter *)brushConverter brushConverterName:(NSString *)brushConverterName;
+- (RNSVGBrushConverter *)getDefinedBrushConverter:(NSString *)brushConverterName;
 - (NSString *)getDataURL;
 
 @end

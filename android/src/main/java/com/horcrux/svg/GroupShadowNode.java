@@ -26,30 +26,35 @@ import javax.annotation.Nullable;
 public class GroupShadowNode extends RenderableShadowNode {
 
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
-        final SvgViewShadowNode svg = getSvgShadowNode();
-        final VirtualNode self = this;
-
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             int count = saveAndSetupCanvas(canvas);
             clip(canvas, paint);
-
-            traverseChildren(new NodeRunnable() {
-                public boolean run(VirtualNode node) {
-                    node.setupDimensions(canvas);
-
-                    node.mergeProperties(self, mAttributeList, true);
-                    node.draw(canvas, paint, opacity * mOpacity);
-                    node.markUpdateSeen();
-
-                    if (node.isResponsible()) {
-                        svg.enableTouchEvents();
-                    }
-                    return true;
-                }
-            });
-
+            drawGroup(canvas, paint, opacity);
             restoreCanvas(canvas, count);
         }
+    }
+
+    protected void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {
+        final SvgViewShadowNode svg = getSvgShadowNode();
+        final VirtualNode self = this;
+        traverseChildren(new NodeRunnable() {
+            public boolean run(VirtualNode node) {
+                node.setupDimensions(canvas);
+
+                node.mergeProperties(self, mAttributeList, true);
+                node.draw(canvas, paint, opacity * mOpacity);
+                node.markUpdateSeen();
+
+                if (node.isResponsible()) {
+                    svg.enableTouchEvents();
+                }
+                return true;
+            }
+        });
+    }
+
+    protected void drawPath(Canvas canvas, Paint paint, float opacity) {
+        super.draw(canvas, paint, opacity);
     }
 
     @Override
@@ -69,6 +74,11 @@ public class GroupShadowNode extends RenderableShadowNode {
 
     @Override
     public int hitTest(final Point point, final @Nullable Matrix matrix) {
+        int hitSelf = super.hitTest(point, matrix);
+        if (hitSelf != -1) {
+            return hitSelf;
+        }
+
         Matrix combinedMatrix = new Matrix();
 
         if (matrix != null) {

@@ -12,58 +12,88 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
-    RNSVGSvgView* svg = [self getSvgView];
     [self clip:context];
-    
+    [self renderGroupTo:context];
+}
+
+- (void)renderGroupTo:(CGContextRef)context
+{
+    RNSVGSvgView* svg = [self getSvgView];
     [self traverseSubviews:^(RNSVGNode *node) {
         if (node.responsible && !svg.responsible) {
             svg.responsible = YES;
-            return NO;
         }
-        return YES;
-    }];
-
-    [self traverseSubviews:^(RNSVGNode *node) {
+        
         [node mergeProperties:self mergeList:self.attributeList inherited:YES];
         [node renderTo:context];
+        
+        if ([node isKindOfClass: [RNSVGRenderable class]]) {
+            RNSVGRenderable *renderable = node;
+            [self concatLayoutBoundingBox:[renderable getLayoutBoundingBox]];
+        }
         return YES;
     }];
 }
 
+- (void)renderPathTo:(CGContextRef)context
+{
+    [super renderLayerTo:context];
+}
+
+- (void)concatLayoutBoundingBox:(CGRect)boundingBox
+{
+    [self setLayoutBoundingBox:CGRectUnion(boundingBox, [self getLayoutBoundingBox])];
+}
+
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    CGMutablePathRef path = CGPathCreateMutable();
+    CGMutablePathRef __block path = CGPathCreateMutable();
     [self traverseSubviews:^(RNSVGNode *node) {
         CGAffineTransform transform = node.matrix;
         CGPathAddPath(path, &transform, [node getPath:context]);
         return YES;
     }];
-    
+
     return (CGPathRef)CFAutorelease(path);
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transform
 {
+    UIView *hitSelf = [super hitTest:point withEvent:event withTransform:transform];
+    if (hitSelf) {
+        return hitSelf;
+    }
+    
     CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
+
+    CGPathRef clip = [self getClipPath];
+    if (clip) {
+        CGPathRef transformedClipPath = CGPathCreateCopyByTransformingPath(clip, &matrix);
+        BOOL insideClipPath = CGPathContainsPoint(clip, nil, point, self.clipRule == kRNSVGCGFCRuleEvenodd);
+        CGPathRelease(transformedClipPath);
+        
+        if (!insideClipPath) {
+            return nil;
+        }
+        
+    }
     
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
-            if (event) {
-                node.active = NO;
-            } else if (node.active) {
-                return node;
-            }
-
-            UIView *view = [node hitTest: point withEvent:event withTransform:matrix];
-            
-            if (view) {
-                node.active = YES;
-                if (node.responsible || (node != view)) {
-                    return view;
-                } else {
-                    return self;
-                }
-            }
+        if (![node isKindOfClass:[RNSVGNode class]]) {
+            continue;
+        }
+        
+        if (event) {
+            node.active = NO;
+        } else if (node.active) {
+            return node;
+        }
+        
+        UIView *hitChild = [node hitTest: point withEvent:event withTransform:matrix];
+        
+        if (hitChild) {
+            node.active = YES;
+            return (node.responsible || (node != hitChild)) ? hitChild : self;
         }
     }
     return nil;
@@ -73,14 +103,14 @@
 {
     if (self.name) {
         RNSVGSvgView* svg = [self getSvgView];
-        [svg defineTemplate:self templateRef:self.name];
+        [svg defineTemplate:self templateName:self.name];
     }
-    
+
     [self traverseSubviews:^(RNSVGNode *node) {
         [node saveDefinition];
         return YES;
     }];
-    
+
 }
 
 - (void)resetProperties
@@ -90,6 +120,5 @@
         return YES;
     }];
 }
-
 
 @end

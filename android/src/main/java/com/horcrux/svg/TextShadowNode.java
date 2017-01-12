@@ -11,226 +11,226 @@ package com.horcrux.svg;
 
 import javax.annotation.Nullable;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Typeface;
-import android.text.TextUtils;
+import android.util.Log;
 
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
- * Shadow node for virtual RNSVGText view
+ * Shadow node for virtual Text view
  */
-public class TextShadowNode extends RenderableShadowNode {
 
-    private static final String PROP_LINES = "lines";
+public class TextShadowNode extends GroupShadowNode {
 
-    private static final String PROP_FONT = "font";
-    private static final String PROP_FONT_FAMILY = "fontFamily";
-    private static final String PROP_FONT_SIZE = "fontSize";
-    private static final String PROP_FONT_STYLE = "fontStyle";
-    private static final String PROP_FONT_WEIGHT = "fontWeight";
+    private float mOffsetX = 0;
+    private float mOffsetY = 0;
 
-    private static final int DEFAULT_FONT_SIZE = 12;
+    private static final int TEXT_ANCHOR_AUTO = 0;
+    private static final int TEXT_ANCHOR_START = 1;
+    private static final int TEXT_ANCHOR_MIDDLE = 2;
+    private static final int TEXT_ANCHOR_END = 3;
 
-    private static final int TEXT_ALIGNMENT_CENTER = 2;
-    private static final int TEXT_ALIGNMENT_LEFT = 0;
-    private static final int TEXT_ALIGNMENT_RIGHT = 1;
+    private int mTextAnchor = TEXT_ANCHOR_AUTO;
+    private @Nullable  ReadableArray mDeltaX;
+    private @Nullable ReadableArray mDeltaY;
+    private @Nullable String mPositionX;
+    private @Nullable String mPositionY;
+    private @Nullable ReadableMap mFont;
 
-    private @Nullable ReadableMap mFrame;
-    private int mTextAlignment = TEXT_ALIGNMENT_LEFT;
-    private Path mTextPath;
+    private GlyphContext mGlyphContext;
+    private TextShadowNode mTextRoot;
 
-    @ReactProp(name = "frame")
-    public void setFrame(@Nullable ReadableMap frame) {
-        mFrame = frame;
+    @ReactProp(name = "textAnchor", defaultInt = TEXT_ANCHOR_AUTO)
+    public void setTextAnchor(int textAnchor) {
+        mTextAnchor = textAnchor;
         markUpdated();
     }
 
-    @ReactProp(name = "alignment", defaultInt = TEXT_ALIGNMENT_LEFT)
-    public void setAlignment(int alignment) {
-        mTextAlignment = alignment;
+    @ReactProp(name = "deltaX")
+    public void setDeltaX(@Nullable ReadableArray deltaX) {
+        mDeltaX = deltaX;
+        markUpdated();
     }
 
-    @ReactProp(name = "path")
-    public void setPath(@Nullable ReadableArray textPath) {
-        float[] pathData = PropHelper.toFloatArray(textPath);
-        mTextPath = new Path();
-        super.createPath(pathData, mTextPath);
+    @ReactProp(name = "deltaY")
+    public void setDeltaY(@Nullable ReadableArray deltaY) {
+        mDeltaY = deltaY;
+        markUpdated();
+    }
+
+    @ReactProp(name = "positionX")
+    public void setPositionX(@Nullable String positionX) {
+        mPositionX = positionX;
+        markUpdated();
+    }
+
+    @ReactProp(name = "positionY")
+    public void setPositionY(@Nullable String positionY) {
+        mPositionY = positionY;
+        markUpdated();
+    }
+
+    @ReactProp(name = "font")
+    public void setFont(@Nullable ReadableMap font) {
+        mFont = font;
         markUpdated();
     }
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
-        opacity *= mOpacity;
         if (opacity > MIN_OPACITY_FOR_DRAW) {
-            String text = formatText();
-            if (text == null) {
-                return;
-            }
-
-            // only set up the canvas if we have something to draw
-            int count = saveAndSetupCanvas(canvas);
             clip(canvas, paint);
-            RectF box = getBox(paint, text);
 
-            if (setupStrokePaint(paint, opacity, box)) {
-                drawText(canvas, paint, text);
-            }
-            if (setupFillPaint(paint, opacity, box)) {
-                drawText(canvas, paint, text);
-            }
+            int count = canvas.save();
+            setupGlyphContext(canvas);
 
+            Path path = getGroupPath(canvas, paint);
+            Matrix matrix = getAlignMatrix(path);
+            canvas.concat(matrix);
+            drawGroup(canvas, paint, opacity);
+            releaseCachedPath();
+
+            mPath = path;
             restoreCanvas(canvas, count);
             markUpdateSeen();
         }
     }
 
-    private void drawText(Canvas canvas, Paint paint, String text) {
-        applyTextPropertiesToPaint(paint);
+    @Override
+    protected Path getPath(Canvas canvas, Paint paint) {
+        setupGlyphContext(canvas);
+        Path groupPath = getGroupPath(canvas, paint);
+        Matrix matrix = getAlignMatrix(groupPath);
+        groupPath.transform(mMatrix);
+        groupPath.transform(matrix);
 
-        if (mTextPath == null) {
-            canvas.drawText(text, 0, -paint.ascent(), paint);
-        } else {
-            Matrix matrix = new Matrix();
-            matrix.setTranslate(0, -paint.getTextSize() * 1.1f);
-            mTextPath.transform(matrix);
-            canvas.drawTextOnPath(text, mTextPath, 0, -paint.ascent(), paint);
-        }
+        releaseCachedPath();
+        return groupPath;
     }
 
-    private String formatText() {
-        if (mFrame == null || !mFrame.hasKey(PROP_LINES)) {
-            return null;
-        }
-
-        ReadableArray linesProp = mFrame.getArray(PROP_LINES);
-        if (linesProp == null || linesProp.size() == 0) {
-            return null;
-        }
-
-        String[] lines = new String[linesProp.size()];
-        for (int i = 0; i < lines.length; i++) {
-            lines[i] = linesProp.getString(i);
-        }
-        return TextUtils.join("\n", lines);
+    @Override
+    protected void drawGroup(Canvas canvas, Paint paint, float opacity) {
+        pushGlyphContext();
+        int count = canvas.save();
+        canvas.concat(mMatrix);
+        super.drawGroup(canvas, paint, opacity);
+        restoreCanvas(canvas, count);
+        popGlyphContext();
     }
 
-    private RectF getBox(Paint paint, String text) {
-        Rect bound = new Rect();
-        paint.getTextBounds(text, 0, text.length(), bound);
-        return new RectF(bound);
+    public int getTextAnchor() {
+        return mTextAnchor;
     }
 
-    private void applyTextPropertiesToPaint(Paint paint) {
-        int alignment = mTextAlignment;
-        switch (alignment) {
-            case TEXT_ALIGNMENT_LEFT:
-                paint.setTextAlign(Paint.Align.LEFT);
-                break;
-            case TEXT_ALIGNMENT_RIGHT:
-                paint.setTextAlign(Paint.Align.RIGHT);
-                break;
-            case TEXT_ALIGNMENT_CENTER:
-                paint.setTextAlign(Paint.Align.CENTER);
-                break;
+    private int getComputedTextAnchor() {
+        int anchor = mTextAnchor;
+
+        if (getChildCount() > 0) {
+            TextShadowNode child = (TextShadowNode)getChildAt(0);
+
+            while (child.getChildCount() > 0 && anchor == TEXT_ANCHOR_AUTO) {
+                anchor = child.getTextAnchor();
+                child = (TextShadowNode)child.getChildAt(0);
+            }
         }
-        if (mFrame != null) {
-            if (mFrame.hasKey(PROP_FONT)) {
-                ReadableMap font = mFrame.getMap(PROP_FONT);
-                if (font != null) {
-                    float fontSize = DEFAULT_FONT_SIZE;
-                    if (font.hasKey(PROP_FONT_SIZE)) {
-                        fontSize = (float) font.getDouble(PROP_FONT_SIZE);
-                    }
-                    paint.setTextSize(fontSize * mScale);
-                    boolean isBold =
-                        font.hasKey(PROP_FONT_WEIGHT) && "bold".equals(font.getString(PROP_FONT_WEIGHT));
-                    boolean isItalic =
-                        font.hasKey(PROP_FONT_STYLE) && "italic".equals(font.getString(PROP_FONT_STYLE));
-                    int fontStyle;
-                    if (isBold && isItalic) {
-                        fontStyle = Typeface.BOLD_ITALIC;
-                    } else if (isBold) {
-                        fontStyle = Typeface.BOLD;
-                    } else if (isItalic) {
-                        fontStyle = Typeface.ITALIC;
-                    } else {
-                        fontStyle = Typeface.NORMAL;
-                    }
-                    // NB: if the font family is null / unsupported, the default one will be used
-                    paint.setTypeface(Typeface.create(font.getString(PROP_FONT_FAMILY), fontStyle));
+        return anchor;
+    }
+
+    protected TextShadowNode getTextRoot() {
+        if (mTextRoot == null) {
+            mTextRoot = this;
+
+            while (mTextRoot != null) {
+                if (mTextRoot.getClass() == TextShadowNode.class) {
+                    break;
+                }
+
+                ReactShadowNode parent = mTextRoot.getParent();
+
+                if (!(parent instanceof TextShadowNode)) {
+                    //todo: throw exception here
+                    mTextRoot = null;
+                } else {
+                    mTextRoot = (TextShadowNode)parent;
                 }
             }
         }
+
+        return mTextRoot;
     }
 
-    @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
-        Path path = new Path();
-
-        String text = formatText();
-        if (text == null) {
-            return path;
-        }
-
-        // TODO: get path while TextPath is set.
-        if (setupFillPaint(paint, 1.0f, getBox(paint, text))) {
-            applyTextPropertiesToPaint(paint);
-            paint.getTextPath(text, 0, text.length(), 0, -paint.ascent(), path);
-            path.transform(mMatrix);
-        }
-
-        return path;
+    protected void setupGlyphContext(Canvas canvas) {
+        setupDimensions(canvas);
+        mGlyphContext = new GlyphContext(mScale, mCanvasWidth, mCanvasHeight);
     }
 
-    @Override
-    public int hitTest(Point point, @Nullable Matrix matrix) {
-        Bitmap bitmap = Bitmap.createBitmap(
-            mCanvasWidth,
-            mCanvasHeight,
-            Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(bitmap);
-
-        if (matrix != null) {
-            canvas.concat(matrix);
-        }
-
-        canvas.concat(mMatrix);
-
-        String text = formatText();
-        if (text == null) {
-            return -1;
-        }
-
-        Paint paint = new Paint();
-        clip(canvas, paint);
-        setHitTestFill(paint);
-        drawText(canvas, paint, text);
-
-        if (setHitTestStroke(paint)) {
-            drawText(canvas, paint, text);
-        }
-
-        canvas.setBitmap(bitmap);
-        try {
-            if (bitmap.getPixel(point.x, point.y) != 0) {
-                return getReactTag();
+    protected void releaseCachedPath() {
+        traverseChildren(new NodeRunnable() {
+            public boolean run(VirtualNode node) {
+                TextShadowNode text = (TextShadowNode)node;
+                text.releaseCachedPath();
+                return true;
             }
-        } catch (Exception e) {
-            return -1;
-        } finally {
-            bitmap.recycle();
+        });
+    }
+
+    protected Path getGroupPath(Canvas canvas, Paint paint) {
+        pushGlyphContext();
+        Path groupPath = super.getPath(canvas, paint);
+        popGlyphContext();
+
+        return groupPath;
+    }
+
+    protected GlyphContext getGlyphContext() {
+        return mGlyphContext;
+    }
+
+    protected void pushGlyphContext() {
+        getTextRoot().getGlyphContext().pushContext(mFont, mDeltaX, mDeltaY, mPositionX, mPositionY);
+    }
+
+    protected void popGlyphContext() {
+        getTextRoot().getGlyphContext().popContext();
+    }
+
+    protected ReadableMap getFontFromContext() {
+        return  getTextRoot().getGlyphContext().getGlyphFont();
+    }
+
+    protected PointF getGlyphPointFromContext(float offset, float glyphWidth) {
+        return  getTextRoot().getGlyphContext().getNextGlyphPoint(offset, glyphWidth);
+    }
+
+    private Matrix getAlignMatrix(Path path) {
+        RectF box = new RectF();
+        path.computeBounds(box, true);
+
+        float width = box.width();
+        float x = 0;
+
+        switch (getComputedTextAnchor()) {
+            case TEXT_ANCHOR_MIDDLE:
+                x = -width / 2;
+                break;
+            case TEXT_ANCHOR_END:
+                x = -width;
+                break;
         }
-        return -1;
+
+        Matrix matrix = new Matrix();
+        matrix.setTranslate(x, 0);
+        return matrix;
     }
 }

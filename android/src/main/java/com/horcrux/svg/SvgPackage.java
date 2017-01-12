@@ -25,21 +25,23 @@ public class SvgPackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-            RenderableViewManager.createGroupViewManager(),
-            RenderableViewManager.createPathViewManager(),
-            RenderableViewManager.createCircleViewManager(),
-            RenderableViewManager.createEllipseViewManager(),
-            RenderableViewManager.createLineViewManager(),
-            RenderableViewManager.createRectViewManager(),
-            RenderableViewManager.createTextViewManager(),
-            RenderableViewManager.createImageViewManager(),
-            RenderableViewManager.createClipPathViewManager(),
-            RenderableViewManager.createDefsViewManager(),
-            RenderableViewManager.createUseViewManager(),
-            RenderableViewManager.createViewBoxViewManager(),
-            RenderableViewManager.createLinearGradientManager(),
-            RenderableViewManager.createRadialGradientManager(),
-            new SvgViewManager());
+                RenderableViewManager.createGroupViewManager(),
+                RenderableViewManager.createPathViewManager(),
+                RenderableViewManager.createCircleViewManager(),
+                RenderableViewManager.createEllipseViewManager(),
+                RenderableViewManager.createLineViewManager(),
+                RenderableViewManager.createRectViewManager(),
+                RenderableViewManager.createTextViewManager(),
+                RenderableViewManager.createTSpanViewManager(),
+                RenderableViewManager.createTextPathViewManager(),
+                RenderableViewManager.createImageViewManager(),
+                RenderableViewManager.createClipPathViewManager(),
+                RenderableViewManager.createDefsViewManager(),
+                RenderableViewManager.createUseViewManager(),
+                RenderableViewManager.createViewBoxViewManager(),
+                RenderableViewManager.createLinearGradientManager(),
+                RenderableViewManager.createRadialGradientManager(),
+                new SvgViewManager());
     }
 
     @Override

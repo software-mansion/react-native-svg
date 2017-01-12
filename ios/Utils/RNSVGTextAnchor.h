@@ -6,12 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-
-#import <UIKit/UIKit.h>
-
-@interface RNSVGBezierPath : NSObject
-
-- (instancetype)initWithBezierCurves:(NSArray *)bezierCurves;
-- (CGAffineTransform)transformAtDistance:(CGFloat)distance;
-
-@end
+typedef CF_ENUM(int32_t, RNSVGTextAnchor) {
+    kRNSVGTextAnchorAuto,
+    kRNSVGTextAnchorStart,
+    kRNSVGTextAnchorMiddle,
+    kRNSVGTextAnchorEnd
+};

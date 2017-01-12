@@ -42,16 +42,21 @@ import java.util.regex.Pattern;
 public class PathShadowNode extends RenderableShadowNode {
 
     private Path mPath;
+    private PropHelper.PathParser mD;
 
     @ReactProp(name = "d")
     public void setD(String d) {
-        PropHelper.PathParser parser = new PropHelper.PathParser(d, mScale);
-        mPath = parser.getPath();
+        mD = new PropHelper.PathParser(d, mScale);
+        mPath = mD.getPath();
         markUpdated();
     }
 
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         return mPath;
+    }
+
+    public ReadableArray getBezierCurves() {
+        return mD.getBezierCurves();
     }
 }

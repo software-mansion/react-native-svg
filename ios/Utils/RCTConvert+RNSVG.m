@@ -15,22 +15,13 @@
 #import "RNSVGCGFCRule.h"
 #import "RNSVGVBMOS.h"
 #import <React/RCTFont.h>
-#import "RNSVGPathParser.h"
 
 @implementation RCTConvert (RNSVG)
 
-+ (CGPathRef)CGPath:(NSString *)d
++ (RNSVGPathParser *)CGPath:(NSString *)d
 {
-    return [[[RNSVGPathParser alloc] initWithPathString: d] getPath];
+    return [[RNSVGPathParser alloc] initWithPathString: d];
 }
-
-RCT_ENUM_CONVERTER(CTTextAlignment, (@{
-                                       @"auto": @(kCTTextAlignmentNatural),
-                                       @"left": @(kCTTextAlignmentLeft),
-                                       @"center": @(kCTTextAlignmentCenter),
-                                       @"right": @(kCTTextAlignmentRight),
-                                       @"justify": @(kCTTextAlignmentJustified),
-                                       }), kCTTextAlignmentNatural, integerValue)
 
 RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
                                      @"evenodd": @(kRNSVGCGFCRuleEvenodd),
@@ -43,84 +34,22 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
                                   @"none": @(kRNSVGVBMOSNone)
                                   }), kRNSVGVBMOSMeet, intValue)
 
-
-// This takes a tuple of text lines and a font to generate a CTLine for each text line.
-// This prepares everything for rendering a frame of text in RNSVGText.
-+ (RNSVGTextFrame)RNSVGTextFrame:(id)json
-{
-    NSDictionary *dict = [self NSDictionary:json];
-    RNSVGTextFrame frame;
-    frame.count = 0;
-    
-    NSArray *lines = [self NSArray:dict[@"lines"]];
-    NSUInteger lineCount = [lines count];
-    if (lineCount == 0) {
-        return frame;
-    }
-    
-    NSDictionary *fontDict = dict[@"font"];
-    NSString *fontFamily = fontDict[@"fontFamily"];
-    
-    BOOL fontFound = NO;
-    NSArray *supportedFontFamilyNames = [UIFont familyNames];
-
-    if ([supportedFontFamilyNames containsObject:fontFamily]) {
-      fontFound = YES;
-    } else {
-      for (NSString *fontFamilyName in supportedFontFamilyNames) {
-        if ([[UIFont fontNamesForFamilyName: fontFamilyName] containsObject:fontFamily]) {
-          fontFound = YES;
-          break;
-        }
-      }
-    }
-
-    fontFamily = fontFound ? fontFamily : nil;
-
-
-    CTFontRef font = (__bridge CTFontRef)[RCTFont updateFont:nil withFamily:fontFamily size:fontDict[@"fontSize"] weight:fontDict[@"fontWeight"] style:fontDict[@"fontStyle"]
-                                                      variant:nil scaleMultiplier:1.0];
-    if (!font) {
-        return frame;
-    }
-    
-    // Create a dictionary for this font
-    CFDictionaryRef attributes = (__bridge CFDictionaryRef)@{
-                                                             (NSString *)kCTFontAttributeName: (__bridge id)font,
-                                                             (NSString *)kCTForegroundColorFromContextAttributeName: @YES
-                                                             };
-    
-    // Set up text frame with font metrics
-    CGFloat size = CTFontGetSize(font);
-    frame.count = lineCount;
-    frame.baseLine = size; // estimate base line
-    frame.lineHeight = size * 1.1; // Base on RNSVG canvas line height estimate
-    frame.lines = malloc(sizeof(CTLineRef) * lineCount);
-    frame.widths = malloc(sizeof(CGFloat) * lineCount);
-    
-    [lines enumerateObjectsUsingBlock:^(NSString *text, NSUInteger i, BOOL *stop) {
-        
-        CFStringRef string = (__bridge CFStringRef)text;
-        CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
-        CTLineRef line = CTLineCreateWithAttributedString(attrString);
-        CFRelease(attrString);
-        
-        frame.lines[i] = line;
-        frame.widths[i] = CTLineGetTypographicBounds(line, nil, nil, nil);
-    }];
-    
-    return frame;
-}
+RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
+                                        @"auto": @(kRNSVGTextAnchorAuto),
+                                        @"start": @(kRNSVGTextAnchorStart),
+                                        @"middle": @(kRNSVGTextAnchorMiddle),
+                                        @"end": @(kRNSVGTextAnchorEnd)
+                                       }), kRNSVGTextAnchorAuto, intValue)
 
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json
 {
     NSArray *arr = [self NSNumberArray:json];
     NSUInteger count = arr.count;
-    
+
     RNSVGCGFloatArray array;
     array.count = count;
     array.array = nil;
-    
+
     if (count) {
         // Ideally, these arrays should already use the same memory layout.
         // In that case we shouldn't need this new malloc.
@@ -129,7 +58,7 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
             array.array[i] = [arr[i] doubleValue];
         }
     }
-    
+
     return array;
 }
 
@@ -137,7 +66,7 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
 {
     NSArray *arr = [self NSArray:json];
     NSUInteger type = [self NSUInteger:arr.firstObject];
-    
+
     switch (type) {
         case 0: // solid color
             // These are probably expensive allocations since it's often the same value.
@@ -154,11 +83,11 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
 + (NSArray *)RNSVGBezier:(id)json
 {
     NSArray *arr = [self NSNumberArray:json];
-    
+
     NSMutableArray<NSArray *> *beziers = [[NSMutableArray alloc] init];
-    
+
     NSUInteger count = [arr count];
-    
+
 #define NEXT_VALUE [self double:arr[i++]]
     @try {
         NSValue *startPoint = [NSValue valueWithCGPoint: CGPointMake(0, 0)];
@@ -204,7 +133,7 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
         RCTLogError(@"Invalid RNSVGBezier format: %@", arr);
         return nil;
     }
-    
+
     return beziers;
 }
 
@@ -242,15 +171,15 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
     RNSVGCGFloatArray colorsAndOffsets = [self RNSVGCGFloatArray:arr];
     size_t stops = colorsAndOffsets.count / 5;
     CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
-    
+
     CGGradientRef gradient = CGGradientCreateWithColorComponents(
                                                                  rgb,
                                                                  colorsAndOffsets.array,
                                                                  colorsAndOffsets.array + stops * 4,
                                                                  stops
                                                                  );
-    
-    
+
+
     CGColorSpaceRelease(rgb);
     free(colorsAndOffsets.array);
     return (CGGradientRef)CFAutorelease(gradient);

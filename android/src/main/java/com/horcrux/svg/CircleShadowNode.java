@@ -9,12 +9,11 @@
 
 package com.horcrux.svg;
 
+
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-
 import com.facebook.react.uimanager.annotations.ReactProp;
-
 
 /**
  * Shadow node for virtual RNSVGPath view

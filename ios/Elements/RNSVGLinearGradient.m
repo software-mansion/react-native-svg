@@ -32,7 +32,7 @@
     converter.colors = self.gradient;
     converter.points = @[self.x1, self.y1, self.x2, self.y2];
     converter.type = kRNSVGLinearGradient;
-    [[self getSvgView] defineBrushConverter:converter brushConverterRef:self.name];
+    [[self getSvgView] defineBrushConverter:converter brushConverterName:self.name];
 }
 @end
 

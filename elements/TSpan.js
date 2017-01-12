@@ -1,13 +1,13 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes, Component } from 'react';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import extractText from '../lib/extract/extractText';
 import {numberProp, pathProps, fontProps} from '../lib/props';
-import {TextAttributes} from '../lib/attributes';
+import {TSpanAttibutes} from '../lib/attributes';
 import Shape from './Shape';
-import TSpan from './TSpan';
 
-class Text extends Shape {
-    static displayName = 'Text';
+// TSpan elements are shadow components
+class TSpan extends Shape {
+    static displayName = 'TSpan';
 
     static propTypes = {
         ...pathProps,
@@ -22,23 +22,22 @@ class Text extends Shape {
     };
 
     render() {
-        const props = this.props;
-
-        return <RNSVGText
+        let props = this.props;
+        return <RNSVGTSpan
             ref={ele => {this.root = ele;}}
             {...this.extractProps({
                 ...props,
                 x: null,
                 y: null
             })}
-            {...extractText(props, true)}
+            {...extractText(props)}
         />;
     }
 }
 
-const RNSVGText = createReactNativeComponentClass({
-    validAttributes: TextAttributes,
-    uiViewClassName: 'RNSVGText'
+const RNSVGTSpan = createReactNativeComponentClass({
+    validAttributes: TSpanAttibutes,
+    uiViewClassName: 'RNSVGTSpan'
 });
 
-export default Text;
+export default TSpan;

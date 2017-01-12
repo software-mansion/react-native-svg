@@ -83,44 +83,44 @@
     self.backgroundColor = inheritedBackgroundColor;
 }
 
-- (void)defineClipPath:(__kindof RNSVGNode *)clipPath clipPathRef:(NSString *)clipPathRef
+- (void)defineClipPath:(__kindof RNSVGNode *)clipPath clipPathName:(NSString *)clipPathName
 {
     if (!clipPaths) {
         clipPaths = [[NSMutableDictionary alloc] init];
     }
-    [clipPaths setObject:clipPath forKey:clipPathRef];
+    [clipPaths setObject:clipPath forKey:clipPathName];
 }
 
-- (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathRef
+- (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathName
 {
-    return clipPaths ? [clipPaths objectForKey:clipPathRef] : nil;
+    return clipPaths ? [clipPaths objectForKey:clipPathName] : nil;
 }
 
-- (void)defineTemplate:(RNSVGNode *)template templateRef:(NSString *)templateRef
+- (void)defineTemplate:(RNSVGNode *)template templateName:(NSString *)templateName
 {
     if (!templates) {
         templates = [[NSMutableDictionary alloc] init];
     }
-    [templates setObject:template forKey:templateRef];
+    [templates setObject:template forKey:templateName];
 }
 
-- (RNSVGNode *)getDefinedTemplate:(NSString *)tempalteRef
+- (RNSVGNode *)getDefinedTemplate:(NSString *)templateName
 {
-    return templates ? [templates objectForKey:tempalteRef] : nil;
+    return templates ? [templates objectForKey:templateName] : nil;
 }
 
 
-- (void)defineBrushConverter:(RNSVGBrushConverter *)brushConverter brushConverterRef:(NSString *)brushConverterRef
+- (void)defineBrushConverter:(RNSVGBrushConverter *)brushConverter brushConverterName:(NSString *)brushConverterName
 {
     if (!brushConverters) {
         brushConverters = [[NSMutableDictionary alloc] init];
     }
-    [brushConverters setObject:brushConverter forKey:brushConverterRef];
+    [brushConverters setObject:brushConverter forKey:brushConverterName];
 }
 
-- (RNSVGBrushConverter *)getDefinedBrushConverter:(NSString *)brushConverterRef
+- (RNSVGBrushConverter *)getDefinedBrushConverter:(NSString *)brushConverterName
 {
-    return brushConverters ? [brushConverters objectForKey:brushConverterRef] : nil;
+    return brushConverters ? [brushConverters objectForKey:brushConverterName] : nil;
 }
 
 @end

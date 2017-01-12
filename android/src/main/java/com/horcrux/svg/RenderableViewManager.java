@@ -25,6 +25,8 @@ public class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
     /* package */ static final String CLASS_GROUP = "RNSVGGroup";
     /* package */ static final String CLASS_PATH = "RNSVGPath";
     /* package */ static final String CLASS_TEXT = "RNSVGText";
+    /* package */ static final String CLASS_TSPAN = "RNSVGTSpan";
+    /* package */ static final String CLASS_TEXT_PATH = "RNSVGTextPath";
     /* package */ static final String CLASS_IMAGE = "RNSVGImage";
     /* package */ static final String CLASS_CIRCLE = "RNSVGCircle";
     /* package */ static final String CLASS_ELLIPSE = "RNSVGEllipse";
@@ -50,6 +52,14 @@ public class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
 
     public static RenderableViewManager createTextViewManager() {
         return new RenderableViewManager(CLASS_TEXT);
+    }
+
+    public static RenderableViewManager createTSpanViewManager() {
+        return new RenderableViewManager(CLASS_TSPAN);
+    }
+
+    public static RenderableViewManager createTextPathViewManager() {
+        return new RenderableViewManager(CLASS_TEXT_PATH);
     }
 
     public static RenderableViewManager createImageViewManager() {
@@ -122,6 +132,10 @@ public class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
                 return new RectShadowNode();
             case CLASS_TEXT:
                 return new TextShadowNode();
+            case CLASS_TSPAN:
+                return new TSpanShadowNode();
+            case CLASS_TEXT_PATH:
+                return new TextPathShadowNode();
             case CLASS_IMAGE:
                 return new ImageShadowNode();
             case CLASS_CLIP_PATH:
@@ -158,6 +172,10 @@ public class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
                 return RectShadowNode.class;
             case CLASS_TEXT:
                 return TextShadowNode.class;
+            case CLASS_TSPAN:
+                return TSpanShadowNode.class;
+            case CLASS_TEXT_PATH:
+                return TextPathShadowNode.class;
             case CLASS_IMAGE:
                 return ImageShadowNode.class;
             case CLASS_CLIP_PATH:

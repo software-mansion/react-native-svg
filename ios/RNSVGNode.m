@@ -58,13 +58,13 @@
     if (opacity == _opacity) {
         return;
     }
-
-    if (opacity < 0) {
+    
+    if (opacity <= 0) {
         opacity = 0;
     } else if (opacity > 1) {
         opacity = 1;
     }
-
+    
     [self invalidate];
     _transparent = opacity < 1;
     _opacity = opacity;
@@ -127,7 +127,7 @@
 - (void)clip:(CGContextRef)context
 {
     CGPathRef clipPath = [self getClipPath:context];
-
+    
     if (clipPath) {
         CGContextAddPath(context, clipPath);
         if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
@@ -169,7 +169,7 @@
     while (parent && [parent class] != [RNSVGSvgView class]) {
         parent = parent.superview;
     }
-
+    
     return (RNSVGSvgView *)parent;
 }
 
@@ -177,7 +177,7 @@
 {
     if (self.name) {
         RNSVGSvgView* svg = [self getSvgView];
-        [svg defineTemplate:self templateRef:self.name];
+        [svg defineTemplate:self templateName:self.name];
     }
 }
 

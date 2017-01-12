@@ -12,6 +12,7 @@
 #import "RNSVGCGFloatArray.h"
 #import "RNSVGCGFCRule.h"
 #import "RNSVGNode.h"
+#import "RNSVGPercentageConverter.h"
 
 @interface RNSVGRenderable : RNSVGNode
 
@@ -26,17 +27,17 @@
 @property (nonatomic, assign) CGFloat strokeMiterlimit;
 @property (nonatomic, assign) RNSVGCGFloatArray strokeDasharray;
 @property (nonatomic, assign) CGFloat strokeDashoffset;
-@property (nonatomic, assign) CGPathRef hitArea;
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 @property (nonatomic, strong) NSArray<NSString *> *attributeList;
 
-- (void)setBoundingBox:(CGRect)boundingBox;
+- (void)setContextBoundingBox:(CGRect)contextBoundingBox;
+- (CGRect)getContextBoundingBox;
+- (void)setLayoutBoundingBox:(CGRect)layoutBoundingBox;
+- (CGRect)getLayoutBoundingBox;
 - (CGFloat)getWidthRelatedValue:(NSString *)string;
 - (CGFloat)getHeightRelatedValue:(NSString *)string;
-- (CGFloat)getContextWidth;
-- (CGFloat)getContextHeight;
-- (CGFloat)getContextX;
-- (CGFloat)getContextY;
-
+- (RNSVGPercentageConverter *)getWidthConverter;
+- (RNSVGPercentageConverter *)getHeightConverter;
+- (void)setHitArea:(CGPathRef)path;
 
 @end
