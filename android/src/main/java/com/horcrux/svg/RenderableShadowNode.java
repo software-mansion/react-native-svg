@@ -20,9 +20,6 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RectF;
 
-import android.graphics.Color;
-import android.util.Log;
-
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
@@ -137,7 +134,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
         markUpdated();
     }
 
-    @ReactProp(name = "strokeWidth", defaultFloat = 0f)
+    @ReactProp(name = "strokeWidth", defaultFloat = 1f)
     public void setStrokeWidth(float strokeWidth) {
         mStrokeWidth = strokeWidth;
         markUpdated();

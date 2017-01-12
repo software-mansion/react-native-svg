@@ -26,30 +26,36 @@ import javax.annotation.Nullable;
 public class GroupShadowNode extends RenderableShadowNode {
 
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
+        if (opacity > MIN_OPACITY_FOR_DRAW) {
+            clip(canvas, paint);
+            drawGroup(canvas, paint, opacity);
+        }
+    }
+
+    protected void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {
+        int count = saveAndSetupCanvas(canvas);
         final SvgViewShadowNode svg = getSvgShadowNode();
         final VirtualNode self = this;
+        traverseChildren(new NodeRunnable() {
+            public boolean run(VirtualNode node) {
+                node.setupDimensions(canvas);
 
-        if (opacity > MIN_OPACITY_FOR_DRAW) {
-            int count = saveAndSetupCanvas(canvas);
-            clip(canvas, paint);
+                node.mergeProperties(self, mAttributeList, true);
+                node.draw(canvas, paint, opacity * mOpacity);
+                node.markUpdateSeen();
 
-            traverseChildren(new NodeRunnable() {
-                public boolean run(VirtualNode node) {
-                    node.setupDimensions(canvas);
-
-                    node.mergeProperties(self, mAttributeList, true);
-                    node.draw(canvas, paint, opacity * mOpacity);
-                    node.markUpdateSeen();
-
-                    if (node.isResponsible()) {
-                        svg.enableTouchEvents();
-                    }
-                    return true;
+                if (node.isResponsible()) {
+                    svg.enableTouchEvents();
                 }
-            });
+                return true;
+            }
+        });
 
-            restoreCanvas(canvas, count);
-        }
+        restoreCanvas(canvas, count);
+    }
+
+    protected void drawPath(Canvas canvas, Paint paint, float opacity) {
+        super.draw(canvas, paint, opacity);
     }
 
     @Override

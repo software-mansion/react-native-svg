@@ -26,6 +26,7 @@
     CGPoint _P2;
     CGPoint _P3;
     BOOL _reachedEnd;
+    BOOL _reachedStart;
 }
 
 - (instancetype)initWithBezierCurvesAndStartOffset:(NSArray<NSArray *> *)bezierCurves startOffset:(CGFloat)startOffset
@@ -37,24 +38,6 @@
         [self setControlPoints];
     }
     return self;
-}
-
-static CGAffineTransform getReachedEndTansform() {
-    return CGAffineTransformMakeScale(0, 1);
-}
-
-static CGAffineTransform getUnreadedTransform() {
-    return CGAffineTransformMakeScale(1, 0);
-}
-
-+ (BOOL) hasReachedEnd:(CGAffineTransform)transform
-{
-    return transform.a == 0;
-}
-
-+ (BOOL) hasReachedStart:(CGAffineTransform) transform
-{
-    return transform.d == 0;
 }
 
 static CGFloat calculateBezier(CGFloat t, CGFloat P0, CGFloat P1, CGFloat P2, CGFloat P3) {
@@ -124,10 +107,9 @@ static CGFloat calculateDistance(CGPoint a, CGPoint b) {
 - (CGAffineTransform)getTransformAtDistance:(CGFloat)distance
 {
     distance += _startOffset;
-    if (_reachedEnd) {
-        return getReachedEndTansform();
-    } else if (distance < 0) {
-        return getUnreadedTransform();
+    _reachedStart = distance >= 0;
+    if (_reachedEnd || !_reachedStart) {
+        return CGAffineTransformIdentity;
     }
     
     CGFloat offset = [self offsetAtDistance:distance - _lastRecord
@@ -142,7 +124,7 @@ static CGFloat calculateDistance(CGPoint a, CGPoint b) {
         return CGAffineTransformRotate(CGAffineTransformMakeTranslation(glyphPoint.x, glyphPoint.y), [self angleAtOffset:offset]);
     } else if (_bezierCurves.count == _currentBezierIndex) {
         _reachedEnd = YES;
-        return getReachedEndTansform();
+        return CGAffineTransformIdentity;
     } else {
         _lastOffset = 0;
         _lastPoint = _P0 = _P3;
@@ -150,6 +132,16 @@ static CGFloat calculateDistance(CGPoint a, CGPoint b) {
         [self setControlPoints];
         return [self getTransformAtDistance:distance - _startOffset];
     }
+}
+
+- (BOOL)hasReachedEnd
+{
+    return _reachedEnd;
+}
+
+- (BOOL)hasReachedStart
+{
+    return _reachedStart;
 }
 
 @end

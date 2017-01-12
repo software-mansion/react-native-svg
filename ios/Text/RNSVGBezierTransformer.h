@@ -11,10 +11,9 @@
 
 @interface RNSVGBezierTransformer : NSObject
 
-+ (BOOL) hasReachedEnd:(CGAffineTransform)transform;
-+ (BOOL) hasReachedStart:(CGAffineTransform) transform;
-
 - (instancetype)initWithBezierCurvesAndStartOffset:(NSArray<NSArray *> *)bezierCurves startOffset:(CGFloat)startOffset;
 - (CGAffineTransform)getTransformAtDistance:(CGFloat)distance;
+- (BOOL)hasReachedEnd;
+- (BOOL)hasReachedStart;
 
 @end

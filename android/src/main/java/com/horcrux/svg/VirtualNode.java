@@ -154,47 +154,6 @@ public abstract class VirtualNode extends LayoutShadowNode {
         mMatrix.setValues(sRawMatrix);
     }
 
-    /**
-     * Creates a {@link Path} from an array of instructions constructed by JS
-     * (see RNSVGSerializablePath.js). Each instruction starts with a type (see PATH_TYPE_*) followed
-     * by arguments for that instruction. For example, to create a line the instruction will be
-     * 2 (PATH_LINE_TO), x, y. This will draw a line from the last draw point (or 0,0) to x,y.
-     *
-     * @param data the array of instructions
-     * @param path the {@link Path} that can be drawn to a canvas
-     */
-    protected void createPath(float[] data, Path path) {
-        path.moveTo(0, 0);
-        int i = 0;
-
-        while (i < data.length) {
-            int type = (int) data[i++];
-            switch (type) {
-                case PATH_TYPE_MOVETO:
-                    path.moveTo(data[i++] * mScale, data[i++] * mScale);
-                    break;
-                case PATH_TYPE_CLOSE:
-                    path.close();
-                    break;
-                case PATH_TYPE_LINETO:
-                    path.lineTo(data[i++] * mScale, data[i++] * mScale);
-                    break;
-                case PATH_TYPE_CURVETO:
-                    path.cubicTo(
-                        data[i++] * mScale,
-                        data[i++] * mScale,
-                        data[i++] * mScale,
-                        data[i++] * mScale,
-                        data[i++] * mScale,
-                        data[i++] * mScale);
-                    break;
-                default:
-                    throw new JSApplicationIllegalArgumentException(
-                        "Unrecognized drawing instruction " + type);
-            }
-        }
-    }
-
     protected @Nullable Path getClipPath(Canvas canvas, Paint paint) {
         if (mClipPath != null) {
             VirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPath);

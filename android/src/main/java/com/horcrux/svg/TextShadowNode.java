@@ -15,136 +15,218 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
+
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
- * Shadow node for virtual RNSVGText view
+ * Shadow node for virtual Text view
  */
 
-public class RNSVGTextShadowNode extends RNSVGGroupShadowNode {
+public class TextShadowNode extends GroupShadowNode {
 
     private float mOffsetX = 0;
     private float mOffsetY = 0;
 
-    private static final int TEXT_ALIGNMENT_LEFT = 0;
-    private static final int TEXT_ALIGNMENT_RIGHT = 1;
+    private static final int TEXT_ANCHOR_AUTO = 0;
+    private static final int TEXT_ANCHOR_START = 1;
+    private static final int TEXT_ANCHOR_MIDDLE = 2;
+    private static final int TEXT_ANCHOR_END = 3;
 
-    private int mTextAlignment = TEXT_ALIGNMENT_LEFT;
-    private Path mTextPath;
+    private int mTextAnchor = TEXT_ANCHOR_AUTO;
+    private @Nullable  ReadableArray mDeltaX;
+    private @Nullable ReadableArray mDeltaY;
+    private @Nullable String mPositionX;
+    private @Nullable String mPositionY;
+    private @Nullable ReadableMap mFont;
 
-    @ReactProp(name = "alignment", defaultInt = TEXT_ALIGNMENT_LEFT)
-    public void setAlignment(int alignment) {
-        mTextAlignment = alignment;
+    private GlyphContext mGlyphContext;
+    private TextShadowNode mTextRoot;
+
+    @ReactProp(name = "textAnchor", defaultInt = TEXT_ANCHOR_AUTO)
+    public void setTextAnchor(int textAnchor) {
+        mTextAnchor = textAnchor;
+        markUpdated();
     }
 
-    @ReactProp(name = "path")
-    public void setPath(@Nullable ReadableArray textPath) {
-        float[] pathData = PropHelper.toFloatArray(textPath);
-        mTextPath = new Path();
-        super.createPath(pathData, mTextPath);
+    @ReactProp(name = "deltaX")
+    public void setDeltaX(@Nullable ReadableArray deltaX) {
+        mDeltaX = deltaX;
+        markUpdated();
+    }
+
+    @ReactProp(name = "deltaY")
+    public void setDeltaY(@Nullable ReadableArray deltaY) {
+        mDeltaY = deltaY;
+        markUpdated();
+    }
+
+    @ReactProp(name = "positionX")
+    public void setPositionX(@Nullable String positionX) {
+        mPositionX = positionX;
+        markUpdated();
+    }
+
+    @ReactProp(name = "positionY")
+    public void setPositionY(@Nullable String positionY) {
+        mPositionY = positionY;
+        markUpdated();
+    }
+
+    @ReactProp(name = "font")
+    public void setFont(@Nullable ReadableMap font) {
+        mFont = font;
         markUpdated();
     }
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
-        float shift = getShift(paint);
+        if (opacity > MIN_OPACITY_FOR_DRAW) {
+            clip(canvas, paint);
 
-        final int count = canvas.save();
+            final int count = canvas.save();
+            setupGlyphContext(canvas);
 
-        Matrix matrix = new Matrix();
-        matrix.postTranslate(-shift, 0);
-        canvas.concat(matrix);
-        super.draw(canvas, paint, opacity);
+            Path path = getGroupPath(canvas, paint);
+            Matrix matrix = getAlignMatrix(path);
+            canvas.concat(matrix);
+            drawGroup(canvas, paint, opacity);
+            releaseCachedPath();
 
-        restoreCanvas(canvas, count);
-        markUpdateSeen();
+            restoreCanvas(canvas, count);
+            markUpdateSeen();
+
+            // todo: set hit area
+        }
     }
 
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
-        Path path = getPathFromSuper(canvas, paint);
+        setupGlyphContext(canvas);
+        Path groupPath = getGroupPath(canvas, paint);
+        Matrix matrix = getAlignMatrix(groupPath);
+        groupPath.transform(matrix);
 
-        float shift = getShift(paint);
+        releaseCachedPath();
+        return groupPath;
+    }
+
+    protected void drawGroup(Canvas canvas, Paint paint, float opacity) {
+        pushGlyphContext();
+        super.drawGroup(canvas, paint, opacity);
+        popGlyphContext();
+    }
+
+    public int getTextAnchor() {
+        return mTextAnchor;
+    }
+
+    private int getComputedTextAnchor() {
+        int anchor = mTextAnchor;
+
+        if (getChildCount() > 0) {
+            TextShadowNode child = (TextShadowNode)getChildAt(0);
+
+            while (child.getChildCount() > 0 && anchor == TEXT_ANCHOR_AUTO) {
+                anchor = child.getTextAnchor();
+                child = (TextShadowNode)child.getChildAt(0);
+            }
+        }
+        return anchor;
+    }
+
+    protected TextShadowNode getTextRoot() {
+        if (mTextRoot == null) {
+            mTextRoot = this;
+
+            while (mTextRoot != null) {
+                if (mTextRoot.getClass() == TextShadowNode.class) {
+                    break;
+                }
+
+                ReactShadowNode parent = mTextRoot.getParent();
+
+                if (!(parent instanceof TextShadowNode)) {
+                    //todo: throw exception here
+                    mTextRoot = null;
+                } else {
+                    mTextRoot = (TextShadowNode)parent;
+                }
+            }
+        }
+
+        return mTextRoot;
+    }
+
+    protected void setupGlyphContext(Canvas canvas) {
+        setupDimensions(canvas);
+        mGlyphContext = new GlyphContext(mScale, mCanvasWidth, mCanvasHeight);
+    }
+
+    protected void releaseCachedPath() {
+        traverseChildren(new NodeRunnable() {
+            public boolean run(VirtualNode node) {
+                TextShadowNode text = (TextShadowNode)node;
+                text.releaseCachedPath();
+                return true;
+            }
+        });
+    }
+
+    protected Path getGroupPath(Canvas canvas, Paint paint) {
+        pushGlyphContext();
+        Path groupPath = super.getPath(canvas, paint);
+        popGlyphContext();
+
+        return groupPath;
+    }
+
+    protected GlyphContext getGlyphContext() {
+        return mGlyphContext;
+    }
+
+    protected void pushGlyphContext() {
+        getTextRoot().getGlyphContext().pushContext(mFont, mDeltaX, mDeltaY, mPositionX, mPositionY);
+    }
+
+    protected void popGlyphContext() {
+        getTextRoot().getGlyphContext().popContext();
+    }
+
+    protected ReadableMap getFontFromContext() {
+        return  getTextRoot().getGlyphContext().getGlyphFont();
+    }
+
+    protected PointF getGlyphPointFromContext(float offset, float glyphWidth) {
+        return  getTextRoot().getGlyphContext().getNextGlyphPoint(offset, glyphWidth);
+    }
+
+    private Matrix getAlignMatrix(Path path) {
+        RectF box = new RectF();
+        path.computeBounds(box, true);
+
+        float width = box.width();
+        float x = 0;
+
+        switch (getComputedTextAnchor()) {
+            case TEXT_ANCHOR_MIDDLE:
+                x = -width / 2;
+                break;
+            case TEXT_ANCHOR_END:
+                x = -width;
+                break;
+        }
+
         Matrix matrix = new Matrix();
-        matrix.setTranslate(shift, 0);
-        path.transform(matrix);
-
-        return path;
-    }
-
-    private Path getPathFromSuper(Canvas canvas, Paint paint) {
-        Path path = super.getPath(canvas, paint);
-        // reset offsetX and offsetY
-        mOffsetX = mOffsetY = 0;
-        return path;
-    }
-
-    public void setOffsetX(float x, boolean increase) {
-        if (increase) {
-            mOffsetX += x;
-        } else {
-            mOffsetX = x;
-        }
-    }
-
-    public void setOffsetY(float y, boolean increase) {
-        if (increase) {
-            mOffsetY += y;
-        } else {
-            mOffsetY = y;
-        }
-    }
-
-    public float getOffsetX() {
-        return mOffsetX;
-    }
-
-    public float getOffsetY() {
-        return mOffsetY;
-    }
-
-    private float getShift(Paint paint) {
-        Rect rect = new Rect();
-
-        for (int i = getChildCount() - 1; i >= 0; i--) {
-            if (!(getChildAt(i) instanceof RNSVGVirtualNode)) {
-                continue;
-            }
-
-            RectF box = ((RNSVGSpanShadowNode) getChildAt(i)).getBox(paint);
-
-            if (rect.top > box.top) {
-                rect.top = (int)box.top;
-            }
-            if (rect.right < box.right) {
-                rect.right = (int)box.right;
-            }
-            if (rect.bottom < box.bottom) {
-                rect.bottom = (int)box.bottom;
-            }
-            if (rect.left > box.left) {
-                rect.left = (int)box.left;
-            }
-        }
-
-
-        float width = rect.width();
-        float shift;
-
-        switch (mTextAlignment) {
-            case TEXT_ALIGNMENT_RIGHT:
-                shift = width;
-                break;
-            case TEXT_ALIGNMENT_LEFT:
-                shift = 0;
-                break;
-            default:
-                shift = width / 2;
-        }
-        return shift;
+        matrix.setTranslate(x, 0);
+        return matrix;
     }
 }

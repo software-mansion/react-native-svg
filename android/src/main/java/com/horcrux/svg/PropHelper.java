@@ -11,18 +11,21 @@ package com.horcrux.svg;
 
 import android.graphics.Color;
 import android.graphics.Path;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.graphics.Matrix;
-import android.util.Log;
 
 import javax.annotation.Nullable;
 
-import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableMap;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,7 +33,7 @@ import java.util.regex.Pattern;
 /**
  * Contains static helper methods for accessing props.
  */
-/* package */ class PropHelper {
+class PropHelper {
 
     /**
      * Converts {@link ReadableArray} to an array of {@code float}. Returns newly created array.
@@ -213,16 +216,19 @@ import java.util.regex.Pattern;
 
         private String mLastCommand;
         private String mLastValue;
+        private WritableArray mBezierCurves;
+        private WritableMap mLastStartPoint;
 
         public PathParser(String d, float scale) {
             mScale = scale;
             mString = d;
-            mPath = new Path();
-            mMatcher = PATH_REG_EXP.matcher(DECIMAL_REG_EXP.matcher(mString).replaceAll("$1,"));
+        }
 
-            while (mMatcher.find() && mValid) {
-                executeCommand(mMatcher.group());
+        public ReadableArray getBezierCurves() {
+            if (mBezierCurves == null) {
+                getPath();
             }
+            return mBezierCurves;
         }
 
         private void executeCommand(String command) {
@@ -320,7 +326,28 @@ import java.util.regex.Pattern;
         }
 
         public Path getPath() {
+            mPath = new Path();
+            mBezierCurves = Arguments.createArray();
+            mMatcher = PATH_REG_EXP.matcher(DECIMAL_REG_EXP.matcher(mString).replaceAll("$1,"));
+
+            while (mMatcher.find() && mValid) {
+                executeCommand(mMatcher.group());
+            }
             return mPath;
+        }
+
+        private WritableMap getPointMap(float x, float y) {
+            WritableMap map = Arguments.createMap();
+            map.putDouble("x", x * mScale);
+            map.putDouble("y", y * mScale);
+            return map;
+        }
+
+        private WritableMap clonePointMap(WritableMap map) {
+            WritableMap cloned = Arguments.createMap();
+            cloned.putDouble("x", map.getDouble("x"));
+            cloned.putDouble("y", map.getDouble("y"));
+            return cloned;
         }
 
         private boolean getNextBoolean() {
@@ -354,6 +381,11 @@ import java.util.regex.Pattern;
             mPivotX = mPenX = x;
             mPivotY = mPenY = y;
             mPath.moveTo(x * mScale, y * mScale);
+
+            mLastStartPoint = getPointMap(x ,y);
+            WritableArray points = Arguments.createArray();
+            points.pushMap(getPointMap(x, y));
+            mBezierCurves.pushArray(points);
         }
 
         private void line(float x, float y) {
@@ -365,6 +397,12 @@ import java.util.regex.Pattern;
             mPivotX = mPenX = x;
             mPivotY = mPenY = y;
             mPath.lineTo(x * mScale, y * mScale);
+
+            WritableArray points = Arguments.createArray();
+            points.pushMap(getPointMap(x, y));
+            points.pushMap(getPointMap(x, y));
+            points.pushMap(getPointMap(x, y));
+            mBezierCurves.pushArray(points);
         }
 
         private void curve(float c1x, float c1y, float c2x, float c2y, float ex, float ey) {
@@ -375,6 +413,12 @@ import java.util.regex.Pattern;
             mPivotX = c2x;
             mPivotY = c2y;
             cubicTo(c1x, c1y, c2x, c2y, ex, ey);
+
+            WritableArray points = Arguments.createArray();
+            points.pushMap(getPointMap(c1x, c1y));
+            points.pushMap(getPointMap(c2x, c2y));
+            points.pushMap(getPointMap(ex, ey));
+            mBezierCurves.pushArray(points);
         }
 
         private void cubicTo(float c1x, float c1y, float c2x, float c2y, float ex, float ey) {
@@ -532,6 +576,12 @@ import java.util.regex.Pattern;
                 mPenY = mPenDownY;
                 mPendDownSet = false;
                 mPath.close();
+
+                WritableArray points = Arguments.createArray();
+                points.pushMap(clonePointMap(mLastStartPoint));
+                points.pushMap(clonePointMap(mLastStartPoint));
+                points.pushMap(clonePointMap(mLastStartPoint));
+                mBezierCurves.pushArray(points);
             }
         }
 
