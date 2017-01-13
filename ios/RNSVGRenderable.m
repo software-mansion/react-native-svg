@@ -213,15 +213,22 @@
             CGContextSetLineDash(context, self.strokeDashoffset, dash.array, dash.count);
         }
         
-        BOOL strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
-        
-        if (!fillColor || !strokeColor) {
+        if (!fillColor) {
             CGContextAddPath(context, path);
             CGContextReplacePathWithStrokedPath(context);
             CGContextClip(context);
         }
         
-        if (!strokeColor) {
+        if (![self.stroke applyStrokeColor:context opacity:self.strokeOpacity]) {
+            // draw fill
+            CGContextAddPath(context, path);
+            CGContextDrawPath(context, mode);
+            
+            // draw stroke
+            CGContextAddPath(context, path);
+            CGContextReplacePathWithStrokedPath(context);
+            CGContextClip(context);
+            
             [self.stroke paint:context
                        opacity:self.strokeOpacity
                 brushConverter:[[self getSvgView] getDefinedBrushConverter:self.stroke.brushRef]
