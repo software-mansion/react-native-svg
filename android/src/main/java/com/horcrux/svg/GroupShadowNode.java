@@ -21,16 +21,14 @@ import com.facebook.react.uimanager.ReactShadowNode;
 import javax.annotation.Nullable;
 
 /**
- * Shadow node for virtual RNSVGGroup view
+ * Shadow node for virtual Group view
  */
 public class GroupShadowNode extends RenderableShadowNode {
 
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
         if (opacity > MIN_OPACITY_FOR_DRAW) {
-            int count = saveAndSetupCanvas(canvas);
             clip(canvas, paint);
             drawGroup(canvas, paint, opacity);
-            restoreCanvas(canvas, count);
         }
     }
 
@@ -39,10 +37,10 @@ public class GroupShadowNode extends RenderableShadowNode {
         final VirtualNode self = this;
         traverseChildren(new NodeRunnable() {
             public boolean run(VirtualNode node) {
-                node.setupDimensions(canvas);
-
                 node.mergeProperties(self, mAttributeList, true);
+                int count = node.saveAndSetupCanvas(canvas);
                 node.draw(canvas, paint, opacity * mOpacity);
+                node.restoreCanvas(canvas, count);
                 node.markUpdateSeen();
 
                 if (node.isResponsible()) {
@@ -63,7 +61,6 @@ public class GroupShadowNode extends RenderableShadowNode {
 
         traverseChildren(new NodeRunnable() {
             public boolean run(VirtualNode node) {
-                node.setupDimensions(canvas);
                 path.addPath(node.getPath(canvas, paint));
                 return true;
             }
@@ -79,13 +76,17 @@ public class GroupShadowNode extends RenderableShadowNode {
             return hitSelf;
         }
 
-        Matrix combinedMatrix = new Matrix();
+        Matrix groupMatrix = new Matrix(mMatrix);
 
         if (matrix != null) {
-            combinedMatrix.postConcat(matrix);
+            groupMatrix.postConcat(matrix);
         }
 
-        combinedMatrix.postConcat(mMatrix);
+        Path clipPath = getClipPath();
+
+        if (clipPath != null && !pathContainsPoint(clipPath, groupMatrix, point)) {
+            return -1;
+        }
 
         for (int i = getChildCount() - 1; i >= 0; i--) {
             ReactShadowNode child = getChildAt(i);
@@ -95,9 +96,9 @@ public class GroupShadowNode extends RenderableShadowNode {
 
             VirtualNode node = (VirtualNode) child;
 
-            int viewTag = node.hitTest(point, combinedMatrix);
-            if (viewTag != -1) {
-                return (node.isResponsible() || viewTag != child.getReactTag()) ? viewTag : getReactTag();
+            int hitChild = node.hitTest(point, groupMatrix);
+            if (hitChild != -1) {
+                return (node.isResponsible() || hitChild != child.getReactTag()) ? hitChild : getReactTag();
             }
         }
 

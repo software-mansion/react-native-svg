@@ -14,11 +14,9 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.Region;
 
 import com.facebook.common.logging.FLog;
-import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -37,26 +35,18 @@ public abstract class VirtualNode extends LayoutShadowNode {
     protected float mOpacity = 1f;
     protected Matrix mMatrix = new Matrix();
 
+    private int mClipRule;
     protected @Nullable String mClipPath;
-
-    private static final int PATH_TYPE_CLOSE = 1;
-    private static final int PATH_TYPE_CURVETO = 3;
-    private static final int PATH_TYPE_LINETO = 2;
-    private static final int PATH_TYPE_MOVETO = 0;
 
     private static final int CLIP_RULE_EVENODD = 0;
     private static final int CLIP_RULE_NONZERO = 1;
 
     protected final float mScale;
-    private int mClipRule;
     protected boolean mResponsible;
-    protected int mCanvasX;
-    protected int mCanvasY;
-    protected int mCanvasWidth;
-    protected int mCanvasHeight;
     protected String mName;
 
     private SvgViewShadowNode mSvgShadowNode;
+    private Path mCachedClipPath;
 
     public VirtualNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
@@ -78,8 +68,8 @@ public abstract class VirtualNode extends LayoutShadowNode {
      *
      * @param canvas the canvas to set up
      */
-    protected final int saveAndSetupCanvas(Canvas canvas) {
-        final int count = canvas.save();
+    protected int saveAndSetupCanvas(Canvas canvas) {
+        int count = canvas.save();
         canvas.concat(mMatrix);
         return count;
     }
@@ -124,7 +114,16 @@ public abstract class VirtualNode extends LayoutShadowNode {
         if (matrixArray != null) {
             int matrixSize = PropHelper.toFloatArray(matrixArray, sMatrixData);
             if (matrixSize == 6) {
-                setupMatrix();
+                sRawMatrix[0] = sMatrixData[0];
+                sRawMatrix[1] = sMatrixData[2];
+                sRawMatrix[2] = sMatrixData[4] * mScale;
+                sRawMatrix[3] = sMatrixData[1];
+                sRawMatrix[4] = sMatrixData[3];
+                sRawMatrix[5] = sMatrixData[5] * mScale;
+                sRawMatrix[6] = 0;
+                sRawMatrix[7] = 0;
+                sRawMatrix[8] = 1;
+                mMatrix.setValues(sRawMatrix);
             } else if (matrixSize != -1) {
                 FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");
             }
@@ -141,21 +140,12 @@ public abstract class VirtualNode extends LayoutShadowNode {
         markUpdated();
     }
 
-    protected void setupMatrix() {
-        sRawMatrix[0] = sMatrixData[0];
-        sRawMatrix[1] = sMatrixData[2];
-        sRawMatrix[2] = sMatrixData[4] * mScale;
-        sRawMatrix[3] = sMatrixData[1];
-        sRawMatrix[4] = sMatrixData[3];
-        sRawMatrix[5] = sMatrixData[5] * mScale;
-        sRawMatrix[6] = 0;
-        sRawMatrix[7] = 0;
-        sRawMatrix[8] = 1;
-        mMatrix.setValues(sRawMatrix);
+    protected @Nullable Path getClipPath() {
+        return mCachedClipPath;
     }
 
     protected @Nullable Path getClipPath(Canvas canvas, Paint paint) {
-        if (mClipPath != null) {
+        if (mClipPath != null && mCachedClipPath == null) {
             VirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPath);
 
             if (node != null) {
@@ -169,14 +159,13 @@ public abstract class VirtualNode extends LayoutShadowNode {
                     default:
                         FLog.w(ReactConstants.TAG, "RNSVG: clipRule: " + mClipRule + " unrecognized");
                 }
-
-                return clipPath;
+                mCachedClipPath = clipPath;
             } else {
                 FLog.w(ReactConstants.TAG, "RNSVG: Undefined clipPath: " + mClipPath);
             }
         }
 
-        return null;
+        return getClipPath();
     }
 
     protected void clip(Canvas canvas, Paint paint) {
@@ -206,26 +195,39 @@ public abstract class VirtualNode extends LayoutShadowNode {
 
         ReactShadowNode parent = getParent();
 
-        while (!(parent instanceof SvgViewShadowNode)) {
-            if (parent == null) {
-                return null;
-            } else {
-                parent = parent.getParent();
-            }
+        if (parent instanceof SvgViewShadowNode) {
+            mSvgShadowNode = (SvgViewShadowNode)parent;
+        } else if (parent instanceof VirtualNode) {
+            mSvgShadowNode = ((VirtualNode) parent).getSvgShadowNode();
+        } else {
+            FLog.e(ReactConstants.TAG, "RNSVG: " + getClass().getName() + " should be descendant of a SvgViewShadow.");
         }
-        mSvgShadowNode = (SvgViewShadowNode) parent;
+
         return mSvgShadowNode;
     }
 
-    protected void setupDimensions(Canvas canvas) {
-        setupDimensions(canvas.getClipBounds());
+    protected float relativeOnWidth(String position) {
+        return PropHelper.fromPercentageToFloat(position, getCanvasWidth(), 0, mScale);
     }
 
-    protected void setupDimensions(Rect rect) {
-        mCanvasX = rect.left;
-        mCanvasY = rect.top;
-        mCanvasWidth = rect.width();
-        mCanvasHeight = rect.height();
+    protected float relativeOnHeight(String position) {
+        return PropHelper.fromPercentageToFloat(position, getCanvasHeight(), 0, mScale);
+    }
+
+    protected float getCanvasWidth() {
+        return getSvgShadowNode().getCanvasBounds().width();
+    }
+
+    protected float getCanvasHeight() {
+        return getSvgShadowNode().getCanvasBounds().height();
+    }
+
+    protected float getCanvasLeft() {
+        return getSvgShadowNode().getCanvasBounds().left;
+    }
+
+    protected float getCanvasTop() {
+        return getSvgShadowNode().getCanvasBounds().top;
     }
 
     protected void saveDefinition() {

@@ -90,42 +90,30 @@ public class TextShadowNode extends GroupShadowNode {
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
         if (opacity > MIN_OPACITY_FOR_DRAW) {
+            setupGlyphContext();
             clip(canvas, paint);
-
-            int count = canvas.save();
-            setupGlyphContext(canvas);
-
             Path path = getGroupPath(canvas, paint);
             Matrix matrix = getAlignMatrix(path);
             canvas.concat(matrix);
             drawGroup(canvas, paint, opacity);
             releaseCachedPath();
-
-            mPath = path;
-            restoreCanvas(canvas, count);
-            markUpdateSeen();
         }
     }
 
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
-        setupGlyphContext(canvas);
+        setupGlyphContext();
         Path groupPath = getGroupPath(canvas, paint);
         Matrix matrix = getAlignMatrix(groupPath);
-        groupPath.transform(mMatrix);
         groupPath.transform(matrix);
 
         releaseCachedPath();
         return groupPath;
     }
 
-    @Override
     protected void drawGroup(Canvas canvas, Paint paint, float opacity) {
         pushGlyphContext();
-        int count = canvas.save();
-        canvas.concat(mMatrix);
         super.drawGroup(canvas, paint, opacity);
-        restoreCanvas(canvas, count);
         popGlyphContext();
     }
 
@@ -170,9 +158,8 @@ public class TextShadowNode extends GroupShadowNode {
         return mTextRoot;
     }
 
-    protected void setupGlyphContext(Canvas canvas) {
-        setupDimensions(canvas);
-        mGlyphContext = new GlyphContext(mScale, mCanvasWidth, mCanvasHeight);
+    protected void setupGlyphContext() {
+        mGlyphContext = new GlyphContext(mScale, getCanvasWidth(), getCanvasHeight());
     }
 
     protected void releaseCachedPath() {

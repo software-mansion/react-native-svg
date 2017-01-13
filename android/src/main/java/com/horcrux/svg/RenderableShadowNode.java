@@ -11,7 +11,6 @@ package com.horcrux.svg;
 
 import javax.annotation.Nullable;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
@@ -19,6 +18,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.graphics.Region;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
@@ -35,7 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Shadow node for virtual RNSVGPath view
+ * Renderable shadow node
  */
 abstract public class RenderableShadowNode extends VirtualNode {
 
@@ -201,18 +201,12 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
-        if (mPath == null) {
-            mPath = getPath(canvas, paint);
-            mPath.setFillType(mFillRule);
-        }
-
         opacity *= mOpacity;
 
         if (opacity > MIN_OPACITY_FOR_DRAW) {
-            int count = saveAndSetupCanvas(canvas);
             if (mPath == null) {
-                throw new JSApplicationIllegalArgumentException(
-                        "Paths should have a valid path (d) prop");
+                mPath = getPath(canvas, paint);
+                mPath.setFillType(mFillRule);
             }
 
             clip(canvas, paint);
@@ -222,9 +216,6 @@ abstract public class RenderableShadowNode extends VirtualNode {
             if (setupStrokePaint(paint, opacity * mStrokeOpacity, null)) {
                 canvas.drawPath(mPath, paint);
             }
-
-            restoreCanvas(canvas, count);
-            markUpdateSeen();
         }
     }
 
@@ -303,62 +294,35 @@ abstract public class RenderableShadowNode extends VirtualNode {
             return -1;
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(
-                mCanvasWidth,
-                mCanvasHeight,
-                Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(bitmap);
+        Matrix pathMatrix = new Matrix(mMatrix);
 
         if (matrix != null) {
-            canvas.concat(matrix);
+            pathMatrix.postConcat(matrix);
         }
 
-        canvas.concat(mMatrix);
-
-        Paint paint = new Paint();
-        clip(canvas, paint);
-        setHitTestFill(paint);
-        canvas.drawPath(mPath, paint);
-
-        if (setHitTestStroke(paint)) {
-            canvas.drawPath(mPath, paint);
-        }
-
-        canvas.setBitmap(bitmap);
-        try {
-            if (bitmap.getPixel(point.x, point.y) != 0) {
-                return getReactTag();
+        if (pathContainsPoint(mPath, pathMatrix, point)) {
+            Path clipPath = getClipPath();
+            if (clipPath != null && !pathContainsPoint(clipPath, pathMatrix, point)) {
+               return -1;
             }
-        } catch (Exception e) {
 
+            return getReactTag();
+        } else{
             return -1;
-        } finally {
-            bitmap.recycle();
         }
-        return -1;
     }
 
-    protected void setHitTestFill(Paint paint) {
-        paint.reset();
-        paint.setARGB(255, 0, 0, 0);
-        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.FILL);
-    }
+    protected boolean pathContainsPoint(Path path, Matrix matrix, Point point) {
+        Path copy = new Path(path);
 
-    protected boolean setHitTestStroke(Paint paint) {
-        if (mStrokeWidth == 0) {
-            return false;
-        }
+        copy.transform(matrix);
 
-        paint.reset();
-        paint.setARGB(255, 0, 0, 0);
-        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(mStrokeWidth * mScale);
-        paint.setStrokeCap(mStrokeLinecap);
-        paint.setStrokeJoin(mStrokeLinejoin);
-        return true;
+        RectF rectF = new RectF();
+        copy.computeBounds(rectF, true);
+        Region region = new Region();
+        region.setPath(copy, new Region((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom));
+
+        return region.contains(point.x, point.y);
     }
 
     @Override
@@ -377,15 +341,14 @@ abstract public class RenderableShadowNode extends VirtualNode {
                 String fieldName = mergeList.getString(i);
                 Field field = getClass().getField(fieldName);
                 Object value = field.get(target);
+                mOriginProperties.add(field.get(this));
 
                 if (inherited) {
                     if (!hasOwnProperty(fieldName)) {
                         mAttributeList.pushString(fieldName);
-                        mOriginProperties.add(field.get(this));
                         field.set(this, value);
                     }
                 } else {
-                    mOriginProperties.add(field.get(this));
                     field.set(this, value);
                 }
             } catch (Exception e) {

@@ -9,35 +9,15 @@
 
 package com.horcrux.svg;
 
-import javax.annotation.Nullable;
-
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.DashPathEffect;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.RectF;
 
-import android.graphics.Color;
-import android.util.Log;
-
-import com.facebook.common.logging.FLog;
-import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
-import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
- * Shadow node for virtual RNSVGPath view
+ * Shadow node for virtual Path view
  */
 public class PathShadowNode extends RenderableShadowNode {
 

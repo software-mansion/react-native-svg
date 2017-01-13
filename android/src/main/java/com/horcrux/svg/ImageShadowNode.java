@@ -39,7 +39,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Shadow node for virtual RNSVGPath view
+ * Shadow node for virtual Image view
  */
 public class ImageShadowNode extends RenderableShadowNode {
 
@@ -107,11 +107,8 @@ public class ImageShadowNode extends RenderableShadowNode {
 
     @Override
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
-        mPath = getPath(canvas, paint);
-
         if (!mLoading.get()) {
             final ImageRequest request = ImageRequestBuilder.newBuilderWithSource(mUri).build();
-
             if (Fresco.getImagePipeline().isInBitmapMemoryCache(request)) {
                 tryRender(request, canvas, paint, opacity * mOpacity);
             } else {
@@ -153,18 +150,15 @@ public class ImageShadowNode extends RenderableShadowNode {
 
     @Nonnull
     private Rect getRect() {
-        float x = PropHelper.fromPercentageToFloat(mX, mCanvasWidth, 0, mScale);
-        float y = PropHelper.fromPercentageToFloat(mY, mCanvasHeight, 0, mScale);
-        float w = PropHelper.fromPercentageToFloat(mW, mCanvasWidth, 0, mScale);
-        float h = PropHelper.fromPercentageToFloat(mH, mCanvasHeight, 0, mScale);
+        float x = relativeOnWidth(mX);
+        float y = relativeOnHeight(mY);
+        float w = relativeOnWidth(mW);
+        float h = relativeOnHeight(mH);
 
         return new Rect((int) x, (int) y, (int) (x + w), (int) (y + h));
     }
 
     private void doRender(Canvas canvas, Paint paint, Bitmap bitmap, float opacity) {
-        final int count = saveAndSetupCanvas(canvas);
-        canvas.concat(mMatrix);
-
         Paint alphaPaint = new Paint();
         alphaPaint.setAlpha((int) (opacity * 255));
 
@@ -185,17 +179,9 @@ public class ImageShadowNode extends RenderableShadowNode {
             renderRect = new RectF(0, 0, (int)rectWidth, (int)(rectWidth / mImageRatio));
         }
 
-        ViewBoxShadowNode viewBox = new ViewBoxShadowNode();
-        viewBox.setMinX("0");
-        viewBox.setMinY("0");
-        viewBox.setVbWidth(renderRect.width() / mScale + "");
-        viewBox.setVbHeight(renderRect.height() / mScale + "");
-        viewBox.setWidth(rectWidth / mScale + "");
-        viewBox.setHeight(rectHeight / mScale + "");
-        viewBox.setAlign(mAlign);
-        viewBox.setMeetOrSlice(mMeetOrSlice);
-        viewBox.setupDimensions(new Rect(0, 0, (int) rectWidth, (int) rectHeight));
-        Matrix transform = viewBox.getTransform();
+        RectF vbRect = new RectF(0, 0, renderRect.width() / mScale, renderRect.height() / mScale);
+        RectF eRect = new RectF(getCanvasLeft(), getCanvasTop(), rectWidth / mScale + getCanvasLeft(), rectHeight / mScale + getCanvasTop());
+        Matrix transform = ViewBoxShadowNode.getTransform(vbRect, eRect, mAlign, mMeetOrSlice, false);
 
         transform.mapRect(renderRect);
         Matrix translation = new Matrix();
@@ -205,30 +191,28 @@ public class ImageShadowNode extends RenderableShadowNode {
         Path clip = new Path();
 
         Path clipPath = getClipPath(canvas, paint);
-
+        Path path = getPath(canvas, paint);
         if (clipPath != null) {
             // clip by the common area of clipPath and mPath
             clip.setFillType(Path.FillType.INVERSE_EVEN_ODD);
 
             Path inverseWindingPath = new Path();
             inverseWindingPath.setFillType(Path.FillType.INVERSE_WINDING);
-            inverseWindingPath.addPath(mPath);
+            inverseWindingPath.addPath(path);
             inverseWindingPath.addPath(clipPath);
 
             Path evenOddPath = new Path();
             evenOddPath.setFillType(Path.FillType.EVEN_ODD);
-            evenOddPath.addPath(mPath);
+            evenOddPath.addPath(path);
             evenOddPath.addPath(clipPath);
 
             canvas.clipPath(evenOddPath, Region.Op.DIFFERENCE);
             canvas.clipPath(inverseWindingPath, Region.Op.DIFFERENCE);
         } else {
-            canvas.clipPath(mPath, Region.Op.REPLACE);
+            canvas.clipPath(path, Region.Op.REPLACE);
         }
 
         canvas.drawBitmap(bitmap, null, renderRect, alphaPaint);
-        restoreCanvas(canvas, count);
-        markUpdateSeen();
     }
 
     private void tryRender(ImageRequest request, Canvas canvas, Paint paint, float opacity) {

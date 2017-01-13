@@ -15,7 +15,7 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
- * Shadow node for virtual LinearGradient definition view
+ * Shadow node for virtual RadialGradient definition view
  */
 public class RadialGradientShadowNode extends DefinitionShadowNode {
     private String mFx;

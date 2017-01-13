@@ -13,20 +13,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.SurfaceTexture;
-import android.support.annotation.Nullable;
+import android.graphics.Rect;
 import android.util.Base64;
-import android.util.Log;
-import android.util.SparseArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.view.Surface;
-import android.view.TextureView;
 
-import com.facebook.common.logging.FLog;
-import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.LayoutShadowNode;
-import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
 
 import java.io.ByteArrayOutputStream;
@@ -42,6 +34,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private final Map<String, VirtualNode> mDefinedClipPaths = new HashMap<>();
     private final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
     private final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
+    private Canvas mCanvas;
 
     @Override
     public boolean isVirtual() {
@@ -71,12 +64,18 @@ public class SvgViewShadowNode extends LayoutShadowNode {
                 (int) getLayoutHeight(),
                 Bitmap.Config.ARGB_8888);
 
-        Canvas canvas = new Canvas(bitmap);
-        drawChildren(canvas);
+        mCanvas = new Canvas(bitmap);
+        drawChildren(mCanvas);
+        mCanvas = null;
         return bitmap;
     }
 
+    public Rect getCanvasBounds() {
+        return mCanvas.getClipBounds();
+    }
+
     private void drawChildren(Canvas canvas) {
+        canvas.getClipBounds();
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         Paint paint = new Paint();
 
@@ -86,9 +85,11 @@ public class SvgViewShadowNode extends LayoutShadowNode {
             }
 
             VirtualNode child = (VirtualNode) getChildAt(i);
-            child.setupDimensions(canvas);
             child.saveDefinition();
+
+            int count = child.saveAndSetupCanvas(canvas);
             child.draw(canvas, paint, 1f);
+            child.restoreCanvas(canvas, count);
             child.markUpdateSeen();
 
             if (child.isResponsible() && !mResponsible) {

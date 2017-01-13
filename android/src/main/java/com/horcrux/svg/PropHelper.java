@@ -11,7 +11,6 @@ package com.horcrux.svg;
 
 import android.graphics.Color;
 import android.graphics.Path;
-import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
@@ -23,7 +22,6 @@ import javax.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 
