@@ -53,10 +53,10 @@ public class EllipseShadowNode extends RenderableShadowNode {
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
-        float cx = PropHelper.fromPercentageToFloat(mCx, mCanvasWidth, 0, mScale);
-        float cy = PropHelper.fromPercentageToFloat(mCy, mCanvasHeight, 0, mScale);
-        float rx = PropHelper.fromPercentageToFloat(mRx, mCanvasWidth, 0, mScale);
-        float ry = PropHelper.fromPercentageToFloat(mRy, mCanvasHeight, 0, mScale);
+        float cx = relativeOnWidth(mCx);
+        float cy = relativeOnHeight(mCy);
+        float rx = relativeOnWidth(mRx);
+        float ry = relativeOnHeight(mRy);
         RectF oval = new RectF(cx - rx, cy - ry, cx + rx, cy + ry);
         path.addOval(oval, Path.Direction.CW);
 

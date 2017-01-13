@@ -13,6 +13,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.support.annotation.Nullable;
 import android.util.Base64;
@@ -42,6 +44,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private final Map<String, VirtualNode> mDefinedClipPaths = new HashMap<>();
     private final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
     private final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
+    private Canvas mCanvas;
 
     @Override
     public boolean isVirtual() {
@@ -71,12 +74,18 @@ public class SvgViewShadowNode extends LayoutShadowNode {
                 (int) getLayoutHeight(),
                 Bitmap.Config.ARGB_8888);
 
-        Canvas canvas = new Canvas(bitmap);
-        drawChildren(canvas);
+        mCanvas = new Canvas(bitmap);
+        drawChildren(mCanvas);
+        mCanvas = null;
         return bitmap;
     }
 
+    public Rect getCanvasBounds() {
+        return mCanvas.getClipBounds();
+    }
+
     private void drawChildren(Canvas canvas) {
+        canvas.getClipBounds();
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         Paint paint = new Paint();
 
@@ -86,9 +95,11 @@ public class SvgViewShadowNode extends LayoutShadowNode {
             }
 
             VirtualNode child = (VirtualNode) getChildAt(i);
-            child.setupDimensions(canvas);
             child.saveDefinition();
+
+            int count = child.saveAndSetupCanvas(canvas);
             child.draw(canvas, paint, 1f);
+            child.restoreCanvas(canvas, count);
             child.markUpdateSeen();
 
             if (child.isResponsible() && !mResponsible) {

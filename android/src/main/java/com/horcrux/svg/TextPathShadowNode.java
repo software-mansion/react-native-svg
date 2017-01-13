@@ -51,8 +51,7 @@ public class TextPathShadowNode extends TextShadowNode {
         }
 
         PathShadowNode path = (PathShadowNode)template;
-
-        return new BezierTransformer(path.getBezierCurves(), PropHelper.fromPercentageToFloat(mStartOffset, mCanvasWidth, 0, mScale));
+        return new BezierTransformer(path.getBezierCurves(), relativeOnWidth(mStartOffset));
     }
 
     @Override

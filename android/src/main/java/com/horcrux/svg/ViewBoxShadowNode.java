@@ -12,6 +12,7 @@ package com.horcrux.svg;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RectF;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -85,26 +86,42 @@ public class ViewBoxShadowNode extends GroupShadowNode {
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
-        setupDimensions(canvas);
-        mMatrix = getTransform();
-        super.draw(canvas, paint, opacity);
+    protected int saveAndSetupCanvas(Canvas canvas) {
+        mMatrix = getTransformFromProps();
+        return super.saveAndSetupCanvas(canvas);
     }
 
-    public Matrix getTransform() {
+    private Matrix getTransformFromProps() {
+
+        float vbX = relativeOnWidth(mMinX);
+        float vbY = relativeOnHeight(mMinY);
+        float vbWidth = relativeOnWidth(mVbWidth);
+        float vbHeight = relativeOnHeight(mVbHeight);
+
+
+        float eX = getCanvasLeft();
+        float eY = getCanvasTop();
+        float eWidth = mBoxWidth != null ? relativeOnWidth(mBoxWidth) : getCanvasWidth();
+        float eHeight = mBoxHeight != null ? relativeOnHeight(mBoxHeight) : getCanvasHeight();
+
+        return getTransform(new RectF(vbX, vbY, vbWidth + vbX, vbHeight + vbY), new RectF(eX, eY, eWidth + eX, eHeight + eY), mAlign, mMeetOrSlice, mFromSymbol);
+    }
+
+    static public Matrix getTransform(RectF vbRect, RectF eRect, String align, int meetOrSlice, boolean fromSymbol) {
         // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform
 
         // Let vb-x, vb-y, vb-width, vb-height be the min-x, min-y, width and height values of the viewBox attribute respectively.
-        float vbX = PropHelper.fromPercentageToFloat(mMinX, mCanvasWidth, 0, mScale);
-        float vbY = PropHelper.fromPercentageToFloat(mMinY, mCanvasHeight, 0, mScale);
-        float vbWidth = PropHelper.fromPercentageToFloat(mVbWidth, mCanvasWidth, 0, mScale);
-        float vbHeight = PropHelper.fromPercentageToFloat(mVbHeight, mCanvasHeight, 0, mScale);
+        float vbX = vbRect.left;
+        float vbY = vbRect.top;
+        float vbWidth = vbRect.width();
+        float vbHeight = vbRect.height();
 
         // Let e-x, e-y, e-width, e-height be the position and size of the element respectively.
-        float eX = mCanvasX;
-        float eY = mCanvasY;
-        float eWidth = mBoxWidth != null ? PropHelper.fromPercentageToFloat(mBoxWidth, mCanvasWidth, 0, mScale) : mCanvasWidth;
-        float eHeight = mBoxHeight != null ? PropHelper.fromPercentageToFloat(mBoxHeight, mCanvasHeight, 0, mScale) : mCanvasHeight;
+        float eX = eRect.left;
+        float eY = eRect.top;
+        float eWidth = eRect.width();
+        float eHeight = eRect.height();
+
 
         // Initialize scale-x to e-width/vb-width.
         float scaleX = eWidth / vbWidth;
@@ -118,7 +135,7 @@ public class ViewBoxShadowNode extends GroupShadowNode {
         float translateY = vbY - eY;
 
         // If align is 'none'
-        if (mMeetOrSlice == MOS_NONE) {
+        if (meetOrSlice == MOS_NONE) {
             // Let scale be set the smaller value of scale-x and scale-y.
             // Assign scale-x and scale-y to scale.
             float scale = scaleX = scaleY = Math.min(scaleX, scaleY);
@@ -137,29 +154,29 @@ public class ViewBoxShadowNode extends GroupShadowNode {
 // If align is not 'none' and meetOrSlice is 'meet', set the larger of scale-x and scale-y to the smaller.
             // Otherwise, if align is not 'none' and meetOrSlice is 'slice', set the smaller of scale-x and scale-y to the larger.
 
-            if (!mAlign.equals("none") && mMeetOrSlice == MOS_MEET) {
+            if (!align.equals("none") && meetOrSlice == MOS_MEET) {
                 scaleX = scaleY = Math.min(scaleX, scaleY);
-            } else if (!mAlign.equals("none") && mMeetOrSlice == MOS_SLICE) {
+            } else if (!align.equals("none") && meetOrSlice == MOS_SLICE) {
                 scaleX = scaleY = Math.max(scaleX, scaleY);
             }
 
             // If align contains 'xMid', minus (e-width / scale-x - vb-width) / 2 from transform-x.
-            if (mAlign.contains("xMid")) {
+            if (align.contains("xMid")) {
                 translateX -= (eWidth / scaleX - vbWidth) / 2;
             }
 
             // If align contains 'xMax', minus (e-width / scale-x - vb-width) from transform-x.
-            if (mAlign.contains("xMax")) {
+            if (align.contains("xMax")) {
                 translateX -= eWidth / scaleX - vbWidth;
             }
 
             // If align contains 'yMid', minus (e-height / scale-y - vb-height) / 2 from transform-y.
-            if (mAlign.contains("YMid")) {
+            if (align.contains("YMid")) {
                 translateY -= (eHeight / scaleY - vbHeight) / 2;
             }
 
             // If align contains 'yMax', minus (e-height / scale-y - vb-height) from transform-y.
-            if (mAlign.contains("YMax")) {
+            if (align.contains("YMax")) {
                 translateY -= eHeight / scaleY - vbHeight;
             }
 
@@ -168,7 +185,7 @@ public class ViewBoxShadowNode extends GroupShadowNode {
         // The transform applied to content contained by the element is given by
         // translate(translate-x, translate-y) scale(scale-x, scale-y).
         Matrix transform = new Matrix();
-        transform.postTranslate(-translateX * (mFromSymbol ? scaleX : 1), -translateY * (mFromSymbol ? scaleY : 1));
+        transform.postTranslate(-translateX * (fromSymbol ? scaleX : 1), -translateY * (fromSymbol ? scaleY : 1));
         transform.postScale(scaleX, scaleY);
         return transform;
     }

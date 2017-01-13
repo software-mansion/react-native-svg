@@ -201,18 +201,12 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
-        if (mPath == null) {
-            mPath = getPath(canvas, paint);
-            mPath.setFillType(mFillRule);
-        }
-
         opacity *= mOpacity;
 
         if (opacity > MIN_OPACITY_FOR_DRAW) {
-            int count = saveAndSetupCanvas(canvas);
             if (mPath == null) {
-                throw new JSApplicationIllegalArgumentException(
-                        "Paths should have a valid path (d) prop");
+                mPath = getPath(canvas, paint);
+                mPath.setFillType(mFillRule);
             }
 
             clip(canvas, paint);
@@ -222,9 +216,6 @@ abstract public class RenderableShadowNode extends VirtualNode {
             if (setupStrokePaint(paint, opacity * mStrokeOpacity, null)) {
                 canvas.drawPath(mPath, paint);
             }
-
-            restoreCanvas(canvas, count);
-            markUpdateSeen();
         }
     }
 
@@ -303,39 +294,39 @@ abstract public class RenderableShadowNode extends VirtualNode {
             return -1;
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(
-                mCanvasWidth,
-                mCanvasHeight,
-                Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(bitmap);
-
-        if (matrix != null) {
-            canvas.concat(matrix);
-        }
-
-        canvas.concat(mMatrix);
-
-        Paint paint = new Paint();
-        clip(canvas, paint);
-        setHitTestFill(paint);
-        canvas.drawPath(mPath, paint);
-
-        if (setHitTestStroke(paint)) {
-            canvas.drawPath(mPath, paint);
-        }
-
-        canvas.setBitmap(bitmap);
-        try {
-            if (bitmap.getPixel(point.x, point.y) != 0) {
-                return getReactTag();
-            }
-        } catch (Exception e) {
-
-            return -1;
-        } finally {
-            bitmap.recycle();
-        }
+//        Bitmap bitmap = Bitmap.createBitmap(
+//                mCanvasWidth,
+//                mCanvasHeight,
+//                Bitmap.Config.ARGB_8888);
+//
+//        Canvas canvas = new Canvas(bitmap);
+//
+//        if (matrix != null) {
+//            canvas.concat(matrix);
+//        }
+//
+//        canvas.concat(mMatrix);
+//
+//        Paint paint = new Paint();
+//        clip(canvas, paint);
+//        setHitTestFill(paint);
+//        canvas.drawPath(mPath, paint);
+//
+//        if (setHitTestStroke(paint)) {
+//            canvas.drawPath(mPath, paint);
+//        }
+//
+//        canvas.setBitmap(bitmap);
+//        try {
+//            if (bitmap.getPixel(point.x, point.y) != 0) {
+//                return getReactTag();
+//            }
+//        } catch (Exception e) {
+//
+//            return -1;
+//        } finally {
+//            bitmap.recycle();
+//        }
         return -1;
     }
 
@@ -377,15 +368,14 @@ abstract public class RenderableShadowNode extends VirtualNode {
                 String fieldName = mergeList.getString(i);
                 Field field = getClass().getField(fieldName);
                 Object value = field.get(target);
+                mOriginProperties.add(field.get(this));
 
                 if (inherited) {
                     if (!hasOwnProperty(fieldName)) {
                         mAttributeList.pushString(fieldName);
-                        mOriginProperties.add(field.get(this));
                         field.set(this, value);
                     }
                 } else {
-                    mOriginProperties.add(field.get(this));
                     field.set(this, value);
                 }
             } catch (Exception e) {

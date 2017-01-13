@@ -75,8 +75,6 @@ public class TSpanShadowNode extends TextShadowNode {
         }
 
         setupTextPath();
-        setupDimensions(canvas);
-
         Path path = new Path();
 
         pushGlyphContext();

@@ -69,12 +69,12 @@ public class RectShadowNode extends RenderableShadowNode {
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
-        float x = PropHelper.fromPercentageToFloat(mX, mCanvasWidth, 0, mScale);
-        float y = PropHelper.fromPercentageToFloat(mY, mCanvasHeight, 0, mScale);
-        float w = PropHelper.fromPercentageToFloat(mW, mCanvasWidth, 0, mScale);
-        float h = PropHelper.fromPercentageToFloat(mH, mCanvasHeight, 0, mScale);
-        float rx = PropHelper.fromPercentageToFloat(mRx, mCanvasWidth, 0, mScale);
-        float ry = PropHelper.fromPercentageToFloat(mRy, mCanvasHeight, 0, mScale);
+        float x = relativeOnWidth(mX);
+        float y = relativeOnHeight(mY);
+        float w = relativeOnWidth(mW);
+        float h = relativeOnHeight(mH);
+        float rx = relativeOnWidth(mRx);
+        float ry = relativeOnHeight(mRy);
 
         if (rx != 0 || ry != 0) {
             if (rx == 0) {

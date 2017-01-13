@@ -51,10 +51,10 @@ public class LineShadowNode extends RenderableShadowNode {
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
-        float x1 = PropHelper.fromPercentageToFloat(mX1, mCanvasWidth, 0, mScale);
-        float y1 = PropHelper.fromPercentageToFloat(mY1, mCanvasHeight, 0, mScale);
-        float x2 = PropHelper.fromPercentageToFloat(mX2, mCanvasWidth, 0, mScale);
-        float y2 = PropHelper.fromPercentageToFloat(mY2, mCanvasHeight, 0, mScale);
+        float x1 = relativeOnWidth(mX1);
+        float y1 = relativeOnHeight(mY1);
+        float x2 = relativeOnWidth(mX2);
+        float y2 = relativeOnHeight(mY2);
 
         path.moveTo(x1, y1);
         path.lineTo(x2, y2);

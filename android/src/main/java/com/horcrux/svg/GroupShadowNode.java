@@ -27,10 +27,8 @@ public class GroupShadowNode extends RenderableShadowNode {
 
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
         if (opacity > MIN_OPACITY_FOR_DRAW) {
-            int count = saveAndSetupCanvas(canvas);
             clip(canvas, paint);
             drawGroup(canvas, paint, opacity);
-            restoreCanvas(canvas, count);
         }
     }
 
@@ -39,10 +37,10 @@ public class GroupShadowNode extends RenderableShadowNode {
         final VirtualNode self = this;
         traverseChildren(new NodeRunnable() {
             public boolean run(VirtualNode node) {
-                node.setupDimensions(canvas);
-
                 node.mergeProperties(self, mAttributeList, true);
+                int count = node.saveAndSetupCanvas(canvas);
                 node.draw(canvas, paint, opacity * mOpacity);
+                node.restoreCanvas(canvas, count);
                 node.markUpdateSeen();
 
                 if (node.isResponsible()) {
@@ -63,7 +61,6 @@ public class GroupShadowNode extends RenderableShadowNode {
 
         traverseChildren(new NodeRunnable() {
             public boolean run(VirtualNode node) {
-                node.setupDimensions(canvas);
                 path.addPath(node.getPath(canvas, paint));
                 return true;
             }
