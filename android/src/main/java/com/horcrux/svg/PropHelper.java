@@ -411,12 +411,6 @@ class PropHelper {
             mPivotX = c2x;
             mPivotY = c2y;
             cubicTo(c1x, c1y, c2x, c2y, ex, ey);
-
-            WritableArray points = Arguments.createArray();
-            points.pushMap(getPointMap(c1x, c1y));
-            points.pushMap(getPointMap(c2x, c2y));
-            points.pushMap(getPointMap(ex, ey));
-            mBezierCurves.pushArray(points);
         }
 
         private void cubicTo(float c1x, float c1y, float c2x, float c2y, float ex, float ey) {
@@ -424,6 +418,12 @@ class PropHelper {
             mPenX = ex;
             mPenY = ey;
             mPath.cubicTo(c1x * mScale, c1y * mScale, c2x * mScale, c2y * mScale, ex * mScale, ey * mScale);
+
+            WritableArray points = Arguments.createArray();
+            points.pushMap(getPointMap(c1x, c1y));
+            points.pushMap(getPointMap(c2x, c2y));
+            points.pushMap(getPointMap(ex, ey));
+            mBezierCurves.pushArray(points);
         }
 
         private void smoothCurve(float c1x, float c1y, float ex, float ey) {
