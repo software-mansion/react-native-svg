@@ -18,7 +18,7 @@ import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
- * Shadow node for virtual RNSVGPath view
+ * Shadow node for virtual Use view
  */
 public class UseShadowNode extends RenderableShadowNode {
 

@@ -19,7 +19,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.ReactConstants;
 
 /**
- * Shadow node for virtual RNSVGClipPath view
+ * Shadow node for virtual ClipPath view
  */
 public class ClipPathShadowNode extends GroupShadowNode {
 

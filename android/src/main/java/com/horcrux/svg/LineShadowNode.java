@@ -15,7 +15,7 @@ import android.graphics.Path;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
- * Shadow node for virtual RNSVGPath view
+ * Shadow node for virtual Line view
  */
 public class LineShadowNode extends RenderableShadowNode {
 

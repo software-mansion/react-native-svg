@@ -11,14 +11,13 @@ package com.horcrux.svg;
 
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.RectF;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
- * Shadow node for virtual RNSVGPath view
+ * Shadow node for virtual ViewBox
  */
 public class ViewBoxShadowNode extends GroupShadowNode {
 

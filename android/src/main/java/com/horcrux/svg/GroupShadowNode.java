@@ -21,7 +21,7 @@ import com.facebook.react.uimanager.ReactShadowNode;
 import javax.annotation.Nullable;
 
 /**
- * Shadow node for virtual RNSVGGroup view
+ * Shadow node for virtual Group view
  */
 public class GroupShadowNode extends RenderableShadowNode {
 

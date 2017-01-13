@@ -11,7 +11,6 @@ package com.horcrux.svg;
 
 import javax.annotation.Nullable;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
@@ -36,7 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Shadow node for virtual RNSVGPath view
+ * Renderable shadow node
  */
 abstract public class RenderableShadowNode extends VirtualNode {
 

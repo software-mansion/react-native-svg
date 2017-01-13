@@ -16,7 +16,7 @@ import android.graphics.RectF;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
- * Shadow node for virtual RNSVGPath view
+ * Shadow node for virtual Rect view
  */
 public class RectShadowNode extends RenderableShadowNode {
 

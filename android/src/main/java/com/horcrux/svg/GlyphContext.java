@@ -10,12 +10,10 @@
 package com.horcrux.svg;
 
 import android.graphics.PointF;
-import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 
 import java.util.ArrayList;
@@ -79,7 +77,7 @@ public class GlyphContext {
         mXContext.remove(mContextLength - 1);
 
         mContextLength--;
-        
+
         if (mContextLength != 0) {
             mXContext.set(mContextLength - 1, x);
             PointF lastLocation = mLocationContext.get(mContextLength - 1);

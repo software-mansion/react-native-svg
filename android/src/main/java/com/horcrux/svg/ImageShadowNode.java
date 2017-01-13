@@ -39,7 +39,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Shadow node for virtual RNSVGPath view
+ * Shadow node for virtual Image view
  */
 public class ImageShadowNode extends RenderableShadowNode {
 

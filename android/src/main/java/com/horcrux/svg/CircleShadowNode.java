@@ -16,7 +16,7 @@ import android.graphics.Path;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
- * Shadow node for virtual RNSVGPath view
+ * Shadow node for virtual Circle view
  */
 public class CircleShadowNode extends RenderableShadowNode {
 

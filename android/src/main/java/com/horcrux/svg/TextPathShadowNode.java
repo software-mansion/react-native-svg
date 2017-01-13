@@ -12,13 +12,14 @@ package com.horcrux.svg;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.drawable.shapes.PathShape;
 
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
+/**
+ * Shadow node for virtual TextPath view
+ */
 public class TextPathShadowNode extends TextShadowNode {
 
     private String mHref;

@@ -16,20 +16,19 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.util.Log;
 
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
+/**
+ * Shadow node for virtual TSpan view
+ */
 public class TSpanShadowNode extends TextShadowNode {
 
     private BezierTransformer mBezierTransformer;

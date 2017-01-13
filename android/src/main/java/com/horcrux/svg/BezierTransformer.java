@@ -11,7 +11,6 @@ package com.horcrux.svg;
 
 import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.util.Log;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;

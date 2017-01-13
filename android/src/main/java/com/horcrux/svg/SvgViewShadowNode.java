@@ -14,21 +14,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.SurfaceTexture;
-import android.support.annotation.Nullable;
 import android.util.Base64;
-import android.util.Log;
-import android.util.SparseArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.view.Surface;
-import android.view.TextureView;
 
-import com.facebook.common.logging.FLog;
-import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.LayoutShadowNode;
-import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
 
 import java.io.ByteArrayOutputStream;

@@ -13,7 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 /**
- * Shadow node for virtual RNSVGPath view
+ * Shadow node for virtual Defs view
  */
 public class DefsShadowNode extends DefinitionShadowNode {
 
