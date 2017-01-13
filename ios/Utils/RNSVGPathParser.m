@@ -9,7 +9,7 @@
 #import "RNSVGPathParser.h"
 #import <React/RCTLog.h>
 
-@implementation RNSVGPathParser : NSObject 
+@implementation RNSVGPathParser : NSObject
 {
     NSString* _d;
     NSString* _originD;
@@ -43,7 +43,7 @@
     NSArray<NSTextCheckingResult *>* results = [_pathRegularExpression matchesInString:_d options:0 range:NSMakeRange(0, [_d length])];
     _bezierCurves = [[NSMutableArray alloc] init];
     int count = [results count];
-    
+
     if (count) {
         NSUInteger i = 0;
         #define NEXT_VALUE [self getNextValue:results[i++]]
@@ -51,7 +51,7 @@
         #define NEXT_BOOL [self bool:NEXT_VALUE]
         NSString* lastCommand;
         NSString* command = NEXT_VALUE;
-        
+
         @try {
             while (command) {
                 if ([command isEqualToString:@"m"]) { // moveTo command
@@ -99,14 +99,14 @@
                     i--;
                     continue;
                 }
-                
+
                 lastCommand = command;
                 if ([lastCommand isEqualToString:@"m"]) {
                     lastCommand = @"l";
                 } else if ([lastCommand isEqualToString:@"M"]) {
                     lastCommand = @"L";
                 }
-                
+
                 command = i < count ? NEXT_VALUE : nil;
             }
         } @catch (NSException *exception) {
@@ -116,7 +116,7 @@
         }
 
     }
-    
+
     return (CGPathRef)CFAutorelease(path);
 }
 
@@ -125,7 +125,7 @@
     if (!_bezierCurves) {
         CGPathRelease([self getPath]);
     }
-    
+
     return [_bezierCurves copy];
 }
 
@@ -157,7 +157,7 @@
     _pivotX = _penX = x;
     _pivotY = _penY = y;
     CGPathMoveToPoint(path, nil, x, y);
-    
+
     _lastStartPoint = [NSValue valueWithCGPoint: CGPointMake(x, y)];
     [_bezierCurves addObject: @[_lastStartPoint]];
 }
@@ -169,12 +169,12 @@
 
 - (void)lineTo:(CGPathRef)path x:(double)x y:(double)y{
     NSValue * source = [NSValue valueWithCGPoint:CGPointMake(_pivotX, _pivotY)];
-    
+
     [self setPenDown];
     _pivotX = _penX = x;
     _pivotY = _penY = y;
     CGPathAddLineToPoint(path, nil, x, y);
-    
+
     NSValue * destination = [NSValue valueWithCGPoint:CGPointMake(x, y)];
     [_bezierCurves addObject: @[destination, destination, destination]];
 }
@@ -191,8 +191,8 @@
 
 - (void)curveTo:(CGPathRef)path c1x:(double)c1x c1y:(double)c1y c2x:(double)c2x c2y:(double)c2y ex:(double)ex ey:(double)ey
 {
-    _pivotX = ex;
-    _pivotY = ey;
+    _pivotX = c2x;
+    _pivotY = c2y;
     [self curveToPoint:path c1x:(double)c1x c1y:(double)c1y c2x:(double)c2x c2y:(double)c2y ex:(double)ex ey:(double)ey];
 }
 
@@ -202,7 +202,7 @@
     _penX = ex;
     _penY = ey;
     CGPathAddCurveToPoint(path, nil, c1x, c1y, c2x, c2y, ex, ey);
-    
+
     [_bezierCurves addObject: @[
                           [NSValue valueWithCGPoint:CGPointMake(c1x, c1y)],
                           [NSValue valueWithCGPoint:CGPointMake(c2x, c2y)],
@@ -267,16 +267,16 @@
 {
     double tX = _penX;
     double tY = _penY;
-    
+
     ry = fabs(ry == 0 ? (rx == 0 ? (y - tY) : rx) : ry);
     rx = fabs(rx == 0 ? (x - tX) : rx);
-    
+
     if (rx == 0 || ry == 0 || (x == tX && y == tY)) {
         [self lineTo:path x:x y:y];
         return;
     }
-    
-    
+
+
     double rad = rotation * M_PI / 180;
     double cosed = cos(rad);
     double sined = sin(rad);
@@ -289,7 +289,7 @@
     float rycx = ry * ry * cx * cx;
     float rxcy = rx * rx * cy * cy;
     float a = rxry - rxcy - rycx;
-    
+
     if (a < 0){
         a = sqrt(1 - a / rxry);
         rx *= a;
@@ -298,7 +298,7 @@
         cy = y / 2;
     } else {
         a = sqrt(a / (rxcy + rycx));
-        
+
         if (outer == clockwise) {
             a = -a;
         }
@@ -307,27 +307,27 @@
         cx = cosed * cxd - sined * cyd + x / 2;
         cy = sined * cxd + cosed * cyd + y / 2;
     }
-    
+
     // Rotation + Scale Transform
     float xx =  cosed / rx;
     float yx = sined / rx;
     float xy = -sined / ry;
     float yy = cosed / ry;
-    
+
     // Start and End Angle
     float sa = atan2(xy * -cx + yy * -cy, xx * -cx + yx * -cy);
     float ea = atan2(xy * (x - cx) + yy * (y - cy), xx * (x - cx) + yx * (y - cy));
-    
+
     cx += tX;
     cy += tY;
     x += tX;
     y += tY;
-    
+
     [self setPenDown];
-    
+
     _penX = _pivotX = x;
     _penY = _pivotY = y;
-    
+
     [self arcToBezier:path cx:cx cy:cy rx:rx ry:ry sa:sa ea:ea clockwise:clockwise rad:rad];
 }
 
@@ -340,7 +340,7 @@
     double yx = -sined * ry;
     double xy = sined * rx;
     double yy =  cosed * ry;
-    
+
     // Bezier Curve Approximation
     double arc = ea - sa;
     if (arc < 0 && clockwise) {
@@ -348,26 +348,26 @@
     } else if (arc > 0 && !clockwise) {
         arc -= M_PI * 2;
     }
-    
+
     int n = ceil(fabs(arc / (M_PI / 2)));
-    
+
     double step = arc / n;
     double k = (4 / 3) * tan(step / 4);
-    
+
     double x = cos(sa);
     double y = sin(sa);
-    
+
     for (int i = 0; i < n; i++){
         double cp1x = x - k * y;
         double cp1y = y + k * x;
-        
+
         sa += step;
         x = cos(sa);
         y = sin(sa);
-        
+
         double cp2x = x + k * y;
         double cp2y = y - k * x;
-        
+
         CGPathAddCurveToPoint(path,
                               nil,
                               cx + xx * cp1x + yx * cp1y,
