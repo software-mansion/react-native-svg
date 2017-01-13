@@ -48,6 +48,7 @@ public abstract class VirtualNode extends LayoutShadowNode {
     protected String mName;
 
     private SvgViewShadowNode mSvgShadowNode;
+    private Path mCachedClipPath;
 
     public VirtualNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
@@ -141,8 +142,12 @@ public abstract class VirtualNode extends LayoutShadowNode {
         markUpdated();
     }
 
+    protected @Nullable Path getClipPath() {
+        return mCachedClipPath;
+    }
+
     protected @Nullable Path getClipPath(Canvas canvas, Paint paint) {
-        if (mClipPath != null) {
+        if (mClipPath != null && mCachedClipPath == null) {
             VirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPath);
 
             if (node != null) {
@@ -156,13 +161,13 @@ public abstract class VirtualNode extends LayoutShadowNode {
                     default:
                         FLog.w(ReactConstants.TAG, "RNSVG: clipRule: " + mClipRule + " unrecognized");
                 }
-                return clipPath;
+                mCachedClipPath = clipPath;
             } else {
                 FLog.w(ReactConstants.TAG, "RNSVG: Undefined clipPath: " + mClipPath);
             }
         }
 
-        return null;
+        return getClipPath();
     }
 
     protected void clip(Canvas canvas, Paint paint) {

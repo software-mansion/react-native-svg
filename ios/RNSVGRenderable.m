@@ -259,7 +259,7 @@
 // hitTest delagate
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    return [self hitTest:point withEvent:event withTransform:CGAffineTransformMakeRotation(0)];
+    return [self hitTest:point withEvent:event withTransform:CGAffineTransformIdentity];
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transform

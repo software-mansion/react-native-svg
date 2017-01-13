@@ -19,6 +19,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.graphics.Region;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
@@ -294,62 +295,35 @@ abstract public class RenderableShadowNode extends VirtualNode {
             return -1;
         }
 
-//        Bitmap bitmap = Bitmap.createBitmap(
-//                mCanvasWidth,
-//                mCanvasHeight,
-//                Bitmap.Config.ARGB_8888);
-//
-//        Canvas canvas = new Canvas(bitmap);
-//
-//        if (matrix != null) {
-//            canvas.concat(matrix);
-//        }
-//
-//        canvas.concat(mMatrix);
-//
-//        Paint paint = new Paint();
-//        clip(canvas, paint);
-//        setHitTestFill(paint);
-//        canvas.drawPath(mPath, paint);
-//
-//        if (setHitTestStroke(paint)) {
-//            canvas.drawPath(mPath, paint);
-//        }
-//
-//        canvas.setBitmap(bitmap);
-//        try {
-//            if (bitmap.getPixel(point.x, point.y) != 0) {
-//                return getReactTag();
-//            }
-//        } catch (Exception e) {
-//
-//            return -1;
-//        } finally {
-//            bitmap.recycle();
-//        }
-        return -1;
-    }
+        Matrix pathMatrix = new Matrix(mMatrix);
 
-    protected void setHitTestFill(Paint paint) {
-        paint.reset();
-        paint.setARGB(255, 0, 0, 0);
-        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.FILL);
-    }
-
-    protected boolean setHitTestStroke(Paint paint) {
-        if (mStrokeWidth == 0) {
-            return false;
+        if (matrix != null) {
+            pathMatrix.postConcat(matrix);
         }
 
-        paint.reset();
-        paint.setARGB(255, 0, 0, 0);
-        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(mStrokeWidth * mScale);
-        paint.setStrokeCap(mStrokeLinecap);
-        paint.setStrokeJoin(mStrokeLinejoin);
-        return true;
+        if (pathContainsPoint(mPath, pathMatrix, point)) {
+            Path clipPath = getClipPath();
+            if (clipPath != null && !pathContainsPoint(clipPath, pathMatrix, point)) {
+               return -1;
+            }
+
+            return getReactTag();
+        } else{
+            return -1;
+        }
+    }
+
+    protected boolean pathContainsPoint(Path path, Matrix matrix, Point point) {
+        Path copy = new Path(path);
+
+        copy.transform(matrix);
+
+        RectF rectF = new RectF();
+        copy.computeBounds(rectF, true);
+        Region region = new Region();
+        region.setPath(copy, new Region((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom));
+
+        return region.contains(point.x, point.y);
     }
 
     @Override
