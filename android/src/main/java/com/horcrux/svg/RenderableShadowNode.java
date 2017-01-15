@@ -204,10 +204,8 @@ abstract public class RenderableShadowNode extends VirtualNode {
         opacity *= mOpacity;
 
         if (opacity > MIN_OPACITY_FOR_DRAW) {
-            if (mPath == null) {
-                mPath = getPath(canvas, paint);
-                mPath.setFillType(mFillRule);
-            }
+            mPath = getPath(canvas, paint);
+            mPath.setFillType(mFillRule);
 
             clip(canvas, paint);
             if (setupFillPaint(paint, opacity * mFillOpacity, null)) {

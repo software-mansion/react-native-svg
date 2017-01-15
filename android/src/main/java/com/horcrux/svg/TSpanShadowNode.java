@@ -92,7 +92,6 @@ public class TSpanShadowNode extends TextShadowNode {
     private Path getLinePath(String line, Paint paint, Path path) {
         float[] widths = new float[line.length()];
         paint.getTextWidths(line, widths);
-
         float glyphPosition = 0f;
 
         for (int index = 0; index < line.length(); index++) {
@@ -132,9 +131,6 @@ public class TSpanShadowNode extends TextShadowNode {
 
         return path;
     }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-
 
     private void applyTextPropertiesToPaint(Paint paint) {
         ReadableMap font = getFontFromContext();
