@@ -69,7 +69,7 @@
     CFStringRef string = (__bridge CFStringRef)text;
     CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
     CTLineRef line = CTLineCreateWithAttributedString(attrString);
-
+    
     CGMutablePathRef linePath = [self getLinePath:line];
     CGAffineTransform offset = CGAffineTransformMakeTranslation(0, _bezierTransformer ? 0 : CTFontGetSize(font) * 1.1);
     CGPathAddPath(path, &offset, linePath);
@@ -87,44 +87,49 @@
 
 - (CGMutablePathRef)getLinePath:(CTLineRef)line
 {
-    CTRunRef run = CFArrayGetValueAtIndex(CTLineGetGlyphRuns(line), 0);
-
-    CFIndex runGlyphCount = CTRunGetGlyphCount(run);
-    CGPoint positions[runGlyphCount];
-    CGGlyph glyphs[runGlyphCount];
-
-    // Grab the glyphs, positions, and font
-    CTRunGetPositions(run, CFRangeMake(0, 0), positions);
-    CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
-    CTFontRef runFont = CFDictionaryGetValue(CTRunGetAttributes(run), kCTFontAttributeName);
-
-    CGPoint glyphPoint;
     CGMutablePathRef path = CGPathCreateMutable();
-    
-    for(CFIndex i = 0; i < runGlyphCount; i++) {
-        CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[i], nil);
+    CFArrayRef runs = CTLineGetGlyphRuns(line);
+    for (CFIndex i = 0; i < CFArrayGetCount(runs); i++) {
+        CTRunRef run = CFArrayGetValueAtIndex(CTLineGetGlyphRuns(line), i);
         
-        glyphPoint = [self getGlyphPointFromContext:positions[i] glyphWidth:CGRectGetWidth(CGPathGetBoundingBox(letter))];
+        CFIndex runGlyphCount = CTRunGetGlyphCount(run);
+        CGPoint positions[runGlyphCount];
+        CGGlyph glyphs[runGlyphCount];
         
-        CGAffineTransform textPathTransform = CGAffineTransformIdentity;
-        CGAffineTransform transform;
-        if (_bezierTransformer) {
-            textPathTransform = [_bezierTransformer getTransformAtDistance:glyphPoint.x];
-            if ([self textPathHasReachedEnd]) {
-                break;
-            } else if (![self textPathHasReachedStart]) {
-                continue;
+        // Grab the glyphs, positions, and font
+        CTRunGetPositions(run, CFRangeMake(0, 0), positions);
+        CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
+        CTFontRef runFont = CFDictionaryGetValue(CTRunGetAttributes(run), kCTFontAttributeName);
+        
+        CGPoint glyphPoint;
+        
+        for(CFIndex i = 0; i < runGlyphCount; i++) {
+            CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[i], nil);
+            
+            glyphPoint = [self getGlyphPointFromContext:positions[i] glyphWidth:CGRectGetWidth(CGPathGetBoundingBox(letter))];
+            
+            CGAffineTransform textPathTransform = CGAffineTransformIdentity;
+            CGAffineTransform transform;
+            if (_bezierTransformer) {
+                textPathTransform = [_bezierTransformer getTransformAtDistance:glyphPoint.x];
+                if ([self textPathHasReachedEnd]) {
+                    break;
+                } else if (![self textPathHasReachedStart]) {
+                    continue;
+                }
+                
+                textPathTransform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(0, glyphPoint.y), textPathTransform);
+                transform = CGAffineTransformScale(textPathTransform, 1.0, -1.0);
+            } else {
+                transform = CGAffineTransformTranslate(CGAffineTransformMakeScale(1.0, -1.0), glyphPoint.x, -glyphPoint.y);
             }
             
-            textPathTransform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(0, glyphPoint.y), textPathTransform);
-            transform = CGAffineTransformScale(textPathTransform, 1.0, -1.0);
-        } else {
-            transform = CGAffineTransformTranslate(CGAffineTransformMakeScale(1.0, -1.0), glyphPoint.x, -glyphPoint.y);
+            CGPathAddPath(path, &transform, letter);
+            CGPathRelease(letter);
         }
-        
-        CGPathAddPath(path, &transform, letter);
-        CGPathRelease(letter);
+
     }
+    
     
     return path;
 }
