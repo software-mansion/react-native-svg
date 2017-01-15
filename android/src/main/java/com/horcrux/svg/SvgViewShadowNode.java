@@ -75,8 +75,6 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     }
 
     private void drawChildren(Canvas canvas) {
-        canvas.getClipBounds();
-        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         Paint paint = new Paint();
 
         for (int i = 0; i < getChildCount(); i++) {
