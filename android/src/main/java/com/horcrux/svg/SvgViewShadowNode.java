@@ -66,6 +66,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
         mCanvas = new Canvas(bitmap);
         drawChildren(mCanvas);
+        mCanvas = null;
         return bitmap;
     }
 
