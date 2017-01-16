@@ -17,6 +17,22 @@ class Text extends Shape {
         textAnchor: PropTypes.oneOf(['start', 'middle', 'end'])
     };
 
+    static childContextTypes = {
+        isInAParentText: React.PropTypes.bool
+    };
+
+    getChildContext() {
+        return {
+            isInAParentText: true
+        };
+    };
+
+    getContextTypes() {
+        return {
+            isInAParentText: React.PropTypes.bool
+        };
+    };
+
     setNativeProps = (...args) => {
         this.root.setNativeProps(...args);
     };
