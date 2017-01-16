@@ -68,17 +68,7 @@
  */
 - (void)saveDefinition;
 
-/**
- * just for template node to merge target node`s properties into owned properties
- */
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList;
-
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited;
-
-/**
- * just for template node to reset all owned properties once after rendered.
- */
-- (void)resetProperties;
+- (void)mergeProperties:(__kindof RNSVGNode *)target;
 
 - (void)beginTransparencyLayer:(CGContextRef)context;
 

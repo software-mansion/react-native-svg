@@ -181,12 +181,7 @@
     }
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
-{
-    // abstract
-}
-
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited
+- (void)mergeProperties:(__kindof RNSVGNode *)target
 {
     // abstract
 }
@@ -200,11 +195,6 @@
             }
         }
     }
-}
-
-- (void)resetProperties
-{
-    // abstract
 }
 
 - (void)dealloc

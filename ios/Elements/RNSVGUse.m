@@ -27,9 +27,8 @@
     if (template) {
         [self beginTransparencyLayer:context];
         [self clip:context];
-        [template mergeProperties:self mergeList:self.attributeList inherited:YES];
+        [template mergeProperties:self];
         [template renderTo:context];
-        [template resetProperties];
         [self endTransparencyLayer:context];
     } else if (self.href) {
         // TODO: calling yellow box here

@@ -11,7 +11,8 @@
 @implementation RNSVGRenderable
 {
     NSMutableDictionary *_originProperties;
-    NSArray *_lastMergedList;
+    NSArray<NSString *> *_lastMergedList;
+    NSArray<NSString *> *_attributeList;
     RNSVGPercentageConverter *_widthConverter;
     RNSVGPercentageConverter *_heightConverter;
     CGRect _contextBoundingBox;
@@ -138,8 +139,8 @@
     if (propList == _propList) {
         return;
     }
-    _attributeList = [propList copy];
-    _propList = propList;
+    
+    _propList = _attributeList = propList;
     [self invalidate];
 }
 
@@ -347,37 +348,35 @@
     return [_heightConverter stringToFloat:string];
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
+- (NSArray<NSString *> *)getAttributeList
 {
-    
-    [self mergeProperties:target mergeList:mergeList inherited:NO];
+    return _attributeList;
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited
+- (void)mergeProperties:(__kindof RNSVGNode *)target
 {
-    _lastMergedList = mergeList;
+    if (_lastMergedList) {
+        [self resetProperties];
+    }
     
-    if (mergeList.count == 0) {
+    NSArray<NSString *> *targetAttributeList = [target getAttributeList];
+    
+    if (targetAttributeList.count == 0) {
         return;
     }
     
     NSMutableArray* attributeList = [self.propList mutableCopy];
-    
     _originProperties = [[NSMutableDictionary alloc] init];
     
-    for (NSString *key in mergeList) {
-        if (inherited) {
-            if (![attributeList containsObject:key]) {
-                [attributeList addObject:key];
-                [_originProperties setValue:[self valueForKey:key] forKey:key];
-                [self setValue:[target valueForKey:key] forKey:key];
-            }
-        } else {
+    for (NSString *key in targetAttributeList) {
+        if (![attributeList containsObject:key]) {
+            [attributeList addObject:key];
             [_originProperties setValue:[self valueForKey:key] forKey:key];
             [self setValue:[target valueForKey:key] forKey:key];
         }
     }
     
+    _lastMergedList = targetAttributeList;
     _attributeList = [attributeList copy];
 }
 
@@ -386,7 +385,9 @@
     for (NSString *key in _lastMergedList) {
         [self setValue:[_originProperties valueForKey:key] forKey:key];
     }
-    _attributeList = [_propList copy];
+    
+    _lastMergedList = nil;
+    _attributeList = _propList;
 }
 
 @end

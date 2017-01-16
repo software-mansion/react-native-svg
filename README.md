@@ -608,6 +608,7 @@ npm i
 4. Mask element.
 5. Load Image from URL.
 6. Fix rotate prop on Text
+7. 
 
 ### Known issues:
 1. Unable to set alpha channel for Gradient on iOS.
