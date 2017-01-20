@@ -20,6 +20,6 @@
 @property (nonatomic, strong) NSString *width;
 @property (nonatomic, strong) NSString *height;
 
-- (CGAffineTransform)getTransform;
++ (CGAffineTransform)getTransform:(CGRect)vbRect eRect:(CGRect)eRect align:(NSString *)align meetOrSlice:(RNSVGVBMOS)meetOrSlice fromSymbol:(BOOL)fromSymbol;
 
 @end

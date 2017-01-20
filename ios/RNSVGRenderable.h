@@ -28,16 +28,8 @@
 @property (nonatomic, assign) RNSVGCGFloatArray strokeDasharray;
 @property (nonatomic, assign) CGFloat strokeDashoffset;
 @property (nonatomic, copy) NSArray<NSString *> *propList;
-@property (nonatomic, strong) NSArray<NSString *> *attributeList;
 
-- (void)setContextBoundingBox:(CGRect)contextBoundingBox;
-- (CGRect)getContextBoundingBox;
-- (void)setLayoutBoundingBox:(CGRect)layoutBoundingBox;
-- (CGRect)getLayoutBoundingBox;
-- (CGFloat)getWidthRelatedValue:(NSString *)string;
-- (CGFloat)getHeightRelatedValue:(NSString *)string;
-- (RNSVGPercentageConverter *)getWidthConverter;
-- (RNSVGPercentageConverter *)getHeightConverter;
 - (void)setHitArea:(CGPathRef)path;
+- (NSArray<NSString *> *)getAttributeList;
 
 @end

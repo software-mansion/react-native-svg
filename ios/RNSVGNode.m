@@ -14,6 +14,7 @@
 {
     BOOL _transparent;
     CGPathRef _cachedClipPath;
+    UIView *_svgView;
 }
 
 - (instancetype)init
@@ -165,12 +166,52 @@
 
 - (RNSVGSvgView *)getSvgView
 {
-    UIView *parent = self.superview;
-    while (parent && [parent class] != [RNSVGSvgView class]) {
-        parent = parent.superview;
+    if (_svgView) {
+        return _svgView;
     }
     
-    return (RNSVGSvgView *)parent;
+    __kindof UIView *parent = self.superview;
+    
+    if ([parent class] == [RNSVGSvgView class]) {
+        _svgView = parent;
+    } else if ([parent isKindOfClass:[RNSVGNode class]]) {
+        RNSVGNode *node = parent;
+        _svgView = [node getSvgView];
+    } else {
+        RCTLogError(@"RNSVG: %@ should be descendant of a SvgViewShadow.", NSStringFromClass(self.class));
+    }
+    
+    return _svgView;
+}
+
+- (CGFloat)relativeOnWidth:(NSString *)position
+{
+    return [RNSVGPercentageConverter stringToFloat:position relative:[self getContextWidth] offset:0];
+}
+
+- (CGFloat)relativeOnHeight:(NSString *)position
+{
+    return [RNSVGPercentageConverter stringToFloat:position relative:[self getContextHeight] offset:0];
+}
+
+- (CGFloat)getContextWidth
+{
+    return CGRectGetWidth([[self getSvgView] getContextBounds]);
+}
+
+- (CGFloat)getContextHeight
+{
+    return CGRectGetHeight([[self getSvgView] getContextBounds]);
+}
+
+- (CGFloat)getContextLeft
+{
+    return CGRectGetMinX([[self getSvgView] getContextBounds]);
+}
+
+- (CGFloat)getContextTop
+{
+    return CGRectGetMinY([[self getSvgView] getContextBounds]);
 }
 
 - (void)saveDefinition
@@ -181,12 +222,7 @@
     }
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
-{
-    // abstract
-}
-
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited
+- (void)mergeProperties:(__kindof RNSVGNode *)target
 {
     // abstract
 }
@@ -200,11 +236,6 @@
             }
         }
     }
-}
-
-- (void)resetProperties
-{
-    // abstract
 }
 
 - (void)dealloc

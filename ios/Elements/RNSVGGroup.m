@@ -24,13 +24,13 @@
             svg.responsible = YES;
         }
         
-        [node mergeProperties:self mergeList:self.attributeList inherited:YES];
+        [node mergeProperties:self];
         [node renderTo:context];
         
         if ([node isKindOfClass: [RNSVGRenderable class]]) {
             RNSVGRenderable *renderable = node;
-            [self concatLayoutBoundingBox:[renderable getLayoutBoundingBox]];
         }
+        
         return YES;
     }];
 }
@@ -38,11 +38,6 @@
 - (void)renderPathTo:(CGContextRef)context
 {
     [super renderLayerTo:context];
-}
-
-- (void)concatLayoutBoundingBox:(CGRect)boundingBox
-{
-    [self setLayoutBoundingBox:CGRectUnion(boundingBox, [self getLayoutBoundingBox])];
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
@@ -111,14 +106,6 @@
         return YES;
     }];
 
-}
-
-- (void)resetProperties
-{
-    [self traverseSubviews:^(RNSVGNode *node) {
-        [node resetProperties];
-        return YES;
-    }];
 }
 
 @end

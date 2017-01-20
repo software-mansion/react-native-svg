@@ -54,13 +54,8 @@
         if ([node isKindOfClass:[RNSVGNode class]]) {
             if (node.responsible && !self.responsible) {
                 self.responsible = YES;
-                break;
             }
-        }
-    }
-    
-    for (RNSVGNode *node in self.subviews) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
+            
             [node saveDefinition];
             [node renderTo:context];
         }
@@ -121,6 +116,11 @@
 - (RNSVGBrushConverter *)getDefinedBrushConverter:(NSString *)brushConverterName
 {
     return brushConverters ? [brushConverters objectForKey:brushConverterName] : nil;
+}
+
+- (CGRect)getContextBounds
+{
+    return CGContextGetClipBoundingBox(UIGraphicsGetCurrentContext());
 }
 
 @end

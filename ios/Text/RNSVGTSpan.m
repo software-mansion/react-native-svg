@@ -18,6 +18,15 @@
     CGPathRef _cache;
 }
 
+- (void)setContent:(NSString *)content
+{
+    if (content == _content) {
+        return;
+    }
+    [self invalidate];
+    _content = content;
+}
+
 - (void)renderLayerTo:(CGContextRef)context
 {
     if (self.content) {
@@ -113,8 +122,10 @@
             if (_bezierTransformer) {
                 textPathTransform = [_bezierTransformer getTransformAtDistance:glyphPoint.x];
                 if ([self textPathHasReachedEnd]) {
+                    CGPathRelease(letter);
                     break;
                 } else if (![self textPathHasReachedStart]) {
+                    CGPathRelease(letter);
                     continue;
                 }
                 
@@ -127,7 +138,6 @@
             CGPathAddPath(path, &transform, letter);
             CGPathRelease(letter);
         }
-
     }
     
     
@@ -140,7 +150,6 @@
     [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
         if ([node class] == [RNSVGTextPath class]) {
             RNSVGTextPath *textPath = node;
-            [node setContextBoundingBox:CGContextGetClipBoundingBox(context)];
             bezierTransformer = [node getBezierTransformer];
             return NO;
         }

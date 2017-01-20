@@ -61,29 +61,34 @@
  */
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transfrom;
 
+/**
+ * get RNSVGSvgView which ownes current RNSVGNode
+ */
 - (RNSVGSvgView *)getSvgView;
+
+- (CGFloat)relativeOnWidth:(NSString *)position;
+
+- (CGFloat)relativeOnHeight:(NSString *)position;
+
+- (CGFloat)getContextWidth;
+
+- (CGFloat)getContextHeight;
+
+- (CGFloat)getContextLeft;
+
+- (CGFloat)getContextTop;
 
 /**
  * save element`s defination into svg element.
  */
 - (void)saveDefinition;
 
-/**
- * just for template node to merge target node`s properties into owned properties
- */
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList;
-
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited;
-
-/**
- * just for template node to reset all owned properties once after rendered.
- */
-- (void)resetProperties;
+- (void)mergeProperties:(__kindof RNSVGNode *)target;
 
 - (void)beginTransparencyLayer:(CGContextRef)context;
 
 - (void)endTransparencyLayer:(CGContextRef)context;
 
-- (void)traverseSubviews:(BOOL (^)(RNSVGNode *node))block;
+- (void)traverseSubviews:(BOOL (^)(__kindof RNSVGNode *node))block;
 
 @end

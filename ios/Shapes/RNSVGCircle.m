@@ -40,21 +40,19 @@
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
     CGMutablePathRef path = CGPathCreateMutable();
-    RNSVGPercentageConverter* convert = [[RNSVGPercentageConverter alloc] init];
-    CGFloat cx = [self getWidthRelatedValue:self.cx];
-    CGFloat cy = [self getHeightRelatedValue:self.cy];
+    CGFloat cx = [self relativeOnWidth:self.cx];
+    CGFloat cy = [self relativeOnHeight:self.cy];
     CGFloat r;
     // radius percentage calculate formula:
     // radius = sqrt(pow((width*percent), 2) + pow((height*percent), 2)) / sqrt(2)
     
-    if ([convert isPercentage:self.r]) {
-        CGFloat radiusPercent = [convert percentageToFloat:self.r relative:1 offset:0];
+    if ([RNSVGPercentageConverter isPercentage:self.r]) {
+        CGFloat radiusPercent = [RNSVGPercentageConverter percentageToFloat:self.r relative:1 offset:0];
         
         r = sqrt(
-                 pow((CGRectGetWidth([self getContextBoundingBox]) * radiusPercent), 2) +
-                 pow((CGRectGetHeight([self getContextBoundingBox]) * radiusPercent), 2)
+                 pow([self getContextWidth] * radiusPercent, 2) +
+                 pow([self getContextHeight] * radiusPercent, 2)
                  ) / sqrt(2);
     } else {
         r = [self.r floatValue];

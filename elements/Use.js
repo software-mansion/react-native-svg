@@ -22,7 +22,7 @@ class Use extends Shape {
 
     render() {
         let {props} = this;
-        // 尝试匹配 "url(#pattern)"
+        // match "url(#pattern)"
         let matched = props.href.match(idExpReg);
         let href;
 

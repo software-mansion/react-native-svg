@@ -11,11 +11,8 @@
 @implementation RNSVGRenderable
 {
     NSMutableDictionary *_originProperties;
-    NSArray *_lastMergedList;
-    RNSVGPercentageConverter *_widthConverter;
-    RNSVGPercentageConverter *_heightConverter;
-    CGRect _contextBoundingBox;
-    CGRect _renderBoundingBox;
+    NSArray<NSString *> *_lastMergedList;
+    NSArray<NSString *> *_attributeList;
     BOOL _fillEvenodd;
     CGPathRef _hitArea;
 }
@@ -138,8 +135,8 @@
     if (propList == _propList) {
         return;
     }
-    _attributeList = [propList copy];
-    _propList = propList;
+    
+    _propList = _attributeList = propList;
     [self invalidate];
 }
 
@@ -303,81 +300,35 @@
     }
 }
 
-- (void)setContextBoundingBox:(CGRect)contextBoundingBox
+- (NSArray<NSString *> *)getAttributeList
 {
-    _contextBoundingBox = contextBoundingBox;
-    _widthConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:contextBoundingBox.size.width
-                                                                           offset:0];
-    _heightConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:contextBoundingBox.size.height
-                                                                            offset:0];
+    return _attributeList;
 }
 
-- (RNSVGPercentageConverter *)getWidthConverter
+- (void)mergeProperties:(__kindof RNSVGNode *)target
 {
-    return _widthConverter;
-}
-
-- (RNSVGPercentageConverter *)getHeightConverter
-{
-    return _heightConverter;
-}
-
-- (CGRect)getContextBoundingBox
-{
-    return _contextBoundingBox;
-}
-
-- (void)setLayoutBoundingBox:(CGRect)layoutBoundingBox
-{
-    _renderBoundingBox = layoutBoundingBox;
-}
-
-- (CGRect)getLayoutBoundingBox
-{
-    return _renderBoundingBox;
-}
-
-- (CGFloat)getWidthRelatedValue:(NSString *)string
-{
-    return [_widthConverter stringToFloat:string];
-}
-
-- (CGFloat)getHeightRelatedValue:(NSString *)string
-{
-    return [_heightConverter stringToFloat:string];
-}
-
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList
-{
+    if (_lastMergedList) {
+        [self resetProperties];
+    }
     
-    [self mergeProperties:target mergeList:mergeList inherited:NO];
-}
-
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited
-{
-    _lastMergedList = mergeList;
+    NSArray<NSString *> *targetAttributeList = [target getAttributeList];
     
-    if (mergeList.count == 0) {
+    if (targetAttributeList.count == 0) {
         return;
     }
     
     NSMutableArray* attributeList = [self.propList mutableCopy];
-    
     _originProperties = [[NSMutableDictionary alloc] init];
     
-    for (NSString *key in mergeList) {
-        if (inherited) {
-            if (![attributeList containsObject:key]) {
-                [attributeList addObject:key];
-                [_originProperties setValue:[self valueForKey:key] forKey:key];
-                [self setValue:[target valueForKey:key] forKey:key];
-            }
-        } else {
+    for (NSString *key in targetAttributeList) {
+        if (![attributeList containsObject:key]) {
+            [attributeList addObject:key];
             [_originProperties setValue:[self valueForKey:key] forKey:key];
             [self setValue:[target valueForKey:key] forKey:key];
         }
     }
     
+    _lastMergedList = targetAttributeList;
     _attributeList = [attributeList copy];
 }
 
@@ -386,7 +337,9 @@
     for (NSString *key in _lastMergedList) {
         [self setValue:[_originProperties valueForKey:key] forKey:key];
     }
-    _attributeList = [_propList copy];
+    
+    _lastMergedList = nil;
+    _attributeList = _propList;
 }
 
 @end

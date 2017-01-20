@@ -12,7 +12,7 @@
 
 @interface RNSVGGlyphContext : NSObject
 
-- (instancetype)initWithConverters:(RNSVGPercentageConverter *)widthConverter heightConverter:(RNSVGPercentageConverter *)heightConverter;
+- (instancetype)initWithDimensions:(CGFloat)width height:(CGFloat)height;
 - (void)pushContext:(NSDictionary *)font deltaX:(NSArray<NSNumber *> *)deltaX deltaY:(NSArray<NSNumber *> *)deltaY positionX:(NSString *)positionX positionY:(NSString *)positionY;
 - (void)popContext;
 - (CTFontRef)getGlyphFont;

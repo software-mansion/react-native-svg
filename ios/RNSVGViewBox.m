@@ -71,32 +71,52 @@
 
 - (void)renderTo:(CGContextRef)context
 {
-    [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
-    self.matrix = [self getTransform];
+    self.matrix = [self getTransformFromProps];
     [super renderTo:context];
 }
 
-- (CGAffineTransform)getTransform
+- (CGAffineTransform)getTransformFromProps
+{
+    
+    CGFloat vbX = [self relativeOnWidth:_minX];
+    CGFloat vbY = [self relativeOnWidth:_minY];
+    CGFloat vbWidth = [self relativeOnWidth:_vbWidth];
+    CGFloat vbHeight = [self relativeOnWidth:_vbHeight];
+    
+    CGFloat eX = [self getContextLeft];
+    CGFloat eY = [self getContextTop];
+    
+    
+    CGFloat eWidth = self.width ? [self relativeOnWidth:self.width] : [self getContextWidth];
+    CGFloat eHeight = self.height ? [self relativeOnWidth:self.height] : [self getContextHeight];
+    
+    
+    return [RNSVGViewBox getTransform:CGRectMake(vbX, vbY, vbWidth, vbHeight)
+                         eRect:CGRectMake(eX, eY, eWidth, eHeight)
+                         align:self.align
+                   meetOrSlice:self.meetOrSlice
+                    fromSymbol:_fromSymbol];
+}
+
++ (CGAffineTransform)getTransform:(CGRect)vbRect eRect:(CGRect)eRect align:(NSString *)align meetOrSlice:(RNSVGVBMOS)meetOrSlice fromSymbol:(BOOL)fromSymbol
 {
     // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform
     
     // Let vb-x, vb-y, vb-width, vb-height be the min-x, min-y, width and height values of the viewBox attribute respectively.
-    CGFloat vbX = [self getWidthRelatedValue:self.minX];
-    CGFloat vbY = [self getHeightRelatedValue:self.minY];
-    CGFloat vbWidth = [self getWidthRelatedValue:self.vbWidth];
-    CGFloat vbHeight = [self getHeightRelatedValue:self.vbHeight];
+    CGFloat vbX = CGRectGetMinX(vbRect);
+    CGFloat vbY = CGRectGetMinY(vbRect);
+    CGFloat vbWidth = CGRectGetWidth(vbRect);
+    CGFloat vbHeight = CGRectGetHeight(vbRect);
     
     // Let e-x, e-y, e-width, e-height be the position and size of the element respectively.
-    CGFloat eX = [self getContextBoundingBox].origin.x;
-    CGFloat eY = [self getContextBoundingBox].origin.y;
-    CGFloat eWidth = self.width ? [self getWidthRelatedValue:self.width] : [self getContextBoundingBox].size.width;
-    CGFloat eHeight = self.height ? [self getHeightRelatedValue:self.height] : [self getContextBoundingBox].size.height;
+    CGFloat eX = CGRectGetMinX(eRect);
+    CGFloat eY = CGRectGetMinY(eRect);
+    CGFloat eWidth = CGRectGetWidth(eRect);
+    CGFloat eHeight = CGRectGetHeight(eRect);
     
     // Let align be the align value of preserveAspectRatio, or 'xMidyMid' if preserveAspectRatio is not defined.
-    NSString *align = self.align;
     
     // Let meetOrSlice be the meetOrSlice value of preserveAspectRatio, or 'meet' if preserveAspectRatio is not defined or if meetOrSlice is missing from this value.
-    RNSVGVBMOS meetOrSlice = self.meetOrSlice;
     
     // Initialize scale-x to e-width/vb-width.
     CGFloat scaleX = eWidth / vbWidth;
@@ -157,10 +177,10 @@
     }
     
     CGAffineTransform transform = CGAffineTransformMakeScale(scaleX, scaleY);
-    return CGAffineTransformTranslate(transform, -translateX * (_fromSymbol ? scaleX : 1), -translateY * (_fromSymbol ? scaleY : 1));
+    return CGAffineTransformTranslate(transform, -translateX * (fromSymbol ? scaleX : 1), -translateY * (fromSymbol ? scaleY : 1));
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target mergeList:(NSArray<NSString *> *)mergeList inherited:(BOOL)inherited
+- (void)mergeProperties:(__kindof RNSVGNode *)target
 {
     if ([target isKindOfClass:[RNSVGUse class]]) {
         RNSVGUse *use = target;

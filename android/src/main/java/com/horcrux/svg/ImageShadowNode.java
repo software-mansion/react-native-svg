@@ -159,9 +159,6 @@ public class ImageShadowNode extends RenderableShadowNode {
     }
 
     private void doRender(Canvas canvas, Paint paint, Bitmap bitmap, float opacity) {
-        Paint alphaPaint = new Paint();
-        alphaPaint.setAlpha((int) (opacity * 255));
-
         // apply viewBox transform on Image render.
         Rect rect = getRect();
         float rectWidth = (float)rect.width();
@@ -212,6 +209,8 @@ public class ImageShadowNode extends RenderableShadowNode {
             canvas.clipPath(path, Region.Op.REPLACE);
         }
 
+        Paint alphaPaint = new Paint();
+        alphaPaint.setAlpha((int) (opacity * 255));
         canvas.drawBitmap(bitmap, null, renderRect, alphaPaint);
     }
 
