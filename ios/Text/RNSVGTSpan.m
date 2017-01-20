@@ -18,6 +18,15 @@
     CGPathRef _cache;
 }
 
+- (void)setContent:(NSString *)content
+{
+    if (content == _content) {
+        return;
+    }
+    [self invalidate];
+    _content = content;
+}
+
 - (void)renderLayerTo:(CGContextRef)context
 {
     if (self.content) {
