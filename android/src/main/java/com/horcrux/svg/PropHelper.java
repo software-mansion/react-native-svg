@@ -100,8 +100,7 @@ class PropHelper {
 
 
     static boolean isPercentage(String string) {
-        Pattern pattern = percentageRegExp;
-        return pattern.matcher(string).matches();
+        return percentageRegExp.matcher(string).matches();
     }
 
     /**
