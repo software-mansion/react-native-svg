@@ -113,8 +113,10 @@
             if (_bezierTransformer) {
                 textPathTransform = [_bezierTransformer getTransformAtDistance:glyphPoint.x];
                 if ([self textPathHasReachedEnd]) {
+                    CGPathRelease(letter);
                     break;
                 } else if (![self textPathHasReachedStart]) {
+                    CGPathRelease(letter);
                     continue;
                 }
                 
@@ -127,7 +129,6 @@
             CGPathAddPath(path, &transform, letter);
             CGPathRelease(letter);
         }
-
     }
     
     
