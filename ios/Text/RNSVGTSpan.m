@@ -140,7 +140,6 @@
     [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
         if ([node class] == [RNSVGTextPath class]) {
             RNSVGTextPath *textPath = node;
-            [node setContextBoundingBox:CGContextGetClipBoundingBox(context)];
             bezierTransformer = [node getBezierTransformer];
             return NO;
         }

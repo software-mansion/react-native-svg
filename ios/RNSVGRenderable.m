@@ -13,10 +13,6 @@
     NSMutableDictionary *_originProperties;
     NSArray<NSString *> *_lastMergedList;
     NSArray<NSString *> *_attributeList;
-    RNSVGPercentageConverter *_widthConverter;
-    RNSVGPercentageConverter *_heightConverter;
-    CGRect _contextBoundingBox;
-    CGRect _renderBoundingBox;
     BOOL _fillEvenodd;
     CGPathRef _hitArea;
 }
@@ -289,7 +285,7 @@
     CGPathRelease(hitArea);
     
     if (contains) {
-        CGPathRef clipPath = [self getClipPath];
+        CGPathRef clipPath = nil;
         
         if (!clipPath) {
             return self;
@@ -302,50 +298,6 @@
     } else {
         return nil;
     }
-}
-
-- (void)setContextBoundingBox:(CGRect)contextBoundingBox
-{
-    _contextBoundingBox = contextBoundingBox;
-    _widthConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:contextBoundingBox.size.width
-                                                                           offset:0];
-    _heightConverter = [[RNSVGPercentageConverter alloc] initWithRelativeAndOffset:contextBoundingBox.size.height
-                                                                            offset:0];
-}
-
-- (RNSVGPercentageConverter *)getWidthConverter
-{
-    return _widthConverter;
-}
-
-- (RNSVGPercentageConverter *)getHeightConverter
-{
-    return _heightConverter;
-}
-
-- (CGRect)getContextBoundingBox
-{
-    return _contextBoundingBox;
-}
-
-- (void)setLayoutBoundingBox:(CGRect)layoutBoundingBox
-{
-    _renderBoundingBox = layoutBoundingBox;
-}
-
-- (CGRect)getLayoutBoundingBox
-{
-    return _renderBoundingBox;
-}
-
-- (CGFloat)getWidthRelatedValue:(NSString *)string
-{
-    return [_widthConverter stringToFloat:string];
-}
-
-- (CGFloat)getHeightRelatedValue:(NSString *)string
-{
-    return [_heightConverter stringToFloat:string];
 }
 
 - (NSArray<NSString *> *)getAttributeList

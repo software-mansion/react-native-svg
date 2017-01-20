@@ -8,6 +8,7 @@
 
 
 #import "RNSVGGlyphContext.h"
+#import "RNSVGPercentageConverter.h"
 #import <React/RCTFont.h>
 
 @implementation RNSVGGlyphContext
@@ -18,15 +19,15 @@
     NSMutableArray<NSArray *> *_deltaYContext;
     NSMutableArray<NSNumber *> *_xContext;
     CGPoint _currentLocation;
-    RNSVGPercentageConverter *_widthConverter;
-    RNSVGPercentageConverter *_heightConverter;
+    CGFloat _width;
+    CGFloat _height;
 }
 
-- (instancetype)initWithConverters:(RNSVGPercentageConverter *)widthConverter heightConverter:(RNSVGPercentageConverter *)heightConverter
+- (instancetype)initWithDimensions:(CGFloat)width height:(CGFloat)height
 {
     if (self = [super init]) {
-        _widthConverter = widthConverter;
-        _heightConverter = heightConverter;
+        _width = width;
+        _height = height;
         _fontContext = [[NSMutableArray alloc] init];
         _locationContext = [[NSMutableArray alloc] init];
         _deltaXContext = [[NSMutableArray alloc] init];
@@ -42,11 +43,11 @@
     CGPoint location = _currentLocation;
     
     if (positionX) {
-        location.x = [_widthConverter stringToFloat:positionX];
+        location.x = [RNSVGPercentageConverter stringToFloat:positionX relative:_width offset:0];
     }
     
     if (positionY) {
-        location.y = [_heightConverter stringToFloat:positionY];
+        location.y = [RNSVGPercentageConverter stringToFloat:positionY relative:_height offset:0];
     }
     
     [_locationContext addObject:[NSValue valueWithCGPoint:location]];

@@ -29,7 +29,6 @@
         
         if ([node isKindOfClass: [RNSVGRenderable class]]) {
             RNSVGRenderable *renderable = node;
-            [self concatLayoutBoundingBox:[renderable getLayoutBoundingBox]];
         }
         
         return YES;
@@ -39,11 +38,6 @@
 - (void)renderPathTo:(CGContextRef)context
 {
     [super renderLayerTo:context];
-}
-
-- (void)concatLayoutBoundingBox:(CGRect)boundingBox
-{
-    [self setLayoutBoundingBox:CGRectUnion(boundingBox, [self getLayoutBoundingBox])];
 }
 
 - (CGPathRef)getPath:(CGContextRef)context

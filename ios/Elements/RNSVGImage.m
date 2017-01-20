@@ -97,7 +97,6 @@
     CGPathRef hitArea = CGPathCreateWithRect(rect, nil);
     [self setHitArea:hitArea];
     CGPathRelease(hitArea);
-    [self clip:context];
     
     CGContextSaveGState(context);
     CGContextTranslateCTM(context, 0, rect.size.height + 2 * rect.origin.y);
@@ -105,10 +104,10 @@
     
     // apply viewBox transform on Image render.
     CGFloat imageRatio = _imageRatio;
-    CGFloat rectWidth = rect.size.width;
-    CGFloat rectHeight = rect.size.height;
-    CGFloat rectX = rect.origin.x;
-    CGFloat rectY = rect.origin.y;
+    CGFloat rectWidth = CGRectGetWidth(rect);
+    CGFloat rectHeight = CGRectGetHeight(rect);
+    CGFloat rectX = CGRectGetMinX(rect);
+    CGFloat rectY = CGRectGetMinY(rect);
     CGFloat rectRatio = rectWidth / rectHeight;
     CGRect renderRect;
     
@@ -119,24 +118,18 @@
     } else {
         renderRect = CGRectMake(0, 0, rectWidth, rectWidth / imageRatio);
     }
-
-    RNSVGViewBox *viewBox = [[RNSVGViewBox alloc] init];
-    viewBox.minX = viewBox.minY = @"0";
-    viewBox.vbWidth = [NSString stringWithFormat:@"%f", renderRect.size.width];
-    viewBox.vbHeight = [NSString stringWithFormat:@"%f", renderRect.size.height];
-    viewBox.width = [NSString stringWithFormat:@"%f", rectWidth];
-    viewBox.height = [NSString stringWithFormat:@"%f", rectHeight];
-    viewBox.align = self.align;
-    viewBox.meetOrSlice = self.meetOrSlice;
     
-    [viewBox setContextBoundingBox:CGRectMake(0, 0, rectWidth, rectHeight)];
+    CGRect vbRect = CGRectMake(0, 0, CGRectGetWidth(renderRect), CGRectGetHeight(renderRect));
+    CGRect eRect = CGRectMake([self getContextLeft], [self getContextTop], rectWidth, rectHeight);
     
-    CGAffineTransform transform = [viewBox getTransform];
+    CGAffineTransform transform = [RNSVGViewBox getTransform:vbRect eRect:eRect align:self.align meetOrSlice:self.meetOrSlice fromSymbol:NO];
+    
     renderRect = CGRectApplyAffineTransform(renderRect, transform);
     renderRect = CGRectApplyAffineTransform(renderRect, CGAffineTransformMakeTranslation(rectX, rectY));
     
+    [self clip:context];
     CGContextClipToRect(context, rect);
-    [self setLayoutBoundingBox:rect];
+ 
     CGContextDrawImage(context, renderRect, _image);
     CGContextRestoreGState(context);
     
@@ -144,12 +137,10 @@
 
 - (CGRect)getRect:(CGContextRef)context
 {
-    [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
-    CGFloat x = [self getWidthRelatedValue:self.x];
-    CGFloat y = [self getHeightRelatedValue:self.y];
-    CGFloat width = [self getWidthRelatedValue:self.width];
-    CGFloat height = [self getHeightRelatedValue:self.height];
-    return CGRectMake(x, y, width, height);
+    return CGRectMake([self relativeOnWidth:self.x],
+                      [self relativeOnHeight:self.y],
+                      [self relativeOnWidth:self.width],
+                      [self relativeOnHeight:self.height]);
 }
 
 - (CGPathRef)getPath:(CGContextRef)context

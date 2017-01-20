@@ -61,7 +61,22 @@
  */
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transfrom;
 
+/**
+ * get RNSVGSvgView which ownes current RNSVGNode
+ */
 - (RNSVGSvgView *)getSvgView;
+
+- (CGFloat)relativeOnWidth:(NSString *)position;
+
+- (CGFloat)relativeOnHeight:(NSString *)position;
+
+- (CGFloat)getContextWidth;
+
+- (CGFloat)getContextHeight;
+
+- (CGFloat)getContextLeft;
+
+- (CGFloat)getContextTop;
 
 /**
  * save element`s defination into svg element.
@@ -74,6 +89,6 @@
 
 - (void)endTransparencyLayer:(CGContextRef)context;
 
-- (void)traverseSubviews:(BOOL (^)(RNSVGNode *node))block;
+- (void)traverseSubviews:(BOOL (^)(__kindof RNSVGNode *node))block;
 
 @end

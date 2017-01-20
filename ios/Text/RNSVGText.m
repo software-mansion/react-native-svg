@@ -45,9 +45,8 @@
 
 - (void)setupGlyphContext:(CGContextRef)context
 {
-    [self setContextBoundingBox:CGContextGetClipBoundingBox(context)];
-    _glyphContext = [[RNSVGGlyphContext alloc] initWithConverters:[self getWidthConverter]
-                                                  heightConverter:[self getHeightConverter]];
+    _glyphContext = [[RNSVGGlyphContext alloc] initWithDimensions:[self getContextWidth]
+                                                  height:[self getContextHeight]];
 }
 
 // release the cached CGPathRef for RNSVGTSpan
