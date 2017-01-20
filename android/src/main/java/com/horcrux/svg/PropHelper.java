@@ -71,6 +71,7 @@ class PropHelper {
 
     }
 
+    static private Pattern percentageRegExp = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$");
 
     /**
      * Converts percentage string into actual based on a relative number
@@ -82,7 +83,7 @@ class PropHelper {
      */
 
     static float fromPercentageToFloat(String percentage, float relative, float offset, float scale) {
-        Matcher matched = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$").matcher(percentage);
+        Matcher matched = percentageRegExp.matcher(percentage);
         if (matched.matches()) {
             return Float.valueOf(matched.group(1)) / 100 * relative + offset;
         } else {
@@ -99,7 +100,7 @@ class PropHelper {
 
 
     static boolean isPercentage(String string) {
-        Pattern pattern = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$");
+        Pattern pattern = percentageRegExp;
         return pattern.matcher(string).matches();
     }
 
