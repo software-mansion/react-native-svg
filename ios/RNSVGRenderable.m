@@ -285,7 +285,7 @@
     CGPathRelease(hitArea);
     
     if (contains) {
-        CGPathRef clipPath = nil;
+        CGPathRef clipPath = [self getClipPath];
         
         if (!clipPath) {
             return self;
