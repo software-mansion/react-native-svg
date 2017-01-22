@@ -154,7 +154,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         }
     }
 
-    public String getBase64() {
+    public String toDataURL() {
         Bitmap bitmap = Bitmap.createBitmap(
                 (int) getLayoutWidth(),
                 (int) getLayoutHeight(),

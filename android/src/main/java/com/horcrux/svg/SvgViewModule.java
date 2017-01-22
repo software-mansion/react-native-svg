@@ -29,7 +29,7 @@ public class SvgViewModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void toDataURL(int tag, Callback successCallback) {
-        SvgView svg = SvgInstancesManager.getSvgViewByTag(tag);
+        SvgViewShadowNode svg = SvgInstancesManager.getShadowNodeByTag(tag);
 
         if (svg != null) {
             successCallback.invoke(svg.toDataURL());

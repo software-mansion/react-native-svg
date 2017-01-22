@@ -182,10 +182,4 @@ public class SvgView extends View {
 
         dispatch(ev, TouchEventType.CANCEL);
     }
-
-    public String toDataURL() {
-        return getShadowNode().getBase64();
-    }
-
-
 }
