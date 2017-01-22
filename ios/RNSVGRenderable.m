@@ -176,15 +176,17 @@
         return;
     }
     
+    
     CGPathDrawingMode mode = kCGPathStroke;
-    BOOL fillColor = YES;
+    BOOL fillColor = NO;
     [self clip:context];
     
     if (self.fill) {
-        mode = _fillEvenodd ? kCGPathEOFill : kCGPathFill;
         fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
         
-        if (!fillColor) {
+        if (fillColor) {
+            mode = _fillEvenodd ? kCGPathEOFill : kCGPathFill;
+        } else {
             CGContextSaveGState(context);
             CGContextAddPath(context, path);
             CGContextClip(context);
@@ -216,10 +218,16 @@
             CGContextClip(context);
         }
         
-        if (![self.stroke applyStrokeColor:context opacity:self.strokeOpacity]) {
+        BOOL strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
+        
+        if (strokeColor && fillColor) {
+            mode = _fillEvenodd ? kCGPathEOFillStroke : kCGPathFillStroke;
+        } else if (!strokeColor) {
             // draw fill
-            CGContextAddPath(context, path);
-            CGContextDrawPath(context, mode);
+            if (fillColor) {
+                CGContextAddPath(context, path);
+                CGContextDrawPath(context, mode);
+            }
             
             // draw stroke
             CGContextAddPath(context, path);
@@ -229,10 +237,8 @@
             [self.stroke paint:context
                        opacity:self.strokeOpacity
                 brushConverter:[[self getSvgView] getDefinedBrushConverter:self.stroke.brushRef]
-            ];
+             ];
             return;
-        } else if (self.fill) {
-            mode = _fillEvenodd ? kCGPathEOFillStroke : kCGPathFillStroke;
         }
     }
     
