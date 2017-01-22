@@ -14,7 +14,7 @@
 - (void)drawLinearGradient:(CGContextRef)context
 {
     
-    CGGradientRef gradient = CGGradientRetain([RCTConvert CGGradient:self.colors offset:0]);
+    CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:self.colors offset:0]);
     CGGradientDrawingOptions extendOptions = kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
     
     CGRect box = CGContextGetClipBoundingBox(context);
@@ -25,10 +25,18 @@
     float offsetX = (midX - width / 2);
     float offsetY = (midY - height / 2);
     
-    CGFloat x1 = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:0] relative:width offset:offsetX];
-    CGFloat y1 = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:1] relative:height offset:offsetY];
-    CGFloat x2 = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:2] relative:width offset:offsetX];
-    CGFloat y2 = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:3] relative:height offset:offsetY];
+    CGFloat x1 = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:0]
+                                                relative:width
+                                                  offset:offsetX];
+    CGFloat y1 = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:1]
+                                                relative:height
+                                                  offset:offsetY];
+    CGFloat x2 = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:2]
+                                                relative:width
+                                                  offset:offsetX];
+    CGFloat y2 = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:3]
+                                                relative:height
+                                                  offset:offsetY];
     
     CGContextDrawLinearGradient(context, gradient, CGPointMake(x1, y1), CGPointMake(x2, y2), extendOptions);
     CGGradientRelease(gradient);
@@ -36,7 +44,7 @@
 
 - (void)drawRidialGradient:(CGContextRef)context
 {
-    CGGradientRef gradient = CGGradientRetain([RCTConvert CGGradient:self.colors offset:0]);
+    CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:self.colors offset:0]);
     CGGradientDrawingOptions extendOptions = kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
     
     CGRect box = CGContextGetClipBoundingBox(context);
@@ -47,12 +55,24 @@
     float offsetX = (midX - width / 2);
     float offsetY = (midY - height / 2);
     
-    CGFloat rx = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:2] relative:width offset:0];
-    CGFloat ry = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:3] relative:height offset:0];
-    CGFloat fx = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:0] relative:width offset:offsetX];
-    CGFloat fy = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:1] relative:height offset:offsetY] / (ry / rx);
-    CGFloat cx = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:4] relative:width offset:offsetX];
-    CGFloat cy = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:5] relative:height offset:offsetY] / (ry / rx);
+    CGFloat rx = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:2]
+                                                relative:width
+                                                  offset:0];
+    CGFloat ry = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:3]
+                                                relative:height
+                                                  offset:0];
+    CGFloat fx = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:0]
+                                                relative:width
+                                                  offset:offsetX];
+    CGFloat fy = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:1]
+                                                relative:height
+                                                  offset:offsetY] / (ry / rx);
+    CGFloat cx = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:4]
+                                                relative:width
+                                                  offset:offsetX];
+    CGFloat cy = [RNSVGPercentageConverter stringToFloat:(NSString *)[self.points objectAtIndex:5]
+                                                relative:height
+                                                  offset:offsetY] / (ry / rx);
     
     CGAffineTransform transform = CGAffineTransformMakeScale(1, ry / rx);
     CGContextConcatCTM(context, transform);

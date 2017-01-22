@@ -19,7 +19,7 @@
 - (instancetype)initWithArray:(NSArray<NSNumber *> *)array
 {
     if ((self = [super initWithArray:array])) {
-        _color = CGColorRetain([RCTConvert CGColor:array offset:1]);
+        _color = CGColorRetain([RCTConvert RNSVGCGColor:array offset:1]);
     }
     return self;
 }
