@@ -6,7 +6,6 @@ import {
     View,
     requireNativeComponent,
     StyleSheet,
-    UIManager,
     findNodeHandle,
     NativeModules
 } from 'react-native';

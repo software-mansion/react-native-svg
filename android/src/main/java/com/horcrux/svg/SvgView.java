@@ -47,7 +47,6 @@ public class SvgView extends View {
     }
 
     private @Nullable Bitmap mBitmap;
-    private RCTEventEmitter mEventEmitter;
     private EventDispatcher mEventDispatcher;
     private int mTargetTag;
 
@@ -56,7 +55,6 @@ public class SvgView extends View {
 
     public SvgView(ReactContext reactContext) {
         super(reactContext);
-        mEventEmitter = reactContext.getJSModule(RCTEventEmitter.class);
         mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
