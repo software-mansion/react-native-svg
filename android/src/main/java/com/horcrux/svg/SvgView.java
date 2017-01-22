@@ -13,17 +13,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.MotionEvent;
-import android.view.TextureView;
 import android.view.View;
 
 import com.facebook.react.ReactRootView;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.UIManagerModule;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.uimanager.events.TouchEvent;
 import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
@@ -188,10 +183,8 @@ public class SvgView extends View {
         dispatch(ev, TouchEventType.CANCEL);
     }
 
-    public void onDataURL() {
-        WritableMap event = Arguments.createMap();
-        event.putString("base64", getShadowNode().getBase64());
-        mEventEmitter.receiveEvent(getId(), Events.EVENT_DATA_URL.toString(), event);
+    public String toDataURL() {
+        return getShadowNode().getBase64();
     }
 
 

@@ -51,6 +51,6 @@ public class SvgPackage implements ReactPackage {
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        return Collections.emptyList();
+        return Collections.<NativeModule>singletonList(new SvgViewModule(reactContext));
     }
 }

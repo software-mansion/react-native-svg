@@ -8,12 +8,10 @@ import {
     StyleSheet,
     UIManager,
     findNodeHandle,
-    NativeModules,
-    Platform
+    NativeModules
 } from 'react-native';
 import extractViewBox from '../lib/extract/extractViewBox';
 import {ViewBoxAttributes} from '../lib/attributes';
-import _ from 'lodash';
 
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
 
@@ -64,24 +62,8 @@ class Svg extends Component{
         this.root.setNativeProps(...args);
     };
 
-
-    toDataURL = Platform.OS === 'ios' ? (callback = _.noop) => {
-        RNSVGSvgViewManager.toDataURL(findNodeHandle(this.root), callback);
-    } : (callback = _.noop) => {
-        let node = findNodeHandle(this.root);
-        this.onDataURLCallbacks.push(callback);
-        UIManager.dispatchViewManagerCommand(
-            node,
-            UIManager.RNSVGSvgView.Commands.toDataURL,
-            null
-        );
-    };
-
-    _onDataURL = (e) => {
-        while (this.onDataURLCallbacks.length) {
-            let callback = this.onDataURLCallbacks.shift();
-            callback(e.nativeEvent.base64);
-        }
+    toDataURL = (callback: Function) => {
+        callback && RNSVGSvgViewManager.toDataURL(findNodeHandle(this.root), callback);
     };
 
     render() {
@@ -108,7 +90,6 @@ class Svg extends Component{
                 },
                 dimensions
             ]}
-            onDataURL={this._onDataURL}
         />;
     }
 }
@@ -118,6 +99,5 @@ const NativeSvgView = requireNativeComponent('RNSVGSvgView', null, {
         ...ViewBoxAttributes
     }
 });
-
 
 export default Svg;
