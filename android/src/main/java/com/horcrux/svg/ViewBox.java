@@ -9,102 +9,17 @@
 
 package com.horcrux.svg;
 
-import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
-
-import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
  * Shadow node for virtual ViewBox
  */
-public class ViewBoxShadowNode extends GroupShadowNode {
+public class ViewBox extends GroupShadowNode {
 
     private static final int MOS_MEET = 0;
     private static final int MOS_SLICE = 1;
     private static final int MOS_NONE = 2;
-
-    private String mMinX;
-    private String mMinY;
-    private String mVbWidth;
-    private String mVbHeight;
-    private String mBoxWidth;
-    private String mBoxHeight;
-    private String mAlign;
-    private int mMeetOrSlice;
-    private boolean mFromSymbol = false;
-
-    @ReactProp(name = "minX")
-    public void setMinX(String minX) {
-        mMinX = minX;
-        markUpdated();
-    }
-
-    @ReactProp(name = "minY")
-    public void setMinY(String minY) {
-        mMinY = minY;
-        markUpdated();
-    }
-
-    @ReactProp(name = "vbWidth")
-    public void setVbWidth(String vbWidth) {
-        mVbWidth = vbWidth;
-        markUpdated();
-    }
-
-    @ReactProp(name = "vbHeight")
-    public void setVbHeight(String vbHeight) {
-        mVbHeight = vbHeight;
-        markUpdated();
-    }
-
-
-    @ReactProp(name = "width")
-    public void setWidth(String width) {
-        mBoxWidth = width;
-        markUpdated();
-    }
-
-    @ReactProp(name = "height")
-    public void setHeight(String height) {
-        mBoxHeight = height;
-        markUpdated();
-    }
-
-    @ReactProp(name = "align")
-    public void setAlign(String align) {
-        mAlign = align;
-        markUpdated();
-    }
-
-    @ReactProp(name = "meetOrSlice")
-    public void setMeetOrSlice(int meetOrSlice) {
-        mMeetOrSlice = meetOrSlice;
-        markUpdated();
-    }
-
-    @Override
-    protected int saveAndSetupCanvas(Canvas canvas) {
-        mMatrix = getTransformFromProps();
-        return super.saveAndSetupCanvas(canvas);
-    }
-
-    private Matrix getTransformFromProps() {
-
-        float vbX = relativeOnWidth(mMinX);
-        float vbY = relativeOnHeight(mMinY);
-        float vbWidth = relativeOnWidth(mVbWidth);
-        float vbHeight = relativeOnHeight(mVbHeight);
-
-
-        float eX = getCanvasLeft();
-        float eY = getCanvasTop();
-        float eWidth = mBoxWidth != null ? relativeOnWidth(mBoxWidth) : getCanvasWidth();
-        float eHeight = mBoxHeight != null ? relativeOnHeight(mBoxHeight) : getCanvasHeight();
-
-        return getTransform(new RectF(vbX, vbY, vbWidth + vbX, vbHeight + vbY), new RectF(eX, eY, eWidth + eX, eHeight + eY), mAlign, mMeetOrSlice, mFromSymbol);
-    }
 
     static public Matrix getTransform(RectF vbRect, RectF eRect, String align, int meetOrSlice, boolean fromSymbol) {
         // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform
@@ -187,20 +102,5 @@ public class ViewBoxShadowNode extends GroupShadowNode {
         transform.postTranslate(-translateX * (fromSymbol ? scaleX : 1), -translateY * (fromSymbol ? scaleY : 1));
         transform.postScale(scaleX, scaleY);
         return transform;
-    }
-
-    @Override
-    public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited) {
-        if (target instanceof UseShadowNode) {
-            mFromSymbol = true;
-            mBoxWidth = ((UseShadowNode)target).getWidth();
-            mBoxHeight = ((UseShadowNode)target).getHeight();
-        }
-    }
-
-    @Override
-    public void resetProperties() {
-        mBoxWidth = mBoxHeight = null;
-        mFromSymbol = false;
     }
 }

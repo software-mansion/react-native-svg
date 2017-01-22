@@ -11,15 +11,20 @@ package com.horcrux.svg;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Base64;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.util.Log;
 
+import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
+import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -35,6 +40,54 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
     private final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
     private Canvas mCanvas;
+    protected final float mScale;
+
+    private float mMinX;
+    private float mMinY;
+    private float mVbWidth;
+    private float mVbHeight;
+    private String mAlign;
+    private int mMeetOrSlice;
+
+    public SvgViewShadowNode() {
+        mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
+    }
+
+    @ReactProp(name = "minX")
+    public void setMinX(float minX) {
+        mMinX = minX;
+        markUpdated();
+    }
+
+    @ReactProp(name = "minY")
+    public void setMinY(float minY) {
+        mMinY = minY;
+        markUpdated();
+    }
+
+    @ReactProp(name = "vbWidth")
+    public void setVbWidth(float vbWidth) {
+        mVbWidth = vbWidth;
+        markUpdated();
+    }
+
+    @ReactProp(name = "vbHeight")
+    public void setVbHeight(float vbHeight) {
+        mVbHeight = vbHeight;
+        markUpdated();
+    }
+
+    @ReactProp(name = "align")
+    public void setAlign(String align) {
+        mAlign = align;
+        markUpdated();
+    }
+
+    @ReactProp(name = "meetOrSlice")
+    public void setMeetOrSlice(int meetOrSlice) {
+        mMeetOrSlice = meetOrSlice;
+        markUpdated();
+    }
 
     @Override
     public boolean isVirtual() {
@@ -66,7 +119,6 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
         mCanvas = new Canvas(bitmap);
         drawChildren(mCanvas);
-        mCanvas = null;
         return bitmap;
     }
 
@@ -75,6 +127,14 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     }
 
     private void drawChildren(Canvas canvas) {
+
+        if (mAlign != null) {
+            RectF vbRect = new RectF(mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
+            RectF eRect = new RectF(0, 0, getLayoutWidth(), getLayoutHeight());
+            Matrix viewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice, false);
+            canvas.concat(viewBoxMatrix);
+        }
+
         Paint paint = new Paint();
 
         for (int i = 0; i < getChildCount(); i++) {

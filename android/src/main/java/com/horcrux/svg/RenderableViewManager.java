@@ -35,7 +35,7 @@ public class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
     /* package */ static final String CLASS_CLIP_PATH = "RNSVGClipPath";
     /* package */ static final String CLASS_DEFS = "RNSVGDefs";
     /* package */ static final String CLASS_USE = "RNSVGUse";
-    /* package */ static final String CLASS_VIEW_BOX = "RNSVGViewBox";
+    /* package */ static final String CLASS_SYMBOL = "RNSVGSymbol";
     /* package */ static final String CLASS_LINEAR_GRADIENT = "RNSVGLinearGradient";
     /* package */ static final String CLASS_RADIAL_GRADIENT = "RNSVGRadialGradient";
 
@@ -94,8 +94,8 @@ public class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
         return new RenderableViewManager(CLASS_USE);
     }
 
-    public static RenderableViewManager createViewBoxViewManager() {
-        return new RenderableViewManager(CLASS_VIEW_BOX);
+    public static RenderableViewManager createSymbolManager() {
+        return new RenderableViewManager(CLASS_SYMBOL);
     }
 
     public static RenderableViewManager createLinearGradientManager() {
@@ -144,8 +144,8 @@ public class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
                 return new DefsShadowNode();
             case CLASS_USE:
                 return new UseShadowNode();
-            case CLASS_VIEW_BOX:
-                return new ViewBoxShadowNode();
+            case CLASS_SYMBOL:
+                return new SymbolShadowNode();
             case CLASS_LINEAR_GRADIENT:
                 return new LinearGradientShadowNode();
             case CLASS_RADIAL_GRADIENT:
@@ -184,8 +184,8 @@ public class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
                 return DefsShadowNode.class;
             case CLASS_USE:
                 return UseShadowNode.class;
-            case CLASS_VIEW_BOX:
-                return ViewBoxShadowNode.class;
+            case CLASS_SYMBOL:
+                return SymbolShadowNode.class;
             case CLASS_LINEAR_GRADIENT:
                 return LinearGradientShadowNode.class;
             case CLASS_RADIAL_GRADIENT:
