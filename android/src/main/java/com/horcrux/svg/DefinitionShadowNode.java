@@ -38,13 +38,4 @@ public class DefinitionShadowNode extends VirtualNode {
     public int hitTest(Point point, Matrix matrix) {
         return -1;
     }
-
-    @Override
-    public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited) {}
-
-    @Override
-    public void mergeProperties(VirtualNode target, ReadableArray mergeList) {}
-
-    @Override
-    public void resetProperties() {}
 }

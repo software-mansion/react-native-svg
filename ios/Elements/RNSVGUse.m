@@ -28,13 +28,20 @@
     if (template) {
         [self beginTransparencyLayer:context];
         [self clip:context];
-        [template mergeProperties:self];
         
+        if ([template isKindOfClass:[RNSVGRenderable class]]) {
+            [(RNSVGRenderable*)template mergeProperties:self];
+        }
+
         if ([template class] == [RNSVGSymbol class]) {
             RNSVGSymbol *symbol = (RNSVGSymbol*)template;
             [symbol renderSymbolTo:context width:[self relativeOnWidth:self.width] height:[self relativeOnWidth:self.height]];
         } else {
             [template renderTo:context];
+        }
+        
+        if ([template isKindOfClass:[RNSVGRenderable class]]) {
+            [(RNSVGRenderable*)template resetProperties];
         }
         
         [self endTransparencyLayer:context];

@@ -57,7 +57,10 @@ public class UseShadowNode extends RenderableShadowNode {
         VirtualNode template = getSvgShadowNode().getDefinedTemplate(mHref);
 
         if (template != null) {
-            template.mergeProperties(this, mAttributeList, true);
+            if (template instanceof RenderableShadowNode) {
+                ((RenderableShadowNode)template).mergeProperties(this);
+            }
+
             int count = template.saveAndSetupCanvas(canvas);
             clip(canvas, paint);
 
@@ -69,7 +72,9 @@ public class UseShadowNode extends RenderableShadowNode {
             }
 
             template.restoreCanvas(canvas, count);
-            template.resetProperties();
+            if (template instanceof RenderableShadowNode) {
+                ((RenderableShadowNode)template).resetProperties();
+            }
         } else {
             FLog.w(ReactConstants.TAG, "`Use` element expected a pre-defined svg template as `href` prop, " +
                 "template named: " + mHref + " is not defined.");

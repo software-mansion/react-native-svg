@@ -15,7 +15,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 
 import com.facebook.common.logging.FLog;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.ReactConstants;
 
 /**
@@ -44,10 +43,7 @@ public class ClipPathShadowNode extends GroupShadowNode {
     }
 
     @Override
-    public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited) {}
-
-    @Override
-    public void mergeProperties(VirtualNode target, ReadableArray mergeList) {}
+    public void mergeProperties(RenderableShadowNode target) {}
 
     @Override
     public void resetProperties() {}

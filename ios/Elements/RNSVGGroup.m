@@ -24,8 +24,15 @@
             svg.responsible = YES;
         }
         
-        [node mergeProperties:self];
+        if ([node isKindOfClass:[RNSVGRenderable class]]) {
+            [(RNSVGRenderable*)node mergeProperties:self];
+        }
+        
         [node renderTo:context];
+        
+        if ([node isKindOfClass:[RNSVGRenderable class]]) {
+            [(RNSVGRenderable*)node resetProperties];
+        }
         
         return YES;
     }];
@@ -97,11 +104,20 @@
         [svg defineTemplate:self templateName:self.name];
     }
 
-    [self traverseSubviews:^(RNSVGNode *node) {
+    [self traverseSubviews:^(__kindof RNSVGNode *node) {
         [node saveDefinition];
         return YES;
     }];
+}
 
+- (void)resetProperties
+{
+    [self traverseSubviews:^(__kindof RNSVGNode *node) {
+        if ([node isKindOfClass:[RNSVGRenderable class]]) {
+            [(RNSVGRenderable*)node resetProperties];
+        }
+        return YES;
+    }];
 }
 
 @end

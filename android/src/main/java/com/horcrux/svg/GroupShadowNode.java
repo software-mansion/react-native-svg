@@ -34,13 +34,21 @@ public class GroupShadowNode extends RenderableShadowNode {
 
     protected void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {
         final SvgViewShadowNode svg = getSvgShadowNode();
-        final VirtualNode self = this;
+        final GroupShadowNode self = this;
         traverseChildren(new NodeRunnable() {
             public boolean run(VirtualNode node) {
-                node.mergeProperties(self, mAttributeList, true);
+                if (node instanceof RenderableShadowNode) {
+                    ((RenderableShadowNode)node).mergeProperties(self);
+                }
+
                 int count = node.saveAndSetupCanvas(canvas);
                 node.draw(canvas, paint, opacity * mOpacity);
                 node.restoreCanvas(canvas, count);
+
+                if (node instanceof RenderableShadowNode) {
+                    ((RenderableShadowNode)node).resetProperties();
+                }
+
                 node.markUpdateSeen();
 
                 if (node.isResponsible()) {
@@ -122,7 +130,9 @@ public class GroupShadowNode extends RenderableShadowNode {
     public void resetProperties() {
         traverseChildren(new NodeRunnable() {
             public boolean run(VirtualNode node) {
-                node.resetProperties();
+                if (node instanceof RenderableShadowNode) {
+                    ((RenderableShadowNode)node).resetProperties();
+                }
                 return true;
             }
         });

@@ -9,6 +9,7 @@
 
 package com.horcrux.svg;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import android.graphics.Canvas;
@@ -70,10 +71,10 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     protected Path mPath;
 
-    private ReadableArray mLastMergedList;
-    private ArrayList<Object> mOriginProperties;
-    protected ReadableArray mPropList = new JavaOnlyArray();
-    protected WritableArray mAttributeList = new JavaOnlyArray();
+    private @Nullable ReadableArray mLastMergedList;
+    private @Nullable ArrayList<Object> mOriginProperties;
+    protected @Nullable ReadableArray mPropList;
+    protected @Nullable WritableArray mAttributeList;
 
     @ReactProp(name = "fill")
     public void setFill(@Nullable ReadableArray fill) {
@@ -191,9 +192,8 @@ abstract public class RenderableShadowNode extends VirtualNode {
             for (int i = 0; i < propList.size(); i++) {
                 String fieldName = propertyNameToFieldName(propList.getString(i));
                 copy.pushString(fieldName);
-                mAttributeList.pushString(fieldName);
             }
-            mPropList = copy;
+            mPropList = mAttributeList = copy;
         }
 
         markUpdated();
@@ -323,46 +323,42 @@ abstract public class RenderableShadowNode extends VirtualNode {
         return region.contains(point.x, point.y);
     }
 
-    @Override
-    public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited) {
-        mLastMergedList = mergeList;
+    public WritableArray getAttributeList() {
+        return mAttributeList;
+    }
 
-        if (mergeList.size() == 0) {
+    public void mergeProperties(RenderableShadowNode target) {
+        WritableArray targetAttributeList = target.getAttributeList();
+
+        if (targetAttributeList == null ||
+                targetAttributeList.size() == 0) {
             return;
         }
 
         mOriginProperties = new ArrayList<>();
-        resetAttributeList();
+        mAttributeList = clonePropList();
 
-        for (int i = 0, size = mergeList.size(); i < size; i++) {
+        for (int i = 0, size = targetAttributeList.size(); i < size; i++) {
             try {
-                String fieldName = mergeList.getString(i);
+                String fieldName = targetAttributeList.getString(i);
                 Field field = getClass().getField(fieldName);
                 Object value = field.get(target);
                 mOriginProperties.add(field.get(this));
 
-                if (inherited) {
-                    if (!hasOwnProperty(fieldName)) {
-                        mAttributeList.pushString(fieldName);
-                        field.set(this, value);
-                    }
-                } else {
+                if (!hasOwnProperty(fieldName)) {
+                    mAttributeList.pushString(fieldName);
                     field.set(this, value);
                 }
             } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
         }
+
+        mLastMergedList = targetAttributeList;
     }
 
-    @Override
-    public void mergeProperties(VirtualNode target, ReadableArray mergeList) {
-        mergeProperties(target, mergeList, false);
-    }
-
-    @Override
     public void resetProperties() {
-        if (mLastMergedList != null) {
+        if (mLastMergedList != null && mOriginProperties != null) {
             try {
                 for (int i = mLastMergedList.size() - 1; i >= 0; i--) {
                     Field field = getClass().getField(mLastMergedList.getString(i));
@@ -374,15 +370,20 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
             mLastMergedList = null;
             mOriginProperties = null;
+            mAttributeList = clonePropList();
         }
-        resetAttributeList();
     }
 
-    private void resetAttributeList() {
-        mAttributeList = Arguments.createArray();
-        for (int i = 0; i < mPropList.size(); i++) {
-            mAttributeList.pushString(mPropList.getString(i));
+    private @Nonnull WritableArray clonePropList() {
+        WritableArray attributeList = Arguments.createArray();
+
+        if (mPropList != null) {
+            for (int i = 0; i < mPropList.size(); i++) {
+                attributeList.pushString(mPropList.getString(i));
+            }
         }
+
+        return attributeList;
     }
 
     // convert propertyName something like fillOpacity to fieldName like mFillOpacity
@@ -398,6 +399,10 @@ abstract public class RenderableShadowNode extends VirtualNode {
     }
 
     private boolean hasOwnProperty(String propName) {
+        if (mAttributeList == null) {
+            return false;
+        }
+
         for (int i = mAttributeList.size() - 1; i >= 0; i--) {
             if (mAttributeList.getString(i).equals(propName)) {
                 return true;
