@@ -38,7 +38,7 @@ public class SvgPackage implements ReactPackage {
                 RenderableViewManager.createClipPathViewManager(),
                 RenderableViewManager.createDefsViewManager(),
                 RenderableViewManager.createUseViewManager(),
-                RenderableViewManager.createViewBoxViewManager(),
+                RenderableViewManager.createSymbolManager(),
                 RenderableViewManager.createLinearGradientManager(),
                 RenderableViewManager.createRadialGradientManager(),
                 new SvgViewManager());
@@ -51,6 +51,6 @@ public class SvgPackage implements ReactPackage {
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        return Collections.emptyList();
+        return Collections.<NativeModule>singletonList(new SvgViewModule(reactContext));
     }
 }

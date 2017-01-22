@@ -66,9 +66,9 @@
  */
 - (RNSVGSvgView *)getSvgView;
 
-- (CGFloat)relativeOnWidth:(NSString *)position;
+- (CGFloat)relativeOnWidth:(NSString *)length;
 
-- (CGFloat)relativeOnHeight:(NSString *)position;
+- (CGFloat)relativeOnHeight:(NSString *)length;
 
 - (CGFloat)getContextWidth;
 

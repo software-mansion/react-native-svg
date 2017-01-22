@@ -6,13 +6,12 @@ import {
     View,
     requireNativeComponent,
     StyleSheet,
-    UIManager,
     findNodeHandle,
-    NativeModules,
-    Platform
+    NativeModules
 } from 'react-native';
-import ViewBox from './ViewBox';
-import _ from 'lodash';
+import extractViewBox from '../lib/extract/extractViewBox';
+import {ViewBoxAttributes} from '../lib/attributes';
+
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
 
 // Svg - Root node of all Svg elements
@@ -34,6 +33,10 @@ class Svg extends Component{
         // more detail https://svgwg.org/svg2-draft/coords.html#ViewBoxAttribute
         viewBox: PropTypes.string,
         preserveAspectRatio: PropTypes.string
+    };
+
+    static defaultProps = {
+        preserveAspectRatio: 'xMidYMid meet'
     };
 
     constructor() {
@@ -58,73 +61,42 @@ class Svg extends Component{
         this.root.setNativeProps(...args);
     };
 
-
-    toDataURL = Platform.OS === 'ios' ? (callback = _.noop) => {
-        RNSVGSvgViewManager.toDataURL(findNodeHandle(this.root), callback);
-    } : (callback = _.noop) => {
-        let node = findNodeHandle(this.root);
-        this.onDataURLCallbacks.push(callback);
-        UIManager.dispatchViewManagerCommand(
-            node,
-            UIManager.RNSVGSvgView.Commands.toDataURL,
-            null
-        );
-    };
-
-    _onDataURL = (e) => {
-        while (this.onDataURLCallbacks.length) {
-            let callback = this.onDataURLCallbacks.shift();
-            callback(e.nativeEvent.base64);
-        }
+    toDataURL = (callback: Function) => {
+        callback && RNSVGSvgViewManager.toDataURL(findNodeHandle(this.root), callback);
     };
 
     render() {
-        let {props} = this;
-        let opacity = +props.opacity;
-        let width = +props.width;
-        let height = +props.height;
-        let viewBox = props.viewBox;
+        const {opacity, width, height, viewBox, preserveAspectRatio, style, ...props} = this.props;
         let dimensions;
 
         if (width && height) {
             dimensions = {
-                width,
-                height,
+                width: +width,
+                height: +height,
                 flex: 0
             };
         }
 
-        if (props.viewbox) {
-            viewBox = props.viewbox;
-            console.warn('Prop `viewbox` is deprecated. please use `viewBox` instead.');
-        }
-
-        let content = viewBox ? <ViewBox
-            viewBox={viewBox}
-            preserveAspectRatio={props.preserveAspectRatio}
-        >{props.children}</ViewBox> : props.children;
-
-        const nativeProps = _.omit(props, ['width', 'height', 'viewBox', 'preserveAspectRatio', 'opacity']);
-
         return <NativeSvgView
-            {...nativeProps}
+            {...props}
+            {...extractViewBox({ viewBox, preserveAspectRatio })}
             ref={ele => {this.root = ele;}}
             style={[
                 styles.svg,
-                props.style,
-                !isNaN(opacity) && {
-                    opacity
+                style,
+                !isNaN(+opacity) && {
+                    opacity: +opacity
                 },
                 dimensions
             ]}
-            onDataURL={this._onDataURL}
-        >
-            {content}
-        </NativeSvgView>;
+        />;
     }
 }
 
-const NativeSvgView = requireNativeComponent('RNSVGSvgView', null);
-
+const NativeSvgView = requireNativeComponent('RNSVGSvgView', null, {
+    nativeOnly: {
+        ...ViewBoxAttributes
+    }
+});
 
 export default Svg;

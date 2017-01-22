@@ -206,12 +206,12 @@ public abstract class VirtualNode extends LayoutShadowNode {
         return mSvgShadowNode;
     }
 
-    protected float relativeOnWidth(String position) {
-        return PropHelper.fromPercentageToFloat(position, getCanvasWidth(), 0, mScale);
+    protected float relativeOnWidth(String length) {
+        return PropHelper.fromPercentageToFloat(length, getCanvasWidth(), 0, mScale);
     }
 
-    protected float relativeOnHeight(String position) {
-        return PropHelper.fromPercentageToFloat(position, getCanvasHeight(), 0, mScale);
+    protected float relativeOnHeight(String length) {
+        return PropHelper.fromPercentageToFloat(length, getCanvasHeight(), 0, mScale);
     }
 
     protected float getCanvasWidth() {

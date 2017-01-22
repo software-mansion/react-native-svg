@@ -604,14 +604,12 @@ npm i
 ### TODO:
 1. Add Native method for elements.
 2. Pattern element.
-3. Implement Animated elements.
-4. Mask element.
-5. Load Image from URL.
-6. Fix rotate prop on Text
+3. Mask element.
+4. Load Image from URL.
+5. Transform prop support.
 
 ### Known issues:
-1. Unable to set alpha channel for Gradient on iOS.
-2. Unable to apply focus point of RadialGradient on Android.
+1. Unable to apply focus point of RadialGradient on Android.
 
 ### Thanks:
 

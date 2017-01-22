@@ -176,8 +176,8 @@ class PropHelper {
                 float cx = PropHelper.fromPercentageToFloat(mPoints.getString(4), width, offsetX, scale);
                 float cy = PropHelper.fromPercentageToFloat(mPoints.getString(5), height, offsetY, scale) / (ry / rx);
                 // TODO: support focus point.
-                //float fx = PropHelper.fromPercentageToFloat(mPoints.getString(0), width, offsetX) * scale;
-                //float fy = PropHelper.fromPercentageToFloat(mPoints.getString(1), height, offsetY) * scale / (ry / rx);
+                //float fx = PropHelper.fromPercentageToFloat(mPoints.getString(0), width, offsetX, scale);
+                //float fy = PropHelper.fromPercentageToFloat(mPoints.getString(1), height, offsetY, scale) / (ry / rx);
                 Shader radialGradient = new RadialGradient(
                         cx,
                         cy,

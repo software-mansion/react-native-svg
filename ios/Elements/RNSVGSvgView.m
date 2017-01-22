@@ -7,7 +7,7 @@
  */
 
 #import "RNSVGSvgView.h"
-
+#import "RNSVGViewBox.h"
 #import "RNSVGNode.h"
 #import <React/RCTLog.h>
 
@@ -17,6 +17,7 @@
     NSMutableDictionary<NSString *, RNSVGNode *> *templates;
     NSMutableDictionary<NSString *, RNSVGBrushConverter *> *brushConverters;
     CGRect _boundingBox;
+    CGAffineTransform _viewBoxTransform;
 }
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
@@ -42,6 +43,66 @@
     [self setNeedsDisplay];
 }
 
+- (void)setMinX:(CGFloat)minX
+{
+    if (minX == _minX) {
+        return;
+    }
+    
+    [self invalidate];
+    _minX = minX;
+}
+
+- (void)setMinY:(CGFloat)minY
+{
+    if (minY == _minY) {
+        return;
+    }
+    
+    [self invalidate];
+    _minY = minY;
+}
+
+- (void)setVbWidth:(CGFloat)vbWidth
+{
+    if (vbWidth == _vbWidth) {
+        return;
+    }
+    
+    [self invalidate];
+    _vbWidth = vbWidth;
+}
+
+- (void)setVbHeight:(CGFloat)vbHeight
+{
+    if (_vbHeight == vbHeight) {
+        return;
+    }
+    
+    [self invalidate];
+    _vbHeight = vbHeight;
+}
+
+- (void)setAlign:(NSString *)align
+{
+    if ([align isEqualToString:_align]) {
+        return;
+    }
+    
+    [self invalidate];
+    _align = align;
+}
+
+- (void)setMeetOrSlice:(RNSVGVBMOS)meetOrSlice
+{
+    if (meetOrSlice == _meetOrSlice) {
+        return;
+    }
+    
+    [self invalidate];
+    _meetOrSlice = meetOrSlice;
+}
+
 - (void)drawRect:(CGRect)rect
 {
     clipPaths = nil;
@@ -49,6 +110,15 @@
     brushConverters = nil;
     _boundingBox = rect;
     CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    if (self.align) {
+        _viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
+                                                 eRect:rect
+                                                 align:self.align
+                                           meetOrSlice:self.meetOrSlice
+                                            fromSymbol:NO];
+        CGContextConcatCTM(context, _viewBoxTransform);
+    }
     
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
@@ -62,12 +132,39 @@
     }
 }
 
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    if (self.align) {
+        for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
+            if (![node isKindOfClass:[RNSVGNode class]]) {
+                continue;
+            }
+            
+            if (event) {
+                node.active = NO;
+            } else if (node.active) {
+                return node;
+            }
+            
+            UIView *hitChild = [node hitTest: point withEvent:event withTransform:_viewBoxTransform];
+            
+            if (hitChild) {
+                node.active = YES;
+                return (node.responsible || (node != hitChild)) ? hitChild : self;
+            }
+        }
+        return nil;
+    } else {
+        return [super hitTest:point withEvent:event];
+    }
+}
+
+
 - (NSString *)getDataURL
 {
     UIGraphicsBeginImageContextWithOptions(_boundingBox.size, NO, 0);
     [self drawRect:_boundingBox];
-    UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
-    NSData *imageData = UIImagePNGRepresentation(image);
+    NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
     NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
     UIGraphicsEndImageContext();
     return base64;

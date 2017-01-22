@@ -6,8 +6,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGGroupManager.h"
+#import "RNSVGNodeManager.h"
 
-@interface RNSVGViewBoxManager : RNSVGGroupManager
+@interface RNSVGSymbolManager : RNSVGNodeManager
 
 @end

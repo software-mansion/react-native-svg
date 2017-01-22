@@ -60,7 +60,14 @@ public class UseShadowNode extends RenderableShadowNode {
             template.mergeProperties(this, mAttributeList, true);
             int count = template.saveAndSetupCanvas(canvas);
             clip(canvas, paint);
-            template.draw(canvas, paint, opacity * mOpacity);
+
+            if (template instanceof SymbolShadowNode) {
+                SymbolShadowNode symbol = (SymbolShadowNode)template;
+                symbol.drawSymbol(canvas, paint, opacity, relativeOnWidth(mWidth), relativeOnHeight(mHeight));
+            } else {
+                template.draw(canvas, paint, opacity * mOpacity);
+            }
+
             template.restoreCanvas(canvas, count);
             template.resetProperties();
         } else {

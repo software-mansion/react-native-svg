@@ -149,8 +149,7 @@
     __block RNSVGBezierTransformer *bezierTransformer;
     [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
         if ([node class] == [RNSVGTextPath class]) {
-            RNSVGTextPath *textPath = node;
-            bezierTransformer = [node getBezierTransformer];
+            bezierTransformer = [(RNSVGTextPath*)node getBezierTransformer];
             return NO;
         }
         return YES;
@@ -170,7 +169,7 @@
             break;
         }
         
-        targetView = [targetView superview];
+        targetView = (RNSVGText*)[targetView superview];
         result = block(targetView);
     }
 }

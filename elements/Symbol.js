@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import ViewBox from './ViewBox';
-import G from './G';
-import Defs from './Defs';
+import extractViewBox from '../lib/extract/extractViewBox';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
+import {SymbolAttributes} from '../lib/attributes';
 
 class SymbolElement extends Component{
     static displayName = 'Symbol';
@@ -13,26 +13,18 @@ class SymbolElement extends Component{
     render() {
         let {props} = this;
 
-        let viewBox = props.viewBox;
-        if (props.viewbox) {
-            viewBox = props.viewbox;
-            console.warn('Prop `viewbox` is deprecated. please use `viewBox` instead.');
-        }
-
-        let content = viewBox ? <ViewBox
+        return <RNSVGSymbol
             name={props.id}
-            viewBox={viewBox}
-            preserveAspectRatio={props.preserveAspectRatio}
+            {...extractViewBox(props)}
         >
             {props.children}
-        </ViewBox> : <G id={props.id}>
-            {props.children}
-        </G>;
-
-        return <Defs>
-            {content}
-        </Defs>;
+        </RNSVGSymbol>;
     }
 }
+
+const RNSVGSymbol = createReactNativeComponentClass({
+    validAttributes: SymbolAttributes,
+    uiViewClassName: 'RNSVGSymbol'
+});
 
 export default SymbolElement;

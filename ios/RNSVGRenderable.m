@@ -13,7 +13,6 @@
     NSMutableDictionary *_originProperties;
     NSArray<NSString *> *_lastMergedList;
     NSArray<NSString *> *_attributeList;
-    BOOL _fillEvenodd;
     CGPathRef _hitArea;
 }
 
@@ -23,6 +22,7 @@
         _fillOpacity = 1;
         _strokeOpacity = 1;
         _strokeWidth = 1;
+        _fillRule = kRNSVGCGFCRuleNonzero;
     }
     return self;
 }
@@ -51,7 +51,6 @@
         return;
     }
     [self invalidate];
-    _fillEvenodd = fillRule == kRNSVGCGFCRuleEvenodd;
     _fillRule = fillRule;
 }
 
@@ -176,15 +175,19 @@
         return;
     }
     
+    
     CGPathDrawingMode mode = kCGPathStroke;
-    BOOL fillColor = YES;
+    BOOL fillColor = NO;
     [self clip:context];
     
+    BOOL evenodd = self.fillRule == kRNSVGCGFCRuleEvenodd;
+    
     if (self.fill) {
-        mode = _fillEvenodd ? kCGPathEOFill : kCGPathFill;
         fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
         
-        if (!fillColor) {
+        if (fillColor) {
+            mode = evenodd ? kCGPathEOFill : kCGPathFill;
+        } else {
             CGContextSaveGState(context);
             CGContextAddPath(context, path);
             CGContextClip(context);
@@ -216,10 +219,16 @@
             CGContextClip(context);
         }
         
-        if (![self.stroke applyStrokeColor:context opacity:self.strokeOpacity]) {
+        BOOL strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
+        
+        if (strokeColor && fillColor) {
+            mode = evenodd ? kCGPathEOFillStroke : kCGPathFillStroke;
+        } else if (!strokeColor) {
             // draw fill
-            CGContextAddPath(context, path);
-            CGContextDrawPath(context, mode);
+            if (fillColor) {
+                CGContextAddPath(context, path);
+                CGContextDrawPath(context, mode);
+            }
             
             // draw stroke
             CGContextAddPath(context, path);
@@ -229,10 +238,8 @@
             [self.stroke paint:context
                        opacity:self.strokeOpacity
                 brushConverter:[[self getSvgView] getDefinedBrushConverter:self.stroke.brushRef]
-            ];
+             ];
             return;
-        } else if (self.fill) {
-            mode = _fillEvenodd ? kCGPathEOFillStroke : kCGPathFillStroke;
         }
     }
     

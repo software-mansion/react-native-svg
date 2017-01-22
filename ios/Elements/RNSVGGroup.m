@@ -27,10 +27,6 @@
         [node mergeProperties:self];
         [node renderTo:context];
         
-        if ([node isKindOfClass: [RNSVGRenderable class]]) {
-            RNSVGRenderable *renderable = node;
-        }
-        
         return YES;
     }];
 }

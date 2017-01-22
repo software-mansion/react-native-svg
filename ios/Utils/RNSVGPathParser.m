@@ -10,7 +10,7 @@
 #import <React/RCTLog.h>
 #import "math.h"
 
-@implementation RNSVGPathParser : NSObject
+@implementation RNSVGPathParser
 {
     NSString* _d;
     NSString* _originD;
@@ -32,7 +32,7 @@
     if (self = [super init]) {
         NSRegularExpression* decimalRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"(\\.\\d+)(?=\\-?\\.)" options:0 error:nil];
         _originD = d;
-        _d = [decimalRegularExpression stringByReplacingMatchesInString:d options:0 range:NSMakeRange(0, [d length]) withTemplate:@"$1\,"];
+        _d = [decimalRegularExpression stringByReplacingMatchesInString:d options:0 range:NSMakeRange(0, [d length]) withTemplate:@"$1,"];
         _pathRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"[a-df-z]|[\\-+]?(?:[\\d.]e[\\-+]?|[^\\s\\-+,a-z])+" options:NSRegularExpressionCaseInsensitive error:nil];
     }
     return self;
@@ -148,12 +148,12 @@
     return ![value isEqualToString:@"0"];
 }
 
-- (void)move:(CGPathRef)path x:(float)x y:(float)y
+- (void)move:(CGMutablePathRef)path x:(float)x y:(float)y
 {
     [self moveTo:path x:x + _penX y:y + _penY];
 }
 
-- (void)moveTo:(CGPathRef)path x:(float)x y:(float)y
+- (void)moveTo:(CGMutablePathRef)path x:(float)x y:(float)y
 {
     _pivotX = _penX = x;
     _pivotY = _penY = y;
@@ -163,14 +163,12 @@
     [_bezierCurves addObject: @[_lastStartPoint]];
 }
 
-- (void)line:(CGPathRef)path x:(float)x y:(float)y
+- (void)line:(CGMutablePathRef)path x:(float)x y:(float)y
 {
     [self lineTo:path x:x + _penX y:y + _penY];
 }
 
-- (void)lineTo:(CGPathRef)path x:(float)x y:(float)y{
-    NSValue * source = [NSValue valueWithCGPoint:CGPointMake(_pivotX, _pivotY)];
-
+- (void)lineTo:(CGMutablePathRef)path x:(float)x y:(float)y{
     [self setPenDown];
     _pivotX = _penX = x;
     _pivotY = _penY = y;
@@ -180,7 +178,7 @@
     [_bezierCurves addObject: @[destination, destination, destination]];
 }
 
-- (void)curve:(CGPathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y ex:(float)ex ey:(float)ey
+- (void)curve:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y ex:(float)ex ey:(float)ey
 {
     [self curveTo:path c1x:c1x + _penX
               c1y:c1y + _penY
@@ -190,14 +188,14 @@
                ey:ey + _penY];
 }
 
-- (void)curveTo:(CGPathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y ex:(float)ex ey:(float)ey
+- (void)curveTo:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y ex:(float)ex ey:(float)ey
 {
     _pivotX = c2x;
     _pivotY = c2y;
     [self curveToPoint:path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y ex:(float)ex ey:(float)ey];
 }
 
-- (void)curveToPoint:(CGPathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y ex:(float)ex ey:(float)ey
+- (void)curveToPoint:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y ex:(float)ex ey:(float)ey
 {
     [self setPenDown];
     _penX = ex;
@@ -211,12 +209,12 @@
                           ]];
 }
 
-- (void)smoothCurve:(CGPathRef)path c1x:(float)c1x c1y:(float)c1y ex:(float)ex ey:(float)ey
+- (void)smoothCurve:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y ex:(float)ex ey:(float)ey
 {
     [self smoothCurveTo:path c1x:c1x + _penX c1y:c1y + _penY ex:ex + _penX ey:ey + _penY];
 }
 
-- (void)smoothCurveTo:(CGPathRef)path c1x:(float)c1x c1y:(float)c1y ex:(float)ex ey:(float)ey
+- (void)smoothCurveTo:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y ex:(float)ex ey:(float)ey
 {
     float c2x = c1x;
     float c2y = c1y;
@@ -227,12 +225,12 @@
     [self curveToPoint:path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y ex:(float)ex ey:(float)ey];
 }
 
-- (void)quadraticBezierCurve:(CGPathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y
+- (void)quadraticBezierCurve:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y
 {
     [self quadraticBezierCurveTo:path c1x:(float)c1x + _penX c1y:(float)c1y + _penY c2x:(float)c2x + _penX c2y:(float)c2y + _penY];
 }
 
-- (void)quadraticBezierCurveTo:(CGPathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y
+- (void)quadraticBezierCurveTo:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y
 {
     _pivotX = c1x;
     _pivotY = c1y;
@@ -245,12 +243,12 @@
     [self curveToPoint:path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y ex:(float)ex ey:(float)ey];
 }
 
-- (void)smoothQuadraticBezierCurve:(CGPathRef)path c1x:(float)c1x c1y:(float)c1y
+- (void)smoothQuadraticBezierCurve:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y
 {
     [self smoothQuadraticBezierCurveTo:path c1x:c1x + _penX c1y:c1y + _penY];
 }
 
-- (void)smoothQuadraticBezierCurveTo:(CGPathRef)path c1x:(float)c1x c1y:(float)c1y
+- (void)smoothQuadraticBezierCurveTo:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y
 {
     float c2x = c1x;
     float c2y = c1y;
@@ -259,12 +257,12 @@
     [self quadraticBezierCurveTo:path c1x:c1x c1y:c1y c2x:c2x c2y:c2y];
 }
 
-- (void)arc:(CGPathRef)path rx:(float)rx ry:(float)ry rotation:(float)rotation outer:(BOOL)outer clockwise:(BOOL)clockwise x:(float)x y:(float)y
+- (void)arc:(CGMutablePathRef)path rx:(float)rx ry:(float)ry rotation:(float)rotation outer:(BOOL)outer clockwise:(BOOL)clockwise x:(float)x y:(float)y
 {
     [self arcTo:path rx:rx ry:ry rotation:rotation outer:outer clockwise:clockwise x:x + _penX y:y + _penY];
 }
 
-- (void)arcTo:(CGPathRef)path rx:(float)rx ry:(float)ry rotation:(float)rotation outer:(BOOL)outer clockwise:(BOOL)clockwise x:(float)x y:(float)y
+- (void)arcTo:(CGMutablePathRef)path rx:(float)rx ry:(float)ry rotation:(float)rotation outer:(BOOL)outer clockwise:(BOOL)clockwise x:(float)x y:(float)y
 {
     float tX = _penX;
     float tY = _penY;
@@ -332,7 +330,7 @@
     [self arcToBezier:path cx:cx cy:cy rx:rx ry:ry sa:sa ea:ea clockwise:clockwise rad:rad];
 }
 
-- (void)arcToBezier:(CGPathRef)path cx:(float)cx cy:(float)cy rx:(float)rx ry:(float)ry sa:(float)sa ea:(float)ea clockwise:(BOOL)clockwise rad:(float)rad
+- (void)arcToBezier:(CGMutablePathRef)path cx:(float)cx cy:(float)cy rx:(float)rx ry:(float)ry sa:(float)sa ea:(float)ea clockwise:(BOOL)clockwise rad:(float)rad
 {
     // Inverse Rotation + Scale Transform
     float cosed = cosf(rad);
@@ -350,7 +348,7 @@
         arc -= M_PI * 2;
     }
 
-    int n = ceilf(fabsf(arc / (M_PI / 2)));
+    int n = ceilf(fabsf(arc / ((float)M_PI / 2)));
 
     float step = arc / n;
     float k = (4.0f / 3.0f) * tanf(step / 4);
@@ -380,7 +378,7 @@
     }
 }
 
-- (void)close:(CGPathRef)path
+- (void)close:(CGMutablePathRef)path
 {
     if (_penDownSet) {
         _penX = _penDownX;

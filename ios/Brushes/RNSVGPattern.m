@@ -26,7 +26,7 @@
       return nil;
     }
     _image = CGImageRetain([RCTConvert CGImage:array[1]]);
-    _rect = [RCTConvert CGRect:array offset:2];
+    _rect = [RCTConvert RNSVGCGRect:array offset:2];
   }
   return self;
 }
