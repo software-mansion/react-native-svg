@@ -21,14 +21,12 @@
 @interface RCTConvert (RNSVG)
 
 + (RNSVGTextAnchor)RNSVGTextAnchor:(id)json;
-+ (RNSVGPathParser *)CGPath:(NSString *)d;
-+ (CTTextAlignment)CTTextAlignment:(id)json;
 + (RNSVGCGFCRule)RNSVGCGFCRule:(id)json;
 + (RNSVGVBMOS)RNSVGVBMOS:(id)json;
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;
 
-
++ (RNSVGPathParser *)CGPath:(NSString *)d;
 + (CGRect)CGRect:(id)json offset:(NSUInteger)offset;
 + (CGColorRef)CGColor:(id)json offset:(NSUInteger)offset;
 + (CGGradientRef)CGGradient:(id)json offset:(NSUInteger)offset;

@@ -31,7 +31,7 @@
         [template mergeProperties:self];
         
         if ([template class] == [RNSVGSymbol class]) {
-            RNSVGSymbol *symbol = template;
+            RNSVGSymbol *symbol = (RNSVGSymbol*)template;
             [symbol renderSymbolTo:context width:[self relativeOnWidth:self.width] height:[self relativeOnWidth:self.height]];
         } else {
             [template renderTo:context];

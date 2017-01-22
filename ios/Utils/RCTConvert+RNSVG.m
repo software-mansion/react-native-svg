@@ -171,14 +171,14 @@ RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
     RNSVGCGFloatArray colorsAndOffsets = [self RNSVGCGFloatArray:arr];
     size_t stops = colorsAndOffsets.count / 5;
     CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
-
+    
+    
     CGGradientRef gradient = CGGradientCreateWithColorComponents(
                                                                  rgb,
                                                                  colorsAndOffsets.array,
                                                                  colorsAndOffsets.array + stops * 4,
                                                                  stops
                                                                  );
-
 
     CGColorSpaceRelease(rgb);
     free(colorsAndOffsets.array);

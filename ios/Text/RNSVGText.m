@@ -97,6 +97,7 @@
         case kRNSVGTextAnchorEnd:
             x = -width;
             break;
+        default: ;
     }
     
     return CGAffineTransformMakeTranslation(x, 0);
@@ -125,7 +126,7 @@
                 //todo: throw exception here
                 break;
             }
-            _textRoot = [_textRoot superview];
+            _textRoot = (RNSVGText*)[_textRoot superview];
         }
     }
     

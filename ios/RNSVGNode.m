@@ -14,7 +14,7 @@
 {
     BOOL _transparent;
     CGPathRef _cachedClipPath;
-    UIView *_svgView;
+    RNSVGSvgView *_svgView;
 }
 
 - (instancetype)init
@@ -227,7 +227,7 @@
     // abstract
 }
 
-- (void)traverseSubviews:(BOOL (^)(RNSVGNode *node))block
+- (void)traverseSubviews:(BOOL (^)(__kindof RNSVGNode *node))block
 {
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
