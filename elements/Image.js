@@ -4,7 +4,7 @@ import {ImageAttributes} from '../lib/attributes';
 import {numberProp, touchableProps, responderProps} from '../lib/props';
 import Shape from './Shape';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
-import {meetOrSliceTypes, alignEnum} from './ViewBox';
+import {meetOrSliceTypes, alignEnum} from '../lib/extract/extractViewBox';
 const spacesRegExp = /\s+/;
 
 class Image extends Shape {

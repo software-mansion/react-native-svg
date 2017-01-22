@@ -11,92 +11,6 @@
 #import "RNSVGUse.h"
 
 @implementation RNSVGViewBox
-{
-    BOOL _fromSymbol;
-}
-
-- (void)setMinX:(NSString *)minX
-{
-    if (minX == _minX) {
-        return;
-    }
-    [self invalidate];
-    _minX = minX;
-}
-
-- (void)setMinY:(NSString *)minY
-{
-    if (minY == _minY) {
-        return;
-    }
-    [self invalidate];
-    _minY = minY;
-}
-
-- (void)setVbHeight:(NSString *)vbHeight
-{
-    if (vbHeight == _vbHeight) {
-        return;
-    }
-    [self invalidate];
-    _vbHeight = vbHeight;
-}
-
-- (void)setVbWidth:(NSString *)vbWidth
-{
-    if (vbWidth == _vbWidth) {
-        return;
-    }
-    [self invalidate];
-    _vbWidth = vbWidth;
-}
-
-- (void)setAlign:(NSString *)align
-{
-    if (align == _align) {
-        return;
-    }
-    [self invalidate];
-    _align = align;
-}
-
-- (void)setMeetOrSlice:(RNSVGVBMOS)meetOrSlice
-{
-    if (meetOrSlice == _meetOrSlice) {
-        return;
-    }
-    [self invalidate];
-    _meetOrSlice = meetOrSlice;
-}
-
-- (void)renderTo:(CGContextRef)context
-{
-    self.matrix = [self getTransformFromProps];
-    [super renderTo:context];
-}
-
-- (CGAffineTransform)getTransformFromProps
-{
-    
-    CGFloat vbX = [self relativeOnWidth:_minX];
-    CGFloat vbY = [self relativeOnWidth:_minY];
-    CGFloat vbWidth = [self relativeOnWidth:_vbWidth];
-    CGFloat vbHeight = [self relativeOnWidth:_vbHeight];
-    
-    CGFloat eX = [self getContextLeft];
-    CGFloat eY = [self getContextTop];
-    
-    
-    CGFloat eWidth = self.width ? [self relativeOnWidth:self.width] : [self getContextWidth];
-    CGFloat eHeight = self.height ? [self relativeOnWidth:self.height] : [self getContextHeight];
-    
-    
-    return [RNSVGViewBox getTransform:CGRectMake(vbX, vbY, vbWidth, vbHeight)
-                         eRect:CGRectMake(eX, eY, eWidth, eHeight)
-                         align:self.align
-                   meetOrSlice:self.meetOrSlice
-                    fromSymbol:_fromSymbol];
-}
 
 + (CGAffineTransform)getTransform:(CGRect)vbRect eRect:(CGRect)eRect align:(NSString *)align meetOrSlice:(RNSVGVBMOS)meetOrSlice fromSymbol:(BOOL)fromSymbol
 {
@@ -178,24 +92,6 @@
     
     CGAffineTransform transform = CGAffineTransformMakeScale(scaleX, scaleY);
     return CGAffineTransformTranslate(transform, -translateX * (fromSymbol ? scaleX : 1), -translateY * (fromSymbol ? scaleY : 1));
-}
-
-- (void)mergeProperties:(__kindof RNSVGNode *)target
-{
-    if ([target isKindOfClass:[RNSVGUse class]]) {
-        RNSVGUse *use = target;
-        _fromSymbol = YES;
-        self.width = use.width;
-        self.height = use.height;
-    }
-}
-
-- (void)resetProperties
-{
-    if (_fromSymbol) {
-        self.width = self.height = nil;
-        _fromSymbol = NO;
-    }
 }
 
 @end

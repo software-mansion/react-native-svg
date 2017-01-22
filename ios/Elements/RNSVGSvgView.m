@@ -7,7 +7,7 @@
  */
 
 #import "RNSVGSvgView.h"
-
+#import "RNSVGViewBox.h"
 #import "RNSVGNode.h"
 #import <React/RCTLog.h>
 
@@ -42,6 +42,66 @@
     [self setNeedsDisplay];
 }
 
+- (void)setMinX:(CGFloat)minX
+{
+    if (minX == _minX) {
+        return;
+    }
+    
+    [self invalidate];
+    _minX = minX;
+}
+
+- (void)setMinY:(CGFloat)minY
+{
+    if (minY == _minY) {
+        return;
+    }
+    
+    [self invalidate];
+    _minY = minY;
+}
+
+- (void)setVbWidth:(CGFloat)vbWidth
+{
+    if (vbWidth == _vbWidth) {
+        return;
+    }
+    
+    [self invalidate];
+    _vbWidth = vbWidth;
+}
+
+- (void)setVbHeight:(CGFloat)vbHeight
+{
+    if (_vbHeight == vbHeight) {
+        return;
+    }
+    
+    [self invalidate];
+    _vbHeight = vbHeight;
+}
+
+- (void)setAlign:(NSString *)align
+{
+    if ([align isEqualToString:_align]) {
+        return;
+    }
+    
+    [self invalidate];
+    _align = align;
+}
+
+- (void)setMeetOrSlice:(RNSVGVBMOS)meetOrSlice
+{
+    if (meetOrSlice == _meetOrSlice) {
+        return;
+    }
+    
+    [self invalidate];
+    _meetOrSlice = meetOrSlice;
+}
+
 - (void)drawRect:(CGRect)rect
 {
     clipPaths = nil;
@@ -49,6 +109,15 @@
     brushConverters = nil;
     _boundingBox = rect;
     CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    if (self.align) {
+        CGAffineTransform viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
+                                                                  eRect:rect
+                                                                  align:self.align
+                                                            meetOrSlice:self.meetOrSlice
+                                                             fromSymbol:NO];
+        CGContextConcatCTM(context, viewBoxTransform);
+    }
     
     for (RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {

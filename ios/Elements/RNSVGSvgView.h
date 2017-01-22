@@ -9,11 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "RNSVGBrushCOnverter.h"
 #import "RNSVGContainer.h"
+#import "RNSVGVBMOS.h"
 
 @class RNSVGNode;
 
 @interface RNSVGSvgView : UIView <RNSVGContainer>
 
+@property (nonatomic, assign) CGFloat minX;
+@property (nonatomic, assign) CGFloat minY;
+@property (nonatomic, assign) CGFloat vbWidth;
+@property (nonatomic, assign) CGFloat vbHeight;
+@property (nonatomic, strong) NSString *align;
+@property (nonatomic, assign) RNSVGVBMOS meetOrSlice;
 @property (nonatomic, assign) BOOL responsible;
 
 /**

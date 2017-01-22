@@ -139,7 +139,7 @@
     }
 }
 
-- (CGPathRef)getPath: (CGContextRef) context
+- (CGPathRef)getPath: (CGContextRef)context
 {
     // abstract
     return nil;
@@ -184,14 +184,14 @@
     return _svgView;
 }
 
-- (CGFloat)relativeOnWidth:(NSString *)position
+- (CGFloat)relativeOnWidth:(NSString *)length
 {
-    return [RNSVGPercentageConverter stringToFloat:position relative:[self getContextWidth] offset:0];
+    return [RNSVGPercentageConverter stringToFloat:length relative:[self getContextWidth] offset:0];
 }
 
-- (CGFloat)relativeOnHeight:(NSString *)position
+- (CGFloat)relativeOnHeight:(NSString *)length
 {
-    return [RNSVGPercentageConverter stringToFloat:position relative:[self getContextHeight] offset:0];
+    return [RNSVGPercentageConverter stringToFloat:length relative:[self getContextHeight] offset:0];
 }
 
 - (CGFloat)getContextWidth

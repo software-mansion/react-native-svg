@@ -11,8 +11,10 @@ import {
     NativeModules,
     Platform
 } from 'react-native';
-import ViewBox from './ViewBox';
+import extractViewBox from '../lib/extract/extractViewBox';
+import {ViewBoxAttributes} from '../lib/attributes';
 import _ from 'lodash';
+
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
 
 // Svg - Root node of all Svg elements
@@ -34,6 +36,10 @@ class Svg extends Component{
         // more detail https://svgwg.org/svg2-draft/coords.html#ViewBoxAttribute
         viewBox: PropTypes.string,
         preserveAspectRatio: PropTypes.string
+    };
+
+    static defaultProps = {
+        preserveAspectRatio: 'xMidYMid meet'
     };
 
     constructor() {
@@ -79,52 +85,39 @@ class Svg extends Component{
     };
 
     render() {
-        let {props} = this;
-        let opacity = +props.opacity;
-        let width = +props.width;
-        let height = +props.height;
-        let viewBox = props.viewBox;
+        const {opacity, width, height, viewBox, preserveAspectRatio, style, ...props} = this.props;
         let dimensions;
 
         if (width && height) {
             dimensions = {
-                width,
-                height,
+                width: +width,
+                height: +height,
                 flex: 0
             };
         }
 
-        if (props.viewbox) {
-            viewBox = props.viewbox;
-            console.warn('Prop `viewbox` is deprecated. please use `viewBox` instead.');
-        }
-
-        let content = viewBox ? <ViewBox
-            viewBox={viewBox}
-            preserveAspectRatio={props.preserveAspectRatio}
-        >{props.children}</ViewBox> : props.children;
-
-        const nativeProps = _.omit(props, ['width', 'height', 'viewBox', 'preserveAspectRatio', 'opacity']);
-
         return <NativeSvgView
-            {...nativeProps}
+            {...props}
+            {...extractViewBox({ viewBox, preserveAspectRatio })}
             ref={ele => {this.root = ele;}}
             style={[
                 styles.svg,
-                props.style,
-                !isNaN(opacity) && {
-                    opacity
+                style,
+                !isNaN(+opacity) && {
+                    opacity: +opacity
                 },
                 dimensions
             ]}
             onDataURL={this._onDataURL}
-        >
-            {content}
-        </NativeSvgView>;
+        />;
     }
 }
 
-const NativeSvgView = requireNativeComponent('RNSVGSvgView', null);
+const NativeSvgView = requireNativeComponent('RNSVGSvgView', null, {
+    nativeOnly: {
+        ...ViewBoxAttributes
+    }
+});
 
 
 export default Svg;
