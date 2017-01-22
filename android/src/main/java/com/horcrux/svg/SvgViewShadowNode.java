@@ -17,9 +17,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Base64;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.util.Log;
 
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
@@ -48,6 +45,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private float mVbHeight;
     private String mAlign;
     private int mMeetOrSlice;
+    private Matrix mViewBoxMatrix;
 
     public SvgViewShadowNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
@@ -131,8 +129,8 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         if (mAlign != null) {
             RectF vbRect = new RectF(mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
             RectF eRect = new RectF(0, 0, getLayoutWidth(), getLayoutHeight());
-            Matrix viewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice, false);
-            canvas.concat(viewBoxMatrix);
+            mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice, false);
+            canvas.concat(mViewBoxMatrix);
         }
 
         Paint paint = new Paint();
@@ -188,7 +186,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
                 continue;
             }
 
-            viewTag = ((VirtualNode) getChildAt(i)).hitTest(point);
+            viewTag = ((VirtualNode) getChildAt(i)).hitTest(point, mViewBoxMatrix);
             if (viewTag != -1) {
                 break;
             }

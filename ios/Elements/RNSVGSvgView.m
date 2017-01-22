@@ -17,6 +17,7 @@
     NSMutableDictionary<NSString *, RNSVGNode *> *templates;
     NSMutableDictionary<NSString *, RNSVGBrushConverter *> *brushConverters;
     CGRect _boundingBox;
+    CGAffineTransform _viewBoxTransform;
 }
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
@@ -111,12 +112,12 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     if (self.align) {
-        CGAffineTransform viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
-                                                                  eRect:rect
-                                                                  align:self.align
-                                                            meetOrSlice:self.meetOrSlice
-                                                             fromSymbol:NO];
-        CGContextConcatCTM(context, viewBoxTransform);
+        _viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
+                                                 eRect:rect
+                                                 align:self.align
+                                           meetOrSlice:self.meetOrSlice
+                                            fromSymbol:NO];
+        CGContextConcatCTM(context, _viewBoxTransform);
     }
     
     for (RNSVGNode *node in self.subviews) {
@@ -131,12 +132,39 @@
     }
 }
 
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    if (self.align) {
+        for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
+            if (![node isKindOfClass:[RNSVGNode class]]) {
+                continue;
+            }
+            
+            if (event) {
+                node.active = NO;
+            } else if (node.active) {
+                return node;
+            }
+            
+            UIView *hitChild = [node hitTest: point withEvent:event withTransform:_viewBoxTransform];
+            
+            if (hitChild) {
+                node.active = YES;
+                return (node.responsible || (node != hitChild)) ? hitChild : self;
+            }
+        }
+        return nil;
+    } else {
+        return [super hitTest:point withEvent:event];
+    }
+}
+
+
 - (NSString *)getDataURL
 {
     UIGraphicsBeginImageContextWithOptions(_boundingBox.size, NO, 0);
     [self drawRect:_boundingBox];
-    UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
-    NSData *imageData = UIImagePNGRepresentation(image);
+    NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
     NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
     UIGraphicsEndImageContext();
     return base64;
