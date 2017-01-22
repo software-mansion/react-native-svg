@@ -13,7 +13,6 @@
     NSMutableDictionary *_originProperties;
     NSArray<NSString *> *_lastMergedList;
     NSArray<NSString *> *_attributeList;
-    BOOL _fillEvenodd;
     CGPathRef _hitArea;
 }
 
@@ -23,6 +22,7 @@
         _fillOpacity = 1;
         _strokeOpacity = 1;
         _strokeWidth = 1;
+        _fillRule = kRNSVGCGFCRuleNonzero;
     }
     return self;
 }
@@ -51,7 +51,6 @@
         return;
     }
     [self invalidate];
-    _fillEvenodd = fillRule == kRNSVGCGFCRuleEvenodd;
     _fillRule = fillRule;
 }
 
@@ -181,11 +180,13 @@
     BOOL fillColor = NO;
     [self clip:context];
     
+    BOOL evenodd = self.fillRule == kRNSVGCGFCRuleEvenodd;
+    
     if (self.fill) {
         fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
         
         if (fillColor) {
-            mode = _fillEvenodd ? kCGPathEOFill : kCGPathFill;
+            mode = evenodd ? kCGPathEOFill : kCGPathFill;
         } else {
             CGContextSaveGState(context);
             CGContextAddPath(context, path);
@@ -221,7 +222,7 @@
         BOOL strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
         
         if (strokeColor && fillColor) {
-            mode = _fillEvenodd ? kCGPathEOFillStroke : kCGPathFillStroke;
+            mode = evenodd ? kCGPathEOFillStroke : kCGPathFillStroke;
         } else if (!strokeColor) {
             // draw fill
             if (fillColor) {

@@ -12,8 +12,6 @@
 #import "RNSVGPattern.h"
 #import "RNSVGSolidColorBrush.h"
 #import <React/RCTLog.h>
-#import "RNSVGCGFCRule.h"
-#import "RNSVGVBMOS.h"
 #import <React/RCTFont.h>
 
 @implementation RCTConvert (RNSVG)
