@@ -222,11 +222,6 @@
     }
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target
-{
-    // abstract
-}
-
 - (void)traverseSubviews:(BOOL (^)(__kindof RNSVGNode *node))block
 {
     for (RNSVGNode *node in self.subviews) {

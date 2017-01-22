@@ -312,12 +312,8 @@
     return _attributeList;
 }
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target
+- (void)mergeProperties:(__kindof RNSVGRenderable *)target
 {
-    if (_lastMergedList) {
-        [self resetProperties];
-    }
-    
     NSArray<NSString *> *targetAttributeList = [target getAttributeList];
     
     if (targetAttributeList.count == 0) {
@@ -328,9 +324,9 @@
     _originProperties = [[NSMutableDictionary alloc] init];
     
     for (NSString *key in targetAttributeList) {
+        [_originProperties setValue:[self valueForKey:key] forKey:key];
         if (![attributeList containsObject:key]) {
             [attributeList addObject:key];
-            [_originProperties setValue:[self valueForKey:key] forKey:key];
             [self setValue:[target valueForKey:key] forKey:key];
         }
     }

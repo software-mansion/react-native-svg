@@ -83,8 +83,6 @@
  */
 - (void)saveDefinition;
 
-- (void)mergeProperties:(__kindof RNSVGNode *)target;
-
 - (void)beginTransparencyLayer:(CGContextRef)context;
 
 - (void)endTransparencyLayer:(CGContextRef)context;

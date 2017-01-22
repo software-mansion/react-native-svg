@@ -30,6 +30,11 @@
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 
 - (void)setHitArea:(CGPathRef)path;
+
 - (NSArray<NSString *> *)getAttributeList;
+
+- (void)mergeProperties:(__kindof RNSVGRenderable *)target;
+
+- (void)resetProperties;
 
 @end

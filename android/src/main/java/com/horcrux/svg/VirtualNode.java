@@ -178,10 +178,6 @@ public abstract class VirtualNode extends LayoutShadowNode {
 
     abstract public int hitTest(Point point, @Nullable Matrix matrix);
 
-    public int hitTest(Point point) {
-        return hitTest(point, null);
-    }
-
     public boolean isResponsible() {
         return mResponsible;
     }
@@ -235,12 +231,6 @@ public abstract class VirtualNode extends LayoutShadowNode {
             getSvgShadowNode().defineTemplate(this, mName);
         }
     }
-
-    abstract public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited);
-
-    abstract public void mergeProperties(VirtualNode target, ReadableArray mergeList);
-
-    abstract public void resetProperties();
 
     protected interface NodeRunnable {
         boolean run(VirtualNode node);

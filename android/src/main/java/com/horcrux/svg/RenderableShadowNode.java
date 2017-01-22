@@ -191,9 +191,8 @@ abstract public class RenderableShadowNode extends VirtualNode {
             for (int i = 0; i < propList.size(); i++) {
                 String fieldName = propertyNameToFieldName(propList.getString(i));
                 copy.pushString(fieldName);
-                mAttributeList.pushString(fieldName);
             }
-            mPropList = copy;
+            mPropList = mAttributeList = copy;
         }
 
         markUpdated();
@@ -323,44 +322,39 @@ abstract public class RenderableShadowNode extends VirtualNode {
         return region.contains(point.x, point.y);
     }
 
-    @Override
-    public void mergeProperties(VirtualNode target, ReadableArray mergeList, boolean inherited) {
-        mLastMergedList = mergeList;
+    public WritableArray getAttributeList() {
+        return mAttributeList;
+    }
 
-        if (mergeList.size() == 0) {
+    public void mergeProperties(RenderableShadowNode target) {
+        WritableArray targetAttributeList = target.getAttributeList();
+
+        if (targetAttributeList.size() == 0) {
             return;
         }
 
         mOriginProperties = new ArrayList<>();
         resetAttributeList();
 
-        for (int i = 0, size = mergeList.size(); i < size; i++) {
+        for (int i = 0, size = targetAttributeList.size(); i < size; i++) {
             try {
-                String fieldName = mergeList.getString(i);
+                String fieldName = targetAttributeList.getString(i);
                 Field field = getClass().getField(fieldName);
                 Object value = field.get(target);
                 mOriginProperties.add(field.get(this));
 
-                if (inherited) {
-                    if (!hasOwnProperty(fieldName)) {
-                        mAttributeList.pushString(fieldName);
-                        field.set(this, value);
-                    }
-                } else {
+                if (!hasOwnProperty(fieldName)) {
+                    mAttributeList.pushString(fieldName);
                     field.set(this, value);
                 }
             } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
         }
+
+        mLastMergedList = targetAttributeList;
     }
 
-    @Override
-    public void mergeProperties(VirtualNode target, ReadableArray mergeList) {
-        mergeProperties(target, mergeList, false);
-    }
-
-    @Override
     public void resetProperties() {
         if (mLastMergedList != null) {
             try {
@@ -374,8 +368,8 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
             mLastMergedList = null;
             mOriginProperties = null;
+            resetAttributeList();
         }
-        resetAttributeList();
     }
 
     private void resetAttributeList() {
