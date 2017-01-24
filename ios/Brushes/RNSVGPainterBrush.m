@@ -6,11 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGBaseBrush.h"
+#import "RNSVGPainterBrush.h"
+#import "RNSVGPainter.h"
 #import "RCTConvert+RNSVG.h"
 #import <React/RCTLog.h>
 
-@implementation RNSVGBaseBrush
+@implementation RNSVGPainterBrush
 
 - (instancetype)initWithArray:(NSArray *)array
 {
@@ -26,7 +27,7 @@
     return self;
 }
 
-- (void)paint:(CGContextRef)context opacity:(CGFloat)opacity brushConverter:(RNSVGBrushConverter *)brushConverter
+- (void)paint:(CGContextRef)context opacity:(CGFloat)opacity painter:(RNSVGPainter *)painter
 {
     BOOL transparency = opacity < 1;
     if (transparency) {
@@ -34,13 +35,7 @@
         CGContextBeginTransparencyLayer(context, NULL);
     }
     
-    if (brushConverter.type == kRNSVGLinearGradient) {
-        [brushConverter drawLinearGradient:context];
-    } else if (brushConverter.type == kRNSVGRadialGradient) {
-        [brushConverter drawRidialGradient:context];
-    } else if (brushConverter.type == kRNSVGPattern) {
-        // todo:
-    }
+    [painter paint:context];
     
     if (transparency) {
         CGContextEndTransparencyLayer(context);

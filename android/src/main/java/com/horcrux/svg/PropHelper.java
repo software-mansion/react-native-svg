@@ -87,112 +87,19 @@ class PropHelper {
         if (matched.matches()) {
             return Float.valueOf(matched.group(1)) / 100 * relative + offset;
         } else {
-            return Float.valueOf(percentage) * scale;
+            return Float.valueOf(percentage) * scale + offset;
         }
     }
 
     /**
-     * Judge given string is a percentage-like string or not.
+     * Matches if the `string` is percentage-like.
      *
      * @param string percentage string
-     * @return string is percentage-like or not.
+     * @return if `string` is percentage-like.
      */
-
 
     static boolean isPercentage(String string) {
         return percentageRegExp.matcher(string).matches();
-    }
-
-    /**
-     *
-     */
-    static class RNSVGBrush {
-
-        private GradientType mType = GradientType.LINEAR_GRADIENT;
-        private ReadableArray mPoints;
-        private ReadableArray mColors;
-
-        public RNSVGBrush(GradientType type, ReadableArray points, ReadableArray colors) {
-            mType = type;
-            mPoints = points;
-            mColors = colors;
-        }
-
-        public enum GradientType {
-            LINEAR_GRADIENT(0),
-            RADIAL_GRADIENT(1);
-
-            GradientType(int ni) {
-                nativeInt = ni;
-            }
-
-            final int nativeInt;
-        }
-
-        private static void parseGradientStops(ReadableArray value, int stopsCount, float[] stops, int[] stopsColors, float opacity) {
-            int startStops = value.size() - stopsCount;
-            for (int i = 0; i < stopsCount; i++) {
-                stops[i] = (float) value.getDouble(startStops + i);
-                stopsColors[i] = Color.argb(
-                        (int) (value.getDouble(i * 4 + 3) * 255 * opacity),
-                        (int) (value.getDouble(i * 4) * 255),
-                        (int) (value.getDouble(i * 4 + 1) * 255),
-                        (int) (value.getDouble(i * 4 + 2) * 255));
-
-            }
-        }
-
-        public void setupPaint(Paint paint, RectF box, float scale, float opacity) {
-            float height = box.height();
-            float width = box.width();
-            float midX = box.centerX();
-            float midY = box.centerY();
-            float offsetX = (midX - width / 2);
-            float offsetY = (midY - height / 2);
-
-
-            int stopsCount = mColors.size() / 5;
-            int[] stopsColors = new int[stopsCount];
-            float[] stops = new float[stopsCount];
-            parseGradientStops(mColors, stopsCount, stops, stopsColors, opacity);
-
-            if (mType == GradientType.LINEAR_GRADIENT) {
-                float x1 = PropHelper.fromPercentageToFloat(mPoints.getString(0), width, offsetX, scale);
-                float y1 = PropHelper.fromPercentageToFloat(mPoints.getString(1), height, offsetY, scale);
-                float x2 = PropHelper.fromPercentageToFloat(mPoints.getString(2), width, offsetX, scale);
-                float y2 = PropHelper.fromPercentageToFloat(mPoints.getString(3), height, offsetY, scale);
-                paint.setShader(
-                        new LinearGradient(
-                                x1,
-                                y1,
-                                x2,
-                                y2,
-                                stopsColors,
-                                stops,
-                                Shader.TileMode.CLAMP));
-            } else {
-                float rx = PropHelper.fromPercentageToFloat(mPoints.getString(2), width, 0f, scale);
-                float ry = PropHelper.fromPercentageToFloat(mPoints.getString(3), height, 0f, scale);
-                float cx = PropHelper.fromPercentageToFloat(mPoints.getString(4), width, offsetX, scale);
-                float cy = PropHelper.fromPercentageToFloat(mPoints.getString(5), height, offsetY, scale) / (ry / rx);
-                // TODO: support focus point.
-                //float fx = PropHelper.fromPercentageToFloat(mPoints.getString(0), width, offsetX, scale);
-                //float fy = PropHelper.fromPercentageToFloat(mPoints.getString(1), height, offsetY, scale) / (ry / rx);
-                Shader radialGradient = new RadialGradient(
-                        cx,
-                        cy,
-                        rx,
-                        stopsColors,
-                        stops,
-                        Shader.TileMode.CLAMP
-                );
-
-                Matrix radialMatrix = new Matrix();
-                radialMatrix.preScale(1f, ry / rx);
-                radialGradient.setLocalMatrix(radialMatrix);
-                paint.setShader(radialGradient);
-            }
-        }
     }
 
     static class PathParser {

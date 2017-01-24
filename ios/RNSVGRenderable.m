@@ -175,7 +175,6 @@
         return;
     }
     
-    
     CGPathDrawingMode mode = kCGPathStroke;
     BOOL fillColor = NO;
     [self clip:context];
@@ -193,7 +192,7 @@
             CGContextClip(context);
             [self.fill paint:context
                      opacity:self.fillOpacity
-              brushConverter:[[self getSvgView] getDefinedBrushConverter:self.fill.brushRef]
+                     painter:[[self getSvgView] getDefinedPainter:self.fill.brushRef]
              ];
             CGContextRestoreGState(context);
             
@@ -237,7 +236,7 @@
             
             [self.stroke paint:context
                        opacity:self.strokeOpacity
-                brushConverter:[[self getSvgView] getDefinedBrushConverter:self.stroke.brushRef]
+                       painter:[[self getSvgView] getDefinedPainter:self.stroke.brushRef]
              ];
             return;
         }

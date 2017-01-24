@@ -8,10 +8,6 @@
 
 #import "RNSVGBrush.h"
 
-@interface RNSVGBaseBrush : RNSVGBrush
-
-- (instancetype)initWithArray:(NSArray *)array;
-
-- (void)paint:(CGContextRef)context opacity:(CGFloat)opacity brushConverter:(RNSVGBrushConverter *)brushConverter;
+@interface RNSVGPainterBrush : RNSVGBrush
 
 @end

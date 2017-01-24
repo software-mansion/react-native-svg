@@ -35,7 +35,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
     private final Map<String, VirtualNode> mDefinedClipPaths = new HashMap<>();
     private final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
-    private final Map<String, PropHelper.RNSVGBrush> mDefinedBrushes = new HashMap<>();
+    private final Map<String, Brush> mDefinedBrushes = new HashMap<>();
     private Canvas mCanvas;
     protected final float mScale;
 
@@ -106,7 +106,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     @Override
     public void setReactTag(int reactTag) {
         super.setReactTag(reactTag);
-        SvgInstancesManager.registerShadowNode(this);
+        SvgViewManager.setShadowNode(this);
     }
 
     public Object drawOutput() {
@@ -211,11 +211,11 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         return mDefinedTemplates.get(templateRef);
     }
 
-    public void defineBrush(PropHelper.RNSVGBrush brush, String brushRef) {
+    public void defineBrush(Brush brush, String brushRef) {
         mDefinedBrushes.put(brushRef, brush);
     }
 
-    public PropHelper.RNSVGBrush getDefinedBrush(String brushRef) {
+    public Brush getDefinedBrush(String brushRef) {
         return mDefinedBrushes.get(brushRef);
     }
 }

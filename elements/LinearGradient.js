@@ -1,10 +1,10 @@
-import React, {PropTypes} from 'react';
+import React, {PropTypes, Component} from 'react';
 import {numberProp} from '../lib/props';
-import Gradient from './Gradient';
+import extractGradient from '../lib/extract/extractGradient';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import {LinearGradientAttributes} from '../lib/attributes';
 
-class LinearGradient extends Gradient{
+class LinearGradient extends Component{
     static displayName = 'LinearGradient';
     static propTypes = {
         x1: numberProp.isRequired,
@@ -28,8 +28,7 @@ class LinearGradient extends Gradient{
             y1={props.y1.toString()}
             x2={props.x2.toString()}
             y2={props.y2.toString()}
-            gradient={this.getGradient()}
-            name={props.id}
+            {...extractGradient(this.props)}
         />;
 
     }

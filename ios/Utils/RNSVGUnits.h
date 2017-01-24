@@ -6,9 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-typedef enum {
-    kRNSVGUndefinedType,
-    kRNSVGLinearGradient,
-    kRNSVGRadialGradient,
-    kRNSVGPattern
-} RNSVGBrushType;
+typedef CF_ENUM(int32_t, RNSVGUnits) {
+    kRNSVGUnitsObjectBoundingBox,
+    kRNSVGUnitsUserSpaceOnUse
+};

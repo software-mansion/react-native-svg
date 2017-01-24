@@ -26,11 +26,18 @@
 
 - (void)saveDefinition
 {
-    RNSVGBrushConverter *converter = [[RNSVGBrushConverter alloc] init];
-    converter.colors = self.gradient;
-    converter.points = @[self.fx, self.fy, self.rx, self.ry, self.cx, self.cy];
-    converter.type = kRNSVGRadialGradient;
-    [[self getSvgView] defineBrushConverter:converter brushConverterName:self.name];
+    NSArray<NSString *> *points = @[self.fx, self.fy, self.rx, self.ry, self.cx, self.cy];
+    RNSVGPainter *painter = [[RNSVGPainter alloc] initWithPointsArray:points];
+    [painter setUnits:self.gradientUnits];
+    [painter setTransform:self.gradientTransform];
+    [painter setRadialGradientColors:self.gradient];
+    
+    RNSVGSvgView *svg = [self getSvgView];
+    if (self.gradientUnits == kRNSVGUnitsUserSpaceOnUse) {
+        [painter setUserSpaceBoundingBox:[svg getContextBounds]];
+    }
+    
+    [svg definePainter:painter painterName:self.name];
 }
 
 @end
