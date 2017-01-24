@@ -9,7 +9,7 @@
 
 package com.horcrux.svg;
 
-import com.facebook.react.bridge.JavaOnlyArray;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -25,9 +25,10 @@ public class RadialGradientShadowNode extends DefinitionShadowNode {
     private String mCx;
     private String mCy;
     private ReadableArray mGradient;
+    private Brush.BrushUnits mGradientUnits;
 
     @ReactProp(name = "fx")
-    public void setFX(String fx) {
+    public void setFx(String fx) {
         mFx = fx;
         markUpdated();
     }
@@ -68,10 +69,23 @@ public class RadialGradientShadowNode extends DefinitionShadowNode {
         markUpdated();
     }
 
+    @ReactProp(name = "gradientUnits")
+    public void setGradientUnits(int gradientUnits) {
+        switch (gradientUnits) {
+            case 0:
+                mGradientUnits = Brush.BrushUnits.OBJECT_BOUNDING_BOX;
+                break;
+            case 1:
+                mGradientUnits = Brush.BrushUnits.USER_SPACE_ON_USE;
+                break;
+        }
+        markUpdated();
+    }
+
     @Override
     protected void saveDefinition() {
         if (mName != null) {
-            WritableArray points = new JavaOnlyArray();
+            WritableArray points = Arguments.createArray();
             points.pushString(mFx);
             points.pushString(mFy);
             points.pushString(mRx);
@@ -79,8 +93,15 @@ public class RadialGradientShadowNode extends DefinitionShadowNode {
             points.pushString(mCx);
             points.pushString(mCy);
 
-            PropHelper.RNSVGBrush brush = new PropHelper.RNSVGBrush(PropHelper.RNSVGBrush.GradientType.RADIAL_GRADIENT, points, mGradient);
-            getSvgShadowNode().defineBrush(brush, mName);
+            Brush brush = new Brush(Brush.BrushType.RADIAL_GRADIENT, points, mGradientUnits);
+            brush.setGradientColors(mGradient);
+
+            SvgViewShadowNode svg = getSvgShadowNode();
+            if (mGradientUnits == Brush.BrushUnits.USER_SPACE_ON_USE) {
+                brush.setUserSpaceBoundingBox(svg.getCanvasBounds());
+            }
+
+            svg.defineBrush(brush, mName);
         }
     }
 }

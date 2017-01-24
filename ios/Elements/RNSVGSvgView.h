@@ -7,7 +7,7 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "RNSVGBrushCOnverter.h"
+#import "RNSVGPainter.h"
 #import "RNSVGContainer.h"
 #import "RNSVGVBMOS.h"
 
@@ -34,9 +34,9 @@
 
 - (RNSVGNode *)getDefinedTemplate:(NSString *)templateName;
 
-- (void)defineBrushConverter:(RNSVGBrushConverter *)brushConverter brushConverterName:(NSString *)brushConverterName;
+- (void)definePainter:(RNSVGPainter *)painter painterName:(NSString *)painterName;
 
-- (RNSVGBrushConverter *)getDefinedBrushConverter:(NSString *)brushConverterName;
+- (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;
 
 - (NSString *)getDataURL;
 

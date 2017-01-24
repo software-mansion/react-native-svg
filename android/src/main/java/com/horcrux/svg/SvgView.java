@@ -19,7 +19,6 @@ import android.view.View;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.uimanager.events.TouchEvent;
 import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
 import com.facebook.react.uimanager.events.TouchEventType;
@@ -61,7 +60,7 @@ public class SvgView extends View {
     @Override
     public void setId(int id) {
         super.setId(id);
-        SvgInstancesManager.registerSvgView(this);
+        SvgViewManager.setSvgView(this);
     }
 
     public void setBitmap(Bitmap bitmap) {
@@ -81,7 +80,7 @@ public class SvgView extends View {
     }
 
     private SvgViewShadowNode getShadowNode() {
-        return SvgInstancesManager.getShadowNodeByTag(getId());
+        return SvgViewManager.getShadowNodeByTag(getId());
     }
 
     @Override

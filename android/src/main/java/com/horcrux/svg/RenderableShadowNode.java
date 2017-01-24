@@ -21,13 +21,10 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Region;
 
-import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
-import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.lang.reflect.Field;
@@ -208,10 +205,10 @@ abstract public class RenderableShadowNode extends VirtualNode {
             mPath.setFillType(mFillRule);
 
             clip(canvas, paint);
-            if (setupFillPaint(paint, opacity * mFillOpacity, null)) {
+            if (setupFillPaint(paint, opacity * mFillOpacity)) {
                 canvas.drawPath(mPath, paint);
             }
-            if (setupStrokePaint(paint, opacity * mStrokeOpacity, null)) {
+            if (setupStrokePaint(paint, opacity * mStrokeOpacity)) {
                 canvas.drawPath(mPath, paint);
             }
         }
@@ -221,12 +218,12 @@ abstract public class RenderableShadowNode extends VirtualNode {
      * Sets up paint according to the props set on a shadow view. Returns {@code true}
      * if the fill should be drawn, {@code false} if not.
      */
-    protected boolean setupFillPaint(Paint paint, float opacity, @Nullable RectF box) {
+    protected boolean setupFillPaint(Paint paint, float opacity) {
         if (mFill != null && mFill.size() > 0) {
             paint.reset();
             paint.setFlags(Paint.ANTI_ALIAS_FLAG);
             paint.setStyle(Paint.Style.FILL);
-            setupPaint(paint, opacity, mFill, box);
+            setupPaint(paint, opacity, mFill);
             return true;
         }
         return false;
@@ -236,7 +233,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
      * Sets up paint according to the props set on a shadow view. Returns {@code true}
      * if the stroke should be drawn, {@code false} if not.
      */
-    protected boolean setupStrokePaint(Paint paint, float opacity, @Nullable  RectF box) {
+    protected boolean setupStrokePaint(Paint paint, float opacity) {
         paint.reset();
         if (mStrokeWidth == 0 || mStroke == null || mStroke.size() == 0) {
             return false;
@@ -248,7 +245,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
         paint.setStrokeJoin(mStrokeLinejoin);
         paint.setStrokeMiter(mStrokeMiterlimit * mScale);
         paint.setStrokeWidth(mStrokeWidth * mScale);
-        setupPaint(paint, opacity, mStroke, box);
+        setupPaint(paint, opacity, mStroke);
 
         if (mStrokeDasharray != null && mStrokeDasharray.length > 0) {
             paint.setPathEffect(new DashPathEffect(mStrokeDasharray, mStrokeDashoffset));
@@ -258,7 +255,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
     }
 
 
-    private void setupPaint(Paint paint, float opacity, ReadableArray colors, @Nullable RectF box) {
+    private void setupPaint(Paint paint, float opacity, ReadableArray colors) {
         int colorType = colors.getInt(0);
         if (colorType == 0) {
             // solid color
@@ -268,17 +265,13 @@ abstract public class RenderableShadowNode extends VirtualNode {
                     (int) (colors.getDouble(2) * 255),
                     (int) (colors.getDouble(3) * 255));
         } else if (colorType == 1) {
-            if (box == null) {
-                box = new RectF();
-                mPath.computeBounds(box, true);
-            }
-            PropHelper.RNSVGBrush brush = getSvgShadowNode().getDefinedBrush(colors.getString(1));
+            RectF box = new RectF();
+            mPath.computeBounds(box, true);
+
+            Brush brush = getSvgShadowNode().getDefinedBrush(colors.getString(1));
             if (brush != null) {
                 brush.setupPaint(paint, box, mScale, opacity);
             }
-        } else {
-            // TODO: Support pattern.
-            FLog.w(ReactConstants.TAG, "RNSVG: Color type " + colorType + " not supported!");
         }
 
     }
@@ -334,7 +327,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
                 targetAttributeList.size() == 0) {
             return;
         }
-
+        
         mOriginProperties = new ArrayList<>();
         mAttributeList = clonePropList();
 

@@ -14,6 +14,7 @@
 #import "RNSVGCGFCRule.h"
 #import "RNSVGVBMOS.h"
 #import "RNSVGTextAnchor.h"
+#import "RNSVGUnits.h"
 #import "RNSVGPathParser.h"
 
 @class RNSVGBrush;
@@ -23,6 +24,7 @@
 + (RNSVGTextAnchor)RNSVGTextAnchor:(id)json;
 + (RNSVGCGFCRule)RNSVGCGFCRule:(id)json;
 + (RNSVGVBMOS)RNSVGVBMOS:(id)json;
++ (RNSVGUnits)RNSVGUnits:(id)json;
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;
 + (RNSVGPathParser *)RNSVGCGPath:(NSString *)d;

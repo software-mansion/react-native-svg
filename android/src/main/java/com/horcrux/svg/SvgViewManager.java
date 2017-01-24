@@ -10,12 +10,15 @@
 package com.horcrux.svg;
 
 import android.graphics.Bitmap;
+import android.util.SparseArray;
 
 import com.facebook.yoga.YogaMeasureMode;
 import com.facebook.yoga.YogaMeasureFunction;
 import com.facebook.yoga.YogaNodeAPI;
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+
+import javax.annotation.Nullable;
 
 /**
  * ViewManager for RNSVGSvgView React views. Renders as a {@link SvgView} and handles
@@ -24,6 +27,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 public class SvgViewManager extends BaseViewManager<SvgView, SvgViewShadowNode> {
 
     private static final String REACT_CLASS = "RNSVGSvgView";
+
     private static final YogaMeasureFunction MEASURE_FUNCTION = new YogaMeasureFunction() {
         @Override
         public long measure(
@@ -35,6 +39,25 @@ public class SvgViewManager extends BaseViewManager<SvgView, SvgViewShadowNode> 
             throw new IllegalStateException("SurfaceView should have explicit width and height set");
         }
     };
+
+    private static final SparseArray<SvgViewShadowNode> mTagToShadowNode = new SparseArray<>();
+    private static final SparseArray<SvgView> mTagToSvgView = new SparseArray<>();
+
+    static void setShadowNode(SvgViewShadowNode shadowNode) {
+        mTagToShadowNode.put(shadowNode.getReactTag(), shadowNode);
+    }
+
+    static void setSvgView(SvgView svg) {
+        mTagToSvgView.put(svg.getId(), svg);
+    }
+
+    static @Nullable SvgView getSvgViewByTag(int tag) {
+        return mTagToSvgView.get(tag);
+    }
+
+    static @Nullable SvgViewShadowNode getShadowNodeByTag(int tag) {
+        return mTagToShadowNode.get(tag);
+    }
 
     @Override
     public String getName() {
@@ -55,7 +78,9 @@ public class SvgViewManager extends BaseViewManager<SvgView, SvgViewShadowNode> 
 
     @Override
     public void onDropViewInstance(SvgView view) {
-        SvgInstancesManager.unregisterInstance(view.getId());
+        int tag = view.getId();
+        mTagToShadowNode.remove(tag);
+        mTagToSvgView.remove(tag);
     }
 
     @Override

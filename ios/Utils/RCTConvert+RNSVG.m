@@ -8,8 +8,7 @@
 
 #import "RCTConvert+RNSVG.h"
 
-#import "RNSVGBaseBrush.h"
-#import "RNSVGPattern.h"
+#import "RNSVGPainterBrush.h"
 #import "RNSVGSolidColorBrush.h"
 #import <React/RCTLog.h>
 #import <React/RCTFont.h>
@@ -33,6 +32,11 @@ RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
                                         @"middle": @(kRNSVGTextAnchorMiddle),
                                         @"end": @(kRNSVGTextAnchorEnd)
                                        }), kRNSVGTextAnchorAuto, intValue)
+
+RCT_ENUM_CONVERTER(RNSVGUnits, (@{
+                                     @"objectBoundingBox": @(kRNSVGUnitsObjectBoundingBox),
+                                     @"userSpaceOnUse": @(kRNSVGUnitsUserSpaceOnUse),
+                                     }), kRNSVGUnitsObjectBoundingBox, intValue)
 
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json
 {
@@ -66,7 +70,7 @@ RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
             // We should memoize colors but look ups may be just as expensive.
             return [[RNSVGSolidColorBrush alloc] initWithArray:arr];
         case 1: // brush
-            return [[RNSVGBaseBrush alloc] initWithArray:arr];
+            return [[RNSVGPainterBrush alloc] initWithArray:arr];
         default:
             RCTLogError(@"Unknown brush type: %zd", type);
             return nil;
@@ -112,8 +116,8 @@ RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
     RNSVGCGFloatArray colorsAndOffsets = [self RNSVGCGFloatArray:arr];
     size_t stops = colorsAndOffsets.count / 5;
     CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
-    
-    
+
+
     CGGradientRef gradient = CGGradientCreateWithColorComponents(
                                                                  rgb,
                                                                  colorsAndOffsets.array,

@@ -1,10 +1,10 @@
-import React, {PropTypes} from 'react';
+import React, {PropTypes, Component} from 'react';
 import {numberProp} from '../lib/props';
-import Gradient from './Gradient';
+import extractGradient from '../lib/extract/extractGradient';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import {RadialGradientAttributes} from '../lib/attributes';
 
-class RadialGradient extends Gradient{
+class RadialGradient extends Component{
     static displayName = 'RadialGradient';
     static propTypes = {
         fx: numberProp.isRequired,
@@ -34,8 +34,7 @@ class RadialGradient extends Gradient{
             ry={(props.ry || props.r).toString()}
             cx={props.cx.toString()}
             cy={props.cy.toString()}
-            gradient={this.getGradient()}
-            name={props.id}
+            {...extractGradient(this.props)}
         />;
 
     }

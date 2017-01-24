@@ -13,9 +13,9 @@
 
 @implementation RNSVGSvgView
 {
-    NSMutableDictionary<NSString *, RNSVGNode *> *clipPaths;
-    NSMutableDictionary<NSString *, RNSVGNode *> *templates;
-    NSMutableDictionary<NSString *, RNSVGBrushConverter *> *brushConverters;
+    NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
+    NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
+    NSMutableDictionary<NSString *, RNSVGPainter *> *_painters;
     CGRect _boundingBox;
     CGAffineTransform _viewBoxTransform;
 }
@@ -105,9 +105,9 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    clipPaths = nil;
-    templates = nil;
-    brushConverters = nil;
+    _clipPaths = nil;
+    _templates = nil;
+    _painters = nil;
     _boundingBox = rect;
     CGContextRef context = UIGraphicsGetCurrentContext();
     
@@ -177,42 +177,42 @@
 
 - (void)defineClipPath:(__kindof RNSVGNode *)clipPath clipPathName:(NSString *)clipPathName
 {
-    if (!clipPaths) {
-        clipPaths = [[NSMutableDictionary alloc] init];
+    if (!_clipPaths) {
+        _clipPaths = [[NSMutableDictionary alloc] init];
     }
-    [clipPaths setObject:clipPath forKey:clipPathName];
+    [_clipPaths setObject:clipPath forKey:clipPathName];
 }
 
 - (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathName
 {
-    return clipPaths ? [clipPaths objectForKey:clipPathName] : nil;
+    return _clipPaths ? [_clipPaths objectForKey:clipPathName] : nil;
 }
 
 - (void)defineTemplate:(RNSVGNode *)template templateName:(NSString *)templateName
 {
-    if (!templates) {
-        templates = [[NSMutableDictionary alloc] init];
+    if (!_templates) {
+        _templates = [[NSMutableDictionary alloc] init];
     }
-    [templates setObject:template forKey:templateName];
+    [_templates setObject:template forKey:templateName];
 }
 
 - (RNSVGNode *)getDefinedTemplate:(NSString *)templateName
 {
-    return templates ? [templates objectForKey:templateName] : nil;
+    return _templates ? [_templates objectForKey:templateName] : nil;
 }
 
 
-- (void)defineBrushConverter:(RNSVGBrushConverter *)brushConverter brushConverterName:(NSString *)brushConverterName
+- (void)definePainter:(RNSVGPainter *)painter painterName:(NSString *)painterName
 {
-    if (!brushConverters) {
-        brushConverters = [[NSMutableDictionary alloc] init];
+    if (!_painters) {
+        _painters = [[NSMutableDictionary alloc] init];
     }
-    [brushConverters setObject:brushConverter forKey:brushConverterName];
+    [_painters setObject:painter forKey:painterName];
 }
 
-- (RNSVGBrushConverter *)getDefinedBrushConverter:(NSString *)brushConverterName
+- (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;
 {
-    return brushConverters ? [brushConverters objectForKey:brushConverterName] : nil;
+    return _painters ? [_painters objectForKey:painterName] : nil;
 }
 
 - (CGRect)getContextBounds
