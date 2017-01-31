@@ -613,6 +613,6 @@ npm i
 
 ### Thanks:
 
-* [w3schools.com SVG Tutorial](http://www.w3schools.com/svg/)
+* [w3schools.com SVG Tutorial](http://www.w3schools.com/graphics/svg_intro.asp)
 * [SVG Tutorial](http://tutorials.jenkov.com/svg/index.html)
 * [MDN](https://developer.mozilla.org/en/docs/Web/SVG)
