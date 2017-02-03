@@ -3,8 +3,9 @@ import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src
 import Shape from './Shape';
 import {CircleAttributes} from '../lib/attributes';
 import {pathProps, numberProp} from '../lib/props';
+import extractProps from '../lib/extract/extractProps';
 
-class Circle extends Shape {
+export default class extends Shape {
     static displayName = 'Circle';
 
     static propTypes = {
@@ -28,7 +29,7 @@ class Circle extends Shape {
         let props = this.props;
         return <RNSVGCircle
             ref={ele => {this.root = ele;}}
-            {...this.extractProps(props)}
+            {...extractProps(props, this)}
             cx={props.cx.toString()}
             cy={props.cy.toString()}
             r={props.r.toString()}
@@ -42,5 +43,3 @@ const RNSVGCircle = createReactNativeComponentClass({
     validAttributes: CircleAttributes,
     uiViewClassName: 'RNSVGCircle'
 });
-
-export default Circle;

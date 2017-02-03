@@ -4,7 +4,7 @@ import extractGradient from '../lib/extract/extractGradient';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import {LinearGradientAttributes} from '../lib/attributes';
 
-class LinearGradient extends Component{
+export default class extends Component{
     static displayName = 'LinearGradient';
     static propTypes = {
         x1: numberProp.isRequired,
@@ -38,6 +38,3 @@ const RNSVGLinearGradient = createReactNativeComponentClass({
     validAttributes: LinearGradientAttributes,
     uiViewClassName: 'RNSVGLinearGradient'
 });
-
-
-export default LinearGradient;

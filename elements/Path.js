@@ -3,8 +3,9 @@ import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src
 import {PathAttributes} from '../lib/attributes';
 import Shape from './Shape';
 import {pathProps} from '../lib/props';
+import extractProps from '../lib/extract/extractProps';
 
-class Path extends Shape {
+export default class extends Shape {
     static displayName = 'Path';
 
     static propTypes = {
@@ -22,7 +23,7 @@ class Path extends Shape {
         return (
             <RNSVGPath
                 ref={ele => {this.root = ele;}}
-                {...this.extractProps(props)}
+                {...extractProps(props, this)}
                 d={props.d}
             />
         );
@@ -33,5 +34,3 @@ const RNSVGPath = createReactNativeComponentClass({
     validAttributes: PathAttributes,
     uiViewClassName: 'RNSVGPath'
 });
-
-export default Path;

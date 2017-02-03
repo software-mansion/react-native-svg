@@ -5,9 +5,11 @@ import {numberProp, touchableProps, responderProps} from '../lib/props';
 import Shape from './Shape';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import {meetOrSliceTypes, alignEnum} from '../lib/extract/extractViewBox';
+import extractProps from '../lib/extract/extractProps';
+
 const spacesRegExp = /\s+/;
 
-class Image extends Shape {
+export default class extends Shape {
     static displayName = 'Image';
     static propTypes = {
         ...responderProps,
@@ -40,7 +42,7 @@ class Image extends Shape {
 
         return <RNSVGImage
             ref={ele => {this.root = ele;}}
-            {...this.extractProps({...props, x: null, y: null}, {responder: true, transform: true})}
+            {...extractProps({...props, x: null, y: null}, this)}
             x={props.x.toString()}
             y={props.y.toString()}
             width={props.width.toString()}
@@ -56,5 +58,3 @@ const RNSVGImage = createReactNativeComponentClass({
     validAttributes: ImageAttributes,
     uiViewClassName: 'RNSVGImage'
 });
-
-export default Image;

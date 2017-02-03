@@ -4,11 +4,12 @@ import {TextPathAttributes} from '../lib/attributes';
 import extractText from '../lib/extract/extractText';
 import Shape from './Shape';
 import {pathProps, fontProps, numberProp} from '../lib/props';
+import extractProps from '../lib/extract/extractProps';
 import TSpan from './TSpan';
 
 const idExpReg = /^#(.+)$/;
 
-class TextPath extends Shape {
+export default class extends Shape {
     static displayName = 'Span';
 
     static propTypes = {
@@ -28,11 +29,11 @@ class TextPath extends Shape {
 
                 return <RNSVGTextPath
                     href={href}
-                    {...this.extractProps({
+                    {...extractProps({
                         ...props,
                         x: null,
                         y: null
-                    })}
+                    }, this)}
                     {...extractText({
                         children,
                         startOffset
@@ -51,5 +52,3 @@ const RNSVGTextPath = createReactNativeComponentClass({
     validAttributes: TextPathAttributes,
     uiViewClassName: 'RNSVGTextPath'
 });
-
-export default TextPath;

@@ -3,10 +3,10 @@ import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src
 import extractText from '../lib/extract/extractText';
 import {numberProp, pathProps, fontProps} from '../lib/props';
 import {TextAttributes} from '../lib/attributes';
+import extractProps from '../lib/extract/extractProps';
 import Shape from './Shape';
-import TSpan from './TSpan';
 
-class Text extends Shape {
+export default class extends Shape {
     static displayName = 'Text';
 
     static propTypes = {
@@ -42,11 +42,11 @@ class Text extends Shape {
 
         return <RNSVGText
             ref={ele => {this.root = ele;}}
-            {...this.extractProps({
+            {...extractProps({
                 ...props,
                 x: null,
                 y: null
-            })}
+            }, this)}
             {...extractText(props, true)}
         />;
     }
@@ -56,5 +56,3 @@ const RNSVGText = createReactNativeComponentClass({
     validAttributes: TextAttributes,
     uiViewClassName: 'RNSVGText'
 });
-
-export default Text;
