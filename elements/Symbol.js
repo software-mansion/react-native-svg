@@ -3,9 +3,9 @@ import extractViewBox from '../lib/extract/extractViewBox';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import {SymbolAttributes} from '../lib/attributes';
 
-class SymbolElement extends Component{
+export default class extends Component{
     static displayName = 'Symbol';
-    static propType = {
+    static propTypes = {
         id: PropTypes.string.isRequired,
         viewBox: PropTypes.string,
         preserveAspectRatio: PropTypes.string
@@ -26,5 +26,3 @@ const RNSVGSymbol = createReactNativeComponentClass({
     validAttributes: SymbolAttributes,
     uiViewClassName: 'RNSVGSymbol'
 });
-
-export default SymbolElement;

@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import Path from './Path';
 import {pathProps} from '../lib/props';
-import _ from 'lodash';
 
-class Polygon extends Component{
+export default class extends Component{
     static displayName = 'Polygon';
     static propTypes = {
         ...pathProps,
@@ -20,7 +19,7 @@ class Polygon extends Component{
 
     render() {
         let points = this.props.points;
-        if (_.isArray(points)) {
+        if (Array.isArray(points)) {
             points = points.join(',');
         }
 
@@ -31,4 +30,3 @@ class Polygon extends Component{
         />;
     }
 }
-export default Polygon;

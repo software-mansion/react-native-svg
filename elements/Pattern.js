@@ -1,14 +1,13 @@
 import {Component, PropTypes} from 'react';
+import {numberProp} from '../lib/props';
 
-let propType = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
-
-class Pattern extends Component{
+export default class extends Component{
     static displayName = 'Pattern';
     static propTypes = {
-        x1: propType,
-        x2: propType,
-        y1: propType,
-        y2: propType,
+        x1: numberProp,
+        x2: numberProp,
+        y1: numberProp,
+        y2: numberProp,
         patternTransform: PropTypes.string,
         patternUnits: PropTypes.oneOf(['userSpaceOnUse', 'objectBoundingBox']),
         patternContentUnits: PropTypes.oneOf(['userSpaceOnUse', 'objectBoundingBox'])
@@ -19,5 +18,3 @@ class Pattern extends Component{
         return null;
     }
 }
-
-export default Pattern;

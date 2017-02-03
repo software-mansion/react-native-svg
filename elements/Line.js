@@ -3,8 +3,9 @@ import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src
 import {LineAttributes} from '../lib/attributes';
 import Shape from './Shape';
 import {pathProps, numberProp} from '../lib/props';
+import extractProps from '../lib/extract/extractProps';
 
-class Line extends Shape {
+export default class extends Shape {
     static displayName = 'Line';
 
     static propTypes = {
@@ -30,7 +31,7 @@ class Line extends Shape {
         let props = this.props;
         return <RNSVGLine
             ref={ele => {this.root = ele;}}
-            {...this.extractProps(props)}
+            {...extractProps(props, this)}
             x1={props.x1.toString()}
             y1={props.y1.toString()}
             x2={props.x2.toString()}
@@ -43,5 +44,3 @@ const RNSVGLine = createReactNativeComponentClass({
     validAttributes: LineAttributes,
     uiViewClassName: 'RNSVGLine'
 });
-
-export default Line;

@@ -1,12 +1,12 @@
-import {PropTypes} from 'react';
+import React, {PropTypes} from 'react';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
+import extractProps from '../lib/extract/extractProps';
 import {pathProps, numberProp} from '../lib/props';
 import {UseAttributes} from '../lib/attributes';
 import Shape from './Shape';
-import React from 'react';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 
 const idExpReg = /^#(.+)$/;
-class Use extends Shape {
+export default class extends Shape {
     static displayName = 'Use';
 
     static propTypes = {
@@ -21,9 +21,9 @@ class Use extends Shape {
     };
 
     render() {
-        let {props} = this;
+        const {props} = this;
         // match "url(#pattern)"
-        let matched = props.href.match(idExpReg);
+        const matched = props.href.match(idExpReg);
         let href;
 
         if (matched) {
@@ -34,11 +34,9 @@ class Use extends Shape {
             console.warn('Invalid `href` prop for `Use` element, expected a href like `"#id"`, but got: "' + props.href + '"');
         }
 
-        let extractedProps = this.extractProps(props);
-
         return <RNSVGUse
             ref={ele => {this.root = ele;}}
-            {...extractedProps}
+            {...extractProps(props, this)}
             href={href}
             width={props.width}
             height={props.height}
@@ -50,6 +48,4 @@ const RNSVGUse = createReactNativeComponentClass({
     validAttributes: UseAttributes,
     uiViewClassName: 'RNSVGUse'
 });
-
-export default Use;
 

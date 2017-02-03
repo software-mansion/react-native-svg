@@ -1,7 +1,7 @@
 import {Component, PropTypes} from 'react';
 import {numberProp} from '../lib/props';
 
-class Stop extends Component{
+export default class extends Component{
     static displayName = 'Stop';
     static propTypes = {
         stopColor: PropTypes.string,
@@ -17,6 +17,3 @@ class Stop extends Component{
         return null;
     }
 }
-
-export default Stop;
-

@@ -1,13 +1,14 @@
 import React from 'react';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import Shape from './Shape';
-import {transformProps} from '../lib/props';
+import {pathProps} from '../lib/props';
 import {GroupAttributes} from '../lib/attributes';
+import extractProps from '../lib/extract/extractProps';
 
-class G extends Shape{
+export default class extends Shape{
     static displayName = 'G';
 
-    static propTypes = transformProps;
+    static propTypes = pathProps;
 
     setNativeProps = (...args) => {
         this.root.setNativeProps(...args);
@@ -17,7 +18,7 @@ class G extends Shape{
         let {props} = this;
 
         return <RNSVGGroup
-            {...this.extractProps(props)}
+            {...extractProps(props, this)}
             ref={ele => {this.root = ele;}}
         >
             {props.children}
@@ -29,8 +30,3 @@ const RNSVGGroup = createReactNativeComponentClass({
     validAttributes: GroupAttributes,
     uiViewClassName: 'RNSVGGroup'
 });
-
-export default G;
-export {
-    RNSVGGroup as NativeGroup
-};

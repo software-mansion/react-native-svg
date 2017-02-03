@@ -3,9 +3,10 @@ import './Path'; // must import Path first, don`t know why. without this will th
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import {pathProps, numberProp} from '../lib/props';
 import {RectAttributes} from '../lib/attributes';
+import extractProps from '../lib/extract/extractProps';
 import Shape from './Shape';
 
-class Rect extends Shape {
+export default class extends Shape {
     static displayName = 'Rect';
 
     static propTypes = {
@@ -36,11 +37,11 @@ class Rect extends Shape {
 
         return <RNSVGRect
             ref={ele => {this.root = ele;}}
-            {...this.extractProps({
+            {...extractProps({
                 ...props,
                 x: null,
                 y: null
-            })}
+            }, this)}
             x={props.x.toString()}
             y={props.y.toString()}
             width={props.width.toString()}
@@ -55,5 +56,3 @@ const RNSVGRect = createReactNativeComponentClass({
     validAttributes: RectAttributes,
     uiViewClassName: 'RNSVGRect'
 });
-
-export default Rect;

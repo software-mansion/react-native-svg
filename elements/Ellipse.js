@@ -3,8 +3,9 @@ import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src
 import Shape from './Shape';
 import {pathProps, numberProp} from '../lib/props';
 import {EllipseAttributes} from '../lib/attributes';
+import extractProps from '../lib/extract/extractProps';
 
-class Ellipse extends Shape{
+export default class extends Shape{
     static displayName = 'Ellipse';
 
     static propTypes = {
@@ -31,7 +32,7 @@ class Ellipse extends Shape{
 
         return <RNSVGEllipse
             ref={ele => {this.root = ele;}}
-            {...this.extractProps(props)}
+            {...extractProps(props, this)}
             cx={props.cx.toString()}
             cy={props.cy.toString()}
             rx={props.rx.toString()}
@@ -44,5 +45,3 @@ const RNSVGEllipse = createReactNativeComponentClass({
     validAttributes: EllipseAttributes,
     uiViewClassName: 'RNSVGEllipse'
 });
-
-export default Ellipse;

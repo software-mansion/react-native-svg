@@ -4,7 +4,7 @@ import extractGradient from '../lib/extract/extractGradient';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import {RadialGradientAttributes} from '../lib/attributes';
 
-class RadialGradient extends Component{
+export default class extends Component{
     static displayName = 'RadialGradient';
     static propTypes = {
         fx: numberProp.isRequired,
@@ -44,5 +44,3 @@ const RNSVGRadialGradient = createReactNativeComponentClass({
     validAttributes: RadialGradientAttributes,
     uiViewClassName: 'RNSVGRadialGradient'
 });
-
-export default RadialGradient;
