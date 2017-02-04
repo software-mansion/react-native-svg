@@ -97,7 +97,7 @@
     return nil;
 }
 
-- (void)saveDefinition
+- (void)parseReference
 {
     if (self.name) {
         RNSVGSvgView* svg = [self getSvgView];
@@ -105,7 +105,7 @@
     }
 
     [self traverseSubviews:^(__kindof RNSVGNode *node) {
-        [node saveDefinition];
+        [node parseReference];
         return YES;
     }];
 }

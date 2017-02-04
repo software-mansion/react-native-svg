@@ -74,7 +74,7 @@
 
 - (void)renderTo:(CGContextRef)context
 {
-    [self saveDefinition];
+    // Do not render Symbol
 }
 
 - (void)renderSymbolTo:(CGContextRef)context width:(CGFloat)width height:(CGFloat)height

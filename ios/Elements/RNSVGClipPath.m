@@ -15,7 +15,7 @@
     return nil;
 }
 
-- (void)saveDefinition
+- (void)parseReference
 {
     [[self getSvgView] defineClipPath:self clipPathName:self.name];
 }

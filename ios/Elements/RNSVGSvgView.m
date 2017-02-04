@@ -126,7 +126,12 @@
                 self.responsible = YES;
             }
             
-            [node saveDefinition];
+            [node parseReference];
+        }
+    }
+    
+    for (RNSVGNode *node in self.subviews) {
+        if ([node isKindOfClass:[RNSVGNode class]]) {
             [node renderTo:context];
         }
     }

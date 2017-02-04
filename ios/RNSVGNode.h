@@ -79,9 +79,9 @@
 - (CGFloat)getContextTop;
 
 /**
- * save element`s defination into svg element.
+ * save element`s reference into svg element.
  */
-- (void)saveDefinition;
+- (void)parseReference;
 
 - (void)beginTransparencyLayer:(CGContextRef)context;
 

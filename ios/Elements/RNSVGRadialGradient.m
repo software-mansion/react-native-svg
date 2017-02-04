@@ -24,7 +24,7 @@
     return nil;
 }
 
-- (void)saveDefinition
+- (void)parseReference
 {
     NSArray<NSString *> *points = @[self.fx, self.fy, self.rx, self.ry, self.cx, self.cy];
     RNSVGPainter *painter = [[RNSVGPainter alloc] initWithPointsArray:points];

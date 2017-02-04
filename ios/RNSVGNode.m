@@ -214,7 +214,7 @@
     return CGRectGetMinY([[self getSvgView] getContextBounds]);
 }
 
-- (void)saveDefinition
+- (void)parseReference
 {
     if (self.name) {
         RNSVGSvgView* svg = [self getSvgView];
