@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong) RNSVGBrush *fill;
 @property (nonatomic, assign) CGFloat fillOpacity;
+@property (nonatomic, assign) CGBlendMode blendMode;
 @property (nonatomic, assign) RNSVGCGFCRule fillRule;
 @property (nonatomic, strong) RNSVGBrush *stroke;
 @property (nonatomic, assign) CGFloat strokeOpacity;
