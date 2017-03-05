@@ -125,7 +125,7 @@ public class TextShadowNode extends GroupShadowNode {
         int anchor = mTextAnchor;
 
         if (getChildCount() > 0) {
-            TextShadowNode child = (TextShadowNode)getChildAt(0);
+            TextShadowNode child = (TextShadowNode)getChildAt(0).getParent();
 
             while (child.getChildCount() > 0 && anchor == TEXT_ANCHOR_AUTO) {
                 anchor = child.getTextAnchor();
