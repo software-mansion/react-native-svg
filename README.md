@@ -384,7 +384,72 @@ The <Text> element is used to define text.
 </Svg>
 ```
 
-![Rect](./screenShoots/text.png)
+![Text](./screenShoots/text.png)
+
+#### TSpan
+
+The <TSpan> element is used to draw multiple lines of text in SVG. Rather than having to position each line of text absolutely, the <TSpan> element makes it possible to position a line of text relatively to the previous line of text.
+
+```html
+<Svg
+    height="160"
+    width="200"
+>
+    <Text y="20" dx="5 5">
+        <TSpan x="10" >tspan line 1</TSpan>
+        <TSpan x="10" dy="15">tspan line 2</TSpan>
+        <TSpan x="10" dx="10" dy="15">tspan line 3</TSpan>
+    </Text>
+    <Text x="10" y="60" fill="red" fontSize="14">
+        <TSpan dy="5 10 20" >12345</TSpan>
+        <TSpan fill="blue" dy="15" dx="0 5 5">
+            <TSpan>6</TSpan>
+            <TSpan>7</TSpan>
+        </TSpan>
+        <TSpan dx="0 10 20" dy="0 20" fontWeight="bold" fontSize="12">89a</TSpan>
+    </Text>
+    <Text y="140" dx="0 5 5" dy="0 -5 -5">delta on text</Text>
+</Svg>
+```
+
+![TSpan](./screenShoots/tspan.png)
+
+#### TextPath
+
+In addition to text drawn in a straight line, SVG also includes the ability to place text along the shape of a <Path> element. To specify that a block of text is to be rendered along the shape of a <Path>, include the given text within a <TextPath> element which includes an href attribute with a reference to a <Path> element.
+
+```html
+<Svg
+    height="100"
+    width="200"
+>
+    <Defs>
+        <Path
+            id="path"
+            d={path}
+        />
+    </Defs>
+    <G y="20">
+        <Text
+            fill="blue"
+
+        >
+            <TextPath href="#path" startOffset="-10%">
+                We go up and down,
+                <TSpan fill="red" dy="5,5,5">then up again</TSpan>
+            </TextPath>
+        </Text>
+        <Path
+            d={path}
+            fill="none"
+            stroke="red"
+            strokeWidth="1"
+        />
+    </G>
+</Svg>
+```
+
+![TextPath](./screenShoots/text-path.png)
 
 #### G
 
@@ -497,11 +562,114 @@ The SVG <Symbol> element is used to define reusable symbols. The shapes nested i
 </Svg>
 ```
 
-![symbol](./screenShoots/symbol.png)
+![Symbol](./screenShoots/symbol.png)
 
 #### Defs
 
 The <Defs> element is used to embed definitions that can be reused inside an SVG image. For instance, you can group SVG shapes together and reuse them as a single shape.
+
+#### Image
+
+The <Image> element allows a raster image to be included in an Svg componenet.
+
+```html
+<Svg
+    height="100"
+    width="100"
+>
+    <Defs>
+        <ClipPath id="clip">
+            <Circle cx="50%" cy="50%" r="40%"/>
+        </ClipPath>
+    </Defs>
+    <Rect
+        x="0"
+        y="0"
+        width="100%"
+        height="100%"
+        fill="red"
+    />
+    <Rect
+        x="5%"
+        y="5%"
+        width="50%"
+        height="90%"
+    />
+
+    <Image
+        x="5%"
+        y="5%"
+        width="50%"
+        height="90%"
+        preserveAspectRatio="xMidYMid slice"
+        opacity="0.5"
+        href={require('../image.jpg')}
+        clipPath="url(#clip)"
+    />
+    <Text
+        x="50"
+        y="50"
+        textAnchor="middle"
+        fontWeight="bold"
+        fontSize="16"
+        fill="blue"
+    >HOGWARTS</Text>
+</Svg>
+```
+
+![Image](./screenShoots/image.png)
+
+#### ClipPath
+
+The <ClipPath> SVG element defines a clipping path. A clipping path is used/referenced using the clipPath property
+
+```html
+<Svg
+    height="100"
+    width="100"
+>
+    <Defs>
+        <RadialGradient id="grad" cx="50%" cy="50%" rx="50%" ry="50%" fx="50%" fy="50%">
+            <Stop
+                offset="0%"
+                stopColor="#ff0"
+                stopOpacity="1"
+            />
+            <Stop
+                offset="100%"
+                stopColor="#00f"
+                stopOpacity="1"
+            />
+        </RadialGradient>
+        <ClipPath id="clip">
+            <G scale="0.9" x="10">
+                <Circle cx="30" cy="30" r="20"/>
+                <Ellipse cx="60" cy="70" rx="20" ry="10" />
+                <Rect x="65" y="15" width="30" height="30" />
+                <Polygon points="20,60 20,80 50,70" />
+                <Text
+                    x="50"
+                    y="30"
+                    fontSize="32"
+                    fonWeight="bold"
+                    textAnchor="middle"
+                    scale="1.2"
+                >Q</Text>
+            </G>
+        </ClipPath>
+    </Defs>
+    <Rect
+        x="0"
+        y="0"
+        width="100"
+        height="100"
+        fill="url(#grad)"
+        clipPath="url(#clip)"
+    />
+</Svg>
+```
+
+![ClipPath](./screenShoots/clip-path.png)
 
 #### LinearGradient
 
