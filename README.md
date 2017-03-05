@@ -14,6 +14,8 @@
 
 ### Installation
 
+#### Automatic
+
 *With Exponent, this is pre-installed. Jump ahead to [Usage](#Usage)*
 
 1. Install library from `npm`
@@ -42,6 +44,30 @@
     ```bash
     rnpm link react-native-svg
     ```
+    
+#### Manual
+
+##### Android
+
+1. `npm install react-native-svg --save`
+
+2. Append the following lines to `android/settings.gradle`:
+
+	```
+	include ':react-native-svg'
+	project(':react-native-svg').projectDir = new File(rootProject.projectDir, 	'./node_modules/react-native-svg/android')
+	```
+    
+3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
+
+	```
+    compile project(':react-native-svg')
+	```
+
+4. Open up `android/app/src/main/java/[...]/MainApplication.java
+  - Add `import com.horcrux.svg.SvgPackage;` to the imports at the top of the file
+  - Add `new SvgPackage()` to the list returned by the `getPackages()` method. Add a comma to the previous item if there's already something there.
+  
 
 ### <a name="Usage">Usage</a>
 
@@ -109,8 +135,8 @@ fillOpacity     | 1          | This prop specifies the opacity of the color or t
 stroke          | 'none'     | The stroke prop controls how the outline of a shape appears.
 strokeWidth     | 1          | The strokeWidth prop specifies the width of the outline on the current object.
 strokeOpacity   | 1          | The strokeOpacity prop specifies the opacity of the outline on the current object.
-strokeLinecap   | 'square'   | The strokeLinecap prop specifies the shape to be used at the end of open subpaths when they are stroked.
-strokeLinejoin  | 'miter'    | The strokeLinejoin prop specifies the shape to be used at the corners of paths or basic shapes when they are stroked.
+strokeLinecap   | 'square'   | The strokeLinecap prop specifies the shape to be used at the end of open subpaths when they are stroked. Can be either `'butt'`, `'square'` or `'round'`.
+strokeLinejoin  | 'miter'    | The strokeLinejoin prop specifies the shape to be used at the corners of paths or basic shapes when they are stroked. Can be either `'miter'`, `'bevel'` or `'round'`.
 strokeDasharray | []         | The strokeDasharray prop controls the pattern of dashes and gaps used to stroke paths.
 strokeDashoffset| null       | The strokeDashoffset prop specifies the distance into the dash pattern to start the dash.
 x               | 0          | Translate distance on x-axis.
