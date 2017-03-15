@@ -33,9 +33,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 public class TextShadowNode extends GroupShadowNode {
 
-    private float mOffsetX = 0;
-    private float mOffsetY = 0;
-
     private static final int TEXT_ANCHOR_AUTO = 0;
     private static final int TEXT_ANCHOR_START = 1;
     private static final int TEXT_ANCHOR_MIDDLE = 2;
@@ -117,25 +114,28 @@ public class TextShadowNode extends GroupShadowNode {
         popGlyphContext();
     }
 
-    public int getTextAnchor() {
+    private int getTextAnchor() {
         return mTextAnchor;
     }
 
     private int getComputedTextAnchor() {
         int anchor = mTextAnchor;
+        ReactShadowNode shadowNode = this;
 
-        if (getChildCount() > 0) {
-            TextShadowNode child = (TextShadowNode)getChildAt(0);
+        while (shadowNode.getChildCount() > 0 &&
+                anchor == TEXT_ANCHOR_AUTO) {
+            shadowNode = shadowNode.getChildAt(0);
 
-            while (child.getChildCount() > 0 && anchor == TEXT_ANCHOR_AUTO) {
-                anchor = child.getTextAnchor();
-                child = (TextShadowNode)child.getChildAt(0);
+            if (shadowNode instanceof TextShadowNode) {
+                anchor = ((TextShadowNode) shadowNode).getTextAnchor();
+            } else {
+                break;
             }
         }
         return anchor;
     }
 
-    protected TextShadowNode getTextRoot() {
+    private TextShadowNode getTextRoot() {
         if (mTextRoot == null) {
             mTextRoot = this;
 
@@ -158,7 +158,7 @@ public class TextShadowNode extends GroupShadowNode {
         return mTextRoot;
     }
 
-    protected void setupGlyphContext() {
+    private void setupGlyphContext() {
         mGlyphContext = new GlyphContext(mScale, getCanvasWidth(), getCanvasHeight());
     }
 
