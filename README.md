@@ -55,7 +55,7 @@
 
 	```
 	include ':react-native-svg'
-	project(':react-native-svg').projectDir = new File(rootProject.projectDir, 	'./node_modules/react-native-svg/android')
+	project(':react-native-svg').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-svg/android')
 	```
     
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
