@@ -23,15 +23,15 @@
     ```bash
     npm install react-native-svg --save
     ```
-    
+
     # NOTICE:
-    
+
     - react-native-svg >= 3.2.0 only supports react-native >= 0.29.0
     - react-native-svg >= 4.2.0 only supports react-native >= 0.32.0
     - react-native-svg >= 4.3.0 only supports react-native >= 0.33.0
     - react-native-svg >= 4.4.0 only supports react-native >= 0.38.0 and react >= 15.4.0
     - react-native-svg >= 4.5.0 only supports react-native >= 0.40.0 and react >= 15.4.0
-    
+
 2. Link native code
 
     ```bash
@@ -44,7 +44,8 @@
     ```bash
     rnpm link react-native-svg
     ```
-    
+3. Re-run the app: re-execute `react-native run-ios`/`react-native run-android`.
+
 #### Manual
 
 ##### Android
@@ -57,7 +58,7 @@
 	include ':react-native-svg'
 	project(':react-native-svg').projectDir = new File(rootProject.projectDir, 	'./node_modules/react-native-svg/android')
 	```
-    
+
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
 
 	```
@@ -67,7 +68,7 @@
 4. Open up `android/app/src/main/java/[...]/MainApplication.java
   - Add `import com.horcrux.svg.SvgPackage;` to the imports at the top of the file
   - Add `new SvgPackage()` to the list returned by the `getPackages()` method. Add a comma to the previous item if there's already something there.
-  
+
 
 ### <a name="Usage">Usage</a>
 
