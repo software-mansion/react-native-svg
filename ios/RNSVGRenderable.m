@@ -249,7 +249,7 @@
 - (void)setHitArea:(CGPathRef)path
 {
     CGPathRelease(_hitArea);
-    if ([self getSvgView].responsible) {
+    if (self.responsible) {
         // Add path to hitArea
         CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
         
