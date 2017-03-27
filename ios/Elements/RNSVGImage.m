@@ -93,46 +93,19 @@
 - (void)renderLayerTo:(CGContextRef)context
 {
     CGRect rect = [self getRect:context];
+
     // add hit area
     CGPathRef hitArea = CGPathCreateWithRect(rect, nil);
     [self setHitArea:hitArea];
     CGPathRelease(hitArea);
     
     CGContextSaveGState(context);
-    CGContextTranslateCTM(context, 0, rect.size.height + 2 * rect.origin.y);
-    CGContextScaleCTM(context, 1, -1);
-    
-    // apply viewBox transform on Image render.
-    CGFloat imageRatio = _imageRatio;
-    CGFloat rectWidth = CGRectGetWidth(rect);
-    CGFloat rectHeight = CGRectGetHeight(rect);
-    CGFloat rectX = CGRectGetMinX(rect);
-    CGFloat rectY = CGRectGetMinY(rect);
-    CGFloat rectRatio = rectWidth / rectHeight;
-    CGRect renderRect;
-    
-    if (imageRatio == rectRatio) {
-        renderRect = rect;
-    } else if (imageRatio < rectRatio) {
-        renderRect = CGRectMake(0, 0, rectHeight * imageRatio, rectHeight);
-    } else {
-        renderRect = CGRectMake(0, 0, rectWidth, rectWidth / imageRatio);
-    }
-    
-    CGRect vbRect = CGRectMake(0, 0, CGRectGetWidth(renderRect), CGRectGetHeight(renderRect));
-    CGRect eRect = CGRectMake([self getContextLeft], [self getContextTop], rectWidth, rectHeight);
-    
-    CGAffineTransform transform = [RNSVGViewBox getTransform:vbRect eRect:eRect align:self.align meetOrSlice:self.meetOrSlice fromSymbol:NO];
-    
-    renderRect = CGRectApplyAffineTransform(renderRect, transform);
-    renderRect = CGRectApplyAffineTransform(renderRect, CGAffineTransformMakeTranslation(rectX, rectY));
-    
+
     [self clip:context];
     CGContextClipToRect(context, rect);
  
-    CGContextDrawImage(context, renderRect, _image);
+    CGContextDrawImage(context, rect, _image);
     CGContextRestoreGState(context);
-    
 }
 
 - (CGRect)getRect:(CGContextRef)context
