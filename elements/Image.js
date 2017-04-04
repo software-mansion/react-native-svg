@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import { Image } from 'react-native';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
 import {ImageAttributes} from '../lib/attributes';
 import {numberProp, touchableProps, responderProps} from '../lib/props';
@@ -18,18 +19,7 @@ export default class extends Shape {
         y: numberProp,
         width: numberProp.isRequired,
         height: numberProp.isRequired,
-        href: PropTypes.oneOfType([
-            PropTypes.number,
-            function(props, propName, componentName) {
-                if (Object.keys(props[propName]).length != 1 ||
-                    !/^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i.test(props[propName].uri)) {
-                    return new Error(
-                        'Invalid prop `' + propName + '` supplied to' +
-                        ' `' + componentName + '`. Validation failed.'
-                    );
-                }
-            }
-        ]).isRequired,
+        href: Image.propTypes.source,
         preserveAspectRatio: PropTypes.string
     };
 
