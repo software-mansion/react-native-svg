@@ -629,7 +629,7 @@ The <ClipPath> SVG element defines a clipping path. A clipping path is used/refe
     width="100"
 >
     <Defs>
-        <RadialGradient id="grad" cx="50%" cy="50%" rx="50%" ry="50%" fx="50%" fy="50%">
+        <RadialGradient id="grad" cx="50%" cy="50%" rx="50%" ry="50%" fx="50%" fy="50%" gradientUnits="userSpaceOnUse">
             <Stop
                 offset="0%"
                 stopColor="#ff0"
@@ -726,7 +726,7 @@ The <RadialGradient> element is used to define a radial gradient. The <RadialGra
     width="300"
 >
     <Defs>
-        <RadialGradient id="grad" cx="150" cy="75" rx="85" ry="55" fx="150" fy="75">
+        <RadialGradient id="grad" cx="150" cy="75" rx="85" ry="55" fx="150" fy="75" gradientUnits="userSpaceOnUse">
             <Stop
                 offset="0"
                 stopColor="#ff0"
