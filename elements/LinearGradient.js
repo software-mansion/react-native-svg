@@ -11,6 +11,7 @@ export default class extends Component{
         x2: numberProp.isRequired,
         y1: numberProp.isRequired,
         y2: numberProp.isRequired,
+        gradientUnits: PropTypes.oneOf(['objectBoundingBox', 'userSpaceOnUse']),
         id: PropTypes.string.isRequired
     };
 
