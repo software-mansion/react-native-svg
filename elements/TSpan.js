@@ -34,10 +34,6 @@ export default class extends Shape {
         };
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         let props = this.props;
         return <RNSVGTSpan

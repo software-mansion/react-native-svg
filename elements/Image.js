@@ -31,10 +31,6 @@ export default class extends Shape {
         preserveAspectRatio: 'xMidYMid meet'
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         let {props} = this;
         let modes = props.preserveAspectRatio.trim().split(spacesRegExp);

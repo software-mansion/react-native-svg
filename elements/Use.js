@@ -16,10 +16,6 @@ export default class extends Shape {
         ...pathProps
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         const {props} = this;
         // match "url(#pattern)"

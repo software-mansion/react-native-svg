@@ -33,10 +33,6 @@ export default class extends Shape {
         };
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         const props = this.props;
 
