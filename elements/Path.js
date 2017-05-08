@@ -10,7 +10,10 @@ export default class extends Shape {
 
     static propTypes = {
         ...pathProps,
-        d: PropTypes.string.isRequired
+        d: React.PropTypes.oneOfType([
+            React.PropTypes.string,
+            React.PropTypes.instanceOf(SerializablePath)
+        ]).isRequired
     };
 
     setNativeProps = (...args) => {
