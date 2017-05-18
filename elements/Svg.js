@@ -3,7 +3,7 @@ import React, {
     PropTypes
 } from 'react';
 import {
-    View,
+    ViewPropTypes,
     requireNativeComponent,
     StyleSheet,
     findNodeHandle,
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 class Svg extends Component{
     static displayName = 'Svg';
     static propTypes = {
-        ...View.propTypes,
+        ...ViewPropTypes,
         opacity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
