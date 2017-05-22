@@ -1,4 +1,5 @@
-import {Component, PropTypes} from 'react';
+import {Component} from 'react';
+import PropTypes from 'prop-types';
 import {numberProp} from '../lib/props';
 
 export default class extends Component{

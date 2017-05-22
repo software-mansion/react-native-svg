@@ -22,12 +22,13 @@
         "lint": "eslint ./"
     },
     "peerDependencies": {
-        "react-native": ">=0.44.0",
-        "react": "16.0.0-alpha.6"
+        "react": "16.0.0-alpha.6",
+        "react-native": ">=0.44.0"
     },
     "dependencies": {
         "color": "^0.11.1",
-        "lodash": "^4.16.6"
+        "lodash": "^4.16.6",
+        "prop-types": "^15.5.10"
     },
     "devDependencies": {
         "babel-eslint": "^6.1.2",
