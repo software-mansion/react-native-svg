@@ -22,7 +22,7 @@
         "lint": "eslint ./"
     },
     "peerDependencies": {
-        "react-native": ">=0.40.0 <0.44.0",
+        "react-native": ">=0.40.0 <0.43.0",
         "react": ">=15.4.0"
     },
     "dependencies": {
