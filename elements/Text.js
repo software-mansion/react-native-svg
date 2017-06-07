@@ -25,13 +25,13 @@ export default class extends Shape {
         return {
             isInAParentText: true
         };
-    };
+    }
 
     getContextTypes() {
         return {
             isInAParentText: React.PropTypes.bool
         };
-    };
+    }
 
     setNativeProps = (...args) => {
         this.root.setNativeProps(...args);
