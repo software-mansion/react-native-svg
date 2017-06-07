@@ -23,7 +23,7 @@
     },
     "peerDependencies": {
         "react-native": ">=0.40.0 <0.43.0",
-        "react": ">=15.4.0"
+        "react": ">=15.4.0 <15.5.0"
     },
     "dependencies": {
         "color": "^0.11.1",
