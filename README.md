@@ -779,7 +779,7 @@ You can use these events to provide interactivity to your react-native-svg compo
 
 ![TouchEvents](./screenShoots/touchevents.gif)
 
-For more examples of touch in action, checkout the [TouchEvents.js examples](Example/examples/TouchEvents.js).
+For more examples of touch in action, checkout the [TouchEvents.js examples](https://github.com/magicismight/react-native-svg-example/blob/master/examples/TouchEvents.js).
 
 ### Run example:
 
