@@ -29,7 +29,6 @@
     "dependencies": {
         "color": "^0.11.1",
         "lodash": "^4.16.6",
-        "react-native": "^0.45.0"
     },
     "devDependencies": {
         "babel-eslint": "^6.1.2",
