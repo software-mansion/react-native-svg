@@ -78,7 +78,7 @@ public class TSpanShadowNode extends TextShadowNode {
 
         pushGlyphContext();
         applyTextPropertiesToPaint(paint);
-        getLinePath(mContent + " ", paint, path);
+        getLinePath(mContent + "", paint, path);
 
         mCache = path;
         popGlyphContext();
@@ -99,13 +99,14 @@ public class TSpanShadowNode extends TextShadowNode {
             Path glyph = new Path();
             float width = widths[index];
 
-            paint.getTextPath(letter, 0, 1, 0, -paint.ascent(), glyph);
+            paint.getTextPath(letter, 0, 1, 0, 0, glyph);
+            PointF glyphDelta = getGlyphDeltaFromContext();
             PointF glyphPoint = getGlyphPointFromContext(glyphPosition, width);
             glyphPosition += width;
             Matrix matrix = new Matrix();
 
             if (mBezierTransformer != null) {
-                matrix = mBezierTransformer.getTransformAtDistance(glyphPoint.x);
+                matrix = mBezierTransformer.getTransformAtDistance(glyphPoint.x + glyphDelta.x);
 
                 if (textPathHasReachedEnd()) {
                     break;
@@ -113,20 +114,14 @@ public class TSpanShadowNode extends TextShadowNode {
                     continue;
                 }
 
+                matrix.preTranslate(0, glyphDelta.y);
                 matrix.postTranslate(0, glyphPoint.y);
             } else {
-                matrix.setTranslate(glyphPoint.x, glyphPoint.y);
+                matrix.setTranslate(glyphPoint.x + glyphDelta.x, glyphPoint.y + glyphDelta.y);
             }
-
 
             glyph.transform(matrix);
             path.addPath(glyph);
-        }
-
-        if (mBezierTransformer != null) {
-            Matrix matrix = new Matrix();
-            matrix.postTranslate(0, paint.ascent() * 1.1f);
-            path.transform(matrix);
         }
 
         return path;

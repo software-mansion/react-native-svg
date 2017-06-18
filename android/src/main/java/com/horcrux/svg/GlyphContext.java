@@ -25,6 +25,7 @@ public class GlyphContext {
 
     private ArrayList<ReadableMap> mFontContext;
     private ArrayList<PointF> mLocationContext;
+    private ArrayList<PointF> mDeltaContext;
     private ArrayList<ArrayList<Float>> mDeltaXContext;
     private ArrayList<ArrayList<Float>> mDeltaYContext;
     private ArrayList<Float> mXContext;
@@ -42,6 +43,7 @@ public class GlyphContext {
         mCurrentLocation = new PointF();
         mFontContext = new ArrayList<>();
         mLocationContext = new ArrayList<>();
+        mDeltaContext = new ArrayList<>();
         mDeltaXContext = new ArrayList<>();
         mDeltaYContext = new ArrayList<>();
         mXContext = new ArrayList<>();
@@ -59,6 +61,7 @@ public class GlyphContext {
         }
 
         mLocationContext.add(location);
+        mDeltaContext.add(new PointF(0, 0));
         mFontContext.add(font);
         mDeltaXContext.add(getFloatArrayListFromReadableArray(deltaX));
         mDeltaYContext.add(getFloatArrayListFromReadableArray(deltaY));
@@ -72,6 +75,7 @@ public class GlyphContext {
         float x = mXContext.get(mContextLength - 1);
         mFontContext.remove(mContextLength - 1);
         mLocationContext.remove(mContextLength - 1);
+        mDeltaContext.remove(mContextLength - 1);
         mDeltaXContext.remove(mContextLength - 1);
         mDeltaYContext.remove(mContextLength - 1);
         mXContext.remove(mContextLength - 1);
@@ -87,21 +91,26 @@ public class GlyphContext {
     }
 
     public PointF getNextGlyphPoint(float offset, float glyphWidth) {
-        float dx = getNextDelta(mDeltaXContext);
-        mCurrentLocation.x += dx;
-
-        float dy = getNextDelta(mDeltaYContext);
-        mCurrentLocation.y += dy;
-
-        for (PointF point: mLocationContext) {
-            point.x += dx;
-            point.y += dy;
-        }
-
         mXContext.set(mXContext.size() - 1, mCurrentLocation.x + offset + glyphWidth);
 
         return new PointF(mCurrentLocation.x + offset, mCurrentLocation.y);
 
+    }
+
+    public PointF getNextGlyphDelta() {
+        float dx = getNextDelta(mDeltaXContext);
+        float dy = getNextDelta(mDeltaYContext);
+
+        if (mContextLength > 0) {
+            for (PointF point: mDeltaContext) {
+                point.x += dx;
+                point.y += dy;
+            }
+
+            return mDeltaContext.get(mContextLength - 1);
+        }
+
+        return new PointF(dx, dy);
     }
 
     private float getNextDelta(ArrayList<ArrayList<Float>> deltaContext) {

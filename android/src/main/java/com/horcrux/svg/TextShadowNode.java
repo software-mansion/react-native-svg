@@ -200,6 +200,10 @@ public class TextShadowNode extends GroupShadowNode {
         return  getTextRoot().getGlyphContext().getNextGlyphPoint(offset, glyphWidth);
     }
 
+    protected PointF getGlyphDeltaFromContext() {
+        return  getTextRoot().getGlyphContext().getNextGlyphDelta();
+    }
+
     private Matrix getAlignMatrix(Path path) {
         RectF box = new RectF();
         path.computeBounds(box, true);
