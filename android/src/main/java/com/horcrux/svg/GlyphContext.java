@@ -56,23 +56,27 @@ public class GlyphContext {
     public void pushContext(@Nullable ReadableMap font, @Nullable ReadableArray deltaX, @Nullable ReadableArray deltaY, @Nullable String positionX, @Nullable String positionY) {
         PointF location = mCurrentLocation;
 
+        mDeltaContext.add(mCurrentDelta);
+
         if (positionX != null) {
             location.x = PropHelper.fromPercentageToFloat(positionX, mWidth, 0, mScale);
+            mCurrentDelta.x = 0;
         }
 
         if (positionY != null) {
             location.y = PropHelper.fromPercentageToFloat(positionY, mHeight, 0, mScale);
+            mCurrentDelta.y = 0;
         }
 
+        mCurrentDelta = clonePointF(mCurrentDelta);
+
         mLocationContext.add(location);
-        mDeltaContext.add(mCurrentDelta);
         mFontContext.add(font);
         mDeltaXContext.add(getFloatArrayListFromReadableArray(deltaX));
         mDeltaYContext.add(getFloatArrayListFromReadableArray(deltaY));
         mXContext.add(location.x);
         mYContext.add(location.y);
 
-        mCurrentDelta = clonePointF(mCurrentDelta);
         mCurrentLocation = clonePointF(location);
         mContextLength++;
     }
@@ -110,8 +114,8 @@ public class GlyphContext {
     }
 
     public PointF getNextGlyphDelta() {
-        float dx = getNextDelta(mDeltaXContext);
-        float dy = getNextDelta(mDeltaYContext);
+        float dx = mScale * getNextDelta(mDeltaXContext);
+        float dy = mScale * getNextDelta(mDeltaYContext);
 
         if (mContextLength > 0) {
             for (PointF point: mDeltaContext) {

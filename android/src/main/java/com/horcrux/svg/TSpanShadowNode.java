@@ -114,7 +114,8 @@ public class TSpanShadowNode extends TextShadowNode {
                     continue;
                 }
 
-                matrix.postTranslate(0, glyphPoint.y + glyphDelta.y);
+                matrix.preTranslate(0, glyphDelta.y);
+                matrix.postTranslate(0, glyphPoint.y);
             } else {
                 matrix.setTranslate(glyphPoint.x + glyphDelta.x, glyphPoint.y + glyphDelta.y);
             }
