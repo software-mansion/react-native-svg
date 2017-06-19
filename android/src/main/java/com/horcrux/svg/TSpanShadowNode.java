@@ -101,12 +101,12 @@ public class TSpanShadowNode extends TextShadowNode {
 
             paint.getTextPath(letter, 0, 1, 0, 0, glyph);
             PointF glyphDelta = getGlyphDeltaFromContext();
-            PointF glyphPoint = getGlyphPointFromContext(glyphPosition, width);
+            PointF glyphPoint = getGlyphPointFromContext(glyphPosition * 1.2f, width);
             glyphPosition += width;
             Matrix matrix = new Matrix();
 
             if (mBezierTransformer != null) {
-                matrix = mBezierTransformer.getTransformAtDistance(glyphPoint.x + glyphDelta.x);
+                matrix = mBezierTransformer.getTransformAtDistance(glyphPoint.x + glyphDelta.x + width / 2);
 
                 if (textPathHasReachedEnd()) {
                     break;
@@ -114,7 +114,7 @@ public class TSpanShadowNode extends TextShadowNode {
                     continue;
                 }
 
-                matrix.preTranslate(0, glyphDelta.y);
+                matrix.preTranslate(-width / 2, glyphDelta.y);
                 matrix.postTranslate(0, glyphPoint.y);
             } else {
                 matrix.setTranslate(glyphPoint.x + glyphDelta.x, glyphPoint.y + glyphDelta.y);

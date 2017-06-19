@@ -16,6 +16,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.util.Base64;
 
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -134,6 +135,10 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         }
 
         Paint paint = new Paint();
+
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
+
+        paint.setTypeface(Typeface.DEFAULT);
 
         for (int i = 0; i < getChildCount(); i++) {
             if (!(getChildAt(i) instanceof VirtualNode)) {

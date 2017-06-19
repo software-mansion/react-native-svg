@@ -52,7 +52,7 @@ public class TextPathShadowNode extends TextShadowNode {
         }
 
         PathShadowNode path = (PathShadowNode)template;
-        return new BezierTransformer(path.getBezierCurves(), relativeOnWidth(mStartOffset));
+        return new BezierTransformer(path.getBezierCurves(), relativeOnWidth(mStartOffset) / 1.2f);
     }
 
     @Override
