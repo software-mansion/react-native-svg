@@ -29,7 +29,9 @@ public class GlyphContext {
     private ArrayList<ArrayList<Float>> mDeltaXContext;
     private ArrayList<ArrayList<Float>> mDeltaYContext;
     private ArrayList<Float> mXContext;
+    private ArrayList<Float> mYContext;
     private @Nonnull PointF mCurrentLocation;
+    private @Nonnull PointF mCurrentDelta;
     private float mScale;
     private float mWidth;
     private float mHeight;
@@ -41,12 +43,14 @@ public class GlyphContext {
         mWidth = width;
         mHeight = height;
         mCurrentLocation = new PointF();
+        mCurrentDelta = new PointF();
         mFontContext = new ArrayList<>();
         mLocationContext = new ArrayList<>();
         mDeltaContext = new ArrayList<>();
         mDeltaXContext = new ArrayList<>();
         mDeltaYContext = new ArrayList<>();
         mXContext = new ArrayList<>();
+        mYContext = new ArrayList<>();
     }
 
     public void pushContext(@Nullable ReadableMap font, @Nullable ReadableArray deltaX, @Nullable ReadableArray deltaY, @Nullable String positionX, @Nullable String positionY) {
@@ -61,40 +65,48 @@ public class GlyphContext {
         }
 
         mLocationContext.add(location);
-        mDeltaContext.add(new PointF(0, 0));
+        mDeltaContext.add(mCurrentDelta);
         mFontContext.add(font);
         mDeltaXContext.add(getFloatArrayListFromReadableArray(deltaX));
         mDeltaYContext.add(getFloatArrayListFromReadableArray(deltaY));
         mXContext.add(location.x);
+        mYContext.add(location.y);
 
+        mCurrentDelta = clonePointF(mCurrentDelta);
         mCurrentLocation = clonePointF(location);
         mContextLength++;
     }
 
     public void popContext() {
         float x = mXContext.get(mContextLength - 1);
+        float y = mYContext.get(mContextLength - 1);
         mFontContext.remove(mContextLength - 1);
         mLocationContext.remove(mContextLength - 1);
         mDeltaContext.remove(mContextLength - 1);
         mDeltaXContext.remove(mContextLength - 1);
         mDeltaYContext.remove(mContextLength - 1);
         mXContext.remove(mContextLength - 1);
+        mYContext.remove(mContextLength - 1);
 
         mContextLength--;
 
         if (mContextLength != 0) {
             mXContext.set(mContextLength - 1, x);
+            mYContext.set(mContextLength - 1, y);
             PointF lastLocation = mLocationContext.get(mContextLength - 1);
+            PointF lastDelta = mDeltaContext.get(mContextLength - 1);
             mCurrentLocation = clonePointF(lastLocation);
+            mCurrentDelta = clonePointF(lastDelta);
             mCurrentLocation.x = lastLocation.x = x;
+            mCurrentLocation.y = lastLocation.y = y;
         }
     }
 
     public PointF getNextGlyphPoint(float offset, float glyphWidth) {
         mXContext.set(mXContext.size() - 1, mCurrentLocation.x + offset + glyphWidth);
+        mYContext.set(mYContext.size() - 1, mCurrentLocation.y);
 
         return new PointF(mCurrentLocation.x + offset, mCurrentLocation.y);
-
     }
 
     public PointF getNextGlyphDelta() {
