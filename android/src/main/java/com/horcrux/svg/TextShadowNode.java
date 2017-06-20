@@ -43,10 +43,6 @@ public class TextShadowNode extends GroupShadowNode {
     private @Nullable ReadableArray mDeltaY;
     private @Nullable String mPositionX;
     private @Nullable String mPositionY;
-    private @Nullable ReadableMap mFont;
-
-    private GlyphContext mGlyphContext;
-    private TextShadowNode mTextRoot;
 
     @ReactProp(name = "textAnchor", defaultInt = TEXT_ANCHOR_AUTO)
     public void setTextAnchor(int textAnchor) {
@@ -108,12 +104,6 @@ public class TextShadowNode extends GroupShadowNode {
         return groupPath;
     }
 
-    protected void drawGroup(Canvas canvas, Paint paint, float opacity) {
-        pushGlyphContext();
-        super.drawGroup(canvas, paint, opacity);
-        popGlyphContext();
-    }
-
     private int getTextAnchor() {
         return mTextAnchor;
     }
@@ -135,33 +125,6 @@ public class TextShadowNode extends GroupShadowNode {
         return anchor;
     }
 
-    private TextShadowNode getTextRoot() {
-        if (mTextRoot == null) {
-            mTextRoot = this;
-
-            while (mTextRoot != null) {
-                if (mTextRoot.getClass() == TextShadowNode.class) {
-                    break;
-                }
-
-                ReactShadowNode parent = mTextRoot.getParent();
-
-                if (!(parent instanceof TextShadowNode)) {
-                    //todo: throw exception here
-                    mTextRoot = null;
-                } else {
-                    mTextRoot = (TextShadowNode)parent;
-                }
-            }
-        }
-
-        return mTextRoot;
-    }
-
-    private void setupGlyphContext() {
-        mGlyphContext = new GlyphContext(mScale, getCanvasWidth(), getCanvasHeight());
-    }
-
     protected void releaseCachedPath() {
         traverseChildren(new NodeRunnable() {
             public boolean run(VirtualNode node) {
@@ -180,28 +143,9 @@ public class TextShadowNode extends GroupShadowNode {
         return groupPath;
     }
 
-    protected GlyphContext getGlyphContext() {
-        return mGlyphContext;
-    }
-
+    @Override
     protected void pushGlyphContext() {
         getTextRoot().getGlyphContext().pushContext(mFont, mDeltaX, mDeltaY, mPositionX, mPositionY);
-    }
-
-    protected void popGlyphContext() {
-        getTextRoot().getGlyphContext().popContext();
-    }
-
-    protected ReadableMap getFontFromContext() {
-        return  getTextRoot().getGlyphContext().getGlyphFont();
-    }
-
-    protected PointF getGlyphPointFromContext(float offset, float glyphWidth) {
-        return  getTextRoot().getGlyphContext().getNextGlyphPoint(offset, glyphWidth);
-    }
-
-    protected PointF getGlyphDeltaFromContext() {
-        return  getTextRoot().getGlyphContext().getNextGlyphDelta();
     }
 
     private Matrix getAlignMatrix(Path path) {

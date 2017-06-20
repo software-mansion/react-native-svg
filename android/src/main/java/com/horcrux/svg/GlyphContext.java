@@ -53,6 +53,24 @@ public class GlyphContext {
         mYContext = new ArrayList<>();
     }
 
+    public void pushContext(@Nullable ReadableMap font) {
+        PointF location = mCurrentLocation;
+
+        mDeltaContext.add(mCurrentDelta);
+
+        mCurrentDelta = clonePointF(mCurrentDelta);
+
+        mLocationContext.add(location);
+        mFontContext.add(font);
+        mDeltaXContext.add(new ArrayList<Float>());
+        mDeltaYContext.add(new ArrayList<Float>());
+        mXContext.add(location.x);
+        mYContext.add(location.y);
+
+        mCurrentLocation = clonePointF(location);
+        mContextLength++;
+    }
+
     public void pushContext(@Nullable ReadableMap font, @Nullable ReadableArray deltaX, @Nullable ReadableArray deltaY, @Nullable String positionX, @Nullable String positionY) {
         PointF location = mCurrentLocation;
 
@@ -194,10 +212,21 @@ public class GlyphContext {
 
     private ArrayList<Float> getFloatArrayListFromReadableArray(ReadableArray readableArray) {
         ArrayList<Float> arrayList = new ArrayList<>();
+        ReadableMap font = getGlyphFont();
+        float fontSize = (float)font.getDouble("fontSize");
 
         if (readableArray != null) {
             for (int i = 0; i < readableArray.size(); i++) {
-                arrayList.add((float)readableArray.getDouble(i));
+                switch (readableArray.getType(i)) {
+                    case String:
+                        String val = readableArray.getString(i);
+                        arrayList.add(Float.valueOf(val.substring(0, val.length() - 2)) * fontSize);
+                        break;
+
+                    case Number:
+                        arrayList.add((float)readableArray.getDouble(i));
+                        break;
+                }
             }
         }
 
