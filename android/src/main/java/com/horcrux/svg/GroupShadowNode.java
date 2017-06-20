@@ -39,11 +39,20 @@ public class GroupShadowNode extends RenderableShadowNode {
     }
 
     protected GroupShadowNode getTextRoot() {
+        GroupShadowNode shadowNode = getShadowNode(GroupShadowNode.class);
+        if (shadowNode == null) {
+            return getShadowNode(TextShadowNode.class);
+        }
+        return shadowNode;
+    }
+
+    @android.support.annotation.Nullable
+    private GroupShadowNode getShadowNode(Class shadowNodeClass) {
         if (mTextRoot == null) {
             mTextRoot = this;
 
             while (mTextRoot != null) {
-                if (mTextRoot.getClass() == GroupShadowNode.class) {
+                if (mTextRoot.getClass() == shadowNodeClass) {
                     break;
                 }
 
@@ -66,6 +75,9 @@ public class GroupShadowNode extends RenderableShadowNode {
     }
 
     protected GlyphContext getGlyphContext() {
+        if (mGlyphContext == null) {
+            setupGlyphContext();
+        }
         return mGlyphContext;
     }
 
