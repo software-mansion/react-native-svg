@@ -39,6 +39,8 @@ public class TSpanShadowNode extends TextShadowNode {
     private static final String PROP_FONT_SIZE = "fontSize";
     private static final String PROP_FONT_STYLE = "fontStyle";
     private static final String PROP_FONT_WEIGHT = "fontWeight";
+    private static final String PROP_KERNING = "kerning";
+    private static final String PROP_LETTER_SPACING = "letterSpacing";
 
     @ReactProp(name = "content")
     public void setContent(@Nullable String content) {
@@ -101,12 +103,12 @@ public class TSpanShadowNode extends TextShadowNode {
 
             paint.getTextPath(letter, 0, 1, 0, 0, glyph);
             PointF glyphDelta = getGlyphDeltaFromContext();
-            PointF glyphPoint = getGlyphPointFromContext(glyphPosition * 1.2f, width);
+            PointF glyphPoint = getGlyphPointFromContext(glyphPosition, width);
             glyphPosition += width;
             Matrix matrix = new Matrix();
 
             if (mBezierTransformer != null) {
-                matrix = mBezierTransformer.getTransformAtDistance(glyphPoint.x + glyphDelta.x + width / 2);
+                matrix = mBezierTransformer.getTransformAtDistance(glyphPoint.x * 1.2f + glyphDelta.x + width / 2);
 
                 if (textPathHasReachedEnd()) {
                     break;
@@ -132,10 +134,22 @@ public class TSpanShadowNode extends TextShadowNode {
 
         paint.setTextAlign(Paint.Align.LEFT);
 
-        float fontSize = (float)font.getDouble(PROP_FONT_SIZE);
+        float fontSize = (float)font.getDouble(PROP_FONT_SIZE) * mScale;
+        float kerning = (float)font.getDouble(PROP_KERNING);
+        float letterSpacing = (float)font.getDouble(PROP_LETTER_SPACING);
 
-        paint.setTextSize(fontSize * mScale);
+        if (mBezierTransformer == null) {
+            letterSpacing *= mScale;
+        } else {
+            // What is going on here? This helps get closer to how e.g. chrome renders things
+            // But, still off, depending on the font size and letter-spacing.
+            letterSpacing *= java.lang.Math.pow(120 / fontSize, 6);
+        }
 
+        paint.setTextSize(fontSize);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            paint.setLetterSpacing(letterSpacing / fontSize);  // setLetterSpacing is only available from LOLLIPOP and on
+        }
 
         boolean isBold = font.hasKey(PROP_FONT_WEIGHT) && "bold".equals(font.getString(PROP_FONT_WEIGHT));
         boolean isItalic = font.hasKey(PROP_FONT_STYLE) && "italic".equals(font.getString(PROP_FONT_STYLE));

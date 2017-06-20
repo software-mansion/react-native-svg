@@ -37,6 +37,8 @@ public class GlyphContext {
     private float mHeight;
     private int mContextLength = 0;
     private static final float DEFAULT_FONT_SIZE = 12f;
+    private static final float DEFAULT_KERNING = 0f;
+    private static final float DEFAULT_LETTER_SPACING = 0f;
 
     GlyphContext(float scale, float width, float height) {
         mScale = scale;
@@ -171,7 +173,11 @@ public class GlyphContext {
     public ReadableMap getGlyphFont() {
         String fontFamily = null;
         float fontSize = DEFAULT_FONT_SIZE;
+        float kerning = DEFAULT_KERNING;
+        float letterSpacing = DEFAULT_LETTER_SPACING;
         boolean fontSizeSet = false;
+        boolean kerningSet = false;
+        boolean letterSpacingSet = false;
         String fontWeight = null;
         String fontStyle = null;
 
@@ -189,6 +195,18 @@ public class GlyphContext {
                 fontSizeSet = true;
             }
 
+            // TODO: add support for other length units
+            if (!kerningSet && font.hasKey("kerning")) {
+                kerning = Float.valueOf(font.getString("kerning"));
+                kerningSet = true;
+            }
+
+            // TODO: add support for other length units
+            if (!letterSpacingSet && font.hasKey("letterSpacing")) {
+                letterSpacing = Float.valueOf(font.getString("letterSpacing"));
+                letterSpacingSet = true;
+            }
+
             if (fontWeight == null && font.hasKey("fontWeight")) {
                 fontWeight = font.getString("fontWeight");
             }
@@ -196,7 +214,7 @@ public class GlyphContext {
                 fontStyle = font.getString("fontStyle");
             }
 
-            if (fontFamily != null && fontSizeSet && fontWeight != null && fontStyle != null) {
+            if (fontFamily != null && fontSizeSet && kerningSet && letterSpacingSet && fontWeight != null && fontStyle != null) {
                 break;
             }
         }
@@ -206,6 +224,8 @@ public class GlyphContext {
         map.putDouble("fontSize", fontSize);
         map.putString("fontWeight", fontWeight);
         map.putString("fontStyle", fontStyle);
+        map.putDouble("kerning", kerning);
+        map.putDouble("letterSpacing", letterSpacing);
 
         return map;
     }
