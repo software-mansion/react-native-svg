@@ -41,6 +41,7 @@ public class TSpanShadowNode extends TextShadowNode {
     private static final String PROP_FONT_STYLE = "fontStyle";
     private static final String PROP_FONT_WEIGHT = "fontWeight";
     private static final String PROP_KERNING = "kerning";
+    private static final String PROP_IS_KERNING_VALUE_SET = "isKerningValueSet";
     private static final String PROP_LETTER_SPACING = "letterSpacing";
 
     @ReactProp(name = "content")
@@ -80,7 +81,6 @@ public class TSpanShadowNode extends TextShadowNode {
         Path path = new Path();
 
         pushGlyphContext();
-        applyTextPropertiesToPaint(paint);
         getLinePath(canvas, mContent + "", paint, path);
 
         mCache = path;
@@ -93,20 +93,27 @@ public class TSpanShadowNode extends TextShadowNode {
     }
 
     private Path getLinePath(Canvas canvas, String line, Paint paint, Path path) {
+        ReadableMap font = applyTextPropertiesToPaint(paint);
+
         PointF glyphPoint = getGlyphPointFromContext(0, 0);
         PointF glyphDelta = getGlyphDeltaFromContext();
+
         PathShadowNode p = null;
         Path bezierPath = null;
         Path glyph = null;
+
         float width = 0;
         float offset = 0;
         float distance = 0;
         float textMeasure = 0;
+        float glyphPosition = 0;
 
         int chars = line.length();
         final float[] widths = new float[chars];
         paint.getTextWidths(line, widths);
-        float glyphPosition = 0f;
+
+        float kerningValue = (float)font.getDouble(PROP_KERNING) * mScale;
+        boolean isKerningValueSet = font.getBoolean(PROP_IS_KERNING_VALUE_SET);
 
         if (mBezierTransformer != null) {
             distance = mBezierTransformer.getTotalDistance();
@@ -123,12 +130,17 @@ public class TSpanShadowNode extends TextShadowNode {
             String letter = line.substring(index, index + 1);
             glyph = new Path();
             width = widths[index];
-            float uptoChar = paint.measureText(line, Math.max(0, index - 1), index);
-            float untilChar = paint.measureText(line, Math.max(0, index - 1), index + 1);
-            float onlyChar = paint.measureText(line, index, index + 1);
-            float kerned = untilChar - uptoChar;
-            float kerning = kerned - onlyChar;
-            glyphPosition += kerning;
+
+            if (isKerningValueSet) {
+                glyphPosition += kerningValue;
+            } else {
+                float previousChar = paint.measureText(line, Math.max(0, index - 1), index);
+                float previousAndCurrentChar = paint.measureText(line, Math.max(0, index - 1), index + 1);
+                float onlyCurrentChar = paint.measureText(line, index, index + 1);
+                float kernedCharWidth = previousAndCurrentChar - previousChar;
+                float kerning = kernedCharWidth - onlyCurrentChar;
+                glyphPosition += kerning;
+            }
 
             paint.getTextPath(letter, 0, 1, 0, 0, glyph);
             glyphPoint = getGlyphPointFromContext(glyphPosition, width);
@@ -149,22 +161,21 @@ public class TSpanShadowNode extends TextShadowNode {
                 matrix.setTranslate(glyphPoint.x + glyphDelta.x, glyphPoint.y + glyphDelta.y);
             }
 
-            glyphPosition += width;
-            glyph.transform(matrix);
-            path.addPath(glyph);
             glyphDelta = getGlyphDeltaFromContext();
+            glyph.transform(matrix);
+            glyphPosition += width;
+            path.addPath(glyph);
         }
 
         return path;
     }
 
-    private void applyTextPropertiesToPaint(Paint paint) {
+    private ReadableMap applyTextPropertiesToPaint(Paint paint) {
         ReadableMap font = getFontFromContext();
 
         paint.setTextAlign(Paint.Align.LEFT);
 
         float fontSize = (float)font.getDouble(PROP_FONT_SIZE) * mScale;
-        float kerning = (float)font.getDouble(PROP_KERNING) * mScale;
         float letterSpacing = (float)font.getDouble(PROP_LETTER_SPACING) * mScale;
 
         paint.setTextSize(fontSize);
@@ -187,6 +198,8 @@ public class TSpanShadowNode extends TextShadowNode {
         }
         // NB: if the font family is null / unsupported, the default one will be used
         paint.setTypeface(Typeface.create(font.getString(PROP_FONT_FAMILY), fontStyle));
+
+        return font;
     }
 
     private void setupTextPath() {

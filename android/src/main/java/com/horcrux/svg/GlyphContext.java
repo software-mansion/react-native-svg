@@ -226,6 +226,7 @@ public class GlyphContext {
         map.putString("fontStyle", fontStyle);
         map.putDouble("kerning", kerning);
         map.putDouble("letterSpacing", letterSpacing);
+        map.putBoolean("isKerningValueSet", kerningSet);
 
         return map;
     }
