@@ -71,83 +71,94 @@ public class TSpanShadowNode extends TextShadowNode {
             return mCache;
         }
 
-        String text = mContent;
-
-        if (text == null) {
+        if (mContent == null) {
             return getGroupPath(canvas, paint);
         }
 
         setupTextPath();
-        Path path = new Path();
 
         pushGlyphContext();
-        getLinePath(canvas, mContent + "", paint, path);
-
-        mCache = path;
+        Path path = mCache = getLinePath(canvas, mContent, paint);
         popGlyphContext();
 
-        RectF box = new RectF();
-        path.computeBounds(box, true);
+        path.computeBounds(new RectF(), true);
 
         return path;
     }
 
-    private Path getLinePath(Canvas canvas, String line, Paint paint, Path path) {
-        ReadableMap font = applyTextPropertiesToPaint(paint);
+    private Path getLinePath(Canvas canvas, String line, Paint paint) {
+        int length = line.length();
+        Path path = new Path();
+
+        if (length == 0) {
+            return path;
+        }
 
         PointF glyphPoint = getGlyphPointFromContext(0, 0);
         PointF glyphDelta = getGlyphDeltaFromContext();
-
-        PathShadowNode p = null;
-        Path bezierPath = null;
-        Path glyph = null;
-
-        float width = 0;
-        float offset = 0;
-        float distance = 0;
         float textMeasure = 0;
-        float glyphPosition = 0;
-
-        int chars = line.length();
-        final float[] widths = new float[chars];
-        paint.getTextWidths(line, widths);
-
-        float kerningValue = (float)font.getDouble(PROP_KERNING) * mScale;
-        boolean isKerningValueSet = font.getBoolean(PROP_IS_KERNING_VALUE_SET);
+        float distance = 0;
+        float offset = 0;
+        PathShadowNode p;
+        Path bezierPath;
 
         if (mBezierTransformer != null) {
             distance = mBezierTransformer.getTotalDistance();
-            p = mBezierTransformer.getPath();
             offset = mBezierTransformer.getmStartOffset();
-            bezierPath = p.getPath();
             textMeasure = paint.measureText(line);
+            p = mBezierTransformer.getPath();
+            bezierPath = p.getPath();
             if (debug) {
-                canvas.drawTextOnPath(line, bezierPath, offset + glyphPoint.x + glyphDelta.x, glyphDelta.y, paint);
+                canvas.drawTextOnPath(
+                    line,
+                    bezierPath,
+                    offset + glyphPoint.x + glyphDelta.x,
+                    glyphDelta.y,
+                    paint
+                );
             }
         }
 
-        for (int index = 0; index < line.length(); index++) {
-            String letter = line.substring(index, index + 1);
-            glyph = new Path();
+        Path glyph;
+        float width;
+        Matrix matrix;
+        String current;
+        String previous = "";
+        float glyphPosition = 0;
+        char[] chars = line.toCharArray();
+        float[] widths = new float[length];
+
+        ReadableMap font = applyTextPropertiesToPaint(paint);
+        double kerningValue = font.getDouble(PROP_KERNING) * mScale;
+        boolean isKerningValueSet = font.getBoolean(PROP_IS_KERNING_VALUE_SET);
+
+        paint.getTextWidths(line, widths);
+
+        for (int index = 0; index < length; index++) {
+            current = String.valueOf(chars[index]);
             width = widths[index];
+            glyph = new Path();
 
             if (isKerningValueSet) {
                 glyphPosition += kerningValue;
             } else {
-                float previousChar = paint.measureText(line, Math.max(0, index - 1), index);
-                float previousAndCurrentChar = paint.measureText(line, Math.max(0, index - 1), index + 1);
-                float onlyCurrentChar = paint.measureText(line, index, index + 1);
-                float kernedCharWidth = previousAndCurrentChar - previousChar;
-                float kerning = kernedCharWidth - onlyCurrentChar;
+                float bothWidth = paint.measureText(previous + current);
+                float previousWidth = paint.measureText(previous);
+                float currentWidth = paint.measureText(current);
+                float kernedWidth = bothWidth - previousWidth;
+                float kerning = kernedWidth - currentWidth;
                 glyphPosition += kerning;
+                previous = current;
             }
 
-            paint.getTextPath(letter, 0, 1, 0, 0, glyph);
             glyphPoint = getGlyphPointFromContext(glyphPosition, width);
-            Matrix matrix = new Matrix();
 
             if (mBezierTransformer != null) {
-                matrix = mBezierTransformer.getTransformAtDistance(offset + glyphPoint.x + glyphDelta.x + width / 2);
+                float halfway = width / 2;
+
+                matrix = mBezierTransformer.getTransformAtDistance(
+                    offset + glyphPoint.x + glyphDelta.x + halfway
+                );
 
                 if (textPathHasReachedEnd()) {
                     break;
@@ -155,12 +166,14 @@ public class TSpanShadowNode extends TextShadowNode {
                     continue;
                 }
 
-                matrix.preTranslate(-width / 2, glyphDelta.y);
+                matrix.preTranslate(-halfway, glyphDelta.y);
                 matrix.postTranslate(0, glyphPoint.y);
             } else {
+                matrix = new Matrix();
                 matrix.setTranslate(glyphPoint.x + glyphDelta.x, glyphPoint.y + glyphDelta.y);
             }
 
+            paint.getTextPath(current, 0, 1, 0, 0, glyph);
             glyphDelta = getGlyphDeltaFromContext();
             glyph.transform(matrix);
             glyphPosition += width;
