@@ -17,6 +17,7 @@ import com.facebook.react.bridge.ReadableMap;
 
 public class BezierTransformer {
     private ReadableArray mBezierCurves;
+    private PathShadowNode mPath;
     private int mCurrentBezierIndex = 0;
     private float mStartOffset = 0f;
     private float mLastOffset = 0f;
@@ -30,9 +31,10 @@ public class BezierTransformer {
     private boolean mReachedStart;
     private boolean mReachedEnd;
 
-    BezierTransformer(ReadableArray bezierCurves, float startOffset) {
-        mBezierCurves = bezierCurves;
+    BezierTransformer(PathShadowNode path, float startOffset) {
+        mBezierCurves = path.getBezierCurves();
         mStartOffset = startOffset;
+        mPath = path;
     }
 
     private float calculateBezier(float t, float P0, float P1, float P2, float P3) {
@@ -100,8 +102,51 @@ public class BezierTransformer {
         }
     }
 
+    public float getmStartOffset() {
+        return mStartOffset;
+    }
+
+    public PathShadowNode getPath() {
+        return mPath;
+    }
+
+    public float getTotalDistance() {
+        float distance = 0;
+
+        while (!mReachedEnd) {
+            distance += 0.1f;
+            float offset = offsetAtDistance(distance - mLastRecord, mLastPoint, mLastOffset);
+
+            if (offset < 1) {
+                PointF glyphPoint = pointAtOffset(offset);
+                mLastOffset = offset;
+                mLastPoint = glyphPoint;
+                mLastRecord = distance;
+            } else if (mBezierCurves.size() == mCurrentBezierIndex) {
+                mReachedEnd = true;
+            } else {
+                mLastOffset = 0;
+                mLastPoint = mP0 = mP3;
+                mLastRecord += mLastDistance;
+                setControlPoints();
+            }
+        }
+
+        mCurrentBezierIndex = 0;
+        mLastOffset = 0f;
+        mLastRecord = 0f;
+        mLastDistance = 0f;
+        mLastPoint = new PointF();
+        mP0 = new PointF();
+        mP1 = new PointF();
+        mP2 = new PointF();
+        mP3 = new PointF();
+        mReachedEnd = false;
+
+        return distance;
+    }
+
     public Matrix getTransformAtDistance(float distance) {
-        distance += mStartOffset;
         mReachedStart = distance >= 0;
 
         if (mReachedEnd || !mReachedStart) {
@@ -127,7 +172,7 @@ public class BezierTransformer {
             mLastPoint = mP0 = mP3;
             mLastRecord += mLastDistance;
             setControlPoints();
-            return getTransformAtDistance(distance - mStartOffset);
+            return getTransformAtDistance(distance);
         }
     }
 

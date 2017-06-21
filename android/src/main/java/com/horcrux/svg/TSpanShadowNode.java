@@ -34,6 +34,7 @@ public class TSpanShadowNode extends TextShadowNode {
     private BezierTransformer mBezierTransformer;
     private Path mCache;
     private @Nullable String mContent;
+    private boolean debug = false;
 
     private static final String PROP_FONT_FAMILY = "fontFamily";
     private static final String PROP_FONT_SIZE = "fontSize";
@@ -80,7 +81,7 @@ public class TSpanShadowNode extends TextShadowNode {
 
         pushGlyphContext();
         applyTextPropertiesToPaint(paint);
-        getLinePath(mContent + "", paint, path);
+        getLinePath(canvas, mContent + "", paint, path);
 
         mCache = path;
         popGlyphContext();
@@ -91,24 +92,50 @@ public class TSpanShadowNode extends TextShadowNode {
         return path;
     }
 
-    private Path getLinePath(String line, Paint paint, Path path) {
-        float[] widths = new float[line.length()];
+    private Path getLinePath(Canvas canvas, String line, Paint paint, Path path) {
+        PointF glyphPoint = getGlyphPointFromContext(0, 0);
+        PointF glyphDelta = getGlyphDeltaFromContext();
+        PathShadowNode p = null;
+        Path bezierPath = null;
+        Path glyph = null;
+        float width = 0;
+        float offset = 0;
+        float distance = 0;
+        float textMeasure = 0;
+
+        int chars = line.length();
+        final float[] widths = new float[chars];
         paint.getTextWidths(line, widths);
         float glyphPosition = 0f;
 
+        if (mBezierTransformer != null) {
+            distance = mBezierTransformer.getTotalDistance();
+            p = mBezierTransformer.getPath();
+            offset = mBezierTransformer.getmStartOffset();
+            bezierPath = p.getPath();
+            textMeasure = paint.measureText(line);
+            if (debug) {
+                canvas.drawTextOnPath(line, bezierPath, offset + glyphPoint.x + glyphDelta.x, glyphDelta.y, paint);
+            }
+        }
+
         for (int index = 0; index < line.length(); index++) {
             String letter = line.substring(index, index + 1);
-            Path glyph = new Path();
-            float width = widths[index];
+            glyph = new Path();
+            width = widths[index];
+            float uptoChar = paint.measureText(line, Math.max(0, index - 1), index);
+            float untilChar = paint.measureText(line, Math.max(0, index - 1), index + 1);
+            float onlyChar = paint.measureText(line, index, index + 1);
+            float kerned = untilChar - uptoChar;
+            float kerning = kerned - onlyChar;
+            glyphPosition += kerning;
 
             paint.getTextPath(letter, 0, 1, 0, 0, glyph);
-            PointF glyphDelta = getGlyphDeltaFromContext();
-            PointF glyphPoint = getGlyphPointFromContext(glyphPosition, width);
-            glyphPosition += width;
+            glyphPoint = getGlyphPointFromContext(glyphPosition, width);
             Matrix matrix = new Matrix();
 
             if (mBezierTransformer != null) {
-                matrix = mBezierTransformer.getTransformAtDistance(glyphPoint.x * 1.2f + glyphDelta.x + width / 2);
+                matrix = mBezierTransformer.getTransformAtDistance(offset + glyphPoint.x + glyphDelta.x + width / 2);
 
                 if (textPathHasReachedEnd()) {
                     break;
@@ -122,8 +149,10 @@ public class TSpanShadowNode extends TextShadowNode {
                 matrix.setTranslate(glyphPoint.x + glyphDelta.x, glyphPoint.y + glyphDelta.y);
             }
 
+            glyphPosition += width;
             glyph.transform(matrix);
             path.addPath(glyph);
+            glyphDelta = getGlyphDeltaFromContext();
         }
 
         return path;
@@ -135,16 +164,8 @@ public class TSpanShadowNode extends TextShadowNode {
         paint.setTextAlign(Paint.Align.LEFT);
 
         float fontSize = (float)font.getDouble(PROP_FONT_SIZE) * mScale;
-        float kerning = (float)font.getDouble(PROP_KERNING);
-        float letterSpacing = (float)font.getDouble(PROP_LETTER_SPACING);
-
-        if (mBezierTransformer == null) {
-            letterSpacing *= mScale;
-        } else {
-            // What is going on here? This helps get closer to how e.g. chrome renders things
-            // But, still off, depending on the font size and letter-spacing.
-            letterSpacing *= java.lang.Math.pow(120 / fontSize, 6);
-        }
+        float kerning = (float)font.getDouble(PROP_KERNING) * mScale;
+        float letterSpacing = (float)font.getDouble(PROP_LETTER_SPACING) * mScale;
 
         paint.setTextSize(fontSize);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
