@@ -102,7 +102,7 @@ public class BezierTransformer {
         }
     }
 
-    public float getmStartOffset() {
+    public float getStartOffset() {
         return mStartOffset;
     }
 

@@ -10,7 +10,6 @@
 package com.horcrux.svg;
 
 
-import android.annotation.TargetApi;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -18,7 +17,6 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.os.Build;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ReactShadowNode;
@@ -103,12 +101,12 @@ public class TSpanShadowNode extends TextShadowNode {
         Path bezierPath;
 
         if (mBezierTransformer != null) {
-            distance = mBezierTransformer.getTotalDistance();
-            offset = mBezierTransformer.getmStartOffset();
-            textMeasure = paint.measureText(line);
-            p = mBezierTransformer.getPath();
-            bezierPath = p.getPath();
+            offset = mBezierTransformer.getStartOffset();
             if (debug) {
+                distance = mBezierTransformer.getTotalDistance();
+                textMeasure = paint.measureText(line);
+                p = mBezierTransformer.getPath();
+                bezierPath = p.getPath();
                 canvas.drawTextOnPath(
                     line,
                     bezierPath,
