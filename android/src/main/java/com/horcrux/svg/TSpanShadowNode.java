@@ -32,7 +32,6 @@ public class TSpanShadowNode extends TextShadowNode {
     private BezierTransformer mBezierTransformer;
     private Path mCache;
     private @Nullable String mContent;
-    private boolean debug = false;
 
     private static final String PROP_FONT_FAMILY = "fontFamily";
     private static final String PROP_FONT_SIZE = "fontSize";
@@ -85,6 +84,7 @@ public class TSpanShadowNode extends TextShadowNode {
     }
 
     private Path getLinePath(Canvas canvas, String line, Paint paint) {
+        ReadableMap font = applyTextPropertiesToPaint(paint);
         int length = line.length();
         Path path = new Path();
 
@@ -102,6 +102,7 @@ public class TSpanShadowNode extends TextShadowNode {
 
         if (mBezierTransformer != null) {
             offset = mBezierTransformer.getStartOffset();
+            boolean debug = true;
             if (debug) {
                 distance = mBezierTransformer.getTotalDistance();
                 textMeasure = paint.measureText(line);
@@ -126,7 +127,6 @@ public class TSpanShadowNode extends TextShadowNode {
         char[] chars = line.toCharArray();
         float[] widths = new float[length];
 
-        ReadableMap font = applyTextPropertiesToPaint(paint);
         double kerningValue = font.getDouble(PROP_KERNING) * mScale;
         boolean isKerningValueSet = font.getBoolean(PROP_IS_KERNING_VALUE_SET);
 
