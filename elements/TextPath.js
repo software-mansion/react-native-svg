@@ -16,6 +16,8 @@ export default class extends Shape {
         ...pathProps,
         ...fontProps,
         href: PropTypes.string.isRequired,
+        method: PropTypes.oneOf(['align', 'stretch']),
+        spacing: PropTypes.oneOf(['auto', 'exact']),
         startOffset: numberProp
     };
 

@@ -14,6 +14,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PathMeasure;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -24,14 +25,17 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
+import static android.graphics.PathMeasure.POSITION_MATRIX_FLAG;
+import static android.graphics.PathMeasure.TANGENT_MATRIX_FLAG;
+
 /**
  * Shadow node for virtual TSpan view
  */
 public class TSpanShadowNode extends TextShadowNode {
 
-    private BezierTransformer mBezierTransformer;
     private Path mCache;
     private @Nullable String mContent;
+    private TextPathShadowNode textPath;
 
     private static final String PROP_FONT_FAMILY = "fontFamily";
     private static final String PROP_FONT_SIZE = "fontSize";
@@ -83,6 +87,21 @@ public class TSpanShadowNode extends TextShadowNode {
         return path;
     }
 
+    private float getTextAnchorShift(float width) {
+        float x = 0;
+
+        switch (getComputedTextAnchor()) {
+            case TEXT_ANCHOR_MIDDLE:
+                x = -width / 2;
+                break;
+            case TEXT_ANCHOR_END:
+                x = -width;
+                break;
+        }
+
+        return x;
+    }
+
     private Path getLinePath(Canvas canvas, String line, Paint paint) {
         ReadableMap font = applyTextPropertiesToPaint(paint);
         int length = line.length();
@@ -92,29 +111,22 @@ public class TSpanShadowNode extends TextShadowNode {
             return path;
         }
 
-        PointF glyphPoint = getGlyphPointFromContext(0, 0);
-        PointF glyphDelta = getGlyphDeltaFromContext();
-        float textMeasure = 0;
-        float distance = 0;
         float offset = 0;
-        PathShadowNode p;
-        Path bezierPath;
+        float distance = 0;
+        float renderMethodScaling = 1;
+        float textMeasure = paint.measureText(line);
+        float textAnchorShift = getTextAnchorShift(textMeasure);
 
-        if (mBezierTransformer != null) {
-            offset = mBezierTransformer.getStartOffset();
-            boolean debug = true;
-            if (debug) {
-                distance = mBezierTransformer.getTotalDistance();
-                textMeasure = paint.measureText(line);
-                p = mBezierTransformer.getPath();
-                bezierPath = p.getPath();
-                canvas.drawTextOnPath(
-                    line,
-                    bezierPath,
-                    offset + glyphPoint.x + glyphDelta.x,
-                    glyphDelta.y,
-                    paint
-                );
+        PathMeasure pm = null;
+
+        if (textPath != null) {
+            pm = new PathMeasure(textPath.getPath(), false);
+            distance = pm.getLength();
+            offset = PropHelper.fromPercentageToFloat(textPath.getStartOffset(), distance, 0, mScale);
+            String spacing = textPath.getSpacing(); // spacing = "auto | exact"
+            String method = textPath.getMethod(); // method = "align | stretch"
+            if ("stretch".equals(method)) {
+                renderMethodScaling = distance / textMeasure;
             }
         }
 
@@ -122,6 +134,8 @@ public class TSpanShadowNode extends TextShadowNode {
         float width;
         Matrix matrix;
         String current;
+        PointF glyphPoint;
+        PointF glyphDelta;
         String previous = "";
         float glyphPosition = 0;
         char[] chars = line.toCharArray();
@@ -133,8 +147,8 @@ public class TSpanShadowNode extends TextShadowNode {
         paint.getTextWidths(line, widths);
 
         for (int index = 0; index < length; index++) {
+            width = widths[index] * renderMethodScaling;
             current = String.valueOf(chars[index]);
-            width = widths[index];
             glyph = new Path();
 
             if (isKerningValueSet) {
@@ -149,32 +163,42 @@ public class TSpanShadowNode extends TextShadowNode {
                 previous = current;
             }
 
-            glyphPoint = getGlyphPointFromContext(glyphPosition, width);
+            glyphPoint = getGlyphPointFromContext(textAnchorShift + glyphPosition, width);
+            glyphDelta = getGlyphDeltaFromContext();
+            glyphPosition += width;
+            matrix = new Matrix();
 
-            if (mBezierTransformer != null) {
+            if (textPath != null) {
                 float halfway = width / 2;
+                float start = offset + glyphPoint.x + glyphDelta.x;
+                float midpoint = start + halfway;
 
-                matrix = mBezierTransformer.getTransformAtDistance(
-                    offset + glyphPoint.x + glyphDelta.x + halfway
-                );
-
-                if (textPathHasReachedEnd()) {
-                    break;
-                } else if (!textPathHasReachedStart()) {
+                if (midpoint > distance ) {
+                    if (start <= distance) {
+                        // Seems to cut off too early, see e.g. toap3, this shows the last "p"
+                        midpoint = start;
+                        halfway = 0;
+                    } else {
+                        break;
+                    }
+                } else if (midpoint < 0) {
                     continue;
                 }
 
+                pm.getMatrix(midpoint, matrix, POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG);
+
                 matrix.preTranslate(-halfway, glyphDelta.y);
+                matrix.preScale(renderMethodScaling, 1);
                 matrix.postTranslate(0, glyphPoint.y);
             } else {
-                matrix = new Matrix();
-                matrix.setTranslate(glyphPoint.x + glyphDelta.x, glyphPoint.y + glyphDelta.y);
+                matrix.setTranslate(
+                    glyphPoint.x + glyphDelta.x + textAnchorShift,
+                    glyphPoint.y + glyphDelta.y
+                );
             }
 
             paint.getTextPath(current, 0, 1, 0, 0, glyph);
-            glyphDelta = getGlyphDeltaFromContext();
             glyph.transform(matrix);
-            glyphPosition += width;
             path.addPath(glyph);
         }
 
@@ -218,8 +242,7 @@ public class TSpanShadowNode extends TextShadowNode {
 
         while (parent != null) {
             if (parent.getClass() == TextPathShadowNode.class) {
-                TextPathShadowNode textPath = (TextPathShadowNode)parent;
-                mBezierTransformer = textPath.getBezierTransformer();
+                textPath = (TextPathShadowNode)parent;
                 break;
             } else if (!(parent instanceof TextShadowNode)) {
                 break;
@@ -227,13 +250,5 @@ public class TSpanShadowNode extends TextShadowNode {
 
             parent = parent.getParent();
         }
-    }
-
-    private boolean textPathHasReachedEnd() {
-        return mBezierTransformer.hasReachedEnd();
-    }
-
-    private boolean textPathHasReachedStart() {
-        return mBezierTransformer.hasReachedStart();
     }
 }

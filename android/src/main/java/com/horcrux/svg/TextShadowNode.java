@@ -33,10 +33,10 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 public class TextShadowNode extends GroupShadowNode {
 
-    private static final int TEXT_ANCHOR_AUTO = 0;
-    private static final int TEXT_ANCHOR_START = 1;
-    private static final int TEXT_ANCHOR_MIDDLE = 2;
-    private static final int TEXT_ANCHOR_END = 3;
+    static final int TEXT_ANCHOR_AUTO = 0;
+    static final int TEXT_ANCHOR_START = 1;
+    static final int TEXT_ANCHOR_MIDDLE = 2;
+    static final int TEXT_ANCHOR_END = 3;
 
     private int mTextAnchor = TEXT_ANCHOR_AUTO;
     private @Nullable  ReadableArray mDeltaX;
@@ -86,8 +86,6 @@ public class TextShadowNode extends GroupShadowNode {
             setupGlyphContext();
             clip(canvas, paint);
             Path path = getGroupPath(canvas, paint);
-            Matrix matrix = getAlignMatrix(path);
-            canvas.concat(matrix);
             drawGroup(canvas, paint, opacity);
             releaseCachedPath();
         }
@@ -97,9 +95,6 @@ public class TextShadowNode extends GroupShadowNode {
     protected Path getPath(Canvas canvas, Paint paint) {
         setupGlyphContext();
         Path groupPath = getGroupPath(canvas, paint);
-        Matrix matrix = getAlignMatrix(groupPath);
-        groupPath.transform(matrix);
-
         releaseCachedPath();
         return groupPath;
     }
@@ -108,20 +103,21 @@ public class TextShadowNode extends GroupShadowNode {
         return mTextAnchor;
     }
 
-    private int getComputedTextAnchor() {
+    int getComputedTextAnchor() {
         int anchor = mTextAnchor;
         ReactShadowNode shadowNode = this;
 
-        while (shadowNode.getChildCount() > 0 &&
-                anchor == TEXT_ANCHOR_AUTO) {
-            shadowNode = shadowNode.getChildAt(0);
-
+        while (shadowNode instanceof GroupShadowNode) {
             if (shadowNode instanceof TextShadowNode) {
                 anchor = ((TextShadowNode) shadowNode).getTextAnchor();
-            } else {
-                break;
+                if (anchor != TEXT_ANCHOR_AUTO) {
+                    break;
+                }
             }
+
+            shadowNode = shadowNode.getParent();
         }
+
         return anchor;
     }
 
@@ -146,26 +142,5 @@ public class TextShadowNode extends GroupShadowNode {
     @Override
     protected void pushGlyphContext() {
         getTextRoot().getGlyphContext().pushContext(mFont, mDeltaX, mDeltaY, mPositionX, mPositionY);
-    }
-
-    private Matrix getAlignMatrix(Path path) {
-        RectF box = new RectF();
-        path.computeBounds(box, true);
-
-        float width = box.width();
-        float x = 0;
-
-        switch (getComputedTextAnchor()) {
-            case TEXT_ANCHOR_MIDDLE:
-                x = -width / 2;
-                break;
-            case TEXT_ANCHOR_END:
-                x = -width;
-                break;
-        }
-
-        Matrix matrix = new Matrix();
-        matrix.setTranslate(x, 0);
-        return matrix;
     }
 }
