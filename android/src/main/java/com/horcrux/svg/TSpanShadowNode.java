@@ -111,8 +111,8 @@ public class TSpanShadowNode extends TextShadowNode {
             return path;
         }
 
-        float offset = 0;
         float distance = 0;
+        float startOffset = 0;
         float renderMethodScaling = 1;
         float textMeasure = paint.measureText(line);
         float textAnchorShift = getTextAnchorShift(textMeasure);
@@ -122,8 +122,8 @@ public class TSpanShadowNode extends TextShadowNode {
         if (textPath != null) {
             pm = new PathMeasure(textPath.getPath(), false);
             distance = pm.getLength();
-            offset = PropHelper.fromPercentageToFloat(textPath.getStartOffset(), distance, 0, mScale);
-            String spacing = textPath.getSpacing(); // spacing = "auto | exact"
+            startOffset = PropHelper.fromPercentageToFloat(textPath.getStartOffset(), distance, 0, mScale);
+            // String spacing = textPath.getSpacing(); // spacing = "auto | exact"
             String method = textPath.getMethod(); // method = "align | stretch"
             if ("stretch".equals(method)) {
                 renderMethodScaling = distance / textMeasure;
@@ -137,9 +137,9 @@ public class TSpanShadowNode extends TextShadowNode {
         PointF glyphPoint;
         PointF glyphDelta;
         String previous = "";
-        float glyphPosition = 0;
         char[] chars = line.toCharArray();
         float[] widths = new float[length];
+        float glyphPosition = startOffset + textAnchorShift;
 
         double kerningValue = font.getDouble(PROP_KERNING) * mScale;
         boolean isKerningValueSet = font.getBoolean(PROP_IS_KERNING_VALUE_SET);
@@ -163,19 +163,20 @@ public class TSpanShadowNode extends TextShadowNode {
                 previous = current;
             }
 
-            glyphPoint = getGlyphPointFromContext(textAnchorShift + glyphPosition, width);
+            glyphPoint = getGlyphPointFromContext(glyphPosition, width);
             glyphDelta = getGlyphDeltaFromContext();
             glyphPosition += width;
             matrix = new Matrix();
 
             if (textPath != null) {
                 float halfway = width / 2;
-                float start = offset + glyphPoint.x + glyphDelta.x;
+                float start = glyphPoint.x + glyphDelta.x;
                 float midpoint = start + halfway;
 
                 if (midpoint > distance ) {
                     if (start <= distance) {
                         // Seems to cut off too early, see e.g. toap3, this shows the last "p"
+                        // Tangent will be from start position instead of midpoint
                         midpoint = start;
                         halfway = 0;
                     } else {
