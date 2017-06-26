@@ -17,6 +17,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.util.Base64;
 
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -128,7 +129,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private void drawChildren(Canvas canvas) {
 
         if (mAlign != null) {
-            RectF vbRect = new RectF(mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
+            RectF vbRect = getViewBox();
             RectF eRect = new RectF(0, 0, getLayoutWidth(), getLayoutHeight());
             mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice, false);
             canvas.concat(mViewBoxMatrix);
@@ -157,6 +158,11 @@ public class SvgViewShadowNode extends LayoutShadowNode {
                 mResponsible = true;
             }
         }
+    }
+
+    @NonNull
+    RectF getViewBox() {
+        return new RectF(mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
     }
 
     public String toDataURL() {

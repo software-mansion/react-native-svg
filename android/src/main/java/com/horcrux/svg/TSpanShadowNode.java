@@ -10,6 +10,7 @@
 package com.horcrux.svg;
 
 
+import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -211,8 +212,13 @@ public class TSpanShadowNode extends TextShadowNode {
 
         paint.setTextAlign(Paint.Align.LEFT);
 
-        float fontSize = (float)font.getDouble(PROP_FONT_SIZE) * mScale;
-        float letterSpacing = (float)font.getDouble(PROP_LETTER_SPACING) * mScale;
+        RectF vb = getSvgShadowNode().getViewBox();
+        float height = vb.height();
+        float ch = getCanvasHeight();
+        float heightScale = height / ch;
+
+        float fontSize = (float)font.getDouble(PROP_FONT_SIZE) * mScale * heightScale;
+        float letterSpacing = (float)font.getDouble(PROP_LETTER_SPACING) * mScale * heightScale;
 
         paint.setTextSize(fontSize);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -232,8 +238,25 @@ public class TSpanShadowNode extends TextShadowNode {
         } else {
             fontStyle = Typeface.NORMAL;
         }
+
+        AssetManager a = getThemedContext().getResources().getAssets();
+
+        Typeface tf = null;
+        try {
+            tf = Typeface.createFromAsset(a, "fonts/" + font.getString(PROP_FONT_FAMILY) + ".otf");
+        } catch (Exception ignored) {
+            try {
+                tf = Typeface.createFromAsset(a, "fonts/" + font.getString(PROP_FONT_FAMILY) + ".ttf");
+            } catch (Exception ignored2) {
+                try {
+                    tf = Typeface.create(font.getString(PROP_FONT_FAMILY), fontStyle);
+                } catch (Exception ignored3) {
+                }
+            }
+        }
+
         // NB: if the font family is null / unsupported, the default one will be used
-        paint.setTypeface(Typeface.create(font.getString(PROP_FONT_FAMILY), fontStyle));
+        paint.setTypeface(tf);
 
         return font;
     }
