@@ -104,7 +104,7 @@ public class TSpanShadowNode extends TextShadowNode {
     }
 
     private Path getLinePath(Canvas canvas, String line, Paint paint) {
-        ReadableMap font = applyTextPropertiesToPaint(paint);
+        ReadableMap font = applyTextPropertiesToPaint(paint, canvas);
         int length = line.length();
         Path path = new Path();
 
@@ -207,7 +207,7 @@ public class TSpanShadowNode extends TextShadowNode {
         return path;
     }
 
-    private ReadableMap applyTextPropertiesToPaint(Paint paint) {
+    private ReadableMap applyTextPropertiesToPaint(Paint paint, Canvas canvas) {
         ReadableMap font = getFontFromContext();
 
         paint.setTextAlign(Paint.Align.LEFT);
@@ -216,6 +216,18 @@ public class TSpanShadowNode extends TextShadowNode {
         float height = vb.height();
         float ch = getCanvasHeight();
         float heightScale = height / ch;
+
+        SvgViewShadowNode svg = getSvgShadowNode();
+        ReactShadowNode node = this;
+        while (node != null && !node.equals(svg)) {
+
+            if (node instanceof VirtualNode) {
+                VirtualNode v = ((VirtualNode) node);
+                heightScale /= v.getScaleY();
+            }
+
+            node = node.getParent();
+        }
 
         float fontSize = (float)font.getDouble(PROP_FONT_SIZE) * mScale * heightScale;
         float letterSpacing = (float)font.getDouble(PROP_LETTER_SPACING) * mScale * heightScale;
