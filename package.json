@@ -28,13 +28,13 @@
     },
     "dependencies": {
         "color": "^0.11.1",
-        "lodash": "^4.16.6",
-        "react-native": "^0.45.0"
+        "lodash": "^4.16.6"
     },
     "devDependencies": {
         "babel-eslint": "^6.1.2",
         "eslint": "^2.13.1",
-        "eslint-plugin-react": "^4.3.0"
+        "eslint-plugin-react": "^4.3.0",
+        "react-native": "0.46.0-rc.2"
     },
     "nativePackage": true
 }

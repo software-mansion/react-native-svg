@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass';
 
 export default class extends Component {
     static displayName = 'Defs';
