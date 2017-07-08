@@ -16,7 +16,7 @@
 
 #### Automatic
 
-*With Exponent, this is pre-installed. Jump ahead to [Usage](#Usage)*
+*With Expo, this is pre-installed. Jump ahead to [Usage](#Usage)*
 
 1. Install library from `npm`
 
@@ -33,14 +33,13 @@
     - react-native-svg >= 4.5.0 only supports react-native >= 0.40.0 and react >= 15.4.0
     - react-native-svg >= 5.1.8 only supports react-native >= 0.44.0 and react == 16.0.0-alpha.6
     - react-native-svg >= 5.2.0 only supports react-native >= 0.45.0 and react == 16.0.0-alpha.12
-   - react-native-svg >= 5.3.0 only supports react-native >= 0.46.0 and react == 16.0.0-alpha.12
+    - react-native-svg >= 5.3.0 only supports react-native >= 0.46.0 and react == 16.0.0-alpha.12
     
 2. Link native code
 
     ```bash
     react-native link react-native-svg
     ```
-    react-native@0.29.0 and 0.29.1 cannot work with Android link properly:[here](https://github.com/facebook/react-native/pull/8612)
 
     Or use `rnpm` instead:
 
@@ -128,6 +127,8 @@ class SvgExample extends Component {
     }
 }
 ```
+
+[Try this on Snack](https://snack.expo.io/r1hCVAaEZ)
 
 ### Common props:
 
