@@ -212,25 +212,8 @@ public class TSpanShadowNode extends TextShadowNode {
 
         paint.setTextAlign(Paint.Align.LEFT);
 
-        RectF vb = getSvgShadowNode().getViewBox();
-        float height = vb.height();
-        float ch = getCanvasHeight();
-        float heightScale = height / ch;
-
-        SvgViewShadowNode svg = getSvgShadowNode();
-        ReactShadowNode node = this;
-        while (node != null && !node.equals(svg)) {
-
-            if (node instanceof VirtualNode) {
-                VirtualNode v = ((VirtualNode) node);
-                heightScale /= v.getScaleY();
-            }
-
-            node = node.getParent();
-        }
-
-        float fontSize = (float)font.getDouble(PROP_FONT_SIZE) * mScale * heightScale;
-        float letterSpacing = (float)font.getDouble(PROP_LETTER_SPACING) * mScale * heightScale;
+        float fontSize = (float)font.getDouble(PROP_FONT_SIZE) * mScale;
+        float letterSpacing = (float)font.getDouble(PROP_LETTER_SPACING) * mScale;
 
         paint.setTextSize(fontSize);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
