@@ -19,7 +19,7 @@ export default class extends Shape {
     };
 
     static childContextTypes = {
-        isInAParentText: React.PropTypes.bool
+        isInAParentText: PropTypes.bool
     };
 
     getChildContext() {
@@ -30,7 +30,7 @@ export default class extends Shape {
 
     getContextTypes() {
         return {
-            isInAParentText: React.PropTypes.bool
+            isInAParentText: PropTypes.bool
         };
     }
 
