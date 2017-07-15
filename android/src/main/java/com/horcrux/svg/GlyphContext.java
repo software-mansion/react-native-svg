@@ -28,10 +28,13 @@ public class GlyphContext {
     private ArrayList<PointF> mDeltaContext;
     private ArrayList<ArrayList<Float>> mDeltaXContext;
     private ArrayList<ArrayList<Float>> mDeltaYContext;
+    private ArrayList<ArrayList<Float>> mRotationContext;
+    private ArrayList<Float> mGlyphRotationContext;
     private ArrayList<Float> mXContext;
     private ArrayList<Float> mYContext;
     private @Nonnull PointF mCurrentLocation;
     private @Nonnull PointF mCurrentDelta;
+    private float mRotation = 0;
     private float mScale;
     private float mWidth;
     private float mHeight;
@@ -51,6 +54,8 @@ public class GlyphContext {
         mDeltaContext = new ArrayList<>();
         mDeltaXContext = new ArrayList<>();
         mDeltaYContext = new ArrayList<>();
+        mRotationContext = new ArrayList<>();
+        mGlyphRotationContext = new ArrayList<>();
         mXContext = new ArrayList<>();
         mYContext = new ArrayList<>();
     }
@@ -66,6 +71,8 @@ public class GlyphContext {
         mFontContext.add(font);
         mDeltaXContext.add(new ArrayList<Float>());
         mDeltaYContext.add(new ArrayList<Float>());
+        mRotationContext.add(new ArrayList<Float>());
+        mGlyphRotationContext.add(mRotation);
         mXContext.add(location.x);
         mYContext.add(location.y);
 
@@ -73,7 +80,7 @@ public class GlyphContext {
         mContextLength++;
     }
 
-    public void pushContext(@Nullable ReadableMap font, @Nullable ReadableArray deltaX, @Nullable ReadableArray deltaY, @Nullable String positionX, @Nullable String positionY) {
+    public void pushContext(@Nullable ReadableMap font, @Nullable ReadableArray rotate, @Nullable ReadableArray deltaX, @Nullable ReadableArray deltaY, @Nullable String positionX, @Nullable String positionY) {
         PointF location = mCurrentLocation;
 
         mDeltaContext.add(mCurrentDelta);
@@ -94,6 +101,8 @@ public class GlyphContext {
         mFontContext.add(font);
         mDeltaXContext.add(getFloatArrayListFromReadableArray(deltaX));
         mDeltaYContext.add(getFloatArrayListFromReadableArray(deltaY));
+        mRotationContext.add(getFloatArrayListFromReadableArray(rotate));
+        mGlyphRotationContext.add(mRotation);
         mXContext.add(location.x);
         mYContext.add(location.y);
 
@@ -104,11 +113,14 @@ public class GlyphContext {
     public void popContext() {
         float x = mXContext.get(mContextLength - 1);
         float y = mYContext.get(mContextLength - 1);
+        float r = mGlyphRotationContext.get(mContextLength - 1);
         mFontContext.remove(mContextLength - 1);
         mLocationContext.remove(mContextLength - 1);
         mDeltaContext.remove(mContextLength - 1);
         mDeltaXContext.remove(mContextLength - 1);
         mDeltaYContext.remove(mContextLength - 1);
+        mRotationContext.remove(mContextLength - 1);
+        mGlyphRotationContext.remove(mContextLength - 1);
         mXContext.remove(mContextLength - 1);
         mYContext.remove(mContextLength - 1);
 
@@ -117,12 +129,14 @@ public class GlyphContext {
         if (mContextLength != 0) {
             mXContext.set(mContextLength - 1, x);
             mYContext.set(mContextLength - 1, y);
+            mGlyphRotationContext.set(mContextLength - 1, r);
             PointF lastLocation = mLocationContext.get(mContextLength - 1);
             PointF lastDelta = mDeltaContext.get(mContextLength - 1);
             mCurrentLocation = clonePointF(lastLocation);
             mCurrentDelta = clonePointF(lastDelta);
             mCurrentLocation.x = lastLocation.x = x;
             mCurrentLocation.y = lastLocation.y = y;
+            mRotation = r;
         }
     }
 
@@ -134,8 +148,8 @@ public class GlyphContext {
     }
 
     public PointF getNextGlyphDelta() {
-        float dx = mScale * getNextDelta(mDeltaXContext);
-        float dy = mScale * getNextDelta(mDeltaYContext);
+        float dx = mScale * getNextFloat(mDeltaXContext);
+        float dy = mScale * getNextFloat(mDeltaYContext);
 
         if (mContextLength > 0) {
             for (PointF point: mDeltaContext) {
@@ -149,13 +163,50 @@ public class GlyphContext {
         return new PointF(dx, dy);
     }
 
-    private float getNextDelta(ArrayList<ArrayList<Float>> deltaContext) {
-        float value = 0;
+    public float getNextGlyphRotation() {
+        if (hasNextFloat(mRotationContext)) {
+            float r = getNextFloat(mRotationContext);
+
+            if (mContextLength > 0) {
+                for (int i = 0; i < mContextLength; i++) {
+                    mGlyphRotationContext.set(i, r);
+                }
+
+                return mGlyphRotationContext.get(mContextLength - 1);
+            }
+
+            return r;
+        } else if (mContextLength > 0) {
+            return mGlyphRotationContext.get(mContextLength - 1);
+        }
+
+        return 0;
+    }
+
+    private float getNextFloat(ArrayList<ArrayList<Float>> context) {
+        return getNextFloat(context, 0);
+    }
+
+    private boolean hasNextFloat(ArrayList<ArrayList<Float>> context) {
+        int index = mContextLength - 1;
+
+        for (; index >= 0; index--) {
+            ArrayList<Float> delta = context.get(index);
+
+            if (delta.size() != 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private float getNextFloat(ArrayList<ArrayList<Float>> context, float value) {
         boolean valueSet = false;
         int index = mContextLength - 1;
 
         for (; index >= 0; index--) {
-            ArrayList<Float> delta = deltaContext.get(index);
+            ArrayList<Float> delta = context.get(index);
 
             if (delta.size() != 0) {
                 if (!valueSet) {

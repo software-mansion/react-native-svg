@@ -137,6 +137,7 @@ public class TSpanShadowNode extends TextShadowNode {
         String current;
         PointF glyphPoint;
         PointF glyphDelta;
+        float glyphRotation;
         String previous = "";
         char[] chars = line.toCharArray();
         float[] widths = new float[length];
@@ -166,6 +167,7 @@ public class TSpanShadowNode extends TextShadowNode {
 
             glyphPoint = getGlyphPointFromContext(glyphPosition, width);
             glyphDelta = getGlyphDeltaFromContext();
+            glyphRotation = getNextGlyphRotationFromContext();
             glyphPosition += width;
             matrix = new Matrix();
 
@@ -199,6 +201,8 @@ public class TSpanShadowNode extends TextShadowNode {
                 );
             }
 
+            matrix.preRotate(glyphRotation);
+
             paint.getTextPath(current, 0, 1, 0, 0, glyph);
             glyph.transform(matrix);
             path.addPath(glyph);
@@ -219,6 +223,11 @@ public class TSpanShadowNode extends TextShadowNode {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             paint.setLetterSpacing(letterSpacing / fontSize);  // setLetterSpacing is only available from LOLLIPOP and on
         }
+
+        int decoration = getTextDecoration();
+
+        paint.setUnderlineText(decoration == TEXT_DECORATION_UNDERLINE);
+        paint.setStrikeThruText(decoration == TEXT_DECORATION_LINE_THROUGH);
 
         boolean isBold = font.hasKey(PROP_FONT_WEIGHT) && "bold".equals(font.getString(PROP_FONT_WEIGHT));
         boolean isItalic = font.hasKey(PROP_FONT_STYLE) && "italic".equals(font.getString(PROP_FONT_STYLE));

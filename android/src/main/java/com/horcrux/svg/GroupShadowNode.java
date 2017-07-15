@@ -101,6 +101,10 @@ public class GroupShadowNode extends RenderableShadowNode {
         return  getTextRoot().getGlyphContext().getNextGlyphDelta();
     }
 
+    protected float getNextGlyphRotationFromContext() {
+        return  getTextRoot().getGlyphContext().getNextGlyphRotation();
+    }
+
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
         setupGlyphContext();
         if (opacity > MIN_OPACITY_FOR_DRAW) {

@@ -38,7 +38,15 @@ public class TextShadowNode extends GroupShadowNode {
     static final int TEXT_ANCHOR_MIDDLE = 2;
     static final int TEXT_ANCHOR_END = 3;
 
+    static final int TEXT_DECORATION_NONE = 0;
+    static final int TEXT_DECORATION_UNDERLINE = 1;
+    static final int TEXT_DECORATION_OVERLINE = 2;
+    static final int TEXT_DECORATION_LINE_THROUGH = 3;
+    static final int TEXT_DECORATION_BLINK = 4;
+
     private int mTextAnchor = TEXT_ANCHOR_AUTO;
+    private int mTextDecoration = TEXT_DECORATION_NONE;
+    private @Nullable  ReadableArray mRotate;
     private @Nullable  ReadableArray mDeltaX;
     private @Nullable ReadableArray mDeltaY;
     private @Nullable String mPositionX;
@@ -47,6 +55,18 @@ public class TextShadowNode extends GroupShadowNode {
     @ReactProp(name = "textAnchor", defaultInt = TEXT_ANCHOR_AUTO)
     public void setTextAnchor(int textAnchor) {
         mTextAnchor = textAnchor;
+        markUpdated();
+    }
+
+    @ReactProp(name = "textDecoration", defaultInt = TEXT_DECORATION_NONE)
+    public void setTextDecoration(int textDecoration) {
+        mTextDecoration = textDecoration;
+        markUpdated();
+    }
+
+    @ReactProp(name = "rotate")
+    public void setRotate(@Nullable ReadableArray rotate) {
+        mRotate = rotate;
         markUpdated();
     }
 
@@ -103,9 +123,33 @@ public class TextShadowNode extends GroupShadowNode {
         return mTextAnchor;
     }
 
+    int getTextDecoration() {
+        int decoration = mTextDecoration;
+        if (decoration != TEXT_DECORATION_NONE) {
+            return decoration;
+        }
+        ReactShadowNode shadowNode = this.getParent();
+
+        while (shadowNode instanceof GroupShadowNode) {
+            if (shadowNode instanceof TextShadowNode) {
+                decoration = ((TextShadowNode) shadowNode).getTextDecoration();
+                if (decoration != TEXT_DECORATION_NONE) {
+                    break;
+                }
+            }
+
+            shadowNode = shadowNode.getParent();
+        }
+
+        return decoration;
+    }
+
     int getComputedTextAnchor() {
         int anchor = mTextAnchor;
-        ReactShadowNode shadowNode = this;
+        if (anchor != TEXT_ANCHOR_AUTO) {
+            return anchor;
+        }
+        ReactShadowNode shadowNode = this.getParent();
 
         while (shadowNode instanceof GroupShadowNode) {
             if (shadowNode instanceof TextShadowNode) {
@@ -141,6 +185,6 @@ public class TextShadowNode extends GroupShadowNode {
 
     @Override
     protected void pushGlyphContext() {
-        getTextRoot().getGlyphContext().pushContext(mFont, mDeltaX, mDeltaY, mPositionX, mPositionY);
+        getTextRoot().getGlyphContext().pushContext(mFont, mRotate, mDeltaX, mDeltaY, mPositionX, mPositionY);
     }
 }
