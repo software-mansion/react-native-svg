@@ -1,5 +1,6 @@
-import React, {PropTypes} from 'react';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
+import React from 'react';
+import PropTypes from 'prop-types';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass';
 import {PathAttributes} from '../lib/attributes';
 import Shape from './Shape';
 import {pathProps} from '../lib/props';

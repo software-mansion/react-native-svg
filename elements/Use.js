@@ -1,5 +1,6 @@
-import React, {PropTypes} from 'react';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/src/renderers/native/createReactNativeComponentClass';
+import React from 'react';
+import PropTypes from 'prop-types';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass';
 import extractProps from '../lib/extract/extractProps';
 import {pathProps, numberProp} from '../lib/props';
 import {UseAttributes} from '../lib/attributes';
