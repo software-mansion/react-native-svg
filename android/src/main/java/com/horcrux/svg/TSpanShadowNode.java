@@ -116,10 +116,8 @@ public class TSpanShadowNode extends TextShadowNode {
         float startOffset = 0;
         float renderMethodScaling = 1;
         float textMeasure = paint.measureText(line);
-        float textAnchorShift = getTextAnchorShift(textMeasure);
 
         PathMeasure pm = null;
-
         if (textPath != null) {
             pm = new PathMeasure(textPath.getPath(), false);
             distance = pm.getLength();
@@ -141,15 +139,15 @@ public class TSpanShadowNode extends TextShadowNode {
         String previous = "";
         float previousWidth = 0;
         char[] chars = line.toCharArray();
-        float glyphPosition = startOffset + textAnchorShift;
-
         double kerningValue = font.getDouble(PROP_KERNING) * mScale;
         boolean isKerningValueSet = font.getBoolean(PROP_IS_KERNING_VALUE_SET);
+        float glyphPosition = startOffset + getTextAnchorShift(textMeasure);
 
         for (int index = 0; index < length; index++) {
-            current = String.valueOf(chars[index]);
-            width = paint.measureText(current) * renderMethodScaling;
             glyph = new Path();
+            current = String.valueOf(chars[index]);
+            paint.getTextPath(current, 0, 1, 0, 0, glyph);
+            width = paint.measureText(current) * renderMethodScaling;
 
             if (isKerningValueSet) {
                 glyphPosition += kerningValue;
@@ -162,15 +160,14 @@ public class TSpanShadowNode extends TextShadowNode {
             }
 
             glyphPoint = getGlyphPointFromContext(glyphPosition, width);
-            glyphDelta = getGlyphDeltaFromContext();
             glyphRotation = getNextGlyphRotationFromContext();
+            glyphDelta = getGlyphDeltaFromContext();
             glyphPosition += width;
             matrix = new Matrix();
 
             if (textPath != null) {
                 float halfway = width / 2;
-                float start = glyphPoint.x + glyphDelta.x;
-                float midpoint = start + halfway;
+                float midpoint = glyphPoint.x + glyphDelta.x + halfway;
 
                 if (midpoint > distance ) {
                     break;
@@ -191,8 +188,6 @@ public class TSpanShadowNode extends TextShadowNode {
             }
 
             matrix.preRotate(glyphRotation);
-
-            paint.getTextPath(current, 0, 1, 0, 0, glyph);
             glyph.transform(matrix);
             path.addPath(glyph);
         }
