@@ -139,29 +139,25 @@ public class TSpanShadowNode extends TextShadowNode {
         PointF glyphDelta;
         float glyphRotation;
         String previous = "";
+        float previousWidth = 0;
         char[] chars = line.toCharArray();
-        float[] widths = new float[length];
         float glyphPosition = startOffset + textAnchorShift;
 
         double kerningValue = font.getDouble(PROP_KERNING) * mScale;
         boolean isKerningValueSet = font.getBoolean(PROP_IS_KERNING_VALUE_SET);
 
-        paint.getTextWidths(line, widths);
-
         for (int index = 0; index < length; index++) {
-            width = widths[index] * renderMethodScaling;
             current = String.valueOf(chars[index]);
+            width = paint.measureText(current) * renderMethodScaling;
             glyph = new Path();
 
             if (isKerningValueSet) {
                 glyphPosition += kerningValue;
             } else {
                 float bothWidth = paint.measureText(previous + current);
-                float previousWidth = paint.measureText(previous);
-                float currentWidth = paint.measureText(current);
-                float kernedWidth = bothWidth - previousWidth;
-                float kerning = kernedWidth - currentWidth;
+                float kerning = bothWidth - previousWidth - width;
                 glyphPosition += kerning;
+                previousWidth = width;
                 previous = current;
             }
 
@@ -177,14 +173,7 @@ public class TSpanShadowNode extends TextShadowNode {
                 float midpoint = start + halfway;
 
                 if (midpoint > distance ) {
-                    if (start <= distance) {
-                        // Seems to cut off too early, see e.g. toap3, this shows the last "p"
-                        // Tangent will be from start position instead of midpoint
-                        midpoint = start;
-                        halfway = 0;
-                    } else {
-                        break;
-                    }
+                    break;
                 } else if (midpoint < 0) {
                     continue;
                 }
