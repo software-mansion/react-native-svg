@@ -152,7 +152,7 @@ public class TSpanShadowNode extends TextShadowNode {
             if (isKerningValueSet) {
                 glyphPosition += kerningValue;
             } else {
-                float bothWidth = paint.measureText(previous + current);
+                float bothWidth = paint.measureText(previous + current) * renderMethodScaling;
                 float kerning = bothWidth - previousWidth - width;
                 glyphPosition += kerning;
                 previousWidth = width;
