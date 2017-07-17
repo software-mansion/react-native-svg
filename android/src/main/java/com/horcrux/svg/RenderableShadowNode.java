@@ -221,7 +221,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
     protected boolean setupFillPaint(Paint paint, float opacity) {
         if (mFill != null && mFill.size() > 0) {
             paint.reset();
-            paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+            paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
             paint.setStyle(Paint.Style.FILL);
             setupPaint(paint, opacity, mFill);
             return true;
@@ -239,7 +239,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
             return false;
         }
 
-        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeCap(mStrokeLinecap);
         paint.setStrokeJoin(mStrokeLinejoin);
@@ -327,7 +327,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
                 targetAttributeList.size() == 0) {
             return;
         }
-        
+
         mOriginProperties = new ArrayList<>();
         mAttributeList = clonePropList();
 

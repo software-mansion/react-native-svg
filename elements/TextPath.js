@@ -17,6 +17,8 @@ export default class extends Shape {
         ...pathProps,
         ...fontProps,
         href: PropTypes.string.isRequired,
+        method: PropTypes.oneOf(['align', 'stretch']),
+        spacing: PropTypes.oneOf(['auto', 'exact']),
         startOffset: numberProp
     };
 
@@ -44,7 +46,7 @@ export default class extends Shape {
         }
 
         console.warn('Invalid `href` prop for `TextPath` element, expected a href like `"#id"`, but got: "' + props.href + '"');
-        return <TSpan>{children}</TSpan>
+        return <TSpan>{children}</TSpan>;
     }
 
 }

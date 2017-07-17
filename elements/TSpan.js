@@ -20,20 +20,20 @@ export default class extends Shape {
     };
 
     static childContextTypes = {
-        isInAParentText: React.PropTypes.bool
+        isInAParentText: PropTypes.bool
     };
 
     getChildContext() {
         return {
             isInAParentText: true
         };
-    };
+    }
 
     getContextTypes() {
         return {
-            isInAParentText: React.PropTypes.bool
+            isInAParentText: PropTypes.bool
         };
-    };
+    }
 
     setNativeProps = (...args) => {
         this.root.setNativeProps(...args);

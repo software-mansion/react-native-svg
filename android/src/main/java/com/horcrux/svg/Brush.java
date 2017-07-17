@@ -25,6 +25,7 @@ public class Brush {
     private BrushType mType = BrushType.LINEAR_GRADIENT;
     private ReadableArray mPoints;
     private ReadableArray mColors;
+    private Matrix mMatrix;
     private boolean mUseObjectBoundingBox;
     private Rect mUserSpaceBoundingBox;
 
@@ -75,6 +76,10 @@ public class Brush {
         mColors = colors;
     }
 
+    public void setGradientTransform(Matrix matrix) {
+        mMatrix = matrix;
+    }
+
     private RectF getPaintRect(RectF pathBoundingBox) {
         RectF rect = mUseObjectBoundingBox ? pathBoundingBox : new RectF(mUserSpaceBoundingBox);
         float width = rect.width();
@@ -107,15 +112,23 @@ public class Brush {
             float y1 = PropHelper.fromPercentageToFloat(mPoints.getString(1), height, offsetY, scale);
             float x2 = PropHelper.fromPercentageToFloat(mPoints.getString(2), width, offsetX, scale);
             float y2 = PropHelper.fromPercentageToFloat(mPoints.getString(3), height, offsetY, scale);
-            paint.setShader(
-                    new LinearGradient(
-                            x1,
-                            y1,
-                            x2,
-                            y2,
-                            stopsColors,
-                            stops,
-                            Shader.TileMode.CLAMP));
+
+            Shader linearGradient = new LinearGradient(
+                x1,
+                y1,
+                x2,
+                y2,
+                stopsColors,
+                stops,
+                Shader.TileMode.CLAMP);
+
+            if (mMatrix != null) {
+                Matrix m = new Matrix();
+                m.preConcat(mMatrix);
+                linearGradient.setLocalMatrix(m);
+            }
+
+            paint.setShader(linearGradient);
         } else if (mType == BrushType.RADIAL_GRADIENT) {
             float rx = PropHelper.fromPercentageToFloat(mPoints.getString(2), width, 0f, scale);
             float ry = PropHelper.fromPercentageToFloat(mPoints.getString(3), height, 0f, scale);
@@ -135,6 +148,11 @@ public class Brush {
 
             Matrix radialMatrix = new Matrix();
             radialMatrix.preScale(1f, ry / rx);
+
+            if (mMatrix != null) {
+                radialMatrix.preConcat(mMatrix);
+            }
+
             radialGradient.setLocalMatrix(radialMatrix);
             paint.setShader(radialGradient);
         } else {
