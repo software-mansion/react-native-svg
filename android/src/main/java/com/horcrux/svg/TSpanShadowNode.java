@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -32,19 +32,19 @@ import static android.graphics.PathMeasure.TANGENT_MATRIX_FLAG;
 /**
  * Shadow node for virtual TSpan view
  */
-public class TSpanShadowNode extends TextShadowNode {
+class TSpanShadowNode extends TextShadowNode {
 
     private Path mCache;
     private @Nullable String mContent;
     private TextPathShadowNode textPath;
 
-    private static final String PROP_FONT_FAMILY = "fontFamily";
+    private static final String PROP_KERNING = "kerning";
     private static final String PROP_FONT_SIZE = "fontSize";
     private static final String PROP_FONT_STYLE = "fontStyle";
     private static final String PROP_FONT_WEIGHT = "fontWeight";
-    private static final String PROP_KERNING = "kerning";
-    private static final String PROP_IS_KERNING_VALUE_SET = "isKerningValueSet";
+    private static final String PROP_FONT_FAMILY = "fontFamily";
     private static final String PROP_LETTER_SPACING = "letterSpacing";
+    private static final String PROP_IS_KERNING_VALUE_SET = "isKerningValueSet";
 
     @ReactProp(name = "content")
     public void setContent(@Nullable String content) {
@@ -80,7 +80,7 @@ public class TSpanShadowNode extends TextShadowNode {
         setupTextPath();
 
         pushGlyphContext();
-        Path path = mCache = getLinePath(canvas, mContent, paint);
+        Path path = mCache = getLinePath(mContent, paint);
         popGlyphContext();
 
         path.computeBounds(new RectF(), true);
@@ -103,8 +103,8 @@ public class TSpanShadowNode extends TextShadowNode {
         return x;
     }
 
-    private Path getLinePath(Canvas canvas, String line, Paint paint) {
-        ReadableMap font = applyTextPropertiesToPaint(paint, canvas);
+    private Path getLinePath(String line, Paint paint) {
+        ReadableMap font = applyTextPropertiesToPaint(paint);
         int length = line.length();
         Path path = new Path();
 
@@ -175,6 +175,7 @@ public class TSpanShadowNode extends TextShadowNode {
                     continue;
                 }
 
+                assert pm != null;
                 pm.getMatrix(midpoint, matrix, POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG);
 
                 matrix.preTranslate(-halfway, glyphDelta.y);
@@ -195,7 +196,7 @@ public class TSpanShadowNode extends TextShadowNode {
         return path;
     }
 
-    private ReadableMap applyTextPropertiesToPaint(Paint paint, Canvas canvas) {
+    private ReadableMap applyTextPropertiesToPaint(Paint paint) {
         ReadableMap font = getFontFromContext();
 
         paint.setTextAlign(Paint.Align.LEFT);

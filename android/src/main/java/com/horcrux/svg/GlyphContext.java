@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class GlyphContext {
+class GlyphContext {
 
     private ArrayList<ArrayList<String>> mXPositionsContext;
     private ArrayList<ArrayList<String>> mYPositionsContext;
@@ -84,7 +84,7 @@ public class GlyphContext {
         mScale = scale;
     }
 
-    public void pushContext(@Nullable ReadableMap font) {
+    void pushContext(@Nullable ReadableMap font) {
         mCurrentLocation = clonePointF(mCurrentLocation);
 
         mXPositionsContext.add(new ArrayList<String>());
@@ -100,7 +100,7 @@ public class GlyphContext {
         mContextLength++;
     }
 
-    public void pushContext(@Nullable ReadableMap font, @Nullable ReadableArray rotate, @Nullable ReadableArray deltaX, @Nullable ReadableArray deltaY, @Nullable String positionX, @Nullable String positionY) {
+    void pushContext(@Nullable ReadableMap font, @Nullable ReadableArray rotate, @Nullable ReadableArray deltaX, @Nullable ReadableArray deltaY, @Nullable String positionX, @Nullable String positionY) {
         mCurrentLocation = clonePointF(mCurrentLocation);
 
         if (positionX != null) {
@@ -152,24 +152,24 @@ public class GlyphContext {
         mContextLength++;
     }
 
-    public void popContext() {
+    void popContext() {
+        mContextLength--;
+
         float dx = mDeltaXIndex > -1 ? mDeltaXContext.get(mDeltaXIndex) : 0f;
         float dy = mDeltaYIndex > -1 ? mDeltaYContext.get(mDeltaYIndex) : 0f;
 
-        float x = mXContext.get(mContextLength - 1);
-        float y = mYContext.get(mContextLength - 1);
+        float x = mXContext.get(mContextLength);
+        float y = mYContext.get(mContextLength);
 
-        mRotationIndexContext.remove(mContextLength - 1);
-        mDeltaXIndexContext.remove(mContextLength - 1);
-        mDeltaYIndexContext.remove(mContextLength - 1);
-        mXPositionsContext.remove(mContextLength - 1);
-        mYPositionsContext.remove(mContextLength - 1);
-        mLocationContext.remove(mContextLength - 1);
-        mFontContext.remove(mContextLength - 1);
-        mXContext.remove(mContextLength - 1);
-        mYContext.remove(mContextLength - 1);
-
-        mContextLength--;
+        mRotationIndexContext.remove(mContextLength);
+        mDeltaXIndexContext.remove(mContextLength);
+        mDeltaYIndexContext.remove(mContextLength);
+        mXPositionsContext.remove(mContextLength);
+        mYPositionsContext.remove(mContextLength);
+        mLocationContext.remove(mContextLength);
+        mFontContext.remove(mContextLength);
+        mXContext.remove(mContextLength);
+        mYContext.remove(mContextLength);
 
         if (mRotationIndex == mContextLength) {
             mRotationsContext.remove(mRotationIndex);
@@ -211,10 +211,11 @@ public class GlyphContext {
         } else {
             mCurrentDelta.x = mCurrentDelta.y = mRotation = 0;
             mDeltaXIndex = mDeltaYIndex = mRotationIndex = -1;
+            mCurrentLocation.x = mCurrentLocation.y = 0;
         }
     }
 
-    public PointF getNextGlyphPoint(float offset, float glyphWidth) {
+    PointF getNextGlyphPoint(float offset, float glyphWidth) {
         if (hasNext(mXPositionsContext)) {
             mCurrentLocation.x = PropHelper.fromPercentageToFloat(getNextString(mXPositionsContext), mWidth, 0, mScale);
             resetDelta(mDeltaXContext);
@@ -232,13 +233,13 @@ public class GlyphContext {
         return new PointF(mCurrentLocation.x + offset, mCurrentLocation.y);
     }
 
-    private static void resetDelta(ArrayList<Float> context) {
+    private void resetDelta(ArrayList<Float> context) {
         for (int i = context.size() - 1; i >= 0; i--) {
             context.set(i, 0f);
         }
     }
 
-    public PointF getNextGlyphDelta() {
+    PointF getNextGlyphDelta() {
         if (mDeltaXIndex > -1) {
             mCurrentDelta.x = getNextDelta(mDeltaXsContext, mDeltaXContext);
         }
@@ -249,7 +250,7 @@ public class GlyphContext {
         return mCurrentDelta;
     }
 
-    public float getNextGlyphRotation() {
+    float getNextGlyphRotation() {
         if (mRotationIndex > -1) {
             int index = mRotationsContext.size() - 1;
             int top = index;
@@ -311,7 +312,7 @@ public class GlyphContext {
         return delta;
     }
 
-    public String getNextString(ArrayList<ArrayList<String>> lists) {
+    private String getNextString(ArrayList<ArrayList<String>> lists) {
         int index = lists.size() - 1;
         boolean valueSet = false;
         String value = "";
@@ -332,7 +333,7 @@ public class GlyphContext {
         return value;
     }
 
-    public ReadableMap getGlyphFont() {
+    ReadableMap getGlyphFont() {
         float letterSpacing = DEFAULT_LETTER_SPACING;
         float fontSize = DEFAULT_FONT_SIZE;
         float kerning = DEFAULT_KERNING;
@@ -345,9 +346,8 @@ public class GlyphContext {
         String fontWeight = null;
         String fontStyle = null;
 
-        int index = mContextLength - 1;
-
-        for (; index >= 0; index--) {
+        // TODO: add support for other length units
+        for (int index = mContextLength - 1; index >= 0; index--) {
             ReadableMap font = mFontContext.get(index);
 
             if (fontFamily == null && font.hasKey("fontFamily")) {
@@ -359,13 +359,11 @@ public class GlyphContext {
                 fontSizeSet = true;
             }
 
-            // TODO: add support for other length units
             if (!kerningSet && font.hasKey("kerning")) {
                 kerning = Float.valueOf(font.getString("kerning"));
                 kerningSet = true;
             }
 
-            // TODO: add support for other length units
             if (!letterSpacingSet && font.hasKey("letterSpacing")) {
                 letterSpacing = Float.valueOf(font.getString("letterSpacing"));
                 letterSpacingSet = true;
@@ -374,6 +372,7 @@ public class GlyphContext {
             if (fontWeight == null && font.hasKey("fontWeight")) {
                 fontWeight = font.getString("fontWeight");
             }
+
             if (fontStyle == null && font.hasKey("fontStyle")) {
                 fontStyle = font.getString("fontStyle");
             }

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -20,14 +20,13 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-
 import javax.annotation.Nullable;
 
 /**
  * Shadow node for virtual Group view
  */
-public class GroupShadowNode extends RenderableShadowNode {
-    protected @Nullable ReadableMap mFont;
+class GroupShadowNode extends RenderableShadowNode {
+    @Nullable ReadableMap mFont;
 
     private GlyphContext mGlyphContext;
     private GroupShadowNode mTextRoot;
@@ -38,7 +37,7 @@ public class GroupShadowNode extends RenderableShadowNode {
         markUpdated();
     }
 
-    protected GroupShadowNode getTextRoot() {
+    GroupShadowNode getTextRoot() {
         GroupShadowNode shadowNode = getShadowNode(GroupShadowNode.class);
         if (shadowNode == null) {
             return getShadowNode(TextShadowNode.class);
@@ -70,11 +69,11 @@ public class GroupShadowNode extends RenderableShadowNode {
         return mTextRoot;
     }
 
-    protected void setupGlyphContext() {
+    void setupGlyphContext() {
         mGlyphContext = new GlyphContext(mScale, getCanvasWidth(), getCanvasHeight());
     }
 
-    protected GlyphContext getGlyphContext() {
+    GlyphContext getGlyphContext() {
         if (mGlyphContext == null) {
             setupGlyphContext();
         }
@@ -89,19 +88,19 @@ public class GroupShadowNode extends RenderableShadowNode {
         getTextRoot().getGlyphContext().popContext();
     }
 
-    protected ReadableMap getFontFromContext() {
+    ReadableMap getFontFromContext() {
         return  getTextRoot().getGlyphContext().getGlyphFont();
     }
 
-    protected PointF getGlyphPointFromContext(float offset, float glyphWidth) {
+    PointF getGlyphPointFromContext(float offset, float glyphWidth) {
         return  getTextRoot().getGlyphContext().getNextGlyphPoint(offset, glyphWidth);
     }
 
-    protected PointF getGlyphDeltaFromContext() {
+    PointF getGlyphDeltaFromContext() {
         return  getTextRoot().getGlyphContext().getNextGlyphDelta();
     }
 
-    protected float getNextGlyphRotationFromContext() {
+    float getNextGlyphRotationFromContext() {
         return  getTextRoot().getGlyphContext().getNextGlyphRotation();
     }
 
@@ -113,7 +112,7 @@ public class GroupShadowNode extends RenderableShadowNode {
         }
     }
 
-    protected void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {
+    void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {
         pushGlyphContext();
         final SvgViewShadowNode svg = getSvgShadowNode();
         final GroupShadowNode self = this;
@@ -142,7 +141,7 @@ public class GroupShadowNode extends RenderableShadowNode {
         popGlyphContext();
     }
 
-    protected void drawPath(Canvas canvas, Paint paint, float opacity) {
+    void drawPath(Canvas canvas, Paint paint, float opacity) {
         super.draw(canvas, paint, opacity);
     }
 

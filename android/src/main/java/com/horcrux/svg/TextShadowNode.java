@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -9,40 +9,33 @@
 
 package com.horcrux.svg;
 
-import javax.annotation.Nullable;
-
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.PointF;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.util.Log;
 
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
+import javax.annotation.Nullable;
+
 /**
  * Shadow node for virtual Text view
  */
 
-public class TextShadowNode extends GroupShadowNode {
+class TextShadowNode extends GroupShadowNode {
 
-    static final int TEXT_ANCHOR_AUTO = 0;
-    static final int TEXT_ANCHOR_START = 1;
+    private static final int TEXT_ANCHOR_AUTO = 0;
+    // static final int TEXT_ANCHOR_START = 1;
     static final int TEXT_ANCHOR_MIDDLE = 2;
     static final int TEXT_ANCHOR_END = 3;
 
-    static final int TEXT_DECORATION_NONE = 0;
+    private static final int TEXT_DECORATION_NONE = 0;
     static final int TEXT_DECORATION_UNDERLINE = 1;
-    static final int TEXT_DECORATION_OVERLINE = 2;
+    // static final int TEXT_DECORATION_OVERLINE = 2;
     static final int TEXT_DECORATION_LINE_THROUGH = 3;
-    static final int TEXT_DECORATION_BLINK = 4;
+    // static final int TEXT_DECORATION_BLINK = 4;
 
     private int mTextAnchor = TEXT_ANCHOR_AUTO;
     private int mTextDecoration = TEXT_DECORATION_NONE;
@@ -105,7 +98,7 @@ public class TextShadowNode extends GroupShadowNode {
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             setupGlyphContext();
             clip(canvas, paint);
-            Path path = getGroupPath(canvas, paint);
+            getGroupPath(canvas, paint);
             drawGroup(canvas, paint, opacity);
             releaseCachedPath();
         }
@@ -175,7 +168,7 @@ public class TextShadowNode extends GroupShadowNode {
         });
     }
 
-    protected Path getGroupPath(Canvas canvas, Paint paint) {
+    Path getGroupPath(Canvas canvas, Paint paint) {
         pushGlyphContext();
         Path groupPath = super.getPath(canvas, paint);
         popGlyphContext();
