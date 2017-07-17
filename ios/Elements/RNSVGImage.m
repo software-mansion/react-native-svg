@@ -126,6 +126,7 @@
     
     CGRect vbRect = CGRectMake(0, 0, CGRectGetWidth(renderRect), CGRectGetHeight(renderRect));
     CGRect eRect = CGRectMake([self getContextLeft], [self getContextTop], rectWidth, rectHeight);
+    CGContextTranslateCTM(context, CGRectGetMinX(eRect), 0.0f);
     
     CGAffineTransform transform = [RNSVGViewBox getTransform:vbRect eRect:eRect align:self.align meetOrSlice:self.meetOrSlice fromSymbol:NO];
     
