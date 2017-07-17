@@ -39,10 +39,10 @@
     CGFloat scaleY = eHeight / vbHeight;
     
     
-    // Initialize translate-x to vb-x - e-x.
-    // Initialize translate-y to vb-y - e-y.
-    CGFloat translateX = vbX - eX;
-    CGFloat translateY = vbY - eY;
+    // Initialize translate-x to e-x - (vb-x * scale-x).
+    // Initialize translate-y to e-y - (vb-y * scale-y).
+    CGFloat translateX = eX - (vbX * scaleX);
+    CGFloat translateY = eY - (vbY * scaleY);
     
     // If align is 'none'
     if (meetOrSlice == kRNSVGVBMOSNone) {
