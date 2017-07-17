@@ -69,24 +69,24 @@
             scaleX = scaleY = fmax(scaleX, scaleY);
         }
         
-        // If align contains 'xMid', minus (e-width / scale-x - vb-width) / 2 from transform-x.
+        // If align contains 'xMid', add (e-width - vb-width * scale-x) / 2 to translate-x.
         if ([align containsString:@"xMid"]) {
-            translateX -= (eWidth / scaleX - vbWidth) / 2;
+            translateX += (eWidth - vbWidth * scaleX) / 2.0f;
         }
         
-        // If align contains 'xMax', minus (e-width / scale-x - vb-width) from transform-x.
+        // If align contains 'xMax', add (e-width - vb-width * scale-x) to translate-x.
         if ([align containsString:@"xMax"]) {
-            translateX -= eWidth / scaleX - vbWidth;
+            translateX += (eWidth - vbWidth * scaleX);
         }
         
-        // If align contains 'yMid', minus (e-height / scale-y - vb-height) / 2 from transform-y.
+        // If align contains 'yMid', add (e-height - vb-height * scale-y) / 2 to translate-y.
         if ([align containsString:@"YMid"]) {
-            translateY -= (eHeight / scaleY - vbHeight) / 2;
+            translateY += (eHeight - vbHeight * scaleY) / 2.0f;
         }
         
-        // If align contains 'yMax', minus (e-height / scale-y - vb-height) from transform-y.
+        // If align contains 'yMax', add (e-height - vb-height * scale-y) to translate-y.
         if ([align containsString:@"YMax"]) {
-            translateY -= eHeight / scaleY - vbHeight;
+            translateY += (eHeight - vbHeight * scaleY);
         }
     }
     
