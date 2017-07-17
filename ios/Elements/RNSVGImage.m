@@ -133,7 +133,6 @@
     renderRect = CGRectApplyAffineTransform(renderRect, CGAffineTransformMakeTranslation(rectX, rectY));
     
     [self clip:context];
-    CGContextClipToRect(context, rect);
  
     CGContextDrawImage(context, renderRect, _image);
     CGContextRestoreGState(context);
