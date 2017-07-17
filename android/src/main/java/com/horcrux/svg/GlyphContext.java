@@ -121,10 +121,10 @@ public class GlyphContext {
 
         ArrayList<Float> rotations = getFloatArrayListFromReadableArray(rotate);
         if (rotations.size() != 0) {
+            mRotationIndex = mRotationsContext.size();
+            mRotationsContext.add(rotations);
             mRotation = rotations.get(0);
             mRotationContext.add(mRotation);
-            mRotationsContext.add(rotations);
-            mRotationIndex = mRotationsContext.size();
         }
 
         ArrayList<Float> deltaXs = getFloatArrayListFromReadableArray(deltaX);
