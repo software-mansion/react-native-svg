@@ -24,51 +24,32 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 class GlyphContext {
-
-    private ArrayList<ArrayList<String>> mXPositionsContext;
-    private ArrayList<ArrayList<String>> mYPositionsContext;
-    private ArrayList<ArrayList<Float>> mRotationsContext;
-    private ArrayList<ArrayList<Float>> mDeltaXsContext;
-    private ArrayList<ArrayList<Float>> mDeltaYsContext;
-    private ArrayList<ReadableMap> mFontContext;
-    private ArrayList<Float> mRotationContext;
-    private ArrayList<Float> mRotations;
-    private ArrayList<Float> mDeltaXs;
-    private ArrayList<Float> mDeltaYs;
-    private ArrayList<String> mXs;
-    private ArrayList<String> mYs;
-
-    private @Nonnull PointF mCurrentLocation;
-    private @Nonnull PointF mCurrentDelta;
-
-    private int top = -1;
-    private float mScale;
-    private float mWidth;
-    private float mHeight;
-    private float mRotation;
-    private int mContextLength;
-
     private static final float DEFAULT_KERNING = 0f;
     private static final float DEFAULT_FONT_SIZE = 12f;
     private static final float DEFAULT_LETTER_SPACING = 0f;
 
+    private ArrayList<ArrayList<String>> mXPositionsContext = new ArrayList<>();
+    private ArrayList<ArrayList<String>> mYPositionsContext = new ArrayList<>();
+    private ArrayList<ArrayList<Float>> mRotationsContext = new ArrayList<>();
+    private ArrayList<ArrayList<Float>> mDeltaXsContext = new ArrayList<>();
+    private ArrayList<ArrayList<Float>> mDeltaYsContext = new ArrayList<>();
+    private ArrayList<ReadableMap> mFontContext = new ArrayList<>();
+    private ArrayList<Float> mRotationContext = new ArrayList<>();
+    private ArrayList<Float> mRotations = new ArrayList<>();
+    private @Nonnull PointF mCurrentLocation = new PointF();
+    private ArrayList<Float> mDeltaXs = new ArrayList<>();
+    private ArrayList<Float> mDeltaYs = new ArrayList<>();
+    private @Nonnull PointF mCurrentDelta = new PointF();
+    private ArrayList<String> mXs = new ArrayList<>();
+    private ArrayList<String> mYs = new ArrayList<>();
+    private int mContextLength;
+    private float mRotation;
+    private float mHeight;
+    private float mWidth;
+    private float mScale;
+    private int top = -1;
+
     GlyphContext(float scale, float width, float height) {
-        mXPositionsContext = new ArrayList<>();
-        mYPositionsContext = new ArrayList<>();
-        mRotationsContext = new ArrayList<>();
-        mRotationContext = new ArrayList<>();
-        mDeltaXsContext = new ArrayList<>();
-        mDeltaYsContext = new ArrayList<>();
-        mFontContext = new ArrayList<>();
-        mRotations = new ArrayList<>();
-        mDeltaXs = new ArrayList<>();
-        mDeltaYs = new ArrayList<>();
-        mXs = new ArrayList<>();
-        mYs = new ArrayList<>();
-
-        mCurrentLocation = new PointF();
-        mCurrentDelta = new PointF();
-
         mHeight = height;
         mWidth = width;
         mScale = scale;
