@@ -24,8 +24,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 class GlyphContext {
+    static final float DEFAULT_FONT_SIZE = 12f;
     private static final float DEFAULT_KERNING = 0f;
-    private static final float DEFAULT_FONT_SIZE = 12f;
     private static final float DEFAULT_LETTER_SPACING = 0f;
 
     private ArrayList<ArrayList<String>> mXPositionsContext = new ArrayList<>();
@@ -201,7 +201,7 @@ class GlyphContext {
 
                 if (top == index) {
                     float relative = isX ? mWidth : mHeight;
-                    value = PropHelper.fromPercentageToFloat(val, relative, 0, mScale);
+                    value = PropHelper.fromRelativeToFloat(val, relative, 0, mScale, getFontSize());
                     if (isX) {
                         mCurrentDelta.x = 0;
                     } else {
@@ -214,6 +214,18 @@ class GlyphContext {
         }
 
         return value;
+    }
+
+    double getFontSize() {
+        for (int index = top; index >= 0; index--) {
+            ReadableMap font = mFontContext.get(index);
+
+            if (mFontContext.get(index).hasKey("fontSize")) {
+                return font.getDouble("fontSize");
+            }
+        }
+
+        return DEFAULT_FONT_SIZE;
     }
 
     ReadableMap getGlyphFont() {
@@ -279,7 +291,6 @@ class GlyphContext {
     }
 
     private ArrayList<Float> getFloatArrayListFromReadableArray(ReadableArray readableArray) {
-        float fontSize = (float) getGlyphFont().getDouble("fontSize");
         ArrayList<Float> arrayList = new ArrayList<>();
 
         if (readableArray != null) {
@@ -287,7 +298,7 @@ class GlyphContext {
                 switch (readableArray.getType(i)) {
                     case String:
                         String val = readableArray.getString(i);
-                        arrayList.add(Float.valueOf(val.substring(0, val.length() - 2)) * fontSize);
+                        arrayList.add((float) (Float.valueOf(val.substring(0, val.length() - 2)) * getFontSize()));
                         break;
 
                     case Number:

@@ -26,6 +26,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
+import static com.horcrux.svg.GlyphContext.DEFAULT_FONT_SIZE;
+
 public abstract class VirtualNode extends LayoutShadowNode {
 
     protected static final float MIN_OPACITY_FOR_DRAW = 0.01f;
@@ -49,6 +51,7 @@ public abstract class VirtualNode extends LayoutShadowNode {
 
     private SvgViewShadowNode mSvgShadowNode;
     private Path mCachedClipPath;
+    private GroupShadowNode mTextRoot;
 
     public VirtualNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
@@ -57,6 +60,45 @@ public abstract class VirtualNode extends LayoutShadowNode {
     @Override
     public boolean isVirtual() {
         return true;
+    }
+
+    GroupShadowNode getTextRoot() {
+        GroupShadowNode shadowNode = getShadowNode(GroupShadowNode.class);
+        if (shadowNode == null) {
+            return getShadowNode(TextShadowNode.class);
+        }
+        return shadowNode;
+    }
+
+    @android.support.annotation.Nullable
+    private GroupShadowNode getShadowNode(Class shadowNodeClass) {
+        VirtualNode node = this;
+        if (mTextRoot == null) {
+            while (node != null) {
+                if (node.getClass() == shadowNodeClass) {
+                    mTextRoot = (GroupShadowNode)node;
+                    break;
+                }
+
+                ReactShadowNode parent = node.getParent();
+
+                if (!(parent instanceof VirtualNode)) {
+                    node = null;
+                } else {
+                    node = (VirtualNode)parent;
+                }
+            }
+        }
+
+        return mTextRoot;
+    }
+
+    double getFontSizeFromContext() {
+        GroupShadowNode root = getTextRoot();
+        if (root == null) {
+            return DEFAULT_FONT_SIZE;
+        }
+        return root.getGlyphContext().getFontSize();
     }
 
     public abstract void draw(Canvas canvas, Paint paint, float opacity);
@@ -229,11 +271,11 @@ public abstract class VirtualNode extends LayoutShadowNode {
     }
 
     protected float relativeOnWidth(String length) {
-        return PropHelper.fromPercentageToFloat(length, getCanvasWidth(), 0, mScale);
+        return PropHelper.fromRelativeToFloat(length, getCanvasWidth(), 0, mScale, getFontSizeFromContext());
     }
 
     protected float relativeOnHeight(String length) {
-        return PropHelper.fromPercentageToFloat(length, getCanvasHeight(), 0, mScale);
+        return PropHelper.fromRelativeToFloat(length, getCanvasHeight(), 0, mScale, getFontSizeFromContext());
     }
 
     protected float getCanvasWidth() {

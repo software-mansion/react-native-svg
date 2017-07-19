@@ -9,7 +9,6 @@
 
 package com.horcrux.svg;
 
-import android.graphics.BitmapShader;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
@@ -108,10 +107,10 @@ public class Brush {
         parseGradientStops(mColors, stopsCount, stops, stopsColors, opacity);
 
         if (mType == BrushType.LINEAR_GRADIENT) {
-            float x1 = PropHelper.fromPercentageToFloat(mPoints.getString(0), width, offsetX, scale);
-            float y1 = PropHelper.fromPercentageToFloat(mPoints.getString(1), height, offsetY, scale);
-            float x2 = PropHelper.fromPercentageToFloat(mPoints.getString(2), width, offsetX, scale);
-            float y2 = PropHelper.fromPercentageToFloat(mPoints.getString(3), height, offsetY, scale);
+            float x1 = PropHelper.fromRelativeToFloat(mPoints.getString(0), width, offsetX, scale, paint.getTextSize());
+            float y1 = PropHelper.fromRelativeToFloat(mPoints.getString(1), height, offsetY, scale, paint.getTextSize());
+            float x2 = PropHelper.fromRelativeToFloat(mPoints.getString(2), width, offsetX, scale, paint.getTextSize());
+            float y2 = PropHelper.fromRelativeToFloat(mPoints.getString(3), height, offsetY, scale, paint.getTextSize());
 
             Shader linearGradient = new LinearGradient(
                 x1,
@@ -130,13 +129,13 @@ public class Brush {
 
             paint.setShader(linearGradient);
         } else if (mType == BrushType.RADIAL_GRADIENT) {
-            float rx = PropHelper.fromPercentageToFloat(mPoints.getString(2), width, 0f, scale);
-            float ry = PropHelper.fromPercentageToFloat(mPoints.getString(3), height, 0f, scale);
-            float cx = PropHelper.fromPercentageToFloat(mPoints.getString(4), width, offsetX, scale);
-            float cy = PropHelper.fromPercentageToFloat(mPoints.getString(5), height, offsetY, scale) / (ry / rx);
+            float rx = PropHelper.fromRelativeToFloat(mPoints.getString(2), width, 0f, scale, paint.getTextSize());
+            float ry = PropHelper.fromRelativeToFloat(mPoints.getString(3), height, 0f, scale, paint.getTextSize());
+            float cx = PropHelper.fromRelativeToFloat(mPoints.getString(4), width, offsetX, scale, paint.getTextSize());
+            float cy = PropHelper.fromRelativeToFloat(mPoints.getString(5), height, offsetY, scale, paint.getTextSize()) / (ry / rx);
             // TODO: support focus point.
-            //float fx = PropHelper.fromPercentageToFloat(mPoints.getString(0), width, offsetX, scale);
-            //float fy = PropHelper.fromPercentageToFloat(mPoints.getString(1), height, offsetY, scale) / (ry / rx);
+            //float fx = PropHelper.fromRelativeToFloat(mPoints.getString(0), width, offsetX, scale);
+            //float fy = PropHelper.fromRelativeToFloat(mPoints.getString(1), height, offsetY, scale) / (ry / rx);
             Shader radialGradient = new RadialGradient(
                     cx,
                     cy,

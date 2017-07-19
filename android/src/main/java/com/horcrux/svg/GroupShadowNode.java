@@ -29,44 +29,11 @@ class GroupShadowNode extends RenderableShadowNode {
     @Nullable ReadableMap mFont;
 
     private GlyphContext mGlyphContext;
-    private GroupShadowNode mTextRoot;
 
     @ReactProp(name = "font")
     public void setFont(@Nullable ReadableMap font) {
         mFont = font;
         markUpdated();
-    }
-
-    GroupShadowNode getTextRoot() {
-        GroupShadowNode shadowNode = getShadowNode(GroupShadowNode.class);
-        if (shadowNode == null) {
-            return getShadowNode(TextShadowNode.class);
-        }
-        return shadowNode;
-    }
-
-    @android.support.annotation.Nullable
-    private GroupShadowNode getShadowNode(Class shadowNodeClass) {
-        if (mTextRoot == null) {
-            mTextRoot = this;
-
-            while (mTextRoot != null) {
-                if (mTextRoot.getClass() == shadowNodeClass) {
-                    break;
-                }
-
-                ReactShadowNode parent = mTextRoot.getParent();
-
-                if (!(parent instanceof GroupShadowNode)) {
-                    //todo: throw exception here
-                    mTextRoot = null;
-                } else {
-                    mTextRoot = (GroupShadowNode)parent;
-                }
-            }
-        }
-
-        return mTextRoot;
     }
 
     void setupGlyphContext() {

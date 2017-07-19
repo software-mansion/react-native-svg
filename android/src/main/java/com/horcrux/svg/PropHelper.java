@@ -72,22 +72,29 @@ class PropHelper {
     }
 
     static private Pattern percentageRegExp = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$");
+    static private Pattern emRegExp = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)em$");
 
     /**
-     * Converts percentage string into actual based on a relative number
+     * Converts percentage or em string into actual based on a relative number
      *
      * @param percentage percentage string
      * @param relative   relative number
      * @param offset     offset number
+     * @param fontSize   current font size
      * @return actual float based on relative number
      */
 
-    static float fromPercentageToFloat(String percentage, float relative, float offset, float scale) {
+    static float fromRelativeToFloat(String percentage, float relative, float offset, float scale, double fontSize) {
         Matcher matched = percentageRegExp.matcher(percentage);
         if (matched.matches()) {
             return Float.valueOf(matched.group(1)) / 100 * relative + offset;
         } else {
-            return Float.valueOf(percentage) * scale + offset;
+            matched = emRegExp.matcher(percentage);
+            if (matched.matches()) {
+                return (float) (Float.valueOf(matched.group(1)) * scale * fontSize);
+            } else {
+                return Float.valueOf(percentage) * scale + offset;
+            }
         }
     }
 

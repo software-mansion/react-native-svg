@@ -20,6 +20,13 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  */
 public class CircleShadowNode extends RenderableShadowNode {
 
+    /*
+        N[1/Sqrt[2], 36]
+        The inverse of the square root of 2.
+        Provide enough digits for the 128-bit IEEE quad (36 significant digits).
+    */
+    private static final double M_SQRT1_2l = 0.707106781186547524400844362104849039;
+
     private String mCx;
     private String mCy;
     private String mR;
@@ -51,10 +58,10 @@ public class CircleShadowNode extends RenderableShadowNode {
 
         float r;
         if (PropHelper.isPercentage(mR)) {
-            r = PropHelper.fromPercentageToFloat(mR, 1, 0, 1);
-            float powX = (float)Math.pow((getCanvasWidth() * r), 2);
-            float powY = (float)Math.pow((getCanvasHeight() * r), 2);
-            r = (float)Math.sqrt(powX + powY) / (float)Math.sqrt(2);
+            r = PropHelper.fromRelativeToFloat(mR, 1, 0, 1, paint.getTextSize());
+            double powX = Math.pow((getCanvasWidth() * r), 2);
+            double powY = Math.pow((getCanvasHeight() * r), 2);
+            r = (float) (Math.sqrt(powX + powY) * M_SQRT1_2l);
         } else {
             r =  Float.parseFloat(mR) * mScale;
         }
