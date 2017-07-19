@@ -151,17 +151,15 @@ class GlyphContext {
     }
 
     PointF getNextGlyphPoint(float glyphWidth) {
-        mCurrentLocation.x = getGlyphPosition(mXPositionsContext, mWidth, mCurrentLocation.x, mCurrentDelta, true);
-        mCurrentLocation.y = getGlyphPosition(mYPositionsContext, mHeight, mCurrentLocation.y, mCurrentDelta, false);
-
+        mCurrentLocation.x = getGlyphPosition(true);
+        mCurrentLocation.y = getGlyphPosition(false);
         mCurrentLocation.x += glyphWidth;
-
         return mCurrentLocation;
     }
 
     PointF getNextGlyphDelta() {
-        mCurrentDelta.x = getNextDelta(mDeltaXsContext, mCurrentDelta.x);
-        mCurrentDelta.y = getNextDelta(mDeltaYsContext, mCurrentDelta.y);
+        mCurrentDelta.x = getNextDelta(true);
+        mCurrentDelta.y = getNextDelta(false);
         return mCurrentDelta;
     }
 
@@ -187,12 +185,12 @@ class GlyphContext {
         return mRotation;
     }
 
-    private float getNextDelta(List<? extends List<Float>> lists, float current) {
+    private float getNextDelta(boolean isX) {
+        ArrayList<ArrayList<Float>> lists = isX ? mDeltaXsContext : mDeltaYsContext;
+        float delta = isX ? mCurrentDelta.x : mCurrentDelta.y;
         List<Float> prev = null;
-        float delta = current;
-        int index = top;
 
-        for (; index >= 0; index--) {
+        for (int index = top; index >= 0; index--) {
             List<Float> deltas = lists.get(index);
 
             if (prev != deltas && deltas.size() != 0) {
@@ -209,19 +207,20 @@ class GlyphContext {
         return delta;
     }
 
-    private float getGlyphPosition(ArrayList<ArrayList<String>> lists, float dim, float current, PointF mCurrentDelta, boolean isX) {
+    private float getGlyphPosition(boolean isX) {
+        ArrayList<ArrayList<String>> lists = isX ? mXPositionsContext : mYPositionsContext;
+        float value = isX ? mCurrentLocation.x : mCurrentLocation.y;
         List<String> prev = null;
-        Float value = current;
-        int index = top;
 
-        for (; index >= 0; index--) {
+        for (int index = top; index >= 0; index--) {
             List<String> list = lists.get(index);
 
             if (prev != list && list.size() != 0) {
                 String val = list.remove(0);
 
                 if (top == index) {
-                    value = PropHelper.fromPercentageToFloat(val, dim, 0, mScale);
+                    float relative = isX ? mWidth : mHeight;
+                    value = PropHelper.fromPercentageToFloat(val, relative, 0, mScale);
                     if (isX) {
                         mCurrentDelta.x = 0;
                     } else {
@@ -250,7 +249,7 @@ class GlyphContext {
         String fontStyle = null;
 
         // TODO: add support for other length units
-        for (int index = mContextLength - 1; index >= 0; index--) {
+        for (int index = top; index >= 0; index--) {
             ReadableMap font = mFontContext.get(index);
 
             if (fontFamily == null && font.hasKey("fontFamily")) {
