@@ -29,6 +29,12 @@ import javax.annotation.Nullable;
 import static com.horcrux.svg.GlyphContext.DEFAULT_FONT_SIZE;
 
 public abstract class VirtualNode extends LayoutShadowNode {
+    /*
+        N[1/Sqrt[2], 36]
+        The inverse of the square root of 2.
+        Provide enough digits for the 128-bit IEEE quad (36 significant digits).
+    */
+    private static final double M_SQRT1_2l = 0.707106781186547524400844362104849039;
 
     protected static final float MIN_OPACITY_FOR_DRAW = 0.01f;
 
@@ -37,6 +43,8 @@ public abstract class VirtualNode extends LayoutShadowNode {
     protected float mOpacity = 1f;
     protected float mScaleX = 1f;
     protected float mScaleY = 1f;
+    protected double mFontSize = -1;
+    protected double mParentFontSize = -1;
     protected Matrix mMatrix = new Matrix();
 
     private int mClipRule;
@@ -126,19 +134,29 @@ public abstract class VirtualNode extends LayoutShadowNode {
     }
 
     double getFontSizeFromContext() {
+        if (mFontSize != -1) {
+            return mFontSize;
+        }
         GroupShadowNode root = getTextRoot();
         if (root == null) {
-            return DEFAULT_FONT_SIZE;
+            mFontSize = DEFAULT_FONT_SIZE;
+        } else {
+            mFontSize = root.getGlyphContext().getFontSize();
         }
-        return root.getGlyphContext().getFontSize();
+        return mFontSize;
     }
 
     double getFontSizeFromParentContext() {
+        if (mParentFontSize != -1) {
+            return mParentFontSize;
+        }
         GroupShadowNode root = getParentTextRoot();
         if (root == null) {
-            return DEFAULT_FONT_SIZE;
+            mParentFontSize = DEFAULT_FONT_SIZE;
+        } else {
+            mParentFontSize = root.getGlyphContext().getFontSize();
         }
-        return root.getGlyphContext().getFontSize();
+        return mParentFontSize;
     }
 
     public abstract void draw(Canvas canvas, Paint paint, float opacity);
@@ -316,6 +334,13 @@ public abstract class VirtualNode extends LayoutShadowNode {
 
     protected float relativeOnHeight(String length) {
         return PropHelper.fromRelativeToFloat(length, getCanvasHeight(), 0, mScale, getFontSizeFromContext());
+    }
+
+    protected float relativeOnOther(String length) {
+        double powX = Math.pow((getCanvasWidth()), 2);
+        double powY = Math.pow((getCanvasHeight()), 2);
+        float r = (float) (Math.sqrt(powX + powY) * M_SQRT1_2l);
+        return PropHelper.fromRelativeToFloat(length, r, 0, mScale, getFontSizeFromContext());
     }
 
     protected float getCanvasWidth() {

@@ -54,7 +54,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
     public @Nullable ReadableArray mStroke;
     public @Nullable float[] mStrokeDasharray;
 
-    public float mStrokeWidth = 1;
+    public String mStrokeWidth = "1";
     public float mStrokeOpacity = 1;
     public float mStrokeMiterlimit = 4;
     public float mStrokeDashoffset = 0;
@@ -132,8 +132,8 @@ abstract public class RenderableShadowNode extends VirtualNode {
         markUpdated();
     }
 
-    @ReactProp(name = "strokeWidth", defaultFloat = 1f)
-    public void setStrokeWidth(float strokeWidth) {
+    @ReactProp(name = "strokeWidth")
+    public void setStrokeWidth(String strokeWidth) {
         mStrokeWidth = strokeWidth;
         markUpdated();
     }
@@ -235,7 +235,8 @@ abstract public class RenderableShadowNode extends VirtualNode {
      */
     protected boolean setupStrokePaint(Paint paint, float opacity) {
         paint.reset();
-        if (mStrokeWidth == 0 || mStroke == null || mStroke.size() == 0) {
+        float strokeWidth = relativeOnOther(mStrokeWidth);
+        if (strokeWidth == 0 || mStroke == null || mStroke.size() == 0) {
             return false;
         }
 
@@ -244,7 +245,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
         paint.setStrokeCap(mStrokeLinecap);
         paint.setStrokeJoin(mStrokeLinejoin);
         paint.setStrokeMiter(mStrokeMiterlimit * mScale);
-        paint.setStrokeWidth(mStrokeWidth * mScale);
+        paint.setStrokeWidth(strokeWidth);
         setupPaint(paint, opacity, mStroke);
 
         if (mStrokeDasharray != null && mStrokeDasharray.length > 0) {

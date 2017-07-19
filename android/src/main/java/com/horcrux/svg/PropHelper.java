@@ -72,7 +72,7 @@ class PropHelper {
     }
 
     static private Pattern percentageRegExp = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$");
-    static private Pattern emRegExp = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)em$");
+    static private Pattern emRegExp = Pattern.compile("^(\\-?\\.?\\d+(?:\\.\\d+)?)em$");
 
     /**
      * Converts percentage or em string into actual based on a relative number
@@ -93,6 +93,9 @@ class PropHelper {
             if (matched.matches()) {
                 return (float) (Float.valueOf(matched.group(1)) * scale * fontSize);
             } else {
+                if (percentage.endsWith("px")) {
+                    percentage = percentage.substring(0, percentage.length() - 2);
+                }
                 return Float.valueOf(percentage) * scale + offset;
             }
         }
