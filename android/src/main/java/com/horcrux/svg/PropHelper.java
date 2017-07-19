@@ -72,31 +72,73 @@ class PropHelper {
     }
 
     static private Pattern percentageRegExp = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$");
-    static private Pattern emRegExp = Pattern.compile("^(\\-?\\.?\\d+(?:\\.\\d+)?)em$");
 
     /**
-     * Converts percentage or em string into actual based on a relative number
+     * Converts length string into actual based on a relative number
      *
-     * @param percentage percentage string
+     *
+     * @param length     length string
      * @param relative   relative number
      * @param offset     offset number
      * @param fontSize   current font size
      * @return actual float based on relative number
      */
 
-    static float fromRelativeToFloat(String percentage, float relative, float offset, float scale, double fontSize) {
-        Matcher matched = percentageRegExp.matcher(percentage);
-        if (matched.matches()) {
-            return Float.valueOf(matched.group(1)) / 100 * relative + offset;
+    static float fromRelativeToFloat(String length, float relative, float offset, float scale, double fontSize) {
+        length = length.trim();
+        int percentIndex = length.length() - 1;
+        if (length.codePointAt(percentIndex) == '%') {
+            return Float.valueOf(length.substring(0, percentIndex)) / 100 * relative + offset;
         } else {
-            matched = emRegExp.matcher(percentage);
-            if (matched.matches()) {
-                return (float) (Float.valueOf(matched.group(1)) * scale * fontSize);
-            } else {
-                if (percentage.endsWith("px")) {
-                    percentage = percentage.substring(0, percentage.length() - 2);
+            int twoLetterUnitIndex = length.length() - 2;
+            if (twoLetterUnitIndex > 0) {
+                String lastTwo = length.substring(twoLetterUnitIndex);
+
+                float val;
+                switch (lastTwo) {
+                    case "px":
+                        val = Float.valueOf(length.substring(0, twoLetterUnitIndex));
+                        break;
+
+                    case "em":
+                        val = (float) (Float.valueOf(length.substring(0, twoLetterUnitIndex)) * fontSize);
+                        break;
+
+                    /*
+                     "1pt" equals "1.25px" (and therefore 1.25 user units)
+                     "1pc" equals "15px" (and therefore 15 user units)
+                     "1mm" would be "3.543307px" (3.543307 user units)
+                     "1cm" equals "35.43307px" (and therefore 35.43307 user units)
+                     "1in" equals "90px" (and therefore 90 user units)
+                     */
+
+                    case "pt":
+                        val = Float.valueOf(length.substring(0, twoLetterUnitIndex)) * 1.25f;
+                        break;
+
+                    case "pc":
+                        val = Float.valueOf(length.substring(0, twoLetterUnitIndex)) * 15;
+                        break;
+
+                    case "mm":
+                        val = Float.valueOf(length.substring(0, twoLetterUnitIndex)) * 3.543307f;
+                        break;
+
+                    case "cm":
+                        val = Float.valueOf(length.substring(0, twoLetterUnitIndex)) * 35.43307f;
+                        break;
+
+                    case "in":
+                        val = Float.valueOf(length.substring(0, twoLetterUnitIndex)) * 90;
+                        break;
+
+                    default:
+                        val = Float.valueOf(length);
                 }
-                return Float.valueOf(percentage) * scale + offset;
+
+                return val * scale + offset;
+            } else {
+                return Float.valueOf(length) * scale + offset;
             }
         }
     }
