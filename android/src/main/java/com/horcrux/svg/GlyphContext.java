@@ -75,8 +75,6 @@ class GlyphContext {
     }
 
     void pushContext(@Nullable ReadableMap font) {
-        mXPositionsContext.add(new ArrayList<String>());
-        mYPositionsContext.add(new ArrayList<String>());
         mRotationsContext.add(mRotations);
         mRotationContext.add(mRotation);
         mDeltaXsContext.add(mDeltaXs);
