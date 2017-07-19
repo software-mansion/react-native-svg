@@ -149,15 +149,11 @@ class GlyphContext {
         }
     }
 
-    PointF getNextGlyphPoint(float glyphPosition, float glyphWidth, float startOffset, float kerningValue) {
+    PointF getNextGlyphPoint(float glyphWidth) {
         if (hasNext(mXPositionsContext)) {
-            float acc = glyphPosition - startOffset;
             String nextString = getNextString(mXPositionsContext);
-            float x = PropHelper.fromPercentageToFloat(nextString, mWidth, 0, mScale);
-            mCurrentLocation.x = acc + x + startOffset + kerningValue + glyphWidth;
+            mCurrentLocation.x = PropHelper.fromPercentageToFloat(nextString, mWidth, 0, mScale);
             mCurrentDelta.x = 0;
-        } else {
-            mCurrentLocation.x += glyphWidth + kerningValue;
         }
         if (hasNext(mYPositionsContext)) {
             String nextString = getNextString(mYPositionsContext);
@@ -165,7 +161,9 @@ class GlyphContext {
             mCurrentDelta.y = 0;
         }
 
-        return new PointF(mCurrentLocation.x + startOffset - glyphWidth, mCurrentLocation.y);
+        mCurrentLocation.x += glyphWidth;
+
+        return mCurrentLocation;
     }
 
     PointF getNextGlyphDelta() {
