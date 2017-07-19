@@ -92,8 +92,8 @@ class GroupShadowNode extends RenderableShadowNode {
         return  getTextRoot().getGlyphContext().getGlyphFont();
     }
 
-    PointF getGlyphPointFromContext(float offset, float glyphWidth) {
-        return  getTextRoot().getGlyphContext().getNextGlyphPoint(offset, glyphWidth);
+    PointF getGlyphPointFromContext(float glyphPosition, float glyphWidth, float startOffset, float kerningValue) {
+        return  getTextRoot().getGlyphContext().getNextGlyphPoint(glyphPosition, glyphWidth, startOffset, kerningValue);
     }
 
     PointF getGlyphDeltaFromContext() {
