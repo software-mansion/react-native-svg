@@ -51,6 +51,7 @@ public abstract class VirtualNode extends LayoutShadowNode {
 
     private SvgViewShadowNode mSvgShadowNode;
     private Path mCachedClipPath;
+    private GroupShadowNode mParentTextRoot;
     private GroupShadowNode mTextRoot;
 
     public VirtualNode() {
@@ -68,6 +69,37 @@ public abstract class VirtualNode extends LayoutShadowNode {
             return getShadowNode(TextShadowNode.class);
         }
         return shadowNode;
+    }
+
+    GroupShadowNode getParentTextRoot() {
+        GroupShadowNode shadowNode = getParentShadowNode(GroupShadowNode.class);
+        if (shadowNode == null) {
+            return getParentShadowNode(TextShadowNode.class);
+        }
+        return shadowNode;
+    }
+
+    @android.support.annotation.Nullable
+    private GroupShadowNode getParentShadowNode(Class shadowNodeClass) {
+        ReactShadowNode node = this.getParent();
+        if (mParentTextRoot == null) {
+            while (node != null) {
+                if (node.getClass() == shadowNodeClass) {
+                    mParentTextRoot = (GroupShadowNode)node;
+                    break;
+                }
+
+                ReactShadowNode parent = node.getParent();
+
+                if (!(parent instanceof VirtualNode)) {
+                    node = null;
+                } else {
+                    node = parent;
+                }
+            }
+        }
+
+        return mParentTextRoot;
     }
 
     @android.support.annotation.Nullable
@@ -95,6 +127,14 @@ public abstract class VirtualNode extends LayoutShadowNode {
 
     double getFontSizeFromContext() {
         GroupShadowNode root = getTextRoot();
+        if (root == null) {
+            return DEFAULT_FONT_SIZE;
+        }
+        return root.getGlyphContext().getFontSize();
+    }
+
+    double getFontSizeFromParentContext() {
+        GroupShadowNode root = getParentTextRoot();
         if (root == null) {
             return DEFAULT_FONT_SIZE;
         }

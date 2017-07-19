@@ -48,7 +48,7 @@ class GroupShadowNode extends RenderableShadowNode {
     }
 
     protected void pushGlyphContext() {
-        getTextRoot().getGlyphContext().pushContext(mFont);
+        getTextRoot().getGlyphContext().pushContext(this, mFont);
     }
 
     protected void popGlyphContext() {
