@@ -220,6 +220,14 @@ class GlyphContext {
         return value;
     }
 
+    float getWidth() {
+        return mWidth;
+    }
+
+    float getHeight() {
+        return mHeight;
+    }
+
     double getFontSize() {
         for (int index = top; index >= 0; index--) {
             ReadableMap font = mFontContext.get(index);
@@ -238,11 +246,10 @@ class GlyphContext {
 
     ReadableMap getGlyphFont() {
         float letterSpacing = DEFAULT_LETTER_SPACING;
-        float fontSize = DEFAULT_FONT_SIZE;
+        float fontSize = (float) getFontSize();
         float kerning = DEFAULT_KERNING;
 
         boolean letterSpacingSet = false;
-        boolean fontSizeSet = false;
         boolean kerningSet = false;
 
         String fontFamily = null;
@@ -255,11 +262,6 @@ class GlyphContext {
 
             if (fontFamily == null && font.hasKey("fontFamily")) {
                 fontFamily = font.getString("fontFamily");
-            }
-
-            if (!fontSizeSet && font.hasKey("fontSize")) {
-                fontSize = (float) font.getDouble("fontSize");
-                fontSizeSet = true;
             }
 
             if (!kerningSet && font.hasKey("kerning")) {
@@ -280,7 +282,7 @@ class GlyphContext {
                 fontStyle = font.getString("fontStyle");
             }
 
-            if (fontFamily != null && fontSizeSet && kerningSet && letterSpacingSet && fontWeight != null && fontStyle != null) {
+            if (fontFamily != null && kerningSet && letterSpacingSet && fontWeight != null && fontStyle != null) {
                 break;
             }
         }

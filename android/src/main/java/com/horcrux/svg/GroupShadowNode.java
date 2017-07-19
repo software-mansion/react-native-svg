@@ -15,6 +15,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ReactShadowNode;
@@ -36,14 +38,13 @@ class GroupShadowNode extends RenderableShadowNode {
         markUpdated();
     }
 
-    void setupGlyphContext() {
-        mGlyphContext = new GlyphContext(mScale, getCanvasWidth(), getCanvasHeight());
+    void setupGlyphContext(Canvas canvas) {
+        RectF clipBounds = new RectF(canvas.getClipBounds());
+        mMatrix.mapRect(clipBounds);
+        mGlyphContext = new GlyphContext(mScale, clipBounds.width(), clipBounds.height());
     }
 
     GlyphContext getGlyphContext() {
-        if (mGlyphContext == null) {
-            setupGlyphContext();
-        }
         return mGlyphContext;
     }
 
@@ -72,7 +73,7 @@ class GroupShadowNode extends RenderableShadowNode {
     }
 
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
-        setupGlyphContext();
+        setupGlyphContext(canvas);
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             clip(canvas, paint);
             drawGroup(canvas, paint, opacity);

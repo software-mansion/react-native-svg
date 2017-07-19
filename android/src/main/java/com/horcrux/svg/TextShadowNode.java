@@ -96,7 +96,7 @@ class TextShadowNode extends GroupShadowNode {
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
         if (opacity > MIN_OPACITY_FOR_DRAW) {
-            setupGlyphContext();
+            setupGlyphContext(canvas);
             clip(canvas, paint);
             getGroupPath(canvas, paint);
             drawGroup(canvas, paint, opacity);
@@ -106,7 +106,7 @@ class TextShadowNode extends GroupShadowNode {
 
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
-        setupGlyphContext();
+        setupGlyphContext(canvas);
         Path groupPath = getGroupPath(canvas, paint);
         releaseCachedPath();
         return groupPath;

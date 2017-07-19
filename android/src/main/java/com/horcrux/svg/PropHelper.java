@@ -86,22 +86,25 @@ class PropHelper {
 
     static float fromRelativeToFloat(String length, float relative, float offset, float scale, double fontSize) {
         length = length.trim();
-        int percentIndex = length.length() - 1;
-        if (length.codePointAt(percentIndex) == '%') {
+        int stringLength = length.length();
+        int percentIndex = stringLength - 1;
+        if (stringLength == 0) {
+            return offset;
+        } else if (length.codePointAt(percentIndex) == '%') {
             return Float.valueOf(length.substring(0, percentIndex)) / 100 * relative + offset;
         } else {
-            int twoLetterUnitIndex = length.length() - 2;
+            int twoLetterUnitIndex = stringLength - 2;
             if (twoLetterUnitIndex > 0) {
                 String lastTwo = length.substring(twoLetterUnitIndex);
+                int end = twoLetterUnitIndex;
+                float unit = 1;
 
-                float val;
                 switch (lastTwo) {
                     case "px":
-                        val = Float.valueOf(length.substring(0, twoLetterUnitIndex));
                         break;
 
                     case "em":
-                        val = (float) (Float.valueOf(length.substring(0, twoLetterUnitIndex)) * fontSize);
+                        unit = (float) fontSize;
                         break;
 
                     /*
@@ -113,30 +116,30 @@ class PropHelper {
                      */
 
                     case "pt":
-                        val = Float.valueOf(length.substring(0, twoLetterUnitIndex)) * 1.25f;
+                        unit = 1.25f;
                         break;
 
                     case "pc":
-                        val = Float.valueOf(length.substring(0, twoLetterUnitIndex)) * 15;
+                        unit = 15;
                         break;
 
                     case "mm":
-                        val = Float.valueOf(length.substring(0, twoLetterUnitIndex)) * 3.543307f;
+                        unit = 3.543307f;
                         break;
 
                     case "cm":
-                        val = Float.valueOf(length.substring(0, twoLetterUnitIndex)) * 35.43307f;
+                        unit = 35.43307f;
                         break;
 
                     case "in":
-                        val = Float.valueOf(length.substring(0, twoLetterUnitIndex)) * 90;
+                        unit = 90;
                         break;
 
                     default:
-                        val = Float.valueOf(length);
+                        end = stringLength;
                 }
 
-                return val * scale + offset;
+                return Float.valueOf(length.substring(0, end)) * unit * scale + offset;
             } else {
                 return Float.valueOf(length) * scale + offset;
             }

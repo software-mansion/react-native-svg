@@ -61,6 +61,8 @@ public abstract class VirtualNode extends LayoutShadowNode {
     private Path mCachedClipPath;
     private GroupShadowNode mParentTextRoot;
     private GroupShadowNode mTextRoot;
+    private float canvasHeight = -1;
+    private float canvasWidth = -1;
 
     public VirtualNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
@@ -344,11 +346,31 @@ public abstract class VirtualNode extends LayoutShadowNode {
     }
 
     protected float getCanvasWidth() {
-        return getSvgShadowNode().getCanvasBounds().width();
+        if (canvasWidth != -1) {
+            return canvasWidth;
+        }
+        GroupShadowNode root = getTextRoot();
+        if (root == null) {
+            canvasWidth = getSvgShadowNode().getCanvasBounds().width();
+        } else {
+            canvasWidth = root.getGlyphContext().getWidth();
+        }
+
+        return canvasWidth;
     }
 
     protected float getCanvasHeight() {
-        return getSvgShadowNode().getCanvasBounds().height();
+        if (canvasHeight != -1) {
+            return canvasHeight;
+        }
+        GroupShadowNode root = getTextRoot();
+        if (root == null) {
+            canvasHeight = getSvgShadowNode().getCanvasBounds().height();
+        } else {
+            canvasHeight = root.getGlyphContext().getHeight();
+        }
+
+        return canvasHeight;
     }
 
     protected float getCanvasLeft() {
