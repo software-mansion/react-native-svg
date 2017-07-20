@@ -69,7 +69,11 @@ class GlyphContext {
         top++;
     }
 
-    void pushContext(TextShadowNode node, @Nullable ReadableMap font, @Nullable ReadableArray rotate, @Nullable ReadableArray deltaX, @Nullable ReadableArray deltaY, @Nullable String positionX, @Nullable String positionY) {
+    void pushContext(TextShadowNode node, @Nullable ReadableMap font, @Nullable ReadableArray rotate, @Nullable ReadableArray deltaX, @Nullable ReadableArray deltaY, @Nullable String positionX, @Nullable String positionY, boolean resetLocation) {
+        if (resetLocation) {
+            reset();
+        }
+
         if (positionX != null) {
             mXs = new ArrayList<>(Arrays.asList(positionX.trim().split("\\s+")));
         }
@@ -106,6 +110,11 @@ class GlyphContext {
         top++;
     }
 
+    private void reset() {
+        mCurrentDelta.x = mCurrentDelta.y = mRotation = 0;
+        mCurrentLocation.x = mCurrentLocation.y = 0;
+    }
+
     void popContext() {
         mContextLength--;
         top--;
@@ -130,8 +139,7 @@ class GlyphContext {
             mXs = mXPositionsContext.get(top);
             mYs = mYPositionsContext.get(top);
         } else {
-            mCurrentDelta.x = mCurrentDelta.y = mRotation = 0;
-            mCurrentLocation.x = mCurrentLocation.y = 0;
+            reset();
         }
     }
 

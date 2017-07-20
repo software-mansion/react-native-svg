@@ -95,5 +95,4 @@ public class TextPathShadowNode extends TextShadowNode {
     protected void popGlyphContext() {
         // do nothing
     }
-
 }
