@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -20,24 +20,24 @@ import com.facebook.react.uimanager.ViewManager;
  * into native views and don't need any logic (all the logic is in {@link SvgView}), this
  * "stubbed" ViewManager is used for all of them.
  */
-public class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
+class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
 
-    /* package */ static final String CLASS_GROUP = "RNSVGGroup";
-    /* package */ static final String CLASS_PATH = "RNSVGPath";
-    /* package */ static final String CLASS_TEXT = "RNSVGText";
-    /* package */ static final String CLASS_TSPAN = "RNSVGTSpan";
-    /* package */ static final String CLASS_TEXT_PATH = "RNSVGTextPath";
-    /* package */ static final String CLASS_IMAGE = "RNSVGImage";
-    /* package */ static final String CLASS_CIRCLE = "RNSVGCircle";
-    /* package */ static final String CLASS_ELLIPSE = "RNSVGEllipse";
-    /* package */ static final String CLASS_LINE = "RNSVGLine";
-    /* package */ static final String CLASS_RECT = "RNSVGRect";
-    /* package */ static final String CLASS_CLIP_PATH = "RNSVGClipPath";
-    /* package */ static final String CLASS_DEFS = "RNSVGDefs";
-    /* package */ static final String CLASS_USE = "RNSVGUse";
-    /* package */ static final String CLASS_SYMBOL = "RNSVGSymbol";
-    /* package */ static final String CLASS_LINEAR_GRADIENT = "RNSVGLinearGradient";
-    /* package */ static final String CLASS_RADIAL_GRADIENT = "RNSVGRadialGradient";
+    /* package */ private static final String CLASS_GROUP = "RNSVGGroup";
+    /* package */ private static final String CLASS_PATH = "RNSVGPath";
+    /* package */ private static final String CLASS_TEXT = "RNSVGText";
+    /* package */ private static final String CLASS_TSPAN = "RNSVGTSpan";
+    /* package */ private static final String CLASS_TEXT_PATH = "RNSVGTextPath";
+    /* package */ private static final String CLASS_IMAGE = "RNSVGImage";
+    /* package */ private static final String CLASS_CIRCLE = "RNSVGCircle";
+    /* package */ private static final String CLASS_ELLIPSE = "RNSVGEllipse";
+    /* package */ private static final String CLASS_LINE = "RNSVGLine";
+    /* package */ private static final String CLASS_RECT = "RNSVGRect";
+    /* package */ private static final String CLASS_CLIP_PATH = "RNSVGClipPath";
+    /* package */ private static final String CLASS_DEFS = "RNSVGDefs";
+    /* package */ private static final String CLASS_USE = "RNSVGUse";
+    /* package */ private static final String CLASS_SYMBOL = "RNSVGSymbol";
+    /* package */ private static final String CLASS_LINEAR_GRADIENT = "RNSVGLinearGradient";
+    /* package */ private static final String CLASS_RADIAL_GRADIENT = "RNSVGRadialGradient";
 
     private final String mClassName;
 

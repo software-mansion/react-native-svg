@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 /**
  * Shadow node for virtual TextPath view
  */
-public class TextPathShadowNode extends TextShadowNode {
+class TextPathShadowNode extends TextShadowNode {
 
     private String mHref;
     private String mMethod;
@@ -51,7 +51,7 @@ public class TextPathShadowNode extends TextShadowNode {
         markUpdated();
     }
 
-    public String getMethod() {
+    String getMethod() {
         return mMethod;
     }
 

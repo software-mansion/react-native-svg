@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
  * ViewManager for RNSVGSvgView React views. Renders as a {@link SvgView} and handles
  * invalidating the native view on shadow view updates happening in the underlying tree.
  */
-public class SvgViewManager extends BaseViewManager<SvgView, SvgViewShadowNode> {
+class SvgViewManager extends BaseViewManager<SvgView, SvgViewShadowNode> {
 
     private static final String REACT_CLASS = "RNSVGSvgView";
 

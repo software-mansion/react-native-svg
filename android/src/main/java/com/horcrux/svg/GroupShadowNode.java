@@ -15,7 +15,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.facebook.react.bridge.ReadableMap;
@@ -48,11 +47,11 @@ class GroupShadowNode extends RenderableShadowNode {
         return mGlyphContext;
     }
 
-    protected void pushGlyphContext() {
+    void pushGlyphContext() {
         getTextRoot().getGlyphContext().pushContext(this, mFont);
     }
 
-    protected void popGlyphContext() {
+    void popGlyphContext() {
         getTextRoot().getGlyphContext().popContext();
     }
 
@@ -85,7 +84,7 @@ class GroupShadowNode extends RenderableShadowNode {
         final SvgViewShadowNode svg = getSvgShadowNode();
         final GroupShadowNode self = this;
         traverseChildren(new NodeRunnable() {
-            public boolean run(VirtualNode node) {
+            public void run(VirtualNode node) {
                 if (node instanceof RenderableShadowNode) {
                     ((RenderableShadowNode)node).mergeProperties(self);
                 }
@@ -103,7 +102,6 @@ class GroupShadowNode extends RenderableShadowNode {
                 if (node.isResponsible()) {
                     svg.enableTouchEvents();
                 }
-                return true;
             }
         });
         popGlyphContext();
@@ -118,9 +116,8 @@ class GroupShadowNode extends RenderableShadowNode {
         final Path path = new Path();
 
         traverseChildren(new NodeRunnable() {
-            public boolean run(VirtualNode node) {
+            public void run(VirtualNode node) {
                 path.addPath(node.getPath(canvas, paint));
-                return true;
             }
         });
 
@@ -163,15 +160,14 @@ class GroupShadowNode extends RenderableShadowNode {
         return -1;
     }
 
-    protected void saveDefinition() {
+    void saveDefinition() {
         if (mName != null) {
             getSvgShadowNode().defineTemplate(this, mName);
         }
 
         traverseChildren(new NodeRunnable() {
-            public boolean run(VirtualNode node) {
+            public void run(VirtualNode node) {
                 node.saveDefinition();
-                return true;
             }
         });
     }
@@ -179,11 +175,10 @@ class GroupShadowNode extends RenderableShadowNode {
     @Override
     public void resetProperties() {
         traverseChildren(new NodeRunnable() {
-            public boolean run(VirtualNode node) {
+            public void run(VirtualNode node) {
                 if (node instanceof RenderableShadowNode) {
                     ((RenderableShadowNode)node).resetProperties();
                 }
-                return true;
             }
         });
     }

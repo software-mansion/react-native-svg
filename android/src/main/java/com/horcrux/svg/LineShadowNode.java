@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -17,7 +17,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 /**
  * Shadow node for virtual Line view
  */
-public class LineShadowNode extends RenderableShadowNode {
+class LineShadowNode extends RenderableShadowNode {
 
     private String mX1;
     private String mY1;

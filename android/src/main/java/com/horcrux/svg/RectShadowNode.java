@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -18,7 +18,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 /**
  * Shadow node for virtual Rect view
  */
-public class RectShadowNode extends RenderableShadowNode {
+class RectShadowNode extends RenderableShadowNode {
 
     private String mX;
     private String mY;

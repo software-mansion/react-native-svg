@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -18,7 +18,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 /**
  * Shadow node for virtual Circle view
  */
-public class CircleShadowNode extends RenderableShadowNode {
+class CircleShadowNode extends RenderableShadowNode {
 
     private String mCx;
     private String mCy;

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -20,21 +20,21 @@ import android.graphics.Shader;
 
 import com.facebook.react.bridge.ReadableArray;
 
-public class Brush {
+class Brush {
     private BrushType mType = BrushType.LINEAR_GRADIENT;
-    private ReadableArray mPoints;
+    private final ReadableArray mPoints;
     private ReadableArray mColors;
     private Matrix mMatrix;
-    private boolean mUseObjectBoundingBox;
+    private final boolean mUseObjectBoundingBox;
     private Rect mUserSpaceBoundingBox;
 
-    public Brush(BrushType type, ReadableArray points, BrushUnits units) {
+    Brush(BrushType type, ReadableArray points, BrushUnits units) {
         mType = type;
         mPoints = points;
         mUseObjectBoundingBox = units == BrushUnits.OBJECT_BOUNDING_BOX;
     }
 
-    public enum BrushType {
+    enum BrushType {
         LINEAR_GRADIENT(0),
         RADIAL_GRADIENT(1),
         PATTERN(2);
@@ -45,7 +45,7 @@ public class Brush {
         final int nativeInt;
     }
 
-    public enum BrushUnits {
+    enum BrushUnits {
         OBJECT_BOUNDING_BOX(0),
         USER_SPACE_ON_USE(1);
         BrushUnits(int ni) {
@@ -67,15 +67,15 @@ public class Brush {
         }
     }
 
-    public void setUserSpaceBoundingBox(Rect userSpaceBoundingBox) {
+    void setUserSpaceBoundingBox(Rect userSpaceBoundingBox) {
         mUserSpaceBoundingBox = userSpaceBoundingBox;
     }
 
-    public void setGradientColors(ReadableArray colors) {
+    void setGradientColors(ReadableArray colors) {
         mColors = colors;
     }
 
-    public void setGradientTransform(Matrix matrix) {
+    void setGradientTransform(Matrix matrix) {
         mMatrix = matrix;
     }
 
@@ -94,7 +94,7 @@ public class Brush {
         return new RectF(x, y, x + width, y + height);
     }
 
-    public void setupPaint(Paint paint, RectF pathBoundingBox, float scale, float opacity) {
+    void setupPaint(Paint paint, RectF pathBoundingBox, float scale, float opacity) {
         RectF rect = getPaintRect(pathBoundingBox);
         float width = rect.width();
         float height = rect.height();
@@ -154,12 +154,13 @@ public class Brush {
 
             radialGradient.setLocalMatrix(radialMatrix);
             paint.setShader(radialGradient);
-        } else {
+        }
+        // else {
             // todo: pattern support
 
             //Shader mShader1 = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
             //paint.setShader(mShader1);
             //bitmap.recycle();
-        }
+        // }
     }
 }

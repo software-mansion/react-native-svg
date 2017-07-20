@@ -28,26 +28,26 @@ class GlyphContext {
     private static final float DEFAULT_KERNING = 0f;
     private static final float DEFAULT_LETTER_SPACING = 0f;
 
-    private ArrayList<ArrayList<String>> mXPositionsContext = new ArrayList<>();
-    private ArrayList<ArrayList<String>> mYPositionsContext = new ArrayList<>();
-    private ArrayList<ArrayList<Float>> mRotationsContext = new ArrayList<>();
-    private ArrayList<ArrayList<Float>> mDeltaXsContext = new ArrayList<>();
-    private ArrayList<ArrayList<Float>> mDeltaYsContext = new ArrayList<>();
-    private ArrayList<ReadableMap> mFontContext = new ArrayList<>();
-    private ArrayList<Float> mRotationContext = new ArrayList<>();
-    private ArrayList<GroupShadowNode> mNodes = new ArrayList<>();
+    private final ArrayList<ArrayList<String>> mXPositionsContext = new ArrayList<>();
+    private final ArrayList<ArrayList<String>> mYPositionsContext = new ArrayList<>();
+    private final ArrayList<ArrayList<Float>> mRotationsContext = new ArrayList<>();
+    private final ArrayList<ArrayList<Float>> mDeltaXsContext = new ArrayList<>();
+    private final ArrayList<ArrayList<Float>> mDeltaYsContext = new ArrayList<>();
+    private final ArrayList<ReadableMap> mFontContext = new ArrayList<>();
+    private final ArrayList<Float> mRotationContext = new ArrayList<>();
+    private final ArrayList<GroupShadowNode> mNodes = new ArrayList<>();
     private ArrayList<Float> mRotations = new ArrayList<>();
-    private @Nonnull PointF mCurrentLocation = new PointF();
+    private @Nonnull final PointF mCurrentLocation = new PointF();
     private ArrayList<Float> mDeltaXs = new ArrayList<>();
     private ArrayList<Float> mDeltaYs = new ArrayList<>();
-    private @Nonnull PointF mCurrentDelta = new PointF();
+    private @Nonnull final PointF mCurrentDelta = new PointF();
     private ArrayList<String> mXs = new ArrayList<>();
     private ArrayList<String> mYs = new ArrayList<>();
     private int mContextLength;
     private float mRotation;
-    private float mHeight;
-    private float mWidth;
-    private float mScale;
+    private final float mHeight;
+    private final float mWidth;
+    private final float mScale;
     private int top = -1;
 
     GlyphContext(float scale, float width, float height) {
@@ -158,9 +158,8 @@ class GlyphContext {
 
     float getNextGlyphRotation() {
         List<Float> prev = null;
-        int index = top;
 
-        for (; index >= 0; index--) {
+        for (int index = top; index >= 0; index--) {
             List<Float> rotations = mRotationsContext.get(index);
 
             if (prev != rotations && rotations.size() != 0) {
@@ -264,7 +263,6 @@ class GlyphContext {
         String fontWeight = null;
         String fontStyle = null;
 
-        // TODO: add support for other length units
         for (int index = top; index >= 0; index--) {
             ReadableMap font = mFontContext.get(index);
 

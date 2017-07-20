@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -9,16 +9,8 @@
 
 package com.horcrux.svg;
 
-import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.graphics.Paint;
-import android.graphics.RadialGradient;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
-import android.graphics.Matrix;
-
-import javax.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableArray;
@@ -27,6 +19,8 @@ import com.facebook.react.bridge.WritableMap;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.annotation.Nullable;
 
 /**
  * Contains static helper methods for accessing props.
@@ -44,12 +38,17 @@ class PropHelper {
     @Nullable
     float[] toFloatArray(@Nullable ReadableArray value) {
         if (value != null) {
-            float[] result = new float[value.size()];
-            toFloatArray(value, result);
-            return result;
+            int fromSize = value.size();
+            float[] into = new float[fromSize];
+            for (int i = 0; i < fromSize; i++) {
+                into[i] = (float) value.getDouble(i);
+            }
+            return into;
         }
         return null;
     }
+
+    private static final int transformInputMatrixSize = 6;
 
     /**
      * Converts given {@link ReadableArray} to an array of {@code float}. Writes result to the array
@@ -61,17 +60,18 @@ class PropHelper {
      * @param into  output array
      * @return number of items copied from input to the output array
      */
-
-    static int toFloatArray(ReadableArray value, float[] into) {
-        int length = value.size() > into.length ? into.length : value.size();
-        for (int i = 0; i < length; i++) {
+    static int toMatrixData(ReadableArray value, float[] into) {
+        int fromSize = value.size();
+        if (fromSize != transformInputMatrixSize) {
+            return fromSize;
+        }
+        for (int i = 0; i < transformInputMatrixSize; i++) {
             into[i] = (float) value.getDouble(i);
         }
-        return value.size();
-
+        return transformInputMatrixSize;
     }
 
-    static private Pattern percentageRegExp = Pattern.compile("^(\\-?\\d+(?:\\.\\d+)?)%$");
+    static private final Pattern percentageRegExp = Pattern.compile("^(-?\\d+(?:\\.\\d+)?)%$");
 
     /**
      * Converts length string into actual based on a relative number
@@ -158,12 +158,12 @@ class PropHelper {
     }
 
     static class PathParser {
-        static private Pattern PATH_REG_EXP = Pattern.compile("[a-df-z]|[\\-+]?(?:[\\d.]e[\\-+]?|[^\\s\\-+,a-z])+", Pattern.CASE_INSENSITIVE);
-        static private Pattern DECIMAL_REG_EXP = Pattern.compile("(\\.\\d+)(?=\\-?\\.)");
+        static private final Pattern PATH_REG_EXP = Pattern.compile("[a-df-z]|[\\-+]?(?:[\\d.]e[\\-+]?|[^\\s\\-+,a-z])+", Pattern.CASE_INSENSITIVE);
+        static private final Pattern DECIMAL_REG_EXP = Pattern.compile("(\\.\\d+)(?=-?\\.)");
 
         private Matcher mMatcher;
         private Path mPath;
-        private String mString;
+        private final String mString;
         private float mPenX = 0f;
         private float mPenY = 0f;
         private float mPenDownX;
@@ -179,12 +179,12 @@ class PropHelper {
         private WritableArray mBezierCurves;
         private WritableMap mLastStartPoint;
 
-        public PathParser(String d, float scale) {
+        PathParser(String d, float scale) {
             mScale = scale;
             mString = d;
         }
 
-        public ReadableArray getBezierCurves() {
+        ReadableArray getBezierCurves() {
             if (mBezierCurves == null) {
                 getPath();
             }

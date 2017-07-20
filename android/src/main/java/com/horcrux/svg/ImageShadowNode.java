@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -43,7 +43,7 @@ import com.facebook.react.bridge.ReadableArray;
 /**
  * Shadow node for virtual Image view
  */
-public class ImageShadowNode extends RenderableShadowNode {
+class ImageShadowNode extends RenderableShadowNode {
 
     private String mX;
     private String mY;
@@ -53,11 +53,11 @@ public class ImageShadowNode extends RenderableShadowNode {
     private float mImageRatio;
     private String mAlign;
     private int mMeetOrSlice;
-    private AtomicBoolean mLoading = new AtomicBoolean(false);
+    private final AtomicBoolean mLoading = new AtomicBoolean(false);
 
     private static final float[] sMatrixData = new float[9];
     private static final float[] sRawMatrix = new float[9];
-    protected Matrix mMatrix = new Matrix();
+    private Matrix mMatrix = new Matrix();
 
     @ReactProp(name = "x")
     public void setX(String x) {
@@ -118,7 +118,7 @@ public class ImageShadowNode extends RenderableShadowNode {
     @ReactProp(name = "matrix")
     public void setMatrix(@Nullable ReadableArray matrixArray) {
         if (matrixArray != null) {
-            int matrixSize = PropHelper.toFloatArray(matrixArray, sMatrixData);
+            int matrixSize = PropHelper.toMatrixData(matrixArray, sMatrixData);
             if (matrixSize == 6) {
                 sRawMatrix[0] = sMatrixData[0];
                 sRawMatrix[1] = sMatrixData[2];
@@ -216,7 +216,7 @@ public class ImageShadowNode extends RenderableShadowNode {
         float canvasLeft = getCanvasLeft();
         float canvasTop = getCanvasTop();
         RectF eRect = new RectF(canvasLeft, canvasTop, rectWidth / mScale + canvasLeft, rectHeight / mScale + canvasTop);
-        Matrix transform = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice, false);
+        Matrix transform = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
 
         Matrix translation = new Matrix();
         if (mMatrix != null) {

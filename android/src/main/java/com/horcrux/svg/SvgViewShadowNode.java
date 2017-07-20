@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -39,7 +39,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
     private final Map<String, Brush> mDefinedBrushes = new HashMap<>();
     private Canvas mCanvas;
-    protected final float mScale;
+    private final float mScale;
 
     private float mMinX;
     private float mMinY;
@@ -111,7 +111,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         SvgViewManager.setShadowNode(this);
     }
 
-    public Object drawOutput() {
+    private Object drawOutput() {
         Bitmap bitmap = Bitmap.createBitmap(
                 (int) getLayoutWidth(),
                 (int) getLayoutHeight(),
@@ -122,7 +122,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         return bitmap;
     }
 
-    public Rect getCanvasBounds() {
+    Rect getCanvasBounds() {
         return mCanvas.getClipBounds();
     }
 
@@ -131,7 +131,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         if (mAlign != null) {
             RectF vbRect = getViewBox();
             RectF eRect = new RectF(0, 0, getLayoutWidth(), getLayoutHeight());
-            mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice, false);
+            mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
             canvas.concat(mViewBoxMatrix);
         }
 
@@ -161,11 +161,11 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     }
 
     @NonNull
-    RectF getViewBox() {
+    private RectF getViewBox() {
         return new RectF(mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
     }
 
-    public String toDataURL() {
+    String toDataURL() {
         Bitmap bitmap = Bitmap.createBitmap(
                 (int) getLayoutWidth(),
                 (int) getLayoutHeight(),
@@ -179,13 +179,13 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
     }
 
-    public void enableTouchEvents() {
+    void enableTouchEvents() {
         if (!mResponsible) {
             mResponsible = true;
         }
     }
 
-    public int hitTest(Point point) {
+    int hitTest(Point point) {
         if (!mResponsible) {
             return -1;
         }
@@ -206,27 +206,27 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         return viewTag;
     }
 
-    public void defineClipPath(VirtualNode clipPath, String clipPathRef) {
+    void defineClipPath(VirtualNode clipPath, String clipPathRef) {
         mDefinedClipPaths.put(clipPathRef, clipPath);
     }
 
-    public VirtualNode getDefinedClipPath(String clipPathRef) {
+    VirtualNode getDefinedClipPath(String clipPathRef) {
         return mDefinedClipPaths.get(clipPathRef);
     }
 
-    public void defineTemplate(VirtualNode template, String templateRef) {
+    void defineTemplate(VirtualNode template, String templateRef) {
         mDefinedTemplates.put(templateRef, template);
     }
 
-    public VirtualNode getDefinedTemplate(String templateRef) {
+    VirtualNode getDefinedTemplate(String templateRef) {
         return mDefinedTemplates.get(templateRef);
     }
 
-    public void defineBrush(Brush brush, String brushRef) {
+    void defineBrush(Brush brush, String brushRef) {
         mDefinedBrushes.put(brushRef, brush);
     }
 
-    public Brush getDefinedBrush(String brushRef) {
+    Brush getDefinedBrush(String brushRef) {
         return mDefinedBrushes.get(brushRef);
     }
 }

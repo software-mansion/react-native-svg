@@ -39,11 +39,11 @@ class TextShadowNode extends GroupShadowNode {
 
     private int mTextAnchor = TEXT_ANCHOR_AUTO;
     private int mTextDecoration = TEXT_DECORATION_NONE;
-    @Nullable  ReadableArray mRotate;
-    @Nullable  ReadableArray mDeltaX;
-    @Nullable ReadableArray mDeltaY;
-    @Nullable String mPositionX;
-    @Nullable String mPositionY;
+    private @Nullable  ReadableArray mRotate;
+    private @Nullable  ReadableArray mDeltaX;
+    private @Nullable ReadableArray mDeltaY;
+    private @Nullable String mPositionX;
+    private @Nullable String mPositionY;
 
     @ReactProp(name = "textAnchor", defaultInt = TEXT_ANCHOR_AUTO)
     public void setTextAnchor(int textAnchor) {
@@ -158,12 +158,11 @@ class TextShadowNode extends GroupShadowNode {
         return decoration;
     }
 
-    protected void releaseCachedPath() {
+    void releaseCachedPath() {
         traverseChildren(new NodeRunnable() {
-            public boolean run(VirtualNode node) {
+            public void run(VirtualNode node) {
                 TextShadowNode text = (TextShadowNode)node;
                 text.releaseCachedPath();
-                return true;
             }
         });
     }
@@ -177,7 +176,7 @@ class TextShadowNode extends GroupShadowNode {
     }
 
     @Override
-    protected void pushGlyphContext() {
+    void pushGlyphContext() {
         boolean isTextNode = !(this instanceof TextPathShadowNode) && !(this instanceof TSpanShadowNode);
         getTextRoot().getGlyphContext().pushContext(this, mFont, mRotate, mDeltaX, mDeltaY, mPositionX, mPositionY, isTextNode);
     }

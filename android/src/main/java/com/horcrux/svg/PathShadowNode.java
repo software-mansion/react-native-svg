@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -19,7 +19,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 /**
  * Shadow node for virtual Path view
  */
-public class PathShadowNode extends RenderableShadowNode {
+class PathShadowNode extends RenderableShadowNode {
 
     private Path mPath;
     private PropHelper.PathParser mD;

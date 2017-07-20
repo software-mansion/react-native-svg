@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 /**
  * Renderable shadow node
  */
+@SuppressWarnings("WeakerAccess")
 abstract public class RenderableShadowNode extends VirtualNode {
 
     // strokeLinecap
@@ -218,7 +219,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
      * Sets up paint according to the props set on a shadow view. Returns {@code true}
      * if the fill should be drawn, {@code false} if not.
      */
-    protected boolean setupFillPaint(Paint paint, float opacity) {
+    private boolean setupFillPaint(Paint paint, float opacity) {
         if (mFill != null && mFill.size() > 0) {
             paint.reset();
             paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
@@ -233,7 +234,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
      * Sets up paint according to the props set on a shadow view. Returns {@code true}
      * if the stroke should be drawn, {@code false} if not.
      */
-    protected boolean setupStrokePaint(Paint paint, float opacity) {
+    private boolean setupStrokePaint(Paint paint, float opacity) {
         paint.reset();
         float strokeWidth = relativeOnOther(mStrokeWidth);
         if (strokeWidth == 0 || mStroke == null || mStroke.size() == 0) {
@@ -304,7 +305,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
         }
     }
 
-    protected boolean pathContainsPoint(Path path, Matrix matrix, Point point) {
+    boolean pathContainsPoint(Path path, Matrix matrix, Point point) {
         Path copy = new Path(path);
 
         copy.transform(matrix);
@@ -317,11 +318,11 @@ abstract public class RenderableShadowNode extends VirtualNode {
         return region.contains(point.x, point.y);
     }
 
-    public WritableArray getAttributeList() {
+    private WritableArray getAttributeList() {
         return mAttributeList;
     }
 
-    public void mergeProperties(RenderableShadowNode target) {
+    void mergeProperties(RenderableShadowNode target) {
         WritableArray targetAttributeList = target.getAttributeList();
 
         if (targetAttributeList == null ||
@@ -351,7 +352,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
         mLastMergedList = targetAttributeList;
     }
 
-    public void resetProperties() {
+    void resetProperties() {
         if (mLastMergedList != null && mOriginProperties != null) {
             try {
                 for (int i = mLastMergedList.size() - 1; i >= 0; i--) {

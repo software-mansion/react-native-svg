@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -15,13 +15,13 @@ import android.graphics.RectF;
 /**
  * Shadow node for virtual ViewBox
  */
-public class ViewBox extends GroupShadowNode {
+class ViewBox extends GroupShadowNode {
 
     private static final int MOS_MEET = 0;
     private static final int MOS_SLICE = 1;
     private static final int MOS_NONE = 2;
 
-    static public Matrix getTransform(RectF vbRect, RectF eRect, String align, int meetOrSlice, boolean fromSymbol) {
+    static Matrix getTransform(RectF vbRect, RectF eRect, String align, int meetOrSlice) {
         // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform
 
         // Let vb-x, vb-y, vb-width, vb-height be the min-x, min-y, width and height values of the viewBox attribute respectively.
@@ -99,7 +99,7 @@ public class ViewBox extends GroupShadowNode {
         // The transform applied to content contained by the element is given by
         // translate(translate-x, translate-y) scale(scale-x, scale-y).
         Matrix transform = new Matrix();
-        transform.postTranslate(translateX * (fromSymbol ? scaleX : 1), translateY * (fromSymbol ? scaleY : 1));
+        transform.postTranslate(translateX, translateY);
         transform.preScale(scaleX, scaleY);
         return transform;
     }

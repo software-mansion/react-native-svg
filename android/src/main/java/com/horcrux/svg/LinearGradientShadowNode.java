@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 /**
  * Shadow node for virtual LinearGradient definition view
  */
-public class LinearGradientShadowNode extends DefinitionShadowNode {
+class LinearGradientShadowNode extends DefinitionShadowNode {
 
     private String mX1;
     private String mY1;
@@ -34,7 +34,7 @@ public class LinearGradientShadowNode extends DefinitionShadowNode {
 
     private static final float[] sMatrixData = new float[9];
     private static final float[] sRawMatrix = new float[9];
-    protected Matrix mMatrix = new Matrix();
+    private Matrix mMatrix = new Matrix();
 
     @ReactProp(name = "x1")
     public void setX1(String x1) {
@@ -82,7 +82,7 @@ public class LinearGradientShadowNode extends DefinitionShadowNode {
     @ReactProp(name = "gradientTransform")
     public void setGradientTransform(@Nullable ReadableArray matrixArray) {
         if (matrixArray != null) {
-            int matrixSize = PropHelper.toFloatArray(matrixArray, sMatrixData);
+            int matrixSize = PropHelper.toMatrixData(matrixArray, sMatrixData);
             if (matrixSize == 6) {
                 sRawMatrix[0] = sMatrixData[0];
                 sRawMatrix[1] = sMatrixData[2];
