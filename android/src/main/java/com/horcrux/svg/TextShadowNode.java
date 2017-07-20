@@ -116,27 +116,6 @@ class TextShadowNode extends GroupShadowNode {
         return mTextAnchor;
     }
 
-    int getTextDecoration() {
-        int decoration = mTextDecoration;
-        if (decoration != TEXT_DECORATION_NONE) {
-            return decoration;
-        }
-        ReactShadowNode shadowNode = this.getParent();
-
-        while (shadowNode instanceof GroupShadowNode) {
-            if (shadowNode instanceof TextShadowNode) {
-                decoration = ((TextShadowNode) shadowNode).getTextDecoration();
-                if (decoration != TEXT_DECORATION_NONE) {
-                    break;
-                }
-            }
-
-            shadowNode = shadowNode.getParent();
-        }
-
-        return decoration;
-    }
-
     int getComputedTextAnchor() {
         int anchor = mTextAnchor;
         if (anchor != TEXT_ANCHOR_AUTO) {
@@ -156,6 +135,27 @@ class TextShadowNode extends GroupShadowNode {
         }
 
         return anchor;
+    }
+
+    int getTextDecoration() {
+        int decoration = mTextDecoration;
+        if (decoration != TEXT_DECORATION_NONE) {
+            return decoration;
+        }
+        ReactShadowNode shadowNode = this.getParent();
+
+        while (shadowNode instanceof GroupShadowNode) {
+            if (shadowNode instanceof TextShadowNode) {
+                decoration = ((TextShadowNode) shadowNode).getTextDecoration();
+                if (decoration != TEXT_DECORATION_NONE) {
+                    break;
+                }
+            }
+
+            shadowNode = shadowNode.getParent();
+        }
+
+        return decoration;
     }
 
     protected void releaseCachedPath() {
