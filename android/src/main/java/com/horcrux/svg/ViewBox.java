@@ -43,10 +43,10 @@ public class ViewBox extends GroupShadowNode {
         // Initialize scale-y to e-height/vb-height.
         float scaleY = eHeight / vbHeight;
 
-        // Initialize translate-x to vb-x - e-x.
-        // Initialize translate-y to vb-y - e-y.
-        float translateX = vbX - eX;
-        float translateY = vbY - eY;
+        // Initialize translate-x to e-x - (vb-x * scale-x).
+        // Initialize translate-y to e-y - (vb-y * scale-y).
+        float translateX = eX - (vbX * scaleX);
+        float translateY = eY - (vbY * scaleY);
 
         // If align is 'none'
         if (meetOrSlice == MOS_NONE) {
@@ -65,7 +65,7 @@ public class ViewBox extends GroupShadowNode {
                 translateY -= (eHeight - vbHeight * scale) / 2;
             }
         } else {
-// If align is not 'none' and meetOrSlice is 'meet', set the larger of scale-x and scale-y to the smaller.
+            // If align is not 'none' and meetOrSlice is 'meet', set the larger of scale-x and scale-y to the smaller.
             // Otherwise, if align is not 'none' and meetOrSlice is 'slice', set the smaller of scale-x and scale-y to the larger.
 
             if (!align.equals("none") && meetOrSlice == MOS_MEET) {
@@ -74,24 +74,24 @@ public class ViewBox extends GroupShadowNode {
                 scaleX = scaleY = Math.max(scaleX, scaleY);
             }
 
-            // If align contains 'xMid', minus (e-width / scale-x - vb-width) / 2 from transform-x.
+            // If align contains 'xMid', add (e-width - vb-width * scale-x) / 2 to translate-x.
             if (align.contains("xMid")) {
-                translateX -= (eWidth / scaleX - vbWidth) / 2;
+                translateX += (eWidth - vbWidth * scaleX) / 2.0f;
             }
 
-            // If align contains 'xMax', minus (e-width / scale-x - vb-width) from transform-x.
+            // If align contains 'xMax', add (e-width - vb-width * scale-x) to translate-x.
             if (align.contains("xMax")) {
-                translateX -= eWidth / scaleX - vbWidth;
+                translateX += (eWidth - vbWidth * scaleX);
             }
 
-            // If align contains 'yMid', minus (e-height / scale-y - vb-height) / 2 from transform-y.
+            // If align contains 'yMid', add (e-height - vb-height * scale-y) / 2 to translate-y.
             if (align.contains("YMid")) {
-                translateY -= (eHeight / scaleY - vbHeight) / 2;
+                translateY += (eHeight - vbHeight * scaleY) / 2.0f;
             }
 
-            // If align contains 'yMax', minus (e-height / scale-y - vb-height) from transform-y.
+            // If align contains 'yMax', add (e-height - vb-height * scale-y) to translate-y.
             if (align.contains("YMax")) {
-                translateY -= eHeight / scaleY - vbHeight;
+                translateY += (eHeight - vbHeight * scaleY);
             }
 
         }
@@ -99,8 +99,8 @@ public class ViewBox extends GroupShadowNode {
         // The transform applied to content contained by the element is given by
         // translate(translate-x, translate-y) scale(scale-x, scale-y).
         Matrix transform = new Matrix();
-        transform.postTranslate(-translateX * (fromSymbol ? scaleX : 1), -translateY * (fromSymbol ? scaleY : 1));
-        transform.postScale(scaleX, scaleY);
+        transform.postTranslate(translateX * (fromSymbol ? scaleX : 1), translateY * (fromSymbol ? scaleY : 1));
+        transform.preScale(scaleX, scaleY);
         return transform;
     }
 }
