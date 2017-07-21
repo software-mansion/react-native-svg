@@ -23,6 +23,8 @@ import javax.annotation.Nullable;
 public class TextPathShadowNode extends TextShadowNode {
 
     private String mHref;
+    private String mMethod;
+    private String mSpacing;
     private @Nullable String mStartOffset;
 
     @ReactProp(name = "href")
@@ -37,12 +39,36 @@ public class TextPathShadowNode extends TextShadowNode {
         markUpdated();
     }
 
+    @ReactProp(name = "method")
+    public void setMethod(@Nullable String method) {
+        mMethod = method;
+        markUpdated();
+    }
+
+    @ReactProp(name = "spacing")
+    public void setSpacing(@Nullable String spacing) {
+        mSpacing = spacing;
+        markUpdated();
+    }
+
+    public String getMethod() {
+        return mMethod;
+    }
+
+    public String getSpacing() {
+        return mSpacing;
+    }
+
+    public String getStartOffset() {
+        return mStartOffset;
+    }
+
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
         drawGroup(canvas, paint, opacity);
     }
 
-    public BezierTransformer getBezierTransformer() {
+    public Path getPath() {
         SvgViewShadowNode svg = getSvgShadowNode();
         VirtualNode template = svg.getDefinedTemplate(mHref);
 
@@ -52,7 +78,7 @@ public class TextPathShadowNode extends TextShadowNode {
         }
 
         PathShadowNode path = (PathShadowNode)template;
-        return new BezierTransformer(path.getBezierCurves(), relativeOnWidth(mStartOffset));
+        return path.getPath();
     }
 
     @Override

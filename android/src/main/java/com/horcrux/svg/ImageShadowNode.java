@@ -38,6 +38,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.facebook.react.bridge.ReadableArray;
+
 /**
  * Shadow node for virtual Image view
  */
@@ -52,6 +54,10 @@ public class ImageShadowNode extends RenderableShadowNode {
     private String mAlign;
     private int mMeetOrSlice;
     private AtomicBoolean mLoading = new AtomicBoolean(false);
+
+    private static final float[] sMatrixData = new float[9];
+    private static final float[] sRawMatrix = new float[9];
+    protected Matrix mMatrix = new Matrix();
 
     @ReactProp(name = "x")
     public void setX(String x) {
@@ -108,6 +114,32 @@ public class ImageShadowNode extends RenderableShadowNode {
         mMeetOrSlice = meetOrSlice;
         markUpdated();
     }
+
+    @ReactProp(name = "matrix")
+    public void setMatrix(@Nullable ReadableArray matrixArray) {
+        if (matrixArray != null) {
+            int matrixSize = PropHelper.toFloatArray(matrixArray, sMatrixData);
+            if (matrixSize == 6) {
+                sRawMatrix[0] = sMatrixData[0];
+                sRawMatrix[1] = sMatrixData[2];
+                sRawMatrix[2] = sMatrixData[4] * mScale;
+                sRawMatrix[3] = sMatrixData[1];
+                sRawMatrix[4] = sMatrixData[3];
+                sRawMatrix[5] = sMatrixData[5] * mScale;
+                sRawMatrix[6] = 0;
+                sRawMatrix[7] = 0;
+                sRawMatrix[8] = 1;
+                mMatrix.setValues(sRawMatrix);
+            } else if (matrixSize != -1) {
+                FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");
+            }
+        } else {
+            mMatrix = null;
+        }
+
+        markUpdated();
+    }
+
 
     @Override
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
@@ -187,6 +219,9 @@ public class ImageShadowNode extends RenderableShadowNode {
         transform.mapRect(renderRect);
         Matrix translation = new Matrix();
         translation.postTranslate(rectX, rectY);
+        if (mMatrix != null) {
+            translation.preConcat(mMatrix);
+        }
         translation.mapRect(renderRect);
 
         Path clip = new Path();

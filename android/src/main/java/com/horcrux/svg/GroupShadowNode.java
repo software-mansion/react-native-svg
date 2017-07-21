@@ -14,8 +14,11 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PointF;
 
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ReactShadowNode;
+import com.facebook.react.uimanager.annotations.ReactProp;
 
 
 import javax.annotation.Nullable;
@@ -24,8 +27,86 @@ import javax.annotation.Nullable;
  * Shadow node for virtual Group view
  */
 public class GroupShadowNode extends RenderableShadowNode {
+    protected @Nullable ReadableMap mFont;
+
+    private GlyphContext mGlyphContext;
+    private GroupShadowNode mTextRoot;
+
+    @ReactProp(name = "font")
+    public void setFont(@Nullable ReadableMap font) {
+        mFont = font;
+        markUpdated();
+    }
+
+    protected GroupShadowNode getTextRoot() {
+        GroupShadowNode shadowNode = getShadowNode(GroupShadowNode.class);
+        if (shadowNode == null) {
+            return getShadowNode(TextShadowNode.class);
+        }
+        return shadowNode;
+    }
+
+    @android.support.annotation.Nullable
+    private GroupShadowNode getShadowNode(Class shadowNodeClass) {
+        if (mTextRoot == null) {
+            mTextRoot = this;
+
+            while (mTextRoot != null) {
+                if (mTextRoot.getClass() == shadowNodeClass) {
+                    break;
+                }
+
+                ReactShadowNode parent = mTextRoot.getParent();
+
+                if (!(parent instanceof GroupShadowNode)) {
+                    //todo: throw exception here
+                    mTextRoot = null;
+                } else {
+                    mTextRoot = (GroupShadowNode)parent;
+                }
+            }
+        }
+
+        return mTextRoot;
+    }
+
+    protected void setupGlyphContext() {
+        mGlyphContext = new GlyphContext(mScale, getCanvasWidth(), getCanvasHeight());
+    }
+
+    protected GlyphContext getGlyphContext() {
+        if (mGlyphContext == null) {
+            setupGlyphContext();
+        }
+        return mGlyphContext;
+    }
+
+    protected void pushGlyphContext() {
+        getTextRoot().getGlyphContext().pushContext(mFont);
+    }
+
+    protected void popGlyphContext() {
+        getTextRoot().getGlyphContext().popContext();
+    }
+
+    protected ReadableMap getFontFromContext() {
+        return  getTextRoot().getGlyphContext().getGlyphFont();
+    }
+
+    protected PointF getGlyphPointFromContext(float offset, float glyphWidth) {
+        return  getTextRoot().getGlyphContext().getNextGlyphPoint(offset, glyphWidth);
+    }
+
+    protected PointF getGlyphDeltaFromContext() {
+        return  getTextRoot().getGlyphContext().getNextGlyphDelta();
+    }
+
+    protected float getNextGlyphRotationFromContext() {
+        return  getTextRoot().getGlyphContext().getNextGlyphRotation();
+    }
 
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
+        setupGlyphContext();
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             clip(canvas, paint);
             drawGroup(canvas, paint, opacity);
@@ -33,6 +114,7 @@ public class GroupShadowNode extends RenderableShadowNode {
     }
 
     protected void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {
+        pushGlyphContext();
         final SvgViewShadowNode svg = getSvgShadowNode();
         final GroupShadowNode self = this;
         traverseChildren(new NodeRunnable() {
@@ -57,6 +139,7 @@ public class GroupShadowNode extends RenderableShadowNode {
                 return true;
             }
         });
+        popGlyphContext();
     }
 
     protected void drawPath(Canvas canvas, Paint paint, float opacity) {

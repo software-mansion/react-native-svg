@@ -36,6 +36,10 @@ public class PathShadowNode extends RenderableShadowNode {
         return mPath;
     }
 
+    public Path getPath() {
+        return mPath;
+    }
+
     public ReadableArray getBezierCurves() {
         return mD.getBezierCurves();
     }
