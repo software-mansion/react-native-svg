@@ -127,7 +127,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
         markUpdated();
     }
 
-    @ReactProp(name = "strokeDashoffset", defaultFloat = 0f)
+    @ReactProp(name = "strokeDashoffset")
     public void setStrokeDashoffset(float strokeWidth) {
         mStrokeDashoffset = strokeWidth * mScale;
         markUpdated();

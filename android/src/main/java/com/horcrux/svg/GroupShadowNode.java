@@ -47,28 +47,16 @@ class GroupShadowNode extends RenderableShadowNode {
         return mGlyphContext;
     }
 
+    GlyphContext getTextRootGlyphContext() {
+        return getTextRoot().getGlyphContext();
+    }
+
     void pushGlyphContext() {
-        getTextRoot().getGlyphContext().pushContext(this, mFont);
+        getTextRootGlyphContext().pushContext(this, mFont);
     }
 
     void popGlyphContext() {
-        getTextRoot().getGlyphContext().popContext();
-    }
-
-    ReadableMap getFontFromContext() {
-        return  getTextRoot().getGlyphContext().getGlyphFont();
-    }
-
-    PointF getGlyphPointFromContext(float glyphWidth) {
-        return  getTextRoot().getGlyphContext().getNextGlyphPoint(glyphWidth);
-    }
-
-    PointF getGlyphDeltaFromContext() {
-        return  getTextRoot().getGlyphContext().getNextGlyphDelta();
-    }
-
-    float getNextGlyphRotationFromContext() {
-        return  getTextRoot().getGlyphContext().getNextGlyphRotation();
+        getTextRootGlyphContext().popContext();
     }
 
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {

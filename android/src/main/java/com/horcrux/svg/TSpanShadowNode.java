@@ -104,7 +104,6 @@ class TSpanShadowNode extends TextShadowNode {
     }
 
     private Path getLinePath(String line, Paint paint) {
-        ReadableMap font = applyTextPropertiesToPaint(paint);
         int length = line.length();
         Path path = new Path();
 
@@ -112,8 +111,12 @@ class TSpanShadowNode extends TextShadowNode {
             return path;
         }
 
+        GlyphContext gc = getTextRootGlyphContext();
+        ReadableMap font = gc.getGlyphFont();
+        applyTextPropertiesToPaint(paint, font);
+
         float distance = 0;
-        float startOffset = 0;
+        float offset = 0;
         float renderMethodScaling = 1;
         float textMeasure = paint.measureText(line);
 
@@ -121,7 +124,7 @@ class TSpanShadowNode extends TextShadowNode {
         if (textPath != null) {
             pm = new PathMeasure(textPath.getPath(), false);
             distance = pm.getLength();
-            startOffset = PropHelper.fromRelativeToFloat(textPath.getStartOffset(), distance, 0, mScale, getFontSizeFromContext());
+            offset = PropHelper.fromRelativeToFloat(textPath.getStartOffset(), distance, 0, mScale, getFontSizeFromContext());
             // String spacing = textPath.getSpacing(); // spacing = "auto | exact"
             String method = textPath.getMethod(); // method = "align | stretch"
             if ("stretch".equals(method)) {
@@ -129,20 +132,20 @@ class TSpanShadowNode extends TextShadowNode {
             }
         }
 
-        startOffset += getTextAnchorShift(textMeasure);
+        offset += getTextAnchorShift(textMeasure);
 
         Path glyph;
         float width;
+        PointF point;
+        PointF delta;
         Matrix matrix;
         String current;
-        PointF glyphPoint;
-        PointF glyphDelta;
-        float glyphRotation;
+        float rotation;
         String previous = "";
         float previousWidth = 0;
         char[] chars = line.toCharArray();
-        float kerningValue = (float) (font.getDouble(PROP_KERNING) * mScale);
-        boolean isKerningValueSet = font.getBoolean(PROP_IS_KERNING_VALUE_SET);
+        float kerning = (float) (font.getDouble(PROP_KERNING) * mScale);
+        boolean autoKerning = !font.getBoolean(PROP_IS_KERNING_VALUE_SET);
 
         for (int index = 0; index < length; index++) {
             glyph = new Path();
@@ -150,19 +153,19 @@ class TSpanShadowNode extends TextShadowNode {
             paint.getTextPath(current, 0, 1, 0, 0, glyph);
             width = paint.measureText(current) * renderMethodScaling;
 
-            if (!isKerningValueSet) {
-                float bothWidth = paint.measureText(previous + current) * renderMethodScaling;
-                kerningValue = bothWidth - previousWidth - width;
+            if (autoKerning) {
+                float both = paint.measureText(previous + current) * renderMethodScaling;
+                kerning = both - previousWidth - width;
                 previousWidth = width;
                 previous = current;
             }
 
-            glyphPoint = getGlyphPointFromContext(width + kerningValue);
-            glyphRotation = getNextGlyphRotationFromContext();
-            glyphDelta = getGlyphDeltaFromContext();
+            point = gc.getNextGlyphPoint(width + kerning);
+            rotation = gc.getNextGlyphRotation();
+            delta = gc.getNextGlyphDelta();
             matrix = new Matrix();
 
-            float x = startOffset + glyphPoint.x + glyphDelta.x - width;
+            float x = offset + point.x + delta.x - width;
 
             if (textPath != null) {
                 float halfway = width / 2;
@@ -177,15 +180,15 @@ class TSpanShadowNode extends TextShadowNode {
                 assert pm != null;
                 pm.getMatrix(midpoint, matrix, POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG);
 
-                matrix.preTranslate(-halfway, glyphDelta.y);
+                matrix.preTranslate(-halfway, delta.y);
                 matrix.preScale(renderMethodScaling, 1);
-                matrix.postTranslate(0, glyphPoint.y);
+                matrix.postTranslate(0, point.y);
             } else {
-                float y = glyphPoint.y + glyphDelta.y;
+                float y = point.y + delta.y;
                 matrix.setTranslate(x, y);
             }
 
-            matrix.preRotate(glyphRotation);
+            matrix.preRotate(rotation);
             glyph.transform(matrix);
             path.addPath(glyph);
         }
@@ -193,9 +196,7 @@ class TSpanShadowNode extends TextShadowNode {
         return path;
     }
 
-    private ReadableMap applyTextPropertiesToPaint(Paint paint) {
-        ReadableMap font = getFontFromContext();
-
+    private void applyTextPropertiesToPaint(Paint paint, ReadableMap font) {
         paint.setTextAlign(Paint.Align.LEFT);
 
         float fontSize = (float) font.getDouble(PROP_FONT_SIZE) * mScale;
@@ -243,8 +244,6 @@ class TSpanShadowNode extends TextShadowNode {
 
         // NB: if the font family is null / unsupported, the default one will be used
         paint.setTypeface(tf);
-
-        return font;
     }
 
     private void setupTextPath() {

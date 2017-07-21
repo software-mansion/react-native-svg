@@ -45,13 +45,13 @@ class TextShadowNode extends GroupShadowNode {
     private @Nullable String mPositionX;
     private @Nullable String mPositionY;
 
-    @ReactProp(name = "textAnchor", defaultInt = TEXT_ANCHOR_AUTO)
+    @ReactProp(name = "textAnchor")
     public void setTextAnchor(int textAnchor) {
         mTextAnchor = textAnchor;
         markUpdated();
     }
 
-    @ReactProp(name = "textDecoration", defaultInt = TEXT_DECORATION_NONE)
+    @ReactProp(name = "textDecoration")
     public void setTextDecoration(int textDecoration) {
         mTextDecoration = textDecoration;
         markUpdated();
