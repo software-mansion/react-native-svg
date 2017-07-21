@@ -42,67 +42,67 @@ class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
     private final String mClassName;
 
 
-    public static RenderableViewManager createGroupViewManager() {
+    static RenderableViewManager createGroupViewManager() {
         return new RenderableViewManager(CLASS_GROUP);
     }
 
-    public static RenderableViewManager createPathViewManager() {
+    static RenderableViewManager createPathViewManager() {
         return new RenderableViewManager(CLASS_PATH);
     }
 
-    public static RenderableViewManager createTextViewManager() {
+    static RenderableViewManager createTextViewManager() {
         return new RenderableViewManager(CLASS_TEXT);
     }
 
-    public static RenderableViewManager createTSpanViewManager() {
+    static RenderableViewManager createTSpanViewManager() {
         return new RenderableViewManager(CLASS_TSPAN);
     }
 
-    public static RenderableViewManager createTextPathViewManager() {
+    static RenderableViewManager createTextPathViewManager() {
         return new RenderableViewManager(CLASS_TEXT_PATH);
     }
 
-    public static RenderableViewManager createImageViewManager() {
+    static RenderableViewManager createImageViewManager() {
         return new RenderableViewManager(CLASS_IMAGE);
     }
 
-    public static RenderableViewManager createCircleViewManager() {
+    static RenderableViewManager createCircleViewManager() {
         return new RenderableViewManager(CLASS_CIRCLE);
     }
 
-    public static RenderableViewManager createEllipseViewManager() {
+    static RenderableViewManager createEllipseViewManager() {
         return new RenderableViewManager(CLASS_ELLIPSE);
     }
 
-    public static RenderableViewManager createLineViewManager() {
+    static RenderableViewManager createLineViewManager() {
         return new RenderableViewManager(CLASS_LINE);
     }
 
-    public static RenderableViewManager createRectViewManager() {
+    static RenderableViewManager createRectViewManager() {
         return new RenderableViewManager(CLASS_RECT);
     }
 
-    public static RenderableViewManager createClipPathViewManager() {
+    static RenderableViewManager createClipPathViewManager() {
         return new RenderableViewManager(CLASS_CLIP_PATH);
     }
 
-    public static RenderableViewManager createDefsViewManager() {
+    static RenderableViewManager createDefsViewManager() {
         return new RenderableViewManager(CLASS_DEFS);
     }
 
-    public static RenderableViewManager createUseViewManager() {
+    static RenderableViewManager createUseViewManager() {
         return new RenderableViewManager(CLASS_USE);
     }
 
-    public static RenderableViewManager createSymbolManager() {
+    static RenderableViewManager createSymbolManager() {
         return new RenderableViewManager(CLASS_SYMBOL);
     }
 
-    public static RenderableViewManager createLinearGradientManager() {
+    static RenderableViewManager createLinearGradientManager() {
         return new RenderableViewManager(CLASS_LINEAR_GRADIENT);
     }
 
-    public static RenderableViewManager createRadialGradientManager() {
+    static RenderableViewManager createRadialGradientManager() {
         return new RenderableViewManager(CLASS_RADIAL_GRADIENT);
     }
 
