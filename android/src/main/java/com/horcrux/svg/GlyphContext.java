@@ -57,11 +57,11 @@ class GlyphContext {
     private double fontSize = DEFAULT_FONT_SIZE;
 
     // Current attribute list
-    private float[] mRotations = new float[] {0};
-    private float[] mDeltaXs = new float[] {};
-    private float[] mDeltaYs = new float[] {};
-    private String[] mXs = new String[] {};
-    private String[] mYs = new String[] {};
+    private float[] mRotations = new float[]{0};
+    private float[] mDeltaXs = new float[]{};
+    private float[] mDeltaYs = new float[]{};
+    private String[] mXs = new String[]{};
+    private String[] mYs = new String[]{};
 
     // Current attribute list index
     private int mXPositionsIndex;
@@ -275,7 +275,7 @@ class GlyphContext {
         int nextIndex = mDeltaXIndex + 1;
         if (nextIndex < mDeltaXs.length) {
             mDeltaXIndex = nextIndex;
-            float val  = mDeltaXs[nextIndex];
+            float val = mDeltaXs[nextIndex];
             mCurrentDelta.x += val * mScale;
         }
     }
@@ -289,7 +289,7 @@ class GlyphContext {
         int nextIndex = mDeltaYIndex + 1;
         if (nextIndex < mDeltaYs.length) {
             mDeltaYIndex = nextIndex;
-            float val  = mDeltaYs[nextIndex];
+            float val = mDeltaYs[nextIndex];
             mCurrentDelta.y += val * mScale;
         }
     }
@@ -304,7 +304,7 @@ class GlyphContext {
         if (nextIndex < mXs.length) {
             mCurrentDelta.x = 0;
             mXPositionIndex = nextIndex;
-            String val  = mXs[nextIndex];
+            String val = mXs[nextIndex];
             mCurrentPosition.x = PropHelper.fromRelativeToFloat(val, mWidth, 0, mScale, fontSize);
         }
     }
@@ -319,7 +319,7 @@ class GlyphContext {
         if (nextIndex < mYs.length) {
             mCurrentDelta.y = 0;
             mYPositionIndex = nextIndex;
-            String val  = mYs[nextIndex];
+            String val = mYs[nextIndex];
             mCurrentPosition.y = PropHelper.fromRelativeToFloat(val, mHeight, 0, mScale, fontSize);
         }
     }
