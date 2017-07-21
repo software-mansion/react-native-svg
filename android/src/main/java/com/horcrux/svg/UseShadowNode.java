@@ -44,14 +44,6 @@ class UseShadowNode extends RenderableShadowNode {
         markUpdated();
     }
 
-    public String getWidth() {
-        return mWidth;
-    }
-
-    public String getHeight() {
-        return mHeight;
-    }
-
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
         VirtualNode template = getSvgShadowNode().getDefinedTemplate(mHref);

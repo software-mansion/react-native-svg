@@ -184,13 +184,6 @@ class PropHelper {
             mString = d;
         }
 
-        ReadableArray getBezierCurves() {
-            if (mBezierCurves == null) {
-                getPath();
-            }
-            return mBezierCurves;
-        }
-
         private void executeCommand(String command) {
             switch (command) {
                 // moveTo command

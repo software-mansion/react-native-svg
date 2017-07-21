@@ -59,7 +59,7 @@ class TextPathShadowNode extends TextShadowNode {
         return mSpacing;
     }
 
-    public String getStartOffset() {
+    String getStartOffset() {
         return mStartOffset;
     }
 

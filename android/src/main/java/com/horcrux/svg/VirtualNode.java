@@ -41,8 +41,6 @@ abstract class VirtualNode extends LayoutShadowNode {
     private static final float[] sMatrixData = new float[9];
     private static final float[] sRawMatrix = new float[9];
     float mOpacity = 1f;
-    private float mScaleX = 1f;
-    private float mScaleY = 1f;
     private double mFontSize = -1;
     private double mParentFontSize = -1;
     Matrix mMatrix = new Matrix();
@@ -213,18 +211,6 @@ abstract class VirtualNode extends LayoutShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "scaleX", defaultFloat = 1f)
-    public void setScaleX(float scaleX) {
-        mScaleX = scaleX;
-        markUpdated();
-    }
-
-    @ReactProp(name = "scaleY", defaultFloat = 1f)
-    public void setScaleY(float scaleY) {
-        mScaleY = scaleY;
-        markUpdated();
-    }
-
     @ReactProp(name = "matrix")
     public void setMatrix(@Nullable ReadableArray matrixArray) {
         if (matrixArray != null) {
@@ -248,18 +234,6 @@ abstract class VirtualNode extends LayoutShadowNode {
         }
 
         markUpdated();
-    }
-
-    public Matrix getMatrix() {
-        return mMatrix;
-    }
-
-    public float getScaleX() {
-        return mScaleX;
-    }
-
-    public float getScaleY() {
-        return mScaleY;
     }
 
     @ReactProp(name = "responsible")
