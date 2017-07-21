@@ -274,7 +274,6 @@
 			isa = PBXGroup;
 			children = (
 				0CF68AC11AF0540F00FF9E5C /* libRNSVG.a */,
-				A361E7A31EB0C33D00646005 /* libRNSVG-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
