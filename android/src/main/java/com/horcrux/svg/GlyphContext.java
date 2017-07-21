@@ -88,34 +88,27 @@ class GlyphContext {
         mScale = scale;
         mWidth = width;
         mHeight = height;
+
         mXPositionsContext.add(mXs);
         mYPositionsContext.add(mYs);
         mDeltaXsContext.add(mDeltaXs);
         mDeltaYsContext.add(mDeltaYs);
         mRotationsContext.add(mRotations);
 
-        mXPositionsIndices.add(mXPositionsIndex);
-        mYPositionsIndices.add(mYPositionsIndex);
-        mRotationsIndices.add(mRotationsIndex);
-        mDeltaXsIndices.add(mDeltaXsIndex);
-        mDeltaYsIndices.add(mDeltaYsIndex);
-
         mXPositionIndices.add(mXPositionIndex);
         mYPositionIndices.add(mYPositionIndex);
         mRotationIndices.add(mRotationIndex);
         mDeltaXIndices.add(mDeltaXIndex);
         mDeltaYIndices.add(mDeltaYIndex);
+
+        pushIndices();
     }
 
     void pushContext(GroupShadowNode node, @Nullable ReadableMap font) {
-        mXPositionsIndices.add(mXPositionsIndex);
-        mYPositionsIndices.add(mYPositionsIndex);
-        mRotationsIndices.add(mRotationsIndex);
-        mDeltaXsIndices.add(mDeltaXsIndex);
-        mDeltaYsIndices.add(mDeltaYsIndex);
         mFontContext.add(font);
         mNodes.add(node);
         mContextLength++;
+        pushIndices();
         top++;
     }
 
@@ -167,15 +160,19 @@ class GlyphContext {
             mDeltaYIndices.add(mDeltaYIndex);
         }
 
+        mFontContext.add(font);
+        mNodes.add(node);
+        mContextLength++;
+        pushIndices();
+        top++;
+    }
+
+    private void pushIndices() {
         mXPositionsIndices.add(mXPositionsIndex);
         mYPositionsIndices.add(mYPositionsIndex);
         mRotationsIndices.add(mRotationsIndex);
         mDeltaXsIndices.add(mDeltaXsIndex);
         mDeltaYsIndices.add(mDeltaYsIndex);
-        mFontContext.add(font);
-        mNodes.add(node);
-        mContextLength++;
-        top++;
     }
 
     private void reset() {
