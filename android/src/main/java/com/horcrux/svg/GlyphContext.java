@@ -136,31 +136,28 @@ class GlyphContext {
             mYPositionsContext.add(mYs);
         }
 
-        float[] rotations = getFloatArrayFromReadableArray(rotate);
-        if (rotations.length != 0) {
+        if (rotate != null && rotate.size() != 0) {
             mRotationsIndex++;
             mRotationIndex = -1;
-            mRotations = rotations;
-            mRotationsContext.add(mRotations);
             mRotationIndices.add(mRotationIndex);
+            mRotations = getFloatArrayFromReadableArray(rotate);
+            mRotationsContext.add(mRotations);
         }
 
-        float[] deltaXs = getFloatArrayFromReadableArray(deltaX);
-        if (deltaXs.length != 0) {
+        if (deltaX != null && deltaX.size() != 0) {
             mDeltaXsIndex++;
             mDeltaXIndex = -1;
-            mDeltaXs = deltaXs;
-            mDeltaXsContext.add(mDeltaXs);
             mDeltaXIndices.add(mDeltaXIndex);
+            mDeltaXs = getFloatArrayFromReadableArray(deltaX);
+            mDeltaXsContext.add(mDeltaXs);
         }
 
-        float[] deltaYs = getFloatArrayFromReadableArray(deltaY);
-        if (deltaYs.length != 0) {
+        if (deltaY != null && deltaY.size() != 0) {
             mDeltaYsIndex++;
             mDeltaYIndex = -1;
-            mDeltaYs = deltaYs;
-            mDeltaYsContext.add(mDeltaYs);
             mDeltaYIndices.add(mDeltaYIndex);
+            mDeltaYs = getFloatArrayFromReadableArray(deltaY);
+            mDeltaYsContext.add(mDeltaYs);
         }
 
         mFontContext.add(font);
@@ -243,84 +240,88 @@ class GlyphContext {
     }
 
     PointF getNextGlyphPoint(float glyphWidth) {
-        mCurrentPosition.x = getGlyphPosition(true);
-        mCurrentPosition.y = getGlyphPosition(false);
+        setGlyphPositionX();
+        setGlyphPositionY();
         mCurrentPosition.x += glyphWidth;
         return mCurrentPosition;
     }
 
     PointF getNextGlyphDelta() {
-        mCurrentDelta.x = getNextDelta(true);
-        mCurrentDelta.y = getNextDelta(false);
+        setNextDeltaX();
+        setNextDeltaY();
         return mCurrentDelta;
     }
 
     float getNextGlyphRotation() {
-        float[] context = mRotations;
+        setNextGlyphRotation();
+        return mRotations[mRotationIndex];
+    }
 
+    private void setNextGlyphRotation() {
         for (int index = mRotationsIndex; index >= 0; index--) {
             int rotationIndex = mRotationIndices.get(index);
             mRotationIndices.set(index, rotationIndex + 1);
         }
 
-        mRotationIndex = Math.min(mRotationIndex + 1, context.length - 1);
-
-        return context[mRotationIndex];
+        mRotationIndex = Math.min(mRotationIndex + 1, mRotations.length - 1);
     }
 
-    private float getNextDelta(boolean isX) {
-        ArrayList<Integer> deltaIndices = isX ? mDeltaXIndices : mDeltaYIndices;
-        int deltasIndex = isX ? mDeltaXsIndex : mDeltaYsIndex;
-        float delta = isX ? mCurrentDelta.x : mCurrentDelta.y;
-        int currentIndex = isX ? mDeltaXIndex : mDeltaYIndex;
-        float[] context = isX ? mDeltaXs : mDeltaYs;
-
-        for (int index = deltasIndex; index >= 0; index--) {
-            int deltaIndex = deltaIndices.get(index);
-            deltaIndices.set(index, deltaIndex + 1);
+    private void setNextDeltaX() {
+        for (int index = mDeltaXsIndex; index >= 0; index--) {
+            int deltaIndex = mDeltaXIndices.get(index);
+            mDeltaXIndices.set(index, deltaIndex + 1);
         }
 
-        int nextIndex = currentIndex + 1;
-        if (nextIndex < context.length) {
-            if (isX) {
-                mDeltaXIndex = nextIndex;
-            } else {
-                mDeltaYIndex = nextIndex;
-            }
-            float val  = context[nextIndex];
-            delta += val * mScale;
+        int nextIndex = mDeltaXIndex + 1;
+        if (nextIndex < mDeltaXs.length) {
+            mDeltaXIndex = nextIndex;
+            float val  = mDeltaXs[nextIndex];
+            mCurrentDelta.x += val * mScale;
         }
-
-        return delta;
     }
 
-    private float getGlyphPosition(boolean isX) {
-        ArrayList<Integer> positionIndices = isX ? mXPositionIndices : mYPositionIndices;
-        int positionsIndex = isX ? mXPositionsIndex : mYPositionsIndex;
-        float value = isX ? mCurrentPosition.x : mCurrentPosition.y;
-        int currentIndex = isX ? mXPositionIndex : mYPositionIndex;
-        String[] context = isX ? mXs : mYs;
-
-        for (int index = positionsIndex; index >= 0; index--) {
-            int positionIndex = positionIndices.get(index);
-            positionIndices.set(index, positionIndex + 1);
+    private void setNextDeltaY() {
+        for (int index = mDeltaYsIndex; index >= 0; index--) {
+            int deltaIndex = mDeltaYIndices.get(index);
+            mDeltaYIndices.set(index, deltaIndex + 1);
         }
 
-        int nextIndex = currentIndex + 1;
-        if (nextIndex < context.length) {
-            if (isX) {
-                mCurrentDelta.x = 0;
-                mXPositionIndex = nextIndex;
-            } else {
-                mCurrentDelta.y = 0;
-                mYPositionIndex = nextIndex;
-            }
-            String val  = context[nextIndex];
-            float relative = isX ? mWidth : mHeight;
-            value = PropHelper.fromRelativeToFloat(val, relative, 0, mScale, fontSize);
+        int nextIndex = mDeltaYIndex + 1;
+        if (nextIndex < mDeltaYs.length) {
+            mDeltaYIndex = nextIndex;
+            float val  = mDeltaYs[nextIndex];
+            mCurrentDelta.y += val * mScale;
+        }
+    }
+
+    private void setGlyphPositionX() {
+        for (int index = mXPositionsIndex; index >= 0; index--) {
+            int positionIndex = mXPositionIndices.get(index);
+            mXPositionIndices.set(index, positionIndex + 1);
         }
 
-        return value;
+        int nextIndex = mXPositionIndex + 1;
+        if (nextIndex < mXs.length) {
+            mCurrentDelta.x = 0;
+            mXPositionIndex = nextIndex;
+            String val  = mXs[nextIndex];
+            mCurrentPosition.x = PropHelper.fromRelativeToFloat(val, mWidth, 0, mScale, fontSize);
+        }
+    }
+
+    private void setGlyphPositionY() {
+        for (int index = mYPositionsIndex; index >= 0; index--) {
+            int positionIndex = mYPositionIndices.get(index);
+            mYPositionIndices.set(index, positionIndex + 1);
+        }
+
+        int nextIndex = mYPositionIndex + 1;
+        if (nextIndex < mYs.length) {
+            mCurrentDelta.y = 0;
+            mYPositionIndex = nextIndex;
+            String val  = mYs[nextIndex];
+            mCurrentPosition.y = PropHelper.fromRelativeToFloat(val, mHeight, 0, mScale, fontSize);
+        }
     }
 
     float getWidth() {
@@ -402,24 +403,20 @@ class GlyphContext {
     }
 
     private float[] getFloatArrayFromReadableArray(ReadableArray readableArray) {
-        if (readableArray != null) {
-            int size = readableArray.size();
-            float[] floats = new float[size];
-            for (int i = 0; i < size; i++) {
-                switch (readableArray.getType(i)) {
-                    case String:
-                        String val = readableArray.getString(i);
-                        floats[i] = (float) (Float.valueOf(val.substring(0, val.length() - 2)) * fontSize);
-                        break;
+        int size = readableArray.size();
+        float[] floats = new float[size];
+        for (int i = 0; i < size; i++) {
+            switch (readableArray.getType(i)) {
+                case String:
+                    String val = readableArray.getString(i);
+                    floats[i] = (float) (Float.valueOf(val.substring(0, val.length() - 2)) * fontSize);
+                    break;
 
-                    case Number:
-                        floats[i] = (float) readableArray.getDouble(i);
-                        break;
-                }
+                case Number:
+                    floats[i] = (float) readableArray.getDouble(i);
+                    break;
             }
-            return floats;
         }
-
-        return new float[0];
+        return floats;
     }
 }
