@@ -112,7 +112,7 @@ class TSpanShadowNode extends TextShadowNode {
         }
 
         GlyphContext gc = getTextRootGlyphContext();
-        ReadableMap font = gc.getGlyphFont();
+        ReadableMap font = gc.getFont();
         applyTextPropertiesToPaint(paint, font);
 
         float distance = 0;
@@ -160,9 +160,9 @@ class TSpanShadowNode extends TextShadowNode {
                 previous = current;
             }
 
-            point = gc.getNextGlyphPoint(width + kerning);
-            rotation = gc.getNextGlyphRotation();
-            delta = gc.getNextGlyphDelta();
+            point = gc.nextPoint(width + kerning);
+            rotation = gc.nextRotation();
+            delta = gc.nextDelta();
             matrix = new Matrix();
 
             float x = offset + point.x + delta.x - width;

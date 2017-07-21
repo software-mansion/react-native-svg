@@ -123,16 +123,16 @@ class GlyphContext {
         if (positionX != null) {
             mXPositionsIndex++;
             mXPositionIndex = -1;
-            mXs = positionX.trim().split("\\s+");
             mXPositionIndices.add(mXPositionIndex);
+            mXs = positionX.trim().split("\\s+");
             mXPositionsContext.add(mXs);
         }
 
         if (positionY != null) {
             mYPositionsIndex++;
             mYPositionIndex = -1;
-            mYs = positionY.trim().split("\\s+");
             mYPositionIndices.add(mYPositionIndex);
+            mYs = positionY.trim().split("\\s+");
             mYPositionsContext.add(mYs);
         }
 
@@ -239,34 +239,30 @@ class GlyphContext {
         }
     }
 
-    PointF getNextGlyphPoint(float glyphWidth) {
-        setGlyphPositionX();
-        setGlyphPositionY();
+    PointF nextPoint(float glyphWidth) {
+        nextPositionX();
+        nextPositionY();
         mCurrentPosition.x += glyphWidth;
         return mCurrentPosition;
     }
 
-    PointF getNextGlyphDelta() {
-        setNextDeltaX();
-        setNextDeltaY();
+    PointF nextDelta() {
+        nextDeltaX();
+        nextDeltaY();
         return mCurrentDelta;
     }
 
-    float getNextGlyphRotation() {
-        setNextGlyphRotation();
-        return mRotations[mRotationIndex];
-    }
-
-    private void setNextGlyphRotation() {
+    float nextRotation() {
         for (int index = mRotationsIndex; index >= 0; index--) {
             int rotationIndex = mRotationIndices.get(index);
             mRotationIndices.set(index, rotationIndex + 1);
         }
 
         mRotationIndex = Math.min(mRotationIndex + 1, mRotations.length - 1);
+        return mRotations[mRotationIndex];
     }
 
-    private void setNextDeltaX() {
+    private void nextDeltaX() {
         for (int index = mDeltaXsIndex; index >= 0; index--) {
             int deltaIndex = mDeltaXIndices.get(index);
             mDeltaXIndices.set(index, deltaIndex + 1);
@@ -280,7 +276,7 @@ class GlyphContext {
         }
     }
 
-    private void setNextDeltaY() {
+    private void nextDeltaY() {
         for (int index = mDeltaYsIndex; index >= 0; index--) {
             int deltaIndex = mDeltaYIndices.get(index);
             mDeltaYIndices.set(index, deltaIndex + 1);
@@ -294,7 +290,7 @@ class GlyphContext {
         }
     }
 
-    private void setGlyphPositionX() {
+    private void nextPositionX() {
         for (int index = mXPositionsIndex; index >= 0; index--) {
             int positionIndex = mXPositionIndices.get(index);
             mXPositionIndices.set(index, positionIndex + 1);
@@ -309,7 +305,7 @@ class GlyphContext {
         }
     }
 
-    private void setGlyphPositionY() {
+    private void nextPositionY() {
         for (int index = mYPositionsIndex; index >= 0; index--) {
             int positionIndex = mYPositionIndices.get(index);
             mYPositionIndices.set(index, positionIndex + 1);
@@ -348,7 +344,7 @@ class GlyphContext {
         return DEFAULT_FONT_SIZE;
     }
 
-    ReadableMap getGlyphFont() {
+    ReadableMap getFont() {
         float letterSpacing = DEFAULT_LETTER_SPACING;
         float kerning = DEFAULT_KERNING;
 

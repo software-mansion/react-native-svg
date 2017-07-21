@@ -24,8 +24,8 @@ class Brush {
     private BrushType mType = BrushType.LINEAR_GRADIENT;
     private final ReadableArray mPoints;
     private ReadableArray mColors;
-    private Matrix mMatrix;
     private final boolean mUseObjectBoundingBox;
+    private Matrix mMatrix;
     private Rect mUserSpaceBoundingBox;
 
     Brush(BrushType type, ReadableArray points, BrushUnits units) {
