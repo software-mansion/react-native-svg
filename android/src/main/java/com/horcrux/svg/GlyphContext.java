@@ -212,38 +212,28 @@ class GlyphContext {
 
         if (x != mXPositionsIndex) {
             mXPositionsContext.remove(x);
-            if (mXPositionsIndex > -1) {
-                mXs = mXPositionsContext.get(mXPositionsIndex);
-                mXPositionIndex = mXPositionIndices.get(mXPositionsIndex);
-            }
+            mXs = mXPositionsContext.get(mXPositionsIndex);
+            mXPositionIndex = mXPositionIndices.get(mXPositionsIndex);
         }
         if (y != mYPositionsIndex) {
             mYPositionsContext.remove(y);
-            if (mYPositionsIndex > -1) {
-                mYs = mYPositionsContext.get(mYPositionsIndex);
-                mYPositionIndex = mYPositionIndices.get(mYPositionsIndex);
-            }
+            mYs = mYPositionsContext.get(mYPositionsIndex);
+            mYPositionIndex = mYPositionIndices.get(mYPositionsIndex);
         }
         if (r != mRotationsIndex) {
             mRotationsContext.remove(r);
-            if (mRotationsIndex > -1) {
-                mRotations = mRotationsContext.get(mRotationsIndex);
-                mRotationIndex = mRotationIndices.get(mRotationsIndex);
-            }
+            mRotations = mRotationsContext.get(mRotationsIndex);
+            mRotationIndex = mRotationIndices.get(mRotationsIndex);
         }
         if (dx != mDeltaXsIndex) {
             mDeltaXsContext.remove(dx);
-            if (mDeltaXsIndex > -1) {
-                mDeltaXs = mDeltaXsContext.get(mDeltaXsIndex);
-                mDeltaXIndex = mDeltaXIndices.get(mDeltaXsIndex);
-            }
+            mDeltaXs = mDeltaXsContext.get(mDeltaXsIndex);
+            mDeltaXIndex = mDeltaXIndices.get(mDeltaXsIndex);
         }
         if (dy != mDeltaYsIndex) {
             mDeltaYsContext.remove(dy);
-            if (mDeltaYsIndex > -1) {
-                mDeltaYs = mDeltaYsContext.get(mDeltaYsIndex);
-                mDeltaYIndex = mDeltaYIndices.get(mDeltaYsIndex);
-            }
+            mDeltaYs = mDeltaYsContext.get(mDeltaYsIndex);
+            mDeltaYIndex = mDeltaYIndices.get(mDeltaYsIndex);
         }
     }
 
