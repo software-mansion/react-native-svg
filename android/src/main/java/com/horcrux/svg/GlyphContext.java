@@ -54,6 +54,7 @@ class GlyphContext {
     // Current accumulated values
     private @Nonnull final PointF mCurrentPosition = new PointF();
     private @Nonnull final PointF mCurrentDelta = new PointF();
+    private double fontSize = DEFAULT_FONT_SIZE;
 
     // Current attribute list
     private float[] mRotations = new float[] {0};
@@ -110,6 +111,8 @@ class GlyphContext {
         mContextLength++;
         pushIndices();
         top++;
+
+        fontSize = getFontSize();
     }
 
     void pushContext(TextShadowNode node, @Nullable ReadableMap font, @Nullable ReadableArray rotate, @Nullable ReadableArray deltaX, @Nullable ReadableArray deltaY, @Nullable String positionX, @Nullable String positionY, boolean resetPosition) {
@@ -165,6 +168,8 @@ class GlyphContext {
         mContextLength++;
         pushIndices();
         top++;
+
+        fontSize = getFontSize();
     }
 
     private void pushIndices() {
@@ -312,7 +317,7 @@ class GlyphContext {
             }
             String val  = context[nextIndex];
             float relative = isX ? mWidth : mHeight;
-            value = PropHelper.fromRelativeToFloat(val, relative, 0, mScale, getFontSize());
+            value = PropHelper.fromRelativeToFloat(val, relative, 0, mScale, fontSize);
         }
 
         return value;
@@ -344,7 +349,6 @@ class GlyphContext {
 
     ReadableMap getGlyphFont() {
         float letterSpacing = DEFAULT_LETTER_SPACING;
-        float fontSize = (float) getFontSize();
         float kerning = DEFAULT_KERNING;
 
         boolean letterSpacingSet = false;
@@ -405,7 +409,7 @@ class GlyphContext {
                 switch (readableArray.getType(i)) {
                     case String:
                         String val = readableArray.getString(i);
-                        floats[i] = (float) (Float.valueOf(val.substring(0, val.length() - 2)) * getFontSize());
+                        floats[i] = (float) (Float.valueOf(val.substring(0, val.length() - 2)) * fontSize);
                         break;
 
                     case Number:
