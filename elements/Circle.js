@@ -1,5 +1,5 @@
 import React from 'react';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
 import Shape from './Shape';
 import {CircleAttributes} from '../lib/attributes';
 import {pathProps, numberProp} from '../lib/props';
