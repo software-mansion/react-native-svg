@@ -401,7 +401,7 @@ class GlyphContext {
      * Get font size from context.
      * <p>
      * ‘font-size’
-     * Value:       <absolute-size> | <relative-size> | <length> | <percentage> | inherit
+     * Value:       < absolute-size > | < relative-size > | < length > | < percentage > | inherit
      * Initial:     medium
      * Applies to:  text content elements
      * Inherited:   yes, the computed value is inherited
@@ -413,14 +413,14 @@ class GlyphContext {
      * baseline when multiple lines of text are set solid in a multiline
      * layout environment.
      * <p>
-     * For SVG, if a <length> is provided without a unit identifier
+     * For SVG, if a < length > is provided without a unit identifier
      * (e.g., an unqualified number such as 128), the SVG user agent
-     * processes the <length> as a height value in the current user
+     * processes the < length > as a height value in the current user
      * coordinate system.
      * <p>
-     * If a <length> is provided with one of the unit identifiers
+     * If a < length > is provided with one of the unit identifiers
      * (e.g., 12pt or 10%), then the SVG user agent converts the
-     * <length> into a corresponding value in the current user
+     * < length > into a corresponding value in the current user
      * coordinate system by applying the rules described in Units.
      * <p>
      * Except for any additional information provided in this specification,
