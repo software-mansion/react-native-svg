@@ -123,7 +123,9 @@ class TSpanShadowNode extends TextShadowNode {
         if (textPath != null) {
             pm = new PathMeasure(textPath.getPath(), false);
             distance = pm.getLength();
-            offset = PropHelper.fromRelativeToFloat(textPath.getStartOffset(), distance, 0, mScale, getFontSizeFromContext());
+            double size = getFontSizeFromContext();
+            String startOffset = textPath.getStartOffset();
+            offset = PropHelper.fromRelativeToFloat(startOffset, distance, 0, mScale, size);
             // String spacing = textPath.getSpacing(); // spacing = "auto | exact"
             String method = textPath.getMethod(); // method = "align | stretch"
             if ("stretch".equals(method)) {
@@ -207,7 +209,7 @@ class TSpanShadowNode extends TextShadowNode {
 
         paint.setTextSize(fontSize);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            paint.setLetterSpacing(letterSpacing / fontSize);  // setLetterSpacing is only available from LOLLIPOP and on
+            paint.setLetterSpacing(letterSpacing / fontSize);
         }
 
         int decoration = getTextDecoration();
@@ -215,8 +217,10 @@ class TSpanShadowNode extends TextShadowNode {
         paint.setUnderlineText(decoration == TEXT_DECORATION_UNDERLINE);
         paint.setStrikeThruText(decoration == TEXT_DECORATION_LINE_THROUGH);
 
-        boolean isBold = font.hasKey(PROP_FONT_WEIGHT) && "bold".equals(font.getString(PROP_FONT_WEIGHT));
-        boolean isItalic = font.hasKey(PROP_FONT_STYLE) && "italic".equals(font.getString(PROP_FONT_STYLE));
+        boolean isBold = font.hasKey(PROP_FONT_WEIGHT) &&
+            "bold".equals(font.getString(PROP_FONT_WEIGHT));
+        boolean isItalic = font.hasKey(PROP_FONT_STYLE) &&
+            "italic".equals(font.getString(PROP_FONT_STYLE));
 
         int fontStyle;
         if (isBold && isItalic) {
@@ -233,10 +237,12 @@ class TSpanShadowNode extends TextShadowNode {
 
         Typeface tf = null;
         try {
-            tf = Typeface.createFromAsset(a, "fonts/" + font.getString(PROP_FONT_FAMILY) + ".otf");
+            String path = "fonts/" + font.getString(PROP_FONT_FAMILY) + ".otf";
+            tf = Typeface.createFromAsset(a, path);
         } catch (Exception ignored) {
             try {
-                tf = Typeface.createFromAsset(a, "fonts/" + font.getString(PROP_FONT_FAMILY) + ".ttf");
+                String path = "fonts/" + font.getString(PROP_FONT_FAMILY) + ".ttf";
+                tf = Typeface.createFromAsset(a, path);
             } catch (Exception ignored2) {
                 try {
                     tf = Typeface.create(font.getString(PROP_FONT_FAMILY), fontStyle);
