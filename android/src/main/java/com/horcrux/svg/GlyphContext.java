@@ -250,8 +250,8 @@ class GlyphContext {
 
     float nextX(float glyphWidth) {
         for (int index = mXsIndex; index >= 0; index--) {
-            int Index = mXIndices.get(index);
-            mXIndices.set(index, Index + 1);
+            int xIndex = mXIndices.get(index);
+            mXIndices.set(index, xIndex + 1);
         }
 
         int nextIndex = mXIndex + 1;
@@ -269,8 +269,8 @@ class GlyphContext {
 
     float nextY() {
         for (int index = mYsIndex; index >= 0; index--) {
-            int Index = mYIndices.get(index);
-            mYIndices.set(index, Index + 1);
+            int yIndex = mYIndices.get(index);
+            mYIndices.set(index, yIndex + 1);
         }
 
         int nextIndex = mYIndex + 1;
