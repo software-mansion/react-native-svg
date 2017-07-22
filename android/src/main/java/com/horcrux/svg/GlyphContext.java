@@ -256,11 +256,15 @@ class GlyphContext {
         }
     }
 
-    float nextX(float glyphWidth) {
-        for (int index = mXsIndex; index >= 0; index--) {
-            int xIndex = mXIndices.get(index);
-            mXIndices.set(index, xIndex + 1);
+    private static void incrementIndices(ArrayList<Integer> indices, int topIndex) {
+        for (int index = topIndex; index >= 0; index--) {
+            int xIndex = indices.get(index);
+            indices.set(index, xIndex + 1);
         }
+    }
+
+    float nextX(float glyphWidth) {
+        incrementIndices(mXIndices, mXsIndex);
 
         int nextIndex = mXIndex + 1;
         if (nextIndex < mXs.length) {
@@ -276,10 +280,7 @@ class GlyphContext {
     }
 
     float nextY() {
-        for (int index = mYsIndex; index >= 0; index--) {
-            int yIndex = mYIndices.get(index);
-            mYIndices.set(index, yIndex + 1);
-        }
+        incrementIndices(mYIndices, mYsIndex);
 
         int nextIndex = mYIndex + 1;
         if (nextIndex < mYs.length) {
@@ -293,10 +294,7 @@ class GlyphContext {
     }
 
     float nextRotation() {
-        for (int index = mRsIndex; index >= 0; index--) {
-            int rotationIndex = mRIndices.get(index);
-            mRIndices.set(index, rotationIndex + 1);
-        }
+        incrementIndices(mRIndices, mRsIndex);
 
         mRIndex = Math.min(mRIndex + 1, mRs.length - 1);
 
@@ -306,10 +304,7 @@ class GlyphContext {
     }
 
     float nextDeltaX() {
-        for (int index = mdXsIndex; index >= 0; index--) {
-            int deltaIndex = mdXIndices.get(index);
-            mdXIndices.set(index, deltaIndex + 1);
-        }
+        incrementIndices(mdXIndices, mdXsIndex);
 
         int nextIndex = mdXIndex + 1;
         if (nextIndex < mdXs.length) {
@@ -322,10 +317,7 @@ class GlyphContext {
     }
 
     float nextDeltaY() {
-        for (int index = mdYsIndex; index >= 0; index--) {
-            int deltaIndex = mdYIndices.get(index);
-            mdYIndices.set(index, deltaIndex + 1);
-        }
+        incrementIndices(mdYIndices, mdYsIndex);
 
         int nextIndex = mdYIndex + 1;
         if (nextIndex < mdYs.length) {
