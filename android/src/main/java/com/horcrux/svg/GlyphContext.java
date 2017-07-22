@@ -20,8 +20,14 @@ import javax.annotation.Nullable;
 
 class GlyphContext {
     static final float DEFAULT_FONT_SIZE = 12f;
-    private static final float DEFAULT_KERNING = 0f;
-    private static final float DEFAULT_LETTER_SPACING = 0f;
+
+    private static final String KERNING = "kerning";
+    private static final String FONT_SIZE = "fontSize";
+    private static final String FONT_STYLE = "fontStyle";
+    private static final String FONT_WEIGHT = "fontWeight";
+    private static final String FONT_FAMILY = "fontFamily";
+    private static final String LETTER_SPACING = "letterSpacing";
+    private static final String IS_KERNING_VALUE_SET = "isKerningValueSet";
 
     // Unique input attribute lists (only added if node sets a value)
     private final ArrayList<String[]> mXsContext = new ArrayList<>();
@@ -51,10 +57,12 @@ class GlyphContext {
     // Cached per push context
     private double fontSize = DEFAULT_FONT_SIZE;
 
+    // Current values
+    private float mr;
+
     // Current accumulated values
     private float mx;
     private float my;
-    private float mr;
     private float mdx;
     private float mdy;
 
@@ -343,8 +351,8 @@ class GlyphContext {
         for (int index = top; index >= 0; index--) {
             ReadableMap font = mFontContext.get(index);
 
-            if (mFontContext.get(index).hasKey("fontSize")) {
-                return font.getDouble("fontSize");
+            if (mFontContext.get(index).hasKey(FONT_SIZE)) {
+                return font.getDouble(FONT_SIZE);
             }
         }
 
@@ -357,11 +365,8 @@ class GlyphContext {
 
     ReadableMap getFont() {
         WritableMap map = Arguments.createMap();
-
-        map.putDouble("letterSpacing", DEFAULT_LETTER_SPACING);
-        map.putBoolean("isKerningValueSet", false);
-        map.putDouble("kerning", DEFAULT_KERNING);
-        map.putDouble("fontSize", fontSize);
+        map.putBoolean(IS_KERNING_VALUE_SET, false);
+        map.putDouble(FONT_SIZE, fontSize);
 
         boolean letterSpacingSet = false;
         boolean fontFamilySet = false;
@@ -372,38 +377,40 @@ class GlyphContext {
         for (int index = top; index >= 0; index--) {
             ReadableMap font = mFontContext.get(index);
 
-            if (!fontFamilySet && font.hasKey("fontFamily")) {
-                String fontFamily = font.getString("fontFamily");
-                map.putString("fontFamily", fontFamily);
-                fontFamilySet = true;
-            }
-
-            if (!kerningSet && font.hasKey("kerning")) {
-                float kerning = Float.valueOf(font.getString("kerning"));
-                map.putBoolean("isKerningValueSet", true);
-                map.putDouble("kerning", kerning);
-                kerningSet = true;
-            }
-
-            if (!letterSpacingSet && font.hasKey("letterSpacing")) {
-                float letterSpacing = Float.valueOf(font.getString("letterSpacing"));
-                map.putDouble("letterSpacing", letterSpacing);
+            if (!letterSpacingSet && font.hasKey(LETTER_SPACING)) {
+                String letterSpacingString = font.getString(LETTER_SPACING);
+                float letterSpacing = Float.valueOf(letterSpacingString);
+                map.putDouble(LETTER_SPACING, letterSpacing);
                 letterSpacingSet = true;
             }
 
-            if (!fontWeightSet && font.hasKey("fontWeight")) {
-                String fontWeight = font.getString("fontWeight");
-                map.putString("fontWeight", fontWeight);
+            if (!fontFamilySet && font.hasKey(FONT_FAMILY)) {
+                String fontFamily = font.getString(FONT_FAMILY);
+                map.putString(FONT_FAMILY, fontFamily);
+                fontFamilySet = true;
+            }
+
+            if (!fontWeightSet && font.hasKey(FONT_WEIGHT)) {
+                String fontWeight = font.getString(FONT_WEIGHT);
+                map.putString(FONT_WEIGHT, fontWeight);
                 fontWeightSet = true;
             }
 
-            if (!fontStyleSet && font.hasKey("fontStyle")) {
-                String fontStyle = font.getString("fontStyle");
-                map.putString("fontStyle", fontStyle);
+            if (!fontStyleSet && font.hasKey(FONT_STYLE)) {
+                String fontStyle = font.getString(FONT_STYLE);
+                map.putString(FONT_STYLE, fontStyle);
                 fontStyleSet = true;
             }
 
-            if (fontFamilySet && kerningSet && letterSpacingSet && fontWeightSet && fontStyleSet) {
+            if (!kerningSet && font.hasKey(KERNING)) {
+                String kerningString = font.getString(KERNING);
+                float kerning = Float.valueOf(kerningString);
+                map.putBoolean(IS_KERNING_VALUE_SET, true);
+                map.putDouble(KERNING, kerning);
+                kerningSet = true;
+            }
+
+            if (letterSpacingSet && fontFamilySet && fontWeightSet && fontStyleSet && kerningSet) {
                 break;
             }
         }
