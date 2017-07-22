@@ -119,9 +119,9 @@ class GlyphContext {
     }
 
     void pushContext(
+        boolean reset,
         TextShadowNode node,
         @Nullable ReadableMap font,
-        boolean reset,
         @Nullable String x,
         @Nullable String y,
         @Nullable ReadableArray rotate,
