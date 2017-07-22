@@ -163,7 +163,7 @@ class GlyphContext {
             mRsIndex++;
             mRIndex = -1;
             mRIndices.add(mRIndex);
-            mRs = getFloatArrayFromReadableArray(rotate);
+            mRs = getFloatArrayFromReadableArray(rotate, 360);
             mRsContext.add(mRs);
         }
 
@@ -171,7 +171,7 @@ class GlyphContext {
             mdXsIndex++;
             mdXIndex = -1;
             mdXIndices.add(mdXIndex);
-            mdXs = getFloatArrayFromReadableArray(deltaX);
+            mdXs = getFloatArrayFromReadableArray(deltaX, mWidth / mScale);
             mdXsContext.add(mdXs);
         }
 
@@ -179,7 +179,7 @@ class GlyphContext {
             mdYsIndex++;
             mdYIndex = -1;
             mdYIndices.add(mdYIndex);
-            mdYs = getFloatArrayFromReadableArray(deltaY);
+            mdYs = getFloatArrayFromReadableArray(deltaY, mHeight / mScale);
             mdYsContext.add(mdYs);
         }
 
@@ -400,16 +400,14 @@ class GlyphContext {
         return map;
     }
 
-    private float[] getFloatArrayFromReadableArray(ReadableArray readableArray) {
+    private float[] getFloatArrayFromReadableArray(ReadableArray readableArray, float dim) {
         int size = readableArray.size();
         float[] floats = new float[size];
         for (int i = 0; i < size; i++) {
             switch (readableArray.getType(i)) {
                 case String:
-                    // em units
-                    String val = readableArray.getString(i);
-                    String substring = val.substring(0, val.length() - 2);
-                    floats[i] = (float) (Float.valueOf(substring) * fontSize);
+                    String string = readableArray.getString(i);
+                    floats[i] = PropHelper.fromRelativeToFloat(string, dim, 0, 1, fontSize);
                     break;
 
                 case Number:
