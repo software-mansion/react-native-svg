@@ -49,7 +49,6 @@ class TSpanShadowNode extends TextShadowNode {
     private static final String PROP_FONT_WEIGHT = "fontWeight";
     private static final String PROP_FONT_FAMILY = "fontFamily";
     private static final String PROP_LETTER_SPACING = "letterSpacing";
-    private static final String PROP_IS_KERNING_VALUE_SET = "isKerningValueSet";
 
     private Path mCache;
     private @Nullable String mContent;
@@ -161,7 +160,7 @@ class TSpanShadowNode extends TextShadowNode {
 
         boolean autoKerning = true;
         float kerning = DEFAULT_KERNING;
-        if (font.getBoolean(PROP_IS_KERNING_VALUE_SET)) {
+        if (font.hasKey(PROP_KERNING)) {
             kerning = (float) (font.getDouble(PROP_KERNING) * mScale);
             autoKerning = false;
         }

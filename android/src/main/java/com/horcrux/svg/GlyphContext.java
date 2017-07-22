@@ -27,7 +27,6 @@ class GlyphContext {
     private static final String FONT_WEIGHT = "fontWeight";
     private static final String FONT_FAMILY = "fontFamily";
     private static final String LETTER_SPACING = "letterSpacing";
-    private static final String IS_KERNING_VALUE_SET = "isKerningValueSet";
 
     // Unique input attribute lists (only added if node sets a value)
     private final ArrayList<String[]> mXsContext = new ArrayList<>();
@@ -355,7 +354,6 @@ class GlyphContext {
 
     ReadableMap getFont() {
         WritableMap map = Arguments.createMap();
-        map.putBoolean(IS_KERNING_VALUE_SET, false);
         map.putDouble(FONT_SIZE, fontSize);
 
         boolean letterSpacingSet = false;
@@ -395,7 +393,6 @@ class GlyphContext {
             if (!kerningSet && font.hasKey(KERNING)) {
                 String kerningString = font.getString(KERNING);
                 float kerning = Float.valueOf(kerningString);
-                map.putBoolean(IS_KERNING_VALUE_SET, true);
                 map.putDouble(KERNING, kerning);
                 kerningSet = true;
             }
