@@ -416,8 +416,10 @@ class GlyphContext {
         for (int i = 0; i < size; i++) {
             switch (readableArray.getType(i)) {
                 case String:
+                    // em units
                     String val = readableArray.getString(i);
-                    floats[i] = (float) (Float.valueOf(val.substring(0, val.length() - 2)) * fontSize);
+                    String substring = val.substring(0, val.length() - 2);
+                    floats[i] = (float) (Float.valueOf(substring) * fontSize);
                     break;
 
                 case Number:
