@@ -59,11 +59,11 @@ class GlyphContext {
     private float mdy;
 
     // Current attribute list
+    private String[] mXs = new String[]{};
+    private String[] mYs = new String[]{};
     private float[] mRotations = new float[]{0};
     private float[] mDeltaXs = new float[]{};
     private float[] mDeltaYs = new float[]{};
-    private String[] mXs = new String[]{};
-    private String[] mYs = new String[]{};
 
     // Current attribute list index
     private int mXPositionsIndex;
@@ -282,8 +282,8 @@ class GlyphContext {
 
         int nextIndex = mRotationIndex + 1;
         if (nextIndex < mRotations.length) {
-            mRotationIndex = Math.min(mRotationIndex + 1, mRotations.length - 1);
-            mr = mRotations[mRotationIndex];
+            mRotationIndex = nextIndex;
+            mr = mRotations[nextIndex];
         }
 
         return mr;

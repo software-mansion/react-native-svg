@@ -114,8 +114,8 @@ class TSpanShadowNode extends TextShadowNode {
         ReadableMap font = gc.getFont();
         applyTextPropertiesToPaint(paint, font);
 
-        float distance = 0;
         float offset = 0;
+        float distance = 0;
         float renderMethodScaling = 1;
         float textMeasure = paint.measureText(line);
 
