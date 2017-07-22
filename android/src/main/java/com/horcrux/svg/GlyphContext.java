@@ -298,11 +298,9 @@ class GlyphContext {
             mRIndices.set(index, rotationIndex + 1);
         }
 
-        int nextIndex = mRIndex + 1;
-        if (nextIndex < mRs.length) {
-            mRIndex = nextIndex;
-            mr = mRs[nextIndex];
-        }
+        mRIndex = Math.min(mRIndex + 1, mRs.length - 1);
+
+        mr = mRs[mRIndex];
 
         return mr;
     }

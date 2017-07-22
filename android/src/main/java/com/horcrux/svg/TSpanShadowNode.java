@@ -187,7 +187,6 @@ class TSpanShadowNode extends TextShadowNode {
             matrix = new Matrix();
 
             float xSum = offset + x + dx - width;
-            float ySum = y + dy;
 
             if (textPath != null) {
                 float halfway = width / 2;
@@ -202,11 +201,11 @@ class TSpanShadowNode extends TextShadowNode {
                 assert pm != null;
                 pm.getMatrix(midpoint, matrix, POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG);
 
-                matrix.preTranslate(-halfway, 0);
+                matrix.preTranslate(-halfway, dy);
                 matrix.preScale(renderMethodScaling, renderMethodScaling);
-                matrix.postTranslate(0, ySum);
+                matrix.postTranslate(0, y);
             } else {
-                matrix.setTranslate(xSum, ySum);
+                matrix.setTranslate(xSum, y + dy);
             }
 
             matrix.preRotate(r);
