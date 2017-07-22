@@ -180,9 +180,10 @@ class TSpanShadowNode extends TextShadowNode {
 
             x = gc.nextX(width + kerning);
             y = gc.nextY();
-            r = gc.nextRotation();
             dx = gc.nextDeltaX();
             dy = gc.nextDeltaY();
+            r = gc.nextRotation();
+
             matrix = new Matrix();
 
             float xSum = offset + x + dx - width;

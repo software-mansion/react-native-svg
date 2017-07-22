@@ -39,11 +39,11 @@ class TextShadowNode extends GroupShadowNode {
 
     private int mTextAnchor = TEXT_ANCHOR_AUTO;
     private int mTextDecoration = TEXT_DECORATION_NONE;
-    private @Nullable  ReadableArray mRotate;
-    private @Nullable  ReadableArray mDeltaX;
+    private @Nullable ReadableArray mPositionX;
+    private @Nullable ReadableArray mPositionY;
+    private @Nullable ReadableArray mDeltaX;
     private @Nullable ReadableArray mDeltaY;
-    private @Nullable String mPositionX;
-    private @Nullable String mPositionY;
+    private @Nullable ReadableArray mRotate;
 
     @ReactProp(name = "textAnchor")
     public void setTextAnchor(int textAnchor) {
@@ -76,13 +76,13 @@ class TextShadowNode extends GroupShadowNode {
     }
 
     @ReactProp(name = "positionX")
-    public void setPositionX(@Nullable String positionX) {
+    public void setPositionX(@Nullable ReadableArray positionX) {
         mPositionX = positionX;
         markUpdated();
     }
 
     @ReactProp(name = "positionY")
-    public void setPositionY(@Nullable String positionY) {
+    public void setPositionY(@Nullable ReadableArray positionY) {
         mPositionY = positionY;
         markUpdated();
     }

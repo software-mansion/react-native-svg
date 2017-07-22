@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
+// https://www.w3.org/TR/SVG/text.html#TSpanElement
 class GlyphContext {
     static final float DEFAULT_FONT_SIZE = 12f;
 
@@ -31,23 +32,23 @@ class GlyphContext {
     // Unique input attribute lists (only added if node sets a value)
     private final ArrayList<String[]> mXsContext = new ArrayList<>();
     private final ArrayList<String[]> mYsContext = new ArrayList<>();
+    private final ArrayList<String[]> mdXsContext = new ArrayList<>();
+    private final ArrayList<String[]> mdYsContext = new ArrayList<>();
     private final ArrayList<float[]> mRsContext = new ArrayList<>();
-    private final ArrayList<float[]> mdXsContext = new ArrayList<>();
-    private final ArrayList<float[]> mdYsContext = new ArrayList<>();
 
     // Unique index into attribute list (one per unique list)
     private final ArrayList<Integer> mXIndices = new ArrayList<>();
     private final ArrayList<Integer> mYIndices = new ArrayList<>();
-    private final ArrayList<Integer> mRIndices = new ArrayList<>();
     private final ArrayList<Integer> mdXIndices = new ArrayList<>();
     private final ArrayList<Integer> mdYIndices = new ArrayList<>();
+    private final ArrayList<Integer> mRIndices = new ArrayList<>();
 
     // Index of unique context used (one per node push/pop)
     private final ArrayList<Integer> mXsIndices = new ArrayList<>();
     private final ArrayList<Integer> mYsIndices = new ArrayList<>();
-    private final ArrayList<Integer> mRsIndices = new ArrayList<>();
     private final ArrayList<Integer> mdXsIndices = new ArrayList<>();
     private final ArrayList<Integer> mdYsIndices = new ArrayList<>();
+    private final ArrayList<Integer> mRsIndices = new ArrayList<>();
 
     // Current stack (one per node push/pop)
     private final ArrayList<ReadableMap> mFontContext = new ArrayList<>();
@@ -57,31 +58,53 @@ class GlyphContext {
     private double fontSize = DEFAULT_FONT_SIZE;
 
     // Current accumulated values
+    // https://www.w3.org/TR/SVG/types.html#DataTypeCoordinate
+    // <coordinate> syntax is the same as that for <length>
     private float mx;
     private float my;
+
+    // https://www.w3.org/TR/SVG/types.html#Length
     private float mdx;
     private float mdy;
 
-    // Current attribute list
+    // Current <list-of-coordinates> SVGLengthList
+    // https://www.w3.org/TR/SVG/types.html#InterfaceSVGLengthList
+    // https://www.w3.org/TR/SVG/types.html#DataTypeCoordinates
+
+    // https://www.w3.org/TR/SVG/text.html#TSpanElementXAttribute
     private String[] mXs = new String[]{};
+
+    // https://www.w3.org/TR/SVG/text.html#TSpanElementYAttribute
     private String[] mYs = new String[]{};
+
+    // Current <list-of-lengths> SVGLengthList
+    // https://www.w3.org/TR/SVG/types.html#DataTypeLengths
+
+    // https://www.w3.org/TR/SVG/text.html#TSpanElementDXAttribute
+    private String[] mdXs = new String[]{};
+
+    // https://www.w3.org/TR/SVG/text.html#TSpanElementDYAttribute
+    private String[] mdYs = new String[]{};
+
+    // Current <list-of-numbers> SVGLengthList
+    // https://www.w3.org/TR/SVG/types.html#DataTypeNumbers
+
+    // https://www.w3.org/TR/SVG/text.html#TSpanElementRotateAttribute
     private float[] mRs = new float[]{0};
-    private float[] mdXs = new float[]{};
-    private float[] mdYs = new float[]{};
 
     // Current attribute list index
     private int mXsIndex;
     private int mYsIndex;
-    private int mRsIndex;
     private int mdXsIndex;
     private int mdYsIndex;
+    private int mRsIndex;
 
     // Current value index in current attribute list
     private int mXIndex = -1;
     private int mYIndex = -1;
-    private int mRIndex = -1;
     private int mdXIndex = -1;
     private int mdYIndex = -1;
+    private int mRIndex = -1;
 
     // Stack length and last index
     private int mContextLength;
@@ -99,15 +122,15 @@ class GlyphContext {
 
         mXsContext.add(mXs);
         mYsContext.add(mYs);
-        mRsContext.add(mRs);
         mdXsContext.add(mdXs);
         mdYsContext.add(mdYs);
+        mRsContext.add(mRs);
 
         mXIndices.add(mXIndex);
         mYIndices.add(mYIndex);
-        mRIndices.add(mRIndex);
         mdXIndices.add(mdXIndex);
         mdYIndices.add(mdYIndex);
+        mRIndices.add(mRIndex);
 
         pushIndices();
     }
@@ -126,8 +149,8 @@ class GlyphContext {
         boolean reset,
         TextShadowNode node,
         @Nullable ReadableMap font,
-        @Nullable String x,
-        @Nullable String y,
+        @Nullable ReadableArray x,
+        @Nullable ReadableArray y,
         @Nullable ReadableArray rotate,
         @Nullable ReadableArray deltaX,
         @Nullable ReadableArray deltaY
@@ -143,35 +166,27 @@ class GlyphContext {
 
         fontSize = getFontSize();
 
-        if (x != null) {
+        if (x != null && x.size() != 0) {
             mXsIndex++;
             mXIndex = -1;
             mXIndices.add(mXIndex);
-            mXs = x.trim().split("\\s+");
+            mXs = getStringArrayFromReadableArray(x);
             mXsContext.add(mXs);
         }
 
-        if (y != null) {
+        if (y != null && y.size() != 0) {
             mYsIndex++;
             mYIndex = -1;
             mYIndices.add(mYIndex);
-            mYs = y.trim().split("\\s+");
+            mYs = getStringArrayFromReadableArray(y);
             mYsContext.add(mYs);
-        }
-
-        if (rotate != null && rotate.size() != 0) {
-            mRsIndex++;
-            mRIndex = -1;
-            mRIndices.add(mRIndex);
-            mRs = getFloatArrayFromReadableArray(rotate, 360);
-            mRsContext.add(mRs);
         }
 
         if (deltaX != null && deltaX.size() != 0) {
             mdXsIndex++;
             mdXIndex = -1;
             mdXIndices.add(mdXIndex);
-            mdXs = getFloatArrayFromReadableArray(deltaX, mWidth / mScale);
+            mdXs = getStringArrayFromReadableArray(deltaX);
             mdXsContext.add(mdXs);
         }
 
@@ -179,8 +194,16 @@ class GlyphContext {
             mdYsIndex++;
             mdYIndex = -1;
             mdYIndices.add(mdYIndex);
-            mdYs = getFloatArrayFromReadableArray(deltaY, mHeight / mScale);
+            mdYs = getStringArrayFromReadableArray(deltaY);
             mdYsContext.add(mdYs);
+        }
+
+        if (rotate != null && rotate.size() != 0) {
+            mRsIndex++;
+            mRIndex = -1;
+            mRIndices.add(mRIndex);
+            mRs = getFloatArrayFromReadableArray(rotate);
+            mRsContext.add(mRs);
         }
 
         pushIndices();
@@ -189,23 +212,23 @@ class GlyphContext {
     private void pushIndices() {
         mXsIndices.add(mXsIndex);
         mYsIndices.add(mYsIndex);
-        mRsIndices.add(mRsIndex);
         mdXsIndices.add(mdXsIndex);
         mdYsIndices.add(mdYsIndex);
+        mRsIndices.add(mRsIndex);
     }
 
     private void reset() {
-        mXsIndex = mYsIndex = mRsIndex = mdXsIndex = mdYsIndex = 0;
-        mXIndex = mYIndex = mRIndex = mdXIndex = mdYIndex = -1;
+        mXsIndex = mYsIndex = mdXsIndex = mdYsIndex = mRsIndex = 0;
+        mXIndex = mYIndex = mdXIndex = mdYIndex = mRIndex = -1;
         mx = my = mdx = mdy = 0;
     }
 
     void popContext() {
         mXsIndices.remove(mContextLength);
         mYsIndices.remove(mContextLength);
-        mRsIndices.remove(mContextLength);
         mdXsIndices.remove(mContextLength);
         mdYsIndices.remove(mContextLength);
+        mRsIndices.remove(mContextLength);
 
         mContextLength--;
         top--;
@@ -215,15 +238,15 @@ class GlyphContext {
 
         int x = mXsIndex;
         int y = mYsIndex;
-        int r = mRsIndex;
         int dx = mdXsIndex;
         int dy = mdYsIndex;
+        int r = mRsIndex;
 
         mXsIndex = mXsIndices.get(mContextLength);
         mYsIndex = mYsIndices.get(mContextLength);
-        mRsIndex = mRsIndices.get(mContextLength);
         mdXsIndex = mdXsIndices.get(mContextLength);
         mdYsIndex = mdYsIndices.get(mContextLength);
+        mRsIndex = mRsIndices.get(mContextLength);
 
         if (x != mXsIndex) {
             mXsContext.remove(x);
@@ -235,11 +258,6 @@ class GlyphContext {
             mYs = mYsContext.get(mYsIndex);
             mYIndex = mYIndices.get(mYsIndex);
         }
-        if (r != mRsIndex) {
-            mRsContext.remove(r);
-            mRs = mRsContext.get(mRsIndex);
-            mRIndex = mRIndices.get(mRsIndex);
-        }
         if (dx != mdXsIndex) {
             mdXsContext.remove(dx);
             mdXs = mdXsContext.get(mdXsIndex);
@@ -249,6 +267,11 @@ class GlyphContext {
             mdYsContext.remove(dy);
             mdYs = mdYsContext.get(mdYsIndex);
             mdYIndex = mdYIndices.get(mdYsIndex);
+        }
+        if (r != mRsIndex) {
+            mRsContext.remove(r);
+            mRs = mRsContext.get(mRsIndex);
+            mRIndex = mRIndices.get(mRsIndex);
         }
     }
 
@@ -289,21 +312,14 @@ class GlyphContext {
         return my;
     }
 
-    float nextRotation() {
-        incrementIndices(mRIndices, mRsIndex);
-
-        mRIndex = Math.min(mRIndex + 1, mRs.length - 1);
-
-        return mRs[mRIndex];
-    }
-
     float nextDeltaX() {
         incrementIndices(mdXIndices, mdXsIndex);
 
         int nextIndex = mdXIndex + 1;
         if (nextIndex < mdXs.length) {
             mdXIndex = nextIndex;
-            float val = mdXs[nextIndex];
+            String string = mdXs[nextIndex];
+            float val = PropHelper.fromRelativeToFloat(string, mWidth, 0, 1, fontSize);
             mdx += val * mScale;
         }
 
@@ -316,11 +332,20 @@ class GlyphContext {
         int nextIndex = mdYIndex + 1;
         if (nextIndex < mdYs.length) {
             mdYIndex = nextIndex;
-            float val = mdYs[nextIndex];
+            String string = mdYs[nextIndex];
+            float val = PropHelper.fromRelativeToFloat(string, mHeight, 0, 1, fontSize);
             mdy += val * mScale;
         }
 
         return mdy;
+    }
+
+    float nextRotation() {
+        incrementIndices(mRIndices, mRsIndex);
+
+        mRIndex = Math.min(mRIndex + 1, mRs.length - 1);
+
+        return mRs[mRIndex];
     }
 
     float getWidth() {
@@ -400,20 +425,21 @@ class GlyphContext {
         return map;
     }
 
-    private float[] getFloatArrayFromReadableArray(ReadableArray readableArray, float dim) {
+    private String[] getStringArrayFromReadableArray(ReadableArray readableArray) {
+        int size = readableArray.size();
+        String[] strings = new String[size];
+        for (int i = 0; i < size; i++) {
+            strings[i] = readableArray.getString(i);
+        }
+        return strings;
+    }
+
+    private float[] getFloatArrayFromReadableArray(ReadableArray readableArray) {
         int size = readableArray.size();
         float[] floats = new float[size];
         for (int i = 0; i < size; i++) {
-            switch (readableArray.getType(i)) {
-                case String:
-                    String string = readableArray.getString(i);
-                    floats[i] = PropHelper.fromRelativeToFloat(string, dim, 0, 1, fontSize);
-                    break;
-
-                case Number:
-                    floats[i] = (float) readableArray.getDouble(i);
-                    break;
-            }
+            String string = readableArray.getString(i);
+            floats[i] = Float.valueOf(string);
         }
         return floats;
     }
