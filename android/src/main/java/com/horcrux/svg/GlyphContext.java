@@ -103,9 +103,9 @@ class GlyphContext {
 
         mXsContext.add(mXs);
         mYsContext.add(mYs);
+        mRsContext.add(mRs);
         mdXsContext.add(mdXs);
         mdYsContext.add(mdYs);
-        mRsContext.add(mRs);
 
         mXIndices.add(mXIndex);
         mYIndices.add(mYIndex);

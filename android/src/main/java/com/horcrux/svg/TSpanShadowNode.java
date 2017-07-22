@@ -162,8 +162,8 @@ class TSpanShadowNode extends TextShadowNode {
         boolean autoKerning = true;
         float kerning = DEFAULT_KERNING;
         if (font.getBoolean(PROP_IS_KERNING_VALUE_SET)) {
-            autoKerning = false;
             kerning = (float) (font.getDouble(PROP_KERNING) * mScale);
+            autoKerning = false;
         }
 
         for (int index = 0; index < length; index++) {
@@ -217,27 +217,25 @@ class TSpanShadowNode extends TextShadowNode {
     }
 
     private void applyTextPropertiesToPaint(Paint paint, ReadableMap font) {
-        paint.setTextAlign(Paint.Align.LEFT);
+        AssetManager assetManager = getThemedContext().getResources().getAssets();
 
         float fontSize = (float) font.getDouble(PROP_FONT_SIZE) * mScale;
+
         float letterSpacing = font.hasKey(PROP_LETTER_SPACING) ?
             (float) font.getDouble(PROP_LETTER_SPACING) * mScale
             : DEFAULT_LETTER_SPACING;
 
-        paint.setTextSize(fontSize);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            paint.setLetterSpacing(letterSpacing / fontSize);
-        }
+        boolean isBold = font.hasKey(PROP_FONT_WEIGHT) &&
+            BOLD.equals(font.getString(PROP_FONT_WEIGHT));
+
+        boolean isItalic = font.hasKey(PROP_FONT_STYLE) &&
+            ITALIC.equals(font.getString(PROP_FONT_STYLE));
 
         int decoration = getTextDecoration();
 
-        paint.setUnderlineText(decoration == TEXT_DECORATION_UNDERLINE);
-        paint.setStrikeThruText(decoration == TEXT_DECORATION_LINE_THROUGH);
+        boolean underlineText = decoration == TEXT_DECORATION_UNDERLINE;
 
-        boolean isBold = font.hasKey(PROP_FONT_WEIGHT) &&
-            BOLD.equals(font.getString(PROP_FONT_WEIGHT));
-        boolean isItalic = font.hasKey(PROP_FONT_STYLE) &&
-            ITALIC.equals(font.getString(PROP_FONT_STYLE));
+        boolean strikeThruText = decoration == TEXT_DECORATION_LINE_THROUGH;
 
         int fontStyle;
         if (isBold && isItalic) {
@@ -250,26 +248,31 @@ class TSpanShadowNode extends TextShadowNode {
             fontStyle = Typeface.NORMAL;
         }
 
-        AssetManager a = getThemedContext().getResources().getAssets();
-
-        Typeface tf = null;
+        Typeface typeface = null;
         try {
             String path = FONTS + font.getString(PROP_FONT_FAMILY) + OTF;
-            tf = Typeface.createFromAsset(a, path);
+            typeface = Typeface.createFromAsset(assetManager, path);
         } catch (Exception ignored) {
             try {
                 String path = FONTS + font.getString(PROP_FONT_FAMILY) + TTF;
-                tf = Typeface.createFromAsset(a, path);
+                typeface = Typeface.createFromAsset(assetManager, path);
             } catch (Exception ignored2) {
                 try {
-                    tf = Typeface.create(font.getString(PROP_FONT_FAMILY), fontStyle);
+                    typeface = Typeface.create(font.getString(PROP_FONT_FAMILY), fontStyle);
                 } catch (Exception ignored3) {
                 }
             }
         }
 
         // NB: if the font family is null / unsupported, the default one will be used
-        paint.setTypeface(tf);
+        paint.setTypeface(typeface);
+        paint.setTextSize(fontSize);
+        paint.setTextAlign(Paint.Align.LEFT);
+        paint.setUnderlineText(underlineText);
+        paint.setStrikeThruText(strikeThruText);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            paint.setLetterSpacing(letterSpacing / fontSize);
+        }
     }
 
     private void setupTextPath() {
