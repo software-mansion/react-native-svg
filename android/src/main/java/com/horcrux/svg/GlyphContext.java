@@ -35,6 +35,9 @@ class GlyphContext {
         DEFAULT_MAP.putDouble(FONT_SIZE, DEFAULT_FONT_SIZE);
     }
 
+    // Current stack (one per node push/pop)
+    private final ArrayList<ReadableMap> mFontContext = new ArrayList<>();
+
     // Unique input attribute lists (only added if node sets a value)
     private final ArrayList<String[]> mXsContext = new ArrayList<>();
     private final ArrayList<String[]> mYsContext = new ArrayList<>();
@@ -55,9 +58,6 @@ class GlyphContext {
     private final ArrayList<Integer> mDXsIndices = new ArrayList<>();
     private final ArrayList<Integer> mDYsIndices = new ArrayList<>();
     private final ArrayList<Integer> mRsIndices = new ArrayList<>();
-
-    // Current stack (one per node push/pop)
-    private final ArrayList<ReadableMap> mFontContext = new ArrayList<>();
 
     // Cleared on push context, cached on getFontSize
     private float mFontSize = DEFAULT_FONT_SIZE;
@@ -113,7 +113,6 @@ class GlyphContext {
 
     // Stack length and last index
     private int mIndexTop;
-    private int mTop = -1;
 
     // Constructor parameters
     private final float mScale;
@@ -132,6 +131,8 @@ class GlyphContext {
         mScale = scale;
         mWidth = width;
         mHeight = height;
+
+        mFontContext.add(DEFAULT_MAP);
 
         mXsContext.add(mXs);
         mYsContext.add(mYs);
@@ -155,23 +156,24 @@ class GlyphContext {
     }
 
     ReadableMap getFont() {
-        if (mTop >= 0) {
-            return mFontContext.get(mTop);
-        } else {
-            return DEFAULT_MAP;
-        }
+        return mFontContext.get(mIndexTop);
     }
 
     private ReadableMap getTopOrParentFont(GroupShadowNode child) {
-        if (mTop >= 0) {
-            return mFontContext.get(mTop);
+        if (mIndexTop > 0) {
+            return mFontContext.get(mIndexTop);
         } else {
             GroupShadowNode parentRoot = child.getParentTextRoot();
-            if (parentRoot != null) {
-                return parentRoot.getGlyphContext().getFont();
-            } else {
-                return DEFAULT_MAP;
+
+            while (parentRoot != null) {
+                ReadableMap map = parentRoot.getGlyphContext().getFont();
+                if (map != DEFAULT_MAP) {
+                    return map;
+                }
+                parentRoot = parentRoot.getParentTextRoot();
             }
+
+            return DEFAULT_MAP;
         }
     }
 
@@ -253,7 +255,6 @@ class GlyphContext {
     private void pushNodeAndFont(GroupShadowNode node, @Nullable ReadableMap font) {
         mFontContext.add(mergeFont(node, font));
         mIndexTop++;
-        mTop++;
     }
 
     void pushContext(GroupShadowNode node, @Nullable ReadableMap font) {
@@ -340,16 +341,14 @@ class GlyphContext {
     }
 
     void popContext() {
+        mFontContext.remove(mIndexTop);
         mXsIndices.remove(mIndexTop);
         mYsIndices.remove(mIndexTop);
         mDXsIndices.remove(mIndexTop);
         mDYsIndices.remove(mIndexTop);
         mRsIndices.remove(mIndexTop);
 
-        mFontContext.remove(mTop);
-
         mIndexTop--;
-        mTop--;
 
         int x = mXsIndex;
         int y = mYsIndex;
