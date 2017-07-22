@@ -59,7 +59,7 @@ class GlyphContext {
     private final ArrayList<Integer> mDYsIndices = new ArrayList<>();
     private final ArrayList<Integer> mRsIndices = new ArrayList<>();
 
-    // Cleared on push context, cached on getFontSize
+    // Calculated on push context, percentage and em length depends on parent font size
     private float mFontSize = DEFAULT_FONT_SIZE;
 
     // Current accumulated values
@@ -111,8 +111,8 @@ class GlyphContext {
     private int mDYIndex = -1;
     private int mRIndex = -1;
 
-    // Stack length and last index
-    private int mIndexTop;
+    // Top index of stack
+    private int mTop;
 
     // Constructor parameters
     private final float mScale;
@@ -156,12 +156,12 @@ class GlyphContext {
     }
 
     ReadableMap getFont() {
-        return mFontContext.get(mIndexTop);
+        return mFontContext.get(mTop);
     }
 
     private ReadableMap getTopOrParentFont(GroupShadowNode child) {
-        if (mIndexTop > 0) {
-            return mFontContext.get(mIndexTop);
+        if (mTop > 0) {
+            return mFontContext.get(mTop);
         } else {
             GroupShadowNode parentRoot = child.getParentTextRoot();
 
@@ -254,7 +254,7 @@ class GlyphContext {
 
     private void pushNodeAndFont(GroupShadowNode node, @Nullable ReadableMap font) {
         mFontContext.add(mergeFont(node, font));
-        mIndexTop++;
+        mTop++;
     }
 
     void pushContext(GroupShadowNode node, @Nullable ReadableMap font) {
@@ -341,14 +341,14 @@ class GlyphContext {
     }
 
     void popContext() {
-        mFontContext.remove(mIndexTop);
-        mXsIndices.remove(mIndexTop);
-        mYsIndices.remove(mIndexTop);
-        mDXsIndices.remove(mIndexTop);
-        mDYsIndices.remove(mIndexTop);
-        mRsIndices.remove(mIndexTop);
+        mFontContext.remove(mTop);
+        mXsIndices.remove(mTop);
+        mYsIndices.remove(mTop);
+        mDXsIndices.remove(mTop);
+        mDYsIndices.remove(mTop);
+        mRsIndices.remove(mTop);
 
-        mIndexTop--;
+        mTop--;
 
         int x = mXsIndex;
         int y = mYsIndex;
@@ -356,11 +356,11 @@ class GlyphContext {
         int dy = mDYsIndex;
         int r = mRsIndex;
 
-        mXsIndex = mXsIndices.get(mIndexTop);
-        mYsIndex = mYsIndices.get(mIndexTop);
-        mDXsIndex = mDXsIndices.get(mIndexTop);
-        mDYsIndex = mDYsIndices.get(mIndexTop);
-        mRsIndex = mRsIndices.get(mIndexTop);
+        mXsIndex = mXsIndices.get(mTop);
+        mYsIndex = mYsIndices.get(mTop);
+        mDXsIndex = mDXsIndices.get(mTop);
+        mDYsIndex = mDYsIndices.get(mTop);
+        mRsIndex = mRsIndices.get(mTop);
 
         if (x != mXsIndex) {
             mXsContext.remove(x);
