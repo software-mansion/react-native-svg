@@ -56,9 +56,6 @@ class GlyphContext {
     // Cached per push context
     private double fontSize = DEFAULT_FONT_SIZE;
 
-    // Current values
-    private float mr;
-
     // Current accumulated values
     private float mx;
     private float my;
@@ -200,7 +197,7 @@ class GlyphContext {
     private void reset() {
         mXsIndex = mYsIndex = mRsIndex = mdXsIndex = mdYsIndex = 0;
         mXIndex = mYIndex = mRIndex = mdXIndex = mdYIndex = -1;
-        mx = my = mr = mdx = mdy = 0;
+        mx = my = mdx = mdy = 0;
     }
 
     void popContext() {
@@ -297,9 +294,7 @@ class GlyphContext {
 
         mRIndex = Math.min(mRIndex + 1, mRs.length - 1);
 
-        mr = mRs[mRIndex];
-
-        return mr;
+        return mRs[mRIndex];
     }
 
     float nextDeltaX() {
