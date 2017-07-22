@@ -48,27 +48,35 @@ class PropHelper {
         return null;
     }
 
-    private static final int transformInputMatrixSize = 6;
+    private static final int inputMatrixDataSize = 6;
 
     /**
-     * Converts given {@link ReadableArray} to an array of {@code float}. Writes result to the array
-     * passed in {@param into}. This method will write to the output array up to the number of items
-     * from the input array. If the input array is longer than output the remaining part of the input
-     * will not be converted.
+     * Converts given {@link ReadableArray} to a matrix data array, {@code float[6]}.
+     * Writes result to the array passed in {@param into}.
+     * This method will write exactly six items to the output array from the input array.
+     *
+     * If the input array has a different size, then only the size is returned;
+     * Does not check output array size. Ensure space for at least six elements.
      *
      * @param value input array
-     * @param into  output array
-     * @return number of items copied from input to the output array
+     * @param sRawMatrix output matrix
+     * @param mScale current resolution scaling
+     * @return size of input array
      */
-    static int toMatrixData(ReadableArray value, float[] into) {
+    static int toMatrixData(ReadableArray value, float[] sRawMatrix, float mScale) {
         int fromSize = value.size();
-        if (fromSize != transformInputMatrixSize) {
+        if (fromSize != inputMatrixDataSize) {
             return fromSize;
         }
-        for (int i = 0; i < transformInputMatrixSize; i++) {
-            into[i] = (float) value.getDouble(i);
-        }
-        return transformInputMatrixSize;
+
+        sRawMatrix[0] = (float) value.getDouble(0);
+        sRawMatrix[1] = (float) value.getDouble(2);
+        sRawMatrix[2] = (float) value.getDouble(4) * mScale;
+        sRawMatrix[3] = (float) value.getDouble(1);
+        sRawMatrix[4] = (float) value.getDouble(3);
+        sRawMatrix[5] = (float) value.getDouble(5) * mScale;
+
+        return inputMatrixDataSize;
     }
 
     static private final Pattern percentageRegExp = Pattern.compile("^(-?\\d+(?:\\.\\d+)?)%$");
