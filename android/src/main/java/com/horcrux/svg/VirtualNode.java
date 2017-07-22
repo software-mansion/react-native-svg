@@ -44,8 +44,8 @@ abstract class VirtualNode extends LayoutShadowNode {
         0, 0, 1
     };
     float mOpacity = 1f;
-    private double mFontSize = -1;
-    private double mParentFontSize = -1;
+    private float mFontSize = -1;
+    private float mParentFontSize = -1;
     Matrix mMatrix = new Matrix();
 
     private int mClipRule;
@@ -136,7 +136,7 @@ abstract class VirtualNode extends LayoutShadowNode {
         return mTextRoot;
     }
 
-    double getFontSizeFromContext() {
+    float getFontSizeFromContext() {
         if (mFontSize != -1) {
             return mFontSize;
         }
@@ -149,7 +149,7 @@ abstract class VirtualNode extends LayoutShadowNode {
         return mFontSize;
     }
 
-    double getFontSizeFromParentContext() {
+    float getFontSizeFromParentContext() {
         if (mParentFontSize != -1) {
             return mParentFontSize;
         }

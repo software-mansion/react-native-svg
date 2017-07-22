@@ -41,9 +41,9 @@ class TextShadowNode extends GroupShadowNode {
     private int mTextDecoration = TEXT_DECORATION_NONE;
     private @Nullable ReadableArray mPositionX;
     private @Nullable ReadableArray mPositionY;
+    private @Nullable ReadableArray mRotate;
     private @Nullable ReadableArray mDeltaX;
     private @Nullable ReadableArray mDeltaY;
-    private @Nullable ReadableArray mRotate;
 
     @ReactProp(name = "textAnchor")
     public void setTextAnchor(int textAnchor) {
