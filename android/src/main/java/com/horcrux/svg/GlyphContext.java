@@ -31,6 +31,7 @@ class GlyphContext {
 
     // Empty font context map
     private static final WritableMap DEFAULT_MAP = Arguments.createMap();
+
     static {
         DEFAULT_MAP.putDouble(FONT_SIZE, DEFAULT_FONT_SIZE);
     }
@@ -61,6 +62,7 @@ class GlyphContext {
 
     // Calculated on push context, percentage and em length depends on parent font size
     private float mFontSize = DEFAULT_FONT_SIZE;
+    private ReadableMap topFont = DEFAULT_MAP;
 
     // Current accumulated values
     // https://www.w3.org/TR/SVG/types.html#DataTypeCoordinate
@@ -156,12 +158,12 @@ class GlyphContext {
     }
 
     ReadableMap getFont() {
-        return mFontContext.get(mTop);
+        return topFont;
     }
 
     private ReadableMap getTopOrParentFont(GroupShadowNode child) {
         if (mTop > 0) {
-            return mFontContext.get(mTop);
+            return topFont;
         } else {
             GroupShadowNode parentRoot = child.getParentTextRoot();
 
@@ -177,9 +179,12 @@ class GlyphContext {
         }
     }
 
-    private WritableMap mergeFont(GroupShadowNode node, @Nullable ReadableMap font) {
+    private void pushNodeAndFont(GroupShadowNode node, @Nullable ReadableMap font) {
         ReadableMap parent = getTopOrParentFont(node);
         WritableMap map = Arguments.createMap();
+        mFontContext.add(map);
+        topFont = map;
+        mTop++;
 
         if (parent.hasKey(LETTER_SPACING)) {
             map.putDouble(LETTER_SPACING, parent.getDouble(LETTER_SPACING));
@@ -206,7 +211,7 @@ class GlyphContext {
         mFontSize = parentFontSize;
 
         if (font == null) {
-            return map;
+            return;
         }
 
         if (font.hasKey(LETTER_SPACING)) {
@@ -248,13 +253,6 @@ class GlyphContext {
             map.putDouble(FONT_SIZE, value);
             mFontSize = value;
         }
-
-        return map;
-    }
-
-    private void pushNodeAndFont(GroupShadowNode node, @Nullable ReadableMap font) {
-        mFontContext.add(mergeFont(node, font));
-        mTop++;
     }
 
     void pushContext(GroupShadowNode node, @Nullable ReadableMap font) {
@@ -356,6 +354,7 @@ class GlyphContext {
         int dy = mDYsIndex;
         int r = mRsIndex;
 
+        topFont = mFontContext.get(mTop);
         mXsIndex = mXsIndices.get(mTop);
         mYsIndex = mYsIndices.get(mTop);
         mDXsIndex = mDXsIndices.get(mTop);
@@ -397,35 +396,36 @@ class GlyphContext {
     }
 
     // https://www.w3.org/TR/SVG11/text.html#FontSizeProperty
+
     /**
      * Get font size from context.
-     *
+     * <p>
      * ‘font-size’
-     *   Value:       <absolute-size> | <relative-size> | <length> | <percentage> | inherit
-     *   Initial:     medium
-     *   Applies to:  text content elements
-     *   Inherited:   yes, the computed value is inherited
-     *   Percentages: refer to parent element's font size
-     *   Media:       visual
-     *   Animatable:  yes
-     *
+     * Value:       <absolute-size> | <relative-size> | <length> | <percentage> | inherit
+     * Initial:     medium
+     * Applies to:  text content elements
+     * Inherited:   yes, the computed value is inherited
+     * Percentages: refer to parent element's font size
+     * Media:       visual
+     * Animatable:  yes
+     * <p>
      * This property refers to the size of the font from baseline to
      * baseline when multiple lines of text are set solid in a multiline
      * layout environment.
-     *
+     * <p>
      * For SVG, if a <length> is provided without a unit identifier
      * (e.g., an unqualified number such as 128), the SVG user agent
      * processes the <length> as a height value in the current user
      * coordinate system.
-     *
+     * <p>
      * If a <length> is provided with one of the unit identifiers
      * (e.g., 12pt or 10%), then the SVG user agent converts the
      * <length> into a corresponding value in the current user
      * coordinate system by applying the rules described in Units.
-     *
+     * <p>
      * Except for any additional information provided in this specification,
      * the normative definition of the property is in CSS2 ([CSS2], section 15.2.4).
-     * */
+     */
     float getFontSize() {
         return mFontSize;
     }
