@@ -196,17 +196,17 @@ class GlyphContext {
     }
 
     void popContext() {
-        mContextLength--;
-        top--;
-
-        mNodes.remove(mContextLength);
-        mFontContext.remove(mContextLength);
-
         mXsIndices.remove(mContextLength);
         mYsIndices.remove(mContextLength);
         mRsIndices.remove(mContextLength);
         mdXsIndices.remove(mContextLength);
         mdYsIndices.remove(mContextLength);
+
+        mContextLength--;
+        top--;
+
+        mNodes.remove(mContextLength);
+        mFontContext.remove(mContextLength);
 
         int x = mXsIndex;
         int y = mYsIndex;
