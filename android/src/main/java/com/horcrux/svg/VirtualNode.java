@@ -82,7 +82,7 @@ abstract class VirtualNode extends LayoutShadowNode {
         return shadowNode;
     }
 
-    private GroupShadowNode getParentTextRoot() {
+    GroupShadowNode getParentTextRoot() {
         GroupShadowNode shadowNode = getParentTextRoot(GroupShadowNode.class);
         if (shadowNode == null) {
             return getParentTextRoot(TextShadowNode.class);

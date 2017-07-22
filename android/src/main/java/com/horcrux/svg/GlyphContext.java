@@ -29,6 +29,12 @@ class GlyphContext {
     private static final String FONT_FAMILY = "fontFamily";
     private static final String LETTER_SPACING = "letterSpacing";
 
+    // Empty font context map
+    private static final WritableMap DEFAULT_MAP = Arguments.createMap();
+    static {
+        DEFAULT_MAP.putDouble(FONT_SIZE, DEFAULT_FONT_SIZE);
+    }
+
     // Unique input attribute lists (only added if node sets a value)
     private final ArrayList<String[]> mXsContext = new ArrayList<>();
     private final ArrayList<String[]> mYsContext = new ArrayList<>();
@@ -52,7 +58,6 @@ class GlyphContext {
 
     // Current stack (one per node push/pop)
     private final ArrayList<ReadableMap> mFontContext = new ArrayList<>();
-    private final ArrayList<GroupShadowNode> mNodes = new ArrayList<>();
 
     // Cleared on push context, cached on getFontSize
     private float mFontSize = DEFAULT_FONT_SIZE;
@@ -149,10 +154,104 @@ class GlyphContext {
         mX = mY = mDX = mDY = 0;
     }
 
+    ReadableMap getFont() {
+        if (mTop >= 0) {
+            return mFontContext.get(mTop);
+        } else {
+            return DEFAULT_MAP;
+        }
+    }
+
+    private ReadableMap getTopOrParentFont(GroupShadowNode child) {
+        if (mTop >= 0) {
+            return mFontContext.get(mTop);
+        } else {
+            GroupShadowNode parentRoot = child.getParentTextRoot();
+            if (parentRoot != null) {
+                return parentRoot.getGlyphContext().getFont();
+            } else {
+                return DEFAULT_MAP;
+            }
+        }
+    }
+
+    private WritableMap mergeFont(GroupShadowNode node, @Nullable ReadableMap font) {
+        ReadableMap parent = getTopOrParentFont(node);
+        WritableMap map = Arguments.createMap();
+
+        if (parent.hasKey(LETTER_SPACING)) {
+            map.putDouble(LETTER_SPACING, parent.getDouble(LETTER_SPACING));
+        }
+
+        if (parent.hasKey(FONT_FAMILY)) {
+            map.putString(FONT_FAMILY, parent.getString(FONT_FAMILY));
+        }
+
+        if (parent.hasKey(FONT_WEIGHT)) {
+            map.putString(FONT_WEIGHT, parent.getString(FONT_WEIGHT));
+        }
+
+        if (parent.hasKey(FONT_STYLE)) {
+            map.putString(FONT_STYLE, parent.getString(FONT_STYLE));
+        }
+
+        if (parent.hasKey(KERNING)) {
+            map.putDouble(KERNING, parent.getDouble(KERNING));
+        }
+
+        float parentFontSize = (float) parent.getDouble(FONT_SIZE);
+        map.putDouble(FONT_SIZE, parentFontSize);
+        mFontSize = parentFontSize;
+
+        if (font == null) {
+            return map;
+        }
+
+        if (font.hasKey(LETTER_SPACING)) {
+            String letterSpacingString = font.getString(LETTER_SPACING);
+            float letterSpacing = Float.valueOf(letterSpacingString);
+            map.putDouble(LETTER_SPACING, letterSpacing);
+        }
+
+        if (font.hasKey(FONT_FAMILY)) {
+            String fontFamily = font.getString(FONT_FAMILY);
+            map.putString(FONT_FAMILY, fontFamily);
+        }
+
+        if (font.hasKey(FONT_WEIGHT)) {
+            String fontWeight = font.getString(FONT_WEIGHT);
+            map.putString(FONT_WEIGHT, fontWeight);
+        }
+
+        if (font.hasKey(FONT_STYLE)) {
+            String fontStyle = font.getString(FONT_STYLE);
+            map.putString(FONT_STYLE, fontStyle);
+        }
+
+        if (font.hasKey(KERNING)) {
+            String kerningString = font.getString(KERNING);
+            float kerning = Float.valueOf(kerningString);
+            map.putDouble(KERNING, kerning);
+        }
+
+        if (font.hasKey(FONT_SIZE)) {
+            String string = font.getString(FONT_SIZE);
+            float value = PropHelper.fromRelativeToFloat(
+                string,
+                parentFontSize,
+                0,
+                1,
+                parentFontSize
+            );
+            map.putDouble(FONT_SIZE, value);
+            mFontSize = value;
+        }
+
+        return map;
+    }
+
     private void pushNodeAndFont(GroupShadowNode node, @Nullable ReadableMap font) {
-        mFontContext.add(font);
-        mNodes.add(node);
-        mFontSize = -1;
+        mFontContext.add(mergeFont(node, font));
         mIndexTop++;
         mTop++;
     }
@@ -248,7 +347,6 @@ class GlyphContext {
         mRsIndices.remove(mIndexTop);
 
         mFontContext.remove(mTop);
-        mNodes.remove(mTop);
 
         mIndexTop--;
         mTop--;
@@ -300,31 +398,6 @@ class GlyphContext {
     }
 
     // https://www.w3.org/TR/SVG11/text.html#FontSizeProperty
-    private float getActualFontSize() {
-        // TODO Should handle an ancestor hierarchy of relative fontSize until default in the root
-        float fontSizeFromParentContext = mTop > -1 ?
-            mNodes.get(0).getFontSizeFromParentContext() : DEFAULT_FONT_SIZE;
-
-        // TODO consider relative fontSizes in this glyph context stack as well
-        // TODO Should parhaps calculate relative size on pushContext
-        for (int index = mTop; index >= 0; index--) {
-            ReadableMap font = mFontContext.get(index);
-
-            if (mFontContext.get(index).hasKey(FONT_SIZE)) {
-                String string = font.getString(FONT_SIZE);
-                return PropHelper.fromRelativeToFloat(
-                    string,
-                    fontSizeFromParentContext,
-                    0,
-                    1,
-                    fontSizeFromParentContext
-                );
-            }
-        }
-
-        return fontSizeFromParentContext;
-    }
-
     /**
      * Get font size from context.
      *
@@ -333,12 +406,12 @@ class GlyphContext {
      *   Initial:     medium
      *   Applies to:  text content elements
      *   Inherited:   yes, the computed value is inherited
-     *   Percentages: refer to parent element's font size TODO
+     *   Percentages: refer to parent element's font size
      *   Media:       visual
      *   Animatable:  yes
      *
      * This property refers to the size of the font from baseline to
-     * baseline when multiple  lines of text are set solid in a multiline
+     * baseline when multiple lines of text are set solid in a multiline
      * layout environment.
      *
      * For SVG, if a <length> is provided without a unit identifier
@@ -355,9 +428,6 @@ class GlyphContext {
      * the normative definition of the property is in CSS2 ([CSS2], section 15.2.4).
      * */
     float getFontSize() {
-        if (mFontSize == -1) {
-            mFontSize = getActualFontSize();
-        }
         return mFontSize;
     }
 
@@ -433,58 +503,5 @@ class GlyphContext {
 
     float getHeight() {
         return mHeight;
-    }
-
-    ReadableMap getFont() {
-        WritableMap map = Arguments.createMap();
-        map.putDouble(FONT_SIZE, getFontSize());
-
-        boolean letterSpacingSet = false;
-        boolean fontFamilySet = false;
-        boolean fontWeightSet = false;
-        boolean fontStyleSet = false;
-        boolean kerningSet = false;
-
-        for (int index = mTop; index >= 0; index--) {
-            ReadableMap font = mFontContext.get(index);
-
-            if (!letterSpacingSet && font.hasKey(LETTER_SPACING)) {
-                String letterSpacingString = font.getString(LETTER_SPACING);
-                float letterSpacing = Float.valueOf(letterSpacingString);
-                map.putDouble(LETTER_SPACING, letterSpacing);
-                letterSpacingSet = true;
-            }
-
-            if (!fontFamilySet && font.hasKey(FONT_FAMILY)) {
-                String fontFamily = font.getString(FONT_FAMILY);
-                map.putString(FONT_FAMILY, fontFamily);
-                fontFamilySet = true;
-            }
-
-            if (!fontWeightSet && font.hasKey(FONT_WEIGHT)) {
-                String fontWeight = font.getString(FONT_WEIGHT);
-                map.putString(FONT_WEIGHT, fontWeight);
-                fontWeightSet = true;
-            }
-
-            if (!fontStyleSet && font.hasKey(FONT_STYLE)) {
-                String fontStyle = font.getString(FONT_STYLE);
-                map.putString(FONT_STYLE, fontStyle);
-                fontStyleSet = true;
-            }
-
-            if (!kerningSet && font.hasKey(KERNING)) {
-                String kerningString = font.getString(KERNING);
-                float kerning = Float.valueOf(kerningString);
-                map.putDouble(KERNING, kerning);
-                kerningSet = true;
-            }
-
-            if (letterSpacingSet && fontFamilySet && fontWeightSet && fontStyleSet && kerningSet) {
-                break;
-            }
-        }
-
-        return map;
     }
 }
