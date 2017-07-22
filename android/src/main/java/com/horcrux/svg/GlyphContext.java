@@ -305,6 +305,7 @@ class GlyphContext {
 
             if (mFontContext.get(index).hasKey(FONT_SIZE)) {
                 String string = font.getString(FONT_SIZE);
+                // https://www.w3.org/TR/SVG11/text.html#FontSizeProperty
                 return PropHelper.fromRelativeToFloat(string, mHeight, 0, 1, DEFAULT_FONT_SIZE);
             }
         }
@@ -316,6 +317,28 @@ class GlyphContext {
         return DEFAULT_FONT_SIZE;
     }
 
+    /**
+     * Get font size from context.
+     *
+     * ‘font-size’ : <absolute-size> | <relative-size> | <length> | <percentage> | inherit
+     *
+     * This property refers to the size of the font from baseline to
+     * baseline when multiple  lines of text are set solid in a multiline
+     * layout environment.
+     *
+     * For SVG, if a <length> is provided without a unit identifier
+     * (e.g., an unqualified number such as 128), the SVG user agent
+     * processes the <length> as a height value in the current user
+     * coordinate system.
+     *
+     * If a <length> is provided with one of the unit identifiers
+     * (e.g., 12pt or 10%), then the SVG user agent converts the
+     * <length> into a corresponding value in the current user
+     * coordinate system by applying the rules described in Units.
+     *
+     * Except for any additional information provided in this specification,
+     * the normative definition of the property is in CSS2 ([CSS2], section 15.2.4).
+     * */
     float getFontSize() {
         if (mFontSize == -1) {
             mFontSize = getActualFontSize();
