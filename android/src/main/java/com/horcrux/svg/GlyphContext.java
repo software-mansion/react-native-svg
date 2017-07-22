@@ -132,6 +132,13 @@ class GlyphContext {
             this.reset();
         }
 
+        mFontContext.add(font);
+        mNodes.add(node);
+        mContextLength++;
+        top++;
+
+        fontSize = getFontSize();
+
         if (x != null) {
             mXsIndex++;
             mXIndex = -1;
@@ -172,13 +179,7 @@ class GlyphContext {
             mdYsContext.add(mdYs);
         }
 
-        mFontContext.add(font);
-        mNodes.add(node);
-        mContextLength++;
         pushIndices();
-        top++;
-
-        fontSize = getFontSize();
     }
 
     private void pushIndices() {
