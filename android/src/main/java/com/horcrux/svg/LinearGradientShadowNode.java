@@ -37,7 +37,7 @@ class LinearGradientShadowNode extends DefinitionShadowNode {
         0, 1, 0,
         0, 0, 1
     };
-    private Matrix mMatrix = new Matrix();
+    private Matrix mMatrix = null;
 
     @ReactProp(name = "x1")
     public void setX1(String x1) {
@@ -87,6 +87,9 @@ class LinearGradientShadowNode extends DefinitionShadowNode {
         if (matrixArray != null) {
             int matrixSize = PropHelper.toMatrixData(matrixArray, sRawMatrix, mScale);
             if (matrixSize == 6) {
+                if (mMatrix == null) {
+                    mMatrix = new Matrix();
+                }
                 mMatrix.setValues(sRawMatrix);
             } else if (matrixSize != -1) {
                 FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");

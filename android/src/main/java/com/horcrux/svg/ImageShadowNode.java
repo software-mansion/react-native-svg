@@ -60,7 +60,7 @@ class ImageShadowNode extends RenderableShadowNode {
         0, 1, 0,
         0, 0, 1
     };
-    private Matrix mMatrix = new Matrix();
+    private Matrix mMatrix = null;
 
     @ReactProp(name = "x")
     public void setX(String x) {
@@ -123,6 +123,9 @@ class ImageShadowNode extends RenderableShadowNode {
         if (matrixArray != null) {
             int matrixSize = PropHelper.toMatrixData(matrixArray, sRawMatrix, mScale);
             if (matrixSize == 6) {
+                if (mMatrix == null) {
+                    mMatrix = new Matrix();
+                }
                 mMatrix.setValues(sRawMatrix);
             } else if (matrixSize != -1) {
                 FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");
