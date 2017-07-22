@@ -299,28 +299,43 @@ class GlyphContext {
         }
     }
 
+    // https://www.w3.org/TR/SVG11/text.html#FontSizeProperty
     private float getActualFontSize() {
+        // TODO Should handle an ancestor hierarchy of relative fontSize until default in the root
+        float fontSizeFromParentContext = mTop > -1 ?
+            mNodes.get(0).getFontSizeFromParentContext() : DEFAULT_FONT_SIZE;
+
+        // TODO consider relative fontSizes in this glyph context stack as well
+        // TODO Should parhaps calculate relative size on pushContext
         for (int index = mTop; index >= 0; index--) {
             ReadableMap font = mFontContext.get(index);
 
             if (mFontContext.get(index).hasKey(FONT_SIZE)) {
                 String string = font.getString(FONT_SIZE);
-                // https://www.w3.org/TR/SVG11/text.html#FontSizeProperty
-                return PropHelper.fromRelativeToFloat(string, mHeight, 0, 1, DEFAULT_FONT_SIZE);
+                return PropHelper.fromRelativeToFloat(
+                    string,
+                    fontSizeFromParentContext,
+                    0,
+                    1,
+                    fontSizeFromParentContext
+                );
             }
         }
 
-        if (mTop > -1) {
-            return mNodes.get(0).getFontSizeFromParentContext();
-        }
-
-        return DEFAULT_FONT_SIZE;
+        return fontSizeFromParentContext;
     }
 
     /**
      * Get font size from context.
      *
-     * ‘font-size’ : <absolute-size> | <relative-size> | <length> | <percentage> | inherit
+     * ‘font-size’
+     *   Value:       <absolute-size> | <relative-size> | <length> | <percentage> | inherit
+     *   Initial:     medium
+     *   Applies to:  text content elements
+     *   Inherited:   yes, the computed value is inherited
+     *   Percentages: refer to parent element's font size TODO
+     *   Media:       visual
+     *   Animatable:  yes
      *
      * This property refers to the size of the font from baseline to
      * baseline when multiple  lines of text are set solid in a multiline
