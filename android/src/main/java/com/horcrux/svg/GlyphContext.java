@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 
 class GlyphContext {
     static final float DEFAULT_FONT_SIZE = 12f;
+    private static final float DEFAULT_KERNING = 0f;
     private static final float DEFAULT_LETTER_SPACING = 0f;
 
     // Unique input attribute lists (only added if node sets a value)
@@ -201,10 +202,6 @@ class GlyphContext {
         int dx = mDeltaXsIndex;
         int dy = mDeltaYsIndex;
 
-        if (mContextLength == 0) {
-            reset();
-        }
-
         mXPositionsIndex = mXPositionsIndices.get(mContextLength);
         mYPositionsIndex = mYPositionsIndices.get(mContextLength);
         mRotationsIndex = mRotationsIndices.get(mContextLength);
@@ -348,6 +345,7 @@ class GlyphContext {
 
         map.putDouble("letterSpacing", DEFAULT_LETTER_SPACING);
         map.putBoolean("isKerningValueSet", false);
+        map.putDouble("kerning", DEFAULT_KERNING);
         map.putDouble("fontSize", fontSize);
 
         boolean letterSpacingSet = false;
