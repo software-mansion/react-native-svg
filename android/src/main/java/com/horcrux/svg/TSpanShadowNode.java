@@ -16,7 +16,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
-import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 
@@ -80,12 +79,12 @@ class TSpanShadowNode extends TextShadowNode {
         setupTextPath();
 
         pushGlyphContext();
-        Path path = mCache = getLinePath(mContent, paint);
+        mCache = getLinePath(mContent, paint);
         popGlyphContext();
 
-        path.computeBounds(new RectF(), true);
+        mCache.computeBounds(new RectF(), true);
 
-        return path;
+        return mCache;
     }
 
     private float getTextAnchorShift(float width) {
@@ -134,13 +133,16 @@ class TSpanShadowNode extends TextShadowNode {
 
         offset += getTextAnchorShift(textMeasure);
 
+        float x;
+        float y;
+        float r;
+        float dx;
+        float dy;
+
         Path glyph;
         float width;
-        PointF point;
-        PointF delta;
         Matrix matrix;
         String current;
-        float rotation;
         String previous = "";
         float previousWidth = 0;
         char[] chars = line.toCharArray();
@@ -160,16 +162,18 @@ class TSpanShadowNode extends TextShadowNode {
                 previous = current;
             }
 
-            point = gc.nextPoint(width + kerning);
-            rotation = gc.nextRotation();
-            delta = gc.nextDelta();
+            x = gc.nextX(width + kerning);
+            y = gc.nextY();
+            r = gc.nextRotation();
+            dx = gc.nextDeltaX();
+            dy = gc.nextDeltaY();
             matrix = new Matrix();
 
-            float x = offset + point.x + delta.x - width;
+            float start = offset + x + dx - width;
 
             if (textPath != null) {
                 float halfway = width / 2;
-                float midpoint = x + halfway;
+                float midpoint = start + halfway;
 
                 if (midpoint > distance) {
                     break;
@@ -180,15 +184,14 @@ class TSpanShadowNode extends TextShadowNode {
                 assert pm != null;
                 pm.getMatrix(midpoint, matrix, POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG);
 
-                matrix.preTranslate(-halfway, delta.y);
+                matrix.preTranslate(-halfway, dy);
                 matrix.preScale(renderMethodScaling, 1);
-                matrix.postTranslate(0, point.y);
+                matrix.postTranslate(0, y);
             } else {
-                float y = point.y + delta.y;
-                matrix.setTranslate(x, y);
+                matrix.setTranslate(start, y + dy);
             }
 
-            matrix.preRotate(rotation);
+            matrix.preRotate(r);
             glyph.transform(matrix);
             path.addPath(glyph);
         }

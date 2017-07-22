@@ -9,8 +9,6 @@
 
 package com.horcrux.svg;
 
-import android.graphics.PointF;
-
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -18,7 +16,6 @@ import com.facebook.react.bridge.WritableMap;
 
 import java.util.ArrayList;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 class GlyphContext {
@@ -51,10 +48,15 @@ class GlyphContext {
     private final ArrayList<ReadableMap> mFontContext = new ArrayList<>();
     private final ArrayList<GroupShadowNode> mNodes = new ArrayList<>();
 
-    // Current accumulated values
-    private @Nonnull final PointF mCurrentPosition = new PointF();
-    private @Nonnull final PointF mCurrentDelta = new PointF();
+    // Cached per push context
     private double fontSize = DEFAULT_FONT_SIZE;
+
+    // Current accumulated values
+    private float mx;
+    private float my;
+    private float mr;
+    private float mdx;
+    private float mdy;
 
     // Current attribute list
     private float[] mRotations = new float[]{0};
@@ -77,6 +79,7 @@ class GlyphContext {
     private int mDeltaXIndex = -1;
     private int mDeltaYIndex = -1;
 
+    // Stack length and last index
     private int mContextLength;
     private int top = -1;
 
@@ -180,7 +183,7 @@ class GlyphContext {
     private void reset() {
         mXPositionsIndex = mYPositionsIndex = mRotationsIndex = mDeltaXsIndex = mDeltaYsIndex = 0;
         mXPositionIndex = mYPositionIndex = mRotationIndex = mDeltaXIndex = mDeltaYIndex = -1;
-        mCurrentPosition.x = mCurrentPosition.y = mCurrentDelta.x = mCurrentDelta.y = 0;
+        mx = my = mr = mdx = mdy = 0;
     }
 
     void popContext() {
@@ -235,17 +238,40 @@ class GlyphContext {
         }
     }
 
-    PointF nextPoint(float glyphWidth) {
-        nextPositionX();
-        nextPositionY();
-        mCurrentPosition.x += glyphWidth;
-        return mCurrentPosition;
+    float nextX(float glyphWidth) {
+        for (int index = mXPositionsIndex; index >= 0; index--) {
+            int positionIndex = mXPositionIndices.get(index);
+            mXPositionIndices.set(index, positionIndex + 1);
+        }
+
+        int nextIndex = mXPositionIndex + 1;
+        if (nextIndex < mXs.length) {
+            mdx = 0;
+            mXPositionIndex = nextIndex;
+            String val = mXs[nextIndex];
+            mx = PropHelper.fromRelativeToFloat(val, mWidth, 0, mScale, fontSize);
+        }
+
+        mx += glyphWidth;
+
+        return mx;
     }
 
-    PointF nextDelta() {
-        nextDeltaX();
-        nextDeltaY();
-        return mCurrentDelta;
+    float nextY() {
+        for (int index = mYPositionsIndex; index >= 0; index--) {
+            int positionIndex = mYPositionIndices.get(index);
+            mYPositionIndices.set(index, positionIndex + 1);
+        }
+
+        int nextIndex = mYPositionIndex + 1;
+        if (nextIndex < mYs.length) {
+            mdy = 0;
+            mYPositionIndex = nextIndex;
+            String val = mYs[nextIndex];
+            my = PropHelper.fromRelativeToFloat(val, mHeight, 0, mScale, fontSize);
+        }
+
+        return my;
     }
 
     float nextRotation() {
@@ -254,11 +280,16 @@ class GlyphContext {
             mRotationIndices.set(index, rotationIndex + 1);
         }
 
-        mRotationIndex = Math.min(mRotationIndex + 1, mRotations.length - 1);
-        return mRotations[mRotationIndex];
+        int nextIndex = mRotationIndex + 1;
+        if (nextIndex < mRotations.length) {
+            mRotationIndex = Math.min(mRotationIndex + 1, mRotations.length - 1);
+            mr = mRotations[mRotationIndex];
+        }
+
+        return mr;
     }
 
-    private void nextDeltaX() {
+    float nextDeltaX() {
         for (int index = mDeltaXsIndex; index >= 0; index--) {
             int deltaIndex = mDeltaXIndices.get(index);
             mDeltaXIndices.set(index, deltaIndex + 1);
@@ -268,11 +299,13 @@ class GlyphContext {
         if (nextIndex < mDeltaXs.length) {
             mDeltaXIndex = nextIndex;
             float val = mDeltaXs[nextIndex];
-            mCurrentDelta.x += val * mScale;
+            mdx += val * mScale;
         }
+
+        return mdx;
     }
 
-    private void nextDeltaY() {
+    float nextDeltaY() {
         for (int index = mDeltaYsIndex; index >= 0; index--) {
             int deltaIndex = mDeltaYIndices.get(index);
             mDeltaYIndices.set(index, deltaIndex + 1);
@@ -282,38 +315,10 @@ class GlyphContext {
         if (nextIndex < mDeltaYs.length) {
             mDeltaYIndex = nextIndex;
             float val = mDeltaYs[nextIndex];
-            mCurrentDelta.y += val * mScale;
-        }
-    }
-
-    private void nextPositionX() {
-        for (int index = mXPositionsIndex; index >= 0; index--) {
-            int positionIndex = mXPositionIndices.get(index);
-            mXPositionIndices.set(index, positionIndex + 1);
+            mdy += val * mScale;
         }
 
-        int nextIndex = mXPositionIndex + 1;
-        if (nextIndex < mXs.length) {
-            mCurrentDelta.x = 0;
-            mXPositionIndex = nextIndex;
-            String val = mXs[nextIndex];
-            mCurrentPosition.x = PropHelper.fromRelativeToFloat(val, mWidth, 0, mScale, fontSize);
-        }
-    }
-
-    private void nextPositionY() {
-        for (int index = mYPositionsIndex; index >= 0; index--) {
-            int positionIndex = mYPositionIndices.get(index);
-            mYPositionIndices.set(index, positionIndex + 1);
-        }
-
-        int nextIndex = mYPositionIndex + 1;
-        if (nextIndex < mYs.length) {
-            mCurrentDelta.y = 0;
-            mYPositionIndex = nextIndex;
-            String val = mYs[nextIndex];
-            mCurrentPosition.y = PropHelper.fromRelativeToFloat(val, mHeight, 0, mScale, fontSize);
-        }
+        return mdy;
     }
 
     float getWidth() {
