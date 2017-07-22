@@ -23,7 +23,6 @@ import javax.annotation.Nullable;
 
 class GlyphContext {
     static final float DEFAULT_FONT_SIZE = 12f;
-    private static final float DEFAULT_KERNING = 0f;
     private static final float DEFAULT_LETTER_SPACING = 0f;
 
     // Unique input attribute lists (only added if node sets a value)
@@ -345,55 +344,56 @@ class GlyphContext {
     }
 
     ReadableMap getFont() {
-        float letterSpacing = DEFAULT_LETTER_SPACING;
-        float kerning = DEFAULT_KERNING;
+        WritableMap map = Arguments.createMap();
+
+        map.putDouble("letterSpacing", DEFAULT_LETTER_SPACING);
+        map.putBoolean("isKerningValueSet", false);
+        map.putDouble("fontSize", fontSize);
 
         boolean letterSpacingSet = false;
+        boolean fontFamilySet = false;
+        boolean fontWeightSet = false;
+        boolean fontStyleSet = false;
         boolean kerningSet = false;
-
-        String fontFamily = null;
-        String fontWeight = null;
-        String fontStyle = null;
 
         for (int index = top; index >= 0; index--) {
             ReadableMap font = mFontContext.get(index);
 
-            if (fontFamily == null && font.hasKey("fontFamily")) {
-                fontFamily = font.getString("fontFamily");
+            if (!fontFamilySet && font.hasKey("fontFamily")) {
+                String fontFamily = font.getString("fontFamily");
+                map.putString("fontFamily", fontFamily);
+                fontFamilySet = true;
             }
 
             if (!kerningSet && font.hasKey("kerning")) {
-                kerning = Float.valueOf(font.getString("kerning"));
+                float kerning = Float.valueOf(font.getString("kerning"));
+                map.putBoolean("isKerningValueSet", true);
+                map.putDouble("kerning", kerning);
                 kerningSet = true;
             }
 
             if (!letterSpacingSet && font.hasKey("letterSpacing")) {
-                letterSpacing = Float.valueOf(font.getString("letterSpacing"));
+                float letterSpacing = Float.valueOf(font.getString("letterSpacing"));
+                map.putDouble("letterSpacing", letterSpacing);
                 letterSpacingSet = true;
             }
 
-            if (fontWeight == null && font.hasKey("fontWeight")) {
-                fontWeight = font.getString("fontWeight");
+            if (!fontWeightSet && font.hasKey("fontWeight")) {
+                String fontWeight = font.getString("fontWeight");
+                map.putString("fontWeight", fontWeight);
+                fontWeightSet = true;
             }
 
-            if (fontStyle == null && font.hasKey("fontStyle")) {
-                fontStyle = font.getString("fontStyle");
+            if (!fontStyleSet && font.hasKey("fontStyle")) {
+                String fontStyle = font.getString("fontStyle");
+                map.putString("fontStyle", fontStyle);
+                fontStyleSet = true;
             }
 
-            if (fontFamily != null && kerningSet && letterSpacingSet && fontWeight != null && fontStyle != null) {
+            if (fontFamilySet && kerningSet && letterSpacingSet && fontWeightSet && fontStyleSet) {
                 break;
             }
         }
-
-        WritableMap map = Arguments.createMap();
-
-        map.putBoolean("isKerningValueSet", kerningSet);
-        map.putDouble("letterSpacing", letterSpacing);
-        map.putString("fontFamily", fontFamily);
-        map.putString("fontWeight", fontWeight);
-        map.putString("fontStyle", fontStyle);
-        map.putDouble("fontSize", fontSize);
-        map.putDouble("kerning", kerning);
 
         return map;
     }
