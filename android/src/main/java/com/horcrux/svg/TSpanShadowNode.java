@@ -186,11 +186,12 @@ class TSpanShadowNode extends TextShadowNode {
             dy = gc.nextDeltaY();
             matrix = new Matrix();
 
-            float start = offset + x + dx - width;
+            float xSum = offset + x + dx - width;
+            float ySum = y + dy;
 
             if (textPath != null) {
                 float halfway = width / 2;
-                float midpoint = start + halfway;
+                float midpoint = xSum + halfway;
 
                 if (midpoint > distance) {
                     break;
@@ -201,11 +202,11 @@ class TSpanShadowNode extends TextShadowNode {
                 assert pm != null;
                 pm.getMatrix(midpoint, matrix, POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG);
 
-                matrix.preTranslate(-halfway, dy);
-                matrix.preScale(renderMethodScaling, 1);
-                matrix.postTranslate(0, y);
+                matrix.preTranslate(-halfway, 0);
+                matrix.preScale(renderMethodScaling, renderMethodScaling);
+                matrix.postTranslate(0, ySum);
             } else {
-                matrix.setTranslate(start, y + dy);
+                matrix.setTranslate(xSum, ySum);
             }
 
             matrix.preRotate(r);
