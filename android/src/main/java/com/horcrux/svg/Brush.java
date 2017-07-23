@@ -107,16 +107,16 @@ class Brush {
         parseGradientStops(mColors, stopsCount, stops, stopsColors, opacity);
 
         if (mType == BrushType.LINEAR_GRADIENT) {
-            float x1 = PropHelper.fromRelativeToFloat(mPoints.getString(0), width, offsetX, scale, paint.getTextSize());
-            float y1 = PropHelper.fromRelativeToFloat(mPoints.getString(1), height, offsetY, scale, paint.getTextSize());
-            float x2 = PropHelper.fromRelativeToFloat(mPoints.getString(2), width, offsetX, scale, paint.getTextSize());
-            float y2 = PropHelper.fromRelativeToFloat(mPoints.getString(3), height, offsetY, scale, paint.getTextSize());
+            double x1 = PropHelper.fromRelative(mPoints.getString(0), width, offsetX, scale, paint.getTextSize());
+            double y1 = PropHelper.fromRelative(mPoints.getString(1), height, offsetY, scale, paint.getTextSize());
+            double x2 = PropHelper.fromRelative(mPoints.getString(2), width, offsetX, scale, paint.getTextSize());
+            double y2 = PropHelper.fromRelative(mPoints.getString(3), height, offsetY, scale, paint.getTextSize());
 
             Shader linearGradient = new LinearGradient(
-                x1,
-                y1,
-                x2,
-                y2,
+                (float) x1,
+                (float) y1,
+                (float) x2,
+                (float) y2,
                 stopsColors,
                 stops,
                 Shader.TileMode.CLAMP);
@@ -129,24 +129,24 @@ class Brush {
 
             paint.setShader(linearGradient);
         } else if (mType == BrushType.RADIAL_GRADIENT) {
-            float rx = PropHelper.fromRelativeToFloat(mPoints.getString(2), width, 0f, scale, paint.getTextSize());
-            float ry = PropHelper.fromRelativeToFloat(mPoints.getString(3), height, 0f, scale, paint.getTextSize());
-            float cx = PropHelper.fromRelativeToFloat(mPoints.getString(4), width, offsetX, scale, paint.getTextSize());
-            float cy = PropHelper.fromRelativeToFloat(mPoints.getString(5), height, offsetY, scale, paint.getTextSize()) / (ry / rx);
+            double rx = PropHelper.fromRelative(mPoints.getString(2), width, 0f, scale, paint.getTextSize());
+            double ry = PropHelper.fromRelative(mPoints.getString(3), height, 0f, scale, paint.getTextSize());
+            double cx = PropHelper.fromRelative(mPoints.getString(4), width, offsetX, scale, paint.getTextSize());
+            double cy = PropHelper.fromRelative(mPoints.getString(5), height, offsetY, scale, paint.getTextSize()) / (ry / rx);
             // TODO: support focus point.
-            //float fx = PropHelper.fromRelativeToFloat(mPoints.getString(0), width, offsetX, scale);
-            //float fy = PropHelper.fromRelativeToFloat(mPoints.getString(1), height, offsetY, scale) / (ry / rx);
+            //double fx = PropHelper.fromRelative(mPoints.getString(0), width, offsetX, scale);
+            //double fy = PropHelper.fromRelative(mPoints.getString(1), height, offsetY, scale) / (ry / rx);
             Shader radialGradient = new RadialGradient(
-                    cx,
-                    cy,
-                    rx,
+                    (float) cx,
+                    (float) cy,
+                    (float) rx,
                     stopsColors,
                     stops,
                     Shader.TileMode.CLAMP
             );
 
             Matrix radialMatrix = new Matrix();
-            radialMatrix.preScale(1f, ry / rx);
+            radialMatrix.preScale(1f, (float) (ry / rx));
 
             if (mMatrix != null) {
                 radialMatrix.preConcat(mMatrix);

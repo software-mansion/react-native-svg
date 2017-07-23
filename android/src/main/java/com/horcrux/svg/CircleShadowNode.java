@@ -46,17 +46,17 @@ class CircleShadowNode extends RenderableShadowNode {
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
 
-        float cx = relativeOnWidth(mCx);
-        float cy = relativeOnHeight(mCy);
+        double cx = relativeOnWidth(mCx);
+        double cy = relativeOnHeight(mCy);
 
-        float r;
+        double r;
         if (PropHelper.isPercentage(mR)) {
             r = relativeOnOther(mR);
         } else {
-            r = Float.parseFloat(mR) * mScale;
+            r = Double.parseDouble(mR) * mScale;
         }
 
-        path.addCircle(cx, cy, r, Path.Direction.CW);
+        path.addCircle((float) cx, (float) cy, (float) r, Path.Direction.CW);
         return path;
     }
 }

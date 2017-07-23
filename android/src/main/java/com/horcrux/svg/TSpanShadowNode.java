@@ -40,8 +40,8 @@ class TSpanShadowNode extends TextShadowNode {
     private static final String OTF = ".otf";
     private static final String TTF = ".ttf";
 
-    private static final float DEFAULT_KERNING = 0f;
-    private static final float DEFAULT_LETTER_SPACING = 0f;
+    private static final double DEFAULT_KERNING = 0d;
+    private static final double DEFAULT_LETTER_SPACING = 0d;
 
     private static final String PROP_KERNING = "kerning";
     private static final String PROP_FONT_SIZE = "fontSize";
@@ -96,8 +96,8 @@ class TSpanShadowNode extends TextShadowNode {
         return mCache;
     }
 
-    private float getTextAnchorShift(float width) {
-        float x = 0;
+    private double getTextAnchorShift(double width) {
+        double x = 0;
 
         switch (getComputedTextAnchor()) {
             case TEXT_ANCHOR_MIDDLE:
@@ -123,18 +123,18 @@ class TSpanShadowNode extends TextShadowNode {
         ReadableMap font = gc.getFont();
         applyTextPropertiesToPaint(paint, font);
 
-        float offset = 0;
-        float distance = 0;
-        float renderMethodScaling = 1;
-        float textMeasure = paint.measureText(line);
+        double offset = 0;
+        double distance = 0;
+        double renderMethodScaling = 1;
+        double textMeasure = paint.measureText(line);
 
         PathMeasure pm = null;
         if (textPath != null) {
             pm = new PathMeasure(textPath.getPath(), false);
             distance = pm.getLength();
-            float size = gc.getFontSize();
+            double size = gc.getFontSize();
             String startOffset = textPath.getStartOffset();
-            offset = PropHelper.fromRelativeToFloat(startOffset, distance, 0, mScale, size);
+            offset = PropHelper.fromRelative(startOffset, distance, 0, mScale, size);
             // String spacing = textPath.getSpacing(); // spacing = "auto | exact"
             String method = textPath.getMethod(); // method = "align | stretch"
             if (STRETCH.equals(method)) {
@@ -144,24 +144,24 @@ class TSpanShadowNode extends TextShadowNode {
 
         offset += getTextAnchorShift(textMeasure);
 
-        float x;
-        float y;
-        float r;
-        float dx;
-        float dy;
+        double x;
+        double y;
+        double r;
+        double dx;
+        double dy;
 
         Path glyph;
-        float width;
+        double width;
         Matrix matrix;
         String current;
         String previous = "";
-        float previousWidth = 0;
+        double previousWidth = 0;
         char[] chars = line.toCharArray();
 
         boolean autoKerning = true;
-        float kerning = DEFAULT_KERNING;
+        double kerning = DEFAULT_KERNING;
         if (font.hasKey(PROP_KERNING)) {
-            kerning = Float.valueOf(font.getString(PROP_KERNING)) * mScale;
+            kerning = Double.valueOf(font.getString(PROP_KERNING)) * mScale;
             autoKerning = false;
         }
 
@@ -172,7 +172,7 @@ class TSpanShadowNode extends TextShadowNode {
             width = paint.measureText(current) * renderMethodScaling;
 
             if (autoKerning) {
-                float both = paint.measureText(previous + current) * renderMethodScaling;
+                double both = paint.measureText(previous + current) * renderMethodScaling;
                 kerning = both - previousWidth - width;
                 previousWidth = width;
                 previous = current;
@@ -186,11 +186,11 @@ class TSpanShadowNode extends TextShadowNode {
 
             matrix = new Matrix();
 
-            float xSum = offset + x + dx - width;
+            double xSum = offset + x + dx - width;
 
             if (textPath != null) {
-                float halfway = width / 2;
-                float midpoint = xSum + halfway;
+                double halfway = width / 2;
+                double midpoint = xSum + halfway;
 
                 if (midpoint > distance) {
                     break;
@@ -199,16 +199,16 @@ class TSpanShadowNode extends TextShadowNode {
                 }
 
                 assert pm != null;
-                pm.getMatrix(midpoint, matrix, POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG);
+                pm.getMatrix((float) midpoint, matrix, POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG);
 
-                matrix.preTranslate(-halfway, dy);
-                matrix.preScale(renderMethodScaling, renderMethodScaling);
-                matrix.postTranslate(0, y);
+                matrix.preTranslate((float) -halfway, (float) dy);
+                matrix.preScale((float) renderMethodScaling, (float) renderMethodScaling);
+                matrix.postTranslate(0, (float) y);
             } else {
-                matrix.setTranslate(xSum, y + dy);
+                matrix.setTranslate((float) xSum, (float) (y + dy));
             }
 
-            matrix.preRotate(r);
+            matrix.preRotate((float) r);
             glyph.transform(matrix);
             path.addPath(glyph);
         }
@@ -219,10 +219,10 @@ class TSpanShadowNode extends TextShadowNode {
     private void applyTextPropertiesToPaint(Paint paint, ReadableMap font) {
         AssetManager assetManager = getThemedContext().getResources().getAssets();
 
-        float fontSize = (float) font.getDouble(PROP_FONT_SIZE) * mScale;
+        double fontSize = font.getDouble(PROP_FONT_SIZE) * mScale;
 
-        float letterSpacing = font.hasKey(PROP_LETTER_SPACING) ?
-            Float.valueOf(font.getString(PROP_LETTER_SPACING)) * mScale
+        double letterSpacing = font.hasKey(PROP_LETTER_SPACING) ?
+            Double.valueOf(font.getString(PROP_LETTER_SPACING)) * mScale
             : DEFAULT_LETTER_SPACING;
 
         boolean isBold = font.hasKey(PROP_FONT_WEIGHT) &&
@@ -266,12 +266,12 @@ class TSpanShadowNode extends TextShadowNode {
 
         // NB: if the font family is null / unsupported, the default one will be used
         paint.setTypeface(typeface);
-        paint.setTextSize(fontSize);
+        paint.setTextSize((float) fontSize);
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setUnderlineText(underlineText);
         paint.setStrikeThruText(strikeThruText);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            paint.setLetterSpacing(letterSpacing / fontSize);
+            paint.setLetterSpacing((float) (letterSpacing / fontSize));
         }
     }
 

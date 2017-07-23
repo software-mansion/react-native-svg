@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 
 // https://www.w3.org/TR/SVG/text.html#TSpanElement
 class GlyphContext {
-    static final float DEFAULT_FONT_SIZE = 12f;
+    static final double DEFAULT_FONT_SIZE = 12d;
 
     private static final String KERNING = "kerning";
     private static final String FONT_SIZE = "fontSize";
@@ -44,7 +44,7 @@ class GlyphContext {
     private final ArrayList<String[]> mYsContext = new ArrayList<>();
     private final ArrayList<String[]> mDXsContext = new ArrayList<>();
     private final ArrayList<String[]> mDYsContext = new ArrayList<>();
-    private final ArrayList<float[]> mRsContext = new ArrayList<>();
+    private final ArrayList<double[]> mRsContext = new ArrayList<>();
 
     // Unique index into attribute list (one per unique list)
     private final ArrayList<Integer> mXIndices = new ArrayList<>();
@@ -61,18 +61,18 @@ class GlyphContext {
     private final ArrayList<Integer> mRsIndices = new ArrayList<>();
 
     // Calculated on push context, percentage and em length depends on parent font size
-    private float mFontSize = DEFAULT_FONT_SIZE;
+    private double mFontSize = DEFAULT_FONT_SIZE;
     private ReadableMap topFont = DEFAULT_MAP;
 
     // Current accumulated values
     // https://www.w3.org/TR/SVG/types.html#DataTypeCoordinate
     // <coordinate> syntax is the same as that for <length>
-    private float mX;
-    private float mY;
+    private double mX;
+    private double mY;
 
     // https://www.w3.org/TR/SVG/types.html#Length
-    private float mDX;
-    private float mDY;
+    private double mDX;
+    private double mDY;
 
     // Current <list-of-coordinates> SVGLengthList
     // https://www.w3.org/TR/SVG/types.html#InterfaceSVGLengthList
@@ -97,7 +97,7 @@ class GlyphContext {
     // https://www.w3.org/TR/SVG/types.html#DataTypeNumbers
 
     // https://www.w3.org/TR/SVG/text.html#TSpanElementRotateAttribute
-    private float[] mRs = new float[]{0};
+    private double[] mRs = new double[]{0};
 
     // Current attribute list index
     private int mXsIndex;
@@ -210,11 +210,11 @@ class GlyphContext {
 
         put(KERNING, map, font, parent);
 
-        float parentFontSize = (float) parent.getDouble(FONT_SIZE);
+        double parentFontSize = parent.getDouble(FONT_SIZE);
 
         if (font.hasKey(FONT_SIZE)) {
             String string = font.getString(FONT_SIZE);
-            float value = PropHelper.fromRelativeToFloat(
+            double value = PropHelper.fromRelative(
                 string,
                 parentFontSize,
                 0,
@@ -244,14 +244,14 @@ class GlyphContext {
         return strings;
     }
 
-    private float[] getFloatArrayFromReadableArray(ReadableArray readableArray) {
+    private double[] getDoubleArrayFromReadableArray(ReadableArray readableArray) {
         int size = readableArray.size();
-        float[] floats = new float[size];
+        double[] doubles = new double[size];
         for (int i = 0; i < size; i++) {
             String string = readableArray.getString(i);
-            floats[i] = Float.valueOf(string);
+            doubles[i] = Double.valueOf(string);
         }
-        return floats;
+        return doubles;
     }
 
     void pushContext(
@@ -306,7 +306,7 @@ class GlyphContext {
             mRsIndex++;
             mRIndex = -1;
             mRIndices.add(mRIndex);
-            mRs = getFloatArrayFromReadableArray(rotate);
+            mRs = getDoubleArrayFromReadableArray(rotate);
             mRsContext.add(mRs);
         }
 
@@ -401,11 +401,11 @@ class GlyphContext {
      * Except for any additional information provided in this specification,
      * the normative definition of the property is in CSS2 ([CSS2], section 15.2.4).
      */
-    float getFontSize() {
+    double getFontSize() {
         return mFontSize;
     }
 
-    float nextX(float glyphWidth) {
+    double nextX(double glyphWidth) {
         incrementIndices(mXIndices, mXsIndex);
 
         int nextIndex = mXIndex + 1;
@@ -413,7 +413,7 @@ class GlyphContext {
             mDX = 0;
             mXIndex = nextIndex;
             String string = mXs[nextIndex];
-            mX = PropHelper.fromRelativeToFloat(string, mWidth, 0, mScale, mFontSize);
+            mX = PropHelper.fromRelative(string, mWidth, 0, mScale, mFontSize);
         }
 
         mX += glyphWidth;
@@ -421,7 +421,7 @@ class GlyphContext {
         return mX;
     }
 
-    float nextY() {
+    double nextY() {
         incrementIndices(mYIndices, mYsIndex);
 
         int nextIndex = mYIndex + 1;
@@ -429,41 +429,41 @@ class GlyphContext {
             mDY = 0;
             mYIndex = nextIndex;
             String string = mYs[nextIndex];
-            mY = PropHelper.fromRelativeToFloat(string, mHeight, 0, mScale, mFontSize);
+            mY = PropHelper.fromRelative(string, mHeight, 0, mScale, mFontSize);
         }
 
         return mY;
     }
 
-    float nextDeltaX() {
+    double nextDeltaX() {
         incrementIndices(mDXIndices, mDXsIndex);
 
         int nextIndex = mDXIndex + 1;
         if (nextIndex < mDXs.length) {
             mDXIndex = nextIndex;
             String string = mDXs[nextIndex];
-            float val = PropHelper.fromRelativeToFloat(string, mWidth, 0, 1, mFontSize);
+            double val = PropHelper.fromRelative(string, mWidth, 0, 1, mFontSize);
             mDX += val * mScale;
         }
 
         return mDX;
     }
 
-    float nextDeltaY() {
+    double nextDeltaY() {
         incrementIndices(mDYIndices, mDYsIndex);
 
         int nextIndex = mDYIndex + 1;
         if (nextIndex < mDYs.length) {
             mDYIndex = nextIndex;
             String string = mDYs[nextIndex];
-            float val = PropHelper.fromRelativeToFloat(string, mHeight, 0, 1, mFontSize);
+            double val = PropHelper.fromRelative(string, mHeight, 0, 1, mFontSize);
             mDY += val * mScale;
         }
 
         return mDY;
     }
 
-    float nextRotation() {
+    double nextRotation() {
         incrementIndices(mRIndices, mRsIndex);
 
         mRIndex = Math.min(mRIndex + 1, mRs.length - 1);

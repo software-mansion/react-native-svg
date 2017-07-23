@@ -58,7 +58,7 @@ class UseShadowNode extends RenderableShadowNode {
 
             if (template instanceof SymbolShadowNode) {
                 SymbolShadowNode symbol = (SymbolShadowNode)template;
-                symbol.drawSymbol(canvas, paint, opacity, relativeOnWidth(mWidth), relativeOnHeight(mHeight));
+                symbol.drawSymbol(canvas, paint, opacity, (float) relativeOnWidth(mWidth), (float) relativeOnHeight(mHeight));
             } else {
                 template.draw(canvas, paint, opacity * mOpacity);
             }

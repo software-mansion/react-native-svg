@@ -183,10 +183,10 @@ class ImageShadowNode extends RenderableShadowNode {
 
     @Nonnull
     private Rect getRect() {
-        float x = relativeOnWidth(mX);
-        float y = relativeOnHeight(mY);
-        float w = relativeOnWidth(mW);
-        float h = relativeOnHeight(mH);
+        double x = relativeOnWidth(mX);
+        double y = relativeOnHeight(mY);
+        double w = relativeOnWidth(mW);
+        double h = relativeOnHeight(mH);
 
         return new Rect((int) x, (int) y, (int) (x + w), (int) (y + h));
     }

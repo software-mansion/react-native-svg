@@ -236,7 +236,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
      */
     private boolean setupStrokePaint(Paint paint, float opacity) {
         paint.reset();
-        float strokeWidth = relativeOnOther(mStrokeWidth);
+        double strokeWidth = relativeOnOther(mStrokeWidth);
         if (strokeWidth == 0 || mStroke == null || mStroke.size() == 0) {
             return false;
         }
@@ -246,7 +246,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
         paint.setStrokeCap(mStrokeLinecap);
         paint.setStrokeJoin(mStrokeLinejoin);
         paint.setStrokeMiter(mStrokeMiterlimit * mScale);
-        paint.setStrokeWidth(strokeWidth);
+        paint.setStrokeWidth((float) strokeWidth);
         setupPaint(paint, opacity, mStroke);
 
         if (mStrokeDasharray != null && mStrokeDasharray.length > 0) {

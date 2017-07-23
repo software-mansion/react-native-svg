@@ -82,16 +82,16 @@ class PropHelper {
     static private final Pattern percentageRegExp = Pattern.compile("^(-?\\d+(?:\\.\\d+)?)%$");
 
     /**
-     * Converts length string into float value
+     * Converts length string into px / user units
      * in the current user coordinate system
      *
      * @param length     length string
      * @param relative   relative size for percentages
      * @param offset     offset for all units
-     * @param fontSize   current font size
-     * @return value in the current user coordinate system
+     * @param scale      scaling parameter
+     * @param fontSize   current font size  @return value in the current user coordinate system
      */
-    static float fromRelativeToFloat(String length, float relative, float offset, float scale, float fontSize) {
+    static double fromRelative(String length, double relative, double offset, double scale, double fontSize) {
         /*
             TODO list
 
@@ -120,13 +120,13 @@ class PropHelper {
         if (stringLength == 0) {
             return offset;
         } else if (length.codePointAt(percentIndex) == '%') {
-            return Float.valueOf(length.substring(0, percentIndex)) / 100 * relative + offset;
+            return Double.valueOf(length.substring(0, percentIndex)) / 100 * relative + offset;
         } else {
             int twoLetterUnitIndex = stringLength - 2;
             if (twoLetterUnitIndex > 0) {
                 String lastTwo = length.substring(twoLetterUnitIndex);
                 int end = twoLetterUnitIndex;
-                float unit = 1;
+                double unit = 1;
 
                 switch (lastTwo) {
                     case "px":
@@ -145,7 +145,7 @@ class PropHelper {
                      */
 
                     case "pt":
-                        unit = 1.25f;
+                        unit = 1.25d;
                         break;
 
                     case "pc":
@@ -153,11 +153,11 @@ class PropHelper {
                         break;
 
                     case "mm":
-                        unit = 3.543307f;
+                        unit = 3.543307d;
                         break;
 
                     case "cm":
-                        unit = 35.43307f;
+                        unit = 35.43307d;
                         break;
 
                     case "in":
@@ -168,9 +168,9 @@ class PropHelper {
                         end = stringLength;
                 }
 
-                return Float.valueOf(length.substring(0, end)) * unit * scale + offset;
+                return Double.valueOf(length.substring(0, end)) * unit * scale + offset;
             } else {
-                return Float.valueOf(length) * scale + offset;
+                return Double.valueOf(length) * scale + offset;
             }
         }
     }

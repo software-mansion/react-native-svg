@@ -25,34 +25,34 @@ class ViewBox extends GroupShadowNode {
         // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform
 
         // Let vb-x, vb-y, vb-width, vb-height be the min-x, min-y, width and height values of the viewBox attribute respectively.
-        float vbX = vbRect.left;
-        float vbY = vbRect.top;
-        float vbWidth = vbRect.width();
-        float vbHeight = vbRect.height();
+        double vbX = vbRect.left;
+        double vbY = vbRect.top;
+        double vbWidth = vbRect.width();
+        double vbHeight = vbRect.height();
 
         // Let e-x, e-y, e-width, e-height be the position and size of the element respectively.
-        float eX = eRect.left;
-        float eY = eRect.top;
-        float eWidth = eRect.width();
-        float eHeight = eRect.height();
+        double eX = eRect.left;
+        double eY = eRect.top;
+        double eWidth = eRect.width();
+        double eHeight = eRect.height();
 
 
         // Initialize scale-x to e-width/vb-width.
-        float scaleX = eWidth / vbWidth;
+        double scaleX = eWidth / vbWidth;
 
         // Initialize scale-y to e-height/vb-height.
-        float scaleY = eHeight / vbHeight;
+        double scaleY = eHeight / vbHeight;
 
         // Initialize translate-x to e-x - (vb-x * scale-x).
         // Initialize translate-y to e-y - (vb-y * scale-y).
-        float translateX = eX - (vbX * scaleX);
-        float translateY = eY - (vbY * scaleY);
+        double translateX = eX - (vbX * scaleX);
+        double translateY = eY - (vbY * scaleY);
 
         // If align is 'none'
         if (meetOrSlice == MOS_NONE) {
             // Let scale be set the smaller value of scale-x and scale-y.
             // Assign scale-x and scale-y to scale.
-            float scale = scaleX = scaleY = Math.min(scaleX, scaleY);
+            double scale = scaleX = scaleY = Math.min(scaleX, scaleY);
 
             // If scale is greater than 1
             if (scale > 1) {
@@ -76,7 +76,7 @@ class ViewBox extends GroupShadowNode {
 
             // If align contains 'xMid', add (e-width - vb-width * scale-x) / 2 to translate-x.
             if (align.contains("xMid")) {
-                translateX += (eWidth - vbWidth * scaleX) / 2.0f;
+                translateX += (eWidth - vbWidth * scaleX) / 2.0d;
             }
 
             // If align contains 'xMax', add (e-width - vb-width * scale-x) to translate-x.
@@ -86,7 +86,7 @@ class ViewBox extends GroupShadowNode {
 
             // If align contains 'yMid', add (e-height - vb-height * scale-y) / 2 to translate-y.
             if (align.contains("YMid")) {
-                translateY += (eHeight - vbHeight * scaleY) / 2.0f;
+                translateY += (eHeight - vbHeight * scaleY) / 2.0d;
             }
 
             // If align contains 'yMax', add (e-height - vb-height * scale-y) to translate-y.
@@ -99,8 +99,8 @@ class ViewBox extends GroupShadowNode {
         // The transform applied to content contained by the element is given by
         // translate(translate-x, translate-y) scale(scale-x, scale-y).
         Matrix transform = new Matrix();
-        transform.postTranslate(translateX, translateY);
-        transform.preScale(scaleX, scaleY);
+        transform.postTranslate((float) translateX, (float) translateY);
+        transform.preScale((float) scaleX, (float) scaleY);
         return transform;
     }
 }
