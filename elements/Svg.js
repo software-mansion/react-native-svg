@@ -1,3 +1,4 @@
+//noinspection JSUnresolvedVariable
 import React, {
     Component
 } from 'react';
@@ -12,6 +13,7 @@ import {
 import extractViewBox from '../lib/extract/extractViewBox';
 import {ViewBoxAttributes} from '../lib/attributes';
 
+/** @namespace NativeModules.RNSVGSvgViewManager */
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
 
 // Svg - Root node of all Svg elements
@@ -43,6 +45,7 @@ class Svg extends Component{
         super(...arguments);
         id++;
         this.id = id;
+        //noinspection JSUnusedGlobalSymbols
         this.onDataURLCallbacks = [];
     }
     measureInWindow = (...args) => {
@@ -61,7 +64,7 @@ class Svg extends Component{
         this.root.setNativeProps(...args);
     };
 
-    toDataURL = (callback: Function) => {
+    toDataURL = (callback) => {
         callback && RNSVGSvgViewManager.toDataURL(findNodeHandle(this.root), callback);
     };
 

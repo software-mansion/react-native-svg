@@ -4,7 +4,7 @@ import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shi
 import {TextPathAttributes} from '../lib/attributes';
 import extractText from '../lib/extract/extractText';
 import Shape from './Shape';
-import {pathProps, fontProps, numberProp} from '../lib/props';
+import {pathProps, fontProps} from '../lib/props';
 import extractProps from '../lib/extract/extractProps';
 import TSpan from './TSpan';
 

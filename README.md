@@ -80,6 +80,7 @@ Here's a simple example. To render output like this:
 Use the following code:
 
 ```javascript
+import 'react';
 import Svg,{
     Circle,
     Ellipse,

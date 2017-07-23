@@ -5,6 +5,7 @@ import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shi
 import {ImageAttributes} from '../lib/attributes';
 import {numberProp, touchableProps, responderProps} from '../lib/props';
 import Shape from './Shape';
+//noinspection JSUnresolvedVariable
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import {meetOrSliceTypes, alignEnum} from '../lib/extract/extractViewBox';
 import extractProps from '../lib/extract/extractProps';

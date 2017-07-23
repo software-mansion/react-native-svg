@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass';
 import extractText from '../lib/extract/extractText';
-import {numberProp, pathProps, fontProps} from '../lib/props';
+import {pathProps, fontProps} from '../lib/props';
 import {TextAttributes} from '../lib/attributes';
 import extractProps from '../lib/extract/extractProps';
 import Shape from './Shape';
@@ -17,16 +17,19 @@ export default class extends Shape {
         dy: PropTypes.string,
     };
 
+    //noinspection JSUnusedGlobalSymbols
     static childContextTypes = {
         isInAParentText: PropTypes.bool
     };
 
+    //noinspection JSUnusedGlobalSymbols
     getChildContext() {
         return {
             isInAParentText: true
         };
     }
 
+    //noinspection JSUnusedGlobalSymbols
     getContextTypes() {
         return {
             isInAParentText: PropTypes.bool
