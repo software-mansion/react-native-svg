@@ -181,65 +181,48 @@ class GlyphContext {
 
     private void pushNodeAndFont(GroupShadowNode node, @Nullable ReadableMap font) {
         ReadableMap parent = getTopOrParentFont(node);
-        WritableMap map = Arguments.createMap();
-        mFontContext.add(map);
-        topFont = map;
         mTop++;
 
-        if (parent.hasKey(LETTER_SPACING)) {
-            map.putDouble(LETTER_SPACING, parent.getDouble(LETTER_SPACING));
-        }
-
-        if (parent.hasKey(FONT_FAMILY)) {
-            map.putString(FONT_FAMILY, parent.getString(FONT_FAMILY));
-        }
-
-        if (parent.hasKey(FONT_WEIGHT)) {
-            map.putString(FONT_WEIGHT, parent.getString(FONT_WEIGHT));
-        }
-
-        if (parent.hasKey(FONT_STYLE)) {
-            map.putString(FONT_STYLE, parent.getString(FONT_STYLE));
-        }
-
-        if (parent.hasKey(KERNING)) {
-            map.putDouble(KERNING, parent.getDouble(KERNING));
-        }
-
-        float parentFontSize = (float) parent.getDouble(FONT_SIZE);
-        map.putDouble(FONT_SIZE, parentFontSize);
-        mFontSize = parentFontSize;
-
         if (font == null) {
+            mFontContext.add(parent);
             return;
         }
 
+        WritableMap map = Arguments.createMap();
+        mFontContext.add(map);
+        topFont = map;
+
         if (font.hasKey(LETTER_SPACING)) {
-            String letterSpacingString = font.getString(LETTER_SPACING);
-            float letterSpacing = Float.valueOf(letterSpacingString);
-            map.putDouble(LETTER_SPACING, letterSpacing);
+            map.putString(LETTER_SPACING, font.getString(LETTER_SPACING));
+        } else if (parent.hasKey(LETTER_SPACING)) {
+            map.putString(LETTER_SPACING, parent.getString(LETTER_SPACING));
         }
 
         if (font.hasKey(FONT_FAMILY)) {
-            String fontFamily = font.getString(FONT_FAMILY);
-            map.putString(FONT_FAMILY, fontFamily);
+            map.putString(FONT_FAMILY, font.getString(FONT_FAMILY));
+        } else if (parent.hasKey(FONT_FAMILY)) {
+            map.putString(FONT_FAMILY, parent.getString(FONT_FAMILY));
         }
 
         if (font.hasKey(FONT_WEIGHT)) {
-            String fontWeight = font.getString(FONT_WEIGHT);
-            map.putString(FONT_WEIGHT, fontWeight);
+            map.putString(FONT_WEIGHT, font.getString(FONT_WEIGHT));
+        } else if (parent.hasKey(FONT_WEIGHT)) {
+            map.putString(FONT_WEIGHT, parent.getString(FONT_WEIGHT));
         }
 
         if (font.hasKey(FONT_STYLE)) {
-            String fontStyle = font.getString(FONT_STYLE);
-            map.putString(FONT_STYLE, fontStyle);
+            map.putString(FONT_STYLE, font.getString(FONT_STYLE));
+        } else if (parent.hasKey(FONT_STYLE)) {
+            map.putString(FONT_STYLE, parent.getString(FONT_STYLE));
         }
 
         if (font.hasKey(KERNING)) {
-            String kerningString = font.getString(KERNING);
-            float kerning = Float.valueOf(kerningString);
-            map.putDouble(KERNING, kerning);
+            map.putString(KERNING, font.getString(KERNING));
+        } else if (parent.hasKey(KERNING)) {
+            map.putString(KERNING, parent.getString(KERNING));
         }
+
+        float parentFontSize = (float) parent.getDouble(FONT_SIZE);
 
         if (font.hasKey(FONT_SIZE)) {
             String string = font.getString(FONT_SIZE);
@@ -252,7 +235,11 @@ class GlyphContext {
             );
             map.putDouble(FONT_SIZE, value);
             mFontSize = value;
+        } else {
+            mFontSize = parentFontSize;
         }
+
+        map.putDouble(FONT_SIZE, mFontSize);
     }
 
     void pushContext(GroupShadowNode node, @Nullable ReadableMap font) {

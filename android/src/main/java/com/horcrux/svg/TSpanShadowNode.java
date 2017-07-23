@@ -161,7 +161,7 @@ class TSpanShadowNode extends TextShadowNode {
         boolean autoKerning = true;
         float kerning = DEFAULT_KERNING;
         if (font.hasKey(PROP_KERNING)) {
-            kerning = (float) (font.getDouble(PROP_KERNING) * mScale);
+            kerning = Float.valueOf(font.getString(PROP_KERNING)) * mScale;
             autoKerning = false;
         }
 
@@ -222,7 +222,7 @@ class TSpanShadowNode extends TextShadowNode {
         float fontSize = (float) font.getDouble(PROP_FONT_SIZE) * mScale;
 
         float letterSpacing = font.hasKey(PROP_LETTER_SPACING) ?
-            (float) font.getDouble(PROP_LETTER_SPACING) * mScale
+            Float.valueOf(font.getString(PROP_LETTER_SPACING)) * mScale
             : DEFAULT_LETTER_SPACING;
 
         boolean isBold = font.hasKey(PROP_FONT_WEIGHT) &&
