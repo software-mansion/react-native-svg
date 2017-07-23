@@ -41,6 +41,7 @@ class TSpanShadowNode extends TextShadowNode {
     private static final String TTF = ".ttf";
 
     private static final double DEFAULT_KERNING = 0d;
+    private static final double DEFAULT_WORD_SPACING = 0d;
     private static final double DEFAULT_LETTER_SPACING = 0d;
 
     private static final String PROP_KERNING = "kerning";
@@ -48,6 +49,7 @@ class TSpanShadowNode extends TextShadowNode {
     private static final String PROP_FONT_STYLE = "fontStyle";
     private static final String PROP_FONT_WEIGHT = "fontWeight";
     private static final String PROP_FONT_FAMILY = "fontFamily";
+    private static final String PROP_WORD_SPACING = "wordSpacing";
     private static final String PROP_LETTER_SPACING = "letterSpacing";
 
     private Path mCache;
@@ -158,9 +160,33 @@ class TSpanShadowNode extends TextShadowNode {
         double previousWidth = 0;
         char[] chars = line.toCharArray();
 
+        /*
+        *
+        * Three properties affect the space between characters and words:
+        *
+        * ‘kerning’ indicates whether the user agent should adjust inter-glyph spacing
+        * based on kerning tables that are included in the relevant font
+        * (i.e., enable auto-kerning) or instead disable auto-kerning
+        * and instead set inter-character spacing to a specific length (typically, zero).
+        *
+        * ‘letter-spacing’ indicates an amount of space that is to be added between text
+        * characters supplemental to any spacing due to the ‘kerning’ property.
+        *
+        * ‘word-spacing’ indicates the spacing behavior between words.
+        *
+        *  Letter-spacing is applied after bidi reordering and is in addition to any word-spacing.
+        *  Depending on the justification rules in effect, user agents may further increase
+        *  or decrease the space between typographic character units in order to justify text.
+        *
+        * */
+
         boolean hasKerning = font.hasKey(PROP_KERNING);
         double kerning = hasKerning ? font.getDouble(PROP_KERNING) * mScale : DEFAULT_KERNING;
         boolean autoKerning = !hasKerning;
+
+        double wordSpacing = font.hasKey(PROP_WORD_SPACING) ?
+            font.getDouble(PROP_WORD_SPACING) * mScale
+            : DEFAULT_WORD_SPACING;
 
         double letterSpacing = font.hasKey(PROP_LETTER_SPACING) ?
             font.getDouble(PROP_LETTER_SPACING) * mScale
@@ -168,7 +194,8 @@ class TSpanShadowNode extends TextShadowNode {
 
         for (int index = 0; index < length; index++) {
             glyph = new Path();
-            current = String.valueOf(chars[index]);
+            final char currentChar = chars[index];
+            current = String.valueOf(currentChar);
             paint.getTextPath(current, 0, 1, 0, 0, glyph);
             width = paint.measureText(current) * renderMethodScaling;
 
@@ -179,7 +206,10 @@ class TSpanShadowNode extends TextShadowNode {
                 previous = current;
             }
 
-            x = gc.nextX(width + kerning + letterSpacing);
+            boolean isWordSeparator = currentChar == ' ';
+            double wordSpace = isWordSeparator ? wordSpacing : 0;
+
+            x = gc.nextX(width + kerning + wordSpace + letterSpacing);
             y = gc.nextY();
             dx = gc.nextDeltaX();
             dy = gc.nextDeltaY();

@@ -27,6 +27,7 @@ class GlyphContext {
     private static final String FONT_STYLE = "fontStyle";
     private static final String FONT_WEIGHT = "fontWeight";
     private static final String FONT_FAMILY = "fontFamily";
+    private static final String WORD_SPACING = "wordSpacing";
     private static final String LETTER_SPACING = "letterSpacing";
 
     // Empty font context map
@@ -241,13 +242,15 @@ class GlyphContext {
 
         put(FONT_STYLE, map, font, parent);
 
-        // TODO https://www.w3.org/TR/SVG11/text.html#SpacingProperties
+        // https://www.w3.org/TR/SVG11/text.html#SpacingProperties
         // https://drafts.csswg.org/css-text-3/#spacing
         // calculated values for units in: kerning, letter-spacing and word-spacing
 
-        putD(LETTER_SPACING, map, font, parent, mFontSize);
-
         putD(KERNING, map, font, parent, mFontSize);
+
+        putD(WORD_SPACING, map, font, parent, mFontSize);
+
+        putD(LETTER_SPACING, map, font, parent, mFontSize);
     }
 
     void pushContext(GroupShadowNode node, @Nullable ReadableMap font) {
