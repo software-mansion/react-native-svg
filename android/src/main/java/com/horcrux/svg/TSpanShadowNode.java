@@ -132,7 +132,7 @@ class TSpanShadowNode extends TextShadowNode {
         if (textPath != null) {
             pm = new PathMeasure(textPath.getPath(), false);
             distance = pm.getLength();
-            double size = getFontSizeFromContext();
+            float size = gc.getFontSize();
             String startOffset = textPath.getStartOffset();
             offset = PropHelper.fromRelativeToFloat(startOffset, distance, 0, mScale, size);
             // String spacing = textPath.getSpacing(); // spacing = "auto | exact"

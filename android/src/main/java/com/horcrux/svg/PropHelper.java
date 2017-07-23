@@ -82,17 +82,38 @@ class PropHelper {
     static private final Pattern percentageRegExp = Pattern.compile("^(-?\\d+(?:\\.\\d+)?)%$");
 
     /**
-     * Converts length string into actual based on a relative number
-     *
+     * Converts length string into float value
+     * in the current user coordinate system
      *
      * @param length     length string
-     * @param relative   relative number
-     * @param offset     offset number
+     * @param relative   relative size for percentages
+     * @param offset     offset for all units
      * @param fontSize   current font size
-     * @return actual float based on relative number
+     * @return value in the current user coordinate system
      */
+    static float fromRelativeToFloat(String length, float relative, float offset, float scale, float fontSize) {
+        /*
+            TODO list
 
-    static float fromRelativeToFloat(String length, float relative, float offset, float scale, double fontSize) {
+            unit	relative to
+            em	    font size of the element
+            ex	    x-height of the element’s font
+            ch	    width of the "0" (ZERO, U+0030) glyph in the element’s font
+            rem	    font size of the root element
+            vw	    1% of viewport’s width
+            vh	    1% of viewport’s height
+            vmin	1% of viewport’s smaller dimension
+            vmax	1% of viewport’s larger dimension
+
+            relative-size [ larger | smaller ]
+            absolute-size: [ xx-small | x-small | small | medium | large | x-large | xx-large ]
+
+            https://www.w3.org/TR/css3-values/#relative-lengths
+            https://www.w3.org/TR/css3-values/#absolute-lengths
+            https://drafts.csswg.org/css-cascade-4/#computed-value
+            https://drafts.csswg.org/css-fonts-3/#propdef-font-size
+            https://drafts.csswg.org/css2/fonts.html#propdef-font-size
+        */
         length = length.trim();
         int stringLength = length.length();
         int percentIndex = stringLength - 1;
@@ -112,7 +133,7 @@ class PropHelper {
                         break;
 
                     case "em":
-                        unit = (float) fontSize;
+                        unit = fontSize;
                         break;
 
                     /*
