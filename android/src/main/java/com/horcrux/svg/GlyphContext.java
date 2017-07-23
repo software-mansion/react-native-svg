@@ -285,9 +285,9 @@ class GlyphContext {
         @Nullable ReadableMap font,
         @Nullable ReadableArray x,
         @Nullable ReadableArray y,
-        @Nullable ReadableArray rotate,
         @Nullable ReadableArray deltaX,
-        @Nullable ReadableArray deltaY
+        @Nullable ReadableArray deltaY,
+        @Nullable ReadableArray rotate
     ) {
         if (reset) {
             this.reset();
@@ -437,8 +437,8 @@ class GlyphContext {
         if (nextIndex < mXs.length) {
             mDX = 0;
             mXIndex = nextIndex;
-            String val = mXs[nextIndex];
-            mX = PropHelper.fromRelativeToFloat(val, mWidth, 0, mScale, getFontSize());
+            String string = mXs[nextIndex];
+            mX = PropHelper.fromRelativeToFloat(string, mWidth, 0, mScale, mFontSize);
         }
 
         mX += glyphWidth;
@@ -453,8 +453,8 @@ class GlyphContext {
         if (nextIndex < mYs.length) {
             mDY = 0;
             mYIndex = nextIndex;
-            String val = mYs[nextIndex];
-            mY = PropHelper.fromRelativeToFloat(val, mHeight, 0, mScale, getFontSize());
+            String string = mYs[nextIndex];
+            mY = PropHelper.fromRelativeToFloat(string, mHeight, 0, mScale, mFontSize);
         }
 
         return mY;
@@ -467,7 +467,7 @@ class GlyphContext {
         if (nextIndex < mDXs.length) {
             mDXIndex = nextIndex;
             String string = mDXs[nextIndex];
-            float val = PropHelper.fromRelativeToFloat(string, mWidth, 0, 1, getFontSize());
+            float val = PropHelper.fromRelativeToFloat(string, mWidth, 0, 1, mFontSize);
             mDX += val * mScale;
         }
 
@@ -481,7 +481,7 @@ class GlyphContext {
         if (nextIndex < mDYs.length) {
             mDYIndex = nextIndex;
             String string = mDYs[nextIndex];
-            float val = PropHelper.fromRelativeToFloat(string, mHeight, 0, 1, getFontSize());
+            float val = PropHelper.fromRelativeToFloat(string, mHeight, 0, 1, mFontSize);
             mDY += val * mScale;
         }
 
