@@ -158,12 +158,13 @@ class TSpanShadowNode extends TextShadowNode {
         double previousWidth = 0;
         char[] chars = line.toCharArray();
 
-        boolean autoKerning = true;
-        double kerning = DEFAULT_KERNING;
-        if (font.hasKey(PROP_KERNING)) {
-            kerning = Double.valueOf(font.getString(PROP_KERNING)) * mScale;
-            autoKerning = false;
-        }
+        boolean hasKerning = font.hasKey(PROP_KERNING);
+        double kerning = hasKerning ? font.getDouble(PROP_KERNING) * mScale : DEFAULT_KERNING;
+        boolean autoKerning = !hasKerning;
+
+        double letterSpacing = font.hasKey(PROP_LETTER_SPACING) ?
+            font.getDouble(PROP_LETTER_SPACING) * mScale
+            : DEFAULT_LETTER_SPACING;
 
         for (int index = 0; index < length; index++) {
             glyph = new Path();
@@ -178,7 +179,7 @@ class TSpanShadowNode extends TextShadowNode {
                 previous = current;
             }
 
-            x = gc.nextX(width + kerning);
+            x = gc.nextX(width + kerning + letterSpacing);
             y = gc.nextY();
             dx = gc.nextDeltaX();
             dy = gc.nextDeltaY();
@@ -220,10 +221,6 @@ class TSpanShadowNode extends TextShadowNode {
         AssetManager assetManager = getThemedContext().getResources().getAssets();
 
         double fontSize = font.getDouble(PROP_FONT_SIZE) * mScale;
-
-        double letterSpacing = font.hasKey(PROP_LETTER_SPACING) ?
-            Double.valueOf(font.getString(PROP_LETTER_SPACING)) * mScale
-            : DEFAULT_LETTER_SPACING;
 
         boolean isBold = font.hasKey(PROP_FONT_WEIGHT) &&
             BOLD.equals(font.getString(PROP_FONT_WEIGHT));
@@ -270,9 +267,6 @@ class TSpanShadowNode extends TextShadowNode {
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setUnderlineText(underlineText);
         paint.setStrikeThruText(strikeThruText);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            paint.setLetterSpacing((float) (letterSpacing / fontSize));
-        }
     }
 
     private void setupTextPath() {

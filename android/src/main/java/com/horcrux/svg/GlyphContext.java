@@ -187,6 +187,22 @@ class GlyphContext {
         }
     }
 
+    private static void putD(String key, WritableMap map, ReadableMap font, ReadableMap parent, double fontSize) {
+        if (font.hasKey(key)) {
+            String string = font.getString(key);
+            double value = PropHelper.fromRelative(
+                string,
+                0,
+                0,
+                1,
+                fontSize
+            );
+            map.putDouble(key, value);
+        } else if (parent.hasKey(key)) {
+            map.putDouble(key, parent.getDouble(key));
+        }
+    }
+
     private void pushNodeAndFont(GroupShadowNode node, @Nullable ReadableMap font) {
         ReadableMap parent = getTopOrParentFont(node);
         mTop++;
@@ -199,16 +215,6 @@ class GlyphContext {
         WritableMap map = Arguments.createMap();
         mFontContext.add(map);
         topFont = map;
-
-        put(LETTER_SPACING, map, font, parent);
-
-        put(FONT_FAMILY, map, font, parent);
-
-        put(FONT_WEIGHT, map, font, parent);
-
-        put(FONT_STYLE, map, font, parent);
-
-        put(KERNING, map, font, parent);
 
         double parentFontSize = parent.getDouble(FONT_SIZE);
 
@@ -228,6 +234,20 @@ class GlyphContext {
         }
 
         map.putDouble(FONT_SIZE, mFontSize);
+
+        put(FONT_FAMILY, map, font, parent);
+
+        put(FONT_WEIGHT, map, font, parent);
+
+        put(FONT_STYLE, map, font, parent);
+
+        // TODO https://www.w3.org/TR/SVG11/text.html#SpacingProperties
+        // https://drafts.csswg.org/css-text-3/#spacing
+        // calculated values for units in: kerning, letter-spacing and word-spacing
+
+        putD(LETTER_SPACING, map, font, parent, mFontSize);
+
+        putD(KERNING, map, font, parent, mFontSize);
     }
 
     void pushContext(GroupShadowNode node, @Nullable ReadableMap font) {
