@@ -18,17 +18,19 @@ import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
+import static com.horcrux.svg.TextShadowNode.KERNING;
+import static com.horcrux.svg.TextShadowNode.TEXT_ANCHOR;
+import static com.horcrux.svg.TextShadowNode.WORD_SPACING;
+import static com.horcrux.svg.TextShadowNode.LETTER_SPACING;
+import static com.horcrux.svg.TextShadowNode.TEXT_DECORATION;
+import static com.facebook.react.uimanager.ViewProps.FONT_SIZE;
+import static com.facebook.react.uimanager.ViewProps.FONT_STYLE;
+import static com.facebook.react.uimanager.ViewProps.FONT_FAMILY;
+import static com.facebook.react.uimanager.ViewProps.FONT_WEIGHT;
+
 // https://www.w3.org/TR/SVG/text.html#TSpanElement
 class GlyphContext {
     static final double DEFAULT_FONT_SIZE = 12d;
-
-    private static final String KERNING = "kerning";
-    private static final String FONT_SIZE = "fontSize";
-    private static final String FONT_STYLE = "fontStyle";
-    private static final String FONT_WEIGHT = "fontWeight";
-    private static final String FONT_FAMILY = "fontFamily";
-    private static final String WORD_SPACING = "wordSpacing";
-    private static final String LETTER_SPACING = "letterSpacing";
 
     // Empty font context map
     private static final WritableMap DEFAULT_MAP = Arguments.createMap();
@@ -236,20 +238,18 @@ class GlyphContext {
 
         map.putDouble(FONT_SIZE, mFontSize);
 
+        put(FONT_STYLE, map, font, parent);
         put(FONT_FAMILY, map, font, parent);
-
         put(FONT_WEIGHT, map, font, parent);
 
-        put(FONT_STYLE, map, font, parent);
+        put(TEXT_ANCHOR, map, font, parent);
+        put(TEXT_DECORATION, map, font, parent);
 
         // https://www.w3.org/TR/SVG11/text.html#SpacingProperties
         // https://drafts.csswg.org/css-text-3/#spacing
-        // calculated values for units in: kerning,  word-spacing, and, letter-spacing
-
+        // calculated values for units in: kerning, word-spacing, and, letter-spacing.
         putD(KERNING, map, font, parent);
-
         putD(WORD_SPACING, map, font, parent);
-
         putD(LETTER_SPACING, map, font, parent);
     }
 
@@ -428,7 +428,7 @@ class GlyphContext {
         return mFontSize;
     }
 
-    double nextX(double glyphWidth) {
+    double nextX(double advance) {
         incrementIndices(mXIndices, mXsIndex);
 
         int nextIndex = mXIndex + 1;
@@ -439,7 +439,7 @@ class GlyphContext {
             mX = PropHelper.fromRelative(string, mWidth, 0, mScale, mFontSize);
         }
 
-        mX += glyphWidth;
+        mX += advance;
 
         return mX;
     }

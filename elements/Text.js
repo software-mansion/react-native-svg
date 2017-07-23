@@ -15,7 +15,6 @@ export default class extends Shape {
         ...fontProps,
         dx: numberProp,
         dy: numberProp,
-        textAnchor: PropTypes.oneOf(['start', 'middle', 'end'])
     };
 
     static childContextTypes = {

@@ -28,6 +28,11 @@ import javax.annotation.Nullable;
 import static android.graphics.PathMeasure.POSITION_MATRIX_FLAG;
 import static android.graphics.PathMeasure.TANGENT_MATRIX_FLAG;
 
+import static com.facebook.react.uimanager.ViewProps.FONT_SIZE;
+import static com.facebook.react.uimanager.ViewProps.FONT_STYLE;
+import static com.facebook.react.uimanager.ViewProps.FONT_WEIGHT;
+import static com.facebook.react.uimanager.ViewProps.FONT_FAMILY;
+
 /**
  * Shadow node for virtual TSpan view
  */
@@ -43,14 +48,6 @@ class TSpanShadowNode extends TextShadowNode {
     private static final double DEFAULT_KERNING = 0d;
     private static final double DEFAULT_WORD_SPACING = 0d;
     private static final double DEFAULT_LETTER_SPACING = 0d;
-
-    private static final String PROP_KERNING = "kerning";
-    private static final String PROP_FONT_SIZE = "fontSize";
-    private static final String PROP_FONT_STYLE = "fontStyle";
-    private static final String PROP_FONT_WEIGHT = "fontWeight";
-    private static final String PROP_FONT_FAMILY = "fontFamily";
-    private static final String PROP_WORD_SPACING = "wordSpacing";
-    private static final String PROP_LETTER_SPACING = "letterSpacing";
 
     private Path mCache;
     private @Nullable String mContent;
@@ -98,10 +95,10 @@ class TSpanShadowNode extends TextShadowNode {
         return mCache;
     }
 
-    private double getTextAnchorShift(double width) {
+    private double getTextAnchorShift(double width, String textAnchor) {
         double x = 0;
 
-        switch (getComputedTextAnchor()) {
+        switch (textAnchor) {
             case TEXT_ANCHOR_MIDDLE:
                 x = -width / 2;
                 break;
@@ -144,7 +141,9 @@ class TSpanShadowNode extends TextShadowNode {
             }
         }
 
-        offset += getTextAnchorShift(textMeasure);
+        if (font.hasKey(TEXT_ANCHOR)) {
+            offset += getTextAnchorShift(textMeasure, font.getString(TEXT_ANCHOR));
+        }
 
         double x;
         double y;
@@ -180,16 +179,16 @@ class TSpanShadowNode extends TextShadowNode {
         *
         * */
 
-        final boolean hasKerning = font.hasKey(PROP_KERNING);
-        double kerning = hasKerning ? font.getDouble(PROP_KERNING) : DEFAULT_KERNING;
+        final boolean hasKerning = font.hasKey(KERNING);
+        double kerning = hasKerning ? font.getDouble(KERNING) : DEFAULT_KERNING;
         final boolean autoKerning = !hasKerning;
 
-        final double wordSpacing = font.hasKey(PROP_WORD_SPACING) ?
-            font.getDouble(PROP_WORD_SPACING)
+        final double wordSpacing = font.hasKey(WORD_SPACING) ?
+            font.getDouble(WORD_SPACING)
             : DEFAULT_WORD_SPACING;
 
-        final double letterSpacing = font.hasKey(PROP_LETTER_SPACING) ?
-            font.getDouble(PROP_LETTER_SPACING)
+        final double letterSpacing = font.hasKey(LETTER_SPACING) ?
+            font.getDouble(LETTER_SPACING)
             : DEFAULT_LETTER_SPACING;
 
         for (int index = 0; index < length; index++) {
@@ -251,19 +250,29 @@ class TSpanShadowNode extends TextShadowNode {
     private void applyTextPropertiesToPaint(Paint paint, ReadableMap font) {
         AssetManager assetManager = getThemedContext().getResources().getAssets();
 
-        double fontSize = font.getDouble(PROP_FONT_SIZE) * mScale;
+        double fontSize = font.getDouble(FONT_SIZE) * mScale;
 
-        boolean isBold = font.hasKey(PROP_FONT_WEIGHT) &&
-            BOLD.equals(font.getString(PROP_FONT_WEIGHT));
+        boolean isBold = font.hasKey(FONT_WEIGHT) &&
+            BOLD.equals(font.getString(FONT_WEIGHT));
 
-        boolean isItalic = font.hasKey(PROP_FONT_STYLE) &&
-            ITALIC.equals(font.getString(PROP_FONT_STYLE));
+        boolean isItalic = font.hasKey(FONT_STYLE) &&
+            ITALIC.equals(font.getString(FONT_STYLE));
 
-        int decoration = getTextDecoration();
+        boolean underlineText = false;
+        boolean strikeThruText = false;
 
-        boolean underlineText = decoration == TEXT_DECORATION_UNDERLINE;
+        if (font.hasKey(TEXT_DECORATION)) {
+            String decoration = font.getString(TEXT_DECORATION);
+            switch (decoration) {
+                case TEXT_DECORATION_UNDERLINE:
+                    underlineText = true;
+                    break;
 
-        boolean strikeThruText = decoration == TEXT_DECORATION_LINE_THROUGH;
+                case TEXT_DECORATION_LINE_THROUGH:
+                    strikeThruText = true;
+                    break;
+            }
+        }
 
         int fontStyle;
         if (isBold && isItalic) {
@@ -278,15 +287,15 @@ class TSpanShadowNode extends TextShadowNode {
 
         Typeface typeface = null;
         try {
-            String path = FONTS + font.getString(PROP_FONT_FAMILY) + OTF;
+            String path = FONTS + font.getString(FONT_FAMILY) + OTF;
             typeface = Typeface.createFromAsset(assetManager, path);
         } catch (Exception ignored) {
             try {
-                String path = FONTS + font.getString(PROP_FONT_FAMILY) + TTF;
+                String path = FONTS + font.getString(FONT_FAMILY) + TTF;
                 typeface = Typeface.createFromAsset(assetManager, path);
             } catch (Exception ignored2) {
                 try {
-                    typeface = Typeface.create(font.getString(PROP_FONT_FAMILY), fontStyle);
+                    typeface = Typeface.create(font.getString(FONT_FAMILY), fontStyle);
                 } catch (Exception ignored3) {
                 }
             }

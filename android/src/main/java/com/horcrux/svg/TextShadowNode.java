@@ -15,7 +15,6 @@ import android.graphics.Path;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
@@ -25,37 +24,30 @@ import javax.annotation.Nullable;
  */
 
 class TextShadowNode extends GroupShadowNode {
+    // static final String INHERIT = "inherit";
 
-    private static final int TEXT_ANCHOR_AUTO = 0;
-    // static final int TEXT_ANCHOR_START = 1;
-    static final int TEXT_ANCHOR_MIDDLE = 2;
-    static final int TEXT_ANCHOR_END = 3;
+    // static final String TEXT_ANCHOR_AUTO = "auto";
+    // static final String TEXT_ANCHOR_START = "start";
+    static final String TEXT_ANCHOR_MIDDLE = "middle";
+    static final String TEXT_ANCHOR_END = "end";
 
-    private static final int TEXT_DECORATION_NONE = 0;
-    static final int TEXT_DECORATION_UNDERLINE = 1;
-    // static final int TEXT_DECORATION_OVERLINE = 2;
-    static final int TEXT_DECORATION_LINE_THROUGH = 3;
-    // static final int TEXT_DECORATION_BLINK = 4;
+    // static final String TEXT_DECORATION_NONE = "none";
+    static final String TEXT_DECORATION_UNDERLINE = "underline";
+    // static final String TEXT_DECORATION_OVERLINE = "overline";
+    static final String TEXT_DECORATION_LINE_THROUGH = "line-through";
+    // static final String TEXT_DECORATION_BLINK = "blink";
 
-    private int mTextAnchor = TEXT_ANCHOR_AUTO;
-    private int mTextDecoration = TEXT_DECORATION_NONE;
+    static final String KERNING = "kerning";
+    static final String TEXT_ANCHOR = "textAnchor";
+    static final String WORD_SPACING = "wordSpacing";
+    static final String LETTER_SPACING = "letterSpacing";
+    static final String TEXT_DECORATION = "textDecoration";
+
     private @Nullable ReadableArray mPositionX;
     private @Nullable ReadableArray mPositionY;
     private @Nullable ReadableArray mRotate;
     private @Nullable ReadableArray mDeltaX;
     private @Nullable ReadableArray mDeltaY;
-
-    @ReactProp(name = "textAnchor")
-    public void setTextAnchor(int textAnchor) {
-        mTextAnchor = textAnchor;
-        markUpdated();
-    }
-
-    @ReactProp(name = "textDecoration")
-    public void setTextDecoration(int textDecoration) {
-        mTextDecoration = textDecoration;
-        markUpdated();
-    }
 
     @ReactProp(name = "rotate")
     public void setRotate(@Nullable ReadableArray rotate) {
@@ -110,52 +102,6 @@ class TextShadowNode extends GroupShadowNode {
         Path groupPath = getGroupPath(canvas, paint);
         releaseCachedPath();
         return groupPath;
-    }
-
-    private int getTextAnchor() {
-        return mTextAnchor;
-    }
-
-    int getComputedTextAnchor() {
-        int anchor = mTextAnchor;
-        if (anchor != TEXT_ANCHOR_AUTO) {
-            return anchor;
-        }
-        ReactShadowNode shadowNode = this.getParent();
-
-        while (shadowNode instanceof GroupShadowNode) {
-            if (shadowNode instanceof TextShadowNode) {
-                anchor = ((TextShadowNode) shadowNode).getTextAnchor();
-                if (anchor != TEXT_ANCHOR_AUTO) {
-                    break;
-                }
-            }
-
-            shadowNode = shadowNode.getParent();
-        }
-
-        return anchor;
-    }
-
-    int getTextDecoration() {
-        int decoration = mTextDecoration;
-        if (decoration != TEXT_DECORATION_NONE) {
-            return decoration;
-        }
-        ReactShadowNode shadowNode = this.getParent();
-
-        while (shadowNode instanceof GroupShadowNode) {
-            if (shadowNode instanceof TextShadowNode) {
-                decoration = ((TextShadowNode) shadowNode).getTextDecoration();
-                if (decoration != TEXT_DECORATION_NONE) {
-                    break;
-                }
-            }
-
-            shadowNode = shadowNode.getParent();
-        }
-
-        return decoration;
     }
 
     void releaseCachedPath() {
