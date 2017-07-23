@@ -181,15 +181,15 @@ class TSpanShadowNode extends TextShadowNode {
         * */
 
         final boolean hasKerning = font.hasKey(PROP_KERNING);
-        double kerning = hasKerning ? font.getDouble(PROP_KERNING) * mScale : DEFAULT_KERNING;
+        double kerning = hasKerning ? font.getDouble(PROP_KERNING) : DEFAULT_KERNING;
         final boolean autoKerning = !hasKerning;
 
         final double wordSpacing = font.hasKey(PROP_WORD_SPACING) ?
-            font.getDouble(PROP_WORD_SPACING) * mScale
+            font.getDouble(PROP_WORD_SPACING)
             : DEFAULT_WORD_SPACING;
 
         final double letterSpacing = font.hasKey(PROP_LETTER_SPACING) ?
-            font.getDouble(PROP_LETTER_SPACING) * mScale
+            font.getDouble(PROP_LETTER_SPACING)
             : DEFAULT_LETTER_SPACING;
 
         for (int index = 0; index < length; index++) {

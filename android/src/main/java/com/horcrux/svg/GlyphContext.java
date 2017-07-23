@@ -188,15 +188,15 @@ class GlyphContext {
         }
     }
 
-    private static void putD(String key, WritableMap map, ReadableMap font, ReadableMap parent, double fontSize) {
+    private void putD(String key, WritableMap map, ReadableMap font, ReadableMap parent) {
         if (font.hasKey(key)) {
             String string = font.getString(key);
             double value = PropHelper.fromRelative(
                 string,
                 0,
                 0,
-                1,
-                fontSize
+                mScale,
+                mFontSize
             );
             map.putDouble(key, value);
         } else if (parent.hasKey(key)) {
@@ -244,13 +244,13 @@ class GlyphContext {
 
         // https://www.w3.org/TR/SVG11/text.html#SpacingProperties
         // https://drafts.csswg.org/css-text-3/#spacing
-        // calculated values for units in: kerning, letter-spacing and word-spacing
+        // calculated values for units in: kerning,  word-spacing, and, letter-spacing
 
-        putD(KERNING, map, font, parent, mFontSize);
+        putD(KERNING, map, font, parent);
 
-        putD(WORD_SPACING, map, font, parent, mFontSize);
+        putD(WORD_SPACING, map, font, parent);
 
-        putD(LETTER_SPACING, map, font, parent, mFontSize);
+        putD(LETTER_SPACING, map, font, parent);
     }
 
     void pushContext(GroupShadowNode node, @Nullable ReadableMap font) {
@@ -465,8 +465,8 @@ class GlyphContext {
         if (nextIndex < mDXs.length) {
             mDXIndex = nextIndex;
             String string = mDXs[nextIndex];
-            double val = PropHelper.fromRelative(string, mWidth, 0, 1, mFontSize);
-            mDX += val * mScale;
+            double val = PropHelper.fromRelative(string, mWidth, 0, mScale, mFontSize);
+            mDX += val;
         }
 
         return mDX;
@@ -479,8 +479,8 @@ class GlyphContext {
         if (nextIndex < mDYs.length) {
             mDYIndex = nextIndex;
             String string = mDYs[nextIndex];
-            double val = PropHelper.fromRelative(string, mHeight, 0, 1, mFontSize);
-            mDY += val * mScale;
+            double val = PropHelper.fromRelative(string, mHeight, 0, mScale, mFontSize);
+            mDY += val;
         }
 
         return mDY;
