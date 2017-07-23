@@ -179,6 +179,14 @@ class GlyphContext {
         }
     }
 
+    private static void setIfExists(String key, WritableMap map, ReadableMap font, ReadableMap parent) {
+        if (font.hasKey(key)) {
+            map.putString(key, font.getString(key));
+        } else if (parent.hasKey(key)) {
+            map.putString(key, parent.getString(key));
+        }
+    }
+
     private void pushNodeAndFont(GroupShadowNode node, @Nullable ReadableMap font) {
         ReadableMap parent = getTopOrParentFont(node);
         mTop++;
@@ -192,35 +200,15 @@ class GlyphContext {
         mFontContext.add(map);
         topFont = map;
 
-        if (font.hasKey(LETTER_SPACING)) {
-            map.putString(LETTER_SPACING, font.getString(LETTER_SPACING));
-        } else if (parent.hasKey(LETTER_SPACING)) {
-            map.putString(LETTER_SPACING, parent.getString(LETTER_SPACING));
-        }
+        setIfExists(LETTER_SPACING, map, font, parent);
 
-        if (font.hasKey(FONT_FAMILY)) {
-            map.putString(FONT_FAMILY, font.getString(FONT_FAMILY));
-        } else if (parent.hasKey(FONT_FAMILY)) {
-            map.putString(FONT_FAMILY, parent.getString(FONT_FAMILY));
-        }
+        setIfExists(FONT_FAMILY, map, font, parent);
 
-        if (font.hasKey(FONT_WEIGHT)) {
-            map.putString(FONT_WEIGHT, font.getString(FONT_WEIGHT));
-        } else if (parent.hasKey(FONT_WEIGHT)) {
-            map.putString(FONT_WEIGHT, parent.getString(FONT_WEIGHT));
-        }
+        setIfExists(FONT_WEIGHT, map, font, parent);
 
-        if (font.hasKey(FONT_STYLE)) {
-            map.putString(FONT_STYLE, font.getString(FONT_STYLE));
-        } else if (parent.hasKey(FONT_STYLE)) {
-            map.putString(FONT_STYLE, parent.getString(FONT_STYLE));
-        }
+        setIfExists(FONT_STYLE, map, font, parent);
 
-        if (font.hasKey(KERNING)) {
-            map.putString(KERNING, font.getString(KERNING));
-        } else if (parent.hasKey(KERNING)) {
-            map.putString(KERNING, parent.getString(KERNING));
-        }
+        setIfExists(KERNING, map, font, parent);
 
         float parentFontSize = (float) parent.getDouble(FONT_SIZE);
 
