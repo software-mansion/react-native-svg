@@ -114,8 +114,8 @@ class TSpanShadowNode extends TextShadowNode {
     }
 
     private Path getLinePath(String line, Paint paint) {
-        int length = line.length();
-        Path path = new Path();
+        final int length = line.length();
+        final Path path = new Path();
 
         if (length == 0) {
             return path;
@@ -128,17 +128,17 @@ class TSpanShadowNode extends TextShadowNode {
         double offset = 0;
         double distance = 0;
         double renderMethodScaling = 1;
-        double textMeasure = paint.measureText(line);
+        final double textMeasure = paint.measureText(line);
 
         PathMeasure pm = null;
         if (textPath != null) {
             pm = new PathMeasure(textPath.getPath(), false);
             distance = pm.getLength();
-            double size = gc.getFontSize();
-            String startOffset = textPath.getStartOffset();
+            final double size = gc.getFontSize();
+            final String startOffset = textPath.getStartOffset();
             offset = PropHelper.fromRelative(startOffset, distance, 0, mScale, size);
             // String spacing = textPath.getSpacing(); // spacing = "auto | exact"
-            String method = textPath.getMethod(); // method = "align | stretch"
+            final String method = textPath.getMethod(); // method = "align | stretch"
             if (STRETCH.equals(method)) {
                 renderMethodScaling = distance / textMeasure;
             }
@@ -153,12 +153,12 @@ class TSpanShadowNode extends TextShadowNode {
         double dy;
 
         Path glyph;
-        double width;
         Matrix matrix;
         String current;
+        double glyphWidth;
         String previous = "";
-        double previousWidth = 0;
-        char[] chars = line.toCharArray();
+        double previousGlyphWidth = 0;
+        final char[] chars = line.toCharArray();
 
         /*
         *
@@ -180,15 +180,15 @@ class TSpanShadowNode extends TextShadowNode {
         *
         * */
 
-        boolean hasKerning = font.hasKey(PROP_KERNING);
+        final boolean hasKerning = font.hasKey(PROP_KERNING);
         double kerning = hasKerning ? font.getDouble(PROP_KERNING) * mScale : DEFAULT_KERNING;
-        boolean autoKerning = !hasKerning;
+        final boolean autoKerning = !hasKerning;
 
-        double wordSpacing = font.hasKey(PROP_WORD_SPACING) ?
+        final double wordSpacing = font.hasKey(PROP_WORD_SPACING) ?
             font.getDouble(PROP_WORD_SPACING) * mScale
             : DEFAULT_WORD_SPACING;
 
-        double letterSpacing = font.hasKey(PROP_LETTER_SPACING) ?
+        final double letterSpacing = font.hasKey(PROP_LETTER_SPACING) ?
             font.getDouble(PROP_LETTER_SPACING) * mScale
             : DEFAULT_LETTER_SPACING;
 
@@ -197,19 +197,20 @@ class TSpanShadowNode extends TextShadowNode {
             final char currentChar = chars[index];
             current = String.valueOf(currentChar);
             paint.getTextPath(current, 0, 1, 0, 0, glyph);
-            width = paint.measureText(current) * renderMethodScaling;
+            glyphWidth = paint.measureText(current) * renderMethodScaling;
 
             if (autoKerning) {
-                double both = paint.measureText(previous + current) * renderMethodScaling;
-                kerning = both - previousWidth - width;
-                previousWidth = width;
+                double bothGlyphWidth = paint.measureText(previous + current) * renderMethodScaling;
+                kerning = bothGlyphWidth - previousGlyphWidth - glyphWidth;
+                previousGlyphWidth = glyphWidth;
                 previous = current;
             }
 
-            boolean isWordSeparator = currentChar == ' ';
-            double wordSpace = isWordSeparator ? wordSpacing : 0;
+            final boolean isWordSeparator = currentChar == ' ';
+            final double wordSpace = isWordSeparator ? wordSpacing : 0;
+            final double advance = glyphWidth + kerning + wordSpace + letterSpacing;
 
-            x = gc.nextX(width + kerning + wordSpace + letterSpacing);
+            x = gc.nextX(advance);
             y = gc.nextY();
             dx = gc.nextDeltaX();
             dy = gc.nextDeltaY();
@@ -217,11 +218,11 @@ class TSpanShadowNode extends TextShadowNode {
 
             matrix = new Matrix();
 
-            double xSum = offset + x + dx - width;
+            final double glyphStart = offset + x + dx - glyphWidth;
 
             if (textPath != null) {
-                double halfway = width / 2;
-                double midpoint = xSum + halfway;
+                double halfGlyphWidth = glyphWidth / 2;
+                double midpoint = glyphStart + halfGlyphWidth;
 
                 if (midpoint > distance) {
                     break;
@@ -232,11 +233,11 @@ class TSpanShadowNode extends TextShadowNode {
                 assert pm != null;
                 pm.getMatrix((float) midpoint, matrix, POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG);
 
-                matrix.preTranslate((float) -halfway, (float) dy);
+                matrix.preTranslate((float) -halfGlyphWidth, (float) dy);
                 matrix.preScale((float) renderMethodScaling, (float) renderMethodScaling);
                 matrix.postTranslate(0, (float) y);
             } else {
-                matrix.setTranslate((float) xSum, (float) (y + dy));
+                matrix.setTranslate((float) glyphStart, (float) (y + dy));
             }
 
             matrix.preRotate((float) r);
