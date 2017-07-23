@@ -96,15 +96,15 @@ class PropHelper {
         /*
             TODO list
 
-            unit	relative to
-            em	    font size of the element
-            ex	    x-height of the element’s font
-            ch	    width of the "0" (ZERO, U+0030) glyph in the element’s font
-            rem	    font size of the root element
-            vw	    1% of viewport’s width
-            vh	    1% of viewport’s height
-            vmin	1% of viewport’s smaller dimension
-            vmax	1% of viewport’s larger dimension
+            unit  relative to
+            em    font size of the element
+            ex    x-height of the element’s font
+            ch    width of the "0" (ZERO, U+0030) glyph in the element’s font
+            rem   font size of the root element
+            vw    1% of viewport’s width
+            vh    1% of viewport’s height
+            vmin  1% of viewport’s smaller dimension
+            vmax  1% of viewport’s larger dimension
 
             relative-size [ larger | smaller ]
             absolute-size: [ xx-small | x-small | small | medium | large | x-large | xx-large ]

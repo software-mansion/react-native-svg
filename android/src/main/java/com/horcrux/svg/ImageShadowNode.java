@@ -209,9 +209,9 @@ class ImageShadowNode extends RenderableShadowNode {
             renderRect = new RectF(0, 0, (int)rectWidth, (int)(rectWidth / mImageRatio));
         }
 
-        RectF vbRect = new RectF(0, 0, renderRect.width() / mScale, renderRect.height() / mScale);
         float canvasLeft = getCanvasLeft();
         float canvasTop = getCanvasTop();
+        RectF vbRect = new RectF(0, 0, renderRect.width() / mScale, renderRect.height() / mScale);
         RectF eRect = new RectF(canvasLeft, canvasTop, rectWidth / mScale + canvasLeft, rectHeight / mScale + canvasTop);
         Matrix transform = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
 
