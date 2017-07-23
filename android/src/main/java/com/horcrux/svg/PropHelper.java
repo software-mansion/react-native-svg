@@ -89,7 +89,8 @@ class PropHelper {
      * @param relative   relative size for percentages
      * @param offset     offset for all units
      * @param scale      scaling parameter
-     * @param fontSize   current font size  @return value in the current user coordinate system
+     * @param fontSize   current font size
+     * @return value in the current user coordinate system
      */
     static double fromRelative(String length, double relative, double offset, double scale, double fontSize) {
         /*
