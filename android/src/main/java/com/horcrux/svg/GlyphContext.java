@@ -179,7 +179,7 @@ class GlyphContext {
         }
     }
 
-    private static void setIfExists(String key, WritableMap map, ReadableMap font, ReadableMap parent) {
+    private static void put(String key, WritableMap map, ReadableMap font, ReadableMap parent) {
         if (font.hasKey(key)) {
             map.putString(key, font.getString(key));
         } else if (parent.hasKey(key)) {
@@ -200,15 +200,15 @@ class GlyphContext {
         mFontContext.add(map);
         topFont = map;
 
-        setIfExists(LETTER_SPACING, map, font, parent);
+        put(LETTER_SPACING, map, font, parent);
 
-        setIfExists(FONT_FAMILY, map, font, parent);
+        put(FONT_FAMILY, map, font, parent);
 
-        setIfExists(FONT_WEIGHT, map, font, parent);
+        put(FONT_WEIGHT, map, font, parent);
 
-        setIfExists(FONT_STYLE, map, font, parent);
+        put(FONT_STYLE, map, font, parent);
 
-        setIfExists(KERNING, map, font, parent);
+        put(KERNING, map, font, parent);
 
         float parentFontSize = (float) parent.getDouble(FONT_SIZE);
 
