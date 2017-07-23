@@ -19,7 +19,7 @@ export default class extends Shape {
         href: PropTypes.string.isRequired,
         method: PropTypes.oneOf(['align', 'stretch']),
         spacing: PropTypes.oneOf(['auto', 'exact']),
-        startOffset: numberProp
+        startOffset: PropTypes.string
     };
 
     render() {

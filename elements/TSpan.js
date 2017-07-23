@@ -14,8 +14,8 @@ export default class extends Shape {
     static propTypes = {
         ...pathProps,
         ...fontProps,
-        dx: numberProp,
-        dy: numberProp,
+        dx: PropTypes.string,
+        dy: PropTypes.string,
     };
 
     static childContextTypes = {

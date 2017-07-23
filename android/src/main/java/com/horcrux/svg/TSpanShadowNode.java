@@ -122,10 +122,11 @@ class TSpanShadowNode extends TextShadowNode {
         ReadableMap font = gc.getFont();
         applyTextPropertiesToPaint(paint, font);
 
-        double offset = 0;
         double distance = 0;
         double renderMethodScaling = 1;
         final double textMeasure = paint.measureText(line);
+        double offset = font.hasKey(TEXT_ANCHOR) ?
+            getTextAnchorShift(textMeasure, font.getString(TEXT_ANCHOR)) : 0;
 
         PathMeasure pm = null;
         if (textPath != null) {
@@ -133,16 +134,12 @@ class TSpanShadowNode extends TextShadowNode {
             distance = pm.getLength();
             final double size = gc.getFontSize();
             final String startOffset = textPath.getStartOffset();
-            offset = PropHelper.fromRelative(startOffset, distance, 0, mScale, size);
+            offset += PropHelper.fromRelative(startOffset, distance, 0, mScale, size);
             // String spacing = textPath.getSpacing(); // spacing = "auto | exact"
             final String method = textPath.getMethod(); // method = "align | stretch"
             if (STRETCH.equals(method)) {
                 renderMethodScaling = distance / textMeasure;
             }
-        }
-
-        if (font.hasKey(TEXT_ANCHOR)) {
-            offset += getTextAnchorShift(textMeasure, font.getString(TEXT_ANCHOR));
         }
 
         double x;
@@ -231,6 +228,11 @@ class TSpanShadowNode extends TextShadowNode {
 
                 assert pm != null;
                 pm.getMatrix((float) midpoint, matrix, POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG);
+                // TODO In the calculation above, if either the startpoint-on-the-path
+                // or the endpoint-on-the-path is off the end of the path,
+                // then extend the path beyond its end points with a straight line
+                // that is parallel to the tangent at the path at its end point
+                // so that the midpoint-on-the-path can still be calculated.
 
                 matrix.preTranslate((float) -halfGlyphWidth, (float) dy);
                 matrix.preScale((float) renderMethodScaling, (float) renderMethodScaling);
