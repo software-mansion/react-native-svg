@@ -31,6 +31,9 @@ import static android.graphics.PathMeasure.TANGENT_MATRIX_FLAG;
  * Shadow node for virtual TSpan view
  */
 class TSpanShadowNode extends TextShadowNode {
+    private static final double tau = 2 * Math.PI;
+    private static final double radToDeg = 360 / tau;
+
     private static final String FONTS = "fonts/";
     private static final String OTF = ".otf";
     private static final String TTF = ".ttf";
@@ -97,6 +100,29 @@ class TSpanShadowNode extends TextShadowNode {
         double renderMethodScaling = 1;
         final double textMeasure = paint.measureText(line);
 
+        /*
+            Determine the startpoint-on-the-path for the first glyph using attribute ‘startOffset’
+            and property text-anchor.
+
+            For text-anchor:start, startpoint-on-the-path is the point
+            on the path which represents the point on the path which is ‘startOffset’ distance
+            along the path from the start of the path, calculated using the user agent's distance
+            along the path algorithm.
+
+            For text-anchor:middle, startpoint-on-the-path is the point
+            on the path which represents the point on the path which is [ ‘startOffset’ minus half
+            of the total advance values for all of the glyphs in the ‘textPath’ element ] distance
+            along the path from the start of the path, calculated using the user agent's distance
+            along the path algorithm.
+
+            For text-anchor:end, startpoint-on-the-path is the point on
+            the path which represents the point on the path which is [ ‘startOffset’ minus the
+            total advance values for all of the glyphs in the ‘textPath’ element ].
+
+            Before rendering the first glyph, the horizontal component of the startpoint-on-the-path
+            is adjusted to take into account various horizontal alignment text properties and
+            attributes, such as a ‘dx’ attribute value on a ‘tspan’ element.
+         */
         final TextAnchor textAnchor = font.textAnchor;
         double offset;
         if (textAnchor == TextAnchor.start) {
@@ -113,6 +139,9 @@ class TSpanShadowNode extends TextShadowNode {
         if (textPath != null) {
             pm = new PathMeasure(textPath.getPath(), false);
             distance = pm.getLength();
+            if (distance == 0) {
+                return path;
+            }
             final double size = gc.getFontSize();
             final String startOffset = textPath.getStartOffset();
             offset += PropHelper.fromRelative(startOffset, distance, 0, mScale, size);
@@ -129,18 +158,8 @@ class TSpanShadowNode extends TextShadowNode {
             }
         }
 
-        double x;
-        double y;
-        double r;
-        double dx;
-        double dy;
-
-        Path glyph;
-        Matrix matrix;
-        String current;
-        double glyphWidth;
         String previous = "";
-        double previousGlyphWidth = 0;
+        double previousCharWidth = 0;
         final char[] chars = line.toCharArray();
 
         /*
@@ -171,60 +190,133 @@ class TSpanShadowNode extends TextShadowNode {
         final double letterSpacing = font.letterSpacing;
 
         for (int index = 0; index < length; index++) {
-            glyph = new Path();
-            final char currentChar = chars[index];
-            current = String.valueOf(currentChar);
+            Path glyph = new Path();
+            char currentChar = chars[index];
+            String current = String.valueOf(currentChar);
             paint.getTextPath(current, 0, 1, 0, 0, glyph);
-            glyphWidth = paint.measureText(current) * renderMethodScaling;
+
+            /*
+                Determine the glyph's charwidth (i.e., the amount which the current text position
+                advances horizontally when the glyph is drawn using horizontal text layout).
+            */
+            double charWidth = paint.measureText(current) * renderMethodScaling;
+
+            /*
+                For each subsequent glyph, set a new startpoint-on-the-path as the previous
+                endpoint-on-the-path, but with appropriate adjustments taking into account
+                horizontal kerning tables in the font and current values of various attributes
+                and properties, including spacing properties (e.g. letter-spacing and word-spacing)
+                and ‘tspan’ elements with values provided for attributes ‘dx’ and ‘dy’. All
+                adjustments are calculated as distance adjustments along the path, calculated
+                using the user agent's distance along the path algorithm.
+            */
 
             if (autoKerning) {
-                double bothGlyphWidth = paint.measureText(previous + current) * renderMethodScaling;
-                kerning = bothGlyphWidth - previousGlyphWidth - glyphWidth;
-                previousGlyphWidth = glyphWidth;
+                double bothCharsWidth = paint.measureText(previous + current) * renderMethodScaling;
+                kerning = bothCharsWidth - previousCharWidth - charWidth;
+                previousCharWidth = charWidth;
                 previous = current;
             }
 
-            final boolean isWordSeparator = currentChar == ' ';
-            final double wordSpace = isWordSeparator ? wordSpacing : 0;
-            final double advance = glyphWidth + kerning + wordSpace + letterSpacing;
+            boolean isWordSeparator = currentChar == ' ';
+            double wordSpace = isWordSeparator ? wordSpacing : 0;
+            double advance = charWidth + kerning + wordSpace + letterSpacing;
 
-            x = gc.nextX(advance);
-            y = gc.nextY();
-            dx = gc.nextDeltaX();
-            dy = gc.nextDeltaY();
-            r = gc.nextRotation();
+            double x = gc.nextX(advance);
+            double y = gc.nextY();
+            double dx = gc.nextDeltaX();
+            double dy = gc.nextDeltaY();
+            double r = gc.nextRotation();
 
-            matrix = new Matrix();
+            Matrix start = new Matrix();
+            Matrix mid = new Matrix();
+            Matrix end = new Matrix();
 
-            final double glyphStart = offset + x + dx - glyphWidth;
+            float[] startPointMatrixData = new float[9];
+            float[] endPointMatrixData = new float[9];
+
+            double startpoint = offset + x + dx - charWidth;
 
             if (textPath != null) {
-                double halfGlyphWidth = glyphWidth / 2;
-                double midpoint = glyphStart + halfGlyphWidth;
+                /*
+                    Determine the point on the curve which is charwidth distance along the path from
+                    the startpoint-on-the-path for this glyph, calculated using the user agent's
+                    distance along the path algorithm. This point is the endpoint-on-the-path for
+                    the glyph.
+                 */
+                double endpoint = startpoint + charWidth;
 
+                /*
+                    Determine the midpoint-on-the-path, which is the point on the path which is
+                    "halfway" (user agents can choose either a distance calculation or a parametric
+                    calculation) between the startpoint-on-the-path and the endpoint-on-the-path.
+                */
+                double halfway = charWidth / 2;
+                double midpoint = startpoint + halfway;
+
+                //  Glyphs whose midpoint-on-the-path are off the path are not rendered.
                 if (midpoint > distance) {
                     break;
                 } else if (midpoint < 0) {
                     continue;
                 }
 
-                assert pm != null;
-                pm.getMatrix((float) midpoint, matrix, POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG);
-                // TODO In the calculation above, if either the startpoint-on-the-path
-                // or the endpoint-on-the-path is off the end of the path,
-                // then extend the path beyond its end points with a straight line
-                // that is parallel to the tangent at the path at its end point
-                // so that the midpoint-on-the-path can still be calculated.
+                /*
+                    Determine the glyph-midline, which is the vertical line in the glyph's
+                    coordinate system that goes through the glyph's x-axis midpoint.
 
-                matrix.preTranslate((float) -halfGlyphWidth, (float) dy);
-                matrix.preScale((float) renderMethodScaling, (float) renderMethodScaling);
-                matrix.postTranslate(0, (float) y);
+                    Position the glyph such that the glyph-midline passes through
+                    the midpoint-on-the-path and is perpendicular to the line
+                    through the startpoint-on-the-path and the endpoint-on-the-path.
+                */
+                assert pm != null;
+                if (startpoint < 0 || endpoint > distance) {
+                    /*
+                        In the calculation above, if either the startpoint-on-the-path
+                        or the endpoint-on-the-path is off the end of the path,
+                        TODO then extend the path beyond its end points with a straight line
+                        that is parallel to the tangent at the path at its end point
+                        so that the midpoint-on-the-path can still be calculated.
+
+                        TODO suggest change in wording of svg spec:
+                        so that the midpoint-on-the-path can still be calculated
+                        to
+                        so that the angle of the glyph-midline to the x-axis can still be calculated
+                    */
+                    final int flags = POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG;
+                    pm.getMatrix((float) midpoint, mid, flags);
+                } else {
+                    pm.getMatrix((float) startpoint, start, POSITION_MATRIX_FLAG);
+                    pm.getMatrix((float) midpoint, mid, POSITION_MATRIX_FLAG);
+                    pm.getMatrix((float) endpoint, end, POSITION_MATRIX_FLAG);
+
+                    start.getValues(startPointMatrixData);
+                    end.getValues(endPointMatrixData);
+
+                    double startX = startPointMatrixData[2];
+                    double startY = startPointMatrixData[5];
+                    double endX = endPointMatrixData[2];
+                    double endY = endPointMatrixData[5];
+
+                    double glyphMidlineAngle = Math.atan2(endY - startY, endX - startX) * radToDeg;
+
+                    mid.preRotate((float) glyphMidlineAngle);
+                }
+
+            /*
+                TODO alignment-baseline
+                Align the glyph vertically relative to the midpoint-on-the-path based on property
+                alignment-baseline and any specified values for attribute ‘dy’ on a ‘tspan’ element.
+            */
+                mid.preTranslate((float) -halfway, (float) dy);
+                mid.preScale((float) renderMethodScaling, (float) renderMethodScaling);
+                mid.postTranslate(0, (float) y);
             } else {
-                matrix.setTranslate((float) glyphStart, (float) (y + dy));
+                mid.setTranslate((float) startpoint, (float) (y + dy));
             }
 
-            matrix.preRotate((float) r);
-            glyph.transform(matrix);
+            mid.preRotate((float) r);
+            glyph.transform(mid);
             path.addPath(glyph);
         }
 
