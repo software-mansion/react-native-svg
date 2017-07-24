@@ -85,6 +85,8 @@ class TextShadowNode extends GroupShadowNode {
         markUpdated();
     }
 
+    // TODO implement https://www.w3.org/TR/SVG2/text.html#TextLayoutAlgorithm
+
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
         if (opacity > MIN_OPACITY_FOR_DRAW) {
