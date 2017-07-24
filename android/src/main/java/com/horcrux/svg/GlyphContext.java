@@ -174,6 +174,7 @@ class GlyphContext {
         }
 
         FontData data = new FontData(font, parent, mScale);
+        mFontSize = data.fontSize;
         mFontContext.add(data);
         topFont = data;
 

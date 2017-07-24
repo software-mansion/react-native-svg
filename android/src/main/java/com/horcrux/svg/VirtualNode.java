@@ -44,7 +44,6 @@ abstract class VirtualNode extends LayoutShadowNode {
         0, 0, 1
     };
     float mOpacity = 1f;
-    private double mFontSize = -1;
     Matrix mMatrix = new Matrix();
 
     private int mClipRule;
@@ -63,6 +62,7 @@ abstract class VirtualNode extends LayoutShadowNode {
     private GroupShadowNode mTextRoot;
     private float canvasHeight = -1;
     private float canvasWidth = -1;
+    private GlyphContext glyphContext;
 
     VirtualNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
@@ -136,16 +136,16 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
     private double getFontSizeFromContext() {
-        if (mFontSize != -1) {
-            return mFontSize;
-        }
         GroupShadowNode root = getTextRoot();
         if (root == null) {
-            mFontSize = DEFAULT_FONT_SIZE;
-        } else {
-            mFontSize = root.getGlyphContext().getFontSize();
+            return DEFAULT_FONT_SIZE;
         }
-        return mFontSize;
+
+        if (glyphContext == null) {
+            glyphContext = root.getGlyphContext();
+        }
+
+        return glyphContext.getFontSize();
     }
 
     public abstract void draw(Canvas canvas, Paint paint, float opacity);
