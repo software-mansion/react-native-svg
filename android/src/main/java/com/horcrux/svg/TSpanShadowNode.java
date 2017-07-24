@@ -31,7 +31,6 @@ import static android.graphics.PathMeasure.TANGENT_MATRIX_FLAG;
  * Shadow node for virtual TSpan view
  */
 class TSpanShadowNode extends TextShadowNode {
-    private static final String STRETCH = "stretch";
     private static final String FONTS = "fonts/";
     private static final String OTF = ".otf";
     private static final String TTF = ".ttf";
@@ -117,9 +116,15 @@ class TSpanShadowNode extends TextShadowNode {
             final double size = gc.getFontSize();
             final String startOffset = textPath.getStartOffset();
             offset += PropHelper.fromRelative(startOffset, distance, 0, mScale, size);
-            // String spacing = textPath.getSpacing(); // spacing = "auto | exact"
-            final String method = textPath.getMethod(); // method = "align | stretch"
-            if (STRETCH.equals(method)) {
+            /*
+            TextPathSpacing spacing = textPath.getSpacing();
+            if (spacing == TextPathSpacing.auto) {
+                // Hmm, what to do here?
+                // https://svgwg.org/svg2-draft/text.html#TextPathElementSpacingAttribute
+            }
+            */
+            final TextPathMethod method = textPath.getMethod();
+            if (method == TextPathMethod.stretch) {
                 renderMethodScaling = distance / textMeasure;
             }
         }

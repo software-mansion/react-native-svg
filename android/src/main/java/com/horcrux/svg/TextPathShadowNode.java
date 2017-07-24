@@ -23,9 +23,9 @@ import javax.annotation.Nullable;
 class TextPathShadowNode extends TextShadowNode {
 
     private String mHref;
-    private String mMethod;
-    private String mSpacing;
     private @Nullable String mStartOffset;
+    private TextPathMethod mMethod = TextPathMethod.align;
+    private TextPathSpacing mSpacing = TextPathSpacing.exact;
 
     @ReactProp(name = "href")
     public void setHref(String href) {
@@ -41,21 +41,21 @@ class TextPathShadowNode extends TextShadowNode {
 
     @ReactProp(name = "method")
     public void setMethod(@Nullable String method) {
-        mMethod = method;
+        mMethod = TextPathMethod.valueOf(method);
         markUpdated();
     }
 
     @ReactProp(name = "spacing")
     public void setSpacing(@Nullable String spacing) {
-        mSpacing = spacing;
+        mSpacing = TextPathSpacing.valueOf(spacing);
         markUpdated();
     }
 
-    String getMethod() {
+    TextPathMethod getMethod() {
         return mMethod;
     }
 
-    public String getSpacing() {
+    public TextPathSpacing getSpacing() {
         return mSpacing;
     }
 
