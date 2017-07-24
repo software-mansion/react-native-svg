@@ -26,7 +26,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-import static com.horcrux.svg.GlyphContext.DEFAULT_FONT_SIZE;
+import static com.horcrux.svg.FontData.DEFAULT_FONT_SIZE;
 
 abstract class VirtualNode extends LayoutShadowNode {
     /*

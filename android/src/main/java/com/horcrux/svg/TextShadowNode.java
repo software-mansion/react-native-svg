@@ -37,12 +37,6 @@ class TextShadowNode extends GroupShadowNode {
     static final String TEXT_DECORATION_LINE_THROUGH = "line-through";
     // static final String TEXT_DECORATION_BLINK = "blink";
 
-    static final String KERNING = "kerning";
-    static final String TEXT_ANCHOR = "textAnchor";
-    static final String WORD_SPACING = "wordSpacing";
-    static final String LETTER_SPACING = "letterSpacing";
-    static final String TEXT_DECORATION = "textDecoration";
-
     private @Nullable ReadableArray mPositionX;
     private @Nullable ReadableArray mPositionY;
     private @Nullable ReadableArray mRotate;
