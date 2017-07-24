@@ -4,6 +4,7 @@ import com.facebook.react.bridge.ReadableMap;
 
 import static com.facebook.react.uimanager.ViewProps.FONT_FAMILY;
 import static com.facebook.react.uimanager.ViewProps.FONT_SIZE;
+import static com.facebook.react.uimanager.ViewProps.FONT_STYLE;
 import static com.facebook.react.uimanager.ViewProps.FONT_WEIGHT;
 
 class FontData {
@@ -21,12 +22,12 @@ class FontData {
 
     final double fontSize;
 
-    final String fontStyle;
     final String fontFamily;
-    final String fontWeight;
+    final FontStyle fontStyle;
+    final FontWeight fontWeight;
 
-    final String textAnchor;
-    final String textDecoration;
+    final TextAnchor textAnchor;
+    final TextDecoration textDecoration;
 
     final double kerning;
     final double wordSpacing;
@@ -37,12 +38,12 @@ class FontData {
     static final FontData Defaults = new FontData();
 
     private FontData() {
-        fontStyle = "";
         fontFamily = "";
-        fontWeight = "";
+        fontStyle = FontStyle.normal;
+        fontWeight = FontWeight.Normal;
 
-        textAnchor = "start";
-        textDecoration = "none";
+        textAnchor = TextAnchor.start;
+        textDecoration = TextDecoration.None;
 
         manualKerning = false;
         kerning = DEFAULT_KERNING;
@@ -77,12 +78,12 @@ class FontData {
             fontSize = parentFontSize;
         }
 
-        fontStyle = font.hasKey(FONT_SIZE) ? font.getString(FONT_SIZE) : parent.fontStyle;
         fontFamily = font.hasKey(FONT_FAMILY) ? font.getString(FONT_FAMILY) : parent.fontFamily;
-        fontWeight = font.hasKey(FONT_WEIGHT) ? font.getString(FONT_WEIGHT) : parent.fontWeight;
+        fontStyle = font.hasKey(FONT_STYLE) ? FontStyle.valueOf(font.getString(FONT_STYLE)) : parent.fontStyle;
+        fontWeight = font.hasKey(FONT_WEIGHT) ? FontWeight.getEnum(font.getString(FONT_WEIGHT)) : parent.fontWeight;
 
-        textAnchor = font.hasKey(TEXT_ANCHOR) ? font.getString(TEXT_ANCHOR) : parent.textAnchor;
-        textDecoration = font.hasKey(TEXT_DECORATION) ? font.getString(TEXT_DECORATION) : parent.textDecoration;
+        textAnchor = font.hasKey(TEXT_ANCHOR) ? TextAnchor.valueOf(font.getString(TEXT_ANCHOR)) : parent.textAnchor;
+        textDecoration = font.hasKey(TEXT_DECORATION) ? TextDecoration.getEnum(font.getString(TEXT_DECORATION)) : parent.textDecoration;
 
         final boolean hasKerning = font.hasKey(KERNING);
         manualKerning = hasKerning || parent.manualKerning;

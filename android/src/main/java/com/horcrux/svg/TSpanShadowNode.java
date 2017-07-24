@@ -31,11 +31,8 @@ import static android.graphics.PathMeasure.TANGENT_MATRIX_FLAG;
  * Shadow node for virtual TSpan view
  */
 class TSpanShadowNode extends TextShadowNode {
-
     private static final String STRETCH = "stretch";
-    private static final String ITALIC = "italic";
     private static final String FONTS = "fonts/";
-    private static final String BOLD = "bold";
     private static final String OTF = ".otf";
     private static final String TTF = ".ttf";
 
@@ -85,21 +82,6 @@ class TSpanShadowNode extends TextShadowNode {
         return mCache;
     }
 
-    private double getTextAnchorShift(double width, String textAnchor) {
-        double x = 0;
-
-        switch (textAnchor) {
-            case TEXT_ANCHOR_MIDDLE:
-                x = -width / 2;
-                break;
-            case TEXT_ANCHOR_END:
-                x = -width;
-                break;
-        }
-
-        return x;
-    }
-
     private Path getLinePath(String line, Paint paint) {
         final int length = line.length();
         final Path path = new Path();
@@ -115,7 +97,18 @@ class TSpanShadowNode extends TextShadowNode {
         double distance = 0;
         double renderMethodScaling = 1;
         final double textMeasure = paint.measureText(line);
-        double offset = getTextAnchorShift(textMeasure, font.textAnchor);
+
+        final TextAnchor textAnchor = font.textAnchor;
+        double offset;
+        if (textAnchor == TextAnchor.start) {
+            offset = 0;
+        } else {
+            if (textAnchor == TextAnchor.middle) {
+                offset = -textMeasure / 2;
+            } else {
+                offset = -textMeasure;
+            }
+        }
 
         PathMeasure pm = null;
         if (textPath != null) {
@@ -238,22 +231,18 @@ class TSpanShadowNode extends TextShadowNode {
 
         double fontSize = font.fontSize * mScale;
 
-        boolean isBold = BOLD.equals(font.fontWeight);
+        boolean isBold = font.fontWeight == FontWeight.Bold;
 
-        boolean isItalic = ITALIC.equals(font.fontStyle);
+        boolean isItalic = font.fontStyle == FontStyle.italic;
 
         boolean underlineText = false;
         boolean strikeThruText = false;
 
-        String decoration = font.textDecoration;
-        switch (decoration) {
-            case TEXT_DECORATION_UNDERLINE:
-                underlineText = true;
-                break;
-
-            case TEXT_DECORATION_LINE_THROUGH:
-                strikeThruText = true;
-                break;
+        TextDecoration decoration = font.textDecoration;
+        if (decoration == TextDecoration.Underline) {
+            underlineText = true;
+        } else if (decoration == TextDecoration.LineThrough) {
+            strikeThruText = true;
         }
 
         int fontStyle;

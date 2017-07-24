@@ -24,19 +24,6 @@ import javax.annotation.Nullable;
  */
 
 class TextShadowNode extends GroupShadowNode {
-    // static final String INHERIT = "inherit";
-
-    // static final String TEXT_ANCHOR_AUTO = "auto";
-    // static final String TEXT_ANCHOR_START = "start";
-    static final String TEXT_ANCHOR_MIDDLE = "middle";
-    static final String TEXT_ANCHOR_END = "end";
-
-    // static final String TEXT_DECORATION_NONE = "none";
-    static final String TEXT_DECORATION_UNDERLINE = "underline";
-    // static final String TEXT_DECORATION_OVERLINE = "overline";
-    static final String TEXT_DECORATION_LINE_THROUGH = "line-through";
-    // static final String TEXT_DECORATION_BLINK = "blink";
-
     private @Nullable ReadableArray mPositionX;
     private @Nullable ReadableArray mPositionY;
     private @Nullable ReadableArray mRotate;
