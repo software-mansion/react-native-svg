@@ -219,7 +219,7 @@ class TSpanShadowNode extends TextShadowNode {
         double totalHeight = top + bottom;
         double baselineShift = 0;
         if (mAlignmentBaseline != null) {
-            // TODO alignment-baseline
+            // TODO alignment-baseline, test / verify behavior
             switch (mAlignmentBaseline) {
                 // https://wiki.apache.org/xmlgraphics-fop/LineLayout/AlignmentHandling
                 default:
