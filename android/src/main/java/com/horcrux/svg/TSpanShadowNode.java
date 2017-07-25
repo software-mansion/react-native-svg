@@ -183,6 +183,13 @@ class TSpanShadowNode extends TextShadowNode {
         final double letterSpacing = font.letterSpacing;
         final boolean autoKerning = !font.manualKerning;
 
+        Paint.FontMetrics fm = paint.getFontMetrics();
+        float ascent = fm.ascent;
+        float bottom = fm.bottom;
+        float descent = fm.descent;
+        float leading = fm.leading;
+        float top = fm.top;
+
         final char[] chars = line.toCharArray();
         for (int index = 0; index < length; index++) {
             char currentChar = chars[index];
@@ -300,7 +307,32 @@ class TSpanShadowNode extends TextShadowNode {
                 TODO alignment-baseline
                 Align the glyph vertically relative to the midpoint-on-the-path based on property
                 alignment-baseline and any specified values for attribute ‘dy’ on a ‘tspan’ element.
+
+                https://developer.mozilla.org/en/docs/Web/CSS/vertical-align
+                https://wiki.apache.org/xmlgraphics-fop/LineLayout/AlignmentHandling
+                https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6bsln.html
+                https://www.microsoft.com/typography/otspec/base.htm
+                http://apike.ca/prog_svg_text_style.html
+                https://www.w3schools.com/tags/canvas_textbaseline.asp
+                http://vanseodesign.com/web-design/svg-text-baseline-alignment/
+                https://iamvdo.me/en/blog/css-font-metrics-line-height-and-vertical-align
+                https://tympanus.net/codrops/css_reference/vertical-align/
             */
+                switch (font.alignmentBaseline) {
+                    case baseline:
+                    case textBottom:
+                    case alphabetic:
+                    case ideographic:
+                    case middle:
+                    case central:
+                    case mathematical:
+                    case textTop:
+                    case bottom:
+                    case center:
+                    case top:
+                    default:
+                }
+
                 mid.preTranslate((float) -halfway, (float) dy);
                 mid.preScale((float) renderMethodScaling, (float) renderMethodScaling);
                 mid.postTranslate(0, (float) y);

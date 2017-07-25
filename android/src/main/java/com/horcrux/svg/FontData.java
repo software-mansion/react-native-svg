@@ -19,6 +19,7 @@ class FontData {
     private static final String WORD_SPACING = "wordSpacing";
     private static final String LETTER_SPACING = "letterSpacing";
     private static final String TEXT_DECORATION = "textDecoration";
+    private static final String ALIGNMENT_BASELINE = "alignment-baseline";
 
     final double fontSize;
 
@@ -28,6 +29,7 @@ class FontData {
 
     final TextAnchor textAnchor;
     final TextDecoration textDecoration;
+    final AlignmentBaseline alignmentBaseline;
 
     final double kerning;
     final double wordSpacing;
@@ -44,6 +46,7 @@ class FontData {
 
         textAnchor = TextAnchor.start;
         textDecoration = TextDecoration.None;
+        alignmentBaseline = AlignmentBaseline.baseline;
 
         manualKerning = false;
         kerning = DEFAULT_KERNING;
@@ -84,6 +87,7 @@ class FontData {
 
         textAnchor = font.hasKey(TEXT_ANCHOR) ? TextAnchor.valueOf(font.getString(TEXT_ANCHOR)) : parent.textAnchor;
         textDecoration = font.hasKey(TEXT_DECORATION) ? TextDecoration.getEnum(font.getString(TEXT_DECORATION)) : parent.textDecoration;
+        alignmentBaseline = font.hasKey(ALIGNMENT_BASELINE) ? AlignmentBaseline.getEnum(font.getString(ALIGNMENT_BASELINE)) : parent.alignmentBaseline;
 
         final boolean hasKerning = font.hasKey(KERNING);
         manualKerning = hasKerning || parent.manualKerning;
