@@ -122,18 +122,8 @@ class TSpanShadowNode extends TextShadowNode {
             is adjusted to take into account various horizontal alignment text properties and
             attributes, such as a ‘dx’ attribute value on a ‘tspan’ element.
          */
-        double offset;
-        final TextAnchor textAnchor = font.textAnchor;
         final double textMeasure = paint.measureText(line);
-        if (textAnchor == TextAnchor.start) {
-            offset = 0;
-        } else {
-            if (textAnchor == TextAnchor.middle) {
-                offset = -textMeasure / 2;
-            } else {
-                offset = -textMeasure;
-            }
-        }
+        double offset = getTextAnchorOffset(font.textAnchor, textMeasure);
 
         double distance = 0;
         PathMeasure pm = null;
@@ -144,9 +134,7 @@ class TSpanShadowNode extends TextShadowNode {
             if (distance == 0) {
                 return path;
             }
-            final double size = gc.getFontSize();
-            final String startOffset = textPath.getStartOffset();
-            offset += PropHelper.fromRelative(startOffset, distance, 0, mScale, size);
+            offset += getAbsoluteStartOffset(distance, gc.getFontSize(), textPath.getStartOffset());
             /*
             TextPathSpacing spacing = textPath.getSpacing();
             if (spacing == TextPathSpacing.auto) {
@@ -305,6 +293,13 @@ class TSpanShadowNode extends TextShadowNode {
             }
         }
 
+        Matrix start = new Matrix();
+        Matrix mid = new Matrix();
+        Matrix end = new Matrix();
+
+        float[] startPointMatrixData = new float[9];
+        float[] endPointMatrixData = new float[9];
+
         final char[] chars = line.toCharArray();
         for (int index = 0; index < length; index++) {
             char currentChar = chars[index];
@@ -341,13 +336,6 @@ class TSpanShadowNode extends TextShadowNode {
             double dx = gc.nextDeltaX();
             double dy = gc.nextDeltaY();
             double r = gc.nextRotation();
-
-            Matrix start = new Matrix();
-            Matrix mid = new Matrix();
-            Matrix end = new Matrix();
-
-            float[] startPointMatrixData = new float[9];
-            float[] endPointMatrixData = new float[9];
 
             double startpoint = offset + x + dx - charWidth;
 
@@ -446,6 +434,24 @@ class TSpanShadowNode extends TextShadowNode {
         }
 
         return path;
+    }
+
+    private double getAbsoluteStartOffset(double distance, double size, String startOffset) {
+        return PropHelper.fromRelative(startOffset, distance, 0, mScale, size);
+    }
+
+    private double getTextAnchorOffset(TextAnchor textAnchor, double textMeasure) {
+        switch (textAnchor) {
+            default:
+            case start:
+                return 0;
+
+            case middle:
+                return -textMeasure / 2;
+
+            case end:
+                return -textMeasure;
+        }
     }
 
     private void applyTextPropertiesToPaint(Paint paint, FontData font) {
