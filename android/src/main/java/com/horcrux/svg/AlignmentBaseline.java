@@ -31,7 +31,20 @@ enum AlignmentBaseline {
     textTop("text-top"),
     bottom("bottom"),
     center("center"),
-    top("top");
+    top("top"),
+    /*
+        SVG implementations may support the following aliases in order to support legacy content:
+
+        text-before-edge = text-top
+        text-after-edge = text-bottom
+    */
+    textBeforeEdge("text-before-edge"),
+    textAfterEdge("text-after-edge"),
+    // SVG 1.1
+    beforeEdge("before-edge"),
+    afterEdge("after-edge"),
+    hanging("hanging"),
+    ;
 
     private final String alignment;
 
