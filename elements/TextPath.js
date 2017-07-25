@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass';
 import {TextPathAttributes} from '../lib/attributes';
 import extractText from '../lib/extract/extractText';
@@ -16,15 +15,15 @@ export default class extends Shape {
     static propTypes = textPathProps;
 
     render() {
-        let {children, href, startOffset, ...props} = this.props;
+        let {children, href, startOffset, method, spacing, side, ...props} = this.props;
         if (href) {
             let matched = href.match(idExpReg);
 
             if (matched) {
                 href = matched[1];
-
+                startOffset = `${startOffset || 0}`;
                 return <RNSVGTextPath
-                    href={href}
+                    {...{href, startOffset, method, spacing, side}}
                     {...extractProps({
                         ...props,
                         x: null,
@@ -32,7 +31,6 @@ export default class extends Shape {
                     }, this)}
                     {...extractText({
                         children,
-                        startOffset
                     }, true)}
                 />;
             }

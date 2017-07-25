@@ -19,7 +19,7 @@ class FontData {
     private static final String WORD_SPACING = "wordSpacing";
     private static final String LETTER_SPACING = "letterSpacing";
     private static final String TEXT_DECORATION = "textDecoration";
-    private static final String ALIGNMENT_BASELINE = "alignment-baseline";
+    private static final String ALIGNMENT_BASELINE = "alignmentBaseline";
 
     final double fontSize;
 

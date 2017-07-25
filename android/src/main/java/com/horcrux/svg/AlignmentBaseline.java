@@ -33,31 +33,31 @@ enum AlignmentBaseline {
     center("center"),
     top("top");
 
-    private final String weight;
+    private final String alignment;
 
-    AlignmentBaseline(String weight) {
-        this.weight = weight;
+    AlignmentBaseline(String alignment) {
+        this.alignment = alignment;
     }
 
     public static AlignmentBaseline getEnum(String strVal) {
-        if (!weightToEnum.containsKey(strVal)) {
+        if (!alignmentToEnum.containsKey(strVal)) {
             throw new IllegalArgumentException("Unknown String Value: " + strVal);
         }
-        return weightToEnum.get(strVal);
+        return alignmentToEnum.get(strVal);
     }
 
-    private static final Map<String, AlignmentBaseline> weightToEnum;
+    private static final Map<String, AlignmentBaseline> alignmentToEnum;
 
     static {
         final Map<String, AlignmentBaseline> tmpMap = new HashMap<>();
         for (final AlignmentBaseline en : AlignmentBaseline.values()) {
-            tmpMap.put(en.weight, en);
+            tmpMap.put(en.alignment, en);
         }
-        weightToEnum = ImmutableMap.copyOf(tmpMap);
+        alignmentToEnum = ImmutableMap.copyOf(tmpMap);
     }
 
     @Override
     public String toString() {
-        return weight;
+        return alignment;
     }
 }
