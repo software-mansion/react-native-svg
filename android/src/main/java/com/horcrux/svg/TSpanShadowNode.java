@@ -96,10 +96,6 @@ class TSpanShadowNode extends TextShadowNode {
         FontData font = gc.getFont();
         applyTextPropertiesToPaint(paint, font);
 
-        double distance = 0;
-        double renderMethodScaling = 1;
-        final double textMeasure = paint.measureText(line);
-
         /*
             Determine the startpoint-on-the-path for the first glyph using attribute ‘startOffset’
             and property text-anchor.
@@ -123,8 +119,9 @@ class TSpanShadowNode extends TextShadowNode {
             is adjusted to take into account various horizontal alignment text properties and
             attributes, such as a ‘dx’ attribute value on a ‘tspan’ element.
          */
-        final TextAnchor textAnchor = font.textAnchor;
         double offset;
+        final TextAnchor textAnchor = font.textAnchor;
+        final double textMeasure = paint.measureText(line);
         if (textAnchor == TextAnchor.start) {
             offset = 0;
         } else {
@@ -135,7 +132,9 @@ class TSpanShadowNode extends TextShadowNode {
             }
         }
 
+        double distance = 0;
         PathMeasure pm = null;
+        double renderMethodScaling = 1;
         if (textPath != null) {
             pm = new PathMeasure(textPath.getPath(), false);
             distance = pm.getLength();
@@ -158,10 +157,6 @@ class TSpanShadowNode extends TextShadowNode {
             }
         }
 
-        String previous = "";
-        double previousCharWidth = 0;
-        final char[] chars = line.toCharArray();
-
         /*
         *
         * Three properties affect the space between characters and words:
@@ -181,19 +176,17 @@ class TSpanShadowNode extends TextShadowNode {
         *  or decrease the space between typographic character units in order to justify text.
         *
         * */
-
-        final boolean autoKerning = !font.manualKerning;
+        String previous = "";
+        double previousCharWidth = 0;
         double kerning = font.kerning;
-
         final double wordSpacing = font.wordSpacing;
-
         final double letterSpacing = font.letterSpacing;
+        final boolean autoKerning = !font.manualKerning;
 
+        final char[] chars = line.toCharArray();
         for (int index = 0; index < length; index++) {
-            Path glyph = new Path();
             char currentChar = chars[index];
             String current = String.valueOf(currentChar);
-            paint.getTextPath(current, 0, 1, 0, 0, glyph);
 
             /*
                 Determine the glyph's charwidth (i.e., the amount which the current text position
@@ -316,6 +309,9 @@ class TSpanShadowNode extends TextShadowNode {
             }
 
             mid.preRotate((float) r);
+
+            Path glyph = new Path();
+            paint.getTextPath(current, 0, 1, 0, 0, glyph);
             glyph.transform(mid);
             path.addPath(glyph);
         }
@@ -329,7 +325,6 @@ class TSpanShadowNode extends TextShadowNode {
         double fontSize = font.fontSize * mScale;
 
         boolean isBold = font.fontWeight == FontWeight.Bold;
-
         boolean isItalic = font.fontStyle == FontStyle.italic;
 
         boolean underlineText = false;
