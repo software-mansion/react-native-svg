@@ -4,7 +4,7 @@ import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shi
 import {TextPathAttributes} from '../lib/attributes';
 import extractText from '../lib/extract/extractText';
 import Shape from './Shape';
-import {pathProps, fontProps} from '../lib/props';
+import {textPathProps} from '../lib/props';
 import extractProps from '../lib/extract/extractProps';
 import TSpan from './TSpan';
 
@@ -13,14 +13,7 @@ const idExpReg = /^#(.+)$/;
 export default class extends Shape {
     static displayName = 'Span';
 
-    static propTypes = {
-        ...pathProps,
-        ...fontProps,
-        href: PropTypes.string.isRequired,
-        method: PropTypes.oneOf(['align', 'stretch']),
-        spacing: PropTypes.oneOf(['auto', 'exact']),
-        startOffset: PropTypes.string
-    };
+    static propTypes = textPathProps;
 
     render() {
         let {children, href, startOffset, ...props} = this.props;

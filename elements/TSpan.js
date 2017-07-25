@@ -2,7 +2,7 @@ import React  from 'react';
 import PropTypes from 'prop-types';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass';
 import extractText from '../lib/extract/extractText';
-import {pathProps, fontProps} from '../lib/props';
+import {textProps} from '../lib/props';
 import {TSpanAttibutes} from '../lib/attributes';
 import extractProps from '../lib/extract/extractProps';
 import Shape from './Shape';
@@ -11,12 +11,7 @@ import Shape from './Shape';
 export default class extends Shape {
     static displayName = 'TSpan';
 
-    static propTypes = {
-        ...pathProps,
-        ...fontProps,
-        dx: PropTypes.string,
-        dy: PropTypes.string,
-    };
+    static propTypes = textProps;
 
     //noinspection JSUnusedGlobalSymbols
     static childContextTypes = {
