@@ -24,11 +24,18 @@ import javax.annotation.Nullable;
  */
 
 class TextShadowNode extends GroupShadowNode {
+    AlignmentBaseline mAlignmentBaseline;
     private @Nullable ReadableArray mPositionX;
     private @Nullable ReadableArray mPositionY;
     private @Nullable ReadableArray mRotate;
     private @Nullable ReadableArray mDeltaX;
     private @Nullable ReadableArray mDeltaY;
+
+    @ReactProp(name = "alignmentBaseline")
+    public void setMethod(@Nullable String alignment) {
+        mAlignmentBaseline = AlignmentBaseline.valueOf(alignment);
+        markUpdated();
+    }
 
     @ReactProp(name = "rotate")
     public void setRotate(@Nullable ReadableArray rotate) {

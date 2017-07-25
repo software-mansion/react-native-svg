@@ -15,7 +15,7 @@ export default class extends Shape {
     static propTypes = textPathProps;
 
     render() {
-        let {children, href, startOffset, method, spacing, side, ...props} = this.props;
+        let {children, href, startOffset, method, spacing, side, alignmentBaseline, ...props} = this.props;
         if (href) {
             let matched = href.match(idExpReg);
 
@@ -23,11 +23,11 @@ export default class extends Shape {
                 href = matched[1];
                 startOffset = `${startOffset || 0}`;
                 return <RNSVGTextPath
-                    {...{href, startOffset, method, spacing, side}}
+                    {...{href, startOffset, method, spacing, side, alignmentBaseline}}
                     {...extractProps({
                         ...props,
                         x: null,
-                        y: null
+                        y: null,
                     }, this)}
                     {...extractText({
                         children,

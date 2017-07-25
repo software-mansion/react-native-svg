@@ -26,6 +26,7 @@ class TextPathShadowNode extends TextShadowNode {
     private @Nullable String mStartOffset;
     private TextPathMethod mMethod = TextPathMethod.align;
     private TextPathSpacing mSpacing = TextPathSpacing.exact;
+    private TextPathSide mSide;
 
     @ReactProp(name = "href")
     public void setHref(String href) {
@@ -51,12 +52,22 @@ class TextPathShadowNode extends TextShadowNode {
         markUpdated();
     }
 
+    @ReactProp(name = "side")
+    public void setSide(@Nullable String side) {
+        mSide = TextPathSide.valueOf(side);
+        markUpdated();
+    }
+
     TextPathMethod getMethod() {
         return mMethod;
     }
 
     public TextPathSpacing getSpacing() {
         return mSpacing;
+    }
+
+    public TextPathSide getSide() {
+        return mSide;
     }
 
     String getStartOffset() {
