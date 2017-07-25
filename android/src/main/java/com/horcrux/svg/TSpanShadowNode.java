@@ -16,6 +16,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 
@@ -184,11 +185,11 @@ class TSpanShadowNode extends TextShadowNode {
         final boolean autoKerning = !font.manualKerning;
 
         Paint.FontMetrics fm = paint.getFontMetrics();
-        float ascent = fm.ascent;
-        float bottom = fm.bottom;
-        float descent = fm.descent;
-        float leading = fm.leading;
-        float top = fm.top;
+        double top = fm.top;
+        double bottom = fm.bottom;
+        double ascent = fm.ascent;
+        double descent = fm.descent;
+        double totalHeight = top - bottom;
 
         final char[] chars = line.toCharArray();
         for (int index = 0; index < length; index++) {
@@ -309,7 +310,6 @@ class TSpanShadowNode extends TextShadowNode {
                 alignment-baseline and any specified values for attribute ‘dy’ on a ‘tspan’ element.
 
                 https://developer.mozilla.org/en/docs/Web/CSS/vertical-align
-                https://wiki.apache.org/xmlgraphics-fop/LineLayout/AlignmentHandling
                 https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6bsln.html
                 https://www.microsoft.com/typography/otspec/base.htm
                 http://apike.ca/prog_svg_text_style.html
@@ -317,23 +317,103 @@ class TSpanShadowNode extends TextShadowNode {
                 http://vanseodesign.com/web-design/svg-text-baseline-alignment/
                 https://iamvdo.me/en/blog/css-font-metrics-line-height-and-vertical-align
                 https://tympanus.net/codrops/css_reference/vertical-align/
+
+                11.10.2.6. The ‘alignment-baseline’ property
+
+                This property is defined in the CSS Line Layout Module 3 specification. See 'alignment-baseline'. [css-inline-3]
+
+                The vertical-align property shorthand should be preferred in new content.
+
+                SVG 2 introduces some changes to the definition of this property.
+                In particular: the values 'auto', 'before-edge', and 'after-edge' have been removed.
+                For backwards compatibility, 'text-before-edge' should be mapped to 'text-top' and
+                'text-after-edge' should be mapped to 'text-bottom'.
+
+                Neither 'text-before-edge' nor 'text-after-edge' should be used with the vertical-align property.
+
+                SVG implementations may support the following aliases in order to support legacy content:
+                TODO?
+                text-before-edge = text-top
+                text-after-edge = text-bottom
             */
+                double baselineShift;
                 switch (font.alignmentBaseline) {
-                    case baseline:
-                    case textBottom:
-                    case alphabetic:
-                    case ideographic:
-                    case middle:
-                    case central:
-                    case mathematical:
-                    case textTop:
-                    case bottom:
-                    case center:
-                    case top:
+                    // https://wiki.apache.org/xmlgraphics-fop/LineLayout/AlignmentHandling
                     default:
+                    case baseline:
+                        // Use the dominant baseline choice of the parent.
+                        // Match the box’s corresponding baseline to that of its parent.
+                        baselineShift = 0;
+                        break;
+
+                    case textBottom:
+                        // Match the bottom of the box to the bottom of the parent’s content area.
+                        // text-after-edge = text-bottom
+                        // text-after-edge = descender depth
+                        baselineShift = descent;
+                        break;
+
+                    case alphabetic:
+                        // Match the box’s alphabetic baseline to that of its parent.
+                        // alphabetic = 0
+                        baselineShift = 0;
+                        break;
+
+                    case ideographic:
+                        // Match the box’s ideographic character face under-side baseline to that of its parent.
+                        // ideographic = descender depth
+                        baselineShift = descent;
+                        break;
+
+                    case middle:
+                        // Align the vertical midpoint of the box with the baseline of the parent box plus half the x-height of the parent.
+                        // middle = x height / 2
+                        Rect bounds = new Rect();
+                        // this will just retrieve the bounding rect for 'x'
+                        paint.getTextBounds("x", 0, 1, bounds);
+                        int xHeight = bounds.height();
+                        baselineShift = xHeight / 2;
+                        break;
+
+                    case central:
+                        // Match the box’s central baseline to the central baseline of its parent.
+                        // central = (ascender height - descender depth) / 2
+                        baselineShift = (ascent - descent) / 2;
+                        break;
+
+                    case mathematical:
+                        // Match the box’s mathematical baseline to that of its parent.
+                    // Hanging and mathematical baselines
+                    // There are no obvious formulas to calculate the position of these baselines.
+                    // At the time of writing FOP puts the hanging baseline at 80% of the ascender
+                    // height and the mathematical baseline at 50%.
+                        baselineShift = ascent / 2;
+                        break;
+
+                    case textTop:
+                        // Match the top of the box to the top of the parent’s content area.
+                        // text-before-edge = text-top
+                        // text-before-edge = ascender height
+                        baselineShift = ascent;
+                        break;
+
+                    case bottom:
+                        // Align the top of the aligned subtree with the top of the line box.
+                        baselineShift = bottom;
+                        break;
+
+                    case center:
+                        // Align the center of the aligned subtree with the center of the line box.
+                        baselineShift = totalHeight / 2;
+                        break;
+
+                    case top:
+                        // Align the bottom of the aligned subtree with the bottom of the line box.
+                        baselineShift = top;
+                        break;
                 }
 
-                mid.preTranslate((float) -halfway, (float) dy);
+                mid.preTranslate((float) -halfway, (float) (dy + baselineShift));
                 mid.preScale((float) renderMethodScaling, (float) renderMethodScaling);
                 mid.postTranslate(0, (float) y);
             } else {
