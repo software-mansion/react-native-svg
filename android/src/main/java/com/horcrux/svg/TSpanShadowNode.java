@@ -134,7 +134,7 @@ class TSpanShadowNode extends TextShadowNode {
             if (distance == 0) {
                 return path;
             }
-            offset += getAbsoluteStartOffset(distance, gc.getFontSize(), textPath.getStartOffset());
+            offset += getAbsoluteStartOffset(textPath.getStartOffset(), distance, gc.getFontSize());
             /*
             TextPathSpacing spacing = textPath.getSpacing();
             if (spacing == TextPathSpacing.auto) {
@@ -440,8 +440,8 @@ class TSpanShadowNode extends TextShadowNode {
         return 1;
     }
 
-    private double getAbsoluteStartOffset(double distance, double size, String startOffset) {
-        return PropHelper.fromRelative(startOffset, distance, 0, mScale, size);
+    private double getAbsoluteStartOffset(String startOffset, double distance, double fontSize) {
+        return PropHelper.fromRelative(startOffset, distance, 0, mScale, fontSize);
     }
 
     private double getTextAnchorOffset(TextAnchor textAnchor, double textMeasure) {
