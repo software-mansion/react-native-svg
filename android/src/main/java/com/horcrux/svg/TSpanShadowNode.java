@@ -98,6 +98,7 @@ class TSpanShadowNode extends TextShadowNode {
         GlyphContext gc = getTextRootGlyphContext();
         FontData font = gc.getFont();
         applyTextPropertiesToPaint(paint, font);
+        GlyphPathBag bag = new GlyphPathBag(paint);
 
         /*
             Determine the startpoint-on-the-path for the first glyph using attribute ‘startOffset’
@@ -127,7 +128,6 @@ class TSpanShadowNode extends TextShadowNode {
 
         double distance = 0;
         PathMeasure pm = null;
-        double renderMethodScaling = 1;
         if (textPath != null) {
             pm = new PathMeasure(textPath.getPath(), false);
             distance = pm.getLength();
@@ -142,11 +142,9 @@ class TSpanShadowNode extends TextShadowNode {
                 // https://svgwg.org/svg2-draft/text.html#TextPathElementSpacingAttribute
             }
             */
-            final TextPathMethod method = textPath.getMethod();
-            if (method == TextPathMethod.stretch) {
-                renderMethodScaling = distance / textMeasure;
-            }
         }
+
+        double renderMethodScaling = getRenderMethodScaling(textMeasure, distance);
 
         /*
         *
@@ -427,13 +425,19 @@ class TSpanShadowNode extends TextShadowNode {
 
             mid.preRotate((float) r);
 
-            Path glyph = new Path();
-            paint.getTextPath(current, 0, 1, 0, 0, glyph);
+            Path glyph = bag.getOrCreateAndCache(currentChar, current);
             glyph.transform(mid);
             path.addPath(glyph);
         }
 
         return path;
+    }
+
+    private double getRenderMethodScaling(double textMeasure, double distance) {
+        if (textPath != null && textPath.getMethod() == TextPathMethod.stretch) {
+            return distance / textMeasure;
+        }
+        return 1;
     }
 
     private double getAbsoluteStartOffset(double distance, double size, String startOffset) {
