@@ -127,6 +127,7 @@ class TSpanShadowNode extends TextShadowNode {
         final double textMeasure = paint.measureText(line);
         double offset = getTextAnchorOffset(font.textAnchor, textMeasure);
 
+        final int side = textPath.getSide() == TextPathSide.right ? -1 : 1;
         double distance = 0;
         PathMeasure pm = null;
         boolean sharpMidline = false;
@@ -148,6 +149,7 @@ class TSpanShadowNode extends TextShadowNode {
         }
 
         double renderMethodScaling = getRenderMethodScaling(textMeasure, distance);
+        double scaledDirection = renderMethodScaling * side;
 
         /*
         *
@@ -338,7 +340,9 @@ class TSpanShadowNode extends TextShadowNode {
             double dy = gc.nextDeltaY();
             double r = gc.nextRotation();
 
-            double startpoint = offset + x + dx - charWidth;
+            charWidth = charWidth * side;
+            double cursor = offset + (x + dx) * side;
+            double startpoint = cursor - charWidth;
 
             if (textPath != null) {
                 /*
@@ -347,7 +351,7 @@ class TSpanShadowNode extends TextShadowNode {
                     distance along the path algorithm. This point is the endpoint-on-the-path for
                     the glyph.
                  */
-                double endpoint = startpoint + charWidth;
+                double endpoint = cursor;
 
                 /*
                     Determine the midpoint-on-the-path, which is the point on the path which is
@@ -417,7 +421,7 @@ class TSpanShadowNode extends TextShadowNode {
 
                     double glyphMidlineAngle = Math.atan2(lineY, lineX);
 
-                    mid.preRotate((float) (glyphMidlineAngle * radToDeg));
+                    mid.preRotate((float) (glyphMidlineAngle * radToDeg * side));
                 }
 
             /*
@@ -425,7 +429,7 @@ class TSpanShadowNode extends TextShadowNode {
                 alignment-baseline and any specified values for attribute ‘dy’ on a ‘tspan’ element.
             */
                 mid.preTranslate((float) -halfway, (float) (dy - baselineShift));
-                mid.preScale((float) renderMethodScaling, (float) renderMethodScaling);
+                mid.preScale((float) scaledDirection, (float) scaledDirection);
                 mid.postTranslate(0, (float) y);
             } else {
                 mid.setTranslate((float) startpoint, (float) (y + dy));

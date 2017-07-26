@@ -23,11 +23,11 @@ import javax.annotation.Nullable;
 class TextPathShadowNode extends TextShadowNode {
 
     private String mHref;
+    private TextPathSide mSide;
     private TextPathMidLine mMidLine;
     private @Nullable String mStartOffset;
     private TextPathMethod mMethod = TextPathMethod.align;
     private TextPathSpacing mSpacing = TextPathSpacing.exact;
-    private TextPathSide mSide;
 
     @ReactProp(name = "href")
     public void setHref(String href) {
