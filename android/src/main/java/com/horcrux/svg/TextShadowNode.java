@@ -24,12 +24,26 @@ import javax.annotation.Nullable;
  */
 
 class TextShadowNode extends GroupShadowNode {
+    String mTextLength = null;
+    TextLengthAdjust mLengthAdjust = TextLengthAdjust.spacing;
     AlignmentBaseline mAlignmentBaseline;
     private @Nullable ReadableArray mPositionX;
     private @Nullable ReadableArray mPositionY;
     private @Nullable ReadableArray mRotate;
     private @Nullable ReadableArray mDeltaX;
     private @Nullable ReadableArray mDeltaY;
+
+    @ReactProp(name = "textLength")
+    public void setmTextLength(@Nullable String length) {
+        mTextLength = length;
+        markUpdated();
+    }
+
+    @ReactProp(name = "lengthAdjust")
+    public void setLengthAdjust(@Nullable String adjustment) {
+        mLengthAdjust = TextLengthAdjust.valueOf(adjustment);
+        markUpdated();
+    }
 
     @ReactProp(name = "alignmentBaseline")
     public void setMethod(@Nullable String alignment) {

@@ -80,7 +80,7 @@ class TSpanShadowNode extends TextShadowNode {
         setupTextPath();
 
         pushGlyphContext();
-        mCache = getLinePath(mContent, paint);
+        mCache = getLinePath(mContent, paint, canvas);
         popGlyphContext();
 
         mCache.computeBounds(new RectF(), true);
@@ -88,7 +88,7 @@ class TSpanShadowNode extends TextShadowNode {
         return mCache;
     }
 
-    private Path getLinePath(String line, Paint paint) {
+    private Path getLinePath(String line, Paint paint, Canvas canvas) {
         final int length = line.length();
         final Path path = new Path();
 
@@ -96,10 +96,22 @@ class TSpanShadowNode extends TextShadowNode {
             return path;
         }
 
+        double distance = 0;
+        PathMeasure pm = null;
+        final boolean hasTextPath = textPath != null;
+        if (hasTextPath) {
+            pm = new PathMeasure(textPath.getPath(), false);
+            distance = pm.getLength();
+            if (distance == 0) {
+                return path;
+            }
+        }
+
         GlyphContext gc = getTextRootGlyphContext();
         FontData font = gc.getFont();
         applyTextPropertiesToPaint(paint, font);
         GlyphPathBag bag = new GlyphPathBag(paint);
+        final char[] chars = line.toCharArray();
 
         /*
             Determine the startpoint-on-the-path for the first glyph using attribute ‘startOffset’
@@ -124,21 +136,80 @@ class TSpanShadowNode extends TextShadowNode {
             is adjusted to take into account various horizontal alignment text properties and
             attributes, such as a ‘dx’ attribute value on a ‘tspan’ element.
          */
+        final TextAnchor textAnchor = font.textAnchor;
         final double textMeasure = paint.measureText(line);
-        double offset = getTextAnchorOffset(font.textAnchor, textMeasure);
+        double offset = getTextAnchorOffset(textAnchor, textMeasure);
 
-        final int side = textPath.getSide() == TextPathSide.right ? -1 : 1;
-        double distance = 0;
-        PathMeasure pm = null;
-        boolean sharpMidline = false;
-        if (textPath != null) {
-            sharpMidline = textPath.getMidLine() == sharp;
-            pm = new PathMeasure(textPath.getPath(), false);
-            distance = pm.getLength();
-            if (distance == 0) {
-                return path;
-            }
-            offset += getAbsoluteStartOffset(textPath.getStartOffset(), distance, gc.getFontSize());
+        int side = 1;
+        double endOfRendering = 0;
+        double startOfRendering = 0;
+        boolean sharpMidLine = false;
+        final double fontSize = gc.getFontSize();
+        if (hasTextPath) {
+            sharpMidLine = textPath.getMidLine() == sharp;
+            /*
+                Name
+                side
+                Value
+                left | right
+                initial value
+                left
+                Animatable
+                yes
+
+                Determines the side of the path the text is placed on
+                (relative to the path direction).
+
+                Specifying a value of right effectively reverses the path.
+
+                Added in SVG 2 to allow text either inside or outside closed subpaths
+                and basic shapes (e.g. rectangles, circles, and ellipses).
+
+                Adding 'side' was resolved at the Sydney (2015) meeting.
+            */
+            side = textPath.getSide() == TextPathSide.right ? -1 : 1;
+            /*
+                Name
+                startOffset
+                Value
+                <length> | <percentage> | <number>
+                initial value
+                0
+                Animatable
+                yes
+
+                An offset from the start of the path for the initial current text position,
+                calculated using the user agent's distance along the path algorithm,
+                after converting the path to the ‘textPath’ element's coordinate system.
+
+                If a <length> other than a percentage is given, then the ‘startOffset’
+                represents a distance along the path measured in the current user coordinate
+                system for the ‘textPath’ element.
+
+                If a percentage is given, then the ‘startOffset’ represents a percentage
+                distance along the entire path. Thus, startOffset="0%" indicates the start
+                point of the path and startOffset="100%" indicates the end point of the path.
+
+                Negative values and values larger than the path length (e.g. 150%) are allowed.
+
+                Any typographic characters with mid-points that are not on the path are not rendered
+
+                For paths consisting of a single closed subpath (including an equivalent path for a
+                basic shape), typographic characters are rendered along one complete circuit of the
+                path. The text is aligned as determined by the text-anchor property to a position
+                along the path set by the ‘startOffset’ attribute.
+
+                For the start (end) value, the text is rendered from the start (end) of the line
+                until the initial position along the path is reached again.
+
+                For the middle, the text is rendered from the middle point in both directions until
+                a point on the path equal distance in both directions from the initial position on
+                the path is reached.
+            */
+            final double halfPathDistance = distance / 2;
+            offset += getAbsoluteStartOffset(textPath.getStartOffset(), distance, fontSize);
+            startOfRendering = -offset + (textAnchor == TextAnchor.middle ? -halfPathDistance : 0);
+            endOfRendering = startOfRendering + distance;
             /*
             TextPathSpacing spacing = textPath.getSpacing();
             if (spacing == TextPathSpacing.auto) {
@@ -148,8 +219,38 @@ class TSpanShadowNode extends TextShadowNode {
             */
         }
 
-        double renderMethodScaling = getRenderMethodScaling(textMeasure, distance);
-        double scaledDirection = renderMethodScaling * side;
+        /*
+            Name
+            method
+            Value
+            align | stretch
+            initial value
+            align
+            Animatable
+            yes
+            Indicates the method by which text should be rendered along the path.
+
+            A value of align indicates that the typographic character should be rendered using
+            simple 2×3 matrix transformations such that there is no stretching/warping of the
+            typographic characters. Typically, supplemental rotation, scaling and translation
+            transformations are done for each typographic characters to be rendered.
+
+            As a result, with align, in fonts where the typographic characters are designed to be
+            connected (e.g., cursive fonts), the connections may not align properly when text is
+            rendered along a path.
+
+            A value of stretch indicates that the typographic character outlines will be converted
+            into paths, and then all end points and control points will be adjusted to be along the
+            perpendicular vectors from the path, thereby stretching and possibly warping the glyphs.
+
+            With this approach, connected typographic characters, such as in cursive scripts,
+            will maintain their connections. (Non-vertical straight path segments should be
+            converted to Bézier curves in such a way that horizontal straight paths have an
+            (approximately) constant offset from the path along which the typographic characters
+            are rendered.)
+
+            TODO implement stretch
+        */
 
         /*
         *
@@ -170,12 +271,71 @@ class TSpanShadowNode extends TextShadowNode {
         *  or decrease the space between typographic character units in order to justify text.
         *
         * */
-        String previous = "";
-        double previousCharWidth = 0;
         double kerning = font.kerning;
-        final double wordSpacing = font.wordSpacing;
+        double wordSpacing = font.wordSpacing;
         final double letterSpacing = font.letterSpacing;
         final boolean autoKerning = !font.manualKerning;
+
+        /*
+            Name	Value	Initial value	Animatable
+            textLength	<length> | <percentage> | <number>	See below	yes
+
+            The author's computation of the total sum of all of the advance values that correspond
+            to character data within this element, including the advance value on the glyph
+            (horizontal or vertical), the effect of properties letter-spacing and word-spacing and
+            adjustments due to attributes ‘dx’ and ‘dy’ on this ‘text’ or ‘tspan’ element or any
+            descendants. This value is used to calibrate the user agent's own calculations with
+            that of the author.
+
+            The purpose of this attribute is to allow the author to achieve exact alignment,
+            in visual rendering order after any bidirectional reordering, for the first and
+            last rendered glyphs that correspond to this element; thus, for the last rendered
+            character (in visual rendering order after any bidirectional reordering),
+            any supplemental inter-character spacing beyond normal glyph advances are ignored
+            (in most cases) when the user agent determines the appropriate amount to expand/compress
+            the text string to fit within a length of ‘textLength’.
+
+            If attribute ‘textLength’ is specified on a given element and also specified on an
+            ancestor, the adjustments on all character data within this element are controlled by
+            the value of ‘textLength’ on this element exclusively, with the possible side-effect
+            that the adjustment ratio for the contents of this element might be different than the
+            adjustment ratio used for other content that shares the same ancestor. The user agent
+            must assume that the total advance values for the other content within that ancestor is
+            the difference between the advance value on that ancestor and the advance value for
+            this element.
+
+            This attribute is not intended for use to obtain effects such as shrinking or
+            expanding text.
+
+            A negative value is an error (see Error processing).
+
+            The ‘textLength’ attribute is only applied when the wrapping area is not defined by the
+            shape-inside or the inline-size properties. It is also not applied for any ‘text’ or
+            ‘tspan’ element that has forced line breaks (due to a white-space value of pre or
+            pre-line).
+
+            If the attribute is not specified anywhere within a ‘text’ element, the effect is as if
+            the author's computation exactly matched the value calculated by the user agent;
+            thus, no advance adjustments are made.
+        */
+        double scaleSpacingAndGlyphs = 1;
+        if (mTextLength != null) {
+            final double author = PropHelper.fromRelative(mTextLength, canvas.getWidth(), 0, mScale, fontSize);
+            if (author < 0) {
+                throw new IllegalArgumentException("Negative textLength value");
+            }
+            switch (mLengthAdjust) {
+                default:
+                case spacing:
+                    int numSpaces = getNumSpaces(length, chars);
+                    wordSpacing += (author - textMeasure) / numSpaces;
+                    break;
+                case spacingAndGlyphs:
+                    scaleSpacingAndGlyphs = author / textMeasure;
+                    break;
+            }
+        }
+        final double scaledDirection = scaleSpacingAndGlyphs * side;
 
         /*
             https://developer.mozilla.org/en/docs/Web/CSS/vertical-align
@@ -202,15 +362,16 @@ class TSpanShadowNode extends TextShadowNode {
 
             Neither 'text-before-edge' nor 'text-after-edge' should be used with the vertical-align property.
         */
-        Paint.FontMetrics fm = paint.getFontMetrics();
-        double top = -fm.top;
-        double bottom = fm.bottom;
-        double ascenderHeight = -fm.ascent;
-        double descenderDepth = fm.descent;
-        double totalHeight = top + bottom;
+        final Paint.FontMetrics fm = paint.getFontMetrics();
+        final double top = -fm.top;
+        final double bottom = fm.bottom;
+        final double ascenderHeight = -fm.ascent;
+        final double descenderDepth = fm.descent;
+        final double totalHeight = top + bottom;
         double baselineShift = 0;
         if (mAlignmentBaseline != null) {
             // TODO alignment-baseline, test / verify behavior
+            // TODO get per glyph baselines from font baseline table, for high-precision alignment
             switch (mAlignmentBaseline) {
                 // https://wiki.apache.org/xmlgraphics-fop/LineLayout/AlignmentHandling
                 default:
@@ -296,14 +457,15 @@ class TSpanShadowNode extends TextShadowNode {
             }
         }
 
-        Matrix start = new Matrix();
-        Matrix mid = new Matrix();
-        Matrix end = new Matrix();
+        final Matrix start = new Matrix();
+        final Matrix mid = new Matrix();
+        final Matrix end = new Matrix();
 
-        float[] startPointMatrixData = new float[9];
-        float[] endPointMatrixData = new float[9];
+        final float[] startPointMatrixData = new float[9];
+        final float[] endPointMatrixData = new float[9];
 
-        final char[] chars = line.toCharArray();
+        String previous = "";
+        double previousCharWidth = 0;
         for (int index = 0; index < length; index++) {
             char currentChar = chars[index];
             String current = String.valueOf(currentChar);
@@ -312,7 +474,7 @@ class TSpanShadowNode extends TextShadowNode {
                 Determine the glyph's charwidth (i.e., the amount which the current text position
                 advances horizontally when the glyph is drawn using horizontal text layout).
             */
-            double charWidth = paint.measureText(current) * renderMethodScaling;
+            double charWidth = paint.measureText(current) * scaleSpacingAndGlyphs;
 
             /*
                 For each subsequent glyph, set a new startpoint-on-the-path as the previous
@@ -324,7 +486,7 @@ class TSpanShadowNode extends TextShadowNode {
                 using the user agent's distance along the path algorithm.
             */
             if (autoKerning) {
-                double bothCharsWidth = paint.measureText(previous + current) * renderMethodScaling;
+                double bothCharsWidth = paint.measureText(previous + current) * scaleSpacingAndGlyphs;
                 kerning = bothCharsWidth - previousCharWidth - charWidth;
                 previousCharWidth = charWidth;
                 previous = current;
@@ -340,31 +502,32 @@ class TSpanShadowNode extends TextShadowNode {
             double dy = gc.nextDeltaY();
             double r = gc.nextRotation();
 
+            advance = advance * side;
             charWidth = charWidth * side;
             double cursor = offset + (x + dx) * side;
-            double startpoint = cursor - charWidth;
+            double startPoint = cursor - advance;
 
-            if (textPath != null) {
+            if (hasTextPath) {
                 /*
                     Determine the point on the curve which is charwidth distance along the path from
                     the startpoint-on-the-path for this glyph, calculated using the user agent's
                     distance along the path algorithm. This point is the endpoint-on-the-path for
                     the glyph.
                  */
-                double endpoint = cursor;
+                double endPoint = startPoint + charWidth;
 
                 /*
                     Determine the midpoint-on-the-path, which is the point on the path which is
                     "halfway" (user agents can choose either a distance calculation or a parametric
                     calculation) between the startpoint-on-the-path and the endpoint-on-the-path.
                 */
-                double halfway = charWidth / 2;
-                double midpoint = startpoint + halfway;
+                double halfWay = charWidth / 2;
+                double midPoint = startPoint + halfWay;
 
                 //  Glyphs whose midpoint-on-the-path are off the path are not rendered.
-                if (midpoint > distance) {
-                    break;
-                } else if (midpoint < 0) {
+                if (midPoint > endOfRendering) {
+                    continue;
+                } else if (midPoint < startOfRendering) {
                     continue;
                 }
 
@@ -381,8 +544,7 @@ class TSpanShadowNode extends TextShadowNode {
                     which doesn't bend text smoothly along a right angle curve, (like Edge does)
                     but keeps the mid-line orthogonal to the mid-point tangent at all times instead.
                 */
-                assert pm != null;
-                if (startpoint < 0 || endpoint > distance || sharpMidline) {
+                if (startPoint < 0 || endPoint > distance || sharpMidLine) {
                 /*
                     In the calculation above, if either the startpoint-on-the-path
                     or the endpoint-on-the-path is off the end of the path,
@@ -399,11 +561,11 @@ class TSpanShadowNode extends TextShadowNode {
                     endpoint-on-the-path can still be calculated.
                 */
                     final int flags = POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG;
-                    pm.getMatrix((float) midpoint, mid, flags);
+                    pm.getMatrix((float) midPoint, mid, flags);
                 } else {
-                    pm.getMatrix((float) startpoint, start, POSITION_MATRIX_FLAG);
-                    pm.getMatrix((float) midpoint, mid, POSITION_MATRIX_FLAG);
-                    pm.getMatrix((float) endpoint, end, POSITION_MATRIX_FLAG);
+                    pm.getMatrix((float) startPoint, start, POSITION_MATRIX_FLAG);
+                    pm.getMatrix((float) midPoint, mid, POSITION_MATRIX_FLAG);
+                    pm.getMatrix((float) endPoint, end, POSITION_MATRIX_FLAG);
 
                     start.getValues(startPointMatrixData);
                     end.getValues(endPointMatrixData);
@@ -428,11 +590,11 @@ class TSpanShadowNode extends TextShadowNode {
                 Align the glyph vertically relative to the midpoint-on-the-path based on property
                 alignment-baseline and any specified values for attribute ‘dy’ on a ‘tspan’ element.
             */
-                mid.preTranslate((float) -halfway, (float) (dy - baselineShift));
-                mid.preScale((float) scaledDirection, (float) scaledDirection);
+                mid.preTranslate((float) -halfWay, (float) (dy + baselineShift));
+                mid.preScale((float) scaledDirection, (float) side);
                 mid.postTranslate(0, (float) y);
             } else {
-                mid.setTranslate((float) startpoint, (float) (y + dy));
+                mid.setTranslate((float) startPoint, (float) (y + dy));
             }
 
             mid.preRotate((float) r);
@@ -445,11 +607,14 @@ class TSpanShadowNode extends TextShadowNode {
         return path;
     }
 
-    private double getRenderMethodScaling(double textMeasure, double distance) {
-        if (textPath != null && textPath.getMethod() == TextPathMethod.stretch) {
-            return distance / textMeasure;
+    private int getNumSpaces(int length, char[] chars) {
+        int numSpaces = 0;
+        for (int index = 0; index < length; index++) {
+            if (chars[index] == ' ') {
+                numSpaces++;
+            }
         }
-        return 1;
+        return numSpaces;
     }
 
     private double getAbsoluteStartOffset(String startOffset, double distance, double fontSize) {
