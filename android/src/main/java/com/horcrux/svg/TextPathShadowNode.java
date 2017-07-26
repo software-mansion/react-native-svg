@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 class TextPathShadowNode extends TextShadowNode {
 
     private String mHref;
+    private TextPathMidLine mMidLine;
     private @Nullable String mStartOffset;
     private TextPathMethod mMethod = TextPathMethod.align;
     private TextPathSpacing mSpacing = TextPathSpacing.exact;
@@ -58,6 +59,12 @@ class TextPathShadowNode extends TextShadowNode {
         markUpdated();
     }
 
+    @ReactProp(name = "midLine")
+    public void setSharp(@Nullable String midLine) {
+        mMidLine = TextPathMidLine.valueOf(midLine);
+        markUpdated();
+    }
+
     TextPathMethod getMethod() {
         return mMethod;
     }
@@ -68,6 +75,10 @@ class TextPathShadowNode extends TextShadowNode {
 
     public TextPathSide getSide() {
         return mSide;
+    }
+
+    public TextPathMidLine getMidLine() {
+        return mMidLine;
     }
 
     String getStartOffset() {

@@ -29,6 +29,7 @@ import static android.graphics.Matrix.MTRANS_X;
 import static android.graphics.Matrix.MTRANS_Y;
 import static android.graphics.PathMeasure.POSITION_MATRIX_FLAG;
 import static android.graphics.PathMeasure.TANGENT_MATRIX_FLAG;
+import static com.horcrux.svg.TextPathMidLine.sharp;
 
 /**
  * Shadow node for virtual TSpan view
@@ -128,7 +129,9 @@ class TSpanShadowNode extends TextShadowNode {
 
         double distance = 0;
         PathMeasure pm = null;
+        boolean sharpMidline = false;
         if (textPath != null) {
+            sharpMidline = textPath.getMidLine() == sharp;
             pm = new PathMeasure(textPath.getPath(), false);
             distance = pm.getLength();
             if (distance == 0) {
@@ -368,9 +371,14 @@ class TSpanShadowNode extends TextShadowNode {
                     Position the glyph such that the glyph-midline passes through
                     the midpoint-on-the-path and is perpendicular to the line
                     through the startpoint-on-the-path and the endpoint-on-the-path.
+
+                    TODO suggest adding a compatibility mid-line rendering attribute to textPath,
+                    for a chrome/firefox/opera/safari compatible sharp text path rendering,
+                    which doesn't bend text smoothly along a right angle curve, (like Edge does)
+                    but keeps the mid-line orthogonal to the mid-point tangent at all times instead.
                 */
                 assert pm != null;
-                if (startpoint < 0 || endpoint > distance) {
+                if (startpoint < 0 || endpoint > distance || sharpMidline) {
                 /*
                     In the calculation above, if either the startpoint-on-the-path
                     or the endpoint-on-the-path is off the end of the path,
