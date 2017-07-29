@@ -16,8 +16,6 @@ import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
-import static com.horcrux.svg.FontData.DEFAULT_FONT_SIZE;
-
 // https://www.w3.org/TR/SVG/text.html#TSpanElement
 class GlyphContext {
 
@@ -46,7 +44,7 @@ class GlyphContext {
     private final ArrayList<Integer> mRsIndices = new ArrayList<>();
 
     // Calculated on push context, percentage and em length depends on parent font size
-    private double mFontSize = DEFAULT_FONT_SIZE;
+    private double mFontSize = FontData.DEFAULT_FONT_SIZE;
     private FontData topFont = FontData.Defaults;
 
     // Current accumulated values

@@ -29,7 +29,6 @@ import static android.graphics.Matrix.MTRANS_X;
 import static android.graphics.Matrix.MTRANS_Y;
 import static android.graphics.PathMeasure.POSITION_MATRIX_FLAG;
 import static android.graphics.PathMeasure.TANGENT_MATRIX_FLAG;
-import static com.horcrux.svg.TextPathMidLine.sharp;
 
 /**
  * Shadow node for virtual TSpan view
@@ -146,7 +145,7 @@ class TSpanShadowNode extends TextShadowNode {
         boolean sharpMidLine = false;
         final double fontSize = gc.getFontSize();
         if (hasTextPath) {
-            sharpMidLine = textPath.getMidLine() == sharp;
+            sharpMidLine = textPath.getMidLine() == TextPathMidLine.sharp;
             /*
                 Name
                 side
@@ -206,9 +205,10 @@ class TSpanShadowNode extends TextShadowNode {
                 a point on the path equal distance in both directions from the initial position on
                 the path is reached.
             */
+            final double absoluteStartOffset = getAbsoluteStartOffset(textPath.getStartOffset(), distance, fontSize);
+            offset += absoluteStartOffset;
             final double halfPathDistance = distance / 2;
-            offset += getAbsoluteStartOffset(textPath.getStartOffset(), distance, fontSize);
-            startOfRendering = -offset + (textAnchor == TextAnchor.middle ? -halfPathDistance : 0);
+            startOfRendering = absoluteStartOffset + (textAnchor == TextAnchor.middle ? -halfPathDistance : 0);
             endOfRendering = startOfRendering + distance;
             /*
             TextPathSpacing spacing = textPath.getSpacing();
@@ -494,9 +494,10 @@ class TSpanShadowNode extends TextShadowNode {
 
             boolean isWordSeparator = currentChar == ' ';
             double wordSpace = isWordSeparator ? wordSpacing : 0;
-            double advance = charWidth + kerning + wordSpace + letterSpacing;
+            double spacing = wordSpace + letterSpacing;
+            double advance = charWidth + spacing;
 
-            double x = gc.nextX(advance);
+            double x = gc.nextX(kerning + advance);
             double y = gc.nextY();
             double dx = gc.nextDeltaX();
             double dy = gc.nextDeltaY();
