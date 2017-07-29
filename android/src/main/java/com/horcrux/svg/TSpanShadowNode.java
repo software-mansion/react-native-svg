@@ -273,7 +273,7 @@ class TSpanShadowNode extends TextShadowNode {
         * */
         double kerning = font.kerning;
         double wordSpacing = font.wordSpacing;
-        final double letterSpacing = font.letterSpacing;
+        double letterSpacing = font.letterSpacing;
         final boolean autoKerning = !font.manualKerning;
 
         /*
@@ -327,8 +327,7 @@ class TSpanShadowNode extends TextShadowNode {
             switch (mLengthAdjust) {
                 default:
                 case spacing:
-                    int numSpaces = getNumSpaces(length, chars);
-                    wordSpacing += (author - textMeasure) / numSpaces;
+                    letterSpacing += (author - textMeasure) / (length - 1);
                     break;
                 case spacingAndGlyphs:
                     scaleSpacingAndGlyphs = author / textMeasure;
@@ -544,12 +543,16 @@ class TSpanShadowNode extends TextShadowNode {
                     for a chrome/firefox/opera/safari compatible sharp text path rendering,
                     which doesn't bend text smoothly along a right angle curve, (like Edge does)
                     but keeps the mid-line orthogonal to the mid-point tangent at all times instead.
+                    https://github.com/w3c/svgwg/issues/337
                 */
-                if (startPoint < 0 || endPoint > distance || sharpMidLine) {
+                final int posAndTanFlags = POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG;
+                if (sharpMidLine) {
+                    pm.getMatrix((float) midPoint, mid, posAndTanFlags);
+                } else {
                 /*
                     In the calculation above, if either the startpoint-on-the-path
                     or the endpoint-on-the-path is off the end of the path,
-                    TODO then extend the path beyond its end points with a straight line
+                    then extend the path beyond its end points with a straight line
                     that is parallel to the tangent at the path at its end point
                     so that the midpoint-on-the-path can still be calculated.
 
@@ -560,13 +563,23 @@ class TSpanShadowNode extends TextShadowNode {
                     or
                     so that the line through the startpoint-on-the-path and the
                     endpoint-on-the-path can still be calculated.
+                    https://github.com/w3c/svgwg/issues/337#issuecomment-318056199
                 */
-                    final int flags = POSITION_MATRIX_FLAG | TANGENT_MATRIX_FLAG;
-                    pm.getMatrix((float) midPoint, mid, flags);
-                } else {
-                    pm.getMatrix((float) startPoint, start, POSITION_MATRIX_FLAG);
+                    if (startPoint < 0) {
+                        pm.getMatrix(0, start, posAndTanFlags);
+                        start.preTranslate((float) startPoint, 0);
+                    } else {
+                        pm.getMatrix((float) startPoint, start, POSITION_MATRIX_FLAG);
+                    }
+
                     pm.getMatrix((float) midPoint, mid, POSITION_MATRIX_FLAG);
-                    pm.getMatrix((float) endPoint, end, POSITION_MATRIX_FLAG);
+
+                    if (endPoint > distance) {
+                        pm.getMatrix((float) distance, end, posAndTanFlags);
+                        end.preTranslate((float) (endPoint - distance), 0);
+                    } else {
+                        pm.getMatrix((float) endPoint, end, POSITION_MATRIX_FLAG);
+                    }
 
                     start.getValues(startPointMatrixData);
                     end.getValues(endPointMatrixData);
@@ -606,16 +619,6 @@ class TSpanShadowNode extends TextShadowNode {
         }
 
         return path;
-    }
-
-    private int getNumSpaces(int length, char[] chars) {
-        int numSpaces = 0;
-        for (int index = 0; index < length; index++) {
-            if (chars[index] == ' ') {
-                numSpaces++;
-            }
-        }
-        return numSpaces;
     }
 
     private double getAbsoluteStartOffset(String startOffset, double distance, double fontSize) {
