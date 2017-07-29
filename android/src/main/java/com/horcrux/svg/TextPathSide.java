@@ -1,6 +1,6 @@
 package com.horcrux.svg;
 
 enum TextPathSide {
-    left,
+    @SuppressWarnings("unused")left,
     right
 }

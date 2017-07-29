@@ -51,6 +51,7 @@ class SvgViewManager extends BaseViewManager<SvgView, SvgViewShadowNode> {
         mTagToSvgView.put(svg.getId(), svg);
     }
 
+    @SuppressWarnings("unused")
     static @Nullable SvgView getSvgViewByTag(int tag) {
         return mTagToSvgView.get(tag);
     }

@@ -1,6 +1,6 @@
 package com.horcrux.svg;
 
 enum TextPathSpacing {
-    auto,
+    @SuppressWarnings("unused")auto,
     exact
 }

@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 class TextShadowNode extends GroupShadowNode {
     String mTextLength = null;
     TextLengthAdjust mLengthAdjust = TextLengthAdjust.spacing;
-    AlignmentBaseline mAlignmentBaseline;
+    private AlignmentBaseline mAlignmentBaseline;
     private @Nullable ReadableArray mPositionX;
     private @Nullable ReadableArray mPositionY;
     private @Nullable ReadableArray mRotate;

@@ -87,6 +87,7 @@ class TSpanShadowNode extends TextShadowNode {
         return mCache;
     }
 
+    @SuppressWarnings("ConstantConditions")
     private Path getLinePath(String line, Paint paint, Canvas canvas) {
         final int length = line.length();
         final Path path = new Path();

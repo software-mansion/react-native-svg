@@ -8,5 +8,5 @@ package com.horcrux.svg;
 */
 enum TextPathMidLine {
     sharp,
-    smooth
+    @SuppressWarnings("unused")smooth
 }

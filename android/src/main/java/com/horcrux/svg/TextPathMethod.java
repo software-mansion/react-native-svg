@@ -2,5 +2,5 @@ package com.horcrux.svg;
 
 enum TextPathMethod {
     align,
-    stretch
+    @SuppressWarnings("unused")stretch
 }

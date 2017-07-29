@@ -2,7 +2,9 @@ package com.horcrux.svg;
 
 // TODO implement https://www.w3.org/TR/SVG2/text.html#TextLayoutAlgorithm
 
+@SuppressWarnings("unused")
 public class TextLayoutAlgorithm {
+    @SuppressWarnings("EmptyMethod")
     void layoutText() {
 /*
 

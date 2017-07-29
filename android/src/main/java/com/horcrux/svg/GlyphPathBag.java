@@ -6,9 +6,9 @@ import android.graphics.Path;
 import java.util.ArrayList;
 
 class GlyphPathBag {
-    private ArrayList<Path> paths = new ArrayList<>();
-    private int[][] data = new int[255][];
-    Paint paint;
+    private final ArrayList<Path> paths = new ArrayList<>();
+    private final int[][] data = new int[255][];
+    private final Paint paint;
 
     GlyphPathBag(Paint paint) {
         this.paint = paint;

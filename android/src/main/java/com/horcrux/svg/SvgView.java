@@ -9,6 +9,7 @@
 
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -29,12 +30,15 @@ import javax.annotation.Nullable;
 /**
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its \childrn.
  */
+@SuppressLint("ViewConstructor")
 public class SvgView extends View {
     public enum Events {
+        @SuppressWarnings("unused")
         EVENT_DATA_URL("onDataURL");
 
         private final String mName;
 
+        @SuppressWarnings({"unused", "SameParameterValue"})
         Events(final String name) {
             mName = name;
         }

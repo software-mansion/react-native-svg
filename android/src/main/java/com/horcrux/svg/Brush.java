@@ -37,11 +37,12 @@ class Brush {
     enum BrushType {
         LINEAR_GRADIENT(0),
         RADIAL_GRADIENT(1),
-        PATTERN(2);
+        @SuppressWarnings("unused")PATTERN(2);
         BrushType(int ni) {
             nativeInt = ni;
         }
 
+        @SuppressWarnings("unused")
         final int nativeInt;
     }
 
@@ -51,6 +52,7 @@ class Brush {
         BrushUnits(int ni) {
             nativeInt = ni;
         }
+        @SuppressWarnings("unused")
         final int nativeInt;
     }
 

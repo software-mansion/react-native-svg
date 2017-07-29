@@ -65,19 +65,21 @@ class TextPathShadowNode extends TextShadowNode {
         markUpdated();
     }
 
+    @SuppressWarnings("unused")
     TextPathMethod getMethod() {
         return mMethod;
     }
 
-    public TextPathSpacing getSpacing() {
+    @SuppressWarnings("unused")
+    TextPathSpacing getSpacing() {
         return mSpacing;
     }
 
-    public TextPathSide getSide() {
+    TextPathSide getSide() {
         return mSide;
     }
 
-    public TextPathMidLine getMidLine() {
+    TextPathMidLine getMidLine() {
         return mMidLine;
     }
 
