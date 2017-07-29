@@ -368,10 +368,11 @@ class TSpanShadowNode extends TextShadowNode {
         final double descenderDepth = fm.descent;
         final double totalHeight = top + bottom;
         double baselineShift = 0;
-        if (mAlignmentBaseline != null) {
+        AlignmentBaseline baseline = getAlignmentBaseline();
+        if (baseline != null) {
             // TODO alignment-baseline, test / verify behavior
             // TODO get per glyph baselines from font baseline table, for high-precision alignment
-            switch (mAlignmentBaseline) {
+            switch (baseline) {
                 // https://wiki.apache.org/xmlgraphics-fop/LineLayout/AlignmentHandling
                 default:
                 case baseline:
@@ -386,7 +387,7 @@ class TSpanShadowNode extends TextShadowNode {
                     // Match the bottom of the box to the bottom of the parent’s content area.
                     // text-after-edge = text-bottom
                     // text-after-edge = descender depth
-                    baselineShift = descenderDepth;
+                    baselineShift = -descenderDepth;
                     break;
 
                 case alphabetic:
@@ -398,7 +399,7 @@ class TSpanShadowNode extends TextShadowNode {
                 case ideographic:
                     // Match the box’s ideographic character face under-side baseline to that of its parent.
                     // ideographic = descender depth
-                    baselineShift = descenderDepth;
+                    baselineShift = -descenderDepth;
                     break;
 
                 case middle:
@@ -423,7 +424,7 @@ class TSpanShadowNode extends TextShadowNode {
                     // There are no obvious formulas to calculate the position of these baselines.
                     // At the time of writing FOP puts the hanging baseline at 80% of the ascender
                     // height and the mathematical baseline at 50%.
-                    baselineShift = ascenderHeight / 2;
+                    baselineShift = 0.5 * ascenderHeight;
                     break;
 
                 case hanging:
@@ -608,7 +609,7 @@ class TSpanShadowNode extends TextShadowNode {
                 mid.preScale((float) scaledDirection, (float) side);
                 mid.postTranslate(0, (float) y);
             } else {
-                mid.setTranslate((float) startPoint, (float) (y + dy));
+                mid.setTranslate((float) startPoint, (float) (y + dy + baselineShift));
             }
 
             mid.preRotate((float) r);

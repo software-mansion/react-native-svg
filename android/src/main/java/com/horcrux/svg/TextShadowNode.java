@@ -15,6 +15,7 @@ import android.graphics.Path;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
@@ -47,7 +48,7 @@ class TextShadowNode extends GroupShadowNode {
 
     @ReactProp(name = "alignmentBaseline")
     public void setMethod(@Nullable String alignment) {
-        mAlignmentBaseline = AlignmentBaseline.valueOf(alignment);
+        mAlignmentBaseline = AlignmentBaseline.getEnum(alignment);
         markUpdated();
     }
 
@@ -104,6 +105,23 @@ class TextShadowNode extends GroupShadowNode {
         Path groupPath = getGroupPath(canvas, paint);
         releaseCachedPath();
         return groupPath;
+    }
+
+    AlignmentBaseline getAlignmentBaseline() {
+        if (mAlignmentBaseline == null) {
+            ReactShadowNode parent = this.getParent();
+            while (parent != null) {
+                if (parent instanceof TextShadowNode) {
+                    TextShadowNode node = (TextShadowNode)parent;
+                    final AlignmentBaseline baseline = node.mAlignmentBaseline;
+                    if (baseline != null) {
+                        return baseline;
+                    }
+                }
+                parent = parent.getParent();
+            }
+        }
+        return mAlignmentBaseline;
     }
 
     void releaseCachedPath() {
