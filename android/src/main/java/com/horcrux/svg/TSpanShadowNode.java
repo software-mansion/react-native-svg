@@ -98,10 +98,12 @@ class TSpanShadowNode extends TextShadowNode {
 
         double distance = 0;
         PathMeasure pm = null;
+        boolean isClosed = false;
         final boolean hasTextPath = textPath != null;
         if (hasTextPath) {
             pm = new PathMeasure(textPath.getPath(), false);
             distance = pm.getLength();
+            isClosed = pm.isClosed();
             if (distance == 0) {
                 return path;
             }
@@ -141,10 +143,10 @@ class TSpanShadowNode extends TextShadowNode {
         double offset = getTextAnchorOffset(textAnchor, textMeasure);
 
         int side = 1;
-        double endOfRendering = 0;
         double startOfRendering = 0;
-        boolean sharpMidLine = false;
+        double endOfRendering = distance;
         final double fontSize = gc.getFontSize();
+        boolean sharpMidLine = false;
         if (hasTextPath) {
             sharpMidLine = textPath.getMidLine() == TextPathMidLine.sharp;
             /*
@@ -208,9 +210,11 @@ class TSpanShadowNode extends TextShadowNode {
             */
             final double absoluteStartOffset = getAbsoluteStartOffset(textPath.getStartOffset(), distance, fontSize);
             offset += absoluteStartOffset;
-            final double halfPathDistance = distance / 2;
-            startOfRendering = absoluteStartOffset + (textAnchor == TextAnchor.middle ? -halfPathDistance : 0);
-            endOfRendering = startOfRendering + distance;
+            if (isClosed) {
+                final double halfPathDistance = distance / 2;
+                startOfRendering = absoluteStartOffset + (textAnchor == TextAnchor.middle ? -halfPathDistance : 0);
+                endOfRendering = startOfRendering + distance;
+            }
             /*
             TextPathSpacing spacing = textPath.getSpacing();
             if (spacing == TextPathSpacing.auto) {
