@@ -1,5 +1,5 @@
 {
-    "version": "5.3.3",
+    "version": "5.4.0",
     "name": "react-native-svg",
     "description": "SVG library for react-native",
     "repository": {
@@ -22,7 +22,7 @@
         "lint": "eslint ./"
     },
     "peerDependencies": {
-        "react-native": ">=0.46.0",
+        "react-native": ">=0.47.0",
         "react": "16.0.0-alpha.12",
         "prop-types": "^15.5.8"
     },
