@@ -19,6 +19,7 @@ import android.graphics.PathMeasure;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.support.v4.graphics.PaintCompat;
 
 import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -96,15 +97,15 @@ class TSpanShadowNode extends TextShadowNode {
             return path;
         }
 
-        double distance = 0;
+        double pathLength = 0;
         PathMeasure pm = null;
         boolean isClosed = false;
         final boolean hasTextPath = textPath != null;
         if (hasTextPath) {
             pm = new PathMeasure(textPath.getPath(), false);
-            distance = pm.getLength();
+            pathLength = pm.getLength();
             isClosed = pm.isClosed();
-            if (distance == 0) {
+            if (pathLength == 0) {
                 return path;
             }
         }
@@ -113,8 +114,10 @@ class TSpanShadowNode extends TextShadowNode {
         FontData font = gc.getFont();
         applyTextPropertiesToPaint(paint, font);
         GlyphPathBag bag = new GlyphPathBag(paint);
+        boolean[] ligature = new boolean[length];
         final char[] chars = line.toCharArray();
-
+        float[] advances = new float[length];
+        paint.getTextWidths(line, advances);
         /*
             Determine the startpoint-on-the-path for the first glyph using attribute ‘startOffset’
             and property text-anchor.
@@ -144,7 +147,7 @@ class TSpanShadowNode extends TextShadowNode {
 
         int side = 1;
         double startOfRendering = 0;
-        double endOfRendering = distance;
+        double endOfRendering = pathLength;
         final double fontSize = gc.getFontSize();
         boolean sharpMidLine = false;
         if (hasTextPath) {
@@ -208,12 +211,12 @@ class TSpanShadowNode extends TextShadowNode {
                 a point on the path equal distance in both directions from the initial position on
                 the path is reached.
             */
-            final double absoluteStartOffset = getAbsoluteStartOffset(textPath.getStartOffset(), distance, fontSize);
+            final double absoluteStartOffset = getAbsoluteStartOffset(textPath.getStartOffset(), pathLength, fontSize);
             offset += absoluteStartOffset;
             if (isClosed) {
-                final double halfPathDistance = distance / 2;
+                final double halfPathDistance = pathLength / 2;
                 startOfRendering = absoluteStartOffset + (textAnchor == TextAnchor.middle ? -halfPathDistance : 0);
-                endOfRendering = startOfRendering + distance;
+                endOfRendering = startOfRendering + pathLength;
             }
             /*
             TextPathSpacing spacing = textPath.getSpacing();
@@ -469,9 +472,11 @@ class TSpanShadowNode extends TextShadowNode {
         final float[] startPointMatrixData = new float[9];
         final float[] endPointMatrixData = new float[9];
 
-        String previous = "";
-        double previousCharWidth = 0;
         for (int index = 0; index < length; index++) {
+            if (ligature[index]) {
+                // Skip rendering other grapheme clusters of ligatures (already rendered)
+                continue;
+            }
             char currentChar = chars[index];
             String current = String.valueOf(currentChar);
 
@@ -479,6 +484,21 @@ class TSpanShadowNode extends TextShadowNode {
                 Determine the glyph's charwidth (i.e., the amount which the current text position
                 advances horizontally when the glyph is drawn using horizontal text layout).
             */
+            boolean hasLigature = false;
+            int nextIndex = index;
+            while (++nextIndex < length) {
+                float nextWidth = advances[nextIndex];
+                if (nextWidth > 0) {
+                    break;
+                }
+                String nextLigature = current + String.valueOf(chars[nextIndex]);
+                boolean hasNextLigature = PaintCompat.hasGlyph(paint, nextLigature);
+                if (hasNextLigature) {
+                    ligature[nextIndex] = true;
+                    current = nextLigature;
+                    hasLigature = true;
+                }
+            }
             double charWidth = paint.measureText(current) * scaleSpacingAndGlyphs;
 
             /*
@@ -491,10 +511,8 @@ class TSpanShadowNode extends TextShadowNode {
                 using the user agent's distance along the path algorithm.
             */
             if (autoKerning) {
-                double bothCharsWidth = paint.measureText(previous + current) * scaleSpacingAndGlyphs;
-                kerning = bothCharsWidth - previousCharWidth - charWidth;
-                previousCharWidth = charWidth;
-                previous = current;
+                double kerned = advances[index] * scaleSpacingAndGlyphs;
+                kerning = kerned - charWidth;
             }
 
             boolean isWordSeparator = currentChar == ' ';
@@ -580,9 +598,9 @@ class TSpanShadowNode extends TextShadowNode {
 
                     pm.getMatrix((float) midPoint, mid, POSITION_MATRIX_FLAG);
 
-                    if (endPoint > distance) {
-                        pm.getMatrix((float) distance, end, posAndTanFlags);
-                        end.preTranslate((float) (endPoint - distance), 0);
+                    if (endPoint > pathLength) {
+                        pm.getMatrix((float) pathLength, end, posAndTanFlags);
+                        end.preTranslate((float) (endPoint - pathLength), 0);
                     } else {
                         pm.getMatrix((float) endPoint, end, POSITION_MATRIX_FLAG);
                     }
@@ -619,7 +637,14 @@ class TSpanShadowNode extends TextShadowNode {
 
             mid.preRotate((float) r);
 
-            Path glyph = bag.getOrCreateAndCache(currentChar, current);
+
+            Path glyph;
+            if (hasLigature) {
+                glyph = new Path();
+                paint.getTextPath(current, 0, current.length(), 0, 0, glyph);
+            } else {
+                glyph = bag.getOrCreateAndCache(currentChar, current);
+            }
             glyph.transform(mid);
             path.addPath(glyph);
         }

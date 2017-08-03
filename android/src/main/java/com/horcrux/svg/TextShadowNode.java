@@ -115,6 +115,7 @@ class TextShadowNode extends GroupShadowNode {
                     TextShadowNode node = (TextShadowNode)parent;
                     final AlignmentBaseline baseline = node.mAlignmentBaseline;
                     if (baseline != null) {
+                        mAlignmentBaseline = baseline;
                         return baseline;
                     }
                 }
