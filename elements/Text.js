@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
 import extractText from '../lib/extract/extractText';
 import {numberProp, pathProps, fontProps} from '../lib/props';
 import {TextAttributes} from '../lib/attributes';
