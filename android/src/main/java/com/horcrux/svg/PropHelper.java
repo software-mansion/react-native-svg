@@ -20,33 +20,10 @@ import com.facebook.react.bridge.WritableMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nullable;
-
 /**
  * Contains static helper methods for accessing props.
  */
 class PropHelper {
-
-    /**
-     * Converts {@link ReadableArray} to an array of {@code float}. Returns newly created array.
-     *
-     * @return a {@code float[]} if converted successfully, or {@code null} if {@param value} was
-     * {@code null}.
-     */
-
-    static
-    @Nullable
-    float[] toFloatArray(@Nullable ReadableArray value) {
-        if (value != null) {
-            int fromSize = value.size();
-            float[] into = new float[fromSize];
-            for (int i = 0; i < fromSize; i++) {
-                into[i] = (float) value.getDouble(i);
-            }
-            return into;
-        }
-        return null;
-    }
 
     private static final int inputMatrixDataSize = 6;
 

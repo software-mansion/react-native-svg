@@ -53,7 +53,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
     private static final int FILL_RULE_NONZERO = 1;
 
     public @Nullable ReadableArray mStroke;
-    public @Nullable float[] mStrokeDasharray;
+    public @Nullable String[] mStrokeDasharray;
 
     public String mStrokeWidth = "1";
     public float mStrokeOpacity = 1;
@@ -117,12 +117,14 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     @ReactProp(name = "strokeDasharray")
     public void setStrokeDasharray(@Nullable ReadableArray strokeDasharray) {
-
-        mStrokeDasharray = PropHelper.toFloatArray(strokeDasharray);
-        if (mStrokeDasharray != null && mStrokeDasharray.length > 0) {
-            for (int i = 0; i < mStrokeDasharray.length; i++) {
-                mStrokeDasharray[i] = mStrokeDasharray[i] * mScale;
+        if (strokeDasharray != null) {
+            int fromSize = strokeDasharray.size();
+            mStrokeDasharray = new String[fromSize];
+            for (int i = 0; i < fromSize; i++) {
+                mStrokeDasharray[i] = strokeDasharray.getString(i);
             }
+        } else {
+            mStrokeDasharray = null;
         }
         markUpdated();
     }
@@ -249,8 +251,13 @@ abstract public class RenderableShadowNode extends VirtualNode {
         paint.setStrokeWidth((float) strokeWidth);
         setupPaint(paint, opacity, mStroke);
 
-        if (mStrokeDasharray != null && mStrokeDasharray.length > 0) {
-            paint.setPathEffect(new DashPathEffect(mStrokeDasharray, mStrokeDashoffset));
+        if (mStrokeDasharray != null) {
+            int length = mStrokeDasharray.length;
+            float[] intervals = new float[length];
+            for (int i = 0; i < length; i++) {
+                intervals[i] = (float)relativeOnOther(mStrokeDasharray[i]);
+            }
+            paint.setPathEffect(new DashPathEffect(intervals, mStrokeDashoffset));
         }
 
         return true;
