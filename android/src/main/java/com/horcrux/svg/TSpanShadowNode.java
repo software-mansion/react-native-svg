@@ -19,6 +19,7 @@ import android.graphics.PathMeasure;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v4.graphics.PaintCompat;
 
 import com.facebook.react.bridge.ReadableMap;
@@ -117,6 +118,122 @@ class TSpanShadowNode extends TextShadowNode {
         GlyphPathBag bag = new GlyphPathBag(paint);
         boolean[] ligature = new boolean[length];
         final char[] chars = line.toCharArray();
+
+        /*
+        *
+        * Three properties affect the space between characters and words:
+        *
+        * ‘kerning’ indicates whether the user agent should adjust inter-glyph spacing
+        * based on kerning tables that are included in the relevant font
+        * (i.e., enable auto-kerning) or instead disable auto-kerning
+        * and instead set inter-character spacing to a specific length (typically, zero).
+        *
+        * ‘letter-spacing’ indicates an amount of space that is to be added between text
+        * characters supplemental to any spacing due to the ‘kerning’ property.
+        *
+        * ‘word-spacing’ indicates the spacing behavior between words.
+        *
+        *  Letter-spacing is applied after bidi reordering and is in addition to any word-spacing.
+        *  Depending on the justification rules in effect, user agents may further increase
+        *  or decrease the space between typographic character units in order to justify text.
+        *
+        * */
+        double kerning = font.kerning;
+        double wordSpacing = font.wordSpacing;
+        double letterSpacing = font.letterSpacing;
+        final boolean autoKerning = !font.manualKerning;
+
+        /*
+        11.1.2. Fonts and glyphs
+
+        A font consists of a collection of glyphs together with other information (collectively,
+        the font tables) necessary to use those glyphs to present characters on some visual medium.
+
+        The combination of the collection of glyphs and the font tables is called the font data.
+
+        A font may supply substitution and positioning tables that can be used by a formatter
+        (text shaper) to re-order, combine and position a sequence of glyphs to form one or more
+        composite glyphs.
+
+        The combining may be as simple as a ligature, or as complex as an indic syllable which
+        combines, usually with some re-ordering, multiple consonants and vowel glyphs.
+
+        The tables may be language dependent, allowing the use of language appropriate letter forms.
+
+        When a glyph, simple or composite, represents an indivisible unit for typesetting purposes,
+        it is know as a typographic character.
+
+        Ligatures are an important feature of advance text layout. Some ligatures are discretionary
+        while others (e.g. in Arabic) are required.
+
+        The following explicit rules apply to ligature formation:
+
+        Ligature formation should not be enabled when characters are in different DOM text nodes;
+        thus, characters separated by markup should not use ligatures.
+
+        Ligature formation should not be enabled when characters are in different text chunks.
+
+        Discretionary ligatures should not be used when the spacing between two characters is not
+        the same as the default space (e.g. when letter-spacing has a non-default value,
+        or text-align has a value of justify and text-justify has a value of distribute).
+        (See CSS Text Module Level 3, ([css-text-3]).
+
+        SVG attributes such as ‘dx’, ‘textLength’, and ‘spacing’ (in ‘textPath’) that may reposition
+        typographic characters do not break discretionary ligatures.
+
+        If discretionary ligatures are not desired
+        they can be turned off by using the font-variant-ligatures property.
+
+        /*
+            When the effective letter-spacing between two characters is not zero
+            (due to either justification or non-zero computed ‘letter-spacing’),
+            user agents should not apply optional ligatures.
+            https://www.w3.org/TR/css-text-3/#letter-spacing-property
+        */
+        final boolean allowOptionalLigatures = letterSpacing == 0 &&
+            font.fontVariantLigatures == FontVariantLigatures.normal;
+
+        /*
+            For OpenType fonts, discretionary ligatures include those enabled by
+            the liga, clig, dlig, hlig, and cala features;
+            required ligatures are found in the rlig feature.
+            https://svgwg.org/svg2-draft/text.html#FontsGlyphs
+
+            http://dev.w3.org/csswg/css-fonts/#propdef-font-feature-settings
+
+            https://www.microsoft.com/typography/otspec/featurelist.htm
+            https://www.microsoft.com/typography/otspec/featuretags.htm
+            https://www.microsoft.com/typography/otspec/features_pt.htm
+            https://www.microsoft.com/typography/otfntdev/arabicot/features.aspx
+            http://unifraktur.sourceforge.net/testcases/enable_opentype_features/
+            https://en.wikipedia.org/wiki/List_of_typographic_features
+            http://ilovetypography.com/OpenType/opentype-features.html
+            https://www.typotheque.com/articles/opentype_features_in_css
+            https://practice.typekit.com/lesson/caring-about-opentype-features/
+            http://stateofwebtype.com/
+
+            6.12. Low-level font feature settings control: the font-feature-settings property
+
+            Name:	font-feature-settings
+            Value:	normal | <feature-tag-value> #
+            Initial:	normal
+            Applies to:	all elements
+            Inherited:	yes
+            Percentages:	N/A
+            Media:	visual
+            Computed value:	as specified
+            Animatable:	no
+        */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (allowOptionalLigatures) {
+                paint.setFontFeatureSettings("'kern', 'liga', 'clig', 'dlig', 'hlig', 'cala', 'rlig'");
+            } else {
+                paint.setFontFeatureSettings("'kern', 'liga' 0, 'clig' 0, 'dlig' 0, 'hlig' 0, 'cala' 0, 'rlig'");
+            }
+        }
+        // OpenType.js font data
+        ReadableMap fontData = font.fontData;
+
         float[] advances = new float[length];
         paint.getTextWidths(line, advances);
 
@@ -265,90 +382,6 @@ class TSpanShadowNode extends TextShadowNode {
 
             TODO implement stretch
         */
-
-        /*
-        *
-        * Three properties affect the space between characters and words:
-        *
-        * ‘kerning’ indicates whether the user agent should adjust inter-glyph spacing
-        * based on kerning tables that are included in the relevant font
-        * (i.e., enable auto-kerning) or instead disable auto-kerning
-        * and instead set inter-character spacing to a specific length (typically, zero).
-        *
-        * ‘letter-spacing’ indicates an amount of space that is to be added between text
-        * characters supplemental to any spacing due to the ‘kerning’ property.
-        *
-        * ‘word-spacing’ indicates the spacing behavior between words.
-        *
-        *  Letter-spacing is applied after bidi reordering and is in addition to any word-spacing.
-        *  Depending on the justification rules in effect, user agents may further increase
-        *  or decrease the space between typographic character units in order to justify text.
-        *
-        * */
-        double kerning = font.kerning;
-        double wordSpacing = font.wordSpacing;
-        double letterSpacing = font.letterSpacing;
-        final boolean autoKerning = !font.manualKerning;
-
-        /*
-        11.1.2. Fonts and glyphs
-
-        A font consists of a collection of glyphs together with other information (collectively,
-        the font tables) necessary to use those glyphs to present characters on some visual medium.
-
-        The combination of the collection of glyphs and the font tables is called the font data.
-
-        A font may supply substitution and positioning tables that can be used by a formatter
-        (text shaper) to re-order, combine and position a sequence of glyphs to form one or more
-        composite glyphs.
-
-        The combining may be as simple as a ligature, or as complex as an indic syllable which
-        combines, usually with some re-ordering, multiple consonants and vowel glyphs.
-
-        The tables may be language dependent, allowing the use of language appropriate letter forms.
-
-        When a glyph, simple or composite, represents an indivisible unit for typesetting purposes,
-        it is know as a typographic character.
-
-        Ligatures are an important feature of advance text layout. Some ligatures are discretionary
-        (TODO) while others (e.g. in Arabic) are required.
-
-        The following explicit rules apply to ligature formation:
-
-        Ligature formation should not be enabled when characters are in different DOM text nodes;
-        thus, characters separated by markup should not use ligatures.
-
-        Ligature formation should not be enabled when characters are in different text chunks.
-
-        Discretionary ligatures should not be used when the spacing between two characters is not
-        the same as the default space (e.g. when letter-spacing has a non-default value,
-        or text-align has a value of justify and text-justify has a value of distribute).
-        (See CSS Text Module Level 3, ([css-text-3]).
-
-        SVG attributes such as ‘dx’, ‘textLength’, and ‘spacing’ (in ‘textPath’) that may reposition
-        typographic characters do not break discretionary ligatures.
-
-        If discretionary ligatures are not desired
-        they can be turned off by using the font-variant-ligatures property.
-
-        /*
-            When the effective letter-spacing between two characters is not zero
-            (due to either justification or non-zero computed ‘letter-spacing’),
-            user agents should not apply optional ligatures.
-            https://www.w3.org/TR/css-text-3/#letter-spacing-property
-        */
-        final boolean allowOptionalLigatures = letterSpacing == 0 &&
-            font.fontVariantLigatures == FontVariantLigatures.normal;
-
-        /*
-            For OpenType fonts, discretionary ligatures include those enabled by
-            the liga, clig, dlig, hlig, and cala features;
-            TODO required ligatures are found in the rlig feature.
-            https://svgwg.org/svg2-draft/text.html#FontsGlyphs
-        */
-
-        // OpenType.js font data
-        ReadableMap fontData = font.fontData;
 
         /*
             Name	Value	Initial value	Animatable
