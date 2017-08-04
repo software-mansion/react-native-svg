@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 
 class TextShadowNode extends GroupShadowNode {
     String mTextLength = null;
+    String mBaselineShift = null;
     TextLengthAdjust mLengthAdjust = TextLengthAdjust.spacing;
     private AlignmentBaseline mAlignmentBaseline;
     private @Nullable ReadableArray mPositionX;
@@ -49,6 +50,34 @@ class TextShadowNode extends GroupShadowNode {
     @ReactProp(name = "alignmentBaseline")
     public void setMethod(@Nullable String alignment) {
         mAlignmentBaseline = AlignmentBaseline.getEnum(alignment);
+        markUpdated();
+    }
+
+    @ReactProp(name = "baselineShift")
+    public void setBaselineShift(@Nullable String baselineShift) {
+        mBaselineShift = baselineShift;
+        markUpdated();
+    }
+
+    @ReactProp(name = "verticalAlign")
+    public void setVerticalAlign(@Nullable String verticalAlign) {
+        if (verticalAlign != null) {
+            verticalAlign = verticalAlign.trim();
+            int i = verticalAlign.lastIndexOf(' ');
+            try {
+                mAlignmentBaseline = AlignmentBaseline.getEnum(verticalAlign.substring(i));
+            } catch (IllegalArgumentException e) {
+                mAlignmentBaseline = AlignmentBaseline.baseline;
+            }
+            try {
+                mBaselineShift = verticalAlign.substring(0, i);
+            } catch (IndexOutOfBoundsException e) {
+                mBaselineShift = null;
+            }
+        } else {
+            mAlignmentBaseline = AlignmentBaseline.baseline;
+            mBaselineShift = null;
+        }
         markUpdated();
     }
 
@@ -122,7 +151,28 @@ class TextShadowNode extends GroupShadowNode {
                 parent = parent.getParent();
             }
         }
+        if (mAlignmentBaseline == null) {
+            mAlignmentBaseline = AlignmentBaseline.baseline;
+        }
         return mAlignmentBaseline;
+    }
+
+    String getBaselineShift() {
+        if (mBaselineShift == null) {
+            ReactShadowNode parent = this.getParent();
+            while (parent != null) {
+                if (parent instanceof TextShadowNode) {
+                    TextShadowNode node = (TextShadowNode)parent;
+                    final String baselineShift = node.mBaselineShift;
+                    if (baselineShift != null) {
+                        mBaselineShift = baselineShift;
+                        return baselineShift;
+                    }
+                }
+                parent = parent.getParent();
+            }
+        }
+        return mBaselineShift;
     }
 
     void releaseCachedPath() {

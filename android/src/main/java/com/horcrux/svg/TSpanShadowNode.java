@@ -438,6 +438,7 @@ class TSpanShadowNode extends TextShadowNode {
         final double descenderDepth = fm.descent;
         final double totalHeight = top + bottom;
         double baselineShift = 0;
+        String baselineShiftString = getBaselineShift();
         AlignmentBaseline baseline = getAlignmentBaseline();
         if (baseline != null) {
             // TODO alignment-baseline, test / verify behavior
@@ -524,6 +525,59 @@ class TSpanShadowNode extends TextShadowNode {
                     // Align the bottom of the aligned subtree with the bottom of the line box.
                     baselineShift = top;
                     break;
+            }
+        /*
+        2.2.2. Alignment Shift: baseline-shift longhand
+
+        This property specifies by how much the box is shifted up from its alignment point.
+        It does not apply when alignment-baseline is top or bottom.
+
+        Authors should use the vertical-align shorthand instead of this property.
+
+        Values have the following meanings:
+
+        <length>
+        Raise (positive value) or lower (negative value) by the specified length.
+        <percentage>
+        Raise (positive value) or lower (negative value) by the specified percentage of the line-height.
+        TODO sub
+        Lower by the offset appropriate for subscripts of the parent’s box.
+        (The UA should use the parent’s font data to find this offset whenever possible.)
+        TODO super
+        Raise by the offset appropriate for superscripts of the parent’s box.
+        (The UA should use the parent’s font data to find this offset whenever possible.)
+
+        User agents may additionally support the keyword baseline as computing to 0
+        if is necessary for them to support legacy SVG content.
+        Issue: We would prefer to remove this,
+        and are looking for feedback from SVG user agents as to whether it’s necessary.
+
+        https://www.w3.org/TR/css-inline-3/#propdef-baseline-shift
+        */
+            if (baselineShiftString != null) {
+                switch (baseline) {
+                    case top:
+                    case bottom:
+                        break;
+
+                    default:
+                        switch (baselineShiftString) {
+                            case "sub":
+                                // TODO
+                                break;
+
+                            case "super":
+                                // TODO
+                                break;
+
+                            case "baseline":
+                                break;
+
+                            default:
+                                baselineShift -= PropHelper.fromRelative(baselineShiftString, fontSize, 0, mScale, fontSize);
+                        }
+                        break;
+                }
             }
         }
 
