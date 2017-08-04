@@ -21,6 +21,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.support.v4.graphics.PaintCompat;
 
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -345,6 +346,9 @@ class TSpanShadowNode extends TextShadowNode {
             TODO required ligatures are found in the rlig feature.
             https://svgwg.org/svg2-draft/text.html#FontsGlyphs
         */
+
+        // OpenType.js font data
+        ReadableMap fontData = font.fontData;
 
         /*
             Name	Value	Initial value	Animatable

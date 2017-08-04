@@ -15,6 +15,7 @@ class FontData {
     private static final double DEFAULT_LETTER_SPACING = 0d;
 
     private static final String KERNING = "kerning";
+    private static final String FONT_DATA = "fontData";
     private static final String TEXT_ANCHOR = "textAnchor";
     private static final String WORD_SPACING = "wordSpacing";
     private static final String LETTER_SPACING = "letterSpacing";
@@ -22,9 +23,9 @@ class FontData {
     private static final String FONT_VARIANT_LIGATURES = "fontVariantLigatures";
 
     final double fontSize;
-
     final String fontFamily;
     final FontStyle fontStyle;
+    final ReadableMap fontData;
     final FontWeight fontWeight;
     final FontVariantLigatures fontVariantLigatures;
 
@@ -40,6 +41,7 @@ class FontData {
     static final FontData Defaults = new FontData();
 
     private FontData() {
+        fontData = null;
         fontFamily = "";
         fontStyle = FontStyle.normal;
         fontWeight = FontWeight.Normal;
@@ -80,6 +82,8 @@ class FontData {
         } else {
             fontSize = parentFontSize;
         }
+
+        fontData = font.hasKey(FONT_DATA) ? font.getMap(FONT_DATA) : parent.fontData;
 
         fontFamily = font.hasKey(FONT_FAMILY) ? font.getString(FONT_FAMILY) : parent.fontFamily;
         fontStyle = font.hasKey(FONT_STYLE) ? FontStyle.valueOf(font.getString(FONT_STYLE)) : parent.fontStyle;
