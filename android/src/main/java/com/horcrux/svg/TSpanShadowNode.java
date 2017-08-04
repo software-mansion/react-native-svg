@@ -118,6 +118,11 @@ class TSpanShadowNode extends TextShadowNode {
         final char[] chars = line.toCharArray();
         float[] advances = new float[length];
         paint.getTextWidths(line, advances);
+
+        /*
+        This would give both advances and textMeasure in one call / looping over the text
+        double textMeasure = paint.getTextRunAdvances(line, 0, length, 0, length, true, advances, 0);
+        */
         /*
             Determine the startpoint-on-the-path for the first glyph using attribute ‘startOffset’
             and property text-anchor.
@@ -472,31 +477,45 @@ class TSpanShadowNode extends TextShadowNode {
         final float[] startPointMatrixData = new float[9];
         final float[] endPointMatrixData = new float[9];
 
+        String previous = "";
+        double previousCharWidth = 0;
+
+        /*
+            When the effective letter-spacing between two characters is not zero
+            (due to either justification or non-zero computed ‘letter-spacing’),
+            user agents should not apply optional ligatures.
+            https://www.w3.org/TR/css-text-3/#letter-spacing-property
+        */
+        final boolean allowOptionalLigatures = letterSpacing == 0;
+
         for (int index = 0; index < length; index++) {
-            if (ligature[index]) {
-                // Skip rendering other grapheme clusters of ligatures (already rendered)
-                continue;
-            }
             char currentChar = chars[index];
             String current = String.valueOf(currentChar);
+            boolean alreadyRenderedGraphemeCluster = ligature[index];
 
             /*
                 Determine the glyph's charwidth (i.e., the amount which the current text position
                 advances horizontally when the glyph is drawn using horizontal text layout).
             */
             boolean hasLigature = false;
-            int nextIndex = index;
-            while (++nextIndex < length) {
-                float nextWidth = advances[nextIndex];
-                if (nextWidth > 0) {
-                    break;
-                }
-                String nextLigature = current + String.valueOf(chars[nextIndex]);
-                boolean hasNextLigature = PaintCompat.hasGlyph(paint, nextLigature);
-                if (hasNextLigature) {
-                    ligature[nextIndex] = true;
-                    current = nextLigature;
-                    hasLigature = true;
+            if (allowOptionalLigatures) {
+                if (alreadyRenderedGraphemeCluster) {
+                    current = "";
+                } else {
+                    int nextIndex = index;
+                    while (++nextIndex < length) {
+                        float nextWidth = advances[nextIndex];
+                        if (nextWidth > 0) {
+                            break;
+                        }
+                        String nextLigature = current + String.valueOf(chars[nextIndex]);
+                        boolean hasNextLigature = PaintCompat.hasGlyph(paint, nextLigature);
+                        if (hasNextLigature) {
+                            ligature[nextIndex] = true;
+                            current = nextLigature;
+                            hasLigature = true;
+                        }
+                    }
                 }
             }
             double charWidth = paint.measureText(current) * scaleSpacingAndGlyphs;
@@ -511,8 +530,16 @@ class TSpanShadowNode extends TextShadowNode {
                 using the user agent's distance along the path algorithm.
             */
             if (autoKerning) {
-                double kerned = advances[index] * scaleSpacingAndGlyphs;
-                kerning = kerned - charWidth;
+                if (allowOptionalLigatures) {
+                    double kerned = advances[index] * scaleSpacingAndGlyphs;
+                    kerning = kerned - charWidth;
+                } else {
+                    double bothCharsWidth = paint.measureText(previous + current) * scaleSpacingAndGlyphs;
+                    double kerned = bothCharsWidth - previousCharWidth;
+                    kerning = kerned - charWidth;
+                    previousCharWidth = charWidth;
+                    previous = current;
+                }
             }
 
             boolean isWordSeparator = currentChar == ' ';
@@ -525,6 +552,12 @@ class TSpanShadowNode extends TextShadowNode {
             double dx = gc.nextDeltaX();
             double dy = gc.nextDeltaY();
             double r = gc.nextRotation();
+
+            if (alreadyRenderedGraphemeCluster) {
+                // Skip rendering other grapheme clusters of ligatures (already rendered),
+                // But, make sure to increment index positions by making gc.next() calls.
+                continue;
+            }
 
             advance = advance * side;
             charWidth = charWidth * side;
