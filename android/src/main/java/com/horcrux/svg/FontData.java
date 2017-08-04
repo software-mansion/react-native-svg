@@ -19,12 +19,14 @@ class FontData {
     private static final String WORD_SPACING = "wordSpacing";
     private static final String LETTER_SPACING = "letterSpacing";
     private static final String TEXT_DECORATION = "textDecoration";
+    private static final String FONT_VARIANT_LIGATURES = "fontVariantLigatures";
 
     final double fontSize;
 
     final String fontFamily;
     final FontStyle fontStyle;
     final FontWeight fontWeight;
+    final FontVariantLigatures fontVariantLigatures;
 
     final TextAnchor textAnchor;
     final TextDecoration textDecoration;
@@ -41,6 +43,7 @@ class FontData {
         fontFamily = "";
         fontStyle = FontStyle.normal;
         fontWeight = FontWeight.Normal;
+        fontVariantLigatures = FontVariantLigatures.normal;
 
         textAnchor = TextAnchor.start;
         textDecoration = TextDecoration.None;
@@ -81,6 +84,7 @@ class FontData {
         fontFamily = font.hasKey(FONT_FAMILY) ? font.getString(FONT_FAMILY) : parent.fontFamily;
         fontStyle = font.hasKey(FONT_STYLE) ? FontStyle.valueOf(font.getString(FONT_STYLE)) : parent.fontStyle;
         fontWeight = font.hasKey(FONT_WEIGHT) ? FontWeight.getEnum(font.getString(FONT_WEIGHT)) : parent.fontWeight;
+        fontVariantLigatures = font.hasKey(FONT_VARIANT_LIGATURES) ? FontVariantLigatures.valueOf(font.getString(FONT_VARIANT_LIGATURES)) : parent.fontVariantLigatures;
 
         textAnchor = font.hasKey(TEXT_ANCHOR) ? TextAnchor.valueOf(font.getString(TEXT_ANCHOR)) : parent.textAnchor;
         textDecoration = font.hasKey(TEXT_DECORATION) ? TextDecoration.getEnum(font.getString(TEXT_DECORATION)) : parent.textDecoration;

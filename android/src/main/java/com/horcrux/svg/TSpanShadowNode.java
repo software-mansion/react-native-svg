@@ -290,6 +290,63 @@ class TSpanShadowNode extends TextShadowNode {
         final boolean autoKerning = !font.manualKerning;
 
         /*
+        11.1.2. Fonts and glyphs
+
+        A font consists of a collection of glyphs together with other information (collectively,
+        the font tables) necessary to use those glyphs to present characters on some visual medium.
+
+        The combination of the collection of glyphs and the font tables is called the font data.
+
+        A font may supply substitution and positioning tables that can be used by a formatter
+        (text shaper) to re-order, combine and position a sequence of glyphs to form one or more
+        composite glyphs.
+
+        The combining may be as simple as a ligature, or as complex as an indic syllable which
+        combines, usually with some re-ordering, multiple consonants and vowel glyphs.
+
+        The tables may be language dependent, allowing the use of language appropriate letter forms.
+
+        When a glyph, simple or composite, represents an indivisible unit for typesetting purposes,
+        it is know as a typographic character.
+
+        Ligatures are an important feature of advance text layout. Some ligatures are discretionary
+        (TODO) while others (e.g. in Arabic) are required.
+
+        The following explicit rules apply to ligature formation:
+
+        Ligature formation should not be enabled when characters are in different DOM text nodes;
+        thus, characters separated by markup should not use ligatures.
+
+        Ligature formation should not be enabled when characters are in different text chunks.
+
+        Discretionary ligatures should not be used when the spacing between two characters is not
+        the same as the default space (e.g. when letter-spacing has a non-default value,
+        or text-align has a value of justify and text-justify has a value of distribute).
+        (See CSS Text Module Level 3, ([css-text-3]).
+
+        SVG attributes such as ‘dx’, ‘textLength’, and ‘spacing’ (in ‘textPath’) that may reposition
+        typographic characters do not break discretionary ligatures.
+
+        If discretionary ligatures are not desired
+        they can be turned off by using the font-variant-ligatures property.
+
+        /*
+            When the effective letter-spacing between two characters is not zero
+            (due to either justification or non-zero computed ‘letter-spacing’),
+            user agents should not apply optional ligatures.
+            https://www.w3.org/TR/css-text-3/#letter-spacing-property
+        */
+        final boolean allowOptionalLigatures = letterSpacing == 0 &&
+            font.fontVariantLigatures == FontVariantLigatures.normal;
+
+        /*
+            For OpenType fonts, discretionary ligatures include those enabled by
+            the liga, clig, dlig, hlig, and cala features;
+            TODO required ligatures are found in the rlig feature.
+            https://svgwg.org/svg2-draft/text.html#FontsGlyphs
+        */
+
+        /*
             Name	Value	Initial value	Animatable
             textLength	<length> | <percentage> | <number>	See below	yes
 
@@ -479,14 +536,6 @@ class TSpanShadowNode extends TextShadowNode {
 
         String previous = "";
         double previousCharWidth = 0;
-
-        /*
-            When the effective letter-spacing between two characters is not zero
-            (due to either justification or non-zero computed ‘letter-spacing’),
-            user agents should not apply optional ligatures.
-            https://www.w3.org/TR/css-text-3/#letter-spacing-property
-        */
-        final boolean allowOptionalLigatures = letterSpacing == 0;
 
         for (int index = 0; index < length; index++) {
             char currentChar = chars[index];
