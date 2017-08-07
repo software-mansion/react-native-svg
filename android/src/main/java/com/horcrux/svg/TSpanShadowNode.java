@@ -223,12 +223,41 @@ class TSpanShadowNode extends TextShadowNode {
             Media:	visual
             Computed value:	as specified
             Animatable:	no
+
+            https://drafts.csswg.org/css-fonts-3/#default-features
+
+            7.1. Default features
+
+            For OpenType fonts, user agents must enable the default features defined in the OpenType
+            documentation for a given script and writing mode.
+
+            Required ligatures, common ligatures and contextual forms must be enabled by default
+            (OpenType features: rlig, liga, clig, calt),
+            along with localized forms (OpenType feature: locl),
+            and features required for proper display of composed characters and marks
+            (OpenType features: ccmp, mark, mkmk).
+
+            These features must always be enabled, even when the value of the ‘font-variant’ and
+            ‘font-feature-settings’ properties is ‘normal’.
+
+            Individual features are only disabled when explicitly overridden by the author,
+            as when ‘font-variant-ligatures’ is set to ‘no-common-ligatures’.
+
+            TODO For handling complex scripts such as Arabic, Mongolian or Devanagari additional features
+            are required.
+
+            TODO For upright text within vertical text runs,
+            vertical alternates (OpenType feature: vert) must be enabled.
         */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String required = "'rlig', 'liga', 'clig', 'calt', 'locl', 'ccmp', 'mark', 'mkmk',";
+            String defaultFeatures = required + "'kern', ";
             if (allowOptionalLigatures) {
-                paint.setFontFeatureSettings("'kern', 'liga', 'clig', 'dlig', 'hlig', 'cala', 'rlig'");
+                String additionalLigatures = "'hlig', 'cala', ";
+                paint.setFontFeatureSettings(defaultFeatures + additionalLigatures + font.fontFeatureSettings);
             } else {
-                paint.setFontFeatureSettings("'kern', 'liga' 0, 'clig' 0, 'dlig' 0, 'hlig' 0, 'cala' 0, 'rlig'");
+                String disableDiscretionaryLigatures = "'liga' 0, 'clig' 0, 'dlig' 0, 'hlig' 0, 'cala' 0, ";
+                paint.setFontFeatureSettings(defaultFeatures + disableDiscretionaryLigatures + font.fontFeatureSettings);
             }
         }
         // OpenType.js font data
@@ -601,10 +630,32 @@ class TSpanShadowNode extends TextShadowNode {
                         switch (baselineShiftString) {
                             case "sub":
                                 // TODO
+                                if (fontData != null && fontData.hasKey("tables") && fontData.hasKey("unitsPerEm")) {
+                                    int unitsPerEm = fontData.getInt("unitsPerEm");
+                                    ReadableMap tables = fontData.getMap("tables");
+                                    if (tables.hasKey("os2")) {
+                                        ReadableMap os2 = tables.getMap("os2");
+                                        if (os2.hasKey("ySubscriptYOffset")) {
+                                            double subOffset = os2.getDouble("ySubscriptYOffset");
+                                            baselineShift += fontSize * subOffset / unitsPerEm;
+                                        }
+                                    }
+                                }
                                 break;
 
                             case "super":
                                 // TODO
+                                if (fontData != null && fontData.hasKey("tables") && fontData.hasKey("unitsPerEm")) {
+                                    int unitsPerEm = fontData.getInt("unitsPerEm");
+                                    ReadableMap tables = fontData.getMap("tables");
+                                    if (tables.hasKey("os2")) {
+                                        ReadableMap os2 = tables.getMap("os2");
+                                        if (os2.hasKey("ySuperscriptYOffset")) {
+                                            double superOffset = os2.getDouble("ySuperscriptYOffset");
+                                            baselineShift -= fontSize * superOffset / unitsPerEm;
+                                        }
+                                    }
+                                }
                                 break;
 
                             case "baseline":
@@ -625,9 +676,6 @@ class TSpanShadowNode extends TextShadowNode {
         final float[] startPointMatrixData = new float[9];
         final float[] endPointMatrixData = new float[9];
 
-        String previous = "";
-        double previousCharWidth = 0;
-
         for (int index = 0; index < length; index++) {
             char currentChar = chars[index];
             String current = String.valueOf(currentChar);
@@ -638,23 +686,21 @@ class TSpanShadowNode extends TextShadowNode {
                 advances horizontally when the glyph is drawn using horizontal text layout).
             */
             boolean hasLigature = false;
-            if (allowOptionalLigatures) {
-                if (alreadyRenderedGraphemeCluster) {
-                    current = "";
-                } else {
-                    int nextIndex = index;
-                    while (++nextIndex < length) {
-                        float nextWidth = advances[nextIndex];
-                        if (nextWidth > 0) {
-                            break;
-                        }
-                        String nextLigature = current + String.valueOf(chars[nextIndex]);
-                        boolean hasNextLigature = PaintCompat.hasGlyph(paint, nextLigature);
-                        if (hasNextLigature) {
-                            ligature[nextIndex] = true;
-                            current = nextLigature;
-                            hasLigature = true;
-                        }
+            if (alreadyRenderedGraphemeCluster) {
+                current = "";
+            } else {
+                int nextIndex = index;
+                while (++nextIndex < length) {
+                    float nextWidth = advances[nextIndex];
+                    if (nextWidth > 0) {
+                        break;
+                    }
+                    String nextLigature = current + String.valueOf(chars[nextIndex]);
+                    boolean hasNextLigature = PaintCompat.hasGlyph(paint, nextLigature);
+                    if (hasNextLigature) {
+                        ligature[nextIndex] = true;
+                        current = nextLigature;
+                        hasLigature = true;
                     }
                 }
             }
@@ -670,16 +716,8 @@ class TSpanShadowNode extends TextShadowNode {
                 using the user agent's distance along the path algorithm.
             */
             if (autoKerning) {
-                if (allowOptionalLigatures) {
-                    double kerned = advances[index] * scaleSpacingAndGlyphs;
-                    kerning = kerned - charWidth;
-                } else {
-                    double bothCharsWidth = paint.measureText(previous + current) * scaleSpacingAndGlyphs;
-                    double kerned = bothCharsWidth - previousCharWidth;
-                    kerning = kerned - charWidth;
-                    previousCharWidth = charWidth;
-                    previous = current;
-                }
+                double kerned = advances[index] * scaleSpacingAndGlyphs;
+                kerning = kerned - charWidth;
             }
 
             boolean isWordSeparator = currentChar == ' ';
@@ -699,8 +737,8 @@ class TSpanShadowNode extends TextShadowNode {
                 continue;
             }
 
-            advance = advance * side;
-            charWidth = charWidth * side;
+            advance *= side;
+            charWidth *= side;
             double cursor = offset + (x + dx) * side;
             double startPoint = cursor - advance;
 
