@@ -163,8 +163,9 @@ class TSpanShadowNode extends TextShadowNode {
         When a glyph, simple or composite, represents an indivisible unit for typesetting purposes,
         it is know as a typographic character.
 
-        Ligatures are an important feature of advance text layout. Some ligatures are discretionary
-        while others (e.g. in Arabic) are required.
+        Ligatures are an important feature of advance text layout.
+
+        Some ligatures are discretionary while others (e.g. in Arabic) are required.
 
         The following explicit rules apply to ligature formation:
 
@@ -446,8 +447,8 @@ class TSpanShadowNode extends TextShadowNode {
             A negative value is an error (see Error processing).
 
             The ‘textLength’ attribute is only applied when the wrapping area is not defined by the
-            shape-inside or the inline-size properties. It is also not applied for any ‘text’ or
-            ‘tspan’ element that has forced line breaks (due to a white-space value of pre or
+        TODO shape-inside or the inline-size properties. It is also not applied for any ‘text’ or
+        TODO ‘tspan’ element that has forced line breaks (due to a white-space value of pre or
             pre-line).
 
             If the attribute is not specified anywhere within a ‘text’ element, the effect is as if
@@ -824,9 +825,7 @@ class TSpanShadowNode extends TextShadowNode {
                     double endX = endPointMatrixData[MTRANS_X];
                     double endY = endPointMatrixData[MTRANS_Y];
 
-                    /*
-                    line through the startpoint-on-the-path and the endpoint-on-the-path
-                    */
+                    // line through the startpoint-on-the-path and the endpoint-on-the-path
                     double lineX = endX - startX;
                     double lineY = endY - startY;
 
