@@ -1,10 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
+import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass';
 import {TextPathAttributes} from '../lib/attributes';
 import extractText from '../lib/extract/extractText';
 import Shape from './Shape';
-import {pathProps, fontProps, numberProp} from '../lib/props';
+import {textPathProps} from '../lib/props';
 import extractProps from '../lib/extract/extractProps';
 import TSpan from './TSpan';
 
@@ -13,38 +12,32 @@ const idExpReg = /^#(.+)$/;
 export default class extends Shape {
     static displayName = 'Span';
 
-    static propTypes = {
-        ...pathProps,
-        ...fontProps,
-        href: PropTypes.string.isRequired,
-        startOffset: numberProp
-    };
+    static propTypes = textPathProps;
 
     render() {
-        let {children, href, startOffset, ...props} = this.props;
+        let {children, href, startOffset, method, spacing, side, alignmentBaseline, midLine, ...props} = this.props;
         if (href) {
             let matched = href.match(idExpReg);
 
             if (matched) {
                 href = matched[1];
-
+                startOffset = `${startOffset || 0}`;
                 return <RNSVGTextPath
-                    href={href}
+                    {...{href, startOffset, method, spacing, side, alignmentBaseline, midLine}}
                     {...extractProps({
                         ...props,
                         x: null,
-                        y: null
+                        y: null,
                     }, this)}
                     {...extractText({
                         children,
-                        startOffset
                     }, true)}
                 />;
             }
         }
 
         console.warn('Invalid `href` prop for `TextPath` element, expected a href like `"#id"`, but got: "' + props.href + '"');
-        return <TSpan>{children}</TSpan>
+        return <TSpan>{children}</TSpan>;
     }
 
 }

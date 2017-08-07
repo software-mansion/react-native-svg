@@ -2,7 +2,7 @@ import React  from 'react';
 import PropTypes from 'prop-types';
 import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
 import extractText from '../lib/extract/extractText';
-import {numberProp, pathProps, fontProps} from '../lib/props';
+import {textProps} from '../lib/props';
 import {TSpanAttibutes} from '../lib/attributes';
 import extractProps from '../lib/extract/extractProps';
 import Shape from './Shape';
@@ -11,29 +11,26 @@ import Shape from './Shape';
 export default class extends Shape {
     static displayName = 'TSpan';
 
-    static propTypes = {
-        ...pathProps,
-        ...fontProps,
-        dx: numberProp,
-        dy: numberProp,
-        textAnchor: PropTypes.oneOf(['start', 'middle', 'end'])
-    };
+    static propTypes = textProps;
 
+    //noinspection JSUnusedGlobalSymbols
     static childContextTypes = {
         isInAParentText: PropTypes.bool
     };
 
+    //noinspection JSUnusedGlobalSymbols
     getChildContext() {
         return {
             isInAParentText: true
         };
-    };
+    }
 
+    //noinspection JSUnusedGlobalSymbols
     getContextTypes() {
         return {
             isInAParentText: PropTypes.bool
         };
-    };
+    }
 
     setNativeProps = (...args) => {
         this.root.setNativeProps(...args);
