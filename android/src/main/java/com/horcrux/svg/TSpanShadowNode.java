@@ -19,8 +19,10 @@ import android.graphics.PathMeasure;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v4.graphics.PaintCompat;
 
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -116,6 +118,151 @@ class TSpanShadowNode extends TextShadowNode {
         GlyphPathBag bag = new GlyphPathBag(paint);
         boolean[] ligature = new boolean[length];
         final char[] chars = line.toCharArray();
+
+        /*
+        *
+        * Three properties affect the space between characters and words:
+        *
+        * ‘kerning’ indicates whether the user agent should adjust inter-glyph spacing
+        * based on kerning tables that are included in the relevant font
+        * (i.e., enable auto-kerning) or instead disable auto-kerning
+        * and instead set inter-character spacing to a specific length (typically, zero).
+        *
+        * ‘letter-spacing’ indicates an amount of space that is to be added between text
+        * characters supplemental to any spacing due to the ‘kerning’ property.
+        *
+        * ‘word-spacing’ indicates the spacing behavior between words.
+        *
+        *  Letter-spacing is applied after bidi reordering and is in addition to any word-spacing.
+        *  Depending on the justification rules in effect, user agents may further increase
+        *  or decrease the space between typographic character units in order to justify text.
+        *
+        * */
+        double kerning = font.kerning;
+        double wordSpacing = font.wordSpacing;
+        double letterSpacing = font.letterSpacing;
+        final boolean autoKerning = !font.manualKerning;
+
+        /*
+        11.1.2. Fonts and glyphs
+
+        A font consists of a collection of glyphs together with other information (collectively,
+        the font tables) necessary to use those glyphs to present characters on some visual medium.
+
+        The combination of the collection of glyphs and the font tables is called the font data.
+
+        A font may supply substitution and positioning tables that can be used by a formatter
+        (text shaper) to re-order, combine and position a sequence of glyphs to form one or more
+        composite glyphs.
+
+        The combining may be as simple as a ligature, or as complex as an indic syllable which
+        combines, usually with some re-ordering, multiple consonants and vowel glyphs.
+
+        The tables may be language dependent, allowing the use of language appropriate letter forms.
+
+        When a glyph, simple or composite, represents an indivisible unit for typesetting purposes,
+        it is know as a typographic character.
+
+        Ligatures are an important feature of advance text layout. Some ligatures are discretionary
+        while others (e.g. in Arabic) are required.
+
+        The following explicit rules apply to ligature formation:
+
+        Ligature formation should not be enabled when characters are in different DOM text nodes;
+        thus, characters separated by markup should not use ligatures.
+
+        Ligature formation should not be enabled when characters are in different text chunks.
+
+        Discretionary ligatures should not be used when the spacing between two characters is not
+        the same as the default space (e.g. when letter-spacing has a non-default value,
+        or text-align has a value of justify and text-justify has a value of distribute).
+        (See CSS Text Module Level 3, ([css-text-3]).
+
+        SVG attributes such as ‘dx’, ‘textLength’, and ‘spacing’ (in ‘textPath’) that may reposition
+        typographic characters do not break discretionary ligatures.
+
+        If discretionary ligatures are not desired
+        they can be turned off by using the font-variant-ligatures property.
+
+        /*
+            When the effective letter-spacing between two characters is not zero
+            (due to either justification or non-zero computed ‘letter-spacing’),
+            user agents should not apply optional ligatures.
+            https://www.w3.org/TR/css-text-3/#letter-spacing-property
+        */
+        final boolean allowOptionalLigatures = letterSpacing == 0 &&
+            font.fontVariantLigatures == FontVariantLigatures.normal;
+
+        /*
+            For OpenType fonts, discretionary ligatures include those enabled by
+            the liga, clig, dlig, hlig, and cala features;
+            required ligatures are found in the rlig feature.
+            https://svgwg.org/svg2-draft/text.html#FontsGlyphs
+
+            http://dev.w3.org/csswg/css-fonts/#propdef-font-feature-settings
+
+            https://www.microsoft.com/typography/otspec/featurelist.htm
+            https://www.microsoft.com/typography/otspec/featuretags.htm
+            https://www.microsoft.com/typography/otspec/features_pt.htm
+            https://www.microsoft.com/typography/otfntdev/arabicot/features.aspx
+            http://unifraktur.sourceforge.net/testcases/enable_opentype_features/
+            https://en.wikipedia.org/wiki/List_of_typographic_features
+            http://ilovetypography.com/OpenType/opentype-features.html
+            https://www.typotheque.com/articles/opentype_features_in_css
+            https://practice.typekit.com/lesson/caring-about-opentype-features/
+            http://stateofwebtype.com/
+
+            6.12. Low-level font feature settings control: the font-feature-settings property
+
+            Name:	font-feature-settings
+            Value:	normal | <feature-tag-value> #
+            Initial:	normal
+            Applies to:	all elements
+            Inherited:	yes
+            Percentages:	N/A
+            Media:	visual
+            Computed value:	as specified
+            Animatable:	no
+
+            https://drafts.csswg.org/css-fonts-3/#default-features
+
+            7.1. Default features
+
+            For OpenType fonts, user agents must enable the default features defined in the OpenType
+            documentation for a given script and writing mode.
+
+            Required ligatures, common ligatures and contextual forms must be enabled by default
+            (OpenType features: rlig, liga, clig, calt),
+            along with localized forms (OpenType feature: locl),
+            and features required for proper display of composed characters and marks
+            (OpenType features: ccmp, mark, mkmk).
+
+            These features must always be enabled, even when the value of the ‘font-variant’ and
+            ‘font-feature-settings’ properties is ‘normal’.
+
+            Individual features are only disabled when explicitly overridden by the author,
+            as when ‘font-variant-ligatures’ is set to ‘no-common-ligatures’.
+
+            TODO For handling complex scripts such as Arabic, Mongolian or Devanagari additional features
+            are required.
+
+            TODO For upright text within vertical text runs,
+            vertical alternates (OpenType feature: vert) must be enabled.
+        */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String required = "'rlig', 'liga', 'clig', 'calt', 'locl', 'ccmp', 'mark', 'mkmk',";
+            String defaultFeatures = required + "'kern', ";
+            if (allowOptionalLigatures) {
+                String additionalLigatures = "'hlig', 'cala', ";
+                paint.setFontFeatureSettings(defaultFeatures + additionalLigatures + font.fontFeatureSettings);
+            } else {
+                String disableDiscretionaryLigatures = "'liga' 0, 'clig' 0, 'dlig' 0, 'hlig' 0, 'cala' 0, ";
+                paint.setFontFeatureSettings(defaultFeatures + disableDiscretionaryLigatures + font.fontFeatureSettings);
+            }
+        }
+        // OpenType.js font data
+        ReadableMap fontData = font.fontData;
+
         float[] advances = new float[length];
         paint.getTextWidths(line, advances);
 
@@ -263,87 +410,6 @@ class TSpanShadowNode extends TextShadowNode {
             are rendered.)
 
             TODO implement stretch
-        */
-
-        /*
-        *
-        * Three properties affect the space between characters and words:
-        *
-        * ‘kerning’ indicates whether the user agent should adjust inter-glyph spacing
-        * based on kerning tables that are included in the relevant font
-        * (i.e., enable auto-kerning) or instead disable auto-kerning
-        * and instead set inter-character spacing to a specific length (typically, zero).
-        *
-        * ‘letter-spacing’ indicates an amount of space that is to be added between text
-        * characters supplemental to any spacing due to the ‘kerning’ property.
-        *
-        * ‘word-spacing’ indicates the spacing behavior between words.
-        *
-        *  Letter-spacing is applied after bidi reordering and is in addition to any word-spacing.
-        *  Depending on the justification rules in effect, user agents may further increase
-        *  or decrease the space between typographic character units in order to justify text.
-        *
-        * */
-        double kerning = font.kerning;
-        double wordSpacing = font.wordSpacing;
-        double letterSpacing = font.letterSpacing;
-        final boolean autoKerning = !font.manualKerning;
-
-        /*
-        11.1.2. Fonts and glyphs
-
-        A font consists of a collection of glyphs together with other information (collectively,
-        the font tables) necessary to use those glyphs to present characters on some visual medium.
-
-        The combination of the collection of glyphs and the font tables is called the font data.
-
-        A font may supply substitution and positioning tables that can be used by a formatter
-        (text shaper) to re-order, combine and position a sequence of glyphs to form one or more
-        composite glyphs.
-
-        The combining may be as simple as a ligature, or as complex as an indic syllable which
-        combines, usually with some re-ordering, multiple consonants and vowel glyphs.
-
-        The tables may be language dependent, allowing the use of language appropriate letter forms.
-
-        When a glyph, simple or composite, represents an indivisible unit for typesetting purposes,
-        it is know as a typographic character.
-
-        Ligatures are an important feature of advance text layout. Some ligatures are discretionary
-        (TODO) while others (e.g. in Arabic) are required.
-
-        The following explicit rules apply to ligature formation:
-
-        Ligature formation should not be enabled when characters are in different DOM text nodes;
-        thus, characters separated by markup should not use ligatures.
-
-        Ligature formation should not be enabled when characters are in different text chunks.
-
-        Discretionary ligatures should not be used when the spacing between two characters is not
-        the same as the default space (e.g. when letter-spacing has a non-default value,
-        or text-align has a value of justify and text-justify has a value of distribute).
-        (See CSS Text Module Level 3, ([css-text-3]).
-
-        SVG attributes such as ‘dx’, ‘textLength’, and ‘spacing’ (in ‘textPath’) that may reposition
-        typographic characters do not break discretionary ligatures.
-
-        If discretionary ligatures are not desired
-        they can be turned off by using the font-variant-ligatures property.
-
-        /*
-            When the effective letter-spacing between two characters is not zero
-            (due to either justification or non-zero computed ‘letter-spacing’),
-            user agents should not apply optional ligatures.
-            https://www.w3.org/TR/css-text-3/#letter-spacing-property
-        */
-        final boolean allowOptionalLigatures = letterSpacing == 0 &&
-            font.fontVariantLigatures == FontVariantLigatures.normal;
-
-        /*
-            For OpenType fonts, discretionary ligatures include those enabled by
-            the liga, clig, dlig, hlig, and cala features;
-            TODO required ligatures are found in the rlig feature.
-            https://svgwg.org/svg2-draft/text.html#FontsGlyphs
         */
 
         /*
@@ -564,10 +630,32 @@ class TSpanShadowNode extends TextShadowNode {
                         switch (baselineShiftString) {
                             case "sub":
                                 // TODO
+                                if (fontData != null && fontData.hasKey("tables") && fontData.hasKey("unitsPerEm")) {
+                                    int unitsPerEm = fontData.getInt("unitsPerEm");
+                                    ReadableMap tables = fontData.getMap("tables");
+                                    if (tables.hasKey("os2")) {
+                                        ReadableMap os2 = tables.getMap("os2");
+                                        if (os2.hasKey("ySubscriptYOffset")) {
+                                            double subOffset = os2.getDouble("ySubscriptYOffset");
+                                            baselineShift += fontSize * subOffset / unitsPerEm;
+                                        }
+                                    }
+                                }
                                 break;
 
                             case "super":
                                 // TODO
+                                if (fontData != null && fontData.hasKey("tables") && fontData.hasKey("unitsPerEm")) {
+                                    int unitsPerEm = fontData.getInt("unitsPerEm");
+                                    ReadableMap tables = fontData.getMap("tables");
+                                    if (tables.hasKey("os2")) {
+                                        ReadableMap os2 = tables.getMap("os2");
+                                        if (os2.hasKey("ySuperscriptYOffset")) {
+                                            double superOffset = os2.getDouble("ySuperscriptYOffset");
+                                            baselineShift -= fontSize * superOffset / unitsPerEm;
+                                        }
+                                    }
+                                }
                                 break;
 
                             case "baseline":
@@ -588,9 +676,6 @@ class TSpanShadowNode extends TextShadowNode {
         final float[] startPointMatrixData = new float[9];
         final float[] endPointMatrixData = new float[9];
 
-        String previous = "";
-        double previousCharWidth = 0;
-
         for (int index = 0; index < length; index++) {
             char currentChar = chars[index];
             String current = String.valueOf(currentChar);
@@ -601,23 +686,21 @@ class TSpanShadowNode extends TextShadowNode {
                 advances horizontally when the glyph is drawn using horizontal text layout).
             */
             boolean hasLigature = false;
-            if (allowOptionalLigatures) {
-                if (alreadyRenderedGraphemeCluster) {
-                    current = "";
-                } else {
-                    int nextIndex = index;
-                    while (++nextIndex < length) {
-                        float nextWidth = advances[nextIndex];
-                        if (nextWidth > 0) {
-                            break;
-                        }
-                        String nextLigature = current + String.valueOf(chars[nextIndex]);
-                        boolean hasNextLigature = PaintCompat.hasGlyph(paint, nextLigature);
-                        if (hasNextLigature) {
-                            ligature[nextIndex] = true;
-                            current = nextLigature;
-                            hasLigature = true;
-                        }
+            if (alreadyRenderedGraphemeCluster) {
+                current = "";
+            } else {
+                int nextIndex = index;
+                while (++nextIndex < length) {
+                    float nextWidth = advances[nextIndex];
+                    if (nextWidth > 0) {
+                        break;
+                    }
+                    String nextLigature = current + String.valueOf(chars[nextIndex]);
+                    boolean hasNextLigature = PaintCompat.hasGlyph(paint, nextLigature);
+                    if (hasNextLigature) {
+                        ligature[nextIndex] = true;
+                        current = nextLigature;
+                        hasLigature = true;
                     }
                 }
             }
@@ -633,16 +716,8 @@ class TSpanShadowNode extends TextShadowNode {
                 using the user agent's distance along the path algorithm.
             */
             if (autoKerning) {
-                if (allowOptionalLigatures) {
-                    double kerned = advances[index] * scaleSpacingAndGlyphs;
-                    kerning = kerned - charWidth;
-                } else {
-                    double bothCharsWidth = paint.measureText(previous + current) * scaleSpacingAndGlyphs;
-                    double kerned = bothCharsWidth - previousCharWidth;
-                    kerning = kerned - charWidth;
-                    previousCharWidth = charWidth;
-                    previous = current;
-                }
+                double kerned = advances[index] * scaleSpacingAndGlyphs;
+                kerning = kerned - charWidth;
             }
 
             boolean isWordSeparator = currentChar == ' ';
@@ -662,8 +737,8 @@ class TSpanShadowNode extends TextShadowNode {
                 continue;
             }
 
-            advance = advance * side;
-            charWidth = charWidth * side;
+            advance *= side;
+            charWidth *= side;
             double cursor = offset + (x + dx) * side;
             double startPoint = cursor - advance;
 

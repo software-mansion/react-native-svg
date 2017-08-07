@@ -15,17 +15,20 @@ class FontData {
     private static final double DEFAULT_LETTER_SPACING = 0d;
 
     private static final String KERNING = "kerning";
+    private static final String FONT_DATA = "fontData";
     private static final String TEXT_ANCHOR = "textAnchor";
     private static final String WORD_SPACING = "wordSpacing";
     private static final String LETTER_SPACING = "letterSpacing";
     private static final String TEXT_DECORATION = "textDecoration";
+    private static final String FONT_FEATURE_SETTINGS = "fontFeatureSettings";
     private static final String FONT_VARIANT_LIGATURES = "fontVariantLigatures";
 
     final double fontSize;
-
     final String fontFamily;
     final FontStyle fontStyle;
+    final ReadableMap fontData;
     final FontWeight fontWeight;
+    final String fontFeatureSettings;
     final FontVariantLigatures fontVariantLigatures;
 
     final TextAnchor textAnchor;
@@ -40,9 +43,11 @@ class FontData {
     static final FontData Defaults = new FontData();
 
     private FontData() {
+        fontData = null;
         fontFamily = "";
         fontStyle = FontStyle.normal;
         fontWeight = FontWeight.Normal;
+        fontFeatureSettings = "";
         fontVariantLigatures = FontVariantLigatures.normal;
 
         textAnchor = TextAnchor.start;
@@ -81,9 +86,12 @@ class FontData {
             fontSize = parentFontSize;
         }
 
+        fontData = font.hasKey(FONT_DATA) ? font.getMap(FONT_DATA) : parent.fontData;
+
         fontFamily = font.hasKey(FONT_FAMILY) ? font.getString(FONT_FAMILY) : parent.fontFamily;
         fontStyle = font.hasKey(FONT_STYLE) ? FontStyle.valueOf(font.getString(FONT_STYLE)) : parent.fontStyle;
         fontWeight = font.hasKey(FONT_WEIGHT) ? FontWeight.getEnum(font.getString(FONT_WEIGHT)) : parent.fontWeight;
+        fontFeatureSettings = font.hasKey(FONT_FEATURE_SETTINGS) ? font.getString(FONT_FEATURE_SETTINGS) : parent.fontFeatureSettings;
         fontVariantLigatures = font.hasKey(FONT_VARIANT_LIGATURES) ? FontVariantLigatures.valueOf(font.getString(FONT_VARIANT_LIGATURES)) : parent.fontVariantLigatures;
 
         textAnchor = font.hasKey(TEXT_ANCHOR) ? TextAnchor.valueOf(font.getString(TEXT_ANCHOR)) : parent.textAnchor;
