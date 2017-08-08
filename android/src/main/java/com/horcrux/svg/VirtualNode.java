@@ -58,7 +58,6 @@ abstract class VirtualNode extends LayoutShadowNode {
 
     private SvgViewShadowNode mSvgShadowNode;
     private Path mCachedClipPath;
-    private GroupShadowNode mParentTextRoot;
     private GroupShadowNode mTextRoot;
     private float canvasHeight = -1;
     private float canvasWidth = -1;
@@ -73,51 +72,12 @@ abstract class VirtualNode extends LayoutShadowNode {
         return true;
     }
 
+    @android.support.annotation.Nullable
     GroupShadowNode getTextRoot() {
-        GroupShadowNode shadowNode = getTextRoot(GroupShadowNode.class);
-        if (shadowNode == null) {
-            return getTextRoot(TextShadowNode.class);
-        }
-        return shadowNode;
-    }
-
-    GroupShadowNode getParentTextRoot() {
-        GroupShadowNode shadowNode = getParentTextRoot(GroupShadowNode.class);
-        if (shadowNode == null) {
-            return getParentTextRoot(TextShadowNode.class);
-        }
-        return shadowNode;
-    }
-
-    @android.support.annotation.Nullable
-    private GroupShadowNode getParentTextRoot(Class shadowNodeClass) {
-        ReactShadowNode node = this.getParent();
-        if (mParentTextRoot == null) {
-            while (node != null) {
-                if (node.getClass() == shadowNodeClass) {
-                    mParentTextRoot = (GroupShadowNode)node;
-                    break;
-                }
-
-                ReactShadowNode parent = node.getParent();
-
-                if (!(parent instanceof VirtualNode)) {
-                    node = null;
-                } else {
-                    node = parent;
-                }
-            }
-        }
-
-        return mParentTextRoot;
-    }
-
-    @android.support.annotation.Nullable
-    private GroupShadowNode getTextRoot(Class shadowNodeClass) {
         VirtualNode node = this;
         if (mTextRoot == null) {
             while (node != null) {
-                if (node.getClass() == shadowNodeClass) {
+                if (node instanceof GroupShadowNode && ((GroupShadowNode) node).getGlyphContext() != null) {
                     mTextRoot = (GroupShadowNode)node;
                     break;
                 }
@@ -134,6 +94,17 @@ abstract class VirtualNode extends LayoutShadowNode {
 
         return mTextRoot;
     }
+
+    @android.support.annotation.Nullable
+    GroupShadowNode getParentTextRoot() {
+        ReactShadowNode parent = this.getParent();
+        if (!(parent instanceof VirtualNode)) {
+            return null;
+        } else {
+            return ((VirtualNode) parent).getTextRoot();
+        }
+    }
+
 
     private double getFontSizeFromContext() {
         GroupShadowNode root = getTextRoot();

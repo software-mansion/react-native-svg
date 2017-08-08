@@ -29,7 +29,6 @@ class GroupShadowNode extends RenderableShadowNode {
     @Nullable ReadableMap mFont;
 
     private GlyphContext mGlyphContext;
-    private GroupShadowNode textRoot;
 
     @ReactProp(name = "font")
     public void setFont(@Nullable ReadableMap font) {
@@ -47,11 +46,9 @@ class GroupShadowNode extends RenderableShadowNode {
         return mGlyphContext;
     }
 
+    @SuppressWarnings("ConstantConditions")
     GlyphContext getTextRootGlyphContext() {
-        if (textRoot == null) {
-            textRoot = getTextRoot();
-        }
-        return textRoot.getGlyphContext();
+        return getTextRoot().getGlyphContext();
     }
 
     void pushGlyphContext() {
