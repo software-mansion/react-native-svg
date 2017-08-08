@@ -22,6 +22,7 @@ import android.util.Base64;
 
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
+import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -126,7 +127,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         return mCanvas.getClipBounds();
     }
 
-    private void drawChildren(Canvas canvas) {
+    private void drawChildren(final Canvas canvas) {
 
         if (mAlign != null) {
             RectF vbRect = getViewBox();
@@ -135,29 +136,31 @@ public class SvgViewShadowNode extends LayoutShadowNode {
             canvas.concat(mViewBoxMatrix);
         }
 
-        Paint paint = new Paint();
+        final Paint paint = new Paint();
 
         paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
 
         paint.setTypeface(Typeface.DEFAULT);
 
-        for (int i = 0; i < getChildCount(); i++) {
-            if (!(getChildAt(i) instanceof VirtualNode)) {
-                continue;
+
+        traverseChildren(new VirtualNode.NodeRunnable() {
+            public void run(VirtualNode node) {
+                node.saveDefinition();
             }
+        });
 
-            VirtualNode child = (VirtualNode) getChildAt(i);
-            child.saveDefinition();
+        traverseChildren(new VirtualNode.NodeRunnable() {
+            public void run(VirtualNode node) {
+                int count = node.saveAndSetupCanvas(canvas);
+                node.draw(canvas, paint, 1f);
+                node.restoreCanvas(canvas, count);
+                node.markUpdateSeen();
 
-            int count = child.saveAndSetupCanvas(canvas);
-            child.draw(canvas, paint, 1f);
-            child.restoreCanvas(canvas, count);
-            child.markUpdateSeen();
-
-            if (child.isResponsible() && !mResponsible) {
-                mResponsible = true;
+                if (node.isResponsible() && !mResponsible) {
+                    mResponsible = true;
+                }
             }
-        }
+        });
     }
 
     @NonNull
@@ -228,5 +231,16 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
     Brush getDefinedBrush(String brushRef) {
         return mDefinedBrushes.get(brushRef);
+    }
+
+    void traverseChildren(VirtualNode.NodeRunnable runner) {
+        for (int i = 0; i < getChildCount(); i++) {
+            ReactShadowNode child = getChildAt(i);
+            if (!(child instanceof VirtualNode)) {
+                continue;
+            }
+
+            runner.run((VirtualNode) child);
+        }
     }
 }

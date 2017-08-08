@@ -19,11 +19,6 @@ class DefsShadowNode extends DefinitionShadowNode {
 
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
-        traverseChildren(new NodeRunnable() {
-            public void run(VirtualNode node) {
-                node.saveDefinition();
-            }
-        });
         NodeRunnable markUpdateSeenRecursive = new NodeRunnable() {
             public void run(VirtualNode node) {
                 node.markUpdateSeen();
@@ -31,5 +26,13 @@ class DefsShadowNode extends DefinitionShadowNode {
             }
         };
         traverseChildren(markUpdateSeenRecursive);
+    }
+
+    void saveDefinition() {
+        traverseChildren(new NodeRunnable() {
+            public void run(VirtualNode node) {
+                node.saveDefinition();
+            }
+        });
     }
 }
