@@ -45,7 +45,7 @@ class TSpanShadowNode extends TextShadowNode {
     private static final String TTF = ".ttf";
 
     private Path mCache;
-    private @Nullable String mContent;
+    @Nullable String mContent;
     private TextPathShadowNode textPath;
 
     @ReactProp(name = "content")
