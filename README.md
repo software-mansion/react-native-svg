@@ -80,6 +80,7 @@ Here's a simple example. To render output like this:
 Use the following code:
 
 ```javascript
+import 'react';
 import Svg,{
     Circle,
     Ellipse,
@@ -805,7 +806,7 @@ npm i
 3. Mask element.
 4. Marker element.
 5. Load Image from URL.
-6. Transform prop support.
+6. ~~Transform prop support~~.
 
 ### Known issues:
 1. Unable to apply focus point of RadialGradient on Android.

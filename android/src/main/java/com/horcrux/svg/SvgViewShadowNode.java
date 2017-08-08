@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -16,6 +16,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.util.Base64;
 
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -37,7 +39,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
     private final Map<String, Brush> mDefinedBrushes = new HashMap<>();
     private Canvas mCanvas;
-    protected final float mScale;
+    private final float mScale;
 
     private float mMinX;
     private float mMinY;
@@ -109,7 +111,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         SvgViewManager.setShadowNode(this);
     }
 
-    public Object drawOutput() {
+    private Object drawOutput() {
         Bitmap bitmap = Bitmap.createBitmap(
                 (int) getLayoutWidth(),
                 (int) getLayoutHeight(),
@@ -120,20 +122,24 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         return bitmap;
     }
 
-    public Rect getCanvasBounds() {
+    Rect getCanvasBounds() {
         return mCanvas.getClipBounds();
     }
 
     private void drawChildren(Canvas canvas) {
 
         if (mAlign != null) {
-            RectF vbRect = new RectF(mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
+            RectF vbRect = getViewBox();
             RectF eRect = new RectF(0, 0, getLayoutWidth(), getLayoutHeight());
-            mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice, false);
+            mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
             canvas.concat(mViewBoxMatrix);
         }
 
         Paint paint = new Paint();
+
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
+
+        paint.setTypeface(Typeface.DEFAULT);
 
         for (int i = 0; i < getChildCount(); i++) {
             if (!(getChildAt(i) instanceof VirtualNode)) {
@@ -154,7 +160,12 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         }
     }
 
-    public String toDataURL() {
+    @NonNull
+    private RectF getViewBox() {
+        return new RectF(mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
+    }
+
+    String toDataURL() {
         Bitmap bitmap = Bitmap.createBitmap(
                 (int) getLayoutWidth(),
                 (int) getLayoutHeight(),
@@ -168,13 +179,13 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
     }
 
-    public void enableTouchEvents() {
+    void enableTouchEvents() {
         if (!mResponsible) {
             mResponsible = true;
         }
     }
 
-    public int hitTest(Point point) {
+    int hitTest(Point point) {
         if (!mResponsible) {
             return -1;
         }
@@ -195,27 +206,27 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         return viewTag;
     }
 
-    public void defineClipPath(VirtualNode clipPath, String clipPathRef) {
+    void defineClipPath(VirtualNode clipPath, String clipPathRef) {
         mDefinedClipPaths.put(clipPathRef, clipPath);
     }
 
-    public VirtualNode getDefinedClipPath(String clipPathRef) {
+    VirtualNode getDefinedClipPath(String clipPathRef) {
         return mDefinedClipPaths.get(clipPathRef);
     }
 
-    public void defineTemplate(VirtualNode template, String templateRef) {
+    void defineTemplate(VirtualNode template, String templateRef) {
         mDefinedTemplates.put(templateRef, template);
     }
 
-    public VirtualNode getDefinedTemplate(String templateRef) {
+    VirtualNode getDefinedTemplate(String templateRef) {
         return mDefinedTemplates.get(templateRef);
     }
 
-    public void defineBrush(Brush brush, String brushRef) {
+    void defineBrush(Brush brush, String brushRef) {
         mDefinedBrushes.put(brushRef, brush);
     }
 
-    public Brush getDefinedBrush(String brushRef) {
+    Brush getDefinedBrush(String brushRef) {
         return mDefinedBrushes.get(brushRef);
     }
 }

@@ -8,6 +8,7 @@ class Shape extends Component {
         _.forEach(SvgTouchableMixin, (method, key) => {
             this[key] = method.bind(this);
         });
+        //noinspection JSUnusedGlobalSymbols
         this.state = this.touchableGetInitialState();
     }
 }

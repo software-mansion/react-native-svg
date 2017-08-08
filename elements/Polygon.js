@@ -16,6 +16,7 @@ export default class extends Component{
     };
 
     setNativeProps = (...args) => {
+        //noinspection JSUnresolvedFunction
         this.root.getNativeElement().setNativeProps(...args);
     };
 

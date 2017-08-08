@@ -42,4 +42,5 @@ export {
     ClipPath
 };
 
+//noinspection JSUnusedGlobalSymbols
 export default Svg;

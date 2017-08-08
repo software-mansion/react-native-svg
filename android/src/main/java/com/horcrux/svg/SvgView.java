@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -9,6 +9,7 @@
 
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -29,12 +30,15 @@ import javax.annotation.Nullable;
 /**
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its \childrn.
  */
+@SuppressLint("ViewConstructor")
 public class SvgView extends View {
     public enum Events {
+        @SuppressWarnings("unused")
         EVENT_DATA_URL("onDataURL");
 
         private final String mName;
 
+        @SuppressWarnings({"unused", "SameParameterValue"})
         Events(final String name) {
             mName = name;
         }
@@ -46,7 +50,7 @@ public class SvgView extends View {
     }
 
     private @Nullable Bitmap mBitmap;
-    private EventDispatcher mEventDispatcher;
+    private final EventDispatcher mEventDispatcher;
     private long mGestureStartTime = TouchEvent.UNSET;
     private int mTargetTag;
 
@@ -131,7 +135,7 @@ public class SvgView extends View {
                 mTouchEventCoalescingKeyHelper));
     }
 
-    public void handleTouchEvent(MotionEvent ev) {
+    private void handleTouchEvent(MotionEvent ev) {
         int action = ev.getAction() & MotionEvent.ACTION_MASK;
         if (action == MotionEvent.ACTION_DOWN) {
             mGestureStartTime = ev.getEventTime();
