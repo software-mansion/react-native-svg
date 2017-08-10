@@ -21,7 +21,7 @@
     if (self = [super init]) {
         _fillOpacity = 1;
         _strokeOpacity = 1;
-        _strokeWidth = 1;
+        _strokeWidth = @"1";
         _fillRule = kRNSVGCGFCRuleNonzero;
     }
     return self;
@@ -72,7 +72,7 @@
     _strokeOpacity = strokeOpacity;
 }
 
-- (void)setStrokeWidth:(CGFloat)strokeWidth
+- (void)setStrokeWidth:(NSString*)strokeWidth
 {
     if (strokeWidth == _strokeWidth) {
         return;
@@ -108,16 +108,26 @@
     _strokeMiterlimit = strokeMiterlimit;
 }
 
-- (void)setStrokeDasharray:(RNSVGCGFloatArray)strokeDasharray
+- (void)setStrokeDasharray:(NSArray<NSString *> *)strokeDasharray
 {
-    if (strokeDasharray.array == _strokeDasharray.array) {
+    if (strokeDasharray == _strokeDasharrayData) {
         return;
     }
     if (_strokeDasharray.array) {
         free(_strokeDasharray.array);
     }
     [self invalidate];
-    _strokeDasharray = strokeDasharray;
+    NSUInteger count = strokeDasharray.count;
+    _strokeDasharray.count = count;
+    _strokeDasharray.array = nil;
+
+    if (count) {
+        _strokeDasharray.array = malloc(sizeof(CGFloat) * count);
+        for (NSUInteger i = 0; i < count; i++) {
+            _strokeDasharray.array[i] = [strokeDasharray[i] floatValue];
+        }
+    }
+    _strokeDasharrayData = strokeDasharray;
 }
 
 - (void)setStrokeDashoffset:(CGFloat)strokeDashoffset
@@ -134,7 +144,7 @@
     if (propList == _propList) {
         return;
     }
-    
+
     _propList = _attributeList = propList;
     [self invalidate];
 }
@@ -153,11 +163,11 @@
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.matrix);
     CGContextSetAlpha(context, self.opacity);
-    
+
     [self beginTransparencyLayer:context];
     [self renderLayerTo:context];
     [self endTransparencyLayer:context];
-    
+
     CGContextRestoreGState(context);
 }
 
@@ -167,23 +177,23 @@
     if (!self.fill && !self.stroke) {
         return;
     }
-    
+
     CGPathRef path = [self getPath:context];
     [self setHitArea:path];
-    
+
     if (self.opacity == 0) {
         return;
     }
-    
+
     CGPathDrawingMode mode = kCGPathStroke;
     BOOL fillColor = NO;
     [self clip:context];
-    
+
     BOOL evenodd = self.fillRule == kRNSVGCGFCRuleEvenodd;
-    
+
     if (self.fill) {
         fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
-        
+
         if (fillColor) {
             mode = evenodd ? kCGPathEOFill : kCGPathFill;
         } else {
@@ -195,31 +205,31 @@
                      painter:[[self getSvgView] getDefinedPainter:self.fill.brushRef]
              ];
             CGContextRestoreGState(context);
-            
+
             if (!self.stroke) {
                 return;
             }
         }
     }
-    
+
     if (self.stroke) {
-        CGContextSetLineWidth(context, self.strokeWidth);
+        CGContextSetLineWidth(context, [self.strokeWidth floatValue]);
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);
         RNSVGCGFloatArray dash = self.strokeDasharray;
-        
+
         if (dash.count) {
             CGContextSetLineDash(context, self.strokeDashoffset, dash.array, dash.count);
         }
-        
+
         if (!fillColor) {
             CGContextAddPath(context, path);
             CGContextReplacePathWithStrokedPath(context);
             CGContextClip(context);
         }
-        
+
         BOOL strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
-        
+
         if (strokeColor && fillColor) {
             mode = evenodd ? kCGPathEOFillStroke : kCGPathFillStroke;
         } else if (!strokeColor) {
@@ -228,12 +238,12 @@
                 CGContextAddPath(context, path);
                 CGContextDrawPath(context, mode);
             }
-            
+
             // draw stroke
             CGContextAddPath(context, path);
             CGContextReplacePathWithStrokedPath(context);
             CGContextClip(context);
-            
+
             [self.stroke paint:context
                        opacity:self.strokeOpacity
                        painter:[[self getSvgView] getDefinedPainter:self.stroke.brushRef]
@@ -241,7 +251,7 @@
             return;
         }
     }
-    
+
     CGContextAddPath(context, path);
     CGContextDrawPath(context, mode);
 }
@@ -252,14 +262,14 @@
     if ([self getSvgView].responsible) {
         // Add path to hitArea
         CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
-        
+
         if (self.stroke && self.strokeWidth) {
             // Add stroke to hitArea
-            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, self.strokeWidth, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
+            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, [self.strokeWidth floatValue], self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
             CGPathAddPath(hitArea, nil, strokePath);
             CGPathRelease(strokePath);
         }
-        
+
         _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(hitArea)));
         CGPathRelease(hitArea);
     }
@@ -277,22 +287,22 @@
     if (!_hitArea) {
         return nil;
     }
-    
+
     if (self.active) {
         if (!event) {
             self.active = NO;
         }
         return self;
     }
-    
+
     CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
     CGPathRef hitArea = CGPathCreateCopyByTransformingPath(_hitArea, &matrix);
     BOOL contains = CGPathContainsPoint(hitArea, nil, point, NO);
     CGPathRelease(hitArea);
-    
+
     if (contains) {
         CGPathRef clipPath = [self getClipPath];
-        
+
         if (!clipPath) {
             return self;
         } else {
@@ -314,14 +324,14 @@
 - (void)mergeProperties:(__kindof RNSVGRenderable *)target
 {
     NSArray<NSString *> *targetAttributeList = [target getAttributeList];
-    
+
     if (targetAttributeList.count == 0) {
         return;
     }
-    
+
     NSMutableArray* attributeList = [self.propList mutableCopy];
     _originProperties = [[NSMutableDictionary alloc] init];
-    
+
     for (NSString *key in targetAttributeList) {
         [_originProperties setValue:[self valueForKey:key] forKey:key];
         if (![attributeList containsObject:key]) {
@@ -329,7 +339,7 @@
             [self setValue:[target valueForKey:key] forKey:key];
         }
     }
-    
+
     _lastMergedList = targetAttributeList;
     _attributeList = [attributeList copy];
 }
@@ -339,7 +349,7 @@
     for (NSString *key in _lastMergedList) {
         [self setValue:[_originProperties valueForKey:key] forKey:key];
     }
-    
+
     _lastMergedList = nil;
     _attributeList = _propList;
 }

@@ -231,7 +231,7 @@
 		7FC260D31E34A12A00A39833 /* RNSVGSymbolManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGSymbolManager.m; sourceTree = "<group>"; };
 		7FFC4EA21E24E52500AD5BE5 /* RNSVGGlyphContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNSVGGlyphContext.h; path = Text/RNSVGGlyphContext.h; sourceTree = "<group>"; };
 		7FFC4EA31E24E5AD00AD5BE5 /* RNSVGGlyphContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGGlyphContext.m; path = Text/RNSVGGlyphContext.m; sourceTree = "<group>"; };
-		A361E7A31EB0C33D00646005 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libRNSVG-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		94DDAC5C1F3D024300EED511 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libRNSVG-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,6 +274,7 @@
 			isa = PBXGroup;
 			children = (
 				0CF68AC11AF0540F00FF9E5C /* libRNSVG.a */,
+				94DDAC5C1F3D024300EED511 /* libRNSVG-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -452,7 +453,7 @@
 			);
 			name = "RNSVG-tvOS";
 			productName = RNSVG;
-			productReference = A361E7A31EB0C33D00646005 /* libRNSVG-tvOS.a */;
+			productReference = 94DDAC5C1F3D024300EED511 /* libRNSVG-tvOS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */

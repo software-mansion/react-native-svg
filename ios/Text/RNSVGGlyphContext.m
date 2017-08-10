@@ -38,16 +38,16 @@
     return self;
 }
 
-- (void)pushContext:(NSDictionary *)font deltaX:(NSArray<NSNumber *> *)deltaX deltaY:(NSArray<NSNumber *> *)deltaY positionX:(NSString *)positionX positionY:(NSString *)positionY
+- (void)pushContext:(NSDictionary *)font deltaX:(NSArray<NSString *> *)deltaX deltaY:(NSArray<NSString *> *)deltaY positionX:(NSArray<NSString *> *)positionX positionY:(NSArray<NSString *> *)positionY
 {
     CGPoint location = _currentLocation;
     
     if (positionX) {
-        location.x = [RNSVGPercentageConverter stringToFloat:positionX relative:_width offset:0];
+        location.x = [RNSVGPercentageConverter stringToFloat:[positionX firstObject] relative:_width offset:0];
     }
     
     if (positionY) {
-        location.y = [RNSVGPercentageConverter stringToFloat:positionY relative:_height offset:0];
+        location.y = [RNSVGPercentageConverter stringToFloat:[positionY firstObject] relative:_height offset:0];
     }
     
     [_locationContext addObject:[NSValue valueWithCGPoint:location]];
@@ -127,6 +127,8 @@
     NSNumber *fontSize;
     NSString *fontWeight;
     NSString *fontStyle;
+    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
 
     for (NSDictionary *font in [_fontContext reverseObjectEnumerator]) {
         if (!fontFamily) {
@@ -134,7 +136,7 @@
         }
         
         if (fontSize == nil) {
-            fontSize = font[@"fontSize"];
+            fontSize = [f numberFromString:font[@"fontSize"]];
         }
         
         if (!fontWeight) {

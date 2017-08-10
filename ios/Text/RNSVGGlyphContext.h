@@ -13,7 +13,7 @@
 @interface RNSVGGlyphContext : NSObject
 
 - (instancetype)initWithDimensions:(CGFloat)width height:(CGFloat)height;
-- (void)pushContext:(NSDictionary *)font deltaX:(NSArray<NSNumber *> *)deltaX deltaY:(NSArray<NSNumber *> *)deltaY positionX:(NSString *)positionX positionY:(NSString *)positionY;
+- (void)pushContext:(NSDictionary *)font deltaX:(NSArray<NSString *> *)deltaX deltaY:(NSArray<NSString *> *)deltaY positionX:(NSArray<NSString *> *)positionX positionY:(NSArray<NSString *> *)positionY;
 - (void)popContext;
 - (CTFontRef)getGlyphFont;
 - (CGPoint)getNextGlyphPoint:(CGPoint)offset glyphWidth:(CGFloat)glyphWidth;

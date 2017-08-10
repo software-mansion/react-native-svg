@@ -14,10 +14,10 @@
 @interface RNSVGText : RNSVGGroup
 
 @property (nonatomic, assign) RNSVGTextAnchor textAnchor;
-@property (nonatomic, strong) NSArray<NSNumber *> *deltaX;
-@property (nonatomic, strong) NSArray<NSNumber *> *deltaY;
-@property (nonatomic, strong) NSString *positionX;
-@property (nonatomic, strong) NSString *positionY;
+@property (nonatomic, strong) NSArray<NSString *> *deltaX;
+@property (nonatomic, strong) NSArray<NSString *> *deltaY;
+@property (nonatomic, strong) NSArray<NSString *> *positionX;
+@property (nonatomic, strong) NSArray<NSString *> *positionY;
 @property (nonatomic, strong) NSDictionary *font;
 
 - (RNSVGText *)getTextRoot;
