@@ -25,8 +25,8 @@
 @property (nonatomic, assign) CGLineCap strokeLinecap;
 @property (nonatomic, assign) CGLineJoin strokeLinejoin;
 @property (nonatomic, assign) CGFloat strokeMiterlimit;
-@property (nonatomic, assign) RNSVGCGFloatArray strokeDasharray;
-@property (nonatomic, assign) NSArray<NSString *> *strokeDasharrayData;
+@property (nonatomic, assign) RNSVGCGFloatArray strokeDasharrayData;
+@property (nonatomic, assign) NSArray<NSString *> *strokeDasharray;
 @property (nonatomic, assign) CGFloat strokeDashoffset;
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 

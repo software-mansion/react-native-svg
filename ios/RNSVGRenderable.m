@@ -110,24 +110,24 @@
 
 - (void)setStrokeDasharray:(NSArray<NSString *> *)strokeDasharray
 {
-    if (strokeDasharray == _strokeDasharrayData) {
+    if (strokeDasharray == _strokeDasharray) {
         return;
     }
-    if (_strokeDasharray.array) {
-        free(_strokeDasharray.array);
+    if (_strokeDasharrayData.array) {
+        free(_strokeDasharrayData.array);
     }
     [self invalidate];
     NSUInteger count = strokeDasharray.count;
-    _strokeDasharray.count = count;
-    _strokeDasharray.array = nil;
+    _strokeDasharrayData.count = count;
+    _strokeDasharrayData.array = nil;
 
     if (count) {
-        _strokeDasharray.array = malloc(sizeof(CGFloat) * count);
+        _strokeDasharrayData.array = malloc(sizeof(CGFloat) * count);
         for (NSUInteger i = 0; i < count; i++) {
-            _strokeDasharray.array[i] = [strokeDasharray[i] floatValue];
+            _strokeDasharrayData.array[i] = [strokeDasharray[i] floatValue];
         }
     }
-    _strokeDasharrayData = strokeDasharray;
+    _strokeDasharray = strokeDasharray;
 }
 
 - (void)setStrokeDashoffset:(CGFloat)strokeDashoffset
@@ -152,8 +152,8 @@
 - (void)dealloc
 {
     CGPathRelease(_hitArea);
-    if (_strokeDasharray.array) {
-        free(_strokeDasharray.array);
+    if (_strokeDasharrayData.array) {
+        free(_strokeDasharrayData.array);
     }
 }
 
@@ -216,7 +216,7 @@
         CGContextSetLineWidth(context, [self.strokeWidth floatValue]);
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);
-        RNSVGCGFloatArray dash = self.strokeDasharray;
+        RNSVGCGFloatArray dash = self.strokeDasharrayData;
 
         if (dash.count) {
             CGContextSetLineDash(context, self.strokeDashoffset, dash.array, dash.count);
