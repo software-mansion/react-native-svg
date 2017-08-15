@@ -70,10 +70,17 @@
     CTFontRef font = [self getFontFromContext];
     
     // Create a dictionary for this font
-    CFDictionaryRef attributes = (__bridge CFDictionaryRef)@{
+    CFDictionaryRef attributes;
+    if (font != nil) {
+        attributes = (__bridge CFDictionaryRef)@{
                                                              (NSString *)kCTFontAttributeName: (__bridge id)font,
                                                              (NSString *)kCTForegroundColorFromContextAttributeName: @YES
                                                              };
+    } else {
+        attributes = (__bridge CFDictionaryRef)@{
+                                                 (NSString *)kCTForegroundColorFromContextAttributeName: @YES
+                                                 };
+    }
 
     CFStringRef string = (__bridge CFStringRef)text;
     CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);

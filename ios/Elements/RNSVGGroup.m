@@ -9,15 +9,20 @@
 #import "RNSVGGroup.h"
 
 @implementation RNSVGGroup
+{
+    RNSVGGlyphContext *_glyphContext;
+}
 
 - (void)renderLayerTo:(CGContextRef)context
 {
     [self clip:context];
+    [self setupGlyphContext:context];
     [self renderGroupTo:context];
 }
 
 - (void)renderGroupTo:(CGContextRef)context
 {
+    [self pushGlyphContext];
     RNSVGSvgView* svg = [self getSvgView];
     [self traverseSubviews:^(RNSVGNode *node) {
         if (node.responsible && !svg.responsible) {
@@ -36,6 +41,28 @@
         
         return YES;
     }];
+    [self popGlyphContext];
+}
+
+- (void)setupGlyphContext:(CGContextRef)context
+{
+    _glyphContext = [[RNSVGGlyphContext alloc] initWithDimensions:[self getContextWidth]
+                                                           height:[self getContextHeight]];
+}
+
+- (RNSVGGlyphContext *)getGlyphContext
+{
+    return _glyphContext;
+}
+
+- (void)pushGlyphContext
+{
+    [[[self getTextRoot] getGlyphContext] pushContext:self.font];
+}
+
+- (void)popGlyphContext
+{
+    [[[self getTextRoot] getGlyphContext] popContext];
 }
 
 - (void)renderPathTo:(CGContextRef)context

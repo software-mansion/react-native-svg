@@ -13,10 +13,6 @@
 #import "RNSVGGlyphContext.h"
 
 @implementation RNSVGText
-{
-    RNSVGText *_textRoot;
-    RNSVGGlyphContext *_glyphContext;
-}
 
 - (void)setTextAnchor:(RNSVGTextAnchor)textAnchor
 {
@@ -28,7 +24,6 @@
 {
     [self clip:context];
     CGContextSaveGState(context);
-    [self setupGlyphContext:context];
     
     CGPathRef path = [self getGroupPath:context];
     CGAffineTransform transform = [self getAlignTransform:path];
@@ -41,12 +36,6 @@
     CGPathRef transformedPath = CGPathCreateCopyByTransformingPath(path, &transform);
     [self setHitArea:transformedPath];
     CGPathRelease(transformedPath);
-}
-
-- (void)setupGlyphContext:(CGContextRef)context
-{
-    _glyphContext = [[RNSVGGlyphContext alloc] initWithDimensions:[self getContextWidth]
-                                                  height:[self getContextHeight]];
 }
 
 // release the cached CGPathRef for RNSVGTSpan
@@ -70,7 +59,6 @@
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    [self setupGlyphContext:context];
     CGPathRef groupPath = [self getGroupPath:context];
     CGAffineTransform transform = [self getAlignTransform:groupPath];
     [self releaseCachedPath];
@@ -115,27 +103,6 @@
         }
     }
     return anchor;
-}
-
-- (RNSVGText *)getTextRoot
-{
-    if (!_textRoot) {
-        _textRoot = self;
-        while (_textRoot && [_textRoot class] != [RNSVGText class]) {
-            if (![_textRoot isKindOfClass:[RNSVGText class]]) {
-                //todo: throw exception here
-                break;
-            }
-            _textRoot = (RNSVGText*)[_textRoot superview];
-        }
-    }
-    
-    return _textRoot;
-}
-
-- (RNSVGGlyphContext *)getGlyphContext
-{
-    return _glyphContext;
 }
 
 - (void)pushGlyphContext

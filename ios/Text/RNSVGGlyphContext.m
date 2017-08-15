@@ -10,6 +10,7 @@
 #import "RNSVGGlyphContext.h"
 #import "RNSVGPercentageConverter.h"
 #import <React/RCTFont.h>
+#import "RNSVGNode.h"
 
 @implementation RNSVGGlyphContext
 {
@@ -21,6 +22,7 @@
     CGPoint _currentLocation;
     CGFloat _width;
     CGFloat _height;
+    CGFloat _fontSize;
 }
 
 - (instancetype)initWithDimensions:(CGFloat)width height:(CGFloat)height
@@ -34,8 +36,24 @@
         _deltaYContext = [[NSMutableArray alloc] init];
         _xContext = [[NSMutableArray alloc] init];
         _currentLocation = CGPointZero;
+        _fontSize = DEFAULT_FONT_SIZE;
     }
     return self;
+}
+
+- (CGFloat) getFontSize
+{
+    return _fontSize;
+}
+
+- (void)pushContext:(NSDictionary *)font
+{
+    CGPoint location = _currentLocation;
+    
+    [_locationContext addObject:[NSValue valueWithCGPoint:location]];
+    [_fontContext addObject:font ? font : @{}];
+    [_xContext addObject:[NSNumber numberWithFloat:location.x]];
+    _currentLocation = location;
 }
 
 - (void)pushContext:(NSDictionary *)font deltaX:(NSArray<NSString *> *)deltaX deltaY:(NSArray<NSString *> *)deltaY positionX:(NSArray<NSString *> *)positionX positionY:(NSArray<NSString *> *)positionY

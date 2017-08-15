@@ -9,13 +9,20 @@
 #import "RNSVGNode.h"
 #import "RNSVGContainer.h"
 #import "RNSVGClipPath.h"
+#import "RNSVGGroup.h"
+#import "RNSVGGlyphContext.h"
 
 @implementation RNSVGNode
 {
+    RNSVGGroup *_textRoot;
+    RNSVGGlyphContext *glyphContext;
     BOOL _transparent;
     CGPathRef _cachedClipPath;
     RNSVGSvgView *_svgView;
 }
+
+CGFloat const M_SQRT1_2l = 0.707106781186547524400844362104849039;
+CGFloat const DEFAULT_FONT_SIZE = 12;
 
 - (instancetype)init
 {
@@ -47,6 +54,53 @@
 {
     id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
     [container invalidate];
+}
+
+- (RNSVGGroup *)getTextRoot
+{
+    RNSVGNode* node = self;
+    if (_textRoot == nil) {
+        while (node != nil) {
+            if ([node isKindOfClass:[RNSVGGroup class]] && [((RNSVGGroup*) node) getGlyphContext] != nil) {
+                _textRoot = (RNSVGGroup*)node;
+                break;
+            }
+            
+            UIView* parent = [node superview];
+            
+            if (![node isKindOfClass:[RNSVGNode class]]) {
+                node = nil;
+            } else {
+                node = (RNSVGNode*)parent;
+            }
+        }
+    }
+    
+    return _textRoot;
+}
+
+- (RNSVGGroup *)getParentTextRoot
+{
+    RNSVGNode* parent = (RNSVGGroup*)[self superview];
+    if (![parent isKindOfClass:[RNSVGGroup class]]) {
+        return nil;
+    } else {
+        return [parent getTextRoot];
+    }
+}
+
+- (CGFloat)getFontSizeFromContext
+{
+    RNSVGGroup* root = [self getTextRoot];
+    if (root == nil) {
+        return DEFAULT_FONT_SIZE;
+    }
+    
+    if (glyphContext == nil) {
+        glyphContext = [root getGlyphContext];
+    }
+    
+    return [glyphContext getFontSize];
 }
 
 - (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
@@ -193,6 +247,15 @@
 {
     return [RNSVGPercentageConverter stringToFloat:length relative:[self getContextHeight] offset:0];
 }
+
+- (CGFloat)relativeOnOther:(NSString *)length
+{
+    CGFloat width = [self getContextWidth];
+    CGFloat height = [self getContextHeight];
+    CGFloat powX = width * width;
+    CGFloat powY = height * height;
+    CGFloat r = sqrt(powX + powY) * M_SQRT1_2l;
+    return [RNSVGPercentageConverter stringToFloat:length relative:r offset:0];}
 
 - (CGFloat)getContextWidth
 {
