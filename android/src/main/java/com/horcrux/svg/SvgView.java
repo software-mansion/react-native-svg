@@ -148,6 +148,7 @@ public class SvgView extends View {
             // this gesture.
             dispatch(ev, TouchEventType.END);
             mTargetTag = -1;
+            mGestureStartTime = TouchEvent.UNSET;
         } else if (action == MotionEvent.ACTION_MOVE) {
             // Update pointer position for current gesture
             dispatch(ev, TouchEventType.MOVE);
@@ -157,8 +158,6 @@ public class SvgView extends View {
         } else if (action == MotionEvent.ACTION_POINTER_UP) {
             // Exactly onw of the pointers goes up
             dispatch(ev, TouchEventType.END);
-            mTargetTag = -1;
-            mGestureStartTime = TouchEvent.UNSET;
         } else if (action == MotionEvent.ACTION_CANCEL) {
             dispatchCancelEvent(ev);
             mTargetTag = -1;
