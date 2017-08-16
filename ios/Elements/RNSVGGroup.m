@@ -28,17 +28,17 @@
         if (node.responsible && !svg.responsible) {
             svg.responsible = YES;
         }
-        
+
         if ([node isKindOfClass:[RNSVGRenderable class]]) {
             [(RNSVGRenderable*)node mergeProperties:self];
         }
-        
+
         [node renderTo:context];
-        
+
         if ([node isKindOfClass:[RNSVGRenderable class]]) {
             [(RNSVGRenderable*)node resetProperties];
         }
-        
+
         return YES;
     }];
     [self popGlyphContext];
@@ -46,8 +46,13 @@
 
 - (void)setupGlyphContext:(CGContextRef)context
 {
-    _glyphContext = [[RNSVGGlyphContext alloc] initWithDimensions:[self getContextWidth]
-                                                           height:[self getContextHeight]];
+    CGRect clipBounds = CGContextGetClipBoundingBox(context);
+    clipBounds = CGRectApplyAffineTransform(clipBounds, self.matrix);
+    CGFloat width = CGRectGetWidth(clipBounds);
+    CGFloat height = CGRectGetHeight(clipBounds);
+
+    _glyphContext = [[RNSVGGlyphContext alloc] initWithDimensions:width
+                                                           height:height];
 }
 
 - (RNSVGGlyphContext *)getGlyphContext
@@ -88,7 +93,7 @@
     if (hitSelf) {
         return hitSelf;
     }
-    
+
     CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
 
     CGPathRef clip = [self getClipPath];
@@ -96,26 +101,26 @@
         CGPathRef transformedClipPath = CGPathCreateCopyByTransformingPath(clip, &matrix);
         BOOL insideClipPath = CGPathContainsPoint(clip, nil, point, self.clipRule == kRNSVGCGFCRuleEvenodd);
         CGPathRelease(transformedClipPath);
-        
+
         if (!insideClipPath) {
             return nil;
         }
-        
+
     }
-    
+
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
         if (![node isKindOfClass:[RNSVGNode class]]) {
             continue;
         }
-        
+
         if (event) {
             node.active = NO;
         } else if (node.active) {
             return node;
         }
-        
+
         UIView *hitChild = [node hitTest: point withEvent:event withTransform:matrix];
-        
+
         if (hitChild) {
             node.active = YES;
             return (node.responsible || (node != hitChild)) ? hitChild : self;

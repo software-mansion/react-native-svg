@@ -14,6 +14,8 @@
 
 - (instancetype)initWithDimensions:(CGFloat)width height:(CGFloat)height;
 
+- (CGFloat)getWidth;
+- (CGFloat)getHeight;
 - (CGFloat)getFontSize;
 - (void)pushContext:(NSDictionary *)font;
 - (void)pushContext:(NSDictionary *)font deltaX:(NSArray<NSString *> *)deltaX deltaY:(NSArray<NSString *> *)deltaY positionX:(NSArray<NSString *> *)positionX positionY:(NSArray<NSString *> *)positionY;

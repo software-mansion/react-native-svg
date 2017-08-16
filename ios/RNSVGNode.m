@@ -65,9 +65,9 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
                 _textRoot = (RNSVGGroup*)node;
                 break;
             }
-            
+
             UIView* parent = [node superview];
-            
+
             if (![node isKindOfClass:[RNSVGNode class]]) {
                 node = nil;
             } else {
@@ -75,7 +75,7 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
             }
         }
     }
-    
+
     return _textRoot;
 }
 
@@ -95,11 +95,11 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
     if (root == nil) {
         return DEFAULT_FONT_SIZE;
     }
-    
+
     if (glyphContext == nil) {
         glyphContext = [root getGlyphContext];
     }
-    
+
     return [glyphContext getFontSize];
 }
 
@@ -113,13 +113,13 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
     if (opacity == _opacity) {
         return;
     }
-    
+
     if (opacity <= 0) {
         opacity = 0;
     } else if (opacity > 1) {
         opacity = 1;
     }
-    
+
     [self invalidate];
     _transparent = opacity < 1;
     _opacity = opacity;
@@ -175,14 +175,14 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
         CGPathRelease(_cachedClipPath);
         _cachedClipPath = CGPathRetain([[[self getSvgView] getDefinedClipPath:self.clipPath] getPath:context]);
     }
-    
+
     return [self getClipPath];
 }
 
 - (void)clip:(CGContextRef)context
 {
     CGPathRef clipPath = [self getClipPath:context];
-    
+
     if (clipPath) {
         CGContextAddPath(context, clipPath);
         if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
@@ -207,7 +207,7 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
 // hitTest delagate
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    
+
     // abstract
     return nil;
 }
@@ -223,9 +223,9 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
     if (_svgView) {
         return _svgView;
     }
-    
+
     __kindof UIView *parent = self.superview;
-    
+
     if ([parent class] == [RNSVGSvgView class]) {
         _svgView = parent;
     } else if ([parent isKindOfClass:[RNSVGNode class]]) {
@@ -234,7 +234,7 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
     } else {
         RCTLogError(@"RNSVG: %@ should be descendant of a SvgViewShadow.", NSStringFromClass(self.class));
     }
-    
+
     return _svgView;
 }
 
@@ -259,12 +259,22 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
 
 - (CGFloat)getContextWidth
 {
-    return CGRectGetWidth([[self getSvgView] getContextBounds]);
+    RNSVGGroup * root = [self getTextRoot];
+    if (root == nil) {
+        return CGRectGetWidth([[self getSvgView] getContextBounds]);
+    } else {
+        return [[root getGlyphContext] getWidth];
+    }
 }
 
 - (CGFloat)getContextHeight
 {
-    return CGRectGetHeight([[self getSvgView] getContextBounds]);
+    RNSVGGroup * root = [self getTextRoot];
+    if (root == nil) {
+        return CGRectGetHeight([[self getSvgView] getContextBounds]);
+    } else {
+        return [[root getGlyphContext] getHeight];
+    }
 }
 
 - (CGFloat)getContextLeft
