@@ -17,7 +17,7 @@
     [self renderGroupTo:context];
 }
 
-- (RNSVGBezierTransformer *)getBezierTransformer
+- (RNSVGPath *)getPath
 {
     RNSVGSvgView *svg = [self getSvgView];
     RNSVGNode *template = [svg getDefinedTemplate:self.href];
@@ -28,6 +28,12 @@
     }
 
     RNSVGPath *path = (RNSVGPath *)template;
+    return path;
+}
+
+- (RNSVGBezierTransformer *)getBezierTransformer
+{
+    RNSVGPath *path = [self getPath];
     CGFloat startOffset = [self relativeOnWidth:self.startOffset];
     return [[RNSVGBezierTransformer alloc] initWithBezierCurvesAndStartOffset:[path getBezierCurves]
                                                                   startOffset:startOffset];

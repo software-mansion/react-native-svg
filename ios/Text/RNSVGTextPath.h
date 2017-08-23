@@ -14,8 +14,13 @@
 @interface RNSVGTextPath : RNSVGText
 
 @property (nonatomic, strong) NSString *href;
+@property (nonatomic, strong) NSString *side;
+@property (nonatomic, strong) NSString *method;
+@property (nonatomic, strong) NSString *midLine;
+@property (nonatomic, strong) NSString *spacing;
 @property (nonatomic, strong) NSString *startOffset;
 
+- (RNSVGPath *)getPath;
 - (RNSVGBezierTransformer *)getBezierTransformer;
 
 @end
