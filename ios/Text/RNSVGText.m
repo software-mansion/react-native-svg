@@ -107,11 +107,12 @@
 
 - (void)pushGlyphContext
 {
+    /*
     [[[self getTextRoot] getRNSVGGlyphContext] pushContext:self.font
                                                     deltaX:self.deltaX
                                                     deltaY:self.deltaY
                                                  positionX:self.positionX
-                                                 positionY:self.positionY];
+                                                 positionY:self.positionY];*/
     [[[self getTextRoot] getGlyphContext] pushContextwithRNSVGText:self
                                                              reset:false
                                                               font:self.font
@@ -124,6 +125,7 @@
 
 - (void)popGlyphContext
 {
+    //[[[self getTextRoot] getRNSVGGlyphContext] popContext];
     [[[self getTextRoot] getGlyphContext] popContext];
 }
 

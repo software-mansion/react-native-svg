@@ -110,15 +110,14 @@
     CFArrayRef runs = CTLineGetGlyphRuns(line);
     GlyphContext* gc = [[self getTextRoot] getGlyphContext];
     FontData* font = [gc getFont];
-    NSUInteger length = str.length;
-    NSUInteger n = length;
-    unichar characters[n];
-    CFStringGetCharacters((__bridge CFStringRef) str, CFRangeMake(0, n), characters);
-    CGGlyph glyphs[n];
+    NSUInteger n = str.length;
     CGSize glyph_advances[n];
+    unichar characters[n];
+    CGGlyph glyphs[n];
 
+    CFStringGetCharacters((__bridge CFStringRef) str, CFRangeMake(0, n), characters);
     CTFontGetGlyphsForCharacters(fontRef, characters, glyphs, n);
-    CTFontGetAdvancesForGlyphs(fontRef, kCTFontDefaultOrientation, glyphs, glyph_advances, n);
+    CTFontGetAdvancesForGlyphs(fontRef, kCTFontOrientationHorizontal, glyphs, glyph_advances, n);
     /*
      *
      * Three properties affect the space between characters and words:
@@ -473,7 +472,7 @@
         switch (mLengthAdjust) {
             default:
             case TextLengthAdjustSpacing:
-                letterSpacing += (author - textMeasure) / (length - 1);
+                letterSpacing += (author - textMeasure) / (n - 1);
                 break;
             case TextLengthAdjustSpacingAndGlyphs:
                 scaleSpacingAndGlyphs = author / textMeasure;
@@ -805,11 +804,11 @@ CGFloat getTextAnchorOffset(enum TextAnchor textAnchor, CGFloat width)
     _path = nil;
     textPath = nil;
     textPathPath = nil;
-    __block RNSVGBezierTransformer *bezierTransformer;
+    //_bezierTransformer = nil;
     [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
         if ([node class] == [RNSVGTextPath class]) {
             textPath = (RNSVGTextPath*) node;
-            bezierTransformer = [textPath getBezierTransformer];
+            //_bezierTransformer = [textPath getBezierTransformer];
             textPathPath = [textPath getPath];
             _path = [UIBezierPath bezierPathWithCGPath:[textPathPath getPath:nil]];
             pathLength = [_path length];
@@ -817,7 +816,6 @@ CGFloat getTextAnchorOffset(enum TextAnchor textAnchor, CGFloat width)
         }
         return YES;
     }];
-    _bezierTransformer = bezierTransformer;
 }
 
 - (void)traverseTextSuperviews:(BOOL (^)(__kindof RNSVGText *node))block

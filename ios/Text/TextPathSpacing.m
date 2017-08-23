@@ -1,18 +1,18 @@
-#import <Foundation/Foundation.h>
+#import "TextPathSpacing.h"
 
-#if !defined (TextPathSpacing_)
-#define TextPathSpacing_
+NSString* TextPathSpacingToString( enum TextPathSpacing fw )
+{
+    return TextPathSpacingStrings[fw];
+}
 
-NS_ENUM(NSInteger, TextPathSpacing) {
-    TextPathSpacingAutoSpacing,
-    TextPathSpacingExact,
-    TextPathSpacingDEFAULT = TextPathSpacingAutoSpacing,
-};
-
-static NSString* const TextPathSpacingStrings[] = {@"auto", @"exact", nil};
-
-NSString* TextPathSpacingToString( enum TextPathSpacing fw );
-
-enum TextPathSpacing TextPathSpacingFromString( NSString* s );
-
-#endif
+enum TextPathSpacing TextPathSpacingFromString( NSString* s )
+{
+    NSInteger i;
+    NSString* fw;
+    for (i = 0; fw = TextPathSpacingStrings[i], fw != nil; i++) {
+        if ([fw isEqualToString:s]) {
+            return i;
+        }
+    }
+    return TextPathSpacingDEFAULT;
+}
