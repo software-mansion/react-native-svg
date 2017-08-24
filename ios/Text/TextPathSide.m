@@ -7,10 +7,9 @@ NSString* TextPathSideToString( enum TextPathSide fw )
 
 enum TextPathSide TextPathSideFromString( NSString* s )
 {
-    NSInteger i;
-    NSString* fw;
-    for (i = 0; fw = TextPathSideStrings[i], fw != nil; i++) {
-        if ([fw isEqualToString:s]) {
+    const NSUInteger l = sizeof(TextPathSideStrings) / sizeof(NSString*);
+    for (NSUInteger i = 0; i < l; i++) {
+        if ([s isEqualToString:TextPathSideStrings[i]]) {
             return i;
         }
     }

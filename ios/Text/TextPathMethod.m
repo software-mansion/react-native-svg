@@ -7,10 +7,9 @@ NSString* TextPathMethodToString( enum TextPathMethod fw )
 
 enum TextPathMethod TextPathMethodFromString( NSString* s )
 {
-    NSInteger i;
-    NSString* fw;
-    for (i = 0; fw = TextPathMethodStrings[i], fw != nil; i++) {
-        if ([fw isEqualToString:s]) {
+    const NSUInteger l = sizeof(TextPathMethodStrings) / sizeof(NSString*);
+    for (NSUInteger i = 0; i < l; i++) {
+        if ([s isEqualToString:TextPathMethodStrings[i]]) {
             return i;
         }
     }

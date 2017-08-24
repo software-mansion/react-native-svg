@@ -7,10 +7,9 @@ NSString* TextPathMidLineToString( enum TextPathMidLine fw )
 
 enum TextPathMidLine TextPathMidLineFromString( NSString* s )
 {
-    NSInteger i;
-    NSString* fw;
-    for (i = 0; fw = TextPathMidLineStrings[i], fw != nil; i++) {
-        if ([fw isEqualToString:s]) {
+    const NSUInteger l = sizeof(TextPathMidLineStrings) / sizeof(NSString*);
+    for (NSUInteger i = 0; i < l; i++) {
+        if ([s isEqualToString:TextPathMidLineStrings[i]]) {
             return i;
         }
     }

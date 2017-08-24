@@ -7,10 +7,9 @@ NSString* TextAnchorToString( enum TextAnchor fw )
 
 enum TextAnchor TextAnchorFromString( NSString* s )
 {
-    NSInteger i;
-    NSString* fw;
-    for (i = 0; fw = TextAnchorStrings[i], fw != nil; i++) {
-        if ([fw isEqualToString:s]) {
+    const NSUInteger l = sizeof(TextAnchorStrings) / sizeof(NSString*);
+    for (NSUInteger i = 0; i < l; i++) {
+        if ([s isEqualToString:TextAnchorStrings[i]]) {
             return i;
         }
     }

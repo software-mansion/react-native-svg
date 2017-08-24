@@ -7,10 +7,9 @@ NSString* FontVariantLigaturesToString( enum FontVariantLigatures fw )
 
 enum FontVariantLigatures FontVariantLigaturesFromString( NSString* s )
 {
-    NSInteger i;
-    NSString* fw;
-    for (i = 0; fw = FontVariantLigaturesStrings[i], fw != nil; i++) {
-        if ([fw isEqualToString:s]) {
+    const NSUInteger l = sizeof(FontVariantLigaturesStrings) / sizeof(NSString*);
+    for (NSUInteger i = 0; i < l; i++) {
+        if ([s isEqualToString:FontVariantLigaturesStrings[i]]) {
             return i;
         }
     }

@@ -7,10 +7,9 @@ NSString* FontStyleToString( enum FontStyle fw )
 
 enum FontStyle FontStyleFromString( NSString* s )
 {
-    NSInteger i;
-    NSString* fw;
-    for (i = 0; fw = FontStyleStrings[i], fw != nil; i++) {
-        if ([fw isEqualToString:s]) {
+    const NSUInteger l = sizeof(FontStyleStrings) / sizeof(NSString*);
+    for (NSUInteger i = 0; i < l; i++) {
+        if ([s isEqualToString:FontStyleStrings[i]]) {
             return i;
         }
     }

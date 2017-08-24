@@ -7,10 +7,9 @@ NSString* TextDecorationToString( enum TextDecoration fw )
 
 enum TextDecoration TextDecorationFromString( NSString* s )
 {
-    NSInteger i;
-    NSString* fw;
-    for (i = 0; fw = TextDecorationStrings[i], fw != nil; i++) {
-        if ([fw isEqualToString:s]) {
+    const NSUInteger l = sizeof(TextDecorationStrings) / sizeof(NSString*);
+    for (NSUInteger i = 0; i < l; i++) {
+        if ([s isEqualToString:TextDecorationStrings[i]]) {
             return i;
         }
     }

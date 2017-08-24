@@ -7,10 +7,9 @@ NSString* TextLengthAdjustToString( enum TextLengthAdjust fw )
 
 enum TextLengthAdjust TextLengthAdjustFromString( NSString* s )
 {
-    NSInteger i;
-    NSString* fw;
-    for (i = 0; fw = TextLengthAdjustStrings[i], fw != nil; i++) {
-        if ([fw isEqualToString:s]) {
+    const NSUInteger l = sizeof(TextLengthAdjustStrings) / sizeof(NSString*);
+    for (NSUInteger i = 0; i < l; i++) {
+        if ([s isEqualToString:TextLengthAdjustStrings[i]]) {
             return i;
         }
     }

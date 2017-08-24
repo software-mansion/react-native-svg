@@ -7,10 +7,9 @@ NSString* TextPathSpacingToString( enum TextPathSpacing fw )
 
 enum TextPathSpacing TextPathSpacingFromString( NSString* s )
 {
-    NSInteger i;
-    NSString* fw;
-    for (i = 0; fw = TextPathSpacingStrings[i], fw != nil; i++) {
-        if ([fw isEqualToString:s]) {
+    const NSUInteger l = sizeof(TextPathSpacingStrings) / sizeof(NSString*);
+    for (NSUInteger i = 0; i < l; i++) {
+        if ([s isEqualToString:TextPathSpacingStrings[i]]) {
             return i;
         }
     }

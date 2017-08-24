@@ -7,10 +7,9 @@ NSString* FontWeightToString( enum FontWeight fw )
 
 enum FontWeight FontWeightFromString( NSString* s )
 {
-    NSInteger i;
-    NSString* fw;
-    for (i = 0; fw = FontWeightStrings[i], fw != nil; i++) {
-        if ([fw isEqualToString:s]) {
+    const NSUInteger l = sizeof(FontWeightStrings) / sizeof(NSString*);
+    for (NSUInteger i = 0; i < l; i++) {
+        if ([s isEqualToString:FontWeightStrings[i]]) {
             return i;
         }
     }
