@@ -77,11 +77,13 @@
     if (font != nil) {
         attributes = (__bridge CFDictionaryRef)@{
                                                  (NSString *)kCTFontAttributeName: (__bridge id)font,
-                                                 (NSString *)kCTForegroundColorFromContextAttributeName: @YES
+                                                 (NSString *)kCTForegroundColorFromContextAttributeName: @YES,
+                                                 (NSString *)NSLigatureAttributeName: @0
                                                  };
     } else {
         attributes = (__bridge CFDictionaryRef)@{
-                                                 (NSString *)kCTForegroundColorFromContextAttributeName: @YES
+                                                 (NSString *)kCTForegroundColorFromContextAttributeName: @YES,
+                                                 (NSString *)NSLigatureAttributeName: @0
                                                  };
     }
 
@@ -681,8 +683,8 @@
     }
 
     CFIndex runEnd = CFArrayGetCount(runs);
-    for (CFIndex i = 0; i < runEnd; i++) {
-        CTRunRef run = CFArrayGetValueAtIndex(CTLineGetGlyphRuns(line), i);
+    for (CFIndex r = 0; r < runEnd; r++) {
+        CTRunRef run = CFArrayGetValueAtIndex(runs, r);
 
         CFIndex runGlyphCount = CTRunGetGlyphCount(run);
         CGPoint positions[runGlyphCount];
@@ -693,14 +695,14 @@
         CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
         CTFontRef runFont = CFDictionaryGetValue(CTRunGetAttributes(run), kCTFontAttributeName);
 
-        for(CFIndex i = 0; i < runGlyphCount; i++) {
-            CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[i], nil);
+        for(CFIndex g = 0; g < runGlyphCount; g++) {
+            CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[g], nil);
 
             /*
              Determine the glyph's charwidth (i.e., the amount which the current text position
              advances horizontally when the glyph is drawn using horizontal text layout).
              */
-            CGFloat charWidth = glyph_advances[i].width * scaleSpacingAndGlyphs;
+            CGFloat charWidth = glyph_advances[g].width * scaleSpacingAndGlyphs;
             //CGPoint glyphPoint = [self getGlyphPointFromContext:positions[i] glyphWidth:CGRectGetWidth(CGPathGetBoundingBox(letter))];
 
             /*
