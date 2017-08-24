@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
-#if !defined (TextAnchor_)
-#define TextAnchor_
+#ifndef TextAnchor_h
+#define TextAnchor_h
 
 NS_ENUM(NSInteger, TextAnchor) {
     TextAnchorStart,

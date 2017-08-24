@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
-#if !defined (TextPathMidLine_)
-#define TextPathMidLine_
+#ifndef TextPathMidLine_h
+#define TextPathMidLine_h
 
 NS_ENUM(NSInteger, TextPathMidLine) {
     TextPathMidLineSharp,

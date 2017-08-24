@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
-#if !defined (TextPathMethod_)
-#define TextPathMethod_
+#ifndef TextPathMethod_h
+#define TextPathMethod_h
 
 NS_ENUM(NSInteger, TextPathMethod) {
     TextPathMethodAlign,

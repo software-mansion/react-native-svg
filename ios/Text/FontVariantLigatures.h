@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
-#if !defined (FontVariantLigatures_)
-#define FontVariantLigatures_
+#ifndef FontVariantLigatures_h
+#define FontVariantLigatures_h
 
 NS_ENUM(NSInteger, FontVariantLigatures) {
     FontVariantLigaturesNormal,

@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
-#if !defined (FontWeight_)
-#define FontWeight_
+#ifndef FontWeight_h
+#define FontWeight_h
 
 NS_ENUM(NSInteger, FontWeight) {
     FontWeightNormal,

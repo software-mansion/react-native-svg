@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
-#if !defined (TextDecoration_)
-#define TextDecoration_
+#ifndef TextDecoration_h
+#define TextDecoration_h
 
 NS_ENUM(NSInteger, TextDecoration) {
     TextDecorationNone,

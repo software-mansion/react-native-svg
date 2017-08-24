@@ -1,8 +1,9 @@
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 
-#if !defined (PropHelper_)
-#define PropHelper_
+#ifndef PropHelper_h
+#define PropHelper_h
+
 @interface PropHelper : NSObject
 
 + (double) fromRelativeWithNSString:(NSString *)length
@@ -12,4 +13,5 @@
                            fontSize:(double)fontSize;
 
 @end
+
 #endif

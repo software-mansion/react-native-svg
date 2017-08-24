@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
-#if !defined (TextPathSpacing_)
-#define TextPathSpacing_
+#ifndef TextPathSpacing_h
+#define TextPathSpacing_h
 
 NS_ENUM(NSInteger, TextPathSpacing) {
     TextPathSpacingAutoSpacing,

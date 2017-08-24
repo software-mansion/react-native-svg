@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
-#if !defined (FontStyle_)
-#define FontStyle_
+#ifndef FontStyle_h
+#define FontStyle_h
 
 NS_ENUM(NSInteger, FontStyle) {
     FontStyleNormal,

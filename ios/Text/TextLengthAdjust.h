@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
-#if !defined (TextLengthAdjust_)
-#define TextLengthAdjust_
+#ifndef TextLengthAdjust_h
+#define TextLengthAdjust_h
 
 NS_ENUM(NSInteger, TextLengthAdjust) {
     TextLengthAdjustSpacing,

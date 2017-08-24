@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
-#if !defined (TextPathSide_)
-#define TextPathSide_
+#ifndef TextPathSide_h
+#define TextPathSide_h
 
 NS_ENUM(NSInteger, TextPathSide) {
     TextPathSideLeft,
