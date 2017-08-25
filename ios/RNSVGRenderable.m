@@ -213,7 +213,8 @@
     }
 
     if (self.stroke) {
-        CGContextSetLineWidth(context, [self.strokeWidth floatValue]);
+        CGFloat width = [self relativeOnOther:self.strokeWidth];
+        CGContextSetLineWidth(context, width);
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);
         RNSVGCGFloatArray dash = self.strokeDasharrayData;

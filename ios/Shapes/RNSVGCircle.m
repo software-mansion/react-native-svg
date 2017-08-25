@@ -43,22 +43,8 @@
     CGMutablePathRef path = CGPathCreateMutable();
     CGFloat cx = [self relativeOnWidth:self.cx];
     CGFloat cy = [self relativeOnHeight:self.cy];
-    CGFloat r;
-    // radius percentage calculate formula:
-    // radius = sqrt(pow((width*percent), 2) + pow((height*percent), 2)) / sqrt(2)
-    
-    if ([RNSVGPercentageConverter isPercentage:self.r]) {
-        CGFloat radiusPercent = [RNSVGPercentageConverter percentageToFloat:self.r relative:1 offset:0];
-        
-        r = sqrt(
-                 pow([self getContextWidth] * radiusPercent, 2) +
-                 pow([self getContextHeight] * radiusPercent, 2)
-                 ) / sqrt(2);
-    } else {
-        r = [self.r floatValue];
-    }
-    
-    CGPathAddArc(path, nil, cx, cy, r, 0, 2*M_PI, NO);
+    CGFloat r = [self relativeOnOther:self.r];
+    CGPathAddArc(path, nil, cx, cy, r, 0, 2 * M_PI, NO);
     return (CGPathRef)CFAutorelease(path);
 }
 
