@@ -25,6 +25,7 @@ RCT_EXPORT_VIEW_PROPERTY(deltaX, NSArray<NSString *>)
 RCT_EXPORT_VIEW_PROPERTY(deltaY, NSArray<NSString *>)
 RCT_EXPORT_VIEW_PROPERTY(positionX, NSArray<NSString *>)
 RCT_EXPORT_VIEW_PROPERTY(positionY, NSArray<NSString *>)
+RCT_EXPORT_VIEW_PROPERTY(rotate, NSArray<NSString *>)
 RCT_EXPORT_VIEW_PROPERTY(font, NSDictionary)
 
 @end

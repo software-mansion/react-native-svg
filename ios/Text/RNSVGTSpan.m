@@ -67,59 +67,42 @@
 
     [self setupTextPath:context];
 
-    CGMutablePathRef path = CGPathCreateMutable();
-
     [self pushGlyphContext];
-    CTFontRef font = [self getFontFromContext];
 
-    // Create a dictionary for this font
-    CFDictionaryRef attributes;
-    if (font != nil) {
-        attributes = (__bridge CFDictionaryRef)@{
-                                                 (NSString *)kCTFontAttributeName: (__bridge id)font,
-                                                 (NSString *)kCTForegroundColorFromContextAttributeName: @YES,
-                                                 (NSString *)NSLigatureAttributeName: @0
-                                                 };
-    } else {
-        attributes = (__bridge CFDictionaryRef)@{
-                                                 (NSString *)kCTForegroundColorFromContextAttributeName: @YES,
-                                                 (NSString *)NSLigatureAttributeName: @0
-                                                 };
-    }
-
-    CFStringRef string = (__bridge CFStringRef)text;
-    CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
-    CTLineRef line = CTLineCreateWithAttributedString(attrString);
-
-    CGMutablePathRef linePath = [self getLinePath:line text:text font:font];
-    CGAffineTransform offset = CGAffineTransformIdentity;
-    CGPathAddPath(path, &offset, linePath);
-    CGPathRelease(linePath);
+    CGMutablePathRef path = [self getLinePath:text];
 
     _cache = CGPathRetain(CFAutorelease(CGPathCreateCopy(path)));
-    [self popGlyphContext];
 
-    // clean up
-    CFRelease(attrString);
-    CFRelease(line);
+    [self popGlyphContext];
 
     return (CGPathRef)CFAutorelease(path);
 }
 
-- (CGMutablePathRef)getLinePath:(CTLineRef)line text:(NSString *)str font:(CTFontRef)fontRef
+- (CGMutablePathRef)getLinePath:(NSString *)str
 {
+    // Create a dictionary for this font
+    CTFontRef fontRef = [self getFontFromContext];
+    CFDictionaryRef attributes;
+    if (fontRef != nil) {
+        attributes = (__bridge CFDictionaryRef)@{
+                                                 (NSString *)kCTFontAttributeName: (__bridge id)fontRef,
+                                                 (NSString *)kCTForegroundColorFromContextAttributeName: @YES,
+                                                 (NSString *)NSLigatureAttributeName: @0                                                 };
+    } else {
+        attributes = (__bridge CFDictionaryRef)@{
+                                                 (NSString *)kCTForegroundColorFromContextAttributeName: @YES,
+                                                 (NSString *)NSLigatureAttributeName: @0                                                             };
+    }
+
+    CFStringRef string = (__bridge CFStringRef)str;
+    CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
+    CTLineRef line = CTLineCreateWithAttributedString(attrString);
+
     CGMutablePathRef path = CGPathCreateMutable();
     CFArrayRef runs = CTLineGetGlyphRuns(line);
     GlyphContext* gc = [[self getTextRoot] getGlyphContext];
     FontData* font = [gc getFont];
     NSUInteger n = str.length;
-    CGSize glyph_advances[n];
-    unichar characters[n];
-    CGGlyph glyphs[n];
-
-    CFStringGetCharacters((__bridge CFStringRef) str, CFRangeMake(0, n), characters);
-    CTFontGetGlyphsForCharacters(fontRef, characters, glyphs, n);
-    CTFontGetAdvancesForGlyphs(fontRef, kCTFontOrientationHorizontal, glyphs, glyph_advances, n);
     /*
      *
      * Three properties affect the space between characters and words:
@@ -682,18 +665,22 @@
         }
     }
 
+    double tau = 2 * M_PI;
+    double radToDeg = 360 / tau;
     CFIndex runEnd = CFArrayGetCount(runs);
     for (CFIndex r = 0; r < runEnd; r++) {
         CTRunRef run = CFArrayGetValueAtIndex(runs, r);
 
         CFIndex runGlyphCount = CTRunGetGlyphCount(run);
-        CGPoint positions[runGlyphCount];
+        CGSize glyph_advances[runGlyphCount];
+        //CGPoint positions[runGlyphCount];
         CGGlyph glyphs[runGlyphCount];
 
         // Grab the glyphs, positions, and font
-        CTRunGetPositions(run, CFRangeMake(0, 0), positions);
         CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
+        //CTRunGetPositions(run, CFRangeMake(0, 0), positions);
         CTFontRef runFont = CFDictionaryGetValue(CTRunGetAttributes(run), kCTFontAttributeName);
+        CTFontGetAdvancesForGlyphs(runFont, kCTFontOrientationHorizontal, glyphs, glyph_advances, runGlyphCount);
 
         for(CFIndex g = 0; g < runGlyphCount; g++) {
             CGPathRef letter = CTFontCreatePathForGlyph(runFont, glyphs[g], nil);
@@ -728,7 +715,7 @@
             double y = [gc nextY];
             double dx = [gc nextDeltaX];
             double dy = [gc nextDeltaY];
-            NSNumber* r = [gc nextRotation];
+            double r = [[gc nextRotation] doubleValue] / radToDeg;
 
             advance *= side;
             charWidth *= side;
@@ -764,17 +751,16 @@
                 CGFloat percentConsumed = midPoint / pathLength;
                 CGPoint mid = [_path pointAtPercent:percentConsumed withSlope:&slope];
                 // Calculate the rotation
-                double angle = atan(slope.y / slope.x); //  + M_PI;
-                if (slope.x < 0) angle += M_PI; // going left, update the angle
+                double angle = atan2(slope.y, slope.x);
 
                 transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(mid.x, mid.y), transform);
-                transform = CGAffineTransformConcat(CGAffineTransformMakeRotation(angle + [r doubleValue]), transform);
+                transform = CGAffineTransformConcat(CGAffineTransformMakeRotation(angle + r), transform);
                 transform = CGAffineTransformScale(transform, scaledDirection, side);
                 transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(-halfWay, dy + baselineShift), transform);
                 transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(0, y), transform);
             } else {
-                transform = CGAffineTransformConcat(CGAffineTransformMakeRotation([r doubleValue]), transform);
                 transform = CGAffineTransformMakeTranslation(startPoint, y + dy);
+                transform = CGAffineTransformConcat(CGAffineTransformMakeRotation(r), transform);
             }
 
             transform = CGAffineTransformScale(transform, 1.0, -1.0);
@@ -783,6 +769,8 @@
         }
     }
 
+    CFRelease(attrString);
+    CFRelease(line);
 
     return path;
 }

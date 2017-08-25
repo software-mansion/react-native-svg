@@ -39,17 +39,17 @@
     NSArray *mDXs_;
     NSArray *mDYs_;
     NSArray *mRs_;
-    int mXsIndex_;
-    int mYsIndex_;
-    int mDXsIndex_;
-    int mDYsIndex_;
-    int mRsIndex_;
-    int mXIndex_;
-    int mYIndex_;
-    int mDXIndex_;
-    int mDYIndex_;
-    int mRIndex_;
-    int mTop_;
+    long mXsIndex_;
+    long mYsIndex_;
+    long mDXsIndex_;
+    long mDYsIndex_;
+    long mRsIndex_;
+    long mXIndex_;
+    long mYIndex_;
+    long mDXIndex_;
+    long mDYIndex_;
+    long mRIndex_;
+    long mTop_;
     float mScale_;
     float mWidth_;
     float mHeight_;
@@ -65,7 +65,7 @@
                      withNSDictionary:(NSDictionary *)font;
 
 + (void)incrementIndicesWithNSArray:(NSArray *)indices
-                            withInt:(int)topIndex;
+                            withLong:(long)topIndex;
 
 - (void)pushContextwithRNSVGText:(RNSVGText *)node
                            reset:(bool)reset
@@ -89,10 +89,10 @@
     NSNumber * fontSize = [NSNumber numberWithDouble:topFont_->fontSize];
     NSString * fontWeight = topFont_->fontWeight_;
     NSString * fontStyle = topFont_->fontStyle_;
-    
+
     BOOL fontFamilyFound = NO;
     NSArray *supportedFontFamilyNames = [UIFont familyNames];
-    
+
     if ([supportedFontFamilyNames containsObject:fontFamily]) {
         fontFamilyFound = YES;
     } else {
@@ -104,7 +104,7 @@
         }
     }
     fontFamily = fontFamilyFound ? fontFamily : nil;
-    
+
     return (__bridge CTFontRef)[RCTFont updateFont:nil
                                         withFamily:fontFamily
                                               size:fontSize
@@ -163,36 +163,36 @@
     if (x != nil && [x count] != 0) {
         mXsIndex_++;
         mXIndex_ = -1;
-        [mXIndices_ addObject:[NSNumber numberWithInteger:mXIndex_]];
+        [mXIndices_ addObject:[NSNumber numberWithLong:mXIndex_]];
         mXs_ = x;
         [mXsContext_ addObject:mXs_];
     }
     if (y != nil && [y count] != 0) {
         mYsIndex_++;
         mYIndex_ = -1;
-        [mYIndices_ addObject:[NSNumber numberWithInteger:mYIndex_]];
+        [mYIndices_ addObject:[NSNumber numberWithLong:mYIndex_]];
         mYs_ = y;
         [mYsContext_ addObject:mYs_];
     }
     if (deltaX != nil && [deltaX count] != 0) {
         mDXsIndex_++;
         mDXIndex_ = -1;
-        [mDXIndices_ addObject:[NSNumber numberWithInteger:mDXIndex_]];
+        [mDXIndices_ addObject:[NSNumber numberWithLong:mDXIndex_]];
         mDXs_ = deltaX;
         [mDXsContext_ addObject:mDXs_];
     }
     if (deltaY != nil && [deltaY count] != 0) {
         mDYsIndex_++;
         mDYIndex_ = -1;
-        [mDYIndices_ addObject:[NSNumber numberWithInteger:mDYIndex_]];
+        [mDYIndices_ addObject:[NSNumber numberWithLong:mDYIndex_]];
         mDYs_ = deltaY;
         [mDYsContext_ addObject:mDYs_];
     }
     if (rotate != nil && [rotate count] != 0) {
         mRsIndex_++;
         mRIndex_ = -1;
-        [mRIndices_ addObject:[NSNumber numberWithInteger:mRIndex_]];
-        mRs_ = rotate;
+        [mRIndices_ addObject:[NSNumber numberWithLong:mRIndex_]];
+        mRs_ = [rotate valueForKeyPath:@"self.doubleValue"];
         [mRsContext_ addObject:mRs_];
     }
     GlyphContext_pushIndices(self);
@@ -206,47 +206,47 @@
     [mDYsIndices_  removeLastObject];
     [mRsIndices_  removeLastObject];
     mTop_--;
-    int x = mXsIndex_;
-    int y = mYsIndex_;
-    int dx = mDXsIndex_;
-    int dy = mDYsIndex_;
-    int r = mRsIndex_;
+    long x = mXsIndex_;
+    long y = mYsIndex_;
+    long dx = mDXsIndex_;
+    long dy = mDYsIndex_;
+    long r = mRsIndex_;
     topFont_ = [mFontContext_ lastObject];
-    mXsIndex_ = [[mXsIndices_ lastObject] intValue];
-    mYsIndex_ = [[mYsIndices_ lastObject] intValue];
-    mDXsIndex_ = [[mDXsIndices_ lastObject] intValue];
-    mDYsIndex_ = [[mDYsIndices_ lastObject] intValue];
-    mRsIndex_ = [[mRsIndices_ lastObject] intValue];
+    mXsIndex_ = [[mXsIndices_ lastObject] longValue];
+    mYsIndex_ = [[mYsIndices_ lastObject] longValue];
+    mDXsIndex_ = [[mDXsIndices_ lastObject] longValue];
+    mDYsIndex_ = [[mDYsIndices_ lastObject] longValue];
+    mRsIndex_ = [[mRsIndices_ lastObject] longValue];
     if (x != mXsIndex_) {
         [mXsContext_ removeObjectAtIndex:x];
         mXs_ = [mXsContext_ objectAtIndex:mXsIndex_];
-        mXIndex_ = [[mXIndices_ objectAtIndex:mXsIndex_] intValue];
+        mXIndex_ = [[mXIndices_ objectAtIndex:mXsIndex_] longValue];
     }
     if (y != mYsIndex_) {
         [mYsContext_ removeObjectAtIndex:y];
         mYs_ = [mYsContext_ objectAtIndex:mYsIndex_];
-        mYIndex_ = [[mYIndices_ objectAtIndex:mYsIndex_] intValue];
+        mYIndex_ = [[mYIndices_ objectAtIndex:mYsIndex_] longValue];
     }
     if (dx != mDXsIndex_) {
         [mDXsContext_ removeObjectAtIndex:dx];
         mDXs_ = [mDXsContext_ objectAtIndex:mDXsIndex_];
-        mDXIndex_ = [[mDXIndices_ objectAtIndex:mDXsIndex_] intValue];
+        mDXIndex_ = [[mDXIndices_ objectAtIndex:mDXsIndex_] longValue];
     }
     if (dy != mDYsIndex_) {
         [mDYsContext_ removeObjectAtIndex:dy];
         mDYs_ = [mDYsContext_ objectAtIndex:mDYsIndex_];
-        mDYIndex_ = [[mDYIndices_ objectAtIndex:mDYsIndex_] intValue];
+        mDYIndex_ = [[mDYIndices_ objectAtIndex:mDYsIndex_] longValue];
     }
     if (r != mRsIndex_) {
         [mRsContext_ removeObjectAtIndex:r];
         mRs_ = [mRsContext_ objectAtIndex:mRsIndex_];
-        mRIndex_ = [[mRIndices_ objectAtIndex:mRsIndex_] intValue];
+        mRIndex_ = [[mRIndices_ objectAtIndex:mRsIndex_] longValue];
     }
 }
 
 + (void)incrementIndicesWithNSArray:(NSMutableArray *)indices
-                            withInt:(int)topIndex {
-    GlyphContext_incrementIndicesWithNSArray_withInt_(indices, topIndex);
+                            withLong:(long)topIndex {
+    GlyphContext_incrementIndicesWithNSArray_withLong_(indices, topIndex);
 }
 
 - (double)getFontSize {
@@ -254,8 +254,8 @@
 }
 
 - (double)nextXWithDouble:(double)advance {
-    GlyphContext_incrementIndicesWithNSArray_withInt_(mXIndices_, mXsIndex_);
-    int nextIndex = mXIndex_ + 1;
+    GlyphContext_incrementIndicesWithNSArray_withLong_(mXIndices_, mXsIndex_);
+    long nextIndex = mXIndex_ + 1;
     if (nextIndex < [mXs_ count]) {
         mDX_ = 0;
         mXIndex_ = nextIndex;
@@ -271,8 +271,8 @@
 }
 
 - (double)nextY {
-    GlyphContext_incrementIndicesWithNSArray_withInt_(mYIndices_, mYsIndex_);
-    int nextIndex = mYIndex_ + 1;
+    GlyphContext_incrementIndicesWithNSArray_withLong_(mYIndices_, mYsIndex_);
+    long nextIndex = mYIndex_ + 1;
     if (nextIndex < [mYs_ count]) {
         mDY_ = 0;
         mYIndex_ = nextIndex;
@@ -287,8 +287,8 @@
 }
 
 - (double)nextDeltaX {
-    GlyphContext_incrementIndicesWithNSArray_withInt_(mDXIndices_, mDXsIndex_);
-    int nextIndex = mDXIndex_ + 1;
+    GlyphContext_incrementIndicesWithNSArray_withLong_(mDXIndices_, mDXsIndex_);
+    long nextIndex = mDXIndex_ + 1;
     if (nextIndex < [mDXs_ count]) {
         mDXIndex_ = nextIndex;
         NSString *string = [mDXs_ objectAtIndex:nextIndex];
@@ -303,8 +303,8 @@
 }
 
 - (double)nextDeltaY {
-    GlyphContext_incrementIndicesWithNSArray_withInt_(mDYIndices_, mDYsIndex_);
-    int nextIndex = mDYIndex_ + 1;
+    GlyphContext_incrementIndicesWithNSArray_withLong_(mDYIndices_, mDYsIndex_);
+    long nextIndex = mDYIndex_ + 1;
     if (nextIndex < [mDYs_ count]) {
         mDYIndex_ = nextIndex;
         NSString *string = [mDYs_ objectAtIndex:nextIndex];
@@ -319,10 +319,13 @@
 }
 
 - (NSNumber*)nextRotation {
-    GlyphContext_incrementIndicesWithNSArray_withInt_(mRIndices_, mRsIndex_);
-    int nextIndex = mRIndex_ + 1;
-    if (nextIndex < [mRs_ count]) {
+    GlyphContext_incrementIndicesWithNSArray_withLong_(mRIndices_, mRsIndex_);
+    long nextIndex = mRIndex_ + 1;
+    long count = [mRs_ count];
+    if (nextIndex < count) {
         mRIndex_ = nextIndex;
+    } else {
+        mRIndex_ = count - 1;
     }
     return mRs_[mRIndex_];
 }
@@ -336,11 +339,11 @@
 }
 
 void GlyphContext_pushIndices(GlyphContext *self) {
-    [self->mXsIndices_ addObject:[NSNumber numberWithInteger:self->mXsIndex_]];
-    [self->mYsIndices_ addObject:[NSNumber numberWithInteger:self->mYsIndex_]];
-    [self->mDXsIndices_ addObject:[NSNumber numberWithInteger:self->mDXsIndex_]];
-    [self->mDYsIndices_ addObject:[NSNumber numberWithInteger:self->mDYsIndex_]];
-    [self->mRsIndices_ addObject:[NSNumber numberWithInteger:self->mRsIndex_]];
+    [self->mXsIndices_ addObject:[NSNumber numberWithLong:self->mXsIndex_]];
+    [self->mYsIndices_ addObject:[NSNumber numberWithLong:self->mYsIndex_]];
+    [self->mDXsIndices_ addObject:[NSNumber numberWithLong:self->mDXsIndex_]];
+    [self->mDYsIndices_ addObject:[NSNumber numberWithLong:self->mDYsIndex_]];
+    [self->mRsIndices_ addObject:[NSNumber numberWithLong:self->mRsIndex_]];
 }
 
 void GlyphContext_initWithFloat_withFloat_withFloat_(GlyphContext *self, float scale_, float width, float height) {
@@ -380,11 +383,11 @@ void GlyphContext_initWithFloat_withFloat_withFloat_(GlyphContext *self, float s
     [self->mDXsContext_ addObject:self->mDXs_];
     [self->mDYsContext_ addObject:self->mDYs_];
     [self->mRsContext_ addObject:self->mRs_];
-    [self->mXIndices_ addObject:[NSNumber numberWithInteger:self->mXIndex_]];
-    [self->mYIndices_ addObject:[NSNumber numberWithInteger:self->mYIndex_]];
-    [self->mDXIndices_ addObject:[NSNumber numberWithInteger:self->mDXIndex_]];
-    [self->mDYIndices_ addObject:[NSNumber numberWithInteger:self->mDYIndex_]];
-    [self->mRIndices_ addObject:[NSNumber numberWithInteger:self->mRIndex_]];
+    [self->mXIndices_ addObject:[NSNumber numberWithLong:self->mXIndex_]];
+    [self->mYIndices_ addObject:[NSNumber numberWithLong:self->mYIndex_]];
+    [self->mDXIndices_ addObject:[NSNumber numberWithLong:self->mDXIndex_]];
+    [self->mDYIndices_ addObject:[NSNumber numberWithLong:self->mDYIndex_]];
+    [self->mRIndices_ addObject:[NSNumber numberWithLong:self->mRIndex_]];
     [self->mFontContext_ addObject:self->topFont_];
     GlyphContext_pushIndices(self);
 }
@@ -428,10 +431,10 @@ void GlyphContext_pushNodeAndFontWithRNSVGGroup_withNSDictionary_(GlyphContext *
     self->topFont_ = data;
 }
 
-void GlyphContext_incrementIndicesWithNSArray_withInt_(NSMutableArray *indices, int topIndex) {
-    for (int index = topIndex; index >= 0; index--) {
-        int xIndex = [[indices  objectAtIndex:index]  intValue];
-        [indices setObject:[NSNumber numberWithInteger:xIndex + 1] atIndexedSubscript:index];
+void GlyphContext_incrementIndicesWithNSArray_withLong_(NSMutableArray *indices, long topIndex) {
+    for (long index = topIndex; index >= 0; index--) {
+        long xIndex = [[indices  objectAtIndex:index] longValue];
+        [indices setObject:[NSNumber numberWithLong:xIndex + 1] atIndexedSubscript:index];
     }
 }
 @end
