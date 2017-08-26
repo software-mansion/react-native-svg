@@ -1,4 +1,3 @@
-
 #import <React/UIView+React.h>
 #import <CoreText/CoreText.h>
 #import "FontData.h"
