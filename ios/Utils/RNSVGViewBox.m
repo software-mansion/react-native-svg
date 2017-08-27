@@ -91,8 +91,8 @@
 
     // The transform applied to content contained by the element is given by
     // translate(translate-x, translate-y) scale(scale-x, scale-y).
-    CGAffineTransform transform = CGAffineTransformMakeScale(scaleX, scaleY);
-    return CGAffineTransformTranslate(transform, translateX, translateY);
+    CGAffineTransform transform = CGAffineTransformMakeTranslation(translateX, translateY);
+    return CGAffineTransformScale(transform, scaleX, scaleY);
 }
 
 @end
