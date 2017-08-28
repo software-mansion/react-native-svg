@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
 #import "RNSVGText.h"
-#import "RNSVGBezierTransformer.h"
 
 @interface RNSVGTextPath : RNSVGText
 
@@ -21,6 +20,5 @@
 @property (nonatomic, strong) NSString *startOffset;
 
 - (RNSVGPath *)getPath;
-- (RNSVGBezierTransformer *)getBezierTransformer;
 
 @end

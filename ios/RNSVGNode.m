@@ -10,14 +10,12 @@
 #import "RNSVGContainer.h"
 #import "RNSVGClipPath.h"
 #import "RNSVGGroup.h"
-#import "RNSVGGlyphContext.h"
 #import "GlyphContext.h"
 
 @implementation RNSVGNode
 {
     RNSVGGroup *_textRoot;
     GlyphContext *glyphContext;
-    RNSVGGlyphContext *RNSVGGlyphContext;
     BOOL _transparent;
     CGPathRef _cachedClipPath;
     RNSVGSvgView *_svgView;

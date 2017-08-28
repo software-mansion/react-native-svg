@@ -14,7 +14,6 @@
 		1023B4901D3DF4C40051496D /* RNSVGDefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 1023B48F1D3DF4C40051496D /* RNSVGDefs.m */; };
 		1023B4931D3DF5060051496D /* RNSVGUse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1023B4921D3DF5060051496D /* RNSVGUse.m */; };
 		1023B4961D3DF57D0051496D /* RNSVGUseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1023B4951D3DF57D0051496D /* RNSVGUseManager.m */; };
-		103371321D41C5C90028AF13 /* RNSVGBezierTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 103371311D41C5C90028AF13 /* RNSVGBezierTransformer.m */; };
 		1039D2891CE71EB7001E90A8 /* RNSVGGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1039D2821CE71EB7001E90A8 /* RNSVGGroup.m */; };
 		1039D28A1CE71EB7001E90A8 /* RNSVGImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1039D2841CE71EB7001E90A8 /* RNSVGImage.m */; };
 		1039D28B1CE71EB7001E90A8 /* RNSVGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 1039D2861CE71EB7001E90A8 /* RNSVGPath.m */; };
@@ -54,7 +53,6 @@
 		7FC260CE1E3499BC00A39833 /* RNSVGViewBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FC260CD1E3499BC00A39833 /* RNSVGViewBox.m */; };
 		7FC260D11E34A12000A39833 /* RNSVGSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FC260D01E34A12000A39833 /* RNSVGSymbol.m */; };
 		7FC260D41E34A12A00A39833 /* RNSVGSymbolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FC260D31E34A12A00A39833 /* RNSVGSymbolManager.m */; };
-		7FFC4EA41E24E5AD00AD5BE5 /* RNSVGGlyphContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FFC4EA31E24E5AD00AD5BE5 /* RNSVGGlyphContext.m */; };
 		945A8AE11F4CBFD1004BBF6B /* Drawing-Text.m in Sources */ = {isa = PBXBuildFile; fileRef = 945A8ADF1F4CBFD1004BBF6B /* Drawing-Text.m */; };
 		945A8AE21F4CBFD1004BBF6B /* UIBezierPath+Text.m in Sources */ = {isa = PBXBuildFile; fileRef = 945A8AE01F4CBFD1004BBF6B /* UIBezierPath+Text.m */; };
 		945A8AE41F4CC01D004BBF6B /* UIBezierPath+Elements.m in Sources */ = {isa = PBXBuildFile; fileRef = 945A8AE31F4CC01D004BBF6B /* UIBezierPath+Elements.m */; };
@@ -108,7 +106,6 @@
 		A361E7711EB0C33D00646005 /* RNSVGCircleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 10BA0D1D1CE74E3100887C2B /* RNSVGCircleManager.m */; };
 		A361E7721EB0C33D00646005 /* RNSVGLinearGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 10BEC1B91D3F66F500FDCB19 /* RNSVGLinearGradient.m */; };
 		A361E7731EB0C33D00646005 /* RNSVGPercentageConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1039D2AF1CE72F27001E90A8 /* RNSVGPercentageConverter.m */; };
-		A361E7741EB0C33D00646005 /* RNSVGGlyphContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FFC4EA31E24E5AD00AD5BE5 /* RNSVGGlyphContext.m */; };
 		A361E7751EB0C33D00646005 /* RNSVGEllipse.m in Sources */ = {isa = PBXBuildFile; fileRef = 10BA0D431CE74E3D00887C2B /* RNSVGEllipse.m */; };
 		A361E7761EB0C33D00646005 /* RNSVGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 1039D2861CE71EB7001E90A8 /* RNSVGPath.m */; };
 		A361E7771EB0C33D00646005 /* RNSVGTextPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F08CE9D1E23479700650F83 /* RNSVGTextPath.m */; };
@@ -125,7 +122,6 @@
 		A361E7821EB0C33D00646005 /* RNSVGSvgViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 10BA0D311CE74E3100887C2B /* RNSVGSvgViewManager.m */; };
 		A361E7831EB0C33D00646005 /* RNSVGSolidColorBrush.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CF68AF41AF0549300FF9E5C /* RNSVGSolidColorBrush.m */; };
 		A361E7841EB0C33D00646005 /* RNSVGPathManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 10BA0D291CE74E3100887C2B /* RNSVGPathManager.m */; };
-		A361E7851EB0C33D00646005 /* RNSVGBezierTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 103371311D41C5C90028AF13 /* RNSVGBezierTransformer.m */; };
 		A361E7861EB0C33D00646005 /* RNSVGRenderableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 10BA0D2D1CE74E3100887C2B /* RNSVGRenderableManager.m */; };
 		A361E7871EB0C33D00646005 /* RNSVGRadialGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 10BEC1BB1D3F66F500FDCB19 /* RNSVGRadialGradient.m */; };
 		A361E7881EB0C33D00646005 /* RNSVGRadialGradientManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 10BEC1C11D3F680F00FDCB19 /* RNSVGRadialGradientManager.m */; };
@@ -206,8 +202,6 @@
 		1023B4921D3DF5060051496D /* RNSVGUse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGUse.m; path = Elements/RNSVGUse.m; sourceTree = "<group>"; };
 		1023B4941D3DF57D0051496D /* RNSVGUseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGUseManager.h; sourceTree = "<group>"; };
 		1023B4951D3DF57D0051496D /* RNSVGUseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGUseManager.m; sourceTree = "<group>"; };
-		103371311D41C5C90028AF13 /* RNSVGBezierTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGBezierTransformer.m; path = Text/RNSVGBezierTransformer.m; sourceTree = "<group>"; };
-		103371331D41D3400028AF13 /* RNSVGBezierTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGBezierTransformer.h; path = Text/RNSVGBezierTransformer.h; sourceTree = "<group>"; };
 		1039D2811CE71EB7001E90A8 /* RNSVGGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGGroup.h; path = Elements/RNSVGGroup.h; sourceTree = "<group>"; };
 		1039D2821CE71EB7001E90A8 /* RNSVGGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGGroup.m; path = Elements/RNSVGGroup.m; sourceTree = "<group>"; };
 		1039D2831CE71EB7001E90A8 /* RNSVGImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGImage.h; path = Elements/RNSVGImage.h; sourceTree = "<group>"; };
@@ -293,8 +287,6 @@
 		7FC260D01E34A12000A39833 /* RNSVGSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGSymbol.m; path = Elements/RNSVGSymbol.m; sourceTree = "<group>"; };
 		7FC260D21E34A12A00A39833 /* RNSVGSymbolManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGSymbolManager.h; sourceTree = "<group>"; };
 		7FC260D31E34A12A00A39833 /* RNSVGSymbolManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGSymbolManager.m; sourceTree = "<group>"; };
-		7FFC4EA21E24E52500AD5BE5 /* RNSVGGlyphContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNSVGGlyphContext.h; path = Text/RNSVGGlyphContext.h; sourceTree = "<group>"; };
-		7FFC4EA31E24E5AD00AD5BE5 /* RNSVGGlyphContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGGlyphContext.m; path = Text/RNSVGGlyphContext.m; sourceTree = "<group>"; };
 		945A8ADD1F4CB7F9004BBF6B /* QuartzBookPack */ = {isa = PBXFileReference; lastKnownFileType = folder; path = QuartzBookPack; sourceTree = "<group>"; };
 		945A8ADF1F4CBFD1004BBF6B /* Drawing-Text.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Drawing-Text.m"; path = "QuartzBookPack/TextDrawing/Drawing-Text.m"; sourceTree = "<group>"; };
 		945A8AE01F4CBFD1004BBF6B /* UIBezierPath+Text.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIBezierPath+Text.m"; path = "QuartzBookPack/TextDrawing/UIBezierPath+Text.m"; sourceTree = "<group>"; };
@@ -506,10 +498,6 @@
 				9494C51A1F4B605F00D5BCFD /* GlyphContext.m */,
 				9494C4EF1F4B5BE700D5BCFD /* PropHelper.h */,
 				9494C4F01F4B5BE700D5BCFD /* PropHelper.m */,
-				103371331D41D3400028AF13 /* RNSVGBezierTransformer.h */,
-				103371311D41C5C90028AF13 /* RNSVGBezierTransformer.m */,
-				7FFC4EA21E24E52500AD5BE5 /* RNSVGGlyphContext.h */,
-				7FFC4EA31E24E5AD00AD5BE5 /* RNSVGGlyphContext.m */,
 				1039D28F1CE71EC2001E90A8 /* RNSVGText.h */,
 				1039D2901CE71EC2001E90A8 /* RNSVGText.m */,
 				7F08CE9C1E23479700650F83 /* RNSVGTextPath.h */,
@@ -718,7 +706,6 @@
 				10BEC1BC1D3F66F500FDCB19 /* RNSVGLinearGradient.m in Sources */,
 				9494C5461F4C44DD00D5BCFD /* TextPathSide.m in Sources */,
 				1039D2B01CE72F27001E90A8 /* RNSVGPercentageConverter.m in Sources */,
-				7FFC4EA41E24E5AD00AD5BE5 /* RNSVGGlyphContext.m in Sources */,
 				9494C53C1F4C44DD00D5BCFD /* TextAnchor.m in Sources */,
 				10BA0D491CE74E3D00887C2B /* RNSVGEllipse.m in Sources */,
 				9494C5051F4B5BE800D5BCFD /* FontWeight.m in Sources */,
@@ -740,7 +727,6 @@
 				10BA0D3E1CE74E3100887C2B /* RNSVGSvgViewManager.m in Sources */,
 				0CF68B0F1AF0549300FF9E5C /* RNSVGSolidColorBrush.m in Sources */,
 				10BA0D3A1CE74E3100887C2B /* RNSVGPathManager.m in Sources */,
-				103371321D41C5C90028AF13 /* RNSVGBezierTransformer.m in Sources */,
 				10BA0D3C1CE74E3100887C2B /* RNSVGRenderableManager.m in Sources */,
 				10BEC1BD1D3F66F500FDCB19 /* RNSVGRadialGradient.m in Sources */,
 				10BEC1C31D3F680F00FDCB19 /* RNSVGRadialGradientManager.m in Sources */,
@@ -786,7 +772,6 @@
 				A361E7711EB0C33D00646005 /* RNSVGCircleManager.m in Sources */,
 				A361E7721EB0C33D00646005 /* RNSVGLinearGradient.m in Sources */,
 				A361E7731EB0C33D00646005 /* RNSVGPercentageConverter.m in Sources */,
-				A361E7741EB0C33D00646005 /* RNSVGGlyphContext.m in Sources */,
 				9494C53F1F4C44DD00D5BCFD /* TextDecoration.m in Sources */,
 				A361E7751EB0C33D00646005 /* RNSVGEllipse.m in Sources */,
 				A361E7761EB0C33D00646005 /* RNSVGPath.m in Sources */,
@@ -809,7 +794,6 @@
 				A361E7831EB0C33D00646005 /* RNSVGSolidColorBrush.m in Sources */,
 				9494C5391F4C44DD00D5BCFD /* FontStyle.m in Sources */,
 				A361E7841EB0C33D00646005 /* RNSVGPathManager.m in Sources */,
-				A361E7851EB0C33D00646005 /* RNSVGBezierTransformer.m in Sources */,
 				A361E7861EB0C33D00646005 /* RNSVGRenderableManager.m in Sources */,
 				A361E7871EB0C33D00646005 /* RNSVGRadialGradient.m in Sources */,
 				945A8AF91F4CE3E8004BBF6B /* AlignmentBaseline.m in Sources */,

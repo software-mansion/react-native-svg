@@ -25,6 +25,5 @@
 - (void)releaseCachedPath;
 - (CGPathRef)getGroupPath:(CGContextRef)context;
 - (CTFontRef)getFontFromContext;
-- (CGPoint)getGlyphPointFromContext:(CGPoint)offset glyphWidth:(CGFloat)glyphWidth;
 
 @end

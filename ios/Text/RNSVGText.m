@@ -10,14 +10,12 @@
 #import "RNSVGTextPath.h"
 #import <React/RCTFont.h>
 #import <CoreText/CoreText.h>
-#import "RNSVGGlyphContext.h"
 #import "GlyphContext.h"
 
 @implementation RNSVGText
 {
     RNSVGText *_textRoot;
     GlyphContext *_glyphContext;
-    RNSVGGlyphContext *_RNSVGGlyphContext;
 }
 
 - (void)renderLayerTo:(CGContextRef)context
@@ -40,8 +38,6 @@
 {
     _glyphContext = [[GlyphContext alloc] initWithScale:1 width:[self getContextWidth]
                                                  height:[self getContextHeight]];
-    _RNSVGGlyphContext = [[RNSVGGlyphContext alloc] initWithDimensions:[self getContextWidth]
-                                                  height:[self getContextHeight]];
 }
 
 // release the cached CGPathRef for RNSVGTSpan
@@ -95,11 +91,6 @@
     return _textRoot;
 }
 
-- (RNSVGGlyphContext *)getRNSVGGlyphContext
-{
-    return _RNSVGGlyphContext;
-}
-
 - (GlyphContext *)getGlyphContext
 {
     return _glyphContext;
@@ -107,12 +98,6 @@
 
 - (void)pushGlyphContext
 {
-    /*
-    [[[self getTextRoot] getRNSVGGlyphContext] pushContext:self.font
-                                                    deltaX:self.deltaX
-                                                    deltaY:self.deltaY
-                                                 positionX:self.positionX
-                                                 positionY:self.positionY];*/
     [[[self getTextRoot] getGlyphContext] pushContextwithRNSVGText:self
                                                              reset:false
                                                               font:self.font
@@ -125,18 +110,12 @@
 
 - (void)popGlyphContext
 {
-    //[[[self getTextRoot] getRNSVGGlyphContext] popContext];
     [[[self getTextRoot] getGlyphContext] popContext];
 }
 
 - (CTFontRef)getFontFromContext
 {
     return [[[self getTextRoot] getGlyphContext] getGlyphFont];
-}
-
-- (CGPoint)getGlyphPointFromContext:(CGPoint)offset glyphWidth:(CGFloat)glyphWidth
-{
-    return [[[self getTextRoot] getRNSVGGlyphContext] getNextGlyphPoint:(CGPoint)offset glyphWidth:glyphWidth];
 }
 
 @end

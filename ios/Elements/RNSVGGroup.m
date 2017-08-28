@@ -11,7 +11,6 @@
 @implementation RNSVGGroup
 {
     GlyphContext *_glyphContext;
-    RNSVGGlyphContext *_RNSVGGlyphContext;
 }
 
 - (void)renderLayerTo:(CGContextRef)context
@@ -52,15 +51,8 @@
     CGFloat width = CGRectGetWidth(clipBounds);
     CGFloat height = CGRectGetHeight(clipBounds);
 
-    _RNSVGGlyphContext = [[RNSVGGlyphContext alloc] initWithDimensions:width
-                                                           height:height];
     _glyphContext = [[GlyphContext alloc] initWithScale:1 width:width
                                                            height:height];
-}
-
-- (RNSVGGlyphContext *)getRNSVGGlyphContext
-{
-    return _RNSVGGlyphContext;
 }
 
 - (GlyphContext *)getGlyphContext
@@ -70,13 +62,11 @@
 
 - (void)pushGlyphContext
 {
-    //[[[self getTextRoot] getRNSVGGlyphContext] pushContext:self.font];
     [[[self getTextRoot] getGlyphContext] pushContextWithRNSVGGroup:self font:self.font];
 }
 
 - (void)popGlyphContext
 {
-    //[[[self getTextRoot] getRNSVGGlyphContext] popContext];
     [[[self getTextRoot] getGlyphContext] popContext];
 }
 
