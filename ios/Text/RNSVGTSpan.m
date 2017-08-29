@@ -671,6 +671,19 @@
             }
         }
         int i = -1;
+        CFDictionaryRef ligattributes;
+        NSNumber *lig = [NSNumber numberWithInt:allowOptionalLigatures ? 2 : 1];
+
+        if (fontRef != nil) {
+            ligattributes = (__bridge CFDictionaryRef)@{
+                                                     (NSString *)kCTFontAttributeName: (__bridge id)fontRef,
+                                                     (NSString *)NSLigatureAttributeName: lig
+                                                     };
+        } else {
+            ligattributes = (__bridge CFDictionaryRef)@{
+                                                     (NSString *)NSLigatureAttributeName: lig
+                                                     };
+        }
         for(CFIndex g = 0; g < runGlyphCount; g++) {
             i++;
             bool alreadyRenderedGraphemeCluster = ligature[i];
@@ -719,7 +732,7 @@
             bool hasLigature = false;
             while (++nextIndex < n) {
                 NSString* nextLigature = [str substringWithRange:NSMakeRange(i, len++)];
-                bool hasNextLigature = hasGlyph(fontRef, nextLigature, &glyph, allowOptionalLigatures);
+                bool hasNextLigature = hasGlyph(fontRef, nextLigature, &glyph, ligattributes);
                 if (hasNextLigature) {
                     ligature[nextIndex] = true;
                     hasLigature = true;
@@ -836,23 +849,9 @@ CGFloat getTextAnchorOffset(enum TextAnchor textAnchor, CGFloat width)
     }
 }
 
-bool hasGlyph(CTFontRef fontRef, NSString * str, CGGlyph* glyph, bool allowOptionalLigatures)
+bool hasGlyph(CTFontRef fontRef, NSString * str, CGGlyph* glyph, CFDictionaryRef attributes)
 {
     CFStringRef string = (__bridge CFStringRef)str;
-    CFDictionaryRef attributes;
-    NSNumber *lig = [NSNumber numberWithInt:allowOptionalLigatures ? 2 : 1];
-
-    if (fontRef != nil) {
-        attributes = (__bridge CFDictionaryRef)@{
-                                                 (NSString *)kCTFontAttributeName: (__bridge id)fontRef,
-                                                 (NSString *)NSLigatureAttributeName: lig
-                                                    };
-    } else {
-        attributes = (__bridge CFDictionaryRef)@{
-                                                 (NSString *)NSLigatureAttributeName: lig
-                                                 };
-    }
-
     CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
     CTLineRef line = CTLineCreateWithAttributedString(attrString);
     CFArrayRef runs = CTLineGetGlyphRuns(line);
@@ -863,14 +862,10 @@ bool hasGlyph(CTFontRef fontRef, NSString * str, CGGlyph* glyph, bool allowOptio
     }
     CTRunRef run = CFArrayGetValueAtIndex(runs, 0);
     CFIndex runGlyphCount = CTRunGetGlyphCount(run);
-
-    CGGlyph glyphs[runGlyphCount];
-    CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
-
     bool hasGlyph = runGlyphCount == 1;
 
     if (hasGlyph) {
-        *glyph = glyphs[0];
+        CTRunGetGlyphs(run, CFRangeMake(0, 1), glyph);
     }
 
     return hasGlyph;
