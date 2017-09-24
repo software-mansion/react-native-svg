@@ -95,7 +95,7 @@ class PropHelper {
         length = length.trim();
         int stringLength = length.length();
         int percentIndex = stringLength - 1;
-        if (stringLength == 0) {
+        if (stringLength == 0 || length.equals("normal")) {
             return offset;
         } else if (length.codePointAt(percentIndex) == '%') {
             return Double.valueOf(length.substring(0, percentIndex)) / 100 * relative + offset;

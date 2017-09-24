@@ -31,7 +31,7 @@
     } else {
         _imageRatio = 0.0;
     }
-    
+
     _image = CGImageRetain([RCTConvert CGImage:src]);
     [self invalidate];
 }
@@ -102,11 +102,11 @@
     CGPathRef hitArea = CGPathCreateWithRect(rect, nil);
     [self setHitArea:hitArea];
     CGPathRelease(hitArea);
-    
+
     CGContextSaveGState(context);
     CGContextTranslateCTM(context, 0, rect.size.height + 2 * rect.origin.y);
     CGContextScaleCTM(context, 1, -1);
-    
+
     // apply viewBox transform on Image render.
     CGFloat imageRatio = _imageRatio;
     CGFloat rectWidth = CGRectGetWidth(rect);
@@ -115,7 +115,7 @@
     CGFloat rectY = CGRectGetMinY(rect);
     CGFloat rectRatio = rectWidth / rectHeight;
     CGRect renderRect;
-    
+
     if (!imageRatio || imageRatio == rectRatio) {
         renderRect = rect;
     } else if (imageRatio < rectRatio) {
@@ -123,29 +123,34 @@
     } else {
         renderRect = CGRectMake(0, 0, rectWidth, rectWidth / imageRatio);
     }
-    
+
+    CGFloat canvasLeft = [self getContextLeft];
+    CGFloat canvasTop = [self getContextTop];
     CGRect vbRect = CGRectMake(0, 0, CGRectGetWidth(renderRect), CGRectGetHeight(renderRect));
-    CGRect eRect = CGRectMake([self getContextLeft], [self getContextTop], rectWidth, rectHeight);
-    
+    CGRect eRect = CGRectMake(canvasLeft, canvasTop, rectWidth, rectHeight);
+
     CGAffineTransform transform = [RNSVGViewBox getTransform:vbRect eRect:eRect align:self.align meetOrSlice:self.meetOrSlice fromSymbol:NO];
-    
+
+    CGFloat dx = rectX + canvasLeft;
+    CGFloat dy = rectY + canvasTop;
+    renderRect = CGRectApplyAffineTransform(renderRect, CGAffineTransformMakeTranslation(-dx, -dy));
     renderRect = CGRectApplyAffineTransform(renderRect, transform);
-    renderRect = CGRectApplyAffineTransform(renderRect, CGAffineTransformMakeTranslation(rectX, rectY));
-    
+
     [self clip:context];
     CGContextClipToRect(context, rect);
- 
+
     CGContextDrawImage(context, renderRect, _image);
     CGContextRestoreGState(context);
-    
+
 }
 
 - (CGRect)getRect:(CGContextRef)context
 {
-    return CGRectMake([self relativeOnWidth:self.x],
-                      [self relativeOnHeight:self.y],
-                      [self relativeOnWidth:self.width],
-                      [self relativeOnHeight:self.height]);
+    CGFloat x = [self relativeOnWidth:self.x];
+    CGFloat y = [self relativeOnHeight:self.y];
+    CGFloat width = [self relativeOnWidth:self.width];
+    CGFloat height = [self relativeOnHeight:self.height];
+    return CGRectMake(x, y, x + width, y + height);
 }
 
 - (CGPathRef)getPath:(CGContextRef)context

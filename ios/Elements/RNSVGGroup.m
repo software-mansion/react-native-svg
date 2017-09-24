@@ -9,33 +9,65 @@
 #import "RNSVGGroup.h"
 
 @implementation RNSVGGroup
+{
+    GlyphContext *_glyphContext;
+}
 
 - (void)renderLayerTo:(CGContextRef)context
 {
     [self clip:context];
+    [self setupGlyphContext:context];
     [self renderGroupTo:context];
 }
 
 - (void)renderGroupTo:(CGContextRef)context
 {
+    [self pushGlyphContext];
     RNSVGSvgView* svg = [self getSvgView];
     [self traverseSubviews:^(RNSVGNode *node) {
         if (node.responsible && !svg.responsible) {
             svg.responsible = YES;
         }
-        
+
         if ([node isKindOfClass:[RNSVGRenderable class]]) {
             [(RNSVGRenderable*)node mergeProperties:self];
         }
-        
+
         [node renderTo:context];
-        
+
         if ([node isKindOfClass:[RNSVGRenderable class]]) {
             [(RNSVGRenderable*)node resetProperties];
         }
-        
+
         return YES;
     }];
+    [self popGlyphContext];
+}
+
+- (void)setupGlyphContext:(CGContextRef)context
+{
+    CGRect clipBounds = CGContextGetClipBoundingBox(context);
+    clipBounds = CGRectApplyAffineTransform(clipBounds, self.matrix);
+    CGFloat width = CGRectGetWidth(clipBounds);
+    CGFloat height = CGRectGetHeight(clipBounds);
+
+    _glyphContext = [[GlyphContext alloc] initWithScale:1 width:width
+                                                           height:height];
+}
+
+- (GlyphContext *)getGlyphContext
+{
+    return _glyphContext;
+}
+
+- (void)pushGlyphContext
+{
+    [[[self getTextRoot] getGlyphContext] pushContextWithRNSVGGroup:self font:self.font];
+}
+
+- (void)popGlyphContext
+{
+    [[[self getTextRoot] getGlyphContext] popContext];
 }
 
 - (void)renderPathTo:(CGContextRef)context
@@ -61,7 +93,7 @@
     if (hitSelf) {
         return hitSelf;
     }
-    
+
     CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
 
     CGPathRef clip = [self getClipPath];
@@ -69,26 +101,26 @@
         CGPathRef transformedClipPath = CGPathCreateCopyByTransformingPath(clip, &matrix);
         BOOL insideClipPath = CGPathContainsPoint(clip, nil, point, self.clipRule == kRNSVGCGFCRuleEvenodd);
         CGPathRelease(transformedClipPath);
-        
+
         if (!insideClipPath) {
             return nil;
         }
-        
+
     }
-    
+
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
         if (![node isKindOfClass:[RNSVGNode class]]) {
             continue;
         }
-        
+
         if (event) {
             node.active = NO;
         } else if (node.active) {
             return node;
         }
-        
+
         UIView *hitChild = [node hitTest: point withEvent:event withTransform:matrix];
-        
+
         if (hitChild) {
             node.active = YES;
             return (node.responsible || (node != hitChild)) ? hitChild : self;

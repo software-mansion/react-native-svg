@@ -50,7 +50,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
         // todo: throw error
         return;
     }
-    
+
     _type = kRNSVGLinearGradient;
     _colors = colors;
 }
@@ -61,7 +61,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
         // todo: throw error
         return;
     }
-    
+
     _type = kRNSVGRadialGradient;
     _colors = colors;
 }
@@ -84,27 +84,27 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     float width = CGRectGetWidth(rect);
     float x = 0.0;
     float y = 0.0;
-    
+
     if (_useObjectBoundingBox) {
         x = CGRectGetMinX(rect);
         y = CGRectGetMinY(rect);
     }
-    
+
     return CGRectMake(x, y, width, height);
 }
 
 - (void)paintLinearGradient:(CGContextRef)context
 {
-    
+
     CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:_colors offset:0]);
     CGGradientDrawingOptions extendOptions = kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
-    
+
     CGRect rect = [self getPaintRect:context];
     float height = CGRectGetHeight(rect);
     float width = CGRectGetWidth(rect);
     float offsetX = CGRectGetMinX(rect);
     float offsetY = CGRectGetMinY(rect);
-    
+
     CGFloat x1 = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:0]
                                                 relative:width
                                                   offset:offsetX];
@@ -117,8 +117,9 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     CGFloat y2 = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:3]
                                                 relative:height
                                                   offset:offsetY];
-    
-    
+
+
+    CGContextConcatCTM(context, _transform);
     CGContextDrawLinearGradient(context, gradient, CGPointMake(x1, y1), CGPointMake(x2, y2), extendOptions);
     CGGradientRelease(gradient);
 }
@@ -127,13 +128,13 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 {
     CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:_colors offset:0]);
     CGGradientDrawingOptions extendOptions = kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
-    
+
     CGRect rect = [self getPaintRect:context];
     float height = CGRectGetHeight(rect);
     float width = CGRectGetWidth(rect);
     float offsetX = CGRectGetMinX(rect);
     float offsetY = CGRectGetMinY(rect);
-    
+
     CGFloat rx = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:2]
                                                 relative:width
                                                   offset:0];
@@ -152,10 +153,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     CGFloat cy = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:5]
                                                 relative:height
                                                   offset:offsetY] / (ry / rx);
-    
+
     CGAffineTransform transform = CGAffineTransformMakeScale(1, ry / rx);
     CGContextConcatCTM(context, transform);
-    
+
+    CGContextConcatCTM(context, _transform);
     CGContextDrawRadialGradient(context, gradient, CGPointMake(fx, fy), 0, CGPointMake(cx, cy), rx, extendOptions);
     CGGradientRelease(gradient);
 }
