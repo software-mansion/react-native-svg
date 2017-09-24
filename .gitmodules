@@ -1,3 +1,7 @@
 [submodule "Example"]
 	path = Example
 	url = https://github.com/magicismight/react-native-svg-example.git
+
+[submodule "ios/PerformanceBezier"]
+	path = ios/PerformanceBezier
+	url = https://github.com/adamwulf/PerformanceBezier.git

@@ -825,7 +825,7 @@ CGFloat getTextAnchorOffset(enum TextAnchor textAnchor, CGFloat width)
             textPathPath = [textPath getPath];
             _path = [UIBezierPath bezierPathWithCGPath:[textPathPath getPath:nil]];
             _path = [_path bezierPathByFlatteningPathAndImmutable:YES];
-            pathLength = [_path length];
+            pathLength = [_path pathLength];
             isClosed = [_path isClosed];
             return NO;
         }
