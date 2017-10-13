@@ -126,14 +126,14 @@
     
     CGRect vbRect = CGRectMake(0, 0, CGRectGetWidth(renderRect), CGRectGetHeight(renderRect));
     CGRect eRect = CGRectMake([self getContextLeft], [self getContextTop], rectWidth, rectHeight);
+    eRect.origin.y = 0.0f;
+    CGContextTranslateCTM(context, CGRectGetMinX(eRect), 0.0f);
     
     CGAffineTransform transform = [RNSVGViewBox getTransform:vbRect eRect:eRect align:self.align meetOrSlice:self.meetOrSlice fromSymbol:NO];
     
     renderRect = CGRectApplyAffineTransform(renderRect, transform);
-    renderRect = CGRectApplyAffineTransform(renderRect, CGAffineTransformMakeTranslation(rectX, rectY));
     
     [self clip:context];
-    CGContextClipToRect(context, rect);
  
     CGContextDrawImage(context, renderRect, _image);
     CGContextRestoreGState(context);
