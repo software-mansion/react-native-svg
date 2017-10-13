@@ -130,4 +130,18 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
     return (CGGradientRef)CFAutorelease(gradient);
 }
 
++ (CGBlendMode)CGBlendMode:(id)json
+{
+    if (!json) {
+        return nil;
+    }
+    NSNumber* mode = [self NSNumber:json];
+    int32_t value = [mode intValue];
+    if (value >= kCGBlendModeNormal && value <= kCGBlendModePlusLighter) {
+        return (CGBlendMode)value;
+    } else {
+        return kCGBlendModeNormal;
+    }
+}
+
 @end

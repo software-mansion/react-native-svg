@@ -23,6 +23,7 @@
         _strokeOpacity = 1;
         _strokeWidth = 1;
         _fillRule = kRNSVGCGFCRuleNonzero;
+        _blendMode = kCGBlendModeNormal;
     }
     return self;
 }
@@ -139,6 +140,15 @@
     [self invalidate];
 }
 
+- (void)setBlendMode:(CGBlendMode)blendMode
+{
+    if (blendMode == _blendMode) {
+        return;
+    }
+    _blendMode = blendMode;
+    [self invalidate];
+}
+
 - (void)dealloc
 {
     CGPathRelease(_hitArea);
@@ -153,6 +163,7 @@
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.matrix);
     CGContextSetAlpha(context, self.opacity);
+    CGContextSetBlendMode(context, self.blendMode);
     
     [self beginTransparencyLayer:context];
     [self renderLayerTo:context];
