@@ -52,7 +52,7 @@ export default class extends Shape {
     }
 }
 
-const RNSVGRect = createReactNativeComponentClass({
+const RNSVGRect = createReactNativeComponentClass('RNSVGRect', () => ({
     validAttributes: RectAttributes,
     uiViewClassName: 'RNSVGRect'
-});
+}));

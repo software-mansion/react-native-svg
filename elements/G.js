@@ -26,7 +26,7 @@ export default class extends Shape{
     }
 }
 
-const RNSVGGroup = createReactNativeComponentClass({
+const RNSVGGroup = createReactNativeComponentClass('RNSVGGroup', () => ({
     validAttributes: GroupAttributes,
     uiViewClassName: 'RNSVGGroup'
-});
+}));

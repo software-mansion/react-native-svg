@@ -23,7 +23,7 @@ export default class extends Component{
     }
 }
 
-const RNSVGSymbol = createReactNativeComponentClass({
+const RNSVGSymbol = createReactNativeComponentClass('RNSVGSymbol', () => ({
     validAttributes: SymbolAttributes,
     uiViewClassName: 'RNSVGSymbol'
-});
+}));

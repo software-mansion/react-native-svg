@@ -45,8 +45,7 @@ export default class extends Shape {
     }
 }
 
-const RNSVGUse = createReactNativeComponentClass({
+const RNSVGUse = createReactNativeComponentClass('RNSVGUse', () => ({
     validAttributes: UseAttributes,
     uiViewClassName: 'RNSVGUse'
-});
-
+}));

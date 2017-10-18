@@ -9,7 +9,7 @@ export default class extends Component {
     }
 }
 
-const RNSVGDefs = createReactNativeComponentClass({
+const RNSVGDefs = createReactNativeComponentClass('RNSVGDefs', () => ({
     validAttributes: {},
     uiViewClassName: 'RNSVGDefs'
-});
+}));

@@ -40,7 +40,7 @@ export default class extends Shape {
     }
 }
 
-const RNSVGLine = createReactNativeComponentClass({
+const RNSVGLine = createReactNativeComponentClass('RNSVGLine', () => ({
     validAttributes: LineAttributes,
     uiViewClassName: 'RNSVGLine'
-});
+}));

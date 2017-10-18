@@ -36,7 +36,10 @@ export default class extends Component{
     }
 }
 
-const RNSVGLinearGradient = createReactNativeComponentClass({
-    validAttributes: LinearGradientAttributes,
-    uiViewClassName: 'RNSVGLinearGradient'
-});
+const RNSVGLinearGradient = createReactNativeComponentClass(
+    'RNSVGLinearGradient',
+    () => ({
+        validAttributes: LinearGradientAttributes,
+        uiViewClassName: 'RNSVGLinearGradient'
+    })
+);

@@ -53,7 +53,7 @@ export default class extends Shape {
     }
 }
 
-const RNSVGText = createReactNativeComponentClass({
+const RNSVGText = createReactNativeComponentClass('RNSVGText', () => ({
     validAttributes: TextAttributes,
     uiViewClassName: 'RNSVGText'
-});
+}));

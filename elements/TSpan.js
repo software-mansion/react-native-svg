@@ -53,7 +53,7 @@ export default class extends Shape {
     }
 }
 
-const RNSVGTSpan = createReactNativeComponentClass({
+const RNSVGTSpan = createReactNativeComponentClass('RNSVGTSpan', () => ({
     validAttributes: TSpanAttibutes,
     uiViewClassName: 'RNSVGTSpan'
-});
+}));

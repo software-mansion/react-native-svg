@@ -41,7 +41,7 @@ export default class extends Shape{
     }
 }
 
-const RNSVGEllipse = createReactNativeComponentClass({
+const RNSVGEllipse = createReactNativeComponentClass('RNSVGEllipse', () => ({
     validAttributes: EllipseAttributes,
     uiViewClassName: 'RNSVGEllipse'
-});
+}));

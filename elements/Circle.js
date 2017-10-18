@@ -37,9 +37,7 @@ export default class extends Shape {
     }
 }
 
-
-
-const RNSVGCircle = createReactNativeComponentClass({
+const RNSVGCircle = createReactNativeComponentClass('RNSVGCircle', () => ({
     validAttributes: CircleAttributes,
     uiViewClassName: 'RNSVGCircle'
-});
+}));

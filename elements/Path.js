@@ -31,7 +31,7 @@ export default class extends Shape {
     }
 }
 
-const RNSVGPath = createReactNativeComponentClass({
+const RNSVGPath = createReactNativeComponentClass('RNSVGPath', () => ({
     validAttributes: PathAttributes,
     uiViewClassName: 'RNSVGPath'
-});
+}));

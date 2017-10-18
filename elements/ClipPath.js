@@ -14,7 +14,7 @@ export default class extends Component{
     }
 }
 
-const RNSVGClipPath = createReactNativeComponentClass({
+const RNSVGClipPath = createReactNativeComponentClass('RNSVGClipPath', () => ({
     validAttributes: ClipPathAttributes,
     uiViewClassName: 'RNSVGClipPath'
-});
+}));
