@@ -1,5 +1,5 @@
 import React from 'react';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
+import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
 import {LineAttributes} from '../lib/attributes';
 import Shape from './Shape';
 import {pathProps, numberProp} from '../lib/props';
