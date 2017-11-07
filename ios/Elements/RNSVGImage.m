@@ -129,11 +129,8 @@
     CGRect vbRect = CGRectMake(0, 0, CGRectGetWidth(renderRect), CGRectGetHeight(renderRect));
     CGRect eRect = CGRectMake(canvasLeft, canvasTop, rectWidth, rectHeight);
 
-    CGAffineTransform transform = [RNSVGViewBox getTransform:vbRect eRect:eRect align:self.align meetOrSlice:self.meetOrSlice fromSymbol:NO];
+    CGAffineTransform transform = [RNSVGViewBox getTransform:vbRect eRect:eRect align:self.align meetOrSlice:self.meetOrSlice];
 
-    CGFloat dx = rectX + canvasLeft;
-    CGFloat dy = rectY + canvasTop;
-    renderRect = CGRectApplyAffineTransform(renderRect, CGAffineTransformMakeTranslation(-dx, -dy));
     renderRect = CGRectApplyAffineTransform(renderRect, transform);
 
     [self clip:context];
@@ -150,7 +147,7 @@
     CGFloat y = [self relativeOnHeight:self.y];
     CGFloat width = [self relativeOnWidth:self.width];
     CGFloat height = [self relativeOnHeight:self.height];
-    return CGRectMake(x, y, x + width, y + height);
+    return CGRectMake(x, y, width, height);
 }
 
 - (CGPathRef)getPath:(CGContextRef)context

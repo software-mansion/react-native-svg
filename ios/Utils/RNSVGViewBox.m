@@ -12,7 +12,7 @@
 
 @implementation RNSVGViewBox
 
-+ (CGAffineTransform)getTransform:(CGRect)vbRect eRect:(CGRect)eRect align:(NSString *)align meetOrSlice:(RNSVGVBMOS)meetOrSlice fromSymbol:(BOOL)fromSymbol
++ (CGAffineTransform)getTransform:(CGRect)vbRect eRect:(CGRect)eRect align:(NSString *)align meetOrSlice:(RNSVGVBMOS)meetOrSlice
 {
     // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform
 
