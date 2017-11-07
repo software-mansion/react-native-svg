@@ -42,7 +42,7 @@ export default class extends Shape {
 
 }
 
-const RNSVGTextPath = createReactNativeComponentClass({
+const RNSVGTextPath = createReactNativeComponentClass('RNSVGTextPath', () => ({
     validAttributes: TextPathAttributes,
     uiViewClassName: 'RNSVGTextPath'
-});
+}));

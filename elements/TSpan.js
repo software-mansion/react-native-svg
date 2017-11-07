@@ -1,6 +1,6 @@
 import React  from 'react';
 import PropTypes from 'prop-types';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
+import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
 import extractText from '../lib/extract/extractText';
 import {textProps} from '../lib/props';
 import {TSpanAttibutes} from '../lib/attributes';
@@ -50,7 +50,7 @@ export default class extends Shape {
     }
 }
 
-const RNSVGTSpan = createReactNativeComponentClass({
+const RNSVGTSpan = createReactNativeComponentClass('RNSVGTSpan', () => ({
     validAttributes: TSpanAttibutes,
     uiViewClassName: 'RNSVGTSpan'
-});
+}));

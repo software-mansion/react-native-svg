@@ -1,5 +1,5 @@
 import React from 'react';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
+import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
 import Shape from './Shape';
 import {CircleAttributes} from '../lib/attributes';
 import {pathProps, numberProp} from '../lib/props';
@@ -37,9 +37,7 @@ export default class extends Shape {
     }
 }
 
-
-
-const RNSVGCircle = createReactNativeComponentClass({
+const RNSVGCircle = createReactNativeComponentClass('RNSVGCircle', () => ({
     validAttributes: CircleAttributes,
     uiViewClassName: 'RNSVGCircle'
-});
+}));

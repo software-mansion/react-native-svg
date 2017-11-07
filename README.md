@@ -34,7 +34,9 @@
     - react-native-svg >= 5.1.8 only supports react-native >= 0.44.0 and react == 16.0.0-alpha.6
     - react-native-svg >= 5.2.0 only supports react-native >= 0.45.0 and react == 16.0.0-alpha.12
     - react-native-svg >= 5.3.0 only supports react-native >= 0.46.0 and react == 16.0.0-alpha.12
-    
+    - react-native-svg >= 5.4.1 only supports react-native >= 0.47.0 and react == 16.0.0-alpha.12
+    - react-native-svg >= 5.5.0 only supports react-native >= 0.50.0 and react == 16.0.0
+
 2. Link native code
 
     ```bash
@@ -137,6 +139,7 @@ Name            | Default    | Description
 ----------------|------------|--------------
 fill            | '#000'     | The fill prop refers to the color inside the shape.
 fillOpacity     | 1          | This prop specifies the opacity of the color or the content the current object is filled with.
+fillRule        | nonzero    | The fillRule prop determines what side of a path is inside a shape, which determines how fill will paint the shape, can be `nonzero` or `evenodd` 
 stroke          | 'none'     | The stroke prop controls how the outline of a shape appears.
 strokeWidth     | 1          | The strokeWidth prop specifies the width of the outline on the current object.
 strokeOpacity   | 1          | The strokeOpacity prop specifies the opacity of the outline on the current object.

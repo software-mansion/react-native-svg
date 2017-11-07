@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "version": "6.0.0-rc1",
+=======
+    "version": "5.5.0",
+>>>>>>> master
     "name": "react-native-svg",
     "description": "SVG library for react-native",
     "repository": {
@@ -22,8 +26,8 @@
         "lint": "eslint ./"
     },
     "peerDependencies": {
-        "react-native": ">=0.46.0",
-        "react": "16.0.0-alpha.12",
+        "react-native": ">=0.50.0",
+        "react": "*",
         "prop-types": "^15.5.8"
     },
     "dependencies": {
