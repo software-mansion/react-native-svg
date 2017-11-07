@@ -6,18 +6,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 #import <PerformanceBezier/PerformanceBezier.h>
+#import <QuartzBookPack/UIBezierPath+Text.h>
 #import "RNSVGTSpan.h"
 #import "RNSVGText.h"
 #import "RNSVGTextPath.h"
-#import "UIBezierPath+Text.h"
 #import "FontData.h"
 
 @implementation RNSVGTSpan
 {
     CGFloat startOffset;
-    UIBezierPath *_path;
+    UIBezierPath *_bezierPath;
     CGPathRef _cache;
-    CGFloat pathLength;
+    CGFloat _pathLength;
     RNSVGTextPath * textPath;
     RNSVGPath * textPathPath;
     bool isClosed;
@@ -282,11 +282,11 @@
         double textMeasure = CGRectGetWidth(textBounds);
         double offset = getTextAnchorOffset(textAnchor, textMeasure);
 
-        bool hasTextPath = _path != nil;
+        bool hasTextPath = _bezierPath != nil;
 
         int side = 1;
         double startOfRendering = 0;
-        double endOfRendering = pathLength;
+        double endOfRendering = _pathLength;
         double fontSize = [gc getFontSize];
         bool sharpMidLine = false;
         if (hasTextPath) {
@@ -351,15 +351,15 @@
              the path is reached.
              */
             double absoluteStartOffset = [PropHelper fromRelativeWithNSString:textPath.startOffset
-                                                                     relative:pathLength
+                                                                     relative:_pathLength
                                                                        offset:0
                                                                         scale:1
                                                                      fontSize:fontSize];
             offset += absoluteStartOffset;
             if (isClosed) {
-                double halfPathDistance = pathLength / 2;
+                double halfPathDistance = _pathLength / 2;
                 startOfRendering = absoluteStartOffset + (textAnchor == TextAnchorMiddle ? -halfPathDistance : 0);
-                endOfRendering = startOfRendering + pathLength;
+                endOfRendering = startOfRendering + _pathLength;
             }
             /*
              TextPathSpacing spacing = textPath.getSpacing();
@@ -773,8 +773,8 @@
                 }
 
                 CGPoint slope;
-                CGFloat percentConsumed = midPoint / pathLength;
-                CGPoint mid = [_path pointAtPercent:percentConsumed withSlope:&slope];
+                CGFloat percentConsumed = midPoint / _pathLength;
+                CGPoint mid = [_bezierPath pointAtPercent:percentConsumed withSlope:&slope];
                 // Calculate the rotation
                 double angle = atan2(slope.y, slope.x);
 
@@ -816,17 +816,17 @@ CGFloat getTextAnchorOffset(enum TextAnchor textAnchor, CGFloat width)
 
 - (void)setupTextPath:(CGContextRef)context
 {
-    _path = nil;
+    _bezierPath = nil;
     textPath = nil;
     textPathPath = nil;
     [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
         if ([node class] == [RNSVGTextPath class]) {
             textPath = (RNSVGTextPath*) node;
             textPathPath = [textPath getPath];
-            _path = [UIBezierPath bezierPathWithCGPath:[textPathPath getPath:nil]];
-            _path = [_path bezierPathByFlatteningPathAndImmutable:YES];
-            pathLength = [_path pathLength];
-            isClosed = [_path isClosed];
+            _bezierPath = [UIBezierPath bezierPathWithCGPath:[textPathPath getPath:nil]];
+            _bezierPath = [_bezierPath bezierPathByFlatteningPathAndImmutable:YES];
+            _pathLength = _bezierPath.pathLength;
+            isClosed = [_bezierPath isClosed];
             return NO;
         }
         return YES;
