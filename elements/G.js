@@ -1,5 +1,5 @@
 import React from 'react';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
+import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
 import Shape from './Shape';
 import {pathProps} from '../lib/props';
 import {GroupAttributes} from '../lib/attributes';
@@ -26,7 +26,7 @@ export default class extends Shape{
     }
 }
 
-const RNSVGGroup = createReactNativeComponentClass({
+const RNSVGGroup = createReactNativeComponentClass('RNSVGGroup', () => ({
     validAttributes: GroupAttributes,
     uiViewClassName: 'RNSVGGroup'
-});
+}));

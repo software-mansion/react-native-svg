@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
+import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
 import extractText from '../lib/extract/extractText';
 import {numberProp, pathProps, fontProps} from '../lib/props';
 import {TextAttributes} from '../lib/attributes';
@@ -53,7 +53,7 @@ export default class extends Shape {
     }
 }
 
-const RNSVGText = createReactNativeComponentClass({
+const RNSVGText = createReactNativeComponentClass('RNSVGText', () => ({
     validAttributes: TextAttributes,
     uiViewClassName: 'RNSVGText'
-});
+}));

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
+import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
 import {PathAttributes} from '../lib/attributes';
 import Shape from './Shape';
 import {pathProps} from '../lib/props';
@@ -31,7 +31,7 @@ export default class extends Shape {
     }
 }
 
-const RNSVGPath = createReactNativeComponentClass({
+const RNSVGPath = createReactNativeComponentClass('RNSVGPath', () => ({
     validAttributes: PathAttributes,
     uiViewClassName: 'RNSVGPath'
-});
+}));
