@@ -933,8 +933,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
-					"-ObjC++",
-					"-lstdc++",
 					"-all_load",
 					"-ObjC",
 				);
@@ -959,8 +957,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
-					"-ObjC++",
-					"-lstdc++",
 					"-all_load",
 					"-ObjC",
 				);
