@@ -82,8 +82,9 @@
 {
     NSString *fontFamily = topFont_->fontFamily;
     NSNumber * fontSize = [NSNumber numberWithDouble:topFont_->fontSize];
-    NSString * fontWeight = topFont_->fontWeight_;
-    NSString * fontStyle = topFont_->fontStyle_;
+    
+    NSString * fontWeight = [FontWeightToString(topFont_->fontWeight) lowercaseString];
+    NSString * fontStyle = FontStyleStrings[topFont_->fontStyle];
 
     BOOL fontFamilyFound = NO;
     NSArray *supportedFontFamilyNames = [UIFont familyNames];

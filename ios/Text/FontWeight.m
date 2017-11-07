@@ -9,7 +9,7 @@ enum FontWeight FontWeightFromString( NSString* s )
 {
     const NSUInteger l = sizeof(FontWeightStrings) / sizeof(NSString*);
     for (NSUInteger i = 0; i < l; i++) {
-        if ([s isEqualToString:FontWeightStrings[i]]) {
+        if ([[s capitalizedString] isEqualToString:FontWeightStrings[i]]) {
             return i;
         }
     }

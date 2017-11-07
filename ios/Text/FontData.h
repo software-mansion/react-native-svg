@@ -14,10 +14,8 @@
     NSString * fontSize_;
     NSString *fontFamily;
     enum FontStyle fontStyle;
-    NSString * fontStyle_;
     NSDictionary * fontData;
     enum FontWeight fontWeight;
-    NSString * fontWeight_;
     NSString *fontFeatureSettings;
     enum FontVariantLigatures fontVariantLigatures;
     enum TextAnchor textAnchor;
