@@ -34,7 +34,9 @@
     - react-native-svg >= 5.1.8 only supports react-native >= 0.44.0 and react == 16.0.0-alpha.6
     - react-native-svg >= 5.2.0 only supports react-native >= 0.45.0 and react == 16.0.0-alpha.12
     - react-native-svg >= 5.3.0 only supports react-native >= 0.46.0 and react == 16.0.0-alpha.12
-    
+    - react-native-svg >= 5.4.1 only supports react-native >= 0.47.0 and react == 16.0.0-alpha.12
+    - react-native-svg >= 5.5.0 only supports react-native >= 0.50.0 and react == 16.0.0
+
 2. Link native code
 
     ```bash
