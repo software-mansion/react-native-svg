@@ -117,7 +117,7 @@
     CGRect renderRect;
     
     if (!imageRatio || imageRatio == rectRatio) {
-        renderRect = rect;
+        renderRect = CGRectMake(0, 0, CGRectGetWidth(rect), CGRectGetHeight(rect));
     } else if (imageRatio < rectRatio) {
         renderRect = CGRectMake(0, 0, rectHeight * imageRatio, rectHeight);
     } else {
