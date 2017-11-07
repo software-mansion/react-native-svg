@@ -10,10 +10,6 @@ export default class extends Shape{
 
     static propTypes = pathProps;
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         let {props} = this;
 

@@ -15,10 +15,6 @@ export default class extends Component{
         points: ''
     };
 
-    setNativeProps = (...args) => {
-        this.root.getNativeElement().setNativeProps(...args);
-    };
-
     render() {
         let points = this.props.points;
         if (Array.isArray(points)) {

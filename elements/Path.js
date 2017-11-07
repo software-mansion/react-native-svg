@@ -14,10 +14,6 @@ export default class extends Shape {
         d: PropTypes.string.isRequired
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         let props = this.props;
 

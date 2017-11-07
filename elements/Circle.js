@@ -21,10 +21,6 @@ export default class extends Shape {
         r: 0
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         let props = this.props;
         return <RNSVGCircle

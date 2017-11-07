@@ -23,10 +23,6 @@ export default class extends Shape {
         y2: 0
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         let props = this.props;
         return <RNSVGLine
