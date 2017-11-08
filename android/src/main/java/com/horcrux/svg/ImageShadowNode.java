@@ -50,7 +50,8 @@ class ImageShadowNode extends RenderableShadowNode {
     private String mW;
     private String mH;
     private Uri mUri;
-    private float mImageRatio;
+    private int mImageWidth;
+    private int mImageHeight;
     private String mAlign;
     private int mMeetOrSlice;
     private final AtomicBoolean mLoading = new AtomicBoolean(false);
@@ -97,9 +98,11 @@ class ImageShadowNode extends RenderableShadowNode {
             }
 
             if (src.hasKey("width") && src.hasKey("height")) {
-                mImageRatio = (float)src.getInt("width") / (float)src.getInt("height");
+                mImageWidth = src.getInt("width");
+                mImageHeight = src.getInt("height");
             } else {
-                mImageRatio = 0f;
+                mImageWidth = 0;
+                mImageHeight = 0;
             }
             mUri = Uri.parse(uriString);
         }
@@ -198,32 +201,32 @@ class ImageShadowNode extends RenderableShadowNode {
         float rectHeight = (float)rect.height();
         float rectX = (float)rect.left;
         float rectY = (float)rect.top;
-        float rectRatio = rectWidth / rectHeight;
-        RectF renderRect;
-
-        if (mImageRatio == 0f || mImageRatio == rectRatio) {
-            renderRect = new RectF(rect);
-        } else if (mImageRatio < rectRatio) {
-            renderRect = new RectF(0, 0, (int)(rectHeight * mImageRatio), (int)rectHeight);
-        } else {
-            renderRect = new RectF(0, 0, (int)rectWidth, (int)(rectWidth / mImageRatio));
-        }
-
         float canvasLeft = getCanvasLeft();
         float canvasTop = getCanvasTop();
-        RectF vbRect = new RectF(0, 0, renderRect.width() / mScale, renderRect.height() / mScale);
-        RectF eRect = new RectF(canvasLeft, canvasTop, rectWidth / mScale + canvasLeft, rectHeight / mScale + canvasTop);
+
+        if (mImageWidth == 0 || mImageHeight == 0) {
+            mImageWidth = bitmap.getWidth();
+            mImageHeight = bitmap.getHeight();
+        }
+
+        RectF renderRect = new RectF(0, 0, mImageWidth, mImageHeight);
+
+        RectF vbRect = new RectF(0, 0, mImageWidth, mImageHeight);
+        RectF eRect = new RectF(canvasLeft, canvasTop, (rectWidth / mScale) + canvasLeft, (rectHeight / mScale) + canvasTop);
         Matrix transform = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
 
         Matrix translation = new Matrix();
+        transform.mapRect(renderRect);
         if (mMatrix != null) {
             translation.postConcat(mMatrix);
+            //mMatrix.mapRect(renderRect);
         }
-        float dx = rectX + canvasLeft;
-        float dy = rectY + canvasTop;
-        translation.postTranslate(-dx, -dy);
+        float dx = rectX / mScale + canvasLeft;
+        float dy = rectY / mScale + canvasTop;
+        translation.postTranslate(dx, dy);
+        translation.postScale(mScale, mScale);
         translation.mapRect(renderRect);
-        transform.mapRect(renderRect);
+
 
         Path clip = new Path();
 

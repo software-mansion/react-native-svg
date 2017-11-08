@@ -15,7 +15,7 @@
 @implementation RNSVGImage
 {
     CGImageRef _image;
-    CGFloat _imageRatio;
+    CGSize _imageSize;
 }
 
 - (void)setSrc:(id)src
@@ -25,14 +25,13 @@
     }
     _src = src;
     CGImageRelease(_image);
+    _image = CGImageRetain([RCTConvert CGImage:src]);
     RCTImageSource *source = [RCTConvert RCTImageSource:src];
     if (source.size.width != 0 && source.size.height != 0) {
-        _imageRatio = source.size.width / source.size.height;
+        _imageSize = source.size;
     } else {
-        _imageRatio = 0.0;
+        _imageSize = CGSizeMake(CGImageGetWidth(_image), CGImageGetHeight(_image));
     }
-
-    _image = CGImageRetain([RCTConvert CGImage:src]);
     [self invalidate];
 }
 
@@ -108,31 +107,24 @@
     CGContextScaleCTM(context, 1, -1);
 
     // apply viewBox transform on Image render.
-    CGFloat imageRatio = _imageRatio;
+    CGRect renderRect = CGRectMake(0, 0, _imageSize.width, _imageSize.height);
+    
     CGFloat rectWidth = CGRectGetWidth(rect);
     CGFloat rectHeight = CGRectGetHeight(rect);
     CGFloat rectX = CGRectGetMinX(rect);
     CGFloat rectY = CGRectGetMinY(rect);
-    CGFloat rectRatio = rectWidth / rectHeight;
-    CGRect renderRect;
-
-    if (!imageRatio || imageRatio == rectRatio) {
-        renderRect = rect;
-    } else if (imageRatio < rectRatio) {
-        renderRect = CGRectMake(0, 0, rectHeight * imageRatio, rectHeight);
-    } else {
-        renderRect = CGRectMake(0, 0, rectWidth, rectWidth / imageRatio);
-    }
-
     CGFloat canvasLeft = [self getContextLeft];
     CGFloat canvasTop = [self getContextTop];
-    CGRect vbRect = CGRectMake(0, 0, CGRectGetWidth(renderRect), CGRectGetHeight(renderRect));
+    
     CGRect eRect = CGRectMake(canvasLeft, canvasTop, rectWidth, rectHeight);
-
+    CGRect vbRect = CGRectMake(0, 0, CGRectGetWidth(renderRect), CGRectGetHeight(renderRect));
     CGAffineTransform transform = [RNSVGViewBox getTransform:vbRect eRect:eRect align:self.align meetOrSlice:self.meetOrSlice];
-
     renderRect = CGRectApplyAffineTransform(renderRect, transform);
-
+    
+    CGFloat dx = rectX + canvasLeft;
+    CGFloat dy = rectY + canvasTop;
+    renderRect = CGRectApplyAffineTransform(renderRect, CGAffineTransformMakeTranslation(dx, dy));
+    
     [self clip:context];
     CGContextClipToRect(context, rect);
 
