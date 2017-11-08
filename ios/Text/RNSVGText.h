@@ -9,25 +9,21 @@
 #import <Foundation/Foundation.h>
 #import "RNSVGGroup.h"
 #import "RNSVGTextAnchor.h"
-#import "RNSVGGlyphContext.h"
 
 @interface RNSVGText : RNSVGGroup
 
-@property (nonatomic, assign) RNSVGTextAnchor textAnchor;
-@property (nonatomic, strong) NSArray<NSNumber *> *deltaX;
-@property (nonatomic, strong) NSArray<NSNumber *> *deltaY;
-@property (nonatomic, strong) NSString *positionX;
-@property (nonatomic, strong) NSString *positionY;
-@property (nonatomic, strong) NSDictionary *font;
+@property (nonatomic, strong) NSString *textLength;
+@property (nonatomic, strong) NSString *baselineShift;
+@property (nonatomic, strong) NSString *lengthAdjust;
+@property (nonatomic, strong) NSString *alignmentBaseline;
+@property (nonatomic, strong) NSArray<NSString *> *deltaX;
+@property (nonatomic, strong) NSArray<NSString *> *deltaY;
+@property (nonatomic, strong) NSArray<NSString *> *positionX;
+@property (nonatomic, strong) NSArray<NSString *> *positionY;
+@property (nonatomic, strong) NSArray<NSString *> *rotate;
 
-- (RNSVGText *)getTextRoot;
 - (void)releaseCachedPath;
 - (CGPathRef)getGroupPath:(CGContextRef)context;
-
-- (RNSVGGlyphContext *)getGlyphContext;
-- (void)pushGlyphContext;
-- (void)popGlyphContext;
 - (CTFontRef)getFontFromContext;
-- (CGPoint)getGlyphPointFromContext:(CGPoint)offset glyphWidth:(CGFloat)glyphWidth;
 
 @end

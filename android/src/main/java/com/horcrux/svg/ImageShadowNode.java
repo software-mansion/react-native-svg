@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -38,20 +38,30 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.facebook.react.bridge.ReadableArray;
+
 /**
  * Shadow node for virtual Image view
  */
-public class ImageShadowNode extends RenderableShadowNode {
+class ImageShadowNode extends RenderableShadowNode {
 
     private String mX;
     private String mY;
     private String mW;
     private String mH;
     private Uri mUri;
-    private float mImageRatio;
+    private int mImageWidth;
+    private int mImageHeight;
     private String mAlign;
     private int mMeetOrSlice;
-    private AtomicBoolean mLoading = new AtomicBoolean(false);
+    private final AtomicBoolean mLoading = new AtomicBoolean(false);
+
+    private static final float[] sRawMatrix = new float[]{
+        1, 0, 0,
+        0, 1, 0,
+        0, 0, 1
+    };
+    private Matrix mMatrix = null;
 
     @ReactProp(name = "x")
     public void setX(String x) {
@@ -88,9 +98,11 @@ public class ImageShadowNode extends RenderableShadowNode {
             }
 
             if (src.hasKey("width") && src.hasKey("height")) {
-                mImageRatio = (float)src.getInt("width") / (float)src.getInt("height");
+                mImageWidth = src.getInt("width");
+                mImageHeight = src.getInt("height");
             } else {
-                mImageRatio = 0f;
+                mImageWidth = 0;
+                mImageHeight = 0;
             }
             mUri = Uri.parse(uriString);
         }
@@ -108,6 +120,26 @@ public class ImageShadowNode extends RenderableShadowNode {
         mMeetOrSlice = meetOrSlice;
         markUpdated();
     }
+
+    @ReactProp(name = "matrix")
+    public void setMatrix(@Nullable ReadableArray matrixArray) {
+        if (matrixArray != null) {
+            int matrixSize = PropHelper.toMatrixData(matrixArray, sRawMatrix, mScale);
+            if (matrixSize == 6) {
+                if (mMatrix == null) {
+                    mMatrix = new Matrix();
+                }
+                mMatrix.setValues(sRawMatrix);
+            } else if (matrixSize != -1) {
+                FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");
+            }
+        } else {
+            mMatrix = null;
+        }
+
+        markUpdated();
+    }
+
 
     @Override
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
@@ -154,10 +186,10 @@ public class ImageShadowNode extends RenderableShadowNode {
 
     @Nonnull
     private Rect getRect() {
-        float x = relativeOnWidth(mX);
-        float y = relativeOnHeight(mY);
-        float w = relativeOnWidth(mW);
-        float h = relativeOnHeight(mH);
+        double x = relativeOnWidth(mX);
+        double y = relativeOnHeight(mY);
+        double w = relativeOnWidth(mW);
+        double h = relativeOnHeight(mH);
 
         return new Rect((int) x, (int) y, (int) (x + w), (int) (y + h));
     }
@@ -169,25 +201,32 @@ public class ImageShadowNode extends RenderableShadowNode {
         float rectHeight = (float)rect.height();
         float rectX = (float)rect.left;
         float rectY = (float)rect.top;
-        float rectRatio = rectWidth / rectHeight;
-        RectF renderRect;
+        float canvasLeft = getCanvasLeft();
+        float canvasTop = getCanvasTop();
 
-        if (mImageRatio == 0f || mImageRatio == rectRatio) {
-            renderRect = new RectF(rect);
-        } else if (mImageRatio < rectRatio) {
-            renderRect = new RectF(0, 0, (int)(rectHeight * mImageRatio), (int)rectHeight);
-        } else {
-            renderRect = new RectF(0, 0, (int)rectWidth, (int)(rectWidth / mImageRatio));
+        if (mImageWidth == 0 || mImageHeight == 0) {
+            mImageWidth = bitmap.getWidth();
+            mImageHeight = bitmap.getHeight();
         }
 
-        RectF vbRect = new RectF(0, 0, renderRect.width() / mScale, renderRect.height() / mScale);
-        RectF eRect = new RectF(getCanvasLeft(), getCanvasTop(), rectWidth / mScale + getCanvasLeft(), rectHeight / mScale + getCanvasTop());
-        Matrix transform = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice, false);
+        RectF renderRect = new RectF(0, 0, mImageWidth, mImageHeight);
 
-        transform.mapRect(renderRect);
+        RectF vbRect = new RectF(0, 0, mImageWidth, mImageHeight);
+        RectF eRect = new RectF(canvasLeft, canvasTop, (rectWidth / mScale) + canvasLeft, (rectHeight / mScale) + canvasTop);
+        Matrix transform = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
+
         Matrix translation = new Matrix();
-        translation.postTranslate(rectX, rectY);
+        transform.mapRect(renderRect);
+        if (mMatrix != null) {
+            translation.postConcat(mMatrix);
+            //mMatrix.mapRect(renderRect);
+        }
+        float dx = rectX / mScale + canvasLeft;
+        float dy = rectY / mScale + canvasTop;
+        translation.postTranslate(dx, dy);
+        translation.postScale(mScale, mScale);
         translation.mapRect(renderRect);
+
 
         Path clip = new Path();
 

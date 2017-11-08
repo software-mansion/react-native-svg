@@ -80,13 +80,13 @@
 - (void)renderSymbolTo:(CGContextRef)context width:(CGFloat)width height:(CGFloat)height
 {
     if (self.align) {
-        CGRect eRect = CGRectMake([self getContextLeft], [self getContextTop], width, height);
+        CGRect eRect = CGRectMake(0, 0, width, height);
         
         CGAffineTransform viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
                                                                   eRect:eRect
                                                                   align:self.align
-                                                            meetOrSlice:self.meetOrSlice
-                                                             fromSymbol:YES];
+                                                            meetOrSlice:self.meetOrSlice];
+        
         CGContextConcatCTM(context, viewBoxTransform);
     }
     [self renderGroupTo:context];

@@ -1,5 +1,5 @@
 {
-    "version": "5.5.1",
+    "version": "6.0.0-rc13",
     "name": "react-native-svg",
     "description": "SVG library for react-native",
     "repository": {
@@ -19,7 +19,8 @@
         "gradient"
     ],
     "scripts": {
-        "lint": "eslint ./"
+        "lint": "eslint ./",
+        "postinstall" : "node scripts/install.js"
     },
     "peerDependencies": {
         "react-native": ">=0.50.0",
@@ -28,14 +29,13 @@
     },
     "dependencies": {
         "color": "^0.11.1",
-        "lodash": "^4.16.6"
+        "lodash": "^4.16.6",
+        "github-download": "^0.5.0"
     },
     "devDependencies": {
         "babel-eslint": "^6.1.2",
         "eslint": "^2.13.1",
-        "eslint-plugin-react": "^4.3.0",
-        "react-native": "^0.49.0",
-        "react": "16.0.0-beta.5"
+        "eslint-plugin-react": "^4.3.0"
     },
     "nativePackage": true
 }

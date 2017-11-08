@@ -10,18 +10,12 @@
 #import "RNSVGTextPath.h"
 #import <React/RCTFont.h>
 #import <CoreText/CoreText.h>
-#import "RNSVGGlyphContext.h"
+#import "GlyphContext.h"
 
 @implementation RNSVGText
 {
     RNSVGText *_textRoot;
-    RNSVGGlyphContext *_glyphContext;
-}
-
-- (void)setTextAnchor:(RNSVGTextAnchor)textAnchor
-{
-    [self invalidate];
-    _textAnchor = textAnchor;
+    GlyphContext *_glyphContext;
 }
 
 - (void)renderLayerTo:(CGContextRef)context
@@ -29,24 +23,21 @@
     [self clip:context];
     CGContextSaveGState(context);
     [self setupGlyphContext:context];
-    
+
     CGPathRef path = [self getGroupPath:context];
-    CGAffineTransform transform = [self getAlignTransform:path];
-    CGContextConcatCTM(context, transform);
     [self renderGroupTo:context];
     [self releaseCachedPath];
     CGContextRestoreGState(context);
-    
-    
-    CGPathRef transformedPath = CGPathCreateCopyByTransformingPath(path, &transform);
+
+    CGPathRef transformedPath = CGPathCreateCopyByTransformingPath(path, &CGAffineTransformIdentity);
     [self setHitArea:transformedPath];
     CGPathRelease(transformedPath);
 }
 
 - (void)setupGlyphContext:(CGContextRef)context
 {
-    _glyphContext = [[RNSVGGlyphContext alloc] initWithDimensions:[self getContextWidth]
-                                                  height:[self getContextHeight]];
+    _glyphContext = [[GlyphContext alloc] initWithScale:1 width:[self getContextWidth]
+                                                 height:[self getContextHeight]];
 }
 
 // release the cached CGPathRef for RNSVGTSpan
@@ -64,7 +55,7 @@
     [self pushGlyphContext];
     CGPathRef groupPath = [super getPath:context];
     [self popGlyphContext];
-    
+
     return groupPath;
 }
 
@@ -72,10 +63,9 @@
 {
     [self setupGlyphContext:context];
     CGPathRef groupPath = [self getGroupPath:context];
-    CGAffineTransform transform = [self getAlignTransform:groupPath];
     [self releaseCachedPath];
-    
-    return (CGPathRef)CFAutorelease(CGPathCreateCopyByTransformingPath(groupPath, &transform));
+
+    return (CGPathRef)CFAutorelease(CGPathCreateCopyByTransformingPath(groupPath, &CGAffineTransformIdentity));
 }
 
 - (void)renderGroupTo:(CGContextRef)context
@@ -83,38 +73,6 @@
     [self pushGlyphContext];
     [super renderGroupTo:context];
     [self popGlyphContext];
-}
-
-- (CGAffineTransform)getAlignTransform:(CGPathRef)path
-{
-    CGFloat width = CGRectGetWidth(CGPathGetBoundingBox(path));
-    CGFloat x = 0;
-    
-    switch ([self getComputedTextAnchor]) {
-        case kRNSVGTextAnchorMiddle:
-            x = -width / 2;
-            break;
-        case kRNSVGTextAnchorEnd:
-            x = -width;
-            break;
-        default: ;
-    }
-    
-    return CGAffineTransformMakeTranslation(x, 0);
-}
-
-- (RNSVGTextAnchor)getComputedTextAnchor
-{
-    RNSVGTextAnchor anchor = self.textAnchor;
-    if (self.subviews.count > 0) {
-        RNSVGText *child = [self.subviews firstObject];
-        
-        while (child.subviews.count && anchor == kRNSVGTextAnchorAuto) {
-            anchor = child.textAnchor;
-            child = [child.subviews firstObject];
-        }
-    }
-    return anchor;
 }
 
 - (RNSVGText *)getTextRoot
@@ -129,22 +87,25 @@
             _textRoot = (RNSVGText*)[_textRoot superview];
         }
     }
-    
+
     return _textRoot;
 }
 
-- (RNSVGGlyphContext *)getGlyphContext
+- (GlyphContext *)getGlyphContext
 {
     return _glyphContext;
 }
 
 - (void)pushGlyphContext
 {
-    [[[self getTextRoot] getGlyphContext] pushContext:self.font
-                                               deltaX:self.deltaX
-                                               deltaY:self.deltaY
-                                            positionX:self.positionX
-                                            positionY:self.positionY];
+    [[[self getTextRoot] getGlyphContext] pushContextwithRNSVGText:self
+                                                             reset:false
+                                                              font:self.font
+                                                                 x:self.positionX
+                                                                 y:self.positionY
+                                                            deltaX:self.deltaX
+                                                            deltaY:self.deltaY
+                                                            rotate:self.rotate];
 }
 
 - (void)popGlyphContext
@@ -155,11 +116,6 @@
 - (CTFontRef)getFontFromContext
 {
     return [[[self getTextRoot] getGlyphContext] getGlyphFont];
-}
-
-- (CGPoint)getGlyphPointFromContext:(CGPoint)offset glyphWidth:(CGFloat)glyphWidth
-{
-    return [[[self getTextRoot] getGlyphContext] getNextGlyphPoint:(CGPoint)offset glyphWidth:glyphWidth];
 }
 
 @end
