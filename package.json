@@ -28,7 +28,7 @@
         "prop-types": "^15.5.8"
     },
     "dependencies": {
-        "color": "^0.11.1",
+        "color": "^2.0.1",
         "lodash": "^4.16.6",
         "github-download": "^0.5.0"
     },
