@@ -269,7 +269,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
         if (colorType == 0) {
             // solid color
             paint.setARGB(
-                    (int) (colors.size() > 4 ? colors.getDouble(4) * opacity * 255 : opacity * 255),
+                    (int) (colors.size() > 4 && !colors.isNull(4) ? colors.getDouble(4) * opacity * 255 : opacity * 255),
                     (int) (colors.getDouble(1) * 255),
                     (int) (colors.getDouble(2) * 255),
                     (int) (colors.getDouble(3) * 255));
