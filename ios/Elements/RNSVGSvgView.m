@@ -115,8 +115,7 @@
         _viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
                                                  eRect:rect
                                                  align:self.align
-                                           meetOrSlice:self.meetOrSlice
-                                            fromSymbol:NO];
+                                           meetOrSlice:self.meetOrSlice];
         CGContextConcatCTM(context, _viewBoxTransform);
     }
     

@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'react-native';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
+import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
 import {ImageAttributes} from '../lib/attributes';
 import {numberProp, touchableProps, responderProps} from '../lib/props';
 import Shape from './Shape';
+//noinspection JSUnresolvedVariable
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import {meetOrSliceTypes, alignEnum} from '../lib/extract/extractViewBox';
 import extractProps from '../lib/extract/extractProps';
@@ -56,7 +57,7 @@ export default class extends Shape {
     }
 }
 
-const RNSVGImage = createReactNativeComponentClass({
+const RNSVGImage = createReactNativeComponentClass('RNSVGImage', () => ({
     validAttributes: ImageAttributes,
     uiViewClassName: 'RNSVGImage'
-});
+}));

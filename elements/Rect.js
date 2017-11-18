@@ -1,6 +1,6 @@
 import React from 'react';
 import './Path'; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
+import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
 import {pathProps, numberProp} from '../lib/props';
 import {RectAttributes} from '../lib/attributes';
 import extractProps from '../lib/extract/extractProps';
@@ -52,7 +52,7 @@ export default class extends Shape {
     }
 }
 
-const RNSVGRect = createReactNativeComponentClass({
+const RNSVGRect = createReactNativeComponentClass('RNSVGRect', () => ({
     validAttributes: RectAttributes,
     uiViewClassName: 'RNSVGRect'
-});
+}));

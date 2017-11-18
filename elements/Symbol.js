@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import extractViewBox from '../lib/extract/extractViewBox';
-import createReactNativeComponentClass from 'react-native/Libraries/Renderer/shims/createReactNativeComponentClass.js';
+import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
 import {SymbolAttributes} from '../lib/attributes';
 
 export default class extends Component{
@@ -23,7 +23,7 @@ export default class extends Component{
     }
 }
 
-const RNSVGSymbol = createReactNativeComponentClass({
+const RNSVGSymbol = createReactNativeComponentClass('RNSVGSymbol', () => ({
     validAttributes: SymbolAttributes,
     uiViewClassName: 'RNSVGSymbol'
-});
+}));
