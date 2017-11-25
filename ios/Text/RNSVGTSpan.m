@@ -858,6 +858,8 @@ bool hasGlyph(CTFontRef fontRef, NSString * str, CGGlyph* glyph, CFDictionaryRef
 
     CFIndex runEnd = CFArrayGetCount(runs);
     if (runEnd > 1) {
+        CFRelease(attrString);
+        CFRelease(line);
         return false;
     }
     CTRunRef run = CFArrayGetValueAtIndex(runs, 0);
@@ -867,6 +869,9 @@ bool hasGlyph(CTFontRef fontRef, NSString * str, CGGlyph* glyph, CFDictionaryRef
     if (hasGlyph) {
         CTRunGetGlyphs(run, CFRangeMake(0, 1), glyph);
     }
+
+    CFRelease(attrString);
+    CFRelease(line);
 
     return hasGlyph;
 }
