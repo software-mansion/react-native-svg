@@ -12,6 +12,8 @@
 #import "RNSVGTextPath.h"
 #import "FontData.h"
 
+NSCharacterSet *separators = nil;
+
 @implementation RNSVGTSpan
 {
     CGFloat startOffset;
@@ -21,6 +23,17 @@
     RNSVGTextPath * textPath;
     RNSVGPath * textPathPath;
     bool isClosed;
+}
+
+- (id)init
+{
+    self = [super init];
+
+    if (separators == nil) {
+        separators = [NSCharacterSet whitespaceCharacterSet];
+    }
+
+    return self;
 }
 
 - (void)setContent:(NSString *)content
@@ -517,8 +530,8 @@
         double totalHeight = top + bottom;
         double baselineShift = 0;
         // TODO, alignmentBaseline and baselineShift are always nil for some reason?
-        NSString *baselineShiftString = [self baselineShift];
-        enum AlignmentBaseline baseline = AlignmentBaselineFromString([self alignmentBaseline]);
+        NSString *baselineShiftString = [self getBaselineShift];
+        enum AlignmentBaseline baseline = AlignmentBaselineFromString([self getAlignmentBaseline]);
         if (baseline != AlignmentBaselineBaseline) {
             // TODO alignment-baseline, test / verify behavior
             // TODO get per glyph baselines from font baseline table, for high-precision alignment
@@ -709,7 +722,8 @@
                 kerning = kerned - charWidth;
             }
 
-            bool isWordSeparator = false;
+            char currentChar = [str characterAtIndex:i];
+            bool isWordSeparator = [separators characterIsMember:currentChar];
             double wordSpace = isWordSeparator ? wordSpacing : 0;
             double spacing = wordSpace + letterSpacing;
             double advance = charWidth + spacing;

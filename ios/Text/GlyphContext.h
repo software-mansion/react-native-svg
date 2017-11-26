@@ -34,8 +34,7 @@
 
 - (void)popContext;
 
-- (void)pushContextwithRNSVGText:(RNSVGText *)node
-                           reset:(bool)reset
+- (void)pushContext:(RNSVGText *)node
                             font:(NSDictionary *)font
                                x:(NSArray*)x
                                y:(NSArray*)y
@@ -43,7 +42,7 @@
                           deltaY:(NSArray*)deltaY
                           rotate:(NSArray*)rotate;
 
-- (void)pushContextWithRNSVGGroup:(RNSVGGroup*)node
+- (void)pushContext:(RNSVGGroup*)node
                              font:(NSDictionary *)font;
 
 

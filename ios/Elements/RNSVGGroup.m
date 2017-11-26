@@ -62,7 +62,7 @@
 
 - (void)pushGlyphContext
 {
-    [[[self getTextRoot] getGlyphContext] pushContextWithRNSVGGroup:self font:self.font];
+    [[[self getTextRoot] getGlyphContext] pushContext:self font:self.font];
 }
 
 - (void)popGlyphContext

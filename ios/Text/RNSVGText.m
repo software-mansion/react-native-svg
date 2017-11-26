@@ -91,6 +91,54 @@
     return _textRoot;
 }
 
+- (NSString*) getAlignmentBaseline
+{
+    if (self.alignmentBaseline != nil) {
+        return self.alignmentBaseline;
+    }
+    UIView* parent = [self superview];
+    while (parent != nil) {
+        if ([parent isKindOfClass:[RNSVGText class]]) {
+            RNSVGText* node = (RNSVGText*)parent;
+            NSString* baseline = node.alignmentBaseline;
+            if (baseline != nil) {
+                self.alignmentBaseline = baseline;
+                return baseline;
+            }
+        }
+        parent = [parent superview];
+    }
+    if (self.alignmentBaseline == nil) {
+        self.alignmentBaseline = AlignmentBaselineStrings[0];
+    }
+    return self.alignmentBaseline;
+}
+
+- (NSString*) getBaselineShift
+{
+    if (self.baselineShift != nil) {
+        return self.baselineShift;
+    }
+    if (self.baselineShift == nil) {
+        UIView* parent = [self superview];
+        while (parent != nil) {
+            if ([parent isKindOfClass:[RNSVGText class]]) {
+                RNSVGText* node = (RNSVGText*)parent;
+                NSString* baselineShift = node.baselineShift;
+                if (baselineShift != nil) {
+                    self.baselineShift = baselineShift;
+                    return baselineShift;
+                }
+            }
+            parent = [parent superview];
+        }
+    }
+    if (self.baselineShift == nil) {
+        self.baselineShift = @"";
+    }
+    return self.baselineShift;
+}
+
 - (GlyphContext *)getGlyphContext
 {
     return _glyphContext;
@@ -98,8 +146,7 @@
 
 - (void)pushGlyphContext
 {
-    [[[self getTextRoot] getGlyphContext] pushContextwithRNSVGText:self
-                                                             reset:false
+    [[[self getTextRoot] getGlyphContext] pushContext:self
                                                               font:self.font
                                                                  x:self.positionX
                                                                  y:self.positionY
