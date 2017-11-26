@@ -19,4 +19,6 @@ RCT_EXPORT_MODULE()
   return [RNSVGGroup new];
 }
 
+RCT_EXPORT_VIEW_PROPERTY(font, NSDictionary)
+
 @end

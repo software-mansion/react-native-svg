@@ -13,6 +13,16 @@
     GlyphContext *_glyphContext;
 }
 
+- (void)setFont:(NSDictionary*)font
+{
+    if (font == _font) {
+        return;
+    }
+
+    [self invalidate];
+    _font = font;
+}
+
 - (void)renderLayerTo:(CGContextRef)context
 {
     [self clip:context];
