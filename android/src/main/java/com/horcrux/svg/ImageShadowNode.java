@@ -32,6 +32,7 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -105,6 +106,9 @@ class ImageShadowNode extends RenderableShadowNode {
                 mImageHeight = 0;
             }
             mUri = Uri.parse(uriString);
+            if (mUri.getScheme() == null) {
+                mUri = ResourceDrawableIdHelper.getInstance().getResourceDrawableUri(getThemedContext(), uriString);
+            }
         }
     }
 
@@ -148,7 +152,7 @@ class ImageShadowNode extends RenderableShadowNode {
             if (Fresco.getImagePipeline().isInBitmapMemoryCache(request)) {
                 tryRender(request, canvas, paint, opacity * mOpacity);
             } else {
-                loadBitmap(request);
+                loadBitmap(request, canvas, paint, opacity * mOpacity);
             }
         }
     }
@@ -160,16 +164,14 @@ class ImageShadowNode extends RenderableShadowNode {
         return path;
     }
 
-    private void loadBitmap(ImageRequest request) {
+    private void loadBitmap(ImageRequest request, final Canvas canvas, final Paint paint, final float opacity) {
         final DataSource<CloseableReference<CloseableImage>> dataSource
             = Fresco.getImagePipeline().fetchDecodedImage(request, getThemedContext());
-
         dataSource.subscribe(new BaseBitmapDataSubscriber() {
                                  @Override
                                  public void onNewResultImpl(Bitmap bitmap) {
                                      mLoading.set(false);
-                                     SvgViewShadowNode shadowNode = getSvgShadowNode();
-                                     shadowNode.markUpdated();
+                                     bitmapTryRender(bitmap, canvas, paint, opacity * mOpacity);
                                  }
 
                                  @Override
@@ -282,6 +284,16 @@ class ImageShadowNode extends RenderableShadowNode {
             throw new IllegalStateException(e);
         } finally {
             dataSource.close();
+        }
+    }
+
+    private void bitmapTryRender(Bitmap bitmap, Canvas canvas, Paint paint, float opacity) {
+        try {
+            if (bitmap != null) {
+                doRender(canvas, paint, bitmap, opacity);
+            }
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
     }
 }
