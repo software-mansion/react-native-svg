@@ -20,7 +20,7 @@
     ],
     "scripts": {
         "lint": "eslint ./",
-        "postinstall" : "node scripts/install.js"
+        "postinstall": "node scripts/install.js"
     },
     "peerDependencies": {
         "react-native": ">=0.50.0",
@@ -29,8 +29,9 @@
     },
     "dependencies": {
         "color": "^2.0.1",
+        "github-download": "^0.5.0",
         "lodash": "^4.16.6",
-        "github-download": "^0.5.0"
+        "pegjs": "^0.10.0"
     },
     "devDependencies": {
         "babel-eslint": "^6.1.2",
