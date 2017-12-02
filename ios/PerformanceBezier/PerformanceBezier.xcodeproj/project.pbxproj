@@ -1,0 +1,676 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6617530D1A8DC45A0051D5CB /* PerformanceBezier.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F2EBE31A8DC05100D536E9 /* PerformanceBezier.framework */; };
+		66AB566C1B0D9830005E6FB1 /* UIBezierPath+Util.h in Headers */ = {isa = PBXBuildFile; fileRef = 66AB566A1B0D9830005E6FB1 /* UIBezierPath+Util.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66AB566D1B0D9830005E6FB1 /* UIBezierPath+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AB566B1B0D9830005E6FB1 /* UIBezierPath+Util.m */; };
+		66B9D2A61A8D609200CAC341 /* PerformanceBezierAbstractTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D4021F1A7EDACA00043802 /* PerformanceBezierAbstractTest.m */; };
+		66B9D2A71A8D609300CAC341 /* PerformanceBezierClockwiseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D4021C1A7EDA9000043802 /* PerformanceBezierClockwiseTests.m */; };
+		66D1B7971AFEAC6F00210262 /* UIBezierPath+Trim.h in Headers */ = {isa = PBXBuildFile; fileRef = 66D1B7951AFEAC6F00210262 /* UIBezierPath+Trim.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66D1B7981AFEAC6F00210262 /* UIBezierPath+Trim.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D1B7961AFEAC6F00210262 /* UIBezierPath+Trim.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		66F2EBE41A8DC05100D536E9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6682FF251A8DBACF00187325 /* Foundation.framework */; };
+		66F2EBF61A8DC12600D536E9 /* UIBezierPath+Center.m in Sources */ = {isa = PBXBuildFile; fileRef = 660E0FD81A80055300F19D8A /* UIBezierPath+Center.m */; };
+		66F2EBF71A8DC12800D536E9 /* UIBezierPath+Clockwise.m in Sources */ = {isa = PBXBuildFile; fileRef = 667617D01A7EB88200C0B447 /* UIBezierPath+Clockwise.m */; };
+		66F2EBF81A8DC13100D536E9 /* UIBezierPath+Equals.m in Sources */ = {isa = PBXBuildFile; fileRef = 667617CC1A7EB86200C0B447 /* UIBezierPath+Equals.m */; };
+		66F2EBF91A8DC13300D536E9 /* UIBezierPath+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 663355CC1A8575F600C45718 /* UIBezierPath+Description.m */; };
+		66F2EBFA1A8DC13500D536E9 /* UIBezierPath+NSOSX.m in Sources */ = {isa = PBXBuildFile; fileRef = 667617C11A7EB79F00C0B447 /* UIBezierPath+NSOSX.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		66F2EBFB1A8DC13700D536E9 /* UIBezierPath+Performance.m in Sources */ = {isa = PBXBuildFile; fileRef = 667617F61A7EC58700C0B447 /* UIBezierPath+Performance.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		66F2EBFC1A8DC13900D536E9 /* UIBezierPath+Uncached.m in Sources */ = {isa = PBXBuildFile; fileRef = 663355D61A857A2700C45718 /* UIBezierPath+Uncached.m */; };
+		66F2EBFD1A8DC13D00D536E9 /* UIBezierPath+FirstLast.m in Sources */ = {isa = PBXBuildFile; fileRef = 667617FB1A7EC5D400C0B447 /* UIBezierPath+FirstLast.m */; };
+		66F2EBFE1A8DC13F00D536E9 /* UIBezierPathProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 667617B81A7EB73A00C0B447 /* UIBezierPathProperties.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		66F2EBFF1A8DC14100D536E9 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 667617D41A7EB9AC00C0B447 /* JRSwizzle.m */; };
+		66F2EC001A8DC15600D536E9 /* UIBezierPath+Uncached.h in Headers */ = {isa = PBXBuildFile; fileRef = 663355D51A857A2700C45718 /* UIBezierPath+Uncached.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66F2EC011A8DC15800D536E9 /* UIBezierPath+Performance.h in Headers */ = {isa = PBXBuildFile; fileRef = 667617F41A7EC58700C0B447 /* UIBezierPath+Performance.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66F2EC021A8DC15A00D536E9 /* UIBezierPath+NSOSX.h in Headers */ = {isa = PBXBuildFile; fileRef = 667617C01A7EB79F00C0B447 /* UIBezierPath+NSOSX.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66F2EC031A8DC15B00D536E9 /* UIBezierPath+Description.h in Headers */ = {isa = PBXBuildFile; fileRef = 663355CB1A8575F600C45718 /* UIBezierPath+Description.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66F2EC041A8DC15E00D536E9 /* UIBezierPath+Equals.h in Headers */ = {isa = PBXBuildFile; fileRef = 667617CB1A7EB86200C0B447 /* UIBezierPath+Equals.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66F2EC051A8DC16000D536E9 /* UIBezierPath+Clockwise.h in Headers */ = {isa = PBXBuildFile; fileRef = 667617CF1A7EB88200C0B447 /* UIBezierPath+Clockwise.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66F2EC061A8DC16100D536E9 /* UIBezierPath+Center.h in Headers */ = {isa = PBXBuildFile; fileRef = 660E0FD71A80055300F19D8A /* UIBezierPath+Center.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66F2EC071A8DC16300D536E9 /* UIBezierPath+Performance_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 667617F51A7EC58700C0B447 /* UIBezierPath+Performance_Private.h */; };
+		66F2EC081A8DC16500D536E9 /* UIBezierPath+NSOSX_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 667617BF1A7EB79F00C0B447 /* UIBezierPath+NSOSX_Private.h */; };
+		66F2EC091A8DC16600D536E9 /* UIBezierPath+FirstLast.h in Headers */ = {isa = PBXBuildFile; fileRef = 667617FA1A7EC5D400C0B447 /* UIBezierPath+FirstLast.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66F2EC0A1A8DC16800D536E9 /* UIBezierPathProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 667617B71A7EB73A00C0B447 /* UIBezierPathProperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66F2EC0B1A8DC16900D536E9 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 667617D31A7EB9AC00C0B447 /* JRSwizzle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66F2EC0C1A8DC16B00D536E9 /* PerformanceBezier.h in Headers */ = {isa = PBXBuildFile; fileRef = 667617AF1A7EB5CB00C0B447 /* PerformanceBezier.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66F2EC0D1A8DC22000D536E9 /* PerformanceBezier-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66F2EBEA1A8DC05100D536E9 /* PerformanceBezier-Info.plist */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6617530E1A8DC8300051D5CB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 661B30C91A7EB43A008549C7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 66F2EBE21A8DC05100D536E9;
+			remoteInfo = PerformanceBezier;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		660E0FD71A80055300F19D8A /* UIBezierPath+Center.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Center.h"; sourceTree = "<group>"; };
+		660E0FD81A80055300F19D8A /* UIBezierPath+Center.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Center.m"; sourceTree = "<group>"; };
+		660E0FDB1A80226100F19D8A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		660E0FDC1A80284C00F19D8A /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		663355CB1A8575F600C45718 /* UIBezierPath+Description.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Description.h"; sourceTree = "<group>"; };
+		663355CC1A8575F600C45718 /* UIBezierPath+Description.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Description.m"; sourceTree = "<group>"; };
+		663355D51A857A2700C45718 /* UIBezierPath+Uncached.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Uncached.h"; sourceTree = "<group>"; };
+		663355D61A857A2700C45718 /* UIBezierPath+Uncached.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Uncached.m"; sourceTree = "<group>"; };
+		667617AF1A7EB5CB00C0B447 /* PerformanceBezier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PerformanceBezier.h; sourceTree = "<group>"; };
+		667617B71A7EB73A00C0B447 /* UIBezierPathProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBezierPathProperties.h; sourceTree = "<group>"; };
+		667617B81A7EB73A00C0B447 /* UIBezierPathProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBezierPathProperties.m; sourceTree = "<group>"; };
+		667617BF1A7EB79F00C0B447 /* UIBezierPath+NSOSX_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+NSOSX_Private.h"; sourceTree = "<group>"; };
+		667617C01A7EB79F00C0B447 /* UIBezierPath+NSOSX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+NSOSX.h"; sourceTree = "<group>"; };
+		667617C11A7EB79F00C0B447 /* UIBezierPath+NSOSX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+NSOSX.m"; sourceTree = "<group>"; };
+		667617CB1A7EB86200C0B447 /* UIBezierPath+Equals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Equals.h"; sourceTree = "<group>"; };
+		667617CC1A7EB86200C0B447 /* UIBezierPath+Equals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Equals.m"; sourceTree = "<group>"; };
+		667617CF1A7EB88200C0B447 /* UIBezierPath+Clockwise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Clockwise.h"; sourceTree = "<group>"; };
+		667617D01A7EB88200C0B447 /* UIBezierPath+Clockwise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Clockwise.m"; sourceTree = "<group>"; };
+		667617D31A7EB9AC00C0B447 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
+		667617D41A7EB9AC00C0B447 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
+		667617F41A7EC58700C0B447 /* UIBezierPath+Performance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Performance.h"; sourceTree = "<group>"; };
+		667617F51A7EC58700C0B447 /* UIBezierPath+Performance_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Performance_Private.h"; sourceTree = "<group>"; };
+		667617F61A7EC58700C0B447 /* UIBezierPath+Performance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Performance.m"; sourceTree = "<group>"; };
+		667617FA1A7EC5D400C0B447 /* UIBezierPath+FirstLast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+FirstLast.h"; sourceTree = "<group>"; };
+		667617FB1A7EC5D400C0B447 /* UIBezierPath+FirstLast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+FirstLast.m"; sourceTree = "<group>"; };
+		66767CC71AFEE4BB00443B03 /* SubdivideLicense */ = {isa = PBXFileReference; lastKnownFileType = text; path = SubdivideLicense; sourceTree = "<group>"; };
+		6682FF251A8DBACF00187325 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		66AB566A1B0D9830005E6FB1 /* UIBezierPath+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Util.h"; sourceTree = "<group>"; };
+		66AB566B1B0D9830005E6FB1 /* UIBezierPath+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Util.m"; sourceTree = "<group>"; };
+		66B9D28C1A8D5FDE00CAC341 /* PerformanceBezierTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PerformanceBezierTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		66B9D2921A8D5FDF00CAC341 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66D1B7951AFEAC6F00210262 /* UIBezierPath+Trim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Trim.h"; sourceTree = "<group>"; };
+		66D1B7961AFEAC6F00210262 /* UIBezierPath+Trim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Trim.m"; sourceTree = "<group>"; };
+		66D4021C1A7EDA9000043802 /* PerformanceBezierClockwiseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerformanceBezierClockwiseTests.m; sourceTree = "<group>"; };
+		66D4021E1A7EDACA00043802 /* PerformanceBezierAbstractTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerformanceBezierAbstractTest.h; sourceTree = "<group>"; };
+		66D4021F1A7EDACA00043802 /* PerformanceBezierAbstractTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerformanceBezierAbstractTest.m; sourceTree = "<group>"; };
+		66F2EBE31A8DC05100D536E9 /* PerformanceBezier.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = PerformanceBezier.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		66F2EBE71A8DC05100D536E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66F2EBEA1A8DC05100D536E9 /* PerformanceBezier-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PerformanceBezier-Info.plist"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		66B9D2891A8D5FDE00CAC341 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6617530D1A8DC45A0051D5CB /* PerformanceBezier.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66F2EBDE1A8DC05100D536E9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66F2EBE41A8DC05100D536E9 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		661B30C81A7EB43A008549C7 = {
+			isa = PBXGroup;
+			children = (
+				660E0FDB1A80226100F19D8A /* README.md */,
+				66767CC71AFEE4BB00443B03 /* SubdivideLicense */,
+				660E0FDC1A80284C00F19D8A /* LICENSE */,
+				66B9D2831A8D5FDE00CAC341 /* PerformanceBezier */,
+				66B9D2901A8D5FDF00CAC341 /* PerformanceBezierTests */,
+				66F2EBE51A8DC05100D536E9 /* Supporting Files */,
+				6682FF241A8DBACF00187325 /* Frameworks */,
+				667617871A7EB50A00C0B447 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		667617871A7EB50A00C0B447 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				66B9D28C1A8D5FDE00CAC341 /* PerformanceBezierTests.xctest */,
+				66F2EBE31A8DC05100D536E9 /* PerformanceBezier.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		667617B61A7EB72F00C0B447 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				660E0FD71A80055300F19D8A /* UIBezierPath+Center.h */,
+				660E0FD81A80055300F19D8A /* UIBezierPath+Center.m */,
+				667617CF1A7EB88200C0B447 /* UIBezierPath+Clockwise.h */,
+				667617D01A7EB88200C0B447 /* UIBezierPath+Clockwise.m */,
+				667617CB1A7EB86200C0B447 /* UIBezierPath+Equals.h */,
+				667617CC1A7EB86200C0B447 /* UIBezierPath+Equals.m */,
+				663355CB1A8575F600C45718 /* UIBezierPath+Description.h */,
+				663355CC1A8575F600C45718 /* UIBezierPath+Description.m */,
+				667617C01A7EB79F00C0B447 /* UIBezierPath+NSOSX.h */,
+				667617C11A7EB79F00C0B447 /* UIBezierPath+NSOSX.m */,
+				667617F41A7EC58700C0B447 /* UIBezierPath+Performance.h */,
+				667617F61A7EC58700C0B447 /* UIBezierPath+Performance.m */,
+				66D1B7951AFEAC6F00210262 /* UIBezierPath+Trim.h */,
+				66D1B7961AFEAC6F00210262 /* UIBezierPath+Trim.m */,
+				663355D51A857A2700C45718 /* UIBezierPath+Uncached.h */,
+				663355D61A857A2700C45718 /* UIBezierPath+Uncached.m */,
+				66AB566A1B0D9830005E6FB1 /* UIBezierPath+Util.h */,
+				66AB566B1B0D9830005E6FB1 /* UIBezierPath+Util.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		667617DB1A7EB9B000C0B447 /* Protected */ = {
+			isa = PBXGroup;
+			children = (
+				667617D31A7EB9AC00C0B447 /* JRSwizzle.h */,
+				667617D41A7EB9AC00C0B447 /* JRSwizzle.m */,
+				667617B71A7EB73A00C0B447 /* UIBezierPathProperties.h */,
+				667617B81A7EB73A00C0B447 /* UIBezierPathProperties.m */,
+				667617FA1A7EC5D400C0B447 /* UIBezierPath+FirstLast.h */,
+				667617FB1A7EC5D400C0B447 /* UIBezierPath+FirstLast.m */,
+				667617BF1A7EB79F00C0B447 /* UIBezierPath+NSOSX_Private.h */,
+				667617F51A7EC58700C0B447 /* UIBezierPath+Performance_Private.h */,
+			);
+			name = Protected;
+			sourceTree = "<group>";
+		};
+		6682FF241A8DBACF00187325 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6682FF251A8DBACF00187325 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		66B9D2831A8D5FDE00CAC341 /* PerformanceBezier */ = {
+			isa = PBXGroup;
+			children = (
+				667617AF1A7EB5CB00C0B447 /* PerformanceBezier.h */,
+				667617DB1A7EB9B000C0B447 /* Protected */,
+				667617B61A7EB72F00C0B447 /* Categories */,
+			);
+			path = PerformanceBezier;
+			sourceTree = "<group>";
+		};
+		66B9D2901A8D5FDF00CAC341 /* PerformanceBezierTests */ = {
+			isa = PBXGroup;
+			children = (
+				66D4021E1A7EDACA00043802 /* PerformanceBezierAbstractTest.h */,
+				66D4021F1A7EDACA00043802 /* PerformanceBezierAbstractTest.m */,
+				66D4021C1A7EDA9000043802 /* PerformanceBezierClockwiseTests.m */,
+				66B9D2911A8D5FDF00CAC341 /* Supporting Files */,
+			);
+			path = PerformanceBezierTests;
+			sourceTree = "<group>";
+		};
+		66B9D2911A8D5FDF00CAC341 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				66B9D2921A8D5FDF00CAC341 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		66F2EBE51A8DC05100D536E9 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				66F2EBEA1A8DC05100D536E9 /* PerformanceBezier-Info.plist */,
+				66F2EBE71A8DC05100D536E9 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			path = PerformanceBezier;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		66F2EBDF1A8DC05100D536E9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66F2EC0C1A8DC16B00D536E9 /* PerformanceBezier.h in Headers */,
+				66F2EC001A8DC15600D536E9 /* UIBezierPath+Uncached.h in Headers */,
+				66F2EC0B1A8DC16900D536E9 /* JRSwizzle.h in Headers */,
+				66F2EC011A8DC15800D536E9 /* UIBezierPath+Performance.h in Headers */,
+				66F2EC0A1A8DC16800D536E9 /* UIBezierPathProperties.h in Headers */,
+				66F2EC041A8DC15E00D536E9 /* UIBezierPath+Equals.h in Headers */,
+				66F2EC061A8DC16100D536E9 /* UIBezierPath+Center.h in Headers */,
+				66F2EC091A8DC16600D536E9 /* UIBezierPath+FirstLast.h in Headers */,
+				66F2EC051A8DC16000D536E9 /* UIBezierPath+Clockwise.h in Headers */,
+				66AB566C1B0D9830005E6FB1 /* UIBezierPath+Util.h in Headers */,
+				66D1B7971AFEAC6F00210262 /* UIBezierPath+Trim.h in Headers */,
+				66F2EC031A8DC15B00D536E9 /* UIBezierPath+Description.h in Headers */,
+				66F2EC021A8DC15A00D536E9 /* UIBezierPath+NSOSX.h in Headers */,
+				66F2EC071A8DC16300D536E9 /* UIBezierPath+Performance_Private.h in Headers */,
+				66F2EC081A8DC16500D536E9 /* UIBezierPath+NSOSX_Private.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		66B9D28B1A8D5FDE00CAC341 /* PerformanceBezierTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66B9D2961A8D5FDF00CAC341 /* Build configuration list for PBXNativeTarget "PerformanceBezierTests" */;
+			buildPhases = (
+				66B9D2881A8D5FDE00CAC341 /* Sources */,
+				66B9D2891A8D5FDE00CAC341 /* Frameworks */,
+				66B9D28A1A8D5FDE00CAC341 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6617530F1A8DC8300051D5CB /* PBXTargetDependency */,
+			);
+			name = PerformanceBezierTests;
+			productName = PerformanceBezierTests;
+			productReference = 66B9D28C1A8D5FDE00CAC341 /* PerformanceBezierTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		66F2EBE21A8DC05100D536E9 /* PerformanceBezier */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66F2EBF01A8DC05100D536E9 /* Build configuration list for PBXNativeTarget "PerformanceBezier" */;
+			buildPhases = (
+				66F2EBF31A8DC05E00D536E9 /* Prepare Build Script */,
+				66F2EBDD1A8DC05100D536E9 /* Sources */,
+				66F2EBDE1A8DC05100D536E9 /* Frameworks */,
+				66F2EBDF1A8DC05100D536E9 /* Headers */,
+				66F2EBE01A8DC05100D536E9 /* Resources */,
+				66F2EBF41A8DC0AB00D536E9 /* Process Headers Script */,
+				66F2EBF51A8DC0CD00D536E9 /* Build Framework Script */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PerformanceBezier;
+			productName = PerformanceBezier;
+			productReference = 66F2EBE31A8DC05100D536E9 /* PerformanceBezier.framework */;
+			productType = "com.apple.product-type.framework.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		661B30C91A7EB43A008549C7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = MM;
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = "Milestone Made";
+				TargetAttributes = {
+					66B9D28B1A8D5FDE00CAC341 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					66F2EBE21A8DC05100D536E9 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 661B30CC1A7EB43A008549C7 /* Build configuration list for PBXProject "PerformanceBezier" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 661B30C81A7EB43A008549C7;
+			productRefGroup = 667617871A7EB50A00C0B447 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				66F2EBE21A8DC05100D536E9 /* PerformanceBezier */,
+				66B9D28B1A8D5FDE00CAC341 /* PerformanceBezierTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		66B9D28A1A8D5FDE00CAC341 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66F2EBE01A8DC05100D536E9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66F2EC0D1A8DC22000D536E9 /* PerformanceBezier-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		66F2EBF31A8DC05E00D536E9 /* Prepare Build Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Prepare Build Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nset +u\nif [[ $UFW_MASTER_SCRIPT_RUNNING ]]\nthen\n# Nothing for the slave script to do\nexit 0\nfi\nset -u\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nUFW_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nUFW_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version  from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$UFW_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nUFW_OTHER_PLATFORM=iphonesimulator\nelse\nUFW_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$UFW_SDK_PLATFORM$ ]]\nthen\nUFW_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${UFW_OTHER_PLATFORM}\"\nelse\necho \"Could not find $UFW_SDK_PLATFORM in $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\nONLY_ACTIVE_PLATFORM=${ONLY_ACTIVE_PLATFORM:-$ONLY_ACTIVE_ARCH}\n\n# Short-circuit if all binaries are up to date\n\nif [[ -f \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" ]] && \\\n[[ -f \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/${EXECUTABLE_PATH}\" ]] && \\\n[[ ! \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" -nt \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/${EXECUTABLE_PATH}\" ]] && \\\n([[ \"${ONLY_ACTIVE_PLATFORM}\" == \"YES\" ]] || \\\n([[ -f \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" ]] && \\\n[[ -f \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/${EXECUTABLE_PATH}\" ]] && \\\n[[ ! \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" -nt \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/${EXECUTABLE_PATH}\" ]]\n)\n)\nthen\nexit 0\nfi\n\n\n# Clean other platform if needed\n\nif [[ ! -f \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" ]] && [[ \"${ONLY_ACTIVE_PLATFORM}\" != \"YES\" ]]\nthen\necho \"Platform \\\"$UFW_SDK_PLATFORM\\\" was cleaned recently. Cleaning \\\"$UFW_OTHER_PLATFORM\\\" as well\"\necho xcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${UFW_OTHER_PLATFORM}${UFW_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" CONFIGURATION_TEMP_DIR=\"${PROJECT_TEMP_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\" clean\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${UFW_OTHER_PLATFORM}${UFW_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" CONFIGURATION_TEMP_DIR=\"${PROJECT_TEMP_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\" clean\nfi\n\n\n# Make sure we are building from fresh binaries\n\nrm -rf \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\"\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework\"\n\nif [[ \"${ONLY_ACTIVE_PLATFORM}\" != \"YES\" ]]\nthen\nrm -rf \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\"\nrm -rf \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework\"\nfi\n";
+		};
+		66F2EBF41A8DC0AB00D536E9 /* Process Headers Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Process Headers Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nHEADERS_ROOT=$SRCROOT/$PRODUCT_NAME\nFRAMEWORK_HEADERS_DIR=\"$BUILT_PRODUCTS_DIR/$WRAPPER_NAME/Versions/$FRAMEWORK_VERSION/Headers\"\n\n## only header files expected at this point\nPUBLIC_HEADERS=$(find $FRAMEWORK_HEADERS_DIR/. -not -type d 2> /dev/null | sed -e \"s@.*/@@g\")\n\nFIND_OPTS=\"\"\nfor PUBLIC_HEADER in $PUBLIC_HEADERS; do\nif [ -n \"$FIND_OPTS\" ]; then\nFIND_OPTS=\"$FIND_OPTS -o\"\nfi\nFIND_OPTS=\"$FIND_OPTS -name '$PUBLIC_HEADER'\"\ndone\n\nif [ -n \"$FIND_OPTS\" ]; then\nfor ORIG_HEADER in $(eval \"find $HEADERS_ROOT/. $FIND_OPTS\" 2> /dev/null | sed -e \"s@^$HEADERS_ROOT/./@@g\"); do\nPUBLIC_HEADER=$(basename $ORIG_HEADER)\nRELATIVE_PATH=$(dirname $ORIG_HEADER)\nif [ -e $FRAMEWORK_HEADERS_DIR/$PUBLIC_HEADER ]; then\nmkdir -p \"$FRAMEWORK_HEADERS_DIR/$RELATIVE_PATH\"\nmv \"$FRAMEWORK_HEADERS_DIR/$PUBLIC_HEADER\" \"$FRAMEWORK_HEADERS_DIR/$RELATIVE_PATH/$PUBLIC_HEADER\"\nfi\ndone\nfi\n";
+		};
+		66F2EBF51A8DC0CD00D536E9 /* Build Framework Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Framework Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nset -e\n\nset +u\nif [[ $UFW_MASTER_SCRIPT_RUNNING ]]\nthen\n# Nothing for the slave script to do\nexit 0\nfi\nset -u\nexport UFW_MASTER_SCRIPT_RUNNING=1\n\n\n# Functions\n\n## List files in the specified directory, storing to the specified array.\n#\n# @param $1 The path to list\n# @param $2 The name of the array to fill\n#\n##\nlist_files ()\n{\n    filelist=$(ls \"$1\")\n    while read line\n    do\n    eval \"$2[\\${#$2[*]}]=\\\"\\$line\\\"\"\n    done <<< \"$filelist\"\n}\n\n\n# Sanity check\n\nif [[ ! -f \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" ]]\nthen\necho \"Framework target \\\"${TARGET_NAME}\\\" had no source files to build from. Make sure your source files have the correct target membership\"\nexit 1\nfi\n\necho \"Target Executable: ${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\"\n\n\n# Gather information\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nUFW_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nUFW_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$UFW_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nUFW_OTHER_PLATFORM=iphonesimulator\nelse\nUFW_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$UFW_SDK_PLATFORM$ ]]\nthen\nUFW_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${UFW_OTHER_PLATFORM}\"\nelse\necho \"Could not find $UFW_SDK_PLATFORM in $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\nONLY_ACTIVE_PLATFORM=${ONLY_ACTIVE_PLATFORM:-$ONLY_ACTIVE_ARCH}\n\n# Short-circuit if all binaries are up to date.\n# We already checked the other platform in the prerun script.\n\nif [[ -f \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\" ]] && [[ -f \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/${PRODUCT_NAME}\" ]] && [[ ! \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\" -nt \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/${PRODUCT_NAME}\" ]]\nthen\nexit 0\nfi\n\nif [ \"${ONLY_ACTIVE_PLATFORM}\" == \"YES\" ]\nthen\necho \"ONLY_ACTIVE_PLATFORM=${ONLY_ACTIVE_PLATFORM}: Skipping other platform build\"\nelse\n# Make sure the other platform gets built\n\necho \"Build other platform\"\n\necho xcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${UFW_OTHER_PLATFORM}${UFW_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" CONFIGURATION_TEMP_DIR=\"${PROJECT_TEMP_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\" $ACTION\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${UFW_OTHER_PLATFORM}${UFW_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" CONFIGURATION_TEMP_DIR=\"${PROJECT_TEMP_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\" $ACTION\n\n\n# Build the fat static library binary\n\necho \"Create universal static library\"\n\necho \"$PLATFORM_DEVELOPER_BIN_DIR/libtool\" -static \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" -o \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}.temp\"\n\"$PLATFORM_DEVELOPER_BIN_DIR/libtool\" -static \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" -o \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}.temp\"\n\necho mv \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}.temp\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}\"\nmv \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}.temp\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}\"\nfi\n\n# Move executable to product name location\n\necho \"Moving Executable\"\necho \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\"\necho \"to\"\necho \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\nmv \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# Build embedded framework structure\n\necho \"Build Embedded Framework\"\n\necho rm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework\"\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework\"\necho mkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/Resources\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/Resources\"\necho cp -a \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/\"\ncp -a \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/\"\n\ndeclare -a UFW_FILE_LIST\nlist_files \"${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\" UFW_FILE_LIST\nfor filename in \"${UFW_FILE_LIST[@]}\"\ndo\nif [[ \"${filename}\" != \"Info.plist\" ]] && [[ ! \"${filename}\" =~ .*\\.lproj$ ]]\nthen\necho ln -sfh \"../${WRAPPER_NAME}/Resources/${filename}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/Resources/${filename}\"\nln -sfh \"../${WRAPPER_NAME}/Resources/${filename}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/Resources/${filename}\"\nfi\ndone\n\n\nif [ \"${ONLY_ACTIVE_PLATFORM}\" != \"YES\" ]\nthen\n# Replace other platform's framework with a copy of this one (so that both have the same universal binary)\n\necho \"Copy from $UFW_SDK_PLATFORM to $UFW_OTHER_PLATFORM\"\n\necho rm -rf \"${BUILD_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\"\nrm -rf \"${BUILD_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\"\necho cp -a \"${BUILD_DIR}/${CONFIGURATION}-${UFW_SDK_PLATFORM}\" \"${BUILD_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\"\ncp -a \"${BUILD_DIR}/${CONFIGURATION}-${UFW_SDK_PLATFORM}\" \"${BUILD_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		66B9D2881A8D5FDE00CAC341 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66B9D2A61A8D609200CAC341 /* PerformanceBezierAbstractTest.m in Sources */,
+				66B9D2A71A8D609300CAC341 /* PerformanceBezierClockwiseTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66F2EBDD1A8DC05100D536E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66F2EBF61A8DC12600D536E9 /* UIBezierPath+Center.m in Sources */,
+				66F2EBF71A8DC12800D536E9 /* UIBezierPath+Clockwise.m in Sources */,
+				66F2EBFD1A8DC13D00D536E9 /* UIBezierPath+FirstLast.m in Sources */,
+				66F2EBFC1A8DC13900D536E9 /* UIBezierPath+Uncached.m in Sources */,
+				66F2EBFF1A8DC14100D536E9 /* JRSwizzle.m in Sources */,
+				66F2EBFB1A8DC13700D536E9 /* UIBezierPath+Performance.m in Sources */,
+				66F2EBFE1A8DC13F00D536E9 /* UIBezierPathProperties.m in Sources */,
+				66AB566D1B0D9830005E6FB1 /* UIBezierPath+Util.m in Sources */,
+				66F2EBF91A8DC13300D536E9 /* UIBezierPath+Description.m in Sources */,
+				66F2EBFA1A8DC13500D536E9 /* UIBezierPath+NSOSX.m in Sources */,
+				66F2EBF81A8DC13100D536E9 /* UIBezierPath+Equals.m in Sources */,
+				66D1B7981AFEAC6F00210262 /* UIBezierPath+Trim.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6617530F1A8DC8300051D5CB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 66F2EBE21A8DC05100D536E9 /* PerformanceBezier */;
+			targetProxy = 6617530E1A8DC8300051D5CB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		661B30CD1A7EB43A008549C7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = "non-global";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		661B30CE1A7EB43A008549C7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = "non-global";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		66B9D2971A8D5FDF00CAC341 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(BUILT_PRODUCTS_DIR)/**",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = PerformanceBezierTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC++",
+					"-lstdc++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		66B9D2981A8D5FDF00CAC341 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(BUILT_PRODUCTS_DIR)/**",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = PerformanceBezierTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC++",
+					"-lstdc++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		66F2EBF11A8DC05100D536E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = PerformanceBezier/Info.plist;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_PLATFORM = YES;
+				OTHER_LDFLAGS = "-ObjC++";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		66F2EBF21A8DC05100D536E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = PerformanceBezier/Info.plist;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_PLATFORM = YES;
+				OTHER_LDFLAGS = "-ObjC++";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		661B30CC1A7EB43A008549C7 /* Build configuration list for PBXProject "PerformanceBezier" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				661B30CD1A7EB43A008549C7 /* Debug */,
+				661B30CE1A7EB43A008549C7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66B9D2961A8D5FDF00CAC341 /* Build configuration list for PBXNativeTarget "PerformanceBezierTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66B9D2971A8D5FDF00CAC341 /* Debug */,
+				66B9D2981A8D5FDF00CAC341 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66F2EBF01A8DC05100D536E9 /* Build configuration list for PBXNativeTarget "PerformanceBezier" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66F2EBF11A8DC05100D536E9 /* Debug */,
+				66F2EBF21A8DC05100D536E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 661B30C91A7EB43A008549C7 /* Project object */;
+}

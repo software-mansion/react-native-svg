@@ -1,5 +1,5 @@
 {
-    "version": "6.0.1-rc.0",
+    "version": "6.0.1-rc.1",
     "name": "react-native-svg",
     "description": "SVG library for react-native",
     "repository": {
@@ -20,7 +20,7 @@
     ],
     "scripts": {
         "lint": "eslint ./",
-        "postinstall" : "node scripts/install.js"
+        "postinstall": "node scripts/install.js"
     },
     "peerDependencies": {
         "react-native": ">=0.50.0",

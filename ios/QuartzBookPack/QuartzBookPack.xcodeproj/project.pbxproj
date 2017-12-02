@@ -1,0 +1,589 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6617530D1A8DC45A0051D5CB /* QuartzBookPack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F2EBE31A8DC05100D536E9 /* QuartzBookPack.framework */; };
+		66F2EBE41A8DC05100D536E9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6682FF251A8DBACF00187325 /* Foundation.framework */; };
+		7F575A941FB20C4F00B9EBC6 /* Drawing-Text.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A761FB20C4F00B9EBC6 /* Drawing-Text.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575A951FB20C4F00B9EBC6 /* Drawing-Text.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F575A771FB20C4F00B9EBC6 /* Drawing-Text.m */; };
+		7F575A961FB20C4F00B9EBC6 /* UIBezierPath+Text.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A781FB20C4F00B9EBC6 /* UIBezierPath+Text.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575A971FB20C4F00B9EBC6 /* UIBezierPath+Text.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F575A791FB20C4F00B9EBC6 /* UIBezierPath+Text.m */; };
+		7F575A981FB20C4F00B9EBC6 /* Utility.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A7B1FB20C4F00B9EBC6 /* Utility.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575A991FB20C4F00B9EBC6 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F575A7C1FB20C4F00B9EBC6 /* Utility.m */; };
+		7F575A9A1FB20C4F00B9EBC6 /* ImageUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A7E1FB20C4F00B9EBC6 /* ImageUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575A9B1FB20C4F00B9EBC6 /* ImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F575A7F1FB20C4F00B9EBC6 /* ImageUtils.m */; };
+		7F575A9C1FB20C4F00B9EBC6 /* Bezier.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A811FB20C4F00B9EBC6 /* Bezier.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575A9D1FB20C4F00B9EBC6 /* BezierElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A821FB20C4F00B9EBC6 /* BezierElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575A9E1FB20C4F00B9EBC6 /* BezierElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F575A831FB20C4F00B9EBC6 /* BezierElement.m */; };
+		7F575A9F1FB20C4F00B9EBC6 /* BezierFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A841FB20C4F00B9EBC6 /* BezierFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575AA01FB20C4F00B9EBC6 /* BezierFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F575A851FB20C4F00B9EBC6 /* BezierFunctions.m */; };
+		7F575AA11FB20C4F00B9EBC6 /* BezierUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A861FB20C4F00B9EBC6 /* BezierUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575AA21FB20C4F00B9EBC6 /* BezierUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F575A871FB20C4F00B9EBC6 /* BezierUtils.m */; };
+		7F575AA31FB20C4F00B9EBC6 /* UIBezierPath+Elements.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A881FB20C4F00B9EBC6 /* UIBezierPath+Elements.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575AA41FB20C4F00B9EBC6 /* UIBezierPath+Elements.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F575A891FB20C4F00B9EBC6 /* UIBezierPath+Elements.m */; };
+		7F575AA51FB20C4F00B9EBC6 /* Drawing-Block.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A8B1FB20C4F00B9EBC6 /* Drawing-Block.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575AA61FB20C4F00B9EBC6 /* Drawing-Block.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F575A8C1FB20C4F00B9EBC6 /* Drawing-Block.m */; };
+		7F575AA71FB20C4F00B9EBC6 /* Drawing-Gradient.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A8D1FB20C4F00B9EBC6 /* Drawing-Gradient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575AA81FB20C4F00B9EBC6 /* Drawing-Gradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F575A8E1FB20C4F00B9EBC6 /* Drawing-Gradient.m */; };
+		7F575AA91FB20C4F00B9EBC6 /* Drawing-Util.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A8F1FB20C4F00B9EBC6 /* Drawing-Util.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575AAA1FB20C4F00B9EBC6 /* Drawing-Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F575A901FB20C4F00B9EBC6 /* Drawing-Util.m */; };
+		7F575AAB1FB20C4F00B9EBC6 /* BaseGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F575A921FB20C4F00B9EBC6 /* BaseGeometry.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F575AAC1FB20C4F00B9EBC6 /* BaseGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F575A931FB20C4F00B9EBC6 /* BaseGeometry.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6617530E1A8DC8300051D5CB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 661B30C91A7EB43A008549C7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 66F2EBE21A8DC05100D536E9;
+			remoteInfo = QuartzBookPack;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		660E0FDB1A80226100F19D8A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		6682FF251A8DBACF00187325 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		66B9D28C1A8D5FDE00CAC341 /* QuartzBookPackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuartzBookPackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		66F2EBE31A8DC05100D536E9 /* QuartzBookPack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = QuartzBookPack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F575A761FB20C4F00B9EBC6 /* Drawing-Text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Drawing-Text.h"; sourceTree = "<group>"; };
+		7F575A771FB20C4F00B9EBC6 /* Drawing-Text.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Drawing-Text.m"; sourceTree = "<group>"; };
+		7F575A781FB20C4F00B9EBC6 /* UIBezierPath+Text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Text.h"; sourceTree = "<group>"; };
+		7F575A791FB20C4F00B9EBC6 /* UIBezierPath+Text.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Text.m"; sourceTree = "<group>"; };
+		7F575A7B1FB20C4F00B9EBC6 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
+		7F575A7C1FB20C4F00B9EBC6 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
+		7F575A7E1FB20C4F00B9EBC6 /* ImageUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtils.h; sourceTree = "<group>"; };
+		7F575A7F1FB20C4F00B9EBC6 /* ImageUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtils.m; sourceTree = "<group>"; };
+		7F575A811FB20C4F00B9EBC6 /* Bezier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bezier.h; sourceTree = "<group>"; };
+		7F575A821FB20C4F00B9EBC6 /* BezierElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierElement.h; sourceTree = "<group>"; };
+		7F575A831FB20C4F00B9EBC6 /* BezierElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BezierElement.m; sourceTree = "<group>"; };
+		7F575A841FB20C4F00B9EBC6 /* BezierFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierFunctions.h; sourceTree = "<group>"; };
+		7F575A851FB20C4F00B9EBC6 /* BezierFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BezierFunctions.m; sourceTree = "<group>"; };
+		7F575A861FB20C4F00B9EBC6 /* BezierUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierUtils.h; sourceTree = "<group>"; };
+		7F575A871FB20C4F00B9EBC6 /* BezierUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BezierUtils.m; sourceTree = "<group>"; };
+		7F575A881FB20C4F00B9EBC6 /* UIBezierPath+Elements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Elements.h"; sourceTree = "<group>"; };
+		7F575A891FB20C4F00B9EBC6 /* UIBezierPath+Elements.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Elements.m"; sourceTree = "<group>"; };
+		7F575A8B1FB20C4F00B9EBC6 /* Drawing-Block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Drawing-Block.h"; sourceTree = "<group>"; };
+		7F575A8C1FB20C4F00B9EBC6 /* Drawing-Block.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Drawing-Block.m"; sourceTree = "<group>"; };
+		7F575A8D1FB20C4F00B9EBC6 /* Drawing-Gradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Drawing-Gradient.h"; sourceTree = "<group>"; };
+		7F575A8E1FB20C4F00B9EBC6 /* Drawing-Gradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Drawing-Gradient.m"; sourceTree = "<group>"; };
+		7F575A8F1FB20C4F00B9EBC6 /* Drawing-Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Drawing-Util.h"; sourceTree = "<group>"; };
+		7F575A901FB20C4F00B9EBC6 /* Drawing-Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Drawing-Util.m"; sourceTree = "<group>"; };
+		7F575A921FB20C4F00B9EBC6 /* BaseGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseGeometry.h; sourceTree = "<group>"; };
+		7F575A931FB20C4F00B9EBC6 /* BaseGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseGeometry.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		66B9D2891A8D5FDE00CAC341 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6617530D1A8DC45A0051D5CB /* QuartzBookPack.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66F2EBDE1A8DC05100D536E9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66F2EBE41A8DC05100D536E9 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		661B30C81A7EB43A008549C7 = {
+			isa = PBXGroup;
+			children = (
+				7F575A801FB20C4F00B9EBC6 /* Bezier */,
+				7F575A8A1FB20C4F00B9EBC6 /* Drawing */,
+				7F575A911FB20C4F00B9EBC6 /* Geometry */,
+				7F575A7D1FB20C4F00B9EBC6 /* Image */,
+				7F575A751FB20C4F00B9EBC6 /* TextDrawing */,
+				7F575A7A1FB20C4F00B9EBC6 /* Utility */,
+				660E0FDB1A80226100F19D8A /* README.md */,
+				6682FF241A8DBACF00187325 /* Frameworks */,
+				667617871A7EB50A00C0B447 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		667617871A7EB50A00C0B447 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				66B9D28C1A8D5FDE00CAC341 /* QuartzBookPackTests.xctest */,
+				66F2EBE31A8DC05100D536E9 /* QuartzBookPack.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6682FF241A8DBACF00187325 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6682FF251A8DBACF00187325 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7F575A751FB20C4F00B9EBC6 /* TextDrawing */ = {
+			isa = PBXGroup;
+			children = (
+				7F575A761FB20C4F00B9EBC6 /* Drawing-Text.h */,
+				7F575A771FB20C4F00B9EBC6 /* Drawing-Text.m */,
+				7F575A781FB20C4F00B9EBC6 /* UIBezierPath+Text.h */,
+				7F575A791FB20C4F00B9EBC6 /* UIBezierPath+Text.m */,
+			);
+			path = TextDrawing;
+			sourceTree = "<group>";
+		};
+		7F575A7A1FB20C4F00B9EBC6 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				7F575A7B1FB20C4F00B9EBC6 /* Utility.h */,
+				7F575A7C1FB20C4F00B9EBC6 /* Utility.m */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		7F575A7D1FB20C4F00B9EBC6 /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				7F575A7E1FB20C4F00B9EBC6 /* ImageUtils.h */,
+				7F575A7F1FB20C4F00B9EBC6 /* ImageUtils.m */,
+			);
+			path = Image;
+			sourceTree = "<group>";
+		};
+		7F575A801FB20C4F00B9EBC6 /* Bezier */ = {
+			isa = PBXGroup;
+			children = (
+				7F575A811FB20C4F00B9EBC6 /* Bezier.h */,
+				7F575A821FB20C4F00B9EBC6 /* BezierElement.h */,
+				7F575A831FB20C4F00B9EBC6 /* BezierElement.m */,
+				7F575A841FB20C4F00B9EBC6 /* BezierFunctions.h */,
+				7F575A851FB20C4F00B9EBC6 /* BezierFunctions.m */,
+				7F575A861FB20C4F00B9EBC6 /* BezierUtils.h */,
+				7F575A871FB20C4F00B9EBC6 /* BezierUtils.m */,
+				7F575A881FB20C4F00B9EBC6 /* UIBezierPath+Elements.h */,
+				7F575A891FB20C4F00B9EBC6 /* UIBezierPath+Elements.m */,
+			);
+			path = Bezier;
+			sourceTree = "<group>";
+		};
+		7F575A8A1FB20C4F00B9EBC6 /* Drawing */ = {
+			isa = PBXGroup;
+			children = (
+				7F575A8B1FB20C4F00B9EBC6 /* Drawing-Block.h */,
+				7F575A8C1FB20C4F00B9EBC6 /* Drawing-Block.m */,
+				7F575A8D1FB20C4F00B9EBC6 /* Drawing-Gradient.h */,
+				7F575A8E1FB20C4F00B9EBC6 /* Drawing-Gradient.m */,
+				7F575A8F1FB20C4F00B9EBC6 /* Drawing-Util.h */,
+				7F575A901FB20C4F00B9EBC6 /* Drawing-Util.m */,
+			);
+			path = Drawing;
+			sourceTree = "<group>";
+		};
+		7F575A911FB20C4F00B9EBC6 /* Geometry */ = {
+			isa = PBXGroup;
+			children = (
+				7F575A921FB20C4F00B9EBC6 /* BaseGeometry.h */,
+				7F575A931FB20C4F00B9EBC6 /* BaseGeometry.m */,
+			);
+			path = Geometry;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		66F2EBDF1A8DC05100D536E9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F575A9F1FB20C4F00B9EBC6 /* BezierFunctions.h in Headers */,
+				7F575A941FB20C4F00B9EBC6 /* Drawing-Text.h in Headers */,
+				7F575A981FB20C4F00B9EBC6 /* Utility.h in Headers */,
+				7F575AAB1FB20C4F00B9EBC6 /* BaseGeometry.h in Headers */,
+				7F575A9D1FB20C4F00B9EBC6 /* BezierElement.h in Headers */,
+				7F575A9A1FB20C4F00B9EBC6 /* ImageUtils.h in Headers */,
+				7F575AA11FB20C4F00B9EBC6 /* BezierUtils.h in Headers */,
+				7F575A961FB20C4F00B9EBC6 /* UIBezierPath+Text.h in Headers */,
+				7F575AA91FB20C4F00B9EBC6 /* Drawing-Util.h in Headers */,
+				7F575AA71FB20C4F00B9EBC6 /* Drawing-Gradient.h in Headers */,
+				7F575A9C1FB20C4F00B9EBC6 /* Bezier.h in Headers */,
+				7F575AA31FB20C4F00B9EBC6 /* UIBezierPath+Elements.h in Headers */,
+				7F575AA51FB20C4F00B9EBC6 /* Drawing-Block.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		66B9D28B1A8D5FDE00CAC341 /* QuartzBookPackTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66B9D2961A8D5FDF00CAC341 /* Build configuration list for PBXNativeTarget "QuartzBookPackTests" */;
+			buildPhases = (
+				66B9D2881A8D5FDE00CAC341 /* Sources */,
+				66B9D2891A8D5FDE00CAC341 /* Frameworks */,
+				66B9D28A1A8D5FDE00CAC341 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6617530F1A8DC8300051D5CB /* PBXTargetDependency */,
+			);
+			name = QuartzBookPackTests;
+			productName = QuartzBookPackTests;
+			productReference = 66B9D28C1A8D5FDE00CAC341 /* QuartzBookPackTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		66F2EBE21A8DC05100D536E9 /* QuartzBookPack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66F2EBF01A8DC05100D536E9 /* Build configuration list for PBXNativeTarget "QuartzBookPack" */;
+			buildPhases = (
+				66F2EBDD1A8DC05100D536E9 /* Sources */,
+				66F2EBDE1A8DC05100D536E9 /* Frameworks */,
+				66F2EBDF1A8DC05100D536E9 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QuartzBookPack;
+			productName = QuartzBookPack;
+			productReference = 66F2EBE31A8DC05100D536E9 /* QuartzBookPack.framework */;
+			productType = "com.apple.product-type.framework.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		661B30C91A7EB43A008549C7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = MM;
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = "Milestone Made";
+				TargetAttributes = {
+					66B9D28B1A8D5FDE00CAC341 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					66F2EBE21A8DC05100D536E9 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 661B30CC1A7EB43A008549C7 /* Build configuration list for PBXProject "QuartzBookPack" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 661B30C81A7EB43A008549C7;
+			productRefGroup = 667617871A7EB50A00C0B447 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				66F2EBE21A8DC05100D536E9 /* QuartzBookPack */,
+				66B9D28B1A8D5FDE00CAC341 /* QuartzBookPackTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		66B9D28A1A8D5FDE00CAC341 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		66B9D2881A8D5FDE00CAC341 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66F2EBDD1A8DC05100D536E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F575A971FB20C4F00B9EBC6 /* UIBezierPath+Text.m in Sources */,
+				7F575A991FB20C4F00B9EBC6 /* Utility.m in Sources */,
+				7F575AA01FB20C4F00B9EBC6 /* BezierFunctions.m in Sources */,
+				7F575A951FB20C4F00B9EBC6 /* Drawing-Text.m in Sources */,
+				7F575AA81FB20C4F00B9EBC6 /* Drawing-Gradient.m in Sources */,
+				7F575A9B1FB20C4F00B9EBC6 /* ImageUtils.m in Sources */,
+				7F575AAA1FB20C4F00B9EBC6 /* Drawing-Util.m in Sources */,
+				7F575AA21FB20C4F00B9EBC6 /* BezierUtils.m in Sources */,
+				7F575AAC1FB20C4F00B9EBC6 /* BaseGeometry.m in Sources */,
+				7F575AA41FB20C4F00B9EBC6 /* UIBezierPath+Elements.m in Sources */,
+				7F575AA61FB20C4F00B9EBC6 /* Drawing-Block.m in Sources */,
+				7F575A9E1FB20C4F00B9EBC6 /* BezierElement.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6617530F1A8DC8300051D5CB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 66F2EBE21A8DC05100D536E9 /* QuartzBookPack */;
+			targetProxy = 6617530E1A8DC8300051D5CB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		661B30CD1A7EB43A008549C7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = "non-global";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		661B30CE1A7EB43A008549C7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = "non-global";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		66B9D2971A8D5FDF00CAC341 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(BUILT_PRODUCTS_DIR)/**",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = QuartzBookPackTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC++",
+					"-lstdc++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		66B9D2981A8D5FDF00CAC341 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(BUILT_PRODUCTS_DIR)/**",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = QuartzBookPackTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC++",
+					"-lstdc++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		66F2EBF11A8DC05100D536E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = QuartzBookPack/Info.plist;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_PLATFORM = YES;
+				OTHER_LDFLAGS = "-ObjC++";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		66F2EBF21A8DC05100D536E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = QuartzBookPack/Info.plist;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_PLATFORM = YES;
+				OTHER_LDFLAGS = "-ObjC++";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		661B30CC1A7EB43A008549C7 /* Build configuration list for PBXProject "QuartzBookPack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				661B30CD1A7EB43A008549C7 /* Debug */,
+				661B30CE1A7EB43A008549C7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66B9D2961A8D5FDF00CAC341 /* Build configuration list for PBXNativeTarget "QuartzBookPackTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66B9D2971A8D5FDF00CAC341 /* Debug */,
+				66B9D2981A8D5FDF00CAC341 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66F2EBF01A8DC05100D536E9 /* Build configuration list for PBXNativeTarget "QuartzBookPack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66F2EBF11A8DC05100D536E9 /* Debug */,
+				66F2EBF21A8DC05100D536E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 661B30C91A7EB43A008549C7 /* Project object */;
+}
