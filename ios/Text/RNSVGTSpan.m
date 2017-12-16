@@ -12,6 +12,8 @@
 #import "RNSVGTextPath.h"
 #import "FontData.h"
 
+NSCharacterSet *separators = nil;
+
 @implementation RNSVGTSpan
 {
     CGFloat startOffset;
@@ -21,6 +23,17 @@
     RNSVGTextPath * textPath;
     RNSVGPath * textPathPath;
     bool isClosed;
+}
+
+- (id)init
+{
+    self = [super init];
+
+    if (separators == nil) {
+        separators = [NSCharacterSet whitespaceCharacterSet];
+    }
+
+    return self;
 }
 
 - (void)setContent:(NSString *)content
@@ -517,8 +530,8 @@
         double totalHeight = top + bottom;
         double baselineShift = 0;
         // TODO, alignmentBaseline and baselineShift are always nil for some reason?
-        NSString *baselineShiftString = [self baselineShift];
-        enum AlignmentBaseline baseline = AlignmentBaselineFromString([self alignmentBaseline]);
+        NSString *baselineShiftString = [self getBaselineShift];
+        enum AlignmentBaseline baseline = AlignmentBaselineFromString([self getAlignmentBaseline]);
         if (baseline != AlignmentBaselineBaseline) {
             // TODO alignment-baseline, test / verify behavior
             // TODO get per glyph baselines from font baseline table, for high-precision alignment
@@ -602,72 +615,72 @@
                     baselineShift = top;
                     break;
             }
-            /*
-             2.2.2. Alignment Shift: baseline-shift longhand
+        }
+        /*
+         2.2.2. Alignment Shift: baseline-shift longhand
 
-             This property specifies by how much the box is shifted up from its alignment point.
-             It does not apply when alignment-baseline is top or bottom.
+         This property specifies by how much the box is shifted up from its alignment point.
+         It does not apply when alignment-baseline is top or bottom.
 
-             Authors should use the vertical-align shorthand instead of this property.
+         Authors should use the vertical-align shorthand instead of this property.
 
-             Values have the following meanings:
+         Values have the following meanings:
 
-             <length>
-             Raise (positive value) or lower (negative value) by the specified length.
-             <percentage>
-             Raise (positive value) or lower (negative value) by the specified percentage of the line-height.
-             TODO sub
-             Lower by the offset appropriate for subscripts of the parent’s box.
-             (The UA should use the parent’s font data to find this offset whenever possible.)
-             TODO super
-             Raise by the offset appropriate for superscripts of the parent’s box.
-             (The UA should use the parent’s font data to find this offset whenever possible.)
+         <length>
+         Raise (positive value) or lower (negative value) by the specified length.
+         <percentage>
+         Raise (positive value) or lower (negative value) by the specified percentage of the line-height.
+         TODO sub
+         Lower by the offset appropriate for subscripts of the parent’s box.
+         (The UA should use the parent’s font data to find this offset whenever possible.)
+         TODO super
+         Raise by the offset appropriate for superscripts of the parent’s box.
+         (The UA should use the parent’s font data to find this offset whenever possible.)
 
-             User agents may additionally support the keyword baseline as computing to 0
-             if is necessary for them to support legacy SVG content.
-             Issue: We would prefer to remove this,
-             and are looking for feedback from SVG user agents as to whether it’s necessary.
+         User agents may additionally support the keyword baseline as computing to 0
+         if is necessary for them to support legacy SVG content.
+         Issue: We would prefer to remove this,
+         and are looking for feedback from SVG user agents as to whether it’s necessary.
 
-             https://www.w3.org/TR/css-inline-3/#propdef-baseline-shift
-             */
-            if (baselineShiftString != nil && fontData != nil) {
-                switch (baseline) {
-                    case AlignmentBaselineTop:
-                    case AlignmentBaselineBottom:
-                        break;
+         https://www.w3.org/TR/css-inline-3/#propdef-baseline-shift
+         */
+        if (baselineShiftString != nil && ![baselineShiftString isEqualToString:@""]) {
+            switch (baseline) {
+                case AlignmentBaselineTop:
+                case AlignmentBaselineBottom:
+                    break;
 
-                    default:
-                        if ([baselineShiftString isEqualToString:@"sub"]) {
-                            // TODO
-                            NSDictionary* tables = [fontData objectForKey:@"tables"];
-                            NSNumber* unitsPerEm = [fontData objectForKey:@"unitsPerEm"];
-                            NSDictionary* os2 = [tables objectForKey:@"os2"];
-                            NSNumber* ySubscriptYOffset = [os2 objectForKey:@"ySubscriptYOffset"];
-                            if (ySubscriptYOffset) {
-                                double subOffset = [ySubscriptYOffset doubleValue];
-                                baselineShift += fontSize * subOffset / [unitsPerEm doubleValue];
-                            }
-                        } else if ([baselineShiftString isEqualToString:@"super"]) {
-                            // TODO
-                            NSDictionary* tables = [fontData objectForKey:@"tables"];
-                            NSNumber* unitsPerEm = [fontData objectForKey:@"unitsPerEm"];
-                            NSDictionary* os2 = [tables objectForKey:@"os2"];
-                            NSNumber* ySuperscriptYOffset = [os2 objectForKey:@"ySuperscriptYOffset"];
-                            if (ySuperscriptYOffset) {
-                                double superOffset = [ySuperscriptYOffset doubleValue];
-                                baselineShift -= fontSize * superOffset / [unitsPerEm doubleValue];
-                            }
-                        } else if ([baselineShiftString isEqualToString:@"baseline"]) {
-                        } else {
-                            baselineShift -= [PropHelper fromRelativeWithNSString:baselineShiftString
-                                                                         relative:fontSize
-                                                                           offset:0
-                                                                            scale:1
-                                                                         fontSize:fontSize];
-
+                default:
+                    if (fontData != nil && [baselineShiftString isEqualToString:@"sub"]) {
+                        // TODO
+                        NSDictionary* tables = [fontData objectForKey:@"tables"];
+                        NSNumber* unitsPerEm = [fontData objectForKey:@"unitsPerEm"];
+                        NSDictionary* os2 = [tables objectForKey:@"os2"];
+                        NSNumber* ySubscriptYOffset = [os2 objectForKey:@"ySubscriptYOffset"];
+                        if (ySubscriptYOffset) {
+                            double subOffset = [ySubscriptYOffset doubleValue];
+                            baselineShift += fontSize * subOffset / [unitsPerEm doubleValue];
                         }
-                        break;
-                }
+                    } else if (fontData != nil && [baselineShiftString isEqualToString:@"super"]) {
+                        // TODO
+                        NSDictionary* tables = [fontData objectForKey:@"tables"];
+                        NSNumber* unitsPerEm = [fontData objectForKey:@"unitsPerEm"];
+                        NSDictionary* os2 = [tables objectForKey:@"os2"];
+                        NSNumber* ySuperscriptYOffset = [os2 objectForKey:@"ySuperscriptYOffset"];
+                        if (ySuperscriptYOffset) {
+                            double superOffset = [ySuperscriptYOffset doubleValue];
+                            baselineShift -= fontSize * superOffset / [unitsPerEm doubleValue];
+                        }
+                    } else if ([baselineShiftString isEqualToString:@"baseline"]) {
+                    } else {
+                        baselineShift -= [PropHelper fromRelativeWithNSString:baselineShiftString
+                                                                     relative:fontSize
+                                                                       offset:0
+                                                                        scale:1
+                                                                     fontSize:fontSize];
+
+                    }
+                    break;
             }
         }
         int i = -1;
@@ -709,7 +722,8 @@
                 kerning = kerned - charWidth;
             }
 
-            bool isWordSeparator = false;
+            char currentChar = [str characterAtIndex:i];
+            bool isWordSeparator = [separators characterIsMember:currentChar];
             double wordSpace = isWordSeparator ? wordSpacing : 0;
             double spacing = wordSpace + letterSpacing;
             double advance = charWidth + spacing;

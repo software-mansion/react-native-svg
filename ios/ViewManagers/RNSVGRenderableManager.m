@@ -32,6 +32,5 @@ RCT_EXPORT_VIEW_PROPERTY(strokeDasharray, NSArray<NSString *>)
 RCT_EXPORT_VIEW_PROPERTY(strokeDashoffset, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(strokeMiterlimit, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(propList, NSArray<NSString *>)
-RCT_EXPORT_VIEW_PROPERTY(font, NSDictionary)
 
 @end

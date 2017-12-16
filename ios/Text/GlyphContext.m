@@ -5,74 +5,105 @@
 #import "FontData.h"
 #import "RNSVGText.h"
 
+// https://www.w3.org/TR/SVG/text.html#TSpanElement
 @interface GlyphContext () {
 @public
+    // Current stack (one per node push/pop)
     NSMutableArray *mFontContext_;
+
+    // Unique input attribute lists (only added if node sets a value)
     NSMutableArray *mXsContext_;
     NSMutableArray *mYsContext_;
     NSMutableArray *mDXsContext_;
     NSMutableArray *mDYsContext_;
     NSMutableArray *mRsContext_;
+
+    // Unique index into attribute list (one per unique list)
     NSMutableArray *mXIndices_;
     NSMutableArray *mYIndices_;
     NSMutableArray *mDXIndices_;
     NSMutableArray *mDYIndices_;
     NSMutableArray *mRIndices_;
+
+    // Index of unique context used (one per node push/pop)
     NSMutableArray *mXsIndices_;
     NSMutableArray *mYsIndices_;
     NSMutableArray *mDXsIndices_;
     NSMutableArray *mDYsIndices_;
     NSMutableArray *mRsIndices_;
+
+    // Calculated on push context, percentage and em length depends on parent font size
     double mFontSize_;
     FontData *topFont_;
+
+    // Current accumulated values
+    // https://www.w3.org/TR/SVG/types.html#DataTypeCoordinate
+    // <coordinate> syntax is the same as that for <length>
     double mX_;
     double mY_;
+
+    // https://www.w3.org/TR/SVG/types.html#Length
     double mDX_;
     double mDY_;
+
+    // Current <list-of-coordinates> SVGLengthList
+    // https://www.w3.org/TR/SVG/types.html#InterfaceSVGLengthList
+    // https://www.w3.org/TR/SVG/types.html#DataTypeCoordinates
+
+    // https://www.w3.org/TR/SVG/text.html#TSpanElementXAttribute
     NSArray *mXs_;
+
+    // https://www.w3.org/TR/SVG/text.html#TSpanElementYAttribute
     NSArray *mYs_;
+
+    // Current <list-of-lengths> SVGLengthList
+    // https://www.w3.org/TR/SVG/types.html#DataTypeLengths
+
+    // https://www.w3.org/TR/SVG/text.html#TSpanElementDXAttribute
     NSArray *mDXs_;
+
+    // https://www.w3.org/TR/SVG/text.html#TSpanElementDYAttribute
     NSArray *mDYs_;
+
+    // Current <list-of-numbers> SVGLengthList
+    // https://www.w3.org/TR/SVG/types.html#DataTypeNumbers
+
+    // https://www.w3.org/TR/SVG/text.html#TSpanElementRotateAttribute
     NSArray *mRs_;
+
+    // Current attribute list index
     long mXsIndex_;
     long mYsIndex_;
     long mDXsIndex_;
     long mDYsIndex_;
     long mRsIndex_;
+
+    // Current value index in current attribute list
     long mXIndex_;
     long mYIndex_;
     long mDXIndex_;
     long mDYIndex_;
     long mRIndex_;
+
+    // Top index of stack
     long mTop_;
+
+    // Constructor parameters
     float mScale_;
     float mWidth_;
     float mHeight_;
 }
 
-- (void)pushIndices;
+- (void)pushContext:(RNSVGText *)node
+               font:(NSDictionary *)font
+                  x:(NSArray*)x
+                  y:(NSArray*)y
+             deltaX:(NSArray*)deltaX
+             deltaY:(NSArray*)deltaY
+             rotate:(NSArray*)rotate;
 
-- (void)reset;
-
-- (FontData *)getTopOrParentFontWithRNSVGGroup:(RNSVGGroup *)child;
-
-- (void)pushNodeAndFontWithRNSVGGroup:(RNSVGGroup *)node
-                     withNSDictionary:(NSDictionary *)font;
-
-+ (void)incrementIndicesWithNSArray:(NSArray *)indices
-                            withLong:(long)topIndex;
-
-- (void)pushContextwithRNSVGText:(RNSVGText *)node
-                           reset:(bool)reset
-                            font:(NSDictionary *)font
-                               x:(NSArray*)x
-                               y:(NSArray*)y
-                          deltaX:(NSArray*)deltaX
-                          deltaY:(NSArray*)deltaY
-                          rotate:(NSArray*)rotate;
-
-- (void)pushContextWithRNSVGGroup:(RNSVGGroup*)node
-                             font:(NSDictionary *)font;
+- (void)pushContext:(RNSVGGroup*)node
+               font:(NSDictionary *)font;
 @end
 
 @implementation GlyphContext
@@ -82,7 +113,7 @@
 {
     NSString *fontFamily = topFont_->fontFamily;
     NSNumber * fontSize = [NSNumber numberWithDouble:topFont_->fontSize];
-    
+
     NSString * fontWeight = [FontWeightToString(topFont_->fontWeight) lowercaseString];
     NSString * fontStyle = FontStyleStrings[topFont_->fontStyle];
 
@@ -110,52 +141,122 @@
                                    scaleMultiplier:1.0];
 }
 
-- (void)pushIndices {
-    GlyphContext_pushIndices(self);
+void pushIndices(GlyphContext *self) {
+    [self->mXsIndices_ addObject:[NSNumber numberWithLong:self->mXsIndex_]];
+    [self->mYsIndices_ addObject:[NSNumber numberWithLong:self->mYsIndex_]];
+    [self->mDXsIndices_ addObject:[NSNumber numberWithLong:self->mDXsIndex_]];
+    [self->mDYsIndices_ addObject:[NSNumber numberWithLong:self->mDYsIndex_]];
+    [self->mRsIndices_ addObject:[NSNumber numberWithLong:self->mRsIndex_]];
 }
 
 - (instancetype)initWithScale:(float)scale_
                         width:(float)width
                        height:(float)height {
-    GlyphContext_initWithFloat_withFloat_withFloat_(self, scale_, width, height);
-    return self;
-}
+    self->mFontContext_ = [[NSMutableArray alloc]init];
+    self->mXsContext_ = [[NSMutableArray alloc]init];
+    self->mYsContext_ = [[NSMutableArray alloc]init];
+    self->mDXsContext_ = [[NSMutableArray alloc]init];
+    self->mDYsContext_ = [[NSMutableArray alloc]init];
+    self->mRsContext_ = [[NSMutableArray alloc]init];
 
-- (void)reset {
-    GlyphContext_reset(self);
+    self->mXIndices_ = [[NSMutableArray alloc]init];
+    self->mYIndices_ = [[NSMutableArray alloc]init];
+    self->mDXIndices_ = [[NSMutableArray alloc]init];
+    self->mDYIndices_ = [[NSMutableArray alloc]init];
+    self->mRIndices_ = [[NSMutableArray alloc]init];
+
+    self->mXsIndices_ = [[NSMutableArray alloc]init];
+    self->mYsIndices_ = [[NSMutableArray alloc]init];
+    self->mDXsIndices_ = [[NSMutableArray alloc]init];
+    self->mDYsIndices_ = [[NSMutableArray alloc]init];
+    self->mRsIndices_ = [[NSMutableArray alloc]init];
+
+    self->mFontSize_ = FontData_DEFAULT_FONT_SIZE;
+    self->topFont_ = [FontData Defaults];
+
+    self->mXs_ = [[NSArray alloc]init];
+    self->mYs_ = [[NSArray alloc]init];
+    self->mDXs_ = [[NSArray alloc]init];
+    self->mDYs_ = [[NSArray alloc]init];
+    self->mRs_ = [[NSArray alloc]initWithObjects:@0, nil];
+
+    self->mXIndex_ = -1;
+    self->mYIndex_ = -1;
+    self->mDXIndex_ = -1;
+    self->mDYIndex_ = -1;
+    self->mRIndex_ = -1;
+
+    self->mScale_ = scale_;
+    self->mWidth_ = width;
+    self->mHeight_ = height;
+
+    [self->mXsContext_ addObject:self->mXs_];
+    [self->mYsContext_ addObject:self->mYs_];
+    [self->mDXsContext_ addObject:self->mDXs_];
+    [self->mDYsContext_ addObject:self->mDYs_];
+    [self->mRsContext_ addObject:self->mRs_];
+
+    [self->mXIndices_ addObject:[NSNumber numberWithLong:self->mXIndex_]];
+    [self->mYIndices_ addObject:[NSNumber numberWithLong:self->mYIndex_]];
+    [self->mDXIndices_ addObject:[NSNumber numberWithLong:self->mDXIndex_]];
+    [self->mDYIndices_ addObject:[NSNumber numberWithLong:self->mDYIndex_]];
+    [self->mRIndices_ addObject:[NSNumber numberWithLong:self->mRIndex_]];
+
+    [self->mFontContext_ addObject:self->topFont_];
+    pushIndices(self);
+    return self;
 }
 
 - (FontData *)getFont {
     return topFont_;
 }
 
-- (FontData *)getTopOrParentFontWithRNSVGGroup:(RNSVGGroup*)child {
-    return GlyphContext_getTopOrParentFontWithRNSVGGroup_(self, child);
-}
-
-- (void)pushNodeAndFontWithRNSVGGroup:(RNSVGGroup*)node
-                     withNSDictionary:(NSDictionary*)font {
-    GlyphContext_pushNodeAndFontWithRNSVGGroup_withNSDictionary_(self, node, font);
-}
-
-- (void)pushContextWithRNSVGGroup:(RNSVGGroup*)node
-                             font:(NSDictionary*)font {
-    GlyphContext_pushNodeAndFontWithRNSVGGroup_withNSDictionary_(self, node, font);
-    GlyphContext_pushIndices(self);
-}
-
-- (void)pushContextwithRNSVGText:(RNSVGText*)node
-                           reset:(bool)reset
-                            font:(NSDictionary*)font
-                               x:(NSArray*)x
-                               y:(NSArray*)y
-                          deltaX:(NSArray*)deltaX
-                          deltaY:(NSArray*)deltaY
-                          rotate:(NSArray*)rotate {
-    if (reset) {
-        GlyphContext_reset(self);
+FontData *getTopOrParentFont(GlyphContext *self, RNSVGGroup* child) {
+    if (self->mTop_ > 0) {
+        return self->topFont_;
+    } else {
+        RNSVGGroup* parentRoot = [child getParentTextRoot];
+        FontData* Defaults = [FontData Defaults];
+        while (parentRoot != nil) {
+            FontData *map = [[parentRoot getGlyphContext] getFont];
+            if (map != Defaults) {
+                return map;
+            }
+            parentRoot = [parentRoot getParentTextRoot];
+        }
+        return Defaults;
     }
-    GlyphContext_pushNodeAndFontWithRNSVGGroup_withNSDictionary_(self, (RNSVGGroup*)node, font);
+}
+
+void pushNodeAndFont(GlyphContext *self, RNSVGGroup* node, NSDictionary* font) {
+    FontData *parent = getTopOrParentFont(self, node);
+    self->mTop_++;
+    if (font == nil) {
+        [self->mFontContext_ addObject:parent];
+        return;
+    }
+    FontData *data = [FontData initWithNSDictionary:font
+                                             parent:parent
+                                              scale:self->mScale_];
+    self->mFontSize_ = data->fontSize;
+    [self->mFontContext_ addObject:data];
+    self->topFont_ = data;
+}
+
+- (void)pushContext:(RNSVGGroup*)node
+               font:(NSDictionary*)font {
+    pushNodeAndFont(self, node, font);
+    pushIndices(self);
+}
+
+- (void)pushContext:(RNSVGText*)node
+               font:(NSDictionary*)font
+                  x:(NSArray*)x
+                  y:(NSArray*)y
+             deltaX:(NSArray*)deltaX
+             deltaY:(NSArray*)deltaY
+             rotate:(NSArray*)rotate {
+    pushNodeAndFont(self, (RNSVGGroup*)node, font);
     if (x != nil && [x count] != 0) {
         mXsIndex_++;
         mXIndex_ = -1;
@@ -191,28 +292,33 @@
         mRs_ = [rotate valueForKeyPath:@"self.doubleValue"];
         [mRsContext_ addObject:mRs_];
     }
-    GlyphContext_pushIndices(self);
+    pushIndices(self);
 }
 
 - (void)popContext {
     [mFontContext_ removeLastObject];
-    [mXsIndices_  removeLastObject];
-    [mYsIndices_  removeLastObject];
-    [mDXsIndices_  removeLastObject];
-    [mDYsIndices_  removeLastObject];
-    [mRsIndices_  removeLastObject];
+    [mXsIndices_ removeLastObject];
+    [mYsIndices_ removeLastObject];
+    [mDXsIndices_ removeLastObject];
+    [mDYsIndices_ removeLastObject];
+    [mRsIndices_ removeLastObject];
+
     mTop_--;
+
     long x = mXsIndex_;
     long y = mYsIndex_;
     long dx = mDXsIndex_;
     long dy = mDYsIndex_;
     long r = mRsIndex_;
+
     topFont_ = [mFontContext_ lastObject];
+
     mXsIndex_ = [[mXsIndices_ lastObject] longValue];
     mYsIndex_ = [[mYsIndices_ lastObject] longValue];
     mDXsIndex_ = [[mDXsIndices_ lastObject] longValue];
     mDYsIndex_ = [[mDYsIndices_ lastObject] longValue];
     mRsIndex_ = [[mRsIndices_ lastObject] longValue];
+
     if (x != mXsIndex_) {
         [mXsContext_ removeObjectAtIndex:x];
         mXs_ = [mXsContext_ objectAtIndex:mXsIndex_];
@@ -240,17 +346,50 @@
     }
 }
 
-+ (void)incrementIndicesWithNSArray:(NSMutableArray *)indices
-                            withLong:(long)topIndex {
-    GlyphContext_incrementIndicesWithNSArray_withLong_(indices, topIndex);
+void incrementIndices(NSMutableArray *indices, long topIndex) {
+    for (long index = topIndex; index >= 0; index--) {
+        long xIndex = [[indices  objectAtIndex:index] longValue];
+        [indices setObject:[NSNumber numberWithLong:xIndex + 1] atIndexedSubscript:index];
+    }
 }
 
+// https://www.w3.org/TR/SVG11/text.html#FontSizeProperty
+
+/**
+ * Get font size from context.
+ * <p>
+ * ‘font-size’
+ * Value:       < absolute-size > | < relative-size > | < length > | < percentage > | inherit
+ * Initial:     medium
+ * Applies to:  text content elements
+ * Inherited:   yes, the computed value is inherited
+ * Percentages: refer to parent element's font size
+ * Media:       visual
+ * Animatable:  yes
+ * <p>
+ * This property refers to the size of the font from baseline to
+ * baseline when multiple lines of text are set solid in a multiline
+ * layout environment.
+ * <p>
+ * For SVG, if a < length > is provided without a unit identifier
+ * (e.g., an unqualified number such as 128), the SVG user agent
+ * processes the < length > as a height value in the current user
+ * coordinate system.
+ * <p>
+ * If a < length > is provided with one of the unit identifiers
+ * (e.g., 12pt or 10%), then the SVG user agent converts the
+ * < length > into a corresponding value in the current user
+ * coordinate system by applying the rules described in Units.
+ * <p>
+ * Except for any additional information provided in this specification,
+ * the normative definition of the property is in CSS2 ([CSS2], section 15.2.4).
+ */
 - (double)getFontSize {
     return mFontSize_;
 }
 
 - (double)nextXWithDouble:(double)advance {
-    GlyphContext_incrementIndicesWithNSArray_withLong_(mXIndices_, mXsIndex_);
+    incrementIndices(mXIndices_, mXsIndex_);
     long nextIndex = mXIndex_ + 1;
     if (nextIndex < [mXs_ count]) {
         mDX_ = 0;
@@ -267,7 +406,7 @@
 }
 
 - (double)nextY {
-    GlyphContext_incrementIndicesWithNSArray_withLong_(mYIndices_, mYsIndex_);
+    incrementIndices(mYIndices_, mYsIndex_);
     long nextIndex = mYIndex_ + 1;
     if (nextIndex < [mYs_ count]) {
         mDY_ = 0;
@@ -283,7 +422,7 @@
 }
 
 - (double)nextDeltaX {
-    GlyphContext_incrementIndicesWithNSArray_withLong_(mDXIndices_, mDXsIndex_);
+    incrementIndices(mDXIndices_, mDXsIndex_);
     long nextIndex = mDXIndex_ + 1;
     if (nextIndex < [mDXs_ count]) {
         mDXIndex_ = nextIndex;
@@ -299,7 +438,7 @@
 }
 
 - (double)nextDeltaY {
-    GlyphContext_incrementIndicesWithNSArray_withLong_(mDYIndices_, mDYsIndex_);
+    incrementIndices(mDYIndices_, mDYsIndex_);
     long nextIndex = mDYIndex_ + 1;
     if (nextIndex < [mDYs_ count]) {
         mDYIndex_ = nextIndex;
@@ -315,7 +454,7 @@
 }
 
 - (NSNumber*)nextRotation {
-    GlyphContext_incrementIndicesWithNSArray_withLong_(mRIndices_, mRsIndex_);
+    incrementIndices(mRIndices_, mRsIndex_);
     long nextIndex = mRIndex_ + 1;
     long count = [mRs_ count];
     if (nextIndex < count) {
@@ -332,105 +471,5 @@
 
 - (float)getHeight {
     return mHeight_;
-}
-
-void GlyphContext_pushIndices(GlyphContext *self) {
-    [self->mXsIndices_ addObject:[NSNumber numberWithLong:self->mXsIndex_]];
-    [self->mYsIndices_ addObject:[NSNumber numberWithLong:self->mYsIndex_]];
-    [self->mDXsIndices_ addObject:[NSNumber numberWithLong:self->mDXsIndex_]];
-    [self->mDYsIndices_ addObject:[NSNumber numberWithLong:self->mDYsIndex_]];
-    [self->mRsIndices_ addObject:[NSNumber numberWithLong:self->mRsIndex_]];
-}
-
-void GlyphContext_initWithFloat_withFloat_withFloat_(GlyphContext *self, float scale_, float width, float height) {
-    self->mFontContext_ = [[NSMutableArray alloc]init];
-    self->mXsContext_ = [[NSMutableArray alloc]init];
-    self->mYsContext_ = [[NSMutableArray alloc]init];
-    self->mDXsContext_ = [[NSMutableArray alloc]init];
-    self->mDYsContext_ = [[NSMutableArray alloc]init];
-    self->mRsContext_ = [[NSMutableArray alloc]init];
-    self->mXIndices_ = [[NSMutableArray alloc]init];
-    self->mYIndices_ = [[NSMutableArray alloc]init];
-    self->mDXIndices_ = [[NSMutableArray alloc]init];
-    self->mDYIndices_ = [[NSMutableArray alloc]init];
-    self->mRIndices_ = [[NSMutableArray alloc]init];
-    self->mXsIndices_ = [[NSMutableArray alloc]init];
-    self->mYsIndices_ = [[NSMutableArray alloc]init];
-    self->mDXsIndices_ = [[NSMutableArray alloc]init];
-    self->mDYsIndices_ = [[NSMutableArray alloc]init];
-    self->mRsIndices_ = [[NSMutableArray alloc]init];
-    self->mFontSize_ = FontData_DEFAULT_FONT_SIZE;
-    self->topFont_ = [FontData Defaults];
-    self->mXs_ = [[NSArray alloc]init];
-    self->mYs_ = [[NSArray alloc]init];
-    self->mDXs_ = [[NSArray alloc]init];
-    self->mDYs_ = [[NSArray alloc]init];
-    self->mRs_ = [[NSArray alloc]initWithObjects:@0, nil];
-    self->mXIndex_ = -1;
-    self->mYIndex_ = -1;
-    self->mDXIndex_ = -1;
-    self->mDYIndex_ = -1;
-    self->mRIndex_ = -1;
-    self->mScale_ = scale_;
-    self->mWidth_ = width;
-    self->mHeight_ = height;
-    [self->mXsContext_ addObject:self->mXs_];
-    [self->mYsContext_ addObject:self->mYs_];
-    [self->mDXsContext_ addObject:self->mDXs_];
-    [self->mDYsContext_ addObject:self->mDYs_];
-    [self->mRsContext_ addObject:self->mRs_];
-    [self->mXIndices_ addObject:[NSNumber numberWithLong:self->mXIndex_]];
-    [self->mYIndices_ addObject:[NSNumber numberWithLong:self->mYIndex_]];
-    [self->mDXIndices_ addObject:[NSNumber numberWithLong:self->mDXIndex_]];
-    [self->mDYIndices_ addObject:[NSNumber numberWithLong:self->mDYIndex_]];
-    [self->mRIndices_ addObject:[NSNumber numberWithLong:self->mRIndex_]];
-    [self->mFontContext_ addObject:self->topFont_];
-    GlyphContext_pushIndices(self);
-}
-
-void GlyphContext_reset(GlyphContext *self) {
-    self->mXsIndex_ = self->mYsIndex_ = self->mDXsIndex_ = self->mDYsIndex_ = self->mRsIndex_ = 0;
-    self->mXIndex_ = self->mYIndex_ = self->mDXIndex_ = self->mDYIndex_ = self->mRIndex_ = -1;
-    self->mX_ = self->mY_ = self->mDX_ = self->mDY_ = 0;
-}
-
-FontData *GlyphContext_getTopOrParentFontWithRNSVGGroup_(GlyphContext *self, RNSVGGroup* child) {
-    if (self->mTop_ > 0) {
-        return self->topFont_;
-    }
-    else {
-        RNSVGGroup* parentRoot = [child getParentTextRoot];
-        FontData* Defaults = [FontData Defaults];
-        while (parentRoot != nil) {
-            FontData *map = [[parentRoot getGlyphContext] getFont];
-            if (map != Defaults) {
-                return map;
-            }
-            parentRoot = [parentRoot getParentTextRoot];
-        }
-        return Defaults;
-    }
-}
-
-void GlyphContext_pushNodeAndFontWithRNSVGGroup_withNSDictionary_(GlyphContext *self, RNSVGGroup* node, NSDictionary* font) {
-    FontData *parent = GlyphContext_getTopOrParentFontWithRNSVGGroup_(self, node);
-    self->mTop_++;
-    if (font == nil) {
-        [self->mFontContext_ addObject:parent];
-        return;
-    }
-    FontData *data = [FontData initWithNSDictionary:font
-                                             parent:parent
-                                              scale:self->mScale_];
-    self->mFontSize_ = data->fontSize;
-    [self->mFontContext_ addObject:data];
-    self->topFont_ = data;
-}
-
-void GlyphContext_incrementIndicesWithNSArray_withLong_(NSMutableArray *indices, long topIndex) {
-    for (long index = topIndex; index >= 0; index--) {
-        long xIndex = [[indices  objectAtIndex:index] longValue];
-        [indices setObject:[NSNumber numberWithLong:xIndex + 1] atIndexedSubscript:index];
-    }
 }
 @end
