@@ -135,12 +135,12 @@ void GetBezierElements(void *info, const CGPathElement *element)
 }
 
 - (void (^)(CGFloat *, NSInteger *, NSMutableArray *, NSMutableArray *, BOOL *)) getTextProperties{
-    return ^(CGFloat *lengthP, NSInteger *lineCountP, NSMutableArray *  lengths, NSMutableArray * lines, BOOL *isClosedP) {
-        __block CGPoint origin = CGPointMake (0.0, 0.0);
-        __block CGPoint last = CGPointMake (0.0, 0.0);
-        __block NSInteger lineCount = 0;
-        __block CGFloat length = 0;
-        __block BOOL isClosed = NO;
+    return ^(CGFloat *lengthP, NSInteger *lineCountP, NSMutableArray * lengths, NSMutableArray * lines, BOOL *isClosedP) {
+        CGPoint origin = CGPointMake (0.0, 0.0);
+        CGPoint last = CGPointMake (0.0, 0.0);
+        NSInteger lineCount = 0;
+        CGFloat length = 0;
+        BOOL isClosed = NO;
         NSArray * elements = self.elements;
         for (BezierElement *element in elements) {
             switch (element.elementType)
@@ -175,34 +175,36 @@ void GetBezierElements(void *info, const CGPathElement *element)
                         break;
                     }
 
-                    // ok, this is the bezier for our current element
+                    // this is the bezier for our current element
                     CGPoint bezier[4] = { last, ctrl1, ctrl2, curveTo };
+                    NSValue *arr = [NSValue valueWithBytes:&bezier objCType:@encode(CGPoint[4])];
+                    NSMutableArray *curves = [NSMutableArray arrayWithObjects:arr, nil];
 
-                    // define our recursive function that will
-                    // help us split the curve up as needed
-                    __weak void (^ __block weakFlattenCurve)(CGPoint bez[4]);
-                    void (^ __block flattenCurve)(CGPoint bez[4]) = ^(CGPoint bez[4]){
+                    NSInteger count = 1;
+                    while (count-- > 0) {
+                        CGPoint bez[4];
+                        [curves[count] getValue:&bez];
+                        [curves removeLastObject];
+
                         // calculate the error rate of the curve vs
                         // a line segement between the start and end points
                         CGPoint onCurve = bezierPointAtT(bez, .5);
                         CGPoint next = bez[3];
                         CGFloat error = distanceOfPointToLine(onCurve, last, next);
 
-                        // if the error is less than our accepted level of error,
-                        // then add a line,
-                        // otherwise, split the curve in half and recur
+                        // if the error is less than our accepted level of error
+                        // then add a line, else, split the curve in half
                         if (error <= idealFlatness) {
                             addLine(&last, &next, lines, &length, lengths);
                             lineCount++;
                         } else {
                             CGPoint bez1[4], bez2[4];
                             subdivideBezierAtT(bez, bez1, bez2, .5);
-                            weakFlattenCurve(bez1);
-                            weakFlattenCurve(bez2);
+                            [curves addObject:[NSValue valueWithBytes:&bez2 objCType:@encode(CGPoint[4])]];
+                            [curves addObject:[NSValue valueWithBytes:&bez1 objCType:@encode(CGPoint[4])]];
+                            count += 2;
                         }
-                    };
-                    weakFlattenCurve = flattenCurve;
-                    weakFlattenCurve(bezier);
+                    }
                     last = curveTo;
                     break;
                 }
