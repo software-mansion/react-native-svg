@@ -19,8 +19,7 @@
         "gradient"
     ],
     "scripts": {
-        "lint": "eslint ./",
-        "postinstall": "node scripts/install.js"
+        "lint": "eslint ./"
     },
     "peerDependencies": {
         "react-native": ">=0.50.0",

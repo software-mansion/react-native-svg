@@ -6,7 +6,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 #import <UIKit/UIKit.h>
-#import <PerformanceBezier/PerformanceBezier.h>
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
 #import "RNSVGText.h"
@@ -16,6 +15,8 @@
 #import "TextPathSpacing.h"
 #import "TextLengthAdjust.h"
 #import "AlignmentBaseline.h"
+#import "UIBezierPath+TextRendering.h"
+
 
 @interface RNSVGTSpan : RNSVGText
 

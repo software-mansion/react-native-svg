@@ -5,8 +5,6 @@
  * This source code is licensed under the MIT-style license found in the
  * LICENSE file in the root directory of this source tree.
  */
-#import <PerformanceBezier/PerformanceBezier.h>
-#import <QuartzBookPack/UIBezierPath+Text.h>
 #import "RNSVGTSpan.h"
 #import "RNSVGText.h"
 #import "RNSVGTextPath.h"
@@ -17,12 +15,13 @@ NSCharacterSet *separators = nil;
 @implementation RNSVGTSpan
 {
     CGFloat startOffset;
-    UIBezierPath *_bezierPath;
     CGPathRef _cache;
     CGFloat _pathLength;
-    RNSVGTextPath * textPath;
-    RNSVGPath * textPathPath;
-    bool isClosed;
+    RNSVGTextPath *textPath;
+    NSMutableArray *lengths;
+    NSMutableArray *lines;
+    NSInteger lineCount;
+    BOOL isClosed;
 }
 
 - (id)init
@@ -295,7 +294,7 @@ NSCharacterSet *separators = nil;
         double textMeasure = CGRectGetWidth(textBounds);
         double offset = getTextAnchorOffset(textAnchor, textMeasure);
 
-        bool hasTextPath = _bezierPath != nil;
+        bool hasTextPath = textPath != nil;
 
         int side = 1;
         double startOfRendering = 0;
@@ -786,9 +785,31 @@ NSCharacterSet *separators = nil;
                     continue;
                 }
 
+                int i = 0;
+                CGFloat totalLength = 0;
+                CGFloat prevLength = 0;
+                
+                // TODO investigate at what lineCount a binary search is faster
+                while (i < lineCount - 1) {
+                    prevLength = totalLength;
+                    totalLength = [[lengths objectAtIndex: i] floatValue];
+                    if (totalLength < midPoint) {
+                        i++;
+                    } else {
+                        break;
+                    }
+                };
+                
+                CGFloat length = totalLength - prevLength;
+                CGFloat targetPercent = (midPoint - prevLength) / length;
+                
+                NSArray * points = [lines objectAtIndex: i];
+                CGPoint p1 = [[points objectAtIndex: 0] CGPointValue];
+                CGPoint p2 = [[points objectAtIndex: 1] CGPointValue];
+                
                 CGPoint slope;
-                CGFloat percentConsumed = midPoint / _pathLength;
-                CGPoint mid = [_bezierPath pointAtPercent:percentConsumed withSlope:&slope];
+                CGPoint mid = InterpolateLineSegment(p1, p2, targetPercent, &slope);
+                
                 // Calculate the rotation
                 double angle = atan2(slope.y, slope.x);
 
@@ -814,6 +835,20 @@ NSCharacterSet *separators = nil;
     return path;
 }
 
+CGPoint InterpolateLineSegment(CGPoint p1, CGPoint p2, CGFloat percent, CGPoint *slope)
+{
+    CGFloat dx = p2.x - p1.x;
+    CGFloat dy = p2.y - p1.y;
+    
+    if (slope)
+        *slope = CGPointMake(dx, dy);
+    
+    CGFloat px = p1.x + dx * percent;
+    CGFloat py = p1.y + dy * percent;
+    
+    return CGPointMake(px, py);
+}
+
 CGFloat getTextAnchorOffset(enum TextAnchor textAnchor, CGFloat width)
 {
     switch (textAnchor) {
@@ -830,17 +865,16 @@ CGFloat getTextAnchorOffset(enum TextAnchor textAnchor, CGFloat width)
 
 - (void)setupTextPath:(CGContextRef)context
 {
-    _bezierPath = nil;
     textPath = nil;
-    textPathPath = nil;
     [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
         if ([node class] == [RNSVGTextPath class]) {
             textPath = (RNSVGTextPath*) node;
-            textPathPath = [textPath getPath];
-            _bezierPath = [UIBezierPath bezierPathWithCGPath:[textPathPath getPath:nil]];
-            _bezierPath = [_bezierPath bezierPathByFlatteningPathAndImmutable:YES];
-            _pathLength = _bezierPath.pathLength;
-            isClosed = [_bezierPath isClosed];
+            RNSVGPath *svgPath = [textPath getPath];
+            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithCGPath:[svgPath getPath:nil]];
+            
+            lines = [NSMutableArray array];
+            lengths = [NSMutableArray array];
+            [bezierPath getTextProperties](&_pathLength, &lineCount, lengths, lines, &isClosed);
             return NO;
         }
         return YES;
