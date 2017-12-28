@@ -17,7 +17,7 @@ CGFloat distance(CGPoint p1, CGPoint p2)
 {
     CGFloat dx = p2.x - p1.x;
     CGFloat dy = p2.y - p1.y;
-    
+
     return sqrt(dx*dx + dy*dy);
 }
 
@@ -59,25 +59,25 @@ CGPoint bezierPointAtT(const CGPoint bez[4], CGFloat t)
 {
     CGPoint q;
     CGFloat mt = 1 - t;
-    
+
     CGPoint bez1[4];
     CGPoint bez2[4];
-    
+
     q.x = mt * bez[1].x + t * bez[2].x;
     q.y = mt * bez[1].y + t * bez[2].y;
     bez1[1].x = mt * bez[0].x + t * bez[1].x;
     bez1[1].y = mt * bez[0].y + t * bez[1].y;
     bez2[2].x = mt * bez[2].x + t * bez[3].x;
     bez2[2].y = mt * bez[2].y + t * bez[3].y;
-    
+
     bez1[2].x = mt * bez1[1].x + t * q.x;
     bez1[2].y = mt * bez1[1].y + t * q.y;
     bez2[1].x = mt * q.x + t * bez2[2].x;
     bez2[1].y = mt * q.y + t * bez2[2].y;
-    
+
     bez1[3].x = bez2[0].x = mt * bez1[2].x + t * bez2[1].x;
     bez1[3].y = bez2[0].y = mt * bez1[2].y + t * bez2[1].y;
-    
+
     return CGPointMake(bez1[3].x, bez1[3].y);
 }
 
@@ -86,24 +86,24 @@ void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint bez2[4], 
 {
     CGPoint q;
     CGFloat mt = 1 - t;
-    
+
     bez1[0].x = bez[0].x;
     bez1[0].y = bez[0].y;
     bez2[3].x = bez[3].x;
     bez2[3].y = bez[3].y;
-    
+
     q.x = mt * bez[1].x + t * bez[2].x;
     q.y = mt * bez[1].y + t * bez[2].y;
     bez1[1].x = mt * bez[0].x + t * bez[1].x;
     bez1[1].y = mt * bez[0].y + t * bez[1].y;
     bez2[2].x = mt * bez[2].x + t * bez[3].x;
     bez2[2].y = mt * bez[2].y + t * bez[3].y;
-    
+
     bez1[2].x = mt * bez1[1].x + t * q.x;
     bez1[2].y = mt * bez1[1].y + t * q.y;
     bez2[1].x = mt * q.x + t * bez2[2].x;
     bez2[1].y = mt * q.y + t * bez2[2].y;
-    
+
     bez1[3].x = bez2[0].x = mt * bez1[2].x + t * bez2[1].x;
     bez1[3].y = bez2[0].y = mt * bez1[2].y + t * bez2[1].y;
 }
@@ -148,14 +148,14 @@ void GetBezierElements(void *info, const CGPathElement *element)
                 case kCGPathElementMoveToPoint:
                     origin = last = element.point;
                     break;
-                    
+
                 case kCGPathElementAddLineToPoint: {
                     CGPoint next = element.point;
                     addLine(&last, &next, lines, &length, lengths);
                     lineCount++;
                     break;
                 }
-                    
+
                 case kCGPathElementAddQuadCurveToPoint:
                 case kCGPathElementAddCurveToPoint:
                 {
@@ -174,19 +174,20 @@ void GetBezierElements(void *info, const CGPathElement *element)
                     } else {
                         break;
                     }
-                    
+
                     // ok, this is the bezier for our current element
                     CGPoint bezier[4] = { last, ctrl1, ctrl2, curveTo };
-                    
+
                     // define our recursive function that will
                     // help us split the curve up as needed
-                    void (^__block flattenCurve)(CGPoint bez[4]) = ^(CGPoint bez[4]){
+                    __weak void (^ __block weakFlattenCurve)(CGPoint bez[4]);
+                    void (^ __block flattenCurve)(CGPoint bez[4]) = ^(CGPoint bez[4]){
                         // calculate the error rate of the curve vs
                         // a line segement between the start and end points
                         CGPoint onCurve = bezierPointAtT(bez, .5);
                         CGPoint next = bez[3];
                         CGFloat error = distanceOfPointToLine(onCurve, last, next);
-                        
+
                         // if the error is less than our accepted level of error,
                         // then add a line,
                         // otherwise, split the curve in half and recur
@@ -196,16 +197,16 @@ void GetBezierElements(void *info, const CGPathElement *element)
                         } else {
                             CGPoint bez1[4], bez2[4];
                             subdivideBezierAtT(bez, bez1, bez2, .5);
-                            flattenCurve(bez1);
-                            flattenCurve(bez2);
+                            weakFlattenCurve(bez1);
+                            weakFlattenCurve(bez2);
                         }
                     };
-                    
-                    flattenCurve(bezier);
+                    weakFlattenCurve = flattenCurve;
+                    weakFlattenCurve(bezier);
                     last = curveTo;
                     break;
                 }
-                    
+
                 case kCGPathElementCloseSubpath: {
                     CGPoint next = origin;
                     addLine(&last, &next, lines, &length, lengths);
@@ -213,7 +214,7 @@ void GetBezierElements(void *info, const CGPathElement *element)
                     isClosed = YES;
                     break;
                 }
-                    
+
                 default:
                     break;
             }
