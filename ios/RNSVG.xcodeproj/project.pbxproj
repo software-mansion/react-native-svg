@@ -87,10 +87,7 @@
 		9494C5471F4C44DD00D5BCFD /* TextPathSide.m in Sources */ = {isa = PBXBuildFile; fileRef = 9494C5361F4C44DD00D5BCFD /* TextPathSide.m */; };
 		9494C5481F4C44DD00D5BCFD /* TextPathSpacing.m in Sources */ = {isa = PBXBuildFile; fileRef = 9494C5371F4C44DD00D5BCFD /* TextPathSpacing.m */; };
 		9494C5491F4C44DD00D5BCFD /* TextPathSpacing.m in Sources */ = {isa = PBXBuildFile; fileRef = 9494C5371F4C44DD00D5BCFD /* TextPathSpacing.m */; };
-		94EB93171FF4196100C0B251 /* UIBezierPath+TextRendering.m in Sources */ = {isa = PBXBuildFile; fileRef = 94EB93161FF4196100C0B251 /* UIBezierPath+TextRendering.m */; };
-		94EB93181FF4196100C0B251 /* UIBezierPath+TextRendering.m in Sources */ = {isa = PBXBuildFile; fileRef = 94EB93161FF4196100C0B251 /* UIBezierPath+TextRendering.m */; };
-		94EB936C1FF4916F00C0B251 /* BezierElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 94EB936B1FF4916F00C0B251 /* BezierElement.m */; };
-		94EB936D1FF4916F00C0B251 /* BezierElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 94EB936B1FF4916F00C0B251 /* BezierElement.m */; };
+		94C70B1A1FF6B1C0004DFD49 /* BezierElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C70B171FF6B1C0004DFD49 /* BezierElement.m */; };
 		A361E76E1EB0C33D00646005 /* RNSVGTextManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 10BA0D331CE74E3100887C2B /* RNSVGTextManager.m */; };
 		A361E76F1EB0C33D00646005 /* RNSVGImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1039D2841CE71EB7001E90A8 /* RNSVGImage.m */; };
 		A361E7701EB0C33D00646005 /* RNSVGRect.m in Sources */ = {isa = PBXBuildFile; fileRef = 10BA0D471CE74E3D00887C2B /* RNSVGRect.m */; };
@@ -295,11 +292,9 @@
 		9494C5351F4C44DD00D5BCFD /* TextPathMidLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextPathMidLine.m; path = Text/TextPathMidLine.m; sourceTree = "<group>"; };
 		9494C5361F4C44DD00D5BCFD /* TextPathSide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextPathSide.m; path = Text/TextPathSide.m; sourceTree = "<group>"; };
 		9494C5371F4C44DD00D5BCFD /* TextPathSpacing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextPathSpacing.m; path = Text/TextPathSpacing.m; sourceTree = "<group>"; };
+		94C70B151FF6B1BF004DFD49 /* BezierElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BezierElement.h; path = Utils/BezierElement.h; sourceTree = "<group>"; };
+		94C70B171FF6B1C0004DFD49 /* BezierElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BezierElement.m; path = Utils/BezierElement.m; sourceTree = "<group>"; };
 		94DDAC5C1F3D024300EED511 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libRNSVG-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		94EB93151FF4196100C0B251 /* UIBezierPath+TextRendering.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIBezierPath+TextRendering.h"; path = "Utils/UIBezierPath+TextRendering.h"; sourceTree = "<group>"; };
-		94EB93161FF4196100C0B251 /* UIBezierPath+TextRendering.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIBezierPath+TextRendering.m"; path = "Utils/UIBezierPath+TextRendering.m"; sourceTree = "<group>"; };
-		94EB936B1FF4916F00C0B251 /* BezierElement.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = BezierElement.m; path = Utils/BezierElement.m; sourceTree = "<group>"; };
-		94EB93701FF4918D00C0B251 /* BezierElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BezierElement.h; path = Utils/BezierElement.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -501,6 +496,8 @@
 		1039D29A1CE7212C001E90A8 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				94C70B151FF6B1BF004DFD49 /* BezierElement.h */,
+				94C70B171FF6B1C0004DFD49 /* BezierElement.m */,
 				7F69160D1E3703D800DA6EDC /* RNSVGUnits.h */,
 				10ABC7381D43982B006CCF6E /* RNSVGVBMOS.h */,
 				10ABC7371D439779006CCF6E /* RNSVGCGFCRule.h */,
@@ -514,10 +511,6 @@
 				7F9CDAF91E1F809C00E0C805 /* RNSVGPathParser.m */,
 				1039D29B1CE72177001E90A8 /* RCTConvert+RNSVG.h */,
 				1039D29C1CE72177001E90A8 /* RCTConvert+RNSVG.m */,
-				94EB93151FF4196100C0B251 /* UIBezierPath+TextRendering.h */,
-				94EB93161FF4196100C0B251 /* UIBezierPath+TextRendering.m */,
-				94EB936B1FF4916F00C0B251 /* BezierElement.m */,
-				94EB93701FF4918D00C0B251 /* BezierElement.h */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -614,7 +607,6 @@
 				10BA0D341CE74E3100887C2B /* RNSVGCircleManager.m in Sources */,
 				10BEC1BC1D3F66F500FDCB19 /* RNSVGLinearGradient.m in Sources */,
 				9494C5461F4C44DD00D5BCFD /* TextPathSide.m in Sources */,
-				94EB93171FF4196100C0B251 /* UIBezierPath+TextRendering.m in Sources */,
 				1039D2B01CE72F27001E90A8 /* RNSVGPercentageConverter.m in Sources */,
 				9494C53C1F4C44DD00D5BCFD /* TextAnchor.m in Sources */,
 				10BA0D491CE74E3D00887C2B /* RNSVGEllipse.m in Sources */,
@@ -649,7 +641,7 @@
 				9494C5251F4B605F00D5BCFD /* GlyphContext.m in Sources */,
 				10BA0D481CE74E3D00887C2B /* RNSVGCircle.m in Sources */,
 				9494C5401F4C44DD00D5BCFD /* TextLengthAdjust.m in Sources */,
-				94EB936C1FF4916F00C0B251 /* BezierElement.m in Sources */,
+				94C70B1A1FF6B1C0004DFD49 /* BezierElement.m in Sources */,
 				10BA0D351CE74E3100887C2B /* RNSVGEllipseManager.m in Sources */,
 				1039D2A01CE72177001E90A8 /* RCTConvert+RNSVG.m in Sources */,
 				9494C4FF1F4B5BE800D5BCFD /* FontData.m in Sources */,
@@ -683,7 +675,6 @@
 				A361E7711EB0C33D00646005 /* RNSVGCircleManager.m in Sources */,
 				A361E7721EB0C33D00646005 /* RNSVGLinearGradient.m in Sources */,
 				A361E7731EB0C33D00646005 /* RNSVGPercentageConverter.m in Sources */,
-				94EB93181FF4196100C0B251 /* UIBezierPath+TextRendering.m in Sources */,
 				9494C53F1F4C44DD00D5BCFD /* TextDecoration.m in Sources */,
 				A361E7751EB0C33D00646005 /* RNSVGEllipse.m in Sources */,
 				A361E7761EB0C33D00646005 /* RNSVGPath.m in Sources */,
@@ -718,7 +709,6 @@
 				9494C53B1F4C44DD00D5BCFD /* FontVariantLigatures.m in Sources */,
 				9494C5001F4B5BE800D5BCFD /* FontData.m in Sources */,
 				9494C5491F4C44DD00D5BCFD /* TextPathSpacing.m in Sources */,
-				94EB936D1FF4916F00C0B251 /* BezierElement.m in Sources */,
 				A361E78D1EB0C33D00646005 /* RNSVGLineManager.m in Sources */,
 				9494C53D1F4C44DD00D5BCFD /* TextAnchor.m in Sources */,
 				9494C5471F4C44DD00D5BCFD /* TextPathSide.m in Sources */,

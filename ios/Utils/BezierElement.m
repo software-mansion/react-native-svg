@@ -1,9 +1,8 @@
 /*
- 
- Erica Sadun, http://ericasadun.com
- 
- */
 
+ Erica Sadun, http://ericasadun.com
+ https://github.com/erica/iOS-Drawing/tree/master/C08/Quartz%20Book%20Pack/Bezier
+ */
 
 #import "BezierElement.h"
 
@@ -22,41 +21,5 @@
     }
     return self;
 }
-
-+ (instancetype) elementWithPathElement: (CGPathElement) element
-{
-    BezierElement *newElement = [[self alloc] init];
-    newElement.elementType = element.type;
-    
-    switch (newElement.elementType)
-    {
-        case kCGPathElementCloseSubpath:
-            break;
-        case kCGPathElementMoveToPoint:
-        case kCGPathElementAddLineToPoint:
-        {
-            newElement.point = element.points[0];
-            break;
-        }
-        case kCGPathElementAddQuadCurveToPoint:
-        {
-            newElement.point = element.points[1];
-            newElement.controlPoint1 = element.points[0];
-            break;
-        }
-        case kCGPathElementAddCurveToPoint:
-        {
-            newElement.point = element.points[2];
-            newElement.controlPoint1 = element.points[0];
-            newElement.controlPoint2 = element.points[1];
-            break;
-        }
-        default:
-            break;
-    }
-    
-    return newElement;
-}
-
 @end
 

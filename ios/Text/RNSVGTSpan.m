@@ -18,8 +18,8 @@ NSCharacterSet *separators = nil;
     CGPathRef _cache;
     CGFloat _pathLength;
     RNSVGTextPath *textPath;
-    NSMutableArray *lengths;
-    NSMutableArray *lines;
+    NSArray *lengths;
+    NSArray *lines;
     NSInteger lineCount;
     BOOL isClosed;
 }
@@ -788,7 +788,7 @@ NSCharacterSet *separators = nil;
                 int i = 0;
                 CGFloat totalLength = 0;
                 CGFloat prevLength = 0;
-                
+
                 // TODO investigate at what lineCount a binary search is faster
                 while (i < lineCount - 1) {
                     prevLength = totalLength;
@@ -799,25 +799,24 @@ NSCharacterSet *separators = nil;
                         break;
                     }
                 };
-                
+
                 CGFloat length = totalLength - prevLength;
                 CGFloat targetPercent = (midPoint - prevLength) / length;
-                
+
                 NSArray * points = [lines objectAtIndex: i];
                 CGPoint p1 = [[points objectAtIndex: 0] CGPointValue];
                 CGPoint p2 = [[points objectAtIndex: 1] CGPointValue];
-                
+
                 CGPoint slope;
                 CGPoint mid = InterpolateLineSegment(p1, p2, targetPercent, &slope);
-                
+
                 // Calculate the rotation
                 double angle = atan2(slope.y, slope.x);
 
                 transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(mid.x, mid.y), transform);
                 transform = CGAffineTransformConcat(CGAffineTransformMakeRotation(angle + r), transform);
                 transform = CGAffineTransformScale(transform, scaledDirection, side);
-                transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(-halfWay, dy + baselineShift), transform);
-                transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(0, y), transform);
+                transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(-halfWay, y + dy + baselineShift), transform);
             } else {
                 transform = CGAffineTransformMakeTranslation(startPoint, y + dy + baselineShift);
                 transform = CGAffineTransformConcat(CGAffineTransformMakeRotation(r), transform);
@@ -839,13 +838,13 @@ CGPoint InterpolateLineSegment(CGPoint p1, CGPoint p2, CGFloat percent, CGPoint 
 {
     CGFloat dx = p2.x - p1.x;
     CGFloat dy = p2.y - p1.y;
-    
+
     if (slope)
         *slope = CGPointMake(dx, dy);
-    
+
     CGFloat px = p1.x + dx * percent;
     CGFloat py = p1.y + dy * percent;
-    
+
     return CGPointMake(px, py);
 }
 
@@ -865,16 +864,13 @@ CGFloat getTextAnchorOffset(enum TextAnchor textAnchor, CGFloat width)
 
 - (void)setupTextPath:(CGContextRef)context
 {
+    lines = nil;
+    lengths = nil;
     textPath = nil;
     [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
         if ([node class] == [RNSVGTextPath class]) {
             textPath = (RNSVGTextPath*) node;
-            RNSVGPath *svgPath = [textPath getPath];
-            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithCGPath:[svgPath getPath:nil]];
-            
-            lines = [NSMutableArray array];
-            lengths = [NSMutableArray array];
-            [bezierPath getTextProperties](&_pathLength, &lineCount, lengths, lines, &isClosed);
+            [[textPath getPath] getPathLength:&_pathLength lineCount:&lineCount lengths:&lengths lines:&lines isClosed:&isClosed];
             return NO;
         }
         return YES;

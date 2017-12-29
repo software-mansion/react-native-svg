@@ -15,8 +15,6 @@
 #import "TextPathSpacing.h"
 #import "TextLengthAdjust.h"
 #import "AlignmentBaseline.h"
-#import "UIBezierPath+TextRendering.h"
-
 
 @interface RNSVGTSpan : RNSVGText
 
