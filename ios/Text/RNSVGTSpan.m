@@ -785,20 +785,25 @@ NSCharacterSet *separators = nil;
                     continue;
                 }
 
-                int i = 0;
-                CGFloat totalLength = 0;
-                CGFloat prevLength = 0;
+                // Investigation suggests binary search is faster at lineCount >= 16
+                // https://gist.github.com/msand/4c7993319425f9d7933be58ad9ada1a4
+                NSUInteger i = lineCount < 16 ?
+                [lengths
+                 indexOfObjectPassingTest:^(NSNumber* length, NSUInteger index, BOOL * _Nonnull stop) {
+                     BOOL contains = midPoint <= [length doubleValue];
+                     return contains;
+                 }]
+                :
+                [lengths
+                 indexOfObject:[NSNumber numberWithDouble:midPoint]
+                 inSortedRange:NSMakeRange(0, lineCount)
+                 options:NSBinarySearchingInsertionIndex
+                 usingComparator:^(NSNumber* obj1, NSNumber* obj2) {
+                     return [obj1 compare:obj2];
+                 }];
 
-                // TODO investigate at what lineCount a binary search is faster
-                while (i < lineCount - 1) {
-                    prevLength = totalLength;
-                    totalLength = [[lengths objectAtIndex: i] floatValue];
-                    if (totalLength < midPoint) {
-                        i++;
-                    } else {
-                        break;
-                    }
-                };
+                CGFloat totalLength = [lengths[i] doubleValue];
+                CGFloat prevLength = i == 0 ? 0 : [lengths[i - 1] doubleValue];
 
                 CGFloat length = totalLength - prevLength;
                 CGFloat targetPercent = (midPoint - prevLength) / length;
