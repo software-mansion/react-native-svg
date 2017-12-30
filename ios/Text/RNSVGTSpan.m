@@ -870,7 +870,7 @@ CGFloat getTextAnchorOffset(enum TextAnchor textAnchor, CGFloat width)
     [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
         if ([node class] == [RNSVGTextPath class]) {
             textPath = (RNSVGTextPath*) node;
-            [[textPath getPath] getPathLength:&_pathLength lineCount:&lineCount lengths:&lengths lines:&lines isClosed:&isClosed];
+            [textPath getPathLength:&_pathLength lineCount:&lineCount lengths:&lengths lines:&lines isClosed:&isClosed];
             return NO;
         }
         return YES;

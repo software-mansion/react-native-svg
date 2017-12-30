@@ -248,7 +248,6 @@
 		7F08CE9D1E23479700650F83 /* RNSVGTextPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGTextPath.m; path = Text/RNSVGTextPath.m; sourceTree = "<group>"; };
 		7F08CE9E1E23479700650F83 /* RNSVGTSpan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGTSpan.h; path = Text/RNSVGTSpan.h; sourceTree = "<group>"; };
 		7F08CE9F1E23479700650F83 /* RNSVGTSpan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGTSpan.m; path = Text/RNSVGTSpan.m; sourceTree = "<group>"; };
-		7F08CEA31E23481F00650F83 /* RNSVGTextAnchor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGTextAnchor.h; path = Utils/RNSVGTextAnchor.h; sourceTree = "<group>"; };
 		7F69160D1E3703D800DA6EDC /* RNSVGUnits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGUnits.h; path = Utils/RNSVGUnits.h; sourceTree = "<group>"; };
 		7F9CDAF81E1F809C00E0C805 /* RNSVGPathParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGPathParser.h; path = Utils/RNSVGPathParser.h; sourceTree = "<group>"; };
 		7F9CDAF91E1F809C00E0C805 /* RNSVGPathParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGPathParser.m; path = Utils/RNSVGPathParser.m; sourceTree = "<group>"; };
@@ -501,7 +500,6 @@
 				7F69160D1E3703D800DA6EDC /* RNSVGUnits.h */,
 				10ABC7381D43982B006CCF6E /* RNSVGVBMOS.h */,
 				10ABC7371D439779006CCF6E /* RNSVGCGFCRule.h */,
-				7F08CEA31E23481F00650F83 /* RNSVGTextAnchor.h */,
 				7FC260CC1E3499BC00A39833 /* RNSVGViewBox.h */,
 				7FC260CD1E3499BC00A39833 /* RNSVGViewBox.m */,
 				1039D29E1CE72177001E90A8 /* RNSVGCGFloatArray.h */,

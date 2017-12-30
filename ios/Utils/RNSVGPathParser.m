@@ -16,7 +16,6 @@
     NSString* _d;
     NSString* _originD;
     NSRegularExpression* _pathRegularExpression;
-    NSMutableArray<BezierElement*>* _bezierCurves;
     float _penX;
     float _penY;
     float _penDownX;
@@ -42,7 +41,6 @@
 {
     CGMutablePathRef path = CGPathCreateMutable();
     NSArray<NSTextCheckingResult *>* results = [_pathRegularExpression matchesInString:_d options:0 range:NSMakeRange(0, [_d length])];
-    _bezierCurves = [[NSMutableArray alloc] init];
     unsigned long count = [results count];
 
     if (count) {
@@ -121,15 +119,6 @@
     return (CGPathRef)CFAutorelease(path);
 }
 
-- (NSArray *)getBezierCurves
-{
-    if (!_bezierCurves) {
-        CGPathRelease([self getPath]);
-    }
-
-    return [_bezierCurves copy];
-}
-
 - (NSString *)getNextValue:(NSTextCheckingResult *)result
 {
     if (!result) {
@@ -158,11 +147,6 @@
     _pivotX = _penX = x;
     _pivotY = _penY = y;
     CGPathMoveToPoint(path, nil, x, y);
-
-    BezierElement *newElement = [[BezierElement alloc] init];
-    newElement.elementType = kCGPathElementMoveToPoint;
-    newElement.point = CGPointMake(x, y);
-    [_bezierCurves addObject:newElement];
 }
 
 - (void)line:(CGMutablePathRef)path x:(float)x y:(float)y
@@ -175,11 +159,6 @@
     _pivotX = _penX = x;
     _pivotY = _penY = y;
     CGPathAddLineToPoint(path, nil, x, y);
-
-    BezierElement *newElement = [[BezierElement alloc] init];
-    newElement.elementType = kCGPathElementAddLineToPoint;
-    newElement.point = CGPointMake(x, y);
-    [_bezierCurves addObject:newElement];
 }
 
 - (void)curve:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y ex:(float)ex ey:(float)ey
@@ -205,13 +184,6 @@
     _penX = ex;
     _penY = ey;
     CGPathAddCurveToPoint(path, nil, c1x, c1y, c2x, c2y, ex, ey);
-
-    BezierElement *newElement = [[BezierElement alloc] init];
-    newElement.elementType = kCGPathElementAddCurveToPoint;
-    newElement.controlPoint1 = CGPointMake(c1x, c1y);
-    newElement.controlPoint2 = CGPointMake(c2x, c2y);
-    newElement.point = CGPointMake(ex, ey);
-    [_bezierCurves addObject:newElement];
 }
 
 - (void)smoothCurve:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y ex:(float)ex ey:(float)ey
@@ -379,13 +351,6 @@
         float ex = cx + xx * x + yx * y;
         float ey = cy + xy * x + yy * y;
         CGPathAddCurveToPoint(path, nil, c1x, c1y, c2x, c2y, ex, ey);
-
-        BezierElement *newElement = [[BezierElement alloc] init];
-        newElement.elementType = kCGPathElementAddCurveToPoint;
-        newElement.controlPoint1 = CGPointMake(c1x, c1y);
-        newElement.controlPoint2 = CGPointMake(c2x, c2y);
-        newElement.point = CGPointMake(ex, ey);
-        [_bezierCurves addObject:newElement];
     }
 }
 
@@ -396,9 +361,6 @@
         _penY = _penDownY;
         _penDownSet = NO;
         CGPathCloseSubpath(path);
-        BezierElement *newElement = [[BezierElement alloc] init];
-        newElement.elementType = kCGPathElementCloseSubpath;
-        [_bezierCurves addObject:newElement];
     }
 }
 

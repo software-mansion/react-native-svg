@@ -26,13 +26,6 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
                                   @"none": @(kRNSVGVBMOSNone)
                                   }), kRNSVGVBMOSMeet, intValue)
 
-RCT_ENUM_CONVERTER(RNSVGTextAnchor, (@{
-                                        @"auto": @(kRNSVGTextAnchorAuto),
-                                        @"start": @(kRNSVGTextAnchorStart),
-                                        @"middle": @(kRNSVGTextAnchorMiddle),
-                                        @"end": @(kRNSVGTextAnchorEnd)
-                                       }), kRNSVGTextAnchorAuto, intValue)
-
 RCT_ENUM_CONVERTER(RNSVGUnits, (@{
                                      @"objectBoundingBox": @(kRNSVGUnitsObjectBoundingBox),
                                      @"userSpaceOnUse": @(kRNSVGUnitsUserSpaceOnUse),

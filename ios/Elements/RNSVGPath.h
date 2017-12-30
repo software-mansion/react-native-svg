@@ -14,6 +14,4 @@
 
 @property (nonatomic, strong) RNSVGPathParser *d;
 
-- (void)getPathLength:(CGFloat*)length lineCount:(NSInteger*)lineCount lengths:(NSArray* __strong *)lengths lines:(NSArray* __strong *)lines isClosed:(BOOL*)isClosed;
-
 @end

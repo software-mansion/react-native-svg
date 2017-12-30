@@ -13,6 +13,5 @@
 
 - (instancetype) initWithPathString:(NSString *)d;
 - (CGPathRef)getPath;
-- (NSArray *)getBezierCurves;
 
 @end
