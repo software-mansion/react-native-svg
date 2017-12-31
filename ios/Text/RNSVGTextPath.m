@@ -167,12 +167,12 @@ void addLine(CGPoint *last, const CGPoint *next, NSMutableArray *lines, CGFloat 
     CGPathRef _path;
     NSMutableArray *lengths;
     NSMutableArray *lines;
-    NSInteger lineCount;
+    NSUInteger lineCount;
     CGFloat length;
     BOOL isClosed;
 }
 
-- (void)getPathLength:(CGFloat*)lengthP lineCount:(NSInteger*)lineCountP lengths:(NSArray* __strong *)lengthsP lines:(NSArray* __strong *)linesP isClosed:(BOOL*)isClosedP
+- (void)getPathLength:(CGFloat*)lengthP lineCount:(NSUInteger*)lineCountP lengths:(NSArray* __strong *)lengthsP lines:(NSArray* __strong *)linesP isClosed:(BOOL*)isClosedP
 {
     RNSVGSvgView *svg = [self getSvgView];
     RNSVGNode *template = [svg getDefinedTemplate:self.href];

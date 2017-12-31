@@ -20,7 +20,7 @@ NSCharacterSet *separators = nil;
     RNSVGTextPath *textPath;
     NSArray *lengths;
     NSArray *lines;
-    NSInteger lineCount;
+    NSUInteger lineCount;
     BOOL isClosed;
 }
 
@@ -115,7 +115,7 @@ NSCharacterSet *separators = nil;
     FontData* font = [gc getFont];
     NSUInteger n = str.length;
     bool ligature[n];
-    for (int i = 0; i < n; i++){
+    for (NSUInteger i = 0; i < n; i++){
         ligature[i] = NO;
     }
     /*
@@ -682,7 +682,6 @@ NSCharacterSet *separators = nil;
                     break;
             }
         }
-        int i = -1;
         CFDictionaryRef ligattributes;
         NSNumber *lig = [NSNumber numberWithInt:allowOptionalLigatures ? 2 : 1];
 
@@ -697,8 +696,7 @@ NSCharacterSet *separators = nil;
                                                      };
         }
         for(CFIndex g = 0; g < runGlyphCount; g++) {
-            i++;
-            bool alreadyRenderedGraphemeCluster = ligature[i];
+            bool alreadyRenderedGraphemeCluster = ligature[g];
 
             /*
              Determine the glyph's charwidth (i.e., the amount which the current text position
@@ -721,13 +719,13 @@ NSCharacterSet *separators = nil;
                 kerning = kerned - charWidth;
             }
 
-            char currentChar = [str characterAtIndex:i];
+            char currentChar = [str characterAtIndex:g];
             bool isWordSeparator = [separators characterIsMember:currentChar];
             double wordSpace = isWordSeparator ? wordSpacing : 0;
             double spacing = wordSpace + letterSpacing;
             double advance = charWidth + spacing;
 
-            double x = [gc nextXWithDouble:kerning + charWidth];
+            double x = [gc nextXWithDouble:kerning + advance];
             double y = [gc nextY];
             double dx = [gc nextDeltaX];
             double dy = [gc nextDeltaY];
@@ -739,12 +737,12 @@ NSCharacterSet *separators = nil;
                 continue;
             }
 
-            int len = 2;
-            int nextIndex = i;
+            NSUInteger len = 2;
+            NSUInteger nextIndex = g;
             CGGlyph glyph = glyphs[g];
             bool hasLigature = false;
             while (++nextIndex < n) {
-                NSString* nextLigature = [str substringWithRange:NSMakeRange(i, len++)];
+                NSString* nextLigature = [str substringWithRange:NSMakeRange(g, len++)];
                 bool hasNextLigature = hasGlyph(fontRef, nextLigature, &glyph, ligattributes);
                 if (hasNextLigature) {
                     ligature[nextIndex] = true;

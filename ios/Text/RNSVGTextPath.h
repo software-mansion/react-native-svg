@@ -19,7 +19,7 @@
 @property (nonatomic, strong) NSString *spacing;
 @property (nonatomic, strong) NSString *startOffset;
 
-- (void)getPathLength:(CGFloat*)length lineCount:(NSInteger*)lineCount lengths:(NSArray* __strong *)lengths lines:(NSArray* __strong *)lines isClosed:(BOOL*)isClosed;
+- (void)getPathLength:(CGFloat*)length lineCount:(NSUInteger*)lineCount lengths:(NSArray* __strong *)lengths lines:(NSArray* __strong *)lines isClosed:(BOOL*)isClosed;
 
 
 @end
