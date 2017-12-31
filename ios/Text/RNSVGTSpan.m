@@ -696,36 +696,58 @@ NSCharacterSet *separators = nil;
                                                      };
         }
         for(CFIndex g = 0; g < runGlyphCount; g++) {
+            CGGlyph glyph = glyphs[g];
+            bool hasLigature = false;
+            CGFloat charWidth = 0;
+            double advance = 0;
+
             bool alreadyRenderedGraphemeCluster = ligature[g];
+            if (!alreadyRenderedGraphemeCluster) {
+                /*
+                 Determine the glyph's charwidth (i.e., the amount which the current text position
+                 advances horizontally when the glyph is drawn using horizontal text layout).
+                 */
+                double unkernedAdvance = CTFontGetAdvancesForGlyphs(fontRef, kCTFontOrientationHorizontal, glyphs + g, NULL, 1);
+                charWidth = unkernedAdvance * scaleSpacingAndGlyphs;
 
-            /*
-             Determine the glyph's charwidth (i.e., the amount which the current text position
-             advances horizontally when the glyph is drawn using horizontal text layout).
-             */
-            double unkernedAdvance = CTFontGetAdvancesForGlyphs(fontRef, kCTFontOrientationHorizontal, glyphs + g, NULL, 1);
-            CGFloat charWidth = unkernedAdvance * scaleSpacingAndGlyphs;
+                /*
+                 For each subsequent glyph, set a new startpoint-on-the-path as the previous
+                 endpoint-on-the-path, but with appropriate adjustments taking into account
+                 horizontal kerning tables in the font and current values of various attributes
+                 and properties, including spacing properties (e.g. letter-spacing and word-spacing)
+                 and ‘tspan’ elements with values provided for attributes ‘dx’ and ‘dy’. All
+                 adjustments are calculated as distance adjustments along the path, calculated
+                 using the user agent's distance along the path algorithm.
+                 */
+                if (autoKerning) {
+                    double kerned = advances[g].width * scaleSpacingAndGlyphs;
+                    kerning = kerned - charWidth;
+                }
 
-            /*
-             For each subsequent glyph, set a new startpoint-on-the-path as the previous
-             endpoint-on-the-path, but with appropriate adjustments taking into account
-             horizontal kerning tables in the font and current values of various attributes
-             and properties, including spacing properties (e.g. letter-spacing and word-spacing)
-             and ‘tspan’ elements with values provided for attributes ‘dx’ and ‘dy’. All
-             adjustments are calculated as distance adjustments along the path, calculated
-             using the user agent's distance along the path algorithm.
-             */
-            if (autoKerning) {
-                double kerned = advances[g].width * scaleSpacingAndGlyphs;
-                kerning = kerned - charWidth;
+                NSUInteger len = 2;
+                NSUInteger nextIndex = g;
+                while (++nextIndex < n) {
+                    NSString* nextLigature = [str substringWithRange:NSMakeRange(g, len++)];
+                    bool hasNextLigature = hasGlyph(fontRef, nextLigature, &glyph, ligattributes);
+                    if (hasNextLigature) {
+                        ligature[nextIndex] = true;
+                        hasLigature = true;
+                    } else {
+                        break;
+                    }
+                }
+                if (hasLigature) {
+                    charWidth = CTFontGetAdvancesForGlyphs(fontRef, kCTFontOrientationHorizontal, &glyph, NULL, 1);
+                }
+
+                char currentChar = [str characterAtIndex:g];
+                bool isWordSeparator = [separators characterIsMember:currentChar];
+                double wordSpace = isWordSeparator ? wordSpacing : 0;
+                double spacing = wordSpace + letterSpacing;
+                advance = charWidth + spacing;
             }
 
-            char currentChar = [str characterAtIndex:g];
-            bool isWordSeparator = [separators characterIsMember:currentChar];
-            double wordSpace = isWordSeparator ? wordSpacing : 0;
-            double spacing = wordSpace + letterSpacing;
-            double advance = charWidth + spacing;
-
-            double x = [gc nextXWithDouble:kerning + advance];
+            double x = [gc nextXWithDouble:(alreadyRenderedGraphemeCluster ? 0 : kerning + advance)];
             double y = [gc nextY];
             double dx = [gc nextDeltaX];
             double dy = [gc nextDeltaY];
@@ -735,21 +757,6 @@ NSCharacterSet *separators = nil;
                 // Skip rendering other grapheme clusters of ligatures (already rendered),
                 // But, make sure to increment index positions by making gc.next() calls.
                 continue;
-            }
-
-            NSUInteger len = 2;
-            NSUInteger nextIndex = g;
-            CGGlyph glyph = glyphs[g];
-            bool hasLigature = false;
-            while (++nextIndex < n) {
-                NSString* nextLigature = [str substringWithRange:NSMakeRange(g, len++)];
-                bool hasNextLigature = hasGlyph(fontRef, nextLigature, &glyph, ligattributes);
-                if (hasNextLigature) {
-                    ligature[nextIndex] = true;
-                    hasLigature = true;
-                } else {
-                    break;
-                }
             }
             CGPathRef glyphPath = CTFontCreatePathForGlyph(runFont, glyph, nil);
 
@@ -804,19 +811,20 @@ NSCharacterSet *separators = nil;
                 CGFloat prevLength = i == 0 ? 0 : [lengths[i - 1] doubleValue];
 
                 CGFloat length = totalLength - prevLength;
-                CGFloat targetPercent = (midPoint - prevLength) / length;
+                CGFloat percent = (midPoint - prevLength) / length;
 
                 NSArray * points = [lines objectAtIndex: i];
                 CGPoint p1 = [[points objectAtIndex: 0] CGPointValue];
                 CGPoint p2 = [[points objectAtIndex: 1] CGPointValue];
 
-                CGPoint slope;
-                CGPoint mid = InterpolateLineSegment(p1, p2, targetPercent, &slope);
+                CGFloat ldx = p2.x - p1.x;
+                CGFloat ldy = p2.y - p1.y;
+                CGFloat angle = atan2(ldy, ldx);
 
-                // Calculate the rotation
-                double angle = atan2(slope.y, slope.x);
+                CGFloat px = p1.x + ldx * percent;
+                CGFloat py = p1.y + ldy * percent;
 
-                transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(mid.x, mid.y), transform);
+                transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(px, py), transform);
                 transform = CGAffineTransformConcat(CGAffineTransformMakeRotation(angle + r), transform);
                 transform = CGAffineTransformScale(transform, scaledDirection, side);
                 transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(-halfWay, y + dy + baselineShift), transform);
@@ -835,20 +843,6 @@ NSCharacterSet *separators = nil;
     CFRelease(line);
 
     return path;
-}
-
-CGPoint InterpolateLineSegment(CGPoint p1, CGPoint p2, CGFloat percent, CGPoint *slope)
-{
-    CGFloat dx = p2.x - p1.x;
-    CGFloat dy = p2.y - p1.y;
-
-    if (slope)
-        *slope = CGPointMake(dx, dy);
-
-    CGFloat px = p1.x + dx * percent;
-    CGFloat py = p1.y + dy * percent;
-
-    return CGPointMake(px, py);
 }
 
 CGFloat getTextAnchorOffset(enum TextAnchor textAnchor, CGFloat width)
