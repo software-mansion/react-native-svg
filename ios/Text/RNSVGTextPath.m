@@ -10,7 +10,7 @@
 #import "RNSVGTextPath.h"
 #import "BezierElement.h"
 
-/* Bezier logic from PerformanceBezier */
+/* Some Bezier logic from PerformanceBezier */
 /*
 
  ## License
@@ -34,67 +34,7 @@ CGFloat distance(CGPoint p1, CGPoint p2)
     CGFloat dx = p2.x - p1.x;
     CGFloat dy = p2.y - p1.y;
 
-    return sqrt(dx*dx + dy*dy);
-}
-
-/**
- * returns the dot product of two coordinates
- */
-CGFloat dotProduct(const CGPoint p1, const CGPoint p2) {
-    return p1.x * p2.x + p1.y * p2.y;
-}
-
-/**
- * returns the shortest distance from a point to a line
- */
-CGFloat distanceOfPointToLine(CGPoint point, CGPoint start, CGPoint end){
-    CGPoint v = CGPointMake(end.x - start.x, end.y - start.y);
-    CGPoint w = CGPointMake(point.x - start.x, point.y - start.y);
-    CGFloat c1 = dotProduct(w, v);
-    CGFloat c2 = dotProduct(v, v);
-    CGFloat d;
-    if (c1 <= 0) {
-        d = distance(point, start);
-    }
-    else if (c2 <= c1) {
-        d = distance(point, end);
-    }
-    else {
-        CGFloat b = c1 / c2;
-        CGPoint Pb = CGPointMake(start.x + b * v.x, start.y + b * v.y);
-        d = distance(point, Pb);
-    }
-    return d;
-}
-
-/**
- * calculate the point on a bezier at time t
- * where 0 < t < 1
- */
-CGPoint bezierPointAtT(const CGPoint bez[4], CGFloat t)
-{
-    CGPoint q;
-    CGFloat mt = 1 - t;
-
-    CGPoint bez1[4];
-    CGPoint bez2[4];
-
-    q.x = mt * bez[1].x + t * bez[2].x;
-    q.y = mt * bez[1].y + t * bez[2].y;
-    bez1[1].x = mt * bez[0].x + t * bez[1].x;
-    bez1[1].y = mt * bez[0].y + t * bez[1].y;
-    bez2[2].x = mt * bez[2].x + t * bez[3].x;
-    bez2[2].y = mt * bez[2].y + t * bez[3].y;
-
-    bez1[2].x = mt * bez1[1].x + t * q.x;
-    bez1[2].y = mt * bez1[1].y + t * q.y;
-    bez2[1].x = mt * q.x + t * bez2[2].x;
-    bez2[1].y = mt * q.y + t * bez2[2].y;
-
-    bez1[3].x = bez2[0].x = mt * bez1[2].x + t * bez2[1].x;
-    bez1[3].y = bez2[0].y = mt * bez1[2].y + t * bez2[1].y;
-
-    return CGPointMake(bez1[3].x, bez1[3].y);
+    return hypot(dx, dy);
 }
 
 // Subdivide a Bézier (specific division)
@@ -221,10 +161,16 @@ void addLine(CGPoint *last, const CGPoint *next, NSMutableArray *lines, CGFloat 
                         [curves removeLastObject];
 
                         // calculate the error rate of the curve vs
-                        // a line segement between the start and end points
-                        CGPoint onCurve = bezierPointAtT(bez, .5);
+                        // a line segment between the start and end points
+                        CGPoint ctrl1 = bez[1];
+                        CGPoint ctrl2 = bez[2];
                         CGPoint next = bez[3];
-                        CGFloat error = distanceOfPointToLine(onCurve, last, next);
+                        CGFloat polyLen =
+                            distance(last, ctrl1) +
+                            distance(ctrl1, ctrl2) +
+                            distance(ctrl2, next);
+                        CGFloat chordLen = distance(last, next);
+                        CGFloat error = polyLen - chordLen;
 
                         // if the error is less than our accepted level of error
                         // then add a line, else, split the curve in half
@@ -239,7 +185,6 @@ void addLine(CGPoint *last, const CGPoint *next, NSMutableArray *lines, CGFloat 
                             curveIndex += 2;
                         }
                     }
-                    last = curveTo;
                     break;
                 }
 
