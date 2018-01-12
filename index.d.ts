@@ -175,6 +175,7 @@ interface RectProps extends PathProps {
   height?: NumberProp,
   rx?: NumberProp,
   ry?: NumberProp,
+    class? : string
 }
 export const Rect: React.ComponentClass<RectProps>;
 
@@ -183,6 +184,7 @@ export const Shape: React.ComponentClass<{}>;
 interface StopProps {
   stopColor?: string,
   stopOpacity?: NumberProp,
+    offset?: string
 }
 export const Stop: React.ComponentClass<StopProps>;
 
