@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 class GlyphPathBag {
     private final ArrayList<Path> paths = new ArrayList<>();
-    private final int[][] data = new int[255][];
+    private final int[][] data = new int[256][];
     private final Paint paint;
 
     GlyphPathBag(Paint paint) {
@@ -28,7 +28,7 @@ class GlyphPathBag {
 
             int[] bin = data[ch >> 8];
             if (bin == null) {
-                bin = data[ch >> 8] = new int[255];
+                bin = data[ch >> 8] = new int[256];
             }
             bin[ch & 0xFF] = paths.size();
 
