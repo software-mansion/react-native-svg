@@ -5,7 +5,7 @@
 
 `react-native-svg` is built to provide a SVG interface to react native on both iOS and Android.
 
-[Check out the demo](https://getexponent.com/@rncommunity/react-native-svg-examples).
+[Check out the demo](https://expo.io/@msand/svgexample) [Source](https://github.com/peterlazar1993/react-native-svg-example/commit/8944e14d2dd1b36cc41fe089ac547cdc9149c111).
 
 ## Features
 
@@ -42,12 +42,6 @@
     ```bash
     react-native link react-native-svg
     ```
-
-    Or use `rnpm` instead:
-
-    ```bash
-    rnpm link react-native-svg
-    ```
     
 #### Manual
 
@@ -72,6 +66,15 @@
   - Add `import com.horcrux.svg.SvgPackage;` to the imports at the top of the file
   - Add `new SvgPackage()` to the list returned by the `getPackages()` method. Add a comma to the previous item if there's already something there.
   
+##### iOS
+
+[Manual linking](http://facebook.github.io/react-native/docs/linking-libraries-ios.html#manual-linking)
+
+To install react-native-svg on iOS visit the link referenced above or do the following:
+
+1. Open your project in XCode and drag the RNSVG.xcodeproj file (located in .../node_modules/react-native-svg/ios) into the Libraries directory shown in XCode.
+2. Expand the RNSVG.xcodeproj file you just added to XCode until you see: libRNSVG.a (located in RNSVG.xcodeproj > Products )
+3. Drag libRNSVG.a into the Link Binary With Libraries section (located in Build Phases which may be found at the top of the XCode window)
 
 ### <a name="Usage">Usage</a>
 
@@ -804,12 +807,11 @@ npm i
 
 
 ### TODO:
-1. Add Native method for elements.
+1. Add Native methods for elements.
 2. Pattern element.
 3. Mask element.
 4. Marker element.
 5. Load Image from URL.
-6. ~~Transform prop support~~.
 
 ### Known issues:
 1. Unable to apply focus point of RadialGradient on Android.
