@@ -43,10 +43,10 @@
     react-native link react-native-svg
     ```
 
-    Or use `rnpm` instead:
+    Or use `npm` instead:
 
     ```bash
-    rnpm link react-native-svg
+    npm link react-native-svg
     ```
     
 #### Manual
