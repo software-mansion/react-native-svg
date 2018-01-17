@@ -9,7 +9,6 @@
 #import "RNSVGTSpanManager.h"
 
 #import "RNSVGTSpan.h"
-#import "RNSVGTextAnchor.h"
 #import "RCTConvert+RNSVG.h"
 
 @implementation RNSVGTSpanManager

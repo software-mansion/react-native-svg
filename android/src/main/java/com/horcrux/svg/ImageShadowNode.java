@@ -160,7 +160,7 @@ class ImageShadowNode extends RenderableShadowNode {
     @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
-        path.addRect(new RectF(getRect()), Path.Direction.CW);
+        path.addRect(getRect(), Path.Direction.CW);
         return path;
     }
 
@@ -187,51 +187,37 @@ class ImageShadowNode extends RenderableShadowNode {
     }
 
     @Nonnull
-    private Rect getRect() {
+    private RectF getRect() {
         double x = relativeOnWidth(mX);
         double y = relativeOnHeight(mY);
         double w = relativeOnWidth(mW);
         double h = relativeOnHeight(mH);
+        if (w == 0) {
+            w = mImageWidth * mScale;
+        }
+        if (h == 0) {
+            h = mImageHeight * mScale;
+        }
 
-        return new Rect((int) x, (int) y, (int) (x + w), (int) (y + h));
+        return new RectF((float)x, (float)y, (float)(x + w), (float)(y + h));
     }
 
     private void doRender(Canvas canvas, Paint paint, Bitmap bitmap, float opacity) {
-        // apply viewBox transform on Image render.
-        Rect rect = getRect();
-        float rectWidth = (float)rect.width();
-        float rectHeight = (float)rect.height();
-        float rectX = (float)rect.left;
-        float rectY = (float)rect.top;
-        float canvasLeft = getCanvasLeft();
-        float canvasTop = getCanvasTop();
-
         if (mImageWidth == 0 || mImageHeight == 0) {
             mImageWidth = bitmap.getWidth();
             mImageHeight = bitmap.getHeight();
         }
 
-        RectF renderRect = new RectF(0, 0, mImageWidth, mImageHeight);
-
+        RectF renderRect = getRect();
         RectF vbRect = new RectF(0, 0, mImageWidth, mImageHeight);
-        RectF eRect = new RectF(canvasLeft, canvasTop, (rectWidth / mScale) + canvasLeft, (rectHeight / mScale) + canvasTop);
-        Matrix transform = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
+        Matrix transform = ViewBox.getTransform(vbRect, renderRect, mAlign, mMeetOrSlice);
+        transform.mapRect(vbRect);
 
-        Matrix translation = new Matrix();
-        transform.mapRect(renderRect);
         if (mMatrix != null) {
-            translation.postConcat(mMatrix);
-            //mMatrix.mapRect(renderRect);
+            mMatrix.mapRect(vbRect);
         }
-        float dx = rectX / mScale + canvasLeft;
-        float dy = rectY / mScale + canvasTop;
-        translation.postTranslate(dx, dy);
-        translation.postScale(mScale, mScale);
-        translation.mapRect(renderRect);
-
 
         Path clip = new Path();
-
         Path clipPath = getClipPath(canvas, paint);
         Path path = getPath(canvas, paint);
         if (clipPath != null) {
@@ -256,7 +242,7 @@ class ImageShadowNode extends RenderableShadowNode {
 
         Paint alphaPaint = new Paint();
         alphaPaint.setAlpha((int) (opacity * 255));
-        canvas.drawBitmap(bitmap, null, renderRect, alphaPaint);
+        canvas.drawBitmap(bitmap, null, vbRect, alphaPaint);
     }
 
     private void tryRender(ImageRequest request, Canvas canvas, Paint paint, float opacity) {

@@ -726,7 +726,7 @@ class TSpanShadowNode extends TextShadowNode {
             double spacing = wordSpace + letterSpacing;
             double advance = charWidth + spacing;
 
-            double x = gc.nextX(kerning + advance);
+            double x = gc.nextX(alreadyRenderedGraphemeCluster ? 0 : kerning + advance);
             double y = gc.nextY();
             double dx = gc.nextDeltaX();
             double dy = gc.nextDeltaY();

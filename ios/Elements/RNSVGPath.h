@@ -14,6 +14,4 @@
 
 @property (nonatomic, strong) RNSVGPathParser *d;
 
-- (NSArray *)getBezierCurves;
-
 @end

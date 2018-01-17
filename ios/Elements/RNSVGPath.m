@@ -30,11 +30,6 @@
     return _path;
 }
 
-- (NSArray *)getBezierCurves
-{
-    return [_d getBezierCurves];
-}
-
 - (void)dealloc
 {
     CGPathRelease(_path);

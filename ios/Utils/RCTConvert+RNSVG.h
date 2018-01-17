@@ -13,7 +13,6 @@
 #import <React/RCTConvert.h>
 #import "RNSVGCGFCRule.h"
 #import "RNSVGVBMOS.h"
-#import "RNSVGTextAnchor.h"
 #import "RNSVGUnits.h"
 #import "RNSVGPathParser.h"
 
@@ -21,7 +20,6 @@
 
 @interface RCTConvert (RNSVG)
 
-+ (RNSVGTextAnchor)RNSVGTextAnchor:(id)json;
 + (RNSVGCGFCRule)RNSVGCGFCRule:(id)json;
 + (RNSVGVBMOS)RNSVGVBMOS:(id)json;
 + (RNSVGUnits)RNSVGUnits:(id)json;
