@@ -205,8 +205,8 @@ export const Stop: React.ComponentClass<StopProps>;
 
 export interface SvgProps extends ReactNative.ViewProperties {
   opacity?: NumberProp,
-  width?: NumberProp,
-  height?: NumberProp,
+  width: NumberProp,
+  height: NumberProp,
   viewBox?: string,
   preserveAspectRatio?: string,
 }
@@ -215,12 +215,12 @@ export interface SvgProps extends ReactNative.ViewProperties {
 export const Svg: React.ComponentClass<SvgProps>;
 export default Svg;
 
-export interface SymbolsProps {
+export interface SymbolProps {
   id: string,
   viewBox?: string,
   preserveAspectRatio?: string,
 }
-export const Symbols: React.ComponentClass<SymbolsProps>;
+export const Symbol: React.ComponentClass<SymbolProps>;
 
 export interface TSpanProps extends CommonPathProps, FontProps {
   dx?: NumberProp,
@@ -244,7 +244,7 @@ export const TextPath: React.ComponentClass<TextPathProps>;
 
 export interface UseProps extends CommonPathProps {
   href: string,
-  width?: NumberProp,
-  height?: NumberProp,
+  width?: string,
+  height?: string,
 }
 export const Use: React.ComponentClass<UseProps>;
