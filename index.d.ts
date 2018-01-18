@@ -4,7 +4,13 @@ import * as ReactNative from 'react-native';
 // Common props
 type NumberProp = string | number;
 
-interface TouchableProps {
+export type FillRule = 'evenodd' | 'nonzero';
+export type Units = 'userSpaceOnUse' | 'objectBoundingBox';
+export type TextAnchor = 'start' | 'middle' | 'end';
+export type Linecap = 'butt' | 'square' | 'round';
+export type Linejoin = 'miter' | 'bevel' | 'round';
+
+export interface TouchableProps {
   disabled?: boolean,
   onPress?: (event: any) => any,
   onPressIn?: (event: any) => any,
@@ -15,37 +21,37 @@ interface TouchableProps {
   delayLongPress?: number
 }
 
-interface ResponderProps extends ReactNative.GestureResponderHandlers {
+export interface ResponderProps extends ReactNative.GestureResponderHandlers {
   pointerEvents?: (event: any) => any,
 }
 
-interface FillProps {
+export interface FillProps {
   fill?: string,
   fillOpacity?: NumberProp,
-  fillRule?: 'evenodd' | 'nonzero',
+  fillRule?: FillRule,
 }
 
-interface ClipProps {
-  clipRule?: 'evenodd' | 'nonzero',
+export interface ClipProps {
+  clipRule?: FillRule,
   clipPath?: string
 }
 
-interface DefinationProps {
+export interface DefinitionProps {
   name?: string,
 }
 
-interface StrokeProps {
+export interface StrokeProps {
   stroke?: string,
   strokeWidth?: NumberProp,
   strokeOpacity?: NumberProp,
   strokeDasharray?: number[] | string,
   strokeDashoffset?: NumberProp,
-  strokeLinecap?: 'butt' | 'square' | 'round',
-  strokeLinejoin?: 'miter' | 'bevel' | 'round',
+  strokeLinecap?: Linecap,
+  strokeLinejoin?: Linejoin,
   strokeMiterlimit?: NumberProp,
 }
 
-interface FontProps {
+export interface FontProps {
   fontFamily?: string,
   fontSize?: NumberProp,
   fontWeight?: NumberProp,
@@ -53,7 +59,7 @@ interface FontProps {
   font?: object
 }
 
-interface TransformProps {
+export interface TransformObject {
   scale?: NumberProp,
   scaleX?: NumberProp,
   scaleY?: NumberProp,
@@ -70,28 +76,31 @@ interface TransformProps {
   skew?: NumberProp,
   skewX?: NumberProp,
   skewY?: NumberProp,
-  transform?: object,
 }
 
-interface PathProps extends FillProps, StrokeProps, ClipProps, TransformProps, ResponderProps, TouchableProps, DefinationProps {}
+export interface TransformProps extends TransformObject {
+  transform?: string | TransformObject,
+}
+
+export interface CommonPathProps extends FillProps, StrokeProps, ClipProps, TransformProps, ResponderProps, TouchableProps, DefinitionProps {}
 
 
 // Element props
-interface CircleProps extends PathProps {
+export interface CircleProps extends CommonPathProps {
   cx?: NumberProp,
   cy?: NumberProp,
   r?: NumberProp,
 }
 export const Circle: React.ComponentClass<CircleProps>;
 
-interface ClipPathProps {
+export interface ClipPathProps {
   id: string,
 }
 export const ClipPath: React.ComponentClass<ClipPathProps>;
 
 export const Defs: React.ComponentClass<{}>;
 
-interface EllipseProps extends PathProps {
+export interface EllipseProps extends CommonPathProps {
   cx?: NumberProp,
   cy?: NumberProp,
   rx?: NumberProp,
@@ -99,19 +108,23 @@ interface EllipseProps extends PathProps {
 }
 export const Ellipse: React.ComponentClass<EllipseProps>;
 
-export const G: React.ComponentClass<PathProps>;
+export interface GProps extends CommonPathProps {
+}
+export const G: React.ComponentClass<GProps>;
 
-interface ImageProps extends ResponderProps, TouchableProps {
+export type ImageHref = ReactNative.ImageURISource | ReactNative.ImageURISource[] | ReactNative.ImageRequireSource;
+
+export interface ImageProps extends ResponderProps, TouchableProps {
   x?: NumberProp,
   y?: NumberProp,
   width?: NumberProp,
   height?: NumberProp,
-  href: ReactNative.ImageURISource | ReactNative.ImageURISource[] | ReactNative.ImageRequireSource,
+  href: ImageHref,
   preserveAspectRatio?: string,
 }
 export const Image: React.ComponentClass<ImageProps>;
 
-interface LineProps extends PathProps {
+export interface LineProps extends CommonPathProps {
   x1?: NumberProp,
   x2?: NumberProp,
   y1?: NumberProp,
@@ -119,43 +132,43 @@ interface LineProps extends PathProps {
 }
 export const Line: React.ComponentClass<LineProps>;
 
-interface LinearGradientProps {
+export interface LinearGradientProps {
   x1?: NumberProp,
   x2?: NumberProp,
   y1?: NumberProp,
   y2?: NumberProp,
-  gradientUnits?: 'objectBoundingBox' | 'userSpaceOnUse',
+  gradientUnits?: Units,
   id: string,
 }
 export const LinearGradient: React.ComponentClass<LinearGradientProps>;
 
-interface PathElementProps extends PathProps {
+export interface PathProps extends CommonPathProps {
   d: string,
 }
-export const Path: React.ComponentClass<PathElementProps>;
+export const Path: React.ComponentClass<PathProps>;
 
-interface PatternProps {
+export interface PatternProps {
   x1?: NumberProp,
   x2?: NumberProp,
   y1?: NumberProp,
   y2?: NumberProp,
   patternTransform?: string,
-  patternUnits?: 'userSpaceOnUse' | 'objectBoundingBox',
-  patternContentUnits?: 'userSpaceOnUse' | 'objectBoundingBox',
+  patternUnits?: Units,
+  patternContentUnits?: Units,
 }
 export const Pattern: React.ComponentClass<PatternProps>;
 
-interface PolygonProps extends PathProps {
+export interface PolygonProps extends CommonPathProps {
   points: string | any[],
 }
 export const Polygon: React.ComponentClass<PolygonProps>;
 
-interface PolylineProps extends PathProps {
+export interface PolylineProps extends CommonPathProps {
   points: string | any[],
 }
 export const Polyline: React.ComponentClass<PolylineProps>;
 
-interface RadialGradientProps {
+export interface RadialGradientProps {
   fx?: NumberProp,
   fy?: NumberProp,
   rx?: NumberProp,
@@ -163,70 +176,73 @@ interface RadialGradientProps {
   cx?: NumberProp,
   cy?: NumberProp,
   r?: NumberProp,
-  gradientUnits: 'objectBoundingBox' | 'userSpaceOnUse',
+  gradientUnits?: Units,
   id: string,
 }
 export const RadialGradient: React.ComponentClass<RadialGradientProps>;
 
-interface RectProps extends PathProps {
+export interface RectProps extends CommonPathProps {
   x?: NumberProp,
   y?: NumberProp,
   width?: NumberProp,
   height?: NumberProp,
   rx?: NumberProp,
   ry?: NumberProp,
-    class? : string
+  class?: string,
 }
 export const Rect: React.ComponentClass<RectProps>;
 
-export const Shape: React.ComponentClass<{}>;
+export interface ShapeProps {
+}
+export const Shape: React.ComponentClass<ShapeProps>;
 
-interface StopProps {
+export interface StopProps {
   stopColor?: string,
   stopOpacity?: NumberProp,
-    offset?: string
+  offset?: string,
 }
 export const Stop: React.ComponentClass<StopProps>;
 
-interface SvgProps extends ReactNative.ViewProperties {
+export interface SvgProps extends ReactNative.ViewProperties {
   opacity?: NumberProp,
   width?: NumberProp,
   height?: NumberProp,
   viewBox?: string,
-  preserveAspectRatio?: string
+  preserveAspectRatio?: string,
 }
 
-declare const Svg: React.ComponentClass<SvgProps>;
+// Svg is both regular and default exported
+export const Svg: React.ComponentClass<SvgProps>;
 export default Svg;
 
-interface SymbolsProps {
+export interface SymbolsProps {
   id: string,
   viewBox?: string,
   preserveAspectRatio?: string,
 }
 export const Symbols: React.ComponentClass<SymbolsProps>;
 
-interface TSpanProps extends PathProps, FontProps {
+export interface TSpanProps extends CommonPathProps, FontProps {
   dx?: NumberProp,
   dy?: NumberProp,
-  textAnchor?: 'start' | 'middle' | 'end',
+  textAnchor?: TextAnchor,
 }
 export const TSpan: React.ComponentClass<TSpanProps>;
 
-interface TextProps extends PathProps, FontProps {
+export interface TextProps extends CommonPathProps, FontProps {
   dx?: NumberProp,
   dy?: NumberProp,
-  textAnchor?: 'start' | 'middle' | 'end',
+  textAnchor?: TextAnchor,
 }
 export const Text: React.ComponentClass<TextProps>;
 
-interface TextPathProps extends PathProps, FontProps {
+export interface TextPathProps extends CommonPathProps, FontProps {
   href: string,
   startOffset?: NumberProp,
 }
 export const TextPath: React.ComponentClass<TextPathProps>;
 
-interface UseProps extends PathProps {
+export interface UseProps extends CommonPathProps {
   href: string,
   width?: NumberProp,
   height?: NumberProp,
