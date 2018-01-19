@@ -76,6 +76,36 @@ To install react-native-svg on iOS visit the link referenced above or do the fol
 2. Expand the RNSVG.xcodeproj file you just added to XCode until you see: libRNSVG.a (located in RNSVG.xcodeproj > Products )
 3. Drag libRNSVG.a into the Link Binary With Libraries section (located in Build Phases which may be found at the top of the XCode window)
 
+###### Cocoapods
+
+1. Add RNSVG to your Pods 
+```
+pod 'RNSVG', :path => '../node_modules/react-native-svg'
+```
+
+2. Add [this](https://github.com/msand/SVGPodTest/blob/fe45f88a936181e6ecaddeb68268d33268b56121/ios/Podfile#L66-L70) to the end of your Podfile
+```
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        if target.name == 'yoga'
+            # Workaround: react-native v0.52 bug issue #17274
+            # node_modules/react-native/ReactCommon/yoga/yoga/YGNodePrint.cpp:208:46: Implicit conversion loses integer
+            # precision: 'size_type' (aka 'unsigned long') to 'const uint32_t' (aka 'const unsigned int')
+            # https://github.com/facebook/react-native/issues/17274#issuecomment-356363557
+            target.build_configurations.each do |config|
+                config.build_settings['GCC_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
+                config.build_settings['GCC_WARN_64_TO_32_BIT_CONVERSION'] = 'NO'
+            end
+        end
+        if target.name == "RNSVG"
+            target.build_configurations.each do |config|
+                config.build_settings['GCC_NO_COMMON_BLOCKS'] = 'NO'
+            end
+        end
+    end
+end
+```
+
 ### <a name="Usage">Usage</a>
 
 Here's a simple example. To render output like this:
