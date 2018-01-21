@@ -76,7 +76,9 @@ To install react-native-svg on iOS visit the link referenced above or do the fol
 2. Expand the RNSVG.xcodeproj file you just added to XCode until you see: libRNSVG.a (located in RNSVG.xcodeproj > Products )
 3. Drag libRNSVG.a into the Link Binary With Libraries section (located in Build Phases which may be found at the top of the XCode window)
 
-###### Cocoapods
+###### CocoaPods
+
+Alternatively, you can use [CocoaPods](https://cocoapods.org/) to manage your native (Objective-C and Swift) dependencies:
 
 1. Add RNSVG to your Pods 
 ```
