@@ -37,7 +37,7 @@ export interface ClipProps {
 }
 
 export interface DefinitionProps {
-  name?: string,
+  id?: string,
 }
 
 export interface StrokeProps {
@@ -192,10 +192,6 @@ export interface RectProps extends CommonPathProps {
 }
 export const Rect: React.ComponentClass<RectProps>;
 
-export interface ShapeProps {
-}
-export const Shape: React.ComponentClass<ShapeProps>;
-
 export interface StopProps {
   stopColor?: string,
   stopOpacity?: NumberProp,
@@ -244,7 +240,7 @@ export const TextPath: React.ComponentClass<TextPathProps>;
 
 export interface UseProps extends CommonPathProps {
   href: string,
-  width?: string,
-  height?: string,
+  width: string,
+  height: string,
 }
 export const Use: React.ComponentClass<UseProps>;
