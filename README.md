@@ -184,7 +184,7 @@ strokeDasharray | []         | The strokeDasharray prop controls the pattern of 
 strokeDashoffset| null       | The strokeDashoffset prop specifies the distance into the dash pattern to start the dash.
 x               | 0          | Translate distance on x-axis.
 y               | 0          | Translate distance on y-axis.
-rotate          | 0          | Rotation degree value on the current object.
+rotation          | 0          | Rotation degree value on the current object.
 scale           | 1          | Scale value on the current object.
 origin          | 0, 0       | Transform origin coordinates for the current object.
 originX         | 0          | Transform originX coordinates for the current object.
@@ -504,7 +504,7 @@ The <G> element is a container used to group other SVG elements. Transformations
     width="200"
 >
     <G
-        rotate="50"
+        rotation="50"
         origin="100, 50"
     >
         <Line
