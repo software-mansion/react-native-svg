@@ -6,7 +6,65 @@ type NumberProp = string | number;
 
 export type FillRule = 'evenodd' | 'nonzero';
 export type Units = 'userSpaceOnUse' | 'objectBoundingBox';
+
 export type TextAnchor = 'start' | 'middle' | 'end';
+export type FontStyle = 'normal' | 'italic' | 'oblique';
+export type FontVariant = 'normal' | 'small-caps';
+export type FontWeight =
+  | 'normal'
+  | 'bold'
+  | 'bolder'
+  | 'lighter'
+  | '100'
+  | '200'
+  | '300'
+  | '400'
+  | '500'
+  | '600'
+  | '700'
+  | '800'
+  | '900'
+  ;
+export type FontStretch =
+  | 'normal'
+  | 'wider'
+  | 'narrower'
+  | 'ultra-condensed'
+  | 'extra-condensed'
+  | 'condensed'
+  | 'semi-condensed'
+  | 'semi-expanded'
+  | 'expanded'
+  | 'extra-expanded'
+  | 'ultra-expanded'
+  ;
+export type TextDecoration = 'none' | 'underline' | 'overline' | 'line-through' | 'blink';
+export type FontVariantLigatures = 'normal' | 'none';
+export type AlignmentBaseline =
+  | 'baseline'
+  | 'text-bottom'
+  | 'alphabetic'
+  | 'ideographic'
+  | 'middle'
+  | 'central'
+  | 'mathematical'
+  | 'text-top'
+  | 'bottom'
+  | 'center'
+  | 'top'
+  | 'text-before-edge'
+  | 'text-after-edge'
+  | 'before-edge'
+  | 'after-edge'
+  | 'hanging'
+  ;
+export type BaselineShift = 'sub' | 'super' | 'baseline' | ReadonlyArray<NumberProp> | NumberProp;
+export type LengthAdjust = 'spacing' | 'spacingAndGlyphs';
+
+export type TextPathMethod = 'align' | 'stretch';
+export type TextPathSpacing = 'auto' | 'exact';
+export type TextPathMidLine = 'sharp' | 'smooth';
+
 export type Linecap = 'butt' | 'square' | 'round';
 export type Linejoin = 'miter' | 'bevel' | 'round';
 
@@ -44,19 +102,30 @@ export interface StrokeProps {
   stroke?: string,
   strokeWidth?: NumberProp,
   strokeOpacity?: NumberProp,
-  strokeDasharray?: number[] | string,
+  strokeDasharray?: ReadonlyArray<number> | string,
   strokeDashoffset?: NumberProp,
   strokeLinecap?: Linecap,
   strokeLinejoin?: Linejoin,
   strokeMiterlimit?: NumberProp,
 }
 
-export interface FontProps {
-  fontFamily?: string,
+export interface FontObject {
+  fontStyle?: FontStyle,
+  fontVariant?: FontVariant,
+  fontWeight?: FontWeight,
+  fontStretch?: FontStretch,
   fontSize?: NumberProp,
-  fontWeight?: NumberProp,
-  fontStyle?: string,
-  font?: object
+  fontFamily?: string,
+  textAnchor?: TextAnchor,
+  textDecoration?: TextDecoration,
+  letterSpacing?: NumberProp,
+  wordSpacing?: NumberProp,
+  kerning?: NumberProp,
+  fontVariantLigatures?: FontVariantLigatures,
+}
+
+export interface FontProps extends FontObject {
+  font?: FontObject,
 }
 
 export interface TransformObject {
@@ -112,14 +181,12 @@ export interface GProps extends CommonPathProps {
 }
 export const G: React.ComponentClass<GProps>;
 
-export type ImageHref = ReactNative.ImageURISource | ReactNative.ImageURISource[] | ReactNative.ImageRequireSource;
-
 export interface ImageProps extends ResponderProps, TouchableProps {
   x?: NumberProp,
   y?: NumberProp,
   width?: NumberProp,
   height?: NumberProp,
-  href: ImageHref,
+  href: ReactNative.ImageProperties['source'],
   preserveAspectRatio?: string,
 }
 export const Image: React.ComponentClass<ImageProps>;
@@ -159,12 +226,12 @@ export interface PatternProps {
 export const Pattern: React.ComponentClass<PatternProps>;
 
 export interface PolygonProps extends CommonPathProps {
-  points: string | any[],
+  points: string | ReadonlyArray<any>,
 }
 export const Polygon: React.ComponentClass<PolygonProps>;
 
 export interface PolylineProps extends CommonPathProps {
-  points: string | any[],
+  points: string | ReadonlyArray<any>,
 }
 export const Polyline: React.ComponentClass<PolylineProps>;
 
@@ -221,20 +288,31 @@ export const Symbol: React.ComponentClass<SymbolProps>;
 export interface TSpanProps extends CommonPathProps, FontProps {
   dx?: NumberProp,
   dy?: NumberProp,
-  textAnchor?: TextAnchor,
 }
 export const TSpan: React.ComponentClass<TSpanProps>;
 
-export interface TextProps extends CommonPathProps, FontProps {
+export interface TextSpecificProps extends CommonPathProps, FontProps {
+  alignmentBaseline: AlignmentBaseline,
+  baselineShift: BaselineShift,
+  verticalAlign: NumberProp,
+  lengthAdjust: LengthAdjust,
+  textLength: NumberProp,
+  fontData?: null | { [name: string]: any },
+  fontFeatureSettings?: string,
+}
+
+export interface TextProps extends TextSpecificProps {
   dx?: NumberProp,
   dy?: NumberProp,
-  textAnchor?: TextAnchor,
 }
 export const Text: React.ComponentClass<TextProps>;
 
-export interface TextPathProps extends CommonPathProps, FontProps {
+export interface TextPathProps extends TextSpecificProps {
   href: string,
   startOffset?: NumberProp,
+  method?: TextPathMethod,
+  spacing?: TextPathSpacing,
+  midLine: TextPathMidLine,
 }
 export const TextPath: React.ComponentClass<TextPathProps>;
 
