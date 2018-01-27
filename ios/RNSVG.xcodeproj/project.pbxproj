@@ -45,6 +45,7 @@
 		10ED4A9E1CF0656A0078BC02 /* RNSVGClipPathManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 10ED4A9D1CF0656A0078BC02 /* RNSVGClipPathManager.m */; };
 		10ED4AA21CF078830078BC02 /* RNSVGNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 10ED4AA11CF078830078BC02 /* RNSVGNode.m */; };
 		10FDEEB21D3FB60500A5C46C /* RNSVGPainterBrush.m in Sources */ = {isa = PBXBuildFile; fileRef = 10FDEEB11D3FB60500A5C46C /* RNSVGPainterBrush.m */; };
+		2DE5BD1C201C5CC1008DC1FE /* BezierElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C70B171FF6B1C0004DFD49 /* BezierElement.m */; };
 		7F08CE9A1E23476900650F83 /* RNSVGTextPathManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F08CE971E23476900650F83 /* RNSVGTextPathManager.m */; };
 		7F08CE9B1E23476900650F83 /* RNSVGTSpanManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F08CE991E23476900650F83 /* RNSVGTSpanManager.m */; };
 		7F08CEA01E23479700650F83 /* RNSVGTextPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F08CE9D1E23479700650F83 /* RNSVGTextPath.m */; };
@@ -696,6 +697,7 @@
 				9494C5391F4C44DD00D5BCFD /* FontStyle.m in Sources */,
 				A361E7841EB0C33D00646005 /* RNSVGPathManager.m in Sources */,
 				A361E7861EB0C33D00646005 /* RNSVGRenderableManager.m in Sources */,
+				2DE5BD1C201C5CC1008DC1FE /* BezierElement.m in Sources */,
 				A361E7871EB0C33D00646005 /* RNSVGRadialGradient.m in Sources */,
 				945A8AF91F4CE3E8004BBF6B /* AlignmentBaseline.m in Sources */,
 				A361E7881EB0C33D00646005 /* RNSVGRadialGradientManager.m in Sources */,
