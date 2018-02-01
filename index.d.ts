@@ -292,11 +292,11 @@ export interface TSpanProps extends CommonPathProps, FontProps {
 export const TSpan: React.ComponentClass<TSpanProps>;
 
 export interface TextSpecificProps extends CommonPathProps, FontProps {
-  alignmentBaseline: AlignmentBaseline,
-  baselineShift: BaselineShift,
-  verticalAlign: NumberProp,
-  lengthAdjust: LengthAdjust,
-  textLength: NumberProp,
+  alignmentBaseline?: AlignmentBaseline,
+  baselineShift?: BaselineShift,
+  verticalAlign?: NumberProp,
+  lengthAdjust?: LengthAdjust,
+  textLength?: NumberProp,
   fontData?: null | { [name: string]: any },
   fontFeatureSettings?: string,
 }
