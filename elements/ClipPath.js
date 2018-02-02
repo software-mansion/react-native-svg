@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
+import { createReactNativeComponentClass }  from '../lib/nativeComponents';
 import {ClipPathAttributes} from '../lib/attributes';
 
 export default class extends Component{

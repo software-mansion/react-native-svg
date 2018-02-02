@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import extractViewBox from '../lib/extract/extractViewBox';
-import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
+import { createReactNativeComponentClass }  from '../lib/nativeComponents';
 import {SymbolAttributes} from '../lib/attributes';
 
 export default class extends Component{
