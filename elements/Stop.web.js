@@ -1,2 +1,2 @@
-import React, {Component} from 'react';
-export default (props) => <stop {...props} />
+import React from 'react';
+export default (props) => <stop {...props} />;
