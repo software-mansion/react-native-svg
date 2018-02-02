@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'react-native';
-import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
+import { createReactNativeComponentClass }  from '../lib/nativeComponents';
 import {ImageAttributes} from '../lib/attributes';
 import {numberProp, touchableProps, responderProps} from '../lib/props';
 import Shape from './Shape';

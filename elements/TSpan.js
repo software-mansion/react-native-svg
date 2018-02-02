@@ -1,6 +1,6 @@
 import React  from 'react';
 import PropTypes from 'prop-types';
-import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
+import { createReactNativeComponentClass }  from '../lib/nativeComponents';
 import extractText from '../lib/extract/extractText';
 import {textProps} from '../lib/props';
 import {TSpanAttibutes} from '../lib/attributes';

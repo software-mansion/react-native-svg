@@ -1,5 +1,5 @@
 import React from 'react';
-import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
+import { createReactNativeComponentClass }  from '../lib/nativeComponents';
 import Shape from './Shape';
 import {pathProps, fontProps} from '../lib/props';
 import {GroupAttributes} from '../lib/attributes';

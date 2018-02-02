@@ -1,5 +1,5 @@
 import React from 'react';
-import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
+import { createReactNativeComponentClass }  from '../lib/nativeComponents';
 import Shape from './Shape';
 import {pathProps, numberProp} from '../lib/props';
 import {EllipseAttributes} from '../lib/attributes';

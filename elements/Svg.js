@@ -5,11 +5,11 @@ import React, {
 import PropTypes from 'prop-types';
 import {
     ViewPropTypes,
-    requireNativeComponent,
     StyleSheet,
     findNodeHandle,
     NativeModules
 } from 'react-native';
+import {requireNativeComponent} from '../lib/nativeComponents'
 import extractViewBox from '../lib/extract/extractViewBox';
 import {ViewBoxAttributes} from '../lib/attributes';
 
