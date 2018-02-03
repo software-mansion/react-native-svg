@@ -24,7 +24,7 @@
     "peerDependencies": {
         "react-native": ">=0.50.0",
         "react": "*",
-        "prop-types": "*"
+        "prop-types": "^15.5.7"
     },
     "dependencies": {
         "color": "^2.0.1",
