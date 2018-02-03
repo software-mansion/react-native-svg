@@ -266,7 +266,8 @@
 
         if (self.stroke && self.strokeWidth) {
             // Add stroke to hitArea
-            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, [self.strokeWidth floatValue], self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
+            CGFloat width = [self relativeOnOther:self.strokeWidth];
+            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
             CGPathAddPath(hitArea, nil, strokePath);
             CGPathRelease(strokePath);
         }
