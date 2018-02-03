@@ -17,7 +17,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
 import android.util.Base64;
 
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -163,7 +162,6 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         });
     }
 
-    @NonNull
     private RectF getViewBox() {
         return new RectF(mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
     }

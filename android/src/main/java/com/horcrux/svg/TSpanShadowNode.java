@@ -20,7 +20,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.v4.graphics.PaintCompat;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ReactShadowNode;

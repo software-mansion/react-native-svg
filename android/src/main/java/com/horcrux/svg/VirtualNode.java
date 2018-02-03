@@ -72,7 +72,7 @@ abstract class VirtualNode extends LayoutShadowNode {
         return true;
     }
 
-    @android.support.annotation.Nullable
+    @Nullable
     GroupShadowNode getTextRoot() {
         VirtualNode node = this;
         if (mTextRoot == null) {
@@ -95,7 +95,7 @@ abstract class VirtualNode extends LayoutShadowNode {
         return mTextRoot;
     }
 
-    @android.support.annotation.Nullable
+    @Nullable
     GroupShadowNode getParentTextRoot() {
         ReactShadowNode parent = this.getParent();
         if (!(parent instanceof VirtualNode)) {
@@ -299,14 +299,6 @@ abstract class VirtualNode extends LayoutShadowNode {
         }
 
         return canvasHeight;
-    }
-
-    float getCanvasLeft() {
-        return getSvgShadowNode().getCanvasBounds().left;
-    }
-
-    float getCanvasTop() {
-        return getSvgShadowNode().getCanvasBounds().top;
     }
 
     void saveDefinition() {
