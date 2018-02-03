@@ -1,22 +1,25 @@
 buildscript {
     repositories {
         jcenter()
-        google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        //noinspection GradleDependency
+        classpath 'com.android.tools.build:gradle:2.2.3'
     }
 }
 
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 23
+    //noinspection GradleDependency
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 27
+        //noinspection OldTargetApi
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }
@@ -32,11 +35,9 @@ repositories {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url "$projectDir/../../../node_modules/react-native/android"
     }
-    google()
 }
 
 dependencies {
-    api "com.android.support:appcompat-v7:27.0.2"
     //noinspection GradleDynamicVersion
-    api 'com.facebook.react:react-native:+'
+    compile 'com.facebook.react:react-native:+'
 }
