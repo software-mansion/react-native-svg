@@ -59,7 +59,9 @@
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
 
 	```
-    compile project(':react-native-svg')
+    compile(project(':react-native-svg')) {
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+    }
 	```
 
 4. Open up `android/app/src/main/java/[...]/MainApplication.java
