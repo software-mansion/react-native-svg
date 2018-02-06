@@ -103,6 +103,6 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 
 - (void)endTransparencyLayer:(CGContextRef)context;
 
-- (void)traverseSubviews:(BOOL (^)(__kindof RNSVGNode *node))block;
+- (void)traverseSubviews:(BOOL (^)(__kindof UIView *node))block;
 
 @end

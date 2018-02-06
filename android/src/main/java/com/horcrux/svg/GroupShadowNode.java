@@ -17,6 +17,7 @@ import android.graphics.Point;
 import android.graphics.RectF;
 
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -72,23 +73,29 @@ class GroupShadowNode extends RenderableShadowNode {
         final SvgViewShadowNode svg = getSvgShadowNode();
         final GroupShadowNode self = this;
         traverseChildren(new NodeRunnable() {
-            public void run(VirtualNode node) {
-                if (node instanceof RenderableShadowNode) {
-                    ((RenderableShadowNode)node).mergeProperties(self);
-                }
+            public void run(LayoutShadowNode lNode) {
+                if (lNode instanceof VirtualNode) {
+                    VirtualNode node = ((VirtualNode)lNode);
+                    if (node instanceof RenderableShadowNode) {
+                        ((RenderableShadowNode)node).mergeProperties(self);
+                    }
 
-                int count = node.saveAndSetupCanvas(canvas);
-                node.draw(canvas, paint, opacity * mOpacity);
-                node.restoreCanvas(canvas, count);
+                    int count = node.saveAndSetupCanvas(canvas);
+                    node.draw(canvas, paint, opacity * mOpacity);
+                    node.restoreCanvas(canvas, count);
 
-                if (node instanceof RenderableShadowNode) {
-                    ((RenderableShadowNode)node).resetProperties();
-                }
+                    if (node instanceof RenderableShadowNode) {
+                        ((RenderableShadowNode)node).resetProperties();
+                    }
 
-                node.markUpdateSeen();
+                    node.markUpdateSeen();
 
-                if (node.isResponsible()) {
-                    svg.enableTouchEvents();
+                    if (node.isResponsible()) {
+                        svg.enableTouchEvents();
+                    }
+                } else if (lNode instanceof SvgViewShadowNode) {
+                    SvgViewShadowNode svgView = (SvgViewShadowNode)lNode;
+                    svgView.drawChildren(canvas);
                 }
             }
         });
@@ -104,8 +111,10 @@ class GroupShadowNode extends RenderableShadowNode {
         final Path path = new Path();
 
         traverseChildren(new NodeRunnable() {
-            public void run(VirtualNode node) {
-                path.addPath(node.getPath(canvas, paint));
+            public void run(LayoutShadowNode node) {
+                if (node instanceof VirtualNode) {
+                    path.addPath(((VirtualNode)node).getPath(canvas, paint));
+                }
             }
         });
 
@@ -154,8 +163,10 @@ class GroupShadowNode extends RenderableShadowNode {
         }
 
         traverseChildren(new NodeRunnable() {
-            public void run(VirtualNode node) {
-                node.saveDefinition();
+            public void run(LayoutShadowNode node) {
+                if (node instanceof VirtualNode) {
+                    ((VirtualNode)node).saveDefinition();
+                }
             }
         });
     }
@@ -163,7 +174,7 @@ class GroupShadowNode extends RenderableShadowNode {
     @Override
     public void resetProperties() {
         traverseChildren(new NodeRunnable() {
-            public void run(VirtualNode node) {
+            public void run(LayoutShadowNode node) {
                 if (node instanceof RenderableShadowNode) {
                     ((RenderableShadowNode)node).resetProperties();
                 }

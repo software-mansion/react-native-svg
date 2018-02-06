@@ -34,19 +34,29 @@
 {
     [self pushGlyphContext];
     RNSVGSvgView* svg = [self getSvgView];
-    [self traverseSubviews:^(RNSVGNode *node) {
-        if (node.responsible && !svg.responsible) {
-            svg.responsible = YES;
-        }
+    [self traverseSubviews:^(UIView *node) {
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            RNSVGNode* svgNode = (RNSVGNode*)node;
+            if (svgNode.responsible && !svg.responsible) {
+                svg.responsible = YES;
+            }
 
-        if ([node isKindOfClass:[RNSVGRenderable class]]) {
-            [(RNSVGRenderable*)node mergeProperties:self];
-        }
+            if ([node isKindOfClass:[RNSVGRenderable class]]) {
+                [(RNSVGRenderable*)node mergeProperties:self];
+            }
 
-        [node renderTo:context];
+            [svgNode renderTo:context];
 
-        if ([node isKindOfClass:[RNSVGRenderable class]]) {
-            [(RNSVGRenderable*)node resetProperties];
+            if ([node isKindOfClass:[RNSVGRenderable class]]) {
+                [(RNSVGRenderable*)node resetProperties];
+            }
+        } else if ([node isKindOfClass:[RNSVGSvgView class]]) {
+            RNSVGSvgView* svgView = (RNSVGSvgView*)node;
+            CGRect rect = CGRectMake(0, 0, [svgView.bbWidth floatValue], [svgView.bbHeight floatValue]);
+            CGContextClipToRect(context, rect);
+            [svgView drawToContext:context withRect:(CGRect)rect];
+        } else {
+            RCTLogWarn(@"Not a RNSVGNode: %@", node.class);
         }
 
         return YES;
@@ -89,8 +99,10 @@
 {
     CGMutablePathRef __block path = CGPathCreateMutable();
     [self traverseSubviews:^(RNSVGNode *node) {
-        CGAffineTransform transform = node.matrix;
-        CGPathAddPath(path, &transform, [node getPath:context]);
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            CGAffineTransform transform = node.matrix;
+            CGPathAddPath(path, &transform, [node getPath:context]);
+        }
         return YES;
     }];
 
@@ -147,7 +159,9 @@
     }
 
     [self traverseSubviews:^(__kindof RNSVGNode *node) {
-        [node parseReference];
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            [node parseReference];
+        }
         return YES;
     }];
 }

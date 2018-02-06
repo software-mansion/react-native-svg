@@ -45,6 +45,8 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private float mMinY;
     private float mVbWidth;
     private float mVbHeight;
+    private String mbbWidth;
+    private String mbbHeight;
     private String mAlign;
     private int mMeetOrSlice;
     private Matrix mViewBoxMatrix;
@@ -74,6 +76,18 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     @ReactProp(name = "vbHeight")
     public void setVbHeight(float vbHeight) {
         mVbHeight = vbHeight;
+        markUpdated();
+    }
+
+    @ReactProp(name = "bbWidth")
+    public void setVbWidth(String bbWidth) {
+        mbbWidth = bbWidth;
+        markUpdated();
+    }
+
+    @ReactProp(name = "bbHeight")
+    public void setVbHeight(String bbHeight) {
+        mbbHeight = bbHeight;
         markUpdated();
     }
 
@@ -117,8 +131,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
                 (int) getLayoutHeight(),
                 Bitmap.Config.ARGB_8888);
 
-        mCanvas = new Canvas(bitmap);
-        drawChildren(mCanvas);
+        drawChildren(new Canvas(bitmap));
         return bitmap;
     }
 
@@ -126,11 +139,21 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         return mCanvas.getClipBounds();
     }
 
-    private void drawChildren(final Canvas canvas) {
-
+    void drawChildren(final Canvas canvas) {
+        mCanvas = canvas;
         if (mAlign != null) {
             RectF vbRect = getViewBox();
-            RectF eRect = new RectF(0, 0, getLayoutWidth(), getLayoutHeight());
+            float width = getLayoutWidth();
+            float height = getLayoutHeight();
+            boolean nested = Float.isNaN(width) || Float.isNaN(height);
+            if (nested) {
+                width = Float.parseFloat(mbbWidth) * mScale;
+                height = Float.parseFloat(mbbHeight) * mScale;
+            }
+            RectF eRect = new RectF(0,0, width, height);
+            if (nested) {
+                canvas.clipRect(eRect);
+            }
             mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
             canvas.concat(mViewBoxMatrix);
         }
@@ -143,20 +166,25 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
 
         traverseChildren(new VirtualNode.NodeRunnable() {
-            public void run(VirtualNode node) {
-                node.saveDefinition();
+            public void run(LayoutShadowNode node) {
+                if (node instanceof VirtualNode) {
+                    ((VirtualNode)node).saveDefinition();
+                }
             }
         });
 
         traverseChildren(new VirtualNode.NodeRunnable() {
-            public void run(VirtualNode node) {
-                int count = node.saveAndSetupCanvas(canvas);
-                node.draw(canvas, paint, 1f);
-                node.restoreCanvas(canvas, count);
-                node.markUpdateSeen();
+            public void run(LayoutShadowNode lNode) {
+                if (lNode instanceof VirtualNode) {
+                    VirtualNode node = (VirtualNode)lNode;
+                    int count = node.saveAndSetupCanvas(canvas);
+                    node.draw(canvas, paint, 1f);
+                    node.restoreCanvas(canvas, count);
+                    node.markUpdateSeen();
 
-                if (node.isResponsible() && !mResponsible) {
-                    mResponsible = true;
+                    if (node.isResponsible() && !mResponsible) {
+                        mResponsible = true;
+                    }
                 }
             }
         });
@@ -238,7 +266,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
                 continue;
             }
 
-            runner.run((VirtualNode) child);
+            runner.run((LayoutShadowNode) child);
         }
     }
 }

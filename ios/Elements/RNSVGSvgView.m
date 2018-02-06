@@ -16,7 +16,6 @@
     NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
     NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
     NSMutableDictionary<NSString *, RNSVGPainter *> *_painters;
-    CGRect _boundingBox;
     CGAffineTransform _viewBoxTransform;
 }
 
@@ -48,7 +47,7 @@
     if (minX == _minX) {
         return;
     }
-    
+
     [self invalidate];
     _minX = minX;
 }
@@ -58,7 +57,7 @@
     if (minY == _minY) {
         return;
     }
-    
+
     [self invalidate];
     _minY = minY;
 }
@@ -68,7 +67,7 @@
     if (vbWidth == _vbWidth) {
         return;
     }
-    
+
     [self invalidate];
     _vbWidth = vbWidth;
 }
@@ -78,9 +77,29 @@
     if (_vbHeight == vbHeight) {
         return;
     }
-    
+
     [self invalidate];
     _vbHeight = vbHeight;
+}
+
+- (void)setBBWidth:(NSString *)bbWidth
+{
+    if ([bbWidth isEqualToString:_bbWidth]) {
+        return;
+    }
+
+    [self invalidate];
+    _bbWidth = bbWidth;
+}
+
+- (void)setBBHeight:(NSString *)bbHeight
+{
+    if ([bbHeight isEqualToString:_bbHeight]) {
+        return;
+    }
+
+    [self invalidate];
+    _bbHeight = bbHeight;
 }
 
 - (void)setAlign:(NSString *)align
@@ -88,7 +107,7 @@
     if ([align isEqualToString:_align]) {
         return;
     }
-    
+
     [self invalidate];
     _align = align;
 }
@@ -98,9 +117,27 @@
     if (meetOrSlice == _meetOrSlice) {
         return;
     }
-    
+
     [self invalidate];
     _meetOrSlice = meetOrSlice;
+}
+
+- (void)drawToContext:(CGContextRef)context withRect:(CGRect)rect {
+
+    if (self.align) {
+        _viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
+                                                 eRect:rect
+                                                 align:self.align
+                                           meetOrSlice:self.meetOrSlice];
+        CGContextConcatCTM(context, _viewBoxTransform);
+    }
+
+    for (UIView *node in self.subviews) {
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            RNSVGNode *svg = (RNSVGNode *)node;
+            [svg renderTo:context];
+        }
+    }
 }
 
 - (void)drawRect:(CGRect)rect
@@ -110,30 +147,21 @@
     _painters = nil;
     _boundingBox = rect;
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    if (self.align) {
-        _viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
-                                                 eRect:rect
-                                                 align:self.align
-                                           meetOrSlice:self.meetOrSlice];
-        CGContextConcatCTM(context, _viewBoxTransform);
-    }
-    
-    for (RNSVGNode *node in self.subviews) {
+
+    for (UIView *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
-            if (node.responsible && !self.responsible) {
+            RNSVGNode *svg = (RNSVGNode *)node;
+            if (svg.responsible && !self.responsible) {
                 self.responsible = YES;
             }
-            
-            [node parseReference];
+
+            [svg parseReference];
+        } else {
+            RCTLogWarn(@"Not a RNSVGNode: %@", node.class);
         }
     }
-    
-    for (RNSVGNode *node in self.subviews) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
-            [node renderTo:context];
-        }
-    }
+
+    [self drawToContext:context withRect:rect];
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
@@ -143,15 +171,15 @@
             if (![node isKindOfClass:[RNSVGNode class]]) {
                 continue;
             }
-            
+
             if (event) {
                 node.active = NO;
             } else if (node.active) {
                 return node;
             }
-            
+
             UIView *hitChild = [node hitTest: point withEvent:event withTransform:_viewBoxTransform];
-            
+
             if (hitChild) {
                 node.active = YES;
                 return (node.responsible || (node != hitChild)) ? hitChild : self;

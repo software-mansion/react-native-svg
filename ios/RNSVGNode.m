@@ -310,13 +310,19 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     }
 }
 
-- (void)traverseSubviews:(BOOL (^)(__kindof RNSVGNode *node))block
+- (void)traverseSubviews:(BOOL (^)(__kindof UIView *node))block
 {
-    for (RNSVGNode *node in self.subviews) {
+    for (UIView *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
             if (!block(node)) {
                 break;
             }
+        } else if ([node isKindOfClass:[RNSVGSvgView class]]) {
+            if (!block(node)) {
+                break;
+            }
+        } else {
+            RCTLogWarn(@"Not a RNSVGNode: %@", node.class);
         }
     }
 }

@@ -15,6 +15,7 @@ import android.graphics.Path;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -177,9 +178,10 @@ class TextShadowNode extends GroupShadowNode {
 
     void releaseCachedPath() {
         traverseChildren(new NodeRunnable() {
-            public void run(VirtualNode node) {
-                TextShadowNode text = (TextShadowNode)node;
-                text.releaseCachedPath();
+            public void run(LayoutShadowNode node) {
+                if (node instanceof TextShadowNode) {
+                    ((TextShadowNode)node).releaseCachedPath();
+                }
             }
         });
     }
