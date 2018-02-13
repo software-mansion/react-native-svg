@@ -3,7 +3,7 @@
 #ifndef TextLengthAdjust_h
 #define TextLengthAdjust_h
 
-NS_ENUM(NSInteger, TextLengthAdjust) {
+typedef NS_ENUM(NSInteger, TextLengthAdjust) {
     TextLengthAdjustSpacing,
     TextLengthAdjustSpacingAndGlyphs,
     TextLengthAdjustDEFAULT = TextLengthAdjustSpacing,

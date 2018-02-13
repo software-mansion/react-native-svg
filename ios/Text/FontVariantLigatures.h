@@ -3,7 +3,7 @@
 #ifndef FontVariantLigatures_h
 #define FontVariantLigatures_h
 
-NS_ENUM(NSInteger, FontVariantLigatures) {
+typedef NS_ENUM(NSInteger, FontVariantLigatures) {
     FontVariantLigaturesNormal,
     FontVariantLigaturesNone,
     FontVariantLigaturesDEFAULT = FontVariantLigaturesNormal,

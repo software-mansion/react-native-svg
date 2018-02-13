@@ -3,7 +3,7 @@
 #ifndef FontStyle_h
 #define FontStyle_h
 
-NS_ENUM(NSInteger, FontStyle) {
+typedef NS_ENUM(NSInteger, FontStyle) {
     FontStyleNormal,
     FontStyleItalic,
     FontStyleOblique,

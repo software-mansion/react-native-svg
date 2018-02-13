@@ -3,7 +3,7 @@
 #ifndef FontWeight_h
 #define FontWeight_h
 
-NS_ENUM(NSInteger, FontWeight) {
+typedef NS_ENUM(NSInteger, FontWeight) {
     FontWeightNormal,
     FontWeightBold,
     FontWeightBolder,

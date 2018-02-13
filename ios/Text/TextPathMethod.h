@@ -3,7 +3,7 @@
 #ifndef TextPathMethod_h
 #define TextPathMethod_h
 
-NS_ENUM(NSInteger, TextPathMethod) {
+typedef NS_ENUM(NSInteger, TextPathMethod) {
     TextPathMethodAlign,
     TextPathMethodStretch,
     TextPathMethodDEFAULT = TextPathMethodAlign,

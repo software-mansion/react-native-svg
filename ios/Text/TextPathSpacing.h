@@ -3,7 +3,7 @@
 #ifndef TextPathSpacing_h
 #define TextPathSpacing_h
 
-NS_ENUM(NSInteger, TextPathSpacing) {
+typedef NS_ENUM(NSInteger, TextPathSpacing) {
     TextPathSpacingAutoSpacing,
     TextPathSpacingExact,
     TextPathSpacingDEFAULT = TextPathSpacingAutoSpacing,
