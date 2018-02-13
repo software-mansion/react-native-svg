@@ -3,7 +3,7 @@
 #ifndef TextAnchor_h
 #define TextAnchor_h
 
-NS_ENUM(NSInteger, TextAnchor) {
+typedef NS_ENUM(NSInteger, TextAnchor) {
     TextAnchorStart,
     TextAnchorMiddle,
     TextAnchorEnd,

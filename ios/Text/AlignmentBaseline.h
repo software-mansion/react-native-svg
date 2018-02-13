@@ -3,7 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ENUM(NSInteger, AlignmentBaseline) {
+typedef NS_ENUM(NSInteger, AlignmentBaseline) {
     AlignmentBaselineBaseline,
     AlignmentBaselineTextBottom,
     AlignmentBaselineAlphabetic,

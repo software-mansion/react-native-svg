@@ -3,7 +3,7 @@
 #ifndef TextDecoration_h
 #define TextDecoration_h
 
-NS_ENUM(NSInteger, TextDecoration) {
+typedef NS_ENUM(NSInteger, TextDecoration) {
     TextDecorationNone,
     TextDecorationUnderline,
     TextDecorationOverline,

@@ -3,7 +3,7 @@
 #ifndef TextPathMidLine_h
 #define TextPathMidLine_h
 
-NS_ENUM(NSInteger, TextPathMidLine) {
+typedef NS_ENUM(NSInteger, TextPathMidLine) {
     TextPathMidLineSharp,
     TextPathMidLineSmooth,
     TextPathMidLineDEFAULT = TextPathMidLineSharp,

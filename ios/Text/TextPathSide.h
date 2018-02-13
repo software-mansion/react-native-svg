@@ -3,7 +3,7 @@
 #ifndef TextPathSide_h
 #define TextPathSide_h
 
-NS_ENUM(NSInteger, TextPathSide) {
+typedef NS_ENUM(NSInteger, TextPathSide) {
     TextPathSideLeft,
     TextPathSideRight,
     TextPathSideDEFAULT = TextPathSideLeft,
