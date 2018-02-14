@@ -1,10 +1,10 @@
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 
-#ifndef PropHelper_h
-#define PropHelper_h
+#ifndef RNSVGPropHelper_h
+#define RNSVGPropHelper_h
 
-@interface PropHelper : NSObject
+@interface RNSVGPropHelper : NSObject
 
 + (double) fromRelativeWithNSString:(NSString *)length
                            relative:(double)relative

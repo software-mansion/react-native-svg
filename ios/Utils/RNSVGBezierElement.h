@@ -7,9 +7,9 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-#define NULLPOINT CGRectNull.origin
+#define RNSVGNULLPOINT CGRectNull.origin
 
-@interface BezierElement : NSObject
+@interface RNSVGBezierElement : NSObject
 
 // Element storage
 @property (nonatomic, assign) CGPathElementType elementType;

@@ -1,12 +1,12 @@
-#import "GlyphContext.h"
+#import "RNSVGGlyphContext.h"
 #import <React/RCTFont.h>
 #import "RNSVGNode.h"
-#import "PropHelper.h"
-#import "FontData.h"
+#import "RNSVGPropHelper.h"
+#import "RNSVGFontData.h"
 #import "RNSVGText.h"
 
 // https://www.w3.org/TR/SVG/text.html#TSpanElement
-@interface GlyphContext () {
+@interface RNSVGGlyphContext () {
 @public
     // Current stack (one per node push/pop)
     NSMutableArray *mFontContext_;
@@ -34,7 +34,7 @@
 
     // Calculated on push context, percentage and em length depends on parent font size
     double mFontSize_;
-    FontData *topFont_;
+    RNSVGFontData *topFont_;
 
     // Current accumulated values
     // https://www.w3.org/TR/SVG/types.html#DataTypeCoordinate
@@ -106,7 +106,7 @@
                font:(NSDictionary *)font;
 @end
 
-@implementation GlyphContext
+@implementation RNSVGGlyphContext
 
 
 - (CTFontRef)getGlyphFont
@@ -114,8 +114,8 @@
     NSString *fontFamily = topFont_->fontFamily;
     NSNumber * fontSize = [NSNumber numberWithDouble:topFont_->fontSize];
 
-    NSString * fontWeight = [FontWeightToString(topFont_->fontWeight) lowercaseString];
-    NSString * fontStyle = FontStyleStrings[topFont_->fontStyle];
+    NSString * fontWeight = [RNSVGFontWeightToString(topFont_->fontWeight) lowercaseString];
+    NSString * fontStyle = RNSVGFontStyleStrings[topFont_->fontStyle];
 
     BOOL fontFamilyFound = NO;
     NSArray *supportedFontFamilyNames = [UIFont familyNames];
@@ -141,7 +141,7 @@
                                    scaleMultiplier:1.0];
 }
 
-void pushIndices(GlyphContext *self) {
+void pushIndices(RNSVGGlyphContext *self) {
     [self->mXsIndices_ addObject:[NSNumber numberWithLong:self->mXsIndex_]];
     [self->mYsIndices_ addObject:[NSNumber numberWithLong:self->mYsIndex_]];
     [self->mDXsIndices_ addObject:[NSNumber numberWithLong:self->mDXsIndex_]];
@@ -171,8 +171,8 @@ void pushIndices(GlyphContext *self) {
     self->mDYsIndices_ = [[NSMutableArray alloc]init];
     self->mRsIndices_ = [[NSMutableArray alloc]init];
 
-    self->mFontSize_ = FontData_DEFAULT_FONT_SIZE;
-    self->topFont_ = [FontData Defaults];
+    self->mFontSize_ = RNSVGFontData_DEFAULT_FONT_SIZE;
+    self->topFont_ = [RNSVGFontData Defaults];
 
     self->mXs_ = [[NSArray alloc]init];
     self->mYs_ = [[NSArray alloc]init];
@@ -207,18 +207,18 @@ void pushIndices(GlyphContext *self) {
     return self;
 }
 
-- (FontData *)getFont {
+- (RNSVGFontData *)getFont {
     return topFont_;
 }
 
-FontData *getTopOrParentFont(GlyphContext *self, RNSVGGroup* child) {
+RNSVGFontData *getTopOrParentFont(RNSVGGlyphContext *self, RNSVGGroup* child) {
     if (self->mTop_ > 0) {
         return self->topFont_;
     } else {
         RNSVGGroup* parentRoot = [child getParentTextRoot];
-        FontData* Defaults = [FontData Defaults];
+        RNSVGFontData* Defaults = [RNSVGFontData Defaults];
         while (parentRoot != nil) {
-            FontData *map = [[parentRoot getGlyphContext] getFont];
+            RNSVGFontData *map = [[parentRoot getGlyphContext] getFont];
             if (map != Defaults) {
                 return map;
             }
@@ -228,16 +228,16 @@ FontData *getTopOrParentFont(GlyphContext *self, RNSVGGroup* child) {
     }
 }
 
-void pushNodeAndFont(GlyphContext *self, RNSVGGroup* node, NSDictionary* font) {
-    FontData *parent = getTopOrParentFont(self, node);
+void pushNodeAndFont(RNSVGGlyphContext *self, RNSVGGroup* node, NSDictionary* font) {
+    RNSVGFontData *parent = getTopOrParentFont(self, node);
     self->mTop_++;
     if (font == nil) {
         [self->mFontContext_ addObject:parent];
         return;
     }
-    FontData *data = [FontData initWithNSDictionary:font
-                                             parent:parent
-                                              scale:self->mScale_];
+    RNSVGFontData *data = [RNSVGFontData initWithNSDictionary:font
+                                                 parent:parent
+                                                  scale:self->mScale_];
     self->mFontSize_ = data->fontSize;
     [self->mFontContext_ addObject:data];
     self->topFont_ = data;
@@ -395,11 +395,11 @@ void incrementIndices(NSMutableArray *indices, long topIndex) {
         mDX_ = 0;
         mXIndex_ = nextIndex;
         NSString *string = [mXs_ objectAtIndex:nextIndex];
-        mX_ = [PropHelper fromRelativeWithNSString:string
-                                          relative:mWidth_
-                                            offset:0
-                                             scale:mScale_
-                                          fontSize:mFontSize_];
+        mX_ = [RNSVGPropHelper fromRelativeWithNSString:string
+                                            relative:mWidth_
+                                              offset:0
+                                               scale:mScale_
+                                            fontSize:mFontSize_];
     }
     mX_ += advance;
     return mX_;
@@ -412,11 +412,11 @@ void incrementIndices(NSMutableArray *indices, long topIndex) {
         mDY_ = 0;
         mYIndex_ = nextIndex;
         NSString *string = [mYs_ objectAtIndex:nextIndex];
-        mY_ = [PropHelper fromRelativeWithNSString:string
-                                          relative:mHeight_
-                                            offset:0
-                                             scale:mScale_
-                                          fontSize:mFontSize_];
+        mY_ = [RNSVGPropHelper fromRelativeWithNSString:string
+                                            relative:mHeight_
+                                              offset:0
+                                               scale:mScale_
+                                            fontSize:mFontSize_];
     }
     return mY_;
 }
@@ -427,11 +427,11 @@ void incrementIndices(NSMutableArray *indices, long topIndex) {
     if (nextIndex < [mDXs_ count]) {
         mDXIndex_ = nextIndex;
         NSString *string = [mDXs_ objectAtIndex:nextIndex];
-        double val = [PropHelper fromRelativeWithNSString:string
-                                                 relative:mWidth_
-                                                   offset:0
-                                                    scale:mScale_
-                                                 fontSize:mFontSize_];
+        double val = [RNSVGPropHelper fromRelativeWithNSString:string
+                                                   relative:mWidth_
+                                                     offset:0
+                                                      scale:mScale_
+                                                   fontSize:mFontSize_];
         mDX_ += val;
     }
     return mDX_;
@@ -443,11 +443,11 @@ void incrementIndices(NSMutableArray *indices, long topIndex) {
     if (nextIndex < [mDYs_ count]) {
         mDYIndex_ = nextIndex;
         NSString *string = [mDYs_ objectAtIndex:nextIndex];
-        double val = [PropHelper fromRelativeWithNSString:string
-                                                 relative:mHeight_
-                                                   offset:0
-                                                    scale:mScale_
-                                                 fontSize:mFontSize_];
+        double val = [RNSVGPropHelper fromRelativeWithNSString:string
+                                                   relative:mHeight_
+                                                     offset:0
+                                                      scale:mScale_
+                                                   fontSize:mFontSize_];
         mDY_ += val;
     }
     return mDY_;

@@ -8,7 +8,7 @@
 
 
 #import "RNSVGTextPath.h"
-#import "BezierElement.h"
+#import "RNSVGBezierElement.h"
 
 /* Some Bezier logic from PerformanceBezier */
 /*
@@ -128,8 +128,8 @@ void addLine(CGPoint *last, const CGPoint *next, NSMutableArray *lines, CGFloat 
         lineCount = 0;
         length = 0;
 
-        NSArray *elements = [BezierElement elementsFromCGPath:path];
-        for (BezierElement *element in elements) {
+        NSArray *elements = [RNSVGBezierElement elementsFromCGPath:path];
+        for (RNSVGBezierElement *element in elements) {
             switch (element.elementType)
             {
                 case kCGPathElementMoveToPoint:

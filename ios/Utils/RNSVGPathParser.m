@@ -8,8 +8,8 @@
 
 #import "RNSVGPathParser.h"
 #import <React/RCTLog.h>
-#import "math.h"
-#import "BezierElement.h"
+#import <math.h>
+#import "RNSVGBezierElement.h"
 
 @implementation RNSVGPathParser
 {

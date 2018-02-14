@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "RNSVGGroup.h"
-#import "AlignmentBaseline.h"
 
 @interface RNSVGText : RNSVGGroup
 

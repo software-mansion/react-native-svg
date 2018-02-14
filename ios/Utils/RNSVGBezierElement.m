@@ -4,27 +4,27 @@
  https://github.com/erica/iOS-Drawing/tree/master/C08/Quartz%20Book%20Pack/Bezier
  */
 
-#import "BezierElement.h"
+#import "RNSVGBezierElement.h"
 
 #pragma mark - Bezier Element -
 
-@implementation BezierElement
+@implementation RNSVGBezierElement
 - (instancetype) init
 {
     self = [super init];
     if (self)
     {
         _elementType = kCGPathElementMoveToPoint;
-        _point = NULLPOINT;
-        _controlPoint1 = NULLPOINT;
-        _controlPoint2 = NULLPOINT;
+        _point = RNSVGNULLPOINT;
+        _controlPoint1 = RNSVGNULLPOINT;
+        _controlPoint2 = RNSVGNULLPOINT;
     }
     return self;
 }
 
 + (instancetype) elementWithPathElement: (CGPathElement) element
 {
-    BezierElement *newElement = [[self alloc] init];
+    RNSVGBezierElement *newElement = [[self alloc] init];
     newElement.elementType = element.type;
 
     switch (newElement.elementType)
@@ -57,12 +57,12 @@
     return newElement;
 }
 
-// Convert one element to BezierElement and save to array
+// Convert one element to RNSVGBezierElement and save to array
 void GetBezierElements(void *info, const CGPathElement *element)
 {
     NSMutableArray *bezierElements = (__bridge NSMutableArray *)info;
     if (element)
-        [bezierElements addObject:[BezierElement elementWithPathElement:*element]];
+        [bezierElements addObject:[RNSVGBezierElement elementWithPathElement:*element]];
 }
 
 // Retrieve array of component elements

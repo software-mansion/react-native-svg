@@ -10,19 +10,19 @@
 #import "RNSVGContainer.h"
 #import "RNSVGClipPath.h"
 #import "RNSVGGroup.h"
-#import "GlyphContext.h"
+#import "RNSVGGlyphContext.h"
 
 @implementation RNSVGNode
 {
     RNSVGGroup *_textRoot;
-    GlyphContext *glyphContext;
+    RNSVGGlyphContext *glyphContext;
     BOOL _transparent;
     CGPathRef _cachedClipPath;
     RNSVGSvgView *_svgView;
 }
 
 CGFloat const M_SQRT1_2l = 0.707106781186547524400844362104849039;
-CGFloat const DEFAULT_FONT_SIZE = 12;
+CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (instancetype)init
 {
@@ -93,7 +93,7 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
 {
     RNSVGGroup* root = [self getTextRoot];
     if (root == nil) {
-        return DEFAULT_FONT_SIZE;
+        return RNSVG_DEFAULT_FONT_SIZE;
     }
 
     if (glyphContext == nil) {
@@ -240,20 +240,20 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
 
 - (CGFloat)relativeOnWidth:(NSString *)length
 {
-    return [PropHelper fromRelativeWithNSString:length
-                                       relative:[self getContextWidth]
-                                         offset:0
-                                          scale:1
-                                       fontSize:[self getFontSizeFromContext]];
+    return [RNSVGPropHelper fromRelativeWithNSString:length
+                                         relative:[self getContextWidth]
+                                           offset:0
+                                            scale:1
+                                         fontSize:[self getFontSizeFromContext]];
 }
 
 - (CGFloat)relativeOnHeight:(NSString *)length
 {
-    return [PropHelper fromRelativeWithNSString:length
-                                       relative:[self getContextHeight]
-                                         offset:0
-                                          scale:1
-                                       fontSize:[self getFontSizeFromContext]];
+    return [RNSVGPropHelper fromRelativeWithNSString:length
+                                         relative:[self getContextHeight]
+                                           offset:0
+                                            scale:1
+                                         fontSize:[self getFontSizeFromContext]];
 }
 
 - (CGFloat)relativeOnOther:(NSString *)length
@@ -263,17 +263,17 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
     CGFloat powX = width * width;
     CGFloat powY = height * height;
     CGFloat r = sqrt(powX + powY) * M_SQRT1_2l;
-    return [PropHelper fromRelativeWithNSString:length
-                                       relative:r
-                                         offset:0
-                                          scale:1
-                                       fontSize:[self getFontSizeFromContext]];
+    return [RNSVGPropHelper fromRelativeWithNSString:length
+                                         relative:r
+                                           offset:0
+                                            scale:1
+                                         fontSize:[self getFontSizeFromContext]];
 }
 
 - (CGFloat)getContextWidth
 {
     RNSVGGroup * root = [self getTextRoot];
-    GlyphContext * gc = [root getGlyphContext];
+    RNSVGGlyphContext * gc = [root getGlyphContext];
     if (root == nil || gc == nil) {
         return CGRectGetWidth([[self getSvgView] getContextBounds]);
     } else {
@@ -284,7 +284,7 @@ CGFloat const DEFAULT_FONT_SIZE = 12;
 - (CGFloat)getContextHeight
 {
     RNSVGGroup * root = [self getTextRoot];
-    GlyphContext * gc = [root getGlyphContext];
+    RNSVGGlyphContext * gc = [root getGlyphContext];
     if (root == nil || gc == nil) {
         return CGRectGetHeight([[self getSvgView] getContextBounds]);
     } else {

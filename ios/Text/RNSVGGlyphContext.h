@@ -1,12 +1,12 @@
 #import <React/UIView+React.h>
 #import <CoreText/CoreText.h>
-#import "FontData.h"
+#import "RNSVGFontData.h"
 
 @class RNSVGText;
 @class RNSVGGroup;
-@class GlyphContext;
+@class RNSVGGlyphContext;
 
-@interface GlyphContext : NSObject
+@interface RNSVGGlyphContext : NSObject
 
 - (CTFontRef)getGlyphFont;
 
@@ -14,7 +14,7 @@
                         width:(float)width
                        height:(float)height;
 
-- (FontData *)getFont;
+- (RNSVGFontData *)getFont;
 
 - (double)getFontSize;
 

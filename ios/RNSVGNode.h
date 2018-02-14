@@ -24,7 +24,7 @@
  Provide enough digits for the 128-bit IEEE quad (36 significant digits).
  */
 extern CGFloat const M_SQRT1_2l;
-extern CGFloat const DEFAULT_FONT_SIZE;
+extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, assign) CGFloat opacity;

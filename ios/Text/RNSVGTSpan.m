@@ -8,7 +8,8 @@
 #import "RNSVGTSpan.h"
 #import "RNSVGText.h"
 #import "RNSVGTextPath.h"
-#import "FontData.h"
+#import "RNSVGTextProperties.h"
+#import "RNSVGFontData.h"
 
 NSCharacterSet *separators = nil;
 static double radToDeg = 180 / M_PI;
@@ -95,8 +96,8 @@ static double radToDeg = 180 / M_PI;
     // Create a dictionary for this font
     CTFontRef fontRef = [self getFontFromContext];
     CGMutablePathRef path = CGPathCreateMutable();
-    GlyphContext* gc = [[self getTextRoot] getGlyphContext];
-    FontData* font = [gc getFont];
+    RNSVGGlyphContext* gc = [[self getTextRoot] getGlyphContext];
+    RNSVGFontData* font = [gc getFont];
     NSUInteger n = str.length;
     /*
      *
@@ -169,7 +170,7 @@ static double radToDeg = 180 / M_PI;
      user agents should not apply optional ligatures.
      https://www.w3.org/TR/css-text-3/#letter-spacing-property
      */
-    bool allowOptionalLigatures = letterSpacing == 0 && font->fontVariantLigatures == FontVariantLigaturesNormal;
+    bool allowOptionalLigatures = letterSpacing == 0 && font->fontVariantLigatures == RNSVGFontVariantLigaturesNormal;
 
     /*
      For OpenType fonts, discretionary ligatures include those enabled by
@@ -268,7 +269,7 @@ static double radToDeg = 180 / M_PI;
      is adjusted to take into account various horizontal alignment text properties and
      attributes, such as a ‘dx’ attribute value on a ‘tspan’ element.
      */
-    enum TextAnchor textAnchor = font->textAnchor;
+    enum RNSVGTextAnchor textAnchor = font->textAnchor;
     CGRect textBounds = CTLineGetBoundsWithOptions(line, 0);
     double textMeasure = CGRectGetWidth(textBounds);
     double offset = getTextAnchorOffset(textAnchor, textMeasure);
@@ -281,7 +282,7 @@ static double radToDeg = 180 / M_PI;
     double fontSize = [gc getFontSize];
     bool sharpMidLine = false;
     if (hasTextPath) {
-        sharpMidLine = TextPathMidLineFromString([textPath midLine]) == TextPathMidLineSharp;
+        sharpMidLine = RNSVGTextPathMidLineFromString([textPath midLine]) == RNSVGTextPathMidLineSharp;
         /*
          Name
          side
@@ -302,7 +303,7 @@ static double radToDeg = 180 / M_PI;
 
          Adding 'side' was resolved at the Sydney (2015) meeting.
          */
-        side = TextPathSideFromString([textPath side]) == TextPathSideRight ? -1 : 1;
+        side = RNSVGTextPathSideFromString([textPath side]) == RNSVGTextPathSideRight ? -1 : 1;
         /*
          Name
          startOffset
@@ -341,20 +342,20 @@ static double radToDeg = 180 / M_PI;
          a point on the path equal distance in both directions from the initial position on
          the path is reached.
          */
-        double absoluteStartOffset = [PropHelper fromRelativeWithNSString:textPath.startOffset
-                                                                 relative:_pathLength
-                                                                   offset:0
-                                                                    scale:1
-                                                                 fontSize:fontSize];
+        double absoluteStartOffset = [RNSVGPropHelper fromRelativeWithNSString:textPath.startOffset
+                                                                   relative:_pathLength
+                                                                     offset:0
+                                                                      scale:1
+                                                                   fontSize:fontSize];
         offset += absoluteStartOffset;
         if (isClosed) {
             double halfPathDistance = _pathLength / 2;
-            startOfRendering = absoluteStartOffset + (textAnchor == TextAnchorMiddle ? -halfPathDistance : 0);
+            startOfRendering = absoluteStartOffset + (textAnchor == RNSVGTextAnchorMiddle ? -halfPathDistance : 0);
             endOfRendering = startOfRendering + _pathLength;
         }
         /*
-         TextPathSpacing spacing = textPath.getSpacing();
-         if (spacing == TextPathSpacing.auto) {
+         RNSVGTextPathSpacing spacing = textPath.getSpacing();
+         if (spacing == RNSVGTextPathSpacing.auto) {
          // Hmm, what to do here?
          // https://svgwg.org/svg2-draft/text.html#TextPathElementSpacingAttribute
          }
@@ -438,13 +439,13 @@ static double radToDeg = 180 / M_PI;
      */
     double scaleSpacingAndGlyphs = 1;
     NSString *mTextLength = [self textLength];
-    enum TextLengthAdjust mLengthAdjust = TextLengthAdjustFromString([self lengthAdjust]);
+    enum RNSVGTextLengthAdjust mLengthAdjust = RNSVGTextLengthAdjustFromString([self lengthAdjust]);
     if (mTextLength != nil) {
-        double author = [PropHelper fromRelativeWithNSString:mTextLength
-                                                    relative:[gc getWidth]
-                                                      offset:0
-                                                       scale:1
-                                                    fontSize:fontSize];
+        double author = [RNSVGPropHelper fromRelativeWithNSString:mTextLength
+                                                      relative:[gc getWidth]
+                                                        offset:0
+                                                         scale:1
+                                                      fontSize:fontSize];
         if (author < 0) {
             NSException *e = [NSException
                               exceptionWithName:@"NegativeTextLength"
@@ -454,11 +455,11 @@ static double radToDeg = 180 / M_PI;
         }
         switch (mLengthAdjust) {
             default:
-            case TextLengthAdjustSpacing:
+            case RNSVGTextLengthAdjustSpacing:
                 // TODO account for ligatures
                 letterSpacing += (author - textMeasure) / (n - 1);
                 break;
-            case TextLengthAdjustSpacingAndGlyphs:
+            case RNSVGTextLengthAdjustSpacingAndGlyphs:
                 scaleSpacingAndGlyphs = author / textMeasure;
                 break;
         }
@@ -509,54 +510,54 @@ static double radToDeg = 180 / M_PI;
     double totalHeight = top + bottom;
     double baselineShift = 0;
     NSString *baselineShiftString = [self getBaselineShift];
-    enum AlignmentBaseline baseline = AlignmentBaselineFromString([self getAlignmentBaseline]);
-    if (baseline != AlignmentBaselineBaseline) {
+    enum RNSVGAlignmentBaseline baseline = RNSVGAlignmentBaselineFromString([self getAlignmentBaseline]);
+    if (baseline != RNSVGAlignmentBaselineBaseline) {
         // TODO alignment-baseline, test / verify behavior
         // TODO get per glyph baselines from font baseline table, for high-precision alignment
         CGFloat xHeight = CTFontGetXHeight(fontRef);
         switch (baseline) {
                 // https://wiki.apache.org/xmlgraphics-fop/LineLayout/AlignmentHandling
             default:
-            case AlignmentBaselineBaseline:
+            case RNSVGAlignmentBaselineBaseline:
                 // Use the dominant baseline choice of the parent.
                 // Match the box’s corresponding baseline to that of its parent.
                 baselineShift = 0;
                 break;
 
-            case AlignmentBaselineTextBottom:
-            case AlignmentBaselineAfterEdge:
-            case AlignmentBaselineTextAfterEdge:
+            case RNSVGAlignmentBaselineTextBottom:
+            case RNSVGAlignmentBaselineAfterEdge:
+            case RNSVGAlignmentBaselineTextAfterEdge:
                 // Match the bottom of the box to the bottom of the parent’s content area.
                 // text-after-edge = text-bottom
                 // text-after-edge = descender depth
                 baselineShift = -descenderDepth;
                 break;
 
-            case AlignmentBaselineAlphabetic:
+            case RNSVGAlignmentBaselineAlphabetic:
                 // Match the box’s alphabetic baseline to that of its parent.
                 // alphabetic = 0
                 baselineShift = 0;
                 break;
 
-            case AlignmentBaselineIdeographic:
+            case RNSVGAlignmentBaselineIdeographic:
                 // Match the box’s ideographic character face under-side baseline to that of its parent.
                 // ideographic = descender depth
                 baselineShift = -descenderDepth;
                 break;
 
-            case AlignmentBaselineMiddle:
+            case RNSVGAlignmentBaselineMiddle:
                 // Align the vertical midpoint of the box with the baseline of the parent box plus half the x-height of the parent. TODO
                 // middle = x height / 2
                 baselineShift = xHeight / 2;
                 break;
 
-            case AlignmentBaselineCentral:
+            case RNSVGAlignmentBaselineCentral:
                 // Match the box’s central baseline to the central baseline of its parent.
                 // central = (ascender height - descender depth) / 2
                 baselineShift = (ascenderHeight - descenderDepth) / 2;
                 break;
 
-            case AlignmentBaselineMathematical:
+            case RNSVGAlignmentBaselineMathematical:
                 // Match the box’s mathematical baseline to that of its parent.
                 // Hanging and mathematical baselines
                 // There are no obvious formulas to calculate the position of these baselines.
@@ -565,30 +566,30 @@ static double radToDeg = 180 / M_PI;
                 baselineShift = 0.5 * ascenderHeight;
                 break;
 
-            case AlignmentBaselineHanging:
+            case RNSVGAlignmentBaselineHanging:
                 baselineShift = 0.8 * ascenderHeight;
                 break;
 
-            case AlignmentBaselineTextTop:
-            case AlignmentBaselineBeforeEdge:
-            case AlignmentBaselineTextBeforeEdge:
+            case RNSVGAlignmentBaselineTextTop:
+            case RNSVGAlignmentBaselineBeforeEdge:
+            case RNSVGAlignmentBaselineTextBeforeEdge:
                 // Match the top of the box to the top of the parent’s content area.
                 // text-before-edge = text-top
                 // text-before-edge = ascender height
                 baselineShift = ascenderHeight;
                 break;
 
-            case AlignmentBaselineBottom:
+            case RNSVGAlignmentBaselineBottom:
                 // Align the top of the aligned subtree with the top of the line box.
                 baselineShift = bottom;
                 break;
 
-            case AlignmentBaselineCenter:
+            case RNSVGAlignmentBaselineCenter:
                 // Align the center of the aligned subtree with the center of the line box.
                 baselineShift = totalHeight / 2;
                 break;
 
-            case AlignmentBaselineTop:
+            case RNSVGAlignmentBaselineTop:
                 // Align the bottom of the aligned subtree with the bottom of the line box.
                 baselineShift = top;
                 break;
@@ -624,8 +625,8 @@ static double radToDeg = 180 / M_PI;
      */
     if (baselineShiftString != nil && ![baselineShiftString isEqualToString:@""]) {
         switch (baseline) {
-            case AlignmentBaselineTop:
-            case AlignmentBaselineBottom:
+            case RNSVGAlignmentBaselineTop:
+            case RNSVGAlignmentBaselineBottom:
                 break;
 
             default:
@@ -651,12 +652,11 @@ static double radToDeg = 180 / M_PI;
                     }
                 } else if ([baselineShiftString isEqualToString:@"baseline"]) {
                 } else {
-                    baselineShift -= [PropHelper fromRelativeWithNSString:baselineShiftString
-                                                                 relative:fontSize
-                                                                   offset:0
-                                                                    scale:1
-                                                                 fontSize:fontSize];
-
+                    baselineShift -= [RNSVGPropHelper fromRelativeWithNSString:baselineShiftString
+                                                                   relative:fontSize
+                                                                     offset:0
+                                                                      scale:1
+                                                                   fontSize:fontSize];
                 }
                 break;
         }
@@ -811,14 +811,14 @@ static double radToDeg = 180 / M_PI;
     return path;
 }
 
-CGFloat getTextAnchorOffset(enum TextAnchor textAnchor, CGFloat width)
+CGFloat getTextAnchorOffset(enum RNSVGTextAnchor textAnchor, CGFloat width)
 {
     switch (textAnchor) {
-        case TextAnchorStart:
+        case RNSVGTextAnchorStart:
             return 0;
-        case TextAnchorMiddle:
+        case RNSVGTextAnchorMiddle:
             return -width / 2;
-        case TextAnchorEnd:
+        case RNSVGTextAnchorEnd:
             return -width;
     }
 
