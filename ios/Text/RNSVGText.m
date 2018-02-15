@@ -10,12 +10,13 @@
 #import "RNSVGTextPath.h"
 #import <React/RCTFont.h>
 #import <CoreText/CoreText.h>
-#import "GlyphContext.h"
+#import "RNSVGGlyphContext.h"
+#import "RNSVGTextProperties.h"
 
 @implementation RNSVGText
 {
     RNSVGText *_textRoot;
-    GlyphContext *_glyphContext;
+    RNSVGGlyphContext *_glyphContext;
 }
 
 - (void)renderLayerTo:(CGContextRef)context
@@ -36,8 +37,8 @@
 
 - (void)setupGlyphContext:(CGContextRef)context
 {
-    _glyphContext = [[GlyphContext alloc] initWithScale:1 width:[self getContextWidth]
-                                                 height:[self getContextHeight]];
+    _glyphContext = [[RNSVGGlyphContext alloc] initWithScale:1 width:[self getContextWidth]
+                                                   height:[self getContextHeight]];
 }
 
 // release the cached CGPathRef for RNSVGTSpan
@@ -109,7 +110,7 @@
         parent = [parent superview];
     }
     if (self.alignmentBaseline == nil) {
-        self.alignmentBaseline = AlignmentBaselineStrings[0];
+        self.alignmentBaseline = RNSVGAlignmentBaselineStrings[0];
     }
     return self.alignmentBaseline;
 }
@@ -139,7 +140,7 @@
     return self.baselineShift;
 }
 
-- (GlyphContext *)getGlyphContext
+- (RNSVGGlyphContext *)getGlyphContext
 {
     return _glyphContext;
 }

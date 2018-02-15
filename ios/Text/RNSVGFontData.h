@@ -1,25 +1,21 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "FontStyle.h"
-#import "FontVariantLigatures.h"
-#import "FontWeight.h"
-#import "PropHelper.h"
-#import "TextAnchor.h"
-#import "TextDecoration.h"
+#import "RNSVGTextProperties.h"
+#import "RNSVGPropHelper.h"
 
-@interface FontData : NSObject {
+@interface RNSVGFontData : NSObject {
 @public
     double fontSize;
     NSString * fontSize_;
     NSString *fontFamily;
-    enum FontStyle fontStyle;
+    enum RNSVGFontStyle fontStyle;
     NSDictionary * fontData;
-    enum FontWeight fontWeight;
+    enum RNSVGFontWeight fontWeight;
     NSString *fontFeatureSettings;
-    enum FontVariantLigatures fontVariantLigatures;
-    enum TextAnchor textAnchor;
-    enum TextDecoration textDecoration;
+    enum RNSVGFontVariantLigatures fontVariantLigatures;
+    enum RNSVGTextAnchor textAnchor;
+    enum RNSVGTextDecoration textDecoration;
     double kerning;
     double wordSpacing;
     double letterSpacing;
@@ -33,9 +29,9 @@
                         fontSize:(double)fontSize;
 
 + (instancetype)initWithNSDictionary:(NSDictionary *)font
-                              parent:(FontData *)parent
+                              parent:(RNSVGFontData *)parent
                                scale:(double)scale;
 
 @end
 
-#define FontData_DEFAULT_FONT_SIZE 12.0
+#define RNSVGFontData_DEFAULT_FONT_SIZE 12.0

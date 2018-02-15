@@ -1,5 +1,5 @@
-#include "PropHelper.h"
-@implementation PropHelper
+#include "RNSVGPropHelper.h"
+@implementation RNSVGPropHelper
 
 + (double)fromRelativeWithNSString:(NSString *)length
                           relative:(double)relative

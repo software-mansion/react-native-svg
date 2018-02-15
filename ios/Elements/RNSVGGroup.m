@@ -10,7 +10,7 @@
 
 @implementation RNSVGGroup
 {
-    GlyphContext *_glyphContext;
+    RNSVGGlyphContext *_glyphContext;
 }
 
 - (void)setFont:(NSDictionary*)font
@@ -61,11 +61,11 @@
     CGFloat width = CGRectGetWidth(clipBounds);
     CGFloat height = CGRectGetHeight(clipBounds);
 
-    _glyphContext = [[GlyphContext alloc] initWithScale:1 width:width
-                                                           height:height];
+    _glyphContext = [[RNSVGGlyphContext alloc] initWithScale:1 width:width
+                                                   height:height];
 }
 
-- (GlyphContext *)getGlyphContext
+- (RNSVGGlyphContext *)getGlyphContext
 {
     return _glyphContext;
 }

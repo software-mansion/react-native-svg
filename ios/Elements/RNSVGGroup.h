@@ -12,7 +12,7 @@
 #import "RNSVGCGFCRule.h"
 #import "RNSVGSvgView.h"
 #import "RNSVGPath.h"
-#import "GlyphContext.h"
+#import "RNSVGGlyphContext.h"
 
 @interface RNSVGGroup : RNSVGPath <RNSVGContainer>
 
@@ -21,7 +21,7 @@
 - (void)renderPathTo:(CGContextRef)context;
 - (void)renderGroupTo:(CGContextRef)context;
 
-- (GlyphContext *)getGlyphContext;
+- (RNSVGGlyphContext *)getGlyphContext;
 - (void)pushGlyphContext;
 - (void)popGlyphContext;
 @end
