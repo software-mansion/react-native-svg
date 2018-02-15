@@ -240,16 +240,16 @@
 		9494C4DF1F473BED00D5BCFD /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		9494C4E11F473BF500D5BCFD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		94DDAC5C1F3D024300EED511 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libRNSVG-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B56895A52035274F004DBF1E /* RNSVGTextProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGTextProperties.h; path = ../../../../ios/Text/RNSVGTextProperties.h; sourceTree = "<group>"; };
-		B56895A62035274F004DBF1E /* RNSVGTextProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGTextProperties.m; path = ../../../../ios/Text/RNSVGTextProperties.m; sourceTree = "<group>"; };
-		B56895A820352B35004DBF1E /* RNSVGBezierElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGBezierElement.m; path = ../../../../ios/Utils/RNSVGBezierElement.m; sourceTree = "<group>"; };
-		B56895A920352B36004DBF1E /* RNSVGBezierElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGBezierElement.h; path = ../../../../ios/Utils/RNSVGBezierElement.h; sourceTree = "<group>"; };
-		B56895AB20352B9B004DBF1E /* RNSVGPropHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGPropHelper.m; path = ../../../../ios/Text/RNSVGPropHelper.m; sourceTree = "<group>"; };
-		B56895AC20352B9B004DBF1E /* RNSVGFontData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGFontData.h; path = ../../../../ios/Text/RNSVGFontData.h; sourceTree = "<group>"; };
-		B56895AD20352B9B004DBF1E /* RNSVGGlyphContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGGlyphContext.h; path = ../../../../ios/Text/RNSVGGlyphContext.h; sourceTree = "<group>"; };
-		B56895AE20352B9B004DBF1E /* RNSVGPropHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGPropHelper.h; path = ../../../../ios/Text/RNSVGPropHelper.h; sourceTree = "<group>"; };
-		B56895AF20352B9B004DBF1E /* RNSVGGlyphContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGGlyphContext.m; path = ../../../../ios/Text/RNSVGGlyphContext.m; sourceTree = "<group>"; };
-		B56895B020352B9B004DBF1E /* RNSVGFontData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGFontData.m; path = ../../../../ios/Text/RNSVGFontData.m; sourceTree = "<group>"; };
+		B56895A52035274F004DBF1E /* RNSVGTextProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGTextProperties.h; path = Text/RNSVGTextProperties.h; sourceTree = "<group>"; };
+		B56895A62035274F004DBF1E /* RNSVGTextProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGTextProperties.m; path = Text/RNSVGTextProperties.m; sourceTree = "<group>"; };
+		B56895A820352B35004DBF1E /* RNSVGBezierElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGBezierElement.m; path = Utils/RNSVGBezierElement.m; sourceTree = "<group>"; };
+		B56895A920352B36004DBF1E /* RNSVGBezierElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGBezierElement.h; path = Utils/RNSVGBezierElement.h; sourceTree = "<group>"; };
+		B56895AB20352B9B004DBF1E /* RNSVGPropHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGPropHelper.m; path = Text/RNSVGPropHelper.m; sourceTree = "<group>"; };
+		B56895AC20352B9B004DBF1E /* RNSVGFontData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGFontData.h; path = Text/RNSVGFontData.h; sourceTree = "<group>"; };
+		B56895AD20352B9B004DBF1E /* RNSVGGlyphContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGGlyphContext.h; path = Text/RNSVGGlyphContext.h; sourceTree = "<group>"; };
+		B56895AE20352B9B004DBF1E /* RNSVGPropHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGPropHelper.h; path = Text/RNSVGPropHelper.h; sourceTree = "<group>"; };
+		B56895AF20352B9B004DBF1E /* RNSVGGlyphContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGGlyphContext.m; path = Text/RNSVGGlyphContext.m; sourceTree = "<group>"; };
+		B56895B020352B9B004DBF1E /* RNSVGFontData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGFontData.m; path = Text/RNSVGFontData.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
