@@ -11,8 +11,8 @@
 #import "RNSVGTextProperties.h"
 #import "RNSVGFontData.h"
 
-NSCharacterSet *separators = nil;
-static double radToDeg = 180 / M_PI;
+static NSCharacterSet *RNSVGTSpan_separators = nil;
+static double RNSVGTSpan_radToDeg = 180 / M_PI;
 
 @implementation RNSVGTSpan
 {
@@ -30,8 +30,8 @@ static double radToDeg = 180 / M_PI;
 {
     self = [super init];
 
-    if (separators == nil) {
-        separators = [NSCharacterSet whitespaceCharacterSet];
+    if (RNSVGTSpan_separators == nil) {
+        RNSVGTSpan_separators = [NSCharacterSet whitespaceCharacterSet];
     }
 
     return self;
@@ -272,7 +272,7 @@ static double radToDeg = 180 / M_PI;
     enum RNSVGTextAnchor textAnchor = font->textAnchor;
     CGRect textBounds = CTLineGetBoundsWithOptions(line, 0);
     double textMeasure = CGRectGetWidth(textBounds);
-    double offset = getTextAnchorOffset(textAnchor, textMeasure);
+    double offset = [RNSVGTSpan getTextAnchorOffset:textAnchor width:textMeasure];
 
     bool hasTextPath = textPath != nil;
 
@@ -703,7 +703,7 @@ static double radToDeg = 180 / M_PI;
 
             CFIndex currIndex = indices[g];
             char currentChar = [str characterAtIndex:currIndex];
-            bool isWordSeparator = [separators characterIsMember:currentChar];
+            bool isWordSeparator = [RNSVGTSpan_separators characterIsMember:currentChar];
             double wordSpace = isWordSeparator ? wordSpacing : 0;
             double spacing = wordSpace + letterSpacing;
             double advance = charWidth + spacing;
@@ -712,7 +712,7 @@ static double radToDeg = 180 / M_PI;
             double y = [gc nextY];
             double dx = [gc nextDeltaX];
             double dy = [gc nextDeltaY];
-            double r = [[gc nextRotation] doubleValue] / radToDeg;
+            double r = [[gc nextRotation] doubleValue] / RNSVGTSpan_radToDeg;
 
             CFIndex endIndex = g + 1 == runGlyphCount ? currIndex : indices[g + 1];
             while (++currIndex < endIndex) {
@@ -811,7 +811,7 @@ static double radToDeg = 180 / M_PI;
     return path;
 }
 
-CGFloat getTextAnchorOffset(enum RNSVGTextAnchor textAnchor, CGFloat width)
++ (CGFloat)getTextAnchorOffset:(RNSVGTextAnchor)textAnchor width:(CGFloat) width
 {
     switch (textAnchor) {
         case RNSVGTextAnchorStart:
