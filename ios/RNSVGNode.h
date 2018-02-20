@@ -23,7 +23,7 @@
  The inverse of the square root of 2.
  Provide enough digits for the 128-bit IEEE quad (36 significant digits).
  */
-extern CGFloat const M_SQRT1_2l;
+extern CGFloat const RNSVG_M_SQRT1_2l;
 extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 
 @property (nonatomic, strong) NSString *name;
