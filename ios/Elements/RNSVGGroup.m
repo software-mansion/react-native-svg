@@ -23,14 +23,14 @@
     _font = font;
 }
 
-- (void)renderLayerTo:(CGContextRef)context
+- (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
     [self clip:context];
     [self setupGlyphContext:context];
-    [self renderGroupTo:context];
+    [self renderGroupTo:context rect:rect];
 }
 
-- (void)renderGroupTo:(CGContextRef)context
+- (void)renderGroupTo:(CGContextRef)context rect:(CGRect)rect
 {
     [self pushGlyphContext];
     RNSVGSvgView* svg = [self getSvgView];
@@ -45,7 +45,7 @@
                 [(RNSVGRenderable*)node mergeProperties:self];
             }
 
-            [svgNode renderTo:context];
+            [svgNode renderTo:context rect:rect];
 
             if ([node isKindOfClass:[RNSVGRenderable class]]) {
                 [(RNSVGRenderable*)node resetProperties];
@@ -56,7 +56,7 @@
             CGContextClipToRect(context, rect);
             [svgView drawToContext:context withRect:(CGRect)rect];
         } else {
-            RCTLogWarn(@"Not a RNSVGNode: %@", node.class);
+            [node drawRect:rect];
         }
 
         return YES;
@@ -90,9 +90,9 @@
     [[[self getTextRoot] getGlyphContext] popContext];
 }
 
-- (void)renderPathTo:(CGContextRef)context
+- (void)renderPathTo:(CGContextRef)context rect:(CGRect)rect
 {
-    [super renderLayerTo:context];
+    [super renderLayerTo:context rect:rect];
 }
 
 - (CGPathRef)getPath:(CGContextRef)context

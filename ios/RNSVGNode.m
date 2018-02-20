@@ -159,7 +159,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     }
 }
 
-- (void)renderTo:(CGContextRef)context
+- (void)renderTo:(CGContextRef)context rect:(CGRect)rect
 {
     // abstract
 }
@@ -199,7 +199,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     return nil;
 }
 
-- (void)renderLayerTo:(CGContextRef)context
+- (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
     // abstract
 }
@@ -313,16 +313,8 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 - (void)traverseSubviews:(BOOL (^)(__kindof UIView *node))block
 {
     for (UIView *node in self.subviews) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
-            if (!block(node)) {
-                break;
-            }
-        } else if ([node isKindOfClass:[RNSVGSvgView class]]) {
-            if (!block(node)) {
-                break;
-            }
-        } else {
-            RCTLogWarn(@"Not a RNSVGNode: %@", node.class);
+        if (!block(node)) {
+            break;
         }
     }
 }

@@ -135,7 +135,9 @@
     for (UIView *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
             RNSVGNode *svg = (RNSVGNode *)node;
-            [svg renderTo:context];
+            [svg renderTo:context rect:rect];
+        } else {
+            [node drawRect:rect];
         }
     }
 }
@@ -156,8 +158,6 @@
             }
 
             [svg parseReference];
-        } else {
-            RCTLogWarn(@"Not a RNSVGNode: %@", node.class);
         }
     }
 

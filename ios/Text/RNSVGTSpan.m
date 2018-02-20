@@ -46,13 +46,13 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
     _content = content;
 }
 
-- (void)renderLayerTo:(CGContextRef)context
+- (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
     if (self.content) {
-        [self renderPathTo:context];
+        [self renderPathTo:context rect:rect];
     } else {
         [self clip:context];
-        [self renderGroupTo:context];
+        [self renderGroupTo:context rect:rect];
     }
 }
 

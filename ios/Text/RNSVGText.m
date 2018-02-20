@@ -19,14 +19,14 @@
     RNSVGGlyphContext *_glyphContext;
 }
 
-- (void)renderLayerTo:(CGContextRef)context
+- (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
     [self clip:context];
     CGContextSaveGState(context);
     [self setupGlyphContext:context];
 
     CGPathRef path = [self getGroupPath:context];
-    [self renderGroupTo:context];
+    [self renderGroupTo:context rect:rect];
     [self releaseCachedPath];
     CGContextRestoreGState(context);
 
@@ -69,10 +69,10 @@
     return (CGPathRef)CFAutorelease(CGPathCreateCopyByTransformingPath(groupPath, &CGAffineTransformIdentity));
 }
 
-- (void)renderGroupTo:(CGContextRef)context
+- (void)renderGroupTo:(CGContextRef)context rect:(CGRect)rect
 {
     [self pushGlyphContext];
-    [super renderGroupTo:context];
+    [super renderGroupTo:context rect:rect];
     [self popGlyphContext];
 }
 

@@ -209,9 +209,9 @@ void RNSVGPerformanceBezier_addLine(CGPoint *last, const CGPoint *next, NSMutabl
     *linesP = lines;
 }
 
-- (void)renderLayerTo:(CGContextRef)context
+- (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
-    [self renderGroupTo:context];
+    [self renderGroupTo:context rect:rect];
 }
 
 - (CGPathRef)getPath:(CGContextRef)context

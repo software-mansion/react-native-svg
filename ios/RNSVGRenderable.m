@@ -157,7 +157,7 @@
     }
 }
 
-- (void)renderTo:(CGContextRef)context
+- (void)renderTo:(CGContextRef)context rect:(CGRect)rect
 {
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
@@ -165,14 +165,14 @@
     CGContextSetAlpha(context, self.opacity);
 
     [self beginTransparencyLayer:context];
-    [self renderLayerTo:context];
+    [self renderLayerTo:context rect:rect];
     [self endTransparencyLayer:context];
 
     CGContextRestoreGState(context);
 }
 
 
-- (void)renderLayerTo:(CGContextRef)context
+- (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
     if (!self.fill && !self.stroke) {
         return;

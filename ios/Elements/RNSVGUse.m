@@ -22,7 +22,7 @@
 }
 
 
-- (void)renderLayerTo:(CGContextRef)context
+- (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
     RNSVGNode* template = [[self getSvgView] getDefinedTemplate:self.href];
     if (template) {
@@ -37,7 +37,7 @@
             RNSVGSymbol *symbol = (RNSVGSymbol*)template;
             [symbol renderSymbolTo:context width:[self relativeOnWidth:self.width] height:[self relativeOnWidth:self.height]];
         } else {
-            [template renderTo:context];
+            [template renderTo:context rect:rect];
         }
         
         if ([template isKindOfClass:[RNSVGRenderable class]]) {
