@@ -18,7 +18,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.Base64;
-import android.view.View;
 
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
@@ -167,7 +166,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
 
         traverseChildren(new VirtualNode.NodeRunnable() {
-            public void run(LayoutShadowNode node) {
+            public void run(ReactShadowNode node) {
                 if (node instanceof VirtualNode) {
                     ((VirtualNode)node).saveDefinition();
                 }
@@ -175,7 +174,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         });
 
         traverseChildren(new VirtualNode.NodeRunnable() {
-            public void run(LayoutShadowNode lNode) {
+            public void run(ReactShadowNode lNode) {
                 if (lNode instanceof VirtualNode) {
                     VirtualNode node = (VirtualNode)lNode;
                     int count = node.saveAndSetupCanvas(canvas);
@@ -265,7 +264,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     void traverseChildren(VirtualNode.NodeRunnable runner) {
         for (int i = 0; i < getChildCount(); i++) {
             ReactShadowNode child = getChildAt(i);
-            runner.run((LayoutShadowNode) child);
+            runner.run(child);
         }
     }
 }

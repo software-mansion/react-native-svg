@@ -12,7 +12,7 @@ package com.horcrux.svg;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import com.facebook.react.uimanager.LayoutShadowNode;
+import com.facebook.react.uimanager.ReactShadowNode;
 
 /**
  * Shadow node for virtual Defs view
@@ -22,7 +22,7 @@ class DefsShadowNode extends DefinitionShadowNode {
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
         NodeRunnable markUpdateSeenRecursive = new NodeRunnable() {
-            public void run(LayoutShadowNode node) {
+            public void run(ReactShadowNode node) {
                 node.markUpdateSeen();
                 if (node instanceof VirtualNode) {
                     ((VirtualNode) node).traverseChildren(this);
@@ -36,7 +36,7 @@ class DefsShadowNode extends DefinitionShadowNode {
 
     void saveDefinition() {
         traverseChildren(new NodeRunnable() {
-            public void run(LayoutShadowNode node) {
+            public void run(ReactShadowNode node) {
                 if (node instanceof VirtualNode) {
                     ((VirtualNode)node).saveDefinition();
                 }

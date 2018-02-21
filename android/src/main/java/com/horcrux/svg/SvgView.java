@@ -20,13 +20,12 @@ import android.view.ViewGroup;
 
 import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ReactShadowNodeImpl;
 import com.facebook.react.uimanager.UIManagerModule;
+import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.uimanager.events.TouchEvent;
 import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
 import com.facebook.react.uimanager.events.TouchEventType;
-import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.view.ReactViewGroup;
 
 import javax.annotation.Nullable;
@@ -36,6 +35,7 @@ import javax.annotation.Nullable;
  */
 @SuppressLint("ViewConstructor")
 public class SvgView extends ViewGroup {
+    @SuppressWarnings("unused")
     public enum Events {
         @SuppressWarnings("unused")
         EVENT_DATA_URL("onDataURL");

@@ -12,12 +12,11 @@ package com.horcrux.svg;
 import android.graphics.Bitmap;
 import android.util.SparseArray;
 
-import com.facebook.react.uimanager.ViewGroupManager;
-import com.facebook.yoga.YogaMeasureMode;
-import com.facebook.yoga.YogaMeasureFunction;
-import com.facebook.yoga.YogaNode;
-import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.yoga.YogaMeasureFunction;
+import com.facebook.yoga.YogaMeasureMode;
+import com.facebook.yoga.YogaNode;
 
 import javax.annotation.Nullable;
 

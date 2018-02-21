@@ -15,7 +15,6 @@ import android.graphics.Path;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -27,7 +26,7 @@ import javax.annotation.Nullable;
 
 class TextShadowNode extends GroupShadowNode {
     String mTextLength = null;
-    String mBaselineShift = null;
+    private String mBaselineShift = null;
     TextLengthAdjust mLengthAdjust = TextLengthAdjust.spacing;
     private AlignmentBaseline mAlignmentBaseline;
     private @Nullable ReadableArray mPositionX;
@@ -178,7 +177,7 @@ class TextShadowNode extends GroupShadowNode {
 
     void releaseCachedPath() {
         traverseChildren(new NodeRunnable() {
-            public void run(LayoutShadowNode node) {
+            public void run(ReactShadowNode node) {
                 if (node instanceof TextShadowNode) {
                     ((TextShadowNode)node).releaseCachedPath();
                 }

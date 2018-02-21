@@ -314,13 +314,13 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
     interface NodeRunnable {
-        void run(LayoutShadowNode node);
+        void run(ReactShadowNode node);
     }
 
     void traverseChildren(NodeRunnable runner) {
         for (int i = 0; i < getChildCount(); i++) {
             ReactShadowNode child = getChildAt(i);
-            runner.run((LayoutShadowNode) child);
+            runner.run(child);
         }
     }
 }
