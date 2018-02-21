@@ -12,6 +12,7 @@ package com.horcrux.svg;
 import android.graphics.Bitmap;
 import android.util.SparseArray;
 
+import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.yoga.YogaMeasureMode;
 import com.facebook.yoga.YogaMeasureFunction;
 import com.facebook.yoga.YogaNode;
@@ -24,7 +25,7 @@ import javax.annotation.Nullable;
  * ViewManager for RNSVGSvgView React views. Renders as a {@link SvgView} and handles
  * invalidating the native view on shadow view updates happening in the underlying tree.
  */
-class SvgViewManager extends BaseViewManager<SvgView, SvgViewShadowNode> {
+class SvgViewManager extends ViewGroupManager<SvgView> {
 
     private static final String REACT_CLASS = "RNSVGSvgView";
 

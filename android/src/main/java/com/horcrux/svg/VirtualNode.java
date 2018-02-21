@@ -64,11 +64,17 @@ abstract class VirtualNode extends LayoutShadowNode {
     private GlyphContext glyphContext;
 
     VirtualNode() {
+        setIsLayoutOnly(true);
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
     }
 
     @Override
     public boolean isVirtual() {
+        return true;
+    }
+
+    @Override
+    public boolean isVirtualAnchor() {
         return true;
     }
 
@@ -314,10 +320,6 @@ abstract class VirtualNode extends LayoutShadowNode {
     void traverseChildren(NodeRunnable runner) {
         for (int i = 0; i < getChildCount(); i++) {
             ReactShadowNode child = getChildAt(i);
-            if (!(child instanceof VirtualNode) && !(child instanceof SvgViewShadowNode)) {
-                continue;
-            }
-
             runner.run((LayoutShadowNode) child);
         }
     }

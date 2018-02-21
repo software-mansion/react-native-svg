@@ -96,6 +96,8 @@ class GroupShadowNode extends RenderableShadowNode {
                 } else if (lNode instanceof SvgViewShadowNode) {
                     SvgViewShadowNode svgView = (SvgViewShadowNode)lNode;
                     svgView.drawChildren(canvas);
+                } else {
+                    lNode.calculateLayout();
                 }
             }
         });

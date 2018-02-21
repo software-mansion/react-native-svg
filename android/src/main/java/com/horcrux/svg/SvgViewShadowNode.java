@@ -18,6 +18,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.Base64;
+import android.view.View;
 
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
@@ -110,7 +111,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
     @Override
     public boolean isVirtualAnchor() {
-        return true;
+        return false;
     }
 
     @Override
@@ -185,6 +186,8 @@ public class SvgViewShadowNode extends LayoutShadowNode {
                     if (node.isResponsible() && !mResponsible) {
                         mResponsible = true;
                     }
+                } else {
+                    lNode.calculateLayout();
                 }
             }
         });
@@ -262,10 +265,6 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     void traverseChildren(VirtualNode.NodeRunnable runner) {
         for (int i = 0; i < getChildCount(); i++) {
             ReactShadowNode child = getChildAt(i);
-            if (!(child instanceof VirtualNode)) {
-                continue;
-            }
-
             runner.run((LayoutShadowNode) child);
         }
     }
