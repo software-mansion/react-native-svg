@@ -54,6 +54,10 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 {
     id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
     [container invalidate];
+    if (_path) {
+        CGPathRelease(_path);
+        _path = nil;
+    }
 }
 
 - (RNSVGGroup *)getTextRoot
@@ -130,8 +134,9 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     if (CGAffineTransformEqualToTransform(matrix, _matrix)) {
         return;
     }
-    [self invalidate];
     _matrix = matrix;
+    id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
+    [container invalidate];
 }
 
 - (void)setClipPath:(NSString *)clipPath
@@ -171,8 +176,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (CGPathRef)getClipPath:(CGContextRef)context
 {
-    if (self.clipPath) {
-        CGPathRelease(_cachedClipPath);
+    if (self.clipPath && !_cachedClipPath) {
         _cachedClipPath = CGPathRetain([[[self getSvgView] getDefinedClipPath:self.clipPath] getPath:context]);
     }
 

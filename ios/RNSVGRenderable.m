@@ -14,6 +14,16 @@
     NSArray<NSString *> *_lastMergedList;
     NSArray<NSString *> *_attributeList;
     CGPathRef _hitArea;
+    CGPathRef _path;
+}
+
+- (void)invalidate
+{
+    [super invalidate];
+    if (_path) {
+        CGPathRelease(_path);
+        _path = nil;
+    }
 }
 
 - (id)init
@@ -151,6 +161,7 @@
 
 - (void)dealloc
 {
+    CGPathRelease(_path);
     CGPathRelease(_hitArea);
     if (_strokeDasharrayData.array) {
         free(_strokeDasharrayData.array);
@@ -178,11 +189,13 @@
         return;
     }
 
-    CGPathRef path = [self getPath:context];
-    [self setHitArea:path];
-
     if (self.opacity == 0) {
         return;
+    }
+
+    if (!_path) {
+        _path = [self getPath:context];
+        [self setHitArea:_path];
     }
 
     CGPathDrawingMode mode = kCGPathStroke;
@@ -198,7 +211,7 @@
             mode = evenodd ? kCGPathEOFill : kCGPathFill;
         } else {
             CGContextSaveGState(context);
-            CGContextAddPath(context, path);
+            CGContextAddPath(context, _path);
             CGContextClip(context);
             [self.fill paint:context
                      opacity:self.fillOpacity
@@ -224,7 +237,7 @@
         }
 
         if (!fillColor) {
-            CGContextAddPath(context, path);
+            CGContextAddPath(context, _path);
             CGContextReplacePathWithStrokedPath(context);
             CGContextClip(context);
         }
@@ -236,12 +249,12 @@
         } else if (!strokeColor) {
             // draw fill
             if (fillColor) {
-                CGContextAddPath(context, path);
+                CGContextAddPath(context, _path);
                 CGContextDrawPath(context, mode);
             }
 
             // draw stroke
-            CGContextAddPath(context, path);
+            CGContextAddPath(context, _path);
             CGContextReplacePathWithStrokedPath(context);
             CGContextClip(context);
 
@@ -253,7 +266,7 @@
         }
     }
 
-    CGContextAddPath(context, path);
+    CGContextAddPath(context, _path);
     CGContextDrawPath(context, mode);
 }
 
