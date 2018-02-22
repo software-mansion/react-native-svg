@@ -9,19 +9,12 @@
 
 package com.horcrux.svg;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.os.Build;
-import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
@@ -34,7 +27,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static android.content.ContentValues.TAG;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Renderable shadow node

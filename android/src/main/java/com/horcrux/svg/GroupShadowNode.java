@@ -10,10 +10,8 @@
 package com.horcrux.svg;
 
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.RectF;
 
 import com.facebook.react.bridge.ReadableMap;

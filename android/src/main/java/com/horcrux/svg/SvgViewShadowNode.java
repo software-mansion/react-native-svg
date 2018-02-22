@@ -49,7 +49,6 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private String mbbHeight;
     private String mAlign;
     private int mMeetOrSlice;
-    private Matrix mViewBoxMatrix = new Matrix();
     private Matrix mInvViewBoxMatrix = new Matrix();
     private boolean mInvertible = true;
 
@@ -156,7 +155,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
             if (nested) {
                 canvas.clipRect(eRect);
             }
-            mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
+            Matrix mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
             mInvertible = mViewBoxMatrix.invert(mInvViewBoxMatrix);
             canvas.concat(mViewBoxMatrix);
         }

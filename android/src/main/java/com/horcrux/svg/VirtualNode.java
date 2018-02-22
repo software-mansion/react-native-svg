@@ -13,7 +13,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Region;
 
@@ -90,6 +89,8 @@ abstract class VirtualNode extends LayoutShadowNode {
     @Override
     public void markUpdated() {
         super.markUpdated();
+        canvasHeight = -1;
+        canvasWidth = -1;
         mRegion = null;
         mPath = null;
         mBox = null;
