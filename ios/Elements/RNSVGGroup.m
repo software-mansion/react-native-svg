@@ -111,7 +111,7 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    CGPoint transformed = CGPointApplyAffineTransform(point, CGAffineTransformInvert(self.matrix));
+    CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
 
     UIView *hitSelf = [super hitTest:transformed withEvent:event];
     if (hitSelf) {
@@ -119,11 +119,8 @@
     }
 
     CGPathRef clip = [self getClipPath];
-    if (clip) {
-        BOOL insideClipPath = CGPathContainsPoint(clip, nil, transformed, self.clipRule == kRNSVGCGFCRuleEvenodd);
-        if (!insideClipPath) {
-            return nil;
-        }
+    if (clip && !CGPathContainsPoint(clip, nil, transformed, self.clipRule == kRNSVGCGFCRuleEvenodd)) {
+        return nil;
     }
 
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
