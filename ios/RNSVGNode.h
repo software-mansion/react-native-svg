@@ -32,6 +32,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, strong) NSString *clipPath;
 @property (nonatomic, assign) BOOL responsible;
 @property (nonatomic, assign) CGAffineTransform matrix;
+@property (nonatomic, assign) CGAffineTransform invmatrix;
 @property (nonatomic, assign) BOOL active;
 @property (nonatomic, assign) CGPathRef path;
 
@@ -68,11 +69,6 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
  * getPath will return the path inside node as a ClipPath.
  */
 - (CGPathRef)getPath:(CGContextRef) context;
-
-/**
- * run hitTest
- */
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transfrom;
 
 /**
  * get RNSVGSvgView which ownes current RNSVGNode

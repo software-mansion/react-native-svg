@@ -20,6 +20,8 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.os.Build;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
@@ -31,6 +33,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Renderable shadow node
@@ -97,7 +101,6 @@ abstract public class RenderableShadowNode extends VirtualNode {
                         "fillRule " + mFillRule + " unrecognized");
         }
 
-        mPath = null;
         markUpdated();
     }
 
@@ -205,6 +208,19 @@ abstract public class RenderableShadowNode extends VirtualNode {
             if (mPath == null) {
                 mPath = getPath(canvas, paint);
                 mPath.setFillType(mFillRule);
+
+                mBox = new RectF();
+                mPath.computeBounds(mBox, true);
+
+                mRegion = new Region();
+                mRegion.setPath(mPath,
+                    new Region(
+                        (int) Math.floor(mBox.left),
+                        (int) Math.floor(mBox.top),
+                        (int) Math.ceil(mBox.right),
+                        (int) Math.ceil(mBox.bottom)
+                    )
+                );
             }
 
             clip(canvas, paint);
@@ -264,7 +280,6 @@ abstract public class RenderableShadowNode extends VirtualNode {
         return true;
     }
 
-
     private void setupPaint(Paint paint, float opacity, ReadableArray colors) {
         int colorType = colors.getInt(0);
         if (colorType == 0) {
@@ -275,55 +290,60 @@ abstract public class RenderableShadowNode extends VirtualNode {
                     (int) (colors.getDouble(2) * 255),
                     (int) (colors.getDouble(3) * 255));
         } else if (colorType == 1) {
-            RectF box = new RectF();
-            mPath.computeBounds(box, true);
-
             Brush brush = getSvgShadowNode().getDefinedBrush(colors.getString(1));
             if (brush != null) {
-                brush.setupPaint(paint, box, mScale, opacity);
+                brush.setupPaint(paint, mBox, mScale, opacity);
             }
         }
 
     }
-
 
     abstract protected Path getPath(Canvas canvas, Paint paint);
 
     @Override
-    public int hitTest(Point point, @Nullable Matrix matrix) {
-        if (mPath == null) {
+    public int hitTest(final float[] src) {
+        if (mPath == null || !mInvertible) {
             return -1;
         }
 
-        Matrix pathMatrix = new Matrix(mMatrix);
+        float[] dst = new float[2];
+        mInvMatrix.mapPoints(dst, src);
+        int x = Math.round(dst[0]);
+        int y = Math.round(dst[1]);
 
-        if (matrix != null) {
-            pathMatrix.postConcat(matrix);
+        if (!mRegion.contains(x, y)) {
+            return -1;
         }
 
-        if (pathContainsPoint(mPath, pathMatrix, point)) {
-            Path clipPath = getClipPath();
-            if (clipPath != null && !pathContainsPoint(clipPath, pathMatrix, point)) {
-               return -1;
+        Path clipPath = getClipPath();
+        if (clipPath != null) {
+            if (mClipRegionPath != clipPath) {
+                mClipRegionPath = clipPath;
+                mClipRegion = getRegion(clipPath);
             }
-
-            return getReactTag();
-        } else{
-            return -1;
+            if (!mClipRegion.contains(x, y)) {
+                return -1;
+            }
         }
+
+        return getReactTag();
     }
 
-    boolean pathContainsPoint(Path path, Matrix matrix, Point point) {
-        Path copy = new Path(path);
-
-        copy.transform(matrix);
-
+    Region getRegion(Path path) {
         RectF rectF = new RectF();
-        copy.computeBounds(rectF, true);
-        Region region = new Region();
-        region.setPath(copy, new Region((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom));
+        path.computeBounds(rectF, true);
 
-        return region.contains(point.x, point.y);
+        Region region = new Region();
+        region.setPath(path,
+                new Region(
+                        (int) Math.floor(rectF.left),
+                        (int) Math.floor(rectF.top),
+                        (int) Math.ceil(rectF.right),
+                        (int) Math.ceil(rectF.bottom)
+                )
+        );
+
+        return region;
     }
 
     private WritableArray getAttributeList() {

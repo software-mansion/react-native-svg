@@ -135,6 +135,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
         return;
     }
     _matrix = matrix;
+    _invmatrix = CGAffineTransformInvert(matrix);
     id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
     [container invalidate];
 }
@@ -212,12 +213,6 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
 
-    // abstract
-    return nil;
-}
-
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transfrom
-{
     // abstract
     return nil;
 }

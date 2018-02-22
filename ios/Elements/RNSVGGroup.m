@@ -109,25 +109,21 @@
     return (CGPathRef)CFAutorelease(path);
 }
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transform
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    UIView *hitSelf = [super hitTest:point withEvent:event withTransform:transform];
+    CGPoint transformed = CGPointApplyAffineTransform(point, CGAffineTransformInvert(self.matrix));
+
+    UIView *hitSelf = [super hitTest:transformed withEvent:event];
     if (hitSelf) {
         return hitSelf;
     }
 
-    CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
-
     CGPathRef clip = [self getClipPath];
     if (clip) {
-        CGPathRef transformedClipPath = CGPathCreateCopyByTransformingPath(clip, &matrix);
-        BOOL insideClipPath = CGPathContainsPoint(clip, nil, point, self.clipRule == kRNSVGCGFCRuleEvenodd);
-        CGPathRelease(transformedClipPath);
-
+        BOOL insideClipPath = CGPathContainsPoint(clip, nil, transformed, self.clipRule == kRNSVGCGFCRuleEvenodd);
         if (!insideClipPath) {
             return nil;
         }
-
     }
 
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
@@ -141,13 +137,14 @@
             return node;
         }
 
-        UIView *hitChild = [node hitTest: point withEvent:event withTransform:matrix];
+        UIView *hitChild = [node hitTest:transformed withEvent:event];
 
         if (hitChild) {
             node.active = YES;
             return (node.responsible || (node != hitChild)) ? hitChild : self;
         }
     }
+
     return nil;
 }
 

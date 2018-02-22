@@ -84,8 +84,6 @@ class TSpanShadowNode extends TextShadowNode {
         mCache = getLinePath(mContent, paint, canvas);
         popGlyphContext();
 
-        mCache.computeBounds(new RectF(), true);
-
         return mCache;
     }
 

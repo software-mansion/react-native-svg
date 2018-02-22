@@ -17,6 +17,7 @@
     NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
     NSMutableDictionary<NSString *, RNSVGPainter *> *_painters;
     CGAffineTransform _viewBoxTransform;
+    CGAffineTransform _invviewBoxTransform;
 }
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
@@ -129,6 +130,7 @@
                                                  eRect:rect
                                                  align:self.align
                                            meetOrSlice:self.meetOrSlice];
+        _invviewBoxTransform = CGAffineTransformInvert(_viewBoxTransform);
         CGContextConcatCTM(context, _viewBoxTransform);
     }
 
@@ -167,6 +169,7 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     if (self.align) {
+        CGPoint transformed = CGPointApplyAffineTransform(point, _invviewBoxTransform);
         for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
             if (![node isKindOfClass:[RNSVGNode class]]) {
                 continue;
@@ -178,7 +181,7 @@
                 return node;
             }
 
-            UIView *hitChild = [node hitTest: point withEvent:event withTransform:_viewBoxTransform];
+            UIView *hitChild = [node hitTest:transformed withEvent:event];
 
             if (hitChild) {
                 node.active = YES;

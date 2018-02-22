@@ -49,7 +49,9 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private String mbbHeight;
     private String mAlign;
     private int mMeetOrSlice;
-    private Matrix mViewBoxMatrix;
+    private Matrix mViewBoxMatrix = new Matrix();
+    private Matrix mInvViewBoxMatrix = new Matrix();
+    private boolean mInvertible = true;
 
     public SvgViewShadowNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
@@ -155,6 +157,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
                 canvas.clipRect(eRect);
             }
             mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
+            mInvertible = mViewBoxMatrix.invert(mInvViewBoxMatrix);
             canvas.concat(mViewBoxMatrix);
         }
 
@@ -217,9 +220,12 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     }
 
     int hitTest(Point point) {
-        if (!mResponsible) {
+        if (!mResponsible || !mInvertible) {
             return -1;
         }
+
+        float[] transformed = { point.x, point.y };
+        mInvViewBoxMatrix.mapPoints(transformed);
 
         int count = getChildCount();
         int viewTag = -1;
@@ -228,7 +234,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
                 continue;
             }
 
-            viewTag = ((VirtualNode) getChildAt(i)).hitTest(point, mViewBoxMatrix);
+            viewTag = ((VirtualNode) getChildAt(i)).hitTest(transformed);
             if (viewTag != -1) {
                 break;
             }

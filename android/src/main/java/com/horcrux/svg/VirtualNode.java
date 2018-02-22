@@ -14,6 +14,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.graphics.Region;
 
 import com.facebook.common.logging.FLog;
@@ -45,6 +46,8 @@ abstract class VirtualNode extends LayoutShadowNode {
     };
     float mOpacity = 1f;
     Matrix mMatrix = new Matrix();
+    Matrix mInvMatrix = new Matrix();
+    boolean mInvertible = true;
 
     private int mClipRule;
     private @Nullable String mClipPath;
@@ -64,6 +67,10 @@ abstract class VirtualNode extends LayoutShadowNode {
     private GlyphContext glyphContext;
 
     Path mPath;
+    RectF mBox;
+    Region mRegion;
+    Path mClipRegionPath;
+    Region mClipRegion;
 
     VirtualNode() {
         setIsLayoutOnly(true);
@@ -84,6 +91,8 @@ abstract class VirtualNode extends LayoutShadowNode {
     public void markUpdated() {
         super.markUpdated();
         mPath = null;
+        mBox = null;
+        mRegion = null;
     }
 
     @Nullable
@@ -193,13 +202,16 @@ abstract class VirtualNode extends LayoutShadowNode {
             if (matrixSize == 6) {
                 if (mMatrix == null) {
                     mMatrix = new Matrix();
+                    mInvMatrix = new Matrix();
                 }
                 mMatrix.setValues(sRawMatrix);
+                mInvertible = mMatrix.invert(mInvMatrix);
             } else if (matrixSize != -1) {
                 FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");
             }
         } else {
             mMatrix = null;
+            mInvMatrix = null;
         }
 
         super.markUpdated();
@@ -247,7 +259,7 @@ abstract class VirtualNode extends LayoutShadowNode {
         }
     }
 
-    abstract public int hitTest(Point point, @Nullable Matrix matrix);
+    abstract public int hitTest(final float[] point);
 
     public boolean isResponsible() {
         return mResponsible;
