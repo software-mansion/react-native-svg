@@ -208,19 +208,6 @@ abstract public class RenderableShadowNode extends VirtualNode {
             if (mPath == null) {
                 mPath = getPath(canvas, paint);
                 mPath.setFillType(mFillRule);
-
-                mBox = new RectF();
-                mPath.computeBounds(mBox, true);
-
-                mRegion = new Region();
-                mRegion.setPath(mPath,
-                    new Region(
-                        (int) Math.floor(mBox.left),
-                        (int) Math.floor(mBox.top),
-                        (int) Math.ceil(mBox.right),
-                        (int) Math.ceil(mBox.bottom)
-                    )
-                );
             }
 
             clip(canvas, paint);
@@ -292,6 +279,10 @@ abstract public class RenderableShadowNode extends VirtualNode {
         } else if (colorType == 1) {
             Brush brush = getSvgShadowNode().getDefinedBrush(colors.getString(1));
             if (brush != null) {
+                if (mBox == null) {
+                    mBox = new RectF();
+                    mPath.computeBounds(mBox, true);
+                }
                 brush.setupPaint(paint, mBox, mScale, opacity);
             }
         }
@@ -311,6 +302,9 @@ abstract public class RenderableShadowNode extends VirtualNode {
         int x = Math.round(dst[0]);
         int y = Math.round(dst[1]);
 
+        if (mRegion == null) {
+            mRegion = getRegion(mPath);
+        }
         if (!mRegion.contains(x, y)) {
             return -1;
         }

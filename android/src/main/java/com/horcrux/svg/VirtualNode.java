@@ -69,8 +69,8 @@ abstract class VirtualNode extends LayoutShadowNode {
     Path mPath;
     RectF mBox;
     Region mRegion;
-    Path mClipRegionPath;
     Region mClipRegion;
+    Path mClipRegionPath;
 
     VirtualNode() {
         setIsLayoutOnly(true);
@@ -90,9 +90,9 @@ abstract class VirtualNode extends LayoutShadowNode {
     @Override
     public void markUpdated() {
         super.markUpdated();
+        mRegion = null;
         mPath = null;
         mBox = null;
-        mRegion = null;
     }
 
     @Nullable
