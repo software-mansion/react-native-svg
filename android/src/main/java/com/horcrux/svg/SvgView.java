@@ -106,13 +106,14 @@ public class SvgView extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        ReactShadowNodeImpl node = getShadowNode();
         for (int i = 0; i < this.getChildCount(); i++) {
             View child = this.getChildAt(i);
             if (child instanceof ReactViewGroup) {
-                ReactShadowNodeImpl node = getShadowNode();
+                int id = child.getId();
                 for (int j = 0; j < node.getChildCount(); j++) {
                     ReactShadowNodeImpl nodeChild = node.getChildAt(j);
-                    if (nodeChild.getReactTag() != child.getId()) {
+                    if (nodeChild.getReactTag() != id) {
                         continue;
                     }
 

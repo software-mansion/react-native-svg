@@ -67,8 +67,6 @@ abstract public class RenderableShadowNode extends VirtualNode {
     public float mFillOpacity = 1;
     public Path.FillType mFillRule = Path.FillType.WINDING;
 
-    protected Path mPath;
-
     private @Nullable ReadableArray mLastMergedList;
     private @Nullable ArrayList<Object> mOriginProperties;
     protected @Nullable ReadableArray mPropList;
@@ -204,10 +202,13 @@ abstract public class RenderableShadowNode extends VirtualNode {
         opacity *= mOpacity;
 
         if (opacity > MIN_OPACITY_FOR_DRAW) {
-            mPath = getPath(canvas, paint);
-            mPath.setFillType(mFillRule);
+            if (mPath == null) {
+                mPath = getPath(canvas, paint);
+                mPath.setFillType(mFillRule);
+            }
 
             clip(canvas, paint);
+
             if (setupFillPaint(paint, opacity * mFillOpacity)) {
                 canvas.drawPath(mPath, paint);
             }

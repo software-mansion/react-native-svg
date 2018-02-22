@@ -63,6 +63,8 @@ abstract class VirtualNode extends LayoutShadowNode {
     private float canvasWidth = -1;
     private GlyphContext glyphContext;
 
+    Path mPath;
+
     VirtualNode() {
         setIsLayoutOnly(true);
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
@@ -76,6 +78,12 @@ abstract class VirtualNode extends LayoutShadowNode {
     @Override
     public boolean isVirtualAnchor() {
         return true;
+    }
+
+    @Override
+    public void markUpdated() {
+        super.markUpdated();
+        mPath = null;
     }
 
     @Nullable
@@ -161,6 +169,7 @@ abstract class VirtualNode extends LayoutShadowNode {
 
     @ReactProp(name = "clipPath")
     public void setClipPath(String clipPath) {
+        mCachedClipPath = null;
         mClipPath = clipPath;
         markUpdated();
     }
@@ -193,7 +202,7 @@ abstract class VirtualNode extends LayoutShadowNode {
             mMatrix = null;
         }
 
-        markUpdated();
+        super.markUpdated();
     }
 
     @ReactProp(name = "responsible")
@@ -207,7 +216,7 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
     @Nullable Path getClipPath(Canvas canvas, Paint paint) {
-        if (mClipPath != null) {
+        if (mClipPath != null && mCachedClipPath == null) {
             VirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPath);
 
             if (node != null) {
