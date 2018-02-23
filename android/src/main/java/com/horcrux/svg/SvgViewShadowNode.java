@@ -11,28 +11,50 @@ package com.horcrux.svg;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.SurfaceTexture;
 import android.graphics.Typeface;
 import android.util.Base64;
+import android.view.Surface;
+import android.view.TextureView;
 
+import com.facebook.common.logging.FLog;
+import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.UIViewOperationQueue;
+import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 /**
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
  */
-public class SvgViewShadowNode extends LayoutShadowNode {
+public class SvgViewShadowNode extends LayoutShadowNode
+        implements TextureView.SurfaceTextureListener  {
+
+    private @Nullable Surface mSurface;
+
+    private @Nullable Integer mBackgroundColor;
+
+    @ReactProp(name = ViewProps.BACKGROUND_COLOR, customType = "Color")
+    public void setBackgroundColor(Integer color) {
+        mBackgroundColor = color;
+        markUpdated();
+    }
+
     private boolean mResponsible = false;
 
     private final Map<String, VirtualNode> mDefinedClipPaths = new HashMap<>();
@@ -117,7 +139,8 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
         super.onCollectExtraUpdates(uiUpdater);
-        uiUpdater.enqueueUpdateExtraData(getReactTag(), drawOutput());
+        drawOutput();
+        uiUpdater.enqueueUpdateExtraData(getReactTag(), this);
     }
 
     @Override
@@ -126,14 +149,37 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         SvgViewManager.setShadowNode(this);
     }
 
-    private Object drawOutput() {
-        Bitmap bitmap = Bitmap.createBitmap(
-                (int) getLayoutWidth(),
-                (int) getLayoutHeight(),
-                Bitmap.Config.ARGB_8888);
+    private void drawOutput() {
+        if (mSurface == null || !mSurface.isValid()) {
+            markChildrenUpdatesSeen(this);
+            return;
+        }
 
-        drawChildren(new Canvas(bitmap));
-        return bitmap;
+        try {
+            Canvas canvas = mSurface.lockCanvas(null);
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            if (mBackgroundColor != null) {
+                canvas.drawColor(mBackgroundColor);
+            }
+
+            drawChildren(canvas);
+
+            if (mSurface == null) {
+                return;
+            }
+
+            mSurface.unlockCanvasAndPost(canvas);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            FLog.e(ReactConstants.TAG, e.getClass().getSimpleName() + " in Surface.unlockCanvasAndPost");
+        }
+    }
+
+    private void markChildrenUpdatesSeen(ReactShadowNode shadowNode) {
+        for (int i = 0; i < shadowNode.getChildCount(); i++) {
+            ReactShadowNode child = shadowNode.getChildAt(i);
+            child.markUpdateSeen();
+            markChildrenUpdatesSeen(child);
+        }
     }
 
     Rect getCanvasBounds() {
@@ -272,4 +318,23 @@ public class SvgViewShadowNode extends LayoutShadowNode {
             runner.run(child);
         }
     }
+
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        mSurface = new Surface(surface);
+        drawOutput();
+    }
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        surface.release();
+        mSurface = null;
+        return true;
+    }
+
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {}
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {}
 }

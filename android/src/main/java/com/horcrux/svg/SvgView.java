@@ -10,11 +10,11 @@
 package com.horcrux.svg;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,8 +27,6 @@ import com.facebook.react.uimanager.events.TouchEvent;
 import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
 import com.facebook.react.uimanager.events.TouchEventType;
 import com.facebook.react.views.view.ReactViewGroup;
-
-import javax.annotation.Nullable;
 
 /**
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its children.
@@ -53,7 +51,7 @@ public class SvgView extends ViewGroup {
         }
     }
 
-    private @Nullable Bitmap mBitmap;
+    private TextureView mTextureView;
     private final EventDispatcher mEventDispatcher;
     private long mGestureStartTime = TouchEvent.UNSET;
     private int mTargetTag;
@@ -63,29 +61,33 @@ public class SvgView extends ViewGroup {
 
     public SvgView(ReactContext reactContext) {
         super(reactContext);
+        mTextureView = new TextureView(reactContext);
+        mTextureView.setOpaque(false);
+        addView(mTextureView);
         mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
+    }
+
+    /**
+     * Sets the {@link TextureView.SurfaceTextureListener} used to listen to surface
+     * texture events.
+     *
+     * @see TextureView#getSurfaceTextureListener
+     * @see TextureView.SurfaceTextureListener
+     */
+    public void setSurfaceTextureListener(TextureView.SurfaceTextureListener listener) {
+        mTextureView.setSurfaceTextureListener(listener);
+    }
+
+    @Override
+    public final void draw(Canvas canvas) {
+        super.draw(canvas);
+        mTextureView.draw(canvas);
     }
 
     @Override
     public void setId(int id) {
         super.setId(id);
         SvgViewManager.setSvgView(this);
-    }
-
-    public void setBitmap(Bitmap bitmap) {
-        if (mBitmap != null) {
-            mBitmap.recycle();
-        }
-        mBitmap = bitmap;
-        invalidate();
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        if (mBitmap != null) {
-            canvas.drawBitmap(mBitmap, 0, 0, null);
-        }
     }
 
     private SvgViewShadowNode getShadowNode() {
@@ -109,7 +111,9 @@ public class SvgView extends ViewGroup {
         ReactShadowNodeImpl node = getShadowNode();
         for (int i = 0; i < this.getChildCount(); i++) {
             View child = this.getChildAt(i);
-            if (child instanceof ReactViewGroup) {
+            if (child instanceof TextureView) {
+                child.layout(l, t, r , b);
+            } else if (child instanceof ReactViewGroup) {
                 int id = child.getId();
                 for (int j = 0; j < node.getChildCount(); j++) {
                     ReactShadowNodeImpl nodeChild = node.getChildAt(j);
