@@ -9,18 +9,19 @@
 
 package com.horcrux.svg;
 
-import android.view.View;
+import android.util.SparseArray;
 
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.ViewManager;
+import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
  * ViewManager for all shadowed RNSVG views: Group, Path and Text. Since these never get rendered
  * into native views and don't need any logic (all the logic is in {@link SvgView}), this
  * "stubbed" ViewManager is used for all of them.
  */
-class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
+class RenderableViewManager extends ViewGroupManager<RenderableView> {
 
     /* package */ private static final String CLASS_GROUP = "RNSVGGroup";
     /* package */ private static final String CLASS_PATH = "RNSVGPath";
@@ -195,17 +196,43 @@ class RenderableViewManager extends ViewManager<View, LayoutShadowNode> {
         }
     }
 
-    @Override
-    protected View createViewInstance(ThemedReactContext reactContext) {
-        throw new IllegalStateException("SVG elements does not map into a native view");
+    @ReactProp(name = "fillOpacity")
+    public void setFillOpacity(RenderableView node, float opacity) {
+        RenderableShadowNode shadow = ((RenderableShadowNode)mTagToShadowNode.get(node.getId()));
+        shadow.setFillOpacity(opacity);
+        SvgViewShadowNode view = shadow.getSvgShadowNode();
+        if (view != null ) view.queueDraw();
     }
 
     @Override
-    public void updateExtraData(View root, Object extraData) {
-        throw new IllegalStateException("SVG elements does not map into a native view");
+    protected RenderableView createViewInstance(ThemedReactContext reactContext) {
+        return new RenderableView(reactContext);
     }
 
     @Override
-    public void onDropViewInstance(View view) {
+    public void updateExtraData(RenderableView root, Object extraData) {
+        throw new IllegalStateException("SVG elements does not map into a native view");
+    }
+
+    private static final SparseArray<VirtualNode> mTagToShadowNode = new SparseArray<>();
+    private static final SparseArray<RenderableView> mTagToSvgView = new SparseArray<>();
+
+    @Override
+    public void onDropViewInstance(RenderableView view) {
+        int tag = view.getId();
+        mTagToShadowNode.remove(tag);
+        mTagToSvgView.remove(tag);
+    }
+
+    public static void setView(RenderableView renderableView) {
+        mTagToSvgView.put(renderableView.getId(), renderableView);
+    }
+
+    static void setShadowNode(VirtualNode virtualNode) {
+        mTagToShadowNode.put(virtualNode.getReactTag(), virtualNode);
+    }
+
+    static VirtualNode getShadowNodeByTag(int id) {
+        return mTagToShadowNode.get(id);
     }
 }

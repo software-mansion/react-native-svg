@@ -44,8 +44,8 @@ export default class extends Shape {
             }, this)}
             x={props.x.toString()}
             y={props.y.toString()}
-            width={props.width.toString()}
-            height={props.height.toString()}
+            rectwidth={props.width.toString()}
+            rectheight={props.height.toString()}
             rx={props.rx.toString()}
             ry={props.ry.toString()}
         />;

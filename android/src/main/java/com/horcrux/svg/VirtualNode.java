@@ -38,6 +38,12 @@ abstract class VirtualNode extends LayoutShadowNode {
 
     static final float MIN_OPACITY_FOR_DRAW = 0.01f;
 
+    @Override
+    public void setReactTag(int reactTag) {
+        super.setReactTag(reactTag);
+        RenderableViewManager.setShadowNode(this);
+    }
+
     private static final float[] sRawMatrix = new float[]{
         1, 0, 0,
         0, 1, 0,
@@ -72,18 +78,17 @@ abstract class VirtualNode extends LayoutShadowNode {
     Path mClipRegionPath;
 
     VirtualNode() {
-        setIsLayoutOnly(true);
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
     }
 
     @Override
     public boolean isVirtual() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isVirtualAnchor() {
-        return true;
+        return false;
     }
 
     @Override

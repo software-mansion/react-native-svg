@@ -21,6 +21,7 @@ import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.graphics.Typeface;
 import android.util.Base64;
+import android.view.Choreographer;
 import android.view.Surface;
 import android.view.TextureView;
 
@@ -43,7 +44,7 @@ import javax.annotation.Nullable;
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
  */
 public class SvgViewShadowNode extends LayoutShadowNode
-        implements TextureView.SurfaceTextureListener  {
+        implements TextureView.SurfaceTextureListener, Choreographer.FrameCallback  {
 
     private @Nullable Surface mSurface;
 
@@ -337,4 +338,21 @@ public class SvgViewShadowNode extends LayoutShadowNode
 
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {}
+
+    private boolean queued = false;
+
+    @Override
+    public void doFrame(long frameTimeNanos) {
+        if (queued) {
+            queued = false;
+            drawOutput();
+        }
+    }
+
+    void queueDraw() {
+        if (!queued) {
+            queued = true;
+            Choreographer.getInstance().postFrameCallback(this);
+        }
+    }
 }

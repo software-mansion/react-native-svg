@@ -67,6 +67,12 @@ public class SvgView extends ViewGroup {
         mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
+    public void addView(View child, int index, LayoutParams params) {
+        if (!(child instanceof RenderableView)) {
+            super.addView(child, index, params);
+        }
+    }
+
     /**
      * Sets the {@link TextureView.SurfaceTextureListener} used to listen to surface
      * texture events.
@@ -111,9 +117,7 @@ public class SvgView extends ViewGroup {
         ReactShadowNodeImpl node = getShadowNode();
         for (int i = 0; i < this.getChildCount(); i++) {
             View child = this.getChildAt(i);
-            if (child instanceof TextureView) {
-                child.layout(l, t, r , b);
-            } else if (child instanceof ReactViewGroup) {
+            if (child instanceof ReactViewGroup) {
                 int id = child.getId();
                 for (int j = 0; j < node.getChildCount(); j++) {
                     ReactShadowNodeImpl nodeChild = node.getChildAt(j);
@@ -129,6 +133,8 @@ public class SvgView extends ViewGroup {
                     child.layout(Math.round(x), Math.round(y), Math.round(nr), Math.round(nb));
                     break;
                 }
+            } else {
+                child.layout(l, t, r , b);
             }
         }
     }

@@ -29,22 +29,22 @@
     _y = y;
 }
 
-- (void)setWidth:(NSString *)width
+- (void)setWidth:(NSString *)rectwidth
 {
-    if (width == _width) {
+    if (rectwidth == _rectwidth) {
         return;
     }
     [self invalidate];
-    _width = width;
+    _rectwidth = rectwidth;
 }
 
-- (void)setHeight:(NSString *)height
+- (void)setHeight:(NSString *)rectheight
 {
-    if (height == _height) {
+    if (rectheight == _rectheight) {
         return;
     }
     [self invalidate];
-    _height = height;
+    _rectheight = rectheight;
 }
 
 - (void)setRx:(NSString *)rx
@@ -70,31 +70,31 @@
     CGMutablePathRef path = CGPathCreateMutable();
     CGFloat x = [self relativeOnWidth:self.x];
     CGFloat y = [self relativeOnHeight:self.y];
-    CGFloat width = [self relativeOnWidth:self.width];
-    CGFloat height = [self relativeOnHeight:self.height];
+    CGFloat width = [self relativeOnWidth:self.rectwidth];
+    CGFloat height = [self relativeOnHeight:self.rectheight];
     CGFloat rx = [self relativeOnWidth:self.rx];
     CGFloat ry = [self relativeOnHeight:self.ry];
-    
+
     if (rx != 0 || ry != 0) {
         if (rx == 0) {
             rx = ry;
         } else if (ry == 0) {
             ry = rx;
         }
-        
+
         if (rx > width / 2) {
             rx = width / 2;
         }
-        
+
         if (ry > height / 2) {
             ry = height / 2;
         }
-        
+
         CGPathAddRoundedRect(path, nil, CGRectMake(x, y, width, height), rx, ry);
     } else {
         CGPathAddRect(path, nil, CGRectMake(x, y, width, height));
     }
-    
+
     return (CGPathRef)CFAutorelease(path);
 }
 
