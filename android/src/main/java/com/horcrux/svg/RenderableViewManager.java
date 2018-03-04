@@ -198,10 +198,20 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
 
     @ReactProp(name = "fillOpacity")
     public void setFillOpacity(RenderableView node, float opacity) {
-        RenderableShadowNode shadow = ((RenderableShadowNode)mTagToShadowNode.get(node.getId()));
-        shadow.setFillOpacity(opacity);
+        node.getShadowNode().setFillOpacity(opacity);
+    }
+
+    /**
+     * Callback that will be triggered after all properties are updated in current update transaction
+     * (all @ReactProp handlers for properties updated in current transaction have been called). If
+     * you want to override this method you should call super.onAfterUpdateTransaction from it as
+     * the parent class of the ViewManager may rely on callback being executed.
+     */
+    protected void onAfterUpdateTransaction(RenderableView node) {
+        super.onAfterUpdateTransaction(node);
+        RenderableShadowNode shadow = node.getShadowNode();
         SvgViewShadowNode view = shadow.getSvgShadowNode();
-        if (view != null ) view.queueDraw();
+        if (view != null) view.drawOutput();
     }
 
     @Override
@@ -215,17 +225,11 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
     }
 
     private static final SparseArray<VirtualNode> mTagToShadowNode = new SparseArray<>();
-    private static final SparseArray<RenderableView> mTagToSvgView = new SparseArray<>();
 
     @Override
     public void onDropViewInstance(RenderableView view) {
-        int tag = view.getId();
-        mTagToShadowNode.remove(tag);
-        mTagToSvgView.remove(tag);
-    }
-
-    public static void setView(RenderableView renderableView) {
-        mTagToSvgView.put(renderableView.getId(), renderableView);
+        mTagToShadowNode.remove(view.getId());
+        view.dropView();
     }
 
     static void setShadowNode(VirtualNode virtualNode) {
