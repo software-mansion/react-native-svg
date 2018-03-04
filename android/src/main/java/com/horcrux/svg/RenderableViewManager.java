@@ -11,10 +11,18 @@ package com.horcrux.svg;
 
 import android.util.SparseArray;
 
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
+
+import javax.annotation.Nullable;
+
+import static com.horcrux.svg.RenderableShadowNode.CAP_ROUND;
+import static com.horcrux.svg.RenderableShadowNode.FILL_RULE_NONZERO;
+import static com.horcrux.svg.RenderableShadowNode.JOIN_ROUND;
 
 /**
  * ViewManager for all shadowed RNSVG views: Group, Path and Text. Since these never get rendered
@@ -48,39 +56,272 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
     }
 
     static RenderableViewManager createPathViewManager() {
-        return new RenderableViewManager(CLASS_PATH);
+        return new RenderableViewManager(CLASS_PATH) {
+
+            @ReactProp(name = "d")
+            public void setD(RenderableView node, String d) {
+                ((PathShadowNode) node.getShadowNode()).setD(d);
+            }
+        };
     }
 
     static RenderableViewManager createTextViewManager() {
-        return new RenderableViewManager(CLASS_TEXT);
+        return new RenderableViewManager(CLASS_TEXT) {
+
+            @ReactProp(name = "textLength")
+            public void setTextLength(RenderableView node, @Nullable String length) {
+                ((TextShadowNode) node.getShadowNode()).setTextLength(length);
+            }
+
+            @ReactProp(name = "lengthAdjust")
+            public void setLengthAdjust(RenderableView node, @Nullable String adjustment) {
+                ((TextShadowNode) node.getShadowNode()).setLengthAdjust(adjustment);
+            }
+
+            @ReactProp(name = "alignmentBaseline")
+            public void setMethod(RenderableView node, @Nullable String alignment) {
+                ((TextShadowNode) node.getShadowNode()).setMethod(alignment);
+            }
+
+            @ReactProp(name = "baselineShift")
+            public void setBaselineShift(RenderableView node, @Nullable String baselineShift) {
+                ((TextShadowNode) node.getShadowNode()).setBaselineShift(baselineShift);
+            }
+
+            @ReactProp(name = "verticalAlign")
+            public void setVerticalAlign(RenderableView node, @Nullable String verticalAlign) {
+                ((TextShadowNode) node.getShadowNode()).setVerticalAlign(verticalAlign);
+            }
+
+            @ReactProp(name = "rotate")
+            public void setRotate(RenderableView node, @Nullable ReadableArray rotate) {
+                ((TextShadowNode) node.getShadowNode()).setRotate(rotate);
+            }
+
+            @ReactProp(name = "deltaX")
+            public void setDeltaX(RenderableView node, @Nullable ReadableArray deltaX) {
+                ((TextShadowNode) node.getShadowNode()).setDeltaX(deltaX);
+            }
+
+            @ReactProp(name = "deltaY")
+            public void setDeltaY(RenderableView node, @Nullable ReadableArray deltaY) {
+                ((TextShadowNode) node.getShadowNode()).setDeltaY(deltaY);
+            }
+
+            @ReactProp(name = "positionX")
+            public void setPositionX(RenderableView node, @Nullable ReadableArray positionX) {
+                ((TextShadowNode) node.getShadowNode()).setPositionX(positionX);
+            }
+
+            @ReactProp(name = "positionY")
+            public void setPositionY(RenderableView node, @Nullable ReadableArray positionY) {
+                ((TextShadowNode) node.getShadowNode()).setPositionY(positionY);
+            }
+
+            @ReactProp(name = "font")
+            public void setFont(RenderableView node, @Nullable ReadableMap font) {
+                ((TextShadowNode) node.getShadowNode()).setFont(font);
+            }
+        };
     }
 
     static RenderableViewManager createTSpanViewManager() {
-        return new RenderableViewManager(CLASS_TSPAN);
+        return new RenderableViewManager(CLASS_TSPAN) {
+
+            @ReactProp(name = "content")
+            public void setContent(RenderableView node, @Nullable String content) {
+                ((TSpanShadowNode) node.getShadowNode()).setContent(content);
+            }
+        };
     }
 
     static RenderableViewManager createTextPathViewManager() {
-        return new RenderableViewManager(CLASS_TEXT_PATH);
+        return new RenderableViewManager(CLASS_TEXT_PATH) {
+
+            @ReactProp(name = "href")
+            public void setHref(RenderableView node, String href) {
+                ((TextPathShadowNode) node.getShadowNode()).setHref(href);
+            }
+
+            @ReactProp(name = "startOffset")
+            public void setStartOffset(RenderableView node, @Nullable String startOffset) {
+                ((TextPathShadowNode) node.getShadowNode()).setStartOffset(startOffset);
+            }
+
+            @ReactProp(name = "method")
+            public void setMethod(RenderableView node, @Nullable String method) {
+                ((TextPathShadowNode) node.getShadowNode()).setMethod(method);
+            }
+
+            @ReactProp(name = "spacing")
+            public void setSpacing(RenderableView node, @Nullable String spacing) {
+                ((TextPathShadowNode) node.getShadowNode()).setSpacing(spacing);
+            }
+
+            @ReactProp(name = "side")
+            public void setSide(RenderableView node, @Nullable String side) {
+                ((TextPathShadowNode) node.getShadowNode()).setSide(side);
+            }
+
+            @ReactProp(name = "midLine")
+            public void setSharp(RenderableView node, @Nullable String midLine) {
+                ((TextPathShadowNode) node.getShadowNode()).setSharp(midLine);
+            }
+        };
     }
 
     static RenderableViewManager createImageViewManager() {
-        return new RenderableViewManager(CLASS_IMAGE);
+        return new RenderableViewManager(CLASS_IMAGE) {
+
+            @ReactProp(name = "x")
+            public void setX(RenderableView node, String x) {
+                ((ImageShadowNode) node.getShadowNode()).setX(x);
+            }
+
+            @ReactProp(name = "y")
+            public void setY(RenderableView node, String y) {
+                ((ImageShadowNode) node.getShadowNode()).setY(y);
+            }
+
+            @ReactProp(name = "width")
+            public void setWidth(RenderableView node, String width) {
+                ((ImageShadowNode) node.getShadowNode()).setWidth(width);
+            }
+
+            @ReactProp(name = "height")
+            public void seHeight(RenderableView node, String height) {
+                ((ImageShadowNode) node.getShadowNode()).seHeight(height);
+            }
+
+            @ReactProp(name = "src")
+            public void setSrc(RenderableView node, @Nullable ReadableMap src) {
+                ((ImageShadowNode) node.getShadowNode()).setSrc(src);
+            }
+
+
+            @ReactProp(name = "align")
+            public void setAlign(RenderableView node, String align) {
+                ((ImageShadowNode) node.getShadowNode()).setAlign(align);
+            }
+
+            @ReactProp(name = "meetOrSlice")
+            public void setMeetOrSlice(RenderableView node, int meetOrSlice) {
+                ((ImageShadowNode) node.getShadowNode()).setMeetOrSlice(meetOrSlice);
+            }
+
+            @ReactProp(name = "matrix")
+            public void setMatrix(RenderableView node, @Nullable ReadableArray matrixArray) {
+                ((ImageShadowNode) node.getShadowNode()).setMatrix(matrixArray);
+            }
+        };
     }
 
     static RenderableViewManager createCircleViewManager() {
-        return new RenderableViewManager(CLASS_CIRCLE);
+        return new RenderableViewManager(CLASS_CIRCLE) {
+
+            @ReactProp(name = "cx")
+            public void setCx(RenderableView node, String cx) {
+                ((CircleShadowNode) node.getShadowNode()).setCx(cx);
+            }
+
+            @ReactProp(name = "cy")
+            public void setCy(RenderableView node, String cy) {
+                ((CircleShadowNode) node.getShadowNode()).setCy(cy);
+            }
+
+            @ReactProp(name = "r")
+            public void setR(RenderableView node, String r) {
+                ((CircleShadowNode) node.getShadowNode()).setR(r);
+            }
+        };
     }
 
     static RenderableViewManager createEllipseViewManager() {
-        return new RenderableViewManager(CLASS_ELLIPSE);
+        return new RenderableViewManager(CLASS_ELLIPSE) {
+
+            @ReactProp(name = "cx")
+            public void setCx(RenderableView node, String cx) {
+                ((EllipseShadowNode) node.getShadowNode()).setCx(cx);
+            }
+
+            @ReactProp(name = "cy")
+            public void setCy(RenderableView node, String cy) {
+                ((EllipseShadowNode) node.getShadowNode()).setCy(cy);
+            }
+
+            @ReactProp(name = "rx")
+            public void setRx(RenderableView node, String rx) {
+                ((EllipseShadowNode) node.getShadowNode()).setRx(rx);
+            }
+
+            @ReactProp(name = "ry")
+            public void setRy(RenderableView node, String ry) {
+                ((EllipseShadowNode) node.getShadowNode()).setRy(ry);
+            }
+        };
     }
 
     static RenderableViewManager createLineViewManager() {
-        return new RenderableViewManager(CLASS_LINE);
+        return new RenderableViewManager(CLASS_LINE) {
+
+            @ReactProp(name = "x1")
+            public void setX1(RenderableView node, String x1) {
+                ((LineShadowNode) node.getShadowNode()).setX1(x1);
+            }
+
+            @ReactProp(name = "y1")
+            public void setY1(RenderableView node, String y1) {
+                ((LineShadowNode) node.getShadowNode()).setY1(y1);
+            }
+
+            @ReactProp(name = "x2")
+            public void setX2(RenderableView node, String x2) {
+                ((LineShadowNode) node.getShadowNode()).setX2(x2);
+            }
+
+            @ReactProp(name = "y2")
+            public void setY2(RenderableView node, String y2) {
+                ((LineShadowNode) node.getShadowNode()).setY2(y2);
+            }
+
+        };
     }
 
     static RenderableViewManager createRectViewManager() {
-        return new RenderableViewManager(CLASS_RECT);
+        return new RenderableViewManager(CLASS_RECT) {
+
+            @ReactProp(name = "x")
+            public void setX(RenderableView node, String x) {
+                ((RectShadowNode) node.getShadowNode()).setX(x);
+            }
+
+            @ReactProp(name = "y")
+            public void setY(RenderableView node, String y) {
+                ((RectShadowNode) node.getShadowNode()).setY(y);
+            }
+
+            @ReactProp(name = "rectwidth")
+            public void setWidth(RenderableView node, String width) {
+                ((RectShadowNode) node.getShadowNode()).setWidth(width);
+            }
+
+
+            @ReactProp(name = "rectheight")
+            public void setHeight(RenderableView node, String height) {
+                ((RectShadowNode) node.getShadowNode()).setHeight(height);
+            }
+
+
+            @ReactProp(name = "rx")
+            public void setRx(RenderableView node, String rx) {
+                ((RectShadowNode) node.getShadowNode()).setRx(rx);
+            }
+
+            @ReactProp(name = "ry")
+            public void setRy(RenderableView node, String ry) {
+                ((RectShadowNode) node.getShadowNode()).setRy(ry);
+            }
+        };
     }
 
     static RenderableViewManager createClipPathViewManager() {
@@ -92,19 +333,148 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
     }
 
     static RenderableViewManager createUseViewManager() {
-        return new RenderableViewManager(CLASS_USE);
+        return new RenderableViewManager(CLASS_USE) {
+
+            @ReactProp(name = "href")
+            public void setHref(RenderableView node, String href) {
+                ((UseShadowNode) node.getShadowNode()).setHref(href);
+            }
+
+            @ReactProp(name = "width")
+            public void setWidth(RenderableView node, String width) {
+                ((UseShadowNode) node.getShadowNode()).setWidth(width);
+            }
+
+            @ReactProp(name = "height")
+            public void setHeight(RenderableView node, String height) {
+                ((UseShadowNode) node.getShadowNode()).setHeight(height);
+            }
+        };
     }
 
     static RenderableViewManager createSymbolManager() {
-        return new RenderableViewManager(CLASS_SYMBOL);
+        return new RenderableViewManager(CLASS_SYMBOL) {
+
+            @ReactProp(name = "minX")
+            public void setMinX(RenderableView node, float minX) {
+                ((SymbolShadowNode) node.getShadowNode()).setMinX(minX);
+            }
+
+            @ReactProp(name = "minY")
+            public void setMinY(RenderableView node, float minY) {
+                ((SymbolShadowNode) node.getShadowNode()).setMinY(minY);
+            }
+
+            @ReactProp(name = "vbWidth")
+            public void setVbWidth(RenderableView node, float vbWidth) {
+                ((SymbolShadowNode) node.getShadowNode()).setVbWidth(vbWidth);
+            }
+
+            @ReactProp(name = "vbHeight")
+            public void setVbHeight(RenderableView node, float vbHeight) {
+                ((SymbolShadowNode) node.getShadowNode()).setVbHeight(vbHeight);
+            }
+
+            @ReactProp(name = "align")
+            public void setAlign(RenderableView node, String align) {
+                ((SymbolShadowNode) node.getShadowNode()).setAlign(align);
+            }
+
+            @ReactProp(name = "meetOrSlice")
+            public void setMeetOrSlice(RenderableView node, int meetOrSlice) {
+                ((SymbolShadowNode) node.getShadowNode()).setMeetOrSlice(meetOrSlice);
+            }
+        };
     }
 
     static RenderableViewManager createLinearGradientManager() {
-        return new RenderableViewManager(CLASS_LINEAR_GRADIENT);
+        return new RenderableViewManager(CLASS_LINEAR_GRADIENT) {
+
+            @ReactProp(name = "x1")
+            public void setX1(RenderableView node, String x1) {
+                ((LinearGradientShadowNode) node.getShadowNode()).setX1(x1);
+            }
+
+            @ReactProp(name = "y1")
+            public void setY1(RenderableView node, String y1) {
+                ((LinearGradientShadowNode) node.getShadowNode()).setY1(y1);
+            }
+
+            @ReactProp(name = "x2")
+            public void setX2(RenderableView node, String x2) {
+                ((LinearGradientShadowNode) node.getShadowNode()).setX2(x2);
+            }
+
+            @ReactProp(name = "y2")
+            public void setY2(RenderableView node, String y2) {
+                ((LinearGradientShadowNode) node.getShadowNode()).setY2(y2);
+            }
+
+            @ReactProp(name = "gradient")
+            public void setGradient(RenderableView node, ReadableArray gradient) {
+                ((LinearGradientShadowNode) node.getShadowNode()).setGradient(gradient);
+            }
+
+            @ReactProp(name = "gradientUnits")
+            public void setGradientUnits(RenderableView node, int gradientUnits) {
+                ((LinearGradientShadowNode) node.getShadowNode()).setGradientUnits(gradientUnits);
+            }
+
+            @ReactProp(name = "gradientTransform")
+            public void setGradientTransform(RenderableView node, @Nullable ReadableArray matrixArray) {
+                ((LinearGradientShadowNode) node.getShadowNode()).setGradientTransform(matrixArray);
+            }
+        };
     }
 
     static RenderableViewManager createRadialGradientManager() {
-        return new RenderableViewManager(CLASS_RADIAL_GRADIENT);
+        return new RenderableViewManager(CLASS_RADIAL_GRADIENT) {
+
+            @ReactProp(name = "fx")
+            public void setFx(RenderableView node, String fx) {
+                ((RadialGradientShadowNode) node.getShadowNode()).setFx(fx);
+            }
+
+            @ReactProp(name = "fy")
+            public void setFy(RenderableView node, String fy) {
+                ((RadialGradientShadowNode) node.getShadowNode()).setFy(fy);
+            }
+
+            @ReactProp(name = "rx")
+            public void setRx(RenderableView node, String rx) {
+                ((RadialGradientShadowNode) node.getShadowNode()).setRx(rx);
+            }
+
+            @ReactProp(name = "ry")
+            public void setRy(RenderableView node, String ry) {
+                ((RadialGradientShadowNode) node.getShadowNode()).setRy(ry);
+            }
+
+            @ReactProp(name = "cx")
+            public void setCx(RenderableView node, String cx) {
+                ((RadialGradientShadowNode) node.getShadowNode()).setCx(cx);
+            }
+
+            @ReactProp(name = "cy")
+            public void setCy(RenderableView node, String cy) {
+                ((RadialGradientShadowNode) node.getShadowNode()).setCy(cy);
+            }
+
+            @ReactProp(name = "gradient")
+            public void setGradient(RenderableView node, ReadableArray gradient) {
+                ((RadialGradientShadowNode) node.getShadowNode()).setGradient(gradient);
+            }
+
+            @ReactProp(name = "gradientUnits")
+            public void setGradientUnits(RenderableView node, int gradientUnits) {
+                ((RadialGradientShadowNode) node.getShadowNode()).setGradientUnits(gradientUnits);
+            }
+
+            @ReactProp(name = "gradientTransform")
+            public void setGradientTransform(RenderableView node, @Nullable ReadableArray matrixArray) {
+                ((RadialGradientShadowNode) node.getShadowNode()).setGradientTransform(matrixArray);
+            }
+        };
     }
 
     private RenderableViewManager(String className) {
@@ -196,9 +566,65 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
         }
     }
 
-    @ReactProp(name = "fillOpacity")
+    @ReactProp(name = "fill")
+    public void setFill(RenderableView node, @Nullable ReadableArray fill) {
+        ((RenderableShadowNode) node.getShadowNode()).setFill(fill);
+    }
+
+    @ReactProp(name = "fillOpacity", defaultFloat = 1f)
     public void setFillOpacity(RenderableView node, float opacity) {
-        node.getShadowNode().setFillOpacity(opacity);
+        ((RenderableShadowNode) node.getShadowNode()).setFillOpacity(opacity);
+    }
+
+    @ReactProp(name = "fillRule", defaultInt = FILL_RULE_NONZERO)
+    public void setFillRule(RenderableView node, int fillRule) {
+        ((RenderableShadowNode) node.getShadowNode()).setFillRule(fillRule);
+    }
+
+
+    @ReactProp(name = "stroke")
+    public void setStroke(RenderableView node, @Nullable ReadableArray strokeColors) {
+        ((RenderableShadowNode) node.getShadowNode()).setStroke(strokeColors);
+    }
+
+    @ReactProp(name = "strokeOpacity", defaultFloat = 1f)
+    public void setStrokeOpacity(RenderableView node, float strokeOpacity) {
+        ((RenderableShadowNode) node.getShadowNode()).setStrokeOpacity(strokeOpacity);
+    }
+
+    @ReactProp(name = "strokeDasharray")
+    public void setStrokeDasharray(RenderableView node, @Nullable ReadableArray strokeDasharray) {
+        ((RenderableShadowNode) node.getShadowNode()).setStrokeDasharray(strokeDasharray);
+    }
+
+    @ReactProp(name = "strokeDashoffset")
+    public void setStrokeDashoffset(RenderableView node, float strokeWidth) {
+        ((RenderableShadowNode) node.getShadowNode()).setStrokeDashoffset(strokeWidth);
+    }
+
+    @ReactProp(name = "strokeWidth")
+    public void setStrokeWidth(RenderableView node, String strokeWidth) {
+        ((RenderableShadowNode) node.getShadowNode()).setStrokeWidth(strokeWidth);
+    }
+
+    @ReactProp(name = "strokeMiterlimit", defaultFloat = 4f)
+    public void setStrokeMiterlimit(RenderableView node, float strokeMiterlimit) {
+        ((RenderableShadowNode) node.getShadowNode()).setStrokeMiterlimit(strokeMiterlimit);
+    }
+
+    @ReactProp(name = "strokeLinecap", defaultInt = CAP_ROUND)
+    public void setStrokeLinecap(RenderableView node, int strokeLinecap) {
+        ((RenderableShadowNode) node.getShadowNode()).setStrokeLinecap(strokeLinecap);
+    }
+
+    @ReactProp(name = "strokeLinejoin", defaultInt = JOIN_ROUND)
+    public void setStrokeLinejoin(RenderableView node, int strokeLinejoin) {
+        ((RenderableShadowNode) node.getShadowNode()).setStrokeLinejoin(strokeLinejoin);
+    }
+
+    @ReactProp(name = "propList")
+    public void setPropList(RenderableView node, @Nullable ReadableArray propList) {
+        ((RenderableShadowNode) node.getShadowNode()).setPropList(propList);
     }
 
     /**
@@ -209,7 +635,7 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
      */
     protected void onAfterUpdateTransaction(RenderableView node) {
         super.onAfterUpdateTransaction(node);
-        RenderableShadowNode shadow = node.getShadowNode();
+        VirtualNode shadow = node.getShadowNode();
         SvgViewShadowNode view = shadow.getSvgShadowNode();
         if (view != null) view.drawOutput();
     }

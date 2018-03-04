@@ -38,17 +38,17 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     // strokeLinecap
     private static final int CAP_BUTT = 0;
-    private static final int CAP_ROUND = 1;
+    static final int CAP_ROUND = 1;
     private static final int CAP_SQUARE = 2;
 
     // strokeLinejoin
     private static final int JOIN_BEVEL = 2;
     private static final int JOIN_MITER = 0;
-    private static final int JOIN_ROUND = 1;
+    static final int JOIN_ROUND = 1;
 
     // fillRule
     private static final int FILL_RULE_EVENODD = 0;
-    private static final int FILL_RULE_NONZERO = 1;
+    static final int FILL_RULE_NONZERO = 1;
 
     public @Nullable ReadableArray mStroke;
     public @Nullable String[] mStrokeDasharray;

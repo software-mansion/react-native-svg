@@ -36,7 +36,7 @@ class TextShadowNode extends GroupShadowNode {
     private @Nullable ReadableArray mDeltaY;
 
     @ReactProp(name = "textLength")
-    public void setmTextLength(@Nullable String length) {
+    public void setTextLength(@Nullable String length) {
         mTextLength = length;
         markUpdated();
     }
