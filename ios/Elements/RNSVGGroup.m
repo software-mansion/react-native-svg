@@ -72,12 +72,13 @@
 
 - (void)pushGlyphContext
 {
-    [[[self getTextRoot] getGlyphContext] pushContext:self font:self.font];
+    __weak typeof(self) weakSelf = self;
+    [[self.textRoot getGlyphContext] pushContext:weakSelf font:self.font];
 }
 
 - (void)popGlyphContext
 {
-    [[[self getTextRoot] getGlyphContext] popContext];
+    [[self.textRoot getGlyphContext] popContext];
 }
 
 - (void)renderPathTo:(CGContextRef)context

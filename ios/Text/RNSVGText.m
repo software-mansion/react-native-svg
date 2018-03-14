@@ -15,7 +15,6 @@
 
 @implementation RNSVGText
 {
-    RNSVGText *_textRoot;
     RNSVGGlyphContext *_glyphContext;
 }
 
@@ -76,20 +75,19 @@
     [self popGlyphContext];
 }
 
-- (RNSVGText *)getTextRoot
+// TODO: Optimisation required
+- (RNSVGText *)textRoot
 {
-    if (!_textRoot) {
-        _textRoot = self;
-        while (_textRoot && [_textRoot class] != [RNSVGText class]) {
-            if (![_textRoot isKindOfClass:[RNSVGText class]]) {
-                //todo: throw exception here
-                break;
-            }
-            _textRoot = (RNSVGText*)[_textRoot superview];
+    RNSVGText *root = self;
+    while (root && [root class] != [RNSVGText class]) {
+        if (![root isKindOfClass:[RNSVGText class]]) {
+            //todo: throw exception here
+            break;
         }
+        root = (RNSVGText*)[root superview];
     }
 
-    return _textRoot;
+    return root;
 }
 
 - (NSString*) getAlignmentBaseline
@@ -147,23 +145,23 @@
 
 - (void)pushGlyphContext
 {
-    [[[self getTextRoot] getGlyphContext] pushContext:self
-                                                              font:self.font
-                                                                 x:self.positionX
-                                                                 y:self.positionY
-                                                            deltaX:self.deltaX
-                                                            deltaY:self.deltaY
-                                                            rotate:self.rotate];
+    [[self.textRoot getGlyphContext] pushContext:self
+                                            font:self.font
+                                               x:self.positionX
+                                               y:self.positionY
+                                          deltaX:self.deltaX
+                                          deltaY:self.deltaY
+                                          rotate:self.rotate];
 }
 
 - (void)popGlyphContext
 {
-    [[[self getTextRoot] getGlyphContext] popContext];
+    [[self.textRoot getGlyphContext] popContext];
 }
 
 - (CTFontRef)getFontFromContext
 {
-    return [[[self getTextRoot] getGlyphContext] getGlyphFont];
+    return [[self.textRoot getGlyphContext] getGlyphFont];
 }
 
 @end

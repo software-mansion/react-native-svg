@@ -96,7 +96,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
     // Create a dictionary for this font
     CTFontRef fontRef = [self getFontFromContext];
     CGMutablePathRef path = CGPathCreateMutable();
-    RNSVGGlyphContext* gc = [[self getTextRoot] getGlyphContext];
+    RNSVGGlyphContext* gc = [self.textRoot getGlyphContext];
     RNSVGFontData* font = [gc getFont];
     NSUInteger n = str.length;
     /*
