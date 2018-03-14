@@ -509,8 +509,8 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
     double top = ascenderHeight;
     double totalHeight = top + bottom;
     double baselineShift = 0;
-    NSString *baselineShiftString = [self getBaselineShift];
-    enum RNSVGAlignmentBaseline baseline = RNSVGAlignmentBaselineFromString([self getAlignmentBaseline]);
+    NSString *baselineShiftString = self.baselineShift;
+    enum RNSVGAlignmentBaseline baseline = RNSVGAlignmentBaselineFromString(self.alignmentBaseline);
     if (baseline != RNSVGAlignmentBaselineBaseline) {
         // TODO alignment-baseline, test / verify behavior
         // TODO get per glyph baselines from font baseline table, for high-precision alignment

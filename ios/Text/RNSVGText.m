@@ -90,52 +90,54 @@
     return root;
 }
 
-- (NSString*) getAlignmentBaseline
+- (NSString *)alignmentBaseline
 {
-    if (self.alignmentBaseline != nil) {
-        return self.alignmentBaseline;
+    if (_alignmentBaseline != nil) {
+        return _alignmentBaseline;
     }
-    UIView* parent = [self superview];
+    
+    UIView* parent = self.superview;
     while (parent != nil) {
         if ([parent isKindOfClass:[RNSVGText class]]) {
             RNSVGText* node = (RNSVGText*)parent;
             NSString* baseline = node.alignmentBaseline;
             if (baseline != nil) {
-                self.alignmentBaseline = baseline;
+                _alignmentBaseline = baseline;
                 return baseline;
             }
         }
         parent = [parent superview];
     }
-    if (self.alignmentBaseline == nil) {
-        self.alignmentBaseline = RNSVGAlignmentBaselineStrings[0];
+    
+    if (_alignmentBaseline == nil) {
+        _alignmentBaseline = RNSVGAlignmentBaselineStrings[0];
     }
-    return self.alignmentBaseline;
+    return _alignmentBaseline;
 }
 
-- (NSString*) getBaselineShift
+- (NSString *)baselineShift
 {
-    if (self.baselineShift != nil) {
-        return self.baselineShift;
+    if (_baselineShift != nil) {
+        return _baselineShift;
     }
-    if (self.baselineShift == nil) {
-        UIView* parent = [self superview];
-        while (parent != nil) {
-            if ([parent isKindOfClass:[RNSVGText class]]) {
-                RNSVGText* node = (RNSVGText*)parent;
-                NSString* baselineShift = node.baselineShift;
-                if (baselineShift != nil) {
-                    self.baselineShift = baselineShift;
-                    return baselineShift;
-                }
+    
+    UIView* parent = [self superview];
+    while (parent != nil) {
+        if ([parent isKindOfClass:[RNSVGText class]]) {
+            RNSVGText* node = (RNSVGText*)parent;
+            NSString* baselineShift = node.baselineShift;
+            if (baselineShift != nil) {
+                _baselineShift = baselineShift;
+                return baselineShift;
             }
-            parent = [parent superview];
         }
+        parent = [parent superview];
     }
-    if (self.baselineShift == nil) {
-        self.baselineShift = @"";
-    }
-    return self.baselineShift;
+    
+    // set default value
+    _baselineShift = @"";
+    
+    return _baselineShift;
 }
 
 - (RNSVGGlyphContext *)getGlyphContext
