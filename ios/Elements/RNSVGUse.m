@@ -24,7 +24,7 @@
 
 - (void)renderLayerTo:(CGContextRef)context
 {
-    RNSVGNode* template = [[self getSvgView] getDefinedTemplate:self.href];
+    RNSVGNode* template = [self.svgView getDefinedTemplate:self.href];
     if (template) {
         [self beginTransparencyLayer:context];
         [self clip:context];

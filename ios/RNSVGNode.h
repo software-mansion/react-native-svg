@@ -34,6 +34,11 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGAffineTransform matrix;
 @property (nonatomic, assign) BOOL active;
 
+/**
+ * RNSVGSvgView which ownes current RNSVGNode
+ */
+@property (nonatomic, readonly, weak) RNSVGSvgView *svgView;
+
 - (void)invalidate;
 
 - (RNSVGGroup *)getTextRoot;
@@ -72,11 +77,6 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
  * run hitTest
  */
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transfrom;
-
-/**
- * get RNSVGSvgView which ownes current RNSVGNode
- */
-- (RNSVGSvgView *)getSvgView;
 
 - (CGFloat)relativeOnWidth:(NSString *)length;
 

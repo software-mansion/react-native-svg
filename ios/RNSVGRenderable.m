@@ -202,7 +202,7 @@
             CGContextClip(context);
             [self.fill paint:context
                      opacity:self.fillOpacity
-                     painter:[[self getSvgView] getDefinedPainter:self.fill.brushRef]
+                     painter:[self.svgView getDefinedPainter:self.fill.brushRef]
              ];
             CGContextRestoreGState(context);
 
@@ -247,7 +247,7 @@
 
             [self.stroke paint:context
                        opacity:self.strokeOpacity
-                       painter:[[self getSvgView] getDefinedPainter:self.stroke.brushRef]
+                       painter:[self.svgView getDefinedPainter:self.stroke.brushRef]
              ];
             return;
         }

@@ -33,10 +33,10 @@
 - (void)renderGroupTo:(CGContextRef)context
 {
     [self pushGlyphContext];
-    RNSVGSvgView* svg = [self getSvgView];
+    
     [self traverseSubviews:^(RNSVGNode *node) {
-        if (node.responsible && !svg.responsible) {
-            svg.responsible = YES;
+        if (node.responsible && !self.svgView.responsible) {
+            self.svgView.responsible = YES;
         }
 
         if ([node isKindOfClass:[RNSVGRenderable class]]) {
@@ -142,8 +142,8 @@
 - (void)parseReference
 {
     if (self.name) {
-        RNSVGSvgView* svg = [self getSvgView];
-        [svg defineTemplate:self templateName:self.name];
+        typeof(self) __weak weakSelf = self;
+        [self.svgView defineTemplate:weakSelf templateName:self.name];
     }
 
     [self traverseSubviews:^(__kindof RNSVGNode *node) {
