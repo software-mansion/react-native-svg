@@ -118,7 +118,12 @@ import Svg,{
     Text,
     Use,
     Defs,
-    Stop
+    Stop,
+    Text,
+    TSpan,
+    TextPath,
+    Image,
+    ClipPath
 } from 'react-native-svg';
 
 class SvgExample extends Component {
