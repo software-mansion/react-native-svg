@@ -32,6 +32,7 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.views.imagehelper.ImageSource;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -47,7 +48,7 @@ public class ImageShadowNode extends RenderableShadowNode {
     private String mY;
     private String mW;
     private String mH;
-    private Uri mUri;
+    private String uriString;
     private float mImageRatio;
     private String mAlign;
     private int mMeetOrSlice;
@@ -80,7 +81,7 @@ public class ImageShadowNode extends RenderableShadowNode {
     @ReactProp(name = "src")
     public void setSrc(@Nullable ReadableMap src) {
         if (src != null) {
-            String uriString = src.getString("uri");
+            uriString = src.getString("uri");
 
             if (uriString == null || uriString.isEmpty()) {
                 //TODO: give warning about this
@@ -92,7 +93,6 @@ public class ImageShadowNode extends RenderableShadowNode {
             } else {
                 mImageRatio = 0f;
             }
-            mUri = Uri.parse(uriString);
         }
     }
 
@@ -112,7 +112,9 @@ public class ImageShadowNode extends RenderableShadowNode {
     @Override
     public void draw(final Canvas canvas, final Paint paint, final float opacity) {
         if (!mLoading.get()) {
-            final ImageRequest request = ImageRequestBuilder.newBuilderWithSource(mUri).build();
+            final ImageSource imageSource = new ImageSource(getThemedContext(), uriString);
+
+            final ImageRequest request = ImageRequestBuilder.newBuilderWithSource(imageSource.getUri()).build();
             if (Fresco.getImagePipeline().isInBitmapMemoryCache(request)) {
                 tryRender(request, canvas, paint, opacity * mOpacity);
             } else {
@@ -137,7 +139,9 @@ public class ImageShadowNode extends RenderableShadowNode {
                                  public void onNewResultImpl(Bitmap bitmap) {
                                      mLoading.set(false);
                                      SvgViewShadowNode shadowNode = getSvgShadowNode();
-                                     shadowNode.markUpdated();
+                                     if(shadowNode != null) {
+                                         shadowNode.markUpdated();
+                                     }
                                  }
 
                                  @Override
