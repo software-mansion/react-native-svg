@@ -52,7 +52,9 @@
             }
         } else if ([node isKindOfClass:[RNSVGSvgView class]]) {
             RNSVGSvgView* svgView = (RNSVGSvgView*)node;
-            CGRect rect = CGRectMake(0, 0, [svgView.bbWidth floatValue], [svgView.bbHeight floatValue]);
+            CGFloat width = [self relativeOnWidth:svgView.bbWidth];
+            CGFloat height = [self relativeOnHeight:svgView.bbHeight];
+            CGRect rect = CGRectMake(0, 0, width, height);
             CGContextClipToRect(context, rect);
             [svgView drawToContext:context withRect:(CGRect)rect];
         } else {

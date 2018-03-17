@@ -572,8 +572,8 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
     }
 
     @ReactProp(name = "fillOpacity", defaultFloat = 1f)
-    public void setFillOpacity(RenderableView node, float opacity) {
-        ((RenderableShadowNode) node.getShadowNode()).setFillOpacity(opacity);
+    public void setFillOpacity(RenderableView node, float fillOpacity) {
+        ((RenderableShadowNode) node.getShadowNode()).setFillOpacity(fillOpacity);
     }
 
     @ReactProp(name = "fillRule", defaultInt = FILL_RULE_NONZERO)
@@ -598,8 +598,8 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
     }
 
     @ReactProp(name = "strokeDashoffset")
-    public void setStrokeDashoffset(RenderableView node, float strokeWidth) {
-        ((RenderableShadowNode) node.getShadowNode()).setStrokeDashoffset(strokeWidth);
+    public void setStrokeDashoffset(RenderableView node, float strokeDashoffset) {
+        ((RenderableShadowNode) node.getShadowNode()).setStrokeDashoffset(strokeDashoffset);
     }
 
     @ReactProp(name = "strokeWidth")
