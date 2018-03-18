@@ -9,6 +9,7 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Bitmap;
 import android.util.SparseArray;
 
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -90,7 +91,7 @@ class SvgViewManager extends ViewGroupManager<SvgView> {
 
     @Override
     public void updateExtraData(SvgView root, Object extraData) {
-        root.setSurfaceTextureListener((SvgViewShadowNode) extraData);
+        root.setBitmap((Bitmap) extraData);
     }
 
 }

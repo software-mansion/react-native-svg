@@ -32,13 +32,13 @@ class UseShadowNode extends RenderableShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "width")
+    @ReactProp(name = "usewidth")
     public void setWidth(String width) {
         mWidth = width;
         markUpdated();
     }
 
-    @ReactProp(name = "height")
+    @ReactProp(name = "useheight")
     public void setHeight(String height) {
         mHeight = height;
         markUpdated();

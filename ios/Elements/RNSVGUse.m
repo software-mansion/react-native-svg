@@ -16,7 +16,7 @@
     if (href == _href) {
         return;
     }
-    
+
     [self invalidate];
     _href = href;
 }
@@ -28,22 +28,22 @@
     if (template) {
         [self beginTransparencyLayer:context];
         [self clip:context];
-        
+
         if ([template isKindOfClass:[RNSVGRenderable class]]) {
             [(RNSVGRenderable*)template mergeProperties:self];
         }
 
         if ([template class] == [RNSVGSymbol class]) {
             RNSVGSymbol *symbol = (RNSVGSymbol*)template;
-            [symbol renderSymbolTo:context width:[self relativeOnWidth:self.width] height:[self relativeOnWidth:self.height]];
+            [symbol renderSymbolTo:context width:[self relativeOnWidth:self.usewidth] height:[self relativeOnHeight:self.useheight]];
         } else {
             [template renderTo:context rect:rect];
         }
-        
+
         if ([template isKindOfClass:[RNSVGRenderable class]]) {
             [(RNSVGRenderable*)template resetProperties];
         }
-        
+
         [self endTransparencyLayer:context];
     } else if (self.href) {
         // TODO: calling yellow box here

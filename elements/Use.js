@@ -39,8 +39,8 @@ export default class extends Shape {
             ref={ele => {this.root = ele;}}
             {...extractProps(props, this)}
             href={href}
-            width={props.width}
-            height={props.height}
+            usewidth={props.width}
+            useheight={props.height}
         >{props.children}</RNSVGUse>;
     }
 }

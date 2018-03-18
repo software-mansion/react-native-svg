@@ -9,6 +9,7 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Bitmap;
 import android.util.SparseArray;
 
 import com.facebook.react.bridge.ReadableArray;
@@ -183,12 +184,12 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
                 ((ImageShadowNode) node.getShadowNode()).setY(y);
             }
 
-            @ReactProp(name = "width")
+            @ReactProp(name = "imagewidth")
             public void setWidth(RenderableView node, String width) {
                 ((ImageShadowNode) node.getShadowNode()).setWidth(width);
             }
 
-            @ReactProp(name = "height")
+            @ReactProp(name = "imageheight")
             public void seHeight(RenderableView node, String height) {
                 ((ImageShadowNode) node.getShadowNode()).seHeight(height);
             }
@@ -340,12 +341,12 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
                 ((UseShadowNode) node.getShadowNode()).setHref(href);
             }
 
-            @ReactProp(name = "width")
+            @ReactProp(name = "usewidth")
             public void setWidth(RenderableView node, String width) {
                 ((UseShadowNode) node.getShadowNode()).setWidth(width);
             }
 
-            @ReactProp(name = "height")
+            @ReactProp(name = "useheight")
             public void setHeight(RenderableView node, String height) {
                 ((UseShadowNode) node.getShadowNode()).setHeight(height);
             }
@@ -637,7 +638,15 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
         super.onAfterUpdateTransaction(node);
         VirtualNode shadow = node.getShadowNode();
         SvgViewShadowNode view = shadow.getSvgShadowNode();
-        if (view != null) view.drawOutput();
+        if (view == null) {
+            return;
+        }
+        SvgView root = SvgViewManager.getSvgViewByTag(view.getReactTag());
+        if (root == null) {
+            return;
+        }
+        Bitmap output = view.drawOutput();
+        root.setBitmap(output);
     }
 
     @Override
