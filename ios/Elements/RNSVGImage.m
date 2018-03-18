@@ -9,9 +9,7 @@
 #import "RNSVGImage.h"
 #import "RCTConvert+RNSVG.h"
 #import <React/RCTImageSource.h>
-#import <React/RCTImageView.h>
 #import <React/RCTImageLoader.h>
-#import <React/RCTImageViewManager.h>
 #import <React/RCTLog.h>
 #import "RNSVGViewBox.h"
 
