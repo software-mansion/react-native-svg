@@ -20,6 +20,16 @@
     CGAffineTransform _viewBoxTransform;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    // This is necessary to ensure that [self setNeedsDisplay] actually triggers
+    // a redraw when our parent transitions between hidden and visible.
+    self.contentMode = UIViewContentModeRedraw;
+  }
+  return self;
+}
+
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
 {
     [super insertReactSubview:subview atIndex:atIndex];

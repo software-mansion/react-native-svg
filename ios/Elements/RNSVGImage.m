@@ -9,6 +9,9 @@
 #import "RNSVGImage.h"
 #import "RCTConvert+RNSVG.h"
 #import <React/RCTImageSource.h>
+#import <React/RCTImageView.h>
+#import <React/RCTImageLoader.h>
+#import <React/RCTImageViewManager.h>
 #import <React/RCTLog.h>
 #import "RNSVGViewBox.h"
 
@@ -16,6 +19,7 @@
 {
     CGImageRef _image;
     CGSize _imageSize;
+    RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
 }
 
 - (void)setSrc:(id)src
@@ -32,7 +36,19 @@
     } else {
         _imageSize = CGSizeMake(CGImageGetWidth(_image), CGImageGetHeight(_image));
     }
-    [self invalidate];
+
+    RCTImageLoaderCancellationBlock previousCancellationBlock = _reloadImageCancellationBlock;
+    if (previousCancellationBlock) {
+        previousCancellationBlock();
+        _reloadImageCancellationBlock = nil;
+    }
+
+    _reloadImageCancellationBlock = [self.bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:src] callback:^(NSError *error, UIImage *image) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _image = CGImageRetain(image.CGImage);
+            [self invalidate];
+        });
+    }];
 }
 
 - (void)setX:(NSString *)x
