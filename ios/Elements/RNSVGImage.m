@@ -108,7 +108,7 @@
     CGImageRelease(_image);
 }
 
-- (void)renderLayerTo:(CGContextRef)context
+- (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
     CGContextSaveGState(context);
 
