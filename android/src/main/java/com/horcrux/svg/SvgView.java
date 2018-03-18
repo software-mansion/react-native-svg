@@ -16,22 +16,26 @@ import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.uimanager.ReactShadowNodeImpl;
 import com.facebook.react.uimanager.UIManagerModule;
+import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.uimanager.events.TouchEvent;
 import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
 import com.facebook.react.uimanager.events.TouchEventType;
-import com.facebook.react.uimanager.events.EventDispatcher;
+import com.facebook.react.views.view.ReactViewGroup;
 
 import javax.annotation.Nullable;
 
 /**
- * Custom {@link View} implementation that draws an RNSVGSvg React view and its \childrn.
+ * Custom {@link View} implementation that draws an RNSVGSvg React view and its children.
  */
 @SuppressLint("ViewConstructor")
-public class SvgView extends View {
+public class SvgView extends ViewGroup {
+    @SuppressWarnings("unused")
     public enum Events {
         @SuppressWarnings("unused")
         EVENT_DATA_URL("onDataURL");
@@ -98,6 +102,31 @@ public class SvgView extends View {
         }
 
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        ReactShadowNodeImpl node = getShadowNode();
+        for (int i = 0; i < this.getChildCount(); i++) {
+            View child = this.getChildAt(i);
+            if (child instanceof ReactViewGroup) {
+                int id = child.getId();
+                for (int j = 0; j < node.getChildCount(); j++) {
+                    ReactShadowNodeImpl nodeChild = node.getChildAt(j);
+                    if (nodeChild.getReactTag() != id) {
+                        continue;
+                    }
+
+                    float x = nodeChild.getLayoutX();
+                    float y = nodeChild.getLayoutY();
+                    float nr = x + nodeChild.getLayoutWidth();
+                    float nb = y + nodeChild.getLayoutHeight();
+
+                    child.layout(Math.round(x), Math.round(y), Math.round(nr), Math.round(nb));
+                    break;
+                }
+            }
+        }
     }
 
     private int getAbsoluteLeft(View view) {

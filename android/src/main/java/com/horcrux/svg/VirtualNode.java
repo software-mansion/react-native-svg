@@ -13,7 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
+import android.graphics.RectF;
 import android.graphics.Region;
 
 import com.facebook.common.logging.FLog;
@@ -45,6 +45,8 @@ abstract class VirtualNode extends LayoutShadowNode {
     };
     float mOpacity = 1f;
     Matrix mMatrix = new Matrix();
+    Matrix mInvMatrix = new Matrix();
+    boolean mInvertible = true;
 
     private int mClipRule;
     private @Nullable String mClipPath;
@@ -63,13 +65,35 @@ abstract class VirtualNode extends LayoutShadowNode {
     private float canvasWidth = -1;
     private GlyphContext glyphContext;
 
+    Path mPath;
+    RectF mBox;
+    Region mRegion;
+    Region mClipRegion;
+    Path mClipRegionPath;
+
     VirtualNode() {
+        setIsLayoutOnly(true);
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
     }
 
     @Override
     public boolean isVirtual() {
         return true;
+    }
+
+    @Override
+    public boolean isVirtualAnchor() {
+        return true;
+    }
+
+    @Override
+    public void markUpdated() {
+        super.markUpdated();
+        canvasHeight = -1;
+        canvasWidth = -1;
+        mRegion = null;
+        mPath = null;
+        mBox = null;
     }
 
     @Nullable
@@ -155,6 +179,7 @@ abstract class VirtualNode extends LayoutShadowNode {
 
     @ReactProp(name = "clipPath")
     public void setClipPath(String clipPath) {
+        mCachedClipPath = null;
         mClipPath = clipPath;
         markUpdated();
     }
@@ -178,16 +203,19 @@ abstract class VirtualNode extends LayoutShadowNode {
             if (matrixSize == 6) {
                 if (mMatrix == null) {
                     mMatrix = new Matrix();
+                    mInvMatrix = new Matrix();
                 }
                 mMatrix.setValues(sRawMatrix);
+                mInvertible = mMatrix.invert(mInvMatrix);
             } else if (matrixSize != -1) {
                 FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");
             }
         } else {
             mMatrix = null;
+            mInvMatrix = null;
         }
 
-        markUpdated();
+        super.markUpdated();
     }
 
     @ReactProp(name = "responsible")
@@ -201,7 +229,7 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
     @Nullable Path getClipPath(Canvas canvas, Paint paint) {
-        if (mClipPath != null) {
+        if (mClipPath != null && mCachedClipPath == null) {
             VirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPath);
 
             if (node != null) {
@@ -232,7 +260,7 @@ abstract class VirtualNode extends LayoutShadowNode {
         }
     }
 
-    abstract public int hitTest(Point point, @Nullable Matrix matrix);
+    abstract public int hitTest(final float[] point);
 
     public boolean isResponsible() {
         return mResponsible;
@@ -308,17 +336,13 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
     interface NodeRunnable {
-        void run(VirtualNode node);
+        void run(ReactShadowNode node);
     }
 
     void traverseChildren(NodeRunnable runner) {
         for (int i = 0; i < getChildCount(); i++) {
             ReactShadowNode child = getChildAt(i);
-            if (!(child instanceof VirtualNode)) {
-                continue;
-            }
-
-            runner.run((VirtualNode) child);
+            runner.run(child);
         }
     }
 }

@@ -74,14 +74,19 @@ class Svg extends Component{
 
         if (width && height) {
             dimensions = {
-                width: +width,
-                height: +height,
+                width: width[width.length - 1] === '%' ? width : +width,
+                height: height[height.length - 1] === '%' ? height : +height,
                 flex: 0
             };
         }
 
+        const w = `${width}`;
+        const h = `${height}`;
+
         return <NativeSvgView
             {...props}
+            bbWidth={w}
+            bbHeight={h}
             {...extractViewBox({ viewBox, preserveAspectRatio })}
             ref={ele => {this.root = ele;}}
             style={[
@@ -98,7 +103,9 @@ class Svg extends Component{
 
 const NativeSvgView = requireNativeComponent('RNSVGSvgView', null, {
     nativeOnly: {
-        ...ViewBoxAttributes
+        ...ViewBoxAttributes,
+        width: true,
+        height: true,
     }
 });
 

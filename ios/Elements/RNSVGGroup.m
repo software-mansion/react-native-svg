@@ -23,30 +23,40 @@
     _font = font;
 }
 
-- (void)renderLayerTo:(CGContextRef)context
+- (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
     [self clip:context];
     [self setupGlyphContext:context];
-    [self renderGroupTo:context];
+    [self renderGroupTo:context rect:rect];
 }
 
-- (void)renderGroupTo:(CGContextRef)context
+- (void)renderGroupTo:(CGContextRef)context rect:(CGRect)rect
 {
     [self pushGlyphContext];
-    
-    [self traverseSubviews:^(RNSVGNode *node) {
-        if (node.responsible && !self.svgView.responsible) {
-            self.svgView.responsible = YES;
-        }
 
-        if ([node isKindOfClass:[RNSVGRenderable class]]) {
-            [(RNSVGRenderable*)node mergeProperties:self];
-        }
+    [self traverseSubviews:^(UIView *node) {
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            RNSVGNode* svgNode = (RNSVGNode*)node;
+            if (svgNode.responsible && !self.svgView.responsible) {
+                self.svgView.responsible = YES;
+            }
 
-        [node renderTo:context];
+            if ([node isKindOfClass:[RNSVGRenderable class]]) {
+                [(RNSVGRenderable*)node mergeProperties:self];
+            }
 
-        if ([node isKindOfClass:[RNSVGRenderable class]]) {
-            [(RNSVGRenderable*)node resetProperties];
+            [svgNode renderTo:context rect:rect];
+
+            if ([node isKindOfClass:[RNSVGRenderable class]]) {
+                [(RNSVGRenderable*)node resetProperties];
+            }
+        } else if ([node isKindOfClass:[RNSVGSvgView class]]) {
+            RNSVGSvgView* svgView = (RNSVGSvgView*)node;
+            CGRect rect = CGRectMake(0, 0, [svgView.bbWidth floatValue], [svgView.bbHeight floatValue]);
+            CGContextClipToRect(context, rect);
+            [svgView drawToContext:context withRect:(CGRect)rect];
+        } else {
+            [node drawRect:rect];
         }
 
         return YES;
@@ -81,42 +91,37 @@
     [[self.textRoot getGlyphContext] popContext];
 }
 
-- (void)renderPathTo:(CGContextRef)context
+- (void)renderPathTo:(CGContextRef)context rect:(CGRect)rect
 {
-    [super renderLayerTo:context];
+    [super renderLayerTo:context rect:rect];
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
     CGMutablePathRef __block path = CGPathCreateMutable();
     [self traverseSubviews:^(RNSVGNode *node) {
-        CGAffineTransform transform = node.matrix;
-        CGPathAddPath(path, &transform, [node getPath:context]);
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            CGAffineTransform transform = node.matrix;
+            CGPathAddPath(path, &transform, [node getPath:context]);
+        }
         return YES;
     }];
 
     return (CGPathRef)CFAutorelease(path);
 }
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event withTransform:(CGAffineTransform)transform
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    UIView *hitSelf = [super hitTest:point withEvent:event withTransform:transform];
+    CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
+
+    UIView *hitSelf = [super hitTest:transformed withEvent:event];
     if (hitSelf) {
         return hitSelf;
     }
 
-    CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, transform);
-
     CGPathRef clip = [self getClipPath];
-    if (clip) {
-        CGPathRef transformedClipPath = CGPathCreateCopyByTransformingPath(clip, &matrix);
-        BOOL insideClipPath = CGPathContainsPoint(clip, nil, point, self.clipRule == kRNSVGCGFCRuleEvenodd);
-        CGPathRelease(transformedClipPath);
-
-        if (!insideClipPath) {
-            return nil;
-        }
-
+    if (clip && !CGPathContainsPoint(clip, nil, transformed, self.clipRule == kRNSVGCGFCRuleEvenodd)) {
+        return nil;
     }
 
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
@@ -130,13 +135,14 @@
             return node;
         }
 
-        UIView *hitChild = [node hitTest: point withEvent:event withTransform:matrix];
+        UIView *hitChild = [node hitTest:transformed withEvent:event];
 
         if (hitChild) {
             node.active = YES;
             return (node.responsible || (node != hitChild)) ? hitChild : self;
         }
     }
+
     return nil;
 }
 
@@ -148,7 +154,9 @@
     }
 
     [self traverseSubviews:^(__kindof RNSVGNode *node) {
-        [node parseReference];
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            [node parseReference];
+        }
         return YES;
     }];
 }
