@@ -27,12 +27,11 @@
     }
     _src = src;
     CGImageRelease(_image);
-    _image = CGImageRetain([RCTConvert CGImage:src]);
     RCTImageSource *source = [RCTConvert RCTImageSource:src];
     if (source.size.width != 0 && source.size.height != 0) {
         _imageSize = source.size;
     } else {
-        _imageSize = CGSizeMake(CGImageGetWidth(_image), CGImageGetHeight(_image));
+        _imageSize = CGSizeMake(0, 0);
     }
 
     RCTImageLoaderCancellationBlock previousCancellationBlock = _reloadImageCancellationBlock;
@@ -43,7 +42,8 @@
 
     _reloadImageCancellationBlock = [self.bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:src] callback:^(NSError *error, UIImage *image) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            _image = CGImageRetain(image.CGImage);
+            self->_image = CGImageRetain(image.CGImage);
+            self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
             [self invalidate];
         });
     }];
