@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import extractViewBox from "../lib/extract/extractViewBox";
 import { ViewBoxAttributes } from "../lib/attributes";
+import { numberProp } from "../lib/props";
 
 /** @namespace NativeModules.RNSVGSvgViewManager */
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
@@ -27,9 +28,9 @@ class Svg extends Component {
     static displayName = "Svg";
     static propTypes = {
         ...ViewPropTypes,
-        opacity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        opacity: numberProp,
+        width: numberProp,
+        height: numberProp,
         // more detail https://svgwg.org/svg2-draft/coords.html#ViewBoxAttribute
         viewBox: PropTypes.string,
         preserveAspectRatio: PropTypes.string
@@ -41,10 +42,7 @@ class Svg extends Component {
 
     constructor() {
         super(...arguments);
-        id++;
-        this.id = id;
-        //noinspection JSUnusedGlobalSymbols
-        this.onDataURLCallbacks = [];
+        this.id = ++id;
     }
     measureInWindow = (...args) => {
         this.root.measureInWindow(...args);

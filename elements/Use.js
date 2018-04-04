@@ -46,8 +46,8 @@ export default class extends Shape {
                 }}
                 {...extractProps(props, this)}
                 href={href}
-                width={props.width}
-                height={props.height}
+                width={props.width.toString()}
+                height={props.height.toString()}
             >
                 {props.children}
             </RNSVGUse>
