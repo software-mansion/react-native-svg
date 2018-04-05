@@ -51,5 +51,21 @@
     }
 }
 
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    const CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
+    RNSVGNode const* template = [self.svgView getDefinedTemplate:self.href];
+    if (event) {
+        self.active = NO;
+    } else if (self.active) {
+        return self;
+    }
+    UIView const* hitChild = [template hitTest:transformed withEvent:event];
+    if (hitChild) {
+        self.active = YES;
+        return self;
+    }
+    return nil;
+}
+
 @end
 
