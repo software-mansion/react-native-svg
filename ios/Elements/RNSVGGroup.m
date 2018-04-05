@@ -61,6 +61,7 @@
 
         return YES;
     }];
+    [self setHitArea:[self getPath:context]];
     [self popGlyphContext];
 }
 
@@ -113,15 +114,18 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
-
-    UIView *hitSelf = [super hitTest:transformed withEvent:event];
-    if (hitSelf) {
-        return hitSelf;
-    }
-
+    
     CGPathRef clip = [self getClipPath];
     if (clip && !CGPathContainsPoint(clip, nil, transformed, self.clipRule == kRNSVGCGFCRuleEvenodd)) {
         return nil;
+    }
+    
+    if (!event) {
+        NSPredicate *const anyActive = [NSPredicate predicateWithFormat:@"active == TRUE"];
+        NSArray *const filtered = [self.subviews filteredArrayUsingPredicate:anyActive];
+        if ([filtered count] != 0) {
+            return filtered.firstObject;
+        }
     }
 
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
@@ -142,7 +146,12 @@
             return (node.responsible || (node != hitChild)) ? hitChild : self;
         }
     }
-
+    
+    UIView *hitSelf = [super hitTest:transformed withEvent:event];
+    if (hitSelf) {
+        return hitSelf;
+    }
+    
     return nil;
 }
 
