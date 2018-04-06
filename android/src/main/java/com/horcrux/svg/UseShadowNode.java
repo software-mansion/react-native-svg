@@ -74,6 +74,24 @@ class UseShadowNode extends RenderableShadowNode {
     }
 
     @Override
+    public int hitTest(float[] src) {
+        if (!mInvertible) {
+            return -1;
+        }
+
+        float[] dst = new float[2];
+        mInvMatrix.mapPoints(dst, src);
+
+        VirtualNode template = getSvgShadowNode().getDefinedTemplate(mHref);
+        int hitChild = template.hitTest(dst);
+        if (hitChild != -1) {
+            return (template.isResponsible() || hitChild != template.getReactTag()) ? hitChild : getReactTag();
+        }
+
+        return -1;
+    }
+
+    @Override
     protected Path getPath(Canvas canvas, Paint paint) {
         // todo:
         return new Path();
