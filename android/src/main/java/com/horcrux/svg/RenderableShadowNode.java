@@ -11,6 +11,7 @@ package com.horcrux.svg;
 
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -20,7 +21,10 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.uimanager.OnLayoutEvent;
+import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.events.EventDispatcher;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -203,6 +207,13 @@ abstract public class RenderableShadowNode extends VirtualNode {
                 mPath = getPath(canvas, paint);
                 mPath.setFillType(mFillRule);
             }
+
+            RectF clientRect = new RectF();
+            mPath.computeBounds(clientRect, true);
+            Matrix svgToViewMatrix = new Matrix(canvas.getMatrix());
+            svgToViewMatrix.preConcat(this.getSvgShadowNode().getInvInitialCTM());
+            svgToViewMatrix.mapRect(clientRect);
+            this.setClientRect(clientRect);
 
             clip(canvas, paint);
 

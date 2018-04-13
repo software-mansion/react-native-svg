@@ -69,6 +69,7 @@ class GroupShadowNode extends RenderableShadowNode {
         pushGlyphContext();
         final SvgViewShadowNode svg = getSvgShadowNode();
         final GroupShadowNode self = this;
+        final RectF groupRect = new RectF();
         traverseChildren(new NodeRunnable() {
             public void run(ReactShadowNode lNode) {
                 if (lNode instanceof VirtualNode) {
@@ -79,6 +80,11 @@ class GroupShadowNode extends RenderableShadowNode {
 
                     int count = node.saveAndSetupCanvas(canvas);
                     node.draw(canvas, paint, opacity * mOpacity);
+                    RectF r = node.getClientRect();
+                    if (r != null) {
+                        groupRect.union(r);
+                    }
+
                     node.restoreCanvas(canvas, count);
 
                     if (node instanceof RenderableShadowNode) {
@@ -98,6 +104,7 @@ class GroupShadowNode extends RenderableShadowNode {
                 }
             }
         });
+        this.setClientRect(groupRect);
         popGlyphContext();
     }
 
