@@ -187,6 +187,10 @@
         self.path = CGPathRetain(CFAutorelease(CGPathCreateCopy([self getPath:context])));
         [self setHitArea:self.path];
     }
+    
+    const CGRect pathBounding = CGPathGetBoundingBox(self.path);
+    const CGAffineTransform svgToClientTransform = CGAffineTransformConcat(CGContextGetCTM(context), self.svgView.invInitialCTM);
+    self.clientRect = CGRectApplyAffineTransform(pathBounding, svgToClientTransform);
 
     CGPathDrawingMode mode = kCGPathStroke;
     BOOL fillColor = NO;

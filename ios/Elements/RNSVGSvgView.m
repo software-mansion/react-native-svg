@@ -135,6 +135,8 @@
 
 - (void)drawToContext:(CGContextRef)context withRect:(CGRect)rect {
 
+    self.initialCTM = CGContextGetCTM(context);
+    self.invInitialCTM = CGAffineTransformInvert(self.initialCTM);
     if (self.align) {
         _viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
                                                  eRect:rect
@@ -147,7 +149,8 @@
     for (UIView *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
             RNSVGNode *svg = (RNSVGNode *)node;
-            [svg renderTo:context rect:rect];
+            [svg renderTo:context
+                     rect:rect];
         } else {
             [node drawRect:rect];
         }

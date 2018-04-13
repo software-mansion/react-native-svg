@@ -145,6 +145,24 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     [container invalidate];
 }
 
+- (void)setClientRect:(CGRect)clientRect {
+    if (CGRectEqualToRect(_clientRect, clientRect)) {
+        return;
+    }
+    _clientRect = clientRect;
+    if (self.onLayout) {
+        self.onLayout(@{
+                        @"layout": @{
+                                @"x": @(_clientRect.origin.x),
+                                @"y": @(_clientRect.origin.y),
+                                @"width": @(_clientRect.size.width),
+                                @"height": @(_clientRect.size.height),
+                                }
+                        });
+
+    }
+}
+
 - (void)setClipPath:(NSString *)clipPath
 {
     if (_clipPath == clipPath) {

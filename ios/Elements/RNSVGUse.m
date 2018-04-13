@@ -49,6 +49,7 @@
         // TODO: calling yellow box here
         RCTLogWarn(@"`Use` element expected a pre-defined svg template as `href` prop, template named: %@ is not defined.", self.href);
     }
+    self.clientRect = template.clientRect;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {

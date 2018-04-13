@@ -33,6 +33,8 @@
 - (void)renderGroupTo:(CGContextRef)context rect:(CGRect)rect
 {
     [self pushGlyphContext];
+    
+    __block CGRect groupRect = CGRectNull;
 
     [self traverseSubviews:^(UIView *node) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
@@ -46,6 +48,11 @@
             }
 
             [svgNode renderTo:context rect:rect];
+            
+            CGRect nodeRect = svgNode.clientRect;
+            if (!CGRectIsEmpty(nodeRect)) {
+                groupRect = CGRectUnion(groupRect, nodeRect);
+            }
 
             if ([node isKindOfClass:[RNSVGRenderable class]]) {
                 [(RNSVGRenderable*)node resetProperties];
@@ -62,6 +69,7 @@
         return YES;
     }];
     [self setHitArea:[self getPath:context]];
+    self.clientRect = groupRect;
     [self popGlyphContext];
 }
 

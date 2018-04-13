@@ -35,6 +35,9 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGAffineTransform invmatrix;
 @property (nonatomic, assign) BOOL active;
 @property (nonatomic, assign) CGPathRef path;
+@property (nonatomic, assign) CGRect clientRect;
+@property (nonatomic, copy) RCTDirectEventBlock onLayout;
+
 
 /**
  * RNSVGSvgView which ownes current RNSVGNode
