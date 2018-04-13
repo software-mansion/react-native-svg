@@ -264,21 +264,19 @@
 {
     CGPathRelease(_hitArea);
     _hitArea = nil;
-    if (self.responsible) {
-        // Add path to hitArea
-        CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
-
-        if (self.stroke && self.strokeWidth) {
-            // Add stroke to hitArea
-            CGFloat width = [self relativeOnOther:self.strokeWidth];
-            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
-            CGPathAddPath(hitArea, nil, strokePath);
-            CGPathRelease(strokePath);
-        }
-
-        _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(hitArea)));
-        CGPathRelease(hitArea);
+    // Add path to hitArea
+    CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
+    
+    if (self.stroke && self.strokeWidth) {
+        // Add stroke to hitArea
+        CGFloat width = [self relativeOnOther:self.strokeWidth];
+        CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
+        CGPathAddPath(hitArea, nil, strokePath);
+        CGPathRelease(strokePath);
     }
+    
+    _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(hitArea)));
+    CGPathRelease(hitArea);
 
 }
 
