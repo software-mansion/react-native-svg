@@ -174,10 +174,7 @@ class ImageShadowNode extends RenderableShadowNode {
                                  @Override
                                  public void onNewResultImpl(Bitmap bitmap) {
                                      mLoading.set(false);
-                                     SvgViewShadowNode shadowNode = getSvgShadowNode();
-                                     if(shadowNode != null) {
-                                         shadowNode.markUpdated();
-                                     }
+                                     bitmapTryRender(bitmap, canvas, paint, opacity * mOpacity);
                                  }
 
                                  @Override
@@ -249,6 +246,7 @@ class ImageShadowNode extends RenderableShadowNode {
         Paint alphaPaint = new Paint();
         alphaPaint.setAlpha((int) (opacity * 255));
         canvas.drawBitmap(bitmap, null, vbRect, alphaPaint);
+        markUpdated();
     }
 
     private void tryRender(ImageRequest request, Canvas canvas, Paint paint, float opacity) {
