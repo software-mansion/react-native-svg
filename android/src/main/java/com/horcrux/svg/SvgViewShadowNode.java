@@ -127,13 +127,18 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     }
 
     private Object drawOutput() {
-        Bitmap bitmap = Bitmap.createBitmap(
-                (int) getLayoutWidth(),
-                (int) getLayoutHeight(),
-                Bitmap.Config.ARGB_8888);
+        int layoutWidth = (int) getLayoutWidth();
+        int layoutHeight = (int) getLayoutHeight();
+        if(layoutHeight != 0 && layoutWidth != 0) {
+            Bitmap bitmap = Bitmap.createBitmap(
+                    layoutWidth,
+                    layoutHeight,
+                    Bitmap.Config.ARGB_8888);
 
-        drawChildren(new Canvas(bitmap));
-        return bitmap;
+            drawChildren(new Canvas(bitmap));
+            return bitmap;
+        }
+        return null;
     }
 
     Rect getCanvasBounds() {
