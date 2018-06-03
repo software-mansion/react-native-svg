@@ -18,7 +18,14 @@ export default class extends Component {
 
     setNativeProps = (...args) => {
         //noinspection JSUnresolvedFunction
-        this.root.getNativeElement().setNativeProps(...args);
+        var points = [...args][0].points;
+        if (points) {
+            if (Array.isArray(points)) {
+                points = points.join(",");
+            }
+            [...args][0].d = `M${extractPolyPoints(points)}`
+        }
+        this.root.setNativeProps(...args);
     };
 
     render() {
