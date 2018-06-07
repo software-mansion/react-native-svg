@@ -229,7 +229,7 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
     @Nullable Path getClipPath(Canvas canvas, Paint paint) {
-        if (mClipPath != null && mCachedClipPath == null) {
+        if (mClipPath != null) {
             VirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPath);
 
             if (node != null) {
