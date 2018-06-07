@@ -19,7 +19,7 @@ export default class extends Shape {
         y: numberProp,
         width: numberProp.isRequired,
         height: numberProp.isRequired,
-        href: Image.propTypes.source,
+        href: PropTypes.object,
         preserveAspectRatio: PropTypes.string
     };
 
