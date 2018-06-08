@@ -17,6 +17,11 @@ export default class extends Shape {
         ...pathProps
     };
 
+    static defaultProps = {
+        width: 0,
+        height: 0
+    };
+
     setNativeProps = (...args) => {
         this.root.setNativeProps(...args);
     };
