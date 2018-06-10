@@ -52,8 +52,6 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private int mMeetOrSlice;
     private Matrix mInvViewBoxMatrix = new Matrix();
     private boolean mInvertible = true;
-    private Matrix initialCTM;
-    private Matrix invInitialCTM;
 
 
     public SvgViewShadowNode() {
@@ -151,9 +149,6 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
     void drawChildren(final Canvas canvas) {
         mCanvas = canvas;
-        this.initialCTM = canvas.getMatrix();
-        this.invInitialCTM = new Matrix();
-        this.initialCTM.invert(this.invInitialCTM);
         if (mAlign != null) {
             RectF vbRect = getViewBox();
             float width = getLayoutWidth();
@@ -285,11 +280,4 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         }
     }
 
-    public Matrix getInitialCTM() {
-        return this.initialCTM;
-    }
-
-    public Matrix getInvInitialCTM() {
-        return this.invInitialCTM;
-    }
 }

@@ -211,7 +211,6 @@ abstract public class RenderableShadowNode extends VirtualNode {
             RectF clientRect = new RectF();
             mPath.computeBounds(clientRect, true);
             Matrix svgToViewMatrix = new Matrix(canvas.getMatrix());
-            svgToViewMatrix.preConcat(this.getSvgShadowNode().getInvInitialCTM());
             svgToViewMatrix.mapRect(clientRect);
             this.setClientRect(clientRect);
 
