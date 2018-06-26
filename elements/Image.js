@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Image } from "react-native";
-import { requireNativeComponent } from "react-native";
+import { Image, requireNativeComponent } from "react-native";
+import ImageSourcePropType from 'react-native/Libraries/Image/ImageSourcePropType';
 import { ImageAttributes } from "../lib/attributes";
 import { numberProp, touchableProps, responderProps } from "../lib/props";
 import Shape from "./Shape";
@@ -19,7 +19,7 @@ export default class extends Shape {
         y: numberProp,
         width: numberProp.isRequired,
         height: numberProp.isRequired,
-        href: Image.propTypes.source,
+        href: ImageSourcePropType,
         preserveAspectRatio: PropTypes.string
     };
 
