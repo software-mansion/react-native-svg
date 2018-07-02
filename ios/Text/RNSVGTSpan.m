@@ -230,17 +230,30 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
      */
     // OpenType.js font data
     NSDictionary * fontData = font->fontData;
+    NSMutableDictionary *attrs = [[NSMutableDictionary alloc] init];
 
     NSNumber *lig = [NSNumber numberWithInt:allowOptionalLigatures ? 2 : 1];
+    attrs[NSLigatureAttributeName] = lig;
     CFDictionaryRef attributes;
     if (fontRef != nil) {
-        attributes = (__bridge CFDictionaryRef)@{
-                                                 (NSString *)kCTFontAttributeName: (__bridge id)fontRef,
-                                                 (NSString *)NSLigatureAttributeName: lig                                                };
-    } else {
-        attributes = (__bridge CFDictionaryRef)@{
-                                                 (NSString *)NSLigatureAttributeName: lig                                                            };
+        attrs[NSFontAttributeName] = (__bridge id)fontRef;
     }
+    if (!autoKerning) {
+        NSNumber *noAutoKern = [NSNumber numberWithFloat:0.0f];
+
+#if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
+        if (___useiOS6Attributes)
+        {
+            [attrs setObject:noAutoKern forKey:NSKernAttributeName];
+        }
+        else
+#endif
+        {
+            [attrs setObject:noAutoKern forKey:(id)kCTKernAttributeName];
+        }
+    }
+
+    attributes = (__bridge CFDictionaryRef)attrs;
 
     CFStringRef string = (__bridge CFStringRef)str;
     CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
