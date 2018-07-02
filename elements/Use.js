@@ -28,6 +28,7 @@ export default class extends Shape {
 
     render() {
         const { props } = this;
+        const { children, width, height } = props;
         // match "url(#pattern)"
         const matched = props.href.match(idExpReg);
         let href;
@@ -51,10 +52,10 @@ export default class extends Shape {
                 }}
                 {...extractProps(props, this)}
                 href={href}
-                width={props.width.toString()}
-                height={props.height.toString()}
+                width={width !== undefined ? width.toString() : ""}
+                height={height !== undefined ? height.toString() : ""}
             >
-                {props.children}
+                {children}
             </RNSVGUse>
         );
     }
