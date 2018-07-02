@@ -63,6 +63,8 @@ class UseShadowNode extends RenderableShadowNode {
                 template.draw(canvas, paint, opacity * mOpacity);
             }
 
+            this.setClientRect(template.getClientRect());
+
             template.restoreCanvas(canvas, count);
             if (template instanceof RenderableShadowNode) {
                 ((RenderableShadowNode)template).resetProperties();
