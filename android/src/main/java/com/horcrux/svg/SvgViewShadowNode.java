@@ -151,12 +151,15 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         mCanvas = canvas;
         if (mAlign != null) {
             RectF vbRect = getViewBox();
-            float width = getLayoutWidth();
-            float height = getLayoutHeight();
-            boolean nested = Float.isNaN(width) || Float.isNaN(height);
+            float width;
+            float height;
+            boolean nested = getNativeParent() instanceof SvgViewShadowNode;
             if (nested) {
                 width = Float.parseFloat(mbbWidth) * mScale;
                 height = Float.parseFloat(mbbHeight) * mScale;
+            } else {
+                width = getLayoutWidth();
+                height = getLayoutHeight();
             }
             RectF eRect = new RectF(0,0, width, height);
             if (nested) {
