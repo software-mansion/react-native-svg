@@ -302,10 +302,10 @@ abstract public class RenderableShadowNode extends VirtualNode {
         int x = Math.round(dst[0]);
         int y = Math.round(dst[1]);
 
-        if (mRegion == null) {
+        if (mRegion == null && mPath != null) {
             mRegion = getRegion(mPath);
         }
-        if (!mRegion.contains(x, y)) {
+        if (mRegion == null || !mRegion.contains(x, y)) {
             return -1;
         }
 
