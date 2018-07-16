@@ -1,25 +1,33 @@
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
 
     dependencies {
         //noinspection GradleDependency
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:3.1.2'
     }
 }
 
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion safeExtGet('compileSdkVersion', 26)
     //noinspection GradleDependency
-    buildToolsVersion "23.0.1"
+    buildToolsVersion safeExtGet('buildToolsVersion', '26.0.2')
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion safeExtGet('minSdkVersion', 16)
         //noinspection OldTargetApi
-        targetSdkVersion 22
+        targetSdkVersion safeExtGet('targetSdkVersion', 26)
         versionCode 1
         versionName "1.0"
     }
@@ -39,5 +47,5 @@ repositories {
 
 dependencies {
     //noinspection GradleDynamicVersion
-    compile 'com.facebook.react:react-native:+'
+    compile "com.facebook.react:react-native:${safeExtGet('reactNative', '+')}"
 }
