@@ -43,13 +43,27 @@
     react-native link react-native-svg
     ```
 
-    A bug in react-native currently links the tvOS library into the iOS project as well.
+    * A bug in react-native currently links the tvOS library into the iOS project as well.
 
-    Until the fix is released:
-    https://github.com/facebook/react-native/issues/13783
-    https://github.com/facebook/react-native/commit/a63fd378a47173cc9f750e9980f18dc12dd7ea51
+        Until the fix is released:
+        https://github.com/facebook/react-native/issues/13783
+        https://github.com/facebook/react-native/commit/a63fd378a47173cc9f750e9980f18dc12dd7ea51
 
-    Follow the instructions here: https://github.com/react-native-community/react-native-svg/issues/544
+        Follow the instructions here: https://github.com/react-native-community/react-native-svg/issues/544
+
+    * If `cocoapods` is used and if error `RNSVGImage.m:12:9: 'React/RCTImageLoader.h' file not found` occurs:
+
+        Add the following entry in Podfile:
+
+        ```ruby
+            pod 'React', :path => '../node_modules/react-native', :subspecs => [
+                [...]
+                'RCTImage', # !!!!!
+            ]
+        ```
+
+        and run `pod install` from `ios` folder
+
 
 #### Manual
 
