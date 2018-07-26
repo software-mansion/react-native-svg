@@ -200,7 +200,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (CGPathRef)getClipPath:(CGContextRef)context
 {
-    if (self.clipPath && !_cachedClipPath) {
+    if (self.clipPath) {
         _cachedClipPath = CGPathRetain([[self.svgView getDefinedClipPath:self.clipPath] getPath:context]);
     }
 
