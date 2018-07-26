@@ -72,6 +72,12 @@ public class SvgView extends ViewGroup {
         SvgViewManager.setSvgView(this);
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        SvgViewManager.dropSvgView(this);
+    }
+
     public void setBitmap(Bitmap bitmap) {
         if (mBitmap != null) {
             mBitmap.recycle();
