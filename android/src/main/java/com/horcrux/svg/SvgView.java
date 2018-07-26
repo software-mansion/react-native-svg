@@ -26,6 +26,7 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.uimanager.events.TouchEvent;
 import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
 import com.facebook.react.uimanager.events.TouchEventType;
+import com.facebook.react.views.text.ReactTextView;
 import com.facebook.react.views.view.ReactViewGroup;
 
 import javax.annotation.Nullable;
@@ -115,22 +116,26 @@ public class SvgView extends ViewGroup {
         ReactShadowNodeImpl node = getShadowNode();
         for (int i = 0; i < this.getChildCount(); i++) {
             View child = this.getChildAt(i);
-            if (child instanceof ReactViewGroup) {
+            if (child instanceof ReactViewGroup || child instanceof ReactTextView) {
+
+                float x = l;
+                float y = t;
+                float nr = r;
+                float nb = b;
+
                 int id = child.getId();
                 for (int j = 0; j < node.getChildCount(); j++) {
                     ReactShadowNodeImpl nodeChild = node.getChildAt(j);
-                    if (nodeChild.getReactTag() != id) {
-                        continue;
+                    if (nodeChild.getReactTag() == id) {
+                        x = nodeChild.getLayoutX();
+                        y = nodeChild.getLayoutY();
+                        nr = x + nodeChild.getLayoutWidth();
+                        nb = y + nodeChild.getLayoutHeight();
+                        break;
                     }
-
-                    float x = nodeChild.getLayoutX();
-                    float y = nodeChild.getLayoutY();
-                    float nr = x + nodeChild.getLayoutWidth();
-                    float nb = y + nodeChild.getLayoutHeight();
-
-                    child.layout(Math.round(x), Math.round(y), Math.round(nr), Math.round(nb));
-                    break;
                 }
+
+                child.layout(Math.round(x), Math.round(y), Math.round(nr), Math.round(nb));
             }
         }
     }
