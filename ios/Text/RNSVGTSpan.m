@@ -82,7 +82,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
 
     [self pushGlyphContext];
 
-    CGMutablePathRef path = [self getLinePath:text];
+    CGMutablePathRef path = [self getLinePath:text context:context];
 
     _cache = CGPathRetain(CFAutorelease(CGPathCreateCopy(path)));
 
@@ -91,7 +91,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
     return (CGPathRef)CFAutorelease(path);
 }
 
-- (CGMutablePathRef)getLinePath:(NSString *)str
+- (CGMutablePathRef)getLinePath:(NSString *)str context:(CGContextRef)context
 {
     // Create a dictionary for this font
     CTFontRef fontRef = [self getFontFromContext];
@@ -720,6 +720,10 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
             double dy = [gc nextDeltaY];
             double r = [[gc nextRotation] doubleValue] / RNSVGTSpan_radToDeg;
 
+            if (isWordSeparator) {
+                continue;
+            }
+
             CFIndex endIndex = g + 1 == runGlyphCount ? currIndex : indices[g + 1];
             while (++currIndex < endIndex) {
                 // Skip rendering other grapheme clusters of ligatures (already rendered),
@@ -805,8 +809,32 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
                 transform = CGAffineTransformConcat(CGAffineTransformMakeRotation(r), transform);
             }
 
-            transform = CGAffineTransformScale(transform, 1.0, -1.0);
-            CGPathAddPath(path, &transform, glyphPath);
+            CGRect box = CGPathGetBoundingBox(glyphPath);
+            CGFloat width = box.size.width;
+
+            if (width == 0) { // Render unicode emoji
+                UILabel *label = [[UILabel alloc] init];
+                CFIndex startIndex = indices[g];
+                NSString* currChars = [str substringWithRange:NSMakeRange(startIndex, MAX(1, endIndex - startIndex))];
+                label.text = currChars;
+                label.opaque = NO;
+                label.backgroundColor = UIColor.clearColor;
+                CGSize measuredSize = [currChars sizeWithAttributes:
+                                       @{NSFontAttributeName: [UIFont systemFontOfSize:17.0f]}];
+                label.frame = CGRectMake(0, 0, ceilf(measuredSize.width), ceilf(measuredSize.height));
+
+                CGFloat fontScale = 34;
+                CGContextConcatCTM(context, transform);
+                CGContextScaleCTM(context, fontSize / fontScale, fontSize / fontScale);
+                CGContextTranslateCTM(context, 0, -measuredSize.height);
+                [label.layer renderInContext:context];
+                CGContextTranslateCTM(context, 0, measuredSize.height);
+                CGContextScaleCTM(context, fontScale / fontSize, fontScale / fontSize);
+                CGContextConcatCTM(context, CGAffineTransformInvert(transform));
+            } else {
+                transform = CGAffineTransformScale(transform, 1.0, -1.0);
+                CGPathAddPath(path, &transform, glyphPath);
+            }
             CGPathRelease(glyphPath);
         }
     }
