@@ -100,11 +100,13 @@ public class SvgView extends ViewGroup {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        mTargetTag = getShadowNode().hitTest(new Point((int) ev.getX(), (int) ev.getY()));
-
-        if (mTargetTag != -1) {
-            handleTouchEvent(ev);
-            return true;
+        SvgViewShadowNode node = getShadowNode();
+        if (node != null) {
+            mTargetTag = node.hitTest(new Point((int) ev.getX(), (int) ev.getY()));
+            if (mTargetTag != -1) {
+                handleTouchEvent(ev);
+                return true;
+            }
         }
 
         return super.dispatchTouchEvent(ev);
