@@ -815,7 +815,8 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
             if (width == 0) { // Render unicode emoji
                 UILabel *label = [[UILabel alloc] init];
                 CFIndex startIndex = indices[g];
-                NSString* currChars = [str substringWithRange:NSMakeRange(startIndex, MAX(1, endIndex - startIndex))];
+                NSUInteger len = endIndex == startIndex ? n - startIndex : MAX(1, endIndex - startIndex);
+                NSString* currChars = [str substringWithRange:NSMakeRange(startIndex, len)];
                 label.text = currChars;
                 label.opaque = NO;
                 label.backgroundColor = UIColor.clearColor;
