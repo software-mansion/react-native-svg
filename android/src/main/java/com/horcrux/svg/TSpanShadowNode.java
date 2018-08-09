@@ -695,12 +695,9 @@ class TSpanShadowNode extends TextShadowNode {
                         break;
                     }
                     String nextLigature = current + String.valueOf(chars[nextIndex]);
-                    boolean hasNextLigature = PaintCompat.hasGlyph(paint, nextLigature);
-                    if (hasNextLigature) {
-                        ligature[nextIndex] = true;
-                        current = nextLigature;
-                        hasLigature = true;
-                    }
+                    ligature[nextIndex] = true;
+                    current = nextLigature;
+                    hasLigature = true;
                 }
             }
             double charWidth = paint.measureText(current) * scaleSpacingAndGlyphs;
