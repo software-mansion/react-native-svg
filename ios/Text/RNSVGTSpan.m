@@ -829,17 +829,20 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
                 label.text = currChars;
                 label.opaque = NO;
                 label.backgroundColor = UIColor.clearColor;
-                CGSize measuredSize = [currChars sizeWithAttributes:
-                                       @{NSFontAttributeName: [UIFont systemFontOfSize:17.0f]}];
-                label.frame = CGRectMake(0, 0, ceilf(measuredSize.width), ceilf(measuredSize.height));
+                UIFont * customFont = [UIFont systemFontOfSize:fontSize];
 
-                CGFloat fontScale = 34;
+                CGSize measuredSize = [currChars sizeWithAttributes:
+                                       @{NSFontAttributeName:customFont}];
+                label.font = customFont;
+                double width = ceilf(measuredSize.width);
+                double height = ceilf(measuredSize.height);
+                CGRect bounds = CGRectMake(0, 0, width, height);
+                label.frame = bounds;
+
                 CGContextConcatCTM(context, transform);
-                CGContextScaleCTM(context, fontSize / fontScale, fontSize / fontScale);
-                CGContextTranslateCTM(context, 0, -measuredSize.height);
+                CGContextTranslateCTM(context, 0, -fontSize);
                 [label.layer renderInContext:context];
-                CGContextTranslateCTM(context, 0, measuredSize.height);
-                CGContextScaleCTM(context, fontScale / fontSize, fontScale / fontSize);
+                CGContextTranslateCTM(context, 0, fontSize);
                 CGContextConcatCTM(context, CGAffineTransformInvert(transform));
             } else {
                 transform = CGAffineTransformScale(transform, 1.0, -1.0);
