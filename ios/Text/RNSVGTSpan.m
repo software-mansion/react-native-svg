@@ -689,6 +689,14 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
         CTRunGetStringIndices(run, CFRangeMake(0, 0), indices);
         CTFontRef runFont = CFDictionaryGetValue(CTRunGetAttributes(run), kCTFontAttributeName);
         CTFontGetAdvancesForGlyphs(runFont, kCTFontOrientationHorizontal, glyphs, advances, runGlyphCount);
+        CFIndex nextOrEndRunIndex = n - 1;
+        if (r + 1 < runEnd) {
+            CTRunRef nextRun = CFArrayGetValueAtIndex(runs, r + 1);
+            CFIndex nextRunGlyphCount = CTRunGetGlyphCount(nextRun);
+            CFIndex nextIndices[nextRunGlyphCount];
+            CTRunGetStringIndices(nextRun, CFRangeMake(0, 0), nextIndices);
+            nextOrEndRunIndex = nextIndices[0];
+        }
 
         for(CFIndex g = 0; g < runGlyphCount; g++) {
             CGGlyph glyph = glyphs[g];
@@ -724,7 +732,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
                 continue;
             }
 
-            CFIndex endIndex = g + 1 == runGlyphCount ? currIndex : indices[g + 1];
+            CFIndex endIndex = g + 1 == runGlyphCount ? nextOrEndRunIndex : indices[g + 1];
             while (++currIndex < endIndex) {
                 // Skip rendering other grapheme clusters of ligatures (already rendered),
                 // And, make sure to increment index positions by making gc.next() calls.
@@ -815,8 +823,9 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
             if (width == 0) { // Render unicode emoji
                 UILabel *label = [[UILabel alloc] init];
                 CFIndex startIndex = indices[g];
-                NSUInteger len = endIndex == startIndex ? n - startIndex : MAX(1, endIndex - startIndex);
-                NSString* currChars = [str substringWithRange:NSMakeRange(startIndex, len)];
+                long len = MAX(1, endIndex - startIndex);
+                NSRange range = NSMakeRange(startIndex, len);
+                NSString* currChars = [str substringWithRange:range];
                 label.text = currChars;
                 label.opaque = NO;
                 label.backgroundColor = UIColor.clearColor;
