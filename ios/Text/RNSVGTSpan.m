@@ -689,7 +689,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
         CTRunGetStringIndices(run, CFRangeMake(0, 0), indices);
         CTFontRef runFont = CFDictionaryGetValue(CTRunGetAttributes(run), kCTFontAttributeName);
         CTFontGetAdvancesForGlyphs(runFont, kCTFontOrientationHorizontal, glyphs, advances, runGlyphCount);
-        CFIndex nextOrEndRunIndex = n - 1;
+        CFIndex nextOrEndRunIndex = n;
         if (r + 1 < runEnd) {
             CTRunRef nextRun = CFArrayGetValueAtIndex(runs, r + 1);
             CFIndex nextRunGlyphCount = CTRunGetGlyphCount(nextRun);
