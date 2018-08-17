@@ -4,21 +4,21 @@ import android.view.ViewGroup;
 
 import com.facebook.react.bridge.ReactContext;
 
-public class RenderableView extends ViewGroup {
-    VirtualNode shadowNode;
+public class RenderableView<T extends VirtualNode> extends ViewGroup {
+    public T shadowNode;
 
     public RenderableView(ReactContext reactContext) {
         super(reactContext);
     }
 
-    VirtualNode getShadowNode() {
+    T getShadowNode() {
         return shadowNode;
     }
 
     @Override
     public void setId(int id) {
         super.setId(id);
-        shadowNode = RenderableViewManager.getShadowNodeByTag(id);
+        shadowNode = (T) RenderableViewManager.getShadowNodeByTag(id);
     }
 
     void dropView() {

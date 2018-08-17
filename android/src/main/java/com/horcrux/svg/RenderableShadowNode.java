@@ -17,8 +17,12 @@ import android.graphics.RectF;
 import android.graphics.Region;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
+import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -70,9 +74,24 @@ abstract public class RenderableShadowNode extends VirtualNode {
     protected @Nullable ReadableArray mPropList;
     protected @Nullable WritableArray mAttributeList;
 
+    static final Pattern regex = Pattern.compile("[0-9.-]+");
+
     @ReactProp(name = "fill")
-    public void setFill(@Nullable ReadableArray fill) {
-        mFill = fill;
+    public void setFill(@Nullable Dynamic fill) {
+        ReadableType type = fill.getType();
+        if (type.equals(ReadableType.Array)) {
+            mFill = fill.asArray();
+        } else {
+            JavaOnlyArray arr = new JavaOnlyArray();
+            arr.pushInt(0);
+            Matcher m = regex.matcher(fill.asString());
+            int i = 0;
+            while (m.find()) {
+                Double parsed = Double.parseDouble(m.group());
+                arr.pushDouble(i++ < 3 ? parsed / 255 : parsed);
+            }
+            mFill = arr;
+        }
         markUpdated();
     }
 
@@ -99,8 +118,20 @@ abstract public class RenderableShadowNode extends VirtualNode {
     }
 
     @ReactProp(name = "stroke")
-    public void setStroke(@Nullable ReadableArray strokeColors) {
-        mStroke = strokeColors;
+    public void setStroke(@Nullable Dynamic strokeColors) {
+        ReadableType type = strokeColors.getType();
+        if (type.equals(ReadableType.Array)) {
+            mStroke = strokeColors.asArray();
+        } else {
+            JavaOnlyArray arr = new JavaOnlyArray();
+            arr.pushInt(0);
+            Matcher m = regex.matcher(strokeColors.asString());
+            while (m.find()) {
+                Double parsed = Double.parseDouble(m.group());
+                arr.pushDouble(parsed);
+            }
+            mStroke = arr;
+        }
         markUpdated();
     }
 

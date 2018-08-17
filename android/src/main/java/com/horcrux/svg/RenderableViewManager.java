@@ -12,6 +12,7 @@ package com.horcrux.svg;
 import android.graphics.Bitmap;
 import android.util.SparseArray;
 
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.LayoutShadowNode;
@@ -30,7 +31,7 @@ import static com.horcrux.svg.RenderableShadowNode.JOIN_ROUND;
  * into native views and don't need any logic (all the logic is in {@link SvgView}), this
  * "stubbed" ViewManager is used for all of them.
  */
-class RenderableViewManager extends ViewGroupManager<RenderableView> {
+class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<RenderableView<T>> {
 
     /* package */ private static final String CLASS_GROUP = "RNSVGGroup";
     /* package */ private static final String CLASS_PATH = "RNSVGPath";
@@ -52,275 +53,275 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
     private final String mClassName;
 
 
-    static RenderableViewManager createGroupViewManager() {
-        return new RenderableViewManager(CLASS_GROUP);
+    static RenderableViewManager<GroupShadowNode> createGroupViewManager() {
+        return new RenderableViewManager<>(CLASS_GROUP);
     }
 
-    static RenderableViewManager createPathViewManager() {
-        return new RenderableViewManager(CLASS_PATH) {
+    static RenderableViewManager<PathShadowNode> createPathViewManager() {
+        return new RenderableViewManager<PathShadowNode>(CLASS_PATH) {
 
             @ReactProp(name = "d")
-            public void setD(RenderableView node, String d) {
-                ((PathShadowNode) node.getShadowNode()).setD(d);
+            public void setD(RenderableView<PathShadowNode> node, String d) {
+                node.shadowNode.setD(d);
             }
         };
     }
 
-    static RenderableViewManager createTextViewManager() {
-        return new RenderableViewManager(CLASS_TEXT) {
+    static RenderableViewManager<TextShadowNode> createTextViewManager() {
+        return new RenderableViewManager<TextShadowNode>(CLASS_TEXT) {
 
             @ReactProp(name = "textLength")
-            public void setTextLength(RenderableView node, @Nullable String length) {
-                ((TextShadowNode) node.getShadowNode()).setTextLength(length);
+            public void setTextLength(RenderableView<TextShadowNode> node, @Nullable String length) {
+                node.shadowNode.setTextLength(length);
             }
 
             @ReactProp(name = "lengthAdjust")
-            public void setLengthAdjust(RenderableView node, @Nullable String adjustment) {
-                ((TextShadowNode) node.getShadowNode()).setLengthAdjust(adjustment);
+            public void setLengthAdjust(RenderableView<TextShadowNode> node, @Nullable String adjustment) {
+                node.shadowNode.setLengthAdjust(adjustment);
             }
 
             @ReactProp(name = "alignmentBaseline")
-            public void setMethod(RenderableView node, @Nullable String alignment) {
-                ((TextShadowNode) node.getShadowNode()).setMethod(alignment);
+            public void setMethod(RenderableView<TextShadowNode> node, @Nullable String alignment) {
+                node.shadowNode.setMethod(alignment);
             }
 
             @ReactProp(name = "baselineShift")
-            public void setBaselineShift(RenderableView node, @Nullable String baselineShift) {
-                ((TextShadowNode) node.getShadowNode()).setBaselineShift(baselineShift);
+            public void setBaselineShift(RenderableView<TextShadowNode> node, @Nullable String baselineShift) {
+                node.shadowNode.setBaselineShift(baselineShift);
             }
 
             @ReactProp(name = "verticalAlign")
-            public void setVerticalAlign(RenderableView node, @Nullable String verticalAlign) {
-                ((TextShadowNode) node.getShadowNode()).setVerticalAlign(verticalAlign);
+            public void setVerticalAlign(RenderableView<TextShadowNode> node, @Nullable String verticalAlign) {
+                node.shadowNode.setVerticalAlign(verticalAlign);
             }
 
             @ReactProp(name = "rotate")
-            public void setRotate(RenderableView node, @Nullable ReadableArray rotate) {
-                ((TextShadowNode) node.getShadowNode()).setRotate(rotate);
+            public void setRotate(RenderableView<TextShadowNode> node, @Nullable ReadableArray rotate) {
+                node.shadowNode.setRotate(rotate);
             }
 
             @ReactProp(name = "deltaX")
-            public void setDeltaX(RenderableView node, @Nullable ReadableArray deltaX) {
-                ((TextShadowNode) node.getShadowNode()).setDeltaX(deltaX);
+            public void setDeltaX(RenderableView<TextShadowNode> node, @Nullable ReadableArray deltaX) {
+                node.shadowNode.setDeltaX(deltaX);
             }
 
             @ReactProp(name = "deltaY")
-            public void setDeltaY(RenderableView node, @Nullable ReadableArray deltaY) {
-                ((TextShadowNode) node.getShadowNode()).setDeltaY(deltaY);
+            public void setDeltaY(RenderableView<TextShadowNode> node, @Nullable ReadableArray deltaY) {
+                node.shadowNode.setDeltaY(deltaY);
             }
 
             @ReactProp(name = "positionX")
-            public void setPositionX(RenderableView node, @Nullable ReadableArray positionX) {
-                ((TextShadowNode) node.getShadowNode()).setPositionX(positionX);
+            public void setPositionX(RenderableView<TextShadowNode> node, @Nullable ReadableArray positionX) {
+                node.shadowNode.setPositionX(positionX);
             }
 
             @ReactProp(name = "positionY")
-            public void setPositionY(RenderableView node, @Nullable ReadableArray positionY) {
-                ((TextShadowNode) node.getShadowNode()).setPositionY(positionY);
+            public void setPositionY(RenderableView<TextShadowNode> node, @Nullable ReadableArray positionY) {
+                node.shadowNode.setPositionY(positionY);
             }
 
             @ReactProp(name = "font")
-            public void setFont(RenderableView node, @Nullable ReadableMap font) {
-                ((TextShadowNode) node.getShadowNode()).setFont(font);
+            public void setFont(RenderableView<TextShadowNode> node, @Nullable ReadableMap font) {
+                node.shadowNode.setFont(font);
             }
         };
     }
 
-    static RenderableViewManager createTSpanViewManager() {
-        return new RenderableViewManager(CLASS_TSPAN) {
+    static RenderableViewManager<TSpanShadowNode> createTSpanViewManager() {
+        return new RenderableViewManager<TSpanShadowNode>(CLASS_TSPAN) {
 
             @ReactProp(name = "content")
-            public void setContent(RenderableView node, @Nullable String content) {
-                ((TSpanShadowNode) node.getShadowNode()).setContent(content);
+            public void setContent(RenderableView<TSpanShadowNode> node, @Nullable String content) {
+                node.shadowNode.setContent(content);
             }
         };
     }
 
-    static RenderableViewManager createTextPathViewManager() {
-        return new RenderableViewManager(CLASS_TEXT_PATH) {
+    static RenderableViewManager<TextPathShadowNode> createTextPathViewManager() {
+        return new RenderableViewManager<TextPathShadowNode>(CLASS_TEXT_PATH) {
 
             @ReactProp(name = "href")
-            public void setHref(RenderableView node, String href) {
-                ((TextPathShadowNode) node.getShadowNode()).setHref(href);
+            public void setHref(RenderableView<TextPathShadowNode> node, String href) {
+                node.shadowNode.setHref(href);
             }
 
             @ReactProp(name = "startOffset")
-            public void setStartOffset(RenderableView node, @Nullable String startOffset) {
-                ((TextPathShadowNode) node.getShadowNode()).setStartOffset(startOffset);
+            public void setStartOffset(RenderableView<TextPathShadowNode> node, @Nullable String startOffset) {
+                node.shadowNode.setStartOffset(startOffset);
             }
 
             @ReactProp(name = "method")
-            public void setMethod(RenderableView node, @Nullable String method) {
-                ((TextPathShadowNode) node.getShadowNode()).setMethod(method);
+            public void setMethod(RenderableView<TextPathShadowNode> node, @Nullable String method) {
+                node.shadowNode.setMethod(method);
             }
 
             @ReactProp(name = "spacing")
-            public void setSpacing(RenderableView node, @Nullable String spacing) {
-                ((TextPathShadowNode) node.getShadowNode()).setSpacing(spacing);
+            public void setSpacing(RenderableView<TextPathShadowNode> node, @Nullable String spacing) {
+                node.shadowNode.setSpacing(spacing);
             }
 
             @ReactProp(name = "side")
-            public void setSide(RenderableView node, @Nullable String side) {
-                ((TextPathShadowNode) node.getShadowNode()).setSide(side);
+            public void setSide(RenderableView<TextPathShadowNode> node, @Nullable String side) {
+                node.shadowNode.setSide(side);
             }
 
             @ReactProp(name = "midLine")
-            public void setSharp(RenderableView node, @Nullable String midLine) {
-                ((TextPathShadowNode) node.getShadowNode()).setSharp(midLine);
+            public void setSharp(RenderableView<TextPathShadowNode> node, @Nullable String midLine) {
+                node.shadowNode.setSharp(midLine);
             }
         };
     }
 
-    static RenderableViewManager createImageViewManager() {
-        return new RenderableViewManager(CLASS_IMAGE) {
+    static RenderableViewManager<ImageShadowNode> createImageViewManager() {
+        return new RenderableViewManager<ImageShadowNode>(CLASS_IMAGE) {
 
             @ReactProp(name = "x")
-            public void setX(RenderableView node, String x) {
-                ((ImageShadowNode) node.getShadowNode()).setX(x);
+            public void setX(RenderableView<ImageShadowNode> node, String x) {
+                node.shadowNode.setX(x);
             }
 
             @ReactProp(name = "y")
-            public void setY(RenderableView node, String y) {
-                ((ImageShadowNode) node.getShadowNode()).setY(y);
+            public void setY(RenderableView<ImageShadowNode> node, String y) {
+                node.shadowNode.setY(y);
             }
 
             @ReactProp(name = "imagewidth")
-            public void setWidth(RenderableView node, String width) {
-                ((ImageShadowNode) node.getShadowNode()).setWidth(width);
+            public void setWidth(RenderableView<ImageShadowNode> node, String width) {
+                node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "imageheight")
-            public void seHeight(RenderableView node, String height) {
-                ((ImageShadowNode) node.getShadowNode()).seHeight(height);
+            public void seHeight(RenderableView<ImageShadowNode> node, String height) {
+                node.shadowNode.seHeight(height);
             }
 
             @ReactProp(name = "src")
-            public void setSrc(RenderableView node, @Nullable ReadableMap src) {
-                ((ImageShadowNode) node.getShadowNode()).setSrc(src);
+            public void setSrc(RenderableView<ImageShadowNode> node, @Nullable ReadableMap src) {
+                node.shadowNode.setSrc(src);
             }
 
 
             @ReactProp(name = "align")
-            public void setAlign(RenderableView node, String align) {
-                ((ImageShadowNode) node.getShadowNode()).setAlign(align);
+            public void setAlign(RenderableView<ImageShadowNode> node, String align) {
+                node.shadowNode.setAlign(align);
             }
 
             @ReactProp(name = "meetOrSlice")
-            public void setMeetOrSlice(RenderableView node, int meetOrSlice) {
-                ((ImageShadowNode) node.getShadowNode()).setMeetOrSlice(meetOrSlice);
+            public void setMeetOrSlice(RenderableView<ImageShadowNode> node, int meetOrSlice) {
+                node.shadowNode.setMeetOrSlice(meetOrSlice);
             }
 
             @ReactProp(name = "matrix")
-            public void setMatrix(RenderableView node, @Nullable ReadableArray matrixArray) {
-                ((ImageShadowNode) node.getShadowNode()).setMatrix(matrixArray);
+            public void setMatrix(RenderableView<ImageShadowNode> node, @Nullable ReadableArray matrixArray) {
+                node.shadowNode.setMatrix(matrixArray);
             }
         };
     }
 
-    static RenderableViewManager createCircleViewManager() {
-        return new RenderableViewManager(CLASS_CIRCLE) {
+    static RenderableViewManager<CircleShadowNode> createCircleViewManager() {
+        return new RenderableViewManager<CircleShadowNode>(CLASS_CIRCLE) {
 
             @ReactProp(name = "cx")
-            public void setCx(RenderableView node, String cx) {
-                ((CircleShadowNode) node.getShadowNode()).setCx(cx);
+            public void setCx(RenderableView<CircleShadowNode> node, String cx) {
+                node.shadowNode.setCx(cx);
             }
 
             @ReactProp(name = "cy")
-            public void setCy(RenderableView node, String cy) {
-                ((CircleShadowNode) node.getShadowNode()).setCy(cy);
+            public void setCy(RenderableView<CircleShadowNode> node, String cy) {
+                node.shadowNode.setCy(cy);
             }
 
             @ReactProp(name = "r")
-            public void setR(RenderableView node, String r) {
-                ((CircleShadowNode) node.getShadowNode()).setR(r);
+            public void setR(RenderableView<CircleShadowNode> node, String r) {
+                node.shadowNode.setR(r);
             }
         };
     }
 
-    static RenderableViewManager createEllipseViewManager() {
-        return new RenderableViewManager(CLASS_ELLIPSE) {
+    static RenderableViewManager<EllipseShadowNode> createEllipseViewManager() {
+        return new RenderableViewManager<EllipseShadowNode>(CLASS_ELLIPSE) {
 
             @ReactProp(name = "cx")
-            public void setCx(RenderableView node, String cx) {
-                ((EllipseShadowNode) node.getShadowNode()).setCx(cx);
+            public void setCx(RenderableView<EllipseShadowNode> node, String cx) {
+                node.shadowNode.setCx(cx);
             }
 
             @ReactProp(name = "cy")
-            public void setCy(RenderableView node, String cy) {
-                ((EllipseShadowNode) node.getShadowNode()).setCy(cy);
+            public void setCy(RenderableView<EllipseShadowNode> node, String cy) {
+                node.shadowNode.setCy(cy);
             }
 
             @ReactProp(name = "rx")
-            public void setRx(RenderableView node, String rx) {
-                ((EllipseShadowNode) node.getShadowNode()).setRx(rx);
+            public void setRx(RenderableView<EllipseShadowNode> node, String rx) {
+                node.shadowNode.setRx(rx);
             }
 
             @ReactProp(name = "ry")
-            public void setRy(RenderableView node, String ry) {
-                ((EllipseShadowNode) node.getShadowNode()).setRy(ry);
+            public void setRy(RenderableView<EllipseShadowNode> node, String ry) {
+                node.shadowNode.setRy(ry);
             }
         };
     }
 
-    static RenderableViewManager createLineViewManager() {
-        return new RenderableViewManager(CLASS_LINE) {
+    static RenderableViewManager<LineShadowNode> createLineViewManager() {
+        return new RenderableViewManager<LineShadowNode>(CLASS_LINE) {
 
             @ReactProp(name = "x1")
-            public void setX1(RenderableView node, String x1) {
-                ((LineShadowNode) node.getShadowNode()).setX1(x1);
+            public void setX1(RenderableView<LineShadowNode> node, String x1) {
+                node.shadowNode.setX1(x1);
             }
 
             @ReactProp(name = "y1")
-            public void setY1(RenderableView node, String y1) {
-                ((LineShadowNode) node.getShadowNode()).setY1(y1);
+            public void setY1(RenderableView<LineShadowNode> node, String y1) {
+                node.shadowNode.setY1(y1);
             }
 
             @ReactProp(name = "x2")
-            public void setX2(RenderableView node, String x2) {
-                ((LineShadowNode) node.getShadowNode()).setX2(x2);
+            public void setX2(RenderableView<LineShadowNode> node, String x2) {
+                node.shadowNode.setX2(x2);
             }
 
             @ReactProp(name = "y2")
-            public void setY2(RenderableView node, String y2) {
-                ((LineShadowNode) node.getShadowNode()).setY2(y2);
+            public void setY2(RenderableView<LineShadowNode> node, String y2) {
+                node.shadowNode.setY2(y2);
             }
 
         };
     }
 
-    static RenderableViewManager createRectViewManager() {
-        return new RenderableViewManager(CLASS_RECT) {
+    static RenderableViewManager<RectShadowNode> createRectViewManager() {
+        return new RenderableViewManager<RectShadowNode>(CLASS_RECT) {
 
             @ReactProp(name = "x")
-            public void setX(RenderableView node, String x) {
-                ((RectShadowNode) node.getShadowNode()).setX(x);
+            public void setX(RenderableView<RectShadowNode> node, String x) {
+                node.shadowNode.setX(x);
             }
 
             @ReactProp(name = "y")
-            public void setY(RenderableView node, String y) {
-                ((RectShadowNode) node.getShadowNode()).setY(y);
+            public void setY(RenderableView<RectShadowNode> node, String y) {
+                node.shadowNode.setY(y);
             }
 
             @ReactProp(name = "rectwidth")
-            public void setWidth(RenderableView node, String width) {
-                ((RectShadowNode) node.getShadowNode()).setWidth(width);
+            public void setWidth(RenderableView<RectShadowNode> node, String width) {
+                node.shadowNode.setWidth(width);
             }
 
 
             @ReactProp(name = "rectheight")
-            public void setHeight(RenderableView node, String height) {
-                ((RectShadowNode) node.getShadowNode()).setHeight(height);
+            public void setHeight(RenderableView<RectShadowNode> node, String height) {
+                node.shadowNode.setHeight(height);
             }
 
 
             @ReactProp(name = "rx")
-            public void setRx(RenderableView node, String rx) {
-                ((RectShadowNode) node.getShadowNode()).setRx(rx);
+            public void setRx(RenderableView<RectShadowNode> node, String rx) {
+                node.shadowNode.setRx(rx);
             }
 
             @ReactProp(name = "ry")
-            public void setRy(RenderableView node, String ry) {
-                ((RectShadowNode) node.getShadowNode()).setRy(ry);
+            public void setRy(RenderableView<RectShadowNode> node, String ry) {
+                node.shadowNode.setRy(ry);
             }
         };
     }
@@ -333,147 +334,147 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
         return new RenderableViewManager(CLASS_DEFS);
     }
 
-    static RenderableViewManager createUseViewManager() {
-        return new RenderableViewManager(CLASS_USE) {
+    static RenderableViewManager<UseShadowNode> createUseViewManager() {
+        return new RenderableViewManager<UseShadowNode>(CLASS_USE) {
 
             @ReactProp(name = "href")
-            public void setHref(RenderableView node, String href) {
-                ((UseShadowNode) node.getShadowNode()).setHref(href);
+            public void setHref(RenderableView<UseShadowNode> node, String href) {
+                node.shadowNode.setHref(href);
             }
 
             @ReactProp(name = "usewidth")
-            public void setWidth(RenderableView node, String width) {
-                ((UseShadowNode) node.getShadowNode()).setWidth(width);
+            public void setWidth(RenderableView<UseShadowNode> node, String width) {
+                node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "useheight")
-            public void setHeight(RenderableView node, String height) {
-                ((UseShadowNode) node.getShadowNode()).setHeight(height);
+            public void setHeight(RenderableView<UseShadowNode> node, String height) {
+                node.shadowNode.setHeight(height);
             }
         };
     }
 
-    static RenderableViewManager createSymbolManager() {
-        return new RenderableViewManager(CLASS_SYMBOL) {
+    static RenderableViewManager<SymbolShadowNode> createSymbolManager() {
+        return new RenderableViewManager<SymbolShadowNode>(CLASS_SYMBOL) {
 
             @ReactProp(name = "minX")
-            public void setMinX(RenderableView node, float minX) {
-                ((SymbolShadowNode) node.getShadowNode()).setMinX(minX);
+            public void setMinX(RenderableView<SymbolShadowNode> node, float minX) {
+                node.shadowNode.setMinX(minX);
             }
 
             @ReactProp(name = "minY")
-            public void setMinY(RenderableView node, float minY) {
-                ((SymbolShadowNode) node.getShadowNode()).setMinY(minY);
+            public void setMinY(RenderableView<SymbolShadowNode> node, float minY) {
+                node.shadowNode.setMinY(minY);
             }
 
             @ReactProp(name = "vbWidth")
-            public void setVbWidth(RenderableView node, float vbWidth) {
-                ((SymbolShadowNode) node.getShadowNode()).setVbWidth(vbWidth);
+            public void setVbWidth(RenderableView<SymbolShadowNode> node, float vbWidth) {
+                node.shadowNode.setVbWidth(vbWidth);
             }
 
             @ReactProp(name = "vbHeight")
-            public void setVbHeight(RenderableView node, float vbHeight) {
-                ((SymbolShadowNode) node.getShadowNode()).setVbHeight(vbHeight);
+            public void setVbHeight(RenderableView<SymbolShadowNode> node, float vbHeight) {
+                node.shadowNode.setVbHeight(vbHeight);
             }
 
             @ReactProp(name = "align")
-            public void setAlign(RenderableView node, String align) {
-                ((SymbolShadowNode) node.getShadowNode()).setAlign(align);
+            public void setAlign(RenderableView<SymbolShadowNode> node, String align) {
+                node.shadowNode.setAlign(align);
             }
 
             @ReactProp(name = "meetOrSlice")
-            public void setMeetOrSlice(RenderableView node, int meetOrSlice) {
-                ((SymbolShadowNode) node.getShadowNode()).setMeetOrSlice(meetOrSlice);
+            public void setMeetOrSlice(RenderableView<SymbolShadowNode> node, int meetOrSlice) {
+                node.shadowNode.setMeetOrSlice(meetOrSlice);
             }
         };
     }
 
-    static RenderableViewManager createLinearGradientManager() {
-        return new RenderableViewManager(CLASS_LINEAR_GRADIENT) {
+    static RenderableViewManager<LinearGradientShadowNode> createLinearGradientManager() {
+        return new RenderableViewManager<LinearGradientShadowNode>(CLASS_LINEAR_GRADIENT) {
 
             @ReactProp(name = "x1")
-            public void setX1(RenderableView node, String x1) {
-                ((LinearGradientShadowNode) node.getShadowNode()).setX1(x1);
+            public void setX1(RenderableView<LinearGradientShadowNode> node, String x1) {
+                node.shadowNode.setX1(x1);
             }
 
             @ReactProp(name = "y1")
-            public void setY1(RenderableView node, String y1) {
-                ((LinearGradientShadowNode) node.getShadowNode()).setY1(y1);
+            public void setY1(RenderableView<LinearGradientShadowNode> node, String y1) {
+                node.shadowNode.setY1(y1);
             }
 
             @ReactProp(name = "x2")
-            public void setX2(RenderableView node, String x2) {
-                ((LinearGradientShadowNode) node.getShadowNode()).setX2(x2);
+            public void setX2(RenderableView<LinearGradientShadowNode> node, String x2) {
+                node.shadowNode.setX2(x2);
             }
 
             @ReactProp(name = "y2")
-            public void setY2(RenderableView node, String y2) {
-                ((LinearGradientShadowNode) node.getShadowNode()).setY2(y2);
+            public void setY2(RenderableView<LinearGradientShadowNode> node, String y2) {
+                node.shadowNode.setY2(y2);
             }
 
             @ReactProp(name = "gradient")
-            public void setGradient(RenderableView node, ReadableArray gradient) {
-                ((LinearGradientShadowNode) node.getShadowNode()).setGradient(gradient);
+            public void setGradient(RenderableView<LinearGradientShadowNode> node, ReadableArray gradient) {
+                node.shadowNode.setGradient(gradient);
             }
 
             @ReactProp(name = "gradientUnits")
-            public void setGradientUnits(RenderableView node, int gradientUnits) {
-                ((LinearGradientShadowNode) node.getShadowNode()).setGradientUnits(gradientUnits);
+            public void setGradientUnits(RenderableView<LinearGradientShadowNode> node, int gradientUnits) {
+                node.shadowNode.setGradientUnits(gradientUnits);
             }
 
             @ReactProp(name = "gradientTransform")
-            public void setGradientTransform(RenderableView node, @Nullable ReadableArray matrixArray) {
-                ((LinearGradientShadowNode) node.getShadowNode()).setGradientTransform(matrixArray);
+            public void setGradientTransform(RenderableView<LinearGradientShadowNode> node, @Nullable ReadableArray matrixArray) {
+                node.shadowNode.setGradientTransform(matrixArray);
             }
         };
     }
 
-    static RenderableViewManager createRadialGradientManager() {
-        return new RenderableViewManager(CLASS_RADIAL_GRADIENT) {
+    static RenderableViewManager<RadialGradientShadowNode> createRadialGradientManager() {
+        return new RenderableViewManager<RadialGradientShadowNode>(CLASS_RADIAL_GRADIENT) {
 
             @ReactProp(name = "fx")
-            public void setFx(RenderableView node, String fx) {
-                ((RadialGradientShadowNode) node.getShadowNode()).setFx(fx);
+            public void setFx(RenderableView<RadialGradientShadowNode> node, String fx) {
+                node.shadowNode.setFx(fx);
             }
 
             @ReactProp(name = "fy")
-            public void setFy(RenderableView node, String fy) {
-                ((RadialGradientShadowNode) node.getShadowNode()).setFy(fy);
+            public void setFy(RenderableView<RadialGradientShadowNode> node, String fy) {
+                node.shadowNode.setFy(fy);
             }
 
             @ReactProp(name = "rx")
-            public void setRx(RenderableView node, String rx) {
-                ((RadialGradientShadowNode) node.getShadowNode()).setRx(rx);
+            public void setRx(RenderableView<RadialGradientShadowNode> node, String rx) {
+                node.shadowNode.setRx(rx);
             }
 
             @ReactProp(name = "ry")
-            public void setRy(RenderableView node, String ry) {
-                ((RadialGradientShadowNode) node.getShadowNode()).setRy(ry);
+            public void setRy(RenderableView<RadialGradientShadowNode> node, String ry) {
+                node.shadowNode.setRy(ry);
             }
 
             @ReactProp(name = "cx")
-            public void setCx(RenderableView node, String cx) {
-                ((RadialGradientShadowNode) node.getShadowNode()).setCx(cx);
+            public void setCx(RenderableView<RadialGradientShadowNode> node, String cx) {
+                node.shadowNode.setCx(cx);
             }
 
             @ReactProp(name = "cy")
-            public void setCy(RenderableView node, String cy) {
-                ((RadialGradientShadowNode) node.getShadowNode()).setCy(cy);
+            public void setCy(RenderableView<RadialGradientShadowNode> node, String cy) {
+                node.shadowNode.setCy(cy);
             }
 
             @ReactProp(name = "gradient")
-            public void setGradient(RenderableView node, ReadableArray gradient) {
-                ((RadialGradientShadowNode) node.getShadowNode()).setGradient(gradient);
+            public void setGradient(RenderableView<RadialGradientShadowNode> node, ReadableArray gradient) {
+                node.shadowNode.setGradient(gradient);
             }
 
             @ReactProp(name = "gradientUnits")
-            public void setGradientUnits(RenderableView node, int gradientUnits) {
-                ((RadialGradientShadowNode) node.getShadowNode()).setGradientUnits(gradientUnits);
+            public void setGradientUnits(RenderableView<RadialGradientShadowNode> node, int gradientUnits) {
+                node.shadowNode.setGradientUnits(gradientUnits);
             }
 
             @ReactProp(name = "gradientTransform")
-            public void setGradientTransform(RenderableView node, @Nullable ReadableArray matrixArray) {
-                ((RadialGradientShadowNode) node.getShadowNode()).setGradientTransform(matrixArray);
+            public void setGradientTransform(RenderableView<RadialGradientShadowNode> node, @Nullable ReadableArray matrixArray) {
+                node.shadowNode.setGradientTransform(matrixArray);
             }
         };
     }
@@ -528,7 +529,7 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
     }
 
     @Override
-    public Class<? extends LayoutShadowNode> getShadowNodeClass() {
+    public Class<? extends VirtualNode> getShadowNodeClass() {
         switch (mClassName) {
             case CLASS_GROUP:
                 return GroupShadowNode.class;
@@ -568,64 +569,64 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
     }
 
     @ReactProp(name = "fill")
-    public void setFill(RenderableView node, @Nullable ReadableArray fill) {
-        ((RenderableShadowNode) node.getShadowNode()).setFill(fill);
+    public void setFill(RenderableView<RenderableShadowNode> node, @Nullable Dynamic fill) {
+        node.shadowNode.setFill(fill);
     }
 
     @ReactProp(name = "fillOpacity", defaultFloat = 1f)
-    public void setFillOpacity(RenderableView node, float fillOpacity) {
-        ((RenderableShadowNode) node.getShadowNode()).setFillOpacity(fillOpacity);
+    public void setFillOpacity(RenderableView<RenderableShadowNode> node, float fillOpacity) {
+        node.shadowNode.setFillOpacity(fillOpacity);
     }
 
     @ReactProp(name = "fillRule", defaultInt = FILL_RULE_NONZERO)
-    public void setFillRule(RenderableView node, int fillRule) {
-        ((RenderableShadowNode) node.getShadowNode()).setFillRule(fillRule);
+    public void setFillRule(RenderableView<RenderableShadowNode> node, int fillRule) {
+        node.shadowNode.setFillRule(fillRule);
     }
 
 
     @ReactProp(name = "stroke")
-    public void setStroke(RenderableView node, @Nullable ReadableArray strokeColors) {
-        ((RenderableShadowNode) node.getShadowNode()).setStroke(strokeColors);
+    public void setStroke(RenderableView<RenderableShadowNode> node, @Nullable Dynamic strokeColors) {
+        node.shadowNode.setStroke(strokeColors);
     }
 
     @ReactProp(name = "strokeOpacity", defaultFloat = 1f)
-    public void setStrokeOpacity(RenderableView node, float strokeOpacity) {
-        ((RenderableShadowNode) node.getShadowNode()).setStrokeOpacity(strokeOpacity);
+    public void setStrokeOpacity(RenderableView<RenderableShadowNode> node, float strokeOpacity) {
+        node.shadowNode.setStrokeOpacity(strokeOpacity);
     }
 
     @ReactProp(name = "strokeDasharray")
-    public void setStrokeDasharray(RenderableView node, @Nullable ReadableArray strokeDasharray) {
-        ((RenderableShadowNode) node.getShadowNode()).setStrokeDasharray(strokeDasharray);
+    public void setStrokeDasharray(RenderableView<RenderableShadowNode> node, @Nullable ReadableArray strokeDasharray) {
+        node.shadowNode.setStrokeDasharray(strokeDasharray);
     }
 
     @ReactProp(name = "strokeDashoffset")
-    public void setStrokeDashoffset(RenderableView node, float strokeDashoffset) {
-        ((RenderableShadowNode) node.getShadowNode()).setStrokeDashoffset(strokeDashoffset);
+    public void setStrokeDashoffset(RenderableView<RenderableShadowNode> node, float strokeDashoffset) {
+        node.shadowNode.setStrokeDashoffset(strokeDashoffset);
     }
 
     @ReactProp(name = "strokeWidth")
-    public void setStrokeWidth(RenderableView node, String strokeWidth) {
-        ((RenderableShadowNode) node.getShadowNode()).setStrokeWidth(strokeWidth);
+    public void setStrokeWidth(RenderableView<RenderableShadowNode> node, String strokeWidth) {
+        node.shadowNode.setStrokeWidth(strokeWidth);
     }
 
     @ReactProp(name = "strokeMiterlimit", defaultFloat = 4f)
-    public void setStrokeMiterlimit(RenderableView node, float strokeMiterlimit) {
-        ((RenderableShadowNode) node.getShadowNode()).setStrokeMiterlimit(strokeMiterlimit);
+    public void setStrokeMiterlimit(RenderableView<RenderableShadowNode> node, float strokeMiterlimit) {
+        node.shadowNode.setStrokeMiterlimit(strokeMiterlimit);
     }
 
     @ReactProp(name = "strokeLinecap", defaultInt = CAP_ROUND)
-    public void setStrokeLinecap(RenderableView node, int strokeLinecap) {
-        ((RenderableShadowNode) node.getShadowNode()).setStrokeLinecap(strokeLinecap);
+    public void setStrokeLinecap(RenderableView<RenderableShadowNode> node, int strokeLinecap) {
+        node.shadowNode.setStrokeLinecap(strokeLinecap);
     }
 
     @ReactProp(name = "strokeLinejoin", defaultInt = JOIN_ROUND)
-    public void setStrokeLinejoin(RenderableView node, int strokeLinejoin) {
-        ((RenderableShadowNode) node.getShadowNode()).setStrokeLinejoin(strokeLinejoin);
+    public void setStrokeLinejoin(RenderableView<RenderableShadowNode> node, int strokeLinejoin) {
+        node.shadowNode.setStrokeLinejoin(strokeLinejoin);
     }
 
     @ReactProp(name = "propList")
-    public void setPropList(RenderableView node, @Nullable ReadableArray propList) {
-        ((RenderableShadowNode) node.getShadowNode()).setPropList(propList);
+    public void setPropList(RenderableView<RenderableShadowNode> node, @Nullable ReadableArray propList) {
+        node.shadowNode.setPropList(propList);
     }
 
     /**
@@ -634,9 +635,9 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
      * you want to override this method you should call super.onAfterUpdateTransaction from it as
      * the parent class of the ViewManager may rely on callback being executed.
      */
-    protected void onAfterUpdateTransaction(RenderableView node) {
+    protected void onAfterUpdateTransaction(RenderableView<T> node) {
         super.onAfterUpdateTransaction(node);
-        VirtualNode shadow = node.getShadowNode();
+        VirtualNode shadow = node.shadowNode;
         SvgViewShadowNode view = shadow.getSvgShadowNode();
         if (view == null) {
             return;
@@ -650,19 +651,19 @@ class RenderableViewManager extends ViewGroupManager<RenderableView> {
     }
 
     @Override
-    protected RenderableView createViewInstance(ThemedReactContext reactContext) {
-        return new RenderableView(reactContext);
+    protected RenderableView<T> createViewInstance(ThemedReactContext reactContext) {
+        return new RenderableView<T>(reactContext);
     }
 
     @Override
-    public void updateExtraData(RenderableView root, Object extraData) {
+    public void updateExtraData(RenderableView<T> root, Object extraData) {
         throw new IllegalStateException("SVG elements does not map into a native view");
     }
 
     private static final SparseArray<VirtualNode> mTagToShadowNode = new SparseArray<>();
 
     @Override
-    public void onDropViewInstance(RenderableView view) {
+    public void onDropViewInstance(RenderableView<T> view) {
         mTagToShadowNode.remove(view.getId());
         view.dropView();
     }
