@@ -130,7 +130,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     Bitmap drawOutput() {
         float width = getLayoutWidth();
         float height = getLayoutHeight();
-        boolean early = Float.isNaN(width) || Float.isNaN(height) || width * height == 0;
+        boolean early = Float.isNaN(width) || Float.isNaN(height) || width * height == 0 || (Math.log10(width) + Math.log10(height) > 42);
         if (early) {
             ReactShadowNodeImpl parent = getParent();
             float parentWidth = parent == null ? 0 : parent.getLayoutWidth();
@@ -240,11 +240,12 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         int count = getChildCount();
         int viewTag = -1;
         for (int i = count - 1; i >= 0; i--) {
-            if (!(getChildAt(i) instanceof VirtualNode)) {
+            ReactShadowNodeImpl child = getChildAt(i);
+            if (!(child instanceof VirtualNode)) {
                 continue;
             }
 
-            viewTag = ((VirtualNode) getChildAt(i)).hitTest(transformed);
+            viewTag = ((VirtualNode) child).hitTest(transformed);
             if (viewTag != -1) {
                 break;
             }
