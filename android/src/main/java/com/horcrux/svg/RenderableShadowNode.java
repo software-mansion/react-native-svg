@@ -233,14 +233,15 @@ abstract public class RenderableShadowNode extends VirtualNode {
                 mPath = getPath(canvas, paint);
                 mPath.setFillType(mFillRule);
             }
+            Path path = mPath;
 
             clip(canvas, paint);
 
             if (setupFillPaint(paint, opacity * mFillOpacity)) {
-                canvas.drawPath(mPath, paint);
+                canvas.drawPath(path, paint);
             }
             if (setupStrokePaint(paint, opacity * mStrokeOpacity)) {
-                canvas.drawPath(mPath, paint);
+                canvas.drawPath(path, paint);
             }
         }
     }
