@@ -33,12 +33,14 @@
 - (void)renderGroupTo:(CGContextRef)context rect:(CGRect)rect
 {
     [self pushGlyphContext];
-    RNSVGSvgView* svg = [self getSvgView];
+    
+    __block CGRect groupRect = CGRectNull;
+
     [self traverseSubviews:^(UIView *node) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
             RNSVGNode* svgNode = (RNSVGNode*)node;
-            if (svgNode.responsible && !svg.responsible) {
-                svg.responsible = YES;
+            if (svgNode.responsible && !self.svgView.responsible) {
+                self.svgView.responsible = YES;
             }
 
             if ([node isKindOfClass:[RNSVGRenderable class]]) {
@@ -46,6 +48,11 @@
             }
 
             [svgNode renderTo:context rect:rect];
+            
+            CGRect nodeRect = svgNode.clientRect;
+            if (!CGRectIsEmpty(nodeRect)) {
+                groupRect = CGRectUnion(groupRect, nodeRect);
+            }
 
             if ([node isKindOfClass:[RNSVGRenderable class]]) {
                 [(RNSVGRenderable*)node resetProperties];
@@ -63,6 +70,8 @@
 
         return YES;
     }];
+    [self setHitArea:[self getPath:context]];
+    self.clientRect = groupRect;
     [self popGlyphContext];
 }
 
@@ -84,12 +93,13 @@
 
 - (void)pushGlyphContext
 {
-    [[[self getTextRoot] getGlyphContext] pushContext:self font:self.font];
+    __weak typeof(self) weakSelf = self;
+    [[self.textRoot getGlyphContext] pushContext:weakSelf font:self.font];
 }
 
 - (void)popGlyphContext
 {
-    [[[self getTextRoot] getGlyphContext] popContext];
+    [[self.textRoot getGlyphContext] popContext];
 }
 
 - (void)renderPathTo:(CGContextRef)context rect:(CGRect)rect
@@ -114,15 +124,18 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
-
-    UIView *hitSelf = [super hitTest:transformed withEvent:event];
-    if (hitSelf) {
-        return hitSelf;
-    }
-
+    
     CGPathRef clip = [self getClipPath];
     if (clip && !CGPathContainsPoint(clip, nil, transformed, self.clipRule == kRNSVGCGFCRuleEvenodd)) {
         return nil;
+    }
+    
+    if (!event) {
+        NSPredicate *const anyActive = [NSPredicate predicateWithFormat:@"active == TRUE"];
+        NSArray *const filtered = [self.subviews filteredArrayUsingPredicate:anyActive];
+        if ([filtered count] != 0) {
+            return filtered.firstObject;
+        }
     }
 
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
@@ -143,15 +156,20 @@
             return (node.responsible || (node != hitChild)) ? hitChild : self;
         }
     }
-
+    
+    UIView *hitSelf = [super hitTest:transformed withEvent:event];
+    if (hitSelf) {
+        return hitSelf;
+    }
+    
     return nil;
 }
 
 - (void)parseReference
 {
     if (self.name) {
-        RNSVGSvgView* svg = [self getSvgView];
-        [svg defineTemplate:self templateName:self.name];
+        typeof(self) __weak weakSelf = self;
+        [self.svgView defineTemplate:weakSelf templateName:self.name];
     }
 
     [self traverseSubviews:^(__kindof RNSVGNode *node) {

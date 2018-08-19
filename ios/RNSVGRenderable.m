@@ -187,6 +187,10 @@
         self.path = CGPathRetain(CFAutorelease(CGPathCreateCopy([self getPath:context])));
         [self setHitArea:self.path];
     }
+    
+    const CGRect pathBounding = CGPathGetBoundingBox(self.path);
+    const CGAffineTransform svgToClientTransform = CGAffineTransformConcat(CGContextGetCTM(context), self.svgView.invInitialCTM);
+    self.clientRect = CGRectApplyAffineTransform(pathBounding, svgToClientTransform);
 
     CGPathDrawingMode mode = kCGPathStroke;
     BOOL fillColor = NO;
@@ -205,7 +209,7 @@
             CGContextClip(context);
             [self.fill paint:context
                      opacity:self.fillOpacity
-                     painter:[[self getSvgView] getDefinedPainter:self.fill.brushRef]
+                     painter:[self.svgView getDefinedPainter:self.fill.brushRef]
              ];
             CGContextRestoreGState(context);
 
@@ -250,7 +254,7 @@
 
             [self.stroke paint:context
                        opacity:self.strokeOpacity
-                       painter:[[self getSvgView] getDefinedPainter:self.stroke.brushRef]
+                       painter:[self.svgView getDefinedPainter:self.stroke.brushRef]
              ];
             return;
         }
@@ -264,21 +268,19 @@
 {
     CGPathRelease(_hitArea);
     _hitArea = nil;
-    if (self.responsible) {
-        // Add path to hitArea
-        CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
-
-        if (self.stroke && self.strokeWidth) {
-            // Add stroke to hitArea
-            CGFloat width = [self relativeOnOther:self.strokeWidth];
-            CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
-            CGPathAddPath(hitArea, nil, strokePath);
-            CGPathRelease(strokePath);
-        }
-
-        _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(hitArea)));
-        CGPathRelease(hitArea);
+    // Add path to hitArea
+    CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
+    
+    if (self.stroke && self.strokeWidth) {
+        // Add stroke to hitArea
+        CGFloat width = [self relativeOnOther:self.strokeWidth];
+        CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
+        CGPathAddPath(hitArea, nil, strokePath);
+        CGPathRelease(strokePath);
     }
+    
+    _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(hitArea)));
+    CGPathRelease(hitArea);
 
 }
 

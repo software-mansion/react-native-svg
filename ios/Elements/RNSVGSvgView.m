@@ -20,6 +20,16 @@
     CGAffineTransform _invviewBoxTransform;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    // This is necessary to ensure that [self setNeedsDisplay] actually triggers
+    // a redraw when our parent transitions between hidden and visible.
+    self.contentMode = UIViewContentModeRedraw;
+  }
+  return self;
+}
+
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
 {
     [super insertReactSubview:subview atIndex:atIndex];
@@ -125,6 +135,8 @@
 
 - (void)drawToContext:(CGContextRef)context withRect:(CGRect)rect {
 
+    self.initialCTM = CGContextGetCTM(context);
+    self.invInitialCTM = CGAffineTransformInvert(self.initialCTM);
     if (self.align) {
         _viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
                                                  eRect:rect
@@ -137,7 +149,8 @@
     for (UIView *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
             RNSVGNode *svg = (RNSVGNode *)node;
-            [svg renderTo:context rect:rect];
+            [svg renderTo:context
+                     rect:rect];
         } else {
             [node drawRect:rect];
         }

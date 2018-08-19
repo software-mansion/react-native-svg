@@ -96,7 +96,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
     // Create a dictionary for this font
     CTFontRef fontRef = [self getFontFromContext];
     CGMutablePathRef path = CGPathCreateMutable();
-    RNSVGGlyphContext* gc = [[self getTextRoot] getGlyphContext];
+    RNSVGGlyphContext* gc = [self.textRoot getGlyphContext];
     RNSVGFontData* font = [gc getFont];
     NSUInteger n = str.length;
     /*
@@ -230,17 +230,30 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
      */
     // OpenType.js font data
     NSDictionary * fontData = font->fontData;
+    NSMutableDictionary *attrs = [[NSMutableDictionary alloc] init];
 
     NSNumber *lig = [NSNumber numberWithInt:allowOptionalLigatures ? 2 : 1];
+    attrs[NSLigatureAttributeName] = lig;
     CFDictionaryRef attributes;
     if (fontRef != nil) {
-        attributes = (__bridge CFDictionaryRef)@{
-                                                 (NSString *)kCTFontAttributeName: (__bridge id)fontRef,
-                                                 (NSString *)NSLigatureAttributeName: lig                                                };
-    } else {
-        attributes = (__bridge CFDictionaryRef)@{
-                                                 (NSString *)NSLigatureAttributeName: lig                                                            };
+        attrs[NSFontAttributeName] = (__bridge id)fontRef;
     }
+    if (!autoKerning) {
+        NSNumber *noAutoKern = [NSNumber numberWithFloat:0.0f];
+
+#if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
+        if (___useiOS6Attributes)
+        {
+            [attrs setObject:noAutoKern forKey:NSKernAttributeName];
+        }
+        else
+#endif
+        {
+            [attrs setObject:noAutoKern forKey:(id)kCTKernAttributeName];
+        }
+    }
+
+    attributes = (__bridge CFDictionaryRef)attrs;
 
     CFStringRef string = (__bridge CFStringRef)str;
     CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
@@ -509,8 +522,8 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
     double top = ascenderHeight;
     double totalHeight = top + bottom;
     double baselineShift = 0;
-    NSString *baselineShiftString = [self getBaselineShift];
-    enum RNSVGAlignmentBaseline baseline = RNSVGAlignmentBaselineFromString([self getAlignmentBaseline]);
+    NSString *baselineShiftString = self.baselineShift;
+    enum RNSVGAlignmentBaseline baseline = RNSVGAlignmentBaselineFromString(self.alignmentBaseline);
     if (baseline != RNSVGAlignmentBaselineBaseline) {
         // TODO alignment-baseline, test / verify behavior
         // TODO get per glyph baselines from font baseline table, for high-precision alignment
@@ -683,11 +696,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
             /*
              Determine the glyph's charwidth (i.e., the amount which the current text position
              advances horizontally when the glyph is drawn using horizontal text layout).
-             */
-            double unkernedAdvance = CTFontGetAdvancesForGlyphs(fontRef, kCTFontOrientationHorizontal, &glyph, NULL, 1);
-            CGFloat charWidth = unkernedAdvance * scaleSpacingAndGlyphs;
 
-            /*
              For each subsequent glyph, set a new startpoint-on-the-path as the previous
              endpoint-on-the-path, but with appropriate adjustments taking into account
              horizontal kerning tables in the font and current values of various attributes
@@ -696,10 +705,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
              adjustments are calculated as distance adjustments along the path, calculated
              using the user agent's distance along the path algorithm.
              */
-            if (autoKerning) {
-                double kerned = advances[g].width * scaleSpacingAndGlyphs;
-                kerning = kerned - charWidth;
-            }
+            CGFloat charWidth = advances[g].width * scaleSpacingAndGlyphs;
 
             CFIndex currIndex = indices[g];
             char currentChar = [str characterAtIndex:currIndex];

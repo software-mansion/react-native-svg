@@ -29,6 +29,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
@@ -52,6 +53,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private int mMeetOrSlice;
     private Matrix mInvViewBoxMatrix = new Matrix();
     private boolean mInvertible = true;
+
 
     public SvgViewShadowNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
@@ -155,12 +157,15 @@ public class SvgViewShadowNode extends LayoutShadowNode {
         mCanvas = canvas;
         if (mAlign != null) {
             RectF vbRect = getViewBox();
-            float width = getLayoutWidth();
-            float height = getLayoutHeight();
-            boolean nested = Float.isNaN(width) || Float.isNaN(height);
+            float width;
+            float height;
+            boolean nested = getNativeParent() instanceof SvgViewShadowNode;
             if (nested) {
                 width = (float) PropHelper.fromRelative(mbbWidth, canvas.getWidth(), 0f, mScale, 12);
                 height = (float) PropHelper.fromRelative(mbbHeight, canvas.getHeight(), 0f, mScale, 12);
+            } else {
+                width = getLayoutWidth();
+                height = getLayoutHeight();
             }
             RectF eRect = new RectF(0,0, width, height);
             if (nested) {
@@ -284,4 +289,5 @@ public class SvgViewShadowNode extends LayoutShadowNode {
             runner.run(child);
         }
     }
+
 }

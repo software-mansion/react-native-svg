@@ -1,6 +1,6 @@
-import {Component} from 'react';
-import SvgTouchableMixin from '../lib/SvgTouchableMixin';
-import _ from 'lodash';
+import { Component } from "react";
+import SvgTouchableMixin from "../lib/SvgTouchableMixin";
+import _ from "lodash";
 
 class Shape extends Component {
     constructor() {

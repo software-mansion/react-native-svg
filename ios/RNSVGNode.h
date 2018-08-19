@@ -35,10 +35,18 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGAffineTransform invmatrix;
 @property (nonatomic, assign) BOOL active;
 @property (nonatomic, assign) CGPathRef path;
+@property (nonatomic, assign) CGRect clientRect;
+@property (nonatomic, copy) RCTDirectEventBlock onLayout;
+
+
+/**
+ * RNSVGSvgView which ownes current RNSVGNode
+ */
+@property (nonatomic, readonly, weak) RNSVGSvgView *svgView;
+@property (nonatomic, readonly, weak) RNSVGGroup *textRoot;
 
 - (void)invalidate;
 
-- (RNSVGGroup *)getTextRoot;
 - (RNSVGGroup *)getParentTextRoot;
 
 - (void)renderTo:(CGContextRef)context rect:(CGRect)rect;
@@ -69,11 +77,6 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
  * getPath will return the path inside node as a ClipPath.
  */
 - (CGPathRef)getPath:(CGContextRef) context;
-
-/**
- * get RNSVGSvgView which ownes current RNSVGNode
- */
-- (RNSVGSvgView *)getSvgView;
 
 - (CGFloat)relativeOnWidth:(NSString *)length;
 

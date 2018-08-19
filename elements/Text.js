@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import createReactNativeComponentClass from '../lib/createReactNativeComponentClass';
-import extractText from '../lib/extract/extractText';
-import {textProps} from '../lib/props';
-import {TextAttributes} from '../lib/attributes';
-import extractProps from '../lib/extract/extractProps';
-import Shape from './Shape';
+import React from "react";
+import PropTypes from "prop-types";
+import { requireNativeComponent } from "react-native";
+import extractText from "../lib/extract/extractText";
+import { textProps } from "../lib/props";
+import { TextAttributes } from "../lib/attributes";
+import extractProps from "../lib/extract/extractProps";
+import Shape from "./Shape";
 
 export default class extends Shape {
-    static displayName = 'Text';
+    static displayName = "Text";
 
     static propTypes = textProps;
 
@@ -38,19 +38,25 @@ export default class extends Shape {
     render() {
         const props = this.props;
 
-        return <RNSVGText
-            ref={ele => {this.root = ele;}}
-            {...extractProps({
-                ...props,
-                x: null,
-                y: null
-            }, this)}
-            {...extractText(props, true)}
-        />;
+        return (
+            <RNSVGText
+                ref={ele => {
+                    this.root = ele;
+                }}
+                {...extractProps(
+                    {
+                        ...props,
+                        x: null,
+                        y: null
+                    },
+                    this
+                )}
+                {...extractText(props, true)}
+            />
+        );
     }
 }
 
-const RNSVGText = createReactNativeComponentClass('RNSVGText', () => ({
-    validAttributes: TextAttributes,
-    uiViewClassName: 'RNSVGText'
-}));
+const RNSVGText = requireNativeComponent("RNSVGText", null, {
+    nativeOnly: TextAttributes
+});

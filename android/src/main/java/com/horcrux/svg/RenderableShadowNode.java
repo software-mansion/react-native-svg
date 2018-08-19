@@ -11,6 +11,7 @@ package com.horcrux.svg;
 
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -23,14 +24,16 @@ import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.uimanager.OnLayoutEvent;
+import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.events.EventDispatcher;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -68,10 +71,10 @@ abstract public class RenderableShadowNode extends VirtualNode {
     public float mFillOpacity = 1;
     public Path.FillType mFillRule = Path.FillType.WINDING;
 
-    private @Nullable ReadableArray mLastMergedList;
+    private @Nullable ArrayList<String> mLastMergedList;
     private @Nullable ArrayList<Object> mOriginProperties;
-    protected @Nullable ReadableArray mPropList;
-    protected @Nullable WritableArray mAttributeList;
+    protected @Nullable ArrayList<String> mPropList;
+    protected @Nullable ArrayList<String> mAttributeList;
 
     static final Pattern regex = Pattern.compile("[0-9.-]+");
 
@@ -213,12 +216,11 @@ abstract public class RenderableShadowNode extends VirtualNode {
     @ReactProp(name = "propList")
     public void setPropList(@Nullable ReadableArray propList) {
         if (propList != null) {
-            WritableArray copy = Arguments.createArray();
+            mPropList = mAttributeList = new ArrayList<>();
             for (int i = 0; i < propList.size(); i++) {
                 String fieldName = propertyNameToFieldName(propList.getString(i));
-                copy.pushString(fieldName);
+                mPropList.add(fieldName);
             }
-            mPropList = mAttributeList = copy;
         }
 
         markUpdated();
@@ -234,6 +236,12 @@ abstract public class RenderableShadowNode extends VirtualNode {
                 mPath.setFillType(mFillRule);
             }
             Path path = mPath;
+
+            RectF clientRect = new RectF();
+            path.computeBounds(clientRect, true);
+            Matrix svgToViewMatrix = new Matrix(canvas.getMatrix());
+            svgToViewMatrix.mapRect(clientRect);
+            this.setClientRect(clientRect);
 
             clip(canvas, paint);
 
@@ -327,10 +335,10 @@ abstract public class RenderableShadowNode extends VirtualNode {
         int x = Math.round(dst[0]);
         int y = Math.round(dst[1]);
 
-        if (mRegion == null) {
+        if (mRegion == null && mPath != null) {
             mRegion = getRegion(mPath);
         }
-        if (!mRegion.contains(x, y)) {
+        if (mRegion == null || !mRegion.contains(x, y)) {
             return -1;
         }
 
@@ -365,12 +373,12 @@ abstract public class RenderableShadowNode extends VirtualNode {
         return region;
     }
 
-    private WritableArray getAttributeList() {
+    private ArrayList<String> getAttributeList() {
         return mAttributeList;
     }
 
     void mergeProperties(RenderableShadowNode target) {
-        WritableArray targetAttributeList = target.getAttributeList();
+        ArrayList<String> targetAttributeList = target.getAttributeList();
 
         if (targetAttributeList == null ||
                 targetAttributeList.size() == 0) {
@@ -378,17 +386,17 @@ abstract public class RenderableShadowNode extends VirtualNode {
         }
 
         mOriginProperties = new ArrayList<>();
-        mAttributeList = clonePropList();
+        mAttributeList = mPropList == null ? new ArrayList<String>() : new ArrayList<>(mPropList);
 
         for (int i = 0, size = targetAttributeList.size(); i < size; i++) {
             try {
-                String fieldName = targetAttributeList.getString(i);
+                String fieldName = targetAttributeList.get(i);
                 Field field = getClass().getField(fieldName);
                 Object value = field.get(target);
                 mOriginProperties.add(field.get(this));
 
                 if (!hasOwnProperty(fieldName)) {
-                    mAttributeList.pushString(fieldName);
+                    mAttributeList.add(fieldName);
                     field.set(this, value);
                 }
             } catch (Exception e) {
@@ -403,7 +411,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
         if (mLastMergedList != null && mOriginProperties != null) {
             try {
                 for (int i = mLastMergedList.size() - 1; i >= 0; i--) {
-                    Field field = getClass().getField(mLastMergedList.getString(i));
+                    Field field = getClass().getField(mLastMergedList.get(i));
                     field.set(this, mOriginProperties.get(i));
                 }
             } catch (Exception e) {
@@ -412,20 +420,8 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
             mLastMergedList = null;
             mOriginProperties = null;
-            mAttributeList = clonePropList();
+            mAttributeList = mPropList;
         }
-    }
-
-    private @Nonnull WritableArray clonePropList() {
-        WritableArray attributeList = Arguments.createArray();
-
-        if (mPropList != null) {
-            for (int i = 0; i < mPropList.size(); i++) {
-                attributeList.pushString(mPropList.getString(i));
-            }
-        }
-
-        return attributeList;
     }
 
     // convert propertyName something like fillOpacity to fieldName like mFillOpacity
@@ -441,15 +437,6 @@ abstract public class RenderableShadowNode extends VirtualNode {
     }
 
     private boolean hasOwnProperty(String propName) {
-        if (mAttributeList == null) {
-            return false;
-        }
-
-        for (int i = mAttributeList.size() - 1; i >= 0; i--) {
-            if (mAttributeList.getString(i).equals(propName)) {
-                return true;
-            }
-        }
-        return false;
+        return mAttributeList != null && mAttributeList.contains(propName);
     }
 }
