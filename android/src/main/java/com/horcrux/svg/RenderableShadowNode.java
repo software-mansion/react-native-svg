@@ -80,6 +80,11 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     @ReactProp(name = "fill")
     public void setFill(@Nullable Dynamic fill) {
+        if (fill == null || fill.isNull()) {
+            mFill = null;
+            markUpdated();
+            return;
+        }
         ReadableType type = fill.getType();
         if (type.equals(ReadableType.Array)) {
             mFill = fill.asArray();
@@ -121,6 +126,11 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     @ReactProp(name = "stroke")
     public void setStroke(@Nullable Dynamic strokeColors) {
+        if (strokeColors == null || strokeColors.isNull()) {
+            mStroke = null;
+            markUpdated();
+            return;
+        }
         ReadableType type = strokeColors.getType();
         if (type.equals(ReadableType.Array)) {
             mStroke = strokeColors.asArray();
