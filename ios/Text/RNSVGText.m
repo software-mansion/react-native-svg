@@ -18,6 +18,12 @@
     RNSVGGlyphContext *_glyphContext;
 }
 
+- (void)invalidate
+{
+    [super invalidate];
+    [self releaseCachedPath];
+}
+
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
     [self clip:context];
@@ -26,7 +32,6 @@
 
     CGPathRef path = [self getGroupPath:context];
     [self renderGroupTo:context rect:rect];
-    [self releaseCachedPath];
     CGContextRestoreGState(context);
 
     CGPathRef transformedPath = CGPathCreateCopyByTransformingPath(path, &CGAffineTransformIdentity);
@@ -63,7 +68,6 @@
 {
     [self setupGlyphContext:context];
     CGPathRef groupPath = [self getGroupPath:context];
-    [self releaseCachedPath];
 
     return (CGPathRef)CFAutorelease(CGPathCreateCopyByTransformingPath(groupPath, &CGAffineTransformIdentity));
 }
@@ -95,7 +99,7 @@
     if (_alignmentBaseline != nil) {
         return _alignmentBaseline;
     }
-    
+
     UIView* parent = self.superview;
     while (parent != nil) {
         if ([parent isKindOfClass:[RNSVGText class]]) {
@@ -108,7 +112,7 @@
         }
         parent = [parent superview];
     }
-    
+
     if (_alignmentBaseline == nil) {
         _alignmentBaseline = RNSVGAlignmentBaselineStrings[0];
     }
@@ -120,7 +124,7 @@
     if (_baselineShift != nil) {
         return _baselineShift;
     }
-    
+
     UIView* parent = [self superview];
     while (parent != nil) {
         if ([parent isKindOfClass:[RNSVGText class]]) {
@@ -133,10 +137,10 @@
         }
         parent = [parent superview];
     }
-    
+
     // set default value
     _baselineShift = @"";
-    
+
     return _baselineShift;
 }
 

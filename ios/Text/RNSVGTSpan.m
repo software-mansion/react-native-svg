@@ -60,6 +60,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
 {
     CGPathRelease(_cache);
     _cache = nil;
+    self.path = nil;
 }
 
 - (void)dealloc
