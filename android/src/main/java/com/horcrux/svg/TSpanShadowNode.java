@@ -65,6 +65,7 @@ class TSpanShadowNode extends TextShadowNode {
     @Override
     protected void releaseCachedPath() {
         mCache = null;
+        mPath = null;
     }
 
     @Override

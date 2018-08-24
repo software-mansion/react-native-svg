@@ -35,6 +35,12 @@ class TextShadowNode extends GroupShadowNode {
     private @Nullable ReadableArray mDeltaX;
     private @Nullable ReadableArray mDeltaY;
 
+    @Override
+    public void markUpdated() {
+        super.markUpdated();
+        releaseCachedPath();
+    }
+
     @ReactProp(name = "textLength")
     public void setTextLength(@Nullable String length) {
         mTextLength = length;
@@ -124,7 +130,6 @@ class TextShadowNode extends GroupShadowNode {
             clip(canvas, paint);
             getGroupPath(canvas, paint);
             drawGroup(canvas, paint, opacity);
-            releaseCachedPath();
         }
     }
 
@@ -132,7 +137,6 @@ class TextShadowNode extends GroupShadowNode {
     protected Path getPath(Canvas canvas, Paint paint) {
         setupGlyphContext(canvas);
         Path groupPath = getGroupPath(canvas, paint);
-        releaseCachedPath();
         return groupPath;
     }
 
