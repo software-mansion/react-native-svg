@@ -122,9 +122,9 @@
     CGRect imageBounds = CGRectMake(0, 0, _imageSize.width, _imageSize.height);
     CGAffineTransform viewbox = [RNSVGViewBox getTransform:imageBounds eRect:hitArea align:self.align meetOrSlice:self.meetOrSlice];
 
+    [self clip:context];
     CGContextTranslateCTM(context, 0, hitArea.size.height);
     CGContextScaleCTM(context, 1, -1);
-    [self clip:context];
     CGContextClipToRect(context, hitArea);
     CGContextConcatCTM(context, viewbox);
     CGContextDrawImage(context, imageBounds, _image);
