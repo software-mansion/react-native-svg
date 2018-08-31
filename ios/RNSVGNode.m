@@ -22,6 +22,7 @@
     RNSVGGlyphContext *glyphContext;
     BOOL _transparent;
     CGPathRef _cachedClipPath;
+    CGImageRef _clipMask;
 }
 
 CGFloat const RNSVG_M_SQRT1_2l = 0.707106781186547524400844362104849039;
@@ -169,8 +170,10 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
         return;
     }
     CGPathRelease(_cachedClipPath);
+    CGImageRelease(_clipMask);
     _cachedClipPath = nil;
     _clipPath = clipPath;
+    _clipMask = nil;
     [self invalidate];
 }
 
@@ -201,7 +204,26 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 - (CGPathRef)getClipPath:(CGContextRef)context
 {
     if (self.clipPath) {
-        _cachedClipPath = CGPathRetain([[self.svgView getDefinedClipPath:self.clipPath] getPath:context]);
+        RNSVGClipPath *_clipNode = (RNSVGClipPath*)[self.svgView getDefinedClipPath:self.clipPath];
+        _cachedClipPath = CGPathRetain([_clipNode getPath:context]);
+        if (_clipMask) {
+            CGImageRelease(_clipMask);
+        }
+        if ([_clipNode isSimpleClipPath]) {
+            _clipMask = nil;
+        } else {
+            CGRect bounds = CGContextGetClipBoundingBox(context);
+            CGSize size = bounds.size;
+
+            UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+            CGContextRef newContext = UIGraphicsGetCurrentContext();
+            CGContextTranslateCTM(newContext, 0.0, size.height);
+            CGContextScaleCTM(newContext, 1.0, -1.0);
+
+            [_clipNode renderLayerTo:newContext rect:bounds];
+            _clipMask = CGBitmapContextCreateImage(newContext);
+            UIGraphicsEndImageContext();
+        }
     }
 
     return [self getClipPath];
@@ -212,11 +234,16 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     CGPathRef clipPath = [self getClipPath:context];
 
     if (clipPath) {
-        CGContextAddPath(context, clipPath);
-        if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
-            CGContextEOClip(context);
+        if (!_clipMask) {
+            CGContextAddPath(context, clipPath);
+            if (self.clipRule == kRNSVGCGFCRuleEvenodd) {
+                CGContextEOClip(context);
+            } else {
+                CGContextClip(context);
+            }
         } else {
-            CGContextClip(context);
+            CGRect bounds = CGContextGetClipBoundingBox(context);
+            CGContextClipToMask(context, bounds, _clipMask);
         }
     }
 }
@@ -343,6 +370,8 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 - (void)dealloc
 {
     CGPathRelease(_cachedClipPath);
+    CGImageRelease(_clipMask);
+    _clipMask = nil;
 }
 
 @end

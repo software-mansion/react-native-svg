@@ -10,9 +10,11 @@
 package com.horcrux.svg;
 
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Build;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ReactShadowNode;
@@ -119,7 +121,36 @@ class GroupShadowNode extends RenderableShadowNode {
         traverseChildren(new NodeRunnable() {
             public void run(ReactShadowNode node) {
                 if (node instanceof VirtualNode) {
-                    path.addPath(((VirtualNode)node).getPath(canvas, paint));
+                    VirtualNode n = (VirtualNode)node;
+                    Matrix transform = n.mMatrix;
+                    path.addPath(n.getPath(canvas, paint), transform);
+                }
+            }
+        });
+
+        return path;
+    }
+
+    protected Path getPath(final Canvas canvas, final Paint paint, final Path.Op op) {
+        final Path path = new Path();
+
+        traverseChildren(new NodeRunnable() {
+            public void run(ReactShadowNode node) {
+                if (node instanceof VirtualNode) {
+                    VirtualNode n = (VirtualNode)node;
+                    Matrix transform = n.mMatrix;
+                    Path p2;
+                    if (n instanceof GroupShadowNode) {
+                        p2 = ((GroupShadowNode)n).getPath(canvas, paint, op);
+                    } else {
+                        p2 = n.getPath(canvas, paint);
+                    }
+                    p2.transform(transform);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        path.op(p2, op);
+                    } else {
+                        path.addPath(p2);
+                    }
                 }
             }
         });

@@ -140,6 +140,11 @@ class TextShadowNode extends GroupShadowNode {
         return groupPath;
     }
 
+    @Override
+    protected Path getPath(Canvas canvas, Paint paint, Path.Op op) {
+        return getPath(canvas, paint);
+    }
+
     AlignmentBaseline getAlignmentBaseline() {
         if (mAlignmentBaseline == null) {
             ReactShadowNode parent = this.getParent();

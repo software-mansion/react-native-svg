@@ -7,6 +7,7 @@
  */
 
 #import "RNSVGRenderable.h"
+#import "RNSVGClipPath.h"
 
 @implementation RNSVGRenderable
 {
@@ -187,7 +188,7 @@
         self.path = CGPathRetain(CFAutorelease(CGPathCreateCopy([self getPath:context])));
         [self setHitArea:self.path];
     }
-    
+
     const CGRect pathBounding = CGPathGetBoundingBox(self.path);
     const CGAffineTransform svgToClientTransform = CGAffineTransformConcat(CGContextGetCTM(context), self.svgView.invInitialCTM);
     self.clientRect = CGRectApplyAffineTransform(pathBounding, svgToClientTransform);
@@ -270,7 +271,7 @@
     _hitArea = nil;
     // Add path to hitArea
     CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
-    
+
     if (self.stroke && self.strokeWidth) {
         // Add stroke to hitArea
         CGFloat width = [self relativeOnOther:self.strokeWidth];
@@ -278,7 +279,7 @@
         CGPathAddPath(hitArea, nil, strokePath);
         CGPathRelease(strokePath);
     }
-    
+
     _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(hitArea)));
     CGPathRelease(hitArea);
 
@@ -304,9 +305,19 @@
         return nil;
     }
 
-    CGPathRef clipPath = [self getClipPath];
-    if (clipPath && !CGPathContainsPoint(clipPath, nil, transformed, self.clipRule == kRNSVGCGFCRuleEvenodd)) {
-        return nil;
+    if (self.clipPath) {
+        RNSVGClipPath *clipNode = (RNSVGClipPath*)[self.svgView getDefinedClipPath:self.clipPath];
+        if ([clipNode isSimpleClipPath]) {
+            CGPathRef clipPath = [self getClipPath];
+            if (clipPath && !CGPathContainsPoint(clipPath, nil, transformed, self.clipRule == kRNSVGCGFCRuleEvenodd)) {
+                return nil;
+            }
+        } else {
+            RNSVGRenderable *clipGroup = (RNSVGRenderable*)clipNode;
+            if (![clipGroup hitTest:transformed withEvent:event]) {
+                return nil;
+            }
+        }
     }
 
     return self;

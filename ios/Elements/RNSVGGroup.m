@@ -7,6 +7,7 @@
  */
 
 #import "RNSVGGroup.h"
+#import "RNSVGClipPath.h"
 
 @implementation RNSVGGroup
 {
@@ -33,7 +34,7 @@
 - (void)renderGroupTo:(CGContextRef)context rect:(CGRect)rect
 {
     [self pushGlyphContext];
-    
+
     __block CGRect groupRect = CGRectNull;
 
     [self traverseSubviews:^(UIView *node) {
@@ -48,7 +49,7 @@
             }
 
             [svgNode renderTo:context rect:rect];
-            
+
             CGRect nodeRect = svgNode.clientRect;
             if (!CGRectIsEmpty(nodeRect)) {
                 groupRect = CGRectUnion(groupRect, nodeRect);
@@ -124,12 +125,22 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
-    
-    CGPathRef clip = [self getClipPath];
-    if (clip && !CGPathContainsPoint(clip, nil, transformed, self.clipRule == kRNSVGCGFCRuleEvenodd)) {
-        return nil;
+
+    if (self.clipPath) {
+        RNSVGClipPath *clipNode = (RNSVGClipPath*)[self.svgView getDefinedClipPath:self.clipPath];
+        if ([clipNode isSimpleClipPath]) {
+            CGPathRef clipPath = [self getClipPath];
+            if (clipPath && !CGPathContainsPoint(clipPath, nil, transformed, self.clipRule == kRNSVGCGFCRuleEvenodd)) {
+                return nil;
+            }
+        } else {
+            RNSVGRenderable *clipGroup = (RNSVGRenderable*)clipNode;
+            if (![clipGroup hitTest:transformed withEvent:event]) {
+                return nil;
+            }
+        }
     }
-    
+
     if (!event) {
         NSPredicate *const anyActive = [NSPredicate predicateWithFormat:@"active == TRUE"];
         NSArray *const filtered = [self.subviews filteredArrayUsingPredicate:anyActive];
@@ -156,12 +167,12 @@
             return (node.responsible || (node != hitChild)) ? hitChild : self;
         }
     }
-    
+
     UIView *hitSelf = [super hitTest:transformed withEvent:event];
     if (hitSelf) {
         return hitSelf;
     }
-    
+
     return nil;
 }
 
