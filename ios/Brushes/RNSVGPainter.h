@@ -14,7 +14,7 @@
 
 - (instancetype)initWithPointsArray:(NSArray<NSString *> *)pointsArray NS_DESIGNATED_INITIALIZER;
 
-- (void)paint:(CGContextRef)context;
+- (void)paint:(CGContextRef)context bounds:(CGRect)bounds;
 
 - (void)setUnits:(RNSVGUnits)unit;
 

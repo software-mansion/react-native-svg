@@ -211,6 +211,7 @@
             [self.fill paint:context
                      opacity:self.fillOpacity
                      painter:[self.svgView getDefinedPainter:self.fill.brushRef]
+                      bounds:pathBounding
              ];
             CGContextRestoreGState(context);
 
@@ -256,6 +257,7 @@
             [self.stroke paint:context
                        opacity:self.strokeOpacity
                        painter:[self.svgView getDefinedPainter:self.stroke.brushRef]
+                        bounds:pathBounding
              ];
             return;
         }

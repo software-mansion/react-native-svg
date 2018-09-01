@@ -66,20 +66,20 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     _colors = colors;
 }
 
-- (void)paint:(CGContextRef)context
+- (void)paint:(CGContextRef)context bounds:(CGRect)bounds
 {
     if (_type == kRNSVGLinearGradient) {
-        [self paintLinearGradient:context];
+        [self paintLinearGradient:context bounds:(CGRect)bounds];
     } else if (_type == kRNSVGRadialGradient) {
-        [self paintRidialGradient:context];
+        [self paintRidialGradient:context bounds:(CGRect)bounds];
     } else if (_type == kRNSVGPattern) {
         // todo:
     }
 }
 
-- (CGRect)getPaintRect:(CGContextRef)context
+- (CGRect)getPaintRect:(CGContextRef)context bounds:(CGRect)bounds
 {
-    CGRect rect = _useObjectBoundingBox ? CGContextGetClipBoundingBox(context) : _userSpaceBoundingBox;
+    CGRect rect = _useObjectBoundingBox ? bounds : _userSpaceBoundingBox;
     float height = CGRectGetHeight(rect);
     float width = CGRectGetWidth(rect);
     float x = 0.0;
@@ -93,13 +93,13 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     return CGRectMake(x, y, width, height);
 }
 
-- (void)paintLinearGradient:(CGContextRef)context
+- (void)paintLinearGradient:(CGContextRef)context bounds:(CGRect)bounds
 {
 
     CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:_colors offset:0]);
     CGGradientDrawingOptions extendOptions = kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
 
-    CGRect rect = [self getPaintRect:context];
+    CGRect rect = [self getPaintRect:context bounds:bounds];
     float height = CGRectGetHeight(rect);
     float width = CGRectGetWidth(rect);
     float offsetX = CGRectGetMinX(rect);
@@ -124,12 +124,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     CGGradientRelease(gradient);
 }
 
-- (void)paintRidialGradient:(CGContextRef)context
+- (void)paintRidialGradient:(CGContextRef)context bounds:(CGRect)bounds
 {
     CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:_colors offset:0]);
     CGGradientDrawingOptions extendOptions = kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
 
-    CGRect rect = [self getPaintRect:context];
+    CGRect rect = [self getPaintRect:context bounds:bounds];
     float height = CGRectGetHeight(rect);
     float width = CGRectGetWidth(rect);
     float offsetX = CGRectGetMinX(rect);
