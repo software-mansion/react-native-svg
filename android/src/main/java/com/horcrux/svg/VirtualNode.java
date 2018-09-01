@@ -27,8 +27,6 @@ import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.EventDispatcher;
 
-import java.util.List;
-
 import javax.annotation.Nullable;
 
 import static com.horcrux.svg.FontData.DEFAULT_FONT_SIZE;
@@ -244,12 +242,7 @@ abstract class VirtualNode extends LayoutShadowNode {
             ClipPathShadowNode mClipNode = (ClipPathShadowNode) getSvgShadowNode().getDefinedClipPath(mClipPath);
 
             if (mClipNode != null) {
-                Path clipPath;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                    clipPath = mClipNode.getPath(canvas, paint, Path.Op.UNION);
-                } else {
-                    clipPath = mClipNode.getPath(canvas, paint);
-                }
+                Path clipPath = mClipNode.getPath(canvas, paint, Region.Op.UNION);
                 switch (mClipRule) {
                     case CLIP_RULE_EVENODD:
                         clipPath.setFillType(Path.FillType.EVEN_ODD);

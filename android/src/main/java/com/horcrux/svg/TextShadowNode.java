@@ -12,6 +12,7 @@ package com.horcrux.svg;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Region;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -141,7 +142,7 @@ class TextShadowNode extends GroupShadowNode {
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint, Path.Op op) {
+    protected Path getPath(Canvas canvas, Paint paint, Region.Op op) {
         return getPath(canvas, paint);
     }
 
