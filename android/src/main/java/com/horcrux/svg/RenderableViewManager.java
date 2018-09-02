@@ -49,6 +49,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     /* package */ private static final String CLASS_SYMBOL = "RNSVGSymbol";
     /* package */ private static final String CLASS_LINEAR_GRADIENT = "RNSVGLinearGradient";
     /* package */ private static final String CLASS_RADIAL_GRADIENT = "RNSVGRadialGradient";
+    /* package */ private static final String CLASS_PATTERN = "RNSVGPattern";
 
     private final String mClassName;
 
@@ -389,6 +390,76 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         };
     }
 
+    static RenderableViewManager<PatternShadowNode> createPatternManager() {
+        return new RenderableViewManager<PatternShadowNode>(CLASS_PATTERN) {
+
+            @ReactProp(name = "x")
+            public void setX(RenderableView<PatternShadowNode> node, String x) {
+                node.shadowNode.setX(x);
+            }
+
+            @ReactProp(name = "y")
+            public void setY(RenderableView<PatternShadowNode> node, String y) {
+                node.shadowNode.setY(y);
+            }
+
+            @ReactProp(name = "patternwidth")
+            public void setWidth(RenderableView<PatternShadowNode> node, String width) {
+                node.shadowNode.setWidth(width);
+            }
+
+            @ReactProp(name = "patternheight")
+            public void setHeight(RenderableView<PatternShadowNode> node, String height) {
+                node.shadowNode.setHeight(height);
+            }
+
+            @ReactProp(name = "patternUnits")
+            public void setPatternUnits(RenderableView<PatternShadowNode> node, int patternUnits) {
+                node.shadowNode.setPatternUnits(patternUnits);
+            }
+
+            @ReactProp(name = "patternContentUnits")
+            public void setPatternContentUnits(RenderableView<PatternShadowNode> node, int patternContentUnits) {
+                node.shadowNode.setPatternContentUnits(patternContentUnits);
+            }
+
+            @ReactProp(name = "patternTransform")
+            public void setPatternTransform(RenderableView<PatternShadowNode> node, @Nullable ReadableArray matrixArray) {
+                node.shadowNode.setPatternTransform(matrixArray);
+            }
+
+            @ReactProp(name = "minX")
+            public void setMinX(RenderableView<PatternShadowNode> node, float minX) {
+                node.shadowNode.setMinX(minX);
+            }
+
+            @ReactProp(name = "minY")
+            public void setMinY(RenderableView<PatternShadowNode> node, float minY) {
+                node.shadowNode.setMinY(minY);
+            }
+
+            @ReactProp(name = "vbWidth")
+            public void setVbWidth(RenderableView<PatternShadowNode> node, float vbWidth) {
+                node.shadowNode.setVbWidth(vbWidth);
+            }
+
+            @ReactProp(name = "vbHeight")
+            public void setVbHeight(RenderableView<PatternShadowNode> node, float vbHeight) {
+                node.shadowNode.setVbHeight(vbHeight);
+            }
+
+            @ReactProp(name = "align")
+            public void setAlign(RenderableView<PatternShadowNode> node, String align) {
+                node.shadowNode.setAlign(align);
+            }
+
+            @ReactProp(name = "meetOrSlice")
+            public void setMeetOrSlice(RenderableView<PatternShadowNode> node, int meetOrSlice) {
+                node.shadowNode.setMeetOrSlice(meetOrSlice);
+            }
+        };
+    }
+
     static RenderableViewManager<LinearGradientShadowNode> createLinearGradientManager() {
         return new RenderableViewManager<LinearGradientShadowNode>(CLASS_LINEAR_GRADIENT) {
 
@@ -523,6 +594,8 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
                 return new LinearGradientShadowNode();
             case CLASS_RADIAL_GRADIENT:
                 return new RadialGradientShadowNode();
+            case CLASS_PATTERN:
+                return new PatternShadowNode();
             default:
                 throw new IllegalStateException("Unexpected type " + mClassName);
         }
@@ -563,6 +636,8 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
                 return LinearGradientShadowNode.class;
             case CLASS_RADIAL_GRADIENT:
                 return RadialGradientShadowNode.class;
+            case CLASS_PATTERN:
+                return PatternShadowNode.class;
             default:
                 throw new IllegalStateException("Unexpected type " + mClassName);
         }

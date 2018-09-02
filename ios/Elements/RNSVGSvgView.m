@@ -268,4 +268,9 @@
     return CGContextGetClipBoundingBox(UIGraphicsGetCurrentContext());
 }
 
+- (CGAffineTransform)getViewBoxTransform
+{
+    return _viewBoxTransform;
+}
+
 @end

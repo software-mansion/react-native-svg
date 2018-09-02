@@ -7,7 +7,9 @@
  */
 
 #import "RNSVGPainter.h"
+#import "RNSVGPattern.h"
 #import "RNSVGPercentageConverter.h"
+#import "RNSVGViewBox.h"
 
 @implementation RNSVGPainter
 {
@@ -15,6 +17,7 @@
     NSArray<NSNumber *> *_colors;
     RNSVGBrushType _type;
     BOOL _useObjectBoundingBox;
+    BOOL _useContentObjectBoundingBox;
     CGAffineTransform _transform;
     CGRect _userSpaceBoundingBox;
 }
@@ -34,6 +37,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     _useObjectBoundingBox = unit == kRNSVGUnitsObjectBoundingBox;
 }
 
+- (void)setContentUnits:(RNSVGUnits)unit
+{
+    _useContentObjectBoundingBox = unit == kRNSVGUnitsObjectBoundingBox;
+}
+
 - (void)setUserSpaceBoundingBox:(CGRect)userSpaceBoundingBox
 {
     _userSpaceBoundingBox = userSpaceBoundingBox;
@@ -42,6 +50,17 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 - (void)setTransform:(CGAffineTransform)transform
 {
     _transform = transform;
+}
+
+- (void)setPattern:(RNSVGPattern *)pattern
+{
+    if (_type != kRNSVGUndefinedType) {
+        // todo: throw error
+        return;
+    }
+
+    _type = kRNSVGPattern;
+    _pattern = pattern;
 }
 
 - (void)setLinearGradientColors:(NSArray<NSNumber *> *)colors
@@ -73,7 +92,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     } else if (_type == kRNSVGRadialGradient) {
         [self paintRidialGradient:context bounds:(CGRect)bounds];
     } else if (_type == kRNSVGPattern) {
-        // todo:
+        [self paintPattern:context bounds:(CGRect)bounds];
     }
 }
 
@@ -91,6 +110,67 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     }
 
     return CGRectMake(x, y, width, height);
+}
+
+void PatternFunction(void* info, CGContextRef context)
+{
+    RNSVGPainter *_painter = (__bridge RNSVGPainter *)info;
+    RNSVGPattern *_pattern = [_painter pattern];
+    CGRect rect = _painter.paintBounds;
+
+    CGAffineTransform _viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(_pattern.minX, _pattern.minY, _pattern.vbWidth, _pattern.vbHeight)
+                                             eRect:rect
+                                             align:_pattern.align
+                                       meetOrSlice:_pattern.meetOrSlice];
+    CGContextConcatCTM(context, _viewBoxTransform);
+
+    [_pattern renderTo:context rect:rect];
+}
+
+- (void)paintPattern:(CGContextRef)context bounds:(CGRect)bounds
+{
+    CGRect rect = [self getPaintRect:context bounds:bounds];
+    float height = CGRectGetHeight(rect);
+    float width = CGRectGetWidth(rect);
+    float offsetX = CGRectGetMinX(rect);
+    float offsetY = CGRectGetMinY(rect);
+
+    CGFloat x = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:0]
+                                                relative:width
+                                                  offset:offsetX];
+    CGFloat y = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:1]
+                                                relative:height
+                                                  offset:offsetY];
+    CGFloat w = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:2]
+                                                relative:width
+                                                  offset:offsetX];
+    CGFloat h = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:3]
+                                                relative:height
+                                                  offset:offsetY];
+
+    CGAffineTransform viewbox = [self.pattern.svgView getViewBoxTransform];
+    CGRect newBounds = CGRectApplyAffineTransform(CGRectMake(x, y, w, h), viewbox);
+    CGSize size = newBounds.size;
+    self.paintBounds = newBounds;
+
+    const CGPatternCallbacks callbacks = { 0, &PatternFunction, NULL };
+    CGColorSpaceRef patternSpace = CGColorSpaceCreatePattern(NULL);
+    CGContextSetFillColorSpace(context, patternSpace);
+    CGColorSpaceRelease(patternSpace);
+
+    CGPatternRef pattern = CGPatternCreate((__bridge void * _Nullable)(self),
+                                           newBounds,
+                                           CGAffineTransformIdentity,
+                                           size.width,
+                                           size.height,
+                                           kCGPatternTilingConstantSpacing,
+                                           true,
+                                           &callbacks);
+    CGFloat alpha = 1.0;
+    CGContextSetFillPattern(context, pattern, &alpha);
+    CGPatternRelease(pattern);
+
+    CGContextFillRect(context, bounds);
 }
 
 - (void)paintLinearGradient:(CGContextRef)context bounds:(CGRect)bounds

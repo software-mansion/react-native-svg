@@ -54,4 +54,6 @@
 
 - (void)drawToContext:(CGContextRef)context withRect:(CGRect)rect;
 
+- (CGAffineTransform)getViewBoxTransform;
+
 @end
