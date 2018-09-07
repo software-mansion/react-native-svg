@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { requireNativeComponent } from "react-native";
-import extractText from "../lib/extract/extractText";
+import extractText from "../lib/extract/extractTextNoCircle";
 import { textProps } from "../lib/props";
 import { TSpanAttibutes } from "../lib/attributes";
 import extractProps from "../lib/extract/extractProps";
