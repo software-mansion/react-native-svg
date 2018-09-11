@@ -19,6 +19,7 @@ import RadialGradient from "./elements/RadialGradient";
 import Stop from "./elements/Stop";
 import ClipPath from "./elements/ClipPath";
 import Pattern from "./elements/Pattern";
+import Mask from "./elements/Mask";
 
 export {
     Svg,
@@ -41,7 +42,8 @@ export {
     RadialGradient,
     Stop,
     ClipPath,
-    Pattern
+    Pattern,
+    Mask,
 };
 
 //noinspection JSUnusedGlobalSymbols

@@ -16,6 +16,7 @@
     NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
     NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
     NSMutableDictionary<NSString *, RNSVGPainter *> *_painters;
+    NSMutableDictionary<NSString *, RNSVGNode *> *_masks;
     CGAffineTransform _viewBoxTransform;
     CGAffineTransform _invviewBoxTransform;
 }
@@ -261,6 +262,19 @@
 - (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;
 {
     return _painters ? [_painters objectForKey:painterName] : nil;
+}
+
+- (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName
+{
+    if (!_masks) {
+        _masks = [[NSMutableDictionary alloc] init];
+    }
+    [_masks setObject:mask forKey:maskName];
+}
+
+- (RNSVGNode *)getDefinedMask:(NSString *)maskName;
+{
+    return _masks ? [_masks objectForKey:maskName] : nil;
 }
 
 - (CGRect)getContextBounds

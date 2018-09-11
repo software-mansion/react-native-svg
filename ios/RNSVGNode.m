@@ -226,7 +226,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
         }
     }
 
-    return [self getClipPath];
+    return _cachedClipPath;
 }
 
 - (void)clip:(CGContextRef)context

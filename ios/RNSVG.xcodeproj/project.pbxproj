@@ -62,6 +62,10 @@
 		94241667213B0D4500088E93 /* RNSVGPattern.m in Sources */ = {isa = PBXBuildFile; fileRef = 94241665213B0D4500088E93 /* RNSVGPattern.m */; };
 		9424166D213B302600088E93 /* RNSVGPatternManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9424166C213B302600088E93 /* RNSVGPatternManager.m */; };
 		9424166E213B302600088E93 /* RNSVGPatternManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9424166C213B302600088E93 /* RNSVGPatternManager.m */; };
+		947F380B214810DC00677F2A /* RNSVGMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 947F380A214810DC00677F2A /* RNSVGMask.m */; };
+		947F380C214810DC00677F2A /* RNSVGMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 947F380A214810DC00677F2A /* RNSVGMask.m */; };
+		947F380F2148119A00677F2A /* RNSVGMaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 947F380E2148119A00677F2A /* RNSVGMaskManager.m */; };
+		947F38102148119A00677F2A /* RNSVGMaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 947F380E2148119A00677F2A /* RNSVGMaskManager.m */; };
 		9494C4D81F473BA700D5BCFD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9494C4D71F473BA700D5BCFD /* QuartzCore.framework */; };
 		9494C4DA1F473BCB00D5BCFD /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9494C4D91F473BCB00D5BCFD /* CoreText.framework */; };
 		9494C4DC1F473BD900D5BCFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9494C4DB1F473BD900D5BCFD /* CoreGraphics.framework */; };
@@ -246,6 +250,10 @@
 		94241669213B0DB800088E93 /* RNSVGPattern.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGPattern.h; sourceTree = "<group>"; };
 		9424166A213B2FF100088E93 /* RNSVGPatternManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGPatternManager.h; sourceTree = "<group>"; };
 		9424166C213B302600088E93 /* RNSVGPatternManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGPatternManager.m; sourceTree = "<group>"; };
+		947F3809214810B800677F2A /* RNSVGMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGMask.h; path = Elements/RNSVGMask.h; sourceTree = "<group>"; };
+		947F380A214810DC00677F2A /* RNSVGMask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGMask.m; path = Elements/RNSVGMask.m; sourceTree = "<group>"; };
+		947F380D2148118300677F2A /* RNSVGMaskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGMaskManager.h; sourceTree = "<group>"; };
+		947F380E2148119A00677F2A /* RNSVGMaskManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGMaskManager.m; sourceTree = "<group>"; };
 		9494C4D71F473BA700D5BCFD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9494C4D91F473BCB00D5BCFD /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		9494C4DB1F473BD900D5BCFD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -344,6 +352,8 @@
 				7F08CE991E23476900650F83 /* RNSVGTSpanManager.m */,
 				9424166A213B2FF100088E93 /* RNSVGPatternManager.h */,
 				9424166C213B302600088E93 /* RNSVGPatternManager.m */,
+				947F380D2148118300677F2A /* RNSVGMaskManager.h */,
+				947F380E2148119A00677F2A /* RNSVGMaskManager.m */,
 				10BEC1BE1D3F680F00FDCB19 /* RNSVGLinearGradientManager.h */,
 				10BEC1BF1D3F680F00FDCB19 /* RNSVGLinearGradientManager.m */,
 				10BEC1C01D3F680F00FDCB19 /* RNSVGRadialGradientManager.h */,
@@ -425,6 +435,8 @@
 				10BEC1B91D3F66F500FDCB19 /* RNSVGLinearGradient.m */,
 				94241669213B0DB800088E93 /* RNSVGPattern.h */,
 				94241665213B0D4500088E93 /* RNSVGPattern.m */,
+				947F3809214810B800677F2A /* RNSVGMask.h */,
+				947F380A214810DC00677F2A /* RNSVGMask.m */,
 				10BEC1BA1D3F66F500FDCB19 /* RNSVGRadialGradient.h */,
 				10BEC1BB1D3F66F500FDCB19 /* RNSVGRadialGradient.m */,
 				1023B4911D3DF5060051496D /* RNSVGUse.h */,
@@ -558,6 +570,7 @@
 				94241666213B0D4500088E93 /* RNSVGPattern.m in Sources */,
 				10BA0D4B1CE74E3D00887C2B /* RNSVGRect.m in Sources */,
 				10BA0D341CE74E3100887C2B /* RNSVGCircleManager.m in Sources */,
+				947F380B214810DC00677F2A /* RNSVGMask.m in Sources */,
 				10BEC1BC1D3F66F500FDCB19 /* RNSVGLinearGradient.m in Sources */,
 				1039D2B01CE72F27001E90A8 /* RNSVGPercentageConverter.m in Sources */,
 				10BA0D491CE74E3D00887C2B /* RNSVGEllipse.m in Sources */,
@@ -599,6 +612,7 @@
 				B56895B120352B9C004DBF1E /* RNSVGPropHelper.m in Sources */,
 				7FC260CE1E3499BC00A39833 /* RNSVGViewBox.m in Sources */,
 				7F08CEA11E23479700650F83 /* RNSVGTSpan.m in Sources */,
+				947F380F2148119A00677F2A /* RNSVGMaskManager.m in Sources */,
 				10BA0D4A1CE74E3D00887C2B /* RNSVGLine.m in Sources */,
 				10FDEEB21D3FB60500A5C46C /* RNSVGPainterBrush.m in Sources */,
 				1039D28C1CE71EB7001E90A8 /* RNSVGSvgView.m in Sources */,
@@ -618,6 +632,7 @@
 				94241667213B0D4500088E93 /* RNSVGPattern.m in Sources */,
 				A361E7711EB0C33D00646005 /* RNSVGCircleManager.m in Sources */,
 				A361E7721EB0C33D00646005 /* RNSVGLinearGradient.m in Sources */,
+				947F380C214810DC00677F2A /* RNSVGMask.m in Sources */,
 				A361E7731EB0C33D00646005 /* RNSVGPercentageConverter.m in Sources */,
 				A361E7751EB0C33D00646005 /* RNSVGEllipse.m in Sources */,
 				A361E7761EB0C33D00646005 /* RNSVGPath.m in Sources */,
@@ -659,6 +674,7 @@
 				A361E7961EB0C33D00646005 /* RNSVGTSpanManager.m in Sources */,
 				A361E7971EB0C33D00646005 /* RNSVGViewBox.m in Sources */,
 				A361E7981EB0C33D00646005 /* RNSVGTSpan.m in Sources */,
+				947F38102148119A00677F2A /* RNSVGMaskManager.m in Sources */,
 				A361E7991EB0C33D00646005 /* RNSVGLine.m in Sources */,
 				167AF4582087C2910035AA75 /* RNSVGFontData.m in Sources */,
 				A361E79A1EB0C33D00646005 /* RNSVGPainterBrush.m in Sources */,

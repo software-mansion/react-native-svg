@@ -50,6 +50,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     /* package */ private static final String CLASS_LINEAR_GRADIENT = "RNSVGLinearGradient";
     /* package */ private static final String CLASS_RADIAL_GRADIENT = "RNSVGRadialGradient";
     /* package */ private static final String CLASS_PATTERN = "RNSVGPattern";
+    /* package */ private static final String CLASS_MASK = "RNSVGMask";
 
     private final String mClassName;
 
@@ -460,6 +461,76 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         };
     }
 
+    static RenderableViewManager<MaskShadowNode> createMaskManager() {
+        return new RenderableViewManager<MaskShadowNode>(CLASS_MASK) {
+
+            @ReactProp(name = "x")
+            public void setX(RenderableView<MaskShadowNode> node, String x) {
+                node.shadowNode.setX(x);
+            }
+
+            @ReactProp(name = "y")
+            public void setY(RenderableView<MaskShadowNode> node, String y) {
+                node.shadowNode.setY(y);
+            }
+
+            @ReactProp(name = "maskwidth")
+            public void setWidth(RenderableView<MaskShadowNode> node, String width) {
+                node.shadowNode.setWidth(width);
+            }
+
+            @ReactProp(name = "maskheight")
+            public void setHeight(RenderableView<MaskShadowNode> node, String height) {
+                node.shadowNode.setHeight(height);
+            }
+
+            @ReactProp(name = "maskUnits")
+            public void setMaskUnits(RenderableView<MaskShadowNode> node, int maskUnits) {
+                node.shadowNode.setMaskUnits(maskUnits);
+            }
+
+            @ReactProp(name = "maskContentUnits")
+            public void setMaskContentUnits(RenderableView<MaskShadowNode> node, int maskContentUnits) {
+                node.shadowNode.setMaskContentUnits(maskContentUnits);
+            }
+
+            @ReactProp(name = "maskTransform")
+            public void setMaskTransform(RenderableView<MaskShadowNode> node, @Nullable ReadableArray matrixArray) {
+                node.shadowNode.setMaskTransform(matrixArray);
+            }
+
+            @ReactProp(name = "minX")
+            public void setMinX(RenderableView<MaskShadowNode> node, float minX) {
+                node.shadowNode.setMinX(minX);
+            }
+
+            @ReactProp(name = "minY")
+            public void setMinY(RenderableView<MaskShadowNode> node, float minY) {
+                node.shadowNode.setMinY(minY);
+            }
+
+            @ReactProp(name = "vbWidth")
+            public void setVbWidth(RenderableView<MaskShadowNode> node, float vbWidth) {
+                node.shadowNode.setVbWidth(vbWidth);
+            }
+
+            @ReactProp(name = "vbHeight")
+            public void setVbHeight(RenderableView<MaskShadowNode> node, float vbHeight) {
+                node.shadowNode.setVbHeight(vbHeight);
+            }
+
+            @ReactProp(name = "align")
+            public void setAlign(RenderableView<MaskShadowNode> node, String align) {
+                node.shadowNode.setAlign(align);
+            }
+
+            @ReactProp(name = "meetOrSlice")
+            public void setMeetOrSlice(RenderableView<MaskShadowNode> node, int meetOrSlice) {
+                node.shadowNode.setMeetOrSlice(meetOrSlice);
+            }
+        };
+    }
+
     static RenderableViewManager<LinearGradientShadowNode> createLinearGradientManager() {
         return new RenderableViewManager<LinearGradientShadowNode>(CLASS_LINEAR_GRADIENT) {
 
@@ -596,6 +667,8 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
                 return new RadialGradientShadowNode();
             case CLASS_PATTERN:
                 return new PatternShadowNode();
+            case CLASS_MASK:
+                return new MaskShadowNode();
             default:
                 throw new IllegalStateException("Unexpected type " + mClassName);
         }
@@ -638,9 +711,26 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
                 return RadialGradientShadowNode.class;
             case CLASS_PATTERN:
                 return PatternShadowNode.class;
+            case CLASS_MASK:
+                return MaskShadowNode.class;
             default:
                 throw new IllegalStateException("Unexpected type " + mClassName);
         }
+    }
+
+    @ReactProp(name = "mask")
+    public void setMask(RenderableView<RenderableShadowNode> node, String mask) {
+        node.shadowNode.setMask(mask);
+    }
+
+    @ReactProp(name = "clipPath")
+    public void setClipPath(RenderableView<RenderableShadowNode> node, String mask) {
+        node.shadowNode.setClipPath(mask);
+    }
+
+    @ReactProp(name = "clipRule")
+    public void setClipRule(RenderableView<RenderableShadowNode> node, int clipRule) {
+        node.shadowNode.setClipRule(clipRule);
     }
 
     @ReactProp(name = "fill")

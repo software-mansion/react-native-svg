@@ -46,6 +46,10 @@
 
 - (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;
 
+- (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName;
+
+- (RNSVGNode *)getDefinedMask:(NSString *)maskName;
+
 - (NSString *)getDataURL;
 
 - (CGRect)getContextBounds;

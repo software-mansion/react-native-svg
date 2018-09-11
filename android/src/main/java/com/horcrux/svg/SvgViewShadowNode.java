@@ -38,6 +38,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
     private final Map<String, VirtualNode> mDefinedClipPaths = new HashMap<>();
     private final Map<String, VirtualNode> mDefinedTemplates = new HashMap<>();
+    private final Map<String, VirtualNode> mDefinedMasks = new HashMap<>();
     private final Map<String, Brush> mDefinedBrushes = new HashMap<>();
     private Canvas mCanvas;
     private final float mScale;
@@ -192,7 +193,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
                 if (lNode instanceof VirtualNode) {
                     VirtualNode node = (VirtualNode)lNode;
                     int count = node.saveAndSetupCanvas(canvas);
-                    node.draw(canvas, paint, 1f);
+                    node.render(canvas, paint, 1f);
                     node.restoreCanvas(canvas, count);
                     node.markUpdateSeen();
 
@@ -277,6 +278,14 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
     Brush getDefinedBrush(String brushRef) {
         return mDefinedBrushes.get(brushRef);
+    }
+
+    void defineMask(VirtualNode mask, String maskRef) {
+        mDefinedMasks.put(maskRef, mask);
+    }
+
+    VirtualNode getDefinedMask(String maskRef) {
+        return mDefinedMasks.get(maskRef);
     }
 
     void traverseChildren(VirtualNode.NodeRunnable runner) {

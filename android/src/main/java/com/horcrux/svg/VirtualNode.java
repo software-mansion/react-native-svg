@@ -60,6 +60,7 @@ abstract class VirtualNode extends LayoutShadowNode {
 
     private int mClipRule;
     private @Nullable String mClipPath;
+    @Nullable String mMask;
 
     private static final int CLIP_RULE_EVENODD = 0;
     private static final int CLIP_RULE_NONZERO = 1;
@@ -153,6 +154,9 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
     public abstract void draw(Canvas canvas, Paint paint, float opacity);
+    public void render(Canvas canvas, Paint paint, float opacity) {
+        draw(canvas, paint, opacity);
+    };
 
     /**
      * Sets up the transform matrix on the canvas before an element is drawn.
@@ -186,6 +190,12 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
 
+    @ReactProp(name = "mask")
+    public void setMask(String mask) {
+        mMask = mask;
+        markUpdated();
+    }
+
     @ReactProp(name = "clipPath")
     public void setClipPath(String clipPath) {
         mCachedClipPath = null;
@@ -194,7 +204,7 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
     @ReactProp(name = "clipRule", defaultInt = CLIP_RULE_NONZERO)
-    public void clipRule(int clipRule) {
+    public void setClipRule(int clipRule) {
         mClipRule = clipRule;
         markUpdated();
     }
