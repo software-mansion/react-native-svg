@@ -185,6 +185,7 @@ UInt32 saturate(double value) {
         NSUInteger iheight = height;
         NSUInteger iwidth = width;
         NSUInteger npixels = iheight * iwidth;
+        CGRect drawBounds = CGRectMake(0, 0, width, height);
 
         // Allocate pixel buffer and bitmap context for mask
         NSUInteger bytesPerPixel = 4;
@@ -194,7 +195,7 @@ UInt32 saturate(double value) {
         UInt32 * pixels = (UInt32 *) calloc(npixels, sizeof(UInt32));
         CGContextRef bcontext = CGBitmapContextCreate(pixels, iwidth, iheight, bitsPerComponent, bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
 
-        // Clip to mask bounds, adjust to viewbox and render the mask
+        // Clip to mask bounds and render the mask
         CGFloat x = [RNSVGPercentageConverter stringToFloat:[_maskNode x]
                                                    relative:width
                                                      offset:0];
@@ -209,13 +210,6 @@ UInt32 saturate(double value) {
                                                      offset:0];
         CGRect maskBounds = CGRectMake(x, y, w, h);
         CGContextClipToRect(bcontext, maskBounds);
-
-        CGRect drawBounds = CGRectMake(0, 0, width, height);
-        CGAffineTransform _viewBoxTransform = [RNSVGViewBox getTransform:rect
-                                                                   eRect:drawBounds
-                                                                   align:_maskNode.align
-                                                             meetOrSlice:_maskNode.meetOrSlice];
-        CGContextConcatCTM(bcontext, _viewBoxTransform);
         [_maskNode renderLayerTo:bcontext rect:rect];
 
         // Apply luminanceToAlpha filter primitive

@@ -5,7 +5,6 @@ import { numberProp } from '../lib/props';
 import PATTERN_UNITS from '../lib/PATTERN_UNITS';
 import { MaskAttributes } from '../lib/attributes';
 import extractTransform from '../lib/extract/extractTransform';
-import extractViewBox from "react-native-svg/lib/extract/extractViewBox";
 
 export default class extends Component {
     static displayName = 'Mask';
@@ -21,8 +20,6 @@ export default class extends Component {
             'userSpaceOnUse',
             'objectBoundingBox',
         ]),
-        viewBox: PropTypes.string,
-        preserveAspectRatio: PropTypes.string
     };
 
     render() {
@@ -62,7 +59,6 @@ export default class extends Component {
                 maskTransform={extractedTransform}
                 maskUnits={maskUnits !== undefined ? PATTERN_UNITS[maskUnits] : 0}
                 maskContentUnits={maskContentUnits !== undefined ? PATTERN_UNITS[maskContentUnits] : 1}
-                {...extractViewBox({ viewBox, preserveAspectRatio })}
             >
                 {children}
             </RNSVGMask>

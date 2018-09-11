@@ -10,12 +10,9 @@
 package com.horcrux.svg;
 
 import android.graphics.Matrix;
-import android.graphics.RectF;
 
 import com.facebook.common.logging.FLog;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -32,13 +29,6 @@ class MaskShadowNode extends GroupShadowNode {
     String mHeight;
     Brush.BrushUnits mMaskUnits;
     Brush.BrushUnits mMaskContentUnits;
-
-    private float mMinX;
-    private float mMinY;
-    private float mVbWidth;
-    private float mVbHeight;
-    String mAlign;
-    int mMeetOrSlice;
 
     private static final float[] sRawMatrix = new float[]{
         1, 0, 0,
@@ -114,46 +104,6 @@ class MaskShadowNode extends GroupShadowNode {
         }
 
         markUpdated();
-    }
-
-    @ReactProp(name = "minX")
-    public void setMinX(float minX) {
-        mMinX = minX;
-        markUpdated();
-    }
-
-    @ReactProp(name = "minY")
-    public void setMinY(float minY) {
-        mMinY = minY;
-        markUpdated();
-    }
-
-    @ReactProp(name = "vbWidth")
-    public void setVbWidth(float vbWidth) {
-        mVbWidth = vbWidth;
-        markUpdated();
-    }
-
-    @ReactProp(name = "vbHeight")
-    public void setVbHeight(float vbHeight) {
-        mVbHeight = vbHeight;
-        markUpdated();
-    }
-
-    @ReactProp(name = "align")
-    public void setAlign(String align) {
-        mAlign = align;
-        markUpdated();
-    }
-
-    @ReactProp(name = "meetOrSlice")
-    public void setMeetOrSlice(int meetOrSlice) {
-        mMeetOrSlice = meetOrSlice;
-        markUpdated();
-    }
-
-    RectF getViewBox() {
-        return new RectF(mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
     }
 
     @Override

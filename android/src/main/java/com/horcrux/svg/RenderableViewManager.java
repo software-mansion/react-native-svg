@@ -498,36 +498,6 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             public void setMaskTransform(RenderableView<MaskShadowNode> node, @Nullable ReadableArray matrixArray) {
                 node.shadowNode.setMaskTransform(matrixArray);
             }
-
-            @ReactProp(name = "minX")
-            public void setMinX(RenderableView<MaskShadowNode> node, float minX) {
-                node.shadowNode.setMinX(minX);
-            }
-
-            @ReactProp(name = "minY")
-            public void setMinY(RenderableView<MaskShadowNode> node, float minY) {
-                node.shadowNode.setMinY(minY);
-            }
-
-            @ReactProp(name = "vbWidth")
-            public void setVbWidth(RenderableView<MaskShadowNode> node, float vbWidth) {
-                node.shadowNode.setVbWidth(vbWidth);
-            }
-
-            @ReactProp(name = "vbHeight")
-            public void setVbHeight(RenderableView<MaskShadowNode> node, float vbHeight) {
-                node.shadowNode.setVbHeight(vbHeight);
-            }
-
-            @ReactProp(name = "align")
-            public void setAlign(RenderableView<MaskShadowNode> node, String align) {
-                node.shadowNode.setAlign(align);
-            }
-
-            @ReactProp(name = "meetOrSlice")
-            public void setMeetOrSlice(RenderableView<MaskShadowNode> node, int meetOrSlice) {
-                node.shadowNode.setMeetOrSlice(meetOrSlice);
-            }
         };
     }
 
