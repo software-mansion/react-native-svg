@@ -124,18 +124,12 @@
 
 - (void)setupGlyphContext:(CGContextRef)context
 {
-    _glyphContext = [[RNSVGGlyphContext alloc] initWithScale:1 width:[self getContextWidth]
-                                                   height:[self getContextHeight]];
-}
-
-// release the cached CGPathRef for RNSVGTSpan
-- (void)releaseCachedPath
-{
-    [self traverseSubviews:^BOOL(__kindof RNSVGNode *node) {
-        RNSVGText *text = node;
-        [text releaseCachedPath];
-        return YES;
-    }];
+    CGRect bounds = CGContextGetClipBoundingBox(context);
+    CGSize size = bounds.size;
+    _glyphContext = [[RNSVGGlyphContext alloc]
+                     initWithScale:1
+                     width:size.width
+                     height:size.height];
 }
 
 - (CGPathRef)getGroupPath:(CGContextRef)context

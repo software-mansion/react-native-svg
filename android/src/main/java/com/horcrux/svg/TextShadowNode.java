@@ -185,16 +185,6 @@ class TextShadowNode extends GroupShadowNode {
         return mBaselineShift;
     }
 
-    void releaseCachedPath() {
-        traverseChildren(new NodeRunnable() {
-            public void run(ReactShadowNode node) {
-                if (node instanceof TextShadowNode) {
-                    ((TextShadowNode)node).releaseCachedPath();
-                }
-            }
-        });
-    }
-
     Path getGroupPath(Canvas canvas, Paint paint) {
         pushGlyphContext();
         Path groupPath = super.getPath(canvas, paint);

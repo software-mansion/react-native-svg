@@ -53,58 +53,82 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private int mMeetOrSlice;
     private Matrix mInvViewBoxMatrix = new Matrix();
     private boolean mInvertible = true;
+    private boolean mRendered = false;
 
 
     public SvgViewShadowNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
     }
 
+    private void releaseCachedPath() {
+        if (!mRendered) {
+            return;
+        }
+        mRendered = false;
+        traverseChildren(new VirtualNode.NodeRunnable() {
+            public void run(ReactShadowNode node) {
+                if (node instanceof VirtualNode) {
+                    VirtualNode n = ((VirtualNode)node);
+                    n.releaseCachedPath();
+                }
+            }
+        });
+    }
+
     @ReactProp(name = "minX")
     public void setMinX(float minX) {
         mMinX = minX;
         markUpdated();
+        releaseCachedPath();
     }
 
     @ReactProp(name = "minY")
     public void setMinY(float minY) {
         mMinY = minY;
         markUpdated();
+        releaseCachedPath();
     }
 
     @ReactProp(name = "vbWidth")
     public void setVbWidth(float vbWidth) {
         mVbWidth = vbWidth;
         markUpdated();
+        releaseCachedPath();
     }
 
     @ReactProp(name = "vbHeight")
     public void setVbHeight(float vbHeight) {
         mVbHeight = vbHeight;
         markUpdated();
+        releaseCachedPath();
     }
 
     @ReactProp(name = "bbWidth")
     public void setVbWidth(String bbWidth) {
         mbbWidth = bbWidth;
         markUpdated();
+        releaseCachedPath();
     }
 
     @ReactProp(name = "bbHeight")
     public void setVbHeight(String bbHeight) {
         mbbHeight = bbHeight;
         markUpdated();
+        releaseCachedPath();
     }
 
     @ReactProp(name = "align")
     public void setAlign(String align) {
         mAlign = align;
         markUpdated();
+        releaseCachedPath();
     }
 
     @ReactProp(name = "meetOrSlice")
     public void setMeetOrSlice(int meetOrSlice) {
         mMeetOrSlice = meetOrSlice;
         markUpdated();
+        releaseCachedPath();
     }
 
     @Override
@@ -130,6 +154,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     }
 
     Bitmap drawOutput() {
+        mRendered = true;
         float width = getLayoutWidth();
         float height = getLayoutHeight();
         boolean early = Float.isNaN(width) || Float.isNaN(height) || width * height == 0 || (Math.log10(width) + Math.log10(height) > 42);

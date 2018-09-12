@@ -19,16 +19,18 @@
     NSMutableDictionary<NSString *, RNSVGNode *> *_masks;
     CGAffineTransform _viewBoxTransform;
     CGAffineTransform _invviewBoxTransform;
+    bool rendered;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-  if (self = [super initWithFrame:frame]) {
-    // This is necessary to ensure that [self setNeedsDisplay] actually triggers
-    // a redraw when our parent transitions between hidden and visible.
-    self.contentMode = UIViewContentModeRedraw;
-  }
-  return self;
+    if (self = [super initWithFrame:frame]) {
+        // This is necessary to ensure that [self setNeedsDisplay] actually triggers
+        // a redraw when our parent transitions between hidden and visible.
+        self.contentMode = UIViewContentModeRedraw;
+    }
+    rendered = false;
+    return self;
 }
 
 - (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
@@ -49,6 +51,20 @@
     // Do nothing, as subviews are inserted by insertReactSubview:
 }
 
+- (void)releaseCachedPath
+{
+    if (!rendered) {
+        return;
+    }
+    rendered = false;
+    for (UIView *node in self.subviews) {
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            RNSVGNode *n = (RNSVGNode *)node;
+            [n releaseCachedPath];
+        }
+    };
+}
+
 - (void)invalidate
 {
     [self setNeedsDisplay];
@@ -61,6 +77,7 @@
     }
 
     [self invalidate];
+    [self releaseCachedPath];
     _minX = minX;
 }
 
@@ -71,6 +88,7 @@
     }
 
     [self invalidate];
+    [self releaseCachedPath];
     _minY = minY;
 }
 
@@ -81,6 +99,7 @@
     }
 
     [self invalidate];
+    [self releaseCachedPath];
     _vbWidth = vbWidth;
 }
 
@@ -91,26 +110,29 @@
     }
 
     [self invalidate];
+    [self releaseCachedPath];
     _vbHeight = vbHeight;
 }
 
-- (void)setBBWidth:(NSString *)bbWidth
+- (void)setBbWidth:(NSString *)bbWidth
 {
     if ([bbWidth isEqualToString:_bbWidth]) {
         return;
     }
 
     [self invalidate];
+    [self releaseCachedPath];
     _bbWidth = bbWidth;
 }
 
-- (void)setBBHeight:(NSString *)bbHeight
+- (void)setBbHeight:(NSString *)bbHeight
 {
     if ([bbHeight isEqualToString:_bbHeight]) {
         return;
     }
 
     [self invalidate];
+    [self releaseCachedPath];
     _bbHeight = bbHeight;
 }
 
@@ -121,6 +143,7 @@
     }
 
     [self invalidate];
+    [self releaseCachedPath];
     _align = align;
 }
 
@@ -131,6 +154,7 @@
     }
 
     [self invalidate];
+    [self releaseCachedPath];
     _meetOrSlice = meetOrSlice;
 }
 
@@ -160,6 +184,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    rendered = true;
     _clipPaths = nil;
     _templates = nil;
     _painters = nil;

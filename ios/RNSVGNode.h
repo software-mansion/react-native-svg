@@ -91,10 +91,6 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 
 - (CGFloat)getContextHeight;
 
-- (CGFloat)getContextLeft;
-
-- (CGFloat)getContextTop;
-
 /**
  * save element`s reference into svg element.
  */
@@ -105,5 +101,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 - (void)endTransparencyLayer:(CGContextRef)context;
 
 - (void)traverseSubviews:(BOOL (^)(__kindof UIView *node))block;
+
+- (void)releaseCachedPath;
 
 @end

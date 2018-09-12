@@ -21,7 +21,6 @@
 @property (nonatomic, strong) NSArray<NSString *> *positionY;
 @property (nonatomic, strong) NSArray<NSString *> *rotate;
 
-- (void)releaseCachedPath;
 - (CGPathRef)getGroupPath:(CGContextRef)context;
 - (CTFontRef)getFontFromContext;
 

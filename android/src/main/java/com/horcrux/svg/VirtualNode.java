@@ -56,7 +56,7 @@ abstract class VirtualNode extends LayoutShadowNode {
     Matrix mMatrix = new Matrix();
     Matrix mInvMatrix = new Matrix();
     boolean mInvertible = true;
-    RectF mClientRect;
+    private RectF mClientRect;
 
     private int mClipRule;
     private @Nullable String mClipPath;
@@ -99,11 +99,26 @@ abstract class VirtualNode extends LayoutShadowNode {
     @Override
     public void markUpdated() {
         super.markUpdated();
+        clearPath();
+    }
+
+    private void clearPath() {
         canvasHeight = -1;
         canvasWidth = -1;
         mRegion = null;
         mPath = null;
         mBox = null;
+    }
+
+    void releaseCachedPath() {
+        clearPath();
+        traverseChildren(new NodeRunnable() {
+            public void run(ReactShadowNode node) {
+                if (node instanceof VirtualNode) {
+                    ((VirtualNode)node).releaseCachedPath();
+                }
+            }
+        });
     }
 
     @Nullable
@@ -156,7 +171,7 @@ abstract class VirtualNode extends LayoutShadowNode {
     public abstract void draw(Canvas canvas, Paint paint, float opacity);
     public void render(Canvas canvas, Paint paint, float opacity) {
         draw(canvas, paint, opacity);
-    };
+    }
 
     /**
      * Sets up the transform matrix on the canvas before an element is drawn.

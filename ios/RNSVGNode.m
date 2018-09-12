@@ -58,6 +58,11 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 {
     id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
     [container invalidate];
+    [self clearPath];
+}
+
+- (void)clearPath
+{
     if (_path) {
         CGPathRelease(_path);
         _path = nil;
@@ -123,7 +128,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     if ([name isEqualToString:_name]) {
         return;
     }
-    
+
     [self invalidate];
     _name = name;
 }
@@ -338,8 +343,9 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (CGFloat)relativeOnOther:(NSString *)length
 {
-    CGFloat width = [self getContextWidth];
-    CGFloat height = [self getContextHeight];
+    CGRect bounds = [self getContextBounds];
+    CGFloat width = CGRectGetWidth(bounds);
+    CGFloat height = CGRectGetHeight(bounds);
     CGFloat powX = width * width;
     CGFloat powY = height * height;
     CGFloat r = sqrt(powX + powY) * RNSVG_M_SQRT1_2l;
@@ -350,36 +356,19 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
                                          fontSize:[self getFontSizeFromContext]];
 }
 
+- (CGRect)getContextBounds
+{
+    return CGContextGetClipBoundingBox(UIGraphicsGetCurrentContext());
+}
+
 - (CGFloat)getContextWidth
 {
-    RNSVGGroup * root = self.textRoot;
-    RNSVGGlyphContext * gc = [root getGlyphContext];
-    if (root == nil || gc == nil) {
-        return CGRectGetWidth([self.svgView getContextBounds]);
-    } else {
-        return [gc getWidth];
-    }
+    return CGRectGetWidth([self getContextBounds]);
 }
 
 - (CGFloat)getContextHeight
 {
-    RNSVGGroup * root = self.textRoot;
-    RNSVGGlyphContext * gc = [root getGlyphContext];
-    if (root == nil || gc == nil) {
-        return CGRectGetHeight([self.svgView getContextBounds]);
-    } else {
-        return [gc getHeight];
-    }
-}
-
-- (CGFloat)getContextLeft
-{
-    return CGRectGetMinX([self.svgView getContextBounds]);
-}
-
-- (CGFloat)getContextTop
-{
-    return CGRectGetMinY([self.svgView getContextBounds]);
+    return CGRectGetHeight([self getContextBounds]);
 }
 
 - (void)parseReference
@@ -397,6 +386,17 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
             break;
         }
     }
+}
+
+- (void)releaseCachedPath
+{
+    [self clearPath];
+    [self traverseSubviews:^BOOL(__kindof RNSVGNode *node) {
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            [node releaseCachedPath];
+        }
+        return YES;
+    }];
 }
 
 - (void)dealloc
