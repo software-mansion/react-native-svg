@@ -16,12 +16,95 @@
 @implementation RNSVGText
 {
     RNSVGGlyphContext *_glyphContext;
+    NSString *_alignmentBaseline;
+    NSString *_baselineShift;
 }
 
 - (void)invalidate
 {
     [super invalidate];
     [self releaseCachedPath];
+}
+
+- (void)setTextLength:(NSString *)textLength
+{
+    if (textLength == _textLength) {
+        return;
+    }
+    [self invalidate];
+    _textLength = textLength;
+}
+
+- (void)setBaselineShift:(NSString *)baselineShift
+{
+    if (baselineShift == _baselineShift) {
+        return;
+    }
+    [self invalidate];
+    _baselineShift = baselineShift;
+}
+
+- (void)setLengthAdjust:(NSString *)lengthAdjust
+{
+    if (lengthAdjust == _lengthAdjust) {
+        return;
+    }
+    [self invalidate];
+    _lengthAdjust = lengthAdjust;
+}
+
+- (void)setAlignmentBaseline:(NSString *)alignmentBaseline
+{
+    if (alignmentBaseline == _alignmentBaseline) {
+        return;
+    }
+    [self invalidate];
+    _alignmentBaseline = alignmentBaseline;
+}
+
+- (void)setDeltaX:(NSArray<NSString *> *)deltaX
+{
+    if (deltaX == _deltaX) {
+        return;
+    }
+    [self invalidate];
+    _deltaX = deltaX;
+}
+
+- (void)setDeltaY:(NSArray<NSString *> *)deltaY
+{
+    if (deltaY == _deltaY) {
+        return;
+    }
+    [self invalidate];
+    _deltaY = deltaY;
+}
+
+- (void)setPositionX:(NSArray<NSString *>*)positionX
+{
+    if (positionX == _positionX) {
+        return;
+    }
+    [self invalidate];
+    _positionX = positionX;
+}
+
+- (void)setPositionY:(NSArray<NSString *>*)positionY
+{
+    if (positionY == _positionY) {
+        return;
+    }
+    [self invalidate];
+    _positionY = positionY;
+}
+
+- (void)setRotate:(NSArray<NSString *> *)rotate
+{
+    if (rotate == _rotate) {
+        return;
+    }
+    [self invalidate];
+    _rotate = rotate;
 }
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
