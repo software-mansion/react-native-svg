@@ -39,7 +39,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
 
 - (void)setContent:(NSString *)content
 {
-    if (content == _content) {
+    if ([content isEqualToString:_content]) {
         return;
     }
     [self invalidate];

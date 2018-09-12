@@ -9,6 +9,66 @@
 
 @implementation RNSVGRadialGradient
 
+- (void)setFx:(NSString *)fx
+{
+    if ([fx isEqualToString:_fx]) {
+        return;
+    }
+    
+    _fx = fx;
+    [self invalidate];
+}
+
+- (void)setFy:(NSString *)fy
+{
+    if ([fy isEqualToString:_fy]) {
+        return;
+    }
+    
+    _fy = fy;
+    [self invalidate];
+}
+
+- (void)setRx:(NSString *)rx
+{
+    if ([rx isEqualToString:_rx]) {
+        return;
+    }
+    
+    _rx = rx;
+    [self invalidate];
+}
+
+- (void)setRy:(NSString *)ry
+{
+    if ([ry isEqualToString:_ry]) {
+        return;
+    }
+    
+    _ry = ry;
+    [self invalidate];
+}
+
+- (void)setCx:(NSString *)cx
+{
+    if ([cx isEqualToString:_cx]) {
+        return;
+    }
+    
+    _cx = cx;
+    [self invalidate];
+}
+
+- (void)setCy:(NSString *)cy
+{
+    if ([cy isEqualToString:_cy]) {
+        return;
+    }
+    
+    _cy = cy;
+    [self invalidate];
+}
+
 - (void)setGradient:(NSArray<NSNumber *> *)gradient
 {
     if (gradient == _gradient) {
@@ -16,6 +76,22 @@
     }
     
     _gradient = gradient;
+    [self invalidate];
+}
+
+- (void)setGradientUnits:(RNSVGUnits)gradientUnits
+{
+    if (gradientUnits == _gradientUnits) {
+        return;
+    }
+    
+    _gradientUnits = gradientUnits;
+    [self invalidate];
+}
+
+- (void)setGradientTransform:(CGAffineTransform)gradientTransform
+{
+    _gradientTransform = gradientTransform;
     [self invalidate];
 }
 

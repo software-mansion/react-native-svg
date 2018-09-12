@@ -51,7 +51,7 @@
 
 - (void)setX:(NSString *)x
 {
-    if (x == _x) {
+    if ([x isEqualToString:_x]) {
         return;
     }
     [self invalidate];
@@ -60,7 +60,7 @@
 
 - (void)setY:(NSString *)y
 {
-    if (y == _y) {
+    if ([y isEqualToString:_y]) {
         return;
     }
     [self invalidate];
@@ -69,7 +69,7 @@
 
 - (void)setImagewidth:(NSString *)width
 {
-    if (width == _imagewidth) {
+    if ([width isEqualToString:_imagewidth]) {
         return;
     }
     [self invalidate];
@@ -78,7 +78,7 @@
 
 - (void)setImageheight:(NSString *)height
 {
-    if (height == _imageheight) {
+    if ([height isEqualToString:_imageheight]) {
         return;
     }
     [self invalidate];
@@ -87,7 +87,7 @@
 
 - (void)setAlign:(NSString *)align
 {
-    if (align == _align) {
+    if ([align isEqualToString:_align]) {
         return;
     }
     [self invalidate];

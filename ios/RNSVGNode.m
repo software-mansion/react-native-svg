@@ -118,6 +118,16 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     self.backgroundColor = inheritedBackgroundColor;
 }
 
+- (void)setName:(NSString *)name
+{
+    if ([name isEqualToString:_name]) {
+        return;
+    }
+    
+    [self invalidate];
+    _name = name;
+}
+
 - (void)setOpacity:(CGFloat)opacity
 {
     if (opacity == _opacity) {
@@ -166,7 +176,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (void)setClipPath:(NSString *)clipPath
 {
-    if (_clipPath == clipPath) {
+    if ([_clipPath isEqualToString:clipPath]) {
         return;
     }
     CGPathRelease(_cachedClipPath);
@@ -174,6 +184,28 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     _cachedClipPath = nil;
     _clipPath = clipPath;
     _clipMask = nil;
+    [self invalidate];
+}
+
+- (void)setClipRule:(RNSVGCGFCRule)clipRule
+{
+    if (_clipRule == clipRule) {
+        return;
+    }
+    CGPathRelease(_cachedClipPath);
+    CGImageRelease(_clipMask);
+    _cachedClipPath = nil;
+    _clipRule = clipRule;
+    _clipMask = nil;
+    [self invalidate];
+}
+
+- (void)setMask:(NSString *)mask
+{
+    if ([_mask isEqualToString:mask]) {
+        return;
+    }
+    _mask = mask;
     [self invalidate];
 }
 

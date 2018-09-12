@@ -77,7 +77,7 @@
 
 - (void)setStrokeWidth:(NSString*)strokeWidth
 {
-    if (strokeWidth == _strokeWidth) {
+    if ([strokeWidth isEqualToString:_strokeWidth]) {
         return;
     }
     [self invalidate];

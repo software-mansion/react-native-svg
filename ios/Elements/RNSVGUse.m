@@ -13,14 +13,33 @@
 
 - (void)setHref:(NSString *)href
 {
-    if (href == _href) {
+    if ([href isEqualToString:_href]) {
         return;
     }
-
+    
     [self invalidate];
     _href = href;
 }
 
+- (void)setUsewidth:(NSString *)usewidth
+{
+    if ([usewidth isEqualToString:_usewidth]) {
+        return;
+    }
+    
+    [self invalidate];
+    _usewidth = usewidth;
+}
+
+- (void)setUseheight:(NSString *)useheight
+{
+    if ([useheight isEqualToString:_useheight]) {
+        return;
+    }
+    
+    [self invalidate];
+    _useheight = useheight;
+}
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {

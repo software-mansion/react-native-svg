@@ -28,7 +28,7 @@
 
 - (void)setTextLength:(NSString *)textLength
 {
-    if (textLength == _textLength) {
+    if ([textLength isEqualToString:_textLength]) {
         return;
     }
     [self invalidate];
@@ -37,7 +37,7 @@
 
 - (void)setBaselineShift:(NSString *)baselineShift
 {
-    if (baselineShift == _baselineShift) {
+    if ([baselineShift isEqualToString:_baselineShift]) {
         return;
     }
     [self invalidate];
@@ -46,7 +46,7 @@
 
 - (void)setLengthAdjust:(NSString *)lengthAdjust
 {
-    if (lengthAdjust == _lengthAdjust) {
+    if ([lengthAdjust isEqualToString:_lengthAdjust]) {
         return;
     }
     [self invalidate];
@@ -55,7 +55,7 @@
 
 - (void)setAlignmentBaseline:(NSString *)alignmentBaseline
 {
-    if (alignmentBaseline == _alignmentBaseline) {
+    if ([alignmentBaseline isEqualToString:_alignmentBaseline]) {
         return;
     }
     [self invalidate];

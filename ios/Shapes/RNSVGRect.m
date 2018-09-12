@@ -13,7 +13,7 @@
 
 - (void)setX:(NSString *)x
 {
-    if (x == _x) {
+    if ([x isEqualToString:_x]) {
         return;
     }
     [self invalidate];
@@ -22,25 +22,25 @@
 
 - (void)setY:(NSString *)y
 {
-    if (y == _y) {
+    if ([y isEqualToString:_y]) {
         return;
     }
     [self invalidate];
     _y = y;
 }
 
-- (void)setWidth:(NSString *)rectwidth
+- (void)setRectwidth:(NSString *)rectwidth
 {
-    if (rectwidth == _rectwidth) {
+    if ([rectwidth isEqualToString:_rectwidth]) {
         return;
     }
     [self invalidate];
     _rectwidth = rectwidth;
 }
 
-- (void)setHeight:(NSString *)rectheight
+- (void)setRectheight:(NSString *)rectheight
 {
-    if (rectheight == _rectheight) {
+    if ([rectheight isEqualToString:_rectheight]) {
         return;
     }
     [self invalidate];
@@ -49,7 +49,7 @@
 
 - (void)setRx:(NSString *)rx
 {
-    if (rx == _rx) {
+    if ([rx isEqualToString:_rx]) {
         return;
     }
     [self invalidate];
@@ -58,7 +58,7 @@
 
 - (void)setRy:(NSString *)ry
 {
-    if (ry == _ry) {
+    if ([ry isEqualToString:_ry]) {
         return;
     }
     [self invalidate];
