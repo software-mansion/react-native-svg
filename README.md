@@ -116,56 +116,75 @@ Here's a simple example. To render output like this:
 Use the following code:
 
 ```javascript
-import 'react';
 import Svg,{
     Circle,
     Ellipse,
     G,
-    LinearGradient,
-    RadialGradient,
-    Line,
+    Text,
+    TSpan,
+    TextPath,
     Path,
     Polygon,
     Polyline,
+    Line,
     Rect,
-    Symbol,
-    Text,
     Use,
+    Image,
+    Symbol,
     Defs,
-    Stop
+    LinearGradient,
+    RadialGradient,
+    Stop,
+    ClipPath,
+    Pattern,
+    Mask,
 } from 'react-native-svg';
 
-class SvgExample extends Component {
-    render() {
-        return (
-            <Svg
-                height="100"
-                width="100"
-            >
-                <Circle
-                    cx="50"
-                    cy="50"
-                    r="45"
-                    stroke="blue"
-                    strokeWidth="2.5"
-                    fill="green"
-                />
-                <Rect
-                    x="15"
-                    y="15"
-                    width="70"
-                    height="70"
-                    stroke="red"
-                    strokeWidth="2"
-                    fill="yellow"
-                />
-            </Svg>
-        );
-    }
+/* Use this if you are using Expo
+import { Svg } from 'expo';
+const { Circle, Rect } = Svg;
+*/
+
+import React from 'react';
+import { View, StyleSheet, Dimensions } from 'react-native';
+
+// Percentages work in plain react-native but aren't supported in Expo yet, workaround with this or onLayout
+const { width, height } = Dimensions.get('window');
+
+export default class SvgExample extends React.Component {
+  render() {
+    return (
+      <View
+        style={[
+          StyleSheet.absoluteFill,
+          { alignItems: 'center', justifyContent: 'center' },
+        ]}>
+        <Svg height={height * 0.5} width={width * 0.5} viewBox="0 0 100 100">
+          <Circle
+            cx="50"
+            cy="50"
+            r="45"
+            stroke="blue"
+            strokeWidth="2.5"
+            fill="green"
+          />
+          <Rect
+            x="15"
+            y="15"
+            width="70"
+            height="70"
+            stroke="red"
+            strokeWidth="2"
+            fill="yellow"
+          />
+        </Svg>
+      </View>
+    );
+  }
 }
 ```
 
-[Try this on Snack](https://snack.expo.io/r1hCVAaEZ)
+[Try this on Snack](https://snack.expo.io/@msand/react-native-svg-example)
 
 ### Common props:
 
@@ -794,6 +813,114 @@ Code explanation:
 
 ![RadialGradient](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/radialgradient.png)
 
+#### Mask
+
+
+In SVG, you can specify that any other graphics object or ‘G’ element can be used as an alpha mask for compositing the current object into the background.
+
+A mask is defined with a ‘Mask’ element. A mask is used/referenced using the ‘mask’ property.
+
+A ‘Mask’ can contain any graphical elements or container elements such as a ‘G’.
+
+The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
+
+https://www.w3.org/TR/SVG11/images/masking/mask01.svg
+```html
+  <Svg width="100%" height="100%" viewBox="0 0 800 300">
+    <Defs>
+      <LinearGradient
+        id="Gradient"
+        gradientUnits="userSpaceOnUse"
+        x1="0"
+        y1="0"
+        x2="800"
+        y2="0"
+      >
+        <Stop offset="0" stopColor="white" stopOpacity="0" />
+        <Stop offset="1" stopColor="white" stopOpacity="1" />
+      </LinearGradient>
+      <Mask
+        id="Mask"
+        maskUnits="userSpaceOnUse"
+        x="0"
+        y="0"
+        width="800"
+        height="300"
+      >
+        <Rect
+          x="0"
+          y="0"
+          width="800"
+          height="300"
+          fill="url(#Gradient)"
+        />
+      </Mask>
+      <Text
+        id="Text"
+        x="400"
+        y="200"
+        fontFamily="Verdana"
+        fontSize="100"
+        textAnchor="middle"
+      >
+        Masked text
+      </Text>
+    </Defs>
+    <Rect x="0" y="0" width="800" height="300" fill="#FF8080" />
+    <Use href="#Text" fill="blue" mask="url(#Mask)" />
+    <Use href="#Text" fill="none" stroke="black" stroke-width="2" />
+  </Svg>
+```
+
+Code explanation: https://www.w3.org/TR/SVG11/masking.html#MaskElement
+
+![Mask](https://www.w3.org/TR/SVG11/images/masking/mask01.svg)
+
+#### Pattern
+
+A pattern is used to fill or stroke an object using a pre-defined graphic object which can be replicated ("tiled") at fixed intervals in x and y to cover the areas to be painted. Patterns are defined using a ‘pattern’ element and then referenced by properties ‘fill’ and ‘stroke’ on a given graphics element to indicate that the given element shall be filled or stroked with the referenced pattern.
+The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
+
+https://www.w3.org/TR/SVG11/images/pservers/pattern01.svg
+```html
+  <Svg width="100%" height="100%" viewBox="0 0 800 400">
+    <Defs>
+      <Pattern
+        id="TrianglePattern"
+        patternUnits="userSpaceOnUse"
+        x="0"
+        y="0"
+        width="100"
+        height="100"
+        viewBox="0 0 10 10"
+      >
+        <Path d="M 0 0 L 7 0 L 3.5 7 z" fill="red" stroke="blue" />
+      </Pattern>
+    </Defs>
+    <Rect
+      fill="none"
+      stroke="blue"
+      x="1"
+      y="1"
+      width="798"
+      height="398"
+    />
+    <Ellipse
+      fill="url(#TrianglePattern)"
+      stroke="black"
+      stroke-width="5"
+      cx="400"
+      cy="200"
+      rx="350"
+      ry="150"
+    />
+  </Svg>
+```
+
+Code explanation: https://www.w3.org/TR/SVG11/pservers.html#PatternElement
+
+![Pattern](https://www.w3.org/TR/SVG11/images/pservers/pattern01.svg)
+
 #### Touch Events
 
 Touch events are supported in react-native-svg. These include:
@@ -839,10 +966,8 @@ npm i
 
 ### TODO:
 1. Add Native methods for elements.
-2. Pattern element.
-3. Mask element.
-4. Marker element.
-5. Load Image from URL.
+2. Marker element.
+3. Load Image from URL.
 
 ### Known issues:
 1. Unable to apply focus point of RadialGradient on Android.
