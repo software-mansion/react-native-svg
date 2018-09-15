@@ -16,6 +16,95 @@
 @implementation RNSVGText
 {
     RNSVGGlyphContext *_glyphContext;
+    NSString *_alignmentBaseline;
+    NSString *_baselineShift;
+}
+
+- (void)invalidate
+{
+    [super invalidate];
+    [self releaseCachedPath];
+}
+
+- (void)setTextLength:(NSString *)textLength
+{
+    if ([textLength isEqualToString:_textLength]) {
+        return;
+    }
+    [self invalidate];
+    _textLength = textLength;
+}
+
+- (void)setBaselineShift:(NSString *)baselineShift
+{
+    if ([baselineShift isEqualToString:_baselineShift]) {
+        return;
+    }
+    [self invalidate];
+    _baselineShift = baselineShift;
+}
+
+- (void)setLengthAdjust:(NSString *)lengthAdjust
+{
+    if ([lengthAdjust isEqualToString:_lengthAdjust]) {
+        return;
+    }
+    [self invalidate];
+    _lengthAdjust = lengthAdjust;
+}
+
+- (void)setAlignmentBaseline:(NSString *)alignmentBaseline
+{
+    if ([alignmentBaseline isEqualToString:_alignmentBaseline]) {
+        return;
+    }
+    [self invalidate];
+    _alignmentBaseline = alignmentBaseline;
+}
+
+- (void)setDeltaX:(NSArray<NSString *> *)deltaX
+{
+    if (deltaX == _deltaX) {
+        return;
+    }
+    [self invalidate];
+    _deltaX = deltaX;
+}
+
+- (void)setDeltaY:(NSArray<NSString *> *)deltaY
+{
+    if (deltaY == _deltaY) {
+        return;
+    }
+    [self invalidate];
+    _deltaY = deltaY;
+}
+
+- (void)setPositionX:(NSArray<NSString *>*)positionX
+{
+    if (positionX == _positionX) {
+        return;
+    }
+    [self invalidate];
+    _positionX = positionX;
+}
+
+- (void)setPositionY:(NSArray<NSString *>*)positionY
+{
+    if (positionY == _positionY) {
+        return;
+    }
+    [self invalidate];
+    _positionY = positionY;
+}
+
+- (void)setRotate:(NSArray<NSString *> *)rotate
+{
+    if (rotate == _rotate) {
+        return;
+    }
+    [self invalidate];
+    _rotate = rotate;
 }
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
@@ -26,7 +115,6 @@
 
     CGPathRef path = [self getGroupPath:context];
     [self renderGroupTo:context rect:rect];
-    [self releaseCachedPath];
     CGContextRestoreGState(context);
 
     CGPathRef transformedPath = CGPathCreateCopyByTransformingPath(path, &CGAffineTransformIdentity);
@@ -36,18 +124,12 @@
 
 - (void)setupGlyphContext:(CGContextRef)context
 {
-    _glyphContext = [[RNSVGGlyphContext alloc] initWithScale:1 width:[self getContextWidth]
-                                                   height:[self getContextHeight]];
-}
-
-// release the cached CGPathRef for RNSVGTSpan
-- (void)releaseCachedPath
-{
-    [self traverseSubviews:^BOOL(__kindof RNSVGNode *node) {
-        RNSVGText *text = node;
-        [text releaseCachedPath];
-        return YES;
-    }];
+    CGRect bounds = CGContextGetClipBoundingBox(context);
+    CGSize size = bounds.size;
+    _glyphContext = [[RNSVGGlyphContext alloc]
+                     initWithScale:1
+                     width:size.width
+                     height:size.height];
 }
 
 - (CGPathRef)getGroupPath:(CGContextRef)context
@@ -63,7 +145,6 @@
 {
     [self setupGlyphContext:context];
     CGPathRef groupPath = [self getGroupPath:context];
-    [self releaseCachedPath];
 
     return (CGPathRef)CFAutorelease(CGPathCreateCopyByTransformingPath(groupPath, &CGAffineTransformIdentity));
 }
@@ -95,7 +176,7 @@
     if (_alignmentBaseline != nil) {
         return _alignmentBaseline;
     }
-    
+
     UIView* parent = self.superview;
     while (parent != nil) {
         if ([parent isKindOfClass:[RNSVGText class]]) {
@@ -108,7 +189,7 @@
         }
         parent = [parent superview];
     }
-    
+
     if (_alignmentBaseline == nil) {
         _alignmentBaseline = RNSVGAlignmentBaselineStrings[0];
     }
@@ -120,7 +201,7 @@
     if (_baselineShift != nil) {
         return _baselineShift;
     }
-    
+
     UIView* parent = [self superview];
     while (parent != nil) {
         if ([parent isKindOfClass:[RNSVGText class]]) {
@@ -133,10 +214,10 @@
         }
         parent = [parent superview];
     }
-    
+
     // set default value
     _baselineShift = @"";
-    
+
     return _baselineShift;
 }
 

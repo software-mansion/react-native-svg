@@ -3,48 +3,45 @@ import PropTypes from 'prop-types';
 import { requireNativeComponent } from "react-native";
 import { numberProp } from '../lib/props';
 import PATTERN_UNITS from '../lib/PATTERN_UNITS';
-import { PatternAttributes } from '../lib/attributes';
+import { MaskAttributes } from '../lib/attributes';
 import extractTransform from '../lib/extract/extractTransform';
-import extractViewBox from "react-native-svg/lib/extract/extractViewBox";
 
 export default class extends Component {
-    static displayName = 'Pattern';
+    static displayName = 'Mask';
     static propTypes = {
         id: PropTypes.string.isRequired,
         x: numberProp,
         y: numberProp,
         width: numberProp,
         height: numberProp,
-        patternTransform: PropTypes.string,
-        patternUnits: PropTypes.oneOf(['userSpaceOnUse', 'objectBoundingBox']),
-        patternContentUnits: PropTypes.oneOf([
+        maskTransform: PropTypes.string,
+        maskUnits: PropTypes.oneOf(['userSpaceOnUse', 'objectBoundingBox']),
+        maskContentUnits: PropTypes.oneOf([
             'userSpaceOnUse',
             'objectBoundingBox',
         ]),
-        viewBox: PropTypes.string,
-        preserveAspectRatio: PropTypes.string
     };
 
     render() {
         const { props } = this;
         const {
-            patternTransform,
+            maskTransform,
             transform,
             id,
             x,
             y,
             width,
             height,
-            patternUnits,
-            patternContentUnits,
+            maskUnits,
+            maskContentUnits,
             children,
             viewBox,
             preserveAspectRatio,
         } = props;
 
         let extractedTransform;
-        if (patternTransform) {
-            extractedTransform = extractTransform(patternTransform);
+        if (maskTransform) {
+            extractedTransform = extractTransform(maskTransform);
         } else if (transform) {
             extractedTransform = extractTransform(transform);
         } else {
@@ -52,24 +49,23 @@ export default class extends Component {
         }
 
         return (
-            <RNSVGPattern
+            <RNSVGMask
                 name={id}
                 x={`${x}`}
                 y={`${y}`}
-                patternwidth={`${width}`}
-                patternheight={`${height}`}
+                maskwidth={`${width}`}
+                maskheight={`${height}`}
                 matrix={extractedTransform}
-                patternTransform={extractedTransform}
-                patternUnits={PATTERN_UNITS[patternUnits] || 0}
-                patternContentUnits={patternContentUnits ? PATTERN_UNITS[patternContentUnits] : 1}
-                {...extractViewBox({ viewBox, preserveAspectRatio })}
+                maskTransform={extractedTransform}
+                maskUnits={maskUnits !== undefined ? PATTERN_UNITS[maskUnits] : 0}
+                maskContentUnits={maskContentUnits !== undefined ? PATTERN_UNITS[maskContentUnits] : 1}
             >
                 {children}
-            </RNSVGPattern>
+            </RNSVGMask>
         );
     }
 }
 
-const RNSVGPattern = requireNativeComponent('RNSVGPattern', null, {
-    nativeOnly: PatternAttributes,
+const RNSVGMask = requireNativeComponent('RNSVGMask', null, {
+    nativeOnly: MaskAttributes,
 });

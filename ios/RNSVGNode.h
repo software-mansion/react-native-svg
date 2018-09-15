@@ -30,6 +30,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGFloat opacity;
 @property (nonatomic, assign) RNSVGCGFCRule clipRule;
 @property (nonatomic, strong) NSString *clipPath;
+@property (nonatomic, strong) NSString *mask;
 @property (nonatomic, assign) BOOL responsible;
 @property (nonatomic, assign) CGAffineTransform matrix;
 @property (nonatomic, assign) CGAffineTransform invmatrix;
@@ -90,10 +91,6 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 
 - (CGFloat)getContextHeight;
 
-- (CGFloat)getContextLeft;
-
-- (CGFloat)getContextTop;
-
 /**
  * save element`s reference into svg element.
  */
@@ -104,5 +101,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 - (void)endTransparencyLayer:(CGContextRef)context;
 
 - (void)traverseSubviews:(BOOL (^)(__kindof UIView *node))block;
+
+- (void)releaseCachedPath;
 
 @end

@@ -10,9 +10,14 @@
 package com.horcrux.svg;
 
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Region;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ReactShadowNode;
@@ -79,7 +84,7 @@ class GroupShadowNode extends RenderableShadowNode {
                     }
 
                     int count = node.saveAndSetupCanvas(canvas);
-                    node.draw(canvas, paint, opacity * mOpacity);
+                    node.render(canvas, paint, opacity * mOpacity);
                     RectF r = node.getClientRect();
                     if (r != null) {
                         groupRect.union(r);
@@ -119,10 +124,62 @@ class GroupShadowNode extends RenderableShadowNode {
         traverseChildren(new NodeRunnable() {
             public void run(ReactShadowNode node) {
                 if (node instanceof VirtualNode) {
-                    path.addPath(((VirtualNode)node).getPath(canvas, paint));
+                    VirtualNode n = (VirtualNode)node;
+                    Matrix transform = n.mMatrix;
+                    path.addPath(n.getPath(canvas, paint), transform);
                 }
             }
         });
+
+        return path;
+    }
+
+    protected Path getPath(final Canvas canvas, final Paint paint, final Region.Op op) {
+        final Path path = new Path();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            final Path.Op pop = Path.Op.valueOf(op.name());
+            traverseChildren(new NodeRunnable() {
+                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                public void run(ReactShadowNode node) {
+                    if (node instanceof VirtualNode) {
+                        VirtualNode n = (VirtualNode)node;
+                        Matrix transform = n.mMatrix;
+                        Path p2;
+                        if (n instanceof GroupShadowNode) {
+                            p2 = ((GroupShadowNode)n).getPath(canvas, paint, op);
+                        } else {
+                            p2 = n.getPath(canvas, paint);
+                        }
+                        p2.transform(transform);
+                        path.op(p2, pop);
+                    }
+                }
+            });
+        } else {
+            Rect clipBounds = canvas.getClipBounds();
+            final Region bounds = new Region(clipBounds);
+            final Region r = new Region();
+            traverseChildren(new NodeRunnable() {
+                public void run(ReactShadowNode node) {
+                    if (node instanceof VirtualNode) {
+                        VirtualNode n = (VirtualNode)node;
+                        Matrix transform = n.mMatrix;
+                        Path p2;
+                        if (n instanceof GroupShadowNode) {
+                            p2 = ((GroupShadowNode)n).getPath(canvas, paint, op);
+                        } else {
+                            p2 = n.getPath(canvas, paint);
+                        }
+                        p2.transform(transform);
+                        Region r2 = new Region();
+                        r2.setPath(p2, bounds);
+                        r.op(r2, op);
+                    }
+                }
+            });
+            path.addPath(r.getBoundaryPath());
+        }
 
         return path;
     }

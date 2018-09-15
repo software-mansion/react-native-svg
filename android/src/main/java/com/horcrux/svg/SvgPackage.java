@@ -41,6 +41,8 @@ public class SvgPackage implements ReactPackage {
                 RenderableViewManager.createSymbolManager(),
                 RenderableViewManager.createLinearGradientManager(),
                 RenderableViewManager.createRadialGradientManager(),
+                RenderableViewManager.createPatternManager(),
+                RenderableViewManager.createMaskManager(),
                 new SvgViewManager());
     }
 

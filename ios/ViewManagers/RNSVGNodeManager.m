@@ -24,14 +24,10 @@ RCT_EXPORT_MODULE()
     return [self node];
 }
 
-- (RCTShadowView *)shadowView
-{
-    return nil;
-}
-
 RCT_EXPORT_VIEW_PROPERTY(name, NSString)
 RCT_EXPORT_VIEW_PROPERTY(opacity, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(matrix, CGAffineTransform)
+RCT_EXPORT_VIEW_PROPERTY(mask, NSString)
 RCT_EXPORT_VIEW_PROPERTY(clipPath, NSString)
 RCT_EXPORT_VIEW_PROPERTY(clipRule, RNSVGCGFCRule)
 RCT_EXPORT_VIEW_PROPERTY(responsible, BOOL)

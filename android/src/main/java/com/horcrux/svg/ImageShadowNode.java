@@ -77,13 +77,13 @@ class ImageShadowNode extends RenderableShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "width")
+    @ReactProp(name = "imagewidth")
     public void setWidth(String width) {
         mW = width;
         markUpdated();
     }
 
-    @ReactProp(name = "height")
+    @ReactProp(name = "imageheight")
     public void seHeight(String height) {
         mH = height;
         markUpdated();

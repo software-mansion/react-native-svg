@@ -12,6 +12,7 @@ package com.horcrux.svg;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Region;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -35,8 +36,14 @@ class TextShadowNode extends GroupShadowNode {
     private @Nullable ReadableArray mDeltaX;
     private @Nullable ReadableArray mDeltaY;
 
+    @Override
+    public void markUpdated() {
+        super.markUpdated();
+        releaseCachedPath();
+    }
+
     @ReactProp(name = "textLength")
-    public void setmTextLength(@Nullable String length) {
+    public void setTextLength(@Nullable String length) {
         mTextLength = length;
         markUpdated();
     }
@@ -124,7 +131,6 @@ class TextShadowNode extends GroupShadowNode {
             clip(canvas, paint);
             getGroupPath(canvas, paint);
             drawGroup(canvas, paint, opacity);
-            releaseCachedPath();
         }
     }
 
@@ -132,8 +138,12 @@ class TextShadowNode extends GroupShadowNode {
     protected Path getPath(Canvas canvas, Paint paint) {
         setupGlyphContext(canvas);
         Path groupPath = getGroupPath(canvas, paint);
-        releaseCachedPath();
         return groupPath;
+    }
+
+    @Override
+    protected Path getPath(Canvas canvas, Paint paint, Region.Op op) {
+        return getPath(canvas, paint);
     }
 
     AlignmentBaseline getAlignmentBaseline() {
@@ -173,16 +183,6 @@ class TextShadowNode extends GroupShadowNode {
             }
         }
         return mBaselineShift;
-    }
-
-    void releaseCachedPath() {
-        traverseChildren(new NodeRunnable() {
-            public void run(ReactShadowNode node) {
-                if (node instanceof TextShadowNode) {
-                    ((TextShadowNode)node).releaseCachedPath();
-                }
-            }
-        });
     }
 
     Path getGroupPath(Canvas canvas, Paint paint) {

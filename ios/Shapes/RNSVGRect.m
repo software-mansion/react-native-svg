@@ -13,7 +13,7 @@
 
 - (void)setX:(NSString *)x
 {
-    if (x == _x) {
+    if ([x isEqualToString:_x]) {
         return;
     }
     [self invalidate];
@@ -22,34 +22,34 @@
 
 - (void)setY:(NSString *)y
 {
-    if (y == _y) {
+    if ([y isEqualToString:_y]) {
         return;
     }
     [self invalidate];
     _y = y;
 }
 
-- (void)setWidth:(NSString *)width
+- (void)setRectwidth:(NSString *)rectwidth
 {
-    if (width == _width) {
+    if ([rectwidth isEqualToString:_rectwidth]) {
         return;
     }
     [self invalidate];
-    _width = width;
+    _rectwidth = rectwidth;
 }
 
-- (void)setHeight:(NSString *)height
+- (void)setRectheight:(NSString *)rectheight
 {
-    if (height == _height) {
+    if ([rectheight isEqualToString:_rectheight]) {
         return;
     }
     [self invalidate];
-    _height = height;
+    _rectheight = rectheight;
 }
 
 - (void)setRx:(NSString *)rx
 {
-    if (rx == _rx) {
+    if ([rx isEqualToString:_rx]) {
         return;
     }
     [self invalidate];
@@ -58,7 +58,7 @@
 
 - (void)setRy:(NSString *)ry
 {
-    if (ry == _ry) {
+    if ([ry isEqualToString:_ry]) {
         return;
     }
     [self invalidate];
@@ -70,31 +70,31 @@
     CGMutablePathRef path = CGPathCreateMutable();
     CGFloat x = [self relativeOnWidth:self.x];
     CGFloat y = [self relativeOnHeight:self.y];
-    CGFloat width = [self relativeOnWidth:self.width];
-    CGFloat height = [self relativeOnHeight:self.height];
+    CGFloat width = [self relativeOnWidth:self.rectwidth];
+    CGFloat height = [self relativeOnHeight:self.rectheight];
     CGFloat rx = [self relativeOnWidth:self.rx];
     CGFloat ry = [self relativeOnHeight:self.ry];
-    
+
     if (rx != 0 || ry != 0) {
         if (rx == 0) {
             rx = ry;
         } else if (ry == 0) {
             ry = rx;
         }
-        
+
         if (rx > width / 2) {
             rx = width / 2;
         }
-        
+
         if (ry > height / 2) {
             ry = height / 2;
         }
-        
+
         CGPathAddRoundedRect(path, nil, CGRectMake(x, y, width, height), rx, ry);
     } else {
         CGPathAddRect(path, nil, CGRectMake(x, y, width, height));
     }
-    
+
     return (CGPathRef)CFAutorelease(path);
 }
 
