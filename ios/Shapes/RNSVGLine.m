@@ -13,7 +13,7 @@
 
 - (void)setX1:(NSString *)x1
 {
-    if (x1 == _x1) {
+    if ([x1 isEqualToString:_x1]) {
         return;
     }
     [self invalidate];
@@ -22,7 +22,7 @@
 
 - (void)setY1:(NSString *)y1
 {
-    if (y1 == _y1) {
+    if ([y1 isEqualToString:_y1]) {
         return;
     }
     [self invalidate];
@@ -31,7 +31,7 @@
 
 - (void)setX2:(NSString *)x2
 {
-    if (x2 == _x2) {
+    if ([x2 isEqualToString:_x2]) {
         return;
     }
     [self invalidate];
@@ -40,7 +40,7 @@
 
 - (void)setY2:(NSString *)y2
 {
-    if (y2 == _y2) {
+    if ([y2 isEqualToString:_y2]) {
         return;
     }
     [self invalidate];

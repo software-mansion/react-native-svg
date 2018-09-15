@@ -7,6 +7,9 @@
  */
 
 #import "RNSVGRenderable.h"
+#import "RNSVGClipPath.h"
+#import "RNSVGMask.h"
+#import "RNSVGViewBox.h"
 
 @implementation RNSVGRenderable
 {
@@ -74,7 +77,7 @@
 
 - (void)setStrokeWidth:(NSString*)strokeWidth
 {
-    if (strokeWidth == _strokeWidth) {
+    if ([strokeWidth isEqualToString:_strokeWidth]) {
         return;
     }
     [self invalidate];
@@ -158,6 +161,11 @@
     }
 }
 
+
+UInt32 saturate(double value) {
+    return value <= 0 ? 0 : value >= 255 ? 255 : value;
+}
+
 - (void)renderTo:(CGContextRef)context rect:(CGRect)rect
 {
     // This needs to be painted on a layer before being composited.
@@ -166,7 +174,97 @@
     CGContextSetAlpha(context, self.opacity);
 
     [self beginTransparencyLayer:context];
-    [self renderLayerTo:context rect:rect];
+
+    if (self.mask) {
+        // https://www.w3.org/TR/SVG11/masking.html#MaskElement
+        RNSVGMask *_maskNode = (RNSVGMask*)[self.svgView getDefinedMask:self.mask];
+        CGRect bounds = CGContextGetClipBoundingBox(context);
+        CGSize boundsSize = bounds.size;
+        float height = boundsSize.height;
+        float width = boundsSize.width;
+        NSUInteger iheight = height;
+        NSUInteger iwidth = width;
+        NSUInteger npixels = iheight * iwidth;
+        CGRect drawBounds = CGRectMake(0, 0, width, height);
+
+        // Allocate pixel buffer and bitmap context for mask
+        NSUInteger bytesPerPixel = 4;
+        NSUInteger bitsPerComponent = 8;
+        NSUInteger bytesPerRow = bytesPerPixel * iwidth;
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        UInt32 * pixels = (UInt32 *) calloc(npixels, sizeof(UInt32));
+        CGContextRef bcontext = CGBitmapContextCreate(pixels, iwidth, iheight, bitsPerComponent, bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+
+        // Clip to mask bounds and render the mask
+        CGFloat x = [RNSVGPercentageConverter stringToFloat:[_maskNode x]
+                                                   relative:width
+                                                     offset:0];
+        CGFloat y = [RNSVGPercentageConverter stringToFloat:[_maskNode y]
+                                                   relative:height
+                                                     offset:0];
+        CGFloat w = [RNSVGPercentageConverter stringToFloat:[_maskNode maskwidth]
+                                                   relative:width
+                                                     offset:0];
+        CGFloat h = [RNSVGPercentageConverter stringToFloat:[_maskNode maskheight]
+                                                   relative:height
+                                                     offset:0];
+        CGRect maskBounds = CGRectMake(x, y, w, h);
+        CGContextClipToRect(bcontext, maskBounds);
+        [_maskNode renderLayerTo:bcontext rect:rect];
+
+        // Apply luminanceToAlpha filter primitive
+        // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
+        UInt32 * currentPixel = pixels;
+        for (NSUInteger i = 0; i < npixels; i++) {
+            UInt32 color = *currentPixel;
+
+            UInt32 r = color & 0xFF;
+            UInt32 g = (color >> 8) & 0xFF;
+            UInt32 b = (color >> 16) & 0xFF;
+
+            double luma = 0.299 * r + 0.587 * g + 0.144 * b;
+            *currentPixel = saturate(luma) << 24;
+            currentPixel++;
+        }
+
+        // Create mask image and release memory
+        CGImageRef maskImage = CGBitmapContextCreateImage(bcontext);
+        CGColorSpaceRelease(colorSpace);
+        CGContextRelease(bcontext);
+        free(pixels);
+
+        // Render content of current SVG Renderable to image
+        UIGraphicsBeginImageContextWithOptions(boundsSize, NO, 0.0);
+        CGContextRef newContext = UIGraphicsGetCurrentContext();
+        CGContextTranslateCTM(newContext, 0.0, height);
+        CGContextScaleCTM(newContext, 1.0, -1.0);
+        [self renderLayerTo:newContext rect:rect];
+        CGImageRef contentImage = CGBitmapContextCreateImage(newContext);
+        UIGraphicsEndImageContext();
+
+        // Blend current element and mask
+        UIGraphicsBeginImageContextWithOptions(boundsSize, NO, 0.0);
+        newContext = UIGraphicsGetCurrentContext();
+        CGContextTranslateCTM(newContext, 0.0, height);
+        CGContextScaleCTM(newContext, 1.0, -1.0);
+
+        CGContextSetBlendMode(newContext, kCGBlendModeCopy);
+        CGContextDrawImage(newContext, drawBounds, maskImage);
+        CGImageRelease(maskImage);
+
+        CGContextSetBlendMode(newContext, kCGBlendModeSourceIn);
+        CGContextDrawImage(newContext, drawBounds, contentImage);
+        CGImageRelease(contentImage);
+
+        CGImageRef blendedImage = CGBitmapContextCreateImage(newContext);
+        UIGraphicsEndImageContext();
+
+        // Render blended result into current render context
+        CGContextDrawImage(context, drawBounds, blendedImage);
+        CGImageRelease(blendedImage);
+    } else {
+        [self renderLayerTo:context rect:rect];
+    }
     [self endTransparencyLayer:context];
 
     CGContextRestoreGState(context);
@@ -187,7 +285,7 @@
         self.path = CGPathRetain(CFAutorelease(CGPathCreateCopy([self getPath:context])));
         [self setHitArea:self.path];
     }
-    
+
     const CGRect pathBounding = CGPathGetBoundingBox(self.path);
     const CGAffineTransform svgToClientTransform = CGAffineTransformConcat(CGContextGetCTM(context), self.svgView.invInitialCTM);
     self.clientRect = CGRectApplyAffineTransform(pathBounding, svgToClientTransform);
@@ -210,6 +308,7 @@
             [self.fill paint:context
                      opacity:self.fillOpacity
                      painter:[self.svgView getDefinedPainter:self.fill.brushRef]
+                      bounds:pathBounding
              ];
             CGContextRestoreGState(context);
 
@@ -255,6 +354,7 @@
             [self.stroke paint:context
                        opacity:self.strokeOpacity
                        painter:[self.svgView getDefinedPainter:self.stroke.brushRef]
+                        bounds:pathBounding
              ];
             return;
         }
@@ -270,7 +370,7 @@
     _hitArea = nil;
     // Add path to hitArea
     CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
-    
+
     if (self.stroke && self.strokeWidth) {
         // Add stroke to hitArea
         CGFloat width = [self relativeOnOther:self.strokeWidth];
@@ -278,7 +378,7 @@
         CGPathAddPath(hitArea, nil, strokePath);
         CGPathRelease(strokePath);
     }
-    
+
     _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(hitArea)));
     CGPathRelease(hitArea);
 
@@ -304,9 +404,19 @@
         return nil;
     }
 
-    CGPathRef clipPath = [self getClipPath];
-    if (clipPath && !CGPathContainsPoint(clipPath, nil, transformed, self.clipRule == kRNSVGCGFCRuleEvenodd)) {
-        return nil;
+    if (self.clipPath) {
+        RNSVGClipPath *clipNode = (RNSVGClipPath*)[self.svgView getDefinedClipPath:self.clipPath];
+        if ([clipNode isSimpleClipPath]) {
+            CGPathRef clipPath = [self getClipPath];
+            if (clipPath && !CGPathContainsPoint(clipPath, nil, transformed, self.clipRule == kRNSVGCGFCRuleEvenodd)) {
+                return nil;
+            }
+        } else {
+            RNSVGRenderable *clipGroup = (RNSVGRenderable*)clipNode;
+            if (![clipGroup hitTest:transformed withEvent:event]) {
+                return nil;
+            }
+        }
     }
 
     return self;

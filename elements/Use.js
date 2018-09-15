@@ -52,8 +52,8 @@ export default class extends Shape {
                 }}
                 {...extractProps(props, this)}
                 href={href}
-                width={width !== undefined ? width.toString() : ""}
-                height={height !== undefined ? height.toString() : ""}
+                usewidth={width !== undefined ? width.toString() : ""}
+                useheight={height !== undefined ? height.toString() : ""}
             >
                 {children}
             </RNSVGUse>

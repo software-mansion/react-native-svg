@@ -9,20 +9,24 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
+import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.uimanager.OnLayoutEvent;
-import com.facebook.react.uimanager.UIManagerModule;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.uimanager.events.EventDispatcher;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -39,17 +43,17 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     // strokeLinecap
     private static final int CAP_BUTT = 0;
-    private static final int CAP_ROUND = 1;
+    static final int CAP_ROUND = 1;
     private static final int CAP_SQUARE = 2;
 
     // strokeLinejoin
     private static final int JOIN_BEVEL = 2;
     private static final int JOIN_MITER = 0;
-    private static final int JOIN_ROUND = 1;
+    static final int JOIN_ROUND = 1;
 
     // fillRule
     private static final int FILL_RULE_EVENODD = 0;
-    private static final int FILL_RULE_NONZERO = 1;
+    static final int FILL_RULE_NONZERO = 1;
 
     public @Nullable ReadableArray mStroke;
     public @Nullable String[] mStrokeDasharray;
@@ -71,9 +75,29 @@ abstract public class RenderableShadowNode extends VirtualNode {
     protected @Nullable ArrayList<String> mPropList;
     protected @Nullable ArrayList<String> mAttributeList;
 
+    static final Pattern regex = Pattern.compile("[0-9.-]+");
+
     @ReactProp(name = "fill")
-    public void setFill(@Nullable ReadableArray fill) {
-        mFill = fill;
+    public void setFill(@Nullable Dynamic fill) {
+        if (fill == null || fill.isNull()) {
+            mFill = null;
+            markUpdated();
+            return;
+        }
+        ReadableType type = fill.getType();
+        if (type.equals(ReadableType.Array)) {
+            mFill = fill.asArray();
+        } else {
+            JavaOnlyArray arr = new JavaOnlyArray();
+            arr.pushInt(0);
+            Matcher m = regex.matcher(fill.asString());
+            int i = 0;
+            while (m.find()) {
+                Double parsed = Double.parseDouble(m.group());
+                arr.pushDouble(i++ < 3 ? parsed / 255 : parsed);
+            }
+            mFill = arr;
+        }
         markUpdated();
     }
 
@@ -100,8 +124,25 @@ abstract public class RenderableShadowNode extends VirtualNode {
     }
 
     @ReactProp(name = "stroke")
-    public void setStroke(@Nullable ReadableArray strokeColors) {
-        mStroke = strokeColors;
+    public void setStroke(@Nullable Dynamic strokeColors) {
+        if (strokeColors == null || strokeColors.isNull()) {
+            mStroke = null;
+            markUpdated();
+            return;
+        }
+        ReadableType type = strokeColors.getType();
+        if (type.equals(ReadableType.Array)) {
+            mStroke = strokeColors.asArray();
+        } else {
+            JavaOnlyArray arr = new JavaOnlyArray();
+            arr.pushInt(0);
+            Matcher m = regex.matcher(strokeColors.asString());
+            while (m.find()) {
+                Double parsed = Double.parseDouble(m.group());
+                arr.pushDouble(parsed);
+            }
+            mStroke = arr;
+        }
         markUpdated();
     }
 
@@ -126,8 +167,8 @@ abstract public class RenderableShadowNode extends VirtualNode {
     }
 
     @ReactProp(name = "strokeDashoffset")
-    public void setStrokeDashoffset(float strokeWidth) {
-        mStrokeDashoffset = strokeWidth * mScale;
+    public void setStrokeDashoffset(float strokeDashoffset) {
+        mStrokeDashoffset = strokeDashoffset * mScale;
         markUpdated();
     }
 
@@ -194,6 +235,73 @@ abstract public class RenderableShadowNode extends VirtualNode {
         markUpdated();
     }
 
+    static double saturate(double v) {
+        return v <= 0 ? 0 : (v >= 1 ? 1 : v);
+    }
+
+    public void render(Canvas canvas, Paint paint, float opacity) {
+        if (mMask != null) {
+            SvgViewShadowNode root = getSvgShadowNode();
+            MaskShadowNode mask = (MaskShadowNode) root.getDefinedMask(mMask);
+
+            Rect clipBounds = canvas.getClipBounds();
+            int height = clipBounds.height();
+            int width = clipBounds.width();
+
+            Bitmap maskBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Bitmap original = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+            Canvas originalCanvas = new Canvas(original);
+            Canvas maskCanvas = new Canvas(maskBitmap);
+            Canvas resultCanvas = new Canvas(result);
+
+            // Clip to mask bounds and render the mask
+            float maskX = (float) relativeOnWidth(mask.mX);
+            float maskY = (float) relativeOnWidth(mask.mY);
+            float maskWidth = (float) relativeOnWidth(mask.mWidth);
+            float maskHeight = (float) relativeOnWidth(mask.mHeight);
+            maskCanvas.clipRect(maskX, maskY, maskWidth, maskHeight);
+
+            Paint maskpaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mask.draw(maskCanvas, maskpaint, 1);
+
+            // Apply luminanceToAlpha filter primitive https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
+            int nPixels = width * height;
+            int[] pixels = new int[nPixels];
+            maskBitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+
+            for (int i = 0; i < nPixels; i++) {
+                int color = pixels[i];
+
+                int r = (color >> 16) & 0xFF;
+                int g = (color >> 8) & 0xFF;
+                int b = color & 0xFF;
+                int a = color >>> 24;
+
+                double luminance = saturate(((0.299 * r) + (0.587 * g) + (0.144 * b)) / 255);
+                int alpha = (int) (a * luminance);
+                int pixel = (alpha << 24);
+                pixels[i] = pixel;
+            }
+
+            maskBitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+
+            // Render content of current SVG Renderable to image
+            draw(originalCanvas, paint, opacity);
+
+            // Blend current element and mask
+            maskpaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+            resultCanvas.drawBitmap(original, 0, 0, null);
+            resultCanvas.drawBitmap(maskBitmap, 0, 0, maskpaint);
+
+            // Render blended result into current render context
+            canvas.drawBitmap(result, 0, 0, paint);
+        } else {
+            draw(canvas, paint, opacity);
+        }
+    }
+
     @Override
     public void draw(Canvas canvas, Paint paint, float opacity) {
         opacity *= mOpacity;
@@ -203,9 +311,10 @@ abstract public class RenderableShadowNode extends VirtualNode {
                 mPath = getPath(canvas, paint);
                 mPath.setFillType(mFillRule);
             }
+            Path path = mPath;
 
             RectF clientRect = new RectF();
-            mPath.computeBounds(clientRect, true);
+            path.computeBounds(clientRect, true);
             Matrix svgToViewMatrix = new Matrix(canvas.getMatrix());
             svgToViewMatrix.mapRect(clientRect);
             this.setClientRect(clientRect);
@@ -213,10 +322,10 @@ abstract public class RenderableShadowNode extends VirtualNode {
             clip(canvas, paint);
 
             if (setupFillPaint(paint, opacity * mFillOpacity)) {
-                canvas.drawPath(mPath, paint);
+                canvas.drawPath(path, paint);
             }
             if (setupStrokePaint(paint, opacity * mStrokeOpacity)) {
-                canvas.drawPath(mPath, paint);
+                canvas.drawPath(path, paint);
             }
         }
     }

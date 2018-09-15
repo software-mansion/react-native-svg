@@ -9,6 +9,9 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
@@ -23,17 +26,27 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.ReactConstants;
 
 class Brush {
-    private BrushType mType = BrushType.LINEAR_GRADIENT;
+    private BrushType mType;
     private final ReadableArray mPoints;
     private ReadableArray mColors;
     private final boolean mUseObjectBoundingBox;
+    private boolean mUseContentObjectBoundingBox;
     private Matrix mMatrix;
     private Rect mUserSpaceBoundingBox;
+    PatternShadowNode mPattern;
 
     Brush(BrushType type, ReadableArray points, BrushUnits units) {
         mType = type;
         mPoints = points;
         mUseObjectBoundingBox = units == BrushUnits.OBJECT_BOUNDING_BOX;
+    }
+
+    void setContentUnits(BrushUnits units) {
+        mUseContentObjectBoundingBox = units == BrushUnits.OBJECT_BOUNDING_BOX;
+    }
+
+    void setPattern(PatternShadowNode pattern) {
+        mPattern = pattern;
     }
 
     enum BrushType {
@@ -105,6 +118,35 @@ class Brush {
         float offsetX = rect.left;
         float offsetY = rect.top;
 
+        if (mType == BrushType.PATTERN) {
+            double x = PropHelper.fromRelative(mPoints.getString(0), width, offsetX, scale, paint.getTextSize());
+            double y = PropHelper.fromRelative(mPoints.getString(1), height, offsetY, scale, paint.getTextSize());
+            double w = PropHelper.fromRelative(mPoints.getString(2), width, offsetX, scale, paint.getTextSize());
+            double h = PropHelper.fromRelative(mPoints.getString(3), height, offsetY, scale, paint.getTextSize());
+
+            RectF vbRect = mPattern.getViewBox();
+            RectF eRect = new RectF((float)x, (float)y, (float)w, (float)h);
+            Matrix mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mPattern.mAlign, mPattern.mMeetOrSlice);
+
+            Bitmap bitmap = Bitmap.createBitmap(
+                    (int) w,
+                    (int) h,
+                    Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            canvas.concat(mViewBoxMatrix);
+            mPattern.draw(canvas, new Paint(), opacity);
+
+            Matrix patternMatrix = new Matrix();
+            if (mMatrix != null) {
+                patternMatrix.preConcat(mMatrix);
+            }
+
+            BitmapShader bitmapShader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+            bitmapShader.setLocalMatrix(patternMatrix);
+            paint.setShader(bitmapShader);
+            return;
+        }
+
         int stopsCount = mColors.size() / 5;
         int[] stopsColors = new int[stopsCount];
         float[] stops = new float[stopsCount];
@@ -170,12 +212,5 @@ class Brush {
             radialGradient.setLocalMatrix(radialMatrix);
             paint.setShader(radialGradient);
         }
-        // else {
-            // todo: pattern support
-
-            //Shader mShader1 = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-            //paint.setShader(mShader1);
-            //bitmap.recycle();
-        // }
     }
 }

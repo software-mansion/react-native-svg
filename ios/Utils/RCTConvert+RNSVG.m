@@ -13,6 +13,8 @@
 #import <React/RCTLog.h>
 #import <React/RCTFont.h>
 
+NSRegularExpression *RNSVGDigitRegEx;
+
 @implementation RCTConvert (RNSVG)
 
 RCT_ENUM_CONVERTER(RNSVGCGFCRule, (@{
@@ -27,9 +29,9 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
                                   }), kRNSVGVBMOSMeet, intValue)
 
 RCT_ENUM_CONVERTER(RNSVGUnits, (@{
-                                     @"objectBoundingBox": @(kRNSVGUnitsObjectBoundingBox),
-                                     @"userSpaceOnUse": @(kRNSVGUnitsUserSpaceOnUse),
-                                     }), kRNSVGUnitsObjectBoundingBox, intValue)
+                                  @"objectBoundingBox": @(kRNSVGUnitsObjectBoundingBox),
+                                  @"userSpaceOnUse": @(kRNSVGUnitsUserSpaceOnUse),
+                                  }), kRNSVGUnitsObjectBoundingBox, intValue)
 
 + (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json
 {
@@ -54,6 +56,24 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
 
 + (RNSVGBrush *)RNSVGBrush:(id)json
 {
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *value = [self NSString:json];
+        if (!RNSVGDigitRegEx) {
+            RNSVGDigitRegEx = [NSRegularExpression regularExpressionWithPattern:@"[0-9.-]+" options:NSRegularExpressionCaseInsensitive error:nil];
+        }
+        NSArray<NSTextCheckingResult*> *_matches = [RNSVGDigitRegEx matchesInString:value options:0 range:NSMakeRange(0, [value length])];
+        NSMutableArray *output = [NSMutableArray array];
+        NSUInteger i = 0;
+        [output addObject:[NSNumber numberWithInteger:0]];
+        for (NSTextCheckingResult *match in _matches) {
+            NSString* strNumber = [value substringWithRange:match.range];
+            [output addObject:[NSNumber numberWithDouble:(i++ < 3 ? strNumber.doubleValue / 255 : strNumber.doubleValue)]];
+        }
+        if ([output count] < 5) {
+            [output addObject:[NSNumber numberWithDouble:1]];
+        }
+        return [[RNSVGSolidColorBrush alloc] initWithArray:output];
+    }
     NSArray *arr = [self NSArray:json];
     NSUInteger type = [self NSUInteger:arr.firstObject];
 
@@ -124,3 +144,4 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
 }
 
 @end
+

@@ -40,14 +40,14 @@ class RectShadowNode extends RenderableShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "width")
+    @ReactProp(name = "rectwidth")
     public void setWidth(String width) {
         mW = width;
         markUpdated();
     }
 
 
-    @ReactProp(name = "height")
+    @ReactProp(name = "rectheight")
     public void setHeight(String height) {
         mH = height;
         markUpdated();

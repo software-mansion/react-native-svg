@@ -49,8 +49,8 @@ export default class extends Shape {
                 {...extractProps({ ...props, x: null, y: null }, this)}
                 x={props.x.toString()}
                 y={props.y.toString()}
-                width={props.width.toString()}
-                height={props.height.toString()}
+                imagewidth={props.width.toString()}
+                imageheight={props.height.toString()}
                 meetOrSlice={meetOrSlice}
                 align={align}
                 src={Image.resolveAssetSource(props.href)}

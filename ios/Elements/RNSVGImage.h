@@ -18,8 +18,8 @@
 @property (nonatomic, assign) id src;
 @property (nonatomic, strong) NSString* x;
 @property (nonatomic, strong) NSString* y;
-@property (nonatomic, strong) NSString* width;
-@property (nonatomic, strong) NSString* height;
+@property (nonatomic, strong) NSString* imagewidth;
+@property (nonatomic, strong) NSString* imageheight;
 @property (nonatomic, strong) NSString *align;
 @property (nonatomic, assign) RNSVGVBMOS meetOrSlice;
 

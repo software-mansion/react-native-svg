@@ -13,7 +13,7 @@
 
 - (void)setCx:(NSString *)cx
 {
-    if (cx == _cx) {
+    if ([cx isEqualToString:_cx]) {
         return;
     }
     [self invalidate];
@@ -22,7 +22,7 @@
 
 - (void)setCy:(NSString *)cy
 {
-    if (cy == _cy) {
+    if ([cy isEqualToString:_cy]) {
         return;
     }
     [self invalidate];
@@ -31,7 +31,7 @@
 
 - (void)setRx:(NSString *)rx
 {
-    if (rx == _rx) {
+    if ([rx isEqualToString:_rx]) {
         return;
     }
     [self invalidate];
@@ -40,7 +40,7 @@
 
 - (void)setRy:(NSString *)ry
 {
-    if (ry == _ry) {
+    if ([ry isEqualToString:_ry]) {
         return;
     }
     [self invalidate];

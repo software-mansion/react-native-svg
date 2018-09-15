@@ -10,13 +10,20 @@
 #import "RNSVGBrushType.h"
 #import "RNSVGUnits.h"
 
+@class RNSVGPattern;
+
 @interface RNSVGPainter : NSObject
+
+@property (nonatomic, assign) RNSVGPattern* pattern;
+@property (nonatomic, assign) CGRect paintBounds;
 
 - (instancetype)initWithPointsArray:(NSArray<NSString *> *)pointsArray NS_DESIGNATED_INITIALIZER;
 
-- (void)paint:(CGContextRef)context;
+- (void)paint:(CGContextRef)context bounds:(CGRect)bounds;
 
 - (void)setUnits:(RNSVGUnits)unit;
+
+- (void)setContentUnits:(RNSVGUnits)unit;
 
 - (void)setUserSpaceBoundingBox:(CGRect)userSpaceBoundingBox;
 

@@ -41,6 +41,12 @@ abstract class VirtualNode extends LayoutShadowNode {
 
     static final float MIN_OPACITY_FOR_DRAW = 0.01f;
 
+    @Override
+    public void setReactTag(int reactTag) {
+        super.setReactTag(reactTag);
+        RenderableViewManager.setShadowNode(this);
+    }
+
     private static final float[] sRawMatrix = new float[]{
         1, 0, 0,
         0, 1, 0,
@@ -50,10 +56,11 @@ abstract class VirtualNode extends LayoutShadowNode {
     Matrix mMatrix = new Matrix();
     Matrix mInvMatrix = new Matrix();
     boolean mInvertible = true;
-    RectF mClientRect;
+    private RectF mClientRect;
 
     private int mClipRule;
     private @Nullable String mClipPath;
+    @Nullable String mMask;
 
     private static final int CLIP_RULE_EVENODD = 0;
     private static final int CLIP_RULE_NONZERO = 1;
@@ -76,28 +83,42 @@ abstract class VirtualNode extends LayoutShadowNode {
     Path mClipRegionPath;
 
     VirtualNode() {
-        setIsLayoutOnly(true);
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
     }
 
     @Override
     public boolean isVirtual() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isVirtualAnchor() {
-        return true;
+        return false;
     }
 
     @Override
     public void markUpdated() {
         super.markUpdated();
+        clearPath();
+    }
+
+    private void clearPath() {
         canvasHeight = -1;
         canvasWidth = -1;
         mRegion = null;
         mPath = null;
         mBox = null;
+    }
+
+    void releaseCachedPath() {
+        clearPath();
+        traverseChildren(new NodeRunnable() {
+            public void run(ReactShadowNode node) {
+                if (node instanceof VirtualNode) {
+                    ((VirtualNode)node).releaseCachedPath();
+                }
+            }
+        });
     }
 
     @Nullable
@@ -148,6 +169,9 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
     public abstract void draw(Canvas canvas, Paint paint, float opacity);
+    public void render(Canvas canvas, Paint paint, float opacity) {
+        draw(canvas, paint, opacity);
+    }
 
     /**
      * Sets up the transform matrix on the canvas before an element is drawn.
@@ -181,6 +205,12 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
 
+    @ReactProp(name = "mask")
+    public void setMask(String mask) {
+        mMask = mask;
+        markUpdated();
+    }
+
     @ReactProp(name = "clipPath")
     public void setClipPath(String clipPath) {
         mCachedClipPath = null;
@@ -189,7 +219,7 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
     @ReactProp(name = "clipRule", defaultInt = CLIP_RULE_NONZERO)
-    public void clipRule(int clipRule) {
+    public void setClipRule(int clipRule) {
         mClipRule = clipRule;
         markUpdated();
     }
@@ -234,10 +264,10 @@ abstract class VirtualNode extends LayoutShadowNode {
 
     @Nullable Path getClipPath(Canvas canvas, Paint paint) {
         if (mClipPath != null) {
-            VirtualNode node = getSvgShadowNode().getDefinedClipPath(mClipPath);
+            ClipPathShadowNode mClipNode = (ClipPathShadowNode) getSvgShadowNode().getDefinedClipPath(mClipPath);
 
-            if (node != null) {
-                Path clipPath = node.getPath(canvas, paint);
+            if (mClipNode != null) {
+                Path clipPath = mClipNode.getPath(canvas, paint, Region.Op.UNION);
                 switch (mClipRule) {
                     case CLIP_RULE_EVENODD:
                         clipPath.setFillType(Path.FillType.EVEN_ODD);
@@ -260,7 +290,7 @@ abstract class VirtualNode extends LayoutShadowNode {
         Path clip = getClipPath(canvas, paint);
 
         if (clip != null) {
-            canvas.clipPath(clip, Region.Op.REPLACE);
+            canvas.clipPath(clip);
         }
     }
 

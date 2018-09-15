@@ -11,6 +11,47 @@
 
 @implementation RNSVGLinearGradient
 
+
+- (void)setX1:(NSString *)x1
+{
+    if ([x1 isEqualToString:_x1]) {
+        return;
+    }
+    
+    _x1 = x1;
+    [self invalidate];
+}
+
+- (void)setY1:(NSString *)y1
+{
+    if ([y1 isEqualToString:_y1]) {
+        return;
+    }
+    
+    _y1 = y1;
+    [self invalidate];
+}
+
+- (void)setX2:(NSString *)x2
+{
+    if ([x2 isEqualToString:_x2]) {
+        return;
+    }
+    
+    _x2 = x2;
+    [self invalidate];
+}
+
+- (void)setY2:(NSString *)y2
+{
+    if ([y2 isEqualToString:_y2]) {
+        return;
+    }
+    
+    _y2 = y2;
+    [self invalidate];
+}
+
 - (void)setGradient:(NSArray<NSNumber *> *)gradient
 {
     if (gradient == _gradient) {
@@ -18,6 +59,22 @@
     }
     
     _gradient = gradient;
+    [self invalidate];
+}
+
+- (void)setGradientUnits:(RNSVGUnits)gradientUnits
+{
+    if (gradientUnits == _gradientUnits) {
+        return;
+    }
+    
+    _gradientUnits = gradientUnits;
+    [self invalidate];
+}
+
+- (void)setGradientTransform:(CGAffineTransform)gradientTransform
+{
+    _gradientTransform = gradientTransform;
     [self invalidate];
 }
 

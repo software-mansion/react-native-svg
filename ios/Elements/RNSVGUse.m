@@ -13,7 +13,7 @@
 
 - (void)setHref:(NSString *)href
 {
-    if (href == _href) {
+    if ([href isEqualToString:_href]) {
         return;
     }
     
@@ -21,6 +21,25 @@
     _href = href;
 }
 
+- (void)setUsewidth:(NSString *)usewidth
+{
+    if ([usewidth isEqualToString:_usewidth]) {
+        return;
+    }
+    
+    [self invalidate];
+    _usewidth = usewidth;
+}
+
+- (void)setUseheight:(NSString *)useheight
+{
+    if ([useheight isEqualToString:_useheight]) {
+        return;
+    }
+    
+    [self invalidate];
+    _useheight = useheight;
+}
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
@@ -28,22 +47,22 @@
     if (template) {
         [self beginTransparencyLayer:context];
         [self clip:context];
-        
+
         if ([template isKindOfClass:[RNSVGRenderable class]]) {
             [(RNSVGRenderable*)template mergeProperties:self];
         }
 
         if ([template class] == [RNSVGSymbol class]) {
             RNSVGSymbol *symbol = (RNSVGSymbol*)template;
-            [symbol renderSymbolTo:context width:[self relativeOnWidth:self.width] height:[self relativeOnWidth:self.height]];
+            [symbol renderSymbolTo:context width:[self relativeOnWidth:self.usewidth] height:[self relativeOnHeight:self.useheight]];
         } else {
             [template renderTo:context rect:rect];
         }
-        
+
         if ([template isKindOfClass:[RNSVGRenderable class]]) {
             [(RNSVGRenderable*)template resetProperties];
         }
-        
+
         [self endTransparencyLayer:context];
     } else if (self.href) {
         // TODO: calling yellow box here
