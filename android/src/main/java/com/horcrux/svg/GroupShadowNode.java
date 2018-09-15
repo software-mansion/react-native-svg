@@ -9,6 +9,7 @@
 
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -17,7 +18,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ReactShadowNode;
@@ -140,7 +140,7 @@ class GroupShadowNode extends RenderableShadowNode {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             final Path.Op pop = Path.Op.valueOf(op.name());
             traverseChildren(new NodeRunnable() {
-                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                @SuppressLint("NewApi")
                 public void run(ReactShadowNode node) {
                     if (node instanceof VirtualNode) {
                         VirtualNode n = (VirtualNode)node;
