@@ -55,7 +55,6 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private boolean mInvertible = true;
     private boolean mRendered = false;
 
-
     public SvgViewShadowNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
     }
@@ -144,7 +143,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     @Override
     public void onCollectExtraUpdates(UIViewOperationQueue uiUpdater) {
         super.onCollectExtraUpdates(uiUpdater);
-        uiUpdater.enqueueUpdateExtraData(getReactTag(), drawOutput());
+        uiUpdater.enqueueUpdateExtraData(getReactTag(), null);
     }
 
     @Override

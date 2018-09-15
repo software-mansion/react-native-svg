@@ -9,7 +9,6 @@
 
 package com.horcrux.svg;
 
-import android.graphics.Bitmap;
 import android.util.SparseArray;
 
 import com.facebook.react.bridge.Dynamic;
@@ -781,8 +780,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         if (root == null) {
             return;
         }
-        Bitmap output = view.drawOutput();
-        root.setBitmap(output);
+        root.invalidate();
     }
 
     @Override

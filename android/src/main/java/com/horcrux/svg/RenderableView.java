@@ -11,10 +11,6 @@ public class RenderableView<T extends VirtualNode> extends ViewGroup {
         super(reactContext);
     }
 
-    T getShadowNode() {
-        return shadowNode;
-    }
-
     @Override
     public void setId(int id) {
         super.setId(id);
