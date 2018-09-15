@@ -134,7 +134,7 @@
 - (CGRect)getHitArea
 {
     CGFloat x = [self relativeOnWidth:self.x];
-    CGFloat y = [self relativeOnHeight:self.y];
+    CGFloat y = -1 * [self relativeOnHeight:self.y];
     CGFloat width = [self relativeOnWidth:self.imagewidth];
     CGFloat height = [self relativeOnHeight:self.imageheight];
     if (width == 0) {
