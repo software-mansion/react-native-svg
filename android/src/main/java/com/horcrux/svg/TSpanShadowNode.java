@@ -672,6 +672,7 @@ class TSpanShadowNode extends TextShadowNode {
         final Matrix end = new Matrix();
 
         final float[] startPointMatrixData = new float[9];
+        final float[] midPointMatrixData = new float[9];
         final float[] endPointMatrixData = new float[9];
 
         for (int index = 0; index < length; index++) {
@@ -694,12 +695,9 @@ class TSpanShadowNode extends TextShadowNode {
                         break;
                     }
                     String nextLigature = current + String.valueOf(chars[nextIndex]);
-                    boolean hasNextLigature = PaintCompat.hasGlyph(paint, nextLigature);
-                    if (hasNextLigature) {
-                        ligature[nextIndex] = true;
-                        current = nextLigature;
-                        hasLigature = true;
-                    }
+                    ligature[nextIndex] = true;
+                    current = nextLigature;
+                    hasLigature = true;
                 }
             }
             double charWidth = paint.measureText(current) * scaleSpacingAndGlyphs;
@@ -729,7 +727,7 @@ class TSpanShadowNode extends TextShadowNode {
             double dy = gc.nextDeltaY();
             double r = gc.nextRotation();
 
-            if (alreadyRenderedGraphemeCluster) {
+            if (alreadyRenderedGraphemeCluster || isWordSeparator) {
                 // Skip rendering other grapheme clusters of ligatures (already rendered),
                 // But, make sure to increment index positions by making gc.next() calls.
                 continue;
@@ -852,8 +850,20 @@ class TSpanShadowNode extends TextShadowNode {
             } else {
                 glyph = bag.getOrCreateAndCache(currentChar, current);
             }
-            glyph.transform(mid);
-            path.addPath(glyph);
+            RectF bounds = new RectF();
+            glyph.computeBounds(bounds, true);
+            float width = bounds.width();
+            if (width == 0) { // Render unicode emoji
+                mid.getValues(midPointMatrixData);
+                double midX = midPointMatrixData[MTRANS_X];
+                double midY = midPointMatrixData[MTRANS_Y];
+                canvas.rotate((float) r, (float)midX, (float)midY);
+                canvas.drawText(current, (float)midX, (float)midY, paint);
+                canvas.rotate((float) -r, (float)midX, (float)midY);
+            } else {
+                glyph.transform(mid);
+                path.addPath(glyph);
+            }
         }
 
         return path;
@@ -929,8 +939,8 @@ class TSpanShadowNode extends TextShadowNode {
         paint.setTextAlign(Paint.Align.LEFT);
 
         // Do these have any effect for anyone? Not for me (@msand) at least.
-        paint.setUnderlineText(underlineText);
-        paint.setStrikeThruText(strikeThruText);
+        // paint.setUnderlineText(underlineText);
+        // paint.setStrikeThruText(strikeThruText);
     }
 
     private void setupTextPath() {

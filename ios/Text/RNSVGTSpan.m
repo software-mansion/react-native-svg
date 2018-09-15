@@ -83,7 +83,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
 
     [self pushGlyphContext];
 
-    CGMutablePathRef path = [self getLinePath:text];
+    CGMutablePathRef path = [self getLinePath:text context:context];
 
     _cache = CGPathRetain(CFAutorelease(CGPathCreateCopy(path)));
 
@@ -92,7 +92,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
     return (CGPathRef)CFAutorelease(path);
 }
 
-- (CGMutablePathRef)getLinePath:(NSString *)str
+- (CGMutablePathRef)getLinePath:(NSString *)str context:(CGContextRef)context
 {
     // Create a dictionary for this font
     CTFontRef fontRef = [self getFontFromContext];
@@ -690,6 +690,14 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
         CTRunGetStringIndices(run, CFRangeMake(0, 0), indices);
         CTFontRef runFont = CFDictionaryGetValue(CTRunGetAttributes(run), kCTFontAttributeName);
         CTFontGetAdvancesForGlyphs(runFont, kCTFontOrientationHorizontal, glyphs, advances, runGlyphCount);
+        CFIndex nextOrEndRunIndex = n;
+        if (r + 1 < runEnd) {
+            CTRunRef nextRun = CFArrayGetValueAtIndex(runs, r + 1);
+            CFIndex nextRunGlyphCount = CTRunGetGlyphCount(nextRun);
+            CFIndex nextIndices[nextRunGlyphCount];
+            CTRunGetStringIndices(nextRun, CFRangeMake(0, 0), nextIndices);
+            nextOrEndRunIndex = nextIndices[0];
+        }
 
         for(CFIndex g = 0; g < runGlyphCount; g++) {
             CGGlyph glyph = glyphs[g];
@@ -721,7 +729,11 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
             double dy = [gc nextDeltaY];
             double r = [[gc nextRotation] doubleValue] / RNSVGTSpan_radToDeg;
 
-            CFIndex endIndex = g + 1 == runGlyphCount ? currIndex : indices[g + 1];
+            if (isWordSeparator) {
+                continue;
+            }
+
+            CFIndex endIndex = g + 1 == runGlyphCount ? nextOrEndRunIndex : indices[g + 1];
             while (++currIndex < endIndex) {
                 // Skip rendering other grapheme clusters of ligatures (already rendered),
                 // And, make sure to increment index positions by making gc.next() calls.
@@ -806,8 +818,37 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
                 transform = CGAffineTransformConcat(CGAffineTransformMakeRotation(r), transform);
             }
 
-            transform = CGAffineTransformScale(transform, 1.0, -1.0);
-            CGPathAddPath(path, &transform, glyphPath);
+            CGRect box = CGPathGetBoundingBox(glyphPath);
+            CGFloat width = box.size.width;
+
+            if (width == 0) { // Render unicode emoji
+                UILabel *label = [[UILabel alloc] init];
+                CFIndex startIndex = indices[g];
+                long len = MAX(1, endIndex - startIndex);
+                NSRange range = NSMakeRange(startIndex, len);
+                NSString* currChars = [str substringWithRange:range];
+                label.text = currChars;
+                label.opaque = NO;
+                label.backgroundColor = UIColor.clearColor;
+                UIFont * customFont = [UIFont systemFontOfSize:fontSize];
+
+                CGSize measuredSize = [currChars sizeWithAttributes:
+                                       @{NSFontAttributeName:customFont}];
+                label.font = customFont;
+                double width = ceilf(measuredSize.width);
+                double height = ceilf(measuredSize.height);
+                CGRect bounds = CGRectMake(0, 0, width, height);
+                label.frame = bounds;
+
+                CGContextConcatCTM(context, transform);
+                CGContextTranslateCTM(context, 0, -fontSize);
+                [label.layer renderInContext:context];
+                CGContextTranslateCTM(context, 0, fontSize);
+                CGContextConcatCTM(context, CGAffineTransformInvert(transform));
+            } else {
+                transform = CGAffineTransformScale(transform, 1.0, -1.0);
+                CGPathAddPath(path, &transform, glyphPath);
+            }
             CGPathRelease(glyphPath);
         }
     }
