@@ -79,12 +79,6 @@ public class SvgView extends ViewGroup {
     }
 
     @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        SvgViewManager.dropSvgView(this);
-    }
-
-    @Override
     public void invalidate() {
         super.invalidate();
         if (mBitmap != null) {
@@ -97,7 +91,11 @@ public class SvgView extends ViewGroup {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (mBitmap == null) {
-            mBitmap = getShadowNode().drawOutput();
+            SvgViewShadowNode node = getShadowNode();
+            if (node == null) {
+                return;
+            }
+            mBitmap = node.drawOutput();
         }
         canvas.drawBitmap(mBitmap, 0, 0, null);
     }
