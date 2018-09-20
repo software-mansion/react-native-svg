@@ -220,11 +220,15 @@
                 return node;
             }
 
-            UIView *hitChild = [node hitTest:transformed withEvent:event];
-
-            if (hitChild) {
-                node.active = YES;
-                return (node.responsible || (node != hitChild)) ? hitChild : self;
+            @try {
+                UIView *hitChild = [node hitTest:transformed withEvent:event];
+                if (hitChild) {
+                    node.active = YES;
+                    return (node.responsible || (node != hitChild)) ? hitChild : self;
+                }
+            }
+            @catch (NSException *exception) {
+                return nil;
             }
         }
         return nil;
