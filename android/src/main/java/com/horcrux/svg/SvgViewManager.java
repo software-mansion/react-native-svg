@@ -50,12 +50,6 @@ class SvgViewManager extends ViewGroupManager<SvgView> {
         mTagToSvgView.put(svg.getId(), svg);
     }
 
-    static void dropSvgView(SvgView view) {
-        int tag = view.getId();
-        mTagToShadowNode.remove(tag);
-        mTagToSvgView.remove(tag);
-    }
-
     @SuppressWarnings("unused")
     static @Nullable SvgView getSvgViewByTag(int tag) {
         return mTagToSvgView.get(tag);
@@ -92,4 +86,12 @@ class SvgViewManager extends ViewGroupManager<SvgView> {
         root.invalidate();
     }
 
+    @Override
+    public void onDropViewInstance(SvgView view) {
+        super.onDropViewInstance(view);
+
+        int tag = view.getId();
+        mTagToShadowNode.remove(tag);
+        mTagToSvgView.remove(tag);
+    }
 }
