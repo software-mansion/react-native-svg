@@ -92,17 +92,17 @@ class TextPathShadowNode extends TextShadowNode {
         drawGroup(canvas, paint, opacity);
     }
 
-    public Path getPath() {
+    public Path getTextPath(Canvas canvas, Paint paint) {
         SvgViewShadowNode svg = getSvgShadowNode();
         VirtualNode template = svg.getDefinedTemplate(mHref);
 
-        if (template == null || template.getClass() != PathShadowNode.class) {
+        if (template == null || !(template instanceof RenderableShadowNode)) {
             // warning about this.
             return null;
         }
 
-        PathShadowNode path = (PathShadowNode)template;
-        return path.getPath();
+        RenderableShadowNode shadowNode = (RenderableShadowNode)template;
+        return shadowNode.getPath(canvas, paint);
     }
 
     @Override

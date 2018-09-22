@@ -987,7 +987,7 @@ public class TextLayoutAlgorithm {
 */
             final TextPathShadowNode textPathShadowNode = inTextPath.get(index);
             if (textPathShadowNode != null && result[index].addressable) {
-                textPath = textPathShadowNode.getPath();
+                textPath = textPathShadowNode.getTextPath(null, null);
                 inPath = true;
 /*
 

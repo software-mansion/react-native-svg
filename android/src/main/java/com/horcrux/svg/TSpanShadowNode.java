@@ -102,7 +102,7 @@ class TSpanShadowNode extends TextShadowNode {
         boolean isClosed = false;
         final boolean hasTextPath = textPath != null;
         if (hasTextPath) {
-            pm = new PathMeasure(textPath.getPath(), false);
+            pm = new PathMeasure(textPath.getTextPath(canvas, paint), false);
             pathLength = pm.getLength();
             isClosed = pm.isClosed();
             if (pathLength == 0) {
