@@ -73,6 +73,7 @@
     }];
     [self setHitArea:[self getPath:context]];
     self.clientRect = groupRect;
+    self.bounds = groupRect;
     [self popGlyphContext];
 }
 

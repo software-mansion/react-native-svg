@@ -8,9 +8,11 @@ import {
     findNodeHandle,
     NativeModules
 } from "react-native";
+import extractResponder from "../lib/extract/extractResponder";
 import extractViewBox from "../lib/extract/extractViewBox";
 import { ViewBoxAttributes } from "../lib/attributes";
 import { numberProp } from "../lib/props";
+import Shape from "./Shape";
 
 /** @namespace NativeModules.RNSVGSvgViewManager */
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
@@ -24,7 +26,7 @@ const styles = StyleSheet.create({
     }
 });
 
-class Svg extends Component {
+class Svg extends Shape {
     static displayName = "Svg";
     static propTypes = {
         ...ViewPropTypes,
@@ -93,6 +95,7 @@ class Svg extends Component {
                 {...props}
                 bbWidth={w}
                 bbHeight={h}
+                {...extractResponder(props, this)}
                 {...extractViewBox({ viewBox, preserveAspectRatio })}
                 ref={ele => {
                     this.root = ele;

@@ -16,7 +16,7 @@
     if ([href isEqualToString:_href]) {
         return;
     }
-    
+
     [self invalidate];
     _href = href;
 }
@@ -26,7 +26,7 @@
     if ([usewidth isEqualToString:_usewidth]) {
         return;
     }
-    
+
     [self invalidate];
     _usewidth = usewidth;
 }
@@ -36,7 +36,7 @@
     if ([useheight isEqualToString:_useheight]) {
         return;
     }
-    
+
     [self invalidate];
     _useheight = useheight;
 }
@@ -69,6 +69,7 @@
         RCTLogWarn(@"`Use` element expected a pre-defined svg template as `href` prop, template named: %@ is not defined.", self.href);
     }
     self.clientRect = template.clientRect;
+    self.bounds = template.clientRect;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {

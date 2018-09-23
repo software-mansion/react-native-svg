@@ -13,19 +13,12 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.uimanager.ReactCompoundView;
 import com.facebook.react.uimanager.ReactShadowNodeImpl;
-import com.facebook.react.uimanager.UIManagerModule;
-import com.facebook.react.uimanager.events.EventDispatcher;
-import com.facebook.react.uimanager.events.TouchEvent;
-import com.facebook.react.uimanager.events.TouchEventCoalescingKeyHelper;
-import com.facebook.react.uimanager.events.TouchEventType;
 import com.facebook.react.views.view.ReactViewGroup;
 
 import javax.annotation.Nullable;
@@ -34,7 +27,8 @@ import javax.annotation.Nullable;
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its children.
  */
 @SuppressLint("ViewConstructor")
-public class SvgView extends ViewGroup {
+public class SvgView extends ViewGroup implements ReactCompoundView {
+
     @SuppressWarnings("unused")
     public enum Events {
         @SuppressWarnings("unused")
@@ -54,16 +48,9 @@ public class SvgView extends ViewGroup {
     }
 
     private @Nullable Bitmap mBitmap;
-    private final EventDispatcher mEventDispatcher;
-    private long mGestureStartTime = TouchEvent.UNSET;
-    private int mTargetTag;
-
-    private final TouchEventCoalescingKeyHelper mTouchEventCoalescingKeyHelper =
-            new TouchEventCoalescingKeyHelper();
 
     public SvgView(ReactContext reactContext) {
         super(reactContext);
-        mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
     public void addView(View child, int index, LayoutParams params) {
@@ -105,17 +92,12 @@ public class SvgView extends ViewGroup {
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
+    public int reactTagForTouch(float touchX, float touchY) {
         SvgViewShadowNode node = getShadowNode();
         if (node != null) {
-            mTargetTag = node.hitTest(new Point((int) ev.getX(), (int) ev.getY()));
-            if (mTargetTag != -1) {
-                handleTouchEvent(ev);
-                return true;
-            }
+            return node.hitTest(new Point((int) touchX, (int) touchY));
         }
-
-        return super.dispatchTouchEvent(ev);
+        return getId();
     }
 
     @Override
@@ -143,93 +125,5 @@ public class SvgView extends ViewGroup {
                 child.layout(l, t, r , b);
             }
         }
-    }
-
-    private int getAbsoluteLeft(View view) {
-        int left = view.getLeft() - view.getScrollX();
-
-        if (view.getParent() == view.getRootView() || view.getParent() instanceof ReactRootView) {
-            return left;
-        }
-
-        View parent = (View) view.getParent();
-        return left + getAbsoluteLeft(parent);
-    }
-
-    private int getAbsoluteTop(View view) {
-        int top = view.getTop() - view.getScrollY();
-
-        if (view.getParent() == view.getRootView() || view.getParent() instanceof ReactRootView) {
-            return top;
-        }
-
-        View parent = (View) view.getParent();
-        return top + getAbsoluteTop(parent);
-    }
-
-    private void dispatch(MotionEvent ev, TouchEventType type) {
-        ev.offsetLocation(getAbsoluteLeft(this), getAbsoluteTop(this));
-        mEventDispatcher.dispatchEvent(
-            TouchEvent.obtain(
-                mTargetTag,
-                type,
-                ev,
-                mGestureStartTime,
-                ev.getX(),
-                ev.getY(),
-                mTouchEventCoalescingKeyHelper));
-    }
-
-    private void handleTouchEvent(MotionEvent ev) {
-        int action = ev.getAction() & MotionEvent.ACTION_MASK;
-        if (action == MotionEvent.ACTION_DOWN) {
-            mGestureStartTime = ev.getEventTime();
-            dispatch(ev, TouchEventType.START);
-        } else if (mTargetTag == -1) {
-            // All the subsequent action types are expected to be called after ACTION_DOWN thus target
-            // is supposed to be set for them.
-            Log.e(
-                "error",
-                "Unexpected state: received touch event but didn't get starting ACTION_DOWN for this " +
-                    "gesture before");
-        } else if (action == MotionEvent.ACTION_UP) {
-            // End of the gesture. We reset target tag to -1 and expect no further event associated with
-            // this gesture.
-            dispatch(ev, TouchEventType.END);
-            mTargetTag = -1;
-            mGestureStartTime = TouchEvent.UNSET;
-        } else if (action == MotionEvent.ACTION_MOVE) {
-            // Update pointer position for current gesture
-            dispatch(ev, TouchEventType.MOVE);
-        } else if (action == MotionEvent.ACTION_POINTER_DOWN) {
-            // New pointer goes down, this can only happen after ACTION_DOWN is sent for the first pointer
-            dispatch(ev, TouchEventType.START);
-        } else if (action == MotionEvent.ACTION_POINTER_UP) {
-            // Exactly onw of the pointers goes up
-            dispatch(ev, TouchEventType.END);
-        } else if (action == MotionEvent.ACTION_CANCEL) {
-            dispatchCancelEvent(ev);
-            mTargetTag = -1;
-            mGestureStartTime = TouchEvent.UNSET;
-        } else {
-            Log.w(
-                "IGNORE",
-                "Warning : touch event was ignored. Action=" + action + " Target=" + mTargetTag);
-        }
-    }
-
-    private void dispatchCancelEvent(MotionEvent ev) {
-        // This means the gesture has already ended, via some other CANCEL or UP event. This is not
-        // expected to happen very often as it would mean some child View has decided to intercept the
-        // touch stream and start a native gesture only upon receiving the UP/CANCEL event.
-        if (mTargetTag == -1) {
-            Log.w(
-                "error",
-                "Can't cancel already finished gesture. Is a child View trying to start a gesture from " +
-                    "an UP/CANCEL event?");
-            return;
-        }
-
-        dispatch(ev, TouchEventType.CANCEL);
     }
 }
