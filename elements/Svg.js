@@ -13,6 +13,7 @@ import extractViewBox from "../lib/extract/extractViewBox";
 import { ViewBoxAttributes } from "../lib/attributes";
 import { numberProp } from "../lib/props";
 import Shape from "./Shape";
+import G from "./G";
 
 /** @namespace NativeModules.RNSVGSvgViewManager */
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
@@ -76,6 +77,7 @@ class Svg extends Shape {
             preserveAspectRatio,
             style,
             color,
+            children,
             ...props
         } = this.props;
         let dimensions;
@@ -110,7 +112,9 @@ class Svg extends Shape {
                     },
                     dimensions
                 ]}
-            />
+            >
+                <G {...props}>{children}</G>
+            </NativeSvgView>
         );
     }
 }
