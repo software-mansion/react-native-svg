@@ -394,6 +394,9 @@ abstract public class RenderableShadowNode extends VirtualNode {
                 }
                 brush.setupPaint(paint, mBox, mScale, opacity);
             }
+        } else if (colorType == 2) {
+            int brush = getSvgShadowNode().mTintColor;
+            paint.setColor(brush);
         }
 
     }

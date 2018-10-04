@@ -75,6 +75,7 @@ class Svg extends Shape {
             viewBox,
             preserveAspectRatio,
             style,
+            color,
             ...props
         } = this.props;
         let dimensions;
@@ -95,6 +96,7 @@ class Svg extends Shape {
                 {...props}
                 bbWidth={w}
                 bbHeight={h}
+                tintColor={color}
                 {...extractResponder(props, this)}
                 {...extractViewBox({ viewBox, preserveAspectRatio })}
                 ref={ele => {
@@ -117,7 +119,8 @@ const NativeSvgView = requireNativeComponent("RNSVGSvgView", null, {
     nativeOnly: {
         ...ViewBoxAttributes,
         width: true,
-        height: true
+        height: true,
+        tintColor: true
     }
 });
 

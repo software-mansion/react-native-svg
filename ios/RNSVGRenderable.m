@@ -298,7 +298,12 @@ UInt32 saturate(double value) {
     BOOL evenodd = self.fillRule == kRNSVGCGFCRuleEvenodd;
 
     if (self.fill) {
-        fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
+        if (self.fill.class == RNSVGBrush.class) {
+            CGContextSetFillColorWithColor(context, [self.tintColor CGColor]);
+            fillColor = YES;
+        } else {
+            fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
+        }
 
         if (fillColor) {
             mode = evenodd ? kCGPathEOFill : kCGPathFill;
@@ -336,7 +341,14 @@ UInt32 saturate(double value) {
             CGContextClip(context);
         }
 
-        BOOL strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
+        BOOL strokeColor;
+
+        if (self.stroke.class == RNSVGBrush.class) {
+            CGContextSetStrokeColorWithColor(context,[self.tintColor CGColor]);
+            strokeColor = YES;
+        } else {
+            strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
+        }
 
         if (strokeColor && fillColor) {
             mode = evenodd ? kCGPathEOFillStroke : kCGPathFillStroke;

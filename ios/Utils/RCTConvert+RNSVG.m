@@ -84,6 +84,8 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
             return [[RNSVGSolidColorBrush alloc] initWithArray:arr];
         case 1: // brush
             return [[RNSVGPainterBrush alloc] initWithArray:arr];
+        case 2: // currentColor
+            return [[RNSVGBrush alloc] initWithArray:nil];
         default:
             RCTLogError(@"Unknown brush type: %zd", type);
             return nil;

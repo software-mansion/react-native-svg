@@ -30,6 +30,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 /**
  * Shadow node for RNSVG virtual tree root - RNSVGSvgView
  */
@@ -54,6 +56,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private Matrix mInvViewBoxMatrix = new Matrix();
     private boolean mInvertible = true;
     private boolean mRendered = false;
+    int mTintColor = 0;
 
     public SvgViewShadowNode() {
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
@@ -72,6 +75,15 @@ public class SvgViewShadowNode extends LayoutShadowNode {
                 }
             }
         });
+    }
+
+    @ReactProp(name = "tintColor", customType = "Color")
+    public void setTintColor(@Nullable Integer tintColor) {
+        if (tintColor == null) {
+            mTintColor = 0;
+        } else {
+            mTintColor = tintColor;
+        }
     }
 
     @ReactProp(name = "minX")
