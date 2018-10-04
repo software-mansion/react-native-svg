@@ -31,12 +31,14 @@ class Svg extends Shape {
     static displayName = "Svg";
     static propTypes = {
         ...ViewPropTypes,
+        color: PropTypes.string,
         opacity: numberProp,
         width: numberProp,
         height: numberProp,
         // more detail https://svgwg.org/svg2-draft/coords.html#ViewBoxAttribute
         viewBox: PropTypes.string,
-        preserveAspectRatio: PropTypes.string
+        preserveAspectRatio: PropTypes.string,
+        style: PropTypes.shape({ ...ViewPropTypes.style, color: PropTypes.string })
     };
 
     static defaultProps = {
@@ -98,7 +100,7 @@ class Svg extends Shape {
                 {...props}
                 bbWidth={w}
                 bbHeight={h}
-                tintColor={color}
+                tintColor={color || style && style.color}
                 {...extractResponder(props, this)}
                 {...extractViewBox({ viewBox, preserveAspectRatio })}
                 ref={ele => {
