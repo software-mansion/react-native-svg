@@ -115,7 +115,7 @@ class Svg extends Shape {
                     dimensions
                 ]}
             >
-                <G {...props}>{children}</G>
+                <G style={style} {...props}>{children}</G>
             </NativeSvgView>
         );
     }
