@@ -14,7 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.ReactCompoundView;
@@ -27,7 +26,7 @@ import javax.annotation.Nullable;
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its children.
  */
 @SuppressLint("ViewConstructor")
-public class SvgView extends ViewGroup implements ReactCompoundView {
+public class SvgView extends ReactViewGroup implements ReactCompoundView {
 
     @SuppressWarnings("unused")
     public enum Events {
@@ -53,6 +52,7 @@ public class SvgView extends ViewGroup implements ReactCompoundView {
         super(reactContext);
     }
 
+    @Override
     public void addView(View child, int index, LayoutParams params) {
         if (!(child instanceof RenderableView)) {
             super.addView(child, index, params);

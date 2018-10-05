@@ -23,7 +23,8 @@ let id = 0;
 
 const styles = StyleSheet.create({
     svg: {
-        backgroundColor: "transparent"
+        backgroundColor: "transparent",
+        borderWidth: 0
     }
 });
 
@@ -73,17 +74,20 @@ class Svg extends Shape {
     render() {
         const {
             opacity,
-            width,
-            height,
             viewBox,
             preserveAspectRatio,
             style,
-            color,
             children,
             ...props
         } = this.props;
-        let dimensions;
+        const stylesAndProps = { ...style, ...props };
+        const {
+            color,
+            width,
+            height,
+        } = stylesAndProps;
 
+        let dimensions;
         if (width && height) {
             dimensions = {
                 width: width[width.length - 1] === "%" ? width : +width,
@@ -100,7 +104,7 @@ class Svg extends Shape {
                 {...props}
                 bbWidth={w}
                 bbHeight={h}
-                tintColor={color || style && style.color}
+                tintColor={color}
                 {...extractResponder(props, this)}
                 {...extractViewBox({ viewBox, preserveAspectRatio })}
                 ref={ele => {

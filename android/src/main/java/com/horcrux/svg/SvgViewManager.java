@@ -12,9 +12,11 @@ package com.horcrux.svg;
 import android.util.SparseArray;
 
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.views.view.ReactViewGroup;
+import com.facebook.react.views.view.ReactViewManager;
 import com.facebook.yoga.YogaMeasureFunction;
 import com.facebook.yoga.YogaMeasureMode;
+import com.facebook.yoga.YogaMeasureOutput;
 import com.facebook.yoga.YogaNode;
 
 import javax.annotation.Nullable;
@@ -23,7 +25,7 @@ import javax.annotation.Nullable;
  * ViewManager for RNSVGSvgView React views. Renders as a {@link SvgView} and handles
  * invalidating the native view on shadow view updates happening in the underlying tree.
  */
-class SvgViewManager extends ViewGroupManager<SvgView> {
+class SvgViewManager extends ReactViewManager {
 
     private static final String REACT_CLASS = "RNSVGSvgView";
 
@@ -35,7 +37,7 @@ class SvgViewManager extends ViewGroupManager<SvgView> {
                 YogaMeasureMode widthMode,
                 float height,
                 YogaMeasureMode heightMode) {
-            throw new IllegalStateException("SurfaceView should have explicit width and height set");
+            return YogaMeasureOutput.make(width, height);
         }
     };
 
@@ -77,17 +79,18 @@ class SvgViewManager extends ViewGroupManager<SvgView> {
     }
 
     @Override
-    protected SvgView createViewInstance(ThemedReactContext reactContext) {
+    public SvgView createViewInstance(ThemedReactContext reactContext) {
         return new SvgView(reactContext);
     }
 
     @Override
-    public void updateExtraData(SvgView root, Object extraData) {
+    public void updateExtraData(ReactViewGroup root, Object extraData) {
+        super.updateExtraData(root, extraData);
         root.invalidate();
     }
 
     @Override
-    public void onDropViewInstance(SvgView view) {
+    public void onDropViewInstance(ReactViewGroup view) {
         super.onDropViewInstance(view);
 
         int tag = view.getId();
