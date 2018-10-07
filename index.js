@@ -20,6 +20,10 @@ import Stop from "./elements/Stop";
 import ClipPath from "./elements/ClipPath";
 import Pattern from "./elements/Pattern";
 import Mask from "./elements/Mask";
+import Filter from "./elements/Filter";
+import FEGaussianBlur from "./elements/FEGaussianBlur";
+import FEMergeNode from "./elements/FEMergeNode";
+import FEMerge from "./elements/FEMerge";
 
 export {
     Svg,
@@ -44,6 +48,10 @@ export {
     ClipPath,
     Pattern,
     Mask,
+    Filter,
+    FEGaussianBlur,
+    FEMergeNode,
+    FEMerge,
 };
 
 //noinspection JSUnusedGlobalSymbols
