@@ -151,8 +151,11 @@ export interface TransformProps extends TransformObject {
   transform?: string | TransformObject,
 }
 
-export interface CommonPathProps extends FillProps, StrokeProps, ClipProps, TransformProps, ResponderProps, TouchableProps, DefinitionProps {}
+export interface CommonMaskProps {
+    mask?: string;
+  }
 
+export interface CommonPathProps extends FillProps, StrokeProps, ClipProps, TransformProps, ResponderProps, TouchableProps, DefinitionProps, CommonMaskProps {}
 
 // Element props
 export interface CircleProps extends CommonPathProps {
@@ -317,7 +320,31 @@ export const TextPath: React.ComponentClass<TextPathProps>;
 
 export interface UseProps extends CommonPathProps {
   href: string,
-  width: string,
-  height: string,
+  width?: string,
+  height?: string,
+  x?: NumberProp,
+  y?: NumberProp,
 }
 export const Use: React.ComponentClass<UseProps>;
+
+
+export enum EMaskUnits {
+  USER_SPACE_ON_USE = 'userSpaceOnUse',
+  OBJECT_BOUNDING_BOX = 'objectBoundingBox',
+}
+
+export type TMaskUnits =
+| EMaskUnits.USER_SPACE_ON_USE
+| EMaskUnits.OBJECT_BOUNDING_BOX;
+
+export interface MaskProps extends CommonPathProps {
+  id: string,
+  x?: NumberProp,
+  y?: NumberProp,
+  width?: NumberProp,
+  height?: NumberProp,
+  maskTransform?: string,
+  maskUnits?: TMaskUnits,
+  maskContentUnits?: TMaskUnits,
+}
+export const Mask: React.ComponentClass<MaskProps>;
