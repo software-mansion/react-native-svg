@@ -97,4 +97,9 @@ class SvgViewManager extends ReactViewManager {
         mTagToShadowNode.remove(tag);
         mTagToSvgView.remove(tag);
     }
+
+    @Override
+    public boolean needsCustomLayoutForChildren() {
+        return true;
+    }
 }

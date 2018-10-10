@@ -53,13 +53,6 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView {
     }
 
     @Override
-    public void addView(View child, int index, LayoutParams params) {
-        if (!(child instanceof RenderableView)) {
-            super.addView(child, index, params);
-        }
-    }
-
-    @Override
     public void setId(int id) {
         super.setId(id);
         SvgViewManager.setSvgView(this);
