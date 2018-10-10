@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { requireNativeComponent } from "react-native";
-import { numberProp } from '../lib/props';
-import PATTERN_UNITS from '../lib/PATTERN_UNITS';
-import { MaskAttributes } from '../lib/attributes';
-import extractTransform from '../lib/extract/extractTransform';
+import { numberProp } from "../lib/props";
+import PATTERN_UNITS from "../lib/PATTERN_UNITS";
+import { MaskAttributes } from "../lib/attributes";
+import extractTransform from "../lib/extract/extractTransform";
 
 export default class extends Component {
-    static displayName = 'Mask';
+    static displayName = "Mask";
     static propTypes = {
         id: PropTypes.string.isRequired,
         x: numberProp,
@@ -15,10 +15,10 @@ export default class extends Component {
         width: numberProp,
         height: numberProp,
         maskTransform: PropTypes.string,
-        maskUnits: PropTypes.oneOf(['userSpaceOnUse', 'objectBoundingBox']),
+        maskUnits: PropTypes.oneOf(["userSpaceOnUse", "objectBoundingBox"]),
         maskContentUnits: PropTypes.oneOf([
-            'userSpaceOnUse',
-            'objectBoundingBox',
+            "userSpaceOnUse",
+            "objectBoundingBox",
         ]),
     };
 
@@ -35,8 +35,6 @@ export default class extends Component {
             maskUnits,
             maskContentUnits,
             children,
-            viewBox,
-            preserveAspectRatio,
         } = props;
 
         let extractedTransform;
@@ -57,8 +55,14 @@ export default class extends Component {
                 maskheight={`${height}`}
                 matrix={extractedTransform}
                 maskTransform={extractedTransform}
-                maskUnits={maskUnits !== undefined ? PATTERN_UNITS[maskUnits] : 0}
-                maskContentUnits={maskContentUnits !== undefined ? PATTERN_UNITS[maskContentUnits] : 1}
+                maskUnits={
+                    maskUnits !== undefined ? PATTERN_UNITS[maskUnits] : 0
+                }
+                maskContentUnits={
+                    maskContentUnits !== undefined
+                        ? PATTERN_UNITS[maskContentUnits]
+                        : 1
+                }
             >
                 {children}
             </RNSVGMask>
@@ -66,6 +70,6 @@ export default class extends Component {
     }
 }
 
-const RNSVGMask = requireNativeComponent('RNSVGMask', null, {
+const RNSVGMask = requireNativeComponent("RNSVGMask", null, {
     nativeOnly: MaskAttributes,
 });

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Image, requireNativeComponent } from "react-native";
-import ImageSourcePropType from 'react-native/Libraries/Image/ImageSourcePropType';
+import ImageSourcePropType from "react-native/Libraries/Image/ImageSourcePropType";
 import { ImageAttributes } from "../lib/attributes";
 import { numberProp, touchableProps, responderProps } from "../lib/props";
 import Shape from "./Shape";
@@ -20,7 +20,7 @@ export default class extends Shape {
         width: numberProp.isRequired,
         height: numberProp.isRequired,
         href: ImageSourcePropType,
-        preserveAspectRatio: PropTypes.string
+        preserveAspectRatio: PropTypes.string,
     };
 
     static defaultProps = {
@@ -28,7 +28,7 @@ export default class extends Shape {
         y: 0,
         width: 0,
         height: 0,
-        preserveAspectRatio: "xMidYMid meet"
+        preserveAspectRatio: "xMidYMid meet",
     };
 
     setNativeProps = (...args) => {
@@ -60,5 +60,5 @@ export default class extends Shape {
 }
 
 const RNSVGImage = requireNativeComponent("RNSVGImage", null, {
-    nativeOnly: ImageAttributes
+    nativeOnly: ImageAttributes,
 });

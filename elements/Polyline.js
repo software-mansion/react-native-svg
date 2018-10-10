@@ -1,10 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import Path from "./Path";
 import { pathProps } from "../lib/props";
 import extractPolyPoints from "../lib/extract/extractPolyPoints";
+import Shape from "./Shape";
 
-export default class extends Component {
+export default class extends Shape {
     static displayName = "Polyline";
     static propTypes = {
         ...pathProps,
@@ -18,12 +19,12 @@ export default class extends Component {
 
     setNativeProps = (...args) => {
         //noinspection JSUnresolvedFunction
-        var points = [...args][0].points;
+        let points = [...args][0].points;
         if (points) {
             if (Array.isArray(points)) {
                 points = points.join(",");
             }
-            [...args][0].d = `M${extractPolyPoints(points)}`
+            [...args][0].d = `M${extractPolyPoints(points)}`;
         }
         this.root.setNativeProps(...args);
     };
