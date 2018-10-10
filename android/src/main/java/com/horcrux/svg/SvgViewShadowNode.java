@@ -269,7 +269,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
 
     int hitTest(Point point) {
         if (!mResponsible || !mInvertible) {
-            return -1;
+            return getReactTag();
         }
 
         float[] transformed = { point.x, point.y };
