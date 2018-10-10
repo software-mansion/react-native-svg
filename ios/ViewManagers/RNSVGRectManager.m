@@ -22,8 +22,26 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_VIEW_PROPERTY(x, NSString)
 RCT_EXPORT_VIEW_PROPERTY(y, NSString)
-RCT_EXPORT_VIEW_PROPERTY(rectwidth, NSString)
-RCT_EXPORT_VIEW_PROPERTY(rectheight, NSString)
+RCT_CUSTOM_VIEW_PROPERTY(rectheight, id, RNSVGRect)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.rectheight = stringValue;
+    } else {
+        view.rectheight = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(rectwidth, id, RNSVGRect)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.rectwidth = stringValue;
+    } else {
+        view.rectwidth = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+
 RCT_EXPORT_VIEW_PROPERTY(rx, NSString)
 RCT_EXPORT_VIEW_PROPERTY(ry, NSString)
 
