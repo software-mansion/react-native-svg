@@ -307,7 +307,8 @@ abstract public class RenderableShadowNode extends VirtualNode {
         opacity *= mOpacity;
 
         if (opacity > MIN_OPACITY_FOR_DRAW) {
-            if (mPath == null) {
+            boolean computePaths = mPath == null;
+            if (computePaths) {
                 mPath = getPath(canvas, paint);
                 mPath.setFillType(mFillRule);
             }
@@ -322,9 +323,17 @@ abstract public class RenderableShadowNode extends VirtualNode {
             clip(canvas, paint);
 
             if (setupFillPaint(paint, opacity * mFillOpacity)) {
+                if (computePaths) {
+                    mFillPath = new Path();
+                    paint.getFillPath(path, mFillPath);
+                }
                 canvas.drawPath(path, paint);
             }
             if (setupStrokePaint(paint, opacity * mStrokeOpacity)) {
+                if (computePaths) {
+                    mStrokePath = new Path();
+                    paint.getFillPath(path, mStrokePath);
+                }
                 canvas.drawPath(path, paint);
             }
         }
@@ -414,10 +423,16 @@ abstract public class RenderableShadowNode extends VirtualNode {
         int x = Math.round(dst[0]);
         int y = Math.round(dst[1]);
 
-        if (mRegion == null && mPath != null) {
-            mRegion = getRegion(mPath);
+        if (mRegion == null && mFillPath != null) {
+            mRegion = getRegion(mFillPath);
         }
-        if (mRegion == null || !mRegion.contains(x, y)) {
+        if (mStrokeRegion == null && mStrokePath != null) {
+            mStrokeRegion = getRegion(mStrokePath);
+        }
+        if (
+            (mRegion == null || !mRegion.contains(x, y)) &&
+            (mStrokeRegion == null || !mStrokeRegion.contains(x, y))
+        ) {
             return -1;
         }
 

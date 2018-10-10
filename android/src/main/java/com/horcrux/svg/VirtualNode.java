@@ -77,8 +77,11 @@ abstract class VirtualNode extends LayoutShadowNode {
     private GlyphContext glyphContext;
 
     Path mPath;
+    Path mFillPath;
+    Path mStrokePath;
     RectF mBox;
     Region mRegion;
+    Region mStrokeRegion;
     Region mClipRegion;
     Path mClipRegionPath;
 

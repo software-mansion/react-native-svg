@@ -973,10 +973,16 @@ class TSpanShadowNode extends TextShadowNode {
         int x = Math.round(dst[0]);
         int y = Math.round(dst[1]);
 
-        if (mRegion == null && mPath != null) {
-            mRegion = getRegion(mPath);
+        if (mRegion == null && mFillPath != null) {
+            mRegion = getRegion(mFillPath);
         }
-        if (mRegion == null || !mRegion.contains(x, y)) {
+        if (mStrokeRegion == null && mStrokePath != null) {
+            mStrokeRegion = getRegion(mStrokePath);
+        }
+        if (
+            (mRegion == null || !mRegion.contains(x, y)) &&
+            (mStrokeRegion == null || !mStrokeRegion.contains(x, y))
+        ) {
             return -1;
         }
 

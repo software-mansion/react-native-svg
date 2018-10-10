@@ -17,6 +17,7 @@ import android.view.View;
 
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.ReactCompoundView;
+import com.facebook.react.uimanager.ReactCompoundViewGroup;
 import com.facebook.react.uimanager.ReactShadowNodeImpl;
 import com.facebook.react.views.view.ReactViewGroup;
 
@@ -26,7 +27,12 @@ import javax.annotation.Nullable;
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its children.
  */
 @SuppressLint("ViewConstructor")
-public class SvgView extends ReactViewGroup implements ReactCompoundView {
+public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactCompoundViewGroup {
+
+    @Override
+    public boolean interceptsTouchEvent(float touchX, float touchY) {
+        return true;
+    }
 
     @SuppressWarnings("unused")
     public enum Events {
