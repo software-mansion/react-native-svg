@@ -289,7 +289,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
             }
         }
 
-        return viewTag;
+        return viewTag == -1 ? getReactTag() : viewTag;
     }
 
     void defineClipPath(VirtualNode clipPath, String clipPathRef) {
