@@ -25,6 +25,16 @@ export default class extends Component {
         preserveAspectRatio: PropTypes.string,
     };
 
+    setNativeProps = (props) => {
+        if (props.width) {
+            props.patternwidth = `${props.width}`;
+        }
+        if (props.height) {
+            props.patternheight = `${props.height}`;
+        }
+        this.root.setNativeProps(props);
+    };
+
     render() {
         const { props } = this;
         const {
@@ -53,6 +63,9 @@ export default class extends Component {
 
         return (
             <RNSVGPattern
+                ref={ele => {
+                    this.root = ele;
+                }}
                 name={id}
                 x={`${x}`}
                 y={`${y}`}

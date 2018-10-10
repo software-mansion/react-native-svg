@@ -62,8 +62,14 @@ class Svg extends Shape {
         this.root.measureLayout(...args);
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
+    setNativeProps = (props) => {
+        if (props.width) {
+            props.bbWidth = `${props.width}`;
+        }
+        if (props.height) {
+            props.bbHeight = `${props.height}`;
+        }
+        this.root.setNativeProps(props);
     };
 
     toDataURL = callback => {

@@ -22,6 +22,16 @@ export default class extends Component {
         ]),
     };
 
+    setNativeProps = (props) => {
+        if (props.width) {
+            props.maskwidth = `${props.width}`;
+        }
+        if (props.height) {
+            props.maskheight = `${props.height}`;
+        }
+        this.root.setNativeProps(props);
+    };
+
     render() {
         const { props } = this;
         const {
@@ -48,6 +58,9 @@ export default class extends Component {
 
         return (
             <RNSVGMask
+                ref={ele => {
+                    this.root = ele;
+                }}
                 name={id}
                 x={`${x}`}
                 y={`${y}`}

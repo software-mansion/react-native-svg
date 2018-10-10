@@ -304,13 +304,13 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "rectwidth")
-            public void setWidth(RenderableView<RectShadowNode> node, String width) {
+            public void setWidth(RenderableView<RectShadowNode> node, Dynamic width) {
                 node.shadowNode.setWidth(width);
             }
 
 
             @ReactProp(name = "rectheight")
-            public void setHeight(RenderableView<RectShadowNode> node, String height) {
+            public void setHeight(RenderableView<RectShadowNode> node, Dynamic height) {
                 node.shadowNode.setHeight(height);
             }
 

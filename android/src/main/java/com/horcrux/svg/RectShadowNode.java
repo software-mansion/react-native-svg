@@ -13,6 +13,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+
+import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
@@ -41,15 +44,22 @@ class RectShadowNode extends RenderableShadowNode {
     }
 
     @ReactProp(name = "rectwidth")
-    public void setWidth(String width) {
-        mW = width;
+    public void setWidth(Dynamic width) {
+        if (width.getType() == ReadableType.String) {
+            mW = width.asString();
+        } else {
+            mW = String.valueOf(width.asDouble());
+        }
         markUpdated();
     }
 
-
     @ReactProp(name = "rectheight")
-    public void setHeight(String height) {
-        mH = height;
+    public void setHeight(Dynamic height) {
+        if (height.getType() == ReadableType.String) {
+            mH = height.asString();
+        } else {
+            mH = String.valueOf(height.asDouble());
+        }
         markUpdated();
     }
 

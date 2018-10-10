@@ -31,8 +31,14 @@ export default class extends Shape {
         preserveAspectRatio: "xMidYMid meet",
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
+    setNativeProps = (props) => {
+        if (props.width) {
+            props.imagewidth = `${props.width}`;
+        }
+        if (props.height) {
+            props.imageheight = `${props.height}`;
+        }
+        this.root.setNativeProps(props);
     };
 
     render() {

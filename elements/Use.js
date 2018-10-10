@@ -22,8 +22,14 @@ export default class extends Shape {
         height: 0
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
+    setNativeProps = (props) => {
+        if (props.width) {
+            props.usewidth = `${props.width}`;
+        }
+        if (props.height) {
+            props.useheight = `${props.height}`;
+        }
+        this.root.setNativeProps(props);
     };
 
     render() {
