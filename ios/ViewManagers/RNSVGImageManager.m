@@ -19,7 +19,7 @@ RCT_EXPORT_MODULE()
 {
     RNSVGImage *svgImage = [RNSVGImage new];
     svgImage.bridge = self.bridge;
-    
+
     return svgImage;
 }
 
@@ -27,6 +27,8 @@ RCT_EXPORT_VIEW_PROPERTY(x, NSString)
 RCT_EXPORT_VIEW_PROPERTY(y, NSString)
 RCT_EXPORT_VIEW_PROPERTY(imagewidth, NSString)
 RCT_EXPORT_VIEW_PROPERTY(imageheight, NSString)
+RCT_REMAP_VIEW_PROPERTY(width, imagewidth, NSString)
+RCT_REMAP_VIEW_PROPERTY(height, imageheight, NSString)
 RCT_EXPORT_VIEW_PROPERTY(src, id)
 RCT_EXPORT_VIEW_PROPERTY(align, NSString)
 RCT_EXPORT_VIEW_PROPERTY(meetOrSlice, RNSVGVBMOS)

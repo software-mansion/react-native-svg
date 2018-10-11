@@ -318,8 +318,18 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
                 node.shadowNode.setPositionX(positionX);
             }
 
+            @ReactProp(name = "x")
+            public void setX(RenderableView<TextShadowNode> node, Dynamic positionX) {
+                node.shadowNode.setPositionX(positionX);
+            }
+
             @ReactProp(name = "positionY")
             public void setPositionY(RenderableView<TextShadowNode> node, Dynamic positionY) {
+                node.shadowNode.setPositionY(positionY);
+            }
+
+            @ReactProp(name = "y")
+            public void setY(RenderableView<TextShadowNode> node, Dynamic positionY) {
                 node.shadowNode.setPositionY(positionY);
             }
 
@@ -339,12 +349,22 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "positionX")
-            public void setPositionX(RenderableView<TSpanShadowNode> node, Dynamic positionX) {
+            public void setPositionX(RenderableView<TextShadowNode> node, Dynamic positionX) {
+                node.shadowNode.setPositionX(positionX);
+            }
+
+            @ReactProp(name = "x")
+            public void setX(RenderableView<TextShadowNode> node, Dynamic positionX) {
                 node.shadowNode.setPositionX(positionX);
             }
 
             @ReactProp(name = "positionY")
-            public void setPositionY(RenderableView<TSpanShadowNode> node, Dynamic positionY) {
+            public void setPositionY(RenderableView<TextShadowNode> node, Dynamic positionY) {
+                node.shadowNode.setPositionY(positionY);
+            }
+
+            @ReactProp(name = "y")
+            public void setY(RenderableView<TextShadowNode> node, Dynamic positionY) {
                 node.shadowNode.setPositionY(positionY);
             }
         };
@@ -399,12 +419,22 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "imagewidth")
+            public void setImageWidth(RenderableView<ImageShadowNode> node, String width) {
+                node.shadowNode.setWidth(width);
+            }
+
+            @ReactProp(name = "width")
             public void setWidth(RenderableView<ImageShadowNode> node, String width) {
                 node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "imageheight")
-            public void seHeight(RenderableView<ImageShadowNode> node, String height) {
+            public void setImageHeight(RenderableView<ImageShadowNode> node, String height) {
+                node.shadowNode.seHeight(height);
+            }
+
+            @ReactProp(name = "height")
+            public void setHeight(RenderableView<ImageShadowNode> node, String height) {
                 node.shadowNode.seHeight(height);
             }
 
@@ -511,16 +541,24 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "rectwidth")
+            public void setRectWidth(RenderableView<RectShadowNode> node, Dynamic width) {
+                node.shadowNode.setWidth(width);
+            }
+
+            @ReactProp(name = "width")
             public void setWidth(RenderableView<RectShadowNode> node, Dynamic width) {
                 node.shadowNode.setWidth(width);
             }
 
-
             @ReactProp(name = "rectheight")
-            public void setHeight(RenderableView<RectShadowNode> node, Dynamic height) {
+            public void setRectHeight(RenderableView<RectShadowNode> node, Dynamic height) {
                 node.shadowNode.setHeight(height);
             }
 
+            @ReactProp(name = "height")
+            public void setHeight(RenderableView<RectShadowNode> node, Dynamic height) {
+                node.shadowNode.setHeight(height);
+            }
 
             @ReactProp(name = "rx")
             public void setRx(RenderableView<RectShadowNode> node, String rx) {
@@ -551,11 +589,21 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "usewidth")
+            public void setUseWidth(RenderableView<UseShadowNode> node, String width) {
+                node.shadowNode.setWidth(width);
+            }
+
+            @ReactProp(name = "width")
             public void setWidth(RenderableView<UseShadowNode> node, String width) {
                 node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "useheight")
+            public void setUseHeight(RenderableView<UseShadowNode> node, String height) {
+                node.shadowNode.setHeight(height);
+            }
+
+            @ReactProp(name = "height")
             public void setHeight(RenderableView<UseShadowNode> node, String height) {
                 node.shadowNode.setHeight(height);
             }
@@ -611,11 +659,21 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "patternwidth")
+            public void setPatternWidth(RenderableView<PatternShadowNode> node, String width) {
+                node.shadowNode.setWidth(width);
+            }
+
+            @ReactProp(name = "width")
             public void setWidth(RenderableView<PatternShadowNode> node, String width) {
                 node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "patternheight")
+            public void setPatternHeight(RenderableView<PatternShadowNode> node, String height) {
+                node.shadowNode.setHeight(height);
+            }
+
+            @ReactProp(name = "height")
             public void setHeight(RenderableView<PatternShadowNode> node, String height) {
                 node.shadowNode.setHeight(height);
             }
@@ -681,11 +739,21 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "maskwidth")
+            public void setMaskWidth(RenderableView<MaskShadowNode> node, String width) {
+                node.shadowNode.setWidth(width);
+            }
+
+            @ReactProp(name = "width")
             public void setWidth(RenderableView<MaskShadowNode> node, String width) {
                 node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "maskheight")
+            public void setMaskHeight(RenderableView<MaskShadowNode> node, String height) {
+                node.shadowNode.setHeight(height);
+            }
+
+            @ReactProp(name = "height")
             public void setHeight(RenderableView<MaskShadowNode> node, String height) {
                 node.shadowNode.setHeight(height);
             }

@@ -59,7 +59,7 @@ abstract class VirtualNode extends LayoutShadowNode {
     Matrix mTransform = new Matrix();
     Matrix mInvMatrix = new Matrix();
     boolean mInvertible = true;
-    private RectF mClientRect;
+    RectF mClientRect;
 
     private int mClipRule;
     private @Nullable String mClipPath;
@@ -113,7 +113,6 @@ abstract class VirtualNode extends LayoutShadowNode {
         canvasWidth = -1;
         mRegion = null;
         mPath = null;
-        mBox = null;
     }
 
     void releaseCachedPath() {

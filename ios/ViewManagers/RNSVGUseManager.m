@@ -21,5 +21,7 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_VIEW_PROPERTY(href, NSString)
 RCT_EXPORT_VIEW_PROPERTY(usewidth, NSString)
 RCT_EXPORT_VIEW_PROPERTY(useheight, NSString)
+RCT_REMAP_VIEW_PROPERTY(width, usewidth, NSString)
+RCT_REMAP_VIEW_PROPERTY(height, useheight, NSString)
 
 @end

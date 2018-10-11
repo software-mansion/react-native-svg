@@ -316,6 +316,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
             RectF clientRect = new RectF();
             path.computeBounds(clientRect, true);
+            mBox = new RectF(clientRect);
             Matrix svgToViewMatrix = new Matrix(canvas.getMatrix());
             svgToViewMatrix.mapRect(clientRect);
             this.setClientRect(clientRect);
@@ -397,10 +398,6 @@ abstract public class RenderableShadowNode extends VirtualNode {
         } else if (colorType == 1) {
             Brush brush = getSvgShadowNode().getDefinedBrush(colors.getString(1));
             if (brush != null) {
-                if (mBox == null) {
-                    mBox = new RectF();
-                    mPath.computeBounds(mBox, true);
-                }
                 brush.setupPaint(paint, mBox, mScale, opacity);
             }
         } else if (colorType == 2) {

@@ -41,6 +41,25 @@ RCT_CUSTOM_VIEW_PROPERTY(rectwidth, id, RNSVGRect)
         view.rectwidth = [NSString stringWithFormat:@"%f", [json floatValue]];
     }
 }
+RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGRect)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.rectheight = stringValue;
+    } else {
+        view.rectheight = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGRect)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.rectwidth = stringValue;
+    } else {
+        view.rectwidth = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
 
 RCT_EXPORT_VIEW_PROPERTY(rx, NSString)
 RCT_EXPORT_VIEW_PROPERTY(ry, NSString)
