@@ -317,7 +317,9 @@ abstract class VirtualNode extends LayoutShadowNode {
 
         ReactShadowNode parent = getParent();
 
-        if (parent instanceof SvgViewShadowNode) {
+        if (parent == null) {
+            return null;
+        } else if (parent instanceof SvgViewShadowNode) {
             mSvgShadowNode = (SvgViewShadowNode)parent;
         } else if (parent instanceof VirtualNode) {
             mSvgShadowNode = ((VirtualNode) parent).getSvgShadowNode();
