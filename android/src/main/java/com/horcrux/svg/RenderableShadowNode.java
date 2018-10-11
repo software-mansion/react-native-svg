@@ -426,6 +426,9 @@ abstract public class RenderableShadowNode extends VirtualNode {
         if (mRegion == null && mFillPath != null) {
             mRegion = getRegion(mFillPath);
         }
+        if (mRegion == null && mPath != null) {
+            mRegion = getRegion(mPath);
+        }
         if (mStrokeRegion == null && mStrokePath != null) {
             mStrokeRegion = getRegion(mStrokePath);
         }

@@ -1,10 +1,12 @@
 import React from "react";
+import _ from "lodash";
 import PropTypes from "prop-types";
 import { requireNativeComponent } from "react-native";
 import extractText from "../lib/extract/extractText";
 import { textProps } from "../lib/props";
 import { TextAttributes } from "../lib/attributes";
 import extractProps from "../lib/extract/extractProps";
+import extractTransform from "../lib/extract/extractTransform";
 import Shape from "./Shape";
 
 export default class extends Shape {
@@ -12,27 +14,16 @@ export default class extends Shape {
 
     static propTypes = textProps;
 
-    //noinspection JSUnusedGlobalSymbols
-    static childContextTypes = {
-        isInAParentText: PropTypes.bool
-    };
-
-    //noinspection JSUnusedGlobalSymbols
-    getChildContext() {
-        return {
-            isInAParentText: true
-        };
-    }
-
-    //noinspection JSUnusedGlobalSymbols
-    getContextTypes() {
-        return {
-            isInAParentText: PropTypes.bool
-        };
-    }
-
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
+    setNativeProps = (props) => {
+        const matrix = !props.matrix && extractTransform(props);
+        if (matrix) {
+            props.matrix = matrix;
+        }
+        const textProps = _.pickBy(extractText(props, true), p => !_.isNil(p));
+        this.root.setNativeProps({
+            ...props,
+            ...textProps
+        });
     };
 
     render() {
