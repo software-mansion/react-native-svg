@@ -171,6 +171,8 @@ UInt32 saturate(double value) {
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.matrix);
+    CGAffineTransform transform = CATransform3DGetAffineTransform(self.layer.transform);
+    CGContextConcatCTM(context, transform);
     CGContextSetAlpha(context, self.opacity);
 
     [self beginTransparencyLayer:context];

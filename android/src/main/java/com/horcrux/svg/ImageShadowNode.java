@@ -28,18 +28,18 @@ import com.facebook.imagepipeline.image.CloseableBitmap;
 import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
 import com.facebook.react.views.imagehelper.ImageSource;
+import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.facebook.react.bridge.ReadableArray;
 
 /**
  * Shadow node for virtual Image view
@@ -127,9 +127,10 @@ class ImageShadowNode extends RenderableShadowNode {
     }
 
     @ReactProp(name = "matrix")
-    public void setMatrix(@Nullable ReadableArray matrixArray) {
-        if (matrixArray != null) {
-            int matrixSize = PropHelper.toMatrixData(matrixArray, sRawMatrix, mScale);
+    public void setMatrix(Dynamic matrixArray) {
+        ReadableType type = matrixArray.getType();
+        if (!matrixArray.isNull() && type.equals(ReadableType.Array)) {
+            int matrixSize = PropHelper.toMatrixData(matrixArray.asArray(), sRawMatrix, mScale);
             if (matrixSize == 6) {
                 if (mMatrix == null) {
                     mMatrix = new Matrix();

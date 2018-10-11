@@ -17,7 +17,9 @@ import android.graphics.RectF;
 import android.graphics.Region;
 
 import com.facebook.common.logging.FLog;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
@@ -54,6 +56,7 @@ abstract class VirtualNode extends LayoutShadowNode {
     };
     float mOpacity = 1f;
     Matrix mMatrix = new Matrix();
+    Matrix mTransform = new Matrix();
     Matrix mInvMatrix = new Matrix();
     boolean mInvertible = true;
     private RectF mClientRect;
@@ -188,6 +191,7 @@ abstract class VirtualNode extends LayoutShadowNode {
     int saveAndSetupCanvas(Canvas canvas) {
         int count = canvas.save();
         canvas.concat(mMatrix);
+        canvas.concat(mTransform);
         return count;
     }
 
@@ -234,9 +238,10 @@ abstract class VirtualNode extends LayoutShadowNode {
     }
 
     @ReactProp(name = "matrix")
-    public void setMatrix(@Nullable ReadableArray matrixArray) {
-        if (matrixArray != null) {
-            int matrixSize = PropHelper.toMatrixData(matrixArray, sRawMatrix, mScale);
+    public void setMatrix(Dynamic matrixArray) {
+        ReadableType type = matrixArray.getType();
+        if (!matrixArray.isNull() && type.equals(ReadableType.Array)) {
+            int matrixSize = PropHelper.toMatrixData(matrixArray.asArray(), sRawMatrix, mScale);
             if (matrixSize == 6) {
                 if (mMatrix == null) {
                     mMatrix = new Matrix();
@@ -250,6 +255,7 @@ abstract class VirtualNode extends LayoutShadowNode {
         } else {
             mMatrix = null;
             mInvMatrix = null;
+            mInvertible = false;
         }
 
         super.markUpdated();

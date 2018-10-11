@@ -9,18 +9,35 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Matrix;
 import android.util.SparseArray;
+import android.view.View;
 
+import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
+import com.facebook.react.uimanager.MatrixMathHelper;
+import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.TransformHelper;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
+import static com.facebook.react.uimanager.MatrixMathHelper.determinant;
+import static com.facebook.react.uimanager.MatrixMathHelper.inverse;
+import static com.facebook.react.uimanager.MatrixMathHelper.multiplyVectorByMatrix;
+import static com.facebook.react.uimanager.MatrixMathHelper.roundTo3Places;
+import static com.facebook.react.uimanager.MatrixMathHelper.transpose;
+import static com.facebook.react.uimanager.MatrixMathHelper.v3Combine;
+import static com.facebook.react.uimanager.MatrixMathHelper.v3Cross;
+import static com.facebook.react.uimanager.MatrixMathHelper.v3Dot;
+import static com.facebook.react.uimanager.MatrixMathHelper.v3Length;
+import static com.facebook.react.uimanager.MatrixMathHelper.v3Normalize;
 import static com.horcrux.svg.RenderableShadowNode.CAP_ROUND;
 import static com.horcrux.svg.RenderableShadowNode.FILL_RULE_NONZERO;
 import static com.horcrux.svg.RenderableShadowNode.JOIN_ROUND;
@@ -53,9 +70,207 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
 
     private final String mClassName;
 
+    public static class MatrixDecompositionContext extends MatrixMathHelper.MatrixDecompositionContext {
+        double[] perspective = new double[4];
+        double[] scale = new double[3];
+        double[] skew = new double[3];
+        double[] translation = new double[3];
+        double[] rotationDegrees = new double[3];
+    }
+
+    private static MatrixDecompositionContext sMatrixDecompositionContext =
+            new MatrixDecompositionContext();
+    private static double[] sTransformDecompositionArray = new double[16];
+
+    private static final int PERSPECTIVE_ARRAY_INVERTED_CAMERA_DISTANCE_INDEX = 2;
+    private static final float CAMERA_DISTANCE_NORMALIZATION_MULTIPLIER = 5;
+
+    private static final double EPSILON = .00001d;
+
+    private static boolean isZero(double d) {
+        if (Double.isNaN(d)) {
+            return false;
+        }
+        return Math.abs(d) < EPSILON;
+    }
+
+    /**
+     * @param transformMatrix 16-element array of numbers representing 4x4 transform matrix
+     */
+    public static void decomposeMatrix(double[] transformMatrix, MatrixDecompositionContext ctx) {
+        Assertions.assertCondition(transformMatrix.length == 16);
+
+        // output values
+        final double[] perspective = ctx.perspective;
+        final double[] scale = ctx.scale;
+        final double[] skew = ctx.skew;
+        final double[] translation = ctx.translation;
+        final double[] rotationDegrees = ctx.rotationDegrees;
+
+        // create normalized, 2d array matrix
+        // and normalized 1d array perspectiveMatrix with redefined 4th column
+        if (isZero(transformMatrix[15])) {
+            return;
+        }
+        double[][] matrix = new double[4][4];
+        double[] perspectiveMatrix = new double[16];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                double value = transformMatrix[(i * 4) + j] / transformMatrix[15];
+                matrix[i][j] = value;
+                perspectiveMatrix[(i * 4) + j] = j == 3 ? 0 : value;
+            }
+        }
+        perspectiveMatrix[15] = 1;
+
+        // test for singularity of upper 3x3 part of the perspective matrix
+        if (isZero(determinant(perspectiveMatrix))) {
+            return;
+        }
+
+        // isolate perspective
+        if (!isZero(matrix[0][3]) || !isZero(matrix[1][3]) || !isZero(matrix[2][3])) {
+            // rightHandSide is the right hand side of the equation.
+            // rightHandSide is a vector, or point in 3d space relative to the origin.
+            double[] rightHandSide = { matrix[0][3], matrix[1][3], matrix[2][3], matrix[3][3] };
+
+            // Solve the equation by inverting perspectiveMatrix and multiplying
+            // rightHandSide by the inverse.
+            double[] inversePerspectiveMatrix = inverse(
+                    perspectiveMatrix
+            );
+            double[] transposedInversePerspectiveMatrix = transpose(
+                    inversePerspectiveMatrix
+            );
+            multiplyVectorByMatrix(rightHandSide, transposedInversePerspectiveMatrix, perspective);
+        } else {
+            // no perspective
+            perspective[0] = perspective[1] = perspective[2] = 0d;
+            perspective[3] = 1d;
+        }
+
+        // translation is simple
+        for (int i = 0; i < 3; i++) {
+            translation[i] = matrix[3][i];
+        }
+
+        // Now get scale and shear.
+        // 'row' is a 3 element array of 3 component vectors
+        double[][] row = new double[3][3];
+        for (int i = 0; i < 3; i++) {
+            row[i][0] = matrix[i][0];
+            row[i][1] = matrix[i][1];
+            row[i][2] = matrix[i][2];
+        }
+
+        // Compute X scale factor and normalize first row.
+        scale[0] = v3Length(row[0]);
+        row[0] = v3Normalize(row[0], scale[0]);
+
+        // Compute XY shear factor and make 2nd row orthogonal to 1st.
+        skew[0] = v3Dot(row[0], row[1]);
+        row[1] = v3Combine(row[1], row[0], 1.0, -skew[0]);
+
+        // Compute XY shear factor and make 2nd row orthogonal to 1st.
+        skew[0] = v3Dot(row[0], row[1]);
+        row[1] = v3Combine(row[1], row[0], 1.0, -skew[0]);
+
+        // Now, compute Y scale and normalize 2nd row.
+        scale[1] = v3Length(row[1]);
+        row[1] = v3Normalize(row[1], scale[1]);
+        skew[0] /= scale[1];
+
+        // Compute XZ and YZ shears, orthogonalize 3rd row
+        skew[1] = v3Dot(row[0], row[2]);
+        row[2] = v3Combine(row[2], row[0], 1.0, -skew[1]);
+        skew[2] = v3Dot(row[1], row[2]);
+        row[2] = v3Combine(row[2], row[1], 1.0, -skew[2]);
+
+        // Next, get Z scale and normalize 3rd row.
+        scale[2] = v3Length(row[2]);
+        row[2] = v3Normalize(row[2], scale[2]);
+        skew[1] /= scale[2];
+        skew[2] /= scale[2];
+
+        // At this point, the matrix (in rows) is orthonormal.
+        // Check for a coordinate system flip.  If the determinant
+        // is -1, then negate the matrix and the scaling factors.
+        double[] pdum3 = v3Cross(row[1], row[2]);
+        if (v3Dot(row[0], pdum3) < 0) {
+            for (int i = 0; i < 3; i++) {
+                scale[i] *= -1;
+                row[i][0] *= -1;
+                row[i][1] *= -1;
+                row[i][2] *= -1;
+            }
+        }
+
+        // Now, get the rotations out
+        // Based on: http://nghiaho.com/?page_id=846
+        double conv = 180 / Math.PI;
+        rotationDegrees[0] = roundTo3Places(-Math.atan2(row[2][1], row[2][2]) * conv);
+        rotationDegrees[1] = roundTo3Places(-Math.atan2(-row[2][0], Math.sqrt(row[2][1] * row[2][1] + row[2][2] * row[2][2])) * conv);
+        rotationDegrees[2] = roundTo3Places(-Math.atan2(row[1][0], row[0][0]) * conv);
+    }
+
+    private static void setTransformProperty(View view, ReadableArray transforms) {
+        TransformHelper.processTransform(transforms, sTransformDecompositionArray);
+        decomposeMatrix(sTransformDecompositionArray, sMatrixDecompositionContext);
+        view.setTranslationX(
+                PixelUtil.toPixelFromDIP((float) sMatrixDecompositionContext.translation[0]));
+        view.setTranslationY(
+                PixelUtil.toPixelFromDIP((float) sMatrixDecompositionContext.translation[1]));
+        view.setRotation((float) sMatrixDecompositionContext.rotationDegrees[2]);
+        view.setRotationX((float) sMatrixDecompositionContext.rotationDegrees[0]);
+        view.setRotationY((float) sMatrixDecompositionContext.rotationDegrees[1]);
+        view.setScaleX((float) sMatrixDecompositionContext.scale[0]);
+        view.setScaleY((float) sMatrixDecompositionContext.scale[1]);
+
+        double[] perspectiveArray = sMatrixDecompositionContext.perspective;
+
+        if (perspectiveArray.length > PERSPECTIVE_ARRAY_INVERTED_CAMERA_DISTANCE_INDEX) {
+            float invertedCameraDistance = (float) perspectiveArray[PERSPECTIVE_ARRAY_INVERTED_CAMERA_DISTANCE_INDEX];
+            if (invertedCameraDistance == 0) {
+                // Default camera distance, before scale multiplier (1280)
+                invertedCameraDistance = 0.00078125f;
+            }
+            float cameraDistance = -1 / invertedCameraDistance;
+            float scale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
+
+            // The following converts the matrix's perspective to a camera distance
+            // such that the camera perspective looks the same on Android and iOS
+            float normalizedCameraDistance = scale * cameraDistance * CAMERA_DISTANCE_NORMALIZATION_MULTIPLIER;
+            view.setCameraDistance(normalizedCameraDistance);
+
+        }
+    }
+
+    private static void resetTransformProperty(View view) {
+        view.setTranslationX(PixelUtil.toPixelFromDIP(0));
+        view.setTranslationY(PixelUtil.toPixelFromDIP(0));
+        view.setRotation(0);
+        view.setRotationX(0);
+        view.setRotationY(0);
+        view.setScaleX(1);
+        view.setScaleY(1);
+        view.setCameraDistance(0);
+    }
 
     static RenderableViewManager<GroupShadowNode> createGroupViewManager() {
-        return new RenderableViewManager<>(CLASS_GROUP);
+        return new RenderableViewManager<GroupShadowNode>(CLASS_GROUP){
+
+            @ReactProp(name = "transform")
+            public void setTransform(RenderableView<GroupShadowNode> node, ReadableArray matrix) {
+
+                if (matrix == null) {
+                    resetTransformProperty(node);
+                } else {
+                    setTransformProperty(node, matrix);
+                    Matrix m = node.getMatrix();
+                    node.shadowNode.mTransform = m;
+                }
+            }
+        };
     }
 
     static RenderableViewManager<PathShadowNode> createPathViewManager() {
@@ -220,11 +435,6 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             @ReactProp(name = "meetOrSlice")
             public void setMeetOrSlice(RenderableView<ImageShadowNode> node, int meetOrSlice) {
                 node.shadowNode.setMeetOrSlice(meetOrSlice);
-            }
-
-            @ReactProp(name = "matrix")
-            public void setMatrix(RenderableView<ImageShadowNode> node, @Nullable ReadableArray matrixArray) {
-                node.shadowNode.setMatrix(matrixArray);
             }
         };
     }
@@ -766,6 +976,11 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     @ReactProp(name = "strokeLinejoin", defaultInt = JOIN_ROUND)
     public void setStrokeLinejoin(RenderableView<RenderableShadowNode> node, int strokeLinejoin) {
         node.shadowNode.setStrokeLinejoin(strokeLinejoin);
+    }
+
+    @ReactProp(name = "matrix")
+    public void setMatrix(RenderableView<RenderableShadowNode> node, Dynamic matrixArray) {
+        node.shadowNode.setMatrix(matrixArray);
     }
 
     @ReactProp(name = "propList")

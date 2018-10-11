@@ -81,6 +81,8 @@
 {
     CGRect clipBounds = CGContextGetClipBoundingBox(context);
     clipBounds = CGRectApplyAffineTransform(clipBounds, self.matrix);
+    CGAffineTransform transform = CATransform3DGetAffineTransform(self.layer.transform);
+    clipBounds = CGRectApplyAffineTransform(clipBounds, transform);
     CGFloat width = CGRectGetWidth(clipBounds);
     CGFloat height = CGRectGetHeight(clipBounds);
 

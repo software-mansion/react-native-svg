@@ -42,6 +42,7 @@ class GroupShadowNode extends RenderableShadowNode {
     void setupGlyphContext(Canvas canvas) {
         RectF clipBounds = new RectF(canvas.getClipBounds());
         mMatrix.mapRect(clipBounds);
+        mTransform.mapRect(clipBounds);
         mGlyphContext = new GlyphContext(mScale, clipBounds.width(), clipBounds.height());
     }
 
