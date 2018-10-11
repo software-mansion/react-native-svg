@@ -14,6 +14,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Region;
 
+import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ReactShadowNode;
@@ -107,14 +109,48 @@ class TextShadowNode extends GroupShadowNode {
     }
 
     @ReactProp(name = "positionX")
-    public void setPositionX(@Nullable ReadableArray positionX) {
-        mPositionX = positionX;
+    public void setPositionX(Dynamic positionX) {
+        if (positionX.isNull()) {
+            mPositionX = null;
+        } else {
+            switch (positionX.getType()) {
+                case Array: {
+                    mPositionX = positionX.asArray();
+                    break;
+                }
+                case String: {
+                    mPositionX = JavaOnlyArray.of(positionX.asString());
+                    break;
+                }
+                case Number: {
+                    mPositionX = JavaOnlyArray.of(String.valueOf(positionX.asDouble()));
+                    break;
+                }
+            }
+        }
         markUpdated();
     }
 
     @ReactProp(name = "positionY")
-    public void setPositionY(@Nullable ReadableArray positionY) {
-        mPositionY = positionY;
+    public void setPositionY(Dynamic positionY) {
+        if (positionY.isNull()) {
+            mPositionY = null;
+        } else {
+            switch (positionY.getType()) {
+                case Array: {
+                    mPositionY = positionY.asArray();
+                    break;
+                }
+                case String: {
+                    mPositionY = JavaOnlyArray.of(positionY.asString());
+                    break;
+                }
+                case Number: {
+                    mPositionY = JavaOnlyArray.of(String.valueOf(positionY.asDouble()));
+                    break;
+                }
+            }
+        }
         markUpdated();
     }
 

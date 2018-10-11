@@ -112,12 +112,12 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "positionX")
-            public void setPositionX(RenderableView<TextShadowNode> node, @Nullable ReadableArray positionX) {
+            public void setPositionX(RenderableView<TextShadowNode> node, Dynamic positionX) {
                 node.shadowNode.setPositionX(positionX);
             }
 
             @ReactProp(name = "positionY")
-            public void setPositionY(RenderableView<TextShadowNode> node, @Nullable ReadableArray positionY) {
+            public void setPositionY(RenderableView<TextShadowNode> node, Dynamic positionY) {
                 node.shadowNode.setPositionY(positionY);
             }
 
@@ -134,6 +134,16 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             @ReactProp(name = "content")
             public void setContent(RenderableView<TSpanShadowNode> node, @Nullable String content) {
                 node.shadowNode.setContent(content);
+            }
+
+            @ReactProp(name = "positionX")
+            public void setPositionX(RenderableView<TSpanShadowNode> node, Dynamic positionX) {
+                node.shadowNode.setPositionX(positionX);
+            }
+
+            @ReactProp(name = "positionY")
+            public void setPositionY(RenderableView<TSpanShadowNode> node, Dynamic positionY) {
+                node.shadowNode.setPositionY(positionY);
             }
         };
     }
