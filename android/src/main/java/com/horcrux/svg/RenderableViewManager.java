@@ -257,20 +257,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<GroupShadowNode> createGroupViewManager() {
-        return new RenderableViewManager<GroupShadowNode>(CLASS_GROUP){
-
-            @ReactProp(name = "transform")
-            public void setTransform(RenderableView<GroupShadowNode> node, ReadableArray matrix) {
-
-                if (matrix == null) {
-                    resetTransformProperty(node);
-                } else {
-                    setTransformProperty(node, matrix);
-                    Matrix m = node.getMatrix();
-                    node.shadowNode.mTransform = m;
-                }
-            }
-        };
+        return new RenderableViewManager<>(CLASS_GROUP);
     }
 
     static RenderableViewManager<PathShadowNode> createPathViewManager() {
@@ -981,6 +968,16 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     @ReactProp(name = "matrix")
     public void setMatrix(RenderableView<RenderableShadowNode> node, Dynamic matrixArray) {
         node.shadowNode.setMatrix(matrixArray);
+    }
+
+    @ReactProp(name = "transform")
+    public void setTransform(RenderableView<RenderableShadowNode> node, ReadableArray matrix) {
+        if (matrix == null) {
+            resetTransformProperty(node);
+        } else {
+            setTransformProperty(node, matrix);
+            node.shadowNode.mTransform = node.getMatrix();
+        }
     }
 
     @ReactProp(name = "propList")
