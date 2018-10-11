@@ -12,6 +12,9 @@ package com.horcrux.svg;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+
+import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
@@ -25,26 +28,42 @@ class LineShadowNode extends RenderableShadowNode {
     private String mY2;
 
     @ReactProp(name = "x1")
-    public void setX1(String x1) {
-        mX1 = x1;
+    public void setX1(Dynamic x1) {
+        if (x1.getType() == ReadableType.String) {
+            mX1 = x1.asString();
+        } else {
+            mX1 = String.valueOf(x1.asDouble());
+        }
         markUpdated();
     }
 
     @ReactProp(name = "y1")
-    public void setY1(String y1) {
-        mY1 = y1;
+    public void setY1(Dynamic y1) {
+        if (y1.getType() == ReadableType.String) {
+            mY1 = y1.asString();
+        } else {
+            mY1 = String.valueOf(y1.asDouble());
+        }
         markUpdated();
     }
 
     @ReactProp(name = "x2")
-    public void setX2(String x2) {
-        mX2 = x2;
+    public void setX2(Dynamic x2) {
+        if (x2.getType() == ReadableType.String) {
+            mX2 = x2.asString();
+        } else {
+            mX2 = String.valueOf(x2.asDouble());
+        }
         markUpdated();
     }
 
     @ReactProp(name = "y2")
-    public void setY2(String y2) {
-        mY2 = y2;
+    public void setY2(Dynamic y2) {
+        if (y2.getType() == ReadableType.String) {
+            mY2 = y2.asString();
+        } else {
+            mY2 = String.valueOf(y2.asDouble());
+        }
         markUpdated();
     }
 

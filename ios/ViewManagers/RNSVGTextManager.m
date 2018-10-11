@@ -21,8 +21,28 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_EXPORT_VIEW_PROPERTY(textAnchor, RNSVGTextAnchor)
-RCT_EXPORT_VIEW_PROPERTY(deltaX, NSArray<NSString *>)
-RCT_EXPORT_VIEW_PROPERTY(deltaY, NSArray<NSString *>)
+RCT_CUSTOM_VIEW_PROPERTY(dx, id, RNSVGText)
+{
+    if ([json isKindOfClass:[NSArray class]]) {
+        NSArray<NSString *> *arrayValue = (NSArray<NSString *> *)json;
+        view.deltaX = arrayValue;
+    } else if ([json isKindOfClass:[NSString class]]) {
+        view.deltaX = [NSArray arrayWithObject:json];
+    } else if ([json isKindOfClass:[NSNumber class]]) {
+        view.deltaX = [NSArray arrayWithObject:[NSString stringWithFormat:@"%f", [json floatValue]]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(dy, id, RNSVGText)
+{
+    if ([json isKindOfClass:[NSArray class]]) {
+        NSArray<NSString *> *arrayValue = (NSArray<NSString *> *)json;
+        view.deltaY = arrayValue;
+    } else if ([json isKindOfClass:[NSString class]]) {
+        view.deltaY = [NSArray arrayWithObject:json];
+    } else if ([json isKindOfClass:[NSNumber class]]) {
+        view.deltaY = [NSArray arrayWithObject:[NSString stringWithFormat:@"%f", [json floatValue]]];
+    }
+}
 RCT_CUSTOM_VIEW_PROPERTY(positionX, id, RNSVGText)
 {
     if ([json isKindOfClass:[NSArray class]]) {
@@ -69,10 +89,36 @@ RCT_CUSTOM_VIEW_PROPERTY(y, id, RNSVGText)
         view.positionY = [NSArray arrayWithObject:[NSString stringWithFormat:@"%f", [json floatValue]]];
     }
 }
-RCT_EXPORT_VIEW_PROPERTY(rotate, NSArray<NSString *>)
+RCT_CUSTOM_VIEW_PROPERTY(rotate, id, RNSVGText)
+{
+    if ([json isKindOfClass:[NSArray class]]) {
+        NSArray<NSString *> *arrayValue = (NSArray<NSString *> *)json;
+        view.rotate = arrayValue;
+    } else if ([json isKindOfClass:[NSString class]]) {
+        view.rotate = [NSArray arrayWithObject:json];
+    } else if ([json isKindOfClass:[NSNumber class]]) {
+        view.rotate = [NSArray arrayWithObject:[NSString stringWithFormat:@"%f", [json floatValue]]];
+    }
+}
 RCT_EXPORT_VIEW_PROPERTY(font, NSDictionary)
-RCT_EXPORT_VIEW_PROPERTY(textLength, NSString)
-RCT_EXPORT_VIEW_PROPERTY(baselineShift, NSString)
+RCT_CUSTOM_VIEW_PROPERTY(textLength, id, RNSVGText)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.textLength = stringValue;
+    } else {
+        view.textLength = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(baselineShift, id, RNSVGText)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.baselineShift = stringValue;
+    } else {
+        view.baselineShift = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
 RCT_EXPORT_VIEW_PROPERTY(lengthAdjust, NSString)
 RCT_EXPORT_VIEW_PROPERTY(alignmentBaseline, NSString)
 

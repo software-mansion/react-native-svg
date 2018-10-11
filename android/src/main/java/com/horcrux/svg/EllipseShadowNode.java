@@ -14,6 +14,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
+import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
@@ -27,26 +29,42 @@ class EllipseShadowNode extends RenderableShadowNode {
     private String mRy;
 
     @ReactProp(name = "cx")
-    public void setCx(String cx) {
-        mCx = cx;
+    public void setCx(Dynamic cx) {
+        if (cx.getType() == ReadableType.String) {
+            mCx = cx.asString();
+        } else {
+            mCx = String.valueOf(cx.asDouble());
+        }
         markUpdated();
     }
 
     @ReactProp(name = "cy")
-    public void setCy(String cy) {
-        mCy = cy;
+    public void setCy(Dynamic cy) {
+        if (cy.getType() == ReadableType.String) {
+            mCy = cy.asString();
+        } else {
+            mCy = String.valueOf(cy.asDouble());
+        }
         markUpdated();
     }
 
     @ReactProp(name = "rx")
-    public void setRx(String rx) {
-        mRx = rx;
+    public void setRx(Dynamic rx) {
+        if (rx.getType() == ReadableType.String) {
+            mRx = rx.asString();
+        } else {
+            mRx = String.valueOf(rx.asDouble());
+        }
         markUpdated();
     }
 
     @ReactProp(name = "ry")
-    public void setRy(String ry) {
-        mRy = ry;
+    public void setRy(Dynamic ry) {
+        if (ry.getType() == ReadableType.String) {
+            mRy = ry.asString();
+        } else {
+            mRy = String.valueOf(ry.asDouble());
+        }
         markUpdated();
     }
 

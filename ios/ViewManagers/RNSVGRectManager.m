@@ -20,8 +20,24 @@ RCT_EXPORT_MODULE()
   return [RNSVGRect new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(x, NSString)
-RCT_EXPORT_VIEW_PROPERTY(y, NSString)
+RCT_CUSTOM_VIEW_PROPERTY(x, id, RNSVGRect)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.x = stringValue;
+    } else {
+        view.x = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(y, id, RNSVGRect)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.y = stringValue;
+    } else {
+        view.y = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
 RCT_CUSTOM_VIEW_PROPERTY(rectheight, id, RNSVGRect)
 {
     if ([json isKindOfClass:[NSString class]]) {
@@ -61,7 +77,23 @@ RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGRect)
     }
 }
 
-RCT_EXPORT_VIEW_PROPERTY(rx, NSString)
-RCT_EXPORT_VIEW_PROPERTY(ry, NSString)
+RCT_CUSTOM_VIEW_PROPERTY(rx, id, RNSVGRect)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.rx = stringValue;
+    } else {
+        view.rx = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(ry, id, RNSVGRect)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.ry = stringValue;
+    } else {
+        view.ry = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
 
 @end

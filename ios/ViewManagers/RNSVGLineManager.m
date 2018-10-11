@@ -20,9 +20,41 @@ RCT_EXPORT_MODULE()
   return [RNSVGLine new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(x1, NSString)
-RCT_EXPORT_VIEW_PROPERTY(y1, NSString)
-RCT_EXPORT_VIEW_PROPERTY(x2, NSString)
-RCT_EXPORT_VIEW_PROPERTY(y2, NSString)
+RCT_CUSTOM_VIEW_PROPERTY(x1, id, RNSVGLine)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.x1 = stringValue;
+    } else {
+        view.x1 = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(y1, id, RNSVGLine)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.y1 = stringValue;
+    } else {
+        view.y1 = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(x2, id, RNSVGLine)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.x2 = stringValue;
+    } else {
+        view.x2 = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(y2, id, RNSVGLine)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.y2 = stringValue;
+    } else {
+        view.y2 = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
 
 @end

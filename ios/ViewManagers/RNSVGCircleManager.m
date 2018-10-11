@@ -20,8 +20,32 @@ RCT_EXPORT_MODULE()
     return [RNSVGCircle new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(cx, NSString)
-RCT_EXPORT_VIEW_PROPERTY(cy, NSString)
-RCT_EXPORT_VIEW_PROPERTY(r, NSString)
+RCT_CUSTOM_VIEW_PROPERTY(cx, id, RNSVGCircle)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.cx = stringValue;
+    } else {
+        view.cx = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(cy, id, RNSVGCircle)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.cy = stringValue;
+    } else {
+        view.cy = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(r, id, RNSVGCircle)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.r = stringValue;
+    } else {
+        view.r = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
 
 @end

@@ -66,26 +66,42 @@ class ImageShadowNode extends RenderableShadowNode {
     private Matrix mMatrix = null;
 
     @ReactProp(name = "x")
-    public void setX(String x) {
-        mX = x;
+    public void setX(Dynamic x) {
+        if (x.getType() == ReadableType.String) {
+            mX = x.asString();
+        } else {
+            mX = String.valueOf(x.asDouble());
+        }
         markUpdated();
     }
 
     @ReactProp(name = "y")
-    public void setY(String y) {
-        mY = y;
+    public void setY(Dynamic y) {
+        if (y.getType() == ReadableType.String) {
+            mY = y.asString();
+        } else {
+            mY = String.valueOf(y.asDouble());
+        }
         markUpdated();
     }
 
-    @ReactProp(name = "imagewidth")
-    public void setWidth(String width) {
-        mW = width;
+    @ReactProp(name = "width")
+    public void setWidth(Dynamic width) {
+        if (width.getType() == ReadableType.String) {
+            mW = width.asString();
+        } else {
+            mW = String.valueOf(width.asDouble());
+        }
         markUpdated();
     }
 
-    @ReactProp(name = "imageheight")
-    public void seHeight(String height) {
-        mH = height;
+    @ReactProp(name = "height")
+    public void seHeight(Dynamic height) {
+        if (height.getType() == ReadableType.String) {
+            mH = height.asString();
+        } else {
+            mH = String.valueOf(height.asDouble());
+        }
         markUpdated();
     }
 

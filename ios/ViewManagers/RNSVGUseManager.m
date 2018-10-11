@@ -19,9 +19,41 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_EXPORT_VIEW_PROPERTY(href, NSString)
-RCT_EXPORT_VIEW_PROPERTY(usewidth, NSString)
-RCT_EXPORT_VIEW_PROPERTY(useheight, NSString)
-RCT_REMAP_VIEW_PROPERTY(width, usewidth, NSString)
-RCT_REMAP_VIEW_PROPERTY(height, useheight, NSString)
+RCT_CUSTOM_VIEW_PROPERTY(useheight, id, RNSVGUse)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.useheight = stringValue;
+    } else {
+        view.useheight = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(usewidth, id, RNSVGUse)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.usewidth = stringValue;
+    } else {
+        view.usewidth = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGUse)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.useheight = stringValue;
+    } else {
+        view.useheight = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGUse)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.usewidth = stringValue;
+    } else {
+        view.usewidth = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
 
 @end

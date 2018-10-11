@@ -14,7 +14,9 @@ import android.graphics.RectF;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -48,26 +50,42 @@ class PatternShadowNode extends GroupShadowNode {
     private Matrix mMatrix = null;
 
     @ReactProp(name = "x")
-    public void setX(String x) {
-        mX = x;
+    public void setX(Dynamic x) {
+        if (x.getType() == ReadableType.String) {
+            mX = x.asString();
+        } else {
+            mX = String.valueOf(x.asDouble());
+        }
         markUpdated();
     }
 
     @ReactProp(name = "y")
-    public void setY(String y) {
-        mY = y;
+    public void setY(Dynamic y) {
+        if (y.getType() == ReadableType.String) {
+            mY = y.asString();
+        } else {
+            mY = String.valueOf(y.asDouble());
+        }
         markUpdated();
     }
 
-    @ReactProp(name = "patternwidth")
-    public void setWidth(String width) {
-        mWidth = width;
+    @ReactProp(name = "width")
+    public void setWidth(Dynamic width) {
+        if (width.getType() == ReadableType.String) {
+            mWidth = width.asString();
+        } else {
+            mWidth = String.valueOf(width.asDouble());
+        }
         markUpdated();
     }
 
-    @ReactProp(name = "patternheight")
-    public void setHeight(String height) {
-        mHeight = height;
+    @ReactProp(name = "height")
+    public void setHeight(Dynamic height) {
+        if (height.getType() == ReadableType.String) {
+            mHeight = height.asString();
+        } else {
+            mHeight = String.valueOf(height.asDouble());
+        }
         markUpdated();
     }
 

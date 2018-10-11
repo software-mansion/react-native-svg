@@ -18,12 +18,62 @@ RCT_EXPORT_MODULE()
     return [RNSVGPattern new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(x, NSString)
-RCT_EXPORT_VIEW_PROPERTY(y, NSString)
-RCT_EXPORT_VIEW_PROPERTY(patternwidth, NSString)
-RCT_EXPORT_VIEW_PROPERTY(patternheight, NSString)
-RCT_REMAP_VIEW_PROPERTY(width, patternwidth, NSString)
-RCT_REMAP_VIEW_PROPERTY(height, patternheight, NSString)
+RCT_CUSTOM_VIEW_PROPERTY(x, id, RNSVGPattern)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.x = stringValue;
+    } else {
+        view.x = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(y, id, RNSVGPattern)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.y = stringValue;
+    } else {
+        view.y = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(patternheight, id, RNSVGPattern)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.patternheight = stringValue;
+    } else {
+        view.patternheight = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(patternwidth, id, RNSVGPattern)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.patternwidth = stringValue;
+    } else {
+        view.patternwidth = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGPattern)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.patternheight = stringValue;
+    } else {
+        view.patternheight = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGPattern)
+{
+    if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        view.patternwidth = stringValue;
+    } else {
+        view.patternwidth = [NSString stringWithFormat:@"%f", [json floatValue]];
+    }
+}
 RCT_EXPORT_VIEW_PROPERTY(patternUnits, RNSVGUnits)
 RCT_EXPORT_VIEW_PROPERTY(patternContentUnits, RNSVGUnits)
 RCT_EXPORT_VIEW_PROPERTY(patternTransform, CGAffineTransform)

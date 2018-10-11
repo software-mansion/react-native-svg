@@ -18,6 +18,7 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -45,8 +46,12 @@ class TextShadowNode extends GroupShadowNode {
     }
 
     @ReactProp(name = "textLength")
-    public void setTextLength(@Nullable String length) {
-        mTextLength = length;
+    public void setTextLength(Dynamic length) {
+        if (length.getType() == ReadableType.String) {
+            mTextLength = length.asString();
+        } else {
+            mTextLength = String.valueOf(length.asDouble());
+        }
         markUpdated();
     }
 
@@ -63,8 +68,12 @@ class TextShadowNode extends GroupShadowNode {
     }
 
     @ReactProp(name = "baselineShift")
-    public void setBaselineShift(@Nullable String baselineShift) {
-        mBaselineShift = baselineShift;
+    public void setBaselineShift(Dynamic baselineShift) {
+        if (baselineShift.getType() == ReadableType.String) {
+            mBaselineShift = baselineShift.asString();
+        } else {
+            mBaselineShift = String.valueOf(baselineShift.asDouble());
+        }
         markUpdated();
     }
 
@@ -91,24 +100,75 @@ class TextShadowNode extends GroupShadowNode {
     }
 
     @ReactProp(name = "rotate")
-    public void setRotate(@Nullable ReadableArray rotate) {
-        mRotate = rotate;
+    public void setRotate(Dynamic rotate) {
+        if (rotate.isNull()) {
+            mRotate = null;
+        } else {
+            switch (rotate.getType()) {
+                case Array: {
+                    mRotate = rotate.asArray();
+                    break;
+                }
+                case String: {
+                    mRotate = JavaOnlyArray.of(rotate.asString());
+                    break;
+                }
+                case Number: {
+                    mRotate = JavaOnlyArray.of(String.valueOf(rotate.asDouble()));
+                    break;
+                }
+            }
+        }
         markUpdated();
     }
 
-    @ReactProp(name = "deltaX")
-    public void setDeltaX(@Nullable ReadableArray deltaX) {
-        mDeltaX = deltaX;
+    @ReactProp(name = "dx")
+    public void setDeltaX(Dynamic deltaX) {
+        if (deltaX.isNull()) {
+            mDeltaX = null;
+        } else {
+            switch (deltaX.getType()) {
+                case Array: {
+                    mDeltaX = deltaX.asArray();
+                    break;
+                }
+                case String: {
+                    mDeltaX = JavaOnlyArray.of(deltaX.asString());
+                    break;
+                }
+                case Number: {
+                    mDeltaX = JavaOnlyArray.of(String.valueOf(deltaX.asDouble()));
+                    break;
+                }
+            }
+        }
         markUpdated();
     }
 
-    @ReactProp(name = "deltaY")
-    public void setDeltaY(@Nullable ReadableArray deltaY) {
-        mDeltaY = deltaY;
+    @ReactProp(name = "dy")
+    public void setDeltaY(Dynamic deltaY) {
+        if (deltaY.isNull()) {
+            mDeltaY = null;
+        } else {
+            switch (deltaY.getType()) {
+                case Array: {
+                    mDeltaY = deltaY.asArray();
+                    break;
+                }
+                case String: {
+                    mDeltaY = JavaOnlyArray.of(deltaY.asString());
+                    break;
+                }
+                case Number: {
+                    mDeltaY = JavaOnlyArray.of(String.valueOf(deltaY.asDouble()));
+                    break;
+                }
+            }
+        }
         markUpdated();
     }
 
-    @ReactProp(name = "positionX")
+    @ReactProp(name = "x")
     public void setPositionX(Dynamic positionX) {
         if (positionX.isNull()) {
             mPositionX = null;
@@ -131,7 +191,7 @@ class TextShadowNode extends GroupShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "positionY")
+    @ReactProp(name = "y")
     public void setPositionY(Dynamic positionY) {
         if (positionY.isNull()) {
             mPositionY = null;

@@ -32,18 +32,26 @@ class RectShadowNode extends RenderableShadowNode {
 
 
     @ReactProp(name = "x")
-    public void setX(String x) {
-        mX = x;
+    public void setX(Dynamic x) {
+        if (x.getType() == ReadableType.String) {
+            mX = x.asString();
+        } else {
+            mX = String.valueOf(x.asDouble());
+        }
         markUpdated();
     }
 
     @ReactProp(name = "y")
-    public void setY(String y) {
-        mY = y;
+    public void setY(Dynamic y) {
+        if (y.getType() == ReadableType.String) {
+            mY = y.asString();
+        } else {
+            mY = String.valueOf(y.asDouble());
+        }
         markUpdated();
     }
 
-    @ReactProp(name = "rectwidth")
+    @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
         if (width.getType() == ReadableType.String) {
             mW = width.asString();
@@ -53,7 +61,7 @@ class RectShadowNode extends RenderableShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "rectheight")
+    @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
         if (height.getType() == ReadableType.String) {
             mH = height.asString();
@@ -63,16 +71,23 @@ class RectShadowNode extends RenderableShadowNode {
         markUpdated();
     }
 
-
     @ReactProp(name = "rx")
-    public void setRx(String rx) {
-        mRx = rx;
+    public void setRx(Dynamic rx) {
+        if (rx.getType() == ReadableType.String) {
+            mRx = rx.asString();
+        } else {
+            mRx = String.valueOf(rx.asDouble());
+        }
         markUpdated();
     }
 
     @ReactProp(name = "ry")
-    public void setRy(String ry) {
-        mRy = ry;
+    public void setRy(Dynamic ry) {
+        if (ry.getType() == ReadableType.String) {
+            mRy = ry.asString();
+        } else {
+            mRy = String.valueOf(ry.asDouble());
+        }
         markUpdated();
     }
 

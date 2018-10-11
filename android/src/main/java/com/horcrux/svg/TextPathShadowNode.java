@@ -13,6 +13,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 
+import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
@@ -36,8 +38,12 @@ class TextPathShadowNode extends TextShadowNode {
     }
 
     @ReactProp(name = "startOffset")
-    public void setStartOffset(@Nullable String startOffset) {
-        mStartOffset = startOffset;
+    public void setStartOffset(Dynamic startOffset) {
+        if (startOffset.getType() == ReadableType.String) {
+            mStartOffset = startOffset.asString();
+        } else {
+            mStartOffset = String.valueOf(startOffset.asDouble());
+        }
         markUpdated();
     }
 

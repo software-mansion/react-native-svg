@@ -173,8 +173,12 @@ abstract public class RenderableShadowNode extends VirtualNode {
     }
 
     @ReactProp(name = "strokeWidth")
-    public void setStrokeWidth(String strokeWidth) {
-        mStrokeWidth = strokeWidth;
+    public void setStrokeWidth(Dynamic strokeWidth) {
+        if (strokeWidth.getType() == ReadableType.String) {
+            mStrokeWidth = strokeWidth.asString();
+        } else {
+            mStrokeWidth = String.valueOf(strokeWidth.asDouble());
+        }
         markUpdated();
     }
 

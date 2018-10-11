@@ -9,7 +9,6 @@
 
 package com.horcrux.svg;
 
-import android.graphics.Matrix;
 import android.util.SparseArray;
 import android.view.View;
 
@@ -274,7 +273,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         return new RenderableViewManager<TextShadowNode>(CLASS_TEXT) {
 
             @ReactProp(name = "textLength")
-            public void setTextLength(RenderableView<TextShadowNode> node, @Nullable String length) {
+            public void setTextLength(RenderableView<TextShadowNode> node, Dynamic length) {
                 node.shadowNode.setTextLength(length);
             }
 
@@ -289,7 +288,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "baselineShift")
-            public void setBaselineShift(RenderableView<TextShadowNode> node, @Nullable String baselineShift) {
+            public void setBaselineShift(RenderableView<TextShadowNode> node, Dynamic baselineShift) {
                 node.shadowNode.setBaselineShift(baselineShift);
             }
 
@@ -299,17 +298,17 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "rotate")
-            public void setRotate(RenderableView<TextShadowNode> node, @Nullable ReadableArray rotate) {
+            public void setRotate(RenderableView<TextShadowNode> node, Dynamic rotate) {
                 node.shadowNode.setRotate(rotate);
             }
 
-            @ReactProp(name = "deltaX")
-            public void setDeltaX(RenderableView<TextShadowNode> node, @Nullable ReadableArray deltaX) {
+            @ReactProp(name = "dx")
+            public void setDeltaX(RenderableView<TextShadowNode> node, Dynamic deltaX) {
                 node.shadowNode.setDeltaX(deltaX);
             }
 
-            @ReactProp(name = "deltaY")
-            public void setDeltaY(RenderableView<TextShadowNode> node, @Nullable ReadableArray deltaY) {
+            @ReactProp(name = "dy")
+            public void setDeltaY(RenderableView<TextShadowNode> node, Dynamic deltaY) {
                 node.shadowNode.setDeltaY(deltaY);
             }
 
@@ -348,6 +347,21 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
                 node.shadowNode.setContent(content);
             }
 
+            @ReactProp(name = "rotate")
+            public void setRotate(RenderableView<TextShadowNode> node, Dynamic rotate) {
+                node.shadowNode.setRotate(rotate);
+            }
+
+            @ReactProp(name = "dx")
+            public void setDeltaX(RenderableView<TextShadowNode> node, Dynamic deltaX) {
+                node.shadowNode.setDeltaX(deltaX);
+            }
+
+            @ReactProp(name = "dy")
+            public void setDeltaY(RenderableView<TextShadowNode> node, Dynamic deltaY) {
+                node.shadowNode.setDeltaY(deltaY);
+            }
+
             @ReactProp(name = "positionX")
             public void setPositionX(RenderableView<TextShadowNode> node, Dynamic positionX) {
                 node.shadowNode.setPositionX(positionX);
@@ -379,7 +393,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "startOffset")
-            public void setStartOffset(RenderableView<TextPathShadowNode> node, @Nullable String startOffset) {
+            public void setStartOffset(RenderableView<TextPathShadowNode> node, Dynamic startOffset) {
                 node.shadowNode.setStartOffset(startOffset);
             }
 
@@ -409,32 +423,32 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         return new RenderableViewManager<ImageShadowNode>(CLASS_IMAGE) {
 
             @ReactProp(name = "x")
-            public void setX(RenderableView<ImageShadowNode> node, String x) {
+            public void setX(RenderableView<ImageShadowNode> node, Dynamic x) {
                 node.shadowNode.setX(x);
             }
 
             @ReactProp(name = "y")
-            public void setY(RenderableView<ImageShadowNode> node, String y) {
+            public void setY(RenderableView<ImageShadowNode> node, Dynamic y) {
                 node.shadowNode.setY(y);
             }
 
             @ReactProp(name = "imagewidth")
-            public void setImageWidth(RenderableView<ImageShadowNode> node, String width) {
+            public void setImageWidth(RenderableView<ImageShadowNode> node, Dynamic width) {
                 node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "width")
-            public void setWidth(RenderableView<ImageShadowNode> node, String width) {
+            public void setWidth(RenderableView<ImageShadowNode> node, Dynamic width) {
                 node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "imageheight")
-            public void setImageHeight(RenderableView<ImageShadowNode> node, String height) {
+            public void setImageHeight(RenderableView<ImageShadowNode> node, Dynamic height) {
                 node.shadowNode.seHeight(height);
             }
 
             @ReactProp(name = "height")
-            public void setHeight(RenderableView<ImageShadowNode> node, String height) {
+            public void setHeight(RenderableView<ImageShadowNode> node, Dynamic height) {
                 node.shadowNode.seHeight(height);
             }
 
@@ -460,17 +474,17 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         return new RenderableViewManager<CircleShadowNode>(CLASS_CIRCLE) {
 
             @ReactProp(name = "cx")
-            public void setCx(RenderableView<CircleShadowNode> node, String cx) {
+            public void setCx(RenderableView<CircleShadowNode> node, Dynamic cx) {
                 node.shadowNode.setCx(cx);
             }
 
             @ReactProp(name = "cy")
-            public void setCy(RenderableView<CircleShadowNode> node, String cy) {
+            public void setCy(RenderableView<CircleShadowNode> node, Dynamic cy) {
                 node.shadowNode.setCy(cy);
             }
 
             @ReactProp(name = "r")
-            public void setR(RenderableView<CircleShadowNode> node, String r) {
+            public void setR(RenderableView<CircleShadowNode> node, Dynamic r) {
                 node.shadowNode.setR(r);
             }
         };
@@ -480,22 +494,22 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         return new RenderableViewManager<EllipseShadowNode>(CLASS_ELLIPSE) {
 
             @ReactProp(name = "cx")
-            public void setCx(RenderableView<EllipseShadowNode> node, String cx) {
+            public void setCx(RenderableView<EllipseShadowNode> node, Dynamic cx) {
                 node.shadowNode.setCx(cx);
             }
 
             @ReactProp(name = "cy")
-            public void setCy(RenderableView<EllipseShadowNode> node, String cy) {
+            public void setCy(RenderableView<EllipseShadowNode> node, Dynamic cy) {
                 node.shadowNode.setCy(cy);
             }
 
             @ReactProp(name = "rx")
-            public void setRx(RenderableView<EllipseShadowNode> node, String rx) {
+            public void setRx(RenderableView<EllipseShadowNode> node, Dynamic rx) {
                 node.shadowNode.setRx(rx);
             }
 
             @ReactProp(name = "ry")
-            public void setRy(RenderableView<EllipseShadowNode> node, String ry) {
+            public void setRy(RenderableView<EllipseShadowNode> node, Dynamic ry) {
                 node.shadowNode.setRy(ry);
             }
         };
@@ -505,22 +519,22 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         return new RenderableViewManager<LineShadowNode>(CLASS_LINE) {
 
             @ReactProp(name = "x1")
-            public void setX1(RenderableView<LineShadowNode> node, String x1) {
+            public void setX1(RenderableView<LineShadowNode> node, Dynamic x1) {
                 node.shadowNode.setX1(x1);
             }
 
             @ReactProp(name = "y1")
-            public void setY1(RenderableView<LineShadowNode> node, String y1) {
+            public void setY1(RenderableView<LineShadowNode> node, Dynamic y1) {
                 node.shadowNode.setY1(y1);
             }
 
             @ReactProp(name = "x2")
-            public void setX2(RenderableView<LineShadowNode> node, String x2) {
+            public void setX2(RenderableView<LineShadowNode> node, Dynamic x2) {
                 node.shadowNode.setX2(x2);
             }
 
             @ReactProp(name = "y2")
-            public void setY2(RenderableView<LineShadowNode> node, String y2) {
+            public void setY2(RenderableView<LineShadowNode> node, Dynamic y2) {
                 node.shadowNode.setY2(y2);
             }
 
@@ -531,12 +545,12 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         return new RenderableViewManager<RectShadowNode>(CLASS_RECT) {
 
             @ReactProp(name = "x")
-            public void setX(RenderableView<RectShadowNode> node, String x) {
+            public void setX(RenderableView<RectShadowNode> node, Dynamic x) {
                 node.shadowNode.setX(x);
             }
 
             @ReactProp(name = "y")
-            public void setY(RenderableView<RectShadowNode> node, String y) {
+            public void setY(RenderableView<RectShadowNode> node, Dynamic y) {
                 node.shadowNode.setY(y);
             }
 
@@ -561,12 +575,12 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "rx")
-            public void setRx(RenderableView<RectShadowNode> node, String rx) {
+            public void setRx(RenderableView<RectShadowNode> node, Dynamic rx) {
                 node.shadowNode.setRx(rx);
             }
 
             @ReactProp(name = "ry")
-            public void setRy(RenderableView<RectShadowNode> node, String ry) {
+            public void setRy(RenderableView<RectShadowNode> node, Dynamic ry) {
                 node.shadowNode.setRy(ry);
             }
         };
@@ -589,22 +603,22 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
             }
 
             @ReactProp(name = "usewidth")
-            public void setUseWidth(RenderableView<UseShadowNode> node, String width) {
+            public void setUseWidth(RenderableView<UseShadowNode> node, Dynamic width) {
                 node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "width")
-            public void setWidth(RenderableView<UseShadowNode> node, String width) {
+            public void setWidth(RenderableView<UseShadowNode> node, Dynamic width) {
                 node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "useheight")
-            public void setUseHeight(RenderableView<UseShadowNode> node, String height) {
+            public void setUseHeight(RenderableView<UseShadowNode> node, Dynamic height) {
                 node.shadowNode.setHeight(height);
             }
 
             @ReactProp(name = "height")
-            public void setHeight(RenderableView<UseShadowNode> node, String height) {
+            public void setHeight(RenderableView<UseShadowNode> node, Dynamic height) {
                 node.shadowNode.setHeight(height);
             }
         };
@@ -649,32 +663,32 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         return new RenderableViewManager<PatternShadowNode>(CLASS_PATTERN) {
 
             @ReactProp(name = "x")
-            public void setX(RenderableView<PatternShadowNode> node, String x) {
+            public void setX(RenderableView<PatternShadowNode> node, Dynamic x) {
                 node.shadowNode.setX(x);
             }
 
             @ReactProp(name = "y")
-            public void setY(RenderableView<PatternShadowNode> node, String y) {
+            public void setY(RenderableView<PatternShadowNode> node, Dynamic y) {
                 node.shadowNode.setY(y);
             }
 
             @ReactProp(name = "patternwidth")
-            public void setPatternWidth(RenderableView<PatternShadowNode> node, String width) {
+            public void setPatternWidth(RenderableView<PatternShadowNode> node, Dynamic width) {
                 node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "width")
-            public void setWidth(RenderableView<PatternShadowNode> node, String width) {
+            public void setWidth(RenderableView<PatternShadowNode> node, Dynamic width) {
                 node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "patternheight")
-            public void setPatternHeight(RenderableView<PatternShadowNode> node, String height) {
+            public void setPatternHeight(RenderableView<PatternShadowNode> node, Dynamic height) {
                 node.shadowNode.setHeight(height);
             }
 
             @ReactProp(name = "height")
-            public void setHeight(RenderableView<PatternShadowNode> node, String height) {
+            public void setHeight(RenderableView<PatternShadowNode> node, Dynamic height) {
                 node.shadowNode.setHeight(height);
             }
 
@@ -729,32 +743,32 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         return new RenderableViewManager<MaskShadowNode>(CLASS_MASK) {
 
             @ReactProp(name = "x")
-            public void setX(RenderableView<MaskShadowNode> node, String x) {
+            public void setX(RenderableView<MaskShadowNode> node, Dynamic x) {
                 node.shadowNode.setX(x);
             }
 
             @ReactProp(name = "y")
-            public void setY(RenderableView<MaskShadowNode> node, String y) {
+            public void setY(RenderableView<MaskShadowNode> node, Dynamic y) {
                 node.shadowNode.setY(y);
             }
 
             @ReactProp(name = "maskwidth")
-            public void setMaskWidth(RenderableView<MaskShadowNode> node, String width) {
+            public void setMaskWidth(RenderableView<MaskShadowNode> node, Dynamic width) {
                 node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "width")
-            public void setWidth(RenderableView<MaskShadowNode> node, String width) {
+            public void setWidth(RenderableView<MaskShadowNode> node, Dynamic width) {
                 node.shadowNode.setWidth(width);
             }
 
             @ReactProp(name = "maskheight")
-            public void setMaskHeight(RenderableView<MaskShadowNode> node, String height) {
+            public void setMaskHeight(RenderableView<MaskShadowNode> node, Dynamic height) {
                 node.shadowNode.setHeight(height);
             }
 
             @ReactProp(name = "height")
-            public void setHeight(RenderableView<MaskShadowNode> node, String height) {
+            public void setHeight(RenderableView<MaskShadowNode> node, Dynamic height) {
                 node.shadowNode.setHeight(height);
             }
 
@@ -779,22 +793,22 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         return new RenderableViewManager<LinearGradientShadowNode>(CLASS_LINEAR_GRADIENT) {
 
             @ReactProp(name = "x1")
-            public void setX1(RenderableView<LinearGradientShadowNode> node, String x1) {
+            public void setX1(RenderableView<LinearGradientShadowNode> node, Dynamic x1) {
                 node.shadowNode.setX1(x1);
             }
 
             @ReactProp(name = "y1")
-            public void setY1(RenderableView<LinearGradientShadowNode> node, String y1) {
+            public void setY1(RenderableView<LinearGradientShadowNode> node, Dynamic y1) {
                 node.shadowNode.setY1(y1);
             }
 
             @ReactProp(name = "x2")
-            public void setX2(RenderableView<LinearGradientShadowNode> node, String x2) {
+            public void setX2(RenderableView<LinearGradientShadowNode> node, Dynamic x2) {
                 node.shadowNode.setX2(x2);
             }
 
             @ReactProp(name = "y2")
-            public void setY2(RenderableView<LinearGradientShadowNode> node, String y2) {
+            public void setY2(RenderableView<LinearGradientShadowNode> node, Dynamic y2) {
                 node.shadowNode.setY2(y2);
             }
 
@@ -819,32 +833,32 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         return new RenderableViewManager<RadialGradientShadowNode>(CLASS_RADIAL_GRADIENT) {
 
             @ReactProp(name = "fx")
-            public void setFx(RenderableView<RadialGradientShadowNode> node, String fx) {
+            public void setFx(RenderableView<RadialGradientShadowNode> node, Dynamic fx) {
                 node.shadowNode.setFx(fx);
             }
 
             @ReactProp(name = "fy")
-            public void setFy(RenderableView<RadialGradientShadowNode> node, String fy) {
+            public void setFy(RenderableView<RadialGradientShadowNode> node, Dynamic fy) {
                 node.shadowNode.setFy(fy);
             }
 
             @ReactProp(name = "rx")
-            public void setRx(RenderableView<RadialGradientShadowNode> node, String rx) {
+            public void setRx(RenderableView<RadialGradientShadowNode> node, Dynamic rx) {
                 node.shadowNode.setRx(rx);
             }
 
             @ReactProp(name = "ry")
-            public void setRy(RenderableView<RadialGradientShadowNode> node, String ry) {
+            public void setRy(RenderableView<RadialGradientShadowNode> node, Dynamic ry) {
                 node.shadowNode.setRy(ry);
             }
 
             @ReactProp(name = "cx")
-            public void setCx(RenderableView<RadialGradientShadowNode> node, String cx) {
+            public void setCx(RenderableView<RadialGradientShadowNode> node, Dynamic cx) {
                 node.shadowNode.setCx(cx);
             }
 
             @ReactProp(name = "cy")
-            public void setCy(RenderableView<RadialGradientShadowNode> node, String cy) {
+            public void setCy(RenderableView<RadialGradientShadowNode> node, Dynamic cy) {
                 node.shadowNode.setCy(cy);
             }
 
@@ -968,8 +982,8 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     @ReactProp(name = "clipPath")
-    public void setClipPath(RenderableView<RenderableShadowNode> node, String mask) {
-        node.shadowNode.setClipPath(mask);
+    public void setClipPath(RenderableView<RenderableShadowNode> node, String clipPath) {
+        node.shadowNode.setClipPath(clipPath);
     }
 
     @ReactProp(name = "clipRule")
@@ -1014,7 +1028,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     @ReactProp(name = "strokeWidth")
-    public void setStrokeWidth(RenderableView<RenderableShadowNode> node, String strokeWidth) {
+    public void setStrokeWidth(RenderableView<RenderableShadowNode> node, Dynamic strokeWidth) {
         node.shadowNode.setStrokeWidth(strokeWidth);
     }
 
