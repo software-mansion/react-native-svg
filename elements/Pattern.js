@@ -5,7 +5,7 @@ import { numberProp } from "../lib/props";
 import PATTERN_UNITS from "../lib/PATTERN_UNITS";
 import { PatternAttributes } from "../lib/attributes";
 import extractTransform from "../lib/extract/extractTransform";
-import extractViewBox from "react-native-svg/lib/extract/extractViewBox";
+import extractViewBox from "../lib/extract/extractViewBox";
 
 export default class extends Component {
     static displayName = "Pattern";
