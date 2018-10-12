@@ -215,13 +215,16 @@ export interface PathProps extends CommonPathProps {
 export const Path: React.ComponentClass<PathProps>;
 
 export interface PatternProps {
-  x1?: NumberProp,
-  x2?: NumberProp,
-  y1?: NumberProp,
-  y2?: NumberProp,
+  id: string,
+  x?: NumberProp,
+  y?: NumberProp,
+  width?: NumberProp,
+  height?: NumberProp,
   patternTransform?: string,
   patternUnits?: Units,
   patternContentUnits?: Units,
+  viewBox?: string,
+  preserveAspectRatio?: string
 }
 export const Pattern: React.ComponentClass<PatternProps>;
 
