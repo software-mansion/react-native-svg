@@ -16,7 +16,7 @@ export default class extends Shape {
         width: numberProp.isRequired,
         height: numberProp.isRequired,
         rx: numberProp,
-        ry: numberProp
+        ry: numberProp,
     };
 
     static defaultProps = {
@@ -25,22 +25,16 @@ export default class extends Shape {
         width: 0,
         height: 0,
         rx: 0,
-        ry: 0
+        ry: 0,
     };
 
-    setNativeProps = (props) => {
-        if (props.width) {
-            props.rectwidth = `${props.width}`;
-        }
-        if (props.height) {
-            props.rectheight = `${props.height}`;
-        }
+    setNativeProps = props => {
         this.root.setNativeProps(props);
     };
 
     render() {
-        let props = this.props;
-
+        const { props } = this;
+        const { x, y, width, height, rx, ry } = props;
         return (
             <RNSVGRect
                 ref={ele => {
@@ -50,21 +44,21 @@ export default class extends Shape {
                     {
                         ...props,
                         x: null,
-                        y: null
+                        y: null,
                     },
-                    this
+                    this,
                 )}
-                x={props.x.toString()}
-                y={props.y.toString()}
-                rectwidth={props.width.toString()}
-                rectheight={props.height.toString()}
-                rx={props.rx.toString()}
-                ry={props.ry.toString()}
+                x={x}
+                y={y}
+                width={width}
+                height={height}
+                rx={rx}
+                ry={ry}
             />
         );
     }
 }
 
 const RNSVGRect = requireNativeComponent("RNSVGRect", null, {
-    nativeOnly: RectAttributes
+    nativeOnly: RectAttributes,
 });

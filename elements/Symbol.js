@@ -9,19 +9,20 @@ export default class extends Component {
     static propTypes = {
         id: PropTypes.string.isRequired,
         viewBox: PropTypes.string,
-        preserveAspectRatio: PropTypes.string
+        preserveAspectRatio: PropTypes.string,
     };
     render() {
-        let { props } = this;
+        const { props } = this;
+        const { id, children } = props;
 
         return (
-            <RNSVGSymbol name={props.id} {...extractViewBox(props)}>
-                {props.children}
+            <RNSVGSymbol name={id} {...extractViewBox(props)}>
+                {children}
             </RNSVGSymbol>
         );
     }
 }
 
 const RNSVGSymbol = requireNativeComponent("RNSVGSymbol", null, {
-    nativeOnly: SymbolAttributes
+    nativeOnly: SymbolAttributes,
 });

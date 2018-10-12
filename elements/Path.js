@@ -11,7 +11,7 @@ export default class extends Shape {
 
     static propTypes = {
         ...pathProps,
-        d: PropTypes.string.isRequired
+        d: PropTypes.string.isRequired,
     };
 
     setNativeProps = (...args) => {
@@ -19,7 +19,7 @@ export default class extends Shape {
     };
 
     render() {
-        let props = this.props;
+        const { props } = this;
 
         return (
             <RNSVGPath
@@ -34,5 +34,5 @@ export default class extends Shape {
 }
 
 const RNSVGPath = requireNativeComponent("RNSVGPath", null, {
-    nativeOnly: PathAttributes
+    nativeOnly: PathAttributes,
 });

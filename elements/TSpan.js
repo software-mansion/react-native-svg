@@ -1,6 +1,5 @@
 import React from "react";
 import _ from "lodash";
-import PropTypes from "prop-types";
 import { requireNativeComponent } from "react-native";
 import extractText from "../lib/extract/extractText";
 import { textProps } from "../lib/props";
@@ -15,20 +14,20 @@ export default class extends Shape {
 
     static propTypes = textProps;
 
-    setNativeProps = (props) => {
+    setNativeProps = props => {
         const matrix = !props.matrix && extractTransform(props);
         if (matrix) {
             props.matrix = matrix;
         }
-        const textProps = _.pickBy(extractText(props, true), p => !_.isNil(p));
+        const text = _.pickBy(extractText(props, true), p => !_.isNil(p));
         this.root.setNativeProps({
             ...props,
-            ...textProps
+            ...text,
         });
     };
 
     render() {
-        let props = this.props;
+        const props = this.props;
         return (
             <RNSVGTSpan
                 ref={ele => {
@@ -38,9 +37,9 @@ export default class extends Shape {
                     {
                         ...props,
                         x: null,
-                        y: null
+                        y: null,
                     },
-                    this
+                    this,
                 )}
                 {...extractText(props)}
             />
@@ -49,5 +48,5 @@ export default class extends Shape {
 }
 
 const RNSVGTSpan = requireNativeComponent("RNSVGTSpan", null, {
-    nativeOnly: TSpanAttibutes
+    nativeOnly: TSpanAttibutes,
 });

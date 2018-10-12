@@ -6,12 +6,12 @@ export default class extends Component {
     static displayName = "Stop";
     static propTypes = {
         stopColor: PropTypes.string,
-        stopOpacity: numberProp
+        stopOpacity: numberProp,
     };
 
     static defaultProps = {
         stopColor: "#000",
-        stopOpacity: 1
+        stopOpacity: 1,
     };
 
     render() {

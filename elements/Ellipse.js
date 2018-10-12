@@ -13,14 +13,14 @@ export default class extends Shape {
         cx: numberProp.isRequired,
         cy: numberProp.isRequired,
         rx: numberProp.isRequired,
-        ry: numberProp.isRequired
+        ry: numberProp.isRequired,
     };
 
     static defaultProps = {
         cx: 0,
         cy: 0,
         rx: 0,
-        ry: 0
+        ry: 0,
     };
 
     setNativeProps = (...args) => {
@@ -28,7 +28,8 @@ export default class extends Shape {
     };
 
     render() {
-        let props = this.props;
+        const { props } = this;
+        const { cx, cy, rx, ry } = props;
 
         return (
             <RNSVGEllipse
@@ -36,15 +37,15 @@ export default class extends Shape {
                     this.root = ele;
                 }}
                 {...extractProps(props, this)}
-                cx={props.cx.toString()}
-                cy={props.cy.toString()}
-                rx={props.rx.toString()}
-                ry={props.ry.toString()}
+                cx={cx}
+                cy={cy}
+                rx={rx}
+                ry={ry}
             />
         );
     }
 }
 
 const RNSVGEllipse = requireNativeComponent("RNSVGEllipse", null, {
-    nativeOnly: EllipseAttributes
+    nativeOnly: EllipseAttributes,
 });

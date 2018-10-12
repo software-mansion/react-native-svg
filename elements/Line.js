@@ -13,14 +13,14 @@ export default class extends Shape {
         x1: numberProp.isRequired,
         x2: numberProp.isRequired,
         y1: numberProp.isRequired,
-        y2: numberProp.isRequired
+        y2: numberProp.isRequired,
     };
 
     static defaultProps = {
         x1: 0,
         y1: 0,
         x2: 0,
-        y2: 0
+        y2: 0,
     };
 
     setNativeProps = (...args) => {
@@ -28,22 +28,23 @@ export default class extends Shape {
     };
 
     render() {
-        let props = this.props;
+        const { props } = this;
+        const { x1, y1, x2, y2 } = props;
         return (
             <RNSVGLine
                 ref={ele => {
                     this.root = ele;
                 }}
                 {...extractProps(props, this)}
-                x1={props.x1.toString()}
-                y1={props.y1.toString()}
-                x2={props.x2.toString()}
-                y2={props.y2.toString()}
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
             />
         );
     }
 }
 
 const RNSVGLine = requireNativeComponent("RNSVGLine", null, {
-    nativeOnly: LineAttributes
+    nativeOnly: LineAttributes,
 });

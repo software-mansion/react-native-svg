@@ -12,10 +12,10 @@ export default class extends Shape {
 
     static propTypes = {
         ...pathProps,
-        ...fontProps
+        ...fontProps,
     };
 
-    setNativeProps = (props) => {
+    setNativeProps = props => {
         const matrix = !props.matrix && extractTransform(props);
         if (matrix) {
             props.matrix = matrix;
@@ -24,7 +24,7 @@ export default class extends Shape {
     };
 
     render() {
-        let { props } = this;
+        const { props } = this;
 
         return (
             <RNSVGGroup
@@ -41,5 +41,5 @@ export default class extends Shape {
 }
 
 const RNSVGGroup = requireNativeComponent("RNSVGGroup", null, {
-    nativeOnly: GroupAttributes
+    nativeOnly: GroupAttributes,
 });

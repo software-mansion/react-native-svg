@@ -14,40 +14,31 @@ export default class extends Shape {
         href: PropTypes.string.isRequired,
         width: numberProp, // Just for reusing `Symbol`
         height: numberProp, //  Just for reusing `Symbol`
-        ...pathProps
+        ...pathProps,
     };
 
     static defaultProps = {
         width: 0,
-        height: 0
+        height: 0,
     };
 
-    setNativeProps = (props) => {
-        if (props.width) {
-            props.usewidth = `${props.width}`;
-        }
-        if (props.height) {
-            props.useheight = `${props.height}`;
-        }
+    setNativeProps = props => {
         this.root.setNativeProps(props);
     };
 
     render() {
         const { props } = this;
-        const { children, width, height } = props;
+        const { children, width, height, href } = props;
+
         // match "url(#pattern)"
-        const matched = props.href.match(idExpReg);
-        let href;
+        const matched = href.match(idExpReg);
+        const match = matched && matched[1];
 
-        if (matched) {
-            href = matched[1];
-        }
-
-        if (!href) {
+        if (!match) {
             console.warn(
                 'Invalid `href` prop for `Use` element, expected a href like `"#id"`, but got: "' +
-                    props.href +
-                    '"'
+                    href +
+                    '"',
             );
         }
 
@@ -57,9 +48,9 @@ export default class extends Shape {
                     this.root = ele;
                 }}
                 {...extractProps(props, this)}
-                href={href}
-                usewidth={width !== undefined ? width.toString() : ""}
-                useheight={height !== undefined ? height.toString() : ""}
+                href={match}
+                width={width}
+                height={height}
             >
                 {children}
             </RNSVGUse>
@@ -68,5 +59,5 @@ export default class extends Shape {
 }
 
 const RNSVGUse = requireNativeComponent("RNSVGUse", null, {
-    nativeOnly: UseAttributes
+    nativeOnly: UseAttributes,
 });

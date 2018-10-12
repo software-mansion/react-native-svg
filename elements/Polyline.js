@@ -10,27 +10,28 @@ export default class extends Shape {
     static propTypes = {
         ...pathProps,
         points: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
-            .isRequired
+            .isRequired,
     };
 
     static defaultProps = {
-        points: ""
+        points: "",
     };
 
-    setNativeProps = (...args) => {
-        //noinspection JSUnresolvedFunction
-        let points = [...args][0].points;
+    setNativeProps = props => {
+        let { points } = props;
         if (points) {
             if (Array.isArray(points)) {
                 points = points.join(",");
             }
-            [...args][0].d = `M${extractPolyPoints(points)}`;
+            props.d = `M${extractPolyPoints(points)}`;
         }
-        this.root.setNativeProps(...args);
+        this.root.setNativeProps(props);
     };
 
     render() {
-        let points = this.props.points;
+        const { props } = this;
+        let { points } = props;
+
         if (Array.isArray(points)) {
             points = points.join(",");
         }

@@ -16,7 +16,7 @@ export default class extends Component {
         cy: numberProp.isRequired,
         r: numberProp,
         gradientUnits: PropTypes.oneOf(["objectBoundingBox", "userSpaceOnUse"]),
-        id: PropTypes.string.isRequired
+        id: PropTypes.string.isRequired,
     };
 
     static defaultProps = {
@@ -24,20 +24,21 @@ export default class extends Component {
         fy: "50%",
         cx: "50%",
         cy: "50%",
-        r: "50%"
+        r: "50%",
     };
 
     render() {
-        let { props } = this;
+        const { props } = this;
+        const { fx, fy, rx, ry, r, cx, cy } = props;
         return (
             <RNSVGRadialGradient
-                fx={props.fx.toString()}
-                fy={props.fy.toString()}
-                rx={(props.rx || props.r).toString()}
-                ry={(props.ry || props.r).toString()}
-                cx={props.cx.toString()}
-                cy={props.cy.toString()}
-                {...extractGradient(this.props)}
+                fx={fx}
+                fy={fy}
+                rx={rx || r}
+                ry={ry || r}
+                cx={cx}
+                cy={cy}
+                {...extractGradient(props)}
             />
         );
     }
@@ -47,6 +48,6 @@ const RNSVGRadialGradient = requireNativeComponent(
     "RNSVGRadialGradient",
     null,
     {
-        nativeOnly: RadialGradientAttributes
-    }
+        nativeOnly: RadialGradientAttributes,
+    },
 );

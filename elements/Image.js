@@ -31,21 +31,16 @@ export default class extends Shape {
         preserveAspectRatio: "xMidYMid meet",
     };
 
-    setNativeProps = (props) => {
-        if (props.width) {
-            props.imagewidth = `${props.width}`;
-        }
-        if (props.height) {
-            props.imageheight = `${props.height}`;
-        }
+    setNativeProps = props => {
         this.root.setNativeProps(props);
     };
 
     render() {
-        let { props } = this;
-        let modes = props.preserveAspectRatio.trim().split(spacesRegExp);
-        let meetOrSlice = meetOrSliceTypes[modes[1]] || 0;
-        let align = alignEnum[modes[0]] || "xMidYMid";
+        const { props } = this;
+        const { preserveAspectRatio, x, y, width, height, href } = props;
+        const modes = preserveAspectRatio.trim().split(spacesRegExp);
+        const meetOrSlice = meetOrSliceTypes[modes[1]] || 0;
+        const align = alignEnum[modes[0]] || "xMidYMid";
 
         return (
             <RNSVGImage
@@ -53,13 +48,13 @@ export default class extends Shape {
                     this.root = ele;
                 }}
                 {...extractProps({ ...props, x: null, y: null }, this)}
-                x={props.x.toString()}
-                y={props.y.toString()}
-                imagewidth={props.width.toString()}
-                imageheight={props.height.toString()}
+                x={x}
+                y={y}
+                width={width}
+                height={height}
                 meetOrSlice={meetOrSlice}
                 align={align}
-                src={Image.resolveAssetSource(props.href)}
+                src={Image.resolveAssetSource(href)}
             />
         );
     }

@@ -22,13 +22,7 @@ export default class extends Component {
         ]),
     };
 
-    setNativeProps = (props) => {
-        if (props.width) {
-            props.maskwidth = `${props.width}`;
-        }
-        if (props.height) {
-            props.maskheight = `${props.height}`;
-        }
+    setNativeProps = props => {
         this.root.setNativeProps(props);
     };
 
@@ -62,10 +56,10 @@ export default class extends Component {
                     this.root = ele;
                 }}
                 name={id}
-                x={`${x}`}
-                y={`${y}`}
-                maskwidth={`${width}`}
-                maskheight={`${height}`}
+                x={x}
+                y={y}
+                width={width}
+                height={height}
                 matrix={extractedTransform}
                 maskTransform={extractedTransform}
                 maskUnits={

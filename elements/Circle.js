@@ -12,13 +12,13 @@ export default class extends Shape {
         ...pathProps,
         cx: numberProp.isRequired,
         cy: numberProp.isRequired,
-        r: numberProp.isRequired
+        r: numberProp.isRequired,
     };
 
     static defaultProps = {
         cx: 0,
         cy: 0,
-        r: 0
+        r: 0,
     };
 
     setNativeProps = (...args) => {
@@ -26,21 +26,22 @@ export default class extends Shape {
     };
 
     render() {
-        let props = this.props;
+        const { props } = this;
+        const { cx, cy, r } = props;
         return (
             <RNSVGCircle
                 ref={ele => {
                     this.root = ele;
                 }}
                 {...extractProps(props, this)}
-                cx={props.cx.toString()}
-                cy={props.cy.toString()}
-                r={props.r.toString()}
+                cx={cx}
+                cy={cy}
+                r={r}
             />
         );
     }
 }
 
 const RNSVGCircle = requireNativeComponent("RNSVGCircle", null, {
-    nativeOnly: CircleAttributes
+    nativeOnly: CircleAttributes,
 });

@@ -25,13 +25,7 @@ export default class extends Component {
         preserveAspectRatio: PropTypes.string,
     };
 
-    setNativeProps = (props) => {
-        if (props.width) {
-            props.patternwidth = `${props.width}`;
-        }
-        if (props.height) {
-            props.patternheight = `${props.height}`;
-        }
+    setNativeProps = props => {
         this.root.setNativeProps(props);
     };
 
@@ -67,10 +61,10 @@ export default class extends Component {
                     this.root = ele;
                 }}
                 name={id}
-                x={`${x}`}
-                y={`${y}`}
-                patternwidth={`${width}`}
-                patternheight={`${height}`}
+                x={x}
+                y={y}
+                width={width}
+                height={height}
                 matrix={extractedTransform}
                 patternTransform={extractedTransform}
                 patternUnits={PATTERN_UNITS[patternUnits] || 0}

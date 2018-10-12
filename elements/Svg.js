@@ -6,7 +6,7 @@ import {
     requireNativeComponent,
     StyleSheet,
     findNodeHandle,
-    NativeModules
+    NativeModules,
 } from "react-native";
 import extractResponder from "../lib/extract/extractResponder";
 import extractViewBox from "../lib/extract/extractViewBox";
@@ -24,8 +24,8 @@ let id = 0;
 const styles = StyleSheet.create({
     svg: {
         backgroundColor: "transparent",
-        borderWidth: 0
-    }
+        borderWidth: 0,
+    },
 });
 
 class Svg extends Shape {
@@ -39,11 +39,14 @@ class Svg extends Shape {
         // more detail https://svgwg.org/svg2-draft/coords.html#ViewBoxAttribute
         viewBox: PropTypes.string,
         preserveAspectRatio: PropTypes.string,
-        style: PropTypes.shape({ ...ViewPropTypes.style, color: PropTypes.string })
+        style: PropTypes.shape({
+            ...ViewPropTypes.style,
+            color: PropTypes.string,
+        }),
     };
 
     static defaultProps = {
-        preserveAspectRatio: "xMidYMid meet"
+        preserveAspectRatio: "xMidYMid meet",
     };
 
     constructor() {
@@ -62,7 +65,7 @@ class Svg extends Shape {
         this.root.measureLayout(...args);
     };
 
-    setNativeProps = (props) => {
+    setNativeProps = props => {
         if (props.width) {
             props.bbWidth = `${props.width}`;
         }
@@ -87,18 +90,14 @@ class Svg extends Shape {
             ...props
         } = this.props;
         const stylesAndProps = { ...style, ...props };
-        const {
-            color,
-            width,
-            height,
-        } = stylesAndProps;
+        const { color, width, height } = stylesAndProps;
 
         let dimensions;
         if (width && height) {
             dimensions = {
                 width: width[width.length - 1] === "%" ? width : +width,
                 height: height[height.length - 1] === "%" ? height : +height,
-                flex: 0
+                flex: 0,
             };
         }
 
@@ -120,12 +119,14 @@ class Svg extends Shape {
                     styles.svg,
                     style,
                     !isNaN(+opacity) && {
-                        opacity: +opacity
+                        opacity: +opacity,
                     },
-                    dimensions
+                    dimensions,
                 ]}
             >
-                <G style={style} {...props}>{children}</G>
+                <G style={style} {...props}>
+                    {children}
+                </G>
             </NativeSvgView>
         );
     }
@@ -136,8 +137,10 @@ const NativeSvgView = requireNativeComponent("RNSVGSvgView", null, {
         ...ViewBoxAttributes,
         width: true,
         height: true,
-        tintColor: true
-    }
+        bbwidth: true,
+        bbheight: true,
+        tintColor: true,
+    },
 });
 
 export default Svg;
