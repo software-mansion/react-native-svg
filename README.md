@@ -5,7 +5,7 @@
 
 `react-native-svg` is built to provide a SVG interface to react native on both iOS and Android.
 
-[Check out the demo](https://expo.io/@msand/svgexample) [Source](https://github.com/peterlazar1993/react-native-svg-example/commit/8944e14d2dd1b36cc41fe089ac547cdc9149c111).
+[Check out the demo](https://snack.expo.io/@msand/react-native-svg-example)
 
 ## Features
 
