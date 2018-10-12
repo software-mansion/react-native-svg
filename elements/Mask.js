@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { requireNativeComponent } from "react-native";
 import { numberProp } from "../lib/props";
-import PATTERN_UNITS from "../lib/PATTERN_UNITS";
+import units from "../lib/units";
 import { MaskAttributes } from "../lib/attributes";
 import extractTransform from "../lib/extract/extractTransform";
 
@@ -62,13 +62,9 @@ export default class extends Component {
                 height={height}
                 matrix={extractedTransform}
                 maskTransform={extractedTransform}
-                maskUnits={
-                    maskUnits !== undefined ? PATTERN_UNITS[maskUnits] : 0
-                }
+                maskUnits={maskUnits !== undefined ? units[maskUnits] : 0}
                 maskContentUnits={
-                    maskContentUnits !== undefined
-                        ? PATTERN_UNITS[maskContentUnits]
-                        : 1
+                    maskContentUnits !== undefined ? units[maskContentUnits] : 1
                 }
             >
                 {children}

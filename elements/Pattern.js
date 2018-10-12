@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { requireNativeComponent } from "react-native";
 import { numberProp } from "../lib/props";
-import PATTERN_UNITS from "../lib/PATTERN_UNITS";
+import units from "../lib/units";
 import { PatternAttributes } from "../lib/attributes";
 import extractTransform from "../lib/extract/extractTransform";
 import extractViewBox from "../lib/extract/extractViewBox";
@@ -67,9 +67,9 @@ export default class extends Component {
                 height={height}
                 matrix={extractedTransform}
                 patternTransform={extractedTransform}
-                patternUnits={PATTERN_UNITS[patternUnits] || 0}
+                patternUnits={units[patternUnits] || 0}
                 patternContentUnits={
-                    patternContentUnits ? PATTERN_UNITS[patternContentUnits] : 1
+                    patternContentUnits ? units[patternContentUnits] : 1
                 }
                 {...extractViewBox({ viewBox, preserveAspectRatio })}
             >
