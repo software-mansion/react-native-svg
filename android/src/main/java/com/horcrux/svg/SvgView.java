@@ -14,7 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -26,7 +25,6 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.ReactCompoundView;
 import com.facebook.react.uimanager.ReactCompoundViewGroup;
-import com.facebook.react.uimanager.ReactShadowNodeImpl;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.view.ReactViewGroup;
 
@@ -93,45 +91,10 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         canvas.drawBitmap(mBitmap, 0, 0, null);
     }
 
-    private SvgViewShadowNode getShadowNode() {
-        return SvgViewManager.getShadowNodeByTag(getId());
-    }
-
     @Override
     public int reactTagForTouch(float touchX, float touchY) {
-        return hitTest(new Point((int) touchX, (int) touchY));
+        return hitTest(touchX, touchY);
     }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        ReactShadowNodeImpl node = getShadowNode();
-        for (int i = 0; i < this.getChildCount(); i++) {
-            View child = this.getChildAt(i);
-            if (child instanceof VirtualView) {
-                continue;
-            }
-            if (child instanceof ReactViewGroup) {
-                int id = child.getId();
-                for (int j = 0; j < node.getChildCount(); j++) {
-                    ReactShadowNodeImpl nodeChild = node.getChildAt(j);
-                    if (nodeChild.getReactTag() != id) {
-                        continue;
-                    }
-
-                    float x = nodeChild.getLayoutX();
-                    float y = nodeChild.getLayoutY();
-                    float nr = x + nodeChild.getLayoutWidth();
-                    float nb = y + nodeChild.getLayoutHeight();
-
-                    child.layout(Math.round(x), Math.round(y), Math.round(nr), Math.round(nb));
-                    break;
-                }
-            } else {
-                child.layout(l, t, r , b);
-            }
-        }
-    }
-
 
     private boolean mResponsible = false;
 
@@ -160,14 +123,13 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
             return;
         }
         mRendered = false;
-        traverseChildren(new VirtualView.NodeRunnable() {
-            public void run(View node) {
-                if (node instanceof VirtualView) {
-                    VirtualView n = ((VirtualView)node);
-                    n.releaseCachedPath();
-                }
+        for (int i = 0; i < getChildCount(); i++) {
+            View node = getChildAt(i);
+            if (node instanceof VirtualView) {
+                VirtualView n = ((VirtualView)node);
+                n.releaseCachedPath();
             }
-        });
+        }
     }
 
     @ReactProp(name = "tintColor", customType = "Color")
@@ -291,28 +253,26 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         paint.setTypeface(Typeface.DEFAULT);
 
 
-        traverseChildren(new VirtualView.NodeRunnable() {
-            public void run(View node) {
-                if (node instanceof VirtualView) {
-                    ((VirtualView)node).saveDefinition();
+        for (int i = 0; i < getChildCount(); i++) {
+            View node = getChildAt(i);
+            if (node instanceof VirtualView) {
+                ((VirtualView)node).saveDefinition();
+            }
+        }
+
+        for (int i = 0; i < getChildCount(); i++) {
+            View lNode = getChildAt(i);
+            if (lNode instanceof VirtualView) {
+                VirtualView node = (VirtualView)lNode;
+                int count = node.saveAndSetupCanvas(canvas);
+                node.render(canvas, paint, 1f);
+                node.restoreCanvas(canvas, count);
+
+                if (node.isResponsible() && !mResponsible) {
+                    mResponsible = true;
                 }
             }
-        });
-
-        traverseChildren(new VirtualView.NodeRunnable() {
-            public void run(View lNode) {
-                if (lNode instanceof VirtualView) {
-                    VirtualView node = (VirtualView)lNode;
-                    int count = node.saveAndSetupCanvas(canvas);
-                    node.render(canvas, paint, 1f);
-                    node.restoreCanvas(canvas, count);
-
-                    if (node.isResponsible() && !mResponsible) {
-                        mResponsible = true;
-                    }
-                }
-            }
-        });
+        }
     }
 
     private RectF getViewBox() {
@@ -339,12 +299,12 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         }
     }
 
-    private int hitTest(Point point) {
+    private int hitTest(float touchX, float touchY) {
         if (!mResponsible || !mInvertible) {
             return getId();
         }
 
-        float[] transformed = { point.x, point.y };
+        float[] transformed = { touchX, touchY };
         mInvViewBoxMatrix.mapPoints(transformed);
 
         int count = getChildCount();
@@ -395,12 +355,4 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     VirtualView getDefinedMask(String maskRef) {
         return mDefinedMasks.get(maskRef);
     }
-
-    void traverseChildren(VirtualView.NodeRunnable runner) {
-        for (int i = 0; i < getChildCount(); i++) {
-            View child = getChildAt(i);
-            runner.run(child);
-        }
-    }
-
 }

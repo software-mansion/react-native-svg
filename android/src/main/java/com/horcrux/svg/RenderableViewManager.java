@@ -40,9 +40,7 @@ import static com.horcrux.svg.RenderableView.FILL_RULE_NONZERO;
 import static com.horcrux.svg.RenderableView.JOIN_ROUND;
 
 /**
- * ViewManager for all shadowed RNSVG views: Group, Path and Text. Since these never get rendered
- * into native views and don't need any logic (all the logic is in {@link SvgView}), this
- * "stubbed" ViewManager is used for all of them.
+ * ViewManager for all RNSVG views
  */
 class RenderableViewManager extends ViewGroupManager<VirtualView> {
 
@@ -987,15 +985,4 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
                 throw new IllegalStateException("Unexpected type " + svgClass.toString());
         }
     }
-
-    @Override
-    public void updateExtraData(VirtualView root, Object extraData) {
-        throw new IllegalStateException("SVG elements does not map into a native view");
-    }
-
-    @Override
-    public void onDropViewInstance(VirtualView view) {
-        super.onDropViewInstance(view);
-    }
-
 }

@@ -86,36 +86,35 @@ class GroupView extends RenderableView {
         final SvgView svg = getSvgView();
         final GroupView self = this;
         final RectF groupRect = new RectF();
-        traverseChildren(new NodeRunnable() {
-            public void run(View lNode) {
-                if (lNode instanceof VirtualView) {
-                    VirtualView node = ((VirtualView)lNode);
-                    if (node instanceof RenderableView) {
-                        ((RenderableView)node).mergeProperties(self);
-                    }
-
-                    int count = node.saveAndSetupCanvas(canvas);
-                    node.render(canvas, paint, opacity * mOpacity);
-                    RectF r = node.getClientRect();
-                    if (r != null) {
-                        groupRect.union(r);
-                    }
-
-                    node.restoreCanvas(canvas, count);
-
-                    if (node instanceof RenderableView) {
-                        ((RenderableView)node).resetProperties();
-                    }
-
-                    if (node.isResponsible()) {
-                        svg.enableTouchEvents();
-                    }
-                } else if (lNode instanceof SvgView) {
-                    SvgView svgView = (SvgView)lNode;
-                    svgView.drawChildren(canvas);
+        for (int i = 0; i < getChildCount(); i++) {
+            View lNode = getChildAt(i);
+            if (lNode instanceof VirtualView) {
+                VirtualView node = ((VirtualView)lNode);
+                if (node instanceof RenderableView) {
+                    ((RenderableView)node).mergeProperties(self);
                 }
+
+                int count = node.saveAndSetupCanvas(canvas);
+                node.render(canvas, paint, opacity * mOpacity);
+                RectF r = node.getClientRect();
+                if (r != null) {
+                    groupRect.union(r);
+                }
+
+                node.restoreCanvas(canvas, count);
+
+                if (node instanceof RenderableView) {
+                    ((RenderableView)node).resetProperties();
+                }
+
+                if (node.isResponsible()) {
+                    svg.enableTouchEvents();
+                }
+            } else if (lNode instanceof SvgView) {
+                SvgView svgView = (SvgView)lNode;
+                svgView.drawChildren(canvas);
             }
-        });
+        }
         this.setClientRect(groupRect);
         popGlyphContext();
     }
@@ -128,15 +127,14 @@ class GroupView extends RenderableView {
     Path getPath(final Canvas canvas, final Paint paint) {
         final Path path = new Path();
 
-        traverseChildren(new NodeRunnable() {
-            public void run(View node) {
-                if (node instanceof VirtualView) {
-                    VirtualView n = (VirtualView)node;
-                    Matrix transform = n.mMatrix;
-                    path.addPath(n.getPath(canvas, paint), transform);
-                }
+        for (int i = 0; i < getChildCount(); i++) {
+            View node = getChildAt(i);
+            if (node instanceof VirtualView) {
+                VirtualView n = (VirtualView)node;
+                Matrix transform = n.mMatrix;
+                path.addPath(n.getPath(canvas, paint), transform);
             }
-        });
+        }
 
         return path;
     }
@@ -146,45 +144,42 @@ class GroupView extends RenderableView {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             final Path.Op pop = Path.Op.valueOf(op.name());
-            traverseChildren(new NodeRunnable() {
-                @SuppressLint("NewApi")
-                public void run(View node) {
-                    if (node instanceof VirtualView) {
-                        VirtualView n = (VirtualView)node;
-                        Matrix transform = n.mMatrix;
-                        Path p2;
-                        if (n instanceof GroupView) {
-                            p2 = ((GroupView)n).getPath(canvas, paint, op);
-                        } else {
-                            p2 = n.getPath(canvas, paint);
-                        }
-                        p2.transform(transform);
-                        path.op(p2, pop);
+            for (int i = 0; i < getChildCount(); i++) {
+                View node = getChildAt(i);
+                if (node instanceof VirtualView) {
+                    VirtualView n = (VirtualView)node;
+                    Matrix transform = n.mMatrix;
+                    Path p2;
+                    if (n instanceof GroupView) {
+                        p2 = ((GroupView)n).getPath(canvas, paint, op);
+                    } else {
+                        p2 = n.getPath(canvas, paint);
                     }
+                    p2.transform(transform);
+                    path.op(p2, pop);
                 }
-            });
+            }
         } else {
             Rect clipBounds = canvas.getClipBounds();
             final Region bounds = new Region(clipBounds);
             final Region r = new Region();
-            traverseChildren(new NodeRunnable() {
-                public void run(View node) {
-                    if (node instanceof VirtualView) {
-                        VirtualView n = (VirtualView)node;
-                        Matrix transform = n.mMatrix;
-                        Path p2;
-                        if (n instanceof GroupView) {
-                            p2 = ((GroupView)n).getPath(canvas, paint, op);
-                        } else {
-                            p2 = n.getPath(canvas, paint);
-                        }
-                        p2.transform(transform);
-                        Region r2 = new Region();
-                        r2.setPath(p2, bounds);
-                        r.op(r2, op);
+            for (int i = 0; i < getChildCount(); i++) {
+                View node = getChildAt(i);
+                if (node instanceof VirtualView) {
+                    VirtualView n = (VirtualView)node;
+                    Matrix transform = n.mMatrix;
+                    Path p2;
+                    if (n instanceof GroupView) {
+                        p2 = ((GroupView)n).getPath(canvas, paint, op);
+                    } else {
+                        p2 = n.getPath(canvas, paint);
                     }
+                    p2.transform(transform);
+                    Region r2 = new Region();
+                    r2.setPath(p2, bounds);
+                    r.op(r2, op);
                 }
-            });
+            }
             path.addPath(r.getBoundaryPath());
         }
 
@@ -236,23 +231,21 @@ class GroupView extends RenderableView {
             getSvgView().defineTemplate(this, mName);
         }
 
-        traverseChildren(new NodeRunnable() {
-            public void run(View node) {
-                if (node instanceof VirtualView) {
-                    ((VirtualView)node).saveDefinition();
-                }
+        for (int i = 0; i < getChildCount(); i++) {
+            View node = getChildAt(i);
+            if (node instanceof VirtualView) {
+                ((VirtualView)node).saveDefinition();
             }
-        });
+        }
     }
 
     @Override
     void resetProperties() {
-        traverseChildren(new NodeRunnable() {
-            public void run(View node) {
-                if (node instanceof RenderableView) {
-                    ((RenderableView)node).resetProperties();
-                }
+        for (int i = 0; i < getChildCount(); i++) {
+            View node = getChildAt(i);
+            if (node instanceof RenderableView) {
+                ((RenderableView)node).resetProperties();
             }
-        });
+        }
     }
 }

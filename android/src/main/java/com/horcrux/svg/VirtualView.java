@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 import static com.horcrux.svg.FontData.DEFAULT_FONT_SIZE;
 
 @SuppressLint("ViewConstructor")
-abstract public class VirtualView<T extends VirtualView> extends ViewGroup {
+abstract public class VirtualView extends ViewGroup {
     final ReactContext mContext;
 
     VirtualView(ReactContext reactContext) {
@@ -110,13 +110,12 @@ abstract public class VirtualView<T extends VirtualView> extends ViewGroup {
 
     void releaseCachedPath() {
         clearPath();
-        traverseChildren(new NodeRunnable() {
-            public void run(View node) {
-                if (node instanceof VirtualView) {
-                    ((VirtualView)node).releaseCachedPath();
-                }
+        for (int i = 0; i < getChildCount(); i++) {
+            View node = getChildAt(i);
+            if (node instanceof VirtualView) {
+                ((VirtualView)node).releaseCachedPath();
             }
-        });
+        }
     }
 
     @Nullable
@@ -381,17 +380,6 @@ abstract public class VirtualView<T extends VirtualView> extends ViewGroup {
     void saveDefinition() {
         if (mName != null) {
             getSvgView().defineTemplate(this, mName);
-        }
-    }
-
-    interface NodeRunnable {
-        void run(View node);
-    }
-
-    void traverseChildren(NodeRunnable runner) {
-        for (int i = 0; i < getChildCount(); i++) {
-            View child = getChildAt(i);
-            runner.run(child);
         }
     }
 

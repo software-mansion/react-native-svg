@@ -26,6 +26,7 @@ class DefinitionView extends VirtualView {
         super(reactContext);
     }
 
+    @SuppressWarnings("EmptyMethod")
     void draw(Canvas canvas, Paint paint, float opacity) {}
 
     @Override

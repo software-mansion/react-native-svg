@@ -15,10 +15,6 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.facebook.react.views.view.ReactViewManager;
-import com.facebook.yoga.YogaMeasureFunction;
-import com.facebook.yoga.YogaMeasureMode;
-import com.facebook.yoga.YogaMeasureOutput;
-import com.facebook.yoga.YogaNode;
 
 import javax.annotation.Nullable;
 
@@ -30,24 +26,7 @@ class SvgViewManager extends ReactViewManager {
 
     private static final String REACT_CLASS = "RNSVGSvgView";
 
-    private static final YogaMeasureFunction MEASURE_FUNCTION = new YogaMeasureFunction() {
-        @Override
-        public long measure(
-                YogaNode node,
-                float width,
-                YogaMeasureMode widthMode,
-                float height,
-                YogaMeasureMode heightMode) {
-            return YogaMeasureOutput.make(width, height);
-        }
-    };
-
-    private static final SparseArray<SvgViewShadowNode> mTagToShadowNode = new SparseArray<>();
     private static final SparseArray<SvgView> mTagToSvgView = new SparseArray<>();
-
-    static void setShadowNode(SvgViewShadowNode shadowNode) {
-        mTagToShadowNode.put(shadowNode.getReactTag(), shadowNode);
-    }
 
     static void setSvgView(SvgView svg) {
         mTagToSvgView.put(svg.getId(), svg);
@@ -57,25 +36,9 @@ class SvgViewManager extends ReactViewManager {
         return mTagToSvgView.get(tag);
     }
 
-    static @Nullable SvgViewShadowNode getShadowNodeByTag(int tag) {
-        return mTagToShadowNode.get(tag);
-    }
-
     @Override
     public String getName() {
         return REACT_CLASS;
-    }
-
-    @Override
-    public Class<SvgViewShadowNode> getShadowNodeClass() {
-        return SvgViewShadowNode.class;
-    }
-
-    @Override
-    public SvgViewShadowNode createShadowNodeInstance() {
-        SvgViewShadowNode node = new SvgViewShadowNode();
-        node.setMeasureFunction(MEASURE_FUNCTION);
-        return node;
     }
 
     @Override
@@ -92,10 +55,7 @@ class SvgViewManager extends ReactViewManager {
     @Override
     public void onDropViewInstance(ReactViewGroup view) {
         super.onDropViewInstance(view);
-
-        int tag = view.getId();
-        mTagToShadowNode.remove(tag);
-        mTagToSvgView.remove(tag);
+        mTagToSvgView.remove(view.getId());
     }
 
     @Override

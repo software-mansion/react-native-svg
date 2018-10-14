@@ -27,26 +27,14 @@ class DefsView extends DefinitionView {
     }
 
     @Override
-    void draw(Canvas canvas, Paint paint, float opacity) {
-        NodeRunnable markUpdateSeenRecursive = new NodeRunnable() {
-            public void run(View node) {
-                if (node instanceof VirtualView) {
-                    ((VirtualView) node).traverseChildren(this);
-                } else if (node instanceof SvgView) {
-                    ((SvgView) node).traverseChildren(this);
-                }
-            }
-        };
-        traverseChildren(markUpdateSeenRecursive);
-    }
+    void draw(Canvas canvas, Paint paint, float opacity) {}
 
     void saveDefinition() {
-        traverseChildren(new NodeRunnable() {
-            public void run(View node) {
-                if (node instanceof VirtualView) {
-                    ((VirtualView)node).saveDefinition();
-                }
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            if (child instanceof VirtualView) {
+                ((VirtualView)child).saveDefinition();
             }
-        });
+        }
     }
 }
