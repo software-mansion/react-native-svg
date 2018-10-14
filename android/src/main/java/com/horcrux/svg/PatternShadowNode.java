@@ -16,7 +16,6 @@ import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -30,8 +29,8 @@ class PatternShadowNode extends GroupShadowNode {
 
     private String mX;
     private String mY;
-    private String mWidth;
-    private String mHeight;
+    private String mW;
+    private String mH;
     private Brush.BrushUnits mPatternUnits;
     private Brush.BrushUnits mPatternContentUnits;
 
@@ -51,41 +50,25 @@ class PatternShadowNode extends GroupShadowNode {
 
     @ReactProp(name = "x")
     public void setX(Dynamic x) {
-        if (x.getType() == ReadableType.String) {
-            mX = x.asString();
-        } else {
-            mX = String.valueOf(x.asDouble());
-        }
+        mX = getStringFromDynamic(x);
         markUpdated();
     }
 
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
-        if (y.getType() == ReadableType.String) {
-            mY = y.asString();
-        } else {
-            mY = String.valueOf(y.asDouble());
-        }
+        mY = getStringFromDynamic(y);
         markUpdated();
     }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
-        if (width.getType() == ReadableType.String) {
-            mWidth = width.asString();
-        } else {
-            mWidth = String.valueOf(width.asDouble());
-        }
+        mW = getStringFromDynamic(width);
         markUpdated();
     }
 
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
-        if (height.getType() == ReadableType.String) {
-            mHeight = height.asString();
-        } else {
-            mHeight = String.valueOf(height.asDouble());
-        }
+        mH = getStringFromDynamic(height);
         markUpdated();
     }
 
@@ -181,8 +164,8 @@ class PatternShadowNode extends GroupShadowNode {
             WritableArray points = Arguments.createArray();
             points.pushString(mX);
             points.pushString(mY);
-            points.pushString(mWidth);
-            points.pushString(mHeight);
+            points.pushString(mW);
+            points.pushString(mH);
 
             Brush brush = new Brush(Brush.BrushType.PATTERN, points, mPatternUnits);
             brush.setContentUnits(mPatternContentUnits);

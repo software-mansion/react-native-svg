@@ -18,6 +18,8 @@ import android.graphics.Region;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.JavaOnlyArray;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -415,4 +417,27 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
         return mClientRect;
     }
 
+    String getStringFromDynamic(Dynamic dynamic) {
+        switch (dynamic.getType()) {
+            case String:
+                return dynamic.asString();
+            case Number:
+                return String.valueOf(dynamic.asDouble());
+            default:
+                return null;
+        }
+    }
+
+    ReadableArray getStringArrayFromDynamic(Dynamic dynamic) {
+        switch (dynamic.getType()) {
+            case Array:
+                return dynamic.asArray();
+            case String:
+                return JavaOnlyArray.of(dynamic.asString());
+            case Number:
+                return JavaOnlyArray.of(String.valueOf(dynamic.asDouble()));
+            default:
+                return null;
+        }
+    }
 }

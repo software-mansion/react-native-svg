@@ -30,7 +30,6 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.imagehelper.ImageSource;
@@ -56,50 +55,27 @@ class ImageShadowNode extends RenderableShadowNode {
     private int mMeetOrSlice;
     private final AtomicBoolean mLoading = new AtomicBoolean(false);
 
-    private static final float[] sRawMatrix = new float[]{
-        1, 0, 0,
-        0, 1, 0,
-        0, 0, 1
-    };
-    private Matrix mMatrix = null;
-
     @ReactProp(name = "x")
     public void setX(Dynamic x) {
-        if (x.getType() == ReadableType.String) {
-            mX = x.asString();
-        } else {
-            mX = String.valueOf(x.asDouble());
-        }
+        mX = getStringFromDynamic(x);
         markUpdated();
     }
 
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
-        if (y.getType() == ReadableType.String) {
-            mY = y.asString();
-        } else {
-            mY = String.valueOf(y.asDouble());
-        }
+        mY = getStringFromDynamic(y);
         markUpdated();
     }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
-        if (width.getType() == ReadableType.String) {
-            mW = width.asString();
-        } else {
-            mW = String.valueOf(width.asDouble());
-        }
+        mW = getStringFromDynamic(width);
         markUpdated();
     }
 
     @ReactProp(name = "height")
-    public void seHeight(Dynamic height) {
-        if (height.getType() == ReadableType.String) {
-            mH = height.asString();
-        } else {
-            mH = String.valueOf(height.asDouble());
-        }
+    public void setHeight(Dynamic height) {
+        mH = getStringFromDynamic(height);
         markUpdated();
     }
 
@@ -138,27 +114,6 @@ class ImageShadowNode extends RenderableShadowNode {
         mMeetOrSlice = meetOrSlice;
         markUpdated();
     }
-
-    @ReactProp(name = "matrix")
-    public void setMatrix(Dynamic matrixArray) {
-        ReadableType type = matrixArray.getType();
-        if (!matrixArray.isNull() && type.equals(ReadableType.Array)) {
-            int matrixSize = PropHelper.toMatrixData(matrixArray.asArray(), sRawMatrix, mScale);
-            if (matrixSize == 6) {
-                if (mMatrix == null) {
-                    mMatrix = new Matrix();
-                }
-                mMatrix.setValues(sRawMatrix);
-            } else if (matrixSize != -1) {
-                FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");
-            }
-        } else {
-            mMatrix = null;
-        }
-
-        markUpdated();
-    }
-
 
     @Override
     void draw(final Canvas canvas, final Paint paint, final float opacity) {

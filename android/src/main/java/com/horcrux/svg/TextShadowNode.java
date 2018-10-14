@@ -15,10 +15,8 @@ import android.graphics.Path;
 import android.graphics.Region;
 
 import com.facebook.react.bridge.Dynamic;
-import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -49,11 +47,7 @@ class TextShadowNode extends GroupShadowNode {
 
     @ReactProp(name = "textLength")
     public void setTextLength(Dynamic length) {
-        if (length.getType() == ReadableType.String) {
-            mTextLength = length.asString();
-        } else {
-            mTextLength = String.valueOf(length.asDouble());
-        }
+        mTextLength = getStringFromDynamic(length);
         markUpdated();
     }
 
@@ -71,11 +65,7 @@ class TextShadowNode extends GroupShadowNode {
 
     @ReactProp(name = "baselineShift")
     public void setBaselineShift(Dynamic baselineShift) {
-        if (baselineShift.getType() == ReadableType.String) {
-            mBaselineShift = baselineShift.asString();
-        } else {
-            mBaselineShift = String.valueOf(baselineShift.asDouble());
-        }
+        mBaselineShift = getStringFromDynamic(baselineShift);
         markUpdated();
     }
 
@@ -103,116 +93,31 @@ class TextShadowNode extends GroupShadowNode {
 
     @ReactProp(name = "rotate")
     public void setRotate(Dynamic rotate) {
-        if (rotate.isNull()) {
-            mRotate = null;
-        } else {
-            switch (rotate.getType()) {
-                case Array: {
-                    mRotate = rotate.asArray();
-                    break;
-                }
-                case String: {
-                    mRotate = JavaOnlyArray.of(rotate.asString());
-                    break;
-                }
-                case Number: {
-                    mRotate = JavaOnlyArray.of(String.valueOf(rotate.asDouble()));
-                    break;
-                }
-            }
-        }
+        mRotate = getStringArrayFromDynamic(rotate);
         markUpdated();
     }
 
     @ReactProp(name = "dx")
     public void setDeltaX(Dynamic deltaX) {
-        if (deltaX.isNull()) {
-            mDeltaX = null;
-        } else {
-            switch (deltaX.getType()) {
-                case Array: {
-                    mDeltaX = deltaX.asArray();
-                    break;
-                }
-                case String: {
-                    mDeltaX = JavaOnlyArray.of(deltaX.asString());
-                    break;
-                }
-                case Number: {
-                    mDeltaX = JavaOnlyArray.of(String.valueOf(deltaX.asDouble()));
-                    break;
-                }
-            }
-        }
+        mDeltaX = getStringArrayFromDynamic(deltaX);
         markUpdated();
     }
 
     @ReactProp(name = "dy")
     public void setDeltaY(Dynamic deltaY) {
-        if (deltaY.isNull()) {
-            mDeltaY = null;
-        } else {
-            switch (deltaY.getType()) {
-                case Array: {
-                    mDeltaY = deltaY.asArray();
-                    break;
-                }
-                case String: {
-                    mDeltaY = JavaOnlyArray.of(deltaY.asString());
-                    break;
-                }
-                case Number: {
-                    mDeltaY = JavaOnlyArray.of(String.valueOf(deltaY.asDouble()));
-                    break;
-                }
-            }
-        }
+        mDeltaY = getStringArrayFromDynamic(deltaY);
         markUpdated();
     }
 
     @ReactProp(name = "x")
     public void setPositionX(Dynamic positionX) {
-        if (positionX.isNull()) {
-            mPositionX = null;
-        } else {
-            switch (positionX.getType()) {
-                case Array: {
-                    mPositionX = positionX.asArray();
-                    break;
-                }
-                case String: {
-                    mPositionX = JavaOnlyArray.of(positionX.asString());
-                    break;
-                }
-                case Number: {
-                    mPositionX = JavaOnlyArray.of(String.valueOf(positionX.asDouble()));
-                    break;
-                }
-            }
-        }
+        mPositionX = getStringArrayFromDynamic(positionX);
         markUpdated();
     }
 
     @ReactProp(name = "y")
     public void setPositionY(Dynamic positionY) {
-        if (positionY.isNull()) {
-            mPositionY = null;
-        } else {
-            switch (positionY.getType()) {
-                case Array: {
-                    mPositionY = positionY.asArray();
-                    break;
-                }
-                case String: {
-                    mPositionY = JavaOnlyArray.of(positionY.asString());
-                    break;
-                }
-                case Number: {
-                    mPositionY = JavaOnlyArray.of(String.valueOf(positionY.asDouble()));
-                    break;
-                }
-            }
-        }
+        mPositionY = getStringArrayFromDynamic(positionY);
         markUpdated();
     }
 

@@ -14,7 +14,6 @@ import android.graphics.Matrix;
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -27,8 +26,8 @@ class MaskShadowNode extends GroupShadowNode {
 
     String mX;
     String mY;
-    String mWidth;
-    String mHeight;
+    String mW;
+    String mH;
 
     // TODO implement proper support for units
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
@@ -45,41 +44,25 @@ class MaskShadowNode extends GroupShadowNode {
 
     @ReactProp(name = "x")
     public void setX(Dynamic x) {
-        if (x.getType() == ReadableType.String) {
-            mX = x.asString();
-        } else {
-            mX = String.valueOf(x.asDouble());
-        }
+        mX = getStringFromDynamic(x);
         markUpdated();
     }
 
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
-        if (y.getType() == ReadableType.String) {
-            mY = y.asString();
-        } else {
-            mY = String.valueOf(y.asDouble());
-        }
+        mY = getStringFromDynamic(y);
         markUpdated();
     }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
-        if (width.getType() == ReadableType.String) {
-            mWidth = width.asString();
-        } else {
-            mWidth = String.valueOf(width.asDouble());
-        }
+        mW = getStringFromDynamic(width);
         markUpdated();
     }
 
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
-        if (height.getType() == ReadableType.String) {
-            mHeight = height.asString();
-        } else {
-            mHeight = String.valueOf(height.asDouble());
-        }
+        mH = getStringFromDynamic(height);
         markUpdated();
     }
 

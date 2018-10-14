@@ -15,7 +15,6 @@ import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.common.ReactConstants;
@@ -44,61 +43,37 @@ class RadialGradientShadowNode extends DefinitionShadowNode {
 
     @ReactProp(name = "fx")
     public void setFx(Dynamic fx) {
-        if (fx.getType() == ReadableType.String) {
-            mFx = fx.asString();
-        } else {
-            mFx = String.valueOf(fx.asDouble());
-        }
+        mFx = getStringFromDynamic(fx);
         markUpdated();
     }
 
     @ReactProp(name = "fy")
     public void setFy(Dynamic fy) {
-        if (fy.getType() == ReadableType.String) {
-            mFy = fy.asString();
-        } else {
-            mFy = String.valueOf(fy.asDouble());
-        }
+        mFy = getStringFromDynamic(fy);
         markUpdated();
     }
 
     @ReactProp(name = "rx")
     public void setRx(Dynamic rx) {
-        if (rx.getType() == ReadableType.String) {
-            mRx = rx.asString();
-        } else {
-            mRx = String.valueOf(rx.asDouble());
-        }
+        mRx = getStringFromDynamic(rx);
         markUpdated();
     }
 
     @ReactProp(name = "ry")
     public void setRy(Dynamic ry) {
-        if (ry.getType() == ReadableType.String) {
-            mRy = ry.asString();
-        } else {
-            mRy = String.valueOf(ry.asDouble());
-        }
+        mRy = getStringFromDynamic(ry);
         markUpdated();
     }
 
     @ReactProp(name = "cx")
     public void setCx(Dynamic cx) {
-        if (cx.getType() == ReadableType.String) {
-            mCx = cx.asString();
-        } else {
-            mCx = String.valueOf(cx.asDouble());
-        }
+        mCx = getStringFromDynamic(cx);
         markUpdated();
     }
 
     @ReactProp(name = "cy")
     public void setCy(Dynamic cy) {
-        if (cy.getType() == ReadableType.String) {
-            mCy = cy.asString();
-        } else {
-            mCy = String.valueOf(cy.asDouble());
-        }
+        mCy = getStringFromDynamic(cy);
         markUpdated();
     }
 

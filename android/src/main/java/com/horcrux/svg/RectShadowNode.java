@@ -15,7 +15,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 
 import com.facebook.react.bridge.Dynamic;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
@@ -29,64 +28,39 @@ class RectShadowNode extends RenderableShadowNode {
     private String mRx;
     private String mRy;
 
-
     @ReactProp(name = "x")
     public void setX(Dynamic x) {
-        if (x.getType() == ReadableType.String) {
-            mX = x.asString();
-        } else {
-            mX = String.valueOf(x.asDouble());
-        }
+        mX = getStringFromDynamic(x);
         markUpdated();
     }
 
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
-        if (y.getType() == ReadableType.String) {
-            mY = y.asString();
-        } else {
-            mY = String.valueOf(y.asDouble());
-        }
+        mY = getStringFromDynamic(y);
         markUpdated();
     }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
-        if (width.getType() == ReadableType.String) {
-            mW = width.asString();
-        } else {
-            mW = String.valueOf(width.asDouble());
-        }
+        mW = getStringFromDynamic(width);
         markUpdated();
     }
 
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
-        if (height.getType() == ReadableType.String) {
-            mH = height.asString();
-        } else {
-            mH = String.valueOf(height.asDouble());
-        }
+        mH = getStringFromDynamic(height);
         markUpdated();
     }
 
     @ReactProp(name = "rx")
     public void setRx(Dynamic rx) {
-        if (rx.getType() == ReadableType.String) {
-            mRx = rx.asString();
-        } else {
-            mRx = String.valueOf(rx.asDouble());
-        }
+        mRx = getStringFromDynamic(rx);
         markUpdated();
     }
 
     @ReactProp(name = "ry")
     public void setRy(Dynamic ry) {
-        if (ry.getType() == ReadableType.String) {
-            mRy = ry.asString();
-        } else {
-            mRy = String.valueOf(ry.asDouble());
-        }
+        mRy = getStringFromDynamic(ry);
         markUpdated();
     }
 

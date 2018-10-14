@@ -15,7 +15,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 
 import com.facebook.react.bridge.Dynamic;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
@@ -28,31 +27,19 @@ class CircleShadowNode extends RenderableShadowNode {
 
     @ReactProp(name = "cx")
     public void setCx(Dynamic cx) {
-        if (cx.getType() == ReadableType.String) {
-            mCx = cx.asString();
-        } else {
-            mCx = String.valueOf(cx.asDouble());
-        }
+        mCx = getStringFromDynamic(cx);
         markUpdated();
     }
 
     @ReactProp(name = "cy")
     public void setCy(Dynamic cy) {
-        if (cy.getType() == ReadableType.String) {
-            mCy = cy.asString();
-        } else {
-            mCy = String.valueOf(cy.asDouble());
-        }
+        mCy = getStringFromDynamic(cy);
         markUpdated();
     }
 
     @ReactProp(name = "r")
     public void setR(Dynamic r) {
-        if (r.getType() == ReadableType.String) {
-            mR = r.asString();
-        } else {
-            mR = String.valueOf(r.asDouble());
-        }
+        mR = getStringFromDynamic(r);
         markUpdated();
     }
 

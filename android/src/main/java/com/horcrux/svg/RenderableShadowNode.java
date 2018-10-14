@@ -174,11 +174,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     @ReactProp(name = "strokeWidth")
     public void setStrokeWidth(Dynamic strokeWidth) {
-        if (strokeWidth.getType() == ReadableType.String) {
-            mStrokeWidth = strokeWidth.asString();
-        } else {
-            mStrokeWidth = String.valueOf(strokeWidth.asDouble());
-        }
+        mStrokeWidth = getStringFromDynamic(strokeWidth);
         markUpdated();
     }
 
@@ -263,8 +259,8 @@ abstract public class RenderableShadowNode extends VirtualNode {
             // Clip to mask bounds and render the mask
             float maskX = (float) relativeOnWidth(mask.mX);
             float maskY = (float) relativeOnWidth(mask.mY);
-            float maskWidth = (float) relativeOnWidth(mask.mWidth);
-            float maskHeight = (float) relativeOnWidth(mask.mHeight);
+            float maskWidth = (float) relativeOnWidth(mask.mW);
+            float maskHeight = (float) relativeOnWidth(mask.mH);
             maskCanvas.clipRect(maskX, maskY, maskWidth, maskHeight);
 
             Paint maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

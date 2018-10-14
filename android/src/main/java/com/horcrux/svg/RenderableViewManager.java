@@ -441,12 +441,12 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
 
             @ReactProp(name = "imageheight")
             public void setImageHeight(RenderableView<ImageShadowNode> node, Dynamic height) {
-                node.shadowNode.seHeight(height);
+                node.shadowNode.setHeight(height);
             }
 
             @ReactProp(name = "height")
             public void setHeight(RenderableView<ImageShadowNode> node, Dynamic height) {
-                node.shadowNode.seHeight(height);
+                node.shadowNode.setHeight(height);
             }
 
             @ReactProp(name = "src")
