@@ -1,21 +1,11 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { requireNativeComponent } from "react-native";
 import extractProps from "../lib/extract/extractProps";
-import { pathProps, numberProp } from "../lib/props";
-import { UseAttributes } from "../lib/attributes";
 import Shape from "./Shape";
 
 const idExpReg = /^#(.+)$/;
 export default class extends Shape {
     static displayName = "Use";
-
-    static propTypes = {
-        href: PropTypes.string.isRequired,
-        width: numberProp, // Just for reusing `Symbol`
-        height: numberProp, //  Just for reusing `Symbol`
-        ...pathProps,
-    };
 
     static defaultProps = {
         width: 0,
@@ -58,6 +48,4 @@ export default class extends Shape {
     }
 }
 
-const RNSVGUse = requireNativeComponent("RNSVGUse", null, {
-    nativeOnly: UseAttributes,
-});
+const RNSVGUse = requireNativeComponent("RNSVGUse");

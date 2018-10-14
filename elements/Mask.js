@@ -1,26 +1,10 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { requireNativeComponent } from "react-native";
-import { numberProp } from "../lib/props";
 import units from "../lib/units";
-import { MaskAttributes } from "../lib/attributes";
 import extractTransform from "../lib/extract/extractTransform";
 
 export default class extends Component {
     static displayName = "Mask";
-    static propTypes = {
-        id: PropTypes.string.isRequired,
-        x: numberProp,
-        y: numberProp,
-        width: numberProp,
-        height: numberProp,
-        maskTransform: PropTypes.string,
-        maskUnits: PropTypes.oneOf(["userSpaceOnUse", "objectBoundingBox"]),
-        maskContentUnits: PropTypes.oneOf([
-            "userSpaceOnUse",
-            "objectBoundingBox",
-        ]),
-    };
 
     setNativeProps = props => {
         this.root.setNativeProps(props);
@@ -73,6 +57,4 @@ export default class extends Component {
     }
 }
 
-const RNSVGMask = requireNativeComponent("RNSVGMask", null, {
-    nativeOnly: MaskAttributes,
-});
+const RNSVGMask = requireNativeComponent("RNSVGMask");

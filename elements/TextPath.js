@@ -1,10 +1,8 @@
 import React from "react";
 
 import { requireNativeComponent } from "react-native";
-import { TextPathAttributes } from "../lib/attributes";
 import extractText from "../lib/extract/extractText";
 import Shape from "./Shape";
-import { textPathProps } from "../lib/props";
 import extractProps from "../lib/extract/extractProps";
 import TSpan from "./TSpan";
 
@@ -12,8 +10,6 @@ const idExpReg = /^#(.+)$/;
 
 export default class extends Shape {
     static displayName = "TextPath";
-
-    static propTypes = textPathProps;
 
     render() {
         const {
@@ -68,6 +64,4 @@ export default class extends Shape {
     }
 }
 
-const RNSVGTextPath = requireNativeComponent("RNSVGTextPath", null, {
-    nativeOnly: TextPathAttributes,
-});
+const RNSVGTextPath = requireNativeComponent("RNSVGTextPath");

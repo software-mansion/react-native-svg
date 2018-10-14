@@ -1,8 +1,6 @@
 //noinspection JSUnresolvedVariable
 import React from "react";
-import PropTypes from "prop-types";
 import {
-    ViewPropTypes,
     requireNativeComponent,
     StyleSheet,
     findNodeHandle,
@@ -10,8 +8,6 @@ import {
 } from "react-native";
 import extractResponder from "../lib/extract/extractResponder";
 import extractViewBox from "../lib/extract/extractViewBox";
-import { ViewBoxAttributes } from "../lib/attributes";
-import { numberProp } from "../lib/props";
 import Shape from "./Shape";
 import G from "./G";
 
@@ -30,20 +26,6 @@ const styles = StyleSheet.create({
 
 class Svg extends Shape {
     static displayName = "Svg";
-    static propTypes = {
-        ...ViewPropTypes,
-        color: PropTypes.string,
-        opacity: numberProp,
-        width: numberProp,
-        height: numberProp,
-        // more detail https://svgwg.org/svg2-draft/coords.html#ViewBoxAttribute
-        viewBox: PropTypes.string,
-        preserveAspectRatio: PropTypes.string,
-        style: PropTypes.shape({
-            ...ViewPropTypes.style,
-            color: PropTypes.string,
-        }),
-    };
 
     static defaultProps = {
         preserveAspectRatio: "xMidYMid meet",
@@ -132,15 +114,6 @@ class Svg extends Shape {
     }
 }
 
-const NativeSvgView = requireNativeComponent("RNSVGSvgView", null, {
-    nativeOnly: {
-        ...ViewBoxAttributes,
-        width: true,
-        height: true,
-        bbwidth: true,
-        bbheight: true,
-        tintColor: true,
-    },
-});
+const NativeSvgView = requireNativeComponent("RNSVGSvgView");
 
 export default Svg;

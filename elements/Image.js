@@ -1,8 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Image, requireNativeComponent } from "react-native";
-import { ImageAttributes } from "../lib/attributes";
-import { numberProp, touchableProps, responderProps } from "../lib/props";
 import Shape from "./Shape";
 import { meetOrSliceTypes, alignEnum } from "../lib/extract/extractViewBox";
 import extractProps from "../lib/extract/extractProps";
@@ -11,15 +8,6 @@ const spacesRegExp = /\s+/;
 
 export default class extends Shape {
     static displayName = "Image";
-    static propTypes = {
-        ...responderProps,
-        ...touchableProps,
-        x: numberProp,
-        y: numberProp,
-        width: numberProp.isRequired,
-        height: numberProp.isRequired,
-        preserveAspectRatio: PropTypes.string,
-    };
 
     static defaultProps = {
         x: 0,
@@ -58,6 +46,4 @@ export default class extends Shape {
     }
 }
 
-const RNSVGImage = requireNativeComponent("RNSVGImage", null, {
-    nativeOnly: ImageAttributes,
-});
+const RNSVGImage = requireNativeComponent("RNSVGImage");

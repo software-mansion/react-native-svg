@@ -2,8 +2,6 @@ import React from "react";
 import _ from "lodash";
 import { requireNativeComponent } from "react-native";
 import extractText from "../lib/extract/extractText";
-import { textProps } from "../lib/props";
-import { TSpanAttibutes } from "../lib/attributes";
 import extractProps from "../lib/extract/extractProps";
 import extractTransform from "../lib/extract/extractTransform";
 import Shape from "./Shape";
@@ -11,8 +9,6 @@ import Shape from "./Shape";
 // TSpan elements are shadow components
 export default class extends Shape {
     static displayName = "TSpan";
-
-    static propTypes = textProps;
 
     setNativeProps = props => {
         const matrix = !props.matrix && extractTransform(props);
@@ -47,6 +43,4 @@ export default class extends Shape {
     }
 }
 
-const RNSVGTSpan = requireNativeComponent("RNSVGTSpan", null, {
-    nativeOnly: TSpanAttibutes,
-});
+const RNSVGTSpan = requireNativeComponent("RNSVGTSpan");

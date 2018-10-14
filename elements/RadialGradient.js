@@ -1,23 +1,10 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { numberProp } from "../lib/props";
 import extractGradient from "../lib/extract/extractGradient";
 import { requireNativeComponent } from "react-native";
 import { RadialGradientAttributes } from "../lib/attributes";
 
 export default class extends Component {
     static displayName = "RadialGradient";
-    static propTypes = {
-        fx: numberProp.isRequired,
-        fy: numberProp.isRequired,
-        rx: numberProp,
-        ry: numberProp,
-        cx: numberProp.isRequired,
-        cy: numberProp.isRequired,
-        r: numberProp,
-        gradientUnits: PropTypes.oneOf(["objectBoundingBox", "userSpaceOnUse"]),
-        id: PropTypes.string.isRequired,
-    };
 
     static defaultProps = {
         fx: "50%",
@@ -44,10 +31,4 @@ export default class extends Component {
     }
 }
 
-const RNSVGRadialGradient = requireNativeComponent(
-    "RNSVGRadialGradient",
-    null,
-    {
-        nativeOnly: RadialGradientAttributes,
-    },
-);
+const RNSVGRadialGradient = requireNativeComponent("RNSVGRadialGradient");
