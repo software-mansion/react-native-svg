@@ -70,7 +70,6 @@ abstract public class RenderableView extends VirtualView {
     private Paint.Cap mStrokeLinecap = Paint.Cap.ROUND;
     private Paint.Join mStrokeLinejoin = Paint.Join.ROUND;
 
-
     private @Nullable ReadableArray mFill;
     private float mFillOpacity = 1;
     private Path.FillType mFillRule = Path.FillType.WINDING;
@@ -300,7 +299,7 @@ abstract public class RenderableView extends VirtualView {
             resultCanvas.drawBitmap(original, 0, 0, null);
             resultCanvas.drawBitmap(maskBitmap, 0, 0, maskPaint);
 
-            // Render blended result into current render context
+            // Render composited result into current render context
             canvas.drawBitmap(result, 0, 0, paint);
         } else {
             draw(canvas, paint, opacity);

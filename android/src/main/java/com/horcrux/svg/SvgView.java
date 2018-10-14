@@ -70,7 +70,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     @Override
     public void setId(int id) {
         super.setId(id);
-        SvgViewManager.setSvgView(this);
+        SvgViewManager.setSvgView(id, this);
     }
 
     @Override

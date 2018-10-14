@@ -246,578 +246,599 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         view.setCameraDistance(0);
     }
 
-    static RenderableViewManager createGroupViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGGroup);
+    static class GroupViewManager extends RenderableViewManager {
+        GroupViewManager() {
+            super(SVGClass.RNSVGGroup);
+        }
     }
 
-    static RenderableViewManager createPathViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGPath) {
 
-            @ReactProp(name = "d")
-            public void setD(PathView node, String d) {
-                node.setD(d);
-            }
-        };
+    static class PathViewManager extends RenderableViewManager {
+        PathViewManager() {
+            super(SVGClass.RNSVGPath);
+        }
+
+        @ReactProp(name = "d")
+        public void setD(PathView node, String d) {
+            node.setD(d);
+        }
     }
 
-    static RenderableViewManager createTextViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGText) {
+    static class TextViewManager extends RenderableViewManager {
+        TextViewManager() {
+            super(SVGClass.RNSVGText);
+        }
 
-            @ReactProp(name = "textLength")
-            public void setTextLength(TextView node, Dynamic length) {
-                node.setTextLength(length);
-            }
+        @ReactProp(name = "textLength")
+        public void setTextLength(TextView node, Dynamic length) {
+            node.setTextLength(length);
+        }
 
-            @ReactProp(name = "lengthAdjust")
-            public void setLengthAdjust(TextView node, @Nullable String adjustment) {
-                node.setLengthAdjust(adjustment);
-            }
+        @ReactProp(name = "lengthAdjust")
+        public void setLengthAdjust(TextView node, @Nullable String adjustment) {
+            node.setLengthAdjust(adjustment);
+        }
 
-            @ReactProp(name = "alignmentBaseline")
-            public void setMethod(TextView node, @Nullable String alignment) {
-                node.setMethod(alignment);
-            }
+        @ReactProp(name = "alignmentBaseline")
+        public void setMethod(TextView node, @Nullable String alignment) {
+            node.setMethod(alignment);
+        }
 
-            @ReactProp(name = "baselineShift")
-            public void setBaselineShift(TextView node, Dynamic baselineShift) {
-                node.setBaselineShift(baselineShift);
-            }
+        @ReactProp(name = "baselineShift")
+        public void setBaselineShift(TextView node, Dynamic baselineShift) {
+            node.setBaselineShift(baselineShift);
+        }
 
-            @ReactProp(name = "verticalAlign")
-            public void setVerticalAlign(TextView node, @Nullable String verticalAlign) {
-                node.setVerticalAlign(verticalAlign);
-            }
+        @ReactProp(name = "verticalAlign")
+        public void setVerticalAlign(TextView node, @Nullable String verticalAlign) {
+            node.setVerticalAlign(verticalAlign);
+        }
 
-            @ReactProp(name = "rotate")
-            public void setRotate(TextView node, Dynamic rotate) {
-                node.setRotate(rotate);
-            }
+        @ReactProp(name = "rotate")
+        public void setRotate(TextView node, Dynamic rotate) {
+            node.setRotate(rotate);
+        }
 
-            @ReactProp(name = "dx")
-            public void setDeltaX(TextView node, Dynamic deltaX) {
-                node.setDeltaX(deltaX);
-            }
+        @ReactProp(name = "dx")
+        public void setDeltaX(TextView node, Dynamic deltaX) {
+            node.setDeltaX(deltaX);
+        }
 
-            @ReactProp(name = "dy")
-            public void setDeltaY(TextView node, Dynamic deltaY) {
-                node.setDeltaY(deltaY);
-            }
+        @ReactProp(name = "dy")
+        public void setDeltaY(TextView node, Dynamic deltaY) {
+            node.setDeltaY(deltaY);
+        }
 
-            @ReactProp(name = "positionX")
-            public void setPositionX(TextView node, Dynamic positionX) {
-                node.setPositionX(positionX);
-            }
+        @ReactProp(name = "positionX")
+        public void setPositionX(TextView node, Dynamic positionX) {
+            node.setPositionX(positionX);
+        }
 
-            @ReactProp(name = "x")
-            public void setX(TextView node, Dynamic positionX) {
-                node.setPositionX(positionX);
-            }
+        @ReactProp(name = "x")
+        public void setX(TextView node, Dynamic positionX) {
+            node.setPositionX(positionX);
+        }
 
-            @ReactProp(name = "positionY")
-            public void setPositionY(TextView node, Dynamic positionY) {
-                node.setPositionY(positionY);
-            }
+        @ReactProp(name = "positionY")
+        public void setPositionY(TextView node, Dynamic positionY) {
+            node.setPositionY(positionY);
+        }
 
-            @ReactProp(name = "y")
-            public void setY(TextView node, Dynamic positionY) {
-                node.setPositionY(positionY);
-            }
+        @ReactProp(name = "y")
+        public void setY(TextView node, Dynamic positionY) {
+            node.setPositionY(positionY);
+        }
 
-            @ReactProp(name = "font")
-            public void setFont(TextView node, @Nullable ReadableMap font) {
-                node.setFont(font);
-            }
-        };
+        @ReactProp(name = "font")
+        public void setFont(TextView node, @Nullable ReadableMap font) {
+            node.setFont(font);
+        }
     }
 
-    static RenderableViewManager createTSpanViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGTSpan) {
+    static class TSpanViewManager extends RenderableViewManager {
+        TSpanViewManager() {
+            super(SVGClass.RNSVGTSpan);
+        }
 
-            @ReactProp(name = "content")
-            public void setContent(TSpanView node, @Nullable String content) {
-                node.setContent(content);
-            }
+        @ReactProp(name = "content")
+        public void setContent(TSpanView node, @Nullable String content) {
+            node.setContent(content);
+        }
 
-            @ReactProp(name = "rotate")
-            public void setRotate(TextView node, Dynamic rotate) {
-                node.setRotate(rotate);
-            }
+        @ReactProp(name = "rotate")
+        public void setRotate(TextView node, Dynamic rotate) {
+            node.setRotate(rotate);
+        }
 
-            @ReactProp(name = "dx")
-            public void setDeltaX(TextView node, Dynamic deltaX) {
-                node.setDeltaX(deltaX);
-            }
+        @ReactProp(name = "dx")
+        public void setDeltaX(TextView node, Dynamic deltaX) {
+            node.setDeltaX(deltaX);
+        }
 
-            @ReactProp(name = "dy")
-            public void setDeltaY(TextView node, Dynamic deltaY) {
-                node.setDeltaY(deltaY);
-            }
+        @ReactProp(name = "dy")
+        public void setDeltaY(TextView node, Dynamic deltaY) {
+            node.setDeltaY(deltaY);
+        }
 
-            @ReactProp(name = "positionX")
-            public void setPositionX(TextView node, Dynamic positionX) {
-                node.setPositionX(positionX);
-            }
+        @ReactProp(name = "positionX")
+        public void setPositionX(TextView node, Dynamic positionX) {
+            node.setPositionX(positionX);
+        }
 
-            @ReactProp(name = "x")
-            public void setX(TextView node, Dynamic positionX) {
-                node.setPositionX(positionX);
-            }
+        @ReactProp(name = "x")
+        public void setX(TextView node, Dynamic positionX) {
+            node.setPositionX(positionX);
+        }
 
-            @ReactProp(name = "positionY")
-            public void setPositionY(TextView node, Dynamic positionY) {
-                node.setPositionY(positionY);
-            }
+        @ReactProp(name = "positionY")
+        public void setPositionY(TextView node, Dynamic positionY) {
+            node.setPositionY(positionY);
+        }
 
-            @ReactProp(name = "y")
-            public void setY(TextView node, Dynamic positionY) {
-                node.setPositionY(positionY);
-            }
-        };
+        @ReactProp(name = "y")
+        public void setY(TextView node, Dynamic positionY) {
+            node.setPositionY(positionY);
+        }
     }
 
-    static RenderableViewManager createTextPathViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGTextPath) {
+    static class TextPathViewManager extends RenderableViewManager {
+        TextPathViewManager() {
+            super(SVGClass.RNSVGTextPath);
+        }
 
-            @ReactProp(name = "href")
-            public void setHref(TextPathView node, String href) {
-                node.setHref(href);
-            }
+        @ReactProp(name = "href")
+        public void setHref(TextPathView node, String href) {
+            node.setHref(href);
+        }
 
-            @ReactProp(name = "startOffset")
-            public void setStartOffset(TextPathView node, Dynamic startOffset) {
-                node.setStartOffset(startOffset);
-            }
+        @ReactProp(name = "startOffset")
+        public void setStartOffset(TextPathView node, Dynamic startOffset) {
+            node.setStartOffset(startOffset);
+        }
 
-            @ReactProp(name = "method")
-            public void setMethod(TextPathView node, @Nullable String method) {
-                node.setMethod(method);
-            }
+        @ReactProp(name = "method")
+        public void setMethod(TextPathView node, @Nullable String method) {
+            node.setMethod(method);
+        }
 
-            @ReactProp(name = "spacing")
-            public void setSpacing(TextPathView node, @Nullable String spacing) {
-                node.setSpacing(spacing);
-            }
+        @ReactProp(name = "spacing")
+        public void setSpacing(TextPathView node, @Nullable String spacing) {
+            node.setSpacing(spacing);
+        }
 
-            @ReactProp(name = "side")
-            public void setSide(TextPathView node, @Nullable String side) {
-                node.setSide(side);
-            }
+        @ReactProp(name = "side")
+        public void setSide(TextPathView node, @Nullable String side) {
+            node.setSide(side);
+        }
 
-            @ReactProp(name = "midLine")
-            public void setSharp(TextPathView node, @Nullable String midLine) {
-                node.setSharp(midLine);
-            }
-        };
+        @ReactProp(name = "midLine")
+        public void setSharp(TextPathView node, @Nullable String midLine) {
+            node.setSharp(midLine);
+        }
     }
 
-    static RenderableViewManager createImageViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGImage) {
+    static class ImageViewManager extends RenderableViewManager {
+        ImageViewManager(){
+            super(SVGClass.RNSVGImage);
+        }
 
-            @ReactProp(name = "x")
-            public void setX(ImageView node, Dynamic x) {
-                node.setX(x);
-            }
+        @ReactProp(name = "x")
+        public void setX(ImageView node, Dynamic x) {
+            node.setX(x);
+        }
 
-            @ReactProp(name = "y")
-            public void setY(ImageView node, Dynamic y) {
-                node.setY(y);
-            }
+        @ReactProp(name = "y")
+        public void setY(ImageView node, Dynamic y) {
+            node.setY(y);
+        }
 
-            @ReactProp(name = "width")
-            public void setWidth(ImageView node, Dynamic width) {
-                node.setWidth(width);
-            }
+        @ReactProp(name = "width")
+        public void setWidth(ImageView node, Dynamic width) {
+            node.setWidth(width);
+        }
 
-            @ReactProp(name = "height")
-            public void setHeight(ImageView node, Dynamic height) {
-                node.setHeight(height);
-            }
+        @ReactProp(name = "height")
+        public void setHeight(ImageView node, Dynamic height) {
+            node.setHeight(height);
+        }
 
-            @ReactProp(name = "src")
-            public void setSrc(ImageView node, @Nullable ReadableMap src) {
-                node.setSrc(src);
-            }
+        @ReactProp(name = "src")
+        public void setSrc(ImageView node, @Nullable ReadableMap src) {
+            node.setSrc(src);
+        }
 
 
-            @ReactProp(name = "align")
-            public void setAlign(ImageView node, String align) {
-                node.setAlign(align);
-            }
+        @ReactProp(name = "align")
+        public void setAlign(ImageView node, String align) {
+            node.setAlign(align);
+        }
 
-            @ReactProp(name = "meetOrSlice")
-            public void setMeetOrSlice(ImageView node, int meetOrSlice) {
-                node.setMeetOrSlice(meetOrSlice);
-            }
-        };
+        @ReactProp(name = "meetOrSlice")
+        public void setMeetOrSlice(ImageView node, int meetOrSlice) {
+            node.setMeetOrSlice(meetOrSlice);
+        }
     }
 
-    static RenderableViewManager createCircleViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGCircle) {
+    static class CircleViewManager extends RenderableViewManager {
+        CircleViewManager() {
+            super(SVGClass.RNSVGCircle);
+        }
 
-            @ReactProp(name = "cx")
-            public void setCx(CircleView node, Dynamic cx) {
-                node.setCx(cx);
-            }
+        @ReactProp(name = "cx")
+        public void setCx(CircleView node, Dynamic cx) {
+            node.setCx(cx);
+        }
 
-            @ReactProp(name = "cy")
-            public void setCy(CircleView node, Dynamic cy) {
-                node.setCy(cy);
-            }
+        @ReactProp(name = "cy")
+        public void setCy(CircleView node, Dynamic cy) {
+            node.setCy(cy);
+        }
 
-            @ReactProp(name = "r")
-            public void setR(CircleView node, Dynamic r) {
-                node.setR(r);
-            }
-        };
+        @ReactProp(name = "r")
+        public void setR(CircleView node, Dynamic r) {
+            node.setR(r);
+        }
     }
 
-    static RenderableViewManager createEllipseViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGEllipse) {
+    static class EllipseViewManager extends RenderableViewManager {
+        EllipseViewManager() {
+            super(SVGClass.RNSVGEllipse);
+        }
 
-            @ReactProp(name = "cx")
-            public void setCx(EllipseView node, Dynamic cx) {
-                node.setCx(cx);
-            }
+        @ReactProp(name = "cx")
+        public void setCx(EllipseView node, Dynamic cx) {
+            node.setCx(cx);
+        }
 
-            @ReactProp(name = "cy")
-            public void setCy(EllipseView node, Dynamic cy) {
-                node.setCy(cy);
-            }
+        @ReactProp(name = "cy")
+        public void setCy(EllipseView node, Dynamic cy) {
+            node.setCy(cy);
+        }
 
-            @ReactProp(name = "rx")
-            public void setRx(EllipseView node, Dynamic rx) {
-                node.setRx(rx);
-            }
+        @ReactProp(name = "rx")
+        public void setRx(EllipseView node, Dynamic rx) {
+            node.setRx(rx);
+        }
 
-            @ReactProp(name = "ry")
-            public void setRy(EllipseView node, Dynamic ry) {
-                node.setRy(ry);
-            }
-        };
+        @ReactProp(name = "ry")
+        public void setRy(EllipseView node, Dynamic ry) {
+            node.setRy(ry);
+        }
     }
 
-    static RenderableViewManager createLineViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGLine) {
+    static class LineViewManager extends RenderableViewManager {
+        LineViewManager() {
+            super(SVGClass.RNSVGLine);
+        }
 
-            @ReactProp(name = "x1")
-            public void setX1(LineView node, Dynamic x1) {
-                node.setX1(x1);
-            }
+        @ReactProp(name = "x1")
+        public void setX1(LineView node, Dynamic x1) {
+            node.setX1(x1);
+        }
 
-            @ReactProp(name = "y1")
-            public void setY1(LineView node, Dynamic y1) {
-                node.setY1(y1);
-            }
+        @ReactProp(name = "y1")
+        public void setY1(LineView node, Dynamic y1) {
+            node.setY1(y1);
+        }
 
-            @ReactProp(name = "x2")
-            public void setX2(LineView node, Dynamic x2) {
-                node.setX2(x2);
-            }
+        @ReactProp(name = "x2")
+        public void setX2(LineView node, Dynamic x2) {
+            node.setX2(x2);
+        }
 
-            @ReactProp(name = "y2")
-            public void setY2(LineView node, Dynamic y2) {
-                node.setY2(y2);
-            }
-
-        };
+        @ReactProp(name = "y2")
+        public void setY2(LineView node, Dynamic y2) {
+            node.setY2(y2);
+        }
     }
 
-    static RenderableViewManager createRectViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGRect) {
+    static class RectViewManager extends RenderableViewManager {
+        RectViewManager() {
+            super(SVGClass.RNSVGRect);
+        }
 
-            @ReactProp(name = "x")
-            public void setX(RectView node, Dynamic x) {
-                node.setX(x);
-            }
+        @ReactProp(name = "x")
+        public void setX(RectView node, Dynamic x) {
+            node.setX(x);
+        }
 
-            @ReactProp(name = "y")
-            public void setY(RectView node, Dynamic y) {
-                node.setY(y);
-            }
+        @ReactProp(name = "y")
+        public void setY(RectView node, Dynamic y) {
+            node.setY(y);
+        }
 
-            @ReactProp(name = "width")
-            public void setWidth(RectView node, Dynamic width) {
-                node.setWidth(width);
-            }
+        @ReactProp(name = "width")
+        public void setWidth(RectView node, Dynamic width) {
+            node.setWidth(width);
+        }
 
-            @ReactProp(name = "height")
-            public void setHeight(RectView node, Dynamic height) {
-                node.setHeight(height);
-            }
+        @ReactProp(name = "height")
+        public void setHeight(RectView node, Dynamic height) {
+            node.setHeight(height);
+        }
 
-            @ReactProp(name = "rx")
-            public void setRx(RectView node, Dynamic rx) {
-                node.setRx(rx);
-            }
+        @ReactProp(name = "rx")
+        public void setRx(RectView node, Dynamic rx) {
+            node.setRx(rx);
+        }
 
-            @ReactProp(name = "ry")
-            public void setRy(RectView node, Dynamic ry) {
-                node.setRy(ry);
-            }
-        };
+        @ReactProp(name = "ry")
+        public void setRy(RectView node, Dynamic ry) {
+            node.setRy(ry);
+        }
     }
 
-    static RenderableViewManager createClipPathViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGClipPath);
+    static class ClipPathViewManager extends RenderableViewManager {
+        ClipPathViewManager() {
+            super(SVGClass.RNSVGClipPath);
+        }
     }
 
-    static RenderableViewManager createDefsViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGDefs);
+    static class DefsViewManager extends RenderableViewManager {
+        DefsViewManager() {
+            super(SVGClass.RNSVGDefs);
+        }
     }
 
-    static RenderableViewManager createUseViewManager() {
-        return new RenderableViewManager(SVGClass.RNSVGUse) {
+    static class UseViewManager extends RenderableViewManager {
+        UseViewManager() {
+            super(SVGClass.RNSVGUse);
+        }
 
-            @ReactProp(name = "href")
-            public void setHref(UseView node, String href) {
-                node.setHref(href);
-            }
+        @ReactProp(name = "href")
+        public void setHref(UseView node, String href) {
+            node.setHref(href);
+        }
 
-            @ReactProp(name = "width")
-            public void setWidth(UseView node, Dynamic width) {
-                node.setWidth(width);
-            }
+        @ReactProp(name = "width")
+        public void setWidth(UseView node, Dynamic width) {
+            node.setWidth(width);
+        }
 
-            @ReactProp(name = "height")
-            public void setHeight(UseView node, Dynamic height) {
-                node.setHeight(height);
-            }
-        };
+        @ReactProp(name = "height")
+        public void setHeight(UseView node, Dynamic height) {
+            node.setHeight(height);
+        }
     }
 
-    static RenderableViewManager createSymbolManager() {
-        return new RenderableViewManager(SVGClass.RNSVGSymbol) {
+    static class SymbolManager extends RenderableViewManager {
+        SymbolManager() {
+            super(SVGClass.RNSVGSymbol);
+        }
 
-            @ReactProp(name = "minX")
-            public void setMinX(SymbolView node, float minX) {
-                node.setMinX(minX);
-            }
+        @ReactProp(name = "minX")
+        public void setMinX(SymbolView node, float minX) {
+            node.setMinX(minX);
+        }
 
-            @ReactProp(name = "minY")
-            public void setMinY(SymbolView node, float minY) {
-                node.setMinY(minY);
-            }
+        @ReactProp(name = "minY")
+        public void setMinY(SymbolView node, float minY) {
+            node.setMinY(minY);
+        }
 
-            @ReactProp(name = "vbWidth")
-            public void setVbWidth(SymbolView node, float vbWidth) {
-                node.setVbWidth(vbWidth);
-            }
+        @ReactProp(name = "vbWidth")
+        public void setVbWidth(SymbolView node, float vbWidth) {
+            node.setVbWidth(vbWidth);
+        }
 
-            @ReactProp(name = "vbHeight")
-            public void setVbHeight(SymbolView node, float vbHeight) {
-                node.setVbHeight(vbHeight);
-            }
+        @ReactProp(name = "vbHeight")
+        public void setVbHeight(SymbolView node, float vbHeight) {
+            node.setVbHeight(vbHeight);
+        }
 
-            @ReactProp(name = "align")
-            public void setAlign(SymbolView node, String align) {
-                node.setAlign(align);
-            }
+        @ReactProp(name = "align")
+        public void setAlign(SymbolView node, String align) {
+            node.setAlign(align);
+        }
 
-            @ReactProp(name = "meetOrSlice")
-            public void setMeetOrSlice(SymbolView node, int meetOrSlice) {
-                node.setMeetOrSlice(meetOrSlice);
-            }
-        };
+        @ReactProp(name = "meetOrSlice")
+        public void setMeetOrSlice(SymbolView node, int meetOrSlice) {
+            node.setMeetOrSlice(meetOrSlice);
+        }
     }
 
-    static RenderableViewManager createPatternManager() {
-        return new RenderableViewManager(SVGClass.RNSVGPattern) {
+    static class PatternManager extends RenderableViewManager {
+        PatternManager() {
+            super(SVGClass.RNSVGPattern);
+        }
 
-            @ReactProp(name = "x")
-            public void setX(PatternView node, Dynamic x) {
-                node.setX(x);
-            }
+        @ReactProp(name = "x")
+        public void setX(PatternView node, Dynamic x) {
+            node.setX(x);
+        }
 
-            @ReactProp(name = "y")
-            public void setY(PatternView node, Dynamic y) {
-                node.setY(y);
-            }
+        @ReactProp(name = "y")
+        public void setY(PatternView node, Dynamic y) {
+            node.setY(y);
+        }
 
-            @ReactProp(name = "width")
-            public void setWidth(PatternView node, Dynamic width) {
-                node.setWidth(width);
-            }
+        @ReactProp(name = "width")
+        public void setWidth(PatternView node, Dynamic width) {
+            node.setWidth(width);
+        }
 
-            @ReactProp(name = "height")
-            public void setHeight(PatternView node, Dynamic height) {
-                node.setHeight(height);
-            }
+        @ReactProp(name = "height")
+        public void setHeight(PatternView node, Dynamic height) {
+            node.setHeight(height);
+        }
 
-            @ReactProp(name = "patternUnits")
-            public void setPatternUnits(PatternView node, int patternUnits) {
-                node.setPatternUnits(patternUnits);
-            }
+        @ReactProp(name = "patternUnits")
+        public void setPatternUnits(PatternView node, int patternUnits) {
+            node.setPatternUnits(patternUnits);
+        }
 
-            @ReactProp(name = "patternContentUnits")
-            public void setPatternContentUnits(PatternView node, int patternContentUnits) {
-                node.setPatternContentUnits(patternContentUnits);
-            }
+        @ReactProp(name = "patternContentUnits")
+        public void setPatternContentUnits(PatternView node, int patternContentUnits) {
+            node.setPatternContentUnits(patternContentUnits);
+        }
 
-            @ReactProp(name = "patternTransform")
-            public void setPatternTransform(PatternView node, @Nullable ReadableArray matrixArray) {
-                node.setPatternTransform(matrixArray);
-            }
+        @ReactProp(name = "patternTransform")
+        public void setPatternTransform(PatternView node, @Nullable ReadableArray matrixArray) {
+            node.setPatternTransform(matrixArray);
+        }
 
-            @ReactProp(name = "minX")
-            public void setMinX(PatternView node, float minX) {
-                node.setMinX(minX);
-            }
+        @ReactProp(name = "minX")
+        public void setMinX(PatternView node, float minX) {
+            node.setMinX(minX);
+        }
 
-            @ReactProp(name = "minY")
-            public void setMinY(PatternView node, float minY) {
-                node.setMinY(minY);
-            }
+        @ReactProp(name = "minY")
+        public void setMinY(PatternView node, float minY) {
+            node.setMinY(minY);
+        }
 
-            @ReactProp(name = "vbWidth")
-            public void setVbWidth(PatternView node, float vbWidth) {
-                node.setVbWidth(vbWidth);
-            }
+        @ReactProp(name = "vbWidth")
+        public void setVbWidth(PatternView node, float vbWidth) {
+            node.setVbWidth(vbWidth);
+        }
 
-            @ReactProp(name = "vbHeight")
-            public void setVbHeight(PatternView node, float vbHeight) {
-                node.setVbHeight(vbHeight);
-            }
+        @ReactProp(name = "vbHeight")
+        public void setVbHeight(PatternView node, float vbHeight) {
+            node.setVbHeight(vbHeight);
+        }
 
-            @ReactProp(name = "align")
-            public void setAlign(PatternView node, String align) {
-                node.setAlign(align);
-            }
+        @ReactProp(name = "align")
+        public void setAlign(PatternView node, String align) {
+            node.setAlign(align);
+        }
 
-            @ReactProp(name = "meetOrSlice")
-            public void setMeetOrSlice(PatternView node, int meetOrSlice) {
-                node.setMeetOrSlice(meetOrSlice);
-            }
-        };
+        @ReactProp(name = "meetOrSlice")
+        public void setMeetOrSlice(PatternView node, int meetOrSlice) {
+            node.setMeetOrSlice(meetOrSlice);
+        }
     }
 
-    static RenderableViewManager createMaskManager() {
-        return new RenderableViewManager(SVGClass.RNSVGMask) {
+    static class MaskManager extends RenderableViewManager {
+        MaskManager() {
+            super(SVGClass.RNSVGMask);
+        }
 
-            @ReactProp(name = "x")
-            public void setX(MaskView node, Dynamic x) {
-                node.setX(x);
-            }
+        @ReactProp(name = "x")
+        public void setX(MaskView node, Dynamic x) {
+            node.setX(x);
+        }
 
-            @ReactProp(name = "y")
-            public void setY(MaskView node, Dynamic y) {
-                node.setY(y);
-            }
+        @ReactProp(name = "y")
+        public void setY(MaskView node, Dynamic y) {
+            node.setY(y);
+        }
 
-            @ReactProp(name = "width")
-            public void setWidth(MaskView node, Dynamic width) {
-                node.setWidth(width);
-            }
+        @ReactProp(name = "width")
+        public void setWidth(MaskView node, Dynamic width) {
+            node.setWidth(width);
+        }
 
-            @ReactProp(name = "height")
-            public void setHeight(MaskView node, Dynamic height) {
-                node.setHeight(height);
-            }
+        @ReactProp(name = "height")
+        public void setHeight(MaskView node, Dynamic height) {
+            node.setHeight(height);
+        }
 
-            @ReactProp(name = "maskUnits")
-            public void setMaskUnits(MaskView node, int maskUnits) {
-                node.setMaskUnits(maskUnits);
-            }
+        @ReactProp(name = "maskUnits")
+        public void setMaskUnits(MaskView node, int maskUnits) {
+            node.setMaskUnits(maskUnits);
+        }
 
-            @ReactProp(name = "maskContentUnits")
-            public void setMaskContentUnits(MaskView node, int maskContentUnits) {
-                node.setMaskContentUnits(maskContentUnits);
-            }
+        @ReactProp(name = "maskContentUnits")
+        public void setMaskContentUnits(MaskView node, int maskContentUnits) {
+            node.setMaskContentUnits(maskContentUnits);
+        }
 
-            @ReactProp(name = "maskTransform")
-            public void setMaskTransform(MaskView node, @Nullable ReadableArray matrixArray) {
-                node.setMaskTransform(matrixArray);
-            }
-        };
+        @ReactProp(name = "maskTransform")
+        public void setMaskTransform(MaskView node, @Nullable ReadableArray matrixArray) {
+            node.setMaskTransform(matrixArray);
+        }
     }
 
-    static RenderableViewManager createLinearGradientManager() {
-        return new RenderableViewManager(SVGClass.RNSVGLinearGradient) {
+    static class LinearGradientManager extends RenderableViewManager {
+        LinearGradientManager() {
+            super(SVGClass.RNSVGLinearGradient);
+        }
 
-            @ReactProp(name = "x1")
-            public void setX1(LinearGradientView node, Dynamic x1) {
-                node.setX1(x1);
-            }
+        @ReactProp(name = "x1")
+        public void setX1(LinearGradientView node, Dynamic x1) {
+            node.setX1(x1);
+        }
 
-            @ReactProp(name = "y1")
-            public void setY1(LinearGradientView node, Dynamic y1) {
-                node.setY1(y1);
-            }
+        @ReactProp(name = "y1")
+        public void setY1(LinearGradientView node, Dynamic y1) {
+            node.setY1(y1);
+        }
 
-            @ReactProp(name = "x2")
-            public void setX2(LinearGradientView node, Dynamic x2) {
-                node.setX2(x2);
-            }
+        @ReactProp(name = "x2")
+        public void setX2(LinearGradientView node, Dynamic x2) {
+            node.setX2(x2);
+        }
 
-            @ReactProp(name = "y2")
-            public void setY2(LinearGradientView node, Dynamic y2) {
-                node.setY2(y2);
-            }
+        @ReactProp(name = "y2")
+        public void setY2(LinearGradientView node, Dynamic y2) {
+            node.setY2(y2);
+        }
 
-            @ReactProp(name = "gradient")
-            public void setGradient(LinearGradientView node, ReadableArray gradient) {
-                node.setGradient(gradient);
-            }
+        @ReactProp(name = "gradient")
+        public void setGradient(LinearGradientView node, ReadableArray gradient) {
+            node.setGradient(gradient);
+        }
 
-            @ReactProp(name = "gradientUnits")
-            public void setGradientUnits(LinearGradientView node, int gradientUnits) {
-                node.setGradientUnits(gradientUnits);
-            }
+        @ReactProp(name = "gradientUnits")
+        public void setGradientUnits(LinearGradientView node, int gradientUnits) {
+            node.setGradientUnits(gradientUnits);
+        }
 
-            @ReactProp(name = "gradientTransform")
-            public void setGradientTransform(LinearGradientView node, @Nullable ReadableArray matrixArray) {
-                node.setGradientTransform(matrixArray);
-            }
-        };
+        @ReactProp(name = "gradientTransform")
+        public void setGradientTransform(LinearGradientView node, @Nullable ReadableArray matrixArray) {
+            node.setGradientTransform(matrixArray);
+        }
     }
 
-    static RenderableViewManager createRadialGradientManager() {
-        return new RenderableViewManager(SVGClass.RNSVGRadialGradient) {
+    static class RadialGradientManager extends RenderableViewManager {
+        RadialGradientManager() {
+            super(SVGClass.RNSVGRadialGradient);
+        }
 
-            @ReactProp(name = "fx")
-            public void setFx(RadialGradientView node, Dynamic fx) {
-                node.setFx(fx);
-            }
+        @ReactProp(name = "fx")
+        public void setFx(RadialGradientView node, Dynamic fx) {
+            node.setFx(fx);
+        }
 
-            @ReactProp(name = "fy")
-            public void setFy(RadialGradientView node, Dynamic fy) {
-                node.setFy(fy);
-            }
+        @ReactProp(name = "fy")
+        public void setFy(RadialGradientView node, Dynamic fy) {
+            node.setFy(fy);
+        }
 
-            @ReactProp(name = "rx")
-            public void setRx(RadialGradientView node, Dynamic rx) {
-                node.setRx(rx);
-            }
+        @ReactProp(name = "rx")
+        public void setRx(RadialGradientView node, Dynamic rx) {
+            node.setRx(rx);
+        }
 
-            @ReactProp(name = "ry")
-            public void setRy(RadialGradientView node, Dynamic ry) {
-                node.setRy(ry);
-            }
+        @ReactProp(name = "ry")
+        public void setRy(RadialGradientView node, Dynamic ry) {
+            node.setRy(ry);
+        }
 
-            @ReactProp(name = "cx")
-            public void setCx(RadialGradientView node, Dynamic cx) {
-                node.setCx(cx);
-            }
+        @ReactProp(name = "cx")
+        public void setCx(RadialGradientView node, Dynamic cx) {
+            node.setCx(cx);
+        }
 
-            @ReactProp(name = "cy")
-            public void setCy(RadialGradientView node, Dynamic cy) {
-                node.setCy(cy);
-            }
+        @ReactProp(name = "cy")
+        public void setCy(RadialGradientView node, Dynamic cy) {
+            node.setCy(cy);
+        }
 
-            @ReactProp(name = "gradient")
-            public void setGradient(RadialGradientView node, ReadableArray gradient) {
-                node.setGradient(gradient);
-            }
+        @ReactProp(name = "gradient")
+        public void setGradient(RadialGradientView node, ReadableArray gradient) {
+            node.setGradient(gradient);
+        }
 
-            @ReactProp(name = "gradientUnits")
-            public void setGradientUnits(RadialGradientView node, int gradientUnits) {
-                node.setGradientUnits(gradientUnits);
-            }
+        @ReactProp(name = "gradientUnits")
+        public void setGradientUnits(RadialGradientView node, int gradientUnits) {
+            node.setGradientUnits(gradientUnits);
+        }
 
-            @ReactProp(name = "gradientTransform")
-            public void setGradientTransform(RadialGradientView node, @Nullable ReadableArray matrixArray) {
-                node.setGradientTransform(matrixArray);
-            }
-        };
+        @ReactProp(name = "gradientTransform")
+        public void setGradientTransform(RadialGradientView node, @Nullable ReadableArray matrixArray) {
+            node.setGradientTransform(matrixArray);
+        }
     }
 
     private RenderableViewManager(SVGClass svgclass) {

@@ -28,8 +28,8 @@ class SvgViewManager extends ReactViewManager {
 
     private static final SparseArray<SvgView> mTagToSvgView = new SparseArray<>();
 
-    static void setSvgView(SvgView svg) {
-        mTagToSvgView.put(svg.getId(), svg);
+    static void setSvgView(int tag, SvgView svg) {
+        mTagToSvgView.put(tag, svg);
     }
 
     static @Nullable SvgView getSvgViewByTag(int tag) {
