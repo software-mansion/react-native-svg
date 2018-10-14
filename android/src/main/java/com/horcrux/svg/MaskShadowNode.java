@@ -29,8 +29,12 @@ class MaskShadowNode extends GroupShadowNode {
     String mY;
     String mWidth;
     String mHeight;
-    Brush.BrushUnits mMaskUnits;
-    Brush.BrushUnits mMaskContentUnits;
+
+    // TODO implement proper support for units
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
+    private Brush.BrushUnits mMaskUnits;
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
+    private Brush.BrushUnits mMaskContentUnits;
 
     private static final float[] sRawMatrix = new float[]{
         1, 0, 0,
@@ -125,7 +129,7 @@ class MaskShadowNode extends GroupShadowNode {
     }
 
     @Override
-    protected void saveDefinition() {
+    void saveDefinition() {
         if (mName != null) {
             SvgViewShadowNode svg = getSvgShadowNode();
             svg.defineMask(this, mName);

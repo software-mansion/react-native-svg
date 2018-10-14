@@ -12,10 +12,7 @@ package com.horcrux.svg;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 
-/**
- * Shadow node for virtual ViewBox
- */
-class ViewBox extends GroupShadowNode {
+class ViewBox {
 
     private static final int MOS_MEET = 0;
     private static final int MOS_SLICE = 1;

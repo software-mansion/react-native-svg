@@ -25,7 +25,6 @@ class SvgViewModule extends ReactContextBaseJavaModule {
     }
 
 
-    @SuppressWarnings("unused")
     @ReactMethod
     public void toDataURL(int tag, Callback successCallback) {
         SvgViewShadowNode svg = SvgViewManager.getShadowNodeByTag(tag);

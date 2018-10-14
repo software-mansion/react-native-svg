@@ -19,6 +19,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
+import static com.horcrux.svg.TextProperties.*;
+
 /**
  * Shadow node for virtual TextPath view
  */
@@ -94,11 +96,11 @@ class TextPathShadowNode extends TextShadowNode {
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
+    void draw(Canvas canvas, Paint paint, float opacity) {
         drawGroup(canvas, paint, opacity);
     }
 
-    public Path getTextPath(Canvas canvas, Paint paint) {
+    Path getTextPath(Canvas canvas, Paint paint) {
         SvgViewShadowNode svg = getSvgShadowNode();
         VirtualNode template = svg.getDefinedTemplate(mHref);
 
@@ -112,17 +114,17 @@ class TextPathShadowNode extends TextShadowNode {
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
+    Path getPath(Canvas canvas, Paint paint) {
         return getGroupPath(canvas, paint);
     }
 
     @Override
-    protected void pushGlyphContext() {
+    void pushGlyphContext() {
         // do nothing
     }
 
     @Override
-    protected void popGlyphContext() {
+    void popGlyphContext() {
         // do nothing
     }
 }

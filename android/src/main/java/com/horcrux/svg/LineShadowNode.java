@@ -21,7 +21,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  * Shadow node for virtual Line view
  */
 class LineShadowNode extends RenderableShadowNode {
-
     private String mX1;
     private String mY1;
     private String mX2;
@@ -68,7 +67,7 @@ class LineShadowNode extends RenderableShadowNode {
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
+    Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
         double x1 = relativeOnWidth(mX1);
         double y1 = relativeOnHeight(mY1);

@@ -177,7 +177,7 @@ class PropHelper {
         private float mPenDownY;
         private float mPivotX = 0f;
         private float mPivotY = 0f;
-        private float mScale = 1f;
+        private final float mScale;
         private boolean mValid = true;
         private boolean mPendDownSet = false;
 
@@ -285,7 +285,7 @@ class PropHelper {
             }
         }
 
-        public Path getPath() {
+        Path getPath() {
             mPath = new Path();
             mBezierCurves = Arguments.createArray();
             mMatcher = PATH_REG_EXP.matcher(DECIMAL_REG_EXP.matcher(mString).replaceAll("$1,"));
@@ -562,7 +562,7 @@ class PropHelper {
                 arc -= Math.PI * 2;
             }
 
-            int n = (int) Math.ceil(Math.abs(round(arc / (Math.PI / 2), 4)));
+            int n = (int) Math.ceil(Math.abs(round(arc / (Math.PI / 2))));
 
             float step = arc / n;
             float k = (float) ((4 / 3.0) * Math.tan(step / 4));
@@ -600,8 +600,8 @@ class PropHelper {
             }
         }
 
-        private double round(double val, int sigDig) {
-            double multiplier = Math.pow(10, sigDig);
+        private double round(double val) {
+            double multiplier = Math.pow(10, 4);
             return Math.round(val * multiplier) / multiplier;
         }
     }

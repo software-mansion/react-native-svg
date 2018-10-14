@@ -176,7 +176,7 @@ class PatternShadowNode extends GroupShadowNode {
     }
 
     @Override
-    protected void saveDefinition() {
+    void saveDefinition() {
         if (mName != null) {
             WritableArray points = Arguments.createArray();
             points.pushString(mX);

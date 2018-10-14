@@ -10,8 +10,10 @@ import com.facebook.react.uimanager.ReactShadowNode;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("unused")
-public class TextLayoutAlgorithm {
+import static com.horcrux.svg.TextProperties.*;
+
+@SuppressWarnings("ALL")
+class TextLayoutAlgorithm {
     class CharacterInformation {
         int index;
         double x = 0;

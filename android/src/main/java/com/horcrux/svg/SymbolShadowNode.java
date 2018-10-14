@@ -62,7 +62,7 @@ class SymbolShadowNode extends GroupShadowNode {
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
+    void draw(Canvas canvas, Paint paint, float opacity) {
         saveDefinition();
     }
 

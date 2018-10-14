@@ -10,30 +10,28 @@
 package com.horcrux.svg;
 
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 
 /**
  * Shadow node for virtual Definition type views
  */
 class DefinitionShadowNode extends VirtualNode {
 
-    public void draw(Canvas canvas, Paint paint, float opacity) {}
+    void draw(Canvas canvas, Paint paint, float opacity) {}
 
     @Override
-    public boolean isResponsible() {
+    boolean isResponsible() {
         return false;
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
+    Path getPath(Canvas canvas, Paint paint) {
         return null;
     }
 
     @Override
-    public int hitTest(float[] src) {
+    int hitTest(float[] src) {
         return -1;
     }
 }

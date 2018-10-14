@@ -26,14 +26,18 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.ReactConstants;
 
 class Brush {
-    private BrushType mType;
+    private final BrushType mType;
     private final ReadableArray mPoints;
     private ReadableArray mColors;
     private final boolean mUseObjectBoundingBox;
+
+    // TODO implement pattern units
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private boolean mUseContentObjectBoundingBox;
+
     private Matrix mMatrix;
     private Rect mUserSpaceBoundingBox;
-    PatternShadowNode mPattern;
+    private PatternShadowNode mPattern;
 
     Brush(BrushType type, ReadableArray points, BrushUnits units) {
         mType = type;
@@ -50,25 +54,14 @@ class Brush {
     }
 
     enum BrushType {
-        LINEAR_GRADIENT(0),
-        RADIAL_GRADIENT(1),
-        @SuppressWarnings("unused")PATTERN(2);
-        BrushType(int ni) {
-            nativeInt = ni;
-        }
-
-        @SuppressWarnings("unused")
-        final int nativeInt;
+        LINEAR_GRADIENT,
+        RADIAL_GRADIENT,
+        PATTERN
     }
 
     enum BrushUnits {
-        OBJECT_BOUNDING_BOX(0),
-        USER_SPACE_ON_USE(1);
-        BrushUnits(int ni) {
-            nativeInt = ni;
-        }
-        @SuppressWarnings("unused")
-        final int nativeInt;
+        OBJECT_BOUNDING_BOX,
+        USER_SPACE_ON_USE
     }
 
     private static void parseGradientStops(ReadableArray value, int stopsCount, float[] stops, int[] stopsColors, float opacity) {

@@ -1,10 +1,13 @@
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.view.ViewGroup;
 
 import com.facebook.react.bridge.ReactContext;
 
+@SuppressLint("ViewConstructor")
 public class RenderableView<T extends VirtualNode> extends ViewGroup {
+    public RenderableViewManager<T> vm;
     public T shadowNode;
 
     public RenderableView(ReactContext reactContext) {
@@ -14,7 +17,7 @@ public class RenderableView<T extends VirtualNode> extends ViewGroup {
     @Override
     public void setId(int id) {
         super.setId(id);
-        shadowNode = (T) RenderableViewManager.getShadowNodeByTag(id);
+        shadowNode = vm.getShadowNodeByTag(id);
     }
 
     void dropView() {

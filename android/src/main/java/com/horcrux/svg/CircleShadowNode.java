@@ -22,7 +22,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  * Shadow node for virtual Circle view
  */
 class CircleShadowNode extends RenderableShadowNode {
-
     private String mCx;
     private String mCy;
     private String mR;
@@ -58,7 +57,7 @@ class CircleShadowNode extends RenderableShadowNode {
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
+    Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
 
         double cx = relativeOnWidth(mCx);

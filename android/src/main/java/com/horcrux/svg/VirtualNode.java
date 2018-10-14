@@ -18,7 +18,6 @@ import android.graphics.Region;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -33,7 +32,7 @@ import javax.annotation.Nullable;
 
 import static com.horcrux.svg.FontData.DEFAULT_FONT_SIZE;
 
-abstract class VirtualNode extends LayoutShadowNode {
+abstract class VirtualNode<T> extends LayoutShadowNode {
     /*
         N[1/Sqrt[2], 36]
         The inverse of the square root of 2.
@@ -46,8 +45,10 @@ abstract class VirtualNode extends LayoutShadowNode {
     @Override
     public void setReactTag(int reactTag) {
         super.setReactTag(reactTag);
-        RenderableViewManager.setShadowNode(this);
+        vm.setShadowNode(this);
     }
+
+    RenderableViewManager<VirtualNode<T>> vm;
 
     private static final float[] sRawMatrix = new float[]{
         1, 0, 0,
@@ -59,7 +60,7 @@ abstract class VirtualNode extends LayoutShadowNode {
     Matrix mTransform = new Matrix();
     Matrix mInvMatrix = new Matrix();
     boolean mInvertible = true;
-    RectF mClientRect;
+    private RectF mClientRect;
 
     private int mClipRule;
     private @Nullable String mClipPath;
@@ -173,8 +174,8 @@ abstract class VirtualNode extends LayoutShadowNode {
         return glyphContext.getFontSize();
     }
 
-    public abstract void draw(Canvas canvas, Paint paint, float opacity);
-    public void render(Canvas canvas, Paint paint, float opacity) {
+    abstract void draw(Canvas canvas, Paint paint, float opacity);
+    void render(Canvas canvas, Paint paint, float opacity) {
         draw(canvas, paint, opacity);
     }
 
@@ -302,13 +303,13 @@ abstract class VirtualNode extends LayoutShadowNode {
         }
     }
 
-    abstract public int hitTest(final float[] point);
+    abstract int hitTest(final float[] point);
 
-    public boolean isResponsible() {
+    boolean isResponsible() {
         return mResponsible;
     }
 
-    abstract protected Path getPath(Canvas canvas, Paint paint);
+    abstract Path getPath(Canvas canvas, Paint paint);
 
     SvgViewShadowNode getSvgShadowNode() {
         if (mSvgShadowNode != null) {
@@ -410,7 +411,7 @@ abstract class VirtualNode extends LayoutShadowNode {
         ));
     }
 
-    public RectF getClientRect() {
+    RectF getClientRect() {
         return mClientRect;
     }
 

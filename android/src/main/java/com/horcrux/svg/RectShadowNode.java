@@ -22,7 +22,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  * Shadow node for virtual Rect view
  */
 class RectShadowNode extends RenderableShadowNode {
-
     private String mX;
     private String mY;
     private String mW;
@@ -92,7 +91,7 @@ class RectShadowNode extends RenderableShadowNode {
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
+    Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
         double x = relativeOnWidth(mX);
         double y = relativeOnHeight(mY);

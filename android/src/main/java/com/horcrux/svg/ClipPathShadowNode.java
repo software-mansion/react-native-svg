@@ -10,9 +10,7 @@
 package com.horcrux.svg;
 
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Point;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.common.ReactConstants;
@@ -23,28 +21,28 @@ import com.facebook.react.common.ReactConstants;
 class ClipPathShadowNode extends GroupShadowNode {
 
     @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
+    void draw(Canvas canvas, Paint paint, float opacity) {
         FLog.w(ReactConstants.TAG, "RNSVG: ClipPath can't be drawn, it should be defined as a child component for `Defs` ");
     }
 
     @Override
-    protected void saveDefinition() {
+    void saveDefinition() {
         getSvgShadowNode().defineClipPath(this, mName);
     }
 
     @Override
-    public boolean isResponsible() {
+    boolean isResponsible() {
         return false;
     }
 
     @Override
-    public int hitTest(float[] src) {
+    int hitTest(float[] src) {
         return -1;
     }
 
     @Override
-    public void mergeProperties(RenderableShadowNode target) {}
+    void mergeProperties(RenderableShadowNode target) {}
 
     @Override
-    public void resetProperties() {}
+    void resetProperties() {}
 }

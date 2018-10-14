@@ -24,6 +24,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
+import static com.horcrux.svg.TextProperties.*;
+
 /**
  * Shadow node for virtual Text view
  */
@@ -221,7 +223,7 @@ class TextShadowNode extends GroupShadowNode {
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
+    void draw(Canvas canvas, Paint paint, float opacity) {
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             setupGlyphContext(canvas);
             clip(canvas, paint);
@@ -231,14 +233,13 @@ class TextShadowNode extends GroupShadowNode {
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
+    Path getPath(Canvas canvas, Paint paint) {
         setupGlyphContext(canvas);
-        Path groupPath = getGroupPath(canvas, paint);
-        return groupPath;
+        return getGroupPath(canvas, paint);
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint, Region.Op op) {
+    Path getPath(Canvas canvas, Paint paint, Region.Op op) {
         return getPath(canvas, paint);
     }
 

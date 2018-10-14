@@ -141,7 +141,7 @@ class RadialGradientShadowNode extends DefinitionShadowNode {
     }
 
     @Override
-    protected void saveDefinition() {
+    void saveDefinition() {
         if (mName != null) {
             WritableArray points = Arguments.createArray();
             points.pushString(mFx);

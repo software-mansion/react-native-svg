@@ -19,7 +19,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  * Shadow node for virtual Path view
  */
 class PathShadowNode extends RenderableShadowNode {
-
     private Path mPath;
 
     @ReactProp(name = "d")
@@ -30,11 +29,7 @@ class PathShadowNode extends RenderableShadowNode {
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
-        return mPath;
-    }
-
-    public Path getPath() {
+    Path getPath(Canvas canvas, Paint paint) {
         return mPath;
     }
 

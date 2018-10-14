@@ -31,6 +31,7 @@ import static android.graphics.Matrix.MTRANS_X;
 import static android.graphics.Matrix.MTRANS_Y;
 import static android.graphics.PathMeasure.POSITION_MATRIX_FLAG;
 import static android.graphics.PathMeasure.TANGENT_MATRIX_FLAG;
+import static com.horcrux.svg.TextProperties.*;
 
 /**
  * Shadow node for virtual TSpan view
@@ -54,7 +55,7 @@ class TSpanShadowNode extends TextShadowNode {
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
+    void draw(Canvas canvas, Paint paint, float opacity) {
         if (mContent != null) {
             drawPath(canvas, paint, opacity);
         } else {
@@ -64,13 +65,13 @@ class TSpanShadowNode extends TextShadowNode {
     }
 
     @Override
-    protected void releaseCachedPath() {
+    void releaseCachedPath() {
         mCache = null;
         mPath = null;
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
+    Path getPath(Canvas canvas, Paint paint) {
         if (mCache != null) {
             return mCache;
         }
@@ -896,6 +897,7 @@ class TSpanShadowNode extends TextShadowNode {
         boolean isBold = font.fontWeight == FontWeight.Bold;
         boolean isItalic = font.fontStyle == FontStyle.italic;
 
+        /*
         boolean underlineText = false;
         boolean strikeThruText = false;
 
@@ -905,6 +907,7 @@ class TSpanShadowNode extends TextShadowNode {
         } else if (decoration == TextDecoration.LineThrough) {
             strikeThruText = true;
         }
+        */
 
         int fontStyle;
         if (isBold && isItalic) {
@@ -960,7 +963,7 @@ class TSpanShadowNode extends TextShadowNode {
     }
 
     @Override
-    public int hitTest(final float[] src) {
+    int hitTest(final float[] src) {
         if (mContent == null) {
             return super.hitTest(src);
         }

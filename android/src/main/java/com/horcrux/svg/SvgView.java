@@ -36,17 +36,14 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
     @SuppressWarnings("unused")
     public enum Events {
-        @SuppressWarnings("unused")
         EVENT_DATA_URL("onDataURL");
 
         private final String mName;
 
-        @SuppressWarnings({"unused", "SameParameterValue"})
         Events(final String name) {
             mName = name;
         }
 
-        @Override
         public String toString() {
             return mName;
         }

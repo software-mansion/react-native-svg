@@ -21,7 +21,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  * Shadow node for virtual Use view
  */
 class UseShadowNode extends RenderableShadowNode {
-
     private String mHref;
     private String mWidth;
     private String mHeight;
@@ -32,20 +31,20 @@ class UseShadowNode extends RenderableShadowNode {
         markUpdated();
     }
 
-    @ReactProp(name = "usewidth")
+    @ReactProp(name = "width")
     public void setWidth(String width) {
         mWidth = width;
         markUpdated();
     }
 
-    @ReactProp(name = "useheight")
+    @ReactProp(name = "height")
     public void setHeight(String height) {
         mHeight = height;
         markUpdated();
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
+    void draw(Canvas canvas, Paint paint, float opacity) {
         VirtualNode template = getSvgShadowNode().getDefinedTemplate(mHref);
 
         if (template != null) {
@@ -76,7 +75,7 @@ class UseShadowNode extends RenderableShadowNode {
     }
 
     @Override
-    public int hitTest(float[] src) {
+    int hitTest(float[] src) {
         if (!mInvertible) {
             return -1;
         }
@@ -94,7 +93,7 @@ class UseShadowNode extends RenderableShadowNode {
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
+    Path getPath(Canvas canvas, Paint paint) {
         // todo:
         return new Path();
     }

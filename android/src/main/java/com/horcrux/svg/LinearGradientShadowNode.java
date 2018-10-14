@@ -121,7 +121,7 @@ class LinearGradientShadowNode extends DefinitionShadowNode {
     }
 
     @Override
-    protected void saveDefinition() {
+    void saveDefinition() {
         if (mName != null) {
             WritableArray points = Arguments.createArray();
             points.pushString(mX1);

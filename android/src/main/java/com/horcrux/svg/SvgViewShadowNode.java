@@ -53,7 +53,7 @@ public class SvgViewShadowNode extends LayoutShadowNode {
     private String mbbHeight;
     private String mAlign;
     private int mMeetOrSlice;
-    private Matrix mInvViewBoxMatrix = new Matrix();
+    private final Matrix mInvViewBoxMatrix = new Matrix();
     private boolean mInvertible = true;
     private boolean mRendered = false;
     int mTintColor = 0;

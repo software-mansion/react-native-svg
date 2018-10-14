@@ -45,12 +45,10 @@ import javax.annotation.Nullable;
  * Shadow node for virtual Image view
  */
 class ImageShadowNode extends RenderableShadowNode {
-
     private String mX;
     private String mY;
     private String mW;
     private String mH;
-    private Uri mUri;
     private String uriString;
     private int mImageWidth;
     private int mImageHeight;
@@ -122,13 +120,12 @@ class ImageShadowNode extends RenderableShadowNode {
                 mImageWidth = 0;
                 mImageHeight = 0;
             }
-            mUri = Uri.parse(uriString);
+            Uri mUri = Uri.parse(uriString);
             if (mUri.getScheme() == null) {
-                mUri = ResourceDrawableIdHelper.getInstance().getResourceDrawableUri(getThemedContext(), uriString);
+                ResourceDrawableIdHelper.getInstance().getResourceDrawableUri(getThemedContext(), uriString);
             }
         }
     }
-
 
     @ReactProp(name = "align")
     public void setAlign(String align) {
@@ -164,7 +161,7 @@ class ImageShadowNode extends RenderableShadowNode {
 
 
     @Override
-    public void draw(final Canvas canvas, final Paint paint, final float opacity) {
+    void draw(final Canvas canvas, final Paint paint, final float opacity) {
         if (!mLoading.get()) {
             final ImageSource imageSource = new ImageSource(getThemedContext(), uriString);
 
@@ -172,19 +169,19 @@ class ImageShadowNode extends RenderableShadowNode {
             if (Fresco.getImagePipeline().isInBitmapMemoryCache(request)) {
                 tryRender(request, canvas, paint, opacity * mOpacity);
             } else {
-                loadBitmap(request, canvas, paint, opacity * mOpacity);
+                loadBitmap(request);
             }
         }
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
+    Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
         path.addRect(getRect(), Path.Direction.CW);
         return path;
     }
 
-    private void loadBitmap(ImageRequest request, final Canvas canvas, final Paint paint, final float opacity) {
+    private void loadBitmap(ImageRequest request) {
         final DataSource<CloseableReference<CloseableImage>> dataSource
             = Fresco.getImagePipeline().fetchDecodedImage(request, getThemedContext());
         dataSource.subscribe(new BaseBitmapDataSubscriber() {
@@ -192,7 +189,7 @@ class ImageShadowNode extends RenderableShadowNode {
                                  public void onNewResultImpl(Bitmap bitmap) {
                                      mLoading.set(false);
                                      SvgViewShadowNode shadowNode = getSvgShadowNode();
-                                     if(shadowNode != null) {
+                                     if (shadowNode != null) {
                                          shadowNode.markUpdated();
                                      }
                                  }
@@ -296,13 +293,4 @@ class ImageShadowNode extends RenderableShadowNode {
         }
     }
 
-    private void bitmapTryRender(Bitmap bitmap, Canvas canvas, Paint paint, float opacity) {
-        try {
-            if (bitmap != null) {
-                doRender(canvas, paint, bitmap, opacity);
-            }
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
-    }
 }

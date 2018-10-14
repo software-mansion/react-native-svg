@@ -38,7 +38,6 @@ import javax.annotation.Nullable;
 /**
  * Renderable shadow node
  */
-@SuppressWarnings("WeakerAccess")
 abstract public class RenderableShadowNode extends VirtualNode {
 
     // strokeLinecap
@@ -55,27 +54,28 @@ abstract public class RenderableShadowNode extends VirtualNode {
     private static final int FILL_RULE_EVENODD = 0;
     static final int FILL_RULE_NONZERO = 1;
 
-    public @Nullable ReadableArray mStroke;
-    public @Nullable String[] mStrokeDasharray;
+    private @Nullable ReadableArray mStroke;
+    private @Nullable String[] mStrokeDasharray;
 
-    public String mStrokeWidth = "1";
-    public float mStrokeOpacity = 1;
-    public float mStrokeMiterlimit = 4;
-    public float mStrokeDashoffset = 0;
+    private String mStrokeWidth = "1";
+    private float mStrokeOpacity = 1;
+    private float mStrokeMiterlimit = 4;
+    private float mStrokeDashoffset = 0;
 
-    public Paint.Cap mStrokeLinecap = Paint.Cap.ROUND;
-    public Paint.Join mStrokeLinejoin = Paint.Join.ROUND;
+    private Paint.Cap mStrokeLinecap = Paint.Cap.ROUND;
+    private Paint.Join mStrokeLinejoin = Paint.Join.ROUND;
 
-    public @Nullable ReadableArray mFill;
-    public float mFillOpacity = 1;
-    public Path.FillType mFillRule = Path.FillType.WINDING;
+
+    private @Nullable ReadableArray mFill;
+    private float mFillOpacity = 1;
+    private Path.FillType mFillRule = Path.FillType.WINDING;
 
     private @Nullable ArrayList<String> mLastMergedList;
     private @Nullable ArrayList<Object> mOriginProperties;
-    protected @Nullable ArrayList<String> mPropList;
-    protected @Nullable ArrayList<String> mAttributeList;
+    private @Nullable ArrayList<String> mPropList;
+    private @Nullable ArrayList<String> mAttributeList;
 
-    static final Pattern regex = Pattern.compile("[0-9.-]+");
+    private static final Pattern regex = Pattern.compile("[0-9.-]+");
 
     @ReactProp(name = "fill")
     public void setFill(@Nullable Dynamic fill) {
@@ -239,11 +239,11 @@ abstract public class RenderableShadowNode extends VirtualNode {
         markUpdated();
     }
 
-    static double saturate(double v) {
+    private static double saturate(double v) {
         return v <= 0 ? 0 : (v >= 1 ? 1 : v);
     }
 
-    public void render(Canvas canvas, Paint paint, float opacity) {
+    void render(Canvas canvas, Paint paint, float opacity) {
         if (mMask != null) {
             SvgViewShadowNode root = getSvgShadowNode();
             MaskShadowNode mask = (MaskShadowNode) root.getDefinedMask(mMask);
@@ -267,8 +267,8 @@ abstract public class RenderableShadowNode extends VirtualNode {
             float maskHeight = (float) relativeOnWidth(mask.mHeight);
             maskCanvas.clipRect(maskX, maskY, maskWidth, maskHeight);
 
-            Paint maskpaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mask.draw(maskCanvas, maskpaint, 1);
+            Paint maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mask.draw(maskCanvas, maskPaint, 1);
 
             // Apply luminanceToAlpha filter primitive https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
             int nPixels = width * height;
@@ -295,9 +295,9 @@ abstract public class RenderableShadowNode extends VirtualNode {
             draw(originalCanvas, paint, opacity);
 
             // Blend current element and mask
-            maskpaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+            maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
             resultCanvas.drawBitmap(original, 0, 0, null);
-            resultCanvas.drawBitmap(maskBitmap, 0, 0, maskpaint);
+            resultCanvas.drawBitmap(maskBitmap, 0, 0, maskPaint);
 
             // Render blended result into current render context
             canvas.drawBitmap(result, 0, 0, paint);
@@ -307,7 +307,7 @@ abstract public class RenderableShadowNode extends VirtualNode {
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
+    void draw(Canvas canvas, Paint paint, float opacity) {
         opacity *= mOpacity;
 
         if (opacity > MIN_OPACITY_FOR_DRAW) {
@@ -321,6 +321,9 @@ abstract public class RenderableShadowNode extends VirtualNode {
             RectF clientRect = new RectF();
             path.computeBounds(clientRect, true);
             mBox = new RectF(clientRect);
+
+            // We create the canvas ourselves, thus we can depend on getMatrix
+            @SuppressWarnings("deprecation")
             Matrix svgToViewMatrix = new Matrix(canvas.getMatrix());
             svgToViewMatrix.mapRect(clientRect);
             this.setClientRect(clientRect);
@@ -392,29 +395,35 @@ abstract public class RenderableShadowNode extends VirtualNode {
 
     private void setupPaint(Paint paint, float opacity, ReadableArray colors) {
         int colorType = colors.getInt(0);
-        if (colorType == 0) {
-            // solid color
-            paint.setARGB(
-                    (int) (colors.size() > 4 ? colors.getDouble(4) * opacity * 255 : opacity * 255),
-                    (int) (colors.getDouble(1) * 255),
-                    (int) (colors.getDouble(2) * 255),
-                    (int) (colors.getDouble(3) * 255));
-        } else if (colorType == 1) {
-            Brush brush = getSvgShadowNode().getDefinedBrush(colors.getString(1));
-            if (brush != null) {
-                brush.setupPaint(paint, mBox, mScale, opacity);
+        switch (colorType) {
+            case 0:
+                // solid color
+                paint.setARGB(
+                        (int) (colors.size() > 4 ? colors.getDouble(4) * opacity * 255 : opacity * 255),
+                        (int) (colors.getDouble(1) * 255),
+                        (int) (colors.getDouble(2) * 255),
+                        (int) (colors.getDouble(3) * 255));
+                break;
+            case 1: {
+                Brush brush = getSvgShadowNode().getDefinedBrush(colors.getString(1));
+                if (brush != null) {
+                    brush.setupPaint(paint, mBox, mScale, opacity);
+                }
+                break;
             }
-        } else if (colorType == 2) {
-            int brush = getSvgShadowNode().mTintColor;
-            paint.setColor(brush);
+            case 2: {
+                int brush = getSvgShadowNode().mTintColor;
+                paint.setColor(brush);
+                break;
+            }
         }
 
     }
 
-    abstract protected Path getPath(Canvas canvas, Paint paint);
+    abstract Path getPath(Canvas canvas, Paint paint);
 
     @Override
-    public int hitTest(final float[] src) {
+    int hitTest(final float[] src) {
         if (mPath == null || !mInvertible) {
             return -1;
         }

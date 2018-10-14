@@ -52,7 +52,6 @@ class SvgViewManager extends ReactViewManager {
         mTagToSvgView.put(svg.getId(), svg);
     }
 
-    @SuppressWarnings("unused")
     static @Nullable SvgView getSvgViewByTag(int tag) {
         return mTagToSvgView.get(tag);
     }

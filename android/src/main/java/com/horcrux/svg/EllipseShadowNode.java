@@ -22,7 +22,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  * Shadow node for virtual Ellipse view
  */
 class EllipseShadowNode extends RenderableShadowNode {
-
     private String mCx;
     private String mCy;
     private String mRx;
@@ -69,7 +68,7 @@ class EllipseShadowNode extends RenderableShadowNode {
     }
 
     @Override
-    protected Path getPath(Canvas canvas, Paint paint) {
+    Path getPath(Canvas canvas, Paint paint) {
         Path path = new Path();
         double cx = relativeOnWidth(mCx);
         double cy = relativeOnHeight(mCy);

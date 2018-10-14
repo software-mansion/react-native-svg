@@ -20,7 +20,7 @@ import com.facebook.react.uimanager.ReactShadowNode;
 class DefsShadowNode extends DefinitionShadowNode {
 
     @Override
-    public void draw(Canvas canvas, Paint paint, float opacity) {
+    void draw(Canvas canvas, Paint paint, float opacity) {
         NodeRunnable markUpdateSeenRecursive = new NodeRunnable() {
             public void run(ReactShadowNode node) {
                 node.markUpdateSeen();

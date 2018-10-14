@@ -9,6 +9,7 @@
 
 package com.horcrux.svg;
 
+import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.View;
 
@@ -46,40 +47,44 @@ import static com.horcrux.svg.RenderableShadowNode.JOIN_ROUND;
  * into native views and don't need any logic (all the logic is in {@link SvgView}), this
  * "stubbed" ViewManager is used for all of them.
  */
-class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<RenderableView<T>> {
+class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<RenderableView> {
 
-    /* package */ private static final String CLASS_GROUP = "RNSVGGroup";
-    /* package */ private static final String CLASS_PATH = "RNSVGPath";
-    /* package */ private static final String CLASS_TEXT = "RNSVGText";
-    /* package */ private static final String CLASS_TSPAN = "RNSVGTSpan";
-    /* package */ private static final String CLASS_TEXT_PATH = "RNSVGTextPath";
-    /* package */ private static final String CLASS_IMAGE = "RNSVGImage";
-    /* package */ private static final String CLASS_CIRCLE = "RNSVGCircle";
-    /* package */ private static final String CLASS_ELLIPSE = "RNSVGEllipse";
-    /* package */ private static final String CLASS_LINE = "RNSVGLine";
-    /* package */ private static final String CLASS_RECT = "RNSVGRect";
-    /* package */ private static final String CLASS_CLIP_PATH = "RNSVGClipPath";
-    /* package */ private static final String CLASS_DEFS = "RNSVGDefs";
-    /* package */ private static final String CLASS_USE = "RNSVGUse";
-    /* package */ private static final String CLASS_SYMBOL = "RNSVGSymbol";
-    /* package */ private static final String CLASS_LINEAR_GRADIENT = "RNSVGLinearGradient";
-    /* package */ private static final String CLASS_RADIAL_GRADIENT = "RNSVGRadialGradient";
-    /* package */ private static final String CLASS_PATTERN = "RNSVGPattern";
-    /* package */ private static final String CLASS_MASK = "RNSVGMask";
-
-    private final String mClassName;
-
-    public static class MatrixDecompositionContext extends MatrixMathHelper.MatrixDecompositionContext {
-        double[] perspective = new double[4];
-        double[] scale = new double[3];
-        double[] skew = new double[3];
-        double[] translation = new double[3];
-        double[] rotationDegrees = new double[3];
+    enum SVGClass {
+        RNSVGGroup,
+        RNSVGPath,
+        RNSVGText,
+        RNSVGTSpan,
+        RNSVGTextPath,
+        RNSVGImage,
+        RNSVGCircle,
+        RNSVGEllipse,
+        RNSVGLine,
+        RNSVGRect,
+        RNSVGClipPath,
+        RNSVGDefs,
+        RNSVGUse,
+        RNSVGSymbol,
+        RNSVGLinearGradient,
+        RNSVGRadialGradient,
+        RNSVGPattern,
+        RNSVGMask,
     }
 
-    private static MatrixDecompositionContext sMatrixDecompositionContext =
+    private final SVGClass svgClass;
+    private final String mClassName;
+    private final Class<T> mClass;
+
+    static class MatrixDecompositionContext extends MatrixMathHelper.MatrixDecompositionContext {
+        final double[] perspective = new double[4];
+        final double[] scale = new double[3];
+        final double[] skew = new double[3];
+        final double[] translation = new double[3];
+        final double[] rotationDegrees = new double[3];
+    }
+
+    private static final MatrixDecompositionContext sMatrixDecompositionContext =
             new MatrixDecompositionContext();
-    private static double[] sTransformDecompositionArray = new double[16];
+    private static final double[] sTransformDecompositionArray = new double[16];
 
     private static final int PERSPECTIVE_ARRAY_INVERTED_CAMERA_DISTANCE_INDEX = 2;
     private static final float CAMERA_DISTANCE_NORMALIZATION_MULTIPLIER = 5;
@@ -87,35 +92,29 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     private static final double EPSILON = .00001d;
 
     private static boolean isZero(double d) {
-        if (Double.isNaN(d)) {
-            return false;
-        }
-        return Math.abs(d) < EPSILON;
+        return !Double.isNaN(d) && Math.abs(d) < EPSILON;
     }
 
-    /**
-     * @param transformMatrix 16-element array of numbers representing 4x4 transform matrix
-     */
-    public static void decomposeMatrix(double[] transformMatrix, MatrixDecompositionContext ctx) {
-        Assertions.assertCondition(transformMatrix.length == 16);
+    private static void decomposeMatrix() {
+        Assertions.assertCondition(sTransformDecompositionArray.length == 16);
 
         // output values
-        final double[] perspective = ctx.perspective;
-        final double[] scale = ctx.scale;
-        final double[] skew = ctx.skew;
-        final double[] translation = ctx.translation;
-        final double[] rotationDegrees = ctx.rotationDegrees;
+        final double[] perspective = sMatrixDecompositionContext.perspective;
+        final double[] scale = sMatrixDecompositionContext.scale;
+        final double[] skew = sMatrixDecompositionContext.skew;
+        final double[] translation = sMatrixDecompositionContext.translation;
+        final double[] rotationDegrees = sMatrixDecompositionContext.rotationDegrees;
 
         // create normalized, 2d array matrix
         // and normalized 1d array perspectiveMatrix with redefined 4th column
-        if (isZero(transformMatrix[15])) {
+        if (isZero(sTransformDecompositionArray[15])) {
             return;
         }
         double[][] matrix = new double[4][4];
         double[] perspectiveMatrix = new double[16];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                double value = transformMatrix[(i * 4) + j] / transformMatrix[15];
+                double value = sTransformDecompositionArray[(i * 4) + j] / sTransformDecompositionArray[15];
                 matrix[i][j] = value;
                 perspectiveMatrix[(i * 4) + j] = j == 3 ? 0 : value;
             }
@@ -149,9 +148,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         }
 
         // translation is simple
-        for (int i = 0; i < 3; i++) {
-            translation[i] = matrix[3][i];
-        }
+        System.arraycopy(matrix[3], 0, translation, 0, 3);
 
         // Now get scale and shear.
         // 'row' is a 3 element array of 3 component vectors
@@ -214,7 +211,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
 
     private static void setTransformProperty(View view, ReadableArray transforms) {
         TransformHelper.processTransform(transforms, sTransformDecompositionArray);
-        decomposeMatrix(sTransformDecompositionArray, sMatrixDecompositionContext);
+        decomposeMatrix();
         view.setTranslationX(
                 PixelUtil.toPixelFromDIP((float) sMatrixDecompositionContext.translation[0]));
         view.setTranslationY(
@@ -256,11 +253,11 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<GroupShadowNode> createGroupViewManager() {
-        return new RenderableViewManager<>(CLASS_GROUP);
+        return new RenderableViewManager<>(SVGClass.RNSVGGroup, GroupShadowNode.class);
     }
 
     static RenderableViewManager<PathShadowNode> createPathViewManager() {
-        return new RenderableViewManager<PathShadowNode>(CLASS_PATH) {
+        return new RenderableViewManager<PathShadowNode>(SVGClass.RNSVGPath, PathShadowNode.class) {
 
             @ReactProp(name = "d")
             public void setD(RenderableView<PathShadowNode> node, String d) {
@@ -270,7 +267,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<TextShadowNode> createTextViewManager() {
-        return new RenderableViewManager<TextShadowNode>(CLASS_TEXT) {
+        return new RenderableViewManager<TextShadowNode>(SVGClass.RNSVGText, TextShadowNode.class) {
 
             @ReactProp(name = "textLength")
             public void setTextLength(RenderableView<TextShadowNode> node, Dynamic length) {
@@ -340,7 +337,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<TSpanShadowNode> createTSpanViewManager() {
-        return new RenderableViewManager<TSpanShadowNode>(CLASS_TSPAN) {
+        return new RenderableViewManager<TSpanShadowNode>(SVGClass.RNSVGTSpan, TSpanShadowNode.class) {
 
             @ReactProp(name = "content")
             public void setContent(RenderableView<TSpanShadowNode> node, @Nullable String content) {
@@ -385,7 +382,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<TextPathShadowNode> createTextPathViewManager() {
-        return new RenderableViewManager<TextPathShadowNode>(CLASS_TEXT_PATH) {
+        return new RenderableViewManager<TextPathShadowNode>(SVGClass.RNSVGTextPath, TextPathShadowNode.class) {
 
             @ReactProp(name = "href")
             public void setHref(RenderableView<TextPathShadowNode> node, String href) {
@@ -420,7 +417,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<ImageShadowNode> createImageViewManager() {
-        return new RenderableViewManager<ImageShadowNode>(CLASS_IMAGE) {
+        return new RenderableViewManager<ImageShadowNode>(SVGClass.RNSVGImage, ImageShadowNode.class) {
 
             @ReactProp(name = "x")
             public void setX(RenderableView<ImageShadowNode> node, Dynamic x) {
@@ -471,7 +468,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<CircleShadowNode> createCircleViewManager() {
-        return new RenderableViewManager<CircleShadowNode>(CLASS_CIRCLE) {
+        return new RenderableViewManager<CircleShadowNode>(SVGClass.RNSVGCircle, CircleShadowNode.class) {
 
             @ReactProp(name = "cx")
             public void setCx(RenderableView<CircleShadowNode> node, Dynamic cx) {
@@ -491,7 +488,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<EllipseShadowNode> createEllipseViewManager() {
-        return new RenderableViewManager<EllipseShadowNode>(CLASS_ELLIPSE) {
+        return new RenderableViewManager<EllipseShadowNode>(SVGClass.RNSVGEllipse, EllipseShadowNode.class) {
 
             @ReactProp(name = "cx")
             public void setCx(RenderableView<EllipseShadowNode> node, Dynamic cx) {
@@ -516,7 +513,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<LineShadowNode> createLineViewManager() {
-        return new RenderableViewManager<LineShadowNode>(CLASS_LINE) {
+        return new RenderableViewManager<LineShadowNode>(SVGClass.RNSVGLine, LineShadowNode.class) {
 
             @ReactProp(name = "x1")
             public void setX1(RenderableView<LineShadowNode> node, Dynamic x1) {
@@ -542,7 +539,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<RectShadowNode> createRectViewManager() {
-        return new RenderableViewManager<RectShadowNode>(CLASS_RECT) {
+        return new RenderableViewManager<RectShadowNode>(SVGClass.RNSVGRect, RectShadowNode.class) {
 
             @ReactProp(name = "x")
             public void setX(RenderableView<RectShadowNode> node, Dynamic x) {
@@ -587,15 +584,15 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager createClipPathViewManager() {
-        return new RenderableViewManager(CLASS_CLIP_PATH);
+        return new RenderableViewManager<>(SVGClass.RNSVGClipPath, ClipPathShadowNode.class);
     }
 
     static RenderableViewManager createDefsViewManager() {
-        return new RenderableViewManager(CLASS_DEFS);
+        return new RenderableViewManager<>(SVGClass.RNSVGDefs, DefsShadowNode.class);
     }
 
     static RenderableViewManager<UseShadowNode> createUseViewManager() {
-        return new RenderableViewManager<UseShadowNode>(CLASS_USE) {
+        return new RenderableViewManager<UseShadowNode>(SVGClass.RNSVGUse, UseShadowNode.class) {
 
             @ReactProp(name = "href")
             public void setHref(RenderableView<UseShadowNode> node, String href) {
@@ -625,7 +622,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<SymbolShadowNode> createSymbolManager() {
-        return new RenderableViewManager<SymbolShadowNode>(CLASS_SYMBOL) {
+        return new RenderableViewManager<SymbolShadowNode>(SVGClass.RNSVGSymbol, SymbolShadowNode.class) {
 
             @ReactProp(name = "minX")
             public void setMinX(RenderableView<SymbolShadowNode> node, float minX) {
@@ -660,7 +657,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<PatternShadowNode> createPatternManager() {
-        return new RenderableViewManager<PatternShadowNode>(CLASS_PATTERN) {
+        return new RenderableViewManager<PatternShadowNode>(SVGClass.RNSVGPattern, PatternShadowNode.class) {
 
             @ReactProp(name = "x")
             public void setX(RenderableView<PatternShadowNode> node, Dynamic x) {
@@ -740,7 +737,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<MaskShadowNode> createMaskManager() {
-        return new RenderableViewManager<MaskShadowNode>(CLASS_MASK) {
+        return new RenderableViewManager<MaskShadowNode>(SVGClass.RNSVGMask, MaskShadowNode.class) {
 
             @ReactProp(name = "x")
             public void setX(RenderableView<MaskShadowNode> node, Dynamic x) {
@@ -790,7 +787,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<LinearGradientShadowNode> createLinearGradientManager() {
-        return new RenderableViewManager<LinearGradientShadowNode>(CLASS_LINEAR_GRADIENT) {
+        return new RenderableViewManager<LinearGradientShadowNode>(SVGClass.RNSVGLinearGradient, LinearGradientShadowNode.class) {
 
             @ReactProp(name = "x1")
             public void setX1(RenderableView<LinearGradientShadowNode> node, Dynamic x1) {
@@ -830,7 +827,7 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     static RenderableViewManager<RadialGradientShadowNode> createRadialGradientManager() {
-        return new RenderableViewManager<RadialGradientShadowNode>(CLASS_RADIAL_GRADIENT) {
+        return new RenderableViewManager<RadialGradientShadowNode>(SVGClass.RNSVGRadialGradient, RadialGradientShadowNode.class) {
 
             @ReactProp(name = "fx")
             public void setFx(RenderableView<RadialGradientShadowNode> node, Dynamic fx) {
@@ -879,8 +876,10 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         };
     }
 
-    private RenderableViewManager(String className) {
-        mClassName = className;
+    private RenderableViewManager(SVGClass svgclass, Class<T> shadowNodeClass) {
+        svgClass = svgclass;
+        mClass = shadowNodeClass;
+        mClassName = svgclass.toString();
     }
 
     @Override
@@ -890,104 +889,72 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
 
     @Override
     public LayoutShadowNode createShadowNodeInstance() {
-        switch (mClassName) {
-            case CLASS_GROUP:
+        VirtualNode shadow = getLayoutShadowNode();
+        shadow.vm = this;
+        return shadow;
+    }
+
+    @NonNull
+    private VirtualNode getLayoutShadowNode() {
+        switch (svgClass) {
+            case RNSVGGroup:
                 return new GroupShadowNode();
-            case CLASS_PATH:
+            case RNSVGPath:
                 return new PathShadowNode();
-            case CLASS_CIRCLE:
+            case RNSVGCircle:
                 return new CircleShadowNode();
-            case CLASS_ELLIPSE:
+            case RNSVGEllipse:
                 return new EllipseShadowNode();
-            case CLASS_LINE:
+            case RNSVGLine:
                 return new LineShadowNode();
-            case CLASS_RECT:
+            case RNSVGRect:
                 return new RectShadowNode();
-            case CLASS_TEXT:
+            case RNSVGText:
                 return new TextShadowNode();
-            case CLASS_TSPAN:
+            case RNSVGTSpan:
                 return new TSpanShadowNode();
-            case CLASS_TEXT_PATH:
+            case RNSVGTextPath:
                 return new TextPathShadowNode();
-            case CLASS_IMAGE:
+            case RNSVGImage:
                 return new ImageShadowNode();
-            case CLASS_CLIP_PATH:
+            case RNSVGClipPath:
                 return new ClipPathShadowNode();
-            case CLASS_DEFS:
+            case RNSVGDefs:
                 return new DefsShadowNode();
-            case CLASS_USE:
+            case RNSVGUse:
                 return new UseShadowNode();
-            case CLASS_SYMBOL:
+            case RNSVGSymbol:
                 return new SymbolShadowNode();
-            case CLASS_LINEAR_GRADIENT:
+            case RNSVGLinearGradient:
                 return new LinearGradientShadowNode();
-            case CLASS_RADIAL_GRADIENT:
+            case RNSVGRadialGradient:
                 return new RadialGradientShadowNode();
-            case CLASS_PATTERN:
+            case RNSVGPattern:
                 return new PatternShadowNode();
-            case CLASS_MASK:
+            case RNSVGMask:
                 return new MaskShadowNode();
             default:
-                throw new IllegalStateException("Unexpected type " + mClassName);
+                throw new IllegalStateException("Unexpected type " + svgClass.toString());
         }
     }
 
     @Override
-    public Class<? extends VirtualNode> getShadowNodeClass() {
-        switch (mClassName) {
-            case CLASS_GROUP:
-                return GroupShadowNode.class;
-            case CLASS_PATH:
-                return PathShadowNode.class;
-            case CLASS_CIRCLE:
-                return CircleShadowNode.class;
-            case CLASS_ELLIPSE:
-                return EllipseShadowNode.class;
-            case CLASS_LINE:
-                return LineShadowNode.class;
-            case CLASS_RECT:
-                return RectShadowNode.class;
-            case CLASS_TEXT:
-                return TextShadowNode.class;
-            case CLASS_TSPAN:
-                return TSpanShadowNode.class;
-            case CLASS_TEXT_PATH:
-                return TextPathShadowNode.class;
-            case CLASS_IMAGE:
-                return ImageShadowNode.class;
-            case CLASS_CLIP_PATH:
-                return ClipPathShadowNode.class;
-            case CLASS_DEFS:
-                return DefsShadowNode.class;
-            case CLASS_USE:
-                return UseShadowNode.class;
-            case CLASS_SYMBOL:
-                return SymbolShadowNode.class;
-            case CLASS_LINEAR_GRADIENT:
-                return LinearGradientShadowNode.class;
-            case CLASS_RADIAL_GRADIENT:
-                return RadialGradientShadowNode.class;
-            case CLASS_PATTERN:
-                return PatternShadowNode.class;
-            case CLASS_MASK:
-                return MaskShadowNode.class;
-            default:
-                throw new IllegalStateException("Unexpected type " + mClassName);
-        }
+    public Class<? extends LayoutShadowNode> getShadowNodeClass() {
+        return mClass;
     }
 
     @ReactProp(name = "mask")
-    public void setMask(RenderableView<RenderableShadowNode> node, String mask) {
+    public void setMask(RenderableView node, String mask) {
         node.shadowNode.setMask(mask);
     }
 
     @ReactProp(name = "clipPath")
-    public void setClipPath(RenderableView<RenderableShadowNode> node, String clipPath) {
+    public void setClipPath(RenderableView node, String clipPath) {
         node.shadowNode.setClipPath(clipPath);
     }
 
     @ReactProp(name = "clipRule")
-    public void setClipRule(RenderableView<RenderableShadowNode> node, int clipRule) {
+    public void setClipRule(RenderableView node, int clipRule) {
         node.shadowNode.setClipRule(clipRule);
     }
 
@@ -1048,12 +1015,12 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     @ReactProp(name = "matrix")
-    public void setMatrix(RenderableView<RenderableShadowNode> node, Dynamic matrixArray) {
+    public void setMatrix(RenderableView node, Dynamic matrixArray) {
         node.shadowNode.setMatrix(matrixArray);
     }
 
     @ReactProp(name = "transform")
-    public void setTransform(RenderableView<RenderableShadowNode> node, ReadableArray matrix) {
+    public void setTransform(RenderableView node, ReadableArray matrix) {
         if (matrix == null) {
             resetTransformProperty(node);
         } else {
@@ -1073,7 +1040,8 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
      * you want to override this method you should call super.onAfterUpdateTransaction from it as
      * the parent class of the ViewManager may rely on callback being executed.
      */
-    protected void onAfterUpdateTransaction(RenderableView<T> node) {
+    @Override
+    protected void onAfterUpdateTransaction(RenderableView node) {
         super.onAfterUpdateTransaction(node);
         VirtualNode shadow = node.shadowNode;
         SvgViewShadowNode view = shadow.getSvgShadowNode();
@@ -1088,28 +1056,30 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
     }
 
     @Override
-    protected RenderableView<T> createViewInstance(ThemedReactContext reactContext) {
-        return new RenderableView<T>(reactContext);
+    protected RenderableView createViewInstance(ThemedReactContext reactContext) {
+        RenderableView view = new RenderableView(reactContext);
+        view.vm = this;
+        return view;
     }
 
     @Override
-    public void updateExtraData(RenderableView<T> root, Object extraData) {
+    public void updateExtraData(RenderableView root, Object extraData) {
         throw new IllegalStateException("SVG elements does not map into a native view");
     }
 
-    private static final SparseArray<VirtualNode> mTagToShadowNode = new SparseArray<>();
+    private final SparseArray<T> mTagToShadowNode = new SparseArray<>();
 
     @Override
-    public void onDropViewInstance(RenderableView<T> view) {
+    public void onDropViewInstance(RenderableView view) {
         mTagToShadowNode.remove(view.getId());
         view.dropView();
     }
 
-    static void setShadowNode(VirtualNode virtualNode) {
+    void setShadowNode(T virtualNode) {
         mTagToShadowNode.put(virtualNode.getReactTag(), virtualNode);
     }
 
-    static VirtualNode getShadowNodeByTag(int id) {
+    T getShadowNodeByTag(int id) {
         return mTagToShadowNode.get(id);
     }
 }

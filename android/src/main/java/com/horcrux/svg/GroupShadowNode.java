@@ -30,7 +30,6 @@ import javax.annotation.Nullable;
  */
 class GroupShadowNode extends RenderableShadowNode {
     @Nullable ReadableMap mFont;
-
     private GlyphContext mGlyphContext;
 
     @ReactProp(name = "font")
@@ -50,9 +49,14 @@ class GroupShadowNode extends RenderableShadowNode {
         return mGlyphContext;
     }
 
-    @SuppressWarnings("ConstantConditions")
+    private static <T> T requireNonNull(T obj) {
+        if (obj == null)
+            throw new NullPointerException();
+        return obj;
+    }
+
     GlyphContext getTextRootGlyphContext() {
-        return getTextRoot().getGlyphContext();
+        return requireNonNull(getTextRoot()).getGlyphContext();
     }
 
     void pushGlyphContext() {
@@ -63,7 +67,7 @@ class GroupShadowNode extends RenderableShadowNode {
         getTextRootGlyphContext().popContext();
     }
 
-    public void draw(final Canvas canvas, final Paint paint, final float opacity) {
+    void draw(final Canvas canvas, final Paint paint, final float opacity) {
         setupGlyphContext(canvas);
         if (opacity > MIN_OPACITY_FOR_DRAW) {
             clip(canvas, paint);
@@ -119,7 +123,7 @@ class GroupShadowNode extends RenderableShadowNode {
     }
 
     @Override
-    protected Path getPath(final Canvas canvas, final Paint paint) {
+    Path getPath(final Canvas canvas, final Paint paint) {
         final Path path = new Path();
 
         traverseChildren(new NodeRunnable() {
@@ -135,7 +139,7 @@ class GroupShadowNode extends RenderableShadowNode {
         return path;
     }
 
-    protected Path getPath(final Canvas canvas, final Paint paint, final Region.Op op) {
+    Path getPath(final Canvas canvas, final Paint paint, final Region.Op op) {
         final Path path = new Path();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -186,7 +190,7 @@ class GroupShadowNode extends RenderableShadowNode {
     }
 
     @Override
-    public int hitTest(final float[] src) {
+    int hitTest(final float[] src) {
         if (!mInvertible) {
             return -1;
         }
@@ -240,7 +244,7 @@ class GroupShadowNode extends RenderableShadowNode {
     }
 
     @Override
-    public void resetProperties() {
+    void resetProperties() {
         traverseChildren(new NodeRunnable() {
             public void run(ReactShadowNode node) {
                 if (node instanceof RenderableShadowNode) {
