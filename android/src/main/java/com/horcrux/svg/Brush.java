@@ -37,7 +37,7 @@ class Brush {
 
     private Matrix mMatrix;
     private Rect mUserSpaceBoundingBox;
-    private PatternShadowNode mPattern;
+    private PatternView mPattern;
 
     Brush(BrushType type, ReadableArray points, BrushUnits units) {
         mType = type;
@@ -49,7 +49,7 @@ class Brush {
         mUseContentObjectBoundingBox = units == BrushUnits.OBJECT_BOUNDING_BOX;
     }
 
-    void setPattern(PatternShadowNode pattern) {
+    void setPattern(PatternView pattern) {
         mPattern = pattern;
     }
 

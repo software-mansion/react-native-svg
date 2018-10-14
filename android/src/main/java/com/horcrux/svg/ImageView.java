@@ -9,6 +9,7 @@
 
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -29,6 +30,7 @@ import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -43,7 +45,8 @@ import javax.annotation.Nullable;
 /**
  * Shadow node for virtual Image view
  */
-class ImageShadowNode extends RenderableShadowNode {
+@SuppressLint("ViewConstructor")
+class ImageView extends RenderableView {
     private String mX;
     private String mY;
     private String mW;
@@ -55,28 +58,32 @@ class ImageShadowNode extends RenderableShadowNode {
     private int mMeetOrSlice;
     private final AtomicBoolean mLoading = new AtomicBoolean(false);
 
+    public ImageView(ReactContext reactContext) {
+        super(reactContext);
+    }
+
     @ReactProp(name = "x")
     public void setX(Dynamic x) {
         mX = getStringFromDynamic(x);
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
         mY = getStringFromDynamic(y);
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
         mW = getStringFromDynamic(width);
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
         mH = getStringFromDynamic(height);
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "src")
@@ -98,7 +105,7 @@ class ImageShadowNode extends RenderableShadowNode {
             }
             Uri mUri = Uri.parse(uriString);
             if (mUri.getScheme() == null) {
-                ResourceDrawableIdHelper.getInstance().getResourceDrawableUri(getThemedContext(), uriString);
+                ResourceDrawableIdHelper.getInstance().getResourceDrawableUri(mContext, uriString);
             }
         }
     }
@@ -106,19 +113,19 @@ class ImageShadowNode extends RenderableShadowNode {
     @ReactProp(name = "align")
     public void setAlign(String align) {
         mAlign = align;
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "meetOrSlice")
     public void setMeetOrSlice(int meetOrSlice) {
         mMeetOrSlice = meetOrSlice;
-        markUpdated();
+        invalidate();
     }
 
     @Override
     void draw(final Canvas canvas, final Paint paint, final float opacity) {
         if (!mLoading.get()) {
-            final ImageSource imageSource = new ImageSource(getThemedContext(), uriString);
+            final ImageSource imageSource = new ImageSource(mContext, uriString);
 
             final ImageRequest request = ImageRequestBuilder.newBuilderWithSource(imageSource.getUri()).build();
             if (Fresco.getImagePipeline().isInBitmapMemoryCache(request)) {
@@ -138,14 +145,14 @@ class ImageShadowNode extends RenderableShadowNode {
 
     private void loadBitmap(ImageRequest request) {
         final DataSource<CloseableReference<CloseableImage>> dataSource
-            = Fresco.getImagePipeline().fetchDecodedImage(request, getThemedContext());
+            = Fresco.getImagePipeline().fetchDecodedImage(request, mContext);
         dataSource.subscribe(new BaseBitmapDataSubscriber() {
                                  @Override
                                  public void onNewResultImpl(Bitmap bitmap) {
                                      mLoading.set(false);
-                                     SvgViewShadowNode shadowNode = getSvgShadowNode();
-                                     if (shadowNode != null) {
-                                         shadowNode.markUpdated();
+                                     SvgView view = getSvgView();
+                                     if (view != null) {
+                                         view.invalidate();
                                      }
                                  }
 
@@ -222,7 +229,7 @@ class ImageShadowNode extends RenderableShadowNode {
 
     private void tryRender(ImageRequest request, Canvas canvas, Paint paint, float opacity) {
         final DataSource<CloseableReference<CloseableImage>> dataSource
-            = Fresco.getImagePipeline().fetchImageFromBitmapCache(request, getThemedContext());
+            = Fresco.getImagePipeline().fetchImageFromBitmapCache(request, mContext);
 
         try {
             final CloseableReference<CloseableImage> imageReference = dataSource.getResult();

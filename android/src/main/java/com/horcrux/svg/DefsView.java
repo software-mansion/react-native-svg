@@ -9,25 +9,31 @@
 
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.view.View;
 
-import com.facebook.react.uimanager.ReactShadowNode;
+import com.facebook.react.bridge.ReactContext;
 
 /**
  * Shadow node for virtual Defs view
  */
-class DefsShadowNode extends DefinitionShadowNode {
+@SuppressLint("ViewConstructor")
+class DefsView extends DefinitionView {
+
+    public DefsView(ReactContext reactContext) {
+        super(reactContext);
+    }
 
     @Override
     void draw(Canvas canvas, Paint paint, float opacity) {
         NodeRunnable markUpdateSeenRecursive = new NodeRunnable() {
-            public void run(ReactShadowNode node) {
-                node.markUpdateSeen();
-                if (node instanceof VirtualNode) {
-                    ((VirtualNode) node).traverseChildren(this);
-                } else if (node instanceof SvgViewShadowNode) {
-                    ((SvgViewShadowNode) node).traverseChildren(this);
+            public void run(View node) {
+                if (node instanceof VirtualView) {
+                    ((VirtualView) node).traverseChildren(this);
+                } else if (node instanceof SvgView) {
+                    ((SvgView) node).traverseChildren(this);
                 }
             }
         };
@@ -36,9 +42,9 @@ class DefsShadowNode extends DefinitionShadowNode {
 
     void saveDefinition() {
         traverseChildren(new NodeRunnable() {
-            public void run(ReactShadowNode node) {
-                if (node instanceof VirtualNode) {
-                    ((VirtualNode)node).saveDefinition();
+            public void run(View node) {
+                if (node instanceof VirtualView) {
+                    ((VirtualView)node).saveDefinition();
                 }
             }
         });

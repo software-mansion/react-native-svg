@@ -9,45 +9,52 @@
 
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
  * Shadow node for virtual Ellipse view
  */
-class EllipseShadowNode extends RenderableShadowNode {
+@SuppressLint("ViewConstructor")
+class EllipseView extends RenderableView {
     private String mCx;
     private String mCy;
     private String mRx;
     private String mRy;
 
+    public EllipseView(ReactContext reactContext) {
+        super(reactContext);
+    }
+
     @ReactProp(name = "cx")
     public void setCx(Dynamic cx) {
         mCx = getStringFromDynamic(cx);
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "cy")
     public void setCy(Dynamic cy) {
         mCy = getStringFromDynamic(cy);
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "rx")
     public void setRx(Dynamic rx) {
         mRx = getStringFromDynamic(rx);
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "ry")
     public void setRy(Dynamic ry) {
         mRy = getStringFromDynamic(ry);
-        markUpdated();
+        invalidate();
     }
 
     @Override

@@ -9,18 +9,21 @@
 
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 /**
  * Shadow node for virtual Rect view
  */
-class RectShadowNode extends RenderableShadowNode {
+@SuppressLint("ViewConstructor")
+class RectView extends RenderableView {
     private String mX;
     private String mY;
     private String mW;
@@ -28,40 +31,44 @@ class RectShadowNode extends RenderableShadowNode {
     private String mRx;
     private String mRy;
 
+    public RectView(ReactContext reactContext) {
+        super(reactContext);
+    }
+
     @ReactProp(name = "x")
     public void setX(Dynamic x) {
         mX = getStringFromDynamic(x);
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
         mY = getStringFromDynamic(y);
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
         mW = getStringFromDynamic(width);
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
         mH = getStringFromDynamic(height);
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "rx")
     public void setRx(Dynamic rx) {
         mRx = getStringFromDynamic(rx);
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "ry")
     public void setRy(Dynamic ry) {
         mRy = getStringFromDynamic(ry);
-        markUpdated();
+        invalidate();
     }
 
     @Override

@@ -144,11 +144,11 @@ class GlyphContext {
         return topFont;
     }
 
-    private FontData getTopOrParentFont(GroupShadowNode child) {
+    private FontData getTopOrParentFont(GroupView child) {
         if (mTop > 0) {
             return topFont;
         } else {
-            GroupShadowNode parentRoot = child.getParentTextRoot();
+            GroupView parentRoot = child.getParentTextRoot();
 
             while (parentRoot != null) {
                 FontData map = parentRoot.getGlyphContext().getFont();
@@ -162,7 +162,7 @@ class GlyphContext {
         }
     }
 
-    private void pushNodeAndFont(GroupShadowNode node, @Nullable ReadableMap font) {
+    private void pushNodeAndFont(GroupView node, @Nullable ReadableMap font) {
         FontData parent = getTopOrParentFont(node);
         mTop++;
 
@@ -178,7 +178,7 @@ class GlyphContext {
 
     }
 
-    void pushContext(GroupShadowNode node, @Nullable ReadableMap font) {
+    void pushContext(GroupView node, @Nullable ReadableMap font) {
         pushNodeAndFont(node, font);
         pushIndices();
     }
@@ -203,14 +203,14 @@ class GlyphContext {
     }
 
     void pushContext(
-        boolean reset,
-        TextShadowNode node,
-        @Nullable ReadableMap font,
-        @Nullable ReadableArray x,
-        @Nullable ReadableArray y,
-        @Nullable ReadableArray deltaX,
-        @Nullable ReadableArray deltaY,
-        @Nullable ReadableArray rotate
+            boolean reset,
+            TextView node,
+            @Nullable ReadableMap font,
+            @Nullable ReadableArray x,
+            @Nullable ReadableArray y,
+            @Nullable ReadableArray deltaX,
+            @Nullable ReadableArray deltaY,
+            @Nullable ReadableArray rotate
     ) {
         if (reset) {
             this.reset();
