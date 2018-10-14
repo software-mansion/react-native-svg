@@ -47,7 +47,7 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
     @Override
     public void setReactTag(int reactTag) {
         super.setReactTag(reactTag);
-        vm.setShadowNode(this);
+        vm.setShadowNode(reactTag, this);
     }
 
     RenderableViewManager<VirtualNode<T>> vm;
@@ -78,6 +78,8 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
     private SvgViewShadowNode mSvgShadowNode;
     private Path mCachedClipPath;
     private GroupShadowNode mTextRoot;
+    private double fontSize = -1;
+    private double canvasDiagonal = -1;
     private float canvasHeight = -1;
     private float canvasWidth = -1;
     private GlyphContext glyphContext;
@@ -112,8 +114,10 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
     }
 
     private void clearPath() {
+        canvasDiagonal = -1;
         canvasHeight = -1;
         canvasWidth = -1;
+        fontSize = -1;
         mRegion = null;
         mPath = null;
     }
@@ -164,6 +168,9 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
 
 
     private double getFontSizeFromContext() {
+        if (fontSize != -1) {
+            return fontSize;
+        }
         GroupShadowNode root = getTextRoot();
         if (root == null) {
             return DEFAULT_FONT_SIZE;
@@ -173,7 +180,9 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
             glyphContext = root.getGlyphContext();
         }
 
-        return glyphContext.getFontSize();
+        fontSize = glyphContext.getFontSize();
+
+        return fontSize;
     }
 
     abstract void draw(Canvas canvas, Paint paint, float opacity);
@@ -342,10 +351,7 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
     }
 
     double relativeOnOther(String length) {
-        double powX = Math.pow((getCanvasWidth()), 2);
-        double powY = Math.pow((getCanvasHeight()), 2);
-        double r = Math.sqrt(powX + powY) * M_SQRT1_2l;
-        return PropHelper.fromRelative(length, r, 0, mScale, getFontSizeFromContext());
+        return PropHelper.fromRelative(length, getCanvasDiagonal(), 0, mScale, getFontSizeFromContext());
     }
 
     private float getCanvasWidth() {
@@ -374,6 +380,16 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
         }
 
         return canvasHeight;
+    }
+
+    private double getCanvasDiagonal() {
+        if (canvasDiagonal != -1) {
+            return canvasDiagonal;
+        }
+        double powX = Math.pow((getCanvasWidth()), 2);
+        double powY = Math.pow((getCanvasHeight()), 2);
+        canvasDiagonal = Math.sqrt(powX + powY) * M_SQRT1_2l;
+        return canvasDiagonal;
     }
 
     void saveDefinition() {

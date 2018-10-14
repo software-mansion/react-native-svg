@@ -1075,8 +1075,8 @@ class RenderableViewManager<T extends VirtualNode> extends ViewGroupManager<Rend
         view.dropView();
     }
 
-    void setShadowNode(T virtualNode) {
-        mTagToShadowNode.put(virtualNode.getReactTag(), virtualNode);
+    void setShadowNode(int reactTag, T virtualNode) {
+        mTagToShadowNode.put(reactTag, virtualNode);
     }
 
     T getShadowNodeByTag(int id) {
