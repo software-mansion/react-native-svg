@@ -31,8 +31,8 @@ import javax.annotation.Nullable;
  */
 @SuppressLint("ViewConstructor")
 class GroupView extends RenderableView {
-    public @Nullable ReadableMap mFont;
-    public GlyphContext mGlyphContext;
+    @Nullable ReadableMap mFont;
+    GlyphContext mGlyphContext;
 
     public GroupView(ReactContext reactContext) {
         super(reactContext);

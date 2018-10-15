@@ -32,15 +32,15 @@ import static com.horcrux.svg.TextProperties.TextLengthAdjust;
 
 @SuppressLint("ViewConstructor")
 class TextView extends GroupView {
-    public String mTextLength = null;
-    public String mBaselineShift = null;
-    public TextLengthAdjust mLengthAdjust = TextLengthAdjust.spacing;
-    public AlignmentBaseline mAlignmentBaseline;
-    public @Nullable ReadableArray mPositionX;
-    public @Nullable ReadableArray mPositionY;
-    public @Nullable ReadableArray mRotate;
-    public @Nullable ReadableArray mDeltaX;
-    public @Nullable ReadableArray mDeltaY;
+    String mTextLength = null;
+    String mBaselineShift = null;
+    TextLengthAdjust mLengthAdjust = TextLengthAdjust.spacing;
+    AlignmentBaseline mAlignmentBaseline;
+    @Nullable ReadableArray mPositionX;
+    @Nullable ReadableArray mPositionY;
+    @Nullable ReadableArray mRotate;
+    @Nullable ReadableArray mDeltaX;
+    @Nullable ReadableArray mDeltaY;
 
     public TextView(ReactContext reactContext) {
         super(reactContext);

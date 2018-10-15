@@ -59,38 +59,46 @@ abstract public class RenderableView extends VirtualView {
     private static final int FILL_RULE_EVENODD = 0;
     static final int FILL_RULE_NONZERO = 1;
 
-    public @Nullable ReadableArray mStroke;
-    public @Nullable String[] mStrokeDasharray;
+    /*
+    Used in mergeProperties, keep public
+    */
 
-    public String mStrokeWidth = "1";
-    public float mStrokeOpacity = 1;
-    public float mStrokeMiterlimit = 4;
-    public float mStrokeDashoffset = 0;
+    public @Nullable ReadableArray stroke;
+    public @Nullable String[] strokeDasharray;
 
-    public Paint.Cap mStrokeLinecap = Paint.Cap.ROUND;
-    public Paint.Join mStrokeLinejoin = Paint.Join.ROUND;
+    public String strokeWidth = "1";
+    public float strokeOpacity = 1;
+    public float strokeMiterlimit = 4;
+    public float strokeDashoffset = 0;
 
-    public @Nullable ReadableArray mFill;
-    public float mFillOpacity = 1;
-    public Path.FillType mFillRule = Path.FillType.WINDING;
+    public Paint.Cap strokeLinecap = Paint.Cap.ROUND;
+    public Paint.Join strokeLinejoin = Paint.Join.ROUND;
 
-    public @Nullable ArrayList<String> mLastMergedList;
-    public @Nullable ArrayList<Object> mOriginProperties;
-    public @Nullable ArrayList<String> mPropList;
-    public @Nullable ArrayList<String> mAttributeList;
+    public @Nullable ReadableArray fill;
+    public float fillOpacity = 1;
+    public Path.FillType fillRule = Path.FillType.WINDING;
+
+    /*
+    End merged properties
+    */
+
+    @Nullable ArrayList<String> mLastMergedList;
+    @Nullable ArrayList<Object> mOriginProperties;
+    @Nullable ArrayList<String> mPropList;
+    @Nullable ArrayList<String> mAttributeList;
 
     private static final Pattern regex = Pattern.compile("[0-9.-]+");
 
     @ReactProp(name = "fill")
     public void setFill(@Nullable Dynamic fill) {
         if (fill == null || fill.isNull()) {
-            mFill = null;
+            this.fill = null;
             invalidate();
             return;
         }
         ReadableType type = fill.getType();
         if (type.equals(ReadableType.Array)) {
-            mFill = fill.asArray();
+            this.fill = fill.asArray();
         } else {
             JavaOnlyArray arr = new JavaOnlyArray();
             arr.pushInt(0);
@@ -100,14 +108,14 @@ abstract public class RenderableView extends VirtualView {
                 Double parsed = Double.parseDouble(m.group());
                 arr.pushDouble(i++ < 3 ? parsed / 255 : parsed);
             }
-            mFill = arr;
+            this.fill = arr;
         }
         invalidate();
     }
 
     @ReactProp(name = "fillOpacity", defaultFloat = 1f)
     public void setFillOpacity(float fillOpacity) {
-        mFillOpacity = fillOpacity;
+        this.fillOpacity = fillOpacity;
         invalidate();
     }
 
@@ -115,13 +123,13 @@ abstract public class RenderableView extends VirtualView {
     public void setFillRule(int fillRule) {
         switch (fillRule) {
             case FILL_RULE_EVENODD:
-                mFillRule = Path.FillType.EVEN_ODD;
+                this.fillRule = Path.FillType.EVEN_ODD;
                 break;
             case FILL_RULE_NONZERO:
                 break;
             default:
                 throw new JSApplicationIllegalArgumentException(
-                        "fillRule " + mFillRule + " unrecognized");
+                        "fillRule " + this.fillRule + " unrecognized");
         }
 
         invalidate();
@@ -130,13 +138,13 @@ abstract public class RenderableView extends VirtualView {
     @ReactProp(name = "stroke")
     public void setStroke(@Nullable Dynamic strokeColors) {
         if (strokeColors == null || strokeColors.isNull()) {
-            mStroke = null;
+            stroke = null;
             invalidate();
             return;
         }
         ReadableType type = strokeColors.getType();
         if (type.equals(ReadableType.Array)) {
-            mStroke = strokeColors.asArray();
+            stroke = strokeColors.asArray();
         } else {
             JavaOnlyArray arr = new JavaOnlyArray();
             arr.pushInt(0);
@@ -145,14 +153,14 @@ abstract public class RenderableView extends VirtualView {
                 Double parsed = Double.parseDouble(m.group());
                 arr.pushDouble(parsed);
             }
-            mStroke = arr;
+            stroke = arr;
         }
         invalidate();
     }
 
     @ReactProp(name = "strokeOpacity", defaultFloat = 1f)
     public void setStrokeOpacity(float strokeOpacity) {
-        mStrokeOpacity = strokeOpacity;
+        this.strokeOpacity = strokeOpacity;
         invalidate();
     }
 
@@ -160,31 +168,31 @@ abstract public class RenderableView extends VirtualView {
     public void setStrokeDasharray(@Nullable ReadableArray strokeDasharray) {
         if (strokeDasharray != null) {
             int fromSize = strokeDasharray.size();
-            mStrokeDasharray = new String[fromSize];
+            this.strokeDasharray = new String[fromSize];
             for (int i = 0; i < fromSize; i++) {
-                mStrokeDasharray[i] = strokeDasharray.getString(i);
+                this.strokeDasharray[i] = strokeDasharray.getString(i);
             }
         } else {
-            mStrokeDasharray = null;
+            this.strokeDasharray = null;
         }
         invalidate();
     }
 
     @ReactProp(name = "strokeDashoffset")
     public void setStrokeDashoffset(float strokeDashoffset) {
-        mStrokeDashoffset = strokeDashoffset * mScale;
+        this.strokeDashoffset = strokeDashoffset * mScale;
         invalidate();
     }
 
     @ReactProp(name = "strokeWidth")
     public void setStrokeWidth(Dynamic strokeWidth) {
-        mStrokeWidth = getStringFromDynamic(strokeWidth);
+        this.strokeWidth = getStringFromDynamic(strokeWidth);
         invalidate();
     }
 
     @ReactProp(name = "strokeMiterlimit", defaultFloat = 4f)
     public void setStrokeMiterlimit(float strokeMiterlimit) {
-        mStrokeMiterlimit = strokeMiterlimit;
+        this.strokeMiterlimit = strokeMiterlimit;
         invalidate();
     }
 
@@ -192,17 +200,17 @@ abstract public class RenderableView extends VirtualView {
     public void setStrokeLinecap(int strokeLinecap) {
         switch (strokeLinecap) {
             case CAP_BUTT:
-                mStrokeLinecap = Paint.Cap.BUTT;
+                this.strokeLinecap = Paint.Cap.BUTT;
                 break;
             case CAP_SQUARE:
-                mStrokeLinecap = Paint.Cap.SQUARE;
+                this.strokeLinecap = Paint.Cap.SQUARE;
                 break;
             case CAP_ROUND:
-                mStrokeLinecap = Paint.Cap.ROUND;
+                this.strokeLinecap = Paint.Cap.ROUND;
                 break;
             default:
                 throw new JSApplicationIllegalArgumentException(
-                        "strokeLinecap " + mStrokeLinecap + " unrecognized");
+                        "strokeLinecap " + this.strokeLinecap + " unrecognized");
         }
         invalidate();
     }
@@ -211,17 +219,17 @@ abstract public class RenderableView extends VirtualView {
     public void setStrokeLinejoin(int strokeLinejoin) {
         switch (strokeLinejoin) {
             case JOIN_MITER:
-                mStrokeLinejoin = Paint.Join.MITER;
+                this.strokeLinejoin = Paint.Join.MITER;
                 break;
             case JOIN_BEVEL:
-                mStrokeLinejoin = Paint.Join.BEVEL;
+                this.strokeLinejoin = Paint.Join.BEVEL;
                 break;
             case JOIN_ROUND:
-                mStrokeLinejoin = Paint.Join.ROUND;
+                this.strokeLinejoin = Paint.Join.ROUND;
                 break;
             default:
                 throw new JSApplicationIllegalArgumentException(
-                        "strokeLinejoin " + mStrokeLinejoin + " unrecognized");
+                        "strokeLinejoin " + this.strokeLinejoin + " unrecognized");
         }
         invalidate();
     }
@@ -231,8 +239,7 @@ abstract public class RenderableView extends VirtualView {
         if (propList != null) {
             mPropList = mAttributeList = new ArrayList<>();
             for (int i = 0; i < propList.size(); i++) {
-                String fieldName = propertyNameToFieldName(propList.getString(i));
-                mPropList.add(fieldName);
+                mPropList.add(propList.getString(i));
             }
         }
 
@@ -314,7 +321,7 @@ abstract public class RenderableView extends VirtualView {
             boolean computePaths = mPath == null;
             if (computePaths) {
                 mPath = getPath(canvas, paint);
-                mPath.setFillType(mFillRule);
+                mPath.setFillType(fillRule);
             }
             Path path = mPath;
 
@@ -330,14 +337,14 @@ abstract public class RenderableView extends VirtualView {
 
             clip(canvas, paint);
 
-            if (setupFillPaint(paint, opacity * mFillOpacity)) {
+            if (setupFillPaint(paint, opacity * fillOpacity)) {
                 if (computePaths) {
                     mFillPath = new Path();
                     paint.getFillPath(path, mFillPath);
                 }
                 canvas.drawPath(path, paint);
             }
-            if (setupStrokePaint(paint, opacity * mStrokeOpacity)) {
+            if (setupStrokePaint(paint, opacity * strokeOpacity)) {
                 if (computePaths) {
                     mStrokePath = new Path();
                     paint.getFillPath(path, mStrokePath);
@@ -352,11 +359,11 @@ abstract public class RenderableView extends VirtualView {
      * if the fill should be drawn, {@code false} if not.
      */
     private boolean setupFillPaint(Paint paint, float opacity) {
-        if (mFill != null && mFill.size() > 0) {
+        if (fill != null && fill.size() > 0) {
             paint.reset();
             paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
             paint.setStyle(Paint.Style.FILL);
-            setupPaint(paint, opacity, mFill);
+            setupPaint(paint, opacity, fill);
             return true;
         }
         return false;
@@ -368,26 +375,26 @@ abstract public class RenderableView extends VirtualView {
      */
     private boolean setupStrokePaint(Paint paint, float opacity) {
         paint.reset();
-        double strokeWidth = relativeOnOther(mStrokeWidth);
-        if (strokeWidth == 0 || mStroke == null || mStroke.size() == 0) {
+        double strokeWidth = relativeOnOther(this.strokeWidth);
+        if (strokeWidth == 0 || stroke == null || stroke.size() == 0) {
             return false;
         }
 
         paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeCap(mStrokeLinecap);
-        paint.setStrokeJoin(mStrokeLinejoin);
-        paint.setStrokeMiter(mStrokeMiterlimit * mScale);
+        paint.setStrokeCap(strokeLinecap);
+        paint.setStrokeJoin(strokeLinejoin);
+        paint.setStrokeMiter(strokeMiterlimit * mScale);
         paint.setStrokeWidth((float) strokeWidth);
-        setupPaint(paint, opacity, mStroke);
+        setupPaint(paint, opacity, stroke);
 
-        if (mStrokeDasharray != null) {
-            int length = mStrokeDasharray.length;
+        if (strokeDasharray != null) {
+            int length = strokeDasharray.length;
             float[] intervals = new float[length];
             for (int i = 0; i < length; i++) {
-                intervals[i] = (float)relativeOnOther(mStrokeDasharray[i]);
+                intervals[i] = (float)relativeOnOther(strokeDasharray[i]);
             }
-            paint.setPathEffect(new DashPathEffect(intervals, mStrokeDashoffset));
+            paint.setPathEffect(new DashPathEffect(intervals, strokeDashoffset));
         }
 
         return true;
@@ -529,18 +536,6 @@ abstract public class RenderableView extends VirtualView {
             mOriginProperties = null;
             mAttributeList = mPropList;
         }
-    }
-
-    // convert propertyName something like fillOpacity to fieldName like mFillOpacity
-    private String propertyNameToFieldName(String fieldName) {
-        Pattern pattern = Pattern.compile("^(\\w)");
-        Matcher matched = pattern.matcher(fieldName);
-        StringBuffer sb = new StringBuffer("m");
-        while (matched.find()) {
-            matched.appendReplacement(sb, matched.group(1).toUpperCase());
-        }
-        matched.appendTail(sb);
-        return sb.toString();
     }
 
     private boolean hasOwnProperty(String propName) {
