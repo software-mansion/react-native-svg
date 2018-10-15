@@ -334,6 +334,11 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         GroupViewManager() {
             super(SVGClass.RNSVGGroup);
         }
+
+        @ReactProp(name = "font")
+        public void setFont(GroupView node, @Nullable ReadableMap font) {
+            node.setFont(font);
+        }
     }
 
 
@@ -463,6 +468,11 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         public void setY(TextView node, Dynamic positionY) {
             node.setPositionY(positionY);
         }
+
+        @ReactProp(name = "font")
+        public void setFont(TextView node, @Nullable ReadableMap font) {
+            node.setFont(font);
+        }
     }
 
     static class TextPathViewManager extends RenderableViewManager {
@@ -498,6 +508,11 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         @ReactProp(name = "midLine")
         public void setSharp(TextPathView node, @Nullable String midLine) {
             node.setSharp(midLine);
+        }
+
+        @ReactProp(name = "font")
+        public void setFont(TextView node, @Nullable ReadableMap font) {
+            node.setFont(font);
         }
     }
 

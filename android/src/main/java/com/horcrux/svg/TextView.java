@@ -128,12 +128,6 @@ class TextView extends GroupView {
         invalidate();
     }
 
-    @ReactProp(name = "font")
-    public void setFont(@Nullable ReadableMap font) {
-        mFont = font;
-        invalidate();
-    }
-
     @Override
     void draw(Canvas canvas, Paint paint, float opacity) {
         if (opacity > MIN_OPACITY_FOR_DRAW) {
