@@ -22,7 +22,6 @@ import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.TransformHelper;
 import com.facebook.react.uimanager.ViewGroupManager;
-import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
 
@@ -965,6 +964,11 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         node.setClipRule(clipRule);
     }
 
+    @ReactProp(name = "opacity", defaultFloat = 1f)
+    public void setOpacity(VirtualView node, float opacity) {
+        node.setOpacity(opacity);
+    }
+
     @ReactProp(name = "fill")
     public void setFill(RenderableView node, @Nullable Dynamic fill) {
         node.setFill(fill);
@@ -1039,6 +1043,11 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
     @ReactProp(name = "propList")
     public void setPropList(RenderableView node, @Nullable ReadableArray propList) {
         node.setPropList(propList);
+    }
+
+    @ReactProp(name = "responsible")
+    public void setResponsible(VirtualView node, boolean responsible) {
+        node.setResponsible(responsible);
     }
 
     @ReactProp(name = "name")

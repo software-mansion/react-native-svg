@@ -19,12 +19,12 @@ import android.view.ViewParent;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-import static com.horcrux.svg.TextProperties.*;
+import static com.horcrux.svg.TextProperties.AlignmentBaseline;
+import static com.horcrux.svg.TextProperties.TextLengthAdjust;
 
 /**
  * Shadow node for virtual Text view
