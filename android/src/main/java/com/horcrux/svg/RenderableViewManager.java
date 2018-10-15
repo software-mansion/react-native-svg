@@ -334,6 +334,10 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
             super(SVGClass.RNSVGGroup);
         }
 
+        GroupViewManager(SVGClass svgClass) {
+            super(svgClass);
+        }
+
         @ReactProp(name = "font")
         public void setFont(GroupView node, @Nullable ReadableMap font) {
             node.setFont(font);
@@ -352,9 +356,13 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class TextViewManager extends RenderableViewManager {
+    static class TextViewManager extends GroupViewManager {
         TextViewManager() {
             super(SVGClass.RNSVGText);
+        }
+
+        TextViewManager(SVGClass svgClass) {
+            super(svgClass);
         }
 
         @ReactProp(name = "textLength")
@@ -397,19 +405,9 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
             node.setDeltaY(deltaY);
         }
 
-        @ReactProp(name = "positionX")
-        public void setPositionX(TextView node, Dynamic positionX) {
-            node.setPositionX(positionX);
-        }
-
         @ReactProp(name = "x")
         public void setX(TextView node, Dynamic positionX) {
             node.setPositionX(positionX);
-        }
-
-        @ReactProp(name = "positionY")
-        public void setPositionY(TextView node, Dynamic positionY) {
-            node.setPositionY(positionY);
         }
 
         @ReactProp(name = "y")
@@ -423,7 +421,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class TSpanViewManager extends RenderableViewManager {
+    static class TSpanViewManager extends TextViewManager {
         TSpanViewManager() {
             super(SVGClass.RNSVGTSpan);
         }
@@ -432,49 +430,9 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         public void setContent(TSpanView node, @Nullable String content) {
             node.setContent(content);
         }
-
-        @ReactProp(name = "rotate")
-        public void setRotate(TextView node, Dynamic rotate) {
-            node.setRotate(rotate);
-        }
-
-        @ReactProp(name = "dx")
-        public void setDeltaX(TextView node, Dynamic deltaX) {
-            node.setDeltaX(deltaX);
-        }
-
-        @ReactProp(name = "dy")
-        public void setDeltaY(TextView node, Dynamic deltaY) {
-            node.setDeltaY(deltaY);
-        }
-
-        @ReactProp(name = "positionX")
-        public void setPositionX(TextView node, Dynamic positionX) {
-            node.setPositionX(positionX);
-        }
-
-        @ReactProp(name = "x")
-        public void setX(TextView node, Dynamic positionX) {
-            node.setPositionX(positionX);
-        }
-
-        @ReactProp(name = "positionY")
-        public void setPositionY(TextView node, Dynamic positionY) {
-            node.setPositionY(positionY);
-        }
-
-        @ReactProp(name = "y")
-        public void setY(TextView node, Dynamic positionY) {
-            node.setPositionY(positionY);
-        }
-
-        @ReactProp(name = "font")
-        public void setFont(TextView node, @Nullable ReadableMap font) {
-            node.setFont(font);
-        }
     }
 
-    static class TextPathViewManager extends RenderableViewManager {
+    static class TextPathViewManager extends TextViewManager {
         TextPathViewManager() {
             super(SVGClass.RNSVGTextPath);
         }
@@ -507,11 +465,6 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         @ReactProp(name = "midLine")
         public void setSharp(TextPathView node, @Nullable String midLine) {
             node.setSharp(midLine);
-        }
-
-        @ReactProp(name = "font")
-        public void setFont(TextView node, @Nullable ReadableMap font) {
-            node.setFont(font);
         }
     }
 
@@ -666,7 +619,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class ClipPathViewManager extends RenderableViewManager {
+    static class ClipPathViewManager extends GroupViewManager {
         ClipPathViewManager() {
             super(SVGClass.RNSVGClipPath);
         }
@@ -699,7 +652,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class SymbolManager extends RenderableViewManager {
+    static class SymbolManager extends GroupViewManager {
         SymbolManager() {
             super(SVGClass.RNSVGSymbol);
         }
@@ -735,7 +688,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class PatternManager extends RenderableViewManager {
+    static class PatternManager extends GroupViewManager {
         PatternManager() {
             super(SVGClass.RNSVGPattern);
         }
@@ -806,7 +759,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class MaskManager extends RenderableViewManager {
+    static class MaskManager extends GroupViewManager {
         MaskManager() {
             super(SVGClass.RNSVGMask);
         }
