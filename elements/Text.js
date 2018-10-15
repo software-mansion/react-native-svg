@@ -7,6 +7,7 @@ import { TextAttributes } from "../lib/attributes";
 import extractProps from "../lib/extract/extractProps";
 import extractTransform from "../lib/extract/extractTransform";
 import Shape from "./Shape";
+import TSpan from "./TSpan";
 
 export default class extends Shape {
     static displayName = "Text";
@@ -18,7 +19,7 @@ export default class extends Shape {
         if (matrix) {
             props.matrix = matrix;
         }
-        const text = _.pickBy(extractText(props, true), p => !_.isNil(p));
+        const text = _.pickBy(extractText(props, true, TSpan), p => !_.isNil(p));
         this.root.setNativeProps({
             ...props,
             ...text,
@@ -41,7 +42,7 @@ export default class extends Shape {
                     },
                     this,
                 )}
-                {...extractText(props, true)}
+                {...extractText(props, true, TSpan)}
             />
         );
     }
