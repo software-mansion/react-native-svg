@@ -59,25 +59,25 @@ abstract public class RenderableView extends VirtualView {
     private static final int FILL_RULE_EVENODD = 0;
     static final int FILL_RULE_NONZERO = 1;
 
-    private @Nullable ReadableArray mStroke;
-    private @Nullable String[] mStrokeDasharray;
+    public @Nullable ReadableArray mStroke;
+    public @Nullable String[] mStrokeDasharray;
 
-    private String mStrokeWidth = "1";
-    private float mStrokeOpacity = 1;
-    private float mStrokeMiterlimit = 4;
-    private float mStrokeDashoffset = 0;
+    public String mStrokeWidth = "1";
+    public float mStrokeOpacity = 1;
+    public float mStrokeMiterlimit = 4;
+    public float mStrokeDashoffset = 0;
 
-    private Paint.Cap mStrokeLinecap = Paint.Cap.ROUND;
-    private Paint.Join mStrokeLinejoin = Paint.Join.ROUND;
+    public Paint.Cap mStrokeLinecap = Paint.Cap.ROUND;
+    public Paint.Join mStrokeLinejoin = Paint.Join.ROUND;
 
-    private @Nullable ReadableArray mFill;
-    private float mFillOpacity = 1;
-    private Path.FillType mFillRule = Path.FillType.WINDING;
+    public @Nullable ReadableArray mFill;
+    public float mFillOpacity = 1;
+    public Path.FillType mFillRule = Path.FillType.WINDING;
 
-    private @Nullable ArrayList<String> mLastMergedList;
-    private @Nullable ArrayList<Object> mOriginProperties;
-    private @Nullable ArrayList<String> mPropList;
-    private @Nullable ArrayList<String> mAttributeList;
+    public @Nullable ArrayList<String> mLastMergedList;
+    public @Nullable ArrayList<Object> mOriginProperties;
+    public @Nullable ArrayList<String> mPropList;
+    public @Nullable ArrayList<String> mAttributeList;
 
     private static final Pattern regex = Pattern.compile("[0-9.-]+");
 

@@ -16,12 +16,15 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
+import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.MatrixMathHelper;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.TransformHelper;
 import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.annotations.ReactPropGroup;
 
 import javax.annotation.Nullable;
 
@@ -35,6 +38,7 @@ import static com.facebook.react.uimanager.MatrixMathHelper.v3Cross;
 import static com.facebook.react.uimanager.MatrixMathHelper.v3Dot;
 import static com.facebook.react.uimanager.MatrixMathHelper.v3Length;
 import static com.facebook.react.uimanager.MatrixMathHelper.v3Normalize;
+import static com.facebook.react.uimanager.ViewProps.*;
 import static com.horcrux.svg.RenderableView.CAP_ROUND;
 import static com.horcrux.svg.RenderableView.FILL_RULE_NONZERO;
 import static com.horcrux.svg.RenderableView.JOIN_ROUND;
@@ -64,6 +68,86 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         RNSVGPattern,
         RNSVGMask,
     }
+
+    class RenderableShadowNode extends LayoutShadowNode {
+
+        @ReactPropGroup(
+            names = {
+                ALIGN_SELF,
+                ALIGN_ITEMS,
+                COLLAPSABLE,
+                FLEX,
+                FLEX_BASIS,
+                FLEX_DIRECTION,
+                FLEX_GROW,
+                FLEX_SHRINK,
+                FLEX_WRAP,
+                JUSTIFY_CONTENT,
+                OVERFLOW,
+                ALIGN_CONTENT,
+                DISPLAY,
+
+                /* position */
+                POSITION,
+                RIGHT,
+                TOP,
+                BOTTOM,
+                LEFT,
+                START,
+                END,
+
+                /* dimensions */
+                WIDTH,
+                HEIGHT,
+                MIN_WIDTH,
+                MAX_WIDTH,
+                MIN_HEIGHT,
+                MAX_HEIGHT,
+
+                /* margins */
+                MARGIN,
+                MARGIN_VERTICAL,
+                MARGIN_HORIZONTAL,
+                MARGIN_LEFT,
+                MARGIN_RIGHT,
+                MARGIN_TOP,
+                MARGIN_BOTTOM,
+                MARGIN_START,
+                MARGIN_END,
+
+                /* paddings */
+                PADDING,
+                PADDING_VERTICAL,
+                PADDING_HORIZONTAL,
+                PADDING_LEFT,
+                PADDING_RIGHT,
+                PADDING_TOP,
+                PADDING_BOTTOM,
+                PADDING_START,
+                PADDING_END,
+
+                BORDER_WIDTH,
+                BORDER_START_WIDTH,
+                BORDER_END_WIDTH,
+                BORDER_TOP_WIDTH,
+                BORDER_BOTTOM_WIDTH,
+                BORDER_LEFT_WIDTH,
+                BORDER_RIGHT_WIDTH,
+            }
+        )
+        public void ignoreLayoutProps(int index, Dynamic value) {}
+    }
+
+    @Override
+    public LayoutShadowNode createShadowNodeInstance() {
+        return new RenderableShadowNode();
+    }
+
+    @Override
+    public Class<RenderableShadowNode> getShadowNodeClass() {
+        return RenderableShadowNode.class;
+    }
+
 
     private final SVGClass svgClass;
     private final String mClassName;
