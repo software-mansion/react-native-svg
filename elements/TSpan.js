@@ -1,7 +1,7 @@
 import React from "react";
 import _ from "lodash";
 import { requireNativeComponent } from "react-native";
-import extractText from "../lib/extract/extractText";
+import extractText from "../lib/extract/extractTextNoRequireCircle";
 import { textProps } from "../lib/props";
 import { TSpanAttibutes } from "../lib/attributes";
 import extractProps from "../lib/extract/extractProps";
