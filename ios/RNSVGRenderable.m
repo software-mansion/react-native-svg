@@ -17,6 +17,7 @@
     NSArray<NSString *> *_lastMergedList;
     NSArray<NSString *> *_attributeList;
     NSArray<NSString *> *_sourceStrokeDashArray;
+    CGPathRef _strokePath;
     CGPathRef _hitArea;
 }
 
@@ -150,6 +151,7 @@
 {
     CGPathRelease(self.path);
     CGPathRelease(_hitArea);
+    CGPathRelease(_strokePath);
     _sourceStrokeDashArray = nil;
     if (_strokeDasharrayData.array) {
         free(_strokeDasharrayData.array);
@@ -395,15 +397,15 @@ UInt32 saturate(double value) {
 {
     CGPathRelease(_hitArea);
     _hitArea = nil;
+    CGPathRelease(_strokePath);
+    _strokePath = nil;
     // Add path to hitArea
     CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
 
     if (self.stroke && self.strokeWidth) {
         // Add stroke to hitArea
         CGFloat width = [self relativeOnOther:self.strokeWidth];
-        CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
-        CGPathAddPath(hitArea, nil, strokePath);
-        CGPathRelease(strokePath);
+        _strokePath = CGPathRetain(CFAutorelease(CGPathCreateCopyByStrokingPath(hitArea, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit)));
     }
 
     _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(hitArea)));
@@ -427,7 +429,9 @@ UInt32 saturate(double value) {
 
     CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
 
-    if (!CGPathContainsPoint(_hitArea, nil, transformed, NO)) {
+    BOOL evenodd = self.fillRule == kRNSVGCGFCRuleEvenodd;
+    if (!CGPathContainsPoint(_hitArea, nil, transformed, evenodd) &&
+        !CGPathContainsPoint(_strokePath, nil, transformed, NO)) {
         return nil;
     }
 
