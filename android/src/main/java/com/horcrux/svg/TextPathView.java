@@ -22,9 +22,6 @@ import javax.annotation.Nullable;
 
 import static com.horcrux.svg.TextProperties.*;
 
-/**
- * Shadow node for virtual TextPath view
- */
 @SuppressLint("ViewConstructor")
 class TextPathView extends TextView {
 

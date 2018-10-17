@@ -23,9 +23,6 @@ import com.facebook.react.common.ReactConstants;
 
 import javax.annotation.Nullable;
 
-/**
- * Shadow node for virtual RadialGradient definition view
- */
 @SuppressLint("ViewConstructor")
 class RadialGradientView extends DefinitionView {
     private String mFx;

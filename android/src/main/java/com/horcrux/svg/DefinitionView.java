@@ -16,9 +16,6 @@ import android.graphics.Path;
 
 import com.facebook.react.bridge.ReactContext;
 
-/**
- * Shadow node for virtual Definition type views
- */
 @SuppressLint("ViewConstructor")
 class DefinitionView extends VirtualView {
 

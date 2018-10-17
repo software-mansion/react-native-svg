@@ -17,9 +17,6 @@ import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.common.ReactConstants;
 
-/**
- * Shadow node for virtual ClipPath view
- */
 @SuppressLint("ViewConstructor")
 class ClipPathView extends GroupView {
 

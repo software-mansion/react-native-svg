@@ -17,9 +17,6 @@ import android.graphics.Path;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-/**
- * Shadow node for virtual Path view
- */
 @SuppressLint("ViewConstructor")
 class PathView extends RenderableView {
     private Path mPath;

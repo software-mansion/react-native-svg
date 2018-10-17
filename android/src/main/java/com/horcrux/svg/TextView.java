@@ -26,10 +26,6 @@ import javax.annotation.Nullable;
 import static com.horcrux.svg.TextProperties.AlignmentBaseline;
 import static com.horcrux.svg.TextProperties.TextLengthAdjust;
 
-/**
- * Shadow node for virtual Text view
- */
-
 @SuppressLint("ViewConstructor")
 class TextView extends GroupView {
     String mTextLength = null;

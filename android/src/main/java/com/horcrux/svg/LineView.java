@@ -18,9 +18,6 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-/**
- * Shadow node for virtual Line view
- */
 @SuppressLint("ViewConstructor")
 class LineView extends RenderableView {
     private String mX1;

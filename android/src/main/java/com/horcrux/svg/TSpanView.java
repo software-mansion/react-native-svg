@@ -35,9 +35,6 @@ import static android.graphics.PathMeasure.POSITION_MATRIX_FLAG;
 import static android.graphics.PathMeasure.TANGENT_MATRIX_FLAG;
 import static com.horcrux.svg.TextProperties.*;
 
-/**
- * Shadow node for virtual TSpan view
- */
 @SuppressLint("ViewConstructor")
 class TSpanView extends TextView {
     private static final double tau = 2 * Math.PI;

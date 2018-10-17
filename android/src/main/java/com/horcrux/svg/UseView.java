@@ -20,9 +20,6 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-/**
- * Shadow node for virtual Use view
- */
 @SuppressLint("ViewConstructor")
 class UseView extends RenderableView {
     private String mHref;

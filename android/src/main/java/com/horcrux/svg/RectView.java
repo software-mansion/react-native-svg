@@ -19,9 +19,6 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-/**
- * Shadow node for virtual Rect view
- */
 @SuppressLint("ViewConstructor")
 class RectView extends RenderableView {
     private String mX;

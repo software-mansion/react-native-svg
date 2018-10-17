@@ -19,9 +19,6 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-/**
- * Shadow node for virtual Circle view
- */
 @SuppressLint("ViewConstructor")
 class CircleView extends RenderableView {
     private String mCx;

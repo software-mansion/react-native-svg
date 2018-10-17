@@ -24,9 +24,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-/**
- * Shadow node for virtual Pattern definition view
- */
 @SuppressLint("ViewConstructor")
 class PatternView extends GroupView {
 

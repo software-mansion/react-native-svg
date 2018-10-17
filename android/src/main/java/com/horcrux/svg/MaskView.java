@@ -21,9 +21,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-/**
- * Shadow node for virtual Mask definition view
- */
 @SuppressLint("ViewConstructor")
 class MaskView extends GroupView {
 

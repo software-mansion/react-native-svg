@@ -19,9 +19,6 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-/**
- * Shadow node for virtual Ellipse view
- */
 @SuppressLint("ViewConstructor")
 class EllipseView extends RenderableView {
     private String mCx;

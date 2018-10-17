@@ -26,9 +26,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-/**
- * Shadow node for virtual Group view
- */
 @SuppressLint("ViewConstructor")
 class GroupView extends RenderableView {
     @Nullable ReadableMap mFont;

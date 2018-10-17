@@ -42,9 +42,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * Shadow node for virtual Image view
- */
 @SuppressLint("ViewConstructor")
 class ImageView extends RenderableView {
     private String mX;

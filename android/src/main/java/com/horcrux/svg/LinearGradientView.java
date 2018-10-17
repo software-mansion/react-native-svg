@@ -23,9 +23,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-/**
- * Shadow node for virtual LinearGradient definition view
- */
 @SuppressLint("ViewConstructor")
 class LinearGradientView extends DefinitionView {
 

@@ -16,9 +16,6 @@ import android.view.View;
 
 import com.facebook.react.bridge.ReactContext;
 
-/**
- * Shadow node for virtual Defs view
- */
 @SuppressLint("ViewConstructor")
 class DefsView extends DefinitionView {
 
