@@ -54,6 +54,7 @@ export default class extends Shape {
                             children,
                         },
                         true,
+                        TSpan,
                     )}
                 />
             );

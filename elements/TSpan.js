@@ -9,7 +9,7 @@ import extractTransform from "../lib/extract/extractTransform";
 import Shape from "./Shape";
 
 // TSpan elements are shadow components
-export default class extends Shape {
+export default class TSpan extends Shape {
     static displayName = "TSpan";
 
     static propTypes = textProps;
@@ -19,7 +19,7 @@ export default class extends Shape {
         if (matrix) {
             props.matrix = matrix;
         }
-        const text = _.pickBy(extractText(props, true), p => !_.isNil(p));
+        const text = _.pickBy(extractText(props, true, TSpan), p => !_.isNil(p));
         this.root.setNativeProps({
             ...props,
             ...text,
@@ -41,7 +41,7 @@ export default class extends Shape {
                     },
                     this,
                 )}
-                {...extractText(props)}
+                {...extractText(props, false, TSpan)}
             />
         );
     }
