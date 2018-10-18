@@ -50,8 +50,6 @@
 
 + (double)fromRelative:(RNSVGLength*)length
               relative:(double)relative
-                offset:(double)offset
-                 scale:(double)scale
               fontSize:(double)fontSize {
     RNSVGLengthUnitType unitType = length.unit;
     double value = length.value;
@@ -59,10 +57,11 @@
     switch (unitType) {
         case SVG_LENGTHTYPE_NUMBER:
         case SVG_LENGTHTYPE_PX:
+            return value;
             break;
 
         case SVG_LENGTHTYPE_PERCENTAGE:
-            return value / 100 * relative + offset;
+            return value / 100 * relative;
 
         case SVG_LENGTHTYPE_EMS:
             unit = fontSize;
@@ -89,9 +88,9 @@
 
         default:
         case SVG_LENGTHTYPE_UNKNOWN:
-            return value * scale + offset;
+            return value;
     }
-    return value * unit * scale + offset;
+    return value * unit;
 }
 
 + (double)fromRelative:(RNSVGLength*)length
@@ -102,6 +101,7 @@
     switch (unitType) {
         case SVG_LENGTHTYPE_NUMBER:
         case SVG_LENGTHTYPE_PX:
+            return value;
             break;
 
         case SVG_LENGTHTYPE_PERCENTAGE:

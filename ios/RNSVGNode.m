@@ -23,6 +23,9 @@
     BOOL _transparent;
     CGPathRef _cachedClipPath;
     CGImageRef _clipMask;
+    double canvasWidth;
+    double canvasHeight;
+    double canvasDiagonal;
 }
 
 CGFloat const RNSVG_M_SQRT1_2l = 0.707106781186547524400844362104849039;
@@ -59,6 +62,9 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
     [container invalidate];
     [self clearPath];
+    canvasWidth = -1;
+    canvasHeight = -1;
+    canvasDiagonal = -1;
 }
 
 - (void)clearPath
@@ -362,7 +368,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     if (unit == SVG_LENGTHTYPE_NUMBER){
         return length.value;
     } else if (unit == SVG_LENGTHTYPE_PERCENTAGE){
-        return length.value / 100 * [self getContextWidth];
+        return length.value / 100 * [self getCanvasWidth];
     }
     return [self fromRelative:length];
 }
@@ -373,7 +379,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     if (unit == SVG_LENGTHTYPE_NUMBER){
         return length.value;
     } else if (unit == SVG_LENGTHTYPE_PERCENTAGE){
-        return length.value / 100 * [self getContextHeight];
+        return length.value / 100 * [self getCanvasHeight];
     }
     return [self fromRelative:length];
 }
@@ -384,7 +390,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     if (unit == SVG_LENGTHTYPE_NUMBER){
         return length.value;
     } else if (unit == SVG_LENGTHTYPE_PERCENTAGE){
-        return length.value / 100 * [self getContextDiagonal];
+        return length.value / 100 * [self getCanvasDiagonal];
     }
     return [self fromRelative:length];
 }
@@ -444,6 +450,46 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     CGFloat powY = height * height;
     CGFloat r = sqrt(powX + powY) * RNSVG_M_SQRT1_2l;
     return r;
+}
+
+- (CGFloat) getCanvasWidth {
+    if (canvasWidth != -1) {
+        return canvasWidth;
+    }
+    RNSVGGroup* root = [self textRoot];
+    if (root == nil) {
+        canvasWidth = [self getContextWidth];
+    } else {
+        canvasWidth = [[root getGlyphContext] getWidth];
+    }
+
+    return canvasWidth;
+}
+
+- (CGFloat) getCanvasHeight {
+    if (canvasHeight != -1) {
+        return canvasHeight;
+    }
+    RNSVGGroup* root = [self textRoot];
+    if (root == nil) {
+        canvasHeight = [self getContextHeight];
+    } else {
+        canvasHeight = [[root getGlyphContext] getHeight];
+    }
+
+    return canvasHeight;
+}
+
+- (CGFloat) getCanvasDiagonal {
+    if (canvasDiagonal != -1) {
+        return canvasDiagonal;
+    }
+    CGFloat width = [self getCanvasWidth];
+    CGFloat height = [self getCanvasHeight];
+    CGFloat powX = width * width;
+    CGFloat powY = height * height;
+    canvasDiagonal = sqrt(powX + powY) * RNSVG_M_SQRT1_2l;
+    return canvasDiagonal;
 }
 
 - (void)parseReference

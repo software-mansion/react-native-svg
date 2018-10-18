@@ -358,8 +358,6 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
          */
         double absoluteStartOffset = [RNSVGPropHelper fromRelative:textPath.startOffset
                                                           relative:_pathLength
-                                                            offset:0
-                                                             scale:1
                                                           fontSize:fontSize];
         offset += absoluteStartOffset;
         if (isClosed) {
@@ -452,14 +450,12 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
      thus, no advance adjustments are made.
      */
     double scaleSpacingAndGlyphs = 1;
-    NSString *mTextLength = [self textLength];
+    RNSVGLength *mTextLength = [self textLength];
     enum RNSVGTextLengthAdjust mLengthAdjust = RNSVGTextLengthAdjustFromString([self lengthAdjust]);
     if (mTextLength != nil) {
-        double author = [RNSVGPropHelper fromRelativeWithNSString:mTextLength
-                                                      relative:[gc getWidth]
-                                                        offset:0
-                                                         scale:1
-                                                      fontSize:fontSize];
+        double author = [RNSVGPropHelper fromRelative:mTextLength
+                                             relative:[gc getWidth]
+                                             fontSize:fontSize];
         if (author < 0) {
             NSException *e = [NSException
                               exceptionWithName:@"NegativeTextLength"
@@ -727,7 +723,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
             double y = [gc nextY];
             double dx = [gc nextDeltaX];
             double dy = [gc nextDeltaY];
-            double r = [[gc nextRotation] doubleValue] / RNSVGTSpan_radToDeg;
+            double r = [gc nextRotation] / RNSVGTSpan_radToDeg;
 
             if (isWordSeparator) {
                 continue;

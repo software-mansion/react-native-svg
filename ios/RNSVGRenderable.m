@@ -320,7 +320,7 @@ UInt32 saturate(double value) {
     }
 
     if (self.stroke) {
-        CGFloat width = [self relativeOnOther:self.strokeWidth];
+        CGFloat width = self.strokeWidth ? [self relativeOnOther:self.strokeWidth] : 1;
         CGContextSetLineWidth(context, width);
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);

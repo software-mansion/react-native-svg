@@ -11,15 +11,15 @@
 
 @interface RNSVGText : RNSVGGroup
 
-@property (nonatomic, strong) NSString *textLength;
+@property (nonatomic, strong) RNSVGLength *textLength;
 @property (nonatomic, strong) NSString *baselineShift;
 @property (nonatomic, strong) NSString *lengthAdjust;
 @property (nonatomic, strong) NSString *alignmentBaseline;
-@property (nonatomic, strong) NSArray<NSString *> *deltaX;
-@property (nonatomic, strong) NSArray<NSString *> *deltaY;
-@property (nonatomic, strong) NSArray<NSString *> *positionX;
-@property (nonatomic, strong) NSArray<NSString *> *positionY;
-@property (nonatomic, strong) NSArray<NSString *> *rotate;
+@property (nonatomic, strong) NSArray<RNSVGLength *> *deltaX;
+@property (nonatomic, strong) NSArray<RNSVGLength *> *deltaY;
+@property (nonatomic, strong) NSArray<RNSVGLength *> *positionX;
+@property (nonatomic, strong) NSArray<RNSVGLength *> *positionY;
+@property (nonatomic, strong) NSArray<RNSVGLength *> *rotate;
 
 - (CGPathRef)getGroupPath:(CGContextRef)context;
 - (CTFontRef)getFontFromContext;

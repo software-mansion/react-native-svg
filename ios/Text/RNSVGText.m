@@ -23,12 +23,12 @@
 - (void)invalidate
 {
     [super invalidate];
-    [self releaseCachedPath];
+    //[self releaseCachedPath];
 }
 
-- (void)setTextLength:(NSString *)textLength
+- (void)setTextLength:(RNSVGLength *)textLength
 {
-    if ([textLength isEqualToString:_textLength]) {
+    if ([textLength isEqualTo:_textLength]) {
         return;
     }
     [self invalidate];
@@ -62,7 +62,7 @@
     _alignmentBaseline = alignmentBaseline;
 }
 
-- (void)setDeltaX:(NSArray<NSString *> *)deltaX
+- (void)setDeltaX:(NSArray<RNSVGLength *> *)deltaX
 {
     if (deltaX == _deltaX) {
         return;
@@ -71,7 +71,7 @@
     _deltaX = deltaX;
 }
 
-- (void)setDeltaY:(NSArray<NSString *> *)deltaY
+- (void)setDeltaY:(NSArray<RNSVGLength *> *)deltaY
 {
     if (deltaY == _deltaY) {
         return;
@@ -80,7 +80,7 @@
     _deltaY = deltaY;
 }
 
-- (void)setPositionX:(NSArray<NSString *>*)positionX
+- (void)setPositionX:(NSArray<RNSVGLength *>*)positionX
 {
     if (positionX == _positionX) {
         return;
@@ -89,7 +89,7 @@
     _positionX = positionX;
 }
 
-- (void)setPositionY:(NSArray<NSString *>*)positionY
+- (void)setPositionY:(NSArray<RNSVGLength *>*)positionY
 {
     if (positionY == _positionY) {
         return;
@@ -98,7 +98,7 @@
     _positionY = positionY;
 }
 
-- (void)setRotate:(NSArray<NSString *> *)rotate
+- (void)setRotate:(NSArray<RNSVGLength *> *)rotate
 {
     if (rotate == _rotate) {
         return;

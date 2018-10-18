@@ -184,6 +184,10 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    UIView* parent = self.superview;
+    if ([parent isKindOfClass:[RNSVGNode class]]) {
+        return;
+    }
     rendered = true;
     _clipPaths = nil;
     _templates = nil;

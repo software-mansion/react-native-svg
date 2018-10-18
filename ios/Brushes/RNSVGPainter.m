@@ -135,16 +135,16 @@ void PatternFunction(void* info, CGContextRef context)
     float offsetX = CGRectGetMinX(rect);
     float offsetY = CGRectGetMinY(rect);
 
-    CGFloat x = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:0]
+    CGFloat x = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:0]
                                                 relative:width
                                                   offset:offsetX];
-    CGFloat y = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:1]
+    CGFloat y = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:1]
                                                 relative:height
                                                   offset:offsetY];
-    CGFloat w = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:2]
+    CGFloat w = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:2]
                                                 relative:width
                                                   offset:offsetX];
-    CGFloat h = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:3]
+    CGFloat h = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:3]
                                                 relative:height
                                                   offset:offsetY];
 
@@ -185,16 +185,16 @@ void PatternFunction(void* info, CGContextRef context)
     float offsetX = CGRectGetMinX(rect);
     float offsetY = CGRectGetMinY(rect);
 
-    CGFloat x1 = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:0]
+    CGFloat x1 = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:0]
                                                 relative:width
                                                   offset:offsetX];
-    CGFloat y1 = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:1]
+    CGFloat y1 = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:1]
                                                 relative:height
                                                   offset:offsetY];
-    CGFloat x2 = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:2]
+    CGFloat x2 = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:2]
                                                 relative:width
                                                   offset:offsetX];
-    CGFloat y2 = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:3]
+    CGFloat y2 = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:3]
                                                 relative:height
                                                   offset:offsetY];
 
@@ -215,22 +215,22 @@ void PatternFunction(void* info, CGContextRef context)
     float offsetX = CGRectGetMinX(rect);
     float offsetY = CGRectGetMinY(rect);
 
-    CGFloat rx = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:2]
+    CGFloat rx = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:2]
                                                 relative:width
                                                   offset:0];
-    CGFloat ry = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:3]
+    CGFloat ry = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:3]
                                                 relative:height
                                                   offset:0];
-    CGFloat fx = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:0]
+    CGFloat fx = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:0]
                                                 relative:width
                                                   offset:offsetX];
-    CGFloat fy = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:1]
+    CGFloat fy = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:1]
                                                 relative:height
                                                   offset:offsetY] / (ry / rx);
-    CGFloat cx = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:4]
+    CGFloat cx = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:4]
                                                 relative:width
                                                   offset:offsetX];
-    CGFloat cy = [RNSVGPercentageConverter stringToFloat:(NSString *)[_points objectAtIndex:5]
+    CGFloat cy = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:5]
                                                 relative:height
                                                   offset:offsetY] / (ry / rx);
 

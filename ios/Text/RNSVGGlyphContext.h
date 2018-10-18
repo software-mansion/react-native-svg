@@ -26,7 +26,7 @@
 
 - (double)nextDeltaY;
 
-- (NSNumber*)nextRotation;
+- (double)nextRotation;
 
 - (double)nextXWithDouble:(double)advance;
 

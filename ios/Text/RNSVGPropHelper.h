@@ -15,8 +15,6 @@
 
 + (double) fromRelative:(RNSVGLength*)length
                relative:(double)relative
-                 offset:(double)offset
-                  scale:(double)scale
                fontSize:(double)fontSize;
 
 + (double)fromRelative:(RNSVGLength*)length
