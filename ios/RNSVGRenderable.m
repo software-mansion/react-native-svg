@@ -121,7 +121,7 @@
 
 - (void)setStrokeDasharray:(NSArray<RNSVGLength *> *)strokeDasharray
 {
-    if ([strokeDasharray isEqualTo:_strokeDasharray]) {
+    if (strokeDasharray == _strokeDasharray) {
         return;
     }
     [self invalidate];

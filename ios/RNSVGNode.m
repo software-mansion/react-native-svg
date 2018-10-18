@@ -356,38 +356,69 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
                                 fontSize:[self getFontSizeFromContext]];
 }
 
-
 - (CGFloat)relativeOnWidth:(RNSVGLength *)length
 {
-    return [RNSVGPropHelper fromRelative:length
-                                relative:[self getContextWidth]
-                                  offset:0
-                                   scale:1
-                                fontSize:[self getFontSizeFromContext]];
+    RNSVGLengthUnitType unit = length.unit;
+    if (unit == SVG_LENGTHTYPE_NUMBER){
+        return length.value;
+    } else if (unit == SVG_LENGTHTYPE_PERCENTAGE){
+        return length.value / 100 * [self getContextWidth];
+    }
+    return [self fromRelative:length];
 }
 
 - (CGFloat)relativeOnHeight:(RNSVGLength *)length
 {
-    return [RNSVGPropHelper fromRelative:length
-                                relative:[self getContextHeight]
-                                  offset:0
-                                   scale:1
-                                fontSize:[self getFontSizeFromContext]];
+    RNSVGLengthUnitType unit = length.unit;
+    if (unit == SVG_LENGTHTYPE_NUMBER){
+        return length.value;
+    } else if (unit == SVG_LENGTHTYPE_PERCENTAGE){
+        return length.value / 100 * [self getContextHeight];
+    }
+    return [self fromRelative:length];
 }
 
 - (CGFloat)relativeOnOther:(RNSVGLength *)length
 {
-    CGRect bounds = [self getContextBounds];
-    CGFloat width = CGRectGetWidth(bounds);
-    CGFloat height = CGRectGetHeight(bounds);
-    CGFloat powX = width * width;
-    CGFloat powY = height * height;
-    CGFloat r = sqrt(powX + powY) * RNSVG_M_SQRT1_2l;
-    return [RNSVGPropHelper fromRelative:length
-                                relative:r
-                                  offset:0
-                                   scale:1
-                                fontSize:[self getFontSizeFromContext]];
+    RNSVGLengthUnitType unit = length.unit;
+    if (unit == SVG_LENGTHTYPE_NUMBER){
+        return length.value;
+    } else if (unit == SVG_LENGTHTYPE_PERCENTAGE){
+        return length.value / 100 * [self getContextDiagonal];
+    }
+    return [self fromRelative:length];
+}
+
+- (double)fromRelative:(RNSVGLength*)length {
+    double unit;
+    switch (length.unit) {
+        case SVG_LENGTHTYPE_EMS:
+            unit = [self getFontSizeFromContext];
+            break;
+        case SVG_LENGTHTYPE_EXS:
+            unit = [self getFontSizeFromContext] / 2;
+            break;
+
+        case SVG_LENGTHTYPE_CM:
+            unit = 35.43307;
+            break;
+        case SVG_LENGTHTYPE_MM:
+            unit = 3.543307;
+            break;
+        case SVG_LENGTHTYPE_IN:
+            unit = 90;
+            break;
+        case SVG_LENGTHTYPE_PT:
+            unit = 1.25;
+            break;
+        case SVG_LENGTHTYPE_PC:
+            unit = 15;
+            break;
+
+        default:
+            unit = 1;
+    }
+    return length.value * unit;
 }
 
 - (CGRect)getContextBounds
@@ -403,6 +434,16 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 - (CGFloat)getContextHeight
 {
     return CGRectGetHeight([self getContextBounds]);
+}
+
+- (CGFloat)getContextDiagonal {
+    CGRect bounds = [self getContextBounds];
+    CGFloat width = CGRectGetWidth(bounds);
+    CGFloat height = CGRectGetHeight(bounds);
+    CGFloat powX = width * width;
+    CGFloat powY = height * height;
+    CGFloat r = sqrt(powX + powY) * RNSVG_M_SQRT1_2l;
+    return r;
 }
 
 - (void)parseReference
