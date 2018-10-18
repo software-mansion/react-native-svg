@@ -329,15 +329,72 @@ abstract public class VirtualView extends ViewGroup {
     }
 
     double relativeOnWidth(SVGLength length) {
-        return PropHelper.fromRelative(length, getCanvasWidth(), 0, mScale, getFontSizeFromContext());
+        SVGLengthUnitType unit = length.unit;
+        if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_NUMBER){
+            return length.value * mScale;
+        } else if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_PERCENTAGE){
+            return length.value / 100 * getCanvasWidth();
+        }
+        return fromRelativeFast(length);
     }
 
     double relativeOnHeight(SVGLength length) {
-        return PropHelper.fromRelative(length, getCanvasHeight(), 0, mScale, getFontSizeFromContext());
+        SVGLengthUnitType unit = length.unit;
+        if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_NUMBER){
+            return length.value * mScale;
+        } else if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_PERCENTAGE){
+            return length.value / 100 * getCanvasHeight();
+        }
+        return fromRelativeFast(length);
     }
 
     double relativeOnOther(SVGLength length) {
-        return PropHelper.fromRelative(length, getCanvasDiagonal(), 0, mScale, getFontSizeFromContext());
+        SVGLengthUnitType unit = length.unit;
+        if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_NUMBER){
+            return length.value * mScale;
+        } else if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_PERCENTAGE){
+            return length.value / 100 * getCanvasDiagonal();
+        }
+        return fromRelativeFast(length);
+    }
+
+    /**
+     * Converts SVGLength into px / user units
+     * in the current user coordinate system
+     *
+     * @param length     length string
+     * @return value in the current user coordinate system
+     */
+    double fromRelativeFast(SVGLength length) {
+        double unit;
+        switch (length.unit) {
+            case SVG_LENGTHTYPE_EMS:
+                unit = getFontSizeFromContext();
+                break;
+            case SVG_LENGTHTYPE_EXS:
+                unit = getFontSizeFromContext() / 2;
+                break;
+
+            case SVG_LENGTHTYPE_CM:
+                unit = 35.43307;
+                break;
+            case SVG_LENGTHTYPE_MM:
+                unit = 3.543307;
+                break;
+            case SVG_LENGTHTYPE_IN:
+                unit = 90;
+                break;
+            case SVG_LENGTHTYPE_PT:
+                unit = 1.25;
+                break;
+            case SVG_LENGTHTYPE_PC:
+                unit = 15;
+                break;
+
+            default:
+                unit = 1;
+        }
+        return length.value * unit * mScale;
     }
 
     private float getCanvasWidth() {
