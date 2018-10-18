@@ -18,12 +18,30 @@
     RNSVGGlyphContext *_glyphContext;
     NSString *_alignmentBaseline;
     NSString *_baselineShift;
+    BOOL _merging;
 }
 
 - (void)invalidate
 {
+    if (_merging) {
+        return;
+    }
     [super invalidate];
-    //[self releaseCachedPath];
+    [self releaseCachedPath];
+}
+
+- (void)mergeProperties:(__kindof RNSVGRenderable *)target
+{
+    _merging = true;
+    [super mergeProperties:target];
+    _merging = false;
+}
+
+- (void)resetProperties
+{
+    _merging = true;
+    [super resetProperties];
+    _merging = false;
 }
 
 - (void)setTextLength:(RNSVGLength *)textLength
