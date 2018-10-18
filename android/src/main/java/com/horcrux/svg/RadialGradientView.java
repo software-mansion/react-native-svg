@@ -13,24 +13,22 @@ import android.annotation.SuppressLint;
 import android.graphics.Matrix;
 
 import com.facebook.common.logging.FLog;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.common.ReactConstants;
+import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
 @SuppressLint("ViewConstructor")
 class RadialGradientView extends DefinitionView {
-    private String mFx;
-    private String mFy;
-    private String mRx;
-    private String mRy;
-    private String mCx;
-    private String mCy;
+    private SVGLength mFx;
+    private SVGLength mFy;
+    private SVGLength mRx;
+    private SVGLength mRy;
+    private SVGLength mCx;
+    private SVGLength mCy;
     private ReadableArray mGradient;
     private Brush.BrushUnits mGradientUnits;
 
@@ -47,37 +45,37 @@ class RadialGradientView extends DefinitionView {
 
     @ReactProp(name = "fx")
     public void setFx(Dynamic fx) {
-        mFx = getStringFromDynamic(fx);
+        mFx = getLengthFromDynamic(fx);
         invalidate();
     }
 
     @ReactProp(name = "fy")
     public void setFy(Dynamic fy) {
-        mFy = getStringFromDynamic(fy);
+        mFy = getLengthFromDynamic(fy);
         invalidate();
     }
 
     @ReactProp(name = "rx")
     public void setRx(Dynamic rx) {
-        mRx = getStringFromDynamic(rx);
+        mRx = getLengthFromDynamic(rx);
         invalidate();
     }
 
     @ReactProp(name = "ry")
     public void setRy(Dynamic ry) {
-        mRy = getStringFromDynamic(ry);
+        mRy = getLengthFromDynamic(ry);
         invalidate();
     }
 
     @ReactProp(name = "cx")
     public void setCx(Dynamic cx) {
-        mCx = getStringFromDynamic(cx);
+        mCx = getLengthFromDynamic(cx);
         invalidate();
     }
 
     @ReactProp(name = "cy")
     public void setCy(Dynamic cy) {
-        mCy = getStringFromDynamic(cy);
+        mCy = getLengthFromDynamic(cy);
         invalidate();
     }
 
@@ -122,14 +120,7 @@ class RadialGradientView extends DefinitionView {
     @Override
     void saveDefinition() {
         if (mName != null) {
-            WritableArray points = Arguments.createArray();
-            points.pushString(mFx);
-            points.pushString(mFy);
-            points.pushString(mRx);
-            points.pushString(mRy);
-            points.pushString(mCx);
-            points.pushString(mCy);
-
+            SVGLength[] points = new SVGLength[]{mFx,mFy,mRx,mRy,mCx,mCy};
             Brush brush = new Brush(Brush.BrushType.RADIAL_GRADIENT, points, mGradientUnits);
             brush.setGradientColors(mGradient);
             if (mMatrix != null) {

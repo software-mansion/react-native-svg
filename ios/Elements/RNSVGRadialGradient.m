@@ -9,9 +9,9 @@
 
 @implementation RNSVGRadialGradient
 
-- (void)setFx:(NSString *)fx
+- (void)setFx:(RNSVGLength *)fx
 {
-    if ([fx isEqualToString:_fx]) {
+    if ([fx isEqualTo:_fx]) {
         return;
     }
     
@@ -19,9 +19,9 @@
     [self invalidate];
 }
 
-- (void)setFy:(NSString *)fy
+- (void)setFy:(RNSVGLength *)fy
 {
-    if ([fy isEqualToString:_fy]) {
+    if ([fy isEqualTo:_fy]) {
         return;
     }
     
@@ -29,9 +29,9 @@
     [self invalidate];
 }
 
-- (void)setRx:(NSString *)rx
+- (void)setRx:(RNSVGLength *)rx
 {
-    if ([rx isEqualToString:_rx]) {
+    if ([rx isEqualTo:_rx]) {
         return;
     }
     
@@ -39,9 +39,9 @@
     [self invalidate];
 }
 
-- (void)setRy:(NSString *)ry
+- (void)setRy:(RNSVGLength *)ry
 {
-    if ([ry isEqualToString:_ry]) {
+    if ([ry isEqualTo:_ry]) {
         return;
     }
     
@@ -49,9 +49,9 @@
     [self invalidate];
 }
 
-- (void)setCx:(NSString *)cx
+- (void)setCx:(RNSVGLength *)cx
 {
-    if ([cx isEqualToString:_cx]) {
+    if ([cx isEqualTo:_cx]) {
         return;
     }
     
@@ -59,9 +59,9 @@
     [self invalidate];
 }
 
-- (void)setCy:(NSString *)cy
+- (void)setCy:(RNSVGLength *)cy
 {
-    if ([cy isEqualToString:_cy]) {
+    if ([cy isEqualTo:_cy]) {
         return;
     }
     
@@ -102,7 +102,7 @@
 
 - (void)parseReference
 {
-    NSArray<NSString *> *points = @[self.fx, self.fy, self.rx, self.ry, self.cx, self.cy];
+    NSArray<RNSVGLength *> *points = @[self.fx, self.fy, self.rx, self.ry, self.cx, self.cy];
     RNSVGPainter *painter = [[RNSVGPainter alloc] initWithPointsArray:points];
     [painter setUnits:self.gradientUnits];
     [painter setTransform:self.gradientTransform];

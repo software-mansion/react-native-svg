@@ -23,8 +23,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 @SuppressLint("ViewConstructor")
 class UseView extends RenderableView {
     private String mHref;
-    private String mW;
-    private String mH;
+    private SVGLength mW;
+    private SVGLength mH;
 
     public UseView(ReactContext reactContext) {
         super(reactContext);
@@ -38,13 +38,13 @@ class UseView extends RenderableView {
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
-        mW = getStringFromDynamic(width);
+        mW = getLengthFromDynamic(width);
         invalidate();
     }
 
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
-        mH = getStringFromDynamic(height);
+        mH = getLengthFromDynamic(height);
         invalidate();
     }
 

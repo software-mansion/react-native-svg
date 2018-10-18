@@ -22,9 +22,9 @@
     [self.svgView defineMask:self maskName:self.name];
 }
 
-- (void)setX:(NSString *)x
+- (void)setX:(RNSVGLength *)x
 {
-    if ([x isEqualToString:_x]) {
+    if ([x isEqualTo:_x]) {
         return;
     }
     
@@ -32,9 +32,9 @@
     [self invalidate];
 }
 
-- (void)setY:(NSString *)y
+- (void)setY:(RNSVGLength *)y
 {
-    if ([y isEqualToString:_y]) {
+    if ([y isEqualTo:_y]) {
         return;
     }
     
@@ -42,9 +42,9 @@
     [self invalidate];
 }
 
-- (void)setMaskwidth:(NSString *)maskwidth
+- (void)setMaskwidth:(RNSVGLength *)maskwidth
 {
-    if ([maskwidth isEqualToString:_maskwidth]) {
+    if ([maskwidth isEqualTo:_maskwidth]) {
         return;
     }
     
@@ -52,9 +52,9 @@
     [self invalidate];
 }
 
-- (void)setMaskheight:(NSString *)maskheight
+- (void)setMaskheight:(RNSVGLength *)maskheight
 {
-    if ([maskheight isEqualToString:_maskheight]) {
+    if ([maskheight isEqualTo:_maskheight]) {
         return;
     }
     

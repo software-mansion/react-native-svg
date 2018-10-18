@@ -28,7 +28,7 @@ class TextPathView extends TextView {
     private String mHref;
     private TextPathSide mSide;
     private TextPathMidLine mMidLine;
-    private @Nullable String mStartOffset;
+    private @Nullable SVGLength mStartOffset;
     private TextPathMethod mMethod = TextPathMethod.align;
     private TextPathSpacing mSpacing = TextPathSpacing.exact;
 
@@ -44,7 +44,7 @@ class TextPathView extends TextView {
 
     @ReactProp(name = "startOffset")
     public void setStartOffset(Dynamic startOffset) {
-        mStartOffset = getStringFromDynamic(startOffset);
+        mStartOffset = getLengthFromDynamic(startOffset);
         invalidate();
     }
 
@@ -90,7 +90,7 @@ class TextPathView extends TextView {
         return mMidLine;
     }
 
-    String getStartOffset() {
+    SVGLength getStartOffset() {
         return mStartOffset;
     }
 

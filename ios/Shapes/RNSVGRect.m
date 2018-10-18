@@ -11,54 +11,54 @@
 
 @implementation RNSVGRect
 
-- (void)setX:(NSString *)x
+- (void)setX:(RNSVGLength *)x
 {
-    if ([x isEqualToString:_x]) {
+    if ([x isEqualTo:_x]) {
         return;
     }
     [self invalidate];
     _x = x;
 }
 
-- (void)setY:(NSString *)y
+- (void)setY:(RNSVGLength *)y
 {
-    if ([y isEqualToString:_y]) {
+    if ([y isEqualTo:_y]) {
         return;
     }
     [self invalidate];
     _y = y;
 }
 
-- (void)setRectwidth:(NSString *)rectwidth
+- (void)setRectwidth:(RNSVGLength *)rectwidth
 {
-    if ([rectwidth isEqualToString:_rectwidth]) {
+    if ([rectwidth isEqualTo:_rectwidth]) {
         return;
     }
     [self invalidate];
     _rectwidth = rectwidth;
 }
 
-- (void)setRectheight:(NSString *)rectheight
+- (void)setRectheight:(RNSVGLength *)rectheight
 {
-    if ([rectheight isEqualToString:_rectheight]) {
+    if ([rectheight isEqualTo:_rectheight]) {
         return;
     }
     [self invalidate];
     _rectheight = rectheight;
 }
 
-- (void)setRx:(NSString *)rx
+- (void)setRx:(RNSVGLength *)rx
 {
-    if ([rx isEqualToString:_rx]) {
+    if ([rx isEqualTo:_rx]) {
         return;
     }
     [self invalidate];
     _rx = rx;
 }
 
-- (void)setRy:(NSString *)ry
+- (void)setRy:(RNSVGLength *)ry
 {
-    if ([ry isEqualToString:_ry]) {
+    if ([ry isEqualTo:_ry]) {
         return;
     }
     [self invalidate];

@@ -21,10 +21,10 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class EllipseView extends RenderableView {
-    private String mCx;
-    private String mCy;
-    private String mRx;
-    private String mRy;
+    private SVGLength mCx;
+    private SVGLength mCy;
+    private SVGLength mRx;
+    private SVGLength mRy;
 
     public EllipseView(ReactContext reactContext) {
         super(reactContext);
@@ -32,25 +32,25 @@ class EllipseView extends RenderableView {
 
     @ReactProp(name = "cx")
     public void setCx(Dynamic cx) {
-        mCx = getStringFromDynamic(cx);
+        mCx = getLengthFromDynamic(cx);
         invalidate();
     }
 
     @ReactProp(name = "cy")
     public void setCy(Dynamic cy) {
-        mCy = getStringFromDynamic(cy);
+        mCy = getLengthFromDynamic(cy);
         invalidate();
     }
 
     @ReactProp(name = "rx")
     public void setRx(Dynamic rx) {
-        mRx = getStringFromDynamic(rx);
+        mRx = getLengthFromDynamic(rx);
         invalidate();
     }
 
     @ReactProp(name = "ry")
     public void setRy(Dynamic ry) {
-        mRy = getStringFromDynamic(ry);
+        mRy = getLengthFromDynamic(ry);
         invalidate();
     }
 

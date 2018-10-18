@@ -14,12 +14,14 @@
 #import "RNSVGCGFCRule.h"
 #import "RNSVGVBMOS.h"
 #import "RNSVGUnits.h"
+#import "RNSVGLength.h"
 #import "RNSVGPathParser.h"
 
 @class RNSVGBrush;
 
 @interface RCTConvert (RNSVG)
 
++ (RNSVGLength*)RNSVGLength:(id)json;
 + (RNSVGCGFCRule)RNSVGCGFCRule:(id)json;
 + (RNSVGVBMOS)RNSVGVBMOS:(id)json;
 + (RNSVGUnits)RNSVGUnits:(id)json;

@@ -56,8 +56,6 @@ class PropHelper {
         return inputMatrixDataSize;
     }
 
-    static private final Pattern percentageRegExp = Pattern.compile("^(-?\\d+(?:\\.\\d+)?)%$");
-
     /**
      * Converts length string into px / user units
      * in the current user coordinate system
@@ -152,16 +150,79 @@ class PropHelper {
             }
         }
     }
-
     /**
-     * Matches if the `string` is percentage-like.
+     * Converts SVGLength into px / user units
+     * in the current user coordinate system
      *
-     * @param string percentage string
-     * @return if `string` is percentage-like.
+     * @param length     length string
+     * @param relative   relative size for percentages
+     * @param offset     offset for all units
+     * @param scale      scaling parameter
+     * @param fontSize   current font size
+     * @return value in the current user coordinate system
      */
+    static double fromRelative(SVGLength length, double relative, double offset, double scale, double fontSize) {
+        /*
+            TODO list
 
-    static boolean isPercentage(String string) {
-        return percentageRegExp.matcher(string).matches();
+            unit  relative to
+            em    font size of the element
+            ex    x-height of the element’s font
+            ch    width of the "0" (ZERO, U+0030) glyph in the element’s font
+            rem   font size of the root element
+            vw    1% of viewport’s width
+            vh    1% of viewport’s height
+            vmin  1% of viewport’s smaller dimension
+            vmax  1% of viewport’s larger dimension
+
+            relative-size [ larger | smaller ]
+            absolute-size: [ xx-small | x-small | small | medium | large | x-large | xx-large ]
+
+            https://www.w3.org/TR/css3-values/#relative-lengths
+            https://www.w3.org/TR/css3-values/#absolute-lengths
+            https://drafts.csswg.org/css-cascade-4/#computed-value
+            https://drafts.csswg.org/css-fonts-3/#propdef-font-size
+            https://drafts.csswg.org/css2/fonts.html#propdef-font-size
+        */
+        SVGLengthUnitType unitType = length.unit;
+        double value = length.value;
+        double unit = 1;
+        switch (unitType) {
+            case SVG_LENGTHTYPE_NUMBER:
+            case SVG_LENGTHTYPE_PX:
+                break;
+
+            case SVG_LENGTHTYPE_PERCENTAGE:
+                return value / 100 * relative + offset;
+
+            case SVG_LENGTHTYPE_EMS:
+                unit = fontSize;
+                break;
+            case SVG_LENGTHTYPE_EXS:
+                unit = fontSize / 2;
+                break;
+
+            case SVG_LENGTHTYPE_CM:
+                unit = 35.43307;
+                break;
+            case SVG_LENGTHTYPE_MM:
+                unit = 3.543307;
+                break;
+            case SVG_LENGTHTYPE_IN:
+                unit = 90;
+                break;
+            case SVG_LENGTHTYPE_PT:
+                unit = 1.25;
+                break;
+            case SVG_LENGTHTYPE_PC:
+                unit = 15;
+                break;
+
+            default:
+            case SVG_LENGTHTYPE_UNKNOWN:
+                return value * scale + offset;
+        }
+        return value * unit * scale + offset;
     }
 
     static class PathParser {

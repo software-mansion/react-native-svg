@@ -875,7 +875,7 @@ class TSpanView extends TextView {
         return path;
     }
 
-    private double getAbsoluteStartOffset(String startOffset, double distance, double fontSize) {
+    private double getAbsoluteStartOffset(SVGLength startOffset, double distance, double fontSize) {
         return PropHelper.fromRelative(startOffset, distance, 0, mScale, fontSize);
     }
 

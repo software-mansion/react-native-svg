@@ -44,10 +44,10 @@ import javax.annotation.Nullable;
 
 @SuppressLint("ViewConstructor")
 class ImageView extends RenderableView {
-    private String mX;
-    private String mY;
-    private String mW;
-    private String mH;
+    private SVGLength mX;
+    private SVGLength mY;
+    private SVGLength mW;
+    private SVGLength mH;
     private String uriString;
     private int mImageWidth;
     private int mImageHeight;
@@ -61,25 +61,25 @@ class ImageView extends RenderableView {
 
     @ReactProp(name = "x")
     public void setX(Dynamic x) {
-        mX = getStringFromDynamic(x);
+        mX = getLengthFromDynamic(x);
         invalidate();
     }
 
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
-        mY = getStringFromDynamic(y);
+        mY = getLengthFromDynamic(y);
         invalidate();
     }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
-        mW = getStringFromDynamic(width);
+        mW = getLengthFromDynamic(width);
         invalidate();
     }
 
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
-        mH = getStringFromDynamic(height);
+        mH = getLengthFromDynamic(height);
         invalidate();
     }
 

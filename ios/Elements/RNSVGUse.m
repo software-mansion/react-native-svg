@@ -21,9 +21,9 @@
     _href = href;
 }
 
-- (void)setUsewidth:(NSString *)usewidth
+- (void)setUsewidth:(RNSVGLength *)usewidth
 {
-    if ([usewidth isEqualToString:_usewidth]) {
+    if ([usewidth isEqualTo:_usewidth]) {
         return;
     }
 
@@ -31,9 +31,9 @@
     _usewidth = usewidth;
 }
 
-- (void)setUseheight:(NSString *)useheight
+- (void)setUseheight:(RNSVGLength *)useheight
 {
-    if ([useheight isEqualToString:_useheight]) {
+    if ([useheight isEqualTo:_useheight]) {
         return;
     }
 

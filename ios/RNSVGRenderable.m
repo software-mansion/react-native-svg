@@ -16,7 +16,7 @@
     NSMutableDictionary *_originProperties;
     NSArray<NSString *> *_lastMergedList;
     NSArray<NSString *> *_attributeList;
-    NSArray<NSString *> *_sourceStrokeDashArray;
+    NSArray<RNSVGLength *> *_sourceStrokeDashArray;
     CGPathRef _strokePath;
     CGPathRef _hitArea;
 }
@@ -26,7 +26,7 @@
     if (self = [super init]) {
         _fillOpacity = 1;
         _strokeOpacity = 1;
-        _strokeWidth = @"1";
+        _strokeWidth = [RNSVGLength lengthWithNumber:1];
         _fillRule = kRNSVGCGFCRuleNonzero;
     }
     return self;
@@ -83,9 +83,9 @@
     _strokeOpacity = strokeOpacity;
 }
 
-- (void)setStrokeWidth:(NSString*)strokeWidth
+- (void)setStrokeWidth:(RNSVGLength*)strokeWidth
 {
-    if ([strokeWidth isEqualToString:_strokeWidth]) {
+    if ([strokeWidth isEqualTo:_strokeWidth]) {
         return;
     }
     [self invalidate];
@@ -119,9 +119,9 @@
     _strokeMiterlimit = strokeMiterlimit;
 }
 
-- (void)setStrokeDasharray:(NSArray<NSString *> *)strokeDasharray
+- (void)setStrokeDasharray:(NSArray<RNSVGLength *> *)strokeDasharray
 {
-    if (strokeDasharray == _strokeDasharray) {
+    if ([strokeDasharray isEqualTo:_strokeDasharray]) {
         return;
     }
     [self invalidate];
@@ -195,18 +195,14 @@ UInt32 saturate(double value) {
         CGContextRef bcontext = CGBitmapContextCreate(pixels, iwidth, iheight, bitsPerComponent, bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
 
         // Clip to mask bounds and render the mask
-        CGFloat x = [RNSVGPercentageConverter stringToFloat:[_maskNode x]
-                                                   relative:width
-                                                     offset:0];
-        CGFloat y = [RNSVGPercentageConverter stringToFloat:[_maskNode y]
-                                                   relative:height
-                                                     offset:0];
-        CGFloat w = [RNSVGPercentageConverter stringToFloat:[_maskNode maskwidth]
-                                                   relative:width
-                                                     offset:0];
-        CGFloat h = [RNSVGPercentageConverter stringToFloat:[_maskNode maskheight]
-                                                   relative:height
-                                                     offset:0];
+        double x = [RNSVGPropHelper fromRelative:[_maskNode x]
+                                         relative:width];
+        double y = [RNSVGPropHelper fromRelative:[_maskNode y]
+                                         relative:height];
+        double w = [RNSVGPropHelper fromRelative:[_maskNode maskwidth]
+                                         relative:width];
+        double h = [RNSVGPropHelper fromRelative:[_maskNode maskheight]
+                                         relative:height];
         CGRect maskBounds = CGRectMake(x, y, w, h);
         CGContextClipToRect(bcontext, maskBounds);
         [_maskNode renderLayerTo:bcontext rect:rect];
@@ -328,7 +324,7 @@ UInt32 saturate(double value) {
         CGContextSetLineWidth(context, width);
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);
-        NSArray<NSString *>* strokeDasharray = self.strokeDasharray;
+        NSArray<RNSVGLength *>* strokeDasharray = self.strokeDasharray;
 
         if (strokeDasharray.count) {
             RNSVGCGFloatArray dash = self.strokeDasharrayData;

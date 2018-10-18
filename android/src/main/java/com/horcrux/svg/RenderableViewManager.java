@@ -70,6 +70,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
 
     class RenderableShadowNode extends LayoutShadowNode {
 
+        @SuppressWarnings("unused")
         @ReactPropGroup(
             names = {
                 ALIGN_SELF,

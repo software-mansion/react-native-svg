@@ -18,8 +18,9 @@ import android.view.ViewParent;
 
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.annotations.ReactProp;
+
+import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
@@ -28,15 +29,15 @@ import static com.horcrux.svg.TextProperties.TextLengthAdjust;
 
 @SuppressLint("ViewConstructor")
 class TextView extends GroupView {
-    String mTextLength = null;
+    SVGLength mTextLength = null;
     String mBaselineShift = null;
     TextLengthAdjust mLengthAdjust = TextLengthAdjust.spacing;
     AlignmentBaseline mAlignmentBaseline;
-    @Nullable ReadableArray mPositionX;
-    @Nullable ReadableArray mPositionY;
-    @Nullable ReadableArray mRotate;
-    @Nullable ReadableArray mDeltaX;
-    @Nullable ReadableArray mDeltaY;
+    @Nullable ArrayList<SVGLength> mPositionX;
+    @Nullable ArrayList<SVGLength> mPositionY;
+    @Nullable ArrayList<SVGLength> mRotate;
+    @Nullable ArrayList<SVGLength> mDeltaX;
+    @Nullable ArrayList<SVGLength> mDeltaY;
 
     public TextView(ReactContext reactContext) {
         super(reactContext);
@@ -50,7 +51,7 @@ class TextView extends GroupView {
 
     @ReactProp(name = "textLength")
     public void setTextLength(Dynamic length) {
-        mTextLength = getStringFromDynamic(length);
+        mTextLength = getLengthFromDynamic(length);
         invalidate();
     }
 
@@ -96,31 +97,31 @@ class TextView extends GroupView {
 
     @ReactProp(name = "rotate")
     public void setRotate(Dynamic rotate) {
-        mRotate = getStringArrayFromDynamic(rotate);
+        mRotate = getLengthArrayFromDynamic(rotate);
         invalidate();
     }
 
     @ReactProp(name = "dx")
     public void setDeltaX(Dynamic deltaX) {
-        mDeltaX = getStringArrayFromDynamic(deltaX);
+        mDeltaX = getLengthArrayFromDynamic(deltaX);
         invalidate();
     }
 
     @ReactProp(name = "dy")
     public void setDeltaY(Dynamic deltaY) {
-        mDeltaY = getStringArrayFromDynamic(deltaY);
+        mDeltaY = getLengthArrayFromDynamic(deltaY);
         invalidate();
     }
 
     @ReactProp(name = "x")
     public void setPositionX(Dynamic positionX) {
-        mPositionX = getStringArrayFromDynamic(positionX);
+        mPositionX = getLengthArrayFromDynamic(positionX);
         invalidate();
     }
 
     @ReactProp(name = "y")
     public void setPositionY(Dynamic positionY) {
-        mPositionY = getStringArrayFromDynamic(positionY);
+        mPositionY = getLengthArrayFromDynamic(positionY);
         invalidate();
     }
 

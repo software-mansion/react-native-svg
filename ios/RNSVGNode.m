@@ -323,25 +323,25 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     return _svgView;
 }
 
-- (CGFloat)relativeOnWidth:(NSString *)length
+- (CGFloat)relativeOnWidthString:(NSString *)length
 {
     return [RNSVGPropHelper fromRelativeWithNSString:length
-                                         relative:[self getContextWidth]
-                                           offset:0
-                                            scale:1
-                                         fontSize:[self getFontSizeFromContext]];
+                                relative:[self getContextWidth]
+                                  offset:0
+                                   scale:1
+                                fontSize:[self getFontSizeFromContext]];
 }
 
-- (CGFloat)relativeOnHeight:(NSString *)length
+- (CGFloat)relativeOnHeightString:(NSString *)length
 {
     return [RNSVGPropHelper fromRelativeWithNSString:length
-                                         relative:[self getContextHeight]
-                                           offset:0
-                                            scale:1
-                                         fontSize:[self getFontSizeFromContext]];
+                                relative:[self getContextHeight]
+                                  offset:0
+                                   scale:1
+                                fontSize:[self getFontSizeFromContext]];
 }
 
-- (CGFloat)relativeOnOther:(NSString *)length
+- (CGFloat)relativeOnOtherString:(NSString *)length
 {
     CGRect bounds = [self getContextBounds];
     CGFloat width = CGRectGetWidth(bounds);
@@ -350,10 +350,44 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     CGFloat powY = height * height;
     CGFloat r = sqrt(powX + powY) * RNSVG_M_SQRT1_2l;
     return [RNSVGPropHelper fromRelativeWithNSString:length
-                                         relative:r
-                                           offset:0
-                                            scale:1
-                                         fontSize:[self getFontSizeFromContext]];
+                                relative:r
+                                  offset:0
+                                   scale:1
+                                fontSize:[self getFontSizeFromContext]];
+}
+
+
+- (CGFloat)relativeOnWidth:(RNSVGLength *)length
+{
+    return [RNSVGPropHelper fromRelative:length
+                                relative:[self getContextWidth]
+                                  offset:0
+                                   scale:1
+                                fontSize:[self getFontSizeFromContext]];
+}
+
+- (CGFloat)relativeOnHeight:(RNSVGLength *)length
+{
+    return [RNSVGPropHelper fromRelative:length
+                                relative:[self getContextHeight]
+                                  offset:0
+                                   scale:1
+                                fontSize:[self getFontSizeFromContext]];
+}
+
+- (CGFloat)relativeOnOther:(RNSVGLength *)length
+{
+    CGRect bounds = [self getContextBounds];
+    CGFloat width = CGRectGetWidth(bounds);
+    CGFloat height = CGRectGetHeight(bounds);
+    CGFloat powX = width * width;
+    CGFloat powY = height * height;
+    CGFloat r = sqrt(powX + powY) * RNSVG_M_SQRT1_2l;
+    return [RNSVGPropHelper fromRelative:length
+                                relative:r
+                                  offset:0
+                                   scale:1
+                                fontSize:[self getFontSizeFromContext]];
 }
 
 - (CGRect)getContextBounds

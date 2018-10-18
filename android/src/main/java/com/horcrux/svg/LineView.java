@@ -20,10 +20,10 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class LineView extends RenderableView {
-    private String mX1;
-    private String mY1;
-    private String mX2;
-    private String mY2;
+    private SVGLength mX1;
+    private SVGLength mY1;
+    private SVGLength mX2;
+    private SVGLength mY2;
 
     public LineView(ReactContext reactContext) {
         super(reactContext);
@@ -31,25 +31,25 @@ class LineView extends RenderableView {
 
     @ReactProp(name = "x1")
     public void setX1(Dynamic x1) {
-        mX1 = getStringFromDynamic(x1);
+        mX1 = getLengthFromDynamic(x1);
         invalidate();
     }
 
     @ReactProp(name = "y1")
     public void setY1(Dynamic y1) {
-        mY1 = getStringFromDynamic(y1);
+        mY1 = getLengthFromDynamic(y1);
         invalidate();
     }
 
     @ReactProp(name = "x2")
     public void setX2(Dynamic x2) {
-        mX2 = getStringFromDynamic(x2);
+        mX2 = getLengthFromDynamic(x2);
         invalidate();
     }
 
     @ReactProp(name = "y2")
     public void setY2(Dynamic y2) {
-        mY2 = getStringFromDynamic(y2);
+        mY2 = getLengthFromDynamic(y2);
         invalidate();
     }
 

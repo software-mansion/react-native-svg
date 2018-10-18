@@ -20,41 +20,9 @@ RCT_EXPORT_MODULE()
   return [RNSVGEllipse new];
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(cx, id, RNSVGEllipse)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.cx = stringValue;
-    } else {
-        view.cx = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
-RCT_CUSTOM_VIEW_PROPERTY(cy, id, RNSVGEllipse)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.cy = stringValue;
-    } else {
-        view.cy = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
-RCT_CUSTOM_VIEW_PROPERTY(rx, id, RNSVGEllipse)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.rx = stringValue;
-    } else {
-        view.rx = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
-RCT_CUSTOM_VIEW_PROPERTY(ry, id, RNSVGEllipse)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.ry = stringValue;
-    } else {
-        view.ry = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
+RCT_EXPORT_VIEW_PROPERTY(cx, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(cy, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(rx, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(ry, RNSVGLength*)
 
 @end

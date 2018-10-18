@@ -60,8 +60,8 @@
             }
         } else if ([node isKindOfClass:[RNSVGSvgView class]]) {
             RNSVGSvgView* svgView = (RNSVGSvgView*)node;
-            CGFloat width = [self relativeOnWidth:svgView.bbWidth];
-            CGFloat height = [self relativeOnHeight:svgView.bbHeight];
+            CGFloat width = [self relativeOnWidthString:svgView.bbWidth];
+            CGFloat height = [self relativeOnHeightString:svgView.bbHeight];
             CGRect rect = CGRectMake(0, 0, width, height);
             CGContextClipToRect(context, rect);
             [svgView drawToContext:context withRect:(CGRect)rect];

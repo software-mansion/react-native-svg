@@ -64,9 +64,9 @@ abstract public class RenderableView extends VirtualView {
     */
 
     public @Nullable ReadableArray stroke;
-    public @Nullable String[] strokeDasharray;
+    public @Nullable SVGLength[] strokeDasharray;
 
-    public String strokeWidth = "1";
+    public SVGLength strokeWidth = new SVGLength(1);
     public float strokeOpacity = 1;
     public float strokeMiterlimit = 4;
     public float strokeDashoffset = 0;
@@ -168,9 +168,9 @@ abstract public class RenderableView extends VirtualView {
     public void setStrokeDasharray(@Nullable ReadableArray strokeDasharray) {
         if (strokeDasharray != null) {
             int fromSize = strokeDasharray.size();
-            this.strokeDasharray = new String[fromSize];
+            this.strokeDasharray = new SVGLength[fromSize];
             for (int i = 0; i < fromSize; i++) {
-                this.strokeDasharray[i] = strokeDasharray.getString(i);
+                this.strokeDasharray[i] = new SVGLength(strokeDasharray.getString(i));
             }
         } else {
             this.strokeDasharray = null;
@@ -186,7 +186,7 @@ abstract public class RenderableView extends VirtualView {
 
     @ReactProp(name = "strokeWidth")
     public void setStrokeWidth(Dynamic strokeWidth) {
-        this.strokeWidth = getStringFromDynamic(strokeWidth);
+        this.strokeWidth = getLengthFromDynamic(strokeWidth);
         invalidate();
     }
 

@@ -97,6 +97,18 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
     return [[RNSVGPathParser alloc] initWithPathString: d];
 }
 
++ (RNSVGLength *)RNSVGLength:(id)json
+{
+    if ([json isKindOfClass:[NSNumber class]]) {
+        return [RNSVGLength lengthWithNumber:[json doubleValue]];
+    } else if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        return [RNSVGLength lengthWithString:stringValue];
+    } else {
+        return [[RNSVGLength alloc] init];
+    }
+}
+
 + (CGRect)RNSVGCGRect:(id)json offset:(NSUInteger)offset
 {
     NSArray *arr = [self NSArray:json];

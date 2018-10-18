@@ -13,7 +13,6 @@ import android.view.ViewParent;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
-import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
@@ -23,6 +22,8 @@ import com.facebook.react.uimanager.OnLayoutEvent;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.EventDispatcher;
+
+import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
@@ -327,15 +328,15 @@ abstract public class VirtualView extends ViewGroup {
         return svgView;
     }
 
-    double relativeOnWidth(String length) {
+    double relativeOnWidth(SVGLength length) {
         return PropHelper.fromRelative(length, getCanvasWidth(), 0, mScale, getFontSizeFromContext());
     }
 
-    double relativeOnHeight(String length) {
+    double relativeOnHeight(SVGLength length) {
         return PropHelper.fromRelative(length, getCanvasHeight(), 0, mScale, getFontSizeFromContext());
     }
 
-    double relativeOnOther(String length) {
+    double relativeOnOther(SVGLength length) {
         return PropHelper.fromRelative(length, getCanvasDiagonal(), 0, mScale, getFontSizeFromContext());
     }
 
@@ -407,25 +408,50 @@ abstract public class VirtualView extends ViewGroup {
         return mClientRect;
     }
 
+    SVGLength getLengthFromDynamic(Dynamic dynamic) {
+        switch (dynamic.getType()) {
+            case Number:
+                return new SVGLength(dynamic.asDouble());
+            case String:
+                return new SVGLength(dynamic.asString());
+            default:
+                return new SVGLength();
+        }
+    }
+
     String getStringFromDynamic(Dynamic dynamic) {
         switch (dynamic.getType()) {
-            case String:
-                return dynamic.asString();
             case Number:
                 return String.valueOf(dynamic.asDouble());
+            case String:
+                return dynamic.asString();
             default:
                 return null;
         }
     }
 
-    ReadableArray getStringArrayFromDynamic(Dynamic dynamic) {
+    ArrayList<SVGLength> getLengthArrayFromDynamic(Dynamic dynamic) {
         switch (dynamic.getType()) {
-            case Array:
-                return dynamic.asArray();
-            case String:
-                return JavaOnlyArray.of(dynamic.asString());
-            case Number:
-                return JavaOnlyArray.of(String.valueOf(dynamic.asDouble()));
+            case Number: {
+                ArrayList<SVGLength> list = new ArrayList<>(1);
+                list.add(new SVGLength(dynamic.asDouble()));
+                return list;
+            }
+            case Array: {
+                ReadableArray arr = dynamic.asArray();
+                int size = arr.size();
+                ArrayList<SVGLength> list = new ArrayList<>(size);
+                for (int i = 0; i < size; i++) {
+                    Dynamic val = arr.getDynamic(i);
+                    list.add(getLengthFromDynamic(val));
+                }
+                return list;
+            }
+            case String: {
+                ArrayList<SVGLength> list = new ArrayList<>(1);
+                list.add(new SVGLength(dynamic.asString()));
+                return list;
+            }
             default:
                 return null;
         }

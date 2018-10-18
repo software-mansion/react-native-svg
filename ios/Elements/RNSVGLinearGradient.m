@@ -12,9 +12,9 @@
 @implementation RNSVGLinearGradient
 
 
-- (void)setX1:(NSString *)x1
+- (void)setX1:(RNSVGLength *)x1
 {
-    if ([x1 isEqualToString:_x1]) {
+    if ([x1 isEqualTo:_x1]) {
         return;
     }
     
@@ -22,9 +22,9 @@
     [self invalidate];
 }
 
-- (void)setY1:(NSString *)y1
+- (void)setY1:(RNSVGLength *)y1
 {
-    if ([y1 isEqualToString:_y1]) {
+    if ([y1 isEqualTo:_y1]) {
         return;
     }
     
@@ -32,9 +32,9 @@
     [self invalidate];
 }
 
-- (void)setX2:(NSString *)x2
+- (void)setX2:(RNSVGLength *)x2
 {
-    if ([x2 isEqualToString:_x2]) {
+    if ([x2 isEqualTo:_x2]) {
         return;
     }
     
@@ -42,9 +42,9 @@
     [self invalidate];
 }
 
-- (void)setY2:(NSString *)y2
+- (void)setY2:(RNSVGLength *)y2
 {
-    if ([y2 isEqualToString:_y2]) {
+    if ([y2 isEqualTo:_y2]) {
         return;
     }
     
@@ -85,7 +85,7 @@
 
 - (void)parseReference
 {
-    NSArray<NSString *> *points = @[self.x1, self.y1, self.x2, self.y2];
+    NSArray<RNSVGLength *> *points = @[self.x1, self.y1, self.x2, self.y2];
     RNSVGPainter *painter = [[RNSVGPainter alloc] initWithPointsArray:points];
     [painter setUnits:self.gradientUnits];
     [painter setTransform:self.gradientTransform];

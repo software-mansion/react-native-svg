@@ -11,27 +11,27 @@
 
 @implementation RNSVGCircle
 
-- (void)setCx:(NSString *)cx
+- (void)setCx:(RNSVGLength *)cx
 {
-    if ([cx isEqualToString:_cx]) {
+    if ([cx isEqualTo:_cx]) {
         return;
     }
     [self invalidate];
     _cx = cx;
 }
 
-- (void)setCy:(NSString *)cy
+- (void)setCy:(RNSVGLength *)cy
 {
-    if ([cy isEqualToString:_cy]) {
+    if ([cy isEqualTo:_cy]) {
         return;
     }
     [self invalidate];
     _cy = cy;
 }
 
-- (void)setR:(NSString *)r
+- (void)setR:(RNSVGLength *)r
 {
-    if ([r isEqualToString:_r]) {
+    if ([r isEqualTo:_r]) {
         return;
     }
     [self invalidate];

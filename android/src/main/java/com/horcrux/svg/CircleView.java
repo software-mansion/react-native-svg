@@ -21,9 +21,9 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class CircleView extends RenderableView {
-    private String mCx;
-    private String mCy;
-    private String mR;
+    private SVGLength mCx;
+    private SVGLength mCy;
+    private SVGLength mR;
 
     public CircleView(ReactContext reactContext) {
         super(reactContext);
@@ -31,19 +31,19 @@ class CircleView extends RenderableView {
 
     @ReactProp(name = "cx")
     public void setCx(Dynamic cx) {
-        mCx = getStringFromDynamic(cx);
+        mCx = getLengthFromDynamic(cx);
         invalidate();
     }
 
     @ReactProp(name = "cy")
     public void setCy(Dynamic cy) {
-        mCy = getStringFromDynamic(cy);
+        mCy = getLengthFromDynamic(cy);
         invalidate();
     }
 
     @ReactProp(name = "r")
     public void setR(Dynamic r) {
-        mR = getStringFromDynamic(r);
+        mR = getLengthFromDynamic(r);
         invalidate();
     }
 
@@ -53,13 +53,7 @@ class CircleView extends RenderableView {
 
         double cx = relativeOnWidth(mCx);
         double cy = relativeOnHeight(mCy);
-
-        double r;
-        if (PropHelper.isPercentage(mR)) {
-            r = relativeOnOther(mR);
-        } else {
-            r = Double.parseDouble(mR) * mScale;
-        }
+        double r = relativeOnOther(mR);
 
         path.addCircle((float) cx, (float) cy, (float) r, Path.Direction.CW);
         return path;

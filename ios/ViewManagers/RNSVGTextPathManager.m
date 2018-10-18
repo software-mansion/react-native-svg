@@ -24,14 +24,6 @@ RCT_EXPORT_VIEW_PROPERTY(side, NSString)
 RCT_EXPORT_VIEW_PROPERTY(method, NSString)
 RCT_EXPORT_VIEW_PROPERTY(midLine, NSString)
 RCT_EXPORT_VIEW_PROPERTY(spacing, NSString)
-RCT_CUSTOM_VIEW_PROPERTY(startOffset, id, RNSVGTextPath)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.startOffset = stringValue;
-    } else {
-        view.startOffset = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
+RCT_EXPORT_VIEW_PROPERTY(startOffset, RNSVGLength*)
 
 @end

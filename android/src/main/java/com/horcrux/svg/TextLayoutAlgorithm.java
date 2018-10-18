@@ -661,7 +661,7 @@ class TextLayoutAlgorithm {
               Find the distance delta = ‘textLength’
               computed value − (b − a).
 */
-                        double delta = Double.parseDouble(node.mTextLength) - (b - a);
+                        double delta = node.mTextLength.value - (b - a);
 /*
 
             User agents are required to shift the last
@@ -1029,7 +1029,7 @@ class TextLayoutAlgorithm {
               referenced element (if the referenced element is
               a ‘path’ element).
 */
-                    double offset = Double.parseDouble(textPathView.getStartOffset());
+                    double offset = textPathView.getStartOffset().value;
 /*
               Let advance = the advance of
               the typographic character corresponding

@@ -14,11 +14,9 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 
 import com.facebook.common.logging.FLog;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
@@ -27,10 +25,10 @@ import javax.annotation.Nullable;
 @SuppressLint("ViewConstructor")
 class PatternView extends GroupView {
 
-    private String mX;
-    private String mY;
-    private String mW;
-    private String mH;
+    private SVGLength mX;
+    private SVGLength mY;
+    private SVGLength mW;
+    private SVGLength mH;
     private Brush.BrushUnits mPatternUnits;
     private Brush.BrushUnits mPatternContentUnits;
 
@@ -54,25 +52,25 @@ class PatternView extends GroupView {
 
     @ReactProp(name = "x")
     public void setX(Dynamic x) {
-        mX = getStringFromDynamic(x);
+        mX = getLengthFromDynamic(x);
         invalidate();
     }
 
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
-        mY = getStringFromDynamic(y);
+        mY = getLengthFromDynamic(y);
         invalidate();
     }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
-        mW = getStringFromDynamic(width);
+        mW = getLengthFromDynamic(width);
         invalidate();
     }
 
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
-        mH = getStringFromDynamic(height);
+        mH = getLengthFromDynamic(height);
         invalidate();
     }
 
@@ -165,12 +163,7 @@ class PatternView extends GroupView {
     @Override
     void saveDefinition() {
         if (mName != null) {
-            WritableArray points = Arguments.createArray();
-            points.pushString(mX);
-            points.pushString(mY);
-            points.pushString(mW);
-            points.pushString(mH);
-
+            SVGLength[] points = new SVGLength[]{mX,mY,mW,mH};
             Brush brush = new Brush(Brush.BrushType.PATTERN, points, mPatternUnits);
             brush.setContentUnits(mPatternContentUnits);
             brush.setPattern(this);

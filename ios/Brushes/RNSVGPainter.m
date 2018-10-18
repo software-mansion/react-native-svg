@@ -13,7 +13,7 @@
 
 @implementation RNSVGPainter
 {
-    NSArray<NSString *> *_points;
+    NSArray<RNSVGLength *> *_points;
     NSArray<NSNumber *> *_colors;
     RNSVGBrushType _type;
     BOOL _useObjectBoundingBox;
@@ -22,7 +22,7 @@
     CGRect _userSpaceBoundingBox;
 }
 
-- (instancetype)initWithPointsArray:(NSArray<NSString *> *)pointsArray
+- (instancetype)initWithPointsArray:(NSArray<RNSVGLength *> *)pointsArray
 {
     if ((self = [super init])) {
         _points = pointsArray;

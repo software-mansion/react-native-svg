@@ -356,11 +356,11 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
          a point on the path equal distance in both directions from the initial position on
          the path is reached.
          */
-        double absoluteStartOffset = [RNSVGPropHelper fromRelativeWithNSString:textPath.startOffset
-                                                                   relative:_pathLength
-                                                                     offset:0
-                                                                      scale:1
-                                                                   fontSize:fontSize];
+        double absoluteStartOffset = [RNSVGPropHelper fromRelative:textPath.startOffset
+                                                          relative:_pathLength
+                                                            offset:0
+                                                             scale:1
+                                                          fontSize:fontSize];
         offset += absoluteStartOffset;
         if (isClosed) {
             double halfPathDistance = _pathLength / 2;

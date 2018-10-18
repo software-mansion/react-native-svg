@@ -24,10 +24,10 @@ import javax.annotation.Nullable;
 @SuppressLint("ViewConstructor")
 class MaskView extends GroupView {
 
-    String mX;
-    String mY;
-    String mW;
-    String mH;
+    SVGLength mX;
+    SVGLength mY;
+    SVGLength mW;
+    SVGLength mH;
 
     // TODO implement proper support for units
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
@@ -48,25 +48,25 @@ class MaskView extends GroupView {
 
     @ReactProp(name = "x")
     public void setX(Dynamic x) {
-        mX = getStringFromDynamic(x);
+        mX = getLengthFromDynamic(x);
         invalidate();
     }
 
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
-        mY = getStringFromDynamic(y);
+        mY = getLengthFromDynamic(y);
         invalidate();
     }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
-        mW = getStringFromDynamic(width);
+        mW = getLengthFromDynamic(width);
         invalidate();
     }
 
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
-        mH = getStringFromDynamic(height);
+        mH = getLengthFromDynamic(height);
         invalidate();
     }
 
