@@ -35,7 +35,7 @@ class SVGLength {
             value = 0;
         } else if (length.codePointAt(percentIndex) == '%') {
             unit = SVGLengthUnitType.SVG_LENGTHTYPE_PERCENTAGE;
-            value = Double.valueOf(length.substring(0, percentIndex)) / 100;
+            value = Double.valueOf(length.substring(0, percentIndex));
         } else {
             int twoLetterUnitIndex = stringLength - 2;
             if (twoLetterUnitIndex > 0) {
