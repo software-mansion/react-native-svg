@@ -874,29 +874,24 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
     lines = nil;
     lengths = nil;
     textPath = nil;
-    [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
-        if ([node class] == [RNSVGTextPath class]) {
-            textPath = (RNSVGTextPath*) node;
-            [textPath getPathLength:&_pathLength lineCount:&lineCount lengths:&lengths lines:&lines isClosed:&isClosed];
-            return NO;
-        }
-        return YES;
-    }];
-}
-
-- (void)traverseTextSuperviews:(BOOL (^)(__kindof RNSVGText *node))block
-{
     RNSVGText *targetView = self;
-    BOOL result = block(self);
 
-    while (targetView && [targetView class] != [RNSVGText class] && result) {
+    while (targetView && [targetView class] != [RNSVGText class]) {
         if (![targetView isKindOfClass:[RNSVGText class]]) {
             //todo: throw exception here
-            break;
+            return;
         }
 
         targetView = (RNSVGText*)[targetView superview];
-        result = block(targetView);
+        if ([targetView class] == [RNSVGTextPath class]) {
+            textPath = (RNSVGTextPath*) targetView;
+            [textPath getPathLength:&_pathLength
+                          lineCount:&lineCount
+                            lengths:&lengths
+                              lines:&lines
+                           isClosed:&isClosed];
+            return;
+        }
     }
 }
 
