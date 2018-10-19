@@ -1,20 +1,9 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { numberProp } from "../lib/props";
 import extractGradient from "../lib/extract/extractGradient";
 import { requireNativeComponent } from "react-native";
-import { LinearGradientAttributes } from "../lib/attributes";
 
 export default class extends Component {
     static displayName = "LinearGradient";
-    static propTypes = {
-        x1: numberProp.isRequired,
-        x2: numberProp.isRequired,
-        y1: numberProp.isRequired,
-        y2: numberProp.isRequired,
-        gradientUnits: PropTypes.oneOf(["objectBoundingBox", "userSpaceOnUse"]),
-        id: PropTypes.string.isRequired,
-    };
 
     static defaultProps = {
         x1: "0%",
@@ -38,10 +27,4 @@ export default class extends Component {
     }
 }
 
-const RNSVGLinearGradient = requireNativeComponent(
-    "RNSVGLinearGradient",
-    null,
-    {
-        nativeOnly: LinearGradientAttributes,
-    },
-);
+const RNSVGLinearGradient = requireNativeComponent("RNSVGLinearGradient");

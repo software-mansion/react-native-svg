@@ -1,23 +1,11 @@
 import React from "react";
 import "./Path"; // must import Path first, don`t know why. without this will throw an `Super expression must either be null or a function, not undefined`
 import { requireNativeComponent } from "react-native";
-import { pathProps, numberProp } from "../lib/props";
-import { RectAttributes } from "../lib/attributes";
 import extractProps from "../lib/extract/extractProps";
 import Shape from "./Shape";
 
 export default class extends Shape {
     static displayName = "Rect";
-
-    static propTypes = {
-        ...pathProps,
-        x: numberProp.isRequired,
-        y: numberProp.isRequired,
-        width: numberProp.isRequired,
-        height: numberProp.isRequired,
-        rx: numberProp,
-        ry: numberProp,
-    };
 
     static defaultProps = {
         x: 0,
@@ -59,6 +47,4 @@ export default class extends Shape {
     }
 }
 
-const RNSVGRect = requireNativeComponent("RNSVGRect", null, {
-    nativeOnly: RectAttributes,
-});
+const RNSVGRect = requireNativeComponent("RNSVGRect");

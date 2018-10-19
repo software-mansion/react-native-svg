@@ -1,20 +1,10 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
-import { LineAttributes } from "../lib/attributes";
 import Shape from "./Shape";
-import { pathProps, numberProp } from "../lib/props";
 import extractProps from "../lib/extract/extractProps";
 
 export default class extends Shape {
     static displayName = "Line";
-
-    static propTypes = {
-        ...pathProps,
-        x1: numberProp.isRequired,
-        x2: numberProp.isRequired,
-        y1: numberProp.isRequired,
-        y2: numberProp.isRequired,
-    };
 
     static defaultProps = {
         x1: 0,
@@ -45,6 +35,4 @@ export default class extends Shape {
     }
 }
 
-const RNSVGLine = requireNativeComponent("RNSVGLine", null, {
-    nativeOnly: LineAttributes,
-});
+const RNSVGLine = requireNativeComponent("RNSVGLine");

@@ -1,20 +1,10 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
 import Shape from "./Shape";
-import { pathProps, numberProp } from "../lib/props";
-import { EllipseAttributes } from "../lib/attributes";
 import extractProps from "../lib/extract/extractProps";
 
 export default class extends Shape {
     static displayName = "Ellipse";
-
-    static propTypes = {
-        ...pathProps,
-        cx: numberProp.isRequired,
-        cy: numberProp.isRequired,
-        rx: numberProp.isRequired,
-        ry: numberProp.isRequired,
-    };
 
     static defaultProps = {
         cx: 0,
@@ -46,6 +36,4 @@ export default class extends Shape {
     }
 }
 
-const RNSVGEllipse = requireNativeComponent("RNSVGEllipse", null, {
-    nativeOnly: EllipseAttributes,
-});
+const RNSVGEllipse = requireNativeComponent("RNSVGEllipse");
