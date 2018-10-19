@@ -71,7 +71,7 @@ class Svg extends Shape {
             children,
             ...props
         } = this.props;
-        const stylesAndProps = { ...style, ...props };
+        const stylesAndProps = { ...(style && style.length ? Object.assign({}, ...style) : style), ...props };
         const { color, width, height } = stylesAndProps;
 
         let dimensions;
