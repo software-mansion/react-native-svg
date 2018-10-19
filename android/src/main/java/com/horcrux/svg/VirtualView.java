@@ -1,40 +1,49 @@
-/*
- * Copyright (c) 2015-present, Horcrux.
- * All rights reserved.
- *
- * This source code is licensed under the MIT-style license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
-import com.facebook.react.bridge.JavaOnlyArray;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
-import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.OnLayoutEvent;
-import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.EventDispatcher;
+
+import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
 import static com.horcrux.svg.FontData.DEFAULT_FONT_SIZE;
 
-abstract class VirtualNode<T> extends LayoutShadowNode {
+@SuppressLint("ViewConstructor")
+abstract public class VirtualView extends ViewGroup {
+    final ReactContext mContext;
+
+    VirtualView(ReactContext reactContext) {
+        super(reactContext);
+        mContext = reactContext;
+        mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+
+    }
+
     /*
         N[1/Sqrt[2], 36]
         The inverse of the square root of 2.
@@ -43,14 +52,6 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
     private static final double M_SQRT1_2l = 0.707106781186547524400844362104849039;
 
     static final float MIN_OPACITY_FOR_DRAW = 0.01f;
-
-    @Override
-    public void setReactTag(int reactTag) {
-        super.setReactTag(reactTag);
-        vm.setShadowNode(reactTag, this);
-    }
-
-    RenderableViewManager<VirtualNode<T>> vm;
 
     private static final float[] sRawMatrix = new float[]{
         1, 0, 0,
@@ -75,9 +76,9 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
     private boolean mResponsible;
     String mName;
 
-    private SvgViewShadowNode mSvgShadowNode;
+    private SvgView svgView;
     private Path mCachedClipPath;
-    private GroupShadowNode mTextRoot;
+    private GroupView mTextRoot;
     private double fontSize = -1;
     private double canvasDiagonal = -1;
     private float canvasHeight = -1;
@@ -93,23 +94,9 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
     Region mClipRegion;
     Path mClipRegionPath;
 
-    VirtualNode() {
-        mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
-    }
-
     @Override
-    public boolean isVirtual() {
-        return false;
-    }
-
-    @Override
-    public boolean isVirtualAnchor() {
-        return false;
-    }
-
-    @Override
-    public void markUpdated() {
-        super.markUpdated();
+    public void invalidate() {
+        super.invalidate();
         clearPath();
     }
 
@@ -124,31 +111,30 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
 
     void releaseCachedPath() {
         clearPath();
-        traverseChildren(new NodeRunnable() {
-            public void run(ReactShadowNode node) {
-                if (node instanceof VirtualNode) {
-                    ((VirtualNode)node).releaseCachedPath();
-                }
+        for (int i = 0; i < getChildCount(); i++) {
+            View node = getChildAt(i);
+            if (node instanceof VirtualView) {
+                ((VirtualView)node).releaseCachedPath();
             }
-        });
+        }
     }
 
     @Nullable
-    GroupShadowNode getTextRoot() {
-        VirtualNode node = this;
+    GroupView getTextRoot() {
+        VirtualView node = this;
         if (mTextRoot == null) {
             while (node != null) {
-                if (node instanceof GroupShadowNode && ((GroupShadowNode) node).getGlyphContext() != null) {
-                    mTextRoot = (GroupShadowNode)node;
+                if (node instanceof GroupView && ((GroupView) node).getGlyphContext() != null) {
+                    mTextRoot = (GroupView)node;
                     break;
                 }
 
-                ReactShadowNode parent = node.getParent();
+                ViewParent parent = node.getParent();
 
-                if (!(parent instanceof VirtualNode)) {
+                if (!(parent instanceof VirtualView)) {
                     node = null;
                 } else {
-                    node = (VirtualNode)parent;
+                    node = (VirtualView)parent;
                 }
             }
         }
@@ -157,12 +143,12 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
     }
 
     @Nullable
-    GroupShadowNode getParentTextRoot() {
-        ReactShadowNode parent = this.getParent();
-        if (!(parent instanceof VirtualNode)) {
+    GroupView getParentTextRoot() {
+        ViewParent parent = this.getParent();
+        if (!(parent instanceof VirtualView)) {
             return null;
         } else {
-            return ((VirtualNode) parent).getTextRoot();
+            return ((VirtualView) parent).getTextRoot();
         }
     }
 
@@ -171,7 +157,7 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
         if (fontSize != -1) {
             return fontSize;
         }
-        GroupShadowNode root = getTextRoot();
+        GroupView root = getTextRoot();
         if (root == null) {
             return DEFAULT_FONT_SIZE;
         }
@@ -219,33 +205,33 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
     @ReactProp(name = "name")
     public void setName(String name) {
         mName = name;
-        markUpdated();
+        invalidate();
     }
 
 
     @ReactProp(name = "mask")
     public void setMask(String mask) {
         mMask = mask;
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "clipPath")
     public void setClipPath(String clipPath) {
         mCachedClipPath = null;
         mClipPath = clipPath;
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "clipRule", defaultInt = CLIP_RULE_NONZERO)
     public void setClipRule(int clipRule) {
         mClipRule = clipRule;
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "opacity", defaultFloat = 1f)
     public void setOpacity(float opacity) {
         mOpacity = opacity;
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "matrix")
@@ -269,13 +255,13 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
             mInvertible = false;
         }
 
-        super.markUpdated();
+        super.invalidate();
     }
 
     @ReactProp(name = "responsible")
     public void setResponsible(boolean responsible) {
         mResponsible = responsible;
-        markUpdated();
+        invalidate();
     }
 
     @Nullable Path getClipPath() {
@@ -284,7 +270,7 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
 
     @Nullable Path getClipPath(Canvas canvas, Paint paint) {
         if (mClipPath != null) {
-            ClipPathShadowNode mClipNode = (ClipPathShadowNode) getSvgShadowNode().getDefinedClipPath(mClipPath);
+            ClipPathView mClipNode = (ClipPathView) getSvgView().getDefinedClipPath(mClipPath);
 
             if (mClipNode != null) {
                 Path clipPath = mClipNode.getPath(canvas, paint, Region.Op.UNION);
@@ -322,45 +308,102 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
 
     abstract Path getPath(Canvas canvas, Paint paint);
 
-    SvgViewShadowNode getSvgShadowNode() {
-        if (mSvgShadowNode != null) {
-            return mSvgShadowNode;
+    SvgView getSvgView() {
+        if (svgView != null) {
+            return svgView;
         }
 
-        ReactShadowNode parent = getParent();
+        ViewParent parent = getParent();
 
         if (parent == null) {
             return null;
-        } else if (parent instanceof SvgViewShadowNode) {
-            mSvgShadowNode = (SvgViewShadowNode)parent;
-        } else if (parent instanceof VirtualNode) {
-            mSvgShadowNode = ((VirtualNode) parent).getSvgShadowNode();
+        } else if (parent instanceof SvgView) {
+            svgView = (SvgView)parent;
+        } else if (parent instanceof VirtualView) {
+            svgView = ((VirtualView) parent).getSvgView();
         } else {
             FLog.e(ReactConstants.TAG, "RNSVG: " + getClass().getName() + " should be descendant of a SvgViewShadow.");
         }
 
-        return mSvgShadowNode;
+        return svgView;
     }
 
-    double relativeOnWidth(String length) {
-        return PropHelper.fromRelative(length, getCanvasWidth(), 0, mScale, getFontSizeFromContext());
+    double relativeOnWidth(SVGLength length) {
+        SVGLengthUnitType unit = length.unit;
+        if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_NUMBER){
+            return length.value * mScale;
+        } else if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_PERCENTAGE){
+            return length.value / 100 * getCanvasWidth();
+        }
+        return fromRelativeFast(length);
     }
 
-    double relativeOnHeight(String length) {
-        return PropHelper.fromRelative(length, getCanvasHeight(), 0, mScale, getFontSizeFromContext());
+    double relativeOnHeight(SVGLength length) {
+        SVGLengthUnitType unit = length.unit;
+        if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_NUMBER){
+            return length.value * mScale;
+        } else if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_PERCENTAGE){
+            return length.value / 100 * getCanvasHeight();
+        }
+        return fromRelativeFast(length);
     }
 
-    double relativeOnOther(String length) {
-        return PropHelper.fromRelative(length, getCanvasDiagonal(), 0, mScale, getFontSizeFromContext());
+    double relativeOnOther(SVGLength length) {
+        SVGLengthUnitType unit = length.unit;
+        if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_NUMBER){
+            return length.value * mScale;
+        } else if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_PERCENTAGE){
+            return length.value / 100 * getCanvasDiagonal();
+        }
+        return fromRelativeFast(length);
+    }
+
+    /**
+     * Converts SVGLength into px / user units
+     * in the current user coordinate system
+     *
+     * @param length     length string
+     * @return value in the current user coordinate system
+     */
+    double fromRelativeFast(SVGLength length) {
+        double unit;
+        switch (length.unit) {
+            case SVG_LENGTHTYPE_EMS:
+                unit = getFontSizeFromContext();
+                break;
+            case SVG_LENGTHTYPE_EXS:
+                unit = getFontSizeFromContext() / 2;
+                break;
+
+            case SVG_LENGTHTYPE_CM:
+                unit = 35.43307;
+                break;
+            case SVG_LENGTHTYPE_MM:
+                unit = 3.543307;
+                break;
+            case SVG_LENGTHTYPE_IN:
+                unit = 90;
+                break;
+            case SVG_LENGTHTYPE_PT:
+                unit = 1.25;
+                break;
+            case SVG_LENGTHTYPE_PC:
+                unit = 15;
+                break;
+
+            default:
+                unit = 1;
+        }
+        return length.value * unit * mScale;
     }
 
     private float getCanvasWidth() {
         if (canvasWidth != -1) {
             return canvasWidth;
         }
-        GroupShadowNode root = getTextRoot();
+        GroupView root = getTextRoot();
         if (root == null) {
-            canvasWidth = getSvgShadowNode().getCanvasBounds().width();
+            canvasWidth = getSvgView().getCanvasBounds().width();
         } else {
             canvasWidth = root.getGlyphContext().getWidth();
         }
@@ -372,9 +415,9 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
         if (canvasHeight != -1) {
             return canvasHeight;
         }
-        GroupShadowNode root = getTextRoot();
+        GroupView root = getTextRoot();
         if (root == null) {
-            canvasHeight = getSvgShadowNode().getCanvasBounds().height();
+            canvasHeight = getSvgView().getCanvasBounds().height();
         } else {
             canvasHeight = root.getGlyphContext().getHeight();
         }
@@ -394,18 +437,7 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
 
     void saveDefinition() {
         if (mName != null) {
-            getSvgShadowNode().defineTemplate(this, mName);
-        }
-    }
-
-    interface NodeRunnable {
-        void run(ReactShadowNode node);
-    }
-
-    void traverseChildren(NodeRunnable runner) {
-        for (int i = 0; i < getChildCount(); i++) {
-            ReactShadowNode child = getChildAt(i);
-            runner.run(child);
+            getSvgView().defineTemplate(this, mName);
         }
     }
 
@@ -417,11 +449,11 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
         if (mClientRect == null) {
             return;
         }
-        EventDispatcher eventDispatcher = this.getThemedContext()
+        EventDispatcher eventDispatcher = mContext
                 .getNativeModule(UIManagerModule.class)
                 .getEventDispatcher();
         eventDispatcher.dispatchEvent(OnLayoutEvent.obtain(
-                this.getReactTag(),
+                this.getId(),
                 (int) mClientRect.left,
                 (int) mClientRect.top,
                 (int) mClientRect.width(),
@@ -433,25 +465,50 @@ abstract class VirtualNode<T> extends LayoutShadowNode {
         return mClientRect;
     }
 
+    SVGLength getLengthFromDynamic(Dynamic dynamic) {
+        switch (dynamic.getType()) {
+            case Number:
+                return new SVGLength(dynamic.asDouble());
+            case String:
+                return new SVGLength(dynamic.asString());
+            default:
+                return new SVGLength();
+        }
+    }
+
     String getStringFromDynamic(Dynamic dynamic) {
         switch (dynamic.getType()) {
-            case String:
-                return dynamic.asString();
             case Number:
                 return String.valueOf(dynamic.asDouble());
+            case String:
+                return dynamic.asString();
             default:
                 return null;
         }
     }
 
-    ReadableArray getStringArrayFromDynamic(Dynamic dynamic) {
+    ArrayList<SVGLength> getLengthArrayFromDynamic(Dynamic dynamic) {
         switch (dynamic.getType()) {
-            case Array:
-                return dynamic.asArray();
-            case String:
-                return JavaOnlyArray.of(dynamic.asString());
-            case Number:
-                return JavaOnlyArray.of(String.valueOf(dynamic.asDouble()));
+            case Number: {
+                ArrayList<SVGLength> list = new ArrayList<>(1);
+                list.add(new SVGLength(dynamic.asDouble()));
+                return list;
+            }
+            case Array: {
+                ReadableArray arr = dynamic.asArray();
+                int size = arr.size();
+                ArrayList<SVGLength> list = new ArrayList<>(size);
+                for (int i = 0; i < size; i++) {
+                    Dynamic val = arr.getDynamic(i);
+                    list.add(getLengthFromDynamic(val));
+                }
+                return list;
+            }
+            case String: {
+                ArrayList<SVGLength> list = new ArrayList<>(1);
+                list.add(new SVGLength(dynamic.asString()));
+                return list;
+            }
             default:
                 return null;
         }

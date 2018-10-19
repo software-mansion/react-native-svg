@@ -12,6 +12,7 @@
 #import "RNSVGCGFloatArray.h"
 #import "RNSVGCGFCRule.h"
 #import "RNSVGNode.h"
+#import "RNSVGLength.h"
 #import "RNSVGPercentageConverter.h"
 
 @interface RNSVGRenderable : RNSVGNode
@@ -21,12 +22,12 @@
 @property (nonatomic, assign) RNSVGCGFCRule fillRule;
 @property (nonatomic, strong) RNSVGBrush *stroke;
 @property (nonatomic, assign) CGFloat strokeOpacity;
-@property (nonatomic, strong) NSString *strokeWidth;
+@property (nonatomic, strong) RNSVGLength *strokeWidth;
 @property (nonatomic, assign) CGLineCap strokeLinecap;
 @property (nonatomic, assign) CGLineJoin strokeLinejoin;
 @property (nonatomic, assign) CGFloat strokeMiterlimit;
 @property (nonatomic, assign) RNSVGCGFloatArray strokeDasharrayData;
-@property (nonatomic, strong) NSArray<NSString *> *strokeDasharray;
+@property (nonatomic, strong) NSArray<RNSVGLength *> *strokeDasharray;
 @property (nonatomic, assign) CGFloat strokeDashoffset;
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 

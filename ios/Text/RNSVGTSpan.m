@@ -356,11 +356,9 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
          a point on the path equal distance in both directions from the initial position on
          the path is reached.
          */
-        double absoluteStartOffset = [RNSVGPropHelper fromRelativeWithNSString:textPath.startOffset
-                                                                   relative:_pathLength
-                                                                     offset:0
-                                                                      scale:1
-                                                                   fontSize:fontSize];
+        double absoluteStartOffset = [RNSVGPropHelper fromRelative:textPath.startOffset
+                                                          relative:_pathLength
+                                                          fontSize:fontSize];
         offset += absoluteStartOffset;
         if (isClosed) {
             double halfPathDistance = _pathLength / 2;
@@ -452,14 +450,12 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
      thus, no advance adjustments are made.
      */
     double scaleSpacingAndGlyphs = 1;
-    NSString *mTextLength = [self textLength];
+    RNSVGLength *mTextLength = [self textLength];
     enum RNSVGTextLengthAdjust mLengthAdjust = RNSVGTextLengthAdjustFromString([self lengthAdjust]);
     if (mTextLength != nil) {
-        double author = [RNSVGPropHelper fromRelativeWithNSString:mTextLength
-                                                      relative:[gc getWidth]
-                                                        offset:0
-                                                         scale:1
-                                                      fontSize:fontSize];
+        double author = [RNSVGPropHelper fromRelative:mTextLength
+                                             relative:[gc getWidth]
+                                             fontSize:fontSize];
         if (author < 0) {
             NSException *e = [NSException
                               exceptionWithName:@"NegativeTextLength"
@@ -727,7 +723,7 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
             double y = [gc nextY];
             double dx = [gc nextDeltaX];
             double dy = [gc nextDeltaY];
-            double r = [[gc nextRotation] doubleValue] / RNSVGTSpan_radToDeg;
+            double r = [gc nextRotation] / RNSVGTSpan_radToDeg;
 
             if (isWordSeparator) {
                 continue;
@@ -878,29 +874,22 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
     lines = nil;
     lengths = nil;
     textPath = nil;
-    [self traverseTextSuperviews:^(__kindof RNSVGText *node) {
-        if ([node class] == [RNSVGTextPath class]) {
-            textPath = (RNSVGTextPath*) node;
-            [textPath getPathLength:&_pathLength lineCount:&lineCount lengths:&lengths lines:&lines isClosed:&isClosed];
-            return NO;
-        }
-        return YES;
-    }];
-}
+    RNSVGText *parent = (RNSVGText*)[self superview];
 
-- (void)traverseTextSuperviews:(BOOL (^)(__kindof RNSVGText *node))block
-{
-    RNSVGText *targetView = self;
-    BOOL result = block(self);
-
-    while (targetView && [targetView class] != [RNSVGText class] && result) {
-        if (![targetView isKindOfClass:[RNSVGText class]]) {
-            //todo: throw exception here
+    while (parent) {
+        if ([parent class] == [RNSVGTextPath class]) {
+            textPath = (RNSVGTextPath*) parent;
+            [textPath getPathLength:&_pathLength
+                          lineCount:&lineCount
+                            lengths:&lengths
+                              lines:&lines
+                           isClosed:&isClosed];
+            break;
+        } else if (![parent isKindOfClass:[RNSVGText class]]) {
             break;
         }
 
-        targetView = (RNSVGText*)[targetView superview];
-        result = block(targetView);
+        parent = (RNSVGText*)[parent superview];
     }
 }
 

@@ -157,9 +157,9 @@ void RNSVGPerformanceBezier_addLine(CGPoint *last, const CGPoint *next, NSMutabl
     _spacing = spacing;
 }
 
-- (void)setStartOffset:(NSString *)startOffset
+- (void)setStartOffset:(RNSVGLength *)startOffset
 {
-    if ([startOffset isEqualToString:_startOffset]) {
+    if ([startOffset isEqualTo:_startOffset]) {
         return;
     }
     [self invalidate];

@@ -26,7 +26,7 @@
 
 - (double)nextDeltaY;
 
-- (NSNumber*)nextRotation;
+- (double)nextRotation;
 
 - (double)nextXWithDouble:(double)advance;
 
@@ -34,13 +34,13 @@
 
 - (void)popContext;
 
-- (void)pushContext:(RNSVGText *)node
-                            font:(NSDictionary *)font
-                               x:(NSArray*)x
-                               y:(NSArray*)y
-                          deltaX:(NSArray*)deltaX
-                          deltaY:(NSArray*)deltaY
-                          rotate:(NSArray*)rotate;
+- (void)pushContext:(RNSVGText*)node
+               font:(NSDictionary*)font
+                  x:(NSArray<RNSVGLength*>*)x
+                  y:(NSArray<RNSVGLength*>*)y
+             deltaX:(NSArray<RNSVGLength*>*)deltaX
+             deltaY:(NSArray<RNSVGLength*>*)deltaY
+             rotate:(NSArray<RNSVGLength*>*)rotate;
 
 - (void)pushContext:(RNSVGGroup*)node
                              font:(NSDictionary *)font;

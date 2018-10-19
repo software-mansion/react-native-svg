@@ -9,25 +9,25 @@
 
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Matrix;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-/**
- * Shadow node for virtual Mask definition view
- */
-class MaskShadowNode extends GroupShadowNode {
+@SuppressLint("ViewConstructor")
+class MaskView extends GroupView {
 
-    String mX;
-    String mY;
-    String mW;
-    String mH;
+    SVGLength mX;
+    SVGLength mY;
+    SVGLength mW;
+    SVGLength mH;
 
     // TODO implement proper support for units
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
@@ -42,28 +42,32 @@ class MaskShadowNode extends GroupShadowNode {
     };
     private Matrix mMatrix = null;
 
+    public MaskView(ReactContext reactContext) {
+        super(reactContext);
+    }
+
     @ReactProp(name = "x")
     public void setX(Dynamic x) {
-        mX = getStringFromDynamic(x);
-        markUpdated();
+        mX = getLengthFromDynamic(x);
+        invalidate();
     }
 
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
-        mY = getStringFromDynamic(y);
-        markUpdated();
+        mY = getLengthFromDynamic(y);
+        invalidate();
     }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
-        mW = getStringFromDynamic(width);
-        markUpdated();
+        mW = getLengthFromDynamic(width);
+        invalidate();
     }
 
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
-        mH = getStringFromDynamic(height);
-        markUpdated();
+        mH = getLengthFromDynamic(height);
+        invalidate();
     }
 
     @ReactProp(name = "maskUnits")
@@ -76,7 +80,7 @@ class MaskShadowNode extends GroupShadowNode {
                 mMaskUnits = Brush.BrushUnits.USER_SPACE_ON_USE;
                 break;
         }
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "maskContentUnits")
@@ -89,7 +93,7 @@ class MaskShadowNode extends GroupShadowNode {
                 mMaskContentUnits = Brush.BrushUnits.USER_SPACE_ON_USE;
                 break;
         }
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "maskTransform")
@@ -108,13 +112,13 @@ class MaskShadowNode extends GroupShadowNode {
             mMatrix = null;
         }
 
-        markUpdated();
+        invalidate();
     }
 
     @Override
     void saveDefinition() {
         if (mName != null) {
-            SvgViewShadowNode svg = getSvgShadowNode();
+            SvgView svg = getSvgView();
             svg.defineMask(this, mName);
         }
     }

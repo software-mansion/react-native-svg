@@ -9,59 +9,63 @@
 
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-/**
- * Shadow node for virtual Rect view
- */
-class RectShadowNode extends RenderableShadowNode {
-    private String mX;
-    private String mY;
-    private String mW;
-    private String mH;
-    private String mRx;
-    private String mRy;
+@SuppressLint("ViewConstructor")
+class RectView extends RenderableView {
+    private SVGLength mX;
+    private SVGLength mY;
+    private SVGLength mW;
+    private SVGLength mH;
+    private SVGLength mRx;
+    private SVGLength mRy;
+
+    public RectView(ReactContext reactContext) {
+        super(reactContext);
+    }
 
     @ReactProp(name = "x")
     public void setX(Dynamic x) {
-        mX = getStringFromDynamic(x);
-        markUpdated();
+        mX = getLengthFromDynamic(x);
+        invalidate();
     }
 
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
-        mY = getStringFromDynamic(y);
-        markUpdated();
+        mY = getLengthFromDynamic(y);
+        invalidate();
     }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
-        mW = getStringFromDynamic(width);
-        markUpdated();
+        mW = getLengthFromDynamic(width);
+        invalidate();
     }
 
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
-        mH = getStringFromDynamic(height);
-        markUpdated();
+        mH = getLengthFromDynamic(height);
+        invalidate();
     }
 
     @ReactProp(name = "rx")
     public void setRx(Dynamic rx) {
-        mRx = getStringFromDynamic(rx);
-        markUpdated();
+        mRx = getLengthFromDynamic(rx);
+        invalidate();
     }
 
     @ReactProp(name = "ry")
     public void setRy(Dynamic ry) {
-        mRy = getStringFromDynamic(ry);
-        markUpdated();
+        mRy = getLengthFromDynamic(ry);
+        invalidate();
     }
 
     @Override

@@ -9,16 +9,20 @@
 
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import com.facebook.common.logging.FLog;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.common.ReactConstants;
 
-/**
- * Shadow node for virtual ClipPath view
- */
-class ClipPathShadowNode extends GroupShadowNode {
+@SuppressLint("ViewConstructor")
+class ClipPathView extends GroupView {
+
+    public ClipPathView(ReactContext reactContext) {
+        super(reactContext);
+    }
 
     @Override
     void draw(Canvas canvas, Paint paint, float opacity) {
@@ -27,7 +31,7 @@ class ClipPathShadowNode extends GroupShadowNode {
 
     @Override
     void saveDefinition() {
-        getSvgShadowNode().defineClipPath(this, mName);
+        getSvgView().defineClipPath(this, mName);
     }
 
     @Override
@@ -41,7 +45,7 @@ class ClipPathShadowNode extends GroupShadowNode {
     }
 
     @Override
-    void mergeProperties(RenderableShadowNode target) {}
+    void mergeProperties(RenderableView target) {}
 
     @Override
     void resetProperties() {}

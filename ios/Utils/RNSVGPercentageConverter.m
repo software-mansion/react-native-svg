@@ -28,20 +28,31 @@ static NSRegularExpression* percentageRegExp;
     }
 }
 
++ (CGFloat)lengthToFloat:(RNSVGLength *)length relative:(CGFloat)relative offset:(CGFloat)offset
+{
+    if (length == nil) {
+        return offset;
+    } else if ([length unit] != SVG_LENGTHTYPE_PERCENTAGE) {
+        return [length value] + offset;
+    } else {
+        return [length value] / 100 * relative + offset;
+    }
+}
+
 + (CGFloat)percentageToFloat:(NSString *)percentage relative:(CGFloat)relative offset:(CGFloat)offset
 {
     __block CGFloat matched;
-    
+
     [percentageRegExp enumerateMatchesInString:percentage
                                                   options:0
                                                     range:NSMakeRange(0, percentage.length)
                                                usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
      {
-         
+
          matched = [[percentage substringWithRange:NSMakeRange(result.range.location, result.range.length)] floatValue];
          matched = matched / 100 * relative + offset;
      }];
-    
+
     return matched;
 }
 

@@ -20,80 +20,20 @@ RCT_EXPORT_MODULE()
   return [RNSVGRect new];
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(x, id, RNSVGRect)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.x = stringValue;
-    } else {
-        view.x = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
-RCT_CUSTOM_VIEW_PROPERTY(y, id, RNSVGRect)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.y = stringValue;
-    } else {
-        view.y = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
-RCT_CUSTOM_VIEW_PROPERTY(rectheight, id, RNSVGRect)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.rectheight = stringValue;
-    } else {
-        view.rectheight = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(rectwidth, id, RNSVGRect)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.rectwidth = stringValue;
-    } else {
-        view.rectwidth = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
+RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(rectheight, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(rectwidth, RNSVGLength*)
 RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGRect)
 {
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.rectheight = stringValue;
-    } else {
-        view.rectheight = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
+    view.rectheight = [RCTConvert RNSVGLength:json];
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGRect)
 {
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.rectwidth = stringValue;
-    } else {
-        view.rectwidth = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
+    view.rectwidth = [RCTConvert RNSVGLength:json];
 }
-
-RCT_CUSTOM_VIEW_PROPERTY(rx, id, RNSVGRect)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.rx = stringValue;
-    } else {
-        view.rx = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
-RCT_CUSTOM_VIEW_PROPERTY(ry, id, RNSVGRect)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.ry = stringValue;
-    } else {
-        view.ry = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
+RCT_EXPORT_VIEW_PROPERTY(rx, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(ry, RNSVGLength*)
 
 @end

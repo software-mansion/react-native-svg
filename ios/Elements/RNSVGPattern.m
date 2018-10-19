@@ -19,7 +19,7 @@
 
 - (void)parseReference
 {
-    NSArray<NSString *> *points = @[self.x, self.y, self.patternwidth, self.patternheight];
+    NSArray<RNSVGLength *> *points = @[self.x, self.y, self.patternwidth, self.patternheight];
     RNSVGPainter *painter = [[RNSVGPainter alloc] initWithPointsArray:points];
     [painter setUnits:self.patternUnits];
     [painter setContentUnits:self.patternContentUnits];
@@ -33,9 +33,9 @@
     [self.svgView definePainter:painter painterName:self.name];
 }
 
-- (void)setX:(NSString *)x
+- (void)setX:(RNSVGLength *)x
 {
-    if ([x isEqualToString:_x]) {
+    if ([x isEqualTo:_x]) {
         return;
     }
     
@@ -43,9 +43,9 @@
     [self invalidate];
 }
 
-- (void)setY:(NSString *)y
+- (void)setY:(RNSVGLength *)y
 {
-    if ([y isEqualToString:_y]) {
+    if ([y isEqualTo:_y]) {
         return;
     }
     
@@ -53,9 +53,9 @@
     [self invalidate];
 }
 
-- (void)setPatternwidth:(NSString *)patternwidth
+- (void)setPatternwidth:(RNSVGLength *)patternwidth
 {
-    if ([patternwidth isEqualToString:_patternwidth]) {
+    if ([patternwidth isEqualTo:_patternwidth]) {
         return;
     }
     
@@ -63,9 +63,9 @@
     [self invalidate];
 }
 
-- (void)setPatternheight:(NSString *)patternheight
+- (void)setPatternheight:(RNSVGLength *)patternheight
 {
-    if ([patternheight isEqualToString:_patternheight]) {
+    if ([patternheight isEqualTo:_patternheight]) {
         return;
     }
     

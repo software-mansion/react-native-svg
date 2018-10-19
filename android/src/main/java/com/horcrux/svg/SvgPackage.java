@@ -19,30 +19,31 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.horcrux.svg.RenderableViewManager.*;
 
 public class SvgPackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-                RenderableViewManager.createGroupViewManager(),
-                RenderableViewManager.createPathViewManager(),
-                RenderableViewManager.createCircleViewManager(),
-                RenderableViewManager.createEllipseViewManager(),
-                RenderableViewManager.createLineViewManager(),
-                RenderableViewManager.createRectViewManager(),
-                RenderableViewManager.createTextViewManager(),
-                RenderableViewManager.createTSpanViewManager(),
-                RenderableViewManager.createTextPathViewManager(),
-                RenderableViewManager.createImageViewManager(),
-                RenderableViewManager.createClipPathViewManager(),
-                RenderableViewManager.createDefsViewManager(),
-                RenderableViewManager.createUseViewManager(),
-                RenderableViewManager.createSymbolManager(),
-                RenderableViewManager.createLinearGradientManager(),
-                RenderableViewManager.createRadialGradientManager(),
-                RenderableViewManager.createPatternManager(),
-                RenderableViewManager.createMaskManager(),
+                new GroupViewManager(),
+                new PathViewManager(),
+                new CircleViewManager(),
+                new EllipseViewManager(),
+                new LineViewManager(),
+                new RectViewManager(),
+                new TextViewManager(),
+                new TSpanViewManager(),
+                new TextPathViewManager(),
+                new ImageViewManager(),
+                new ClipPathViewManager(),
+                new DefsViewManager(),
+                new UseViewManager(),
+                new SymbolManager(),
+                new LinearGradientManager(),
+                new RadialGradientManager(),
+                new PatternManager(),
+                new MaskManager(),
                 new SvgViewManager());
     }
 

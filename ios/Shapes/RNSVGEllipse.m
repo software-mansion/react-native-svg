@@ -11,36 +11,36 @@
 
 @implementation RNSVGEllipse
 
-- (void)setCx:(NSString *)cx
+- (void)setCx:(RNSVGLength *)cx
 {
-    if ([cx isEqualToString:_cx]) {
+    if ([cx isEqualTo:_cx]) {
         return;
     }
     [self invalidate];
     _cx = cx;
 }
 
-- (void)setCy:(NSString *)cy
+- (void)setCy:(RNSVGLength *)cy
 {
-    if ([cy isEqualToString:_cy]) {
+    if ([cy isEqualTo:_cy]) {
         return;
     }
     [self invalidate];
     _cy = cy;
 }
 
-- (void)setRx:(NSString *)rx
+- (void)setRx:(RNSVGLength *)rx
 {
-    if ([rx isEqualToString:_rx]) {
+    if ([rx isEqualTo:_rx]) {
         return;
     }
     [self invalidate];
     _rx = rx;
 }
 
-- (void)setRy:(NSString *)ry
+- (void)setRy:(RNSVGLength *)ry
 {
-    if ([ry isEqualToString:_ry]) {
+    if ([ry isEqualTo:_ry]) {
         return;
     }
     [self invalidate];

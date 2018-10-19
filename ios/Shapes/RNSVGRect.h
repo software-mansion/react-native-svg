@@ -12,11 +12,11 @@
 
 @interface RNSVGRect : RNSVGRenderable
 
-@property (nonatomic, strong) NSString* x;
-@property (nonatomic, strong) NSString* y;
-@property (nonatomic, strong) NSString* rectwidth;
-@property (nonatomic, strong) NSString* rectheight;
-@property (nonatomic, strong) NSString* rx;
-@property (nonatomic, strong) NSString* ry;
+@property (nonatomic, strong) RNSVGLength* x;
+@property (nonatomic, strong) RNSVGLength* y;
+@property (nonatomic, strong) RNSVGLength* rectwidth;
+@property (nonatomic, strong) RNSVGLength* rectheight;
+@property (nonatomic, strong) RNSVGLength* rx;
+@property (nonatomic, strong) RNSVGLength* ry;
 
 @end

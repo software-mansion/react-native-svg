@@ -9,28 +9,26 @@
 
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 
 import com.facebook.common.logging.FLog;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-/**
- * Shadow node for virtual Pattern definition view
- */
-class PatternShadowNode extends GroupShadowNode {
+@SuppressLint("ViewConstructor")
+class PatternView extends GroupView {
 
-    private String mX;
-    private String mY;
-    private String mW;
-    private String mH;
+    private SVGLength mX;
+    private SVGLength mY;
+    private SVGLength mW;
+    private SVGLength mH;
     private Brush.BrushUnits mPatternUnits;
     private Brush.BrushUnits mPatternContentUnits;
 
@@ -48,28 +46,32 @@ class PatternShadowNode extends GroupShadowNode {
     };
     private Matrix mMatrix = null;
 
+    public PatternView(ReactContext reactContext) {
+        super(reactContext);
+    }
+
     @ReactProp(name = "x")
     public void setX(Dynamic x) {
-        mX = getStringFromDynamic(x);
-        markUpdated();
+        mX = getLengthFromDynamic(x);
+        invalidate();
     }
 
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
-        mY = getStringFromDynamic(y);
-        markUpdated();
+        mY = getLengthFromDynamic(y);
+        invalidate();
     }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
-        mW = getStringFromDynamic(width);
-        markUpdated();
+        mW = getLengthFromDynamic(width);
+        invalidate();
     }
 
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
-        mH = getStringFromDynamic(height);
-        markUpdated();
+        mH = getLengthFromDynamic(height);
+        invalidate();
     }
 
     @ReactProp(name = "patternUnits")
@@ -82,7 +84,7 @@ class PatternShadowNode extends GroupShadowNode {
                 mPatternUnits = Brush.BrushUnits.USER_SPACE_ON_USE;
                 break;
         }
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "patternContentUnits")
@@ -95,7 +97,7 @@ class PatternShadowNode extends GroupShadowNode {
                 mPatternContentUnits = Brush.BrushUnits.USER_SPACE_ON_USE;
                 break;
         }
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "patternTransform")
@@ -114,43 +116,43 @@ class PatternShadowNode extends GroupShadowNode {
             mMatrix = null;
         }
 
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "minX")
     public void setMinX(float minX) {
         mMinX = minX;
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "minY")
     public void setMinY(float minY) {
         mMinY = minY;
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "vbWidth")
     public void setVbWidth(float vbWidth) {
         mVbWidth = vbWidth;
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "vbHeight")
     public void setVbHeight(float vbHeight) {
         mVbHeight = vbHeight;
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "align")
     public void setAlign(String align) {
         mAlign = align;
-        markUpdated();
+        invalidate();
     }
 
     @ReactProp(name = "meetOrSlice")
     public void setMeetOrSlice(int meetOrSlice) {
         mMeetOrSlice = meetOrSlice;
-        markUpdated();
+        invalidate();
     }
 
 
@@ -161,12 +163,7 @@ class PatternShadowNode extends GroupShadowNode {
     @Override
     void saveDefinition() {
         if (mName != null) {
-            WritableArray points = Arguments.createArray();
-            points.pushString(mX);
-            points.pushString(mY);
-            points.pushString(mW);
-            points.pushString(mH);
-
+            SVGLength[] points = new SVGLength[]{mX,mY,mW,mH};
             Brush brush = new Brush(Brush.BrushType.PATTERN, points, mPatternUnits);
             brush.setContentUnits(mPatternContentUnits);
             brush.setPattern(this);
@@ -175,7 +172,7 @@ class PatternShadowNode extends GroupShadowNode {
                 brush.setGradientTransform(mMatrix);
             }
 
-            SvgViewShadowNode svg = getSvgShadowNode();
+            SvgView svg = getSvgView();
             if (mPatternUnits == Brush.BrushUnits.USER_SPACE_ON_USE || mPatternContentUnits == Brush.BrushUnits.USER_SPACE_ON_USE) {
                 brush.setUserSpaceBoundingBox(svg.getCanvasBounds());
             }

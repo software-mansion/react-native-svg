@@ -9,15 +9,21 @@
 
 package com.horcrux.svg;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-/**
- * Shadow node for virtual Definition type views
- */
-class DefinitionShadowNode extends VirtualNode {
+import com.facebook.react.bridge.ReactContext;
 
+@SuppressLint("ViewConstructor")
+class DefinitionView extends VirtualView {
+
+    DefinitionView(ReactContext reactContext) {
+        super(reactContext);
+    }
+
+    @SuppressWarnings("EmptyMethod")
     void draw(Canvas canvas, Paint paint, float opacity) {}
 
     @Override

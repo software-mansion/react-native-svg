@@ -23,59 +23,17 @@ RCT_EXPORT_MODULE()
     return svgImage;
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(x, id, RNSVGImage)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.x = stringValue;
-    } else {
-        view.x = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
-RCT_CUSTOM_VIEW_PROPERTY(y, id, RNSVGImage)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.y = stringValue;
-    } else {
-        view.y = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
-RCT_CUSTOM_VIEW_PROPERTY(imagewidth, id, RNSVGImage)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.imagewidth = stringValue;
-    } else {
-        view.imagewidth = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
+RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(imagewidth, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(imageheight, RNSVGLength*)
 RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGImage)
 {
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.imagewidth = stringValue;
-    } else {
-        view.imagewidth = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
-RCT_CUSTOM_VIEW_PROPERTY(imageheight, id, RNSVGImage)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.imageheight = stringValue;
-    } else {
-        view.imageheight = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
+    view.imagewidth = [RCTConvert RNSVGLength:json];
 }
 RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGImage)
 {
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.imageheight = stringValue;
-    } else {
-        view.imageheight = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
+    view.imageheight = [RCTConvert RNSVGLength:json];
 }
 RCT_EXPORT_VIEW_PROPERTY(src, id)
 RCT_EXPORT_VIEW_PROPERTY(align, NSString)

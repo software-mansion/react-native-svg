@@ -97,6 +97,39 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
     return [[RNSVGPathParser alloc] initWithPathString: d];
 }
 
++ (RNSVGLength *)RNSVGLength:(id)json
+{
+    if ([json isKindOfClass:[NSNumber class]]) {
+        return [RNSVGLength lengthWithNumber:[json doubleValue]];
+    } else if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        return [RNSVGLength lengthWithString:stringValue];
+    } else {
+        return [[RNSVGLength alloc] init];
+    }
+}
+
++ (NSArray<RNSVGLength *>*)RNSVGLengthArray:(id)json
+{
+    if ([json isKindOfClass:[NSNumber class]]) {
+        RNSVGLength* length = [RNSVGLength lengthWithNumber:[json doubleValue]];
+        return [NSArray arrayWithObject:length];
+    } else if ([json isKindOfClass:[NSArray class]]) {
+        NSArray *arrayValue = (NSArray*)json;
+        NSMutableArray<RNSVGLength*>* lengths = [NSMutableArray arrayWithCapacity:[arrayValue count]];
+        for (id obj in arrayValue) {
+            [lengths addObject:[self RNSVGLength:obj]];
+        }
+        return lengths;
+    }  else if ([json isKindOfClass:[NSString class]]) {
+        NSString *stringValue = (NSString *)json;
+        RNSVGLength* length = [RNSVGLength lengthWithString:stringValue];
+        return [NSArray arrayWithObject:length];
+    } else {
+        return nil;
+    }
+}
+
 + (CGRect)RNSVGCGRect:(id)json offset:(NSUInteger)offset
 {
     NSArray *arr = [self NSArray:json];

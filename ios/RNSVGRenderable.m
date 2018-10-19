@@ -16,6 +16,8 @@
     NSMutableDictionary *_originProperties;
     NSArray<NSString *> *_lastMergedList;
     NSArray<NSString *> *_attributeList;
+    NSArray<RNSVGLength *> *_sourceStrokeDashArray;
+    CGPathRef _strokePath;
     CGPathRef _hitArea;
 }
 
@@ -24,10 +26,16 @@
     if (self = [super init]) {
         _fillOpacity = 1;
         _strokeOpacity = 1;
-        _strokeWidth = @"1";
+        _strokeWidth = [RNSVGLength lengthWithNumber:1];
         _fillRule = kRNSVGCGFCRuleNonzero;
     }
     return self;
+}
+
+- (void)invalidate
+{
+    _sourceStrokeDashArray = nil;
+    [super invalidate];
 }
 
 - (void)setFill:(RNSVGBrush *)fill
@@ -75,9 +83,9 @@
     _strokeOpacity = strokeOpacity;
 }
 
-- (void)setStrokeWidth:(NSString*)strokeWidth
+- (void)setStrokeWidth:(RNSVGLength*)strokeWidth
 {
-    if ([strokeWidth isEqualToString:_strokeWidth]) {
+    if ([strokeWidth isEqualTo:_strokeWidth]) {
         return;
     }
     [self invalidate];
@@ -111,25 +119,12 @@
     _strokeMiterlimit = strokeMiterlimit;
 }
 
-- (void)setStrokeDasharray:(NSArray<NSString *> *)strokeDasharray
+- (void)setStrokeDasharray:(NSArray<RNSVGLength *> *)strokeDasharray
 {
     if (strokeDasharray == _strokeDasharray) {
         return;
     }
-    if (_strokeDasharrayData.array) {
-        free(_strokeDasharrayData.array);
-    }
     [self invalidate];
-    NSUInteger count = strokeDasharray.count;
-    _strokeDasharrayData.count = count;
-    _strokeDasharrayData.array = nil;
-
-    if (count) {
-        _strokeDasharrayData.array = malloc(sizeof(CGFloat) * count);
-        for (NSUInteger i = 0; i < count; i++) {
-            _strokeDasharrayData.array[i] = [strokeDasharray[i] floatValue];
-        }
-    }
     _strokeDasharray = strokeDasharray;
 }
 
@@ -156,6 +151,8 @@
 {
     CGPathRelease(self.path);
     CGPathRelease(_hitArea);
+    CGPathRelease(_strokePath);
+    _sourceStrokeDashArray = nil;
     if (_strokeDasharrayData.array) {
         free(_strokeDasharrayData.array);
     }
@@ -198,18 +195,14 @@ UInt32 saturate(double value) {
         CGContextRef bcontext = CGBitmapContextCreate(pixels, iwidth, iheight, bitsPerComponent, bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
 
         // Clip to mask bounds and render the mask
-        CGFloat x = [RNSVGPercentageConverter stringToFloat:[_maskNode x]
-                                                   relative:width
-                                                     offset:0];
-        CGFloat y = [RNSVGPercentageConverter stringToFloat:[_maskNode y]
-                                                   relative:height
-                                                     offset:0];
-        CGFloat w = [RNSVGPercentageConverter stringToFloat:[_maskNode maskwidth]
-                                                   relative:width
-                                                     offset:0];
-        CGFloat h = [RNSVGPercentageConverter stringToFloat:[_maskNode maskheight]
-                                                   relative:height
-                                                     offset:0];
+        double x = [RNSVGPropHelper fromRelative:[_maskNode x]
+                                         relative:width];
+        double y = [RNSVGPropHelper fromRelative:[_maskNode y]
+                                         relative:height];
+        double w = [RNSVGPropHelper fromRelative:[_maskNode maskwidth]
+                                         relative:width];
+        double h = [RNSVGPropHelper fromRelative:[_maskNode maskheight]
+                                         relative:height];
         CGRect maskBounds = CGRectMake(x, y, w, h);
         CGContextClipToRect(bcontext, maskBounds);
         [_maskNode renderLayerTo:bcontext rect:rect];
@@ -327,13 +320,30 @@ UInt32 saturate(double value) {
     }
 
     if (self.stroke) {
-        CGFloat width = [self relativeOnOther:self.strokeWidth];
+        CGFloat width = self.strokeWidth ? [self relativeOnOther:self.strokeWidth] : 1;
         CGContextSetLineWidth(context, width);
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);
-        RNSVGCGFloatArray dash = self.strokeDasharrayData;
+        NSArray<RNSVGLength *>* strokeDasharray = self.strokeDasharray;
 
-        if (dash.count) {
+        if (strokeDasharray.count) {
+            RNSVGCGFloatArray dash = self.strokeDasharrayData;
+            if (strokeDasharray != _sourceStrokeDashArray) {
+                _sourceStrokeDashArray = strokeDasharray;
+                if (dash.array) {
+                    free(dash.array);
+                }
+                dash.array = nil;
+
+                NSUInteger count = strokeDasharray.count;
+                dash.count = count;
+                if (count) {
+                    dash.array = malloc(sizeof(CGFloat) * count);
+                    for (NSUInteger i = 0; i < count; i++) {
+                        dash.array[i] = [self relativeOnOther:strokeDasharray[i]];
+                    }
+                }
+            }
             CGContextSetLineDash(context, self.strokeDashoffset, dash.array, dash.count);
         }
 
@@ -383,15 +393,15 @@ UInt32 saturate(double value) {
 {
     CGPathRelease(_hitArea);
     _hitArea = nil;
+    CGPathRelease(_strokePath);
+    _strokePath = nil;
     // Add path to hitArea
     CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
 
     if (self.stroke && self.strokeWidth) {
         // Add stroke to hitArea
         CGFloat width = [self relativeOnOther:self.strokeWidth];
-        CGPathRef strokePath = CGPathCreateCopyByStrokingPath(hitArea, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit);
-        CGPathAddPath(hitArea, nil, strokePath);
-        CGPathRelease(strokePath);
+        _strokePath = CGPathRetain(CFAutorelease(CGPathCreateCopyByStrokingPath(hitArea, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit)));
     }
 
     _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(hitArea)));
@@ -415,7 +425,9 @@ UInt32 saturate(double value) {
 
     CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
 
-    if (!CGPathContainsPoint(_hitArea, nil, transformed, NO)) {
+    BOOL evenodd = self.fillRule == kRNSVGCGFCRuleEvenodd;
+    if (!CGPathContainsPoint(_hitArea, nil, transformed, evenodd) &&
+        !CGPathContainsPoint(_strokePath, nil, transformed, NO)) {
         return nil;
     }
 

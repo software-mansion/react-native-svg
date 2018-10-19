@@ -25,18 +25,10 @@ RCT_EXPORT_VIEW_PROPERTY(fillOpacity, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(fillRule, RNSVGCGFCRule)
 RCT_EXPORT_VIEW_PROPERTY(stroke, RNSVGBrush)
 RCT_EXPORT_VIEW_PROPERTY(strokeOpacity, CGFloat)
-RCT_CUSTOM_VIEW_PROPERTY(strokeWidth, id, RNSVGRenderable)
-{
-    if ([json isKindOfClass:[NSString class]]) {
-        NSString *stringValue = (NSString *)json;
-        view.strokeWidth = stringValue;
-    } else {
-        view.strokeWidth = [NSString stringWithFormat:@"%f", [json floatValue]];
-    }
-}
+RCT_EXPORT_VIEW_PROPERTY(strokeWidth, RNSVGLength*)
 RCT_EXPORT_VIEW_PROPERTY(strokeLinecap, CGLineCap)
 RCT_EXPORT_VIEW_PROPERTY(strokeLinejoin, CGLineJoin)
-RCT_EXPORT_VIEW_PROPERTY(strokeDasharray, NSArray<NSString *>)
+RCT_EXPORT_VIEW_PROPERTY(strokeDasharray, NSArray<RNSVGLength *>)
 RCT_EXPORT_VIEW_PROPERTY(strokeDashoffset, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(strokeMiterlimit, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(propList, NSArray<NSString *>)

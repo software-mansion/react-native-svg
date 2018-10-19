@@ -1,15 +1,16 @@
 
 #import "RNSVGGroup.h"
+#import "RNSVGLength.h"
 
 @interface RNSVGPattern : RNSVGGroup
 
-@property (nonatomic, strong) NSString *x;
-@property (nonatomic, strong) NSString *y;
-@property (nonatomic, strong) NSString *patternwidth;
-@property (nonatomic, strong) NSString *patternheight;
-@property (nonatomic, assign)RNSVGUnits patternUnits;
-@property (nonatomic, assign)RNSVGUnits patternContentUnits;
-@property (nonatomic, assign)CGAffineTransform patternTransform;
+@property (nonatomic, strong) RNSVGLength *x;
+@property (nonatomic, strong) RNSVGLength *y;
+@property (nonatomic, strong) RNSVGLength *patternwidth;
+@property (nonatomic, strong) RNSVGLength *patternheight;
+@property (nonatomic, assign) RNSVGUnits patternUnits;
+@property (nonatomic, assign) RNSVGUnits patternContentUnits;
+@property (nonatomic, assign) CGAffineTransform patternTransform;
 
 @property (nonatomic, assign) CGFloat minX;
 @property (nonatomic, assign) CGFloat minY;

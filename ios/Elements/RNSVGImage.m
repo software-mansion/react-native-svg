@@ -49,36 +49,36 @@
     }];
 }
 
-- (void)setX:(NSString *)x
+- (void)setX:(RNSVGLength *)x
 {
-    if ([x isEqualToString:_x]) {
+    if ([x isEqualTo:_x]) {
         return;
     }
     [self invalidate];
     _x = x;
 }
 
-- (void)setY:(NSString *)y
+- (void)setY:(RNSVGLength *)y
 {
-    if ([y isEqualToString:_y]) {
+    if ([y isEqualTo:_y]) {
         return;
     }
     [self invalidate];
     _y = y;
 }
 
-- (void)setImagewidth:(NSString *)width
+- (void)setImagewidth:(RNSVGLength *)width
 {
-    if ([width isEqualToString:_imagewidth]) {
+    if ([width isEqualTo:_imagewidth]) {
         return;
     }
     [self invalidate];
     _imagewidth = width;
 }
 
-- (void)setImageheight:(NSString *)height
+- (void)setImageheight:(RNSVGLength *)height
 {
-    if ([height isEqualToString:_imageheight]) {
+    if ([height isEqualTo:_imageheight]) {
         return;
     }
     [self invalidate];

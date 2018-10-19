@@ -27,7 +27,7 @@ import com.facebook.react.common.ReactConstants;
 
 class Brush {
     private final BrushType mType;
-    private final ReadableArray mPoints;
+    private final SVGLength[] mPoints;
     private ReadableArray mColors;
     private final boolean mUseObjectBoundingBox;
 
@@ -37,9 +37,9 @@ class Brush {
 
     private Matrix mMatrix;
     private Rect mUserSpaceBoundingBox;
-    private PatternShadowNode mPattern;
+    private PatternView mPattern;
 
-    Brush(BrushType type, ReadableArray points, BrushUnits units) {
+    Brush(BrushType type, SVGLength[] points, BrushUnits units) {
         mType = type;
         mPoints = points;
         mUseObjectBoundingBox = units == BrushUnits.OBJECT_BOUNDING_BOX;
@@ -49,7 +49,7 @@ class Brush {
         mUseContentObjectBoundingBox = units == BrushUnits.OBJECT_BOUNDING_BOX;
     }
 
-    void setPattern(PatternShadowNode pattern) {
+    void setPattern(PatternView pattern) {
         mPattern = pattern;
     }
 
@@ -111,11 +111,12 @@ class Brush {
         float offsetX = rect.left;
         float offsetY = rect.top;
 
+        float textSize = paint.getTextSize();
         if (mType == BrushType.PATTERN) {
-            double x = PropHelper.fromRelative(mPoints.getString(0), width, offsetX, scale, paint.getTextSize());
-            double y = PropHelper.fromRelative(mPoints.getString(1), height, offsetY, scale, paint.getTextSize());
-            double w = PropHelper.fromRelative(mPoints.getString(2), width, offsetX, scale, paint.getTextSize());
-            double h = PropHelper.fromRelative(mPoints.getString(3), height, offsetY, scale, paint.getTextSize());
+            double x = PropHelper.fromRelative(mPoints[0], width, offsetX, scale, textSize);
+            double y = PropHelper.fromRelative(mPoints[1], height, offsetY, scale, textSize);
+            double w = PropHelper.fromRelative(mPoints[2], width, offsetX, scale, textSize);
+            double h = PropHelper.fromRelative(mPoints[3], height, offsetY, scale, textSize);
 
             RectF vbRect = mPattern.getViewBox();
             RectF eRect = new RectF((float)x, (float)y, (float)w, (float)h);
@@ -157,10 +158,10 @@ class Brush {
         }
 
         if (mType == BrushType.LINEAR_GRADIENT) {
-            double x1 = PropHelper.fromRelative(mPoints.getString(0), width, offsetX, scale, paint.getTextSize());
-            double y1 = PropHelper.fromRelative(mPoints.getString(1), height, offsetY, scale, paint.getTextSize());
-            double x2 = PropHelper.fromRelative(mPoints.getString(2), width, offsetX, scale, paint.getTextSize());
-            double y2 = PropHelper.fromRelative(mPoints.getString(3), height, offsetY, scale, paint.getTextSize());
+            double x1 = PropHelper.fromRelative(mPoints[0], width, offsetX, scale, textSize);
+            double y1 = PropHelper.fromRelative(mPoints[1], height, offsetY, scale, textSize);
+            double x2 = PropHelper.fromRelative(mPoints[2], width, offsetX, scale, textSize);
+            double y2 = PropHelper.fromRelative(mPoints[3], height, offsetY, scale, textSize);
 
             Shader linearGradient = new LinearGradient(
                 (float) x1,
@@ -179,13 +180,13 @@ class Brush {
 
             paint.setShader(linearGradient);
         } else if (mType == BrushType.RADIAL_GRADIENT) {
-            double rx = PropHelper.fromRelative(mPoints.getString(2), width, 0f, scale, paint.getTextSize());
-            double ry = PropHelper.fromRelative(mPoints.getString(3), height, 0f, scale, paint.getTextSize());
-            double cx = PropHelper.fromRelative(mPoints.getString(4), width, offsetX, scale, paint.getTextSize());
-            double cy = PropHelper.fromRelative(mPoints.getString(5), height, offsetY, scale, paint.getTextSize()) / (ry / rx);
+            double rx = PropHelper.fromRelative(mPoints[2], width, 0f, scale, textSize);
+            double ry = PropHelper.fromRelative(mPoints[3], height, 0f, scale, textSize);
+            double cx = PropHelper.fromRelative(mPoints[4], width, offsetX, scale, textSize);
+            double cy = PropHelper.fromRelative(mPoints[5], height, offsetY, scale, textSize) / (ry / rx);
             // TODO: support focus point.
-            //double fx = PropHelper.fromRelative(mPoints.getString(0), width, offsetX, scale);
-            //double fy = PropHelper.fromRelative(mPoints.getString(1), height, offsetY, scale) / (ry / rx);
+            //double fx = PropHelper.fromRelative(mPoints[0], width, offsetX, scale);
+            //double fy = PropHelper.fromRelative(mPoints[1], height, offsetY, scale) / (ry / rx);
             Shader radialGradient = new RadialGradient(
                     (float) cx,
                     (float) cy,

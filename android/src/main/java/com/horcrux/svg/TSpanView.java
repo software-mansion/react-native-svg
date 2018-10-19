@@ -10,6 +10,7 @@
 package com.horcrux.svg;
 
 
+import android.annotation.SuppressLint;
 import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -20,9 +21,10 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.view.ViewParent;
 
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.ReactShadowNode;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
@@ -33,10 +35,8 @@ import static android.graphics.PathMeasure.POSITION_MATRIX_FLAG;
 import static android.graphics.PathMeasure.TANGENT_MATRIX_FLAG;
 import static com.horcrux.svg.TextProperties.*;
 
-/**
- * Shadow node for virtual TSpan view
- */
-class TSpanShadowNode extends TextShadowNode {
+@SuppressLint("ViewConstructor")
+class TSpanView extends TextView {
     private static final double tau = 2 * Math.PI;
     private static final double radToDeg = 360 / tau;
 
@@ -46,12 +46,16 @@ class TSpanShadowNode extends TextShadowNode {
 
     private Path mCache;
     @Nullable String mContent;
-    private TextPathShadowNode textPath;
+    private TextPathView textPath;
+
+    public TSpanView(ReactContext reactContext) {
+        super(reactContext);
+    }
 
     @ReactProp(name = "content")
     public void setContent(@Nullable String content) {
         mContent = content;
-        markUpdated();
+        invalidate();
     }
 
     @Override
@@ -871,7 +875,7 @@ class TSpanShadowNode extends TextShadowNode {
         return path;
     }
 
-    private double getAbsoluteStartOffset(String startOffset, double distance, double fontSize) {
+    private double getAbsoluteStartOffset(SVGLength startOffset, double distance, double fontSize) {
         return PropHelper.fromRelative(startOffset, distance, 0, mScale, fontSize);
     }
 
@@ -890,7 +894,7 @@ class TSpanShadowNode extends TextShadowNode {
     }
 
     private void applyTextPropertiesToPaint(Paint paint, FontData font) {
-        AssetManager assetManager = getThemedContext().getResources().getAssets();
+        AssetManager assetManager = mContext.getResources().getAssets();
 
         double fontSize = font.fontSize * mScale;
 
@@ -948,13 +952,13 @@ class TSpanShadowNode extends TextShadowNode {
     }
 
     private void setupTextPath() {
-        ReactShadowNode parent = getParent();
+        ViewParent parent = getParent();
 
         while (parent != null) {
-            if (parent.getClass() == TextPathShadowNode.class) {
-                textPath = (TextPathShadowNode) parent;
+            if (parent.getClass() == TextPathView.class) {
+                textPath = (TextPathView) parent;
                 break;
-            } else if (!(parent instanceof TextShadowNode)) {
+            } else if (!(parent instanceof TextView)) {
                 break;
             }
 
@@ -1000,6 +1004,6 @@ class TSpanShadowNode extends TextShadowNode {
             }
         }
 
-        return getReactTag();
+        return getId();
     }
 }
