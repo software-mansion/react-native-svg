@@ -874,24 +874,22 @@ static double RNSVGTSpan_radToDeg = 180 / M_PI;
     lines = nil;
     lengths = nil;
     textPath = nil;
-    RNSVGText *targetView = self;
+    RNSVGText *parent = (RNSVGText*)[self superview];
 
-    while (targetView && [targetView class] != [RNSVGText class]) {
-        if (![targetView isKindOfClass:[RNSVGText class]]) {
-            //todo: throw exception here
-            return;
-        }
-
-        targetView = (RNSVGText*)[targetView superview];
-        if ([targetView class] == [RNSVGTextPath class]) {
-            textPath = (RNSVGTextPath*) targetView;
+    while (parent) {
+        if ([parent class] == [RNSVGTextPath class]) {
+            textPath = (RNSVGTextPath*) parent;
             [textPath getPathLength:&_pathLength
                           lineCount:&lineCount
                             lengths:&lengths
                               lines:&lines
                            isClosed:&isClosed];
-            return;
+            break;
+        } else if (![parent isKindOfClass:[RNSVGText class]]) {
+            break;
         }
+
+        parent = (RNSVGText*)[parent superview];
     }
 }
 
