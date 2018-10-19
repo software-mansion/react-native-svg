@@ -327,7 +327,7 @@ UInt32 saturate(double value) {
         NSArray<RNSVGLength *>* strokeDasharray = self.strokeDasharray;
 
         if (strokeDasharray.count) {
-            RNSVGCGFloatArray dash = self.strokeDasharrayData;
+            RNSVGCGFloatArray dash = _strokeDasharrayData;
             if (strokeDasharray != _sourceStrokeDashArray) {
                 _sourceStrokeDashArray = strokeDasharray;
                 if (dash.array) {
@@ -340,9 +340,10 @@ UInt32 saturate(double value) {
                 if (count) {
                     dash.array = malloc(sizeof(CGFloat) * count);
                     for (NSUInteger i = 0; i < count; i++) {
-                        dash.array[i] = [self relativeOnOther:strokeDasharray[i]];
+                        dash.array[i] = (CGFloat)[self relativeOnOther:strokeDasharray[i]];
                     }
                 }
+                _strokeDasharrayData = dash;
             }
             CGContextSetLineDash(context, self.strokeDashoffset, dash.array, dash.count);
         }
