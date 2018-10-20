@@ -1,3 +1,5 @@
+#import <UIKit/UIKit.h>
+
 #ifndef RNSVGLength_h
 #define RNSVGLength_h
 
@@ -18,10 +20,10 @@ typedef CF_ENUM(unsigned short, RNSVGLengthUnitType) {
 
 @interface RNSVGLength : NSObject
 
-@property (nonatomic, assign) double value;
+@property (nonatomic, assign) CGFloat value;
 @property (nonatomic, assign) RNSVGLengthUnitType unit;
 
-+ (instancetype) lengthWithNumber: (double) number;
++ (instancetype) lengthWithNumber: (CGFloat) number;
 + (instancetype) lengthWithString: (NSString *) lengthString;
 - (BOOL) isEqualTo: (RNSVGLength *)other;
 

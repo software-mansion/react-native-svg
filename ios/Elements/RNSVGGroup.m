@@ -86,8 +86,8 @@
     CGFloat width = CGRectGetWidth(clipBounds);
     CGFloat height = CGRectGetHeight(clipBounds);
 
-    _glyphContext = [[RNSVGGlyphContext alloc] initWithScale:1 width:width
-                                                   height:height];
+    _glyphContext = [[RNSVGGlyphContext alloc] initWithWidth:width
+                                                      height:height];
 }
 
 - (RNSVGGlyphContext *)getGlyphContext

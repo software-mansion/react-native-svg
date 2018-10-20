@@ -10,27 +10,26 @@
 
 - (CTFontRef)getGlyphFont;
 
-- (instancetype)initWithScale:(float)scale_
-                        width:(float)width
-                       height:(float)height;
+- (instancetype)initWithWidth:(CGFloat)width
+                       height:(CGFloat)height;
 
 - (RNSVGFontData *)getFont;
 
-- (double)getFontSize;
+- (CGFloat)getFontSize;
 
-- (float)getHeight;
+- (CGFloat)getHeight;
 
-- (float)getWidth;
+- (CGFloat)getWidth;
 
-- (double)nextDeltaX;
+- (CGFloat)nextDeltaX;
 
-- (double)nextDeltaY;
+- (CGFloat)nextDeltaY;
 
-- (double)nextRotation;
+- (CGFloat)nextRotation;
 
-- (double)nextXWithDouble:(double)advance;
+- (CGFloat)nextXWithDouble:(CGFloat)advance;
 
-- (double)nextY;
+- (CGFloat)nextY;
 
 - (void)popContext;
 

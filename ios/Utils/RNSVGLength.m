@@ -14,7 +14,7 @@
     return self;
 }
 
-+ (instancetype) lengthWithNumber: (double) number
++ (instancetype) lengthWithNumber:(CGFloat)number
 {
     RNSVGLength *length = [[self alloc] init];
     length.unit = SVG_LENGTHTYPE_NUMBER;

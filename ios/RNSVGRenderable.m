@@ -161,7 +161,7 @@
 }
 
 
-UInt32 saturate(double value) {
+UInt32 saturate(CGFloat value) {
     return value <= 0 ? 0 : value >= 255 ? 255 : value;
 }
 
@@ -181,8 +181,8 @@ UInt32 saturate(double value) {
         RNSVGMask *_maskNode = (RNSVGMask*)[self.svgView getDefinedMask:self.mask];
         CGRect bounds = CGContextGetClipBoundingBox(context);
         CGSize boundsSize = bounds.size;
-        float height = boundsSize.height;
-        float width = boundsSize.width;
+        CGFloat height = boundsSize.height;
+        CGFloat width = boundsSize.width;
         NSUInteger iheight = height;
         NSUInteger iwidth = width;
         NSUInteger npixels = iheight * iwidth;
@@ -197,14 +197,14 @@ UInt32 saturate(double value) {
         CGContextRef bcontext = CGBitmapContextCreate(pixels, iwidth, iheight, bitsPerComponent, bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
 
         // Clip to mask bounds and render the mask
-        double x = [RNSVGPropHelper fromRelative:[_maskNode x]
-                                         relative:width];
-        double y = [RNSVGPropHelper fromRelative:[_maskNode y]
-                                         relative:height];
-        double w = [RNSVGPropHelper fromRelative:[_maskNode maskwidth]
-                                         relative:width];
-        double h = [RNSVGPropHelper fromRelative:[_maskNode maskheight]
-                                         relative:height];
+        CGFloat x = [self relativeOn:[_maskNode x]
+                            relative:width];
+        CGFloat y = [self relativeOn:[_maskNode y]
+                            relative:height];
+        CGFloat w = [self relativeOn:[_maskNode maskwidth]
+                            relative:width];
+        CGFloat h = [self relativeOn:[_maskNode maskheight]
+                            relative:height];
         CGRect maskBounds = CGRectMake(x, y, w, h);
         CGContextClipToRect(bcontext, maskBounds);
         [_maskNode renderLayerTo:bcontext rect:rect];
@@ -219,7 +219,7 @@ UInt32 saturate(double value) {
             UInt32 g = (color >> 8) & 0xFF;
             UInt32 b = (color >> 16) & 0xFF;
 
-            double luma = 0.299 * r + 0.587 * g + 0.144 * b;
+            CGFloat luma = 0.299 * r + 0.587 * g + 0.144 * b;
             *currentPixel = saturate(luma) << 24;
             currentPixel++;
         }
@@ -267,6 +267,20 @@ UInt32 saturate(double value) {
     CGContextRestoreGState(context);
 }
 
+- (void)prepareStrokeDash:(NSUInteger)count strokeDasharray:(NSArray<RNSVGLength *> *)strokeDasharray {
+    if (strokeDasharray != _sourceStrokeDashArray) {
+        CGFloat *dash = _strokeDashArrayData;
+        _strokeDashArrayData = realloc(dash, sizeof(CGFloat) * count);
+        if (!_strokeDashArrayData) {
+            free(dash);
+            return;
+        }
+        _sourceStrokeDashArray = strokeDasharray;
+        for (NSUInteger i = 0; i < count; i++) {
+            _strokeDashArrayData[i] = (CGFloat)[self relativeOnOther:strokeDasharray[i]];
+        }
+    }
+}
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
@@ -330,17 +344,10 @@ UInt32 saturate(double value) {
         NSUInteger count = strokeDasharray.count;
 
         if (count) {
-            if (strokeDasharray != _sourceStrokeDashArray) {
-                _sourceStrokeDashArray = strokeDasharray;
-                if (_strokeDashArrayData) {
-                    free(_strokeDashArrayData);
-                }
-                _strokeDashArrayData = malloc(sizeof(CGFloat) * count);
-                for (NSUInteger i = 0; i < count; i++) {
-                    _strokeDashArrayData[i] = (CGFloat)[self relativeOnOther:strokeDasharray[i]];
-                }
+            [self prepareStrokeDash:count strokeDasharray:strokeDasharray];
+            if (_strokeDashArrayData) {
+                CGContextSetLineDash(context, self.strokeDashoffset, _strokeDashArrayData, count);
             }
-            CGContextSetLineDash(context, self.strokeDashoffset, _strokeDashArrayData, count);
         }
 
         if (!fillColor) {

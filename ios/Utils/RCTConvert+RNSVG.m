@@ -33,21 +33,19 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
                                   @"userSpaceOnUse": @(kRNSVGUnitsUserSpaceOnUse),
                                   }), kRNSVGUnitsObjectBoundingBox, intValue)
 
-+ (RNSVGCGFloatArray)RNSVGCGFloatArray:(id)json
++ (CGFloat*)RNSVGCGFloatArray:(id)json
 {
     NSArray *arr = [self NSNumberArray:json];
     NSUInteger count = arr.count;
 
-    RNSVGCGFloatArray array;
-    array.count = count;
-    array.array = nil;
+    CGFloat* array = nil;
 
     if (count) {
         // Ideally, these arrays should already use the same memory layout.
         // In that case we shouldn't need this new malloc.
-        array.array = malloc(sizeof(CGFloat) * count);
+        array = malloc(sizeof(CGFloat) * count);
         for (NSUInteger i = 0; i < count; i++) {
-            array.array[i] = [arr[i] doubleValue];
+            array[i] = [arr[i] doubleValue];
         }
     }
 
@@ -62,7 +60,7 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
             RNSVGDigitRegEx = [NSRegularExpression regularExpressionWithPattern:@"[0-9.-]+" options:NSRegularExpressionCaseInsensitive error:nil];
         }
         NSArray<NSTextCheckingResult*> *_matches = [RNSVGDigitRegEx matchesInString:value options:0 range:NSMakeRange(0, [value length])];
-        NSMutableArray *output = [NSMutableArray array];
+        NSMutableArray<NSNumber*> *output = [NSMutableArray array];
         NSUInteger i = 0;
         [output addObject:[NSNumber numberWithInteger:0]];
         for (NSTextCheckingResult *match in _matches) {
@@ -161,20 +159,20 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
         return nil;
     }
     arr = [arr subarrayWithRange:(NSRange){offset, arr.count - offset}];
-    RNSVGCGFloatArray colorsAndOffsets = [self RNSVGCGFloatArray:arr];
-    size_t stops = colorsAndOffsets.count / 5;
+    CGFloat* colorsAndOffsets = [self RNSVGCGFloatArray:arr];
+    size_t stops = arr.count / 5;
     CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
 
 
     CGGradientRef gradient = CGGradientCreateWithColorComponents(
                                                                  rgb,
-                                                                 colorsAndOffsets.array,
-                                                                 colorsAndOffsets.array + stops * 4,
+                                                                 colorsAndOffsets,
+                                                                 colorsAndOffsets + stops * 4,
                                                                  stops
                                                                  );
 
     CGColorSpaceRelease(rgb);
-    free(colorsAndOffsets.array);
+    free(colorsAndOffsets);
     return (CGGradientRef)CFAutorelease(gradient);
 }
 

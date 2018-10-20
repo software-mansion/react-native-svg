@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 #import "RNSVGBrush.h"
-#import "RNSVGCGFloatArray.h"
 #import "RNSVGCGFCRule.h"
 #import "RNSVGNode.h"
 #import "RNSVGLength.h"

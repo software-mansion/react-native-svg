@@ -33,18 +33,18 @@
     NSMutableArray<NSNumber*> *mRsIndices_;
 
     // Calculated on push context, percentage and em length depends on parent font size
-    double mFontSize_;
+    CGFloat mFontSize_;
     RNSVGFontData *topFont_;
 
     // Current accumulated values
     // https://www.w3.org/TR/SVG/types.html#DataTypeCoordinate
     // <coordinate> syntax is the same as that for <length>
-    double mX_;
-    double mY_;
+    CGFloat mX_;
+    CGFloat mY_;
 
     // https://www.w3.org/TR/SVG/types.html#Length
-    double mDX_;
-    double mDY_;
+    CGFloat mDX_;
+    CGFloat mDY_;
 
     // Current <list-of-coordinates> SVGLengthList
     // https://www.w3.org/TR/SVG/types.html#InterfaceSVGLengthList
@@ -89,9 +89,8 @@
     long mTop_;
 
     // Constructor parameters
-    float mScale_;
-    float mWidth_;
-    float mHeight_;
+    CGFloat mWidth_;
+    CGFloat mHeight_;
 }
 
 - (void)pushContext:(RNSVGText*)node
@@ -150,9 +149,8 @@
     [self->mRsIndices_ addObject:[NSNumber numberWithLong:self->mRsIndex_]];
 }
 
-- (instancetype)initWithScale:(float)scale_
-                        width:(float)width
-                       height:(float)height {
+- (instancetype)initWithWidth:(CGFloat)width
+                       height:(CGFloat)height {
     self->mFontContext_ = [[NSMutableArray alloc]init];
     self->mXsContext_ = [[NSMutableArray alloc]init];
     self->mYsContext_ = [[NSMutableArray alloc]init];
@@ -187,7 +185,6 @@
     self->mDYIndex_ = -1;
     self->mRIndex_ = -1;
 
-    self->mScale_ = scale_;
     self->mWidth_ = width;
     self->mHeight_ = height;
 
@@ -239,8 +236,7 @@
         return;
     }
     RNSVGFontData *data = [RNSVGFontData initWithNSDictionary:font
-                                                 parent:parent
-                                                  scale:self->mScale_];
+                                                       parent:parent];
     self->mFontSize_ = data->fontSize;
     [self->mFontContext_ addObject:data];
     self->topFont_ = data;
@@ -388,11 +384,11 @@
  * Except for any additional information provided in this specification,
  * the normative definition of the property is in CSS2 ([CSS2], section 15.2.4).
  */
-- (double)getFontSize {
+- (CGFloat)getFontSize {
     return mFontSize_;
 }
 
-- (double)nextXWithDouble:(double)advance {
+- (CGFloat)nextXWithDouble:(CGFloat)advance {
     [RNSVGGlyphContext incrementIndices:mXIndices_ topIndex:mXsIndex_];
     long nextIndex = mXIndex_ + 1;
     if (nextIndex < [mXs_ count]) {
@@ -407,7 +403,7 @@
     return mX_;
 }
 
-- (double)nextY {
+- (CGFloat)nextY {
     [RNSVGGlyphContext incrementIndices:mYIndices_ topIndex:mYsIndex_];
     long nextIndex = mYIndex_ + 1;
     if (nextIndex < [mYs_ count]) {
@@ -421,13 +417,13 @@
     return mY_;
 }
 
-- (double)nextDeltaX {
+- (CGFloat)nextDeltaX {
     [RNSVGGlyphContext incrementIndices:mDXIndices_ topIndex:mDXsIndex_];
     long nextIndex = mDXIndex_ + 1;
     if (nextIndex < [mDXs_ count]) {
         mDXIndex_ = nextIndex;
         RNSVGLength *length = [mDXs_ objectAtIndex:nextIndex];
-        double val = [RNSVGPropHelper fromRelative:length
+        CGFloat val = [RNSVGPropHelper fromRelative:length
                                           relative:mWidth_
                                           fontSize:mFontSize_];
         mDX_ += val;
@@ -435,13 +431,13 @@
     return mDX_;
 }
 
-- (double)nextDeltaY {
+- (CGFloat)nextDeltaY {
     [RNSVGGlyphContext incrementIndices:mDYIndices_ topIndex:mDYsIndex_];
     long nextIndex = mDYIndex_ + 1;
     if (nextIndex < [mDYs_ count]) {
         mDYIndex_ = nextIndex;
         RNSVGLength *length = [mDYs_ objectAtIndex:nextIndex];
-        double val = [RNSVGPropHelper fromRelative:length
+        CGFloat val = [RNSVGPropHelper fromRelative:length
                                           relative:mHeight_
                                           fontSize:mFontSize_];
         mDY_ += val;
@@ -449,7 +445,7 @@
     return mDY_;
 }
 
-- (double)nextRotation {
+- (CGFloat)nextRotation {
     [RNSVGGlyphContext incrementIndices:mRIndices_ topIndex:mRsIndex_];
     long nextIndex = mRIndex_ + 1;
     long count = [mRs_ count];
@@ -461,11 +457,11 @@
     return [mRs_[mRIndex_] value];
 }
 
-- (float)getWidth {
+- (CGFloat)getWidth {
     return mWidth_;
 }
 
-- (float)getHeight {
+- (CGFloat)getHeight {
     return mHeight_;
 }
 @end

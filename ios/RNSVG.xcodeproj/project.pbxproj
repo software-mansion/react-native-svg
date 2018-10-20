@@ -176,7 +176,6 @@
 		1039D2901CE71EC2001E90A8 /* RNSVGText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGText.m; path = Text/RNSVGText.m; sourceTree = "<group>"; };
 		1039D29B1CE72177001E90A8 /* RCTConvert+RNSVG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RCTConvert+RNSVG.h"; path = "Utils/RCTConvert+RNSVG.h"; sourceTree = "<group>"; };
 		1039D29C1CE72177001E90A8 /* RCTConvert+RNSVG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RCTConvert+RNSVG.m"; path = "Utils/RCTConvert+RNSVG.m"; sourceTree = "<group>"; };
-		1039D29E1CE72177001E90A8 /* RNSVGCGFloatArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGCGFloatArray.h; path = Utils/RNSVGCGFloatArray.h; sourceTree = "<group>"; };
 		1039D2A11CE721A7001E90A8 /* RNSVGContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGContainer.h; sourceTree = "<group>"; };
 		1039D2AE1CE72F27001E90A8 /* RNSVGPercentageConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGPercentageConverter.h; path = Utils/RNSVGPercentageConverter.h; sourceTree = "<group>"; };
 		1039D2AF1CE72F27001E90A8 /* RNSVGPercentageConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGPercentageConverter.m; path = Utils/RNSVGPercentageConverter.m; sourceTree = "<group>"; };
@@ -471,7 +470,6 @@
 				10ABC7371D439779006CCF6E /* RNSVGCGFCRule.h */,
 				7FC260CC1E3499BC00A39833 /* RNSVGViewBox.h */,
 				7FC260CD1E3499BC00A39833 /* RNSVGViewBox.m */,
-				1039D29E1CE72177001E90A8 /* RNSVGCGFloatArray.h */,
 				1039D2AE1CE72F27001E90A8 /* RNSVGPercentageConverter.h */,
 				1039D2AF1CE72F27001E90A8 /* RNSVGPercentageConverter.m */,
 				7F9CDAF81E1F809C00E0C805 /* RNSVGPathParser.h */,

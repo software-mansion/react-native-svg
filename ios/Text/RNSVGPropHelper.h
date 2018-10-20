@@ -7,18 +7,16 @@
 
 @interface RNSVGPropHelper : NSObject
 
-+ (double) fromRelativeWithNSString:(NSString *)length
-                           relative:(double)relative
-                             offset:(double)offset
-                              scale:(double)scale
-                           fontSize:(double)fontSize;
++ (CGFloat) fromRelativeWithNSString:(NSString *)length
+                           relative:(CGFloat)relative
+                           fontSize:(CGFloat)fontSize;
 
-+ (double) fromRelative:(RNSVGLength*)length
-               relative:(double)relative
-               fontSize:(double)fontSize;
++ (CGFloat) fromRelative:(RNSVGLength*)length
+               relative:(CGFloat)relative
+               fontSize:(CGFloat)fontSize;
 
-+ (double)fromRelative:(RNSVGLength*)length
-              relative:(double)relative;
++ (CGFloat)fromRelative:(RNSVGLength*)length
+              relative:(CGFloat)relative;
 @end
 
 #endif

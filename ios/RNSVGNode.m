@@ -23,9 +23,9 @@
     BOOL _transparent;
     CGPathRef _cachedClipPath;
     CGImageRef _clipMask;
-    double canvasWidth;
-    double canvasHeight;
-    double canvasDiagonal;
+    CGFloat canvasWidth;
+    CGFloat canvasHeight;
+    CGFloat canvasDiagonal;
 }
 
 CGFloat const RNSVG_M_SQRT1_2l = 0.707106781186547524400844362104849039;
@@ -332,34 +332,33 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 - (CGFloat)relativeOnWidthString:(NSString *)length
 {
     return [RNSVGPropHelper fromRelativeWithNSString:length
-                                relative:[self getContextWidth]
-                                  offset:0
-                                   scale:1
+                                relative:[self getCanvasWidth]
                                 fontSize:[self getFontSizeFromContext]];
 }
 
 - (CGFloat)relativeOnHeightString:(NSString *)length
 {
     return [RNSVGPropHelper fromRelativeWithNSString:length
-                                relative:[self getContextHeight]
-                                  offset:0
-                                   scale:1
+                                relative:[self getCanvasHeight]
                                 fontSize:[self getFontSizeFromContext]];
 }
 
 - (CGFloat)relativeOnOtherString:(NSString *)length
 {
-    CGRect bounds = [self getContextBounds];
-    CGFloat width = CGRectGetWidth(bounds);
-    CGFloat height = CGRectGetHeight(bounds);
-    CGFloat powX = width * width;
-    CGFloat powY = height * height;
-    CGFloat r = sqrt(powX + powY) * RNSVG_M_SQRT1_2l;
     return [RNSVGPropHelper fromRelativeWithNSString:length
-                                relative:r
-                                  offset:0
-                                   scale:1
+                                relative:[self getCanvasDiagonal]
                                 fontSize:[self getFontSizeFromContext]];
+}
+
+- (CGFloat)relativeOn:(RNSVGLength *)length relative:(CGFloat)relative
+{
+    RNSVGLengthUnitType unit = length.unit;
+    if (unit == SVG_LENGTHTYPE_NUMBER){
+        return length.value;
+    } else if (unit == SVG_LENGTHTYPE_PERCENTAGE){
+        return length.value / 100 * relative;
+    }
+    return [self fromRelative:length];
 }
 
 - (CGFloat)relativeOnWidth:(RNSVGLength *)length
@@ -395,8 +394,8 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     return [self fromRelative:length];
 }
 
-- (double)fromRelative:(RNSVGLength*)length {
-    double unit;
+- (CGFloat)fromRelative:(RNSVGLength*)length {
+    CGFloat unit;
     switch (length.unit) {
         case SVG_LENGTHTYPE_EMS:
             unit = [self getFontSizeFromContext];

@@ -90,7 +90,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     if (_type == kRNSVGLinearGradient) {
         [self paintLinearGradient:context bounds:(CGRect)bounds];
     } else if (_type == kRNSVGRadialGradient) {
-        [self paintRidialGradient:context bounds:(CGRect)bounds];
+        [self paintRadialGradient:context bounds:(CGRect)bounds];
     } else if (_type == kRNSVGPattern) {
         [self paintPattern:context bounds:(CGRect)bounds];
     }
@@ -99,10 +99,10 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 - (CGRect)getPaintRect:(CGContextRef)context bounds:(CGRect)bounds
 {
     CGRect rect = _useObjectBoundingBox ? bounds : _userSpaceBoundingBox;
-    float height = CGRectGetHeight(rect);
-    float width = CGRectGetWidth(rect);
-    float x = 0.0;
-    float y = 0.0;
+    CGFloat height = CGRectGetHeight(rect);
+    CGFloat width = CGRectGetWidth(rect);
+    CGFloat x = 0.0;
+    CGFloat y = 0.0;
 
     if (_useObjectBoundingBox) {
         x = CGRectGetMinX(rect);
@@ -130,10 +130,10 @@ void PatternFunction(void* info, CGContextRef context)
 - (void)paintPattern:(CGContextRef)context bounds:(CGRect)bounds
 {
     CGRect rect = [self getPaintRect:context bounds:bounds];
-    float height = CGRectGetHeight(rect);
-    float width = CGRectGetWidth(rect);
-    float offsetX = CGRectGetMinX(rect);
-    float offsetY = CGRectGetMinY(rect);
+    CGFloat height = CGRectGetHeight(rect);
+    CGFloat width = CGRectGetWidth(rect);
+    CGFloat offsetX = CGRectGetMinX(rect);
+    CGFloat offsetY = CGRectGetMinY(rect);
 
     CGFloat x = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:0]
                                                 relative:width
@@ -180,10 +180,10 @@ void PatternFunction(void* info, CGContextRef context)
     CGGradientDrawingOptions extendOptions = kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
 
     CGRect rect = [self getPaintRect:context bounds:bounds];
-    float height = CGRectGetHeight(rect);
-    float width = CGRectGetWidth(rect);
-    float offsetX = CGRectGetMinX(rect);
-    float offsetY = CGRectGetMinY(rect);
+    CGFloat height = CGRectGetHeight(rect);
+    CGFloat width = CGRectGetWidth(rect);
+    CGFloat offsetX = CGRectGetMinX(rect);
+    CGFloat offsetY = CGRectGetMinY(rect);
 
     CGFloat x1 = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:0]
                                                 relative:width
@@ -204,16 +204,16 @@ void PatternFunction(void* info, CGContextRef context)
     CGGradientRelease(gradient);
 }
 
-- (void)paintRidialGradient:(CGContextRef)context bounds:(CGRect)bounds
+- (void)paintRadialGradient:(CGContextRef)context bounds:(CGRect)bounds
 {
     CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:_colors offset:0]);
     CGGradientDrawingOptions extendOptions = kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
 
     CGRect rect = [self getPaintRect:context bounds:bounds];
-    float height = CGRectGetHeight(rect);
-    float width = CGRectGetWidth(rect);
-    float offsetX = CGRectGetMinX(rect);
-    float offsetY = CGRectGetMinY(rect);
+    CGFloat height = CGRectGetHeight(rect);
+    CGFloat width = CGRectGetWidth(rect);
+    CGFloat offsetX = CGRectGetMinX(rect);
+    CGFloat offsetY = CGRectGetMinY(rect);
 
     CGFloat rx = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:2]
                                                 relative:width

@@ -62,7 +62,7 @@ RCT_CUSTOM_VIEW_PROPERTY(baselineShift, id, RNSVGText)
         NSString *stringValue = (NSString *)json;
         view.baselineShift = stringValue;
     } else {
-        view.baselineShift = [NSString stringWithFormat:@"%f", [json floatValue]];
+        view.baselineShift = [NSString stringWithFormat:@"%f", [json doubleValue]];
     }
 }
 RCT_EXPORT_VIEW_PROPERTY(lengthAdjust, NSString)

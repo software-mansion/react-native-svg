@@ -22,7 +22,7 @@ static NSRegularExpression* percentageRegExp;
     if (string == nil) {
         return offset;
     } else if (![self isPercentage:string]) {
-        return [string floatValue] + offset;
+        return [string doubleValue] + offset;
     } else {
         return [self percentageToFloat:string relative:relative offset:offset];
     }
@@ -49,7 +49,7 @@ static NSRegularExpression* percentageRegExp;
                                                usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
      {
 
-         matched = [[percentage substringWithRange:NSMakeRange(result.range.location, result.range.length)] floatValue];
+         matched = [[percentage substringWithRange:NSMakeRange(result.range.location, result.range.length)] doubleValue];
          matched = matched / 100 * relative + offset;
      }];
 

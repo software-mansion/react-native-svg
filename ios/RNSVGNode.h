@@ -85,6 +85,8 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 
 - (CGFloat)relativeOnOtherString:(NSString *)length;
 
+- (CGFloat)relativeOn:(RNSVGLength *)length relative:(CGFloat)relative;
+
 - (CGFloat)relativeOnWidth:(RNSVGLength *)length;
 
 - (CGFloat)relativeOnHeight:(RNSVGLength *)length;

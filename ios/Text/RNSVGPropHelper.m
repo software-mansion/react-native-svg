@@ -1,26 +1,24 @@
 #include "RNSVGPropHelper.h"
 @implementation RNSVGPropHelper
 
-+ (double)fromRelativeWithNSString:(NSString *)length
-                          relative:(double)relative
-                            offset:(double)offset
-                             scale:(double)scale
-                          fontSize:(double)fontSize {
++ (CGFloat)fromRelativeWithNSString:(NSString *)length
+                          relative:(CGFloat)relative
+                          fontSize:(CGFloat)fontSize {
     length = [length stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSUInteger stringLength = [length length];
     NSInteger percentIndex = stringLength - 1;
     if (stringLength == 0) {
-        return offset;
+        return 0;
     }
     else if ([length characterAtIndex:percentIndex] == '%') {
-        return [[length substringWithRange:NSMakeRange(0, percentIndex)] doubleValue] / 100 * relative + offset;
+        return [[length substringWithRange:NSMakeRange(0, percentIndex)] doubleValue] / 100 * relative;
     }
     else {
         NSInteger twoLetterUnitIndex = stringLength - 2;
         if (twoLetterUnitIndex > 0) {
             NSString *lastTwo = [length substringFromIndex:twoLetterUnitIndex];
             NSUInteger end = twoLetterUnitIndex;
-            double unit = 1;
+            CGFloat unit = 1;
             if ([lastTwo isEqualToString:@"px"]) {
 
             } else if ([lastTwo isEqualToString:@"em"]) {
@@ -41,19 +39,19 @@
                 end = stringLength;
             }
 
-            return [[length substringWithRange:NSMakeRange(0, end)] doubleValue] * unit * scale + offset;
+            return [[length substringWithRange:NSMakeRange(0, end)] doubleValue] * unit;
         } else {
-            return [length doubleValue] * scale + offset;
+            return [length doubleValue];
         }
     }
 }
 
-+ (double)fromRelative:(RNSVGLength*)length
-              relative:(double)relative
-              fontSize:(double)fontSize {
++ (CGFloat)fromRelative:(RNSVGLength*)length
+              relative:(CGFloat)relative
+              fontSize:(CGFloat)fontSize {
     RNSVGLengthUnitType unitType = length.unit;
-    double value = length.value;
-    double unit = 1;
+    CGFloat value = length.value;
+    CGFloat unit = 1;
     switch (unitType) {
         case SVG_LENGTHTYPE_NUMBER:
         case SVG_LENGTHTYPE_PX:
@@ -93,11 +91,11 @@
     return value * unit;
 }
 
-+ (double)fromRelative:(RNSVGLength*)length
-              relative:(double)relative {
++ (CGFloat)fromRelative:(RNSVGLength*)length
+              relative:(CGFloat)relative {
     RNSVGLengthUnitType unitType = length.unit;
-    double value = length.value;
-    double unit = 1;
+    CGFloat value = length.value;
+    CGFloat unit = 1;
     switch (unitType) {
         case SVG_LENGTHTYPE_NUMBER:
         case SVG_LENGTHTYPE_PX:

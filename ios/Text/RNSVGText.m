@@ -144,10 +144,8 @@
 {
     CGRect bounds = CGContextGetClipBoundingBox(context);
     CGSize size = bounds.size;
-    _glyphContext = [[RNSVGGlyphContext alloc]
-                     initWithScale:1
-                     width:size.width
-                     height:size.height];
+    _glyphContext = [[RNSVGGlyphContext alloc] initWithWidth:size.width
+                                                      height:size.height];
 }
 
 - (CGPathRef)getGroupPath:(CGContextRef)context
