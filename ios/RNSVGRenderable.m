@@ -17,6 +17,7 @@
     NSArray<NSString *> *_lastMergedList;
     NSArray<NSString *> *_attributeList;
     NSArray<RNSVGLength *> *_sourceStrokeDashArray;
+    CGFloat *_strokeDashArrayData;
     CGPathRef _strokePath;
     CGPathRef _hitArea;
 }
@@ -153,9 +154,10 @@
     CGPathRelease(_hitArea);
     CGPathRelease(_strokePath);
     _sourceStrokeDashArray = nil;
-    if (_strokeDasharrayData.array) {
-        free(_strokeDasharrayData.array);
+    if (_strokeDashArrayData) {
+        free(_strokeDashArrayData);
     }
+    _strokeDashArrayData = nil;
 }
 
 
@@ -325,27 +327,20 @@ UInt32 saturate(double value) {
         CGContextSetLineCap(context, self.strokeLinecap);
         CGContextSetLineJoin(context, self.strokeLinejoin);
         NSArray<RNSVGLength *>* strokeDasharray = self.strokeDasharray;
+        NSUInteger count = strokeDasharray.count;
 
-        if (strokeDasharray.count) {
-            RNSVGCGFloatArray dash = _strokeDasharrayData;
+        if (count) {
             if (strokeDasharray != _sourceStrokeDashArray) {
                 _sourceStrokeDashArray = strokeDasharray;
-                if (dash.array) {
-                    free(dash.array);
+                if (_strokeDashArrayData) {
+                    free(_strokeDashArrayData);
                 }
-                dash.array = nil;
-
-                NSUInteger count = strokeDasharray.count;
-                dash.count = count;
-                if (count) {
-                    dash.array = malloc(sizeof(CGFloat) * count);
-                    for (NSUInteger i = 0; i < count; i++) {
-                        dash.array[i] = (CGFloat)[self relativeOnOther:strokeDasharray[i]];
-                    }
+                _strokeDashArrayData = malloc(sizeof(CGFloat) * count);
+                for (NSUInteger i = 0; i < count; i++) {
+                    _strokeDashArrayData[i] = (CGFloat)[self relativeOnOther:strokeDasharray[i]];
                 }
-                _strokeDasharrayData = dash;
             }
-            CGContextSetLineDash(context, self.strokeDashoffset, dash.array, dash.count);
+            CGContextSetLineDash(context, self.strokeDashoffset, _strokeDashArrayData, count);
         }
 
         if (!fillColor) {
