@@ -27,6 +27,6 @@ typedef CF_ENUM(unsigned short, RNSVGLengthUnitType) {
 + (instancetype) lengthWithString: (NSString *) lengthString;
 - (BOOL) isEqualTo: (RNSVGLength *)other;
 
-@end;
+@end
 
 #endif /* RNSVGLength_h */

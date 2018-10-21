@@ -125,11 +125,11 @@ static const NSUInteger kMatrixArrayLength = 4 * 4;
 
         } else if ([property isEqualToString:@"skewX"]) {
             CGFloat skew = [self convertToRadians:value];
-            transform.m21 = tanf(skew);
+            transform.m21 = tanf((float)skew);
 
         } else if ([property isEqualToString:@"skewY"]) {
             CGFloat skew = [self convertToRadians:value];
-            transform.m12 = tanf(skew);
+            transform.m12 = tanf((float)skew);
 
         } else {
             RCTLogError(@"Unsupported transform type for a CATransform3D: %@.", property);

@@ -711,7 +711,7 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / M_PI;
             CGFloat charWidth = advances[g].width * scaleSpacingAndGlyphs;
 
             CFIndex currIndex = indices[g];
-            char currentChar = [str characterAtIndex:currIndex];
+            unichar currentChar = [str characterAtIndex:currIndex];
             bool isWordSeparator = [RNSVGTSpan_separators characterIsMember:currentChar];
             CGFloat wordSpace = isWordSeparator ? wordSpacing : 0;
             CGFloat spacing = wordSpace + letterSpacing;
@@ -829,8 +829,8 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / M_PI;
                 CGSize measuredSize = [currChars sizeWithAttributes:
                                        @{NSFontAttributeName:customFont}];
                 label.font = customFont;
-                CGFloat width = ceilf(measuredSize.width);
-                CGFloat height = ceilf(measuredSize.height);
+                CGFloat width = ceil(measuredSize.width);
+                CGFloat height = ceil(measuredSize.height);
                 CGRect bounds = CGRectMake(0, 0, width, height);
                 label.frame = bounds;
 

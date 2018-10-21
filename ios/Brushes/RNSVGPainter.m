@@ -88,11 +88,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 - (void)paint:(CGContextRef)context bounds:(CGRect)bounds
 {
     if (_type == kRNSVGLinearGradient) {
-        [self paintLinearGradient:context bounds:(CGRect)bounds];
+        [self paintLinearGradient:context bounds:bounds];
     } else if (_type == kRNSVGRadialGradient) {
-        [self paintRadialGradient:context bounds:(CGRect)bounds];
+        [self paintRadialGradient:context bounds:bounds];
     } else if (_type == kRNSVGPattern) {
-        [self paintPattern:context bounds:(CGRect)bounds];
+        [self paintPattern:context bounds:bounds];
     }
 }
 

@@ -35,7 +35,7 @@
         CGContextBeginTransparencyLayer(context, NULL);
     }
 
-    [painter paint:context bounds:(CGRect)bounds];
+    [painter paint:context bounds:bounds];
 
     if (transparency) {
         CGContextEndTransparencyLayer(context);

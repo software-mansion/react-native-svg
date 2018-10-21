@@ -64,7 +64,7 @@
             CGFloat height = [self relativeOnHeightString:svgView.bbHeight];
             CGRect rect = CGRectMake(0, 0, width, height);
             CGContextClipToRect(context, rect);
-            [svgView drawToContext:context withRect:(CGRect)rect];
+            [svgView drawToContext:context withRect:rect];
         } else {
             [node drawRect:rect];
         }

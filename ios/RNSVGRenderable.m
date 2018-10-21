@@ -162,7 +162,7 @@
 
 
 UInt32 saturate(CGFloat value) {
-    return value <= 0 ? 0 : value >= 255 ? 255 : value;
+    return value <= 0 ? 0 : value >= 255 ? 255 : (UInt32)value;
 }
 
 - (void)renderTo:(CGContextRef)context rect:(CGRect)rect
@@ -183,8 +183,8 @@ UInt32 saturate(CGFloat value) {
         CGSize boundsSize = bounds.size;
         CGFloat height = boundsSize.height;
         CGFloat width = boundsSize.width;
-        NSUInteger iheight = height;
-        NSUInteger iwidth = width;
+        NSUInteger iheight = (NSUInteger)height;
+        NSUInteger iwidth = (NSUInteger)width;
         NSUInteger npixels = iheight * iwidth;
         CGRect drawBounds = CGRectMake(0, 0, width, height);
 
