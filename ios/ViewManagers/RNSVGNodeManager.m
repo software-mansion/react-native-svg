@@ -20,7 +20,7 @@ static const NSUInteger kMatrixArrayLength = 4 * 4;
         NSString *stringValue = (NSString *)json;
         if ([stringValue hasSuffix:@"deg"]) {
             CGFloat degrees = [[stringValue substringToIndex:stringValue.length - 3] floatValue];
-            return degrees * M_PI / 180;
+            return degrees * (CGFloat)M_PI / 180;
         }
         if ([stringValue hasSuffix:@"rad"]) {
             return [[stringValue substringToIndex:stringValue.length - 3] floatValue];
@@ -39,12 +39,13 @@ static const NSUInteger kMatrixArrayLength = 4 * 4;
         RCTLogConvertError(json, @"a CATransform3D. Expected array for transform matrix.");
         return transform;
     }
-    if ([json count] != kMatrixArrayLength) {
+    NSArray *array = json;
+    if ([array count] != kMatrixArrayLength) {
         RCTLogConvertError(json, @"a CATransform3D. Expected 4x4 matrix array.");
         return transform;
     }
     for (NSUInteger i = 0; i < kMatrixArrayLength; i++) {
-        ((CGFloat *)&transform)[i] = [RCTConvert CGFloat:json[i]];
+        ((CGFloat *)&transform)[i] = [RCTConvert CGFloat:array[i]];
     }
     return transform;
 }

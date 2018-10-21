@@ -33,7 +33,7 @@
         return output;
     } else if ([length characterAtIndex:percentIndex] == '%') {
         output.unit = SVG_LENGTHTYPE_PERCENTAGE;
-        output.value = [[length substringWithRange:NSMakeRange(0, percentIndex)] doubleValue];
+        output.value = (CGFloat)[[length substringWithRange:NSMakeRange(0, percentIndex)] doubleValue];
     } else {
         NSInteger twoLetterUnitIndex = stringLength - 2;
         RNSVGLengthUnitType unit = SVG_LENGTHTYPE_NUMBER;
@@ -59,9 +59,9 @@
             } else {
                 end = stringLength;
             }
-            output.value = [[length substringWithRange:NSMakeRange(0, end)] doubleValue];
+            output.value = (CGFloat)[[length substringWithRange:NSMakeRange(0, end)] doubleValue];
         } else {
-            output.value = [length doubleValue];
+            output.value = (CGFloat)[length doubleValue];
         }
         output.unit = unit;
     }

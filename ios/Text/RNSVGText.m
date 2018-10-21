@@ -162,7 +162,7 @@
     [self setupGlyphContext:context];
     CGPathRef groupPath = [self getGroupPath:context];
 
-    return (CGPathRef)CFAutorelease(CGPathCreateCopyByTransformingPath(groupPath, &CGAffineTransformIdentity));
+    return (CGPathRef)CFAutorelease(CGPathCreateCopy(groupPath));
 }
 
 - (void)renderGroupTo:(CGContextRef)context rect:(CGRect)rect

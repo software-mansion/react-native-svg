@@ -11,7 +11,7 @@
         return 0;
     }
     else if ([length characterAtIndex:percentIndex] == '%') {
-        return [[length substringWithRange:NSMakeRange(0, percentIndex)] doubleValue] / 100 * relative;
+        return (CGFloat)[[length substringWithRange:NSMakeRange(0, percentIndex)] doubleValue] / 100 * relative;
     }
     else {
         NSInteger twoLetterUnitIndex = stringLength - 2;
@@ -30,18 +30,18 @@
             } else if ([lastTwo isEqualToString:@"pc"]) {
                 unit = 15;
             } else if ([lastTwo isEqualToString:@"mm"]) {
-                unit = 3.543307;
+                unit = (CGFloat)3.543307;
             } else if ([lastTwo isEqualToString:@"cm"]) {
-                unit = 35.43307;
+                unit = (CGFloat)35.43307;
             } else if ([lastTwo isEqualToString:@"in"]) {
                 unit = 90;
             } else {
                 end = stringLength;
             }
 
-            return [[length substringWithRange:NSMakeRange(0, end)] doubleValue] * unit;
+            return (CGFloat)[[length substringWithRange:NSMakeRange(0, end)] doubleValue] * unit;
         } else {
-            return [length doubleValue];
+            return (CGFloat)[length doubleValue];
         }
     }
 }
@@ -69,10 +69,10 @@
             break;
 
         case SVG_LENGTHTYPE_CM:
-            unit = 35.43307;
+            unit = (CGFloat)35.43307;
             break;
         case SVG_LENGTHTYPE_MM:
-            unit = 3.543307;
+            unit = (CGFloat)3.543307;
             break;
         case SVG_LENGTHTYPE_IN:
             unit = 90;
@@ -113,10 +113,10 @@
             break;
 
         case SVG_LENGTHTYPE_CM:
-            unit = 35.43307;
+            unit = (CGFloat)35.43307;
             break;
         case SVG_LENGTHTYPE_MM:
-            unit = 3.543307;
+            unit = (CGFloat)3.543307;
             break;
         case SVG_LENGTHTYPE_IN:
             unit = 90;

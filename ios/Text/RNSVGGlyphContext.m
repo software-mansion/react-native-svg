@@ -151,6 +151,7 @@
 
 - (instancetype)initWithWidth:(CGFloat)width
                        height:(CGFloat)height {
+    self = [super init];
     self->mFontContext_ = [[NSMutableArray alloc]init];
     self->mXsContext_ = [[NSMutableArray alloc]init];
     self->mYsContext_ = [[NSMutableArray alloc]init];

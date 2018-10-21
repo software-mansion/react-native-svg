@@ -12,7 +12,7 @@
 #import "RNSVGFontData.h"
 
 static NSCharacterSet *RNSVGTSpan_separators = nil;
-static CGFloat RNSVGTSpan_radToDeg = 180 / M_PI;
+static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 
 @implementation RNSVGTSpan
 {
@@ -83,16 +83,16 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / M_PI;
 
     [self pushGlyphContext];
 
-    CGMutablePathRef path = [self getLinePath:text context:context];
+    CGPathRef path = [self getLinePath:text context:context];
 
     _cache = CGPathRetain(CFAutorelease(CGPathCreateCopy(path)));
 
     [self popGlyphContext];
 
-    return (CGPathRef)CFAutorelease(path);
+    return path;
 }
 
-- (CGMutablePathRef)getLinePath:(NSString *)str context:(CGContextRef)context
+- (CGPathRef)getLinePath:(NSString *)str context:(CGContextRef)context
 {
     // Create a dictionary for this font
     CTFontRef fontRef = [self getFontFromContext];
@@ -294,9 +294,9 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / M_PI;
     CGFloat startOfRendering = 0;
     CGFloat endOfRendering = _pathLength;
     CGFloat fontSize = [gc getFontSize];
-    bool sharpMidLine = false;
+    //bool sharpMidLine = false;
     if (hasTextPath) {
-        sharpMidLine = RNSVGTextPathMidLineFromString([textPath midLine]) == RNSVGTextPathMidLineSharp;
+        //sharpMidLine = RNSVGTextPathMidLineFromString([textPath midLine]) == RNSVGTextPathMidLineSharp;
         /*
          Name
          side
@@ -573,11 +573,11 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / M_PI;
                 // There are no obvious formulas to calculate the position of these baselines.
                 // At the time of writing FOP puts the hanging baseline at 80% of the ascender
                 // height and the mathematical baseline at 50%.
-                baselineShift = 0.5 * ascenderHeight;
+                baselineShift = (CGFloat)0.5 * ascenderHeight;
                 break;
 
             case RNSVGAlignmentBaselineHanging:
-                baselineShift = 0.8 * ascenderHeight;
+                baselineShift = (CGFloat)0.8 * ascenderHeight;
                 break;
 
             case RNSVGAlignmentBaselineTextTop:
@@ -647,7 +647,7 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / M_PI;
                     NSDictionary* os2 = [tables objectForKey:@"os2"];
                     NSNumber* ySubscriptYOffset = [os2 objectForKey:@"ySubscriptYOffset"];
                     if (ySubscriptYOffset) {
-                        CGFloat subOffset = [ySubscriptYOffset doubleValue];
+                        CGFloat subOffset = (CGFloat)[ySubscriptYOffset doubleValue];
                         baselineShift += fontSize * subOffset / [unitsPerEm doubleValue];
                     }
                 } else if (fontData != nil && [baselineShiftString isEqualToString:@"super"]) {
@@ -657,7 +657,7 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / M_PI;
                     NSDictionary* os2 = [tables objectForKey:@"os2"];
                     NSNumber* ySuperscriptYOffset = [os2 objectForKey:@"ySuperscriptYOffset"];
                     if (ySuperscriptYOffset) {
-                        CGFloat superOffset = [ySuperscriptYOffset doubleValue];
+                        CGFloat superOffset = (CGFloat)[ySuperscriptYOffset doubleValue];
                         baselineShift -= fontSize * superOffset / [unitsPerEm doubleValue];
                     }
                 } else if ([baselineShiftString isEqualToString:@"baseline"]) {
@@ -786,8 +786,8 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / M_PI;
                      return [obj1 compare:obj2];
                  }];
 
-                CGFloat totalLength = [lengths[i] doubleValue];
-                CGFloat prevLength = i == 0 ? 0 : [lengths[i - 1] doubleValue];
+                CGFloat totalLength = (CGFloat)[lengths[i] doubleValue];
+                CGFloat prevLength = i == 0 ? 0 : (CGFloat)[lengths[i - 1] doubleValue];
 
                 CGFloat length = totalLength - prevLength;
                 CGFloat percent = (midPoint - prevLength) / length;
@@ -850,7 +850,7 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / M_PI;
     CFRelease(attrString);
     CFRelease(line);
 
-    return path;
+    return (CGPathRef)CFAutorelease(path);
 }
 
 + (CGFloat)getTextAnchorOffset:(RNSVGTextAnchor)textAnchor width:(CGFloat) width

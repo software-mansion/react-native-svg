@@ -24,7 +24,7 @@
  3. Link to https://github.com/adamwulf/PerformanceBezier
 
  */
-static CGFloat idealFlatness = .01;
+static CGFloat idealFlatness = (CGFloat).01;
 
 /**
  * returns the distance between two points

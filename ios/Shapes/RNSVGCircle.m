@@ -44,7 +44,7 @@
     CGFloat cx = [self relativeOnWidth:self.cx];
     CGFloat cy = [self relativeOnHeight:self.cy];
     CGFloat r = [self relativeOnOther:self.r];
-    CGPathAddArc(path, nil, cx, cy, r, 0, 2 * M_PI, NO);
+    CGPathAddArc(path, nil, cx, cy, r, 0, 2 * (CGFloat)M_PI, NO);
     return (CGPathRef)CFAutorelease(path);
 }
 

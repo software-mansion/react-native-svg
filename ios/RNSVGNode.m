@@ -28,7 +28,7 @@
     CGFloat canvasDiagonal;
 }
 
-CGFloat const RNSVG_M_SQRT1_2l = 0.707106781186547524400844362104849039;
+CGFloat const RNSVG_M_SQRT1_2l = (CGFloat)0.707106781186547524400844362104849039;
 CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (instancetype)init
@@ -405,10 +405,10 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
             break;
 
         case SVG_LENGTHTYPE_CM:
-            unit = 35.43307;
+            unit = (CGFloat)35.43307;
             break;
         case SVG_LENGTHTYPE_MM:
-            unit = 3.543307;
+            unit = (CGFloat)3.543307;
             break;
         case SVG_LENGTHTYPE_IN:
             unit = 90;

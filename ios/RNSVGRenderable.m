@@ -150,7 +150,7 @@
 
 - (void)dealloc
 {
-    CGPathRelease(self.path);
+    self.path = nil;
     CGPathRelease(_hitArea);
     CGPathRelease(_strokePath);
     _sourceStrokeDashArray = nil;
@@ -159,7 +159,6 @@
     }
     _strokeDashArrayData = nil;
 }
-
 
 UInt32 saturate(CGFloat value) {
     return value <= 0 ? 0 : value >= 255 ? 255 : (UInt32)value;
@@ -219,7 +218,7 @@ UInt32 saturate(CGFloat value) {
             UInt32 g = (color >> 8) & 0xFF;
             UInt32 b = (color >> 16) & 0xFF;
 
-            CGFloat luma = 0.299 * r + 0.587 * g + 0.144 * b;
+            CGFloat luma = (CGFloat)(0.299 * r + 0.587 * g + 0.144 * b);
             *currentPixel = saturate(luma) << 24;
             currentPixel++;
         }
@@ -395,24 +394,19 @@ UInt32 saturate(CGFloat value) {
 - (void)setHitArea:(CGPathRef)path
 {
     CGPathRelease(_hitArea);
-    _hitArea = nil;
     CGPathRelease(_strokePath);
+    _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(path)));
     _strokePath = nil;
-    // Add path to hitArea
-    CGMutablePathRef hitArea = CGPathCreateMutableCopy(path);
-
     if (self.stroke && self.strokeWidth) {
         // Add stroke to hitArea
         CGFloat width = [self relativeOnOther:self.strokeWidth];
-        _strokePath = CGPathRetain(CFAutorelease(CGPathCreateCopyByStrokingPath(hitArea, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit)));
+        _strokePath = CGPathRetain(CFAutorelease(CGPathCreateCopyByStrokingPath(path, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit)));
+        // TODO add dashing
+        // CGPathCreateCopyByDashingPath(CGPathRef  _Nullable path, const CGAffineTransform * _Nullable transform, CGFloat phase, const CGFloat * _Nullable lengths, size_t count)
     }
-
-    _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(hitArea)));
-    CGPathRelease(hitArea);
-
 }
 
-// hitTest delagate
+// hitTest delegate
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     if (!_hitArea) {

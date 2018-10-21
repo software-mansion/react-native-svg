@@ -45,7 +45,7 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
         // In that case we shouldn't need this new malloc.
         array = malloc(sizeof(CGFloat) * count);
         for (NSUInteger i = 0; i < count; i++) {
-            array[i] = [arr[i] doubleValue];
+            array[i] = (CGFloat)[arr[i] doubleValue];
         }
     }
 
@@ -85,7 +85,7 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
         case 2: // currentColor
             return [[RNSVGBrush alloc] initWithArray:nil];
         default:
-            RCTLogError(@"Unknown brush type: %zd", type);
+            RCTLogError(@"Unknown brush type: %zd", (unsigned long)type);
             return nil;
     }
 }
@@ -98,7 +98,7 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
 + (RNSVGLength *)RNSVGLength:(id)json
 {
     if ([json isKindOfClass:[NSNumber class]]) {
-        return [RNSVGLength lengthWithNumber:[json doubleValue]];
+        return [RNSVGLength lengthWithNumber:(CGFloat)[json doubleValue]];
     } else if ([json isKindOfClass:[NSString class]]) {
         NSString *stringValue = (NSString *)json;
         return [RNSVGLength lengthWithString:stringValue];
@@ -110,7 +110,7 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
 + (NSArray<RNSVGLength *>*)RNSVGLengthArray:(id)json
 {
     if ([json isKindOfClass:[NSNumber class]]) {
-        RNSVGLength* length = [RNSVGLength lengthWithNumber:[json doubleValue]];
+        RNSVGLength* length = [RNSVGLength lengthWithNumber:(CGFloat)[json doubleValue]];
         return [NSArray arrayWithObject:length];
     } else if ([json isKindOfClass:[NSArray class]]) {
         NSArray *arrayValue = (NSArray*)json;
@@ -132,7 +132,7 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
 {
     NSArray *arr = [self NSArray:json];
     if (arr.count < offset + 4) {
-        RCTLogError(@"Too few elements in array (expected at least %zd): %@", 4 + offset, arr);
+        RCTLogError(@"Too few elements in array (expected at least %zd): %@", (ssize_t)(4 + offset), arr);
         return CGRectZero;
     }
     return (CGRect){
@@ -145,7 +145,7 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
 {
     NSArray *arr = [self NSArray:json];
     if (arr.count < offset + 4) {
-        RCTLogError(@"Too few elements in array (expected at least %zd): %@", 4 + offset, arr);
+        RCTLogError(@"Too few elements in array (expected at least %zd): %@", (ssize_t)(4 + offset), arr);
         return nil;
     }
     return [self CGColor:[arr subarrayWithRange:(NSRange){offset, 4}]];
@@ -155,7 +155,7 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
 {
     NSArray *arr = [self NSArray:json];
     if (arr.count < offset) {
-        RCTLogError(@"Too few elements in array (expected at least %zd): %@", offset, arr);
+        RCTLogError(@"Too few elements in array (expected at least %zd): %@", (unsigned long)offset, arr);
         return nil;
     }
     arr = [arr subarrayWithRange:(NSRange){offset, arr.count - offset}];

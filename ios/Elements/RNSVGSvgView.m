@@ -28,8 +28,8 @@
         // This is necessary to ensure that [self setNeedsDisplay] actually triggers
         // a redraw when our parent transitions between hidden and visible.
         self.contentMode = UIViewContentModeRedraw;
+        rendered = false;
     }
-    rendered = false;
     return self;
 }
 
