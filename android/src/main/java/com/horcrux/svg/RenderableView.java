@@ -36,9 +36,6 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 
-/**
- * Renderable shadow node
- */
 abstract public class RenderableView extends VirtualView {
 
     RenderableView(ReactContext reactContext) {
@@ -355,7 +352,7 @@ abstract public class RenderableView extends VirtualView {
     }
 
     /**
-     * Sets up paint according to the props set on a shadow view. Returns {@code true}
+     * Sets up paint according to the props set on a view. Returns {@code true}
      * if the fill should be drawn, {@code false} if not.
      */
     private boolean setupFillPaint(Paint paint, float opacity) {
@@ -370,7 +367,7 @@ abstract public class RenderableView extends VirtualView {
     }
 
     /**
-     * Sets up paint according to the props set on a shadow view. Returns {@code true}
+     * Sets up paint according to the props set on a view. Returns {@code true}
      * if the stroke should be drawn, {@code false} if not.
      */
     private boolean setupStrokePaint(Paint paint, float opacity) {

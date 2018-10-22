@@ -322,7 +322,7 @@ abstract public class VirtualView extends ViewGroup {
         } else if (parent instanceof VirtualView) {
             svgView = ((VirtualView) parent).getSvgView();
         } else {
-            FLog.e(ReactConstants.TAG, "RNSVG: " + getClass().getName() + " should be descendant of a SvgViewShadow.");
+            FLog.e(ReactConstants.TAG, "RNSVG: " + getClass().getName() + " should be descendant of a SvgView.");
         }
 
         return svgView;

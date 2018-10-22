@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 
 /**
  * ViewManager for RNSVGSvgView React views. Renders as a {@link SvgView} and handles
- * invalidating the native view on shadow view updates happening in the underlying tree.
+ * invalidating the native view on view updates happening in the underlying tree.
  */
 class SvgViewManager extends ReactViewManager {
 
