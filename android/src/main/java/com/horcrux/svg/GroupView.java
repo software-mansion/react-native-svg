@@ -43,8 +43,12 @@ class GroupView extends RenderableView {
 
     void setupGlyphContext(Canvas canvas) {
         RectF clipBounds = new RectF(canvas.getClipBounds());
-        mMatrix.mapRect(clipBounds);
-        mTransform.mapRect(clipBounds);
+        if (mMatrix != null) {
+            mMatrix.mapRect(clipBounds);
+        }
+        if (mTransform != null) {
+            mTransform.mapRect(clipBounds);
+        }
         mGlyphContext = new GlyphContext(mScale, clipBounds.width(), clipBounds.height());
     }
 
@@ -171,7 +175,9 @@ class GroupView extends RenderableView {
                     } else {
                         p2 = n.getPath(canvas, paint);
                     }
-                    p2.transform(transform);
+                    if (transform != null) {
+                        p2.transform(transform);
+                    }
                     Region r2 = new Region();
                     r2.setPath(p2, bounds);
                     r.op(r2, op);
