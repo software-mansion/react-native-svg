@@ -399,8 +399,8 @@ class PropHelper {
         }
 
         private void moveTo(float x, float y) {
-            mPivotX = mPenX = x;
-            mPivotY = mPenY = y;
+            mPenDownX = mPivotX = mPenX = x;
+            mPenDownY = mPivotY = mPenY = y;
             mPath.moveTo(x * mScale, y * mScale);
 
             mLastStartPoint = getPointMap(x ,y);

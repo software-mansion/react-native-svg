@@ -144,8 +144,8 @@
 
 - (void)moveTo:(CGMutablePathRef)path x:(float)x y:(float)y
 {
-    _pivotX = _penX = x;
-    _pivotY = _penY = y;
+    _penDownX = _pivotX = _penX = x;
+    _penDownY = _pivotY = _penY = y;
     CGPathMoveToPoint(path, nil, x, y);
 }
 
