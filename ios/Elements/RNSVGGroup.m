@@ -81,8 +81,7 @@
 {
     CGRect clipBounds = CGContextGetClipBoundingBox(context);
     clipBounds = CGRectApplyAffineTransform(clipBounds, self.matrix);
-    CGAffineTransform transform = CATransform3DGetAffineTransform(self.layer.transform);
-    clipBounds = CGRectApplyAffineTransform(clipBounds, transform);
+    clipBounds = CGRectApplyAffineTransform(clipBounds, self.transform);
     CGFloat width = CGRectGetWidth(clipBounds);
     CGFloat height = CGRectGetHeight(clipBounds);
 
@@ -128,6 +127,7 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
+    transformed = CGPointApplyAffineTransform(transformed, self.invTransform);
 
     if (self.clipPath) {
         RNSVGClipPath *clipNode = (RNSVGClipPath*)[self.svgView getDefinedClipPath:self.clipPath];

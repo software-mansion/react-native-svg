@@ -191,12 +191,13 @@ class GroupView extends RenderableView {
 
     @Override
     int hitTest(final float[] src) {
-        if (!mInvertible) {
+        if (!mInvertible || !mTransformInvertible) {
             return -1;
         }
 
         float[] dst = new float[2];
         mInvMatrix.mapPoints(dst, src);
+        mInvTransform.mapPoints(dst, src);
 
         int x = Math.round(dst[0]);
         int y = Math.round(dst[1]);

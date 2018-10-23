@@ -428,12 +428,13 @@ abstract public class RenderableView extends VirtualView {
 
     @Override
     int hitTest(final float[] src) {
-        if (mPath == null || !mInvertible) {
+        if (mPath == null || !mInvertible || !mTransformInvertible) {
             return -1;
         }
 
         float[] dst = new float[2];
         mInvMatrix.mapPoints(dst, src);
+        mInvTransform.mapPoints(dst, src);
         int x = Math.round(dst[0]);
         int y = Math.round(dst[1]);
 

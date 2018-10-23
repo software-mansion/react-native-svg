@@ -156,9 +156,10 @@ RCT_EXPORT_VIEW_PROPERTY(opacity, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(matrix, CGAffineTransform)
 RCT_CUSTOM_VIEW_PROPERTY(transform, CATransform3D, RNSVGNode)
 {
-    view.layer.transform = json ? [RNSVGNodeManager CATransform3D:json] : defaultView.layer.transform;
-    // TODO: Improve this by enabling edge antialiasing only for transforms with rotation or skewing
-    view.layer.allowsEdgeAntialiasing = !CATransform3DIsIdentity(view.layer.transform);
+    CATransform3D transform3d = json ? [RNSVGNodeManager CATransform3D:json] : defaultView.layer.transform;
+    CGAffineTransform transform = CATransform3DGetAffineTransform(transform3d);
+    view.invTransform = CGAffineTransformInvert(transform);
+    view.transform = transform;
     [view invalidate];
 }
 RCT_EXPORT_VIEW_PROPERTY(mask, NSString)

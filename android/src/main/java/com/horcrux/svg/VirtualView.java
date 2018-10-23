@@ -62,7 +62,9 @@ abstract public class VirtualView extends ViewGroup {
     Matrix mMatrix = new Matrix();
     Matrix mTransform = new Matrix();
     Matrix mInvMatrix = new Matrix();
+    Matrix mInvTransform = new Matrix();
     boolean mInvertible = true;
+    boolean mTransformInvertible = true;
     private RectF mClientRect;
 
     private int mClipRule;

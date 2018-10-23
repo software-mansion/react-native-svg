@@ -81,12 +81,13 @@ class UseView extends RenderableView {
 
     @Override
     int hitTest(float[] src) {
-        if (!mInvertible) {
+        if (!mInvertible || !mTransformInvertible) {
             return -1;
         }
 
         float[] dst = new float[2];
         mInvMatrix.mapPoints(dst, src);
+        mInvTransform.mapPoints(dst, src);
 
         VirtualView template = getSvgView().getDefinedTemplate(mHref);
         int hitChild = template.hitTest(dst);

@@ -73,7 +73,8 @@
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    const CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
+    CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
+    transformed =  CGPointApplyAffineTransform(transformed, self.invTransform);
     RNSVGNode const* template = [self.svgView getDefinedTemplate:self.href];
     if (event) {
         self.active = NO;

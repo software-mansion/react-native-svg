@@ -211,30 +211,29 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
+    CGPoint transformed = point;
     if (self.align) {
-        CGPoint transformed = CGPointApplyAffineTransform(point, _invviewBoxTransform);
-        for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
-            if (![node isKindOfClass:[RNSVGNode class]]) {
-                continue;
-            }
-
-            if (event) {
-                node.active = NO;
-            } else if (node.active) {
-                return node;
-            }
-
-            UIView *hitChild = [node hitTest:transformed withEvent:event];
-
-            if (hitChild) {
-                node.active = YES;
-                return (node.responsible || (node != hitChild)) ? hitChild : self;
-            }
-        }
-        return nil;
-    } else {
-        return [super hitTest:point withEvent:event];
+        transformed = CGPointApplyAffineTransform(transformed, _invviewBoxTransform);
     }
+    for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
+        if (![node isKindOfClass:[RNSVGNode class]]) {
+            continue;
+        }
+
+        if (event) {
+            node.active = NO;
+        } else if (node.active) {
+            return node;
+        }
+
+        UIView *hitChild = [node hitTest:transformed withEvent:event];
+
+        if (hitChild) {
+            node.active = YES;
+            return (node.responsible || (node != hitChild)) ? hitChild : self;
+        }
+    }
+    return nil;
 }
 
 

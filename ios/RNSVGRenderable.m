@@ -169,8 +169,7 @@ UInt32 saturate(CGFloat value) {
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.matrix);
-    CGAffineTransform transform = CATransform3DGetAffineTransform(self.layer.transform);
-    CGContextConcatCTM(context, transform);
+    CGContextConcatCTM(context, self.transform);
     CGContextSetAlpha(context, self.opacity);
 
     [self beginTransparencyLayer:context];
@@ -421,6 +420,7 @@ UInt32 saturate(CGFloat value) {
     }
 
     CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
+    transformed = CGPointApplyAffineTransform(transformed, self.invTransform);
 
     BOOL evenodd = self.fillRule == kRNSVGCGFCRuleEvenodd;
     if (!CGPathContainsPoint(_hitArea, nil, transformed, evenodd) &&

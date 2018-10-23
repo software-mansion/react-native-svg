@@ -9,6 +9,7 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Matrix;
 import android.view.View;
 
 import com.facebook.infer.annotation.Assertions;
@@ -990,8 +991,10 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
             resetTransformProperty(node);
         } else {
             setTransformProperty(node, matrix);
-            node.mTransform = node.getMatrix();
         }
+        Matrix m = node.getMatrix();
+        node.mTransform = m;
+        node.mTransformInvertible = m.invert(node.mInvTransform);
     }
 
     @ReactProp(name = "propList")
