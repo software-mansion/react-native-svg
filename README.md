@@ -10,7 +10,7 @@
 ## Features
 
 1. Supports most SVG elements and properties (Rect, Circle, Line, Polyline, Polygon, G ...).
-2. Easy to convert SVG code into ReactNative code.
+2. Easy to [convert SVG code](https://svgr.now.sh/) to react-native-svg.
 
 ### Installation
 
