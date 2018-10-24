@@ -22,6 +22,7 @@ import com.facebook.react.uimanager.OnLayoutEvent;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.EventDispatcher;
+import com.facebook.react.views.view.ReactViewGroup;
 
 import java.util.ArrayList;
 
@@ -30,18 +31,13 @@ import javax.annotation.Nullable;
 import static com.horcrux.svg.FontData.DEFAULT_FONT_SIZE;
 
 @SuppressLint("ViewConstructor")
-abstract public class VirtualView extends ViewGroup {
+abstract public class VirtualView extends ReactViewGroup {
     final ReactContext mContext;
 
     VirtualView(ReactContext reactContext) {
         super(reactContext);
         mContext = reactContext;
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
     }
 
     /*
@@ -443,6 +439,53 @@ abstract public class VirtualView extends ViewGroup {
         }
     }
 
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = mClientRect != null ?
+                (int) Math.ceil(mClientRect.width())
+                : getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec);
+
+        int height = mClientRect != null ?
+                (int) Math.ceil(mClientRect.height())
+                : getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
+
+        setMeasuredDimension(width, height);
+    }
+
+    /**
+     * Called from layout when this view should
+     * assign a size and position to each of its children.
+     *
+     * Derived classes with children should override
+     * this method and call layout on each of
+     * their children.
+     * @param changed This is a new size or position for this view
+     * @param pleft Left position, relative to parent
+     * @param ptop Top position, relative to parent
+     * @param pright Right position, relative to parent
+     * @param pbottom Bottom position, relative to parent
+     */
+
+    RectF layoutRect = new RectF();
+    protected void onLayout(boolean changed, int pleft, int ptop, int pright, int pbottom) {
+        if (mClientRect == null) {
+            return;
+        }
+
+        if (!(this instanceof GroupView)) {
+            int left = (int) Math.floor(mClientRect.left);
+            int top = (int) Math.floor(mClientRect.top);
+            int right = (int) Math.ceil(mClientRect.right);
+            int bottom = (int) Math.ceil(mClientRect.bottom);
+            setLeft(left);
+            setTop(top);
+            setRight(right);
+            setBottom(bottom);
+        }
+        int width = (int) Math.ceil(mClientRect.width());
+        int height = (int) Math.ceil(mClientRect.height());
+        setMeasuredDimension(width, height);
+    }
+
     void setClientRect(RectF rect) {
         if (mClientRect != null && mClientRect.equals(rect)) {
             return;
@@ -451,15 +494,30 @@ abstract public class VirtualView extends ViewGroup {
         if (mClientRect == null) {
             return;
         }
+        int left = (int) Math.floor(mClientRect.left);
+        int top = (int) Math.floor(mClientRect.top);
+        int right = (int) Math.ceil(mClientRect.right);
+        int bottom = (int) Math.ceil(mClientRect.bottom);
+        int width = (int) Math.ceil(mClientRect.width());
+        int height = (int) Math.ceil(mClientRect.height());
+
+        if (!(this instanceof GroupView)) {
+            setLeft(left);
+            setTop(top);
+            setRight(right);
+            setBottom(bottom);
+        }
+        setMeasuredDimension(width, height);
+
         EventDispatcher eventDispatcher = mContext
                 .getNativeModule(UIManagerModule.class)
                 .getEventDispatcher();
         eventDispatcher.dispatchEvent(OnLayoutEvent.obtain(
                 this.getId(),
-                (int) mClientRect.left,
-                (int) mClientRect.top,
-                (int) mClientRect.width(),
-                (int) mClientRect.height()
+                left,
+                top,
+                width,
+                height
         ));
     }
 
