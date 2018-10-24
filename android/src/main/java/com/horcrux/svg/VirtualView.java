@@ -63,12 +63,12 @@ abstract public class VirtualView extends ReactViewGroup {
     boolean mTransformInvertible = true;
     private RectF mClientRect;
 
-    private int mClipRule;
+    int mClipRule;
     private @Nullable String mClipPath;
     @Nullable String mMask;
 
     private static final int CLIP_RULE_EVENODD = 0;
-    private static final int CLIP_RULE_NONZERO = 1;
+    static final int CLIP_RULE_NONZERO = 1;
 
     final float mScale;
     private boolean mResponsible;
@@ -271,8 +271,9 @@ abstract public class VirtualView extends ReactViewGroup {
             ClipPathView mClipNode = (ClipPathView) getSvgView().getDefinedClipPath(mClipPath);
 
             if (mClipNode != null) {
-                Path clipPath = mClipNode.getPath(canvas, paint, Region.Op.UNION);
-                switch (mClipRule) {
+                Path clipPath = mClipNode.mClipRule == CLIP_RULE_EVENODD ? mClipNode.getPath(canvas, paint) :
+                        mClipNode.getPath(canvas, paint, Region.Op.UNION);
+                switch (mClipNode.mClipRule) {
                     case CLIP_RULE_EVENODD:
                         clipPath.setFillType(Path.FillType.EVEN_ODD);
                         break;
