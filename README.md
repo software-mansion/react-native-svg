@@ -21,21 +21,7 @@
 1. Install library from `npm`
 
     ```bash
-    npm install react-native-svg --save
-    ```
-
-    # NOTICE:
-
-    - react-native-svg >= 3.2.0 only supports react-native >= 0.29.0
-    - react-native-svg >= 4.2.0 only supports react-native >= 0.32.0
-    - react-native-svg >= 4.3.0 only supports react-native >= 0.33.0
-    - react-native-svg >= 4.4.0 only supports react-native >= 0.38.0 and react >= 15.4.0
-    - react-native-svg >= 4.5.0 only supports react-native >= 0.40.0 and react >= 15.4.0
-    - react-native-svg >= 5.1.8 only supports react-native >= 0.44.0 and react == 16.0.0-alpha.6
-    - react-native-svg >= 5.2.0 only supports react-native >= 0.45.0 and react == 16.0.0-alpha.12
-    - react-native-svg >= 5.3.0 only supports react-native >= 0.46.0 and react == 16.0.0-alpha.12
-    - react-native-svg >= 5.4.1 only supports react-native >= 0.47.0 and react == 16.0.0-alpha.12
-    - react-native-svg >= 5.5.1 only supports react-native >= 0.50.0 and react == 16.0.0
+    npm i react-native-svg
 
 2. Link native code
 
@@ -43,19 +29,34 @@
     react-native link react-native-svg
     ```
 
-    * If `cocoapods` is used and if error `RNSVGImage.m:12:9: 'React/RCTImageLoader.h' file not found` occurs:
+    ```
 
-        Add the following entry in Podfile:
+# NOTICE:
 
-        ```ruby
-            pod 'React', :path => '../node_modules/react-native', :subspecs => [
-                [...]
-                'RCTImage', # !!!!!
-            ]
-        ```
+Due to breaking changes in react-native, the version given in the left column 
+(and higher versions) of react-native-svg only supports the react-native version
+in the right column (and higher versions, if possible).
 
-        and run `pod install` from `ios` folder
+It is recommended to use the version of react given in the peer dependencies 
+of the react-native version you are using.
 
+The latest version of react-native-svg should always work in a clean react-native project.
+    
+| react-native-svg | react-native |
+|------------------|--------------|
+| 3.2.0            | 0.29         |
+| 4.2.0            | 0.32         |
+| 4.3.0            | 0.33         |
+| 4.4.0            | 0.38         |
+| 4.5.0            | 0.40         |
+| 5.1.8            | 0.44         |
+| 5.2.0            | 0.45         |
+| 5.3.0            | 0.46         |
+| 5.4.1            | 0.47         |
+| 5.5.1            | >=0.50       |
+| 6.0.0            | >=0.50       |
+| 7.0.0            | >=0.50       |
+| 8.0.0            | >=0.50       |
 
 #### Manual
 
@@ -97,6 +98,59 @@ Alternatively, you can use [CocoaPods](https://cocoapods.org/) to manage your na
 1. Add RNSVG to your Podfile
 ```
 pod 'RNSVG', :path => '../node_modules/react-native-svg'
+```
+
+If `cocoapods` is used and if error `RNSVGImage.m:12:9: 'React/RCTImageLoader.h' file not found` occurs:
+
+Add the following entry in Podfile:
+
+```ruby
+    pod 'React', :path => '../node_modules/react-native', :subspecs => [
+        [...]
+        'RCTImage', # <-- Add RCTImage
+    ]
+```
+
+and run `pod install` from `ios` folder
+
+###### Troubleshooting
+
+If you have build errors, then it might be caused by caching issues, please try:
+
+```bash
+watchman watch-del-all
+rm -fr $TMPDIR/react-*
+npm start -- --reset-cache
+
+Or,
+
+rm -rf node_modules
+npm i
+npm start -- --reset-cache
+```
+
+If the new build system in XCode 10 is failing, either use the legacy system, or [uncheck "Parallelize build"](https://github.com/react-native-community/react-native-svg/issues/817#issuecomment-432309469), clean the project, and build again.
+
+If you have unexpected behavior, please create a clean project with the latest versions of react-native and react-native-svg
+
+```bash
+react-native init CleanProject
+cd CleanProject/
+npm i react-native-svg
+react-native link
+```
+
+Make a reproduction of the problem in App.js
+    
+```bash
+react-native run-ios
+react-native run-android
+```
+
+Verify that it is still an issue with the latest version. If so, open a new issue, include the entire App.js file, specify what platforms you've tested, and the results of running this command:
+
+```bash
+react-native info
 ```
 
 ### <a name="Usage">Usage</a>
@@ -959,13 +1013,7 @@ npm i
 ### TODO:
 1. Add Native methods for elements.
 2. Marker element.
-3. Load Image from URL.
+3. Filters
 
 ### Known issues:
 1. Unable to apply focus point of RadialGradient on Android.
-
-### Thanks:
-
-* [w3schools.com SVG Tutorial](http://www.w3schools.com/graphics/svg_intro.asp)
-* [SVG Tutorial](http://tutorials.jenkov.com/svg/index.html)
-* [MDN](https://developer.mozilla.org/en/docs/Web/SVG)
