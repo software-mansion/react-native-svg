@@ -22,6 +22,7 @@
 
     ```bash
     npm i react-native-svg
+    ```
 
 2. Link native code
 
@@ -29,7 +30,6 @@
     react-native link react-native-svg
     ```
 
-    ```
 
 # NOTICE:
 
