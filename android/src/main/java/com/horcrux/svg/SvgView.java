@@ -88,7 +88,8 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         if (mBitmap == null) {
             mBitmap = drawOutput();
         }
-        canvas.drawBitmap(mBitmap, 0, 0, null);
+        if (mBitmap != null)
+            canvas.drawBitmap(mBitmap, 0, 0, null);
     }
 
     @Override
@@ -213,6 +214,9 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
             width = (float) PropHelper.fromRelative(mbbWidth, parentWidth, 0, mScale, 12);
             height = (float) PropHelper.fromRelative(mbbHeight, parentHeight, 0, mScale, 12);
             setMeasuredDimension((int)Math.ceil(width), (int)Math.ceil(height));
+        }
+        if (width == 0 || height == 0) {
+            return null;
         }
         Bitmap bitmap = Bitmap.createBitmap(
                 (int) width,
