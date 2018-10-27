@@ -9,9 +9,8 @@ export default class extends Component {
     static displayName = "feGaussianBlur";
     static propTypes = {
         ...filterPrimitiveProps,
-        in1: PropTypes.string,
-        stdDeviation: numberProp,
-        edgeMode: PropTypes.oneOf(["duplicate", "wrap", "none"]),
+        in: PropTypes.string,
+        stdDeviation: numberProp
     };
 
     render() {
@@ -25,10 +24,9 @@ const RNSVGFEGaussianBlur = requireNativeComponent(
     {
         nativeOnly: {
             ...FilterPrimitiveStandardAttributes,
-            in1: true,
+            in: true,
             stdDeviationX: true,
-            stdDeviationY: true,
-            edgeMode: true,
+            stdDeviationY: true
         },
     },
 );
