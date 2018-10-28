@@ -233,8 +233,8 @@ static CGImageRef renderToImage(RNSVGRenderable *object,
 
             // Apply luminanceToAlpha filter primitive
             // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
-            CIImage *grayscaleMask = transformImageIntoGrayscaleMask(maskSrcImage);
-            CIImage* composite = applyBlendWithAlphaMask(contentSrcImage, grayscaleMask);
+            CIImage *alphaMask = transformImageIntoAlphaMask(maskSrcImage);
+            CIImage* composite = applyBlendWithAlphaMask(contentSrcImage, alphaMask);
 
             // Create masked image and release memory
             CGImageRef compositeImage = [[RNSVGRenderable sharedCIContext] createCGImage:composite fromRect:drawBounds];
@@ -478,47 +478,46 @@ static CGImageRef renderToImage(RNSVGRenderable *object,
     _attributeList = _propList;
 }
 
-static CIImage *transformImageIntoGrayscaleMask(CIImage *inputImage)
+static CIImage *transparentImage()
 {
-    CIFilter *blackBackground = [CIFilter filterWithName:@"CIConstantColorGenerator"];
-    [blackBackground setValue:[CIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0] forKey:@"inputColor"];
-
-    CIFilter *layerOverBlack = [CIFilter filterWithName:@"CISourceOverCompositing"];
-    [layerOverBlack setValue:[blackBackground valueForKey:@"outputImage"] forKey:@"inputBackgroundImage"];
-    [layerOverBlack setValue:inputImage forKey:@"inputImage"];
-
-    CIImage *luminanceAlpha = applyLuminanceToAlphaFilter([layerOverBlack valueForKey:@"outputImage"]);
-    CIImage *luminanceAsGrayscale = applyExpandAlphatoGrayscaleFilter(luminanceAlpha);
-    CIImage *alphaAsGrayscale = applyExpandAlphatoGrayscaleFilter(inputImage);
-
-    CIFilter *multipliedGrayscale = [CIFilter filterWithName:@"CIMultiplyCompositing"];
-    [multipliedGrayscale setValue:luminanceAsGrayscale forKey:@"inputBackgroundImage"];
-    [multipliedGrayscale setValue:alphaAsGrayscale forKey:@"inputImage"];
-    return [multipliedGrayscale valueForKey:@"outputImage"];
+    static CIImage *transparentImage = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CIFilter *transparent = [CIFilter filterWithName:@"CIConstantColorGenerator"];
+        [transparent setValue:[CIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0] forKey:@"inputColor"];
+        transparentImage = [transparent valueForKey:@"outputImage"];
+    });
+    return transparentImage;
 }
 
-static CIImage *applyExpandAlphatoGrayscaleFilter(CIImage *inputImage)
+static CIImage *blackImage()
 {
-    CIFilter *alphaToGrayscale = [CIFilter filterWithName:@"CIColorMatrix"];
-    CGFloat zero[4] = {0, 0, 0, 0};
-    [alphaToGrayscale setDefaults];
-    [alphaToGrayscale setValue:inputImage forKey:@"inputImage"];
-    [alphaToGrayscale setValue:[CIVector vectorWithValues:zero count:4] forKey:@"inputRVector"];
-    [alphaToGrayscale setValue:[CIVector vectorWithValues:zero count:4] forKey:@"inputGVector"];
-    [alphaToGrayscale setValue:[CIVector vectorWithValues:zero count:4] forKey:@"inputBVector"];
-    [alphaToGrayscale setValue:[CIVector vectorWithX:0.0 Y:0.0 Z:0.0 W:1.0] forKey:@"inputAVector"];
-    [alphaToGrayscale setValue:[CIVector vectorWithX:1.0 Y:1.0 Z:1.0 W:0.0] forKey:@"inputBiasVector"];
-    return [alphaToGrayscale valueForKey:@"outputImage"];
+    static CIImage *blackImage = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CIFilter *black = [CIFilter filterWithName:@"CIConstantColorGenerator"];
+        [black setValue:[CIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0] forKey:@"inputColor"];
+        blackImage = [black valueForKey:@"outputImage"];
+    });
+    return blackImage;
+}
+
+static CIImage *transformImageIntoAlphaMask(CIImage *inputImage)
+{
+    CIImage *blackBackground = blackImage();
+    CIFilter *layerOverBlack = [CIFilter filterWithName:@"CISourceOverCompositing"];
+    [layerOverBlack setValue:blackBackground forKey:@"inputBackgroundImage"];
+    [layerOverBlack setValue:inputImage forKey:@"inputImage"];
+    return applyLuminanceToAlphaFilter([layerOverBlack valueForKey:@"outputImage"]);
 }
 
 static CIImage *applyBlendWithAlphaMask(CIImage *inputImage, CIImage *inputMaskImage)
 {
-    CIFilter *blackBackground = [CIFilter filterWithName:@"CIConstantColorGenerator"];
-    [blackBackground setValue:[CIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0] forKey:@"inputColor"];
-    CIFilter *blendWithAlphaMask = [CIFilter filterWithName:@"CIBlendWithMask"];
+    CIImage *transparent = transparentImage();
+    CIFilter *blendWithAlphaMask = [CIFilter filterWithName:@"CIBlendWithAlphaMask"];
     [blendWithAlphaMask setDefaults];
     [blendWithAlphaMask setValue:inputImage forKey:@"inputImage"];
-    [blendWithAlphaMask setValue:[blackBackground valueForKey:@"outputImage"] forKey:@"inputBackgroundImage"];
+    [blendWithAlphaMask setValue:transparent forKey:@"inputBackgroundImage"];
     [blendWithAlphaMask setValue:inputMaskImage forKey:@"inputMaskImage"];
     return [blendWithAlphaMask valueForKey:@"outputImage"];
 }
