@@ -9,4 +9,6 @@
 @property (nonatomic, assign) RNSVGUnits filterUnits;
 @property (nonatomic, assign) RNSVGUnits primitiveUnits;
 
+- (CIImage*) applyFilter:(CIImage*)img;
+
 @end

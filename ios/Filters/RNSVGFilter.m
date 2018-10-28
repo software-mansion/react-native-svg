@@ -10,6 +10,11 @@
 
 @implementation RNSVGFilter
 
+- (CIImage*) applyFilter:(CIImage*)img
+{
+    return img;
+}
+
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     return nil;
@@ -25,7 +30,7 @@
     if ([x isEqualTo:_x]) {
         return;
     }
-    
+
     _x = x;
     [self invalidate];
 }
@@ -35,7 +40,7 @@
     if ([y isEqualTo:_y]) {
         return;
     }
-    
+
     _y = y;
     [self invalidate];
 }
@@ -45,7 +50,7 @@
     if ([width isEqualTo:_width]) {
         return;
     }
-    
+
     _width = width;
     [self invalidate];
 }
@@ -55,7 +60,7 @@
     if ([height isEqualTo:_height]) {
         return;
     }
-    
+
     _height = height;
     [self invalidate];
 }
@@ -65,7 +70,7 @@
     if (filterUnits == _filterUnits) {
         return;
     }
-    
+
     _filterUnits = filterUnits;
     [self invalidate];
 }
@@ -75,7 +80,7 @@
     if (primitiveUnits == _primitiveUnits) {
         return;
     }
-    
+
     _primitiveUnits = primitiveUnits;
     [self invalidate];
 }

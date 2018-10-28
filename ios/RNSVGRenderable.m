@@ -8,6 +8,7 @@
 
 #import "RNSVGRenderable.h"
 #import "RNSVGClipPath.h"
+#import "RNSVGFilter.h"
 #import "RNSVGMask.h"
 #import "RNSVGViewBox.h"
 #import "RNSVGVectorEffect.h"
@@ -214,45 +215,56 @@ static CGImageRef renderToImage(RNSVGRenderable *object,
 
     [self beginTransparencyLayer:context];
 
-    if (self.mask) {
-        // https://www.w3.org/TR/SVG11/masking.html#MaskElement
-        RNSVGMask *_maskNode = (RNSVGMask*)[self.svgView getDefinedMask:self.mask];
+    if (self.mask || self.filter) {
         CGRect bounds = CGContextGetClipBoundingBox(context);
-
         CGSize boundsSize = bounds.size;
         CGFloat width = boundsSize.width;
         CGFloat height = boundsSize.height;
         CGRect drawBounds = CGRectMake(0, 0, width, height);
 
-        CGFloat x = [self relativeOn:[_maskNode x] relative:width];
-        CGFloat y = [self relativeOn:[_maskNode y] relative:height];
-        CGFloat w = [self relativeOn:[_maskNode width] relative:width];
-        CGFloat h = [self relativeOn:[_maskNode height] relative:height];
-
-        // Clip to mask bounds and render the mask
-        CGRect maskBounds = CGRectMake(x, y, w, h);
-        CGImageRef maskContent = renderToImage(_maskNode, boundsSize, rect, &maskBounds);
-        CIImage* maskSrcImage = [CIImage imageWithCGImage:maskContent];
-
-        // Apply luminanceToAlpha filter primitive
-        // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
-        CIImage *grayscaleMask = transformImageIntoGrayscaleMask(maskSrcImage);
-
         // Render content of current SVG Renderable to image
         CGImageRef currentContent = renderToImage(self, boundsSize, rect, nil);
         CIImage* contentSrcImage = [CIImage imageWithCGImage:currentContent];
 
-        CIImage* composite = applyBlendWithAlphaMask(contentSrcImage, grayscaleMask);
+        if (self.filter) {
+            // https://www.w3.org/TR/SVG11/filters.html
+            RNSVGFilter *_filterNode = (RNSVGFilter*)[self.svgView getDefinedFilter:self.filter];
+            contentSrcImage = [_filterNode applyFilter:contentSrcImage];
+        }
 
-        // Create masked image and release memory
-        CGImageRef compositeImage = [[RNSVGRenderable sharedCIContext] createCGImage:composite fromRect:drawBounds];
+        if (self.mask) {
+            // https://www.w3.org/TR/SVG11/masking.html#MaskElement
+            RNSVGMask *_maskNode = (RNSVGMask*)[self.svgView getDefinedMask:self.mask];
+            CGFloat x = [self relativeOn:[_maskNode x] relative:width];
+            CGFloat y = [self relativeOn:[_maskNode y] relative:height];
+            CGFloat w = [self relativeOn:[_maskNode width] relative:width];
+            CGFloat h = [self relativeOn:[_maskNode height] relative:height];
 
-        // Render composited result into current render context
-        CGContextDrawImage(context, drawBounds, compositeImage);
+            // Clip to mask bounds and render the mask
+            CGRect maskBounds = CGRectMake(x, y, w, h);
+            CGImageRef maskContent = renderToImage(_maskNode, boundsSize, rect, &maskBounds);
+            CIImage* maskSrcImage = [CIImage imageWithCGImage:maskContent];
 
-        CGImageRelease(compositeImage);
+            // Apply luminanceToAlpha filter primitive
+            // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
+            CIImage *grayscaleMask = transformImageIntoGrayscaleMask(maskSrcImage);
+            CIImage* composite = applyBlendWithAlphaMask(contentSrcImage, grayscaleMask);
+
+            // Create masked image and release memory
+            CGImageRef compositeImage = [[RNSVGRenderable sharedCIContext] createCGImage:composite fromRect:drawBounds];
+
+            // Render composited result into current render context
+            CGContextDrawImage(context, drawBounds, compositeImage);
+            CGImageRelease(compositeImage);
+            CGImageRelease(maskContent);
+        } else {
+            // Render filtered result into current render context
+            CGImageRef filteredImage = [[RNSVGRenderable sharedCIContext] createCGImage:contentSrcImage fromRect:drawBounds];
+            CGContextDrawImage(context, drawBounds, filteredImage);
+            CGImageRelease(filteredImage);
+        }
+
         CGImageRelease(currentContent);
-        CGImageRelease(maskContent);
     } else {
         [self renderLayerTo:context rect:rect];
     }
