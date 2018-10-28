@@ -1,25 +1,51 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { requireNativeComponent } from "react-native";
-import { filterPrimitiveProps } from "../lib/props";
-import { FilterPrimitiveStandardAttributes } from "../lib/attributes";
-import extractFilterPrimitive from "../lib/extract/extractFilterPrimitive";
+/*
 
-export default class extends Component {
-    static displayName = "feMergeNodeElement";
-    static propTypes = {
-        ...filterPrimitiveProps,
-        in1: PropTypes.string,
+https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFEMergeNodeElement
+
+interface SVGFEMergeNodeElement : SVGElement {
+  readonly attribute SVGAnimatedString in1;
+};
+
+Attributes:
+    in1 (readonly SVGAnimatedString)
+    Corresponds to attribute ‘in’ on the given ‘feMergeNode’ element.
+
+https://www.w3.org/TR/SVG11/filters.html#feMergeNodeElement
+
+‘feMergeNode’
+
+Categories:
+    None
+Content model:
+    Any number of the following elements, in any order:
+    ‘animate’
+    ‘set’
+Attributes:
+    core attributes
+    ‘in’
+DOM Interfaces:
+    SVGFEMergeNodeElement
+ */
+
+export default class FEMergeNode extends Component {
+    static displayName = "feMergeNode";
+
+    setNativeProps = props => {
+        this.root.setNativeProps(props);
     };
 
     render() {
-        return <RNSVGFEMergeNode {...extractFilterPrimitive(this.props)} />;
+        return (
+            <RNSVGFEMergeNode
+                in1={this.props.in}
+                ref={r => {
+                    this.root = r;
+                }}
+            />
+        );
     }
 }
 
-const RNSVGFEMergeNode = requireNativeComponent("RNSVGFEMergeNode", null, {
-    nativeOnly: {
-        ...FilterPrimitiveStandardAttributes,
-        in1: true,
-    },
-});
+const RNSVGFEMergeNode = requireNativeComponent("RNSVGFEMergeNode");

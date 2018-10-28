@@ -21,24 +21,24 @@
     _href = href;
 }
 
-- (void)setUsewidth:(RNSVGLength *)usewidth
+- (void)setWidth:(RNSVGLength *)width
 {
-    if ([usewidth isEqualTo:_usewidth]) {
+    if ([width isEqualTo:_width]) {
         return;
     }
 
     [self invalidate];
-    _usewidth = usewidth;
+    _width = width;
 }
 
-- (void)setUseheight:(RNSVGLength *)useheight
+- (void)setHeight:(RNSVGLength *)height
 {
-    if ([useheight isEqualTo:_useheight]) {
+    if ([height isEqualTo:_height]) {
         return;
     }
 
     [self invalidate];
-    _useheight = useheight;
+    _height = height;
 }
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
@@ -54,7 +54,7 @@
 
         if ([template class] == [RNSVGSymbol class]) {
             RNSVGSymbol *symbol = (RNSVGSymbol*)template;
-            [symbol renderSymbolTo:context width:[self relativeOnWidth:self.usewidth] height:[self relativeOnHeight:self.useheight]];
+            [symbol renderSymbolTo:context width:[self relativeOnWidth:self.width] height:[self relativeOnHeight:self.height]];
         } else {
             [template renderTo:context rect:rect];
         }

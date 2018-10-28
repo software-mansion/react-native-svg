@@ -1,16 +1,14 @@
 /**
- * Copyright (c) 2015-present, Horcrux.
+ * Copyright (c) 2015-present, react-native-community.
  * All rights reserved.
  *
  * This source code is licensed under the MIT-style license found in the
  * LICENSE file in the root directory of this source tree.
  */
-#import "RNSVGMask.h"
-#import "RNSVGPainter.h"
-#import "RNSVGBrushType.h"
+#import "RNSVGFilter.h"
 #import "RNSVGNode.h"
 
-@implementation RNSVGMask
+@implementation RNSVGFilter
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
@@ -19,7 +17,7 @@
 
 - (void)parseReference
 {
-    [self.svgView defineMask:self maskName:self.name];
+    [self.svgView defineFilter:self filterName:self.name];
 }
 
 - (void)setX:(RNSVGLength *)x
@@ -27,7 +25,7 @@
     if ([x isEqualTo:_x]) {
         return;
     }
-
+    
     _x = x;
     [self invalidate];
 }
@@ -37,7 +35,7 @@
     if ([y isEqualTo:_y]) {
         return;
     }
-
+    
     _y = y;
     [self invalidate];
 }
@@ -47,7 +45,7 @@
     if ([width isEqualTo:_width]) {
         return;
     }
-
+    
     _width = width;
     [self invalidate];
 }
@@ -57,34 +55,28 @@
     if ([height isEqualTo:_height]) {
         return;
     }
-
+    
     _height = height;
     [self invalidate];
 }
 
-- (void)setMaskUnits:(RNSVGUnits)maskUnits
+- (void)setFilterUnits:(RNSVGUnits)filterUnits
 {
-    if (maskUnits == _maskUnits) {
+    if (filterUnits == _filterUnits) {
         return;
     }
-
-    _maskUnits = maskUnits;
+    
+    _filterUnits = filterUnits;
     [self invalidate];
 }
 
-- (void)setMaskContentUnits:(RNSVGUnits)maskContentUnits
+- (void)setPrimitiveUnits:(RNSVGUnits)primitiveUnits
 {
-    if (maskContentUnits == _maskContentUnits) {
+    if (primitiveUnits == _primitiveUnits) {
         return;
     }
-
-    _maskContentUnits = maskContentUnits;
-    [self invalidate];
-}
-
-- (void)setMaskTransform:(CGAffineTransform)maskTransform
-{
-    _maskTransform = maskTransform;
+    
+    _primitiveUnits = primitiveUnits;
     [self invalidate];
 }
 
