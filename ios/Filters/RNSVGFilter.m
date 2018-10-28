@@ -5,14 +5,42 @@
  * This source code is licensed under the MIT-style license found in the
  * LICENSE file in the root directory of this source tree.
  */
+#import "RNSVGFilterPrimitive.h"
 #import "RNSVGFilter.h"
 #import "RNSVGNode.h"
 
-@implementation RNSVGFilter
+@implementation RNSVGFilter {
+    NSMutableDictionary<NSString *, CIImage *> *resultByName;
+}
 
-- (CIImage*) applyFilter:(CIImage*)img
+- (id)init
 {
-    return img;
+    if (self = [super init]) {
+        resultByName = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+- (CIImage *)applyFilter:(CIImage *)img
+{
+    [resultByName removeAllObjects];
+    CIImage *sourceAlpha = applySourceAlphaFilter(img);
+    [resultByName setObject:img forKey:@"SourceGraphic"];
+    [resultByName setObject:sourceAlpha forKey:@"SourceAlpha"];
+
+    CIImage *result = img;
+    for (UIView *node in self.subviews) {
+        if ([node isKindOfClass:[RNSVGFilterPrimitive class]]) {
+            RNSVGFilterPrimitive *n = (RNSVGFilterPrimitive *)node;
+            result = [n applyFilter:resultByName previousFilterResult:result];
+            NSString *resultName = n.result;
+            if (resultName) {
+                [resultByName setObject:sourceAlpha forKey:resultName];
+            }
+        }
+    };
+
+    return result;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
@@ -23,6 +51,25 @@
 - (void)parseReference
 {
     [self.svgView defineFilter:self filterName:self.name];
+}
+
+static CIFilter * sourceAlphaFilter() {
+    CIFilter *sourceAlpha = [CIFilter filterWithName:@"CIColorMatrix"];
+    CGFloat zero[4] = {0, 0, 0, 0};
+    [sourceAlpha setDefaults];
+    [sourceAlpha setValue:[CIVector vectorWithValues:zero count:4] forKey:@"inputRVector"];
+    [sourceAlpha setValue:[CIVector vectorWithValues:zero count:4] forKey:@"inputGVector"];
+    [sourceAlpha setValue:[CIVector vectorWithValues:zero count:4] forKey:@"inputBVector"];
+    [sourceAlpha setValue:[CIVector vectorWithX:0.0 Y:0.0 Z:0.0 W:1.0] forKey:@"inputAVector"];
+    [sourceAlpha setValue:[CIVector vectorWithValues:zero count:4] forKey:@"inputBiasVector"];
+    return sourceAlpha;
+}
+
+static CIImage *applySourceAlphaFilter(CIImage *inputImage)
+{
+    CIFilter * sourceAlpha = sourceAlphaFilter();
+    [sourceAlpha setValue:inputImage forKey:@"inputImage"];
+    return [sourceAlpha valueForKey:@"outputImage"];
 }
 
 - (void)setX:(RNSVGLength *)x
