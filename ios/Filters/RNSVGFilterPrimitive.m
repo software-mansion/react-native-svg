@@ -17,7 +17,13 @@
 
 - (void)parseReference
 {
-    
+
+}
+
+- (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results
+      previousFilterResult:(CIImage *)previous
+{
+    return previous;
 }
 
 - (void)setX:(RNSVGLength *)x
@@ -25,7 +31,7 @@
     if ([x isEqualTo:_x]) {
         return;
     }
-    
+
     _x = x;
     [self invalidate];
 }
@@ -35,7 +41,7 @@
     if ([y isEqualTo:_y]) {
         return;
     }
-    
+
     _y = y;
     [self invalidate];
 }
@@ -45,7 +51,7 @@
     if ([width isEqualTo:_width]) {
         return;
     }
-    
+
     _width = width;
     [self invalidate];
 }
@@ -55,7 +61,7 @@
     if ([height isEqualTo:_height]) {
         return;
     }
-    
+
     _height = height;
     [self invalidate];
 }
@@ -65,7 +71,7 @@
     if ([result isEqualToString:_result]) {
         return;
     }
-    
+
     [self invalidate];
     _result = result;
 }

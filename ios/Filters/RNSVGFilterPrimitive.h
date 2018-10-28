@@ -8,4 +8,7 @@
 @property (nonatomic, strong) RNSVGLength *height;
 @property (nonatomic, strong) NSString *result;
 
+- (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results
+      previousFilterResult:(CIImage *)previous;
+
 @end

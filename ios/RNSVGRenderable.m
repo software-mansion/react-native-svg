@@ -224,7 +224,7 @@ static CGImageRef renderToImage(RNSVGRenderable *object,
 
         // Render content of current SVG Renderable to image
         CGImageRef currentContent = renderToImage(self, boundsSize, rect, nil);
-        CIImage* contentSrcImage = [CIImage imageWithCGImage:currentContent];
+        CIImage *contentSrcImage = [CIImage imageWithCGImage:currentContent];
 
         if (self.filter) {
             // https://www.w3.org/TR/SVG11/filters.html
@@ -243,12 +243,12 @@ static CGImageRef renderToImage(RNSVGRenderable *object,
             // Clip to mask bounds and render the mask
             CGRect maskBounds = CGRectMake(x, y, w, h);
             CGImageRef maskContent = renderToImage(_maskNode, boundsSize, rect, &maskBounds);
-            CIImage* maskSrcImage = [CIImage imageWithCGImage:maskContent];
+            CIImage *maskSrcImage = [CIImage imageWithCGImage:maskContent];
 
             // Apply luminanceToAlpha filter primitive
             // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
             CIImage *alphaMask = transformImageIntoAlphaMask(maskSrcImage);
-            CIImage* composite = applyBlendWithAlphaMask(contentSrcImage, alphaMask);
+            CIImage *composite = applyBlendWithAlphaMask(contentSrcImage, alphaMask);
 
             // Create masked image and release memory
             CGImageRef compositeImage = [[RNSVGRenderable sharedCIContext] createCGImage:composite fromRect:drawBounds];
