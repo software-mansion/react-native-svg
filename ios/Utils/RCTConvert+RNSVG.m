@@ -28,6 +28,13 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
                                   @"none": @(kRNSVGVBMOSNone)
                                   }), kRNSVGVBMOSMeet, intValue)
 
+RCT_ENUM_CONVERTER(RNSVGColorMatrixTypes, (@{
+                                  @"matrix": @(SVG_FECOLORMATRIX_TYPE_MATRIX),
+                                  @"saturate": @(SVG_FECOLORMATRIX_TYPE_SATURATE),
+                                  @"hueRotate": @(SVG_FECOLORMATRIX_TYPE_HUEROTATE),
+                                  @"luminanceToAlpha": @(SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA)
+                                  }), SVG_FECOLORMATRIX_TYPE_UNKNOWN, intValue)
+
 RCT_ENUM_CONVERTER(RNSVGUnits, (@{
                                   @"objectBoundingBox": @(kRNSVGUnitsObjectBoundingBox),
                                   @"userSpaceOnUse": @(kRNSVGUnitsUserSpaceOnUse),

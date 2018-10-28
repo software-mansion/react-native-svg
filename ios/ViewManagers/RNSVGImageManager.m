@@ -25,15 +25,21 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength*)
 RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(imagewidth, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(imageheight, RNSVGLength*)
+RCT_CUSTOM_VIEW_PROPERTY(imagewidth, id, RNSVGImage)
+{
+    view.width = [RCTConvert RNSVGLength:json];
+}
+RCT_CUSTOM_VIEW_PROPERTY(imageheight, id, RNSVGImage)
+{
+    view.height = [RCTConvert RNSVGLength:json];
+}
 RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGImage)
 {
-    view.imagewidth = [RCTConvert RNSVGLength:json];
+    view.width = [RCTConvert RNSVGLength:json];
 }
 RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGImage)
 {
-    view.imageheight = [RCTConvert RNSVGLength:json];
+    view.height = [RCTConvert RNSVGLength:json];
 }
 RCT_EXPORT_VIEW_PROPERTY(src, id)
 RCT_EXPORT_VIEW_PROPERTY(align, NSString)

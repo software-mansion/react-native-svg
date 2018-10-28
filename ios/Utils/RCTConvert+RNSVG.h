@@ -12,6 +12,7 @@
 #import <React/RCTConvert.h>
 #import "RNSVGCGFCRule.h"
 #import "RNSVGVBMOS.h"
+#import "RNSVGColorMatrixTypes.h"
 #import "RNSVGUnits.h"
 #import "RNSVGLength.h"
 #import "RNSVGPathParser.h"

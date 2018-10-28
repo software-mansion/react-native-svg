@@ -24,6 +24,7 @@ import Filter from './elements/Filter';
 import FEGaussianBlur from './elements/FEGaussianBlur';
 import FEMergeNode from './elements/FEMergeNode';
 import FEMerge from './elements/FEMerge';
+import FEColorMatrix from "./elements/FEColorMatrix";
 
 export {
   Svg,
@@ -52,6 +53,7 @@ export {
   FEGaussianBlur,
   FEMergeNode,
   FEMerge,
+  FEColorMatrix,
 };
 
 export default Svg;

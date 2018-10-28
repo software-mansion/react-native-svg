@@ -254,6 +254,15 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     [self invalidate];
 }
 
+- (void)setFilter:(NSString *)filter
+{
+    if ([_filter isEqualToString:filter]) {
+        return;
+    }
+    _filter = filter;
+    [self invalidate];
+}
+
 - (void)beginTransparencyLayer:(CGContextRef)context
 {
     if (_transparent) {

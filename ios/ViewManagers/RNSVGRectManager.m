@@ -22,16 +22,23 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength*)
 RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(rectheight, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(rectwidth, RNSVGLength*)
+RCT_CUSTOM_VIEW_PROPERTY(rectheight, id, RNSVGRect)
+{
+    view.height = [RCTConvert RNSVGLength:json];
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(rectwidth, id, RNSVGRect)
+{
+    view.width = [RCTConvert RNSVGLength:json];
+}
 RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGRect)
 {
-    view.rectheight = [RCTConvert RNSVGLength:json];
+    view.height = [RCTConvert RNSVGLength:json];
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGRect)
 {
-    view.rectwidth = [RCTConvert RNSVGLength:json];
+    view.width = [RCTConvert RNSVGLength:json];
 }
 RCT_EXPORT_VIEW_PROPERTY(rx, RNSVGLength*)
 RCT_EXPORT_VIEW_PROPERTY(ry, RNSVGLength*)

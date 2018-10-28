@@ -20,17 +20,17 @@
 - (void)parseReference
 {
     self.dirty = false;
-    NSArray<RNSVGLength *> *points = @[self.x, self.y, self.patternwidth, self.patternheight];
+    NSArray<RNSVGLength *> *points = @[self.x, self.y, self.width, self.height];
     RNSVGPainter *painter = [[RNSVGPainter alloc] initWithPointsArray:points];
     [painter setUnits:self.patternUnits];
     [painter setContentUnits:self.patternContentUnits];
     [painter setTransform:self.patternTransform];
     [painter setPattern:self];
-    
+
     if (self.patternUnits == kRNSVGUnitsUserSpaceOnUse || self.patternContentUnits == kRNSVGUnitsUserSpaceOnUse) {
         [painter setUserSpaceBoundingBox:[self.svgView getContextBounds]];
     }
-    
+
     [self.svgView definePainter:painter painterName:self.name];
 }
 
@@ -39,7 +39,7 @@
     if ([x isEqualTo:_x]) {
         return;
     }
-    
+
     _x = x;
     [self invalidate];
 }
@@ -49,28 +49,28 @@
     if ([y isEqualTo:_y]) {
         return;
     }
-    
+
     _y = y;
     [self invalidate];
 }
 
-- (void)setPatternwidth:(RNSVGLength *)patternwidth
+- (void)setWidth:(RNSVGLength *)width
 {
-    if ([patternwidth isEqualTo:_patternwidth]) {
+    if ([width isEqualTo:_width]) {
         return;
     }
-    
-    _patternwidth = patternwidth;
+
+    _width = width;
     [self invalidate];
 }
 
-- (void)setPatternheight:(RNSVGLength *)patternheight
+- (void)setHeight:(RNSVGLength *)height
 {
-    if ([patternheight isEqualTo:_patternheight]) {
+    if ([height isEqualTo:_height]) {
         return;
     }
-    
-    _patternheight = patternheight;
+
+    _height = height;
     [self invalidate];
 }
 
@@ -79,7 +79,7 @@
     if (patternUnits == _patternUnits) {
         return;
     }
-    
+
     _patternUnits = patternUnits;
     [self invalidate];
 }
@@ -89,7 +89,7 @@
     if (patternContentUnits == _patternContentUnits) {
         return;
     }
-    
+
     _patternContentUnits = patternContentUnits;
     [self invalidate];
 }
@@ -105,7 +105,7 @@
     if (minX == _minX) {
         return;
     }
-    
+
     [self invalidate];
     _minX = minX;
 }
@@ -115,7 +115,7 @@
     if (minY == _minY) {
         return;
     }
-    
+
     [self invalidate];
     _minY = minY;
 }
@@ -125,7 +125,7 @@
     if (vbWidth == _vbWidth) {
         return;
     }
-    
+
     [self invalidate];
     _vbWidth = vbWidth;
 }
@@ -135,7 +135,7 @@
     if (_vbHeight == vbHeight) {
         return;
     }
-    
+
     [self invalidate];
     _vbHeight = vbHeight;
 }
@@ -145,7 +145,7 @@
     if ([align isEqualToString:_align]) {
         return;
     }
-    
+
     [self invalidate];
     _align = align;
 }
@@ -155,7 +155,7 @@
     if (meetOrSlice == _meetOrSlice) {
         return;
     }
-    
+
     [self invalidate];
     _meetOrSlice = meetOrSlice;
 }

@@ -11,6 +11,7 @@
 #import "RNSVGMask.h"
 #import "RNSVGViewBox.h"
 #import "RNSVGVectorEffect.h"
+#import "LuminanceToAlpha.h"
 
 @implementation RNSVGRenderable
 {
@@ -21,6 +22,7 @@
     CGFloat *_strokeDashArrayData;
     CGPathRef _srcHitPath;
     CGPathRef _hitArea;
+    CIContext* ciContext;
 }
 
 - (id)init
@@ -173,8 +175,32 @@
     _strokeDashArrayData = nil;
 }
 
-UInt32 saturate(CGFloat value) {
-    return value <= 0 ? 0 : value >= 255 ? 255 : (UInt32)value;
+static CGImageRef renderToImage(RNSVGRenderable *object,
+                                CGSize bounds,
+                                CGRect rect,
+                                CGRect* clip)
+{
+    UIGraphicsBeginImageContextWithOptions(bounds, NO, 1.0);
+    CGContextRef cgContext = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(cgContext, 0.0, bounds.height);
+    CGContextScaleCTM(cgContext, 1.0, -1.0);
+    if (clip) {
+        CGContextClipToRect(cgContext, *clip);
+    }
+    [object renderLayerTo:cgContext rect:rect];
+    CGImageRef contentImage = CGBitmapContextCreateImage(cgContext);
+    UIGraphicsEndImageContext();
+    return contentImage;
+}
+
++ (CIContext *)sharedCIContext {
+    static CIContext *sharedCIContext = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedCIContext = [[CIContext alloc] init];
+    });
+
+    return sharedCIContext;
 }
 
 - (void)renderTo:(CGContextRef)context rect:(CGRect)rect
@@ -192,85 +218,41 @@ UInt32 saturate(CGFloat value) {
         // https://www.w3.org/TR/SVG11/masking.html#MaskElement
         RNSVGMask *_maskNode = (RNSVGMask*)[self.svgView getDefinedMask:self.mask];
         CGRect bounds = CGContextGetClipBoundingBox(context);
+
         CGSize boundsSize = bounds.size;
-        CGFloat height = boundsSize.height;
         CGFloat width = boundsSize.width;
-        NSUInteger iheight = (NSUInteger)height;
-        NSUInteger iwidth = (NSUInteger)width;
-        NSUInteger npixels = iheight * iwidth;
+        CGFloat height = boundsSize.height;
         CGRect drawBounds = CGRectMake(0, 0, width, height);
 
-        // Allocate pixel buffer and bitmap context for mask
-        NSUInteger bytesPerPixel = 4;
-        NSUInteger bitsPerComponent = 8;
-        NSUInteger bytesPerRow = bytesPerPixel * iwidth;
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        UInt32 * pixels = (UInt32 *) calloc(npixels, sizeof(UInt32));
-        CGContextRef bcontext = CGBitmapContextCreate(pixels, iwidth, iheight, bitsPerComponent, bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+        CGFloat x = [self relativeOn:[_maskNode x] relative:width];
+        CGFloat y = [self relativeOn:[_maskNode y] relative:height];
+        CGFloat w = [self relativeOn:[_maskNode width] relative:width];
+        CGFloat h = [self relativeOn:[_maskNode height] relative:height];
 
         // Clip to mask bounds and render the mask
-        CGFloat x = [self relativeOn:[_maskNode x]
-                            relative:width];
-        CGFloat y = [self relativeOn:[_maskNode y]
-                            relative:height];
-        CGFloat w = [self relativeOn:[_maskNode maskwidth]
-                            relative:width];
-        CGFloat h = [self relativeOn:[_maskNode maskheight]
-                            relative:height];
         CGRect maskBounds = CGRectMake(x, y, w, h);
-        CGContextClipToRect(bcontext, maskBounds);
-        [_maskNode renderLayerTo:bcontext rect:rect];
+        CGImageRef maskContent = renderToImage(_maskNode, boundsSize, rect, &maskBounds);
+        CIImage* maskSrcImage = [CIImage imageWithCGImage:maskContent];
 
         // Apply luminanceToAlpha filter primitive
         // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
-        UInt32 * currentPixel = pixels;
-        for (NSUInteger i = 0; i < npixels; i++) {
-            UInt32 color = *currentPixel;
-
-            UInt32 r = color & 0xFF;
-            UInt32 g = (color >> 8) & 0xFF;
-            UInt32 b = (color >> 16) & 0xFF;
-
-            CGFloat luma = (CGFloat)(0.299 * r + 0.587 * g + 0.144 * b);
-            *currentPixel = saturate(luma) << 24;
-            currentPixel++;
-        }
-
-        // Create mask image and release memory
-        CGImageRef maskImage = CGBitmapContextCreateImage(bcontext);
-        CGColorSpaceRelease(colorSpace);
-        CGContextRelease(bcontext);
-        free(pixels);
+        CIImage *grayscaleMask = transformImageIntoGrayscaleMask(maskSrcImage);
 
         // Render content of current SVG Renderable to image
-        UIGraphicsBeginImageContextWithOptions(boundsSize, NO, 0.0);
-        CGContextRef newContext = UIGraphicsGetCurrentContext();
-        CGContextTranslateCTM(newContext, 0.0, height);
-        CGContextScaleCTM(newContext, 1.0, -1.0);
-        [self renderLayerTo:newContext rect:rect];
-        CGImageRef contentImage = CGBitmapContextCreateImage(newContext);
-        UIGraphicsEndImageContext();
+        CGImageRef currentContent = renderToImage(self, boundsSize, rect, nil);
+        CIImage* contentSrcImage = [CIImage imageWithCGImage:currentContent];
 
-        // Blend current element and mask
-        UIGraphicsBeginImageContextWithOptions(boundsSize, NO, 0.0);
-        newContext = UIGraphicsGetCurrentContext();
-        CGContextTranslateCTM(newContext, 0.0, height);
-        CGContextScaleCTM(newContext, 1.0, -1.0);
+        CIImage* composite = applyBlendWithAlphaMask(contentSrcImage, grayscaleMask);
 
-        CGContextSetBlendMode(newContext, kCGBlendModeCopy);
-        CGContextDrawImage(newContext, drawBounds, maskImage);
-        CGImageRelease(maskImage);
+        // Create masked image and release memory
+        CGImageRef compositeImage = [[RNSVGRenderable sharedCIContext] createCGImage:composite fromRect:drawBounds];
 
-        CGContextSetBlendMode(newContext, kCGBlendModeSourceIn);
-        CGContextDrawImage(newContext, drawBounds, contentImage);
-        CGImageRelease(contentImage);
+        // Render composited result into current render context
+        CGContextDrawImage(context, drawBounds, compositeImage);
 
-        CGImageRef blendedImage = CGBitmapContextCreateImage(newContext);
-        UIGraphicsEndImageContext();
-
-        // Render blended result into current render context
-        CGContextDrawImage(context, drawBounds, blendedImage);
-        CGImageRelease(blendedImage);
+        CGImageRelease(compositeImage);
+        CGImageRelease(currentContent);
+        CGImageRelease(maskContent);
     } else {
         [self renderLayerTo:context rect:rect];
     }
@@ -541,6 +523,51 @@ UInt32 saturate(CGFloat value) {
     _lastMergedList = nil;
     _attributeList = _propList;
     self.merging = false;
+}
+
+static CIImage *transformImageIntoGrayscaleMask(CIImage *inputImage)
+{
+    CIFilter *blackBackground = [CIFilter filterWithName:@"CIConstantColorGenerator"];
+    [blackBackground setValue:[CIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0] forKey:@"inputColor"];
+
+    CIFilter *layerOverBlack = [CIFilter filterWithName:@"CISourceOverCompositing"];
+    [layerOverBlack setValue:[blackBackground valueForKey:@"outputImage"] forKey:@"inputBackgroundImage"];
+    [layerOverBlack setValue:inputImage forKey:@"inputImage"];
+
+    CIImage *luminanceAlpha = applyLuminanceToAlphaFilter([layerOverBlack valueForKey:@"outputImage"]);
+    CIImage *luminanceAsGrayscale = applyExpandAlphatoGrayscaleFilter(luminanceAlpha);
+    CIImage *alphaAsGrayscale = applyExpandAlphatoGrayscaleFilter(inputImage);
+
+    CIFilter *multipliedGrayscale = [CIFilter filterWithName:@"CIMultiplyCompositing"];
+    [multipliedGrayscale setValue:luminanceAsGrayscale forKey:@"inputBackgroundImage"];
+    [multipliedGrayscale setValue:alphaAsGrayscale forKey:@"inputImage"];
+    return [multipliedGrayscale valueForKey:@"outputImage"];
+}
+
+static CIImage *applyExpandAlphatoGrayscaleFilter(CIImage *inputImage)
+{
+    CIFilter *alphaToGrayscale = [CIFilter filterWithName:@"CIColorMatrix"];
+    CGFloat zero[4] = {0, 0, 0, 0};
+    [alphaToGrayscale setDefaults];
+    [alphaToGrayscale setValue:inputImage forKey:@"inputImage"];
+    [alphaToGrayscale setValue:[CIVector vectorWithValues:zero count:4] forKey:@"inputRVector"];
+    [alphaToGrayscale setValue:[CIVector vectorWithValues:zero count:4] forKey:@"inputGVector"];
+    [alphaToGrayscale setValue:[CIVector vectorWithValues:zero count:4] forKey:@"inputBVector"];
+    [alphaToGrayscale setValue:[CIVector vectorWithX:0.0 Y:0.0 Z:0.0 W:1.0] forKey:@"inputAVector"];
+    [alphaToGrayscale setValue:[CIVector vectorWithX:1.0 Y:1.0 Z:1.0 W:0.0] forKey:@"inputBiasVector"];
+    return [alphaToGrayscale valueForKey:@"outputImage"];
+}
+
+static CIImage *applyBlendWithAlphaMask(CIImage *inputImage, CIImage *inputMaskImage)
+{
+    CIFilter *blackBackground = [CIFilter filterWithName:@"CIConstantColorGenerator"];
+    [blackBackground setValue:[CIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0] forKey:@"inputColor"];
+    CIFilter *blendWithAlphaMask = [CIFilter filterWithName:@"CIBlendWithMask"];
+    [blendWithAlphaMask setDefaults];
+    [blendWithAlphaMask setValue:inputImage forKey:@"inputImage"];
+    [blendWithAlphaMask setValue:[blackBackground valueForKey:@"outputImage"] forKey:@"inputBackgroundImage"];
+    [blendWithAlphaMask setValue:inputMaskImage forKey:@"inputMaskImage"];
+    return [blendWithAlphaMask valueForKey:@"outputImage"];
 }
 
 @end

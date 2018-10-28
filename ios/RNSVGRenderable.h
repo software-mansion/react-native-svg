@@ -39,4 +39,6 @@
 
 - (void)resetProperties;
 
++ (CIContext *)sharedCIContext;
+
 @end

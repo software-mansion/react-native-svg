@@ -14,8 +14,8 @@
 
 @property (nonatomic, strong) RNSVGLength* x;
 @property (nonatomic, strong) RNSVGLength* y;
-@property (nonatomic, strong) RNSVGLength* rectwidth;
-@property (nonatomic, strong) RNSVGLength* rectheight;
+@property (nonatomic, strong) RNSVGLength* width;
+@property (nonatomic, strong) RNSVGLength* height;
 @property (nonatomic, strong) RNSVGLength* rx;
 @property (nonatomic, strong) RNSVGLength* ry;
 
