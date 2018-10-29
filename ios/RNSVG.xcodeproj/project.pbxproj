@@ -102,6 +102,14 @@
 		94CD25702186AAD2001B7193 /* RNSVGFEGaussianBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD256E2186AAD2001B7193 /* RNSVGFEGaussianBlur.m */; };
 		94CD25722186AAE5001B7193 /* RNSVGFEGaussianBlurManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25712186AAE5001B7193 /* RNSVGFEGaussianBlurManager.m */; };
 		94CD25732186AAE5001B7193 /* RNSVGFEGaussianBlurManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25712186AAE5001B7193 /* RNSVGFEGaussianBlurManager.m */; };
+		94CD25792186C3F1001B7193 /* RNSVGFEBlend.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25782186C3F1001B7193 /* RNSVGFEBlend.m */; };
+		94CD257A2186C3F1001B7193 /* RNSVGFEBlend.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25782186C3F1001B7193 /* RNSVGFEBlend.m */; };
+		94CD257C2186C403001B7193 /* RNSVGFEBlendManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD257B2186C403001B7193 /* RNSVGFEBlendManager.m */; };
+		94CD257D2186C403001B7193 /* RNSVGFEBlendManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD257B2186C403001B7193 /* RNSVGFEBlendManager.m */; };
+		94CD25812186C43B001B7193 /* RNSVGFEOffset.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25802186C43B001B7193 /* RNSVGFEOffset.m */; };
+		94CD25822186C43B001B7193 /* RNSVGFEOffset.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25802186C43B001B7193 /* RNSVGFEOffset.m */; };
+		94CD25842186C44B001B7193 /* RNSVGFEOffsetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25832186C44B001B7193 /* RNSVGFEOffsetManager.m */; };
+		94CD25852186C44B001B7193 /* RNSVGFEOffsetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25832186C44B001B7193 /* RNSVGFEOffsetManager.m */; };
 		94F00C5621780D2E00384EA4 /* RNSVGLength.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F00C5521780D2E00384EA4 /* RNSVGLength.m */; };
 		94F00C5721780D2E00384EA4 /* RNSVGLength.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F00C5521780D2E00384EA4 /* RNSVGLength.m */; };
 		A361E76E1EB0C33D00646005 /* RNSVGTextManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 10BA0D331CE74E3100887C2B /* RNSVGTextManager.m */; };
@@ -327,6 +335,15 @@
 		94CD25712186AAE5001B7193 /* RNSVGFEGaussianBlurManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGFEGaussianBlurManager.m; sourceTree = "<group>"; };
 		94CD25742186AAF0001B7193 /* RNSVGFEGaussianBlurManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGFEGaussianBlurManager.h; sourceTree = "<group>"; };
 		94CD25752186AEFF001B7193 /* RNSVGEdgeModeValues.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGEdgeModeValues.h; sourceTree = "<group>"; };
+		94CD25762186C311001B7193 /* RNSVGBlendModeTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGBlendModeTypes.h; sourceTree = "<group>"; };
+		94CD25772186C3E1001B7193 /* RNSVGFEBlend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGFEBlend.h; sourceTree = "<group>"; };
+		94CD25782186C3F1001B7193 /* RNSVGFEBlend.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGFEBlend.m; sourceTree = "<group>"; };
+		94CD257B2186C403001B7193 /* RNSVGFEBlendManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGFEBlendManager.m; sourceTree = "<group>"; };
+		94CD257E2186C40E001B7193 /* RNSVGFEBlendManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGFEBlendManager.h; sourceTree = "<group>"; };
+		94CD257F2186C42E001B7193 /* RNSVGFEOffset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGFEOffset.h; sourceTree = "<group>"; };
+		94CD25802186C43B001B7193 /* RNSVGFEOffset.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGFEOffset.m; sourceTree = "<group>"; };
+		94CD25832186C44B001B7193 /* RNSVGFEOffsetManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGFEOffsetManager.m; sourceTree = "<group>"; };
+		94CD25862186C458001B7193 /* RNSVGFEOffsetManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGFEOffsetManager.h; sourceTree = "<group>"; };
 		94DDAC5C1F3D024300EED511 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libRNSVG-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		94F00C5421780CEE00384EA4 /* RNSVGLength.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNSVGLength.h; path = Utils/RNSVGLength.h; sourceTree = "<group>"; };
 		94F00C5521780D2E00384EA4 /* RNSVGLength.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RNSVGLength.m; path = Utils/RNSVGLength.m; sourceTree = "<group>"; };
@@ -428,6 +445,8 @@
 				94CD252A21852097001B7193 /* RNSVGFilterManager.m */,
 				94CD2532218524E4001B7193 /* RNSVGFilterPrimitiveManager.h */,
 				94CD2533218524F2001B7193 /* RNSVGFilterPrimitiveManager.m */,
+				94CD257E2186C40E001B7193 /* RNSVGFEBlendManager.h */,
+				94CD257B2186C403001B7193 /* RNSVGFEBlendManager.m */,
 				94CD25512186861D001B7193 /* RNSVGFECompositeManager.h */,
 				94CD25522186862B001B7193 /* RNSVGFECompositeManager.m */,
 				94CD254821853885001B7193 /* RNSVGFEColorMatrixManager.h */,
@@ -438,6 +457,8 @@
 				94CD25672186AA6C001B7193 /* RNSVGFEMergeManager.m */,
 				94CD25632186AA51001B7193 /* RNSVGFEMergeNodeManager.h */,
 				94CD25642186AA5E001B7193 /* RNSVGFEMergeNodeManager.m */,
+				94CD25862186C458001B7193 /* RNSVGFEOffsetManager.h */,
+				94CD25832186C44B001B7193 /* RNSVGFEOffsetManager.m */,
 				10BEC1BE1D3F680F00FDCB19 /* RNSVGLinearGradientManager.h */,
 				10BEC1BF1D3F680F00FDCB19 /* RNSVGLinearGradientManager.m */,
 				10BEC1C01D3F680F00FDCB19 /* RNSVGRadialGradientManager.h */,
@@ -584,6 +605,8 @@
 				94CD252721851EDA001B7193 /* RNSVGFilter.m */,
 				94CD252E21852393001B7193 /* RNSVGFilterPrimitive.h */,
 				94CD252F218523DB001B7193 /* RNSVGFilterPrimitive.m */,
+				94CD25772186C3E1001B7193 /* RNSVGFEBlend.h */,
+				94CD25782186C3F1001B7193 /* RNSVGFEBlend.m */,
 				94CD254D218685F2001B7193 /* RNSVGFEComposite.h */,
 				94CD254E218685FF001B7193 /* RNSVGFEComposite.m */,
 				94CD25432185342D001B7193 /* RNSVGFEColorMatrix.h */,
@@ -594,6 +617,9 @@
 				94CD255C2186AA1D001B7193 /* RNSVGFEMerge.m */,
 				94CD25622186AA3C001B7193 /* RNSVGFEMergeNode.h */,
 				94CD255F2186AA2F001B7193 /* RNSVGFEMergeNode.m */,
+				94CD257F2186C42E001B7193 /* RNSVGFEOffset.h */,
+				94CD25802186C43B001B7193 /* RNSVGFEOffset.m */,
+				94CD25762186C311001B7193 /* RNSVGBlendModeTypes.h */,
 				94CD2547218534CB001B7193 /* RNSVGColorMatrixTypes.h */,
 				94CD2555218686D8001B7193 /* RNSVGCompositeOperators.h */,
 				94CD25752186AEFF001B7193 /* RNSVGEdgeModeValues.h */,
@@ -695,6 +721,7 @@
 				94CD252821851EDA001B7193 /* RNSVGFilter.m in Sources */,
 				94CD25682186AA6C001B7193 /* RNSVGFEMergeManager.m in Sources */,
 				10BEC1C21D3F680F00FDCB19 /* RNSVGLinearGradientManager.m in Sources */,
+				94CD25792186C3F1001B7193 /* RNSVGFEBlend.m in Sources */,
 				1039D2951CE71EC2001E90A8 /* RNSVGText.m in Sources */,
 				94CD252B21852097001B7193 /* RNSVGFilterManager.m in Sources */,
 				10BA0D3B1CE74E3100887C2B /* RNSVGRectManager.m in Sources */,
@@ -702,6 +729,7 @@
 				1039D2891CE71EB7001E90A8 /* RNSVGGroup.m in Sources */,
 				10ED4A9E1CF0656A0078BC02 /* RNSVGClipPathManager.m in Sources */,
 				10BEC1C61D3F7BD300FDCB19 /* RNSVGPainter.m in Sources */,
+				94CD257C2186C403001B7193 /* RNSVGFEBlendManager.m in Sources */,
 				10ED4AA21CF078830078BC02 /* RNSVGNode.m in Sources */,
 				10ED4A9B1CF065260078BC02 /* RNSVGClipPath.m in Sources */,
 				10BA0D3E1CE74E3100887C2B /* RNSVGSvgViewManager.m in Sources */,
@@ -734,12 +762,14 @@
 				94CD25452185343B001B7193 /* RNSVGFEColorMatrix.m in Sources */,
 				10BA0D361CE74E3100887C2B /* RNSVGGroupManager.m in Sources */,
 				94F00C5621780D2E00384EA4 /* RNSVGLength.m in Sources */,
+				94CD25812186C43B001B7193 /* RNSVGFEOffset.m in Sources */,
 				9424166D213B302600088E93 /* RNSVGPatternManager.m in Sources */,
 				7F08CE9A1E23476900650F83 /* RNSVGTextPathManager.m in Sources */,
 				7F08CE9B1E23476900650F83 /* RNSVGTSpanManager.m in Sources */,
 				B56895B120352B9C004DBF1E /* RNSVGPropHelper.m in Sources */,
 				7FC260CE1E3499BC00A39833 /* RNSVGViewBox.m in Sources */,
 				7F08CEA11E23479700650F83 /* RNSVGTSpan.m in Sources */,
+				94CD25842186C44B001B7193 /* RNSVGFEOffsetManager.m in Sources */,
 				947F380F2148119A00677F2A /* RNSVGMaskManager.m in Sources */,
 				10BA0D4A1CE74E3D00887C2B /* RNSVGLine.m in Sources */,
 				10FDEEB21D3FB60500A5C46C /* RNSVGPainterBrush.m in Sources */,
@@ -773,6 +803,7 @@
 				94CD252921851EDA001B7193 /* RNSVGFilter.m in Sources */,
 				94CD25692186AA6C001B7193 /* RNSVGFEMergeManager.m in Sources */,
 				A361E77A1EB0C33D00646005 /* RNSVGText.m in Sources */,
+				94CD257A2186C3F1001B7193 /* RNSVGFEBlend.m in Sources */,
 				A361E77B1EB0C33D00646005 /* RNSVGRectManager.m in Sources */,
 				94CD252C21852097001B7193 /* RNSVGFilterManager.m in Sources */,
 				A361E77C1EB0C33D00646005 /* RNSVGRenderable.m in Sources */,
@@ -780,6 +811,7 @@
 				A361E77E1EB0C33D00646005 /* RNSVGClipPathManager.m in Sources */,
 				A361E77F1EB0C33D00646005 /* RNSVGPainter.m in Sources */,
 				A361E7801EB0C33D00646005 /* RNSVGNode.m in Sources */,
+				94CD257D2186C403001B7193 /* RNSVGFEBlendManager.m in Sources */,
 				A361E7811EB0C33D00646005 /* RNSVGClipPath.m in Sources */,
 				A361E7821EB0C33D00646005 /* RNSVGSvgViewManager.m in Sources */,
 				A361E7831EB0C33D00646005 /* RNSVGSolidColorBrush.m in Sources */,
@@ -812,12 +844,14 @@
 				94CD25462185343B001B7193 /* RNSVGFEColorMatrix.m in Sources */,
 				A361E7941EB0C33D00646005 /* RNSVGGroupManager.m in Sources */,
 				94F00C5721780D2E00384EA4 /* RNSVGLength.m in Sources */,
+				94CD25822186C43B001B7193 /* RNSVGFEOffset.m in Sources */,
 				9424166E213B302600088E93 /* RNSVGPatternManager.m in Sources */,
 				A361E7951EB0C33D00646005 /* RNSVGTextPathManager.m in Sources */,
 				167AF45B2087C2A10035AA75 /* RNSVGTextProperties.m in Sources */,
 				A361E7961EB0C33D00646005 /* RNSVGTSpanManager.m in Sources */,
 				A361E7971EB0C33D00646005 /* RNSVGViewBox.m in Sources */,
 				A361E7981EB0C33D00646005 /* RNSVGTSpan.m in Sources */,
+				94CD25852186C44B001B7193 /* RNSVGFEOffsetManager.m in Sources */,
 				947F38102148119A00677F2A /* RNSVGMaskManager.m in Sources */,
 				A361E7991EB0C33D00646005 /* RNSVGLine.m in Sources */,
 				167AF4582087C2910035AA75 /* RNSVGFontData.m in Sources */,

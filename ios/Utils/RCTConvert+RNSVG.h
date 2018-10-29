@@ -12,6 +12,7 @@
 #import <React/RCTConvert.h>
 #import "RNSVGCGFCRule.h"
 #import "RNSVGVBMOS.h"
+#import "RNSVGBlendModeTypes.h"
 #import "RNSVGColorMatrixTypes.h"
 #import "RNSVGCompositeOperators.h"
 #import "RNSVGEdgeModeValues.h"
@@ -30,6 +31,7 @@
 + (RNSVGUnits)RNSVGUnits:(id)json;
 + (RNSVGCompositeOperators)RNSVGCompositeOperators:(id)json;
 + (RNSVGEdgeModeValues)RNSVGEdgeModeValues:(id)json;
++ (RNSVGBlendModeTypes)RNSVGBlendModeTypes:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;
 + (RNSVGPathParser *)RNSVGCGPath:(NSString *)d;
 + (CGRect)RNSVGCGRect:(id)json offset:(NSUInteger)offset;

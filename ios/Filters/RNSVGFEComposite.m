@@ -14,24 +14,15 @@
 - (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results
     previousFilterResult:(CIImage *)previous
 {
-    CIFilter *filter = [self getCIFilter:results];
-    
-    if (filter) {
-        return [filter valueForKey:@"outputImage"];
-    }
-    
-    return previous;
-}
-
-// Based on: https://github.com/xebecnan/EAWebkit/blob/master/Webkit-owb/WebCore/svg/graphics/filters/cg/SVGFECompositeCg.mm
-
-- (CIFilter*)getCIFilter:(NSMutableDictionary<NSString *, CIImage *> *)results
-{
     CIFilter* filter = nil;
     RNSVGCompositeOperators op = self.Operator;
+
+    // Based on: https://github.com/xebecnan/EAWebkit/blob/master/Webkit-owb/WebCore/svg/graphics/filters/cg/SVGFECompositeCg.mm
+
     switch (op) {
+        default:
         case SVG_FECOMPOSITE_OPERATOR_UNKNOWN:
-            return nil;
+            return previous;
         case SVG_FECOMPOSITE_OPERATOR_OVER:
             filter = [CIFilter filterWithName:@"CISourceOverCompositing"];
             break;
@@ -51,21 +42,30 @@
         case SVG_FECOMPOSITE_OPERATOR_ARITHMETIC:
             [WKArithmeticFilter class];
             filter = [CIFilter filterWithName:@"WKArithmeticFilter"];
-            [filter setValue:[NSNumber numberWithFloat:[self.k1 floatValue]] forKey:@"inputK1"];
-            [filter setValue:[NSNumber numberWithFloat:[self.k2 floatValue]] forKey:@"inputK2"];
-            [filter setValue:[NSNumber numberWithFloat:[self.k3 floatValue]] forKey:@"inputK3"];
-            [filter setValue:[NSNumber numberWithFloat:[self.k4 floatValue]] forKey:@"inputK4"];
             break;
     }
-    
+
     [filter setDefaults];
-    CIImage *inputImage = [results objectForKey:self.in1];
+
+    if (op == SVG_FECOMPOSITE_OPERATOR_ARITHMETIC) {
+        [filter setValue:[NSNumber numberWithFloat:[self.k1 floatValue]] forKey:@"inputK1"];
+        [filter setValue:[NSNumber numberWithFloat:[self.k2 floatValue]] forKey:@"inputK2"];
+        [filter setValue:[NSNumber numberWithFloat:[self.k3 floatValue]] forKey:@"inputK3"];
+        [filter setValue:[NSNumber numberWithFloat:[self.k4 floatValue]] forKey:@"inputK4"];
+    }
+
+    CIImage *inResult = self.in1 ? [results objectForKey:self.in1] : nil;
+    CIImage *inputImage = inResult ? inResult : previous;
     CIImage *backgroundImage = [results objectForKey:self.in2];
-    
+
     [filter setValue:inputImage forKey:@"inputImage"];
     [filter setValue:backgroundImage forKey:@"inputBackgroundImage"];
-    
-    return filter;
+
+    if (filter) {
+        return [filter valueForKey:@"outputImage"];
+    }
+
+    return previous;
 }
 
 - (void)setIn1:(NSString *)in1
@@ -73,7 +73,7 @@
     if ([in1 isEqualToString:_in1]) {
         return;
     }
-    
+
     _in1 = in1;
     [self invalidate];
 }
@@ -83,7 +83,7 @@
     if ([in2 isEqualToString:_in2]) {
         return;
     }
-    
+
     _in2 = in2;
     [self invalidate];
 }
@@ -99,7 +99,7 @@
 
 - (void)setK1:(NSNumber *)k1
 {
-    if ([k1 isEqualToNumber:_k1]) {
+    if (k1 == _k1) {
         return;
     }
     _k1 = k1;
@@ -108,7 +108,7 @@
 
 - (void)setK2:(NSNumber *)k2
 {
-    if ([k2 isEqualToNumber:_k2]) {
+    if (k2 == _k2) {
         return;
     }
     _k2 = k2;
@@ -117,7 +117,7 @@
 
 - (void)setK3:(NSNumber *)k3
 {
-    if ([k3 isEqualToNumber:_k3]) {
+    if (k3 == _k3) {
         return;
     }
     _k3 = k3;
@@ -126,7 +126,7 @@
 
 - (void)setK4:(NSNumber *)k4
 {
-    if ([k4 isEqualToNumber:_k4]) {
+    if (k4 == _k4) {
         return;
     }
     _k4 = k4;

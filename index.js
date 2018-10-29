@@ -26,6 +26,8 @@ import FEMergeNode from './elements/FEMergeNode';
 import FEMerge from './elements/FEMerge';
 import FEColorMatrix from './elements/FEColorMatrix';
 import FEComposite from './elements/FEComposite';
+import FEBlend from './elements/FEBlend';
+import FEOffset from './elements/FEOffset';
 
 export {
   Svg,
@@ -56,6 +58,8 @@ export {
   FEMerge,
   FEColorMatrix,
   FEComposite,
+  FEBlend,
+  FEOffset,
 };
 
 export default Svg;

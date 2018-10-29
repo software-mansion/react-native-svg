@@ -72,32 +72,17 @@ static CIKernel *arithmeticFilter = nil;
 - (id)init
 {
     if (!arithmeticFilter) {
-        NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-        NSError *error = nil;
-        NSString *kernelFile = [bundle pathForResource:@"WKArithmeticFilter" ofType:@"cikernel"];
-        NSString *code = [NSString stringWithContentsOfFile:kernelFile encoding:NSUTF8StringEncoding error:&error];
-        NSArray *kernels = [CIKernel kernelsWithString:code];
-        arithmeticFilter = [kernels objectAtIndex:0];
+        NSString *code =
+@"kernel vec4 arithmeticComposite(sampler in1, sampler in2, float k1, float k2, float k3, float k4)\
+{\
+    vec4 vin1 = sample(in1, samplerCoord(in1));\
+    vec4 vin2 = sample(in2, samplerCoord(in2));\
+    vec4 res = k1*vin1*vin2 + k2*vin1 + k3*vin2 + vec4(k4);\
+    return res;\
+}";
+        arithmeticFilter = [CIKernel kernelWithString:code];
     }
     return [super init];
-}
-
-- (CIKernel *)arithmeticKernel
-{
-    static CIKernel *arithmeticKernel = nil;
-
-    NSBundle    *bundle = [NSBundle bundleForClass:[self class]];
-    NSStringEncoding encoding = NSUTF8StringEncoding;
-    NSError     *error = nil;
-    NSString    *kernelFile = [bundle pathForResource:@"WKArithmeticFilter" ofType:@"cikernel"];
-    NSString    *code = [NSString stringWithContentsOfFile:kernelFile encoding:encoding error:&error];
-
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        arithmeticKernel = [CIKernel kernelWithString:code];
-    });
-
-    return arithmeticKernel;
 }
 
 - (CIImage *)outputImage
@@ -106,7 +91,7 @@ static CIKernel *arithmeticFilter = nil;
     CIKernelROICallback callback = ^CGRect(int index, CGRect rect) {
         return CGRectMake(0, 0, CGRectGetWidth(result.extent), CGRectGetHeight(result.extent));
     };
-    return [[self arithmeticKernel] applyWithExtent:result.extent roiCallback:callback arguments:@[arithmeticFilter, inputImage, inputBackgroundImage, inputK1, inputK2, inputK3, inputK4]];
+    return [arithmeticFilter applyWithExtent:result.extent roiCallback:callback arguments:@[inputImage, inputBackgroundImage, inputK1, inputK2, inputK3, inputK4]];
 }
 
 @end
