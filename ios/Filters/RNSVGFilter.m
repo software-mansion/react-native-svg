@@ -6,11 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 #import "RNSVGFilterPrimitive.h"
+#import "RNSVGFEMerge.h"
 #import "RNSVGFilter.h"
 #import "RNSVGNode.h"
 
 @implementation RNSVGFilter {
     NSMutableDictionary<NSString *, CIImage *> *resultByName;
+    bool _hasSourceGraphicAsLastOutput;
 }
 
 - (id)init
@@ -32,30 +34,30 @@
     [resultByName setObject:backgroundAlpha forKey:@"BackgroundAlpha"];
 
     CIImage *result = img;
+    RNSVGFilterPrimitive *n;
     for (UIView *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGFilterPrimitive class]]) {
-            RNSVGFilterPrimitive *n = (RNSVGFilterPrimitive *)node;
+            n = (RNSVGFilterPrimitive *)node;
             result = [n applyFilter:resultByName previousFilterResult:result];
             NSString *resultName = n.result;
             if (resultName) {
-                [resultByName setObject:sourceAlpha forKey:resultName];
+                [resultByName setObject:result forKey:resultName];
             }
         }
     };
 
+    _hasSourceGraphicAsLastOutput = false;
+    if (n && [n isKindOfClass:[RNSVGFEMerge class]]) {
+        RNSVGFEMerge *m = (RNSVGFEMerge*)n;
+        _hasSourceGraphicAsLastOutput = [m hasSourceGraphicAsLastOutput];
+    }
+
     return result;
 }
 
-static CIImage *transparentImage()
+- (BOOL)hasSourceGraphicAsLastOutput
 {
-    static CIImage *transparentImage = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        CIFilter *transparent = [CIFilter filterWithName:@"CIConstantColorGenerator"];
-        [transparent setValue:[CIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0] forKey:@"inputColor"];
-        transparentImage = [transparent valueForKey:@"outputImage"];
-    });
-    return transparentImage;
+    return _hasSourceGraphicAsLastOutput;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event

@@ -28,6 +28,8 @@ import FEColorMatrix from './elements/FEColorMatrix';
 import FEComposite from './elements/FEComposite';
 import FEBlend from './elements/FEBlend';
 import FEOffset from './elements/FEOffset';
+import FESpecularLighting from './elements/FESpecularLighting';
+import FEPointLight from './elements/FEPointLight';
 
 export {
   Svg,
@@ -60,6 +62,8 @@ export {
   FEComposite,
   FEBlend,
   FEOffset,
+  FESpecularLighting,
+  FEPointLight,
 };
 
 export default Svg;

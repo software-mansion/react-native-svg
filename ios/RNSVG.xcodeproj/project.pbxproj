@@ -110,6 +110,22 @@
 		94CD25822186C43B001B7193 /* RNSVGFEOffset.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25802186C43B001B7193 /* RNSVGFEOffset.m */; };
 		94CD25842186C44B001B7193 /* RNSVGFEOffsetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25832186C44B001B7193 /* RNSVGFEOffsetManager.m */; };
 		94CD25852186C44B001B7193 /* RNSVGFEOffsetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25832186C44B001B7193 /* RNSVGFEOffsetManager.m */; };
+		94CD258921876CC3001B7193 /* RNSVGFEPointLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD258821876CC3001B7193 /* RNSVGFEPointLight.m */; };
+		94CD258A21876CC3001B7193 /* RNSVGFEPointLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD258821876CC3001B7193 /* RNSVGFEPointLight.m */; };
+		94CD258C21876CD5001B7193 /* RNSVGFEPointLightManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD258B21876CD5001B7193 /* RNSVGFEPointLightManager.m */; };
+		94CD258D21876CD5001B7193 /* RNSVGFEPointLightManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD258B21876CD5001B7193 /* RNSVGFEPointLightManager.m */; };
+		94CD259121876D05001B7193 /* RNSVGFESpecularLighting.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD259021876D05001B7193 /* RNSVGFESpecularLighting.m */; };
+		94CD259221876D05001B7193 /* RNSVGFESpecularLighting.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD259021876D05001B7193 /* RNSVGFESpecularLighting.m */; };
+		94CD259421876D17001B7193 /* RNSVGFESpecularLightingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD259321876D17001B7193 /* RNSVGFESpecularLightingManager.m */; };
+		94CD259521876D17001B7193 /* RNSVGFESpecularLightingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD259321876D17001B7193 /* RNSVGFESpecularLightingManager.m */; };
+		94CD2599218770BA001B7193 /* WKSpecularLightingFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD2598218770BA001B7193 /* WKSpecularLightingFilter.m */; };
+		94CD259A218770BA001B7193 /* WKSpecularLightingFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD2598218770BA001B7193 /* WKSpecularLightingFilter.m */; };
+		94CD259C2187738B001B7193 /* WKPointLightFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD259B2187738A001B7193 /* WKPointLightFilter.m */; };
+		94CD259D2187738B001B7193 /* WKPointLightFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD259B2187738A001B7193 /* WKPointLightFilter.m */; };
+		94CD25A321877AD6001B7193 /* WKNormalMapFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25A221877AD6001B7193 /* WKNormalMapFilter.m */; };
+		94CD25A421877AD6001B7193 /* WKNormalMapFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25A221877AD6001B7193 /* WKNormalMapFilter.m */; };
+		94CD25A721877F22001B7193 /* RNSVGLightSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25A621877F22001B7193 /* RNSVGLightSource.m */; };
+		94CD25A821877F22001B7193 /* RNSVGLightSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CD25A621877F22001B7193 /* RNSVGLightSource.m */; };
 		94F00C5621780D2E00384EA4 /* RNSVGLength.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F00C5521780D2E00384EA4 /* RNSVGLength.m */; };
 		94F00C5721780D2E00384EA4 /* RNSVGLength.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F00C5521780D2E00384EA4 /* RNSVGLength.m */; };
 		A361E76E1EB0C33D00646005 /* RNSVGTextManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 10BA0D331CE74E3100887C2B /* RNSVGTextManager.m */; };
@@ -344,6 +360,23 @@
 		94CD25802186C43B001B7193 /* RNSVGFEOffset.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGFEOffset.m; sourceTree = "<group>"; };
 		94CD25832186C44B001B7193 /* RNSVGFEOffsetManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGFEOffsetManager.m; sourceTree = "<group>"; };
 		94CD25862186C458001B7193 /* RNSVGFEOffsetManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGFEOffsetManager.h; sourceTree = "<group>"; };
+		94CD258721876CB6001B7193 /* RNSVGFEPointLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGFEPointLight.h; sourceTree = "<group>"; };
+		94CD258821876CC3001B7193 /* RNSVGFEPointLight.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGFEPointLight.m; sourceTree = "<group>"; };
+		94CD258B21876CD5001B7193 /* RNSVGFEPointLightManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGFEPointLightManager.m; sourceTree = "<group>"; };
+		94CD258E21876CE0001B7193 /* RNSVGFEPointLightManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGFEPointLightManager.h; sourceTree = "<group>"; };
+		94CD258F21876CFA001B7193 /* RNSVGFESpecularLighting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGFESpecularLighting.h; sourceTree = "<group>"; };
+		94CD259021876D05001B7193 /* RNSVGFESpecularLighting.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGFESpecularLighting.m; sourceTree = "<group>"; };
+		94CD259321876D17001B7193 /* RNSVGFESpecularLightingManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGFESpecularLightingManager.m; sourceTree = "<group>"; };
+		94CD259621876D22001B7193 /* RNSVGFESpecularLightingManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGFESpecularLightingManager.h; sourceTree = "<group>"; };
+		94CD2597218770A9001B7193 /* WKSpecularLightingFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WKSpecularLightingFilter.h; sourceTree = "<group>"; };
+		94CD2598218770BA001B7193 /* WKSpecularLightingFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WKSpecularLightingFilter.m; sourceTree = "<group>"; };
+		94CD259B2187738A001B7193 /* WKPointLightFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WKPointLightFilter.m; sourceTree = "<group>"; };
+		94CD259E21877395001B7193 /* WKPointLightFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WKPointLightFilter.h; sourceTree = "<group>"; };
+		94CD25A021877976001B7193 /* RNSVGLightType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGLightType.h; sourceTree = "<group>"; };
+		94CD25A121877ACB001B7193 /* WKNormalMapFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WKNormalMapFilter.h; sourceTree = "<group>"; };
+		94CD25A221877AD6001B7193 /* WKNormalMapFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WKNormalMapFilter.m; sourceTree = "<group>"; };
+		94CD25A521877D7C001B7193 /* RNSVGLightSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGLightSource.h; sourceTree = "<group>"; };
+		94CD25A621877F22001B7193 /* RNSVGLightSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGLightSource.m; sourceTree = "<group>"; };
 		94DDAC5C1F3D024300EED511 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libRNSVG-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		94F00C5421780CEE00384EA4 /* RNSVGLength.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNSVGLength.h; path = Utils/RNSVGLength.h; sourceTree = "<group>"; };
 		94F00C5521780D2E00384EA4 /* RNSVGLength.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RNSVGLength.m; path = Utils/RNSVGLength.m; sourceTree = "<group>"; };
@@ -459,6 +492,10 @@
 				94CD25642186AA5E001B7193 /* RNSVGFEMergeNodeManager.m */,
 				94CD25862186C458001B7193 /* RNSVGFEOffsetManager.h */,
 				94CD25832186C44B001B7193 /* RNSVGFEOffsetManager.m */,
+				94CD258E21876CE0001B7193 /* RNSVGFEPointLightManager.h */,
+				94CD258B21876CD5001B7193 /* RNSVGFEPointLightManager.m */,
+				94CD259621876D22001B7193 /* RNSVGFESpecularLightingManager.h */,
+				94CD259321876D17001B7193 /* RNSVGFESpecularLightingManager.m */,
 				10BEC1BE1D3F680F00FDCB19 /* RNSVGLinearGradientManager.h */,
 				10BEC1BF1D3F680F00FDCB19 /* RNSVGLinearGradientManager.m */,
 				10BEC1C01D3F680F00FDCB19 /* RNSVGRadialGradientManager.h */,
@@ -619,14 +656,27 @@
 				94CD255F2186AA2F001B7193 /* RNSVGFEMergeNode.m */,
 				94CD257F2186C42E001B7193 /* RNSVGFEOffset.h */,
 				94CD25802186C43B001B7193 /* RNSVGFEOffset.m */,
+				94CD25A021877976001B7193 /* RNSVGLightType.h */,
+				94CD25A521877D7C001B7193 /* RNSVGLightSource.h */,
+				94CD25A621877F22001B7193 /* RNSVGLightSource.m */,
+				94CD258721876CB6001B7193 /* RNSVGFEPointLight.h */,
+				94CD258821876CC3001B7193 /* RNSVGFEPointLight.m */,
+				94CD258F21876CFA001B7193 /* RNSVGFESpecularLighting.h */,
+				94CD259021876D05001B7193 /* RNSVGFESpecularLighting.m */,
 				94CD25762186C311001B7193 /* RNSVGBlendModeTypes.h */,
 				94CD2547218534CB001B7193 /* RNSVGColorMatrixTypes.h */,
 				94CD2555218686D8001B7193 /* RNSVGCompositeOperators.h */,
 				94CD25752186AEFF001B7193 /* RNSVGEdgeModeValues.h */,
 				94CD254C218561C9001B7193 /* LuminanceToAlpha.h */,
-				94CD255621868FA6001B7193 /* WKArithmeticFilter.m */,
 				94CD255921869006001B7193 /* WKArithmeticFilter.h */,
+				94CD255621868FA6001B7193 /* WKArithmeticFilter.m */,
 				94CD255A21869012001B7193 /* WKArithmeticFilter.cikernel */,
+				94CD25A121877ACB001B7193 /* WKNormalMapFilter.h */,
+				94CD25A221877AD6001B7193 /* WKNormalMapFilter.m */,
+				94CD259E21877395001B7193 /* WKPointLightFilter.h */,
+				94CD259B2187738A001B7193 /* WKPointLightFilter.m */,
+				94CD2597218770A9001B7193 /* WKSpecularLightingFilter.h */,
+				94CD2598218770BA001B7193 /* WKSpecularLightingFilter.m */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -705,7 +755,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B56895AA20352B36004DBF1E /* RNSVGBezierElement.m in Sources */,
+				94CD25A721877F22001B7193 /* RNSVGLightSource.m in Sources */,
 				10BA0D3F1CE74E3100887C2B /* RNSVGTextManager.m in Sources */,
+				94CD2599218770BA001B7193 /* WKSpecularLightingFilter.m in Sources */,
 				1039D28A1CE71EB7001E90A8 /* RNSVGImage.m in Sources */,
 				94241666213B0D4500088E93 /* RNSVGPattern.m in Sources */,
 				10BA0D4B1CE74E3D00887C2B /* RNSVGRect.m in Sources */,
@@ -719,6 +771,8 @@
 				7F08CEA01E23479700650F83 /* RNSVGTextPath.m in Sources */,
 				1023B4931D3DF5060051496D /* RNSVGUse.m in Sources */,
 				94CD252821851EDA001B7193 /* RNSVGFilter.m in Sources */,
+				94CD258921876CC3001B7193 /* RNSVGFEPointLight.m in Sources */,
+				94CD258C21876CD5001B7193 /* RNSVGFEPointLightManager.m in Sources */,
 				94CD25682186AA6C001B7193 /* RNSVGFEMergeManager.m in Sources */,
 				10BEC1C21D3F680F00FDCB19 /* RNSVGLinearGradientManager.m in Sources */,
 				94CD25792186C3F1001B7193 /* RNSVGFEBlend.m in Sources */,
@@ -732,6 +786,7 @@
 				94CD257C2186C403001B7193 /* RNSVGFEBlendManager.m in Sources */,
 				10ED4AA21CF078830078BC02 /* RNSVGNode.m in Sources */,
 				10ED4A9B1CF065260078BC02 /* RNSVGClipPath.m in Sources */,
+				94CD25A321877AD6001B7193 /* WKNormalMapFilter.m in Sources */,
 				10BA0D3E1CE74E3100887C2B /* RNSVGSvgViewManager.m in Sources */,
 				0CF68B0F1AF0549300FF9E5C /* RNSVGSolidColorBrush.m in Sources */,
 				94CD254F21868600001B7193 /* RNSVGFEComposite.m in Sources */,
@@ -739,6 +794,7 @@
 				94CD255D2186AA1D001B7193 /* RNSVGFEMerge.m in Sources */,
 				10BA0D3A1CE74E3100887C2B /* RNSVGPathManager.m in Sources */,
 				B56895B220352B9C004DBF1E /* RNSVGGlyphContext.m in Sources */,
+				94CD259421876D17001B7193 /* RNSVGFESpecularLightingManager.m in Sources */,
 				10BA0D3C1CE74E3100887C2B /* RNSVGRenderableManager.m in Sources */,
 				10BEC1BD1D3F66F500FDCB19 /* RNSVGRadialGradient.m in Sources */,
 				10BEC1C31D3F680F00FDCB19 /* RNSVGRadialGradientManager.m in Sources */,
@@ -749,11 +805,13 @@
 				10BA0D381CE74E3100887C2B /* RNSVGLineManager.m in Sources */,
 				10BA0D481CE74E3D00887C2B /* RNSVGCircle.m in Sources */,
 				94CD25652186AA5E001B7193 /* RNSVGFEMergeNodeManager.m in Sources */,
+				94CD259C2187738B001B7193 /* WKPointLightFilter.m in Sources */,
 				94CD2530218523DB001B7193 /* RNSVGFilterPrimitive.m in Sources */,
 				94CD2534218524F2001B7193 /* RNSVGFilterPrimitiveManager.m in Sources */,
 				10BA0D351CE74E3100887C2B /* RNSVGEllipseManager.m in Sources */,
 				1039D2A01CE72177001E90A8 /* RCTConvert+RNSVG.m in Sources */,
 				0CF68B0B1AF0549300FF9E5C /* RNSVGBrush.m in Sources */,
+				94CD259121876D05001B7193 /* RNSVGFESpecularLighting.m in Sources */,
 				B56895A720352750004DBF1E /* RNSVGTextProperties.m in Sources */,
 				94CD25602186AA2F001B7193 /* RNSVGFEMergeNode.m in Sources */,
 				7FC260D41E34A12A00A39833 /* RNSVGSymbolManager.m in Sources */,
@@ -787,7 +845,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A361E76E1EB0C33D00646005 /* RNSVGTextManager.m in Sources */,
+				94CD25A821877F22001B7193 /* RNSVGLightSource.m in Sources */,
 				A361E76F1EB0C33D00646005 /* RNSVGImage.m in Sources */,
+				94CD259A218770BA001B7193 /* WKSpecularLightingFilter.m in Sources */,
 				A361E7701EB0C33D00646005 /* RNSVGRect.m in Sources */,
 				94241667213B0D4500088E93 /* RNSVGPattern.m in Sources */,
 				A361E7711EB0C33D00646005 /* RNSVGCircleManager.m in Sources */,
@@ -801,6 +861,8 @@
 				A361E7781EB0C33D00646005 /* RNSVGUse.m in Sources */,
 				A361E7791EB0C33D00646005 /* RNSVGLinearGradientManager.m in Sources */,
 				94CD252921851EDA001B7193 /* RNSVGFilter.m in Sources */,
+				94CD258A21876CC3001B7193 /* RNSVGFEPointLight.m in Sources */,
+				94CD258D21876CD5001B7193 /* RNSVGFEPointLightManager.m in Sources */,
 				94CD25692186AA6C001B7193 /* RNSVGFEMergeManager.m in Sources */,
 				A361E77A1EB0C33D00646005 /* RNSVGText.m in Sources */,
 				94CD257A2186C3F1001B7193 /* RNSVGFEBlend.m in Sources */,
@@ -814,6 +876,7 @@
 				94CD257D2186C403001B7193 /* RNSVGFEBlendManager.m in Sources */,
 				A361E7811EB0C33D00646005 /* RNSVGClipPath.m in Sources */,
 				A361E7821EB0C33D00646005 /* RNSVGSvgViewManager.m in Sources */,
+				94CD25A421877AD6001B7193 /* WKNormalMapFilter.m in Sources */,
 				A361E7831EB0C33D00646005 /* RNSVGSolidColorBrush.m in Sources */,
 				167AF45A2087C2990035AA75 /* RNSVGPropHelper.m in Sources */,
 				94CD255021868600001B7193 /* RNSVGFEComposite.m in Sources */,
@@ -821,6 +884,7 @@
 				94CD255E2186AA1D001B7193 /* RNSVGFEMerge.m in Sources */,
 				A361E7841EB0C33D00646005 /* RNSVGPathManager.m in Sources */,
 				167AF4572087C26F0035AA75 /* RNSVGBezierElement.m in Sources */,
+				94CD259521876D17001B7193 /* RNSVGFESpecularLightingManager.m in Sources */,
 				A361E7861EB0C33D00646005 /* RNSVGRenderableManager.m in Sources */,
 				A361E7871EB0C33D00646005 /* RNSVGRadialGradient.m in Sources */,
 				A361E7881EB0C33D00646005 /* RNSVGRadialGradientManager.m in Sources */,
@@ -831,11 +895,13 @@
 				A361E78D1EB0C33D00646005 /* RNSVGLineManager.m in Sources */,
 				167AF4592087C2950035AA75 /* RNSVGGlyphContext.m in Sources */,
 				94CD25662186AA5E001B7193 /* RNSVGFEMergeNodeManager.m in Sources */,
+				94CD259D2187738B001B7193 /* WKPointLightFilter.m in Sources */,
 				94CD2531218523DB001B7193 /* RNSVGFilterPrimitive.m in Sources */,
 				94CD2535218524F2001B7193 /* RNSVGFilterPrimitiveManager.m in Sources */,
 				A361E78E1EB0C33D00646005 /* RNSVGCircle.m in Sources */,
 				A361E78F1EB0C33D00646005 /* RNSVGEllipseManager.m in Sources */,
 				A361E7901EB0C33D00646005 /* RCTConvert+RNSVG.m in Sources */,
+				94CD259221876D05001B7193 /* RNSVGFESpecularLighting.m in Sources */,
 				A361E7911EB0C33D00646005 /* RNSVGBrush.m in Sources */,
 				94CD25612186AA2F001B7193 /* RNSVGFEMergeNode.m in Sources */,
 				A361E7921EB0C33D00646005 /* RNSVGSymbolManager.m in Sources */,
