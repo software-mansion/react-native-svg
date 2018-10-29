@@ -44,6 +44,12 @@ RCT_ENUM_CONVERTER(RNSVGCompositeOperators, (@{
                                                @"arithmetic": @(SVG_FECOMPOSITE_OPERATOR_ARITHMETIC)
                                                }), SVG_FECOMPOSITE_OPERATOR_UNKNOWN, intValue)
 
+RCT_ENUM_CONVERTER(RNSVGEdgeModeValues, (@{
+                                  @"duplicate": @(SVG_EDGEMODE_DUPLICATE),
+                                  @"wrap": @(SVG_EDGEMODE_WRAP),
+                                  @"none": @(SVG_EDGEMODE_NONE),
+                                  }), SVG_EDGEMODE_UNKNOWN, intValue)
+
 RCT_ENUM_CONVERTER(RNSVGUnits, (@{
                                   @"objectBoundingBox": @(kRNSVGUnitsObjectBoundingBox),
                                   @"userSpaceOnUse": @(kRNSVGUnitsUserSpaceOnUse),
