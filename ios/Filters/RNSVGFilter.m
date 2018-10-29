@@ -21,13 +21,15 @@
     return self;
 }
 
-- (CIImage *)applyFilter:(CIImage *)img
+- (CIImage *)applyFilter:(CIImage *)img background:(CIImage *)background
 {
     [resultByName removeAllObjects];
     CIImage *sourceAlpha = applySourceAlphaFilter(img);
+    CIImage *backgroundAlpha = applySourceAlphaFilter(background);
     [resultByName setObject:img forKey:@"SourceGraphic"];
     [resultByName setObject:sourceAlpha forKey:@"SourceAlpha"];
-    [resultByName setObject:transparentImage() forKey:@"BackgroundImage"];
+    [resultByName setObject:background forKey:@"BackgroundImage"];
+    [resultByName setObject:backgroundAlpha forKey:@"BackgroundAlpha"];
 
     CIImage *result = img;
     for (UIView *node in self.subviews) {
