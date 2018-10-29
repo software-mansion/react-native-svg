@@ -27,6 +27,7 @@
     CIImage *sourceAlpha = applySourceAlphaFilter(img);
     [resultByName setObject:img forKey:@"SourceGraphic"];
     [resultByName setObject:sourceAlpha forKey:@"SourceAlpha"];
+    [resultByName setObject:transparentImage() forKey:@"BackgroundImage"];
 
     CIImage *result = img;
     for (UIView *node in self.subviews) {
@@ -41,6 +42,18 @@
     };
 
     return result;
+}
+
+static CIImage *transparentImage()
+{
+    static CIImage *transparentImage = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CIFilter *transparent = [CIFilter filterWithName:@"CIConstantColorGenerator"];
+        [transparent setValue:[CIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0] forKey:@"inputColor"];
+        transparentImage = [transparent valueForKey:@"outputImage"];
+    });
+    return transparentImage;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event

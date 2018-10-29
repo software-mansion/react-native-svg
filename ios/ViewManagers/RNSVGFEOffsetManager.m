@@ -6,20 +6,20 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGFEColorMatrixManager.h"
-#import "RNSVGFEColorMatrix.h"
+#import "RNSVGFEOffsetManager.h"
+#import "RNSVGFEOffset.h"
 
-@implementation RNSVGFEColorMatrixManager
+@implementation RNSVGFEOffsetManager
 
 RCT_EXPORT_MODULE()
 
-- (RNSVGFEColorMatrix *)node
+- (RNSVGFEOffset *)node
 {
-    return [RNSVGFEColorMatrix new];
+    return [RNSVGFEOffset new];
 }
 
 RCT_EXPORT_VIEW_PROPERTY(in1, NSString)
-RCT_EXPORT_VIEW_PROPERTY(type, RNSVGColorMatrixTypes)
-RCT_EXPORT_VIEW_PROPERTY(values, NSArray<NSNumber *>)
+RCT_EXPORT_VIEW_PROPERTY(dx, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(dy, NSNumber)
 
 @end

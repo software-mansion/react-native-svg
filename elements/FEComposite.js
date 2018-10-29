@@ -189,7 +189,7 @@ export const CompositeOperators = {
     atop: SVG_FECOMPOSITE_OPERATOR_ATOP,
     xor: SVG_FECOMPOSITE_OPERATOR_XOR,
     arithmetic: SVG_FECOMPOSITE_OPERATOR_ARITHMETIC
-}
+};
 
 export default class FEComposite extends Component {
     static displayName = "feComposite";
@@ -199,14 +199,14 @@ export default class FEComposite extends Component {
     };
 
     render() {
-        const { props } = this
+        const { props } = this;
         const {
             in2,
             operator,
-            k1,
-            k2,
-            k3,
-            k4,
+            k1 = 0,
+            k2 = 0,
+            k3 = 0,
+            k4 = 0,
         } = props;
         return (
             <RNSVGFEComposite
@@ -214,10 +214,10 @@ export default class FEComposite extends Component {
                 in1={props.in}
                 in2={in2}
                 operator={operator}
-                k1={k1}
-                k2={k2}
-                k3={k3}
-                k4={k4}
+                k1={k1 || 0}
+                k2={k2 || 0}
+                k3={k3 || 0}
+                k4={k4 || 0}
                 ref={r => {
                     this.root = r;
                 }}

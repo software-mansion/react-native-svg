@@ -45,10 +45,18 @@ RCT_ENUM_CONVERTER(RNSVGCompositeOperators, (@{
                                                }), SVG_FECOMPOSITE_OPERATOR_UNKNOWN, intValue)
 
 RCT_ENUM_CONVERTER(RNSVGEdgeModeValues, (@{
-                                  @"duplicate": @(SVG_EDGEMODE_DUPLICATE),
-                                  @"wrap": @(SVG_EDGEMODE_WRAP),
-                                  @"none": @(SVG_EDGEMODE_NONE),
-                                  }), SVG_EDGEMODE_UNKNOWN, intValue)
+                                           @"duplicate": @(SVG_EDGEMODE_DUPLICATE),
+                                           @"wrap": @(SVG_EDGEMODE_WRAP),
+                                           @"none": @(SVG_EDGEMODE_NONE),
+                                           }), SVG_EDGEMODE_UNKNOWN, intValue)
+
+RCT_ENUM_CONVERTER(RNSVGBlendModeTypes, (@{
+                                           @"normal": @(SVG_FEBLEND_MODE_NORMAL),
+                                           @"multiply": @(SVG_FEBLEND_MODE_MULTIPLY),
+                                           @"screen": @(SVG_FEBLEND_MODE_SCREEN),
+                                           @"darken": @(SVG_FEBLEND_MODE_DARKEN),
+                                           @"lighten": @(SVG_FEBLEND_MODE_LIGHTEN),
+                                           }), SVG_FEBLEND_MODE_UNKNOWN, intValue)
 
 RCT_ENUM_CONVERTER(RNSVGUnits, (@{
                                   @"objectBoundingBox": @(kRNSVGUnitsObjectBoundingBox),

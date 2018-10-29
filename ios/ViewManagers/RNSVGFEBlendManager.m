@@ -6,20 +6,20 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGFEColorMatrixManager.h"
-#import "RNSVGFEColorMatrix.h"
+#import "RNSVGFEBlendManager.h"
+#import "RNSVGFEBlend.h"
 
-@implementation RNSVGFEColorMatrixManager
+@implementation RNSVGFEBlendManager
 
 RCT_EXPORT_MODULE()
 
-- (RNSVGFEColorMatrix *)node
+- (RNSVGFEBlend *)node
 {
-    return [RNSVGFEColorMatrix new];
+    return [RNSVGFEBlend new];
 }
 
 RCT_EXPORT_VIEW_PROPERTY(in1, NSString)
-RCT_EXPORT_VIEW_PROPERTY(type, RNSVGColorMatrixTypes)
-RCT_EXPORT_VIEW_PROPERTY(values, NSArray<NSNumber *>)
+RCT_EXPORT_VIEW_PROPERTY(in2, NSString)
+RCT_EXPORT_VIEW_PROPERTY(mode, RNSVGBlendModeTypes)
 
 @end
