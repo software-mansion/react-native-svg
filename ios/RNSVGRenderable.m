@@ -215,7 +215,9 @@ static CGImageRef renderToImage(RNSVGRenderable *object,
         if (self.filter) {
             // https://www.w3.org/TR/SVG11/filters.html
             RNSVGFilter *_filterNode = (RNSVGFilter*)[self.svgView getDefinedFilter:self.filter];
-            contentSrcImage = [_filterNode applyFilter:contentSrcImage];
+            CGImageRef backgroundImage = CGBitmapContextCreateImage(context);
+            CIImage *background = [CIImage imageWithCGImage:currentContent];
+            contentSrcImage = [_filterNode applyFilter:contentSrcImage background:background];
         }
 
         if (self.mask) {
