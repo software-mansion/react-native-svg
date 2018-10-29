@@ -163,25 +163,31 @@ export const ColorMatrixTypes = {
 export default class FEColorMatrix extends Component {
     static displayName = "feColorMatrix";
 
+    static defaultProps = {
+        type: SVG_FECOLORMATRIX_TYPE_MATRIX,
+    };
+
     setNativeProps = props => {
         this.root.setNativeProps(props);
     };
 
     render() {
-        const { type, values } = this.props;
+        const { type = SVG_FECOLORMATRIX_TYPE_MATRIX, values } = this.props;
         const _values =
-            typeof values === "string"
+            values && values.map
+                ? values.map(s => +s)
+                : typeof values === "string"
                 ? values
-                      .replace(/,|\s\s+/gm, " ")
-                      .trim()
-                      .split(" ")
-                      .map(s => +s)
-                : values;
+                    .replace(/,|\s\s+/gm, " ")
+                    .trim()
+                    .split(" ")
+                    .map(s => +s)
+                : [+values].filter(n => !isNaN(n));
         return (
             <RNSVGFEColorMatrix
                 {...extractFilterPrimitive(this.props)}
                 in1={this.props.in}
-                type={ColorMatrixTypes[type] || SVG_FECOLORMATRIX_TYPE_UNKNOWN}
+                type={typeof type === 'number' ? type : ColorMatrixTypes[type] || SVG_FECOLORMATRIX_TYPE_UNKNOWN}
                 values={_values}
                 ref={r => {
                     this.root = r;

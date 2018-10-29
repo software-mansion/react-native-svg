@@ -13,6 +13,7 @@
 #import "RNSVGCGFCRule.h"
 #import "RNSVGVBMOS.h"
 #import "RNSVGColorMatrixTypes.h"
+#import "RNSVGCompositeOperators.h"
 #import "RNSVGUnits.h"
 #import "RNSVGLength.h"
 #import "RNSVGPathParser.h"
@@ -26,6 +27,7 @@
 + (RNSVGCGFCRule)RNSVGCGFCRule:(id)json;
 + (RNSVGVBMOS)RNSVGVBMOS:(id)json;
 + (RNSVGUnits)RNSVGUnits:(id)json;
++ (RNSVGCompositeOperators)RNSVGCompositeOperators:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;
 + (RNSVGPathParser *)RNSVGCGPath:(NSString *)d;
 + (CGRect)RNSVGCGRect:(id)json offset:(NSUInteger)offset;

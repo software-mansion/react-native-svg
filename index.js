@@ -25,6 +25,7 @@ import FEGaussianBlur from "./elements/FEGaussianBlur";
 import FEMergeNode from "./elements/FEMergeNode";
 import FEMerge from "./elements/FEMerge";
 import FEColorMatrix from "./elements/FEColorMatrix";
+import FEComposite from "./elements/FEComposite";
 
 export {
     Svg,
@@ -53,7 +54,8 @@ export {
     FEGaussianBlur,
     FEMergeNode,
     FEMerge,
-    FEColorMatrix
+    FEColorMatrix,
+    FEComposite,
 };
 
 //noinspection JSUnusedGlobalSymbols
