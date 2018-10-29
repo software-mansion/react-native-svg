@@ -184,18 +184,24 @@ export default class FEGaussianBlur extends Component {
 
     render() {
         const { edgeMode, stdDeviation } = this.props;
-        const stdD = `${stdDeviation}`
-            .replace(/,|\s\s+/gm, " ")
-            .trim()
-            .split(" ");
+        const stdD =
+            stdDeviation && stdDeviation.map
+                ? stdDeviation.map(s => +s)
+                : typeof stdDeviation === "string"
+                ? stdDeviation
+                    .replace(/,|\s\s+/gm, " ")
+                    .trim()
+                    .split(" ")
+                    .map(s => +s)
+                : [+stdDeviation].filter(n => !isNaN(n));
         return (
             <RNSVGFEGaussianBlur
                 {...extractFilterPrimitive(this.props)}
                 {...{
                     in1: this.props.in,
                     edgeMode: edgeModeValues[edgeMode] || SVG_EDGEMODE_UNKNOWN,
-                    stdDeviationX: stdD[0],
-                    stdDeviationY: stdD.length > 1 ? stdD[1] : stdD[0],
+                    stdDeviationX: stdD[0] || 0,
+                    stdDeviationY: (stdD.length > 1 ? stdD[1] : stdD[0]) || 0,
                 }}
                 ref={r => {
                     this.root = r;

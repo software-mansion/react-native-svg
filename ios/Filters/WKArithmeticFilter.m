@@ -30,8 +30,9 @@ static CIKernel *arithmeticFilter = nil;
 @implementation WKArithmeticFilter
 + (void)initialize
 {
+    id<CIFilterConstructor> anObject = (id<CIFilterConstructor>)self;
     [CIFilter registerFilterName:@"WKArithmeticFilter"
-                     constructor:self
+                     constructor:anObject
                  classAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                   @"WebKit Arithmetic Filter", kCIAttributeFilterDisplayName,
                                   [NSArray arrayWithObjects:kCICategoryStylize, kCICategoryVideo,
@@ -84,18 +85,18 @@ static CIKernel *arithmeticFilter = nil;
 - (CIKernel *)arithmeticKernel
 {
     static CIKernel *arithmeticKernel = nil;
-    
+
     NSBundle    *bundle = [NSBundle bundleForClass:[self class]];
     NSStringEncoding encoding = NSUTF8StringEncoding;
     NSError     *error = nil;
     NSString    *kernelFile = [bundle pathForResource:@"WKArithmeticFilter" ofType:@"cikernel"];
     NSString    *code = [NSString stringWithContentsOfFile:kernelFile encoding:encoding error:&error];
-    
+
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         arithmeticKernel = [CIKernel kernelWithString:code];
     });
-    
+
     return arithmeticKernel;
 }
 
