@@ -10,5 +10,6 @@
 @property (nonatomic, assign) RNSVGUnits primitiveUnits;
 
 - (CIImage*)applyFilter:(CIImage*)img background:(CIImage *)background;
+- (BOOL)hasSourceGraphicAsLastOutput;
 
 @end

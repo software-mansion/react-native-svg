@@ -2,4 +2,6 @@
 
 @interface RNSVGFEMerge : RNSVGFilterPrimitive
 
+- (BOOL)hasSourceGraphicAsLastOutput;
+
 @end

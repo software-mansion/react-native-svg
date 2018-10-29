@@ -212,12 +212,14 @@ static CGImageRef renderToImage(RNSVGRenderable *object,
         CGImageRef currentContent = renderToImage(self, boundsSize, rect, nil);
         CIImage *contentSrcImage = [CIImage imageWithCGImage:currentContent];
 
+        BOOL hasSourceGraphicAsLastOutput = false;
         if (self.filter) {
             // https://www.w3.org/TR/SVG11/filters.html
             RNSVGFilter *_filterNode = (RNSVGFilter*)[self.svgView getDefinedFilter:self.filter];
             CGImageRef backgroundImage = CGBitmapContextCreateImage(context);
-            CIImage *background = [CIImage imageWithCGImage:currentContent];
+            CIImage *background = [CIImage imageWithCGImage:backgroundImage];
             contentSrcImage = [_filterNode applyFilter:contentSrcImage background:background];
+            hasSourceGraphicAsLastOutput = [_filterNode hasSourceGraphicAsLastOutput];
         }
 
         if (self.mask) {
@@ -253,6 +255,9 @@ static CGImageRef renderToImage(RNSVGRenderable *object,
         }
 
         CGImageRelease(currentContent);
+        if (hasSourceGraphicAsLastOutput) {
+            [self renderLayerTo:context rect:rect];
+        }
     } else {
         [self renderLayerTo:context rect:rect];
     }

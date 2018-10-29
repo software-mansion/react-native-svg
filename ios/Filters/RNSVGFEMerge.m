@@ -9,20 +9,27 @@
 #import "RNSVGFEMergeNode.h"
 #import "RNSVGNode.h"
 
-@implementation RNSVGFEMerge
+@implementation RNSVGFEMerge {
+    bool _hasSourceGraphicAsLastOutput;
+}
 
 - (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results
     previousFilterResult:(CIImage *)previous
 {
     CIFilter *filter;
-    CIImage *previousOutput = previous;
-    
+    CIImage *previousOutput = nil;
+
+    RNSVGFEMergeNode *n;
     for (UIView *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGFEMergeNode class]]) {
-            RNSVGFEMergeNode *n = (RNSVGFEMergeNode *)node;
+            n = (RNSVGFEMergeNode *)node;
             CIImage* inputImage = [results objectForKey:n.in1];
             if (!inputImage) {
                 return previousOutput;
+            }
+            if (!previousOutput) {
+                previousOutput = inputImage;
+                continue;
             }
             filter = [CIFilter filterWithName:@"CISourceOverCompositing"];
             [filter setDefaults];
@@ -31,8 +38,15 @@
             previousOutput = [filter valueForKey:@"outputImage"];
         }
     }
-    
-    return previousOutput;
+
+    _hasSourceGraphicAsLastOutput = n && [n.in1 isEqualToString:@"SourceGraphic"];
+
+    return previousOutput ? previousOutput : previous;
+}
+
+- (BOOL)hasSourceGraphicAsLastOutput
+{
+    return _hasSourceGraphicAsLastOutput;
 }
 
 @end
