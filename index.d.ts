@@ -319,7 +319,7 @@ export interface TextSpecificProps extends CommonPathProps, FontProps {
 export interface TextProps extends TextSpecificProps {
   dx?: NumberProp,
   dy?: NumberProp,
-  opacity? NumberProp,
+  opacity?: NumberProp,
 }
 export const Text: React.ComponentClass<TextProps>;
 
