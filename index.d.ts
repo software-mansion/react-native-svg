@@ -161,6 +161,7 @@ export interface CommonPathProps extends FillProps, StrokeProps, ClipProps, Tran
 export interface CircleProps extends CommonPathProps {
   cx?: NumberProp,
   cy?: NumberProp,
+  opacity?: NumberProp,
   r?: NumberProp,
 }
 export const Circle: React.ComponentClass<CircleProps>;
@@ -175,12 +176,14 @@ export const Defs: React.ComponentClass<{}>;
 export interface EllipseProps extends CommonPathProps {
   cx?: NumberProp,
   cy?: NumberProp,
+  opacity?: NumberProp,
   rx?: NumberProp,
   ry?: NumberProp,
 }
 export const Ellipse: React.ComponentClass<EllipseProps>;
 
 export interface GProps extends CommonPathProps {
+  opacity?: NumberProp,
 }
 export const G: React.ComponentClass<GProps>;
 
@@ -191,10 +194,12 @@ export interface ImageProps extends ResponderProps, TouchableProps {
   height?: NumberProp,
   href: ReactNative.ImageProperties['source'],
   preserveAspectRatio?: string,
+  opacity?: NumberProp,
 }
 export const Image: React.ComponentClass<ImageProps>;
 
 export interface LineProps extends CommonPathProps {
+  opacity?: NumberProp,
   x1?: NumberProp,
   x2?: NumberProp,
   y1?: NumberProp,
@@ -214,6 +219,7 @@ export const LinearGradient: React.ComponentClass<LinearGradientProps>;
 
 export interface PathProps extends CommonPathProps {
   d: string,
+  opacity?: NumberProp,
 }
 export const Path: React.ComponentClass<PathProps>;
 
@@ -232,11 +238,13 @@ export interface PatternProps {
 export const Pattern: React.ComponentClass<PatternProps>;
 
 export interface PolygonProps extends CommonPathProps {
+  opacity?: NumberProp,
   points: string | ReadonlyArray<any>,
 }
 export const Polygon: React.ComponentClass<PolygonProps>;
 
 export interface PolylineProps extends CommonPathProps {
+  opacity?: NumberProp,
   points: string | ReadonlyArray<any>,
 }
 export const Polyline: React.ComponentClass<PolylineProps>;
@@ -262,6 +270,7 @@ export interface RectProps extends CommonPathProps {
   rx?: NumberProp,
   ry?: NumberProp,
   class?: string,
+  opacity?: NumberProp,
 }
 export const Rect: React.ComponentClass<RectProps>;
 
@@ -287,6 +296,7 @@ export interface SymbolProps {
   id: string,
   viewBox?: string,
   preserveAspectRatio?: string,
+  opacity?: NumberProp,
 }
 export const Symbol: React.ComponentClass<SymbolProps>;
 
@@ -309,6 +319,7 @@ export interface TextSpecificProps extends CommonPathProps, FontProps {
 export interface TextProps extends TextSpecificProps {
   dx?: NumberProp,
   dy?: NumberProp,
+  opacity? NumberProp,
 }
 export const Text: React.ComponentClass<TextProps>;
 
@@ -327,6 +338,7 @@ export interface UseProps extends CommonPathProps {
   height?: string,
   x?: NumberProp,
   y?: NumberProp,
+  opacity?: NumberProp,
 }
 export const Use: React.ComponentClass<UseProps>;
 
