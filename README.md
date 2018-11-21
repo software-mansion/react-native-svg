@@ -244,7 +244,7 @@ strokeWidth     | 1          | The strokeWidth prop specifies the width of the o
 strokeOpacity   | 1          | The strokeOpacity prop specifies the opacity of the outline on the current object.
 strokeLinecap   | 'square'   | The strokeLinecap prop specifies the shape to be used at the end of open subpaths when they are stroked. Can be either `'butt'`, `'square'` or `'round'`.
 strokeLinejoin  | 'miter'    | The strokeLinejoin prop specifies the shape to be used at the corners of paths or basic shapes when they are stroked. Can be either `'miter'`, `'bevel'` or `'round'`.
-strokeDasharray | []         | The strokeDasharray prop controls the pattern of dashes and gaps used to stroke paths.
+strokeDasharray | ''         | The strokeDasharray prop controls the pattern of dashes and gaps used to stroke paths. Example: '4 3 2 1'
 strokeDashoffset| null       | The strokeDashoffset prop specifies the distance into the dash pattern to start the dash.
 x               | 0          | Translate distance on x-axis.
 y               | 0          | Translate distance on y-axis.
@@ -268,7 +268,7 @@ originY         | 0          | Transform originY coordinates for the current obj
     <Circle cx="50" cy="50" r="30" fill="yellow" />
     <Circle cx="40" cy="40" r="4" fill="black" />
     <Circle cx="60" cy="40" r="4" fill="black" />
-    <Path d="M 40 60 A 10 10 0 0 0 60 60" stroke="black" />
+    <Path d="M 40 60 A 10 10 0 0 0 60 60" stroke="black" strokeDasharray="4 3 2 1" />
 </Svg>
 ```
 
