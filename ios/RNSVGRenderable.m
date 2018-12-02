@@ -291,7 +291,7 @@ UInt32 saturate(CGFloat value) {
     }
 
     if (!self.path) {
-        self.path = CGPathRetain(CFAutorelease(CGPathCreateCopy([self getPath:context])));
+        self.path = [self getPath:context];
         [self setHitArea:self.path];
     }
 
