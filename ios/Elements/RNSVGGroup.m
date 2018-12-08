@@ -73,7 +73,16 @@
     }];
     [self setHitArea:[self getPath:context]];
     self.clientRect = groupRect;
-    self.bounds = groupRect;
+
+    const CGAffineTransform matrix = self.matrix;
+    const CGAffineTransform current = CGContextGetCTM(context);
+    const CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
+    const CGRect clientRect = CGRectApplyAffineTransform(groupRect, svgToClientTransform);
+    const CGSize clientSize = clientRect.size;
+
+    self.bounds = CGRectMake(0, 0, clientSize.width, clientSize.height);
+    self.frame = CGRectMake(matrix.tx, matrix.ty, clientSize.width, clientSize.height);
+
     [self popGlyphContext];
 }
 

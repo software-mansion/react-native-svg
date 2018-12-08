@@ -296,9 +296,16 @@ UInt32 saturate(CGFloat value) {
     }
 
     const CGRect pathBounding = CGPathGetBoundingBox(self.path);
-    const CGAffineTransform svgToClientTransform = CGAffineTransformConcat(CGContextGetCTM(context), self.svgView.invInitialCTM);
-    self.clientRect = CGRectApplyAffineTransform(pathBounding, svgToClientTransform);
-    self.bounds = self.clientRect;
+
+    const CGAffineTransform matrix = self.matrix;
+    const CGAffineTransform current = CGContextGetCTM(context);
+    const CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
+    const CGRect clientRect = CGRectApplyAffineTransform(pathBounding, svgToClientTransform);
+    const CGSize clientSize = clientRect.size;
+
+    self.clientRect = clientRect;
+    self.bounds = CGRectMake(0, 0, clientSize.width, clientSize.height);
+    self.frame = CGRectMake(matrix.tx, matrix.ty, clientSize.width, clientSize.height);
 
     CGPathDrawingMode mode = kCGPathStroke;
     BOOL fillColor = NO;

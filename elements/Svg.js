@@ -10,6 +10,7 @@ import extractResponder from "../lib/extract/extractResponder";
 import extractViewBox from "../lib/extract/extractViewBox";
 import Shape from "./Shape";
 import G from "./G";
+import _ from "lodash";
 
 /** @namespace NativeModules.RNSVGSvgViewManager */
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
@@ -23,6 +24,22 @@ const styles = StyleSheet.create({
         borderWidth: 0,
     },
 });
+
+const gProps = [
+    "font",
+    "transform",
+    "fill",
+    "fillOpacity",
+    "fillRule",
+    "stroke",
+    "strokeWidth",
+    "strokeOpacity",
+    "strokeDasharray",
+    "strokeDashoffset",
+    "strokeLinecap",
+    "strokeLinejoin",
+    "strokeMiterlimit",
+];
 
 class Svg extends Shape {
     static displayName = "Svg";
@@ -69,6 +86,7 @@ class Svg extends Shape {
             preserveAspectRatio,
             style,
             children,
+            onLayout,
             ...props
         } = this.props;
         const stylesAndProps = { ...(style && style.length ? Object.assign({}, ...style) : style), ...props };
@@ -92,6 +110,7 @@ class Svg extends Shape {
                 bbWidth={w}
                 bbHeight={h}
                 tintColor={color}
+                onLayout={onLayout}
                 {...extractResponder(props, this)}
                 {...extractViewBox({ viewBox, preserveAspectRatio })}
                 ref={ele => {
@@ -106,7 +125,7 @@ class Svg extends Shape {
                     dimensions,
                 ]}
             >
-                <G style={style} {...props}>
+                <G style={style} {...(_.pick(stylesAndProps, gProps))}>
                     {children}
                 </G>
             </NativeSvgView>
