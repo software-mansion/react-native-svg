@@ -166,7 +166,6 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     }
     _matrix = matrix;
     _invmatrix = CGAffineTransformInvert(matrix);
-    self.transform = CGAffineTransformConcat(matrix, self.transforms);
     id<RNSVGContainer> container = (id<RNSVGContainer>)self.superview;
     [container invalidate];
 }

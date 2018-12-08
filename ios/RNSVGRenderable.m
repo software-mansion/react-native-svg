@@ -168,7 +168,8 @@ UInt32 saturate(CGFloat value) {
 {
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
-    CGContextConcatCTM(context, self.transform);
+    CGContextConcatCTM(context, self.matrix);
+    CGContextConcatCTM(context, self.transforms);
     CGContextSetAlpha(context, self.opacity);
 
     [self beginTransparencyLayer:context];
@@ -296,24 +297,22 @@ UInt32 saturate(CGFloat value) {
 
     const CGRect pathBounding = CGPathGetBoundingBox(self.path);
 
-    const CGAffineTransform current = CGContextGetCTM(context);
-    const CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
-    const CGRect clientRect = CGRectApplyAffineTransform(pathBounding, svgToClientTransform);
+    CGAffineTransform current = CGContextGetCTM(context);
+    CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
+    CGRect clientRect = CGRectApplyAffineTransform(pathBounding, svgToClientTransform);
 
     self.clientRect = clientRect;
 
-    const CGAffineTransform vbmatrix = self.svgView.getViewBoxTransform;
-    const CGAffineTransform matrix = CGAffineTransformConcat(self.transform, vbmatrix);
+    CGAffineTransform vbmatrix = self.svgView.getViewBoxTransform;
+    CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, vbmatrix);
 
-    const CGRect bounds = CGRectMake(0, 0, CGRectGetWidth(clientRect), CGRectGetHeight(clientRect));
-    const CGPoint mid = CGPointMake(CGRectGetMidX(pathBounding), CGRectGetMidY(pathBounding));
+    CGRect bounds = CGRectMake(0, 0, CGRectGetWidth(clientRect), CGRectGetHeight(clientRect));
+    CGPoint mid = CGPointMake(CGRectGetMidX(pathBounding), CGRectGetMidY(pathBounding));
     CGPoint center = CGPointApplyAffineTransform(mid, matrix);
-
-    const CGRect frame = CGRectApplyAffineTransform(pathBounding, matrix);
 
     self.bounds = bounds;
     self.center = center;
-    self.frame = frame;
+    self.frame = clientRect;
 
     CGPathDrawingMode mode = kCGPathStroke;
     BOOL fillColor = NO;

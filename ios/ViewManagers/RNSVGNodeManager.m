@@ -160,7 +160,6 @@ RCT_CUSTOM_VIEW_PROPERTY(transform, CATransform3D, RNSVGNode)
     CGAffineTransform transform = CATransform3DGetAffineTransform(transform3d);
     view.invTransform = CGAffineTransformInvert(transform);
     view.transforms = transform;
-    view.transform = CGAffineTransformConcat(view.matrix, transform);
     [view invalidate];
 }
 RCT_EXPORT_VIEW_PROPERTY(mask, NSString)

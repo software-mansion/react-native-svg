@@ -77,11 +77,10 @@
     CGAffineTransform matrix = self.matrix;
     CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
     CGPoint center = CGPointApplyAffineTransform(mid, matrix);
-    CGRect frame = CGRectApplyAffineTransform(bounds, matrix);
 
     self.bounds = bounds;
     self.center = center;
-    self.frame = frame;
+    self.frame = bounds;
 
     [self popGlyphContext];
 }
@@ -89,7 +88,8 @@
 - (void)setupGlyphContext:(CGContextRef)context
 {
     CGRect clipBounds = CGContextGetClipBoundingBox(context);
-    clipBounds = CGRectApplyAffineTransform(clipBounds, self.transform);
+    clipBounds = CGRectApplyAffineTransform(clipBounds, self.matrix);
+    clipBounds = CGRectApplyAffineTransform(clipBounds, self.transforms);
     CGFloat width = CGRectGetWidth(clipBounds);
     CGFloat height = CGRectGetHeight(clipBounds);
 
@@ -123,7 +123,7 @@
     CGMutablePathRef __block path = CGPathCreateMutable();
     [self traverseSubviews:^(RNSVGNode *node) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
-            CGAffineTransform transform = node.transform;
+            CGAffineTransform transform = CGAffineTransformConcat(node.matrix, node.transforms);
             CGPathAddPath(path, &transform, [node getPath:context]);
         }
         return YES;
