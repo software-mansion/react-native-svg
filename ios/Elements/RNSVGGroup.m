@@ -74,7 +74,7 @@
     [self setHitArea:[self getPath:context]];
     self.clientRect = bounds;
 
-    CGAffineTransform matrix = self.transform;
+    CGAffineTransform matrix = self.matrix;
     CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
     CGPoint center = CGPointApplyAffineTransform(mid, matrix);
     CGRect frame = CGRectApplyAffineTransform(bounds, matrix);
