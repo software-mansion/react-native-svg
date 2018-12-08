@@ -91,7 +91,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         if (mBitmap != null)
             canvas.drawBitmap(mBitmap, 0, 0, null);
     }
-    
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);

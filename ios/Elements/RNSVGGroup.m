@@ -35,7 +35,7 @@
 {
     [self pushGlyphContext];
 
-    __block CGRect groupRect = CGRectNull;
+    __block CGRect bounds = CGRectNull;
 
     [self traverseSubviews:^(UIView *node) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
@@ -52,7 +52,7 @@
 
             CGRect nodeRect = svgNode.clientRect;
             if (!CGRectIsEmpty(nodeRect)) {
-                groupRect = CGRectUnion(groupRect, nodeRect);
+                bounds = CGRectUnion(bounds, nodeRect);
             }
 
             if ([node isKindOfClass:[RNSVGRenderable class]]) {
@@ -72,16 +72,16 @@
         return YES;
     }];
     [self setHitArea:[self getPath:context]];
-    self.clientRect = groupRect;
+    self.clientRect = bounds;
 
-    const CGAffineTransform matrix = self.matrix;
-    const CGAffineTransform current = CGContextGetCTM(context);
-    const CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
-    const CGRect clientRect = CGRectApplyAffineTransform(groupRect, svgToClientTransform);
-    const CGSize clientSize = clientRect.size;
+    CGAffineTransform matrix = self.transform;
+    CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
+    CGPoint center = CGPointApplyAffineTransform(mid, matrix);
+    CGRect frame = CGRectApplyAffineTransform(bounds, matrix);
 
-    self.bounds = CGRectMake(0, 0, clientSize.width, clientSize.height);
-    self.frame = CGRectMake(matrix.tx, matrix.ty, clientSize.width, clientSize.height);
+    self.bounds = bounds;
+    self.center = center;
+    self.frame = frame;
 
     [self popGlyphContext];
 }
@@ -89,7 +89,6 @@
 - (void)setupGlyphContext:(CGContextRef)context
 {
     CGRect clipBounds = CGContextGetClipBoundingBox(context);
-    clipBounds = CGRectApplyAffineTransform(clipBounds, self.matrix);
     clipBounds = CGRectApplyAffineTransform(clipBounds, self.transform);
     CGFloat width = CGRectGetWidth(clipBounds);
     CGFloat height = CGRectGetHeight(clipBounds);
@@ -124,7 +123,7 @@
     CGMutablePathRef __block path = CGPathCreateMutable();
     [self traverseSubviews:^(RNSVGNode *node) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
-            CGAffineTransform transform = node.matrix;
+            CGAffineTransform transform = node.transform;
             CGPathAddPath(path, &transform, [node getPath:context]);
         }
         return YES;
