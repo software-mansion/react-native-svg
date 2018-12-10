@@ -282,8 +282,8 @@ export interface StopProps {
 export const Stop: React.ComponentClass<StopProps>;
 
 export interface SvgProps extends ReactNative.ViewProperties {
-  width: NumberProp,
-  height: NumberProp,
+  width?: NumberProp,
+  height?: NumberProp,
   viewBox?: string,
   preserveAspectRatio?: string,
 }
