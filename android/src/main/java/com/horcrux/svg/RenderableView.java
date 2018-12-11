@@ -248,10 +248,12 @@ abstract public class RenderableView extends VirtualView {
     }
 
     void render(Canvas canvas, Paint paint, float opacity) {
+        MaskView mask = null;
         if (mMask != null) {
             SvgView root = getSvgView();
-            MaskView mask = (MaskView) root.getDefinedMask(mMask);
-
+            mask = (MaskView) root.getDefinedMask(mMask);
+        }
+        if (mask != null) {
             Rect clipBounds = canvas.getClipBounds();
             int height = clipBounds.height();
             int width = clipBounds.width();
