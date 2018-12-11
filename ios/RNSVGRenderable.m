@@ -295,7 +295,9 @@ UInt32 saturate(CGFloat value) {
         [self setHitArea:self.path];
     }
 
-    const CGRect pathBounding = CGPathGetBoundingBox(self.path);
+    const CGRect fillBounds = CGPathGetBoundingBox(self.path);
+    const CGRect strokeBounds = CGPathGetBoundingBox(_strokePath);
+    const CGRect pathBounding = CGRectUnion(fillBounds, strokeBounds);
 
     CGAffineTransform current = CGContextGetCTM(context);
     CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
@@ -417,6 +419,11 @@ UInt32 saturate(CGFloat value) {
         // TODO add dashing
         // CGPathCreateCopyByDashingPath(CGPathRef  _Nullable path, const CGAffineTransform * _Nullable transform, CGFloat phase, const CGFloat * _Nullable lengths, size_t count)
     }
+}
+
+- (BOOL)isUserInteractionEnabled
+{
+    return NO;
 }
 
 // hitTest delegate

@@ -226,8 +226,6 @@
 
         if (event) {
             node.active = NO;
-        } else if (node.active) {
-            return node;
         }
 
         UIView *hitChild = [node hitTest:transformed withEvent:event];
