@@ -6,7 +6,11 @@ class Shape extends Component {
     constructor() {
         super(...arguments);
         _.forEach(SvgTouchableMixin, (method, key) => {
-            this[key] = method.bind(this);
+            if (typeof method === 'function') {
+                this[key] = method.bind(this);
+            } else {
+                this[key] = method;
+            }
         });
         //noinspection JSUnusedGlobalSymbols
         this.state = this.touchableGetInitialState();
