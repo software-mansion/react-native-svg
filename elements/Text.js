@@ -1,11 +1,11 @@
 import React from "react";
-import _ from "lodash";
 import { requireNativeComponent } from "react-native";
 import extractText from "../lib/extract/extractText";
 import extractProps from "../lib/extract/extractProps";
 import extractTransform from "../lib/extract/extractTransform";
 import Shape from "./Shape";
 import TSpan from "./TSpan";
+import { notNil, pickBy } from "../lib/util";
 
 export default class extends Shape {
     static displayName = "Text";
@@ -15,7 +15,7 @@ export default class extends Shape {
         if (matrix) {
             props.matrix = matrix;
         }
-        const text = _.pickBy(extractText(props, true, TSpan), p => !_.isNil(p));
+        const text = pickBy(extractText(props, true, TSpan), notNil);
         this.root.setNativeProps({
             ...props,
             ...text,

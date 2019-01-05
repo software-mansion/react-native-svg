@@ -4,7 +4,7 @@
     "description": "SVG library for react-native",
     "repository": {
         "type": "git",
-        "url": "https://github.com/magicismight/react-native-svg"
+        "url": "https://github.com/react-native-community/react-native-svg"
     },
     "license": "MIT",
     "main": "./index.js",
@@ -19,21 +19,21 @@
         "gradient"
     ],
     "scripts": {
-        "lint": "eslint ./"
+        "lint": "eslint ./",
+        "peg": "pegjs -o ./lib/extract/transform.js ./lib/extract/transform.peg"
     },
     "peerDependencies": {
         "react-native": ">=0.50.0",
         "react": "*"
     },
     "dependencies": {
-        "color": "^2.0.1",
-        "lodash": "^4.16.6",
-        "pegjs": "^0.10.0"
+        "color": "^2.0.1"
     },
     "devDependencies": {
         "babel-eslint": "^6.1.2",
         "eslint": "^2.13.1",
-        "eslint-plugin-react": "^4.3.0"
+        "eslint-plugin-react": "^4.3.0",
+        "pegjs": "^0.10.0"
     },
     "nativePackage": true
 }

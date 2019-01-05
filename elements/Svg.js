@@ -10,7 +10,7 @@ import extractResponder from "../lib/extract/extractResponder";
 import extractViewBox from "../lib/extract/extractViewBox";
 import Shape from "./Shape";
 import G from "./G";
-import _ from "lodash";
+import { pick } from "../lib/util";
 
 /** @namespace NativeModules.RNSVGSvgViewManager */
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
@@ -125,7 +125,7 @@ class Svg extends Shape {
                     dimensions,
                 ]}
             >
-                <G style={style} {...(_.pick(stylesAndProps, gProps))}>
+                <G style={style} {...(pick(stylesAndProps, gProps))}>
                     {children}
                 </G>
             </NativeSvgView>
