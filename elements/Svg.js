@@ -89,7 +89,10 @@ class Svg extends Shape {
             onLayout,
             ...props
         } = this.props;
-        const stylesAndProps = { ...(style && style.length ? Object.assign({}, ...style) : style), ...props };
+        const stylesAndProps = {
+            ...(style && style.length ? Object.assign({}, ...style) : style),
+            ...props,
+        };
         const { color, width, height } = stylesAndProps;
 
         let dimensions;
@@ -125,7 +128,7 @@ class Svg extends Shape {
                     dimensions,
                 ]}
             >
-                <G style={style} {...(pick(stylesAndProps, gProps))}>
+                <G style={style} {...pick(stylesAndProps, gProps)}>
                     {children}
                 </G>
             </NativeSvgView>

@@ -176,7 +176,7 @@ void PatternFunction(void* info, CGContextRef context)
 - (void)paintLinearGradient:(CGContextRef)context bounds:(CGRect)bounds
 {
 
-    CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:_colors offset:0]);
+    CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:_colors]);
     CGGradientDrawingOptions extendOptions = kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
 
     CGRect rect = [self getPaintRect:context bounds:bounds];
@@ -206,7 +206,7 @@ void PatternFunction(void* info, CGContextRef context)
 
 - (void)paintRadialGradient:(CGContextRef)context bounds:(CGRect)bounds
 {
-    CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:_colors offset:0]);
+    CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:_colors]);
     CGGradientDrawingOptions extendOptions = kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
 
     CGRect rect = [self getPaintRect:context bounds:bounds];

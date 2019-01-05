@@ -6,7 +6,7 @@ class Shape extends Component {
         super(...arguments);
         for (let key of Object.keys(SvgTouchableMixin)) {
             const method = SvgTouchableMixin[key];
-            if (typeof method === 'function') {
+            if (typeof method === "function") {
                 this[key] = method.bind(this);
             } else {
                 this[key] = method;
