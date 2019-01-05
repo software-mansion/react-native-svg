@@ -19,15 +19,21 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_EXPORT_VIEW_PROPERTY(href, NSString)
-RCT_EXPORT_VIEW_PROPERTY(useheight, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(usewidth, RNSVGLength*)
+RCT_CUSTOM_VIEW_PROPERTY(useheight, id, RNSVGUse)
+{
+    view.height = [RCTConvert RNSVGLength:json];
+}
+RCT_CUSTOM_VIEW_PROPERTY(usewidth, id, RNSVGUse)
+{
+    view.width = [RCTConvert RNSVGLength:json];
+}
 RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGUse)
 {
-    view.useheight = [RCTConvert RNSVGLength:json];
+    view.height = [RCTConvert RNSVGLength:json];
 }
 RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGUse)
 {
-    view.usewidth = [RCTConvert RNSVGLength:json];
+    view.width = [RCTConvert RNSVGLength:json];
 }
 
 @end

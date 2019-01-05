@@ -6,8 +6,8 @@
 
 @property (nonatomic, strong) RNSVGLength *x;
 @property (nonatomic, strong) RNSVGLength *y;
-@property (nonatomic, strong) RNSVGLength *patternwidth;
-@property (nonatomic, strong) RNSVGLength *patternheight;
+@property (nonatomic, strong) RNSVGLength *width;
+@property (nonatomic, strong) RNSVGLength *height;
 @property (nonatomic, assign) RNSVGUnits patternUnits;
 @property (nonatomic, assign) RNSVGUnits patternContentUnits;
 @property (nonatomic, assign) CGAffineTransform patternTransform;

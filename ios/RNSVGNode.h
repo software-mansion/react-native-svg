@@ -31,6 +31,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) RNSVGCGFCRule clipRule;
 @property (nonatomic, strong) NSString *clipPath;
 @property (nonatomic, strong) NSString *mask;
+@property (nonatomic, strong) NSString *filter;
 @property (nonatomic, assign) BOOL responsible;
 @property (nonatomic, assign) CGAffineTransform matrix;
 @property (nonatomic, assign) CGAffineTransform transforms;

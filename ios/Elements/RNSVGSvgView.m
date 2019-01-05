@@ -17,6 +17,7 @@
     NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
     NSMutableDictionary<NSString *, RNSVGPainter *> *_painters;
     NSMutableDictionary<NSString *, RNSVGNode *> *_masks;
+    NSMutableDictionary<NSString *, RNSVGNode *> *_filters;
     CGAffineTransform _viewBoxTransform;
     CGAffineTransform _invviewBoxTransform;
     bool rendered;
@@ -305,6 +306,19 @@
 - (RNSVGNode *)getDefinedMask:(NSString *)maskName;
 {
     return _masks ? [_masks objectForKey:maskName] : nil;
+}
+
+- (void)defineFilter:(RNSVGNode *)filter filterName:(NSString *)filterName
+{
+    if (!_filters) {
+        _filters = [[NSMutableDictionary alloc] init];
+    }
+    [_filters setObject:filter forKey:filterName];
+}
+
+- (RNSVGNode *)getDefinedFilter:(NSString *)filterName;
+{
+    return _filters ? [_filters objectForKey:filterName] : nil;
 }
 
 - (CGRect)getContextBounds

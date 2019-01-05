@@ -28,6 +28,36 @@ RCT_ENUM_CONVERTER(RNSVGVBMOS, (@{
                                   @"none": @(kRNSVGVBMOSNone)
                                   }), kRNSVGVBMOSMeet, intValue)
 
+RCT_ENUM_CONVERTER(RNSVGColorMatrixTypes, (@{
+                                  @"matrix": @(SVG_FECOLORMATRIX_TYPE_MATRIX),
+                                  @"saturate": @(SVG_FECOLORMATRIX_TYPE_SATURATE),
+                                  @"hueRotate": @(SVG_FECOLORMATRIX_TYPE_HUEROTATE),
+                                  @"luminanceToAlpha": @(SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA)
+                                  }), SVG_FECOLORMATRIX_TYPE_UNKNOWN, intValue)
+
+RCT_ENUM_CONVERTER(RNSVGCompositeOperators, (@{
+                                               @"over": @(SVG_FECOMPOSITE_OPERATOR_OVER),
+                                               @"in": @(SVG_FECOMPOSITE_OPERATOR_IN),
+                                               @"out": @(SVG_FECOMPOSITE_OPERATOR_OUT),
+                                               @"atop": @(SVG_FECOMPOSITE_OPERATOR_ATOP),
+                                               @"xor": @(SVG_FECOMPOSITE_OPERATOR_XOR),
+                                               @"arithmetic": @(SVG_FECOMPOSITE_OPERATOR_ARITHMETIC)
+                                               }), SVG_FECOMPOSITE_OPERATOR_UNKNOWN, intValue)
+
+RCT_ENUM_CONVERTER(RNSVGEdgeModeValues, (@{
+                                           @"duplicate": @(SVG_EDGEMODE_DUPLICATE),
+                                           @"wrap": @(SVG_EDGEMODE_WRAP),
+                                           @"none": @(SVG_EDGEMODE_NONE),
+                                           }), SVG_EDGEMODE_UNKNOWN, intValue)
+
+RCT_ENUM_CONVERTER(RNSVGBlendModeTypes, (@{
+                                           @"normal": @(SVG_FEBLEND_MODE_NORMAL),
+                                           @"multiply": @(SVG_FEBLEND_MODE_MULTIPLY),
+                                           @"screen": @(SVG_FEBLEND_MODE_SCREEN),
+                                           @"darken": @(SVG_FEBLEND_MODE_DARKEN),
+                                           @"lighten": @(SVG_FEBLEND_MODE_LIGHTEN),
+                                           }), SVG_FEBLEND_MODE_UNKNOWN, intValue)
+
 RCT_ENUM_CONVERTER(RNSVGUnits, (@{
                                   @"objectBoundingBox": @(kRNSVGUnitsObjectBoundingBox),
                                   @"userSpaceOnUse": @(kRNSVGUnitsUserSpaceOnUse),
