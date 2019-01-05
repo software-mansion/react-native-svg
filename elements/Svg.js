@@ -65,11 +65,12 @@ class Svg extends Shape {
     };
 
     setNativeProps = props => {
-        if (props.width) {
-            props.bbWidth = `${props.width}`;
+        const { width, height } = props;
+        if (width) {
+            props.bbWidth = `${width}`;
         }
-        if (props.height) {
-            props.bbHeight = `${props.height}`;
+        if (height) {
+            props.bbHeight = `${height}`;
         }
         this.root.setNativeProps(props);
     };

@@ -1,15 +1,16 @@
 import { Component } from "react";
 import SvgTouchableMixin from "../lib/SvgTouchableMixin";
 
+const touch = Object.entries(SvgTouchableMixin);
+
 class Shape extends Component {
     constructor() {
         super(...arguments);
-        for (let key of Object.keys(SvgTouchableMixin)) {
-            const method = SvgTouchableMixin[key];
-            if (typeof method === "function") {
-                this[key] = method.bind(this);
+        for (let [key, val] of touch) {
+            if (typeof val === "function") {
+                this[key] = val.bind(this);
             } else {
-                this[key] = method;
+                this[key] = val;
             }
         }
         //noinspection JSUnusedGlobalSymbols

@@ -28,14 +28,7 @@ export default class extends Component {
             preserveAspectRatio,
         } = props;
 
-        let extractedTransform;
-        if (patternTransform) {
-            extractedTransform = extractTransform(patternTransform);
-        } else if (transform) {
-            extractedTransform = extractTransform(transform);
-        } else {
-            extractedTransform = extractTransform(props);
-        }
+        const extractedTransform = extractTransform(patternTransform || transform || props);
 
         return (
             <RNSVGPattern

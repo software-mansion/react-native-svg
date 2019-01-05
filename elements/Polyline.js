@@ -11,11 +11,8 @@ export default class extends Shape {
     };
 
     setNativeProps = props => {
-        let { points } = props;
+        const { points } = props;
         if (points) {
-            if (Array.isArray(points)) {
-                points = points.join(",");
-            }
             props.d = `M${extractPolyPoints(points)}`;
         }
         this.root.setNativeProps(props);
@@ -23,12 +20,7 @@ export default class extends Shape {
 
     render() {
         const { props } = this;
-        let { points } = props;
-
-        if (Array.isArray(points)) {
-            points = points.join(",");
-        }
-
+        const { points } = props;
         return (
             <Path
                 ref={ele => {

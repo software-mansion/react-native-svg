@@ -25,14 +25,7 @@ export default class extends Component {
             children,
         } = props;
 
-        let extractedTransform;
-        if (maskTransform) {
-            extractedTransform = extractTransform(maskTransform);
-        } else if (transform) {
-            extractedTransform = extractTransform(transform);
-        } else {
-            extractedTransform = extractTransform(props);
-        }
+        const extractedTransform = extractTransform(maskTransform || transform || props);
 
         return (
             <RNSVGMask
