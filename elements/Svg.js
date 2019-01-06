@@ -24,30 +24,6 @@ const styles = StyleSheet.create({
     },
 });
 
-const gProps = [
-    "font",
-    "transform",
-    "fill",
-    "fillOpacity",
-    "fillRule",
-    "stroke",
-    "strokeWidth",
-    "strokeOpacity",
-    "strokeDasharray",
-    "strokeDashoffset",
-    "strokeLinecap",
-    "strokeLinejoin",
-    "strokeMiterlimit",
-];
-
-function pickGProps(object) {
-    const result = {};
-    for (let key of gProps) {
-        result[key] = object[key];
-    }
-    return result;
-}
-
 class Svg extends Shape {
     static displayName = "Svg";
 
@@ -101,7 +77,26 @@ class Svg extends Shape {
             ...(style && style.length ? Object.assign({}, ...style) : style),
             ...props,
         };
-        const { color, width, height } = stylesAndProps;
+        const {
+            color,
+            width,
+            height,
+
+            // Inherited G properties
+            font,
+            transform,
+            fill,
+            fillOpacity,
+            fillRule,
+            stroke,
+            strokeWidth,
+            strokeOpacity,
+            strokeDasharray,
+            strokeDashoffset,
+            strokeLinecap,
+            strokeLinejoin,
+            strokeMiterlimit,
+        } = stylesAndProps;
 
         let dimensions;
         if (width && height) {
@@ -136,7 +131,24 @@ class Svg extends Shape {
                     dimensions,
                 ]}
             >
-                <G style={style} {...pickGProps(stylesAndProps)}>
+                <G
+                    style={style}
+                    {...{
+                        font,
+                        transform,
+                        fill,
+                        fillOpacity,
+                        fillRule,
+                        stroke,
+                        strokeWidth,
+                        strokeOpacity,
+                        strokeDasharray,
+                        strokeDashoffset,
+                        strokeLinecap,
+                        strokeLinejoin,
+                        strokeMiterlimit,
+                    }}
+                >
                     {children}
                 </G>
             </NativeSvgView>
