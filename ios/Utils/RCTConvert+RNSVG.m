@@ -137,7 +137,7 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
     NSArray *arr = [self NSNumberArray:json];
     NSUInteger count = arr.count;
     if (count < 5) {
-        RCTLogError(@"Too few elements in array (expected at least %zd): %@", (unsigned long)offset, arr);
+        RCTLogError(@"Too few elements in array (expected at least %zd): %@", 5l, arr);
         return nil;
     }
 
