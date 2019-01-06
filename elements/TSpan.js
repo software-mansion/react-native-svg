@@ -6,7 +6,6 @@ import extractTransform from "../lib/extract/extractTransform";
 import Shape from "./Shape";
 import { pickNotNil } from "../lib/util";
 
-// TSpan elements are shadow components
 export default class TSpan extends Shape {
     static displayName = "TSpan";
 

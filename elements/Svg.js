@@ -1,4 +1,3 @@
-//noinspection JSUnresolvedVariable
 import React from "react";
 import {
     requireNativeComponent,
@@ -11,7 +10,6 @@ import extractViewBox from "../lib/extract/extractViewBox";
 import Shape from "./Shape";
 import G from "./G";
 
-/** @namespace NativeModules.RNSVGSvgViewManager */
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
 
 // Svg - Root node of all Svg elements

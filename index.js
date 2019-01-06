@@ -46,5 +46,4 @@ export {
     Mask,
 };
 
-//noinspection JSUnusedGlobalSymbols
 export default Svg;

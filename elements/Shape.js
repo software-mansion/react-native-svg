@@ -13,7 +13,6 @@ class Shape extends Component {
                 this[key] = val;
             }
         }
-        //noinspection JSUnusedGlobalSymbols
         this.state = this.touchableGetInitialState();
     }
 }
