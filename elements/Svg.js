@@ -98,14 +98,11 @@ class Svg extends Shape {
             strokeMiterlimit,
         } = stylesAndProps;
 
-        let dimensions;
-        if (width && height) {
-            dimensions = {
-                width: width[width.length - 1] === "%" ? width : +width,
-                height: height[height.length - 1] === "%" ? height : +height,
-                flex: 0,
-            };
-        }
+        const dimensions = width && height ? {
+            width: width[width.length - 1] === "%" ? width : +width,
+            height: height[height.length - 1] === "%" ? height : +height,
+            flex: 0,
+        } : null;
 
         const w = `${width}`;
         const h = `${height}`;

@@ -6,7 +6,7 @@ const touch = Object.entries(SvgTouchableMixin);
 class Shape extends Component {
     constructor() {
         super(...arguments);
-        for (let [key, val] of touch) {
+        for (const [key, val] of touch) {
             if (typeof val === "function") {
                 this[key] = val.bind(this);
             } else {
