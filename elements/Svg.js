@@ -50,10 +50,10 @@ class Svg extends Shape {
     setNativeProps = props => {
         const { width, height } = props;
         if (width) {
-            props.bbWidth = `${width}`;
+            props.bbWidth = String(width);
         }
         if (height) {
-            props.bbHeight = `${height}`;
+            props.bbHeight = String(height);
         }
         this.root.setNativeProps(props);
     };
@@ -104,8 +104,8 @@ class Svg extends Shape {
             flex: 0,
         } : null;
 
-        const w = `${width}`;
-        const h = `${height}`;
+        const w = String(width);
+        const h = String(height);
 
         return (
             <NativeSvgView
