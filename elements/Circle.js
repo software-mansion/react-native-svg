@@ -1,7 +1,7 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
-import Shape from "./Shape";
 import extractProps from "../lib/extract/extractProps";
+import Shape from "./Shape";
 
 export default class extends Shape {
     static displayName = "Circle";

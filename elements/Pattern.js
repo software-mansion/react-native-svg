@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { requireNativeComponent } from "react-native";
-import units from "../lib/units";
 import extractTransform from "../lib/extract/extractTransform";
 import extractViewBox from "../lib/extract/extractViewBox";
+import units from "../lib/units";
 
 export default class extends Component {
     static displayName = "Pattern";

@@ -1,8 +1,8 @@
 import React from "react";
 import { Image, requireNativeComponent } from "react-native";
-import Shape from "./Shape";
 import { meetOrSliceTypes, alignEnum } from "../lib/extract/extractViewBox";
 import extractProps from "../lib/extract/extractProps";
+import Shape from "./Shape";
 
 const spacesRegExp = /\s+/;
 

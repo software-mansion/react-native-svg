@@ -1,5 +1,4 @@
 import React from "react";
-
 import { requireNativeComponent } from "react-native";
 import extractText from "../lib/extract/extractText";
 import extractProps from "../lib/extract/extractProps";

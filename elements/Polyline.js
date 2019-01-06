@@ -1,7 +1,7 @@
 import React from "react";
 import Path from "./Path";
-import extractPolyPoints from "../lib/extract/extractPolyPoints";
 import Shape from "./Shape";
+import extractPolyPoints from "../lib/extract/extractPolyPoints";
 
 export default class extends Shape {
     static displayName = "Polyline";

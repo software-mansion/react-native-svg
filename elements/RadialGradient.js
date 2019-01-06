@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import extractGradient from "../lib/extract/extractGradient";
 import { requireNativeComponent } from "react-native";
+import extractGradient from "../lib/extract/extractGradient";
 
 export default class extends Component {
     static displayName = "RadialGradient";
