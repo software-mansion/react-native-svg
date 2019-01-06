@@ -3,8 +3,9 @@ import { requireNativeComponent } from "react-native";
 import extractText from "../lib/extract/extractText";
 import extractProps from "../lib/extract/extractProps";
 import extractTransform from "../lib/extract/extractTransform";
-import Shape from "./Shape";
 import { pickNotNil } from "../lib/util";
+import Shape from "./Shape";
+import "./TSpan";
 
 export default class extends Shape {
     static displayName = "Text";
