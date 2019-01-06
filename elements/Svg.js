@@ -10,7 +10,6 @@ import extractResponder from "../lib/extract/extractResponder";
 import extractViewBox from "../lib/extract/extractViewBox";
 import Shape from "./Shape";
 import G from "./G";
-import { pick } from "../lib/util";
 
 /** @namespace NativeModules.RNSVGSvgViewManager */
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
@@ -40,6 +39,14 @@ const gProps = [
     "strokeLinejoin",
     "strokeMiterlimit",
 ];
+
+function pickGProps(object) {
+    const result = {};
+    for (let key of gProps) {
+        result[key] = object[key];
+    }
+    return result;
+}
 
 class Svg extends Shape {
     static displayName = "Svg";
@@ -129,7 +136,7 @@ class Svg extends Shape {
                     dimensions,
                 ]}
             >
-                <G style={style} {...pick(stylesAndProps, gProps)}>
+                <G style={style} {...pickGProps(stylesAndProps)}>
                     {children}
                 </G>
             </NativeSvgView>
