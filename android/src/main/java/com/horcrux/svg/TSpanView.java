@@ -44,7 +44,6 @@ class TSpanView extends TextView {
     private static final String OTF = ".otf";
     private static final String TTF = ".ttf";
 
-    private Path mCache;
     @Nullable String mContent;
     private TextPathView textPath;
 
@@ -69,28 +68,23 @@ class TSpanView extends TextView {
     }
 
     @Override
-    void releaseCachedPath() {
-        mCache = null;
-        mPath = null;
-    }
-
-    @Override
     Path getPath(Canvas canvas, Paint paint) {
-        if (mCache != null) {
-            return mCache;
+        if (mPath != null) {
+            return mPath;
         }
 
         if (mContent == null) {
-            return getGroupPath(canvas, paint);
+            mPath = getGroupPath(canvas, paint);
+            return mPath;
         }
 
         setupTextPath();
 
         pushGlyphContext();
-        mCache = getLinePath(mContent, paint, canvas);
+        mPath = getLinePath(mContent, paint, canvas);
         popGlyphContext();
 
-        return mCache;
+        return mPath;
     }
 
     @SuppressWarnings("ConstantConditions")

@@ -124,8 +124,9 @@ class Svg extends Shape {
                 ]}
             >
                 <G
-                    style={style}
                     {...{
+                        children,
+                        style,
                         font,
                         transform,
                         fill,
@@ -140,9 +141,7 @@ class Svg extends Shape {
                         strokeLinejoin,
                         strokeMiterlimit,
                     }}
-                >
-                    {children}
-                </G>
+                />
             </NativeSvgView>
         );
     }
