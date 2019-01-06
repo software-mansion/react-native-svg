@@ -102,16 +102,13 @@ class Svg extends Shape {
             flex: 0,
         } : null;
 
-        const w = String(width);
-        const h = String(height);
-
         return (
             <NativeSvgView
                 {...props}
-                bbWidth={w}
-                bbHeight={h}
                 tintColor={color}
                 onLayout={onLayout}
+                bbWidth={String(width)}
+                bbHeight={String(height)}
                 {...extractResponder(props, this)}
                 {...extractViewBox({ viewBox, preserveAspectRatio })}
                 ref={ele => {
