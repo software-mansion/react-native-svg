@@ -126,18 +126,21 @@ class GroupView extends RenderableView {
 
     @Override
     Path getPath(final Canvas canvas, final Paint paint) {
-        final Path path = new Path();
+        if (mPath != null) {
+            return mPath;
+        }
+        mPath = new Path();
 
         for (int i = 0; i < getChildCount(); i++) {
             View node = getChildAt(i);
             if (node instanceof VirtualView) {
                 VirtualView n = (VirtualView)node;
                 Matrix transform = n.mMatrix;
-                path.addPath(n.getPath(canvas, paint), transform);
+                mPath.addPath(n.getPath(canvas, paint), transform);
             }
         }
 
-        return path;
+        return mPath;
     }
 
     Path getPath(final Canvas canvas, final Paint paint, final Region.Op op) {
