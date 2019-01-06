@@ -2,8 +2,8 @@ import React from "react";
 
 import { requireNativeComponent } from "react-native";
 import extractText from "../lib/extract/extractText";
-import Shape from "./Shape";
 import extractProps from "../lib/extract/extractProps";
+import Shape from "./Shape";
 import TSpan from "./TSpan";
 
 const idExpReg = /^#(.+)$/;
@@ -50,7 +50,6 @@ export default class extends Shape {
                             children,
                         },
                         true,
-                        TSpan,
                     )}
                 />
             );

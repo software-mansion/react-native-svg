@@ -1,10 +1,10 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
-import extractText from "../lib/extract/extractText";
+import extractText, { setTSpan } from "../lib/extract/extractText";
 import extractProps from "../lib/extract/extractProps";
 import extractTransform from "../lib/extract/extractTransform";
 import Shape from "./Shape";
-import { notNil, pickBy } from "../lib/util";
+import { pickNotNil } from "../lib/util";
 
 // TSpan elements are shadow components
 export default class TSpan extends Shape {
@@ -15,7 +15,7 @@ export default class TSpan extends Shape {
         if (matrix) {
             props.matrix = matrix;
         }
-        const text = pickBy(extractText(props, true, TSpan), notNil);
+        const text = pickNotNil(extractText(props, false));
         this.root.setNativeProps({
             ...props,
             ...text,
@@ -37,10 +37,12 @@ export default class TSpan extends Shape {
                     },
                     this,
                 )}
-                {...extractText(props, false, TSpan)}
+                {...extractText(props, false)}
             />
         );
     }
 }
+
+setTSpan(TSpan);
 
 const RNSVGTSpan = requireNativeComponent("RNSVGTSpan");
