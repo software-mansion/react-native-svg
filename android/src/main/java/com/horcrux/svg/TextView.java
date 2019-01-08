@@ -45,8 +45,11 @@ class TextView extends GroupView {
 
     @Override
     public void invalidate() {
+        if (mPath == null) {
+            return;
+        }
         super.invalidate();
-        releaseCachedPath();
+        clearChildCache();
     }
 
     @ReactProp(name = "textLength")

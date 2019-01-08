@@ -93,12 +93,15 @@ abstract public class VirtualView extends ReactViewGroup {
 
     @Override
     public void invalidate() {
+        if (mPath == null) {
+            return;
+        }
+        clearCache();
+        clearParentCache();
         super.invalidate();
-        clearPath();
-        clearPathsUpToRoot();
     }
 
-    private void clearPath() {
+    private void clearCache() {
         canvasDiagonal = -1;
         canvasHeight = -1;
         canvasWidth = -1;
@@ -108,25 +111,28 @@ abstract public class VirtualView extends ReactViewGroup {
         mPath = null;
     }
 
-    void releaseCachedPath() {
-        clearPath();
+    void clearChildCache() {
+        clearCache();
         for (int i = 0; i < getChildCount(); i++) {
             View node = getChildAt(i);
             if (node instanceof VirtualView) {
-                ((VirtualView)node).releaseCachedPath();
+                ((VirtualView)node).clearChildCache();
             }
         }
     }
 
-    private void clearPathsUpToRoot() {
+    private void clearParentCache() {
         VirtualView node = this;
         while (true) {
             ViewParent parent = node.getParent();
             if (!(parent instanceof VirtualView)) {
                 return;
             }
-            node.clearPath();
             node = (VirtualView)parent;
+            if (node.mPath == null) {
+                return;
+            }
+            node.clearCache();
         }
     }
 
@@ -267,7 +273,7 @@ abstract public class VirtualView extends ReactViewGroup {
         }
 
         super.invalidate();
-        clearPathsUpToRoot();
+        clearParentCache();
     }
 
     @ReactProp(name = "responsible")

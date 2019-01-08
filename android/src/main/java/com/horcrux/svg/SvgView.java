@@ -125,7 +125,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     private boolean mRendered = false;
     int mTintColor = 0;
 
-    private void releaseCachedPath() {
+    private void clearChildCache() {
         if (!mRendered) {
             return;
         }
@@ -134,7 +134,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
             View node = getChildAt(i);
             if (node instanceof VirtualView) {
                 VirtualView n = ((VirtualView)node);
-                n.releaseCachedPath();
+                n.clearChildCache();
             }
         }
     }
@@ -152,56 +152,56 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     public void setMinX(float minX) {
         mMinX = minX;
         invalidate();
-        releaseCachedPath();
+        clearChildCache();
     }
 
     @ReactProp(name = "minY")
     public void setMinY(float minY) {
         mMinY = minY;
         invalidate();
-        releaseCachedPath();
+        clearChildCache();
     }
 
     @ReactProp(name = "vbWidth")
     public void setVbWidth(float vbWidth) {
         mVbWidth = vbWidth;
         invalidate();
-        releaseCachedPath();
+        clearChildCache();
     }
 
     @ReactProp(name = "vbHeight")
     public void setVbHeight(float vbHeight) {
         mVbHeight = vbHeight;
         invalidate();
-        releaseCachedPath();
+        clearChildCache();
     }
 
     @ReactProp(name = "bbWidth")
     public void setVbWidth(String bbWidth) {
         mbbWidth = bbWidth;
         invalidate();
-        releaseCachedPath();
+        clearChildCache();
     }
 
     @ReactProp(name = "bbHeight")
     public void setVbHeight(String bbHeight) {
         mbbHeight = bbHeight;
         invalidate();
-        releaseCachedPath();
+        clearChildCache();
     }
 
     @ReactProp(name = "align")
     public void setAlign(String align) {
         mAlign = align;
         invalidate();
-        releaseCachedPath();
+        clearChildCache();
     }
 
     @ReactProp(name = "meetOrSlice")
     public void setMeetOrSlice(int meetOrSlice) {
         mMeetOrSlice = meetOrSlice;
         invalidate();
-        releaseCachedPath();
+        clearChildCache();
     }
 
     private Bitmap drawOutput() {
