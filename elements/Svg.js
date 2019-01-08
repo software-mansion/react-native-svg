@@ -12,9 +12,6 @@ import G from "./G";
 
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
 
-// Svg - Root node of all Svg elements
-let id = 0;
-
 const styles = StyleSheet.create({
     svg: {
         backgroundColor: "transparent",
@@ -29,10 +26,6 @@ class Svg extends Shape {
         preserveAspectRatio: "xMidYMid meet",
     };
 
-    constructor() {
-        super(...arguments);
-        this.id = ++id;
-    }
     measureInWindow = (...args) => {
         this.root.measureInWindow(...args);
     };
