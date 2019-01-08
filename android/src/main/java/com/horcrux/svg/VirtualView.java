@@ -93,7 +93,7 @@ abstract public class VirtualView extends ReactViewGroup {
 
     @Override
     public void invalidate() {
-        if (mPath == null) {
+        if (this instanceof RenderableView && mPath == null) {
             return;
         }
         clearCache();
