@@ -1,13 +1,26 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
-import extractText from "../lib/extract/extractText";
+import extractTransform from "../lib/extract/extractTransform";
 import extractProps from "../lib/extract/extractProps";
-import { idPattern } from "../lib/util";
+import extractText from "../lib/extract/extractText";
+import { idPattern, pickNotNil } from "../lib/util";
 import Shape from "./Shape";
 import TSpan from "./TSpan";
 
 export default class extends Shape {
     static displayName = "TextPath";
+
+    setNativeProps = props => {
+        const matrix = !props.matrix && extractTransform(props);
+        if (matrix) {
+            props.matrix = matrix;
+        }
+        const text = pickNotNil(extractText(props, true));
+        this.root.setNativeProps({
+            ...props,
+            ...text,
+        });
+    };
 
     render() {
         const {
@@ -26,6 +39,9 @@ export default class extends Shape {
         if (match) {
             return (
                 <RNSVGTextPath
+                    ref={ele => {
+                        this.root = ele;
+                    }}
                     {...{
                         href: match,
                         startOffset: startOffset || 0,
@@ -58,7 +74,15 @@ export default class extends Shape {
                 href +
                 '"',
         );
-        return <TSpan>{children}</TSpan>;
+        return (
+            <TSpan
+                ref={ele => {
+                    this.root = ele;
+                }}
+            >
+                {children}
+            </TSpan>
+        );
     }
 }
 

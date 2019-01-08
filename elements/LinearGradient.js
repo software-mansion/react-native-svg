@@ -12,11 +12,18 @@ export default class extends Component {
         y2: "0%",
     };
 
+    setNativeProps = (...args) => {
+        this.root.setNativeProps(...args);
+    };
+
     render() {
         const { props } = this;
         const { x1, y1, x2, y2 } = props;
         return (
             <RNSVGLinearGradient
+                ref={ele => {
+                    this.root = ele;
+                }}
                 x1={x1}
                 y1={y1}
                 x2={x2}
