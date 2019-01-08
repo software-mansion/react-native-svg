@@ -8,7 +8,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import com.facebook.common.logging.FLog;
@@ -96,6 +95,7 @@ abstract public class VirtualView extends ReactViewGroup {
     public void invalidate() {
         super.invalidate();
         clearPath();
+        clearPathsUpToRoot();
     }
 
     private void clearPath() {
@@ -103,6 +103,7 @@ abstract public class VirtualView extends ReactViewGroup {
         canvasHeight = -1;
         canvasWidth = -1;
         fontSize = -1;
+        mStrokeRegion = null;
         mRegion = null;
         mPath = null;
     }
@@ -114,6 +115,18 @@ abstract public class VirtualView extends ReactViewGroup {
             if (node instanceof VirtualView) {
                 ((VirtualView)node).releaseCachedPath();
             }
+        }
+    }
+
+    private void clearPathsUpToRoot() {
+        VirtualView node = this;
+        while (true) {
+            ViewParent parent = node.getParent();
+            if (!(parent instanceof VirtualView)) {
+                return;
+            }
+            node.clearPath();
+            node = (VirtualView)parent;
         }
     }
 
@@ -254,6 +267,7 @@ abstract public class VirtualView extends ReactViewGroup {
         }
 
         super.invalidate();
+        clearPathsUpToRoot();
     }
 
     @ReactProp(name = "responsible")
@@ -465,8 +479,6 @@ abstract public class VirtualView extends ReactViewGroup {
      * @param pright Right position, relative to parent
      * @param pbottom Bottom position, relative to parent
      */
-
-    RectF layoutRect = new RectF();
     protected void onLayout(boolean changed, int pleft, int ptop, int pright, int pbottom) {
         if (mClientRect == null) {
             return;
