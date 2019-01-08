@@ -25,9 +25,6 @@ export default class extends Shape {
         const { props } = this;
         const { preserveAspectRatio, x, y, width, height, href } = props;
         const modes = preserveAspectRatio.trim().split(spacesRegExp);
-        const meetOrSlice = meetOrSliceTypes[modes[1]] || 0;
-        const align = alignEnum[modes[0]] || "xMidYMid";
-
         return (
             <RNSVGImage
                 ref={ele => {
@@ -38,8 +35,8 @@ export default class extends Shape {
                 y={y}
                 width={width}
                 height={height}
-                meetOrSlice={meetOrSlice}
-                align={align}
+                meetOrSlice={meetOrSliceTypes[modes[1]] || 0}
+                align={alignEnum[modes[0]] || "xMidYMid"}
                 src={Image.resolveAssetSource(href)}
             />
         );

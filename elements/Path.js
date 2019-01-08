@@ -12,7 +12,6 @@ export default class extends Shape {
 
     render() {
         const { props } = this;
-
         return (
             <RNSVGPath
                 ref={ele => {

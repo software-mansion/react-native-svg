@@ -24,9 +24,6 @@ export default class extends Component {
             maskContentUnits,
             children,
         } = props;
-
-        const extractedTransform = extractTransform(maskTransform || transform || props);
-
         return (
             <RNSVGMask
                 ref={ele => {
@@ -37,8 +34,7 @@ export default class extends Component {
                 y={y}
                 width={width}
                 height={height}
-                matrix={extractedTransform}
-                maskTransform={extractedTransform}
+                maskTransform={extractTransform(maskTransform || transform || props)}
                 maskUnits={maskUnits !== undefined ? units[maskUnits] : 0}
                 maskContentUnits={
                     maskContentUnits !== undefined ? units[maskContentUnits] : 1

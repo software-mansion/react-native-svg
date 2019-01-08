@@ -20,7 +20,6 @@ export default class extends Shape {
     render() {
         const { props } = this;
         const { cx, cy, rx, ry } = props;
-
         return (
             <RNSVGEllipse
                 ref={ele => {

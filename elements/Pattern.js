@@ -27,9 +27,6 @@ export default class extends Component {
             viewBox,
             preserveAspectRatio,
         } = props;
-
-        const extractedTransform = extractTransform(patternTransform || transform || props);
-
         return (
             <RNSVGPattern
                 ref={ele => {
@@ -40,8 +37,7 @@ export default class extends Component {
                 y={y}
                 width={width}
                 height={height}
-                matrix={extractedTransform}
-                patternTransform={extractedTransform}
+                patternTransform={extractTransform(patternTransform || transform || props)}
                 patternUnits={units[patternUnits] || 0}
                 patternContentUnits={
                     patternContentUnits ? units[patternContentUnits] : 1

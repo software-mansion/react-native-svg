@@ -2,10 +2,9 @@ import React from "react";
 import { requireNativeComponent } from "react-native";
 import extractText from "../lib/extract/extractText";
 import extractProps from "../lib/extract/extractProps";
+import { idPattern } from "../lib/util";
 import Shape from "./Shape";
 import TSpan from "./TSpan";
-
-const idExpReg = /^#(.+)$/;
 
 export default class extends Shape {
     static displayName = "TextPath";
@@ -22,9 +21,9 @@ export default class extends Shape {
             midLine,
             ...props
         } = this.props;
-        const matched = href && href.match(idExpReg);
+        const matched = href && href.match(idPattern);
         const match = matched && matched[1];
-        if (href && match) {
+        if (match) {
             return (
                 <RNSVGTextPath
                     {...{

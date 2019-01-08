@@ -24,7 +24,6 @@ export default class extends Shape {
 
     render() {
         const props = this.props;
-
         return (
             <RNSVGText
                 ref={ele => {

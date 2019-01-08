@@ -1,9 +1,9 @@
 import React from "react";
-import { requireNativeComponent } from "react-native";
+import {requireNativeComponent} from "react-native";
 import extractProps from "../lib/extract/extractProps";
+import { idPattern } from "../lib/util";
 import Shape from "./Shape";
 
-const idExpReg = /^#(.+)$/;
 export default class extends Shape {
     static displayName = "Use";
 
@@ -21,7 +21,7 @@ export default class extends Shape {
         const { children, width, height, href } = props;
 
         // match "url(#pattern)"
-        const matched = href.match(idExpReg);
+        const matched = href.match(idPattern);
         const match = matched && matched[1];
 
         if (!match) {

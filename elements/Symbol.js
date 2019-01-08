@@ -8,7 +8,6 @@ export default class extends Component {
     render() {
         const { props } = this;
         const { id, children } = props;
-
         return (
             <RNSVGSymbol name={id} {...extractViewBox(props)}>
                 {children}
