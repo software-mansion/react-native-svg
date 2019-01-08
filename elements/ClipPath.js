@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { requireNativeComponent } from "react-native";
 import extractClipPath from "../lib/extract/extractClipPath";
 
-export default class extends Component {
+export default class ClipPath extends Component {
     static displayName = "ClipPath";
 
     setNativeProps = (...args) => {

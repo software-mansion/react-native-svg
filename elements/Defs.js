@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { requireNativeComponent } from "react-native";
 
-export default class extends Component {
+export default class Defs extends Component {
     static displayName = "Defs";
 
     render() {

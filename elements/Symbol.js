@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { requireNativeComponent } from "react-native";
 import extractViewBox from "../lib/extract/extractViewBox";
 
-export default class extends Component {
+export default class Symbol extends Component {
     static displayName = "Symbol";
 
     render() {

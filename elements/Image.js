@@ -6,7 +6,7 @@ import Shape from "./Shape";
 
 const spacesRegExp = /\s+/;
 
-export default class extends Shape {
+export default class Image extends Shape {
     static displayName = "Image";
 
     static defaultProps = {

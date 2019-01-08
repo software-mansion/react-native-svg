@@ -3,7 +3,7 @@ import Path from "./Path";
 import Shape from "./Shape";
 import extractPolyPoints from "../lib/extract/extractPolyPoints";
 
-export default class extends Shape {
+export default class Polyline extends Shape {
     static displayName = "Polyline";
 
     static defaultProps = {

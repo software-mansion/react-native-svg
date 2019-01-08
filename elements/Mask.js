@@ -3,7 +3,7 @@ import { requireNativeComponent } from "react-native";
 import extractTransform from "../lib/extract/extractTransform";
 import units from "../lib/units";
 
-export default class extends Component {
+export default class Mask extends Component {
     static displayName = "Mask";
 
     setNativeProps = props => {

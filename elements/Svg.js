@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     },
 });
 
-class Svg extends Shape {
+export default class Svg extends Shape {
     static displayName = "Svg";
 
     static defaultProps = {
@@ -141,5 +141,3 @@ class Svg extends Shape {
 }
 
 const NativeSvgView = requireNativeComponent("RNSVGSvgView");
-
-export default Svg;

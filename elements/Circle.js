@@ -3,7 +3,7 @@ import { requireNativeComponent } from "react-native";
 import extractProps from "../lib/extract/extractProps";
 import Shape from "./Shape";
 
-export default class extends Shape {
+export default class Circle extends Shape {
     static displayName = "Circle";
 
     static defaultProps = {

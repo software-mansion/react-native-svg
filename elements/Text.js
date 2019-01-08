@@ -7,7 +7,7 @@ import { pickNotNil } from "../lib/util";
 import Shape from "./Shape";
 import "./TSpan";
 
-export default class extends Shape {
+export default class Text extends Shape {
     static displayName = "Text";
 
     setNativeProps = props => {

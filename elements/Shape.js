@@ -3,7 +3,7 @@ import SvgTouchableMixin from "../lib/SvgTouchableMixin";
 
 const touch = Object.entries(SvgTouchableMixin);
 
-class Shape extends Component {
+export default class Shape extends Component {
     constructor() {
         super(...arguments);
         for (const [key, val] of touch) {
@@ -16,5 +16,3 @@ class Shape extends Component {
         this.state = this.touchableGetInitialState();
     }
 }
-
-export default Shape;

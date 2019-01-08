@@ -4,7 +4,7 @@ import extractProps from "../lib/extract/extractProps";
 import { idPattern } from "../lib/util";
 import Shape from "./Shape";
 
-export default class extends Shape {
+export default class Use extends Shape {
     static displayName = "Use";
 
     static defaultProps = {

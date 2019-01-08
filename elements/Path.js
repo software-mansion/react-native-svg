@@ -3,7 +3,7 @@ import { requireNativeComponent } from "react-native";
 import extractProps from "../lib/extract/extractProps";
 import Shape from "./Shape";
 
-export default class extends Shape {
+export default class Path extends Shape {
     static displayName = "Path";
 
     setNativeProps = (...args) => {

@@ -4,7 +4,7 @@ import extractTransform from "../lib/extract/extractTransform";
 import extractViewBox from "../lib/extract/extractViewBox";
 import units from "../lib/units";
 
-export default class extends Component {
+export default class Pattern extends Component {
     static displayName = "Pattern";
 
     setNativeProps = props => {

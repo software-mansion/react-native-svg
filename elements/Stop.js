@@ -1,6 +1,6 @@
 import { Component } from "react";
 
-export default class extends Component {
+export default class Stop extends Component {
     static displayName = "Stop";
 
     static defaultProps = {

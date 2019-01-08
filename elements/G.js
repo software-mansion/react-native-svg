@@ -5,7 +5,7 @@ import { extractFont } from "../lib/extract/extractText";
 import extractTransform from "../lib/extract/extractTransform";
 import Shape from "./Shape";
 
-export default class extends Shape {
+export default class G extends Shape {
     static displayName = "G";
 
     setNativeProps = props => {

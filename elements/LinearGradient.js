@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { requireNativeComponent } from "react-native";
 import extractGradient from "../lib/extract/extractGradient";
 
-export default class extends Component {
+export default class LinearGradient extends Component {
     static displayName = "LinearGradient";
 
     static defaultProps = {
