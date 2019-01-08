@@ -104,9 +104,7 @@ export default class Svg extends Shape {
                 bbHeight={String(height)}
                 {...extractResponder(props, this)}
                 {...extractViewBox({ viewBox, preserveAspectRatio })}
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 style={[
                     styles.svg,
                     style,

@@ -12,18 +12,12 @@ export default class Circle extends Shape {
         r: 0,
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         const { props } = this;
         const { cx, cy, r } = props;
         return (
             <RNSVGCircle
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 {...extractProps(props, this)}
                 cx={cx}
                 cy={cy}

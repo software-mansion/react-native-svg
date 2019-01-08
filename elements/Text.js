@@ -26,9 +26,7 @@ export default class Text extends Shape {
         const props = this.props;
         return (
             <RNSVGText
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 {...extractProps(
                     {
                         ...props,

@@ -7,10 +7,6 @@ import units from "../lib/units";
 export default class Pattern extends Component {
     static displayName = "Pattern";
 
-    setNativeProps = props => {
-        this.root.setNativeProps(props);
-    };
-
     render() {
         const { props } = this;
         const {
@@ -29,9 +25,7 @@ export default class Pattern extends Component {
         } = props;
         return (
             <RNSVGPattern
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 name={id}
                 x={x}
                 y={y}

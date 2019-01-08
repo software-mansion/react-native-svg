@@ -15,4 +15,10 @@ export default class Shape extends Component {
         }
         this.state = this.touchableGetInitialState();
     }
+    refMethod = ref => {
+        this.root = ref;
+    };
+    setNativeProps = props => {
+        this.root.setNativeProps(props);
+    };
 }

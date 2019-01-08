@@ -6,7 +6,7 @@ import Shape from "./Shape";
 
 const spacesRegExp = /\s+/;
 
-export default class Image extends Shape {
+export default class SvgImage extends Shape {
     static displayName = "Image";
 
     static defaultProps = {
@@ -17,19 +17,13 @@ export default class Image extends Shape {
         preserveAspectRatio: "xMidYMid meet",
     };
 
-    setNativeProps = props => {
-        this.root.setNativeProps(props);
-    };
-
     render() {
         const { props } = this;
         const { preserveAspectRatio, x, y, width, height, href } = props;
         const modes = preserveAspectRatio.trim().split(spacesRegExp);
         return (
             <RNSVGImage
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 {...extractProps({ ...props, x: null, y: null }, this)}
                 x={x}
                 y={y}

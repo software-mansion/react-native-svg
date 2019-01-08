@@ -23,11 +23,9 @@ export default class Polyline extends Shape {
         const { points } = props;
         return (
             <Path
-                ref={ele => {
-                    this.root = ele;
-                }}
-                {...this.props}
+                ref={this.refMethod}
                 d={`M${extractPolyPoints(points)}`}
+                {...props}
             />
         );
     }

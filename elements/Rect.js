@@ -15,18 +15,12 @@ export default class Rect extends Shape {
         ry: 0,
     };
 
-    setNativeProps = props => {
-        this.root.setNativeProps(props);
-    };
-
     render() {
         const { props } = this;
         const { x, y, width, height, rx, ry } = props;
         return (
             <RNSVGRect
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 {...extractProps(
                     {
                         ...props,

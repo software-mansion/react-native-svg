@@ -6,10 +6,6 @@ import units from "../lib/units";
 export default class Mask extends Component {
     static displayName = "Mask";
 
-    setNativeProps = props => {
-        this.root.setNativeProps(props);
-    };
-
     render() {
         const { props } = this;
         const {
@@ -26,9 +22,7 @@ export default class Mask extends Component {
         } = props;
         return (
             <RNSVGMask
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 name={id}
                 x={x}
                 y={y}

@@ -39,18 +39,7 @@ export default class TextPath extends Shape {
         if (match) {
             return (
                 <RNSVGTextPath
-                    ref={ele => {
-                        this.root = ele;
-                    }}
-                    {...{
-                        href: match,
-                        startOffset: startOffset || 0,
-                        method,
-                        spacing,
-                        side,
-                        alignmentBaseline,
-                        midLine,
-                    }}
+                    ref={this.refMethod}
                     {...extractProps(
                         {
                             ...props,
@@ -65,6 +54,15 @@ export default class TextPath extends Shape {
                         },
                         true,
                     )}
+                    {...{
+                        href: match,
+                        startOffset: startOffset || 0,
+                        method,
+                        spacing,
+                        side,
+                        alignmentBaseline,
+                        midLine,
+                    }}
                 />
             );
         }
@@ -76,9 +74,7 @@ export default class TextPath extends Shape {
         );
         return (
             <TSpan
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
             >
                 {children}
             </TSpan>

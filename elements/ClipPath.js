@@ -5,17 +5,11 @@ import extractClipPath from "../lib/extract/extractClipPath";
 export default class ClipPath extends Component {
     static displayName = "ClipPath";
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         const { id, children } = this.props;
         return (
             <RNSVGClipPath
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 name={id}
                 {...extractClipPath(this.props)}
             >

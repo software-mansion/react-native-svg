@@ -13,18 +13,12 @@ export default class Ellipse extends Shape {
         ry: 0,
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         const { props } = this;
         const { cx, cy, rx, ry } = props;
         return (
             <RNSVGEllipse
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 {...extractProps(props, this)}
                 cx={cx}
                 cy={cy}

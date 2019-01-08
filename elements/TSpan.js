@@ -25,9 +25,7 @@ export default class TSpan extends Shape {
         const props = this.props;
         return (
             <RNSVGTSpan
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 {...extractProps(
                     {
                         ...props,

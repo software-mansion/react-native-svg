@@ -1,5 +1,5 @@
 import React from "react";
-import {requireNativeComponent} from "react-native";
+import { requireNativeComponent } from "react-native";
 import extractProps from "../lib/extract/extractProps";
 import { idPattern } from "../lib/util";
 import Shape from "./Shape";
@@ -10,10 +10,6 @@ export default class Use extends Shape {
     static defaultProps = {
         width: 0,
         height: 0,
-    };
-
-    setNativeProps = props => {
-        this.root.setNativeProps(props);
     };
 
     render() {
@@ -34,9 +30,7 @@ export default class Use extends Shape {
 
         return (
             <RNSVGUse
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 {...extractProps(props, this)}
                 href={match}
                 width={width}

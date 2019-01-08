@@ -13,18 +13,12 @@ export default class Line extends Shape {
         y2: 0,
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         const { props } = this;
         const { x1, y1, x2, y2 } = props;
         return (
             <RNSVGLine
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 {...extractProps(props, this)}
                 x1={x1}
                 y1={y1}

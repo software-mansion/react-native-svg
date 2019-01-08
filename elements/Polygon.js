@@ -23,11 +23,9 @@ export default class Polygon extends Shape {
         const { points } = props;
         return (
             <Path
-                ref={ele => {
-                    this.root = ele;
-                }}
-                {...props}
+                ref={this.refMethod}
                 d={`M${extractPolyPoints(points)}z`}
+                {...props}
             />
         );
     }

@@ -20,11 +20,9 @@ export default class G extends Shape {
         const { props } = this;
         return (
             <RNSVGGroup
+                ref={this.refMethod}
                 {...extractProps(props, this)}
                 font={extractFont(props)}
-                ref={ele => {
-                    this.root = ele;
-                }}
             >
                 {props.children}
             </RNSVGGroup>

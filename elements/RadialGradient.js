@@ -13,18 +13,12 @@ export default class RadialGradient extends Component {
         r: "50%",
     };
 
-    setNativeProps = (...args) => {
-        this.root.setNativeProps(...args);
-    };
-
     render() {
         const { props } = this;
         const { fx, fy, rx, ry, r, cx, cy } = props;
         return (
             <RNSVGRadialGradient
-                ref={ele => {
-                    this.root = ele;
-                }}
+                ref={this.refMethod}
                 fx={fx}
                 fy={fy}
                 rx={rx || r}
