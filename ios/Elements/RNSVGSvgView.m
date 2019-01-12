@@ -51,18 +51,17 @@
     // Do nothing, as subviews are inserted by insertReactSubview:
 }
 
-- (void)releaseCachedPath
+- (void)clearChildCache
 {
     if (!rendered) {
         return;
     }
     rendered = false;
-    for (UIView *node in self.subviews) {
+    for (__kindof RNSVGNode *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
-            RNSVGNode *n = (RNSVGNode *)node;
-            [n releaseCachedPath];
+            [node clearChildCache];
         }
-    };
+    }
 }
 
 - (void)invalidate
@@ -77,7 +76,7 @@
     }
 
     [self invalidate];
-    [self releaseCachedPath];
+    [self clearChildCache];
     _minX = minX;
 }
 
@@ -88,7 +87,7 @@
     }
 
     [self invalidate];
-    [self releaseCachedPath];
+    [self clearChildCache];
     _minY = minY;
 }
 
@@ -99,7 +98,7 @@
     }
 
     [self invalidate];
-    [self releaseCachedPath];
+    [self clearChildCache];
     _vbWidth = vbWidth;
 }
 
@@ -110,7 +109,7 @@
     }
 
     [self invalidate];
-    [self releaseCachedPath];
+    [self clearChildCache];
     _vbHeight = vbHeight;
 }
 
@@ -121,7 +120,7 @@
     }
 
     [self invalidate];
-    [self releaseCachedPath];
+    [self clearChildCache];
     _bbWidth = bbWidth;
 }
 
@@ -132,7 +131,7 @@
     }
 
     [self invalidate];
-    [self releaseCachedPath];
+    [self clearChildCache];
     _bbHeight = bbHeight;
 }
 
@@ -143,7 +142,7 @@
     }
 
     [self invalidate];
-    [self releaseCachedPath];
+    [self clearChildCache];
     _align = align;
 }
 
@@ -154,7 +153,7 @@
     }
 
     [self invalidate];
-    [self releaseCachedPath];
+    [self clearChildCache];
     _meetOrSlice = meetOrSlice;
 }
 

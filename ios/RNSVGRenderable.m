@@ -19,6 +19,7 @@
     NSArray<RNSVGLength *> *_sourceStrokeDashArray;
     CGFloat *_strokeDashArrayData;
     CGPathRef _strokePath;
+    CGPathRef _srcHitPath;
     CGPathRef _hitArea;
 }
 
@@ -36,7 +37,11 @@
 - (void)invalidate
 {
     _sourceStrokeDashArray = nil;
+    if (self.dirty || self.merging) {
+        return;
+    }
     [super invalidate];
+    self.dirty = true;
 }
 
 - (void)setFill:(RNSVGBrush *)fill
@@ -166,6 +171,7 @@ UInt32 saturate(CGFloat value) {
 
 - (void)renderTo:(CGContextRef)context rect:(CGRect)rect
 {
+    self.dirty = false;
     // This needs to be painted on a layer before being composited.
     CGContextSaveGState(context);
     CGContextConcatCTM(context, self.matrix);
@@ -290,12 +296,16 @@ UInt32 saturate(CGFloat value) {
         return;
     }
 
-    if (!self.path) {
-        self.path = CGPathRetain(CFAutorelease(CGPathCreateCopy([self getPath:context])));
-        [self setHitArea:self.path];
+    CGPathRef path = self.path;
+    if (!path) {
+        path = [self getPath:context];
+        if (!self.path) {
+            self.path = CGPathRetain(path);
+        }
+        [self setHitArea:path];
     }
 
-    const CGRect fillBounds = CGPathGetBoundingBox(self.path);
+    const CGRect fillBounds = CGPathGetBoundingBox(path);
     const CGRect strokeBounds = CGPathGetBoundingBox(_strokePath);
     const CGRect pathBounding = CGRectUnion(fillBounds, strokeBounds);
 
@@ -334,7 +344,7 @@ UInt32 saturate(CGFloat value) {
             mode = evenodd ? kCGPathEOFill : kCGPathFill;
         } else {
             CGContextSaveGState(context);
-            CGContextAddPath(context, self.path);
+            CGContextAddPath(context, path);
             CGContextClip(context);
             [self.fill paint:context
                      opacity:self.fillOpacity
@@ -365,7 +375,7 @@ UInt32 saturate(CGFloat value) {
         }
 
         if (!fillColor) {
-            CGContextAddPath(context, self.path);
+            CGContextAddPath(context, path);
             CGContextReplacePathWithStrokedPath(context);
             CGContextClip(context);
         }
@@ -384,12 +394,12 @@ UInt32 saturate(CGFloat value) {
         } else if (!strokeColor) {
             // draw fill
             if (fillColor) {
-                CGContextAddPath(context, self.path);
+                CGContextAddPath(context, path);
                 CGContextDrawPath(context, mode);
             }
 
             // draw stroke
-            CGContextAddPath(context, self.path);
+            CGContextAddPath(context, path);
             CGContextReplacePathWithStrokedPath(context);
             CGContextClip(context);
 
@@ -402,15 +412,19 @@ UInt32 saturate(CGFloat value) {
         }
     }
 
-    CGContextAddPath(context, self.path);
+    CGContextAddPath(context, path);
     CGContextDrawPath(context, mode);
 }
 
 - (void)setHitArea:(CGPathRef)path
 {
+    if (_srcHitPath == path) {
+        return;
+    }
+    _srcHitPath = path;
     CGPathRelease(_hitArea);
     CGPathRelease(_strokePath);
-    _hitArea = CGPathRetain(CFAutorelease(CGPathCreateCopy(path)));
+    _hitArea = CGPathCreateCopy(path);
     _strokePath = nil;
     if (self.stroke && self.strokeWidth) {
         // Add stroke to hitArea
@@ -474,6 +488,7 @@ UInt32 saturate(CGFloat value) {
 
 - (void)mergeProperties:(__kindof RNSVGRenderable *)target
 {
+    self.merging = true;
     NSArray<NSString *> *targetAttributeList = [target getAttributeList];
 
     if (targetAttributeList.count == 0) {
@@ -493,16 +508,19 @@ UInt32 saturate(CGFloat value) {
 
     _lastMergedList = targetAttributeList;
     _attributeList = [attributeList copy];
+    self.merging = false;
 }
 
 - (void)resetProperties
 {
+    self.merging = true;
     for (NSString *key in _lastMergedList) {
         [self setValue:[_originProperties valueForKey:key] forKey:key];
     }
 
     _lastMergedList = nil;
     _attributeList = _propList;
+    self.merging = false;
 }
 
 @end

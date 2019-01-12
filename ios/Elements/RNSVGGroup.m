@@ -122,6 +122,10 @@
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
+    CGPathRef cached = self.path;
+    if (cached) {
+        return cached;
+    }
     CGMutablePathRef __block path = CGPathCreateMutable();
     [self traverseSubviews:^(RNSVGNode *node) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
@@ -131,7 +135,9 @@
         return YES;
     }];
 
-    return (CGPathRef)CFAutorelease(path);
+    cached = CGPathRetain(path);
+    self.path = cached;
+    return cached;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event

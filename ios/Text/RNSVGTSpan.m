@@ -17,7 +17,6 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 @implementation RNSVGTSpan
 {
     CGFloat startOffset;
-    CGPathRef _cache;
     CGFloat _pathLength;
     RNSVGTextPath *textPath;
     NSArray *lengths;
@@ -56,22 +55,11 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     }
 }
 
-- (void)releaseCachedPath
-{
-    CGPathRelease(_cache);
-    _cache = nil;
-    self.path = nil;
-}
-
-- (void)dealloc
-{
-    CGPathRelease(_cache);
-}
-
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    if (_cache) {
-        return _cache;
+    CGPathRef path = self.path;
+    if (path) {
+        return path;
     }
 
     NSString *text = self.content;
@@ -83,9 +71,9 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 
     [self pushGlyphContext];
 
-    CGPathRef path = [self getLinePath:text context:context];
+    path = [self getLinePath:text context:context];
 
-    _cache = CGPathRetain(CFAutorelease(CGPathCreateCopy(path)));
+    self.path = CGPathRetain(path);
 
     [self popGlyphContext];
 
