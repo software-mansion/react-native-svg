@@ -135,7 +135,7 @@
         return YES;
     }];
 
-    cached = CGPathRetain(path);
+    cached = CGPathRetain(CFAutorelease(path));
     self.path = cached;
     return cached;
 }

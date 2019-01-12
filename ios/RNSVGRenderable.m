@@ -40,6 +40,7 @@
     if (self.dirty || self.merging) {
         return;
     }
+    _srcHitPath = nil;
     [super invalidate];
     self.dirty = true;
 }
@@ -155,7 +156,6 @@
 
 - (void)dealloc
 {
-    self.path = nil;
     CGPathRelease(_hitArea);
     CGPathRelease(_strokePath);
     _sourceStrokeDashArray = nil;

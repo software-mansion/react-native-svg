@@ -78,6 +78,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (void)clearPath
 {
+    CGPathRelease(_path);
     self.path = nil;
 }
 
@@ -546,6 +547,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 {
     CGPathRelease(_cachedClipPath);
     CGImageRelease(_clipMask);
+    CGPathRelease(_path);
     _clipMask = nil;
 }
 
