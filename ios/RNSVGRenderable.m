@@ -316,7 +316,8 @@ UInt32 saturate(CGFloat value) {
     self.clientRect = clientRect;
 
     CGAffineTransform vbmatrix = self.svgView.getViewBoxTransform;
-    CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, vbmatrix);
+    CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
+    CGAffineTransform matrix = CGAffineTransformConcat(transform, vbmatrix);
 
     CGRect bounds = CGRectMake(0, 0, CGRectGetWidth(clientRect), CGRectGetHeight(clientRect));
     CGPoint mid = CGPointMake(CGRectGetMidX(pathBounding), CGRectGetMidY(pathBounding));

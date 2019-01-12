@@ -74,9 +74,9 @@
     [self setHitArea:[self getPath:context]];
     self.clientRect = bounds;
 
-    CGAffineTransform matrix = self.matrix;
+    CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
     CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
-    CGPoint center = CGPointApplyAffineTransform(mid, matrix);
+    CGPoint center = CGPointApplyAffineTransform(mid, transform);
 
     self.bounds = bounds;
     if (!isnan(center.x) && !isnan(center.y)) {
