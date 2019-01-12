@@ -129,6 +129,18 @@
     CGContextConcatCTM(context, viewbox);
     CGContextDrawImage(context, imageBounds, _image);
     CGContextRestoreGState(context);
+
+    CGRect bounds = hitArea;
+    self.clientRect = bounds;
+    CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
+    CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
+    CGPoint center = CGPointApplyAffineTransform(mid, transform);
+
+    self.bounds = bounds;
+    if (!isnan(center.x) && !isnan(center.y)) {
+        self.center = center;
+    }
+    self.frame = bounds;
 }
 
 - (CGRect)getHitArea
