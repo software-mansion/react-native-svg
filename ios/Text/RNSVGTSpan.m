@@ -752,8 +752,10 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 
                 //  Glyphs whose midpoint-on-the-path are off the path are not rendered.
                 if (midPoint > endOfRendering) {
+                    CGPathRelease(glyphPath);
                     continue;
                 } else if (midPoint < startOfRendering) {
+                    CGPathRelease(glyphPath);
                     continue;
                 }
 

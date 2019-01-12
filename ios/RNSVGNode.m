@@ -283,6 +283,9 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 {
     if (self.clipPath) {
         _clipNode = (RNSVGClipPath*)[self.svgView getDefinedClipPath:self.clipPath];
+        if (_cachedClipPath) {
+            CGPathRelease(_cachedClipPath);
+        }
         _cachedClipPath = CGPathRetain([_clipNode getPath:context]);
         if (_clipMask) {
             CGImageRelease(_clipMask);
