@@ -68,8 +68,17 @@
         // TODO: calling yellow box here
         RCTLogWarn(@"`Use` element expected a pre-defined svg template as `href` prop, template named: %@ is not defined.", self.href);
     }
-    self.clientRect = template.clientRect;
-    self.bounds = template.clientRect;
+    CGRect bounds = template.clientRect;
+    self.clientRect = bounds;
+    CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
+    CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
+    CGPoint center = CGPointApplyAffineTransform(mid, transform);
+
+    self.bounds = bounds;
+    if (!isnan(center.x) && !isnan(center.y)) {
+        self.center = center;
+    }
+    self.frame = bounds;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
