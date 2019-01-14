@@ -23,6 +23,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 @SuppressLint("ViewConstructor")
 class UseView extends RenderableView {
     private String mHref;
+    private SVGLength mX;
+    private SVGLength mY;
     private SVGLength mW;
     private SVGLength mH;
 
@@ -33,6 +35,18 @@ class UseView extends RenderableView {
     @ReactProp(name = "href")
     public void setHref(String href) {
         mHref = href;
+        invalidate();
+    }
+
+    @ReactProp(name = "x")
+    public void setX(Dynamic x) {
+        mX = getLengthFromDynamic(x);
+        invalidate();
+    }
+
+    @ReactProp(name = "y")
+    public void setY(Dynamic y) {
+        mY = getLengthFromDynamic(y);
         invalidate();
     }
 
@@ -53,6 +67,7 @@ class UseView extends RenderableView {
         VirtualView template = getSvgView().getDefinedTemplate(mHref);
 
         if (template != null) {
+            canvas.translate((float) relativeOnWidth(mX), (float) relativeOnHeight(mY));
             if (template instanceof RenderableView) {
                 ((RenderableView)template).mergeProperties(this);
             }

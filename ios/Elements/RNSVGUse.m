@@ -64,7 +64,7 @@
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
-    CGContextTranslateCTM(context, [self relativeOnWidth:self.x], [self relativeOnWidth:self.y]);
+    CGContextTranslateCTM(context, [self relativeOnWidth:self.x], [self relativeOnHeight:self.y]);
     RNSVGNode* template = [self.svgView getDefinedTemplate:self.href];
     if (template) {
         [self beginTransparencyLayer:context];
