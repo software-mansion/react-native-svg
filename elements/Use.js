@@ -14,7 +14,7 @@ export default class Use extends Shape {
 
     render() {
         const { props } = this;
-        const { children, width, height, href } = props;
+        const { children, x, y, width, height, href } = props;
 
         // match "url(#pattern)"
         const matched = href.match(idPattern);
@@ -31,8 +31,13 @@ export default class Use extends Shape {
         return (
             <RNSVGUse
                 ref={this.refMethod}
-                {...extractProps(props, this)}
+                {...extractProps(
+                    { ...props, x: undefined, y: undefined },
+                    this,
+                )}
                 href={match}
+                x={x}
+                y={y}
                 width={width}
                 height={height}
             >

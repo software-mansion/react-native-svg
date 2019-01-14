@@ -21,6 +21,27 @@
     _href = href;
 }
 
+- (void)setX:(RNSVGLength *)x
+{
+    if ([x isEqualTo:_x]) {
+        return;
+    }
+
+    [self invalidate];
+    _x = x;
+}
+
+- (void)setY:(RNSVGLength *)y
+{
+    if ([y isEqualTo:_y]) {
+        return;
+    }
+
+    [self invalidate];
+    _y = y;
+}
+
+
 - (void)setUsewidth:(RNSVGLength *)usewidth
 {
     if ([usewidth isEqualTo:_usewidth]) {
@@ -43,6 +64,7 @@
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
+    CGContextTranslateCTM(context, [self relativeOnWidth:self.x], [self relativeOnWidth:self.y]);
     RNSVGNode* template = [self.svgView getDefinedTemplate:self.href];
     if (template) {
         [self beginTransparencyLayer:context];
