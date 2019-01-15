@@ -324,7 +324,9 @@ UInt32 saturate(CGFloat value) {
     CGPoint center = CGPointApplyAffineTransform(mid, matrix);
 
     self.bounds = bounds;
-    self.center = center;
+    if (!isnan(center.x) && !isnan(center.y)) {
+        self.center = center;
+    }
     self.frame = clientRect;
 
     CGPathDrawingMode mode = kCGPathStroke;
