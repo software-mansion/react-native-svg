@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import { requireNativeComponent } from "react-native";
 import extractViewBox from "../lib/extract/extractViewBox";
+import Shape from "./Shape";
 
-export default class Symbol extends Component {
+export default class Symbol extends Shape {
     static displayName = "Symbol";
 
     render() {

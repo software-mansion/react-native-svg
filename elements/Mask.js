@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import { requireNativeComponent } from "react-native";
 import extractTransform from "../lib/extract/extractTransform";
 import units from "../lib/units";
+import Shape from "./Shape";
 
-export default class Mask extends Component {
+export default class Mask extends Shape {
     static displayName = "Mask";
 
     render() {

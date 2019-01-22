@@ -1,10 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import { requireNativeComponent } from "react-native";
 import extractTransform from "../lib/extract/extractTransform";
 import extractViewBox from "../lib/extract/extractViewBox";
 import units from "../lib/units";
+import Shape from "./Shape";
 
-export default class Pattern extends Component {
+export default class Pattern extends Shape {
     static displayName = "Pattern";
 
     render() {
