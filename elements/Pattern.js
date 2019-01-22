@@ -24,6 +24,7 @@ export default class Pattern extends Shape {
             viewBox,
             preserveAspectRatio,
         } = props;
+        const matrix = extractTransform(patternTransform || transform || props);
         return (
             <RNSVGPattern
                 ref={this.refMethod}
@@ -32,7 +33,8 @@ export default class Pattern extends Shape {
                 y={y}
                 width={width}
                 height={height}
-                patternTransform={extractTransform(patternTransform || transform || props)}
+                matrix={matrix}
+                patternTransform={matrix}
                 patternUnits={units[patternUnits] || 0}
                 patternContentUnits={
                     patternContentUnits ? units[patternContentUnits] : 1
