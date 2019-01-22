@@ -72,17 +72,19 @@
         return YES;
     }];
     [self setHitArea:[self getPath:context]];
-    self.clientRect = bounds;
+    if (!CGRectEqualToRect(bounds, CGRectNull)) {
+        self.clientRect = bounds;
 
-    CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
-    CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
-    CGPoint center = CGPointApplyAffineTransform(mid, transform);
+        CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
+        CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
+        CGPoint center = CGPointApplyAffineTransform(mid, transform);
 
-    self.bounds = bounds;
-    if (!isnan(center.x) && !isnan(center.y)) {
-        self.center = center;
+        self.bounds = bounds;
+        if (!isnan(center.x) && !isnan(center.y)) {
+            self.center = center;
+        }
+        self.frame = bounds;
     }
-    self.frame = bounds;
 
     [self popGlyphContext];
 }

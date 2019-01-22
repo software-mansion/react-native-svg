@@ -288,14 +288,6 @@ UInt32 saturate(CGFloat value) {
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
-    if (!self.fill && !self.stroke) {
-        return;
-    }
-
-    if (self.opacity == 0) {
-        return;
-    }
-
     CGPathRef path = self.path;
     if (!path) {
         path = [self getPath:context];
@@ -328,6 +320,14 @@ UInt32 saturate(CGFloat value) {
         self.center = center;
     }
     self.frame = clientRect;
+
+    if (!self.fill && !self.stroke) {
+        return;
+    }
+
+    if (self.opacity == 0) {
+        return;
+    }
 
     CGPathDrawingMode mode = kCGPathStroke;
     BOOL fillColor = NO;
