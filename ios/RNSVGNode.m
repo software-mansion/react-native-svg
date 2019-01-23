@@ -531,6 +531,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (void)parseReference
 {
+    self.dirty = false;
     if (self.name) {
         typeof(self) __weak weakSelf = self;
         [self.svgView defineTemplate:weakSelf templateName:self.name];

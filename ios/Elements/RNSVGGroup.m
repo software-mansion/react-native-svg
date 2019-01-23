@@ -197,6 +197,7 @@
 
 - (void)parseReference
 {
+    self.dirty = false;
     if (self.name) {
         typeof(self) __weak weakSelf = self;
         [self.svgView defineTemplate:weakSelf templateName:self.name];

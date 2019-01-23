@@ -23,7 +23,7 @@ export default class LinearGradient extends Shape {
                 y1={y1}
                 x2={x2}
                 y2={y2}
-                {...extractGradient(props)}
+                {...extractGradient(props, this)}
             />
         );
     }

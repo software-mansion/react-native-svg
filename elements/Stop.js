@@ -7,6 +7,12 @@ export default class Stop extends Component {
         stopColor: "#000",
         stopOpacity: 1,
     };
+    setNativeProps = () => {
+        const { parent } = this.props;
+        if (parent) {
+            parent.forceUpdate();
+        }
+    };
 
     render() {
         return null;

@@ -26,7 +26,7 @@ export default class RadialGradient extends Shape {
                 ry={ry || r}
                 cx={cx}
                 cy={cy}
-                {...extractGradient(props)}
+                {...extractGradient(props, this)}
             />
         );
     }
