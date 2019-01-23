@@ -7,7 +7,11 @@
 
 [Check out the demo](https://snack.expo.io/@msand/react-native-svg-example)
 
-- [Features](#features)
+## Features
+
+1. Supports most SVG elements and properties (Rect, Circle, Line, Polyline, Polygon, G ...).
+2. Easy to [convert SVG code](https://svgr.now.sh/) to react-native-svg.
+
 - [Installation](#installation)
     - [Automatically](#automatically)
     - [Manually](#manually)
@@ -44,13 +48,6 @@
 - [Run example](#run-example)
 - [TODO](#todo)
 - [Known issues](#known-issues)
-
-
-## Features
-
-1. Supports most SVG elements and properties (Rect, Circle, Line, Polyline, Polygon, G ...).
-2. Easy to [convert SVG code](https://svgr.now.sh/) to react-native-svg.
-
 
 ### Installation
 
