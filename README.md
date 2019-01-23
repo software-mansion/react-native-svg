@@ -3,18 +3,58 @@
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 [![NPM](https://img.shields.io/npm/dm/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 
-`react-native-svg` is built to provide a SVG interface to react native on both iOS and Android.
+`react-native-svg` provides SVG support to React Native on iOS and Android.
 
 [Check out the demo](https://snack.expo.io/@msand/react-native-svg-example)
+
+- [Features](#features)
+- [Installation](#installation)
+    - [Automatically](#automatically)
+    - [Manually](#manually)
+        - [Android](#android)
+        - [iOS](#ios)
+- [Troubleshooting](#troubleshooting)
+- [Usage](#usage)
+    - [Use with content loaded from uri](#use-with-content-loaded-from-uri)
+    - [Use with svg files](#use-with-svg-files)
+- [Common props](#common-props)
+- [Supported elements](#supported-elements)
+    - [Svg](#svg)
+    - [Rect](#rect)
+    - [Circle](#circle)
+    - [Ellipse](#ellipse)
+    - [Line](#line)
+    - [Polygon](#polygon)
+    - [Polyline](#polyline)
+    - [Path](#path)
+    - [Text](#text)
+    - [TSpan](#tspan)
+    - [TextPath](#textpath)
+    - [G](#g)
+    - [Use](#use)
+    - [Symbol](#symbol)
+    - [Defs](#defs)
+    - [Image](#image)
+    - [ClipPath](#clippath)
+    - [LinearGradient](#lineargradient)
+    - [RadialGradient](#radialgradient)
+    - [Mask](#mask)
+    - [Pattern](#pattern)
+- [Touch Events](#touch-events)
+- [Run example](#run-example)
+- [TODO](#todo)
+- [Known issues](#known-issues)
+
 
 ## Features
 
 1. Supports most SVG elements and properties (Rect, Circle, Line, Polyline, Polygon, G ...).
 2. Easy to [convert SVG code](https://svgr.now.sh/) to react-native-svg.
 
+
 ### Installation
 
-#### Automatic
+#### Automatically
 
 *With Expo, this is pre-installed. Jump ahead to [Usage](#Usage)*
 
@@ -61,7 +101,7 @@ The latest version of react-native-svg should always work in a clean react-nativ
 Or, include [this PR](https://github.com/facebook/react-native/pull/17842) manually for v7+ stability on android for older RN ( [included in 0.57-stable](https://github.com/facebook/react-native/commit/d9f5319cf0d9828b29d0e350284b22ce29985042) and newer)
 
 
-#### Manual
+#### Manually
 
 ##### Android
 
@@ -234,6 +274,56 @@ export default class SvgExample extends React.Component {
 ```
 
 [Try this on Snack](https://snack.expo.io/@msand/react-native-svg-example)
+
+### Use with content loaded from uri
+
+Try react-native-svg-uri
+```jsx
+import * as React from 'react';
+import SvgUri from 'react-native-svg-uri';
+
+export default () => (
+  <SvgUri
+    width="200"
+    height="200"
+    source={{
+      uri: 'http://thenewcode.com/assets/images/thumbnails/homer-simpson.svg',
+    }}
+  />
+);
+```
+
+### Use with svg files
+
+Try react-native-svg-uri
+
+.babelrc
+```json
+{
+  "presets": ["module:metro-react-native-babel-preset"],
+  "plugins": [
+    ["babel-plugin-inline-import", {
+      "extensions": [
+        ".svg"
+      ]
+    }]
+  ]
+}
+```
+
+App.js
+```jsx
+import * as React from 'react';
+import SvgUri from 'react-native-svg-uri';
+import testSvg from './test.svg';
+export default () => (
+  <SvgUri
+    width="200"
+    height="200"
+    svgXmlData={testSvg}
+  />
+);
+```
 
 ### Common props:
 
