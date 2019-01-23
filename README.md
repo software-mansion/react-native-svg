@@ -277,7 +277,7 @@ export default class SvgExample extends React.Component {
 
 ### Use with content loaded from uri
 
-Try react-native-svg-uri
+Try [react-native-svg-uri](https://github.com/vault-development/react-native-svg-uri)
 ```jsx
 import * as React from 'react';
 import SvgUri from 'react-native-svg-uri';
@@ -295,7 +295,7 @@ export default () => (
 
 ### Use with svg files
 
-Try react-native-svg-uri
+Try [react-native-svg-uri](https://github.com/vault-development/react-native-svg-uri) with [babel-plugin-inline-import](https://github.com/credcollective/babel-plugin-inline-import/)
 
 .babelrc
 ```json
