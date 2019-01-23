@@ -192,6 +192,7 @@ export interface ImageProps extends ResponderProps, TouchableProps {
   y?: NumberProp,
   width?: NumberProp,
   height?: NumberProp,
+  xlinkHref?: ReactNative.ImageProperties['source'],
   href: ReactNative.ImageProperties['source'],
   preserveAspectRatio?: string,
   opacity?: NumberProp,
@@ -324,6 +325,7 @@ export interface TextProps extends TextSpecificProps {
 export const Text: React.ComponentClass<TextProps>;
 
 export interface TextPathProps extends TextSpecificProps {
+  xlinkHref?: string,
   href: string,
   startOffset?: NumberProp,
   method?: TextPathMethod,
@@ -333,6 +335,7 @@ export interface TextPathProps extends TextSpecificProps {
 export const TextPath: React.ComponentClass<TextPathProps>;
 
 export interface UseProps extends CommonPathProps {
+  xlinkHref?: string,
   href: string,
   width?: string,
   height?: string,

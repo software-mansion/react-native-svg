@@ -19,7 +19,7 @@ export default class SvgImage extends Shape {
 
     render() {
         const { props } = this;
-        const { preserveAspectRatio, x, y, width, height, href } = props;
+        const { preserveAspectRatio, x, y, width, height, xlinkHref, href = xlinkHref } = props;
         const modes = preserveAspectRatio.trim().split(spacesRegExp);
         return (
             <RNSVGImage

@@ -16,7 +16,7 @@ export default class Use extends Shape {
 
     render() {
         const { props } = this;
-        const { children, x, y, width, height, href } = props;
+        const { children, x, y, width, height, xlinkHref, href = xlinkHref } = props;
 
         // match "url(#pattern)"
         const matched = href.match(idPattern);

@@ -25,7 +25,8 @@ export default class TextPath extends Shape {
     render() {
         const {
             children,
-            href,
+            xlinkHref,
+            href = xlinkHref,
             startOffset,
             method,
             spacing,
