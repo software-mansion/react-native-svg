@@ -26,6 +26,7 @@ import android.view.ViewParent;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.views.text.ReactFontManager;
 
 import javax.annotation.Nullable;
 
@@ -929,7 +930,7 @@ class TSpanView extends TextView {
                 typeface = Typeface.createFromAsset(assetManager, path);
             } catch (Exception ignored2) {
                 try {
-                    typeface = Typeface.create(fontFamily, fontStyle);
+                    typeface = ReactFontManager.getInstance().getTypeface(fontFamily, fontStyle, assetManager);
                 } catch (Exception ignored3) {
                 }
             }
