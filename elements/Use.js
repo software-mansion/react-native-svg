@@ -34,7 +34,7 @@ export default class Use extends Shape {
             <RNSVGUse
                 ref={this.refMethod}
                 {...extractProps(
-                    { ...props, x: undefined, y: undefined },
+                    { ...props, x: null, y: null },
                     this,
                 )}
                 href={match}

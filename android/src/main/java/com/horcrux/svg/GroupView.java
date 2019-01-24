@@ -88,9 +88,12 @@ class GroupView extends RenderableView {
         final GroupView self = this;
         final RectF groupRect = new RectF();
         for (int i = 0; i < getChildCount(); i++) {
-            View lNode = getChildAt(i);
-            if (lNode instanceof VirtualView) {
-                VirtualView node = ((VirtualView)lNode);
+            View child = getChildAt(i);
+            if (child instanceof MaskView) {
+                continue;
+            }
+            if (child instanceof VirtualView) {
+                VirtualView node = ((VirtualView)child);
                 if (node instanceof RenderableView) {
                     ((RenderableView)node).mergeProperties(self);
                 }
@@ -111,8 +114,8 @@ class GroupView extends RenderableView {
                 if (node.isResponsible()) {
                     svg.enableTouchEvents();
                 }
-            } else if (lNode instanceof SvgView) {
-                SvgView svgView = (SvgView)lNode;
+            } else if (child instanceof SvgView) {
+                SvgView svgView = (SvgView)child;
                 svgView.drawChildren(canvas);
             }
         }
@@ -133,6 +136,9 @@ class GroupView extends RenderableView {
 
         for (int i = 0; i < getChildCount(); i++) {
             View node = getChildAt(i);
+            if (node instanceof MaskView) {
+                continue;
+            }
             if (node instanceof VirtualView) {
                 VirtualView n = (VirtualView)node;
                 Matrix transform = n.mMatrix;
@@ -150,6 +156,9 @@ class GroupView extends RenderableView {
             final Path.Op pop = Path.Op.valueOf(op.name());
             for (int i = 0; i < getChildCount(); i++) {
                 View node = getChildAt(i);
+                if (node instanceof MaskView) {
+                    continue;
+                }
                 if (node instanceof VirtualView) {
                     VirtualView n = (VirtualView)node;
                     Matrix transform = n.mMatrix;
@@ -169,6 +178,9 @@ class GroupView extends RenderableView {
             final Region r = new Region();
             for (int i = 0; i < getChildCount(); i++) {
                 View node = getChildAt(i);
+                if (node instanceof MaskView) {
+                    continue;
+                }
                 if (node instanceof VirtualView) {
                     VirtualView n = (VirtualView)node;
                     Matrix transform = n.mMatrix;
@@ -219,6 +231,9 @@ class GroupView extends RenderableView {
         for (int i = getChildCount() - 1; i >= 0; i--) {
             View child = getChildAt(i);
             if (!(child instanceof VirtualView)) {
+                continue;
+            }
+            if (child instanceof MaskView) {
                 continue;
             }
 

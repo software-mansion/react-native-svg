@@ -89,9 +89,11 @@ export default class Svg extends Shape {
             strokeMiterlimit,
         } = stylesAndProps;
 
+        const w = parseInt(width);
+        const h = parseInt(height);
         const dimensions = width && height ? {
-            width: width[width.length - 1] === "%" ? width : +width,
-            height: height[height.length - 1] === "%" ? height : +height,
+            width: isNaN(w) || width[width.length - 1] === '%' ? width : w,
+            height: isNaN(h) || height[height.length - 1] === '%' ? height : h,
             flex: 0,
         } : null;
 

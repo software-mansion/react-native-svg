@@ -8,6 +8,7 @@
 
 #import "RNSVGGroup.h"
 #import "RNSVGClipPath.h"
+#import "RNSVGMask.h"
 
 @implementation RNSVGGroup
 {
@@ -38,7 +39,9 @@
     __block CGRect bounds = CGRectNull;
 
     [self traverseSubviews:^(UIView *node) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
+        if ([node isKindOfClass:[RNSVGMask class]]) {
+            // no-op
+        } else if ([node isKindOfClass:[RNSVGNode class]]) {
             RNSVGNode* svgNode = (RNSVGNode*)node;
             if (svgNode.responsible && !self.svgView.responsible) {
                 self.svgView.responsible = YES;
@@ -203,7 +206,7 @@
         [self.svgView defineTemplate:weakSelf templateName:self.name];
     }
 
-    [self traverseSubviews:^(__kindof RNSVGNode *node) {
+    [self traverseSubviews:^(RNSVGNode *node) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
             [node parseReference];
         }

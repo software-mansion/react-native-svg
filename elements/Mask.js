@@ -1,11 +1,19 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
 import extractTransform from "../lib/extract/extractTransform";
+import extractProps from "react-native-svg/lib/extract/extractProps";
 import units from "../lib/units";
 import Shape from "./Shape";
 
 export default class Mask extends Shape {
     static displayName = "Mask";
+
+    static defaultProps = {
+        x: "0%",
+        y: "0%",
+        width: "100%",
+        height: "100%",
+    };
 
     render() {
         const { props } = this;
@@ -24,7 +32,7 @@ export default class Mask extends Shape {
         return (
             <RNSVGMask
                 ref={this.refMethod}
-                name={id}
+                {...extractProps({ ...props, x: null, y: null }, this)}
                 x={x}
                 y={y}
                 width={width}
