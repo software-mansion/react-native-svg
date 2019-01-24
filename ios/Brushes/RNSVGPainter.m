@@ -117,12 +117,19 @@ void PatternFunction(void* info, CGContextRef context)
     RNSVGPainter *_painter = (__bridge RNSVGPainter *)info;
     RNSVGPattern *_pattern = [_painter pattern];
     CGRect rect = _painter.paintBounds;
-
-    CGAffineTransform _viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(_pattern.minX, _pattern.minY, _pattern.vbWidth, _pattern.vbHeight)
-                                             eRect:rect
-                                             align:_pattern.align
-                                       meetOrSlice:_pattern.meetOrSlice];
-    CGContextConcatCTM(context, _viewBoxTransform);
+    CGFloat minX = _pattern.minX;
+    CGFloat minY = _pattern.minY;
+    CGFloat vbWidth = _pattern.vbWidth;
+    CGFloat vbHeight = _pattern.vbHeight;
+    if (vbWidth > 0 && vbHeight > 0) {
+        CGRect vbRect = CGRectMake(minX, minY, vbWidth, vbHeight);
+        CGAffineTransform _viewBoxTransform = [RNSVGViewBox
+                                               getTransform:vbRect
+                                               eRect:rect
+                                               align:_pattern.align
+                                               meetOrSlice:_pattern.meetOrSlice];
+        CGContextConcatCTM(context, _viewBoxTransform);
+    }
 
     [_pattern renderTo:context rect:rect];
 }

@@ -118,16 +118,19 @@ class Brush {
             double w = PropHelper.fromRelative(mPoints[2], width, offsetX, scale, textSize);
             double h = PropHelper.fromRelative(mPoints[3], height, offsetY, scale, textSize);
 
-            RectF vbRect = mPattern.getViewBox();
-            RectF eRect = new RectF((float)x, (float)y, (float)w, (float)h);
-            Matrix mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mPattern.mAlign, mPattern.mMeetOrSlice);
-
             Bitmap bitmap = Bitmap.createBitmap(
                     (int) w,
                     (int) h,
                     Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
-            canvas.concat(mViewBoxMatrix);
+
+            RectF vbRect = mPattern.getViewBox();
+            if (vbRect != null && vbRect.width() > 0 && vbRect.height() > 0) {
+                RectF eRect = new RectF((float) x, (float) y, (float) w, (float) h);
+                Matrix mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mPattern.mAlign, mPattern.mMeetOrSlice);
+                canvas.concat(mViewBoxMatrix);
+            }
+
             mPattern.draw(canvas, new Paint(), opacity);
 
             Matrix patternMatrix = new Matrix();
