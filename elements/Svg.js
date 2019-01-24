@@ -41,10 +41,10 @@ export default class Svg extends Shape {
     setNativeProps = props => {
         const { width, height } = props;
         if (width) {
-            props.bbWidth = String(width);
+            props.bbWidth = width;
         }
         if (height) {
-            props.bbHeight = String(height);
+            props.bbHeight = height;
         }
         this.root.setNativeProps(props);
     };
@@ -98,12 +98,10 @@ export default class Svg extends Shape {
         return (
             <NativeSvgView
                 {...props}
+                bbWidth={width}
+                bbHeight={height}
                 tintColor={color}
                 onLayout={onLayout}
-                bbWidth={String(width)}
-                bbHeight={String(height)}
-                {...extractResponder(props, this)}
-                {...extractViewBox({ viewBox, preserveAspectRatio })}
                 ref={this.refMethod}
                 style={[
                     styles.svg,
@@ -113,6 +111,8 @@ export default class Svg extends Shape {
                     },
                     dimensions,
                 ]}
+                {...extractResponder(props, this)}
+                {...extractViewBox({ viewBox, preserveAspectRatio })}
             >
                 <G
                     {...{

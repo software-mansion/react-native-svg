@@ -21,6 +21,7 @@ import android.util.Base64;
 import android.view.View;
 import android.view.ViewParent;
 
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.ReactCompoundView;
@@ -116,8 +117,8 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     private float mMinY;
     private float mVbWidth;
     private float mVbHeight;
-    private String mbbWidth;
-    private String mbbHeight;
+    private SVGLength mbbWidth;
+    private SVGLength mbbHeight;
     private String mAlign;
     private int mMeetOrSlice;
     private final Matrix mInvViewBoxMatrix = new Matrix();
@@ -177,15 +178,15 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
 
     @ReactProp(name = "bbWidth")
-    public void setVbWidth(String bbWidth) {
-        mbbWidth = bbWidth;
+    public void setBbWidth(Dynamic bbWidth) {
+        mbbWidth = SVGLength.from(bbWidth);
         invalidate();
         clearChildCache();
     }
 
     @ReactProp(name = "bbHeight")
-    public void setVbHeight(String bbHeight) {
-        mbbHeight = bbHeight;
+    public void setBbHeight(Dynamic bbHeight) {
+        mbbHeight = SVGLength.from(bbHeight);
         invalidate();
         clearChildCache();
     }

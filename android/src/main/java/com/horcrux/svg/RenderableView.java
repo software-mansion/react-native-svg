@@ -183,7 +183,7 @@ abstract public class RenderableView extends VirtualView {
 
     @ReactProp(name = "strokeWidth")
     public void setStrokeWidth(Dynamic strokeWidth) {
-        this.strokeWidth = getLengthFromDynamic(strokeWidth);
+        this.strokeWidth = SVGLength.from(strokeWidth);
         invalidate();
     }
 

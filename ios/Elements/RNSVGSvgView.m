@@ -113,9 +113,9 @@
     _vbHeight = vbHeight;
 }
 
-- (void)setBbWidth:(NSString *)bbWidth
+- (void)setBbWidth:(RNSVGLength *)bbWidth
 {
-    if ([bbWidth isEqualToString:_bbWidth]) {
+    if ([bbWidth isEqualTo:_bbWidth]) {
         return;
     }
 
@@ -124,9 +124,9 @@
     _bbWidth = bbWidth;
 }
 
-- (void)setBbHeight:(NSString *)bbHeight
+- (void)setBbHeight:(RNSVGLength *)bbHeight
 {
-    if ([bbHeight isEqualToString:_bbHeight]) {
+    if ([bbHeight isEqualTo:_bbHeight]) {
         return;
     }
 
