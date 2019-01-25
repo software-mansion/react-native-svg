@@ -1,6 +1,8 @@
 **/node_modules/
-android/
+Example/examples/
 Example/android/
-ios/
 Example/ios/
 screenShoots/
+android/
+ios/
+lib/extract/transform.js

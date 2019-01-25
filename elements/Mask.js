@@ -20,7 +20,6 @@ export default class Mask extends Shape {
         const {
             maskTransform,
             transform,
-            id,
             x,
             y,
             width,
