@@ -292,7 +292,43 @@ export default () => (
 
 ### Use with svg files
 
-Try [react-native-svg-uri](https://github.com/vault-development/react-native-svg-uri) with [babel-plugin-inline-import](https://github.com/credcollective/babel-plugin-inline-import/)
+Try [react-native-svg-transformer](https://github.com/kristerkari/react-native-svg-transformer) to get compile time conversion and cached transformations.
+https://github.com/kristerkari/react-native-svg-transformer#installation-and-configuration
+https://github.com/kristerkari/react-native-svg-transformer#for-react-native-v057-or-newer
+
+rn-cli.config.js
+```js
+const { getDefaultConfig } = require("metro-config");
+
+module.exports = (async () => {
+  const {
+    resolver: { sourceExts, assetExts }
+  } = await getDefaultConfig();
+  return {
+    transformer: {
+      babelTransformerPath: require.resolve("react-native-svg-transformer")
+    },
+    resolver: {
+      assetExts: assetExts.filter(ext => ext !== "svg"),
+      sourceExts: [...sourceExts, "svg"]
+    }
+  };
+})();
+```
+
+Import your .svg file inside a React component:
+
+```jsx
+import Logo from "./logo.svg";
+```
+
+You can then use your image as a component:
+
+```jsx
+<Logo width={120} height={40} />
+```
+
+Alternatively, you can use [react-native-svg-uri](https://github.com/vault-development/react-native-svg-uri) with [babel-plugin-inline-import](https://github.com/credcollective/babel-plugin-inline-import/), but with transforms done at run-time.
 
 .babelrc
 ```json
