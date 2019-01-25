@@ -97,6 +97,11 @@ export default class Svg extends Shape {
             flex: 0,
         } : null;
 
+        const o = +opacity;
+        const opacityStyle = !isNaN(o) ? {
+            opacity: o,
+        } : null;
+
         return (
             <NativeSvgView
                 {...props}
@@ -108,9 +113,7 @@ export default class Svg extends Shape {
                 style={[
                     styles.svg,
                     style,
-                    !isNaN(+opacity) && {
-                        opacity: +opacity,
-                    },
+                    opacityStyle,
                     dimensions,
                 ]}
                 {...extractResponder(props, this)}
