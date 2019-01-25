@@ -8,6 +8,13 @@ import Shape from "./Shape";
 export default class Pattern extends Shape {
     static displayName = "Pattern";
 
+    static defaultProps = {
+        x: "0%",
+        y: "0%",
+        width: "100%",
+        height: "100%",
+    };
+
     render() {
         const { props } = this;
         const {

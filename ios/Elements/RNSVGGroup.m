@@ -133,7 +133,7 @@
     }
     CGMutablePathRef __block path = CGPathCreateMutable();
     [self traverseSubviews:^(RNSVGNode *node) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
+        if ([node isKindOfClass:[RNSVGNode class]] && ![node isKindOfClass:[RNSVGMask class]]) {
             CGAffineTransform transform = CGAffineTransformConcat(node.matrix, node.transforms);
             CGPathAddPath(path, &transform, [node getPath:context]);
         }
@@ -174,7 +174,7 @@
     }
 
     for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
-        if (![node isKindOfClass:[RNSVGNode class]]) {
+        if (![node isKindOfClass:[RNSVGNode class]] || [node isKindOfClass:[RNSVGMask class]]) {
             continue;
         }
 

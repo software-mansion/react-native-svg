@@ -131,7 +131,21 @@ void PatternFunction(void* info, CGContextRef context)
         CGContextConcatCTM(context, _viewBoxTransform);
     }
 
+    if (_painter.useObjectBoundingBoxForContentUnits) {
+        CGRect bounds = _painter.bounds;
+        CGContextConcatCTM(context, CGAffineTransformMakeScale(bounds.size.width, bounds.size.height));
+    }
+
     [_pattern renderTo:context rect:rect];
+}
+
+- (CGFloat)getVal:(RNSVGLength*)length relative:(CGFloat)relative
+{
+    RNSVGLengthUnitType unit = [length unit];
+    CGFloat val = [RNSVGPropHelper fromRelative:length
+                                       relative:relative];
+    return _useObjectBoundingBox &&
+        unit == SVG_LENGTHTYPE_NUMBER ? val * relative : val;
 }
 
 - (void)paintPattern:(CGContextRef)context bounds:(CGRect)bounds
@@ -139,26 +153,18 @@ void PatternFunction(void* info, CGContextRef context)
     CGRect rect = [self getPaintRect:context bounds:bounds];
     CGFloat height = CGRectGetHeight(rect);
     CGFloat width = CGRectGetWidth(rect);
-    CGFloat offsetX = CGRectGetMinX(rect);
-    CGFloat offsetY = CGRectGetMinY(rect);
 
-    CGFloat x = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:0]
-                                                relative:width
-                                                  offset:offsetX];
-    CGFloat y = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:1]
-                                                relative:height
-                                                  offset:offsetY];
-    CGFloat w = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:2]
-                                                relative:width
-                                                  offset:offsetX];
-    CGFloat h = [RNSVGPercentageConverter lengthToFloat:[_points objectAtIndex:3]
-                                                relative:height
-                                                  offset:offsetY];
+    CGFloat x = [self getVal:[_points objectAtIndex:0] relative:width];
+    CGFloat y = [self getVal:[_points objectAtIndex:1] relative:height];
+    CGFloat w = [self getVal:[_points objectAtIndex:2] relative:width];
+    CGFloat h = [self getVal:[_points objectAtIndex:3] relative:height];
 
     CGAffineTransform viewbox = [self.pattern.svgView getViewBoxTransform];
-    CGRect newBounds = CGRectApplyAffineTransform(CGRectMake(x, y, w, h), viewbox);
+    CGRect newBounds = CGRectMake(x, y, w, h);
     CGSize size = newBounds.size;
+    self.useObjectBoundingBoxForContentUnits = _useContentObjectBoundingBox;
     self.paintBounds = newBounds;
+    self.bounds = rect;
 
     const CGPatternCallbacks callbacks = { 0, &PatternFunction, NULL };
     CGColorSpaceRef patternSpace = CGColorSpaceCreatePattern(NULL);
@@ -167,7 +173,7 @@ void PatternFunction(void* info, CGContextRef context)
 
     CGPatternRef pattern = CGPatternCreate((__bridge void * _Nullable)(self),
                                            newBounds,
-                                           CGAffineTransformIdentity,
+                                           viewbox,
                                            size.width,
                                            size.height,
                                            kCGPatternTilingConstantSpacing,

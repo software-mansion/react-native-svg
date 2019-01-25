@@ -33,7 +33,7 @@ class Brush {
 
     // TODO implement pattern units
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private boolean mUseContentObjectBoundingBox;
+    private boolean mUseContentObjectBoundingBoxUnits;
 
     private Matrix mMatrix;
     private Rect mUserSpaceBoundingBox;
@@ -46,7 +46,7 @@ class Brush {
     }
 
     void setContentUnits(BrushUnits units) {
-        mUseContentObjectBoundingBox = units == BrushUnits.OBJECT_BOUNDING_BOX;
+        mUseContentObjectBoundingBoxUnits = units == BrushUnits.OBJECT_BOUNDING_BOX;
     }
 
     void setPattern(PatternView pattern) {
@@ -104,6 +104,11 @@ class Brush {
         return new RectF(x, y, x + width, y + height);
     }
 
+    private double getVal(SVGLength length, double relative, float scale, float textSize) {
+        return PropHelper.fromRelative(length, relative, 0, mUseObjectBoundingBox &&
+                length.unit == SVGLengthUnitType.SVG_LENGTHTYPE_NUMBER ? relative : scale, textSize);
+    }
+
     void setupPaint(Paint paint, RectF pathBoundingBox, float scale, float opacity) {
         RectF rect = getPaintRect(pathBoundingBox);
         float width = rect.width();
@@ -113,10 +118,14 @@ class Brush {
 
         float textSize = paint.getTextSize();
         if (mType == BrushType.PATTERN) {
-            double x = PropHelper.fromRelative(mPoints[0], width, offsetX, scale, textSize);
-            double y = PropHelper.fromRelative(mPoints[1], height, offsetY, scale, textSize);
-            double w = PropHelper.fromRelative(mPoints[2], width, offsetX, scale, textSize);
-            double h = PropHelper.fromRelative(mPoints[3], height, offsetY, scale, textSize);
+            double x = getVal(mPoints[0], width, scale, textSize);
+            double y = getVal(mPoints[1], height, scale, textSize);
+            double w = getVal(mPoints[2], width, scale, textSize);
+            double h = getVal(mPoints[3], height, scale, textSize);
+
+            if (!(w > 1 && h > 1)) {
+                return;
+            }
 
             Bitmap bitmap = Bitmap.createBitmap(
                     (int) w,
@@ -129,6 +138,10 @@ class Brush {
                 RectF eRect = new RectF((float) x, (float) y, (float) w, (float) h);
                 Matrix mViewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mPattern.mAlign, mPattern.mMeetOrSlice);
                 canvas.concat(mViewBoxMatrix);
+            }
+
+            if (mUseContentObjectBoundingBoxUnits) {
+                canvas.scale(width / scale, height / scale);
             }
 
             mPattern.draw(canvas, new Paint(), opacity);
