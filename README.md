@@ -232,10 +232,7 @@ const { Circle, Rect } = Svg;
 */
 
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-
-// Percentages work in plain react-native but aren't supported in Expo yet, workaround with this or onLayout
-const { width, height } = Dimensions.get('window');
+import { View, StyleSheet } from 'react-native';
 
 export default class SvgExample extends React.Component {
   render() {
@@ -245,7 +242,7 @@ export default class SvgExample extends React.Component {
           StyleSheet.absoluteFill,
           { alignItems: 'center', justifyContent: 'center' },
         ]}>
-        <Svg height={height * 0.5} width={width * 0.5} viewBox="0 0 100 100">
+        <Svg height="50%" width="50%" viewBox="0 0 100 100">
           <Circle
             cx="50"
             cy="50"
