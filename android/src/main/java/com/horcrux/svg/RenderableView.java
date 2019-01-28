@@ -167,7 +167,7 @@ abstract public class RenderableView extends VirtualView {
             int fromSize = strokeDasharray.size();
             this.strokeDasharray = new SVGLength[fromSize];
             for (int i = 0; i < fromSize; i++) {
-                this.strokeDasharray[i] = new SVGLength(strokeDasharray.getString(i));
+                this.strokeDasharray[i] = SVGLength.from(strokeDasharray.getDynamic(i));
             }
         } else {
             this.strokeDasharray = null;
