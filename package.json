@@ -20,7 +20,7 @@
     ],
     "scripts": {
         "lint": "eslint ./",
-        "format": "prettier './{elements,lib}/*.js' './lib/extract/e*.js' --write",
+        "format": "prettier index.js './{elements,lib}/*.js' './lib/extract/e*.js' --write",
         "peg": "pegjs -o ./lib/extract/transform.js ./lib/extract/transform.peg"
     },
     "peerDependencies": {
