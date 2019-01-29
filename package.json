@@ -20,11 +20,12 @@
     ],
     "scripts": {
         "lint": "eslint ./",
+        "format": "prettier './{elements,lib}/*.js' './lib/extract/e*.js' --write",
         "peg": "pegjs -o ./lib/extract/transform.js ./lib/extract/transform.peg"
     },
     "peerDependencies": {
-        "react-native": ">=0.50.0",
-        "react": "*"
+        "react": "*",
+        "react-native": ">=0.50.0"
     },
     "dependencies": {
         "color": "^2.0.1"
@@ -33,7 +34,8 @@
         "babel-eslint": "^6.1.2",
         "eslint": "^2.13.1",
         "eslint-plugin-react": "^4.3.0",
-        "pegjs": "^0.10.0"
+        "pegjs": "^0.10.0",
+        "prettier": "^1.16.1"
     },
     "nativePackage": true
 }

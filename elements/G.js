@@ -1,6 +1,6 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
-import extractProps from "../lib/extract/extractProps";
+import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
 import { extractFont } from "../lib/extract/extractText";
 import extractTransform from "../lib/extract/extractTransform";
 import Shape from "./Shape";
@@ -18,11 +18,12 @@ export default class G extends Shape {
 
     render() {
         const { props } = this;
+        const prop = propsAndStyles(props);
         return (
             <RNSVGGroup
                 ref={this.refMethod}
-                {...extractProps(props, this)}
-                font={extractFont(props)}
+                {...extractProps(prop, this)}
+                font={extractFont(prop)}
             >
                 {props.children}
             </RNSVGGroup>

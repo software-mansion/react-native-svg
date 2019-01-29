@@ -1,6 +1,6 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
-import extractProps from "../lib/extract/extractProps";
+import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
 import Shape from "./Shape";
 
 export default class Ellipse extends Shape {
@@ -19,7 +19,7 @@ export default class Ellipse extends Shape {
         return (
             <RNSVGEllipse
                 ref={this.refMethod}
-                {...extractProps(props, this)}
+                {...extractProps(propsAndStyles(props), this)}
                 cx={cx}
                 cy={cy}
                 rx={rx}

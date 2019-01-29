@@ -1,7 +1,7 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
 import extractText from "../lib/extract/extractText";
-import extractProps from "../lib/extract/extractProps";
+import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
 import extractTransform from "../lib/extract/extractTransform";
 import { pickNotNil } from "../lib/util";
 import Shape from "./Shape";
@@ -24,18 +24,19 @@ export default class Text extends Shape {
 
     render() {
         const props = this.props;
+        const prop = propsAndStyles(props);
         return (
             <RNSVGText
                 ref={this.refMethod}
                 {...extractProps(
                     {
-                        ...props,
+                        ...prop,
                         x: null,
                         y: null,
                     },
                     this,
                 )}
-                {...extractText(props, true)}
+                {...extractText(prop, true)}
             />
         );
     }

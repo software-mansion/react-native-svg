@@ -1,6 +1,6 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
-import extractProps from "../lib/extract/extractProps";
+import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
 import Shape from "./Shape";
 
 export default class Rect extends Shape {
@@ -23,7 +23,7 @@ export default class Rect extends Shape {
                 ref={this.refMethod}
                 {...extractProps(
                     {
-                        ...props,
+                        ...propsAndStyles(props),
                         x: null,
                         y: null,
                     },

@@ -1,6 +1,6 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
-import extractProps from "../lib/extract/extractProps";
+import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
 import Shape from "./Shape";
 
 export default class Path extends Shape {
@@ -11,7 +11,7 @@ export default class Path extends Shape {
         return (
             <RNSVGPath
                 ref={this.refMethod}
-                {...extractProps(props, this)}
+                {...extractProps(propsAndStyles(props), this)}
                 d={props.d}
             />
         );

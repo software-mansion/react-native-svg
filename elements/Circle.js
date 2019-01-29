@@ -1,6 +1,6 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
-import extractProps from "../lib/extract/extractProps";
+import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
 import Shape from "./Shape";
 
 export default class Circle extends Shape {
@@ -18,7 +18,7 @@ export default class Circle extends Shape {
         return (
             <RNSVGCircle
                 ref={this.refMethod}
-                {...extractProps(props, this)}
+                {...extractProps(propsAndStyles(props), this)}
                 cx={cx}
                 cy={cy}
                 r={r}

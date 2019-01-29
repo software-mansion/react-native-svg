@@ -1,6 +1,6 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
-import extractProps from "../lib/extract/extractProps";
+import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
 import Shape from "./Shape";
 
 export default class Line extends Shape {
@@ -19,7 +19,7 @@ export default class Line extends Shape {
         return (
             <RNSVGLine
                 ref={this.refMethod}
-                {...extractProps(props, this)}
+                {...extractProps(propsAndStyles(props), this)}
                 x1={x1}
                 y1={y1}
                 x2={x2}

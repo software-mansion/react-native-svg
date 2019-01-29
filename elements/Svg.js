@@ -91,16 +91,23 @@ export default class Svg extends Shape {
 
         const w = parseInt(width, 10);
         const h = parseInt(height, 10);
-        const dimensions = width && height ? {
-            width: isNaN(w) || width[width.length - 1] === "%" ? width : w,
-            height: isNaN(h) || height[height.length - 1] === "%" ? height : h,
-            flex: 0,
-        } : null;
+        const doNotParseWidth = isNaN(w) || width[width.length - 1] === "%";
+        const doNotParseHeight = isNaN(h) || height[height.length - 1] === "%";
+        const dimensions =
+            width && height
+                ? {
+                      width: doNotParseWidth ? width : w,
+                      height: doNotParseHeight ? height : h,
+                      flex: 0,
+                  }
+                : null;
 
         const o = +opacity;
-        const opacityStyle = !isNaN(o) ? {
-            opacity: o,
-        } : null;
+        const opacityStyle = !isNaN(o)
+            ? {
+                  opacity: o,
+              }
+            : null;
 
         return (
             <NativeSvgView
@@ -110,12 +117,7 @@ export default class Svg extends Shape {
                 tintColor={color}
                 onLayout={onLayout}
                 ref={this.refMethod}
-                style={[
-                    styles.svg,
-                    style,
-                    opacityStyle,
-                    dimensions,
-                ]}
+                style={[styles.svg, style, opacityStyle, dimensions]}
                 {...extractResponder(props, this)}
                 {...extractViewBox({ viewBox, preserveAspectRatio })}
             >

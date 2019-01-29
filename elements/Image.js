@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, requireNativeComponent } from "react-native";
 import { meetOrSliceTypes, alignEnum } from "../lib/extract/extractViewBox";
-import extractProps from "../lib/extract/extractProps";
+import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
 import Shape from "./Shape";
 
 const spacesRegExp = /\s+/;
@@ -19,12 +19,23 @@ export default class SvgImage extends Shape {
 
     render() {
         const { props } = this;
-        const { preserveAspectRatio, x, y, width, height, xlinkHref, href = xlinkHref } = props;
+        const {
+            preserveAspectRatio,
+            x,
+            y,
+            width,
+            height,
+            xlinkHref,
+            href = xlinkHref,
+        } = props;
         const modes = preserveAspectRatio.trim().split(spacesRegExp);
         return (
             <RNSVGImage
                 ref={this.refMethod}
-                {...extractProps({ ...props, x: null, y: null }, this)}
+                {...extractProps(
+                    { ...propsAndStyles(props), x: null, y: null },
+                    this,
+                )}
                 x={x}
                 y={y}
                 width={width}

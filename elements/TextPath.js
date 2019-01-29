@@ -1,7 +1,7 @@
 import React from "react";
 import { requireNativeComponent } from "react-native";
 import extractTransform from "../lib/extract/extractTransform";
-import extractProps from "../lib/extract/extractProps";
+import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
 import extractText from "../lib/extract/extractText";
 import { idPattern, pickNotNil } from "../lib/util";
 import Shape from "./Shape";
@@ -43,7 +43,7 @@ export default class TextPath extends Shape {
                     ref={this.refMethod}
                     {...extractProps(
                         {
-                            ...props,
+                            ...propsAndStyles(props),
                             x: null,
                             y: null,
                         },
@@ -73,13 +73,7 @@ export default class TextPath extends Shape {
                 href +
                 '"',
         );
-        return (
-            <TSpan
-                ref={this.refMethod}
-            >
-                {children}
-            </TSpan>
-        );
+        return <TSpan ref={this.refMethod}>{children}</TSpan>;
     }
 }
 
