@@ -5,56 +5,53 @@ import { idPattern } from "../lib/util";
 import Shape from "./Shape";
 
 export default class Use extends Shape {
-    static displayName = "Use";
+  static displayName = "Use";
 
-    static defaultProps = {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-    };
+  static defaultProps = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  };
 
-    render() {
-        const { props } = this;
-        const {
-            children,
-            x,
-            y,
-            width,
-            height,
-            xlinkHref,
-            href = xlinkHref,
-        } = props;
+  render() {
+    const { props } = this;
+    const {
+      children,
+      x,
+      y,
+      width,
+      height,
+      xlinkHref,
+      href = xlinkHref,
+    } = props;
 
-        // match "url(#pattern)"
-        const matched = href.match(idPattern);
-        const match = matched && matched[1];
+    // match "url(#pattern)"
+    const matched = href.match(idPattern);
+    const match = matched && matched[1];
 
-        if (!match) {
-            console.warn(
-                'Invalid `href` prop for `Use` element, expected a href like `"#id"`, but got: "' +
-                    href +
-                    '"',
-            );
-        }
-
-        return (
-            <RNSVGUse
-                ref={this.refMethod}
-                {...extractProps(
-                    { ...propsAndStyles(props), x: null, y: null },
-                    this,
-                )}
-                href={match}
-                x={x}
-                y={y}
-                width={width}
-                height={height}
-            >
-                {children}
-            </RNSVGUse>
-        );
+    if (!match) {
+      console.warn(
+        'Invalid `href` prop for `Use` element, expected a href like `"#id"`, but got: "' +
+          href +
+          '"',
+      );
     }
+
+    return (
+      <RNSVGUse
+        ref={this.refMethod}
+        {...extractProps({ ...propsAndStyles(props), x: null, y: null }, this)}
+        href={match}
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+      >
+        {children}
+      </RNSVGUse>
+    );
+  }
 }
 
 const RNSVGUse = requireNativeComponent("RNSVGUse");

@@ -7,45 +7,42 @@ import Shape from "./Shape";
 const spacesRegExp = /\s+/;
 
 export default class SvgImage extends Shape {
-    static displayName = "Image";
+  static displayName = "Image";
 
-    static defaultProps = {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        preserveAspectRatio: "xMidYMid meet",
-    };
+  static defaultProps = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    preserveAspectRatio: "xMidYMid meet",
+  };
 
-    render() {
-        const { props } = this;
-        const {
-            preserveAspectRatio,
-            x,
-            y,
-            width,
-            height,
-            xlinkHref,
-            href = xlinkHref,
-        } = props;
-        const modes = preserveAspectRatio.trim().split(spacesRegExp);
-        return (
-            <RNSVGImage
-                ref={this.refMethod}
-                {...extractProps(
-                    { ...propsAndStyles(props), x: null, y: null },
-                    this,
-                )}
-                x={x}
-                y={y}
-                width={width}
-                height={height}
-                meetOrSlice={meetOrSliceTypes[modes[1]] || 0}
-                align={alignEnum[modes[0]] || "xMidYMid"}
-                src={Image.resolveAssetSource(href)}
-            />
-        );
-    }
+  render() {
+    const { props } = this;
+    const {
+      preserveAspectRatio,
+      x,
+      y,
+      width,
+      height,
+      xlinkHref,
+      href = xlinkHref,
+    } = props;
+    const modes = preserveAspectRatio.trim().split(spacesRegExp);
+    return (
+      <RNSVGImage
+        ref={this.refMethod}
+        {...extractProps({ ...propsAndStyles(props), x: null, y: null }, this)}
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        meetOrSlice={meetOrSliceTypes[modes[1]] || 0}
+        align={alignEnum[modes[0]] || "xMidYMid"}
+        src={Image.resolveAssetSource(href)}
+      />
+    );
+  }
 }
 
 const RNSVGImage = requireNativeComponent("RNSVGImage");
