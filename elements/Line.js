@@ -1,10 +1,10 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
-import Shape from "./Shape";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import Shape from './Shape';
 
 export default class Line extends Shape {
-  static displayName = "Line";
+  static displayName = 'Line';
 
   static defaultProps = {
     x1: 0,
@@ -29,4 +29,4 @@ export default class Line extends Shape {
   }
 }
 
-const RNSVGLine = requireNativeComponent("RNSVGLine");
+const RNSVGLine = requireNativeComponent('RNSVGLine');

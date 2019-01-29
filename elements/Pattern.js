@@ -1,18 +1,18 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractTransform from "../lib/extract/extractTransform";
-import extractViewBox from "../lib/extract/extractViewBox";
-import units from "../lib/units";
-import Shape from "./Shape";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractTransform from '../lib/extract/extractTransform';
+import extractViewBox from '../lib/extract/extractViewBox';
+import units from '../lib/units';
+import Shape from './Shape';
 
 export default class Pattern extends Shape {
-  static displayName = "Pattern";
+  static displayName = 'Pattern';
 
   static defaultProps = {
-    x: "0%",
-    y: "0%",
-    width: "100%",
-    height: "100%",
+    x: '0%',
+    y: '0%',
+    width: '100%',
+    height: '100%',
   };
 
   render() {
@@ -54,4 +54,4 @@ export default class Pattern extends Shape {
   }
 }
 
-const RNSVGPattern = requireNativeComponent("RNSVGPattern");
+const RNSVGPattern = requireNativeComponent('RNSVGPattern');

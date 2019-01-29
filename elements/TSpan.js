@@ -1,13 +1,13 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
-import extractTransform from "../lib/extract/extractTransform";
-import extractText, { setTSpan } from "../lib/extract/extractText";
-import { pickNotNil } from "../lib/util";
-import Shape from "./Shape";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import extractTransform from '../lib/extract/extractTransform';
+import extractText, { setTSpan } from '../lib/extract/extractText';
+import { pickNotNil } from '../lib/util';
+import Shape from './Shape';
 
 export default class TSpan extends Shape {
-  static displayName = "TSpan";
+  static displayName = 'TSpan';
 
   setNativeProps = props => {
     const matrix = !props.matrix && extractTransform(props);
@@ -43,4 +43,4 @@ export default class TSpan extends Shape {
 
 setTSpan(TSpan);
 
-const RNSVGTSpan = requireNativeComponent("RNSVGTSpan");
+const RNSVGTSpan = requireNativeComponent('RNSVGTSpan');

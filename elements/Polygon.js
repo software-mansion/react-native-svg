@@ -1,13 +1,13 @@
-import React from "react";
-import Path from "./Path";
-import Shape from "./Shape";
-import extractPolyPoints from "../lib/extract/extractPolyPoints";
+import React from 'react';
+import Path from './Path';
+import Shape from './Shape';
+import extractPolyPoints from '../lib/extract/extractPolyPoints';
 
 export default class Polygon extends Shape {
-  static displayName = "Polygon";
+  static displayName = 'Polygon';
 
   static defaultProps = {
-    points: "",
+    points: '',
   };
 
   setNativeProps = props => {

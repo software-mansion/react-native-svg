@@ -1,14 +1,14 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractTransform from "../lib/extract/extractTransform";
-import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
-import extractText from "../lib/extract/extractText";
-import { idPattern, pickNotNil } from "../lib/util";
-import Shape from "./Shape";
-import TSpan from "./TSpan";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractTransform from '../lib/extract/extractTransform';
+import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import extractText from '../lib/extract/extractText';
+import { idPattern, pickNotNil } from '../lib/util';
+import Shape from './Shape';
+import TSpan from './TSpan';
 
 export default class TextPath extends Shape {
-  static displayName = "TextPath";
+  static displayName = 'TextPath';
 
   setNativeProps = props => {
     const matrix = !props.matrix && extractTransform(props);
@@ -69,7 +69,7 @@ export default class TextPath extends Shape {
     }
 
     console.warn(
-      'Invalid `href` prop for `TextPath` element, expected a href like `"#id"`, but got: "' +
+      'Invalid `href` prop for `TextPath` element, expected a href like "#id", but got: "' +
         href +
         '"',
     );
@@ -77,4 +77,4 @@ export default class TextPath extends Shape {
   }
 }
 
-const RNSVGTextPath = requireNativeComponent("RNSVGTextPath");
+const RNSVGTextPath = requireNativeComponent('RNSVGTextPath');

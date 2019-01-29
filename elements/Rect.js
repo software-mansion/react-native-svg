@@ -1,10 +1,10 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
-import Shape from "./Shape";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import Shape from './Shape';
 
 export default class Rect extends Shape {
-  static displayName = "Rect";
+  static displayName = 'Rect';
 
   static defaultProps = {
     x: 0,
@@ -40,4 +40,4 @@ export default class Rect extends Shape {
   }
 }
 
-const RNSVGRect = requireNativeComponent("RNSVGRect");
+const RNSVGRect = requireNativeComponent('RNSVGRect');

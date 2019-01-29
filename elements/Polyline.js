@@ -1,13 +1,13 @@
-import React from "react";
-import Path from "./Path";
-import Shape from "./Shape";
-import extractPolyPoints from "../lib/extract/extractPolyPoints";
+import React from 'react';
+import Path from './Path';
+import Shape from './Shape';
+import extractPolyPoints from '../lib/extract/extractPolyPoints';
 
 export default class Polyline extends Shape {
-  static displayName = "Polyline";
+  static displayName = 'Polyline';
 
   static defaultProps = {
-    points: "",
+    points: '',
   };
 
   setNativeProps = props => {

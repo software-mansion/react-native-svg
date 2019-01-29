@@ -1,12 +1,12 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
-import { extractFont } from "../lib/extract/extractText";
-import extractTransform from "../lib/extract/extractTransform";
-import Shape from "./Shape";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import { extractFont } from '../lib/extract/extractText';
+import extractTransform from '../lib/extract/extractTransform';
+import Shape from './Shape';
 
 export default class G extends Shape {
-  static displayName = "G";
+  static displayName = 'G';
 
   setNativeProps = props => {
     const matrix = !props.matrix && extractTransform(props);
@@ -31,4 +31,4 @@ export default class G extends Shape {
   }
 }
 
-const RNSVGGroup = requireNativeComponent("RNSVGGroup");
+const RNSVGGroup = requireNativeComponent('RNSVGGroup');

@@ -1,17 +1,17 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractGradient from "../lib/extract/extractGradient";
-import Shape from "./Shape";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractGradient from '../lib/extract/extractGradient';
+import Shape from './Shape';
 
 export default class RadialGradient extends Shape {
-  static displayName = "RadialGradient";
+  static displayName = 'RadialGradient';
 
   static defaultProps = {
-    fx: "50%",
-    fy: "50%",
-    cx: "50%",
-    cy: "50%",
-    r: "50%",
+    fx: '50%',
+    fy: '50%',
+    cx: '50%',
+    cy: '50%',
+    r: '50%',
   };
 
   render() {
@@ -32,4 +32,4 @@ export default class RadialGradient extends Shape {
   }
 }
 
-const RNSVGRadialGradient = requireNativeComponent("RNSVGRadialGradient");
+const RNSVGRadialGradient = requireNativeComponent('RNSVGRadialGradient');

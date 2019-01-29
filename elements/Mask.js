@@ -1,18 +1,18 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractTransform from "../lib/extract/extractTransform";
-import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
-import units from "../lib/units";
-import Shape from "./Shape";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractTransform from '../lib/extract/extractTransform';
+import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import units from '../lib/units';
+import Shape from './Shape';
 
 export default class Mask extends Shape {
-  static displayName = "Mask";
+  static displayName = 'Mask';
 
   static defaultProps = {
-    x: "0%",
-    y: "0%",
-    width: "100%",
-    height: "100%",
+    x: '0%',
+    y: '0%',
+    width: '100%',
+    height: '100%',
   };
 
   render() {
@@ -48,4 +48,4 @@ export default class Mask extends Shape {
   }
 }
 
-const RNSVGMask = requireNativeComponent("RNSVGMask");
+const RNSVGMask = requireNativeComponent('RNSVGMask');

@@ -1,10 +1,10 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractClipPath from "../lib/extract/extractClipPath";
-import Shape from "./Shape";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractClipPath from '../lib/extract/extractClipPath';
+import Shape from './Shape';
 
 export default class ClipPath extends Shape {
-  static displayName = "ClipPath";
+  static displayName = 'ClipPath';
 
   render() {
     const { id, children } = this.props;
@@ -20,4 +20,4 @@ export default class ClipPath extends Shape {
   }
 }
 
-const RNSVGClipPath = requireNativeComponent("RNSVGClipPath");
+const RNSVGClipPath = requireNativeComponent('RNSVGClipPath');

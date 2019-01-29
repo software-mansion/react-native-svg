@@ -1,10 +1,10 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
-import Shape from "./Shape";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import Shape from './Shape';
 
 export default class Circle extends Shape {
-  static displayName = "Circle";
+  static displayName = 'Circle';
 
   static defaultProps = {
     cx: 0,
@@ -27,4 +27,4 @@ export default class Circle extends Shape {
   }
 }
 
-const RNSVGCircle = requireNativeComponent("RNSVGCircle");
+const RNSVGCircle = requireNativeComponent('RNSVGCircle');

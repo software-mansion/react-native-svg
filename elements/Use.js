@@ -1,11 +1,11 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
-import { idPattern } from "../lib/util";
-import Shape from "./Shape";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import { idPattern } from '../lib/util';
+import Shape from './Shape';
 
 export default class Use extends Shape {
-  static displayName = "Use";
+  static displayName = 'Use';
 
   static defaultProps = {
     x: 0,
@@ -26,13 +26,12 @@ export default class Use extends Shape {
       href = xlinkHref,
     } = props;
 
-    // match "url(#pattern)"
     const matched = href.match(idPattern);
     const match = matched && matched[1];
 
     if (!match) {
       console.warn(
-        'Invalid `href` prop for `Use` element, expected a href like `"#id"`, but got: "' +
+        'Invalid `href` prop for `Use` element, expected a href like "#id", but got: "' +
           href +
           '"',
       );
@@ -54,4 +53,4 @@ export default class Use extends Shape {
   }
 }
 
-const RNSVGUse = requireNativeComponent("RNSVGUse");
+const RNSVGUse = requireNativeComponent('RNSVGUse');

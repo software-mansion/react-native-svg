@@ -1,29 +1,29 @@
-import React from "react";
+import React from 'react';
 import {
   requireNativeComponent,
   StyleSheet,
   findNodeHandle,
   NativeModules,
-} from "react-native";
-import extractResponder from "../lib/extract/extractResponder";
-import extractViewBox from "../lib/extract/extractViewBox";
-import Shape from "./Shape";
-import G from "./G";
+} from 'react-native';
+import extractResponder from '../lib/extract/extractResponder';
+import extractViewBox from '../lib/extract/extractViewBox';
+import Shape from './Shape';
+import G from './G';
 
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
 
 const styles = StyleSheet.create({
   svg: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: 0,
   },
 });
 
 export default class Svg extends Shape {
-  static displayName = "Svg";
+  static displayName = 'Svg';
 
   static defaultProps = {
-    preserveAspectRatio: "xMidYMid meet",
+    preserveAspectRatio: 'xMidYMid meet',
   };
 
   measureInWindow = (...args) => {
@@ -91,8 +91,8 @@ export default class Svg extends Shape {
 
     const w = parseInt(width, 10);
     const h = parseInt(height, 10);
-    const doNotParseWidth = isNaN(w) || width[width.length - 1] === "%";
-    const doNotParseHeight = isNaN(h) || height[height.length - 1] === "%";
+    const doNotParseWidth = isNaN(w) || width[width.length - 1] === '%';
+    const doNotParseHeight = isNaN(h) || height[height.length - 1] === '%';
     const dimensions =
       width && height
         ? {
@@ -145,4 +145,4 @@ export default class Svg extends Shape {
   }
 }
 
-const NativeSvgView = requireNativeComponent("RNSVGSvgView");
+const NativeSvgView = requireNativeComponent('RNSVGSvgView');

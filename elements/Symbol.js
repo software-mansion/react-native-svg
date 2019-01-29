@@ -1,10 +1,10 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractViewBox from "../lib/extract/extractViewBox";
-import Shape from "./Shape";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractViewBox from '../lib/extract/extractViewBox';
+import Shape from './Shape';
 
 export default class Symbol extends Shape {
-  static displayName = "Symbol";
+  static displayName = 'Symbol';
 
   render() {
     const { props } = this;
@@ -17,4 +17,4 @@ export default class Symbol extends Shape {
   }
 }
 
-const RNSVGSymbol = requireNativeComponent("RNSVGSymbol");
+const RNSVGSymbol = requireNativeComponent('RNSVGSymbol');

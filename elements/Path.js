@@ -1,10 +1,10 @@
-import React from "react";
-import { requireNativeComponent } from "react-native";
-import extractProps, { propsAndStyles } from "../lib/extract/extractProps";
-import Shape from "./Shape";
+import React from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import Shape from './Shape';
 
 export default class Path extends Shape {
-  static displayName = "Path";
+  static displayName = 'Path';
 
   render() {
     const { props } = this;
@@ -18,4 +18,4 @@ export default class Path extends Shape {
   }
 }
 
-const RNSVGPath = requireNativeComponent("RNSVGPath");
+const RNSVGPath = requireNativeComponent('RNSVGPath');

@@ -1,5 +1,5 @@
-import { Component } from "react";
-import SvgTouchableMixin from "../lib/SvgTouchableMixin";
+import { Component } from 'react';
+import SvgTouchableMixin from '../lib/SvgTouchableMixin';
 
 const touchKeys = Object.keys(SvgTouchableMixin);
 const touchVals = touchKeys.map(key => SvgTouchableMixin[key]);
@@ -11,7 +11,7 @@ export default class Shape extends Component {
     for (let i = 0; i < numTouchKeys; i++) {
       const key = touchKeys[i];
       const val = touchVals[i];
-      if (typeof val === "function") {
+      if (typeof val === 'function') {
         this[key] = val.bind(this);
       } else {
         this[key] = val;
