@@ -27,9 +27,7 @@
         "react": "*",
         "react-native": ">=0.50.0"
     },
-    "dependencies": {
-        "color": "^2.0.1"
-    },
+    "dependencies": {},
     "devDependencies": {
         "babel-eslint": "^6.1.2",
         "eslint": "^2.13.1",
