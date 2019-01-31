@@ -83,8 +83,12 @@ export interface ResponderProps extends ReactNative.GestureResponderHandlers {
   pointerEvents?: (event: any) => any,
 }
 
+// rgba values inside range 0 to 1 inclusive
+// rgbaArray = [r, g, b, a]
+type rgbaArray = ReadonlyArray<number>
+
 export interface FillProps {
-  fill?: string,
+  fill?: rgbaArray | string,
   fillOpacity?: NumberProp,
   fillRule?: FillRule,
 }
@@ -99,10 +103,10 @@ export interface DefinitionProps {
 }
 
 export interface StrokeProps {
-  stroke?: string,
+  stroke?: rgbaArray | string,
   strokeWidth?: NumberProp,
   strokeOpacity?: NumberProp,
-  strokeDasharray?: ReadonlyArray<number> | string,
+  strokeDasharray?: ReadonlyArray<NumberProp> | NumberProp,
   strokeDashoffset?: NumberProp,
   strokeLinecap?: Linecap,
   strokeLinejoin?: Linejoin,
@@ -147,13 +151,30 @@ export interface TransformObject {
   skewY?: NumberProp,
 }
 
+/*
+
+  ColumnMajorTransformMatrix
+
+  [a, b, c, d, tx, ty]
+
+  This matrix can be visualized as:
+
+  ╔═      ═╗
+  ║ a c tx ║
+  ║ b d ty ║
+  ║ 0 0 1  ║
+  ╚═      ═╝
+
+*/
+type ColumnMajorTransformMatrix = ReadonlyArray<number>;
+
 export interface TransformProps extends TransformObject {
-  transform?: string | TransformObject,
+  transform?: ColumnMajorTransformMatrix | string | TransformObject,
 }
 
 export interface CommonMaskProps {
-    mask?: string;
-  }
+  mask?: string;
+}
 
 export interface CommonPathProps extends FillProps, StrokeProps, ClipProps, TransformProps, ResponderProps, TouchableProps, DefinitionProps, CommonMaskProps {}
 
@@ -230,7 +251,7 @@ export interface PatternProps {
   y?: NumberProp,
   width?: NumberProp,
   height?: NumberProp,
-  patternTransform?: string,
+  patternTransform?: ColumnMajorTransformMatrix | string,
   patternUnits?: Units,
   patternContentUnits?: Units,
   viewBox?: string,
@@ -240,13 +261,13 @@ export const Pattern: React.ComponentClass<PatternProps>;
 
 export interface PolygonProps extends CommonPathProps {
   opacity?: NumberProp,
-  points: string | ReadonlyArray<any>,
+  points: string | ReadonlyArray<NumberProp>,
 }
 export const Polygon: React.ComponentClass<PolygonProps>;
 
 export interface PolylineProps extends CommonPathProps {
   opacity?: NumberProp,
-  points: string | ReadonlyArray<any>,
+  points: string | ReadonlyArray<NumberProp>,
 }
 export const Polyline: React.ComponentClass<PolylineProps>;
 
@@ -270,15 +291,14 @@ export interface RectProps extends CommonPathProps {
   height?: NumberProp,
   rx?: NumberProp,
   ry?: NumberProp,
-  class?: string,
   opacity?: NumberProp,
 }
 export const Rect: React.ComponentClass<RectProps>;
 
 export interface StopProps {
-  stopColor?: string,
+  stopColor?: rgbaArray | string,
   stopOpacity?: NumberProp,
-  offset?: string,
+  offset?: NumberProp,
 }
 export const Stop: React.ComponentClass<StopProps>;
 
@@ -337,8 +357,8 @@ export const TextPath: React.ComponentClass<TextPathProps>;
 export interface UseProps extends CommonPathProps {
   xlinkHref?: string,
   href: string,
-  width?: string,
-  height?: string,
+  width?: NumberProp,
+  height?: NumberProp,
   x?: NumberProp,
   y?: NumberProp,
   opacity?: NumberProp,
@@ -352,8 +372,8 @@ export enum EMaskUnits {
 }
 
 export type TMaskUnits =
-| EMaskUnits.USER_SPACE_ON_USE
-| EMaskUnits.OBJECT_BOUNDING_BOX;
+  | EMaskUnits.USER_SPACE_ON_USE
+  | EMaskUnits.OBJECT_BOUNDING_BOX;
 
 export interface MaskProps extends CommonPathProps {
   id: string,
@@ -361,7 +381,7 @@ export interface MaskProps extends CommonPathProps {
   y?: NumberProp,
   width?: NumberProp,
   height?: NumberProp,
-  maskTransform?: string,
+  maskTransform?: ColumnMajorTransformMatrix | string,
   maskUnits?: TMaskUnits,
   maskContentUnits?: TMaskUnits,
 }
