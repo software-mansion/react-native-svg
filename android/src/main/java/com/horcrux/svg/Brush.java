@@ -65,15 +65,13 @@ class Brush {
     }
 
     private static void parseGradientStops(ReadableArray value, int stopsCount, float[] stops, int[] stopsColors, float opacity) {
-        int startStops = value.size() - stopsCount;
         for (int i = 0; i < stopsCount; i++) {
-            stops[i] = (float) value.getDouble(startStops + i);
-            stopsColors[i] = Color.argb(
-                    (int) (value.getDouble(i * 4 + 3) * 255 * opacity),
-                    (int) (value.getDouble(i * 4) * 255),
-                    (int) (value.getDouble(i * 4 + 1) * 255),
-                    (int) (value.getDouble(i * 4 + 2) * 255));
-
+            int stopIndex = i * 2;
+            stops[i] = (float) value.getDouble(stopIndex);
+            int color = value.getInt(stopIndex + 1);
+            int alpha = color >>> 24;
+            int combined = Math.round((float)alpha * opacity);
+            stopsColors[i] = combined << 24 | (color & 0x00ffffff);
         }
     }
 
@@ -157,7 +155,7 @@ class Brush {
             return;
         }
 
-        int stopsCount = mColors.size() / 5;
+        int stopsCount = mColors.size() / 2;
         int[] stopsColors = new int[stopsCount];
         float[] stops = new float[stopsCount];
         parseGradientStops(mColors, stopsCount, stops, stopsColors, opacity);

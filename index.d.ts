@@ -87,8 +87,12 @@ export interface ResponderProps extends ReactNative.GestureResponderHandlers {
 // rgbaArray = [r, g, b, a]
 type rgbaArray = ReadonlyArray<number>
 
+// argb values inside range 0x00 to 0xff inclusive
+// int32ARGBColor = 0xaarrggbb
+type int32ARGBColor = number
+
 export interface FillProps {
-  fill?: rgbaArray | string,
+  fill?: int32ARGBColor | rgbaArray | string,
   fillOpacity?: NumberProp,
   fillRule?: FillRule,
 }
@@ -103,7 +107,7 @@ export interface DefinitionProps {
 }
 
 export interface StrokeProps {
-  stroke?: rgbaArray | string,
+  stroke?: int32ARGBColor | rgbaArray | string,
   strokeWidth?: NumberProp,
   strokeOpacity?: NumberProp,
   strokeDasharray?: ReadonlyArray<NumberProp> | NumberProp,
@@ -296,7 +300,7 @@ export interface RectProps extends CommonPathProps {
 export const Rect: React.ComponentClass<RectProps>;
 
 export interface StopProps {
-  stopColor?: rgbaArray | string,
+  stopColor?: int32ARGBColor | rgbaArray | string,
   stopOpacity?: NumberProp,
   offset?: NumberProp,
 }

@@ -23,11 +23,11 @@ import com.facebook.common.logging.FLog;
 import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.DataSource;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipeline;
 import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.facebook.imagepipeline.image.CloseableBitmap;
 import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
@@ -121,13 +121,15 @@ class ImageView extends RenderableView {
     @Override
     void draw(final Canvas canvas, final Paint paint, final float opacity) {
         if (!mLoading.get()) {
-            final ImageSource imageSource = new ImageSource(mContext, uriString);
+            ImagePipeline imagePipeline = Fresco.getImagePipeline();
+            ImageSource imageSource = new ImageSource(mContext, uriString);
+            ImageRequest request = ImageRequest.fromUri(imageSource.getUri());
+            boolean inMemoryCache = imagePipeline.isInBitmapMemoryCache(request);
 
-            final ImageRequest request = ImageRequestBuilder.newBuilderWithSource(imageSource.getUri()).build();
-            if (Fresco.getImagePipeline().isInBitmapMemoryCache(request)) {
-                tryRender(request, canvas, paint, opacity * mOpacity);
+            if (inMemoryCache) {
+                tryRenderFromBitmapCache(imagePipeline, request, canvas, paint, opacity * mOpacity);
             } else {
-                loadBitmap(request);
+                loadBitmap(imagePipeline, request);
             }
         }
     }
@@ -139,29 +141,29 @@ class ImageView extends RenderableView {
         return path;
     }
 
-    private void loadBitmap(ImageRequest request) {
+    private void loadBitmap(final ImagePipeline imagePipeline, final ImageRequest request) {
+        mLoading.set(true);
         final DataSource<CloseableReference<CloseableImage>> dataSource
-            = Fresco.getImagePipeline().fetchDecodedImage(request, mContext);
-        dataSource.subscribe(new BaseBitmapDataSubscriber() {
-                                 @Override
-                                 public void onNewResultImpl(Bitmap bitmap) {
-                                     mLoading.set(false);
-                                     SvgView view = getSvgView();
-                                     if (view != null) {
-                                         view.invalidate();
-                                     }
-                                 }
+                = imagePipeline.fetchDecodedImage(request, mContext);
+        BaseBitmapDataSubscriber subscriber = new BaseBitmapDataSubscriber() {
+            @Override
+            public void onNewResultImpl(Bitmap bitmap) {
+                mLoading.set(false);
+                SvgView view = getSvgView();
+                if (view != null) {
+                    view.invalidate();
+                }
+            }
 
-                                 @Override
-                                 public void onFailureImpl(DataSource dataSource) {
-                                     // No cleanup required here.
-                                     // TODO: more details about this failure
-                                     mLoading.set(false);
-                                     FLog.w(ReactConstants.TAG, dataSource.getFailureCause(), "RNSVG: fetchDecodedImage failed!");
-                                 }
-                             },
-            UiThreadImmediateExecutorService.getInstance()
-        );
+            @Override
+            public void onFailureImpl(DataSource dataSource) {
+                // No cleanup required here.
+                // TODO: more details about this failure
+                mLoading.set(false);
+                FLog.w(ReactConstants.TAG, dataSource.getFailureCause(), "RNSVG: fetchDecodedImage failed!");
+            }
+        };
+        dataSource.subscribe(subscriber, UiThreadImmediateExecutorService.getInstance());
     }
 
     @Nonnull
@@ -177,7 +179,7 @@ class ImageView extends RenderableView {
             h = mImageHeight * mScale;
         }
 
-        return new RectF((float)x, (float)y, (float)(x + w), (float)(y + h));
+        return new RectF((float) x, (float) y, (float) (x + w), (float) (y + h));
     }
 
     private void doRender(Canvas canvas, Paint paint, Bitmap bitmap, float opacity) {
@@ -212,27 +214,37 @@ class ImageView extends RenderableView {
         this.setClientRect(vbRect);
     }
 
-    private void tryRender(ImageRequest request, Canvas canvas, Paint paint, float opacity) {
+    private void tryRenderFromBitmapCache(ImagePipeline imagePipeline, ImageRequest request, Canvas canvas, Paint paint, float opacity) {
         final DataSource<CloseableReference<CloseableImage>> dataSource
-            = Fresco.getImagePipeline().fetchImageFromBitmapCache(request, mContext);
+                = imagePipeline.fetchImageFromBitmapCache(request, mContext);
 
         try {
             final CloseableReference<CloseableImage> imageReference = dataSource.getResult();
-            if (imageReference != null) {
-                try {
-                    if (imageReference.get() instanceof CloseableBitmap) {
-                        final Bitmap bitmap = ((CloseableBitmap) imageReference.get()).getUnderlyingBitmap();
-
-                        if (bitmap != null) {
-                            doRender(canvas, paint, bitmap, opacity);
-                        }
-                    }
-                } catch (Exception e) {
-                    throw new IllegalStateException(e);
-                } finally {
-                    CloseableReference.closeSafely(imageReference);
-                }
+            if (imageReference == null) {
+                return;
             }
+
+            try {
+                CloseableImage closeableImage = imageReference.get();
+                if (!(closeableImage instanceof CloseableBitmap)) {
+                    return;
+                }
+
+                CloseableBitmap closeableBitmap = (CloseableBitmap) closeableImage;
+                final Bitmap bitmap = closeableBitmap.getUnderlyingBitmap();
+
+                if (bitmap == null) {
+                    return;
+                }
+
+                doRender(canvas, paint, bitmap, opacity);
+
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            } finally {
+                CloseableReference.closeSafely(imageReference);
+            }
+
         } catch (Exception e) {
             throw new IllegalStateException(e);
         } finally {

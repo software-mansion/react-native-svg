@@ -125,6 +125,9 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
 + (CGColorRef)RNSVGCGColor:(id)json offset:(NSUInteger)offset
 {
     NSArray *arr = [self NSArray:json];
+    if (arr.count == offset + 1) {
+        return [self CGColor:[arr objectAtIndex:offset]];
+    }
     if (arr.count < offset + 4) {
         RCTLogError(@"Too few elements in array (expected at least %zd): %@", (ssize_t)(4 + offset), arr);
         return nil;
@@ -134,25 +137,36 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
 
 + (CGGradientRef)RNSVGCGGradient:(id)json
 {
-    NSArray *arr = [self NSNumberArray:json];
-    NSUInteger count = arr.count;
-    if (count < 5) {
-        RCTLogError(@"Too few elements in array (expected at least %zd): %@", 5l, arr);
-        return nil;
-    }
-
-    CGFloat colorsAndOffsets[count];
+    NSArray *arr = [self NSArray:json];
+    NSUInteger count = arr.count / 2;
+    NSUInteger values = count * 5;
+    NSUInteger offsetIndex = values - count;
+    CGFloat colorsAndOffsets[values];
     for (NSUInteger i = 0; i < count; i++) {
-        colorsAndOffsets[i] = (CGFloat)[arr[i] doubleValue];
+        NSUInteger stopIndex = i * 2;
+        CGFloat offset = (CGFloat)[arr[stopIndex] doubleValue];
+        NSUInteger argb = [self NSUInteger:arr[stopIndex + 1]];
+
+        CGFloat a = ((argb >> 24) & 0xFF) / 255.0;
+        CGFloat r = ((argb >> 16) & 0xFF) / 255.0;
+        CGFloat g = ((argb >> 8) & 0xFF) / 255.0;
+        CGFloat b = (argb & 0xFF) / 255.0;
+
+        NSUInteger colorIndex = i * 4;
+        colorsAndOffsets[colorIndex] = r;
+        colorsAndOffsets[colorIndex + 1] = g;
+        colorsAndOffsets[colorIndex + 2] = b;
+        colorsAndOffsets[colorIndex + 3] = a;
+
+        colorsAndOffsets[offsetIndex + i] = offset;
     }
 
-    size_t stops = count / 5;
     CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColorComponents(
                                                                  rgb,
                                                                  colorsAndOffsets,
-                                                                 colorsAndOffsets + stops * 4,
-                                                                 stops
+                                                                 colorsAndOffsets + offsetIndex,
+                                                                 count
                                                                  );
     CGColorSpaceRelease(rgb);
     return (CGGradientRef)CFAutorelease(gradient);
