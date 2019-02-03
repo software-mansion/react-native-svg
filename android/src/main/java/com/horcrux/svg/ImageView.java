@@ -193,13 +193,6 @@ class ImageView extends RenderableView {
         Matrix transform = ViewBox.getTransform(vbRect, renderRect, mAlign, mMeetOrSlice);
         transform.mapRect(vbRect);
 
-        if (mMatrix != null) {
-            mMatrix.mapRect(vbRect);
-        }
-        if (mTransform != null) {
-            mTransform.mapRect(vbRect);
-        }
-
         canvas.clipPath(getPath(canvas, paint));
 
         Path clipPath = getClipPath(canvas, paint);
