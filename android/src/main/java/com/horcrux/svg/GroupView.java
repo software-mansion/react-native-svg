@@ -117,6 +117,9 @@ class GroupView extends RenderableView {
             } else if (child instanceof SvgView) {
                 SvgView svgView = (SvgView)child;
                 svgView.drawChildren(canvas);
+                if (svgView.isResponsible()) {
+                    svg.enableTouchEvents();
+                }
             }
         }
         this.setClientRect(groupRect);
@@ -230,18 +233,24 @@ class GroupView extends RenderableView {
 
         for (int i = getChildCount() - 1; i >= 0; i--) {
             View child = getChildAt(i);
-            if (!(child instanceof VirtualView)) {
-                continue;
-            }
-            if (child instanceof MaskView) {
-                continue;
-            }
+            if (child instanceof VirtualView) {
+                if (child instanceof MaskView) {
+                    continue;
+                }
 
-            VirtualView node = (VirtualView) child;
+                VirtualView node = (VirtualView) child;
 
-            int hitChild = node.hitTest(dst);
-            if (hitChild != -1) {
-                return (node.isResponsible() || hitChild != child.getId()) ? hitChild : getId();
+                int hitChild = node.hitTest(dst);
+                if (hitChild != -1) {
+                    return (node.isResponsible() || hitChild != child.getId()) ? hitChild : getId();
+                }
+            } else if (child instanceof SvgView) {
+                SvgView node = (SvgView) child;
+
+                int hitChild = node.reactTagForTouch(dst[0], dst[1]);
+                if (hitChild != child.getId()) {
+                    return hitChild;
+                }
             }
         }
 

@@ -77,6 +77,15 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     @Override
     public void invalidate() {
         super.invalidate();
+        ViewParent parent = getParent();
+        if (parent instanceof VirtualView) {
+            if (!mRendered) {
+                return;
+            }
+            mRendered = false;
+            ((VirtualView) parent).getSvgView().invalidate();
+            return;
+        }
         if (mBitmap != null) {
             mBitmap.recycle();
         }
@@ -242,6 +251,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
 
     void drawChildren(final Canvas canvas) {
+        mRendered = true;
         mCanvas = canvas;
         if (mAlign != null) {
             RectF vbRect = getViewBox();
@@ -314,6 +324,10 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         }
     }
 
+    boolean isResponsible() {
+        return mResponsible;
+    }
+
     private int hitTest(float touchX, float touchY) {
         if (!mResponsible || !mInvertible) {
             return getId();
@@ -326,11 +340,11 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         int viewTag = -1;
         for (int i = count - 1; i >= 0; i--) {
             View child = getChildAt(i);
-            if (!(child instanceof VirtualView)) {
-                continue;
+            if (child instanceof VirtualView) {
+                viewTag = ((VirtualView) child).hitTest(transformed);
+            } else if (child instanceof SvgView) {
+                viewTag = ((SvgView) child).hitTest(touchX, touchY);
             }
-
-            viewTag = ((VirtualView) child).hitTest(transformed);
             if (viewTag != -1) {
                 break;
             }
