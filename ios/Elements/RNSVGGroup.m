@@ -173,20 +173,26 @@
         }
     }
 
-    for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
-        if (![node isKindOfClass:[RNSVGNode class]] || [node isKindOfClass:[RNSVGMask class]]) {
-            continue;
-        }
-
-        if (event) {
-            node.active = NO;
-        }
-
-        UIView *hitChild = [node hitTest:transformed withEvent:event];
-
-        if (hitChild) {
-            node.active = YES;
-            return (node.responsible || (node != hitChild)) ? hitChild : self;
+    for (UIView *node in [self.subviews reverseObjectEnumerator]) {
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            if ([node isKindOfClass:[RNSVGMask class]]) {
+                continue;
+            }
+            RNSVGNode* svgNode = (RNSVGNode*)node;
+            if (event) {
+                svgNode.active = NO;
+            }
+            UIView *hitChild = [svgNode hitTest:transformed withEvent:event];
+            if (hitChild) {
+                svgNode.active = YES;
+                return (svgNode.responsible || (svgNode != hitChild)) ? hitChild : self;
+            }
+        } else if ([node isKindOfClass:[RNSVGSvgView class]]) {
+            RNSVGSvgView* svgView = (RNSVGSvgView*)node;
+            UIView *hitChild = [svgView hitTest:transformed withEvent:event];
+            if (hitChild) {
+                return hitChild;
+            }
         }
     }
 

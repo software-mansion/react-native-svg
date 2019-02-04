@@ -66,6 +66,16 @@
 
 - (void)invalidate
 {
+    UIView* parent = self.superview;
+    if ([parent isKindOfClass:[RNSVGNode class]]) {
+        if (!rendered) {
+            return;
+        }
+        RNSVGNode* svgNode = (RNSVGNode*)parent;
+        [svgNode invalidate];
+        rendered = false;
+        return;
+    }
     [self setNeedsDisplay];
 }
 
@@ -158,7 +168,7 @@
 }
 
 - (void)drawToContext:(CGContextRef)context withRect:(CGRect)rect {
-
+    rendered = true;
     self.initialCTM = CGContextGetCTM(context);
     self.invInitialCTM = CGAffineTransformInvert(self.initialCTM);
     if (self.align) {
