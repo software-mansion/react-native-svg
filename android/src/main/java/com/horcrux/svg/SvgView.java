@@ -234,7 +234,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
             height = (float) PropHelper.fromRelative(mbbHeight, parentHeight, 0, mScale, 12);
             setMeasuredDimension((int)Math.ceil(width), (int)Math.ceil(height));
         }
-        if (width == 0 || height == 0) {
+        if (width <= 0 || height <= 0) {
             return null;
         }
         Bitmap bitmap = Bitmap.createBitmap(
