@@ -550,6 +550,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 - (void)dealloc
 {
     CGPathRelease(_cachedClipPath);
+    CGPathRelease(_strokePath);
     CGImageRelease(_clipMask);
     CGPathRelease(_path);
     _clipMask = nil;

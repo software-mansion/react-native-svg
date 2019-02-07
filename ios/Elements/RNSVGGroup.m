@@ -74,9 +74,13 @@
 
         return YES;
     }];
-    [self setHitArea:[self getPath:context]];
+    CGPathRef path = [self getPath:context];
+    [self setHitArea:path];
     if (!CGRectEqualToRect(bounds, CGRectNull)) {
         self.clientRect = bounds;
+        const CGRect fillBounds = CGPathGetBoundingBox(path);
+        const CGRect strokeBounds = CGPathGetBoundingBox(self.strokePath);
+        self.pathBounds = CGRectUnion(fillBounds, strokeBounds);
 
         CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
         CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
@@ -150,6 +154,10 @@
     CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
     transformed = CGPointApplyAffineTransform(transformed, self.invTransform);
 
+    if (!CGRectContainsPoint(self.pathBounds, transformed)) {
+        return nil;
+    }
+
     if (self.clipPath) {
         RNSVGClipPath *clipNode = (RNSVGClipPath*)[self.svgView getDefinedClipPath:self.clipPath];
         if ([clipNode isSimpleClipPath]) {
@@ -169,7 +177,7 @@
         NSPredicate *const anyActive = [NSPredicate predicateWithFormat:@"active == TRUE"];
         NSArray *const filtered = [self.subviews filteredArrayUsingPredicate:anyActive];
         if ([filtered count] != 0) {
-            return [filtered.firstObject hitTest:transformed withEvent:event];
+            return [filtered.lastObject hitTest:transformed withEvent:event];
         }
     }
 

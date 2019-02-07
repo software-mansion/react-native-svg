@@ -18,7 +18,6 @@
     NSArray<NSString *> *_attributeList;
     NSArray<RNSVGLength *> *_sourceStrokeDashArray;
     CGFloat *_strokeDashArrayData;
-    CGPathRef _strokePath;
     CGPathRef _srcHitPath;
     CGPathRef _hitArea;
 }
@@ -157,7 +156,6 @@
 - (void)dealloc
 {
     CGPathRelease(_hitArea);
-    CGPathRelease(_strokePath);
     _sourceStrokeDashArray = nil;
     if (_strokeDashArrayData) {
         free(_strokeDashArrayData);
@@ -295,15 +293,15 @@ UInt32 saturate(CGFloat value) {
             self.path = CGPathRetain(path);
         }
         [self setHitArea:path];
+        const CGRect fillBounds = CGPathGetBoundingBox(path);
+        const CGRect strokeBounds = CGPathGetBoundingBox(self.strokePath);
+        self.pathBounds = CGRectUnion(fillBounds, strokeBounds);
     }
-
-    const CGRect fillBounds = CGPathGetBoundingBox(path);
-    const CGRect strokeBounds = CGPathGetBoundingBox(_strokePath);
-    const CGRect pathBounding = CGRectUnion(fillBounds, strokeBounds);
+    const CGRect pathBounds = self.pathBounds;
 
     CGAffineTransform current = CGContextGetCTM(context);
     CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
-    CGRect clientRect = CGRectApplyAffineTransform(pathBounding, svgToClientTransform);
+    CGRect clientRect = CGRectApplyAffineTransform(pathBounds, svgToClientTransform);
 
     self.clientRect = clientRect;
 
@@ -312,7 +310,7 @@ UInt32 saturate(CGFloat value) {
     CGAffineTransform matrix = CGAffineTransformConcat(transform, vbmatrix);
 
     CGRect bounds = CGRectMake(0, 0, CGRectGetWidth(clientRect), CGRectGetHeight(clientRect));
-    CGPoint mid = CGPointMake(CGRectGetMidX(pathBounding), CGRectGetMidY(pathBounding));
+    CGPoint mid = CGPointMake(CGRectGetMidX(pathBounds), CGRectGetMidY(pathBounds));
     CGPoint center = CGPointApplyAffineTransform(mid, matrix);
 
     self.bounds = bounds;
@@ -352,7 +350,7 @@ UInt32 saturate(CGFloat value) {
             [self.fill paint:context
                      opacity:self.fillOpacity
                      painter:[self.svgView getDefinedPainter:self.fill.brushRef]
-                      bounds:pathBounding
+                      bounds:pathBounds
              ];
             CGContextRestoreGState(context);
 
@@ -409,7 +407,7 @@ UInt32 saturate(CGFloat value) {
             [self.stroke paint:context
                        opacity:self.strokeOpacity
                        painter:[self.svgView getDefinedPainter:self.stroke.brushRef]
-                        bounds:pathBounding
+                        bounds:pathBounds
              ];
             return;
         }
@@ -426,13 +424,13 @@ UInt32 saturate(CGFloat value) {
     }
     _srcHitPath = path;
     CGPathRelease(_hitArea);
-    CGPathRelease(_strokePath);
+    CGPathRelease(self.strokePath);
     _hitArea = CGPathCreateCopy(path);
-    _strokePath = nil;
+    self.strokePath = nil;
     if (self.stroke && self.strokeWidth) {
         // Add stroke to hitArea
         CGFloat width = [self relativeOnOther:self.strokeWidth];
-        _strokePath = CGPathRetain(CFAutorelease(CGPathCreateCopyByStrokingPath(path, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit)));
+        self.strokePath = CGPathRetain(CFAutorelease(CGPathCreateCopyByStrokingPath(path, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit)));
         // TODO add dashing
         // CGPathCreateCopyByDashingPath(CGPathRef  _Nullable path, const CGAffineTransform * _Nullable transform, CGFloat phase, const CGFloat * _Nullable lengths, size_t count)
     }
@@ -460,9 +458,13 @@ UInt32 saturate(CGFloat value) {
     CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
     transformed = CGPointApplyAffineTransform(transformed, self.invTransform);
 
+    if (!CGRectContainsPoint(self.pathBounds, transformed)) {
+        return nil;
+    }
+
     BOOL evenodd = self.fillRule == kRNSVGCGFCRuleEvenodd;
     if (!CGPathContainsPoint(_hitArea, nil, transformed, evenodd) &&
-        !CGPathContainsPoint(_strokePath, nil, transformed, NO)) {
+        !CGPathContainsPoint(self.strokePath, nil, transformed, NO)) {
         return nil;
     }
 
