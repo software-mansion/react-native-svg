@@ -169,7 +169,7 @@
         NSPredicate *const anyActive = [NSPredicate predicateWithFormat:@"active == TRUE"];
         NSArray *const filtered = [self.subviews filteredArrayUsingPredicate:anyActive];
         if ([filtered count] != 0) {
-            return [filtered.firstObject hitTest:transformed withEvent:event];
+            return [filtered.lastObject hitTest:transformed withEvent:event];
         }
     }
 
