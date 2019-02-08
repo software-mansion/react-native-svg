@@ -28,6 +28,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.text.ReactFontManager;
 
+import java.util.ArrayList;
+
 import javax.annotation.Nullable;
 
 import static android.graphics.Matrix.MTRANS_X;
@@ -47,6 +49,8 @@ class TSpanView extends TextView {
 
     @Nullable String mContent;
     private TextPathView textPath;
+    ArrayList<String> emoji = new ArrayList<>();
+    ArrayList<Matrix> emojiTransforms = new ArrayList<>();
 
     public TSpanView(ReactContext reactContext) {
         super(reactContext);
@@ -61,6 +65,20 @@ class TSpanView extends TextView {
     @Override
     void draw(Canvas canvas, Paint paint, float opacity) {
         if (mContent != null) {
+            int numEmoji = emoji.size();
+            if (numEmoji > 0) {
+                GlyphContext gc = getTextRootGlyphContext();
+                FontData font = gc.getFont();
+                applyTextPropertiesToPaint(paint, font);
+                for (int i = 0; i < numEmoji; i++) {
+                    String current = emoji.get(i);
+                    Matrix mid = emojiTransforms.get(i);
+                    canvas.save();
+                    canvas.concat(mid);
+                    canvas.drawText(current, 0, 0, paint);
+                    canvas.restore();
+                }
+            }
             drawPath(canvas, paint, opacity);
         } else {
             clip(canvas, paint);
@@ -676,6 +694,9 @@ class TSpanView extends TextView {
         final float[] midPointMatrixData = new float[9];
         final float[] endPointMatrixData = new float[9];
 
+        emoji.clear();
+        emojiTransforms.clear();
+
         for (int index = 0; index < length; index++) {
             char currentChar = chars[index];
             String current = String.valueOf(currentChar);
@@ -855,12 +876,12 @@ class TSpanView extends TextView {
             glyph.computeBounds(bounds, true);
             float width = bounds.width();
             if (width == 0) { // Render unicode emoji
-                mid.getValues(midPointMatrixData);
-                double midX = midPointMatrixData[MTRANS_X];
-                double midY = midPointMatrixData[MTRANS_Y];
-                canvas.rotate((float) r, (float)midX, (float)midY);
-                canvas.drawText(current, (float)midX, (float)midY, paint);
-                canvas.rotate((float) -r, (float)midX, (float)midY);
+                canvas.save();
+                canvas.concat(mid);
+                emoji.add(current);
+                emojiTransforms.add(new Matrix(mid));
+                canvas.drawText(current, 0, 0, paint);
+                canvas.restore();
             } else {
                 glyph.transform(mid);
                 path.addPath(glyph);
