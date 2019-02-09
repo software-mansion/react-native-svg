@@ -14,6 +14,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Region;
+import android.view.View;
 import android.view.ViewParent;
 
 import com.facebook.react.bridge.Dynamic;
@@ -38,6 +39,7 @@ class TextView extends GroupView {
     @Nullable ArrayList<SVGLength> mRotate;
     @Nullable ArrayList<SVGLength> mDeltaX;
     @Nullable ArrayList<SVGLength> mDeltaY;
+    double cachedAdvance = Double.NaN;
 
     public TextView(ReactContext reactContext) {
         super(reactContext);
@@ -48,6 +50,7 @@ class TextView extends GroupView {
         if (mPath == null) {
             return;
         }
+        cachedAdvance = Double.NaN;
         super.invalidate();
         clearChildCache();
     }
@@ -207,4 +210,42 @@ class TextView extends GroupView {
         boolean isTextNode = !(this instanceof TextPathView) && !(this instanceof TSpanView);
         getTextRootGlyphContext().pushContext(isTextNode, this, mFont, mPositionX, mPositionY, mDeltaX, mDeltaY, mRotate);
     }
+
+    TextView getTextAnchorRoot() {
+        GlyphContext gc = getTextRootGlyphContext();
+        FontData font = gc.getFont();
+        TextProperties.TextAnchor textAnchor = font.textAnchor;
+        if (textAnchor == TextProperties.TextAnchor.start) {
+            return this;
+        }
+        ViewParent parent = this.getParent();
+        if (parent instanceof TextView) {
+            TextView parentText = (TextView)parent;
+            GlyphContext parentGc = parentText.getGlyphContext();
+            FontData parentFont = parentGc.getFont();
+            if (parentFont.textAnchor == TextProperties.TextAnchor.start) {
+                return this;
+            } else {
+                return parentText.getTextAnchorRoot();
+            }
+        }
+        return this;
+    }
+
+    double getSubtreeTextChunksTotalAdvance(Paint paint) {
+        if (!Double.isNaN(cachedAdvance)) {
+            return cachedAdvance;
+        }
+        double advance = 0;
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            if (child instanceof TextView) {
+                TextView text = (TextView)child;
+                advance += text.getSubtreeTextChunksTotalAdvance(paint);
+            }
+        }
+        cachedAdvance = advance;
+        return advance;
+    }
+
 }

@@ -21,6 +21,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.view.View;
 import android.view.ViewParent;
 
 import com.facebook.react.bridge.ReactContext;
@@ -104,6 +105,50 @@ class TSpanView extends TextView {
         popGlyphContext();
 
         return mPath;
+    }
+
+    double getSubtreeTextChunksTotalAdvance(Paint paint) {
+        double advance = 0;
+
+        if (mContent == null) {
+            for (int i = 0; i < getChildCount(); i++) {
+                View child = getChildAt(i);
+                if (child instanceof TextView) {
+                    TextView text = (TextView)child;
+                    advance += text.getSubtreeTextChunksTotalAdvance(paint);
+                }
+            }
+            return advance;
+        }
+
+        String line = mContent;
+        final int length = line.length();
+
+        if (length == 0) {
+            return advance;
+        }
+
+        GlyphContext gc = getTextRootGlyphContext();
+        FontData font = gc.getFont();
+        applyTextPropertiesToPaint(paint, font);
+
+        double letterSpacing = font.letterSpacing;
+        final boolean allowOptionalLigatures = letterSpacing == 0 &&
+                font.fontVariantLigatures == FontVariantLigatures.normal;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String required = "'rlig', 'liga', 'clig', 'calt', 'locl', 'ccmp', 'mark', 'mkmk',";
+            String defaultFeatures = required + "'kern', ";
+            if (allowOptionalLigatures) {
+                String additionalLigatures = "'hlig', 'cala', ";
+                paint.setFontFeatureSettings(defaultFeatures + additionalLigatures + font.fontFeatureSettings);
+            } else {
+                String disableDiscretionaryLigatures = "'liga' 0, 'clig' 0, 'dlig' 0, 'hlig' 0, 'cala' 0, ";
+                paint.setFontFeatureSettings(defaultFeatures + disableDiscretionaryLigatures + font.fontFeatureSettings);
+            }
+        }
+
+        return paint.measureText(line);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -311,8 +356,10 @@ class TSpanView extends TextView {
             attributes, such as a ‘dx’ attribute value on a ‘tspan’ element.
          */
         final TextAnchor textAnchor = font.textAnchor;
-        final double textMeasure = paint.measureText(line);
+        TextView anchorRoot = getTextAnchorRoot();
+        final double textMeasure = anchorRoot.getSubtreeTextChunksTotalAdvance(paint);
         double offset = getTextAnchorOffset(textAnchor, textMeasure);
+        applyTextPropertiesToPaint(paint, font);
 
         int side = 1;
         double startOfRendering = 0;
