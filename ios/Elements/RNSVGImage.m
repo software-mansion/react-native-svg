@@ -117,6 +117,7 @@
     CGPathRef hitAreaPath = CGPathCreateWithRect(hitArea, nil);
     [self setHitArea:hitAreaPath];
     CGPathRelease(hitAreaPath);
+    self.pathBounds = hitArea;
 
     // apply viewBox transform on Image render.
     CGRect imageBounds = CGRectMake(0, 0, _imageSize.width, _imageSize.height);
