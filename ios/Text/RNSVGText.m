@@ -18,6 +18,7 @@
     RNSVGGlyphContext *_glyphContext;
     NSString *_alignmentBaseline;
     NSString *_baselineShift;
+    CGFloat cachedAdvance;
 }
 
 - (void)invalidate
@@ -25,6 +26,7 @@
     if (self.dirty || self.merging) {
         return;
     }
+    cachedAdvance = NAN;
     [super invalidate];
     [self clearChildCache];
 }
@@ -246,6 +248,45 @@
 - (CTFontRef)getFontFromContext
 {
     return [[self.textRoot getGlyphContext] getGlyphFont];
+}
+
+- (RNSVGText*)getTextAnchorRoot
+{
+    RNSVGGlyphContext* gc = [self.textRoot getGlyphContext];
+    RNSVGFontData* font = [gc getFont];
+    enum RNSVGTextAnchor textAnchor = font->textAnchor;
+    if (textAnchor == RNSVGTextAnchorStart) {
+        return self;
+    }
+    UIView* parent = [self superview];
+    if ([parent isKindOfClass:[RNSVGText class]]) {
+        RNSVGText *parentText = (RNSVGText*)parent;
+        RNSVGGlyphContext* gc = [parentText.textRoot getGlyphContext];
+        RNSVGFontData* font = [gc getFont];
+        enum RNSVGTextAnchor textAnchor = font->textAnchor;
+        if (textAnchor == RNSVGTextAnchorStart) {
+            return self;
+        } else {
+            return [parentText getTextAnchorRoot];
+        }
+    }
+    return self;
+}
+
+- (CGFloat)getSubtreeTextChunksTotalAdvance
+{
+    if (!isnan(cachedAdvance)) {
+        return cachedAdvance;
+    }
+    CGFloat advance = 0;
+    for (UIView *node in self.subviews) {
+        if ([node isKindOfClass:[RNSVGText class]]) {
+            RNSVGText *text = (RNSVGText*)node;
+            advance += [text getSubtreeTextChunksTotalAdvance];
+        }
+    }
+    cachedAdvance = advance;
+    return advance;
 }
 
 @end

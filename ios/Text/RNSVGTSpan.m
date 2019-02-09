@@ -100,6 +100,65 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     return path;
 }
 
+- (CGFloat)getSubtreeTextChunksTotalAdvance
+{
+    CGFloat advance = 0;
+
+    NSString *str = self.content;
+    if (!str) {
+        for (UIView *node in self.subviews) {
+            if ([node isKindOfClass:[RNSVGText class]]) {
+                RNSVGText *text = (RNSVGText*)node;
+                advance += [text getSubtreeTextChunksTotalAdvance];
+            }
+        }
+        return advance;
+    }
+
+    // Create a dictionary for this font
+    CTFontRef fontRef = [self getFontFromContext];
+    RNSVGGlyphContext* gc = [self.textRoot getGlyphContext];
+    RNSVGFontData* font = [gc getFont];
+
+    CGFloat letterSpacing = font->letterSpacing;
+    bool autoKerning = !font->manualKerning;
+
+    bool allowOptionalLigatures = letterSpacing == 0 && font->fontVariantLigatures == RNSVGFontVariantLigaturesNormal;
+
+    NSMutableDictionary *attrs = [[NSMutableDictionary alloc] init];
+
+    NSNumber *lig = [NSNumber numberWithInt:allowOptionalLigatures ? 2 : 1];
+    attrs[NSLigatureAttributeName] = lig;
+    CFDictionaryRef attributes;
+    if (fontRef != nil) {
+        attrs[NSFontAttributeName] = (__bridge id)fontRef;
+    }
+    if (!autoKerning) {
+        NSNumber *noAutoKern = [NSNumber numberWithFloat:0.0f];
+
+#if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
+        if (___useiOS6Attributes)
+        {
+            [attrs setObject:noAutoKern forKey:NSKernAttributeName];
+        }
+        else
+#endif
+        {
+            [attrs setObject:noAutoKern forKey:(id)kCTKernAttributeName];
+        }
+    }
+
+    attributes = (__bridge CFDictionaryRef)attrs;
+
+    CFStringRef string = (__bridge CFStringRef)str;
+    CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
+    CTLineRef line = CTLineCreateWithAttributedString(attrString);
+
+    CGRect textBounds = CTLineGetBoundsWithOptions(line, 0);
+    CGFloat textMeasure = CGRectGetWidth(textBounds);
+    return textMeasure;
+}
+
 - (CGPathRef)getLinePath:(NSString *)str context:(CGContextRef)context
 {
     // Create a dictionary for this font
@@ -292,8 +351,8 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
      attributes, such as a ‘dx’ attribute value on a ‘tspan’ element.
      */
     enum RNSVGTextAnchor textAnchor = font->textAnchor;
-    CGRect textBounds = CTLineGetBoundsWithOptions(line, 0);
-    CGFloat textMeasure = CGRectGetWidth(textBounds);
+    RNSVGText *anchorRoot = [self getTextAnchorRoot];
+    CGFloat textMeasure = [anchorRoot getSubtreeTextChunksTotalAdvance];
     CGFloat offset = [RNSVGTSpan getTextAnchorOffset:textAnchor width:textMeasure];
 
     bool hasTextPath = textPath != nil;
