@@ -146,6 +146,7 @@ class TSpanView extends TextView {
                 String disableDiscretionaryLigatures = "'liga' 0, 'clig' 0, 'dlig' 0, 'hlig' 0, 'cala' 0, ";
                 paint.setFontFeatureSettings(defaultFeatures + disableDiscretionaryLigatures + font.fontFeatureSettings);
             }
+            paint.setLetterSpacing((float)(letterSpacing / (font.fontSize * mScale)));
         }
 
         return paint.measureText(line);
@@ -610,7 +611,7 @@ class TSpanView extends TextView {
                     // this will just retrieve the bounding rect for 'x'
                     paint.getTextBounds("x", 0, 1, bounds);
                     int xHeight = bounds.height();
-                    baselineShift = xHeight / 2;
+                    baselineShift = xHeight / 2.0;
                     break;
 
                 case central:
@@ -738,7 +739,6 @@ class TSpanView extends TextView {
         final Matrix end = new Matrix();
 
         final float[] startPointMatrixData = new float[9];
-        final float[] midPointMatrixData = new float[9];
         final float[] endPointMatrixData = new float[9];
 
         emoji.clear();
@@ -1008,6 +1008,9 @@ class TSpanView extends TextView {
         paint.setTypeface(typeface);
         paint.setTextSize((float) fontSize);
         paint.setTextAlign(Paint.Align.LEFT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            paint.setLetterSpacing(0);
+        }
 
         // Do these have any effect for anyone? Not for me (@msand) at least.
         // paint.setUnderlineText(underlineText);

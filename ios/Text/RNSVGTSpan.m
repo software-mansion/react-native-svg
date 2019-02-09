@@ -121,7 +121,7 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     RNSVGFontData* font = [gc getFont];
 
     CGFloat letterSpacing = font->letterSpacing;
-    bool autoKerning = !font->manualKerning;
+    CGFloat kerning = font->kerning;
 
     bool allowOptionalLigatures = letterSpacing == 0 && font->fontVariantLigatures == RNSVGFontVariantLigaturesNormal;
 
@@ -133,19 +133,18 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     if (fontRef != nil) {
         attrs[NSFontAttributeName] = (__bridge id)fontRef;
     }
-    if (!autoKerning) {
-        NSNumber *noAutoKern = [NSNumber numberWithFloat:0.0f];
+    float kern = (float)(letterSpacing + kerning);
+    NSNumber *kernAttr = [NSNumber numberWithFloat:kern];
 
 #if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
-        if (___useiOS6Attributes)
-        {
-            [attrs setObject:noAutoKern forKey:NSKernAttributeName];
-        }
-        else
+    if (___useiOS6Attributes)
+    {
+        [attrs setObject:kernAttr forKey:NSKernAttributeName];
+    }
+    else
 #endif
-        {
-            [attrs setObject:noAutoKern forKey:(id)kCTKernAttributeName];
-        }
+    {
+        [attrs setObject:kernAttr forKey:(id)kCTKernAttributeName];
     }
 
     attributes = (__bridge CFDictionaryRef)attrs;

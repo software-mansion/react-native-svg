@@ -213,23 +213,17 @@ class TextView extends GroupView {
 
     TextView getTextAnchorRoot() {
         GlyphContext gc = getTextRootGlyphContext();
-        FontData font = gc.getFont();
-        TextProperties.TextAnchor textAnchor = font.textAnchor;
-        if (textAnchor == TextProperties.TextAnchor.start) {
-            return this;
-        }
+        ArrayList<FontData> font = gc.mFontContext;
+        TextView node = this;
         ViewParent parent = this.getParent();
-        if (parent instanceof TextView) {
-            TextView parentText = (TextView)parent;
-            GlyphContext parentGc = parentText.getGlyphContext();
-            FontData parentFont = parentGc.getFont();
-            if (parentFont.textAnchor == TextProperties.TextAnchor.start) {
-                return this;
-            } else {
-                return parentText.getTextAnchorRoot();
+        for (int i = font.size() - 1; i >= 0; i--) {
+            if (!(parent instanceof TextView) || font.get(i).textAnchor == TextProperties.TextAnchor.start) {
+                return node;
             }
+            node = (TextView) parent;
+            parent = node.getParent();
         }
-        return this;
+        return node;
     }
 
     double getSubtreeTextChunksTotalAdvance(Paint paint) {
@@ -240,7 +234,7 @@ class TextView extends GroupView {
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
             if (child instanceof TextView) {
-                TextView text = (TextView)child;
+                TextView text = (TextView) child;
                 advance += text.getSubtreeTextChunksTotalAdvance(paint);
             }
         }
