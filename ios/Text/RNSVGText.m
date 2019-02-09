@@ -253,24 +253,19 @@
 - (RNSVGText*)getTextAnchorRoot
 {
     RNSVGGlyphContext* gc = [self.textRoot getGlyphContext];
-    RNSVGFontData* font = [gc getFont];
-    enum RNSVGTextAnchor textAnchor = font->textAnchor;
-    if (textAnchor == RNSVGTextAnchorStart) {
-        return self;
-    }
+    NSArray* font = [gc getFontContext];
+    RNSVGText* node = self;
     UIView* parent = [self superview];
-    if ([parent isKindOfClass:[RNSVGText class]]) {
-        RNSVGText *parentText = (RNSVGText*)parent;
-        RNSVGGlyphContext* gc = [parentText.textRoot getGlyphContext];
-        RNSVGFontData* font = [gc getFont];
-        enum RNSVGTextAnchor textAnchor = font->textAnchor;
-        if (textAnchor == RNSVGTextAnchorStart) {
-            return self;
-        } else {
-            return [parentText getTextAnchorRoot];
+    for (NSInteger i = [font count] - 1; i >= 0; i--) {
+        RNSVGFontData* fontData = [font objectAtIndex:i];
+        if (![parent isKindOfClass:[RNSVGText class]] ||
+            fontData->textAnchor == RNSVGTextAnchorStart) {
+            return node;
         }
+        node = (RNSVGText*) parent;
+        parent = [node superview];
     }
-    return self;
+    return node;
 }
 
 - (CGFloat)getSubtreeTextChunksTotalAdvance
