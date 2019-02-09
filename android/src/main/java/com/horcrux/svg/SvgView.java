@@ -221,8 +221,8 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         mRendered = true;
         float width = getWidth();
         float height = getHeight();
-        boolean early = Float.isNaN(width) || Float.isNaN(height) || width * height == 0 || (Math.log10(width) + Math.log10(height) > 42);
-        if (early || width == 0 || height == 0) {
+        boolean invalid = Float.isNaN(width) || Float.isNaN(height) || width < 1 || height < 1 || (Math.log10(width) + Math.log10(height) > 42);
+        if (invalid) {
             return null;
         }
         Bitmap bitmap = Bitmap.createBitmap(
