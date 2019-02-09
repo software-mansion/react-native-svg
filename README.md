@@ -117,7 +117,7 @@ Or, include [this PR](https://github.com/facebook/react-native/pull/17842) manua
     implementation project(':react-native-svg')
 	```
 
-4. Open up `android/app/src/main/java/[...]/MainApplication.java
+4. Open up `android/app/src/main/java/[...]/MainApplication.java`
   - Add `import com.horcrux.svg.SvgPackage;` to the imports at the top of the file
   - Add `new SvgPackage()` to the list returned by the `getPackages()` method. Add a comma to the previous item if there's already something there.
 
@@ -127,9 +127,9 @@ Or, include [this PR](https://github.com/facebook/react-native/pull/17842) manua
 
 To install react-native-svg on iOS visit the link referenced above or do the following:
 
-1. Open your project in XCode and drag the RNSVG.xcodeproj file (located in .../node_modules/react-native-svg/ios) into the Libraries directory shown in XCode.
-2. Expand the RNSVG.xcodeproj file you just added to XCode until you see: libRNSVG.a (located in RNSVG.xcodeproj > Products )
-3. Drag libRNSVG.a into the Link Binary With Libraries section (located in Build Phases which may be found at the top of the XCode window)
+1. Open your project in XCode and drag the `RNSVG.xcodeproj` file (located in `.../node_modules/react-native-svg/ios`) into the Libraries directory shown in XCode.
+2. Expand the `RNSVG.xcodeproj` file you just added to XCode until you see: `libRNSVG.a` (located in `RNSVG.xcodeproj` > `Products` )
+3. Drag `libRNSVG.a` into the Link Binary With Libraries section (located in Build Phases which may be found at the top of the XCode window)
 
 ###### CocoaPods
 
@@ -180,14 +180,14 @@ npm i react-native-svg
 react-native link
 ```
 
-Make a reproduction of the problem in App.js
+Make a reproduction of the problem in `App.js`
     
 ```bash
 react-native run-ios
 react-native run-android
 ```
 
-Verify that it is still an issue with the latest version. If so, open a new issue, include the entire App.js file, specify what platforms you've tested, and the results of running this command:
+Verify that it is still an issue with the latest version. If so, open a new issue, include the entire `App.js` file, specify what platforms you've tested, and the results of running this command:
 
 ```bash
 react-native info
