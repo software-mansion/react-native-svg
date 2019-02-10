@@ -26,9 +26,14 @@
     if (self.dirty || self.merging) {
         return;
     }
-    cachedAdvance = NAN;
     [super invalidate];
     [self clearChildCache];
+}
+
+- (void)clearPath
+{
+    [super clearPath];
+    cachedAdvance = NAN;
 }
 
 - (void)setTextLength:(RNSVGLength *)textLength

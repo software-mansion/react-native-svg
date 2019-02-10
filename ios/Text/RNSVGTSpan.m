@@ -25,6 +25,7 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     BOOL isClosed;
     NSMutableArray *emoji;
     NSMutableArray *emojiTransform;
+    CGFloat cachedAdvance;
 }
 
 - (id)init
@@ -39,6 +40,12 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     emojiTransform = [NSMutableArray arrayWithCapacity:0];
 
     return self;
+}
+
+- (void)clearPath
+{
+    [super clearPath];
+    cachedAdvance = NAN;
 }
 
 - (void)setContent:(NSString *)content
@@ -102,6 +109,9 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 
 - (CGFloat)getSubtreeTextChunksTotalAdvance
 {
+    if (!isnan(cachedAdvance)) {
+        return cachedAdvance;
+    }
     CGFloat advance = 0;
 
     NSString *str = self.content;
@@ -112,6 +122,7 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
                 advance += [text getSubtreeTextChunksTotalAdvance];
             }
         }
+        cachedAdvance = advance;
         return advance;
     }
 
@@ -155,6 +166,7 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 
     CGRect textBounds = CTLineGetBoundsWithOptions(line, 0);
     CGFloat textMeasure = CGRectGetWidth(textBounds);
+    cachedAdvance = textMeasure;
     return textMeasure;
 }
 

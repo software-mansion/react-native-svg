@@ -108,6 +108,9 @@ class TSpanView extends TextView {
     }
 
     double getSubtreeTextChunksTotalAdvance(Paint paint) {
+        if (!Double.isNaN(cachedAdvance)) {
+            return cachedAdvance;
+        }
         double advance = 0;
 
         if (mContent == null) {
@@ -118,6 +121,7 @@ class TSpanView extends TextView {
                     advance += text.getSubtreeTextChunksTotalAdvance(paint);
                 }
             }
+            cachedAdvance = advance;
             return advance;
         }
 
@@ -125,6 +129,7 @@ class TSpanView extends TextView {
         final int length = line.length();
 
         if (length == 0) {
+            cachedAdvance = 0;
             return advance;
         }
 
@@ -149,7 +154,8 @@ class TSpanView extends TextView {
             paint.setLetterSpacing((float)(letterSpacing / (font.fontSize * mScale)));
         }
 
-        return paint.measureText(line);
+        cachedAdvance = paint.measureText(line);
+        return cachedAdvance;
     }
 
     @SuppressWarnings("ConstantConditions")

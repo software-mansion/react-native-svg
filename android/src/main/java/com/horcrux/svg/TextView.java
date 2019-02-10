@@ -50,9 +50,13 @@ class TextView extends GroupView {
         if (mPath == null) {
             return;
         }
-        cachedAdvance = Double.NaN;
         super.invalidate();
         clearChildCache();
+    }
+
+    void clearCache() {
+        cachedAdvance = Double.NaN;
+        super.clearCache();
     }
 
     @ReactProp(name = "textLength")
