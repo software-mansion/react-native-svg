@@ -306,6 +306,20 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
     }
 
+    String toDataURL(int width, int height) {
+        Bitmap bitmap = Bitmap.createBitmap(
+                width,
+                height,
+                Bitmap.Config.ARGB_8888);
+
+        drawChildren(new Canvas(bitmap));
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bitmap.recycle();
+        byte[] bitmapBytes = stream.toByteArray();
+        return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+    }
+
     void enableTouchEvents() {
         if (!mResponsible) {
             mResponsible = true;

@@ -52,6 +52,8 @@
 
 - (NSString *)getDataURL;
 
+- (NSString *)getDataURLwithBounds:(CGSize)bounds;
+
 - (CGRect)getContextBounds;
 
 - (void)drawRect:(CGRect)rect;
