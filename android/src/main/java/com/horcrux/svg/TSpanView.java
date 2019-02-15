@@ -94,17 +94,16 @@ class TSpanView extends TextView {
         }
 
         if (mContent == null) {
-            mPath = getGroupPath(canvas, paint);
-            return mPath;
+            return getGroupPath(canvas, paint);
         }
 
         setupTextPath();
 
         pushGlyphContext();
-        mPath = getLinePath(mContent, paint, canvas);
+        Path path = getLinePath(mContent, paint, canvas);
         popGlyphContext();
 
-        return mPath;
+        return path;
     }
 
     double getSubtreeTextChunksTotalAdvance(Paint paint) {
@@ -1055,6 +1054,9 @@ class TSpanView extends TextView {
 
         if (mRegion == null && mFillPath != null) {
             mRegion = getRegion(mFillPath);
+        }
+        if (mRegion == null && mPath != null) {
+            mRegion = getRegion(mPath);
         }
         if (mStrokeRegion == null && mStrokePath != null) {
             mStrokeRegion = getRegion(mStrokePath);
