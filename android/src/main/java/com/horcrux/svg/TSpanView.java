@@ -48,6 +48,7 @@ class TSpanView extends TextView {
     private static final String OTF = ".otf";
     private static final String TTF = ".ttf";
 
+    private Path mCachedPath;
     @Nullable String mContent;
     private TextPathView textPath;
     ArrayList<String> emoji = new ArrayList<>();
@@ -61,6 +62,12 @@ class TSpanView extends TextView {
     public void setContent(@Nullable String content) {
         mContent = content;
         invalidate();
+    }
+
+    @Override
+    public void invalidate() {
+        mCachedPath = null;
+        super.invalidate();
     }
 
     @Override
@@ -89,21 +96,22 @@ class TSpanView extends TextView {
 
     @Override
     Path getPath(Canvas canvas, Paint paint) {
-        if (mPath != null) {
-            return mPath;
+        if (mCachedPath != null) {
+            return mCachedPath;
         }
 
         if (mContent == null) {
-            return getGroupPath(canvas, paint);
+            mCachedPath = getGroupPath(canvas, paint);
+            return mCachedPath;
         }
 
         setupTextPath();
 
         pushGlyphContext();
-        Path path = getLinePath(mContent, paint, canvas);
+        mCachedPath = getLinePath(mContent, paint, canvas);
         popGlyphContext();
 
-        return path;
+        return mCachedPath;
     }
 
     double getSubtreeTextChunksTotalAdvance(Paint paint) {
