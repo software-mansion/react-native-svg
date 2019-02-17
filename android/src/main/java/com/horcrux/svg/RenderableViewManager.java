@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.JavaOnlyMap;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -344,6 +345,22 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         @ReactProp(name = "font")
         public void setFont(GroupView node, @Nullable ReadableMap font) {
             node.setFont(font);
+        }
+
+        @ReactProp(name = "fontSize")
+        public void setFontSize(GroupView node, Dynamic fontSize) {
+            JavaOnlyMap map = new JavaOnlyMap();
+            switch (fontSize.getType()) {
+                case Number:
+                    map.putDouble("fontSize", fontSize.asDouble());
+                    break;
+                case String:
+                    map.putString("fontSize", fontSize.asString());
+                    break;
+                default:
+                    return;
+            }
+            node.setFont(map);
         }
     }
 
