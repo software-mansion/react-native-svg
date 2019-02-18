@@ -80,7 +80,7 @@ export interface TouchableProps {
 }
 
 export interface ResponderProps extends ReactNative.GestureResponderHandlers {
-  pointerEvents?: (event: any) => any,
+  pointerEvents?: "box-none" | "none" | "box-only" | "auto",
 }
 
 // rgba values inside range 0 to 1 inclusive
