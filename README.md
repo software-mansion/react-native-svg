@@ -416,6 +416,12 @@ You can cascade colors from the Svg element to its children:
 
 ![Pencil](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/pencil.png)
 
+  Code explanation:
+
+  * fill prop defines the color inside the object.
+  * stroke prop defines the color of the line drawn around the object.
+  * color is a bit special in the sense that it won't color anything by itself, but define a kind of color variable that can be reused by children elements. In this example we're defining a "green" color in the Svg element and using it in the second Path element via stroke="currentColor". The "currentColor" is what refers to that "green" value, and it can be used by other props that accept colors too, e.g. fill="currentColor".
+
 ### Rect
 
 The <Rect> element is used to create a rectangle and variations of a rectangle shape:
