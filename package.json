@@ -7,7 +7,7 @@
         "url": "https://github.com/react-native-community/react-native-svg"
     },
     "license": "MIT",
-    "main": "./index.js",
+    "main": "./index",
     "keywords": [
         "react-component",
         "react-native",
