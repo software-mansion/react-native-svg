@@ -238,7 +238,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         return mCanvas.getClipBounds();
     }
 
-    void drawChildren(final Canvas canvas) {
+    synchronized void drawChildren(final Canvas canvas) {
         mRendered = true;
         mCanvas = canvas;
         if (mAlign != null) {
