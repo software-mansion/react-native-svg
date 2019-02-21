@@ -1,4 +1,4 @@
-import { createElement } from 'react';
+import { createElement } from 'react-native-web';
 
 function generate(componentName, tagName): any {
   function SvgElement(props) {
