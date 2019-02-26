@@ -311,6 +311,7 @@ export interface SvgProps extends ReactNative.ViewProperties {
   height?: NumberProp,
   viewBox?: string,
   preserveAspectRatio?: string,
+  fill?: string,
 }
 
 // Svg is both regular and default exported
