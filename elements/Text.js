@@ -15,7 +15,8 @@ export default class Text extends Shape {
     if (matrix) {
       props.matrix = matrix;
     }
-    const text = pickNotNil(extractText(props, true));
+    const prop = propsAndStyles(props);
+    const text = pickNotNil(extractText(prop, true));
     this.root.setNativeProps({
       ...props,
       ...text,
