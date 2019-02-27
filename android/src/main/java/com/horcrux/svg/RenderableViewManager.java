@@ -45,6 +45,7 @@ import static com.facebook.react.uimanager.ViewProps.*;
 import static com.horcrux.svg.RenderableView.CAP_ROUND;
 import static com.horcrux.svg.RenderableView.FILL_RULE_NONZERO;
 import static com.horcrux.svg.RenderableView.JOIN_ROUND;
+import static com.horcrux.svg.RenderableView.VECTOR_EFFECT_DEFAULT;
 
 /**
  * ViewManager for all RNSVG views
@@ -1011,6 +1012,11 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
     @ReactProp(name = "strokeLinejoin", defaultInt = JOIN_ROUND)
     public void setStrokeLinejoin(RenderableView node, int strokeLinejoin) {
         node.setStrokeLinejoin(strokeLinejoin);
+    }
+
+    @ReactProp(name = "vectorEffect", defaultInt = VECTOR_EFFECT_DEFAULT)
+    public void setVectorEffect(RenderableView node, int vectorEffect) {
+        node.setVectorEffect(vectorEffect);
     }
 
     @ReactProp(name = "matrix")
