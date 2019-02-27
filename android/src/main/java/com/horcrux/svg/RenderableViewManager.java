@@ -18,6 +18,7 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.JavaOnlyMap;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.MatrixMathHelper;
@@ -315,8 +316,12 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
             float scale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
 
             // The following converts the matrix's perspective to a camera distance
-            // such that the camera perspective looks the same on Android and iOS
-            float normalizedCameraDistance = scale * cameraDistance * CAMERA_DISTANCE_NORMALIZATION_MULTIPLIER;
+            // such that the camera perspective looks the same on Android and iOS.
+            // The native Android implementation removed the screen density from the
+            // calculation, so squaring and a normalization value of
+            // sqrt(5) produces an exact replica with iOS.
+            // For more information, see https://github.com/facebook/react-native/pull/18302
+            float normalizedCameraDistance = scale * scale * cameraDistance * CAMERA_DISTANCE_NORMALIZATION_MULTIPLIER;
             view.setCameraDistance(normalizedCameraDistance);
 
         }
@@ -1014,11 +1019,15 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
     }
 
     @ReactProp(name = "transform")
-    public void setTransform(VirtualView node, ReadableArray matrix) {
-        if (matrix == null) {
+    public void setTransform(VirtualView node, Dynamic matrix) {
+        if (matrix.getType() != ReadableType.Array) {
+            return;
+        }
+        ReadableArray ma = matrix.asArray();
+        if (ma == null) {
             resetTransformProperty(node);
         } else {
-            setTransformProperty(node, matrix);
+            setTransformProperty(node, ma);
         }
         Matrix m = node.getMatrix();
         node.mTransform = m;
