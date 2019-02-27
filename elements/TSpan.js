@@ -14,16 +14,16 @@ export default class TSpan extends Shape {
     if (matrix) {
       props.matrix = matrix;
     }
-    const text = pickNotNil(extractText(props, false));
+    const prop = propsAndStyles(props);
+    const text = pickNotNil(extractText(prop, false));
     this.root.setNativeProps({
-      ...props,
+      ...prop,
       ...text,
     });
   };
 
   render() {
-    const props = this.props;
-    const prop = propsAndStyles(props);
+    const prop = propsAndStyles(this.props);
     return (
       <RNSVGTSpan
         ref={this.refMethod}

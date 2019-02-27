@@ -18,14 +18,13 @@ export default class Text extends Shape {
     const prop = propsAndStyles(props);
     const text = pickNotNil(extractText(prop, true));
     this.root.setNativeProps({
-      ...props,
+      ...prop,
       ...text,
     });
   };
 
   render() {
-    const props = this.props;
-    const prop = propsAndStyles(props);
+    const prop = propsAndStyles(this.props);
     return (
       <RNSVGText
         ref={this.refMethod}
