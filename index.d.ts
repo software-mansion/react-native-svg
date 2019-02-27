@@ -103,7 +103,7 @@ export interface ClipProps {
 }
   
 VectorEffectProps {
-  vectorEffect?: "none" | "non-scaling-stroke";
+  vectorEffect?: "none" | "non-scaling-stroke" | "nonScalingStroke" | "default" | "inherit" | "uri";
 }
 
 export interface DefinitionProps {
