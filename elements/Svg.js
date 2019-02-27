@@ -54,11 +54,7 @@ export default class Svg extends Shape {
       return;
     }
     const handle = findNodeHandle(this.root);
-    if (options) {
-      RNSVGSvgViewManager.toDataURL(handle, options, callback);
-    } else {
-      RNSVGSvgViewManager.toDataURL(handle, callback);
-    }
+    RNSVGSvgViewManager.toDataURL(handle, options, callback);
   };
 
   render() {
