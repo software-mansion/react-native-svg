@@ -101,6 +101,10 @@ export interface ClipProps {
   clipRule?: FillRule,
   clipPath?: string
 }
+  
+VectorEffectProps {
+  vectorEffect?: "none" | "non-scaling-stroke" | "nonScalingStroke" | "default" | "inherit" | "uri";
+}
 
 export interface DefinitionProps {
   id?: string,
@@ -180,7 +184,7 @@ export interface CommonMaskProps {
   mask?: string;
 }
 
-export interface CommonPathProps extends FillProps, StrokeProps, ClipProps, TransformProps, ResponderProps, TouchableProps, DefinitionProps, CommonMaskProps {}
+export interface CommonPathProps extends FillProps, StrokeProps, ClipProps, TransformProps, VectorEffectProps, ResponderProps, TouchableProps, DefinitionProps, CommonMaskProps {}
 
 // Element props
 export interface CircleProps extends CommonPathProps {
