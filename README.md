@@ -70,15 +70,15 @@
 
 # NOTICE:
 
-Due to breaking changes in react-native, the version given in the left column 
+Due to breaking changes in react-native, the version given in the left column
 (and higher versions) of react-native-svg only supports the react-native version
 in the right column (and higher versions, if possible).
 
-It is recommended to use the version of react given in the peer dependencies 
+It is recommended to use the version of react given in the peer dependencies
 of the react-native version you are using.
 
 The latest version of react-native-svg should always work in a clean react-native project.
-    
+
 | react-native-svg | react-native |
 |------------------|--------------|
 | 3.2.0            | 0.29         |
@@ -181,7 +181,7 @@ react-native link
 ```
 
 Make a reproduction of the problem in `App.js`
-    
+
 ```bash
 react-native run-ios
 react-native run-android
@@ -394,6 +394,33 @@ originY         | 0          | Transform originY coordinates for the current obj
     <Path d="M 40 60 A 10 10 0 0 0 60 60" stroke="black" />
 </Svg>
 ```
+
+Colors set in the Svg element are inherited by its children:
+
+```html
+<Svg
+    width="130"
+    height="130"
+    fill="blue"
+    stroke="red"
+    color="green"
+    viewBox="-16 -16 544 544"
+>
+    <Path
+        d="M318.37,85.45L422.53,190.11,158.89,455,54.79,350.38ZM501.56,60.2L455.11,13.53a45.93,45.93,0,0,0-65.11,0L345.51,58.24,449.66,162.9l51.9-52.15A35.8,35.8,0,0,0,501.56,60.2ZM0.29,497.49a11.88,11.88,0,0,0,14.34,14.17l116.06-28.28L26.59,378.72Z"
+        strokeWidth="32"
+    />
+    <Path d="M0,0L512,512" stroke="currentColor" strokeWidth="32" />
+</Svg>
+```
+
+![Pencil](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/pencil.png)
+
+  Code explanation:
+
+  * The fill prop defines the color inside the object.
+  * The stroke prop defines the color of the line drawn around the object.
+  * The color prop is a bit special in the sense that it won't color anything by itself, but define a kind of color variable that can be used by children elements. In this example we're defining a "green" color in the Svg element and using it in the second Path element via stroke="currentColor". The "currentColor" is what refers to that "green" value, and it can be used in other props that accept colors too, e.g. fill="currentColor".
 
 ### Rect
 
