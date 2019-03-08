@@ -291,9 +291,10 @@ export default () => (
 
 Try [react-native-svg-transformer](https://github.com/kristerkari/react-native-svg-transformer) to get compile time conversion and cached transformations.
 https://github.com/kristerkari/react-native-svg-transformer#installation-and-configuration
-https://github.com/kristerkari/react-native-svg-transformer#for-react-native-v057-or-newer
+https://github.com/kristerkari/react-native-svg-transformer#for-react-native-v057-or-newer--expo-sdk-v3100-or-newer
 
-rn-cli.config.js
+`metro.config.js`
+
 ```js
 const { getDefaultConfig } = require("metro-config");
 
