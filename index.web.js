@@ -1,4 +1,18 @@
-import { createElement } from 'react-native-web';
+import { createElement, StyleSheet } from 'react-native-web';
+
+function resolve(style1, style2) {
+  if (style1 && style2) {
+    return StyleSheet
+      ? [style1, style2]
+      : {
+          // Compatibility for arrays of styles in plain react web
+          ...(style1.length ? Object.assign({}, ...style1) : style1),
+          ...style2,
+        };
+  } else {
+    return style1 || style2;
+  }
+}
 
 /**
  * The `react-native-svg` has some non-standard api's that do not match with the
@@ -22,7 +36,7 @@ function prepare(props) {
     fontSize,
     fontWeight,
     fontStyle,
-    style = {},
+    style,
     ...clean
   } = props;
 
@@ -58,20 +72,24 @@ function prepare(props) {
     clean.transform = transform.join(' ');
   }
 
+  const styles = {};
   if (fontFamily != null) {
-    style.fontFamily = fontFamily;
+    styles.fontFamily = fontFamily;
   }
   if (fontSize != null) {
-    style.fontSize = fontSize;
+    styles.fontSize = fontSize;
   }
   if (fontWeight != null) {
-    style.fontWeight = fontWeight;
+    styles.fontWeight = fontWeight;
   }
   if (fontStyle != null) {
-    style.fontStyle = fontStyle;
+    styles.fontStyle = fontStyle;
   }
   /* eslint-enable eqeqeq */
-  clean.style = style;
+  clean.style = resolve(
+    style,
+    styles,
+  );
 
   // We provide a default of `xMidYMid` if aspectRatio is not specified with align information.
   const preserve = clean.preserveAspectRatio;
