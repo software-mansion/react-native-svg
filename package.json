@@ -7,7 +7,7 @@
         "url": "https://github.com/react-native-community/react-native-svg"
     },
     "license": "MIT",
-    "main": "./index.js",
+    "main": "./index",
     "keywords": [
         "react-component",
         "react-native",
@@ -20,7 +20,7 @@
     ],
     "scripts": {
         "lint": "eslint ./",
-        "format": "prettier index.js './{elements,lib}/*.js' './lib/extract/e*.js' --write",
+        "format": "prettier index.js  index.web.js './{elements,lib}/*.js' './lib/extract/e*.js' --write",
         "peg": "pegjs -o ./lib/extract/transform.js ./lib/extract/transform.peg"
     },
     "peerDependencies": {
