@@ -91,12 +91,6 @@ function prepare(props) {
     styles,
   );
 
-  // We provide a default of `xMidYMid` if aspectRatio is not specified with align information.
-  const preserve = clean.preserveAspectRatio;
-  if (preserve && preserve !== 'none' && !~preserve.indexOf(' ')) {
-    clean.preserveAspectRatio = 'xMidYMid ' + preserve;
-  }
-
   return clean;
 }
 
