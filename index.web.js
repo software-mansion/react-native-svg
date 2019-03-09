@@ -4,11 +4,10 @@ function resolve(styleProp, cleanedProps) {
   if (styleProp) {
     return StyleSheet
       ? [styleProp, cleanedProps]
-      : {
-          // Compatibility for arrays of styles in plain react web
-          ...(styleProp.length ? Object.assign({}, ...styleProp) : styleProp),
-          ...cleanedProps,
-        };
+      : // Compatibility for arrays of styles in plain react web
+      styleProp.length
+      ? Object.assign({}, ...styleProp, cleanedProps)
+      : Object.assign({}, styleProp, cleanedProps);
   } else {
     return cleanedProps;
   }
@@ -27,7 +26,7 @@ function prepare(props) {
   const {
     translate,
     scale,
-    rotate,
+    rotation,
     skewX,
     skewY,
     originX,
@@ -55,8 +54,9 @@ function prepare(props) {
   if (scale != null) {
     transform.push(`scale(${scale})`);
   }
-  if (rotate != null) {
-    transform.push(`rotate(${rotate})`);
+  // rotation maps to rotate, not to collide with the text rotate attribute
+  if (rotation != null) {
+    transform.push(`rotate(${rotation})`);
   }
   if (skewX != null) {
     transform.push(`skewX(${skewX})`);
@@ -86,10 +86,7 @@ function prepare(props) {
     styles.fontStyle = fontStyle;
   }
   /* eslint-enable eqeqeq */
-  clean.style = resolve(
-    style,
-    styles,
-  );
+  clean.style = resolve(style, styles);
 
   return clean;
 }
