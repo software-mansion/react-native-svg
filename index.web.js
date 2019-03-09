@@ -1,16 +1,16 @@
 import { createElement, StyleSheet } from 'react-native-web';
 
-function resolve(style1, style2) {
-  if (style1 && style2) {
+function resolve(styleProp, cleanedProps) {
+  if (styleProp) {
     return StyleSheet
-      ? [style1, style2]
+      ? [styleProp, cleanedProps]
       : {
           // Compatibility for arrays of styles in plain react web
-          ...(style1.length ? Object.assign({}, ...style1) : style1),
-          ...style2,
+          ...(styleProp.length ? Object.assign({}, ...styleProp) : styleProp),
+          ...cleanedProps,
         };
   } else {
-    return style1 || style2;
+    return cleanedProps;
   }
 }
 
