@@ -10,7 +10,6 @@ import { createElement } from 'react-native-web';
  * @private
  */
 function prepare(props) {
-  /* eslint-disable no-unused-vars */
   const {
     translate,
     scale,
@@ -23,73 +22,58 @@ function prepare(props) {
     fontSize,
     fontWeight,
     fontStyle,
-    style: ignoredStyles,
+    style = {},
     ...clean
   } = props;
-  /* eslint-enable no-unused-vars */
 
-  const transform = [];
-
-  //
   // Correctly apply the transformation properties.
   // To apply originX and originY we need to translate the element on those values and
   // translate them back once the element is scaled, rotated and skewed.
-  //
-  if ('originX' in props || 'originY' in props) {
-    transform.push(`translate(${props.originX || 0}, ${props.originY || 0})`);
+  const transform = [];
+
+  /* eslint-disable eqeqeq */
+  if (originX != null || originY != null) {
+    transform.push(`translate(${originX || 0}, ${originY || 0})`);
   }
-  if ('translate' in props) {
-    transform.push(`translate(${props.translate})`);
+  if (translate != null) {
+    transform.push(`translate(${translate})`);
   }
-  if ('scale' in props) {
-    transform.push(`scale(${props.scale})`);
+  if (scale != null) {
+    transform.push(`scale(${scale})`);
   }
-  if ('rotate' in props) {
-    transform.push(`rotate(${props.rotate})`);
+  if (rotate != null) {
+    transform.push(`rotate(${rotate})`);
   }
-  if ('skewX' in props) {
-    transform.push(`skewX(${props.skewX})`);
+  if (skewX != null) {
+    transform.push(`skewX(${skewX})`);
   }
-  if ('skewY' in props) {
-    transform.push(`skewY(${props.skewY})`);
+  if (skewY != null) {
+    transform.push(`skewY(${skewY})`);
   }
-  if ('originX' in props || 'originY' in props) {
-    transform.push(`translate(${-props.originX || 0}, ${-props.originY || 0})`);
+  if (originX != null || originY != null) {
+    transform.push(`translate(${-originX || 0}, ${-originY || 0})`);
   }
+
   if (transform.length) {
     clean.transform = transform.join(' ');
   }
 
-  //
-  // Correctly set the initial style value.
-  //
-  const style = 'style' in props ? props.style : {};
-
-  //
-  // This is the nasty part where we depend on React internals to work as
-  // intended. If we add an empty object as style, it shouldn't render a `style`
-  // attribute. So we can safely conditionally add things to our `style` object
-  // and re-introduce it to our `clean` object
-  //
-  if ('fontFamily' in props) {
-    style.fontFamily = props.fontFamily;
+  if (fontFamily != null) {
+    style.fontFamily = fontFamily;
   }
-  if ('fontSize' in props) {
-    style.fontSize = props.fontSize;
+  if (fontSize != null) {
+    style.fontSize = fontSize;
   }
-  if ('fontWeight' in props) {
-    style.fontWeight = props.fontWeight;
+  if (fontWeight != null) {
+    style.fontWeight = fontWeight;
   }
-  if ('fontStyle' in props) {
-    style.fontStyle = props.fontStyle;
+  if (fontStyle != null) {
+    style.fontStyle = fontStyle;
   }
+  /* eslint-enable eqeqeq */
   clean.style = style;
 
-  //
-  // React-Native svg provides as a default of `xMidYMid` if aspectRatio is not
-  // specified with align information. So we need to support this behavior and
-  // correctly default to `xMidYMid [mode]`.
-  //
+  // We provide a default of `xMidYMid` if aspectRatio is not specified with align information.
   const preserve = clean.preserveAspectRatio;
   if (preserve && preserve !== 'none' && !~preserve.indexOf(' ')) {
     clean.preserveAspectRatio = 'xMidYMid ' + preserve;
