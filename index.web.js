@@ -287,12 +287,7 @@ function Symbol(props) {
  * @param {String} props.rotate rotation
  */
 function Text(props) {
-  const { x, y, dx, dy, rotate, ...rest } = props;
-
-  return createElement('text', {
-    ...prepare(rest),
-    ...{ x, y, dx, dy, rotate },
-  });
+  return createElement('text', prepare(props));
 }
 
 /**
@@ -308,12 +303,7 @@ function Text(props) {
  * @param {String} props.rotate rotation
  */
 function TSpan(props) {
-  const { x, y, dx, dy, rotate, ...rest } = props;
-
-  return createElement('tspan', {
-    ...prepare(rest),
-    ...{ x, y, dx, dy, rotate },
-  });
+  return createElement('tspan', prepare(props));
 }
 
 /**
