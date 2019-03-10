@@ -15,29 +15,23 @@ export default class TSpan extends Shape {
       props.matrix = matrix;
     }
     const prop = propsAndStyles(props);
-    const text = pickNotNil(extractText(prop, false));
-    this.root.setNativeProps({
-      ...prop,
-      ...text,
-    });
+    Object.assign(prop, pickNotNil(extractText(prop, false)));
+    this.root.setNativeProps(prop);
   };
 
   render() {
     const prop = propsAndStyles(this.props);
-    return (
-      <RNSVGTSpan
-        ref={this.refMethod}
-        {...extractProps(
-          {
-            ...prop,
-            x: null,
-            y: null,
-          },
-          this,
-        )}
-        {...extractText(prop, false)}
-      />
+    const props = extractProps(
+      {
+        ...prop,
+        x: null,
+        y: null,
+      },
+      this,
     );
+    Object.assign(props, extractText(prop, false));
+    props.ref = this.refMethod;
+    return <RNSVGTSpan {...props} />;
   }
 }
 

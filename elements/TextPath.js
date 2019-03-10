@@ -15,11 +15,8 @@ export default class TextPath extends Shape {
     if (matrix) {
       props.matrix = matrix;
     }
-    const text = pickNotNil(extractText(props, true));
-    this.root.setNativeProps({
-      ...props,
-      ...text,
-    });
+    Object.assign(props, pickNotNil(extractText(props, true)));
+    this.root.setNativeProps(props);
   };
 
   render() {
@@ -27,45 +24,45 @@ export default class TextPath extends Shape {
       children,
       xlinkHref,
       href = xlinkHref,
-      startOffset,
+      startOffset = 0,
       method,
       spacing,
       side,
       alignmentBaseline,
       midLine,
-      ...props
+      ...prop
     } = this.props;
     const matched = href && href.match(idPattern);
     const match = matched && matched[1];
     if (match) {
-      return (
-        <RNSVGTextPath
-          ref={this.refMethod}
-          {...extractProps(
-            {
-              ...propsAndStyles(props),
-              x: null,
-              y: null,
-            },
-            this,
-          )}
-          {...extractText(
-            {
-              children,
-            },
-            true,
-          )}
-          {...{
-            href: match,
-            startOffset: startOffset || 0,
-            method,
-            spacing,
-            side,
-            alignmentBaseline,
-            midLine,
-          }}
-        />
+      const props = extractProps(
+        {
+          ...propsAndStyles(prop),
+          x: null,
+          y: null,
+        },
+        this,
       );
+      Object.assign(
+        props,
+        extractText(
+          {
+            children,
+          },
+          true,
+        ),
+        {
+          href: match,
+          startOffset,
+          method,
+          spacing,
+          side,
+          alignmentBaseline,
+          midLine,
+        },
+      );
+      props.ref = this.refMethod;
+      return <RNSVGTextPath {...props} />;
     }
 
     console.warn(
