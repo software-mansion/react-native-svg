@@ -11,6 +11,7 @@ import { resolve } from './lib/resolve';
  * @private
  */
 function prepare(props) {
+  /* eslint-disable eqeqeq */
   const {
     translate,
     scale,
@@ -27,12 +28,8 @@ function prepare(props) {
     ...clean
   } = props;
 
-  // Correctly apply the transformation properties.
-  // To apply originX and originY we need to translate the element on those values and
-  // translate them back once the element is scaled, rotated and skewed.
   const transform = [];
 
-  /* eslint-disable eqeqeq */
   if (originX != null || originY != null) {
     transform.push(`translate(${originX || 0}, ${originY || 0})`);
   }
@@ -42,7 +39,7 @@ function prepare(props) {
   if (scale != null) {
     transform.push(`scale(${scale})`);
   }
-  // rotation maps to rotate, not to collide with the text rotate attribute
+  // rotation maps to rotate, not to collide with the text rotate attribute (which acts per glyph rather than block)
   if (rotation != null) {
     transform.push(`rotate(${rotation})`);
   }
@@ -61,6 +58,7 @@ function prepare(props) {
   }
 
   const styles = {};
+
   if (fontFamily != null) {
     styles.fontFamily = fontFamily;
   }
@@ -73,29 +71,29 @@ function prepare(props) {
   if (fontStyle != null) {
     styles.fontStyle = fontStyle;
   }
-  /* eslint-enable eqeqeq */
+
   clean.style = resolve(style, styles);
 
   return clean;
 }
 
-function Circle(props) {
+export function Circle(props) {
   return createElement('circle', prepare(props));
 }
 
-function ClipPath(props) {
+export function ClipPath(props) {
   return createElement('clipPath', prepare(props));
 }
 
-function Defs(props) {
+export function Defs(props) {
   return createElement('defs', prepare(props));
 }
 
-function Ellipse(props) {
+export function Ellipse(props) {
   return createElement('ellipse', prepare(props));
 }
 
-function G(props) {
+export function G(props) {
   const { x, y, ...rest } = props;
 
   if ((x || y) && !rest.translate) {
@@ -105,97 +103,72 @@ function G(props) {
   return createElement('g', prepare(rest));
 }
 
-function Image(props) {
+export function Image(props) {
   return createElement('image', prepare(props));
 }
 
-function Line(props) {
+export function Line(props) {
   return createElement('line', prepare(props));
 }
 
-function LinearGradient(props) {
+export function LinearGradient(props) {
   return createElement('linearGradient', prepare(props));
 }
 
-function Path(props) {
+export function Path(props) {
   return createElement('path', prepare(props));
 }
 
-function Polygon(props) {
+export function Polygon(props) {
   return createElement('polygon', prepare(props));
 }
 
-function Polyline(props) {
+export function Polyline(props) {
   return createElement('polyline', prepare(props));
 }
 
-function RadialGradient(props) {
+export function RadialGradient(props) {
   return createElement('radialGradient', prepare(props));
 }
 
-function Rect(props) {
+export function Rect(props) {
   return createElement('rect', prepare(props));
 }
 
-function Stop(props) {
+export function Stop(props) {
   return createElement('stop', prepare(props));
 }
 
-function Svg(props) {
+export function Svg(props) {
   return createElement('svg', prepare(props));
 }
 
-function Symbol(props) {
+export function Symbol(props) {
   return createElement('symbol', prepare(props));
 }
 
-function Text(props) {
+export function Text(props) {
   return createElement('text', prepare(props));
 }
 
-function TSpan(props) {
+export function TSpan(props) {
   return createElement('tspan', prepare(props));
 }
 
-function TextPath(props) {
+export function TextPath(props) {
   return createElement('textPath', prepare(props));
 }
 
-function Use(props) {
+export function Use(props) {
   return createElement('use', prepare(props));
 }
 
-function Mask(props) {
+export function Mask(props) {
   return createElement('mask', prepare(props));
 }
 
-function Pattern(props) {
+export function Pattern(props) {
   return createElement('pattern', prepare(props));
 }
-
-export {
-  Circle,
-  ClipPath,
-  Defs,
-  Ellipse,
-  G,
-  Image,
-  Line,
-  LinearGradient,
-  Mask,
-  Path,
-  Pattern,
-  Polygon,
-  Polyline,
-  RadialGradient,
-  Rect,
-  Stop,
-  Svg,
-  Symbol,
-  TSpan,
-  Text,
-  TextPath,
-  Use,
-};
 
 export default Svg;
