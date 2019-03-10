@@ -80,7 +80,7 @@ export interface TouchableProps {
 }
 
 export interface ResponderProps extends ReactNative.GestureResponderHandlers {
-  pointerEvents?: (event: any) => any,
+  pointerEvents?: "box-none" | "none" | "box-only" | "auto",
 }
 
 // rgba values inside range 0 to 1 inclusive
@@ -310,11 +310,13 @@ export interface StopProps {
 }
 export const Stop: React.ComponentClass<StopProps>;
 
-export interface SvgProps extends ReactNative.ViewProperties {
+export interface SvgProps extends GProps, ReactNative.ViewProperties {
   width?: NumberProp,
   height?: NumberProp,
   viewBox?: string,
   preserveAspectRatio?: string,
+  color?: int32ARGBColor | rgbaArray | string,
+  title?: string,
 }
 
 // Svg is both regular and default exported
