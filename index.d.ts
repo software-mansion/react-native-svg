@@ -102,7 +102,7 @@ export interface ClipProps {
   clipPath?: string
 }
   
-VectorEffectProps {
+interface VectorEffectProps {
   vectorEffect?: "none" | "non-scaling-stroke" | "nonScalingStroke" | "default" | "inherit" | "uri";
 }
 
