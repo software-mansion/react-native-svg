@@ -25,12 +25,33 @@ class SvgViewModule extends ReactContextBaseJavaModule {
         return "RNSVGSvgViewManager";
     }
 
-
-    @ReactMethod
-    public void toDataURL(int tag, ReadableMap options, Callback successCallback) {
+    static public void toDataURL(final int tag, final ReadableMap options, final Callback successCallback, final int attempt) {
         SvgView svg = SvgViewManager.getSvgViewByTag(tag);
 
-        if (svg != null) {
+        if (svg == null) {
+            SvgViewManager.runWhenViewIsAvailable(tag, new Runnable() {
+                @Override
+                public void run() {
+                    SvgView svg = SvgViewManager.getSvgViewByTag(tag);
+                    if (svg == null) { // Should never happen
+                        return;
+                    }
+                    svg.setToDataUrlTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            toDataURL(tag, options, successCallback, attempt + 1);
+                        }
+                    });
+                }
+            });
+        } else if (!svg.isRendered()) {
+            svg.setToDataUrlTask(new Runnable() {
+                @Override
+                public void run() {
+                    toDataURL(tag, options, successCallback, attempt + 1);
+                }
+            });
+        } else {
             if (options != null) {
                 successCallback.invoke(
                     svg.toDataURL(
@@ -42,5 +63,10 @@ class SvgViewModule extends ReactContextBaseJavaModule {
                 successCallback.invoke(svg.toDataURL());
             }
         }
+    }
+
+    @ReactMethod
+    public void toDataURL(int tag, ReadableMap options, Callback successCallback) {
+        toDataURL(tag, options, successCallback, 0);
     }
 }

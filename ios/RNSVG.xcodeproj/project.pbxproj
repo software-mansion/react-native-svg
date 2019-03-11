@@ -251,6 +251,7 @@
 		94241669213B0DB800088E93 /* RNSVGPattern.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGPattern.h; sourceTree = "<group>"; };
 		9424166A213B2FF100088E93 /* RNSVGPatternManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSVGPatternManager.h; sourceTree = "<group>"; };
 		9424166C213B302600088E93 /* RNSVGPatternManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSVGPatternManager.m; sourceTree = "<group>"; };
+		94696EE92235A7F200C1D558 /* RNSVGVectorEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGVectorEffect.h; path = Utils/RNSVGVectorEffect.h; sourceTree = "<group>"; };
 		947F3809214810B800677F2A /* RNSVGMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGMask.h; path = Elements/RNSVGMask.h; sourceTree = "<group>"; };
 		947F380A214810DC00677F2A /* RNSVGMask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGMask.m; path = Elements/RNSVGMask.m; sourceTree = "<group>"; };
 		947F380D2148118300677F2A /* RNSVGMaskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGMaskManager.h; sourceTree = "<group>"; };
@@ -463,6 +464,7 @@
 		1039D29A1CE7212C001E90A8 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				94696EE92235A7F200C1D558 /* RNSVGVectorEffect.h */,
 				B56895A920352B36004DBF1E /* RNSVGBezierElement.h */,
 				B56895A820352B35004DBF1E /* RNSVGBezierElement.m */,
 				7F69160D1E3703D800DA6EDC /* RNSVGUnits.h */,

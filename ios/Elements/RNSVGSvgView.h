@@ -52,7 +52,7 @@
 
 - (NSString *)getDataURL;
 
-- (NSString *)getDataURLwithBounds:(CGSize)bounds;
+- (NSString *)getDataURLwithBounds:(CGRect)bounds;
 
 - (CGRect)getContextBounds;
 

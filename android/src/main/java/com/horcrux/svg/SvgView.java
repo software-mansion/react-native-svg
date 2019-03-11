@@ -101,8 +101,19 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         if (mBitmap == null) {
             mBitmap = drawOutput();
         }
-        if (mBitmap != null)
+        if (mBitmap != null) {
             canvas.drawBitmap(mBitmap, 0, 0, null);
+            if (toDataUrlTask != null) {
+                toDataUrlTask.run();
+                toDataUrlTask = null;
+            }
+        }
+    }
+
+    private Runnable toDataUrlTask = null;
+
+    void setToDataUrlTask(Runnable task) {
+        toDataUrlTask = task;
     }
 
     @Override
@@ -137,6 +148,10 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     private boolean mInvertible = true;
     private boolean mRendered = false;
     int mTintColor = 0;
+
+    boolean isRendered() {
+        return mRendered;
+    }
 
     private void clearChildCache() {
         if (!mRendered) {
@@ -298,7 +313,10 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
                 getHeight(),
                 Bitmap.Config.ARGB_8888);
 
+        clearChildCache();
         drawChildren(new Canvas(bitmap));
+        clearChildCache();
+        this.invalidate();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         bitmap.recycle();
@@ -312,7 +330,10 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
                 height,
                 Bitmap.Config.ARGB_8888);
 
+        clearChildCache();
         drawChildren(new Canvas(bitmap));
+        clearChildCache();
+        this.invalidate();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         bitmap.recycle();
