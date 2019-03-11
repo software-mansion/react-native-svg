@@ -13,7 +13,6 @@ import android.graphics.Matrix;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.JavaOnlyMap;
 import com.facebook.react.bridge.ReadableArray;
@@ -179,7 +178,9 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
     }
 
     private static void decomposeMatrix() {
-        Assertions.assertCondition(sTransformDecompositionArray.length == 16);
+        if (sTransformDecompositionArray.length != 16) {
+          throw new AssertionError();
+        }
 
         // output values
         final double[] perspective = sMatrixDecompositionContext.perspective;
