@@ -39,7 +39,9 @@ export default class SvgImage extends Shape {
         height={height}
         meetOrSlice={meetOrSliceTypes[modes[1]] || 0}
         align={alignEnum[modes[0]] || 'xMidYMid'}
-        src={Image.resolveAssetSource(href)}
+        src={Image.resolveAssetSource(
+          typeof href === 'string' ? { uri: href } : href,
+        )}
       />
     );
   }
