@@ -508,12 +508,12 @@ UInt32 saturate(CGFloat value) {
 
 - (void)mergeProperties:(__kindof RNSVGRenderable *)target
 {
-    self.merging = true;
     NSArray<NSString *> *targetAttributeList = [target getAttributeList];
 
     if (targetAttributeList.count == 0) {
         return;
     }
+    self.merging = true;
 
     NSMutableArray* attributeList = [self.propList mutableCopy];
     _originProperties = [[NSMutableDictionary alloc] init];
