@@ -193,6 +193,8 @@ Verify that it is still an issue with the latest version. If so, open a new issu
 react-native info
 ```
 
+If you suspect that you've found a spec conformance bug, then you can test using your component in a react-native-web project by forking this codesandbox, to see how different browsers render the same content: https://codesandbox.io/s/pypn6mn3y7
+
 ### <a name="Usage">Usage</a>
 
 Here's a simple example. To render output like this:
