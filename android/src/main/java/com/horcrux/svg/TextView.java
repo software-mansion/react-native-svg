@@ -221,7 +221,7 @@ class TextView extends GroupView {
         TextView node = this;
         ViewParent parent = this.getParent();
         for (int i = font.size() - 1; i >= 0; i--) {
-            if (!(parent instanceof TextView) || font.get(i).textAnchor == TextProperties.TextAnchor.start) {
+            if (!(parent instanceof TextView) || font.get(i).textAnchor == TextProperties.TextAnchor.start || node.mPositionX != null) {
                 return node;
             }
             node = (TextView) parent;

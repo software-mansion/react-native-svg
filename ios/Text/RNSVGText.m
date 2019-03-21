@@ -264,7 +264,8 @@
     for (NSInteger i = [font count] - 1; i >= 0; i--) {
         RNSVGFontData* fontData = [font objectAtIndex:i];
         if (![parent isKindOfClass:[RNSVGText class]] ||
-            fontData->textAnchor == RNSVGTextAnchorStart) {
+            fontData->textAnchor == RNSVGTextAnchorStart ||
+            node.positionX != nil) {
             return node;
         }
         node = (RNSVGText*) parent;
