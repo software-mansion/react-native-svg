@@ -70,6 +70,11 @@ class TSpanView extends TextView {
         super.invalidate();
     }
 
+    void clearCache() {
+        mCachedPath = null;
+        super.clearCache();
+    }
+
     @Override
     void draw(Canvas canvas, Paint paint, float opacity) {
         if (mContent != null) {

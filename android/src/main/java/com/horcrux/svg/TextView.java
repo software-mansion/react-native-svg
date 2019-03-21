@@ -51,7 +51,7 @@ class TextView extends GroupView {
             return;
         }
         super.invalidate();
-        clearChildCache();
+        getTextContainer().clearChildCache();
     }
 
     void clearCache() {
@@ -246,4 +246,13 @@ class TextView extends GroupView {
         return advance;
     }
 
+    TextView getTextContainer() {
+        TextView node = this;
+        ViewParent parent = this.getParent();
+        while (parent instanceof TextView) {
+            node = (TextView) parent;
+            parent = node.getParent();
+        }
+        return node;
+    }
 }
