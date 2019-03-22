@@ -1061,6 +1061,9 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         if (view!= null) {
             view.invalidate();
         }
+        if (node instanceof TextView) {
+            ((TextView)node).getTextContainer().clearChildCache();
+        }
     }
 
     @Override
