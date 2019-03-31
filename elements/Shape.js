@@ -5,8 +5,12 @@ import _ from "lodash";
 class Shape extends Component {
     constructor() {
         super(...arguments);
-        _.forEach(SvgTouchableMixin, (method, key) => {
-            this[key] = method.bind(this);
+        _.forEach(SvgTouchableMixin, (val, key) => {
+            if (typeof val === "function") {
+                this[key] = val.bind(this);
+            } else {
+                this[key] = val;
+            }
         });
         //noinspection JSUnusedGlobalSymbols
         this.state = this.touchableGetInitialState();
