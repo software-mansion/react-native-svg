@@ -73,6 +73,7 @@ class UseView extends RenderableView {
             return;
         }
 
+        template.clearCache();
         canvas.translate((float) relativeOnWidth(mX), (float) relativeOnHeight(mY));
         if (template instanceof RenderableView) {
             ((RenderableView)template).mergeProperties(this);
