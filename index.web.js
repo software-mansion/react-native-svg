@@ -1,17 +1,16 @@
 import { createElement } from 'react-native-web';
 import { resolve } from './lib/resolve';
+import { Component } from 'react';
 
 /**
- * The `react-native-svg` has some non-standard api's that do not match with the
- * properties that can be applied to web SVG elements. This prepare function removes
- * those properties and adds the properties back in their correct location.
+ * `react-native-svg` supports additional props that aren't defined in the spec.
+ * This function replaces them in a spec conforming manner.
  *
  * @param {Object} props Properties given to us.
  * @returns {Object} Cleaned object.
  * @private
  */
 function prepare(props) {
-  /* eslint-disable eqeqeq */
   const {
     translate,
     scale,
@@ -77,98 +76,142 @@ function prepare(props) {
   return clean;
 }
 
-export function Circle(props) {
-  return createElement('circle', prepare(props));
-}
-
-export function ClipPath(props) {
-  return createElement('clipPath', prepare(props));
-}
-
-export function Defs(props) {
-  return createElement('defs', prepare(props));
-}
-
-export function Ellipse(props) {
-  return createElement('ellipse', prepare(props));
-}
-
-export function G(props) {
-  const { x, y, ...rest } = props;
-
-  if ((x || y) && !rest.translate) {
-    rest.translate = `${x || 0}, ${y || 0}`;
+export class Circle extends Component {
+  render() {
+    return createElement('circle', prepare(this.props));
   }
-
-  return createElement('g', prepare(rest));
 }
 
-export function Image(props) {
-  return createElement('image', prepare(props));
+export class ClipPath extends Component {
+  render() {
+    return createElement('clipPath', prepare(this.props));
+  }
 }
 
-export function Line(props) {
-  return createElement('line', prepare(props));
+export class Defs extends Component {
+  render() {
+    return createElement('defs', prepare(this.props));
+  }
 }
 
-export function LinearGradient(props) {
-  return createElement('linearGradient', prepare(props));
+export class Ellipse extends Component {
+  render() {
+    return createElement('ellipse', prepare(this.props));
+  }
 }
 
-export function Path(props) {
-  return createElement('path', prepare(props));
+export class G extends Component {
+  render() {
+    const { x, y, ...rest } = this.props;
+
+    if ((x || y) && !rest.translate) {
+      rest.translate = `${x || 0}, ${y || 0}`;
+    }
+
+    return createElement('g', prepare(rest));
+  }
 }
 
-export function Polygon(props) {
-  return createElement('polygon', prepare(props));
+export class Image extends Component {
+  render() {
+    return createElement('image', prepare(this.props));
+  }
 }
 
-export function Polyline(props) {
-  return createElement('polyline', prepare(props));
+export class Line extends Component {
+  render() {
+    return createElement('line', prepare(this.props));
+  }
 }
 
-export function RadialGradient(props) {
-  return createElement('radialGradient', prepare(props));
+export class LinearGradient extends Component {
+  render() {
+    return createElement('linearGradient', prepare(this.props));
+  }
 }
 
-export function Rect(props) {
-  return createElement('rect', prepare(props));
+export class Path extends Component {
+  render() {
+    return createElement('path', prepare(this.props));
+  }
 }
 
-export function Stop(props) {
-  return createElement('stop', prepare(props));
+export class Polygon extends Component {
+  render() {
+    return createElement('polygon', prepare(this.props));
+  }
 }
 
-export function Svg(props) {
-  return createElement('svg', prepare(props));
+export class Polyline extends Component {
+  render() {
+    return createElement('polyline', prepare(this.props));
+  }
 }
 
-export function Symbol(props) {
-  return createElement('symbol', prepare(props));
+export class RadialGradient extends Component {
+  render() {
+    return createElement('radialGradient', prepare(this.props));
+  }
 }
 
-export function Text(props) {
-  return createElement('text', prepare(props));
+export class Rect extends Component {
+  render() {
+    return createElement('rect', prepare(this.props));
+  }
 }
 
-export function TSpan(props) {
-  return createElement('tspan', prepare(props));
+export class Stop extends Component {
+  render() {
+    return createElement('stop', prepare(this.props));
+  }
 }
 
-export function TextPath(props) {
-  return createElement('textPath', prepare(props));
+export class Svg extends Component {
+  render() {
+    return createElement('svg', prepare(this.props));
+  }
 }
 
-export function Use(props) {
-  return createElement('use', prepare(props));
+export class Symbol extends Component {
+  render() {
+    return createElement('symbol', prepare(this.props));
+  }
 }
 
-export function Mask(props) {
-  return createElement('mask', prepare(props));
+export class Text extends Component {
+  render() {
+    return createElement('text', prepare(this.props));
+  }
 }
 
-export function Pattern(props) {
-  return createElement('pattern', prepare(props));
+export class TSpan extends Component {
+  render() {
+    return createElement('tspan', prepare(this.props));
+  }
+}
+
+export class TextPath extends Component {
+  render() {
+    return createElement('textPath', prepare(this.props));
+  }
+}
+
+export class Use extends Component {
+  render() {
+    return createElement('use', prepare(this.props));
+  }
+}
+
+export class Mask extends Component {
+  render() {
+    return createElement('mask', prepare(this.props));
+  }
+}
+
+export class Pattern extends Component {
+  render() {
+    return createElement('pattern', prepare(this.props));
+  }
 }
 
 export default Svg;
