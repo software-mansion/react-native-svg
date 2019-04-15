@@ -605,7 +605,7 @@ The following commands are available for path data:
   * A = elliptical Arc
   * Z = closepath
 
-`Note:` All of the commands above can also be expressed with lower letters. Capital letters means absolutely positioned, lower cases means relatively positioned.
+`Note:` All of the commands above can also be expressed with lower letters. Capital letters means absolutely positioned, lower cases means relatively positioned. See [Path document of SVG](https://www.w3.org/TR/SVG/paths.html) to know parameters for each command.
 
 ```html
 <Svg
