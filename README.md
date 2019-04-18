@@ -91,9 +91,10 @@ The latest version of react-native-svg should always work in a clean react-nativ
 | 5.3.0            | 0.46         |
 | 5.4.1            | 0.47         |
 | 5.5.1            | >=0.50       |
-| 6.0.0            | >=0.50       |
-| 7.0.0            | >=0.57.4     |
-| 8.0.0            | >=0.57.4     |
+| >=6              | >=0.50       |
+| >=7              | >=0.57.4     |
+| >=8              | >=0.57.4     |
+| >=9              | >=0.57.4     |
 
 Or, include [this PR](https://github.com/facebook/react-native/pull/17842) manually for v7+ stability on android for older RN ( [included in 0.57-stable](https://github.com/facebook/react-native/commit/d9f5319cf0d9828b29d0e350284b22ce29985042) and newer)
 
