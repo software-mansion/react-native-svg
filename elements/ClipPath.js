@@ -7,12 +7,13 @@ export default class ClipPath extends Shape {
   static displayName = 'ClipPath';
 
   render() {
-    const { id, children } = this.props;
+    const { props } = this;
+    const { id, children } = props;
     return (
       <RNSVGClipPath
         ref={this.refMethod}
         name={id}
-        {...extractClipPath(this.props)}
+        {...extractClipPath(props)}
       >
         {children}
       </RNSVGClipPath>

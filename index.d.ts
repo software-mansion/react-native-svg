@@ -80,7 +80,7 @@ export interface TouchableProps {
 }
 
 export interface ResponderProps extends ReactNative.GestureResponderHandlers {
-  pointerEvents?: (event: any) => any,
+  pointerEvents?: "box-none" | "none" | "box-only" | "auto",
 }
 
 // rgba values inside range 0 to 1 inclusive
@@ -100,6 +100,10 @@ export interface FillProps {
 export interface ClipProps {
   clipRule?: FillRule,
   clipPath?: string
+}
+  
+interface VectorEffectProps {
+  vectorEffect?: "none" | "non-scaling-stroke" | "nonScalingStroke" | "default" | "inherit" | "uri";
 }
 
 export interface DefinitionProps {
@@ -180,7 +184,7 @@ export interface CommonMaskProps {
   mask?: string;
 }
 
-export interface CommonPathProps extends FillProps, StrokeProps, ClipProps, TransformProps, ResponderProps, TouchableProps, DefinitionProps, CommonMaskProps {}
+export interface CommonPathProps extends FillProps, StrokeProps, ClipProps, TransformProps, VectorEffectProps, ResponderProps, TouchableProps, DefinitionProps, CommonMaskProps {}
 
 // Element props
 export interface CircleProps extends CommonPathProps {
@@ -306,11 +310,13 @@ export interface StopProps {
 }
 export const Stop: React.ComponentClass<StopProps>;
 
-export interface SvgProps extends ReactNative.ViewProperties {
+export interface SvgProps extends GProps, ReactNative.ViewProperties {
   width?: NumberProp,
   height?: NumberProp,
   viewBox?: string,
   preserveAspectRatio?: string,
+  color?: int32ARGBColor | rgbaArray | string,
+  title?: string,
 }
 
 // Svg is both regular and default exported

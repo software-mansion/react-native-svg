@@ -15,30 +15,24 @@ export default class Text extends Shape {
     if (matrix) {
       props.matrix = matrix;
     }
-    const text = pickNotNil(extractText(props, true));
-    this.root.setNativeProps({
-      ...props,
-      ...text,
-    });
+    const prop = propsAndStyles(props);
+    Object.assign(prop, pickNotNil(extractText(prop, true)));
+    this.root.setNativeProps(prop);
   };
 
   render() {
-    const props = this.props;
-    const prop = propsAndStyles(props);
-    return (
-      <RNSVGText
-        ref={this.refMethod}
-        {...extractProps(
-          {
-            ...prop,
-            x: null,
-            y: null,
-          },
-          this,
-        )}
-        {...extractText(prop, true)}
-      />
+    const prop = propsAndStyles(this.props);
+    const props = extractProps(
+      {
+        ...prop,
+        x: null,
+        y: null,
+      },
+      this,
     );
+    Object.assign(props, extractText(prop, true));
+    props.ref = this.refMethod;
+    return <RNSVGText {...props} />;
   }
 }
 

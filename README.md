@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 [![NPM](https://img.shields.io/npm/dm/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 
-`react-native-svg` provides SVG support to React Native on iOS and Android.
+`react-native-svg` provides SVG support to React Native on iOS and Android, and a compatibility layer for the web.
 
 [Check out the demo](https://snack.expo.io/@msand/react-native-svg-example)
 
@@ -70,15 +70,15 @@
 
 # NOTICE:
 
-Due to breaking changes in react-native, the version given in the left column 
+Due to breaking changes in react-native, the version given in the left column
 (and higher versions) of react-native-svg only supports the react-native version
 in the right column (and higher versions, if possible).
 
-It is recommended to use the version of react given in the peer dependencies 
+It is recommended to use the version of react given in the peer dependencies
 of the react-native version you are using.
 
 The latest version of react-native-svg should always work in a clean react-native project.
-    
+
 | react-native-svg | react-native |
 |------------------|--------------|
 | 3.2.0            | 0.29         |
@@ -91,12 +91,16 @@ The latest version of react-native-svg should always work in a clean react-nativ
 | 5.3.0            | 0.46         |
 | 5.4.1            | 0.47         |
 | 5.5.1            | >=0.50       |
-| 6.0.0            | >=0.50       |
-| 7.0.0            | >=0.57.4     |
-| 8.0.0            | >=0.57.4     |
+| >=6              | >=0.50       |
+| >=7              | >=0.57.4     |
+| >=8              | >=0.57.4     |
+| >=9              | >=0.57.4     |
 
-Or, include [this PR](https://github.com/facebook/react-native/pull/17842) manually for v7+ stability on android for older RN ( [included in 0.57-stable](https://github.com/facebook/react-native/commit/d9f5319cf0d9828b29d0e350284b22ce29985042) and newer)
+Or, include [this PR](https://github.com/facebook/react-native/pull/17842) manually for v7+ stability on android for older RN ( [included in 0.57-stable](https://github.com/facebook/react-native/commit/d9f5319cf0d9828b29d0e350284b22ce29985042) and newer).
 
+The latest version of v6, v7, v8 and v9 should all work in the latest react-native version. 
+
+v7 and newer requires the patch for making android thread safe, to get native animation support.
 
 #### Manually
 
@@ -181,7 +185,7 @@ react-native link
 ```
 
 Make a reproduction of the problem in `App.js`
-    
+
 ```bash
 react-native run-ios
 react-native run-android
@@ -192,6 +196,8 @@ Verify that it is still an issue with the latest version. If so, open a new issu
 ```bash
 react-native info
 ```
+
+If you suspect that you've found a spec conformance bug, then you can test using your component in a react-native-web project by forking this codesandbox, to see how different browsers render the same content: https://codesandbox.io/s/pypn6mn3y7
 
 ### <a name="Usage">Usage</a>
 
@@ -291,9 +297,10 @@ export default () => (
 
 Try [react-native-svg-transformer](https://github.com/kristerkari/react-native-svg-transformer) to get compile time conversion and cached transformations.
 https://github.com/kristerkari/react-native-svg-transformer#installation-and-configuration
-https://github.com/kristerkari/react-native-svg-transformer#for-react-native-v057-or-newer
+https://github.com/kristerkari/react-native-svg-transformer#for-react-native-v057-or-newer--expo-sdk-v3100-or-newer
 
-rn-cli.config.js
+`metro.config.js`
+
 ```js
 const { getDefaultConfig } = require("metro-config");
 
@@ -394,6 +401,33 @@ originY         | 0          | Transform originY coordinates for the current obj
     <Path d="M 40 60 A 10 10 0 0 0 60 60" stroke="black" />
 </Svg>
 ```
+
+Colors set in the Svg element are inherited by its children:
+
+```html
+<Svg
+    width="130"
+    height="130"
+    fill="blue"
+    stroke="red"
+    color="green"
+    viewBox="-16 -16 544 544"
+>
+    <Path
+        d="M318.37,85.45L422.53,190.11,158.89,455,54.79,350.38ZM501.56,60.2L455.11,13.53a45.93,45.93,0,0,0-65.11,0L345.51,58.24,449.66,162.9l51.9-52.15A35.8,35.8,0,0,0,501.56,60.2ZM0.29,497.49a11.88,11.88,0,0,0,14.34,14.17l116.06-28.28L26.59,378.72Z"
+        strokeWidth="32"
+    />
+    <Path d="M0,0L512,512" stroke="currentColor" strokeWidth="32" />
+</Svg>
+```
+
+![Pencil](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/pencil.png)
+
+  Code explanation:
+
+  * The fill prop defines the color inside the object.
+  * The stroke prop defines the color of the line drawn around the object.
+  * The color prop is a bit special in the sense that it won't color anything by itself, but define a kind of color variable that can be used by children elements. In this example we're defining a "green" color in the Svg element and using it in the second Path element via stroke="currentColor". The "currentColor" is what refers to that "green" value, and it can be used in other props that accept colors too, e.g. fill="currentColor".
 
 ### Rect
 
@@ -575,7 +609,7 @@ The following commands are available for path data:
   * A = elliptical Arc
   * Z = closepath
 
-`Note:` All of the commands above can also be expressed with lower letters. Capital letters means absolutely positioned, lower cases means relatively positioned.
+`Note:` All of the commands above can also be expressed with lower letters. Capital letters means absolutely positioned, lower cases means relatively positioned. See [Path document of SVG](https://www.w3.org/TR/SVG/paths.html) to know parameters for each command.
 
 ```html
 <Svg
