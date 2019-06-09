@@ -10,7 +10,7 @@ buildscript {
 
     dependencies {
         //noinspection GradleDependency
-        classpath rootProject.ext.has('gradleBuildTools') ? rootProject.ext.get('gradleBuildTools') : 'com.android.tools.build:gradle:3.3.0'
+        classpath safeExtGet('gradleBuildTools', 'com.android.tools.build:gradle:3.4.0')
     }
 }
 
@@ -24,7 +24,7 @@ android {
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', 16)
         //noinspection OldTargetApi
-        targetSdkVersion safeExtGet('targetSdkVersion', 27)
+        targetSdkVersion safeExtGet('targetSdkVersion', 28)
     }
     lintOptions {
         abortOnError false
