@@ -98,7 +98,7 @@ The latest version of react-native-svg should always work in a clean react-nativ
 
 Or, include [this PR](https://github.com/facebook/react-native/pull/17842) manually for v7+ stability on android for older RN ( [included in 0.57-stable](https://github.com/facebook/react-native/commit/d9f5319cf0d9828b29d0e350284b22ce29985042) and newer).
 
-The latest version of v6, v7, v8 and v9 should all work in the latest react-native version. 
+The latest version of v6, v7, v8 and v9 should all work in the latest react-native version.
 
 v7 and newer requires the patch for making android thread safe, to get native animation support.
 
