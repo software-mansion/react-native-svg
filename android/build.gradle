@@ -10,7 +10,7 @@ buildscript {
 
     dependencies {
         //noinspection GradleDependency
-        classpath safeExtGet('gradleBuildTools', 'com.android.tools.build:gradle:3.4.0')
+        classpath rootProject.ext.has('gradleBuildTools') ? rootProject.ext.get('gradleBuildTools') : 'com.android.tools.build:gradle:3.4.0'
     }
 }
 
