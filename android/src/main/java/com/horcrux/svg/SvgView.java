@@ -176,6 +176,8 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         } else {
             mTintColor = tintColor;
         }
+        invalidate();
+        clearChildCache();
     }
 
     @ReactProp(name = "minX")
