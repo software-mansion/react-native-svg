@@ -1,10 +1,7 @@
-def safeExtGet(prop, fallback) {
-    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
-}
-
-def gradlePluginVersion = safeExtGet('gradlePluginVersion', '3.4.0')
-
 buildscript {
+    ext.safeExtGet = {prop, fallback ->
+        rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+    }
     repositories {
         google()
         jcenter()
@@ -12,7 +9,7 @@ buildscript {
 
     dependencies {
         //noinspection GradleDependency
-        classpath("com.android.tools.build:gradle:$gradlePluginVersion")
+        classpath("com.android.tools.build:gradle:${safeExtGet('gradlePluginVersion', '3.4.1')}")
     }
 }
 
