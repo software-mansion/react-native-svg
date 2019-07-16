@@ -175,6 +175,9 @@ class TSpanView extends TextView {
         final int length = line.length();
         final Path path = new Path();
 
+        emoji.clear();
+        emojiTransforms.clear();
+
         if (length == 0) {
             return path;
         }
@@ -758,9 +761,6 @@ class TSpanView extends TextView {
 
         final float[] startPointMatrixData = new float[9];
         final float[] endPointMatrixData = new float[9];
-
-        emoji.clear();
-        emojiTransforms.clear();
 
         for (int index = 0; index < length; index++) {
             char currentChar = chars[index];
