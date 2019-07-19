@@ -985,20 +985,8 @@ class TSpanView extends TextView {
 
         double fontSize = font.fontSize * mScale;
 
-        boolean isBold = font.fontWeight == FontWeight.Bold;
+        boolean isBold = font.fontWeight == FontWeight.Bold || font.absoluteFontWeight >= 550;
         boolean isItalic = font.fontStyle == FontStyle.italic;
-
-        /*
-        boolean underlineText = false;
-        boolean strikeThruText = false;
-
-        TextDecoration decoration = font.textDecoration;
-        if (decoration == TextDecoration.Underline) {
-            underlineText = true;
-        } else if (decoration == TextDecoration.LineThrough) {
-            strikeThruText = true;
-        }
-        */
 
         int fontStyle;
         if (isBold && isItalic) {
@@ -1035,10 +1023,6 @@ class TSpanView extends TextView {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             paint.setLetterSpacing(0);
         }
-
-        // Do these have any effect for anyone? Not for me (@msand) at least.
-        // paint.setUnderlineText(underlineText);
-        // paint.setStrikeThruText(strikeThruText);
     }
 
     private void setupTextPath() {

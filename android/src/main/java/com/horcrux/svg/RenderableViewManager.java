@@ -366,6 +366,22 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
             }
             node.setFont(map);
         }
+
+        @ReactProp(name = "fontWeight")
+        public void setFontWeight(GroupView node, Dynamic fontWeight) {
+            JavaOnlyMap map = new JavaOnlyMap();
+            switch (fontWeight.getType()) {
+                case Number:
+                    map.putDouble("fontWeight", fontWeight.asDouble());
+                    break;
+                case String:
+                    map.putString("fontWeight", fontWeight.asString());
+                    break;
+                default:
+                    return;
+            }
+            node.setFont(map);
+        }
     }
 
 

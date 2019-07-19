@@ -4,8 +4,6 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 
 import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.facebook.react.uimanager.ViewProps.FONT_FAMILY;
 import static com.facebook.react.uimanager.ViewProps.FONT_SIZE;
@@ -17,22 +15,38 @@ class AbsoluteFontWeight {
 
     static int normal = 400;
 
-    private static final EnumMap<FontWeight, Integer> fontWeightToInt;
+    private static final FontWeight[] WEIGHTS = new FontWeight[]{
+            FontWeight.w100,
+            FontWeight.w100,
+            FontWeight.w200,
+            FontWeight.w300,
+            FontWeight.Normal,
+            FontWeight.w500,
+            FontWeight.w600,
+            FontWeight.Bold,
+            FontWeight.w800,
+            FontWeight.w900,
+            FontWeight.w900,
+    };
 
+    static FontWeight nearestFontWeight(int absoluteFontWeight) {
+        return WEIGHTS[Math.round(absoluteFontWeight / 100f)];
+    }
+
+    private static final EnumMap<FontWeight, Integer> fontWeightToInt;
     static {
-        final Map<FontWeight, Integer> integerMap = new HashMap<>();
-        integerMap.put(FontWeight.Normal, 400);
-        integerMap.put(FontWeight.Bold, 700);
-        integerMap.put(FontWeight.w100, 100);
-        integerMap.put(FontWeight.w200, 200);
-        integerMap.put(FontWeight.w300, 300);
-        integerMap.put(FontWeight.w400, 400);
-        integerMap.put(FontWeight.w500, 500);
-        integerMap.put(FontWeight.w600, 600);
-        integerMap.put(FontWeight.w700, 700);
-        integerMap.put(FontWeight.w800, 800);
-        integerMap.put(FontWeight.w900, 900);
-        fontWeightToInt = new EnumMap<>(integerMap);
+        fontWeightToInt = new EnumMap<>(FontWeight.class);
+        fontWeightToInt.put(FontWeight.Normal, 400);
+        fontWeightToInt.put(FontWeight.Bold, 700);
+        fontWeightToInt.put(FontWeight.w100, 100);
+        fontWeightToInt.put(FontWeight.w200, 200);
+        fontWeightToInt.put(FontWeight.w300, 300);
+        fontWeightToInt.put(FontWeight.w400, 400);
+        fontWeightToInt.put(FontWeight.w500, 500);
+        fontWeightToInt.put(FontWeight.w600, 600);
+        fontWeightToInt.put(FontWeight.w700, 700);
+        fontWeightToInt.put(FontWeight.w800, 800);
+        fontWeightToInt.put(FontWeight.w900, 900);
     }
 
     static int from(FontWeight fontWeight) {
@@ -157,8 +171,8 @@ class FontData {
     private void handleNumericWeight(FontData parent, double number) {
         long weight = Math.round(number);
         if (weight >= 1 && weight <= 1000) {
-            fontWeight = FontWeight.Normal;
             absoluteFontWeight = (int)weight;
+            fontWeight = AbsoluteFontWeight.nearestFontWeight(absoluteFontWeight);
         } else {
             setInheritedWeight(parent);
         }
@@ -185,8 +199,8 @@ class FontData {
         }
 
         if (font.hasKey(FONT_WEIGHT)) {
-            ReadableType fontSizeType = font.getType(FONT_WEIGHT);
-            if (fontSizeType == ReadableType.Number) {
+            ReadableType fontWeightType = font.getType(FONT_WEIGHT);
+            if (fontWeightType == ReadableType.Number) {
                 handleNumericWeight(parent, font.getDouble(FONT_WEIGHT));
             } else {
                 String string = font.getString(FONT_WEIGHT);
