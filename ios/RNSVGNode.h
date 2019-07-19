@@ -13,7 +13,7 @@
 
 /**
  * RNSVG nodes are implemented as base UIViews. They should be implementation for all basic
- ＊interfaces for all non-defination nodes.
+ ＊interfaces for all non-definition nodes.
  */
 
 @interface RNSVGNode : UIView

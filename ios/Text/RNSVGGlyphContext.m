@@ -116,7 +116,7 @@
     NSString *fontFamily = topFont_->fontFamily;
     NSNumber * fontSize = [NSNumber numberWithDouble:topFont_->fontSize];
 
-    NSString * fontWeight = [RNSVGFontWeightToString(topFont_->fontWeight) lowercaseString];
+    NSString * fontWeight = RNSVGFontWeightStrings[topFont_->fontWeight];
     NSString * fontStyle = RNSVGFontStyleStrings[topFont_->fontStyle];
 
     BOOL fontFamilyFound = NO;
