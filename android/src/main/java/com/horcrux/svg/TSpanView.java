@@ -164,6 +164,9 @@ class TSpanView extends TextView {
                 paint.setFontFeatureSettings(defaultFeatures + disableDiscretionaryLigatures + font.fontFeatureSettings);
             }
             paint.setLetterSpacing((float)(letterSpacing / (font.fontSize * mScale)));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                paint.setFontVariationSettings("'wght' " + font.absoluteFontWeight + ", " + font.fontVariationSettings);
+            }
         }
 
         cachedAdvance = paint.measureText(line);
@@ -342,6 +345,9 @@ class TSpanView extends TextView {
             } else {
                 String disableDiscretionaryLigatures = "'liga' 0, 'clig' 0, 'dlig' 0, 'hlig' 0, 'cala' 0, ";
                 paint.setFontFeatureSettings(defaultFeatures + disableDiscretionaryLigatures + font.fontFeatureSettings);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                paint.setFontVariationSettings("'wght' " + font.absoluteFontWeight + ", " + font.fontVariationSettings);
             }
         }
         // OpenType.js font data

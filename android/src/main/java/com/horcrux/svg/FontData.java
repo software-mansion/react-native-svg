@@ -3,11 +3,82 @@ package com.horcrux.svg;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.facebook.react.uimanager.ViewProps.FONT_FAMILY;
 import static com.facebook.react.uimanager.ViewProps.FONT_SIZE;
 import static com.facebook.react.uimanager.ViewProps.FONT_STYLE;
 import static com.facebook.react.uimanager.ViewProps.FONT_WEIGHT;
 import static com.horcrux.svg.TextProperties.*;
+
+class AbsoluteFontWeight {
+
+    static int normal = 400;
+
+    private static final EnumMap<FontWeight, Integer> fontWeightToInt;
+
+    static {
+        final Map<FontWeight, Integer> integerMap = new HashMap<>();
+        integerMap.put(FontWeight.Normal, 400);
+        integerMap.put(FontWeight.Bold, 700);
+        integerMap.put(FontWeight.w100, 100);
+        integerMap.put(FontWeight.w200, 200);
+        integerMap.put(FontWeight.w300, 300);
+        integerMap.put(FontWeight.w400, 400);
+        integerMap.put(FontWeight.w500, 500);
+        integerMap.put(FontWeight.w600, 600);
+        integerMap.put(FontWeight.w700, 700);
+        integerMap.put(FontWeight.w800, 800);
+        integerMap.put(FontWeight.w900, 900);
+        fontWeightToInt = new EnumMap<>(integerMap);
+    }
+
+    static int from(FontWeight fontWeight) {
+        Integer w = fontWeightToInt.get(fontWeight);
+        if (w != null) {
+            return w;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    // https://drafts.csswg.org/css-fonts-4/#relative-weights
+    static int from(FontWeight fontWeight, int inherited) {
+        if (fontWeight == FontWeight.Bolder) {
+            return bolder(inherited);
+        } else if (fontWeight == FontWeight.Lighter) {
+            return lighter(inherited);
+        } else {
+            return from(fontWeight);
+        }
+    }
+
+    private static int bolder(int inherited) {
+        if (inherited < 350) {
+            return 400;
+        } else if (inherited < 550) {
+            return 700;
+        } else if (inherited < 900) {
+            return 900;
+        } else {
+            return inherited;
+        }
+    }
+
+    private static int lighter(int inherited) {
+        if (inherited < 100) {
+            return inherited;
+        } else if (inherited < 550) {
+            return 100;
+        } else if (inherited < 750) {
+            return 400;
+        } else {
+            return 700;
+        }
+    }
+}
 
 class FontData {
     static final double DEFAULT_FONT_SIZE = 12d;
@@ -23,14 +94,19 @@ class FontData {
     private static final String LETTER_SPACING = "letterSpacing";
     private static final String TEXT_DECORATION = "textDecoration";
     private static final String FONT_FEATURE_SETTINGS = "fontFeatureSettings";
+    private static final String FONT_VARIATION_SETTINGS = "fontVariationSettings";
     private static final String FONT_VARIANT_LIGATURES = "fontVariantLigatures";
 
     final double fontSize;
     final String fontFamily;
     final FontStyle fontStyle;
     final ReadableMap fontData;
-    final FontWeight fontWeight;
+
+    FontWeight fontWeight;
+    int absoluteFontWeight;
+
     final String fontFeatureSettings;
+    final String fontVariationSettings;
     final FontVariantLigatures fontVariantLigatures;
 
     final TextAnchor textAnchor;
@@ -49,7 +125,9 @@ class FontData {
         fontFamily = "";
         fontStyle = FontStyle.normal;
         fontWeight = FontWeight.Normal;
+        absoluteFontWeight = AbsoluteFontWeight.normal;
         fontFeatureSettings = "";
+        fontVariationSettings = "";
         fontVariantLigatures = FontVariantLigatures.normal;
 
         textAnchor = TextAnchor.start;
@@ -69,6 +147,21 @@ class FontData {
             scale,
             fontSize
         );
+    }
+
+    private void setInheritedWeight(FontData parent) {
+        fontWeight = parent.fontWeight;
+        absoluteFontWeight = parent.absoluteFontWeight;
+    }
+
+    private void handleNumericWeight(FontData parent, double number) {
+        long weight = Math.round(number);
+        if (weight >= 1 && weight <= 1000) {
+            fontWeight = FontWeight.Normal;
+            absoluteFontWeight = (int)weight;
+        } else {
+            setInheritedWeight(parent);
+        }
     }
 
     FontData(ReadableMap font, FontData parent, double scale) {
@@ -91,12 +184,31 @@ class FontData {
             fontSize = parentFontSize;
         }
 
+        if (font.hasKey(FONT_WEIGHT)) {
+            ReadableType fontSizeType = font.getType(FONT_WEIGHT);
+            if (fontSizeType == ReadableType.Number) {
+                handleNumericWeight(parent, font.getDouble(FONT_WEIGHT));
+            } else {
+                String string = font.getString(FONT_WEIGHT);
+                if (FontWeight.hasEnum(string)) {
+                    fontWeight = FontWeight.get(string);
+                    absoluteFontWeight = AbsoluteFontWeight.from(fontWeight, parent.absoluteFontWeight);
+                } else if (string != null) {
+                    handleNumericWeight(parent, Double.parseDouble(string));
+                } else {
+                    setInheritedWeight(parent);
+                }
+            }
+        } else {
+            setInheritedWeight(parent);
+        }
+
         fontData = font.hasKey(FONT_DATA) ? font.getMap(FONT_DATA) : parent.fontData;
 
         fontFamily = font.hasKey(FONT_FAMILY) ? font.getString(FONT_FAMILY) : parent.fontFamily;
         fontStyle = font.hasKey(FONT_STYLE) ? FontStyle.valueOf(font.getString(FONT_STYLE)) : parent.fontStyle;
-        fontWeight = font.hasKey(FONT_WEIGHT) ? FontWeight.getEnum(font.getString(FONT_WEIGHT)) : parent.fontWeight;
         fontFeatureSettings = font.hasKey(FONT_FEATURE_SETTINGS) ? font.getString(FONT_FEATURE_SETTINGS) : parent.fontFeatureSettings;
+        fontVariationSettings = font.hasKey(FONT_VARIATION_SETTINGS) ? font.getString(FONT_VARIATION_SETTINGS) : parent.fontVariationSettings;
         fontVariantLigatures = font.hasKey(FONT_VARIANT_LIGATURES) ? FontVariantLigatures.valueOf(font.getString(FONT_VARIANT_LIGATURES)) : parent.fontVariantLigatures;
 
         textAnchor = font.hasKey(TEXT_ANCHOR) ? TextAnchor.valueOf(font.getString(TEXT_ANCHOR)) : parent.textAnchor;

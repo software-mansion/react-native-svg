@@ -114,10 +114,11 @@ class TextProperties {
             this.weight = weight;
         }
 
-        static FontWeight getEnum(String strVal) {
-            if(!weightToEnum.containsKey(strVal)) {
-                throw new IllegalArgumentException("Unknown String Value: " + strVal);
-            }
+        static boolean hasEnum(String strVal) {
+            return weightToEnum.containsKey(strVal);
+        }
+
+        static FontWeight get(String strVal) {
             return weightToEnum.get(strVal);
         }
 
