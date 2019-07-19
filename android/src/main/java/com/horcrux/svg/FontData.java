@@ -3,8 +3,6 @@ package com.horcrux.svg;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 
-import java.util.EnumMap;
-
 import static com.facebook.react.uimanager.ViewProps.FONT_FAMILY;
 import static com.facebook.react.uimanager.ViewProps.FONT_SIZE;
 import static com.facebook.react.uimanager.ViewProps.FONT_STYLE;
@@ -33,39 +31,18 @@ class AbsoluteFontWeight {
         return WEIGHTS[Math.round(absoluteFontWeight / 100f)];
     }
 
-    private static final EnumMap<FontWeight, Integer> fontWeightToInt;
-    static {
-        fontWeightToInt = new EnumMap<>(FontWeight.class);
-        fontWeightToInt.put(FontWeight.Normal, 400);
-        fontWeightToInt.put(FontWeight.Bold, 700);
-        fontWeightToInt.put(FontWeight.w100, 100);
-        fontWeightToInt.put(FontWeight.w200, 200);
-        fontWeightToInt.put(FontWeight.w300, 300);
-        fontWeightToInt.put(FontWeight.w400, 400);
-        fontWeightToInt.put(FontWeight.w500, 500);
-        fontWeightToInt.put(FontWeight.w600, 600);
-        fontWeightToInt.put(FontWeight.w700, 700);
-        fontWeightToInt.put(FontWeight.w800, 800);
-        fontWeightToInt.put(FontWeight.w900, 900);
-    }
-
-    static int from(FontWeight fontWeight) {
-        Integer w = fontWeightToInt.get(fontWeight);
-        if (w != null) {
-            return w;
-        } else {
-            throw new IllegalArgumentException();
-        }
-    }
+    private static final int[] absoluteFontWeights = new int[]{
+            400, 700, 100, 200, 300, 400, 500, 600, 700, 800, 900
+    };
 
     // https://drafts.csswg.org/css-fonts-4/#relative-weights
-    static int from(FontWeight fontWeight, int inherited) {
+    static int from(FontWeight fontWeight, FontData parent) {
         if (fontWeight == FontWeight.Bolder) {
-            return bolder(inherited);
+            return bolder(parent.absoluteFontWeight);
         } else if (fontWeight == FontWeight.Lighter) {
-            return lighter(inherited);
+            return lighter(parent.absoluteFontWeight);
         } else {
-            return from(fontWeight);
+            return absoluteFontWeights[fontWeight.ordinal()];
         }
     }
 
@@ -164,8 +141,8 @@ class FontData {
     }
 
     private void setInheritedWeight(FontData parent) {
-        fontWeight = parent.fontWeight;
         absoluteFontWeight = parent.absoluteFontWeight;
+        fontWeight = parent.fontWeight;
     }
 
     private void handleNumericWeight(FontData parent, double number) {
@@ -205,8 +182,8 @@ class FontData {
             } else {
                 String string = font.getString(FONT_WEIGHT);
                 if (FontWeight.hasEnum(string)) {
-                    fontWeight = FontWeight.get(string);
-                    absoluteFontWeight = AbsoluteFontWeight.from(fontWeight, parent.absoluteFontWeight);
+                    absoluteFontWeight = AbsoluteFontWeight.from(FontWeight.get(string), parent);
+                    fontWeight = AbsoluteFontWeight.nearestFontWeight(absoluteFontWeight);
                 } else if (string != null) {
                     handleNumericWeight(parent, Double.parseDouble(string));
                 } else {

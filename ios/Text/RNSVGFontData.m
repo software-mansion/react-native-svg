@@ -53,8 +53,8 @@ RNSVGFontData *RNSVGFontData_Defaults;
 }
 
 - (void)setInheritedWeight:(RNSVGFontData*) parent {
-    fontWeight = parent->fontWeight;
     absoluteFontWeight = parent->absoluteFontWeight;
+    fontWeight = parent->fontWeight;
 }
 
 RNSVGFontWeight nearestFontWeight(int absoluteFontWeight) {
@@ -124,7 +124,7 @@ int lighter(int inherited) {
     else {
         data->fontSize = parentFontSize;
     }
-    
+
     if ([font objectForKey:FONT_WEIGHT]) {
         id fontWeight = [font objectForKey:FONT_WEIGHT];
         if ([fontWeight isKindOfClass:NSNumber.class]) {
@@ -144,7 +144,7 @@ int lighter(int inherited) {
     } else {
         [data setInheritedWeight:parent];
     }
-    
+
     data->fontData = [font objectForKey:FONT_DATA] ? [font objectForKey:FONT_DATA] : parent->fontData;
     data->fontFamily = [font objectForKey:FONT_FAMILY] ? [font objectForKey:FONT_FAMILY] : parent->fontFamily;
     NSString* style = [font objectForKey:FONT_STYLE];
