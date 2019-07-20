@@ -1007,13 +1007,13 @@ class TSpanView extends TextView {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             Typeface.Builder builder = new Typeface.Builder(assetManager, otfpath);
-            builder.setFontVariationSettings("'wght' " + weight);
+            builder.setFontVariationSettings("'wght' " + weight + font.fontVariationSettings);
             builder.setWeight(weight);
             builder.setItalic(isItalic);
             typeface = builder.build();
             if (typeface == null) {
                 builder = new Typeface.Builder(assetManager, ttfpath);
-                builder.setFontVariationSettings("'wght' " + weight);
+                builder.setFontVariationSettings("'wght' " + weight + font.fontVariationSettings);
                 builder.setWeight(weight);
                 builder.setItalic(isItalic);
                 typeface = builder.build();

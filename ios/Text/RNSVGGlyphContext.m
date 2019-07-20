@@ -177,52 +177,6 @@
         }
         wght_id = (CFNumberRef)axisId;
         break;
-        /*
-        int axisIdInt;
-        if (!CFNumberGetValue(wght_id, kCFNumberIntType, &axisIdInt))
-        {
-            continue;
-        }
-
-        CFTypeRef axisDefaultValue = CFDictionaryGetValue(cgAxisDict,
-                                                          kCTFontVariationAxisDefaultValueKey);
-        CFTypeRef axisMinValue = CFDictionaryGetValue(cgAxisDict,
-                                                      kCTFontVariationAxisMinimumValueKey);
-        CFTypeRef axisMaxValue = CFDictionaryGetValue(cgAxisDict,
-                                                      kCTFontVariationAxisMaximumValueKey);
-
-        if (!axisDefaultValue || CFGetTypeID(axisDefaultValue) != CFNumberGetTypeID()) {
-            break;
-        }
-        CFNumberRef axisDefaultValueNumber = (CFNumberRef)axisDefaultValue;
-        double axisDefaultValueDouble;
-        if (!CFNumberGetValue(axisDefaultValueNumber, kCFNumberDoubleType, &axisDefaultValueDouble))
-        {
-            break;
-        }
-
-        if (!axisMinValue || CFGetTypeID(axisMinValue) != CFNumberGetTypeID()) {
-            break;
-        }
-        CFNumberRef axisMinValueNumber = (CFNumberRef)axisMinValue;
-        double axisMinValueDouble;
-        if (!CFNumberGetValue(axisMinValueNumber, kCFNumberDoubleType, &axisMinValueDouble))
-        {
-            break;
-        }
-
-        if (!axisMaxValue || CFGetTypeID(axisMaxValue) != CFNumberGetTypeID()) {
-            break;
-        }
-        CFNumberRef axisMaxValueNumber = (CFNumberRef)axisMaxValue;
-        double axisMaxValueDouble;
-        if (!CFNumberGetValue(axisMaxValueNumber, kCFNumberDoubleType, &axisMaxValueDouble))
-        {
-            break;
-        }
-
-        RCTLog(@"name: %@ min: %f max: %f def: %f id: %i", axisNameNSString, axisMinValueDouble, axisMaxValueDouble, axisDefaultValueDouble, axisIdInt);
-        */
     }
 
     if (wght_id == 0) {
