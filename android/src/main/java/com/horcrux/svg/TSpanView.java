@@ -387,7 +387,6 @@ class TSpanView extends TextView {
         TextView anchorRoot = getTextAnchorRoot();
         final double textMeasure = anchorRoot.getSubtreeTextChunksTotalAdvance(paint);
         double offset = getTextAnchorOffset(textAnchor, textMeasure);
-        applyTextPropertiesToPaint(paint, font);
 
         int side = 1;
         double startOfRendering = 0;
@@ -1044,6 +1043,8 @@ class TSpanView extends TextView {
 
         // NB: if the font family is null / unsupported, the default one will be used
         paint.setTypeface(typeface);
+        paint.setLinearText(true);
+        paint.setSubpixelText(true);
         paint.setTextSize((float) fontSize);
         paint.setTextAlign(Paint.Align.LEFT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
