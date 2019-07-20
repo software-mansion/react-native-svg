@@ -144,7 +144,7 @@
 
     CTFontRef ref = (__bridge CTFontRef)font;
 
-    int weight = topFont_->absoluteFontWeight;
+    double weight = topFont_->absoluteFontWeight;
     if (weight == 400) {
         return ref;
     }
@@ -169,6 +169,26 @@
         NSString *axisNameNSString = (__bridge NSString *)(axisNameString);
         if (![@"Weight" isEqualToString:axisNameNSString]) {
             continue;
+        }
+
+        CFTypeRef axisMinValue = CFDictionaryGetValue(cgAxisDict, kCTFontVariationAxisMinimumValueKey);
+        if (axisMinValue && CFGetTypeID(axisMinValue) == CFNumberGetTypeID()) {
+            CFNumberRef axisMinValueNumber = (CFNumberRef)axisMinValue;
+            double axisMinValueDouble;
+            if (CFNumberGetValue(axisMinValueNumber, kCFNumberDoubleType, &axisMinValueDouble))
+            {
+                weight = fmax(axisMinValueDouble, weight);
+            }
+        }
+
+        CFTypeRef axisMaxValue = CFDictionaryGetValue(cgAxisDict, kCTFontVariationAxisMaximumValueKey);
+        if (axisMaxValue && CFGetTypeID(axisMaxValue) == CFNumberGetTypeID()) {
+            CFNumberRef axisMaxValueNumber = (CFNumberRef)axisMaxValue;
+            double axisMaxValueDouble;
+            if (CFNumberGetValue(axisMaxValueNumber, kCFNumberDoubleType, &axisMaxValueDouble))
+            {
+                weight = fmin(axisMaxValueDouble, weight);
+            }
         }
 
         CFTypeRef axisId = CFDictionaryGetValue(cgAxisDict, kCTFontVariationAxisIdentifierKey);
