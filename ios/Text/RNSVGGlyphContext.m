@@ -114,10 +114,10 @@
 - (CTFontRef)getGlyphFont
 {
     NSString *fontFamily = topFont_->fontFamily;
-    NSNumber * fontSize = [NSNumber numberWithDouble:topFont_->fontSize];
+    NSNumber *fontSize = [NSNumber numberWithDouble:topFont_->fontSize];
 
-    NSString * fontWeight = RNSVGFontWeightStrings[topFont_->fontWeight];
-    NSString * fontStyle = RNSVGFontStyleStrings[topFont_->fontStyle];
+    NSString *fontWeight = RNSVGFontWeightStrings[topFont_->fontWeight];
+    NSString *fontStyle = RNSVGFontStyleStrings[topFont_->fontStyle];
 
     BOOL fontFamilyFound = NO;
     NSArray *supportedFontFamilyNames = [UIFont familyNames];
@@ -161,7 +161,6 @@
 
         CFDictionaryRef cgAxisDict = (CFDictionaryRef)cgAxis;
         CFTypeRef axisName = CFDictionaryGetValue(cgAxisDict, kCTFontVariationAxisNameKey);
-        CFTypeRef axisId = CFDictionaryGetValue(cgAxisDict, kCTFontVariationAxisIdentifierKey);
 
         if (!axisName || CFGetTypeID(axisName) != CFStringGetTypeID()) {
             continue;
@@ -172,6 +171,7 @@
             continue;
         }
 
+        CFTypeRef axisId = CFDictionaryGetValue(cgAxisDict, kCTFontVariationAxisIdentifierKey);
         if (!axisId || CFGetTypeID(axisId) != CFNumberGetTypeID()) {
             continue;
         }
@@ -310,8 +310,8 @@
     if (self->mTop_ > 0) {
         return self->topFont_;
     } else {
-        RNSVGGroup* parentRoot = [child getParentTextRoot];
-        RNSVGFontData* Defaults = [RNSVGFontData Defaults];
+        RNSVGGroup *parentRoot = [child getParentTextRoot];
+        RNSVGFontData *Defaults = [RNSVGFontData Defaults];
         while (parentRoot != nil) {
             RNSVGFontData *map = [[parentRoot getGlyphContext] getFont];
             if (map != Defaults) {
