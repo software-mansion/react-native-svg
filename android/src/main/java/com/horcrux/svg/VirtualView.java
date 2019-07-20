@@ -345,30 +345,30 @@ abstract public class VirtualView extends ReactViewGroup {
     }
 
     double relativeOnWidth(SVGLength length) {
-        SVGLengthUnitType unit = length.unit;
-        if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_NUMBER){
+        SVGLength.UnitType unit = length.unit;
+        if (unit == SVGLength.UnitType.NUMBER){
             return length.value * mScale;
-        } else if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_PERCENTAGE){
+        } else if (unit == SVGLength.UnitType.PERCENTAGE){
             return length.value / 100 * getCanvasWidth();
         }
         return fromRelativeFast(length);
     }
 
     double relativeOnHeight(SVGLength length) {
-        SVGLengthUnitType unit = length.unit;
-        if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_NUMBER){
+        SVGLength.UnitType unit = length.unit;
+        if (unit == SVGLength.UnitType.NUMBER){
             return length.value * mScale;
-        } else if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_PERCENTAGE){
+        } else if (unit == SVGLength.UnitType.PERCENTAGE){
             return length.value / 100 * getCanvasHeight();
         }
         return fromRelativeFast(length);
     }
 
     double relativeOnOther(SVGLength length) {
-        SVGLengthUnitType unit = length.unit;
-        if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_NUMBER){
+        SVGLength.UnitType unit = length.unit;
+        if (unit == SVGLength.UnitType.NUMBER){
             return length.value * mScale;
-        } else if (unit == SVGLengthUnitType.SVG_LENGTHTYPE_PERCENTAGE){
+        } else if (unit == SVGLength.UnitType.PERCENTAGE){
             return length.value / 100 * getCanvasDiagonal();
         }
         return fromRelativeFast(length);
@@ -384,26 +384,26 @@ abstract public class VirtualView extends ReactViewGroup {
     private double fromRelativeFast(SVGLength length) {
         double unit;
         switch (length.unit) {
-            case SVG_LENGTHTYPE_EMS:
+            case EMS:
                 unit = getFontSizeFromContext();
                 break;
-            case SVG_LENGTHTYPE_EXS:
+            case EXS:
                 unit = getFontSizeFromContext() / 2;
                 break;
 
-            case SVG_LENGTHTYPE_CM:
+            case CM:
                 unit = 35.43307;
                 break;
-            case SVG_LENGTHTYPE_MM:
+            case MM:
                 unit = 3.543307;
                 break;
-            case SVG_LENGTHTYPE_IN:
+            case IN:
                 unit = 90;
                 break;
-            case SVG_LENGTHTYPE_PT:
+            case PT:
                 unit = 1.25;
                 break;
-            case SVG_LENGTHTYPE_PC:
+            case PC:
                 unit = 15;
                 break;
 

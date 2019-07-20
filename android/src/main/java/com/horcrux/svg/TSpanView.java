@@ -165,7 +165,7 @@ class TSpanView extends TextView {
             }
             paint.setLetterSpacing((float)(letterSpacing / (font.fontSize * mScale)));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                paint.setFontVariationSettings("'wght' " + font.absoluteFontWeight + ", " + font.fontVariationSettings);
+                paint.setFontVariationSettings("'wght' " + font.absoluteFontWeight + font.fontVariationSettings);
             }
         }
 
@@ -347,7 +347,7 @@ class TSpanView extends TextView {
                 paint.setFontFeatureSettings(defaultFeatures + disableDiscretionaryLigatures + font.fontFeatureSettings);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                paint.setFontVariationSettings("'wght' " + font.absoluteFontWeight + ", " + font.fontVariationSettings);
+                paint.setFontVariationSettings("'wght' " + font.absoluteFontWeight + font.fontVariationSettings);
             }
         }
         // OpenType.js font data
@@ -1000,20 +1000,46 @@ class TSpanView extends TextView {
         }
 
         Typeface typeface = null;
+        int weight = font.absoluteFontWeight;
         final String fontFamily = font.fontFamily;
-        try {
-            String path = FONTS + fontFamily + OTF;
-            typeface = Typeface.createFromAsset(assetManager, path);
-        } catch (Exception ignored) {
+        String otfpath = FONTS + fontFamily + OTF;
+        String ttfpath = FONTS + fontFamily + TTF;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            Typeface.Builder builder = new Typeface.Builder(assetManager, otfpath);
+            builder.setFontVariationSettings("'wght' " + weight);
+            builder.setWeight(weight);
+            builder.setItalic(isItalic);
+            typeface = builder.build();
+            if (typeface == null) {
+                builder = new Typeface.Builder(assetManager, ttfpath);
+                builder.setFontVariationSettings("'wght' " + weight);
+                builder.setWeight(weight);
+                builder.setItalic(isItalic);
+                typeface = builder.build();
+            }
+        } else {
             try {
-                String path = FONTS + fontFamily + TTF;
-                typeface = Typeface.createFromAsset(assetManager, path);
-            } catch (Exception ignored2) {
+                typeface = Typeface.createFromAsset(assetManager, otfpath);
+            } catch (Exception ignored) {
                 try {
-                    typeface = ReactFontManager.getInstance().getTypeface(fontFamily, fontStyle, assetManager);
-                } catch (Exception ignored3) {
+                    typeface = Typeface.createFromAsset(assetManager, ttfpath);
+                } catch (Exception ignored2) {
                 }
             }
+        }
+
+        if (typeface == null) {
+            try {
+                typeface = ReactFontManager.getInstance().getTypeface(fontFamily, fontStyle, weight, assetManager);
+            } catch (Exception ignored) {
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            typeface = Typeface.create(typeface, weight, isItalic);
+        } else {
+            typeface = Typeface.create(typeface, fontStyle);
         }
 
         // NB: if the font family is null / unsupported, the default one will be used

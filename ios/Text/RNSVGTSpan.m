@@ -157,18 +157,6 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     {
         [attrs setObject:kernAttr forKey:(id)kCTKernAttributeName];
     }
-    
-    int weight = font->absoluteFontWeight;
-    if (weight != 400) {
-        // https://github.com/WebKit/webkit/blob/73b06fb2cc31aaff91119718d9abdc7be703d41b/Source/WebCore/platform/graphics/cocoa/FontCacheCoreText.cpp#L429-L444
-        float denormalizedWeight = (weight + 109.3) / 523.7;
-        CFMutableDictionaryRef variationDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-        long long bitwiseTag = 'w' << 24 | 'g' << 16 | 'h' << 8 | 't';
-        CFNumberRef tagNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberLongLongType, &bitwiseTag);
-        CFNumberRef valueNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberFloatType, &denormalizedWeight);
-        CFDictionarySetValue(variationDictionary, tagNumber, valueNumber);
-        CFDictionaryAddValue(attributes, kCTFontVariationAttribute, variationDictionary);
-    }
 
     CFStringRef string = (__bridge CFStringRef)str;
     CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
@@ -340,18 +328,6 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
         {
             [attrs setObject:noAutoKern forKey:(id)kCTKernAttributeName];
         }
-    }
-    
-    int weight = font->absoluteFontWeight;
-    if (weight != 400) {
-        // https://github.com/WebKit/webkit/blob/73b06fb2cc31aaff91119718d9abdc7be703d41b/Source/WebCore/platform/graphics/cocoa/FontCacheCoreText.cpp#L429-L444
-        float denormalizedWeight = (weight + 109.3) / 523.7;
-        CFMutableDictionaryRef variationDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-        long long bitwiseTag = 'w' << 24 | 'g' << 16 | 'h' << 8 | 't';
-        CFNumberRef tagNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberLongLongType, &bitwiseTag);
-        CFNumberRef valueNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberFloatType, &denormalizedWeight);
-        CFDictionarySetValue(variationDictionary, tagNumber, valueNumber);
-        CFDictionaryAddValue(attributes, kCTFontVariationAttribute, variationDictionary);
     }
 
     CFStringRef string = (__bridge CFStringRef)str;

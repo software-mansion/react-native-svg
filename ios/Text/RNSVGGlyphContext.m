@@ -134,13 +134,105 @@
     }
     fontFamily = fontFamilyFound ? fontFamily : nil;
 
-    return (__bridge CTFontRef)[RCTFont updateFont:nil
-                                        withFamily:fontFamily
-                                              size:fontSize
-                                            weight:fontWeight
-                                             style:fontStyle
-                                           variant:nil
-                                   scaleMultiplier:1.0];
+    UIFont *font = [RCTFont updateFont:nil
+                              withFamily:fontFamily
+                                    size:fontSize
+                                  weight:fontWeight
+                                   style:fontStyle
+                                 variant:nil
+                         scaleMultiplier:1.0];
+
+    CTFontRef ref = (__bridge CTFontRef)font;
+
+    int weight = topFont_->absoluteFontWeight;
+    if (weight == 400) {
+        return ref;
+    }
+
+    CFArrayRef cgAxes = CTFontCopyVariationAxes(ref);
+    CFIndex cgAxisCount = CFArrayGetCount(cgAxes);
+    CFNumberRef wght_id = 0;
+
+    for (CFIndex i = 0; i < cgAxisCount; ++i) {
+        CFTypeRef cgAxis = CFArrayGetValueAtIndex(cgAxes, i);
+        if (CFGetTypeID(cgAxis) != CFDictionaryGetTypeID()) {
+            continue;
+        }
+
+        CFDictionaryRef cgAxisDict = (CFDictionaryRef)cgAxis;
+        CFTypeRef axisName = CFDictionaryGetValue(cgAxisDict, kCTFontVariationAxisNameKey);
+        CFTypeRef axisId = CFDictionaryGetValue(cgAxisDict, kCTFontVariationAxisIdentifierKey);
+
+        if (!axisName || CFGetTypeID(axisName) != CFStringGetTypeID()) {
+            continue;
+        }
+        CFStringRef axisNameString = (CFStringRef)axisName;
+        NSString *axisNameNSString = (__bridge NSString *)(axisNameString);
+        if (![@"Weight" isEqualToString:axisNameNSString]) {
+            continue;
+        }
+
+        if (!axisId || CFGetTypeID(axisId) != CFNumberGetTypeID()) {
+            continue;
+        }
+        wght_id = (CFNumberRef)axisId;
+        break;
+        /*
+        int axisIdInt;
+        if (!CFNumberGetValue(wght_id, kCFNumberIntType, &axisIdInt))
+        {
+            continue;
+        }
+
+        CFTypeRef axisDefaultValue = CFDictionaryGetValue(cgAxisDict,
+                                                          kCTFontVariationAxisDefaultValueKey);
+        CFTypeRef axisMinValue = CFDictionaryGetValue(cgAxisDict,
+                                                      kCTFontVariationAxisMinimumValueKey);
+        CFTypeRef axisMaxValue = CFDictionaryGetValue(cgAxisDict,
+                                                      kCTFontVariationAxisMaximumValueKey);
+
+        if (!axisDefaultValue || CFGetTypeID(axisDefaultValue) != CFNumberGetTypeID()) {
+            break;
+        }
+        CFNumberRef axisDefaultValueNumber = (CFNumberRef)axisDefaultValue;
+        double axisDefaultValueDouble;
+        if (!CFNumberGetValue(axisDefaultValueNumber, kCFNumberDoubleType, &axisDefaultValueDouble))
+        {
+            break;
+        }
+
+        if (!axisMinValue || CFGetTypeID(axisMinValue) != CFNumberGetTypeID()) {
+            break;
+        }
+        CFNumberRef axisMinValueNumber = (CFNumberRef)axisMinValue;
+        double axisMinValueDouble;
+        if (!CFNumberGetValue(axisMinValueNumber, kCFNumberDoubleType, &axisMinValueDouble))
+        {
+            break;
+        }
+
+        if (!axisMaxValue || CFGetTypeID(axisMaxValue) != CFNumberGetTypeID()) {
+            break;
+        }
+        CFNumberRef axisMaxValueNumber = (CFNumberRef)axisMaxValue;
+        double axisMaxValueDouble;
+        if (!CFNumberGetValue(axisMaxValueNumber, kCFNumberDoubleType, &axisMaxValueDouble))
+        {
+            break;
+        }
+
+        RCTLog(@"name: %@ min: %f max: %f def: %f id: %i", axisNameNSString, axisMinValueDouble, axisMaxValueDouble, axisDefaultValueDouble, axisIdInt);
+        */
+    }
+
+    if (wght_id == 0) {
+        return ref;
+    }
+    UIFontDescriptor *uifd = font.fontDescriptor;
+    CTFontDescriptorRef ctfd = (__bridge CTFontDescriptorRef)(uifd);
+    CTFontDescriptorRef newfd = CTFontDescriptorCreateCopyWithVariation(ctfd, wght_id, (CGFloat)weight);
+    CTFontRef newfont = CTFontCreateCopyWithAttributes(ref, (CGFloat)[fontSize doubleValue], nil, newfd);
+    return newfont;
 }
 
 - (void)pushIndices

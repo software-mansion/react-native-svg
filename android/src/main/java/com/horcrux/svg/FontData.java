@@ -9,69 +9,70 @@ import static com.facebook.react.uimanager.ViewProps.FONT_STYLE;
 import static com.facebook.react.uimanager.ViewProps.FONT_WEIGHT;
 import static com.horcrux.svg.TextProperties.*;
 
-class AbsoluteFontWeight {
-
-    static int normal = 400;
-
-    private static final FontWeight[] WEIGHTS = new FontWeight[]{
-            FontWeight.w100,
-            FontWeight.w100,
-            FontWeight.w200,
-            FontWeight.w300,
-            FontWeight.Normal,
-            FontWeight.w500,
-            FontWeight.w600,
-            FontWeight.Bold,
-            FontWeight.w800,
-            FontWeight.w900,
-            FontWeight.w900,
-    };
-
-    static FontWeight nearestFontWeight(int absoluteFontWeight) {
-        return WEIGHTS[Math.round(absoluteFontWeight / 100f)];
-    }
-
-    private static final int[] absoluteFontWeights = new int[]{
-            400, 700, 100, 200, 300, 400, 500, 600, 700, 800, 900
-    };
-
-    // https://drafts.csswg.org/css-fonts-4/#relative-weights
-    static int from(FontWeight fontWeight, FontData parent) {
-        if (fontWeight == FontWeight.Bolder) {
-            return bolder(parent.absoluteFontWeight);
-        } else if (fontWeight == FontWeight.Lighter) {
-            return lighter(parent.absoluteFontWeight);
-        } else {
-            return absoluteFontWeights[fontWeight.ordinal()];
-        }
-    }
-
-    private static int bolder(int inherited) {
-        if (inherited < 350) {
-            return 400;
-        } else if (inherited < 550) {
-            return 700;
-        } else if (inherited < 900) {
-            return 900;
-        } else {
-            return inherited;
-        }
-    }
-
-    private static int lighter(int inherited) {
-        if (inherited < 100) {
-            return inherited;
-        } else if (inherited < 550) {
-            return 100;
-        } else if (inherited < 750) {
-            return 400;
-        } else {
-            return 700;
-        }
-    }
-}
-
 class FontData {
+
+    static class AbsoluteFontWeight {
+
+        static final int normal = 400;
+
+        private static final FontWeight[] WEIGHTS = new FontWeight[]{
+                FontWeight.w100,
+                FontWeight.w100,
+                FontWeight.w200,
+                FontWeight.w300,
+                FontWeight.Normal,
+                FontWeight.w500,
+                FontWeight.w600,
+                FontWeight.Bold,
+                FontWeight.w800,
+                FontWeight.w900,
+                FontWeight.w900,
+        };
+
+        static FontWeight nearestFontWeight(int absoluteFontWeight) {
+            return WEIGHTS[Math.round(absoluteFontWeight / 100f)];
+        }
+
+        private static final int[] absoluteFontWeights = new int[]{
+                400, 700, 100, 200, 300, 400, 500, 600, 700, 800, 900
+        };
+
+        // https://drafts.csswg.org/css-fonts-4/#relative-weights
+        static int from(FontWeight fontWeight, FontData parent) {
+            if (fontWeight == FontWeight.Bolder) {
+                return bolder(parent.absoluteFontWeight);
+            } else if (fontWeight == FontWeight.Lighter) {
+                return lighter(parent.absoluteFontWeight);
+            } else {
+                return absoluteFontWeights[fontWeight.ordinal()];
+            }
+        }
+
+        private static int bolder(int inherited) {
+            if (inherited < 350) {
+                return 400;
+            } else if (inherited < 550) {
+                return 700;
+            } else if (inherited < 900) {
+                return 900;
+            } else {
+                return inherited;
+            }
+        }
+
+        private static int lighter(int inherited) {
+            if (inherited < 100) {
+                return inherited;
+            } else if (inherited < 550) {
+                return 100;
+            } else if (inherited < 750) {
+                return 400;
+            } else {
+                return 700;
+            }
+        }
+    }
+
     static final double DEFAULT_FONT_SIZE = 12d;
 
     private static final double DEFAULT_KERNING = 0d;

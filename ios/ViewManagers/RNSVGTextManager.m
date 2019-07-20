@@ -68,7 +68,7 @@ RCT_CUSTOM_VIEW_PROPERTY(baselineShift, id, RNSVGText)
 RCT_EXPORT_VIEW_PROPERTY(lengthAdjust, NSString)
 RCT_EXPORT_VIEW_PROPERTY(alignmentBaseline, NSString)
 
-RCT_CUSTOM_VIEW_PROPERTY(fontSize, id, RNSVGGroup)
+RCT_CUSTOM_VIEW_PROPERTY(fontSize, id, RNSVGText)
 {
     if ([json isKindOfClass:[NSString class]]) {
         NSString *stringValue = (NSString *)json;
@@ -80,7 +80,7 @@ RCT_CUSTOM_VIEW_PROPERTY(fontSize, id, RNSVGGroup)
     }
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(fontWeight, id, RNSVGGroup)
+RCT_CUSTOM_VIEW_PROPERTY(fontWeight, id, RNSVGText)
 {
     if ([json isKindOfClass:[NSString class]]) {
         NSString *stringValue = (NSString *)json;
