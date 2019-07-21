@@ -167,7 +167,7 @@
         }
         CFStringRef axisNameString = (CFStringRef)axisName;
         NSString *axisNameNSString = (__bridge NSString *)(axisNameString);
-        if (![@"Weight" isEqualToString:axisNameNSString]) {
+        if (![@"Weight" isEqualToString:axisNameNSString] && ![@"Size" isEqualToString:axisNameNSString]) {
             continue;
         }
 
