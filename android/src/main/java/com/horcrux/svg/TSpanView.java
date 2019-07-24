@@ -53,9 +53,11 @@ class TSpanView extends TextView {
     private TextPathView textPath;
     private final ArrayList<String> emoji = new ArrayList<>();
     private final ArrayList<Matrix> emojiTransforms = new ArrayList<>();
+    private final AssetManager assets;
 
     public TSpanView(ReactContext reactContext) {
         super(reactContext);
+        assets = mContext.getResources().getAssets();
     }
 
     @ReactProp(name = "content")
@@ -980,73 +982,68 @@ class TSpanView extends TextView {
     }
 
     private void applyTextPropertiesToPaint(Paint paint, FontData font) {
-        AssetManager assetManager = mContext.getResources().getAssets();
-
-        double fontSize = font.fontSize * mScale;
-
         boolean isBold = font.fontWeight == FontWeight.Bold || font.absoluteFontWeight >= 550;
         boolean isItalic = font.fontStyle == FontStyle.italic;
 
-        int fontStyle;
+        int style;
         if (isBold && isItalic) {
-            fontStyle = Typeface.BOLD_ITALIC;
+            style = Typeface.BOLD_ITALIC;
         } else if (isBold) {
-            fontStyle = Typeface.BOLD;
+            style = Typeface.BOLD;
         } else if (isItalic) {
-            fontStyle = Typeface.ITALIC;
+            style = Typeface.ITALIC;
         } else {
-            fontStyle = Typeface.NORMAL;
+            style = Typeface.NORMAL;
         }
 
         Typeface typeface = null;
         int weight = font.absoluteFontWeight;
         final String fontFamily = font.fontFamily;
-        String otfpath = FONTS + fontFamily + OTF;
-        String ttfpath = FONTS + fontFamily + TTF;
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            Typeface.Builder builder = new Typeface.Builder(assetManager, otfpath);
-            builder.setFontVariationSettings("'wght' " + weight + font.fontVariationSettings);
-            builder.setWeight(weight);
-            builder.setItalic(isItalic);
-            typeface = builder.build();
-            if (typeface == null) {
-                builder = new Typeface.Builder(assetManager, ttfpath);
+        if (fontFamily != null && fontFamily.length() > 0) {
+            String otfpath = FONTS + fontFamily + OTF;
+            String ttfpath = FONTS + fontFamily + TTF;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Typeface.Builder builder = new Typeface.Builder(assets, otfpath);
                 builder.setFontVariationSettings("'wght' " + weight + font.fontVariationSettings);
                 builder.setWeight(weight);
                 builder.setItalic(isItalic);
                 typeface = builder.build();
-            }
-        } else {
-            try {
-                typeface = Typeface.createFromAsset(assetManager, otfpath);
-            } catch (Exception ignored) {
+                if (typeface == null) {
+                    builder = new Typeface.Builder(assets, ttfpath);
+                    builder.setFontVariationSettings("'wght' " + weight + font.fontVariationSettings);
+                    builder.setWeight(weight);
+                    builder.setItalic(isItalic);
+                    typeface = builder.build();
+                }
+            } else {
                 try {
-                    typeface = Typeface.createFromAsset(assetManager, ttfpath);
-                } catch (Exception ignored2) {
+                    typeface = Typeface.createFromAsset(assets, otfpath);
+                    typeface = Typeface.create(typeface, style);
+                } catch (Exception ignored) {
+                    try {
+                        typeface = Typeface.createFromAsset(assets, ttfpath);
+                        typeface = Typeface.create(typeface, style);
+                    } catch (Exception ignored2) {
+                    }
                 }
             }
         }
 
         if (typeface == null) {
             try {
-                typeface = ReactFontManager.getInstance().getTypeface(fontFamily, fontStyle, weight, assetManager);
+                typeface = ReactFontManager.getInstance().getTypeface(fontFamily, style, weight, assets);
             } catch (Exception ignored) {
             }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             typeface = Typeface.create(typeface, weight, isItalic);
-        } else {
-            typeface = Typeface.create(typeface, fontStyle);
         }
 
-        // NB: if the font family is null / unsupported, the default one will be used
-        paint.setTypeface(typeface);
         paint.setLinearText(true);
         paint.setSubpixelText(true);
-        paint.setTextSize((float) fontSize);
-        paint.setTextAlign(Paint.Align.LEFT);
+        paint.setTypeface(typeface);
+        paint.setTextSize((float) (font.fontSize * mScale));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             paint.setLetterSpacing(0);
         }
