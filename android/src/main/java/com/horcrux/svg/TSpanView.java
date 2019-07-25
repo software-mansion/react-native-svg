@@ -1031,7 +1031,7 @@ class TSpanView extends TextView {
 
         if (typeface == null) {
             try {
-                typeface = ReactFontManager.getInstance().getTypeface(fontFamily, style, weight, assets);
+                typeface = ReactFontManager.getInstance().getTypeface(fontFamily, style, assets);
             } catch (Exception ignored) {
             }
         }
