@@ -139,7 +139,7 @@ abstract public class RenderableView extends VirtualView {
                 break;
             default:
                 throw new JSApplicationIllegalArgumentException(
-                        "fillRule " + this.fillRule + " unrecognized");
+                        "fillRule " + fillRule + " unrecognized");
         }
 
         invalidate();
