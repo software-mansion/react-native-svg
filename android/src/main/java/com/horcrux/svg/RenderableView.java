@@ -220,7 +220,7 @@ abstract public class RenderableView extends VirtualView {
                 break;
             default:
                 throw new JSApplicationIllegalArgumentException(
-                        "strokeLinecap " + this.strokeLinecap + " unrecognized");
+                        "strokeLinecap " + strokeLinecap + " unrecognized");
         }
         invalidate();
     }
@@ -239,7 +239,7 @@ abstract public class RenderableView extends VirtualView {
                 break;
             default:
                 throw new JSApplicationIllegalArgumentException(
-                        "strokeLinejoin " + this.strokeLinejoin + " unrecognized");
+                        "strokeLinejoin " + strokeLinejoin + " unrecognized");
         }
         invalidate();
     }
