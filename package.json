@@ -2,6 +2,7 @@
     "version": "9.5.3",
     "name": "react-native-svg",
     "description": "SVG library for react-native",
+    "homepage": "https://github.com/react-native-community/react-native-svg",
     "repository": {
         "type": "git",
         "url": "https://github.com/react-native-community/react-native-svg"
@@ -29,11 +30,14 @@
     },
     "dependencies": {},
     "devDependencies": {
+        "@react-native-community/eslint-config": "^0.0.5",
         "babel-eslint": "^10.0.2",
-        "eslint": "^6.0.1",
+        "eslint": "^6.1.0",
+        "eslint-plugin-prettier": "^3.1.0",
         "eslint-plugin-react": "^7.14.2",
         "pegjs": "^0.10.0",
-        "prettier": "^1.18.2"
+        "prettier": "^1.18.2",
+        "react": "^16.8.6"
     },
     "nativePackage": true
 }
