@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { requireNativeComponent } from "react-native";
+import React, { Component } from 'react';
+import { requireNativeComponent } from 'react-native';
 /*
 
 https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFEMergeNodeElement
@@ -30,7 +30,7 @@ DOM Interfaces:
  */
 
 export default class FEMergeNode extends Component {
-    static displayName = "feMergeNode";
+    static displayName = 'feMergeNode';
 
     setNativeProps = props => {
         this.root.setNativeProps(props);
@@ -48,4 +48,4 @@ export default class FEMergeNode extends Component {
     }
 }
 
-const RNSVGFEMergeNode = requireNativeComponent("RNSVGFEMergeNode");
+const RNSVGFEMergeNode = requireNativeComponent('RNSVGFEMergeNode');

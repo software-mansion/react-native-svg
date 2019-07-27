@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { requireNativeComponent } from "react-native";
-import extractFilterPrimitive from "../lib/extract/extractFilterPrimitive";
+import React, { Component } from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractFilterPrimitive from '../lib/extract/extractFilterPrimitive';
 /*
 
 https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFESpecularLightingElement
@@ -144,7 +144,7 @@ Attribute definitions:
 */
 
 export default class FESpecularLighting extends Component {
-    static displayName = "feSpecularLighting";
+    static displayName = 'feSpecularLighting';
 
     setNativeProps = props => {
         this.root.setNativeProps(props);
@@ -162,11 +162,11 @@ export default class FESpecularLighting extends Component {
         const kUL =
             kernelUnitLength !== undefined && (kernelUnitLength.map
                 ? kernelUnitLength.map(s => +s)
-                : typeof kernelUnitLength === "string"
+                : typeof kernelUnitLength === 'string'
                 ? kernelUnitLength
-                    .replace(/,|\s\s+/gm, " ")
+                    .replace(/,|\s\s+/gm, ' ')
                     .trim()
-                    .split(" ")
+                    .split(' ')
                     .map(s => +s)
                 : [+kernelUnitLength].filter(n => !isNaN(n)));
         return (
@@ -187,4 +187,4 @@ export default class FESpecularLighting extends Component {
     }
 }
 
-const RNSVGFESpecularLighting = requireNativeComponent("RNSVGFESpecularLighting");
+const RNSVGFESpecularLighting = requireNativeComponent('RNSVGFESpecularLighting');

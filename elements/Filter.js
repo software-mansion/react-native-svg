@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { requireNativeComponent } from "react-native";
-import UNITS from "../lib/units";
+import React, { Component } from 'react';
+import { requireNativeComponent } from 'react-native';
+import UNITS from '../lib/units';
 
 /*
 
@@ -208,7 +208,7 @@ defaults for the filter effects region are x="-10%" y="-10%" width="120%" height
 
 */
 export default class Filter extends Component {
-    static displayName = "filter";
+    static displayName = 'filter';
 
     setNativeProps = props => {
         this.root.setNativeProps(props);
@@ -228,9 +228,9 @@ export default class Filter extends Component {
         } = this.props;
 
         const fr = `${filterRes}`
-            .replace(/,|\s\s+/gm, " ")
+            .replace(/,|\s\s+/gm, ' ')
             .trim()
-            .split(" ");
+            .split(' ');
 
         return (
             <RNSVGFilter
@@ -255,4 +255,4 @@ export default class Filter extends Component {
     }
 }
 
-const RNSVGFilter = requireNativeComponent("RNSVGFilter");
+const RNSVGFilter = requireNativeComponent('RNSVGFilter');

@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { requireNativeComponent } from "react-native";
-import extractFilterPrimitive from "../lib/extract/extractFilterPrimitive";
+import React, { Component } from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractFilterPrimitive from '../lib/extract/extractFilterPrimitive';
 
 /*
 
@@ -176,7 +176,7 @@ export const edgeModeValues = {
 };
 
 export default class FEGaussianBlur extends Component {
-    static displayName = "feGaussianBlur";
+    static displayName = 'feGaussianBlur';
 
     setNativeProps = props => {
         this.root.setNativeProps(props);
@@ -187,11 +187,11 @@ export default class FEGaussianBlur extends Component {
         const stdD =
             stdDeviation && stdDeviation.map
                 ? stdDeviation.map(s => +s)
-                : typeof stdDeviation === "string"
+                : typeof stdDeviation === 'string'
                 ? stdDeviation
-                    .replace(/,|\s\s+/gm, " ")
+                    .replace(/,|\s\s+/gm, ' ')
                     .trim()
-                    .split(" ")
+                    .split(' ')
                     .map(s => +s)
                 : [+stdDeviation].filter(n => !isNaN(n));
         return (
@@ -211,4 +211,4 @@ export default class FEGaussianBlur extends Component {
     }
 }
 
-const RNSVGFEGaussianBlur = requireNativeComponent("RNSVGFEGaussianBlur");
+const RNSVGFEGaussianBlur = requireNativeComponent('RNSVGFEGaussianBlur');

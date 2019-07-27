@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { requireNativeComponent } from "react-native";
+import React, { Component } from 'react';
+import { requireNativeComponent } from 'react-native';
 /*
 
 https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFEPointLightElement
@@ -38,15 +38,15 @@ Content model:
     ‘animate’
     ‘set’
 Attributes:
-    core attributes 
+    core attributes
     ‘x’
     ‘y’
     ‘z’
 DOM Interfaces:
     SVGFEPointLightElement
-    
+
 Attribute definitions:
-    
+
     x = "<number>"
     X location for the light source in the coordinate system established by attribute ‘primitiveUnits’ on the ‘filter’ element.
     If the attribute is not specified, then the effect is as if a value of 0 were specified.
@@ -58,8 +58,8 @@ Attribute definitions:
     Animatable: yes.
 
     z = "<number>"
-    Z location for the light source in the coordinate system established by attribute ‘primitiveUnits’ on the ‘filter’ element, 
-    assuming that, in the initial coordinate system, the positive Z-axis comes out towards the person viewing the 
+    Z location for the light source in the coordinate system established by attribute ‘primitiveUnits’ on the ‘filter’ element,
+    assuming that, in the initial coordinate system, the positive Z-axis comes out towards the person viewing the
     content and assuming that one unit along the Z-axis equals one unit in X and Y.
     If the attribute is not specified, then the effect is as if a value of 0 were specified.
     Animatable: yes.
@@ -67,7 +67,7 @@ Attribute definitions:
 */
 
 export default class FEPointLight extends Component {
-    static displayName = "fePointLight";
+    static displayName = 'fePointLight';
 
     setNativeProps = props => {
         this.root.setNativeProps(props);
@@ -88,4 +88,4 @@ export default class FEPointLight extends Component {
     }
 }
 
-const RNSVGFEPointLight = requireNativeComponent("RNSVGFEPointLight");
+const RNSVGFEPointLight = requireNativeComponent('RNSVGFEPointLight');

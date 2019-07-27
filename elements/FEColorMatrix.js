@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { requireNativeComponent } from "react-native";
-import extractFilterPrimitive from "../lib/extract/extractFilterPrimitive";
+import React, { Component } from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractFilterPrimitive from '../lib/extract/extractFilterPrimitive';
 
 /*
 
@@ -161,7 +161,7 @@ export const ColorMatrixTypes = {
 };
 
 export default class FEColorMatrix extends Component {
-    static displayName = "feColorMatrix";
+    static displayName = 'feColorMatrix';
 
     static defaultProps = {
         type: SVG_FECOLORMATRIX_TYPE_MATRIX,
@@ -176,11 +176,11 @@ export default class FEColorMatrix extends Component {
         const _values =
             values && values.map
                 ? values.map(s => +s)
-                : typeof values === "string"
+                : typeof values === 'string'
                 ? values
-                    .replace(/,|\s\s+/gm, " ")
+                    .replace(/,|\s\s+/gm, ' ')
                     .trim()
-                    .split(" ")
+                    .split(' ')
                     .map(s => +s)
                 : [+values].filter(n => !isNaN(n));
         return (
@@ -197,4 +197,4 @@ export default class FEColorMatrix extends Component {
     }
 }
 
-const RNSVGFEColorMatrix = requireNativeComponent("RNSVGFEColorMatrix");
+const RNSVGFEColorMatrix = requireNativeComponent('RNSVGFEColorMatrix');

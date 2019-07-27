@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { requireNativeComponent } from "react-native";
-import extractFilterPrimitive from "../lib/extract/extractFilterPrimitive";
+import React, { Component } from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractFilterPrimitive from '../lib/extract/extractFilterPrimitive';
 /*
 
 https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFEOffsetElement
@@ -83,14 +83,14 @@ Attribute definitions:
 */
 
 export default class FEOffset extends Component {
-    static displayName = "feOffset";
+    static displayName = 'feOffset';
 
     setNativeProps = props => {
         this.root.setNativeProps(props);
     };
 
     render() {
-        const { props } = this
+        const { props } = this;
         const {
             dx = 0,
             dy = 0,
@@ -109,4 +109,4 @@ export default class FEOffset extends Component {
     }
 }
 
-const RNSVGFEOffset = requireNativeComponent("RNSVGFEOffset");
+const RNSVGFEOffset = requireNativeComponent('RNSVGFEOffset');

@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { requireNativeComponent } from "react-native";
-import extractFilterPrimitive from "../lib/extract/extractFilterPrimitive";
+import React, { Component } from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractFilterPrimitive from '../lib/extract/extractFilterPrimitive';
 
 /*
 
@@ -51,7 +51,7 @@ DOM Interfaces:
  */
 
 export default class SVGFEMerge extends Component {
-    static displayName = "feMerge";
+    static displayName = 'feMerge';
 
     setNativeProps = props => {
         this.root.setNativeProps(props);
@@ -69,4 +69,4 @@ export default class SVGFEMerge extends Component {
     }
 }
 
-const RNSVGFEMerge = requireNativeComponent("RNSVGFEMerge");
+const RNSVGFEMerge = requireNativeComponent('RNSVGFEMerge');

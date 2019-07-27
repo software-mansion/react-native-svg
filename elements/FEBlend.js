@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { requireNativeComponent } from "react-native";
-import extractFilterPrimitive from "../lib/extract/extractFilterPrimitive";
+import React, { Component } from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractFilterPrimitive from '../lib/extract/extractFilterPrimitive';
 /*
 
 https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFEBlendElement
@@ -183,11 +183,11 @@ export const BlendModeTypes = {
     multiply: SVG_FEBLEND_MODE_MULTIPLY,
     screen: SVG_FEBLEND_MODE_SCREEN,
     darken: SVG_FEBLEND_MODE_DARKEN,
-    lighten: SVG_FEBLEND_MODE_LIGHTEN
+    lighten: SVG_FEBLEND_MODE_LIGHTEN,
 };
 
 export default class FEBlend extends Component {
-    static displayName = "feBlend";
+    static displayName = 'feBlend';
 
     setNativeProps = props => {
         this.root.setNativeProps(props);
@@ -197,7 +197,7 @@ export default class FEBlend extends Component {
         const { props } = this;
         const {
             in2,
-            mode = SVG_FEBLEND_MODE_NORMAL
+            mode = SVG_FEBLEND_MODE_NORMAL,
         } = props;
         return (
             <RNSVGFEBlend
@@ -213,4 +213,4 @@ export default class FEBlend extends Component {
     }
 }
 
-const RNSVGFEBlend = requireNativeComponent("RNSVGFEBlend");
+const RNSVGFEBlend = requireNativeComponent('RNSVGFEBlend');

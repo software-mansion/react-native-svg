@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { requireNativeComponent } from "react-native";
-import extractFilterPrimitive from "../lib/extract/extractFilterPrimitive";
+import React, { Component } from 'react';
+import { requireNativeComponent } from 'react-native';
+import extractFilterPrimitive from '../lib/extract/extractFilterPrimitive';
 /*
 
 https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFECompositeElement
@@ -188,11 +188,11 @@ export const CompositeOperators = {
     out: SVG_FECOMPOSITE_OPERATOR_OUT,
     atop: SVG_FECOMPOSITE_OPERATOR_ATOP,
     xor: SVG_FECOMPOSITE_OPERATOR_XOR,
-    arithmetic: SVG_FECOMPOSITE_OPERATOR_ARITHMETIC
+    arithmetic: SVG_FECOMPOSITE_OPERATOR_ARITHMETIC,
 };
 
 export default class FEComposite extends Component {
-    static displayName = "feComposite";
+    static displayName = 'feComposite';
 
     setNativeProps = props => {
         this.root.setNativeProps(props);
@@ -226,4 +226,4 @@ export default class FEComposite extends Component {
     }
 }
 
-const RNSVGFEComposite = requireNativeComponent("RNSVGFEComposite");
+const RNSVGFEComposite = requireNativeComponent('RNSVGFEComposite');
