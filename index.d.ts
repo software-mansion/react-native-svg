@@ -216,7 +216,7 @@ export interface GProps extends CommonPathProps {
 }
 export const G: React.ComponentClass<GProps>;
 
-export interface ImageProps extends ResponderProps, TouchableProps {
+export interface ImageProps extends ResponderProps, CommonMaskProps, ClipProps, TouchableProps {
   x?: NumberProp,
   y?: NumberProp,
   width?: NumberProp,
