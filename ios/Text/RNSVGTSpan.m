@@ -14,6 +14,27 @@
 static NSCharacterSet *RNSVGTSpan_separators = nil;
 static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 
+@interface TopAlignedLabel : UILabel
+
+@end
+
+
+@implementation TopAlignedLabel
+
+- (void)drawTextInRect:(CGRect) rect
+{
+    NSAttributedString *attributedText = [[NSAttributedString alloc]     initWithString:self.text attributes:@{NSFontAttributeName:self.font}];
+    rect.size.height = [attributedText boundingRectWithSize:rect.size
+                                                    options:NSStringDrawingUsesLineFragmentOrigin
+                                                    context:nil].size.height;
+    if (self.numberOfLines != 0) {
+        rect.size.height = MIN(rect.size.height, self.numberOfLines * self.font.lineHeight);
+    }
+    [super drawTextInRect:rect];
+}
+
+@end
+
 @implementation RNSVGTSpan
 {
     CGFloat startOffset;
@@ -26,6 +47,9 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     NSMutableArray *emoji;
     NSMutableArray *emojiTransform;
     CGFloat cachedAdvance;
+    CTFontRef fontRef;
+    CGFloat firstX;
+    CGFloat firstY;
 }
 
 - (id)init
@@ -60,26 +84,130 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
     if (self.content) {
-        if (self.path) {
-            NSUInteger count = [emoji count];
-            RNSVGGlyphContext* gc = [self.textRoot getGlyphContext];
-            CGFloat fontSize = [gc getFontSize];
-            for (NSUInteger i = 0; i < count; i++) {
-                UILabel *label = [emoji objectAtIndex:i];
-                NSValue *transformValue = [emojiTransform objectAtIndex:i];
-                CGAffineTransform transform = [transformValue CGAffineTransformValue];
-                CGContextConcatCTM(context, transform);
-                CGContextTranslateCTM(context, 0, -fontSize);
-                [label.layer renderInContext:context];
-                CGContextTranslateCTM(context, 0, fontSize);
-                CGContextConcatCTM(context, CGAffineTransformInvert(transform));
+        RNSVGGlyphContext* gc = [self.textRoot getGlyphContext];
+        if (self.inlineSize != nil && self.inlineSize.value != 0) {
+            [self drawWrappedText:context gc:gc rect:rect];
+        } else {
+            if (self.path) {
+                NSUInteger count = [emoji count];
+                CGFloat fontSize = [gc getFontSize];
+                for (NSUInteger i = 0; i < count; i++) {
+                    UILabel *label = [emoji objectAtIndex:i];
+                    NSValue *transformValue = [emojiTransform objectAtIndex:i];
+                    CGAffineTransform transform = [transformValue CGAffineTransformValue];
+                    CGContextConcatCTM(context, transform);
+                    CGContextTranslateCTM(context, 0, -fontSize);
+                    [label.layer renderInContext:context];
+                    CGContextTranslateCTM(context, 0, fontSize);
+                    CGContextConcatCTM(context, CGAffineTransformInvert(transform));
+                }
             }
+            [self renderPathTo:context rect:rect];
         }
-        [self renderPathTo:context rect:rect];
     } else {
         [self clip:context];
         [self renderGroupTo:context rect:rect];
     }
+}
+
+- (NSMutableDictionary *)getAttributes:(RNSVGFontData *)fontdata {
+    NSMutableDictionary *attrs = [[NSMutableDictionary alloc] init];
+
+    if (fontRef != nil) {
+        attrs[NSFontAttributeName] = (__bridge id)fontRef;
+    }
+
+    CGFloat letterSpacing = fontdata->letterSpacing;
+    bool allowOptionalLigatures = letterSpacing == 0 && fontdata->fontVariantLigatures == RNSVGFontVariantLigaturesNormal;
+    NSNumber *lig = [NSNumber numberWithInt:allowOptionalLigatures ? 2 : 1];
+    attrs[NSLigatureAttributeName] = lig;
+
+    CGFloat kerning = fontdata->kerning;
+    float kern = (float)(letterSpacing + kerning);
+    NSNumber *kernAttr = [NSNumber numberWithFloat:kern];
+#if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
+    if (___useiOS6Attributes)
+    {
+        [attrs setObject:kernAttr forKey:NSKernAttributeName];
+    }
+    else
+#endif
+    {
+        [attrs setObject:kernAttr forKey:(id)kCTKernAttributeName];
+    }
+
+    return attrs;
+}
+
+- (void)drawWrappedText:(CGContextRef)context gc:(RNSVGGlyphContext *)gc rect:(CGRect)rect {
+    RNSVGFontData* fontdata = [gc getFont];
+    CFStringRef string = (__bridge CFStringRef)self.content;
+    NSMutableDictionary * attrs = [self getAttributes:fontdata];
+    CFMutableDictionaryRef attributes = (__bridge CFMutableDictionaryRef)attrs;
+    CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
+
+    enum RNSVGTextAnchor textAnchor = fontdata->textAnchor;
+    NSTextAlignment align;
+    switch (textAnchor) {
+        case RNSVGTextAnchorStart:
+            align = NSTextAlignmentLeft;
+            break;
+
+        case RNSVGTextAnchorMiddle:
+            align = NSTextAlignmentCenter;
+            break;
+
+        case RNSVGTextAnchorEnd:
+            align = NSTextAlignmentRight;
+            break;
+
+        default:
+            align = NSTextAlignmentLeft;
+            break;
+    }
+
+    UIFont *font = (__bridge UIFont *)(fontRef);
+    TopAlignedLabel *label = [[TopAlignedLabel alloc] init];
+    label.attributedText = (__bridge NSAttributedString * _Nullable)(attrString);
+    label.baselineAdjustment = UIBaselineAdjustmentNone;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.backgroundColor = UIColor.clearColor;
+    label.textAlignment = align;
+    label.numberOfLines = 0;
+    label.opaque = NO;
+    label.font = font;
+
+    CGFloat fontSize = [gc getFontSize];
+    CGFloat height = CGRectGetHeight(rect);
+    CGFloat width = [RNSVGPropHelper fromRelative:self.inlineSize
+                                         relative:[gc getWidth]
+                                         fontSize:fontSize];
+    CGRect constrain = CGRectMake(0, 0, width, height);
+    CGRect s = [self.content
+                boundingRectWithSize:constrain.size
+                options:NSStringDrawingUsesLineFragmentOrigin
+                attributes:attrs
+                context:nil];
+
+    CGRect bounds = CGRectMake(0, 0, width, s.size.height);
+    label.frame = bounds;
+    label.bounds = bounds;
+
+    CGFloat ascender = font.ascender;
+    CGFloat capHeight = font.capHeight;
+    /*
+     CGFloat descender = font.descender;
+     CGFloat pointSize = font.pointSize;
+     CGFloat xHeight = font.xHeight;
+     CGFloat lineHeight = font.lineHeight;
+     CGFloat leading = font.leading;
+     */
+
+    CGFloat dx = firstX - capHeight;
+    CGFloat dy = firstY - ascender;
+    CGContextTranslateCTM(context, dx, dy);
+    [label.layer renderInContext:context];
+    CGContextTranslateCTM(context, -dx, -dy);
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
@@ -127,38 +255,13 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     }
 
     // Create a dictionary for this font
-    CTFontRef fontRef = [self getFontFromContext];
-    RNSVGGlyphContext* gc = [self.textRoot getGlyphContext];
-    RNSVGFontData* font = [gc getFont];
-
-    CGFloat letterSpacing = font->letterSpacing;
-    CGFloat kerning = font->kerning;
-
-    bool allowOptionalLigatures = letterSpacing == 0 && font->fontVariantLigatures == RNSVGFontVariantLigaturesNormal;
-
-    NSMutableDictionary *attrs = [[NSMutableDictionary alloc] init];
-    CFMutableDictionaryRef attributes = (__bridge CFMutableDictionaryRef)attrs;
-
-    NSNumber *lig = [NSNumber numberWithInt:allowOptionalLigatures ? 2 : 1];
-    attrs[NSLigatureAttributeName] = lig;
-    if (fontRef != nil) {
-        attrs[NSFontAttributeName] = (__bridge id)fontRef;
-    }
-    float kern = (float)(letterSpacing + kerning);
-    NSNumber *kernAttr = [NSNumber numberWithFloat:kern];
-
-#if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
-    if (___useiOS6Attributes)
-    {
-        [attrs setObject:kernAttr forKey:NSKernAttributeName];
-    }
-    else
-#endif
-    {
-        [attrs setObject:kernAttr forKey:(id)kCTKernAttributeName];
-    }
+    fontRef = [self getFontFromContext];
+    RNSVGGlyphContext *gc = [self.textRoot getGlyphContext];
+    RNSVGFontData *fontdata = [gc getFont];
+    NSMutableDictionary *attrs = [self getAttributes:fontdata];
 
     CFStringRef string = (__bridge CFStringRef)str;
+    CFMutableDictionaryRef attributes = (__bridge CFMutableDictionaryRef)attrs;
     CFAttributedStringRef attrString = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
     CTLineRef line = CTLineCreateWithAttributedString(attrString);
 
@@ -171,10 +274,10 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 - (CGPathRef)getLinePath:(NSString *)str context:(CGContextRef)context
 {
     // Create a dictionary for this font
-    CTFontRef fontRef = [self getFontFromContext];
+    fontRef = [self getFontFromContext];
     CGMutablePathRef path = CGPathCreateMutable();
-    RNSVGGlyphContext* gc = [self.textRoot getGlyphContext];
-    RNSVGFontData* font = [gc getFont];
+    RNSVGGlyphContext *gc = [self.textRoot getGlyphContext];
+    RNSVGFontData *font = [gc getFont];
     NSUInteger n = str.length;
     /*
      *
@@ -749,8 +852,8 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 
     CFArrayRef runs = CTLineGetGlyphRuns(line);
     CFIndex runEnd = CFArrayGetCount(runs);
-    for (CFIndex r = 0; r < runEnd; r++) {
-        CTRunRef run = CFArrayGetValueAtIndex(runs, r);
+    for (CFIndex ri = 0; ri < runEnd; ri++) {
+        CTRunRef run = CFArrayGetValueAtIndex(runs, ri);
         CFIndex runGlyphCount = CTRunGetGlyphCount(run);
         CFIndex indices[runGlyphCount];
         CGSize advances[runGlyphCount];
@@ -762,8 +865,8 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
         CTFontRef runFont = CFDictionaryGetValue(CTRunGetAttributes(run), kCTFontAttributeName);
         CTFontGetAdvancesForGlyphs(runFont, kCTFontOrientationHorizontal, glyphs, advances, runGlyphCount);
         CFIndex nextOrEndRunIndex = n;
-        if (r + 1 < runEnd) {
-            CTRunRef nextRun = CFArrayGetValueAtIndex(runs, r + 1);
+        if (ri + 1 < runEnd) {
+            CTRunRef nextRun = CFArrayGetValueAtIndex(runs, ri + 1);
             CFIndex nextRunGlyphCount = CTRunGetGlyphCount(nextRun);
             CFIndex nextIndices[nextRunGlyphCount];
             CTRunGetStringIndices(nextRun, CFRangeMake(0, 0), nextIndices);
@@ -799,6 +902,11 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
             CGFloat dx = [gc nextDeltaX];
             CGFloat dy = [gc nextDeltaY];
             CGFloat r = [gc nextRotation] / RNSVGTSpan_radToDeg;
+
+            if (ri == 0 && g == 0) {
+                firstX = x;
+                firstY = y;
+            }
 
             if (isWordSeparator) {
                 continue;

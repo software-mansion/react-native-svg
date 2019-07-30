@@ -30,6 +30,7 @@ import static com.horcrux.svg.TextProperties.TextLengthAdjust;
 
 @SuppressLint("ViewConstructor")
 class TextView extends GroupView {
+    SVGLength mInlineSize = null;
     SVGLength mTextLength = null;
     private String mBaselineShift = null;
     TextLengthAdjust mLengthAdjust = TextLengthAdjust.spacing;
@@ -57,6 +58,12 @@ class TextView extends GroupView {
     void clearCache() {
         cachedAdvance = Double.NaN;
         super.clearCache();
+    }
+
+    @ReactProp(name = "inlineSize")
+    public void setInlineSize(Dynamic inlineSize) {
+        mInlineSize = SVGLength.from(inlineSize);
+        invalidate();
     }
 
     @ReactProp(name = "textLength")

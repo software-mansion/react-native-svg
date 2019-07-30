@@ -21,6 +21,10 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.text.Layout;
+import android.text.SpannableString;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.view.View;
 import android.view.ViewParent;
 
@@ -37,7 +41,13 @@ import static android.graphics.Matrix.MTRANS_X;
 import static android.graphics.Matrix.MTRANS_Y;
 import static android.graphics.PathMeasure.POSITION_MATRIX_FLAG;
 import static android.graphics.PathMeasure.TANGENT_MATRIX_FLAG;
-import static com.horcrux.svg.TextProperties.*;
+import static com.horcrux.svg.TextProperties.AlignmentBaseline;
+import static com.horcrux.svg.TextProperties.FontStyle;
+import static com.horcrux.svg.TextProperties.FontVariantLigatures;
+import static com.horcrux.svg.TextProperties.FontWeight;
+import static com.horcrux.svg.TextProperties.TextAnchor;
+import static com.horcrux.svg.TextProperties.TextPathMidLine;
+import static com.horcrux.svg.TextProperties.TextPathSide;
 
 @SuppressLint("ViewConstructor")
 class TSpanView extends TextView {
@@ -54,6 +64,10 @@ class TSpanView extends TextView {
     private final ArrayList<String> emoji = new ArrayList<>();
     private final ArrayList<Matrix> emojiTransforms = new ArrayList<>();
     private final AssetManager assets;
+    double firstX = 0;
+    double firstY = 0;
+    double fontSize;
+    FontData font;
 
     public TSpanView(ReactContext reactContext) {
         super(reactContext);
@@ -80,25 +94,118 @@ class TSpanView extends TextView {
     @Override
     void draw(Canvas canvas, Paint paint, float opacity) {
         if (mContent != null) {
-            int numEmoji = emoji.size();
-            if (numEmoji > 0) {
-                GlyphContext gc = getTextRootGlyphContext();
-                FontData font = gc.getFont();
-                applyTextPropertiesToPaint(paint, font);
-                for (int i = 0; i < numEmoji; i++) {
-                    String current = emoji.get(i);
-                    Matrix mid = emojiTransforms.get(i);
-                    canvas.save();
-                    canvas.concat(mid);
-                    canvas.drawText(current, 0, 0, paint);
-                    canvas.restore();
+            if (mInlineSize != null && mInlineSize.value != 0) {
+                drawWrappedText(canvas, paint);
+            } else {
+                int numEmoji = emoji.size();
+                if (numEmoji > 0) {
+                    GlyphContext gc = getTextRootGlyphContext();
+                    FontData font = gc.getFont();
+                    applyTextPropertiesToPaint(paint, font);
+                    for (int i = 0; i < numEmoji; i++) {
+                        String current = emoji.get(i);
+                        Matrix mid = emojiTransforms.get(i);
+                        canvas.save();
+                        canvas.concat(mid);
+                        canvas.drawText(current, 0, 0, paint);
+                        canvas.restore();
+                    }
                 }
+                drawPath(canvas, paint, opacity);
             }
-            drawPath(canvas, paint, opacity);
         } else {
             clip(canvas, paint);
             drawGroup(canvas, paint, opacity);
         }
+    }
+
+    private void drawWrappedText(Canvas canvas, Paint paint) {
+        TextPaint tp = new TextPaint(paint);
+        applyTextPropertiesToPaint(tp, font);
+        applySpacingAndFeatuers(tp);
+
+        Layout.Alignment align;
+        switch (font.textAnchor) {
+            default:
+            case start:
+                align = Layout.Alignment.ALIGN_NORMAL;
+                break;
+
+            case middle:
+                align = Layout.Alignment.ALIGN_CENTER;
+                break;
+
+            case end:
+                align = Layout.Alignment.ALIGN_OPPOSITE;
+                break;
+        }
+
+        StaticLayout layout;
+        boolean includeFontPadding = true;
+        SpannableString text = new SpannableString(mContent);
+        final double width = PropHelper.fromRelative(mInlineSize, canvas.getWidth(), 0, mScale, fontSize);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            layout = new StaticLayout(
+                    text,
+                    tp,
+                    (int)width,
+                    align,
+                    1.f,
+                    0.f,
+                    includeFontPadding);
+        } else {
+            layout = StaticLayout.Builder.obtain(text, 0, text.length(), tp, (int)width)
+                    .setAlignment(align)
+                    .setLineSpacing(0.f, 1.f)
+                    .setIncludePad(includeFontPadding)
+                    .setBreakStrategy(Layout.BREAK_STRATEGY_HIGH_QUALITY)
+                    .setHyphenationFrequency(Layout.HYPHENATION_FREQUENCY_NORMAL)
+                    .build();
+        }
+
+        /*
+        float density = tp.density;
+        Paint.FontMetrics fm = tp.getFontMetrics();
+        float ascent = fm.ascent;
+        float descent = fm.descent;
+        float top = fm.top;
+        float bottom = fm.bottom;
+        float leading = fm.leading;
+        final double descenderDepth = fm.descent;
+        final double cbottom = descenderDepth + fm.leading;
+        final double ascenderHeight = -fm.ascent + fm.leading;
+        final double ctop = -fm.top;
+        final double totalHeight = ctop + cbottom;
+        int lineDescent = layout.getLineDescent(0);
+        int lineBaseline = layout.getLineBaseline(0);
+        int lineBottom = layout.getLineBottom(0);
+        int lineEnd = layout.getLineEnd(0);
+        float lineLeft = layout.getLineLeft(0);
+        float lineMax = layout.getLineMax(0);
+        float lineRight = layout.getLineRight(0);
+        int lineStart = layout.getLineStart(0);
+        int lineTop = layout.getLineTop(0);
+        int lineVisibleEnd = layout.getLineVisibleEnd(0);
+        float lineWidth = layout.getLineWidth(0);
+        Rect bounds = new Rect();
+        int lineBounds = layout.getLineBounds(0, bounds);
+        int bottomPadding = layout.getBottomPadding();
+        int topPadding = layout.getTopPadding();
+        int paragraphLeft = layout.getParagraphLeft(0);
+        float spacingAdd = layout.getSpacingAdd();
+         */
+        int lineAscent = layout.getLineAscent(0);
+
+        Rect rect = new Rect();
+        tp.getTextBounds("M", 0, 1, rect);
+        float capHeight = rect.top;
+        float dx = (float) (firstX + capHeight);
+        float dy = (float) (firstY + lineAscent);
+
+        canvas.save();
+        canvas.translate(dx, dy);
+        layout.draw(canvas);
+        canvas.restore();
     }
 
     @Override
@@ -148,31 +255,39 @@ class TSpanView extends TextView {
         }
 
         GlyphContext gc = getTextRootGlyphContext();
-        FontData font = gc.getFont();
+        font = gc.getFont();
         applyTextPropertiesToPaint(paint, font);
 
-        double letterSpacing = font.letterSpacing;
-        final boolean allowOptionalLigatures = letterSpacing == 0 &&
-                font.fontVariantLigatures == FontVariantLigatures.normal;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String required = "'rlig', 'liga', 'clig', 'calt', 'locl', 'ccmp', 'mark', 'mkmk',";
-            String defaultFeatures = required + "'kern', ";
-            if (allowOptionalLigatures) {
-                String additionalLigatures = "'hlig', 'cala', ";
-                paint.setFontFeatureSettings(defaultFeatures + additionalLigatures + font.fontFeatureSettings);
-            } else {
-                String disableDiscretionaryLigatures = "'liga' 0, 'clig' 0, 'dlig' 0, 'hlig' 0, 'cala' 0, ";
-                paint.setFontFeatureSettings(defaultFeatures + disableDiscretionaryLigatures + font.fontFeatureSettings);
-            }
-            paint.setLetterSpacing((float)(letterSpacing / (font.fontSize * mScale)));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                paint.setFontVariationSettings("'wght' " + font.absoluteFontWeight + font.fontVariationSettings);
-            }
-        }
+        applySpacingAndFeatuers(paint);
 
         cachedAdvance = paint.measureText(line);
         return cachedAdvance;
+    }
+
+    final static String requiredFontFeatures = "'rlig', 'liga', 'clig', 'calt', 'locl', 'ccmp', 'mark', 'mkmk',";
+    final static String disableDiscretionaryLigatures = "'liga' 0, 'clig' 0, 'dlig' 0, 'hlig' 0, 'cala' 0, ";
+    final static String defaultFeatures = requiredFontFeatures + "'kern', ";
+    final static String additionalLigatures = "'hlig', 'cala', ";
+    final static String fontWeightTag = "'wght' ";
+
+    private void applySpacingAndFeatuers(Paint paint) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            double letterSpacing = font.letterSpacing;
+            paint.setLetterSpacing((float) (letterSpacing / (font.fontSize * mScale)));
+
+            final boolean allowOptionalLigatures = letterSpacing == 0 &&
+                    font.fontVariantLigatures == FontVariantLigatures.normal;
+
+            if (allowOptionalLigatures) {
+                paint.setFontFeatureSettings(defaultFeatures + additionalLigatures + font.fontFeatureSettings);
+            } else {
+                paint.setFontFeatureSettings(defaultFeatures + disableDiscretionaryLigatures + font.fontFeatureSettings);
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                paint.setFontVariationSettings(fontWeightTag + font.absoluteFontWeight + font.fontVariationSettings);
+            }
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -201,7 +316,7 @@ class TSpanView extends TextView {
         }
 
         GlyphContext gc = getTextRootGlyphContext();
-        FontData font = gc.getFont();
+        font = gc.getFont();
         applyTextPropertiesToPaint(paint, font);
         GlyphPathBag bag = new GlyphPathBag(paint);
         boolean[] ligature = new boolean[length];
@@ -339,17 +454,14 @@ class TSpanView extends TextView {
             vertical alternates (OpenType feature: vert) must be enabled.
         */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String required = "'rlig', 'liga', 'clig', 'calt', 'locl', 'ccmp', 'mark', 'mkmk',";
-            String defaultFeatures = required + "'kern', ";
             if (allowOptionalLigatures) {
-                String additionalLigatures = "'hlig', 'cala', ";
                 paint.setFontFeatureSettings(defaultFeatures + additionalLigatures + font.fontFeatureSettings);
             } else {
-                String disableDiscretionaryLigatures = "'liga' 0, 'clig' 0, 'dlig' 0, 'hlig' 0, 'cala' 0, ";
                 paint.setFontFeatureSettings(defaultFeatures + disableDiscretionaryLigatures + font.fontFeatureSettings);
             }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                paint.setFontVariationSettings("'wght' " + font.absoluteFontWeight + font.fontVariationSettings);
+                paint.setFontVariationSettings(fontWeightTag + font.absoluteFontWeight + font.fontVariationSettings);
             }
         }
         // OpenType.js font data
@@ -393,7 +505,7 @@ class TSpanView extends TextView {
         int side = 1;
         double startOfRendering = 0;
         double endOfRendering = pathLength;
-        final double fontSize = gc.getFontSize();
+        fontSize = gc.getFontSize();
         boolean sharpMidLine = false;
         if (hasTextPath) {
             sharpMidLine = textPath.getMidLine() == TextPathMidLine.sharp;
@@ -820,6 +932,11 @@ class TSpanView extends TextView {
             double dx = gc.nextDeltaX();
             double dy = gc.nextDeltaY();
             double r = gc.nextRotation();
+
+            if (index == 0) {
+                firstX = x;
+                firstY = y;
+            }
 
             if (alreadyRenderedGraphemeCluster || isWordSeparator) {
                 // Skip rendering other grapheme clusters of ligatures (already rendered),

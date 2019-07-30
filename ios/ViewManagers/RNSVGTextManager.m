@@ -52,6 +52,10 @@ RCT_CUSTOM_VIEW_PROPERTY(rotate, id, RNSVGText)
     view.rotate = [RCTConvert RNSVGLengthArray:json];
 }
 RCT_EXPORT_VIEW_PROPERTY(font, NSDictionary)
+RCT_CUSTOM_VIEW_PROPERTY(inlineSize, id, RNSVGText)
+{
+    view.inlineSize = [RCTConvert RNSVGLength:json];
+}
 RCT_CUSTOM_VIEW_PROPERTY(textLength, id, RNSVGText)
 {
     view.textLength = [RCTConvert RNSVGLength:json];

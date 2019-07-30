@@ -405,6 +405,11 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
             super(svgClass);
         }
 
+        @ReactProp(name = "inlineSize")
+        public void setInlineSize(TextView node, Dynamic inlineSize) {
+            node.setInlineSize(inlineSize);
+        }
+
         @ReactProp(name = "textLength")
         public void setTextLength(TextView node, Dynamic length) {
             node.setTextLength(length);
