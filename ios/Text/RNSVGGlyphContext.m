@@ -150,6 +150,9 @@
     }
 
     CFArrayRef cgAxes = CTFontCopyVariationAxes(ref);
+    if (cgAxes == 0) {
+        return ref;
+    }
     CFIndex cgAxisCount = CFArrayGetCount(cgAxes);
     CFNumberRef wght_id = 0;
 
