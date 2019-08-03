@@ -1070,6 +1070,11 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         node.setResponsible(responsible);
     }
 
+    @ReactProp(name = "onLayout")
+    public void setOnLayout(VirtualView node, boolean onLayout) {
+        node.setOnLayout(onLayout);
+    }
+
     @ReactProp(name = "name")
     public void setName(VirtualView node, String name) {
         node.setName(name);

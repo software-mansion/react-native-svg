@@ -340,19 +340,18 @@ abstract public class RenderableView extends VirtualView {
             if (nonScalingStroke) {
                 Path scaled = new Path();
                 //noinspection deprecation
-                mPath.transform(canvas.getMatrix(), scaled);
+                mPath.transform(mCTM, scaled);
                 canvas.setMatrix(null);
                 path = scaled;
             }
 
-            RectF clientRect = new RectF();
-            path.computeBounds(clientRect, true);
-            mBox = new RectF(clientRect);
+            if (computePaths || path != mPath) {
+                mBox = new RectF();
+                path.computeBounds(mBox, true);
+            }
 
-            // We create the canvas ourselves, thus we can depend on getMatrix
-            @SuppressWarnings("deprecation")
-            Matrix svgToViewMatrix = new Matrix(canvas.getMatrix());
-            svgToViewMatrix.mapRect(clientRect);
+            RectF clientRect = new RectF(mBox);
+            mCTM.mapRect(clientRect);
             this.setClientRect(clientRect);
 
             clip(canvas, paint);

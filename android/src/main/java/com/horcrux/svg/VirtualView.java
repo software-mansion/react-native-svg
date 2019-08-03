@@ -51,11 +51,14 @@ abstract public class VirtualView extends ReactViewGroup {
         0, 0, 1
     };
     float mOpacity = 1f;
+    Matrix mCTM = new Matrix();
     Matrix mMatrix = new Matrix();
     Matrix mTransform = new Matrix();
+    Matrix mInvCTM = new Matrix();
     Matrix mInvMatrix = new Matrix();
     final Matrix mInvTransform = new Matrix();
     boolean mInvertible = true;
+    boolean mCTMInvertible = true;
     boolean mTransformInvertible = true;
     private RectF mClientRect;
 
@@ -68,6 +71,7 @@ abstract public class VirtualView extends ReactViewGroup {
 
     final float mScale;
     private boolean mResponsible;
+    private boolean mOnLayout;
     String mName;
 
     private SvgView svgView;
@@ -198,11 +202,14 @@ abstract public class VirtualView extends ReactViewGroup {
      * drawing code should apply opacity recursively.
      *
      * @param canvas the canvas to set up
+     * @param ctm
      */
-    int saveAndSetupCanvas(Canvas canvas) {
+    int saveAndSetupCanvas(Canvas canvas, Matrix ctm) {
         int count = canvas.save();
-        canvas.concat(mMatrix);
-        canvas.concat(mTransform);
+        mCTM.setConcat(mMatrix, mTransform);
+        canvas.concat(mCTM);
+        mCTM.preConcat(ctm);
+        mCTMInvertible = mCTM.invert(mInvCTM);
         return count;
     }
 
@@ -222,6 +229,11 @@ abstract public class VirtualView extends ReactViewGroup {
         invalidate();
     }
 
+    @ReactProp(name = "onLayout")
+    public void setOnLayout(boolean onLayout) {
+        mOnLayout = onLayout;
+        invalidate();
+    }
 
     @ReactProp(name = "mask")
     public void setMask(String mask) {
@@ -525,16 +537,18 @@ abstract public class VirtualView extends ReactViewGroup {
         }
         setMeasuredDimension(width, height);
 
-        EventDispatcher eventDispatcher = mContext
-                .getNativeModule(UIManagerModule.class)
-                .getEventDispatcher();
-        eventDispatcher.dispatchEvent(OnLayoutEvent.obtain(
-                this.getId(),
-                left,
-                top,
-                width,
-                height
-        ));
+        if (mOnLayout) {
+            EventDispatcher eventDispatcher = mContext
+                    .getNativeModule(UIManagerModule.class)
+                    .getEventDispatcher();
+            eventDispatcher.dispatchEvent(OnLayoutEvent.obtain(
+                    this.getId(),
+                    left,
+                    top,
+                    width,
+                    height
+            ));
+        }
     }
 
     RectF getClientRect() {
