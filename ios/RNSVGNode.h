@@ -39,6 +39,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) BOOL active;
 @property (nonatomic, assign) BOOL dirty;
 @property (nonatomic, assign) BOOL merging;
+@property (nonatomic, assign) BOOL skip;
 @property (nonatomic, assign) CGPathRef path;
 @property (nonatomic, assign) CGPathRef strokePath;
 @property (nonatomic, assign) CGRect clientRect;

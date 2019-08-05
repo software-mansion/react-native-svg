@@ -334,11 +334,11 @@ UInt32 saturate(CGFloat value) {
     }
     self.frame = clientRect;
 
-    if (!self.fill && !self.stroke) {
+    if (self.skip || self.opacity == 0) {
         return;
     }
 
-    if (self.opacity == 0) {
+    if (!self.fill && !self.stroke) {
         return;
     }
 

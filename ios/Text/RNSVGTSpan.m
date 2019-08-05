@@ -139,7 +139,10 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     return attrs;
 }
 
+TopAlignedLabel *label;
 - (void)drawWrappedText:(CGContextRef)context gc:(RNSVGGlyphContext *)gc rect:(CGRect)rect {
+    [self pushGlyphContext];
+    fontRef = [self getFontFromContext];
     RNSVGFontData* fontdata = [gc getFont];
     CFStringRef string = (__bridge CFStringRef)self.content;
     NSMutableDictionary * attrs = [self getAttributes:fontdata];
@@ -167,7 +170,9 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     }
 
     UIFont *font = (__bridge UIFont *)(fontRef);
-    TopAlignedLabel *label = [[TopAlignedLabel alloc] init];
+    if (!label) {
+        label = [[TopAlignedLabel alloc] init];
+    }
     label.attributedText = (__bridge NSAttributedString * _Nullable)(attrString);
     label.baselineAdjustment = UIBaselineAdjustmentNone;
     label.lineBreakMode = NSLineBreakByWordWrapping;
@@ -193,21 +198,15 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     label.frame = bounds;
     label.bounds = bounds;
 
-    CGFloat ascender = font.ascender;
-    CGFloat capHeight = font.capHeight;
-    /*
-     CGFloat descender = font.descender;
-     CGFloat pointSize = font.pointSize;
-     CGFloat xHeight = font.xHeight;
-     CGFloat lineHeight = font.lineHeight;
-     CGFloat leading = font.leading;
-     */
-
-    CGFloat dx = firstX - capHeight;
-    CGFloat dy = firstY - ascender;
+    firstX = [gc nextXWithDouble:0];
+    firstY = [gc nextY] - font.ascender;
+    CGFloat dx = firstX;
+    CGFloat dy = firstY;
     CGContextTranslateCTM(context, dx, dy);
     [label.layer renderInContext:context];
     CGContextTranslateCTM(context, -dx, -dy);
+    [self popGlyphContext];
+    [self renderPathTo:context rect:rect];
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
@@ -220,6 +219,14 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     NSString *text = self.content;
     if (!text) {
         return [self getGroupPath:context];
+    }
+
+    if (self.inlineSize != nil && self.inlineSize.value != 0) {
+        CGAffineTransform transform = CGAffineTransformMakeTranslation(firstX, firstY);
+        path = CGPathCreateWithRect(label.bounds, &transform);
+        self.path = CGPathRetain(path);
+        self.skip = true;
+        return path;
     }
 
     [self setupTextPath:context];
@@ -902,11 +909,6 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
             CGFloat dx = [gc nextDeltaX];
             CGFloat dy = [gc nextDeltaY];
             CGFloat r = [gc nextRotation] / RNSVGTSpan_radToDeg;
-
-            if (ri == 0 && g == 0) {
-                firstX = x;
-                firstY = y;
-            }
 
             if (isWordSeparator) {
                 continue;

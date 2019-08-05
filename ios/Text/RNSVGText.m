@@ -131,8 +131,9 @@
     [self clip:context];
     CGContextSaveGState(context);
     [self setupGlyphContext:context];
-    [self getGroupPath:context];
-    [self renderGroupTo:context rect:rect];
+    [self pushGlyphContext];
+    [super renderGroupTo:context rect:rect];
+    [self popGlyphContext];
     CGContextRestoreGState(context);
 }
 
