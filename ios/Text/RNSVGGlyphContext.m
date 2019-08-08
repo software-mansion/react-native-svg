@@ -113,35 +113,17 @@
 
 - (CTFontRef)getGlyphFont
 {
+    CGFloat size = topFont_->fontSize;
     NSString *fontFamily = topFont_->fontFamily;
-    NSNumber *fontSize = [NSNumber numberWithDouble:topFont_->fontSize];
-
-    NSString *fontWeight = RNSVGFontWeightStrings[topFont_->fontWeight];
     NSString *fontStyle = RNSVGFontStyleStrings[topFont_->fontStyle];
-
-    BOOL fontFamilyFound = NO;
-    NSArray *supportedFontFamilyNames = [UIFont familyNames];
-
-    if ([supportedFontFamilyNames containsObject:fontFamily]) {
-        fontFamilyFound = YES;
-    } else {
-        for (NSString *fontFamilyName in supportedFontFamilyNames) {
-            if ([[UIFont fontNamesForFamilyName: fontFamilyName] containsObject:fontFamily]) {
-                fontFamilyFound = YES;
-                break;
-            }
-        }
-    }
-    fontFamily = fontFamilyFound ? fontFamily : nil;
-
+    NSString *fontWeight = RNSVGFontWeightStrings[topFont_->fontWeight];
     UIFont *font = [RCTFont updateFont:nil
-                              withFamily:fontFamily
-                                    size:fontSize
-                                  weight:fontWeight
-                                   style:fontStyle
-                                 variant:nil
-                         scaleMultiplier:1.0];
-
+                            withFamily:[fontFamily isEqualToString:@""] ? nil : fontFamily
+                                  size:@(isnan(size) ? 0 : size)
+                                weight:fontWeight
+                                 style:fontStyle
+                               variant:nil
+                       scaleMultiplier:1.0];
     CTFontRef ref = (__bridge CTFontRef)font;
 
     double weight = topFont_->absoluteFontWeight;
@@ -208,7 +190,7 @@
     UIFontDescriptor *uifd = font.fontDescriptor;
     CTFontDescriptorRef ctfd = (__bridge CTFontDescriptorRef)(uifd);
     CTFontDescriptorRef newfd = CTFontDescriptorCreateCopyWithVariation(ctfd, wght_id, (CGFloat)weight);
-    CTFontRef newfont = CTFontCreateCopyWithAttributes(ref, (CGFloat)[fontSize doubleValue], nil, newfd);
+    CTFontRef newfont = CTFontCreateCopyWithAttributes(ref, size, nil, newfd);
     return newfont;
 }
 
