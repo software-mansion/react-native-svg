@@ -187,7 +187,7 @@ If you have unexpected behavior, please create a clean project with the latest v
 react-native init CleanProject
 cd CleanProject/
 yarn add react-native-svg
-react-native link
+cd ios && pod install && cd ..
 ```
 
 Make a reproduction of the problem in `App.js`
