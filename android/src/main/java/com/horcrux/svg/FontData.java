@@ -132,13 +132,19 @@ class FontData {
         letterSpacing = DEFAULT_LETTER_SPACING;
     }
 
-    private double toAbsolute(String string, double scale, double fontSize) {
-        return PropHelper.fromRelative(
-            string,
-            0,
-            scale,
-            fontSize
-        );
+    private double toAbsolute(ReadableMap font, String prop, double scale, double fontSize, double relative) {
+        ReadableType propType = font.getType(prop);
+        if (propType == ReadableType.Number) {
+            return font.getDouble(prop);
+        } else {
+            String string = font.getString(prop);
+            return PropHelper.fromRelative(
+                    string,
+                    relative,
+                    scale,
+                    fontSize
+            );
+        }
     }
 
     private void setInheritedWeight(FontData parent) {
@@ -160,18 +166,7 @@ class FontData {
         double parentFontSize = parent.fontSize;
 
         if (font.hasKey(FONT_SIZE)) {
-            ReadableType fontSizeType = font.getType(FONT_SIZE);
-            if (fontSizeType == ReadableType.Number) {
-                fontSize = font.getDouble(FONT_SIZE);
-            } else {
-                String string = font.getString(FONT_SIZE);
-                fontSize = PropHelper.fromRelative(
-                    string,
-                    parentFontSize,
-                    1,
-                    parentFontSize
-                );
-            }
+            fontSize = toAbsolute(font, FONT_SIZE, 1, parentFontSize, parentFontSize);
         } else {
             fontSize = parentFontSize;
         }
@@ -212,8 +207,8 @@ class FontData {
         // https://www.w3.org/TR/SVG11/text.html#SpacingProperties
         // https://drafts.csswg.org/css-text-3/#spacing
         // calculated values for units in: kerning, word-spacing, and, letter-spacing.
-        kerning = hasKerning ? toAbsolute(font.getString(KERNING), scale, fontSize) : parent.kerning;
-        wordSpacing = font.hasKey(WORD_SPACING) ? toAbsolute(font.getString(WORD_SPACING), scale, fontSize) : parent.wordSpacing;
-        letterSpacing = font.hasKey(LETTER_SPACING) ? toAbsolute(font.getString(LETTER_SPACING), scale, fontSize) : parent.letterSpacing;
+        kerning = hasKerning ? toAbsolute(font, KERNING, scale, fontSize, 0) : parent.kerning;
+        wordSpacing = font.hasKey(WORD_SPACING) ? toAbsolute(font, WORD_SPACING, scale, fontSize, 0) : parent.wordSpacing;
+        letterSpacing = font.hasKey(LETTER_SPACING) ? toAbsolute(font, LETTER_SPACING, scale, fontSize, 0) : parent.letterSpacing;
     }
 }
