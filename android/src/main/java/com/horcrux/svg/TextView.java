@@ -148,7 +148,9 @@ class TextView extends GroupView {
             setupGlyphContext(canvas);
             clip(canvas, paint);
             getGroupPath(canvas, paint);
+            pushGlyphContext();
             drawGroup(canvas, paint, opacity);
+            popGlyphContext();
         }
     }
 
