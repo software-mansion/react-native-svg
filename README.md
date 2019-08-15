@@ -58,11 +58,17 @@
 1. Install library from `npm`
 
     ```bash
-    npm i react-native-svg
+    yarn add react-native-svg
     ```
 
 2. Link native code
 
+    With autolinking (react-native 0.60+)
+    ```bash
+    cd ios && pod install
+    ```
+    
+    Pre 0.60
     ```bash
     react-native link react-native-svg
     ```
@@ -104,9 +110,9 @@ v7 and newer requires the patch for making android thread safe, to get native an
 
 #### Manually
 
-##### Android
+##### Android pre RN 0.60
 
-1. `npm install react-native-svg --save`
+1. `yarn add react-native-svg` In RN 0.60+, this is all you should ever need to do get Android working. Before this, react-native link was responsible for the following steps:
 
 2. Append the following lines to `android/settings.gradle`:
 
@@ -125,11 +131,11 @@ v7 and newer requires the patch for making android thread safe, to get native an
   - Add `import com.horcrux.svg.SvgPackage;` to the imports at the top of the file
   - Add `new SvgPackage()` to the list returned by the `getPackages()` method. Add a comma to the previous item if there's already something there.
 
-##### iOS
+##### iOS pre RN 0.60
 
 [Manual linking](http://facebook.github.io/react-native/docs/linking-libraries-ios.html#manual-linking)
 
-To install react-native-svg on iOS visit the link referenced above or do the following:
+To install react-native-svg on iOS visit the link referenced above or do the following (react-native link should do this for you):
 
 1. Open your project in XCode and drag the `RNSVG.xcodeproj` file (located in `.../node_modules/react-native-svg/ios`) into the Libraries directory shown in XCode.
 2. Expand the `RNSVG.xcodeproj` file you just added to XCode until you see: `libRNSVG.a` (located in `RNSVG.xcodeproj` > `Products` )
@@ -139,7 +145,7 @@ To install react-native-svg on iOS visit the link referenced above or do the fol
 
 Alternatively, you can use [CocoaPods](https://cocoapods.org/) to manage your native (Objective-C and Swift) dependencies:
 
-1. Add RNSVG to your Podfile
+1. Add RNSVG to your Podfile (with RN 0.60+ autolinking, this is not needed)
 ```
 pod 'RNSVG', :path => '../node_modules/react-native-svg'
 ```
@@ -157,31 +163,31 @@ Add the following entry in Podfile:
 
 and run `pod install` from `ios` folder
 
-###### Troubleshooting
+### Troubleshooting
 
 If you have build errors, then it might be caused by caching issues, please try:
 
 ```bash
 watchman watch-del-all
 rm -fr $TMPDIR/react-*
-npm start -- --reset-cache
+react-native start --reset-cache
 
 Or,
 
 rm -rf node_modules
-npm i
-npm start -- --reset-cache
+yarn
+react-native start --reset-cache
 ```
 
-If the new build system in XCode 10 is failing, either use the legacy system, or [uncheck "Parallelize build"](https://github.com/react-native-community/react-native-svg/issues/817#issuecomment-432309469), clean the project, and build again.
+#### Unexpected behavior
 
 If you have unexpected behavior, please create a clean project with the latest versions of react-native and react-native-svg
 
 ```bash
 react-native init CleanProject
 cd CleanProject/
-npm i react-native-svg
-react-native link
+yarn add react-native-svg
+cd ios && pod install && cd ..
 ```
 
 Make a reproduction of the problem in `App.js`
@@ -191,13 +197,15 @@ react-native run-ios
 react-native run-android
 ```
 
-Verify that it is still an issue with the latest version. If so, open a new issue, include the entire `App.js` file, specify what platforms you've tested, and the results of running this command:
+# Opening issues
+
+Verify that it is still an issue with the latest version as specified in the previous step. If so, open a new issue, include the entire `App.js` file, specify what platforms you've tested, and the results of running this command:
 
 ```bash
 react-native info
 ```
 
-If you suspect that you've found a spec conformance bug, then you can test using your component in a react-native-web project by forking this codesandbox, to see how different browsers render the same content: https://codesandbox.io/s/pypn6mn3y7
+If you suspect that you've found a spec conformance bug, then you can test using your component in a react-native-web project by forking this codesandbox, to see how different browsers render the same content: https://codesandbox.io/s/pypn6mn3y7 If any evergreen brower with significant userbase or other svg user agent renders some svg content better, or supports more of the svg and related specs, please open an issue asap.
 
 ### <a name="Usage">Usage</a>
 
@@ -1159,7 +1167,7 @@ For more examples of touch in action, checkout the [TouchEvents.js examples](htt
 
 git clone https://github.com/magicismight/react-native-svg-example.git
 cd react-native-svg-example
-npm i
+yarn
 
 # run Android: react-native run-android
 # run iOS: react-native run-ios
