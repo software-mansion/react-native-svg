@@ -20,6 +20,14 @@ import Stop from './elements/Stop';
 import ClipPath from './elements/ClipPath';
 import Pattern from './elements/Pattern';
 import Mask from './elements/Mask';
+import {
+  parse,
+  SvgAst,
+  SvgFromUri,
+  SvgFromXml,
+  SvgUri,
+  SvgXml,
+} from './xml'
 
 export {
   Svg,
@@ -44,6 +52,12 @@ export {
   ClipPath,
   Pattern,
   Mask,
+  parse,
+  SvgAst,
+  SvgFromUri,
+  SvgFromXml,
+  SvgUri,
+  SvgXml,
 };
 
 export default Svg;

@@ -21,6 +21,7 @@
 - [Usage](#usage)
     - [Use with content loaded from uri](#use-with-content-loaded-from-uri)
     - [Use with svg files](#use-with-svg-files)
+    - [Use with xml strings](#use-with-xml-strings)
 - [Common props](#common-props)
 - [Supported elements](#supported-elements)
     - [Svg](#svg)
@@ -67,7 +68,7 @@
     ```bash
     cd ios && pod install
     ```
-    
+
     Pre 0.60
     ```bash
     react-native link react-native-svg
@@ -116,14 +117,14 @@ v7 and newer requires the patch for making android thread safe, to get native an
 
 2. Append the following lines to `android/settings.gradle`:
 
-	```
+	```gradle
 	include ':react-native-svg'
 	project(':react-native-svg').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-svg/android')
 	```
 
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
 
-	```
+	```gradle
     implementation project(':react-native-svg')
 	```
 
@@ -146,7 +147,7 @@ To install react-native-svg on iOS visit the link referenced above or do the fol
 Alternatively, you can use [CocoaPods](https://cocoapods.org/) to manage your native (Objective-C and Swift) dependencies:
 
 1. Add RNSVG to your Podfile (with RN 0.60+ autolinking, this is not needed)
-```
+```ruby
 pod 'RNSVG', :path => '../node_modules/react-native-svg'
 ```
 
@@ -215,7 +216,7 @@ Here's a simple example. To render output like this:
 
 Use the following code:
 
-```javascript
+```jsx
 import Svg,{
     Circle,
     Ellipse,
@@ -285,18 +286,15 @@ export default class SvgExample extends React.Component {
 
 ### Use with content loaded from uri
 
-Try [react-native-svg-uri](https://github.com/vault-development/react-native-svg-uri)
 ```jsx
 import * as React from 'react';
-import SvgUri from 'react-native-svg-uri';
+import { SvgUri } from 'react-native-svg';
 
 export default () => (
   <SvgUri
-    width="200"
-    height="200"
-    source={{
-      uri: 'http://thenewcode.com/assets/images/thumbnails/homer-simpson.svg',
-    }}
+    width="100%"
+    height="100%"
+    uri="http://thenewcode.com/assets/images/thumbnails/homer-simpson.svg"
   />
 );
 ```
@@ -340,7 +338,7 @@ You can then use your image as a component:
 <Logo width={120} height={40} />
 ```
 
-Alternatively, you can use [react-native-svg-uri](https://github.com/vault-development/react-native-svg-uri) with [babel-plugin-inline-import](https://github.com/credcollective/babel-plugin-inline-import/), but with transforms done at run-time.
+Alternatively, you can use SvgXml with [babel-plugin-inline-import](https://github.com/credcollective/babel-plugin-inline-import/), but with transforms done at run-time.
 
 .babelrc
 ```json
@@ -359,15 +357,47 @@ Alternatively, you can use [react-native-svg-uri](https://github.com/vault-devel
 App.js
 ```jsx
 import * as React from 'react';
-import SvgUri from 'react-native-svg-uri';
+import { SvgXml } from 'react-native-svg';
 import testSvg from './test.svg';
 export default () => (
-  <SvgUri
+  <SvgXml
     width="200"
     height="200"
-    svgXmlData={testSvg}
+    xml={testSvg}
   />
 );
+```
+
+### Use with xml strings
+
+```jsx
+import * as React from 'react';
+import { SvgXml } from 'react-native-svg';
+
+const xml = `
+  <svg width="32" height="32" viewBox="0 0 32 32">
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      fill="url(#gradient)"
+      d="M4 0C1.79086 0 0 1.79086 0 4V28C0 30.2091 1.79086 32 4 32H28C30.2091 32 32 30.2091 32 28V4C32 1.79086 30.2091 0 28 0H4ZM17 6C17 5.44772 17.4477 5 18 5H20C20.5523 5 21 5.44772 21 6V25C21 25.5523 20.5523 26 20 26H18C17.4477 26 17 25.5523 17 25V6ZM12 11C11.4477 11 11 11.4477 11 12V25C11 25.5523 11.4477 26 12 26H14C14.5523 26 15 25.5523 15 25V12C15 11.4477 14.5523 11 14 11H12ZM6 18C5.44772 18 5 18.4477 5 19V25C5 25.5523 5.44772 26 6 26H8C8.55228 26 9 25.5523 9 25V19C9 18.4477 8.55228 18 8 18H6ZM24 14C23.4477 14 23 14.4477 23 15V25C23 25.5523 23.4477 26 24 26H26C26.5523 26 27 25.5523 27 25V15C27 14.4477 26.5523 14 26 14H24Z"
+    />
+    <defs>
+      <linearGradient
+        id="gradient"
+        x1="0"
+        y1="0"
+        x2="8.46631"
+        y2="37.3364"
+        gradient-units="userSpaceOnUse">
+        <stop offset="0" stop-color="#FEA267" />
+        <stop offset="1" stop-color="#E75A4C" />
+      </linearGradient>
+    </defs>
+  </svg>
+`;
+
+export default () => <SvgXml xml={xml} width="100%" height="100%"/>;
 ```
 
 ### Common props:
@@ -397,7 +427,7 @@ originY         | 0          | Transform originY coordinates for the current obj
 
 #### Svg
 
-```html
+```jsx
 <Svg
     height="100"
     width="100"
@@ -412,7 +442,7 @@ originY         | 0          | Transform originY coordinates for the current obj
 
 Colors set in the Svg element are inherited by its children:
 
-```html
+```jsx
 <Svg
     width="130"
     height="130"
@@ -442,7 +472,7 @@ Colors set in the Svg element are inherited by its children:
 The <Rect> element is used to create a rectangle and variations of a rectangle shape:
 
 
-```html
+```jsx
 <Svg
     width="200"
     height="60"
@@ -471,7 +501,7 @@ The <Rect> element is used to create a rectangle and variations of a rectangle s
 
 The <Circle> element is used to create a circle:
 
-```html
+```jsx
 <Svg
     height="100"
     width="100"
@@ -498,7 +528,7 @@ The <Ellipse> element is used to create an ellipse.
 
 An ellipse is closely related to a circle. The difference is that an ellipse has an x and a y radius that differs from each other, while a circle has equal x and y radius.
 
-```html
+```jsx
 <Svg
     height="100"
     width="110"
@@ -527,7 +557,7 @@ Code explanation:
 
 The <Line> element is an SVG basic shape, used to create a line connecting two points.
 
-```html
+```jsx
 <Svg
     height="100"
     width="100"
@@ -556,7 +586,7 @@ Code explanation:
 
 The <Polygon> element is used to create a graphic that contains at least three sides. Polygons are made of straight lines, and the shape is "closed" (all the lines connect up).
 
-```html
+```jsx
 <Svg
     height="100"
     width="100"
@@ -580,7 +610,7 @@ Code explanation:
 
 The <Polyline> element is used to create any shape that consists of only straight lines:
 
-```html
+```jsx
 <Svg
     height="100"
     width="100"
@@ -619,7 +649,7 @@ The following commands are available for path data:
 
 `Note:` All of the commands above can also be expressed with lower letters. Capital letters means absolutely positioned, lower cases means relatively positioned. See [Path document of SVG](https://www.w3.org/TR/SVG/paths.html) to know parameters for each command.
 
-```html
+```jsx
 <Svg
     height="100"
     width="100"
@@ -639,7 +669,7 @@ The following commands are available for path data:
 
 The <Text> element is used to define text.
 
-```html
+```jsx
 <Svg
     height="60"
     width="200"
@@ -662,7 +692,7 @@ The <Text> element is used to define text.
 
 The <TSpan> element is used to draw multiple lines of text in SVG. Rather than having to position each line of text absolutely, the <TSpan> element makes it possible to position a line of text relatively to the previous line of text.
 
-```html
+```jsx
 <Svg
     height="160"
     width="200"
@@ -690,7 +720,7 @@ The <TSpan> element is used to draw multiple lines of text in SVG. Rather than h
 
 In addition to text drawn in a straight line, SVG also includes the ability to place text along the shape of a <Path> element. To specify that a block of text is to be rendered along the shape of a <Path>, include the given text within a <TextPath> element which includes an href attribute with a reference to a <Path> element.
 
-```html
+```jsx
 <Svg
     height="100"
     width="200"
@@ -727,7 +757,7 @@ In addition to text drawn in a straight line, SVG also includes the ability to p
 
 The <G> element is a container used to group other SVG elements. Transformations applied to the g element are performed on all of its child elements, and any of its props are inherited by its child elements. It can also group multiple elements to be referenced later with the [&lt;Use /&gt;](#use) element.
 
-```html
+```jsx
 <Svg
     height="100"
     width="200"
@@ -770,7 +800,7 @@ The <G> element is a container used to group other SVG elements. Transformations
 
 The <Use> element can reuse an SVG shape from elsewhere in the SVG document, including <G> elements and <Symbol> elements. The reused shape can be defined inside the [&lt;Defs&gt;](#defs) element (which makes the shape invisible until used) or outside.
 
-```html
+```jsx
 <Svg
     height="100"
     width="300"
@@ -802,7 +832,7 @@ The <Use> element specifies where to show the reused shapes via its x and y prop
 
 The SVG <Symbol> element is used to define reusable symbols. The shapes nested inside a <Symbol> are not displayed unless referenced by a <Use> element.
 
-```html
+```jsx
 <Svg
     height="150"
     width="110"
@@ -844,7 +874,7 @@ The <Defs> element is used to embed definitions that can be reused inside an SVG
 
 The <Image> element allows a raster image to be included in an Svg componenet.
 
-```html
+```jsx
 <Svg
     height="100"
     width="100"
@@ -895,7 +925,7 @@ The <Image> element allows a raster image to be included in an Svg componenet.
 
 The <ClipPath> SVG element defines a clipping path. A clipping path is used/referenced using the clipPath property
 
-```html
+```jsx
 <Svg
     height="100"
     width="100"
@@ -954,7 +984,7 @@ Linear gradients can be defined as horizontal, vertical or angular gradients:
   * Vertical gradients are created when x1 and x2 are equal and y1 and y2 differ
   * Angular gradients are created when x1 and x2 differ and y1 and y2 differ
 
-```html
+```jsx
 <Svg
     height="150"
     width="300"
@@ -980,7 +1010,7 @@ Code explanation:
 
 *NOTICE:*
 LinearGradient also supports percentage as prop:
-```html
+```jsx
 <LinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
     <Stop offset="0%" stopColor="rgb(255,255,0)" stopOpacity="0" />
     <Stop offset="100%" stopColor="red" stopOpacity="1" />
@@ -992,7 +1022,7 @@ This result is same as the example before. But it's recommend to use exact numbe
 
 The <RadialGradient> element is used to define a radial gradient. The <RadialGradient> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
 
-```html
+```jsx
 <Svg
     height="150"
     width="300"
@@ -1036,7 +1066,7 @@ A ‘Mask’ can contain any graphical elements or container elements such as a 
 The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
 
 https://www.w3.org/TR/SVG11/images/masking/mask01.svg
-```html
+```jsx
   <Svg width="100%" height="100%" viewBox="0 0 800 300">
     <Defs>
       <LinearGradient
@@ -1093,7 +1123,7 @@ A pattern is used to fill or stroke an object using a pre-defined graphic object
 The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
 
 https://www.w3.org/TR/SVG11/images/pservers/pattern01.svg
-```html
+```jsx
   <Svg width="100%" height="100%" viewBox="0 0 800 400">
     <Defs>
       <Pattern
@@ -1147,7 +1177,7 @@ Touch events are supported in react-native-svg. These include:
 
 You can use these events to provide interactivity to your react-native-svg components.
 
-```html
+```jsx
 <Circle
     cx="50%"
     cy="50%"
