@@ -170,23 +170,6 @@ export function astToReact(child, i) {
 
 // slimmed down parser based on https://github.com/Rich-Harris/svg-parser
 
-function locate(source, search) {
-  const lines = source.split('\n');
-  const nLines = lines.length;
-  for (let line = 0; line < nLines; line++) {
-    const { length } = lines[line];
-    if (search < length) {
-      return { line, column: search };
-    } else {
-      search -= length;
-    }
-  }
-}
-
-const validNameCharacters = /[a-zA-Z0-9:_-]/;
-const whitespace = /[\s\t\r\n]/;
-const quotemarks = /['"]/;
-
 function repeat(str, i) {
   let result = '';
   while (i--) {
@@ -194,6 +177,32 @@ function repeat(str, i) {
   }
   return result;
 }
+
+const tabsToSpaces = tabs => repeat('  ', tabs.length);
+
+function locate(source, i) {
+  const lines = source.split('\n');
+  const nLines = lines.length;
+  let column = i;
+  for (let line = 0; line < nLines; line++) {
+    const { length } = lines[line];
+    if (column >= length) {
+      column -= length;
+    } else {
+      const before = source.slice(0, i).replace(/^\t+/, tabsToSpaces);
+      const beforeLine = /(^|\n).*$/.exec(before)[0];
+      const after = source.slice(i);
+      const afterLine = /.*(\n|$)/.exec(after)[0];
+      const pad = repeat(' ', beforeLine.length);
+      const snippet = `${beforeLine}${afterLine}\n${pad}^`;
+      return { line, column, snippet };
+    }
+  }
+}
+
+const validNameCharacters = /[a-zA-Z0-9:_-]/;
+const whitespace = /[\s\t\r\n]/;
+const quotemarks = /['"]/;
 
 export function parse(source) {
   const length = source.length;
@@ -204,19 +213,7 @@ export function parse(source) {
   let stack = [];
 
   function error(message) {
-    const { line, column } = locate(source, i);
-    const before = source
-      .slice(0, i)
-      .replace(/^\t+/, match => repeat('  ', match.length));
-    const beforeLine = /(^|\n).*$/.exec(before)[0];
-    const after = source.slice(i);
-    const afterLine = /.*(\n|$)/.exec(after)[0];
-
-    const snippet = `${beforeLine}${afterLine}\n${repeat(
-      ' ',
-      beforeLine.length,
-    )}^`;
-
+    const { line, column, snippet } = locate(source, i);
     throw new Error(
       `${message} (${line}:${column}). If this is valid SVG, it's probably a bug. Please raise an issue\n\n${snippet}`,
     );
@@ -260,14 +257,15 @@ export function parse(source) {
     } // <?xml...
 
     if (char === '!') {
-      let start = i + 1;
+      const start = i + 1;
       if (source.slice(start, i + 3) === '--') {
         return comment;
       }
-      if (source.slice(start, i + 8) === '[CDATA[') {
+      const end = i + 8;
+      if (source.slice(start, end) === '[CDATA[') {
         return cdata;
       }
-      if (/doctype/i.test(source.slice(start, i + 8))) {
+      if (/doctype/i.test(source.slice(start, end))) {
         return neutral;
       }
     }
@@ -465,7 +463,9 @@ export function parse(source) {
     error('Unexpected end of input');
   }
 
-  root.children = root.children.map(astToReact);
+  if (root) {
+    root.children = root.children.map(astToReact);
+  }
 
   return root;
 }
