@@ -225,6 +225,7 @@ export interface ImageProps extends ResponderProps, CommonMaskProps, ClipProps, 
   href: ReactNative.ImageProperties['source'],
   preserveAspectRatio?: string,
   opacity?: NumberProp,
+  clipPath?: string
 }
 export const Image: React.ComponentClass<ImageProps>;
 
