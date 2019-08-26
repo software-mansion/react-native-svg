@@ -139,11 +139,15 @@ const camelCase = phrase => phrase.replace(/-([a-z])/g, upperCase);
 export function getStyle(string) {
   const style = {};
   const declarations = string.split(";");
-  for (let i = 0, l = declarations.length; i < l; i++) {
-    const declaration = declarations[i].split(":");
-    const property = declaration[0];
-    const value = declaration[1];
+  const { length } = declarations;
+  for (let i = 0; i < length; i++) {
+    const declaration = declarations[i];
+    if (declaration.length !== 0) {
+      const split = declaration.split(":");
+      const property = split[0];
+      const value = split[1];
     style[camelCase(property.trim())] = value.trim();
+  }
   }
   return style;
 }
@@ -164,7 +168,8 @@ export function astToReact(child, i) {
 
 function locate(source, search) {
   const lines = source.split("\n");
-  for (let line = 0, l = lines.length; line < l; line++) {
+  const nLines = lines.length;
+  for (let line = 0; line < nLines; line++) {
     const { length } = lines[line];
     if (search < length) {
       return { line, column: search };
@@ -213,8 +218,8 @@ export function parse(source) {
 
   function metadata() {
     while (
-      (i < length && source[i] !== "<") ||
-      !validNameCharacters.test(source[i + 1])
+      i + 1 < length &&
+      (source[i] !== "<" || !validNameCharacters.test(source[i + 1]))
       ) {
       i++;
     }
@@ -224,7 +229,11 @@ export function parse(source) {
 
   function neutral() {
     let text = "";
-    while (i < length && source[i] !== "<") text += source[i++];
+    let char;
+    while (i < length && (char = source[i]) !== "<") {
+      text += char;
+      i += 1;
+    }
 
     if (/\S/.test(text)) {
       children.push(text);
@@ -243,9 +252,10 @@ export function parse(source) {
     if (char === "?") return neutral; // <?xml...
 
     if (char === "!") {
-      if (source.slice(i + 1, i + 3) === "--") return comment;
-      if (source.slice(i + 1, i + 8) === "[CDATA[") return cdata;
-      if (/doctype/i.test(source.slice(i + 1, i + 8))) return neutral;
+      let start = i + 1;
+      if (source.slice(start, i + 3) === "--") return comment;
+      if (source.slice(start, i + 8) === "[CDATA[") return cdata;
+      if (/doctype/i.test(source.slice(start, i + 8))) return neutral;
     }
 
     if (char === "/") return closingTag;
@@ -336,8 +346,11 @@ export function parse(source) {
 
   function getName() {
     let name = "";
-    while (i < length && validNameCharacters.test(source[i]))
-      name += source[i++];
+    let char;
+    while (i < length && validNameCharacters.test((char = source[i]))) {
+      name += char;
+      i += 1;
+    }
 
     return name;
   }
