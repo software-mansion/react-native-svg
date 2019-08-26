@@ -56,9 +56,10 @@ export function SvgAst({ ast, override }) {
   );
 }
 
-export function SvgXml({ xml, ...props }) {
+export function SvgXml(props) {
+  const { xml, override } = props;
   const ast = useMemo(() => xml && parse(xml), [xml]);
-  return (ast && <SvgAst ast={ast} override={props} />) || null;
+  return (ast && <SvgAst ast={ast} override={override || props} />) || null;
 }
 
 async function fetchText(uri) {
@@ -68,14 +69,15 @@ async function fetchText(uri) {
 
 const err = console.error.bind(console);
 
-export function SvgUri({ uri, ...props }) {
+export function SvgUri(props) {
+  const { uri } = props;
   const [xml, setXml] = useState();
   useEffect(() => {
     fetchText(uri)
       .then(setXml)
       .catch(err);
   }, [uri]);
-  return (xml && <SvgXml xml={xml} {...props} />) || null;
+  return (xml && <SvgXml xml={xml} override={props} />) || null;
 }
 
 // Extending Component is required for Animated support.
@@ -83,8 +85,7 @@ export function SvgUri({ uri, ...props }) {
 export class SvgFromXml extends Component {
   state = {};
   componentDidMount() {
-    const { xml } = this.props;
-    this.parse(xml);
+    this.parse(this.props.xml);
   }
   componentDidUpdate(prevProps) {
     const { xml } = this.props;
@@ -94,23 +95,24 @@ export class SvgFromXml extends Component {
   }
   parse(xml) {
     try {
-      const ast = parse(xml);
-      this.setState({ ast });
+      this.setState({ ast: parse(xml) });
     } catch (e) {
       console.error(e);
     }
   }
   render() {
-    const { ast } = this.state;
-    return ast ? <SvgAst ast={ast} override={this.props} /> : null;
+    const {
+      props,
+      state: { ast },
+    } = this;
+    return ast ? <SvgAst ast={ast} override={props.override || props} /> : null;
   }
 }
 
 export class SvgFromUri extends Component {
   state = {};
   componentDidMount() {
-    const { uri } = this.props;
-    this.fetch(uri);
+    this.fetch(this.props.uri);
   }
   componentDidUpdate(prevProps) {
     const { uri } = this.props;
@@ -120,15 +122,17 @@ export class SvgFromUri extends Component {
   }
   async fetch(uri) {
     try {
-      const xml = await fetchText(uri);
-      this.setState({ xml });
+      this.setState({ xml: await fetchText(uri) });
     } catch (e) {
       console.error(e);
     }
   }
   render() {
-    const { xml } = this.state;
-    return xml ? <SvgFromXml xml={xml} {...this.props} /> : null;
+    const {
+      props,
+      state: { xml },
+    } = this;
+    return xml ? <SvgFromXml xml={xml} override={props} /> : null;
   }
 }
 
