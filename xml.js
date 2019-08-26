@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useMemo } from "react";
+import React, { Component, useState, useEffect, useMemo } from 'react';
 import Rect from './elements/Rect';
 import Circle from './elements/Circle';
 import Ellipse from './elements/Ellipse';
@@ -44,7 +44,7 @@ export const tags = {
   stop: Stop,
   clipPath: ClipPath,
   pattern: Pattern,
-  mask: Mask
+  mask: Mask,
 };
 
 export function SvgAst({ ast, override }) {
@@ -138,22 +138,22 @@ const camelCase = phrase => phrase.replace(/-([a-z])/g, upperCase);
 
 export function getStyle(string) {
   const style = {};
-  const declarations = string.split(";");
+  const declarations = string.split(';');
   const { length } = declarations;
   for (let i = 0; i < length; i++) {
     const declaration = declarations[i];
     if (declaration.length !== 0) {
-      const split = declaration.split(":");
+      const split = declaration.split(':');
       const property = split[0];
       const value = split[1];
-    style[camelCase(property.trim())] = value.trim();
-  }
+      style[camelCase(property.trim())] = value.trim();
+    }
   }
   return style;
 }
 
 export function astToReact(child, i) {
-  if (typeof child === "object") {
+  if (typeof child === 'object') {
     const { Tag, props, children } = child;
     return (
       <Tag key={i} {...props}>
@@ -167,7 +167,7 @@ export function astToReact(child, i) {
 // slimmed down parser based on https://github.com/Rich-Harris/svg-parser
 
 function locate(source, search) {
-  const lines = source.split("\n");
+  const lines = source.split('\n');
   const nLines = lines.length;
   for (let line = 0; line < nLines; line++) {
     const { length } = lines[line];
@@ -181,11 +181,13 @@ function locate(source, search) {
 
 const validNameCharacters = /[a-zA-Z0-9:_-]/;
 const whitespace = /[\s\t\r\n]/;
-const quotemark = /['"]/;
+const quotemarks = /['"]/;
 
 function repeat(str, i) {
-  let result = "";
-  while (i--) result += str;
+  let result = '';
+  while (i--) {
+    result += str;
+  }
   return result;
 }
 
@@ -201,26 +203,26 @@ export function parse(source) {
     const { line, column } = locate(source, i);
     const before = source
       .slice(0, i)
-      .replace(/^\t+/, match => repeat("  ", match.length));
+      .replace(/^\t+/, match => repeat('  ', match.length));
     const beforeLine = /(^|\n).*$/.exec(before)[0];
     const after = source.slice(i);
     const afterLine = /.*(\n|$)/.exec(after)[0];
 
     const snippet = `${beforeLine}${afterLine}\n${repeat(
-      " ",
-      beforeLine.length
+      ' ',
+      beforeLine.length,
     )}^`;
 
     throw new Error(
-      `${message} (${line}:${column}). If this is valid SVG, it's probably a bug. Please raise an issue\n\n${snippet}`
+      `${message} (${line}:${column}). If this is valid SVG, it's probably a bug. Please raise an issue\n\n${snippet}`,
     );
   }
 
   function metadata() {
     while (
       i + 1 < length &&
-      (source[i] !== "<" || !validNameCharacters.test(source[i + 1]))
-      ) {
+      (source[i] !== '<' || !validNameCharacters.test(source[i + 1]))
+    ) {
       i++;
     }
 
@@ -228,9 +230,9 @@ export function parse(source) {
   }
 
   function neutral() {
-    let text = "";
+    let text = '';
     let char;
-    while (i < length && (char = source[i]) !== "<") {
+    while (i < length && (char = source[i]) !== '<') {
       text += char;
       i += 1;
     }
@@ -239,7 +241,7 @@ export function parse(source) {
       children.push(text);
     }
 
-    if (source[i] === "<") {
+    if (source[i] === '<') {
       return openingTag;
     }
 
@@ -249,16 +251,26 @@ export function parse(source) {
   function openingTag() {
     const char = source[i];
 
-    if (char === "?") return neutral; // <?xml...
+    if (char === '?') {
+      return neutral;
+    } // <?xml...
 
-    if (char === "!") {
+    if (char === '!') {
       let start = i + 1;
-      if (source.slice(start, i + 3) === "--") return comment;
-      if (source.slice(start, i + 8) === "[CDATA[") return cdata;
-      if (/doctype/i.test(source.slice(start, i + 8))) return neutral;
+      if (source.slice(start, i + 3) === '--') {
+        return comment;
+      }
+      if (source.slice(start, i + 8) === '[CDATA[') {
+        return cdata;
+      }
+      if (/doctype/i.test(source.slice(start, i + 8))) {
+        return neutral;
+      }
     }
 
-    if (char === "/") return closingTag;
+    if (char === '/') {
+      return closingTag;
+    }
 
     const tag = getName();
     const props = {};
@@ -266,7 +278,7 @@ export function parse(source) {
       tag,
       props,
       children: [],
-      Tag: tags[tag]
+      Tag: tags[tag],
     };
 
     if (currentElement) {
@@ -284,13 +296,13 @@ export function parse(source) {
 
     let selfClosing = false;
 
-    if (source[i] === "/") {
+    if (source[i] === '/') {
       i += 1;
       selfClosing = true;
     }
 
-    if (source[i] !== ">") {
-      error("Expected >");
+    if (source[i] !== '>') {
+      error('Expected >');
     }
 
     if (!selfClosing) {
@@ -303,16 +315,20 @@ export function parse(source) {
   }
 
   function comment() {
-    const index = source.indexOf("-->", i);
-    if (!~index) error("expected -->");
+    const index = source.indexOf('-->', i);
+    if (!~index) {
+      error('expected -->');
+    }
 
     i = index + 2;
     return neutral;
   }
 
   function cdata() {
-    const index = source.indexOf("]]>", i);
-    if (!~index) error("expected ]]>");
+    const index = source.indexOf(']]>', i);
+    if (!~index) {
+      error('expected ]]>');
+    }
 
     i = index + 2;
     return neutral;
@@ -321,18 +337,18 @@ export function parse(source) {
   function closingTag() {
     const tag = getName();
 
-    if (!tag) error("Expected tag name");
+    if (!tag) {
+      error('Expected tag name');
+    }
 
     if (tag !== currentElement.tag) {
       error(
-        `Expected closing tag </${tag}> to match opening tag <${
-          currentElement.tag
-          }>`
+        `Expected closing tag </${tag}> to match opening tag <${currentElement.tag}>`,
       );
     }
 
-    if (source[i] !== ">") {
-      error("Expected >");
+    if (source[i] !== '>') {
+      error('Expected >');
     }
 
     stack.pop();
@@ -345,7 +361,7 @@ export function parse(source) {
   }
 
   function getName() {
-    let name = "";
+    let name = '';
     let char;
     while (i < length && validNameCharacters.test((char = source[i]))) {
       name += char;
@@ -357,21 +373,27 @@ export function parse(source) {
 
   function getAttributes(props) {
     while (i < length) {
-      if (!whitespace.test(source[i])) return;
+      if (!whitespace.test(source[i])) {
+        return;
+      }
       allowSpaces();
 
       const name = getName();
-      if (!name) return;
+      if (!name) {
+        return;
+      }
 
       let value = true;
 
       allowSpaces();
-      if (source[i] === "=") {
+      if (source[i] === '=') {
         i += 1;
         allowSpaces();
 
         value = getAttributeValue();
-        if (!isNaN(value) && value.trim() !== "") value = +value;
+        if (!isNaN(value) && value.trim() !== '') {
+          value = +value;
+        }
       }
 
       props[camelCase(name)] = value;
@@ -379,16 +401,16 @@ export function parse(source) {
   }
 
   function getAttributeValue() {
-    return quotemark.test(source[i])
+    return quotemarks.test(source[i])
       ? getQuotedAttributeValue()
       : getUnquotedAttributeValue();
   }
 
   function getUnquotedAttributeValue() {
-    let value = "";
+    let value = '';
     do {
       const char = source[i];
-      if (char === " " || char === ">" || char === "/") {
+      if (char === ' ' || char === '>' || char === '/') {
         return value;
       }
 
@@ -402,7 +424,7 @@ export function parse(source) {
   function getQuotedAttributeValue() {
     const quotemark = source[i++];
 
-    let value = "";
+    let value = '';
     let escaped = false;
 
     while (i < length) {
@@ -411,7 +433,7 @@ export function parse(source) {
         return value;
       }
 
-      if (char === "\\" && !escaped) {
+      if (char === '\\' && !escaped) {
         escaped = true;
       }
 
@@ -421,18 +443,22 @@ export function parse(source) {
   }
 
   function allowSpaces() {
-    while (i < length && whitespace.test(source[i])) i += 1;
+    while (i < length && whitespace.test(source[i])) {
+      i += 1;
+    }
   }
 
   let i = 0;
   while (i < length) {
-    if (!state) error("Unexpected character");
+    if (!state) {
+      error('Unexpected character');
+    }
     state = state();
     i += 1;
   }
 
   if (state !== neutral) {
-    error("Unexpected end of input");
+    error('Unexpected end of input');
   }
 
   root.children = root.children.map(astToReact);

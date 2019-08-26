@@ -21,7 +21,7 @@
     ],
     "scripts": {
         "lint": "eslint ./",
-        "format": "prettier index.js  index.web.js './{elements,lib}/*.js' './lib/extract/e*.js' --write",
+        "format": "prettier index.js  index.web.js xml.js README.md './{elements,lib}/*.js' './lib/extract/e*.js' --write",
         "peg": "pegjs -o ./lib/extract/transform.js ./lib/extract/transform.peg"
     },
     "peerDependencies": {
@@ -31,13 +31,13 @@
     "dependencies": {},
     "devDependencies": {
         "@react-native-community/eslint-config": "^0.0.5",
-        "babel-eslint": "^10.0.2",
-        "eslint": "^6.1.0",
+        "babel-eslint": "^10.0.3",
+        "eslint": "^6.2.2",
         "eslint-plugin-prettier": "^3.1.0",
-        "eslint-plugin-react": "^7.14.2",
+        "eslint-plugin-react": "^7.14.3",
         "pegjs": "^0.10.0",
         "prettier": "^1.18.2",
-        "react": "^16.8.6"
+        "react": "^16.9.0"
     },
     "nativePackage": true
 }
