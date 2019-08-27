@@ -138,7 +138,7 @@ export class SvgFromUri extends Component {
 
 const upperCase = (match, letter) => letter.toUpperCase();
 
-const camelCase = phrase => phrase.replace(/-([a-z])/g, upperCase);
+const camelCase = phrase => phrase.replace(/[:\-]([a-z])/g, upperCase);
 
 export function getStyle(string) {
   const style = {};
@@ -178,7 +178,7 @@ function repeat(str, i) {
   return result;
 }
 
-const tabsToSpaces = tabs => repeat('  ', tabs.length);
+const toSpaces = tabs => repeat('  ', tabs.length);
 
 function locate(source, i) {
   const lines = source.split('\n');
@@ -189,7 +189,7 @@ function locate(source, i) {
     if (column >= length) {
       column -= length;
     } else {
-      const before = source.slice(0, i).replace(/^\t+/, tabsToSpaces);
+      const before = source.slice(0, i).replace(/^\t+/, toSpaces);
       const beforeLine = /(^|\n).*$/.exec(before)[0];
       const after = source.slice(i);
       const afterLine = /.*(\n|$)/.exec(after)[0];
