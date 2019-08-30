@@ -428,7 +428,7 @@ class PathParser {
     }
 
     private void skip_spaces() {
-        while (Character.isWhitespace(s.charAt(i))) i++;
+        while (i < l && Character.isWhitespace(s.charAt(i))) i++;
     }
 
     private boolean is_cmd(char c) {
@@ -531,7 +531,9 @@ class PathParser {
         if (c == '.') {
             i += 1;
             skip_digits();
-            c = s.charAt(i);
+            if (i < l) {
+                c = s.charAt(i);
+            }
         }
 
         if (c == 'e' || c == 'E') {
@@ -564,12 +566,12 @@ class PathParser {
     }
 
     private void parse_list_separator() {
-        if (s.charAt(i) == ',') {
+        if (i < l && s.charAt(i) == ',') {
             i += 1;
         }
     }
 
     private void skip_digits() {
-        while (Character.isDigit(s.charAt(i))) i++;
+        while (i < l && Character.isDigit(s.charAt(i))) i++;
     }
 }

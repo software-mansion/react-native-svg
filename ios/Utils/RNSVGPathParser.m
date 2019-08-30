@@ -431,7 +431,7 @@
 }
 
 - (void)skip_spaces {
-    while ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:[s characterAtIndex:i]]) i++;
+    while (i < l && [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:[s characterAtIndex:i]]) i++;
 }
 
 - (bool)is_cmd:(char)c {
@@ -534,7 +534,9 @@
     if (c == '.') {
         i += 1;
         [self skip_digits];
-        c = [s characterAtIndex:i];
+        if (i < l) {
+            c = [s characterAtIndex:i];
+        }
     }
 
     if (c == 'e' || c == 'E') {
@@ -567,13 +569,13 @@
 }
 
 - (void)parse_list_separator {
-    if ([s characterAtIndex:i] == ',') {
+    if (i < l && [s characterAtIndex:i] == ',') {
         i += 1;
     }
 }
 
 - (void)skip_digits {
-    while ([[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[s characterAtIndex:i]]) i++;
+    while (i < l && [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[s characterAtIndex:i]]) i++;
 }
 
 @end
