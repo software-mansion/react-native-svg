@@ -47,6 +47,10 @@
     while (i < l) {
         [self skip_spaces];
 
+        if (i >= l) {
+            break;
+        }
+        
         bool has_prev_cmd = prev_cmd != ' ';
         char first_char = [s characterAtIndex:i];
 
