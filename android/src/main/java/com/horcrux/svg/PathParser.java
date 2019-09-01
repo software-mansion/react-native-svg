@@ -39,6 +39,10 @@ class PathParser {
         while (i < l) {
             skip_spaces();
 
+            if (i >= l) {
+                break
+            }
+
             boolean has_prev_cmd = prev_cmd != ' ';
             char first_char = s.charAt(i);
 
