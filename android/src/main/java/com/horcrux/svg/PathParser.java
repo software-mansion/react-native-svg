@@ -40,7 +40,7 @@ class PathParser {
             skip_spaces();
 
             if (i >= l) {
-                break
+                break;
             }
 
             boolean has_prev_cmd = prev_cmd != ' ';
