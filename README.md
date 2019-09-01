@@ -170,6 +170,13 @@ and run `pod install` from `ios` folder
 
 ### Troubleshooting
 
+#### Problems with Proguard
+When Proguard is enabled (which it is by default for Android release builds), it causes runtine error
+To avoid this, add an exception to `android/app/proguard-rules.pro`:
+```bash
+-keep public class com.horcrux.svg.** {*;}
+```
+
 If you have build errors, then it might be caused by caching issues, please try:
 
 ```bash
@@ -1103,11 +1110,3 @@ yarn
 ### Known issues:
 
 1. Unable to apply focus point of RadialGradient on Android.
-
-### Troubleshooting
-##### Problems with Proguard
-When Proguard is enabled (which it is by default for Android release builds), it causes runtine error
-To avoid this, add an exception to `android/app/proguard-rules.pro`:
-```bash
--keep public class com.horcrux.svg.** {*;}
-```
