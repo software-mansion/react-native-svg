@@ -50,7 +50,7 @@
         if (i >= l) {
             break;
         }
-        
+
         bool has_prev_cmd = prev_cmd != ' ';
         char first_char = [s characterAtIndex:i];
 
@@ -483,7 +483,7 @@
         case '0':
         case '1': {
             i += 1;
-            if ([s characterAtIndex:i] == ',') {
+            if (i < l && [s characterAtIndex:i] == ',') {
                 i += 1;
             }
             [self skip_spaces];
@@ -529,7 +529,9 @@
     // Consume integer.
     if (c >= '0' && c <= '9') {
         [self skip_digits];
-        c = [s characterAtIndex:i];
+        if (i < l) {
+            c = [s characterAtIndex:i];
+        }
     } else if (c != '.') {
         RCTLogError(@"InvalidNumber: %@", s);
     }
@@ -543,7 +545,7 @@
         }
     }
 
-    if (c == 'e' || c == 'E') {
+    if ((c == 'e' || c == 'E') && i + 1 < l) {
         char c2 = [s characterAtIndex:i + 1];
         // Check for `em`/`ex`.
         if (c2 != 'm' && c2 != 'x') {

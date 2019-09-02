@@ -480,7 +480,7 @@ class PathParser {
             case '0':
             case '1': {
                 i += 1;
-                if (s.charAt(i) == ',') {
+                if (i < l && s.charAt(i) == ',') {
                     i += 1;
                 }
                 skip_spaces();
@@ -526,7 +526,9 @@ class PathParser {
         // Consume integer.
         if (c >= '0' && c <= '9') {
             skip_digits();
-            c = s.charAt(i);
+            if (i < l) {
+                c = s.charAt(i);
+            }
         } else if (c != '.') {
             throw new Error("InvalidNumber");
         }
@@ -540,7 +542,7 @@ class PathParser {
             }
         }
 
-        if (c == 'e' || c == 'E') {
+        if ((c == 'e' || c == 'E') && i + 1 < l) {
             char c2 = s.charAt(i + 1);
             // Check for `em`/`ex`.
             if (c2 != 'm' && c2 != 'x') {
