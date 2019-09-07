@@ -205,6 +205,7 @@
 
 - (void)moveTo:(CGMutablePathRef)path x:(float)x y:(float)y
 {
+    //RCTLogInfo(@"move x: %f y: %f", x, y);
     _penDownX = _pivotX = _penX = x;
     _penDownY = _pivotY = _penY = y;
     CGPathMoveToPoint(path, nil, x, y);
@@ -216,6 +217,7 @@
 }
 
 - (void)lineTo:(CGMutablePathRef)path x:(float)x y:(float)y{
+    //RCTLogInfo(@"line x: %f y: %f", x, y);
     [self setPenDown];
     _pivotX = _penX = x;
     _pivotY = _penY = y;
@@ -234,6 +236,7 @@
 
 - (void)curveTo:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y ex:(float)ex ey:(float)ey
 {
+    //RCTLogInfo(@"curve c1x: %f c1y: %f c2x: %f c2y: %f ex: %f ey: %f", c1x, c1y, c2x, c2y, ex, ey);
     _pivotX = c2x;
     _pivotY = c2y;
     [self curveToPoint:path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y ex:(float)ex ey:(float)ey];
@@ -254,6 +257,7 @@
 
 - (void)smoothCurveTo:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y ex:(float)ex ey:(float)ey
 {
+    //RCTLogInfo(@"smoothcurve c1x: %f c1y: %f ex: %f ey: %f", c1x, c1y, ex, ey);
     float c2x = c1x;
     float c2y = c1y;
     c1x = (_penX * 2) - _pivotX;
@@ -270,6 +274,7 @@
 
 - (void)quadraticBezierCurveTo:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y c2x:(float)c2x c2y:(float)c2y
 {
+    //RCTLogInfo(@"quad c1x: %f c1y: %f c2x: %f c2y: %f", c1x, c1y, c2x, c2y);
     _pivotX = c1x;
     _pivotY = c1y;
     float ex = c2x;
@@ -288,6 +293,7 @@
 
 - (void)smoothQuadraticBezierCurveTo:(CGMutablePathRef)path c1x:(float)c1x c1y:(float)c1y
 {
+    //RCTLogInfo(@"smoothquad c1x: %f c1y: %f", c1x, c1y);
     float c2x = c1x;
     float c2y = c1y;
     c1x = (_penX * 2) - _pivotX;
@@ -302,6 +308,7 @@
 
 - (void)arcTo:(CGMutablePathRef)path rx:(float)rx ry:(float)ry rotation:(float)rotation outer:(BOOL)outer clockwise:(BOOL)clockwise x:(float)x y:(float)y
 {
+    //RCTLogInfo(@"arc rx: %f ry: %f rotation: %f outer: %i clockwise: %i x: %f y: %f", rx, ry, rotation, outer, clockwise, x, y);
     float tX = _penX;
     float tY = _penY;
 

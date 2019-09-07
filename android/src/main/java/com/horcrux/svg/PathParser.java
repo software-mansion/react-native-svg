@@ -4,7 +4,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 
 class PathParser {
-    static final PathParser singleton = new PathParser();
+    private static final PathParser singleton = new PathParser();
 
     private PathParser() {
     }
@@ -15,26 +15,33 @@ class PathParser {
 
     static float mScale;
 
-    private char prev_cmd = ' ';
     private Path mPath;
-    private int i = 0;
-    private int l = 0;
     private String s;
+    private int i;
+    private int l;
 
-    private float mPenX = 0f;
-    private float mPenY = 0f;
+    private float mPenX;
+    private float mPenY;
+    private float mPivotX;
+    private float mPivotY;
     private float mPenDownX;
     private float mPenDownY;
-    private float mPivotX = 0f;
-    private float mPivotY = 0f;
-    private boolean mPenDown = false;
+    private boolean mPenDown;
 
-    Path parse(String data) {
+    private Path parse(String data) {
+        char prev_cmd = ' ';
         mPath = new Path();
         l = data.length();
-        prev_cmd = ' ';
         s = data;
         i = 0;
+
+        mPenX = 0f;
+        mPenY = 0f;
+        mPivotX = 0f;
+        mPivotY = 0f;
+        mPenDownX = 0f;
+        mPenDownY = 0f;
+        mPenDown = false;
 
         while (i < l) {
             skip_spaces();
@@ -187,6 +194,7 @@ class PathParser {
     }
 
     private void moveTo(float x, float y) {
+        //FLog.w(ReactConstants.TAG, "move x: " + x + " y: " + y);
         mPenDownX = mPivotX = mPenX = x;
         mPenDownY = mPivotY = mPenY = y;
         mPath.moveTo(x * mScale, y * mScale);
@@ -197,6 +205,7 @@ class PathParser {
     }
 
     private void lineTo(float x, float y) {
+        //FLog.w(ReactConstants.TAG, "line x: " + x + " y: " + y);
         setPenDown();
         mPivotX = mPenX = x;
         mPivotY = mPenY = y;
@@ -208,6 +217,7 @@ class PathParser {
     }
 
     private void curveTo(float c1x, float c1y, float c2x, float c2y, float ex, float ey) {
+        //FLog.w(ReactConstants.TAG, "curve c1x: " + c1x + " c1y: " + c1y + "ex: " + ex + " ey: " + ey);
         mPivotX = c2x;
         mPivotY = c2y;
         cubicTo(c1x, c1y, c2x, c2y, ex, ey);
@@ -225,6 +235,7 @@ class PathParser {
     }
 
     private void smoothCurveTo(float c1x, float c1y, float ex, float ey) {
+        //FLog.w(ReactConstants.TAG, "smoothcurve c1x: " + c1x + " c1y: " + c1y + "ex: " + ex + " ey: " + ey);
         float c2x = c1x;
         float c2y = c1y;
         c1x = (mPenX * 2) - mPivotX;
@@ -239,6 +250,7 @@ class PathParser {
     }
 
     private void quadraticBezierCurveTo(float c1x, float c1y, float c2x, float c2y) {
+        //FLog.w(ReactConstants.TAG, "quad c1x: " + c1x + " c1y: " + c1y + "c2x: " + c2x + " c2y: " + c2y);
         mPivotX = c1x;
         mPivotY = c1y;
         float ex = c2x;
@@ -255,6 +267,7 @@ class PathParser {
     }
 
     private void smoothQuadraticBezierCurveTo(float c1x, float c1y) {
+        //FLog.w(ReactConstants.TAG, "smoothquad c1x: " + c1x + " c1y: " + c1y);
         float c2x = c1x;
         float c2y = c1y;
         c1x = (mPenX * 2) - mPivotX;
@@ -267,6 +280,7 @@ class PathParser {
     }
 
     private void arcTo(float rx, float ry, float rotation, boolean outer, boolean clockwise, float x, float y) {
+        //FLog.w(ReactConstants.TAG, "arc rx: " + rx + " ry: " + ry + " rotation: " + rotation + " outer: " + outer + " clockwise: " + clockwise + " x: " + x + " y: " + y);
         float tX = mPenX;
         float tY = mPenY;
 
