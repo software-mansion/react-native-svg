@@ -407,15 +407,15 @@ interface XMLElement {
 
 export function parse(xml: string): XMLElement | null
 
-interface AstProps {
+interface AstProps extends ReactNative.ViewProps {
   ast: XMLElement, override: any, children?: any
 }
 export const SvgAst: React.FunctionComponent<AstProps>
 
-interface SvgXmlProps { override?: any, xml: string }
+interface SvgXmlProps extends ReactNative.ViewProps { override?: any, xml: string }
 export const SvgXml: React.FunctionComponent<SvgXmlProps>
 export const SvgFromXml: React.ComponentClass<SvgXmlProps>
 
-interface SvgUriProps { uri: string }
+interface SvgUriProps extends ReactNative.ViewProps { uri: string }
 export const SvgUri: React.FunctionComponent<SvgUriProps>
 export const SvgFromUri: React.ComponentClass<SvgUriProps>
