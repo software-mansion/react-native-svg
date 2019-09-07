@@ -47,6 +47,10 @@ export const tags = {
   mask: Mask,
 };
 
+function missingTag() {
+  return null;
+}
+
 export function SvgAst({ ast, override }) {
   const { props, children } = ast;
   return (
@@ -184,20 +188,22 @@ function locate(source, i) {
   const lines = source.split('\n');
   const nLines = lines.length;
   let column = i;
-  for (let line = 0; line < nLines; line++) {
+  let line = 0;
+  for (; line < nLines; line++) {
     const { length } = lines[line];
     if (column >= length) {
       column -= length;
     } else {
-      const before = source.slice(0, i).replace(/^\t+/, toSpaces);
-      const beforeLine = /(^|\n).*$/.exec(before)[0];
-      const after = source.slice(i);
-      const afterLine = /.*(\n|$)/.exec(after)[0];
-      const pad = repeat(' ', beforeLine.length);
-      const snippet = `${beforeLine}${afterLine}\n${pad}^`;
-      return { line, column, snippet };
+      break;
     }
   }
+  const before = source.slice(0, i).replace(/^\t+/, toSpaces);
+  const beforeLine = /(^|\n).*$/.exec(before)[0];
+  const after = source.slice(i);
+  const afterLine = /.*(\n|$)/.exec(after)[0];
+  const pad = repeat(' ', beforeLine.length);
+  const snippet = `${beforeLine}${afterLine}\n${pad}^`;
+  return { line, column, snippet };
 }
 
 const validNameCharacters = /[a-zA-Z0-9:_-]/;
@@ -280,7 +286,7 @@ export function parse(source) {
       tag,
       props,
       children: [],
-      Tag: tags[tag],
+      Tag: tags[tag] || missingTag,
     };
 
     if (currentElement) {
