@@ -4,35 +4,26 @@ import android.graphics.Path;
 import android.graphics.RectF;
 
 class PathParser {
-    private static final PathParser singleton = new PathParser();
-
-    private PathParser() {
-    }
-
-    static Path parseData(String data) {
-        return singleton.parse(data);
-    }
-
     static float mScale;
 
-    private Path mPath;
-    private String s;
-    private int i;
-    private int l;
+    private static int i;
+    private static int l;
+    private static String s;
+    private static Path mPath;
 
-    private float mPenX;
-    private float mPenY;
-    private float mPivotX;
-    private float mPivotY;
-    private float mPenDownX;
-    private float mPenDownY;
-    private boolean mPenDown;
+    private static float mPenX;
+    private static float mPenY;
+    private static float mPivotX;
+    private static float mPivotY;
+    private static float mPenDownX;
+    private static float mPenDownY;
+    private static boolean mPenDown;
 
-    private Path parse(String data) {
+    static Path parse(String d) {
         char prev_cmd = ' ';
         mPath = new Path();
-        l = data.length();
-        s = data;
+        l = d.length();
+        s = d;
         i = 0;
 
         mPenX = 0f;
@@ -189,22 +180,22 @@ class PathParser {
         return mPath;
     }
 
-    private void move(float x, float y) {
+    private static void move(float x, float y) {
         moveTo(x + mPenX, y + mPenY);
     }
 
-    private void moveTo(float x, float y) {
+    private static void moveTo(float x, float y) {
         //FLog.w(ReactConstants.TAG, "move x: " + x + " y: " + y);
         mPenDownX = mPivotX = mPenX = x;
         mPenDownY = mPivotY = mPenY = y;
         mPath.moveTo(x * mScale, y * mScale);
     }
 
-    private void line(float x, float y) {
+    private static void line(float x, float y) {
         lineTo(x + mPenX, y + mPenY);
     }
 
-    private void lineTo(float x, float y) {
+    private static void lineTo(float x, float y) {
         //FLog.w(ReactConstants.TAG, "line x: " + x + " y: " + y);
         setPenDown();
         mPivotX = mPenX = x;
@@ -212,29 +203,29 @@ class PathParser {
         mPath.lineTo(x * mScale, y * mScale);
     }
 
-    private void curve(float c1x, float c1y, float c2x, float c2y, float ex, float ey) {
+    private static void curve(float c1x, float c1y, float c2x, float c2y, float ex, float ey) {
         curveTo(c1x + mPenX, c1y + mPenY, c2x + mPenX, c2y + mPenY, ex + mPenX, ey + mPenY);
     }
 
-    private void curveTo(float c1x, float c1y, float c2x, float c2y, float ex, float ey) {
+    private static void curveTo(float c1x, float c1y, float c2x, float c2y, float ex, float ey) {
         //FLog.w(ReactConstants.TAG, "curve c1x: " + c1x + " c1y: " + c1y + "ex: " + ex + " ey: " + ey);
         mPivotX = c2x;
         mPivotY = c2y;
         cubicTo(c1x, c1y, c2x, c2y, ex, ey);
     }
 
-    private void cubicTo(float c1x, float c1y, float c2x, float c2y, float ex, float ey) {
+    private static void cubicTo(float c1x, float c1y, float c2x, float c2y, float ex, float ey) {
         setPenDown();
         mPenX = ex;
         mPenY = ey;
         mPath.cubicTo(c1x * mScale, c1y * mScale, c2x * mScale, c2y * mScale, ex * mScale, ey * mScale);
     }
 
-    private void smoothCurve(float c1x, float c1y, float ex, float ey) {
+    private static void smoothCurve(float c1x, float c1y, float ex, float ey) {
         smoothCurveTo(c1x + mPenX, c1y + mPenY, ex + mPenX, ey + mPenY);
     }
 
-    private void smoothCurveTo(float c1x, float c1y, float ex, float ey) {
+    private static void smoothCurveTo(float c1x, float c1y, float ex, float ey) {
         //FLog.w(ReactConstants.TAG, "smoothcurve c1x: " + c1x + " c1y: " + c1y + "ex: " + ex + " ey: " + ey);
         float c2x = c1x;
         float c2y = c1y;
@@ -245,11 +236,11 @@ class PathParser {
         cubicTo(c1x, c1y, c2x, c2y, ex, ey);
     }
 
-    private void quadraticBezierCurve(float c1x, float c1y, float c2x, float c2y) {
+    private static void quadraticBezierCurve(float c1x, float c1y, float c2x, float c2y) {
         quadraticBezierCurveTo(c1x + mPenX, c1y + mPenY, c2x + mPenX, c2y + mPenY);
     }
 
-    private void quadraticBezierCurveTo(float c1x, float c1y, float c2x, float c2y) {
+    private static void quadraticBezierCurveTo(float c1x, float c1y, float c2x, float c2y) {
         //FLog.w(ReactConstants.TAG, "quad c1x: " + c1x + " c1y: " + c1y + "c2x: " + c2x + " c2y: " + c2y);
         mPivotX = c1x;
         mPivotY = c1y;
@@ -262,11 +253,11 @@ class PathParser {
         cubicTo(c1x, c1y, c2x, c2y, ex, ey);
     }
 
-    private void smoothQuadraticBezierCurve(float c1x, float c1y) {
+    private static void smoothQuadraticBezierCurve(float c1x, float c1y) {
         smoothQuadraticBezierCurveTo(c1x + mPenX, c1y + mPenY);
     }
 
-    private void smoothQuadraticBezierCurveTo(float c1x, float c1y) {
+    private static void smoothQuadraticBezierCurveTo(float c1x, float c1y) {
         //FLog.w(ReactConstants.TAG, "smoothquad c1x: " + c1x + " c1y: " + c1y);
         float c2x = c1x;
         float c2y = c1y;
@@ -275,11 +266,11 @@ class PathParser {
         quadraticBezierCurveTo(c1x, c1y, c2x, c2y);
     }
 
-    private void arc(float rx, float ry, float rotation, boolean outer, boolean clockwise, float x, float y) {
+    private static void arc(float rx, float ry, float rotation, boolean outer, boolean clockwise, float x, float y) {
         arcTo(rx, ry, rotation, outer, clockwise, x + mPenX, y + mPenY);
     }
 
-    private void arcTo(float rx, float ry, float rotation, boolean outer, boolean clockwise, float x, float y) {
+    private static void arcTo(float rx, float ry, float rotation, boolean outer, boolean clockwise, float x, float y) {
         //FLog.w(ReactConstants.TAG, "arc rx: " + rx + " ry: " + ry + " rotation: " + rotation + " outer: " + outer + " clockwise: " + clockwise + " x: " + x + " y: " + y);
         float tX = mPenX;
         float tY = mPenY;
@@ -376,7 +367,7 @@ class PathParser {
         }
     }
 
-    private void close() {
+    private static void close() {
         if (mPenDown) {
             mPenX = mPenDownX;
             mPenY = mPenDownY;
@@ -385,7 +376,7 @@ class PathParser {
         }
     }
 
-    private void arcToBezier(float cx, float cy, float rx, float ry, float sa, float ea, boolean clockwise, float rad) {
+    private static void arcToBezier(float cx, float cy, float rx, float ry, float sa, float ea, boolean clockwise, float rad) {
         // Inverse Rotation + Scale Transform
         float cos = (float) Math.cos(rad);
         float sin = (float) Math.sin(rad);
@@ -432,7 +423,7 @@ class PathParser {
         }
     }
 
-    private void setPenDown() {
+    private static void setPenDown() {
         if (!mPenDown) {
             mPenDownX = mPenX;
             mPenDownY = mPenY;
@@ -440,16 +431,16 @@ class PathParser {
         }
     }
 
-    private double round(double val) {
+    private static double round(double val) {
         double multiplier = Math.pow(10, 4);
         return Math.round(val * multiplier) / multiplier;
     }
 
-    private void skip_spaces() {
+    private static void skip_spaces() {
         while (i < l && Character.isWhitespace(s.charAt(i))) i++;
     }
 
-    private boolean is_cmd(char c) {
+    private static boolean is_cmd(char c) {
         switch (c) {
             case 'M':
             case 'm':
@@ -476,17 +467,17 @@ class PathParser {
         return false;
     }
 
-    private boolean is_number_start(char c) {
+    private static boolean is_number_start(char c) {
         return (c >= '0' && c <= '9') || c == '.' || c == '-' || c == '+';
     }
 
-    private boolean is_absolute(char c) {
+    private static boolean is_absolute(char c) {
         return Character.isUpperCase(c);
     }
 
     // By the SVG spec 'large-arc' and 'sweep' must contain only one char
     // and can be written without any separators, e.g.: 10 20 30 01 10 20.
-    private boolean parse_flag() {
+    private static boolean parse_flag() {
         skip_spaces();
 
         char c = s.charAt(i);
@@ -507,7 +498,7 @@ class PathParser {
         return c == '1';
     }
 
-    private float parse_list_number() {
+    private static float parse_list_number() {
         if (i == l) {
             throw new Error("UnexpectedEnd");
         }
@@ -519,7 +510,7 @@ class PathParser {
         return n;
     }
 
-    private float parse_number() {
+    private static float parse_number() {
         // Strip off leading whitespaces.
         skip_spaces();
 
@@ -585,13 +576,13 @@ class PathParser {
         return n;
     }
 
-    private void parse_list_separator() {
+    private static void parse_list_separator() {
         if (i < l && s.charAt(i) == ',') {
             i += 1;
         }
     }
 
-    private void skip_digits() {
+    private static void skip_digits() {
         while (i < l && Character.isDigit(s.charAt(i))) i++;
     }
 }
