@@ -101,7 +101,7 @@ export interface ClipProps {
   clipRule?: FillRule,
   clipPath?: string
 }
-  
+
 interface VectorEffectProps {
   vectorEffect?: "none" | "non-scaling-stroke" | "nonScalingStroke" | "default" | "inherit" | "uri";
 }
@@ -184,7 +184,7 @@ export interface CommonMaskProps {
   mask?: string;
 }
 
-export interface CommonPathProps extends FillProps, StrokeProps, ClipProps, TransformProps, VectorEffectProps, ResponderProps, TouchableProps, DefinitionProps, CommonMaskProps {}
+export interface CommonPathProps extends FillProps, StrokeProps, ClipProps, TransformProps, VectorEffectProps, ResponderProps, TouchableProps, DefinitionProps, CommonMaskProps { }
 
 // Element props
 export interface CircleProps extends CommonPathProps {
@@ -397,3 +397,25 @@ export interface MaskProps extends CommonPathProps {
   maskContentUnits?: TMaskUnits,
 }
 export const Mask: React.ComponentClass<MaskProps>;
+
+interface XMLElement {
+  tag: string,
+  children: XMLElement[] | void
+  props: any,
+  Tag: any // TODO: add tags?
+}
+
+export function parse(xml: string): XMLElement | null
+
+interface AstProps {
+  ast: XMLElement, override: any, children?: any
+}
+export const SvgAst: React.FunctionComponent<AstProps>
+
+interface SvgXmlProps { override?: any, xml: string }
+export const SvgXml: React.FunctionComponent<SvgXmlProps>
+export const SvgFromXml: React.ComponentClass<SvgXmlProps>
+
+interface SvgUriProps { uri: string }
+export const SvgUri: React.FunctionComponent<SvgUriProps>
+export const SvgFromUri: React.ComponentClass<SvgUriProps>

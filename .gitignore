@@ -45,3 +45,6 @@ cn-doc.md
 # experimental code
 #
 experimental/
+
+# VS Code
+.vscode/
