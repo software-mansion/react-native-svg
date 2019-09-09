@@ -3,7 +3,8 @@ import * as ReactNative from 'react-native';
 import { GestureResponderEvent } from 'react-native';
 
 // Common props
-type NumberProp = string | number;
+export type NumberProp = string | number;
+export type NumberArray = (NumberProp)[] | NumberProp;
 
 export type FillRule = 'evenodd' | 'nonzero';
 export type Units = 'userSpaceOnUse' | 'objectBoundingBox';
@@ -12,6 +13,7 @@ export type TextAnchor = 'start' | 'middle' | 'end';
 export type FontStyle = 'normal' | 'italic' | 'oblique';
 export type FontVariant = 'normal' | 'small-caps';
 export type FontWeight =
+  | NumberProp
   | 'normal'
   | 'bold'
   | 'bolder'
@@ -93,11 +95,11 @@ export interface ResponderProps extends ReactNative.GestureResponderHandlers {
 
 // rgba values inside range 0 to 1 inclusive
 // rgbaArray = [r, g, b, a]
-type rgbaArray = ReadonlyArray<number>;
+export type rgbaArray = ReadonlyArray<number>;
 
 // argb values inside range 0x00 to 0xff inclusive
 // int32ARGBColor = 0xaarrggbb
-type int32ARGBColor = number;
+export type int32ARGBColor = number;
 
 export interface FillProps {
   fill?: int32ARGBColor | rgbaArray | string;
@@ -110,7 +112,7 @@ export interface ClipProps {
   clipPath?: string;
 }
 
-interface VectorEffectProps {
+export interface VectorEffectProps {
   vectorEffect?:
     | 'none'
     | 'non-scaling-stroke'
@@ -147,7 +149,9 @@ export interface FontObject {
   letterSpacing?: NumberProp;
   wordSpacing?: NumberProp;
   kerning?: NumberProp;
-  fontVariantLigatures?: FontVariantLigatures;
+  fontFeatureSettings?: string;
+  fontVariantLigatures?: string;
+  fontVariationSettings?: string;
 }
 
 export interface FontProps extends FontObject {
@@ -155,22 +159,21 @@ export interface FontProps extends FontObject {
 }
 
 export interface TransformObject {
-  scale?: NumberProp;
-  scaleX?: NumberProp;
-  scaleY?: NumberProp;
-  rotate?: NumberProp;
-  rotation?: NumberProp;
-  translate?: NumberProp;
+  translate?: NumberArray;
   translateX?: NumberProp;
   translateY?: NumberProp;
-  x?: NumberProp;
-  y?: NumberProp;
-  origin?: NumberProp;
+  origin?: NumberArray;
   originX?: NumberProp;
   originY?: NumberProp;
-  skew?: NumberProp;
+  scale?: NumberArray;
+  scaleX?: NumberProp;
+  scaleY?: NumberProp;
+  skew?: NumberArray;
   skewX?: NumberProp;
   skewY?: NumberProp;
+  rotation?: NumberProp;
+  x?: NumberArray;
+  y?: NumberArray;
 }
 
 /*
@@ -188,7 +191,14 @@ export interface TransformObject {
   ╚═      ═╝
 
 */
-type ColumnMajorTransformMatrix = ReadonlyArray<number>;
+export type ColumnMajorTransformMatrix = [
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+];
 
 export interface TransformProps extends TransformObject {
   transform?: ColumnMajorTransformMatrix | string | TransformObject;
@@ -360,8 +370,12 @@ export interface SymbolProps {
 export const Symbol: React.ComponentClass<SymbolProps>;
 
 export interface TSpanProps extends CommonPathProps, FontProps {
-  dx?: NumberProp;
-  dy?: NumberProp;
+  x?: NumberArray;
+  y?: NumberArray;
+  dx?: NumberArray;
+  dy?: NumberArray;
+  rotate?: NumberArray;
+  inlineSize?: NumberProp;
 }
 export const TSpan: React.ComponentClass<TSpanProps>;
 
@@ -376,9 +390,13 @@ export interface TextSpecificProps extends CommonPathProps, FontProps {
 }
 
 export interface TextProps extends TextSpecificProps {
-  dx?: NumberProp;
-  dy?: NumberProp;
+  x?: NumberArray;
+  y?: NumberArray;
+  dx?: NumberArray;
+  dy?: NumberArray;
+  rotate?: NumberArray;
   opacity?: NumberProp;
+  inlineSize?: NumberProp;
 }
 export const Text: React.ComponentClass<TextProps>;
 
@@ -431,19 +449,19 @@ export interface AST {
   Tag: React.ComponentType;
 }
 
-interface UriProps extends SvgProps {
+export interface UriProps extends SvgProps {
   uri: string | null;
   override?: SvgProps;
 }
 export type UriState = { xml: string | null };
 
-interface XmlProps extends SvgProps {
+export interface XmlProps extends SvgProps {
   xml: string | null;
   override?: SvgProps;
 }
 export type XmlState = { ast: AST | null };
 
-interface AstProps extends SvgProps {
+export interface AstProps extends SvgProps {
   ast: AST | null;
   override?: SvgProps;
 }

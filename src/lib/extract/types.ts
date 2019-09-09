@@ -20,21 +20,21 @@ export type VectorEffect =
   | 'uri';
 
 export interface TransformProps {
-  translate?: NumberProp;
+  translate?: NumberArray;
   translateX?: NumberProp;
   translateY?: NumberProp;
-  origin?: NumberProp;
+  origin?: NumberArray;
   originX?: NumberProp;
   originY?: NumberProp;
-  scale?: NumberProp;
+  scale?: NumberArray;
   scaleX?: NumberProp;
   scaleY?: NumberProp;
-  skew?: NumberProp;
+  skew?: NumberArray;
   skewX?: NumberProp;
   skewY?: NumberProp;
   rotation?: NumberProp;
-  x?: NumberProp;
-  y?: NumberProp;
+  x?: NumberArray;
+  y?: NumberArray;
   transform?: number[] | string | TransformProps | void | undefined;
 }
 

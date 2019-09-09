@@ -87,7 +87,16 @@ export function props2transform(props: TransformProps): TransformedProps {
     y,
   } = props;
 
-  const tr = universal2axis(translate, translateX || x, translateY || y);
+  if (Array.isArray(x) || Array.isArray(y)) {
+    console.warn(
+      'Passing SvgLengthList to x or y attribute where SvgLength expected',
+    );
+  }
+  const tr = universal2axis(
+    translate,
+    translateX || (Array.isArray(x) ? x[0] : x),
+    translateY || (Array.isArray(y) ? y[0] : y),
+  );
   const or = universal2axis(origin, originX, originY);
   const sc = universal2axis(scale, scaleX, scaleY, 1);
   const sk = universal2axis(skew, skewX, skewY);

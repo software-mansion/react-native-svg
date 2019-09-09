@@ -1,7 +1,7 @@
 import React, { Children, ComponentType } from 'react';
 import extractLengthList from './extractLengthList';
 import { pickNotNil } from '../util';
-import { NumberProp } from './types';
+import { NumberArray, NumberProp } from './types';
 
 const fontRegExp = /^\s*((?:(?:normal|bold|italic)\s+)*)(?:(\d+(?:\.\d+)?(?:%|px|em|pt|pc|mm|cm|in]))*(?:\s*\/.*?)?\s+)?\s*"?([^"]*)/i;
 const fontFamilyPrefix = /^[\s"']*/;
@@ -126,15 +126,15 @@ function getChild(child: undefined | string | number | ComponentType) {
 }
 
 export type TextProps = {
-  x?: NumberProp;
-  y?: NumberProp;
-  dx?: NumberProp;
-  dy?: NumberProp;
-  rotate?: NumberProp;
+  x?: NumberArray;
+  y?: NumberArray;
+  dx?: NumberArray;
+  dy?: NumberArray;
+  rotate?: NumberArray;
   children?: string | number | (string | number | ComponentType)[];
   inlineSize?: NumberProp;
   baselineShift?: NumberProp;
-  verticalAlign?: string;
+  verticalAlign?: NumberProp;
   alignmentBaseline?: string;
 } & fontProps;
 
