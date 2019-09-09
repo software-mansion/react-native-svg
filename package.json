@@ -1,5 +1,5 @@
 {
-  "version": "9.9.0",
+  "version": "9.9.1",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -12,12 +12,6 @@
   "module": "lib/module/index.js",
   "react-native": "src/index.ts",
   "types": "src/index.d.ts",
-  "files": [
-    "lib/",
-    "src/",
-    "android/",
-    "ios/"
-  ],
   "@react-native-community/bob": {
     "source": "src",
     "output": "lib",
