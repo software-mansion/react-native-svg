@@ -152,7 +152,7 @@ export interface FontObject {
   wordSpacing?: NumberProp;
   kerning?: NumberProp;
   fontFeatureSettings?: string;
-  fontVariantLigatures?: string;
+  fontVariantLigatures?: FontVariantLigatures;
   fontVariationSettings?: string;
 }
 
