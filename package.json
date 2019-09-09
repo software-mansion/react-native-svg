@@ -14,7 +14,9 @@
   "types": "src/index.d.ts",
   "files": [
     "lib/",
-    "src/"
+    "src/",
+    "android/",
+    "ios/"
   ],
   "@react-native-community/bob": {
     "source": "src",
