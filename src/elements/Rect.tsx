@@ -48,4 +48,4 @@ export default class Rect extends Shape<{
   }
 }
 
-const RNSVGRect = requireNativeComponent('RNSVGRect');
+export const RNSVGRect = requireNativeComponent('RNSVGRect');

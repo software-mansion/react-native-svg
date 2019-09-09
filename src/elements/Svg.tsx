@@ -149,7 +149,7 @@ export default class Svg extends Shape<
       : null;
 
     return (
-      <NativeSvgView
+      <RNSVGSvg
         {...props}
         bbWidth={width}
         bbHeight={height}
@@ -179,9 +179,9 @@ export default class Svg extends Shape<
             strokeMiterlimit,
           }}
         />
-      </NativeSvgView>
+      </RNSVGSvg>
     );
   }
 }
 
-const NativeSvgView = requireNativeComponent('RNSVGSvgView');
+export const RNSVGSvg = requireNativeComponent('RNSVGSvgView');

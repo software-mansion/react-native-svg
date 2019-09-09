@@ -21,4 +21,4 @@ export default class ClipPath extends Shape<{
   }
 }
 
-const RNSVGClipPath = requireNativeComponent('RNSVGClipPath');
+export const RNSVGClipPath = requireNativeComponent('RNSVGClipPath');

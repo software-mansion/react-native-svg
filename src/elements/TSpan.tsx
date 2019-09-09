@@ -43,4 +43,4 @@ export default class TSpan extends Shape<{}> {
 
 setTSpan(TSpan);
 
-const RNSVGTSpan = requireNativeComponent('RNSVGTSpan');
+export const RNSVGTSpan = requireNativeComponent('RNSVGTSpan');

@@ -67,4 +67,4 @@ export default class Pattern extends Shape<{
   }
 }
 
-const RNSVGPattern = requireNativeComponent('RNSVGPattern');
+export const RNSVGPattern = requireNativeComponent('RNSVGPattern');

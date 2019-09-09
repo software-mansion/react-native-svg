@@ -120,7 +120,7 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
   componentDidMount() {
     this.parse(this.props.xml);
   }
-  componentDidUpdate(prevProps: { xml: string }) {
+  componentDidUpdate(prevProps: { xml: string | null }) {
     const { xml } = this.props;
     if (xml !== prevProps.xml) {
       this.parse(xml);

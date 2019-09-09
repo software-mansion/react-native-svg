@@ -61,4 +61,4 @@ export default class Use extends Shape<{
   }
 }
 
-const RNSVGUse = requireNativeComponent('RNSVGUse');
+export const RNSVGUse = requireNativeComponent('RNSVGUse');

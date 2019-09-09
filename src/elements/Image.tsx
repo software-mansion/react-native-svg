@@ -69,4 +69,4 @@ export default class SvgImage extends Shape<{
   }
 }
 
-const RNSVGImage = requireNativeComponent('RNSVGImage');
+export const RNSVGImage = requireNativeComponent('RNSVGImage');

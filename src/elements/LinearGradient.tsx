@@ -40,4 +40,6 @@ export default class LinearGradient extends Shape<{
   }
 }
 
-const RNSVGLinearGradient = requireNativeComponent('RNSVGLinearGradient');
+export const RNSVGLinearGradient = requireNativeComponent(
+  'RNSVGLinearGradient',
+);

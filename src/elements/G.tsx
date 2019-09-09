@@ -36,4 +36,4 @@ export default class G extends Shape<{}> {
   }
 }
 
-const RNSVGGroup = requireNativeComponent('RNSVGGroup');
+export const RNSVGGroup = requireNativeComponent('RNSVGGroup');

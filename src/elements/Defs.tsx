@@ -9,4 +9,4 @@ export default class Defs extends Component {
   }
 }
 
-const RNSVGDefs = requireNativeComponent('RNSVGDefs');
+export const RNSVGDefs = requireNativeComponent('RNSVGDefs');

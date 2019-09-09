@@ -20,4 +20,4 @@ export default class Path extends Shape<{
   }
 }
 
-const RNSVGPath = requireNativeComponent('RNSVGPath');
+export const RNSVGPath = requireNativeComponent('RNSVGPath');

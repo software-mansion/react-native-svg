@@ -58,4 +58,4 @@ export default class Mask extends Shape<{
   }
 }
 
-const RNSVGMask = requireNativeComponent('RNSVGMask');
+export const RNSVGMask = requireNativeComponent('RNSVGMask');

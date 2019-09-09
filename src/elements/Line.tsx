@@ -35,4 +35,4 @@ export default class Line extends Shape<{
   }
 }
 
-const RNSVGLine = requireNativeComponent('RNSVGLine');
+export const RNSVGLine = requireNativeComponent('RNSVGLine');

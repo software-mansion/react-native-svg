@@ -42,4 +42,4 @@ export default class Text extends Shape<{}> {
   }
 }
 
-const RNSVGText = requireNativeComponent('RNSVGText');
+export const RNSVGText = requireNativeComponent('RNSVGText');

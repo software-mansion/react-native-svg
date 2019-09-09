@@ -94,4 +94,4 @@ export default class TextPath extends Shape<{
   }
 }
 
-const RNSVGTextPath = requireNativeComponent('RNSVGTextPath');
+export const RNSVGTextPath = requireNativeComponent('RNSVGTextPath');

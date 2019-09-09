@@ -35,4 +35,4 @@ export default class Ellipse extends Shape<{
   }
 }
 
-const RNSVGEllipse = requireNativeComponent('RNSVGEllipse');
+export const RNSVGEllipse = requireNativeComponent('RNSVGEllipse');

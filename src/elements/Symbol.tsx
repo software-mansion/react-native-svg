@@ -21,4 +21,4 @@ export default class Symbol extends Shape<{
   }
 }
 
-const RNSVGSymbol = requireNativeComponent('RNSVGSymbol');
+export const RNSVGSymbol = requireNativeComponent('RNSVGSymbol');

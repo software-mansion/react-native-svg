@@ -1,25 +1,26 @@
-import Rect from './elements/Rect';
-import Circle from './elements/Circle';
-import Ellipse from './elements/Ellipse';
+import Shape from './elements/Shape';
+import Rect, { RNSVGRect } from './elements/Rect';
+import Circle, { RNSVGCircle } from './elements/Circle';
+import Ellipse, { RNSVGEllipse } from './elements/Ellipse';
 import Polygon from './elements/Polygon';
 import Polyline from './elements/Polyline';
-import Line from './elements/Line';
-import Svg from './elements/Svg';
-import Path from './elements/Path';
-import G from './elements/G';
-import Text from './elements/Text';
-import TSpan from './elements/TSpan';
-import TextPath from './elements/TextPath';
-import Use from './elements/Use';
-import Image from './elements/Image';
-import Symbol from './elements/Symbol';
-import Defs from './elements/Defs';
-import LinearGradient from './elements/LinearGradient';
-import RadialGradient from './elements/RadialGradient';
+import Line, { RNSVGLine } from './elements/Line';
+import Svg, { RNSVGSvg } from './elements/Svg';
+import Path, { RNSVGPath } from './elements/Path';
+import G, { RNSVGGroup } from './elements/G';
+import Text, { RNSVGText } from './elements/Text';
+import TSpan, { RNSVGTSpan } from './elements/TSpan';
+import TextPath, { RNSVGTextPath } from './elements/TextPath';
+import Use, { RNSVGUse } from './elements/Use';
+import Image, { RNSVGImage } from './elements/Image';
+import Symbol, { RNSVGSymbol } from './elements/Symbol';
+import Defs, { RNSVGDefs } from './elements/Defs';
+import LinearGradient, { RNSVGLinearGradient } from './elements/LinearGradient';
+import RadialGradient, { RNSVGRadialGradient } from './elements/RadialGradient';
 import Stop from './elements/Stop';
-import ClipPath from './elements/ClipPath';
-import Pattern from './elements/Pattern';
-import Mask from './elements/Mask';
+import ClipPath, { RNSVGClipPath } from './elements/ClipPath';
+import Pattern, { RNSVGPattern } from './elements/Pattern';
+import Mask, { RNSVGMask } from './elements/Mask';
 import { parse, SvgAst, SvgFromUri, SvgFromXml, SvgUri, SvgXml } from './xml';
 
 export {
@@ -51,6 +52,26 @@ export {
   SvgFromXml,
   SvgUri,
   SvgXml,
+  Shape,
+  RNSVGMask,
+  RNSVGPattern,
+  RNSVGClipPath,
+  RNSVGRadialGradient,
+  RNSVGLinearGradient,
+  RNSVGDefs,
+  RNSVGSymbol,
+  RNSVGImage,
+  RNSVGUse,
+  RNSVGTextPath,
+  RNSVGTSpan,
+  RNSVGText,
+  RNSVGGroup,
+  RNSVGPath,
+  RNSVGLine,
+  RNSVGEllipse,
+  RNSVGCircle,
+  RNSVGRect,
+  RNSVGSvg,
 };
 
 export default Svg;

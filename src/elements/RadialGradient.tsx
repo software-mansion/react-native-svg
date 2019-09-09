@@ -46,4 +46,6 @@ export default class RadialGradient extends Shape<{
   }
 }
 
-const RNSVGRadialGradient = requireNativeComponent('RNSVGRadialGradient');
+export const RNSVGRadialGradient = requireNativeComponent(
+  'RNSVGRadialGradient',
+);

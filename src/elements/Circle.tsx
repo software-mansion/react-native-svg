@@ -32,4 +32,4 @@ export default class Circle extends Shape<{
   }
 }
 
-const RNSVGCircle = requireNativeComponent('RNSVGCircle');
+export const RNSVGCircle = requireNativeComponent('RNSVGCircle');
