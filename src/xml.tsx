@@ -3,7 +3,6 @@ import React, {
   useState,
   useEffect,
   useMemo,
-  ReactElement,
   ComponentType,
 } from 'react';
 import Rect from './elements/Rect';
@@ -60,7 +59,7 @@ function missingTag() {
 
 export interface AST {
   tag: string;
-  children: (AST | string)[] | (ReactElement | string)[];
+  children: (AST | string)[] | (JSX.Element | string)[];
   props: {};
   Tag: ComponentType;
 }
@@ -195,7 +194,7 @@ export function getStyle(string: string): Styles {
 export function astToReact(
   value: AST | string,
   index: number,
-): ReactElement | string {
+): JSX.Element | string {
   if (typeof value === 'object') {
     const { Tag, props, children } = value;
     return (

@@ -426,7 +426,7 @@ export const Mask: React.ComponentClass<MaskProps>;
 
 export interface AST {
   tag: string;
-  children: (AST | string)[] | (React.ReactElement | string)[];
+  children: (AST | string)[] | (JSX.Element | string)[];
   props: {};
   Tag: React.ComponentType;
 }
