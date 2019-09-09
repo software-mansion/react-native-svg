@@ -101,8 +101,10 @@ export type rgbaArray = ReadonlyArray<number>;
 // int32ARGBColor = 0xaarrggbb
 export type int32ARGBColor = number;
 
+export type Color = int32ARGBColor | rgbaArray | string;
+
 export interface FillProps {
-  fill?: int32ARGBColor | rgbaArray | string;
+  fill?: Color;
   fillOpacity?: NumberProp;
   fillRule?: FillRule;
 }
@@ -127,7 +129,7 @@ export interface DefinitionProps {
 }
 
 export interface StrokeProps {
-  stroke?: int32ARGBColor | rgbaArray | string;
+  stroke?: Color;
   strokeWidth?: NumberProp;
   strokeOpacity?: NumberProp;
   strokeDasharray?: ReadonlyArray<NumberProp> | NumberProp;
@@ -342,7 +344,7 @@ export interface RectProps extends CommonPathProps {
 export const Rect: React.ComponentClass<RectProps>;
 
 export interface StopProps {
-  stopColor?: int32ARGBColor | rgbaArray | string;
+  stopColor?: Color;
   stopOpacity?: NumberProp;
   offset?: NumberProp;
 }
@@ -353,7 +355,7 @@ export interface SvgProps extends GProps, ReactNative.ViewProperties {
   height?: NumberProp;
   viewBox?: string;
   preserveAspectRatio?: string;
-  color?: int32ARGBColor | rgbaArray | string;
+  color?: Color;
   title?: string;
 }
 
