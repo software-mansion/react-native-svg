@@ -46,3 +46,6 @@ cn-doc.md
 #
 experimental/
 /lib/
+
+# VS Code
+.vscode/

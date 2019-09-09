@@ -423,3 +423,37 @@ export interface MaskProps extends CommonPathProps {
   maskContentUnits?: TMaskUnits;
 }
 export const Mask: React.ComponentClass<MaskProps>;
+
+export interface AST {
+  tag: string;
+  children: (AST | string)[] | (React.ReactElement | string)[];
+  props: {};
+  Tag: React.ComponentType;
+}
+
+interface UriProps extends SvgProps {
+  uri: string | null;
+  override?: SvgProps;
+}
+export type UriState = { xml: string | null };
+
+interface XmlProps extends SvgProps {
+  xml: string | null;
+  override?: SvgProps;
+}
+export type XmlState = { ast: AST | null };
+
+interface AstProps extends SvgProps {
+  ast: AST | null;
+  override?: SvgProps;
+}
+
+export function parse(xml: string): AST | null;
+
+export const SvgAst: React.FunctionComponent<AstProps>;
+
+export const SvgXml: React.FunctionComponent<XmlProps>;
+export const SvgFromXml: React.ComponentClass<XmlProps, XmlState>;
+
+export const SvgUri: React.FunctionComponent<UriProps>;
+export const SvgFromUri: React.ComponentClass<UriProps, UriState>;
