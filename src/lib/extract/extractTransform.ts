@@ -33,7 +33,7 @@ function universal2axis(
   axisX: NumberProp | void,
   axisY: NumberProp | void,
   defaultValue?: number,
-) {
+): [number, number] {
   let x;
   let y;
   if (typeof universal === 'number') {
@@ -108,7 +108,7 @@ export function props2transform(props: TransformProps): TransformedProps {
 export function transformToMatrix(
   props: TransformedProps,
   transform: number[] | string | TransformProps | void | undefined,
-) {
+): [number, number, number, number, number, number] {
   reset();
   appendTransformProps(props);
 

@@ -4,7 +4,14 @@
  */
 const DEG_TO_RAD = Math.PI / 180;
 
-export const identity = [1, 0, 0, 1, 0, 0];
+export const identity: [number, number, number, number, number, number] = [
+  1,
+  0,
+  0,
+  1,
+  0,
+  0,
+];
 
 let a = 1;
 let b = 0;
@@ -44,7 +51,7 @@ export function reset() {
  * @method toArray
  * @return {Array} an array with current matrix values.
  **/
-export function toArray() {
+export function toArray(): [number, number, number, number, number, number] {
   if (hasInitialState) {
     return identity;
   }

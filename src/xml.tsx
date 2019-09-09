@@ -247,7 +247,7 @@ const validNameCharacters = /[a-zA-Z0-9:_-]/;
 const whitespace = /[\s\t\r\n]/;
 const quotemarks = /['"]/;
 
-export function parse(source: string) {
+export function parse(source: string): AST | null {
   const length = source.length;
   let currentElement: AST | null = null;
   let state = metadata;
