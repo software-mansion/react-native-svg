@@ -58,14 +58,25 @@ function missingTag() {
   return null;
 }
 
-interface AST {
+export interface AST {
   tag: string;
   children: (AST | string)[] | (ReactElement | string)[];
   props: {};
   Tag: ComponentType;
 }
 
-export function SvgAst({ ast, override }: { ast: AST; override?: Object }) {
+export type UriProps = { uri: string | null; override?: Object };
+export type UriState = { xml: string | null };
+
+export type XmlProps = { xml: string | null; override?: Object };
+export type XmlState = { ast: AST | null };
+
+export type AstProps = { ast: AST | null; override?: Object };
+
+export function SvgAst({ ast, override }: AstProps) {
+  if (!ast) {
+    return null;
+  }
   const { props, children } = ast;
   return (
     <Svg {...props} {...override}>
@@ -74,10 +85,12 @@ export function SvgAst({ ast, override }: { ast: AST; override?: Object }) {
   );
 }
 
-export function SvgXml(props: { xml: string; override?: Object }) {
+export function SvgXml(props: XmlProps) {
   const { xml, override } = props;
-  const ast = useMemo(() => xml && parse(xml), [xml]);
-  return (ast && <SvgAst ast={ast} override={override || props} />) || null;
+  const ast = useMemo<AST | null>(() => (xml !== null ? parse(xml) : null), [
+    xml,
+  ]);
+  return <SvgAst ast={ast} override={override || props} />;
 }
 
 async function fetchText(uri: string) {
@@ -87,21 +100,23 @@ async function fetchText(uri: string) {
 
 const err = console.error.bind(console);
 
-export function SvgUri(props: { uri: string; override?: Object }) {
+export function SvgUri(props: UriProps) {
   const { uri } = props;
-  const [xml, setXml] = useState();
+  const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
-    fetchText(uri)
-      .then(setXml)
-      .catch(err);
+    uri
+      ? fetchText(uri)
+          .then(setXml)
+          .catch(err)
+      : setXml(null);
   }, [uri]);
-  return (xml && <SvgXml xml={xml} override={props} />) || null;
+  return <SvgXml xml={xml} override={props} />;
 }
 
 // Extending Component is required for Animated support.
 
-export class SvgFromXml extends Component<{ xml: string; override?: Object }> {
-  state: { ast?: AST } = {};
+export class SvgFromXml extends Component<XmlProps, XmlState> {
+  state = { ast: null };
   componentDidMount() {
     this.parse(this.props.xml);
   }
@@ -111,9 +126,9 @@ export class SvgFromXml extends Component<{ xml: string; override?: Object }> {
       this.parse(xml);
     }
   }
-  parse(xml: string) {
+  parse(xml: string | null) {
     try {
-      this.setState({ ast: parse(xml) });
+      this.setState({ ast: xml ? parse(xml) : null });
     } catch (e) {
       console.error(e);
     }
@@ -123,24 +138,24 @@ export class SvgFromXml extends Component<{ xml: string; override?: Object }> {
       props,
       state: { ast },
     } = this;
-    return ast ? <SvgAst ast={ast} override={props.override || props} /> : null;
+    return <SvgAst ast={ast} override={props.override || props} />;
   }
 }
 
-export class SvgFromUri extends Component<{ uri: string; override?: Object }> {
-  state: { xml?: string } = {};
+export class SvgFromUri extends Component<UriProps, UriState> {
+  state = { xml: null };
   componentDidMount() {
     this.fetch(this.props.uri);
   }
-  componentDidUpdate(prevProps: { uri: string }) {
+  componentDidUpdate(prevProps: { uri: string | null }) {
     const { uri } = this.props;
     if (uri !== prevProps.uri) {
       this.fetch(uri);
     }
   }
-  async fetch(uri: string) {
+  async fetch(uri: string | null) {
     try {
-      this.setState({ xml: await fetchText(uri) });
+      this.setState({ xml: uri ? await fetchText(uri) : null });
     } catch (e) {
       console.error(e);
     }
@@ -150,7 +165,7 @@ export class SvgFromUri extends Component<{ uri: string; override?: Object }> {
       props,
       state: { xml },
     } = this;
-    return xml ? <SvgFromXml xml={xml} override={props} /> : null;
+    return <SvgFromXml xml={xml} override={props} />;
   }
 }
 

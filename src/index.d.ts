@@ -219,7 +219,7 @@ export interface CircleProps extends CommonPathProps {
 export const Circle: React.ComponentClass<CircleProps>;
 
 export interface ClipPathProps {
-  id: string;
+  id?: string;
 }
 export const ClipPath: React.ComponentClass<ClipPathProps>;
 
@@ -249,7 +249,7 @@ export interface ImageProps
   width?: NumberProp;
   height?: NumberProp;
   xlinkHref?: ReactNative.ImageProps['source'];
-  href: ReactNative.ImageProps['source'];
+  href?: ReactNative.ImageProps['source'];
   preserveAspectRatio?: string;
   opacity?: NumberProp;
   clipPath?: string;
@@ -271,18 +271,18 @@ export interface LinearGradientProps {
   y1?: NumberProp;
   y2?: NumberProp;
   gradientUnits?: Units;
-  id: string;
+  id?: string;
 }
 export const LinearGradient: React.ComponentClass<LinearGradientProps>;
 
 export interface PathProps extends CommonPathProps {
-  d: string;
+  d?: string;
   opacity?: NumberProp;
 }
 export const Path: React.ComponentClass<PathProps>;
 
 export interface PatternProps {
-  id: string;
+  id?: string;
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
@@ -297,13 +297,13 @@ export const Pattern: React.ComponentClass<PatternProps>;
 
 export interface PolygonProps extends CommonPathProps {
   opacity?: NumberProp;
-  points: string | ReadonlyArray<NumberProp>;
+  points?: string | ReadonlyArray<NumberProp>;
 }
 export const Polygon: React.ComponentClass<PolygonProps>;
 
 export interface PolylineProps extends CommonPathProps {
   opacity?: NumberProp;
-  points: string | ReadonlyArray<NumberProp>;
+  points?: string | ReadonlyArray<NumberProp>;
 }
 export const Polyline: React.ComponentClass<PolylineProps>;
 
@@ -316,7 +316,7 @@ export interface RadialGradientProps {
   cy?: NumberProp;
   r?: NumberProp;
   gradientUnits?: Units;
-  id: string;
+  id?: string;
 }
 export const RadialGradient: React.ComponentClass<RadialGradientProps>;
 
@@ -352,7 +352,7 @@ export const Svg: React.ComponentClass<SvgProps>;
 export default Svg;
 
 export interface SymbolProps {
-  id: string;
+  id?: string;
   viewBox?: string;
   preserveAspectRatio?: string;
   opacity?: NumberProp;
@@ -384,17 +384,17 @@ export const Text: React.ComponentClass<TextProps>;
 
 export interface TextPathProps extends TextSpecificProps {
   xlinkHref?: string;
-  href: string;
+  href?: string;
   startOffset?: NumberProp;
   method?: TextPathMethod;
   spacing?: TextPathSpacing;
-  midLine: TextPathMidLine;
+  midLine?: TextPathMidLine;
 }
 export const TextPath: React.ComponentClass<TextPathProps>;
 
 export interface UseProps extends CommonPathProps {
   xlinkHref?: string;
-  href: string;
+  href?: string;
   width?: NumberProp;
   height?: NumberProp;
   x?: NumberProp;
@@ -413,7 +413,7 @@ export type TMaskUnits =
   | EMaskUnits.OBJECT_BOUNDING_BOX;
 
 export interface MaskProps extends CommonPathProps {
-  id: string;
+  id?: string;
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
