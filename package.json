@@ -1,43 +1,69 @@
 {
-    "version": "9.8.5",
-    "name": "react-native-svg",
-    "description": "SVG library for react-native",
-    "homepage": "https://github.com/react-native-community/react-native-svg",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/react-native-community/react-native-svg"
-    },
-    "license": "MIT",
-    "main": "./index",
-    "keywords": [
-        "react-component",
-        "react-native",
-        "ios",
-        "android",
-        "SVG",
-        "ART",
-        "VML",
-        "gradient"
-    ],
-    "scripts": {
-        "lint": "eslint ./",
-        "format": "prettier index.js  index.web.js xml.js README.md './{elements,lib}/*.js' './lib/extract/e*.js' --write",
-        "peg": "pegjs -o ./lib/extract/transform.js ./lib/extract/transform.peg"
-    },
-    "peerDependencies": {
-        "react": "*",
-        "react-native": ">=0.50.0"
-    },
-    "dependencies": {},
-    "devDependencies": {
-        "@react-native-community/eslint-config": "^0.0.5",
-        "babel-eslint": "^10.0.3",
-        "eslint": "^6.2.2",
-        "eslint-plugin-prettier": "^3.1.0",
-        "eslint-plugin-react": "^7.14.3",
-        "pegjs": "^0.10.0",
-        "prettier": "^1.18.2",
-        "react": "^16.9.0"
-    },
-    "nativePackage": true
+  "version": "9.8.5",
+  "name": "react-native-svg",
+  "description": "SVG library for react-native",
+  "homepage": "https://github.com/react-native-community/react-native-svg",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/react-native-community/react-native-svg"
+  },
+  "license": "MIT",
+  "main": "lib/commonjs/index.js",
+  "module": "lib/module/index.js",
+  "react-native": "src/index.js",
+  "types": "lib/typescript/src/index.d.ts",
+  "files": [
+    "lib/",
+    "src/"
+  ],
+  "@react-native-community/bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
+    ]
+  },
+  "keywords": [
+    "react-component",
+    "react-native",
+    "ios",
+    "android",
+    "SVG",
+    "ART",
+    "VML",
+    "gradient"
+  ],
+  "scripts": {
+    "lint": "eslint --ext .ts,.tsx src",
+    "format": "prettier README.md './src/**/*.{ts,tsx}' src/index.d.ts --write",
+    "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
+    "tsc": "tsc --noEmit",
+    "test": "yarn lint && yarn tsc",
+    "prepare": "bob build",
+    "semantic-release": "semantic-release"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": ">=0.50.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@react-native-community/bob": "^0.7.0",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "@types/react": "^16.9.2",
+    "@types/react-native": "^0.60.12",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.2.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
+    "pegjs": "^0.10.0",
+    "prettier": "^1.18.2",
+    "react": "^16.9.0",
+    "semantic-release": "^15.13.24",
+    "semantic-release-cli": "^5.2.1",
+    "typescript": "^3.6.2"
+  },
+  "nativePackage": true
 }

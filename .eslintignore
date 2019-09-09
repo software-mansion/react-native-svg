@@ -2,7 +2,7 @@
 Example/examples/
 Example/android/
 Example/ios/
-screenShoots/
+screenshots/
 android/
 ios/
-lib/extract/transform.js
+src/lib/extract/transform.js

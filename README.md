@@ -171,8 +171,10 @@ and run `pod install` from `ios` folder
 ### Troubleshooting
 
 #### Problems with Proguard
+
 When Proguard is enabled (which it is by default for Android release builds), it causes runtine error
 To avoid this, add an exception to `android/app/proguard-rules.pro`:
+
 ```bash
 -keep public class com.horcrux.svg.** {*;}
 ```
@@ -223,7 +225,7 @@ If you suspect that you've found a spec conformance bug, then you can test using
 
 Here's a simple example. To render output like this:
 
-![SVG example](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/svg.png)
+![SVG example](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/svg.png)
 
 Use the following code:
 
@@ -464,7 +466,7 @@ Colors set in the Svg element are inherited by its children:
 </Svg>
 ```
 
-![Pencil](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/pencil.png)
+![Pencil](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/pencil.png)
 
 Code explanation:
 
@@ -490,7 +492,7 @@ The <Rect> element is used to create a rectangle and variations of a rectangle s
 </Svg>
 ```
 
-![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/rect.png)
+![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/rect.png)
 
 Code explanation:
 
@@ -508,7 +510,7 @@ The <Circle> element is used to create a circle:
 </Svg>
 ```
 
-![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/circle.png)
+![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/circle.png)
 
 Code explanation:
 
@@ -535,7 +537,7 @@ An ellipse is closely related to a circle. The difference is that an ellipse has
 </Svg>
 ```
 
-![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/ellipse.png)
+![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/ellipse.png)
 
 Code explanation:
 
@@ -554,7 +556,7 @@ The <Line> element is an SVG basic shape, used to create a line connecting two p
 </Svg>
 ```
 
-![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/line.png)
+![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/line.png)
 
 Code explanation:
 
@@ -578,7 +580,7 @@ The <Polygon> element is used to create a graphic that contains at least three s
 </Svg>
 ```
 
-![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/polygon.png)
+![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/polygon.png)
 
 Code explanation:
 
@@ -599,7 +601,7 @@ The <Polyline> element is used to create any shape that consists of only straigh
 </Svg>
 ```
 
-![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/polyline.png)
+![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/polyline.png)
 
 Code explanation:
 
@@ -634,7 +636,7 @@ The following commands are available for path data:
 </Svg>
 ```
 
-![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/path.png)
+![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/path.png)
 
 #### Text
 
@@ -656,7 +658,7 @@ The <Text> element is used to define text.
 </Svg>
 ```
 
-![Text](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/text.png)
+![Text](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/text.png)
 
 #### TSpan
 
@@ -689,7 +691,7 @@ The <TSpan> element is used to draw multiple lines of text in SVG. Rather than h
 </Svg>
 ```
 
-![TSpan](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/tspan.png)
+![TSpan](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/tspan.png)
 
 #### TextPath
 
@@ -714,7 +716,7 @@ In addition to text drawn in a straight line, SVG also includes the ability to p
 </Svg>
 ```
 
-![TextPath](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/text-path.png)
+![TextPath](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/text-path.png)
 
 #### G
 
@@ -734,7 +736,7 @@ The <G> element is a container used to group other SVG elements. Transformations
 </Svg>
 ```
 
-![G](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/g.png)
+![G](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/g.png)
 
 #### Use
 
@@ -762,7 +764,7 @@ Before the <G> element can be referenced, it must have an ID set on it via its i
 
 The <Use> element specifies where to show the reused shapes via its x and y props. Notice that the shapes inside the <G> element are located at 0,0. That is done because their position is added to the position specified in the <Use> element.
 
-![use](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/use.png)
+![use](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/use.png)
 
 #### Symbol
 
@@ -788,7 +790,7 @@ The SVG <Symbol> element is used to define reusable symbols. The shapes nested i
 </Svg>
 ```
 
-![Symbol](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/symbol.png)
+![Symbol](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/symbol.png)
 
 #### Defs
 
@@ -831,7 +833,7 @@ The <Image> element allows a raster image to be included in an Svg componenet.
 </Svg>
 ```
 
-![Image](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/image.png)
+![Image](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/image.png)
 
 #### ClipPath
 
@@ -883,7 +885,7 @@ The <ClipPath> SVG element defines a clipping path. A clipping path is used/refe
 </Svg>
 ```
 
-![ClipPath](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/clip-path.png)
+![ClipPath](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/clip-path.png)
 
 #### LinearGradient
 
@@ -915,7 +917,7 @@ Code explanation:
 - The color range for a gradient can be composed of two or more colors. Each color is specified with a <Stop> tag. The offset prop is used to define where the gradient color begin and end
 - The fill prop links the ellipse element to the gradient
 
-![LinearGradient](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/lineargradient.png)
+![LinearGradient](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/lineargradient.png)
 
 _NOTICE:_
 LinearGradient also supports percentage as prop:
@@ -961,7 +963,7 @@ Code explanation:
 - The color range for a gradient can be composed of two or more colors. Each color is specified with a <stop> tag. The offset prop is used to define where the gradient color begin and end
 - The fill prop links the ellipse element to the gradient
 
-![RadialGradient](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/radialgradient.png)
+![RadialGradient](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/radialgradient.png)
 
 #### Mask
 
@@ -1084,7 +1086,7 @@ You can use these events to provide interactivity to your react-native-svg compo
 />
 ```
 
-![TouchEvents](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenShoots/touchevents.gif)
+![TouchEvents](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/touchevents.gif)
 
 For more examples of touch in action, checkout the [TouchEvents.js examples](https://github.com/magicismight/react-native-svg-example/blob/master/examples/TouchEvents.js).
 
