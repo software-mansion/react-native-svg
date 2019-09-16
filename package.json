@@ -48,10 +48,12 @@
   "devDependencies": {
     "@react-native-community/bob": "^0.7.0",
     "@react-native-community/eslint-config": "^0.0.5",
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/git": "^7.0.16",
     "@types/react": "^16.9.2",
-    "@types/react-native": "^0.60.12",
+    "@types/react-native": "^0.60.14",
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.2.2",
+    "eslint": "^6.4.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
     "pegjs": "^0.10.0",
@@ -59,7 +61,17 @@
     "react": "^16.9.0",
     "semantic-release": "^15.13.24",
     "semantic-release-cli": "^5.2.1",
-    "typescript": "^3.6.2"
+    "typescript": "^3.6.3"
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      "@semantic-release/git"
+    ]
   },
   "nativePackage": true
 }
