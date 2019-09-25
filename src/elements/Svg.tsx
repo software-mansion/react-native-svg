@@ -9,6 +9,7 @@ import {
   MeasureInWindowOnSuccessCallback,
 } from 'react-native';
 import {
+  Color,
   ClipProps,
   FillProps,
   NumberProp,
@@ -19,6 +20,7 @@ import {
 } from '../lib/extract/types';
 import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
+import extractColor from '../lib/extract/extractColor';
 import Shape from './Shape';
 import G from './G';
 
@@ -33,6 +35,7 @@ const styles = StyleSheet.create({
 
 export default class Svg extends Shape<
   {
+    color?: Color;
     style?: [] | {};
     viewBox?: string;
     opacity?: NumberProp;
@@ -148,12 +151,14 @@ export default class Svg extends Shape<
         }
       : null;
 
+    const tint = extractColor(color);
     return (
       <RNSVGSvg
         {...props}
         bbWidth={width}
         bbHeight={height}
-        tintColor={color}
+        color={tint}
+        tintColor={tint}
         onLayout={onLayout}
         ref={this.refMethod}
         style={[styles.svg, style, opacityStyle, dimensions]}

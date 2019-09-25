@@ -169,7 +169,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         }
     }
 
-    @ReactProp(name = "tintColor", customType = "Color")
+    @ReactProp(name = "tintColor")
     public void setTintColor(@Nullable Integer tintColor) {
         if (tintColor == null) {
             mTintColor = 0;
