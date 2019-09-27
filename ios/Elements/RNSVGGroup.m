@@ -140,6 +140,7 @@
         if ([node isKindOfClass:[RNSVGNode class]] && ![node isKindOfClass:[RNSVGMask class]]) {
             CGAffineTransform transform = CGAffineTransformConcat(node.matrix, node.transforms);
             CGPathAddPath(path, &transform, [node getPath:context]);
+            node.dirty = false;
         }
         return YES;
     }];
