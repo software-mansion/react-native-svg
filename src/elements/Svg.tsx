@@ -114,6 +114,7 @@ export default class Svg extends Shape<
       color,
       width,
       height,
+      focusable,
 
       // Inherited G properties
       font,
@@ -162,6 +163,7 @@ export default class Svg extends Shape<
         onLayout={onLayout}
         ref={this.refMethod}
         style={[styles.svg, style, opacityStyle, dimensions]}
+        focusable={Boolean(focusable) && focusable !== 'false'}
         {...extractResponder(props, this as ResponderInstanceProps)}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
       >
