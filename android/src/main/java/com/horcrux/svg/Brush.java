@@ -154,7 +154,12 @@ class Brush {
             return;
         }
 
-        int stopsCount = mColors.size() / 2;
+        int size = mColors.size();
+        if (size == 0) {
+            FLog.w(ReactConstants.TAG, "Gradient contains no stops");
+            return;
+        }
+        int stopsCount = size / 2;
         int[] stopsColors = new int[stopsCount];
         float[] stops = new float[stopsCount];
         parseGradientStops(mColors, stopsCount, stops, stopsColors, opacity);
@@ -167,7 +172,7 @@ class Brush {
             // editors or other tools, so let's handle that gracefully.
             stopsColors = new int[] { stopsColors[0], stopsColors[0] };
             stops = new float[] { stops[0], stops[0] };
-            FLog.w(ReactConstants.TAG, "Gradient contains only on stop");
+            FLog.w(ReactConstants.TAG, "Gradient contains only one stop");
         }
 
         if (mType == BrushType.LINEAR_GRADIENT) {

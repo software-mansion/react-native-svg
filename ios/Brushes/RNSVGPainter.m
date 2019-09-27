@@ -187,6 +187,10 @@ void PatternFunction(void* info, CGContextRef context)
 
 - (void)paintLinearGradient:(CGContextRef)context bounds:(CGRect)bounds
 {
+    if ([_colors count] == 0) {
+        RCTLogWarn(@"No stops in gradient");
+        return;
+    }
     CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:_colors]);
     CGGradientDrawingOptions extendOptions = kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
 
@@ -208,6 +212,10 @@ void PatternFunction(void* info, CGContextRef context)
 
 - (void)paintRadialGradient:(CGContextRef)context bounds:(CGRect)bounds
 {
+    if ([_colors count] == 0) {
+        RCTLogWarn(@"No stops in gradient");
+        return;
+    }
     CGGradientRef gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:_colors]);
     CGGradientDrawingOptions extendOptions = kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation;
 
