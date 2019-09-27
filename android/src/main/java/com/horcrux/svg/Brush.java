@@ -171,10 +171,10 @@ class Brush {
         }
 
         if (mType == BrushType.LINEAR_GRADIENT) {
-            double x1 = PropHelper.fromRelative(mPoints[0], width, offsetX, scale, textSize);
-            double y1 = PropHelper.fromRelative(mPoints[1], height, offsetY, scale, textSize);
-            double x2 = PropHelper.fromRelative(mPoints[2], width, offsetX, scale, textSize);
-            double y2 = PropHelper.fromRelative(mPoints[3], height, offsetY, scale, textSize);
+            double x1 = getVal(mPoints[0], width, scale, textSize) + offsetX;
+            double y1 = getVal(mPoints[1], height, scale, textSize) + offsetY;
+            double x2 = getVal(mPoints[2], width, scale, textSize) + offsetX;
+            double y2 = getVal(mPoints[3], height, scale, textSize) + offsetY;
 
             Shader linearGradient = new LinearGradient(
                 (float) x1,
@@ -193,13 +193,18 @@ class Brush {
 
             paint.setShader(linearGradient);
         } else if (mType == BrushType.RADIAL_GRADIENT) {
-            double rx = PropHelper.fromRelative(mPoints[2], width, 0f, scale, textSize);
-            double ry = PropHelper.fromRelative(mPoints[3], height, 0f, scale, textSize);
-            double cx = PropHelper.fromRelative(mPoints[4], width, offsetX, scale, textSize);
-            double cy = PropHelper.fromRelative(mPoints[5], height, offsetY, scale, textSize) / (ry / rx);
+            double rx = getVal(mPoints[2], width, scale, textSize);
+            double ry = getVal(mPoints[3], height, scale, textSize);
+
+            double ratio = ry / rx;
+
+            double cx = getVal(mPoints[4], width, scale, textSize) + offsetX;
+            double cy = getVal(mPoints[5], height, scale, textSize) + offsetY / ratio;
+
             // TODO: support focus point.
             //double fx = PropHelper.fromRelative(mPoints[0], width, offsetX, scale);
             //double fy = PropHelper.fromRelative(mPoints[1], height, offsetY, scale) / (ry / rx);
+
             Shader radialGradient = new RadialGradient(
                     (float) cx,
                     (float) cy,
@@ -210,7 +215,7 @@ class Brush {
             );
 
             Matrix radialMatrix = new Matrix();
-            radialMatrix.preScale(1f, (float) (ry / rx));
+            radialMatrix.preScale(1f, (float) ratio);
 
             if (mMatrix != null) {
                 radialMatrix.preConcat(mMatrix);

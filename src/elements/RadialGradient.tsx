@@ -21,8 +21,6 @@ export default class RadialGradient extends Shape<{
   static displayName = 'RadialGradient';
 
   static defaultProps = {
-    fx: '50%',
-    fy: '50%',
     cx: '50%',
     cy: '50%',
     r: '50%',
@@ -30,7 +28,7 @@ export default class RadialGradient extends Shape<{
 
   render() {
     const { props } = this;
-    const { fx, fy, rx, ry, r, cx, cy } = props;
+    const { rx, ry, r, cx, cy, fx = cx, fy = cy } = props;
     return (
       <RNSVGRadialGradient
         ref={this.refMethod}

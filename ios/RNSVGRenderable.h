@@ -13,7 +13,6 @@
 #import "RNSVGNode.h"
 #import "RNSVGLength.h"
 #import "RNSVGVectorEffect.h"
-#import "RNSVGPercentageConverter.h"
 
 @interface RNSVGRenderable : RNSVGNode
 
