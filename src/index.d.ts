@@ -283,6 +283,7 @@ export interface LinearGradientProps {
   y1?: NumberProp;
   y2?: NumberProp;
   gradientUnits?: Units;
+  gradientTransform?: ColumnMajorTransformMatrix | string;
   id?: string;
 }
 export const LinearGradient: React.ComponentClass<LinearGradientProps>;
@@ -328,6 +329,7 @@ export interface RadialGradientProps {
   cy?: NumberProp;
   r?: NumberProp;
   gradientUnits?: Units;
+  gradientTransform?: ColumnMajorTransformMatrix | string;
   id?: string;
 }
 export const RadialGradient: React.ComponentClass<RadialGradientProps>;
