@@ -27,6 +27,7 @@ import Stop from './elements/Stop';
 import ClipPath from './elements/ClipPath';
 import Pattern from './elements/Pattern';
 import Mask from './elements/Mask';
+import Marker from './elements/Marker';
 
 export const tags: { [tag: string]: ComponentType } = {
   svg: Svg,
@@ -51,6 +52,7 @@ export const tags: { [tag: string]: ComponentType } = {
   clipPath: ClipPath,
   pattern: Pattern,
   mask: Mask,
+  marker: Marker,
 };
 
 function missingTag() {

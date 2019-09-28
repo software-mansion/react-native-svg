@@ -46,6 +46,10 @@
 
 - (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;
 
+- (void)defineMarker:(RNSVGNode *)marker markerName:(NSString *)markerName;
+
+- (RNSVGNode *)getDefinedMarker:(NSString *)markerName;
+
 - (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName;
 
 - (RNSVGNode *)getDefinedMask:(NSString *)maskName;

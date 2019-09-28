@@ -218,6 +218,12 @@ export class Mask extends Component {
   }
 }
 
+export class Marker extends Component {
+  render() {
+    return createElement('marker', prepare(this.props));
+  }
+}
+
 export class Pattern extends Component {
   render() {
     return createElement('pattern', prepare(this.props));

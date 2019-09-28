@@ -21,6 +21,7 @@ import Stop from './elements/Stop';
 import ClipPath, { RNSVGClipPath } from './elements/ClipPath';
 import Pattern, { RNSVGPattern } from './elements/Pattern';
 import Mask, { RNSVGMask } from './elements/Mask';
+import Marker, { RNSVGMarker } from './elements/Marker';
 import { parse, SvgAst, SvgFromUri, SvgFromXml, SvgUri, SvgXml } from './xml';
 
 export {
@@ -46,6 +47,7 @@ export {
   ClipPath,
   Pattern,
   Mask,
+  Marker,
   parse,
   SvgAst,
   SvgFromUri,
@@ -53,6 +55,7 @@ export {
   SvgUri,
   SvgXml,
   Shape,
+  RNSVGMarker,
   RNSVGMask,
   RNSVGPattern,
   RNSVGClipPath,

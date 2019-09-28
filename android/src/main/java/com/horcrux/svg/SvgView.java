@@ -133,6 +133,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
     private final Map<String, VirtualView> mDefinedClipPaths = new HashMap<>();
     private final Map<String, VirtualView> mDefinedTemplates = new HashMap<>();
+    private final Map<String, VirtualView> mDefinedMarkers = new HashMap<>();
     private final Map<String, VirtualView> mDefinedMasks = new HashMap<>();
     private final Map<String, Brush> mDefinedBrushes = new HashMap<>();
     private Canvas mCanvas;
@@ -411,5 +412,13 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
     VirtualView getDefinedMask(String maskRef) {
         return mDefinedMasks.get(maskRef);
+    }
+
+    void defineMarker(VirtualView marker, String markerRef) {
+        mDefinedMasks.put(markerRef, marker);
+    }
+
+    VirtualView getDefinedMarker(String markerRef) {
+        return mDefinedMasks.get(markerRef);
     }
 }

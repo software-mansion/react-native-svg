@@ -51,7 +51,7 @@ import static com.horcrux.svg.RenderableView.JOIN_ROUND;
  */
 class RenderableViewManager extends ViewGroupManager<VirtualView> {
 
-    enum SVGClass {
+    private enum SVGClass {
         RNSVGGroup,
         RNSVGPath,
         RNSVGText,
@@ -70,6 +70,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         RNSVGRadialGradient,
         RNSVGPattern,
         RNSVGMask,
+        RNSVGMarker,
     }
 
     class RenderableShadowNode extends LayoutShadowNode {
@@ -855,6 +856,72 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
+    static class MarkerManager extends GroupViewManager {
+        MarkerManager() {
+            super(SVGClass.RNSVGMarker);
+        }
+
+        @ReactProp(name = "refX")
+        public void setRefX(MarkerView node, Dynamic refX) {
+            node.setRefX(refX);
+        }
+
+        @ReactProp(name = "refY")
+        public void setRefY(MarkerView node, Dynamic refY) {
+            node.setRefY(refY);
+        }
+
+        @ReactProp(name = "markerWidth")
+        public void setMarkerWidth(MarkerView node, Dynamic markerWidth) {
+            node.setMarkerWidth(markerWidth);
+        }
+
+        @ReactProp(name = "markerHeight")
+        public void setMarkerHeight(MarkerView node, Dynamic markerHeight) {
+            node.setMarkerHeight(markerHeight);
+        }
+
+        @ReactProp(name = "markerUnits")
+        public void setMarkerUnits(MarkerView node, String markerUnits) {
+            node.setMarkerUnits(markerUnits);
+        }
+
+        @ReactProp(name = "orient")
+        public void setOrient(MarkerView node, String orient) {
+            node.setOrient(orient);
+        }
+
+        @ReactProp(name = "minX")
+        public void setMinX(MarkerView node, float minX) {
+            node.setMinX(minX);
+        }
+
+        @ReactProp(name = "minY")
+        public void setMinY(MarkerView node, float minY) {
+            node.setMinY(minY);
+        }
+
+        @ReactProp(name = "vbWidth")
+        public void setVbWidth(MarkerView node, float vbWidth) {
+            node.setVbWidth(vbWidth);
+        }
+
+        @ReactProp(name = "vbHeight")
+        public void setVbHeight(MarkerView node, float vbHeight) {
+            node.setVbHeight(vbHeight);
+        }
+
+        @ReactProp(name = "align")
+        public void setAlign(MarkerView node, String align) {
+            node.setAlign(align);
+        }
+
+        @ReactProp(name = "meetOrSlice")
+        public void setMeetOrSlice(MarkerView node, int meetOrSlice) {
+            node.setMeetOrSlice(meetOrSlice);
+        }
+    }
+
     static class LinearGradientManager extends RenderableViewManager {
         LinearGradientManager() {
             super(SVGClass.RNSVGLinearGradient);
@@ -1162,6 +1229,8 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
                 return new PatternView(reactContext);
             case RNSVGMask:
                 return new MaskView(reactContext);
+            case RNSVGMarker:
+                return new MarkerView(reactContext);
             default:
                 throw new IllegalStateException("Unexpected type " + svgClass.toString());
         }
