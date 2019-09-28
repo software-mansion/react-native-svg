@@ -62,7 +62,7 @@ export default function extractProps(
   };
 
   if (id) {
-    extracted.name = id;
+    extracted.name = String(id);
   }
 
   if (clipPath) {
