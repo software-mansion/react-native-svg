@@ -1,3 +1,10 @@
+## [9.9.9](https://github.com/react-native-community/react-native-svg/compare/v9.9.8...v9.9.9) (2019-09-28)
+
+
+### Bug Fixes
+
+* handling of numeric id ([2fb39f5](https://github.com/react-native-community/react-native-svg/commit/2fb39f5)), closes [#1077](https://github.com/react-native-community/react-native-svg/issues/1077)
+
 ## [9.9.8](https://github.com/react-native-community/react-native-svg/compare/v9.9.7...v9.9.8) (2019-09-28)
 
 
