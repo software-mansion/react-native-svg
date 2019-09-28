@@ -281,9 +281,9 @@ abstract public class RenderableView extends VirtualView {
 
             // Clip to mask bounds and render the mask
             float maskX = (float) relativeOnWidth(mask.mX);
-            float maskY = (float) relativeOnWidth(mask.mY);
+            float maskY = (float) relativeOnHeight(mask.mY);
             float maskWidth = (float) relativeOnWidth(mask.mW);
-            float maskHeight = (float) relativeOnWidth(mask.mH);
+            float maskHeight = (float) relativeOnHeight(mask.mH);
             maskCanvas.clipRect(maskX, maskY, maskWidth, maskHeight);
 
             Paint maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
