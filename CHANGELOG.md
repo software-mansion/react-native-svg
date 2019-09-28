@@ -1,3 +1,10 @@
+## [9.9.8](https://github.com/react-native-community/react-native-svg/compare/v9.9.7...v9.9.8) (2019-09-28)
+
+
+### Bug Fixes
+
+* **android:** mask height and vertical position calculation ([74b42a7](https://github.com/react-native-community/react-native-svg/commit/74b42a7)), closes [#1097](https://github.com/react-native-community/react-native-svg/issues/1097)
+
 ## [9.9.7](https://github.com/react-native-community/react-native-svg/compare/v9.9.6...v9.9.7) (2019-09-28)
 
 
