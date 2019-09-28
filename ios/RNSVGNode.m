@@ -254,6 +254,33 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     [self invalidate];
 }
 
+- (void)setMarkerStart:(NSString *)markerStart
+{
+    if ([_markerStart isEqualToString:markerStart]) {
+        return;
+    }
+    _markerStart = markerStart;
+    [self invalidate];
+}
+
+- (void)setMarkerMid:(NSString *)markerMid
+{
+    if ([_markerMid isEqualToString:markerMid]) {
+        return;
+    }
+    _markerMid = markerMid;
+    [self invalidate];
+}
+
+- (void)setMarkerEnd:(NSString *)markerEnd
+{
+    if ([_markerEnd isEqualToString:markerEnd]) {
+        return;
+    }
+    _markerEnd = markerEnd;
+    [self invalidate];
+}
+
 - (void)beginTransparencyLayer:(CGContextRef)context
 {
     if (_transparent) {

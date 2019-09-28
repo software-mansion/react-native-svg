@@ -1030,6 +1030,21 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         node.setMask(mask);
     }
 
+    @ReactProp(name = "markerStart")
+    public void setMarkerStart(VirtualView node, String markerStart) {
+        node.setMarkerStart(markerStart);
+    }
+
+    @ReactProp(name = "markerMid")
+    public void setMarkerMid(VirtualView node, String markerMid) {
+        node.setMarkerMid(markerMid);
+    }
+
+    @ReactProp(name = "markerEnd")
+    public void setMarkerEnd(VirtualView node, String markerEnd) {
+        node.setMarkerEnd(markerEnd);
+    }
+
     @ReactProp(name = "clipPath")
     public void setClipPath(VirtualView node, String clipPath) {
         node.setClipPath(clipPath);

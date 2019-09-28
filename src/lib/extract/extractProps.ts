@@ -27,6 +27,10 @@ export default function extractProps(
   props: {
     id?: string;
     mask?: string;
+    marker?: string;
+    markerStart?: string;
+    markerMid?: string;
+    markerEnd?: string;
     clipPath?: string;
     opacity?: NumberProp;
     onLayout?: () => void;
@@ -38,7 +42,18 @@ export default function extractProps(
     ClipProps,
   ref: Object,
 ) {
-  const { opacity, onLayout, id, clipPath, mask, transform } = props;
+  const {
+    opacity,
+    onLayout,
+    id,
+    clipPath,
+    mask,
+    marker,
+    markerStart = marker,
+    markerMid = marker,
+    markerEnd = marker,
+    transform,
+  } = props;
   const styleProperties: string[] = [];
   const transformProps = props2transform(props);
   const matrix = transformToMatrix(transformProps, transform);
@@ -50,8 +65,14 @@ export default function extractProps(
     propList: string[];
     onLayout?: () => void;
     ref?: (instance: Component | null) => void;
+    markerStart?: string;
+    markerMid?: string;
+    markerEnd?: string;
   } = {
     matrix,
+    markerStart,
+    markerMid,
+    markerEnd,
     onLayout,
     ...transformProps,
     propList: styleProperties,
