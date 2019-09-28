@@ -1,3 +1,13 @@
+## [9.9.7](https://github.com/react-native-community/react-native-svg/compare/v9.9.6...v9.9.7) (2019-09-28)
+
+
+### Bug Fixes
+
+* add gradientTransform to d.ts ([3f08c46](https://github.com/react-native-community/react-native-svg/commit/3f08c46)), closes [#1069](https://github.com/react-native-community/react-native-svg/issues/1069)
+* handling of gradients without stops ([18828c0](https://github.com/react-native-community/react-native-svg/commit/18828c0)), closes [#1099](https://github.com/react-native-community/react-native-svg/issues/1099)
+* handling of rounded rect ([c12d66e](https://github.com/react-native-community/react-native-svg/commit/c12d66e)), closes [#1112](https://github.com/react-native-community/react-native-svg/issues/1112)
+* units in linear and radial gradients ([70c54e6](https://github.com/react-native-community/react-native-svg/commit/70c54e6)), closes [#1110](https://github.com/react-native-community/react-native-svg/issues/1110) [#1118](https://github.com/react-native-community/react-native-svg/issues/1118)
+
 ## [9.9.6](https://github.com/react-native-community/react-native-svg/compare/v9.9.5...v9.9.6) (2019-09-27)
 
 
