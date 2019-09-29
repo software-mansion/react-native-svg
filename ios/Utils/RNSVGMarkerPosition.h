@@ -8,7 +8,7 @@ typedef enum RNSVGMarkerType {
     kEndMarker
 } RNSVGMarkerType;
 
-#define RNSVGNULLPOINT CGRectNull.origin
+#define RNSVGZEROPOINT CGRectZero.origin
 
 @interface RNSVGMarkerPosition : NSObject
 

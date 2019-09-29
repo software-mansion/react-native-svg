@@ -150,6 +150,12 @@
     _meetOrSlice = meetOrSlice;
 }
 
+static CGFloat RNSVG_degToRad = (CGFloat)M_PI / 180;
+
+double deg2rad(CGFloat deg) {
+    return deg * RNSVG_degToRad;
+}
+
 - (void)renderMarker:(CGContextRef)context rect:(CGRect)rect position:(RNSVGMarkerPosition*)position strokeWidth:(CGFloat)strokeWidth
 {
     CGContextSaveGState(context);
@@ -158,7 +164,9 @@
     CGAffineTransform transform = CGAffineTransformMakeTranslation(origin.x, origin.y);
 
     float markerAngle = [@"auto" isEqualToString:_orient] ? -1 : [_orient doubleValue];
-    transform = CGAffineTransformRotate(transform, markerAngle == -1 ? [position angle] : markerAngle);
+    float angle = 180 + (markerAngle == -1 ? [position angle] : markerAngle);
+    float rad = deg2rad(angle);
+    transform = CGAffineTransformRotate(transform, rad);
 
     bool useStrokeWidth = [@"strokeWidth" isEqualToString:_markerUnits];
     if (useStrokeWidth) {

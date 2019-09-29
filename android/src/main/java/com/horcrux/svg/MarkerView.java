@@ -132,14 +132,15 @@ class MarkerView extends GroupView {
 
         Point origin = position.origin;
         Matrix transform = new Matrix();
-        transform.setTranslate((float)origin.x, (float)origin.y);
+        transform.setTranslate((float)origin.x * mScale, (float)origin.y * mScale);
 
         double markerAngle = "auto".equals(mOrient) ? -1 : Double.parseDouble(mOrient);
-        transform.postRotate((float)(markerAngle == -1 ? position.angle : markerAngle));
+        float degrees = 180 + (float) (markerAngle == -1 ? position.angle : markerAngle);
+        transform.preRotate(degrees);
 
         boolean useStrokeWidth = "strokeWidth".equals(mMarkerUnits);
         if (useStrokeWidth) {
-            transform.postScale(strokeWidth, strokeWidth);
+            transform.preScale(strokeWidth, strokeWidth);
         }
 
         canvas.concat(transform);

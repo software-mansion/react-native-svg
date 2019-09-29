@@ -8,7 +8,7 @@
     if (self)
     {
         _type = kStartMarker;
-        _origin = RNSVGNULLPOINT;
+        _origin = RNSVGZEROPOINT;
         _angle = 0;
     }
     return self;
@@ -25,8 +25,8 @@
 + (NSArray<RNSVGMarkerPosition*>*) fromCGPath:(CGPathRef)path {
     positions_ = [[NSMutableArray alloc] init];
     element_index_ = 0;
-    origin_ = RNSVGNULLPOINT;
-    subpath_start_ = RNSVGNULLPOINT;
+    origin_ = RNSVGZEROPOINT;
+    subpath_start_ = RNSVGZEROPOINT;
     CGPathApply(path, (__bridge void *)positions_, UpdateFromPathElement);
     PathIsDone();
     return positions_;
