@@ -24,6 +24,9 @@
 
 + (NSArray<RNSVGMarkerPosition*>*) fromCGPath:(CGPathRef)path {
     positions_ = [[NSMutableArray alloc] init];
+    element_index_ = 0;
+    origin_ = RNSVGNULLPOINT;
+    subpath_start_ = RNSVGNULLPOINT;
     CGPathApply(path, (__bridge void *)positions_, UpdateFromPathElement);
     PathIsDone();
     return positions_;
