@@ -11,6 +11,9 @@
 #import "RNSVGMask.h"
 #import "RNSVGViewBox.h"
 #import "RNSVGVectorEffect.h"
+#import "RNSVGBezierElement.h"
+#import "RNSVGMarker.h"
+#import "RNSVGMarkerPosition.h"
 
 @implementation RNSVGRenderable
 {
@@ -277,6 +280,8 @@ UInt32 saturate(CGFloat value) {
     [self endTransparencyLayer:context];
 
     CGContextRestoreGState(context);
+
+    [self renderMarkers:context path:self.path rect:&rect];
 }
 
 - (void)prepareStrokeDash:(NSUInteger)count strokeDasharray:(NSArray<RNSVGLength *> *)strokeDasharray {
@@ -290,6 +295,35 @@ UInt32 saturate(CGFloat value) {
         _sourceStrokeDashArray = strokeDasharray;
         for (NSUInteger i = 0; i < count; i++) {
             _strokeDashArrayData[i] = (CGFloat)[self relativeOnOther:strokeDasharray[i]];
+        }
+    }
+}
+
+- (void)renderMarkers:(CGContextRef)context path:(CGPathRef)path rect:(const CGRect *)rect {
+    RNSVGMarker *markerStart = (RNSVGMarker*)[self.svgView getDefinedMarker:self.markerStart];
+    RNSVGMarker *markerMid = (RNSVGMarker*)[self.svgView getDefinedMarker:self.markerMid];
+    RNSVGMarker *markerEnd = (RNSVGMarker*)[self.svgView getDefinedMarker:self.markerEnd];
+    if (markerStart || markerMid || markerEnd) {
+        NSArray<RNSVGMarkerPosition*>* positions = [RNSVGMarkerPosition fromCGPath:path];
+        CGFloat width = self.strokeWidth ? [self relativeOnOther:self.strokeWidth] : 1;
+        for (RNSVGMarkerPosition* position in positions) {
+            RNSVGMarkerType type = [position type];
+            switch (type) {
+                case kStartMarker:
+                    [markerStart renderMarker:context rect:*rect position:position strokeWidth:width];
+                    break;
+
+                case kMidMarker:
+                    [markerMid renderMarker:context rect:*rect position:position strokeWidth:width];
+                    break;
+
+                case kEndMarker:
+                    [markerEnd renderMarker:context rect:*rect position:position strokeWidth:width];
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 }

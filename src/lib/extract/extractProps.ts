@@ -23,6 +23,14 @@ export function propsAndStyles(props: Object & { style?: [] | {} }) {
   };
 }
 
+function getMarker(marker?: string) {
+  if (!marker) {
+    return undefined;
+  }
+  const matched = marker.match(idPattern);
+  return matched ? matched[1] : undefined;
+}
+
 export default function extractProps(
   props: {
     id?: string;
@@ -70,9 +78,9 @@ export default function extractProps(
     markerEnd?: string;
   } = {
     matrix,
-    markerStart,
-    markerMid,
-    markerEnd,
+    markerStart: getMarker(markerStart),
+    markerMid: getMarker(markerMid),
+    markerEnd: getMarker(markerEnd),
     onLayout,
     ...transformProps,
     propList: styleProperties,

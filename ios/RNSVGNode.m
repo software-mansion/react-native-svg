@@ -36,6 +36,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 {
     if (self = [super init]) {
         self.opacity = 1;
+        self.matrix = CGAffineTransformIdentity;
         self.transforms = CGAffineTransformIdentity;
         self.invTransform = CGAffineTransformIdentity;
         _merging = false;

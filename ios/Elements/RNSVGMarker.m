@@ -9,6 +9,7 @@
 #import "RNSVGPainter.h"
 #import "RNSVGBrushType.h"
 #import "RNSVGNode.h"
+#import "RNSVGViewBox.h"
 
 @implementation RNSVGMarker
 
@@ -21,6 +22,12 @@
 {
     self.dirty = false;
     [self.svgView defineMarker:self markerName:self.name];
+    [self traverseSubviews:^(RNSVGNode *node) {
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            [node parseReference];
+        }
+        return YES;
+    }];
 }
 
 - (void)setX:(RNSVGLength *)refX
@@ -28,7 +35,7 @@
     if ([refX isEqualTo:_refX]) {
         return;
     }
-    
+
     _refX = refX;
     [self invalidate];
 }
@@ -38,7 +45,7 @@
     if ([refY isEqualTo:_refY]) {
         return;
     }
-    
+
     _refY = refY;
     [self invalidate];
 }
@@ -48,7 +55,7 @@
     if ([markerWidth isEqualTo:_markerWidth]) {
         return;
     }
-    
+
     _markerWidth = markerWidth;
     [self invalidate];
 }
@@ -58,17 +65,17 @@
     if ([markerHeight isEqualTo:_markerHeight]) {
         return;
     }
-    
+
     _markerHeight = markerHeight;
     [self invalidate];
 }
 
 - (void)setMarkerUnits:(NSString *)markerUnits
 {
-    if (markerUnits == _markerUnits) {
+    if ([_markerUnits isEqualToString:markerUnits]) {
         return;
     }
-    
+
     _markerUnits = markerUnits;
     [self invalidate];
 }
@@ -78,7 +85,7 @@
     if ([orient isEqualToString:_orient]) {
         return;
     }
-    
+
     [self invalidate];
     _orient = orient;
 }
@@ -88,7 +95,7 @@
     if (minX == _minX) {
         return;
     }
-    
+
     [self invalidate];
     _minX = minX;
 }
@@ -98,7 +105,7 @@
     if (minY == _minY) {
         return;
     }
-    
+
     [self invalidate];
     _minY = minY;
 }
@@ -108,7 +115,7 @@
     if (vbWidth == _vbWidth) {
         return;
     }
-    
+
     [self invalidate];
     _vbWidth = vbWidth;
 }
@@ -118,7 +125,7 @@
     if (_vbHeight == vbHeight) {
         return;
     }
-    
+
     [self invalidate];
     _vbHeight = vbHeight;
 }
@@ -128,7 +135,7 @@
     if ([align isEqualToString:_align]) {
         return;
     }
-    
+
     [self invalidate];
     _align = align;
 }
@@ -138,9 +145,46 @@
     if (meetOrSlice == _meetOrSlice) {
         return;
     }
-    
+
     [self invalidate];
     _meetOrSlice = meetOrSlice;
+}
+
+- (void)renderMarker:(CGContextRef)context rect:(CGRect)rect position:(RNSVGMarkerPosition*)position strokeWidth:(CGFloat)strokeWidth
+{
+    CGContextSaveGState(context);
+
+    CGPoint origin = [position origin];
+    CGAffineTransform transform = CGAffineTransformMakeTranslation(origin.x, origin.y);
+
+    float markerAngle = [@"auto" isEqualToString:_orient] ? -1 : [_orient doubleValue];
+    transform = CGAffineTransformRotate(transform, markerAngle == -1 ? [position angle] : markerAngle);
+
+    bool useStrokeWidth = [@"strokeWidth" isEqualToString:_markerUnits];
+    if (useStrokeWidth) {
+        transform = CGAffineTransformScale(transform, strokeWidth, strokeWidth);
+    }
+
+    CGContextConcatCTM(context, transform);
+
+    CGFloat width = [self relativeOnWidth:self.markerWidth];
+    CGFloat height = [self relativeOnHeight:self.markerHeight];
+    CGRect eRect = CGRectMake(0, 0, width, height);
+    if (self.align) {
+        CGAffineTransform viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
+                                                                  eRect:eRect
+                                                                  align:self.align
+                                                            meetOrSlice:self.meetOrSlice];
+        CGContextConcatCTM(context, viewBoxTransform);
+    }
+
+    CGFloat x = [self relativeOnWidth:self.refX];
+    CGFloat y = [self relativeOnHeight:self.refY];
+    CGContextTranslateCTM(context, -x, -y);
+
+    [self renderGroupTo:context rect:eRect];
+
+    CGContextRestoreGState(context);
 }
 
 @end
