@@ -12,7 +12,6 @@ package com.horcrux.svg;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
@@ -370,9 +369,38 @@ abstract public class RenderableView extends VirtualView {
                 }
                 canvas.drawPath(path, paint);
             }
+            renderMarkers(canvas, paint, opacity);
         }
     }
 
+    void renderMarkers(Canvas canvas, Paint paint, float opacity) {
+        MarkerView markerStart = (MarkerView)getSvgView().getDefinedMarker(mMarkerStart);
+        MarkerView markerMid = (MarkerView)getSvgView().getDefinedMarker(mMarkerMid);
+        MarkerView markerEnd = (MarkerView)getSvgView().getDefinedMarker(mMarkerEnd);
+        if (elements != null && (markerStart != null || markerMid != null  || markerEnd != null)) {
+            ArrayList<RNSVGMarkerPosition> positions = RNSVGMarkerPosition.fromPath(elements);
+            float width = (float)(this.strokeWidth != null ? relativeOnOther(this.strokeWidth) : 1);
+            for (RNSVGMarkerPosition position : positions) {
+                RNSVGMarkerType type = position.type;
+                switch (type) {
+                    case kStartMarker:
+                        if (markerStart != null) markerStart.renderMarker(canvas, paint, opacity, position, width);
+                        break;
+
+                    case kMidMarker:
+                        if (markerMid != null) markerMid.renderMarker(canvas, paint, opacity, position, width);
+                        break;
+
+                    case kEndMarker:
+                        if (markerEnd != null) markerEnd.renderMarker(canvas, paint, opacity, position, width);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+    }
     /**
      * Sets up paint according to the props set on a view. Returns {@code true}
      * if the fill should be drawn, {@code false} if not.

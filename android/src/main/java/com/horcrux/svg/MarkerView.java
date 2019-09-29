@@ -10,7 +10,11 @@
 package com.horcrux.svg;
 
 import android.annotation.SuppressLint;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.RectF;
+import android.view.View;
 
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
@@ -109,16 +113,52 @@ class MarkerView extends GroupView {
         invalidate();
     }
 
-
-    RectF getViewBox() {
-        return new RectF(mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
-    }
-
     @Override
     void saveDefinition() {
         if (mName != null) {
             SvgView svg = getSvgView();
             svg.defineMarker(this, mName);
+            for (int i = 0; i < getChildCount(); i++) {
+                View node = getChildAt(i);
+                if (node instanceof VirtualView) {
+                    ((VirtualView)node).saveDefinition();
+                }
+            }
         }
+    }
+
+    void renderMarker(Canvas canvas, Paint paint, float opacity, RNSVGMarkerPosition position, float strokeWidth) {
+        int count = saveAndSetupCanvas(canvas, mCTM);
+
+        Point origin = position.origin;
+        Matrix transform = new Matrix();
+        transform.setTranslate((float)origin.x, (float)origin.y);
+
+        double markerAngle = "auto".equals(mOrient) ? -1 : Double.parseDouble(mOrient);
+        transform.postRotate((float)(markerAngle == -1 ? position.angle : markerAngle));
+
+        boolean useStrokeWidth = "strokeWidth".equals(mMarkerUnits);
+        if (useStrokeWidth) {
+            transform.postScale(strokeWidth, strokeWidth);
+        }
+
+        canvas.concat(transform);
+
+        double width = relativeOnWidth(mMarkerWidth) / mScale;
+        double height = relativeOnHeight(mMarkerHeight) / mScale;
+        RectF eRect = new RectF(0, 0, (float)width, (float)height);
+        if (mAlign != null) {
+            RectF vbRect = new RectF(mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
+            Matrix viewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
+            canvas.concat(viewBoxMatrix);
+        }
+
+        double x = relativeOnWidth(mRefX);
+        double y = relativeOnHeight(mRefY);
+        canvas.translate((float)-x, (float)-y);
+
+        drawGroup(canvas, paint, opacity);
+
+        restoreCanvas(canvas, count);
     }
 }

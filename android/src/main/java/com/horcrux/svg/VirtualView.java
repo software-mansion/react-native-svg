@@ -22,6 +22,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.view.ReactViewGroup;
 
+import java.util.ArrayList;
+
 import javax.annotation.Nullable;
 
 import static com.horcrux.svg.FontData.DEFAULT_FONT_SIZE;
@@ -94,6 +96,7 @@ abstract public class VirtualView extends ReactViewGroup {
     Region mStrokeRegion;
     Region mClipRegion;
     Path mClipRegionPath;
+    ArrayList<PathElement> elements;
 
     @Override
     public void invalidate() {
@@ -205,7 +208,7 @@ abstract public class VirtualView extends ReactViewGroup {
      * drawing code should apply opacity recursively.
      *
      * @param canvas the canvas to set up
-     * @param ctm
+     * @param ctm current transformation matrix
      */
     int saveAndSetupCanvas(Canvas canvas, Matrix ctm) {
         int count = canvas.save();
