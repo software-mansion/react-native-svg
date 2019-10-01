@@ -1,3 +1,10 @@
+## [9.10.1](https://github.com/react-native-community/react-native-svg/compare/v9.10.0...v9.10.1) (2019-10-01)
+
+
+### Bug Fixes
+
+* project.pbxproj for non cocoapods builds ([cd70134](https://github.com/react-native-community/react-native-svg/commit/cd70134)), closes [#1130](https://github.com/react-native-community/react-native-svg/issues/1130)
+
 # [9.10.0](https://github.com/react-native-community/react-native-svg/compare/v9.9.9...v9.10.0) (2019-10-01)
 
 
