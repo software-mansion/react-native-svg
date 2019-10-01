@@ -1,3 +1,15 @@
+# [9.10.0](https://github.com/react-native-community/react-native-svg/compare/v9.9.9...v9.10.0) (2019-10-01)
+
+
+### Features
+
+* improve marker rendering ([9628830](https://github.com/react-native-community/react-native-svg/commit/9628830))
+* improve marker rendering ([2e3069d](https://github.com/react-native-community/react-native-svg/commit/2e3069d))
+* **android:** implement marker rendering ([ceee5ff](https://github.com/react-native-community/react-native-svg/commit/ceee5ff))
+* **ios:** implement marker rendering ([589363d](https://github.com/react-native-community/react-native-svg/commit/589363d))
+* define marker attributes ([61533c6](https://github.com/react-native-community/react-native-svg/commit/61533c6))
+* define marker element ([e7b5978](https://github.com/react-native-community/react-native-svg/commit/e7b5978))
+
 ## [9.9.9](https://github.com/react-native-community/react-native-svg/compare/v9.9.8...v9.9.9) (2019-09-28)
 
 
