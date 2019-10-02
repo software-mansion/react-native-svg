@@ -1106,8 +1106,7 @@ yarn
 ### TODO:
 
 1. Add Native methods for elements.
-2. Marker element.
-3. Filters
+2. Filters
 
 ### Known issues:
 
