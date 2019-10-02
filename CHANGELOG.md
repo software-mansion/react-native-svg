@@ -1,3 +1,10 @@
+## [9.10.2](https://github.com/react-native-community/react-native-svg/compare/v9.10.1...v9.10.2) (2019-10-02)
+
+
+### Bug Fixes
+
+* marker viewBox translation ([b111028](https://github.com/react-native-community/react-native-svg/commit/b111028))
+
 ## [9.10.1](https://github.com/react-native-community/react-native-svg/compare/v9.10.0...v9.10.1) (2019-10-01)
 
 
