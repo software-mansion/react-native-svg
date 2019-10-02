@@ -151,7 +151,9 @@ class MarkerView extends GroupView {
         if (mAlign != null) {
             RectF vbRect = new RectF(mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
             Matrix viewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
-            canvas.concat(viewBoxMatrix);
+            float[] values = new float[9];
+            viewBoxMatrix.getValues(values);
+            canvas.scale(values[Matrix.MSCALE_X], values[Matrix.MSCALE_Y]);
         }
 
         double x = relativeOnWidth(mRefX);

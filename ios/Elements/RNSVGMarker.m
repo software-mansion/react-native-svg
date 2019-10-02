@@ -183,7 +183,7 @@ double deg2rad(CGFloat deg) {
                                                                   eRect:eRect
                                                                   align:self.align
                                                             meetOrSlice:self.meetOrSlice];
-        CGContextConcatCTM(context, viewBoxTransform);
+        CGContextScaleCTM(context, viewBoxTransform.a, viewBoxTransform.d);
     }
 
     CGFloat x = [self relativeOnWidth:self.refX];
