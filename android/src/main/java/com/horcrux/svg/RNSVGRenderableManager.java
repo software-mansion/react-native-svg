@@ -9,6 +9,8 @@
 
 package com.horcrux.svg;
 
+import android.graphics.PathMeasure;
+
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -71,5 +73,26 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         float y = (float)options.getDouble("y");
         float[] src = new float[] { x, y };
         isPointInFill(tag, src, successCallback, 0);
+    }
+
+    @SuppressWarnings("unused")
+    @ReactMethod
+    public void getTotalLength(int tag, Callback successCallback) {
+        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+        PathMeasure pm = new PathMeasure(svg.getPath(null, null), false);
+        successCallback.invoke(pm.getLength());
+    }
+
+    @SuppressWarnings("unused")
+    @ReactMethod
+    public void getPointAtLength(int tag, ReadableMap options, Callback successCallback) {
+        float length = (float)options.getDouble("length");
+        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+        PathMeasure pm = new PathMeasure(svg.getPath(null, null), false);
+        float pathLength = pm.getLength();
+        float[] pos = new float[2];
+        float[] tan = new float[2];
+        pm.getPosTan(Math.max(0, Math.min(length, pathLength)), pos, tan);
+        successCallback.invoke(pos[0], pos[1]);
     }
 }
