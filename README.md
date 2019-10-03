@@ -46,6 +46,7 @@
   - [RadialGradient](#radialgradient)
   - [Mask](#mask)
   - [Pattern](#pattern)
+  - [Marker](#marker)
 - [Touch Events](#touch-events)
 - [Run example](#run-example)
 - [TODO](#todo)
@@ -1025,7 +1026,7 @@ Code explanation: <https://www.w3.org/TR/SVG11/masking.html#MaskElement>
 #### Pattern
 
 A pattern is used to fill or stroke an object using a pre-defined graphic object which can be replicated ("tiled") at fixed intervals in x and y to cover the areas to be painted. Patterns are defined using a ‘pattern’ element and then referenced by properties ‘fill’ and ‘stroke’ on a given graphics element to indicate that the given element shall be filled or stroked with the referenced pattern.
-The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
+The <Pattern> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
 
 <https://www.w3.org/TR/SVG11/images/pservers/pattern01.svg>
 
@@ -1048,7 +1049,7 @@ The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;D
   <Ellipse
     fill="url(#TrianglePattern)"
     stroke="black"
-    stroke-width="5"
+    strokeWidth="5"
     cx="400"
     cy="200"
     rx="350"
@@ -1060,6 +1061,38 @@ The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;D
 Code explanation: <https://www.w3.org/TR/SVG11/pservers.html#PatternElement>
 
 ![Pattern](https://www.w3.org/TR/SVG11/images/pservers/pattern01.svg)
+
+#### Marker
+
+A marker is a symbol which is attached to one or more vertices of ‘path’, ‘line’, ‘polyline’ and ‘polygon’ elements. Typically, markers are used to make arrowheads or polymarkers. Arrowheads can be defined by attaching a marker to the start or end vertices of ‘path’, ‘line’ or ‘polyline’ elements. Polymarkers can be defined by attaching a marker to all vertices of a ‘path’, ‘line’, ‘polyline’ or ‘polygon’ element.
+
+The graphics for a marker are defined by a ‘marker’ element. To indicate that a particular ‘marker’ element should be rendered at the vertices of a particular ‘path’, ‘line’, ‘polyline’ or ‘polygon’ element, set one or more marker properties (‘marker’, ‘marker-start’, ‘marker-mid’ or ‘marker-end’) to reference the given ‘marker’ element.
+
+<https://www.w3.org/TR/SVG11/images/painting/marker.svg>
+
+```jsx
+<Svg width="400" height="200" 
+     viewBox="0 0 4000 2000">
+  <Defs>
+    <Marker id="Triangle"
+      viewBox="0 0 10 10" refX="0" refY="5" 
+      markerUnits="strokeWidth"
+      markerWidth="4" markerHeight="3"
+      orient="auto">
+      <Path d="M 0 0 L 10 5 L 0 10 z" />
+    </Marker>
+  </Defs>
+  <Rect x="10" y="10" width="3980" height="1980"
+       fill="none" stroke="blue" strokeWidth="10" />
+  <Path d="M 1000 750 L 2000 750 L 2500 1250"
+        fill="none" stroke="black" strokeWidth="100" 
+        markerEnd="url(#Triangle)"  />
+</Svg>
+```
+
+Code explanation: <https://www.w3.org/TR/SVG11/painting.html#Markers>
+
+![Marker](https://www.w3.org/TR/SVG11/images/painting/marker.svg)
 
 #### Touch Events
 
