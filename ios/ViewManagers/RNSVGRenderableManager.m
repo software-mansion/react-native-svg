@@ -10,6 +10,7 @@
 #import <React/RCTUIManager.h>
 #import <React/RCTUIManagerUtils.h>
 #import "RNSVGRenderableManager.h"
+#import "RNSVGPathMeasure.h"
 
 #import "RCTConvert+RNSVG.h"
 #import "RNSVGCGFCRule.h"
@@ -37,29 +38,27 @@ RCT_EXPORT_VIEW_PROPERTY(strokeMiterlimit, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(vectorEffect, int)
 RCT_EXPORT_VIEW_PROPERTY(propList, NSArray<NSString *>)
 
-- (void)isPointInFill:(nonnull NSNumber *)reactTag point:(CGPoint)point callback:(RCTResponseSenderBlock)callback attempt:(int)attempt {
+typedef void (^RNSVGSuccessBlock)(RNSVGRenderable *view);
+typedef void (^RNSVGFailBlock)(void);
+
+- (void)withTag:(nonnull NSNumber *)reactTag success:(RNSVGSuccessBlock)successBlock fail:(RNSVGFailBlock)failBlock attempt:(int)attempt {
     [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
         __kindof UIView *view = viewRegistry[reactTag];
-        UIView *target;
         if (!view) {
             if (attempt < 1) {
                 void (^retryBlock)(void) = ^{
-                    [self isPointInFill:reactTag point:point callback:callback attempt:(attempt + 1)];
+                    [self withTag:reactTag success:successBlock fail:failBlock attempt:(attempt + 1)];
                 };
                 RCTExecuteOnUIManagerQueue(retryBlock);
             } else {
-                callback(@[[NSNumber numberWithBool:false]]);
+                failBlock();
             }
-            return;
-        }
-        if ([view isKindOfClass:[RNSVGRenderable class]]) {
+        } else if ([view isKindOfClass:[RNSVGRenderable class]]) {
             RNSVGRenderable *svg = view;
-            target = [svg hitTest:point withEvent:nil];
-            BOOL hit = target != nil;
-            callback(@[[NSNumber numberWithBool:hit]]);
+            successBlock(svg);
         } else {
             RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
-            callback(@[[NSNumber numberWithBool:false]]);
+            failBlock();
         }
     }];
 }
@@ -82,8 +81,57 @@ RCT_EXPORT_METHOD(isPointInFill:(nonnull NSNumber *)reactTag options:(NSDictiona
     CGFloat x = (CGFloat)[xo floatValue];
     CGFloat y = (CGFloat)[yo floatValue];
     CGPoint point = CGPointMake(x, y);
-    [self isPointInFill:reactTag point:point callback:callback attempt:0];
+    [self
+     withTag:reactTag
+     success:^(RNSVGRenderable *svg){
+         UIView *target = [svg hitTest:point withEvent:nil];
+         BOOL hit = target != nil;
+         callback(@[[NSNumber numberWithBool:hit]]);
+     }
+     fail:^{
+         callback(@[[NSNumber numberWithBool:false]]);
+     }
+     attempt:0];
 }
 
+RCT_EXPORT_METHOD(getTotalLength:(nonnull NSNumber *)reactTag callback:(RCTResponseSenderBlock)callback)
+{
+    [self
+     withTag:reactTag
+     success:^(RNSVGRenderable *svg){
+         CGPathRef target = [svg getPath:nil];
+         RNSVGPathMeasure *measure = [RNSVGPathMeasure init];
+         [measure extractPathData:target];
+
+         CGFloat pathLegth = measure.pathLength;
+         callback(@[[NSNumber numberWithDouble:pathLegth]]);
+     }
+     fail:^{
+         callback(@[[NSNumber numberWithBool:false]]);
+     }
+     attempt:0];
+}
+
+RCT_EXPORT_METHOD(getPointAtLength:(nonnull NSNumber *)reactTag options:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback)
+{
+    id length = [options objectForKey:@"length"];
+    CGFloat x = (CGFloat)[length floatValue];
+    [self
+     withTag:reactTag
+     success:^(RNSVGRenderable *svg){
+         CGPathRef target = [svg getPath:nil];
+         RNSVGPathMeasure *measure = [[RNSVGPathMeasure alloc]init];
+         [measure extractPathData:target];
+         CGFloat angle;
+         CGFloat px;
+         CGFloat py;
+         [measure getPosAndTan:&angle midPoint:fmax(0, fmin(measure.pathLength, x)) px:&px py:&py];
+         callback(@[[NSNumber numberWithDouble:px], [NSNumber numberWithDouble:py]]);
+     }
+     fail:^{
+         callback(@[[NSNumber numberWithBool:false]]);
+     }
+     attempt:0];
+}
 
 @end

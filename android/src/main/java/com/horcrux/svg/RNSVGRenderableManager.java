@@ -52,7 +52,6 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
                             } else {
                                 successCallback.invoke(false);
                             }
-                            return;
                         } else {
                             float scale = svg.mScale;
                             src[0] *= scale;
