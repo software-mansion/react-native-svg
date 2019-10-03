@@ -1094,6 +1094,103 @@ Code explanation: <https://www.w3.org/TR/SVG11/painting.html#Markers>
 
 ![Marker](https://www.w3.org/TR/SVG11/images/painting/marker.svg)
 
+```jsx
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+
+const markerRendering = `<svg xmlns="http://www.w3.org/2000/svg"
+     width="275" height="200" viewBox="0 0 100 30">
+  <defs>
+    <marker id="m1" viewBox="0 0 10 10" refX="5" refY="5"
+     markerWidth="8" markerHeight="8">
+      <circle cx="5" cy="5" r="5" fill="green"/>
+    </marker>
+    <marker id="m2" viewBox="0 0 10 10" refX="5" refY="5"
+     markerWidth="6.5" markerHeight="6.5">
+      <circle cx="5" cy="5" r="5" fill="skyblue" opacity="0.9"/>
+    </marker>
+    <marker id="m3" viewBox="0 0 10 10" refX="5" refY="5"
+     markerWidth="5" markerHeight="5">
+      <circle cx="5" cy="5" r="5" fill="maroon" opacity="0.85"/>
+    </marker>    
+  </defs>
+  
+  <path d="M10,10 h10 v10 z m20,0 h10 v10 z m20,0 h10 v10 z"
+  fill="none" stroke="black"
+  marker-start="url(#m1)"  
+  marker-mid="url(#m2)"
+  marker-end="url(#m3)"  
+  />
+</svg>`;
+
+export default class App extends React.Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <SvgXml xml={markerRendering} />
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+});
+```
+
+![MarkerDoubled](https://www.w3.org/TR/SVG2/images/painting/marker-doubled.svg)
+
+```jsx
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+
+const markerRendering = `<svg xmlns="http://www.w3.org/2000/svg"
+     width="275" height="200" viewBox="0 0 275 200">
+  <defs>
+    <marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5" 
+            markerUnits="strokeWidth" markerWidth="4" markerHeight="3"
+            orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" />
+    </marker>
+  </defs>
+
+  <g fill="none" stroke-width="10" marker-end="url(#Triangle)">
+    <path stroke="crimson" d="M 100,75 C 125,50 150,50 175,75" marker-end="url(#Triangle)"/>
+    <path stroke="olivedrab" d="M 175,125 C 150,150 125,150 100,125" marker-end="url(#Triangle)"/>
+  </g>
+</svg>`;
+
+export default class App extends React.Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <SvgXml xml={markerRendering} />
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+});
+```
+
+![MarkerRendering](https://www.w3.org/TR/SVG2/images/painting/marker-rendering.svg)
+
+Code explanation: <https://www.w3.org/TR/SVG2/painting.html#VertexMarkerProperties>
+
 #### Touch Events
 
 Touch events are supported in react-native-svg. These include:
