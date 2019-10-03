@@ -1,3 +1,10 @@
+## [9.11.1](https://github.com/react-native-community/react-native-svg/compare/v9.11.0...v9.11.1) (2019-10-03)
+
+
+### Bug Fixes
+
+* marker onPress & gestures ([bff92f0](https://github.com/react-native-community/react-native-svg/commit/bff92f0))
+
 # [9.11.0](https://github.com/react-native-community/react-native-svg/compare/v9.10.2...v9.11.0) (2019-10-03)
 
 
