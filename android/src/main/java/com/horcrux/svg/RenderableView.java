@@ -94,6 +94,12 @@ abstract public class RenderableView extends VirtualView {
 
     private static final Pattern regex = Pattern.compile("[0-9.-]+");
 
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+        RenderableViewManager.setRenderableView(id, this);
+    }
+
     @ReactProp(name = "vectorEffect")
     public void setVectorEffect(int vectorEffect) {
         this.vectorEffect = vectorEffect;

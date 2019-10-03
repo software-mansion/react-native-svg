@@ -1,12 +1,31 @@
 import { Component } from 'react';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
-import { NativeMethodsMixinStatic } from 'react-native';
+import {
+  NativeModules,
+  findNodeHandle,
+  NativeMethodsMixinStatic,
+} from 'react-native';
 import { TransformProps } from '../lib/extract/types';
 
+const RNSVGRenderableManager = NativeModules.RNSVGRenderableManager;
 const { touchableGetInitialState } = SvgTouchableMixin;
 const touchKeys = Object.keys(SvgTouchableMixin);
 const touchVals = touchKeys.map(key => SvgTouchableMixin[key]);
 const numTouchKeys = touchKeys.length;
+
+interface SVGBoundingBoxOptions {
+  fill: boolean;
+  stroke: boolean;
+  markers: boolean;
+  clipped: boolean;
+}
+
+interface DOMPointInit {
+  x?: number;
+  y?: number;
+  z?: number;
+  w?: number;
+}
 
 export default class Shape<P> extends Component<P> {
   [x: string]: unknown;
@@ -35,5 +54,54 @@ export default class Shape<P> extends Component<P> {
     } & TransformProps,
   ) => {
     this.root && this.root.setNativeProps(props);
+  };
+  getBBox = (callback: () => void, options?: SVGBoundingBoxOptions) => {
+    if (!callback) {
+      return;
+    }
+    const handle = findNodeHandle(this.root as Component);
+    RNSVGRenderableManager.getBBox(handle, options, callback); // TODO
+  };
+  getCTM = (callback: () => void) => {
+    if (!callback) {
+      return;
+    }
+    const handle = findNodeHandle(this.root as Component);
+    RNSVGRenderableManager.getCTM(handle, callback); // TODO
+  };
+  getScreenCTM = (callback: () => void) => {
+    if (!callback) {
+      return;
+    }
+    const handle = findNodeHandle(this.root as Component);
+    RNSVGRenderableManager.getScreenCTM(handle, callback); // TODO
+  };
+  isPointInFill = (callback: () => void, options: DOMPointInit) => {
+    if (!callback) {
+      return;
+    }
+    const handle = findNodeHandle(this.root as Component);
+    RNSVGRenderableManager.isPointInFill(handle, options, callback);
+  };
+  isPointInStroke = (callback: () => void, options: DOMPointInit) => {
+    if (!callback) {
+      return;
+    }
+    const handle = findNodeHandle(this.root as Component);
+    RNSVGRenderableManager.isPointInStroke(handle, options, callback); // TODO
+  };
+  getTotalLength = (callback: () => void) => {
+    if (!callback) {
+      return;
+    }
+    const handle = findNodeHandle(this.root as Component);
+    RNSVGRenderableManager.getTotalLength(handle, callback); // TODO
+  };
+  getPointAtLength = (callback: () => void, options: Object) => {
+    if (!callback) {
+      return;
+    }
+    const handle = findNodeHandle(this.root as Component);
+    RNSVGRenderableManager.getPointAtLength(handle, options, callback); // TODO
   };
 }
