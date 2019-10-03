@@ -37,6 +37,8 @@ class MarkerView extends GroupView {
     String mAlign;
     int mMeetOrSlice;
 
+    Matrix markerTransform = new Matrix();
+
     public MarkerView(ReactContext reactContext) {
         super(reactContext);
     }
@@ -130,20 +132,18 @@ class MarkerView extends GroupView {
     void renderMarker(Canvas canvas, Paint paint, float opacity, RNSVGMarkerPosition position, float strokeWidth) {
         int count = saveAndSetupCanvas(canvas, mCTM);
 
+        markerTransform.reset();
         Point origin = position.origin;
-        Matrix transform = new Matrix();
-        transform.setTranslate((float)origin.x * mScale, (float)origin.y * mScale);
+        markerTransform.setTranslate((float)origin.x * mScale, (float)origin.y * mScale);
 
         double markerAngle = "auto".equals(mOrient) ? -1 : Double.parseDouble(mOrient);
         float degrees = 180 + (float) (markerAngle == -1 ? position.angle : markerAngle);
-        transform.preRotate(degrees);
+        markerTransform.preRotate(degrees);
 
         boolean useStrokeWidth = "strokeWidth".equals(mMarkerUnits);
         if (useStrokeWidth) {
-            transform.preScale(strokeWidth, strokeWidth);
+            markerTransform.preScale(strokeWidth, strokeWidth);
         }
-
-        canvas.concat(transform);
 
         double width = relativeOnWidth(mMarkerWidth) / mScale;
         double height = relativeOnHeight(mMarkerHeight) / mScale;
@@ -153,12 +153,14 @@ class MarkerView extends GroupView {
             Matrix viewBoxMatrix = ViewBox.getTransform(vbRect, eRect, mAlign, mMeetOrSlice);
             float[] values = new float[9];
             viewBoxMatrix.getValues(values);
-            canvas.scale(values[Matrix.MSCALE_X], values[Matrix.MSCALE_Y]);
+            markerTransform.preScale(values[Matrix.MSCALE_X], values[Matrix.MSCALE_Y]);
         }
 
         double x = relativeOnWidth(mRefX);
         double y = relativeOnHeight(mRefY);
-        canvas.translate((float)-x, (float)-y);
+        markerTransform.preTranslate((float)-x, (float)-y);
+
+        canvas.concat(markerTransform);
 
         drawGroup(canvas, paint, opacity);
 

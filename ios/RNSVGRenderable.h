@@ -30,6 +30,7 @@
 @property (nonatomic, assign) CGFloat strokeDashoffset;
 @property (nonatomic, assign) RNSVGVectorEffect vectorEffect;
 @property (nonatomic, copy) NSArray<NSString *> *propList;
+@property (nonatomic, assign) CGPathRef hitArea;
 
 - (void)setHitArea:(CGPathRef)path;
 

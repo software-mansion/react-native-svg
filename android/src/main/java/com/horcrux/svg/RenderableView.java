@@ -12,6 +12,7 @@ package com.horcrux.svg;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
@@ -382,24 +383,29 @@ abstract public class RenderableView extends VirtualView {
             contextElement = this;
             ArrayList<RNSVGMarkerPosition> positions = RNSVGMarkerPosition.fromPath(elements);
             float width = (float)(this.strokeWidth != null ? relativeOnOther(this.strokeWidth) : 1);
+            mMarkerPath = new Path();
             for (RNSVGMarkerPosition position : positions) {
                 RNSVGMarkerType type = position.type;
+                MarkerView marker = null;
                 switch (type) {
                     case kStartMarker:
-                        if (markerStart != null) markerStart.renderMarker(canvas, paint, opacity, position, width);
+                        marker = markerStart;
                         break;
 
                     case kMidMarker:
-                        if (markerMid != null) markerMid.renderMarker(canvas, paint, opacity, position, width);
+                        marker = markerMid;
                         break;
 
                     case kEndMarker:
-                        if (markerEnd != null) markerEnd.renderMarker(canvas, paint, opacity, position, width);
-                        break;
-
-                    default:
+                        marker = markerEnd;
                         break;
                 }
+                if (marker == null) {
+                    continue;
+                }
+                marker.renderMarker(canvas, paint, opacity, position, width);
+                Matrix transform = marker.markerTransform;
+                mMarkerPath.addPath(marker.getPath(canvas, paint), transform);
             }
             contextElement = null;
         }
@@ -520,9 +526,13 @@ abstract public class RenderableView extends VirtualView {
         if (mStrokeRegion == null && mStrokePath != null) {
             mStrokeRegion = getRegion(mStrokePath);
         }
+        if (mMarkerRegion == null && mMarkerPath != null) {
+            mMarkerRegion = getRegion(mMarkerPath);
+        }
         if (
             (mRegion == null || !mRegion.contains(x, y)) &&
-            (mStrokeRegion == null || !mStrokeRegion.contains(x, y))
+            (mStrokeRegion == null || !mStrokeRegion.contains(x, y) &&
+            (mMarkerRegion == null || !mMarkerRegion.contains(x, y)))
         ) {
             return -1;
         }

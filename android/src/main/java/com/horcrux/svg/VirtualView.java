@@ -91,8 +91,10 @@ abstract public class VirtualView extends ReactViewGroup {
     Path mPath;
     Path mFillPath;
     Path mStrokePath;
+    Path mMarkerPath;
     RectF mBox;
     Region mRegion;
+    Region mMarkerRegion;
     Region mStrokeRegion;
     Region mClipRegion;
     Path mClipRegionPath;
@@ -114,6 +116,7 @@ abstract public class VirtualView extends ReactViewGroup {
         canvasWidth = -1;
         fontSize = -1;
         mStrokeRegion = null;
+        mMarkerRegion = null;
         mRegion = null;
         mPath = null;
     }

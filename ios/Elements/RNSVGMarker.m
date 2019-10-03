@@ -173,8 +173,6 @@ double deg2rad(CGFloat deg) {
         transform = CGAffineTransformScale(transform, strokeWidth, strokeWidth);
     }
 
-    CGContextConcatCTM(context, transform);
-
     CGFloat width = [self relativeOnWidth:self.markerWidth];
     CGFloat height = [self relativeOnHeight:self.markerHeight];
     CGRect eRect = CGRectMake(0, 0, width, height);
@@ -183,12 +181,15 @@ double deg2rad(CGFloat deg) {
                                                                   eRect:eRect
                                                                   align:self.align
                                                             meetOrSlice:self.meetOrSlice];
-        CGContextScaleCTM(context, viewBoxTransform.a, viewBoxTransform.d);
+        transform = CGAffineTransformScale(transform, viewBoxTransform.a, viewBoxTransform.d);
     }
 
     CGFloat x = [self relativeOnWidth:self.refX];
     CGFloat y = [self relativeOnHeight:self.refY];
-    CGContextTranslateCTM(context, -x, -y);
+    transform = CGAffineTransformTranslate(transform,  -x, -y);
+
+    self.transform = transform;
+    CGContextConcatCTM(context, transform);
 
     [self renderGroupTo:context rect:eRect];
 

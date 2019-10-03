@@ -23,7 +23,6 @@
     NSArray<RNSVGLength *> *_sourceStrokeDashArray;
     CGFloat *_strokeDashArrayData;
     CGPathRef _srcHitPath;
-    CGPathRef _hitArea;
 }
 
 static RNSVGRenderable * _contextElement;
@@ -311,25 +310,39 @@ UInt32 saturate(CGFloat value) {
         _contextElement = self;
         NSArray<RNSVGMarkerPosition*>* positions = [RNSVGMarkerPosition fromCGPath:path];
         CGFloat width = self.strokeWidth ? [self relativeOnOther:self.strokeWidth] : 1;
+        __block CGRect bounds = CGRectNull;
+        CGMutablePathRef markerPath = CGPathCreateMutable();
         for (RNSVGMarkerPosition* position in positions) {
             RNSVGMarkerType type = [position type];
+            RNSVGMarker *marker;
             switch (type) {
                 case kStartMarker:
-                    [markerStart renderMarker:context rect:*rect position:position strokeWidth:width];
+                    marker = markerStart;
                     break;
 
                 case kMidMarker:
-                    [markerMid renderMarker:context rect:*rect position:position strokeWidth:width];
+                    marker = markerMid;
                     break;
 
                 case kEndMarker:
-                    [markerEnd renderMarker:context rect:*rect position:position strokeWidth:width];
-                    break;
-
-                default:
+                    marker = markerEnd;
                     break;
             }
+            if (!marker) {
+                continue;
+            }
+
+            [marker renderMarker:context rect:*rect position:position strokeWidth:width];
+            CGAffineTransform transform = marker.transform;
+            CGPathRef hitArea = marker.hitArea;
+            CGPathAddPath(markerPath, &transform, hitArea);
+            CGRect nodeRect = marker.pathBounds;
+            if (!CGRectIsEmpty(nodeRect)) {
+                bounds = CGRectUnion(bounds, CGRectApplyAffineTransform(nodeRect, transform));
+            }
         }
+        self.markerBounds = bounds;
+        self.markerPath = markerPath;
         _contextElement = nil;
     }
 }
@@ -513,13 +526,15 @@ UInt32 saturate(CGFloat value) {
     CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
     transformed = CGPointApplyAffineTransform(transformed, self.invTransform);
 
-    if (!CGRectContainsPoint(self.pathBounds, transformed)) {
+    if (!CGRectContainsPoint(self.pathBounds, transformed) &&
+        !CGRectContainsPoint(self.markerBounds, transformed)) {
         return nil;
     }
 
     BOOL evenodd = self.fillRule == kRNSVGCGFCRuleEvenodd;
     if (!CGPathContainsPoint(_hitArea, nil, transformed, evenodd) &&
-        !CGPathContainsPoint(self.strokePath, nil, transformed, NO)) {
+        !CGPathContainsPoint(self.strokePath, nil, transformed, NO) &&
+        !CGPathContainsPoint(self.markerPath, nil, transformed, NO)) {
         return nil;
     }
 

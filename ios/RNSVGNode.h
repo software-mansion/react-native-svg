@@ -45,8 +45,10 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) BOOL skip;
 @property (nonatomic, assign) CGPathRef path;
 @property (nonatomic, assign) CGPathRef strokePath;
+@property (nonatomic, assign) CGPathRef markerPath;
 @property (nonatomic, assign) CGRect clientRect;
 @property (nonatomic, assign) CGRect pathBounds;
+@property (nonatomic, assign) CGRect markerBounds;
 @property (nonatomic, copy) RCTDirectEventBlock onLayout;
 
 
