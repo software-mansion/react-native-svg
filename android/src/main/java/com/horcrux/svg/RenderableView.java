@@ -42,6 +42,7 @@ abstract public class RenderableView extends VirtualView {
         super(reactContext);
     }
 
+    static RenderableView contextElement;
     // strokeLinecap
     private static final int CAP_BUTT = 0;
     static final int CAP_ROUND = 1;
@@ -378,6 +379,7 @@ abstract public class RenderableView extends VirtualView {
         MarkerView markerMid = (MarkerView)getSvgView().getDefinedMarker(mMarkerMid);
         MarkerView markerEnd = (MarkerView)getSvgView().getDefinedMarker(mMarkerEnd);
         if (elements != null && (markerStart != null || markerMid != null  || markerEnd != null)) {
+            contextElement = this;
             ArrayList<RNSVGMarkerPosition> positions = RNSVGMarkerPosition.fromPath(elements);
             float width = (float)(this.strokeWidth != null ? relativeOnOther(this.strokeWidth) : 1);
             for (RNSVGMarkerPosition position : positions) {
@@ -399,8 +401,10 @@ abstract public class RenderableView extends VirtualView {
                         break;
                 }
             }
+            contextElement = null;
         }
     }
+
     /**
      * Sets up paint according to the props set on a view. Returns {@code true}
      * if the fill should be drawn, {@code false} if not.
@@ -475,6 +479,18 @@ abstract public class RenderableView extends VirtualView {
             case 2: {
                 int brush = getSvgView().mTintColor;
                 paint.setColor(brush);
+                break;
+            }
+            case 3: {
+                if (contextElement != null && contextElement.fill != null) {
+                    setupPaint(paint, opacity, contextElement.fill);
+                }
+                break;
+            }
+            case 4: {
+                if (contextElement != null && contextElement.stroke != null) {
+                    setupPaint(paint, opacity, contextElement.stroke);
+                }
                 break;
             }
         }

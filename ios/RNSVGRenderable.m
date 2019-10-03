@@ -26,6 +26,10 @@
     CGPathRef _hitArea;
 }
 
+static RNSVGRenderable * _contextElement;
++ (RNSVGRenderable *)contextElement { return _contextElement; }
++ (void)setContextElement:(RNSVGRenderable *)contextElement { _contextElement = contextElement; }
+
 - (id)init
 {
     if (self = [super init]) {
@@ -304,6 +308,7 @@ UInt32 saturate(CGFloat value) {
     RNSVGMarker *markerMid = (RNSVGMarker*)[self.svgView getDefinedMarker:self.markerMid];
     RNSVGMarker *markerEnd = (RNSVGMarker*)[self.svgView getDefinedMarker:self.markerEnd];
     if (markerStart || markerMid || markerEnd) {
+        _contextElement = self;
         NSArray<RNSVGMarkerPosition*>* positions = [RNSVGMarkerPosition fromCGPath:path];
         CGFloat width = self.strokeWidth ? [self relativeOnOther:self.strokeWidth] : 1;
         for (RNSVGMarkerPosition* position in positions) {
@@ -325,6 +330,7 @@ UInt32 saturate(CGFloat value) {
                     break;
             }
         }
+        _contextElement = nil;
     }
 }
 

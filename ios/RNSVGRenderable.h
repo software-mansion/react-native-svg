@@ -16,6 +16,7 @@
 
 @interface RNSVGRenderable : RNSVGNode
 
+@property (class) RNSVGRenderable *contextElement;
 @property (nonatomic, strong) RNSVGBrush *fill;
 @property (nonatomic, assign) CGFloat fillOpacity;
 @property (nonatomic, assign) RNSVGCGFCRule fillRule;

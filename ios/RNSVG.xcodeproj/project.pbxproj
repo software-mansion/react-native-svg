@@ -65,6 +65,8 @@
 		947F380C214810DC00677F2A /* RNSVGMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 947F380A214810DC00677F2A /* RNSVGMask.m */; };
 		947F380F2148119A00677F2A /* RNSVGMaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 947F380E2148119A00677F2A /* RNSVGMaskManager.m */; };
 		947F38102148119A00677F2A /* RNSVGMaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 947F380E2148119A00677F2A /* RNSVGMaskManager.m */; };
+		9482DEFA23460EC800FC486E /* RNSVGContextBrush.m in Sources */ = {isa = PBXBuildFile; fileRef = 9482DEF823460EC700FC486E /* RNSVGContextBrush.m */; };
+		9482DEFB23460EC800FC486E /* RNSVGContextBrush.m in Sources */ = {isa = PBXBuildFile; fileRef = 9482DEF823460EC700FC486E /* RNSVGContextBrush.m */; };
 		9494C4D81F473BA700D5BCFD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9494C4D71F473BA700D5BCFD /* QuartzCore.framework */; };
 		9494C4DA1F473BCB00D5BCFD /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9494C4D91F473BCB00D5BCFD /* CoreText.framework */; };
 		9494C4DC1F473BD900D5BCFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9494C4DB1F473BD900D5BCFD /* CoreGraphics.framework */; };
@@ -257,6 +259,8 @@
 		947F380A214810DC00677F2A /* RNSVGMask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGMask.m; path = Elements/RNSVGMask.m; sourceTree = "<group>"; };
 		947F380D2148118300677F2A /* RNSVGMaskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGMaskManager.h; sourceTree = "<group>"; };
 		947F380E2148119A00677F2A /* RNSVGMaskManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGMaskManager.m; sourceTree = "<group>"; };
+		9482DEF823460EC700FC486E /* RNSVGContextBrush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGContextBrush.m; sourceTree = "<group>"; };
+		9482DEF923460EC800FC486E /* RNSVGContextBrush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGContextBrush.h; sourceTree = "<group>"; };
 		9494C4D71F473BA700D5BCFD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9494C4D91F473BCB00D5BCFD /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		9494C4DB1F473BD900D5BCFD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -340,6 +344,8 @@
 		0CF68AEA1AF0549300FF9E5C /* Brushes */ = {
 			isa = PBXGroup;
 			children = (
+				9482DEF923460EC800FC486E /* RNSVGContextBrush.h */,
+				9482DEF823460EC700FC486E /* RNSVGContextBrush.m */,
 				10FDEEB31D3FBED400A5C46C /* RNSVGBrushType.h */,
 				10FDEEB01D3FB60500A5C46C /* RNSVGPainterBrush.h */,
 				10FDEEB11D3FB60500A5C46C /* RNSVGPainterBrush.m */,
@@ -599,6 +605,7 @@
 				10BEC1C21D3F680F00FDCB19 /* RNSVGLinearGradientManager.m in Sources */,
 				1039D2951CE71EC2001E90A8 /* RNSVGText.m in Sources */,
 				10BA0D3B1CE74E3100887C2B /* RNSVGRectManager.m in Sources */,
+				9482DEFA23460EC800FC486E /* RNSVGContextBrush.m in Sources */,
 				0CF68B071AF0549300FF9E5C /* RNSVGRenderable.m in Sources */,
 				1039D2891CE71EB7001E90A8 /* RNSVGGroup.m in Sources */,
 				10ED4A9E1CF0656A0078BC02 /* RNSVGClipPathManager.m in Sources */,
@@ -664,6 +671,7 @@
 				A361E77A1EB0C33D00646005 /* RNSVGText.m in Sources */,
 				A361E77B1EB0C33D00646005 /* RNSVGRectManager.m in Sources */,
 				A361E77C1EB0C33D00646005 /* RNSVGRenderable.m in Sources */,
+				9482DEFB23460EC800FC486E /* RNSVGContextBrush.m in Sources */,
 				A361E77D1EB0C33D00646005 /* RNSVGGroup.m in Sources */,
 				A361E77E1EB0C33D00646005 /* RNSVGClipPathManager.m in Sources */,
 				A361E77F1EB0C33D00646005 /* RNSVGPainter.m in Sources */,

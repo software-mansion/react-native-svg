@@ -4,6 +4,8 @@ import { Color } from './types';
 const urlIdPattern = /^url\(#(.+)\)$/;
 
 const currentColorBrush = [2];
+const contextFillBrush = [3];
+const contextStrokeBrush = [4];
 
 export default function extractBrush(color?: Color) {
   if (typeof color === 'number') {
@@ -18,6 +20,14 @@ export default function extractBrush(color?: Color) {
 
   if (color === 'currentColor') {
     return currentColorBrush;
+  }
+
+  if (color === 'context-fill') {
+    return contextFillBrush;
+  }
+
+  if (color === 'context-stroke') {
+    return contextStrokeBrush;
   }
 
   const brush = typeof color === 'string' && color.match(urlIdPattern);
