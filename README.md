@@ -1157,7 +1157,7 @@ const markerRendering = `<svg xmlns="http://www.w3.org/2000/svg"
     <marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5" 
             markerUnits="strokeWidth" markerWidth="4" markerHeight="3"
             orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 z" />
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" />
     </marker>
   </defs>
 
