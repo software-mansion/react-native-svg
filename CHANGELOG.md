@@ -1,3 +1,10 @@
+# [9.11.0](https://github.com/react-native-community/react-native-svg/compare/v9.10.2...v9.11.0) (2019-10-03)
+
+
+### Features
+
+* implement support for context-fill and context-stroke color ([f9a7238](https://github.com/react-native-community/react-native-svg/commit/f9a7238))
+
 ## [9.10.2](https://github.com/react-native-community/react-native-svg/compare/v9.10.1...v9.10.2) (2019-10-02)
 
 
