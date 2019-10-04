@@ -99,7 +99,7 @@ export default class Shape<P> extends Component<P> {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
-    RNSVGRenderableManager.isPointInStroke(handle, options, callback); // TODO
+    RNSVGRenderableManager.isPointInStroke(handle, options, callback);
   };
   getTotalLength = (callback: () => void) => {
     if (!callback) {

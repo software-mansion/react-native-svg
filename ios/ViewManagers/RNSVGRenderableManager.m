@@ -94,6 +94,36 @@ RCT_EXPORT_METHOD(isPointInFill:(nonnull NSNumber *)reactTag options:(NSDictiona
      attempt:0];
 }
 
+RCT_EXPORT_METHOD(isPointInStroke:(nonnull NSNumber *)reactTag options:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback)
+{
+    if (options == nil) {
+        RCTLogError(@"Invalid options given to isPointInFill, got: %@", options);
+        callback(@[[NSNumber numberWithBool:false]]);
+        return;
+    }
+    id xo = [options objectForKey:@"x"];
+    id yo = [options objectForKey:@"y"];
+    if (![xo isKindOfClass:NSNumber.class] ||
+        ![yo isKindOfClass:NSNumber.class]) {
+        RCTLogError(@"Invalid x or y given to isPointInFill");
+        callback(@[[NSNumber numberWithBool:false]]);
+        return;
+    }
+    [self
+     withTag:reactTag
+     success:^(RNSVGRenderable *svg){
+         CGFloat x = (CGFloat)[xo floatValue];
+         CGFloat y = (CGFloat)[yo floatValue];
+         CGPoint point = CGPointMake(x, y);
+         BOOL hit = CGPathContainsPoint(svg.strokePath, nil, point, NO);
+         callback(@[[NSNumber numberWithBool:hit]]);
+     }
+     fail:^{
+         callback(@[[NSNumber numberWithBool:false]]);
+     }
+     attempt:0];
+}
+
 RCT_EXPORT_METHOD(getTotalLength:(nonnull NSNumber *)reactTag callback:(RCTResponseSenderBlock)callback)
 {
     [self

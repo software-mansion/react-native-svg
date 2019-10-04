@@ -13,6 +13,7 @@ import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.RectF;
+import android.graphics.Region;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -76,6 +77,24 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         float y = (float) options.getDouble("y");
         float[] src = new float[]{x, y};
         isPointInFill(tag, src, successCallback, 0);
+    }
+
+    @SuppressWarnings("unused")
+    @ReactMethod
+    public void isPointInStroke(int tag, ReadableMap options, Callback successCallback) {
+        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+        if (svg == null) {
+            successCallback.invoke(false);
+            return;
+        }
+        svg.getPath(null, null);
+        svg.initBounds();
+        Region strokeRegion = svg.mStrokeRegion;
+        float scale = svg.mScale;
+        int x = (int) (options.getDouble("x") * scale);
+        int y = (int) (options.getDouble("y") * scale);
+        boolean hit = strokeRegion != null && strokeRegion.contains(x, y);
+        successCallback.invoke(hit);
     }
 
     @SuppressWarnings("unused")
