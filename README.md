@@ -1235,8 +1235,7 @@ yarn
 
 ### TODO:
 
-1. Add Native methods for elements.
-2. Filters
+1. Filters
 
 ### Known issues:
 
