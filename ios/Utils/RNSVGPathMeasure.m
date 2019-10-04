@@ -189,7 +189,7 @@ void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint bez2[4], 
     }
 }
 
-- (void)getPosAndTan:(CGFloat *)angle midPoint:(CGFloat)midPoint px:(CGFloat *)px py:(CGFloat *)py {
+- (void)getPosAndTan:(CGFloat *)angle midPoint:(CGFloat)midPoint x:(CGFloat *)x y:(CGFloat *)y {
     // Investigation suggests binary search is faster at lineCount >= 16
     // https://gist.github.com/msand/4c7993319425f9d7933be58ad9ada1a4
     NSUInteger i = _lineCount < 16 ?
@@ -220,8 +220,8 @@ void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint bez2[4], 
     CGFloat ldx = p2.x - p1.x;
     CGFloat ldy = p2.y - p1.y;
     *angle = atan2(ldy, ldx);
-    *px = p1.x + ldx * percent;
-    *py = p1.y + ldy * percent;
+    *x = p1.x + ldx * percent;
+    *y = p1.y + ldy * percent;
 }
 
 @end

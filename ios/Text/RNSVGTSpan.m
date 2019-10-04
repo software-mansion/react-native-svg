@@ -959,7 +959,7 @@ TopAlignedLabel *label;
                 CGFloat angle;
                 CGFloat px;
                 CGFloat py;
-                [measure getPosAndTan:&angle midPoint:midPoint px:&px py:&py];
+                [measure getPosAndTan:&angle midPoint:midPoint x:&px y:&py];
 
                 transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(px, py), transform);
                 transform = CGAffineTransformConcat(CGAffineTransformMakeRotation(angle + r), transform);
@@ -1032,7 +1032,7 @@ TopAlignedLabel *label;
 {
     textPath = nil;
     RNSVGText *parent = (RNSVGText*)[self superview];
-    CGPathRef path;
+    CGPathRef path = nil;
     while (parent) {
         if ([parent class] == [RNSVGTextPath class]) {
             textPath = (RNSVGTextPath*) parent;

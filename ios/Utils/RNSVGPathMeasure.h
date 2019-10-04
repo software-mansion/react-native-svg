@@ -19,6 +19,6 @@
 
 - (void)reset;
 - (void)extractPathData:(CGPathRef)path;
-- (void)getPosAndTan:(CGFloat *)angle midPoint:(CGFloat)midPoint px:(CGFloat *)px py:(CGFloat *)py;
+- (void)getPosAndTan:(CGFloat *)angle midPoint:(CGFloat)midPoint x:(CGFloat *)x y:(CGFloat *)y;
 
 @end

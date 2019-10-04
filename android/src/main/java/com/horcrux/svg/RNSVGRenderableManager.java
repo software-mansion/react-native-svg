@@ -15,12 +15,14 @@ import android.graphics.PathMeasure;
 import android.graphics.RectF;
 import android.graphics.Region;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.UiThreadUtil;
+import com.facebook.react.bridge.WritableMap;
 
 import javax.annotation.Nonnull;
 
@@ -115,7 +117,12 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         float[] pos = new float[2];
         float[] tan = new float[2];
         pm.getPosTan(Math.max(0, Math.min(length, pathLength)), pos, tan);
-        successCallback.invoke(pos[0], pos[1]);
+        double angle = Math.atan2(tan[1], tan[0]);
+        WritableMap result = Arguments.createMap();
+        result.putDouble("x", pos[0]);
+        result.putDouble("y", pos[1]);
+        result.putDouble("angle", angle);
+        successCallback.invoke(result);
     }
 
     @SuppressWarnings("unused")
@@ -139,9 +146,17 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
             bounds.union(svg.mMarkerBounds);
         }
         if (clipped) {
-            bounds.intersect(svg.mClipBounds);
+            RectF clipBounds = svg.mClipBounds;
+            if (clipBounds != null) {
+                bounds.intersect(svg.mClipBounds);
+            }
         }
-        successCallback.invoke(bounds.left, bounds.top, bounds.width(), bounds.height());
+        WritableMap result = Arguments.createMap();
+        result.putDouble("x", bounds.left);
+        result.putDouble("y", bounds.top);
+        result.putDouble("width", bounds.width());
+        result.putDouble("height", bounds.height());
+        successCallback.invoke(result);
     }
 
     @SuppressWarnings("unused")
@@ -155,10 +170,14 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
 
         float[] values = new float[9];
         ctm.getValues(values);
-        successCallback.invoke(
-                values[Matrix.MSCALE_X], values[Matrix.MSKEW_X], values[Matrix.MTRANS_X],
-                values[Matrix.MSKEW_Y], values[Matrix.MSCALE_Y], values[Matrix.MTRANS_Y]
-        );
+        WritableMap result = Arguments.createMap();
+        result.putDouble("a", values[Matrix.MSCALE_X]);
+        result.putDouble("b", values[Matrix.MSKEW_Y]);
+        result.putDouble("c", values[Matrix.MSKEW_X]);
+        result.putDouble("d", values[Matrix.MSCALE_Y]);
+        result.putDouble("e", values[Matrix.MTRANS_X]);
+        result.putDouble("f", values[Matrix.MTRANS_Y]);
+        successCallback.invoke(result);
     }
 
     @SuppressWarnings("unused")
@@ -168,9 +187,13 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         Matrix screenCTM = svg.mCTM;
         float[] values = new float[9];
         screenCTM.getValues(values);
-        successCallback.invoke(
-                values[Matrix.MSCALE_X], values[Matrix.MSKEW_X], values[Matrix.MTRANS_X],
-                values[Matrix.MSKEW_Y], values[Matrix.MSCALE_Y], values[Matrix.MTRANS_Y]
-        );
+        WritableMap result = Arguments.createMap();
+        result.putDouble("a", values[Matrix.MSCALE_X]);
+        result.putDouble("b", values[Matrix.MSKEW_Y]);
+        result.putDouble("c", values[Matrix.MSKEW_X]);
+        result.putDouble("d", values[Matrix.MSCALE_Y]);
+        result.putDouble("e", values[Matrix.MTRANS_X]);
+        result.putDouble("f", values[Matrix.MTRANS_Y]);
+        successCallback.invoke(result);
     }
 }

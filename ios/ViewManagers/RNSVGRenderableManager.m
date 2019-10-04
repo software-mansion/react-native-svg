@@ -132,7 +132,6 @@ RCT_EXPORT_METHOD(getTotalLength:(nonnull NSNumber *)reactTag callback:(RCTRespo
          CGPathRef target = [svg getPath:nil];
          RNSVGPathMeasure *measure = [[RNSVGPathMeasure alloc]init];
          [measure extractPathData:target];
-
          CGFloat pathLegth = measure.pathLength;
          callback(@[[NSNumber numberWithDouble:pathLegth]]);
      }
@@ -145,7 +144,7 @@ RCT_EXPORT_METHOD(getTotalLength:(nonnull NSNumber *)reactTag callback:(RCTRespo
 RCT_EXPORT_METHOD(getPointAtLength:(nonnull NSNumber *)reactTag options:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback)
 {
     id length = [options objectForKey:@"length"];
-    CGFloat x = (CGFloat)[length floatValue];
+    CGFloat position = (CGFloat)[length floatValue];
     [self
      withTag:reactTag
      success:^(RNSVGRenderable *svg){
@@ -153,10 +152,18 @@ RCT_EXPORT_METHOD(getPointAtLength:(nonnull NSNumber *)reactTag options:(NSDicti
          RNSVGPathMeasure *measure = [[RNSVGPathMeasure alloc]init];
          [measure extractPathData:target];
          CGFloat angle;
-         CGFloat px;
-         CGFloat py;
-         [measure getPosAndTan:&angle midPoint:fmax(0, fmin(measure.pathLength, x)) px:&px py:&py];
-         callback(@[[NSNumber numberWithDouble:px], [NSNumber numberWithDouble:py]]);
+         CGFloat x;
+         CGFloat y;
+         [measure getPosAndTan:&angle midPoint:fmax(0, fmin(position, measure.pathLength)) x:&x y:&y];
+         callback(
+                  @[
+                    @{
+                        @"x":@(x),
+                        @"y":@(y),
+                        @"angle":@(angle)
+                        }
+                    ]
+                  );
      }
      fail:^{
          callback(@[[NSNumber numberWithBool:false]]);
@@ -187,16 +194,22 @@ RCT_EXPORT_METHOD(getBBox:(nonnull NSNumber *)reactTag options:(NSDictionary *)o
          if (clipped) {
              CGPathRef clipPath = [svg getClipPath];
              CGRect clipBounds = CGPathGetBoundingBox(clipPath);
-             bounds = CGRectIntersection(bounds, clipBounds);
+             if (clipPath && !CGRectIsEmpty(clipBounds)) {
+                 bounds = CGRectIntersection(bounds, clipBounds);
+             }
          }
          CGPoint origin = bounds.origin;
          CGSize size = bounds.size;
-         callback(@[
-                    [NSNumber numberWithDouble:origin.x],
-                    [NSNumber numberWithDouble:origin.y],
-                    [NSNumber numberWithDouble:size.width],
-                    [NSNumber numberWithDouble:size.height]
-                    ]);
+         callback(
+                  @[
+                    @{
+                        @"x":@(origin.x),
+                        @"y":@(origin.y),
+                        @"width":@(size.width),
+                        @"height":@(size.height)
+                        }
+                    ]
+                  );
      }
      fail:^{
          callback(@[[NSNumber numberWithBool:false]]);
@@ -210,10 +223,18 @@ RCT_EXPORT_METHOD(getCTM:(nonnull NSNumber *)reactTag callback:(RCTResponseSende
      withTag:reactTag
      success:^(RNSVGRenderable *svg){
          CGAffineTransform ctm = svg.ctm;
-         callback(@[
-                    n(ctm.a), n(ctm.c), n(ctm.tx),
-                    n(ctm.b), n(ctm.d), n(ctm.ty)
-                    ]);
+         callback(
+                  @[
+                    @{
+                        @"a":n(ctm.a),
+                        @"b":n(ctm.b),
+                        @"c":n(ctm.c),
+                        @"d":n(ctm.d),
+                        @"e":n(ctm.tx),
+                        @"f":n(ctm.ty)
+                        }
+                    ]
+                  );
      }
      fail:^{
          callback(@[[NSNumber numberWithBool:false]]);
@@ -230,11 +251,19 @@ RCT_EXPORT_METHOD(getScreenCTM:(nonnull NSNumber *)reactTag callback:(RCTRespons
     [self
      withTag:reactTag
      success:^(RNSVGRenderable *svg){
-         CGAffineTransform screenCTM = svg.screenCTM;
-         callback(@[
-                    n(screenCTM.a), n(screenCTM.c), n(screenCTM.tx),
-                    n(screenCTM.b), n(screenCTM.d), n(screenCTM.ty)
-                    ]);
+         CGAffineTransform ctm = svg.screenCTM;
+         callback(
+                  @[
+                    @{
+                        @"a":n(ctm.a),
+                        @"b":n(ctm.b),
+                        @"c":n(ctm.c),
+                        @"d":n(ctm.d),
+                        @"e":n(ctm.tx),
+                        @"f":n(ctm.ty)
+                        }
+                    ]
+                  );
      }
      fail:^{
          callback(@[[NSNumber numberWithBool:false]]);
@@ -243,3 +272,4 @@ RCT_EXPORT_METHOD(getScreenCTM:(nonnull NSNumber *)reactTag callback:(RCTRespons
 }
 
 @end
+
