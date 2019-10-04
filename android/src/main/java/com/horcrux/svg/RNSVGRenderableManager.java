@@ -104,7 +104,8 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
     public void getTotalLength(int tag, Callback successCallback) {
         RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
         PathMeasure pm = new PathMeasure(svg.getPath(null, null), false);
-        successCallback.invoke(pm.getLength());
+        float scale = svg.mScale;
+        successCallback.invoke(pm.getLength() / scale);
     }
 
     @SuppressWarnings("unused")
@@ -119,8 +120,9 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         pm.getPosTan(Math.max(0, Math.min(length, pathLength)), pos, tan);
         double angle = Math.atan2(tan[1], tan[0]);
         WritableMap result = Arguments.createMap();
-        result.putDouble("x", pos[0]);
-        result.putDouble("y", pos[1]);
+        float scale = svg.mScale;
+        result.putDouble("x", pos[0] / scale);
+        result.putDouble("y", pos[1] / scale);
         result.putDouble("angle", angle);
         successCallback.invoke(result);
     }
@@ -152,10 +154,11 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
             }
         }
         WritableMap result = Arguments.createMap();
-        result.putDouble("x", bounds.left);
-        result.putDouble("y", bounds.top);
-        result.putDouble("width", bounds.width());
-        result.putDouble("height", bounds.height());
+        float scale = svg.mScale;
+        result.putDouble("x", bounds.left / scale);
+        result.putDouble("y", bounds.top / scale);
+        result.putDouble("width", bounds.width() / scale);
+        result.putDouble("height", bounds.height() / scale);
         successCallback.invoke(result);
     }
 
@@ -185,6 +188,7 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
     public void getScreenCTM(int tag, Callback successCallback) {
         RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
         Matrix screenCTM = svg.mCTM;
+        SvgView root = svg.getSvgView();
         float[] values = new float[9];
         screenCTM.getValues(values);
         WritableMap result = Arguments.createMap();
@@ -192,8 +196,8 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         result.putDouble("b", values[Matrix.MSKEW_Y]);
         result.putDouble("c", values[Matrix.MSKEW_X]);
         result.putDouble("d", values[Matrix.MSCALE_Y]);
-        result.putDouble("e", values[Matrix.MTRANS_X]);
-        result.putDouble("f", values[Matrix.MTRANS_Y]);
+        result.putDouble("e", values[Matrix.MTRANS_X] + root.getLeft());
+        result.putDouble("f", values[Matrix.MTRANS_Y] + root.getTop());
         successCallback.invoke(result);
     }
 }
