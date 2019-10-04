@@ -40,7 +40,7 @@
         _reloadImageCancellationBlock = nil;
     }
 
-    _reloadImageCancellationBlock = [self.bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:src] callback:^(NSError *error, UIImage *image) {
+    _reloadImageCancellationBlock = [[self->_bridge moduleForClass:[RCTImageLoader class]]  loadImageWithURLRequest:[RCTConvert NSURLRequest:src] callback:^(NSError *error, UIImage *image) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self->_image = CGImageRetain(image.CGImage);
             self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
