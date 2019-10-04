@@ -55,13 +55,24 @@ export default class Shape<P> extends Component<P> {
   ) => {
     this.root && this.root.setNativeProps(props);
   };
-  getBBox = (callback: () => void, options?: SVGBoundingBoxOptions) => {
-    if (!callback) {
-      return;
-    }
+  getBBox = (callback?: () => void, options?: SVGBoundingBoxOptions) => {
     const { fill = true, stroke = true, markers = true, clipped = true } =
       options || {};
     const handle = findNodeHandle(this.root as Component);
+    if (!callback) {
+      return new Promise(resolve => {
+        RNSVGRenderableManager.getBBox(
+          handle,
+          {
+            fill,
+            stroke,
+            markers,
+            clipped,
+          },
+          resolve,
+        );
+      });
+    }
     RNSVGRenderableManager.getBBox(
       handle,
       {
@@ -72,47 +83,66 @@ export default class Shape<P> extends Component<P> {
       },
       callback,
     );
+    return undefined;
   };
   getCTM = (callback: () => void) => {
-    if (!callback) {
-      return;
-    }
     const handle = findNodeHandle(this.root as Component);
+    if (!callback) {
+      return new Promise(resolve => {
+        RNSVGRenderableManager.getCTM(handle, resolve);
+      });
+    }
     RNSVGRenderableManager.getCTM(handle, callback);
+    return undefined;
   };
   getScreenCTM = (callback: () => void) => {
-    if (!callback) {
-      return;
-    }
     const handle = findNodeHandle(this.root as Component);
+    if (!callback) {
+      return new Promise(resolve => {
+        RNSVGRenderableManager.getScreenCTM(handle, resolve);
+      });
+    }
     RNSVGRenderableManager.getScreenCTM(handle, callback);
+    return undefined;
   };
   isPointInFill = (options: DOMPointInit, callback: () => void) => {
-    if (!callback) {
-      return;
-    }
     const handle = findNodeHandle(this.root as Component);
+    if (!callback) {
+      return new Promise(resolve => {
+        RNSVGRenderableManager.isPointInFill(handle, options, resolve);
+      });
+    }
     RNSVGRenderableManager.isPointInFill(handle, options, callback);
+    return undefined;
   };
-  isPointInStroke = (options: DOMPointInit, callback: () => void) => {
-    if (!callback) {
-      return;
-    }
+  isPointInStroke = (options: DOMPointInit, callback?: () => void) => {
     const handle = findNodeHandle(this.root as Component);
+    if (!callback) {
+      return new Promise(resolve => {
+        RNSVGRenderableManager.isPointInStroke(handle, options, resolve);
+      });
+    }
     RNSVGRenderableManager.isPointInStroke(handle, options, callback);
+    return undefined;
   };
-  getTotalLength = (callback: () => void) => {
-    if (!callback) {
-      return;
-    }
+  getTotalLength = (callback?: () => void) => {
     const handle = findNodeHandle(this.root as Component);
+    if (!callback) {
+      return new Promise(resolve => {
+        RNSVGRenderableManager.getTotalLength(handle, resolve);
+      });
+    }
     RNSVGRenderableManager.getTotalLength(handle, callback);
+    return undefined;
   };
   getPointAtLength = (length: number, callback: () => void) => {
-    if (!callback) {
-      return;
-    }
     const handle = findNodeHandle(this.root as Component);
+    if (!callback) {
+      return new Promise(resolve => {
+        RNSVGRenderableManager.getPointAtLength(handle, { length }, resolve);
+      });
+    }
     RNSVGRenderableManager.getPointAtLength(handle, { length }, callback);
+    return undefined;
   };
 }
