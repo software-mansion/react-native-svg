@@ -94,7 +94,20 @@ void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint bez2[4], 
     *last = *next;
 }
 
+- (void)reset {
+    _lengths = nil;
+    _lines = nil;
+    _isClosed = NO;
+    _lineCount = 0;
+    _pathLength = 0;
+    _path = nil;
+}
+
 - (void)extractPathData:(CGPathRef)path {
+    if (path == _path) {
+        return;
+    }
+    _path = path;
     CGPoint origin = CGPointMake (0.0, 0.0);
     CGPoint last = CGPointMake (0.0, 0.0);
     _lengths = [NSMutableArray array];

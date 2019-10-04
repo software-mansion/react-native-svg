@@ -11,12 +11,13 @@
 @interface RNSVGPathMeasure : NSObject
 
 @property CGFloat pathLength;
-@property CGPathRef textPath;
+@property CGPathRef path;
 @property NSMutableArray *lengths;
 @property NSMutableArray *lines;
 @property NSUInteger lineCount;
 @property BOOL isClosed;
 
+- (void)reset;
 - (void)extractPathData:(CGPathRef)path;
 - (void)getPosAndTan:(CGFloat *)angle midPoint:(CGFloat)midPoint px:(CGFloat *)px py:(CGFloat *)py;
 

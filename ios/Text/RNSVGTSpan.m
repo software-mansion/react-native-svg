@@ -1032,17 +1032,21 @@ TopAlignedLabel *label;
 {
     textPath = nil;
     RNSVGText *parent = (RNSVGText*)[self superview];
+    CGPathRef path;
     while (parent) {
         if ([parent class] == [RNSVGTextPath class]) {
             textPath = (RNSVGTextPath*) parent;
             RNSVGNode *template = [self.svgView getDefinedTemplate:textPath.href];
-            CGPathRef path = [template getPath:nil];
+            path = [template getPath:context];
             [measure extractPathData:path];
             break;
         } else if (![parent isKindOfClass:[RNSVGText class]]) {
             break;
         }
         parent = (RNSVGText*)[parent superview];
+    }
+    if (!path) {
+        [measure reset];
     }
 }
 
