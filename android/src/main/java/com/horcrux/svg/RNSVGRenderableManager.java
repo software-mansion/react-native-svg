@@ -9,7 +9,10 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Matrix;
+import android.graphics.Path;
 import android.graphics.PathMeasure;
+import android.graphics.RectF;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -69,9 +72,9 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
     @SuppressWarnings("unused")
     @ReactMethod
     public void isPointInFill(int tag, ReadableMap options, Callback successCallback) {
-        float x = (float)options.getDouble("x");
-        float y = (float)options.getDouble("y");
-        float[] src = new float[] { x, y };
+        float x = (float) options.getDouble("x");
+        float y = (float) options.getDouble("y");
+        float[] src = new float[]{x, y};
         isPointInFill(tag, src, successCallback, 0);
     }
 
@@ -86,7 +89,7 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
     @SuppressWarnings("unused")
     @ReactMethod
     public void getPointAtLength(int tag, ReadableMap options, Callback successCallback) {
-        float length = (float)options.getDouble("length");
+        float length = (float) options.getDouble("length");
         RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
         PathMeasure pm = new PathMeasure(svg.getPath(null, null), false);
         float pathLength = pm.getLength();
@@ -94,5 +97,61 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         float[] tan = new float[2];
         pm.getPosTan(Math.max(0, Math.min(length, pathLength)), pos, tan);
         successCallback.invoke(pos[0], pos[1]);
+    }
+
+    @SuppressWarnings("unused")
+    @ReactMethod
+    public void getBBox(int tag, ReadableMap options, Callback successCallback) {
+        boolean fill = options.getBoolean("fill");
+        boolean stroke = options.getBoolean("stroke");
+        boolean markers = options.getBoolean("markers");
+        boolean clipped = options.getBoolean("clipped");
+        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+        Path path = svg.getPath(null, null);
+        svg.initBounds();
+        RectF bounds = new RectF();
+        if (fill) {
+            bounds.union(svg.mFillBounds);
+        }
+        if (stroke) {
+            bounds.union(svg.mStrokeBounds);
+        }
+        if (markers) {
+            bounds.union(svg.mMarkerBounds);
+        }
+        if (clipped) {
+            bounds.intersect(svg.mClipBounds);
+        }
+        successCallback.invoke(bounds.left, bounds.top, bounds.width(), bounds.height());
+    }
+
+    @SuppressWarnings("unused")
+    @ReactMethod
+    public void getCTM(int tag, Callback successCallback) {
+        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+        Matrix screenCTM = svg.mCTM;
+        Matrix invViewBox = svg.getSvgView().mInvViewBoxMatrix;
+        Matrix ctm = new Matrix(screenCTM);
+        ctm.preConcat(invViewBox);
+
+        float[] values = new float[9];
+        ctm.getValues(values);
+        successCallback.invoke(
+                values[Matrix.MSCALE_X], values[Matrix.MSKEW_X], values[Matrix.MTRANS_X],
+                values[Matrix.MSKEW_Y], values[Matrix.MSCALE_Y], values[Matrix.MTRANS_Y]
+        );
+    }
+
+    @SuppressWarnings("unused")
+    @ReactMethod
+    public void getScreenCTM(int tag, Callback successCallback) {
+        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+        Matrix screenCTM = svg.mCTM;
+        float[] values = new float[9];
+        screenCTM.getValues(values);
+        successCallback.invoke(
+                values[Matrix.MSCALE_X], values[Matrix.MSKEW_X], values[Matrix.MTRANS_X],
+                values[Matrix.MSKEW_Y], values[Matrix.MSCALE_Y], values[Matrix.MTRANS_Y]
+        );
     }
 }

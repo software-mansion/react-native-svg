@@ -203,7 +203,6 @@ class ImageView extends RenderableView {
         Paint alphaPaint = new Paint();
         alphaPaint.setAlpha((int) (opacity * 255));
         canvas.drawBitmap(bitmap, null, vbRect, alphaPaint);
-        //noinspection deprecation
         mCTM.mapRect(vbRect);
         this.setClientRect(vbRect);
     }

@@ -121,6 +121,8 @@
     [self setHitArea:hitAreaPath];
     CGPathRelease(hitAreaPath);
     self.pathBounds = hitArea;
+    self.fillBounds = hitArea;
+    self.strokeBounds = hitArea;
 
     // apply viewBox transform on Image render.
     CGRect imageBounds = CGRectMake(0, 0, _imageSize.width, _imageSize.height);
@@ -136,6 +138,13 @@
 
     CGRect bounds = hitArea;
     self.clientRect = bounds;
+    
+    CGAffineTransform current = CGContextGetCTM(context);
+    CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
+    
+    self.ctm = svgToClientTransform;
+    self.screenCTM = current;
+    
     CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
     CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
     CGPoint center = CGPointApplyAffineTransform(mid, transform);

@@ -356,9 +356,9 @@ UInt32 saturate(CGFloat value) {
             self.path = CGPathRetain(path);
         }
         [self setHitArea:path];
-        const CGRect fillBounds = CGPathGetBoundingBox(path);
-        const CGRect strokeBounds = CGPathGetBoundingBox(self.strokePath);
-        self.pathBounds = CGRectUnion(fillBounds, strokeBounds);
+        self.fillBounds = CGPathGetBoundingBox(path);
+        self.strokeBounds = CGPathGetBoundingBox(self.strokePath);
+        self.pathBounds = CGRectUnion(self.fillBounds, self.strokeBounds);
     }
     const CGRect pathBounds = self.pathBounds;
 
@@ -366,7 +366,9 @@ UInt32 saturate(CGFloat value) {
     CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
     CGRect clientRect = CGRectApplyAffineTransform(pathBounds, svgToClientTransform);
 
+    self.ctm = svgToClientTransform;
     self.clientRect = clientRect;
+    self.screenCTM = current;
 
     if (_vectorEffect == kRNSVGVectorEffectNonScalingStroke) {
         path = CGPathCreateCopyByTransformingPath(path, &svgToClientTransform);

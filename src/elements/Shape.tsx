@@ -14,10 +14,10 @@ const touchVals = touchKeys.map(key => SvgTouchableMixin[key]);
 const numTouchKeys = touchKeys.length;
 
 interface SVGBoundingBoxOptions {
-  fill: boolean;
-  stroke: boolean;
-  markers: boolean;
-  clipped: boolean;
+  fill?: boolean;
+  stroke?: boolean;
+  markers?: boolean;
+  clipped?: boolean;
 }
 
 interface DOMPointInit {
@@ -59,31 +59,42 @@ export default class Shape<P> extends Component<P> {
     if (!callback) {
       return;
     }
+    const { fill = true, stroke = true, markers = true, clipped = true } =
+      options || {};
     const handle = findNodeHandle(this.root as Component);
-    RNSVGRenderableManager.getBBox(handle, options, callback); // TODO
+    RNSVGRenderableManager.getBBox(
+      handle,
+      {
+        fill,
+        stroke,
+        markers,
+        clipped,
+      },
+      callback,
+    );
   };
   getCTM = (callback: () => void) => {
     if (!callback) {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
-    RNSVGRenderableManager.getCTM(handle, callback); // TODO
+    RNSVGRenderableManager.getCTM(handle, callback);
   };
   getScreenCTM = (callback: () => void) => {
     if (!callback) {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
-    RNSVGRenderableManager.getScreenCTM(handle, callback); // TODO
+    RNSVGRenderableManager.getScreenCTM(handle, callback);
   };
-  isPointInFill = (callback: () => void, options: DOMPointInit) => {
+  isPointInFill = (options: DOMPointInit, callback: () => void) => {
     if (!callback) {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
     RNSVGRenderableManager.isPointInFill(handle, options, callback);
   };
-  isPointInStroke = (callback: () => void, options: DOMPointInit) => {
+  isPointInStroke = (options: DOMPointInit, callback: () => void) => {
     if (!callback) {
       return;
     }
@@ -95,13 +106,13 @@ export default class Shape<P> extends Component<P> {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
-    RNSVGRenderableManager.getTotalLength(handle, callback); // TODO
+    RNSVGRenderableManager.getTotalLength(handle, callback);
   };
-  getPointAtLength = (callback: () => void, options: Object) => {
+  getPointAtLength = (options: Object, callback: () => void) => {
     if (!callback) {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
-    RNSVGRenderableManager.getPointAtLength(handle, options, callback); // TODO
+    RNSVGRenderableManager.getPointAtLength(handle, options, callback);
   };
 }

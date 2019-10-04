@@ -1158,15 +1158,8 @@ class TSpanView extends TextView {
         int x = Math.round(dst[0]);
         int y = Math.round(dst[1]);
 
-        if (mRegion == null && mFillPath != null) {
-            mRegion = getRegion(mFillPath);
-        }
-        if (mRegion == null && mPath != null) {
-            mRegion = getRegion(mPath);
-        }
-        if (mStrokeRegion == null && mStrokePath != null) {
-            mStrokeRegion = getRegion(mStrokePath);
-        }
+        initBounds();
+
         if (
             (mRegion == null || !mRegion.contains(x, y)) &&
             (mStrokeRegion == null || !mStrokeRegion.contains(x, y))
@@ -1176,10 +1169,6 @@ class TSpanView extends TextView {
 
         Path clipPath = getClipPath();
         if (clipPath != null) {
-            if (mClipRegionPath != clipPath) {
-                mClipRegionPath = clipPath;
-                mClipRegion = getRegion(clipPath);
-            }
             if (!mClipRegion.contains(x, y)) {
                 return -1;
             }

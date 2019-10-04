@@ -100,7 +100,7 @@ RCT_EXPORT_METHOD(getTotalLength:(nonnull NSNumber *)reactTag callback:(RCTRespo
      withTag:reactTag
      success:^(RNSVGRenderable *svg){
          CGPathRef target = [svg getPath:nil];
-         RNSVGPathMeasure *measure = [RNSVGPathMeasure init];
+         RNSVGPathMeasure *measure = [[RNSVGPathMeasure alloc]init];
          [measure extractPathData:target];
 
          CGFloat pathLegth = measure.pathLength;
@@ -127,6 +127,84 @@ RCT_EXPORT_METHOD(getPointAtLength:(nonnull NSNumber *)reactTag options:(NSDicti
          CGFloat py;
          [measure getPosAndTan:&angle midPoint:fmax(0, fmin(measure.pathLength, x)) px:&px py:&py];
          callback(@[[NSNumber numberWithDouble:px], [NSNumber numberWithDouble:py]]);
+     }
+     fail:^{
+         callback(@[[NSNumber numberWithBool:false]]);
+     }
+     attempt:0];
+}
+
+RCT_EXPORT_METHOD(getBBox:(nonnull NSNumber *)reactTag options:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback)
+{
+    [self
+     withTag:reactTag
+     success:^(RNSVGRenderable *svg){
+         BOOL fill = [[options objectForKey:@"fill"] boolValue];
+         BOOL stroke = [[options objectForKey:@"stroke"] boolValue];
+         BOOL markers = [[options objectForKey:@"markers"] boolValue];
+         BOOL clipped = [[options objectForKey:@"clipped"] boolValue];
+         [svg getPath:nil];
+         CGRect bounds = CGRectZero;
+         if (fill) {
+             bounds = CGRectUnion(bounds, svg.fillBounds);
+         }
+         if (stroke) {
+             bounds = CGRectUnion(bounds, svg.strokeBounds);
+         }
+         if (markers) {
+             bounds = CGRectUnion(bounds, svg.markerBounds);
+         }
+         if (clipped) {
+             CGPathRef clipPath = [svg getClipPath];
+             CGRect clipBounds = CGPathGetBoundingBox(clipPath);
+             bounds = CGRectIntersection(bounds, clipBounds);
+         }
+         CGPoint origin = bounds.origin;
+         CGSize size = bounds.size;
+         callback(@[
+                    [NSNumber numberWithDouble:origin.x],
+                    [NSNumber numberWithDouble:origin.y],
+                    [NSNumber numberWithDouble:size.width],
+                    [NSNumber numberWithDouble:size.height]
+                    ]);
+     }
+     fail:^{
+         callback(@[[NSNumber numberWithBool:false]]);
+     }
+     attempt:0];
+}
+
+RCT_EXPORT_METHOD(getCTM:(nonnull NSNumber *)reactTag callback:(RCTResponseSenderBlock)callback)
+{
+    [self
+     withTag:reactTag
+     success:^(RNSVGRenderable *svg){
+         CGAffineTransform ctm = svg.ctm;
+         callback(@[
+                    n(ctm.a), n(ctm.c), n(ctm.tx),
+                    n(ctm.b), n(ctm.d), n(ctm.ty)
+                    ]);
+     }
+     fail:^{
+         callback(@[[NSNumber numberWithBool:false]]);
+     }
+     attempt:0];
+}
+
+static NSNumber *n(CGFloat af) {
+    return [NSNumber numberWithDouble:af];
+}
+
+RCT_EXPORT_METHOD(getScreenCTM:(nonnull NSNumber *)reactTag callback:(RCTResponseSenderBlock)callback)
+{
+    [self
+     withTag:reactTag
+     success:^(RNSVGRenderable *svg){
+         CGAffineTransform screenCTM = svg.screenCTM;
+         callback(@[
+                    n(screenCTM.a), n(screenCTM.c), n(screenCTM.tx),
+                    n(screenCTM.b), n(screenCTM.d), n(screenCTM.ty)
+                    ]);
      }
      fail:^{
          callback(@[[NSNumber numberWithBool:false]]);

@@ -78,10 +78,16 @@
     [self setHitArea:path];
     if (!CGRectEqualToRect(bounds, CGRectNull)) {
         self.clientRect = bounds;
-        const CGRect fillBounds = CGPathGetBoundingBox(path);
-        const CGRect strokeBounds = CGPathGetBoundingBox(self.strokePath);
-        self.pathBounds = CGRectUnion(fillBounds, strokeBounds);
+        self.fillBounds = CGPathGetBoundingBox(path);
+        self.strokeBounds = CGPathGetBoundingBox(self.strokePath);
+        self.pathBounds = CGRectUnion(self.fillBounds, self.strokeBounds);
 
+        CGAffineTransform current = CGContextGetCTM(context);
+        CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
+        
+        self.ctm = svgToClientTransform;
+        self.screenCTM = current;
+        
         CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
         CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
         CGPoint center = CGPointApplyAffineTransform(mid, transform);
