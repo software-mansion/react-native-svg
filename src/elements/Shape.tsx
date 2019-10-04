@@ -108,11 +108,11 @@ export default class Shape<P> extends Component<P> {
     const handle = findNodeHandle(this.root as Component);
     RNSVGRenderableManager.getTotalLength(handle, callback);
   };
-  getPointAtLength = (options: Object, callback: () => void) => {
+  getPointAtLength = (length: number, callback: () => void) => {
     if (!callback) {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
-    RNSVGRenderableManager.getPointAtLength(handle, options, callback);
+    RNSVGRenderableManager.getPointAtLength(handle, { length }, callback);
   };
 }
