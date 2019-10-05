@@ -37,6 +37,14 @@ export interface SVGPoint extends Point {
   matrixTransform(matrix: SVGMatrix): SVGPoint;
 }
 
+export interface Rect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+export interface SVGRect extends Rect {}
+
 export interface Matrix {
   a: number;
   b: number;
@@ -256,7 +264,10 @@ export default class Shape<P> extends Component<P> {
   ) => {
     this.root && this.root.setNativeProps(props);
   };
-  getBBox = (options?: SVGBoundingBoxOptions, callback?: () => void) => {
+  getBBox = (
+    options?: SVGBoundingBoxOptions,
+    callback?: (box: SVGRect) => void,
+  ) => {
     const { fill = true, stroke = true, markers = true, clipped = true } =
       options || {};
     const handle = findNodeHandle(this.root as Component);
