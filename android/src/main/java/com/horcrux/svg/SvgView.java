@@ -415,10 +415,10 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
 
     void defineMarker(VirtualView marker, String markerRef) {
-        mDefinedMasks.put(markerRef, marker);
+        mDefinedMarkers.put(markerRef, marker);
     }
 
     VirtualView getDefinedMarker(String markerRef) {
-        return mDefinedMasks.get(markerRef);
+        return mDefinedMarkers.get(markerRef);
     }
 }

@@ -121,7 +121,7 @@ class TSpanView extends TextView {
         FontData font = gc.getFont();
         TextPaint tp = new TextPaint(paint);
         applyTextPropertiesToPaint(tp, font);
-        applySpacingAndFeatuers(tp, font);
+        applySpacingAndFeatures(tp, font);
         double fontSize = gc.getFontSize();
 
         Layout.Alignment align;
@@ -225,7 +225,7 @@ class TSpanView extends TextView {
         FontData font = gc.getFont();
         applyTextPropertiesToPaint(paint, font);
 
-        applySpacingAndFeatuers(paint, font);
+        applySpacingAndFeatures(paint, font);
 
         cachedAdvance = paint.measureText(line);
         return cachedAdvance;
@@ -237,7 +237,7 @@ class TSpanView extends TextView {
     final static String additionalLigatures = "'hlig', 'cala', ";
     final static String fontWeightTag = "'wght' ";
 
-    private void applySpacingAndFeatuers(Paint paint, FontData font) {
+    private void applySpacingAndFeatures(Paint paint, FontData font) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             double letterSpacing = font.letterSpacing;
             paint.setLetterSpacing((float) (letterSpacing / (font.fontSize * mScale)));
