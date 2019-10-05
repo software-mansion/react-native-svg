@@ -16,12 +16,10 @@ import android.graphics.RectF;
 import android.graphics.Region;
 
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.bridge.WritableMap;
 
 import javax.annotation.Nonnull;
@@ -37,106 +35,97 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         return "RNSVGRenderableManager";
     }
 
-    private static void isPointInFill(final int tag, final float[] src, final Callback successCallback, final int attempt) {
-        UiThreadUtil.runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
-
-                        if (svg == null) {
-                            if (attempt < 1) {
-                                RenderableViewManager.runWhenViewIsAvailable(tag, new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
-                                        if (svg == null) { // Should never happen
-                                            successCallback.invoke(false);
-                                            return;
-                                        }
-                                        isPointInFill(tag, src, successCallback, attempt + 1);
-                                    }
-                                });
-                            } else {
-                                successCallback.invoke(false);
-                            }
-                        } else {
-                            float scale = svg.mScale;
-                            src[0] *= scale;
-                            src[1] *= scale;
-                            int i = svg.hitTest(src);
-                            successCallback.invoke(i != -1);
-                        }
-                    }
-                }
-        );
-    }
-
     @SuppressWarnings("unused")
-    @ReactMethod
-    public void isPointInFill(int tag, ReadableMap options, Callback successCallback) {
-        float x = (float) options.getDouble("x");
-        float y = (float) options.getDouble("y");
-        float[] src = new float[]{x, y};
-        isPointInFill(tag, src, successCallback, 0);
-    }
-
-    @SuppressWarnings("unused")
-    @ReactMethod
-    public void isPointInStroke(int tag, ReadableMap options, Callback successCallback) {
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public boolean isPointInFill(int tag, ReadableMap options) {
         RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
         if (svg == null) {
-            successCallback.invoke(false);
-            return;
+            return false;
         }
+
+        float scale = svg.mScale;
+        float x = (float) options.getDouble("x") * scale;
+        float y = (float) options.getDouble("y") * scale;
+
+        int i = svg.hitTest(new float[]{x, y});
+        return i != -1;
+    }
+
+    @SuppressWarnings("unused")
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public boolean isPointInStroke(int tag, ReadableMap options) {
+        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+        if (svg == null) {
+            return false;
+        }
+
         svg.getPath(null, null);
         svg.initBounds();
-        Region strokeRegion = svg.mStrokeRegion;
+
         float scale = svg.mScale;
         int x = (int) (options.getDouble("x") * scale);
         int y = (int) (options.getDouble("y") * scale);
-        boolean hit = strokeRegion != null && strokeRegion.contains(x, y);
-        successCallback.invoke(hit);
+
+        Region strokeRegion = svg.mStrokeRegion;
+        return strokeRegion != null && strokeRegion.contains(x, y);
     }
 
     @SuppressWarnings("unused")
-    @ReactMethod
-    public void getTotalLength(int tag, Callback successCallback) {
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public float getTotalLength(int tag) {
         RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
-        PathMeasure pm = new PathMeasure(svg.getPath(null, null), false);
-        float scale = svg.mScale;
-        successCallback.invoke(pm.getLength() / scale);
+        if (svg == null) {
+            return 0;
+        }
+
+        Path path = svg.getPath(null, null);
+        PathMeasure pm = new PathMeasure(path, false);
+        return pm.getLength() / svg.mScale;
     }
 
     @SuppressWarnings("unused")
-    @ReactMethod
-    public void getPointAtLength(int tag, ReadableMap options, Callback successCallback) {
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public WritableMap getPointAtLength(int tag, ReadableMap options) {
+        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+        if (svg == null) {
+            return null;
+        }
+
+        Path path = svg.getPath(null, null);
+        PathMeasure pm = new PathMeasure(path, false);
         float length = (float) options.getDouble("length");
-        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
-        PathMeasure pm = new PathMeasure(svg.getPath(null, null), false);
-        float pathLength = pm.getLength();
+        float scale = svg.mScale;
+
         float[] pos = new float[2];
         float[] tan = new float[2];
-        pm.getPosTan(Math.max(0, Math.min(length, pathLength)), pos, tan);
+        float distance = Math.max(0, Math.min(length, pm.getLength()));
+        pm.getPosTan(distance, pos, tan);
+
         double angle = Math.atan2(tan[1], tan[0]);
         WritableMap result = Arguments.createMap();
-        float scale = svg.mScale;
         result.putDouble("x", pos[0] / scale);
         result.putDouble("y", pos[1] / scale);
         result.putDouble("angle", angle);
-        successCallback.invoke(result);
+        return result;
     }
 
     @SuppressWarnings("unused")
-    @ReactMethod
-    public void getBBox(int tag, ReadableMap options, Callback successCallback) {
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public WritableMap getBBox(int tag, ReadableMap options) {
+        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+        if (svg == null) {
+            return null;
+        }
+
         boolean fill = options.getBoolean("fill");
         boolean stroke = options.getBoolean("stroke");
         boolean markers = options.getBoolean("markers");
         boolean clipped = options.getBoolean("clipped");
-        RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+
         Path path = svg.getPath(null, null);
+        float scale = svg.mScale;
         svg.initBounds();
+
         RectF bounds = new RectF();
         if (fill) {
             bounds.union(svg.mFillBounds);
@@ -153,26 +142,30 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
                 bounds.intersect(svg.mClipBounds);
             }
         }
+
         WritableMap result = Arguments.createMap();
-        float scale = svg.mScale;
         result.putDouble("x", bounds.left / scale);
         result.putDouble("y", bounds.top / scale);
         result.putDouble("width", bounds.width() / scale);
         result.putDouble("height", bounds.height() / scale);
-        successCallback.invoke(result);
+        return result;
     }
 
     @SuppressWarnings("unused")
-    @ReactMethod
-    public void getCTM(int tag, Callback successCallback) {
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public WritableMap getCTM(int tag) {
         RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
-        Matrix screenCTM = svg.mCTM;
-        Matrix invViewBox = svg.getSvgView().mInvViewBoxMatrix;
-        Matrix ctm = new Matrix(screenCTM);
-        ctm.preConcat(invViewBox);
+        if (svg == null) {
+            return null;
+        }
+
+        Matrix ctm = new Matrix(svg.mCTM);
+        Matrix invViewBoxMatrix = svg.getSvgView().mInvViewBoxMatrix;
+        ctm.preConcat(invViewBoxMatrix);
 
         float[] values = new float[9];
         ctm.getValues(values);
+
         WritableMap result = Arguments.createMap();
         result.putDouble("a", values[Matrix.MSCALE_X]);
         result.putDouble("b", values[Matrix.MSKEW_Y]);
@@ -180,18 +173,23 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         result.putDouble("d", values[Matrix.MSCALE_Y]);
         result.putDouble("e", values[Matrix.MTRANS_X]);
         result.putDouble("f", values[Matrix.MTRANS_Y]);
-        successCallback.invoke(result);
+        return result;
     }
 
     @SuppressWarnings("unused")
-    @ReactMethod
-    public void getScreenCTM(int tag, Callback successCallback) {
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public WritableMap getScreenCTM(int tag) {
         RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
-        Matrix screenCTM = svg.mCTM;
+        if (svg == null) {
+            return null;
+        }
+
+        float[] values = new float[9];
+        svg.mCTM.getValues(values);
+
         SvgView root = svg.getSvgView();
         float scale = svg.mScale;
-        float[] values = new float[9];
-        screenCTM.getValues(values);
+
         WritableMap result = Arguments.createMap();
         result.putDouble("a", values[Matrix.MSCALE_X]);
         result.putDouble("b", values[Matrix.MSKEW_Y]);
@@ -199,6 +197,6 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         result.putDouble("d", values[Matrix.MSCALE_Y]);
         result.putDouble("e", values[Matrix.MTRANS_X] + root.getLeft() / scale);
         result.putDouble("f", values[Matrix.MTRANS_Y] + root.getTop() / scale);
-        successCallback.invoke(result);
+        return result;
     }
 }

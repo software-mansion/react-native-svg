@@ -38,237 +38,211 @@ RCT_EXPORT_VIEW_PROPERTY(strokeMiterlimit, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(vectorEffect, int)
 RCT_EXPORT_VIEW_PROPERTY(propList, NSArray<NSString *>)
 
-typedef void (^RNSVGSuccessBlock)(RNSVGRenderable *view);
-typedef void (^RNSVGFailBlock)(void);
-
-- (void)withTag:(nonnull NSNumber *)reactTag success:(RNSVGSuccessBlock)successBlock fail:(RNSVGFailBlock)failBlock attempt:(int)attempt {
-    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-        __kindof UIView *view = viewRegistry[reactTag];
-        if (!view) {
-            if (attempt < 1) {
-                void (^retryBlock)(void) = ^{
-                    [self withTag:reactTag success:successBlock fail:failBlock attempt:(attempt + 1)];
-                };
-                RCTExecuteOnUIManagerQueue(retryBlock);
-            } else {
-                failBlock();
-            }
-        } else if ([view isKindOfClass:[RNSVGRenderable class]]) {
-            RNSVGRenderable *svg = view;
-            successBlock(svg);
-        } else {
-            RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
-            failBlock();
-        }
-    }];
-}
-
-RCT_EXPORT_METHOD(isPointInFill:(nonnull NSNumber *)reactTag options:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isPointInFill:(nonnull NSNumber *)reactTag options:(NSDictionary *)options)
 {
+    __block UIView *view;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        view = [self.bridge.uiManager viewForReactTag:reactTag];
+    });
+    if (![view isKindOfClass:[RNSVGRenderable class]]) {
+        RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
+        return [NSNumber numberWithBool:false];
+    }
     if (options == nil) {
         RCTLogError(@"Invalid options given to isPointInFill, got: %@", options);
-        callback(@[[NSNumber numberWithBool:false]]);
-        return;
+        return [NSNumber numberWithBool:false];
     }
     id xo = [options objectForKey:@"x"];
     id yo = [options objectForKey:@"y"];
     if (![xo isKindOfClass:NSNumber.class] ||
         ![yo isKindOfClass:NSNumber.class]) {
         RCTLogError(@"Invalid x or y given to isPointInFill");
-        callback(@[[NSNumber numberWithBool:false]]);
-        return;
+        return [NSNumber numberWithBool:false];
     }
-    CGFloat x = (CGFloat)[xo floatValue];
-    CGFloat y = (CGFloat)[yo floatValue];
+    RNSVGRenderable *svg = (RNSVGRenderable *)view;
+    CGFloat x = (CGFloat)[xo doubleValue];
+    CGFloat y = (CGFloat)[yo doubleValue];
     CGPoint point = CGPointMake(x, y);
-    [self
-     withTag:reactTag
-     success:^(RNSVGRenderable *svg){
-         UIView *target = [svg hitTest:point withEvent:nil];
-         BOOL hit = target != nil;
-         callback(@[[NSNumber numberWithBool:hit]]);
-     }
-     fail:^{
-         callback(@[[NSNumber numberWithBool:false]]);
-     }
-     attempt:0];
+    UIView *target = [svg hitTest:point withEvent:nil];
+    BOOL hit = target != nil;
+    return [NSNumber numberWithBool:hit];
 }
 
-RCT_EXPORT_METHOD(isPointInStroke:(nonnull NSNumber *)reactTag options:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isPointInStroke:(nonnull NSNumber *)reactTag options:(NSDictionary *)options)
 {
+    __block UIView *view;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        view = [self.bridge.uiManager viewForReactTag:reactTag];
+    });
+    if (![view isKindOfClass:[RNSVGRenderable class]]) {
+        RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
+        return [NSNumber numberWithBool:false];
+    }
     if (options == nil) {
         RCTLogError(@"Invalid options given to isPointInFill, got: %@", options);
-        callback(@[[NSNumber numberWithBool:false]]);
-        return;
+        return [NSNumber numberWithBool:false];
     }
     id xo = [options objectForKey:@"x"];
     id yo = [options objectForKey:@"y"];
     if (![xo isKindOfClass:NSNumber.class] ||
         ![yo isKindOfClass:NSNumber.class]) {
         RCTLogError(@"Invalid x or y given to isPointInFill");
-        callback(@[[NSNumber numberWithBool:false]]);
-        return;
+        return [NSNumber numberWithBool:false];
     }
-    [self
-     withTag:reactTag
-     success:^(RNSVGRenderable *svg){
-         CGFloat x = (CGFloat)[xo floatValue];
-         CGFloat y = (CGFloat)[yo floatValue];
-         CGPoint point = CGPointMake(x, y);
-         BOOL hit = CGPathContainsPoint(svg.strokePath, nil, point, NO);
-         callback(@[[NSNumber numberWithBool:hit]]);
-     }
-     fail:^{
-         callback(@[[NSNumber numberWithBool:false]]);
-     }
-     attempt:0];
+    RNSVGRenderable *svg = (RNSVGRenderable *)view;
+    CGFloat x = (CGFloat)[xo doubleValue];
+    CGFloat y = (CGFloat)[yo doubleValue];
+    CGPoint point = CGPointMake(x, y);
+    BOOL hit = CGPathContainsPoint(svg.strokePath, nil, point, NO);
+
+    return [NSNumber numberWithBool:hit];
 }
 
-RCT_EXPORT_METHOD(getTotalLength:(nonnull NSNumber *)reactTag callback:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getTotalLength:(nonnull NSNumber *)reactTag)
 {
-    [self
-     withTag:reactTag
-     success:^(RNSVGRenderable *svg){
-         CGPathRef target = [svg getPath:nil];
-         RNSVGPathMeasure *measure = [[RNSVGPathMeasure alloc]init];
-         [measure extractPathData:target];
-         CGFloat pathLegth = measure.pathLength;
-         callback(@[[NSNumber numberWithDouble:pathLegth]]);
-     }
-     fail:^{
-         callback(@[[NSNumber numberWithBool:false]]);
-     }
-     attempt:0];
+    __block UIView *view;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        view = [self.bridge.uiManager viewForReactTag:reactTag];
+    });
+    if (![view isKindOfClass:[RNSVGRenderable class]]) {
+        RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
+        return [NSNumber numberWithDouble:0];
+    }
+
+    RNSVGPathMeasure *measure = [[RNSVGPathMeasure alloc]init];
+    RNSVGRenderable *svg = (RNSVGRenderable *)view;
+    CGPathRef target = [svg getPath:nil];
+    [measure extractPathData:target];
+
+    return [NSNumber numberWithDouble:measure.pathLength];
 }
 
-RCT_EXPORT_METHOD(getPointAtLength:(nonnull NSNumber *)reactTag options:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getPointAtLength:(nonnull NSNumber *)reactTag options:(NSDictionary *)options)
 {
-    id length = [options objectForKey:@"length"];
-    CGFloat position = (CGFloat)[length floatValue];
-    [self
-     withTag:reactTag
-     success:^(RNSVGRenderable *svg){
-         CGPathRef target = [svg getPath:nil];
-         RNSVGPathMeasure *measure = [[RNSVGPathMeasure alloc]init];
-         [measure extractPathData:target];
-         CGFloat angle;
-         CGFloat x;
-         CGFloat y;
-         [measure getPosAndTan:&angle midPoint:fmax(0, fmin(position, measure.pathLength)) x:&x y:&y];
-         callback(
-                  @[
-                    @{
-                        @"x":@(x),
-                        @"y":@(y),
-                        @"angle":@(angle)
-                        }
-                    ]
-                  );
-     }
-     fail:^{
-         callback(@[[NSNumber numberWithBool:false]]);
-     }
-     attempt:0];
+    __block UIView *view;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        view = [self.bridge.uiManager viewForReactTag:reactTag];
+    });
+    if (![view isKindOfClass:[RNSVGRenderable class]]) {
+        RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
+        return nil;
+    }
+
+    CGFloat position = (CGFloat)[[options objectForKey:@"length"] doubleValue];
+    RNSVGPathMeasure *measure = [[RNSVGPathMeasure alloc]init];
+    RNSVGRenderable *svg = (RNSVGRenderable *)view;
+    CGPathRef target = [svg getPath:nil];
+    [measure extractPathData:target];
+
+    CGFloat x;
+    CGFloat y;
+    CGFloat angle;
+    double midPoint = fmax(0, fmin(position, measure.pathLength));
+    [measure getPosAndTan:&angle midPoint:midPoint x:&x y:&y];
+
+    return @{
+             @"x":@(x),
+             @"y":@(y),
+             @"angle":@(angle)
+             };
 }
 
-RCT_EXPORT_METHOD(getBBox:(nonnull NSNumber *)reactTag options:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getBBox:(nonnull NSNumber *)reactTag options:(NSDictionary *)options)
 {
-    [self
-     withTag:reactTag
-     success:^(RNSVGRenderable *svg){
-         BOOL fill = [[options objectForKey:@"fill"] boolValue];
-         BOOL stroke = [[options objectForKey:@"stroke"] boolValue];
-         BOOL markers = [[options objectForKey:@"markers"] boolValue];
-         BOOL clipped = [[options objectForKey:@"clipped"] boolValue];
-         [svg getPath:nil];
-         CGRect bounds = CGRectZero;
-         if (fill) {
-             bounds = CGRectUnion(bounds, svg.fillBounds);
-         }
-         if (stroke) {
-             bounds = CGRectUnion(bounds, svg.strokeBounds);
-         }
-         if (markers) {
-             bounds = CGRectUnion(bounds, svg.markerBounds);
-         }
-         if (clipped) {
-             CGPathRef clipPath = [svg getClipPath];
-             CGRect clipBounds = CGPathGetBoundingBox(clipPath);
-             if (clipPath && !CGRectIsEmpty(clipBounds)) {
-                 bounds = CGRectIntersection(bounds, clipBounds);
-             }
-         }
-         CGPoint origin = bounds.origin;
-         CGSize size = bounds.size;
-         callback(
-                  @[
-                    @{
-                        @"x":@(origin.x),
-                        @"y":@(origin.y),
-                        @"width":@(size.width),
-                        @"height":@(size.height)
-                        }
-                    ]
-                  );
-     }
-     fail:^{
-         callback(@[[NSNumber numberWithBool:false]]);
-     }
-     attempt:0];
+    __block UIView *view;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        view = [self.bridge.uiManager viewForReactTag:reactTag];
+    });
+    if (![view isKindOfClass:[RNSVGRenderable class]]) {
+        RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
+        return nil;
+    }
+
+    RNSVGRenderable *svg = (RNSVGRenderable *)view;
+    BOOL fill = [[options objectForKey:@"fill"] boolValue];
+    BOOL stroke = [[options objectForKey:@"stroke"] boolValue];
+    BOOL markers = [[options objectForKey:@"markers"] boolValue];
+    BOOL clipped = [[options objectForKey:@"clipped"] boolValue];
+    [svg getPath:nil];
+
+    CGRect bounds = CGRectZero;
+    if (fill) {
+        bounds = CGRectUnion(bounds, svg.fillBounds);
+    }
+    if (stroke) {
+        bounds = CGRectUnion(bounds, svg.strokeBounds);
+    }
+    if (markers) {
+        bounds = CGRectUnion(bounds, svg.markerBounds);
+    }
+    if (clipped) {
+        CGPathRef clipPath = [svg getClipPath];
+        CGRect clipBounds = CGPathGetBoundingBox(clipPath);
+        if (clipPath && !CGRectIsEmpty(clipBounds)) {
+            bounds = CGRectIntersection(bounds, clipBounds);
+        }
+    }
+
+    CGPoint origin = bounds.origin;
+    CGSize size = bounds.size;
+    return @{
+             @"x":@(origin.x),
+             @"y":@(origin.y),
+             @"width":@(size.width),
+             @"height":@(size.height)
+             };
 }
 
-RCT_EXPORT_METHOD(getCTM:(nonnull NSNumber *)reactTag callback:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getCTM:(nonnull NSNumber *)reactTag)
 {
-    [self
-     withTag:reactTag
-     success:^(RNSVGRenderable *svg){
-         CGAffineTransform ctm = svg.ctm;
-         callback(
-                  @[
-                    @{
-                        @"a":@(ctm.a),
-                        @"b":@(ctm.b),
-                        @"c":@(ctm.c),
-                        @"d":@(ctm.d),
-                        @"e":@(ctm.tx),
-                        @"f":@(ctm.ty)
-                        }
-                    ]
-                  );
-     }
-     fail:^{
-         callback(@[[NSNumber numberWithBool:false]]);
-     }
-     attempt:0];
+    __block UIView *view;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        view = [self.bridge.uiManager viewForReactTag:reactTag];
+    });
+    if (![view isKindOfClass:[RNSVGRenderable class]]) {
+        RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
+        return nil;
+    }
+
+    RNSVGRenderable *svg = (RNSVGRenderable *)view;
+    CGAffineTransform ctm = svg.ctm;
+    return @{
+             @"a":@(ctm.a),
+             @"b":@(ctm.b),
+             @"c":@(ctm.c),
+             @"d":@(ctm.d),
+             @"e":@(ctm.tx),
+             @"f":@(ctm.ty)
+             };
 }
 
-RCT_EXPORT_METHOD(getScreenCTM:(nonnull NSNumber *)reactTag callback:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getScreenCTM:(nonnull NSNumber *)reactTag)
 {
-    [self
-     withTag:reactTag
-     success:^(RNSVGRenderable *svg){
-         RNSVGSvgView* root = svg.svgView;
-         CGAffineTransform viewbox = [root getViewBoxTransform];
-         CGAffineTransform ctm = CGAffineTransformConcat(svg.ctm, viewbox);
-         CGPoint offset = [root convertPoint:CGPointZero toView:svg.window];
-         callback(
-                  @[
-                    @{
-                        @"a":@(ctm.a),
-                        @"b":@(ctm.b),
-                        @"c":@(ctm.c),
-                        @"d":@(ctm.d),
-                        @"e":@(ctm.tx + offset.x),
-                        @"f":@(ctm.ty + offset.y)
-                        }
-                    ]
-                  );
-     }
-     fail:^{
-         callback(@[[NSNumber numberWithBool:false]]);
-     }
-     attempt:0];
+    __block UIView *view;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        view = [self.bridge.uiManager viewForReactTag:reactTag];
+    });
+    if (![view isKindOfClass:[RNSVGRenderable class]]) {
+        RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
+        return nil;
+    }
+
+    RNSVGRenderable *svg = (RNSVGRenderable *)view;
+    RNSVGSvgView* root = svg.svgView;
+    CGAffineTransform viewbox = [root getViewBoxTransform];
+    CGAffineTransform ctm = CGAffineTransformConcat(svg.ctm, viewbox);
+    CGPoint offset = [root convertPoint:CGPointZero toView:svg.window];
+
+    return @{
+             @"a":@(ctm.a),
+             @"b":@(ctm.b),
+             @"c":@(ctm.c),
+             @"d":@(ctm.d),
+             @"e":@(ctm.tx + offset.x),
+             @"f":@(ctm.ty + offset.y)
+             };
 }
 
 @end
+
 

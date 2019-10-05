@@ -264,117 +264,42 @@ export default class Shape<P> extends Component<P> {
   ) => {
     this.root && this.root.setNativeProps(props);
   };
-  getBBox = (
-    options?: SVGBoundingBoxOptions,
-    callback?: (box: SVGRect) => void,
-  ) => {
+  getBBox = (options?: SVGBoundingBoxOptions): SVGRect => {
     const { fill = true, stroke = true, markers = true, clipped = true } =
       options || {};
     const handle = findNodeHandle(this.root as Component);
-    if (!callback) {
-      return new Promise(resolve => {
-        RNSVGRenderableManager.getBBox(
-          handle,
-          {
-            fill,
-            stroke,
-            markers,
-            clipped,
-          },
-          resolve,
-        );
-      });
-    }
-    RNSVGRenderableManager.getBBox(
-      handle,
-      {
-        fill,
-        stroke,
-        markers,
-        clipped,
-      },
-      callback,
+    return RNSVGRenderableManager.getBBox(handle, {
+      fill,
+      stroke,
+      markers,
+      clipped,
+    });
+  };
+  getCTM = (): SVGMatrix => {
+    const handle = findNodeHandle(this.root as Component);
+    return new SVGMatrix(RNSVGRenderableManager.getCTM(handle));
+  };
+  getScreenCTM = (): SVGMatrix => {
+    const handle = findNodeHandle(this.root as Component);
+    return new SVGMatrix(RNSVGRenderableManager.getScreenCTM(handle));
+  };
+  isPointInFill = (options: DOMPointInit): boolean => {
+    const handle = findNodeHandle(this.root as Component);
+    return RNSVGRenderableManager.isPointInFill(handle, options);
+  };
+  isPointInStroke = (options: DOMPointInit): boolean => {
+    const handle = findNodeHandle(this.root as Component);
+    return RNSVGRenderableManager.isPointInStroke(handle, options);
+  };
+  getTotalLength = (): number => {
+    const handle = findNodeHandle(this.root as Component);
+    return RNSVGRenderableManager.getTotalLength(handle);
+  };
+  getPointAtLength = (length: number): SVGPoint => {
+    const handle = findNodeHandle(this.root as Component);
+    return new SVGPoint(
+      RNSVGRenderableManager.getPointAtLength(handle, { length }),
     );
-    return undefined;
-  };
-  getCTM = (callback: (screenCTM: SVGMatrix) => void) => {
-    const handle = findNodeHandle(this.root as Component);
-    if (!callback) {
-      return new Promise(resolve => {
-        RNSVGRenderableManager.getCTM(handle, (matrix: Matrix) =>
-          resolve(new SVGMatrix(matrix)),
-        );
-      });
-    }
-    RNSVGRenderableManager.getCTM(handle, (matrix: Matrix) =>
-      callback(new SVGMatrix(matrix)),
-    );
-    return undefined;
-  };
-  getScreenCTM = (callback: (screenCTM: SVGMatrix) => void) => {
-    const handle = findNodeHandle(this.root as Component);
-    if (!callback) {
-      return new Promise(resolve => {
-        RNSVGRenderableManager.getScreenCTM(handle, (matrix: Matrix) =>
-          resolve(new SVGMatrix(matrix)),
-        );
-      });
-    }
-    RNSVGRenderableManager.getScreenCTM(handle, (matrix: Matrix) =>
-      callback(new SVGMatrix(matrix)),
-    );
-    return undefined;
-  };
-  isPointInFill = (options: DOMPointInit, callback: (res: boolean) => void) => {
-    const handle = findNodeHandle(this.root as Component);
-    if (!callback) {
-      return new Promise(resolve => {
-        RNSVGRenderableManager.isPointInFill(handle, options, resolve);
-      });
-    }
-    RNSVGRenderableManager.isPointInFill(handle, options, callback);
-    return undefined;
-  };
-  isPointInStroke = (
-    options: DOMPointInit,
-    callback?: (res: boolean) => void,
-  ) => {
-    const handle = findNodeHandle(this.root as Component);
-    if (!callback) {
-      return new Promise(resolve => {
-        RNSVGRenderableManager.isPointInStroke(handle, options, resolve);
-      });
-    }
-    RNSVGRenderableManager.isPointInStroke(handle, options, callback);
-    return undefined;
-  };
-  getTotalLength = (callback?: (length: number) => void) => {
-    const handle = findNodeHandle(this.root as Component);
-    if (!callback) {
-      return new Promise(resolve => {
-        RNSVGRenderableManager.getTotalLength(handle, resolve);
-      });
-    }
-    RNSVGRenderableManager.getTotalLength(handle, callback);
-    return undefined;
-  };
-  getPointAtLength = (length: number, callback: (point: SVGPoint) => void) => {
-    const handle = findNodeHandle(this.root as Component);
-    if (!callback) {
-      return new Promise(resolve => {
-        RNSVGRenderableManager.getPointAtLength(
-          handle,
-          { length },
-          (point: Point) => resolve(new SVGPoint(point)),
-        );
-      });
-    }
-    RNSVGRenderableManager.getPointAtLength(
-      handle,
-      { length },
-      (point: Point) => callback(new SVGPoint(point)),
-    );
-    return undefined;
   };
 }
 Shape.prototype.ownerSVGElement = ownerSVGElement;
