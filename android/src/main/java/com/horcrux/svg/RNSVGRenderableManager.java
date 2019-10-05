@@ -189,6 +189,7 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
         Matrix screenCTM = svg.mCTM;
         SvgView root = svg.getSvgView();
+        float scale = svg.mScale;
         float[] values = new float[9];
         screenCTM.getValues(values);
         WritableMap result = Arguments.createMap();
@@ -196,8 +197,8 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         result.putDouble("b", values[Matrix.MSKEW_Y]);
         result.putDouble("c", values[Matrix.MSKEW_X]);
         result.putDouble("d", values[Matrix.MSCALE_Y]);
-        result.putDouble("e", values[Matrix.MTRANS_X] + root.getLeft());
-        result.putDouble("f", values[Matrix.MTRANS_Y] + root.getTop());
+        result.putDouble("e", values[Matrix.MTRANS_X] + root.getLeft() / scale);
+        result.putDouble("f", values[Matrix.MTRANS_Y] + root.getTop() / scale);
         successCallback.invoke(result);
     }
 }

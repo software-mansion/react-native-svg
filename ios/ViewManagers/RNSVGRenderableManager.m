@@ -226,12 +226,12 @@ RCT_EXPORT_METHOD(getCTM:(nonnull NSNumber *)reactTag callback:(RCTResponseSende
          callback(
                   @[
                     @{
-                        @"a":n(ctm.a),
-                        @"b":n(ctm.b),
-                        @"c":n(ctm.c),
-                        @"d":n(ctm.d),
-                        @"e":n(ctm.tx),
-                        @"f":n(ctm.ty)
+                        @"a":@(ctm.a),
+                        @"b":@(ctm.b),
+                        @"c":@(ctm.c),
+                        @"d":@(ctm.d),
+                        @"e":@(ctm.tx),
+                        @"f":@(ctm.ty)
                         }
                     ]
                   );
@@ -242,25 +242,24 @@ RCT_EXPORT_METHOD(getCTM:(nonnull NSNumber *)reactTag callback:(RCTResponseSende
      attempt:0];
 }
 
-static NSNumber *n(CGFloat af) {
-    return [NSNumber numberWithDouble:af];
-}
-
 RCT_EXPORT_METHOD(getScreenCTM:(nonnull NSNumber *)reactTag callback:(RCTResponseSenderBlock)callback)
 {
     [self
      withTag:reactTag
      success:^(RNSVGRenderable *svg){
-         CGAffineTransform ctm = svg.screenCTM;
+         RNSVGSvgView* root = svg.svgView;
+         CGAffineTransform viewbox = [root getViewBoxTransform];
+         CGAffineTransform ctm = CGAffineTransformConcat(svg.ctm, viewbox);
+         CGPoint offset = [root convertPoint:CGPointZero toView:svg.window];
          callback(
                   @[
                     @{
-                        @"a":n(ctm.a),
-                        @"b":n(ctm.b),
-                        @"c":n(ctm.c),
-                        @"d":n(ctm.d),
-                        @"e":n(ctm.tx),
-                        @"f":n(ctm.ty)
+                        @"a":@(ctm.a),
+                        @"b":@(ctm.b),
+                        @"c":@(ctm.c),
+                        @"d":@(ctm.d),
+                        @"e":@(ctm.tx + offset.x),
+                        @"f":@(ctm.ty + offset.y)
                         }
                     ]
                   );
