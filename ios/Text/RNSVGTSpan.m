@@ -273,6 +273,10 @@ TopAlignedLabel *label;
     CGRect textBounds = CTLineGetBoundsWithOptions(line, 0);
     CGFloat textMeasure = CGRectGetWidth(textBounds);
     cachedAdvance = textMeasure;
+
+    CFRelease(attrString);
+    CFRelease(line);
+
     return textMeasure;
 }
 
