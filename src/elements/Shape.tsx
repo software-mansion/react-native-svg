@@ -34,7 +34,7 @@ export interface Point {
 
 export interface SVGPoint extends Point {
   constructor(point?: Point): SVGPoint;
-  matrixTransform(matrix: SVGMatrix): SVGPoint;
+  matrixTransform(matrix: Matrix): SVGPoint;
 }
 
 export interface Rect {
@@ -56,7 +56,7 @@ export interface Matrix {
 
 export interface SVGMatrix extends Matrix {
   constructor(matrix?: Matrix): SVGMatrix;
-  multiply(secondMatrix: SVGMatrix): SVGMatrix;
+  multiply(secondMatrix: Matrix): SVGMatrix;
   inverse(): SVGMatrix;
   translate(x: number, y: number): SVGMatrix;
   scale(scaleFactor: number): SVGMatrix;
@@ -222,7 +222,7 @@ export class SVGPoint implements SVGPoint {
       this.y = 0;
     }
   }
-  matrixTransform(matrix: SVGMatrix): SVGPoint {
+  matrixTransform(matrix: Matrix): SVGPoint {
     return new SVGPoint(matrixTransform(matrix, this));
   }
 }
