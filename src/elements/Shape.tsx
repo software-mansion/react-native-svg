@@ -83,7 +83,7 @@ export function multiply_matrices(l: Matrix, r: Matrix): Matrix {
   return { a, c, e, b, d, f };
 }
 
-export function invert({ a, b, c, d, e, f }: Matrix) {
+export function invert({ a, b, c, d, e, f }: Matrix): Matrix {
   const n = a * d - b * c;
   return {
     a: d / n,
@@ -202,7 +202,7 @@ export class SVGMatrix implements SVGMatrix {
   }
 }
 
-export function matrixTransform(matrix: Matrix, point: SVGPoint): Point {
+export function matrixTransform(matrix: Matrix, point: Point): Point {
   const { a, b, c, d, e, f } = matrix;
   const { x, y } = point;
   return {
