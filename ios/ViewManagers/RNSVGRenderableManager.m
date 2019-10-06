@@ -228,18 +228,14 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getScreenCTM:(nonnull NSNumber *)reactTag
     }
 
     RNSVGRenderable *svg = (RNSVGRenderable *)view;
-    RNSVGSvgView* root = svg.svgView;
-    CGAffineTransform viewbox = [root getViewBoxTransform];
-    CGAffineTransform ctm = CGAffineTransformConcat(svg.ctm, viewbox);
-    CGPoint offset = [root convertPoint:CGPointZero toView:svg.window];
-
+    CGAffineTransform ctm = svg.ctm;
     return @{
              @"a":@(ctm.a),
              @"b":@(ctm.b),
              @"c":@(ctm.c),
              @"d":@(ctm.d),
-             @"e":@(ctm.tx + offset.x),
-             @"f":@(ctm.ty + offset.y)
+             @"e":@(ctm.tx),
+             @"f":@(ctm.ty)
              };
 }
 

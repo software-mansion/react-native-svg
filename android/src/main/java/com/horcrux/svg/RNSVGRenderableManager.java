@@ -159,6 +159,7 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
             return null;
         }
 
+        float scale = svg.mScale;
         Matrix ctm = new Matrix(svg.mCTM);
         Matrix invViewBoxMatrix = svg.getSvgView().mInvViewBoxMatrix;
         ctm.preConcat(invViewBoxMatrix);
@@ -171,8 +172,8 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         result.putDouble("b", values[Matrix.MSKEW_Y]);
         result.putDouble("c", values[Matrix.MSKEW_X]);
         result.putDouble("d", values[Matrix.MSCALE_Y]);
-        result.putDouble("e", values[Matrix.MTRANS_X]);
-        result.putDouble("f", values[Matrix.MTRANS_Y]);
+        result.putDouble("e", values[Matrix.MTRANS_X] / scale);
+        result.putDouble("f", values[Matrix.MTRANS_Y] / scale);
         return result;
     }
 
@@ -186,8 +187,6 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
 
         float[] values = new float[9];
         svg.mCTM.getValues(values);
-
-        SvgView root = svg.getSvgView();
         float scale = svg.mScale;
 
         WritableMap result = Arguments.createMap();
@@ -195,8 +194,8 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         result.putDouble("b", values[Matrix.MSKEW_Y]);
         result.putDouble("c", values[Matrix.MSKEW_X]);
         result.putDouble("d", values[Matrix.MSCALE_Y]);
-        result.putDouble("e", values[Matrix.MTRANS_X] + root.getLeft() / scale);
-        result.putDouble("f", values[Matrix.MTRANS_Y] + root.getTop() / scale);
+        result.putDouble("e", values[Matrix.MTRANS_X] / scale);
+        result.putDouble("f", values[Matrix.MTRANS_Y] / scale);
         return result;
     }
 }
