@@ -5,6 +5,7 @@ experimental/
 android/build/
 screenshots/
 idl/
+flow-typed/
 
 # OSX
 #
