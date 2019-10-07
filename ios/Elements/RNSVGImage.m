@@ -129,22 +129,22 @@
     CGAffineTransform viewbox = [RNSVGViewBox getTransform:imageBounds eRect:hitArea align:self.align meetOrSlice:self.meetOrSlice];
 
     [self clip:context];
-    CGContextTranslateCTM(context, 0, hitArea.size.height);
-    CGContextScaleCTM(context, 1, -1);
     CGContextClipToRect(context, hitArea);
     CGContextConcatCTM(context, viewbox);
+    CGContextTranslateCTM(context, 0, imageBounds.size.height);
+    CGContextScaleCTM(context, 1, -1);
     CGContextDrawImage(context, imageBounds, _image);
     CGContextRestoreGState(context);
 
     CGRect bounds = hitArea;
     self.clientRect = bounds;
-    
+
     CGAffineTransform current = CGContextGetCTM(context);
     CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
-    
+
     self.ctm = svgToClientTransform;
     self.screenCTM = current;
-    
+
     CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
     CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
     CGPoint center = CGPointApplyAffineTransform(mid, transform);
@@ -159,7 +159,7 @@
 - (CGRect)getHitArea
 {
     CGFloat x = [self relativeOnWidth:self.x];
-    CGFloat y = -1 * [self relativeOnHeight:self.y];
+    CGFloat y = [self relativeOnHeight:self.y];
     CGFloat width = [self relativeOnWidth:self.imagewidth];
     CGFloat height = [self relativeOnHeight:self.imageheight];
     if (width == 0) {
