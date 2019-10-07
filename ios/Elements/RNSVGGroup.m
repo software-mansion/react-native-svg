@@ -39,7 +39,7 @@
     __block CGRect bounds = CGRectNull;
 
     [self traverseSubviews:^(UIView *node) {
-        if ([node isKindOfClass:[RNSVGMask class]]) {
+        if ([node isKindOfClass:[RNSVGMask class]] || [node isKindOfClass:[RNSVGClipPath class]]) {
             // no-op
         } else if ([node isKindOfClass:[RNSVGNode class]]) {
             RNSVGNode* svgNode = (RNSVGNode*)node;
@@ -84,10 +84,10 @@
 
         CGAffineTransform current = CGContextGetCTM(context);
         CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
-        
+
         self.ctm = svgToClientTransform;
         self.screenCTM = current;
-        
+
         CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
         CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
         CGPoint center = CGPointApplyAffineTransform(mid, transform);
