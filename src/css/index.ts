@@ -12,7 +12,7 @@ import parseCSS, {
   ParserError,
   Rule,
 } from 'css/lib/parse';
-import { AST } from '../xml';
+import { AST, camelCase } from '../xml';
 
 function parserErrorToString(err: ParserError): string {
   return `${err.message}`;
@@ -88,7 +88,7 @@ function applyRule(element: AST, rule: Rule) {
     const props: { [x: string]: string | undefined } = element.props;
     rule.declarations.forEach(function(decl: Declaration) {
       if (decl.property) {
-        props[decl.property] = decl.value;
+        props[camelCase(decl.property)] = decl.value;
       }
     });
   }
