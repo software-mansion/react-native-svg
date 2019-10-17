@@ -48,7 +48,9 @@
     "react": "*",
     "react-native": ">=0.50.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "css": "^2.2.4"
+  },
   "devDependencies": {
     "@react-native-community/bob": "^0.7.0",
     "@react-native-community/eslint-config": "^0.0.5",

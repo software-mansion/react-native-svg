@@ -5,6 +5,7 @@ import React, {
   useMemo,
   ComponentType,
 } from 'react';
+import applyCss from './css';
 import Rect from './elements/Rect';
 import Circle from './elements/Circle';
 import Ellipse from './elements/Ellipse';
@@ -514,6 +515,7 @@ export function parse(source: string): AST | null {
 
   if (root && typeof root === 'object') {
     const r: AST = root;
+    applyCss(r);
     const ast: (AST | string)[] = r.children as (AST | string)[];
     r.children = ast.map(astToReact);
   }
