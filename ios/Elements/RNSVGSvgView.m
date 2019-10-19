@@ -18,7 +18,6 @@
     NSMutableDictionary<NSString *, RNSVGPainter *> *_painters;
     NSMutableDictionary<NSString *, RNSVGNode *> *_markers;
     NSMutableDictionary<NSString *, RNSVGNode *> *_masks;
-    CGAffineTransform _viewBoxTransform;
     CGAffineTransform _invviewBoxTransform;
     bool rendered;
 }

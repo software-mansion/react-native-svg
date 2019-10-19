@@ -88,7 +88,7 @@ export default class Svg extends Shape<
     this.root && this.root.setNativeProps(props);
   };
 
-  toDataURL = (callback: () => void, options: Object) => {
+  toDataURL = (callback: () => void, options?: Object) => {
     if (!callback) {
       return;
     }

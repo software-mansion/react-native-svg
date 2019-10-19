@@ -25,6 +25,7 @@ function prepare(props) {
     fontWeight,
     fontStyle,
     style,
+    forwardedRef,
     ...clean
   } = props;
 
@@ -55,6 +56,10 @@ function prepare(props) {
 
   if (transform.length) {
     clean.transform = transform.join(' ');
+  }
+
+  if (forwardedRef) {
+    clean.ref = forwardedRef;
   }
 
   const styles: {

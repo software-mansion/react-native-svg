@@ -94,6 +94,12 @@ abstract public class RenderableView extends VirtualView {
 
     private static final Pattern regex = Pattern.compile("[0-9.-]+");
 
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+        RenderableViewManager.setRenderableView(id, this);
+    }
+
     @ReactProp(name = "vectorEffect")
     public void setVectorEffect(int vectorEffect) {
         this.vectorEffect = vectorEffect;
@@ -517,18 +523,8 @@ abstract public class RenderableView extends VirtualView {
         int x = Math.round(dst[0]);
         int y = Math.round(dst[1]);
 
-        if (mRegion == null && mFillPath != null) {
-            mRegion = getRegion(mFillPath);
-        }
-        if (mRegion == null && mPath != null) {
-            mRegion = getRegion(mPath);
-        }
-        if (mStrokeRegion == null && mStrokePath != null) {
-            mStrokeRegion = getRegion(mStrokePath);
-        }
-        if (mMarkerRegion == null && mMarkerPath != null) {
-            mMarkerRegion = getRegion(mMarkerPath);
-        }
+        initBounds();
+
         if (
             (mRegion == null || !mRegion.contains(x, y)) &&
             (mStrokeRegion == null || !mStrokeRegion.contains(x, y) &&
@@ -539,10 +535,6 @@ abstract public class RenderableView extends VirtualView {
 
         Path clipPath = getClipPath();
         if (clipPath != null) {
-            if (mClipRegionPath != clipPath) {
-                mClipRegionPath = clipPath;
-                mClipRegion = getRegion(clipPath);
-            }
             if (!mClipRegion.contains(x, y)) {
                 return -1;
             }
@@ -551,10 +543,39 @@ abstract public class RenderableView extends VirtualView {
         return getId();
     }
 
-    Region getRegion(Path path) {
-        RectF rectF = new RectF();
-        path.computeBounds(rectF, true);
+    void initBounds() {
+        if (mRegion == null && mFillPath != null) {
+            mFillBounds = new RectF();
+            mFillPath.computeBounds(mFillBounds, true);
+            mRegion = getRegion(mFillPath, mFillBounds);
+        }
+        if (mRegion == null && mPath != null) {
+            mFillBounds = new RectF();
+            mPath.computeBounds(mFillBounds, true);
+            mRegion = getRegion(mPath, mFillBounds);
+        }
+        if (mStrokeRegion == null && mStrokePath != null) {
+            mStrokeBounds = new RectF();
+            mStrokePath.computeBounds(mStrokeBounds, true);
+            mStrokeRegion = getRegion(mStrokePath, mStrokeBounds);
+        }
+        if (mMarkerRegion == null && mMarkerPath != null) {
+            mMarkerBounds = new RectF();
+            mMarkerPath.computeBounds(mMarkerBounds, true);
+            mMarkerRegion = getRegion(mMarkerPath, mMarkerBounds);
+        }
+        Path clipPath = getClipPath();
+        if (clipPath != null) {
+            if (mClipRegionPath != clipPath) {
+                mClipRegionPath = clipPath;
+                mClipBounds = new RectF();
+                clipPath.computeBounds(mClipBounds, true);
+                mClipRegion = getRegion(clipPath, mClipBounds);
+            }
+        }
+    }
 
+    Region getRegion(Path path, RectF rectF) {
         Region region = new Region();
         region.setPath(path,
                 new Region(

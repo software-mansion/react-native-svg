@@ -67,6 +67,8 @@
 		947F38102148119A00677F2A /* RNSVGMaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 947F380E2148119A00677F2A /* RNSVGMaskManager.m */; };
 		9482DEFA23460EC800FC486E /* RNSVGContextBrush.m in Sources */ = {isa = PBXBuildFile; fileRef = 9482DEF823460EC700FC486E /* RNSVGContextBrush.m */; };
 		9482DEFB23460EC800FC486E /* RNSVGContextBrush.m in Sources */ = {isa = PBXBuildFile; fileRef = 9482DEF823460EC700FC486E /* RNSVGContextBrush.m */; };
+		9482DF02234680A200FC486E /* RNSVGPathMeasure.m in Sources */ = {isa = PBXBuildFile; fileRef = 9482DF00234680A200FC486E /* RNSVGPathMeasure.m */; };
+		9482DF03234680A200FC486E /* RNSVGPathMeasure.m in Sources */ = {isa = PBXBuildFile; fileRef = 9482DF00234680A200FC486E /* RNSVGPathMeasure.m */; };
 		9494C4D81F473BA700D5BCFD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9494C4D71F473BA700D5BCFD /* QuartzCore.framework */; };
 		9494C4DA1F473BCB00D5BCFD /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9494C4D91F473BCB00D5BCFD /* CoreText.framework */; };
 		9494C4DC1F473BD900D5BCFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9494C4DB1F473BD900D5BCFD /* CoreGraphics.framework */; };
@@ -261,6 +263,8 @@
 		947F380E2148119A00677F2A /* RNSVGMaskManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGMaskManager.m; sourceTree = "<group>"; };
 		9482DEF823460EC700FC486E /* RNSVGContextBrush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSVGContextBrush.m; sourceTree = "<group>"; };
 		9482DEF923460EC800FC486E /* RNSVGContextBrush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSVGContextBrush.h; sourceTree = "<group>"; };
+		9482DF00234680A200FC486E /* RNSVGPathMeasure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNSVGPathMeasure.m; path = Utils/RNSVGPathMeasure.m; sourceTree = "<group>"; };
+		9482DF01234680A200FC486E /* RNSVGPathMeasure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNSVGPathMeasure.h; path = Utils/RNSVGPathMeasure.h; sourceTree = "<group>"; };
 		9494C4D71F473BA700D5BCFD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9494C4D91F473BCB00D5BCFD /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		9494C4DB1F473BD900D5BCFD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -482,6 +486,8 @@
 		1039D29A1CE7212C001E90A8 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				9482DF01234680A200FC486E /* RNSVGPathMeasure.h */,
+				9482DF00234680A200FC486E /* RNSVGPathMeasure.m */,
 				94A178FD2344097B00693CB3 /* RNSVGMarkerPosition.h */,
 				94A178FE2344097B00693CB3 /* RNSVGMarkerPosition.m */,
 				94696EE92235A7F200C1D558 /* RNSVGVectorEffect.h */,
@@ -608,6 +614,7 @@
 				9482DEFA23460EC800FC486E /* RNSVGContextBrush.m in Sources */,
 				0CF68B071AF0549300FF9E5C /* RNSVGRenderable.m in Sources */,
 				1039D2891CE71EB7001E90A8 /* RNSVGGroup.m in Sources */,
+				9482DF02234680A200FC486E /* RNSVGPathMeasure.m in Sources */,
 				10ED4A9E1CF0656A0078BC02 /* RNSVGClipPathManager.m in Sources */,
 				10BEC1C61D3F7BD300FDCB19 /* RNSVGPainter.m in Sources */,
 				10ED4AA21CF078830078BC02 /* RNSVGNode.m in Sources */,
@@ -674,6 +681,7 @@
 				9482DEFB23460EC800FC486E /* RNSVGContextBrush.m in Sources */,
 				A361E77D1EB0C33D00646005 /* RNSVGGroup.m in Sources */,
 				A361E77E1EB0C33D00646005 /* RNSVGClipPathManager.m in Sources */,
+				9482DF03234680A200FC486E /* RNSVGPathMeasure.m in Sources */,
 				A361E77F1EB0C33D00646005 /* RNSVGPainter.m in Sources */,
 				A361E7801EB0C33D00646005 /* RNSVGNode.m in Sources */,
 				A361E7811EB0C33D00646005 /* RNSVGClipPath.m in Sources */,

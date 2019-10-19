@@ -147,7 +147,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     private SVGLength mbbHeight;
     private String mAlign;
     private int mMeetOrSlice;
-    private final Matrix mInvViewBoxMatrix = new Matrix();
+    final Matrix mInvViewBoxMatrix = new Matrix();
     private boolean mInvertible = true;
     private boolean mRendered = false;
     int mTintColor = 0;
@@ -415,10 +415,10 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
 
     void defineMarker(VirtualView marker, String markerRef) {
-        mDefinedMasks.put(markerRef, marker);
+        mDefinedMarkers.put(markerRef, marker);
     }
 
     VirtualView getDefinedMarker(String markerRef) {
-        return mDefinedMasks.get(markerRef);
+        return mDefinedMarkers.get(markerRef);
     }
 }

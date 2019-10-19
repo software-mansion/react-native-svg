@@ -17,10 +17,12 @@ import { Component } from 'react';
 
 export function propsAndStyles(props: Object & { style?: [] | {} }) {
   const { style } = props;
-  return {
-    ...(Array.isArray(style) ? Object.assign({}, ...style) : style),
-    ...props,
-  };
+  return !style
+    ? props
+    : {
+        ...(Array.isArray(style) ? Object.assign({}, ...style) : style),
+        ...props,
+      };
 }
 
 function getMarker(marker?: string) {

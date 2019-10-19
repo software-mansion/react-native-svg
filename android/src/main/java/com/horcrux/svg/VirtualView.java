@@ -92,12 +92,16 @@ abstract public class VirtualView extends ReactViewGroup {
     Path mFillPath;
     Path mStrokePath;
     Path mMarkerPath;
+    Path mClipRegionPath;
     RectF mBox;
+    RectF mFillBounds;
+    RectF mStrokeBounds;
+    RectF mMarkerBounds;
+    RectF mClipBounds;
     Region mRegion;
     Region mMarkerRegion;
     Region mStrokeRegion;
     Region mClipRegion;
-    Path mClipRegionPath;
     ArrayList<PathElement> elements;
 
     @Override
@@ -329,6 +333,8 @@ abstract public class VirtualView extends ReactViewGroup {
             if (mClipNode != null) {
                 Path clipPath = mClipNode.mClipRule == CLIP_RULE_EVENODD ? mClipNode.getPath(canvas, paint) :
                         mClipNode.getPath(canvas, paint, Region.Op.UNION);
+                clipPath.transform(mClipNode.mMatrix);
+                clipPath.transform(mClipNode.mTransform);
                 switch (mClipNode.mClipRule) {
                     case CLIP_RULE_EVENODD:
                         clipPath.setFillType(Path.FillType.EVEN_ODD);
