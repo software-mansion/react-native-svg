@@ -9,10 +9,20 @@
 #import "RNSVGImage.h"
 #import "RCTConvert+RNSVG.h"
 #import <React/RCTImageSource.h>
+
+#if __has_include(<React/RCTImageLoader.h>)
+
+#import <React/RCTImageLoader.h>
+
+#else
+
 #import <React/RCTImageURLLoader.h>
 #import <React/RCTImageShadowView.h>
 #import <React/RCTImageView.h>
 #import <React/RCTImageLoaderProtocol.h>
+
+#endif
+
 #import <React/RCTLog.h>
 #import "RNSVGViewBox.h"
 
