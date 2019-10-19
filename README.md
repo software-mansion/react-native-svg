@@ -1072,22 +1072,37 @@ The graphics for a marker are defined by a ‘marker’ element. To indicate tha
 <https://www.w3.org/TR/SVG11/images/painting/marker.svg>
 
 ```jsx
-<Svg width="400" height="200" 
-     viewBox="0 0 4000 2000">
+<Svg width="400" height="200" viewBox="0 0 4000 2000">
   <Defs>
-    <Marker id="Triangle"
-      viewBox="0 0 10 10" refX="0" refY="5" 
+    <Marker
+      id="Triangle"
+      viewBox="0 0 10 10"
+      refX="0"
+      refY="5"
       markerUnits="strokeWidth"
-      markerWidth="4" markerHeight="3"
-      orient="auto">
+      markerWidth="4"
+      markerHeight="3"
+      orient="auto"
+    >
       <Path d="M 0 0 L 10 5 L 0 10 z" />
     </Marker>
   </Defs>
-  <Rect x="10" y="10" width="3980" height="1980"
-       fill="none" stroke="blue" strokeWidth="10" />
-  <Path d="M 1000 750 L 2000 750 L 2500 1250"
-        fill="none" stroke="black" strokeWidth="100" 
-        markerEnd="url(#Triangle)"  />
+  <Rect
+    x="10"
+    y="10"
+    width="3980"
+    height="1980"
+    fill="none"
+    stroke="blue"
+    strokeWidth="10"
+  />
+  <Path
+    d="M 1000 750 L 2000 750 L 2500 1250"
+    fill="none"
+    stroke="black"
+    strokeWidth="100"
+    markerEnd="url(#Triangle)"
+  />
 </Svg>
 ```
 
@@ -1097,8 +1112,8 @@ Code explanation: <https://www.w3.org/TR/SVG11/painting.html#Markers>
 
 ```jsx
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {SvgXml} from 'react-native-svg';
+import { StyleSheet, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 
 const markerRendering = `<svg xmlns="http://www.w3.org/2000/svg"
      width="275" height="200" viewBox="0 0 100 30">
@@ -1149,8 +1164,8 @@ const styles = StyleSheet.create({
 
 ```jsx
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {SvgXml} from 'react-native-svg';
+import { StyleSheet, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 
 const markerRendering = `<svg xmlns="http://www.w3.org/2000/svg"
      width="275" height="200" viewBox="0 0 275 200">
@@ -1224,12 +1239,12 @@ For more examples of touch in action, checkout the [TouchEvents.js examples](htt
 ### Serialize
 
 ```jsx
-import * as React from "react";
-import { Platform, StyleSheet, TouchableOpacity } from "react-native";
-import { Svg, Rect } from "react-native-svg";
-import ReactDOMServer from "react-dom/server";
+import * as React from 'react';
+import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
+import { Svg, Rect } from 'react-native-svg';
+import ReactDOMServer from 'react-dom/server';
 
-const isWeb = Platform.OS === "web";
+const isWeb = Platform.OS === 'web';
 
 const childToWeb = child => {
   const { type, props } = child;
@@ -1244,7 +1259,7 @@ const toWeb = children => React.Children.map(children, childToWeb);
 export default class App extends React.Component {
   renderSvg() {
     return (
-      <Svg height="100%" width="100%" style={{ backgroundColor: "#33AAFF" }}>
+      <Svg height="100%" width="100%" style={{ backgroundColor: '#33AAFF' }}>
         <Rect
           x="50"
           y="50"
@@ -1275,10 +1290,10 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    backgroundColor: "#ecf0f1",
-    padding: 8
-  }
+    justifyContent: 'center',
+    backgroundColor: '#ecf0f1',
+    padding: 8,
+  },
 });
 ```
 
