@@ -264,6 +264,11 @@ export default class Shape<P> extends Component<P> {
   ) => {
     this.root && this.root.setNativeProps(props);
   };
+  /*
+   * The following native methods are experimental and likely broken in some
+   * ways. If you have a use case for these, please open an issue with a
+   * representative example / reproduction.
+   * */
   getBBox = (options?: SVGBoundingBoxOptions): SVGRect => {
     const { fill = true, stroke = true, markers = true, clipped = true } =
       options || {};
