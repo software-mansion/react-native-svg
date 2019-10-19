@@ -9,7 +9,10 @@
 #import "RNSVGImage.h"
 #import "RCTConvert+RNSVG.h"
 #import <React/RCTImageSource.h>
-#import <React/RCTImageLoader.h>
+#import <React/RCTImageURLLoader.h>
+#import <React/RCTImageShadowView.h>
+#import <React/RCTImageView.h>
+#import <React/RCTImageLoaderProtocol.h>
 #import <React/RCTLog.h>
 #import "RNSVGViewBox.h"
 
@@ -40,7 +43,7 @@
         _reloadImageCancellationBlock = nil;
     }
 
-    _reloadImageCancellationBlock = [self.bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:src] callback:^(NSError *error, UIImage *image) {
+    _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:src] callback:^(NSError *error, UIImage *image) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self->_image = CGImageRetain(image.CGImage);
             self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
