@@ -1,7 +1,6 @@
 import extractFill from './extractFill';
 import extractStroke from './extractStroke';
 import { transformToMatrix, props2transform } from './extractTransform';
-import extractClipPath from './extractClipPath';
 import extractResponder from './extractResponder';
 import extractOpacity from './extractOpacity';
 import { idPattern } from '../util';
@@ -14,6 +13,11 @@ import {
   TransformProps,
 } from './types';
 import { Component } from 'react';
+
+const clipRules: { evenodd: number; nonzero: number } = {
+  evenodd: 0,
+  nonzero: 1,
+};
 
 export function propsAndStyles(props: Object & { style?: [] | {} }) {
   const { style } = props;
@@ -57,6 +61,7 @@ export default function extractProps(
     onLayout,
     id,
     clipPath,
+    clipRule,
     mask,
     marker,
     markerStart = marker,
@@ -78,12 +83,10 @@ export default function extractProps(
     markerStart?: string;
     markerMid?: string;
     markerEnd?: string;
+    clipPath?: string;
+    clipRule?: number;
   } = {
     matrix,
-    markerStart: getMarker(markerStart),
-    markerMid: getMarker(markerMid),
-    markerEnd: getMarker(markerEnd),
-    onLayout,
     ...transformProps,
     propList: styleProperties,
     opacity: extractOpacity(opacity),
@@ -92,12 +95,42 @@ export default function extractProps(
     ...extractStroke(props, styleProperties),
   };
 
+  if (onLayout) {
+    extracted.onLayout = onLayout;
+  }
+
+  if (markerStart) {
+    extracted.markerStart = getMarker(markerStart);
+  }
+  if (markerMid) {
+    extracted.markerMid = getMarker(markerMid);
+  }
+  if (markerEnd) {
+    extracted.markerEnd = getMarker(markerEnd);
+  }
+
   if (id) {
     extracted.name = String(id);
   }
 
   if (clipPath) {
-    Object.assign(extracted, extractClipPath(props));
+    if (clipRule) {
+      extracted.clipRule = clipRules[clipRule] === 0 ? 0 : 1;
+    }
+
+    if (clipPath) {
+      const matched = clipPath.match(idPattern);
+
+      if (matched) {
+        extracted.clipPath = matched[1];
+      } else {
+        console.warn(
+          'Invalid `clipPath` prop, expected a clipPath like "#id", but got: "' +
+            clipPath +
+            '"',
+        );
+      }
+    }
   }
 
   if (mask) {

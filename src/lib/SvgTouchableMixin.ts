@@ -15,7 +15,7 @@ const {
 export default {
   ...Mixin,
 
-  touchableHandleStartShouldSetResponder: function(e: GestureResponderEvent) {
+  touchableHandleStartShouldSetResponder(e: GestureResponderEvent) {
     const { onStartShouldSetResponder } = this.props;
     if (onStartShouldSetResponder) {
       return onStartShouldSetResponder(e);
@@ -24,9 +24,7 @@ export default {
     }
   },
 
-  touchableHandleResponderTerminationRequest: function(
-    e: GestureResponderEvent,
-  ) {
+  touchableHandleResponderTerminationRequest(e: GestureResponderEvent) {
     const { onResponderTerminationRequest } = this.props;
     if (onResponderTerminationRequest) {
       return onResponderTerminationRequest(e);
@@ -35,7 +33,7 @@ export default {
     }
   },
 
-  touchableHandleResponderGrant: function(e: GestureResponderEvent) {
+  touchableHandleResponderGrant(e: GestureResponderEvent) {
     const { onResponderGrant } = this.props;
     if (onResponderGrant) {
       return onResponderGrant(e);
@@ -44,7 +42,7 @@ export default {
     }
   },
 
-  touchableHandleResponderMove: function(e: GestureResponderEvent) {
+  touchableHandleResponderMove(e: GestureResponderEvent) {
     const { onResponderMove } = this.props;
     if (onResponderMove) {
       return onResponderMove(e);
@@ -53,7 +51,7 @@ export default {
     }
   },
 
-  touchableHandleResponderRelease: function(e: GestureResponderEvent) {
+  touchableHandleResponderRelease(e: GestureResponderEvent) {
     const { onResponderRelease } = this.props;
     if (onResponderRelease) {
       return onResponderRelease(e);
@@ -62,7 +60,7 @@ export default {
     }
   },
 
-  touchableHandleResponderTerminate: function(e: GestureResponderEvent) {
+  touchableHandleResponderTerminate(e: GestureResponderEvent) {
     const { onResponderTerminate } = this.props;
     if (onResponderTerminate) {
       return onResponderTerminate(e);
@@ -71,47 +69,47 @@ export default {
     }
   },
 
-  touchableHandlePress: function(e: GestureResponderEvent) {
+  touchableHandlePress(e: GestureResponderEvent) {
     const { onPress } = this.props;
     onPress && onPress(e);
   },
 
-  touchableHandleActivePressIn: function(e: GestureResponderEvent) {
+  touchableHandleActivePressIn(e: GestureResponderEvent) {
     const { onPressIn } = this.props;
     onPressIn && onPressIn(e);
   },
 
-  touchableHandleActivePressOut: function(e: GestureResponderEvent) {
+  touchableHandleActivePressOut(e: GestureResponderEvent) {
     const { onPressOut } = this.props;
     onPressOut && onPressOut(e);
   },
 
-  touchableHandleLongPress: function(e: GestureResponderEvent) {
+  touchableHandleLongPress(e: GestureResponderEvent) {
     const { onLongPress } = this.props;
     onLongPress && onLongPress(e);
   },
 
-  touchableGetPressRectOffset: function() {
+  touchableGetPressRectOffset() {
     const { pressRetentionOffset } = this.props;
     return pressRetentionOffset || PRESS_RETENTION_OFFSET;
   },
 
-  touchableGetHitSlop: function() {
+  touchableGetHitSlop() {
     const { hitSlop } = this.props;
     return hitSlop;
   },
 
-  touchableGetHighlightDelayMS: function() {
+  touchableGetHighlightDelayMS() {
     const { delayPressIn } = this.props;
     return delayPressIn || 0;
   },
 
-  touchableGetLongPressDelayMS: function() {
+  touchableGetLongPressDelayMS() {
     const { delayLongPress } = this.props;
     return delayLongPress === 0 ? 0 : delayLongPress || 500;
   },
 
-  touchableGetPressOutDelayMS: function() {
+  touchableGetPressOutDelayMS() {
     const { delayPressOut } = this.props;
     return delayPressOut || 0;
   },
