@@ -1,3 +1,42 @@
+# [9.12.0](https://github.com/react-native-community/react-native-svg/compare/v9.11.1...v9.12.0) (2019-10-19)
+
+
+### Bug Fixes
+
+* handle setting transform attribute on clipPath, fixes [#1152](https://github.com/react-native-community/react-native-svg/issues/1152) ([73b21d1](https://github.com/react-native-community/react-native-svg/commit/73b21d1))
+* improve handling of transform attribute on clipPath, fixes [#1152](https://github.com/react-native-community/react-native-svg/issues/1152) ([3aa126e](https://github.com/react-native-community/react-native-svg/commit/3aa126e))
+* **ios:** backwards compatible RCTImageLoader.h handling fixes [#1141](https://github.com/react-native-community/react-native-svg/issues/1141) ([3c22c97](https://github.com/react-native-community/react-native-svg/commit/3c22c97))
+* **ios:** clipPath rendering, fixes [#1131](https://github.com/react-native-community/react-native-svg/issues/1131) ([2534537](https://github.com/react-native-community/react-native-svg/commit/2534537))
+* **ios:** deprecation of RCTImageLoader fixes [#1141](https://github.com/react-native-community/react-native-svg/issues/1141) ([5452144](https://github.com/react-native-community/react-native-svg/commit/5452144))
+* **ios:** fix changes in color/currentColor/tintColor, fixes [#1151](https://github.com/react-native-community/react-native-svg/issues/1151) ([0c7e94d](https://github.com/react-native-community/react-native-svg/commit/0c7e94d))
+* **ios:** image viewBox opposite handling of y alignment, fixes [#1138](https://github.com/react-native-community/react-native-svg/issues/1138) ([c69e9e2](https://github.com/react-native-community/react-native-svg/commit/c69e9e2))
+* **js:** allow setting stopColor/Opacity/Offset using styles, fix [#1153](https://github.com/react-native-community/react-native-svg/issues/1153) ([5984e06](https://github.com/react-native-community/react-native-svg/commit/5984e06))
+* getPointAtLength signature ([2c57af2](https://github.com/react-native-community/react-native-svg/commit/2c57af2))
+* getScreenCTM calculation ([5c5072d](https://github.com/react-native-community/react-native-svg/commit/5c5072d))
+* improve native method spec conformance ([c63f9e2](https://github.com/react-native-community/react-native-svg/commit/c63f9e2))
+* improve types for getBBox ([cecde7d](https://github.com/react-native-community/react-native-svg/commit/cecde7d))
+* prepare script ([9a3dc4e](https://github.com/react-native-community/react-native-svg/commit/9a3dc4e))
+* **ios:** memory leak in tspan, fixes [#1073](https://github.com/react-native-community/react-native-svg/issues/1073) ([974f3a8](https://github.com/react-native-community/react-native-svg/commit/974f3a8))
+* fix native methods spec conformance ([ecedb21](https://github.com/react-native-community/react-native-svg/commit/ecedb21))
+* Make native methods synchronous ([8ce7611](https://github.com/react-native-community/react-native-svg/commit/8ce7611))
+* refine types for matrix helpers ([409af91](https://github.com/react-native-community/react-native-svg/commit/409af91))
+* refine types for matrix helpers ([7a3f867](https://github.com/react-native-community/react-native-svg/commit/7a3f867))
+* **android:** defineMarker/getDefinedMarker storage ([e6eda84](https://github.com/react-native-community/react-native-svg/commit/e6eda84))
+* **android:** native method scaling and getScreenCTM offset ([f3e0b19](https://github.com/react-native-community/react-native-svg/commit/f3e0b19))
+* native method signatures web compatibility / spec conformance ([8687a3d](https://github.com/react-native-community/react-native-svg/commit/8687a3d))
+* **ios:** optimize extractPathData, clear PathMeasure when no textPath ([df69c26](https://github.com/react-native-community/react-native-svg/commit/df69c26))
+
+
+### Features
+
+* **flow:** add flowgen to generate flow types from typescript, [#1125](https://github.com/react-native-community/react-native-svg/issues/1125) ([fcd66fb](https://github.com/react-native-community/react-native-svg/commit/fcd66fb))
+* implement getBBox, getCTM, getScreenCTM ([f13d54a](https://github.com/react-native-community/react-native-svg/commit/f13d54a))
+* implement isPointInStroke ([2ba64df](https://github.com/react-native-community/react-native-svg/commit/2ba64df))
+* initial implementation of isPointInFill ([203e53b](https://github.com/react-native-community/react-native-svg/commit/203e53b))
+* support using native methods using promises instead of callbacks ([c28499b](https://github.com/react-native-community/react-native-svg/commit/c28499b))
+* **android:** implement getTotalLength and getPointAtLength ([cd667d0](https://github.com/react-native-community/react-native-svg/commit/cd667d0))
+* **ios:** implement getTotalLength and getPointAtLength ([78c4f20](https://github.com/react-native-community/react-native-svg/commit/78c4f20))
+
 ## [9.11.1](https://github.com/react-native-community/react-native-svg/compare/v9.11.0...v9.11.1) (2019-10-03)
 
 
