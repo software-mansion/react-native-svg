@@ -314,7 +314,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
         if (_cachedClipPath) {
             CGPathRelease(_cachedClipPath);
         }
-        CGAffineTransform transform = _clipNode.matrix;
+        CGAffineTransform transform = CGAffineTransformConcat(_clipNode.matrix, _clipNode.transforms);
         _cachedClipPath = CGPathCreateCopyByTransformingPath([_clipNode getPath:context], &transform);
         CGPathRetain(_cachedClipPath);
         if (_clipMask) {

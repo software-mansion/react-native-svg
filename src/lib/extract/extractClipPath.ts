@@ -1,6 +1,5 @@
 import { idPattern } from '../util';
 import { ClipProps } from './types';
-import extractTransform from './extractTransform';
 
 const clipRules: { evenodd: number; nonzero: number } = {
   evenodd: 0,
@@ -8,11 +7,10 @@ const clipRules: { evenodd: number; nonzero: number } = {
 };
 
 export default function extractClipPath(props: ClipProps) {
-  const { clipPath, clipRule, transform } = props;
+  const { clipPath, clipRule } = props;
   const extracted: {
     clipPath?: string;
     clipRule?: number;
-    matrix?: number[];
   } = {};
 
   if (clipRule) {
@@ -31,10 +29,6 @@ export default function extractClipPath(props: ClipProps) {
           '"',
       );
     }
-  }
-
-  if (transform) {
-    extracted.matrix = extractTransform(transform);
   }
 
   return extracted;

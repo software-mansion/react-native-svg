@@ -334,6 +334,7 @@ abstract public class VirtualView extends ReactViewGroup {
                 Path clipPath = mClipNode.mClipRule == CLIP_RULE_EVENODD ? mClipNode.getPath(canvas, paint) :
                         mClipNode.getPath(canvas, paint, Region.Op.UNION);
                 clipPath.transform(mClipNode.mMatrix);
+                clipPath.transform(mClipNode.mTransform);
                 switch (mClipNode.mClipRule) {
                     case CLIP_RULE_EVENODD:
                         clipPath.setFillType(Path.FillType.EVEN_ODD);
