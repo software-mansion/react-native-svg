@@ -92,4 +92,5 @@ export type StrokeProps = {
 export type ClipProps = {
   clipPath?: string;
   clipRule?: 'evenodd' | 'nonzero';
+  transform?: number[] | string | TransformProps;
 };
