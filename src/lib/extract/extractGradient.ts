@@ -63,7 +63,12 @@ export default function extractGradient(
   const l = childArray.length;
   for (let i = 0; i < l; i++) {
     const {
-      props: { offset, stopColor, stopOpacity },
+      props: {
+        style,
+        offset = style && style.offset,
+        stopColor = (style && style.stopColor) || '#000',
+        stopOpacity = style && style.stopOpacity,
+      },
     } = childArray[i];
     const offsetNumber = percentToFloat(offset || 0);
     const color = stopColor && extractColor(stopColor);
