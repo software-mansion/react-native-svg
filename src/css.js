@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { parse, SvgAst } from './xml';
+import { camelCase, parse, SvgAst } from './xml';
 import baseCssAdapter from 'css-select-base-adapter';
 import csstree, { List } from 'css-tree';
 import cssSelect from 'css-select';
@@ -563,7 +563,7 @@ CSSStyleDeclaration.prototype.setProperty = function(
   };
   let key = propertyName.trim();
   properties.set(key, property);
-  this.parentNode.props.style[key] = trimmedValue;
+  this.parentNode.props.style[camelCase(key)] = trimmedValue;
 
   return property;
 };
