@@ -289,23 +289,6 @@ function sortSelectors(selectors) {
 }
 
 /**
- * Convert a css-tree AST style declaration to CSSStyleDeclaration property.
- *
- * @param {Object} declaration css-tree style declaration
- * @return {Object} CSSStyleDeclaration property
- */
-function csstreeToStyleDeclaration(declaration) {
-  const propertyName = declaration.property,
-    propertyValue = csstree.generate(declaration.value),
-    propertyPriority = declaration.important ? 'important' : '';
-  return {
-    name: propertyName,
-    value: propertyValue,
-    priority: propertyPriority,
-  };
-}
-
-/**
  * Gets the CSS string of a style element
  *
  * @param {Object} element style element
@@ -339,8 +322,8 @@ function CSSStyleDeclaration(node) {
 
   declarations.children.each(declaration => {
     try {
-      const { name, value, priority } = csstreeToStyleDeclaration(declaration);
-      this.setProperty(name, value, priority);
+      const { property, value, important } = declaration;
+      this.setProperty(property, csstree.generate(value), important);
     } catch (styleError) {
       if (styleError.message !== 'Unknown node type: undefined') {
         console.warn(
@@ -365,26 +348,22 @@ CSSStyleDeclaration.prototype.getProperty = function(propertyName) {
 /**
  * Modify an existing CSS property or creates a new CSS property in the declaration block.
  *
- * @param {String} propertyName representing the CSS property name to be modified.
+ * @param {String} name representing the CSS property name to be modified.
  * @param {String} [value] containing the new property value. If not specified, treated as the empty string. value must not contain "!important" -- that should be set using the priority parameter.
- * @param {String} [priority] allowing the "important" CSS priority to be set. If not specified, treated as the empty string.
+ * @param {String} [important] allowing the "important" CSS priority to be set. If not specified, treated as the empty string.
  * @return {undefined}
  */
-CSSStyleDeclaration.prototype.setProperty = function(
-  propertyName,
-  value,
-  priority,
-) {
-  if (typeof propertyName === 'undefined') {
+CSSStyleDeclaration.prototype.setProperty = function(name, value, important) {
+  if (typeof name === 'undefined') {
     throw Error('propertyName argument required, but only not present.');
   }
 
   const trimmedValue = value.trim();
   const property = {
     value: trimmedValue,
-    priority: priority.trim(),
+    important,
   };
-  const key = propertyName.trim();
+  const key = name.trim();
   this.properties.set(key, property);
   this.style[camelCase(key)] = trimmedValue;
 
@@ -520,6 +499,8 @@ export function inlineStyles(document) {
       if (selector.rule === null) {
         continue;
       }
+      initStyle(selectedEl);
+      const { style } = selectedEl;
 
       // merge declarations
       csstree.walk(selector.rule, {
@@ -529,15 +510,13 @@ export function inlineStyles(document) {
           // no inline styles, external styles,                                    external styles used
           // inline styles,    external styles same   priority as inline styles,   inline   styles used
           // inline styles,    external styles higher priority than inline styles, external styles used
-          const { name, value, priority } = csstreeToStyleDeclaration(
-            styleCsstreeDeclaration,
-          );
-          initStyle(selectedEl);
-          const styleProperty = selectedEl.style.getProperty(name);
-          if (styleProperty && styleProperty.priority >= priority) {
+          const { property, value, important } = styleCsstreeDeclaration;
+          const styleProperty = style.getProperty(property);
+          if (styleProperty && styleProperty.important >= important) {
             return;
           }
-          selectedEl.style.setProperty(name, value, priority);
+          const propertyValue = csstree.generate(value);
+          style.setProperty(property, propertyValue, important);
         },
       });
     }
