@@ -12,49 +12,49 @@ import stable from 'stable';
 /**
  * DOMUtils API for rnsvg AST (used by css-select)
  */
-var rnsvgCssSelectAdapterMin = {
+const rnsvgCssSelectAdapterMin = {
   // is the node a tag?
   // isTag: ( node:Node ) => isTag:Boolean
-  isTag: function(node) {
+  isTag(node) {
     return node.tag;
   },
 
   // get the parent of the node
   // getParent: ( node:Node ) => parentNode:Node
   // returns null when no parent exists
-  getParent: function(node) {
+  getParent(node) {
     return node.parent || null;
   },
 
   // get the node's children
   // getChildren: ( node:Node ) => children:[Node]
-  getChildren: function(node) {
+  getChildren(node) {
     return node.children || [];
   },
 
   // get the name of the tag
   // getName: ( elem:ElementNode ) => tagName:String
-  getName: function(elemAst) {
+  getName(elemAst) {
     return elemAst.tag;
   },
 
   // get the text content of the node, and its children if it has any
   // getText: ( node:Node ) => text:String
   // returns empty string when there is no text
-  getText: function(node) {
+  getText() {
     return '';
   },
 
   // get the attribute value
   // getAttributeValue: ( elem:ElementNode, name:String ) => value:String
   // returns null when attribute doesn't exist
-  getAttributeValue: function(elem, name) {
+  getAttributeValue(elem, name) {
     return elem && elem.props.hasOwnProperty(name) ? elem.props[name] : null;
   },
 };
 
 // use base adapter for default implementation
-var rnsvgCssSelectAdapter = baseCssAdapter(rnsvgCssSelectAdapterMin);
+const rnsvgCssSelectAdapter = baseCssAdapter(rnsvgCssSelectAdapterMin);
 
 /**
  * Evaluate a string of CSS selectors against the element and returns matched elements.
@@ -64,7 +64,7 @@ var rnsvgCssSelectAdapter = baseCssAdapter(rnsvgCssSelectAdapterMin);
  * @return {Array} null if no elements matched
  */
 function querySelectorAll(document, selectors) {
-  var matchedEls = cssSelect(selectors, document, cssSelectOpts);
+  const matchedEls = cssSelect(selectors, document, cssSelectOpts);
 
   return matchedEls.length > 0 ? matchedEls : null;
 }
@@ -74,9 +74,9 @@ const cssSelectOpts = {
 };
 
 function specificity(simpleSelector) {
-  var A = 0;
-  var B = 0;
-  var C = 0;
+  let A = 0;
+  let B = 0;
+  let C = 0;
 
   simpleSelector.children.each(function walk(node) {
     switch (node.type) {
@@ -137,41 +137,39 @@ function specificity(simpleSelector) {
  * @return {Array} selectors
  */
 function flattenToSelectors(cssAst) {
-  var selectors = [];
+  const selectors = [];
 
   csstree.walk(cssAst, {
     visit: 'Rule',
-    enter: function(node) {
+    enter(node) {
       if (node.type !== 'Rule') {
         return;
       }
 
-      var atrule = this.atrule;
-      var rule = node;
+      const atrule = this.atrule;
+      const rule = node;
 
-      node.prelude.children.each(function(selectorNode, selectorItem) {
-        var selector = {
+      node.prelude.children.each((selectorNode, selectorItem) => {
+        const selector = {
           item: selectorItem,
           atrule: atrule,
           rule: rule,
           pseudos: [],
         };
 
-        selectorNode.children.each(function(
-          selectorChildNode,
-          selectorChildItem,
-          selectorChildList,
-        ) {
-          if (
-            selectorChildNode.type === 'PseudoClassSelector' ||
-            selectorChildNode.type === 'PseudoElementSelector'
-          ) {
-            selector.pseudos.push({
-              item: selectorChildItem,
-              list: selectorChildList,
-            });
-          }
-        });
+        selectorNode.children.each(
+          (selectorChildNode, selectorChildItem, selectorChildList) => {
+            if (
+              selectorChildNode.type === 'PseudoClassSelector' ||
+              selectorChildNode.type === 'PseudoElementSelector'
+            ) {
+              selector.pseudos.push({
+                item: selectorChildItem,
+                list: selectorChildList,
+              });
+            }
+          },
+        );
 
         selectors.push(selector);
       });
@@ -189,18 +187,18 @@ function flattenToSelectors(cssAst) {
  * @return {Array} Filtered selectors that match the passed media queries
  */
 function filterByMqs(selectors, useMqs) {
-  return selectors.filter(function(selector) {
+  return selectors.filter(selector => {
     if (selector.atrule === null) {
       return ~useMqs.indexOf('');
     }
 
-    var mqName = selector.atrule.name;
-    var mqStr = mqName;
+    const mqName = selector.atrule.name;
+    let mqStr = mqName;
     if (
       selector.atrule.expression &&
       selector.atrule.expression.children.first().type === 'MediaQueryList'
     ) {
-      var mqExpr = csstree.generate(selector.atrule.expression);
+      const mqExpr = csstree.generate(selector.atrule.expression);
       mqStr = [mqName, mqExpr].join(' ');
     }
 
@@ -216,11 +214,11 @@ function filterByMqs(selectors, useMqs) {
  * @return {Array} Filtered selectors that match the passed pseudo-elements and/or -classes
  */
 function filterByPseudos(selectors, usePseudos) {
-  return selectors.filter(function(selector) {
-    var pseudoSelectorsStr = csstree.generate({
+  return selectors.filter(selector => {
+    const pseudoSelectorsStr = csstree.generate({
       type: 'Selector',
       children: new List().fromArray(
-        selector.pseudos.map(function(pseudo) {
+        selector.pseudos.map(pseudo => {
           return pseudo.item.data;
         }),
       ),
@@ -236,8 +234,8 @@ function filterByPseudos(selectors, usePseudos) {
  * @return {Array} Selectors without pseudo-elements and/or -classes
  */
 function cleanPseudos(selectors) {
-  selectors.forEach(function(selector) {
-    selector.pseudos.forEach(function(pseudo) {
+  selectors.forEach(selector => {
+    selector.pseudos.forEach(pseudo => {
       pseudo.list.remove(pseudo.item);
     });
   });
@@ -252,7 +250,7 @@ function cleanPseudos(selectors) {
  * @return {Number} Score of selector specificity A compared to selector specificity B
  */
 function compareSpecificity(aSpecificity, bSpecificity) {
-  for (var i = 0; i < 4; i += 1) {
+  for (let i = 0; i < 4; i += 1) {
     if (aSpecificity[i] < bSpecificity[i]) {
       return -1;
     } else if (aSpecificity[i] > bSpecificity[i]) {
@@ -271,7 +269,7 @@ function compareSpecificity(aSpecificity, bSpecificity) {
  * @return {Number} Score of selector A compared to selector B
  */
 function compareSimpleSelectorNode(aSimpleSelectorNode, bSimpleSelectorNode) {
-  var aSpecificity = specificity(aSimpleSelectorNode),
+  const aSpecificity = specificity(aSimpleSelectorNode),
     bSpecificity = specificity(bSimpleSelectorNode);
   return compareSpecificity(aSpecificity, bSpecificity);
 }
@@ -297,7 +295,7 @@ function sortSelectors(selectors) {
  * @return {Object} CSSStyleDeclaration property
  */
 function csstreeToStyleDeclaration(declaration) {
-  var propertyName = declaration.property,
+  const propertyName = declaration.property,
     propertyValue = csstree.generate(declaration.value),
     propertyPriority = declaration.important ? 'important' : '';
   return {
@@ -317,7 +315,7 @@ function getCssStr(element) {
   return element.children || [];
 }
 
-var CSSStyleDeclaration = function(node) {
+const CSSStyleDeclaration = function(node) {
   this.parentNode = node;
 
   this.properties = new Map();
@@ -335,25 +333,20 @@ var CSSStyleDeclaration = function(node) {
  * @param parentNode the parentNode to assign to the cloned result
  */
 CSSStyleDeclaration.prototype.clone = function(parentNode) {
-  var node = this;
-  var nodeData = {};
+  let nodeData = {};
 
-  Object.keys(node).forEach(function(key) {
+  Object.keys(this).forEach(key => {
     if (key !== 'parentNode') {
-      nodeData[key] = node[key];
+      nodeData[key] = this[key];
     }
   });
 
   // Deep-clone node data.
   nodeData = JSON.parse(JSON.stringify(nodeData));
 
-  var clone = new CSSStyleDeclaration(parentNode);
+  const clone = new CSSStyleDeclaration(parentNode);
   Object.assign(clone, nodeData);
   return clone;
-};
-
-CSSStyleDeclaration.prototype.hasStyle = function() {
-  this.addStyleHandler();
 };
 
 // attr.style
@@ -417,9 +410,9 @@ CSSStyleDeclaration.prototype._loadCssText = function() {
   if (!this.styleValue || this.styleValue.length === 0) {
     return;
   }
-  var inlineCssStr = this.styleValue;
+  const inlineCssStr = this.styleValue;
 
-  var declarations = {};
+  let declarations = {};
   try {
     declarations = csstree.parse(inlineCssStr, {
       context: 'declarationList',
@@ -431,18 +424,17 @@ CSSStyleDeclaration.prototype._loadCssText = function() {
   }
   this.parseError = false;
 
-  var self = this;
-  declarations.children.each(function(declaration) {
+  declarations.children.each(declaration => {
     try {
-      var styleDeclaration = csstreeToStyleDeclaration(declaration);
-      self.setProperty(
+      const styleDeclaration = csstreeToStyleDeclaration(declaration);
+      this.setProperty(
         styleDeclaration.name,
         styleDeclaration.value,
         styleDeclaration.priority,
       );
     } catch (styleError) {
       if (styleError.message !== 'Unknown node type: undefined') {
-        self.parseError = styleError;
+        this.parseError = styleError;
       }
     }
   });
@@ -456,16 +448,16 @@ CSSStyleDeclaration.prototype._loadCssText = function() {
  * @return {String} Textual representation of the declaration block (empty string for no properties)
  */
 CSSStyleDeclaration.prototype.getCssText = function() {
-  var properties = this.getProperties();
+  const properties = this.getProperties();
 
   if (this.parseError) {
     // in case of a parse error, pass through original styles
     return this.styleValue;
   }
 
-  var cssText = [];
-  properties.forEach(function(property, propertyName) {
-    var strImportant = property.priority === 'important' ? '!important' : '';
+  const cssText = [];
+  properties.forEach((property, propertyName) => {
+    const strImportant = property.priority === 'important' ? '!important' : '';
     cssText.push(
       propertyName.trim() + ':' + property.value.trim() + strImportant,
     );
@@ -487,11 +479,10 @@ CSSStyleDeclaration.prototype._getProperty = function(propertyName) {
     throw Error('1 argument required, but only 0 present.');
   }
 
-  var properties = this.getProperties();
+  const properties = this.getProperties();
   this._handleParseError();
 
-  var property = properties.get(propertyName.trim());
-  return property;
+  return properties.get(propertyName.trim());
 };
 
 /**
@@ -501,7 +492,7 @@ CSSStyleDeclaration.prototype._getProperty = function(propertyName) {
  * @return {String} priority that represents the priority (e.g. "important") if one exists. If none exists, returns the empty string.
  */
 CSSStyleDeclaration.prototype.getPropertyPriority = function(propertyName) {
-  var property = this._getProperty(propertyName);
+  const property = this._getProperty(propertyName);
   return property ? property.priority : '';
 };
 
@@ -512,7 +503,7 @@ CSSStyleDeclaration.prototype.getPropertyPriority = function(propertyName) {
  * @return {String} value containing the value of the property. If not set, returns the empty string.
  */
 CSSStyleDeclaration.prototype.getPropertyValue = function(propertyName) {
-  var property = this._getProperty(propertyName);
+  const property = this._getProperty(propertyName);
   return property ? property.value : null;
 };
 
@@ -527,7 +518,7 @@ CSSStyleDeclaration.prototype.item = function(index) {
     throw Error('1 argument required, but only 0 present.');
   }
 
-  var properties = this.getProperties();
+  const properties = this.getProperties();
   this._handleParseError();
 
   return Array.from(properties.keys())[index];
@@ -546,27 +537,6 @@ CSSStyleDeclaration.prototype.getProperties = function() {
 // writes to properties
 
 /**
- * Remove a property from the CSS declaration block.
- *
- * @param {String} propertyName representing the property name to be removed.
- * @return {String} oldValue equal to the value of the CSS property before it was removed.
- */
-CSSStyleDeclaration.prototype.removeProperty = function(propertyName) {
-  if (typeof propertyName === 'undefined') {
-    throw Error('1 argument required, but only 0 present.');
-  }
-
-  this.hasStyle();
-
-  var properties = this.getProperties();
-  this._handleParseError();
-
-  var oldValue = this.getPropertyValue(propertyName);
-  properties.delete(propertyName.trim());
-  return oldValue;
-};
-
-/**
  * Modify an existing CSS property or creates a new CSS property in the declaration block.
  *
  * @param {String} propertyName representing the CSS property name to be modified.
@@ -583,13 +553,11 @@ CSSStyleDeclaration.prototype.setProperty = function(
     throw Error('propertyName argument required, but only not present.');
   }
 
-  this.hasStyle();
-
-  var properties = this.getProperties();
+  const properties = this.getProperties();
   this._handleParseError();
 
   let trimmedValue = value.trim();
-  var property = {
+  const property = {
     value: trimmedValue,
     priority: priority.trim(),
   };
@@ -607,10 +575,6 @@ CSSStyleDeclaration.prototype.setProperty = function(
  *   onlyMatchedOnce (default: true)
  *     inline only selectors that match once
  *
- *   removeMatchedSelectors (default: true)
- *     clean up matched selectors,
- *     leave selectors that hadn't matched
- *
  *   useMqs (default: ['', 'screen'])
  *     what media queries to be used
  *     empty string element for styles outside media queries
@@ -626,7 +590,6 @@ CSSStyleDeclaration.prototype.setProperty = function(
  */
 const opts = {
   onlyMatchedOnce: true,
-  removeMatchedSelectors: true,
   useMqs: ['', 'screen'],
   usePseudos: [''],
 };
@@ -648,26 +611,25 @@ function initStyle(selectedEl) {
 
 export function inlineStyles(document) {
   // collect <style/>s
-  var styleEls = querySelectorAll(document, 'style');
+  const styleEls = querySelectorAll(document, 'style');
 
   //no <styles/>s, nothing to do
   if (styleEls === null) {
     return document;
   }
 
-  var styles = [],
-    selectors = [];
+  let selectors = [];
 
-  for (var styleEl of styleEls) {
+  for (let styleEl of styleEls) {
     if (!styleEl.children.length /* || styleEl.closestElem('foreignObject')*/) {
       // skip empty <style/>s or <foreignObject> content.
       continue;
     }
 
-    var cssStr = getCssStr(styleEl);
+    const cssStr = getCssStr(styleEl);
 
     // collect <style/>s and their css ast
-    var cssAst = {};
+    let cssAst = {};
     try {
       cssAst = csstree.parse(cssStr, {
         parseValue: false,
@@ -678,32 +640,27 @@ export function inlineStyles(document) {
       continue;
     }
 
-    styles.push({
-      styleEl: styleEl,
-      cssAst: cssAst,
-    });
-
     selectors = selectors.concat(flattenToSelectors(cssAst));
   }
 
   // filter for mediaqueries to be used or without any mediaquery
-  var selectorsMq = filterByMqs(selectors, opts.useMqs);
+  const selectorsMq = filterByMqs(selectors, opts.useMqs);
 
   // filter for pseudo elements to be used
-  var selectorsPseudo = filterByPseudos(selectorsMq, opts.usePseudos);
+  const selectorsPseudo = filterByPseudos(selectorsMq, opts.usePseudos);
 
   // remove PseudoClass from its SimpleSelector for proper matching
   cleanPseudos(selectorsPseudo);
 
   // stable sort selectors
-  var sortedSelectors = sortSelectors(selectorsPseudo).reverse();
+  const sortedSelectors = sortSelectors(selectorsPseudo).reverse();
 
-  var selector, selectedEl;
+  let selector, selectedEl;
 
   // match selectors
   for (selector of sortedSelectors) {
-    var selectorStr = csstree.generate(selector.item.data),
-      selectedEls = null;
+    const selectorStr = csstree.generate(selector.item.data);
+    let selectedEls = null;
 
     try {
       selectedEls = querySelectorAll(document, selectorStr);
@@ -747,12 +704,12 @@ export function inlineStyles(document) {
       // merge declarations
       csstree.walk(selector.rule, {
         visit: 'Declaration',
-        enter: function(styleCsstreeDeclaration) {
+        enter(styleCsstreeDeclaration) {
           // existing inline styles have higher priority
           // no inline styles, external styles,                                    external styles used
           // inline styles,    external styles same   priority as inline styles,   inline   styles used
           // inline styles,    external styles higher priority than inline styles, external styles used
-          var styleDeclaration = csstreeToStyleDeclaration(
+          const styleDeclaration = csstreeToStyleDeclaration(
             styleCsstreeDeclaration,
           );
           initStyle(selectedEl);
@@ -771,102 +728,7 @@ export function inlineStyles(document) {
         },
       });
     }
-
-    if (
-      opts.removeMatchedSelectors &&
-      selector.selectedEls !== null &&
-      selector.selectedEls.length > 0
-    ) {
-      // clean up matching simple selectors if option removeMatchedSelectors is enabled
-      // selector.rule.prelude.children.remove(selector.item);
-    }
   }
-
-  if (!opts.removeMatchedSelectors) {
-    return document; // no further processing required
-  }
-
-  /*
-  // clean up matched class + ID attribute values
-  for (selector of sortedSelectors) {
-    if (!selector.selectedEls) {
-      continue;
-    }
-
-    if (
-      opts.onlyMatchedOnce &&
-      selector.selectedEls !== null &&
-      selector.selectedEls.length > 1
-    ) {
-      // skip selectors that match more than once if option onlyMatchedOnce is enabled
-      continue;
-    }
-
-    for (selectedEl of selector.selectedEls) {
-      // class
-      var firstSubSelector = selector.item.data.children.first();
-      if (firstSubSelector.type === 'ClassSelector') {
-        selectedEl.class.remove(firstSubSelector.name);
-      }
-      // clean up now empty class attributes
-      if (typeof selectedEl.class.item(0) === 'undefined') {
-        selectedEl.removeAttr('class');
-      }
-
-      // ID
-      if (firstSubSelector.type === 'IdSelector') {
-        selectedEl.removeAttr('id', firstSubSelector.name);
-      }
-    }
-  }
-
-  // clean up now empty elements
-  for (var style of styles) {
-    csstree.walk(style.cssAst, {
-      visit: 'Rule',
-      enter: function(node, item, list) {
-        // clean up <style/> atrules without any rulesets left
-        if (
-          node.type === 'Atrule' &&
-          // only Atrules containing rulesets
-          node.block !== null &&
-          node.block.children.isEmpty()
-        ) {
-          list.remove(item);
-          return;
-        }
-
-        // clean up <style/> rulesets without any css selectors left
-        if (node.type === 'Rule' && node.prelude.children.isEmpty()) {
-          list.remove(item);
-        }
-      },
-    });
-
-    if (style.cssAst.children.isEmpty()) {
-      // clean up now emtpy <style/>s
-      var styleParentEl = style.styleEl.parentNode;
-      styleParentEl.spliceContent(
-        styleParentEl.content.indexOf(style.styleEl),
-        1,
-      );
-
-      if (styleParentEl.elem === 'defs' && styleParentEl.content.length === 0) {
-        // also clean up now empty <def/>s
-        var defsParentEl = styleParentEl.parentNode;
-        defsParentEl.spliceContent(
-          defsParentEl.content.indexOf(styleParentEl),
-          1,
-        );
-      }
-
-      continue;
-    }
-
-    // update existing, left over <style>s
-    setCssStr(style.styleEl, csstree.generate(style.cssAst));
-  }
-*/
 
   return document;
 }
