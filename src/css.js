@@ -284,8 +284,9 @@ function CSSStyleDeclaration({ props: { style }, styles }) {
       .parse(styles, declarationParseProps)
       .children.each(({ property, value, important }) => {
         try {
-          const val = csstree.generate(value);
-          setProperty(style, properties, property.trim(), val, important);
+          const name = property.trim();
+          properties.set(name, important);
+          style[camelCase(name)] = csstree.generate(value).trim();
         } catch (styleError) {
           if (styleError.message !== 'Unknown node type: undefined') {
             console.warn(
@@ -302,21 +303,6 @@ function CSSStyleDeclaration({ props: { style }, styles }) {
     );
   }
   return styleDeclaration;
-}
-
-/**
- * Modify an existing CSS property or creates a new CSS property in the declaration block.
- *
- * @param {Object} style style property given to jsx
- * @param {Map} properties map of priorities for existing properties
- * @param {String} name representing the CSS property name to be modified.
- * @param {String} [value] containing the new property value. If not specified, treated as the empty string. value must not contain "!important" -- that should be set using the priority parameter.
- * @param {String} [important] allowing the "important" CSS priority to be set. If not specified, treated as the empty string.
- * @return {undefined}
- */
-function setProperty(style, properties, name, value, important) {
-  properties.set(name, important);
-  style[camelCase(name)] = value.trim();
 }
 
 function initStyle(selectedEl) {
@@ -426,12 +412,14 @@ export function inlineStyles(document) {
           // inline styles,    external styles same   priority as inline styles,   inline   styles used
           // inline styles,    external styles higher priority than inline styles, external styles used
           const name = property.trim();
-          const val = csstree.generate(value);
+          const camel = camelCase(name);
+          const val = csstree.generate(value).trim();
           for (let element of matched) {
             const { style, properties } = element.style;
             const current = properties.get(name);
             if (current === undefined || current < important) {
-              setProperty(style, properties, name, val, important);
+              properties.set(name, important);
+              style[camel] = val;
             }
           }
         },
