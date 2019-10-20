@@ -61,6 +61,8 @@ function missingTag() {
 
 export interface AST {
   tag: string;
+  styles?: string;
+  parent: AST | null;
   children: (AST | string)[] | (JSX.Element | string)[];
   props: {};
   Tag: ComponentType;
@@ -248,7 +250,10 @@ const validNameCharacters = /[a-zA-Z0-9:_-]/;
 const whitespace = /[\s\t\r\n]/;
 const quotemarks = /['"]/;
 
-export function parse(source: string): AST | null {
+export function parse(
+  source: string,
+  middleware: (ast: AST) => AST,
+): AST | null {
   const length = source.length;
   let currentElement: AST | null = null;
   let state = metadata;
@@ -324,6 +329,7 @@ export function parse(source: string): AST | null {
       tag,
       props,
       children: [],
+      parent: currentElement,
       Tag: tags[tag] || missingTag,
     };
 
@@ -337,6 +343,7 @@ export function parse(source: string): AST | null {
 
     const { style } = props;
     if (typeof style === 'string') {
+      element.styles = style;
       props.style = getStyle(style);
     }
 
@@ -513,7 +520,7 @@ export function parse(source: string): AST | null {
   }
 
   if (root && typeof root === 'object') {
-    const r: AST = root;
+    const r: AST = middleware ? middleware(root) : root;
     const ast: (AST | string)[] = r.children as (AST | string)[];
     r.children = ast.map(astToReact);
   }
