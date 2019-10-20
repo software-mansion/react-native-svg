@@ -383,6 +383,8 @@ export function parse(
       error('expected ]]>');
     }
 
+    children.push(source.slice(i + 7, index));
+
     i = index + 2;
     return neutral;
   }
