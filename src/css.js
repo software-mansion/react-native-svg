@@ -597,7 +597,9 @@ const opts = {
 function initStyle(selectedEl) {
   if (!selectedEl.style) {
     let value = selectedEl.styles || '';
-    selectedEl.props.style = {};
+    if (!selectedEl.props.style) {
+      selectedEl.props.style = {};
+    }
     selectedEl.style = new CSSStyleDeclaration(selectedEl);
     selectedEl.style.addStyleHandler();
     selectedEl.styles = {
@@ -636,7 +638,10 @@ export function inlineStyles(document) {
         parseCustomProperty: false,
       });
     } catch (parseError) {
-      // console.warn('Warning: Parse error of styles of <style/> element, skipped. Error details: ' + parseError);
+      console.warn(
+        'Warning: Parse error of styles of <style/> element, skipped. Error details: ' +
+          parseError,
+      );
       continue;
     }
 
