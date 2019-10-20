@@ -252,7 +252,7 @@ const quotemarks = /['"]/;
 
 export function parse(
   source: string,
-  middleware: (ast: AST) => AST,
+  middleware?: (ast: AST) => AST,
 ): AST | null {
   const length = source.length;
   let currentElement: AST | null = null;
