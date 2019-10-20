@@ -321,7 +321,7 @@ function CSSStyleDeclaration(node) {
  */
 function setProperty({ properties, style }, name, value, important) {
   if (typeof name === 'undefined') {
-    throw Error('propertyName argument required, but only not present.');
+    throw Error('propertyName argument required, but not present.');
   }
   const v = value.trim();
   const key = name.trim();
@@ -426,36 +426,30 @@ export function inlineStyles(document) {
 
   // match selectors
   for (let selector of sortedSelectors) {
+    if (selector.rule === null) {
+      continue;
+    }
     const selectorStr = csstree.generate(selector.item.data);
     try {
-      const selected = querySelectorAll(document, selectorStr);
-      if (selected.length) {
-        // apply <style/> to matched elements
-        for (let element of selected) {
-          if (selector.rule === null) {
-            continue;
-          }
-
-          initStyle(element);
-          const { style } = element;
-          const { properties } = style;
-
-          // merge declarations
-          csstree.walk(selector.rule, {
-            visit: 'Declaration',
-            enter({ property, value, important }) {
-              // existing inline styles have higher priority
-              // no inline styles, external styles,                                    external styles used
-              // inline styles,    external styles same   priority as inline styles,   inline   styles used
-              // inline styles,    external styles higher priority than inline styles, external styles used
-              const prop = properties.get(property.trim());
-              if (prop && prop.important >= important) {
-                return;
-              }
-              setProperty(style, property, csstree.generate(value), important);
-            },
-          });
-        }
+      // apply <style/> to matched elements
+      for (let element of querySelectorAll(document, selectorStr)) {
+        initStyle(element);
+        const { style } = element;
+        const { properties } = style;
+        csstree.walk(selector.rule, {
+          visit: 'Declaration',
+          enter({ property, value, important }) {
+            // existing inline styles have higher priority
+            // no inline styles, external styles,                                    external styles used
+            // inline styles,    external styles same   priority as inline styles,   inline   styles used
+            // inline styles,    external styles higher priority than inline styles, external styles used
+            const prop = properties.get(property.trim());
+            if (prop && prop.important >= important) {
+              return;
+            }
+            setProperty(style, property, csstree.generate(value), important);
+          },
+        });
       }
     } catch (selectError) {
       if (selectError.constructor === SyntaxError) {
