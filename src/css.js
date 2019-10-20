@@ -118,7 +118,8 @@ function specificity(selector) {
 
       case 'TypeSelector':
         // ignore universal selector
-        if (node.name.charAt(node.name.length - 1) !== '*') {
+        const { name } = node;
+        if (name.charAt(name.length - 1) !== '*') {
           C++;
         }
         break;
@@ -171,26 +172,19 @@ function flattenToSelectors(cssAst, selectors) {
  * Filter selectors by Media Query.
  *
  * @param {Array} selectors to filter
- * @param {Array} useMqs Array with strings of media queries that should pass (<name> <expression>)
  * @return {Array} Filtered selectors that match the passed media queries
  */
-function filterByMqs(selectors, useMqs) {
-  return selectors.filter(selector => {
-    if (selector.atrule === null) {
+function filterByMqs(selectors) {
+  return selectors.filter(({ atrule }) => {
+    if (atrule === null) {
       return ~useMqs.indexOf('');
     }
-
-    const mqName = selector.atrule.name;
-    let mqStr = mqName;
-    if (
-      selector.atrule.expression &&
-      selector.atrule.expression.children.first().type === 'MediaQueryList'
-    ) {
-      const mqExpr = csstree.generate(selector.atrule.expression);
-      mqStr = [mqName, mqExpr].join(' ');
-    }
-
-    return ~useMqs.indexOf(mqStr);
+    const { name, expression } = atrule;
+    return ~useMqs.indexOf(
+      expression && expression.children.first().type === 'MediaQueryList'
+        ? [name, csstree.generate(expression)].join(' ')
+        : name,
+    );
   });
 }
 
@@ -198,21 +192,20 @@ function filterByMqs(selectors, useMqs) {
  * Filter selectors by the pseudo-elements and/or -classes they contain.
  *
  * @param {Array} selectors to filter
- * @param {Array} usePseudos Array with strings of single or sequence of pseudo-elements and/or -classes that should pass
  * @return {Array} Filtered selectors that match the passed pseudo-elements and/or -classes
  */
-function filterByPseudos(selectors, usePseudos) {
-  return selectors.filter(selector => {
-    const pseudoSelectorsStr = csstree.generate({
-      type: 'Selector',
-      children: new List().fromArray(
-        selector.pseudos.map(pseudo => {
-          return pseudo.item.data;
+function filterByPseudos(selectors) {
+  return selectors.filter(
+    ({ pseudos }) =>
+      ~usePseudos.indexOf(
+        csstree.generate({
+          type: 'Selector',
+          children: new List().fromArray(
+            pseudos.map(pseudo => pseudo.item.data),
+          ),
         }),
       ),
-    });
-    return ~usePseudos.indexOf(pseudoSelectorsStr);
-  });
+  );
 }
 
 /**
@@ -222,11 +215,9 @@ function filterByPseudos(selectors, usePseudos) {
  * @return {Array} Selectors without pseudo-elements and/or -classes
  */
 function cleanPseudos(selectors) {
-  selectors.forEach(selector => {
-    selector.pseudos.forEach(pseudo => {
-      pseudo.list.remove(pseudo.item);
-    });
-  });
+  selectors.forEach(({ pseudos }) =>
+    pseudos.forEach(pseudo => pseudo.list.remove(pseudo.item)),
+  );
 }
 
 /**
@@ -245,7 +236,6 @@ function compareSpecificity(aSpecificity, bSpecificity) {
       return 1;
     }
   }
-
   return 0;
 }
 
@@ -272,6 +262,10 @@ function sortSelectors(selectors) {
   return stable(selectors, bySelectorSpecificity);
 }
 
+const declarationParseProps = {
+  context: 'declarationList',
+  parseValue: false,
+};
 function CSSStyleDeclaration(node) {
   const style = {
     style: node.props.style,
@@ -281,13 +275,9 @@ function CSSStyleDeclaration(node) {
   if (!styles || styles.length === 0) {
     return style;
   }
-
   try {
     csstree
-      .parse(styles, {
-        context: 'declarationList',
-        parseValue: false,
-      })
+      .parse(styles, declarationParseProps)
       .children.each(({ property, value, important }) => {
         try {
           setProperty(style, property, csstree.generate(value), important);
@@ -306,7 +296,6 @@ function CSSStyleDeclaration(node) {
         parseError,
     );
   }
-
   return style;
 }
 
@@ -341,9 +330,7 @@ function setProperty({ properties, style }, name, value, important) {
  */
 function closestElem(node, elemName) {
   let elem = node;
-
   while ((elem = elem.parent) && elem.tag !== elemName) {}
-
   return elem;
 }
 
@@ -355,6 +342,17 @@ function initStyle(selectedEl) {
     selectedEl.style = CSSStyleDeclaration(selectedEl);
   }
 }
+
+// useMqs Array with strings of media queries that should pass (<name> <expression>)
+const useMqs = ['', 'screen'];
+
+// usePseudos Array with strings of single or sequence of pseudo-elements and/or -classes that should pass
+const usePseudos = [''];
+
+const parseProps = {
+  parseValue: false,
+  parseCustomProperty: false,
+};
 
 /**
  * Moves + merges styles from style elements to element styles
@@ -369,14 +367,10 @@ function initStyle(selectedEl) {
  *     empty string element for all non-pseudo-classes and/or -elements
  *
  * @param {Object} document document element
- * @param {Object} opts plugin params
  *
  * @author strarsis <strarsis@gmail.com>
+ * @author modified by: msand <msand@abo.fim>
  */
-const opts = {
-  useMqs: ['', 'screen'],
-  usePseudos: [''],
-};
 export function inlineStyles(document) {
   // collect <style/>s
   const styleElements = querySelectorAll(document, 'style');
@@ -397,13 +391,7 @@ export function inlineStyles(document) {
 
     // collect <style/>s and their css ast
     try {
-      flattenToSelectors(
-        csstree.parse(children, {
-          parseValue: false,
-          parseCustomProperty: false,
-        }),
-        selectors,
-      );
+      flattenToSelectors(csstree.parse(children, parseProps), selectors);
     } catch (parseError) {
       console.warn(
         'Warning: Parse error of styles of <style/> element, skipped. Error details: ' +
@@ -413,10 +401,10 @@ export function inlineStyles(document) {
   }
 
   // filter for mediaqueries to be used or without any mediaquery
-  const selectorsMq = filterByMqs(selectors, opts.useMqs);
+  const selectorsMq = filterByMqs(selectors);
 
   // filter for pseudo elements to be used
-  const selectorsPseudo = filterByPseudos(selectorsMq, opts.usePseudos);
+  const selectorsPseudo = filterByPseudos(selectorsMq);
 
   // remove PseudoClass from its SimpleSelector for proper matching
   cleanPseudos(selectorsPseudo);
@@ -425,18 +413,18 @@ export function inlineStyles(document) {
   const sortedSelectors = sortSelectors(selectorsPseudo).reverse();
 
   // match selectors
-  for (let selector of sortedSelectors) {
-    if (selector.rule === null) {
+  for (let { rule, item } of sortedSelectors) {
+    if (rule === null) {
       continue;
     }
-    const selectorStr = csstree.generate(selector.item.data);
+    const selectorStr = csstree.generate(item.data);
     try {
       // apply <style/> to matched elements
       for (let element of querySelectorAll(document, selectorStr)) {
         initStyle(element);
         const { style } = element;
         const { properties } = style;
-        csstree.walk(selector.rule, {
+        csstree.walk(rule, {
           visit: 'Declaration',
           enter({ property, value, important }) {
             // existing inline styles have higher priority
