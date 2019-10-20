@@ -316,222 +316,48 @@ function getCssStr(element) {
 }
 
 const CSSStyleDeclaration = function(node) {
-  this.parentNode = node;
-
+  this.style = node.props.style;
   this.properties = new Map();
-  this.hasSynced = false;
-
-  this.styleAttr = null;
-  this.styleValue = null;
-
-  this.parseError = false;
-};
-
-/**
- * Performs a deep clone of this object.
- *
- * @param parentNode the parentNode to assign to the cloned result
- */
-CSSStyleDeclaration.prototype.clone = function(parentNode) {
-  let nodeData = {};
-
-  Object.keys(this).forEach(key => {
-    if (key !== 'parentNode') {
-      nodeData[key] = this[key];
-    }
-  });
-
-  // Deep-clone node data.
-  nodeData = JSON.parse(JSON.stringify(nodeData));
-
-  const clone = new CSSStyleDeclaration(parentNode);
-  Object.assign(clone, nodeData);
-  return clone;
-};
-
-// attr.style
-
-CSSStyleDeclaration.prototype.addStyleHandler = function() {
-  this.styleAttr = {
-    // empty style attr
-    name: 'style',
-    value: null,
-  };
-
-  Object.defineProperty(this.parentNode, 'styles', {
-    get: this.getStyleAttr.bind(this),
-    set: this.setStyleAttr.bind(this),
-    enumerable: true,
-    configurable: true,
-  });
-
-  this.addStyleValueHandler();
-};
-
-// attr.style.value
-
-CSSStyleDeclaration.prototype.addStyleValueHandler = function() {
-  Object.defineProperty(this.styleAttr, 'value', {
-    get: this.getStyleValue.bind(this),
-    set: this.setStyleValue.bind(this),
-    enumerable: true,
-    configurable: true,
-  });
-};
-
-CSSStyleDeclaration.prototype.getStyleAttr = function() {
-  return this.styleAttr;
-};
-
-CSSStyleDeclaration.prototype.setStyleAttr = function(newStyleAttr) {
-  this.setStyleValue(newStyleAttr.value); // must before applying value handler!
-
-  this.styleAttr = newStyleAttr;
-  this.addStyleValueHandler();
-  this.hasSynced = false; // raw css changed
-};
-
-CSSStyleDeclaration.prototype.getStyleValue = function() {
-  return this.getCssText();
-};
-
-CSSStyleDeclaration.prototype.setStyleValue = function(newValue) {
-  this.properties.clear(); // reset all existing properties
-  this.styleValue = newValue;
-  this.hasSynced = false; // raw css changed
-};
-
-CSSStyleDeclaration.prototype._loadCssText = function() {
-  if (this.hasSynced) {
+  const { styles } = node;
+  if (!styles || styles.length === 0) {
     return;
   }
-  this.hasSynced = true; // must be set here to prevent loop in setProperty(...)
-
-  if (!this.styleValue || this.styleValue.length === 0) {
-    return;
-  }
-  const inlineCssStr = this.styleValue;
 
   let declarations = {};
   try {
-    declarations = csstree.parse(inlineCssStr, {
+    declarations = csstree.parse(styles, {
       context: 'declarationList',
       parseValue: false,
     });
   } catch (parseError) {
-    this.parseError = parseError;
+    console.warn(
+      "Warning: Parse error when parsing inline styles, style properties of this element cannot be used. The raw styles can still be get/set using .attr('style').value. Error details: " +
+        parseError,
+    );
     return;
   }
-  this.parseError = false;
 
   declarations.children.each(declaration => {
     try {
-      const styleDeclaration = csstreeToStyleDeclaration(declaration);
-      this.setProperty(
-        styleDeclaration.name,
-        styleDeclaration.value,
-        styleDeclaration.priority,
-      );
+      const { name, value, priority } = csstreeToStyleDeclaration(declaration);
+      this.setProperty(name, value, priority);
     } catch (styleError) {
       if (styleError.message !== 'Unknown node type: undefined') {
-        this.parseError = styleError;
+        console.warn(
+          "Warning: Parse error when parsing inline styles, style properties of this element cannot be used. The raw styles can still be get/set using .attr('style').value. Error details: " +
+            styleError,
+        );
       }
     }
   });
 };
 
-// only reads from properties
-
-/**
- * Get the textual representation of the declaration block (equivalent to .cssText attribute).
- *
- * @return {String} Textual representation of the declaration block (empty string for no properties)
- */
-CSSStyleDeclaration.prototype.getCssText = function() {
-  const properties = this.getProperties();
-
-  if (this.parseError) {
-    // in case of a parse error, pass through original styles
-    return this.styleValue;
-  }
-
-  const cssText = [];
-  properties.forEach((property, propertyName) => {
-    const strImportant = property.priority === 'important' ? '!important' : '';
-    cssText.push(
-      propertyName.trim() + ':' + property.value.trim() + strImportant,
-    );
-  });
-  return cssText.join(';');
-};
-
-CSSStyleDeclaration.prototype._handleParseError = function() {
-  if (this.parseError) {
-    console.warn(
-      "Warning: Parse error when parsing inline styles, style properties of this element cannot be used. The raw styles can still be get/set using .attr('style').value. Error details: " +
-        this.parseError,
-    );
-  }
-};
-
-CSSStyleDeclaration.prototype._getProperty = function(propertyName) {
+CSSStyleDeclaration.prototype.getProperty = function(propertyName) {
   if (typeof propertyName === 'undefined') {
     throw Error('1 argument required, but only 0 present.');
   }
 
-  const properties = this.getProperties();
-  this._handleParseError();
-
-  return properties.get(propertyName.trim());
-};
-
-/**
- * Return the optional priority, "important".
- *
- * @param {String} propertyName representing the property name to be checked.
- * @return {String} priority that represents the priority (e.g. "important") if one exists. If none exists, returns the empty string.
- */
-CSSStyleDeclaration.prototype.getPropertyPriority = function(propertyName) {
-  const property = this._getProperty(propertyName);
-  return property ? property.priority : '';
-};
-
-/**
- * Return the property value given a property name.
- *
- * @param {String} propertyName representing the property name to be checked.
- * @return {String} value containing the value of the property. If not set, returns the empty string.
- */
-CSSStyleDeclaration.prototype.getPropertyValue = function(propertyName) {
-  const property = this._getProperty(propertyName);
-  return property ? property.value : null;
-};
-
-/**
- * Return a property name.
- *
- * @param {Number} index of the node to be fetched. The index is zero-based.
- * @return {String} propertyName that is the name of the CSS property at the specified index.
- */
-CSSStyleDeclaration.prototype.item = function(index) {
-  if (typeof index === 'undefined') {
-    throw Error('1 argument required, but only 0 present.');
-  }
-
-  const properties = this.getProperties();
-  this._handleParseError();
-
-  return Array.from(properties.keys())[index];
-};
-
-/**
- * Return all properties of the node.
- *
- * @return {Map} properties that is a Map with propertyName as key and property (propertyValue + propertyPriority) as value.
- */
-CSSStyleDeclaration.prototype.getProperties = function() {
-  this._loadCssText();
-  return this.properties;
+  return this.properties.get(propertyName.trim());
 };
 
 // writes to properties
@@ -553,17 +379,14 @@ CSSStyleDeclaration.prototype.setProperty = function(
     throw Error('propertyName argument required, but only not present.');
   }
 
-  const properties = this.getProperties();
-  this._handleParseError();
-
-  let trimmedValue = value.trim();
+  const trimmedValue = value.trim();
   const property = {
     value: trimmedValue,
     priority: priority.trim(),
   };
-  let key = propertyName.trim();
-  properties.set(key, property);
-  this.parentNode.props.style[camelCase(key)] = trimmedValue;
+  const key = propertyName.trim();
+  this.properties.set(key, property);
+  this.style[camelCase(key)] = trimmedValue;
 
   return property;
 };
@@ -596,18 +419,10 @@ const opts = {
 
 function initStyle(selectedEl) {
   if (!selectedEl.style) {
-    let value = selectedEl.styles || '';
     if (!selectedEl.props.style) {
       selectedEl.props.style = {};
     }
     selectedEl.style = new CSSStyleDeclaration(selectedEl);
-    selectedEl.style.addStyleHandler();
-    selectedEl.styles = {
-      name: 'style',
-      value: value,
-      prefix: '',
-      local: '',
-    };
   }
 }
 
@@ -714,22 +529,15 @@ export function inlineStyles(document) {
           // no inline styles, external styles,                                    external styles used
           // inline styles,    external styles same   priority as inline styles,   inline   styles used
           // inline styles,    external styles higher priority than inline styles, external styles used
-          const styleDeclaration = csstreeToStyleDeclaration(
+          const { name, value, priority } = csstreeToStyleDeclaration(
             styleCsstreeDeclaration,
           );
           initStyle(selectedEl);
-          if (
-            selectedEl.style.getPropertyValue(styleDeclaration.name) !== null &&
-            selectedEl.style.getPropertyPriority(styleDeclaration.name) >=
-              styleDeclaration.priority
-          ) {
+          const styleProperty = selectedEl.style.getProperty(name);
+          if (styleProperty && styleProperty.priority >= priority) {
             return;
           }
-          selectedEl.style.setProperty(
-            styleDeclaration.name,
-            styleDeclaration.value,
-            styleDeclaration.priority,
-          );
+          selectedEl.style.setProperty(name, value, priority);
         },
       });
     }
