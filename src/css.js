@@ -315,7 +315,7 @@ function getCssStr(element) {
   return element.children || [];
 }
 
-const CSSStyleDeclaration = function(node) {
+function CSSStyleDeclaration(node) {
   this.style = node.props.style;
   this.properties = new Map();
   const { styles } = node;
@@ -350,7 +350,7 @@ const CSSStyleDeclaration = function(node) {
       }
     }
   });
-};
+}
 
 CSSStyleDeclaration.prototype.getProperty = function(propertyName) {
   if (typeof propertyName === 'undefined') {
