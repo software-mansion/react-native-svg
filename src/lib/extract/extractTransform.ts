@@ -1,5 +1,4 @@
 import { append, appendTransform, identity, reset, toArray } from '../Matrix2D';
-// @ts-ignore
 import { parse } from './transform';
 import { NumberProp, TransformedProps, TransformProps } from './types';
 
