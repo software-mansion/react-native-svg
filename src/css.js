@@ -61,24 +61,22 @@ const rnsvgCssSelectAdapter = baseCssAdapter(rnsvgCssSelectAdapterMin);
  *
  * @param {Object} document to select elements from
  * @param {String} selectors CSS selector(s) string
- * @return {Array} null if no elements matched
+ * @return {Array}
  */
 function querySelectorAll(document, selectors) {
-  const matchedEls = cssSelect(selectors, document, cssSelectOpts);
-
-  return matchedEls.length > 0 ? matchedEls : null;
+  return cssSelect(selectors, document, cssSelectOpts);
 }
 const cssSelectOpts = {
   xmlMode: true,
   adapter: rnsvgCssSelectAdapter,
 };
 
-function specificity(simpleSelector) {
+function specificity(selector) {
   let A = 0;
   let B = 0;
   let C = 0;
 
-  simpleSelector.children.each(function walk(node) {
+  selector.children.each(function walk(node) {
     switch (node.type) {
       case 'SelectorList':
       case 'Selector':
@@ -134,49 +132,39 @@ function specificity(simpleSelector) {
  * Flatten a CSS AST to a selectors list.
  *
  * @param {Object} cssAst css-tree AST to flatten
- * @return {Array} selectors
+ * @param {Array} selectors
  */
-function flattenToSelectors(cssAst) {
-  const selectors = [];
-
+function flattenToSelectors(cssAst, selectors) {
   csstree.walk(cssAst, {
     visit: 'Rule',
-    enter(node) {
-      if (node.type !== 'Rule') {
+    enter(rule) {
+      const { type, prelude } = rule;
+      if (type !== 'Rule') {
         return;
       }
-
       const atrule = this.atrule;
-      const rule = node;
-
-      node.prelude.children.each((selectorNode, selectorItem) => {
-        const selector = {
-          item: selectorItem,
-          atrule: atrule,
-          rule: rule,
-          pseudos: [],
-        };
-
-        selectorNode.children.each(
-          (selectorChildNode, selectorChildItem, selectorChildList) => {
-            if (
-              selectorChildNode.type === 'PseudoClassSelector' ||
-              selectorChildNode.type === 'PseudoElementSelector'
-            ) {
-              selector.pseudos.push({
-                item: selectorChildItem,
-                list: selectorChildList,
-              });
-            }
-          },
-        );
-
-        selectors.push(selector);
+      prelude.children.each(({ children }, item) => {
+        const pseudos = [];
+        selectors.push({
+          item,
+          atrule,
+          rule,
+          pseudos,
+        });
+        children.each(({ type: childType }, pseudoItem, list) => {
+          if (
+            childType === 'PseudoClassSelector' ||
+            childType === 'PseudoElementSelector'
+          ) {
+            pseudos.push({
+              item: pseudoItem,
+              list,
+            });
+          }
+        });
       });
     },
   });
-
-  return selectors;
 }
 
 /**
@@ -264,18 +252,14 @@ function compareSpecificity(aSpecificity, bSpecificity) {
 /**
  * Compare two simple selectors.
  *
- * @param {Object} aSimpleSelectorNode Simple selector A
- * @param {Object} bSimpleSelectorNode Simple selector B
+ * @param {Object} selectorA Simple selector A
+ * @param {Object} selectorB Simple selector B
  * @return {Number} Score of selector A compared to selector B
  */
-function compareSimpleSelectorNode(aSimpleSelectorNode, bSimpleSelectorNode) {
-  const aSpecificity = specificity(aSimpleSelectorNode),
-    bSpecificity = specificity(bSimpleSelectorNode);
+function bySelectorSpecificity(selectorA, selectorB) {
+  const aSpecificity = specificity(selectorA.item.data),
+    bSpecificity = specificity(selectorB.item.data);
   return compareSpecificity(aSpecificity, bSpecificity);
-}
-
-function _bySelectorSpecificity(selectorA, selectorB) {
-  return compareSimpleSelectorNode(selectorA.item.data, selectorB.item.data);
 }
 
 /**
@@ -285,98 +269,97 @@ function _bySelectorSpecificity(selectorA, selectorB) {
  * @return {Array} Stable sorted selectors
  */
 function sortSelectors(selectors) {
-  return stable(selectors, _bySelectorSpecificity);
-}
-
-/**
- * Gets the CSS string of a style element
- *
- * @param {Object} element style element
- * @return {String|Array} CSS string or empty array if no styles are set
- */
-function getCssStr(element) {
-  return element.children || [];
+  return stable(selectors, bySelectorSpecificity);
 }
 
 function CSSStyleDeclaration(node) {
-  this.style = node.props.style;
-  this.properties = new Map();
+  const style = {
+    style: node.props.style,
+    properties: new Map(),
+  };
   const { styles } = node;
   if (!styles || styles.length === 0) {
-    return;
+    return style;
   }
 
-  let declarations = {};
   try {
-    declarations = csstree.parse(styles, {
-      context: 'declarationList',
-      parseValue: false,
-    });
+    csstree
+      .parse(styles, {
+        context: 'declarationList',
+        parseValue: false,
+      })
+      .children.each(({ property, value, important }) => {
+        try {
+          setProperty(style, property, csstree.generate(value), important);
+        } catch (styleError) {
+          if (styleError.message !== 'Unknown node type: undefined') {
+            console.warn(
+              "Warning: Parse error when parsing inline styles, style properties of this element cannot be used. The raw styles can still be get/set using .attr('style').value. Error details: " +
+                styleError,
+            );
+          }
+        }
+      });
   } catch (parseError) {
     console.warn(
       "Warning: Parse error when parsing inline styles, style properties of this element cannot be used. The raw styles can still be get/set using .attr('style').value. Error details: " +
         parseError,
     );
-    return;
   }
 
-  declarations.children.each(declaration => {
-    try {
-      const { property, value, important } = declaration;
-      this.setProperty(property, csstree.generate(value), important);
-    } catch (styleError) {
-      if (styleError.message !== 'Unknown node type: undefined') {
-        console.warn(
-          "Warning: Parse error when parsing inline styles, style properties of this element cannot be used. The raw styles can still be get/set using .attr('style').value. Error details: " +
-            styleError,
-        );
-      }
-    }
-  });
+  return style;
 }
-
-CSSStyleDeclaration.prototype.getProperty = function(propertyName) {
-  if (typeof propertyName === 'undefined') {
-    throw Error('1 argument required, but only 0 present.');
-  }
-
-  return this.properties.get(propertyName.trim());
-};
-
-// writes to properties
 
 /**
  * Modify an existing CSS property or creates a new CSS property in the declaration block.
  *
+ * @param {{properties: *, style: *}}
  * @param {String} name representing the CSS property name to be modified.
  * @param {String} [value] containing the new property value. If not specified, treated as the empty string. value must not contain "!important" -- that should be set using the priority parameter.
  * @param {String} [important] allowing the "important" CSS priority to be set. If not specified, treated as the empty string.
  * @return {undefined}
  */
-CSSStyleDeclaration.prototype.setProperty = function(name, value, important) {
+function setProperty({ properties, style }, name, value, important) {
   if (typeof name === 'undefined') {
     throw Error('propertyName argument required, but only not present.');
   }
-
-  const trimmedValue = value.trim();
-  const property = {
-    value: trimmedValue,
-    important,
-  };
+  const v = value.trim();
   const key = name.trim();
-  this.properties.set(key, property);
-  this.style[camelCase(key)] = trimmedValue;
+  properties.set(key, {
+    value: v,
+    important,
+  });
+  style[camelCase(key)] = v;
+}
 
-  return property;
-};
+/**
+ * Find the closest ancestor of the current element.
+ * @param node
+ * @param elemName
+ *
+ * @return {?Object}
+ */
+function closestElem(node, elemName) {
+  let elem = node;
+
+  while ((elem = elem.parent) && elem.tag !== elemName) {}
+
+  return elem;
+}
+
+function initStyle(selectedEl) {
+  if (!selectedEl.style) {
+    if (!selectedEl.props.style) {
+      selectedEl.props.style = {};
+    }
+    selectedEl.style = CSSStyleDeclaration(selectedEl);
+  }
+}
 
 /**
  * Moves + merges styles from style elements to element styles
  *
  * Options
- *   onlyMatchedOnce (default: true)
- *     inline only selectors that match once
- *
  *   useMqs (default: ['', 'screen'])
  *     what media queries to be used
  *     empty string element for styles outside media queries
@@ -391,55 +374,42 @@ CSSStyleDeclaration.prototype.setProperty = function(name, value, important) {
  * @author strarsis <strarsis@gmail.com>
  */
 const opts = {
-  onlyMatchedOnce: true,
   useMqs: ['', 'screen'],
   usePseudos: [''],
 };
-
-function initStyle(selectedEl) {
-  if (!selectedEl.style) {
-    if (!selectedEl.props.style) {
-      selectedEl.props.style = {};
-    }
-    selectedEl.style = new CSSStyleDeclaration(selectedEl);
-  }
-}
-
 export function inlineStyles(document) {
   // collect <style/>s
-  const styleEls = querySelectorAll(document, 'style');
+  const styleElements = querySelectorAll(document, 'style');
 
   //no <styles/>s, nothing to do
-  if (styleEls === null) {
+  if (styleElements.length === 0) {
     return document;
   }
 
-  let selectors = [];
+  const selectors = [];
 
-  for (let styleEl of styleEls) {
-    if (!styleEl.children.length /* || styleEl.closestElem('foreignObject')*/) {
+  for (let element of styleElements) {
+    const { children } = element;
+    if (!children.length || closestElem(element, 'foreignObject')) {
       // skip empty <style/>s or <foreignObject> content.
       continue;
     }
 
-    const cssStr = getCssStr(styleEl);
-
     // collect <style/>s and their css ast
-    let cssAst = {};
     try {
-      cssAst = csstree.parse(cssStr, {
-        parseValue: false,
-        parseCustomProperty: false,
-      });
+      flattenToSelectors(
+        csstree.parse(children, {
+          parseValue: false,
+          parseCustomProperty: false,
+        }),
+        selectors,
+      );
     } catch (parseError) {
       console.warn(
         'Warning: Parse error of styles of <style/> element, skipped. Error details: ' +
           parseError,
       );
-      continue;
     }
-
-    selectors = selectors.concat(flattenToSelectors(cssAst));
   }
 
   // filter for mediaqueries to be used or without any mediaquery
@@ -454,71 +424,50 @@ export function inlineStyles(document) {
   // stable sort selectors
   const sortedSelectors = sortSelectors(selectorsPseudo).reverse();
 
-  let selector, selectedEl;
-
   // match selectors
-  for (selector of sortedSelectors) {
+  for (let selector of sortedSelectors) {
     const selectorStr = csstree.generate(selector.item.data);
-    let selectedEls = null;
-
     try {
-      selectedEls = querySelectorAll(document, selectorStr);
+      const selected = querySelectorAll(document, selectorStr);
+      if (selected.length) {
+        // apply <style/> to matched elements
+        for (let element of selected) {
+          if (selector.rule === null) {
+            continue;
+          }
+
+          initStyle(element);
+          const { style } = element;
+          const { properties } = style;
+
+          // merge declarations
+          csstree.walk(selector.rule, {
+            visit: 'Declaration',
+            enter({ property, value, important }) {
+              // existing inline styles have higher priority
+              // no inline styles, external styles,                                    external styles used
+              // inline styles,    external styles same   priority as inline styles,   inline   styles used
+              // inline styles,    external styles higher priority than inline styles, external styles used
+              const prop = properties.get(property.trim());
+              if (prop && prop.important >= important) {
+                return;
+              }
+              setProperty(style, property, csstree.generate(value), important);
+            },
+          });
+        }
+      }
     } catch (selectError) {
       if (selectError.constructor === SyntaxError) {
-        // console.warn('Warning: Syntax error when trying to select \n\n' + selectorStr + '\n\n, skipped. Error details: ' + selectError);
+        console.warn(
+          'Warning: Syntax error when trying to select \n\n' +
+            selectorStr +
+            '\n\n, skipped. Error details: ' +
+            selectError,
+        );
         continue;
       }
       throw selectError;
-    }
-
-    if (selectedEls === null) {
-      // nothing selected
-      continue;
-    }
-
-    selector.selectedEls = selectedEls;
-  }
-
-  // apply <style/> styles to matched elements
-  for (selector of sortedSelectors) {
-    if (!selector.selectedEls) {
-      continue;
-    }
-
-    if (
-      opts.onlyMatchedOnce &&
-      selector.selectedEls !== null &&
-      selector.selectedEls.length > 1
-    ) {
-      // skip selectors that match more than once if option onlyMatchedOnce is enabled
-      continue;
-    }
-
-    // apply <style/> to matched elements
-    for (selectedEl of selector.selectedEls) {
-      if (selector.rule === null) {
-        continue;
-      }
-      initStyle(selectedEl);
-      const { style } = selectedEl;
-
-      // merge declarations
-      csstree.walk(selector.rule, {
-        visit: 'Declaration',
-        enter(styleCsstreeDeclaration) {
-          // existing inline styles have higher priority
-          // no inline styles, external styles,                                    external styles used
-          // inline styles,    external styles same   priority as inline styles,   inline   styles used
-          // inline styles,    external styles higher priority than inline styles, external styles used
-          const { property, value, important } = styleCsstreeDeclaration;
-          const styleProperty = style.getProperty(property);
-          if (styleProperty && styleProperty.important >= important) {
-            return;
-          }
-          const propertyValue = csstree.generate(value);
-          style.setProperty(property, propertyValue, important);
-        },
-      });
     }
   }
 
