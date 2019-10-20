@@ -266,21 +266,22 @@ const declarationParseProps = {
   context: 'declarationList',
   parseValue: false,
 };
-function CSSStyleDeclaration(node) {
-  const style = {
-    style: node.props.style,
-    properties: new Map(),
+function CSSStyleDeclaration({ props: { style }, styles }) {
+  const properties = new Map();
+  const styleDeclaration = {
+    style,
+    properties,
   };
-  const { styles } = node;
   if (!styles || styles.length === 0) {
-    return style;
+    return styleDeclaration;
   }
   try {
     csstree
       .parse(styles, declarationParseProps)
       .children.each(({ property, value, important }) => {
         try {
-          setProperty(style, property, csstree.generate(value), important);
+          const val = csstree.generate(value);
+          setProperty(style, properties, property.trim(), val, important);
         } catch (styleError) {
           if (styleError.message !== 'Unknown node type: undefined') {
             console.warn(
@@ -296,36 +297,28 @@ function CSSStyleDeclaration(node) {
         parseError,
     );
   }
-  return style;
+  return styleDeclaration;
 }
 
 /**
  * Modify an existing CSS property or creates a new CSS property in the declaration block.
  *
- * @param {{properties: *, style: *}}
+ * @param {Object} style style property given to jsx
+ * @param {Map} properties map of priorities for existing properties
  * @param {String} name representing the CSS property name to be modified.
  * @param {String} [value] containing the new property value. If not specified, treated as the empty string. value must not contain "!important" -- that should be set using the priority parameter.
  * @param {String} [important] allowing the "important" CSS priority to be set. If not specified, treated as the empty string.
  * @return {undefined}
  */
-function setProperty({ properties, style }, name, value, important) {
-  if (typeof name === 'undefined') {
-    throw Error('propertyName argument required, but not present.');
-  }
-  const v = value.trim();
-  const key = name.trim();
-  properties.set(key, {
-    value: v,
-    important,
-  });
-  style[camelCase(key)] = v;
+function setProperty(style, properties, name, value, important) {
+  properties.set(name, important);
+  style[camelCase(name)] = value.trim();
 }
 
 /**
  * Find the closest ancestor of the current element.
  * @param node
  * @param elemName
- *
  * @return {?Object}
  */
 function closestElem(node, elemName) {
@@ -422,8 +415,9 @@ export function inlineStyles(document) {
       // apply <style/> to matched elements
       for (let element of querySelectorAll(document, selectorStr)) {
         initStyle(element);
-        const { style } = element;
-        const { properties } = style;
+        const {
+          style: { style, properties },
+        } = element;
         csstree.walk(rule, {
           visit: 'Declaration',
           enter({ property, value, important }) {
@@ -431,11 +425,12 @@ export function inlineStyles(document) {
             // no inline styles, external styles,                                    external styles used
             // inline styles,    external styles same   priority as inline styles,   inline   styles used
             // inline styles,    external styles higher priority than inline styles, external styles used
-            const prop = properties.get(property.trim());
-            if (prop && prop.important >= important) {
-              return;
+            const name = property.trim();
+            const current = properties.get(name);
+            if (current === undefined || current < important) {
+              const val = csstree.generate(value);
+              setProperty(style, properties, name, val, important);
             }
-            setProperty(style, property, csstree.generate(value), important);
           },
         });
       }
