@@ -411,27 +411,31 @@ export function inlineStyles(document) {
     const selectorStr = csstree.generate(item.data);
     try {
       // apply <style/> to matched elements
-      for (let element of querySelectorAll(document, selectorStr)) {
+      const matched = querySelectorAll(document, selectorStr);
+      if (matched.length === 0) {
+        continue;
+      }
+      for (let element of matched) {
         initStyle(element);
-        const {
-          style: { style, properties },
-        } = element;
-        csstree.walk(rule, {
-          visit: 'Declaration',
-          enter({ property, value, important }) {
-            // existing inline styles have higher priority
-            // no inline styles, external styles,                                    external styles used
-            // inline styles,    external styles same   priority as inline styles,   inline   styles used
-            // inline styles,    external styles higher priority than inline styles, external styles used
-            const name = property.trim();
+      }
+      csstree.walk(rule, {
+        visit: 'Declaration',
+        enter({ property, value, important }) {
+          // existing inline styles have higher priority
+          // no inline styles, external styles,                                    external styles used
+          // inline styles,    external styles same   priority as inline styles,   inline   styles used
+          // inline styles,    external styles higher priority than inline styles, external styles used
+          const name = property.trim();
+          const val = csstree.generate(value);
+          for (let element of matched) {
+            const { style, properties } = element.style;
             const current = properties.get(name);
             if (current === undefined || current < important) {
-              const val = csstree.generate(value);
               setProperty(style, properties, name, val, important);
             }
-          },
-        });
-      }
+          }
+        },
+      });
     } catch (selectError) {
       if (selectError.constructor === SyntaxError) {
         console.warn(
