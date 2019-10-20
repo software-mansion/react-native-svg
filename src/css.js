@@ -71,64 +71,6 @@ const cssSelectOpts = {
   adapter: rnsvgCssSelectAdapter,
 };
 
-function specificity(selector) {
-  let A = 0;
-  let B = 0;
-  let C = 0;
-
-  selector.children.each(function walk(node) {
-    switch (node.type) {
-      case 'SelectorList':
-      case 'Selector':
-        node.children.each(walk);
-        break;
-
-      case 'IdSelector':
-        A++;
-        break;
-
-      case 'ClassSelector':
-      case 'AttributeSelector':
-        B++;
-        break;
-
-      case 'PseudoClassSelector':
-        switch (node.name.toLowerCase()) {
-          case 'not':
-            node.children.each(walk);
-            break;
-
-          case 'before':
-          case 'after':
-          case 'first-line':
-          case 'first-letter':
-            C++;
-            break;
-
-          // TODO: support for :nth-*(.. of <SelectorList>), :matches(), :has()
-
-          default:
-            B++;
-        }
-        break;
-
-      case 'PseudoElementSelector':
-        C++;
-        break;
-
-      case 'TypeSelector':
-        // ignore universal selector
-        const { name } = node;
-        if (name.charAt(name.length - 1) !== '*') {
-          C++;
-        }
-        break;
-    }
-  });
-
-  return [A, B, C];
-}
-
 /**
  * Flatten a CSS AST to a selectors list.
  *
@@ -187,6 +129,8 @@ function filterByMqs(selectors) {
     );
   });
 }
+// useMqs Array with strings of media queries that should pass (<name> <expression>)
+const useMqs = ['', 'screen'];
 
 /**
  * Filter selectors by the pseudo-elements and/or -classes they contain.
@@ -207,6 +151,8 @@ function filterByPseudos(selectors) {
       ),
   );
 }
+// usePseudos Array with strings of single or sequence of pseudo-elements and/or -classes that should pass
+const usePseudos = [''];
 
 /**
  * Remove pseudo-elements and/or -classes from the selectors for proper matching.
@@ -218,6 +164,64 @@ function cleanPseudos(selectors) {
   selectors.forEach(({ pseudos }) =>
     pseudos.forEach(pseudo => pseudo.list.remove(pseudo.item)),
   );
+}
+
+function specificity(selector) {
+  let A = 0;
+  let B = 0;
+  let C = 0;
+
+  selector.children.each(function walk(node) {
+    switch (node.type) {
+      case 'SelectorList':
+      case 'Selector':
+        node.children.each(walk);
+        break;
+
+      case 'IdSelector':
+        A++;
+        break;
+
+      case 'ClassSelector':
+      case 'AttributeSelector':
+        B++;
+        break;
+
+      case 'PseudoClassSelector':
+        switch (node.name.toLowerCase()) {
+          case 'not':
+            node.children.each(walk);
+            break;
+
+          case 'before':
+          case 'after':
+          case 'first-line':
+          case 'first-letter':
+            C++;
+            break;
+
+          // TODO: support for :nth-*(.. of <SelectorList>), :matches(), :has()
+
+          default:
+            B++;
+        }
+        break;
+
+      case 'PseudoElementSelector':
+        C++;
+        break;
+
+      case 'TypeSelector':
+        // ignore universal selector
+        const { name } = node;
+        if (name.charAt(name.length - 1) !== '*') {
+          C++;
+        }
+        break;
+    }
+  });
+
+  return [A, B, C];
 }
 
 /**
@@ -315,6 +319,15 @@ function setProperty(style, properties, name, value, important) {
   style[camelCase(name)] = value.trim();
 }
 
+function initStyle(selectedEl) {
+  if (!selectedEl.style) {
+    if (!selectedEl.props.style) {
+      selectedEl.props.style = {};
+    }
+    selectedEl.style = CSSStyleDeclaration(selectedEl);
+  }
+}
+
 /**
  * Find the closest ancestor of the current element.
  * @param node
@@ -326,21 +339,6 @@ function closestElem(node, elemName) {
   while ((elem = elem.parent) && elem.tag !== elemName) {}
   return elem;
 }
-
-function initStyle(selectedEl) {
-  if (!selectedEl.style) {
-    if (!selectedEl.props.style) {
-      selectedEl.props.style = {};
-    }
-    selectedEl.style = CSSStyleDeclaration(selectedEl);
-  }
-}
-
-// useMqs Array with strings of media queries that should pass (<name> <expression>)
-const useMqs = ['', 'screen'];
-
-// usePseudos Array with strings of single or sequence of pseudo-elements and/or -classes that should pass
-const usePseudos = [''];
 
 const parseProps = {
   parseValue: false,
