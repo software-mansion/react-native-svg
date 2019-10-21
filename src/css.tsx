@@ -10,8 +10,6 @@ import {
   UriProps,
   XmlProps,
 } from './xml';
-// @ts-ignore
-import baseCssAdapter from 'css-select-base-adapter';
 import csstree, {
   Atrule,
   CssNode,
@@ -24,7 +22,8 @@ import csstree, {
   Selector,
   SelectorList,
 } from 'css-tree';
-import cssSelect from 'css-select';
+// @ts-ignore
+import cssSelect, { CSSselect } from 'css-select';
 import stable from 'stable';
 
 /*
@@ -34,49 +33,154 @@ import stable from 'stable';
 /**
  * DOMUtils API for rnsvg AST (used by css-select)
  */
-const rnsvgCssSelectAdapterMin = {
-  // is the node a tag?
-  // isTag: ( node:Node ) => isTag:Boolean
-  isTag(node: AST) {
-    return node.tag;
-  },
+// is the node a tag?
+// isTag: ( node:Node ) => isTag:Boolean
+function isTag(node: CSSselect.Node): node is CSSselect.ElementNode {
+  return node.tag;
+}
 
-  // get the parent of the node
-  // getParent: ( node:Node ) => parentNode:Node
-  // returns null when no parent exists
-  getParent(node: AST) {
-    return node.parent || null;
-  },
+// get the parent of the node
+// getParent: ( node:Node ) => parentNode:Node
+// returns null when no parent exists
+function getParent(node: AST) {
+  return node.parent || null;
+}
 
-  // get the node's children
-  // getChildren: ( node:Node ) => children:[Node]
-  getChildren(node: AST) {
-    return node.children || [];
-  },
+// get the node's children
+// getChildren: ( node:Node ) => children:[Node]
+function getChildren(node: AST) {
+  return node.children || [];
+}
 
-  // get the name of the tag
-  // getName: ( elem:ElementNode ) => tagName:String
-  getName(elemAst: AST) {
-    return elemAst.tag;
-  },
+// get the name of the tag
+// getName: ( elem:ElementNode ) => tagName:String
+function getName(elemAst: AST) {
+  return elemAst.tag;
+}
 
-  // get the text content of the node, and its children if it has any
-  // getText: ( node:Node ) => text:String
-  // returns empty string when there is no text
-  getText() {
-    return '';
-  },
+// get the text content of the node, and its children if it has any
+// getText: ( node:Node ) => text:String
+// returns empty string when there is no text
+function getText() {
+  return '';
+}
 
-  // get the attribute value
-  // getAttributeValue: ( elem:ElementNode, name:String ) => value:String
-  // returns null when attribute doesn't exist
-  getAttributeValue(elem: AST, name: string) {
-    return elem.props.hasOwnProperty(name) ? elem.props[name] : null;
-  },
-};
+// get the attribute value
+// getAttributeValue: ( elem:ElementNode, name:String ) => value:String
+// returns null when attribute doesn't exist
+function getAttributeValue(elem: CSSselect.ElementNode, name: string): string {
+  return elem.props[name];
+}
 
-// use base adapter for default implementation
-const rnsvgCssSelectAdapter = baseCssAdapter(rnsvgCssSelectAdapterMin);
+// takes an array of nodes, and removes any duplicates, as well as any nodes
+// whose ancestors are also in the array
+function removeSubsets(nodes: Array<CSSselect.Node>): Array<CSSselect.Node> {
+  let idx = nodes.length,
+    node,
+    ancestor,
+    replace;
+
+  // Check if each node (or one of its ancestors) is already contained in the
+  // array.
+  while (--idx > -1) {
+    node = ancestor = nodes[idx];
+
+    // Temporarily remove the node under consideration
+    nodes[idx] = null;
+    replace = true;
+
+    while (ancestor) {
+      if (nodes.indexOf(ancestor) > -1) {
+        replace = false;
+        nodes.splice(idx, 1);
+        break;
+      }
+      ancestor = getParent(ancestor);
+    }
+
+    // If the node has been found to be unique, re-insert it.
+    if (replace) {
+      nodes[idx] = node;
+    }
+  }
+
+  return nodes;
+}
+
+// does at least one of passed element nodes pass the test predicate?
+function existsOne(
+  test: CSSselect.Predicate<CSSselect.ElementNode>,
+  elems: Array<CSSselect.ElementNode>,
+): boolean {
+  return elems.some(function(elem) {
+    return isTag(elem)
+      ? // eslint-disable-next-line jest/no-disabled-tests
+        test(elem) || existsOne(test, getChildren(elem))
+      : false;
+  });
+}
+
+/*
+  get the siblings of the node. Note that unlike jQuery's `siblings` method,
+  this is expected to include the current node as well
+*/
+function getSiblings(node: CSSselect.Node): Array<CSSselect.Node> {
+  const parent = getParent(node);
+  return (parent && getChildren(parent)) as Array<CSSselect.Node>;
+}
+
+// does the element have the named attribute?
+function hasAttrib(elem: AST, name: string) {
+  return elem.props.hasOwnProperty(name);
+}
+
+// finds the first node in the array that matches the test predicate, or one
+// of its children
+function findOne(
+  test: CSSselect.Predicate<CSSselect.ElementNode>,
+  elems: Array<CSSselect.ElementNode>,
+): CSSselect.ElementNode | undefined {
+  let elem = null;
+
+  for (let i = 0, l = elems.length; i < l && !elem; i++) {
+    // eslint-disable-next-line jest/no-disabled-tests
+    if (test(elems[i])) {
+      elem = elems[i];
+    } else {
+      const childs = getChildren(elems[i]);
+      if (childs && childs.length > 0) {
+        elem = findOne(test, childs);
+      }
+    }
+  }
+
+  return elem;
+}
+
+// finds all of the element nodes in the array that match the test predicate,
+// as well as any of their children that match it
+function findAll(
+  test: CSSselect.Predicate<CSSselect.ElementNode>,
+  nodes: Array<CSSselect.Node>,
+): Array<CSSselect.ElementNode> {
+  let result = [];
+
+  for (let i = 0, j = nodes.length; i < j; i++) {
+    if (!isTag(nodes[i])) {
+      continue;
+    }
+    // eslint-disable-next-line jest/no-disabled-tests
+    if (test(nodes[i])) {
+      result.push(nodes[i]);
+    }
+    const childs = getChildren(nodes[i]);
+    if (childs) {
+      result = result.concat(findAll(test, childs));
+    }
+  }
+
+  return result;
+}
 
 /**
  * Evaluate a string of CSS selectors against the element and returns matched elements.
@@ -90,7 +194,20 @@ function querySelectorAll(document: AST, selectors: string) {
 }
 const cssSelectOpts = {
   xmlMode: true,
-  adapter: rnsvgCssSelectAdapter,
+  adapter: {
+    removeSubsets,
+    existsOne,
+    getSiblings,
+    hasAttrib,
+    findOne,
+    findAll,
+    isTag,
+    getParent,
+    getChildren,
+    getName,
+    getText,
+    getAttributeValue,
+  },
 };
 
 type FlatPseudoSelector = {
