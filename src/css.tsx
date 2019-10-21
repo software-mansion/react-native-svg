@@ -109,14 +109,13 @@ function removeSubsets(nodes: Array<XmlAST | string>): Array<XmlAST | string> {
 
 // does at least one of passed element nodes pass the test predicate?
 function existsOne(
-  test: Predicate<XmlAST>,
+  predicate: Predicate<XmlAST>,
   elems: Array<XmlAST | string>,
 ): boolean {
   return elems.some(
     elem =>
       typeof elem === 'object' &&
-      // eslint-disable-next-line jest/no-disabled-tests
-      (test(elem) || existsOne(test, elem.children)),
+      (predicate(elem) || existsOne(predicate, elem.children)),
   );
 }
 
@@ -137,7 +136,7 @@ function hasAttrib(elem: XmlAST, name: string): boolean {
 // finds the first node in the array that matches the test predicate, or one
 // of its children
 function findOne(
-  test: Predicate<XmlAST>,
+  predicate: Predicate<XmlAST>,
   elems: Array<XmlAST | string>,
 ): XmlAST | undefined {
   let elem: XmlAST | undefined;
@@ -145,13 +144,12 @@ function findOne(
   for (let i = 0, l = elems.length; i < l && !elem; i++) {
     const node = elems[i];
     if (typeof node === 'string') {
-      // eslint-disable-next-line jest/no-disabled-tests
-    } else if (test(node)) {
+    } else if (predicate(node)) {
       elem = node;
     } else {
       const { children } = node;
       if (children.length !== 0) {
-        elem = findOne(test, children);
+        elem = findOne(predicate, children);
       }
     }
   }
@@ -162,7 +160,7 @@ function findOne(
 // finds all of the element nodes in the array that match the test predicate,
 // as well as any of their children that match it
 function findAll(
-  test: Predicate<XmlAST>,
+  predicate: Predicate<XmlAST>,
   nodes: Array<XmlAST | string>,
   result: Array<XmlAST> = [],
 ): Array<XmlAST> {
@@ -171,13 +169,12 @@ function findAll(
     if (typeof node !== 'object') {
       continue;
     }
-    // eslint-disable-next-line jest/no-disabled-tests
-    if (test(node)) {
+    if (predicate(node)) {
       result.push(node);
     }
     const { children } = node;
     if (children.length !== 0) {
-      findAll(test, children, result);
+      findAll(predicate, children, result);
     }
   }
 
