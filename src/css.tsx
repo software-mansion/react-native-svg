@@ -13,6 +13,7 @@ import {
 } from './xml';
 import csstree, {
   Atrule,
+  AtrulePrelude,
   CssNode,
   Declaration,
   DeclarationList,
@@ -89,7 +90,7 @@ function removeSubsets(nodes: Array<XmlAST | string>): Array<XmlAST | string> {
     replace = true;
 
     while (ancestor) {
-      if (nodes.indexOf(ancestor) > -1) {
+      if (nodes.includes(ancestor)) {
         replace = false;
         nodes.splice(idx, 1);
         break;
@@ -276,15 +277,14 @@ function flattenToSelectors(cssAst: CssNode, selectors: FlatSelectorList) {
 function filterByMqs(selectors: FlatSelectorList) {
   return selectors.filter(({ atrule }) => {
     if (atrule === null) {
-      return ~useMqs.indexOf('');
+      return true;
     }
-    // @ts-ignore
-    const { name, expression } = atrule;
-    return ~useMqs.indexOf(
-      expression && expression.children.first().type === 'MediaQueryList'
-        ? [name, csstree.generate(expression)].join(' ')
-        : name,
-    );
+    const { name, prelude } = atrule;
+    const atPrelude = prelude as AtrulePrelude;
+    const first = atPrelude && atPrelude.children.first();
+    const mq = first && first.type === 'MediaQueryList';
+    const query = mq ? csstree.generate(atPrelude) : name;
+    return useMqs.includes(query);
   });
 }
 // useMqs Array with strings of media queries that should pass (<name> <expression>)
@@ -297,16 +297,15 @@ const useMqs = ['', 'screen'];
  * @return {Array} Filtered selectors that match the passed pseudo-elements and/or -classes
  */
 function filterByPseudos(selectors: FlatSelectorList) {
-  return selectors.filter(
-    ({ pseudos }) =>
-      ~usePseudos.indexOf(
-        csstree.generate({
-          type: 'Selector',
-          children: new List<CssNode>().fromArray(
-            pseudos.map(pseudo => pseudo.item.data),
-          ),
-        }),
-      ),
+  return selectors.filter(({ pseudos }) =>
+    usePseudos.includes(
+      csstree.generate({
+        type: 'Selector',
+        children: new List<CssNode>().fromArray(
+          pseudos.map(pseudo => pseudo.item.data),
+        ),
+      }),
+    ),
   );
 }
 // usePseudos Array with strings of single or sequence of pseudo-elements and/or -classes that should pass
