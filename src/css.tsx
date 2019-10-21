@@ -405,20 +405,31 @@ function compareSpecificity(
   return 0;
 }
 
+type specificityAndSelector = {
+  selector: FlatSelector;
+  specificity: Specificity;
+};
+function specificityAndSelector(
+  selector: FlatSelector,
+): specificityAndSelector {
+  return {
+    selector,
+    specificity: specificity(selector.item.data as Selector),
+  };
+}
+
 /**
  * Compare two simple selectors.
  *
- * @param {Object} selectorA Simple selector A
- * @param {Object} selectorB Simple selector B
+ * @param {Object} a Simple selector A
+ * @param {Object} b Simple selector B
  * @return {Number} Score of selector A compared to selector B
  */
 function bySelectorSpecificity(
-  selectorA: FlatSelector,
-  selectorB: FlatSelector,
+  a: specificityAndSelector,
+  b: specificityAndSelector,
 ): number {
-  const aSpecificity = specificity(selectorA.item.data as Selector),
-    bSpecificity = specificity(selectorB.item.data as Selector);
-  return compareSpecificity(aSpecificity, bSpecificity);
+  return compareSpecificity(a.specificity, b.specificity);
 }
 
 // Run a single pass with the given chunk size.
@@ -478,7 +489,7 @@ function pass<T>(
 
 // Execute the sort using the input array and a second buffer as work space.
 // Returns one of those two, containing the final result.
-function exec<T>(arr: T[], len: number, comp: (a: T, b: T) => number) {
+function exec<T>(arr: T[], len: number, comp: (a: T, b: T) => number): T[] {
   // Rather than dividing input, simply iterate chunks of 1, 2, 4, 8, etc.
   // Chunks are the size of the left or right hand in merge sort.
   // Stop when the left-hand covers all of the array.
@@ -505,7 +516,8 @@ function sortSelectors(selectors: FlatSelectorList) {
   if (len <= 1) {
     return selectors;
   }
-  return exec(selectors.slice(), len, bySelectorSpecificity);
+  const withSpecificity = selectors.map(specificityAndSelector);
+  return exec(withSpecificity, len, bySelectorSpecificity).map(s => s.selector);
 }
 
 const declarationParseProps = {
