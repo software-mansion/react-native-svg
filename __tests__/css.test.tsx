@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { SvgCss, SvgCssUri, inlineStyles } from '../src/css';
+import { SvgCss } from '../src/ReactNativeSVG';
 
 test('supports CSS in style element', () => {
   const xml = `<?xml version="1.0" standalone="no"?>
