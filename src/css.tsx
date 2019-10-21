@@ -1,13 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  AST,
   camelCase,
   err,
   fetchText,
+  JsxAST,
   parse,
   Styles,
   SvgAst,
   UriProps,
+  XmlAST,
   XmlProps,
 } from './xml';
 import csstree, {
@@ -34,48 +35,46 @@ import stable from 'stable';
  */
 // is the node a tag?
 // isTag: ( node:Node ) => isTag:Boolean
-function isTag(node: AST | string): node is AST {
+function isTag(node: XmlAST | string): node is XmlAST {
   return typeof node === 'object';
 }
 
 // get the parent of the node
 // getParent: ( node:Node ) => parentNode:Node
 // returns null when no parent exists
-function getParent(node: AST | string): AST | string {
-  return ((typeof node === 'object' && node.parent) || null) as AST | string;
+function getParent(node: XmlAST | string): XmlAST {
+  return ((typeof node === 'object' && node.parent) || null) as XmlAST;
 }
 
 // get the node's children
 // getChildren: ( node:Node ) => children:[Node]
-function getChildren(node: AST | string): Array<AST | string> {
-  return (
-    (typeof node === 'object' && (node.children as (AST | string)[])) || []
-  );
+function getChildren(node: XmlAST | string): Array<XmlAST | string> {
+  return (typeof node === 'object' && node.children) || [];
 }
 
-// get the name of the tag
+// get the name of the tag'
 // getName: ( elem:ElementNode ) => tagName:String
-function getName(elem: AST): string {
+function getName(elem: XmlAST): string {
   return elem.tag;
 }
 
 // get the text content of the node, and its children if it has any
 // getText: ( node:Node ) => text:String
 // returns empty string when there is no text
-function getText(_node: AST | string): string {
+function getText(_node: XmlAST | string): string {
   return '';
 }
 
 // get the attribute value
 // getAttributeValue: ( elem:ElementNode, name:String ) => value:String
 // returns null when attribute doesn't exist
-function getAttributeValue(elem: AST, name: string): string {
-  return elem.props[name] as string;
+function getAttributeValue(elem: XmlAST, name: string): string {
+  return (elem.props[name] || null) as string;
 }
 
 // takes an array of nodes, and removes any duplicates, as well as any nodes
 // whose ancestors are also in the array
-function removeSubsets(nodes: Array<AST | string>): Array<AST | string> {
+function removeSubsets(nodes: Array<XmlAST | string>): Array<XmlAST | string> {
   let idx = nodes.length,
     node,
     ancestor,
@@ -96,7 +95,7 @@ function removeSubsets(nodes: Array<AST | string>): Array<AST | string> {
         nodes.splice(idx, 1);
         break;
       }
-      ancestor = getParent(ancestor);
+      ancestor = (typeof ancestor === 'object' && ancestor.parent) || null;
     }
 
     // If the node has been found to be unique, re-insert it.
@@ -109,10 +108,15 @@ function removeSubsets(nodes: Array<AST | string>): Array<AST | string> {
 }
 
 // does at least one of passed element nodes pass the test predicate?
-function existsOne(test: Predicate<AST>, elems: Array<AST | string>): boolean {
+function existsOne(
+  test: Predicate<XmlAST>,
+  elems: Array<XmlAST | string>,
+): boolean {
   return elems.some(
-    // eslint-disable-next-line jest/no-disabled-tests
-    elem => isTag(elem) && (test(elem) || existsOne(test, getChildren(elem))),
+    elem =>
+      typeof elem === 'object' &&
+      // eslint-disable-next-line jest/no-disabled-tests
+      (test(elem) || existsOne(test, elem.children)),
   );
 }
 
@@ -120,34 +124,34 @@ function existsOne(test: Predicate<AST>, elems: Array<AST | string>): boolean {
   get the siblings of the node. Note that unlike jQuery's `siblings` method,
   this is expected to include the current node as well
 */
-function getSiblings(node: AST | string): Array<AST | string> {
-  const parent = getParent(node);
-  return (typeof parent === 'object' && getChildren(parent)) || [];
+function getSiblings(node: XmlAST | string): Array<XmlAST | string> {
+  const parent = typeof node === 'object' && node.parent;
+  return (parent && parent.children) || [];
 }
 
 // does the element have the named attribute?
-function hasAttrib(elem: AST, name: string): boolean {
+function hasAttrib(elem: XmlAST, name: string): boolean {
   return elem.props.hasOwnProperty(name);
 }
 
 // finds the first node in the array that matches the test predicate, or one
 // of its children
 function findOne(
-  test: Predicate<AST>,
-  elems: Array<AST | string>,
-): AST | undefined {
-  let elem: AST | undefined;
+  test: Predicate<XmlAST>,
+  elems: Array<XmlAST | string>,
+): XmlAST | undefined {
+  let elem: XmlAST | undefined;
 
   for (let i = 0, l = elems.length; i < l && !elem; i++) {
-    const e = elems[i];
-    if (typeof e === 'string') {
+    const node = elems[i];
+    if (typeof node === 'string') {
       // eslint-disable-next-line jest/no-disabled-tests
-    } else if (test(e)) {
-      elem = e;
+    } else if (test(node)) {
+      elem = node;
     } else {
-      const childs = getChildren(e);
-      if (childs.length !== 0) {
-        elem = findOne(test, childs);
+      const { children } = node;
+      if (children.length !== 0) {
+        elem = findOne(test, children);
       }
     }
   }
@@ -158,29 +162,29 @@ function findOne(
 // finds all of the element nodes in the array that match the test predicate,
 // as well as any of their children that match it
 function findAll(
-  test: Predicate<AST>,
-  nodes: Array<AST | string>,
-  result: Array<AST> = [],
-): Array<AST> {
+  test: Predicate<XmlAST>,
+  nodes: Array<XmlAST | string>,
+  result: Array<XmlAST> = [],
+): Array<XmlAST> {
   for (let i = 0, j = nodes.length; i < j; i++) {
     const node = nodes[i];
-    if (!isTag(node)) {
+    if (typeof node !== 'object') {
       continue;
     }
     // eslint-disable-next-line jest/no-disabled-tests
     if (test(node)) {
       result.push(node);
     }
-    const childs = getChildren(node);
-    if (childs.length !== 0) {
-      findAll(test, childs, result);
+    const { children } = node;
+    if (children.length !== 0) {
+      findAll(test, children, result);
     }
   }
 
   return result;
 }
 
-const adapter: Adapter<AST | string, AST> = {
+const adapter: Adapter<XmlAST | string, XmlAST> = {
   removeSubsets,
   existsOne,
   getSiblings,
@@ -195,7 +199,7 @@ const adapter: Adapter<AST | string, AST> = {
   getAttributeValue,
 };
 
-const cssSelectOpts: Options<AST | string, AST> = {
+const cssSelectOpts: Options<XmlAST | string, XmlAST> = {
   xmlMode: true,
   adapter,
 };
@@ -204,10 +208,10 @@ const cssSelectOpts: Options<AST | string, AST> = {
  * Evaluate a string of CSS selectors against the element and returns matched elements.
  *
  * @param {Query} query can be either a CSS selector string or a compiled query function.
- * @param {Array<AST> | AST} elems Elements to query. If it is an element, its children will be queried.
- * @return {Array<AST>} All matching elements.
+ * @param {Array<XmlAST> | XmlAST} elems Elements to query. If it is an element, its children will be queried.
+ * @return {Array<XmlAST>} All matching elements.
  */
-function querySelectorAll(query: Query, elems: AST | AST[]): AST[] {
+function querySelectorAll(query: Query, elems: XmlAST | XmlAST[]): XmlAST[] {
   return cssSelect(query, elems, cssSelectOpts);
 }
 
@@ -433,7 +437,7 @@ const declarationParseProps = {
   context: 'declarationList',
   parseValue: false,
 };
-function CSSStyleDeclaration(ast: AST) {
+function CSSStyleDeclaration(ast: XmlAST) {
   const { props, styles } = ast;
   if (!props.style) {
     props.style = {};
@@ -473,11 +477,11 @@ function CSSStyleDeclaration(ast: AST) {
   }
 }
 
-interface StyledAST extends AST {
+interface StyledAST extends XmlAST {
   style: Styles;
   priority: Map<string, boolean | undefined>;
 }
-function initStyle(selectedEl: AST): StyledAST {
+function initStyle(selectedEl: XmlAST): StyledAST {
   if (!selectedEl.style) {
     CSSStyleDeclaration(selectedEl);
   }
@@ -490,8 +494,8 @@ function initStyle(selectedEl: AST): StyledAST {
  * @param elemName
  * @return {?Object}
  */
-function closestElem(node: AST, elemName: string) {
-  let elem: AST | null = node;
+function closestElem(node: XmlAST, elemName: string) {
+  let elem: XmlAST | null = node;
   while ((elem = elem.parent) && elem.tag !== elemName) {}
   return elem;
 }
@@ -518,7 +522,7 @@ const parseProps = {
  * @author strarsis <strarsis@gmail.com>
  * @author modified by: msand <msand@abo.fi>
  */
-export function inlineStyles(document: AST) {
+export function inlineStyles(document: XmlAST) {
   // collect <style/>s
   const styleElements = querySelectorAll('style', document);
 
@@ -612,7 +616,7 @@ export function inlineStyles(document: AST) {
 
 export function SvgCss(props: XmlProps) {
   const { xml, override } = props;
-  const ast = useMemo<AST | null>(
+  const ast = useMemo<JsxAST | null>(
     () => (xml !== null ? parse(xml, inlineStyles) : null),
     [xml],
   );
