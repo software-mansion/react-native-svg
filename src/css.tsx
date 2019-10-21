@@ -315,19 +315,17 @@ const declarationParseProps = {
   context: 'declarationList',
   parseValue: false,
 };
-type CSSStyleDeclaration = {
-  style: Styles;
-  properties: Map<string, boolean | undefined>;
-};
-function CSSStyleDeclaration({ props, styles }: AST): CSSStyleDeclaration {
-  const properties = new Map();
+function CSSStyleDeclaration(ast: AST) {
+  const { props, styles } = ast;
+  if (!props.style) {
+    props.style = {};
+  }
   const style = props.style as Styles;
-  const styleDeclaration = {
-    style,
-    properties,
-  };
+  const priority = new Map();
+  ast.style = style;
+  ast.priority = priority;
   if (!styles || styles.length === 0) {
-    return styleDeclaration;
+    return;
   }
   try {
     const declarations = csstree.parse(
@@ -338,7 +336,7 @@ function CSSStyleDeclaration({ props, styles }: AST): CSSStyleDeclaration {
       try {
         const { property, value, important } = node as Declaration;
         const name = property.trim();
-        properties.set(name, important);
+        priority.set(name, important);
         style[camelCase(name)] = csstree.generate(value).trim();
       } catch (styleError) {
         if (styleError.message !== 'Unknown node type: undefined') {
@@ -355,16 +353,17 @@ function CSSStyleDeclaration({ props, styles }: AST): CSSStyleDeclaration {
         parseError,
     );
   }
-  return styleDeclaration;
 }
 
-function initStyle(selectedEl: AST) {
+interface StyledAST extends AST {
+  style: Styles;
+  priority: Map<string, boolean | undefined>;
+}
+function initStyle(selectedEl: AST): StyledAST {
   if (!selectedEl.style) {
-    if (!selectedEl.props.style) {
-      selectedEl.props.style = {};
-    }
-    selectedEl.style = CSSStyleDeclaration(selectedEl);
+    CSSStyleDeclaration(selectedEl);
   }
+  return selectedEl as StyledAST;
 }
 
 /**
@@ -451,12 +450,9 @@ export function inlineStyles(document: AST) {
     const selectorStr = csstree.generate(item.data);
     try {
       // apply <style/> to matched elements
-      const matched = querySelectorAll(document, selectorStr);
+      const matched = querySelectorAll(document, selectorStr).map(initStyle);
       if (matched.length === 0) {
         continue;
-      }
-      for (let element of matched) {
-        initStyle(element);
       }
       csstree.walk(rule, {
         visit: 'Declaration',
@@ -470,10 +466,10 @@ export function inlineStyles(document: AST) {
           const camel = camelCase(name);
           const val = csstree.generate(value).trim();
           for (let element of matched) {
-            const { style, properties } = element.style as CSSStyleDeclaration;
-            const current = properties.get(name);
+            const { style, priority } = element;
+            const current = priority.get(name);
             if (current === undefined || current < important) {
-              properties.set(name, important as boolean);
+              priority.set(name, important as boolean);
               style[camel] = val;
             }
           }
