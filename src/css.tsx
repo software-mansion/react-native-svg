@@ -24,7 +24,6 @@ import csstree, {
   SelectorList,
 } from 'css-tree';
 import cssSelect, { Adapter, Options, Predicate, Query } from 'css-select';
-import stable from 'stable';
 
 /*
  * Style element inlining experiment based on SVGO
@@ -396,7 +395,7 @@ function specificity(selector: Selector): Specificity {
 function compareSpecificity(
   aSpecificity: Specificity,
   bSpecificity: Specificity,
-) {
+): number {
   for (let i = 0; i < 4; i += 1) {
     if (aSpecificity[i] < bSpecificity[i]) {
       return -1;
@@ -417,10 +416,82 @@ function compareSpecificity(
 function bySelectorSpecificity(
   selectorA: FlatSelector,
   selectorB: FlatSelector,
-) {
+): number {
   const aSpecificity = specificity(selectorA.item.data as Selector),
     bSpecificity = specificity(selectorB.item.data as Selector);
   return compareSpecificity(aSpecificity, bSpecificity);
+}
+
+// Run a single pass with the given chunk size.
+function pass<T>(
+  arr: T[],
+  comp: (a: T, b: T) => number,
+  chk: number,
+  result: T[],
+) {
+  // Step size / double chunk size.
+  const dbl = chk * 2;
+  // Bounds of the left and right chunks.
+  let l, r, e;
+  // Iterators over the left and right chunk.
+  let li, ri;
+
+  // Iterate over pairs of chunks.
+  let i = 0;
+  const len = arr.length;
+  for (l = 0; l < len; l += dbl) {
+    r = l + chk;
+    e = r + chk;
+    if (r > len) {
+      r = len;
+    }
+    if (e > len) {
+      e = len;
+    }
+
+    // Iterate both chunks in parallel.
+    li = l;
+    ri = r;
+    while (true) {
+      // Compare the chunks.
+      if (li < r && ri < e) {
+        // This works for a regular `sort()` compatible comparator,
+        // but also for a simple comparator like: `a > b`
+        if (comp(arr[li], arr[ri]) <= 0) {
+          result[i++] = arr[li++];
+        } else {
+          result[i++] = arr[ri++];
+        }
+      }
+      // Nothing to compare, just flush what's left.
+      else if (li < r) {
+        result[i++] = arr[li++];
+      } else if (ri < e) {
+        result[i++] = arr[ri++];
+      }
+      // Both iterators are at the chunk ends.
+      else {
+        break;
+      }
+    }
+  }
+}
+
+// Execute the sort using the input array and a second buffer as work space.
+// Returns one of those two, containing the final result.
+function exec<T>(arr: T[], len: number, comp: (a: T, b: T) => number) {
+  // Rather than dividing input, simply iterate chunks of 1, 2, 4, 8, etc.
+  // Chunks are the size of the left or right hand in merge sort.
+  // Stop when the left-hand covers all of the array.
+  let buffer = new Array(len);
+  for (let chk = 1; chk < len; chk *= 2) {
+    pass<T>(arr, comp, chk, buffer);
+    const tmp = arr;
+    arr = buffer;
+    buffer = tmp;
+  }
+
+  return arr;
 }
 
 /**
@@ -430,7 +501,12 @@ function bySelectorSpecificity(
  * @return {Array} Stable sorted selectors
  */
 function sortSelectors(selectors: FlatSelectorList) {
-  return stable(selectors, bySelectorSpecificity);
+  // Short-circuit when there's nothing to sort.
+  const len = selectors.length;
+  if (len <= 1) {
+    return selectors;
+  }
+  return exec(selectors.slice(), len, bySelectorSpecificity);
 }
 
 const declarationParseProps = {
