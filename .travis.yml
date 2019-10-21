@@ -5,4 +5,4 @@ node_js:
   - '10'
 
 script:
-  - npm run lint
+  - npm test
