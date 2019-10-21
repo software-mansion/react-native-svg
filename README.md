@@ -57,7 +57,13 @@
 
 #### Automatically
 
-_With Expo, this is pre-installed. Jump ahead to [Usage](#Usage)_
+##### With expo-cli
+
+With Expo, you'll need to run `expo install react-native-svg` to install this library. 
+
+Please refer to [Expo docs](https://docs.expo.io/versions/latest/sdk/svg/) for more information or jump ahead to [Usage](#Usage).
+
+##### With react-native-cli
 
 1. Install library from `npm`
 
