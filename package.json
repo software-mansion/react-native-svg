@@ -76,7 +76,7 @@
     "react-native": "^0.61.2",
     "semantic-release": "^15.13.24",
     "semantic-release-cli": "^5.2.1",
-    "typescript": "^3.6.3"
+    "typescript": "^3.7.0-beta"
   },
   "release": {
     "plugins": [

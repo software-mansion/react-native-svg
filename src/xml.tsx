@@ -61,8 +61,9 @@ function missingTag() {
 
 export interface AST {
   tag: string;
-  style?: unknown;
+  style?: Styles;
   styles?: string;
+  priority?: Map<string, boolean | undefined>;
   parent: AST | null;
   children: (AST | string)[] | (JSX.Element | string)[];
   props: {
