@@ -405,13 +405,11 @@ function compareSpecificity(
   return 0;
 }
 
-type specificityAndSelector = {
+type Spec = {
   selector: FlatSelector;
   specificity: Specificity;
 };
-function specificityAndSelector(
-  selector: FlatSelector,
-): specificityAndSelector {
+function selectorWithSpecificity(selector: FlatSelector): Spec {
   return {
     selector,
     specificity: specificity(selector.item.data as Selector),
@@ -425,20 +423,12 @@ function specificityAndSelector(
  * @param {Object} b Simple selector B
  * @return {Number} Score of selector A compared to selector B
  */
-function bySelectorSpecificity(
-  a: specificityAndSelector,
-  b: specificityAndSelector,
-): number {
+function bySelectorSpecificity(a: Spec, b: Spec): number {
   return compareSpecificity(a.specificity, b.specificity);
 }
 
 // Run a single pass with the given chunk size.
-function pass<T>(
-  arr: T[],
-  comp: (a: T, b: T) => number,
-  chk: number,
-  result: T[],
-) {
+function pass(arr: Spec[], len: number, chk: number, result: Spec[]) {
   // Step size / double chunk size.
   const dbl = chk * 2;
   // Bounds of the left and right chunks.
@@ -448,7 +438,6 @@ function pass<T>(
 
   // Iterate over pairs of chunks.
   let i = 0;
-  const len = arr.length;
   for (l = 0; l < len; l += dbl) {
     r = l + chk;
     e = r + chk;
@@ -467,7 +456,7 @@ function pass<T>(
       if (li < r && ri < e) {
         // This works for a regular `sort()` compatible comparator,
         // but also for a simple comparator like: `a > b`
-        if (comp(arr[li], arr[ri]) <= 0) {
+        if (bySelectorSpecificity(arr[li], arr[ri]) <= 0) {
           result[i++] = arr[li++];
         } else {
           result[i++] = arr[ri++];
@@ -489,18 +478,17 @@ function pass<T>(
 
 // Execute the sort using the input array and a second buffer as work space.
 // Returns one of those two, containing the final result.
-function exec<T>(arr: T[], len: number, comp: (a: T, b: T) => number): T[] {
+function exec(arr: Spec[], len: number): Spec[] {
   // Rather than dividing input, simply iterate chunks of 1, 2, 4, 8, etc.
   // Chunks are the size of the left or right hand in merge sort.
   // Stop when the left-hand covers all of the array.
   let buffer = new Array(len);
   for (let chk = 1; chk < len; chk *= 2) {
-    pass<T>(arr, comp, chk, buffer);
+    pass(arr, len, chk, buffer);
     const tmp = arr;
     arr = buffer;
     buffer = tmp;
   }
-
   return arr;
 }
 
@@ -516,8 +504,8 @@ function sortSelectors(selectors: FlatSelectorList) {
   if (len <= 1) {
     return selectors;
   }
-  const withSpecificity = selectors.map(specificityAndSelector);
-  return exec(withSpecificity, len, bySelectorSpecificity).map(s => s.selector);
+  const specs = selectors.map(selectorWithSpecificity);
+  return exec(specs, len).map(s => s.selector);
 }
 
 const declarationParseProps = {
