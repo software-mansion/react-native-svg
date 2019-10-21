@@ -23,7 +23,7 @@ import csstree, {
   SelectorList,
 } from 'css-tree';
 // @ts-ignore
-import cssSelect, { CSSselect } from 'css-select';
+import cssSelect, { Adapter, CSSselect } from 'css-select';
 import stable from 'stable';
 
 /*
@@ -42,26 +42,26 @@ function isTag(node: CSSselect.Node): node is CSSselect.ElementNode {
 // get the parent of the node
 // getParent: ( node:Node ) => parentNode:Node
 // returns null when no parent exists
-function getParent(node: AST) {
+function getParent(node: CSSselect.Node): CSSselect.Node {
   return node.parent || null;
 }
 
 // get the node's children
 // getChildren: ( node:Node ) => children:[Node]
-function getChildren(node: AST) {
+function getChildren(node: CSSselect.Node): Array<CSSselect.Node> {
   return node.children || [];
 }
 
 // get the name of the tag
 // getName: ( elem:ElementNode ) => tagName:String
-function getName(elemAst: AST) {
-  return elemAst.tag;
+function getName(elem: CSSselect.ElementNode): string {
+  return elem.tag;
 }
 
 // get the text content of the node, and its children if it has any
 // getText: ( node:Node ) => text:String
 // returns empty string when there is no text
-function getText() {
+function getText(_node: CSSselect.Node): string {
   return '';
 }
 
@@ -130,7 +130,7 @@ function getSiblings(node: CSSselect.Node): Array<CSSselect.Node> {
 }
 
 // does the element have the named attribute?
-function hasAttrib(elem: AST, name: string) {
+function hasAttrib(elem: CSSselect.ElementNode, name: string): boolean {
   return elem.props.hasOwnProperty(name);
 }
 
@@ -182,6 +182,26 @@ function findAll(
   return result;
 }
 
+const adapter: Adapter<AST | string, AST> = {
+  removeSubsets,
+  existsOne,
+  getSiblings,
+  hasAttrib,
+  findOne,
+  findAll,
+  isTag,
+  getParent,
+  getChildren,
+  getName,
+  getText,
+  getAttributeValue,
+};
+
+const cssSelectOpts = {
+  xmlMode: true,
+  adapter,
+};
+
 /**
  * Evaluate a string of CSS selectors against the element and returns matched elements.
  *
@@ -192,23 +212,6 @@ function findAll(
 function querySelectorAll(document: AST, selectors: string) {
   return cssSelect(selectors, document, cssSelectOpts);
 }
-const cssSelectOpts = {
-  xmlMode: true,
-  adapter: {
-    removeSubsets,
-    existsOne,
-    getSiblings,
-    hasAttrib,
-    findOne,
-    findAll,
-    isTag,
-    getParent,
-    getChildren,
-    getName,
-    getText,
-    getAttributeValue,
-  },
-};
 
 type FlatPseudoSelector = {
   item: ListItem<CssNode>;
