@@ -61,10 +61,13 @@ function missingTag() {
 
 export interface AST {
   tag: string;
+  style?: unknown;
   styles?: string;
   parent: AST | null;
   children: (AST | string)[] | (JSX.Element | string)[];
-  props: {};
+  props: {
+    [prop: string]: Styles | string | undefined;
+  };
   Tag: ComponentType;
 }
 
@@ -96,12 +99,12 @@ export function SvgXml(props: XmlProps) {
   return <SvgAst ast={ast} override={override || props} />;
 }
 
-async function fetchText(uri: string) {
+export async function fetchText(uri: string) {
   const response = await fetch(uri);
   return await response.text();
 }
 
-const err = console.error.bind(console);
+export const err = console.error.bind(console);
 
 export function SvgUri(props: UriProps) {
   const { uri } = props;
@@ -177,7 +180,7 @@ const upperCase = (_match: string, letter: string) => letter.toUpperCase();
 export const camelCase = (phrase: string) =>
   phrase.replace(/[:\-]([a-z])/g, upperCase);
 
-type Styles = { [property: string]: string };
+export type Styles = { [property: string]: string };
 
 export function getStyle(string: string): Styles {
   const style: Styles = {};
@@ -324,7 +327,7 @@ export function parse(
     }
 
     const tag = getName();
-    const props: { style?: Styles | string } = {};
+    const props: { [prop: string]: Styles | string | undefined } = {};
     const element: AST = {
       tag,
       props,

@@ -1,7 +1,29 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { camelCase, parse, SvgAst } from './xml';
+import {
+  AST,
+  camelCase,
+  err,
+  fetchText,
+  parse,
+  Styles,
+  SvgAst,
+  UriProps,
+  XmlProps,
+} from './xml';
+// @ts-ignore
 import baseCssAdapter from 'css-select-base-adapter';
-import csstree, { List } from 'css-tree';
+import csstree, {
+  Atrule,
+  CssNode,
+  Declaration,
+  DeclarationList,
+  List,
+  ListItem,
+  PseudoClassSelector,
+  Rule,
+  Selector,
+  SelectorList,
+} from 'css-tree';
 import cssSelect from 'css-select';
 import stable from 'stable';
 
@@ -15,26 +37,26 @@ import stable from 'stable';
 const rnsvgCssSelectAdapterMin = {
   // is the node a tag?
   // isTag: ( node:Node ) => isTag:Boolean
-  isTag(node) {
+  isTag(node: AST) {
     return node.tag;
   },
 
   // get the parent of the node
   // getParent: ( node:Node ) => parentNode:Node
   // returns null when no parent exists
-  getParent(node) {
+  getParent(node: AST) {
     return node.parent || null;
   },
 
   // get the node's children
   // getChildren: ( node:Node ) => children:[Node]
-  getChildren(node) {
+  getChildren(node: AST) {
     return node.children || [];
   },
 
   // get the name of the tag
   // getName: ( elem:ElementNode ) => tagName:String
-  getName(elemAst) {
+  getName(elemAst: AST) {
     return elemAst.tag;
   },
 
@@ -48,8 +70,8 @@ const rnsvgCssSelectAdapterMin = {
   // get the attribute value
   // getAttributeValue: ( elem:ElementNode, name:String ) => value:String
   // returns null when attribute doesn't exist
-  getAttributeValue(elem, name) {
-    return elem && elem.props.hasOwnProperty(name) ? elem.props[name] : null;
+  getAttributeValue(elem: AST, name: string) {
+    return elem.props.hasOwnProperty(name) ? elem.props[name] : null;
   },
 };
 
@@ -63,7 +85,7 @@ const rnsvgCssSelectAdapter = baseCssAdapter(rnsvgCssSelectAdapterMin);
  * @param {String} selectors CSS selector(s) string
  * @return {Array}
  */
-function querySelectorAll(document, selectors) {
+function querySelectorAll(document: AST, selectors: string) {
   return cssSelect(selectors, document, cssSelectOpts);
 }
 const cssSelectOpts = {
@@ -71,23 +93,37 @@ const cssSelectOpts = {
   adapter: rnsvgCssSelectAdapter,
 };
 
+type FlatPseudoSelector = {
+  item: ListItem<CssNode>;
+  list: List<CssNode>;
+};
+type FlatPseudoSelectorList = FlatPseudoSelector[];
+type FlatSelector = {
+  item: ListItem<CssNode>;
+  atrule: Atrule | null;
+  rule: CssNode;
+  pseudos: FlatPseudoSelectorList;
+};
+type FlatSelectorList = FlatSelector[];
+
 /**
  * Flatten a CSS AST to a selectors list.
  *
  * @param {Object} cssAst css-tree AST to flatten
  * @param {Array} selectors
  */
-function flattenToSelectors(cssAst, selectors) {
+function flattenToSelectors(cssAst: CssNode, selectors: FlatSelectorList) {
   csstree.walk(cssAst, {
     visit: 'Rule',
-    enter(rule) {
-      const { type, prelude } = rule;
+    enter(rule: CssNode) {
+      const { type, prelude } = rule as Rule;
       if (type !== 'Rule') {
         return;
       }
       const atrule = this.atrule;
-      prelude.children.each(({ children }, item) => {
-        const pseudos = [];
+      (prelude as SelectorList).children.each((node, item) => {
+        const { children } = node as Selector;
+        const pseudos: FlatPseudoSelectorList = [];
         selectors.push({
           item,
           atrule,
@@ -116,11 +152,12 @@ function flattenToSelectors(cssAst, selectors) {
  * @param {Array} selectors to filter
  * @return {Array} Filtered selectors that match the passed media queries
  */
-function filterByMqs(selectors) {
+function filterByMqs(selectors: FlatSelectorList) {
   return selectors.filter(({ atrule }) => {
     if (atrule === null) {
       return ~useMqs.indexOf('');
     }
+    // @ts-ignore
     const { name, expression } = atrule;
     return ~useMqs.indexOf(
       expression && expression.children.first().type === 'MediaQueryList'
@@ -138,13 +175,13 @@ const useMqs = ['', 'screen'];
  * @param {Array} selectors to filter
  * @return {Array} Filtered selectors that match the passed pseudo-elements and/or -classes
  */
-function filterByPseudos(selectors) {
+function filterByPseudos(selectors: FlatSelectorList) {
   return selectors.filter(
     ({ pseudos }) =>
       ~usePseudos.indexOf(
         csstree.generate({
           type: 'Selector',
-          children: new List().fromArray(
+          children: new List<CssNode>().fromArray(
             pseudos.map(pseudo => pseudo.item.data),
           ),
         }),
@@ -160,18 +197,19 @@ const usePseudos = [''];
  * @param {Array} selectors to clean
  * @return {Array} Selectors without pseudo-elements and/or -classes
  */
-function cleanPseudos(selectors) {
+function cleanPseudos(selectors: FlatSelectorList) {
   selectors.forEach(({ pseudos }) =>
     pseudos.forEach(pseudo => pseudo.list.remove(pseudo.item)),
   );
 }
 
-function specificity(selector) {
+type Specificity = [number, number, number];
+function specificity(selector: Selector): Specificity {
   let A = 0;
   let B = 0;
   let C = 0;
 
-  selector.children.each(function walk(node) {
+  selector.children.each(function walk(node: CssNode) {
     switch (node.type) {
       case 'SelectorList':
       case 'Selector':
@@ -190,7 +228,8 @@ function specificity(selector) {
       case 'PseudoClassSelector':
         switch (node.name.toLowerCase()) {
           case 'not':
-            node.children.each(walk);
+            const children = (node as PseudoClassSelector).children;
+            children && children.each(walk);
             break;
 
           case 'before':
@@ -232,7 +271,10 @@ function specificity(selector) {
  * @param {Array} bSpecificity Specificity of selector B
  * @return {Number} Score of selector specificity A compared to selector specificity B
  */
-function compareSpecificity(aSpecificity, bSpecificity) {
+function compareSpecificity(
+  aSpecificity: Specificity,
+  bSpecificity: Specificity,
+) {
   for (let i = 0; i < 4; i += 1) {
     if (aSpecificity[i] < bSpecificity[i]) {
       return -1;
@@ -250,9 +292,12 @@ function compareSpecificity(aSpecificity, bSpecificity) {
  * @param {Object} selectorB Simple selector B
  * @return {Number} Score of selector A compared to selector B
  */
-function bySelectorSpecificity(selectorA, selectorB) {
-  const aSpecificity = specificity(selectorA.item.data),
-    bSpecificity = specificity(selectorB.item.data);
+function bySelectorSpecificity(
+  selectorA: FlatSelector,
+  selectorB: FlatSelector,
+) {
+  const aSpecificity = specificity(selectorA.item.data as Selector),
+    bSpecificity = specificity(selectorB.item.data as Selector);
   return compareSpecificity(aSpecificity, bSpecificity);
 }
 
@@ -262,7 +307,7 @@ function bySelectorSpecificity(selectorA, selectorB) {
  * @param {Array} selectors to be sorted
  * @return {Array} Stable sorted selectors
  */
-function sortSelectors(selectors) {
+function sortSelectors(selectors: FlatSelectorList) {
   return stable(selectors, bySelectorSpecificity);
 }
 
@@ -270,8 +315,13 @@ const declarationParseProps = {
   context: 'declarationList',
   parseValue: false,
 };
-function CSSStyleDeclaration({ props: { style }, styles }) {
+type CSSStyleDeclaration = {
+  style: Styles;
+  properties: Map<string, boolean | undefined>;
+};
+function CSSStyleDeclaration({ props, styles }: AST): CSSStyleDeclaration {
   const properties = new Map();
+  const style = props.style as Styles;
   const styleDeclaration = {
     style,
     properties,
@@ -280,22 +330,25 @@ function CSSStyleDeclaration({ props: { style }, styles }) {
     return styleDeclaration;
   }
   try {
-    csstree
-      .parse(styles, declarationParseProps)
-      .children.each(({ property, value, important }) => {
-        try {
-          const name = property.trim();
-          properties.set(name, important);
-          style[camelCase(name)] = csstree.generate(value).trim();
-        } catch (styleError) {
-          if (styleError.message !== 'Unknown node type: undefined') {
-            console.warn(
-              "Warning: Parse error when parsing inline styles, style properties of this element cannot be used. The raw styles can still be get/set using .attr('style').value. Error details: " +
-                styleError,
-            );
-          }
+    const declarations = csstree.parse(
+      styles,
+      declarationParseProps,
+    ) as DeclarationList;
+    declarations.children.each(node => {
+      try {
+        const { property, value, important } = node as Declaration;
+        const name = property.trim();
+        properties.set(name, important);
+        style[camelCase(name)] = csstree.generate(value).trim();
+      } catch (styleError) {
+        if (styleError.message !== 'Unknown node type: undefined') {
+          console.warn(
+            "Warning: Parse error when parsing inline styles, style properties of this element cannot be used. The raw styles can still be get/set using .attr('style').value. Error details: " +
+              styleError,
+          );
         }
-      });
+      }
+    });
   } catch (parseError) {
     console.warn(
       "Warning: Parse error when parsing inline styles, style properties of this element cannot be used. The raw styles can still be get/set using .attr('style').value. Error details: " +
@@ -305,7 +358,7 @@ function CSSStyleDeclaration({ props: { style }, styles }) {
   return styleDeclaration;
 }
 
-function initStyle(selectedEl) {
+function initStyle(selectedEl: AST) {
   if (!selectedEl.style) {
     if (!selectedEl.props.style) {
       selectedEl.props.style = {};
@@ -320,8 +373,8 @@ function initStyle(selectedEl) {
  * @param elemName
  * @return {?Object}
  */
-function closestElem(node, elemName) {
-  let elem = node;
+function closestElem(node: AST, elemName: string) {
+  let elem: AST | null = node;
   while ((elem = elem.parent) && elem.tag !== elemName) {}
   return elem;
 }
@@ -346,9 +399,9 @@ const parseProps = {
  * @param {Object} document document element
  *
  * @author strarsis <strarsis@gmail.com>
- * @author modified by: msand <msand@abo.fim>
+ * @author modified by: msand <msand@abo.fi>
  */
-export function inlineStyles(document) {
+export function inlineStyles(document: AST) {
   // collect <style/>s
   const styleElements = querySelectorAll(document, 'style');
 
@@ -357,7 +410,7 @@ export function inlineStyles(document) {
     return document;
   }
 
-  const selectors = [];
+  const selectors: FlatSelectorList = [];
 
   for (let element of styleElements) {
     const { children } = element;
@@ -368,7 +421,8 @@ export function inlineStyles(document) {
 
     // collect <style/>s and their css ast
     try {
-      flattenToSelectors(csstree.parse(children, parseProps), selectors);
+      const styleString = children.join('');
+      flattenToSelectors(csstree.parse(styleString, parseProps), selectors);
     } catch (parseError) {
       console.warn(
         'Warning: Parse error of styles of <style/> element, skipped. Error details: ' +
@@ -406,7 +460,8 @@ export function inlineStyles(document) {
       }
       csstree.walk(rule, {
         visit: 'Declaration',
-        enter({ property, value, important }) {
+        enter(node: CssNode) {
+          const { property, value, important } = node as Declaration;
           // existing inline styles have higher priority
           // no inline styles, external styles,                                    external styles used
           // inline styles,    external styles same   priority as inline styles,   inline   styles used
@@ -415,10 +470,10 @@ export function inlineStyles(document) {
           const camel = camelCase(name);
           const val = csstree.generate(value).trim();
           for (let element of matched) {
-            const { style, properties } = element.style;
+            const { style, properties } = element.style as CSSStyleDeclaration;
             const current = properties.get(name);
             if (current === undefined || current < important) {
-              properties.set(name, important);
+              properties.set(name, important as boolean);
               style[camel] = val;
             }
           }
@@ -441,24 +496,18 @@ export function inlineStyles(document) {
   return document;
 }
 
-export function SvgCss(props) {
+export function SvgCss(props: XmlProps) {
   const { xml, override } = props;
-  const ast = useMemo(() => (xml !== null ? parse(xml, inlineStyles) : null), [
-    xml,
-  ]);
+  const ast = useMemo<AST | null>(
+    () => (xml !== null ? parse(xml, inlineStyles) : null),
+    [xml],
+  );
   return <SvgAst ast={ast} override={override || props} />;
 }
 
-async function fetchText(uri) {
-  const response = await fetch(uri);
-  return await response.text();
-}
-
-const err = console.error.bind(console);
-
-export function SvgCssUri(props) {
+export function SvgCssUri(props: UriProps) {
   const { uri } = props;
-  const [xml, setXml] = useState(null);
+  const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
     uri
       ? fetchText(uri)
