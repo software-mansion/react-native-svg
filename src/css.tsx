@@ -22,8 +22,7 @@ import csstree, {
   Selector,
   SelectorList,
 } from 'css-tree';
-// @ts-ignore
-import cssSelect, { Adapter, CSSselect } from 'css-select';
+import cssSelect, { Adapter, Options, Predicate, Query } from 'css-select';
 import stable from 'stable';
 
 /*
@@ -35,46 +34,48 @@ import stable from 'stable';
  */
 // is the node a tag?
 // isTag: ( node:Node ) => isTag:Boolean
-function isTag(node: CSSselect.Node): node is CSSselect.ElementNode {
-  return node.tag;
+function isTag(node: AST | string): node is AST {
+  return typeof node === 'object';
 }
 
 // get the parent of the node
 // getParent: ( node:Node ) => parentNode:Node
 // returns null when no parent exists
-function getParent(node: CSSselect.Node): CSSselect.Node {
-  return node.parent || null;
+function getParent(node: AST | string): AST | string {
+  return ((typeof node === 'object' && node.parent) || null) as AST | string;
 }
 
 // get the node's children
 // getChildren: ( node:Node ) => children:[Node]
-function getChildren(node: CSSselect.Node): Array<CSSselect.Node> {
-  return node.children || [];
+function getChildren(node: AST | string): Array<AST | string> {
+  return (
+    (typeof node === 'object' && (node.children as (AST | string)[])) || []
+  );
 }
 
 // get the name of the tag
 // getName: ( elem:ElementNode ) => tagName:String
-function getName(elem: CSSselect.ElementNode): string {
+function getName(elem: AST): string {
   return elem.tag;
 }
 
 // get the text content of the node, and its children if it has any
 // getText: ( node:Node ) => text:String
 // returns empty string when there is no text
-function getText(_node: CSSselect.Node): string {
+function getText(_node: AST | string): string {
   return '';
 }
 
 // get the attribute value
 // getAttributeValue: ( elem:ElementNode, name:String ) => value:String
 // returns null when attribute doesn't exist
-function getAttributeValue(elem: CSSselect.ElementNode, name: string): string {
-  return elem.props[name];
+function getAttributeValue(elem: AST, name: string): string {
+  return elem.props[name] as string;
 }
 
 // takes an array of nodes, and removes any duplicates, as well as any nodes
 // whose ancestors are also in the array
-function removeSubsets(nodes: Array<CSSselect.Node>): Array<CSSselect.Node> {
+function removeSubsets(nodes: Array<AST | string>): Array<AST | string> {
   let idx = nodes.length,
     node,
     ancestor,
@@ -86,7 +87,7 @@ function removeSubsets(nodes: Array<CSSselect.Node>): Array<CSSselect.Node> {
     node = ancestor = nodes[idx];
 
     // Temporarily remove the node under consideration
-    nodes[idx] = null;
+    delete nodes[idx];
     replace = true;
 
     while (ancestor) {
@@ -108,47 +109,44 @@ function removeSubsets(nodes: Array<CSSselect.Node>): Array<CSSselect.Node> {
 }
 
 // does at least one of passed element nodes pass the test predicate?
-function existsOne(
-  test: CSSselect.Predicate<CSSselect.ElementNode>,
-  elems: Array<CSSselect.ElementNode>,
-): boolean {
-  return elems.some(function(elem) {
-    return isTag(elem)
-      ? // eslint-disable-next-line jest/no-disabled-tests
-        test(elem) || existsOne(test, getChildren(elem))
-      : false;
-  });
+function existsOne(test: Predicate<AST>, elems: Array<AST | string>): boolean {
+  return elems.some(
+    // eslint-disable-next-line jest/no-disabled-tests
+    elem => isTag(elem) && (test(elem) || existsOne(test, getChildren(elem))),
+  );
 }
 
 /*
   get the siblings of the node. Note that unlike jQuery's `siblings` method,
   this is expected to include the current node as well
 */
-function getSiblings(node: CSSselect.Node): Array<CSSselect.Node> {
+function getSiblings(node: AST | string): Array<AST | string> {
   const parent = getParent(node);
-  return (parent && getChildren(parent)) as Array<CSSselect.Node>;
+  return (typeof parent === 'object' && getChildren(parent)) || [];
 }
 
 // does the element have the named attribute?
-function hasAttrib(elem: CSSselect.ElementNode, name: string): boolean {
+function hasAttrib(elem: AST, name: string): boolean {
   return elem.props.hasOwnProperty(name);
 }
 
 // finds the first node in the array that matches the test predicate, or one
 // of its children
 function findOne(
-  test: CSSselect.Predicate<CSSselect.ElementNode>,
-  elems: Array<CSSselect.ElementNode>,
-): CSSselect.ElementNode | undefined {
-  let elem = null;
+  test: Predicate<AST>,
+  elems: Array<AST | string>,
+): AST | undefined {
+  let elem: AST | undefined;
 
   for (let i = 0, l = elems.length; i < l && !elem; i++) {
-    // eslint-disable-next-line jest/no-disabled-tests
-    if (test(elems[i])) {
-      elem = elems[i];
+    const e = elems[i];
+    if (typeof e === 'string') {
+      // eslint-disable-next-line jest/no-disabled-tests
+    } else if (test(e)) {
+      elem = e;
     } else {
-      const childs = getChildren(elems[i]);
-      if (childs && childs.length > 0) {
+      const childs = getChildren(e);
+      if (childs.length !== 0) {
         elem = findOne(test, childs);
       }
     }
@@ -160,22 +158,22 @@ function findOne(
 // finds all of the element nodes in the array that match the test predicate,
 // as well as any of their children that match it
 function findAll(
-  test: CSSselect.Predicate<CSSselect.ElementNode>,
-  nodes: Array<CSSselect.Node>,
-): Array<CSSselect.ElementNode> {
-  let result = [];
-
+  test: Predicate<AST>,
+  nodes: Array<AST | string>,
+  result: Array<AST> = [],
+): Array<AST> {
   for (let i = 0, j = nodes.length; i < j; i++) {
-    if (!isTag(nodes[i])) {
+    const node = nodes[i];
+    if (!isTag(node)) {
       continue;
     }
     // eslint-disable-next-line jest/no-disabled-tests
-    if (test(nodes[i])) {
-      result.push(nodes[i]);
+    if (test(node)) {
+      result.push(node);
     }
-    const childs = getChildren(nodes[i]);
-    if (childs) {
-      result = result.concat(findAll(test, childs));
+    const childs = getChildren(node);
+    if (childs.length !== 0) {
+      findAll(test, childs, result);
     }
   }
 
@@ -197,7 +195,7 @@ const adapter: Adapter<AST | string, AST> = {
   getAttributeValue,
 };
 
-const cssSelectOpts = {
+const cssSelectOpts: Options<AST | string, AST> = {
   xmlMode: true,
   adapter,
 };
@@ -205,12 +203,12 @@ const cssSelectOpts = {
 /**
  * Evaluate a string of CSS selectors against the element and returns matched elements.
  *
- * @param {Object} document to select elements from
- * @param {String} selectors CSS selector(s) string
- * @return {Array}
+ * @param {Query} query can be either a CSS selector string or a compiled query function.
+ * @param {Array<AST> | AST} elems Elements to query. If it is an element, its children will be queried.
+ * @return {Array<AST>} All matching elements.
  */
-function querySelectorAll(document: AST, selectors: string) {
-  return cssSelect(selectors, document, cssSelectOpts);
+function querySelectorAll(query: Query, elems: AST | AST[]): AST[] {
+  return cssSelect(query, elems, cssSelectOpts);
 }
 
 type FlatPseudoSelector = {
@@ -522,7 +520,7 @@ const parseProps = {
  */
 export function inlineStyles(document: AST) {
   // collect <style/>s
-  const styleElements = querySelectorAll(document, 'style');
+  const styleElements = querySelectorAll('style', document);
 
   //no <styles/>s, nothing to do
   if (styleElements.length === 0) {
@@ -570,7 +568,7 @@ export function inlineStyles(document: AST) {
     const selectorStr = csstree.generate(item.data);
     try {
       // apply <style/> to matched elements
-      const matched = querySelectorAll(document, selectorStr).map(initStyle);
+      const matched = querySelectorAll(selectorStr, document).map(initStyle);
       if (matched.length === 0) {
         continue;
       }
