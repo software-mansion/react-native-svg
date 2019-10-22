@@ -1,9 +1,9 @@
 import React, {
   Component,
-  useState,
+  ComponentType,
   useEffect,
   useMemo,
-  ComponentType,
+  useState,
 } from 'react';
 import Rect from './elements/Rect';
 import Circle from './elements/Circle';
@@ -72,13 +72,22 @@ export interface AST {
   Tag: ComponentType;
 }
 
+export interface XmlAST extends AST {
+  children: (XmlAST | string)[];
+  parent: XmlAST | null;
+}
+
+export interface JsxAST extends AST {
+  children: (JSX.Element | string)[];
+}
+
 export type UriProps = { uri: string | null; override?: Object };
 export type UriState = { xml: string | null };
 
 export type XmlProps = { xml: string | null; override?: Object };
-export type XmlState = { ast: AST | null };
+export type XmlState = { ast: JsxAST | null };
 
-export type AstProps = { ast: AST | null; override?: Object };
+export type AstProps = { ast: JsxAST | null; override?: Object };
 
 export function SvgAst({ ast, override }: AstProps) {
   if (!ast) {
@@ -94,7 +103,7 @@ export function SvgAst({ ast, override }: AstProps) {
 
 export function SvgXml(props: XmlProps) {
   const { xml, override } = props;
-  const ast = useMemo<AST | null>(() => (xml !== null ? parse(xml) : null), [
+  const ast = useMemo<JsxAST | null>(() => (xml !== null ? parse(xml) : null), [
     xml,
   ]);
   return <SvgAst ast={ast} override={override || props} />;
@@ -256,14 +265,14 @@ const quotemarks = /['"]/;
 
 export function parse(
   source: string,
-  middleware?: (ast: AST) => AST,
-): AST | null {
+  middleware?: (ast: XmlAST) => XmlAST,
+): JsxAST | null {
   const length = source.length;
-  let currentElement: AST | null = null;
+  let currentElement: XmlAST | null = null;
   let state = metadata;
   let children = null;
-  let root: AST | null = null;
-  let stack: AST[] = [];
+  let root: XmlAST | undefined;
+  let stack: XmlAST[] = [];
 
   function error(message: string) {
     const { line, column, snippet } = locate(source, i);
@@ -329,7 +338,7 @@ export function parse(
 
     const tag = getName();
     const props: { [prop: string]: Styles | string | undefined } = {};
-    const element: AST = {
+    const element: XmlAST = {
       tag,
       props,
       children: [],
@@ -525,11 +534,13 @@ export function parse(
     error('Unexpected end of input');
   }
 
-  if (root && typeof root === 'object') {
-    const r: AST = middleware ? middleware(root) : root;
-    const ast: (AST | string)[] = r.children as (AST | string)[];
-    r.children = ast.map(astToReact);
+  if (root) {
+    const xml: XmlAST = (middleware ? middleware(root) : root) || root;
+    const ast: (JSX.Element | string)[] = xml.children.map(astToReact);
+    const jsx: JsxAST = xml as JsxAST;
+    jsx.children = ast;
+    return jsx;
   }
 
-  return root;
+  return null;
 }

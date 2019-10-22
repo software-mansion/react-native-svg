@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "lib": ["es6"],
+    "lib": ["es6", "es2016"],
     "jsx": "react-native",
     "strict": true,
     "noImplicitAny": true,
