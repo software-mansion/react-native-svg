@@ -40,7 +40,7 @@
     "format": "prettier README.md './src/**/*.{ts,tsx}' src/index.d.ts --write",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
     "tsc": "tsc --noEmit",
-    "test": "npm run lint && npm run tsc && npm run flow",
+    "test": "npm run lint && npm run tsc && npm run flow && jest",
     "prepare": "npm run flowgen && npm run bob",
     "semantic-release": "semantic-release"
   },
@@ -61,6 +61,7 @@
     "@types/react": "^16.9.9",
     "@types/react-native": "^0.60.21",
     "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
     "eslint": "^6.5.1",
     "eslint-plugin-flowtype": "^4.3.0",
     "eslint-plugin-prettier": "^3.1.1",
@@ -68,13 +69,18 @@
     "flow-bin": "^0.109.0",
     "flow-typed": "^2.6.1",
     "flowgen": "^1.10.0",
+    "jest": "^24.9.0",
     "pegjs": "^0.10.0",
     "prettier": "^1.18.2",
     "react": "^16.10.2",
     "react-native": "^0.61.2",
+    "react-test-renderer": "^16.10.2",
     "semantic-release": "^15.13.27",
     "semantic-release-cli": "^5.2.1",
     "typescript": "^3.7.0-dev.20191018"
+  },
+  "jest": {
+    "preset": "react-native"
   },
   "release": {
     "plugins": [
