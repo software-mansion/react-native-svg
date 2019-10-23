@@ -321,6 +321,23 @@ export default () => (
 );
 ```
 
+#### CSS Support
+
+If remote SVG file contains CSS in `<style>` element, use `SvgCssUri`:
+
+```jsx
+import * as React from 'react';
+import { SvgCssUri } from 'react-native-svg';
+
+export default () => (
+  <SvgCssUri
+    width="100%"
+    height="100%"
+    uri="http://thenewcode.com/assets/svg/accessibility.svg"
+  />
+);
+```
+
 ### Use with svg files
 
 Try [react-native-svg-transformer](https://github.com/kristerkari/react-native-svg-transformer) to get compile time conversion and cached transformations.
@@ -417,6 +434,28 @@ const xml = `
 `;
 
 export default () => <SvgXml xml={xml} width="100%" height="100%" />;
+```
+
+#### CSS support
+
+If xml string contains CSS in `<style>` element, use `SvgCss`:
+
+```jsx
+import * as React from 'react';
+import { SvgCss } from 'react-native-svg';
+
+const xml = `
+  <svg width="32" height="32" viewBox="0 0 32 32">
+    <style>
+      .red {
+        fill: #ff0000;
+      }
+    </style>
+    <rect class="red" x="0" y="0" width="32" height="32" />
+  </svg>
+`;
+
+export default () => <SvgCss xml={xml} width="100%" height="100%" />;
 ```
 
 ### Common props:
