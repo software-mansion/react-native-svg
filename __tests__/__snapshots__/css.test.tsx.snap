@@ -1,5 +1,87 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`inlines styles 1`] = `
+Object {
+  "Tag": [Function],
+  "children": Array [
+    <Defs>
+      <missingTag
+        type="text/css"
+      >
+        
+      /* tag selector */
+      rect {
+        stroke: blue;
+        fill: yellow
+      }
+
+      /* class selector */
+      .redbox { fill: red; }
+
+      /* multiple selectors */
+      g .class-1, g .class-2 {
+        stroke-width: 16
+      }
+
+      /* two classes */
+      .class-2.transparent {
+        fill-opacity: 0.3;
+      }
+
+      /* Commented out
+      rect {
+        fill: black;
+      }
+      */
+    
+      </missingTag>
+    </Defs>,
+    <G>
+      <Rect
+        class="redbox class-1"
+        height={200}
+        style={
+          Object {
+            "fill": "red",
+            "stroke": "blue",
+            "strokeWidth": "16",
+          }
+        }
+        width={1000}
+        x={100}
+        y={0}
+      />
+    </G>,
+    <G>
+      <Rect
+        class="redbox class-2 transparent"
+        height={200}
+        style={
+          Object {
+            "fill": "red",
+            "fillOpacity": "0.3",
+            "stroke": "blue",
+            "strokeWidth": "16",
+          }
+        }
+        width={750}
+        x={100}
+        y={350}
+      />
+    </G>,
+  ],
+  "parent": null,
+  "props": Object {
+    "height": "100%",
+    "version": 1.1,
+    "viewBox": "0 0 1000 500",
+    "width": "100%",
+    "xmlns": "http://www.w3.org/2000/svg",
+  },
+  "tag": "svg",
+}
+`;
+
 exports[`supports CSS in style element 1`] = `
 <RNSVGSvgView
   align="xMidYMid"

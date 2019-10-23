@@ -28,6 +28,7 @@ import cssSelect, { Adapter, Options, Predicate, Query } from 'css-select';
 
 /*
  * Style element inlining experiment based on SVGO
+ * https://github.com/svg/svgo/blob/11f9c797411a8de966aacc4cb83dbb3e471757bc/plugins/inlineStyles.js
  * */
 
 /**

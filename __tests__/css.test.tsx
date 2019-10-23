@@ -1,9 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { SvgCss } from '../src/ReactNativeSVG';
+import { SvgCss, parse, inlineStyles } from '../src/ReactNativeSVG';
 
-test('supports CSS in style element', () => {
-  const xml = `<?xml version="1.0" standalone="no"?>
+const xml = `<?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
@@ -44,6 +43,12 @@ test('supports CSS in style element', () => {
   </g>
 </svg>`;
 
+test('inlines styles', () => {
+  const ast = parse(xml, inlineStyles);
+  expect(ast).toMatchSnapshot();
+});
+
+test('supports CSS in style element', () => {
   const tree = renderer.create(<SvgCss xml={xml} />).toJSON();
   expect(tree).toMatchSnapshot();
 });
