@@ -23,7 +23,13 @@ import Pattern, { RNSVGPattern } from './elements/Pattern';
 import Mask, { RNSVGMask } from './elements/Mask';
 import Marker, { RNSVGMarker } from './elements/Marker';
 import { parse, SvgAst, SvgFromUri, SvgFromXml, SvgUri, SvgXml } from './xml';
-import { SvgCss, SvgCssUri, inlineStyles } from './css';
+import {
+  SvgCss,
+  SvgCssUri,
+  SvgWithCss,
+  SvgWithCssUri,
+  inlineStyles,
+} from './css';
 
 export {
   Svg,
@@ -57,6 +63,8 @@ export {
   SvgXml,
   SvgCss,
   SvgCssUri,
+  SvgWithCss,
+  SvgWithCssUri,
   inlineStyles,
   Shape,
   RNSVGMarker,

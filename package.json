@@ -46,13 +46,12 @@
     "semantic-release": "semantic-release"
   },
   "peerDependencies": {
+    "css-select": "^2.0.2",
+    "css-tree": "^1.0.0-alpha.37",
     "react": "*",
     "react-native": ">=0.50.0"
   },
-  "dependencies": {
-    "css-select": "^2.0.2",
-    "css-tree": "^1.0.0-alpha.36"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@react-native-community/bob": "^0.7.0",
     "@react-native-community/eslint-config": "^0.0.5",
@@ -63,6 +62,8 @@
     "@types/react-native": "^0.60.21",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
+    "css-select": "^2.0.2",
+    "css-tree": "^1.0.0-alpha.37",
     "eslint": "^6.5.1",
     "eslint-plugin-flowtype": "^4.3.0",
     "eslint-plugin-prettier": "^3.1.1",

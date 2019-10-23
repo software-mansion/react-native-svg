@@ -1,15 +1,18 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { Component, useEffect, useMemo, useState } from 'react';
 import {
   camelCase,
   err,
   fetchText,
   JsxAST,
+  Middleware,
   parse,
   Styles,
   SvgAst,
   UriProps,
+  UriState,
   XmlAST,
   XmlProps,
+  XmlState,
 } from './xml';
 import csstree, {
   Atrule,
@@ -595,7 +598,9 @@ const parseProps = {
  * @author strarsis <strarsis@gmail.com>
  * @author modified by: msand <msand@abo.fi>
  */
-export function inlineStyles(document: XmlAST) {
+export const inlineStyles: Middleware = function inlineStyles(
+  document: XmlAST,
+) {
   // collect <style/>s
   const styleElements = querySelectorAll('style', document);
 
@@ -685,7 +690,7 @@ export function inlineStyles(document: XmlAST) {
   }
 
   return document;
-}
+};
 
 export function SvgCss(props: XmlProps) {
   const { xml, override } = props;
@@ -707,4 +712,60 @@ export function SvgCssUri(props: UriProps) {
       : setXml(null);
   }, [uri]);
   return <SvgCss xml={xml} override={props} />;
+}
+
+// Extending Component is required for Animated support.
+
+export class SvgWithCss extends Component<XmlProps, XmlState> {
+  state = { ast: null };
+  componentDidMount() {
+    this.parse(this.props.xml);
+  }
+  componentDidUpdate(prevProps: { xml: string | null }) {
+    const { xml } = this.props;
+    if (xml !== prevProps.xml) {
+      this.parse(xml);
+    }
+  }
+  parse(xml: string | null) {
+    try {
+      this.setState({ ast: xml ? parse(xml, inlineStyles) : null });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  render() {
+    const {
+      props,
+      state: { ast },
+    } = this;
+    return <SvgAst ast={ast} override={props.override || props} />;
+  }
+}
+
+export class SvgWithCssUri extends Component<UriProps, UriState> {
+  state = { xml: null };
+  componentDidMount() {
+    this.fetch(this.props.uri);
+  }
+  componentDidUpdate(prevProps: { uri: string | null }) {
+    const { uri } = this.props;
+    if (uri !== prevProps.uri) {
+      this.fetch(uri);
+    }
+  }
+  async fetch(uri: string | null) {
+    try {
+      this.setState({ xml: uri ? await fetchText(uri) : null });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  render() {
+    const {
+      props,
+      state: { xml },
+    } = this;
+    return <SvgWithCss xml={xml} override={props} />;
+  }
 }

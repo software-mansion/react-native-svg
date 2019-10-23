@@ -263,10 +263,9 @@ const validNameCharacters = /[a-zA-Z0-9:_-]/;
 const whitespace = /[\s\t\r\n]/;
 const quotemarks = /['"]/;
 
-export function parse(
-  source: string,
-  middleware?: (ast: XmlAST) => XmlAST,
-): JsxAST | null {
+export type Middleware = (ast: XmlAST) => XmlAST;
+
+export function parse(source: string, middleware?: Middleware): JsxAST | null {
   const length = source.length;
   let currentElement: XmlAST | null = null;
   let state = metadata;
