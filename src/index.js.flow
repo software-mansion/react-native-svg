@@ -404,12 +404,32 @@ export type MaskProps = {
   ...
 } & CommonPathProps;
 declare export var Mask: React.ComponentClass<MaskProps>;
+export type Styles = {
+  [property: string]: string,
+  ...
+};
 export interface AST {
   tag: string;
+  style?: Styles;
+  styles?: string;
+  priority?: Map<string, boolean | void>;
+  parent: AST | null;
   children: (AST | string)[] | (React$Node | string)[];
-  props: { ... };
+  props: {
+    [prop: string]: Styles | string | void,
+    ...
+  };
   Tag: React.ComponentType<>;
 }
+export type XmlAST = {
+  children: (XmlAST | string)[],
+  parent: XmlAST | null,
+  ...
+} & AST;
+export type JsxAST = {
+  children: (React$Node | string)[],
+  ...
+} & AST;
 export type UriProps = {
   uri: string | null,
   override?: SvgProps,
@@ -425,17 +445,26 @@ export type XmlProps = {
   ...
 } & SvgProps;
 export type XmlState = {
-  ast: AST | null,
+  ast: JsxAST | null,
   ...
 };
 export type AstProps = {
-  ast: AST | null,
+  ast: JsxAST | null,
   override?: SvgProps,
   ...
 } & SvgProps;
-declare export function parse(xml: string): AST | null;
+export type Middleware = (ast: XmlAST) => XmlAST;
+declare export function parse(
+  source: string,
+  middleware?: Middleware
+): JsxAST | null;
 declare export var SvgAst: React.FunctionComponent<AstProps>;
 declare export var SvgXml: React.FunctionComponent<XmlProps>;
 declare export var SvgFromXml: React.ComponentClass<XmlProps, XmlState>;
 declare export var SvgUri: React.FunctionComponent<UriProps>;
 declare export var SvgFromUri: React.ComponentClass<UriProps, UriState>;
+declare export var SvgCss: React.FunctionComponent<XmlProps>;
+declare export var SvgWithCss: React.ComponentClass<XmlProps, XmlState>;
+declare export var SvgCssUri: React.FunctionComponent<UriProps>;
+declare export var SvgWithCssUri: React.ComponentClass<UriProps, UriState>;
+declare export var inlineStyles: Middleware;
