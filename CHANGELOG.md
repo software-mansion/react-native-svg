@@ -1,3 +1,10 @@
+## [9.13.2](https://github.com/react-native-community/react-native-svg/compare/v9.13.1...v9.13.2) (2019-10-23)
+
+
+### Bug Fixes
+
+* make css-select and css-tree dependencies instead of peers ([957914d](https://github.com/react-native-community/react-native-svg/commit/957914d59b27e22121d13f13cb54a051b893b446)), closes [#1166](https://github.com/react-native-community/react-native-svg/issues/1166)
+
 ## [9.13.1](https://github.com/react-native-community/react-native-svg/compare/v9.13.0...v9.13.1) (2019-10-23)
 
 
