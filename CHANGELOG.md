@@ -1,3 +1,10 @@
+## [9.13.1](https://github.com/react-native-community/react-native-svg/compare/v9.13.0...v9.13.1) (2019-10-23)
+
+
+### Bug Fixes
+
+* update flow types ([a50a856](https://github.com/react-native-community/react-native-svg/commit/a50a85671ea94e616eff761346875701f95d90ec))
+
 # [9.13.0](https://github.com/react-native-community/react-native-svg/compare/v9.12.0...v9.13.0) (2019-10-23)
 
 
