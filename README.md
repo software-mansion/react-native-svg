@@ -59,7 +59,7 @@
 
 ##### With expo-cli
 
-With Expo, you'll need to run `expo install react-native-svg` to install this library. 
+With Expo, you'll need to run `expo install react-native-svg` to install this library.
 
 Please refer to [Expo docs](https://docs.expo.io/versions/latest/sdk/svg/) for more information or jump ahead to [Usage](#Usage).
 
@@ -321,6 +321,23 @@ export default () => (
 );
 ```
 
+#### CSS Support
+
+If remote SVG file contains CSS in `<style>` element, use `SvgCssUri`:
+
+```jsx
+import * as React from 'react';
+import { SvgCssUri } from 'react-native-svg';
+
+export default () => (
+  <SvgCssUri
+    width="100%"
+    height="100%"
+    uri="http://thenewcode.com/assets/svg/accessibility.svg"
+  />
+);
+```
+
 ### Use with svg files
 
 Try [react-native-svg-transformer](https://github.com/kristerkari/react-native-svg-transformer) to get compile time conversion and cached transformations.
@@ -419,6 +436,28 @@ const xml = `
 export default () => <SvgXml xml={xml} width="100%" height="100%" />;
 ```
 
+#### CSS support
+
+If xml string contains CSS in `<style>` element, use `SvgCss`:
+
+```jsx
+import * as React from 'react';
+import { SvgCss } from 'react-native-svg';
+
+const xml = `
+  <svg width="32" height="32" viewBox="0 0 32 32">
+    <style>
+      .red {
+        fill: #ff0000;
+      }
+    </style>
+    <rect class="red" x="0" y="0" width="32" height="32" />
+  </svg>
+`;
+
+export default () => <SvgCss xml={xml} width="100%" height="100%" />;
+```
+
 ### Common props:
 
 | Name             | Default  | Description                                                                                                                                                            |
@@ -482,7 +521,7 @@ Code explanation:
 - The stroke prop defines the color of the line drawn around the object.
 - The color prop is a bit special in the sense that it won't color anything by itself, but define a kind of color variable that can be used by children elements. In this example we're defining a "green" color in the Svg element and using it in the second Path element via stroke="currentColor". The "currentColor" is what refers to that "green" value, and it can be used in other props that accept colors too, e.g. fill="currentColor".
 
-### Rect
+#### Rect
 
 The <Rect> element is used to create a rectangle and variations of a rectangle shape:
 
@@ -508,7 +547,7 @@ Code explanation:
 - The x prop defines the left position of the rectangle (e.g. x="25" places the rectangle 25 px from the left margin).
 - The y prop defines the top position of the rectangle (e.g. y="5" places the rectangle 5 px from the top margin).
 
-##### Circle
+#### Circle
 
 The <Circle> element is used to create a circle:
 
@@ -1135,14 +1174,14 @@ const markerRendering = `<svg xmlns="http://www.w3.org/2000/svg"
     <marker id="m3" viewBox="0 0 10 10" refX="5" refY="5"
      markerWidth="5" markerHeight="5">
       <circle cx="5" cy="5" r="5" fill="maroon" opacity="0.85"/>
-    </marker>    
+    </marker>
   </defs>
-  
+
   <path d="M10,10 h10 v10 z m20,0 h10 v10 z m20,0 h10 v10 z"
   fill="none" stroke="black"
-  marker-start="url(#m1)"  
+  marker-start="url(#m1)"
   marker-mid="url(#m2)"
-  marker-end="url(#m3)"  
+  marker-end="url(#m3)"
   />
 </svg>`;
 
@@ -1176,7 +1215,7 @@ import { SvgXml } from 'react-native-svg';
 const markerRendering = `<svg xmlns="http://www.w3.org/2000/svg"
      width="275" height="200" viewBox="0 0 275 200">
   <defs>
-    <marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5" 
+    <marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5"
             markerUnits="strokeWidth" markerWidth="4" markerHeight="3"
             orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" />
