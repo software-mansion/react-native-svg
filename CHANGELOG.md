@@ -1,3 +1,10 @@
+## [9.13.3](https://github.com/react-native-community/react-native-svg/compare/v9.13.2...v9.13.3) (2019-10-25)
+
+
+### Bug Fixes
+
+* **android:** Image onPress [#1170](https://github.com/react-native-community/react-native-svg/issues/1170) ([5c967b7](https://github.com/react-native-community/react-native-svg/commit/5c967b7c6992246ebd602e9a86d2544f0662ce10))
+
 ## [9.13.2](https://github.com/react-native-community/react-native-svg/compare/v9.13.1...v9.13.2) (2019-10-23)
 
 
