@@ -136,9 +136,9 @@ class ImageView extends RenderableView {
 
     @Override
     Path getPath(Canvas canvas, Paint paint) {
-        Path path = new Path();
-        path.addRect(getRect(), Path.Direction.CW);
-        return path;
+        mPath = new Path();
+        mPath.addRect(getRect(), Path.Direction.CW);
+        return mPath;
     }
 
     private void loadBitmap(final ImagePipeline imagePipeline, final ImageRequest request) {

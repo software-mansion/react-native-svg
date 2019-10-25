@@ -229,7 +229,7 @@ react-native info
 
 If you suspect that you've found a spec conformance bug, then you can test using your component in a react-native-web project by forking this codesandbox, to see how different browsers render the same content: <https://codesandbox.io/s/pypn6mn3y7> If any evergreen brower with significant userbase or other svg user agent renders some svg content better, or supports more of the svg and related specs, please open an issue asap.
 
-### <a name="Usage">Usage</a>
+### Usage
 
 Here's a simple example. To render output like this:
 
