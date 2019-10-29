@@ -35,6 +35,8 @@ import com.facebook.react.views.text.ReactFontManager;
 
 import java.util.ArrayList;
 
+import java.text.Bidi;
+
 import javax.annotation.Nullable;
 
 import static android.graphics.Matrix.MTRANS_X;
@@ -175,6 +177,66 @@ class TSpanView extends TextView {
         canvas.restore();
     }
 
+
+    /**
+     * Implements visual to logical order converter.
+     *
+     * @author <a href="http://www.nesterovsky-bros.com">Nesterovsky bros</a>
+     *
+     * @param text an input text in visual order to convert.
+     * @return a String value in logical order.
+     */
+    public static String visualToLogical(String text)
+    {
+        if ((text == null) || (text.length() == 0))
+        {
+            return text;
+        }
+
+        Bidi bidi = new Bidi(text, Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT);
+
+        if (bidi.isLeftToRight())
+        {
+            return text;
+        }
+
+        int count = bidi.getRunCount();
+        byte[] levels = new byte[count];
+        Integer[] runs = new Integer[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            levels[i] = (byte)bidi.getRunLevel(i);
+            runs[i] = i;
+        }
+
+        Bidi.reorderVisually(levels, 0, runs, 0, count);
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < count; i++)
+        {
+            int index = runs[i];
+            int start = bidi.getRunStart(index);
+            int end = bidi.getRunLimit(index);
+            int level = levels[index];
+
+            if ((level & 1) != 0)
+            {
+                for (; --end >= start;)
+                {
+                    result.append(text.charAt(end));
+                }
+            }
+            else
+            {
+                result.append(text, start, end);
+            }
+        }
+
+        return result.toString();
+    }
+
     @Override
     Path getPath(Canvas canvas, Paint paint) {
         if (mCachedPath != null) {
@@ -189,7 +251,7 @@ class TSpanView extends TextView {
         setupTextPath();
 
         pushGlyphContext();
-        mCachedPath = getLinePath(mContent, paint, canvas);
+        mCachedPath = getLinePath(visualToLogical(mContent), paint, canvas);
         popGlyphContext();
 
         return mCachedPath;
@@ -421,6 +483,7 @@ class TSpanView extends TextView {
             vertical alternates (OpenType feature: vert) must be enabled.
         */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // String arabic = "'isol', 'fina', 'medi', 'init', 'rclt', 'mset', 'curs', ";
             if (allowOptionalLigatures) {
                 paint.setFontFeatureSettings(defaultFeatures + additionalLigatures + font.fontFeatureSettings);
             } else {
