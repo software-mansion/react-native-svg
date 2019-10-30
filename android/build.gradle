@@ -37,12 +37,73 @@ android {
 }
 
 repositories {
-    mavenLocal()
-    google()
+    mavenCentral()
     jcenter()
-    maven {
-        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-        url "$rootDir/../node_modules/react-native/android"
+    google()
+
+    def found = false
+    def defaultDir = null
+    def androidSourcesName = 'React Native sources'
+
+    if (rootProject.ext.has('reactNativeAndroidRoot')) {
+        defaultDir = rootProject.ext.get('reactNativeAndroidRoot')
+    } else {
+        defaultDir = new File(
+        projectDir,
+        '/../../../node_modules/react-native/android'
+        )
+    }
+
+    if (defaultDir.exists()) {
+        maven {
+        url defaultDir.toString()
+        name androidSourcesName
+        }
+
+        logger.info(":${project.name}:reactNativeAndroidRoot ${defaultDir.canonicalPath}")
+        found = true
+    } else {
+        def parentDir = rootProject.projectDir
+
+        1.upto(5, {
+        if (found) return true
+        parentDir = parentDir.parentFile
+
+        def androidSourcesDir = new File(
+            parentDir,
+            'node_modules/react-native'
+        )
+
+        def androidPrebuiltBinaryDir = new File(
+            parentDir,
+            'node_modules/react-native/android'
+        )
+
+        if (androidPrebuiltBinaryDir.exists()) {
+            maven {
+            url androidPrebuiltBinaryDir.toString()
+            name androidSourcesName
+            }
+
+            logger.info(":${project.name}:reactNativeAndroidRoot ${androidPrebuiltBinaryDir.canonicalPath}")
+            found = true
+        } else if (androidSourcesDir.exists()) {
+            maven {
+            url androidSourcesDir.toString()
+            name androidSourcesName
+            }
+
+            logger.info(":${project.name}:reactNativeAndroidRoot ${androidSourcesDir.canonicalPath}")
+            found = true
+        }
+        })
+    }
+
+    if (!found) {
+        throw new GradleException(
+        "${project.name}: unable to locate React Native android sources. " +
+            "Ensure you have you installed React Native as a dependency in your project and try again."
+        )
     }
 }
 
