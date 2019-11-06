@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -104,6 +105,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
             mBitmap = drawOutput();
         }
         if (mBitmap != null) {
+            canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.DITHER_FLAG));
             canvas.drawBitmap(mBitmap, 0, 0, null);
             if (toDataUrlTask != null) {
                 toDataUrlTask.run();
@@ -245,10 +247,18 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         if (invalid) {
             return null;
         }
-        Bitmap bitmap = Bitmap.createBitmap(
-                (int) width,
-                (int) height,
-                Bitmap.Config.ARGB_8888);
+        Bitmap bitmap;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            bitmap = Bitmap.createBitmap(
+                    (int) width,
+                    (int) height,
+                    Bitmap.Config.RGBA_F16);
+        } else {
+            bitmap = Bitmap.createBitmap(
+                    (int) width,
+                    (int) height,
+                    Bitmap.Config.ARGB_8888);
+        }
 
         drawChildren(new Canvas(bitmap));
         return bitmap;
@@ -282,7 +292,8 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
         final Paint paint = new Paint();
 
-        paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG | Paint.DITHER_FLAG );
+        paint.setDither(true);
 
         paint.setTypeface(Typeface.DEFAULT);
 
