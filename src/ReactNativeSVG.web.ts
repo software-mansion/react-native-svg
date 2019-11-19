@@ -2,6 +2,14 @@ import { createElement } from 'react-native-web';
 import { resolve } from './lib/resolve';
 import { Component } from 'react';
 import { NumberProp } from './lib/extract/types';
+import { parse, SvgAst, SvgFromUri, SvgFromXml, SvgUri, SvgXml } from './xml';
+import {
+  SvgCss,
+  SvgCssUri,
+  SvgWithCss,
+  SvgWithCssUri,
+  inlineStyles,
+} from './css';
 
 /**
  * `react-native-svg` supports additional props that aren't defined in the spec.
@@ -234,5 +242,19 @@ export class Pattern extends Component {
     return createElement('pattern', prepare(this.props));
   }
 }
+
+export {
+  parse,
+  SvgAst,
+  SvgFromUri,
+  SvgFromXml,
+  SvgUri,
+  SvgXml,
+  SvgCss,
+  SvgCssUri,
+  SvgWithCss,
+  SvgWithCssUri,
+  inlineStyles,
+};
 
 export default Svg;
