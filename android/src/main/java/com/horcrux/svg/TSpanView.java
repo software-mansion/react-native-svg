@@ -213,6 +213,35 @@ class TSpanView extends TextView {
             return advance;
         }
 
+        ViewParent parent = getParent();
+
+        if (parent instanceof TextView) {
+            TextView textView = (TextView) parent;
+
+            for (int i = 0; i < textView.getChildCount(); i++) {
+                View child = textView.getChildAt(i);
+                if (child instanceof TSpanView) {
+                    TSpanView text = (TSpanView) child;
+                    String line = text.mContent;
+                    int length = line.length();
+
+                    if (length == 0) {
+                        continue;
+                    }
+
+                    GlyphContext gc = getTextRootGlyphContext();
+                    FontData font = gc.getFont();
+                    applyTextPropertiesToPaint(paint, font);
+
+                    applySpacingAndFeatures(paint, font);
+
+                    advance += paint.measureText(line);
+                }
+            }
+            cachedAdvance = advance;
+            return advance;
+        }
+
         String line = mContent;
         final int length = line.length();
 
