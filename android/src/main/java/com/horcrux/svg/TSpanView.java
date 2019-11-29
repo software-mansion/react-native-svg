@@ -213,6 +213,9 @@ class TSpanView extends TextView {
             return advance;
         }
 
+        GlyphContext gc = getTextRootGlyphContext();
+        FontData font = gc.getFont();
+
         ViewParent parent = getParent();
 
         if (parent instanceof TextView) {
@@ -220,26 +223,24 @@ class TSpanView extends TextView {
 
             for (int i = 0; i < textView.getChildCount(); i++) {
                 View child = textView.getChildAt(i);
-                if (child instanceof TSpanView) {
+                if (child instanceof TSpanView && child != this) {
                     TSpanView text = (TSpanView) child;
-                    String line = text.mContent;
-                    int length = line.length();
+                    String spanContent = text.mContent;
+                    int spanLength = spanContent.length();
 
-                    if (length == 0) {
+                    if (spanLength == 0) {
                         continue;
                     }
 
-                    GlyphContext gc = getTextRootGlyphContext();
-                    FontData font = gc.getFont();
-                    applyTextPropertiesToPaint(paint, font);
+                    ReadableMap fontMap = text.mFont;
+                    FontData fontData = new FontData(fontMap, font, textView.mScale);
+                    applyTextPropertiesToPaint(paint, fontData);
 
-                    applySpacingAndFeatures(paint, font);
+                    applySpacingAndFeatures(paint, fontData);
 
-                    advance += paint.measureText(line);
+                    advance += paint.measureText(spanContent);
                 }
             }
-            cachedAdvance = advance;
-            return advance;
         }
 
         String line = mContent;
@@ -250,14 +251,15 @@ class TSpanView extends TextView {
             return advance;
         }
 
-        GlyphContext gc = getTextRootGlyphContext();
-        FontData font = gc.getFont();
         applyTextPropertiesToPaint(paint, font);
 
         applySpacingAndFeatures(paint, font);
 
-        cachedAdvance = paint.measureText(line);
-        return cachedAdvance;
+        advance += paint.measureText(line);
+
+        cachedAdvance = advance;
+
+        return advance;
     }
 
     final static String requiredFontFeatures = "'rlig', 'liga', 'clig', 'calt', 'locl', 'ccmp', 'mark', 'mkmk',";
