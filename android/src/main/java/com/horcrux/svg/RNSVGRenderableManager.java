@@ -127,13 +127,13 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
         svg.initBounds();
 
         RectF bounds = new RectF();
-        if (fill) {
+        if (fill && svg.mFillBounds != null) {
             bounds.union(svg.mFillBounds);
         }
-        if (stroke) {
+        if (stroke && svg.mStrokeBounds != null) {
             bounds.union(svg.mStrokeBounds);
         }
-        if (markers) {
+        if (markers && svg.mMarkerBounds != null) {
             bounds.union(svg.mMarkerBounds);
         }
         if (clipped) {
