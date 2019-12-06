@@ -159,6 +159,9 @@ class TextView extends GroupView {
         if (mPath != null) {
             return mPath;
         }
+        if (canvas == null || paint == null) {
+            return null;
+        }
         setupGlyphContext(canvas);
         return getGroupPath(canvas, paint);
     }
@@ -210,6 +213,9 @@ class TextView extends GroupView {
     Path getGroupPath(Canvas canvas, Paint paint) {
         if (mPath != null) {
             return mPath;
+        }
+        if (canvas == null || paint == null) {
+            return null;
         }
         pushGlyphContext();
         mPath = super.getPath(canvas, paint);
