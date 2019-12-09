@@ -62,6 +62,10 @@ function prepare(props) {
     clean.ref = forwardedRef;
   }
 
+  if (props.onPress && !props.onClick){
+    clean.onClick = props.onPress;
+  }
+
   const styles: {
     fontStyle?: string;
     fontFamily?: string;
