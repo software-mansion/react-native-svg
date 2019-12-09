@@ -142,28 +142,10 @@ class TSpanView extends TextView {
                 break;
         }
 
-        StaticLayout layout;
         boolean includeFontPadding = true;
         SpannableString text = new SpannableString(mContent);
         final double width = PropHelper.fromRelative(mInlineSize, canvas.getWidth(), 0, mScale, fontSize);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            layout = new StaticLayout(
-                    text,
-                    tp,
-                    (int)width,
-                    align,
-                    1.f,
-                    0.f,
-                    includeFontPadding);
-        } else {
-            layout = StaticLayout.Builder.obtain(text, 0, text.length(), tp, (int)width)
-                    .setAlignment(align)
-                    .setLineSpacing(0.f, 1.f)
-                    .setIncludePad(includeFontPadding)
-                    .setBreakStrategy(Layout.BREAK_STRATEGY_HIGH_QUALITY)
-                    .setHyphenationFrequency(Layout.HYPHENATION_FREQUENCY_NORMAL)
-                    .build();
-        }
+        StaticLayout layout = getStaticLayout(tp, align, includeFontPadding, text, (int) width);
 
         int lineAscent = layout.getLineAscent(0);
 
@@ -175,6 +157,28 @@ class TSpanView extends TextView {
         canvas.translate(dx, dy);
         layout.draw(canvas);
         canvas.restore();
+    }
+
+    @SuppressWarnings("deprecation")
+    private StaticLayout getStaticLayout(TextPaint tp, Layout.Alignment align, boolean includeFontPadding, SpannableString text, int width) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return new StaticLayout(
+                    text,
+                    tp,
+                    width,
+                    align,
+                    1.f,
+                    0.f,
+                    includeFontPadding);
+        } else {
+            return StaticLayout.Builder.obtain(text, 0, text.length(), tp, width)
+                    .setAlignment(align)
+                    .setLineSpacing(0.f, 1.f)
+                    .setIncludePad(includeFontPadding)
+                    .setBreakStrategy(Layout.BREAK_STRATEGY_HIGH_QUALITY)
+                    .setHyphenationFrequency(Layout.HYPHENATION_FREQUENCY_NORMAL)
+                    .build();
+        }
     }
 
 
