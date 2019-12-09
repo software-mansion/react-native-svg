@@ -140,6 +140,9 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 TopAlignedLabel *label;
 - (void)drawWrappedText:(CGContextRef)context gc:(RNSVGGlyphContext *)gc rect:(CGRect)rect {
     [self pushGlyphContext];
+    if (fontRef != nil) {
+         CFRelease(fontRef);
+     }
     fontRef = [self getFontFromContext];
     RNSVGFontData* fontdata = [gc getFont];
     CFStringRef string = (__bridge CFStringRef)self.content;
