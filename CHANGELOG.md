@@ -1,3 +1,11 @@
+## [9.13.4](https://github.com/react-native-community/react-native-svg/compare/v9.13.3...v9.13.4) (2019-12-09)
+
+
+### Bug Fixes
+
+* initialize PathView with empty path ([45192bd](https://github.com/react-native-community/react-native-svg/commit/45192bd0864198ffe2573f404974fc3d17a2ec93))
+* **ios:** Fix image size when calling getDataURL with bounds. fixes [#855](https://github.com/react-native-community/react-native-svg/issues/855) ([45b0859](https://github.com/react-native-community/react-native-svg/commit/45b0859b7f4fa0ee8c515b4e11f136ed3783c2e6))
+
 ## [9.13.3](https://github.com/react-native-community/react-native-svg/compare/v9.13.2...v9.13.3) (2019-10-25)
 
 
