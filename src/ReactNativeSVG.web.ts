@@ -62,7 +62,7 @@ function prepare(props) {
     clean.ref = forwardedRef;
   }
 
-  if (props.onPress && !props.onClick){
+  if (props.onPress && !props.onClick) {
     clean.onClick = props.onPress;
   }
 
