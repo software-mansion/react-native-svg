@@ -149,3 +149,14 @@ export default function extractProps(
 
   return extracted;
 }
+
+export function extract(instance: Object, props: Object & { style?: [] | {} }) {
+  return extractProps(propsAndStyles(props), instance);
+}
+
+export function withoutXY(
+  instance: Object,
+  props: Object & { style?: [] | {} },
+) {
+  return extractProps({ ...propsAndStyles(props), x: null, y: null }, instance);
+}

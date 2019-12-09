@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { requireNativeComponent } from 'react-native';
 import extractTransform from '../lib/extract/extractTransform';
-import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import { withoutXY } from '../lib/extract/extractProps';
 import { NumberProp, TransformProps } from '../lib/extract/types';
 import extractText from '../lib/extract/extractText';
 import { idPattern, pickNotNil } from '../lib/util';
@@ -51,14 +51,7 @@ export default class TextPath extends Shape<{
     const matched = href && href.match(idPattern);
     const match = matched && matched[1];
     if (match) {
-      const props = extractProps(
-        {
-          ...propsAndStyles(prop),
-          x: null,
-          y: null,
-        },
-        this,
-      );
+      const props = withoutXY(this, prop);
       Object.assign(
         props,
         extractText(

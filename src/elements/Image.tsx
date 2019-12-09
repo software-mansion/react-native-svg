@@ -5,7 +5,7 @@ import {
   requireNativeComponent,
 } from 'react-native';
 import { meetOrSliceTypes, alignEnum } from '../lib/extract/extractViewBox';
-import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import { withoutXY } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 
@@ -50,7 +50,7 @@ export default class SvgImage extends Shape<{
     return (
       <RNSVGImage
         ref={this.refMethod}
-        {...extractProps({ ...propsAndStyles(props), x: null, y: null }, this)}
+        {...withoutXY(this, props)}
         x={x}
         y={y}
         width={width}

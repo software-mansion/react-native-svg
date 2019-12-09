@@ -1,6 +1,6 @@
 import React from 'react';
 import { requireNativeComponent } from 'react-native';
-import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import { withoutXY } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import { idPattern } from '../lib/util';
 import Shape from './Shape';
@@ -48,7 +48,7 @@ export default class Use extends Shape<{
     return (
       <RNSVGUse
         ref={this.refMethod}
-        {...extractProps({ ...propsAndStyles(props), x: null, y: null }, this)}
+        {...withoutXY(this, props)}
         href={match}
         x={x}
         y={y}
