@@ -1,3 +1,10 @@
+## [9.13.5](https://github.com/react-native-community/react-native-svg/compare/v9.13.4...v9.13.5) (2019-12-09)
+
+
+### Bug Fixes
+
+* **android:** deprecation warning in TSpanView ([6035d2d](https://github.com/react-native-community/react-native-svg/commit/6035d2df137be94c144135ede1e8f70934e1439a))
+
 ## [9.13.4](https://github.com/react-native-community/react-native-svg/compare/v9.13.3...v9.13.4) (2019-12-09)
 
 
