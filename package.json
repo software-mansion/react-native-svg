@@ -12,6 +12,15 @@
   "module": "lib/module/index.js",
   "react-native": "src/index.ts",
   "types": "src/index.d.ts",
+  "files": [
+    "__tests__",
+    "android",
+    "elements",
+    "ios",
+    "lib",
+    "src",
+    "RNSVG.podspec"
+  ],
   "@react-native-community/bob": {
     "source": "src",
     "output": "lib",
