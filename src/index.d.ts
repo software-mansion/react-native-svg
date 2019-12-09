@@ -446,6 +446,29 @@ export interface MaskProps extends CommonPathProps {
 }
 export const Mask: React.ComponentClass<MaskProps>;
 
+export enum MarkerUnits {
+  STROKE_WIDTH = 'strokeWidth',
+  USER_SPACE_ON_USE = 'userSpaceOnUse',
+}
+
+export enum Orient {
+  AUTO = 'auto',
+  AUTO_START_REVERSE = 'auto-start-reverse',
+}
+
+export interface MarkerProps {
+  id?: string;
+  viewBox?: string;
+  preserveAspectRatio?: string;
+  refX?: NumberProp;
+  refY?: NumberProp;
+  markerWidth?: NumberProp;
+  markerHeight?: NumberProp;
+  markerUnits?: MarkerUnits;
+  orient?: Orient | NumberProp;
+}
+export const Marker: React.ComponentClass<MarkerProps>;
+
 export type Styles = { [property: string]: string };
 
 export interface AST {
