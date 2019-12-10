@@ -210,6 +210,13 @@ export interface CommonMaskProps {
   mask?: string;
 }
 
+export interface CommonMarkerProps {
+  marker?: string;
+  markerStart?: string;
+  markerMid?: string;
+  markerEnd?: string;
+}
+
 export interface CommonPathProps
   extends FillProps,
     StrokeProps,
@@ -219,6 +226,7 @@ export interface CommonPathProps
     ResponderProps,
     TouchableProps,
     DefinitionProps,
+    CommonMarkerProps,
     CommonMaskProps {}
 
 // Element props
