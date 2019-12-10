@@ -8,3 +8,6 @@ gradle/
 gradlew
 gradlew.bat
 local.properties
+.settings
+.classpath
+.project
