@@ -1,3 +1,10 @@
+## [9.13.6](https://github.com/react-native-community/react-native-svg/compare/v9.13.5...v9.13.6) (2019-12-10)
+
+
+### Bug Fixes
+
+* **android:** better npm ignores ([7bc717b](https://github.com/react-native-community/react-native-svg/commit/7bc717bfd533041e2a2dcd06f0c403a90b2bc138))
+
 ## [9.13.5](https://github.com/react-native-community/react-native-svg/compare/v9.13.4...v9.13.5) (2019-12-09)
 
 
