@@ -45,7 +45,7 @@
     "flow": "flow src",
     "flowgen": "flowgen src/index.d.ts -o src/index.js.flow",
     "flowtyped": "flow-typed install",
-    "format": "prettier README.md './src/**/*.{ts,tsx}' src/index.d.ts --write",
+    "format": "prettier README.md CONTRIBUTING.md CODE_OF_CONDUCT.md './src/**/*.{ts,tsx}' src/index.d.ts --write",
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
