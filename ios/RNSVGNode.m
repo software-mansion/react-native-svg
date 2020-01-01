@@ -174,6 +174,16 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     _name = name;
 }
 
+- (void)setDisplay:(NSString *)display
+{
+    if ([display isEqualToString:_display]) {
+        return;
+    }
+
+    [self invalidate];
+    _display = display;
+}
+
 - (void)setOpacity:(CGFloat)opacity
 {
     if (opacity == _opacity) {

@@ -1213,6 +1213,11 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         node.setName(name);
     }
 
+    @ReactProp(name = "display")
+    public void setDisplay(VirtualView node, String display) {
+        node.setDisplay(display);
+    }
+
     private void invalidateSvgView(VirtualView node) {
         SvgView view = node.getSvgView();
         if (view!= null) {

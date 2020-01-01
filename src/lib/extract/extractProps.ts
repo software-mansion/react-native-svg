@@ -46,6 +46,7 @@ export default function extractProps(
     markerMid?: string;
     markerEnd?: string;
     clipPath?: string;
+    display?: string;
     opacity?: NumberProp;
     onLayout?: () => void;
     transform?: number[] | string | TransformProps;
@@ -57,11 +58,12 @@ export default function extractProps(
   ref: Object,
 ) {
   const {
+    id,
     opacity,
     onLayout,
-    id,
     clipPath,
     clipRule,
+    display,
     mask,
     marker,
     markerStart = marker,
@@ -85,6 +87,7 @@ export default function extractProps(
     markerEnd?: string;
     clipPath?: string;
     clipRule?: number;
+    display?: string;
   } = {
     matrix,
     ...transformProps,
@@ -93,6 +96,7 @@ export default function extractProps(
     ...extractResponder(props, ref),
     ...extractFill(props, styleProperties),
     ...extractStroke(props, styleProperties),
+    display: display === 'none' ? 'none' : undefined,
   };
 
   if (onLayout) {

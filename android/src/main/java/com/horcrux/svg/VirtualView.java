@@ -77,6 +77,7 @@ abstract public class VirtualView extends ReactViewGroup {
     final float mScale;
     private boolean mResponsible;
     private boolean mOnLayout;
+    String mDisplay;
     String mName;
 
     private SvgView svgView;
@@ -239,6 +240,12 @@ abstract public class VirtualView extends ReactViewGroup {
     @ReactProp(name = "name")
     public void setName(String name) {
         mName = name;
+        invalidate();
+    }
+
+    @ReactProp(name = "display")
+    public void setDisplay(String display) {
+        mDisplay = display;
         invalidate();
     }
 

@@ -94,6 +94,9 @@ class GroupView extends RenderableView {
             }
             if (child instanceof VirtualView) {
                 VirtualView node = ((VirtualView)child);
+                if ("none".equals(node.mDisplay)) {
+                    continue;
+                }
                 if (node instanceof RenderableView) {
                     ((RenderableView)node).mergeProperties(self);
                 }
