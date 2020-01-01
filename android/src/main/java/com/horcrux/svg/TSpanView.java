@@ -93,7 +93,12 @@ class TSpanView extends TextView {
     void draw(Canvas canvas, Paint paint, float opacity) {
         if (mContent != null) {
             if (mInlineSize != null && mInlineSize.value != 0) {
-                drawWrappedText(canvas, paint);
+                if (setupFillPaint(paint, opacity * fillOpacity)) {
+                    drawWrappedText(canvas, paint);
+                }
+                if (setupStrokePaint(paint, opacity * strokeOpacity)) {
+                    drawWrappedText(canvas, paint);
+                }
             } else {
                 int numEmoji = emoji.size();
                 if (numEmoji > 0) {

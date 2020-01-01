@@ -421,7 +421,7 @@ abstract public class RenderableView extends VirtualView {
      * Sets up paint according to the props set on a view. Returns {@code true}
      * if the fill should be drawn, {@code false} if not.
      */
-    private boolean setupFillPaint(Paint paint, float opacity) {
+    boolean setupFillPaint(Paint paint, float opacity) {
         if (fill != null && fill.size() > 0) {
             paint.reset();
             paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
@@ -436,7 +436,7 @@ abstract public class RenderableView extends VirtualView {
      * Sets up paint according to the props set on a view. Returns {@code true}
      * if the stroke should be drawn, {@code false} if not.
      */
-    private boolean setupStrokePaint(Paint paint, float opacity) {
+    boolean setupStrokePaint(Paint paint, float opacity) {
         paint.reset();
         double strokeWidth = relativeOnOther(this.strokeWidth);
         if (strokeWidth == 0 || stroke == null || stroke.size() == 0) {

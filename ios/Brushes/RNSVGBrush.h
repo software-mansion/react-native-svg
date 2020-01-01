@@ -29,6 +29,8 @@
 
 - (BOOL)applyStrokeColor:(CGContextRef)context opacity:(CGFloat)opacity;
 
+- (CGColorRef)getColorWithOpacity:(CGFloat)opacity;
+
 /**
  * @abstract
  * paint fills the context with a brush. The context is assumed to

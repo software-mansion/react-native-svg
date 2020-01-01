@@ -29,6 +29,11 @@
     CGColorRelease(_color);
 }
 
+- (CGColorRef)getColorWithOpacity:(CGFloat)opacity
+{
+    return CGColorCreateCopyWithAlpha(_color, opacity * CGColorGetAlpha(_color));
+}
+
 - (BOOL)applyFillColor:(CGContextRef)context opacity:(CGFloat)opacity
 {
     CGColorRef color = CGColorCreateCopyWithAlpha(_color, opacity * CGColorGetAlpha(_color));
