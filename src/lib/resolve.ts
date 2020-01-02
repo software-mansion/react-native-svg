@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native-web';
+import { StyleSheet } from 'react-native';
 
 // Kept in separate file, to avoid name collision with Symbol element
 export function resolve(styleProp, cleanedProps) {

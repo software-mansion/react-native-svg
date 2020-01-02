@@ -80,9 +80,15 @@ const prepare = <T extends BaseProps>(
     fontStyle,
     style,
     forwardedRef,
+    onPress,
+    onPressIn,
+    onPressOut,
+    onLongPress,
     // @ts-ignore
     ...rest
   } = props;
+  const hasTouchableProperty =
+    onPress || onPressIn || onPressOut || onLongPress;
   const clean: {
     accessible?: boolean;
     onStartShouldSetResponder?: (e: GestureResponderEvent) => boolean;
@@ -95,15 +101,20 @@ const prepare = <T extends BaseProps>(
     style?: object;
     ref?: {};
   } = {
-    ...rest,
     accessible: accessible !== false,
-    onStartShouldSetResponder: self.touchableHandleStartShouldSetResponder,
-    onResponderTerminationRequest:
-      self.touchableHandleResponderTerminationRequest,
-    onResponderGrant: self.touchableHandleResponderGrant,
-    onResponderMove: self.touchableHandleResponderMove,
-    onResponderRelease: self.touchableHandleResponderRelease,
-    onResponderTerminate: self.touchableHandleResponderTerminate,
+    ...(hasTouchableProperty
+      ? {
+          onStartShouldSetResponder:
+            self.touchableHandleStartShouldSetResponder,
+          onResponderTerminationRequest:
+            self.touchableHandleResponderTerminationRequest,
+          onResponderGrant: self.touchableHandleResponderGrant,
+          onResponderMove: self.touchableHandleResponderMove,
+          onResponderRelease: self.touchableHandleResponderRelease,
+          onResponderTerminate: self.touchableHandleResponderTerminate,
+        }
+      : null),
+    ...rest,
   };
 
   const transform = [];
