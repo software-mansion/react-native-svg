@@ -8,10 +8,6 @@ import {
 import { TransformProps } from '../lib/extract/types';
 
 const RNSVGRenderableManager = NativeModules.RNSVGRenderableManager;
-const { touchableGetInitialState } = SvgTouchableMixin;
-const touchKeys = Object.keys(SvgTouchableMixin);
-const touchVals = touchKeys.map(key => SvgTouchableMixin[key]);
-const numTouchKeys = touchKeys.length;
 
 export interface SVGBoundingBoxOptions {
   fill?: boolean;
@@ -241,16 +237,7 @@ export default class Shape<P> extends Component<P> {
   root: (Shape<P> & NativeMethodsMixinStatic) | null = null;
   constructor(props: P, context: {}) {
     super(props, context);
-    for (let i = 0; i < numTouchKeys; i++) {
-      const key = touchKeys[i];
-      const val = touchVals[i];
-      if (typeof val === 'function') {
-        this[key] = val.bind(this);
-      } else {
-        this[key] = val;
-      }
-    }
-    this.state = touchableGetInitialState();
+    SvgTouchableMixin(this);
   }
   refMethod: (
     instance: (Shape<P> & NativeMethodsMixinStatic) | null,

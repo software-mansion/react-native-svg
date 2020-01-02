@@ -177,6 +177,12 @@ export type TransformProps = {
 export interface CommonMaskProps {
   mask?: string;
 }
+export interface CommonMarkerProps {
+  marker?: string;
+  markerStart?: string;
+  markerMid?: string;
+  markerEnd?: string;
+}
 export type CommonPathProps = { ... } & FillProps &
   StrokeProps &
   ClipProps &
@@ -185,6 +191,7 @@ export type CommonPathProps = { ... } & FillProps &
   ResponderProps &
   TouchableProps &
   DefinitionProps &
+  CommonMarkerProps &
   CommonMaskProps;
 export type CircleProps = {
   cx?: NumberProp,

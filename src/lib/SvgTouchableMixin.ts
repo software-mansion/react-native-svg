@@ -10,9 +10,10 @@ const {
   touchableHandleResponderMove,
   touchableHandleResponderRelease,
   touchableHandleResponderTerminate,
+  touchableGetInitialState,
 } = Mixin;
 
-export default {
+const SvgTouchableMixin = {
   ...Mixin,
 
   touchableHandleStartShouldSetResponder(e: GestureResponderEvent) {
@@ -113,4 +114,21 @@ export default {
     const { delayPressOut } = this.props;
     return delayPressOut || 0;
   },
+};
+
+const touchKeys = Object.keys(SvgTouchableMixin);
+const touchVals = touchKeys.map(key => SvgTouchableMixin[key]);
+const numTouchKeys = touchKeys.length;
+
+export default (target: { [x: string]: unknown; state: unknown }) => {
+  for (let i = 0; i < numTouchKeys; i++) {
+    const key = touchKeys[i];
+    const val = touchVals[i];
+    if (typeof val === 'function') {
+      target[key] = val.bind(target);
+    } else {
+      target[key] = val;
+    }
+  }
+  target.state = touchableGetInitialState();
 };

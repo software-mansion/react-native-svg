@@ -1,18 +1,72 @@
-import { createElement } from 'react-native-web';
+// @ts-ignore
+import * as React from 'react';
+import { createElement, GestureResponderEvent } from 'react-native';
+import { NumberProp, TransformProps } from './lib/extract/types';
+import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
-import { Component } from 'react';
-import { NumberProp } from './lib/extract/types';
+
+type BlurEvent = Object;
+type FocusEvent = Object;
+type PressEvent = Object;
+type LayoutEvent = Object;
+type EdgeInsetsProp = Object;
+
+interface BaseProps {
+  accessible?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  accessibilityIgnoresInvertColors?: boolean;
+  accessibilityRole?: string;
+  accessibilityState?: Object;
+  delayLongPress?: number;
+  delayPressIn?: number;
+  delayPressOut?: number;
+  disabled?: boolean;
+  hitSlop?: EdgeInsetsProp;
+  nativeID?: string;
+  touchSoundDisabled?: boolean;
+  onBlur?: (e: BlurEvent) => void;
+  onFocus?: (e: FocusEvent) => void;
+  onLayout?: (event: LayoutEvent) => object;
+  onLongPress?: (event: PressEvent) => object;
+  onClick?: (event: PressEvent) => object;
+  onPress?: (event: PressEvent) => object;
+  onPressIn?: (event: PressEvent) => object;
+  onPressOut?: (event: PressEvent) => object;
+  pressRetentionOffset?: EdgeInsetsProp;
+  rejectResponderTermination?: boolean;
+
+  translate: TransformProps;
+  scale: NumberProp;
+  rotation: NumberProp;
+  skewX: NumberProp;
+  skewY: NumberProp;
+  originX: NumberProp;
+  originY: NumberProp;
+
+  fontStyle?: string;
+  fontWeight?: NumberProp;
+  fontSize?: NumberProp;
+  fontFamily?: string;
+  forwardedRef: {};
+  style: {};
+}
 
 /**
  * `react-native-svg` supports additional props that aren't defined in the spec.
  * This function replaces them in a spec conforming manner.
  *
- * @param {Object} props Properties given to us.
- * @returns {Object} Cleaned object.
+ * @param {WebShape} self Instance given to us.
+ * @param {Object?} props Optional overridden props given to us.
+ * @returns {Object} Cleaned props object.
  * @private
  */
-function prepare(props) {
+const prepare = <T extends BaseProps>(
+  self: WebShape<T>,
+  props = self.props,
+) => {
   const {
+    accessible,
     translate,
     scale,
     rotation,
@@ -26,8 +80,31 @@ function prepare(props) {
     fontStyle,
     style,
     forwardedRef,
-    ...clean
+    // @ts-ignore
+    ...rest
   } = props;
+  const clean: {
+    accessible?: boolean;
+    onStartShouldSetResponder?: (e: GestureResponderEvent) => boolean;
+    onResponderMove?: (e: GestureResponderEvent) => void;
+    onResponderGrant?: (e: GestureResponderEvent) => void;
+    onResponderRelease?: (e: GestureResponderEvent) => void;
+    onResponderTerminate?: (e: GestureResponderEvent) => void;
+    onResponderTerminationRequest?: (e: GestureResponderEvent) => boolean;
+    transform?: string;
+    style?: object;
+    ref?: {};
+  } = {
+    ...rest,
+    accessible: accessible !== false,
+    onStartShouldSetResponder: self.touchableHandleStartShouldSetResponder,
+    onResponderTerminationRequest:
+      self.touchableHandleResponderTerminationRequest,
+    onResponderGrant: self.touchableHandleResponderGrant,
+    onResponderMove: self.touchableHandleResponderMove,
+    onResponderRelease: self.touchableHandleResponderRelease,
+    onResponderTerminate: self.touchableHandleResponderTerminate,
+  };
 
   const transform = [];
 
@@ -62,10 +139,6 @@ function prepare(props) {
     clean.ref = forwardedRef;
   }
 
-  if (props.onPress && !props.onClick) {
-    clean.onClick = props.onPress;
-  }
-
   const styles: {
     fontStyle?: string;
     fontFamily?: string;
@@ -89,153 +162,166 @@ function prepare(props) {
   clean.style = resolve(style, styles);
 
   return clean;
-}
+};
 
-export class Circle extends Component {
-  render() {
-    return createElement('circle', prepare(this.props));
+export class WebShape<
+  P extends BaseProps = BaseProps,
+  C = {}
+> extends React.Component<P, C> {
+  [x: string]: unknown;
+  constructor(props: P, context: C) {
+    super(props, context);
+    SvgTouchableMixin(this);
   }
 }
 
-export class ClipPath extends Component {
-  render() {
-    return createElement('clipPath', prepare(this.props));
+export class Circle extends WebShape {
+  render(): JSX.Element {
+    return createElement('circle', prepare(this));
   }
 }
 
-export class Defs extends Component {
-  render() {
-    return createElement('defs', prepare(this.props));
+export class ClipPath extends WebShape {
+  render(): JSX.Element {
+    return createElement('clipPath', prepare(this));
   }
 }
 
-export class Ellipse extends Component {
-  render() {
-    return createElement('ellipse', prepare(this.props));
+export class Defs extends WebShape {
+  render(): JSX.Element {
+    return createElement('defs', prepare(this));
   }
 }
 
-export class G extends Component<{
-  x?: NumberProp;
-  y?: NumberProp;
-  translate?: string;
-}> {
-  render() {
+export class Ellipse extends WebShape {
+  render(): JSX.Element {
+    return createElement('ellipse', prepare(this));
+  }
+}
+
+export class G extends WebShape<
+  BaseProps & {
+    x?: NumberProp;
+    y?: NumberProp;
+    translate?: string;
+  }
+> {
+  render(): JSX.Element {
     const { x, y, ...rest } = this.props;
 
     if ((x || y) && !rest.translate) {
       rest.translate = `${x || 0}, ${y || 0}`;
     }
 
-    return createElement('g', prepare(rest));
+    return createElement('g', prepare(this, rest));
   }
 }
 
-export class Image extends Component {
-  render() {
-    return createElement('image', prepare(this.props));
+export class Image extends WebShape {
+  render(): JSX.Element {
+    return createElement('image', prepare(this));
   }
 }
 
-export class Line extends Component {
-  render() {
-    return createElement('line', prepare(this.props));
+export class Line extends WebShape {
+  render(): JSX.Element {
+    return createElement('line', prepare(this));
   }
 }
 
-export class LinearGradient extends Component {
-  render() {
-    return createElement('linearGradient', prepare(this.props));
+export class LinearGradient extends WebShape {
+  render(): JSX.Element {
+    return createElement('linearGradient', prepare(this));
   }
 }
 
-export class Path extends Component {
-  render() {
-    return createElement('path', prepare(this.props));
+export class Path extends WebShape {
+  render(): JSX.Element {
+    return createElement('path', prepare(this));
   }
 }
 
-export class Polygon extends Component {
-  render() {
-    return createElement('polygon', prepare(this.props));
+export class Polygon extends WebShape {
+  render(): JSX.Element {
+    return createElement('polygon', prepare(this));
   }
 }
 
-export class Polyline extends Component {
-  render() {
-    return createElement('polyline', prepare(this.props));
+export class Polyline extends WebShape {
+  render(): JSX.Element {
+    return createElement('polyline', prepare(this));
   }
 }
 
-export class RadialGradient extends Component {
-  render() {
-    return createElement('radialGradient', prepare(this.props));
+export class RadialGradient extends WebShape {
+  render(): JSX.Element {
+    return createElement('radialGradient', prepare(this));
   }
 }
 
-export class Rect extends Component {
-  render() {
-    return createElement('rect', prepare(this.props));
+export class Rect extends WebShape {
+  render(): JSX.Element {
+    return createElement('rect', prepare(this));
   }
 }
 
-export class Stop extends Component {
-  render() {
-    return createElement('stop', prepare(this.props));
+export class Stop extends WebShape {
+  render(): JSX.Element {
+    return createElement('stop', prepare(this));
   }
 }
 
-export class Svg extends Component {
-  render() {
-    return createElement('svg', prepare(this.props));
+export class Svg extends WebShape {
+  render(): JSX.Element {
+    return createElement('svg', prepare(this));
   }
 }
 
-export class Symbol extends Component {
-  render() {
-    return createElement('symbol', prepare(this.props));
+export class Symbol extends WebShape {
+  render(): JSX.Element {
+    return createElement('symbol', prepare(this));
   }
 }
 
-export class Text extends Component {
-  render() {
-    return createElement('text', prepare(this.props));
+export class Text extends WebShape {
+  render(): JSX.Element {
+    return createElement('text', prepare(this));
   }
 }
 
-export class TSpan extends Component {
-  render() {
-    return createElement('tspan', prepare(this.props));
+export class TSpan extends WebShape {
+  render(): JSX.Element {
+    return createElement('tspan', prepare(this));
   }
 }
 
-export class TextPath extends Component {
-  render() {
-    return createElement('textPath', prepare(this.props));
+export class TextPath extends WebShape {
+  render(): JSX.Element {
+    return createElement('textPath', prepare(this));
   }
 }
 
-export class Use extends Component {
-  render() {
-    return createElement('use', prepare(this.props));
+export class Use extends WebShape {
+  render(): JSX.Element {
+    return createElement('use', prepare(this));
   }
 }
 
-export class Mask extends Component {
-  render() {
-    return createElement('mask', prepare(this.props));
+export class Mask extends WebShape {
+  render(): JSX.Element {
+    return createElement('mask', prepare(this));
   }
 }
 
-export class Marker extends Component {
-  render() {
-    return createElement('marker', prepare(this.props));
+export class Marker extends WebShape {
+  render(): JSX.Element {
+    return createElement('marker', prepare(this));
   }
 }
 
-export class Pattern extends Component {
-  render() {
-    return createElement('pattern', prepare(this.props));
+export class Pattern extends WebShape {
+  render(): JSX.Element {
+    return createElement('pattern', prepare(this));
   }
 }
 
