@@ -72,7 +72,9 @@
             CGContextClipToRect(context, rect);
             [svgView drawToContext:context withRect:rect];
         } else {
-            [node drawRect:rect];
+            node.hidden = false;
+            [node.layer renderInContext:context];
+            node.hidden = true;
         }
 
         return YES;
