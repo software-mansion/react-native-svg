@@ -3,7 +3,7 @@ import * as React from 'react';
 import { createElement, GestureResponderEvent } from 'react-native';
 import { NumberProp, TransformProps } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
-import { IterableStyles, resolve } from './lib/resolve';
+import { resolve } from './lib/resolve';
 
 type BlurEvent = Object;
 type FocusEvent = Object;
@@ -49,7 +49,7 @@ interface BaseProps {
   fontSize?: NumberProp;
   fontFamily?: string;
   forwardedRef: {};
-  style: IterableStyles<{}>;
+  style: Iterable<{}>;
 }
 
 /**
