@@ -117,23 +117,19 @@ export default function extractProps(
     extracted.name = String(id);
   }
 
+  if (clipRule) {
+    extracted.clipRule = clipRules[clipRule] === 0 ? 0 : 1;
+  }
   if (clipPath) {
-    if (clipRule) {
-      extracted.clipRule = clipRules[clipRule] === 0 ? 0 : 1;
-    }
-
-    if (clipPath) {
-      const matched = clipPath.match(idPattern);
-
-      if (matched) {
-        extracted.clipPath = matched[1];
-      } else {
-        console.warn(
-          'Invalid `clipPath` prop, expected a clipPath like "#id", but got: "' +
-            clipPath +
-            '"',
-        );
-      }
+    const matched = clipPath.match(idPattern);
+    if (matched) {
+      extracted.clipPath = matched[1];
+    } else {
+      console.warn(
+        'Invalid `clipPath` prop, expected a clipPath like "#id", but got: "' +
+          clipPath +
+          '"',
+      );
     }
   }
 
