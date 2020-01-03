@@ -23,6 +23,7 @@ import android.view.View;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.views.view.ReactViewGroup;
 
 import javax.annotation.Nullable;
 
@@ -123,6 +124,10 @@ class GroupView extends RenderableView {
                 if (svgView.isResponsible()) {
                     svg.enableTouchEvents();
                 }
+            } else if (child instanceof ReactViewGroup) {
+                // Enable rendering other native ancestor views in e.g. masks
+                ReactViewGroup vg = (ReactViewGroup) child;
+                vg.draw(canvas);
             }
         }
         this.setClientRect(groupRect);

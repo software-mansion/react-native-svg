@@ -559,13 +559,17 @@ abstract public class VirtualView extends ReactViewGroup {
             return;
         }
         mClientRect = rect;
-        if (mClientRect == null || (!mResponsible && !mOnLayout)) {
+        if (mClientRect == null) {
+            return;
+        }
+        int width = (int) Math.ceil(mClientRect.width());
+        int height = (int) Math.ceil(mClientRect.height());
+        setMeasuredDimension(width, height);
+        if ((!mResponsible && !mOnLayout)) {
             return;
         }
         int left = (int) Math.floor(mClientRect.left);
         int top = (int) Math.floor(mClientRect.top);
-        int width = (int) Math.ceil(mClientRect.width());
-        int height = (int) Math.ceil(mClientRect.height());
         if (mResponsible) {
             int right = (int) Math.ceil(mClientRect.right);
             int bottom = (int) Math.ceil(mClientRect.bottom);
@@ -576,7 +580,6 @@ abstract public class VirtualView extends ReactViewGroup {
                 setRight(right);
                 setBottom(bottom);
             }
-            setMeasuredDimension(width, height);
         }
         if (mOnLayout) {
             EventDispatcher eventDispatcher = mContext
