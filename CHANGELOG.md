@@ -1,3 +1,15 @@
+# [10.0.0](https://github.com/react-native-community/react-native-svg/compare/v9.14.0...v10.0.0) (2020-01-04)
+
+
+* feat!: Masks now support native elements ([966881a](https://github.com/react-native-community/react-native-svg/commit/966881a67d302e4418ad302465aa4a6f9a7a2e8a))
+
+
+### BREAKING CHANGES
+
+* If you had native elements inside any Svg root before,
+Then your content might change appearance when upgrading,
+as e.g. transforms and masks now take effect.
+
 # [9.14.0](https://github.com/react-native-community/react-native-svg/compare/v9.13.6...v9.14.0) (2020-01-04)
 
 
