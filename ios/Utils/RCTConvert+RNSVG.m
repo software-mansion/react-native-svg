@@ -163,7 +163,7 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
         colorsAndOffsets[colorIndex + 2] = b;
         colorsAndOffsets[colorIndex + 3] = a;
 
-        colorsAndOffsets[offsetIndex + i] = offset;
+        colorsAndOffsets[offsetIndex + i] = fmax(0, fmin(offset, 1));
     }
 
     CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
