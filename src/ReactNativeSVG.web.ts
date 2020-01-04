@@ -175,6 +175,52 @@ const prepare = <T extends BaseProps>(
   return clean;
 };
 
+const getBoundingClientRect = (node: SVGElement) => {
+  if (node) {
+    // @ts-ignore
+    const isElement = node.nodeType === 1; /* Node.ELEMENT_NODE */
+    // @ts-ignore
+    if (isElement && typeof node.getBoundingClientRect === 'function') {
+      // @ts-ignore
+      return node.getBoundingClientRect();
+    }
+  }
+};
+
+const measureLayout = (
+  node: SVGElement,
+  callback: (
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    left: number,
+    top: number,
+  ) => void,
+) => {
+  // @ts-ignore
+  const relativeNode = node && node.parentNode;
+  if (node && relativeNode) {
+    setTimeout(() => {
+      const relativeRect = getBoundingClientRect(relativeNode);
+      const { height, left, top, width } = getBoundingClientRect(node);
+      const x = left - relativeRect.left;
+      const y = top - relativeRect.top;
+      callback(x, y, width, height, left, top);
+    }, 0);
+  }
+};
+
+function remeasure() {
+  // @ts-ignore
+  const tag = this.state.touchable.responderID;
+  if (tag == null) {
+    return;
+  }
+  // @ts-ignore
+  measureLayout(tag, this._handleQueryLayout);
+}
+
 export class WebShape<
   P extends BaseProps = BaseProps,
   C = {}
@@ -183,6 +229,7 @@ export class WebShape<
   constructor(props: P, context: C) {
     super(props, context);
     SvgTouchableMixin(this);
+    this._remeasureMetricsOnActivation = remeasure.bind(this);
   }
 }
 
