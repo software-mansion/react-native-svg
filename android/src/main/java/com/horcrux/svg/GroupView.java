@@ -77,10 +77,8 @@ class GroupView extends RenderableView {
 
     void draw(final Canvas canvas, final Paint paint, final float opacity) {
         setupGlyphContext(canvas);
-        if (opacity > MIN_OPACITY_FOR_DRAW) {
-            clip(canvas, paint);
-            drawGroup(canvas, paint, opacity);
-        }
+        clip(canvas, paint);
+        drawGroup(canvas, paint, opacity);
     }
 
     void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {

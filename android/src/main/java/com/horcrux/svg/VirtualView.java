@@ -45,8 +45,6 @@ abstract public class VirtualView extends ReactViewGroup {
     */
     private static final double M_SQRT1_2l = 0.707106781186547524400844362104849039;
 
-    static final float MIN_OPACITY_FOR_DRAW = 0.01f;
-
     private static final float[] sRawMatrix = new float[]{
         1, 0, 0,
         0, 1, 0,

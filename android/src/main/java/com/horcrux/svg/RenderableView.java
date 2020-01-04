@@ -336,49 +336,47 @@ abstract public class RenderableView extends VirtualView {
     void draw(Canvas canvas, Paint paint, float opacity) {
         opacity *= mOpacity;
 
-        if (opacity > MIN_OPACITY_FOR_DRAW) {
-            boolean computePaths = mPath == null;
-            if (computePaths) {
-                mPath = getPath(canvas, paint);
-                mPath.setFillType(fillRule);
-            }
-            boolean nonScalingStroke = vectorEffect == VECTOR_EFFECT_NON_SCALING_STROKE;
-            Path path = mPath;
-            if (nonScalingStroke) {
-                Path scaled = new Path();
-                //noinspection deprecation
-                mPath.transform(mCTM, scaled);
-                canvas.setMatrix(null);
-                path = scaled;
-            }
-
-            if (computePaths || path != mPath) {
-                mBox = new RectF();
-                path.computeBounds(mBox, true);
-            }
-
-            RectF clientRect = new RectF(mBox);
-            mCTM.mapRect(clientRect);
-            this.setClientRect(clientRect);
-
-            clip(canvas, paint);
-
-            if (setupFillPaint(paint, opacity * fillOpacity)) {
-                if (computePaths) {
-                    mFillPath = new Path();
-                    paint.getFillPath(path, mFillPath);
-                }
-                canvas.drawPath(path, paint);
-            }
-            if (setupStrokePaint(paint, opacity * strokeOpacity)) {
-                if (computePaths) {
-                    mStrokePath = new Path();
-                    paint.getFillPath(path, mStrokePath);
-                }
-                canvas.drawPath(path, paint);
-            }
-            renderMarkers(canvas, paint, opacity);
+        boolean computePaths = mPath == null;
+        if (computePaths) {
+            mPath = getPath(canvas, paint);
+            mPath.setFillType(fillRule);
         }
+        boolean nonScalingStroke = vectorEffect == VECTOR_EFFECT_NON_SCALING_STROKE;
+        Path path = mPath;
+        if (nonScalingStroke) {
+            Path scaled = new Path();
+            //noinspection deprecation
+            mPath.transform(mCTM, scaled);
+            canvas.setMatrix(null);
+            path = scaled;
+        }
+
+        if (computePaths || path != mPath) {
+            mBox = new RectF();
+            path.computeBounds(mBox, true);
+        }
+
+        RectF clientRect = new RectF(mBox);
+        mCTM.mapRect(clientRect);
+        this.setClientRect(clientRect);
+
+        clip(canvas, paint);
+
+        if (setupFillPaint(paint, opacity * fillOpacity)) {
+            if (computePaths) {
+                mFillPath = new Path();
+                paint.getFillPath(path, mFillPath);
+            }
+            canvas.drawPath(path, paint);
+        }
+        if (setupStrokePaint(paint, opacity * strokeOpacity)) {
+            if (computePaths) {
+                mStrokePath = new Path();
+                paint.getFillPath(path, mStrokePath);
+            }
+            canvas.drawPath(path, paint);
+        }
+        renderMarkers(canvas, paint, opacity);
     }
 
     void renderMarkers(Canvas canvas, Paint paint, float opacity) {
