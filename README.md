@@ -1074,6 +1074,7 @@ If you had native elements inside any Svg root before (which was unsupported),
 Then your content might change appearance when upgrading, 
 as e.g. transforms and masks now take effect.
 
+
 #### Pattern
 
 A pattern is used to fill or stroke an object using a pre-defined graphic object which can be replicated ("tiled") at fixed intervals in x and y to cover the areas to be painted. Patterns are defined using a ‘pattern’ element and then referenced by properties ‘fill’ and ‘stroke’ on a given graphics element to indicate that the given element shall be filled or stroked with the referenced pattern.
