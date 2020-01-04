@@ -1,3 +1,25 @@
+# [9.14.0](https://github.com/react-native-community/react-native-svg/compare/v9.13.6...v9.14.0) (2020-01-04)
+
+
+### Bug Fixes
+
+* **android:** correct values for measureInWindow, fixes [#1231](https://github.com/react-native-community/react-native-svg/issues/1231) ([3bf07f8](https://github.com/react-native-community/react-native-svg/commit/3bf07f808554a80d09a3b40bc355715fe0bc0eea))
+* **android:** elements not touchable if below opacity limit ([ebc7220](https://github.com/react-native-community/react-native-svg/commit/ebc7220f4d464d4a2e9306c9f18580ac9c2a1494)), closes [#1200](https://github.com/react-native-community/react-native-svg/issues/1200)
+* **android:** fix radial gradient vertical center offset scaling ([d5bddd5](https://github.com/react-native-community/react-native-svg/commit/d5bddd5e2d45cea48de9410a3d5998ffb9049a32))
+* **ios:** crash when offset is outside range [#1201](https://github.com/react-native-community/react-native-svg/issues/1201) ([a2ef51f](https://github.com/react-native-community/react-native-svg/commit/a2ef51fdfafae1bfb71879b477e6eef02cd1655d))
+* **web:** fix gesture responder dimensions measurement ([36c20b3](https://github.com/react-native-community/react-native-svg/commit/36c20b3763fe4beb8d0ec2fa1ea54085f5131fc5))
+* extraction of clip rule, fixes [#1233](https://github.com/react-native-community/react-native-svg/issues/1233) ([f93bdde](https://github.com/react-native-community/react-native-svg/commit/f93bdde26fd96944e20bb84fbcf3d4f9fd58eda3))
+* Text color doesn't work with inlineSize [#1225](https://github.com/react-native-community/react-native-svg/issues/1225) ([027b8c1](https://github.com/react-native-community/react-native-svg/commit/027b8c16aa99267467b5aef0fcfd1aa8c2c8582a))
+
+
+### Features
+
+* **android:** support using other native views in e.g. masks ([15b4ac6](https://github.com/react-native-community/react-native-svg/commit/15b4ac63b93ac3f6b682de0f03f1822d90bcad34))
+* **ios:** support using other native views in e.g. masks ([518a3b1](https://github.com/react-native-community/react-native-svg/commit/518a3b18360a9d04939e244db7f6b6d95e628d2e))
+* **web:** Implement support for event, touch & responder handlers ([60561ec](https://github.com/react-native-community/react-native-svg/commit/60561ec38d4eab0cc39ae9106bd166651e6d2252))
+* **web:** Optimize: only set responders if press handler exists ([23250ad](https://github.com/react-native-community/react-native-svg/commit/23250ad30af79e2f2b3a3bead52b0a02cdc72b09))
+* Implement display="none" ([3e3ad13](https://github.com/react-native-community/react-native-svg/commit/3e3ad13b65ed70f606f6826947cbcfb4f7ce2c4b)), closes [#1220](https://github.com/react-native-community/react-native-svg/issues/1220)
+
 ## [9.13.6](https://github.com/react-native-community/react-native-svg/compare/v9.13.5...v9.13.6) (2019-12-10)
 
 
