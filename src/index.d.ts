@@ -259,6 +259,14 @@ export interface GProps extends CommonPathProps {
 }
 export const G: React.ComponentClass<GProps>;
 
+export interface ForeignObjectProps {
+  x?: NumberProp;
+  y?: NumberProp;
+  width?: NumberProp;
+  height?: NumberProp;
+}
+export const ForeignObject: React.ComponentClass<ForeignObjectProps>;
+
 export interface ImageProps
   extends ResponderProps,
     CommonMaskProps,

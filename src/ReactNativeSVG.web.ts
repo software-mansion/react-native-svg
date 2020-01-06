@@ -371,6 +371,12 @@ export class Mask extends WebShape {
   }
 }
 
+export class ForeignObject extends WebShape {
+  render(): JSX.Element {
+    return createElement('foreignObject', prepare(this));
+  }
+}
+
 export class Marker extends WebShape {
   render(): JSX.Element {
     return createElement('marker', prepare(this));

@@ -6,7 +6,7 @@ import extractTransform from '../lib/extract/extractTransform';
 import { TransformProps } from '../lib/extract/types';
 import Shape from './Shape';
 
-export default class G extends Shape<{}> {
+export default class G<P> extends Shape<P> {
   static displayName = 'G';
 
   setNativeProps = (
