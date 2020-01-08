@@ -66,7 +66,6 @@ const prepare = <T extends BaseProps>(
   props = self.props,
 ) => {
   const {
-    accessible,
     translate,
     scale,
     rotation,
@@ -90,7 +89,6 @@ const prepare = <T extends BaseProps>(
   const hasTouchableProperty =
     onPress || onPressIn || onPressOut || onLongPress;
   const clean: {
-    accessible?: boolean;
     onStartShouldSetResponder?: (e: GestureResponderEvent) => boolean;
     onResponderMove?: (e: GestureResponderEvent) => void;
     onResponderGrant?: (e: GestureResponderEvent) => void;
@@ -101,7 +99,6 @@ const prepare = <T extends BaseProps>(
     style?: {};
     ref?: {};
   } = {
-    accessible: accessible !== false,
     ...(hasTouchableProperty
       ? {
           onStartShouldSetResponder:
