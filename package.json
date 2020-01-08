@@ -60,7 +60,7 @@
   },
   "dependencies": {
     "css-select": "^2.0.2",
-    "css-tree": "^1.0.0-alpha.37"
+    "css-tree": "^1.0.0-alpha.39"
   },
   "devDependencies": {
     "@react-native-community/bob": "^0.7.0",
