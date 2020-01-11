@@ -1,9 +1,11 @@
 
 #import "RNSVGGroup.h"
 #import "RNSVGLength.h"
+#import "RCTEventDispatcher.h"
 
 @interface RNSVGForeignObject : RNSVGGroup
 
+- (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher;
 @property (nonatomic, strong) RNSVGLength *x;
 @property (nonatomic, strong) RNSVGLength *y;
 @property (nonatomic, strong) RNSVGLength *foreignObjectwidth;
