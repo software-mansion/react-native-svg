@@ -18,7 +18,20 @@
 - (void)parseReference
 {
     self.dirty = false;
-    [self.svgView defineForeignObject:self foreignObjectName:self.name];
+}
+
+- (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
+{
+    [self clip:context];
+    CGContextTranslateCTM(context, [self relativeOnWidth:self.x], [self relativeOnHeight:self.y]);
+    CGRect clip = CGRectMake(
+                             0,
+                             0,
+                             [self relativeOnWidth:self.foreignObjectwidth],
+                             [self relativeOnHeight:self.foreignObjectheight]
+                             );
+    CGContextClipToRect(context, clip);
+    [super renderLayerTo:context rect:rect];
 }
 
 - (void)setX:(RNSVGLength *)x

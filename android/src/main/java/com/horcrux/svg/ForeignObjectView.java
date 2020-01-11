@@ -10,6 +10,11 @@
 package com.horcrux.svg;
 
 import android.annotation.SuppressLint;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
@@ -25,6 +30,23 @@ class ForeignObjectView extends GroupView {
 
     public ForeignObjectView(ReactContext reactContext) {
         super(reactContext);
+    }
+
+    @Override
+    void draw(Canvas canvas, Paint paint, float opacity) {
+        float x = (float)relativeOnWidth(mX);
+        float y = (float)relativeOnHeight(mY);
+        float w = (float)relativeOnWidth(mW);
+        float h = (float)relativeOnHeight(mH);
+        canvas.translate(x, y);
+        canvas.clipRect(0, 0, w, h);
+        super.draw(canvas, paint, opacity);
+    }
+
+    @Override
+    public void onDescendantInvalidated(@NonNull View child, @NonNull View target) {
+        super.onDescendantInvalidated(child, target);
+        invalidate();
     }
 
     @ReactProp(name = "x")
