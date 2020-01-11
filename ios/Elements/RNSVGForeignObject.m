@@ -40,10 +40,18 @@
 - (void)uiManagerDidPerformMounting:(RCTUIManager *)manager
 {
   [manager addUIBlock:^(__unused RCTUIManager *uiManager, __unused NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-      if (!self->_ready && !self.dirty) {
+      if (!self->_ready) {
           [self invalidate];
       }
   }];
+}
+
+- (void)renderChildTo:(CGContextRef)context rect:(CGRect)rect node:(UIView*)node
+{
+    node.hidden = false;
+    self->_ready = [node drawViewHierarchyInRect:rect afterScreenUpdates:true];
+    [node.layer renderInContext:context];
+    node.hidden = true;
 }
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect

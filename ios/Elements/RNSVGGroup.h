@@ -20,6 +20,7 @@
 
 - (void)renderPathTo:(CGContextRef)context rect:(CGRect)rect;
 - (void)renderGroupTo:(CGContextRef)context rect:(CGRect)rect;
+- (void)renderChildTo:(CGContextRef)context rect:(CGRect)rect node:(UIView*)node;
 
 - (RNSVGGlyphContext *)getGlyphContext;
 - (void)pushGlyphContext;
