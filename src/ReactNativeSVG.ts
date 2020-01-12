@@ -22,6 +22,7 @@ import ClipPath, { RNSVGClipPath } from './elements/ClipPath';
 import Pattern, { RNSVGPattern } from './elements/Pattern';
 import Mask, { RNSVGMask } from './elements/Mask';
 import Marker, { RNSVGMarker } from './elements/Marker';
+import ForeignObject, { RNSVGForeignObject } from './elements/ForeignObject';
 import { parse, SvgAst, SvgFromUri, SvgFromXml, SvgUri, SvgXml } from './xml';
 import {
   SvgCss,
@@ -55,6 +56,7 @@ export {
   Pattern,
   Mask,
   Marker,
+  ForeignObject,
   parse,
   SvgAst,
   SvgFromUri,
@@ -87,6 +89,7 @@ export {
   RNSVGCircle,
   RNSVGRect,
   RNSVGSvg,
+  RNSVGForeignObject,
 };
 
 export default Svg;

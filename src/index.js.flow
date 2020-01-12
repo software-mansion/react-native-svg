@@ -220,6 +220,13 @@ export type GProps = {
   ...
 } & CommonPathProps;
 declare export var G: React.ComponentClass<GProps>;
+export type ForeignObjectProps = {
+  x?: NumberProp;
+  y?: NumberProp;
+  width?: NumberProp;
+  height?: NumberProp;
+}
+declare export var ForeignObject: React.ComponentClass<ForeignObjectProps>;
 export type ImageProps = {
   x?: NumberProp,
   y?: NumberProp,

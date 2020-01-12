@@ -122,6 +122,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         RNSVGPattern,
         RNSVGMask,
         RNSVGMarker,
+        RNSVGForeignObject,
     }
 
     class RenderableShadowNode extends LayoutShadowNode {
@@ -907,6 +908,32 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
+    static class ForeignObjectManager extends GroupViewManager {
+        ForeignObjectManager() {
+            super(SVGClass.RNSVGForeignObject);
+        }
+
+        @ReactProp(name = "x")
+        public void setX(ForeignObjectView node, Dynamic x) {
+            node.setX(x);
+        }
+
+        @ReactProp(name = "y")
+        public void setY(ForeignObjectView node, Dynamic y) {
+            node.setY(y);
+        }
+
+        @ReactProp(name = "width")
+        public void setWidth(ForeignObjectView node, Dynamic width) {
+            node.setWidth(width);
+        }
+
+        @ReactProp(name = "height")
+        public void setHeight(ForeignObjectView node, Dynamic height) {
+            node.setHeight(height);
+        }
+    }
+
     static class MarkerManager extends GroupViewManager {
         MarkerManager() {
             super(SVGClass.RNSVGMarker);
@@ -1302,6 +1329,8 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
                 return new MaskView(reactContext);
             case RNSVGMarker:
                 return new MarkerView(reactContext);
+            case RNSVGForeignObject:
+                return new ForeignObjectView(reactContext);
             default:
                 throw new IllegalStateException("Unexpected type " + svgClass.toString());
         }
