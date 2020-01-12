@@ -47,6 +47,7 @@
   - [Mask](#mask)
   - [Pattern](#pattern)
   - [Marker](#marker)
+  - [ForeignObject](#foreignobject)
 - [Touch Events](#touch-events)
 - [Serialize](#serialize)
 - [Run example](#run-example)
@@ -1071,9 +1072,8 @@ Code explanation: <https://www.w3.org/TR/SVG11/masking.html#MaskElement>
 
 v10 adds experimental support for using masks together with native elements.
 If you had native elements inside any Svg root before (which was unsupported),
-Then your content might change appearance when upgrading, 
+Then your content might change appearance when upgrading,
 as e.g. transforms and masks now take effect.
-
 
 #### Pattern
 
@@ -1257,6 +1257,90 @@ const styles = StyleSheet.create({
 ![MarkerRendering](https://www.w3.org/TR/SVG2/images/painting/marker-rendering.svg)
 
 Code explanation: <https://www.w3.org/TR/SVG2/painting.html#VertexMarkerProperties>
+
+#### ForeignObject
+
+SVG is designed to be compatible with other XML languages for describing and rendering other types of content. The ‘foreignObject’ element allows for inclusion of elements in a non-SVG namespace which is rendered within a region of the SVG graphic using other user agent processes. The included foreign graphical content is subject to SVG transformations, filters, clipping, masking and compositing.
+
+One goal for SVG is to provide a mechanism by which other XML language processors can render into an area within an SVG drawing, with those renderings subject to the various transformations and compositing parameters that are currently active at a given point within the SVG content tree. One particular example of this is to provide a frame for XML content styled with CSS or XSL so that dynamically reflowing text (subject to SVG transformations and compositing) could be inserted into the middle of some SVG content.
+
+https://svgwg.org/svg2-draft/embedded.html#ForeignObjectElement
+https://www.w3.org/TR/SVG11/extend.html#ForeignObjectElement
+
+```jsx
+import React, { Component } from 'react';
+import { Text, View, Image } from 'react-native';
+import {
+  Svg,
+  Defs,
+  LinearGradient,
+  Stop,
+  Mask,
+  Rect,
+  G,
+  Circle,
+  ForeignObject,
+} from 'react-native-svg';
+
+export default class App extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Svg height="50%">
+          <Defs>
+            <LinearGradient
+              id="Gradient"
+              gradientUnits="userSpaceOnUse"
+              x1="0"
+              y1="0"
+              x2="800"
+              y2="0"
+            >
+              <Stop offset="0" stopColor="white" stopOpacity="0.2" />
+              <Stop offset="1" stopColor="white" stopOpacity="1" />
+            </LinearGradient>
+            <Mask
+              id="Mask"
+              maskUnits="userSpaceOnUse"
+              x="0"
+              y="0"
+              width="800"
+              height="300"
+            >
+              <Rect
+                x="0"
+                y="0"
+                width="800"
+                height="300"
+                fill="url(#Gradient)"
+              />
+            </Mask>
+          </Defs>
+          <G mask="url(#Mask)">
+            <Circle cx={50} cy={70} r={65} />
+            <ForeignObject x={50} y={0} width={100} height={100}>
+              <View style={{ width: 200, height: 400, transform: [] }}>
+                <Image
+                  style={{ width: 200, height: 200 }}
+                  source={{
+                    uri: 'https://picsum.photos/200/200',
+                  }}
+                />
+              </View>
+            </ForeignObject>
+            <ForeignObject x={55} y={5} width={100} height={100}>
+              <View style={{ width: 200, height: 400, transform: [] }}>
+                <Text style={{ color: 'blue' }}>Testing</Text>
+                <Text style={{ color: 'green' }}>Testing2</Text>
+              </View>
+            </ForeignObject>
+          </G>
+        </Svg>
+      </View>
+    );
+  }
+}
+```
 
 #### Touch Events
 
