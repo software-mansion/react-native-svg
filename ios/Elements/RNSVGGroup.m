@@ -107,6 +107,11 @@
     [self popGlyphContext];
 }
 
+- (void)drawRect:(CGRect)rect
+{
+    [self invalidate];
+}
+
 - (void)setupGlyphContext:(CGContextRef)context
 {
     CGRect clipBounds = CGContextGetClipBoundingBox(context);

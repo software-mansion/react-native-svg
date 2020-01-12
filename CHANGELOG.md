@@ -1,3 +1,19 @@
+# [10.1.0](https://github.com/react-native-community/react-native-svg/compare/v10.0.0...v10.1.0) (2020-01-12)
+
+
+### Bug Fixes
+
+* **android:** improve handling of native ancestors ([89f4432](https://github.com/react-native-community/react-native-svg/commit/89f443236eb1be9704c4475857e5623ad539936a))
+* **ios:** compile warning ([e59c0fb](https://github.com/react-native-community/react-native-svg/commit/e59c0fb9c01623a8ceb2abd0a8f7fd0446002c8f))
+* **ios:** initial render foreignObject / re-render on mount of sub views ([d549698](https://github.com/react-native-community/react-native-svg/commit/d54969846d28f57597baca33a653a88abc9a4dbf))
+* **ios:** invalidate G / foreignObject on change in native children ([65cee78](https://github.com/react-native-community/react-native-svg/commit/65cee78a33024ba7112821ed656eac3014ed234d))
+* foreignObject clipping and transform ([85e7943](https://github.com/react-native-community/react-native-svg/commit/85e7943448621f0d96adea89f89127ad07eadba6))
+
+
+### Features
+
+* ForeignObject documentation ([529b3bf](https://github.com/react-native-community/react-native-svg/commit/529b3bfaa0c2024fd7f66c8e635b46ec159d4f5e))
+
 # [10.0.0](https://github.com/react-native-community/react-native-svg/compare/v9.14.0...v10.0.0) (2020-01-04)
 
 

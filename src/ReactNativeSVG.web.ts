@@ -1,7 +1,7 @@
 // @ts-ignore
 import * as React from 'react';
 import { GestureResponderEvent } from 'react-native';
-import { NumberProp, TransformProps } from './lib/extract/types';
+import { NumberArray, NumberProp } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
 
@@ -44,9 +44,9 @@ interface BaseProps {
   pressRetentionOffset?: EdgeInsetsProp;
   rejectResponderTermination?: boolean;
 
-  translate: TransformProps;
-  scale: NumberProp;
-  rotation: NumberProp;
+  translate: NumberArray;
+  scale: NumberArray;
+  rotation: NumberArray;
   skewX: NumberProp;
   skewY: NumberProp;
   originX: NumberProp;
@@ -74,7 +74,6 @@ const prepare = <T extends BaseProps>(
   props = self.props,
 ) => {
   const {
-    accessible,
     translate,
     scale,
     rotation,
@@ -98,7 +97,6 @@ const prepare = <T extends BaseProps>(
   const hasTouchableProperty =
     onPress || onPressIn || onPressOut || onLongPress;
   const clean: {
-    accessible?: boolean;
     onStartShouldSetResponder?: (e: GestureResponderEvent) => boolean;
     onResponderMove?: (e: GestureResponderEvent) => void;
     onResponderGrant?: (e: GestureResponderEvent) => void;
@@ -109,7 +107,6 @@ const prepare = <T extends BaseProps>(
     style?: {};
     ref?: {};
   } = {
-    accessible: accessible !== false,
     ...(hasTouchableProperty
       ? {
           onStartShouldSetResponder:
@@ -208,8 +205,9 @@ const measureLayout = (
 ) => {
   // @ts-ignore
   const relativeNode = node && node.parentNode;
-  if (node && relativeNode) {
+  if (relativeNode) {
     setTimeout(() => {
+      // @ts-ignore
       const relativeRect = getBoundingClientRect(relativeNode);
       const { height, left, top, width } = getBoundingClientRect(node);
       const x = left - relativeRect.left;
@@ -234,6 +232,17 @@ export class WebShape<
   C = {}
 > extends React.Component<P, C> {
   [x: string]: unknown;
+  _remeasureMetricsOnActivation: () => void;
+  touchableHandleStartShouldSetResponder?: (
+    e: GestureResponderEvent,
+  ) => boolean;
+  touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
+  touchableHandleResponderGrant?: (e: GestureResponderEvent) => void;
+  touchableHandleResponderRelease?: (e: GestureResponderEvent) => void;
+  touchableHandleResponderTerminate?: (e: GestureResponderEvent) => void;
+  touchableHandleResponderTerminationRequest?: (
+    e: GestureResponderEvent,
+  ) => boolean;
   constructor(props: P, context: C) {
     super(props, context);
     SvgTouchableMixin(this);
@@ -376,6 +385,12 @@ export class Use extends WebShape {
 export class Mask extends WebShape {
   render(): JSX.Element {
     return createElement('mask', prepare(this));
+  }
+}
+
+export class ForeignObject extends WebShape {
+  render(): JSX.Element {
+    return createElement('foreignObject', prepare(this));
   }
 }
 

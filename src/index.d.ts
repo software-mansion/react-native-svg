@@ -4,7 +4,7 @@ import { GestureResponderEvent } from 'react-native';
 
 // Common props
 export type NumberProp = string | number;
-export type NumberArray = (NumberProp)[] | NumberProp;
+export type NumberArray = NumberProp[] | NumberProp;
 
 export type FillRule = 'evenodd' | 'nonzero';
 export type Units = 'userSpaceOnUse' | 'objectBoundingBox';
@@ -258,6 +258,14 @@ export interface GProps extends CommonPathProps {
   opacity?: NumberProp;
 }
 export const G: React.ComponentClass<GProps>;
+
+export interface ForeignObjectProps {
+  x?: NumberProp;
+  y?: NumberProp;
+  width?: NumberProp;
+  height?: NumberProp;
+}
+export const ForeignObject: React.ComponentClass<ForeignObjectProps>;
 
 export interface ImageProps
   extends ResponderProps,

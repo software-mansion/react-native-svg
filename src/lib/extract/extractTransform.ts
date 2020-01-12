@@ -28,7 +28,7 @@ function appendTransformProps(props: TransformedProps) {
 }
 
 function universal2axis(
-  universal: NumberProp | (NumberProp)[] | undefined,
+  universal: NumberProp | NumberProp[] | undefined,
   axisX: NumberProp | void,
   axisY: NumberProp | void,
   defaultValue?: number,

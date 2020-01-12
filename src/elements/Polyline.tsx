@@ -13,7 +13,7 @@ export default class Polyline extends Shape<{ points?: number[] }> {
 
   setNativeProps = (
     props: Object & {
-      points?: string | (NumberProp)[];
+      points?: string | NumberProp[];
       d?: string;
     },
   ) => {
@@ -29,7 +29,7 @@ export default class Polyline extends Shape<{ points?: number[] }> {
     const { points } = props;
     return (
       <Path
-        ref={this.refMethod as ((instance: Path | null) => void)}
+        ref={this.refMethod as (instance: Path | null) => void}
         d={points && `M${extractPolyPoints(points)}`}
         {...props}
       />

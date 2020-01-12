@@ -4,8 +4,8 @@ const spaceReg = /\s+/;
 const commaReg = /,/g;
 
 export default function extractLengthList(
-  lengthList?: (NumberProp)[] | NumberProp,
-): (NumberProp)[] {
+  lengthList?: NumberProp[] | NumberProp,
+): NumberProp[] {
   if (Array.isArray(lengthList)) {
     return lengthList;
   } else if (typeof lengthList === 'number') {

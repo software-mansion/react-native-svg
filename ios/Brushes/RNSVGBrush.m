@@ -33,6 +33,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     return NO;
 }
 
+- (CGColorRef)getColorWithOpacity:(CGFloat)opacity
+{
+    return nil;
+}
+
 - (void)paint:(CGContextRef)context opacity:(CGFloat)opacity painter:(RNSVGPainter *)painter
 {
     // abstract
