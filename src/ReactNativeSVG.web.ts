@@ -1,7 +1,7 @@
 // @ts-ignore
 import * as React from 'react';
 import { createElement, GestureResponderEvent } from 'react-native';
-import { NumberProp, TransformProps } from './lib/extract/types';
+import { NumberArray, NumberProp } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
 
@@ -36,9 +36,9 @@ interface BaseProps {
   pressRetentionOffset?: EdgeInsetsProp;
   rejectResponderTermination?: boolean;
 
-  translate: TransformProps;
-  scale: NumberProp;
-  rotation: NumberProp;
+  translate: NumberArray;
+  scale: NumberArray;
+  rotation: NumberArray;
   skewX: NumberProp;
   skewY: NumberProp;
   originX: NumberProp;
@@ -197,8 +197,9 @@ const measureLayout = (
 ) => {
   // @ts-ignore
   const relativeNode = node && node.parentNode;
-  if (node && relativeNode) {
+  if (relativeNode) {
     setTimeout(() => {
+      // @ts-ignore
       const relativeRect = getBoundingClientRect(relativeNode);
       const { height, left, top, width } = getBoundingClientRect(node);
       const x = left - relativeRect.left;
@@ -223,6 +224,17 @@ export class WebShape<
   C = {}
 > extends React.Component<P, C> {
   [x: string]: unknown;
+  _remeasureMetricsOnActivation: () => void;
+  touchableHandleStartShouldSetResponder?: (
+    e: GestureResponderEvent,
+  ) => boolean;
+  touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
+  touchableHandleResponderGrant?: (e: GestureResponderEvent) => void;
+  touchableHandleResponderRelease?: (e: GestureResponderEvent) => void;
+  touchableHandleResponderTerminate?: (e: GestureResponderEvent) => void;
+  touchableHandleResponderTerminationRequest?: (
+    e: GestureResponderEvent,
+  ) => boolean;
   constructor(props: P, context: C) {
     super(props, context);
     SvgTouchableMixin(this);
