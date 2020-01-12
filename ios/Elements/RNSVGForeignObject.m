@@ -7,51 +7,17 @@
  */
 #import "RNSVGForeignObject.h"
 #import "RNSVGNode.h"
-#import "RCTUIManager.h"
-#import "RCTUIManagerObserverCoordinator.h"
 
 @implementation RNSVGForeignObject
-{
-    RCTEventDispatcher *_eventDispatcher;
-    bool _ready;
-}
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     return nil;
 }
 
-- (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
-{
-  RCTAssertParam(eventDispatcher);
-
-    if ((self = [super init])) {
-        _eventDispatcher = eventDispatcher;
-        [_eventDispatcher.bridge.uiManager.observerCoordinator addObserver:self];
-    }
-    return self;
-}
-
 - (void)parseReference
 {
     self.dirty = false;
-}
-
-- (void)uiManagerDidPerformMounting:(RCTUIManager *)manager
-{
-  [manager addUIBlock:^(__unused RCTUIManager *uiManager, __unused NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-      if (!self->_ready) {
-          [self invalidate];
-      }
-  }];
-}
-
-- (void)renderChildTo:(CGContextRef)context rect:(CGRect)rect node:(UIView*)node
-{
-    node.hidden = false;
-    self->_ready = [node drawViewHierarchyInRect:rect afterScreenUpdates:true];
-    [node.layer renderInContext:context];
-    node.hidden = true;
 }
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect

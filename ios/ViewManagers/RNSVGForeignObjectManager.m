@@ -15,7 +15,7 @@ RCT_EXPORT_MODULE()
 
 - (RNSVGForeignObject *)node
 {
-    return [[RNSVGForeignObject alloc] initWithEventDispatcher:self.bridge.eventDispatcher];
+    return [RNSVGForeignObject new];
 }
 
 RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength*)
