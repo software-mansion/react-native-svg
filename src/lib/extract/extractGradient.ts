@@ -6,7 +6,7 @@ import extractTransform from './extractTransform';
 import { TransformProps } from './types';
 import units from '../units';
 
-const percentReg = /^([+\-]?\d+(?:\.\d+)?(?:[eE][+\-]?\d+)?)(%?)$/;
+const percentReg = /^([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)(%?)$/;
 
 function percentToFloat(
   percent:

@@ -27,7 +27,7 @@ export const alignEnum: { [align: string]: string } = [
 const spacesRegExp = /\s+/;
 
 export default function extractViewBox(props: {
-  viewBox?: string | (NumberProp)[];
+  viewBox?: string | NumberProp[];
   preserveAspectRatio?: string;
 }) {
   const { viewBox, preserveAspectRatio } = props;

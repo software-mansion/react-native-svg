@@ -4,7 +4,7 @@ import { GestureResponderEvent } from 'react-native';
 
 // Common props
 export type NumberProp = string | number;
-export type NumberArray = (NumberProp)[] | NumberProp;
+export type NumberArray = NumberProp[] | NumberProp;
 
 export type FillRule = 'evenodd' | 'nonzero';
 export type Units = 'userSpaceOnUse' | 'objectBoundingBox';

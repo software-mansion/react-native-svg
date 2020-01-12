@@ -1,6 +1,6 @@
 import { NumberProp } from './types';
 
-export default function extractPolyPoints(points: string | (NumberProp)[]) {
+export default function extractPolyPoints(points: string | NumberProp[]) {
   const polyPoints = Array.isArray(points) ? points.join(',') : points;
   return polyPoints
     .replace(/[^e]-/, ' -')

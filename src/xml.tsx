@@ -188,7 +188,7 @@ export class SvgFromUri extends Component<UriProps, UriState> {
 const upperCase = (_match: string, letter: string) => letter.toUpperCase();
 
 export const camelCase = (phrase: string) =>
-  phrase.replace(/[:\-]([a-z])/g, upperCase);
+  phrase.replace(/[:-]([a-z])/g, upperCase);
 
 export type Styles = { [property: string]: string };
 

@@ -220,7 +220,7 @@ export type GProps = {
   ...
 } & CommonPathProps;
 declare export var G: React.ComponentClass<GProps>;
-export type ForeignObjectProps = {
+export interface ForeignObjectProps {
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;

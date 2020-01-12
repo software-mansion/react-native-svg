@@ -1,7 +1,7 @@
 import { GestureResponderEvent } from 'react-native';
 
 export type NumberProp = string | number;
-export type NumberArray = (NumberProp)[] | NumberProp;
+export type NumberArray = NumberProp[] | NumberProp;
 
 // rgbaArray = [r, g, b, a]
 export type rgbaArray = number[];
