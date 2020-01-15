@@ -41,6 +41,8 @@ abstract public class RenderableView extends VirtualView {
 
     RenderableView(ReactContext reactContext) {
         super(reactContext);
+        setPivotX(0);
+        setPivotY(0);
     }
 
     static RenderableView contextElement;
