@@ -40,6 +40,11 @@
 
 #define NEXT_FLOAT [self parse_list_number]
 #define NEXT_BOOL [self parse_flag]
+#define ROUND_BOOL [self round_to_bool:[self parse_list_number]]
+
+- (bool) round_to_bool: (float) number {
+    return number > 0.5;
+}
 
 - (CGPathRef)getPath
 {
@@ -163,11 +168,11 @@
                 break;
             }
             case 'a': {
-                [self arc:path rx:NEXT_FLOAT ry:NEXT_FLOAT rotation:NEXT_FLOAT outer:NEXT_BOOL clockwise:NEXT_BOOL x:NEXT_FLOAT y:NEXT_FLOAT];
+                [self arc:path rx:NEXT_FLOAT ry:NEXT_FLOAT rotation:NEXT_FLOAT outer:ROUND_BOOL clockwise:NEXT_BOOL x:NEXT_FLOAT y:NEXT_FLOAT];
                 break;
             }
             case 'A': {
-                [self arcTo:path rx:NEXT_FLOAT ry:NEXT_FLOAT rotation:NEXT_FLOAT outer:NEXT_BOOL clockwise:NEXT_BOOL x:NEXT_FLOAT y:NEXT_FLOAT];
+                [self arcTo:path rx:NEXT_FLOAT ry:NEXT_FLOAT rotation:NEXT_FLOAT outer:ROUND_BOOL clockwise:NEXT_BOOL x:NEXT_FLOAT y:NEXT_FLOAT];
                 break;
             }
             case 'z':
