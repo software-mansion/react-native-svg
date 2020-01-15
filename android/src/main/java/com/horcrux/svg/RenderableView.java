@@ -41,6 +41,8 @@ abstract public class RenderableView extends VirtualView {
 
     RenderableView(ReactContext reactContext) {
         super(reactContext);
+        setPivotX(0);
+        setPivotY(0);
     }
 
     static RenderableView contextElement;
@@ -166,9 +168,10 @@ abstract public class RenderableView extends VirtualView {
             JavaOnlyArray arr = new JavaOnlyArray();
             arr.pushInt(0);
             Matcher m = regex.matcher(strokeColors.asString());
+            int i = 0;
             while (m.find()) {
                 double parsed = Double.parseDouble(m.group());
-                arr.pushDouble(parsed);
+                arr.pushDouble(i++ < 3 ? parsed / 255 : parsed);
             }
             stroke = arr;
         }

@@ -380,8 +380,8 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
     }
 
     private static void resetTransformProperty(View view) {
-        view.setTranslationX(PixelUtil.toPixelFromDIP(0));
-        view.setTranslationY(PixelUtil.toPixelFromDIP(0));
+        view.setTranslationX(0);
+        view.setTranslationY(0);
         view.setRotation(0);
         view.setRotationX(0);
         view.setRotationY(0);
