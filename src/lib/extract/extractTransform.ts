@@ -67,9 +67,11 @@ function universal2axis(
   return [x || defaultValue || 0, y || defaultValue || 0];
 }
 
-export function props2transform(props: TransformProps): TransformedProps {
+export function props2transform(
+  props: TransformProps,
+): TransformedProps | null {
   const {
-    rotation = 0,
+    rotation,
     translate,
     translateX,
     translateY,
@@ -85,6 +87,25 @@ export function props2transform(props: TransformProps): TransformedProps {
     x,
     y,
   } = props;
+  if (
+    rotation == null &&
+    translate == null &&
+    translateX == null &&
+    translateY == null &&
+    origin == null &&
+    originX == null &&
+    originY == null &&
+    scale == null &&
+    scaleX == null &&
+    scaleY == null &&
+    skew == null &&
+    skewX == null &&
+    skewY == null &&
+    x == null &&
+    y == null
+  ) {
+    return null;
+  }
 
   if (Array.isArray(x) || Array.isArray(y)) {
     console.warn(
@@ -101,7 +122,7 @@ export function props2transform(props: TransformProps): TransformedProps {
   const sk = universal2axis(skew, skewX, skewY);
 
   return {
-    rotation: +rotation || 0,
+    rotation: rotation == null ? 0 : +rotation || 0,
     originX: or[0],
     originY: or[1],
     scaleX: sc[0],
@@ -114,11 +135,14 @@ export function props2transform(props: TransformProps): TransformedProps {
 }
 
 export function transformToMatrix(
-  props: TransformedProps,
-  transform: number[] | string | TransformProps | void | undefined,
-): [number, number, number, number, number, number] {
+  props: TransformedProps | null,
+  transform: number[] | string | TransformProps | void | null | undefined,
+): [number, number, number, number, number, number] | null {
+  if (!props && !transform) {
+    return null;
+  }
   reset();
-  appendTransformProps(props);
+  props && appendTransformProps(props);
 
   if (transform) {
     if (Array.isArray(transform)) {
@@ -141,7 +165,8 @@ export function transformToMatrix(
         console.error(e);
       }
     } else {
-      appendTransformProps(props2transform(transform));
+      const transformProps = props2transform(transform);
+      transformProps && appendTransformProps(transformProps);
     }
   }
 

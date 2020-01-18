@@ -17,6 +17,7 @@ import {
   ResponderProps,
   TransformProps,
   ResponderInstanceProps,
+  extractedProps,
 } from '../lib/extract/types';
 import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
@@ -153,6 +154,8 @@ export default class Svg extends Shape<
       : null;
 
     const tint = extractColor(color);
+    const responder: extractedProps = {};
+    extractResponder(responder, props, this as ResponderInstanceProps);
     return (
       <RNSVGSvg
         {...props}
@@ -164,8 +167,8 @@ export default class Svg extends Shape<
         ref={this.refMethod}
         style={[styles.svg, style, opacityStyle, dimensions]}
         focusable={Boolean(focusable) && focusable !== 'false'}
-        {...extractResponder(props, this as ResponderInstanceProps)}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
+        {...responder}
       >
         <G
           {...{

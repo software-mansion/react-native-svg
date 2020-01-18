@@ -1,10 +1,15 @@
 import { PanResponder } from 'react-native';
-import { ResponderInstanceProps, ResponderProps } from './types';
+import {
+  extractedProps,
+  ResponderInstanceProps,
+  ResponderProps,
+} from './types';
 
 const responderKeys = Object.keys(PanResponder.create({}).panHandlers);
 const numResponderKeys = responderKeys.length;
 
 export default function extractResponder(
+  o: extractedProps,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   props: { [x: string]: any } & ResponderProps,
   ref: ResponderInstanceProps,
@@ -20,9 +25,6 @@ export default function extractResponder(
     delayLongPress,
     pointerEvents,
   } = props;
-  const o: {
-    [touchableProperty: string]: unknown;
-  } = {};
 
   let responsible = false;
   for (let i = 0; i < numResponderKeys; i++) {
@@ -62,6 +64,4 @@ export default function extractResponder(
   if (responsible) {
     o.responsible = true;
   }
-
-  return o;
 }

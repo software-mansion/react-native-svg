@@ -1,18 +1,18 @@
 import extractFill from './extractFill';
 import extractStroke from './extractStroke';
-import { transformToMatrix, props2transform } from './extractTransform';
+import { props2transform, transformToMatrix } from './extractTransform';
 import extractResponder from './extractResponder';
 import extractOpacity from './extractOpacity';
 import { idPattern } from '../util';
 import {
   ClipProps,
+  extractedProps,
   FillProps,
   NumberProp,
   ResponderProps,
   StrokeProps,
   TransformProps,
 } from './types';
-import { Component } from 'react';
 
 const clipRules: { evenodd: number; nonzero: number } = {
   evenodd: 0,
@@ -74,30 +74,24 @@ export default function extractProps(
   const styleProperties: string[] = [];
   const transformProps = props2transform(props);
   const matrix = transformToMatrix(transformProps, transform);
-  const extracted: {
-    name?: string;
-    mask?: string;
-    opacity: number;
-    matrix: number[];
-    propList: string[];
-    onLayout?: () => void;
-    ref?: (instance: Component | null) => void;
-    markerStart?: string;
-    markerMid?: string;
-    markerEnd?: string;
-    clipPath?: string;
-    clipRule?: number;
-    display?: string;
-  } = {
-    matrix,
-    ...transformProps,
+  const extracted: extractedProps = {
     propList: styleProperties,
-    opacity: extractOpacity(opacity),
-    ...extractResponder(props, ref),
-    ...extractFill(props, styleProperties),
-    ...extractStroke(props, styleProperties),
-    display: display === 'none' ? 'none' : undefined,
   };
+  extractResponder(extracted, props, ref);
+  extractFill(extracted, props, styleProperties);
+  extractStroke(extracted, props, styleProperties);
+
+  if (matrix !== null) {
+    extracted.matrix = matrix;
+  }
+
+  if (opacity != null) {
+    extracted.opacity = extractOpacity(opacity);
+  }
+
+  if (display != null) {
+    extracted.display = display === 'none' ? 'none' : undefined;
+  }
 
   if (onLayout) {
     extracted.onLayout = onLayout;
