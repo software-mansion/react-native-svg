@@ -24,16 +24,24 @@ export default class G<P> extends Shape<P> {
   render() {
     const { props } = this;
     const prop = propsAndStyles(props);
+    const extractedProps = extractProps(prop, this);
+    const font = extractFont(prop);
+    if (hasProps(font)) {
+      extractedProps.font = font;
+    }
     return (
-      <RNSVGGroup
-        ref={this.refMethod}
-        {...extractProps(prop, this)}
-        font={extractFont(prop)}
-      >
+      <RNSVGGroup ref={this.refMethod} {...extractedProps}>
         {props.children}
       </RNSVGGroup>
     );
   }
 }
+
+const hasProps = (obj: {}) => {
+  for (let _ in obj) {
+    return true;
+  }
+  return false;
+};
 
 export const RNSVGGroup = requireNativeComponent('RNSVGGroup');

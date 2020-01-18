@@ -155,13 +155,9 @@ exports[`supports CSS in style element 1`] = `
 </svg>"
   xmlns="http://www.w3.org/2000/svg"
 >
-  <RNSVGGroup
-    font={Object {}}
-  >
+  <RNSVGGroup>
     <RNSVGDefs />
-    <RNSVGGroup
-      font={Object {}}
-    >
+    <RNSVGGroup>
       <RNSVGRect
         fill={4294901760}
         height={200}
@@ -179,9 +175,7 @@ exports[`supports CSS in style element 1`] = `
         y={0}
       />
     </RNSVGGroup>
-    <RNSVGGroup
-      font={Object {}}
-    >
+    <RNSVGGroup>
       <RNSVGRect
         fill={4294901760}
         fillOpacity={0.3}
