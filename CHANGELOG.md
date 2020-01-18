@@ -1,3 +1,24 @@
+# [11.0.0](https://github.com/react-native-community/react-native-svg/compare/v10.1.0...v11.0.0) (2020-01-18)
+
+
+### Bug Fixes
+
+* compatibility with reanimated color, fixes [#1241](https://github.com/react-native-community/react-native-svg/issues/1241) ([4983766](https://github.com/react-native-community/react-native-svg/commit/498376678ea098eea9380f98b0e8eddd267b2fd1))
+* **android:** NullPointerException when calling getBBox [#1215](https://github.com/react-native-community/react-native-svg/issues/1215) ([3eb82a9](https://github.com/react-native-community/react-native-svg/commit/3eb82a91b46264e98c168b99f9ffbb08cd560b05))
+* **android:** support animating stroke color ([c5dd62f](https://github.com/react-native-community/react-native-svg/commit/c5dd62f47b3e9dfa538a94d78958966bfcfc1d0f))
+* **android:** support setting path null ([2d34734](https://github.com/react-native-community/react-native-svg/commit/2d347347a32601ae680c4e7f91dc8846df52e65a))
+* **ios:** iOS 10.3 renders opaque background when drawRect is defined ([61bc9bd](https://github.com/react-native-community/react-native-svg/commit/61bc9bd2cb6686edd6661e80429c65e8a6187cd7)), closes [#1252](https://github.com/react-native-community/react-native-svg/issues/1252)
+* **web:** Allow createElement & unstable_createElement usage ([#1240](https://github.com/react-native-community/react-native-svg/issues/1240)) ([7a23968](https://github.com/react-native-community/react-native-svg/commit/7a23968f3db1772ae0c16330a382f3ec750a4945))
+
+
+* fix(android)!: pivot point for RN transform array syntax ([db682f8](https://github.com/react-native-community/react-native-svg/commit/db682f87bc8c89f1cf72c7fcdcb4970041679214))
+
+
+### BREAKING CHANGES
+
+* Makes android specific transform origin adjustments
+ unnecessary / broken. Renders exactly the same as web and ios instead.
+
 # [10.1.0](https://github.com/react-native-community/react-native-svg/compare/v10.0.0...v10.1.0) (2020-01-12)
 
 
