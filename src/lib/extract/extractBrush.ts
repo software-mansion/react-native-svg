@@ -10,7 +10,7 @@ const contextStrokeBrush = [4];
 export default function extractBrush(color?: Color) {
   if (typeof color === 'number') {
     if (color >>> 0 === color && color >= 0 && color <= 0xffffffff) {
-      return [0, integerColor(color)];
+      return integerColor(color);
     }
   }
 
@@ -37,7 +37,7 @@ export default function extractBrush(color?: Color) {
 
   const int32ARGBColor = extractColor(color);
   if (typeof int32ARGBColor === 'number') {
-    return [0, int32ARGBColor];
+    return int32ARGBColor;
   }
 
   console.warn(`"${color}" is not a valid color or brush`);

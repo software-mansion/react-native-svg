@@ -1,6 +1,6 @@
 import extractBrush from './extractBrush';
 import extractOpacity from './extractOpacity';
-import { colorNames, integerColor } from './extractColor';
+import { colorNames } from './extractColor';
 import { FillProps } from './types';
 
 const fillRules: { evenodd: number; nonzero: number } = {
@@ -8,9 +8,7 @@ const fillRules: { evenodd: number; nonzero: number } = {
   nonzero: 1,
 };
 
-// default fill is black
-const black = colorNames.black;
-const defaultFill = [0, integerColor(black as number)];
+const defaultFill = colorNames.black;
 
 export default function extractFill(
   props: FillProps,
