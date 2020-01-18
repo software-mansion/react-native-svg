@@ -157,12 +157,10 @@ exports[`supports CSS in style element 1`] = `
 >
   <RNSVGGroup
     font={Object {}}
-    propList={Array []}
   >
     <RNSVGDefs />
     <RNSVGGroup
       font={Object {}}
-      propList={Array []}
     >
       <RNSVGRect
         fill={4294901760}
@@ -183,7 +181,6 @@ exports[`supports CSS in style element 1`] = `
     </RNSVGGroup>
     <RNSVGGroup
       font={Object {}}
-      propList={Array []}
     >
       <RNSVGRect
         fill={4294901760}

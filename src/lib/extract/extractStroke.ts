@@ -27,7 +27,7 @@ const vectorEffects = {
 export default function extractStroke(
   o: extractedProps,
   props: StrokeProps,
-  styleProperties: string[],
+  inherited: string[],
 ) {
   const {
     stroke,
@@ -42,19 +42,19 @@ export default function extractStroke(
   } = props;
 
   if (stroke != null) {
-    styleProperties.push('stroke');
+    inherited.push('stroke');
     o.stroke = extractBrush(stroke);
   }
   if (strokeWidth != null) {
-    styleProperties.push('strokeWidth');
+    inherited.push('strokeWidth');
     o.strokeWidth = strokeWidth;
   }
   if (strokeOpacity != null) {
-    styleProperties.push('strokeOpacity');
+    inherited.push('strokeOpacity');
     o.strokeOpacity = extractOpacity(strokeOpacity);
   }
   if (strokeDasharray != null) {
-    styleProperties.push('strokeDasharray');
+    inherited.push('strokeDasharray');
     const strokeDash =
       !strokeDasharray || strokeDasharray === 'none'
         ? null
@@ -65,20 +65,20 @@ export default function extractStroke(
         : strokeDash;
   }
   if (strokeDashoffset != null) {
-    styleProperties.push('strokeDashoffset');
+    inherited.push('strokeDashoffset');
     o.strokeDashoffset =
       strokeDasharray && strokeDashoffset ? +strokeDashoffset || 0 : null;
   }
   if (strokeLinecap != null) {
-    styleProperties.push('strokeLinecap');
+    inherited.push('strokeLinecap');
     o.strokeLinecap = (strokeLinecap && caps[strokeLinecap]) || 0;
   }
   if (strokeLinejoin != null) {
-    styleProperties.push('strokeLinejoin');
+    inherited.push('strokeLinejoin');
     o.strokeLinejoin = (strokeLinejoin && joins[strokeLinejoin]) || 0;
   }
   if (strokeMiterlimit != null) {
-    styleProperties.push('strokeMiterlimit');
+    inherited.push('strokeMiterlimit');
     o.strokeMiterlimit =
       (strokeMiterlimit && typeof strokeMiterlimit !== 'number'
         ? parseFloat(strokeMiterlimit)

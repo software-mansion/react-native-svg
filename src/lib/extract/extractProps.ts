@@ -71,16 +71,19 @@ export default function extractProps(
     markerEnd = marker,
     transform,
   } = props;
-  const styleProperties: string[] = [];
+  const extracted: extractedProps = {};
+
+  const inherited: string[] = [];
+  extractResponder(extracted, props, ref);
+  extractFill(extracted, props, inherited);
+  extractStroke(extracted, props, inherited);
+
+  if (inherited.length) {
+    extracted.propList = inherited;
+  }
+
   const transformProps = props2transform(props);
   const matrix = transformToMatrix(transformProps, transform);
-  const extracted: extractedProps = {
-    propList: styleProperties,
-  };
-  extractResponder(extracted, props, ref);
-  extractFill(extracted, props, styleProperties);
-  extractStroke(extracted, props, styleProperties);
-
   if (matrix !== null) {
     extracted.matrix = matrix;
   }
