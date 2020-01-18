@@ -36,6 +36,9 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
 
 + (RNSVGBrush *)RNSVGBrush:(id)json
 {
+    if ([json isKindOfClass:[NSNumber class]]) {
+        return [[RNSVGSolidColorBrush alloc] initWithNumber:json];
+    }
     if ([json isKindOfClass:[NSString class]]) {
         NSString *value = [self NSString:json];
         if (!RNSVGDigitRegEx) {

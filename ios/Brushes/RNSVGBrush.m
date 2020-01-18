@@ -16,8 +16,6 @@
     return [super init];
 }
 
-RCT_NOT_IMPLEMENTED(- (instancetype)init)
-
 - (void)paint:(CGContextRef)context opacity:(CGFloat)opacity painter:(RNSVGPainter *)painter bounds:(CGRect)bounds
 {
 

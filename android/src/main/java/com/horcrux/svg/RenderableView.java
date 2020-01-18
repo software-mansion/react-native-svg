@@ -116,7 +116,9 @@ abstract public class RenderableView extends VirtualView {
             return;
         }
         ReadableType type = fill.getType();
-        if (type.equals(ReadableType.Array)) {
+        if (type.equals(ReadableType.Number)) {
+            this.fill = JavaOnlyArray.of(0, fill.asInt());
+        } else if (type.equals(ReadableType.Array)) {
             this.fill = fill.asArray();
         } else {
             JavaOnlyArray arr = new JavaOnlyArray();
@@ -162,7 +164,9 @@ abstract public class RenderableView extends VirtualView {
             return;
         }
         ReadableType type = strokeColors.getType();
-        if (type.equals(ReadableType.Array)) {
+        if (type.equals(ReadableType.Number)) {
+            stroke = JavaOnlyArray.of(0, strokeColors.asInt());
+        } else if (type.equals(ReadableType.Array)) {
             stroke = strokeColors.asArray();
         } else {
             JavaOnlyArray arr = new JavaOnlyArray();

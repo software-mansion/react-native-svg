@@ -24,6 +24,14 @@
     return self;
 }
 
+- (instancetype)initWithNumber:(NSNumber *)number
+{
+    if ((self = [super init])) {
+        _color = CGColorRetain([RCTConvert CGColor:number]);
+    }
+    return self;
+}
+
 - (void)dealloc
 {
     CGColorRelease(_color);

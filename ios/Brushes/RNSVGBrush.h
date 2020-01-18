@@ -15,7 +15,7 @@
 @property (nonatomic, strong) NSString* brushRef;
 
 /* @abstract */
-- (instancetype)initWithArray:(NSArray *)data NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithArray:(NSArray *)data;
 
 /**
  * @abstract
