@@ -156,12 +156,7 @@ exports[`supports CSS in style element 1`] = `
   xmlns="http://www.w3.org/2000/svg"
 >
   <RNSVGGroup
-    fill={
-      Array [
-        0,
-        4278190080,
-      ]
-    }
+    fill={4278190080}
     fillOpacity={1}
     fillRule={1}
     font={Object {}}
@@ -198,12 +193,7 @@ exports[`supports CSS in style element 1`] = `
   >
     <RNSVGDefs />
     <RNSVGGroup
-      fill={
-        Array [
-          0,
-          4278190080,
-        ]
-      }
+      fill={4278190080}
       fillOpacity={1}
       fillRule={1}
       font={Object {}}
@@ -239,12 +229,7 @@ exports[`supports CSS in style element 1`] = `
       y={0}
     >
       <RNSVGRect
-        fill={
-          Array [
-            0,
-            4294901760,
-          ]
-        }
+        fill={4294901760}
         fillOpacity={1}
         fillRule={1}
         height={200}
@@ -273,12 +258,7 @@ exports[`supports CSS in style element 1`] = `
         scaleY={1}
         skewX={0}
         skewY={0}
-        stroke={
-          Array [
-            0,
-            4278190335,
-          ]
-        }
+        stroke={4278190335}
         strokeDasharray={null}
         strokeDashoffset={null}
         strokeLinecap={0}
@@ -293,12 +273,7 @@ exports[`supports CSS in style element 1`] = `
       />
     </RNSVGGroup>
     <RNSVGGroup
-      fill={
-        Array [
-          0,
-          4278190080,
-        ]
-      }
+      fill={4278190080}
       fillOpacity={1}
       fillRule={1}
       font={Object {}}
@@ -334,12 +309,7 @@ exports[`supports CSS in style element 1`] = `
       y={0}
     >
       <RNSVGRect
-        fill={
-          Array [
-            0,
-            4294901760,
-          ]
-        }
+        fill={4294901760}
         fillOpacity={0.3}
         fillRule={1}
         height={200}
@@ -369,12 +339,7 @@ exports[`supports CSS in style element 1`] = `
         scaleY={1}
         skewX={0}
         skewY={0}
-        stroke={
-          Array [
-            0,
-            4278190335,
-          ]
-        }
+        stroke={4278190335}
         strokeDasharray={null}
         strokeDashoffset={null}
         strokeLinecap={0}
