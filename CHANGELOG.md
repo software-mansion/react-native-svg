@@ -1,3 +1,15 @@
+## [11.0.1](https://github.com/react-native-community/react-native-svg/compare/v11.0.0...v11.0.1) (2020-01-18)
+
+
+### Bug Fixes
+
+* snapshot ([a37afcb](https://github.com/react-native-community/react-native-svg/commit/a37afcb485b8804dbc212195bc5695738a3634f7))
+
+
+### Performance Improvements
+
+* optimize passing of colors to native ([f138c9b](https://github.com/react-native-community/react-native-svg/commit/f138c9b1aba568ac3ac0c272af1d62811519f526))
+
 # [11.0.0](https://github.com/react-native-community/react-native-svg/compare/v10.1.0...v11.0.0) (2020-01-18)
 
 
