@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { requireNativeComponent } from 'react-native';
 import extractTransform from '../lib/extract/extractTransform';
 import { withoutXY } from '../lib/extract/extractProps';
 import { NumberProp, TransformProps } from '../lib/extract/types';
@@ -7,6 +6,7 @@ import extractText from '../lib/extract/extractText';
 import { idPattern, pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import TSpan from './TSpan';
+import { RNSVGTextPath } from './NativeComponents';
 
 export default class TextPath extends Shape<{
   children?: NumberProp | [NumberProp | React.ComponentType];
@@ -86,5 +86,3 @@ export default class TextPath extends Shape<{
     );
   }
 }
-
-export const RNSVGTextPath = requireNativeComponent('RNSVGTextPath');

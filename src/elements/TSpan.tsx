@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { requireNativeComponent } from 'react-native';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import extractTransform from '../lib/extract/extractTransform';
 import extractText, { setTSpan } from '../lib/extract/extractText';
 import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import { TransformProps } from '../lib/extract/types';
+import { RNSVGTSpan } from './NativeComponents';
 
 export default class TSpan extends Shape<{}> {
   static displayName = 'TSpan';
@@ -42,5 +42,3 @@ export default class TSpan extends Shape<{}> {
 }
 
 setTSpan(TSpan);
-
-export const RNSVGTSpan = requireNativeComponent('RNSVGTSpan');

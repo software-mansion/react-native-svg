@@ -98,10 +98,6 @@ exports[`supports CSS in style element 1`] = `
         "backgroundColor": "transparent",
         "borderWidth": 0,
       },
-      undefined,
-      Object {
-        "opacity": 1,
-      },
       Object {
         "flex": 0,
         "height": "100%",

@@ -1,10 +1,10 @@
 import React from 'react';
-import { requireNativeComponent } from 'react-native';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import { extractFont } from '../lib/extract/extractText';
 import extractTransform from '../lib/extract/extractTransform';
 import { TransformProps } from '../lib/extract/types';
 import Shape from './Shape';
+import { RNSVGGroup } from './NativeComponents';
 
 export default class G<P> extends Shape<P> {
   static displayName = 'G';
@@ -43,5 +43,3 @@ const hasProps = (obj: {}) => {
   }
   return false;
 };
-
-export const RNSVGGroup = requireNativeComponent('RNSVGGroup');
