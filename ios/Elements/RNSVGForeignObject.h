@@ -1,7 +1,6 @@
 
 #import "RNSVGGroup.h"
 #import "RNSVGLength.h"
-#import "RCTEventDispatcher.h"
 
 @interface RNSVGForeignObject : RNSVGGroup
 
