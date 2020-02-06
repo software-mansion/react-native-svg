@@ -8,8 +8,24 @@ about: Report a reproducible bug or regression in this library.
 Please provide a clear and concise description of what the bug is.
 Include screenshots if needed.
 Please test using the latest release of the library, as maybe said bug has been already fixed.
-If the library has multiple install methods, describe installation method (e.g., pod, not pod, with jetifier etc)
 
+#### Unexpected behavior
+
+If you have unexpected behavior, please create a clean project with the latest versions of react-native and react-native-svg
+
+```bash
+react-native init CleanProject
+cd CleanProject/
+yarn add react-native-svg
+cd ios && pod install && cd ..
+modify App.js -> run the app
+```
+
+If it's still an issue with the latest versions,
+please make an sscce in the clean project,
+and make it available as a git repo on github.
+Or as a https://snack.expo.io/ if expo has the latest version,
+and / or the bug exists both in the latest version and the one used in expo and snack.
 
 ## Environment info
 
