@@ -281,6 +281,7 @@ export interface ImageProps
   preserveAspectRatio?: string;
   opacity?: NumberProp;
   clipPath?: string;
+  id?: string;
 }
 export const Image: React.ComponentClass<ImageProps>;
 
