@@ -60,6 +60,11 @@ interface BaseProps {
   style: Iterable<{}>;
 }
 
+const hasTouchableProperty = (props: BaseProps) =>
+  Boolean(
+    props.onPress || props.onPressIn || props.onPressOut || props.onLongPress,
+  );
+
 /**
  * `react-native-svg` supports additional props that aren't defined in the spec.
  * This function replaces them in a spec conforming manner.
@@ -94,8 +99,7 @@ const prepare = <T extends BaseProps>(
     // @ts-ignore
     ...rest
   } = props;
-  const hasTouchableProperty =
-    onPress || onPressIn || onPressOut || onLongPress;
+
   const clean: {
     onStartShouldSetResponder?: (e: GestureResponderEvent) => boolean;
     onResponderMove?: (e: GestureResponderEvent) => void;
@@ -107,7 +111,7 @@ const prepare = <T extends BaseProps>(
     style?: {};
     ref?: {};
   } = {
-    ...(hasTouchableProperty
+    ...(hasTouchableProperty(props)
       ? {
           onStartShouldSetResponder:
             self.touchableHandleStartShouldSetResponder,
@@ -245,7 +249,11 @@ export class WebShape<
   ) => boolean;
   constructor(props: P, context: C) {
     super(props, context);
-    SvgTouchableMixin(this);
+
+    if (hasTouchableProperty(props)) {
+      SvgTouchableMixin(this);
+    }
+
     this._remeasureMetricsOnActivation = remeasure.bind(this);
   }
 }
