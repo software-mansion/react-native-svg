@@ -1,10 +1,4 @@
-import React, {
-  Component,
-  ComponentType,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import * as React from 'react';
 import Rect from './elements/Rect';
 import Circle from './elements/Circle';
 import Ellipse from './elements/Ellipse';
@@ -29,7 +23,7 @@ import Pattern from './elements/Pattern';
 import Mask from './elements/Mask';
 import Marker from './elements/Marker';
 
-export const tags: { [tag: string]: ComponentType } = {
+export const tags: { [tag: string]: React.ComponentType } = {
   svg: Svg,
   circle: Circle,
   ellipse: Ellipse,
@@ -69,7 +63,7 @@ export interface AST {
   props: {
     [prop: string]: Styles | string | undefined;
   };
-  Tag: ComponentType;
+  Tag: React.ComponentType;
 }
 
 export interface XmlAST extends AST {
@@ -103,7 +97,7 @@ export function SvgAst({ ast, override }: AstProps) {
 
 export function SvgXml(props: XmlProps) {
   const { xml, override } = props;
-  const ast = useMemo<JsxAST | null>(() => (xml !== null ? parse(xml) : null), [
+  const ast = React.useMemo<JsxAST | null>(() => (xml !== null ? parse(xml) : null), [
     xml,
   ]);
   return <SvgAst ast={ast} override={override || props} />;
@@ -118,8 +112,8 @@ export const err = console.error.bind(console);
 
 export function SvgUri(props: UriProps) {
   const { uri } = props;
-  const [xml, setXml] = useState<string | null>(null);
-  useEffect(() => {
+  const [xml, setXml] = React.useState<string | null>(null);
+  React.useEffect(() => {
     uri
       ? fetchText(uri)
           .then(setXml)
@@ -131,7 +125,7 @@ export function SvgUri(props: UriProps) {
 
 // Extending Component is required for Animated support.
 
-export class SvgFromXml extends Component<XmlProps, XmlState> {
+export class SvgFromXml extends React.Component<XmlProps, XmlState> {
   state = { ast: null };
   componentDidMount() {
     this.parse(this.props.xml);
@@ -158,7 +152,7 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
   }
 }
 
-export class SvgFromUri extends Component<UriProps, UriState> {
+export class SvgFromUri extends React.Component<UriProps, UriState> {
   state = { xml: null };
   componentDidMount() {
     this.fetch(this.props.uri);

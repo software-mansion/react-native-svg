@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { requireNativeComponent } from 'react-native';
 import extractViewBox from '../lib/extract/extractViewBox';
 import { NumberProp } from '../lib/extract/types';

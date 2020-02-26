@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { requireNativeComponent } from 'react-native';
 import extractTransform from '../lib/extract/extractTransform';
 import extractViewBox from '../lib/extract/extractViewBox';

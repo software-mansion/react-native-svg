@@ -12,7 +12,7 @@ import {
   StrokeProps,
   TransformProps,
 } from './types';
-import { Component } from 'react';
+import * as React from 'react';
 
 const clipRules: { evenodd: number; nonzero: number } = {
   evenodd: 0,
@@ -81,7 +81,7 @@ export default function extractProps(
     matrix: number[];
     propList: string[];
     onLayout?: () => void;
-    ref?: (instance: Component | null) => void;
+    ref?: (instance: React.Component | null) => void;
     markerStart?: string;
     markerMid?: string;
     markerEnd?: string;
