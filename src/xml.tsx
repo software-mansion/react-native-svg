@@ -97,9 +97,10 @@ export function SvgAst({ ast, override }: AstProps) {
 
 export function SvgXml(props: XmlProps) {
   const { xml, override } = props;
-  const ast = React.useMemo<JsxAST | null>(() => (xml !== null ? parse(xml) : null), [
-    xml,
-  ]);
+  const ast = React.useMemo<JsxAST | null>(
+    () => (xml !== null ? parse(xml) : null),
+    [xml],
+  );
   return <SvgAst ast={ast} override={override || props} />;
 }
 
