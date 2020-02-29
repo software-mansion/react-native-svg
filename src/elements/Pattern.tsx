@@ -1,10 +1,10 @@
 import React from 'react';
-import { requireNativeComponent } from 'react-native';
 import extractTransform from '../lib/extract/extractTransform';
 import extractViewBox from '../lib/extract/extractViewBox';
 import { NumberProp, TransformProps } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
+import { RNSVGPattern } from './NativeComponents';
 
 export default class Pattern extends Shape<{
   id?: string;
@@ -66,5 +66,3 @@ export default class Pattern extends Shape<{
     );
   }
 }
-
-export const RNSVGPattern = requireNativeComponent('RNSVGPattern');

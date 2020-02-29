@@ -1,10 +1,10 @@
 import React from 'react';
-import { requireNativeComponent } from 'react-native';
 import extractTransform from '../lib/extract/extractTransform';
 import { withoutXY } from '../lib/extract/extractProps';
 import { NumberProp, TransformProps } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
+import { RNSVGMask } from './NativeComponents';
 
 export default class Mask extends Shape<{
   x?: NumberProp;
@@ -57,5 +57,3 @@ export default class Mask extends Shape<{
     );
   }
 }
-
-export const RNSVGMask = requireNativeComponent('RNSVGMask');

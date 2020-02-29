@@ -26,7 +26,7 @@ project.xcworkspace
 .idea
 .gradle
 local.properties
-build
+build/
 
 # node.js
 #

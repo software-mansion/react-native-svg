@@ -98,10 +98,6 @@ exports[`supports CSS in style element 1`] = `
         "backgroundColor": "transparent",
         "borderWidth": 0,
       },
-      undefined,
-      Object {
-        "opacity": 1,
-      },
       Object {
         "flex": 0,
         "height": "100%",
@@ -155,97 +151,12 @@ exports[`supports CSS in style element 1`] = `
 </svg>"
   xmlns="http://www.w3.org/2000/svg"
 >
-  <RNSVGGroup
-    fill={4278190080}
-    fillOpacity={1}
-    fillRule={1}
-    font={Object {}}
-    matrix={
-      Array [
-        1,
-        0,
-        0,
-        1,
-        0,
-        0,
-      ]
-    }
-    opacity={1}
-    originX={0}
-    originY={0}
-    propList={Array []}
-    rotation={0}
-    scaleX={1}
-    scaleY={1}
-    skewX={0}
-    skewY={0}
-    stroke={null}
-    strokeDasharray={null}
-    strokeDashoffset={null}
-    strokeLinecap={0}
-    strokeLinejoin={0}
-    strokeMiterlimit={4}
-    strokeOpacity={1}
-    strokeWidth={1}
-    vectorEffect={0}
-    x={0}
-    y={0}
-  >
+  <RNSVGGroup>
     <RNSVGDefs />
-    <RNSVGGroup
-      fill={4278190080}
-      fillOpacity={1}
-      fillRule={1}
-      font={Object {}}
-      matrix={
-        Array [
-          1,
-          0,
-          0,
-          1,
-          0,
-          0,
-        ]
-      }
-      opacity={1}
-      originX={0}
-      originY={0}
-      propList={Array []}
-      rotation={0}
-      scaleX={1}
-      scaleY={1}
-      skewX={0}
-      skewY={0}
-      stroke={null}
-      strokeDasharray={null}
-      strokeDashoffset={null}
-      strokeLinecap={0}
-      strokeLinejoin={0}
-      strokeMiterlimit={4}
-      strokeOpacity={1}
-      strokeWidth={1}
-      vectorEffect={0}
-      x={0}
-      y={0}
-    >
+    <RNSVGGroup>
       <RNSVGRect
         fill={4294901760}
-        fillOpacity={1}
-        fillRule={1}
         height={200}
-        matrix={
-          Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ]
-        }
-        opacity={1}
-        originX={0}
-        originY={0}
         propList={
           Array [
             "fill",
@@ -253,79 +164,18 @@ exports[`supports CSS in style element 1`] = `
             "strokeWidth",
           ]
         }
-        rotation={0}
-        scaleX={1}
-        scaleY={1}
-        skewX={0}
-        skewY={0}
         stroke={4278190335}
-        strokeDasharray={null}
-        strokeDashoffset={null}
-        strokeLinecap={0}
-        strokeLinejoin={0}
-        strokeMiterlimit={4}
-        strokeOpacity={1}
         strokeWidth="16"
-        vectorEffect={0}
         width={1000}
         x={100}
         y={0}
       />
     </RNSVGGroup>
-    <RNSVGGroup
-      fill={4278190080}
-      fillOpacity={1}
-      fillRule={1}
-      font={Object {}}
-      matrix={
-        Array [
-          1,
-          0,
-          0,
-          1,
-          0,
-          0,
-        ]
-      }
-      opacity={1}
-      originX={0}
-      originY={0}
-      propList={Array []}
-      rotation={0}
-      scaleX={1}
-      scaleY={1}
-      skewX={0}
-      skewY={0}
-      stroke={null}
-      strokeDasharray={null}
-      strokeDashoffset={null}
-      strokeLinecap={0}
-      strokeLinejoin={0}
-      strokeMiterlimit={4}
-      strokeOpacity={1}
-      strokeWidth={1}
-      vectorEffect={0}
-      x={0}
-      y={0}
-    >
+    <RNSVGGroup>
       <RNSVGRect
         fill={4294901760}
         fillOpacity={0.3}
-        fillRule={1}
         height={200}
-        matrix={
-          Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ]
-        }
-        opacity={1}
-        originX={0}
-        originY={0}
         propList={
           Array [
             "fill",
@@ -334,20 +184,8 @@ exports[`supports CSS in style element 1`] = `
             "strokeWidth",
           ]
         }
-        rotation={0}
-        scaleX={1}
-        scaleY={1}
-        skewX={0}
-        skewY={0}
         stroke={4278190335}
-        strokeDasharray={null}
-        strokeDashoffset={null}
-        strokeLinecap={0}
-        strokeLinejoin={0}
-        strokeMiterlimit={4}
-        strokeOpacity={1}
         strokeWidth="16"
-        vectorEffect={0}
         width={750}
         x={100}
         y={350}
