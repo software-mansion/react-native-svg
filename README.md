@@ -846,7 +846,7 @@ The <Defs> element is used to embed definitions that can be reused inside an SVG
 
 #### Image
 
-The <Image> element allows a raster image to be included in an Svg componenet.
+The <Image> element allows a raster image to be included in an Svg component.
 
 ```jsx
 <Svg height="100" width="100">
