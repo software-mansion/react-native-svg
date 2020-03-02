@@ -9,7 +9,7 @@ buildscript {
         }
         
         dependencies {
-            classpath("com.android.tools.build:gradle:3.5.3")
+            classpath("com.android.tools.build:gradle:3.6.1")
         }
     }
 }
@@ -22,8 +22,6 @@ def safeExtGet(prop, fallback) {
 
 android {
     compileSdkVersion safeExtGet('compileSdkVersion', 28)
-    //noinspection GradleDependency
-    buildToolsVersion safeExtGet('buildToolsVersion', '28.0.3')
 
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', 16)
