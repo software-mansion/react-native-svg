@@ -1,3 +1,31 @@
+# [12.0.0](https://github.com/react-native-community/react-native-svg/compare/v11.0.1...v12.0.0) (2020-03-04)
+
+
+* fix!: #1262 default width and height on svg ([1d6798b](https://github.com/react-native-community/react-native-svg/commit/1d6798b08ff578cd9f7b5963fbf4d44bf4225a4e)), closes [#1262](https://github.com/react-native-community/react-native-svg/issues/1262)
+* fix!: #1247 Animated view translation inside Svg tag ([0288d95](https://github.com/react-native-community/react-native-svg/commit/0288d95e7b5d6c9b4fb93f320f5787ca2dbd1599)), closes [#1247](https://github.com/react-native-community/react-native-svg/issues/1247) [#1258](https://github.com/react-native-community/react-native-svg/issues/1258)
+
+
+### Bug Fixes
+
+* **ios:** handle gradient and pattern transform when null ([715e9b8](https://github.com/react-native-community/react-native-svg/commit/715e9b82a89d813443c1e302d0339b446fc2707d))
+* **ios:** pod install error ([675df92](https://github.com/react-native-community/react-native-svg/commit/675df924072223cb92b9f70e183755c4ac665f8a))
+* **web:** [#1274](https://github.com/react-native-community/react-native-svg/issues/1274) Unable to build using babel-plugin-react-native-web ([80b5064](https://github.com/react-native-community/react-native-svg/commit/80b506415447d22962764700bd42a1b7a8597f6f))
+* removed missing unnecessary React headers import error caused by non-framework style import ([f795029](https://github.com/react-native-community/react-native-svg/commit/f795029c2a21ce65279dc2dc3f090b46c3a6c08a))
+
+
+### Performance Improvements
+
+* optimize extraction of fill, stroke, responder, matrix & display ([279c3fc](https://github.com/react-native-community/react-native-svg/commit/279c3fcf84540ba12b18dd2056e3189af75c29b4))
+* optimize handling of font properties in G elements ([0fa4177](https://github.com/react-native-community/react-native-svg/commit/0fa4177ed7e2e1ecacd729d92305c5406b767d4f))
+* optimize handling of inherited styles ([363c1b4](https://github.com/react-native-community/react-native-svg/commit/363c1b491ff035b5f4c2666f7cacd6665029d2a8))
+* optimize svg root prop handling, simplify element development ([f0cd11d](https://github.com/react-native-community/react-native-svg/commit/f0cd11d6f6cfc993bfb384866ce9b26efc918b58))
+
+
+### BREAKING CHANGES
+
+* default size might change if width or height is missing
+* Behavior of native elements is reverted to pre v10
+
 ## [11.0.1](https://github.com/react-native-community/react-native-svg/compare/v11.0.0...v11.0.1) (2020-01-18)
 
 
