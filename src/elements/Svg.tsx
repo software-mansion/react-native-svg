@@ -53,6 +53,8 @@ export default class Svg extends Shape<
   static displayName = 'Svg';
 
   static defaultProps = {
+    width: '100%',
+    height: '100%',
     preserveAspectRatio: 'xMidYMid meet',
   };
 
