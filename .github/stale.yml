@@ -4,7 +4,7 @@
 daysUntilStale: 60
 
  # Number of days of inactivity before an Issue or Pull Request with the stale label is closed.
-daysUntilClose: 7
+daysUntilClose: 365
 
  # Issues or Pull Requests.
 exemptLabels:
