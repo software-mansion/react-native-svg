@@ -237,6 +237,7 @@ export type ImageProps = {
   preserveAspectRatio?: string,
   opacity?: NumberProp,
   clipPath?: string,
+  id?: string,
   ...
 } & ResponderProps &
   CommonMaskProps &
