@@ -1,3 +1,10 @@
+## [12.0.2](https://github.com/react-native-community/react-native-svg/compare/v12.0.1...v12.0.2) (2020-03-05)
+
+
+### Bug Fixes
+
+* [#1262](https://github.com/react-native-community/react-native-svg/issues/1262) support single dimension + aspectRatio syntax ([b2f7605](https://github.com/react-native-community/react-native-svg/commit/b2f76058550a542ef500b71b41f81f410fc9d1e4))
+
 ## [12.0.1](https://github.com/react-native-community/react-native-svg/compare/v12.0.0...v12.0.1) (2020-03-05)
 
 
