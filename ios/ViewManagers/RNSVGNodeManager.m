@@ -236,4 +236,30 @@ RCT_CUSTOM_VIEW_PROPERTY(display, id, RNSVGNode)
 
 RCT_CUSTOM_SHADOW_PROPERTY(direction, id, RNSVGNode) {}
 
+RCT_CUSTOM_VIEW_PROPERTY(pointerEvents, RCTPointerEvents, RNSVGNode)
+{
+  if (!json) {
+    view.userInteractionEnabled = defaultView.userInteractionEnabled;
+    return;
+  }
+
+  switch ([RCTConvert RCTPointerEvents:json]) {
+    case RCTPointerEventsBoxNone:
+    case RCTPointerEventsBoxOnly:
+    case RCTPointerEventsUnspecified:
+      // Pointer events "unspecified" acts as if a stylesheet had not specified,
+      // which is different than "auto" in CSS (which cannot and will not be
+      // supported in `React`. "auto" may override a parent's "none".
+      // Unspecified values do not.
+      // This wouldn't override a container view's `userInteractionEnabled = NO`
+      view.userInteractionEnabled = YES;
+      break;
+    case RCTPointerEventsNone:
+      view.userInteractionEnabled = NO;
+      break;
+    default:
+      view.userInteractionEnabled = NO;
+      RCTLogError(@"UIView base class does not support pointerEvent value: %@", json);
+  }
+}
 @end

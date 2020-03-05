@@ -27,6 +27,7 @@ import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.lang.reflect.Field;
@@ -519,6 +520,10 @@ abstract public class RenderableView extends VirtualView {
     @Override
     int hitTest(final float[] src) {
         if (mPath == null || !mInvertible || !mTransformInvertible) {
+            return -1;
+        }
+
+        if (mPointerEvents == PointerEvents.NONE) {
             return -1;
         }
 
