@@ -116,10 +116,10 @@ export default class Svg extends Shape<
       ...(Array.isArray(style) ? Object.assign({}, ...style) : style),
       ...extracted,
     };
-    const {
+    let {
       color,
-      width = '100%',
-      height = '100%',
+      width,
+      height,
       focusable,
 
       // Inherited G properties
@@ -137,6 +137,9 @@ export default class Svg extends Shape<
       strokeLinejoin,
       strokeMiterlimit,
     } = stylesAndProps;
+    if (width === undefined && height === undefined) {
+      width = height = '100%';
+    }
 
     const props: extractedProps = extracted as extractedProps;
     props.focusable = Boolean(focusable) && focusable !== 'false';
