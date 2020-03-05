@@ -1,3 +1,11 @@
+## [12.0.1](https://github.com/react-native-community/react-native-svg/compare/v12.0.0...v12.0.1) (2020-03-05)
+
+
+### Bug Fixes
+
+* [#1262](https://github.com/react-native-community/react-native-svg/issues/1262) allow setting width and height using stylesheet ([c5374b2](https://github.com/react-native-community/react-native-svg/commit/c5374b297e6145aa529ea2a51fe1ca6db61a3f0a))
+* react-native 0.59 compat ([c4dba22](https://github.com/react-native-community/react-native-svg/commit/c4dba222a3d53d4222127d4877078977475de400))
+
 # [12.0.0](https://github.com/react-native-community/react-native-svg/compare/v11.0.1...v12.0.0) (2020-03-04)
 
 
