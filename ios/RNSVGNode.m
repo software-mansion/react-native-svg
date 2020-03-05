@@ -165,6 +165,15 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     self.backgroundColor = inheritedBackgroundColor;
 }
 
+- (void)setPointerEvents:(RCTPointerEvents)pointerEvents
+{
+  _pointerEvents = pointerEvents;
+  self.userInteractionEnabled = (pointerEvents != RCTPointerEventsNone);
+  if (pointerEvents == RCTPointerEventsBoxNone) {
+    self.accessibilityViewIsModal = NO;
+  }
+}
+
 - (void)setName:(NSString *)name
 {
     if ([name isEqualToString:_name]) {
