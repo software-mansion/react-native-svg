@@ -80,8 +80,8 @@ abstract public class RenderableView extends VirtualView {
     public float strokeMiterlimit = 4;
     public float strokeDashoffset = 0;
 
-    public Paint.Cap strokeLinecap = Paint.Cap.ROUND;
-    public Paint.Join strokeLinejoin = Paint.Join.ROUND;
+    public Paint.Cap strokeLinecap = Paint.Cap.BUTT;
+    public Paint.Join strokeLinejoin = Paint.Join.MITER;
 
     public @Nullable ReadableArray fill;
     public float fillOpacity = 1;

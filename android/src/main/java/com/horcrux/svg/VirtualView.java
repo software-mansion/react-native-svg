@@ -318,9 +318,9 @@ abstract public class VirtualView extends ReactViewGroup {
                 FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");
             }
         } else {
-            mMatrix = null;
-            mInvMatrix = null;
-            mInvertible = false;
+            mMatrix.reset();
+            mInvMatrix.reset();
+            mInvertible = true;
         }
 
         super.invalidate();
