@@ -1,3 +1,12 @@
+## [12.0.3](https://github.com/react-native-community/react-native-svg/compare/v12.0.2...v12.0.3) (2020-03-08)
+
+
+### Bug Fixes
+
+* **android:** default cap, join and handling of null matrix ([df4ff9c](https://github.com/react-native-community/react-native-svg/commit/df4ff9caa7cedfabcbb8e470977ad92db3773830))
+* **ios:** [#1290](https://github.com/react-native-community/react-native-svg/issues/1290) pointerEvents="none" gesture handling ([11d14fd](https://github.com/react-native-community/react-native-svg/commit/11d14fd3998152f7af9a5e103e349542f7be213d))
+* [#1290](https://github.com/react-native-community/react-native-svg/issues/1290) pointerEvents="none" ([bd78998](https://github.com/react-native-community/react-native-svg/commit/bd78998a2bc7a028c3dbca26d36b2bb1753d31e2))
+
 ## [12.0.2](https://github.com/react-native-community/react-native-svg/compare/v12.0.1...v12.0.2) (2020-03-05)
 
 
