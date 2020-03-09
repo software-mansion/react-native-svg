@@ -249,13 +249,42 @@ export class WebShape<
   ) => boolean;
   constructor(props: P, context: C) {
     super(props, context);
-
-    if (hasTouchableProperty(props)) {
-      SvgTouchableMixin(this);
-    }
-
+    SvgTouchableMixin(this);
     this._remeasureMetricsOnActivation = remeasure.bind(this);
+    const componentDidMount = this.componentDidUpdate as () => void;
+    this.componentDidMount = () => {
+      componentDidMount();
+      if (!hasTouchableProperty(this.props)) {
+        this.detachBlurListener();
+      }
+    };
   }
+  componentDidUpdate(prevProps: Readonly<P>): void {
+    const wasTouchable = hasTouchableProperty(prevProps);
+    const isTouchable = hasTouchableProperty(this.props);
+    if (wasTouchable !== isTouchable) {
+      if (isTouchable) {
+        this.attachBlurListener();
+      } else {
+        this.detachBlurListener();
+      }
+    }
+  }
+  _touchableBlurListener?: () => void;
+  _touchableNode?: {
+    addEventListener: (name: string, listener?: () => void) => void;
+    removeEventListener: (name: string, listener?: () => void) => void;
+  };
+  detachBlurListener = () => {
+    const node = this._touchableNode;
+    if (node && node.removeEventListener) {
+      node.removeEventListener('blur', this._touchableBlurListener);
+    }
+  };
+  attachBlurListener = () => {
+    const node = this._touchableNode;
+    node && node.addEventListener('blur', this._touchableBlurListener);
+  };
 }
 
 export class Circle extends WebShape {
