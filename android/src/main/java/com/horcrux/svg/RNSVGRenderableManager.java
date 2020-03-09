@@ -250,7 +250,7 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
                 char[] buffer = new char[DEFAULT_BUFFER_SIZE];
                 StringBuilder builder = new StringBuilder();
                 int n;
-                while ((n = reader.read(buffer)) != EOF) {
+                while ((n = reader.read(buffer, 0, DEFAULT_BUFFER_SIZE)) != EOF) {
                     builder.append(buffer, 0, n);
                 }
                 String result = builder.toString();

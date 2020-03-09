@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import { NativeModules, Platform } from 'react-native';
 // @ts-ignore
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import { fetchText } from './xml';
-import { SvgCss } from './css';
+import { SvgCss, SvgWithCss } from './css';
 
-const { getRawResource } = NativeModules.RNSVGRenderableManager;
+const { getRawResource } = NativeModules.RNSVGRenderableManager || {};
 
 export function getUriFromSource(source?: string | number) {
   const resolvedAssetSource = resolveAssetSource(source);
@@ -49,6 +49,7 @@ export const loadLocalRawResource =
     : loadLocalRawResourceAndroid;
 
 export type LocalProps = { asset?: string | number; override?: Object };
+export type LocalState = { xml: string | null };
 
 export function LocalSvg(props: LocalProps) {
   const { asset, ...rest } = props;
@@ -57,6 +58,33 @@ export function LocalSvg(props: LocalProps) {
     loadLocalRawResource(asset).then(setXml);
   }, [asset]);
   return <SvgCss xml={xml} {...rest} />;
+}
+
+export class WithLocalSvg extends Component<LocalProps, LocalState> {
+  state = { xml: null };
+  componentDidMount() {
+    this.load(this.props.asset);
+  }
+  componentDidUpdate(prevProps: { asset?: string | number }) {
+    const { asset } = this.props;
+    if (asset !== prevProps.asset) {
+      this.load(asset);
+    }
+  }
+  async load(asset?: string | number) {
+    try {
+      this.setState({ xml: asset ? await loadLocalRawResource(asset) : null });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  render() {
+    const {
+      props,
+      state: { xml },
+    } = this;
+    return <SvgWithCss xml={xml} override={props} />;
+  }
 }
 
 export default LocalSvg;
