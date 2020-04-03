@@ -116,12 +116,12 @@ export interface ClipProps {
 
 export interface VectorEffectProps {
   vectorEffect?:
-    | 'none'
-    | 'non-scaling-stroke'
-    | 'nonScalingStroke'
-    | 'default'
-    | 'inherit'
-    | 'uri';
+  | 'none'
+  | 'non-scaling-stroke'
+  | 'nonScalingStroke'
+  | 'default'
+  | 'inherit'
+  | 'uri';
 }
 
 export interface DefinitionProps {
@@ -219,15 +219,15 @@ export interface CommonMarkerProps {
 
 export interface CommonPathProps
   extends FillProps,
-    StrokeProps,
-    ClipProps,
-    TransformProps,
-    VectorEffectProps,
-    ResponderProps,
-    TouchableProps,
-    DefinitionProps,
-    CommonMarkerProps,
-    CommonMaskProps {}
+  StrokeProps,
+  ClipProps,
+  TransformProps,
+  VectorEffectProps,
+  ResponderProps,
+  TouchableProps,
+  DefinitionProps,
+  CommonMarkerProps,
+  CommonMaskProps {}
 
 // Element props
 export interface CircleProps extends CommonPathProps {
@@ -256,7 +256,7 @@ export interface EllipseProps extends CommonPathProps {
   ry?: NumberProp;
 }
 export const Ellipse: React.ComponentClass<EllipseProps>;
-export type  Ellipse = React.ComponentClass<EllipseProps>;
+export type Ellipse = React.ComponentClass<EllipseProps>;
 
 export interface GProps extends CommonPathProps {
   opacity?: NumberProp;
@@ -275,9 +275,9 @@ export type ForeignObject = React.ComponentClass<ForeignObjectProps>;
 
 export interface ImageProps
   extends ResponderProps,
-    CommonMaskProps,
-    ClipProps,
-    TouchableProps {
+  CommonMaskProps,
+  ClipProps,
+  TouchableProps {
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
