@@ -3,11 +3,15 @@ import * as React from 'react';
 import {
   GestureResponderEvent,
   // @ts-ignore
-  unstable_createElement as createElement,
+  unstable_createElement as ucE,
+  // @ts-ignore
+  createElement as cE,
 } from 'react-native';
 import { NumberArray, NumberProp } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
+
+const createElement = cE || ucE;
 
 type BlurEvent = Object;
 type FocusEvent = Object;
