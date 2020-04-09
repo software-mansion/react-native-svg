@@ -1,3 +1,17 @@
+# [12.1.0](https://github.com/react-native-community/react-native-svg/compare/v12.0.3...v12.1.0) (2020-04-09)
+
+
+### Bug Fixes
+
+* **web:** improve react-native-web version compatibility ([88953c3](https://github.com/react-native-community/react-native-svg/commit/88953c3f296e2ff3a201a53626e32b7cc4f6abcc))
+
+
+### Features
+
+* implement WithLocalSvg ([e66e87a](https://github.com/react-native-community/react-native-svg/commit/e66e87a5b5c090509d5e2127237963f83e60f1e9))
+* Support local .svg files, fixes [#1306](https://github.com/react-native-community/react-native-svg/issues/1306) ([4e9e8b5](https://github.com/react-native-community/react-native-svg/commit/4e9e8b58b21d317cfc98c0a34ec5fb0bea5ae2ee))
+* **svgUri:** add onError prop to SvgUri/Xml/Ast ([3c32a6f](https://github.com/react-native-community/react-native-svg/commit/3c32a6fdd580dea53ecc271288155117ce040b55))
+
 ## [12.0.3](https://github.com/react-native-community/react-native-svg/compare/v12.0.2...v12.0.3) (2020-03-08)
 
 
