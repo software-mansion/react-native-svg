@@ -466,29 +466,30 @@ export type JsxAST = {
   children: (React$Node | string)[],
   ...
 } & AST;
+export type AdditionalProps = {
+  onError?: (error: Error) => void,
+  override?: SvgProps,
+} & SvgProps;
 export type UriProps = {
   uri: string | null,
-  override?: SvgProps,
   ...
-} & SvgProps;
+} & AdditionalProps;
 export type UriState = {
   xml: string | null,
   ...
 };
 export type XmlProps = {
   xml: string | null,
-  override?: SvgProps,
   ...
-} & SvgProps;
+} & AdditionalProps;
 export type XmlState = {
   ast: JsxAST | null,
   ...
 };
 export type AstProps = {
   ast: JsxAST | null,
-  override?: SvgProps,
   ...
-} & SvgProps;
+} & AdditionalProps;
 export type Middleware = (ast: XmlAST) => XmlAST;
 declare export function parse(
   source: string,
