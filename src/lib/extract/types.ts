@@ -108,8 +108,8 @@ export type extractedProps = {
   clipPath?: string;
   clipRule?: number;
   display?: string;
-  testID?: string; 
-  accessibilityLabel?: string; 
-  accessible?: boolean;    
+  testID?: string;
+  accessibilityLabel?: string;
+  accessible?: boolean;
   [touchableProperty: string]: unknown;
 };
