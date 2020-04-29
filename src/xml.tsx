@@ -75,13 +75,18 @@ export interface JsxAST extends AST {
   children: (JSX.Element | string)[];
 }
 
-export type UriProps = { uri: string | null; override?: Object };
+export type AdditionalProps = {
+  onError?: (error: Error) => void;
+  override?: Object;
+};
+
+export type UriProps = { uri: string | null } & AdditionalProps;
 export type UriState = { xml: string | null };
 
-export type XmlProps = { xml: string | null; override?: Object };
+export type XmlProps = { xml: string | null } & AdditionalProps;
 export type XmlState = { ast: JsxAST | null };
 
-export type AstProps = { ast: JsxAST | null; override?: Object };
+export type AstProps = { ast: JsxAST | null } & AdditionalProps;
 
 export function SvgAst({ ast, override }: AstProps) {
   if (!ast) {
@@ -95,13 +100,20 @@ export function SvgAst({ ast, override }: AstProps) {
   );
 }
 
+export const err = console.error.bind(console);
+
 export function SvgXml(props: XmlProps) {
-  const { xml, override } = props;
-  const ast = React.useMemo<JsxAST | null>(
-    () => (xml !== null ? parse(xml) : null),
-    [xml],
-  );
-  return <SvgAst ast={ast} override={override || props} />;
+  const { onError = err, xml, override } = props;
+  const ast = useMemo<JsxAST | null>(() => (xml !== null ? parse(xml) : null), [
+    xml,
+  ]);
+
+  try {
+    return <SvgAst ast={ast} override={override || props} />;
+  } catch (error) {
+    onError(error);
+    return null;
+  }
 }
 
 export async function fetchText(uri: string) {
@@ -109,18 +121,16 @@ export async function fetchText(uri: string) {
   return await response.text();
 }
 
-export const err = console.error.bind(console);
-
 export function SvgUri(props: UriProps) {
-  const { uri } = props;
-  const [xml, setXml] = React.useState<string | null>(null);
-  React.useEffect(() => {
+  const { onError = err, uri } = props;
+  const [xml, setXml] = useState<string | null>(null);
+  useEffect(() => {
     uri
       ? fetchText(uri)
           .then(setXml)
-          .catch(err)
+          .catch(onError)
       : setXml(null);
-  }, [uri]);
+  }, [onError, uri]);
   return <SvgXml xml={xml} override={props} />;
 }
 

@@ -3,6 +3,7 @@ import { requireNativeComponent } from 'react-native';
 import extractGradient from '../lib/extract/extractGradient';
 import { NumberProp, TransformProps } from '../lib/extract/types';
 import Shape from './Shape';
+import { RNSVGRadialGradient } from './NativeComponents';
 
 export default class RadialGradient extends Shape<{
   fx?: NumberProp;
@@ -43,7 +44,3 @@ export default class RadialGradient extends Shape<{
     );
   }
 }
-
-export const RNSVGRadialGradient = requireNativeComponent(
-  'RNSVGRadialGradient',
-);

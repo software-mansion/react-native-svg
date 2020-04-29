@@ -8,6 +8,7 @@ import { meetOrSliceTypes, alignEnum } from '../lib/extract/extractViewBox';
 import { withoutXY } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
+import { RNSVGImage } from './NativeComponents';
 
 const spacesRegExp = /\s+/;
 
@@ -68,5 +69,3 @@ export default class SvgImage extends Shape<{
     );
   }
 }
-
-export const RNSVGImage = requireNativeComponent('RNSVGImage');

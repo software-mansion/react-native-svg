@@ -1,3 +1,4 @@
+import { Component } from 'react';
 import { GestureResponderEvent } from 'react-native';
 
 export type NumberProp = string | number;
@@ -92,4 +93,20 @@ export type StrokeProps = {
 export type ClipProps = {
   clipPath?: string;
   clipRule?: 'evenodd' | 'nonzero';
+};
+export type extractedProps = {
+  name?: string;
+  mask?: string;
+  opacity?: number;
+  matrix?: number[];
+  propList?: string[];
+  onLayout?: () => void;
+  ref?: (instance: Component | null) => void;
+  markerStart?: string;
+  markerMid?: string;
+  markerEnd?: string;
+  clipPath?: string;
+  clipRule?: number;
+  display?: string;
+  [touchableProperty: string]: unknown;
 };

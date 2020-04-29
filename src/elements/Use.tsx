@@ -4,6 +4,7 @@ import { withoutXY } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import { idPattern } from '../lib/util';
 import Shape from './Shape';
+import { RNSVGUse } from './NativeComponents';
 
 export default class Use extends Shape<{
   x?: NumberProp;
@@ -60,5 +61,3 @@ export default class Use extends Shape<{
     );
   }
 }
-
-export const RNSVGUse = requireNativeComponent('RNSVGUse');

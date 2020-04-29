@@ -6,8 +6,7 @@ import {
   NativeMethodsMixinStatic,
 } from 'react-native';
 import { TransformProps } from '../lib/extract/types';
-
-const RNSVGRenderableManager = NativeModules.RNSVGRenderableManager;
+const { RNSVGRenderableManager } = NativeModules;
 
 export interface SVGBoundingBoxOptions {
   fill?: boolean;

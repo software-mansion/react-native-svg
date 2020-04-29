@@ -6,6 +6,7 @@ import extractText, { setTSpan } from '../lib/extract/extractText';
 import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import { TransformProps } from '../lib/extract/types';
+import { RNSVGTSpan } from './NativeComponents';
 
 export default class TSpan extends Shape<{}> {
   static displayName = 'TSpan';
@@ -42,5 +43,3 @@ export default class TSpan extends Shape<{}> {
 }
 
 setTSpan(TSpan);
-
-export const RNSVGTSpan = requireNativeComponent('RNSVGTSpan');

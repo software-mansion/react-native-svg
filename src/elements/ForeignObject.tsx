@@ -3,6 +3,7 @@ import { requireNativeComponent } from 'react-native';
 import { withoutXY } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import G from './G';
+import { RNSVGForeignObject } from './NativeComponents';
 
 export default class ForeignObject extends G<{
   x?: NumberProp;
@@ -36,5 +37,3 @@ export default class ForeignObject extends G<{
     );
   }
 }
-
-export const RNSVGForeignObject = requireNativeComponent('RNSVGForeignObject');

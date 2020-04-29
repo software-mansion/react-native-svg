@@ -3,6 +3,10 @@ name: '🐛 Bug Report'
 about: Report a reproducible bug or regression in this library.
 ---
 
+NB Never post screenshots of code. Post copy paste-able code if you include any.
+Ignoring this will likely lead to direct closing of the issue.
+Please respect the time and energy of open source maintainers.
+
 # Bug
 
 Please provide a clear and concise description of what the bug is.

@@ -846,7 +846,7 @@ The <Defs> element is used to embed definitions that can be reused inside an SVG
 
 #### Image
 
-The <Image> element allows a raster image to be included in an Svg componenet.
+The <Image> element allows a raster image to be included in an Svg component.
 
 ```jsx
 <Svg height="100" width="100">
@@ -949,8 +949,8 @@ Linear gradients can be defined as horizontal, vertical or angular gradients:
 ```jsx
 <Svg height="150" width="300">
   <Defs>
-    <LinearGradient id="grad" x1="0" y1="0" x2="170" y2="0">
-      <Stop offset="0" stopColor="rgb(255,255,0)" stopOpacity="0" />
+    <LinearGradient id="grad" x1="0" y1="0" x2="1" y2="0">
+      <Stop offset="0" stopColor="#FFD080" stopOpacity="1" />
       <Stop offset="1" stopColor="red" stopOpacity="1" />
     </LinearGradient>
   </Defs>

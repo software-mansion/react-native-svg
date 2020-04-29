@@ -3,6 +3,7 @@ import { requireNativeComponent } from 'react-native';
 import extractGradient from '../lib/extract/extractGradient';
 import { NumberProp, TransformProps } from '../lib/extract/types';
 import Shape from './Shape';
+import { RNSVGLinearGradient } from './NativeComponents';
 
 export default class LinearGradient extends Shape<{
   id?: string;
@@ -39,7 +40,3 @@ export default class LinearGradient extends Shape<{
     );
   }
 }
-
-export const RNSVGLinearGradient = requireNativeComponent(
-  'RNSVGLinearGradient',
-);

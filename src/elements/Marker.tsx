@@ -3,6 +3,7 @@ import { requireNativeComponent } from 'react-native';
 import extractViewBox from '../lib/extract/extractViewBox';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
+import { RNSVGMarker } from './NativeComponents';
 
 export default class Marker extends Shape<{
   id?: string;
@@ -57,5 +58,3 @@ export default class Marker extends Shape<{
     );
   }
 }
-
-export const RNSVGMarker = requireNativeComponent('RNSVGMarker');

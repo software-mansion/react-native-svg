@@ -7,6 +7,7 @@ import { TransformProps } from '../lib/extract/types';
 import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import './TSpan';
+import { RNSVGText } from './NativeComponents';
 
 export default class Text extends Shape<{}> {
   static displayName = 'Text';
@@ -41,5 +42,3 @@ export default class Text extends Shape<{}> {
     return <RNSVGText {...props} />;
   }
 }
-
-export const RNSVGText = requireNativeComponent('RNSVGText');

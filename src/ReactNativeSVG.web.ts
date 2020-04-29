@@ -1,17 +1,17 @@
 // @ts-ignore
 import * as React from 'react';
-import { GestureResponderEvent } from 'react-native';
+import {
+  GestureResponderEvent,
+  // @ts-ignore
+  unstable_createElement as ucE,
+  // @ts-ignore
+  createElement as cE,
+} from 'react-native';
 import { NumberArray, NumberProp } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
 
-const createElement: <P>(
-  type: React.ReactType,
-  props?: P,
-  ...children: React.ReactNode[]
-) => React.ReactElement<P> =
-  require('react-native').unstable_createElement ||
-  require('react-native').createElement;
+const createElement = cE || ucE;
 
 type BlurEvent = Object;
 type FocusEvent = Object;

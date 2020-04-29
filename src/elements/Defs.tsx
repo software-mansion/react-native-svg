@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { requireNativeComponent } from 'react-native';
+import { RNSVGDefs } from './NativeComponents';
 
 export default class Defs extends React.Component {
   static displayName = 'Defs';
@@ -8,5 +9,3 @@ export default class Defs extends React.Component {
     return <RNSVGDefs>{this.props.children}</RNSVGDefs>;
   }
 }
-
-export const RNSVGDefs = requireNativeComponent('RNSVGDefs');

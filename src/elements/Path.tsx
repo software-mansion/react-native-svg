@@ -2,6 +2,7 @@ import * as React from 'react';
 import { requireNativeComponent } from 'react-native';
 import { extract } from '../lib/extract/extractProps';
 import Shape from './Shape';
+import { RNSVGPath } from './NativeComponents';
 
 export default class Path extends Shape<{
   d?: string;
@@ -15,5 +16,3 @@ export default class Path extends Shape<{
     );
   }
 }
-
-export const RNSVGPath = requireNativeComponent('RNSVGPath');
