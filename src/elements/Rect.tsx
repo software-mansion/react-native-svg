@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { requireNativeComponent } from 'react-native';
 import { withoutXY } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';

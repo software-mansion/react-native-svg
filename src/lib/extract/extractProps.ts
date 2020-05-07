@@ -1,3 +1,5 @@
+// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as React from 'react';
 import extractFill from './extractFill';
 import extractStroke from './extractStroke';

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { requireNativeComponent } from 'react-native';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
 import { RNSVGSymbol } from './NativeComponents';

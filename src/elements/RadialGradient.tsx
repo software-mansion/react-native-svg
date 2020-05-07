@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { requireNativeComponent } from 'react-native';
 import extractGradient from '../lib/extract/extractGradient';
 import { NumberProp, TransformProps } from '../lib/extract/types';
 import Shape from './Shape';
