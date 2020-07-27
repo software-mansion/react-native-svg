@@ -128,6 +128,14 @@ export interface DefinitionProps {
   id?: string;
   testID?: string;
 }
+export interface AccessibilityProps {
+  accessibilityHint?: string;
+  accessibilityIgnoresInvertColors?: boolean;
+  accessibilityLabel?: string;
+  accessibilityRole?: string;
+  accessibilityState?: Object;
+  accessible?: boolean;
+}
 
 export interface StrokeProps {
   stroke?: Color;
@@ -227,6 +235,7 @@ export interface CommonPathProps
     ResponderProps,
     TouchableProps,
     DefinitionProps,
+    AccessibilityProps,
     CommonMarkerProps,
     CommonMaskProps {}
 
