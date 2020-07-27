@@ -126,6 +126,7 @@ export interface VectorEffectProps {
 
 export interface DefinitionProps {
   id?: string;
+  testID?: string;
 }
 
 export interface StrokeProps {
