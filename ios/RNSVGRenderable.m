@@ -370,9 +370,11 @@ UInt32 saturate(CGFloat value) {
     self.ctm = svgToClientTransform;
     self.clientRect = clientRect;
     self.screenCTM = current;
-
+    
     if (_vectorEffect == kRNSVGVectorEffectNonScalingStroke) {
-        path = CGPathCreateCopyByTransformingPath(path, &svgToClientTransform);
+        //Path was reassigned to new, copied object; need to call release somewhere
+        //but this function has multiple return points so I pick CFAutoRelease.
+        path = CFAutoRelease(CGPathCreateCopyByTransformingPath(path, &svgToClientTransform));
         CGContextConcatCTM(context, CGAffineTransformInvert(svgToClientTransform));
     }
 
