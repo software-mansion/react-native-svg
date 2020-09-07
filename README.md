@@ -72,7 +72,7 @@ Install the JavaScript with:
 
 ##### With react-native-cli
 
-1. Install library from `npm` / `yarn`
+1. Install library from `npm` or `yarn`
 
    ```bash
    npm i react-native-svg
