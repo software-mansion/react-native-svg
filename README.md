@@ -12,47 +12,51 @@
 1. Supports most SVG elements and properties (Rect, Circle, Line, Polyline, Polygon, G ...).
 2. Easy to [convert SVG code](https://svgr.now.sh/) to react-native-svg.
 
-- [Installation](#installation)
-  - [Automatically](#automatically)
-  - [Manually](#manually)
-    - [Android](#android-pre-rn-060)
-    - [iOS](#ios-pre-rn-060)
-- [Troubleshooting](#troubleshooting)
+- [NOTICE:](#notice)
+      - [Manually](#manually)
+        - [Android pre RN 0.60](#android-pre-rn-060)
+        - [iOS pre RN 0.60](#ios-pre-rn-060)
+          - [CocoaPods](#cocoapods)
+    - [Troubleshooting](#troubleshooting)
+      - [Problems with Proguard](#problems-with-proguard)
+      - [Unexpected behavior](#unexpected-behavior)
 - [Opening issues](#opening-issues)
-- [Usage](#usage)
-  - [Use with content loaded from uri](#use-with-content-loaded-from-uri)
-  - [Use with svg files](#use-with-svg-files)
-  - [Use with xml strings](#use-with-xml-strings)
-- [Common props](#common-props)
-- [Supported elements](#supported-elements)
-  - [Svg](#svg)
-  - [Rect](#rect)
-  - [Circle](#circle)
-  - [Ellipse](#ellipse)
-  - [Line](#line)
-  - [Polygon](#polygon)
-  - [Polyline](#polyline)
-  - [Path](#path)
-  - [Text](#text)
-  - [TSpan](#tspan)
-  - [TextPath](#textpath)
-  - [G](#g)
-  - [Use](#use)
-  - [Symbol](#symbol)
-  - [Defs](#defs)
-  - [Image](#image)
-  - [ClipPath](#clippath)
-  - [LinearGradient](#lineargradient)
-  - [RadialGradient](#radialgradient)
-  - [Mask](#mask)
-  - [Pattern](#pattern)
-  - [Marker](#marker)
-  - [ForeignObject](#foreignobject)
-- [Touch Events](#touch-events)
-- [Serialize](#serialize)
-- [Run example](#run-example)
-- [TODO](#todo)
-- [Known issues](#known-issues)
+    - [Usage](#usage)
+    - [Use with content loaded from uri](#use-with-content-loaded-from-uri)
+      - [CSS Support](#css-support)
+    - [Use with svg files](#use-with-svg-files)
+    - [Use with xml strings](#use-with-xml-strings)
+      - [CSS support](#css-support-1)
+    - [Common props:](#common-props)
+    - [Supported elements:](#supported-elements)
+      - [Svg](#svg)
+      - [Rect](#rect)
+      - [Circle](#circle)
+      - [Ellipse](#ellipse)
+      - [Line](#line)
+      - [Polygon](#polygon)
+      - [Polyline](#polyline)
+      - [Path](#path)
+      - [Text](#text)
+      - [TSpan](#tspan)
+      - [TextPath](#textpath)
+      - [G](#g)
+      - [Use](#use)
+      - [Symbol](#symbol)
+      - [Defs](#defs)
+      - [Image](#image)
+      - [ClipPath](#clippath)
+      - [LinearGradient](#lineargradient)
+      - [RadialGradient](#radialgradient)
+      - [Mask](#mask)
+      - [Pattern](#pattern)
+      - [Marker](#marker)
+      - [ForeignObject](#foreignobject)
+      - [Touch Events](#touch-events)
+    - [Serialize](#serialize)
+    - [Run example:](#run-example)
+    - [TODO:](#todo)
+    - [Known issues:](#known-issues)
 
 ### Installation
 
@@ -317,15 +321,34 @@ export default class SvgExample extends React.Component {
 
 ```jsx
 import * as React from 'react';
+import { ActivityIndicator } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
-export default () => (
-  <SvgUri
-    width="100%"
-    height="100%"
-    uri="http://thenewcode.com/assets/images/thumbnails/homer-simpson.svg"
-  />
-);
+
+export default function TestComponent() {
+  const [loading, setLoading] = useState(true);
+  const onError = (e: Error) => {
+    console.log(e.message);
+    setLoading(false);
+  }
+
+  const onLoad = () => {
+    console.log('Svg loaded!');
+    setLoading(false);
+  }
+
+  if (loading) return <ActivityIndicator />
+
+  return (
+    <SvgUri
+      width="100%"
+      height="100%"
+      uri="http://thenewcode.com/assets/images/thumbnails/homer-simpson.svg"
+      onError={onError}
+      onLoad={onLoad}
+    />
+  );
+}
 ```
 
 #### CSS Support
