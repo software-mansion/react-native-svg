@@ -136,11 +136,13 @@ export function SvgUri(props: UriProps) {
       ? fetchText(uri)
           .then(data => {
             setXml(data);
-            onLoad();
+            if (onLoad) {
+              onLoad();
+            }
           })
           .catch(onError)
       : setXml(null);
-  }, [onError, uri]);
+  }, [onError, uri, onLoad]);
   return <SvgXml xml={xml} override={props} />;
 }
 
