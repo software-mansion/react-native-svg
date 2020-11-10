@@ -13,7 +13,6 @@
   "react-native": "src/index.ts",
   "types": "src/index.d.ts",
   "files": [
-    "__tests__",
     "android",
     "elements",
     "ios",
