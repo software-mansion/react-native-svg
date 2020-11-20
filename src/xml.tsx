@@ -86,7 +86,7 @@ export type AdditionalProps = {
   override?: Object;
 };
 
-export type UriProps = { uri: string | null } & AdditionalProps;
+export type UriProps = { uri: string | null, defaultValue: string | null } & AdditionalProps;
 export type UriState = { xml: string | null };
 
 export type XmlProps = { xml: string | null } & AdditionalProps;
@@ -128,7 +128,7 @@ export async function fetchText(uri: string) {
 }
 
 export function SvgUri(props: UriProps) {
-  const { onError = err, uri } = props;
+  const { onError = err, uri, defaultValue } = props;
   const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
     uri
@@ -137,7 +137,7 @@ export function SvgUri(props: UriProps) {
           .catch(onError)
       : setXml(null);
   }, [onError, uri]);
-  return <SvgXml xml={xml} override={props} />;
+  return <SvgXml xml={xml || defaultValue} override={props} />;
 }
 
 // Extending Component is required for Animated support.
