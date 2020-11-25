@@ -46,14 +46,14 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     return self;
 }
 
-- (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
+- (void)insertReactSubview:(RNSVGView *)subview atIndex:(NSInteger)atIndex
 {
     [super insertReactSubview:subview atIndex:atIndex];
     [self insertSubview:subview atIndex:atIndex];
     [self invalidate];
 }
 
-- (void)removeReactSubview:(UIView *)subview
+- (void)removeReactSubview:(RNSVGView *)subview
 {
     [super removeReactSubview:subview];
     [self invalidate];
@@ -98,7 +98,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 {
     RNSVGNode* node = self;
     while (node != nil) {
-        UIView* parent = [node superview];
+        RNSVGPlatformView* parent = [node superview];
 
         if (![parent isKindOfClass:[RNSVGNode class]]) {
             return;
@@ -124,7 +124,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
             break;
         }
 
-        UIView* parent = [node superview];
+        RNSVGPlatformView* parent = [node superview];
 
         if (![node isKindOfClass:[RNSVGNode class]]) {
             node = nil;
@@ -160,7 +160,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     return [glyphContext getFontSize];
 }
 
-- (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
+- (void)reactSetInheritedBackgroundColor:(RNSVGColor *)inheritedBackgroundColor
 {
     self.backgroundColor = inheritedBackgroundColor;
 }
@@ -170,7 +170,11 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _pointerEvents = pointerEvents;
   self.userInteractionEnabled = (pointerEvents != RCTPointerEventsNone);
   if (pointerEvents == RCTPointerEventsBoxNone) {
+#if TARGET_OS_OSX
+    self.accessibilityModal = NO;
+#else
     self.accessibilityViewIsModal = NO;
+#endif
   }
 }
 
@@ -390,7 +394,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 }
 
 // hitTest delagate
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+- (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
 
     // abstract
@@ -403,7 +407,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
         return _svgView;
     }
 
-    __kindof UIView *parent = self.superview;
+    __kindof RNSVGPlatformView *parent = self.superview;
 
     if ([parent class] == [RNSVGSvgView class]) {
         _svgView = parent;
@@ -587,9 +591,9 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     }
 }
 
-- (void)traverseSubviews:(BOOL (^)(__kindof UIView *node))block
+- (void)traverseSubviews:(BOOL (^)(__kindof RNSVGView *node))block
 {
-    for (UIView *node in self.subviews) {
+    for (RNSVGView *node in self.subviews) {
         if (!block(node)) {
             break;
         }

@@ -41,6 +41,11 @@ static RNSVGRenderable * _contextElement;
     return self;
 }
 
+- (RNSVGColor *)defaultColor
+{
+    return [self tintColor];
+}
+
 - (void)invalidate
 {
     _sourceStrokeDashArray = nil;
@@ -406,7 +411,7 @@ UInt32 saturate(CGFloat value) {
 
     if (self.fill) {
         if (self.fill.class == RNSVGBrush.class) {
-            CGContextSetFillColorWithColor(context, [self.tintColor CGColor]);
+            CGContextSetFillColorWithColor(context, [self.defaultColor CGColor]);
             fillColor = YES;
         } else {
             fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
@@ -455,7 +460,7 @@ UInt32 saturate(CGFloat value) {
         BOOL strokeColor;
 
         if (self.stroke.class == RNSVGBrush.class) {
-            CGContextSetStrokeColorWithColor(context,[self.tintColor CGColor]);
+            CGContextSetStrokeColorWithColor(context,[self.defaultColor CGColor]);
             strokeColor = YES;
         } else {
             strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
@@ -513,7 +518,7 @@ UInt32 saturate(CGFloat value) {
 }
 
 // hitTest delegate
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+- (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     if (!_hitArea) {
         return nil;

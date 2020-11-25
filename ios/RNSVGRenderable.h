@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "RNSVGUIKit.h"
+
 #import "RNSVGBrush.h"
 #import "RNSVGCGFCRule.h"
 #import "RNSVGNode.h"
@@ -31,6 +33,8 @@
 @property (nonatomic, assign) RNSVGVectorEffect vectorEffect;
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 @property (nonatomic, assign) CGPathRef hitArea;
+
+- (RNSVGColor *)defaultColor;
 
 - (void)setHitArea:(CGPathRef)path;
 
