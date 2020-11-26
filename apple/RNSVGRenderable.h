@@ -34,8 +34,6 @@
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 @property (nonatomic, assign) CGPathRef hitArea;
 
-- (RNSVGColor *)defaultColor;
-
 - (void)setHitArea:(CGPathRef)path;
 
 - (NSArray<NSString *> *)getAttributeList;

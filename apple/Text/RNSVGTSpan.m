@@ -68,7 +68,7 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
             CGColorRef color;
             if (self.fill) {
                 if (self.fill.class == RNSVGBrush.class) {
-                    color = [self.defaultColor CGColor];
+                    color = [self.tintColor CGColor];
                     [self drawWrappedText:context gc:gc rect:rect color:color];
                 } else {
                     color = [self.fill getColorWithOpacity:self.fillOpacity];
@@ -81,7 +81,7 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
             }
             if (self.stroke) {
                 if (self.stroke.class == RNSVGBrush.class) {
-                    color = [self.defaultColor CGColor];
+                    color = [self.tintColor CGColor];
                     [self drawWrappedText:context gc:gc rect:rect color:color];
                 } else {
                     color = [self.stroke getColorWithOpacity:self.strokeOpacity];

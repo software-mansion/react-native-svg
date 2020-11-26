@@ -41,11 +41,6 @@ static RNSVGRenderable * _contextElement;
     return self;
 }
 
-- (RNSVGColor *)defaultColor
-{
-    return [self tintColor];
-}
-
 - (void)invalidate
 {
     _sourceStrokeDashArray = nil;
@@ -411,7 +406,7 @@ UInt32 saturate(CGFloat value) {
 
     if (self.fill) {
         if (self.fill.class == RNSVGBrush.class) {
-            CGContextSetFillColorWithColor(context, [self.defaultColor CGColor]);
+            CGContextSetFillColorWithColor(context, [self.tintColor CGColor]);
             fillColor = YES;
         } else {
             fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
@@ -460,7 +455,7 @@ UInt32 saturate(CGFloat value) {
         BOOL strokeColor;
 
         if (self.stroke.class == RNSVGBrush.class) {
-            CGContextSetStrokeColorWithColor(context,[self.defaultColor CGColor]);
+            CGContextSetStrokeColorWithColor(context,[self.tintColor CGColor]);
             strokeColor = YES;
         } else {
             strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
