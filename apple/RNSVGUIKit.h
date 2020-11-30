@@ -26,6 +26,7 @@
 @end
 
 // TODO: These could probably be a part of react-native-macos
+// See https://github.com/microsoft/react-native-macos/issues/658 and https://github.com/microsoft/react-native-macos/issues/659
 @interface NSImage (RNSVGMacOSExtensions)
 @property (readonly) CGImageRef CGImage;
 @end
