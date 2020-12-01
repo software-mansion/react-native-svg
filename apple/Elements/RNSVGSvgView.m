@@ -25,8 +25,7 @@
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-#if !TARGET_OS_OSX
-        // TODO: Figure out the proper macOS equivalent
+#if !TARGET_OS_OSX // Not available on macOS
         // This is necessary to ensure that [self setNeedsDisplay] actually triggers
         // a redraw when our parent transitions between hidden and visible.
         self.contentMode = UIViewContentModeRedraw;
