@@ -1,5 +1,3 @@
-#if !TARGET_OS_OSX
-
 #import "RNSVGTopAlignedLabel.h"
 
 @implementation RNSVGTopAlignedLabel
@@ -17,5 +15,3 @@
 }
 
 @end
-
-#endif

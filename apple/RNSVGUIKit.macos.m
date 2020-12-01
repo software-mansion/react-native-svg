@@ -1,5 +1,3 @@
-#if TARGET_OS_OSX
-
 #import "RNSVGUIKit.h"
 
 @implementation RNSVGView
@@ -86,5 +84,3 @@
 }
 
 @end
-
-#endif // ] TARGET_OS_OSX
