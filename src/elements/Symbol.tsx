@@ -1,7 +1,7 @@
 import React from 'react';
-import { requireNativeComponent } from 'react-native';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
+import { RNSVGSymbol } from './NativeComponents';
 
 export default class Symbol extends Shape<{
   id?: string;
@@ -20,5 +20,3 @@ export default class Symbol extends Shape<{
     );
   }
 }
-
-export const RNSVGSymbol = requireNativeComponent('RNSVGSymbol');

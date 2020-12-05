@@ -1,8 +1,8 @@
 import React from 'react';
-import { requireNativeComponent } from 'react-native';
 import { withoutXY } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
+import { RNSVGRect } from './NativeComponents';
 
 export default class Rect extends Shape<{
   x?: NumberProp;
@@ -38,5 +38,3 @@ export default class Rect extends Shape<{
     );
   }
 }
-
-export const RNSVGRect = requireNativeComponent('RNSVGRect');

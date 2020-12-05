@@ -60,9 +60,15 @@
 
 ##### With expo-cli
 
-With Expo, you'll need to run `expo install react-native-svg` to install this library.
+> ✅ The [Expo client app](https://expo.io/tools) comes with the native code installed!
 
-Please refer to [Expo docs](https://docs.expo.io/versions/latest/sdk/svg/) for more information or jump ahead to [Usage](#Usage).
+Install the JavaScript with:
+
+  ```bash
+  expo install react-native-svg
+  ```
+
+📚 See the [**Expo docs**](https://docs.expo.io/versions/latest/sdk/svg/) for more info or jump ahead to [Usage](#Usage).
 
 ##### With react-native-cli
 
@@ -228,7 +234,7 @@ Verify that it is still an issue with the latest version as specified in the pre
 react-native info
 ```
 
-If you suspect that you've found a spec conformance bug, then you can test using your component in a react-native-web project by forking this codesandbox, to see how different browsers render the same content: <https://codesandbox.io/s/pypn6mn3y7> If any evergreen brower with significant userbase or other svg user agent renders some svg content better, or supports more of the svg and related specs, please open an issue asap.
+If you suspect that you've found a spec conformance bug, then you can test using your component in a react-native-web project by forking this codesandbox, to see how different browsers render the same content: <https://codesandbox.io/s/pypn6mn3y7> If any evergreen browser with significant userbase or other svg user agent renders some svg content better, or supports more of the svg and related specs, please open an issue asap.
 
 ### Usage
 
@@ -846,7 +852,7 @@ The <Defs> element is used to embed definitions that can be reused inside an SVG
 
 #### Image
 
-The <Image> element allows a raster image to be included in an Svg componenet.
+The <Image> element allows a raster image to be included in an Svg component.
 
 ```jsx
 <Svg height="100" width="100">
@@ -949,8 +955,8 @@ Linear gradients can be defined as horizontal, vertical or angular gradients:
 ```jsx
 <Svg height="150" width="300">
   <Defs>
-    <LinearGradient id="grad" x1="0" y1="0" x2="170" y2="0">
-      <Stop offset="0" stopColor="rgb(255,255,0)" stopOpacity="0" />
+    <LinearGradient id="grad" x1="0" y1="0" x2="1" y2="0">
+      <Stop offset="0" stopColor="#FFD080" stopOpacity="1" />
       <Stop offset="1" stopColor="red" stopOpacity="1" />
     </LinearGradient>
   </Defs>

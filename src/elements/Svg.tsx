@@ -1,28 +1,30 @@
 import React, { Component } from 'react';
 import {
-  requireNativeComponent,
-  StyleSheet,
   findNodeHandle,
-  NativeModules,
-  MeasureOnSuccessCallback,
-  MeasureLayoutOnSuccessCallback,
   MeasureInWindowOnSuccessCallback,
+  MeasureLayoutOnSuccessCallback,
+  MeasureOnSuccessCallback,
+  NativeModules,
+  StyleSheet,
+  ViewStyle,
 } from 'react-native';
 import {
-  Color,
   ClipProps,
+  Color,
+  extractedProps,
   FillProps,
   NumberProp,
-  StrokeProps,
-  ResponderProps,
-  TransformProps,
   ResponderInstanceProps,
+  ResponderProps,
+  StrokeProps,
+  TransformProps,
 } from '../lib/extract/types';
 import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
 import extractColor from '../lib/extract/extractColor';
 import Shape from './Shape';
 import G from './G';
+import { RNSVGSvg } from './NativeComponents';
 
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
 
@@ -32,15 +34,16 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
 });
+const defaultStyle = styles.svg;
 
 export default class Svg extends Shape<
   {
     color?: Color;
-    style?: [] | {};
     viewBox?: string;
     opacity?: NumberProp;
     onLayout?: () => void;
     preserveAspectRatio?: string;
+    style?: ViewStyle[] | ViewStyle;
   } & TransformProps &
     ResponderProps &
     StrokeProps &
@@ -54,11 +57,13 @@ export default class Svg extends Shape<
   };
 
   measureInWindow = (callback: MeasureInWindowOnSuccessCallback) => {
-    this.root && this.root.measureInWindow(callback);
+    const { root } = this;
+    root && root.measureInWindow(callback);
   };
 
   measure = (callback: MeasureOnSuccessCallback) => {
-    this.root && this.root.measure(callback);
+    const { root } = this;
+    root && root.measure(callback);
   };
 
   measureLayout = (
@@ -66,8 +71,8 @@ export default class Svg extends Shape<
     onSuccess: MeasureLayoutOnSuccessCallback,
     onFail: () => void /* currently unused */,
   ) => {
-    this.root &&
-      this.root.measureLayout(relativeToNativeNode, onSuccess, onFail);
+    const { root } = this;
+    root && root.measureLayout(relativeToNativeNode, onSuccess, onFail);
   };
 
   setNativeProps = (
@@ -85,7 +90,8 @@ export default class Svg extends Shape<
     if (height) {
       props.bbHeight = height;
     }
-    this.root && this.root.setNativeProps(props);
+    const { root } = this;
+    root && root.setNativeProps(props);
   };
 
   toDataURL = (callback: () => void, options?: Object) => {
@@ -98,19 +104,19 @@ export default class Svg extends Shape<
 
   render() {
     const {
-      opacity = 1,
-      viewBox,
-      preserveAspectRatio,
       style,
+      opacity,
+      viewBox,
       children,
       onLayout,
-      ...props
+      preserveAspectRatio,
+      ...extracted
     } = this.props;
     const stylesAndProps = {
       ...(Array.isArray(style) ? Object.assign({}, ...style) : style),
-      ...props,
+      ...extracted,
     };
-    const {
+    let {
       color,
       width,
       height,
@@ -131,40 +137,66 @@ export default class Svg extends Shape<
       strokeLinejoin,
       strokeMiterlimit,
     } = stylesAndProps;
+    if (width === undefined && height === undefined) {
+      width = height = '100%';
+    }
 
-    const w = parseInt(width, 10);
-    const h = parseInt(height, 10);
-    const doNotParseWidth = isNaN(w) || width[width.length - 1] === '%';
-    const doNotParseHeight = isNaN(h) || height[height.length - 1] === '%';
-    const dimensions =
-      width && height
-        ? {
-            width: doNotParseWidth ? width : w,
-            height: doNotParseHeight ? height : h,
-            flex: 0,
-          }
-        : null;
+    const props: extractedProps = extracted as extractedProps;
+    props.focusable = Boolean(focusable) && focusable !== 'false';
+    const rootStyles: (ViewStyle | ViewStyle[])[] = [defaultStyle];
 
-    const o = +opacity;
-    const opacityStyle = !isNaN(o)
-      ? {
-          opacity: o,
-        }
-      : null;
+    if (style) {
+      rootStyles.push(style);
+    }
+
+    let override = false;
+    const overrideStyles: ViewStyle = {};
+    const o = opacity != null ? +opacity : NaN;
+    if (!isNaN(o)) {
+      override = true;
+      overrideStyles.opacity = o;
+    }
+
+    if (width && height) {
+      override = true;
+      const w = parseInt(width, 10);
+      const h = parseInt(height, 10);
+      const doNotParseWidth = isNaN(w) || width[width.length - 1] === '%';
+      const doNotParseHeight = isNaN(h) || height[height.length - 1] === '%';
+      overrideStyles.width = doNotParseWidth ? width : w;
+      overrideStyles.height = doNotParseHeight ? height : h;
+      overrideStyles.flex = 0;
+    }
+
+    if (override) {
+      rootStyles.push(overrideStyles);
+    }
+
+    props.style = rootStyles.length > 1 ? rootStyles : defaultStyle;
+
+    if (width != null) {
+      props.bbWidth = width;
+    }
+    if (height != null) {
+      props.bbHeight = height;
+    }
+
+    extractResponder(props, props, this as ResponderInstanceProps);
 
     const tint = extractColor(color);
+    if (tint != null) {
+      props.color = tint;
+      props.tintColor = tint;
+    }
+
+    if (onLayout != null) {
+      props.onLayout = onLayout;
+    }
+
     return (
       <RNSVGSvg
         {...props}
-        bbWidth={width}
-        bbHeight={height}
-        color={tint}
-        tintColor={tint}
-        onLayout={onLayout}
         ref={this.refMethod}
-        style={[styles.svg, style, opacityStyle, dimensions]}
-        focusable={Boolean(focusable) && focusable !== 'false'}
-        {...extractResponder(props, this as ResponderInstanceProps)}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
       >
         <G
@@ -190,5 +222,3 @@ export default class Svg extends Shape<
     );
   }
 }
-
-export const RNSVGSvg = requireNativeComponent('RNSVGSvgView');

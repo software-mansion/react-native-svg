@@ -1,8 +1,4 @@
 buildscript {
-    ext.safeExtGet = {prop, fallback ->
-        rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
-    }
-    
     // The Android Gradle plugin is only required when opening the android folder stand-alone.
     // This avoids unnecessary downloads and potential conflicts when the library is included as a
     // module dependency in an application project.
@@ -13,18 +9,19 @@ buildscript {
         }
         
         dependencies {
-            //noinspection GradleDependency
-            classpath("com.android.tools.build:gradle:3.5.1")
+            classpath("com.android.tools.build:gradle:3.6.1")
         }
     }
 }
 
 apply plugin: 'com.android.library'
 
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
 android {
     compileSdkVersion safeExtGet('compileSdkVersion', 28)
-    //noinspection GradleDependency
-    buildToolsVersion safeExtGet('buildToolsVersion', '28.0.3')
 
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', 16)
@@ -48,5 +45,5 @@ repositories {
 
 dependencies {
     //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:${safeExtGet('reactnativeVersion', '+')}"
+    implementation "com.facebook.react:react-native:+"
 }

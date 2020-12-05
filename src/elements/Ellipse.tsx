@@ -1,8 +1,8 @@
 import React from 'react';
-import { requireNativeComponent } from 'react-native';
 import { extract } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
+import { RNSVGEllipse } from './NativeComponents';
 
 export default class Ellipse extends Shape<{
   cx?: NumberProp;
@@ -34,5 +34,3 @@ export default class Ellipse extends Shape<{
     );
   }
 }
-
-export const RNSVGEllipse = requireNativeComponent('RNSVGEllipse');

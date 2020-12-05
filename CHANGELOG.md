@@ -1,3 +1,69 @@
+# [12.1.0](https://github.com/react-native-community/react-native-svg/compare/v12.0.3...v12.1.0) (2020-04-09)
+
+
+### Bug Fixes
+
+* **web:** improve react-native-web version compatibility ([88953c3](https://github.com/react-native-community/react-native-svg/commit/88953c3f296e2ff3a201a53626e32b7cc4f6abcc))
+
+
+### Features
+
+* implement WithLocalSvg ([e66e87a](https://github.com/react-native-community/react-native-svg/commit/e66e87a5b5c090509d5e2127237963f83e60f1e9))
+* Support local .svg files, fixes [#1306](https://github.com/react-native-community/react-native-svg/issues/1306) ([4e9e8b5](https://github.com/react-native-community/react-native-svg/commit/4e9e8b58b21d317cfc98c0a34ec5fb0bea5ae2ee))
+* **svgUri:** add onError prop to SvgUri/Xml/Ast ([3c32a6f](https://github.com/react-native-community/react-native-svg/commit/3c32a6fdd580dea53ecc271288155117ce040b55))
+
+## [12.0.3](https://github.com/react-native-community/react-native-svg/compare/v12.0.2...v12.0.3) (2020-03-08)
+
+
+### Bug Fixes
+
+* **android:** default cap, join and handling of null matrix ([df4ff9c](https://github.com/react-native-community/react-native-svg/commit/df4ff9caa7cedfabcbb8e470977ad92db3773830))
+* **ios:** [#1290](https://github.com/react-native-community/react-native-svg/issues/1290) pointerEvents="none" gesture handling ([11d14fd](https://github.com/react-native-community/react-native-svg/commit/11d14fd3998152f7af9a5e103e349542f7be213d))
+* [#1290](https://github.com/react-native-community/react-native-svg/issues/1290) pointerEvents="none" ([bd78998](https://github.com/react-native-community/react-native-svg/commit/bd78998a2bc7a028c3dbca26d36b2bb1753d31e2))
+
+## [12.0.2](https://github.com/react-native-community/react-native-svg/compare/v12.0.1...v12.0.2) (2020-03-05)
+
+
+### Bug Fixes
+
+* [#1262](https://github.com/react-native-community/react-native-svg/issues/1262) support single dimension + aspectRatio syntax ([b2f7605](https://github.com/react-native-community/react-native-svg/commit/b2f76058550a542ef500b71b41f81f410fc9d1e4))
+
+## [12.0.1](https://github.com/react-native-community/react-native-svg/compare/v12.0.0...v12.0.1) (2020-03-05)
+
+
+### Bug Fixes
+
+* [#1262](https://github.com/react-native-community/react-native-svg/issues/1262) allow setting width and height using stylesheet ([c5374b2](https://github.com/react-native-community/react-native-svg/commit/c5374b297e6145aa529ea2a51fe1ca6db61a3f0a))
+* react-native 0.59 compat ([c4dba22](https://github.com/react-native-community/react-native-svg/commit/c4dba222a3d53d4222127d4877078977475de400))
+
+# [12.0.0](https://github.com/react-native-community/react-native-svg/compare/v11.0.1...v12.0.0) (2020-03-04)
+
+
+* fix!: #1262 default width and height on svg ([1d6798b](https://github.com/react-native-community/react-native-svg/commit/1d6798b08ff578cd9f7b5963fbf4d44bf4225a4e)), closes [#1262](https://github.com/react-native-community/react-native-svg/issues/1262)
+* fix!: #1247 Animated view translation inside Svg tag ([0288d95](https://github.com/react-native-community/react-native-svg/commit/0288d95e7b5d6c9b4fb93f320f5787ca2dbd1599)), closes [#1247](https://github.com/react-native-community/react-native-svg/issues/1247) [#1258](https://github.com/react-native-community/react-native-svg/issues/1258)
+
+
+### Bug Fixes
+
+* **ios:** handle gradient and pattern transform when null ([715e9b8](https://github.com/react-native-community/react-native-svg/commit/715e9b82a89d813443c1e302d0339b446fc2707d))
+* **ios:** pod install error ([675df92](https://github.com/react-native-community/react-native-svg/commit/675df924072223cb92b9f70e183755c4ac665f8a))
+* **web:** [#1274](https://github.com/react-native-community/react-native-svg/issues/1274) Unable to build using babel-plugin-react-native-web ([80b5064](https://github.com/react-native-community/react-native-svg/commit/80b506415447d22962764700bd42a1b7a8597f6f))
+* removed missing unnecessary React headers import error caused by non-framework style import ([f795029](https://github.com/react-native-community/react-native-svg/commit/f795029c2a21ce65279dc2dc3f090b46c3a6c08a))
+
+
+### Performance Improvements
+
+* optimize extraction of fill, stroke, responder, matrix & display ([279c3fc](https://github.com/react-native-community/react-native-svg/commit/279c3fcf84540ba12b18dd2056e3189af75c29b4))
+* optimize handling of font properties in G elements ([0fa4177](https://github.com/react-native-community/react-native-svg/commit/0fa4177ed7e2e1ecacd729d92305c5406b767d4f))
+* optimize handling of inherited styles ([363c1b4](https://github.com/react-native-community/react-native-svg/commit/363c1b491ff035b5f4c2666f7cacd6665029d2a8))
+* optimize svg root prop handling, simplify element development ([f0cd11d](https://github.com/react-native-community/react-native-svg/commit/f0cd11d6f6cfc993bfb384866ce9b26efc918b58))
+
+
+### BREAKING CHANGES
+
+* default size might change if width or height is missing
+* Behavior of native elements is reverted to pre v10
+
 ## [11.0.1](https://github.com/react-native-community/react-native-svg/compare/v11.0.0...v11.0.1) (2020-01-18)
 
 

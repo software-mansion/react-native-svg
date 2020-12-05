@@ -1,8 +1,8 @@
 import React from 'react';
-import { requireNativeComponent } from 'react-native';
 import { extract } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
+import { RNSVGCircle } from './NativeComponents';
 
 export default class Circle extends Shape<{
   cx?: NumberProp;
@@ -31,5 +31,3 @@ export default class Circle extends Shape<{
     );
   }
 }
-
-export const RNSVGCircle = requireNativeComponent('RNSVGCircle');

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { requireNativeComponent } from 'react-native';
 import extractText from '../lib/extract/extractText';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import extractTransform from '../lib/extract/extractTransform';
@@ -7,6 +6,7 @@ import { TransformProps } from '../lib/extract/types';
 import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import './TSpan';
+import { RNSVGText } from './NativeComponents';
 
 export default class Text extends Shape<{}> {
   static displayName = 'Text';
@@ -41,5 +41,3 @@ export default class Text extends Shape<{}> {
     return <RNSVGText {...props} />;
   }
 }
-
-export const RNSVGText = requireNativeComponent('RNSVGText');
