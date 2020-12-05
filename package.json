@@ -60,10 +60,10 @@
   },
   "dependencies": {
     "css-select": "^2.1.0",
-    "css-tree": "^1.0.0-alpha.39"
+    "css-tree": "^1.1.2"
   },
   "devDependencies": {
-    "@react-native-community/bob": "^0.9.7",
+    "@react-native-community/bob": "^0.16.2",
     "@react-native-community/eslint-config": "0.0.7",
     "@react-native-community/eslint-plugin": "^1.0.0",
     "@semantic-release/changelog": "^5.0.0",
