@@ -49,7 +49,7 @@ buck-out/
 *.jsbundle
 
 # CocoaPods
-/ios/Pods/
+Pods/
 
 # @react-native-community/bob
 lib/

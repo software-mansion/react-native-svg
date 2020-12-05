@@ -49,9 +49,9 @@
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
-    "prepare": "npm run flowgen && npm run bob",
+    "prepare": "yarn flowgen && yarn bob",
     "semantic-release": "semantic-release",
-    "test": "npm run lint && npm run tsc && npm run flow && npm run jest",
+    "test": "yarn lint && yarn tsc && yarn flow && yarn jest",
     "tsc": "tsc --noEmit"
   },
   "peerDependencies": {
