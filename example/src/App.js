@@ -35,7 +35,7 @@ export const App = () => (
   <ScrollView>
     <Space />
 
-    <Svg height="50%" width="50%" viewBox="0 0 100 100">
+    <Svg height="100" width="100" viewBox="0 0 100 100">
       <Circle
         cx="50"
         cy="50"
@@ -369,7 +369,7 @@ export const App = () => (
 
     <Space />
 
-    <Svg width="100%" height="100%" viewBox="0 0 800 300">
+    <Svg width="400" height="150" viewBox="0 0 800 300">
       <Defs>
         <LinearGradient
           id="Gradient"
@@ -410,7 +410,7 @@ export const App = () => (
 
     <Space />
 
-    <Svg width="100%" height="100%" viewBox="0 0 800 400">
+    <Svg width="200" height="100" viewBox="0 0 800 400">
       <Defs>
         <Pattern
           id="TrianglePattern"
@@ -473,7 +473,7 @@ export const App = () => (
 
     <Space />
 
-    <Svg height="50%">
+    <Svg width="400" height="150">
       <Defs>
         <LinearGradient
           id="Gradient"
