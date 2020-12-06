@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   createElement,
+  StyleSheet,
   TouchableWithoutFeedback,
   TouchableWithoutFeedbackProps,
   // @ts-ignore
@@ -35,6 +36,15 @@ const createComponent = <P extends BaseProps = BaseProps>(
   type: keyof React.ReactSVG,
 ) => (props: P): React.ReactElement<P> =>
   (unstable_createElement || createElement)(type, props);
+
+const styles = StyleSheet.create({
+  base: {
+    display: 'flex',
+    flexBasis: 'auto',
+    flexGrow: 0,
+    flexShrink: 0,
+  },
+});
 
 const prepare = <P extends BaseProps = BaseProps>(
   Component: (props: P) => React.ReactElement<P>,
@@ -118,7 +128,7 @@ const prepare = <P extends BaseProps = BaseProps>(
     clean.ref = forwardedRef;
   }
 
-  const styles: {
+  const additionalStyles: {
     fontStyle?: string;
     fontFamily?: string;
     fontSize?: NumberProp;
@@ -126,19 +136,22 @@ const prepare = <P extends BaseProps = BaseProps>(
   } = {};
 
   if (fontFamily != null) {
-    styles.fontFamily = fontFamily;
+    additionalStyles.fontFamily = fontFamily;
   }
   if (fontSize != null) {
-    styles.fontSize = fontSize;
+    additionalStyles.fontSize = fontSize;
   }
   if (fontWeight != null) {
-    styles.fontWeight = fontWeight;
+    additionalStyles.fontWeight = fontWeight;
   }
   if (fontStyle != null) {
-    styles.fontStyle = fontStyle;
+    additionalStyles.fontStyle = fontStyle;
   }
 
-  clean.style = resolve(style, styles);
+  clean.style = StyleSheet.compose(
+    styles.base,
+    resolve(style, additionalStyles),
+  );
 
   if (!(onLongPress || onPress || onPressIn || onPressOut)) {
     return React.createElement(Component, rest, children);
