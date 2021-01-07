@@ -1,11 +1,11 @@
 {
   "version": "12.1.0",
-  "name": "react-native-svg",
+  "name": "react-native-svg-animation-fix",
   "description": "SVG library for react-native",
-  "homepage": "https://github.com/bardliu/react-native-svg/tree/strokeDasharray_animation_fix",
+  "homepage": "https://github.com/bardliu/react-native-svg",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bardliu/react-native-svg/tree/strokeDasharray_animation_fix"
+    "url": "https://github.com/bardliu/react-native-svg"
   },
   "license": "MIT",
   "main": "lib/commonjs/index.js",
