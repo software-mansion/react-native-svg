@@ -110,17 +110,8 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
         return lengths;
     }  else if ([json isKindOfClass:[NSString class]]) {
         NSString *stringValue = (NSString *)json;
-        stringValue = [stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        stringValue = [stringValue stringByReplacingOccurrencesOfString:@"," withString:@" " options:NSRegularExpressionSearch range:NSMakeRange (0, stringValue.length)];
-        NSArray<NSString *> *array = [stringValue componentsSeparatedByString:@" "];
-        NSMutableArray<RNSVGLength *> *svgLengthArray = [NSMutableArray array];
-
-        for (NSString *string in array) {
-            RNSVGLength* length = [RNSVGLength lengthWithString:string];
-            [svgLengthArray addObject:length];
-        }
-
-        return svgLengthArray;
+        RNSVGLength* length = [RNSVGLength lengthWithString:stringValue];
+        return [NSArray arrayWithObject:length];
     } else {
         return nil;
     }

@@ -130,13 +130,8 @@ class SVGLength {
                 return list;
             }
             case String: {
-                String stringValue = dynamic.asString().trim();
-                stringValue = stringValue.replaceAll(",", " ");
-                String[] strings = stringValue.split(" ");
-                ArrayList<SVGLength> list = new ArrayList<>(strings.length);
-                for (String length : strings) {
-                    list.add(new SVGLength(length));
-                }
+                ArrayList<SVGLength> list = new ArrayList<>(1);
+                list.add(new SVGLength(dynamic.asString()));
                 return list;
             }
             default:
