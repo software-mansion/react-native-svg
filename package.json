@@ -15,8 +15,8 @@
   "files": [
     "__tests__",
     "android",
+    "apple",
     "elements",
-    "ios",
     "lib",
     "src",
     "RNSVG.podspec"
