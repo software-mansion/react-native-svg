@@ -1,11 +1,11 @@
 {
   "version": "12.1.0",
-  "name": "react-native-svg",
+  "name": "react-native-svg-macos",
   "description": "SVG library for react-native",
-  "homepage": "https://github.com/react-native-community/react-native-svg",
+  "homepage": "https://github.com/microsoft/react-native-svg-macos",
   "repository": {
     "type": "git",
-    "url": "https://github.com/react-native-community/react-native-svg"
+    "url": "https://github.com/microsoft/react-native-svg-macos"
   },
   "license": "MIT",
   "main": "lib/commonjs/index.js",
@@ -34,6 +34,7 @@
     "react-component",
     "react-native",
     "ios",
+    "macos",
     "android",
     "SVG",
     "ART",
