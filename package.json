@@ -1,6 +1,6 @@
 {
   "version": "12.1.0",
-  "name": "react-native-svg-macos",
+  "name": "@microsoft/react-native-svg-macos",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/microsoft/react-native-svg-macos",
   "repository": {
