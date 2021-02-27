@@ -1,11 +1,11 @@
 {
   "version": "12.1.0",
-  "name": "@microsoft/react-native-svg-macos",
+  "name": "@microsoft/react-native-svg-desktop",
   "description": "SVG library for react-native",
-  "homepage": "https://github.com/microsoft/react-native-svg-macos",
+  "homepage": "https://github.com/microsoft/react-native-svg-desktop",
   "repository": {
     "type": "git",
-    "url": "https://github.com/microsoft/react-native-svg-macos"
+    "url": "https://github.com/microsoft/react-native-svg-desktop"
   },
   "license": "MIT",
   "main": "lib/commonjs/index.js",
