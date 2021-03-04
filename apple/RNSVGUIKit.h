@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // Most (if not all) of this file could probably go away once react-native-macos's version of RCTUIKit.h makes its way upstream.
 // https://github.com/microsoft/react-native-macos/issues/242
 
