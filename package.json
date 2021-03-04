@@ -64,6 +64,7 @@
     "css-tree": "^1.0.0-alpha.39"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.9.0",
     "@react-native-community/bob": "^0.9.7",
     "@react-native-community/eslint-config": "0.0.7",
     "@react-native-community/eslint-plugin": "^1.0.0",
