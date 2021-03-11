@@ -1,6 +1,6 @@
-## react-native-svg-macos
+## react-native-svg-desktop
 
-`react-native-svg-macos` is a temporary fork of `react-native-svg` that adds support for macOS.
+`react-native-svg-desktop` is a temporary fork of `react-native-svg` that adds support for macOS.
 
 This is a short-term solution to get macOS compatibility up and running while waiting for [this pull request](https://github.com/react-native-svg/react-native-svg/pull/1494) to get resolved. In the long term, we would like to bring any changes in this fork into the original repo.
 
