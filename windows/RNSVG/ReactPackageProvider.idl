@@ -1,4 +1,4 @@
-namespace Rnsvg
+namespace RNSVG
 {
     [webhosthidden]
     [default_interface]
