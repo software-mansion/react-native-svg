@@ -6,8 +6,8 @@
     <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
     <MinimalCoreWin>true</MinimalCoreWin>
     <ProjectGuid>{7acf84ec-efba-4043-8e14-40b159508902}</ProjectGuid>
-    <ProjectName>MicrosoftReactNativeSvgDesktop</ProjectName>
-    <RootNamespace>Rnsvg</RootNamespace>
+    <ProjectName>RNSVG</ProjectName>
+    <RootNamespace>RNSVG</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>
@@ -95,7 +95,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateWindowsMetadata>true</GenerateWindowsMetadata>
-      <ModuleDefinitionFile>MicrosoftReactNativeSvgDesktop.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>RNSVG.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">

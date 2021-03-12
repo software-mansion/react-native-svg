@@ -3,7 +3,7 @@
 
 using namespace winrt::Microsoft::ReactNative;
 
-namespace winrt::Rnsvg::implementation
+namespace winrt::RNSVG::implementation
 {
     struct ReactPackageProvider : ReactPackageProviderT<ReactPackageProvider>
     {
@@ -11,11 +11,11 @@ namespace winrt::Rnsvg::implementation
 
         void CreatePackage(IReactPackageBuilder const &packageBuilder) noexcept;
     };
-} // namespace winrt::Rnsvg::implementation
+} // namespace winrt::RNSVG::implementation
 
-namespace winrt::Rnsvg::factory_implementation
+namespace winrt::RNSVG::factory_implementation
 {
 
 struct ReactPackageProvider : ReactPackageProviderT<ReactPackageProvider, implementation::ReactPackageProvider> {};
 
-} // namespace winrt::Rnsvg::factory_implementation
+} // namespace winrt::RNSVG::factory_implementation

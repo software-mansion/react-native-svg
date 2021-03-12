@@ -8,7 +8,7 @@
 
 using namespace winrt::Microsoft::ReactNative;
 
-namespace winrt::Rnsvg::implementation
+namespace winrt::RNSVG::implementation
 {
 
 void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuilder) noexcept
@@ -16,4 +16,4 @@ void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuil
     AddAttributedModules(packageBuilder);
 }
 
-} // namespace winrt::Rnsvg::implementation
+} // namespace winrt::RNSVG::implementation
