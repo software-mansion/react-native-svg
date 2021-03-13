@@ -1,0 +1,12 @@
+namespace RNSVG
+{
+    [default_interface]
+    runtimeclass GroupViewManager
+      : Microsoft.ReactNative.IViewManager
+      , Microsoft.ReactNative.IViewManagerWithReactContext
+      , Microsoft.ReactNative.IViewManagerWithNativeProperties
+      , Microsoft.ReactNative.IViewManagerWithChildren
+    {
+        GroupViewManager();
+    }
+}
