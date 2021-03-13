@@ -5,15 +5,20 @@
 #endif
 
 #include "RNSVGModule.h"
+#include "SvgViewManager.h"
+#include "GroupViewManager.h"
+#include "RectViewManager.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation
 {
-
-void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuilder) noexcept
-{
+  void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuilder) noexcept
+  {
     AddAttributedModules(packageBuilder);
-}
+    packageBuilder.AddViewManager(L"SvgViewManager", []() { return winrt::make<SvgViewManager>(); });
+    packageBuilder.AddViewManager(L"GroupViewManager", []() { return winrt::make<GroupViewManager>(); });
+    packageBuilder.AddViewManager(L"RectViewManager", []() { return winrt::make<RectViewManager>(); });
+  }
 
 } // namespace winrt::RNSVG::implementation

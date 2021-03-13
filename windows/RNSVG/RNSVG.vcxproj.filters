@@ -2,6 +2,21 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Midl Include="ReactPackageProvider.idl" />
+    <Midl Include="SvgViewManager.idl">
+      <Filter>ViewManagers</Filter>
+    </Midl>
+    <Midl Include="GroupView.idl">
+      <Filter>Views</Filter>
+    </Midl>
+    <Midl Include="SvgView.idl">
+      <Filter>Views</Filter>
+    </Midl>
+    <Midl Include="GroupViewManager.idl">
+      <Filter>ViewManagers</Filter>
+    </Midl>
+    <Midl Include="RectViewManager.idl">
+      <Filter>ViewManagers</Filter>
+    </Midl>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -16,5 +31,13 @@
   <ItemGroup>
     <None Include="PropertySheet.props" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Views">
+      <UniqueIdentifier>{e902587e-fe1d-4643-875b-d58996b40d98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewManagers">
+      <UniqueIdentifier>{cb3ce7b2-9fdf-4578-8e0d-4d6853b727bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

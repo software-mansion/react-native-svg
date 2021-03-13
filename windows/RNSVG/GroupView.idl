@@ -1,0 +1,8 @@
+namespace RNSVG
+{
+    [default_interface]
+    runtimeclass GroupView : Windows.UI.Xaml.Controls.Canvas {
+        GroupView(Microsoft.ReactNative.IReactContext context);
+        void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
+    };
+}

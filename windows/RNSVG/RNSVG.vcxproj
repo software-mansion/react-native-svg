@@ -110,13 +110,37 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GroupViewManager.h">
+      <DependentUpon>GroupViewManager.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="ReactPackageProvider.h">
       <DependentUpon>ReactPackageProvider.idl</DependentUpon>
     </ClInclude>
+    <ClInclude Include="RectViewManager.h">
+      <DependentUpon>RectViewManager.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="RNSVGModule.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="GroupView.h">
+      <DependentUpon>GroupView.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
+    <ClInclude Include="SvgView.h">
+      <DependentUpon>SvgView.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
+    <ClInclude Include="SvgViewManager.h">
+      <DependentUpon>SvgViewManager.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GroupViewManager.cpp">
+      <DependentUpon>GroupViewManager.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -124,9 +148,40 @@
       <DependentUpon>ReactPackageProvider.idl</DependentUpon>
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="GroupView.cpp">
+      <DependentUpon>GroupView.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="RectViewManager.cpp">
+      <DependentUpon>RectViewManager.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="SvgView.cpp">
+      <DependentUpon>SvgView.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="SvgViewManager.cpp">
+      <DependentUpon>SvgViewManager.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="GroupViewManager.idl">
+      <SubType>Designer</SubType>
+    </Midl>
     <Midl Include="ReactPackageProvider.idl" />
+    <Midl Include="GroupView.idl">
+      <SubType>Designer</SubType>
+    </Midl>
+    <Midl Include="RectViewManager.idl">
+      <SubType>Designer</SubType>
+    </Midl>
+    <Midl Include="SvgView.idl">
+      <SubType>Designer</SubType>
+    </Midl>
+    <Midl Include="SvgViewManager.idl">
+      <SubType>Designer</SubType>
+    </Midl>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
