@@ -4,6 +4,8 @@
 #include "SvgViewManager.g.cpp"
 #endif
 
+#include <winrt/Microsoft.Graphics.Canvas.UI.Xaml.h>
+
 #include "SvgView.h"
 
 namespace winrt
