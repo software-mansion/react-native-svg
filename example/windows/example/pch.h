@@ -18,6 +18,7 @@
 #include <winrt/Windows.UI.Xaml.h>
 
 #include <winrt/Microsoft.ReactNative.h>
+#include <winrt/RNSVG.h>
 
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 #include <winrt/Microsoft.UI.Xaml.Controls.Primitives.h>
