@@ -6,14 +6,16 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "postinstall": "rm -rf node_modules/react-native-svg-desktop/{examples,node_modules}",
     "test": "jest",
     "lint": "eslint .",
     "windows": "react-native run-windows"
   },
   "dependencies": {
     "react": "17.0.1",
-    "react-native": "0.64.0-rc.4",
-    "react-native-windows": "^0.64.0-0"
+    "react-native": "^0.64.0",
+    "react-native-windows": "^0.64.0",
+    "react-native-svg-desktop": "file:.."
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

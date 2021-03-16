@@ -26,6 +26,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import {Svg, G, Rect} from 'react-native-svg-desktop';
+
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
@@ -70,9 +72,10 @@ const App: () => Node = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
+          <Section title="Step One!">
+            <Svg height="200" width="200">
+              <Rect height="60" width="75" fill="green" />
+            </Svg>
           </Section>
           <Section title="See Your Changes">
             <ReloadInstructions />
