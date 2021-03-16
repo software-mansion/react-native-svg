@@ -6,6 +6,9 @@
 
 #include <winrt/Microsoft.Graphics.Canvas.UI.Xaml.h>
 
+#include <winrt/Windows.UI.Xaml.Media.h>
+#include <winrt/Windows.UI.Xaml.Shapes.h>
+
 #include "SvgView.h"
 
 namespace winrt
@@ -27,9 +30,7 @@ namespace winrt::RNSVG::implementation
 
   FrameworkElement SvgViewManager::CreateView()
   {
-    winrt::Microsoft::ReactNative::ViewPanel view{};
-    view.Background(winrt::Windows::UI::Xaml::Media::SolidColorBrush({winrt::Windows::UI::Colors::Orange()}));
-    return view;
+    return winrt::RNSVG::SvgView(m_reactContext);
   }
 
   // IViewManagerWithContext
