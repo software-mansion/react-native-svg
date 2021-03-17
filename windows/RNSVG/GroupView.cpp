@@ -71,12 +71,13 @@ namespace winrt::RNSVG::implementation
     return finalSize;
   }
 
-  void GroupView::DrawChildren(Microsoft::Graphics::Canvas::CanvasDrawingSession const &session)
+  void GroupView::DrawChildren(
+    Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const& canvas,
+    Microsoft::Graphics::Canvas::CanvasDrawingSession const &session)
   {
     for (auto child : m_children)
     {
-        child.Render(session);
-      //session.DrawRectangle(50, 50, 100, 100, winrt::Windows::UI::Colors::Blue());
+        child.Render(canvas, session);
     }
   }
 

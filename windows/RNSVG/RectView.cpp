@@ -4,10 +4,12 @@
 #include "RectView.g.cpp"
 #endif
 
+#include <winrt/Microsoft.Graphics.Canvas.Geometry.h>
 #include <winrt/Windows.UI.Xaml.Media.h>
 
 #include "JSValueReader.h"
 #include "JSValueXaml.h"
+#include "Utils.h"
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;
@@ -48,15 +50,22 @@ namespace winrt::RNSVG::implementation
           {
             m_ry = propertyValue.AsSingle();
           }
+          else if (propertyName == "strokeWidth")
+          {
+            m_strokeWidth = propertyValue.AsSingle();
+          }
+          else if (propertyName == "stroke")
+          {
+            if (auto color = Utils::GetColorFromJSValue(propertyValue))
+            {
+              m_stroke = color.value();
+            }
+          }
           else if (propertyName == "fill")
           {
-            if (auto value = propertyValue.To<Windows::UI::Xaml::Media::Brush>())
+            if (auto color = Utils::GetColorFromJSValue(propertyValue))
             {
-              if (auto scb = value.try_as<Windows::UI::Xaml::Media::SolidColorBrush>())
-              {
-                auto color{scb.Color()};
-                m_fill = scb.Color();
-              }
+              m_fill = color.value();
             }
           }
         }
@@ -68,10 +77,21 @@ namespace winrt::RNSVG::implementation
         //parent.InvalidateCanvas();
     }
 
-    void RectView::Render(Microsoft::Graphics::Canvas::CanvasDrawingSession const &session)
+    void RectView::Render(
+        Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
+        Microsoft::Graphics::Canvas::CanvasDrawingSession const &session)
     {
-      auto color{Windows::UI::Colors::Red()};
-      session.FillRoundedRectangle(m_x, m_y, m_width, m_height, m_rx, m_ry, m_fill);
-      session.DrawRoundedRectangle(m_x, m_y, m_width, m_height, m_rx, m_ry, color, 2);
+      auto resourceCreator{canvas.try_as<Microsoft::Graphics::Canvas::ICanvasResourceCreator>()};
+      auto rect{Microsoft::Graphics::Canvas::Geometry::CanvasGeometry::CreateRoundedRectangle(
+          resourceCreator, m_x, m_y, m_width, m_height, m_rx, m_ry)};
+      
+      session.FillGeometry(rect, m_fill);
+
+      if (m_strokeWidth > 0.0f)
+      {
+        session.DrawGeometry(rect, m_stroke, m_strokeWidth);
+      }
+
+      //session.DrawRoundedRectangle(m_x, m_y, m_width, m_height, m_rx, m_ry, color, m_strokeWidth);
     }
 } // namespace winrt::RNSVG::implementation

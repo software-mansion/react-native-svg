@@ -16,7 +16,7 @@ namespace winrt::RNSVG::implementation
 {
   SvgView::SvgView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context)
   {
-    Background(winrt::Windows::UI::Xaml::Media::SolidColorBrush{winrt::Windows::UI::Colors::Yellow()});
+    Background(winrt::Windows::UI::Xaml::Media::SolidColorBrush{winrt::Windows::UI::Colors::LightGray()});
     m_canvas.Draw({get_weak(), &SvgView::Canvas_Draw});
     Children().Append(m_canvas);
   }
@@ -59,7 +59,7 @@ namespace winrt::RNSVG::implementation
   }
 
   void SvgView::Canvas_Draw(
-    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const & /*sender*/,
+    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const & sender,
     winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasDrawEventArgs const &args)
   {
     if (!m_hasRendered)
@@ -71,7 +71,7 @@ namespace winrt::RNSVG::implementation
     {
       if (auto group = child.try_as<GroupView>())
       {
-        group->DrawChildren(args.DrawingSession());
+        group->DrawChildren(sender, args.DrawingSession());
       }
     }
   }

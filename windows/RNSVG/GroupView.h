@@ -22,7 +22,7 @@ namespace winrt::RNSVG::implementation
     Windows::Foundation::Size MeasureOverride(Windows::Foundation::Size availableSize);
     Windows::Foundation::Size ArrangeOverride(Windows::Foundation::Size finalSize);
 
-    void DrawChildren(Microsoft::Graphics::Canvas::CanvasDrawingSession const& session);
+    void DrawChildren(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const& canvas, Microsoft::Graphics::Canvas::CanvasDrawingSession const& session);
     void InvalidateCanvas();
 
    private:

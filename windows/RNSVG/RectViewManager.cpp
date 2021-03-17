@@ -47,6 +47,8 @@ namespace winrt::RNSVG::implementation
     nativeProps.Insert(L"y", ViewManagerPropertyType::Number);
     nativeProps.Insert(L"rx", ViewManagerPropertyType::Number);
     nativeProps.Insert(L"ry", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"stroke", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"strokeWidth", ViewManagerPropertyType::Number);
 
     return nativeProps.GetView();
   }
