@@ -6,7 +6,7 @@ namespace RNSVG
     {
       Windows.UI.Color Color;
       void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
-      void Render(Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+      void Render(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas, Microsoft.Graphics.Canvas.CanvasDrawingSession session);
       void SetParent(Windows.UI.Xaml.FrameworkElement parent);
     }
 }
