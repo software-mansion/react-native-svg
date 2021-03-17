@@ -49,6 +49,7 @@ namespace winrt::RNSVG::implementation
 
     nativeProps.Insert(L"height", ViewManagerPropertyType::Number);
     nativeProps.Insert(L"width", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"opacity", ViewManagerPropertyType::Number);
 
     return nativeProps.GetView();
   }

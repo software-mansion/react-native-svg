@@ -27,6 +27,7 @@ namespace winrt::RNSVG::implementation
     bool m_hasRendered{false};
     Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
     Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl m_canvas{};
+    float m_opacity{1.0f};
 
     std::vector<Windows::UI::Xaml::UIElement> m_children{};
   };
