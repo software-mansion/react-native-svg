@@ -33,10 +33,26 @@ namespace winrt::RNSVG::implementation
       if (propertyName == "width")
       {
         Width(propertyValue.AsDouble());
-      } else if (propertyName == "height")
+      }
+      else if (propertyName == "height")
       {
         Height(propertyValue.AsDouble());
       }
+      else if (propertyName == "opacity")
+      {
+        if (propertyValue.IsNull())
+        {
+          m_opacity = 1.0f;
+        } else
+        {
+          m_opacity = propertyValue.AsSingle();
+        }
+      }
+    }
+
+    if (m_hasRendered)
+    {
+      InvalidateCanvas();
     }
   }
 
@@ -67,6 +83,8 @@ namespace winrt::RNSVG::implementation
       m_hasRendered = true;
     }
 
+    auto layer{args.DrawingSession().CreateLayer(m_opacity)};
+
     for (auto child : m_children)
     {
       if (auto group = child.try_as<GroupView>())
@@ -74,6 +92,8 @@ namespace winrt::RNSVG::implementation
         group->DrawChildren(sender, args.DrawingSession());
       }
     }
+
+    layer.Close();
   }
 
   void SvgView::AddGroup(Windows::UI::Xaml::UIElement const &element)
