@@ -34,6 +34,9 @@ namespace winrt::RNSVG::implementation
         Windows::UI::Xaml::UIElement const &oldChild,
         Windows::UI::Xaml::UIElement const &newChild);
 
+    // IViewManagerRequiresNativeLayout
+    bool RequiresNativeLayout() { return true; }
+
    private:
     Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   };

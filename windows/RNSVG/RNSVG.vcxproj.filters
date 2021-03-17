@@ -17,6 +17,10 @@
     <Midl Include="RectViewManager.idl">
       <Filter>ViewManagers</Filter>
     </Midl>
+    <Midl Include="RenderableView.idl" />
+    <Midl Include="RectView.idl">
+      <Filter>Views</Filter>
+    </Midl>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

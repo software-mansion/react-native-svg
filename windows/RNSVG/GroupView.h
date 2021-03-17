@@ -1,6 +1,8 @@
 #pragma once
 #include "GroupView.g.h"
 
+#include "SvgView.h"
+
 namespace winrt::RNSVG::implementation
 {
   struct GroupView : GroupViewT<GroupView>
@@ -11,12 +13,22 @@ namespace winrt::RNSVG::implementation
     GroupView(Microsoft::ReactNative::IReactContext const &context);
     void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader);
 
+    void SetParent(weak_ref<SvgView> parent) { m_parent = parent; }
+    winrt::com_ptr<SvgView> GetParent() { return m_parent.get(); }
+
+    void AddChild(RenderableView const &child);
+
     // Overrides
-    winrt::Windows::Foundation::Size MeasureOverride(winrt::Windows::Foundation::Size availableSize);
-    winrt::Windows::Foundation::Size ArrangeOverride(winrt::Windows::Foundation::Size finalSize);
+    Windows::Foundation::Size MeasureOverride(Windows::Foundation::Size availableSize);
+    Windows::Foundation::Size ArrangeOverride(Windows::Foundation::Size finalSize);
+
+    void DrawChildren(Microsoft::Graphics::Canvas::CanvasDrawingSession const& session);
+    void InvalidateCanvas();
 
    private:
     Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
+    weak_ref<SvgView> m_parent;
+    std::vector<RenderableView> m_children{};
   };
 } // namespace winrt::RNSVG::implementation
 namespace winrt::RNSVG::factory_implementation

@@ -47,7 +47,7 @@ namespace winrt::RNSVG::implementation
   {
     auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
 
-    nativeProps.Insert(L"fill", ViewManagerPropertyType::Color);
+    nativeProps.Insert(L"fill", ViewManagerPropertyType::Number);
     nativeProps.Insert(L"height", ViewManagerPropertyType::Number);
     nativeProps.Insert(L"width", ViewManagerPropertyType::Number);
 
@@ -65,10 +65,19 @@ namespace winrt::RNSVG::implementation
   // IViewManagerWithChildren
   void GroupViewManager::AddView(FrameworkElement const &parent, UIElement const &child, int64_t /*index*/)
   {
-    if (auto const &view = parent.try_as<Canvas>())
+    if (auto groupView = parent.try_as<GroupView>())
     {
-      view.Children().Append(child);
+      if (auto childView = child.try_as<RenderableView>())
+      {
+        //childView.SetParent(groupView);
+        childView.SetParent(parent);
+        groupView->AddChild(childView);
+      }
     }
+    //if (auto const &view = parent.try_as<Canvas>())
+    //{
+    //  view.Children().Append(child);
+    //}
   }
 
   void GroupViewManager::RemoveAllChildren(FrameworkElement const &parent)
