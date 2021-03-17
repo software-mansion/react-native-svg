@@ -4,8 +4,6 @@
 #include "SvgViewManager.g.cpp"
 #endif
 
-#include <winrt/Microsoft.Graphics.Canvas.UI.Xaml.h>
-
 #include <winrt/Windows.UI.Xaml.Media.h>
 #include <winrt/Windows.UI.Xaml.Shapes.h>
 
@@ -66,9 +64,10 @@ namespace winrt::RNSVG::implementation
   // IViewManagerWithChildren
   void SvgViewManager::AddView(FrameworkElement const &parent, UIElement const &child, int64_t /*index*/)
   {
-    if (auto const &view = parent.try_as<Panel>())
+    if (auto const &view = parent.try_as<SvgView>())
     {
-      view.Children().Append(child);
+      view->AddGroup(child);
+      //view.Children().Append(child);
     }
   }
 
@@ -88,8 +87,7 @@ namespace winrt::RNSVG::implementation
     }
   }
 
-  void
-  SvgViewManager::ReplaceChild(FrameworkElement const &parent, UIElement const &oldChild, UIElement const &newChild)
+  void SvgViewManager::ReplaceChild(FrameworkElement const &parent, UIElement const &oldChild, UIElement const &newChild)
   {
     if (auto const &view = parent.try_as<Panel>())
     {

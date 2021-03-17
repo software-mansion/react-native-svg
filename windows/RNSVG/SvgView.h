@@ -15,8 +15,20 @@ namespace winrt::RNSVG::implementation
     winrt::Windows::Foundation::Size MeasureOverride(winrt::Windows::Foundation::Size availableSize);
     winrt::Windows::Foundation::Size ArrangeOverride(winrt::Windows::Foundation::Size finalSize);
 
+    // CanvasControl
+    void Canvas_Draw(
+        Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &sender,
+        Microsoft::Graphics::Canvas::UI::Xaml::CanvasDrawEventArgs const &args);
+
+    void AddGroup(Windows::UI::Xaml::UIElement const &element);
+    void InvalidateCanvas();
+
    private:
+    bool m_hasRendered{false};
     Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
+    Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl m_canvas{};
+
+    std::vector<Windows::UI::Xaml::UIElement> m_children{};
   };
 } // namespace winrt::RNSVG::implementation
 

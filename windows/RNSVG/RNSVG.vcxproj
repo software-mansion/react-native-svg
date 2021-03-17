@@ -117,6 +117,10 @@
     <ClInclude Include="ReactPackageProvider.h">
       <DependentUpon>ReactPackageProvider.idl</DependentUpon>
     </ClInclude>
+    <ClInclude Include="RectView.h">
+      <DependentUpon>RectView.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="RectViewManager.h">
       <DependentUpon>RectViewManager.idl</DependentUpon>
       <SubType>Code</SubType>
@@ -152,6 +156,10 @@
       <DependentUpon>GroupView.idl</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
+    <ClCompile Include="RectView.cpp">
+      <DependentUpon>RectView.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
     <ClCompile Include="RectViewManager.cpp">
       <DependentUpon>RectViewManager.idl</DependentUpon>
       <SubType>Code</SubType>
@@ -173,7 +181,13 @@
     <Midl Include="GroupView.idl">
       <SubType>Designer</SubType>
     </Midl>
+    <Midl Include="RectView.idl">
+      <SubType>Designer</SubType>
+    </Midl>
     <Midl Include="RectViewManager.idl">
+      <SubType>Designer</SubType>
+    </Midl>
+    <Midl Include="RenderableView.idl">
       <SubType>Designer</SubType>
     </Midl>
     <Midl Include="SvgView.idl">
@@ -201,7 +215,7 @@
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.200615.7\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.200615.7\build\native\Microsoft.Windows.CppWinRT.targets')" />
     <Import Project="$(SolutionDir)\packages\$(WinUIPackageName).$(WinUIPackageVersion)\build\native\$(WinUIPackageName).targets" Condition="Exists('$(SolutionDir)\packages\$(WinUIPackageName).$(WinUIPackageVersion)\build\native\$(WinUIPackageName).targets')" />
-    <Import Project="..\packages\Win2D.uwp.1.25.0\build\native\Win2D.uwp.targets" Condition="Exists('..\packages\Win2D.uwp.1.25.0\build\native\Win2D.uwp.targets')" />
+    <Import Project="$(SolutionDir)\packages\Win2D.uwp.1.25.0\build\native\Win2D.uwp.targets" Condition="Exists('$(SolutionDir)\packages\Win2D.uwp.1.25.0\build\native\Win2D.uwp.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -210,6 +224,6 @@
     <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.200615.7\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.200615.7\build\native\Microsoft.Windows.CppWinRT.props'))" />
     <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.200615.7\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.200615.7\build\native\Microsoft.Windows.CppWinRT.targets'))" />
     <Error Condition="!Exists('$(SolutionDir)\packages\$(WinUIPackageName).$(WinUIPackageVersion)\build\native\$(WinUIPackageName).targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\$(WinUIPackageName).$(WinUIPackageVersion)\build\native\$(WinUIPackageName).targets'))" />
-    <Error Condition="!Exists('..\packages\Win2D.uwp.1.25.0\build\native\Win2D.uwp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Win2D.uwp.1.25.0\build\native\Win2D.uwp.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\packages\Win2D.uwp.1.25.0\build\native\Win2D.uwp.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Win2D.uwp.1.25.0\build\native\Win2D.uwp.targets'))" />
   </Target>
 </Project>

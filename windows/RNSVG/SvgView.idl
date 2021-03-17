@@ -1,7 +1,8 @@
 namespace RNSVG
 {
     [default_interface]
-    runtimeclass SvgView : Windows.UI.Xaml.Controls.Panel {
+    runtimeclass SvgView : Windows.UI.Xaml.Controls.Panel
+    {
         SvgView(Microsoft.ReactNative.IReactContext context);
         void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
     };

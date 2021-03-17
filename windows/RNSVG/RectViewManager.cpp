@@ -10,6 +10,8 @@
 #include <winrt/Windows.UI.Xaml.Media.h>
 #include <winrt/Windows.UI.Xaml.Shapes.h>
 
+#include "RectView.h"
+
 using namespace winrt;
 using namespace Microsoft::ReactNative;
 using namespace Windows::UI::Xaml;
@@ -27,9 +29,10 @@ namespace winrt::RNSVG::implementation
 
   FrameworkElement RectViewManager::CreateView()
   {
-    winrt::Windows::UI::Xaml::Shapes::Rectangle view{};
-    view.Fill(winrt::Windows::UI::Xaml::Media::SolidColorBrush{winrt::Windows::UI::Colors::Blue()});
-    return view;
+    return winrt::RNSVG::RectView();
+    //winrt::Windows::UI::Xaml::Shapes::Rectangle view{};
+    //view.Fill(winrt::Windows::UI::Xaml::Media::SolidColorBrush{winrt::Windows::UI::Colors::Blue()});
+    //return view;
   }
 
   // IViewManagerWithNativeProperties
@@ -37,39 +40,22 @@ namespace winrt::RNSVG::implementation
   {
     auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
 
-    nativeProps.Insert(L"fill", ViewManagerPropertyType::Color);
+    nativeProps.Insert(L"fill", ViewManagerPropertyType::Number);
     nativeProps.Insert(L"height", ViewManagerPropertyType::Number);
     nativeProps.Insert(L"width", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"x", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"y", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"rx", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"ry", ViewManagerPropertyType::Number);
 
     return nativeProps.GetView();
   }
 
   void RectViewManager::UpdateProperties(FrameworkElement const &view, IJSValueReader const &propertyMapReader)
   {
-    if (auto rect = view.try_as<winrt::Windows::UI::Xaml::Shapes::Rectangle>())
+    if (auto rectView = view.try_as<RectView>())
     {
-      const JSValueObject &propertyMap = JSValue::ReadObjectFrom(propertyMapReader);
-      // auto const &propertyMap = Microsoft::ReactNative::JSValueObject::ReadFrom(propertyMapReader);
-
-      for (auto const &pair : propertyMap)
-      {
-        auto const &propertyName = pair.first;
-        auto const &propertyValue = pair.second;
-
-        if (propertyName == "width")
-        {
-          rect.Width(propertyValue.AsDouble());
-        } else if (propertyName == "height")
-        {
-          rect.Height(propertyValue.AsDouble());
-        } else if (propertyName == "fill")
-        {
-          if (auto value = propertyValue.To<Brush>())
-          {
-            rect.SetValue(Shape::FillProperty(), value);
-          }
-        }
-      }
+      rectView->UpdateProperties(propertyMapReader);
     }
   }
 

@@ -1,0 +1,12 @@
+import "RenderableView.idl";
+
+namespace RNSVG
+{
+    [default_interface]
+    runtimeclass RectView
+      : Windows.UI.Xaml.FrameworkElement
+      , RenderableView
+    {
+        RectView();
+    }
+}
