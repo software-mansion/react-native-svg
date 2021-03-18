@@ -21,8 +21,8 @@ namespace winrt::RNSVG::implementation
     private:
         weak_ref<RNSVG::GroupView> m_parent;
 
-        Windows::UI::Color m_fill;
-        Windows::UI::Color m_stroke;
+        Windows::UI::Color m_fill{Windows::UI::Colors::Transparent()};
+        Windows::UI::Color m_stroke{Windows::UI::Colors::Transparent()};
         float m_strokeWidth{0.0f};
         float m_width{0.0f};
         float m_height{0.0f};

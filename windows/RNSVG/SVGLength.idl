@@ -1,0 +1,26 @@
+namespace RNSVG
+{
+  enum UnitType
+  {
+    Unknown,
+    Number,
+    Percentage,
+    EMS,
+    EXS,
+    PX,
+    CM,
+    MM,
+    PT,
+    PC,
+  };
+
+  [default_interface]
+  runtimeclass SVGLength 
+  {
+    SVGLength(Double param);
+    SVGLength(Double param, UnitType type);
+
+    Double Value{get;};
+    UnitType Unit{get;};
+  }
+}

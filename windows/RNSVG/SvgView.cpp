@@ -1,7 +1,5 @@
 #include "pch.h"
 
-#include "JSValueXaml.h"
-
 #include "SvgView.h"
 #if __has_include("SvgView.g.cpp")
 #include "SvgView.g.cpp"
@@ -11,6 +9,8 @@
 #include <winrt/Windows.UI.Xaml.Shapes.h>
 
 #include "GroupView.h"
+
+#include "SVGLength.h"
 
 namespace winrt::RNSVG::implementation
 {
@@ -32,11 +32,13 @@ namespace winrt::RNSVG::implementation
 
       if (propertyName == "width")
       {
-        Width(propertyValue.AsDouble());
+        auto svgLength{SVGLength::From(propertyValue)};
+        Width(svgLength.Value());
       }
       else if (propertyName == "height")
       {
-        Height(propertyValue.AsDouble());
+        auto svgLength{SVGLength::From(propertyValue)};
+        Height(svgLength.Value());
       }
       else if (propertyName == "opacity")
       {

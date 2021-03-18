@@ -9,6 +9,7 @@
 
 #include "JSValueReader.h"
 #include "JSValueXaml.h"
+#include "SVGLength.h"
 #include "Utils.h"
 
 using namespace winrt;
@@ -19,7 +20,6 @@ namespace winrt::RNSVG::implementation
     void RectView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader)
     {
         const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
-        // auto const &propertyMap = Microsoft::ReactNative::JSValueObject::ReadFrom(propertyMapReader);
 
         for (auto const &pair : propertyMap)
         {
@@ -28,31 +28,38 @@ namespace winrt::RNSVG::implementation
 
           if (propertyName == "width")
           {
-            m_width = propertyValue.AsSingle();
+            auto svgLength{SVGLength::From(propertyValue)};
+            m_width = static_cast<float>(svgLength.Value());
           }
           else if (propertyName == "height")
           {
-            m_height = propertyValue.AsSingle();
+            auto svgLength{SVGLength::From(propertyValue)};
+            m_height = static_cast<float>(svgLength.Value());
           }
           else if (propertyName == "x")
           {
-            m_x = propertyValue.AsSingle();
+            auto svgLength{SVGLength::From(propertyValue)};
+            m_x = static_cast<float>(svgLength.Value());
           }
           else if (propertyName == "y")
           {
-            m_y = propertyValue.AsSingle();
+            auto svgLength{SVGLength::From(propertyValue)};
+            m_y = static_cast<float>(svgLength.Value());
           }
           else if (propertyName == "rx")
           {
-            m_rx = propertyValue.AsSingle();
+            auto svgLength{SVGLength::From(propertyValue)};
+            m_rx = static_cast<float>(svgLength.Value());
           }
           else if (propertyName == "ry")
           {
-            m_ry = propertyValue.AsSingle();
+            auto svgLength{SVGLength::From(propertyValue)};
+            m_ry = static_cast<float>(svgLength.Value());
           }
           else if (propertyName == "strokeWidth")
           {
-            m_strokeWidth = propertyValue.AsSingle();
+            auto svgLength{SVGLength::From(propertyValue)};
+            m_strokeWidth = static_cast<float>(svgLength.Value());
           }
           else if (propertyName == "stroke")
           {
@@ -74,7 +81,6 @@ namespace winrt::RNSVG::implementation
         {
           parent.InvalidateCanvas();
         }
-        //parent.InvalidateCanvas();
     }
 
     void RectView::Render(
