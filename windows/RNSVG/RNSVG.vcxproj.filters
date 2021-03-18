@@ -21,6 +21,7 @@
     <Midl Include="RectView.idl">
       <Filter>Views</Filter>
     </Midl>
+    <Midl Include="SVGLength.idl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
