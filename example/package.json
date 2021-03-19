@@ -6,16 +6,16 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "postinstall": "rm -rf node_modules/react-native-svg-desktop/{examples,node_modules}",
+    "postinstall": "shx rm -rf node_modules/react-native-svg-desktop/{example,node_modules}",
     "test": "jest",
     "lint": "eslint .",
-    "windows": "react-native run-windows"
+    "windows": "react-native run-windows --no-autolink"
   },
   "dependencies": {
     "react": "17.0.1",
     "react-native": "^0.64.0",
-    "react-native-windows": "^0.64.0",
-    "react-native-svg-desktop": "file:.."
+    "react-native-svg-desktop": "file:..",
+    "react-native-windows": "^0.64.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -25,7 +25,8 @@
     "eslint": "7.14.0",
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "^0.64.0",
-    "react-test-renderer": "17.0.1"
+    "react-test-renderer": "17.0.1",
+    "shx": "^0.3.3"
   },
   "jest": {
     "preset": "react-native"
