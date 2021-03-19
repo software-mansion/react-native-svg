@@ -21,6 +21,10 @@ namespace winrt::RNSVG::implementation
         Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &sender,
         Microsoft::Graphics::Canvas::UI::Xaml::CanvasDrawEventArgs const &args);
 
+    void Canvas_SizeChanged(
+        Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &sender,
+        Windows::UI::Xaml::SizeChangedEventArgs const &args);
+
     void InvalidateCanvas();
 
    private:
@@ -30,6 +34,9 @@ namespace winrt::RNSVG::implementation
     float m_opacity{1.0f};
     Windows::Foundation::Collections::IVector<Windows::UI::Xaml::UIElement> m_views{
         winrt::single_threaded_vector<Windows::UI::Xaml::UIElement>()};
+
+    Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::Draw_revoker m_canvasDrawRevoker{};
+    Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::SizeChanged_revoker m_canvaSizeChangedRevoker{};
   };
 } // namespace winrt::RNSVG::implementation
 
