@@ -110,25 +110,20 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GroupView.h" />
     <ClInclude Include="GroupViewManager.h">
       <DependentUpon>GroupViewManager.idl</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
+    <ClInclude Include="RectView.h" />
     <ClInclude Include="RenderableView.h">
       <DependentUpon>RenderableView.idl</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
-    <ClInclude Include="SVGLength.h">
-      <DependentUpon>SVGLength.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClInclude>
+    <ClInclude Include="SVGLength.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="ReactPackageProvider.h">
       <DependentUpon>ReactPackageProvider.idl</DependentUpon>
-    </ClInclude>
-    <ClInclude Include="RectView.h">
-      <DependentUpon>RectView.idl</DependentUpon>
-      <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="RectViewManager.h">
       <DependentUpon>RectViewManager.idl</DependentUpon>
@@ -136,10 +131,6 @@
     </ClInclude>
     <ClInclude Include="RNSVGModule.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="GroupView.h">
-      <DependentUpon>GroupView.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClInclude>
     <ClInclude Include="SvgView.h">
       <DependentUpon>SvgView.idl</DependentUpon>
       <SubType>Code</SubType>
@@ -150,6 +141,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GroupView.cpp" />
     <ClCompile Include="GroupViewManager.cpp">
       <DependentUpon>GroupViewManager.idl</DependentUpon>
       <SubType>Code</SubType>
@@ -161,14 +153,7 @@
       <DependentUpon>ReactPackageProvider.idl</DependentUpon>
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
-    <ClCompile Include="GroupView.cpp">
-      <DependentUpon>GroupView.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClCompile>
-    <ClCompile Include="RectView.cpp">
-      <DependentUpon>RectView.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClCompile>
+    <ClCompile Include="RectView.cpp" />
     <ClCompile Include="RectViewManager.cpp">
       <DependentUpon>RectViewManager.idl</DependentUpon>
       <SubType>Code</SubType>
@@ -177,10 +162,7 @@
       <DependentUpon>RenderableView.idl</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
-    <ClCompile Include="SVGLength.cpp">
-      <DependentUpon>SVGLength.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClCompile>
+    <ClCompile Include="SVGLength.cpp" />
     <ClCompile Include="SvgView.cpp">
       <DependentUpon>SvgView.idl</DependentUpon>
       <SubType>Code</SubType>
@@ -195,19 +177,10 @@
       <SubType>Designer</SubType>
     </Midl>
     <Midl Include="ReactPackageProvider.idl" />
-    <Midl Include="GroupView.idl">
-      <SubType>Designer</SubType>
-    </Midl>
-    <Midl Include="RectView.idl">
-      <SubType>Designer</SubType>
-    </Midl>
     <Midl Include="RectViewManager.idl">
       <SubType>Designer</SubType>
     </Midl>
     <Midl Include="RenderableView.idl">
-      <SubType>Designer</SubType>
-    </Midl>
-    <Midl Include="SVGLength.idl">
       <SubType>Designer</SubType>
     </Midl>
     <Midl Include="SvgView.idl">
