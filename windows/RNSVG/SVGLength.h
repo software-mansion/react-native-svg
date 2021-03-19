@@ -10,17 +10,17 @@ namespace winrt::RNSVG::implementation
     {
      public:
         SVGLength() = default;
-        SVGLength(double value);
-        SVGLength(double value, RNSVG::UnitType type);
+        SVGLength(float value);
+        SVGLength(float value, RNSVG::UnitType type);
 
-        double Value() { return m_value; }
+        float Value() { return m_value; }
         RNSVG::UnitType Unit() { return m_unit; }
 
         static RNSVG::SVGLength From(std::string value);
         static RNSVG::SVGLength From(Microsoft::ReactNative::JSValue const& value);
 
      private:
-        double m_value{0.0};
+        float m_value{0.0f};
         RNSVG::UnitType m_unit{RNSVG::UnitType::Unknown};
     };
 }

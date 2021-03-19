@@ -23,8 +23,7 @@ namespace winrt::RNSVG::implementation
 
         if (propertyName == "strokeWidth")
         {
-          auto svgLength{SVGLength::From(propertyValue)};
-          m_strokeWidth = static_cast<float>(svgLength.Value());
+          m_strokeWidth = SVGLength::From(propertyValue);
         } else if (propertyName == "stroke")
         {
           if (auto color = Utils::GetColorFromJSValue(propertyValue))

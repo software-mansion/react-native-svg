@@ -6,13 +6,13 @@
 
 namespace winrt::RNSVG::implementation
 {
-  SVGLength::SVGLength(double value)
+  SVGLength::SVGLength(float value)
     : m_value(value)
     , m_unit(RNSVG::UnitType::Number)
   {
   }
 
-  SVGLength::SVGLength(double value, RNSVG::UnitType type)
+  SVGLength::SVGLength(float value, RNSVG::UnitType type)
     : m_value(value)
     , m_unit(type)
   {
@@ -27,7 +27,7 @@ namespace winrt::RNSVG::implementation
     }
     else if (value.back() == '%')
     {
-      return {std::stod(value.substr(0, strLength - 1), nullptr), RNSVG::UnitType::Percentage};
+      return {std::stof(value.substr(0, strLength - 1), nullptr), RNSVG::UnitType::Percentage};
     }
     else if (strLength > 2)
     {
@@ -62,10 +62,10 @@ namespace winrt::RNSVG::implementation
         end = strLength;
       }
 
-      return {std::stod(value.substr(0, end), nullptr), unit};
+      return {std::stof(value.substr(0, end), nullptr), unit};
     }
 
-    return {std::stod(value, nullptr), RNSVG::UnitType::Number};
+    return {std::stof(value, nullptr), RNSVG::UnitType::Number};
   }
 
   RNSVG::SVGLength SVGLength::From(Microsoft::ReactNative::JSValue const &propertyValue)
@@ -75,11 +75,7 @@ namespace winrt::RNSVG::implementation
       return SVGLength::From(propertyValue.AsString());
     } else
     {
-      return RNSVG::SVGLength(propertyValue.AsDouble());
+      return RNSVG::SVGLength(propertyValue.AsSingle());
     }
   }
-
-
-
-
 } // namespace winrt::RNSVG::implementation

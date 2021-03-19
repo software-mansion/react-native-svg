@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RenderableView.g.h"
+#include "SVGLength.h"
 
 namespace winrt::RNSVG::implementation
 {
@@ -24,8 +25,8 @@ namespace winrt::RNSVG::implementation
         float StrokeOpacity() { return m_strokeOpacity; }
         void StrokeOpacity(float value) { m_strokeOpacity = value; }
 
-        float StrokeWidth() { return m_strokeWidth; }
-        void StrokeWidth(float value) { m_strokeWidth = value; }
+        RNSVG::SVGLength StrokeWidth() { return m_strokeWidth; }
+        void StrokeWidth(RNSVG::SVGLength value) { m_strokeWidth = value; }
 
         void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader);
         void InvalidateCanvas();
@@ -42,6 +43,6 @@ namespace winrt::RNSVG::implementation
         Windows::UI::Color m_stroke{Windows::UI::Colors::Transparent()};
         float m_fillOpacity{1.0f};
         float m_strokeOpacity{1.0f};
-        float m_strokeWidth{0.0f};
+        RNSVG::SVGLength m_strokeWidth{};
     };
 }
