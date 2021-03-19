@@ -9,8 +9,8 @@ namespace winrt::RNSVG::implementation
      public:
         RenderableView() = default;
 
-        Windows::UI::Xaml::FrameworkElement ParentView() { return m_parent; }
-        void ParentView(Windows::UI::Xaml::FrameworkElement const &value) { m_parent = value; }
+        Windows::UI::Xaml::FrameworkElement SvgParent() { return m_parent; }
+        void SvgParent(Windows::UI::Xaml::FrameworkElement const &value) { m_parent = value; }
 
         Windows::UI::Color Fill() { return m_fill; }
         void Fill(Windows::UI::Color const &value) { m_fill = value; }

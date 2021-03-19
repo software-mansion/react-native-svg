@@ -6,7 +6,7 @@ namespace RNSVG
     runtimeclass GroupView : RenderableView
     {
       GroupView(Microsoft.ReactNative.IReactContext context);
-      Windows.Foundation.Collections.IVector<Windows.UI.Xaml.UIElement> Children { get; };
+      Windows.Foundation.Collections.IVector<RenderableView> Children { get; };
 
       void RenderGroup(
           Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,

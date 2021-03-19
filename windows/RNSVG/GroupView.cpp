@@ -24,10 +24,7 @@ namespace winrt::RNSVG::implementation
   {
     for (auto child : Children())
     {
-      if (auto view = child.try_as<IRenderableView>())
-      {
-        view.Render(canvas, session);
-      }
+      child.Render(canvas, session);
     }
   }
 } // namespace winrt::RNSVG::implementation
