@@ -30,9 +30,6 @@ namespace winrt::RNSVG::implementation
   FrameworkElement RectViewManager::CreateView()
   {
     return winrt::RNSVG::RectView();
-    //winrt::Windows::UI::Xaml::Shapes::Rectangle view{};
-    //view.Fill(winrt::Windows::UI::Xaml::Media::SolidColorBrush{winrt::Windows::UI::Colors::Blue()});
-    //return view;
   }
 
   // IViewManagerWithNativeProperties

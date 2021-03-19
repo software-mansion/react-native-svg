@@ -1,9 +1,15 @@
+import "RenderableView.idl";
+
 namespace RNSVG
 {
     [default_interface]
-    runtimeclass GroupView : Windows.UI.Xaml.Controls.Canvas {
-        GroupView(Microsoft.ReactNative.IReactContext context);
-        void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
-        void InvalidateCanvas();
+    runtimeclass GroupView : RenderableView
+    {
+      GroupView(Microsoft.ReactNative.IReactContext context);
+      Windows.Foundation.Collections.IVector<Windows.UI.Xaml.UIElement> Children { get; };
+
+      void RenderGroup(
+          Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
+          Microsoft.Graphics.Canvas.CanvasDrawingSession session);
     };
 }
