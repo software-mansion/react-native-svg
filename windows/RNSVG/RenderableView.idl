@@ -1,22 +1,61 @@
-#include "SVGLength.idl"
-
 namespace RNSVG
 {
-    [default_interface]
-    unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
-    {
-      Windows.UI.Xaml.FrameworkElement SvgParent;
-      Windows.UI.Color Fill;
-      Single FillOpacity;
-      Windows.UI.Color Stroke;
-      Single StrokeOpacity;
-      SVGLength StrokeWidth;
+  enum UnitType
+  {
+    Unknown,
+    Number,
+    Percentage,
+    EMS,
+    EXS,
+    PX,
+    CM,
+    MM,
+    PT,
+    PC,
+  };
 
-      void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
-      void InvalidateCanvas();
+  [default_interface]
+  runtimeclass SVGLength {
+    SVGLength();
+    SVGLength(Single param);
+    SVGLength(Single param, UnitType type);
 
-      void Render(
+    Single Value { get; };
+    UnitType Unit { get; };
+  }
+
+  [default_interface]
+  unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
+  {
+    Windows.UI.Xaml.FrameworkElement SvgParent;
+    Windows.UI.Color Fill;
+    Single FillOpacity;
+    Windows.UI.Color Stroke;
+    Single StrokeOpacity;
+    SVGLength StrokeWidth;
+
+    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
+    void InvalidateCanvas();
+
+    void Render(
+      Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
+      Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+  }
+
+  [default_interface]
+  runtimeclass GroupView : RenderableView
+  {
+    GroupView(Microsoft.ReactNative.IReactContext context);
+    Windows.Foundation.Collections.IVector<RenderableView> Children { get; };
+
+    void RenderGroup(
         Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
         Microsoft.Graphics.Canvas.CanvasDrawingSession session);
-    }
+  };
+
+  [default_interface]
+  runtimeclass RectView : RenderableView
+  {
+    RectView();
+  }
 }

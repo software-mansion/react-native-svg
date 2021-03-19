@@ -5,9 +5,6 @@
     <Midl Include="SvgViewManager.idl">
       <Filter>ViewManagers</Filter>
     </Midl>
-    <Midl Include="GroupView.idl">
-      <Filter>Views</Filter>
-    </Midl>
     <Midl Include="SvgView.idl">
       <Filter>Views</Filter>
     </Midl>
@@ -17,10 +14,6 @@
     <Midl Include="RectViewManager.idl">
       <Filter>ViewManagers</Filter>
     </Midl>
-    <Midl Include="RectView.idl">
-      <Filter>Views</Filter>
-    </Midl>
-    <Midl Include="SVGLength.idl" />
     <Midl Include="RenderableView.idl">
       <Filter>Views</Filter>
     </Midl>
@@ -29,12 +22,32 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="ReactPackageProvider.cpp" />
+    <ClCompile Include="RectView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="SVGLength.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReactPackageProvider.h" />
     <ClInclude Include="RNSVGModule.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="RectView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SVGLength.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />
@@ -46,6 +59,9 @@
     </Filter>
     <Filter Include="ViewManagers">
       <UniqueIdentifier>{cb3ce7b2-9fdf-4578-8e0d-4d6853b727bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{8a4e0664-0d52-46ca-b476-a1ad90239a09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
