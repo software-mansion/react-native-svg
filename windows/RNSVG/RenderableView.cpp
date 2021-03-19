@@ -1,0 +1,59 @@
+#include "pch.h"
+#include "RenderableView.h"
+#if __has_include("RenderableView.g.cpp")
+#include "RenderableView.g.cpp"
+#endif
+
+#include "Utils.h"
+#include "SVGLength.h"
+#include "JSValueXaml.h"
+#include "SvgView.h"
+
+namespace winrt::RNSVG::implementation
+{
+    void RenderableView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader)
+    {
+      const Microsoft::ReactNative::JSValueObject &propertyMap =
+          Microsoft::ReactNative::JSValue::ReadObjectFrom(reader);
+
+      for (auto const &pair : propertyMap)
+      {
+        auto const &propertyName = pair.first;
+        auto const &propertyValue = pair.second;
+
+        if (propertyName == "strokeWidth")
+        {
+          auto svgLength{SVGLength::From(propertyValue)};
+          m_strokeWidth = static_cast<float>(svgLength.Value());
+        } else if (propertyName == "stroke")
+        {
+          if (auto color = Utils::GetColorFromJSValue(propertyValue))
+          {
+            m_stroke = color.value();
+          }
+        } else if (propertyName == "fill")
+        {
+          if (auto color = Utils::GetColorFromJSValue(propertyValue))
+          {
+            m_fill = color.value();
+          }
+        }
+      }
+
+      if (Parent())
+      {
+        InvalidateCanvas();
+      }
+    }
+
+    void RenderableView::InvalidateCanvas()
+    {
+      if (auto parent{Parent().try_as<SvgView>()})
+      {
+        parent->InvalidateCanvas();
+      } else if (auto parent{Parent().try_as<RenderableView>()})
+      {
+        parent->InvalidateCanvas();
+      }
+    }
+}

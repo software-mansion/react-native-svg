@@ -114,6 +114,10 @@
       <DependentUpon>GroupViewManager.idl</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
+    <ClInclude Include="RenderableView.h">
+      <DependentUpon>RenderableView.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="SVGLength.h">
       <DependentUpon>SVGLength.idl</DependentUpon>
       <SubType>Code</SubType>
@@ -167,6 +171,10 @@
     </ClCompile>
     <ClCompile Include="RectViewManager.cpp">
       <DependentUpon>RectViewManager.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="RenderableView.cpp">
+      <DependentUpon>RenderableView.idl</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="SVGLength.cpp">

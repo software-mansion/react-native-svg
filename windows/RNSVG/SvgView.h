@@ -9,6 +9,7 @@ namespace winrt::RNSVG::implementation
     SvgView() = default;
 
     SvgView(Microsoft::ReactNative::IReactContext const &context);
+    Windows::Foundation::Collections::IVector<Windows::UI::Xaml::UIElement> Views() { return m_views; }
     void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader);
 
     // Overrides
@@ -20,7 +21,6 @@ namespace winrt::RNSVG::implementation
         Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &sender,
         Microsoft::Graphics::Canvas::UI::Xaml::CanvasDrawEventArgs const &args);
 
-    void AddGroup(Windows::UI::Xaml::UIElement const &element);
     void InvalidateCanvas();
 
    private:
@@ -28,8 +28,8 @@ namespace winrt::RNSVG::implementation
     Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
     Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl m_canvas{};
     float m_opacity{1.0f};
-
-    std::vector<Windows::UI::Xaml::UIElement> m_children{};
+    Windows::Foundation::Collections::IVector<Windows::UI::Xaml::UIElement> m_views{
+        winrt::single_threaded_vector<Windows::UI::Xaml::UIElement>()};
   };
 } // namespace winrt::RNSVG::implementation
 

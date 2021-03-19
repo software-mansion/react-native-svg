@@ -67,36 +67,35 @@ namespace winrt::RNSVG::implementation
   {
     if (auto const &view = parent.try_as<SvgView>())
     {
-      view->AddGroup(child);
-      //view.Children().Append(child);
+      view->Views().Append(child);
     }
   }
 
   void SvgViewManager::RemoveAllChildren(FrameworkElement const &parent)
   {
-    if (auto const &view = parent.try_as<Panel>())
+    if (auto const &view = parent.try_as<SvgView>())
     {
-      view.Children().Clear();
+      view->Views().Clear();
     }
   }
 
   void SvgViewManager::RemoveChildAt(FrameworkElement const &parent, int64_t index)
   {
-    if (auto const &view = parent.try_as<Panel>())
+    if (auto const &view = parent.try_as<SvgView>())
     {
-      view.Children().RemoveAt(static_cast<uint32_t>(index));
+      view->Views().RemoveAt(static_cast<uint32_t>(index));
     }
   }
 
   void SvgViewManager::ReplaceChild(FrameworkElement const &parent, UIElement const &oldChild, UIElement const &newChild)
   {
-    if (auto const &view = parent.try_as<Panel>())
+    if (auto const &view = parent.try_as<SvgView>())
     {
       uint32_t index;
 
-      if (view.Children().IndexOf(oldChild, index))
+      if (view->Views().IndexOf(oldChild, index))
       {
-        view.Children().SetAt(index, newChild);
+        view->Views().SetAt(index, newChild);
       }
     }
   }

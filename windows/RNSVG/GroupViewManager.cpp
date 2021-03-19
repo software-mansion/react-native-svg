@@ -69,43 +69,38 @@ namespace winrt::RNSVG::implementation
     {
       if (auto childView = child.try_as<RenderableView>())
       {
-        //childView.SetParent(groupView);
-        childView.SetParent(parent);
-        groupView->AddChild(childView);
+        
+        groupView->Children().Append(child);
       }
     }
-    //if (auto const &view = parent.try_as<Canvas>())
-    //{
-    //  view.Children().Append(child);
-    //}
   }
 
   void GroupViewManager::RemoveAllChildren(FrameworkElement const &parent)
   {
-    if (auto const &view = parent.try_as<Canvas>())
+    if (auto groupView = parent.try_as<GroupView>())
     {
-      view.Children().Clear();
+      groupView->Children().Clear();
     }
   }
 
   void GroupViewManager::RemoveChildAt(FrameworkElement const &parent, int64_t index)
   {
-    if (auto const &view = parent.try_as<Canvas>())
+    if (auto groupView = parent.try_as<GroupView>())
     {
-      view.Children().RemoveAt(static_cast<uint32_t>(index));
+      groupView->Children().RemoveAt(static_cast<uint32_t>(index));
     }
   }
 
   void
   GroupViewManager::ReplaceChild(FrameworkElement const &parent, UIElement const &oldChild, UIElement const &newChild)
   {
-    if (auto const &view = parent.try_as<Canvas>())
+    if (auto groupView = parent.try_as<GroupView>())
     {
       uint32_t index;
 
-      if (view.Children().IndexOf(oldChild, index))
+      if (groupView->Children().IndexOf(oldChild, index))
       {
-        view.Children().SetAt(index, newChild);
+        groupView->Children().SetAt(index, newChild);
       }
     }
   }

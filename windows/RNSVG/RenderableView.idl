@@ -1,12 +1,19 @@
-import "GroupView.idl";
-
 namespace RNSVG
 {
-    interface RenderableView 
+    [default_interface]
+    unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
     {
-      Windows.UI.Color Color;
+      Windows.UI.Color Fill;
+      Single FillOpacity;
+      Windows.UI.Color Stroke;
+      Single StrokeOpacity;
+      Single StrokeWidth;
+
       void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
-      void Render(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas, Microsoft.Graphics.Canvas.CanvasDrawingSession session);
-      void SetParent(Windows.UI.Xaml.FrameworkElement parent);
+      void InvalidateCanvas();
+
+      void Render(
+        Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
+        Microsoft.Graphics.Canvas.CanvasDrawingSession session);
     }
 }

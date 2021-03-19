@@ -4,6 +4,7 @@ namespace RNSVG
     runtimeclass SvgView : Windows.UI.Xaml.Controls.Panel
     {
         SvgView(Microsoft.ReactNative.IReactContext context);
+        Windows.Foundation.Collections.IVector<Windows.UI.Xaml.UIElement> Views { get; };
         void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
     };
 }

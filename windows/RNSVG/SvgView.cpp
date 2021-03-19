@@ -5,11 +5,7 @@
 #include "SvgView.g.cpp"
 #endif
 
-#include <winrt/Windows.UI.Xaml.Media.h>
-#include <winrt/Windows.UI.Xaml.Shapes.h>
-
 #include "GroupView.h"
-
 #include "SVGLength.h"
 
 namespace winrt::RNSVG::implementation
@@ -87,24 +83,15 @@ namespace winrt::RNSVG::implementation
 
     auto layer{args.DrawingSession().CreateLayer(m_opacity)};
 
-    for (auto child : m_children)
+    for (auto child : Views())
     {
-      if (auto group = child.try_as<GroupView>())
+      if (auto group = child.try_as<IRenderableView>())
       {
-        group->DrawChildren(sender, args.DrawingSession());
+        group.Render(sender, args.DrawingSession());
       }
     }
 
     layer.Close();
-  }
-
-  void SvgView::AddGroup(Windows::UI::Xaml::UIElement const &element)
-  {
-    if (auto group = element.try_as<GroupView>())
-    {
-      group->SetParent(get_weak());
-      m_children.push_back(element);
-    }
   }
 
   void SvgView::InvalidateCanvas()
