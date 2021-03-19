@@ -16,12 +16,12 @@ namespace winrt::RNSVG::implementation
             Microsoft::Graphics::Canvas::CanvasDrawingSession const& session);
 
      private:
-        float m_width{0.0f};
-        float m_height{0.0f};
-        float m_x{0.0f};
-        float m_y{0.0f};
-        float m_rx{0.0f};
-        float m_ry{0.0f};
+        RNSVG::SVGLength m_width{};
+        RNSVG::SVGLength m_height{};
+        RNSVG::SVGLength m_x{};
+        RNSVG::SVGLength m_y{};
+        RNSVG::SVGLength m_rx{};
+        RNSVG::SVGLength m_ry{};
     };
 }
 

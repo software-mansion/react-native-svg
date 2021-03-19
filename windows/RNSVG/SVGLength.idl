@@ -17,10 +17,11 @@ namespace RNSVG
   [default_interface]
   runtimeclass SVGLength 
   {
-    SVGLength(Double param);
-    SVGLength(Double param, UnitType type);
+    SVGLength();
+    SVGLength(Single param);
+    SVGLength(Single param, UnitType type);
 
-    Double Value{get;};
+    Single Value{get;};
     UnitType Unit{get;};
   }
 }

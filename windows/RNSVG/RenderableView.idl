@@ -1,3 +1,5 @@
+#include "SVGLength.idl"
+
 namespace RNSVG
 {
     [default_interface]
@@ -8,7 +10,7 @@ namespace RNSVG
       Single FillOpacity;
       Windows.UI.Color Stroke;
       Single StrokeOpacity;
-      Single StrokeWidth;
+      SVGLength StrokeWidth;
 
       void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
       void InvalidateCanvas();

@@ -7,7 +7,6 @@
 #include <winrt/Microsoft.Graphics.Canvas.Geometry.h>
 
 #include "JSValueXaml.h"
-#include "SVGLength.h"
 #include "Utils.h"
 
 using namespace winrt;
@@ -26,33 +25,27 @@ namespace winrt::RNSVG::implementation
 
           if (propertyName == "width")
           {
-            auto svgLength{SVGLength::From(propertyValue)};
-            m_width = static_cast<float>(svgLength.Value());
+            m_width = SVGLength::From(propertyValue);
           }
           else if (propertyName == "height")
           {
-            auto svgLength{SVGLength::From(propertyValue)};
-            m_height = static_cast<float>(svgLength.Value());
+            m_height = SVGLength::From(propertyValue);
           }
           else if (propertyName == "x")
           {
-            auto svgLength{SVGLength::From(propertyValue)};
-            m_x = static_cast<float>(svgLength.Value());
+            m_x = SVGLength::From(propertyValue);
           }
           else if (propertyName == "y")
           {
-            auto svgLength{SVGLength::From(propertyValue)};
-            m_y = static_cast<float>(svgLength.Value());
+            m_y = SVGLength::From(propertyValue);
           }
           else if (propertyName == "rx")
           {
-            auto svgLength{SVGLength::From(propertyValue)};
-            m_rx = static_cast<float>(svgLength.Value());
+            m_rx = SVGLength::From(propertyValue);
           }
           else if (propertyName == "ry")
           {
-            auto svgLength{SVGLength::From(propertyValue)};
-            m_ry = static_cast<float>(svgLength.Value());
+            m_ry = SVGLength::From(propertyValue);
           }
         }
 
@@ -65,13 +58,13 @@ namespace winrt::RNSVG::implementation
     {
       auto resourceCreator{canvas.try_as<Microsoft::Graphics::Canvas::ICanvasResourceCreator>()};
       auto rect{Microsoft::Graphics::Canvas::Geometry::CanvasGeometry::CreateRoundedRectangle(
-          resourceCreator, m_x, m_y, m_width, m_height, m_rx, m_ry)};
+          resourceCreator, m_x.Value(), m_y.Value(), m_width.Value(), m_height.Value(), m_rx.Value(), m_ry.Value())};
       
       session.FillGeometry(rect, Fill());
 
-      if (StrokeWidth() > 0.0f)
+      if (StrokeWidth().Value() > 0.0f)
       {
-        session.DrawGeometry(rect, Stroke(), StrokeWidth());
+        session.DrawGeometry(rect, Stroke(), StrokeWidth().Value());
       }
     }
 } // namespace winrt::RNSVG::implementation
