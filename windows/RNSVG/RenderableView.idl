@@ -3,6 +3,7 @@ namespace RNSVG
     [default_interface]
     unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
     {
+      Windows.UI.Xaml.FrameworkElement ParentView;
       Windows.UI.Color Fill;
       Single FillOpacity;
       Windows.UI.Color Stroke;

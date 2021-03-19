@@ -40,7 +40,7 @@ namespace winrt::RNSVG::implementation
         }
       }
 
-      if (Parent())
+      if (ParentView())
       {
         InvalidateCanvas();
       }
@@ -48,12 +48,12 @@ namespace winrt::RNSVG::implementation
 
     void RenderableView::InvalidateCanvas()
     {
-      if (auto parent{Parent().try_as<SvgView>()})
+      if (auto svgView{ParentView().try_as<SvgView>()})
       {
-        parent->InvalidateCanvas();
-      } else if (auto parent{Parent().try_as<RenderableView>()})
+        svgView->InvalidateCanvas();
+      } else if (auto renderable{ParentView().try_as<RenderableView>()})
       {
-        parent->InvalidateCanvas();
+        renderable->InvalidateCanvas();
       }
     }
 }
