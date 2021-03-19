@@ -22,7 +22,7 @@ namespace winrt::RNSVG::implementation
         Microsoft::Graphics::Canvas::UI::Xaml::CanvasDrawEventArgs const &args);
 
     void Canvas_SizeChanged(
-        Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &sender,
+        winrt::Windows::Foundation::IInspectable const sender,
         Windows::UI::Xaml::SizeChangedEventArgs const &args);
 
     void InvalidateCanvas();
