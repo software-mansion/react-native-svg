@@ -93,7 +93,7 @@ namespace winrt::RNSVG::implementation
   }
 
   void SvgView::Canvas_SizeChanged(
-    Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &/*sender*/,
+    Windows::Foundation::IInspectable const /*sender*/,
     Windows::UI::Xaml::SizeChangedEventArgs const &/*args*/)
   {
     //sender.Invalidate();
