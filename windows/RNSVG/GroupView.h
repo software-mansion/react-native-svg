@@ -9,7 +9,7 @@ namespace winrt::RNSVG::implementation
   public:
     GroupView() = default;
     GroupView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {}
-    Windows::Foundation::Collections::IVector<Windows::UI::Xaml::UIElement> Children() { return m_children; }
+    Windows::Foundation::Collections::IVector<RNSVG::RenderableView> Children() { return m_children; }
 
     void Render(
         Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const& canvas,
@@ -21,8 +21,8 @@ namespace winrt::RNSVG::implementation
 
   private:
     Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
-     Windows::Foundation::Collections::IVector<Windows::UI::Xaml::UIElement> m_children{
-         winrt::single_threaded_vector<Windows::UI::Xaml::UIElement>()};
+    Windows::Foundation::Collections::IVector<RNSVG::RenderableView> m_children{
+        winrt::single_threaded_vector<RNSVG::RenderableView>()};
   };
 } // namespace winrt::RNSVG::implementation
 

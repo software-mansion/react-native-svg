@@ -57,51 +57,69 @@ namespace winrt::RNSVG::implementation
 
   void SvgViewManager::UpdateProperties(FrameworkElement const &view, IJSValueReader const &propertyMapReader)
   {
-    if (auto svgView = view.try_as<SvgView>())
+    if (auto svgView{view.try_as<RNSVG::SvgView>()})
     {
-      svgView->UpdateProperties(propertyMapReader);
+      svgView.UpdateProperties(propertyMapReader);
     }
   }
 
   // IViewManagerWithChildren
   void SvgViewManager::AddView(FrameworkElement const &parent, UIElement const &child, int64_t /*index*/)
   {
-    if (auto const &view = parent.try_as<SvgView>())
+    if (auto view{parent.try_as<RNSVG::SvgView>()})
     {
-      view->Views().Append(child);
+      view.Views().Append(child);
 
-      if (auto const &childView = child.try_as<RenderableView>())
+      if (auto childView{child.try_as<RNSVG::RenderableView>()})
       {
-        childView->ParentView(parent);
+        childView.SvgParent(parent);
       }
     }
   }
 
   void SvgViewManager::RemoveAllChildren(FrameworkElement const &parent)
   {
-    if (auto const &view = parent.try_as<SvgView>())
+    if (auto view{parent.try_as<RNSVG::SvgView>()})
     {
-      view->Views().Clear();
+      for (auto child : view.Views())
+      {
+        if (auto childView{child.try_as<RNSVG::RenderableView>()})
+        {
+          childView.SvgParent(nullptr);
+        }
+      }
+      view.Views().Clear();
     }
   }
 
   void SvgViewManager::RemoveChildAt(FrameworkElement const &parent, int64_t index)
   {
-    if (auto const &view = parent.try_as<SvgView>())
+    if (auto view{parent.try_as<RNSVG::SvgView>()})
     {
-      view->Views().RemoveAt(static_cast<uint32_t>(index));
+      auto child{view.Views().GetAt(static_cast<uint32_t>(index))};
+      if (auto childView{child.try_as<RNSVG::RenderableView>()})
+      {
+        childView.SvgParent(nullptr);
+      }
+      view.Views().RemoveAt(static_cast<uint32_t>(index));
     }
   }
 
   void SvgViewManager::ReplaceChild(FrameworkElement const &parent, UIElement const &oldChild, UIElement const &newChild)
   {
-    if (auto const &view = parent.try_as<SvgView>())
+    auto svgView{parent.try_as<RNSVG::SvgView>()};
+    auto oldChildView{oldChild.try_as<RNSVG::RenderableView>()};
+    auto newChildView{newChild.try_as<RNSVG::RenderableView>()};
+
+    if (svgView && oldChildView && newChildView)
     {
       uint32_t index;
 
-      if (view->Views().IndexOf(oldChild, index))
+      if (svgView.Views().IndexOf(oldChild, index))
       {
-        view->Views().SetAt(index, newChild);
+        svgView.Views().SetAt(index, newChild);
+        oldChildView.SvgParent(nullptr);
+        newChildView.SvgParent(parent);
       }
     }
   }

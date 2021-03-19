@@ -52,9 +52,9 @@ namespace winrt::RNSVG::implementation
 
   void RectViewManager::UpdateProperties(FrameworkElement const &view, IJSValueReader const &propertyMapReader)
   {
-    if (auto rectView = view.try_as<RectView>())
+    if (auto rectView{view.try_as<RNSVG::RectView>()})
     {
-      rectView->UpdateProperties(propertyMapReader);
+      rectView.UpdateProperties(propertyMapReader);
     }
   }
 

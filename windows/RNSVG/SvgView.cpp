@@ -48,10 +48,7 @@ namespace winrt::RNSVG::implementation
       }
     }
 
-    if (m_hasRendered)
-    {
-      InvalidateCanvas();
-    }
+    InvalidateCanvas();
   }
 
   winrt::Windows::Foundation::Size SvgView::MeasureOverride(winrt::Windows::Foundation::Size availableSize)

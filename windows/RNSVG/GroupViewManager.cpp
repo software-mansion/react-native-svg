@@ -56,51 +56,65 @@ namespace winrt::RNSVG::implementation
 
   void GroupViewManager::UpdateProperties(FrameworkElement const &view, IJSValueReader const &propertyMapReader)
   {
-    if (auto groupView = view.try_as<GroupView>())
+    if (auto groupView{view.try_as<RNSVG::GroupView>()})
     {
-      groupView->UpdateProperties(propertyMapReader);
+      groupView.UpdateProperties(propertyMapReader);
     }
   }
 
   // IViewManagerWithChildren
   void GroupViewManager::AddView(FrameworkElement const &parent, UIElement const &child, int64_t /*index*/)
   {
-    if (auto groupView = parent.try_as<GroupView>())
+    if (auto groupView{parent.try_as<RNSVG::GroupView>()})
     {
-      if (auto childView = child.try_as<RenderableView>())
+      if (auto childView{child.try_as<RNSVG::RenderableView>()})
       {
-        groupView->Children().Append(child);
-        childView->ParentView(parent);
+        groupView.Children().Append(childView);
+        childView.SvgParent(parent);
       }
     }
   }
 
   void GroupViewManager::RemoveAllChildren(FrameworkElement const &parent)
   {
-    if (auto groupView = parent.try_as<GroupView>())
+    if (auto groupView{parent.try_as<RNSVG::GroupView>()})
     {
-      groupView->Children().Clear();
+      for (auto child : groupView.Children())
+      {
+        child.SvgParent(nullptr);
+      }
+
+      groupView.Children().Clear();
     }
   }
 
   void GroupViewManager::RemoveChildAt(FrameworkElement const &parent, int64_t index)
   {
-    if (auto groupView = parent.try_as<GroupView>())
+    if (auto groupView{parent.try_as<RNSVG::GroupView>()})
     {
-      groupView->Children().RemoveAt(static_cast<uint32_t>(index));
+      auto child{groupView.Children().GetAt(static_cast<uint32_t>(index))};
+      child.SvgParent(nullptr);
+
+      groupView.Children().RemoveAt(static_cast<uint32_t>(index));
     }
   }
 
   void
   GroupViewManager::ReplaceChild(FrameworkElement const &parent, UIElement const &oldChild, UIElement const &newChild)
   {
-    if (auto groupView = parent.try_as<GroupView>())
+    auto groupView{parent.try_as<RNSVG::GroupView>()};
+    auto oldChildView{oldChild.try_as<RNSVG::RenderableView>()};
+    auto newChildView{newChild.try_as<RNSVG::RenderableView>()};
+
+    if (groupView && oldChildView && newChildView)
     {
       uint32_t index;
 
-      if (groupView->Children().IndexOf(oldChild, index))
+      if (groupView.Children().IndexOf(oldChildView, index))
       {
-        groupView->Children().SetAt(index, newChild);
+        groupView.Children().SetAt(index, newChildView);
+        oldChildView.SvgParent(nullptr);
+        newChildView.SvgParent(parent);
       }
     }
   }
