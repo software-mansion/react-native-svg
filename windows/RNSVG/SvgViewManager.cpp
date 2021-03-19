@@ -8,6 +8,7 @@
 #include <winrt/Windows.UI.Xaml.Shapes.h>
 
 #include "SvgView.h"
+#include "RenderableView.h"
 
 namespace winrt
 {
@@ -68,6 +69,11 @@ namespace winrt::RNSVG::implementation
     if (auto const &view = parent.try_as<SvgView>())
     {
       view->Views().Append(child);
+
+      if (auto const &childView = child.try_as<RenderableView>())
+      {
+        childView->ParentView(parent);
+      }
     }
   }
 
