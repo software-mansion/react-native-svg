@@ -49,7 +49,7 @@ namespace winrt::RNSVG::implementation
     {
       if (auto childView{child.try_as<RNSVG::RenderableView>()})
       {
-        groupView.Children().Append(childView);
+        groupView.AddChild(childView);
         childView.SvgParent(parent);
       }
     }
@@ -92,9 +92,10 @@ namespace winrt::RNSVG::implementation
 
       if (groupView.Children().IndexOf(oldChildView, index))
       {
-        groupView.Children().SetAt(index, newChildView);
+        groupView.Children().RemoveAt(index);
         oldChildView.SvgParent(nullptr);
         newChildView.SvgParent(parent);
+        groupView.AddChild(newChildView);
       }
     }
   }
