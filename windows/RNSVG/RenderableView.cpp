@@ -11,7 +11,7 @@
 
 namespace winrt::RNSVG::implementation
 {
-    void RenderableView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader)
+    void RenderableView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate)
     {
       const Microsoft::ReactNative::JSValueObject &propertyMap =
           Microsoft::ReactNative::JSValue::ReadObjectFrom(reader);
@@ -23,23 +23,57 @@ namespace winrt::RNSVG::implementation
 
         if (propertyName == "strokeWidth")
         {
-          m_strokeWidth = SVGLength::From(propertyValue);
+          if (invalidate || m_strokeWidth.Unit() == RNSVG::UnitType::Unknown)
+          {
+            if (Utils::JSValueIsNull(propertyValue))
+            {
+              m_strokeWidth = SvgParent().as<RNSVG::RenderableView>().StrokeWidth();
+            } else
+            {
+              m_strokeWidth = SVGLength::From(propertyValue);
+            }
+          }
         } else if (propertyName == "stroke")
         {
-          if (auto color = Utils::GetColorFromJSValue(propertyValue))
+          if (invalidate || Utils::IsTransparent(m_stroke))
           {
-            m_stroke = color.value();
+            Windows::UI::Color newColor{Windows::UI::Colors::Transparent()};
+            if (Utils::JSValueIsNull(propertyValue))
+            {
+              newColor = SvgParent().as<RNSVG::RenderableView>().Stroke();
+            } else
+            {
+              if (auto color = Utils::GetColorFromJSValue(propertyValue))
+              {
+                newColor = color.value();
+              }
+            }
+            m_stroke = newColor;
           }
         } else if (propertyName == "fill")
         {
-          if (auto color = Utils::GetColorFromJSValue(propertyValue))
+          if (invalidate || Utils::IsTransparent(m_fill))
           {
-            m_fill = color.value();
+            Windows::UI::Color newColor{Windows::UI::Colors::Transparent()};
+            if (Utils::JSValueIsNull(propertyValue))
+            {
+              newColor = SvgParent().as<RNSVG::RenderableView>().Fill();
+            } else
+            {
+              if (auto color = Utils::GetColorFromJSValue(propertyValue))
+              {
+                newColor = color.value();
+              }
+            }
+            m_fill = newColor;
           }
         }
       }
 
-      InvalidateCanvas();
+      if (invalidate)
+      {
+        InvalidateCanvas();
+      }
     }
 
     void RenderableView::InvalidateCanvas()

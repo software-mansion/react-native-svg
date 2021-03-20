@@ -29,7 +29,7 @@ namespace winrt::RNSVG::implementation
         void StrokeWidth(RNSVG::SVGLength value) { m_strokeWidth = value; }
 
         void InvalidateCanvas();
-        virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader);
+        virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate = true);
 
         virtual void Render(
             Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const& canvas,

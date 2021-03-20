@@ -9,7 +9,10 @@ namespace winrt::RNSVG::implementation
   public:
     GroupView() = default;
     GroupView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {}
+
     Windows::Foundation::Collections::IVector<RNSVG::RenderableView> Children() { return m_children; }
+
+    void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate);
 
     void Render(
         Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const& canvas,
