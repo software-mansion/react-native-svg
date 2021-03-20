@@ -10,7 +10,7 @@ namespace winrt::RNSVG::implementation
      public:
         RectView() = default;
 
-        void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader);
+        void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate);
         void Render(
             Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const& canvas,
             Microsoft::Graphics::Canvas::CanvasDrawingSession const& session);

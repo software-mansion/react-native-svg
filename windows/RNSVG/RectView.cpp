@@ -14,7 +14,7 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation
 {
-    void RectView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader)
+    void RectView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate)
     {
         const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
 
@@ -49,7 +49,7 @@ namespace winrt::RNSVG::implementation
           }
         }
 
-        __super::UpdateProperties(reader);
+        __super::UpdateProperties(reader, invalidate);
     }
 
     void RectView::Render(

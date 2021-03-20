@@ -34,7 +34,7 @@ namespace RNSVG
     Single StrokeOpacity;
     SVGLength StrokeWidth;
 
-    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
+    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean invalidate);
     void InvalidateCanvas();
 
     void Render(

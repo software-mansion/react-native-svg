@@ -23,5 +23,19 @@ namespace winrt::RNSVG
 
       return std::nullopt;
     }
+
+    static bool IsTransparent(Windows::UI::Color const& color)
+    {
+      auto transparent{Windows::UI::Colors::Transparent()};
+      return color.A == transparent.A
+        && color.R == transparent.R
+        && color.G == transparent.G
+        && color.B == transparent.B;
+    }
+
+    static bool JSValueIsNull(Microsoft::ReactNative::JSValue const &value)
+    {
+      return value.Type() == Microsoft::ReactNative::JSValueType::Null;
+    }
   };
 }
