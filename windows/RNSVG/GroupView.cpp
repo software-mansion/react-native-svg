@@ -12,46 +12,37 @@
 using namespace winrt;
 using namespace Microsoft::ReactNative;
 
-namespace winrt::RNSVG::implementation
-{
-  void GroupView::AddChild(RNSVG::RenderableView const &child)
-  {
-    m_children.Append(child);
-    if (m_props)
-    {
-      child.UpdateProperties(m_props, false);
-    }
+namespace winrt::RNSVG::implementation {
+void GroupView::AddChild(RNSVG::RenderableView const &child) {
+  m_children.Append(child);
+  if (m_props) {
+    child.UpdateProperties(m_props, false);
+  }
+}
+
+void GroupView::UpdateProperties(IJSValueReader const &reader, bool invalidate) {
+  if (!m_props) {
+    m_props = reader;
   }
 
-  void GroupView::UpdateProperties(IJSValueReader const &reader, bool invalidate)
-  {
-    if (!m_props)
-    {
-      m_props = reader;
-    }
-
-    for (auto child : Children())
-    {
-      child.UpdateProperties(reader, false);
-    }
-
-    __super::UpdateProperties(reader, invalidate);
+  for (auto child : Children()) {
+    child.UpdateProperties(reader, false);
   }
 
-  void GroupView::Render(
-    Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const& canvas,
-    Microsoft::Graphics::Canvas::CanvasDrawingSession const &session)
-  {
-    RenderGroup(canvas, session);
-  }
+  __super::UpdateProperties(reader, invalidate);
+}
 
-  void GroupView::RenderGroup(
+void GroupView::Render(
     Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-    Microsoft::Graphics::Canvas::CanvasDrawingSession const &session)
-  {
-    for (auto child : Children())
-    {
-      child.Render(canvas, session);
-    }
+    Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
+  RenderGroup(canvas, session);
+}
+
+void GroupView::RenderGroup(
+    Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
+    Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
+  for (auto child : Children()) {
+    child.Render(canvas, session);
   }
+}
 } // namespace winrt::RNSVG::implementation
