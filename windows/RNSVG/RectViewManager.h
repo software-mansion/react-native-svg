@@ -1,22 +1,16 @@
 #pragma once
 
+#include "RenderableViewManager.h"
 #include "RectViewManager.g.h"
 
 namespace winrt::RNSVG::implementation
 {
-  struct RectViewManager : RectViewManagerT<RectViewManager>
+  struct RectViewManager : RectViewManagerT<RectViewManager, RNSVG::implementation::RenderableViewManager>
   {
-    RectViewManager() = default;
-
-    // IViewManager
-    hstring Name();
-    Windows::UI::Xaml::FrameworkElement CreateView();
+    RectViewManager();
 
     // IViewManagerWithNativeProperties
     Windows::Foundation::Collections::IMapView<hstring, Microsoft::ReactNative::ViewManagerPropertyType> NativeProps();
-    void UpdateProperties(
-        Windows::UI::Xaml::FrameworkElement const &view,
-        Microsoft::ReactNative::IJSValueReader const &propertyMapReader);
   };
 } // namespace winrt::RNSVG::implementation
 
