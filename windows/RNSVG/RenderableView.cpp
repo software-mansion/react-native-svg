@@ -11,13 +11,13 @@
 
 using namespace winrt;
 using namespace Microsoft::Graphics::Canvas;
+using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation
 {
-    void RenderableView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate)
+    void RenderableView::UpdateProperties(IJSValueReader const &reader, bool invalidate)
     {
-      const Microsoft::ReactNative::JSValueObject &propertyMap =
-          Microsoft::ReactNative::JSValue::ReadObjectFrom(reader);
+      const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
 
       for (auto const &pair : propertyMap)
       {
@@ -31,7 +31,8 @@ namespace winrt::RNSVG::implementation
             if (Utils::JSValueIsNull(propertyValue))
             {
               m_strokeWidth = SvgParent().as<RNSVG::RenderableView>().StrokeWidth();
-            } else
+            }
+            else
             {
               m_strokeWidth = SVGLength::From(propertyValue);
             }
@@ -42,7 +43,8 @@ namespace winrt::RNSVG::implementation
           if (Utils::JSValueIsNull(propertyValue))
           {
             m_strokeOpacity = SvgParent().as<RNSVG::RenderableView>().StrokeOpacity();
-          } else
+          }
+          else
           {
             m_strokeOpacity = propertyValue.AsSingle();
           }
@@ -52,7 +54,8 @@ namespace winrt::RNSVG::implementation
           if (Utils::JSValueIsNull(propertyValue))
           {
             m_fillOpacity = SvgParent().as<RNSVG::RenderableView>().FillOpacity();
-          } else
+          }
+          else
           {
             m_fillOpacity = propertyValue.AsSingle();
           }
@@ -65,16 +68,15 @@ namespace winrt::RNSVG::implementation
             if (Utils::JSValueIsNull(propertyValue))
             {
               newColor = SvgParent().as<RNSVG::RenderableView>().Stroke();
-            } else
+            }
+            else if (auto color = Utils::GetColorFromJSValue(propertyValue))
             {
-              if (auto color = Utils::GetColorFromJSValue(propertyValue))
-              {
-                newColor = color.value();
-              }
+              newColor = color.value();
             }
             m_stroke = newColor;
           }
-        } else if (propertyName == "fill")
+        }
+        else if (propertyName == "fill")
         {
           if (invalidate || Utils::IsTransparent(m_fill))
           {
@@ -82,16 +84,15 @@ namespace winrt::RNSVG::implementation
             if (Utils::JSValueIsNull(propertyValue))
             {
               newColor = SvgParent().as<RNSVG::RenderableView>().Fill();
-            } else
+            }
+            else if (auto color = Utils::GetColorFromJSValue(propertyValue))
             {
-              if (auto color = Utils::GetColorFromJSValue(propertyValue))
-              {
-                newColor = color.value();
-              }
+              newColor = color.value();
             }
             m_fill = newColor;
           }
-        } else if (propertyName == "strokeLinecap")
+        }
+        else if (propertyName == "strokeLinecap")
         {
           auto strokeLineCap{propertyValue.AsInt32()};
           switch (strokeLineCap)
@@ -107,7 +108,8 @@ namespace winrt::RNSVG::implementation
               m_strokeLineCap = Geometry::CanvasCapStyle::Flat;
               break;
           }
-        } else if (propertyName == "strokeLinejoin")
+        }
+        else if (propertyName == "strokeLinejoin")
         {
           auto strokeLineJoin{propertyValue.AsInt32()};
           switch (strokeLineJoin)
@@ -123,12 +125,42 @@ namespace winrt::RNSVG::implementation
               m_strokeLineJoin = Geometry::CanvasLineJoin::Miter;
               break;
           }
-        } else if (propertyName == "strokeDashoffset")
+        }
+        else if (propertyName == "fillRule")
+        {
+          auto fillRule{propertyValue.AsInt32()};
+          switch (fillRule)
+          {
+            case 0:
+              m_fillRule = Geometry::CanvasFilledRegionDetermination::Alternate;
+              break;
+            case 1:
+            default:
+              m_fillRule = Geometry::CanvasFilledRegionDetermination::Winding;
+              break;
+          }
+        } 
+        else if (propertyName == "strokeDashoffset")
         {
           m_strokeDashOffset = propertyValue.AsSingle();
-        } else if (propertyName == "strokeMiterlimit")
+        }
+        else if (propertyName == "strokeMiterlimit")
         {
           m_strokeMiterLimit = propertyValue.AsSingle();
+        }
+        else if (propertyName == "strokeDasharray")
+        {
+          auto const& asArray = propertyValue.AsArray();
+
+          if (!asArray.empty() && (asArray.size() % 2 == 0))
+          {
+            m_strokeDashArray.Clear();
+          
+            for (auto& item : asArray)
+            {
+              m_strokeDashArray.Append(SVGLength::From(item));
+            }
+          }
         }
       }
 
@@ -145,7 +177,8 @@ namespace winrt::RNSVG::implementation
         if (auto svgView{SvgParent().try_as<RNSVG::SvgView>()})
         {
           svgView.InvalidateCanvas();
-        } else if (auto renderable{SvgParent().try_as<RNSVG::RenderableView>()})
+        }
+        else if (auto renderable{SvgParent().try_as<RNSVG::RenderableView>()})
         {
           renderable.InvalidateCanvas();
         }

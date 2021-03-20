@@ -35,8 +35,10 @@ namespace RNSVG
     SVGLength StrokeWidth;
     Single StrokeMiterLimit;
     Single StrokeDashOffset;
+    Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
     Microsoft.Graphics.Canvas.Geometry.CanvasCapStyle StrokeLineCap;
     Microsoft.Graphics.Canvas.Geometry.CanvasLineJoin StrokeLineJoin;
+    Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule;
 
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean invalidate);
     void InvalidateCanvas();
