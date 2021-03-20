@@ -33,6 +33,10 @@ namespace RNSVG
     Windows.UI.Color Stroke;
     Single StrokeOpacity;
     SVGLength StrokeWidth;
+    Single StrokeMiterLimit;
+    Single StrokeDashOffset;
+    Microsoft.Graphics.Canvas.Geometry.CanvasCapStyle StrokeLineCap;
+    Microsoft.Graphics.Canvas.Geometry.CanvasLineJoin StrokeLineJoin;
 
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean invalidate);
     void InvalidateCanvas();

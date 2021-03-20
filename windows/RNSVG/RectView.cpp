@@ -4,17 +4,16 @@
 #include "RectView.g.cpp"
 #endif
 
-#include <winrt/Microsoft.Graphics.Canvas.Geometry.h>
-
 #include "JSValueXaml.h"
 #include "Utils.h"
 
 using namespace winrt;
+using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation
 {
-    void RectView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate)
+    void RectView::UpdateProperties(IJSValueReader const &reader, bool invalidate)
     {
         const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
 
@@ -53,18 +52,28 @@ namespace winrt::RNSVG::implementation
     }
 
     void RectView::Render(
-        Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const& canvas,
-        Microsoft::Graphics::Canvas::CanvasDrawingSession const& session)
+        UI::Xaml::CanvasControl const& canvas,
+        CanvasDrawingSession const& session)
     {
-      auto resourceCreator{canvas.try_as<Microsoft::Graphics::Canvas::ICanvasResourceCreator>()};
-      auto rect{Microsoft::Graphics::Canvas::Geometry::CanvasGeometry::CreateRoundedRectangle(
+      auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+      auto rect{Geometry::CanvasGeometry::CreateRoundedRectangle(
           resourceCreator, m_x.Value(), m_y.Value(), m_width.Value(), m_height.Value(), m_rx.Value(), m_ry.Value())};
-      
+
+      auto fillLayer{session.CreateLayer(FillOpacity())};
       session.FillGeometry(rect, Fill());
+      fillLayer.Close();
 
       if (StrokeWidth().Value() > 0.0f)
       {
+        auto strokeLayer{session.CreateLayer(StrokeOpacity())};
+        Geometry::CanvasStrokeStyle strokeStyle{};
+        strokeStyle.EndCap(StrokeLineCap());
+        strokeStyle.LineJoin(StrokeLineJoin());
+        strokeStyle.DashOffset(StrokeDashOffset());
+        strokeStyle.MiterLimit(StrokeMiterLimit());
+        rect.Stroke(StrokeWidth().Value(), strokeStyle);
         session.DrawGeometry(rect, Stroke(), StrokeWidth().Value());
+        strokeLayer.Close();
       }
     }
 } // namespace winrt::RNSVG::implementation

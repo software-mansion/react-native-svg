@@ -9,6 +9,9 @@
 #include "JSValueXaml.h"
 #include "SvgView.h"
 
+using namespace winrt;
+using namespace Microsoft::Graphics::Canvas;
+
 namespace winrt::RNSVG::implementation
 {
     void RenderableView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate)
@@ -33,7 +36,28 @@ namespace winrt::RNSVG::implementation
               m_strokeWidth = SVGLength::From(propertyValue);
             }
           }
-        } else if (propertyName == "stroke")
+        }
+        else if (propertyName == "strokeOpacity")
+        {
+          if (Utils::JSValueIsNull(propertyValue))
+          {
+            m_strokeOpacity = SvgParent().as<RNSVG::RenderableView>().StrokeOpacity();
+          } else
+          {
+            m_strokeOpacity = propertyValue.AsSingle();
+          }
+        }
+        else if (propertyName == "fillOpacity")
+        {
+          if (Utils::JSValueIsNull(propertyValue))
+          {
+            m_fillOpacity = SvgParent().as<RNSVG::RenderableView>().FillOpacity();
+          } else
+          {
+            m_fillOpacity = propertyValue.AsSingle();
+          }
+        }
+        else if (propertyName == "stroke")
         {
           if (invalidate || Utils::IsTransparent(m_stroke))
           {
@@ -67,6 +91,44 @@ namespace winrt::RNSVG::implementation
             }
             m_fill = newColor;
           }
+        } else if (propertyName == "strokeLinecap")
+        {
+          auto strokeLineCap{propertyValue.AsInt32()};
+          switch (strokeLineCap)
+          {
+            case 2:
+              m_strokeLineCap = Geometry::CanvasCapStyle::Square;
+              break;
+            case 1:
+              m_strokeLineCap = Geometry::CanvasCapStyle::Round;
+              break;
+            case 0:
+            default:
+              m_strokeLineCap = Geometry::CanvasCapStyle::Flat;
+              break;
+          }
+        } else if (propertyName == "strokeLinejoin")
+        {
+          auto strokeLineJoin{propertyValue.AsInt32()};
+          switch (strokeLineJoin)
+          {
+            case 2:
+              m_strokeLineJoin = Geometry::CanvasLineJoin::Bevel;
+              break;
+            case 1:
+              m_strokeLineJoin = Geometry::CanvasLineJoin::Round;
+              break;
+            case 0:
+            default:
+              m_strokeLineJoin = Geometry::CanvasLineJoin::Miter;
+              break;
+          }
+        } else if (propertyName == "strokeDashoffset")
+        {
+          m_strokeDashOffset = propertyValue.AsSingle();
+        } else if (propertyName == "strokeMiterlimit")
+        {
+          m_strokeMiterLimit = propertyValue.AsSingle();
         }
       }
 

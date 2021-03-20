@@ -25,8 +25,20 @@ namespace winrt::RNSVG::implementation
         float StrokeOpacity() { return m_strokeOpacity; }
         void StrokeOpacity(float value) { m_strokeOpacity = value; }
 
+        float StrokeMiterLimit() { return m_strokeMiterLimit; }
+        void StrokeMiterLimit(float value) { m_strokeMiterLimit = value; }
+
+        float StrokeDashOffset() { return m_strokeDashOffset; }
+        void StrokeDashOffset(float value) { m_strokeDashOffset = value; }
+
         RNSVG::SVGLength StrokeWidth() { return m_strokeWidth; }
-        void StrokeWidth(RNSVG::SVGLength value) { m_strokeWidth = value; }
+        void StrokeWidth(RNSVG::SVGLength const& value) { m_strokeWidth = value; }
+
+        Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle StrokeLineCap() { return m_strokeLineCap; }
+        void StrokeLineCap(Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle const& value) { m_strokeLineCap = value; }
+
+        Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin StrokeLineJoin() { return m_strokeLineJoin; }
+        void StrokeLineJoin(Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin const& value) { m_strokeLineJoin = value; }
 
         void InvalidateCanvas();
         virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate = true);
@@ -43,6 +55,12 @@ namespace winrt::RNSVG::implementation
         Windows::UI::Color m_stroke{Windows::UI::Colors::Transparent()};
         float m_fillOpacity{1.0f};
         float m_strokeOpacity{1.0f};
+        float m_strokeMiterLimit{0.0f};
+        float m_strokeDashOffset{0.0f};
         RNSVG::SVGLength m_strokeWidth{};
+        Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle m_strokeLineCap{
+            Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle::Flat};
+        Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin m_strokeLineJoin{
+            Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin::Miter};
     };
 }

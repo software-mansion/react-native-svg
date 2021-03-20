@@ -18,6 +18,7 @@
 #include <winrt/Windows.UI.Xaml.h>
 
 #include <winrt/Microsoft.Graphics.Canvas.h>
+#include <winrt/Microsoft.Graphics.Canvas.Geometry.h>
 #include <winrt/Microsoft.Graphics.Canvas.UI.Xaml.h>
 
 #include <winrt/Microsoft.ReactNative.h>
