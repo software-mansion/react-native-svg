@@ -34,11 +34,16 @@ namespace winrt::RNSVG::implementation
         RNSVG::SVGLength StrokeWidth() { return m_strokeWidth; }
         void StrokeWidth(RNSVG::SVGLength const& value) { m_strokeWidth = value; }
 
+        Windows::Foundation::Collections::IVector<RNSVG::SVGLength> StrokeDashArray() { return m_strokeDashArray; }
+
         Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle StrokeLineCap() { return m_strokeLineCap; }
         void StrokeLineCap(Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle const& value) { m_strokeLineCap = value; }
 
         Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin StrokeLineJoin() { return m_strokeLineJoin; }
         void StrokeLineJoin(Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin const& value) { m_strokeLineJoin = value; }
+
+        Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination FillRule() { return m_fillRule; }
+        void FillRule(Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination const& value) { m_fillRule = value; }
 
         void InvalidateCanvas();
         virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate = true);
@@ -58,9 +63,13 @@ namespace winrt::RNSVG::implementation
         float m_strokeMiterLimit{0.0f};
         float m_strokeDashOffset{0.0f};
         RNSVG::SVGLength m_strokeWidth{};
+        Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_strokeDashArray{
+            winrt::single_threaded_vector<RNSVG::SVGLength>()};
         Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle m_strokeLineCap{
             Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle::Flat};
         Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin m_strokeLineJoin{
             Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin::Miter};
+        Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination m_fillRule{
+            Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination::Winding};
     };
 }

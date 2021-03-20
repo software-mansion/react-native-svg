@@ -71,8 +71,8 @@ namespace winrt::RNSVG::implementation
         strokeStyle.LineJoin(StrokeLineJoin());
         strokeStyle.DashOffset(StrokeDashOffset());
         strokeStyle.MiterLimit(StrokeMiterLimit());
-        rect.Stroke(StrokeWidth().Value(), strokeStyle);
-        session.DrawGeometry(rect, Stroke(), StrokeWidth().Value());
+        strokeStyle.CustomDashStyle(Utils::GetValueArray(StrokeDashArray()));
+        session.DrawGeometry(rect, Stroke(), StrokeWidth().Value(), strokeStyle);
         strokeLayer.Close();
       }
     }

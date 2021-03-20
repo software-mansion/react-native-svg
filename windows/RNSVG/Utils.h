@@ -37,5 +37,17 @@ namespace winrt::RNSVG
     {
       return value.Type() == Microsoft::ReactNative::JSValueType::Null;
     }
+
+    static std::vector<float> GetValueArray(IVector<SVGLength> const& value)
+    {
+      std::vector<float> result;
+
+      for (auto item : value)
+      {
+        result.push_back(item.Value());
+      }
+
+      return std::move(result);
+    }
   };
 }
