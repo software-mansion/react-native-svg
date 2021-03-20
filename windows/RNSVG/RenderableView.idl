@@ -24,6 +24,21 @@ namespace RNSVG
     UnitType Unit { get; };
   }
 
+  enum BaseProp
+  {
+    Fill,
+    FillOpacity,
+    FillRule,
+    Stroke,
+    StrokeOpacity,
+    StrokeWidth,
+    StrokeMiterLimit,
+    StrokeDashOffset,
+    StrokeDashArray,
+    StrokeLineCap,
+    StrokeLineJoin,
+  };
+
   [default_interface]
   unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
   {

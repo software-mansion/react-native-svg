@@ -71,5 +71,19 @@ namespace winrt::RNSVG::implementation
             Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin::Miter};
         Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination m_fillRule{
             Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination::Winding};
+
+        std::map<RNSVG::BaseProp, bool> m_propSetMap{
+          {RNSVG::BaseProp::Fill, false},
+          {RNSVG::BaseProp::FillOpacity, false},
+          {RNSVG::BaseProp::FillRule, false},
+          {RNSVG::BaseProp::Stroke, false},
+          {RNSVG::BaseProp::StrokeOpacity, false},
+          {RNSVG::BaseProp::StrokeWidth, false},
+          {RNSVG::BaseProp::StrokeMiterLimit, false},
+          {RNSVG::BaseProp::StrokeDashOffset, false},
+          {RNSVG::BaseProp::StrokeDashArray, false},
+          {RNSVG::BaseProp::StrokeLineCap, false},
+          {RNSVG::BaseProp::StrokeLineJoin, false},
+        };
     };
 }
