@@ -1,0 +1,31 @@
+namespace RNSVG
+{
+  enum SVGClass
+  {
+    RNSVGGroup,
+    RNSVGRect,
+    Unknown,
+  };
+
+  [default_interface]
+  unsealed runtimeclass RenderableViewManager
+    : Microsoft.ReactNative.IViewManager
+    , Microsoft.ReactNative.IViewManagerWithReactContext
+    , Microsoft.ReactNative.IViewManagerWithNativeProperties
+  {
+  }
+
+  [default_interface]
+  runtimeclass GroupViewManager
+    : RenderableViewManager
+    , Microsoft.ReactNative.IViewManagerWithChildren
+  {
+      GroupViewManager();
+  }
+
+  [default_interface]
+  runtimeclass RectViewManager : RenderableViewManager
+  {
+      RectViewManager();
+  }
+}

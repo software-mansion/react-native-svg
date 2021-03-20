@@ -8,14 +8,11 @@
     <Midl Include="SvgView.idl">
       <Filter>Views</Filter>
     </Midl>
-    <Midl Include="GroupViewManager.idl">
-      <Filter>ViewManagers</Filter>
-    </Midl>
-    <Midl Include="RectViewManager.idl">
-      <Filter>ViewManagers</Filter>
-    </Midl>
     <Midl Include="RenderableView.idl">
       <Filter>Views</Filter>
+    </Midl>
+    <Midl Include="RenderableViewManager.idl">
+      <Filter>ViewManagers</Filter>
     </Midl>
   </ItemGroup>
   <ItemGroup>
@@ -30,6 +27,12 @@
     </ClCompile>
     <ClCompile Include="GroupView.cpp">
       <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="RectViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupViewManager.cpp">
+      <Filter>ViewManagers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +50,12 @@
     </ClInclude>
     <ClInclude Include="GroupView.h">
       <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="RectViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupViewManager.h">
+      <Filter>ViewManagers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

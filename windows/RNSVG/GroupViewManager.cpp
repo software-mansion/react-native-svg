@@ -20,46 +20,26 @@ using namespace Windows::UI::Xaml::Shapes;
 
 namespace winrt::RNSVG::implementation
 {
-  // IViewManager
-  hstring GroupViewManager::Name()
-  {
-    return L"RNSVGGroup";
-  }
-
-  FrameworkElement GroupViewManager::CreateView()
-  {
-    return winrt::RNSVG::GroupView(m_reactContext);
-  }
-
-  // IViewManagerWithContext
-  IReactContext GroupViewManager::ReactContext()
-  {
-    return m_reactContext;
-  }
-
-  void GroupViewManager::ReactContext(IReactContext const &reactContext)
-  {
-    m_reactContext = reactContext;
+  GroupViewManager::GroupViewManager() {
+    m_class = RNSVG::SVGClass::RNSVGGroup;
+    m_name = L"RNSVGGroup";
   }
 
   // IViewManagerWithNativeProperties
   IMapView<hstring, ViewManagerPropertyType> GroupViewManager::NativeProps()
   {
+    auto parentProps{__super::NativeProps()};
     auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
 
-    nativeProps.Insert(L"fill", ViewManagerPropertyType::Number);
+    for (auto prop : parentProps)
+    {
+      nativeProps.Insert(prop.Key(), prop.Value());
+    }
+
     nativeProps.Insert(L"height", ViewManagerPropertyType::Number);
     nativeProps.Insert(L"width", ViewManagerPropertyType::Number);
 
     return nativeProps.GetView();
-  }
-
-  void GroupViewManager::UpdateProperties(FrameworkElement const &view, IJSValueReader const &propertyMapReader)
-  {
-    if (auto groupView{view.try_as<RNSVG::GroupView>()})
-    {
-      groupView.UpdateProperties(propertyMapReader);
-    }
   }
 
   // IViewManagerWithChildren
