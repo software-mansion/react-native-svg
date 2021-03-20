@@ -48,6 +48,8 @@ namespace RNSVG
     GroupView(Microsoft.ReactNative.IReactContext context);
     Windows.Foundation.Collections.IVector<RenderableView> Children { get; };
 
+    void AddChild(RenderableView child);
+
     void RenderGroup(
         Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
         Microsoft.Graphics.Canvas.CanvasDrawingSession session);

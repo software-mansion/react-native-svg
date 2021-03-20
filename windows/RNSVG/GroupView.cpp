@@ -14,9 +14,21 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation
 {
+  void GroupView::AddChild(RNSVG::RenderableView const &child)
+  {
+    m_children.Append(child);
+    if (m_props)
+    {
+      child.UpdateProperties(m_props, false);
+    }
+  }
+
   void GroupView::UpdateProperties(IJSValueReader const &reader, bool invalidate)
   {
-    const Microsoft::ReactNative::JSValueObject &propertyMap = Microsoft::ReactNative::JSValue::ReadObjectFrom(reader);
+    if (!m_props)
+    {
+      m_props = reader;
+    }
 
     for (auto child : Children())
     {

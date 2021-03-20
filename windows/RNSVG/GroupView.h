@@ -11,6 +11,7 @@ namespace winrt::RNSVG::implementation
     GroupView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {}
 
     Windows::Foundation::Collections::IVector<RNSVG::RenderableView> Children() { return m_children; }
+    void AddChild(RNSVG::RenderableView const &child);
 
     void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate);
 
@@ -26,6 +27,7 @@ namespace winrt::RNSVG::implementation
     Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
     Windows::Foundation::Collections::IVector<RNSVG::RenderableView> m_children{
         winrt::single_threaded_vector<RNSVG::RenderableView>()};
+    Microsoft::ReactNative::IJSValueReader m_props{nullptr};
   };
 } // namespace winrt::RNSVG::implementation
 
