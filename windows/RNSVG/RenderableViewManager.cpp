@@ -26,8 +26,14 @@ namespace winrt::RNSVG::implementation
     auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
 
     nativeProps.Insert(L"fill", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"fillOpacity", ViewManagerPropertyType::Number);
     nativeProps.Insert(L"stroke", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"strokeOpacity", ViewManagerPropertyType::Number);
     nativeProps.Insert(L"strokeWidth", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"strokeLinecap", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"strokeLinejoin", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"strokeMiterlimit", ViewManagerPropertyType::Number);
+    nativeProps.Insert(L"strokeDashoffset", ViewManagerPropertyType::Number);
 
     return nativeProps.GetView();
   }
