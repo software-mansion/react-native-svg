@@ -42,6 +42,8 @@ void RectView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessio
   auto rect{Geometry::CanvasGeometry::CreateRoundedRectangle(
       resourceCreator, m_x.Value(), m_y.Value(), m_width.Value(), m_height.Value(), m_rx.Value(), m_ry.Value())};
 
+  rect = rect.Transform(SvgScale() * SvgRotation());
+
   auto fillLayer{session.CreateLayer(FillOpacity())};
   session.FillGeometry(rect, Fill());
   fillLayer.Close();
