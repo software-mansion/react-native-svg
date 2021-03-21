@@ -11,6 +11,9 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Windows::UI::Xaml::FrameworkElement SvgParent() { return m_parent; }
   void SvgParent(Windows::UI::Xaml::FrameworkElement const &value) { m_parent = value; }
 
+  Microsoft::Graphics::Canvas::Geometry::CanvasGeometry Geometry() { return m_geometry; }
+  void Geometry(Microsoft::Graphics::Canvas::Geometry::CanvasGeometry value) { m_geometry = value; }
+
   Numerics::float3x2 SvgScale() { return m_scale; }
   void SvgScale(Numerics::float3x2 const &value) { m_scale = value; }
 
@@ -50,16 +53,19 @@ struct RenderableView : RenderableViewT<RenderableView> {
   void FillRule(Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination const &value) { m_fillRule = value; }
 
   void InvalidateCanvas();
-  virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate = true);
-
+  virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
+  virtual void CreateGeometry(Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator) = 0;
   virtual void Render(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) = 0;
+      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
 
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
 
   Windows::UI::Xaml::FrameworkElement m_parent{nullptr};
+  Microsoft::Graphics::Canvas::Geometry::CanvasGeometry m_geometry{nullptr};
+  bool m_recreateResources{true};
+
   Numerics::float3x2 m_scale{Numerics::make_float3x2_scale(1)};
   Numerics::float3x2 m_rotation{Numerics::make_float3x2_rotation(0)};
   Windows::UI::Color m_fill{Windows::UI::Colors::Transparent()};

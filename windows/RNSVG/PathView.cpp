@@ -14,7 +14,7 @@ using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void PathView::UpdateProperties(IJSValueReader const &reader, bool invalidate) {
+void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
 
   for (auto const &pair : propertyMap) {
@@ -27,38 +27,13 @@ void PathView::UpdateProperties(IJSValueReader const &reader, bool invalidate) {
     } 
   }
 
-  __super::UpdateProperties(reader, invalidate);
+  __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void PathView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
-  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
-
+void PathView::CreateGeometry(ICanvasResourceCreator const& resourceCreator) {
   Svg::CanvasSvgDocument doc{resourceCreator};
-
-  auto path = doc.CreatePathAttribute(m_segmentData, m_commands);
-
-  auto geometry = path.CreatePathGeometry();
-
-  geometry = geometry.Transform(SvgScale() * SvgRotation());
-
-  geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
-
-  if (auto fillLayer{session.CreateLayer(FillOpacity())}) {
-    session.FillGeometry(geometry, Fill());
-    fillLayer.Close();
-  }
-
-  if (auto strokeLayer{session.CreateLayer(StrokeOpacity())}) {
-    Geometry::CanvasStrokeStyle strokeStyle{};
-    strokeStyle.EndCap(StrokeLineCap());
-    strokeStyle.LineJoin(StrokeLineJoin());
-    strokeStyle.DashOffset(StrokeDashOffset());
-    strokeStyle.MiterLimit(StrokeMiterLimit());
-    strokeStyle.CustomDashStyle(Utils::GetValueArray(StrokeDashArray()));
-
-    session.DrawGeometry(geometry, Stroke(), StrokeWidth().Value(), strokeStyle);
-    strokeLayer.Close();
-  }
+  auto path{doc.CreatePathAttribute(m_segmentData, m_commands)};
+  Geometry(path.CreatePathGeometry());
 }
 
 void PathView::ParsePath() {

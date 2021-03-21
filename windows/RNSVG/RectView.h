@@ -8,10 +8,8 @@ struct RectView : RectViewT<RectView, RNSVG::implementation::RenderableView> {
  public:
   RectView() = default;
 
-  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate);
-  void Render(
-      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+  void CreateGeometry(Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator);
 
  private:
   RNSVG::SVGLength m_width{};

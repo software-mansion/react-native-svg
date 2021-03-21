@@ -45,6 +45,8 @@ namespace RNSVG
   unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
   {
     Windows.UI.Xaml.FrameworkElement SvgParent;
+    Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
+
     Windows.Foundation.Numerics.Matrix3x2 SvgScale;
     Windows.Foundation.Numerics.Matrix3x2 SvgRotation;
     Windows.UI.Color Fill;
@@ -59,9 +61,10 @@ namespace RNSVG
     Microsoft.Graphics.Canvas.Geometry.CanvasLineJoin StrokeLineJoin;
     Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule;
 
-    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean invalidate);
+    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
     void InvalidateCanvas();
 
+    void CreateGeometry(Microsoft.Graphics.Canvas.ICanvasResourceCreator resourceCreator);
     void Render(
       Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
       Microsoft.Graphics.Canvas.CanvasDrawingSession session);
