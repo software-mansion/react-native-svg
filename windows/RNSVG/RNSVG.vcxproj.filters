@@ -34,6 +34,12 @@
     <ClCompile Include="GroupViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
+    <ClCompile Include="PathViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="PathView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -56,6 +62,12 @@
     </ClInclude>
     <ClInclude Include="GroupViewManager.h">
       <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="PathViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="PathView.h">
+      <Filter>Views</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

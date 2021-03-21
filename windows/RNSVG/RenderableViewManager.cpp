@@ -11,7 +11,9 @@ namespace winrt::RNSVG::implementation {
 Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
   switch (m_class) {
     case RNSVG::SVGClass::RNSVGGroup:
-      return winrt ::RNSVG::GroupView(m_reactContext);
+      return winrt::RNSVG::GroupView(m_reactContext);
+    case RNSVG::SVGClass::RNSVGPath:
+      return winrt::RNSVG::PathView();
     case RNSVG::SVGClass::RNSVGRect:
       return winrt::RNSVG::RectView();
   }

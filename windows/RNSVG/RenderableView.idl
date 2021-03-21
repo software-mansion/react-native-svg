@@ -85,4 +85,10 @@ namespace RNSVG
   {
     RectView();
   }
+
+  [default_interface]
+  runtimeclass PathView : RenderableView
+  {
+    PathView();
+  }
 }

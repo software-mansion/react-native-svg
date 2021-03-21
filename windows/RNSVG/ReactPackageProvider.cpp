@@ -7,6 +7,7 @@
 #include "RNSVGModule.h"
 #include "SvgViewManager.h"
 #include "GroupViewManager.h"
+#include "PathViewManager.h"
 #include "RectViewManager.h"
 
 using namespace winrt::Microsoft::ReactNative;
@@ -18,6 +19,7 @@ namespace winrt::RNSVG::implementation
     AddAttributedModules(packageBuilder);
     packageBuilder.AddViewManager(L"SvgViewManager", []() { return winrt::make<SvgViewManager>(); });
     packageBuilder.AddViewManager(L"GroupViewManager", []() { return winrt::make<GroupViewManager>(); });
+    packageBuilder.AddViewManager(L"PathViewManager", []() { return winrt::make<PathViewManager>(); });
     packageBuilder.AddViewManager(L"RectViewManager", []() { return winrt::make<RectViewManager>(); });
   }
 
