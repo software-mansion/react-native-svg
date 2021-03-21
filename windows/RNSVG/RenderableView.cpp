@@ -56,13 +56,13 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool invalid
         } else {
           m_fillOpacity = propertyValue.AsSingle();
         }
+        propSet = true;
       }
-      propSet = true;
     } else if (propertyName == "stroke") {
       prop = RNSVG::BaseProp::Stroke;
       if (invalidate || !m_propSetMap[prop]) {
         Windows::UI::Color newColor{Windows::UI::Colors::Transparent()};
-        if (Utils::JSValueIsNull(propertyValue)) {
+        if (parent && Utils::JSValueIsNull(propertyValue)) {
           newColor = parent.Stroke();
         } else if (auto color = Utils::GetColorFromJSValue(propertyValue)) {
           newColor = color.value();
@@ -74,7 +74,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool invalid
       prop = RNSVG::BaseProp::Fill;
       if (invalidate || !m_propSetMap[prop]) {
         Windows::UI::Color newColor{Windows::UI::Colors::Transparent()};
-        if (Utils::JSValueIsNull(propertyValue)) {
+        if (parent && Utils::JSValueIsNull(propertyValue)) {
           newColor = parent.Fill();
         } else if (auto color = Utils::GetColorFromJSValue(propertyValue)) {
           newColor = color.value();
@@ -102,6 +102,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool invalid
               break;
           }
         }
+        propSet = true;
       }
     } else if (propertyName == "strokeLinejoin") {
       prop = RNSVG::BaseProp::StrokeLineJoin;
@@ -190,8 +191,8 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool invalid
         } else {
           m_scale = Numerics::make_float3x2_scale(propertyValue.AsSingle());
         }
+        propSet = true;
       }
-      propSet = true;
     } else if (propertyName == "rotation") {
       prop = RNSVG::BaseProp::Rotation;
       if (invalidate || !m_propSetMap[prop]) {
@@ -200,8 +201,8 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool invalid
         } else {
           m_rotation = Numerics::make_float3x2_rotation(propertyValue.AsSingle() * static_cast<float>(M_PI) / 180.0f);
         }
+        propSet = true;
       }
-      propSet = true;
     }
 
     // Invalidate = true means a property is being changed on the element

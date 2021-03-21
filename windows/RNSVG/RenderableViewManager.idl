@@ -3,7 +3,25 @@ namespace RNSVG
   enum SVGClass
   {
     RNSVGGroup,
+    RNSVGPath,
+    RNSVGText,
+    RNSVGTSpan,
+    RNSVGTextPath,
+    RNSVGImage,
+    RNSVGCircle,
+    RNSVGEllipse,
+    RNSVGLine,
     RNSVGRect,
+    RNSVGClipPath,
+    RNSVGDefs,
+    RNSVGUse,
+    RNSVGSymbol,
+    RNSVGLinearGradient,
+    RNSVGRadialGradient,
+    RNSVGPattern,
+    RNSVGMask,
+    RNSVGMarker,
+    RNSVGForeignObject,
     Unknown,
   };
 
@@ -27,5 +45,11 @@ namespace RNSVG
   runtimeclass RectViewManager : RenderableViewManager
   {
       RectViewManager();
+  }
+
+  [default_interface]
+  runtimeclass PathViewManager : RenderableViewManager
+  {
+      PathViewManager();
   }
 }
