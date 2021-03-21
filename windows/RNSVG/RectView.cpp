@@ -12,7 +12,7 @@ using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void RectView::UpdateProperties(IJSValueReader const &reader, bool invalidate) {
+void RectView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
 
   for (auto const &pair : propertyMap) {
@@ -34,30 +34,11 @@ void RectView::UpdateProperties(IJSValueReader const &reader, bool invalidate) {
     }
   }
 
-  __super::UpdateProperties(reader, invalidate);
+  __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void RectView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
-  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
-  auto rect{Geometry::CanvasGeometry::CreateRoundedRectangle(
-      resourceCreator, m_x.Value(), m_y.Value(), m_width.Value(), m_height.Value(), m_rx.Value(), m_ry.Value())};
-
-  rect = rect.Transform(SvgScale() * SvgRotation());
-
-  auto fillLayer{session.CreateLayer(FillOpacity())};
-  session.FillGeometry(rect, Fill());
-  fillLayer.Close();
-
-  if (StrokeWidth().Value() > 0.0f) {
-    auto strokeLayer{session.CreateLayer(StrokeOpacity())};
-    Geometry::CanvasStrokeStyle strokeStyle{};
-    strokeStyle.EndCap(StrokeLineCap());
-    strokeStyle.LineJoin(StrokeLineJoin());
-    strokeStyle.DashOffset(StrokeDashOffset());
-    strokeStyle.MiterLimit(StrokeMiterLimit());
-    strokeStyle.CustomDashStyle(Utils::GetValueArray(StrokeDashArray()));
-    session.DrawGeometry(rect, Stroke(), StrokeWidth().Value(), strokeStyle);
-    strokeLayer.Close();
-  }
+void RectView::CreateGeometry(ICanvasResourceCreator const& resourceCreator) {
+  Geometry(Geometry::CanvasGeometry::CreateRoundedRectangle(
+      resourceCreator, m_x.Value(), m_y.Value(), m_width.Value(), m_height.Value(), m_rx.Value(), m_ry.Value()));
 }
 } // namespace winrt::RNSVG::implementation

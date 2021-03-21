@@ -13,7 +13,8 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
   }
   void AddChild(RNSVG::RenderableView const &child);
 
-  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate);
+  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+  void CreateGeometry(Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator);
 
   void Render(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,

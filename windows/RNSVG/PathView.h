@@ -8,10 +8,8 @@ struct PathView : PathViewT<PathView, RNSVG::implementation::RenderableView> {
  public:
   PathView() = default;
 
-  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool invalidate);
-  void Render(
-      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+  void CreateGeometry(Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator);
 
  private:
   std::string m_d;
