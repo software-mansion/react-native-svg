@@ -9,6 +9,9 @@
 #include "SvgView.h"
 #include "Utils.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 using namespace winrt;
 using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
@@ -179,6 +182,26 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool invalid
         }
         propSet = true;
       }
+    } else if (propertyName == "scale") {
+      prop = RNSVG::BaseProp::Scale;
+      if (invalidate || !m_propSetMap[prop]) {
+        if (Utils::JSValueIsNull(propertyValue)) {
+          m_scale = parent.SvgScale();
+        } else {
+          m_scale = Numerics::make_float3x2_scale(propertyValue.AsSingle());
+        }
+      }
+      propSet = true;
+    } else if (propertyName == "rotation") {
+      prop = RNSVG::BaseProp::Rotation;
+      if (invalidate || !m_propSetMap[prop]) {
+        if (Utils::JSValueIsNull(propertyValue)) {
+          m_rotation = parent.SvgRotation();
+        } else {
+          m_rotation = Numerics::make_float3x2_rotation(propertyValue.AsSingle() * static_cast<float>(M_PI) / 180.0f);
+        }
+      }
+      propSet = true;
     }
 
     // Invalidate = true means a property is being changed on the element

@@ -26,6 +26,8 @@ namespace RNSVG
 
   enum BaseProp
   {
+    Scale,
+    Rotation,
     Fill,
     FillOpacity,
     FillRule,
@@ -43,6 +45,8 @@ namespace RNSVG
   unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
   {
     Windows.UI.Xaml.FrameworkElement SvgParent;
+    Windows.Foundation.Numerics.Matrix3x2 SvgScale;
+    Windows.Foundation.Numerics.Matrix3x2 SvgRotation;
     Windows.UI.Color Fill;
     Single FillOpacity;
     Windows.UI.Color Stroke;

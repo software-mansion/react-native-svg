@@ -11,6 +11,12 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Windows::UI::Xaml::FrameworkElement SvgParent() { return m_parent; }
   void SvgParent(Windows::UI::Xaml::FrameworkElement const &value) { m_parent = value; }
 
+  Numerics::float3x2 SvgScale() { return m_scale; }
+  void SvgScale(Numerics::float3x2 const &value) { m_scale = value; }
+
+  Numerics::float3x2 SvgRotation() { return m_rotation; }
+  void SvgRotation(Numerics::float3x2 const &value) { m_rotation = value; }
+
   Windows::UI::Color Fill() { return m_fill; }
   void Fill(Windows::UI::Color const &value) { m_fill = value; }
 
@@ -54,6 +60,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
 
   Windows::UI::Xaml::FrameworkElement m_parent{nullptr};
+  Numerics::float3x2 m_scale{Numerics::make_float3x2_scale(1)};
+  Numerics::float3x2 m_rotation{Numerics::make_float3x2_rotation(0)};
   Windows::UI::Color m_fill{Windows::UI::Colors::Transparent()};
   Windows::UI::Color m_stroke{Windows::UI::Colors::Transparent()};
   float m_fillOpacity{1.0f};
@@ -71,6 +79,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
       Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination::Winding};
 
   std::map<RNSVG::BaseProp, bool> m_propSetMap{
+      {RNSVG::BaseProp::Scale, false},
+      {RNSVG::BaseProp::Rotation, false},
       {RNSVG::BaseProp::Fill, false},
       {RNSVG::BaseProp::FillOpacity, false},
       {RNSVG::BaseProp::FillRule, false},
