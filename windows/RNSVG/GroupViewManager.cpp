@@ -42,7 +42,7 @@ IMapView<hstring, ViewManagerPropertyType> GroupViewManager::NativeProps() {
 // IViewManagerWithChildren
 void GroupViewManager::AddView(FrameworkElement const &parent, UIElement const &child, int64_t /*index*/) {
   if (auto groupView{parent.try_as<RNSVG::GroupView>()}) {
-    if (auto childView{child.try_as<RNSVG::RenderableView>()}) {
+    if (auto childView{child.try_as<IRenderable>()}) {
       groupView.AddChild(childView);
       childView.SvgParent(parent);
     }
@@ -73,8 +73,8 @@ void GroupViewManager::ReplaceChild(
     UIElement const &oldChild,
     UIElement const &newChild) {
   auto groupView{parent.try_as<RNSVG::GroupView>()};
-  auto oldChildView{oldChild.try_as<RNSVG::RenderableView>()};
-  auto newChildView{newChild.try_as<RNSVG::RenderableView>()};
+  auto oldChildView{oldChild.try_as<IRenderable>()};
+  auto newChildView{newChild.try_as<IRenderable>()};
 
   if (groupView && oldChildView && newChildView) {
     uint32_t index;
