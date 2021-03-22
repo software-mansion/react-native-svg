@@ -7,6 +7,7 @@
 #include <winrt/Windows.UI.Xaml.Media.h>
 #include <winrt/Windows.UI.Xaml.Shapes.h>
 
+#include "RenderableView.h"
 #include "SvgView.h"
 
 namespace winrt {
@@ -58,7 +59,7 @@ void SvgViewManager::AddView(FrameworkElement const &parent, UIElement const &ch
   if (auto view{parent.try_as<RNSVG::SvgView>()}) {
     view.Views().Append(child);
 
-    if (auto childView{child.try_as<IRenderable>()}) {
+    if (auto childView{child.try_as<RNSVG::RenderableView>()}) {
       childView.SvgParent(parent);
     }
   }
@@ -67,7 +68,7 @@ void SvgViewManager::AddView(FrameworkElement const &parent, UIElement const &ch
 void SvgViewManager::RemoveAllChildren(FrameworkElement const &parent) {
   if (auto view{parent.try_as<RNSVG::SvgView>()}) {
     for (auto child : view.Views()) {
-      if (auto childView{child.try_as<IRenderable>()}) {
+      if (auto childView{child.try_as<RNSVG::RenderableView>()}) {
         childView.SvgParent(nullptr);
       }
     }
@@ -78,7 +79,7 @@ void SvgViewManager::RemoveAllChildren(FrameworkElement const &parent) {
 void SvgViewManager::RemoveChildAt(FrameworkElement const &parent, int64_t index) {
   if (auto view{parent.try_as<RNSVG::SvgView>()}) {
     auto child{view.Views().GetAt(static_cast<uint32_t>(index))};
-    if (auto childView{child.try_as<IRenderable>()}) {
+    if (auto childView{child.try_as<RNSVG::RenderableView>()}) {
       childView.SvgParent(nullptr);
     }
     view.Views().RemoveAt(static_cast<uint32_t>(index));
@@ -90,8 +91,8 @@ void SvgViewManager::ReplaceChild(
     UIElement const &oldChild,
     UIElement const &newChild) {
   auto svgView{parent.try_as<RNSVG::SvgView>()};
-  auto oldChildView{oldChild.try_as<IRenderable>()};
-  auto newChildView{newChild.try_as<IRenderable>()};
+  auto oldChildView{oldChild.try_as<RNSVG::RenderableView>()};
+  auto newChildView{newChild.try_as<RNSVG::RenderableView>()};
 
   if (svgView && oldChildView && newChildView) {
     uint32_t index;
