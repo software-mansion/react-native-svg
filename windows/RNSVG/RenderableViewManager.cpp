@@ -36,8 +36,7 @@ IMapView<hstring, ViewManagerPropertyType> RenderableViewManager::NativeProps() 
   nativeProps.Insert(L"strokeMiterlimit", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"strokeDashoffset", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"strokeDasharray", ViewManagerPropertyType::Array);
-  nativeProps.Insert(L"scale", ViewManagerPropertyType::Number);
-  nativeProps.Insert(L"rotation", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"matrix", ViewManagerPropertyType::Array);
 
   return nativeProps.GetView();
 }
