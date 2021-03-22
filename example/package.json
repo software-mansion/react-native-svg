@@ -12,8 +12,14 @@
     "windows": "react-native run-windows --no-autolink"
   },
   "dependencies": {
+    "@react-navigation/drawer": "^5.9.0",
+    "@react-navigation/native": "^5.7.3",
     "react": "17.0.1",
     "react-native": "^0.64.0",
+    "react-native-safe-area-context": "^3.1.0",
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-reanimated": "^1.10.0",
+    "react-native-screens": "^2.9.0",
     "react-native-svg-desktop": "file:..",
     "react-native-windows": "^0.64.0"
   },

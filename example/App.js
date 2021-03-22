@@ -1,13 +1,100 @@
-import React from 'react';
+import * as React from 'react';
+import {View, Button, StyleSheet} from 'react-native';
+import {AppTheme} from 'react-native-windows';
+import {
+  DefaultTheme,
+  DarkTheme,
+  NavigationContainer,
+  useNavigationState,
+} from '@react-navigation/native';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
 
-import {Svg, Rect} from 'react-native-svg-desktop';
+import SVGExampleList from './SVGExampleList';
 
-const App: () => React$Node = () => {
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    width: '100%',
+    height: '100%',
+  },
+  navItem: {
+    flexGrow: 1,
+    flexShrink: 1,
+    height: '100%',
+    alignSelf: 'stretch',
+  },
+});
+
+// @ts-ignore
+function ScreenWrapper({navigation}) {
+  const state = useNavigationState((state) => state);
+  const Component = SVGExampleList[state.index].component;
   return (
-    <Svg height="1000" width="1000">
-      <Rect x="50" y="50" rx="50" ry="50" height="75" width="75" fill="blue" />
-    </Svg>
+    <View style={styles.container}>
+      <Button title="Menu" onPress={() => navigation.openDrawer()} />
+      <View style={styles.navItem}>
+        <Component />
+      </View>
+    </View>
   );
-};
+}
 
-export default App;
+// @ts-ignore
+function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      <DrawerItem
+        label="Close"
+        onPress={() => props.navigation.closeDrawer()}
+      />
+    </DrawerContentScrollView>
+  );
+}
+
+const Drawer = createDrawerNavigator();
+
+function MyDrawer() {
+  let screens = renderScreens();
+  return (
+    <Drawer.Navigator
+      drawerContent={(props) => (
+        <CustomDrawerContent {...props} drawerType="permanent" />
+      )}>
+      {screens}
+    </Drawer.Navigator>
+  );
+}
+
+function renderScreens() {
+  const items = [];
+  for (var i = 0; i < SVGExampleList.length; i++) {
+    items.push(renderScreen(i));
+  }
+
+  return items;
+}
+
+function renderScreen(i: number) {
+  return (
+    <Drawer.Screen
+      name={SVGExampleList[i].key}
+      key={SVGExampleList[i].key}
+      component={ScreenWrapper}
+    />
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer
+      theme={AppTheme.currentTheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <MyDrawer />
+    </NavigationContainer>
+  );
+}
