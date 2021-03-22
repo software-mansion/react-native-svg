@@ -41,7 +41,8 @@ namespace RNSVG
     StrokeLineJoin,
   };
 
-  interface IRenderable
+  [default_interface]
+  unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
   {
     Windows.UI.Xaml.FrameworkElement SvgParent;
     Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
@@ -55,7 +56,7 @@ namespace RNSVG
     SVGLength StrokeWidth;
     Single StrokeMiterLimit;
     Single StrokeDashOffset;
-    Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray { get; };
+    Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
     Microsoft.Graphics.Canvas.Geometry.CanvasCapStyle StrokeLineCap;
     Microsoft.Graphics.Canvas.Geometry.CanvasLineJoin StrokeLineJoin;
     Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule;
@@ -65,13 +66,22 @@ namespace RNSVG
 
     void CreateGeometry(Microsoft.Graphics.Canvas.ICanvasResourceCreator resourceCreator);
     void Render(
-        Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas, Microsoft.Graphics.Canvas.CanvasDrawingSession session);
-  };
+      Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
+      Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+  }
 
   [default_interface]
-  unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement, IRenderable
+  runtimeclass GroupView : RenderableView
   {
-  }
+    GroupView(Microsoft.ReactNative.IReactContext context);
+    Windows.Foundation.Collections.IVector<RenderableView> Children { get; };
+
+    void AddChild(RenderableView child);
+
+    void RenderGroup(
+        Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
+        Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+  };
 
   [default_interface]
   runtimeclass RectView : RenderableView
@@ -84,22 +94,4 @@ namespace RNSVG
   {
     PathView();
   }
-
-  [default_interface]
-  unsealed runtimeclass RenderableGroupView : Windows.UI.Xaml.FrameworkElement, IRenderable
-  {
-    Windows.Foundation.Collections.IVector<IRenderable> Children { get; };
-
-    void AddChild(IRenderable child);
-
-    void RenderGroup(
-        Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
-        Microsoft.Graphics.Canvas.CanvasDrawingSession session);
-  }
-
-  [default_interface]
-  runtimeclass GroupView : RenderableGroupView
-  {
-    GroupView(Microsoft.ReactNative.IReactContext context);
-  };
 }

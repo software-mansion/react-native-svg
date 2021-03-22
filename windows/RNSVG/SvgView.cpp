@@ -65,7 +65,7 @@ void SvgView::Canvas_Draw(
   auto layer{args.DrawingSession().CreateLayer(m_opacity)};
 
   for (auto child : Views()) {
-    if (auto group = child.try_as<IRenderable>()) {
+    if (auto group = child.try_as<IRenderableView>()) {
       group.Render(sender, args.DrawingSession());
     }
   }

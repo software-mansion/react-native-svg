@@ -116,7 +116,6 @@
     <ClInclude Include="PathViewManager.h" />
     <ClInclude Include="RectView.h" />
     <ClInclude Include="RectViewManager.h" />
-    <ClInclude Include="RenderableGroupView.h" />
     <ClInclude Include="RenderableView.h">
       <DependentUpon>RenderableView.idl</DependentUpon>
       <SubType>Code</SubType>
@@ -155,7 +154,6 @@
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="RectView.cpp" />
     <ClCompile Include="RectViewManager.cpp" />
-    <ClCompile Include="RenderableGroupView.cpp" />
     <ClCompile Include="RenderableView.cpp">
       <DependentUpon>RenderableView.idl</DependentUpon>
       <SubType>Code</SubType>

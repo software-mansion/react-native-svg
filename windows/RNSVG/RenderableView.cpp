@@ -19,7 +19,7 @@ using namespace Microsoft::ReactNative;
 namespace winrt::RNSVG::implementation {
 void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
-  auto const &parent = SvgParent().as<IRenderable>();
+  auto const &parent = SvgParent().as<RNSVG::RenderableView>();
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName = pair.first;
@@ -255,7 +255,7 @@ void RenderableView::InvalidateCanvas() {
   if (SvgParent()) {
     if (auto svgView{SvgParent().try_as<RNSVG::SvgView>()}) {
       svgView.InvalidateCanvas();
-    } else if (auto renderable{SvgParent().try_as<IRenderable>()}) {
+    } else if (auto renderable{SvgParent().try_as<RNSVG::RenderableView>()}) {
       renderable.InvalidateCanvas();
     }
   }

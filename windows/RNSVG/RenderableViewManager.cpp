@@ -45,8 +45,8 @@ IMapView<hstring, ViewManagerPropertyType> RenderableViewManager::NativeProps() 
 void RenderableViewManager::UpdateProperties(
     Windows::UI::Xaml::FrameworkElement const &view,
     Microsoft::ReactNative::IJSValueReader const &propertyMapReader) {
-  if (auto renderable{view.try_as<IRenderable>()}) {
-    renderable.UpdateProperties(propertyMapReader, true, true);
+  if (auto renderable{view.try_as<RenderableView>()}) {
+    renderable->UpdateProperties(propertyMapReader);
   }
 }
 } // namespace winrt::RNSVG::implementation
