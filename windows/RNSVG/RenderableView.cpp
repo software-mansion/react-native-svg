@@ -25,67 +25,61 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
     auto const &propertyName = pair.first;
     auto const &propertyValue = pair.second;
 
-    bool propSet{false};
-    auto prop{RNSVG::BaseProp::Fill};
+    auto prop{RNSVG::BaseProp::Unknown};
 
     if (propertyName == "strokeWidth") {
       prop = RNSVG::BaseProp::StrokeWidth;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (Utils::JSValueIsNull(propertyValue)) {
+        if (propertyValue.IsNull()) {
           m_strokeWidth = parent.StrokeWidth();
         } else {
           m_strokeWidth = SVGLength::From(propertyValue);
         }
-        propSet = true;
       }
     } else if (propertyName == "strokeOpacity") {
       prop = RNSVG::BaseProp::StrokeOpacity;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (Utils::JSValueIsNull(propertyValue)) {
+        if (propertyValue.IsNull()) {
           m_strokeOpacity = parent.StrokeOpacity();
         } else {
           m_strokeOpacity = propertyValue.AsSingle();
         }
-        propSet = true;
       }
     } else if (propertyName == "fillOpacity") {
       prop = RNSVG::BaseProp::FillOpacity;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (Utils::JSValueIsNull(propertyValue)) {
+        if (propertyValue.IsNull()) {
           m_fillOpacity = parent.FillOpacity();
         } else {
           m_fillOpacity = propertyValue.AsSingle();
         }
-        propSet = true;
       }
     } else if (propertyName == "stroke") {
       prop = RNSVG::BaseProp::Stroke;
       if (forceUpdate || !m_propSetMap[prop]) {
         Windows::UI::Color newColor{Windows::UI::Colors::Transparent()};
-        if (parent && Utils::JSValueIsNull(propertyValue)) {
+        if (parent && propertyValue.IsNull()) {
           newColor = parent.Stroke();
         } else if (auto color = Utils::GetColorFromJSValue(propertyValue)) {
           newColor = color.value();
         }
         m_stroke = newColor;
-        propSet = true;
       }
     } else if (propertyName == "fill") {
       prop = RNSVG::BaseProp::Fill;
       if (forceUpdate || !m_propSetMap[prop]) {
         Windows::UI::Color newColor{Windows::UI::Colors::Transparent()};
-        if (parent && Utils::JSValueIsNull(propertyValue)) {
+        if (parent && propertyValue.IsNull()) {
           newColor = parent.Fill();
         } else if (auto color = Utils::GetColorFromJSValue(propertyValue)) {
           newColor = color.value();
         }
         m_fill = newColor;
-        propSet = true;
       }
     } else if (propertyName == "strokeLinecap") {
       prop = RNSVG::BaseProp::StrokeLineCap;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (Utils::JSValueIsNull(propertyValue)) {
+        if (propertyValue.IsNull()) {
           m_strokeLineCap = parent.StrokeLineCap();
         } else {
           auto strokeLineCap{propertyValue.AsInt32()};
@@ -102,12 +96,11 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
               break;
           }
         }
-        propSet = true;
       }
     } else if (propertyName == "strokeLinejoin") {
       prop = RNSVG::BaseProp::StrokeLineJoin;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (Utils::JSValueIsNull(propertyValue)) {
+        if (propertyValue.IsNull()) {
           m_strokeLineCap = parent.StrokeLineCap();
         } else {
           auto strokeLineJoin{propertyValue.AsInt32()};
@@ -124,12 +117,11 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
               break;
           }
         }
-        propSet = true;
       }
     } else if (propertyName == "fillRule") {
       prop = RNSVG::BaseProp::FillRule;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (Utils::JSValueIsNull(propertyValue)) {
+        if (propertyValue.IsNull()) {
           m_fillRule = parent.FillRule();
         } else {
           auto fillRule{propertyValue.AsInt32()};
@@ -143,32 +135,29 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
               break;
           }
         }
-        propSet = true;
       }
     } else if (propertyName == "strokeDashoffset") {
       prop = RNSVG::BaseProp::StrokeDashOffset;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (Utils::JSValueIsNull(propertyValue)) {
+        if (propertyValue.IsNull()) {
           m_strokeDashOffset = parent.StrokeDashOffset();
         } else {
           m_strokeDashOffset = propertyValue.AsSingle();
         }
-        propSet = true;
       }
     } else if (propertyName == "strokeMiterlimit") {
       prop = RNSVG::BaseProp::StrokeMiterLimit;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (Utils::JSValueIsNull(propertyValue)) {
+        if (propertyValue.IsNull()) {
           m_strokeMiterLimit = parent.StrokeMiterLimit();
         } else {
           m_strokeMiterLimit = propertyValue.AsSingle();
         }
-        propSet = true;
       }
     } else if (propertyName == "strokeDasharray") {
       prop = RNSVG::BaseProp::StrokeDashArray;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (Utils::JSValueIsNull(propertyValue)) {
+        if (propertyValue.IsNull()) {
           m_strokeDashArray = parent.StrokeDashArray();
         } else {
           auto const &asArray = propertyValue.AsArray();
@@ -181,35 +170,31 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
             }
           }
         }
-        propSet = true;
       }
-    } else if (propertyName == "scale") {
-      prop = RNSVG::BaseProp::Scale;
+    } else if (propertyName == "matrix") {
+      prop = RNSVG::BaseProp::Matrix;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (Utils::JSValueIsNull(propertyValue)) {
-          m_scale = parent.SvgScale();
+        if (propertyValue.IsNull()) {
+          m_transformMatrix = parent.SvgTransform();
         } else {
-          m_scale = Numerics::make_float3x2_scale(propertyValue.AsSingle());
+          auto const &matrix{propertyValue.AsArray()};
+
+          m_transformMatrix = float3x2(
+              matrix.at(0).AsSingle(),
+              matrix.at(1).AsSingle(),
+              matrix.at(2).AsSingle(),
+              matrix.at(3).AsSingle(),
+              matrix.at(4).AsSingle(),
+              matrix.at(5).AsSingle());
         }
-        propSet = true;
-      }
-    } else if (propertyName == "rotation") {
-      prop = RNSVG::BaseProp::Rotation;
-      if (forceUpdate || !m_propSetMap[prop]) {
-        if (Utils::JSValueIsNull(propertyValue)) {
-          m_rotation = parent.SvgRotation();
-        } else {
-          m_rotation = Numerics::make_float3x2_rotation(propertyValue.AsSingle() * static_cast<float>(M_PI) / 180.0f);
-        }
-        propSet = true;
       }
     }
 
     // forceUpdate = true means the property is being set on an element
     // instead of being inherited from the parent.
-    if (forceUpdate && propSet) {
+    if (forceUpdate && (prop != RNSVG::BaseProp::Unknown)) {
       // If the propertyValue is null, that means we reset the property
-      m_propSetMap[prop] = !Utils::JSValueIsNull(propertyValue);
+      m_propSetMap[prop] = !propertyValue.IsNull();
     }
   }
 
@@ -219,6 +204,8 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
     InvalidateCanvas();
   }
 }
+
+void RenderableView::CreateGeometry(Microsoft::Graphics::Canvas::ICanvasResourceCreator const &/*resourceCreator*/) {}
 
 void RenderableView::Render(
     Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
@@ -230,7 +217,7 @@ void RenderableView::Render(
   }
 
   auto geometry{Geometry()};
-  geometry = geometry.Transform(SvgScale() * SvgRotation());
+  geometry = geometry.Transform(SvgTransform());
   geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
 
   if (auto fillLayer{session.CreateLayer(FillOpacity())}) {

@@ -8,9 +8,7 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
   GroupView() = default;
   GroupView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {}
 
-  Windows::Foundation::Collections::IVector<RNSVG::RenderableView> Children() {
-    return m_children;
-  }
+  Windows::Foundation::Collections::IVector<RNSVG::RenderableView> Children() { return m_children; }
   void AddChild(RNSVG::RenderableView const &child);
 
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);

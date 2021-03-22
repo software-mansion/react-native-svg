@@ -26,8 +26,7 @@ namespace RNSVG
 
   enum BaseProp
   {
-    Scale,
-    Rotation,
+    Matrix,
     Fill,
     FillOpacity,
     FillRule,
@@ -39,16 +38,17 @@ namespace RNSVG
     StrokeDashArray,
     StrokeLineCap,
     StrokeLineJoin,
+    Unknown,
   };
 
   [default_interface]
   unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
   {
+    RenderableView(Microsoft.ReactNative.IReactContext context);
     Windows.UI.Xaml.FrameworkElement SvgParent;
     Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
 
-    Windows.Foundation.Numerics.Matrix3x2 SvgScale;
-    Windows.Foundation.Numerics.Matrix3x2 SvgRotation;
+    Windows.Foundation.Numerics.Matrix3x2 SvgTransform;
     Windows.UI.Color Fill;
     Single FillOpacity;
     Windows.UI.Color Stroke;
@@ -71,19 +71,6 @@ namespace RNSVG
   }
 
   [default_interface]
-  runtimeclass GroupView : RenderableView
-  {
-    GroupView(Microsoft.ReactNative.IReactContext context);
-    Windows.Foundation.Collections.IVector<RenderableView> Children { get; };
-
-    void AddChild(RenderableView child);
-
-    void RenderGroup(
-        Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
-        Microsoft.Graphics.Canvas.CanvasDrawingSession session);
-  };
-
-  [default_interface]
   runtimeclass RectView : RenderableView
   {
     RectView();
@@ -94,4 +81,17 @@ namespace RNSVG
   {
     PathView();
   }
-}
+
+  [default_interface]
+  unsealed runtimeclass GroupView : RenderableView
+  {
+    GroupView(Microsoft.ReactNative.IReactContext context);
+    Windows.Foundation.Collections.IVector<RenderableView> Children { get; };
+
+    void AddChild(RenderableView child);
+
+    void RenderGroup(
+        Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
+        Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+  };
+  }
