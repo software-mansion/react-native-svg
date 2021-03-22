@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "RenderableView.h"
-#if __has_include("RenderableView.g.cpp")
-#include "RenderableView.g.cpp"
+#include "RenderableGroupView.h"
+#if __has_include("RenderableGroupView.g.cpp")
+#include "RenderableGroupView.g.cpp"
 #endif
 
 #include "JSValueXaml.h"
@@ -17,7 +17,18 @@ using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+void RenderableGroupView::AddChild(IRenderable const &child) {
+  m_children.Append(child);
+  if (m_props) {
+    child.UpdateProperties(m_props, false, false);
+  }
+}
+
+void RenderableGroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  if (!m_props) {
+    m_props = reader;
+  }
+
   const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
   auto const &parent = SvgParent().as<IRenderable>();
 
@@ -213,6 +224,10 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
     }
   }
 
+  for (auto child : Children()) {
+    child.UpdateProperties(reader, false, false);
+  }
+
   m_recreateResources = true;
 
   if (invalidate) {
@@ -220,38 +235,28 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
   }
 }
 
-void RenderableView::Render(
+void RenderableGroupView::CreateGeometry(ICanvasResourceCreator const &resourceCreator) {
+  std::vector<Geometry::CanvasGeometry> geometries;
+  for (auto child : Children()) {
+    geometries.push_back(child.Geometry());
+  }
+
+  Geometry(Geometry::CanvasGeometry::CreateGroup(resourceCreator, geometries, FillRule()));
+}
+
+void RenderableGroupView::Render(
     Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-    Microsoft::Graphics::Canvas::CanvasDrawingSession const &session)
-{
-  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
-  if (m_recreateResources) {
-    CreateGeometry(resourceCreator);
-  }
+    Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
+  RenderGroup(canvas, session);
+}
 
-  auto geometry{Geometry()};
-  geometry = geometry.Transform(SvgScale() * SvgRotation());
-  geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
-
-  if (auto fillLayer{session.CreateLayer(FillOpacity())}) {
-    session.FillGeometry(geometry, Fill());
-    fillLayer.Close();
-  }
-
-  if (auto strokeLayer{session.CreateLayer(StrokeOpacity())}) {
-    Geometry::CanvasStrokeStyle strokeStyle{};
-    strokeStyle.EndCap(StrokeLineCap());
-    strokeStyle.LineJoin(StrokeLineJoin());
-    strokeStyle.DashOffset(StrokeDashOffset());
-    strokeStyle.MiterLimit(StrokeMiterLimit());
-    strokeStyle.CustomDashStyle(Utils::GetValueArray(StrokeDashArray()));
-
-    session.DrawGeometry(geometry, Stroke(), StrokeWidth().Value(), strokeStyle);
-    strokeLayer.Close();
+void RenderableGroupView::RenderGroup(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
+  for (auto child : Children()) {
+    child.Render(canvas, session);
   }
 }
 
-void RenderableView::InvalidateCanvas() {
+void RenderableGroupView::InvalidateCanvas() {
   if (SvgParent()) {
     if (auto svgView{SvgParent().try_as<RNSVG::SvgView>()}) {
       svgView.InvalidateCanvas();

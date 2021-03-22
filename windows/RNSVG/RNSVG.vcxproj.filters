@@ -40,6 +40,9 @@
     <ClCompile Include="PathView.cpp">
       <Filter>Views</Filter>
     </ClCompile>
+    <ClCompile Include="RenderableGroupView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -67,6 +70,9 @@
       <Filter>ViewManagers</Filter>
     </ClInclude>
     <ClInclude Include="PathView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableGroupView.h">
       <Filter>Views</Filter>
     </ClInclude>
   </ItemGroup>
