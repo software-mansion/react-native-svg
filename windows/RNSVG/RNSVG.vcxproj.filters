@@ -25,9 +25,6 @@
     <ClCompile Include="SVGLength.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="GroupView.cpp">
-      <Filter>Views</Filter>
-    </ClCompile>
     <ClCompile Include="RectViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
@@ -39,6 +36,21 @@
     </ClCompile>
     <ClCompile Include="PathView.cpp">
       <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="TextView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="TextViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="TSpanView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="TSpanViewManager.cpp">
+      <Filter>ViewManagers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -54,9 +66,6 @@
     <ClInclude Include="SVGLength.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="GroupView.h">
-      <Filter>Views</Filter>
-    </ClInclude>
     <ClInclude Include="RectViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
@@ -68,6 +77,21 @@
     </ClInclude>
     <ClInclude Include="PathView.h">
       <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="TextView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="TextViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="TSpanView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="TSpanViewManager.h">
+      <Filter>ViewManagers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +107,9 @@
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{8a4e0664-0d52-46ca-b476-a1ad90239a09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\GroupViews">
+      <UniqueIdentifier>{96f26034-8559-4794-a806-4ecac541e02b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -41,6 +41,14 @@ namespace RNSVG
     Unknown,
   };
 
+  enum FontProp
+  {
+    FontSize,
+    FontWeight,
+    FontFamily,
+    Unknown,
+  };
+
   [default_interface]
   unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
   {
@@ -88,10 +96,30 @@ namespace RNSVG
     GroupView(Microsoft.ReactNative.IReactContext context);
     Windows.Foundation.Collections.IVector<RenderableView> Children { get; };
 
+    Single FontSize;
+    String FontFamily;
+    String FontWeight;
+
     void AddChild(RenderableView child);
 
     void RenderGroup(
         Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
         Microsoft.Graphics.Canvas.CanvasDrawingSession session);
   };
+
+  [default_interface]
+  unsealed runtimeclass TextView : GroupView
+  {
+    TextView();
+    Windows.Foundation.Collections.IVector<SVGLength> X{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> Y{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> DX{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> DY{ get; };
+  }
+
+  [default_interface]
+  runtimeclass TSpanView : TextView
+  {
+    TSpanView();
+  }
   }

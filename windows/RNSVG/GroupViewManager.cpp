@@ -13,10 +13,7 @@ using namespace Microsoft::ReactNative;
 
 using namespace Windows::Foundation;
 using namespace Windows::Foundation::Collections;
-
 using namespace Windows::UI::Xaml;
-using namespace Windows::UI::Xaml::Controls;
-using namespace Windows::UI::Xaml::Shapes;
 
 namespace winrt::RNSVG::implementation {
 GroupViewManager::GroupViewManager() {
@@ -33,8 +30,7 @@ IMapView<hstring, ViewManagerPropertyType> GroupViewManager::NativeProps() {
     nativeProps.Insert(prop.Key(), prop.Value());
   }
 
-  nativeProps.Insert(L"height", ViewManagerPropertyType::Number);
-  nativeProps.Insert(L"width", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"font", ViewManagerPropertyType::Map);
 
   return nativeProps.GetView();
 }
@@ -43,8 +39,8 @@ IMapView<hstring, ViewManagerPropertyType> GroupViewManager::NativeProps() {
 void GroupViewManager::AddView(FrameworkElement const &parent, UIElement const &child, int64_t /*index*/) {
   if (auto groupView{parent.try_as<RNSVG::GroupView>()}) {
     if (auto childView{child.try_as<RNSVG::RenderableView>()}) {
-      groupView.AddChild(childView);
       childView.SvgParent(parent);
+      groupView.AddChild(childView);
     }
   }
 }

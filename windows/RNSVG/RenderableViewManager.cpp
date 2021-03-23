@@ -16,6 +16,10 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
       return winrt::RNSVG::PathView();
     case RNSVG::SVGClass::RNSVGRect:
       return winrt::RNSVG::RectView();
+    case RNSVG::SVGClass::RNSVGText:
+      return winrt::RNSVG::TextView();
+    case RNSVG::SVGClass::RNSVGTSpan:
+      return winrt::RNSVG::TSpanView();
   }
 
   throw hresult_not_implemented();
