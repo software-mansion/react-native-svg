@@ -11,14 +11,23 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
   Windows::Foundation::Collections::IVector<RNSVG::RenderableView> Children() { return m_children; }
   void AddChild(RNSVG::RenderableView const &child);
 
-  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  void CreateGeometry(Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator);
+  hstring FontFamily() { return m_fontFamily; }
+  void FontFamily(hstring const &value) { m_fontFamily = value; }
 
-  void Render(
+  float FontSize() { return m_fontSize; }
+  void FontSize(float value) { m_fontSize = value; }
+
+  hstring FontWeight(){ return m_fontWeight; }
+  void FontWeight(hstring const &value) { m_fontWeight = value; }
+
+  virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+  virtual void CreateGeometry(Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator);
+
+  virtual void Render(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
       Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
 
-  void RenderGroup(
+  virtual void RenderGroup(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
       Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
 
@@ -27,6 +36,16 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
   Windows::Foundation::Collections::IVector<RNSVG::RenderableView> m_children{
       winrt::single_threaded_vector<RNSVG::RenderableView>()};
   Microsoft::ReactNative::IJSValueReader m_props{nullptr};
+
+  float m_fontSize{16.0f};
+  hstring m_fontFamily{L"Segoe UI"};
+  hstring m_fontWeight{L"normal"};
+
+  std::map<RNSVG::FontProp, bool> m_fontPropMap{
+    {RNSVG::FontProp::FontSize, false},
+    {RNSVG::FontProp::FontWeight, false},
+    {RNSVG::FontProp::FontFamily, false},
+  };
 };
 } // namespace winrt::RNSVG::implementation
 

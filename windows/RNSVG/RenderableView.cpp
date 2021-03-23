@@ -179,7 +179,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
         } else {
           auto const &matrix{propertyValue.AsArray()};
 
-          m_transformMatrix = float3x2(
+          m_transformMatrix = Numerics::float3x2(
               matrix.at(0).AsSingle(),
               matrix.at(1).AsSingle(),
               matrix.at(2).AsSingle(),

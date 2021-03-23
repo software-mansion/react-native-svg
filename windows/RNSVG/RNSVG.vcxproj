@@ -125,6 +125,10 @@
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="SVGLength.h" />
+    <ClInclude Include="TextView.h" />
+    <ClInclude Include="TextViewManager.h" />
+    <ClInclude Include="TSpanView.h" />
+    <ClInclude Include="TSpanViewManager.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="ReactPackageProvider.h">
       <DependentUpon>ReactPackageProvider.idl</DependentUpon>
@@ -171,6 +175,10 @@
       <DependentUpon>SvgViewManager.idl</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
+    <ClCompile Include="TextView.cpp" />
+    <ClCompile Include="TextViewManager.cpp" />
+    <ClCompile Include="TSpanView.cpp" />
+    <ClCompile Include="TSpanViewManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="ReactPackageProvider.idl" />

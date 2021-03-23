@@ -31,14 +31,7 @@ namespace RNSVG
     , Microsoft.ReactNative.IViewManagerWithReactContext
     , Microsoft.ReactNative.IViewManagerWithNativeProperties
   {
-  }
-
-  [default_interface]
-  runtimeclass GroupViewManager
-    : RenderableViewManager
-    , Microsoft.ReactNative.IViewManagerWithChildren
-  {
-      GroupViewManager();
+    RenderableViewManager();
   }
 
   [default_interface]
@@ -51,5 +44,25 @@ namespace RNSVG
   runtimeclass PathViewManager : RenderableViewManager
   {
       PathViewManager();
+  }
+
+  [default_interface]
+  unsealed runtimeclass GroupViewManager
+    : RenderableViewManager
+    , Microsoft.ReactNative.IViewManagerWithChildren
+  {
+      GroupViewManager();
+  }
+
+  [default_interface]
+  unsealed runtimeclass TextViewManager : GroupViewManager
+  {
+      TextViewManager();
+  }
+
+  [default_interface]
+  runtimeclass TSpanViewManager : TextViewManager
+  {
+      TSpanViewManager();
   }
 }

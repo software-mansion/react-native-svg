@@ -21,7 +21,7 @@ struct RenderableViewManager : RenderableViewManagerT<RenderableViewManager> {
       Windows::UI::Xaml::FrameworkElement const &view,
       Microsoft::ReactNative::IJSValueReader const &propertyMapReader);
   virtual
-    Windows::Foundation::Collections::IMapView<hstring, Microsoft::ReactNative::ViewManagerPropertyType> NativeProps() = 0;
+    Windows::Foundation::Collections::IMapView<hstring, Microsoft::ReactNative::ViewManagerPropertyType> NativeProps();
 
  protected:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
@@ -29,3 +29,7 @@ struct RenderableViewManager : RenderableViewManagerT<RenderableViewManager> {
   hstring m_name{};
 };
 } // namespace winrt::RNSVG::implementation
+
+namespace winrt::RNSVG::factory_implementation {
+struct RenderableViewManager : RenderableViewManagerT<RenderableViewManager, implementation::RenderableViewManager> {};
+} // namespace winrt::RNSVG::factory_implementation

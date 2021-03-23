@@ -9,6 +9,8 @@
 #include "GroupViewManager.h"
 #include "PathViewManager.h"
 #include "RectViewManager.h"
+#include "TextViewManager.h"
+#include "TSpanViewManager.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -21,6 +23,8 @@ namespace winrt::RNSVG::implementation
     packageBuilder.AddViewManager(L"GroupViewManager", []() { return winrt::make<GroupViewManager>(); });
     packageBuilder.AddViewManager(L"PathViewManager", []() { return winrt::make<PathViewManager>(); });
     packageBuilder.AddViewManager(L"RectViewManager", []() { return winrt::make<RectViewManager>(); });
+    packageBuilder.AddViewManager(L"TextViewManager", []() { return winrt::make<TextViewManager>(); });
+    packageBuilder.AddViewManager(L"TSpanViewManager", []() { return winrt::make<TSpanViewManager>(); });
   }
 
 } // namespace winrt::RNSVG::implementation
