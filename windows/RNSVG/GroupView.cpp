@@ -59,7 +59,7 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
               m_fontFamily = parent ? parent.FontFamily() : L"Segoe UI";
               break;
             case RNSVG::FontProp::FontWeight:
-              m_fontWeight = parent ? parent.FontWeight() : L"normal";
+              m_fontWeight = L"auto";
               break;
             default:
               throw hresult_error();

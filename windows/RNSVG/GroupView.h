@@ -39,7 +39,7 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
 
   float m_fontSize{16.0f};
   hstring m_fontFamily{L"Segoe UI"};
-  hstring m_fontWeight{L"normal"};
+  hstring m_fontWeight{L"auto"};
 
   std::map<RNSVG::FontProp, bool> m_fontPropMap{
     {RNSVG::FontProp::FontSize, false},
