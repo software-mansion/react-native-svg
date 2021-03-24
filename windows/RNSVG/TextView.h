@@ -11,15 +11,16 @@ struct TextView : TextViewT<TextView, RNSVG::implementation::GroupView> {
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> Y() { return m_y; }
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> DX() { return m_dx; }
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> DY() { return m_dy; }
+  Windows::Foundation::Collections::IVector<RNSVG::SVGLength> Rotate() { return m_rotate; }
 
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  virtual void CreateGeometry(Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator);
 
  private:
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_x{winrt::single_threaded_vector<RNSVG::SVGLength>()};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_y{winrt::single_threaded_vector<RNSVG::SVGLength>()};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_dx{winrt::single_threaded_vector<RNSVG::SVGLength>()};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_dy{winrt::single_threaded_vector<RNSVG::SVGLength>()};
+  Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_rotate{winrt::single_threaded_vector<RNSVG::SVGLength>()};
 };
 } // namespace winrt::RNSVG::implementation
 namespace winrt::RNSVG::factory_implementation {

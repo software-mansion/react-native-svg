@@ -15,30 +15,33 @@ void TextView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
     auto const &propertyValue = pair.second;
 
     if (propertyName == "x") {
+      m_x.Clear();
       for (auto &item : propertyValue.AsArray()) {
         m_x.Append(SVGLength::From(item));
       }
     } else if (propertyName == "y") {
+      m_y.Clear();
       for (auto &item : propertyValue.AsArray()) {
         m_y.Append(SVGLength::From(item));
       }
     } else if (propertyName == "dx") {
+      m_dx.Clear();
       for (auto &item : propertyValue.AsArray()) {
         m_dx.Append(SVGLength::From(item));
       }
     } else if (propertyName == "dy") {
+      m_dy.Clear();
       for (auto &item : propertyValue.AsArray()) {
         m_dy.Append(SVGLength::From(item));
       }
     } else if (propertyName == "rotate") {
-      auto &asArray = propertyValue.AsArray();
-      auto type = propertyValue.Type();
+      m_rotate.Clear();
+      for (auto &item : propertyValue.AsArray()) {
+        m_rotate.Append(SVGLength::From(item));
+      }
     }
   }
 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
-}
-void TextView::CreateGeometry(Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator) {
-  __super::CreateGeometry(resourceCreator);
 }
 } // namespace winrt::RNSVG::implementation

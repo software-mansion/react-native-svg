@@ -72,7 +72,7 @@ namespace RNSVG
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
     void InvalidateCanvas();
 
-    void CreateGeometry(Microsoft.Graphics.Canvas.ICanvasResourceCreator resourceCreator);
+    void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
     void Render(
       Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
       Microsoft.Graphics.Canvas.CanvasDrawingSession session);
@@ -121,5 +121,7 @@ namespace RNSVG
   runtimeclass TSpanView : TextView
   {
     TSpanView();
+
+    Windows.Foundation.Collections.IVector<SVGLength> Rotate { get; };
   }
   }

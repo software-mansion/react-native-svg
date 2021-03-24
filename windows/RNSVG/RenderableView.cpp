@@ -205,15 +205,15 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
   }
 }
 
-void RenderableView::CreateGeometry(Microsoft::Graphics::Canvas::ICanvasResourceCreator const &/*resourceCreator*/) {}
+void RenderableView::CreateGeometry(UI::Xaml::CanvasControl const &/*canvas*/) {}
 
 void RenderableView::Render(
-    Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-    Microsoft::Graphics::Canvas::CanvasDrawingSession const &session)
+    UI::Xaml::CanvasControl const &canvas,
+    CanvasDrawingSession const &session)
 {
   auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   if (m_recreateResources) {
-    CreateGeometry(resourceCreator);
+    CreateGeometry(canvas);
   }
 
   auto geometry{Geometry()};
