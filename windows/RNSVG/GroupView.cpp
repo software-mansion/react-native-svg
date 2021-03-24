@@ -112,8 +112,8 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
   }
 }
 
-void GroupView::CreateGeometry(ICanvasResourceCreator const &resourceCreator)
-{
+void GroupView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
+  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   std::vector<Geometry::CanvasGeometry> geometries;
   for (auto child : Children()) {
     geometries.push_back(child.Geometry());

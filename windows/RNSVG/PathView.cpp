@@ -22,15 +22,23 @@ void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
     auto const &propertyValue = pair.second;
 
     if (propertyName == "d") {
-      m_d = propertyValue.AsString();
-      ParsePath();
+      m_commands.clear();
+      m_segmentData.clear();
+
+      if (propertyValue.IsNull()) {
+        m_d.clear();
+      } else {
+        m_d = propertyValue.AsString();
+        ParsePath();
+      }
     } 
   }
 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void PathView::CreateGeometry(ICanvasResourceCreator const& resourceCreator) {
+void PathView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
+  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   Svg::CanvasSvgDocument doc{resourceCreator};
   auto path{doc.CreatePathAttribute(m_segmentData, m_commands)};
   Geometry(path.CreatePathGeometry());

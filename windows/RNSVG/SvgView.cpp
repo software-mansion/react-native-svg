@@ -10,7 +10,6 @@
 
 namespace winrt::RNSVG::implementation {
 SvgView::SvgView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {
-  Background(winrt::Windows::UI::Xaml::Media::SolidColorBrush{winrt::Windows::UI::Colors::LightGray()});
   m_canvasDrawRevoker = m_canvas.Draw(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_Draw});
   m_canvaSizeChangedRevoker = m_canvas.SizeChanged(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_SizeChanged});
   Children().Append(m_canvas);

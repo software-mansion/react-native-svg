@@ -6,6 +6,9 @@
 #include <winrt/Windows.UI.Text.h>
 #include "JSValueReader.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 using namespace winrt;
 using namespace Microsoft::ReactNative;
 using namespace Windows::UI;
@@ -37,6 +40,21 @@ struct Utils {
     }
 
     return std::move(result);
+  }
+
+  static float GetSvgLengthValue(SVGLength length, float parentValue) {
+    switch (length.Unit()) {
+      case RNSVG::UnitType::Percentage:
+        return length.Value() / 100.0f * parentValue;
+      default:
+        return length.Value();
+    }
+  }
+
+  static Numerics::float3x2 GetRotationMatrix(float degrees) {
+    // convert to radians
+    auto radians{degrees * static_cast<float>(M_PI) / 100.0f};
+    return Numerics::make_float3x2_rotation(radians);
   }
 
   static FontWeight FontWeightFrom(hstring const& weight, Xaml::FrameworkElement const& parent) {

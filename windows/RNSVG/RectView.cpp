@@ -37,8 +37,16 @@ void RectView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void RectView::CreateGeometry(ICanvasResourceCreator const& resourceCreator) {
-  Geometry(Geometry::CanvasGeometry::CreateRoundedRectangle(
-      resourceCreator, m_x.Value(), m_y.Value(), m_width.Value(), m_height.Value(), m_rx.Value(), m_ry.Value()));
+void RectView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
+  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+
+  auto x{Utils::GetSvgLengthValue(m_x, canvas.Size().Width)};
+  auto y{Utils::GetSvgLengthValue(m_y, canvas.Size().Height)};
+  auto width{Utils::GetSvgLengthValue(m_width, canvas.Size().Width)};
+  auto height{Utils::GetSvgLengthValue(m_height, canvas.Size().Height)};
+  auto rx{Utils::GetSvgLengthValue(m_rx, canvas.Size().Width)};
+  auto ry{Utils::GetSvgLengthValue(m_ry, canvas.Size().Height)};
+
+  Geometry(Geometry::CanvasGeometry::CreateRoundedRectangle(resourceCreator, x, y, width, height, rx, ry));
 }
 } // namespace winrt::RNSVG::implementation

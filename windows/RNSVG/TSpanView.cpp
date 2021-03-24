@@ -25,13 +25,13 @@ void TSpanView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void TSpanView::CreateGeometry(ICanvasResourceCreator const &resourceCreator) {
-
+void TSpanView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
+  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   Microsoft::Graphics::Canvas::Text::CanvasTextFormat const& textFormat{};
   textFormat.FontSize(FontSize());
   textFormat.FontFamily(FontFamily());
   textFormat.FontWeight(Utils::FontWeightFrom(FontWeight(), SvgParent()));
 
-  Geometry(Geometry::CanvasGeometry::CreateText({resourceCreator, to_hstring(m_content), textFormat, 200, 200}));
+  Geometry(Geometry::CanvasGeometry::CreateText({resourceCreator, to_hstring(m_content), textFormat, canvas.Size().Width, canvas.Size().Height}));
 }
 } // namespace winrt::RNSVG::implementation
