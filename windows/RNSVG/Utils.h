@@ -45,7 +45,7 @@ struct Utils {
     } else if (weight == L"bold") {
       return FontWeights::Bold();
     } else if (weight == L"bolder" || weight == L"lighter" || weight == L"auto") {
-      auto groupView{parent.as<RNSVG::GroupView>()};
+      auto groupView{parent.try_as<RNSVG::GroupView>()};
       FontWeight parentWeight{
           groupView ? FontWeightFrom(groupView.FontWeight(), groupView.SvgParent()) : FontWeights::Normal()};
 
