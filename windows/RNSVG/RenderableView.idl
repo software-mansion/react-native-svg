@@ -85,6 +85,11 @@ namespace RNSVG
   }
 
   [default_interface]
+  runtimeclass CircleView : RenderableView {
+    CircleView();
+  }
+
+  [default_interface]
   runtimeclass PathView : RenderableView
   {
     PathView();

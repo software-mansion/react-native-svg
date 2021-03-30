@@ -41,6 +41,12 @@ namespace RNSVG
   }
 
   [default_interface]
+  runtimeclass CircleViewManager : RenderableViewManager
+  {
+      CircleViewManager();
+  }
+
+  [default_interface]
   runtimeclass PathViewManager : RenderableViewManager
   {
       PathViewManager();

@@ -46,7 +46,9 @@ RNSVG::SVGLength SVGLength::From(std::string value) {
 }
 
 RNSVG::SVGLength SVGLength::From(Microsoft::ReactNative::JSValue const &propertyValue) {
-  if (propertyValue.Type() == Microsoft::ReactNative::JSValueType::String) {
+  if (propertyValue.IsNull()) {
+    return {0.0f, RNSVG::UnitType::Unknown};
+  } else if (propertyValue.Type() == Microsoft::ReactNative::JSValueType::String) {
     return SVGLength::From(propertyValue.AsString());
   } else {
     return RNSVG::SVGLength(propertyValue.AsSingle());
