@@ -4,9 +4,21 @@ import {Example} from '../components/Example';
 import {Page} from '../components/Page';
 import {Svg, Line} from 'react-native-svg-desktop';
 
-export const EllipsePage: React.FunctionComponent<{}> = () => {
+export const LinePage: React.FunctionComponent<{}> = () => {
   return (
-    <Page title="Ellipse">
+    <Page title="Line">
+      <Example title="Line">
+        <Svg height="100" width="100">
+          <Line
+            x1="10%"
+            y1="10%"
+            x2="90%"
+            y2="90%"
+            stroke="red"
+            strokeWidth="2"
+          />
+        </Svg>
+      </Example>
       <Example title="Line">
         <Svg height="100" width="200">
           <Line
@@ -37,7 +49,7 @@ export const EllipsePage: React.FunctionComponent<{}> = () => {
             strokeLinecap="square"
           />
         </Svg>
-        </Example>
+      </Example>
     </Page>
   );
 };
