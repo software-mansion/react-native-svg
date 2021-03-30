@@ -110,6 +110,8 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CircleView.h" />
+    <ClInclude Include="CircleViewManager.h" />
     <ClInclude Include="GroupView.h" />
     <ClInclude Include="GroupViewManager.h" />
     <ClInclude Include="PathView.h" />
@@ -145,6 +147,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CircleView.cpp" />
+    <ClCompile Include="CircleViewManager.cpp" />
     <ClCompile Include="GroupView.cpp" />
     <ClCompile Include="GroupViewManager.cpp" />
     <ClCompile Include="PathView.cpp" />

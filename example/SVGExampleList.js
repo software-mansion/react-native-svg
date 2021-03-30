@@ -2,11 +2,10 @@
 import React from 'react';
 import {Welcome} from './Welcome';
 import {RectPage} from './examples/Rect';
+import {CirclePage} from './examples/Circle';
 import {PathPage} from './examples/Path';
 import {PolygonPage} from './examples/Polygon';
 import {PolylinePage} from './examples/Polyline';
-
-
 
 interface ISVGExample {
   key: string;
@@ -21,6 +20,10 @@ export const SVGExampleList: Array<ISVGExample> = [
   {
     key: 'Rect',
     component: RectPage,
+  },
+  {
+    key: 'Circle',
+    component: CirclePage,
   },
   {
     key: 'Path',

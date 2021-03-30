@@ -52,6 +52,12 @@
     <ClCompile Include="TSpanViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
+    <ClCompile Include="CircleView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -91,6 +97,12 @@
       <Filter>Views\GroupViews</Filter>
     </ClInclude>
     <ClInclude Include="TSpanViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
   </ItemGroup>
