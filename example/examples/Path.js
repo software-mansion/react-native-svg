@@ -2,7 +2,7 @@
 import React from 'react';
 import {Example} from '../components/Example';
 import {Page} from '../components/Page';
-import {Svg, G, Path} from 'react-native-svg-desktop';
+import {Svg, Circle, G, Path} from 'react-native-svg-desktop';
 
 export const PathPage: React.FunctionComponent<{}> = () => {
   return (
@@ -57,11 +57,13 @@ export const PathPage: React.FunctionComponent<{}> = () => {
               strokeWidth="5"
               fill="none"
             />
-            {/* <G stroke="purple" strokeWidth="3" fill="purple" r="3">
-              <Circle cx="100" cy="350" />
-              <Circle cx="250" cy="50" />
-              <Circle cx="400" cy="350" />
-            </G> */}
+            {
+              <G stroke="purple" strokeWidth="3" fill="purple" r="3">
+                <Circle cx="100" cy="350" />
+                <Circle cx="250" cy="50" />
+                <Circle cx="400" cy="350" />
+              </G>
+            }
             {/* <G fontSize="30" fill="black" stroke="none" textAnchor="middle">
               <Text x="100" y="350" dx="-30">
                 A

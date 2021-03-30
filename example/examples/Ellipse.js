@@ -7,7 +7,7 @@ import {Svg, Ellipse} from 'react-native-svg-desktop';
 export const EllipsePage: React.FunctionComponent<{}> = () => {
   return (
     <Page title="Ellipse">
-      <Example title="Circle">
+      <Example title="Ellipse">
         <Svg height="100" width="200">
           <Ellipse
             cx="50%"

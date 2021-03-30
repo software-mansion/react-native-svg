@@ -116,6 +116,8 @@
     <ClInclude Include="EllipseViewManager.h" />
     <ClInclude Include="GroupView.h" />
     <ClInclude Include="GroupViewManager.h" />
+    <ClInclude Include="LineView.h" />
+    <ClInclude Include="LineViewManager.h" />
     <ClInclude Include="PathView.h" />
     <ClInclude Include="PathViewManager.h" />
     <ClInclude Include="RectView.h" />
@@ -155,6 +157,8 @@
     <ClCompile Include="EllipseViewManager.cpp" />
     <ClCompile Include="GroupView.cpp" />
     <ClCompile Include="GroupViewManager.cpp" />
+    <ClCompile Include="LineView.cpp" />
+    <ClCompile Include="LineViewManager.cpp" />
     <ClCompile Include="PathView.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

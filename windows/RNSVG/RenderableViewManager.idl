@@ -53,6 +53,12 @@ namespace RNSVG
   }
 
   [default_interface]
+  runtimeclass LineViewManager : RenderableViewManager
+  {
+      LineViewManager();
+  }
+
+  [default_interface]
   runtimeclass PathViewManager : RenderableViewManager
   {
       PathViewManager();
