@@ -64,6 +64,12 @@
     <ClCompile Include="EllipseView.cpp">
       <Filter>Views</Filter>
     </ClCompile>
+    <ClCompile Include="LineViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="LineView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -115,6 +121,12 @@
       <Filter>ViewManagers</Filter>
     </ClInclude>
     <ClInclude Include="EllipseView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="LineViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="LineView.h">
       <Filter>Views</Filter>
     </ClInclude>
   </ItemGroup>

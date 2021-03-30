@@ -19,7 +19,9 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
     case RNSVG::SVGClass::RNSVGCircle:
       return winrt::RNSVG::CircleView();
     case RNSVG::SVGClass::RNSVGEllipse:
-      return winrt::RNSVG::EllipseView(); 
+      return winrt::RNSVG::EllipseView();
+    case RNSVG::SVGClass::RNSVGLine:
+      return winrt::RNSVG::LineView();
     case RNSVG::SVGClass::RNSVGText:
       return winrt::RNSVG::TextView();
     case RNSVG::SVGClass::RNSVGTSpan:
