@@ -227,6 +227,7 @@ void RenderableView::Render(
 
   if (auto strokeLayer{session.CreateLayer(StrokeOpacity())}) {
     Geometry::CanvasStrokeStyle strokeStyle{};
+    strokeStyle.StartCap(StrokeLineCap());
     strokeStyle.EndCap(StrokeLineCap());
     strokeStyle.LineJoin(StrokeLineJoin());
     strokeStyle.DashOffset(StrokeDashOffset());

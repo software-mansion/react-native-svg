@@ -38,7 +38,7 @@ void LineView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
   auto x2{Utils::GetSvgLengthValue(m_x2, canvas.Size().Width)};
   auto y2{Utils::GetSvgLengthValue(m_y2, canvas.Size().Height)};
 
-  auto pathBuilder = Geometry::CanvasPathBuilder(resourceCreator);
+  auto pathBuilder{Geometry::CanvasPathBuilder(resourceCreator)};
   pathBuilder.BeginFigure(x1, y1);
   pathBuilder.AddLine (x2, y2);
   pathBuilder.EndFigure(Geometry::CanvasFigureLoop::Open);
