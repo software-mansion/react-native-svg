@@ -2,7 +2,7 @@
 import React from 'react';
 import {Example} from '../components/Example';
 import {Page} from '../components/Page';
-import {Svg, Circle, G} from 'react-native-svg-desktop';
+import {Svg, Circle} from 'react-native-svg-desktop';
 
 export const CirclePage: React.FunctionComponent<{}> = () => {
   return (
@@ -13,16 +13,16 @@ export const CirclePage: React.FunctionComponent<{}> = () => {
         </Svg>
       </Example>
       <Example title="Stroke Circle">
-      <Svg height="100" width="100">
-        <Circle
-          cx="50"
-          cy="50"
-          r="45"
-          stroke="purple"
-          strokeWidth="2.5"
-          fill="none"
-        />
-      </Svg>
+        <Svg height="100" width="100">
+          <Circle
+            cx="50"
+            cy="50"
+            r="45"
+            stroke="purple"
+            strokeWidth="2.5"
+            fill="none"
+          />
+        </Svg>
       </Example>
       <Example title="Circle with strokeOpacity">
         <Svg height="100" width="100">
