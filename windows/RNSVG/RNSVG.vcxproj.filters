@@ -58,6 +58,12 @@
     <ClCompile Include="CircleViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
+    <ClCompile Include="EllipseViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipseView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -104,6 +110,12 @@
     </ClInclude>
     <ClInclude Include="CircleViewManager.h">
       <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="EllipseViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="EllipseView.h">
+      <Filter>Views</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

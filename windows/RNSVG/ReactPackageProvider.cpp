@@ -10,6 +10,7 @@
 #include "PathViewManager.h"
 #include "RectViewManager.h"
 #include "CircleViewManager.h"
+#include "EllipseViewManager.h"
 #include "TextViewManager.h"
 #include "TSpanViewManager.h"
 
@@ -25,6 +26,7 @@ namespace winrt::RNSVG::implementation
     packageBuilder.AddViewManager(L"PathViewManager", []() { return winrt::make<PathViewManager>(); });
     packageBuilder.AddViewManager(L"RectViewManager", []() { return winrt::make<RectViewManager>(); });
     packageBuilder.AddViewManager(L"CircleViewManager", []() { return winrt::make<CircleViewManager>(); });
+    packageBuilder.AddViewManager(L"EllipseViewManager", []() { return winrt::make<EllipseViewManager>(); });
     packageBuilder.AddViewManager(L"TextViewManager", []() { return winrt::make<TextViewManager>(); });
     packageBuilder.AddViewManager(L"TSpanViewManager", []() { return winrt::make<TSpanViewManager>(); });
   }

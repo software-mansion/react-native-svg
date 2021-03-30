@@ -47,6 +47,12 @@ namespace RNSVG
   }
 
   [default_interface]
+  runtimeclass EllipseViewManager : RenderableViewManager
+  {
+      EllipseViewManager();
+  }
+
+  [default_interface]
   runtimeclass PathViewManager : RenderableViewManager
   {
       PathViewManager();

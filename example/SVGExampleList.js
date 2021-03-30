@@ -3,6 +3,7 @@ import React from 'react';
 import {Welcome} from './Welcome';
 import {RectPage} from './examples/Rect';
 import {CirclePage} from './examples/Circle';
+import {EllipsePage} from './examples/Ellipse';
 import {PathPage} from './examples/Path';
 import {PolygonPage} from './examples/Polygon';
 import {PolylinePage} from './examples/Polyline';
@@ -24,6 +25,10 @@ export const SVGExampleList: Array<ISVGExample> = [
   {
     key: 'Circle',
     component: CirclePage,
+  },
+  {
+    key: 'Ellipse',
+    component: EllipsePage,
   },
   {
     key: 'Path',
