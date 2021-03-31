@@ -1,15 +1,9 @@
-## react-native-svg-macos
-
-`react-native-svg-macos` is a temporary fork of `react-native-svg` that adds support for macOS.
-
-This is a short-term solution to get macOS compatibility up and running while waiting for [this pull request](https://github.com/react-native-svg/react-native-svg/pull/1494) to get resolved. In the long term, we would like to bring any changes in this fork into the original repo.
-
 ## react-native-svg
 
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 [![NPM](https://img.shields.io/npm/dm/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 
-`react-native-svg` provides SVG support to React Native on iOS and Android, and a compatibility layer for the web.
+`react-native-svg` provides SVG support to React Native on iOS, Android, macOS, Windows, and a compatibility layer for the web.
 
 [Check out the demo](https://snack.expo.io/@msand/react-native-svg-example)
 
