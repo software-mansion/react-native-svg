@@ -468,15 +468,6 @@ export interface UseProps extends CommonPathProps {
 export const Use: React.ComponentClass<UseProps>;
 export type Use = React.ComponentClass<UseProps>;
 
-export enum EMaskUnits {
-  USER_SPACE_ON_USE = 'userSpaceOnUse',
-  OBJECT_BOUNDING_BOX = 'objectBoundingBox',
-}
-
-export type TMaskUnits =
-  | EMaskUnits.USER_SPACE_ON_USE
-  | EMaskUnits.OBJECT_BOUNDING_BOX;
-
 export interface MaskProps extends CommonPathProps {
   id?: string;
   x?: NumberProp;
@@ -484,8 +475,8 @@ export interface MaskProps extends CommonPathProps {
   width?: NumberProp;
   height?: NumberProp;
   maskTransform?: ColumnMajorTransformMatrix | string;
-  maskUnits?: TMaskUnits;
-  maskContentUnits?: TMaskUnits;
+  maskUnits?: Units;
+  maskContentUnits?: Units;
 }
 export const Mask: React.ComponentClass<MaskProps>;
 export type Mask = React.ComponentClass<MaskProps>;
