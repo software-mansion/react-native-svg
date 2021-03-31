@@ -2,7 +2,7 @@
 import React from 'react';
 import {Example} from '../components/Example';
 import {Page} from '../components/Page';
-import {Svg, Rect} from 'react-native-svg-desktop';
+import {Svg, Rect} from 'react-native-svg';
 
 export const RectPage: React.FunctionComponent<{}> = () => {
   return (

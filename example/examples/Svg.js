@@ -3,7 +3,7 @@ import React from 'react';
 import {Example} from '../components/Example';
 import {Page} from '../components/Page';
 import {StyleSheet, View} from 'react-native';
-import {Svg, Rect, Circle, Path, Line} from 'react-native-svg-desktop';
+import {Svg, Rect, Circle, Path, Line} from 'react-native-svg';
 
 const styles = StyleSheet.create({
   container: {

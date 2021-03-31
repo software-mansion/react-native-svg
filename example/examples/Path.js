@@ -2,7 +2,7 @@
 import React from 'react';
 import {Example} from '../components/Example';
 import {Page} from '../components/Page';
-import {Svg, Circle, G, Path} from 'react-native-svg-desktop';
+import {Svg, Circle, G, Path} from 'react-native-svg';
 
 export const PathPage: React.FunctionComponent<{}> = () => {
   return (

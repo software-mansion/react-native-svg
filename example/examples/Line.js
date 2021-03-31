@@ -2,7 +2,7 @@
 import React from 'react';
 import {Example} from '../components/Example';
 import {Page} from '../components/Page';
-import {Svg, Line} from 'react-native-svg-desktop';
+import {Svg, Line} from 'react-native-svg';
 
 export const LinePage: React.FunctionComponent<{}> = () => {
   return (

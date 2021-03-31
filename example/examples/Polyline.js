@@ -2,7 +2,7 @@
 import React from 'react';
 import {Example} from '../components/Example';
 import {Page} from '../components/Page';
-import {Svg, Polyline} from 'react-native-svg-desktop';
+import {Svg, Polyline} from 'react-native-svg';
 
 export const PolylinePage: React.FunctionComponent<{}> = () => {
   return (

@@ -33,13 +33,13 @@ module.exports = {
       new RegExp(
         `${path.resolve(__dirname, 'windows').replace(/[/\\]/g, '/')}.*`,
       ),
-      // Prevent recursive node_modules from local react-native-svg-desktop
+      // Prevent recursive node_modules from local react-native-svg
       new RegExp(
-        `${path.resolve(__dirname, 'node_modules/react-native-svg-desktop/node_modules').replace(/[/\\]/g, '/')}.*`,
+        `${path.resolve(__dirname, 'node_modules/react-native-svg/node_modules').replace(/[/\\]/g, '/')}.*`,
       ),
-      // Prevent recursive examples from local react-native-svg-desktop
+      // Prevent recursive examples from local react-native-svg
       new RegExp(
-        `${path.resolve(__dirname, 'node_modules/react-native-svg-desktop/example').replace(/[/\\]/g, '/')}.*`,
+        `${path.resolve(__dirname, 'node_modules/react-native-svg/example').replace(/[/\\]/g, '/')}.*`,
       ),
       // This prevents "react-native run-windows" from hitting: EBUSY: resource busy or locked, open msbuild.ProjectImports.zip
       /.*\.ProjectImports\.zip/,
