@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import {Welcome} from './Welcome';
+import {SvgPage} from './examples/Svg';
 import {RectPage} from './examples/Rect';
 import {CirclePage} from './examples/Circle';
 import {EllipsePage} from './examples/Ellipse';
@@ -15,9 +16,13 @@ interface ISVGExample {
 }
 
 export const SVGExampleList: Array<ISVGExample> = [
-{
+  {
     key: 'Welcome',
     component: Welcome,
+  },
+  {
+    key: 'Svg',
+    component: SvgPage,
   },
   {
     key: 'Rect',

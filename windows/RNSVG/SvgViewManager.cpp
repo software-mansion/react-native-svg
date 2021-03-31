@@ -44,6 +44,14 @@ IMapView<hstring, ViewManagerPropertyType> SvgViewManager::NativeProps() {
   nativeProps.Insert(L"height", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"width", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"opacity", ViewManagerPropertyType::Number);
+  // viewBox
+  nativeProps.Insert(L"minX", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"minY", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"vbWidth", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"vbHeight", ViewManagerPropertyType::Number);
+  // preserveAspectRatio
+  nativeProps.Insert(L"align", ViewManagerPropertyType::String);
+  nativeProps.Insert(L"meetOrSlice", ViewManagerPropertyType::Number);
 
   return nativeProps.GetView();
 }

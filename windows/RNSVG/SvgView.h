@@ -14,8 +14,8 @@ struct SvgView : SvgViewT<SvgView> {
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader);
 
   // Overrides
-  winrt::Windows::Foundation::Size MeasureOverride(winrt::Windows::Foundation::Size availableSize);
-  winrt::Windows::Foundation::Size ArrangeOverride(winrt::Windows::Foundation::Size finalSize);
+  Windows::Foundation::Size MeasureOverride(Windows::Foundation::Size availableSize);
+  Windows::Foundation::Size ArrangeOverride(Windows::Foundation::Size finalSize);
 
   // CanvasControl
   void Canvas_Draw(
@@ -23,7 +23,7 @@ struct SvgView : SvgViewT<SvgView> {
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasDrawEventArgs const &args);
 
   void Canvas_SizeChanged(
-      winrt::Windows::Foundation::IInspectable const sender,
+      Windows::Foundation::IInspectable const &sender,
       Windows::UI::Xaml::SizeChangedEventArgs const &args);
 
   void InvalidateCanvas();
@@ -33,6 +33,16 @@ struct SvgView : SvgViewT<SvgView> {
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl m_canvas{};
   float m_opacity{1.0f};
+  float m_scale{0.0f};
+  float m_minX{0.0f};
+  float m_minY{0.0f};
+  float m_vbWidth{0.0f};
+  float m_vbHeight{0.0f};
+  RNSVG::SVGLength m_bbWidth{};
+  RNSVG::SVGLength m_bbHeight{};
+  std::string m_align{""};
+  RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
+
   Windows::Foundation::Collections::IVector<Windows::UI::Xaml::UIElement> m_views{
       winrt::single_threaded_vector<Windows::UI::Xaml::UIElement>()};
 
