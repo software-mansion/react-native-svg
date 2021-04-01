@@ -40,12 +40,14 @@ void RectView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
 void RectView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
   auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
 
+  auto rxLength{m_rx.Unit() == RNSVG::UnitType::Unknown ? m_ry : m_rx};
+  auto ryLength{m_ry.Unit() == RNSVG::UnitType::Unknown ? m_rx : m_ry};
   auto x{Utils::GetSvgLengthValue(m_x, canvas.Size().Width)};
   auto y{Utils::GetSvgLengthValue(m_y, canvas.Size().Height)};
   auto width{Utils::GetSvgLengthValue(m_width, canvas.Size().Width)};
   auto height{Utils::GetSvgLengthValue(m_height, canvas.Size().Height)};
-  auto rx{Utils::GetSvgLengthValue(m_rx, canvas.Size().Width)};
-  auto ry{Utils::GetSvgLengthValue(m_ry, canvas.Size().Height)};
+  auto rx{Utils::GetSvgLengthValue(rxLength, canvas.Size().Width)};
+  auto ry{Utils::GetSvgLengthValue(ryLength, canvas.Size().Height)};
 
   Geometry(Geometry::CanvasGeometry::CreateRoundedRectangle(resourceCreator, x, y, width, height, rx, ry));
 }
