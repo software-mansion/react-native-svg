@@ -30,6 +30,10 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
       return winrt::RNSVG::TSpanView();
     case RNSVG::SVGClass::RNSVGSymbol:
       return winrt::RNSVG::SymbolView();
+    case RNSVG::SVGClass::RNSVGDefs:
+      return winrt::RNSVG::DefsView();
+    case RNSVG::SVGClass::RNSVGLinearGradient:
+      return winrt::RNSVG::LinearGradientView();
   }
 
   throw hresult_not_implemented();

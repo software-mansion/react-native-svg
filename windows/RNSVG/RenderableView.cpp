@@ -26,7 +26,13 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
     // name is not a prop we want to propagate to child elements
     // so we only set it when forceUpdate = true
     if (propertyName == "name" && forceUpdate) {
+      if (parent) {
+        SvgRoot().Templates().Remove(m_id);
+      }
       m_id = to_hstring(Utils::JSValueAsString(propertyValue));
+      if (parent) {
+        SaveDefinition();
+      }
     } else if (propertyName == "strokeWidth") {
       prop = RNSVG::BaseProp::StrokeWidth;
       if (forceUpdate || !m_propSetMap[prop]) {
@@ -159,19 +165,8 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
     } else if (propertyName == "matrix") {
       prop = RNSVG::BaseProp::Matrix;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (propertyValue.IsNull()) {
-          m_transformMatrix = parent.SvgTransform();
-        } else {
-          auto const &matrix{propertyValue.AsArray()};
-
-          m_transformMatrix = Numerics::float3x2(
-              matrix.at(0).AsSingle(),
-              matrix.at(1).AsSingle(),
-              matrix.at(2).AsSingle(),
-              matrix.at(3).AsSingle(),
-              matrix.at(4).AsSingle(),
-              matrix.at(5).AsSingle());
-        }
+        Numerics::float3x2 fallbackValue{parent ? parent.SvgTransform() : Numerics::make_float3x2_rotation(0)};
+        m_transformMatrix = Utils::JSValueAsTransform(propertyValue, fallbackValue);
       }
     }
 
@@ -190,11 +185,17 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
   }
 }
 
+void RenderableView::SaveDefinition() {
+  if (m_id != L"") {
+    SvgRoot().Templates().Insert(m_id, *this);
+  }
+}
+
 void RenderableView::Render(
     UI::Xaml::CanvasControl const &canvas,
     CanvasDrawingSession const &session)
 {
-  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   if (m_recreateResources) {
     CreateGeometry(canvas);
   }
@@ -204,7 +205,7 @@ void RenderableView::Render(
   geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
 
   if (auto const &fillLayer{session.CreateLayer(FillOpacity())}) {
-    auto const &fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), resourceCreator)};
+    auto const &fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), geometry, resourceCreator)};
     session.FillGeometry(geometry, fill);
     fillLayer.Close();
   }
@@ -218,7 +219,7 @@ void RenderableView::Render(
     strokeStyle.MiterLimit(StrokeMiterLimit());
     strokeStyle.CustomDashStyle(Utils::GetValueArray(StrokeDashArray()));
 
-    auto const &stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), resourceCreator)};
+    auto const &stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry, resourceCreator)};
     session.DrawGeometry(geometry, stroke, StrokeWidth().Value(), strokeStyle);
     strokeLayer.Close();
   }

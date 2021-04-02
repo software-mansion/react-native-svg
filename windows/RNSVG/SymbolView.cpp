@@ -9,19 +9,6 @@ using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void SymbolView::SaveDefinition() {
-  if (auto const &root{SvgRoot()}) {
-    root.Templates().Insert(Id(), *this);
-  }
-}
-
-void SymbolView::RemoveDefinition() {
-  const auto &root{SvgRoot()};
-  if (root && root.Templates().HasKey(Id())) {
-    root.Templates().Remove(Id());
-  }
-}
-
 void SymbolView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -29,9 +16,7 @@ void SymbolView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate
     auto const &propertyName{pair.first};
     auto const &propertyValue{pair.second};
 
-    if (propertyName == "name") {
-      RemoveDefinition();
-    } else if (propertyName == "vbWidth") {
+    if (propertyName == "vbWidth") {
       m_vbWidth = Utils::JSValueAsFloat(propertyValue);
     } else if (propertyName == "vbHeight") {
       m_vbHeight = Utils::JSValueAsFloat(propertyValue);
@@ -47,14 +32,6 @@ void SymbolView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate
   }
 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
-
-  if (propertyMap.find("name") != propertyMap.end()) {
-    SaveDefinition();
-  }
-}
-
-void SymbolView::Render(UI::Xaml::CanvasControl const &/*canvas*/, CanvasDrawingSession const &/*session*/) {
-  SaveDefinition();
 }
 
 } // namespace winrt::RNSVG::implementation

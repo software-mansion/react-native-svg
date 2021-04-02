@@ -88,6 +88,21 @@
     <ClCompile Include="UseViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
+    <ClCompile Include="DefsViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearGradientViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="DefsView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearGradientView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="BrushView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -170,6 +185,21 @@
     </ClInclude>
     <ClInclude Include="UseViewManager.h">
       <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="DefsViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearGradientViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="DefsView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearGradientView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushView.h">
+      <Filter>Views</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -23,6 +23,8 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
   virtual void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas);
 
+  virtual void SaveDefinition();
+
   virtual void Render(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
       Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);

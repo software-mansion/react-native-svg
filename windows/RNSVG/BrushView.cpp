@@ -1,0 +1,17 @@
+#include "pch.h"
+#include "BrushView.h"
+#include "BrushView.g.cpp"
+
+namespace winrt::RNSVG::implementation {
+void BrushView::SaveDefinition() {
+  if (auto const &root{SvgRoot()}) {
+    CreateBrush();
+    root.Brushes().Insert(Id(), *this);
+  }
+}
+
+void BrushView::SetBounds(Windows::Foundation::Rect const &rect) {
+  m_bounds = rect;
+  UpdateBounds();
+}
+} // namespace winrt::RNSVG::implementation

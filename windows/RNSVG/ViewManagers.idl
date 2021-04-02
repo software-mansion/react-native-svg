@@ -89,6 +89,18 @@ namespace RNSVG
   }
 
   [default_interface]
+  runtimeclass DefsViewManager : GroupViewManager
+  {
+    DefsViewManager();
+  }
+
+  [default_interface]
+  runtimeclass LinearGradientViewManager : GroupViewManager
+  {
+    LinearGradientViewManager();
+  }
+
+  [default_interface]
   runtimeclass SymbolViewManager : GroupViewManager
   {
     SymbolViewManager();

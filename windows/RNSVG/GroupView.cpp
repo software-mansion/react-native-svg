@@ -116,13 +116,21 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
 }
 
 void GroupView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   std::vector<Geometry::CanvasGeometry> geometries;
   for (auto const &child : Children()) {
     geometries.push_back(child.Geometry());
   }
 
   Geometry(Geometry::CanvasGeometry::CreateGroup(resourceCreator, geometries, FillRule()));
+}
+
+void GroupView::SaveDefinition() {
+  __super::SaveDefinition();
+
+  for (auto const &child : Children()) {
+    child.SaveDefinition();
+  }
 }
 
 void GroupView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {

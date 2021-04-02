@@ -87,6 +87,12 @@ void SvgView::Canvas_Draw(UI::Xaml::CanvasControl const &sender, UI::Xaml::Canva
 
   for (auto const &child : Views()) {
     if (auto const &group{child.try_as<IRenderableView>()}) {
+      group.SaveDefinition();
+    }
+  }
+
+  for (auto const &child : Views()) {
+    if (auto const &group{child.try_as<IRenderableView>()}) {
       group.Render(sender, args.DrawingSession());
     }
   }

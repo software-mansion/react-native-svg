@@ -34,9 +34,13 @@ namespace RNSVG
   runtimeclass SvgView : Windows.UI.Xaml.Controls.Panel
   {
     SvgView(Microsoft.ReactNative.IReactContext context);
+
     Single SvgScale{ get; };
-    Windows.Foundation.Collections.IVector<Windows.UI.Xaml.UIElement> Views { get; };
+    Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl Canvas{ get; };
+    Windows.Foundation.Collections.IVector<Windows.UI.Xaml.UIElement> Views{ get; };
     Windows.Foundation.Collections.IMap<String, RenderableView> Templates{ get; };
+    Windows.Foundation.Collections.IMap<String, BrushView> Brushes{ get; };
+
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
     void InvalidateCanvas();
   };
@@ -66,12 +70,6 @@ namespace RNSVG
     Unknown,
   };
 
-  interface IDefinitionView
-  {
-    void SaveDefinition();
-    void RemoveDefinition();
-  };
-
   [default_interface]
   unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
   {
@@ -98,6 +96,7 @@ namespace RNSVG
 
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
 
+    void SaveDefinition();
     void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
     void Render(
       Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
@@ -176,7 +175,13 @@ namespace RNSVG
   };
 
   [default_interface]
-  runtimeclass SymbolView : GroupView, IDefinitionView
+  runtimeclass DefsView : GroupView
+  {
+    DefsView();
+  };
+
+  [default_interface]
+  runtimeclass SymbolView : GroupView
   {
     SymbolView();
     Single MinX{ get; };
@@ -185,5 +190,21 @@ namespace RNSVG
     Single VbHeight{ get; };
     String Align{ get; };
     MeetOrSlice MeetOrSlice{ get; };
+  };
+
+  [default_interface]
+  unsealed runtimeclass BrushView : GroupView
+  {
+    BrushView();
+
+    Microsoft.Graphics.Canvas.Brushes.ICanvasBrush Brush{ get; };
+    void CreateBrush();
+    void SetBounds(Windows.Foundation.Rect rect);
+  };
+
+  [default_interface]
+  runtimeclass LinearGradientView : BrushView
+  {
+    LinearGradientView();
   };
   }

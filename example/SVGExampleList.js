@@ -10,6 +10,7 @@ import {PathPage} from './examples/Path';
 import {PolygonPage} from './examples/Polygon';
 import {PolylinePage} from './examples/Polyline';
 import {ReusablePage} from './examples/Reusable';
+import {GradientsPage} from './examples/Gradients';
 
 interface ISVGExample {
   key: string;
@@ -56,6 +57,10 @@ export const SVGExampleList: Array<ISVGExample> = [
   {
     key: 'Reusable',
     component: ReusablePage,
+  },
+  {
+    key: 'Gradients',
+    component: GradientsPage,
   },
 ];
 

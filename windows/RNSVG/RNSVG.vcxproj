@@ -110,12 +110,17 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BrushView.h" />
     <ClInclude Include="CircleView.h" />
     <ClInclude Include="CircleViewManager.h" />
+    <ClInclude Include="DefsView.h" />
+    <ClInclude Include="DefsViewManager.h" />
     <ClInclude Include="EllipseView.h" />
     <ClInclude Include="EllipseViewManager.h" />
     <ClInclude Include="GroupView.h" />
     <ClInclude Include="GroupViewManager.h" />
+    <ClInclude Include="LinearGradientView.h" />
+    <ClInclude Include="LinearGradientViewManager.h" />
     <ClInclude Include="LineView.h" />
     <ClInclude Include="LineViewManager.h" />
     <ClInclude Include="PathView.h" />
@@ -143,12 +148,17 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BrushView.cpp" />
     <ClCompile Include="CircleView.cpp" />
     <ClCompile Include="CircleViewManager.cpp" />
+    <ClCompile Include="DefsView.cpp" />
+    <ClCompile Include="DefsViewManager.cpp" />
     <ClCompile Include="EllipseView.cpp" />
     <ClCompile Include="EllipseViewManager.cpp" />
     <ClCompile Include="GroupView.cpp" />
     <ClCompile Include="GroupViewManager.cpp" />
+    <ClCompile Include="LinearGradientView.cpp" />
+    <ClCompile Include="LinearGradientViewManager.cpp" />
     <ClCompile Include="LineView.cpp" />
     <ClCompile Include="LineViewManager.cpp" />
     <ClCompile Include="PathView.cpp" />

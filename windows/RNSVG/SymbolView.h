@@ -14,13 +14,11 @@ struct SymbolView : SymbolViewT<SymbolView, RNSVG::implementation::GroupView> {
   hstring Align() { return to_hstring(m_align); }
   RNSVG::MeetOrSlice MeetOrSlice() { return m_meetOrSlice; }
 
-  void SaveDefinition();
-  void RemoveDefinition();
-
+  // RenderableView
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
   void Render(
-      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &/*canvas*/,
+      Microsoft::Graphics::Canvas::CanvasDrawingSession const &/*session*/){};
 
  private:
   float m_minX{0.0f};

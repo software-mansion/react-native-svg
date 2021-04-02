@@ -9,12 +9,16 @@ struct SvgView : SvgViewT<SvgView> {
 
   SvgView(Microsoft::ReactNative::IReactContext const &context);
 
+  Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl Canvas() { return m_canvas; }
   float SvgScale() { return m_scale; }
   Windows::Foundation::Collections::IVector<Windows::UI::Xaml::UIElement> Views() {
     return m_views;
   }
   Windows::Foundation::Collections::IMap<hstring, RNSVG::RenderableView> Templates() {
     return m_templates;
+  }
+  Windows::Foundation::Collections::IMap<hstring, RNSVG::BrushView> Brushes() {
+    return m_brushes;
   }
 
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader);
@@ -53,6 +57,8 @@ struct SvgView : SvgViewT<SvgView> {
       winrt::single_threaded_vector<Windows::UI::Xaml::UIElement>()};
   Windows::Foundation::Collections::IMap<hstring, RNSVG::RenderableView> m_templates{
       winrt::single_threaded_map<hstring, RNSVG::RenderableView>()};
+  Windows::Foundation::Collections::IMap<hstring, RNSVG::BrushView> m_brushes{
+      winrt::single_threaded_map<hstring, RNSVG::BrushView>()};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::Draw_revoker m_canvasDrawRevoker{};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::SizeChanged_revoker m_canvaSizeChangedRevoker{};
 };

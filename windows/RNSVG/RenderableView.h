@@ -35,6 +35,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination FillRule() { return m_fillRule; }
 
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
+  virtual void SaveDefinition();
   virtual void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &/*canvas*/) {}
   virtual void Render(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,

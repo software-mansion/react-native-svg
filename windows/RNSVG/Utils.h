@@ -235,14 +235,52 @@ struct Utils {
     }
   }
 
+  static Numerics::float3x2 JSValueAsTransform(JSValue const& value, Numerics::float3x2 defaultValue = {}) {
+    if (value.IsNull()) {
+      return defaultValue;
+    } else {
+      auto const &matrix{value.AsArray()};
+
+      return Numerics::float3x2(
+          matrix.at(0).AsSingle(),
+          matrix.at(1).AsSingle(),
+          matrix.at(2).AsSingle(),
+          matrix.at(3).AsSingle(),
+          matrix.at(4).AsSingle(),
+          matrix.at(5).AsSingle());
+    }
+  }
+
+  static std::vector<Brushes::CanvasGradientStop> JSValueAsStops(JSValue const& value) {
+    if (value.IsNull()) {
+      return {};
+    }
+
+    auto const &stops{value.AsArray()};
+    std::vector<Brushes::CanvasGradientStop> canvasStops{};
+
+    for (size_t i = 0; i < stops.size(); ++i) {
+      Brushes::CanvasGradientStop stop{};
+      stop.Position = Utils::JSValueAsFloat(stops.at(i));
+      stop.Color = Utils::JSValueAsColor(stops.at(++i));
+      canvasStops.push_back(stop);
+    }
+
+    return canvasStops;
+  }
+
   static Brushes::ICanvasBrush GetCanvasBrush(
       hstring const &brushId,
       Color color,
-      RNSVG::SvgView const &/*root*/,
+      RNSVG::SvgView const &root,
+      Geometry::CanvasGeometry const &geometry,
       ICanvasResourceCreator const &resourceCreator) {
     Brushes::ICanvasBrush brush{nullptr};
-    if (brushId != L"") {
-      // Try to get brush from SvgRoot
+    if (root && brushId != L"") {
+      if (auto const &brushView{root.Brushes().TryLookup(brushId)}) {
+        brushView.SetBounds(geometry.ComputeBounds());
+        brush = brushView.Brush();
+      }
     }
 
     if (!brush) {
