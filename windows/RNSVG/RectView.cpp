@@ -13,11 +13,11 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 void RectView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
-    auto const &propertyName = pair.first;
-    auto const &propertyValue = pair.second;
+    auto const &propertyName{pair.first};
+    auto const &propertyValue{pair.second};
 
     if (propertyName == "width") {
       m_width = SVGLength::From(propertyValue);
@@ -38,16 +38,17 @@ void RectView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
 }
 
 void RectView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
 
-  auto rxLength{m_rx.Unit() == RNSVG::UnitType::Unknown ? m_ry : m_rx};
-  auto ryLength{m_ry.Unit() == RNSVG::UnitType::Unknown ? m_rx : m_ry};
-  auto x{Utils::GetSvgLengthValue(m_x, canvas.Size().Width)};
-  auto y{Utils::GetSvgLengthValue(m_y, canvas.Size().Height)};
-  auto width{Utils::GetSvgLengthValue(m_width, canvas.Size().Width)};
-  auto height{Utils::GetSvgLengthValue(m_height, canvas.Size().Height)};
-  auto rx{Utils::GetSvgLengthValue(rxLength, canvas.Size().Width)};
-  auto ry{Utils::GetSvgLengthValue(ryLength, canvas.Size().Height)};
+  float x{Utils::GetSvgLengthValue(m_x, canvas.Size().Width)};
+  float y{Utils::GetSvgLengthValue(m_y, canvas.Size().Height)};
+  float width{Utils::GetSvgLengthValue(m_width, canvas.Size().Width)};
+  float height{Utils::GetSvgLengthValue(m_height, canvas.Size().Height)};
+
+  auto const &rxLength{m_rx.Unit() == RNSVG::UnitType::Unknown ? m_ry : m_rx};
+  auto const &ryLength{m_ry.Unit() == RNSVG::UnitType::Unknown ? m_rx : m_ry};
+  float rx{Utils::GetSvgLengthValue(rxLength, canvas.Size().Width)};
+  float ry{Utils::GetSvgLengthValue(ryLength, canvas.Size().Height)};
 
   Geometry(Geometry::CanvasGeometry::CreateRoundedRectangle(resourceCreator, x, y, width, height, rx, ry));
 }

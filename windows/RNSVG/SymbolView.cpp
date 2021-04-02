@@ -10,7 +10,7 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 void SymbolView::SaveDefinition() {
-  if (auto root{SvgRoot()}) {
+  if (auto const &root{SvgRoot()}) {
     root.Templates().Insert(Id(), *this);
   }
 }

@@ -17,19 +17,19 @@ RectViewManager::RectViewManager() {
 
 // IViewManagerWithNativeProperties
 IMapView<hstring, ViewManagerPropertyType> RectViewManager::NativeProps() {
-  auto parentProps{__super::NativeProps()};
-  auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
+  auto const &parentProps{__super::NativeProps()};
+  auto const &nativeProps{winrt::single_threaded_map<hstring, ViewManagerPropertyType>()};
 
-  for (auto prop : parentProps) {
+  for (auto const &prop : parentProps) {
     nativeProps.Insert(prop.Key(), prop.Value());
   }
 
-  nativeProps.Insert(L"height", ViewManagerPropertyType::Number);
-  nativeProps.Insert(L"width", ViewManagerPropertyType::Number);
-  nativeProps.Insert(L"x", ViewManagerPropertyType::Number);
-  nativeProps.Insert(L"y", ViewManagerPropertyType::Number);
-  nativeProps.Insert(L"rx", ViewManagerPropertyType::Number);
-  nativeProps.Insert(L"ry", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"height", ViewManagerPropertyType::String);
+  nativeProps.Insert(L"width", ViewManagerPropertyType::String);
+  nativeProps.Insert(L"x", ViewManagerPropertyType::String);
+  nativeProps.Insert(L"y", ViewManagerPropertyType::String);
+  nativeProps.Insert(L"rx", ViewManagerPropertyType::String);
+  nativeProps.Insert(L"ry", ViewManagerPropertyType::String);
 
   return nativeProps.GetView();
 }

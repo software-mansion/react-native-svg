@@ -8,7 +8,6 @@
 #include <winrt/Windows.Graphics.Display.h>
 
 #include "GroupView.h"
-#include "SVGLength.h"
 #include "Utils.h"
 
 using namespace winrt;
@@ -26,11 +25,11 @@ SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
 }
 
 void SvgView::UpdateProperties(IJSValueReader const &reader) {
-  auto const &propertyMap = JSValueObject::ReadFrom(reader);
+  auto const &propertyMap{JSValueObject::ReadFrom(reader)};
 
   for (auto const &pair : propertyMap) {
-    auto const &propertyName = pair.first;
-    auto const &propertyValue = pair.second;
+    auto const &propertyName{pair.first};
+    auto const &propertyValue{pair.second};
 
     if (propertyName == "bbWidth") {
       m_bbWidth = SVGLength::From(propertyValue);
@@ -59,14 +58,14 @@ void SvgView::UpdateProperties(IJSValueReader const &reader) {
 }
 
 Size SvgView::MeasureOverride(Size availableSize) {
-  for (auto child : Children()) {
+  for (auto const &child : Children()) {
     child.Measure(availableSize);
   }
   return availableSize;
 }
 
 Size SvgView::ArrangeOverride(Size finalSize) {
-  for (auto child : Children()) {
+  for (auto const &child : Children()) {
     child.Arrange({0, 0, finalSize.Width, finalSize.Height});
   }
   return finalSize;
@@ -86,8 +85,8 @@ void SvgView::Canvas_Draw(UI::Xaml::CanvasControl const &sender, UI::Xaml::Canva
     args.DrawingSession().Transform(Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
   }
 
-  for (auto child : Views()) {
-    if (auto group = child.try_as<IRenderableView>()) {
+  for (auto const &child : Views()) {
+    if (auto const &group{child.try_as<IRenderableView>()}) {
       group.Render(sender, args.DrawingSession());
     }
   }

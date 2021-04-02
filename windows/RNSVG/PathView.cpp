@@ -15,11 +15,11 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
-    auto const &propertyName = pair.first;
-    auto const &propertyValue = pair.second;
+    auto const &propertyName{pair.first};
+    auto const &propertyValue{pair.second};
 
     if (propertyName == "d") {
       m_commands.clear();
@@ -38,9 +38,9 @@ void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
 }
 
 void PathView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   Svg::CanvasSvgDocument doc{resourceCreator};
-  auto path{doc.CreatePathAttribute(m_segmentData, m_commands)};
+  auto const &path{doc.CreatePathAttribute(m_segmentData, m_commands)};
   Geometry(path.CreatePathGeometry());
 }
 

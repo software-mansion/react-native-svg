@@ -20,7 +20,7 @@ struct Utils {
   static std::vector<float> GetValueArray(IVector<SVGLength> const &value) {
     std::vector<float> result;
 
-    for (auto item : value) {
+    for (auto const &item : value) {
       result.push_back(item.Value());
     }
 
@@ -48,7 +48,7 @@ struct Utils {
     } else if (weight == L"bold") {
       return FontWeights::Bold();
     } else if (weight == L"bolder" || weight == L"lighter" || weight == L"auto") {
-      auto groupView{parent.try_as<RNSVG::GroupView>()};
+      auto const &groupView{parent.try_as<RNSVG::GroupView>()};
       FontWeight parentWeight{
           groupView ? FontWeightFrom(groupView.FontWeight(), groupView.SvgParent()) : FontWeights::Normal()};
 
@@ -175,8 +175,8 @@ struct Utils {
 
     // The transform applied to content contained by the element is given by
     // translate(translate-x, translate-y) scale(scale-x, scale-y).
-    auto translate{Numerics::make_float3x2_translation(translateX, translateY)};
-    auto scale{Numerics::make_float3x2_scale(scaleX, scaleY)};
+    auto const &translate{Numerics::make_float3x2_translation(translateX, translateY)};
+    auto const &scale{Numerics::make_float3x2_scale(scaleX, scaleY)};
 
     return scale * translate;
   }
@@ -216,8 +216,8 @@ struct Utils {
   static Color JSValueAsColor(JSValue const &value, Color defaultValue = Colors::Transparent()) {
     if (value.IsNull()) {
       return defaultValue;
-    } else if (auto brush{value.To<Xaml::Media::Brush>()}) {
-      if (auto scb{brush.try_as<Xaml::Media::SolidColorBrush>()}) {
+    } else if (auto const &brush{value.To<Xaml::Media::Brush>()}) {
+      if (auto const &scb{brush.try_as<Xaml::Media::SolidColorBrush>()}) {
         return scb.Color();
       }
     }

@@ -11,11 +11,11 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 void EllipseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
-    auto const &propertyName = pair.first;
-    auto const &propertyValue = pair.second;
+    auto const &propertyName{pair.first};
+    auto const &propertyValue{pair.second};
 
     if (propertyName == "cx") {
       m_cx = SVGLength::From(propertyValue);
@@ -32,12 +32,12 @@ void EllipseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
 }
 
 void EllipseView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
 
-  auto cx{Utils::GetSvgLengthValue(m_cx, canvas.Size().Width)};
-  auto cy{Utils::GetSvgLengthValue(m_cy, canvas.Size().Height)};
-  auto rx{Utils::GetSvgLengthValue(m_rx, canvas.Size().Width)};
-  auto ry{Utils::GetSvgLengthValue(m_ry, canvas.Size().Height)};
+  float cx{Utils::GetSvgLengthValue(m_cx, canvas.Size().Width)};
+  float cy{Utils::GetSvgLengthValue(m_cy, canvas.Size().Height)};
+  float rx{Utils::GetSvgLengthValue(m_rx, canvas.Size().Width)};
+  float ry{Utils::GetSvgLengthValue(m_ry, canvas.Size().Height)};
 
   Geometry(Geometry::CanvasGeometry::CreateEllipse(resourceCreator, cx, cy, rx, ry));
 }

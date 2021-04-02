@@ -63,7 +63,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
         if (propertyValue.IsNull()) {
           m_strokeLineCap = parent.StrokeLineCap();
         } else {
-          auto strokeLineCap{propertyValue.AsInt32()};
+          auto const &strokeLineCap{propertyValue.AsInt32()};
           switch (strokeLineCap) {
             case 2:
               m_strokeLineCap = Geometry::CanvasCapStyle::Square;
@@ -84,7 +84,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
         if (propertyValue.IsNull()) {
           m_strokeLineCap = parent.StrokeLineCap();
         } else {
-          auto strokeLineJoin{propertyValue.AsInt32()};
+          auto const &strokeLineJoin{propertyValue.AsInt32()};
           switch (strokeLineJoin) {
             case 2:
               m_strokeLineJoin = Geometry::CanvasLineJoin::Bevel;
@@ -105,7 +105,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
         if (propertyValue.IsNull()) {
           m_fillRule = parent.FillRule();
         } else {
-          auto fillRule{propertyValue.AsInt32()};
+          auto const &fillRule{propertyValue.AsInt32()};
           switch (fillRule) {
             case 0:
               m_fillRule = Geometry::CanvasFilledRegionDetermination::Alternate;
@@ -140,7 +140,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
           if (!asArray.empty() && (asArray.size() % 2 == 0)) {
             m_strokeDashArray.Clear();
 
-            for (auto &item : asArray) {
+            for (auto const &item : asArray) {
               m_strokeDashArray.Append(SVGLength::From(item));
             }
           }
@@ -193,12 +193,12 @@ void RenderableView::Render(
   geometry = geometry.Transform(SvgTransform());
   geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
 
-  if (auto fillLayer{session.CreateLayer(FillOpacity())}) {
+  if (auto const &fillLayer{session.CreateLayer(FillOpacity())}) {
     session.FillGeometry(geometry, Fill());
     fillLayer.Close();
   }
 
-  if (auto strokeLayer{session.CreateLayer(StrokeOpacity())}) {
+  if (auto const &strokeLayer{session.CreateLayer(StrokeOpacity())}) {
     Geometry::CanvasStrokeStyle strokeStyle{};
     strokeStyle.StartCap(StrokeLineCap());
     strokeStyle.EndCap(StrokeLineCap());
@@ -214,9 +214,9 @@ void RenderableView::Render(
 
 RNSVG::SvgView RenderableView::SvgRoot() {
   if (SvgParent()) {
-    if (auto svgView{SvgParent().try_as<RNSVG::SvgView>()}) {
+    if (auto const &svgView{SvgParent().try_as<RNSVG::SvgView>()}) {
       return svgView;
-    } else if (auto renderable{SvgParent().try_as<RNSVG::RenderableView>()}) {
+    } else if (auto const &renderable{SvgParent().try_as<RNSVG::RenderableView>()}) {
       return renderable.SvgRoot();
     }
   }

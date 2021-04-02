@@ -11,11 +11,11 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 void TSpanView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
-    auto const &propertyName = pair.first;
-    auto const &propertyValue = pair.second;
+    auto const &propertyName{pair.first};
+    auto const &propertyValue{pair.second};
 
     if (propertyName == "content") {
       m_content = propertyValue.AsString();
@@ -26,7 +26,7 @@ void TSpanView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
 }
 
 void TSpanView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   Microsoft::Graphics::Canvas::Text::CanvasTextFormat const& textFormat{};
   textFormat.FontSize(FontSize());
   textFormat.FontFamily(FontFamily());

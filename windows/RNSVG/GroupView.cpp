@@ -32,15 +32,15 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
 
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
-  auto parent{SvgParent().as<RNSVG::GroupView>()};
+  auto const &parent{SvgParent().as<RNSVG::GroupView>()};
   auto fontProp{RNSVG::FontProp::Unknown};
 
   for (auto const &pair : propertyMap) {
-    auto const &propertyName = pair.first;
-    auto const &propertyValue = pair.second;
+    auto const &propertyName{pair.first};
+    auto const &propertyValue{pair.second};
 
     if (propertyName == "font") {
-      auto &asObject = propertyValue.AsObject();
+      auto const &asObject = propertyValue.AsObject();
 
       // When any of the font props update, you don't get individual updates.
       // Instead, you get a new JSValueObject with all font props set on the element.
@@ -52,7 +52,7 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
         m_fontPropMap[RNSVG::FontProp::FontWeight] = false;
       }
 
-      for (auto item : m_fontPropMap) {
+      for (auto const &item : m_fontPropMap) {
         if (!item.second) {
           switch (item.first) {
             case RNSVG::FontProp::FontSize:
@@ -71,8 +71,8 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
       }
 
       for (auto const &prop : asObject) {
-        auto const &key = prop.first;
-        auto const &value = prop.second;
+        auto const &key{prop.first};
+        auto const &value{prop.second};
 
         if (key == "fontSize") {
           fontProp = RNSVG::FontProp::FontSize;
@@ -106,7 +106,7 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
 
   __super::UpdateProperties(reader, forceUpdate, false);
 
-  for (auto child : Children()) {
+  for (auto const &child : Children()) {
     child.UpdateProperties(reader, false, false);
   }
 
@@ -118,7 +118,7 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
 void GroupView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
   auto resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   std::vector<Geometry::CanvasGeometry> geometries;
-  for (auto child : Children()) {
+  for (auto const &child : Children()) {
     geometries.push_back(child.Geometry());
   }
 
@@ -134,7 +134,7 @@ void GroupView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
 }
 
 void GroupView::RenderGroup(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
-  for (auto child : Children()) {
+  for (auto const &child : Children()) {
     child.Render(canvas, session);
   }
 }

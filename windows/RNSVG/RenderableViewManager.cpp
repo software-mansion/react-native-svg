@@ -37,7 +37,7 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
 
 // IViewManagerWithNativeProperties
 IMapView<hstring, ViewManagerPropertyType> RenderableViewManager::NativeProps() {
-  auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
+  auto const &nativeProps{winrt::single_threaded_map<hstring, ViewManagerPropertyType>()};
 
   nativeProps.Insert(L"name", ViewManagerPropertyType::String);
   nativeProps.Insert(L"fill", ViewManagerPropertyType::Number);
@@ -45,7 +45,7 @@ IMapView<hstring, ViewManagerPropertyType> RenderableViewManager::NativeProps() 
   nativeProps.Insert(L"fillOpacity", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"stroke", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"strokeOpacity", ViewManagerPropertyType::Number);
-  nativeProps.Insert(L"strokeWidth", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"strokeWidth", ViewManagerPropertyType::String);
   nativeProps.Insert(L"strokeLinecap", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"strokeLinejoin", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"strokeMiterlimit", ViewManagerPropertyType::Number);
@@ -59,7 +59,7 @@ IMapView<hstring, ViewManagerPropertyType> RenderableViewManager::NativeProps() 
 void RenderableViewManager::UpdateProperties(
     Windows::UI::Xaml::FrameworkElement const &view,
     Microsoft::ReactNative::IJSValueReader const &propertyMapReader) {
-  if (auto renderable{view.try_as<RenderableView>()}) {
+  if (auto const &renderable{view.try_as<RenderableView>()}) {
     renderable->UpdateProperties(propertyMapReader);
   }
 }

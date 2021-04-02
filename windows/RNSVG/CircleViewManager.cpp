@@ -14,16 +14,16 @@ CircleViewManager::CircleViewManager() {
 Windows::Foundation::Collections::IMapView<hstring, ViewManagerPropertyType>
 CircleViewManager::NativeProps() {
 
-  auto parentProps{__super::NativeProps()};
-  auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
+  auto const &parentProps{__super::NativeProps()};
+  auto const &nativeProps{winrt::single_threaded_map<hstring, ViewManagerPropertyType>()};
 
-  for (auto prop : parentProps) {
+  for (auto const &prop : parentProps) {
     nativeProps.Insert(prop.Key(), prop.Value());
   }
 
-  nativeProps.Insert(L"cx", ViewManagerPropertyType::Number);
-  nativeProps.Insert(L"cy", ViewManagerPropertyType::Number);
-  nativeProps.Insert(L"r", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"cx", ViewManagerPropertyType::String);
+  nativeProps.Insert(L"cy", ViewManagerPropertyType::String);
+  nativeProps.Insert(L"r", ViewManagerPropertyType::String);
 
   return nativeProps.GetView();
 }

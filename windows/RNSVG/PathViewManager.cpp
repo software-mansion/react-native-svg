@@ -17,10 +17,10 @@ PathViewManager::PathViewManager() {
 
 // IViewManagerWithNativeProperties
 IMapView<hstring, ViewManagerPropertyType> PathViewManager::NativeProps() {
-  auto parentProps{__super::NativeProps()};
-  auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
+  auto const &parentProps{__super::NativeProps()};
+  auto const &nativeProps{winrt::single_threaded_map<hstring, ViewManagerPropertyType>()};
 
-  for (auto prop : parentProps) {
+  for (auto const &prop : parentProps) {
     nativeProps.Insert(prop.Key(), prop.Value());
   }
 
