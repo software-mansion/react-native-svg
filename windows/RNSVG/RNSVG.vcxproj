@@ -122,33 +122,25 @@
     <ClInclude Include="PathViewManager.h" />
     <ClInclude Include="RectView.h" />
     <ClInclude Include="RectViewManager.h" />
-    <ClInclude Include="RenderableView.h">
-      <DependentUpon>RenderableView.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClInclude>
-    <ClInclude Include="RenderableViewManager.h">
-      <DependentUpon>RenderableViewManager.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClInclude>
+    <ClInclude Include="RenderableView.h" />
+    <ClInclude Include="RenderableViewManager.h" />
     <ClInclude Include="SVGLength.h" />
+    <ClInclude Include="SvgView.h" />
+    <ClInclude Include="SvgViewManager.h" />
+    <ClInclude Include="SymbolView.h" />
+    <ClInclude Include="SymbolViewManager.h" />
     <ClInclude Include="TextView.h" />
     <ClInclude Include="TextViewManager.h" />
     <ClInclude Include="TSpanView.h" />
     <ClInclude Include="TSpanViewManager.h" />
+    <ClInclude Include="UseView.h" />
+    <ClInclude Include="UseViewManager.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="ReactPackageProvider.h">
       <DependentUpon>ReactPackageProvider.idl</DependentUpon>
     </ClInclude>
     <ClInclude Include="RNSVGModule.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="SvgView.h">
-      <DependentUpon>SvgView.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClInclude>
-    <ClInclude Include="SvgViewManager.h">
-      <DependentUpon>SvgViewManager.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CircleView.cpp" />
@@ -170,40 +162,26 @@
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="RectView.cpp" />
     <ClCompile Include="RectViewManager.cpp" />
-    <ClCompile Include="RenderableView.cpp">
-      <DependentUpon>RenderableView.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClCompile>
-    <ClCompile Include="RenderableViewManager.cpp">
-      <DependentUpon>RenderableViewManager.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClCompile>
+    <ClCompile Include="RenderableView.cpp" />
+    <ClCompile Include="RenderableViewManager.cpp" />
     <ClCompile Include="SVGLength.cpp" />
-    <ClCompile Include="SvgView.cpp">
-      <DependentUpon>SvgView.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClCompile>
-    <ClCompile Include="SvgViewManager.cpp">
-      <DependentUpon>SvgViewManager.idl</DependentUpon>
-      <SubType>Code</SubType>
-    </ClCompile>
+    <ClCompile Include="SvgView.cpp" />
+    <ClCompile Include="SvgViewManager.cpp" />
+    <ClCompile Include="SymbolView.cpp" />
+    <ClCompile Include="SymbolViewManager.cpp" />
     <ClCompile Include="TextView.cpp" />
     <ClCompile Include="TextViewManager.cpp" />
     <ClCompile Include="TSpanView.cpp" />
     <ClCompile Include="TSpanViewManager.cpp" />
+    <ClCompile Include="UseView.cpp" />
+    <ClCompile Include="UseViewManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="ReactPackageProvider.idl" />
-    <Midl Include="RenderableView.idl">
+    <Midl Include="Views.idl">
       <SubType>Designer</SubType>
     </Midl>
-    <Midl Include="RenderableViewManager.idl">
-      <SubType>Designer</SubType>
-    </Midl>
-    <Midl Include="SvgView.idl">
-      <SubType>Designer</SubType>
-    </Midl>
-    <Midl Include="SvgViewManager.idl">
+    <Midl Include="ViewManagers.idl">
       <SubType>Designer</SubType>
     </Midl>
   </ItemGroup>

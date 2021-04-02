@@ -22,10 +22,14 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
       return winrt::RNSVG::EllipseView();
     case RNSVG::SVGClass::RNSVGLine:
       return winrt::RNSVG::LineView();
+    case RNSVG::SVGClass::RNSVGUse:
+      return winrt::RNSVG::UseView();
     case RNSVG::SVGClass::RNSVGText:
       return winrt::RNSVG::TextView();
     case RNSVG::SVGClass::RNSVGTSpan:
       return winrt::RNSVG::TSpanView();
+    case RNSVG::SVGClass::RNSVGSymbol:
+      return winrt::RNSVG::SymbolView();
   }
 
   throw hresult_not_implemented();
@@ -35,6 +39,7 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
 IMapView<hstring, ViewManagerPropertyType> RenderableViewManager::NativeProps() {
   auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
 
+  nativeProps.Insert(L"name", ViewManagerPropertyType::String);
   nativeProps.Insert(L"fill", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"fillRule", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"fillOpacity", ViewManagerPropertyType::Number);

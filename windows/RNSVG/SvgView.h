@@ -8,9 +8,15 @@ struct SvgView : SvgViewT<SvgView> {
   SvgView() = default;
 
   SvgView(Microsoft::ReactNative::IReactContext const &context);
+
+  float SvgScale() { return m_scale; }
   Windows::Foundation::Collections::IVector<Windows::UI::Xaml::UIElement> Views() {
     return m_views;
   }
+  Windows::Foundation::Collections::IMap<hstring, RNSVG::RenderableView> Templates() {
+    return m_templates;
+  }
+
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader);
 
   // Overrides
@@ -45,7 +51,8 @@ struct SvgView : SvgViewT<SvgView> {
 
   Windows::Foundation::Collections::IVector<Windows::UI::Xaml::UIElement> m_views{
       winrt::single_threaded_vector<Windows::UI::Xaml::UIElement>()};
-
+  Windows::Foundation::Collections::IMap<hstring, RNSVG::RenderableView> m_templates{
+      winrt::single_threaded_map<hstring, RNSVG::RenderableView>()};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::Draw_revoker m_canvasDrawRevoker{};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::SizeChanged_revoker m_canvaSizeChangedRevoker{};
 };

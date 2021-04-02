@@ -37,7 +37,7 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
       winrt::single_threaded_vector<RNSVG::RenderableView>()};
   Microsoft::ReactNative::IJSValueReader m_props{nullptr};
 
-  float m_fontSize{16.0f};
+  float m_fontSize{12.0f};
   hstring m_fontFamily{L"Segoe UI"};
   hstring m_fontWeight{L"auto"};
 

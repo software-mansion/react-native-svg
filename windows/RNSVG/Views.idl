@@ -22,7 +22,24 @@ namespace RNSVG
 
     Single Value { get; };
     UnitType Unit { get; };
-  }
+  };
+
+  enum MeetOrSlice {
+    Meet,
+    Slice,
+    None,
+  };
+
+  [default_interface]
+  runtimeclass SvgView : Windows.UI.Xaml.Controls.Panel
+  {
+    SvgView(Microsoft.ReactNative.IReactContext context);
+    Single SvgScale{ get; };
+    Windows.Foundation.Collections.IVector<Windows.UI.Xaml.UIElement> Views { get; };
+    Windows.Foundation.Collections.IMap<String, RenderableView> Templates{ get; };
+    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
+    void InvalidateCanvas();
+  };
 
   enum BaseProp
   {
@@ -49,13 +66,21 @@ namespace RNSVG
     Unknown,
   };
 
+  interface IDefinitionView
+  {
+    void SaveDefinition();
+    void RemoveDefinition();
+  };
+
   [default_interface]
   unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
   {
     RenderableView(Microsoft.ReactNative.IReactContext context);
+    SvgView SvgRoot{ get; };
     Windows.UI.Xaml.FrameworkElement SvgParent;
     Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
 
+    String Id{ get; };
     Windows.Foundation.Numerics.Matrix3x2 SvgTransform;
     Windows.UI.Color Fill;
     Single FillOpacity;
@@ -70,43 +95,48 @@ namespace RNSVG
     Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule;
 
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
-    void InvalidateCanvas();
 
     void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
     void Render(
       Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
       Microsoft.Graphics.Canvas.CanvasDrawingSession session);
-  }
+  };
 
   [default_interface]
   runtimeclass RectView : RenderableView
   {
     RectView();
-  }
+  };
 
   [default_interface]
   runtimeclass CircleView : RenderableView
   {
     CircleView();
-  }
+  };
 
   [default_interface]
   runtimeclass EllipseView : RenderableView
   {
     EllipseView();
-  }
+  };
 
   [default_interface]
   runtimeclass LineView : RenderableView
   {
     LineView();
-  }
+  };
 
   [default_interface]
   runtimeclass PathView : RenderableView
   {
     PathView();
-  }
+  };
+
+  [default_interface]
+  runtimeclass UseView : RenderableView
+  {
+    UseView();
+  };
 
   [default_interface]
   unsealed runtimeclass GroupView : RenderableView
@@ -133,7 +163,7 @@ namespace RNSVG
     Windows.Foundation.Collections.IVector<SVGLength> Y{ get; };
     Windows.Foundation.Collections.IVector<SVGLength> DX{ get; };
     Windows.Foundation.Collections.IVector<SVGLength> DY{ get; };
-  }
+  };
 
   [default_interface]
   runtimeclass TSpanView : TextView
@@ -141,5 +171,17 @@ namespace RNSVG
     TSpanView();
 
     Windows.Foundation.Collections.IVector<SVGLength> Rotate { get; };
-  }
+  };
+
+  [default_interface]
+  runtimeclass SymbolView : GroupView, IDefinitionView
+  {
+    SymbolView();
+    Single MinX{ get; };
+    Single MinY{ get; };
+    Single VbWidth{ get; };
+    Single VbHeight{ get; };
+    String Align{ get; };
+    MeetOrSlice MeetOrSlice{ get; };
+  };
   }

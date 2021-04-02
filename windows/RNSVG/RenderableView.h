@@ -9,11 +9,15 @@ struct RenderableView : RenderableViewT<RenderableView> {
   RenderableView() = default;
   RenderableView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {}
 
+  RNSVG::SvgView SvgRoot();
+
   Windows::UI::Xaml::FrameworkElement SvgParent() { return m_parent; }
   void SvgParent(Windows::UI::Xaml::FrameworkElement const &value) { m_parent = value; }
 
   Microsoft::Graphics::Canvas::Geometry::CanvasGeometry Geometry() { return m_geometry; }
   void Geometry(Microsoft::Graphics::Canvas::Geometry::CanvasGeometry value) { m_geometry = value; }
+
+  hstring Id() { return m_id; }
 
   Numerics::float3x2 SvgTransform() { return m_transformMatrix; }
   void SvgTransform(Numerics::float3x2 const &value) { m_transformMatrix = value; }
@@ -50,9 +54,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination FillRule() { return m_fillRule; }
   void FillRule(Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination const &value) { m_fillRule = value; }
 
-  void InvalidateCanvas();
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
-  virtual void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas);
+  virtual void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &/*canvas*/) {}
   virtual void Render(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
       Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
@@ -63,6 +66,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Microsoft::Graphics::Canvas::Geometry::CanvasGeometry m_geometry{nullptr};
   bool m_recreateResources{true};
 
+  hstring m_id{L""};
   Numerics::float3x2 m_transformMatrix{Numerics::make_float3x2_rotation(0)};
   Windows::UI::Color m_fill{Windows::UI::Colors::Transparent()};
   Windows::UI::Color m_stroke{Windows::UI::Colors::Transparent()};

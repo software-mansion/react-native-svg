@@ -9,6 +9,7 @@ import {LinePage} from './examples/Line';
 import {PathPage} from './examples/Path';
 import {PolygonPage} from './examples/Polygon';
 import {PolylinePage} from './examples/Polyline';
+import {ReusablePage} from './examples/Reusable';
 
 interface ISVGExample {
   key: string;
@@ -51,6 +52,10 @@ export const SVGExampleList: Array<ISVGExample> = [
   {
     key: 'Polyline',
     component: PolylinePage,
+  },
+  {
+    key: 'Reusable',
+    component: ReusablePage,
   },
 ];
 

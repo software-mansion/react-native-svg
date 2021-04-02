@@ -26,6 +26,16 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass SvgViewManager
+    : Microsoft.ReactNative.IViewManager
+    , Microsoft.ReactNative.IViewManagerWithReactContext
+    , Microsoft.ReactNative.IViewManagerWithNativeProperties
+    , Microsoft.ReactNative.IViewManagerWithChildren
+  {
+    SvgViewManager();
+  }
+
+  [default_interface]
   unsealed runtimeclass RenderableViewManager
     : Microsoft.ReactNative.IViewManager
     , Microsoft.ReactNative.IViewManagerWithReactContext
@@ -37,31 +47,37 @@ namespace RNSVG
   [default_interface]
   runtimeclass RectViewManager : RenderableViewManager
   {
-      RectViewManager();
+    RectViewManager();
   }
 
   [default_interface]
   runtimeclass CircleViewManager : RenderableViewManager
   {
-      CircleViewManager();
+    CircleViewManager();
   }
 
   [default_interface]
   runtimeclass EllipseViewManager : RenderableViewManager
   {
-      EllipseViewManager();
+    EllipseViewManager();
   }
 
   [default_interface]
   runtimeclass LineViewManager : RenderableViewManager
   {
-      LineViewManager();
+    LineViewManager();
   }
 
   [default_interface]
   runtimeclass PathViewManager : RenderableViewManager
   {
-      PathViewManager();
+    PathViewManager();
+  }
+
+  [default_interface]
+  runtimeclass UseViewManager : RenderableViewManager
+  {
+    UseViewManager();
   }
 
   [default_interface]
@@ -69,18 +85,24 @@ namespace RNSVG
     : RenderableViewManager
     , Microsoft.ReactNative.IViewManagerWithChildren
   {
-      GroupViewManager();
+    GroupViewManager();
+  }
+
+  [default_interface]
+  runtimeclass SymbolViewManager : GroupViewManager
+  {
+    SymbolViewManager();
   }
 
   [default_interface]
   unsealed runtimeclass TextViewManager : GroupViewManager
   {
-      TextViewManager();
+    TextViewManager();
   }
 
   [default_interface]
   runtimeclass TSpanViewManager : TextViewManager
   {
-      TSpanViewManager();
+    TSpanViewManager();
   }
 }

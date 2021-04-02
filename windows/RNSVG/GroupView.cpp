@@ -17,6 +17,9 @@ using namespace Microsoft::ReactNative;
 namespace winrt::RNSVG::implementation {
 void GroupView::AddChild(RNSVG::RenderableView const &child) {
   m_children.Append(child);
+
+  // TODO: Instead of using the cached reader from first render,
+  // We need to do a pass of the currently set props.
   if (m_props) {
     child.UpdateProperties(m_props, false, false);
   }
@@ -27,7 +30,7 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
     m_props = reader;
   }
 
-  const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   auto parent{SvgParent().as<RNSVG::GroupView>()};
   auto fontProp{RNSVG::FontProp::Unknown};
@@ -53,7 +56,7 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
         if (!item.second) {
           switch (item.first) {
             case RNSVG::FontProp::FontSize:
-              m_fontSize = parent ? parent.FontSize() : 16.0f;
+              m_fontSize = parent ? parent.FontSize() : 12.0f;
               break;
             case RNSVG::FontProp::FontFamily:
               m_fontFamily = parent ? parent.FontFamily() : L"Segoe UI";
@@ -107,8 +110,8 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
     child.UpdateProperties(reader, false, false);
   }
 
-  if (invalidate) {
-    InvalidateCanvas();
+  if (invalidate && parent) {
+    SvgRoot().InvalidateCanvas();
   }
 }
 
@@ -122,9 +125,7 @@ void GroupView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
   Geometry(Geometry::CanvasGeometry::CreateGroup(resourceCreator, geometries, FillRule()));
 }
 
-void GroupView::Render(
-    UI::Xaml::CanvasControl const &canvas,
-    CanvasDrawingSession const &session) {
+void GroupView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
   if (Children().Size() == 0) {
     __super::Render(canvas, session);
   } else {
@@ -132,9 +133,7 @@ void GroupView::Render(
   }
 }
 
-void GroupView::RenderGroup(
-    UI::Xaml::CanvasControl const &canvas,
-    CanvasDrawingSession const &session) {
+void GroupView::RenderGroup(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
   for (auto child : Children()) {
     child.Render(canvas, session);
   }

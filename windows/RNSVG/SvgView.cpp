@@ -39,57 +39,19 @@ void SvgView::UpdateProperties(IJSValueReader const &reader) {
       m_bbHeight = SVGLength::From(propertyValue);
       Height(m_bbHeight.Value());
     } else if (propertyName == "vbWidth") {
-      if (propertyValue.IsNull()) {
-        m_vbWidth = 0.0f;
-      } else {
-        m_vbWidth = propertyValue.AsSingle();
-      }
+      m_vbWidth = Utils::JSValueAsFloat(propertyValue);
     } else if (propertyName == "vbHeight") {
-      if (propertyValue.IsNull()) {
-        m_vbHeight = 0.0f;
-      } else {
-        m_vbHeight = propertyValue.AsSingle();
-      }
+      m_vbHeight = Utils::JSValueAsFloat(propertyValue);
     } else if (propertyName == "minX") {
-      if (propertyValue.IsNull()) {
-        m_minX = 0.0f;
-      } else {
-        m_minX = propertyValue.AsSingle();
-      }
+      m_minX = Utils::JSValueAsFloat(propertyValue);
     } else if (propertyName == "minY") {
-      if (propertyValue.IsNull()) {
-        m_minY = 0.0f;
-      } else {
-        m_minY = propertyValue.AsSingle();
-      }
+      m_minY = Utils::JSValueAsFloat(propertyValue);
     } else if (propertyName == "align") {
-      if (propertyValue.IsNull()) {
-        m_align = "";
-      } else {
-        m_align = propertyValue.AsString();
-      }
+      m_align = Utils::JSValueAsString(propertyValue);
     } else if (propertyName == "meetOrSlice") {
-      if (propertyValue.IsNull()) {
-        m_meetOrSlice = RNSVG::MeetOrSlice::Meet;
-      } else {
-        switch (propertyValue.AsInt8()) {
-          case 2:
-            m_meetOrSlice = RNSVG::MeetOrSlice::None;
-            break;
-          case 1:
-            m_meetOrSlice = RNSVG::MeetOrSlice::Slice;
-            break;
-          case 0:
-          default:
-            m_meetOrSlice = RNSVG::MeetOrSlice::Meet;
-        }
-      }
+      m_meetOrSlice = Utils::GetMeetOrSlice(propertyValue);
     } else if (propertyName == "opacity") {
-      if (propertyValue.IsNull()) {
-        m_opacity = 1.0f;
-      } else {
-        m_opacity = propertyValue.AsSingle();
-      }
+      m_opacity = Utils::JSValueAsFloat(propertyValue, 1.0f);
     }
   }
 

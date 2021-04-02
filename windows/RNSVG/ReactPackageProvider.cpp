@@ -12,8 +12,10 @@
 #include "CircleViewManager.h"
 #include "EllipseViewManager.h"
 #include "LineViewManager.h"
+#include "UseViewManager.h"
 #include "TextViewManager.h"
 #include "TSpanViewManager.h"
+#include "SymbolViewManager.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -29,8 +31,10 @@ namespace winrt::RNSVG::implementation
     packageBuilder.AddViewManager(L"CircleViewManager", []() { return winrt::make<CircleViewManager>(); });
     packageBuilder.AddViewManager(L"EllipseViewManager", []() { return winrt::make<EllipseViewManager>(); });
     packageBuilder.AddViewManager(L"LineViewManager", []() { return winrt::make<LineViewManager>(); });
+    packageBuilder.AddViewManager(L"UseViewManager", []() { return winrt::make<UseViewManager>(); });
     packageBuilder.AddViewManager(L"TextViewManager", []() { return winrt::make<TextViewManager>(); });
     packageBuilder.AddViewManager(L"TSpanViewManager", []() { return winrt::make<TSpanViewManager>(); });
+    packageBuilder.AddViewManager(L"SymbolViewManager", []() { return winrt::make<SymbolViewManager>(); });
   }
 
 } // namespace winrt::RNSVG::implementation

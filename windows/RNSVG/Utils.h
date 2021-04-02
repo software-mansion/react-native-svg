@@ -17,21 +17,6 @@ using namespace Windows::UI::Text;
 namespace winrt::RNSVG {
 struct Utils {
  public:
-  static std::optional<Color> GetColorFromJSValue(JSValue const &value) {
-    if (auto brush = value.To<Xaml::Media::Brush>()) {
-      if (auto scb = brush.try_as<Xaml::Media::SolidColorBrush>()) {
-        return std::optional<Color>{scb.Color()};
-      }
-    }
-
-    return std::nullopt;
-  }
-
-  static bool IsTransparent(Color const &color) {
-    auto transparent{Colors::Transparent()};
-    return color.A == transparent.A && color.R == transparent.R && color.G == transparent.G && color.B == transparent.B;
-  }
-
   static std::vector<float> GetValueArray(IVector<SVGLength> const &value) {
     std::vector<float> result;
 
@@ -194,6 +179,58 @@ struct Utils {
     auto scale{Numerics::make_float3x2_scale(scaleX, scaleY)};
 
     return scale * translate;
+  }
+
+  static RNSVG::MeetOrSlice GetMeetOrSlice(JSValue const &value) {
+    if (value.IsNull()) {
+      return RNSVG::MeetOrSlice::Meet;
+    }
+
+    switch (value.AsInt8()) {
+      case 2:
+        return RNSVG::MeetOrSlice::None;
+      case 1:
+        return RNSVG::MeetOrSlice::Slice;
+      case 0:
+      default:
+        return RNSVG::MeetOrSlice::Meet;
+    }
+  }
+
+  static float JSValueAsFloat(JSValue const &value, float defaultValue = 0.0f) {
+    if (value.IsNull()) {
+      return defaultValue;
+    } else {
+      return value.AsSingle();
+    }
+  }
+
+  static std::string JSValueAsString(JSValue const &value, std::string defaultValue = "") {
+    if (value.IsNull()) {
+      return defaultValue;
+    } else {
+      return value.AsString();
+    }
+  }
+
+  static Color JSValueAsColor(JSValue const &value, Color defaultValue = Colors::Transparent()) {
+    if (value.IsNull()) {
+      return defaultValue;
+    } else if (auto brush{value.To<Xaml::Media::Brush>()}) {
+      if (auto scb{brush.try_as<Xaml::Media::SolidColorBrush>()}) {
+        return scb.Color();
+      }
+    }
+
+    return defaultValue;
+  }
+
+  static SVGLength JSValueAsSVGLength(JSValue const &value, SVGLength const &defaultValue = {}) {
+    if (value.IsNull()) {
+      return defaultValue;
+    } else {
+      return RNSVG::implementation::SVGLength::From(value);
+    }
   }
 };
 } // namespace winrt::RNSVG

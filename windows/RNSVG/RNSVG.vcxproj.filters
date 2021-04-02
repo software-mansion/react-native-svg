@@ -2,16 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Midl Include="ReactPackageProvider.idl" />
-    <Midl Include="SvgViewManager.idl">
-      <Filter>ViewManagers</Filter>
-    </Midl>
-    <Midl Include="SvgView.idl">
+    <Midl Include="Views.idl">
       <Filter>Views</Filter>
     </Midl>
-    <Midl Include="RenderableView.idl">
-      <Filter>Views</Filter>
-    </Midl>
-    <Midl Include="RenderableViewManager.idl">
+    <Midl Include="ViewManagers.idl">
       <Filter>ViewManagers</Filter>
     </Midl>
   </ItemGroup>
@@ -28,9 +22,6 @@
     <ClCompile Include="RectViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
-    <ClCompile Include="GroupViewManager.cpp">
-      <Filter>ViewManagers</Filter>
-    </ClCompile>
     <ClCompile Include="PathViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
@@ -43,14 +34,8 @@
     <ClCompile Include="TextView.cpp">
       <Filter>Views\GroupViews</Filter>
     </ClCompile>
-    <ClCompile Include="TextViewManager.cpp">
-      <Filter>ViewManagers</Filter>
-    </ClCompile>
     <ClCompile Include="TSpanView.cpp">
       <Filter>Views\GroupViews</Filter>
-    </ClCompile>
-    <ClCompile Include="TSpanViewManager.cpp">
-      <Filter>ViewManagers</Filter>
     </ClCompile>
     <ClCompile Include="CircleView.cpp">
       <Filter>Views</Filter>
@@ -70,6 +55,39 @@
     <ClCompile Include="LineView.cpp">
       <Filter>Views</Filter>
     </ClCompile>
+    <ClCompile Include="RenderableView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="SvgView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="SymbolView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="SvgViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="TextViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="TSpanViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="UseView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="SymbolViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="UseViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -87,9 +105,6 @@
     <ClInclude Include="RectViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
-    <ClInclude Include="GroupViewManager.h">
-      <Filter>ViewManagers</Filter>
-    </ClInclude>
     <ClInclude Include="PathViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
@@ -102,14 +117,8 @@
     <ClInclude Include="TextView.h">
       <Filter>Views\GroupViews</Filter>
     </ClInclude>
-    <ClInclude Include="TextViewManager.h">
-      <Filter>ViewManagers</Filter>
-    </ClInclude>
     <ClInclude Include="TSpanView.h">
       <Filter>Views\GroupViews</Filter>
-    </ClInclude>
-    <ClInclude Include="TSpanViewManager.h">
-      <Filter>ViewManagers</Filter>
     </ClInclude>
     <ClInclude Include="CircleView.h">
       <Filter>Views</Filter>
@@ -129,6 +138,39 @@
     <ClInclude Include="LineView.h">
       <Filter>Views</Filter>
     </ClInclude>
+    <ClInclude Include="RenderableView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="SvgView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="SvgViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="TSpanViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="UseView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="UseViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />
@@ -146,6 +188,9 @@
     </Filter>
     <Filter Include="Views\GroupViews">
       <UniqueIdentifier>{96f26034-8559-4794-a806-4ecac541e02b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewManagers\GroupViewManagers">
+      <UniqueIdentifier>{5942afc3-8b5d-4d8c-bb09-e82581f606b7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
