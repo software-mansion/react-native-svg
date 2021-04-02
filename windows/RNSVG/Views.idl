@@ -81,18 +81,20 @@ namespace RNSVG
     Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
 
     String Id{ get; };
-    Windows.Foundation.Numerics.Matrix3x2 SvgTransform;
-    Windows.UI.Color Fill;
-    Single FillOpacity;
-    Windows.UI.Color Stroke;
-    Single StrokeOpacity;
-    SVGLength StrokeWidth;
-    Single StrokeMiterLimit;
-    Single StrokeDashOffset;
+    Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
+    Windows.UI.Color Fill{ get; };
+    Single FillOpacity{ get; };
+    String FillBrushId{ get; };
+    Windows.UI.Color Stroke{ get; };
+    Single StrokeOpacity{ get; };
+    String StrokeBrushId{ get; };
+    SVGLength StrokeWidth{ get; };
+    Single StrokeMiterLimit{ get; };
+    Single StrokeDashOffset{ get; };
     Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
-    Microsoft.Graphics.Canvas.Geometry.CanvasCapStyle StrokeLineCap;
-    Microsoft.Graphics.Canvas.Geometry.CanvasLineJoin StrokeLineJoin;
-    Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule;
+    Microsoft.Graphics.Canvas.Geometry.CanvasCapStyle StrokeLineCap{ get; };
+    Microsoft.Graphics.Canvas.Geometry.CanvasLineJoin StrokeLineJoin{ get; };
+    Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule{ get; };
 
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
 
