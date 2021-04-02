@@ -48,14 +48,24 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
     } else if (propertyName == "stroke") {
       prop = RNSVG::BaseProp::Stroke;
       if (forceUpdate || !m_propSetMap[prop]) {
-        Windows::UI::Color fallbackColor{parent ? parent.Stroke() : Windows::UI::Colors::Transparent()};
-        m_stroke = Utils::JSValueAsColor(propertyValue, fallbackColor);
+        if (propertyValue.Type() == JSValueType::Array) {
+          auto const &brush{propertyValue.AsArray()};
+          m_strokeBrushId = to_hstring(Utils::JSValueAsString(brush.at(1)));
+        } else {
+          Windows::UI::Color fallbackColor{parent ? parent.Stroke() : Windows::UI::Colors::Transparent()};
+          m_stroke = Utils::JSValueAsColor(propertyValue, fallbackColor);
+        }
       }
     } else if (propertyName == "fill") {
       prop = RNSVG::BaseProp::Fill;
       if (forceUpdate || !m_propSetMap[prop]) {
-        Windows::UI::Color fallbackColor{parent ? parent.Fill() : Windows::UI::Colors::Transparent()};
-        m_fill = Utils::JSValueAsColor(propertyValue, fallbackColor);
+        if (propertyValue.Type() == JSValueType::Array) {
+          auto const &brush{propertyValue.AsArray()};
+          m_fillBrushId = to_hstring(Utils::JSValueAsString(brush.at(1)));
+        } else {
+          Windows::UI::Color fallbackColor{parent ? parent.Fill() : Windows::UI::Colors::Transparent()};
+          m_fill = Utils::JSValueAsColor(propertyValue, fallbackColor);
+        }
       }
     } else if (propertyName == "strokeLinecap") {
       prop = RNSVG::BaseProp::StrokeLineCap;
@@ -194,7 +204,8 @@ void RenderableView::Render(
   geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
 
   if (auto const &fillLayer{session.CreateLayer(FillOpacity())}) {
-    session.FillGeometry(geometry, Fill());
+    auto const &fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), resourceCreator)};
+    session.FillGeometry(geometry, fill);
     fillLayer.Close();
   }
 
@@ -207,7 +218,8 @@ void RenderableView::Render(
     strokeStyle.MiterLimit(StrokeMiterLimit());
     strokeStyle.CustomDashStyle(Utils::GetValueArray(StrokeDashArray()));
 
-    session.DrawGeometry(geometry, Stroke(), StrokeWidth().Value(), strokeStyle);
+    auto const &stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), resourceCreator)};
+    session.DrawGeometry(geometry, stroke, StrokeWidth().Value(), strokeStyle);
     strokeLayer.Close();
   }
 }

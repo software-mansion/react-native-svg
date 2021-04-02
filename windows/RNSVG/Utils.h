@@ -2,6 +2,7 @@
 
 #include "pch.h"
 
+#include <winrt/Microsoft.Graphics.Canvas.Brushes.h>
 #include <winrt/Windows.Foundation.Numerics.h>
 #include <winrt/Windows.UI.Text.h>
 #include "JSValueReader.h"
@@ -10,6 +11,7 @@
 #include <math.h>
 
 using namespace winrt;
+using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 using namespace Windows::UI;
 using namespace Windows::UI::Text;
@@ -231,6 +233,23 @@ struct Utils {
     } else {
       return RNSVG::implementation::SVGLength::From(value);
     }
+  }
+
+  static Brushes::ICanvasBrush GetCanvasBrush(
+      hstring const &brushId,
+      Color color,
+      RNSVG::SvgView const &/*root*/,
+      ICanvasResourceCreator const &resourceCreator) {
+    Brushes::ICanvasBrush brush{nullptr};
+    if (brushId != L"") {
+      // Try to get brush from SvgRoot
+    }
+
+    if (!brush) {
+      brush = Brushes::CanvasSolidColorBrush(resourceCreator, color);
+    }
+
+    return brush;
   }
 };
 } // namespace winrt::RNSVG
