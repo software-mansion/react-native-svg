@@ -9,7 +9,6 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
   GroupView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {}
 
   Windows::Foundation::Collections::IVector<RNSVG::RenderableView> Children() { return m_children; }
-  void AddChild(RNSVG::RenderableView const &child);
 
   hstring FontFamily() { return m_fontFamily; }
   void FontFamily(hstring const &value) { m_fontFamily = value; }
@@ -41,7 +40,6 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Windows::Foundation::Collections::IVector<RNSVG::RenderableView> m_children{
       winrt::single_threaded_vector<RNSVG::RenderableView>()};
-  Microsoft::ReactNative::IJSValueReader m_props{nullptr};
 
   float m_fontSize{12.0f};
   hstring m_fontFamily{L"Segoe UI"};

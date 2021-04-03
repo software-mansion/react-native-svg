@@ -151,8 +151,6 @@ namespace RNSVG
     String FontFamily;
     String FontWeight;
 
-    void AddChild(RenderableView child);
-
     void RenderGroup(
         Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
         Microsoft.Graphics.Canvas.CanvasDrawingSession session);

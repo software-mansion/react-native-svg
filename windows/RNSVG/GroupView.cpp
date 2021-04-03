@@ -15,21 +15,7 @@ using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void GroupView::AddChild(RNSVG::RenderableView const &child) {
-  m_children.Append(child);
-
-  // TODO: Instead of using the cached reader from first render,
-  // We need to do a pass of the currently set props.
-  if (m_props) {
-    child.UpdateProperties(m_props, false, false);
-  }
-}
-
 void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  if (!m_props) {
-    m_props = reader;
-  }
-
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   auto const &parent{SvgParent().as<RNSVG::GroupView>()};
@@ -169,7 +155,6 @@ void GroupView::Unload() {
   }
 
   m_reactContext = nullptr;
-  m_props = nullptr;
   m_fontPropMap.clear();
   m_children.Clear();
 
