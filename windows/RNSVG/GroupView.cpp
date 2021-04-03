@@ -133,17 +133,46 @@ void GroupView::SaveDefinition() {
   }
 }
 
+void GroupView::MergeProperties(RNSVG::RenderableView const &other) {
+  __super::MergeProperties(other);
+
+  for (auto const &child : Children()) {
+    child.MergeProperties(*this);
+  }
+}
+
 void GroupView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
+  auto const &transform{session.Transform()};
+
+  if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
+    session.Transform(transform * SvgTransform());
+  }
+
   if (Children().Size() == 0) {
     __super::Render(canvas, session);
   } else {
     RenderGroup(canvas, session);
   }
+
+  session.Transform(transform);
 }
 
 void GroupView::RenderGroup(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
   for (auto const &child : Children()) {
     child.Render(canvas, session);
   }
+}
+
+void GroupView::Unload() {
+  for (auto const &child : Children()) {
+    child.Unload();
+  }
+
+  m_reactContext = nullptr;
+  m_props = nullptr;
+  m_fontPropMap.clear();
+  m_children.Clear();
+
+  __super::Unload();
 }
 } // namespace winrt::RNSVG::implementation

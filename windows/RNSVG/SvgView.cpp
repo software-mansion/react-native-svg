@@ -21,6 +21,8 @@ SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
 
   m_canvasDrawRevoker = m_canvas.Draw(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_Draw});
   m_canvaSizeChangedRevoker = m_canvas.SizeChanged(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_SizeChanged});
+  m_panelUnloadedRevoker = Unloaded(winrt::auto_revoke, {get_weak(), &SvgView::Panel_Unloaded});
+
   Children().Append(m_canvas);
 }
 
@@ -101,7 +103,7 @@ void SvgView::Canvas_Draw(UI::Xaml::CanvasControl const &sender, UI::Xaml::Canva
 }
 
 void SvgView::Canvas_SizeChanged(
-    IInspectable const &/*sender*/,
+    IInspectable const & /*sender*/,
     Windows::UI::Xaml::SizeChangedEventArgs const & /*args*/) {
   // sender.Invalidate();
 }
@@ -109,6 +111,24 @@ void SvgView::Canvas_SizeChanged(
 void SvgView::InvalidateCanvas() {
   if (m_hasRendered) {
     m_canvas.Invalidate();
+  }
+}
+
+void SvgView::Panel_Unloaded(IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const & /*args*/) {
+  if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
+    m_reactContext = nullptr;
+    m_templates.Clear();
+    m_brushes.Clear();
+    m_canvas.RemoveFromVisualTree();
+    m_canvas = nullptr;
+
+    for (auto const &child : m_views) {
+      if (auto const &renderable{child.try_as<RNSVG::RenderableView>()}) {
+        renderable.Unload();
+      }
+    }
+
+    m_views.Clear();
   }
 }
 } // namespace winrt::RNSVG::implementation

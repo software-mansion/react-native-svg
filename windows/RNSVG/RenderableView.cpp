@@ -13,7 +13,7 @@ using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate){
+void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
   auto const &parent{SvgParent().try_as<RNSVG::RenderableView>()};
 
@@ -36,7 +36,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
     } else if (propertyName == "strokeWidth") {
       prop = RNSVG::BaseProp::StrokeWidth;
       if (forceUpdate || !m_propSetMap[prop]) {
-        auto const &fallbackValue{parent ? parent.StrokeWidth() : RNSVG::SVGLength()};
+        auto const &fallbackValue{parent ? parent.StrokeWidth() : RNSVG::SVGLength(1.0f, RNSVG::UnitType::PX)};
         m_strokeWidth = Utils::JSValueAsSVGLength(propertyValue, fallbackValue);
       }
     } else if (propertyName == "strokeOpacity") {
@@ -164,10 +164,12 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
       }
     } else if (propertyName == "matrix") {
       prop = RNSVG::BaseProp::Matrix;
-      if (forceUpdate || !m_propSetMap[prop]) {
+      if (forceUpdate) {
         Numerics::float3x2 fallbackValue{parent ? parent.SvgTransform() : Numerics::make_float3x2_rotation(0)};
         m_transformMatrix = Utils::JSValueAsTransform(propertyValue, fallbackValue);
       }
+    } else if (propertyName == "opacity") {
+      m_opacity = Utils::JSValueAsFloat(propertyValue);
     }
 
     // forceUpdate = true means the property is being set on an element
@@ -201,7 +203,10 @@ void RenderableView::Render(
   }
 
   auto geometry{Geometry()};
-  geometry = geometry.Transform(SvgTransform());
+  if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
+    geometry = geometry.Transform(SvgTransform());
+  }
+
   geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
 
   if (auto const &fillLayer{session.CreateLayer(FillOpacity())}) {
@@ -225,6 +230,53 @@ void RenderableView::Render(
   }
 }
 
+void RenderableView::MergeProperties(RNSVG::RenderableView const &other) {
+  for (auto const &prop : m_propSetMap) {
+    if (!prop.second) {
+      switch (prop.first) {
+        case RNSVG::BaseProp::Fill:
+          m_fill = other.Fill();
+          m_fillBrushId = other.FillBrushId();
+          break;
+        case RNSVG::BaseProp::FillOpacity:
+          m_fillOpacity = other.FillOpacity();
+          break;
+        case RNSVG::BaseProp::FillRule:
+          m_fillRule = other.FillRule();
+          break;
+        case RNSVG::BaseProp::Stroke:
+          m_stroke = other.Stroke();
+          m_strokeBrushId = other.StrokeBrushId();
+          break;
+        case RNSVG::BaseProp::StrokeOpacity:
+          m_strokeOpacity = other.StrokeOpacity();
+          break;
+        case RNSVG::BaseProp::StrokeWidth:
+          m_strokeWidth = other.StrokeWidth();
+          break;
+        case RNSVG::BaseProp::StrokeMiterLimit:
+          m_strokeMiterLimit = other.StrokeMiterLimit();
+          break;
+        case RNSVG::BaseProp::StrokeDashOffset:
+          m_strokeDashOffset = other.StrokeDashOffset();
+          break;
+        case RNSVG::BaseProp::StrokeDashArray:
+          m_strokeDashArray = other.StrokeDashArray();
+          break;
+        case RNSVG::BaseProp::StrokeLineCap:
+          m_strokeLineCap = other.StrokeLineCap();
+          break;
+        case RNSVG::BaseProp::StrokeLineJoin:
+          m_strokeLineJoin = other.StrokeLineJoin();
+          break;
+        case RNSVG::BaseProp::Unknown:
+        default:
+          break;
+      }
+    }
+  }
+}
+
 RNSVG::SvgView RenderableView::SvgRoot() {
   if (SvgParent()) {
     if (auto const &svgView{SvgParent().try_as<RNSVG::SvgView>()}) {
@@ -235,5 +287,13 @@ RNSVG::SvgView RenderableView::SvgRoot() {
   }
 
   return {nullptr};
+}
+
+void RenderableView::Unload() {
+  m_parent = nullptr;
+  m_reactContext = nullptr;
+  m_geometry = nullptr;
+  m_propSetMap.clear();
+  m_strokeDashArray.Clear();
 }
 } // namespace winrt::RNSVG::implementation

@@ -34,12 +34,31 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin StrokeLineJoin() { return m_strokeLineJoin; }
   Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination FillRule() { return m_fillRule; }
 
+  virtual void MergeProperties(RNSVG::RenderableView const &other);
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
   virtual void SaveDefinition();
   virtual void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &/*canvas*/) {}
   virtual void Render(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
       Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  virtual void Unload();
+
+ protected:
+  std::map<RNSVG::BaseProp, bool> m_propSetMap{
+      {RNSVG::BaseProp::Matrix, false},
+      {RNSVG::BaseProp::Fill, false},
+      {RNSVG::BaseProp::FillOpacity, false},
+      {RNSVG::BaseProp::FillRule, false},
+      {RNSVG::BaseProp::Stroke, false},
+      {RNSVG::BaseProp::StrokeOpacity, false},
+      {RNSVG::BaseProp::StrokeWidth, false},
+      {RNSVG::BaseProp::StrokeMiterLimit, false},
+      {RNSVG::BaseProp::StrokeDashOffset, false},
+      {RNSVG::BaseProp::StrokeDashArray, false},
+      {RNSVG::BaseProp::StrokeLineCap, false},
+      {RNSVG::BaseProp::StrokeLineJoin, false},
+  };
+  float m_opacity{1.0f};
 
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
@@ -57,7 +76,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   float m_strokeOpacity{1.0f};
   float m_strokeMiterLimit{0.0f};
   float m_strokeDashOffset{0.0f};
-  RNSVG::SVGLength m_strokeWidth{};
+  RNSVG::SVGLength m_strokeWidth{1.0f, RNSVG::UnitType::PX};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_strokeDashArray{
       winrt::single_threaded_vector<RNSVG::SVGLength>()};
   Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle m_strokeLineCap{
@@ -66,21 +85,6 @@ struct RenderableView : RenderableViewT<RenderableView> {
       Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin::Miter};
   Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination m_fillRule{
       Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination::Winding};
-
-  std::map<RNSVG::BaseProp, bool> m_propSetMap{
-      {RNSVG::BaseProp::Matrix, false},
-      {RNSVG::BaseProp::Fill, false},
-      {RNSVG::BaseProp::FillOpacity, false},
-      {RNSVG::BaseProp::FillRule, false},
-      {RNSVG::BaseProp::Stroke, false},
-      {RNSVG::BaseProp::StrokeOpacity, false},
-      {RNSVG::BaseProp::StrokeWidth, false},
-      {RNSVG::BaseProp::StrokeMiterLimit, false},
-      {RNSVG::BaseProp::StrokeDashOffset, false},
-      {RNSVG::BaseProp::StrokeDashArray, false},
-      {RNSVG::BaseProp::StrokeLineCap, false},
-      {RNSVG::BaseProp::StrokeLineJoin, false},
-  };
 };
 } // namespace winrt::RNSVG::implementation
 

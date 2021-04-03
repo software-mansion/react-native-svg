@@ -54,6 +54,11 @@ void LinearGradientView::UpdateProperties(IJSValueReader const &reader, bool for
   SaveDefinition();
 }
 
+void LinearGradientView::Unload() {
+  m_stops.clear();
+  __super::Unload();
+}
+
 void LinearGradientView::CreateBrush() {
   auto const &canvas{SvgRoot().Canvas()};
   auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};

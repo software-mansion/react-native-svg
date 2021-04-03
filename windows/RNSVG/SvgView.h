@@ -36,6 +36,8 @@ struct SvgView : SvgViewT<SvgView> {
       Windows::Foundation::IInspectable const &sender,
       Windows::UI::Xaml::SizeChangedEventArgs const &args);
 
+  void Panel_Unloaded(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &args);
+
   void InvalidateCanvas();
 
  private:
@@ -61,6 +63,7 @@ struct SvgView : SvgViewT<SvgView> {
       winrt::single_threaded_map<hstring, RNSVG::BrushView>()};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::Draw_revoker m_canvasDrawRevoker{};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::SizeChanged_revoker m_canvaSizeChangedRevoker{};
+  Windows::UI::Xaml::FrameworkElement::Unloaded_revoker m_panelUnloadedRevoker{};
 };
 } // namespace winrt::RNSVG::implementation
 

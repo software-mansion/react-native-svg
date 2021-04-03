@@ -11,7 +11,9 @@ struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {
 
   Microsoft::Graphics::Canvas::Brushes::ICanvasBrush Brush() { return m_brush; }
   virtual void CreateBrush() {}
+  virtual void Unload();
   void SetBounds(Windows::Foundation::Rect const &rect);
+
 
  protected:
   Microsoft::Graphics::Canvas::Brushes::ICanvasBrush m_brush{nullptr};

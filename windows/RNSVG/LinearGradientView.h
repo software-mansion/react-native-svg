@@ -9,6 +9,7 @@ struct LinearGradientView : LinearGradientViewT<LinearGradientView, RNSVG::imple
 
   // RenderableView
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+  void Unload();
 
  private:
   RNSVG::SVGLength m_x1{};

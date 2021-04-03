@@ -38,8 +38,11 @@ void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
 
 void UseView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
   if (auto const &view{GetRenderableTemplate()}) {
+    auto const &originalTransform{session.Transform()};
+    auto transform{Numerics::make_float3x2_scale(1)};
+
+    // Figure out any necessary transforms
     if (auto const &symbol{view.try_as<RNSVG::SymbolView>()}) {
-      auto const &transform{session.Transform()};
       if (symbol.Align() != L"") {
         if (auto const &root{SvgRoot()}) {
           Rect vbRect{
@@ -54,15 +57,43 @@ void UseView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession
           float elHeight{Utils::GetSvgLengthValue(m_height, canvas.Size().Height)};
           Rect elRect{elX, elY, elWidth, elHeight};
 
-          session.Transform(Utils::GetViewBoxTransform(vbRect, elRect, to_string(symbol.Align()), symbol.MeetOrSlice()));
+          transform = Utils::GetViewBoxTransform(vbRect, elRect, to_string(symbol.Align()), symbol.MeetOrSlice());
         }
       }
-
-      symbol.RenderGroup(canvas, session);
-      session.Transform(transform);
     } else {
-      view.Render(canvas, session);
+      float x{Utils::GetSvgLengthValue(m_x, canvas.Size().Width)};
+      float y{Utils::GetSvgLengthValue(m_y, canvas.Size().Height)};
+      transform = Numerics::make_float3x2_translation({x, y});
     }
+
+    // Combine new transform with existing one if it's set
+    if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
+      transform = transform * SvgTransform();
+    }
+
+    session.Transform(transform);
+
+    // Propagate props to template
+    view.MergeProperties(*this);
+
+    // Set opacity and render
+    if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
+      if (auto const &symbol{view.try_as<RNSVG::SymbolView>()}) {
+        symbol.RenderGroup(canvas, session);
+      } else {
+        view.Render(canvas, session);
+      }
+      opacityLayer.Close();
+    }
+
+    // Restore original template props
+    if (auto const &parent{view.SvgParent().try_as<RNSVG::RenderableView>()}) {
+      view.MergeProperties(parent);
+    }
+
+    // Restore session transform
+    session.Transform(originalTransform);
+
   } else {
     throw hresult_not_implemented(L"'Use' element expected a pre-defined svg template as 'href' prop. Template named: " + m_href + L" is not defined");
   }
