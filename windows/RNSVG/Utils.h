@@ -19,7 +19,7 @@ using namespace Windows::UI::Text;
 namespace winrt::RNSVG {
 struct Utils {
  public:
-  static std::vector<float> GetAdjustedStrokeArray(IVector<SVGLength> const &value, float StrokeWidth) {
+  static std::vector<float> GetAdjustedStrokeArray(IVector<SVGLength> const &value, float strokeWidth) {
     std::vector<float> result;
 
     for (auto const &item : value) {
@@ -27,7 +27,7 @@ struct Utils {
       * we divide each value in the dashArray by StrokeWidth to account for this. 
       http://microsoft.github.io/Win2D/WinUI2/html/P_Microsoft_Graphics_Canvas_Geometry_CanvasStrokeStyle_CustomDashStyle.htm
       */
-      result.push_back(item.Value() / StrokeWidth);
+      result.push_back(item.Value() / strokeWidth == 0.0f ? 1.0f : strokeWidth);
     }
 
     return std::move(result);

@@ -226,7 +226,7 @@ void RenderableView::Render(
     strokeStyle.CustomDashStyle(Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth));
 
     auto const &stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry, resourceCreator)};
-    session.DrawGeometry(geometry, stroke, StrokeWidth().Value(), strokeStyle);
+    session.DrawGeometry(geometry, stroke, strokeWidth, strokeStyle);
     strokeLayer.Close();
   }
 }
