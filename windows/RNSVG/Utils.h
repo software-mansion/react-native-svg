@@ -19,11 +19,11 @@ using namespace Windows::UI::Text;
 namespace winrt::RNSVG {
 struct Utils {
  public:
-  static std::vector<float> GetValueArray(IVector<SVGLength> const &value) {
+  static std::vector<float> GetAdjustedStrokeArray(IVector<SVGLength> const &value, SVGLength StrokeWidth) {
     std::vector<float> result;
 
     for (auto const &item : value) {
-      result.push_back(item.Value());
+      result.push_back(item.Value() / StrokeWidth.Value());
     }
 
     return std::move(result);

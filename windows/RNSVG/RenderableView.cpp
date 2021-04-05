@@ -222,7 +222,7 @@ void RenderableView::Render(
     strokeStyle.LineJoin(StrokeLineJoin());
     strokeStyle.DashOffset(StrokeDashOffset());
     strokeStyle.MiterLimit(StrokeMiterLimit());
-    strokeStyle.CustomDashStyle(Utils::GetValueArray(StrokeDashArray()));
+    strokeStyle.CustomDashStyle(Utils::GetAdjustedStrokeArray(StrokeDashArray(), StrokeWidth()));
 
     auto const &stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry, resourceCreator)};
     session.DrawGeometry(geometry, stroke, StrokeWidth().Value(), strokeStyle);
