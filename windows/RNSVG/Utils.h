@@ -19,11 +19,15 @@ using namespace Windows::UI::Text;
 namespace winrt::RNSVG {
 struct Utils {
  public:
-  static std::vector<float> GetAdjustedStrokeArray(IVector<SVGLength> const &value, SVGLength StrokeWidth) {
+  static std::vector<float> GetAdjustedStrokeArray(IVector<SVGLength> const &value, float StrokeWidth) {
     std::vector<float> result;
 
     for (auto const &item : value) {
-      result.push_back(item.Value() / StrokeWidth.Value());
+      /* Win2D sets the length of each dash as the product of the element value in array and stroke width,
+      * we divide each value in the dashArray by StrokeWidth to account for this. 
+      http://microsoft.github.io/Win2D/WinUI2/html/P_Microsoft_Graphics_Canvas_Geometry_CanvasStrokeStyle_CustomDashStyle.htm
+      */
+      result.push_back(item.Value() / StrokeWidth);
     }
 
     return std::move(result);
