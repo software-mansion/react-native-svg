@@ -18,6 +18,7 @@
 #include "SymbolViewManager.h"
 #include "DefsViewManager.h"
 #include "LinearGradientViewManager.h"
+#include "PatternViewManager.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -39,6 +40,7 @@ namespace winrt::RNSVG::implementation
     packageBuilder.AddViewManager(L"SymbolViewManager", []() { return winrt::make<SymbolViewManager>(); });
     packageBuilder.AddViewManager(L"DefsViewManager", []() { return winrt::make<DefsViewManager>(); });
     packageBuilder.AddViewManager(L"LinearGradientViewManager", []() { return winrt::make<LinearGradientViewManager>(); });
+    packageBuilder.AddViewManager(L"PatternViewManager", []() { return winrt::make<PatternViewManager>(); });
   }
 
 } // namespace winrt::RNSVG::implementation

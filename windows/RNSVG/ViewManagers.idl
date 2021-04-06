@@ -101,6 +101,12 @@ namespace RNSVG
   }
 
   [default_interface]
+  runtimeclass PatternViewManager : GroupViewManager
+  {
+    PatternViewManager();
+  }
+
+  [default_interface]
   runtimeclass SymbolViewManager : GroupViewManager
   {
     SymbolViewManager();

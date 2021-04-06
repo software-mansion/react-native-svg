@@ -125,6 +125,8 @@
     <ClInclude Include="LineViewManager.h" />
     <ClInclude Include="PathView.h" />
     <ClInclude Include="PathViewManager.h" />
+    <ClInclude Include="PatternView.h" />
+    <ClInclude Include="PatternViewManager.h" />
     <ClInclude Include="RectView.h" />
     <ClInclude Include="RectViewManager.h" />
     <ClInclude Include="RenderableView.h" />
@@ -162,6 +164,8 @@
     <ClCompile Include="LineView.cpp" />
     <ClCompile Include="LineViewManager.cpp" />
     <ClCompile Include="PathView.cpp" />
+    <ClCompile Include="PatternView.cpp" />
+    <ClCompile Include="PatternViewManager.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

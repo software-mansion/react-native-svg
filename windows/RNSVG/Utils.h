@@ -203,6 +203,20 @@ struct Utils {
     }
   }
 
+  static std::string JSValueAsBrushUnits(JSValue const &value, std::string defaultValue = "objectBoundingBox") {
+    if (value.IsNull()) {
+      return defaultValue;
+    } else {
+      switch (value.AsInt32()) {
+        case 1:
+          return "userSpaceOnUse";
+        case 0:
+        default:
+          return "objectBoundingBox";
+      }
+    }
+  }
+
   static float JSValueAsFloat(JSValue const &value, float defaultValue = 0.0f) {
     if (value.IsNull()) {
       return defaultValue;

@@ -27,18 +27,7 @@ void LinearGradientView::UpdateProperties(IJSValueReader const &reader, bool for
     } else if (propertyName == "gradient") {
       m_stops = Utils::JSValueAsStops(propertyValue);
     } else if (propertyName == "gradientUnits") {
-      if (propertyValue.IsNull()) {
-        m_gradientUnits = "objectBoundingBox";
-      } else {
-        switch (propertyValue.AsInt32()) {
-          case 1:
-            m_gradientUnits = "userSpaceOnUse";
-            break;
-          case 0:
-          default:
-            m_gradientUnits = "objectBoundingBox";
-        }
-      }
+      m_gradientUnits = Utils::JSValueAsBrushUnits(propertyValue);
     } else if (propertyName == "gradientTransform") {
       m_transformSet = true;
       m_transform = Utils::JSValueAsTransform(propertyValue);

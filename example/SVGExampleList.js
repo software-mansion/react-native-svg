@@ -12,6 +12,7 @@ import {PolylinePage} from './examples/Polyline';
 import {ReusablePage} from './examples/Reusable';
 import {GradientsPage} from './examples/Gradients';
 import {StrokingPage} from './examples/Stroking';
+import {PatternPage} from './examples/Pattern';
 
 interface ISVGExample {
   key: string;
@@ -66,6 +67,10 @@ export const SVGExampleList: Array<ISVGExample> = [
   {
     key: 'Stroking',
     component: StrokingPage,
+  },
+  {
+    key: 'Pattern',
+    component: PatternPage,
   },
 ];
 

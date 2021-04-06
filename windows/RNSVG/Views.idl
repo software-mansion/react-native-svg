@@ -207,4 +207,10 @@ namespace RNSVG
   {
     LinearGradientView();
   };
+
+  [default_interface]
+  runtimeclass PatternView : BrushView
+  {
+    PatternView();
+  };
   }
