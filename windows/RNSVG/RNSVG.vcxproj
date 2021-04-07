@@ -192,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <Midl Include="ReactPackageProvider.idl" />
+    <Midl Include="Types.idl" />
     <Midl Include="Views.idl">
       <SubType>Designer</SubType>
     </Midl>

@@ -34,10 +34,10 @@ void EllipseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
 void EllipseView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
   auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
 
-  float cx{Utils::GetSvgLengthValue(m_cx, canvas.Size().Width)};
-  float cy{Utils::GetSvgLengthValue(m_cy, canvas.Size().Height)};
-  float rx{Utils::GetSvgLengthValue(m_rx, canvas.Size().Width)};
-  float ry{Utils::GetSvgLengthValue(m_ry, canvas.Size().Height)};
+  float cx{Utils::GetAbsoluteLength(m_cx, canvas.Size().Width)};
+  float cy{Utils::GetAbsoluteLength(m_cy, canvas.Size().Height)};
+  float rx{Utils::GetAbsoluteLength(m_rx, canvas.Size().Width)};
+  float ry{Utils::GetAbsoluteLength(m_ry, canvas.Size().Height)};
 
   Geometry(Geometry::CanvasGeometry::CreateEllipse(resourceCreator, cx, cy, rx, ry));
 }

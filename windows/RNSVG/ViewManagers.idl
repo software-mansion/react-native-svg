@@ -1,30 +1,7 @@
+import "Types.idl";
+
 namespace RNSVG
 {
-  enum SVGClass
-  {
-    RNSVGGroup,
-    RNSVGPath,
-    RNSVGText,
-    RNSVGTSpan,
-    RNSVGTextPath,
-    RNSVGImage,
-    RNSVGCircle,
-    RNSVGEllipse,
-    RNSVGLine,
-    RNSVGRect,
-    RNSVGClipPath,
-    RNSVGDefs,
-    RNSVGUse,
-    RNSVGSymbol,
-    RNSVGLinearGradient,
-    RNSVGRadialGradient,
-    RNSVGPattern,
-    RNSVGMask,
-    RNSVGMarker,
-    RNSVGForeignObject,
-    Unknown,
-  };
-
   [default_interface]
   runtimeclass SvgViewManager
     : Microsoft.ReactNative.IViewManager
@@ -33,7 +10,7 @@ namespace RNSVG
     , Microsoft.ReactNative.IViewManagerWithChildren
   {
     SvgViewManager();
-  }
+  };
 
   [default_interface]
   unsealed runtimeclass RenderableViewManager
@@ -42,43 +19,43 @@ namespace RNSVG
     , Microsoft.ReactNative.IViewManagerWithNativeProperties
   {
     RenderableViewManager();
-  }
+  };
 
   [default_interface]
   runtimeclass RectViewManager : RenderableViewManager
   {
     RectViewManager();
-  }
+  };
 
   [default_interface]
   runtimeclass CircleViewManager : RenderableViewManager
   {
     CircleViewManager();
-  }
+  };
 
   [default_interface]
   runtimeclass EllipseViewManager : RenderableViewManager
   {
     EllipseViewManager();
-  }
+  };
 
   [default_interface]
   runtimeclass LineViewManager : RenderableViewManager
   {
     LineViewManager();
-  }
+  };
 
   [default_interface]
   runtimeclass PathViewManager : RenderableViewManager
   {
     PathViewManager();
-  }
+  };
 
   [default_interface]
   runtimeclass UseViewManager : RenderableViewManager
   {
     UseViewManager();
-  }
+  };
 
   [default_interface]
   unsealed runtimeclass GroupViewManager
@@ -86,41 +63,41 @@ namespace RNSVG
     , Microsoft.ReactNative.IViewManagerWithChildren
   {
     GroupViewManager();
-  }
+  };
 
   [default_interface]
   runtimeclass DefsViewManager : GroupViewManager
   {
     DefsViewManager();
-  }
+  };
 
   [default_interface]
   runtimeclass LinearGradientViewManager : GroupViewManager
   {
     LinearGradientViewManager();
-  }
+  };
 
   [default_interface]
   runtimeclass PatternViewManager : GroupViewManager
   {
     PatternViewManager();
-  }
+  };
 
   [default_interface]
   runtimeclass SymbolViewManager : GroupViewManager
   {
     SymbolViewManager();
-  }
+  };
 
   [default_interface]
   unsealed runtimeclass TextViewManager : GroupViewManager
   {
     TextViewManager();
-  }
+  };
 
   [default_interface]
   runtimeclass TSpanViewManager : TextViewManager
   {
     TSpanViewManager();
-  }
+  };
 }

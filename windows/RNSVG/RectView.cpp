@@ -40,15 +40,15 @@ void RectView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
 void RectView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
   auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
 
-  float x{Utils::GetSvgLengthValue(m_x, canvas.Size().Width)};
-  float y{Utils::GetSvgLengthValue(m_y, canvas.Size().Height)};
-  float width{Utils::GetSvgLengthValue(m_width, canvas.Size().Width)};
-  float height{Utils::GetSvgLengthValue(m_height, canvas.Size().Height)};
+  float x{Utils::GetAbsoluteLength(m_x, canvas.Size().Width)};
+  float y{Utils::GetAbsoluteLength(m_y, canvas.Size().Height)};
+  float width{Utils::GetAbsoluteLength(m_width, canvas.Size().Width)};
+  float height{Utils::GetAbsoluteLength(m_height, canvas.Size().Height)};
 
-  auto const &rxLength{m_rx.Unit() == RNSVG::UnitType::Unknown ? m_ry : m_rx};
-  auto const &ryLength{m_ry.Unit() == RNSVG::UnitType::Unknown ? m_rx : m_ry};
-  float rx{Utils::GetSvgLengthValue(rxLength, canvas.Size().Width)};
-  float ry{Utils::GetSvgLengthValue(ryLength, canvas.Size().Height)};
+  auto const &rxLength{m_rx.Unit() == RNSVG::LengthType::Unknown ? m_ry : m_rx};
+  auto const &ryLength{m_ry.Unit() == RNSVG::LengthType::Unknown ? m_rx : m_ry};
+  float rx{Utils::GetAbsoluteLength(rxLength, canvas.Size().Width)};
+  float ry{Utils::GetAbsoluteLength(ryLength, canvas.Size().Height)};
 
   Geometry(Geometry::CanvasGeometry::CreateRoundedRectangle(resourceCreator, x, y, width, height, rx, ry));
 }

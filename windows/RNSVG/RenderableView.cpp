@@ -36,7 +36,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
     } else if (propertyName == "strokeWidth") {
       prop = RNSVG::BaseProp::StrokeWidth;
       if (forceUpdate || !m_propSetMap[prop]) {
-        auto const &fallbackValue{parent ? parent.StrokeWidth() : RNSVG::SVGLength(1.0f, RNSVG::UnitType::PX)};
+        auto const &fallbackValue{parent ? parent.StrokeWidth() : RNSVG::SVGLength(1.0f, RNSVG::LengthType::Pixel)};
         m_strokeWidth = Utils::JSValueAsSVGLength(propertyValue, fallbackValue);
       }
     } else if (propertyName == "strokeOpacity") {
@@ -222,8 +222,10 @@ void RenderableView::Render(
     strokeStyle.LineJoin(StrokeLineJoin());
     strokeStyle.DashOffset(StrokeDashOffset());
     strokeStyle.MiterLimit(StrokeMiterLimit());
-    float strokeWidth{Utils::GetSvgLengthValue(StrokeWidth(), canvas.Size().Width)};
-    strokeStyle.CustomDashStyle(Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth));
+
+    float canvasDiagonal{Utils::GetCanvasDiagonal(canvas.Size())};
+    float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
+    strokeStyle.CustomDashStyle(Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal));
 
     auto const &stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry, resourceCreator)};
     session.DrawGeometry(geometry, stroke, strokeWidth, strokeStyle);

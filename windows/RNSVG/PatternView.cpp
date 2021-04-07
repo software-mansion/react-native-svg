@@ -53,6 +53,10 @@ void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 
   SaveDefinition();
+
+  if (auto const &root{SvgRoot()}) {
+    root.InvalidateCanvas();
+  }
 }
 
 void PatternView::UpdateBounds() {
@@ -87,10 +91,10 @@ void PatternView::CreateBrush(Windows::Foundation::Rect const &rect) {
 }
 
 Windows::Foundation::Rect PatternView::GetAdjustedRect(Windows::Foundation::Rect const &bounds) {
-  float x{Utils::GetSvgLengthValue(m_x, bounds.Width) + bounds.X};
-  float y{Utils::GetSvgLengthValue(m_y, bounds.Height) + bounds.Y};
-  float width{Utils::GetSvgLengthValue(m_width, bounds.Width)};
-  float height{Utils::GetSvgLengthValue(m_height, bounds.Height)};
+  float x{Utils::GetAbsoluteLength(m_x, bounds.Width) + bounds.X};
+  float y{Utils::GetAbsoluteLength(m_y, bounds.Height) + bounds.Y};
+  float width{Utils::GetAbsoluteLength(m_width, bounds.Width)};
+  float height{Utils::GetAbsoluteLength(m_height, bounds.Height)};
 
   return {x, y, width, height};
 }
@@ -121,6 +125,7 @@ Microsoft::Graphics::Canvas::CanvasCommandList PatternView::GetCommandList(Windo
     child.Render(canvas, session);
   }
 
+  session.Close();
   return cmdList;
 }
 

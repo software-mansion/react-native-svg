@@ -51,18 +51,18 @@ void UseView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession
               (symbol.MinX() + symbol.VbWidth()) * root.SvgScale(),
               (symbol.MinY() + symbol.VbHeight()) * root.SvgScale()};
 
-          float elX{Utils::GetSvgLengthValue(m_x, canvas.Size().Width)};
-          float elY{Utils::GetSvgLengthValue(m_y, canvas.Size().Height)};
-          float elWidth{Utils::GetSvgLengthValue(m_width, canvas.Size().Width)};
-          float elHeight{Utils::GetSvgLengthValue(m_height, canvas.Size().Height)};
+          float elX{Utils::GetAbsoluteLength(m_x, canvas.Size().Width)};
+          float elY{Utils::GetAbsoluteLength(m_y, canvas.Size().Height)};
+          float elWidth{Utils::GetAbsoluteLength(m_width, canvas.Size().Width)};
+          float elHeight{Utils::GetAbsoluteLength(m_height, canvas.Size().Height)};
           Rect elRect{elX, elY, elWidth, elHeight};
 
           transform = Utils::GetViewBoxTransform(vbRect, elRect, to_string(symbol.Align()), symbol.MeetOrSlice());
         }
       }
     } else {
-      float x{Utils::GetSvgLengthValue(m_x, canvas.Size().Width)};
-      float y{Utils::GetSvgLengthValue(m_y, canvas.Size().Height)};
+      float x{Utils::GetAbsoluteLength(m_x, canvas.Size().Width)};
+      float y{Utils::GetAbsoluteLength(m_y, canvas.Size().Height)};
       transform = Numerics::make_float3x2_translation({x, y});
     }
 

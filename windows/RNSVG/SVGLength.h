@@ -9,21 +9,17 @@ struct SVGLength : SVGLengthT<SVGLength> {
  public:
   SVGLength() = default;
   SVGLength(float value);
-  SVGLength(float value, RNSVG::UnitType type);
+  SVGLength(float value, RNSVG::LengthType type);
 
-  float Value() {
-    return m_value;
-  }
-  RNSVG::UnitType Unit() {
-    return m_unit;
-  }
+  float Value() { return m_value; }
+  RNSVG::LengthType Unit() { return m_unit; }
 
   static RNSVG::SVGLength From(std::string value);
   static RNSVG::SVGLength From(Microsoft::ReactNative::JSValue const &value);
 
  private:
   float m_value{0.0f};
-  RNSVG::UnitType m_unit{RNSVG::UnitType::Unknown};
+  RNSVG::LengthType m_unit{RNSVG::LengthType::Unknown};
 };
 } // namespace winrt::RNSVG::implementation
 

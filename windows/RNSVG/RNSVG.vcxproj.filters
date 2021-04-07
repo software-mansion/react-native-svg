@@ -3,10 +3,13 @@
   <ItemGroup>
     <Midl Include="ReactPackageProvider.idl" />
     <Midl Include="Views.idl">
-      <Filter>Views</Filter>
+      <Filter>IDLs</Filter>
     </Midl>
     <Midl Include="ViewManagers.idl">
-      <Filter>ViewManagers</Filter>
+      <Filter>IDLs</Filter>
+    </Midl>
+    <Midl Include="Types.idl">
+      <Filter>IDLs</Filter>
     </Midl>
   </ItemGroup>
   <ItemGroup>
@@ -233,6 +236,9 @@
     </Filter>
     <Filter Include="ViewManagers\GroupViewManagers">
       <UniqueIdentifier>{5942afc3-8b5d-4d8c-bb09-e82581f606b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IDLs">
+      <UniqueIdentifier>{50f81ae3-d543-477a-a60c-a0f310289f29}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

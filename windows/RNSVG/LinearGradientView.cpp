@@ -69,10 +69,10 @@ void LinearGradientView::UpdateBounds() {
 }
 
 void LinearGradientView::SetPoints(Brushes::CanvasLinearGradientBrush brush, Windows::Foundation::Rect const &bounds) {
-  float x1{Utils::GetSvgLengthValue(m_x1, bounds.Width) + bounds.X};
-  float y1{Utils::GetSvgLengthValue(m_y1, bounds.Height) + bounds.Y};
-  float x2{Utils::GetSvgLengthValue(m_x2, bounds.Width) + bounds.X};
-  float y2{Utils::GetSvgLengthValue(m_y2, bounds.Height) + bounds.Y};
+  float x1{Utils::GetAbsoluteLength(m_x1, bounds.Width) + bounds.X};
+  float y1{Utils::GetAbsoluteLength(m_y1, bounds.Height) + bounds.Y};
+  float x2{Utils::GetAbsoluteLength(m_x2, bounds.Width) + bounds.X};
+  float y2{Utils::GetAbsoluteLength(m_y2, bounds.Height) + bounds.Y};
 
   brush.StartPoint({x1, y1});
   brush.EndPoint({x2, y2});

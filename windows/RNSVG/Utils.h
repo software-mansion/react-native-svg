@@ -19,26 +19,56 @@ using namespace Windows::UI::Text;
 namespace winrt::RNSVG {
 struct Utils {
  public:
-  static std::vector<float> GetAdjustedStrokeArray(IVector<SVGLength> const &value, float strokeWidth) {
+  static std::vector<float> GetAdjustedStrokeArray(IVector<SVGLength> const &value, float strokeWidth, float canvasDiagonal) {
     std::vector<float> result;
 
     for (auto const &item : value) {
-      /* Win2D sets the length of each dash as the product of the element value in array and stroke width,
-      * we divide each value in the dashArray by StrokeWidth to account for this. 
-      http://microsoft.github.io/Win2D/WinUI2/html/P_Microsoft_Graphics_Canvas_Geometry_CanvasStrokeStyle_CustomDashStyle.htm
-      */
-      result.push_back(item.Value() / strokeWidth == 0.0f ? 1.0f : strokeWidth);
+      float absValue{GetAbsoluteLength(item, canvasDiagonal)};
+
+      // Win2D sets the length of each dash as the product of the element value in array and stroke width,
+      // we divide each value in the dashArray by StrokeWidth to account for this.
+      // http://microsoft.github.io/Win2D/WinUI2/html/P_Microsoft_Graphics_Canvas_Geometry_CanvasStrokeStyle_CustomDashStyle.htm
+      result.push_back(absValue / (strokeWidth == 0.0f ? 1.0f : strokeWidth));
     }
 
     return std::move(result);
   }
 
-  static float GetSvgLengthValue(SVGLength length, float parentValue) {
+  static float GetCanvasDiagonal(Windows::Foundation::Size const &size) {
+    float powX{std::powf(size.Width, 2)};
+    float powY{std::powf(size.Height, 2)};
+
+    return std::sqrtf(powX + powY) * static_cast<float>(M_SQRT1_2);
+  }
+
+  static float GetAbsoluteLength(SVGLength const &length, float relativeTo) {
+    auto value{length.Value()};
+
+    // 1in = 2.54cm = 96px
+    auto inch{96.0f};
+    auto cm{inch / 2.54f};
+
     switch (length.Unit()) {
-      case RNSVG::UnitType::Percentage:
-        return length.Value() / 100.0f * parentValue;
+      case RNSVG::LengthType::Percentage:
+        return value / 100.0f * relativeTo;
+      case RNSVG::LengthType::Centimeter:
+        // 1cm = 96px/2.54
+        return value * cm;
+      case RNSVG::LengthType::Millimeter:
+        // 1mm = 1/10th of 1cm
+        return value * cm / 10.0f;
+      case RNSVG::LengthType::Inch:
+        // 1in = 2.54cm = 96px
+        return value * inch;
+      case RNSVG::LengthType::Point:
+        // 1pt = 1/72th of 1in
+        return value * inch / 72.0f;
+      case RNSVG::LengthType::Pica:
+        // 1pc = 1/6th of 1in
+        return value * inch / 6.0f;
+      case RNSVG::LengthType::Pixel:
       default:
-        return length.Value();
+        return value;
     }
   }
 

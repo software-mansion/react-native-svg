@@ -10,6 +10,7 @@ import {
   Defs,
   Pattern,
   Ellipse,
+  Polygon,
 } from 'react-native-svg';
 
 export const PatternPage: React.FunctionComponent<{}> = () => {
@@ -97,6 +98,27 @@ export const PatternPage: React.FunctionComponent<{}> = () => {
             cy="200"
             rx="350"
             ry="150"
+          />
+        </Svg>
+      </Example>
+      <Example title="Star">
+        <Svg width="230" height="100" viewBox="0 0 230 100">
+          <Defs>
+            <Pattern id="star" width="10%" height="10%" viewBox="0 0 10 10">
+              <Polygon
+                points="0,0 2,5 0,10 5,8 10,10 8,5 10,0 5,2"
+                fill="black"
+              />
+            </Pattern>
+          </Defs>
+          <Circle cx="50" cy="50" r="50" fill="url(#star)" />
+          <Circle
+            cx="180"
+            cy="50"
+            r="40"
+            fill="none"
+            strokeWidth="20"
+            stroke="url(#star)"
           />
         </Svg>
       </Example>

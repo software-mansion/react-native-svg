@@ -32,9 +32,9 @@ void CircleView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate
 void CircleView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
   auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
 
-  float cx{Utils::GetSvgLengthValue(m_cx, canvas.Size().Width)};
-  float cy{Utils::GetSvgLengthValue(m_cy, canvas.Size().Height)};
-  float r{Utils::GetSvgLengthValue(m_r, canvas.Size().Height)};
+  float cx{Utils::GetAbsoluteLength(m_cx, canvas.Size().Width)};
+  float cy{Utils::GetAbsoluteLength(m_cy, canvas.Size().Height)};
+  float r{Utils::GetAbsoluteLength(m_r, Utils::GetCanvasDiagonal(canvas.Size()))};
 
   Geometry(Geometry::CanvasGeometry::CreateCircle(resourceCreator, cx, cy, r));
 }

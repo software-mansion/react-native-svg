@@ -1,35 +1,7 @@
+import "Types.idl";
+
 namespace RNSVG
 {
-  enum UnitType
-  {
-    Unknown,
-    Number,
-    Percentage,
-    EMS,
-    EXS,
-    PX,
-    CM,
-    MM,
-    PT,
-    PC,
-  };
-
-  [default_interface]
-  runtimeclass SVGLength {
-    SVGLength();
-    SVGLength(Single param);
-    SVGLength(Single param, UnitType type);
-
-    Single Value { get; };
-    UnitType Unit { get; };
-  };
-
-  enum MeetOrSlice {
-    Meet,
-    Slice,
-    None,
-  };
-
   [default_interface]
   runtimeclass SvgView : Windows.UI.Xaml.Controls.Panel
   {
@@ -43,31 +15,6 @@ namespace RNSVG
 
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
     void InvalidateCanvas();
-  };
-
-  enum BaseProp
-  {
-    Matrix,
-    Fill,
-    FillOpacity,
-    FillRule,
-    Stroke,
-    StrokeOpacity,
-    StrokeWidth,
-    StrokeMiterLimit,
-    StrokeDashOffset,
-    StrokeDashArray,
-    StrokeLineCap,
-    StrokeLineJoin,
-    Unknown,
-  };
-
-  enum FontProp
-  {
-    FontSize,
-    FontWeight,
-    FontFamily,
-    Unknown,
   };
 
   [default_interface]
@@ -213,4 +160,4 @@ namespace RNSVG
   {
     PatternView();
   };
-  }
+}

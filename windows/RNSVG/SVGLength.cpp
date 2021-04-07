@@ -5,49 +5,51 @@
 #endif
 
 namespace winrt::RNSVG::implementation {
-SVGLength::SVGLength(float value) : m_value(value), m_unit(RNSVG::UnitType::Number) {}
+SVGLength::SVGLength(float value) : m_value(value), m_unit(RNSVG::LengthType::Number) {}
 
-SVGLength::SVGLength(float value, RNSVG::UnitType type) : m_value(value), m_unit(type) {}
+SVGLength::SVGLength(float value, RNSVG::LengthType type) : m_value(value), m_unit(type) {}
 
 RNSVG::SVGLength SVGLength::From(std::string value) {
   auto strLength{value.size()};
   if (strLength == 0 || value == "normal") {
-    return {0.0, RNSVG::UnitType::Unknown};
+    return {0.0, RNSVG::LengthType::Unknown};
   } else if (value.back() == '%') {
-    return {std::stof(value.substr(0, strLength - 1), nullptr), RNSVG::UnitType::Percentage};
+    return {std::stof(value.substr(0, strLength - 1), nullptr), RNSVG::LengthType::Percentage};
   } else if (strLength > 2) {
     auto end{strLength - 2};
     auto lastTwo{value.substr(end)};
 
-    auto unit{RNSVG::UnitType::Unknown};
+    auto unit{RNSVG::LengthType::Unknown};
     if (lastTwo == "px") {
-      unit = RNSVG::UnitType::Number;
+      unit = RNSVG::LengthType::Number;
     } else if (lastTwo == "em") {
-      unit = RNSVG::UnitType::EMS;
+      unit = RNSVG::LengthType::EMS;
     } else if (lastTwo == "ex") {
-      unit = RNSVG::UnitType::EXS;
-    } else if (lastTwo == "pt") {
-      unit = RNSVG::UnitType::PT;
-    } else if (lastTwo == "pc") {
-      unit = RNSVG::UnitType::PC;
-    } else if (lastTwo == "mm") {
-      unit = RNSVG::UnitType::MM;
+      unit = RNSVG::LengthType::EXS;
     } else if (lastTwo == "cm") {
-      unit = RNSVG::UnitType::CM;
+      unit = RNSVG::LengthType::Centimeter;
+    } else if (lastTwo == "mm") {
+      unit = RNSVG::LengthType::Millimeter;
+    } else if (lastTwo == "in") {
+      unit = RNSVG::LengthType::Inch;
+    } else if (lastTwo == "pt") {
+      unit = RNSVG::LengthType::Point;
+    } else if (lastTwo == "pc") {
+      unit = RNSVG::LengthType::Pica;
     } else {
-      unit = RNSVG::UnitType::Number;
+      unit = RNSVG::LengthType::Number;
       end = strLength;
     }
 
     return {std::stof(value.substr(0, end), nullptr), unit};
   }
 
-  return {std::stof(value, nullptr), RNSVG::UnitType::Number};
+  return {std::stof(value, nullptr), RNSVG::LengthType::Number};
 }
 
 RNSVG::SVGLength SVGLength::From(Microsoft::ReactNative::JSValue const &propertyValue) {
   if (propertyValue.IsNull()) {
-    return {0.0f, RNSVG::UnitType::Unknown};
+    return {0.0f, RNSVG::LengthType::Unknown};
   } else if (propertyValue.Type() == Microsoft::ReactNative::JSValueType::String) {
     return SVGLength::From(propertyValue.AsString());
   } else {

@@ -33,10 +33,10 @@ void LineView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
 void LineView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
   auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
 
-  float x1{Utils::GetSvgLengthValue(m_x1, canvas.Size().Width)};
-  float y1{Utils::GetSvgLengthValue(m_y1, canvas.Size().Height)};
-  float x2{Utils::GetSvgLengthValue(m_x2, canvas.Size().Width)};
-  float y2{Utils::GetSvgLengthValue(m_y2, canvas.Size().Height)};
+  float x1{Utils::GetAbsoluteLength(m_x1, canvas.Size().Width)};
+  float y1{Utils::GetAbsoluteLength(m_y1, canvas.Size().Height)};
+  float x2{Utils::GetAbsoluteLength(m_x2, canvas.Size().Width)};
+  float y2{Utils::GetAbsoluteLength(m_y2, canvas.Size().Height)};
 
   auto const &pathBuilder{Geometry::CanvasPathBuilder(resourceCreator)};
   pathBuilder.BeginFigure(x1, y1);

@@ -76,7 +76,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   float m_strokeOpacity{1.0f};
   float m_strokeMiterLimit{0.0f};
   float m_strokeDashOffset{0.0f};
-  RNSVG::SVGLength m_strokeWidth{1.0f, RNSVG::UnitType::PX};
+  RNSVG::SVGLength m_strokeWidth{1.0f, RNSVG::LengthType::Pixel};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_strokeDashArray{
       winrt::single_threaded_vector<RNSVG::SVGLength>()};
   Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle m_strokeLineCap{
