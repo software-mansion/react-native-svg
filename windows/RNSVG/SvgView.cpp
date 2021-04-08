@@ -20,45 +20,83 @@ SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
   m_scale = static_cast<float>(DisplayInformation::GetForCurrentView().ResolutionScale()) / 100;
 
   m_canvasDrawRevoker = m_canvas.Draw(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_Draw});
-  m_canvaSizeChangedRevoker = m_canvas.SizeChanged(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_SizeChanged});
+  m_canvasSizeChangedRevoker = m_canvas.SizeChanged(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_SizeChanged});
   m_panelUnloadedRevoker = Unloaded(winrt::auto_revoke, {get_weak(), &SvgView::Panel_Unloaded});
 
   Children().Append(m_canvas);
 }
 
-void SvgView::UpdateProperties(IJSValueReader const &reader) {
-  auto const &propertyMap{JSValueObject::ReadFrom(reader)};
-
-  for (auto const &pair : propertyMap) {
-    auto const &propertyName{pair.first};
-    auto const &propertyValue{pair.second};
-
-    if (propertyName == "width") {
-      m_width = SVGLength::From(propertyValue);
-    } else if (propertyName == "height") {
-      m_height = SVGLength::From(propertyValue);
-    } else if (propertyName == "bbWidth") {
-      m_bbWidth = SVGLength::From(propertyValue);
-      Width(m_bbWidth.Value());
-    } else if (propertyName == "bbHeight") {
-      m_bbHeight = SVGLength::From(propertyValue);
-      Height(m_bbHeight.Value());
-    } else if (propertyName == "vbWidth") {
-      m_vbWidth = Utils::JSValueAsFloat(propertyValue);
-    } else if (propertyName == "vbHeight") {
-      m_vbHeight = Utils::JSValueAsFloat(propertyValue);
-    } else if (propertyName == "minX") {
-      m_minX = Utils::JSValueAsFloat(propertyValue);
-    } else if (propertyName == "minY") {
-      m_minY = Utils::JSValueAsFloat(propertyValue);
-    } else if (propertyName == "align") {
-      m_align = Utils::JSValueAsString(propertyValue);
-    } else if (propertyName == "meetOrSlice") {
-      m_meetOrSlice = Utils::GetMeetOrSlice(propertyValue);
-    }
+void SvgView::SvgParent(Windows::UI::Xaml::FrameworkElement const &value) {
+  if (value) {
+    m_canvasDrawRevoker.revoke();
+    m_canvasSizeChangedRevoker.revoke();
+    m_panelUnloadedRevoker.revoke();
+    m_canvas.RemoveFromVisualTree();
+    m_canvas = nullptr;
+    m_parent = value;
   }
+}
 
-  InvalidateCanvas();
+void SvgView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  // If forceUpdate is false, that means this is a nested Svg
+  // and we're inheriting props. Pass those along to the group.
+  if (!forceUpdate && m_group) {
+    m_group.UpdateProperties(reader, forceUpdate, invalidate);
+  } else {
+    auto const &propertyMap{JSValueObject::ReadFrom(reader)};
+
+    for (auto const &pair : propertyMap) {
+      auto const &propertyName{pair.first};
+      auto const &propertyValue{pair.second};
+
+      if (propertyName == "name") {
+        if (m_parent && m_group) {
+          m_group.SvgRoot().Templates().Remove(m_id);
+        }
+        m_id = to_hstring(Utils::JSValueAsString(propertyValue));
+        if (m_parent) {
+          SaveDefinition();
+        }
+      } else if (propertyName == "width") {
+        m_width = SVGLength::From(propertyValue);
+      } else if (propertyName == "height") {
+        m_height = SVGLength::From(propertyValue);
+      } else if (propertyName == "bbWidth") {
+        m_bbWidth = SVGLength::From(propertyValue);
+        Width(m_bbWidth.Value());
+      } else if (propertyName == "bbHeight") {
+        m_bbHeight = SVGLength::From(propertyValue);
+        Height(m_bbHeight.Value());
+      } else if (propertyName == "vbWidth") {
+        m_vbWidth = Utils::JSValueAsFloat(propertyValue);
+      } else if (propertyName == "vbHeight") {
+        m_vbHeight = Utils::JSValueAsFloat(propertyValue);
+      } else if (propertyName == "minX") {
+        m_minX = Utils::JSValueAsFloat(propertyValue);
+      } else if (propertyName == "minY") {
+        m_minY = Utils::JSValueAsFloat(propertyValue);
+      } else if (propertyName == "align") {
+        m_align = Utils::JSValueAsString(propertyValue);
+      } else if (propertyName == "meetOrSlice") {
+        m_meetOrSlice = Utils::GetMeetOrSlice(propertyValue);
+      }
+    }
+
+    InvalidateCanvas();
+  }
+}
+
+void SvgView::SaveDefinition() {
+  if (m_id != L"" && m_group) {
+    m_group.SvgRoot().Templates().Insert(m_id, *this);
+    m_group.SaveDefinition();
+  }
+}
+
+void SvgView::MergeProperties(RNSVG::RenderableView const &other) {
+  if (m_group) {
+    m_group.MergeProperties(other);
+  }
 }
 
 Size SvgView::MeasureOverride(Size availableSize) {
@@ -75,22 +113,38 @@ Size SvgView::ArrangeOverride(Size finalSize) {
   return finalSize;
 }
 
+void SvgView::Render(UI::Xaml::CanvasControl const & canvas, CanvasDrawingSession const & session) {
+  if (m_align != "") {
+    Rect vbRect{m_minX * m_scale, m_minY * m_scale, m_vbWidth * m_scale, m_vbHeight * m_scale};
+    float width{static_cast<float>(canvas.ActualWidth())};
+    float height{static_cast<float>(canvas.ActualHeight())};
+    bool nested{m_parent};
+
+    if (nested) {
+      width = Utils::GetAbsoluteLength(m_bbWidth, width);
+      height = Utils::GetAbsoluteLength(m_bbHeight, height);
+    }
+
+    Rect elRect{0, 0, width, height};
+
+    session.Transform(Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
+  }
+
+  if (m_group) {
+    m_group.SaveDefinition();
+    m_group.Render(canvas, session);
+  }
+}
+
 void SvgView::Canvas_Draw(UI::Xaml::CanvasControl const &sender, UI::Xaml::CanvasDrawEventArgs const &args) {
   if (!m_hasRendered) {
     m_hasRendered = true;
   }
 
-  if (m_align != "") {
-    Rect vbRect{m_minX * m_scale, m_minY * m_scale, m_vbWidth * m_scale, m_vbHeight * m_scale};
-    Rect elRect{0, 0, static_cast<float>(sender.ActualWidth()), static_cast<float>(sender.ActualHeight())};
+  m_brushes.Clear();
+  m_templates.Clear();
 
-    args.DrawingSession().Transform(Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
-  }
-
-  if (m_group) {
-    m_group.SaveDefinition();
-    m_group.Render(sender, args.DrawingSession());
-  }
+  Render(sender, args.DrawingSession());
 }
 
 void SvgView::Canvas_SizeChanged(
@@ -99,24 +153,30 @@ void SvgView::Canvas_SizeChanged(
   // sender.Invalidate();
 }
 
-void SvgView::InvalidateCanvas() {
-  if (m_hasRendered) {
-    m_canvas.Invalidate();
+void SvgView::Panel_Unloaded(IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const & /*args*/) {
+  if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
+    svgView.Unload();
   }
 }
 
-void SvgView::Panel_Unloaded(IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const & /*args*/) {
-  if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
-    m_reactContext = nullptr;
-    m_templates.Clear();
-    m_brushes.Clear();
+void SvgView::Unload() {
+  m_reactContext = nullptr;
+  m_templates.Clear();
+  m_brushes.Clear();
 
-    if (m_group) {
-      m_group.Unload();
-    }
+  if (m_group) {
+    m_group.Unload();
+  }
 
+  if (m_canvas) {
     m_canvas.RemoveFromVisualTree();
     m_canvas = nullptr;
+  }
+}
+
+void SvgView::InvalidateCanvas() {
+  if (m_hasRendered) {
+    m_canvas.Invalidate();
   }
 }
 } // namespace winrt::RNSVG::implementation

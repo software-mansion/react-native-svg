@@ -19,7 +19,7 @@ struct UseView : UseViewT<UseView, RNSVG::implementation::RenderableView> {
   RNSVG::SVGLength m_width{};
   RNSVG::SVGLength m_height{};
 
-  RNSVG::RenderableView GetRenderableTemplate();
+  RNSVG::IRenderable GetRenderableTemplate();
 };
 } // namespace winrt::RNSVG::implementation
 

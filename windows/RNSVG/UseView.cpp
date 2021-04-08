@@ -99,7 +99,7 @@ void UseView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession
   }
 }
 
-RNSVG::RenderableView UseView::GetRenderableTemplate() {
+RNSVG::IRenderable UseView::GetRenderableTemplate() {
   if (auto const &root{SvgRoot()}) {
     return root.Templates().TryLookup(m_href);
   }

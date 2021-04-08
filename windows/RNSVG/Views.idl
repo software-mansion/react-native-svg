@@ -2,29 +2,38 @@ import "Types.idl";
 
 namespace RNSVG
 {
+  interface IRenderable
+  {
+    Windows.UI.Xaml.FrameworkElement SvgParent;
+    Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
+
+    void Render(
+        Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas, Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
+    void MergeProperties(RenderableView other);
+    void SaveDefinition();
+    void Unload();
+  };
+
   [default_interface]
-  runtimeclass SvgView : Windows.UI.Xaml.Controls.Panel
+  runtimeclass SvgView : Windows.UI.Xaml.Controls.Panel, IRenderable
   {
     SvgView(Microsoft.ReactNative.IReactContext context);
 
     Single SvgScale{ get; };
     GroupView Group;
     Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl Canvas{ get; };
-
-    Windows.Foundation.Collections.IMap<String, RenderableView> Templates{ get; };
+    Windows.Foundation.Collections.IMap<String, IRenderable> Templates{ get; };
     Windows.Foundation.Collections.IMap<String, BrushView> Brushes{ get; };
 
-    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
     void InvalidateCanvas();
   };
 
   [default_interface]
-  unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement
+  unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement, IRenderable
   {
     RenderableView(Microsoft.ReactNative.IReactContext context);
     SvgView SvgRoot{ get; };
-    Windows.UI.Xaml.FrameworkElement SvgParent;
-    Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
 
     String Id{ get; };
     Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
@@ -42,15 +51,7 @@ namespace RNSVG
     Microsoft.Graphics.Canvas.Geometry.CanvasLineJoin StrokeLineJoin{ get; };
     Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule{ get; };
 
-    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
-
-    void SaveDefinition();
     void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
-    void Render(
-      Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
-      Microsoft.Graphics.Canvas.CanvasDrawingSession session);
-    void MergeProperties(RenderableView other);
-    void Unload();
   };
 
   [default_interface]
@@ -93,7 +94,7 @@ namespace RNSVG
   unsealed runtimeclass GroupView : RenderableView
   {
     GroupView(Microsoft.ReactNative.IReactContext context);
-    Windows.Foundation.Collections.IVector<RenderableView> Children { get; };
+    Windows.Foundation.Collections.IVector<IRenderable> Children { get; };
 
     Single FontSize;
     String FontFamily;

@@ -38,7 +38,7 @@ IMapView<hstring, ViewManagerPropertyType> GroupViewManager::NativeProps() {
 // IViewManagerWithChildren
 void GroupViewManager::AddView(FrameworkElement const &parent, UIElement const &child, int64_t /*index*/) {
   if (auto const &groupView{parent.try_as<RNSVG::GroupView>()}) {
-    if (auto const &childView{child.try_as<RNSVG::RenderableView>()}) {
+    if (auto const &childView{child.try_as<IRenderable>()}) {
       childView.SvgParent(parent);
       groupView.Children().Append(childView);
       childView.MergeProperties(groupView);

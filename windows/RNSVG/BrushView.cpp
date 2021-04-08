@@ -16,6 +16,7 @@ void BrushView::SetBounds(Windows::Foundation::Rect const &rect) {
 }
 
 void BrushView::Unload() {
+  m_brush.Close();
   m_brush = nullptr;
 
   __super::Unload();

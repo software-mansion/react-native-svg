@@ -193,10 +193,7 @@ void RenderableView::SaveDefinition() {
   }
 }
 
-void RenderableView::Render(
-    UI::Xaml::CanvasControl const &canvas,
-    CanvasDrawingSession const &session)
-{
+void RenderableView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
   auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   if (m_recreateResources) {
     CreateGeometry(canvas);
@@ -287,13 +284,19 @@ void RenderableView::MergeProperties(RNSVG::RenderableView const &other) {
 RNSVG::SvgView RenderableView::SvgRoot() {
   if (SvgParent()) {
     if (auto const &svgView{SvgParent().try_as<RNSVG::SvgView>()}) {
-      return svgView;
+      if (svgView.SvgParent()) {
+        if (auto const &parent{svgView.SvgParent().try_as<RNSVG::RenderableView>()}) {
+          return parent.SvgRoot();
+        }
+      } else {
+        return svgView;
+      }
     } else if (auto const &renderable{SvgParent().try_as<RNSVG::RenderableView>()}) {
       return renderable.SvgRoot();
     }
   }
 
-  return {nullptr};
+  return nullptr;
 }
 
 void RenderableView::Unload() {
