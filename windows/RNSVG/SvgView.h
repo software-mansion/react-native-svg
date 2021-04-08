@@ -10,10 +10,12 @@ struct SvgView : SvgViewT<SvgView> {
   SvgView(Microsoft::ReactNative::IReactContext const &context);
 
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl Canvas() { return m_canvas; }
+
+  RNSVG::GroupView Group() { return m_group; }
+  void Group(RNSVG::GroupView const &value) { m_group = value; }
+
   float SvgScale() { return m_scale; }
-  Windows::Foundation::Collections::IVector<Windows::UI::Xaml::UIElement> Views() {
-    return m_views;
-  }
+
   Windows::Foundation::Collections::IMap<hstring, RNSVG::RenderableView> Templates() {
     return m_templates;
   }
@@ -44,7 +46,7 @@ struct SvgView : SvgViewT<SvgView> {
   bool m_hasRendered{false};
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl m_canvas{};
-  float m_opacity{1.0f};
+  RNSVG::GroupView m_group{nullptr};
   float m_scale{0.0f};
   float m_minX{0.0f};
   float m_minY{0.0f};
@@ -52,11 +54,11 @@ struct SvgView : SvgViewT<SvgView> {
   float m_vbHeight{0.0f};
   RNSVG::SVGLength m_bbWidth{};
   RNSVG::SVGLength m_bbHeight{};
+  RNSVG::SVGLength m_width{};
+  RNSVG::SVGLength m_height{};
   std::string m_align{""};
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
 
-  Windows::Foundation::Collections::IVector<Windows::UI::Xaml::UIElement> m_views{
-      winrt::single_threaded_vector<Windows::UI::Xaml::UIElement>()};
   Windows::Foundation::Collections::IMap<hstring, RNSVG::RenderableView> m_templates{
       winrt::single_threaded_map<hstring, RNSVG::RenderableView>()};
   Windows::Foundation::Collections::IMap<hstring, RNSVG::BrushView> m_brushes{

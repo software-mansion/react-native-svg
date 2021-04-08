@@ -18,7 +18,7 @@ namespace winrt::RNSVG::implementation {
 void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
-  auto const &parent{SvgParent().as<RNSVG::GroupView>()};
+  auto const &parent{SvgParent().try_as<RNSVG::GroupView>()};
   auto fontProp{RNSVG::FontProp::Unknown};
 
   for (auto const &pair : propertyMap) {
@@ -96,7 +96,7 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
     child.UpdateProperties(reader, false, false);
   }
 
-  if (invalidate && parent) {
+  if (invalidate && SvgParent()) {
     SvgRoot().InvalidateCanvas();
   }
 }
@@ -134,12 +134,15 @@ void GroupView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
     session.Transform(transform * SvgTransform());
   }
 
-  if (Children().Size() == 0) {
-    __super::Render(canvas, session);
-  } else {
-    RenderGroup(canvas, session);
-  }
+  if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
+    if (Children().Size() == 0) {
+      __super::Render(canvas, session);
+    } else {
+      RenderGroup(canvas, session);
+    }
 
+    opacityLayer.Close();
+  }
   session.Transform(transform);
 }
 

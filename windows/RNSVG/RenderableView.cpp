@@ -168,8 +168,8 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
         Numerics::float3x2 fallbackValue{parent ? parent.SvgTransform() : Numerics::make_float3x2_rotation(0)};
         m_transformMatrix = Utils::JSValueAsTransform(propertyValue, fallbackValue);
       }
-    } else if (propertyName == "opacity") {
-      m_opacity = Utils::JSValueAsFloat(propertyValue);
+    } else if (propertyName == "opacity" && forceUpdate) {
+      m_opacity = Utils::JSValueAsFloat(propertyValue, 1.0f);
     }
 
     // forceUpdate = true means the property is being set on an element
@@ -209,27 +209,31 @@ void RenderableView::Render(
 
   geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
 
-  if (auto const &fillLayer{session.CreateLayer(FillOpacity())}) {
-    auto const &fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), geometry, resourceCreator)};
-    session.FillGeometry(geometry, fill);
-    fillLayer.Close();
-  }
+  if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
+    if (auto const &fillLayer{session.CreateLayer(FillOpacity())}) {
+      auto const &fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), geometry, resourceCreator)};
+      session.FillGeometry(geometry, fill);
+      fillLayer.Close();
+    }
 
-  if (auto const &strokeLayer{session.CreateLayer(StrokeOpacity())}) {
-    Geometry::CanvasStrokeStyle strokeStyle{};
-    strokeStyle.StartCap(StrokeLineCap());
-    strokeStyle.EndCap(StrokeLineCap());
-    strokeStyle.LineJoin(StrokeLineJoin());
-    strokeStyle.DashOffset(StrokeDashOffset());
-    strokeStyle.MiterLimit(StrokeMiterLimit());
+    if (auto const &strokeLayer{session.CreateLayer(StrokeOpacity())}) {
+      Geometry::CanvasStrokeStyle strokeStyle{};
+      strokeStyle.StartCap(StrokeLineCap());
+      strokeStyle.EndCap(StrokeLineCap());
+      strokeStyle.LineJoin(StrokeLineJoin());
+      strokeStyle.DashOffset(StrokeDashOffset());
+      strokeStyle.MiterLimit(StrokeMiterLimit());
 
-    float canvasDiagonal{Utils::GetCanvasDiagonal(canvas.Size())};
-    float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
-    strokeStyle.CustomDashStyle(Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal));
+      float canvasDiagonal{Utils::GetCanvasDiagonal(canvas.Size())};
+      float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
+      strokeStyle.CustomDashStyle(Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal));
 
-    auto const &stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry, resourceCreator)};
-    session.DrawGeometry(geometry, stroke, strokeWidth, strokeStyle);
-    strokeLayer.Close();
+      auto const &stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry, resourceCreator)};
+      session.DrawGeometry(geometry, stroke, strokeWidth, strokeStyle);
+      strokeLayer.Close();
+    }
+
+    opacityLayer.Close();
   }
 }
 

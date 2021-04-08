@@ -44,6 +44,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
   virtual void Unload();
 
  protected:
+  float m_opacity{1.0f};
+
   std::map<RNSVG::BaseProp, bool> m_propSetMap{
       {RNSVG::BaseProp::Matrix, false},
       {RNSVG::BaseProp::Fill, false},
@@ -58,7 +60,6 @@ struct RenderableView : RenderableViewT<RenderableView> {
       {RNSVG::BaseProp::StrokeLineCap, false},
       {RNSVG::BaseProp::StrokeLineJoin, false},
   };
-  float m_opacity{1.0f};
 
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};

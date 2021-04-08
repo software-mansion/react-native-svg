@@ -8,8 +8,9 @@ namespace RNSVG
     SvgView(Microsoft.ReactNative.IReactContext context);
 
     Single SvgScale{ get; };
+    GroupView Group;
     Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl Canvas{ get; };
-    Windows.Foundation.Collections.IVector<Windows.UI.Xaml.UIElement> Views{ get; };
+
     Windows.Foundation.Collections.IMap<String, RenderableView> Templates{ get; };
     Windows.Foundation.Collections.IMap<String, BrushView> Brushes{ get; };
 
