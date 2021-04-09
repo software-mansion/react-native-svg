@@ -2,6 +2,7 @@
 import React from 'react';
 import {Welcome} from './Welcome';
 import {SvgPage} from './examples/Svg';
+import {SvgUriPage} from './examples/SvgUri';
 import {GroupPage} from './examples/G';
 import {RectPage} from './examples/Rect';
 import {CirclePage} from './examples/Circle';
@@ -29,6 +30,10 @@ export const SVGExampleList: Array<ISVGExample> = [
   {
     key: 'Svg',
     component: SvgPage,
+  },
+  {
+    key: 'SvgUri',
+    component: SvgUriPage,
   },
   {
     key: 'G',
