@@ -34,14 +34,17 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin StrokeLineJoin() { return m_strokeLineJoin; }
   Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination FillRule() { return m_fillRule; }
 
-  virtual void MergeProperties(RNSVG::RenderableView const &other);
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
+  virtual void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const & /*canvas*/) {}
+  virtual void MergeProperties(RNSVG::RenderableView const &other);
   virtual void SaveDefinition();
-  virtual void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &/*canvas*/) {}
+  virtual void Unload();
   virtual void Render(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
       Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
-  virtual void Unload();
+  virtual void CreateResources(
+      Microsoft::Graphics::Canvas::ICanvasResourceCreator const & /*resourceCreator*/,
+      Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const & /*args*/) { }
 
  protected:
   float m_opacity{1.0f};

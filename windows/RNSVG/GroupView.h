@@ -34,6 +34,10 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
       Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
 
+  virtual void CreateResources(
+      Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
+      Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args);
+
   virtual void Unload();
 
  private:

@@ -20,6 +20,7 @@ SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
   m_scale = static_cast<float>(DisplayInformation::GetForCurrentView().ResolutionScale()) / 100;
 
   m_canvasDrawRevoker = m_canvas.Draw(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_Draw});
+  m_canvasCreateResourcesRevoker = m_canvas.CreateResources(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_CreateResources});
   m_canvasSizeChangedRevoker = m_canvas.SizeChanged(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_SizeChanged});
   m_panelUnloadedRevoker = Unloaded(winrt::auto_revoke, {get_weak(), &SvgView::Panel_Unloaded});
 
@@ -29,6 +30,7 @@ SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
 void SvgView::SvgParent(Windows::UI::Xaml::FrameworkElement const &value) {
   if (value) {
     m_canvasDrawRevoker.revoke();
+    m_canvasCreateResourcesRevoker.revoke();
     m_canvasSizeChangedRevoker.revoke();
     m_panelUnloadedRevoker.revoke();
     m_canvas.RemoveFromVisualTree();
@@ -145,6 +147,16 @@ void SvgView::Canvas_Draw(UI::Xaml::CanvasControl const &sender, UI::Xaml::Canva
   m_templates.Clear();
 
   Render(sender, args.DrawingSession());
+}
+
+void SvgView::CreateResources(ICanvasResourceCreator const &resourceCreator, UI::CanvasCreateResourcesEventArgs const &args) {
+  if (m_group) {
+    m_group.CreateResources(resourceCreator, args);
+  }
+}
+
+void SvgView::Canvas_CreateResources(UI::Xaml::CanvasControl const &sender, UI::CanvasCreateResourcesEventArgs const &args) {
+  CreateResources(sender, args);
 }
 
 void SvgView::Canvas_SizeChanged(

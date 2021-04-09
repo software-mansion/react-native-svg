@@ -11,7 +11,7 @@ EllipseViewManager::EllipseViewManager() {
   m_name = L"RNSVGEllipse";
 }
 
-Windows::Foundation::Collections::IMapView<hstring, ViewManagerPropertyType> EllipseViewManager::NativeProps() {
+IMapView<hstring, ViewManagerPropertyType> EllipseViewManager::NativeProps() {
   auto const &parentProps{__super::NativeProps()};
   auto const &nativeProps{winrt::single_threaded_map<hstring, ViewManagerPropertyType>()};
 

@@ -11,7 +11,7 @@ LineViewManager::LineViewManager() {
   m_name = L"RNSVGLine";
 }
 
-Windows::Foundation::Collections::IMapView<hstring, ViewManagerPropertyType> LineViewManager::NativeProps() {
+IMapView<hstring, ViewManagerPropertyType> LineViewManager::NativeProps() {
   auto const &parentProps{__super::NativeProps()};
   auto const &nativeProps{winrt::single_threaded_map<hstring, ViewManagerPropertyType>()};
 

@@ -26,7 +26,7 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
     auto const &propertyValue{pair.second};
 
     if (propertyName == "font") {
-      auto const &asObject = propertyValue.AsObject();
+      auto const &font{propertyValue.AsObject()};
 
       // When any of the font props update, you don't get individual updates.
       // Instead, you get a new JSValueObject with all font props set on the element.
@@ -56,7 +56,7 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
         }
       }
 
-      for (auto const &prop : asObject) {
+      for (auto const &prop : font) {
         auto const &key{prop.first};
         auto const &value{prop.second};
 
@@ -149,6 +149,12 @@ void GroupView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
 void GroupView::RenderGroup(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
   for (auto const &child : Children()) {
     child.Render(canvas, session);
+  }
+}
+
+void GroupView::CreateResources(ICanvasResourceCreator const &resourceCreator, UI::CanvasCreateResourcesEventArgs const &args) {
+  for (auto const &child : Children()) {
+    child.CreateResources(resourceCreator, args);
   }
 }
 

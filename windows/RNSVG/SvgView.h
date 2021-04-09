@@ -31,12 +31,15 @@ struct SvgView : SvgViewT<SvgView> {
 
   // IRenderable
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
-  void Render(
-      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
   void MergeProperties(RNSVG::RenderableView const &other);
   void SaveDefinition();
   void Unload();
+  void Render(
+      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
+      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  void CreateResources(
+      Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
+      Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args);
 
   // Overrides
   Windows::Foundation::Size MeasureOverride(Windows::Foundation::Size availableSize);
@@ -46,6 +49,9 @@ struct SvgView : SvgViewT<SvgView> {
   void Canvas_Draw(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &sender,
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasDrawEventArgs const &args);
+  void Canvas_CreateResources(
+      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &sender,
+      Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args);
   void Canvas_SizeChanged(
       Windows::Foundation::IInspectable const &sender,
       Windows::UI::Xaml::SizeChangedEventArgs const &args);
@@ -78,6 +84,7 @@ struct SvgView : SvgViewT<SvgView> {
   Windows::Foundation::Collections::IMap<hstring, RNSVG::BrushView> m_brushes{
       winrt::single_threaded_map<hstring, RNSVG::BrushView>()};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::Draw_revoker m_canvasDrawRevoker{};
+  Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::CreateResources_revoker m_canvasCreateResourcesRevoker{};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::SizeChanged_revoker m_canvasSizeChangedRevoker{};
   Windows::UI::Xaml::FrameworkElement::Unloaded_revoker m_panelUnloadedRevoker{};
 };

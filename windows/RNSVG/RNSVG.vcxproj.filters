@@ -112,6 +112,12 @@
     <ClCompile Include="PatternView.cpp">
       <Filter>Views\GroupViews</Filter>
     </ClCompile>
+    <ClCompile Include="ImageView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -215,6 +221,12 @@
     </ClInclude>
     <ClInclude Include="PatternView.h">
       <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageViewManager.h">
+      <Filter>ViewManagers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

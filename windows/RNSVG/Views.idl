@@ -7,8 +7,12 @@ namespace RNSVG
     Windows.UI.Xaml.FrameworkElement SvgParent;
     Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
 
+    void CreateResources(
+      Microsoft.Graphics.Canvas.ICanvasResourceCreator resourceCreator,
+      Microsoft.Graphics.Canvas.UI.CanvasCreateResourcesEventArgs args);
     void Render(
-        Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas, Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+      Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
+      Microsoft.Graphics.Canvas.CanvasDrawingSession session);
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
     void MergeProperties(RenderableView other);
     void SaveDefinition();
@@ -88,6 +92,12 @@ namespace RNSVG
   runtimeclass UseView : RenderableView
   {
     UseView();
+  };
+
+  [default_interface]
+  runtimeclass ImageView : RenderableView
+  {
+    ImageView();
   };
 
   [default_interface]

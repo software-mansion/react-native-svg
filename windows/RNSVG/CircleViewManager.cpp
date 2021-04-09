@@ -11,9 +11,7 @@ CircleViewManager::CircleViewManager() {
   m_name = L"RNSVGCircle";
 }
 
-Windows::Foundation::Collections::IMapView<hstring, ViewManagerPropertyType>
-CircleViewManager::NativeProps() {
-
+IMapView<hstring, ViewManagerPropertyType> CircleViewManager::NativeProps() {
   auto const &parentProps{__super::NativeProps()};
   auto const &nativeProps{winrt::single_threaded_map<hstring, ViewManagerPropertyType>()};
 

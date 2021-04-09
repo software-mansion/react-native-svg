@@ -24,6 +24,8 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
       return winrt::RNSVG::LineView();
     case RNSVG::SVGClass::RNSVGUse:
       return winrt::RNSVG::UseView();
+    case RNSVG::SVGClass::RNSVGImage:
+      return winrt::RNSVG::ImageView();
     case RNSVG::SVGClass::RNSVGText:
       return winrt::RNSVG::TextView();
     case RNSVG::SVGClass::RNSVGTSpan:

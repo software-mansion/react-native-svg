@@ -119,6 +119,8 @@
     <ClInclude Include="EllipseViewManager.h" />
     <ClInclude Include="GroupView.h" />
     <ClInclude Include="GroupViewManager.h" />
+    <ClInclude Include="ImageView.h" />
+    <ClInclude Include="ImageViewManager.h" />
     <ClInclude Include="LinearGradientView.h" />
     <ClInclude Include="LinearGradientViewManager.h" />
     <ClInclude Include="LineView.h" />
@@ -159,6 +161,8 @@
     <ClCompile Include="EllipseViewManager.cpp" />
     <ClCompile Include="GroupView.cpp" />
     <ClCompile Include="GroupViewManager.cpp" />
+    <ClCompile Include="ImageView.cpp" />
+    <ClCompile Include="ImageViewManager.cpp" />
     <ClCompile Include="LinearGradientView.cpp" />
     <ClCompile Include="LinearGradientViewManager.cpp" />
     <ClCompile Include="LineView.cpp" />

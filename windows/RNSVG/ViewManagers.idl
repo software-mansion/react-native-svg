@@ -58,6 +58,12 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass ImageViewManager : RenderableViewManager
+  {
+    ImageViewManager();
+  };
+
+  [default_interface]
   unsealed runtimeclass GroupViewManager
     : RenderableViewManager
     , Microsoft.ReactNative.IViewManagerWithChildren
