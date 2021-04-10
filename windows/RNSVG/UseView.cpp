@@ -30,10 +30,6 @@ void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
   }
 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
-
-  if (auto const &view{GetRenderableTemplate()}) {
-    view.UpdateProperties(reader, false, false);
-  }
 }
 
 void UseView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
