@@ -84,8 +84,8 @@ void GroupViewManager::ReplaceChild(
     UIElement const &oldChild,
     UIElement const &newChild) {
   auto const &groupView{parent.try_as<RNSVG::GroupView>()};
-  auto const &oldChildView{oldChild.try_as<RNSVG::RenderableView>()};
-  auto const &newChildView{newChild.try_as<RNSVG::RenderableView>()};
+  auto const &oldChildView{oldChild.try_as<IRenderable>()};
+  auto const &newChildView{newChild.try_as<IRenderable>()};
 
   if (groupView && oldChildView && newChildView) {
     uint32_t index;

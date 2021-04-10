@@ -17,6 +17,18 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
   auto const &parent{SvgParent().try_as<RNSVG::RenderableView>()};
 
+  auto const &propList{propertyMap.find("propList")};
+  if (propList != propertyMap.end()) {
+    m_propList.clear();
+    auto const &propValue{(*propList).second};
+    for (auto const &item : propValue.AsArray()) {
+      m_propList.push_back(Utils::JSValueAsString(item));
+    }
+  }
+
+  bool fillSet{std::find(m_propList.begin(), m_propList.end(), "fill") != m_propList.end()};
+  bool strokeSet{std::find(m_propList.begin(), m_propList.end(), "stroke") != m_propList.end()};
+
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
     auto const &propertyValue{pair.second};
@@ -58,7 +70,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
           auto const &brush{propertyValue.AsArray()};
           m_strokeBrushId = to_hstring(Utils::JSValueAsString(brush.at(1)));
         } else {
-          Windows::UI::Color fallbackColor{parent ? parent.Stroke() : Windows::UI::Colors::Transparent()};
+          Windows::UI::Color fallbackColor{(parent && !strokeSet) ? parent.Stroke() : Windows::UI::Colors::Transparent()};
           m_stroke = Utils::JSValueAsColor(propertyValue, fallbackColor);
         }
       }
@@ -69,7 +81,13 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
           auto const &brush{propertyValue.AsArray()};
           m_fillBrushId = to_hstring(Utils::JSValueAsString(brush.at(1)));
         } else {
-          Windows::UI::Color fallbackColor{parent ? parent.Fill() : Windows::UI::Colors::Transparent()};
+          Windows::UI::Color fallbackColor{Windows::UI::Colors::Black()};
+          if (propertyValue.IsNull() && fillSet) {
+            fallbackColor = Windows::UI::Colors::Transparent();
+          } else if (parent) {
+            fallbackColor = parent.Fill();
+          }
+
           m_fill = Utils::JSValueAsColor(propertyValue, fallbackColor);
         }
       }
@@ -175,8 +193,17 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
     // forceUpdate = true means the property is being set on an element
     // instead of being inherited from the parent.
     if (forceUpdate && (prop != RNSVG::BaseProp::Unknown)) {
-      // If the propertyValue is null, that means we reset the property
-      m_propSetMap[prop] = !propertyValue.IsNull();
+      // If the propertyValue is null, that generally means the prop was deleted
+      bool propSet{!propertyValue.IsNull()};
+
+      // The exception being Fill and Stroke due to 'none' coming through as null
+      if (prop == RNSVG::BaseProp::Fill) {
+        propSet = fillSet;
+      } else if (prop == RNSVG::BaseProp::Stroke) {
+        propSet = strokeSet;
+      }
+
+      m_propSetMap[prop] = propSet;
     }
   }
 
@@ -300,9 +327,14 @@ RNSVG::SvgView RenderableView::SvgRoot() {
 }
 
 void RenderableView::Unload() {
+  if (m_geometry) {
+    m_geometry.Close();
+    m_geometry = nullptr;
+  }
+
   m_parent = nullptr;
   m_reactContext = nullptr;
-  m_geometry = nullptr;
+  m_propList.clear();
   m_propSetMap.clear();
   m_strokeDashArray.Clear();
 }

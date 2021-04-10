@@ -61,6 +61,7 @@ IMapView<hstring, ViewManagerPropertyType> RenderableViewManager::NativeProps() 
   nativeProps.Insert(L"strokeDasharray", ViewManagerPropertyType::Array);
   nativeProps.Insert(L"matrix", ViewManagerPropertyType::Array);
   nativeProps.Insert(L"opacity", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"propList", ViewManagerPropertyType::Array);
 
   return nativeProps.GetView();
 }

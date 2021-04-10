@@ -48,7 +48,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
 
  protected:
   float m_opacity{1.0f};
-
+  std::vector<std::string> m_propList{};
   std::map<RNSVG::BaseProp, bool> m_propSetMap{
       {RNSVG::BaseProp::Matrix, false},
       {RNSVG::BaseProp::Fill, false},
@@ -72,7 +72,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
 
   hstring m_id{L""};
   Numerics::float3x2 m_transformMatrix{Numerics::make_float3x2_rotation(0)};
-  Windows::UI::Color m_fill{Windows::UI::Colors::Transparent()};
+  Windows::UI::Color m_fill{Windows::UI::Colors::Black()};
   Windows::UI::Color m_stroke{Windows::UI::Colors::Transparent()};
   hstring m_fillBrushId{L""};
   hstring m_strokeBrushId{L""};
