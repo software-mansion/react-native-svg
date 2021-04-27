@@ -4,9 +4,9 @@ import { GestureResponderEvent } from 'react-native';
 
 class Shape<P> extends React.Component<P> {
   [x: string]: unknown;
-  root: (Shape<P> & NativeMethodsMixinStatic) | null;
+  root: (Shape<P> & ReactNative.NativeMethods) | null;
   constructor(props: P, context: {});
-  refMethod: (instance: (Shape<P> & NativeMethodsMixinStatic) | null) => void;
+  refMethod: (instance: (Shape<P> & ReactNative.NativeMethods) | null) => void;
   setNativeProps: (props: Object & {
       matrix?: [number, number, number, number, number, number] | undefined;
   } & TransformProps) => void;
