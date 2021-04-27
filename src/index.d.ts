@@ -347,7 +347,7 @@ export interface PatternProps {
   viewBox?: string;
   preserveAspectRatio?: string;
 }
-class Pattern extends Shape<PatternProps>{}
+export class Pattern extends Shape<PatternProps>{}
 
 export interface PolygonProps extends CommonPathProps {
   opacity?: NumberProp;
@@ -405,7 +405,7 @@ export interface SvgProps extends GProps, ReactNative.ViewProperties {
 }
 
 // Svg is both regular and default exported
-class Svg extends Shape<SvgProps> {}
+export class Svg extends Shape<SvgProps> {}
 
 export default Svg;
 
@@ -415,7 +415,6 @@ export interface SymbolProps {
   preserveAspectRatio?: string;
   opacity?: NumberProp;
 }
-
 export class Symbol extends Shape<SymbolProps>{}
 
 export interface TSpanProps extends CommonPathProps, FontProps {
@@ -426,7 +425,7 @@ export interface TSpanProps extends CommonPathProps, FontProps {
   rotate?: NumberArray;
   inlineSize?: NumberProp;
 }
-class TSpan extends Shape<TSPanProps>{}
+export class TSpan extends Shape<TSPanProps>{}
 
 export interface TextSpecificProps extends CommonPathProps, FontProps {
   alignmentBaseline?: AlignmentBaseline;
@@ -447,7 +446,7 @@ export interface TextProps extends TextSpecificProps {
   opacity?: NumberProp;
   inlineSize?: NumberProp;
 }
-class Text extends Shape<TextProps>{}
+export class Text extends Shape<TextProps>{}
 
 export interface TextPathProps extends TextSpecificProps {
   xlinkHref?: string;
@@ -457,7 +456,7 @@ export interface TextPathProps extends TextSpecificProps {
   spacing?: TextPathSpacing;
   midLine?: TextPathMidLine;
 }
-class TextPath extends Shape<TextPathProps> {}
+export class TextPath extends Shape<TextPathProps> {}
 
 export interface UseProps extends CommonPathProps {
   xlinkHref?: string;
@@ -490,7 +489,7 @@ export interface MaskProps extends CommonPathProps {
   maskUnits?: TMaskUnits;
   maskContentUnits?: TMaskUnits;
 }
-class Mask extends Shape<MaskProps>{}
+export class Mask extends Shape<MaskProps>{}
 
 export enum MarkerUnits {
   STROKE_WIDTH = 'strokeWidth',
@@ -513,7 +512,7 @@ export interface MarkerProps {
   markerUnits?: MarkerUnits;
   orient?: Orient | NumberProp;
 }
-class Marker extends Shape<MarkerProps>{}
+export class Marker extends Shape<MarkerProps>{}
 
 export type Styles = { [property: string]: string };
 
