@@ -17,6 +17,7 @@ class Shape<P> extends React.Component<P> {
   isPointInStroke: (options: DOMPointInit) => boolean;
   getTotalLength: () => number;
   getPointAtLength: (length: number) => SVGPoint;
+  onLayout?: (event: ReactNative.LayoutChangeEvent) => void;
 }
 
 // Common props
@@ -244,7 +245,8 @@ export interface CommonPathProps
     TouchableProps,
     DefinitionProps,
     CommonMarkerProps,
-    CommonMaskProps {}
+    CommonMaskProps,
+    ReactNative.ViewProps {}
 
 // Element props
 export interface CircleProps extends CommonPathProps {
