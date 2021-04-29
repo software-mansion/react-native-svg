@@ -129,6 +129,8 @@
     <ClInclude Include="PathViewManager.h" />
     <ClInclude Include="PatternView.h" />
     <ClInclude Include="PatternViewManager.h" />
+    <ClInclude Include="RadialGradientView.h" />
+    <ClInclude Include="RadialGradientViewManager.h" />
     <ClInclude Include="RectView.h" />
     <ClInclude Include="RectViewManager.h" />
     <ClInclude Include="RenderableView.h" />
@@ -174,6 +176,8 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PathViewManager.cpp" />
+    <ClCompile Include="RadialGradientView.cpp" />
+    <ClCompile Include="RadialGradientViewManager.cpp" />
     <ClCompile Include="ReactPackageProvider.cpp">
       <DependentUpon>ReactPackageProvider.idl</DependentUpon>
     </ClCompile>

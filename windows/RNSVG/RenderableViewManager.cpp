@@ -36,6 +36,8 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
       return winrt::RNSVG::DefsView();
     case RNSVG::SVGClass::RNSVGLinearGradient:
       return winrt::RNSVG::LinearGradientView();
+    case RNSVG::SVGClass::RNSVGRadialGradient:
+      return winrt::RNSVG::RadialGradientView();
     case RNSVG::SVGClass::RNSVGPattern:
       return winrt::RNSVG::PatternView();
   }

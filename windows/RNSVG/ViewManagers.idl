@@ -84,6 +84,12 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass RadialGradientViewManager : GroupViewManager
+  {
+    RadialGradientViewManager();
+  };
+
+  [default_interface]
   runtimeclass PatternViewManager : GroupViewManager
   {
     PatternViewManager();

@@ -168,6 +168,12 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass RadialGradientView : BrushView
+  {
+    RadialGradientView();
+  };
+
+  [default_interface]
   runtimeclass PatternView : BrushView
   {
     PatternView();

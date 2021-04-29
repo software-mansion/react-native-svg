@@ -118,6 +118,12 @@
     <ClCompile Include="ImageViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
+    <ClCompile Include="RadialGradientView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="RadialGradientViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -227,6 +233,12 @@
     </ClInclude>
     <ClInclude Include="ImageViewManager.h">
       <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="RadialGradientView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="RadialGradientViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
