@@ -73,17 +73,20 @@ void RadialGradientView::UpdateBounds() {
 }
 
 void RadialGradientView::SetPoints(Brushes::CanvasRadialGradientBrush brush, Windows::Foundation::Rect const &bounds) {
+  float rx{Utils::GetAbsoluteLength(m_rx, bounds.Width)};
+  float ry{Utils::GetAbsoluteLength(m_ry, bounds.Height)};
+
   float fx{Utils::GetAbsoluteLength(m_fx, bounds.Width) + bounds.X};
   float fy{Utils::GetAbsoluteLength(m_fy, bounds.Height) + bounds.Y};
-  float rx{Utils::GetAbsoluteLength(m_rx, bounds.Width) + bounds.X};
-  float ry{Utils::GetAbsoluteLength(m_ry, bounds.Height) + bounds.Y};
+
   float cx{Utils::GetAbsoluteLength(m_cx, bounds.Width) + bounds.X};
   float cy{Utils::GetAbsoluteLength(m_cy, bounds.Height) + bounds.Y};
 
   brush.RadiusX(rx);
   brush.RadiusY(ry);
-  brush.Center({fx, fy});
-  brush.OriginOffset({(cx - fx), (cy - fy)});
+
+  brush.Center({cx, cy});
+  brush.OriginOffset({(fx - cx), (fy - cy)});
 }
 
 } // namespace winrt::RNSVG::implementation
