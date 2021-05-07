@@ -59,11 +59,11 @@ void RadialGradientView::CreateBrush() {
 
   SetPoints(brush, {0, 0, canvas.Size().Width, canvas.Size().Height});
 
-  if (m_transformSet) {               
-    brush.Transform(m_transform);           
+  if (m_transformSet) {
+    brush.Transform(m_transform);
   }
 
-  m_brush = brush;                      
+  m_brush = brush;
 }
 
 void RadialGradientView::UpdateBounds() {
