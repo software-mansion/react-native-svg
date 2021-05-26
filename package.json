@@ -1,11 +1,11 @@
 {
-  "version": "12.1.0",
-  "name": "react-native-svg",
+  "version": "12.1.1",
+  "name": "react-native-svg-fixed",
   "description": "SVG library for react-native",
-  "homepage": "https://github.com/react-native-community/react-native-svg",
+  "homepage": "https://github.com/pratyushok/react-native-svg",
   "repository": {
     "type": "git",
-    "url": "https://github.com/react-native-community/react-native-svg"
+    "url": "https://github.com/pratyushok/react-native-svg"
   },
   "license": "MIT",
   "main": "lib/commonjs/index.js",
