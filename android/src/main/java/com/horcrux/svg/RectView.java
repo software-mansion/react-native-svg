@@ -17,6 +17,8 @@ import android.os.Build;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 
+import java.util.ArrayList;
+
 @SuppressLint("ViewConstructor")
 class RectView extends RenderableView {
   private SVGLength mX;
@@ -170,6 +172,14 @@ class RectView extends RenderableView {
       path.close(); // Ensure isSimplePath = false such that rect doesn't become represented using
       // integers
     }
+
+    elements = new ArrayList<>();
+    elements.add(new PathElement(ElementType.kCGPathElementMoveToPoint, new Point[]{new Point(mX.value,mY.value)}));
+    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mX.value + mW.value,mY.value)}));
+    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mX.value + mW.value,mY.value + mH.value)}));
+    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mX.value,mY.value + mH.value)}));
+    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mX.value,mY.value)}));
+
     return path;
   }
 }
