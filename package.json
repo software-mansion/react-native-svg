@@ -1,6 +1,6 @@
 {
   "version": "12.1.1",
-  "name": "react-native-svg-fixed",
+  "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/pratyushok/react-native-svg",
   "repository": {
@@ -49,7 +49,6 @@
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
-    "prepare": "npm run flowgen && npm run bob",
     "semantic-release": "semantic-release",
     "test": "npm run lint && npm run tsc && npm run flow && npm run jest",
     "tsc": "tsc --noEmit"
