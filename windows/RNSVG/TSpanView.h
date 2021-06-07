@@ -9,6 +9,9 @@ public:
 
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
   void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas);
+  virtual void Render(
+      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
+      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
 
  private:
   std::string m_content;

@@ -16,6 +16,7 @@ import {GradientsPage} from './examples/Gradients';
 import {StrokingPage} from './examples/Stroking';
 import {PatternPage} from './examples/Pattern';
 import {ImagePage} from './examples/Image';
+import {TextPage} from './examples/Text';
 
 interface ISVGExample {
   key: string;
@@ -86,6 +87,10 @@ export const SVGExampleList: Array<ISVGExample> = [
   {
     key: 'Pattern',
     component: PatternPage,
+  },
+  {
+    key: 'Text',
+    component: TextPage,
   },
 ];
 
