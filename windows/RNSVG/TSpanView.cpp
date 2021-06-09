@@ -38,9 +38,7 @@ void TSpanView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
 void TSpanView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
   auto const &transform{session.Transform()};
 
-  auto const &translation{Numerics::make_float3x2_translation(0.0f, 0.0f)};
-
-  session.Transform(transform * translation);
+  session.Transform(transform * Numerics::make_float3x2_translation(X().GetAt(0).Value(), Y().GetAt(0).Value()));
 
   __super::Render(canvas, session);
 
