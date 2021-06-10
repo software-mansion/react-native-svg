@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "TextView.h"
 #include "TextView.g.cpp"
-#include "Utils.h";
 
 using namespace winrt;
 using namespace Microsoft::Graphics::Canvas;
@@ -19,7 +18,6 @@ void TextView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
       m_x.Clear();
       for (auto const &item : propertyValue.AsArray()) {
         m_x.Append(SVGLength::From(item));
-        auto const &should_be_x{X().GetAt(0).Value()};
       }
     } else if (propertyName == "y") {
       m_y.Clear();

@@ -37,11 +37,16 @@ void TSpanView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
 
 void TSpanView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
   auto const &transform{session.Transform()};
+  bool translateXY{X().Size() > 0 || Y().Size() > 0};
 
-  session.Transform(transform * Numerics::make_float3x2_translation(X().GetAt(0).Value(), Y().GetAt(0).Value()));
-
+  if (translateXY) {
+    float x{X().Size() > 0 ? X().GetAt(0).Value() : 0};
+    float y{Y().Size() > 0 ? Y().GetAt(0).Value() : 0};
+    session.Transform(transform * Numerics::make_float3x2_translation(x, y));
+  }
   __super::Render(canvas, session);
-
-  session.Transform(transform);
+  if (translateXY) {
+    session.Transform(transform);
+  }
 }
 } // namespace winrt::RNSVG::implementation
