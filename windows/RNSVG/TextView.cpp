@@ -44,4 +44,18 @@ void TextView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
+
+void TextView::RenderGroup(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
+  auto const &transform{session.Transform()};
+  bool translateXY{X().Size() > 0 || Y().Size() > 0};
+  if (translateXY) {
+    float x{X().Size() > 0 ? X().GetAt(0).Value() : 0};
+    float y{Y().Size() > 0 ? Y().GetAt(0).Value() : 0};
+    session.Transform(transform * Numerics::make_float3x2_translation(x, y));
+  }
+  __super::RenderGroup(canvas, session);
+  if (translateXY) {
+    session.Transform(transform);
+  }
+}
 } // namespace winrt::RNSVG::implementation

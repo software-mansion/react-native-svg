@@ -26,11 +26,11 @@ C 160 10 180 10 180 10
       <Example title="Text">
         <Svg height="30" width="100">
           <Text x="50" y="9" fill="red" textAnchor="middle">
-            I love SVG!!!
+            I love SVG!
           </Text>
         </Svg>
       </Example>
-      {/* <Example title="Transform the text">
+      <Example title="Transform the text">
         <Svg height="60" width="200">
           <Text x="0" y="15" fill="red" rotate="30" origin="20,40">
             I love SVG
@@ -108,12 +108,12 @@ C 160 10 180 10 180 10
           </Defs>
           <G y="20">
             <Text fill="blue">
-              <TextPath href="#textpath" startOffset="-10%">
+              {/* <TextPath href="#textpath" startOffset="-10%">
                 We go up and down,
                 <TSpan fill="red" dy="5,5,5">
                   then up again
                 </TSpan>
-              </TextPath>
+              </TextPath> */}
             </Text>
             <Path d={path} fill="none" stroke="red" strokeWidth="1" />
           </G>
@@ -144,7 +144,7 @@ C 160 10 180 10 180 10
             delta on text
           </Text>
         </Svg>
-      </Example> */}
+      </Example>
     </Page>
   );
 };
