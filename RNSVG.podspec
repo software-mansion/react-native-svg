@@ -15,5 +15,5 @@ Pod::Spec.new do |s|
   s.ios.exclude_files = '**/*.macos.{h,m}'
   s.osx.exclude_files = '**/*.ios.{h,m}'
   s.requires_arc      = true
-  s.dependency          'React'
+  s.dependency          'React-Core'
 end
