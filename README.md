@@ -96,6 +96,22 @@ Install the JavaScript with:
    react-native link react-native-svg
    ```
 
+##### React Native Web
+
+`react-native-svg` has a compatibility layer for the web. This compatibility layer is exposed via `.web.js` files.
+If your project targets `react-native-web`, be sure that your bundler is set up to resolve these files.
+
+Webpack users can simply configure Webpack to resolve files with the `.web.js` extension alongside any other extensions:
+
+```
+ resolve: {
+    extensions: [ '.web.js', '.js',  ... ]
+  }
+}
+```
+
+Please note that some components (such as `SvgXml` and `SvgCss`) may not work in the web compatibility layer.
+
 # NOTICE:
 
 Due to breaking changes in react-native, the version given in the left column
