@@ -3,7 +3,7 @@ import SvgTouchableMixin from '../lib/SvgTouchableMixin';
 import {
   NativeModules,
   findNodeHandle,
-  NativeMethodsMixinStatic,
+  NativeMethods,
 } from 'react-native';
 import { TransformProps } from '../lib/extract/types';
 const { RNSVGRenderableManager } = NativeModules;
@@ -233,14 +233,14 @@ export const ownerSVGElement = {
 
 export default class Shape<P> extends Component<P> {
   [x: string]: unknown;
-  root: (Shape<P> & NativeMethodsMixinStatic) | null = null;
+  root: (Shape<P> & NativeMethods) | null = null;
   constructor(props: P, context: {}) {
     super(props, context);
     SvgTouchableMixin(this);
   }
   refMethod: (
-    instance: (Shape<P> & NativeMethodsMixinStatic) | null,
-  ) => void = (instance: (Shape<P> & NativeMethodsMixinStatic) | null) => {
+    instance: (Shape<P> & NativeMethods) | null,
+  ) => void = (instance: (Shape<P> & NativeMethods) | null) => {
     this.root = instance;
   };
   setNativeProps = (
