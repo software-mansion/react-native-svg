@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactNative from 'react-native';
-import { GestureResponderEvent, TransformStyle } from 'react-native';
+import { GestureResponderEvent, TransformsStyle } from 'react-native';
 
 // Common props
 export type NumberProp = string | number;
@@ -203,7 +203,7 @@ export type ColumnMajorTransformMatrix = [
 ];
 
 export interface TransformProps extends TransformObject {
-  transform?: ColumnMajorTransformMatrix | string | TransformObject | TransformStyle["transform"];
+  transform?: ColumnMajorTransformMatrix | string | TransformObject | TransformsStyle["transform"];
 }
 
 export interface CommonMaskProps {
