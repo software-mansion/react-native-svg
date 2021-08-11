@@ -46,15 +46,15 @@ export default class Pattern extends Shape<{
     } = props;
     const matrix = extractTransform(patternTransform || transform || props);
     const patternProps = {
-        name: id,
-        x,
-        y,
-        width,
-        height,
-        matrix,
-        patternTransform: matrix,
-        patternUnits: (patternUnits && units[patternUnits]) || 0,
-        patternContentUnits: patternContentUnits ? units[patternContentUnits] : 1,
+      name: id,
+      x,
+      y,
+      width,
+      height,
+      matrix,
+      patternTransform: matrix,
+      patternUnits: (patternUnits && units[patternUnits]) || 0,
+      patternContentUnits: patternContentUnits ? units[patternContentUnits] : 1,
     };
     return (
       <RNSVGPattern

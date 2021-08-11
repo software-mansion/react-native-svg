@@ -22,11 +22,6 @@ export default class Line extends Shape<{
     const { props } = this;
     const { x1, y1, x2, y2 } = props;
     const lineProps = { x1, y1, x2, y2 };
-    return (
-      <RNSVGLine
-        ref={this.refMethod}
-        {...lineProps}
-      />
-    );
+    return <RNSVGLine ref={this.refMethod} {...lineProps} />;
   }
 }

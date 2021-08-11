@@ -52,11 +52,7 @@ export default class Use extends Shape<{
       height,
     };
     return (
-      <RNSVGUse
-        ref={this.refMethod}
-        {...withoutXY(this, props)}
-        {...useProps}
-      >
+      <RNSVGUse ref={this.refMethod} {...withoutXY(this, props)} {...useProps}>
         {children}
       </RNSVGUse>
     );

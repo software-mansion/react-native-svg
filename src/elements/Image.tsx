@@ -52,10 +52,10 @@ export default class SvgImage extends Shape<{
       meetOrSlice: meetOrSliceTypes[meetOrSlice] || 0,
       align: alignEnum[align] || 'xMidYMid',
       src: !href
-            ? null
-            : Image.resolveAssetSource(
-                typeof href === 'string' ? { uri: href } : href,
-              )
+        ? null
+        : Image.resolveAssetSource(
+            typeof href === 'string' ? { uri: href } : href,
+          ),
     };
     return (
       <RNSVGImage

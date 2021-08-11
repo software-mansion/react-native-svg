@@ -21,11 +21,6 @@ export default class Circle extends Shape<{
     const { cx, cy, r } = props;
     const circleProps = { cx, cy, r };
 
-    return (
-      <RNSVGCircle
-        ref={this.refMethod}
-        {...circleProps}
-      />
-    );
+    return <RNSVGCircle ref={this.refMethod} {...circleProps} />;
   }
 }

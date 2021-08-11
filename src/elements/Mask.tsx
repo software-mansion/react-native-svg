@@ -45,7 +45,8 @@ export default class Mask extends Shape<{
       height,
       maskTransform: extractTransform(maskTransform || transform || props),
       maskUnits: maskUnits !== undefined ? units[maskUnits] : 0,
-      maskContentUnits: maskContentUnits !== undefined ? units[maskContentUnits] : 1,
+      maskContentUnits:
+        maskContentUnits !== undefined ? units[maskContentUnits] : 1,
     };
     return (
       <RNSVGMask
