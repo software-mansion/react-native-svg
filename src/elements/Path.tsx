@@ -1,4 +1,5 @@
 import React from 'react';
+import { extract } from '../lib/extract/extractProps';
 import Shape from './Shape';
 import { RNSVGPath } from './NativeComponents';
 
@@ -10,7 +11,7 @@ export default class Path extends Shape<{
   render() {
     const { props } = this;
     const { d } = props;
-    const pathProps = { d };
+    const pathProps = { ...extract(this, props), d };
     return <RNSVGPath ref={this.refMethod} {...pathProps} />;
   }
 }
