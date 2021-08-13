@@ -29,15 +29,18 @@ export default class RadialGradient extends Shape<{
   render() {
     const { props } = this;
     const { rx, ry, r, cx, cy, fx = cx, fy = cy } = props;
+    const radialGradientProps = {
+      fx,
+      fy,
+      rx: rx || r,
+      ry: ry || r,
+      cx,
+      cy,
+    };
     return (
       <RNSVGRadialGradient
         ref={this.refMethod}
-        fx={fx}
-        fy={fy}
-        rx={rx || r}
-        ry={ry || r}
-        cx={cx}
-        cy={cy}
+        {...radialGradientProps}
         {...extractGradient(props, this)}
       />
     );

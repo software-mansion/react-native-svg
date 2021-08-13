@@ -203,7 +203,11 @@ export type ColumnMajorTransformMatrix = [
 ];
 
 export interface TransformProps extends TransformObject {
-  transform?: ColumnMajorTransformMatrix | string | TransformObject | TransformsStyle["transform"];
+  transform?:
+    | ColumnMajorTransformMatrix
+    | string
+    | TransformObject
+    | TransformsStyle['transform'];
 }
 
 export interface CommonMaskProps {
