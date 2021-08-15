@@ -98,6 +98,8 @@ Install the JavaScript with:
 
 ##### React Native Web
 
+> If you use React Native Web via Expo CLI (or @expo/webpack-config) the following configuration is not necessary. 
+
 `react-native-svg` has a compatibility layer for the web. This compatibility layer is exposed via `.web.js` files.
 If your project targets `react-native-web`, be sure that your bundler is set up to resolve these files.
 
