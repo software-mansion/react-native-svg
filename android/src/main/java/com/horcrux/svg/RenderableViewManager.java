@@ -1284,6 +1284,8 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
             @Override
             public void onChildViewRemoved(View view, View view1) {
                 if (view instanceof VirtualView) {
+                    SvgView svgView = ((VirtualView) view).getSvgView();
+                    svgView.setRemovedFromReactViewHierarchy();
                     invalidateSvgView((VirtualView) view);
                 }
             }
