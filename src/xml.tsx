@@ -205,7 +205,7 @@ export type Styles = { [property: string]: string };
 
 export function getStyle(string: string): Styles {
   const style: Styles = {};
-  const declarations = string.split(';');
+  const declarations = string.split(';').filter(v => v.trim());
   const { length } = declarations;
   for (let i = 0; i < length; i++) {
     const declaration = declarations[i];
