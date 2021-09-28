@@ -6,7 +6,7 @@
 
 import * as React from "react";
 import * as ReactNative from "react-native";
-import { GestureResponderEvent } from "react-native";
+import { GestureResponderEvent, TransformsStyle } from "react-native";
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
 export type FillRule = "evenodd" | "nonzero";
@@ -171,7 +171,11 @@ export type ColumnMajorTransformMatrix = [
   number
 ];
 export type TransformProps = {
-  transform?: ColumnMajorTransformMatrix | string | TransformObject,
+  transform?:
+    | ColumnMajorTransformMatrix
+    | string
+    | TransformObject
+    | $PropertyType<TransformsStyle, "transform">,
   ...
 } & TransformObject;
 export interface CommonMaskProps {

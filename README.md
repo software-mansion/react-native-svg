@@ -7,6 +7,10 @@
 
 [Check out the demo](https://snack.expo.io/@msand/react-native-svg-example)
 
+## Looking for maintainers
+
+https://github.com/react-native-svg/react-native-svg/issues/1554
+
 ## Features
 
 1. Supports most SVG elements and properties (Rect, Circle, Line, Polyline, Polygon, G ...).
@@ -60,9 +64,15 @@
 
 ##### With expo-cli
 
-With Expo, you'll need to run `expo install react-native-svg` to install this library.
+> ✅ The [Expo client app](https://expo.io/tools) comes with the native code installed!
 
-Please refer to [Expo docs](https://docs.expo.io/versions/latest/sdk/svg/) for more information or jump ahead to [Usage](#Usage).
+Install the JavaScript with:
+
+  ```bash
+  expo install react-native-svg
+  ```
+
+📚 See the [**Expo docs**](https://docs.expo.io/versions/latest/sdk/svg/) for more info or jump ahead to [Usage](#Usage).
 
 ##### With react-native-cli
 
@@ -228,7 +238,7 @@ Verify that it is still an issue with the latest version as specified in the pre
 react-native info
 ```
 
-If you suspect that you've found a spec conformance bug, then you can test using your component in a react-native-web project by forking this codesandbox, to see how different browsers render the same content: <https://codesandbox.io/s/pypn6mn3y7> If any evergreen brower with significant userbase or other svg user agent renders some svg content better, or supports more of the svg and related specs, please open an issue asap.
+If you suspect that you've found a spec conformance bug, then you can test using your component in a react-native-web project by forking this codesandbox, to see how different browsers render the same content: <https://codesandbox.io/s/pypn6mn3y7> If any evergreen browser with significant userbase or other svg user agent renders some svg content better, or supports more of the svg and related specs, please open an issue asap.
 
 ### Usage
 
@@ -262,11 +272,6 @@ import Svg, {
   Pattern,
   Mask,
 } from 'react-native-svg';
-
-/* Use this if you are using Expo
-import * as Svg from 'react-native-svg';
-const { Circle, Rect } = Svg;
-*/
 
 import React from 'react';
 import { View, StyleSheet } from 'react-native';

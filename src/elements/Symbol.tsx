@@ -13,8 +13,13 @@ export default class Symbol extends Shape<{
   render() {
     const { props } = this;
     const { id, children } = props;
+    const symbolProps = { name: id };
     return (
-      <RNSVGSymbol ref={this.refMethod} name={id} {...extractViewBox(props)}>
+      <RNSVGSymbol
+        ref={this.refMethod}
+        {...symbolProps}
+        {...extractViewBox(props)}
+      >
         {children}
       </RNSVGSymbol>
     );
