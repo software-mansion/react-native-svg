@@ -138,7 +138,7 @@
         return nil;
     }
     CGPathRef path = [template getPath:context];
-    return CGPathCreateCopyByTransformingPath(path, &transform);
+    return (CGPathRef) CFAutorelease(CGPathCreateCopyByTransformingPath(path, &transform));
 }
 
 @end
