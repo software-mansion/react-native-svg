@@ -167,7 +167,7 @@ export interface ClipPathProps {
 }
 export const ClipPath: React.ComponentClass<ClipPathProps>;
 
-export const Defs: React.ComponentClass<{}>;
+export const Defs: React.ComponentClass<{ children?: React.ReactNode }>;
 
 export interface EllipseProps extends CommonPathProps {
   cx?: NumberProp,
@@ -200,6 +200,7 @@ export interface LineProps extends CommonPathProps {
 export const Line: React.ComponentClass<LineProps>;
 
 export interface LinearGradientProps {
+  children?: React.ReactNode,
   x1?: NumberProp,
   x2?: NumberProp,
   y1?: NumberProp,
