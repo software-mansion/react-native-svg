@@ -1,5 +1,5 @@
 {
-  "version": "12.1.0",
+  "version": "12.2.0",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -69,8 +69,8 @@
     "@semantic-release/changelog": "^5.0.0",
     "@semantic-release/git": "^9.0.0",
     "@types/css-tree": "^1.0.3",
-    "@types/react": "^16.9.23",
-    "@types/react-native": "^0.61.19",
+    "@types/react": "^17.0.16",
+    "@types/react-native": "^0.63.40",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.1.0",
     "eslint": "^6.8.0",

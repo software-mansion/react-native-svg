@@ -273,11 +273,6 @@ import Svg, {
   Mask,
 } from 'react-native-svg';
 
-/* Use this if you are using Expo
-import * as Svg from 'react-native-svg';
-const { Circle, Rect } = Svg;
-*/
-
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 

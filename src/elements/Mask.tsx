@@ -38,19 +38,21 @@ export default class Mask extends Shape<{
       maskContentUnits,
       children,
     } = props;
+    const maskProps = {
+      x,
+      y,
+      width,
+      height,
+      maskTransform: extractTransform(maskTransform || transform || props),
+      maskUnits: maskUnits !== undefined ? units[maskUnits] : 0,
+      maskContentUnits:
+        maskContentUnits !== undefined ? units[maskContentUnits] : 1,
+    };
     return (
       <RNSVGMask
         ref={this.refMethod}
         {...withoutXY(this, props)}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        maskTransform={extractTransform(maskTransform || transform || props)}
-        maskUnits={maskUnits !== undefined ? units[maskUnits] : 0}
-        maskContentUnits={
-          maskContentUnits !== undefined ? units[maskContentUnits] : 1
-        }
+        {...maskProps}
       >
         {children}
       </RNSVGMask>

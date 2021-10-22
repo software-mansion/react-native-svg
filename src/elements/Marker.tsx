@@ -40,16 +40,20 @@ export default class Marker extends Shape<{
       markerHeight,
       children,
     } = props;
+    const markerProps = {
+      name: id,
+      refX,
+      refY,
+      markerUnits,
+      orient: String(orient),
+      markerWidth,
+      markerHeight,
+    };
+
     return (
       <RNSVGMarker
         ref={this.refMethod}
-        name={id}
-        refX={refX}
-        refY={refY}
-        orient={String(orient)}
-        markerUnits={markerUnits}
-        markerWidth={markerWidth}
-        markerHeight={markerHeight}
+        {...markerProps}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
       >
         {children}

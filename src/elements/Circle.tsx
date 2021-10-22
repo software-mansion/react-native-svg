@@ -20,14 +20,8 @@ export default class Circle extends Shape<{
   render() {
     const { props } = this;
     const { cx, cy, r } = props;
-    return (
-      <RNSVGCircle
-        ref={this.refMethod}
-        {...extract(this, props)}
-        cx={cx}
-        cy={cy}
-        r={r}
-      />
-    );
+    const circleProps = { ...extract(this, props), cx, cy, r };
+
+    return <RNSVGCircle ref={this.refMethod} {...circleProps} />;
   }
 }
