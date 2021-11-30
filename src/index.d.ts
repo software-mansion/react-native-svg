@@ -221,7 +221,7 @@ export interface CommonMarkerProps {
   markerEnd?: string;
 }
 
-export interface LayoutProps {
+export interface NativeProps {
   onLayout?: (event: LayoutChangeEvent) => void;
 }
 
@@ -236,7 +236,7 @@ export interface CommonPathProps
     DefinitionProps,
     CommonMarkerProps,
     CommonMaskProps,
-    LayoutProps {}
+    NativeProps {}
 
 // Element props
 export interface CircleProps extends CommonPathProps {

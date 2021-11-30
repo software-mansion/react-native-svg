@@ -187,7 +187,7 @@ export interface CommonMarkerProps {
   markerMid?: string;
   markerEnd?: string;
 }
-export interface LayoutProps {
+export interface NativeProps {
   onLayout?: (event: LayoutChangeEvent) => void;
 }
 export type CommonPathProps = { ... } & FillProps &
@@ -200,7 +200,7 @@ export type CommonPathProps = { ... } & FillProps &
   DefinitionProps &
   CommonMarkerProps &
   CommonMaskProps &
-  LayoutProps;
+  NativeProps;
 export type CircleProps = {
   cx?: NumberProp,
   cy?: NumberProp,
