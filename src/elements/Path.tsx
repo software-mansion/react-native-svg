@@ -10,8 +10,8 @@ export default class Path extends Shape<{
 
   render() {
     const { props } = this;
-    return (
-      <RNSVGPath ref={this.refMethod} {...extract(this, props)} d={props.d} />
-    );
+    const { d } = props;
+    const pathProps = { ...extract(this, props), d };
+    return <RNSVGPath ref={this.refMethod} {...pathProps} />;
   }
 }
