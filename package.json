@@ -5,7 +5,7 @@
   "homepage": "https://github.com/react-native-community/react-native-svg",
   "repository": {
     "type": "git",
-    "url": "https://github.com/react-native-community/react-native-svg"
+    "url": "git+https://github.com/react-native-community/react-native-svg"
   },
   "license": "MIT",
   "main": "lib/commonjs/index.js",
@@ -56,13 +56,15 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": ">=0.50.0"
+    "react-native": ">=0.50.0",
+    "react-native-web": ">=0.13.4"
   },
   "dependencies": {
     "css-select": "^2.1.0",
     "css-tree": "^1.0.0-alpha.39"
   },
   "devDependencies": {
+    "@babel/compat-data": "^7.9.0",
     "@react-native-community/bob": "^0.9.7",
     "@react-native-community/eslint-config": "0.0.7",
     "@react-native-community/eslint-plugin": "^1.0.0",
@@ -85,6 +87,7 @@
     "prettier": "^1.19.1",
     "react": "^16.13.0",
     "react-native": "^0.61.5",
+    "react-native-web": ">=0.13.4",
     "react-test-renderer": "^16.13.0",
     "semantic-release": "^17.0.4",
     "semantic-release-cli": "^5.2.3",
@@ -103,5 +106,12 @@
       "@semantic-release/git"
     ]
   },
-  "nativePackage": true
+  "nativePackage": true,
+  "optionalDependencies": {
+    "react-native-web": ">=0.13.4"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "author": "sharcoux"
 }
