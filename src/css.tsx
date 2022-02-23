@@ -27,7 +27,7 @@ import csstree, {
   Selector,
   SelectorList,
 } from 'css-tree';
-import cssSelect, { Adapter, Options, Predicate, Query } from 'css-select';
+import cssSelect, { Options } from 'css-select';
 
 /*
  * Style element inlining experiment based on SVGO
@@ -113,7 +113,7 @@ function removeSubsets(nodes: Array<XmlAST | string>): Array<XmlAST | string> {
 
 // does at least one of passed element nodes pass the test predicate?
 function existsOne(
-  predicate: Predicate<XmlAST>,
+  predicate: (v: XmlAST) => boolean,
   elems: Array<XmlAST | string>,
 ): boolean {
   return elems.some(
@@ -140,10 +140,10 @@ function hasAttrib(elem: XmlAST, name: string): boolean {
 // finds the first node in the array that matches the test predicate, or one
 // of its children
 function findOne(
-  predicate: Predicate<XmlAST>,
+  predicate: (v: XmlAST)=> boolean,
   elems: Array<XmlAST | string>,
-): XmlAST | undefined {
-  let elem: XmlAST | undefined;
+): XmlAST | null {
+  let elem: XmlAST | null = null;
 
   for (let i = 0, l = elems.length; i < l && !elem; i++) {
     const node = elems[i];
@@ -164,7 +164,7 @@ function findOne(
 // finds all of the element nodes in the array that match the test predicate,
 // as well as any of their children that match it
 function findAll(
-  predicate: Predicate<XmlAST>,
+  predicate: (v: XmlAST) => boolean,
   nodes: Array<XmlAST | string>,
   result: Array<XmlAST> = [],
 ): Array<XmlAST> {
@@ -185,36 +185,23 @@ function findAll(
   return result;
 }
 
-const adapter: Adapter<XmlAST | string, XmlAST> = {
-  removeSubsets,
-  existsOne,
-  getSiblings,
-  hasAttrib,
-  findOne,
-  findAll,
-  isTag,
-  getParent,
-  getChildren,
-  getName,
-  getText,
-  getAttributeValue,
-};
-
 const cssSelectOpts: Options<XmlAST | string, XmlAST> = {
   xmlMode: true,
-  adapter,
+  adapter: {
+    removeSubsets,
+    existsOne,
+    getSiblings,
+    hasAttrib,
+    findOne,
+    findAll,
+    isTag,
+    getParent,
+    getChildren,
+    getName,
+    getText,
+    getAttributeValue,
+  },
 };
-
-/**
- * Evaluate a string of CSS selectors against the element and returns matched elements.
- *
- * @param {Query} query can be either a CSS selector string or a compiled query function.
- * @param {Array<XmlAST> | XmlAST} elems Elements to query. If it is an element, its children will be queried.
- * @return {Array<XmlAST>} All matching elements.
- */
-function querySelectorAll(query: Query, elems: XmlAST | XmlAST[]): XmlAST[] {
-  return cssSelect(query, elems, cssSelectOpts);
-}
 
 type FlatPseudoSelector = {
   item: ListItem<CssNode>;
@@ -602,7 +589,7 @@ export const inlineStyles: Middleware = function inlineStyles(
   document: XmlAST,
 ) {
   // collect <style/>s
-  const styleElements = querySelectorAll('style', document);
+  const styleElements = cssSelect('style', document, cssSelectOpts);
 
   //no <styles/>s, nothing to do
   if (styleElements.length === 0) {
@@ -650,7 +637,8 @@ export const inlineStyles: Middleware = function inlineStyles(
     const selectorStr = csstree.generate(item.data);
     try {
       // apply <style/> to matched elements
-      const matched = querySelectorAll(selectorStr, document).map(initStyle);
+      const matched = cssSelect(selectorStr, document, cssSelectOpts).map(initStyle);
+      
       if (matched.length === 0) {
         continue;
       }
