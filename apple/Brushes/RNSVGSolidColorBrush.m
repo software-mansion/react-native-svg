@@ -7,19 +7,20 @@
  */
 
 #import "RNSVGSolidColorBrush.h"
+#import "RNSVGUIKit.h"
 
 #import "RCTConvert+RNSVG.h"
 #import <React/RCTLog.h>
 
 @implementation RNSVGSolidColorBrush
 {
-    UIColor *_color;
+    RNSVGColor *_color;
 }
 
 - (instancetype)initWithArray:(NSArray<RNSVGLength *> *)array
 {
     if ((self = [super initWithArray:array])) {
-        _color = [RCTConvert RNSVGUIColor:array offset:1];
+        _color = [RCTConvert RNSVGColor:array offset:1];
     }
     return self;
 }
@@ -27,7 +28,7 @@
 - (instancetype)initWithNumber:(NSNumber *)number
 {
     if ((self = [super init])) {
-        _color = [RCTConvert UIColor:number];
+        _color = [RCTConvert RNSVGColor:number];
     }
     return self;
 }
@@ -41,7 +42,6 @@
 {
     CGColorRef baseColor = _color.CGColor;
     CGColorRef color = CGColorCreateCopyWithAlpha(baseColor, opacity * CGColorGetAlpha(baseColor));
-    CGColorRelease(baseColor);
     return color;
 }
 
@@ -49,6 +49,7 @@
 {
     CGColorRef color = [self getColorWithOpacity:opacity];
     CGContextSetFillColorWithColor(context, color);
+    CGColorRelease(color);
     return YES;
 }
 
@@ -56,6 +57,7 @@
 {
     CGColorRef color = [self getColorWithOpacity:opacity];
     CGContextSetStrokeColorWithColor(context, color);
+    CGColorRelease(color);
     return YES;
 }
 
