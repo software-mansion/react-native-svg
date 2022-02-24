@@ -1,0 +1,22 @@
+name: Test macOS build
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'apple/**'
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      WORKING_DIRECTORY: Example
+    concurrency:
+      group: macos-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
