@@ -1,4 +1,4 @@
-name: Test iOS build
+name: Test macOS build
 on:
   pull_request:
     branches:
