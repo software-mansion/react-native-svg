@@ -11,7 +11,7 @@
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
   "react-native": "src/index.ts",
-  "types": "src/index.d.ts",
+  "types": "lib/typescript/index",
   "files": [
     "__tests__",
     "android",
@@ -43,9 +43,9 @@
   "scripts": {
     "bob": "bob build",
     "flow": "flow src",
-    "flowgen": "flowgen src/index.d.ts -o src/index.js.flow",
+    "flowgen": "flowgen src/index.ts -o src/index.js.flow",
     "flowtyped": "flow-typed install",
-    "format": "prettier README.md CONTRIBUTING.md CODE_OF_CONDUCT.md './src/**/*.{ts,tsx}' src/index.d.ts --write",
+    "format": "prettier README.md CONTRIBUTING.md CODE_OF_CONDUCT.md './src/**/*.{ts,tsx}' --write",
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
