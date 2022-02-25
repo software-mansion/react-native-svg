@@ -51,7 +51,7 @@ class ClipPathElement extends Component {
               x="50"
               y="30"
               fontSize="32"
-              fonWeight="bold"
+              fontWeight="bold"
               textAnchor="middle"
               scale="1.2">
               Q
