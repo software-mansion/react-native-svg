@@ -1,28 +1,12 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Svg,
   Circle,
-  Ellipse,
   G,
   Text,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
   Line,
   Rect,
   Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
 } from '../Svg';
 
 class GExample extends Component {
@@ -42,6 +26,7 @@ class GExample extends Component {
   componentWillUnmount = () => {
     this._unmounted = true;
   };
+  private _unmounted: any;
   render() {
     return (
       <Svg height="100" width="100">
@@ -118,4 +103,4 @@ const icon = (
 
 const samples = [GExample, GTransform];
 
-export { icon, samples };
+export {icon, samples};

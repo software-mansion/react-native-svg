@@ -1,29 +1,5 @@
-import React, { Component } from 'react';
-import {
-  Svg,
-  Circle,
-  Ellipse,
-  G,
-  Text,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
-} from '../Svg';
+import React, {Component} from 'react';
+import {Svg, Circle} from '../Svg';
 
 class CircleExample extends Component {
   static title = 'Circle';
@@ -102,4 +78,4 @@ const icon = (
 );
 
 const samples = [CircleExample, StrokeCircle, StrokeOpacityCircle, PieCircle];
-export { icon, samples };
+export {icon, samples};
