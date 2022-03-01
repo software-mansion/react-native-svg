@@ -138,6 +138,7 @@ class SvgNativeMethods extends Component {
       });
     });
   };
+  root: any;
   render() {
     return (
       <View>

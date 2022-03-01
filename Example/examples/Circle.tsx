@@ -57,7 +57,7 @@ class PieCircle extends Component {
         <Circle cx="50" cy="50" r="40" fill="#ddd" />
         <Circle
           origin="50, 50"
-          rotate="-90"
+          rotation="-90"
           cx="50"
           cy="50"
           r="20"

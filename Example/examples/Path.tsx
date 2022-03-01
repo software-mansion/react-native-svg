@@ -67,10 +67,10 @@ class BezierCurve extends Component {
             strokeWidth="5"
             fill="none"
           />
-          <G stroke="purple" strokeWidth="3" fill="purple" r="3">
-            <Circle cx="100" cy="350" />
-            <Circle cx="250" cy="50" />
-            <Circle cx="400" cy="350" />
+          <G stroke="purple" strokeWidth="3" fill="purple">
+            <Circle cx="100" cy="350" r="3"/>
+            <Circle cx="250" cy="50" r="3"/>
+            <Circle cx="400" cy="350" r="3"/>
           </G>
           <G fontSize="30" fill="black" stroke="none" textAnchor="middle">
             <Text x="100" y="350" dx="-30">
