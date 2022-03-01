@@ -3,6 +3,9 @@ import { Image as NativeImage, View } from 'react-native';
 import { Image as SvgImage } from '../Svg';
 
 class WebImage extends NativeImage {
+  oldRender: () => React.ReactNode;
+  private _setImageRef: (ref: any) => void;
+  private _imageRef: any;
   constructor(props, context) {
     super(props, context);
     this._setImageRef = ref => {

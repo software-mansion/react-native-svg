@@ -1,29 +1,5 @@
-import React, { Component } from 'react';
-import {
-  Svg,
-  Circle,
-  Ellipse,
-  G,
-  Text,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
-} from '../Svg';
+import React, {Component} from 'react';
+import {Svg, Line} from '../Svg';
 
 class LineExample extends Component {
   static title = 'Line';
@@ -88,4 +64,4 @@ const icon = (
 
 const samples = [LineExample, LineWithStrokeLinecap];
 
-export { icon, samples };
+export {icon, samples};

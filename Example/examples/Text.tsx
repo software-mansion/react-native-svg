@@ -1,29 +1,15 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import {
   Svg,
-  Circle,
-  Ellipse,
   G,
   Text,
   TSpan,
   TextPath,
   Path,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
   Defs,
   LinearGradient,
-  RadialGradient,
   Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
 } from '../Svg';
 
 class TextExample extends Component {
@@ -70,7 +56,12 @@ class TextStroke extends Component {
     return (
       <Svg height="60" width="200">
         <Defs>
-          <LinearGradient id="text-stroke-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <LinearGradient
+            id="text-stroke-grad"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="0%">
             <Stop offset="0%" stopColor="blue" stopOpacity="0.5" />
             <Stop offset="100%" stopColor="red" stopOpacity="1" />
           </LinearGradient>
@@ -182,11 +173,7 @@ class TSpanExample extends Component {
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 100 100">
-    <Text
-      x="0"
-      y="80"
-      fontSize="100"
-      fill="blue">
+    <Text x="0" y="80" fontSize="100" fill="blue">
       字
     </Text>
   </Svg>
@@ -201,4 +188,4 @@ const samples = [
   TSpanExample,
 ];
 
-export { icon, samples };
+export {icon, samples};

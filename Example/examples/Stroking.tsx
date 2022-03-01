@@ -1,28 +1,16 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Svg,
   Circle,
-  Ellipse,
   G,
   Text,
-  TSpan,
-  TextPath,
   Path,
-  Polygon,
   Polyline,
-  Line,
   Rect,
-  Use,
-  Image,
-  Symbol,
   Defs,
-  LinearGradient,
   RadialGradient,
   Stop,
   ClipPath,
-  Pattern,
-  Mask,
-  Marker,
 } from '../Svg';
 
 class StrokeExample extends Component {
@@ -172,4 +160,4 @@ const samples = [
   StrokeDashoffset,
   StrokePattern,
 ];
-export { icon, samples };
+export {icon, samples};

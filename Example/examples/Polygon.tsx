@@ -1,29 +1,5 @@
-import React, { Component } from 'react';
-import {
-  Svg,
-  Circle,
-  Ellipse,
-  G,
-  Text,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
-} from '../Svg';
+import React, {Component} from 'react';
+import {Svg, G, Path, Polygon} from '../Svg';
 
 class PolygonExample extends Component {
   static title = 'The following example creates a polygon with three sides';
@@ -112,4 +88,4 @@ const icon = (
 
 const samples = [PolygonExample, FourSidePolygon, StarPolygon, EvenOddPolygon];
 
-export { icon, samples };
+export {icon, samples};
