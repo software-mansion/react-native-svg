@@ -1,29 +1,15 @@
-import React, { Component } from 'react';
-import { View } from 'react-native';
+import React, {Component} from 'react';
+import {View} from 'react-native';
 import {
   Svg,
   Circle,
   Ellipse,
-  G,
   Text,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
-  Line,
   Rect,
-  Use,
-  Image,
-  Symbol,
   Defs,
   LinearGradient,
   RadialGradient,
   Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
 } from '../Svg';
 
 class LinearGradientHorizontal extends Component {
@@ -332,4 +318,4 @@ const samples = [
   FillGradientInRect,
 ];
 
-export { icon, samples };
+export {icon, samples};

@@ -1,29 +1,5 @@
-import React, { Component } from 'react';
-import {
-  Svg,
-  Circle,
-  Ellipse,
-  G,
-  Text,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
-} from '../Svg';
+import React, {Component} from 'react';
+import {Svg, Ellipse} from '../Svg';
 
 class EllipseExample extends Component {
   static title = 'Ellipse';
@@ -87,4 +63,4 @@ const icon = (
 
 const samples = [EllipseExample, PileEllipses, CombinedEllipses];
 
-export { icon, samples };
+export {icon, samples};

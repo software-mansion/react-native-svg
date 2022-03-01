@@ -262,7 +262,7 @@ export interface EllipseProps extends CommonPathProps {
 export const Ellipse: React.ComponentClass<EllipseProps>;
 export type Ellipse = React.ComponentClass<EllipseProps>;
 
-export interface GProps extends CommonPathProps {
+export interface GProps extends CommonPathProps, FontProps {
   opacity?: NumberProp;
 }
 export const G: React.ComponentClass<GProps>;

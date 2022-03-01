@@ -1,58 +1,35 @@
-import React, { Component, PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
   PanResponder,
   View,
   Animated,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {
-  Svg,
-  Circle,
-  Ellipse,
-  G,
-  Text,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
-} from '../Svg';
+import {Svg, G, Text, Path, Polyline, Line} from '../Svg';
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
-const zeroDelta = { x: 0, y: 0 };
+const zeroDelta = {x: 0, y: 0};
 
 class PanExample extends PureComponent {
   static title = 'Bind PanResponder on the SVG Shape';
+  panXY: any;
   constructor(props, context) {
     super(props, context);
     const xy = new Animated.ValueXY();
-    const { x: dx, y: dy } = xy;
+    const {x: dx, y: dy} = xy;
     let offset = zeroDelta;
     xy.addListener(flatOffset => {
       offset = flatOffset;
     });
-    const { panHandlers } = PanResponder.create({
+    const {panHandlers} = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onMoveShouldSetPanResponderCapture: () => true,
       onPanResponderGrant: () => {
         xy.setOffset(offset);
         xy.setValue(zeroDelta);
       },
-      onPanResponderMove: Animated.event([null, { dx, dy }]),
+      onPanResponderMove: Animated.event([null, {dx, dy}]),
       onPanResponderRelease: () => {
         xy.flattenOffset();
       },
@@ -121,4 +98,4 @@ const samples = [PanExample];
 
 const scroll = false;
 
-export { icon, samples, scroll };
+export {icon, samples, scroll};

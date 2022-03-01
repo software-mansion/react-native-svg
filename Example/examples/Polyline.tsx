@@ -1,29 +1,5 @@
-import React, { Component } from 'react';
-import {
-  Svg,
-  Circle,
-  Ellipse,
-  G,
-  Text,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
-} from '../Svg';
+import React, {Component} from 'react';
+import {Svg, Polyline} from '../Svg';
 
 class PolylineExample extends Component {
   static title =
@@ -110,4 +86,4 @@ const samples = [
   PolylineFillStroke,
 ];
 
-export { icon, samples };
+export {icon, samples};

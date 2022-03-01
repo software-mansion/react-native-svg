@@ -7,40 +7,18 @@
 import React, { Component } from 'react';
 import {
   Dimensions,
-  Platform,
   StyleSheet,
   Text,
   View,
   ScrollView,
   TouchableHighlight,
   TouchableOpacity,
-  Animated,
-  Easing,
 } from 'react-native';
 import Modal from './Modal';
 import {
   Svg,
   Circle,
-  Ellipse,
-  G,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
   Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
 } from './Svg';
 
 import * as examples from './examples';

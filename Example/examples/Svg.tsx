@@ -1,29 +1,6 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import {
-  Svg,
-  Circle,
-  Ellipse,
-  G,
-  Text,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
-} from '../Svg';
+import React, {Component} from 'react';
+import {StyleSheet, View, Image} from 'react-native';
+import {Svg, Circle, G, Path, Line, Rect} from '../Svg';
 
 const styles = StyleSheet.create({
   container: {
@@ -161,6 +138,7 @@ class SvgNativeMethods extends Component {
       });
     });
   };
+  root: any;
   render() {
     return (
       <View>
@@ -178,11 +156,11 @@ class SvgNativeMethods extends Component {
             />
           </G>
         </Svg>
-        <View style={{ width: 150, height: 100, borderWidth: 1, marginTop: 5 }}>
+        <View style={{width: 150, height: 100, borderWidth: 1, marginTop: 5}}>
           {this.state.base64 && (
             <Image
-              source={{ uri: `data:image/png;base64,${this.state.base64}` }}
-              style={{ width: 150, height: 100 }}
+              source={{uri: `data:image/png;base64,${this.state.base64}`}}
+              style={{width: 150, height: 100}}
             />
           )}
         </View>
@@ -214,4 +192,4 @@ const samples = [
   SvgNativeMethods,
 ];
 
-export { icon, samples };
+export {icon, samples};

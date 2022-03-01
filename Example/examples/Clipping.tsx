@@ -1,28 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Svg,
   Circle,
   Ellipse,
   G,
   Text,
-  TSpan,
-  TextPath,
   Path,
   Polygon,
-  Polyline,
-  Line,
   Rect,
-  Use,
-  Image,
-  Symbol,
   Defs,
-  LinearGradient,
   RadialGradient,
   Stop,
   ClipPath,
-  Pattern,
-  Mask,
-  Marker,
 } from '../Svg';
 
 class ClipPathElement extends Component {
@@ -51,7 +40,7 @@ class ClipPathElement extends Component {
               x="50"
               y="30"
               fontSize="32"
-              fonWeight="bold"
+              fontWeight="bold"
               textAnchor="middle"
               scale="1.2">
               Q
@@ -77,11 +66,11 @@ class ClipRule extends Component {
     return (
       <Svg height="100" width="100">
         <Defs>
-          <ClipPath id="clip-rule-clip" clipRule="evenodd">
+          <ClipPath id="clip-rule-clip">
             <Path d="M50,5L20,99L95,39L5,39L80,99z" />
           </ClipPath>
         </Defs>
-        <G clipPath="url(#clip-rule-clip)">
+        <G clipPath="url(#clip-rule-clip)" clipRule="evenodd">
           <Rect x="0" y="0" width="50" height="50" fill="red" />
           <Rect x="50" y="0" width="50" height="50" fill="blue" />
           <Rect x="0" y="50" width="50" height="50" fill="yellow" />
@@ -147,4 +136,4 @@ const icon = (
 
 const samples = [ClipPathElement, ClipRule, TextClipping];
 
-export { icon, samples };
+export {icon, samples};

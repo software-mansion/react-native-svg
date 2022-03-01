@@ -1,29 +1,5 @@
-import React, { Component } from 'react';
-import {
-  Svg,
-  Circle,
-  Ellipse,
-  G,
-  Text,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
-} from '../Svg';
+import React, {Component} from 'react';
+import {Svg, Circle, G, Text, Path} from '../Svg';
 
 class PathExample extends Component {
   static title = 'Path';
@@ -91,10 +67,10 @@ class BezierCurve extends Component {
             strokeWidth="5"
             fill="none"
           />
-          <G stroke="purple" strokeWidth="3" fill="purple" r="3">
-            <Circle cx="100" cy="350" />
-            <Circle cx="250" cy="50" />
-            <Circle cx="400" cy="350" />
+          <G stroke="purple" strokeWidth="3" fill="purple">
+            <Circle cx="100" cy="350" r="3"/>
+            <Circle cx="250" cy="50" r="3"/>
+            <Circle cx="400" cy="350" r="3"/>
           </G>
           <G fontSize="30" fill="black" stroke="none" textAnchor="middle">
             <Text x="100" y="350" dx="-30">
@@ -124,4 +100,4 @@ const icon = (
 
 const samples = [PathExample, UnclosedPath, BezierCurve];
 
-export { icon, samples };
+export {icon, samples};
