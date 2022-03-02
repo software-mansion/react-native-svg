@@ -7,17 +7,18 @@
 
 [Check out the Example app](https://github.com/react-native-svg/react-native-svg/tree/main/Example)
 
-## Features
-
-1. Supports most SVG elements and properties (Rect, Circle, Line, Polyline, Polygon, G ...).
-2. Easy to [convert SVG code](https://svgr.now.sh/) to react-native-svg.
-
+- [Features](#features)
 - [Installation](#installation)
 - [Troubleshooting](#troubleshooting)
 - [Opening issues](#opening-issues)
 - [Usage](#usage)
 - [TODO](#todo)
 - [Known issues](#known-issues)
+
+## Features
+
+1. Supports most SVG elements and properties (Rect, Circle, Line, Polyline, Polygon, G ...).
+2. Easy to [convert SVG code](https://svgr.now.sh/) to react-native-svg.
 
 ## Installation
 
@@ -48,16 +49,8 @@ Install the JavaScript with:
 
 2. Link native code
 
-   With autolinking (react-native 0.60+)
-
    ```bash
    cd ios && pod install
-   ```
-
-   Pre 0.60
-
-   ```bash
-   react-native link react-native-svg
    ```
 
 ## Supported react-native versions
