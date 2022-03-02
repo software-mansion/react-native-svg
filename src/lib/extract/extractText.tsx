@@ -1,4 +1,4 @@
-import React, { Children, ComponentType } from 'react';
+import React, { Children, ComponentType, ReactNode } from 'react';
 import extractLengthList from './extractLengthList';
 import { pickNotNil } from '../util';
 import { NumberArray, NumberProp } from './types';
@@ -117,7 +117,7 @@ export function setTSpan(TSpanImplementation: ComponentType) {
   TSpan = TSpanImplementation;
 }
 
-function getChild(child: undefined | string | number | ComponentType) {
+function getChild(child: ReactNode) {
   if (typeof child === 'string' || typeof child === 'number') {
     return <TSpan>{String(child)}</TSpan>;
   } else {
@@ -131,7 +131,7 @@ export type TextProps = {
   dx?: NumberArray;
   dy?: NumberArray;
   rotate?: NumberArray;
-  children?: string | number | (string | number | ComponentType)[];
+  children?: ReactNode;
   inlineSize?: NumberProp;
   baselineShift?: NumberProp;
   verticalAlign?: NumberProp;
