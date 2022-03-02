@@ -44,7 +44,7 @@ When you're sending a pull request:
 
 ## Commits and versioning
 
-All PRs are merged into the `develop` branch, following [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0-beta.3). Combined with [semantic versioning](https://semver.org/), this allows us to have a frequent releases of the library.
+All PRs are merged into the `main` branch and released with `release-it`.
 
 _Note_: We don't force this convention on Pull Requests from contributors, but it's a clean way to see what type of changes are made, so feel free to follow it.
 
@@ -60,7 +60,7 @@ Most notably prefixes you'll see:
 
 ## Release process
 
-We use [Semantic Release](http://semantic-release.org) to release new versions of the library when changes are merged into the `master` branch, which we plan to keep stable. Bug fixes take priority in the release order. The master branch should always contain the latest released code.
+We use [release-it](https://github.com/release-it/release-it) to release new versions of library from `main` branch.
 
 ## Reporting issues
 
