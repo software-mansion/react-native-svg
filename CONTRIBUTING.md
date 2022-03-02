@@ -17,7 +17,7 @@ Add test example in [TestsExample](https://github.com/react-native-svg/react-nat
 
 ## Tests
 
-We use `typescript` for type checks, `eslint` with `prettier` for linting/formatting, `jest/detox` for tests (unit and e2e). All tests are run on travis-ci for all opened pull requests, but you should use them locally when making changes.
+We use `typescript` for type checks, `eslint` with `prettier` for linting/formatting. All tests are run by github actions for all opened pull requests.
 
 - `yarn test`: Run all tests, except for e2e (see note below).
 - `yarn lint`: Run `eslint` check.
