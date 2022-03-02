@@ -13,13 +13,7 @@ We'd like to make contributions as pleasant as possible, so here's a small guide
 
 ### Testing your changes
 
-You can test your changes on any React Native application you have set up locally.
-You can also use the testing application available at https://github.com/msand/react-native-svg-e2e/
-or: https://github.com/magicismight/react-native-svg-example
-
-Just `cd` to your application and type `yarn link react-native-svg` to make your app use your local modified package instead of the one from npmjs.com (this is what point 5 was about in the previous section).
-
-If you made changes in the native code, don't forget to run `react-native link` before building your React Native application so that latest changes are taken into account.
+Add test example in [TestsExample](https://github.com/react-native-svg/react-native-svg/tree/main/TestsExample) concerning your change following the convention of `TestX.tsx` where `X` is your PR number.
 
 ## Tests
 
