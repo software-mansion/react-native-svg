@@ -1,18 +1,11 @@
 import React from 'react';
 import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
 import { idPattern } from '../lib/util';
 import Shape from './Shape';
 import { RNSVGUse } from './NativeComponents';
+import { UseProps } from './types';
 
-export default class Use extends Shape<{
-  x?: NumberProp;
-  y?: NumberProp;
-  width?: NumberProp;
-  height?: NumberProp;
-  xlinkHref?: string;
-  href?: string;
-}> {
+export default class Use extends Shape<UseProps> {
   static displayName = 'Use';
 
   static defaultProps = {

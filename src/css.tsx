@@ -140,7 +140,7 @@ function hasAttrib(elem: XmlAST, name: string): boolean {
 // finds the first node in the array that matches the test predicate, or one
 // of its children
 function findOne(
-  predicate: (v: XmlAST)=> boolean,
+  predicate: (v: XmlAST) => boolean,
   elems: Array<XmlAST | string>,
 ): XmlAST | null {
   let elem: XmlAST | null = null;
@@ -637,8 +637,10 @@ export const inlineStyles: Middleware = function inlineStyles(
     const selectorStr = csstree.generate(item.data);
     try {
       // apply <style/> to matched elements
-      const matched = cssSelect(selectorStr, document, cssSelectOpts).map(initStyle);
-      
+      const matched = cssSelect(selectorStr, document, cssSelectOpts).map(
+        initStyle,
+      );
+
       if (matched.length === 0) {
         continue;
       }

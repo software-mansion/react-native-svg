@@ -1,14 +1,10 @@
 import React from 'react';
 import { extract } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGCircle } from './NativeComponents';
+import { CircleProps } from './types';
 
-export default class Circle extends Shape<{
-  cx?: NumberProp;
-  cy?: NumberProp;
-  r?: NumberProp;
-}> {
+export default class Circle extends Shape<CircleProps> {
   static displayName = 'Circle';
 
   static defaultProps = {

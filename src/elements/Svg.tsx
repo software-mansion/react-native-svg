@@ -5,19 +5,14 @@ import {
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
   NativeModules,
+  StyleProp,
   StyleSheet,
   ViewStyle,
 } from 'react-native';
 import {
-  ClipProps,
-  Color,
   extractedProps,
-  FillProps,
   NumberProp,
   ResponderInstanceProps,
-  ResponderProps,
-  StrokeProps,
-  TransformProps,
 } from '../lib/extract/types';
 import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
@@ -25,6 +20,7 @@ import extractColor from '../lib/extract/extractColor';
 import Shape from './Shape';
 import G from './G';
 import { RNSVGSvg } from './NativeComponents';
+import { SvgProps } from './types';
 
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
 
@@ -36,20 +32,7 @@ const styles = StyleSheet.create({
 });
 const defaultStyle = styles.svg;
 
-export default class Svg extends Shape<
-  {
-    color?: Color;
-    viewBox?: string;
-    opacity?: NumberProp;
-    onLayout?: () => void;
-    preserveAspectRatio?: string;
-    style?: ViewStyle[] | ViewStyle;
-  } & TransformProps &
-    ResponderProps &
-    StrokeProps &
-    FillProps &
-    ClipProps
-> {
+export default class Svg extends Shape<SvgProps> {
   static displayName = 'Svg';
 
   static defaultProps = {
@@ -143,7 +126,9 @@ export default class Svg extends Shape<
 
     const props: extractedProps = extracted as extractedProps;
     props.focusable = Boolean(focusable) && focusable !== 'false';
-    const rootStyles: (ViewStyle | ViewStyle[])[] = [defaultStyle];
+    const rootStyles: (StyleProp<ViewStyle> | StyleProp<ViewStyle>[])[] = [
+      defaultStyle,
+    ];
 
     if (style) {
       rootStyles.push(style);

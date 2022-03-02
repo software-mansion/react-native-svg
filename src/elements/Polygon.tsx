@@ -3,8 +3,9 @@ import Path from './Path';
 import Shape from './Shape';
 import { NumberProp } from '../lib/extract/types';
 import extractPolyPoints from '../lib/extract/extractPolyPoints';
+import { PolygonProps } from './types';
 
-export default class Polygon extends Shape<{ points?: number[] }> {
+export default class Polygon extends Shape<PolygonProps> {
   static displayName = 'Polygon';
 
   static defaultProps = {

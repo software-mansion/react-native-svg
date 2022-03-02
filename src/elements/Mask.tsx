@@ -1,21 +1,12 @@
 import React from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp, TransformProps } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
 import { RNSVGMask } from './NativeComponents';
+import { MaskProps } from './types';
 
-export default class Mask extends Shape<{
-  x?: NumberProp;
-  y?: NumberProp;
-  width?: NumberProp;
-  height?: NumberProp;
-  transform?: number[] | string | TransformProps;
-  maskTransform?: number[] | string | TransformProps;
-  maskUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-  maskContentUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-}> {
+export default class Mask extends Shape<MaskProps> {
   static displayName = 'Mask';
 
   static defaultProps = {

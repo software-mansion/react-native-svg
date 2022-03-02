@@ -1,15 +1,10 @@
 import React from 'react';
 import { extract } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGEllipse } from './NativeComponents';
+import { EllipseProps } from './types';
 
-export default class Ellipse extends Shape<{
-  cx?: NumberProp;
-  cy?: NumberProp;
-  rx?: NumberProp;
-  ry?: NumberProp;
-}> {
+export default class Ellipse extends Shape<EllipseProps> {
   static displayName = 'Ellipse';
 
   static defaultProps = {

@@ -1,20 +1,10 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import extractGradient from '../lib/extract/extractGradient';
-import { NumberProp, TransformProps } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGLinearGradient } from './NativeComponents';
+import { LinearGradientProps } from './types';
 
-export default class LinearGradient extends Shape<{
-  id?: string;
-  x1?: NumberProp;
-  y1?: NumberProp;
-  x2?: NumberProp;
-  y2?: NumberProp;
-  children?: ReactElement[];
-  transform?: number[] | string | TransformProps;
-  gradientTransform?: number[] | string | TransformProps;
-  gradientUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-}> {
+export default class LinearGradient extends Shape<LinearGradientProps> {
   static displayName = 'LinearGradient';
 
   static defaultProps = {

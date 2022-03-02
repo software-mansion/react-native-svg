@@ -1,22 +1,14 @@
 import React from 'react';
-import { Image, ImageSourcePropType } from 'react-native';
+import { Image } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
 import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGImage } from './NativeComponents';
+import { ImageProps } from './types';
 
 const spacesRegExp = /\s+/;
 
-export default class SvgImage extends Shape<{
-  preserveAspectRatio?: string;
-  x?: NumberProp;
-  y?: NumberProp;
-  width?: NumberProp;
-  height?: NumberProp;
-  xlinkHref?: string | number | ImageSourcePropType;
-  href?: string | number | ImageSourcePropType;
-}> {
+export default class SvgImage extends Shape<ImageProps> {
   static displayName = 'Image';
 
   static defaultProps = {

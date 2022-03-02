@@ -68,9 +68,9 @@ https://github.com/react-native-svg/react-native-svg/issues/1554
 
 Install the JavaScript with:
 
-  ```bash
-  expo install react-native-svg
-  ```
+```bash
+expo install react-native-svg
+```
 
 📚 See the [**Expo docs**](https://docs.expo.io/versions/latest/sdk/svg/) for more info or jump ahead to [Usage](#Usage).
 
@@ -79,10 +79,13 @@ Install the JavaScript with:
 1. Install library
 
    from npm
+
    ```bash
    npm install react-native-svg
    ```
+
    from yarn
+
    ```bash
    yarn add react-native-svg
    ```

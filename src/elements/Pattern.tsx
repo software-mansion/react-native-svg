@@ -1,24 +1,12 @@
 import React from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import extractViewBox from '../lib/extract/extractViewBox';
-import { NumberProp, TransformProps } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
 import { RNSVGPattern } from './NativeComponents';
+import { PatternProps } from './types';
 
-export default class Pattern extends Shape<{
-  id?: string;
-  x?: NumberProp;
-  y?: NumberProp;
-  width?: NumberProp;
-  height?: NumberProp;
-  viewBox?: string;
-  preserveAspectRatio?: string;
-  transform?: number[] | string | TransformProps;
-  patternTransform?: number[] | string | TransformProps;
-  patternUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-  patternContentUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-}> {
+export default class Pattern extends Shape<PatternProps> {
   static displayName = 'Pattern';
 
   static defaultProps = {

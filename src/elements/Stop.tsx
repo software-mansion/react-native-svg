@@ -1,11 +1,10 @@
 import { Component } from 'react';
+import { StopProps } from './types';
 
-type StopProps = {
-  parent?: Component;
-};
-
-export default class Stop extends Component<StopProps, {}> {
-  props!: StopProps;
+export default class Stop extends Component<
+  StopProps & { parent?: Component },
+  {}
+> {
   static displayName = 'Stop';
 
   setNativeProps = () => {

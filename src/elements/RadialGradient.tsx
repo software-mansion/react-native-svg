@@ -1,23 +1,10 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import extractGradient from '../lib/extract/extractGradient';
-import { NumberProp, TransformProps } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGRadialGradient } from './NativeComponents';
+import { RadialGradientProps } from './types';
 
-export default class RadialGradient extends Shape<{
-  fx?: NumberProp;
-  fy?: NumberProp;
-  rx?: NumberProp;
-  ry?: NumberProp;
-  r?: NumberProp;
-  cx?: NumberProp;
-  cy?: NumberProp;
-  id?: string;
-  children?: ReactElement[];
-  transform?: number[] | string | TransformProps;
-  gradientTransform?: number[] | string | TransformProps;
-  gradientUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-}> {
+export default class RadialGradient extends Shape<RadialGradientProps & {}> {
   static displayName = 'RadialGradient';
 
   static defaultProps = {

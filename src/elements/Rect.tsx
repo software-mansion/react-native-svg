@@ -1,17 +1,10 @@
 import React from 'react';
 import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGRect } from './NativeComponents';
+import { RectProps } from './types';
 
-export default class Rect extends Shape<{
-  x?: NumberProp;
-  y?: NumberProp;
-  width?: NumberProp;
-  height?: NumberProp;
-  rx?: NumberProp;
-  ry?: NumberProp;
-}> {
+export default class Rect extends Shape<RectProps> {
   static displayName = 'Rect';
 
   static defaultProps = {

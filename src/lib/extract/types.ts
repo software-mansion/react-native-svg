@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { GestureResponderEvent } from 'react-native';
+import { GestureResponderEvent, LayoutChangeEvent } from 'react-native';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
@@ -100,7 +100,7 @@ export type extractedProps = {
   opacity?: number;
   matrix?: number[];
   propList?: string[];
-  onLayout?: () => void;
+  onLayout?: (event: LayoutChangeEvent) => void;
   ref?: (instance: Component | null) => void;
   markerStart?: string;
   markerMid?: string;

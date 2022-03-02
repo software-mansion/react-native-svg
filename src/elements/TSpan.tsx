@@ -6,8 +6,9 @@ import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import { TransformProps } from '../lib/extract/types';
 import { RNSVGTSpan } from './NativeComponents';
+import { TSpanProps } from './types';
 
-export default class TSpan extends Shape<{}> {
+export default class TSpan extends Shape<TSpanProps> {
   static displayName = 'TSpan';
 
   setNativeProps = (

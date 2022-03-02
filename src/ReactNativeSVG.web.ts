@@ -96,6 +96,7 @@ const prepare = <T extends BaseProps>(
   } = props;
   const hasTouchableProperty =
     onPress || onPressIn || onPressOut || onLongPress;
+  // @ts-ignore for some reason it throws error
   const clean: {
     onStartShouldSetResponder?: (e: GestureResponderEvent) => boolean;
     onResponderMove?: (e: GestureResponderEvent) => void;

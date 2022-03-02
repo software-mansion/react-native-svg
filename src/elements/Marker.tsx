@@ -1,20 +1,10 @@
 import React from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
-import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGMarker } from './NativeComponents';
+import { MarkerProps } from './types';
 
-export default class Marker extends Shape<{
-  id?: string;
-  viewBox?: string;
-  preserveAspectRatio?: string;
-  refX?: NumberProp;
-  refY?: NumberProp;
-  markerWidth?: NumberProp;
-  markerHeight?: NumberProp;
-  markerUnits?: 'strokeWidth' | 'userSpaceOnUse';
-  orient?: 'auto' | 'auto-start-reverse' | NumberProp;
-}> {
+export default class Marker extends Shape<MarkerProps> {
   static displayName = 'Marker';
 
   static defaultProps = {

@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "react-native-svg": ["./src"],
+    },
     "target": "es2017",
     "lib": ["es6", "es2016"],
     "jsx": "react-native",
@@ -19,5 +23,5 @@
     "allowSyntheticDefaultImports": true,
     "types": ["react", "react-native"]
   },
-  "include": ["src/index.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

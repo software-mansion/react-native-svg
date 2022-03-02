@@ -1,15 +1,10 @@
 import React from 'react';
 import { extract } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGLine } from './NativeComponents';
+import { LineProps } from './types';
 
-export default class Line extends Shape<{
-  x1?: NumberProp;
-  y1?: NumberProp;
-  x2?: NumberProp;
-  y2?: NumberProp;
-}> {
+export default class Line extends Shape<LineProps> {
   static displayName = 'Line';
 
   static defaultProps = {

@@ -7,8 +7,9 @@ import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import './TSpan';
 import { RNSVGText } from './NativeComponents';
+import { TextProps } from './types';
 
-export default class Text extends Shape<{}> {
+export default class Text extends Shape<TextProps> {
   static displayName = 'Text';
 
   setNativeProps = (

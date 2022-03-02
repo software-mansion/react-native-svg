@@ -1,24 +1,15 @@
 import React, { Component } from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp, TransformProps } from '../lib/extract/types';
+import { TransformProps } from '../lib/extract/types';
 import extractText from '../lib/extract/extractText';
 import { idPattern, pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import TSpan from './TSpan';
 import { RNSVGTextPath } from './NativeComponents';
+import { TextPathProps } from './types';
 
-export default class TextPath extends Shape<{
-  children?: NumberProp | [NumberProp | React.ComponentType];
-  alignmentBaseline?: string;
-  startOffset?: NumberProp;
-  xlinkHref?: string;
-  midLine?: string;
-  spacing?: string;
-  method?: string;
-  href?: string;
-  side?: string;
-}> {
+export default class TextPath extends Shape<TextPathProps> {
   static displayName = 'TextPath';
 
   setNativeProps = (

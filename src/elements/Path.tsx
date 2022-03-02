@@ -2,10 +2,9 @@ import React from 'react';
 import { extract } from '../lib/extract/extractProps';
 import Shape from './Shape';
 import { RNSVGPath } from './NativeComponents';
+import { PathProps } from './types';
 
-export default class Path extends Shape<{
-  d?: string;
-}> {
+export default class Path extends Shape<PathProps> {
   static displayName = 'Path';
 
   render() {

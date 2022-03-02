@@ -3,8 +3,9 @@ import Path from './Path';
 import Shape from './Shape';
 import { NumberProp } from '../lib/extract/types';
 import extractPolyPoints from '../lib/extract/extractPolyPoints';
+import { PolylineProps } from './types';
 
-export default class Polyline extends Shape<{ points?: number[] }> {
+export default class Polyline extends Shape<PolylineProps> {
   static displayName = 'Polyline';
 
   static defaultProps = {
