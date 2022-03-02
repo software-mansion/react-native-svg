@@ -1,4 +1,4 @@
-import {ReactElement} from 'react';
+import {ReactElement, ReactNode} from 'react';
 import { GestureResponderEvent, TransformsStyle, OpaqueColorValue, GestureResponderHandlers, ImageProps as RNImageProps, ViewProps } from 'react-native';
 
 // Common props
@@ -412,7 +412,7 @@ export interface TextPathProps extends TextSpecificProps {
   spacing?: TextPathSpacing;
   midLine?: TextPathMidLine;
   side?: string;
-  children?: NumberProp | [NumberProp | React.ComponentType];
+  children?: ReactNode;
 }
 
 export interface UseProps extends CommonPathProps {
