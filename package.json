@@ -1,5 +1,5 @@
 {
-  "version": "12.2.0",
+  "version": "12.3.0",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -47,8 +47,8 @@
     "lint": "eslint --ext .ts,.tsx src",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
     "prepare": " npm run bob",
-    "semantic-release": "semantic-release",
     "test": "npm run lint && npm run tsc && npm run jest",
+    "release": "npm login && release-it",
     "tsc": "tsc --noEmit"
   },
   "peerDependencies": {
@@ -63,8 +63,6 @@
     "@react-native-community/bob": "^0.9.7",
     "@react-native-community/eslint-config": "0.0.7",
     "@react-native-community/eslint-plugin": "^1.0.0",
-    "@semantic-release/changelog": "^5.0.0",
-    "@semantic-release/git": "^9.0.0",
     "@types/css-tree": "^1.0.3",
     "@types/react": "^17.0.16",
     "@types/react-native": "^0.63.40",
@@ -79,22 +77,11 @@
     "react": "^16.13.0",
     "react-native": "^0.61.5",
     "react-test-renderer": "^16.13.0",
-    "semantic-release": "^17.0.4",
-    "semantic-release-cli": "^5.2.3",
+    "release-it": "^14.12.5",
     "typescript": "^3.8.3"
   },
   "jest": {
     "preset": "react-native"
-  },
-  "release": {
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
-      "@semantic-release/npm",
-      "@semantic-release/github",
-      "@semantic-release/git"
-    ]
   },
   "nativePackage": true
 }
