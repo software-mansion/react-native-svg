@@ -17,6 +17,16 @@
  */
 static CGFloat idealFlatness = (CGFloat).01;
 
+/**
+ * returns the distance between two points
+ */
+static CGFloat distance(CGPoint p1, CGPoint p2)
+{
+    CGFloat dx = p2.x - p1.x;
+    CGFloat dy = p2.y - p1.y;
+    return hypot(dx, dy);
+}
+
 // Subdivide a Bézier (specific division)
 /*
  * (c) 2004 Alastair J. Houghton
@@ -48,17 +58,8 @@ static CGFloat idealFlatness = (CGFloat).01;
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-@implementation RNSVGPathMeasure
-/**
-* returns the distance between two points
-*/
-+(CGFloat) distanceFrom:(CGPoint)p1 to:(CGPoint) p2 {
-    CGFloat dx = p2.x - p1.x;
-    CGFloat dy = p2.y - p1.y;
-    return hypot(dx, dy);
-}
-
-+(void) subdivideBezierAtT:(const CGPoint)bez[4] bez1:(CGPoint)bez1[4] bez2:(CGPoint)bez2[4] t:(CGFloat)t {
+static void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint bez2[4], CGFloat t)
+{
     CGPoint q;
     CGFloat mt = 1 - t;
 
@@ -83,10 +84,11 @@ static CGFloat idealFlatness = (CGFloat).01;
     bez1[3].y = bez2[0].y = mt * bez1[2].y + t * bez2[1].y;
 }
 
+@implementation RNSVGPathMeasure
 
 - (void)addLine:(CGPoint *)last next:(const CGPoint *)next {
     NSArray *line = @[[NSValue valueWithCGPoint:*last], [NSValue valueWithCGPoint:*next]];
-    _pathLength += [RNSVGPathMeasure distanceFrom:*last to:*next];
+    _pathLength += distance(*last, *next);
     [_lengths addObject:[NSNumber numberWithDouble:_pathLength]];
     [_lines addObject:line];
     *last = *next;
@@ -151,10 +153,10 @@ static CGFloat idealFlatness = (CGFloat).01;
                     CGPoint ctrl2 = bez[2];
                     CGPoint next = bez[3];
                     CGFloat polyLen =
-                        [RNSVGPathMeasure distanceFrom:last to:ctrl1] +
-                        [RNSVGPathMeasure distanceFrom:ctrl1 to:ctrl2] +
-                        [RNSVGPathMeasure distanceFrom:ctrl2 to:next];
-                    CGFloat chordLen = [RNSVGPathMeasure distanceFrom:last to:next];
+                        distance(last, ctrl1) +
+                        distance(ctrl1, ctrl2) +
+                        distance(ctrl2, next);
+                    CGFloat chordLen = distance(last, next);
                     CGFloat error = polyLen - chordLen;
 
                     // if the error is less than our accepted level of error
@@ -164,7 +166,7 @@ static CGFloat idealFlatness = (CGFloat).01;
                         _lineCount++;
                     } else {
                         CGPoint bez1[4], bez2[4];
-                        [RNSVGPathMeasure subdivideBezierAtT:bez bez1:bez1 bez2:bez2 t:.5];
+                        subdivideBezierAtT(bez, bez1, bez2, .5);
                         [curves addObject:[NSValue valueWithBytes:&bez2 objCType:@encode(CGPoint[4])]];
                         [curves addObject:[NSValue valueWithBytes:&bez1 objCType:@encode(CGPoint[4])]];
                         curveIndex += 2;
