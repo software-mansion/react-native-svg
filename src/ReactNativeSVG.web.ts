@@ -154,6 +154,7 @@ const prepare = <P extends BaseProps = BaseProps>(
   );
 
   if (!(onLongPress || onPress || onPressIn || onPressOut)) {
+    // @ts-expect-error
     return React.createElement(Component, rest, children);
   }
 
@@ -200,6 +201,7 @@ const prepare = <P extends BaseProps = BaseProps>(
       onPressOut,
       rejectResponderTermination,
     },
+    // @ts-expect-error
     React.createElement(Component, childProps, children),
   );
 };
