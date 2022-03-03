@@ -21,7 +21,6 @@ interface BaseProps extends Omit<TouchableWithoutFeedbackProps, 'style'> {
   fontSize?: NumberProp;
   fontStyle?: string;
   fontWeight?: NumberProp;
-  forwardedRef?: unknown;
   originX?: NumberProp;
   originY?: NumberProp;
   rotation?: NumberArray;
@@ -48,145 +47,9 @@ const styles = StyleSheet.create({
 
 const prepare = <P extends BaseProps = BaseProps>(
   Component: (props: P) => React.ReactElement<P>,
-): React.FC<P> => props => {
-  const {
-    delayLongPress,
-    delayPressIn,
-    delayPressOut,
-    disabled,
-    focusable,
-    onBlur,
-    onFocus,
-    onLongPress,
-    onPress,
-    onPressIn,
-    onPressOut,
-    rejectResponderTermination,
-
-    children,
-    fontFamily,
-    fontSize,
-    fontStyle,
-    fontWeight,
-    forwardedRef,
-    originX,
-    originY,
-    rotation,
-    scale,
-    skewX,
-    skewY,
-    style,
-    translate,
-
-    // other TouchableWithoutFeedback props
-    // unsupported by react-native-web implem
-    hasTVPreferredFocus,
-    hitSlop,
-    pressRetentionOffset,
-    touchSoundDisabled,
-    tvParallaxProperties,
-
-    ...rest
-  } = props;
-
-  const clean: typeof rest & {
-    ref?: unknown;
-    style?: {};
-    transform?: string;
-  } = rest;
-
-  const transform = [];
-
-  if (originX != null || originY != null) {
-    transform.push(`translate(${originX || 0}, ${originY || 0})`);
-  }
-  if (translate != null) {
-    transform.push(`translate(${translate})`);
-  }
-  if (scale != null) {
-    transform.push(`scale(${scale})`);
-  }
-  // rotation maps to rotate, not to collide with the text rotate attribute (which acts per glyph rather than block)
-  if (rotation != null) {
-    transform.push(`rotate(${rotation})`);
-  }
-  if (skewX != null) {
-    transform.push(`skewX(${skewX})`);
-  }
-  if (skewY != null) {
-    transform.push(`skewY(${skewY})`);
-  }
-  if (originX != null || originY != null) {
-    transform.push(`translate(${-originX || 0}, ${-originY || 0})`);
-  }
-
-  if (transform.length) {
-    clean.transform = transform.join(' ');
-  }
-
-  if (forwardedRef) {
-    clean.ref = forwardedRef;
-  }
-
-  const additionalStyles: {
-    fontStyle?: string;
-    fontFamily?: string;
-    fontSize?: NumberProp;
-    fontWeight?: NumberProp;
-  } = {};
-
-  if (fontFamily != null) {
-    additionalStyles.fontFamily = fontFamily;
-  }
-  if (fontSize != null) {
-    additionalStyles.fontSize = fontSize;
-  }
-  if (fontWeight != null) {
-    additionalStyles.fontWeight = fontWeight;
-  }
-  if (fontStyle != null) {
-    additionalStyles.fontStyle = fontStyle;
-  }
-
-  clean.style = StyleSheet.compose(
-    styles.base,
-    resolve(style, additionalStyles),
-  );
-
-  if (!(onLongPress || onPress || onPressIn || onPressOut)) {
-    // @ts-expect-error
-    return React.createElement(Component, rest, children);
-  }
-
-  const {
-    accessibilityLabel,
-    accessibilityLiveRegion,
-    accessibilityRole,
-    accessibilityState,
-    accessibilityValue,
-    accessible,
-    importantForAccessibility,
-    nativeID,
-    onLayout,
-    testID,
-
-    ...childProps
-  } = rest;
-
-  return React.createElement(
-    TouchableWithoutFeedback,
-    {
-      accessibilityLabel,
-      accessibilityLiveRegion,
-      accessibilityRole,
-      accessibilityState,
-      accessibilityValue,
-      accessible,
-      importantForAccessibility,
-      // @ts-expect-error
-      nativeID,
-      testID,
-
+) =>
+  React.forwardRef((props: P, forwardedRef: unknown) => {
+    const {
       delayLongPress,
       delayPressIn,
       delayPressOut,
@@ -194,17 +57,153 @@ const prepare = <P extends BaseProps = BaseProps>(
       focusable,
       onBlur,
       onFocus,
-      onLayout,
       onLongPress,
       onPress,
       onPressIn,
       onPressOut,
       rejectResponderTermination,
-    },
-    // @ts-expect-error
-    React.createElement(Component, childProps, children),
-  );
-};
+
+      children,
+      fontFamily,
+      fontSize,
+      fontStyle,
+      fontWeight,
+      originX,
+      originY,
+      rotation,
+      scale,
+      skewX,
+      skewY,
+      style,
+      translate,
+
+      // other TouchableWithoutFeedback props
+      // unsupported by react-native-web implem
+      hasTVPreferredFocus,
+      hitSlop,
+      pressRetentionOffset,
+      touchSoundDisabled,
+      tvParallaxProperties,
+
+      ...rest
+    } = props;
+
+    const clean: typeof rest & {
+      ref?: unknown;
+      style?: {};
+      transform?: string;
+    } = rest;
+
+    const transform = [];
+
+    if (originX != null || originY != null) {
+      transform.push(`translate(${originX || 0}, ${originY || 0})`);
+    }
+    if (translate != null) {
+      transform.push(`translate(${translate})`);
+    }
+    if (scale != null) {
+      transform.push(`scale(${scale})`);
+    }
+    // rotation maps to rotate, not to collide with the text rotate attribute (which acts per glyph rather than block)
+    if (rotation != null) {
+      transform.push(`rotate(${rotation})`);
+    }
+    if (skewX != null) {
+      transform.push(`skewX(${skewX})`);
+    }
+    if (skewY != null) {
+      transform.push(`skewY(${skewY})`);
+    }
+    if (originX != null || originY != null) {
+      transform.push(`translate(${-originX || 0}, ${-originY || 0})`);
+    }
+
+    if (transform.length) {
+      clean.transform = transform.join(' ');
+    }
+
+    if (forwardedRef) {
+      clean.ref = forwardedRef;
+    }
+
+    const additionalStyles: {
+      fontStyle?: string;
+      fontFamily?: string;
+      fontSize?: NumberProp;
+      fontWeight?: NumberProp;
+    } = {};
+
+    if (fontFamily != null) {
+      additionalStyles.fontFamily = fontFamily;
+    }
+    if (fontSize != null) {
+      additionalStyles.fontSize = fontSize;
+    }
+    if (fontWeight != null) {
+      additionalStyles.fontWeight = fontWeight;
+    }
+    if (fontStyle != null) {
+      additionalStyles.fontStyle = fontStyle;
+    }
+
+    clean.style = StyleSheet.compose(
+      styles.base,
+      resolve(style, additionalStyles),
+    );
+
+    if (!(onLongPress || onPress || onPressIn || onPressOut)) {
+      // @ts-expect-error
+      return React.createElement(Component, rest, children);
+    }
+
+    const {
+      accessibilityLabel,
+      accessibilityLiveRegion,
+      accessibilityRole,
+      accessibilityState,
+      accessibilityValue,
+      accessible,
+      importantForAccessibility,
+      nativeID,
+      onLayout,
+      testID,
+
+      ...childProps
+    } = rest;
+
+    return React.createElement(
+      TouchableWithoutFeedback,
+      {
+        accessibilityLabel,
+        accessibilityLiveRegion,
+        accessibilityRole,
+        accessibilityState,
+        accessibilityValue,
+        accessible,
+        importantForAccessibility,
+        // @ts-expect-error
+        nativeID,
+        testID,
+
+        delayLongPress,
+        delayPressIn,
+        delayPressOut,
+        disabled,
+        focusable,
+        onBlur,
+        onFocus,
+        onLayout,
+        onLongPress,
+        onPress,
+        onPressIn,
+        onPressOut,
+        rejectResponderTermination,
+      },
+      // @ts-expect-error
+      React.createElement(Component, childProps, children),
+    );
+  });
 
 export const Circle = prepare(createComponent('circle'));
 export const ClipPath = prepare(createComponent('clipPath'));
