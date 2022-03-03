@@ -48,8 +48,17 @@ static CGFloat idealFlatness = (CGFloat).01;
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint bez2[4], CGFloat t)
-{
+@implementation RNSVGPathMeasure
+/**
+* returns the distance between two points
+*/
++(CGFloat) distanceFrom:(CGPoint) p1 to:(CGPoint) p2 {
+    CGFloat dx = p2.x - p1.x;
+    CGFloat dy = p2.y - p1.y;
+    return hypot(dx, dy);
+}
+
++(void) subdivideBezierAtT:(const CGPoint) bez[4] bez1:(CGPoint)bez1[4] bez2:(CGPoint)bez2[4] t:(CGFloat)t {
     CGPoint q;
     CGFloat mt = 1 - t;
 
@@ -74,15 +83,6 @@ void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint bez2[4], 
     bez1[3].y = bez2[0].y = mt * bez1[2].y + t * bez2[1].y;
 }
 
-@implementation RNSVGPathMeasure
-/**
-* returns the distance between two points
-*/
-+(CGFloat) distanceFrom:(CGPoint) p1 to:(CGPoint) p2 {
-    CGFloat dx = p2.x - p1.x;
-    CGFloat dy = p2.y - p1.y;
-    return hypot(dx, dy);
-}
 
 - (void)addLine:(CGPoint *)last next:(const CGPoint *)next {
     NSArray *line = @[[NSValue valueWithCGPoint:*last], [NSValue valueWithCGPoint:*next]];
@@ -164,7 +164,7 @@ void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint bez2[4], 
                         _lineCount++;
                     } else {
                         CGPoint bez1[4], bez2[4];
-                        subdivideBezierAtT(bez, bez1, bez2, .5);
+                        [RNSVGPathMeasure subdivideBezierAtT:bez bez1:bez1 bez2:bez2 t:.5];
                         [curves addObject:[NSValue valueWithBytes:&bez2 objCType:@encode(CGPoint[4])]];
                         [curves addObject:[NSValue valueWithBytes:&bez1 objCType:@encode(CGPoint[4])]];
                         curveIndex += 2;
