@@ -20,6 +20,5 @@
     "types": ["react", "react-native"]
   },
   "files": ["src/index.d.ts"],
-  "exclude": ["example"],
   "include": ["src/index.ts"]
 }

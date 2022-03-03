@@ -1446,17 +1446,12 @@ const styles = StyleSheet.create({
 
 ```bash
 
-git clone https://github.com/react-native-svg/react-native-svg.git
-cd ./react-native-svg/example
+git clone https://github.com/magicismight/react-native-svg-example.git
+cd react-native-svg-example
 yarn
 
-# For react-native:
-# start Metro: yarn start-metro
 # run Android: react-native run-android
 # run iOS: react-native run-ios
-
-# For react-native-web:
-# run Webpack: yarn start-webpack
 
 ```
 
