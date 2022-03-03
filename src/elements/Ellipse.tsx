@@ -22,15 +22,7 @@ export default class Ellipse extends Shape<{
   render() {
     const { props } = this;
     const { cx, cy, rx, ry } = props;
-    return (
-      <RNSVGEllipse
-        ref={this.refMethod}
-        {...extract(this, props)}
-        cx={cx}
-        cy={cy}
-        rx={rx}
-        ry={ry}
-      />
-    );
+    const ellipseProps = { ...extract(this, props), cx, cy, rx, ry };
+    return <RNSVGEllipse ref={this.refMethod} {...ellipseProps} />;
   }
 }

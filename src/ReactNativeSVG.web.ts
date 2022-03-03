@@ -10,6 +10,7 @@ import {
 import { NumberArray, NumberProp } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
+import { getHasTouchableProperty } from './lib/util';
 
 const createElement = cE || ucE;
 
@@ -87,15 +88,10 @@ const prepare = <T extends BaseProps>(
     fontStyle,
     style,
     forwardedRef,
-    onPress,
-    onPressIn,
-    onPressOut,
-    onLongPress,
     // @ts-ignore
     ...rest
   } = props;
-  const hasTouchableProperty =
-    onPress || onPressIn || onPressOut || onLongPress;
+  const hasTouchableProperty = getHasTouchableProperty(props);
   const clean: {
     onStartShouldSetResponder?: (e: GestureResponderEvent) => boolean;
     onResponderMove?: (e: GestureResponderEvent) => void;
@@ -245,7 +241,11 @@ export class WebShape<
   ) => boolean;
   constructor(props: P, context: C) {
     super(props, context);
-    SvgTouchableMixin(this);
+    const hasTouchableProperty = getHasTouchableProperty(props);
+  
+    // Do not attach touchable mixin handlers if SVG element doesn't have a touchable prop
+    if (hasTouchableProperty) SvgTouchableMixin(this);
+    
     this._remeasureMetricsOnActivation = remeasure.bind(this);
   }
 }
