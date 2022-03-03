@@ -52,13 +52,13 @@ static CGFloat idealFlatness = (CGFloat).01;
 /**
 * returns the distance between two points
 */
-+(CGFloat) distanceFrom:(CGPoint) p1 to:(CGPoint) p2 {
++(CGFloat) distanceFrom:(CGPoint)p1 to:(CGPoint) p2 {
     CGFloat dx = p2.x - p1.x;
     CGFloat dy = p2.y - p1.y;
     return hypot(dx, dy);
 }
 
-+(void) subdivideBezierAtT:(const CGPoint) bez[4] bez1:(CGPoint)bez1[4] bez2:(CGPoint)bez2[4] t:(CGFloat)t {
++(void) subdivideBezierAtT:(const CGPoint)bez[4] bez1:(CGPoint)bez1[4] bez2:(CGPoint)bez2[4] t:(CGFloat)t {
     CGPoint q;
     CGFloat mt = 1 - t;
 
