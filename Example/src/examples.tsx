@@ -14,7 +14,6 @@ import * as Clipping from './examples/Clipping';
 import * as Image from './examples/Image';
 import * as Reusable from './examples/Reusable';
 import * as TouchEvents from './examples/TouchEvents';
-import * as PanResponder from './examples/PanResponder';
 
 export {
   Svg,
@@ -33,6 +32,4 @@ export {
   Image,
   TouchEvents,
   Reusable,
-  PanResponder,
 };
-

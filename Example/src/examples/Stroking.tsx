@@ -11,7 +11,7 @@ import {
   RadialGradient,
   Stop,
   ClipPath,
-} from '../Svg';
+} from 'react-native-svg';
 
 class StrokeExample extends Component {
   static title =
@@ -86,7 +86,8 @@ class StrokeDashoffset extends Component {
           y="40"
           textAnchor="middle"
           strokeDasharray="100"
-          strokeDashoffset="60">
+          strokeDashoffset="60"
+        >
           STROKE
         </Text>
       </Svg>
@@ -107,7 +108,8 @@ class StrokePattern extends Component {
             rx="80%"
             ry="80%"
             fx="50%"
-            fy="50%">
+            fy="50%"
+          >
             <Stop offset="50%" stopColor="#fff" stopOpacity="0.5" />
             <Stop offset="100%" stopColor="#f00" stopOpacity="1" />
           </RadialGradient>
@@ -146,7 +148,8 @@ const icon = (
     viewBox="0 0 20 20"
     fill="none"
     stroke="black"
-    strokeWidth="2">
+    strokeWidth="2"
+  >
     <Path strokeDasharray="2,2" d="M0 4 h20" />
     <Path strokeDasharray="4,4" d="M0 10 h20" />
     <Path strokeDasharray="4,2,1,1,1,6" d="M0 19 h20" />

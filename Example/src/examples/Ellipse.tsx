@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Svg, Ellipse} from '../Svg';
+import {Svg, Ellipse} from 'react-native-svg';
 
 class EllipseExample extends Component {
   static title = 'Ellipse';

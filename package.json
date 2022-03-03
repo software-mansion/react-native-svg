@@ -21,7 +21,7 @@
     "src",
     "RNSVG.podspec"
   ],
-  "@react-native-community/bob": {
+  "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
     "targets": [
@@ -63,7 +63,6 @@
     "css-tree": "^1.0.0-alpha.39"
   },
   "devDependencies": {
-    "@react-native-community/bob": "^0.9.7",
     "@react-native-community/eslint-config": "0.0.7",
     "@react-native-community/eslint-plugin": "^1.0.0",
     "@types/css-tree": "^1.0.3",
@@ -83,6 +82,7 @@
     "prettier": "^1.19.1",
     "react": "^16.13.0",
     "react-native": "^0.62.3",
+    "react-native-builder-bob": "^0.18.2",
     "react-test-renderer": "^16.13.0",
     "release-it": "^14.12.5",
     "typescript": "^3.8.3"

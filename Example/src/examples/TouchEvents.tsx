@@ -1,6 +1,15 @@
 import React, {Component} from 'react';
 
-import {Svg, Circle, G, Text, Path, Rect, Defs, ClipPath} from '../Svg';
+import {
+  Svg,
+  Circle,
+  G,
+  Text,
+  Path,
+  Rect,
+  Defs,
+  ClipPath,
+} from 'react-native-svg';
 
 class PressExample extends Component {
   static title =
@@ -73,7 +82,8 @@ class GroupExample extends Component {
             fontSize="40"
             x="100"
             y="40"
-            onPress={() => alert('Pressed on Text')}>
+            onPress={() => alert('Pressed on Text')}
+          >
             H
           </Text>
           <Rect x="20" y="20" width="40" height="40" fill="yellow" />

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Svg, Polyline} from '../Svg';
+import {Svg, Polyline} from 'react-native-svg';
 
 class PolylineExample extends Component {
   static title =

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
-import {Svg, Circle, G, Path, Line, Rect} from '../Svg';
+import {Svg, Circle, G, Path, Line, Rect} from 'react-native-svg';
 
 const styles = StyleSheet.create({
   container: {
@@ -77,7 +77,8 @@ class SvgViewbox extends Component {
         height="100"
         width="100"
         viewBox="40 20 100 40"
-        preserveAspectRatio="none">
+        preserveAspectRatio="none"
+      >
         <Rect x="0" y="0" width="100" height="100" fill="red" />
         <Circle cx="50" cy="50" r="30" fill="yellow" />
         <Circle cx="40" cy="40" r="4" fill="black" />
@@ -147,7 +148,8 @@ class SvgNativeMethods extends Component {
           width="150"
           ref={ele => {
             this.root = ele;
-          }}>
+          }}
+        >
           <G x="40" onPress={this.alert}>
             <Circle cx="32" cy="32" r="4.167" fill="blue" />
             <Path

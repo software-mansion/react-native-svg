@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Svg, G, Path, Polygon} from '../Svg';
+import {Svg, G, Path, Polygon} from 'react-native-svg';
 
 class PolygonExample extends Component {
   static title = 'The following example creates a polygon with three sides';
