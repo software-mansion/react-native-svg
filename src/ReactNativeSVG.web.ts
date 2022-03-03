@@ -21,7 +21,7 @@ interface BaseProps extends Omit<TouchableWithoutFeedbackProps, 'style'> {
   fontSize?: NumberProp;
   fontStyle?: string;
   fontWeight?: NumberProp;
-  forwardedRef?: {};
+  forwardedRef?: unknown;
   originX?: NumberProp;
   originY?: NumberProp;
   rotation?: NumberArray;
@@ -230,6 +230,8 @@ export const Text = prepare(createComponent('text'));
 export const TextPath = prepare(createComponent('textPath'));
 export const Use = prepare(createComponent('use'));
 
+const BaseG = prepare(createComponent('g'));
+
 export const G = (
   props: BaseProps & {
     x?: NumberProp;
@@ -243,7 +245,7 @@ export const G = (
     rest.translate = `${x || 0}, ${y || 0}`;
   }
 
-  return prepare(createComponent('g'))(rest);
+  return React.createElement(BaseG, rest);
 };
 
 Circle.displayName = 'Circle';
