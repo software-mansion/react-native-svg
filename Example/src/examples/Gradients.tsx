@@ -26,8 +26,7 @@ class LinearGradientHorizontal extends Component {
             y1="0"
             x2="235"
             y2="0"
-            gradientUnits="userSpaceOnUse"
-          >
+            gradientUnits="userSpaceOnUse">
             <Stop offset="0" stopColor="rgb(255,255,0)" stopOpacity="1" />
             <Stop offset="1" stopColor="red" />
           </LinearGradient>
@@ -51,8 +50,7 @@ class LinearGradientHorizontalBug extends Component {
             y1="0"
             x2="235"
             y2="0"
-            gradientUnits="userSpaceOnUse"
-          >
+            gradientUnits="userSpaceOnUse">
             <Stop offset="0" stopColor="rgb(255,255,0)" stopOpacity="0" />
             <Stop offset="1" stopColor="red" />
           </LinearGradient>
@@ -90,8 +88,7 @@ class GradientUnits extends Component {
           height: 150,
           flexDirection: 'row',
           justifyContent: 'space-around',
-        }}
-      >
+        }}>
         <Svg height="150" width="90">
           <Defs>
             <LinearGradient id="defaultUnits" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -117,8 +114,7 @@ class GradientUnits extends Component {
               y1="0%"
               x2="0%"
               y2="100%"
-              gradientUnits="userSpaceOnUse"
-            >
+              gradientUnits="userSpaceOnUse">
               <Stop offset="0%" stopColor="#000" stopOpacity="1" />
               <Stop offset="100%" stopColor="#ff0" stopOpacity="1" />
             </LinearGradient>
@@ -175,8 +171,7 @@ class RadialGradientExample extends Component {
             r="85"
             fx="150"
             fy="75"
-            gradientUnits="userSpaceOnUse"
-          >
+            gradientUnits="userSpaceOnUse">
             <Stop offset="0" stopColor="#ff0" stopOpacity="1" />
             <Stop offset="0.3" stopColor="#000" stopOpacity="1" />
             <Stop offset="0.7" stopColor="#0f0" stopOpacity="1" />
@@ -202,8 +197,7 @@ class RadialGradientPercent extends Component {
             rx="50%"
             ry="50%"
             fx="50%"
-            fy="50%"
-          >
+            fy="50%">
             <Stop offset="0%" stopColor="#fff" stopOpacity="1" />
             <Stop offset="100%" stopColor="#00f" stopOpacity="1" />
           </RadialGradient>
@@ -227,8 +221,7 @@ class RadialGradientPart extends Component {
             cy="30%"
             r="30%"
             fx="50%"
-            fy="50%"
-          >
+            fy="50%">
             <Stop offset="0%" stopColor="#fff" stopOpacity="0" />
             <Stop offset="100%" stopColor="#00f" stopOpacity="1" />
           </RadialGradient>
@@ -251,8 +244,7 @@ class FillGradientWithOpacity extends Component {
             cy="50%"
             r="50%"
             fx="50%"
-            fy="50%"
-          >
+            fy="50%">
             <Stop offset="0%" stopColor="#fff" stopOpacity="1" />
             <Stop offset="100%" stopColor="#00f" stopOpacity="1" />
           </RadialGradient>
@@ -282,8 +274,7 @@ class FillGradientInRect extends Component {
             cy="50%"
             r="50%"
             fx="50%"
-            fy="50%"
-          >
+            fy="50%">
             <Stop offset="0%" stopColor="#fff" stopOpacity="1" />
             <Stop offset="100%" stopColor="#00f" stopOpacity="1" />
           </RadialGradient>

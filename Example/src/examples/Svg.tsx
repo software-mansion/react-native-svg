@@ -132,11 +132,13 @@ class SvgNativeMethods extends Component {
     base64: null,
   };
   alert = () => {
-    this.root.toDataURL(base64 => {
-      this.setState({
-        base64,
+    if (Platform.OS !== 'web') {
+      this.root.toDataURL(base64 => {
+        this.setState({
+          base64,
+        });
       });
-    });
+    }
   };
   root: any;
   render() {
@@ -145,11 +147,9 @@ class SvgNativeMethods extends Component {
         <Svg
           height="100"
           width="150"
-          {...(Platform.OS !== 'web' && {
-            ref: ele => {
-              this.root = ele;
-            },
-          })}>
+          ref={ele => {
+            this.root = ele;
+          }}>
           <G x="40" onPress={this.alert}>
             <Circle cx="32" cy="32" r="4.167" fill="blue" />
             <Path

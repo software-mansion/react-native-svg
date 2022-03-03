@@ -30,8 +30,7 @@ class ImageExample extends Component {
           textAnchor="middle"
           fontWeight="bold"
           fontSize="16"
-          fill="blue"
-        >
+          fill="blue">
           HOGWARTS
         </Text>
       </Svg>
@@ -65,8 +64,7 @@ class ClipImage extends Component {
           textAnchor="middle"
           fontWeight="bold"
           fontSize="16"
-          fill="red"
-        >
+          fill="red">
           HOGWARTS
         </Text>
       </Svg>

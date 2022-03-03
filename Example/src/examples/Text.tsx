@@ -42,8 +42,7 @@ class TextRotate extends Component {
           fill="#f60"
           rotate="106"
           scale="1.36"
-          origin="140, 0"
-        >
+          origin="140, 0">
           I love SVG
         </Text>
       </Svg>
@@ -62,8 +61,7 @@ class TextStroke extends Component {
             x1="0%"
             y1="0%"
             x2="100%"
-            y2="0%"
-          >
+            y2="0%">
             <Stop offset="0%" stopColor="blue" stopOpacity="0.5" />
             <Stop offset="100%" stopColor="red" stopOpacity="1" />
           </LinearGradient>
@@ -75,8 +73,7 @@ class TextStroke extends Component {
           fontSize="30"
           fontWeight="bold"
           x="100"
-          y="20"
-        >
+          y="20">
           <TSpan textAnchor="middle">{['STROKE TEXT']}</TSpan>
         </Text>
       </Svg>
@@ -104,8 +101,7 @@ class TextFill extends Component {
           fontWeight="bold"
           x="100"
           y="20"
-          textAnchor="middle"
-        >
+          textAnchor="middle">
           FILL TEXT
         </Text>
       </Svg>

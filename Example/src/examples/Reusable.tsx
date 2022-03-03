@@ -90,8 +90,7 @@ class DefsExample extends Component {
             cy="50%"
             r="50%"
             fx="50%"
-            fy="50%"
-          >
+            fy="50%">
             <Stop offset="0%" stopColor="yellow" />
             <Stop offset="50%" stopColor="red" />
             <Stop offset="100%" stopColor="blue" />

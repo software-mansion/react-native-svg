@@ -27,8 +27,7 @@ class ClipPathElement extends Component {
             rx="50%"
             ry="50%"
             fx="50%"
-            fy="50%"
-          >
+            fy="50%">
             <Stop offset="0%" stopColor="#ff0" stopOpacity="1" />
             <Stop offset="100%" stopColor="#00f" stopOpacity="1" />
           </RadialGradient>
@@ -43,8 +42,7 @@ class ClipPathElement extends Component {
               fontSize="32"
               fontWeight="bold"
               textAnchor="middle"
-              scale="1.2"
-            >
+              scale="1.2">
               Q
             </Text>
           </ClipPath>
@@ -112,8 +110,7 @@ class TextClipping extends Component {
           stroke="blue"
           strokeWidth="1"
           textAnchor="middle"
-          clipPath="url(#text-clipping-clip)"
-        >
+          clipPath="url(#text-clipping-clip)">
           NOT THE FACE
         </Text>
       </Svg>

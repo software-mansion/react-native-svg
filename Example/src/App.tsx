@@ -161,8 +161,7 @@ export default class SvgExample extends Component {
           style={styles.link}
           underlayColor="#ccc"
           key={`example-${name}`}
-          onPress={() => this.show(name)}
-        >
+          onPress={() => this.show(name)}>
           <View style={styles.cell}>
             {icon}
             <Text style={styles.title}>{name}</Text>
@@ -177,8 +176,7 @@ export default class SvgExample extends Component {
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
-        scrollEnabled={this.state.scroll}
-      >
+        scrollEnabled={this.state.scroll}>
         {this.state.content}
       </ScrollView>
       <View style={styles.close}>
@@ -203,8 +201,7 @@ export default class SvgExample extends Component {
           transparent={false}
           animationType="fade"
           visible={this.state.modal}
-          onRequestClose={this.hide}
-        >
+          onRequestClose={this.hide}>
           {this.modalContent()}
         </Modal>
       </View>
