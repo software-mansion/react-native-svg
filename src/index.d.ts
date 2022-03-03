@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactNative from 'react-native';
-import { GestureResponderEvent } from 'react-native';
+import { GestureResponderEvent, TransformsStyle, OpaqueColorValue } from 'react-native';
 
 // Common props
 export type NumberProp = string | number;
@@ -101,7 +101,7 @@ export type rgbaArray = ReadonlyArray<number>;
 // int32ARGBColor = 0xaarrggbb
 export type int32ARGBColor = number;
 
-export type Color = int32ARGBColor | rgbaArray | string;
+export type Color = int32ARGBColor | rgbaArray | OpaqueColorValue | string;
 
 export interface FillProps {
   fill?: Color;
@@ -203,7 +203,11 @@ export type ColumnMajorTransformMatrix = [
 ];
 
 export interface TransformProps extends TransformObject {
-  transform?: ColumnMajorTransformMatrix | string | TransformObject;
+  transform?:
+    | ColumnMajorTransformMatrix
+    | string
+    | TransformObject
+    | TransformsStyle['transform'];
 }
 
 export interface CommonMaskProps {
@@ -258,7 +262,7 @@ export interface EllipseProps extends CommonPathProps {
 export const Ellipse: React.ComponentClass<EllipseProps>;
 export type Ellipse = React.ComponentClass<EllipseProps>;
 
-export interface GProps extends CommonPathProps {
+export interface GProps extends CommonPathProps, FontProps {
   opacity?: NumberProp;
 }
 export const G: React.ComponentClass<GProps>;

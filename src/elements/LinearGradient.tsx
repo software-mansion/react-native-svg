@@ -27,13 +27,11 @@ export default class LinearGradient extends Shape<{
   render() {
     const { props } = this;
     const { x1, y1, x2, y2 } = props;
+    const linearGradientProps = { x1, y1, x2, y2 };
     return (
       <RNSVGLinearGradient
         ref={this.refMethod}
-        x1={x1}
-        y1={y1}
-        x2={x2}
-        y2={y2}
+        {...linearGradientProps}
         {...extractGradient(props, this)}
       />
     );
