@@ -22,14 +22,12 @@ export default class ForeignObject extends G<{
   render() {
     const { props } = this;
     const { x, y, width, height, children } = props;
+    const foreignObjectProps = { x, y, width, height };
     return (
       <RNSVGForeignObject
         ref={this.refMethod}
         {...withoutXY(this, props)}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
+        {...foreignObjectProps}
       >
         {children}
       </RNSVGForeignObject>

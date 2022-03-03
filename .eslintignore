@@ -4,5 +4,5 @@ Example/android/
 Example/ios/
 screenshots/
 android/
-ios/
+apple/
 src/lib/extract/transform.js

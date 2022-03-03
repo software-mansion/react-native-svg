@@ -24,16 +24,12 @@ export default class Rect extends Shape<{
   render() {
     const { props } = this;
     const { x, y, width, height, rx, ry } = props;
+    const rectProps = { x, y, width, height, rx, ry };
     return (
       <RNSVGRect
         ref={this.refMethod}
         {...withoutXY(this, props)}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        rx={rx}
-        ry={ry}
+        {...rectProps}
       />
     );
   }

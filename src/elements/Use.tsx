@@ -44,17 +44,15 @@ export default class Use extends Shape<{
           '"',
       );
     }
-
+    const useProps = {
+      href: match,
+      x,
+      y,
+      width,
+      height,
+    };
     return (
-      <RNSVGUse
-        ref={this.refMethod}
-        {...withoutXY(this, props)}
-        href={match}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-      >
+      <RNSVGUse ref={this.refMethod} {...withoutXY(this, props)} {...useProps}>
         {children}
       </RNSVGUse>
     );
