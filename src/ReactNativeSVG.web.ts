@@ -90,7 +90,7 @@ const prepare = <P extends BaseProps = BaseProps>(
   } = props;
 
   const clean: typeof rest & {
-    ref?: {};
+    ref?: unknown;
     style?: {};
     transform?: string;
   } = rest;
