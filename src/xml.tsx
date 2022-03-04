@@ -124,7 +124,10 @@ export function SvgXml(props: XmlProps) {
 
 export async function fetchText(uri: string) {
   const response = await fetch(uri);
-  return await response.text();
+  if (response.ok) {
+    return await response.text();
+  }
+  throw new Error(`Fetching ${uri} failed with status ${response.status}`);
 }
 
 export function SvgUri(props: UriProps) {
