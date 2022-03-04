@@ -127,8 +127,7 @@ export async function fetchText(uri: string) {
   if (response.ok) {
     return await response.text();
   }
-  console.warn(`Fetch ${uri} failed with status ${response.status}`);
-  return null;
+  throw new Error(`Fetching ${uri} failed with status ${response.status}`);
 }
 
 export function SvgUri(props: UriProps) {
