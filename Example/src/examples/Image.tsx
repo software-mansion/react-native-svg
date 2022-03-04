@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {Svg, Circle, Text, Rect, Defs, ClipPath} from '../Svg';
-
-import Image from '../components/SnackImageCompat';
+import {Platform} from 'react-native';
+import {Svg, Circle, Text, Rect, Defs, ClipPath, Image} from 'react-native-svg';
 
 class ImageExample extends Component {
   static title = 'Draw Image with preserveAspectRatio prop';
@@ -22,7 +21,7 @@ class ImageExample extends Component {
           height="90%"
           preserveAspectRatio="xMidYMid slice"
           opacity="0.5"
-          href={require('../image.jpg')}
+          href={require('../assets/image.jpg')}
           clipPath="url(#image-clip)"
         />
         <Text
@@ -55,7 +54,7 @@ class ClipImage extends Component {
           y="5%"
           width="90%"
           height="90%"
-          href={require('../image.jpg')}
+          href={require('../assets/image.jpg')}
           opacity="0.6"
           clipPath="url(#clip-image)"
         />
@@ -83,7 +82,8 @@ class DataURI extends Component {
           y="5%"
           width="90%"
           height="90%"
-          href={{uri: dataUriExample}}
+          // @ts-expect-error
+          href={Platform.OS === 'web' ? dataUriExample : {uri: dataUriExample}}
           opacity="0.6"
         />
       </Svg>
@@ -98,7 +98,7 @@ const icon = (
       y="5%"
       width="90%"
       height="90%"
-      href={require('../image.jpg')}
+      href={require('../assets/image.jpg')}
     />
   </Svg>
 );

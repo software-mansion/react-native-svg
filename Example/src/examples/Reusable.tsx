@@ -12,7 +12,7 @@ import {
   RadialGradient,
   Stop,
   ClipPath,
-} from '../Svg';
+} from 'react-native-svg';
 
 class UseExample extends Component {
   static title = 'Reuse svg code';

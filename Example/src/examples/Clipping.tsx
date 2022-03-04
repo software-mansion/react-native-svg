@@ -12,7 +12,7 @@ import {
   RadialGradient,
   Stop,
   ClipPath,
-} from '../Svg';
+} from 'react-native-svg';
 
 class ClipPathElement extends Component {
   static title = 'Clip by set clip-path with a path data';

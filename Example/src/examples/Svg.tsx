@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
-import {Svg, Circle, G, Path, Line, Rect} from '../Svg';
+import {Svg, Circle, G, Path, Line, Rect} from 'react-native-svg';
 
 const styles = StyleSheet.create({
   container: {

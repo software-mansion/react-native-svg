@@ -1,6 +1,15 @@
 import React, {Component} from 'react';
 
-import {Svg, Circle, G, Text, Path, Rect, Defs, ClipPath} from '../Svg';
+import {
+  Svg,
+  Circle,
+  G,
+  Text,
+  Path,
+  Rect,
+  Defs,
+  ClipPath,
+} from 'react-native-svg';
 
 class PressExample extends Component {
   static title =

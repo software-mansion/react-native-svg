@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Svg, Circle} from '../Svg';
+import {Svg, Circle} from 'react-native-svg';
 
 class CircleExample extends Component {
   static title = 'Circle';

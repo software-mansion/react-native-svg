@@ -11,7 +11,7 @@ import {
   RadialGradient,
   Stop,
   ClipPath,
-} from '../Svg';
+} from 'react-native-svg';
 
 class StrokeExample extends Component {
   static title =

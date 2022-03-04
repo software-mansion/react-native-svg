@@ -10,7 +10,7 @@ import {
   Defs,
   LinearGradient,
   Stop,
-} from '../Svg';
+} from 'react-native-svg';
 
 class TextExample extends Component {
   static title = 'Text';
