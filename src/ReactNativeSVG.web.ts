@@ -10,7 +10,6 @@ import {
 import { NumberArray, NumberProp } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
-import { getHasTouchableProperty } from './lib/util';
 
 const createElement = cE || ucE;
 
@@ -60,6 +59,9 @@ interface BaseProps {
   forwardedRef: {};
   style: Iterable<{}>;
 }
+
+const getHasTouchableProperty = (props: BaseProps) =>
+  props.onPress || props.onPressIn || props.onPressOut || props.onLongPress;
 
 /**
  * `react-native-svg` supports additional props that aren't defined in the spec.
