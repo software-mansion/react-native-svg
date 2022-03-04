@@ -1,6 +1,10 @@
 import * as React from 'react';
 import * as ReactNative from 'react-native';
-import { GestureResponderEvent, TransformsStyle, OpaqueColorValue } from 'react-native';
+import {
+  GestureResponderEvent,
+  TransformsStyle,
+  OpaqueColorValue,
+} from 'react-native';
 
 // Common props
 export type NumberProp = string | number;

@@ -244,10 +244,12 @@ export class WebShape<
   constructor(props: P, context: C) {
     super(props, context);
     const hasTouchableProperty = getHasTouchableProperty(props);
-  
+
     // Do not attach touchable mixin handlers if SVG element doesn't have a touchable prop
-    if (hasTouchableProperty) SvgTouchableMixin(this);
-    
+    if (hasTouchableProperty) {
+      SvgTouchableMixin(this);
+    }
+
     this._remeasureMetricsOnActivation = remeasure.bind(this);
   }
 }
