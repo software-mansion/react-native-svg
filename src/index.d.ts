@@ -393,7 +393,12 @@ export interface StopProps {
 export const Stop: React.ComponentClass<StopProps>;
 export type Stop = React.ComponentClass<StopProps>;
 
-export interface SvgProps extends GProps, ReactNative.ViewProperties {
+export type AdditionalProps = {
+  onError?: (error: Error) => void;
+  override?: Object;
+};
+
+export interface SvgProps extends AdditionalProps, GProps, ReactNative.ViewProperties {
   width?: NumberProp;
   height?: NumberProp;
   viewBox?: string;
