@@ -5,7 +5,7 @@ import {
   Animated,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {Svg, G, Text, Path, Polyline, Line} from '../Svg';
+import {Svg, G, Text, Path, Polyline, Line} from 'react-native-svg';
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
@@ -23,7 +23,7 @@ class PanExample extends PureComponent {
       offset = flatOffset;
     });
     const {panHandlers} = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponderCapture: () => true,
       onPanResponderGrant: () => {
         xy.setOffset(offset);

@@ -230,7 +230,8 @@ export type EllipseType = React.ComponentClass<EllipseProps>;
 export type GProps = {
   opacity?: NumberProp,
   ...
-} & CommonPathProps;
+} & CommonPathProps &
+  FontProps;
 declare export var G: React.ComponentClass<GProps>;
 export type GType = React.ComponentClass<GProps>;
 export interface ForeignObjectProps {

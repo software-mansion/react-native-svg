@@ -4,7 +4,7 @@
  */
 'use strict';
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -14,12 +14,8 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
-import Modal from './Modal';
-import {
-  Svg,
-  Circle,
-  Line,
-} from './Svg';
+import {Modal} from 'react-native';
+import {Svg, Circle, Line} from 'react-native-svg';
 
 import * as examples from './examples';
 
@@ -124,7 +120,11 @@ const initialState = {
 };
 
 export default class SvgExample extends Component {
-  state = initialState;
+  state: {
+    content: React.ReactNode;
+    modal: boolean;
+    scroll?: boolean;
+  } = initialState;
 
   show = name => {
     if (this.state.modal) {
@@ -202,7 +202,6 @@ export default class SvgExample extends Component {
         <Text style={styles.welcome}>SVG library for React Apps</Text>
         <View style={styles.contentContainer}>{this.getExamples()}</View>
         <Modal
-          ariaHideApp={false}
           transparent={false}
           animationType="fade"
           visible={this.state.modal}

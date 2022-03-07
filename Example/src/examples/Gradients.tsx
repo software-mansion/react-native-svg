@@ -10,7 +10,7 @@ import {
   LinearGradient,
   RadialGradient,
   Stop,
-} from '../Svg';
+} from 'react-native-svg';
 
 class LinearGradientHorizontal extends Component {
   static title =
