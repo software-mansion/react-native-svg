@@ -110,6 +110,7 @@ const names = [
   'Clipping',
   'Image',
   'TouchEvents',
+  'PanResponder',
   'Reusable',
 ];
 
@@ -119,7 +120,11 @@ const initialState = {
 };
 
 export default class SvgExample extends Component {
-  state = initialState;
+  state: {
+    content: React.ReactNode;
+    modal: boolean;
+    scroll?: boolean;
+  } = initialState;
 
   show = name => {
     if (this.state.modal) {
@@ -197,7 +202,6 @@ export default class SvgExample extends Component {
         <Text style={styles.welcome}>SVG library for React Apps</Text>
         <View style={styles.contentContainer}>{this.getExamples()}</View>
         <Modal
-          ariaHideApp={false}
           transparent={false}
           animationType="fade"
           visible={this.state.modal}

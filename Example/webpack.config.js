@@ -1,12 +1,10 @@
-// http://necolas.github.io/react-native-web/docs/?path=/docs/guides-multi-platform--page#web-packaging-for-existing-react-native-apps
+'use strict';
 
 const path = require('path');
 const fromRoot = _ => path.resolve(__dirname, _);
 
-const isProd = process.env.NODE_ENV === 'production';
-
 module.exports = {
-  mode: isProd ? 'production' : 'development',
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   entry: fromRoot('index.js'),
   output: {
     path: fromRoot('dist'),
@@ -29,13 +27,20 @@ module.exports = {
       },
       {
         test: /\.(gif|jpe?g|png)$/i,
-        use: [{loader: 'file-loader'}],
+        use: [
+          {
+            loader: 'file-loader',
+            options: {esModule: false},
+          },
+        ],
       },
     ],
   },
   resolve: {
     symlinks: false,
-    alias: {'react-native$': 'react-native-web'},
+    alias: {
+      'react-native$': 'react-native-web',
+    },
     extensions: [
       '.web.ts',
       '.ts',
