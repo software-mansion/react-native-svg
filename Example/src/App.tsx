@@ -7,13 +7,13 @@
 import React, {Component} from 'react';
 import {
   Dimensions,
-  Modal,
-  ScrollView,
   StyleSheet,
   Text,
+  View,
+  ScrollView,
   TouchableHighlight,
   TouchableOpacity,
-  View,
+  Modal,
 } from 'react-native';
 import {Svg, Circle, Line} from 'react-native-svg';
 

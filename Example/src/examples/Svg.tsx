@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image, Platform} from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
 import {Svg, Circle, G, Path, Line, Rect} from 'react-native-svg';
 
 const styles = StyleSheet.create({
@@ -132,13 +132,11 @@ class SvgNativeMethods extends Component {
     base64: null,
   };
   alert = () => {
-    if (Platform.OS !== 'web') {
-      this.root.toDataURL(base64 => {
-        this.setState({
-          base64,
-        });
+    this.root.toDataURL(base64 => {
+      this.setState({
+        base64,
       });
-    }
+    });
   };
   root: any;
   render() {

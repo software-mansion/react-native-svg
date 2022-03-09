@@ -358,7 +358,7 @@ export type SvgProps = {
   title?: string,
   ...
 } & GProps &
-  ReactNative.ViewProps;
+  ReactNative.ViewProperties;
 declare export var Svg: React.ComponentClass<SvgProps>;
 export type SvgType = React.ComponentClass<SvgProps>;
 declare export default typeof Svg;

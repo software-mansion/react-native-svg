@@ -63,8 +63,7 @@ class GTransform extends Component {
             stroke="#600"
             strokeWidth="1"
             fill="#600"
-            textAnchor="middle"
-          >
+            textAnchor="middle">
             Text grouped with shapes
           </Text>
         </G>
