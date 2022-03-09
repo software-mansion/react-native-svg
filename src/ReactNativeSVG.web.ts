@@ -23,11 +23,6 @@ const styles = StyleSheet.create({
 });
 
 interface BaseProps extends Omit<TouchableWithoutFeedbackProps, 'style'> {
-  // Web only TouchableWithoutFeedback props
-  focusable?: boolean;
-  nativeID?: string;
-  rejectResponderTermination?: boolean;
-
   forwardedRef?: unknown;
 
   children?: React.ReactNode;
@@ -51,14 +46,12 @@ const createSvgElement = (type: keyof React.ReactSVG, props: BaseProps) => {
     delayPressIn,
     delayPressOut,
     disabled,
-    focusable,
     onBlur,
     onFocus,
     onLongPress,
     onPress,
     onPressIn,
     onPressOut,
-    rejectResponderTermination,
 
     forwardedRef,
 
@@ -154,49 +147,21 @@ const createSvgElement = (type: keyof React.ReactSVG, props: BaseProps) => {
     return RNWCreateElement(type, transformedProps, children);
   }
 
-  const {
-    accessibilityLabel,
-    accessibilityLiveRegion,
-    accessibilityRole,
-    accessibilityState,
-    accessibilityValue,
-    accessible,
-    importantForAccessibility,
-    nativeID,
-    onLayout,
-    testID,
-
-    ...transformedChildProps
-  } = transformedProps;
-
-  return RNWCreateElement(
+  return React.createElement(
     TouchableWithoutFeedback,
     {
-      accessibilityLabel,
-      accessibilityLiveRegion,
-      accessibilityRole,
-      accessibilityState,
-      accessibilityValue,
-      accessible,
-      importantForAccessibility,
-      nativeID,
-      testID,
-
       delayLongPress,
       delayPressIn,
       delayPressOut,
       disabled,
-      focusable,
       onBlur,
       onFocus,
-      onLayout,
       onLongPress,
       onPress,
       onPressIn,
       onPressOut,
-      rejectResponderTermination,
     },
-    React.createElement(type, transformedChildProps, children),
+    RNWCreateElement(type, transformedProps, children),
   );
 };
 
