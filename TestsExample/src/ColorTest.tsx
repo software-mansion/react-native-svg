@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlatformColor, Platform, Button } from 'react-native';
+import { PlatformColor, Platform, Button, DynamicColorIOS } from 'react-native';
 import {
   Svg,
   Circle,
@@ -9,10 +9,17 @@ import {
 } from 'react-native-svg';
 
 const color = PlatformColor(Platform.select({
-  ios: 'label',
-  android: '@android:color/primary_text_light',
+  ios: 'systemTealColor',
+  android: '@android:color/holo_blue_bright',
   default: 'black',
 }))
+
+// const customContrastDynamicTextColor = DynamicColorIOS({
+//   dark: 'hsla(360, 40%, 30%, 1.0)',
+//   light: '#ff00ff55',
+//   highContrastDark: 'black',
+//   highContrastLight: 'white',
+// });
 
 export default () => {
   const [test, setTest] = React.useState(50);
