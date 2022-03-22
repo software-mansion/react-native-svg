@@ -128,7 +128,7 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
 
         float[] pos = new float[2];
         float[] tan = new float[2];
-        float distance = Math.max(0, Math.min(length, pm.getLength()));
+        float distance = Math.max(0, Math.min(length * scale, pm.getLength()));
         pm.getPosTan(distance, pos, tan);
 
         double angle = Math.atan2(tan[1], tan[0]);
