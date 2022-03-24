@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its children.
  */
 @SuppressLint("ViewConstructor")
-public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactCompoundViewGroup {
+public class SvgView extends FabricEnabledViewGroup implements ReactCompoundView, ReactCompoundViewGroup {
 
     @Override
     public boolean interceptsTouchEvent(float touchX, float touchY) {

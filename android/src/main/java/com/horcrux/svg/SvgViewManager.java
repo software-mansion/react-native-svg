@@ -13,9 +13,12 @@ import android.util.SparseArray;
 
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.facebook.react.views.view.ReactViewManager;
+import com.facebook.react.viewmanagers.RNSvgViewManagerDelegate;
+import com.facebook.react.viewmanagers.RNSvgViewManagerInterface;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,6 +33,19 @@ class SvgViewManager extends ReactViewManager {
 
     private static final SparseArray<SvgView> mTagToSvgView = new SparseArray<>();
     private static final SparseArray<Runnable> mTagToRunnable = new SparseArray<>();
+
+    /* TODO: maybe it should be of exact `SvgView` type */
+    private final ViewManagerDelegate<ReactViewGroup> mDelegate;
+
+    @Override
+    protected ViewManagerDelegate<ReactViewGroup> getDelegate(){
+      return mDelegate;
+    }
+
+    public SvgViewManager() {
+      super();
+      mDelegate = RNSvgViewManagerDelegate<SvgView, SvgViewManager>(this);
+    }
 
     static void setSvgView(int tag, SvgView svg) {
         mTagToSvgView.put(tag, svg);
@@ -56,7 +72,7 @@ class SvgViewManager extends ReactViewManager {
 
     @Nonnull
     @Override
-    public SvgView createViewInstance(ThemedReactContext reactContext) {
+    public ReactViewGroup createViewInstance(ThemedReactContext reactContext) {
         return new SvgView(reactContext);
     }
 

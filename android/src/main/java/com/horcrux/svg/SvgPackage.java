@@ -14,6 +14,7 @@ import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
+import com.facebook.soloader.SoLoader;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -55,6 +56,13 @@ public class SvgPackage implements ReactPackage {
     @Nonnull
     @Override
     public List<NativeModule> createNativeModules(@Nonnull ReactApplicationContext reactContext) {
+        if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+            // For Fabric, we load c++ native library here, this triggers svg's Fabric
+            // component registration which is necessary in order to avoid asking users
+            // to manually add init calls in their application code.
+            // This should no longer be needed if RN's autolink mechanism has Fabric support
+            SoLoader.loadLibrary("rnsvg_modules");
+        }
         return Arrays.<NativeModule>asList(
                 new SvgViewModule(reactContext),
                 new RNSVGRenderableManager(reactContext)

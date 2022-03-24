@@ -14,6 +14,18 @@ buildscript {
     }
 }
 
+def isNewArchitectureEnabled() {
+    // To opt-in for the New Architecture, you can either:
+    // - Set `newArchEnabled` to true inside the `gradle.properties` file
+    // - Invoke gradle with `-newArchEnabled=true`
+    // - Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
+    return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
+}
+
+if (isNewArchitectureEnabled()) {
+    apply plugin: "com.facebook.react"
+}
+
 apply plugin: 'com.android.library'
 
 def safeExtGet(prop, fallback) {
@@ -27,9 +39,57 @@ android {
         minSdkVersion safeExtGet('minSdkVersion', 16)
         //noinspection OldTargetApi
         targetSdkVersion safeExtGet('targetSdkVersion', 28)
+        buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+        if (isNewArchitectureEnabled()) {
+            var appProject = rootProject.allprojects.find {it.plugins.hasPlugin('com.android.application')}
+            externalNativeBuild {
+                ndkBuild {
+                    arguments "APP_PLATFORM=android-21",
+                            "APP_STL=c++_shared",
+                            "NDK_TOOLCHAIN_VERSION=clang",
+                            "GENERATED_SRC_DIR=${appProject.buildDir}/generated/source",
+                            "PROJECT_BUILD_DIR=${appProject.buildDir}",
+                            "REACT_ANDROID_DIR=${appProject.rootDir}/../node_modules/react-native/ReactAndroid",
+                            "REACT_ANDROID_BUILD_DIR=${appProject.rootDir}/../node_modules/react-native/ReactAndroid/build"
+                    cFlags "-Wall", "-Werror", "-fexceptions", "-frtti", "-DWITH_INSPECTOR=1"
+                    cppFlags "-std=c++17"
+                    targets "rnsvg_modules"
+                }
+            }
+        }
     }
     lintOptions {
         abortOnError false
+    }
+
+    if (isNewArchitectureEnabled()) {
+        externalNativeBuild {
+            ndkBuild {
+                path "src/main/jni/Android.mk"
+            }
+        }
+    }
+    packagingOptions {
+        // For some reason gradle only complains about the duplicated version of libreact_render libraries
+        // while there are more libraries copied in intermediates folder of the lib build directory, we exlude
+        // only the ones that make the build fail (ideally we should only include librnscreens_modules but we
+        // are only allowed to specify exlude patterns)
+        exclude "**/libreact_render*.so"
+    }
+
+    sourceSets.main {
+        java {
+            if (isNewArchitectureEnabled()) {
+                srcDirs += [
+                    "src/fabric/java",
+                ]
+            } else {
+                srcDirs += [
+                    "src/paper/java", 
+                    "build/generated/source/codegen/java"
+                ]
+            }
+        }
     }
 }
 
@@ -44,6 +104,19 @@ repositories {
 }
 
 dependencies {
-    //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"
+    if (isNewArchitectureEnabled()) {
+        implementation project(":ReactAndroid")
+    } else {
+        implementation 'com.facebook.react:react-native:+'
+    }
+}
+
+if (isNewArchitectureEnabled()) {
+    react {
+        reactRoot = rootProject.file("../node_modules/react-native/")
+        jsRootDir = file("../src/fabric/")
+        codegenDir = rootProject.file("../node_modules/react-native-codegen/")
+        libraryName = "rnsvg"
+        codegenJavaPackageName = "com.horcrux.rnsvg"
+    }
 }
