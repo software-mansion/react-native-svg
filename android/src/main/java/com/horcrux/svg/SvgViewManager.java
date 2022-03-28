@@ -17,8 +17,8 @@ import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.facebook.react.views.view.ReactViewManager;
-import com.facebook.react.viewmanagers.RNSvgViewManagerDelegate;
-import com.facebook.react.viewmanagers.RNSvgViewManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGSvgViewManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGSvgViewManagerInterface;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,24 +27,22 @@ import javax.annotation.Nullable;
  * ViewManager for RNSVGSvgView React views. Renders as a {@link SvgView} and handles
  * invalidating the native view on view updates happening in the underlying tree.
  */
-class SvgViewManager extends ReactViewManager {
+class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInterface<SvgView> {
 
     private static final String REACT_CLASS = "RNSVGSvgView";
 
     private static final SparseArray<SvgView> mTagToSvgView = new SparseArray<>();
     private static final SparseArray<Runnable> mTagToRunnable = new SparseArray<>();
 
-    /* TODO: maybe it should be of exact `SvgView` type */
-    private final ViewManagerDelegate<ReactViewGroup> mDelegate;
+    private final ViewManagerDelegate<SvgView> mDelegate;
 
-    @Override
-    protected ViewManagerDelegate<ReactViewGroup> getDelegate(){
+//    @Override
+    protected ViewManagerDelegate getDelegate(){
       return mDelegate;
     }
 
     public SvgViewManager() {
-      super();
-      mDelegate = RNSvgViewManagerDelegate<SvgView, SvgViewManager>(this);
+      mDelegate = new RNSVGSvgViewManagerDelegate(this);
     }
 
     static void setSvgView(int tag, SvgView svg) {
@@ -142,4 +140,5 @@ class SvgViewManager extends ReactViewManager {
     public void setMeetOrSlice(SvgView node, int meetOrSlice) {
         node.setMeetOrSlice(meetOrSlice);
     }
+
 }

@@ -90,5 +90,14 @@
   "jest": {
     "preset": "react-native"
   },
-  "nativePackage": true
+  "nativePackage": true,
+  "codegenConfig": {
+    "libraries": [
+      {
+        "name": "rnsvg",
+        "type": "components",
+        "jsSrcsDir": "./src/fabric"
+      }
+    ]
+  }
 }

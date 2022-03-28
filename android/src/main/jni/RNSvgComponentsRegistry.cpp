@@ -6,7 +6,7 @@
 #include <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #include <react/renderer/mapbuffer/MapBuffer.h>
 #include <react/renderer/mapbuffer/MapBufferBuilder.h>
-#include <rnsvg/RNSScreenComponentDescriptor.h>
+//#include <rnsvg/RNSvgViewComponentDescriptor.h>
 
 namespace facebook {
 namespace react {
@@ -19,8 +19,8 @@ std::shared_ptr<ComponentDescriptorProviderRegistry const>
 RNSvgComponentsRegistry::sharedProviderRegistry() {
   auto providerRegistry = CoreComponentsRegistry::sharedProviderRegistry();
 
-  // Screens
-  providerRegistry->add(concreteComponentDescriptorProvider<RNSvgViewComponentDescriptor>());
+  // Svg
+  providerRegistry->add(concreteComponentDescriptorProvider<RNSVGSvgViewComponentDescriptor>());
 
   return providerRegistry;
 }

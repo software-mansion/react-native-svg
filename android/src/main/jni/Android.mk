@@ -35,8 +35,7 @@ LOCAL_SHARED_LIBRARIES := libjsi \
     libruntimeexecutor \
     libreact_render_mapbuffer \
     libreact_codegen_rncore \
-    libreact_codegen_rnsvg \
-    librnsvg_common
+    libreact_codegen_rnsvg
 
 LOCAL_CFLAGS := \
     -DLOG_TAG=\"ReactNative\"
