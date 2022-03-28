@@ -349,11 +349,6 @@ export interface StopProps {
 }
 declare export var Stop: React.ComponentClass<StopProps>;
 export type StopType = React.ComponentClass<StopProps>;
-export type AdditionalProps = {
-  onError?: (error: Error) => void,
-  override?: Object,
-  ...
-};
 export type SvgProps = {
   width?: NumberProp,
   height?: NumberProp,
@@ -362,8 +357,7 @@ export type SvgProps = {
   color?: Color,
   title?: string,
   ...
-} & AdditionalProps &
-  GProps &
+} & GProps &
   ReactNative.ViewProperties;
 declare export var Svg: React.ComponentClass<SvgProps>;
 export type SvgType = React.ComponentClass<SvgProps>;
@@ -507,6 +501,7 @@ export type JsxAST = {
 } & AST;
 export type UriProps = {
   uri: string | null,
+  onError?: (error: Error) => void,
   override?: SvgProps,
   ...
 } & SvgProps;
@@ -516,6 +511,7 @@ export type UriState = {
 };
 export type XmlProps = {
   xml: string | null,
+  onError?: (error: Error) => void,
   override?: SvgProps,
   ...
 } & SvgProps;
