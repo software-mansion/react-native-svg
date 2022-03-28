@@ -6,7 +6,6 @@
 #include <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #include <react/renderer/mapbuffer/MapBuffer.h>
 #include <react/renderer/mapbuffer/MapBufferBuilder.h>
-//#include <rnsvg/RNSvgViewComponentDescriptor.h>
 
 namespace facebook {
 namespace react {
@@ -21,6 +20,7 @@ RNSvgComponentsRegistry::sharedProviderRegistry() {
 
   // Svg
   providerRegistry->add(concreteComponentDescriptorProvider<RNSVGSvgViewComponentDescriptor>());
+  providerRegistry->add(concreteComponentDescriptorProvider<RNSVGCircleComponentDescriptor>());
 
   return providerRegistry;
 }

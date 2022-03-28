@@ -102,21 +102,25 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
     }
 
     @ReactProp(name = "minX")
+    @Override
     public void setMinX(SvgView node, float minX) {
         node.setMinX(minX);
     }
 
     @ReactProp(name = "minY")
+    @Override
     public void setMinY(SvgView node, float minY) {
         node.setMinY(minY);
     }
 
     @ReactProp(name = "vbWidth")
+    @Override
     public void setVbWidth(SvgView node, float vbWidth) {
         node.setVbWidth(vbWidth);
     }
 
     @ReactProp(name = "vbHeight")
+    @Override
     public void setVbHeight(SvgView node, float vbHeight) {
         node.setVbHeight(vbHeight);
     }
@@ -132,11 +136,13 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
     }
 
     @ReactProp(name = "align")
+    @Override
     public void setAlign(SvgView node, String align) {
         node.setAlign(align);
     }
 
     @ReactProp(name = "meetOrSlice")
+    @Override
     public void setMeetOrSlice(SvgView node, int meetOrSlice) {
         node.setMeetOrSlice(meetOrSlice);
     }

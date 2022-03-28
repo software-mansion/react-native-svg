@@ -27,9 +27,12 @@ import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.TransformHelper;
 import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
+import com.facebook.react.viewmanagers.RNSVGCircleManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGCircleManagerInterface;
 
 import java.util.Locale;
 
@@ -612,12 +615,19 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class CircleViewManager extends RenderableViewManager {
+    static class CircleViewManager extends RenderableViewManager implements RNSVGCircleManagerInterface<CircleView>  {
         CircleViewManager() {
             super(SVGClass.RNSVGCircle);
+            mDelegate = new RNSVGCircleManagerDelegate(this);
         }
 
-        @ReactProp(name = "cx")
+        private final ViewManagerDelegate<CircleView> mDelegate;
+
+      protected ViewManagerDelegate getDelegate(){
+        return mDelegate;
+      }
+
+      @ReactProp(name = "cx")
         public void setCx(CircleView node, Dynamic cx) {
             node.setCx(cx);
         }
@@ -631,6 +641,22 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         public void setR(CircleView node, Dynamic r) {
             node.setR(r);
         }
+
+      @Override
+      public void setCx(CircleView view, double value) {
+        view.setCx(value);
+        view.setStrokeWidth(3f);
+      }
+
+      @Override
+      public void setCy(CircleView view, double value) {
+        view.setCy(value);
+      }
+
+      @Override
+      public void setR(CircleView view, double value) {
+        view.setR(value);
+      }
     }
 
     static class EllipseViewManager extends RenderableViewManager {

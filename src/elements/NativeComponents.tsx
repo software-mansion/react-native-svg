@@ -6,7 +6,7 @@ const ENABLE_FABRIC = !!global?.nativeFabricUIManager;
 const FabricComponents = ENABLE_FABRIC ? require('../fabric') : {};
 
 export const RNSVGSvg = ENABLE_FABRIC ? FabricComponents.SvgView : rnc('RNSVGSvgView');
-export const RNSVGCircle = rnc('RNSVGCircle');
+export const RNSVGCircle = ENABLE_FABRIC ? FabricComponents.Circle : rnc('RNSVGCircle');
 export const RNSVGClipPath = rnc('RNSVGClipPath');
 export const RNSVGDefs = rnc('RNSVGDefs');
 export const RNSVGEllipse = rnc('RNSVGEllipse');

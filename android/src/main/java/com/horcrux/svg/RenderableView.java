@@ -216,6 +216,11 @@ abstract public class RenderableView extends VirtualView {
         invalidate();
     }
 
+  public void setStrokeWidth(double strokeWidth) {
+    this.strokeWidth = SVGLength.from(strokeWidth);
+    invalidate();
+  }
+
     @ReactProp(name = "strokeMiterlimit", defaultFloat = 4f)
     public void setStrokeMiterlimit(float strokeMiterlimit) {
         this.strokeMiterlimit = strokeMiterlimit;
