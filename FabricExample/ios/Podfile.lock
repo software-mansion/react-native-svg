@@ -695,7 +695,22 @@ PODS:
     - React-logger (= 0.68.0-rc.3)
     - React-perflogger (= 0.68.0-rc.3)
   - RNSVG (12.3.0):
-    - React-Core
+    - RCT-Folly (= 2021.06.28.00-v2)
+    - RCTRequired
+    - RCTTypeSafety
+    - React
+    - React-Codegen
+    - React-RCTFabric
+    - ReactCommon/turbomodule/core
+    - RNSVG/common (= 12.3.0)
+  - RNSVG/common (12.3.0):
+    - RCT-Folly (= 2021.06.28.00-v2)
+    - RCTRequired
+    - RCTTypeSafety
+    - React
+    - React-Codegen
+    - React-RCTFabric
+    - ReactCommon/turbomodule/core
   - SocketRocket (0.6.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -913,7 +928,7 @@ SPEC CHECKSUMS:
   React-rncore: 3d228d749427bfcac312d6f2607d6615be6f528e
   React-runtimeexecutor: 945d83ec4223bc14b217ae1a660c8324a16924d8
   ReactCommon: f05b7b2a71e54163e2c82a2b6b59490784caa8b1
-  RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
+  RNSVG: 7955fa6a8e0c8cfa90b918fa1c494b265b535a6d
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: ac34625b5ea9d8204a2f85cf6bdbcf003a321ae0
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

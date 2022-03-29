@@ -9,16 +9,13 @@
 #import <React/UIView+React.h>
 #import <React/RCTPointerEvents.h>
 #import "RNSVGCGFCRule.h"
-#import "RNSVGSvgView.h"
+#import "RNSVGSvgViewComponentView.h"
+
+#import <React/RCTViewComponentView.h>
 
 @class RNSVGGroup;
 
-/**
- * RNSVG nodes are implemented as base NSViews/UIViews. They should be implementation for all basic
- ＊interfaces for all non-definition nodes.
- */
-
-@interface RNSVGNode : RNSVGView
+@interface RNSVGNodeFabric : RCTViewComponentView
 
 /*
  N[1/Sqrt[2], 36]
@@ -68,7 +65,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 /**
  * RNSVGSvgView which ownes current RNSVGNode
  */
-@property (nonatomic, readonly, weak) RNSVGSvgView *svgView;
+@property (nonatomic, readonly, weak) RNSVGSvgViewComponentView *svgView;
 @property (nonatomic, readonly, weak) RNSVGGroup *textRoot;
 
 - (void)invalidate;
