@@ -1,12 +1,12 @@
 import React from 'react';
-import { Platform, Button, SafeAreaView } from 'react-native';
+import { PlatformColor, Platform, Button } from 'react-native';
 import {
   Svg,
   Circle,
   Rect,
   Text,
   TSpan,
-  SvgCssUri
+  SvgUri
 } from 'react-native-svg';
 
 const color = PlatformColor(Platform.select({
@@ -46,7 +46,7 @@ export default () => {
         </Text>
       </Svg>
       <Button title="Click me" onPress={()=> setTest(test + 1)}/>
-      <SvgCssUri
+      <SvgUri
         onError={() => setUri('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg')}
         width="100"
         height="100"
