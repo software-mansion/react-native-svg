@@ -19,7 +19,8 @@
     "elements",
     "lib",
     "src",
-    "RNSVG.podspec"
+    "RNSVG.podspec",
+    "windows"
   ],
   "@react-native-community/bob": {
     "source": "src",
@@ -35,6 +36,7 @@
     "react-native",
     "ios",
     "android",
+    "windows",
     "SVG",
     "ART",
     "VML",
