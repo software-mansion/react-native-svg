@@ -4,6 +4,7 @@
 #import <React/RCTLog.h>
 
 #import <react/renderer/components/rnsvg/Props.h>
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 
 #import "RCTFabricComponentsPlugins.h"
 
@@ -61,6 +62,19 @@ using namespace facebook::react;
     [self setNeedsDisplay];
 }
 
+- (void)clearChildCache
+{
+    if (!rendered) {
+        return;
+    }
+    rendered = false;
+    for (__kindof RNSVGNode *node in self.subviews) {
+        if ([node isKindOfClass:[RNSVGNode class]]) {
+            [node clearChildCache];
+        }
+    }
+}
+
 - (void)drawToContext:(CGContextRef)context withRect:(CGRect)rect {
     rendered = true;
     self.initialCTM = CGContextGetCTM(context);
@@ -81,6 +95,10 @@ using namespace facebook::react;
     for (RNSVGView *node in self.subviews) {
         if ([node isKindOfClass:[RNSVGNode class]]) {
             RNSVGNode *svg = (RNSVGNode *)node;
+            [svg renderTo:context
+                     rect:rect];
+        } else if ([node isKindOfClass:[RCTViewComponentView class]] && [((RCTViewComponentView *)node).contentView isKindOfClass:[RNSVGNode class]]) {
+            RNSVGNode *svg = (RNSVGNode *)(((RCTViewComponentView *)node).contentView);
             [svg renderTo:context
                      rect:rect];
         } else {
@@ -141,15 +159,156 @@ using namespace facebook::react;
     return nil;
 }
 
+- (NSString *)getDataURL
+{
+    UIGraphicsBeginImageContextWithOptions(_boundingBox.size, NO, 0);
+    [self clearChildCache];
+    [self drawRect:_boundingBox];
+    [self clearChildCache];
+    [self invalidate];
+    NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
+    NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    UIGraphicsEndImageContext();
+    return base64;
+}
+
+- (NSString *)getDataURLwithBounds:(CGRect)bounds
+{
+    UIGraphicsBeginImageContextWithOptions(bounds.size, NO, 1);
+    [self clearChildCache];
+    [self drawRect:bounds];
+    [self clearChildCache];
+    [self invalidate];
+    NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
+    NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    UIGraphicsEndImageContext();
+    return base64;
+}
+
+- (void)reactSetInheritedBackgroundColor:(RNSVGColor *)inheritedBackgroundColor
+{
+    self.backgroundColor = inheritedBackgroundColor;
+}
+
+- (void)defineClipPath:(__kindof RNSVGNode *)clipPath clipPathName:(NSString *)clipPathName
+{
+    if (!_clipPaths) {
+        _clipPaths = [[NSMutableDictionary alloc] init];
+    }
+    [_clipPaths setObject:clipPath forKey:clipPathName];
+}
+
+- (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathName
+{
+    return _clipPaths ? [_clipPaths objectForKey:clipPathName] : nil;
+}
+
+- (void)defineTemplate:(RNSVGNode *)definedTemplate templateName:(NSString *)templateName
+{
+    if (!_templates) {
+        _templates = [[NSMutableDictionary alloc] init];
+    }
+    [_templates setObject:definedTemplate forKey:templateName];
+}
+
+- (RNSVGNode *)getDefinedTemplate:(NSString *)templateName
+{
+    return _templates ? [_templates objectForKey:templateName] : nil;
+}
+
+
+- (void)definePainter:(RNSVGPainter *)painter painterName:(NSString *)painterName
+{
+    if (!_painters) {
+        _painters = [[NSMutableDictionary alloc] init];
+    }
+    [_painters setObject:painter forKey:painterName];
+}
+
+- (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;
+{
+    return _painters ? [_painters objectForKey:painterName] : nil;
+}
+
+- (void)defineMarker:(RNSVGNode *)marker markerName:(NSString *)markerName
+{
+    if (!_markers) {
+        _markers = [[NSMutableDictionary alloc] init];
+    }
+    [_markers setObject:marker forKey:markerName];
+}
+
+- (RNSVGNode *)getDefinedMarker:(NSString *)markerName;
+{
+    return _markers ? [_markers objectForKey:markerName] : nil;
+}
+
+- (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName
+{
+    if (!_masks) {
+        _masks = [[NSMutableDictionary alloc] init];
+    }
+    [_masks setObject:mask forKey:maskName];
+}
+
+- (RNSVGNode *)getDefinedMask:(NSString *)maskName;
+{
+    return _masks ? [_masks objectForKey:maskName] : nil;
+}
+
+- (CGRect)getContextBounds
+{
+    return CGContextGetClipBoundingBox(UIGraphicsGetCurrentContext());
+}
+
+- (CGAffineTransform)getViewBoxTransform
+{
+    return _viewBoxTransform;
+}
+
 #pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGSvgViewComponentDescriptor>();
+}
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &oldScreenProps = *std::static_pointer_cast<const RNSVGSvgViewProps>(_props);
-  const auto &newScreenProps = *std::static_pointer_cast<const RNSVGSvgViewProps>(props);
+  const auto &newSvgViewProps = *std::static_pointer_cast<const RNSVGSvgViewProps>(props);
+    
+    self.minX = newSvgViewProps.minX;
+    self.minY = newSvgViewProps.minY;
+    self.vbWidth = newSvgViewProps.vbWidth;
+    self.vbHeight = newSvgViewProps.vbHeight;
+    self.align = [RNSVGSvgViewComponentView stringToPropValue:newSvgViewProps.align];
+    self.meetOrSlice = [RNSVGSvgViewComponentView intToRNSVGVBMOS:newSvgViewProps.meetOrSlice];
+    [self invalidate];
 
   [super updateProps:props oldProps:oldProps];
 }
+
++ (NSString *)stringToPropValue:(std::string)value
+{
+  if (value.empty())
+    return nil;
+  return [[NSString alloc] initWithUTF8String:value.c_str()];
+}
+
++ (RNSVGVBMOS)intToRNSVGVBMOS:(int)value
+{
+    switch (value) {
+        case 0:
+            return kRNSVGVBMOSMeet;
+        case 1:
+            return kRNSVGVBMOSSlice;
+        case 2:
+            return kRNSVGVBMOSNone;
+        default:
+            return kRNSVGVBMOSMeet;
+    }
+}
+
 
 @end
 

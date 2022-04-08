@@ -1,43 +1,43 @@
 #import "RNSVGCircleComponentView.h"
-#import "RNSVGViewBox.h"
-#import "RNSVGNode.h"
-#import <React/RCTLog.h>
+#import "RNSVGCircle.h"
 
-#import <react/renderer/components/rnsvg/Props.h>
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 
 #import "RCTFabricComponentsPlugins.h"
 
 using namespace facebook::react;
 
-@implementation RNSVGCircleComponentView
+@implementation RNSVGCircleComponentView {
+    RNSVGCircle *_circle;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNSVGCircleProps>();
     _props = defaultProps;
+    _circle = [[RNSVGCircle alloc] initWithFrame:self.bounds];
+    self.contentView = _circle;
   }
   return self;
 }
 
-- (CGPathRef)getPath:(CGContextRef)context
-{
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGFloat cx = [self relativeOnWidth:self.cx];
-    CGFloat cy = [self relativeOnHeight:self.cy];
-    CGFloat r = [self relativeOnOther:self.r];
-    CGPathAddArc(path, nil, cx, cy, r, 0, 2 * (CGFloat)M_PI, NO);
-    return (CGPathRef)CFAutorelease(path);
-}
-
 #pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGCircleComponentDescriptor>();
+}
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &oldScreenProps = *std::static_pointer_cast<const RNSVGCircleProps>(_props);
-  const auto &newScreenProps = *std::static_pointer_cast<const RNSVGCircleProps>(props);
+  const auto &newCircleProps = *std::static_pointer_cast<const RNSVGCircleProps>(props);
 
-  [super updateProps:props oldProps:oldProps];
+    [_circle setCx:[RNSVGLength lengthWithNumber:(CGFloat)newCircleProps.cx]];
+    [_circle setCy:[RNSVGLength lengthWithNumber:(CGFloat)newCircleProps.cy]];
+    [_circle setR:[RNSVGLength lengthWithNumber:(CGFloat)newCircleProps.r]];
+    
+    [super updateProps:props oldProps:oldProps];
 }
 
 @end

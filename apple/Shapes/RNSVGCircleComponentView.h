@@ -1,9 +1,9 @@
 #import <Foundation/Foundation.h>
 
-#import "RNSVGRenderableFabric.h"
 #import "RNSVGLength.h"
+#import <React/RCTViewComponentView.h>
 
-@interface RNSVGCircleComponentView : RNSVGRenderableFabric
+@interface RNSVGCircleComponentView : RCTViewComponentView
 
 @property (nonatomic, strong) RNSVGLength* cx;
 @property (nonatomic, strong) RNSVGLength* cy;

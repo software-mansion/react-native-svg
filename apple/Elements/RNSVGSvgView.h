@@ -38,7 +38,7 @@
 
 - (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathName;
 
-- (void)defineTemplate:(__kindof RNSVGNode *)template templateName:(NSString *)templateName;
+- (void)defineTemplate:(__kindof RNSVGNode *)definedTemplate templateName:(NSString *)templateName;
 
 - (RNSVGNode *)getDefinedTemplate:(NSString *)templateName;
 

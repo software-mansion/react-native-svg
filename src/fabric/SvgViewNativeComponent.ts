@@ -4,11 +4,6 @@ import type { ViewProps, HostComponent } from 'react-native';
 // @ts-ignore TS being TS
 import type { Float, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-const codegenNativeComponent = codegenNativeComponentUntyped as <T extends {}>(
-  name: string
-) => HostComponent<T>;
-
 interface NativeProps extends ViewProps {
   minX: Float,
   minY: Float,
@@ -17,5 +12,10 @@ interface NativeProps extends ViewProps {
   align: string,
   meetOrSlice: Int32,
 }
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+const codegenNativeComponent = codegenNativeComponentUntyped as <T extends {}>(
+  name: string
+) => HostComponent<T>;
 
 export default codegenNativeComponent<NativeProps>('RNSVGSvgView');
