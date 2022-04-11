@@ -30,6 +30,10 @@ export default function extractBrush(color?: Color) {
     return contextStrokeBrush;
   }
 
+  if (typeof color === 'string' && color.match(/^[0-9a-f]{6}$/)) {
+    return integerColor(parseInt(color, 16));
+  }
+
   const brush = typeof color === 'string' && color.match(urlIdPattern);
   if (brush) {
     return [1, brush[1]];
