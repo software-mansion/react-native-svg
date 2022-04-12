@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as ReactNative from 'react-native';
 import {
+  ColorValue,
   GestureResponderEvent,
   TransformsStyle,
-  OpaqueColorValue,
 } from 'react-native';
 
 // Common props
@@ -97,15 +97,7 @@ export interface ResponderProps extends ReactNative.GestureResponderHandlers {
   pointerEvents?: 'box-none' | 'none' | 'box-only' | 'auto';
 }
 
-// rgba values inside range 0 to 1 inclusive
-// rgbaArray = [r, g, b, a]
-export type rgbaArray = ReadonlyArray<number>;
-
-// argb values inside range 0x00 to 0xff inclusive
-// int32ARGBColor = 0xaarrggbb
-export type int32ARGBColor = number;
-
-export type Color = int32ARGBColor | rgbaArray | OpaqueColorValue | string;
+export type Color = ColorValue;
 
 export interface FillProps {
   fill?: Color;

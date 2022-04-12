@@ -1,23 +1,28 @@
 import React from 'react';
-import { PlatformColor, Platform, Button } from 'react-native';
+import { PlatformColor, Platform, Button, DynamicColorIOS } from 'react-native';
 import {
   Svg,
   Circle,
   Rect,
   Text,
   TSpan,
-  SvgUri
 } from 'react-native-svg';
 
 const color = PlatformColor(Platform.select({
-  ios: 'label',
-  android: '@android:color/primary_text_light',
+  ios: 'systemTealColor',
+  android: '@android:color/holo_blue_bright',
   default: 'black',
 }))
 
+// const customContrastDynamicTextColor = DynamicColorIOS({
+//   dark: 'hsla(360, 40%, 30%, 1.0)',
+//   light: '#ff00ff55',
+//   highContrastDark: 'black',
+//   highContrastLight: 'white',
+// });
+
 export default () => {
   const [test, setTest] = React.useState(50);
-  const [uri, setUri] = React.useState('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/not_existing.svg')
 
   return (
     <>
@@ -46,12 +51,6 @@ export default () => {
         </Text>
       </Svg>
       <Button title="Click me" onPress={()=> setTest(test + 1)}/>
-      <SvgUri
-        onError={() => setUri('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg')}
-        width="100"
-        height="100"
-        uri={uri}
-      />
     </>
   );
 }
