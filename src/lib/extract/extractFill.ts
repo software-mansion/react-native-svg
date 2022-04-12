@@ -8,6 +8,8 @@ const fillRules: { evenodd: number; nonzero: number } = {
   nonzero: 1,
 };
 
+const defaultFill = processColor('black');
+
 export default function extractFill(
   o: extractedProps,
   props: FillProps,
@@ -17,7 +19,7 @@ export default function extractFill(
   if (fill != null) {
     inherited.push('fill');
     o.fill =
-      !fill && typeof fill !== 'number' ? processColor('black') : extractBrush(fill);
+      !fill && typeof fill !== 'number' ? defaultFill : extractBrush(fill);
   }
   if (fillOpacity != null) {
     inherited.push('fillOpacity');
