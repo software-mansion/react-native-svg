@@ -501,6 +501,7 @@ export type JsxAST = {
 } & AST;
 export type UriProps = {
   uri: string | null,
+  onError?: (error: Error) => void,
   override?: SvgProps,
   ...
 } & SvgProps;
@@ -510,6 +511,7 @@ export type UriState = {
 };
 export type XmlProps = {
   xml: string | null,
+  onError?: (error: Error) => void,
   override?: SvgProps,
   ...
 } & SvgProps;
