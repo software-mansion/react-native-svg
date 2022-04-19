@@ -21,6 +21,7 @@ RNSvgComponentsRegistry::sharedProviderRegistry() {
   // Svg
   providerRegistry->add(concreteComponentDescriptorProvider<RNSVGSvgViewComponentDescriptor>());
   providerRegistry->add(concreteComponentDescriptorProvider<RNSVGCircleComponentDescriptor>());
+  providerRegistry->add(concreteComponentDescriptorProvider<RNSVGGroupComponentDescriptor>());
 
   return providerRegistry;
 }

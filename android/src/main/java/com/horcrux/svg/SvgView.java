@@ -71,6 +71,8 @@ public class SvgView extends FabricEnabledViewGroup implements ReactCompoundView
     public SvgView(ReactContext reactContext) {
         super(reactContext);
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
+        // for some reason on Fabric the `onDraw` won't be called without it
+        setWillNotDraw(false);
     }
 
     @Override

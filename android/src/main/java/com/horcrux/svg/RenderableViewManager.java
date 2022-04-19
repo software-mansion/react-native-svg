@@ -33,6 +33,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.facebook.react.viewmanagers.RNSVGCircleManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGCircleManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGGroupManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGGroupManagerInterface;
 
 import java.util.Locale;
 
@@ -397,14 +399,22 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         view.setCameraDistance(0);
     }
 
-    static class GroupViewManager extends RenderableViewManager {
+    static class GroupViewManager extends RenderableViewManager implements RNSVGGroupManagerInterface<GroupView> {
         GroupViewManager() {
             super(SVGClass.RNSVGGroup);
+            mDelegate = new RNSVGGroupManagerDelegate(this);
         }
 
-        GroupViewManager(SVGClass svgClass) {
+      private final ViewManagerDelegate<GroupView> mDelegate;
+
+      protected ViewManagerDelegate getDelegate(){
+        return mDelegate;
+      }
+
+      GroupViewManager(SVGClass svgClass) {
             super(svgClass);
-        }
+            mDelegate = new RNSVGGroupManagerDelegate(this);
+      }
 
         @ReactProp(name = "font")
         public void setFont(GroupView node, @Nullable ReadableMap font) {
