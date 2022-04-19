@@ -136,6 +136,11 @@ abstract public class RenderableView extends VirtualView {
         invalidate();
     }
 
+  public void setFill(int fill) {
+    this.fill = JavaOnlyArray.of(0, fill);
+    invalidate();
+  }
+
     @ReactProp(name = "fillOpacity", defaultFloat = 1f)
     public void setFillOpacity(float fillOpacity) {
         this.fillOpacity = fillOpacity;

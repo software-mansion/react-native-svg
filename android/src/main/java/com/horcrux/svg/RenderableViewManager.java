@@ -657,6 +657,11 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
       public void setR(CircleView view, double value) {
         view.setR(value);
       }
+
+      @Override
+      public void setFill(CircleView view, int value) {
+        view.setFill(value);
+      }
     }
 
     static class EllipseViewManager extends RenderableViewManager {
