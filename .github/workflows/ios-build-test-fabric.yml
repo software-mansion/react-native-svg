@@ -1,0 +1,42 @@
+name: Test iOS build on Fabric
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'ios/**'
+      - 'common/**'
+      - 'src/fabric/**'
+      - 'FabricExample/**'
+      - 'package.json'
+      - 'RNScreens.podspec'
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      WORKING_DIRECTORY: FabricExample
+    concurrency:
+      group: ios-fabric-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: 'yarn'
+          cache-dependency-path: 'FabricExample/yarn.lock'
+      - name: Install node dependencies
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: yarn
+      - name: Install pods
+        working-directory: ${{ env.WORKING_DIRECTORY }}/ios
+        run: RCT_NEW_ARCH_ENABLED=1 pod install
+      - name: Build app
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: yarn ios
