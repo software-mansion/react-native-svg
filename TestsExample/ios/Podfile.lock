@@ -347,7 +347,7 @@ PODS:
     - React-jsi (= 0.68.0-rc.1)
     - React-logger (= 0.68.0-rc.1)
     - React-perflogger (= 0.68.0-rc.1)
-  - RNSVG (12.2.0):
+  - RNSVG (12.3.0):
     - React-Core
   - SocketRocket (0.6.0)
   - Yoga (1.14.0)
@@ -501,7 +501,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
   FBLazyVector: bcdeff523be9f87a135b7c6fde8736db94904716
-  FBReactNativeSpec: 96fb2991e5748dcf1c627822cbf41253f1fffe31
+  FBReactNativeSpec: 137186498f03934daf999cec565fbc3d291f294c
   Flipper: 26fc4b7382499f1281eb8cb921e5c3ad6de91fe0
   Flipper-Boost-iOSX: fd1e2b8cbef7e662a122412d7ac5f5bea715403c
   Flipper-DoubleConversion: 57ffbe81ef95306cc9e69c4aa3aeeeeb58a6a28c
@@ -540,7 +540,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 5cab6419b68d5750482b0fc34dbb27af550469cc
   React-runtimeexecutor: 10cda3a396b14a764a5f86088e7e3810b9c66cec
   ReactCommon: 73a01eb83f22c84a6b09dfb60f3463888ebd4975
-  RNSVG: 4ecc2e8f38b6ebe7889909570c26f3abe8059767
+  RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: d29dba374c1a582b40cfb736647b5e1b5ed35dba
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

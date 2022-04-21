@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import {
+  ColorValue,
   findNodeHandle,
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
   NativeModules,
+  processColor,
   StyleSheet,
   ViewStyle,
 } from 'react-native';
 import {
   ClipProps,
-  Color,
   extractedProps,
   FillProps,
   NumberProp,
@@ -21,7 +22,6 @@ import {
 } from '../lib/extract/types';
 import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
-import extractColor from '../lib/extract/extractColor';
 import Shape from './Shape';
 import G from './G';
 import { RNSVGSvg } from './NativeComponents';
@@ -38,7 +38,7 @@ const defaultStyle = styles.svg;
 
 export default class Svg extends Shape<
   {
-    color?: Color;
+    color?: ColorValue;
     viewBox?: string;
     opacity?: NumberProp;
     onLayout?: () => void;
@@ -183,7 +183,7 @@ export default class Svg extends Shape<
 
     extractResponder(props, props, this as ResponderInstanceProps);
 
-    const tint = extractColor(color);
+    const tint = processColor(color);
     if (tint != null) {
       props.color = tint;
       props.tintColor = tint;

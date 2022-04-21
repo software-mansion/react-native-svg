@@ -7,9 +7,9 @@
 import * as React from "react";
 import * as ReactNative from "react-native";
 import {
+  ColorValue,
   GestureResponderEvent,
   TransformsStyle,
-  OpaqueColorValue,
 } from "react-native";
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
@@ -95,9 +95,7 @@ export type ResponderProps = {
   pointerEvents?: "box-none" | "none" | "box-only" | "auto",
   ...
 } & ReactNative.GestureResponderHandlers;
-export type rgbaArray = $ReadOnlyArray<number>;
-export type int32ARGBColor = number;
-export type Color = int32ARGBColor | rgbaArray | OpaqueColorValue | string;
+export type Color = ColorValue;
 export interface FillProps {
   fill?: Color;
   fillOpacity?: NumberProp;
@@ -501,6 +499,7 @@ export type JsxAST = {
 } & AST;
 export type UriProps = {
   uri: string | null,
+  onError?: (error: Error) => void,
   override?: SvgProps,
   ...
 } & SvgProps;
@@ -510,6 +509,7 @@ export type UriState = {
 };
 export type XmlProps = {
   xml: string | null,
+  onError?: (error: Error) => void,
   override?: SvgProps,
   ...
 } & SvgProps;
