@@ -57,16 +57,22 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
         }
         return [[RNSVGSolidColorBrush alloc] initWithArray:output];
     }
-    NSArray *arr = [self NSArray:json];
-    NSUInteger type = [self NSUInteger:arr.firstObject];
+    NSDictionary *dict = [self NSDictionary:json];
+    int type = [dict[@"type"] intValue];
 
     switch (type) {
         case 0: // solid color
             // These are probably expensive allocations since it's often the same value.
             // We should memoize colors but look ups may be just as expensive.
+        {
+            NSArray *arr = @[@(0), dict[@"value"]];
             return [[RNSVGSolidColorBrush alloc] initWithArray:arr];
+        }
         case 1: // brush
+        {
+            NSArray *arr = @[@(1), dict[@"brushRef"]];
             return [[RNSVGPainterBrush alloc] initWithArray:arr];
+        }
         case 2: // currentColor
             return [[RNSVGBrush alloc] initWithArray:nil];
         case 3: // context-fill
@@ -77,6 +83,7 @@ RCT_ENUM_CONVERTER(RNSVGUnits, (@{
             RCTLogError(@"Unknown brush type: %zd", (unsigned long)type);
             return nil;
     }
+
 }
 
 + (RNSVGPathParser *)RNSVGCGPath:(NSString *)d

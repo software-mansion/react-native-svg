@@ -33,6 +33,15 @@
     return self;
 }
 
+- (instancetype)initWithColor:(RNSVGColor *)color
+{
+    if ((self = [super init])) {
+        _color = color;
+    }
+    return self;
+}
+
+
 - (void)dealloc
 {
     _color = nil;
