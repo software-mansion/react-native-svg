@@ -655,7 +655,6 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
       @Override
       public void setCx(CircleView view, double value) {
         view.setCx(value);
-        view.setStrokeWidth(3f);
       }
 
       @Override
@@ -669,7 +668,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
       }
 
       @Override
-      public void setFill(CircleView view, int value) {
+      public void setFill(CircleView view, ReadableMap value) {
         view.setFill(value);
       }
     }
