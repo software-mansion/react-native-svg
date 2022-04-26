@@ -36,9 +36,9 @@ using namespace facebook::react;
 {
   const auto &newCircleProps = *std::static_pointer_cast<const RNSVGCircleProps>(props);
 
-    [_circle setCx:[RNSVGLength lengthWithNumber:(CGFloat)newCircleProps.cx]];
-    [_circle setCy:[RNSVGLength lengthWithNumber:(CGFloat)newCircleProps.cy]];
-    [_circle setR:[RNSVGLength lengthWithNumber:(CGFloat)newCircleProps.r]];
+    [_circle setCx:[RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.cx)]];
+    [_circle setCy:[RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.cy)]];
+    [_circle setR:[RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.r)]];
     // TODO: DynamicColorIOS not working for some reason
     [_circle setFill:[RNSVGCircleComponentView RNSVGBrush:newCircleProps.fill]];
     [super updateProps:props oldProps:oldProps];

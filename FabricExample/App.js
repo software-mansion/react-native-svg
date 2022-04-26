@@ -18,12 +18,12 @@ const color = PlatformColor(Platform.select({
 export default () => {
   return (
     <>
-      <Svg height={100} width={140} >
+      <Svg height="100" width={140} color='hsla(360, 40%, 30%, 1.0)'>
         <Circle
             cx={50}
-            cy={50}
+            cy="50"
             r={45}
-            fill={color}
+            fill="currentColor"
           />
       </Svg>
       <Text>TEST</Text>

@@ -151,6 +151,15 @@ export function extract(instance: Object, props: Object & { style?: [] | {} }) {
   return extractProps(propsAndStyles(props), instance);
 }
 
+export function stringifyPropsForFabric(props: Object) {
+  const extracted = {};
+  Object.keys(props).forEach(k => {
+    extracted[k] = String(props[k]);
+  });
+  
+  return extracted;
+}
+
 export function withoutXY(
   instance: Object,
   props: Object & { style?: [] | {} },

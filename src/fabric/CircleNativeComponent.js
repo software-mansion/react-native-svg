@@ -12,9 +12,9 @@ import type { Int32, Double } from 'react-native/Libraries/Types/CodegenTypes';
 
 type NativeProps = $ReadOnly<{|
     ...ViewProps,
-    cx?: Double,
-    cy?: Double,
-    r?: Double,
+    cx?: string,
+    cy?: string,
+    r?: string,
     fill?: $ReadOnly<{|
       type: Int32,
       value?: ColorValue,

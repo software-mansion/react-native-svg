@@ -175,10 +175,10 @@ export default class Svg extends Shape<
     props.style = rootStyles.length > 1 ? rootStyles : defaultStyle;
 
     if (width != null) {
-      props.bbWidth = width;
+      props.bbWidth = String(width);
     }
     if (height != null) {
-      props.bbHeight = height;
+      props.bbHeight = String(height);
     }
 
     extractResponder(props, props, this as ResponderInstanceProps);

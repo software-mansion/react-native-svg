@@ -8,6 +8,7 @@
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 
 #import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
 
 using namespace facebook::react;
 
@@ -70,6 +71,8 @@ using namespace facebook::react;
     _svgView.vbHeight = newSvgViewProps.vbHeight;
     _svgView.align = [RNSVGSvgViewComponentView stringToPropValue:newSvgViewProps.align];
     _svgView.meetOrSlice = [RNSVGSvgViewComponentView intToRNSVGVBMOS:newSvgViewProps.meetOrSlice];
+    _svgView.tintColor = RCTUIColorFromSharedColor(newSvgViewProps.tintColor);
+    _svgView.tintColor = RCTUIColorFromSharedColor(newSvgViewProps.color);
 
   [super updateProps:props oldProps:oldProps];
 }
