@@ -7,9 +7,7 @@
 
 [Check out the demo](https://snack.expo.io/@msand/react-native-svg-example)
 
-## Looking for maintainers
-
-https://github.com/react-native-svg/react-native-svg/issues/1554
+[Check out the Example app](https://github.com/react-native-svg/react-native-svg/tree/main/Example)
 
 ## Features
 
