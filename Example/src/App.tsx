@@ -13,8 +13,8 @@ import {
   ScrollView,
   TouchableHighlight,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
-import {Modal} from 'react-native';
 import {Svg, Circle, Line} from 'react-native-svg';
 
 import * as examples from './examples';

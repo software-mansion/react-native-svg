@@ -1,124 +1,89 @@
-// @ts-ignore
 import * as React from 'react';
 import {
-  GestureResponderEvent,
-  // @ts-ignore
-  unstable_createElement as ucE,
-  // @ts-ignore
-  createElement as cE,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  TouchableWithoutFeedbackProps,
+  createElement,
+  // @ts-expect-error
+  unstable_createElement,
 } from 'react-native';
 import { NumberArray, NumberProp } from './lib/extract/types';
-import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
 
-const createElement = cE || ucE;
+const RNWCreateElement: typeof createElement =
+  unstable_createElement || createElement;
 
-type BlurEvent = Object;
-type FocusEvent = Object;
-type PressEvent = Object;
-type LayoutEvent = Object;
-type EdgeInsetsProp = Object;
+const styles = StyleSheet.create({
+  base: {
+    display: 'flex',
+    flexBasis: 'auto',
+    flexGrow: 0,
+    flexShrink: 0,
+  },
+});
 
-interface BaseProps {
-  accessible?: boolean;
-  accessibilityLabel?: string;
-  accessibilityHint?: string;
-  accessibilityIgnoresInvertColors?: boolean;
-  accessibilityRole?: string;
-  accessibilityState?: Object;
-  delayLongPress?: number;
-  delayPressIn?: number;
-  delayPressOut?: number;
-  disabled?: boolean;
-  hitSlop?: EdgeInsetsProp;
-  nativeID?: string;
-  touchSoundDisabled?: boolean;
-  onBlur?: (e: BlurEvent) => void;
-  onFocus?: (e: FocusEvent) => void;
-  onLayout?: (event: LayoutEvent) => object;
-  onLongPress?: (event: PressEvent) => object;
-  onClick?: (event: PressEvent) => object;
-  onPress?: (event: PressEvent) => object;
-  onPressIn?: (event: PressEvent) => object;
-  onPressOut?: (event: PressEvent) => object;
-  pressRetentionOffset?: EdgeInsetsProp;
-  rejectResponderTermination?: boolean;
+interface BaseProps extends Omit<TouchableWithoutFeedbackProps, 'style'> {
+  forwardedRef?: unknown;
 
-  translate: NumberArray;
-  scale: NumberArray;
-  rotation: NumberArray;
-  skewX: NumberProp;
-  skewY: NumberProp;
-  originX: NumberProp;
-  originY: NumberProp;
-
+  children?: React.ReactNode;
+  fontFamily?: string;
+  fontSize?: NumberProp;
   fontStyle?: string;
   fontWeight?: NumberProp;
-  fontSize?: NumberProp;
-  fontFamily?: string;
-  forwardedRef: {};
-  style: Iterable<{}>;
+  originX?: NumberProp;
+  originY?: NumberProp;
+  rotation?: NumberArray;
+  scale?: NumberArray;
+  skewX?: NumberProp;
+  skewY?: NumberProp;
+  style?: Iterable<{}>;
+  translate?: NumberArray;
 }
 
-const hasTouchableProperty = (props: BaseProps) =>
-  props.onPress || props.onPressIn || props.onPressOut || props.onLongPress;
-
-/**
- * `react-native-svg` supports additional props that aren't defined in the spec.
- * This function replaces them in a spec conforming manner.
- *
- * @param {WebShape} self Instance given to us.
- * @param {Object?} props Optional overridden props given to us.
- * @returns {Object} Cleaned props object.
- * @private
- */
-const prepare = <T extends BaseProps>(
-  self: WebShape<T>,
-  props = self.props,
-) => {
+const createSvgElement = (type: keyof React.ReactSVG, props: BaseProps) => {
   const {
-    translate,
-    scale,
-    rotation,
-    skewX,
-    skewY,
-    originX,
-    originY,
+    delayLongPress,
+    delayPressIn,
+    delayPressOut,
+    disabled,
+    onBlur,
+    onFocus,
+    onLongPress,
+    onPress,
+    onPressIn,
+    onPressOut,
+
+    forwardedRef,
+
+    children,
     fontFamily,
     fontSize,
-    fontWeight,
     fontStyle,
+    fontWeight,
+    originX,
+    originY,
+    rotation,
+    scale,
+    skewX,
+    skewY,
     style,
-    forwardedRef,
-    // @ts-ignore
-    ...rest
+    translate,
+
+    // TouchableWithoutFeedback props unsupported by react-native-web
+    hasTVPreferredFocus,
+    hitSlop,
+    pressRetentionOffset,
+    touchSoundDisabled,
+    tvParallaxProperties,
+
+    ...otherProps
   } = props;
 
-  const clean: {
-    onStartShouldSetResponder?: (e: GestureResponderEvent) => boolean;
-    onResponderMove?: (e: GestureResponderEvent) => void;
-    onResponderGrant?: (e: GestureResponderEvent) => void;
-    onResponderRelease?: (e: GestureResponderEvent) => void;
-    onResponderTerminate?: (e: GestureResponderEvent) => void;
-    onResponderTerminationRequest?: (e: GestureResponderEvent) => boolean;
-    transform?: string;
+  const transformedProps: typeof otherProps & {
+    ref?: unknown;
     style?: {};
-    ref?: {};
-  } = {
-    ...(hasTouchableProperty(props)
-      ? {
-          onStartShouldSetResponder:
-            self.touchableHandleStartShouldSetResponder,
-          onResponderTerminationRequest:
-            self.touchableHandleResponderTerminationRequest,
-          onResponderGrant: self.touchableHandleResponderGrant,
-          onResponderMove: self.touchableHandleResponderMove,
-          onResponderRelease: self.touchableHandleResponderRelease,
-          onResponderTerminate: self.touchableHandleResponderTerminate,
-        }
-      : null),
-    ...rest,
-  };
+    transform?: string;
+  } = otherProps;
 
   const transform = [];
 
@@ -146,14 +111,14 @@ const prepare = <T extends BaseProps>(
   }
 
   if (transform.length) {
-    clean.transform = transform.join(' ');
+    transformedProps.transform = transform.join(' ');
   }
 
   if (forwardedRef) {
-    clean.ref = forwardedRef;
+    transformedProps.ref = forwardedRef;
   }
 
-  const styles: {
+  const additionalStyles: {
     fontStyle?: string;
     fontFamily?: string;
     fontSize?: NumberProp;
@@ -161,123 +126,70 @@ const prepare = <T extends BaseProps>(
   } = {};
 
   if (fontFamily != null) {
-    styles.fontFamily = fontFamily;
+    additionalStyles.fontFamily = fontFamily;
   }
   if (fontSize != null) {
-    styles.fontSize = fontSize;
+    additionalStyles.fontSize = fontSize;
   }
   if (fontWeight != null) {
-    styles.fontWeight = fontWeight;
+    additionalStyles.fontWeight = fontWeight;
   }
   if (fontStyle != null) {
-    styles.fontStyle = fontStyle;
+    additionalStyles.fontStyle = fontStyle;
   }
 
-  clean.style = resolve(style, styles);
+  transformedProps.style = StyleSheet.compose(
+    styles.base,
+    resolve(style, additionalStyles),
+  );
 
-  return clean;
+  if (!(onLongPress || onPress || onPressIn || onPressOut)) {
+    return RNWCreateElement(type, transformedProps, children);
+  }
+
+  return React.createElement(
+    TouchableWithoutFeedback,
+    {
+      delayLongPress,
+      delayPressIn,
+      delayPressOut,
+      disabled,
+      onBlur,
+      onFocus,
+      onLongPress,
+      onPress,
+      onPressIn,
+      onPressOut,
+    },
+    RNWCreateElement(type, transformedProps, children),
+  );
 };
 
-const getBoundingClientRect = (node: SVGElement) => {
-  if (node) {
-    // @ts-ignore
-    const isElement = node.nodeType === 1; /* Node.ELEMENT_NODE */
-    // @ts-ignore
-    if (isElement && typeof node.getBoundingClientRect === 'function') {
-      // @ts-ignore
-      return node.getBoundingClientRect();
-    }
-  }
-};
-
-const measureLayout = (
-  node: SVGElement,
-  callback: (
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    left: number,
-    top: number,
-  ) => void,
-) => {
-  // @ts-ignore
-  const relativeNode = node && node.parentNode;
-  if (relativeNode) {
-    setTimeout(() => {
-      // @ts-ignore
-      const relativeRect = getBoundingClientRect(relativeNode);
-      const { height, left, top, width } = getBoundingClientRect(node);
-      const x = left - relativeRect.left;
-      const y = top - relativeRect.top;
-      callback(x, y, width, height, left, top);
-    }, 0);
-  }
-};
-
-function remeasure() {
-  // @ts-ignore
-  const tag = this.state.touchable.responderID;
-  if (tag == null) {
-    return;
-  }
-  // @ts-ignore
-  measureLayout(tag, this._handleQueryLayout);
-}
-
-export class WebShape<
-  P extends BaseProps = BaseProps,
-  C = {}
-> extends React.Component<P, C> {
-  [x: string]: unknown;
-  _remeasureMetricsOnActivation: () => void;
-  touchableHandleStartShouldSetResponder?: (
-    e: GestureResponderEvent,
-  ) => boolean;
-  touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
-  touchableHandleResponderGrant?: (e: GestureResponderEvent) => void;
-  touchableHandleResponderRelease?: (e: GestureResponderEvent) => void;
-  touchableHandleResponderTerminate?: (e: GestureResponderEvent) => void;
-  touchableHandleResponderTerminationRequest?: (
-    e: GestureResponderEvent,
-  ) => boolean;
-  constructor(props: P, context: C) {
-    super(props, context);
-
-    // Do not attach touchable mixin handlers if SVG element doesn't have a touchable prop
-    if (hasTouchableProperty(props)) {
-      SvgTouchableMixin(this);
-    }
-
-    this._remeasureMetricsOnActivation = remeasure.bind(this);
-  }
-}
-
-export class Circle extends WebShape {
+export class Circle extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('circle', prepare(this));
+    return createSvgElement('circle', this.props);
   }
 }
 
-export class ClipPath extends WebShape {
+export class ClipPath extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('clipPath', prepare(this));
+    return createSvgElement('clipPath', this.props);
   }
 }
 
-export class Defs extends WebShape {
+export class Defs extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('defs', prepare(this));
+    return createSvgElement('defs', this.props);
   }
 }
 
-export class Ellipse extends WebShape {
+export class Ellipse extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('ellipse', prepare(this));
+    return createSvgElement('ellipse', this.props);
   }
 }
 
-export class G extends WebShape<
+export class G extends React.Component<
   BaseProps & {
     x?: NumberProp;
     y?: NumberProp;
@@ -291,121 +203,121 @@ export class G extends WebShape<
       rest.translate = `${x || 0}, ${y || 0}`;
     }
 
-    return createElement('g', prepare(this, rest));
+    return createSvgElement('g', rest);
   }
 }
 
-export class Image extends WebShape {
+export class Image extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('image', prepare(this));
+    return createSvgElement('image', this.props);
   }
 }
 
-export class Line extends WebShape {
+export class Line extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('line', prepare(this));
+    return createSvgElement('line', this.props);
   }
 }
 
-export class LinearGradient extends WebShape {
+export class LinearGradient extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('linearGradient', prepare(this));
+    return createSvgElement('linearGradient', this.props);
   }
 }
 
-export class Path extends WebShape {
+export class Path extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('path', prepare(this));
+    return createSvgElement('path', this.props);
   }
 }
 
-export class Polygon extends WebShape {
+export class Polygon extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('polygon', prepare(this));
+    return createSvgElement('polygon', this.props);
   }
 }
 
-export class Polyline extends WebShape {
+export class Polyline extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('polyline', prepare(this));
+    return createSvgElement('polyline', this.props);
   }
 }
 
-export class RadialGradient extends WebShape {
+export class RadialGradient extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('radialGradient', prepare(this));
+    return createSvgElement('radialGradient', this.props);
   }
 }
 
-export class Rect extends WebShape {
+export class Rect extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('rect', prepare(this));
+    return createSvgElement('rect', this.props);
   }
 }
 
-export class Stop extends WebShape {
+export class Stop extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('stop', prepare(this));
+    return createSvgElement('stop', this.props);
   }
 }
 
-export class Svg extends WebShape {
+export class Svg extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('svg', prepare(this));
+    return createSvgElement('svg', this.props);
   }
 }
 
-export class Symbol extends WebShape {
+export class Symbol extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('symbol', prepare(this));
+    return createSvgElement('symbol', this.props);
   }
 }
 
-export class Text extends WebShape {
+export class Text extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('text', prepare(this));
+    return createSvgElement('text', this.props);
   }
 }
 
-export class TSpan extends WebShape {
+export class TSpan extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('tspan', prepare(this));
+    return createSvgElement('tspan', this.props);
   }
 }
 
-export class TextPath extends WebShape {
+export class TextPath extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('textPath', prepare(this));
+    return createSvgElement('textPath', this.props);
   }
 }
 
-export class Use extends WebShape {
+export class Use extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('use', prepare(this));
+    return createSvgElement('use', this.props);
   }
 }
 
-export class Mask extends WebShape {
+export class Mask extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('mask', prepare(this));
+    return createSvgElement('mask', this.props);
   }
 }
 
-export class ForeignObject extends WebShape {
+export class ForeignObject extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('foreignObject', prepare(this));
+    return createSvgElement('foreignObject', this.props);
   }
 }
 
-export class Marker extends WebShape {
+export class Marker extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('marker', prepare(this));
+    return createSvgElement('marker', this.props);
   }
 }
 
-export class Pattern extends WebShape {
+export class Pattern extends React.Component<BaseProps> {
   render(): JSX.Element {
-    return createElement('pattern', prepare(this));
+    return createSvgElement('pattern', this.props);
   }
 }
 
