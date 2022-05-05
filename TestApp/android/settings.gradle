@@ -1,0 +1,12 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenLocal()
+        google()
+    }
+}
+
+rootProject.name = "TestApp"
+
+apply(from: "../node_modules/react-native-test-app/test-app.gradle")
+applyTestAppSettings(settings)

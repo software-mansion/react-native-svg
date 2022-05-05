@@ -1,0 +1,7 @@
+require_relative '../node_modules/react-native-test-app/test_app'
+
+use_flipper!({ 'Flipper' => '0.75.1', 'Flipper-Folly' => '2.5.3' })
+
+workspace 'TestApp.xcworkspace'
+
+use_test_app! :fabric_enabled => true, :hermes_enabled => true
