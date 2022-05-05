@@ -69,19 +69,12 @@ using namespace facebook::react;
     _svgView.minY = newSvgViewProps.minY;
     _svgView.vbWidth = newSvgViewProps.vbWidth;
     _svgView.vbHeight = newSvgViewProps.vbHeight;
-    _svgView.align = [RNSVGSvgViewComponentView stringToPropValue:newSvgViewProps.align];
+    _svgView.align = RCTNSStringFromStringNilIfEmpty(newSvgViewProps.align);
     _svgView.meetOrSlice = [RNSVGSvgViewComponentView intToRNSVGVBMOS:newSvgViewProps.meetOrSlice];
     _svgView.tintColor = RCTUIColorFromSharedColor(newSvgViewProps.tintColor);
     _svgView.tintColor = RCTUIColorFromSharedColor(newSvgViewProps.color);
 
   [super updateProps:props oldProps:oldProps];
-}
-
-+ (NSString *)stringToPropValue:(std::string)value
-{
-  if (value.empty())
-    return nil;
-  return [[NSString alloc] initWithUTF8String:value.c_str()];
 }
 
 + (RNSVGVBMOS)intToRNSVGVBMOS:(int)value
