@@ -242,8 +242,8 @@ export type Circle = React.ComponentClass<CircleProps>;
 export interface ClipPathProps {
   id?: string;
 }
-export const ClipPath: React.ComponentClass<ClipPathProps>;
-export type ClipPath = React.ComponentClass<ClipPathProps>;
+export const ClipPath: React.ComponentClass<React.PropsWithChildren<ClipPathProps>>;
+export type ClipPath = React.ComponentClass<React.PropsWithChildren<ClipPathProps>>;
 
 export const Defs: React.ComponentClass<{}>;
 export type Defs = React.ComponentClass<{}>;
@@ -261,8 +261,8 @@ export type Ellipse = React.ComponentClass<EllipseProps>;
 export interface GProps extends CommonPathProps, FontProps {
   opacity?: NumberProp;
 }
-export const G: React.ComponentClass<GProps>;
-export type G = React.ComponentClass<GProps>;
+export const G: React.ComponentClass<React.PropsWithChildren<GProps>>;
+export type G = React.ComponentClass<React.PropsWithChildren<GProps>>;
 
 export interface ForeignObjectProps {
   x?: NumberProp;
@@ -416,8 +416,8 @@ export interface TSpanProps extends CommonPathProps, FontProps {
   rotate?: NumberArray;
   inlineSize?: NumberProp;
 }
-export const TSpan: React.ComponentClass<TSpanProps>;
-export type TSpan = React.ComponentClass<TSpanProps>;
+export const TSpan: React.ComponentClass<React.PropsWithChildren<TSpanProps>>;
+export type TSpan = React.ComponentClass<React.PropsWithChildren<TSpanProps>>;
 
 export interface TextSpecificProps extends CommonPathProps, FontProps {
   alignmentBaseline?: AlignmentBaseline;
@@ -438,8 +438,8 @@ export interface TextProps extends TextSpecificProps {
   opacity?: NumberProp;
   inlineSize?: NumberProp;
 }
-export const Text: React.ComponentClass<TextProps>;
-export type Text = React.ComponentClass<TextProps>;
+export const Text: React.ComponentClass<React.PropsWithChildren<TextProps>>;
+export type Text = React.ComponentClass<React.PropsWithChildren<TextProps>>;
 
 export interface TextPathProps extends TextSpecificProps {
   xlinkHref?: string;
@@ -449,8 +449,8 @@ export interface TextPathProps extends TextSpecificProps {
   spacing?: TextPathSpacing;
   midLine?: TextPathMidLine;
 }
-export const TextPath: React.ComponentClass<TextPathProps>;
-export type TextPath = React.ComponentClass<TextPathProps>;
+export const TextPath: React.ComponentClass<React.PropsWithChildren<TextPathProps>>;
+export type TextPath = React.ComponentClass<React.PropsWithChildren<TextPathProps>>;
 
 export interface UseProps extends CommonPathProps {
   xlinkHref?: string;
