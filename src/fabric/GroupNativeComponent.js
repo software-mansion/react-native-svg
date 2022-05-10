@@ -39,19 +39,17 @@ type SvgNodeCommonProps = $ReadOnly<{|
   display?: string,
 |}>;
 
+type ColorStruct = $ReadOnly<{|
+  type?: WithDefault<Int32, -1>,
+  value?: ColorValue,
+  brushRef?: string,
+|}>;
+
 type SvgRenderableCommonProps = $ReadOnly<{|
-  fill?: $ReadOnly<{|
-    type: Int32,
-    value?: ColorValue,
-    brushRef?: string,
-  |}>,
+  fill?: ColorStruct,
   fillOpacity?: WithDefault<Float, 1.0>,
   fillRule?: WithDefault<Int32, 1>,
-  stroke?: $ReadOnly<{|
-    type: Int32,
-    value?: ColorValue,
-    brushRef?: string,
-  |}>,
+  stroke?: ColorStruct,
   strokeOpacity?: WithDefault<Float, 1.0>,
   strokeWidth?: WithDefault<string, "1">,
   strokeLinecap?: WithDefault<Int32, 0>,

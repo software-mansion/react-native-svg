@@ -1,10 +1,8 @@
 #import "RNSVGCircleComponentView.h"
 #import "RNSVGCircle.h"
-#import "RNSVGPainterBrush.h"
-#import "RNSVGSolidColorBrush.h"
-#import "RNSVGContextBrush.h"
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "FabricConversions.h"
 
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import "RCTFabricComponentsPlugins.h"
 #import "RCTConversions.h"
 
@@ -36,41 +34,11 @@ using namespace facebook::react;
 {
   const auto &newCircleProps = *std::static_pointer_cast<const RNSVGCircleProps>(props);
 
-    [_circle setCx:[RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.cx)]];
-    [_circle setCy:[RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.cy)]];
-    [_circle setR:[RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.r)]];
-    // TODO: DynamicColorIOS not working for some reason
-    [_circle setFill:[RNSVGCircleComponentView RNSVGBrush:newCircleProps.fill]];
+    _circle.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.cx)];
+    _circle.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.cy)];
+    _circle.r  = [RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.r)];
+    setCommonRenderableProps(newCircleProps, _circle);
     [super updateProps:props oldProps:oldProps];
-}
-
-+ (RNSVGBrush *)RNSVGBrush:(facebook::react::RNSVGCircleFillStruct)fillObject
-{
-    int type = fillObject.type;
-
-    switch (type) {
-        case 0: // solid color
-        {
-            // These are probably expensive allocations since it's often the same value.
-            // We should memoize colors but look ups may be just as expensive.
-            RNSVGColor *color = RCTUIColorFromSharedColor(fillObject.value);
-            return [[RNSVGSolidColorBrush alloc] initWithColor:color];
-        }
-        case 1: // brush
-        {
-            NSArray *arr = @[@(type), RCTNSStringFromString(fillObject.brushRef)];
-            return [[RNSVGPainterBrush alloc] initWithArray:arr];
-        }
-        case 2: // currentColor
-            return [[RNSVGBrush alloc] initWithArray:nil];
-        case 3: // context-fill
-            return [[RNSVGContextBrush alloc] initFill];
-        case 4: // context-stroke
-            return [[RNSVGContextBrush alloc] initStroke];
-        default:
-            RCTLogError(@"Unknown brush type: %d", type);
-            return nil;
-    }
 }
 
 @end

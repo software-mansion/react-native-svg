@@ -154,6 +154,7 @@ export function extract(instance: Object, props: Object & { style?: [] | {} }) {
 export function stringifyPropsForFabric(props: Object) {
   const extracted = {};
   Object.keys(props).forEach(k => {
+    // @ts-ignore
     extracted[k] = String(props[k]);
   });
   
