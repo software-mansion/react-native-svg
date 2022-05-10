@@ -30,7 +30,7 @@ type SvgNodeCommonProps = $ReadOnly<{|
   clipPath?: string,
   clipRule?: WithDefault<Int32, 0>,
   responsible?: boolean,
-  onLayout?: ?DirectEventHandler<LayoutEvent>,
+  onLayout?: ?DirectEventHandler<LayoutEvent>, // not working for now
   display?: string,
 |}>;
 

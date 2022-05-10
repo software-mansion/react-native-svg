@@ -1,10 +1,11 @@
 #import "RNSVGCircleComponentView.h"
 #import "RNSVGCircle.h"
-#import "FabricConversions.h"
+#include "FabricConversions.h"
 
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import "RCTFabricComponentsPlugins.h"
 #import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
 
 using namespace facebook::react;
 
@@ -39,6 +40,13 @@ using namespace facebook::react;
     _circle.r  = [RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.r)];
     setCommonRenderableProps(newCircleProps, _circle);
     [super updateProps:props oldProps:oldProps];
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    _circle = [[RNSVGCircle alloc] init];
+    self.contentView = _circle;
 }
 
 @end

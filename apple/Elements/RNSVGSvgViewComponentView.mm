@@ -71,8 +71,12 @@ using namespace facebook::react;
     _svgView.vbHeight = newSvgViewProps.vbHeight;
     _svgView.align = RCTNSStringFromStringNilIfEmpty(newSvgViewProps.align);
     _svgView.meetOrSlice = [RNSVGSvgViewComponentView intToRNSVGVBMOS:newSvgViewProps.meetOrSlice];
-    _svgView.tintColor = RCTUIColorFromSharedColor(newSvgViewProps.tintColor);
-    _svgView.tintColor = RCTUIColorFromSharedColor(newSvgViewProps.color);
+    if (RCTUIColorFromSharedColor(newSvgViewProps.tintColor)) {
+        _svgView.tintColor = RCTUIColorFromSharedColor(newSvgViewProps.tintColor);
+    }
+    if (RCTUIColorFromSharedColor(newSvgViewProps.color)) {
+        _svgView.tintColor = RCTUIColorFromSharedColor(newSvgViewProps.color);
+    }
 
   [super updateProps:props oldProps:oldProps];
 }

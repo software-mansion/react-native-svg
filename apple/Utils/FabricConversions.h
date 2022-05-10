@@ -2,6 +2,7 @@
 #import "RNSVGSolidColorBrush.h"
 #import "RNSVGContextBrush.h"
 #import "RNSVGRenderable.h"
+#import "RNSVGLength.h"
 
 #import "RCTFabricComponentsPlugins.h"
 #import "RCTConversions.h"
@@ -46,7 +47,7 @@ void setCommonNodeProps(T nodeProps, RNSVGNode *node)
     if (nodeProps.matrix.size() == 6) {
         node.matrix = CGAffineTransformMake(nodeProps.matrix.at(0), nodeProps.matrix.at(1), nodeProps.matrix.at(2), nodeProps.matrix.at(3), nodeProps.matrix.at(4), nodeProps.matrix.at(5));
     }
-    // transfrom
+    // transform
     node.mask =  RCTNSStringFromStringNilIfEmpty(nodeProps.mask);
     node.markerStart =  RCTNSStringFromStringNilIfEmpty(nodeProps.markerStart);
     node.markerMid =  RCTNSStringFromStringNilIfEmpty(nodeProps.markerMid);
@@ -56,7 +57,18 @@ void setCommonNodeProps(T nodeProps, RNSVGNode *node)
     node.responsible = nodeProps.responsible;
     // onLayout
     node.display =  RCTNSStringFromStringNilIfEmpty(nodeProps.display);
-    // pointerEvents
+    switch (nodeProps.pointerEvents) {
+        case facebook::react::PointerEventsMode::Auto:
+            node.pointerEvents = RCTPointerEventsUnspecified;
+        case facebook::react::PointerEventsMode::None:
+            node.pointerEvents = RCTPointerEventsNone;
+        case facebook::react::PointerEventsMode::BoxNone:
+            node.pointerEvents = RCTPointerEventsBoxNone;
+        case facebook::react::PointerEventsMode::BoxOnly:
+            node.pointerEvents = RCTPointerEventsBoxOnly;
+        default:
+            node.pointerEvents = RCTPointerEventsUnspecified;
+    }
 }
 
 template<typename T>
@@ -71,15 +83,21 @@ void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode
     renderableNode.strokeWidth =  [RNSVGLength lengthWithString:RCTNSStringFromString(renderableProps.strokeWidth)];
     renderableNode.strokeLinecap = renderableProps.strokeLinecap == 0 ? kCGLineCapButt : renderableProps.strokeLinecap == 1 ? kCGLineCapRound : kCGLineCapSquare;
     renderableNode.strokeLinejoin =  renderableProps.strokeLinejoin == 0 ? kCGLineJoinMiter : renderableProps.strokeLinejoin == 1 ? kCGLineJoinRound : kCGLineJoinBevel;
-//    std::vector<std::string> strokeDasharray{};
+    if (renderableProps.strokeDasharray.size() > 0) {
+        NSMutableArray<RNSVGLength *> *lengthArray = [NSMutableArray new];
+        for (auto str : renderableProps.strokeDasharray) {
+            RNSVGLength *lengthFromString = [RNSVGLength lengthWithString:RCTNSStringFromString(str)];
+            [lengthArray addObject:lengthFromString];
+        }
+        renderableNode.strokeDasharray = lengthArray;
+    }
     renderableNode.strokeDashoffset = renderableProps.strokeDashoffset;
     renderableNode.strokeMiterlimit = renderableProps.strokeMiterlimit;
     renderableNode.vectorEffect = renderableProps.vectorEffect == 0 ? kRNSVGVectorEffectDefault : renderableProps.vectorEffect == 1 ? kRNSVGVectorEffectNonScalingStroke : renderableProps.vectorEffect == 2 ? kRNSVGVectorEffectInherit : kRNSVGVectorEffectUri;
     if (renderableProps.propList.size() > 0) {
         NSMutableArray<NSString *> *propArray = [NSMutableArray new];
         for (auto str : renderableProps.propList) {
-            NSString *nsstr = [NSString stringWithUTF8String:str.c_str()];
-            [propArray addObject:nsstr];
+            [propArray addObject:RCTNSStringFromString(str)];
         }
         renderableNode.propList = propArray;
     }
