@@ -10,7 +10,7 @@
 using namespace facebook::react;
 
 @implementation RNSVGCircleComponentView {
-    RNSVGCircle *_circle;
+    RNSVGCircle *_element;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -18,8 +18,8 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNSVGCircleProps>();
     _props = defaultProps;
-    _circle = [[RNSVGCircle alloc] init];
-    self.contentView = _circle;
+    _element = [[RNSVGCircle alloc] init];
+    self.contentView = _element;
   }
   return self;
 }
@@ -33,20 +33,20 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newCircleProps = *std::static_pointer_cast<const RNSVGCircleProps>(props);
+  const auto &newProps = *std::static_pointer_cast<const RNSVGCircleProps>(props);
 
-    _circle.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.cx)];
-    _circle.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.cy)];
-    _circle.r  = [RNSVGLength lengthWithString:RCTNSStringFromString(newCircleProps.r)];
-    setCommonRenderableProps(newCircleProps, _circle);
+    _element.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
+    _element.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
+    _element.r  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.r)];
+    setCommonRenderableProps(newProps, _element);
     [super updateProps:props oldProps:oldProps];
 }
 
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
-    _circle = [[RNSVGCircle alloc] init];
-    self.contentView = _circle;
+    _element = [[RNSVGCircle alloc] init];
+    self.contentView = _element;
 }
 
 @end

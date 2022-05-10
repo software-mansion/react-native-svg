@@ -10,7 +10,7 @@
 using namespace facebook::react;
 
 @implementation RNSVGGroupComponentView {
-    RNSVGGroup *_group;
+    RNSVGGroup *_element;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -18,8 +18,8 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNSVGGroupProps>();
     _props = defaultProps;
-    _group = [[RNSVGGroup alloc] init];
-    self.contentView = _group;
+    _element = [[RNSVGGroup alloc] init];
+    self.contentView = _element;
   }
   return self;
 }
@@ -27,8 +27,8 @@ using namespace facebook::react;
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
     if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]]) {
-        [_group insertSubview:((RCTViewComponentView *)childComponentView).contentView atIndex:index];
-        [_group invalidate];
+        [_element insertSubview:((RCTViewComponentView *)childComponentView).contentView atIndex:index];
+        [_element invalidate];
     } else {
         [super mountChildComponentView:childComponentView index:index];
     }
@@ -38,7 +38,7 @@ using namespace facebook::react;
 {
     if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]]) {
         [childComponentView removeFromSuperview];
-        [_group invalidate];
+        [_element invalidate];
     } else {
         [super unmountChildComponentView:childComponentView index:index];
     }
@@ -53,18 +53,18 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newGroupProps = *std::static_pointer_cast<const RNSVGGroupProps>(props);
-    setCommonRenderableProps(newGroupProps, _group);
+    const auto &newProps = *std::static_pointer_cast<const RNSVGGroupProps>(props);
+    setCommonRenderableProps(newProps, _element);
     
-    if (RCTNSStringFromStringNilIfEmpty(newGroupProps.fontSize)) {
-        _group.font = @{ @"fontSize": RCTNSStringFromString(newGroupProps.fontSize) };
+    if (RCTNSStringFromStringNilIfEmpty(newProps.fontSize)) {
+        _element.font = @{ @"fontSize": RCTNSStringFromString(newProps.fontSize) };
     }
-    if (RCTNSStringFromStringNilIfEmpty(newGroupProps.fontWeight)) {
-        _group.font = @{ @"fontWeight": RCTNSStringFromString(newGroupProps.fontWeight) };
+    if (RCTNSStringFromStringNilIfEmpty(newProps.fontWeight)) {
+        _element.font = @{ @"fontWeight": RCTNSStringFromString(newProps.fontWeight) };
     }
-    NSDictionary *fontDict = [RNSVGGroupComponentView parseFontStruct:newGroupProps.font];
+    NSDictionary *fontDict = [RNSVGGroupComponentView parseFontStruct:newProps.font];
     if (fontDict.count > 0) {
-        _group.font = fontDict;
+        _element.font = fontDict;
     }
     [super updateProps:props oldProps:oldProps];
 }
@@ -97,6 +97,13 @@ void addValueToDict(NSMutableDictionary *dict, std::string value, NSString *key)
     if (valueOrNil) {
         dict[key] = valueOrNil;
     }
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    _element = [[RNSVGGroup alloc] init];
+    self.contentView = _element;
 }
 
 @end

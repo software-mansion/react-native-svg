@@ -20,7 +20,7 @@ using namespace facebook::react;
     NSMutableDictionary<NSString *, RNSVGNode *> *_masks;
     CGAffineTransform _invviewBoxTransform;
     bool rendered;
-    RNSVGSvgView *_svgView;
+    RNSVGSvgView *_element;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -28,8 +28,8 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNSVGSvgViewProps>();
     _props = defaultProps;
-    _svgView = [[RNSVGSvgView alloc] initWithFrame:frame];
-    self.contentView = _svgView;
+    _element = [[RNSVGSvgView alloc] initWithFrame:frame];
+    self.contentView = _element;
   }
   return self;
 }
@@ -37,8 +37,8 @@ using namespace facebook::react;
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
     if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]]) {
-        [_svgView insertSubview:((RCTViewComponentView *)childComponentView).contentView atIndex:index];
-        [_svgView invalidate];
+        [_element insertSubview:((RCTViewComponentView *)childComponentView).contentView atIndex:index];
+        [_element invalidate];
     } else {
         [super mountChildComponentView:childComponentView index:index];
     }
@@ -48,7 +48,7 @@ using namespace facebook::react;
 {
     if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]]) {
         [childComponentView removeFromSuperview];
-        [_svgView invalidate];
+        [_element invalidate];
     } else {
         [super unmountChildComponentView:childComponentView index:index];
     }
@@ -63,19 +63,19 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newSvgViewProps = *std::static_pointer_cast<const RNSVGSvgViewProps>(props);
+  const auto &newProps = *std::static_pointer_cast<const RNSVGSvgViewProps>(props);
     
-    _svgView.minX = newSvgViewProps.minX;
-    _svgView.minY = newSvgViewProps.minY;
-    _svgView.vbWidth = newSvgViewProps.vbWidth;
-    _svgView.vbHeight = newSvgViewProps.vbHeight;
-    _svgView.align = RCTNSStringFromStringNilIfEmpty(newSvgViewProps.align);
-    _svgView.meetOrSlice = [RNSVGSvgViewComponentView intToRNSVGVBMOS:newSvgViewProps.meetOrSlice];
-    if (RCTUIColorFromSharedColor(newSvgViewProps.tintColor)) {
-        _svgView.tintColor = RCTUIColorFromSharedColor(newSvgViewProps.tintColor);
+    _element.minX = newProps.minX;
+    _element.minY = newProps.minY;
+    _element.vbWidth = newProps.vbWidth;
+    _element.vbHeight = newProps.vbHeight;
+    _element.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
+    _element.meetOrSlice = [RNSVGSvgViewComponentView intToRNSVGVBMOS:newProps.meetOrSlice];
+    if (RCTUIColorFromSharedColor(newProps.tintColor)) {
+        _element.tintColor = RCTUIColorFromSharedColor(newProps.tintColor);
     }
-    if (RCTUIColorFromSharedColor(newSvgViewProps.color)) {
-        _svgView.tintColor = RCTUIColorFromSharedColor(newSvgViewProps.color);
+    if (RCTUIColorFromSharedColor(newProps.color)) {
+        _element.tintColor = RCTUIColorFromSharedColor(newProps.color);
     }
 
   [super updateProps:props oldProps:oldProps];
@@ -95,6 +95,12 @@ using namespace facebook::react;
     }
 }
 
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    _element = [[RNSVGSvgView alloc] init];
+    self.contentView = _element;
+}
 
 @end
 
