@@ -1,5 +1,5 @@
-#import "RNSVGGroupComponentView.h"
-#import "RNSVGGroup.h"
+#import "RNSVGForeignObjectComponentView.h"
+#import "RNSVGForeignObject.h"
 #import "FabricConversions.h"
 
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
@@ -9,16 +9,16 @@
 
 using namespace facebook::react;
 
-@implementation RNSVGGroupComponentView {
-    RNSVGGroup *_element;
+@implementation RNSVGForeignObjectComponentView {
+    RNSVGForeignObject *_element;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
-    static const auto defaultProps = std::make_shared<const RNSVGGroupProps>();
+    static const auto defaultProps = std::make_shared<const RNSVGForeignObjectProps>();
     _props = defaultProps;
-    _element = [[RNSVGGroup alloc] init];
+    _element = [[RNSVGForeignObject alloc] init];
     self.contentView = _element;
   }
   return self;
@@ -48,12 +48,12 @@ using namespace facebook::react;
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
-  return concreteComponentDescriptorProvider<RNSVGGroupComponentDescriptor>();
+  return concreteComponentDescriptorProvider<RNSVGForeignObjectComponentDescriptor>();
 }
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newProps = *std::static_pointer_cast<const RNSVGGroupProps>(props);
+    const auto &newProps = *std::static_pointer_cast<const RNSVGForeignObjectProps>(props);
     setCommonRenderableProps(newProps, _element);
     
     if (RCTNSStringFromStringNilIfEmpty(newProps.fontSize)) {
@@ -66,19 +66,35 @@ using namespace facebook::react;
     if (fontDict.count > 0) {
         _element.font = fontDict;
     }
+
+    _element.x =  RCTNSStringFromStringNilIfEmpty(newProps.x) ? [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)] : nil;
+    _element.y =  RCTNSStringFromStringNilIfEmpty(newProps.y) ? [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)] : nil;
+    if (RCTNSStringFromStringNilIfEmpty(newProps.foreignObjectheight)) {
+        _element.foreignObjectheight =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.foreignObjectheight)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.foreignObjectwidth)) {
+        _element.foreignObjectwidth =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.foreignObjectwidth)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
+        _element.foreignObjectheight =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
+        _element.foreignObjectwidth =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+    }
+    
     [super updateProps:props oldProps:oldProps];
 }
 
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
-    _element = [[RNSVGGroup alloc] init];
+    _element = [[RNSVGForeignObject alloc] init];
     self.contentView = _element;
 }
 
 @end
 
-Class<RCTComponentViewProtocol> RNSVGGroupCls(void)
+Class<RCTComponentViewProtocol> RNSVGForeignObjectCls(void)
 {
-  return RNSVGGroupComponentView.class;
+  return RNSVGForeignObjectComponentView.class;
 }

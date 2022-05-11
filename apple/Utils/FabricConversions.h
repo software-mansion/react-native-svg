@@ -8,7 +8,7 @@
 #import "RCTConversions.h"
 
 template<typename T>
-RNSVGBrush *brushFromColorStruct(T fillObject)
+static RNSVGBrush *brushFromColorStruct(T fillObject)
 {
     int type = fillObject.type;
 
@@ -40,7 +40,7 @@ RNSVGBrush *brushFromColorStruct(T fillObject)
 }
 
 template<typename T>
-void setCommonNodeProps(T nodeProps, RNSVGNode *node)
+static void setCommonNodeProps(T nodeProps, RNSVGNode *node)
 {
     node.name =  RCTNSStringFromStringNilIfEmpty(nodeProps.name);
     node.opacity = nodeProps.opacity;
@@ -72,7 +72,7 @@ void setCommonNodeProps(T nodeProps, RNSVGNode *node)
 }
 
 template<typename T>
-void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode)
+static void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode)
 {
     setCommonNodeProps(renderableProps, renderableNode);
     renderableNode.fill = brushFromColorStruct(renderableProps.fill);
@@ -102,3 +102,35 @@ void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode
         renderableNode.propList = propArray;
     }
 }
+
+static void addValueToDict(NSMutableDictionary *dict, std::string value, NSString *key)
+{
+    NSString *valueOrNil = RCTNSStringFromStringNilIfEmpty(value);
+    if (valueOrNil) {
+        dict[key] = valueOrNil;
+    }
+}
+
+template<typename T>
+static NSDictionary *parseFontStruct(T fontStruct)
+{
+    NSMutableDictionary *fontDict = [NSMutableDictionary new];
+    
+    // TODO: do it better maybe
+    addValueToDict(fontDict, fontStruct.fontStyle, @"fontStyle");
+    addValueToDict(fontDict, fontStruct.fontVariant, @"fontVariant");
+    addValueToDict(fontDict, fontStruct.fontWeight, @"fontWeight");
+    addValueToDict(fontDict, fontStruct.fontStretch, @"fontStretch");
+    addValueToDict(fontDict, fontStruct.fontSize, @"fontSize");
+    addValueToDict(fontDict, fontStruct.fontFamily, @"fontFamily");
+    addValueToDict(fontDict, fontStruct.textAnchor, @"textAnchor");
+    addValueToDict(fontDict, fontStruct.textDecoration, @"textDecoration");
+    addValueToDict(fontDict, fontStruct.letterSpacing, @"letterSpacing");
+    addValueToDict(fontDict, fontStruct.wordSpacing, @"wordSpacing");
+    addValueToDict(fontDict, fontStruct.kerning, @"kerning");
+    addValueToDict(fontDict, fontStruct.fontFeatureSettings, @"fontFeatureSettings");
+    addValueToDict(fontDict, fontStruct.fontVariantLigatures, @"fontVariantLigatures");
+    addValueToDict(fontDict, fontStruct.fontVariationSettings, @"fontVariationSettings");
+    return [NSDictionary dictionaryWithDictionary:fontDict];
+}
+
