@@ -8,7 +8,7 @@
 #import "RCTConversions.h"
 
 template<typename T>
-static RNSVGBrush *brushFromColorStruct(T fillObject)
+RNSVGBrush *brushFromColorStruct(T fillObject)
 {
     int type = fillObject.type;
 
@@ -40,7 +40,7 @@ static RNSVGBrush *brushFromColorStruct(T fillObject)
 }
 
 template<typename T>
-static void setCommonNodeProps(T nodeProps, RNSVGNode *node)
+void setCommonNodeProps(T nodeProps, RNSVGNode *node)
 {
     node.name =  RCTNSStringFromStringNilIfEmpty(nodeProps.name);
     node.opacity = nodeProps.opacity;
@@ -72,7 +72,7 @@ static void setCommonNodeProps(T nodeProps, RNSVGNode *node)
 }
 
 template<typename T>
-static void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode)
+void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode)
 {
     setCommonNodeProps(renderableProps, renderableNode);
     renderableNode.fill = brushFromColorStruct(renderableProps.fill);
@@ -112,7 +112,7 @@ static void addValueToDict(NSMutableDictionary *dict, std::string value, NSStrin
 }
 
 template<typename T>
-static NSDictionary *parseFontStruct(T fontStruct)
+NSDictionary *parseFontStruct(T fontStruct)
 {
     NSMutableDictionary *fontDict = [NSMutableDictionary new];
     
