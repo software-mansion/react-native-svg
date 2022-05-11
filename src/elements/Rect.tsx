@@ -1,5 +1,5 @@
 import React from 'react';
-import { withoutXY } from '../lib/extract/extractProps';
+import { stringifyPropsForFabric, withoutXY } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGRect } from './NativeComponents';
@@ -24,7 +24,7 @@ export default class Rect extends Shape<{
   render() {
     const { props } = this;
     const { x, y, width, height, rx, ry } = props;
-    const rectProps = { x, y, width, height, rx, ry };
+    const rectProps = stringifyPropsForFabric({ x, y, width, height, rx, ry });
     return (
       <RNSVGRect
         ref={this.refMethod}
