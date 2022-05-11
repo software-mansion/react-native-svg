@@ -3,6 +3,7 @@
 #import "RNSVGContextBrush.h"
 #import "RNSVGRenderable.h"
 #import "RNSVGLength.h"
+#import "RNSVGVBMOS.h"
 
 #import "RCTFabricComponentsPlugins.h"
 #import "RCTConversions.h"
@@ -134,3 +135,16 @@ NSDictionary *parseFontStruct(T fontStruct)
     return [NSDictionary dictionaryWithDictionary:fontDict];
 }
 
+static RNSVGVBMOS intToRNSVGVBMOS(int value)
+{
+    switch (value) {
+        case 0:
+            return kRNSVGVBMOSMeet;
+        case 1:
+            return kRNSVGVBMOSSlice;
+        case 2:
+            return kRNSVGVBMOSNone;
+        default:
+            return kRNSVGVBMOSMeet;
+    }
+}

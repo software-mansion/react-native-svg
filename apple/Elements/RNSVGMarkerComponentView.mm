@@ -1,10 +1,7 @@
-#import "RNSVGSvgViewComponentView.h"
-#import "RNSVGSvgView.h"
-#import "RNSVGViewBox.h"
-#import "RNSVGNode.h"
+#import "RNSVGMarkerComponentView.h"
+#import "RNSVGMarker.h"
 #import "RNSVGFabricConversions.h"
 
-#import <react/renderer/components/rnsvg/Props.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 
 #import "RCTFabricComponentsPlugins.h"
@@ -12,23 +9,16 @@
 
 using namespace facebook::react;
 
-@implementation RNSVGSvgViewComponentView {
-    NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
-    NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
-    NSMutableDictionary<NSString *, RNSVGPainter *> *_painters;
-    NSMutableDictionary<NSString *, RNSVGNode *> *_markers;
-    NSMutableDictionary<NSString *, RNSVGNode *> *_masks;
-    CGAffineTransform _invviewBoxTransform;
-    bool rendered;
-    RNSVGSvgView *_element;
+@implementation RNSVGMarkerComponentView {
+    RNSVGMarker *_element;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
-    static const auto defaultProps = std::make_shared<const RNSVGSvgViewProps>();
+    static const auto defaultProps = std::make_shared<const RNSVGMarkerProps>();
     _props = defaultProps;
-    _element = [[RNSVGSvgView alloc] initWithFrame:frame];
+    _element = [[RNSVGMarker alloc] init];
     self.contentView = _element;
   }
   return self;
@@ -58,39 +48,52 @@ using namespace facebook::react;
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
-  return concreteComponentDescriptorProvider<RNSVGSvgViewComponentDescriptor>();
+  return concreteComponentDescriptorProvider<RNSVGMarkerComponentDescriptor>();
 }
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGSvgViewProps>(props);
+    const auto &newProps = *std::static_pointer_cast<const RNSVGMarkerProps>(props);
+    setCommonRenderableProps(newProps, _element);
     
+    if (RCTNSStringFromStringNilIfEmpty(newProps.fontSize)) {
+        _element.font = @{ @"fontSize": RCTNSStringFromString(newProps.fontSize) };
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.fontWeight)) {
+        _element.font = @{ @"fontWeight": RCTNSStringFromString(newProps.fontWeight) };
+    }
+    NSDictionary *fontDict = parseFontStruct(newProps.font);
+    if (fontDict.count > 0) {
+        _element.font = fontDict;
+    }
+    
+    _element.refX = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.refX)];
+    _element.refY = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.refY)];
+    _element.markerHeight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.markerHeight)];
+    _element.markerWidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.markerWidth)];
+    _element.markerUnits = RCTNSStringFromStringNilIfEmpty(newProps.markerUnits);
+    _element.orient = RCTNSStringFromStringNilIfEmpty(newProps.orient);
+
     _element.minX = newProps.minX;
     _element.minY = newProps.minY;
     _element.vbWidth = newProps.vbWidth;
     _element.vbHeight = newProps.vbHeight;
     _element.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
     _element.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
-    if (RCTUIColorFromSharedColor(newProps.tintColor)) {
-        _element.tintColor = RCTUIColorFromSharedColor(newProps.tintColor);
-    }
-    if (RCTUIColorFromSharedColor(newProps.color)) {
-        _element.tintColor = RCTUIColorFromSharedColor(newProps.color);
-    }
 
-  [super updateProps:props oldProps:oldProps];
+    [super updateProps:props oldProps:oldProps];
 }
 
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
-    _element = [[RNSVGSvgView alloc] init];
+    _element = [[RNSVGMarker alloc] init];
     self.contentView = _element;
 }
 
 @end
 
-Class<RCTComponentViewProtocol> RNSVGSvgViewCls(void)
+Class<RCTComponentViewProtocol> RNSVGMarkerCls(void)
 {
-  return RNSVGSvgViewComponentView.class;
+  return RNSVGMarkerComponentView.class;
 }

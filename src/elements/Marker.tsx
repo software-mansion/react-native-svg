@@ -3,6 +3,7 @@ import extractViewBox from '../lib/extract/extractViewBox';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGMarker } from './NativeComponents';
+import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 
 export default class Marker extends Shape<{
   id?: string;
@@ -40,7 +41,7 @@ export default class Marker extends Shape<{
       markerHeight,
       children,
     } = props;
-    const markerProps = {
+    const markerProps = stringifyPropsForFabric({
       name: id,
       refX,
       refY,
@@ -48,7 +49,7 @@ export default class Marker extends Shape<{
       orient: String(orient),
       markerWidth,
       markerHeight,
-    };
+    });;
 
     return (
       <RNSVGMarker
