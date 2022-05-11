@@ -3,6 +3,7 @@ import extractGradient from '../lib/extract/extractGradient';
 import { NumberProp, TransformProps } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGRadialGradient } from './NativeComponents';
+import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 
 export default class RadialGradient extends Shape<{
   fx?: NumberProp;
@@ -29,14 +30,14 @@ export default class RadialGradient extends Shape<{
   render() {
     const { props } = this;
     const { rx, ry, r, cx, cy, fx = cx, fy = cy } = props;
-    const radialGradientProps = {
+    const radialGradientProps = stringifyPropsForFabric({
       fx,
       fy,
       rx: rx || r,
       ry: ry || r,
       cx,
       cy,
-    };
+    });
     return (
       <RNSVGRadialGradient
         ref={this.refMethod}
