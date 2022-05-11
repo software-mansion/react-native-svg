@@ -1,6 +1,6 @@
 import React from 'react';
 import extractTransform from '../lib/extract/extractTransform';
-import { withoutXY } from '../lib/extract/extractProps';
+import { stringifyPropsForFabric, withoutXY } from '../lib/extract/extractProps';
 import { NumberProp, TransformProps } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
@@ -38,11 +38,8 @@ export default class Mask extends Shape<{
       maskContentUnits,
       children,
     } = props;
+    const strigifiedMaskProps = stringifyPropsForFabric({x, y, width, height,});
     const maskProps = {
-      x,
-      y,
-      width,
-      height,
       maskTransform: extractTransform(maskTransform || transform || props),
       maskUnits: maskUnits !== undefined ? units[maskUnits] : 0,
       maskContentUnits:
@@ -52,6 +49,7 @@ export default class Mask extends Shape<{
       <RNSVGMask
         ref={this.refMethod}
         {...withoutXY(this, props)}
+        {...strigifiedMaskProps}
         {...maskProps}
       >
         {children}
