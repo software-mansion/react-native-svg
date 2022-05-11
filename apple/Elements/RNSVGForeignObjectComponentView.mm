@@ -1,6 +1,6 @@
 #import "RNSVGForeignObjectComponentView.h"
 #import "RNSVGForeignObject.h"
-#import "FabricConversions.h"
+#import "RNSVGFabricConversions.h"
 
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 

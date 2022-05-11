@@ -1,6 +1,6 @@
 #import "RNSVGDefsComponentView.h"
 #import "RNSVGDefs.h"
-#include "FabricConversions.h"
+#import "RNSVGFabricConversions.h"
 
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 
@@ -52,7 +52,7 @@ using namespace facebook::react;
 }
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
-{    
+{
     [super updateProps:props oldProps:oldProps];
 }
 

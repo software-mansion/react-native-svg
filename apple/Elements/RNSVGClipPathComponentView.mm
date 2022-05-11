@@ -1,6 +1,6 @@
 #import "RNSVGClipPathComponentView.h"
 #import "RNSVGClipPath.h"
-#include "FabricConversions.h"
+#import "RNSVGFabricConversions.h"
 
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 

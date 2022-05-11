@@ -1,6 +1,6 @@
 #import "RNSVGLineComponentView.h"
 #import "RNSVGLine.h"
-#include "FabricConversions.h"
+#import "RNSVGFabricConversions.h"
 
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import "RCTFabricComponentsPlugins.h"
