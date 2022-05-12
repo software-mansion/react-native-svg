@@ -5,6 +5,7 @@ import { NumberProp, TransformProps } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
 import { RNSVGPattern } from './NativeComponents';
+import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 
 export default class Pattern extends Shape<{
   id?: string;
@@ -45,12 +46,9 @@ export default class Pattern extends Shape<{
       preserveAspectRatio,
     } = props;
     const matrix = extractTransform(patternTransform || transform || props);
+    const strigifiedPatternProps = stringifyPropsForFabric({x, y, width, height});
     const patternProps = {
       name: id,
-      x,
-      y,
-      width,
-      height,
       matrix,
       patternTransform: matrix,
       patternUnits: (patternUnits && units[patternUnits]) || 0,
@@ -59,6 +57,7 @@ export default class Pattern extends Shape<{
     return (
       <RNSVGPattern
         ref={this.refMethod}
+        {...strigifiedPatternProps}
         {...patternProps}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
       >
