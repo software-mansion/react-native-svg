@@ -62,7 +62,7 @@ export default class TextPath extends Shape<{
         ),
         {
           href: match,
-          startOffset,
+          startOffset: startOffset === null ? null : String(startOffset),
           method,
           spacing,
           side,
