@@ -151,12 +151,10 @@ export function extract(instance: Object, props: Object & { style?: [] | {} }) {
   return extractProps(propsAndStyles(props), instance);
 }
 
-export function stringifyPropsForFabric(props: Object) {
-  const extracted = {};
+export function stringifyPropsForFabric(props: { [key: string]: NumberProp | undefined | null; }): { [key: string]: string; } {
+  const extracted: { [key: string]: string; } = {};
   Object.keys(props).forEach(k => {
-    // @ts-ignore
     if (props[k] !== undefined && props[k] !== null) {
-    // @ts-ignore
       extracted[k] = String(props[k]);
     }
   });
