@@ -2,6 +2,7 @@ import React, { Children, ComponentType } from 'react';
 import extractLengthList from './extractLengthList';
 import { pickNotNil } from '../util';
 import { NumberArray, NumberProp } from './types';
+import { stringifyPropsForFabric } from './extractProps';
 
 const fontRegExp = /^\s*((?:(?:normal|bold|italic)\s+)*)(?:(\d+(?:\.\d+)?(?:%|px|em|pt|pc|mm|cm|in]))*(?:\s*\/.*?)?\s+)?\s*"?([^"]*)/i;
 const fontFamilyPrefix = /^[\s"']*/;
@@ -167,12 +168,12 @@ export default function extractText(props: TextProps, container: boolean) {
       children
     );
 
+    const stringifiedTextProps = stringifyPropsForFabric({inlineSize, baselineShift, verticalAlign});
+
   return {
     content: textChildren === null ? String(children) : null,
     children: textChildren,
-    inlineSize,
-    baselineShift,
-    verticalAlign,
+    ...stringifiedTextProps,
     alignmentBaseline,
     font: extractFont(props),
     x: extractLengthList(x),

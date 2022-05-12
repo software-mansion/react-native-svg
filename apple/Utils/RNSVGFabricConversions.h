@@ -72,6 +72,18 @@ void setCommonNodeProps(T nodeProps, RNSVGNode *node)
     }
 }
 
+static NSMutableArray<RNSVGLength *> *createLengthArrayFromStrings(std::vector<std::string> stringArray) {
+    if (stringArray.empty()) {
+        return nil;
+    }
+    NSMutableArray<RNSVGLength *> *lengthArray = [NSMutableArray new];
+    for (auto str : stringArray) {
+        RNSVGLength *lengthFromString = [RNSVGLength lengthWithString:RCTNSStringFromString(str)];
+        [lengthArray addObject:lengthFromString];
+    }
+    return lengthArray;
+}
+
 template<typename T>
 void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode)
 {
@@ -84,14 +96,7 @@ void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode
     renderableNode.strokeWidth =  [RNSVGLength lengthWithString:RCTNSStringFromString(renderableProps.strokeWidth)];
     renderableNode.strokeLinecap = renderableProps.strokeLinecap == 0 ? kCGLineCapButt : renderableProps.strokeLinecap == 1 ? kCGLineCapRound : kCGLineCapSquare;
     renderableNode.strokeLinejoin =  renderableProps.strokeLinejoin == 0 ? kCGLineJoinMiter : renderableProps.strokeLinejoin == 1 ? kCGLineJoinRound : kCGLineJoinBevel;
-    if (renderableProps.strokeDasharray.size() > 0) {
-        NSMutableArray<RNSVGLength *> *lengthArray = [NSMutableArray new];
-        for (auto str : renderableProps.strokeDasharray) {
-            RNSVGLength *lengthFromString = [RNSVGLength lengthWithString:RCTNSStringFromString(str)];
-            [lengthArray addObject:lengthFromString];
-        }
-        renderableNode.strokeDasharray = lengthArray;
-    }
+    renderableNode.strokeDasharray = createLengthArrayFromStrings(renderableProps.strokeDasharray);
     renderableNode.strokeDashoffset = renderableProps.strokeDashoffset;
     renderableNode.strokeMiterlimit = renderableProps.strokeMiterlimit;
     renderableNode.vectorEffect = renderableProps.vectorEffect == 0 ? kRNSVGVectorEffectDefault : renderableProps.vectorEffect == 1 ? kRNSVGVectorEffectNonScalingStroke : renderableProps.vectorEffect == 2 ? kRNSVGVectorEffectInherit : kRNSVGVectorEffectUri;
