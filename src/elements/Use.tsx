@@ -1,5 +1,5 @@
 import React from 'react';
-import { withoutXY } from '../lib/extract/extractProps';
+import { stringifyPropsForFabric, withoutXY } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import { idPattern } from '../lib/util';
 import Shape from './Shape';
@@ -44,13 +44,13 @@ export default class Use extends Shape<{
           '"',
       );
     }
-    const useProps = {
+    const useProps = stringifyPropsForFabric({
       href: match,
       x,
       y,
       width,
       height,
-    };
+    });
     return (
       <RNSVGUse ref={this.refMethod} {...withoutXY(this, props)} {...useProps}>
         {children}
