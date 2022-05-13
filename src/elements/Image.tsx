@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, ImageSourcePropType } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
-import { withoutXY } from '../lib/extract/extractProps';
+import { stringifyPropsForFabric, withoutXY } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGImage } from './NativeComponents';
@@ -44,11 +44,9 @@ export default class SvgImage extends Shape<{
     const align = modes[0];
     const meetOrSlice: 'meet' | 'slice' | 'none' | string | undefined =
       modes[1];
+    const stringifiedImageProps = stringifyPropsForFabric({x, y, width, height});
     const imageProps = {
-      x,
-      y,
-      width,
-      height,
+      ...stringifiedImageProps,
       meetOrSlice: meetOrSliceTypes[meetOrSlice] || 0,
       align: alignEnum[align] || 'xMidYMid',
       src: !href
