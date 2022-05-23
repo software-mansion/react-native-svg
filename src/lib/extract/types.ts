@@ -1,11 +1,136 @@
-import { Component } from 'react';
 import { ColorValue, GestureResponderEvent } from 'react-native';
+import * as ReactNative from 'react-native';
+import React from 'react';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
 
+export type FillRule = 'evenodd' | 'nonzero';
+export type Units = 'userSpaceOnUse' | 'objectBoundingBox';
+
+export type TextAnchor = 'start' | 'middle' | 'end';
+export type FontStyle = 'normal' | 'italic' | 'oblique';
+export type FontVariant = 'normal' | 'small-caps';
+export type FontWeight =
+  | NumberProp
+  | 'normal'
+  | 'bold'
+  | 'bolder'
+  | 'lighter'
+  | '100'
+  | '200'
+  | '300'
+  | '400'
+  | '500'
+  | '600'
+  | '700'
+  | '800'
+  | '900';
+export type FontStretch =
+  | 'normal'
+  | 'wider'
+  | 'narrower'
+  | 'ultra-condensed'
+  | 'extra-condensed'
+  | 'condensed'
+  | 'semi-condensed'
+  | 'semi-expanded'
+  | 'expanded'
+  | 'extra-expanded'
+  | 'ultra-expanded';
+export type TextDecoration =
+  | 'none'
+  | 'underline'
+  | 'overline'
+  | 'line-through'
+  | 'blink';
+export type FontVariantLigatures = 'normal' | 'none';
+export type AlignmentBaseline =
+  | 'baseline'
+  | 'text-bottom'
+  | 'alphabetic'
+  | 'ideographic'
+  | 'middle'
+  | 'central'
+  | 'mathematical'
+  | 'text-top'
+  | 'bottom'
+  | 'center'
+  | 'top'
+  | 'text-before-edge'
+  | 'text-after-edge'
+  | 'before-edge'
+  | 'after-edge'
+  | 'hanging';
+export type BaselineShift =
+  | 'sub'
+  | 'super'
+  | 'baseline'
+  | ReadonlyArray<NumberProp>
+  | NumberProp;
+export type LengthAdjust = 'spacing' | 'spacingAndGlyphs';
+
+export type TextPathMethod = 'align' | 'stretch';
+export type TextPathSpacing = 'auto' | 'exact';
+export type TextPathMidLine = 'sharp' | 'smooth';
+
 export type Linecap = 'butt' | 'square' | 'round';
 export type Linejoin = 'miter' | 'bevel' | 'round';
+
+export interface TouchableProps {
+  disabled?: boolean;
+  onPress?: (event: GestureResponderEvent) => void;
+  onPressIn?: (event: GestureResponderEvent) => void;
+  onPressOut?: (event: GestureResponderEvent) => void;
+  onLongPress?: (event: GestureResponderEvent) => void;
+  delayPressIn?: number;
+  delayPressOut?: number;
+  delayLongPress?: number;
+}
+
+export interface ResponderProps extends ReactNative.GestureResponderHandlers {
+  pointerEvents?: 'box-none' | 'none' | 'box-only' | 'auto';
+}
+
+export type Color = ColorValue;
+
+export interface FillProps {
+  fill?: Color;
+  fillOpacity?: NumberProp;
+  fillRule?: FillRule;
+}
+
+export interface ClipProps {
+  clipRule?: FillRule;
+  clipPath?: string;
+}
+
+export interface VectorEffectProps {
+  vectorEffect?:
+    | 'none'
+    | 'non-scaling-stroke'
+    | 'nonScalingStroke'
+    | 'default'
+    | 'inherit'
+    | 'uri';
+}
+
+export interface DefinitionProps {
+  id?: string;
+}
+
+export interface StrokeProps {
+  stroke?: Color;
+  strokeWidth?: NumberProp;
+  strokeOpacity?: NumberProp;
+  strokeDasharray?: ReadonlyArray<NumberProp> | NumberProp;
+  strokeDashoffset?: NumberProp;
+  strokeLinecap?: Linecap;
+  strokeLinejoin?: Linejoin;
+  strokeMiterlimit?: NumberProp;
+  vectorEffect?: VectorEffect;
+}
+
 export type VectorEffect =
   | 'none'
   | 'non-scaling-stroke'
@@ -14,7 +139,28 @@ export type VectorEffect =
   | 'inherit'
   | 'uri';
 
-export interface TransformProps {
+export interface FontObject {
+  fontStyle?: FontStyle;
+  fontVariant?: FontVariant;
+  fontWeight?: FontWeight;
+  fontStretch?: FontStretch;
+  fontSize?: NumberProp;
+  fontFamily?: string;
+  textAnchor?: TextAnchor;
+  textDecoration?: TextDecoration;
+  letterSpacing?: NumberProp;
+  wordSpacing?: NumberProp;
+  kerning?: NumberProp;
+  fontFeatureSettings?: string;
+  fontVariantLigatures?: FontVariantLigatures;
+  fontVariationSettings?: string;
+}
+
+export interface FontProps extends FontObject {
+  font?: FontObject;
+}
+
+export interface TransformObject {
   translate?: NumberArray;
   translateX?: NumberProp;
   translateY?: NumberProp;
@@ -30,7 +176,35 @@ export interface TransformProps {
   rotation?: NumberProp;
   x?: NumberArray;
   y?: NumberArray;
-  transform?: number[] | string | TransformProps | void | undefined;
+}
+
+/*
+
+  ColumnMajorTransformMatrix
+
+  [a, b, c, d, tx, ty]
+
+  This matrix can be visualized as:
+
+  ╔═      ═╗
+  ║ a c tx ║
+  ║ b d ty ║
+  ║ 0 0 1  ║
+  ╚═      ═╝
+
+*/
+export type ColumnMajorTransformMatrix = [
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+];
+
+export interface TransformProps extends TransformObject {
+  transform?: ColumnMajorTransformMatrix | string | TransformObject;
+  // | TransformsStyle['transform'];
 }
 
 export interface TransformedProps {
@@ -45,17 +219,29 @@ export interface TransformedProps {
   y: number;
 }
 
-export type ResponderProps = {
-  onPress?: () => void;
-  disabled?: boolean;
-  onPressIn?: () => void;
-  onPressOut?: () => void;
-  onLongPress?: () => void;
-  delayPressIn?: number;
-  delayPressOut?: number;
-  delayLongPress?: number;
-  pointerEvents?: string;
-};
+export interface CommonMaskProps {
+  mask?: string;
+}
+
+export interface CommonMarkerProps {
+  marker?: string;
+  markerStart?: string;
+  markerMid?: string;
+  markerEnd?: string;
+}
+
+export interface CommonPathProps
+  extends FillProps,
+    StrokeProps,
+    ClipProps,
+    TransformProps,
+    VectorEffectProps,
+    ResponderProps,
+    TouchableProps,
+    DefinitionProps,
+    CommonMarkerProps,
+    CommonMaskProps {}
+
 export type ResponderInstanceProps = {
   touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
   touchableHandleResponderGrant?: (e: GestureResponderEvent) => void;
@@ -68,34 +254,15 @@ export type ResponderInstanceProps = {
     e: GestureResponderEvent,
   ) => boolean;
 };
-export type FillProps = {
-  fill?: ColorValue;
-  fillRule?: 'evenodd' | 'nonzero';
-  fillOpacity?: NumberProp;
-};
-export type StrokeProps = {
-  stroke?: ColorValue;
-  strokeWidth?: NumberProp;
-  strokeOpacity?: NumberProp;
-  strokeDasharray?: NumberArray;
-  strokeDashoffset?: NumberProp;
-  strokeLinecap?: Linecap;
-  strokeLinejoin?: Linejoin;
-  strokeMiterlimit?: NumberProp;
-  vectorEffect?: VectorEffect;
-};
-export type ClipProps = {
-  clipPath?: string;
-  clipRule?: 'evenodd' | 'nonzero';
-};
+
 export type extractedProps = {
   name?: string;
   mask?: string;
   opacity?: number;
   matrix?: number[];
   propList?: string[];
-  onLayout?: () => void;
-  ref?: (instance: Component | null) => void;
+  onLayout?: (event: ReactNative.LayoutChangeEvent) => void;
+  ref?: (instance: React.Component | null) => void;
   markerStart?: string;
   markerMid?: string;
   markerEnd?: string;
@@ -104,3 +271,13 @@ export type extractedProps = {
   display?: string;
   [touchableProperty: string]: unknown;
 };
+
+export interface TextSpecificProps extends CommonPathProps, FontProps {
+  alignmentBaseline?: AlignmentBaseline;
+  baselineShift?: BaselineShift;
+  verticalAlign?: NumberProp;
+  lengthAdjust?: LengthAdjust;
+  textLength?: NumberProp;
+  fontData?: null | { [name: string]: unknown };
+  fontFeatureSettings?: string;
+}

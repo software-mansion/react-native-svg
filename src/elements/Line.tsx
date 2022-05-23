@@ -1,15 +1,18 @@
 import React from 'react';
 import { extract } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
+import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGLine } from './NativeComponents';
 
-export default class Line extends Shape<{
+export interface LineProps extends CommonPathProps {
+  opacity?: NumberProp;
   x1?: NumberProp;
-  y1?: NumberProp;
   x2?: NumberProp;
+  y1?: NumberProp;
   y2?: NumberProp;
-}> {
+}
+
+export default class Line extends Shape<LineProps> {
   static displayName = 'Line';
 
   static defaultProps = {

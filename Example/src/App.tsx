@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const names = [
+const names: (keyof typeof examples)[] = [
   'Svg',
   'Stroking',
   'Path',
@@ -126,7 +126,7 @@ export default class SvgExample extends Component {
     scroll?: boolean;
   } = initialState;
 
-  show = name => {
+  show = (name: keyof typeof examples) => {
     if (this.state.modal) {
       return;
     }
@@ -145,7 +145,7 @@ export default class SvgExample extends Component {
             ))}
           </View>
         ),
-        scroll: example.scroll !== false,
+        scroll: (example as {scroll?: boolean}).scroll !== false,
       });
     }
   };

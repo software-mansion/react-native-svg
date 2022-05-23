@@ -7075,10 +7075,8 @@ react-native-macos@^0.66.0-0:
     ws "^6.1.4"
 
 "react-native-svg@link:..":
-  version "12.3.0"
-  dependencies:
-    css-select "^4.2.1"
-    css-tree "^1.0.0-alpha.39"
+  version "0.0.0"
+  uid ""
 
 react-native-web@^0.17.7:
   version "0.17.7"
@@ -8310,6 +8308,11 @@ typedarray-to-buffer@^3.1.5:
   integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   dependencies:
     is-typedarray "^1.0.0"
+
+typescript@^4.6.4:
+  version "4.6.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.4.tgz#caa78bbc3a59e6a5c510d35703f6a09877ce45e9"
+  integrity sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg==
 
 ua-parser-js@^0.7.30:
   version "0.7.31"

@@ -1,22 +1,38 @@
 import React from 'react';
-import { Image, ImageSourcePropType } from 'react-native';
+import * as ReactNative from 'react-native';
+import { Image } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
 import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
+import {
+  ClipProps,
+  CommonMaskProps,
+  NumberProp,
+  ResponderProps,
+  TouchableProps,
+} from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGImage } from './NativeComponents';
 
 const spacesRegExp = /\s+/;
 
-export default class SvgImage extends Shape<{
-  preserveAspectRatio?: string;
+export interface ImageProps
+  extends ResponderProps,
+    CommonMaskProps,
+    ClipProps,
+    TouchableProps {
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  xlinkHref?: string | number | ImageSourcePropType;
-  href?: string | number | ImageSourcePropType;
-}> {
+  xlinkHref?: ReactNative.ImageProps['source'];
+  href?: ReactNative.ImageProps['source'];
+  preserveAspectRatio?: string;
+  opacity?: NumberProp;
+  clipPath?: string;
+  id?: string;
+}
+
+export default class SvgImage extends Shape<ImageProps> {
   static displayName = 'Image';
 
   static defaultProps = {

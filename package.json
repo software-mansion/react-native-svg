@@ -10,8 +10,8 @@
   "license": "MIT",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
+  "typings": "lib/typescript/index.d.ts",
   "react-native": "src/index.ts",
-  "types": "src/index.d.ts",
   "files": [
     "__tests__",
     "android",
@@ -67,8 +67,8 @@
     "@react-native-community/eslint-config": "0.0.7",
     "@react-native-community/eslint-plugin": "^1.0.0",
     "@types/css-tree": "^1.0.3",
-    "@types/react": "^17.0.16",
-    "@types/react-native": "^0.63.40",
+    "@types/react": "~18.0.9",
+    "@types/react-native": "^0.67.7",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.1.0",
     "eslint": "^6.8.0",
@@ -85,7 +85,7 @@
     "react-native": "^0.62.3",
     "react-test-renderer": "^16.13.0",
     "release-it": "^14.12.5",
-    "typescript": "^3.8.3"
+    "typescript": "^4.6.4"
   },
   "jest": {
     "preset": "react-native"

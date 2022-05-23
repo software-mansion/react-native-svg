@@ -1,29 +1,26 @@
 import React, { Component } from 'react';
+import * as ReactNative from 'react-native';
 import {
-  ColorValue,
   findNodeHandle,
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
   NativeModules,
   processColor,
+  StyleProp,
   StyleSheet,
   ViewStyle,
 } from 'react-native';
 import {
-  ClipProps,
+  Color,
   extractedProps,
-  FillProps,
   NumberProp,
   ResponderInstanceProps,
-  ResponderProps,
-  StrokeProps,
-  TransformProps,
 } from '../lib/extract/types';
 import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
-import G from './G';
+import G, { GProps } from './G';
 import { RNSVGSvg } from './NativeComponents';
 
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
@@ -36,20 +33,16 @@ const styles = StyleSheet.create({
 });
 const defaultStyle = styles.svg;
 
-export default class Svg extends Shape<
-  {
-    color?: ColorValue;
-    viewBox?: string;
-    opacity?: NumberProp;
-    onLayout?: () => void;
-    preserveAspectRatio?: string;
-    style?: ViewStyle[] | ViewStyle;
-  } & TransformProps &
-    ResponderProps &
-    StrokeProps &
-    FillProps &
-    ClipProps
-> {
+export interface SvgProps extends GProps, ReactNative.ViewProps {
+  width?: NumberProp;
+  height?: NumberProp;
+  viewBox?: string;
+  preserveAspectRatio?: string;
+  color?: Color;
+  title?: string;
+}
+
+export default class Svg extends Shape<SvgProps> {
   static displayName = 'Svg';
 
   static defaultProps = {
@@ -94,7 +87,7 @@ export default class Svg extends Shape<
     root && root.setNativeProps(props);
   };
 
-  toDataURL = (callback: () => void, options?: Object) => {
+  toDataURL = (callback: (base64: string) => void, options?: Object) => {
     if (!callback) {
       return;
     }
@@ -143,7 +136,7 @@ export default class Svg extends Shape<
 
     const props: extractedProps = extracted as extractedProps;
     props.focusable = Boolean(focusable) && focusable !== 'false';
-    const rootStyles: (ViewStyle | ViewStyle[])[] = [defaultStyle];
+    const rootStyles: StyleProp<ViewStyle>[] = [defaultStyle];
 
     if (style) {
       rootStyles.push(style);
