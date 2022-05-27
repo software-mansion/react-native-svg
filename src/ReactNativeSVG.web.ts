@@ -227,7 +227,7 @@ function remeasure() {
 
 export class WebShape<
   P extends BaseProps = BaseProps,
-  C = {}
+  C = {},
 > extends React.Component<P, C> {
   [x: string]: unknown;
   _remeasureMetricsOnActivation: () => void;

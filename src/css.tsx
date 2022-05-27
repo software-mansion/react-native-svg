@@ -117,7 +117,7 @@ function existsOne(
   elems: Array<XmlAST | string>,
 ): boolean {
   return elems.some(
-    elem =>
+    (elem) =>
       typeof elem === 'object' &&
       (predicate(elem) || existsOne(predicate, elem.children)),
   );
@@ -290,7 +290,7 @@ function filterByPseudos(selectors: FlatSelectorList) {
       csstree.generate({
         type: 'Selector',
         children: new List<CssNode>().fromArray(
-          pseudos.map(pseudo => pseudo.item.data),
+          pseudos.map((pseudo) => pseudo.item.data),
         ),
       }),
     ),
@@ -307,7 +307,7 @@ const usePseudos = [''];
  */
 function cleanPseudos(selectors: FlatSelectorList) {
   selectors.forEach(({ pseudos }) =>
-    pseudos.forEach(pseudo => pseudo.list.remove(pseudo.item)),
+    pseudos.forEach((pseudo) => pseudo.list.remove(pseudo.item)),
   );
 }
 
@@ -493,7 +493,7 @@ function sortSelectors(selectors: FlatSelectorList) {
     return selectors;
   }
   const specs = selectors.map(selectorWithSpecificity);
-  return exec(specs, len).map(s => s.selector);
+  return exec(specs, len).map((s) => s.selector);
 }
 
 const declarationParseProps = {
@@ -517,7 +517,7 @@ function CSSStyleDeclaration(ast: XmlAST) {
       styles,
       declarationParseProps,
     ) as DeclarationList;
-    declarations.children.each(node => {
+    declarations.children.each((node) => {
       try {
         const { property, value, important } = node as Declaration;
         const name = property.trim();
@@ -698,11 +698,7 @@ export function SvgCssUri(props: UriProps) {
   const { uri, onError = err } = props;
   const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
-    uri
-      ? fetchText(uri)
-          .then(setXml)
-          .catch(onError)
-      : setXml(null);
+    uri ? fetchText(uri).then(setXml).catch(onError) : setXml(null);
   }, [onError, uri]);
   return <SvgCss xml={xml} override={props} />;
 }
