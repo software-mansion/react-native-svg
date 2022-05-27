@@ -59,7 +59,7 @@
     "react-native": ">=0.50.0"
   },
   "dependencies": {
-    "css-select": "^4.2.1",
+    "css-select": "^5.1.0",
     "css-tree": "^1.0.0-alpha.39"
   },
   "devDependencies": {
