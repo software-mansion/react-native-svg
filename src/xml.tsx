@@ -100,7 +100,7 @@ export function SvgAst({ ast, override }: AstProps) {
   }
   const { props, children } = ast;
   const propsNew = { ...props };
-  const styles: string | Styles = propsNew?.style ?? {};
+  const styles: Styles = propsNew?.style ?? {};
   let borderRadius: string = styles && styles?.borderRadius;
   if (borderRadius && typeof borderRadius === 'string' && borderRadius.includes("%")) {
     borderRadius = borderRadius.replace("%", "");
