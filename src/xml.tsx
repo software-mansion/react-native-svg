@@ -107,7 +107,9 @@ export function SvgAst({ ast, override }: AstProps) {
     const width = parseFloat(propsNew.width as string ?? "0");
     const height = parseFloat(propsNew.height as string ?? "1");
     const percent = parseFloat(borderRadius)/100;
-    propsNew.style.borderRadius = (height + width)/2 * percent;
+    if (propsNew.style && propsNew.style.borderRadius) {
+        propsNew.style.borderRadius = (height + width)/2 * percent;
+    }
   }
 
   return (
