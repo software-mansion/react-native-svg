@@ -99,8 +99,19 @@ export function SvgAst({ ast, override }: AstProps) {
     return null;
   }
   const { props, children } = ast;
+  const propsNew = { ...props };
+  const styles: React.CSSProperties = propsNew ? propsNew?.style : {};
+  let borderRadius: string = styles && styles?.borderRadius;
+  if (borderRadius && typeof borderRadius === 'string' && borderRadius.includes("%")) {
+    borderRadius = borderRadius.replace("%", "");
+    const width = parseFloat(propsNew.width as string ?? "0");
+    const height = parseFloat(propsNew.height as string ?? "1");
+    const percent = parseFloat(borderRadius)/100;
+    propsNew.style.borderRadius = (height + width) * percent;
+  }
+
   return (
-    <Svg {...props} {...override}>
+    <Svg {...propsNew} {...override}>
       {children}
     </Svg>
   );
