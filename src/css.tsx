@@ -524,7 +524,10 @@ function CSSStyleDeclaration(ast: XmlAST) {
         priority.set(name, important);
         style[camelCase(name)] = csstree.generate(value).trim();
       } catch (styleError) {
-        if (styleError.message !== 'Unknown node type: undefined') {
+        if (
+          styleError instanceof Error &&
+          styleError.message !== 'Unknown node type: undefined'
+        ) {
           console.warn(
             "Warning: Parse error when parsing inline styles, style properties of this element cannot be used. The raw styles can still be get/set using .attr('style').value. Error details: " +
               styleError,
@@ -666,7 +669,7 @@ export const inlineStyles: Middleware = function inlineStyles(
         },
       });
     } catch (selectError) {
-      if (selectError.constructor === SyntaxError) {
+      if (selectError instanceof SyntaxError) {
         console.warn(
           'Warning: Syntax error when trying to select \n\n' +
             selectorStr +

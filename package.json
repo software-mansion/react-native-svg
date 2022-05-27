@@ -86,7 +86,7 @@
     "react-native": "^0.62.3",
     "react-test-renderer": "^16.13.0",
     "release-it": "^14.12.5",
-    "typescript": "^3.8.3"
+    "typescript": "^4.7.2"
   },
   "jest": {
     "preset": "react-native"
