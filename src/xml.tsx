@@ -99,17 +99,15 @@ export function SvgAst({ ast, override }: AstProps) {
     return null;
   }
   const { props, children } = ast;
-  const propsNew = { ...props };
-  const styles: Styles = propsNew?.style ?? {};
+  const propsNew: any = { ...props };
+  const styles: any = propsNew?.style ?? {};
   let borderRadius: string = styles && styles?.borderRadius;
   if (borderRadius && typeof borderRadius === 'string' && borderRadius.includes("%")) {
     borderRadius = borderRadius.replace("%", "");
     const width = parseFloat(propsNew.width as string ?? "0");
     const height = parseFloat(propsNew.height as string ?? "1");
     const percent = parseFloat(borderRadius)/100;
-    if (propsNew.style && propsNew.style.borderRadius) {
-        propsNew.style.borderRadius = (height + width)/2 * percent;
-    }
+    if (propsNew) propsNew.style.borderRadius = (height + width)/2 * percent;
   }
 
   return (
