@@ -5,7 +5,6 @@ type StopProps = {
 };
 
 export default class Stop extends Component<StopProps, {}> {
-  props!: StopProps;
   static displayName = 'Stop';
 
   setNativeProps = () => {
