@@ -66,9 +66,9 @@
 
 Install the JavaScript with:
 
-  ```bash
-  expo install react-native-svg
-  ```
+```bash
+expo install react-native-svg
+```
 
 📚 See the [**Expo docs**](https://docs.expo.io/versions/latest/sdk/svg/) for more info or jump ahead to [Usage](#Usage).
 
@@ -77,10 +77,13 @@ Install the JavaScript with:
 1. Install library
 
    from npm
+
    ```bash
    npm install react-native-svg
    ```
+
    from yarn
+
    ```bash
    yarn add react-native-svg
    ```
@@ -358,16 +361,20 @@ import * as React from 'react';
 import { SvgUri } from 'react-native-svg';
 
 export default () => {
-  const [uri, setUri] = React.useState('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/not_existing.svg')
+  const [uri, setUri] = React.useState(
+    'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/not_existing.svg',
+  );
   return (
     <SvgUri
-      onError={() => setUri('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg')}
+      onError={() =>
+        setUri('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg')
+      }
       width="100%"
       height="100%"
       uri={uri}
     />
   );
-}
+};
 ```
 
 ### Use with svg files
