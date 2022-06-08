@@ -1,2 +1,5 @@
 screenshots/
 idl/
+
+# Android/IOS Build Artifacts
+build/
