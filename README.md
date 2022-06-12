@@ -1103,7 +1103,7 @@ Code explanation: <https://www.w3.org/TR/SVG11/masking.html#MaskElement>
 
 v10 adds experimental support for using masks together with native elements.
 If you had native elements inside any Svg root before (which was unsupported),
-Then your content might change appearance when upgrading,
+then your content might change appearance when upgrading,
 as e.g. transforms and masks now take effect.
 
 #### Pattern
