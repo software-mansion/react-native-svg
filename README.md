@@ -13,6 +13,10 @@
 
 1. Supports most SVG elements and properties (Rect, Circle, Line, Polyline, Polygon, G ...).
 2. Easy to [convert SVG code](https://svgr.now.sh/) to react-native-svg.
+3. Partial support for react-native-windows. Current status:
+  - Done: Svg, Rect, Circle, Ellipse, Line, Polygon, Polyline, Path, G, Use, Symbol, Defs, Image, LinearGradient, RadialGradient, Pattern
+  - Partial: Text, TSpan
+  - Missing: TextPath, ClipPath, Mask, Marker, ForeignObject.
 
 - [Installation](#installation)
   - [Automatically](#automatically)

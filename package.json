@@ -19,7 +19,8 @@
     "elements",
     "lib",
     "src",
-    "RNSVG.podspec"
+    "RNSVG.podspec",
+    "windows"
   ],
   "@react-native-community/bob": {
     "source": "src",
@@ -35,6 +36,7 @@
     "react-native",
     "ios",
     "android",
+    "windows",
     "SVG",
     "ART",
     "VML",
@@ -81,8 +83,9 @@
     "jest": "^25.1.0",
     "pegjs": "^0.10.0",
     "prettier": "^1.19.1",
-    "react": "^16.13.0",
-    "react-native": "^0.62.3",
+    "react": "^17.0.1",
+    "react-native": "^0.64.0",
+    "react-native-windows": "^0.64.0",
     "react-test-renderer": "^16.13.0",
     "release-it": "^14.12.5",
     "typescript": "^3.8.3"
