@@ -8,6 +8,8 @@ export type NumberArray = NumberProp[] | NumberProp;
 
 export type FillRule = 'evenodd' | 'nonzero';
 export type Units = 'userSpaceOnUse' | 'objectBoundingBox';
+export type MarkerUnits = 'strokeWidth' | 'userSpaceOnUse';
+export type Orient = 'auto' | 'auto-start-reverse';
 
 export type TextAnchor = 'start' | 'middle' | 'end';
 export type FontStyle = 'normal' | 'italic' | 'oblique';
@@ -480,16 +482,6 @@ export interface MaskProps extends CommonPathProps {
 }
 export const Mask: React.ComponentClass<MaskProps>;
 export type Mask = React.ComponentClass<MaskProps>;
-
-export enum MarkerUnits {
-  STROKE_WIDTH = 'strokeWidth',
-  USER_SPACE_ON_USE = 'userSpaceOnUse',
-}
-
-export enum Orient {
-  AUTO = 'auto',
-  AUTO_START_REVERSE = 'auto-start-reverse',
-}
 
 export interface MarkerProps {
   id?: string;
