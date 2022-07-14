@@ -20,7 +20,7 @@
     "lib",
     "src",
     "RNSVG.podspec",
-    "!build"
+    "!android/build"
   ],
   "@react-native-community/bob": {
     "source": "src",
