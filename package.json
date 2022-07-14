@@ -19,7 +19,8 @@
     "elements",
     "lib",
     "src",
-    "RNSVG.podspec"
+    "RNSVG.podspec",
+    "!build"
   ],
   "@react-native-community/bob": {
     "source": "src",
