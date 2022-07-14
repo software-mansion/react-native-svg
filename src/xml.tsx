@@ -110,9 +110,10 @@ export const err = console.error.bind(console);
 
 export function SvgXml(props: XmlProps) {
   const { onError = err, xml, override } = props;
-  const ast = useMemo<JsxAST | null>(() => (xml !== null ? parse(xml) : null), [
-    xml,
-  ]);
+  const ast = useMemo<JsxAST | null>(
+    () => (xml !== null ? parse(xml) : null),
+    [xml],
+  );
 
   try {
     return <SvgAst ast={ast} override={override || props} />;
@@ -134,11 +135,7 @@ export function SvgUri(props: UriProps) {
   const { onError = err, uri } = props;
   const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
-    uri
-      ? fetchText(uri)
-          .then(setXml)
-          .catch(onError)
-      : setXml(null);
+    uri ? fetchText(uri).then(setXml).catch(onError) : setXml(null);
   }, [onError, uri]);
   return <SvgXml xml={xml} override={props} />;
 }

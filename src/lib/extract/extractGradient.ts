@@ -54,7 +54,7 @@ export default function extractGradient(
 
   const stops = [];
   const childArray = children
-    ? Children.map(children, child =>
+    ? Children.map(children, (child) =>
         React.cloneElement(child, {
           parent,
         }),
