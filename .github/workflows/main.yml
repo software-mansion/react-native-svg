@@ -1,4 +1,3 @@
-
 name: Lint
 on:
   push:
@@ -24,9 +23,6 @@ jobs:
           cache: 'yarn'
       - name: Install node dependencies
         run: yarn
-      - name: Format code
-        run: |
-          yarn format
       - name: Test and lint
         run: |
           yarn test
