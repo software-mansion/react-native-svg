@@ -4,7 +4,7 @@
  */
 const DEG_TO_RAD = Math.PI / 180;
 
-export const identity: [number, number, number, number, number, number] = [
+export const identity: [ number, number, number, number, number, number ] = [
   1,
   0,
   0,
@@ -22,7 +22,8 @@ let ty = 0;
 let hasInitialState = true;
 
 /**
- * Represents an affine transformation matrix, and provides tools for concatenating transforms.
+ * Represents an affine transformation matrix, and provides tools for
+ *concatenating transforms.
  *
  * This matrix can be visualized as:
  *
@@ -51,16 +52,17 @@ export function reset() {
  * @method toArray
  * @return {Array} an array with current matrix values.
  **/
-export function toArray(): [number, number, number, number, number, number] {
+export function toArray(): [ number, number, number, number, number, number ] {
   if (hasInitialState) {
     return identity;
   }
-  return [a, b, c, d, tx, ty];
+  return [ a, b, c, d, tx, ty ];
 }
 
 /**
- * Appends the specified matrix properties to this matrix. All parameters are required.
- * This is the equivalent of multiplying `(this matrix) * (specified matrix)`.
+ * Appends the specified matrix properties to this matrix. All parameters are
+ *required. This is the equivalent of multiplying `(this matrix) * (specified
+ *matrix)`.
  * @method append
  * @param {Number} a2
  * @param {Number} b2
@@ -70,12 +72,12 @@ export function toArray(): [number, number, number, number, number, number] {
  * @param {Number} ty2
  **/
 export function append(
-  a2: number,
-  b2: number,
-  c2: number,
-  d2: number,
-  tx2: number,
-  ty2: number,
+    a2: number,
+    b2: number,
+    c2: number,
+    d2: number,
+    tx2: number,
+    ty2: number,
 ) {
   const change = a2 !== 1 || b2 !== 0 || c2 !== 0 || d2 !== 1;
   const translate = tx2 !== 0 || ty2 !== 0;
@@ -109,8 +111,9 @@ export function append(
 }
 
 /**
- * Generates matrix properties from the specified display object transform properties, and appends them to this matrix.
- * For example, you can use this to generate a matrix representing the transformations of a display object:
+ * Generates matrix properties from the specified display object transform
+ *properties, and appends them to this matrix. For example, you can use this to
+ *generate a matrix representing the transformations of a display object:
  *
  * 	reset();
  * 	appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation);
@@ -128,27 +131,18 @@ export function append(
  * @param {Number} regY Optional.
  **/
 export function appendTransform(
-  x: number,
-  y: number,
-  scaleX: number,
-  scaleY: number,
-  rotation: number,
-  skewX: number,
-  skewY: number,
-  regX: number,
-  regY: number,
+    x: number,
+    y: number,
+    scaleX: number,
+    scaleY: number,
+    rotation: number,
+    skewX: number,
+    skewY: number,
+    regX: number,
+    regY: number,
 ) {
-  if (
-    x === 0 &&
-    y === 0 &&
-    scaleX === 1 &&
-    scaleY === 1 &&
-    rotation === 0 &&
-    skewX === 0 &&
-    skewY === 0 &&
-    regX === 0 &&
-    regY === 0
-  ) {
+  if (x === 0 && y === 0 && scaleX === 1 && scaleY === 1 && rotation === 0 &&
+      skewX === 0 && skewY === 0 && regX === 0 && regY === 0) {
     return;
   }
   let cos, sin;

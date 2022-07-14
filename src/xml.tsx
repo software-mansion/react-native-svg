@@ -1,10 +1,4 @@
-import React, {
-  Component,
-  ComponentType,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, {Component, ComponentType, useEffect, useMemo, useState, } from 'react';
 import Rect from './elements/Rect';
 import Circle from './elements/Circle';
 import Ellipse from './elements/Ellipse';
@@ -29,30 +23,30 @@ import Pattern from './elements/Pattern';
 import Mask from './elements/Mask';
 import Marker from './elements/Marker';
 
-export const tags: { [tag: string]: ComponentType } = {
-  svg: Svg,
-  circle: Circle,
-  ellipse: Ellipse,
-  g: G,
-  text: Text,
-  tspan: TSpan,
-  textPath: TextPath,
-  path: Path,
-  polygon: Polygon,
-  polyline: Polyline,
-  line: Line,
-  rect: Rect,
-  use: Use,
-  image: Image,
-  symbol: Symbol,
-  defs: Defs,
-  linearGradient: LinearGradient,
-  radialGradient: RadialGradient,
-  stop: Stop,
-  clipPath: ClipPath,
-  pattern: Pattern,
-  mask: Mask,
-  marker: Marker,
+export const tags : {[tag:string] : ComponentType} = {
+  svg : Svg,
+  circle : Circle,
+  ellipse : Ellipse,
+  g : G,
+  text : Text,
+  tspan : TSpan,
+  textPath : TextPath,
+  path : Path,
+  polygon : Polygon,
+  polyline : Polyline,
+  line : Line,
+  rect : Rect,
+  use : Use,
+  image : Image,
+  symbol : Symbol,
+  defs : Defs,
+  linearGradient : LinearGradient,
+  radialGradient : RadialGradient,
+  stop : Stop,
+  clipPath : ClipPath,
+  pattern : Pattern,
+  mask : Mask,
+  marker : Marker,
 };
 
 function missingTag() {
@@ -60,105 +54,100 @@ function missingTag() {
 }
 
 export interface AST {
-  tag: string;
-  style?: Styles;
-  styles?: string;
-  priority?: Map<string, boolean | undefined>;
-  parent: AST | null;
-  children: (AST | string)[] | (JSX.Element | string)[];
-  props: {
-    [prop: string]: Styles | string | undefined;
+  tag : string;
+  style ?: Styles;
+  styles ?: string;
+  priority ?: Map<string, boolean | undefined>;
+  parent : AST | null;
+  children : (AST | string)[] | (JSX.Element | string)[];
+  props : {
+    [prop:string] : Styles | string | undefined;
   };
-  Tag: ComponentType;
+  Tag : ComponentType;
 }
 
 export interface XmlAST extends AST {
-  children: (XmlAST | string)[];
-  parent: XmlAST | null;
+  children : (XmlAST | string)[];
+  parent : XmlAST | null;
 }
 
 export interface JsxAST extends AST {
-  children: (JSX.Element | string)[];
+  children : (JSX.Element | string)[];
 }
 
 export type AdditionalProps = {
-  onError?: (error: Error) => void;
-  override?: Object;
-};
+    onError
+        ?: (error
+            : Error) = > void;
+override ?: Object;
+}
+;
 
-export type UriProps = { uri: string | null } & AdditionalProps;
-export type UriState = { xml: string | null };
+export type UriProps = {uri : string | null} & AdditionalProps;
+export type UriState = {xml : string | null};
 
-export type XmlProps = { xml: string | null } & AdditionalProps;
-export type XmlState = { ast: JsxAST | null };
+export type XmlProps = {xml : string | null} & AdditionalProps;
+export type XmlState = {ast : JsxAST | null};
 
-export type AstProps = { ast: JsxAST | null } & AdditionalProps;
+export type AstProps = {ast : JsxAST | null} & AdditionalProps;
 
-export function SvgAst({ ast, override }: AstProps) {
+export function SvgAst({ast, override} : AstProps) {
   if (!ast) {
     return null;
   }
-  const { props, children } = ast;
-  return (
-    <Svg {...props} {...override}>
-      {children}
-    </Svg>
-  );
+  const {props, children} = ast;
+  return (<Svg{... props} {... override}>{children}</ Svg>);
 }
 
 export const err = console.error.bind(console);
 
-export function SvgXml(props: XmlProps) {
-  const { onError = err, xml, override } = props;
-  const ast = useMemo<JsxAST | null>(() => (xml !== null ? parse(xml) : null), [
-    xml,
-  ]);
+export function SvgXml(props : XmlProps) {
+  const {onError = err, xml, override} = props;
+  const ast = useMemo<JsxAST | null>(
+      () = > (xml != = null ? parse(xml) : null), [xml], );
 
   try {
-    return <SvgAst ast={ast} override={override || props} />;
+    return <SvgAst ast = {ast} override = {override || props} />;
   } catch (error) {
     onError(error);
     return null;
   }
 }
 
-export async function fetchText(uri: string) {
+export async function fetchText(uri : string) {
   const response = await fetch(uri);
   if (response.ok) {
     return await response.text();
   }
-  throw new Error(`Fetching ${uri} failed with status ${response.status}`);
+  throw new Error(`Fetching ${uri} failed with status $ { response.status }`);
 }
 
-export function SvgUri(props: UriProps) {
-  const { onError = err, uri } = props;
-  const [xml, setXml] = useState<string | null>(null);
-  useEffect(() => {
-    uri
-      ? fetchText(uri)
-          .then(setXml)
-          .catch(onError)
-      : setXml(null);
-  }, [onError, uri]);
-  return <SvgXml xml={xml} override={props} />;
+export function SvgUri(props : UriProps) {
+  const {onError = err, uri} = props;
+  const[xml, setXml] = useState<string | null>(null);
+  useEffect(
+      () = >
+          { uri ? fetchText(uri).then(setXml).catch(onError) : setXml(null); },
+      [ onError, uri ]);
+  return <SvgXml xml = {xml} override = {props} />;
 }
 
 // Extending Component is required for Animated support.
 
 export class SvgFromXml extends Component<XmlProps, XmlState> {
-  state = { ast: null };
+  state = {ast : null};
   componentDidMount() {
     this.parse(this.props.xml);
   }
-  componentDidUpdate(prevProps: { xml: string | null }) {
-    const { xml } = this.props;
-    if (xml !== prevProps.xml) {
+  componentDidUpdate(prevProps : {xml : string | null}) {
+    const {xml} = this.props;
+    if (xml != = prevProps.xml) {
       this.parse(xml);
     }
   }
-  parse(xml: string | null) {
+  parse(xml : string | null) {
     try {
-      this.setState({ ast: xml ? parse(xml) : null });
+      this.setState({ast : xml ? parse(xml) : null});
     } catch (e) {
       console.error(e);
     }
@@ -166,26 +155,26 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
   render() {
     const {
       props,
-      state: { ast },
+      state : {ast},
     } = this;
-    return <SvgAst ast={ast} override={props.override || props} />;
+    return <SvgAst ast = {ast} override = {props.override || props} />;
   }
 }
 
 export class SvgFromUri extends Component<UriProps, UriState> {
-  state = { xml: null };
+  state = {xml : null};
   componentDidMount() {
     this.fetch(this.props.uri);
   }
-  componentDidUpdate(prevProps: { uri: string | null }) {
-    const { uri } = this.props;
-    if (uri !== prevProps.uri) {
+  componentDidUpdate(prevProps : {uri : string | null}) {
+    const {uri} = this.props;
+    if (uri != = prevProps.uri) {
       this.fetch(uri);
     }
   }
-  async fetch(uri: string | null) {
+  async fetch(uri : string | null) {
     try {
-      this.setState({ xml: uri ? await fetchText(uri) : null });
+      this.setState({xml : uri ? await fetchText(uri) : null});
     } catch (e) {
       console.error(e);
     }
@@ -193,26 +182,29 @@ export class SvgFromUri extends Component<UriProps, UriState> {
   render() {
     const {
       props,
-      state: { xml },
+      state : {xml},
     } = this;
-    return <SvgFromXml xml={xml} override={props} />;
+    return <SvgFromXml xml = {xml} override = {props} />;
   }
 }
 
-const upperCase = (_match: string, letter: string) => letter.toUpperCase();
+const upperCase = (_match
+                   : string, letter
+                   : string) = > letter.toUpperCase();
 
-export const camelCase = (phrase: string) =>
-  phrase.replace(/[:-]([a-z])/g, upperCase);
+export const camelCase = (phrase
+                          : string) = >
+    phrase.replace(/ [:-]([a - z]) / g, upperCase);
 
-export type Styles = { [property: string]: string };
+export type Styles = {[property:string] : string};
 
-export function getStyle(string: string): Styles {
-  const style: Styles = {};
+export function getStyle(string : string) : Styles {
+  const style : Styles = {};
   const declarations = string.split(';');
-  const { length } = declarations;
+  const {length} = declarations;
   for (let i = 0; i < length; i++) {
     const declaration = declarations[i];
-    if (declaration.length !== 0) {
+    if (declaration.length != = 0) {
       const split = declaration.split(':');
       const property = split[0];
       const value = split[1];
@@ -222,24 +214,22 @@ export function getStyle(string: string): Styles {
   return style;
 }
 
-export function astToReact(
-  value: AST | string,
-  index: number,
-): JSX.Element | string {
-  if (typeof value === 'object') {
-    const { Tag, props, children } = value;
-    return (
-      <Tag key={index} {...props}>
-        {(children as (AST | string)[]).map(astToReact)}
-      </Tag>
-    );
+export function astToReact(value
+                           : AST | string, index
+                           : number, )
+    : JSX.Element
+    | string {
+  if (typeof value == = 'object') {
+    const {Tag, props, children} = value;
+    return (<Tag key = {index} {... props}>{
+        (children as(AST | string)[]).map(astToReact)}</ Tag>);
   }
   return value;
 }
 
 // slimmed down parser based on https://github.com/Rich-Harris/svg-parser
 
-function repeat(str: string, i: number) {
+function repeat(str : string, i : number) {
   let result = '';
   while (i--) {
     result += str;
@@ -247,58 +237,61 @@ function repeat(str: string, i: number) {
   return result;
 }
 
-const toSpaces = (tabs: string) => repeat('  ', tabs.length);
+const toSpaces = (tabs : string) = > repeat('  ', tabs.length);
 
-function locate(source: string, i: number) {
+function locate(source : string, i : number) {
   const lines = source.split('\n');
   const nLines = lines.length;
   let column = i;
   let line = 0;
   for (; line < nLines; line++) {
-    const { length } = lines[line];
+    const {length} = lines[line];
     if (column >= length) {
       column -= length;
     } else {
       break;
     }
   }
-  const before = source.slice(0, i).replace(/^\t+/, toSpaces);
-  const beforeExec = /(^|\n).*$/.exec(before);
+  const before = source.slice(0, i).replace(/ ^\t + /, toSpaces);
+  const beforeExec = / (^ |\n).*$ /.exec(before);
   const beforeLine = (beforeExec && beforeExec[0]) || '';
   const after = source.slice(i);
-  const afterExec = /.*(\n|$)/.exec(after);
+  const afterExec = /.*(\n | $) /.exec(after);
   const afterLine = afterExec && afterExec[0];
   const pad = repeat(' ', beforeLine.length);
-  const snippet = `${beforeLine}${afterLine}\n${pad}^`;
-  return { line, column, snippet };
+  const snippet = `${beforeLine} $ {
+    afterLine
+  }
+  \n${pad} ^`;
+  return {line, column, snippet};
 }
 
-const validNameCharacters = /[a-zA-Z0-9:_-]/;
-const whitespace = /[\s\t\r\n]/;
+const validNameCharacters = / [a - zA - Z0 - 9:_ - ] / ;
+const whitespace = / [\s\t\r\n] / ;
 const quotemarks = /['"]/;
 
 export type Middleware = (ast: XmlAST) => XmlAST;
 
 export function parse(source: string, middleware?: Middleware): JsxAST | null {
   const length = source.length;
-  let currentElement: XmlAST | null = null;
+  let currentElement : XmlAST | null = null;
   let state = metadata;
   let children = null;
-  let root: XmlAST | undefined;
-  let stack: XmlAST[] = [];
+  let root : XmlAST | undefined;
+  let stack : XmlAST[] = [];
 
-  function error(message: string) {
-    const { line, column, snippet } = locate(source, i);
+  function error(message : string) {
+    const {line, column, snippet} = locate(source, i);
     throw new Error(
-      `${message} (${line}:${column}). If this is valid SVG, it's probably a bug. Please raise an issue\n\n${snippet}`,
-    );
+      `${message}(${line}
+                   : ${column})
+            .If this is valid SVG,
+        it's probably a bug. Please raise an issue\n\n${snippet}`, );
   }
 
   function metadata() {
-    while (
-      i + 1 < length &&
-      (source[i] !== '<' || !validNameCharacters.test(source[i + 1]))
-    ) {
+    while (i + 1 < length &&
+           (source[i] != = '<' || !validNameCharacters.test(source[i + 1]))) {
       i++;
     }
 
@@ -308,16 +301,16 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
   function neutral() {
     let text = '';
     let char;
-    while (i < length && (char = source[i]) !== '<') {
+    while (i < length && (char = source[i]) != = '<') {
       text += char;
       i += 1;
     }
 
-    if (/\S/.test(text)) {
+    if (/\S /.test(text)) {
       children.push(text);
     }
 
-    if (source[i] === '<') {
+    if (source[i] == = '<') {
       return openingTag;
     }
 
@@ -327,36 +320,36 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
   function openingTag() {
     const char = source[i];
 
-    if (char === '?') {
+    if (char == = '?') {
       return neutral;
     } // <?xml...
 
-    if (char === '!') {
+    if (char == = '!') {
       const start = i + 1;
-      if (source.slice(start, i + 3) === '--') {
+      if (source.slice(start, i + 3) == = '--') {
         return comment;
       }
       const end = i + 8;
-      if (source.slice(start, end) === '[CDATA[') {
+      if (source.slice(start, end) == = '[CDATA[') {
         return cdata;
       }
-      if (/doctype/i.test(source.slice(start, end))) {
+      if (/ doctype / i.test(source.slice(start, end))) {
         return neutral;
       }
     }
 
-    if (char === '/') {
+    if (char == = '/') {
       return closingTag;
     }
 
     const tag = getName();
-    const props: { [prop: string]: Styles | string | undefined } = {};
-    const element: XmlAST = {
+    const props : {[prop:string] : Styles | string | undefined} = {};
+    const element : XmlAST = {
       tag,
       props,
-      children: [],
-      parent: currentElement,
-      Tag: tags[tag] || missingTag,
+      children : [],
+      parent : currentElement,
+      Tag : tags[tag] || missingTag,
     };
 
     if (currentElement) {
@@ -367,26 +360,26 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
 
     getAttributes(props);
 
-    const { style } = props;
-    if (typeof style === 'string') {
+    const {style} = props;
+    if (typeof style == = 'string') {
       element.styles = style;
       props.style = getStyle(style);
     }
 
     let selfClosing = false;
 
-    if (source[i] === '/') {
+    if (source[i] == = '/') {
       i += 1;
       selfClosing = true;
     }
 
-    if (source[i] !== '>') {
+    if (source[i] != = '>') {
       error('Expected >');
     }
 
     if (!selfClosing) {
       currentElement = element;
-      ({ children } = element);
+      ({children} = element);
       stack.push(element);
     }
 
@@ -422,20 +415,20 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
       error('Expected tag name');
     }
 
-    if (currentElement && tag !== currentElement.tag) {
+    if (currentElement &&tag != = currentElement.tag) {
       error(
-        `Expected closing tag </${tag}> to match opening tag <${currentElement.tag}>`,
-      );
+        `Expected closing tag</ ${tag}> to match opening
+              tag<${currentElement.tag}>`, );
     }
 
-    if (source[i] !== '>') {
+    if (source[i] != = '>') {
       error('Expected >');
     }
 
     stack.pop();
     currentElement = stack[stack.length - 1];
     if (currentElement) {
-      ({ children } = currentElement);
+      ({children} = currentElement);
     }
 
     return neutral;
@@ -452,10 +445,12 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     return name;
   }
 
-  function getAttributes(props: {
-    [x: string]: Styles | string | number | boolean | undefined;
-    style?: string | Styles | undefined;
-  }) {
+  function getAttributes(props
+                         : {
+                           [x:string] : Styles | string | number | boolean |
+                                        undefined;
+                           style ?: string | Styles | undefined;
+                         }) {
     while (i < length) {
       if (!whitespace.test(source[i])) {
         return;
@@ -467,15 +462,15 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
         return;
       }
 
-      let value: boolean | number | string = true;
+      let value : boolean | number | string = true;
 
       allowSpaces();
-      if (source[i] === '=') {
+      if (source[i] == = '=') {
         i += 1;
         allowSpaces();
 
         value = getAttributeValue();
-        if (!isNaN(+value) && value.trim() !== '') {
+        if (!isNaN(+value) && value.trim() != = '') {
           value = +value;
         }
       }
@@ -484,17 +479,16 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     }
   }
 
-  function getAttributeValue(): string {
-    return quotemarks.test(source[i])
-      ? getQuotedAttributeValue()
-      : getUnquotedAttributeValue();
+  function getAttributeValue() : string {
+    return quotemarks.test(source[i]) ? getQuotedAttributeValue()
+                                      : getUnquotedAttributeValue();
   }
 
   function getUnquotedAttributeValue() {
     let value = '';
     do {
       const char = source[i];
-      if (char === ' ' || char === '>' || char === '/') {
+      if (char == = ' ' || char == = '>' || char == = '/') {
         return value;
       }
 
@@ -513,15 +507,18 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
 
     while (i < length) {
       const char = source[i++];
-      if (char === quotemark && !escaped) {
+      if (char == = quotemark && !escaped) {
         return value;
       }
 
-      if (char === '\\' && !escaped) {
+      if (char == = '\\' && !escaped) {
         escaped = true;
       }
 
-      value += escaped ? `\\${char}` : char;
+      value += escaped ? `\\$ {
+        char
+      }
+      ` : char;
       escaped = false;
     }
 
@@ -543,14 +540,14 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     i += 1;
   }
 
-  if (state !== neutral) {
+  if (state != = neutral) {
     error('Unexpected end of input');
   }
 
   if (root) {
-    const xml: XmlAST = (middleware ? middleware(root) : root) || root;
-    const ast: (JSX.Element | string)[] = xml.children.map(astToReact);
-    const jsx: JsxAST = xml as JsxAST;
+    const xml : XmlAST = (middleware ? middleware(root) : root) || root;
+    const ast : (JSX.Element | string)[] = xml.children.map(astToReact);
+    const jsx : JsxAST = xml as JsxAST;
     jsx.children = ast;
     return jsx;
   }
