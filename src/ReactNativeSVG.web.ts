@@ -1,16 +1,15 @@
 // @ts-ignore
 import * as React from 'react';
 import {
-  // @ts-ignore
-  createElement as cE,
   GestureResponderEvent,
   // @ts-ignore
   unstable_createElement as ucE,
+  // @ts-ignore
+  createElement as cE,
 } from 'react-native';
-
-import {NumberArray, NumberProp} from './lib/extract/types';
-import {resolve} from './lib/resolve';
+import { NumberArray, NumberProp } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
+import { resolve } from './lib/resolve';
 
 const createElement = cE || ucE;
 
@@ -62,7 +61,7 @@ interface BaseProps {
 }
 
 const hasTouchableProperty = (props: BaseProps) =>
-    props.onPress || props.onPressIn || props.onPressOut || props.onLongPress;
+  props.onPress || props.onPressIn || props.onPressOut || props.onLongPress;
 
 /**
  * `react-native-svg` supports additional props that aren't defined in the spec.
@@ -74,9 +73,9 @@ const hasTouchableProperty = (props: BaseProps) =>
  * @private
  */
 const prepare = <T extends BaseProps>(
-    self: WebShape<T>,
-    props = self.props,
-    ) => {
+  self: WebShape<T>,
+  props = self.props,
+) => {
   const {
     translate,
     scale,
@@ -106,16 +105,18 @@ const prepare = <T extends BaseProps>(
     style?: {};
     ref?: {};
   } = {
-    ...(hasTouchableProperty(props) ? {
-      onStartShouldSetResponder : self.touchableHandleStartShouldSetResponder,
-      onResponderTerminationRequest :
-          self.touchableHandleResponderTerminationRequest,
-      onResponderGrant : self.touchableHandleResponderGrant,
-      onResponderMove : self.touchableHandleResponderMove,
-      onResponderRelease : self.touchableHandleResponderRelease,
-      onResponderTerminate : self.touchableHandleResponderTerminate,
-    }
-                                    : null),
+    ...(hasTouchableProperty(props)
+      ? {
+          onStartShouldSetResponder:
+            self.touchableHandleStartShouldSetResponder,
+          onResponderTerminationRequest:
+            self.touchableHandleResponderTerminationRequest,
+          onResponderGrant: self.touchableHandleResponderGrant,
+          onResponderMove: self.touchableHandleResponderMove,
+          onResponderRelease: self.touchableHandleResponderRelease,
+          onResponderTerminate: self.touchableHandleResponderTerminate,
+        }
+      : null),
     ...rest,
   };
 
@@ -130,8 +131,7 @@ const prepare = <T extends BaseProps>(
   if (scale != null) {
     transform.push(`scale(${scale})`);
   }
-  // rotation maps to rotate, not to collide with the text rotate attribute
-  // (which acts per glyph rather than block)
+  // rotation maps to rotate, not to collide with the text rotate attribute (which acts per glyph rather than block)
   if (rotation != null) {
     transform.push(`rotate(${rotation})`);
   }
@@ -142,7 +142,7 @@ const prepare = <T extends BaseProps>(
     transform.push(`skewY(${skewY})`);
   }
   if (originX != null || originY != null) {
-    transform.push(`translate(${- originX || 0}, ${- originY || 0})`);
+    transform.push(`translate(${-originX || 0}, ${-originY || 0})`);
   }
 
   if (transform.length) {
@@ -191,23 +191,23 @@ const getBoundingClientRect = (node: SVGElement) => {
 };
 
 const measureLayout = (
-    node: SVGElement,
-    callback: (
-        x: number,
-        y: number,
-        width: number,
-        height: number,
-        left: number,
-        top: number,
-        ) => void,
-    ) => {
+  node: SVGElement,
+  callback: (
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    left: number,
+    top: number,
+  ) => void,
+) => {
   // @ts-ignore
   const relativeNode = node && node.parentNode;
   if (relativeNode) {
     setTimeout(() => {
       // @ts-ignore
       const relativeRect = getBoundingClientRect(relativeNode);
-      const {height, left, top, width} = getBoundingClientRect(node);
+      const { height, left, top, width } = getBoundingClientRect(node);
       const x = left - relativeRect.left;
       const y = top - relativeRect.top;
       callback(x, y, width, height, left, top);
@@ -232,20 +232,19 @@ export class WebShape<
   [x: string]: unknown;
   _remeasureMetricsOnActivation: () => void;
   touchableHandleStartShouldSetResponder?: (
-      e: GestureResponderEvent,
-      ) => boolean;
+    e: GestureResponderEvent,
+  ) => boolean;
   touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
   touchableHandleResponderGrant?: (e: GestureResponderEvent) => void;
   touchableHandleResponderRelease?: (e: GestureResponderEvent) => void;
   touchableHandleResponderTerminate?: (e: GestureResponderEvent) => void;
   touchableHandleResponderTerminationRequest?: (
-      e: GestureResponderEvent,
-      ) => boolean;
+    e: GestureResponderEvent,
+  ) => boolean;
   constructor(props: P, context: C) {
     super(props, context);
 
-    // Do not attach touchable mixin handlers if SVG element doesn't have a
-    // touchable prop
+    // Do not attach touchable mixin handlers if SVG element doesn't have a touchable prop
     if (hasTouchableProperty(props)) {
       SvgTouchableMixin(this);
     }
@@ -278,14 +277,15 @@ export class Ellipse extends WebShape {
   }
 }
 
-export class G extends WebShape < BaseProps&{
-  x?: NumberProp;
-  y?: NumberProp;
-  translate?: string;
-}
+export class G extends WebShape<
+  BaseProps & {
+    x?: NumberProp;
+    y?: NumberProp;
+    translate?: string;
+  }
 > {
   render(): JSX.Element {
-    const {x, y, ...rest} = this.props;
+    const { x, y, ...rest } = this.props;
 
     if ((x || y) && !rest.translate) {
       rest.translate = `${x || 0}, ${y || 0}`;

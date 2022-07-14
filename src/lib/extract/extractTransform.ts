@@ -1,30 +1,29 @@
-import {append, appendTransform, identity, reset, toArray} from '../Matrix2D';
-
-import {parse} from './transform';
-import {NumberProp, TransformedProps, TransformProps} from './types';
+import { append, appendTransform, identity, reset, toArray } from '../Matrix2D';
+import { parse } from './transform';
+import { NumberProp, TransformedProps, TransformProps } from './types';
 
 function appendTransformProps(props: TransformedProps) {
-  const {x, y, originX, originY, scaleX, scaleY, rotation, skewX, skewY} =
-      props;
+  const { x, y, originX, originY, scaleX, scaleY, rotation, skewX, skewY } =
+    props;
   appendTransform(
-      x + originX,
-      y + originY,
-      scaleX,
-      scaleY,
-      rotation,
-      skewX,
-      skewY,
-      originX,
-      originY,
+    x + originX,
+    y + originY,
+    scaleX,
+    scaleY,
+    rotation,
+    skewX,
+    skewY,
+    originX,
+    originY,
   );
 }
 
 function universal2axis(
-    universal: NumberProp|NumberProp[]|undefined,
-    axisX: NumberProp|void,
-    axisY: NumberProp|void,
-    defaultValue?: number,
-    ): [ number, number ] {
+  universal: NumberProp | NumberProp[] | undefined,
+  axisX: NumberProp | void,
+  axisY: NumberProp | void,
+  defaultValue?: number,
+): [number, number] {
   let x;
   let y;
   if (typeof universal === 'number') {
@@ -56,12 +55,12 @@ function universal2axis(
     y = axisY;
   }
 
-  return [ x || defaultValue || 0, y || defaultValue || 0 ];
+  return [x || defaultValue || 0, y || defaultValue || 0];
 }
 
 export function props2transform(
-    props: TransformProps,
-    ): TransformedProps|null {
+  props: TransformProps,
+): TransformedProps | null {
   const {
     rotation,
     translate,
@@ -79,45 +78,57 @@ export function props2transform(
     x,
     y,
   } = props;
-  if (rotation == null && translate == null && translateX == null &&
-      translateY == null && origin == null && originX == null &&
-      originY == null && scale == null && scaleX == null && scaleY == null &&
-      skew == null && skewX == null && skewY == null && x == null &&
-      y == null) {
+  if (
+    rotation == null &&
+    translate == null &&
+    translateX == null &&
+    translateY == null &&
+    origin == null &&
+    originX == null &&
+    originY == null &&
+    scale == null &&
+    scaleX == null &&
+    scaleY == null &&
+    skew == null &&
+    skewX == null &&
+    skewY == null &&
+    x == null &&
+    y == null
+  ) {
     return null;
   }
 
   if (Array.isArray(x) || Array.isArray(y)) {
     console.warn(
-        'Passing SvgLengthList to x or y attribute where SvgLength expected',
+      'Passing SvgLengthList to x or y attribute where SvgLength expected',
     );
   }
   const tr = universal2axis(
-      translate,
-      translateX || (Array.isArray(x) ? x[0] : x),
-      translateY || (Array.isArray(y) ? y[0] : y),
+    translate,
+    translateX || (Array.isArray(x) ? x[0] : x),
+    translateY || (Array.isArray(y) ? y[0] : y),
   );
   const or = universal2axis(origin, originX, originY);
   const sc = universal2axis(scale, scaleX, scaleY, 1);
   const sk = universal2axis(skew, skewX, skewY);
 
   return {
-    rotation : rotation == null ? 0 : +rotation || 0,
-    originX : or[0],
-    originY : or[1],
-    scaleX : sc[0],
-    scaleY : sc[1],
-    skewX : sk[0],
-    skewY : sk[1],
-    x : tr[0],
-    y : tr[1],
+    rotation: rotation == null ? 0 : +rotation || 0,
+    originX: or[0],
+    originY: or[1],
+    scaleX: sc[0],
+    scaleY: sc[1],
+    skewX: sk[0],
+    skewY: sk[1],
+    x: tr[0],
+    y: tr[1],
   };
 }
 
 export function transformToMatrix(
-    props: TransformedProps|null,
-    transform: number[]|string|TransformProps|void|null|undefined,
-    ): [ number, number, number, number, number, number ]|null {
+  props: TransformedProps | null,
+  transform: number[] | string | TransformProps | void | null | undefined,
+): [number, number, number, number, number, number] | null {
   if (!props && !transform) {
     return null;
   }
@@ -128,12 +139,12 @@ export function transformToMatrix(
     if (Array.isArray(transform)) {
       if (typeof transform[0] === 'number') {
         append(
-            transform[0],
-            transform[1],
-            transform[2],
-            transform[3],
-            transform[4],
-            transform[5],
+          transform[0],
+          transform[1],
+          transform[2],
+          transform[3],
+          transform[4],
+          transform[5],
         );
       }
       // noop for react-native transform arrays, let animated handle them
@@ -154,7 +165,7 @@ export function transformToMatrix(
 }
 
 export default function extractTransform(
-    props: number[]|string|TransformProps,
+  props: number[] | string | TransformProps,
 ) {
   if (Array.isArray(props)) {
     return props;
@@ -162,7 +173,7 @@ export default function extractTransform(
   if (typeof props === 'string') {
     try {
       const t = parse(props);
-      return [ t[0], t[3], t[1], t[4], t[2], t[5] ];
+      return [t[0], t[3], t[1], t[4], t[2], t[5]];
     } catch (e) {
       console.error(e);
       return identity;

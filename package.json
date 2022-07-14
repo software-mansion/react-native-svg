@@ -45,8 +45,9 @@
     "flow": "flow src",
     "flowgen": "flowgen src/index.d.ts -o src/index.js.flow",
     "flowtyped": "flow-typed install",
+    "format": "yarn format-js && yarn format-ios",
     "format-ios": "find apple/ -iname *.h -o -iname *.m -o -iname *.cpp -o -iname *.mm | xargs clang-format -i",
-    "format": "prettier README.md CONTRIBUTING.md CODE_OF_CONDUCT.md './src/**/*.{ts,tsx}' './Example/**/*.{ts,tsx}' src/index.d.ts --write && yarn format-ios",
+    "format-js": "prettier README.md CONTRIBUTING.md CODE_OF_CONDUCT.md './src/**/*.{ts,tsx}' './Example/**/*.{ts,tsx}' src/index.d.ts --write",
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
@@ -98,7 +99,7 @@
     "typescript": "^4.7.2"
   },
   "lint-staged": {
-    "{src,Example}/**/*.{js,ts,tsx}": "yarn format",
+    "{src,Example}/**/*.{js,ts,tsx}": "yarn format-js",
     "src/**/*.{js,ts,tsx}": "yarn lint",
     "apple/**/*.{h,m,mm,cpp}": "yarn format-ios"
   },
