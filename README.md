@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 [![NPM](https://img.shields.io/npm/dm/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 
-`react-native-svg` provides SVG support to React Native on iOS and Android, and a compatibility layer for the web.
+`react-native-svg` provides SVG support to React Native on iOS, Android, macOS, Windows, and a compatibility layer for the web.
 
 [Check out the demo](https://snack.expo.io/@msand/react-native-svg-example)
 
