@@ -77,6 +77,9 @@ using namespace facebook::react;
     if (RCTUIColorFromSharedColor(newProps.color)) {
         _element.tintColor = RCTUIColorFromSharedColor(newProps.color);
     }
+    // for some reason the default transparent backgroundColor is not applied without
+    // this line, so we add it here
+    _element.backgroundColor = RCTUIColorFromSharedColor(newProps.backgroundColor);
 
   [super updateProps:props oldProps:oldProps];
 }
