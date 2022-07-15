@@ -6,6 +6,15 @@
 #import "RCTFabricComponentsPlugins.h"
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
+#import "RCTBridge.h"
+#import "RCTImagePrimitivesConversions.h"
+#import "RCTImageSource.h"
+
+// Some RN private method hacking below similar to how it is done in RNScreens:
+// https://github.com/software-mansion/react-native-screens/blob/90e548739f35b5ded2524a9d6410033fc233f586/ios/RNSScreenStackHeaderConfig.mm#L30
+@interface RCTBridge (Private)
++ (RCTBridge *)currentBridge;
+@end
 
 using namespace facebook::react;
 
@@ -19,6 +28,7 @@ using namespace facebook::react;
     static const auto defaultProps = std::make_shared<const RNSVGImageProps>();
     _props = defaultProps;
     _element = [[RNSVGImage alloc] init];
+    _element.bridge = [RCTBridge currentBridge];
     self.contentView = _element;
   }
   return self;
@@ -34,6 +44,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGImageProps>(props);
+    const auto &oldImageProps = *std::static_pointer_cast<const RNSVGImageProps>(oldProps);
 
     setCommonRenderableProps(newProps, _element);
     _element.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
@@ -50,7 +61,15 @@ using namespace facebook::react;
     if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
         _element.imagewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
     }
-//    _element.src = newProps.src;
+    
+    if (oldProps == nullptr || oldImageProps.src != newProps.src) {
+        // TODO: make it the same as in e.g. slider
+        NSURLRequest *request = NSURLRequestFromImageSource(newProps.src);
+        CGSize size = RCTCGSizeFromSize(newProps.src.size);
+        CGFloat scale = newProps.src.scale;
+        RCTImageSource *imageSource = [[RCTImageSource alloc] initWithURLRequest:request size:size scale:scale];
+        [_element setImageSrc:imageSource request:request];
+    }
     _element.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
     _element.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
     [super updateProps:props oldProps:oldProps];
@@ -60,6 +79,7 @@ using namespace facebook::react;
 {
     [super prepareForRecycle];
     _element = [[RNSVGImage alloc] init];
+    _element.bridge = [RCTBridge currentBridge];
     self.contentView = _element;
 }
 

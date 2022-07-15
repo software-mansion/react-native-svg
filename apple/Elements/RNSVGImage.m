@@ -8,7 +8,6 @@
 
 #import "RNSVGImage.h"
 #import "RCTConvert+RNSVG.h"
-#import <React/RCTImageSource.h>
 
 #if __has_include(<React/RCTImageLoader.h>)
 
@@ -55,6 +54,31 @@
     }
 
     _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:src] callback:^(NSError *error, UIImage *image) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self->_image = CGImageRetain(image.CGImage);
+            self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+            [self invalidate];
+        });
+    }];
+}
+
+- (void)setImageSrc:(RCTImageSource *)source request:(NSURLRequest *)request
+{
+    CGImageRelease(_image);
+    _image = nil;
+    if (source.size.width != 0 && source.size.height != 0) {
+        _imageSize = source.size;
+    } else {
+        _imageSize = CGSizeMake(0, 0);
+    }
+
+    RCTImageLoaderCancellationBlock previousCancellationBlock = _reloadImageCancellationBlock;
+    if (previousCancellationBlock) {
+        previousCancellationBlock();
+        _reloadImageCancellationBlock = nil;
+    }
+
+    _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:request callback:^(NSError *error, UIImage *image) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self->_image = CGImageRetain(image.CGImage);
             self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
