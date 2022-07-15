@@ -1,0 +1,181 @@
+import "Types.idl";
+
+namespace RNSVG
+{
+  interface IRenderable
+  {
+    Windows.UI.Xaml.FrameworkElement SvgParent;
+    Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
+
+    void CreateResources(
+      Microsoft.Graphics.Canvas.ICanvasResourceCreator resourceCreator,
+      Microsoft.Graphics.Canvas.UI.CanvasCreateResourcesEventArgs args);
+    void Render(
+      Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
+      Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
+    void MergeProperties(RenderableView other);
+    void SaveDefinition();
+    void Unload();
+  };
+
+  [default_interface]
+  runtimeclass SvgView : Windows.UI.Xaml.Controls.Panel, IRenderable
+  {
+    SvgView(Microsoft.ReactNative.IReactContext context);
+
+    Single SvgScale{ get; };
+    GroupView Group;
+    Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl Canvas{ get; };
+    Windows.Foundation.Collections.IMap<String, IRenderable> Templates{ get; };
+    Windows.Foundation.Collections.IMap<String, BrushView> Brushes{ get; };
+
+    void InvalidateCanvas();
+  };
+
+  [default_interface]
+  unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement, IRenderable
+  {
+    RenderableView(Microsoft.ReactNative.IReactContext context);
+    SvgView SvgRoot{ get; };
+
+    String Id{ get; };
+    Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
+    Windows.UI.Color Fill{ get; };
+    Single FillOpacity{ get; };
+    String FillBrushId{ get; };
+    Windows.UI.Color Stroke{ get; };
+    Single StrokeOpacity{ get; };
+    String StrokeBrushId{ get; };
+    SVGLength StrokeWidth{ get; };
+    Single StrokeMiterLimit{ get; };
+    Single StrokeDashOffset{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
+    Microsoft.Graphics.Canvas.Geometry.CanvasCapStyle StrokeLineCap{ get; };
+    Microsoft.Graphics.Canvas.Geometry.CanvasLineJoin StrokeLineJoin{ get; };
+    Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule{ get; };
+
+    void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
+  };
+
+  [default_interface]
+  runtimeclass RectView : RenderableView
+  {
+    RectView();
+  };
+
+  [default_interface]
+  runtimeclass CircleView : RenderableView
+  {
+    CircleView();
+  };
+
+  [default_interface]
+  runtimeclass EllipseView : RenderableView
+  {
+    EllipseView();
+  };
+
+  [default_interface]
+  runtimeclass LineView : RenderableView
+  {
+    LineView();
+  };
+
+  [default_interface]
+  runtimeclass PathView : RenderableView
+  {
+    PathView();
+  };
+
+  [default_interface]
+  runtimeclass UseView : RenderableView
+  {
+    UseView();
+  };
+
+  [default_interface]
+  runtimeclass ImageView : RenderableView
+  {
+    ImageView();
+  };
+
+  [default_interface]
+  unsealed runtimeclass GroupView : RenderableView
+  {
+    GroupView(Microsoft.ReactNative.IReactContext context);
+    Windows.Foundation.Collections.IVector<IRenderable> Children { get; };
+
+    Single FontSize;
+    String FontFamily;
+    String FontWeight;
+
+    void RenderGroup(
+        Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
+        Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+  };
+
+  [default_interface]
+  unsealed runtimeclass TextView : GroupView
+  {
+    TextView();
+    Windows.Foundation.Collections.IVector<SVGLength> X{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> Y{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> DX{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> DY{ get; };
+  };
+
+  [default_interface]
+  runtimeclass TSpanView : TextView
+  {
+    TSpanView();
+
+    Windows.Foundation.Collections.IVector<SVGLength> Rotate { get; };
+  };
+
+  [default_interface]
+  runtimeclass DefsView : GroupView
+  {
+    DefsView();
+  };
+
+  [default_interface]
+  runtimeclass SymbolView : GroupView
+  {
+    SymbolView();
+    Single MinX{ get; };
+    Single MinY{ get; };
+    Single VbWidth{ get; };
+    Single VbHeight{ get; };
+    String Align{ get; };
+    MeetOrSlice MeetOrSlice{ get; };
+  };
+
+  [default_interface]
+  unsealed runtimeclass BrushView : GroupView
+  {
+    BrushView();
+
+    Microsoft.Graphics.Canvas.Brushes.ICanvasBrush Brush{ get; };
+    void CreateBrush();
+    void SetBounds(Windows.Foundation.Rect rect);
+  };
+
+  [default_interface]
+  runtimeclass LinearGradientView : BrushView
+  {
+    LinearGradientView();
+  };
+
+  [default_interface]
+  runtimeclass RadialGradientView : BrushView
+  {
+    RadialGradientView();
+  };
+
+  [default_interface]
+  runtimeclass PatternView : BrushView
+  {
+    PatternView();
+  };
+}
