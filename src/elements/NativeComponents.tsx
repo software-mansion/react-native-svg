@@ -1,17 +1,12 @@
 import { requireNativeComponent as rnc } from 'react-native';
 
-// @ts-expect-error nativeFabricUIManager is not yet included in the RN types
-const ENABLE_FABRIC = !!global?.nativeFabricUIManager;
-
-const FabricComponents = ENABLE_FABRIC ? require('../fabric') : {};
-
-export const RNSVGSvg = ENABLE_FABRIC ? FabricComponents.SvgView : rnc('RNSVGSvgView');
-export const RNSVGCircle = ENABLE_FABRIC ? FabricComponents.Circle : rnc('RNSVGCircle');
+export const RNSVGSvg = rnc('RNSVGSvgView');
+export const RNSVGCircle = rnc('RNSVGCircle');
 export const RNSVGClipPath = rnc('RNSVGClipPath');
 export const RNSVGDefs = rnc('RNSVGDefs');
 export const RNSVGEllipse = rnc('RNSVGEllipse');
 export const RNSVGForeignObject = rnc('RNSVGForeignObject');
-export const RNSVGGroup = ENABLE_FABRIC ? FabricComponents.Group : rnc('RNSVGGroup');
+export const RNSVGGroup = rnc('RNSVGGroup');
 export const RNSVGImage = rnc('RNSVGImage');
 export const RNSVGLine = rnc('RNSVGLine');
 export const RNSVGLinearGradient = rnc('RNSVGLinearGradient');
