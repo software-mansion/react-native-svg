@@ -85,10 +85,10 @@ export default class Svg extends Shape<
   ) => {
     const { width, height } = props;
     if (width) {
-      props.bbWidth = width;
+      props.bbWidth = String(width);
     }
     if (height) {
-      props.bbHeight = height;
+      props.bbHeight = String(height);
     }
     const { root } = this;
     root && root.setNativeProps(props);

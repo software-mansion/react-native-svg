@@ -13,13 +13,6 @@
 using namespace facebook::react;
 
 @implementation RNSVGSvgViewComponentView {
-    NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
-    NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
-    NSMutableDictionary<NSString *, RNSVGPainter *> *_painters;
-    NSMutableDictionary<NSString *, RNSVGNode *> *_markers;
-    NSMutableDictionary<NSString *, RNSVGNode *> *_masks;
-    CGAffineTransform _invviewBoxTransform;
-    bool rendered;
     RNSVGSvgView *_element;
 }
 
@@ -69,6 +62,8 @@ using namespace facebook::react;
     _element.minY = newProps.minY;
     _element.vbWidth = newProps.vbWidth;
     _element.vbHeight = newProps.vbHeight;
+    _element.bbWidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.bbWidth)];
+    _element.bbHeight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.bbHeight)];
     _element.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
     _element.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
     if (RCTUIColorFromSharedColor(newProps.tintColor)) {

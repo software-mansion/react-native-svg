@@ -51,6 +51,7 @@ using namespace facebook::react;
     if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
         _element.usewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
     }
+    _element.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
 
     [super updateProps:props oldProps:oldProps];
 }
