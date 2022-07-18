@@ -46,11 +46,12 @@ Pod::Spec.new do |s|
       ss.pod_target_xcconfig  = { "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/common/cpp\"" }
     end
   else 
-    s.source_files      = 'apple/**/*.{h,m}'
-    s.ios.exclude_files = '**/*.macos.{h,m}'
+    s.source_files       = 'apple/**/*.{h,m}'
+    s.exclude_files      = ['apple/**/*ComponentView.h', 'apple/Utils/RNSVGFabricConversions.h']
+    s.ios.exclude_files  = '**/*.macos.{h,m}'
     s.tvos.exclude_files = '**/*.macos.{h,m}'
-    s.osx.exclude_files = '**/*.ios.{h,m}'
-    s.requires_arc      = true
-    s.dependency          'React-Core'
+    s.osx.exclude_files  = '**/*.ios.{h,m}'
+    s.requires_arc       = true
+    s.dependency           'React-Core'
   end
 end
