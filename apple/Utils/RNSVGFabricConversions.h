@@ -153,3 +153,21 @@ static RNSVGVBMOS intToRNSVGVBMOS(int value)
             return kRNSVGVBMOSMeet;
     }
 }
+
+static void mountChildComponentView(UIView<RCTComponentViewProtocol> *childComponentView, NSInteger index, RNSVGNode *element) {
+    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ([((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]] || [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGSvgView class]])) {
+        [element insertSubview:((RCTViewComponentView *)childComponentView).contentView atIndex:index];
+        [element invalidate];
+    } else {
+        RCTLogError(@"Children of SVG should only be of SVG type, instead found %@", childComponentView);
+    }
+}
+
+static void unmountChildComponentView(UIView<RCTComponentViewProtocol> *childComponentView, NSInteger index, RNSVGNode *element) {
+    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ([((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]] || [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGSvgView class]])) {
+        [childComponentView removeFromSuperview];
+        [element invalidate];
+    } else {
+        RCTLogError(@"Children of SVG should only be of SVG type, instead found %@", childComponentView);
+    }
+}

@@ -1,10 +1,7 @@
 #import "RNSVGSvgViewComponentView.h"
 #import "RNSVGSvgView.h"
-#import "RNSVGViewBox.h"
-#import "RNSVGNode.h"
 #import "RNSVGFabricConversions.h"
 
-#import <react/renderer/components/rnsvg/Props.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 
 #import "RCTFabricComponentsPlugins.h"
@@ -33,7 +30,7 @@ using namespace facebook::react;
         [_element insertSubview:((RCTViewComponentView *)childComponentView).contentView atIndex:index];
         [_element invalidate];
     } else {
-        [super mountChildComponentView:childComponentView index:index];
+        RCTLogError(@"Only child of SvgView should be a Group element, instead found %@", childComponentView);
     }
 }
 
@@ -43,7 +40,7 @@ using namespace facebook::react;
         [childComponentView removeFromSuperview];
         [_element invalidate];
     } else {
-        [super unmountChildComponentView:childComponentView index:index];
+        RCTLogError(@"Only child of SvgView should a be Group element, instead found %@", childComponentView);
     }
 }
 

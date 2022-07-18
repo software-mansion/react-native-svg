@@ -26,22 +26,12 @@ using namespace facebook::react;
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]]) {
-        [_element insertSubview:((RCTViewComponentView *)childComponentView).contentView atIndex:index];
-        [_element invalidate];
-    } else {
-        [super mountChildComponentView:childComponentView index:index];
-    }
+    mountChildComponentView(childComponentView, index, _element);
 }
 
 - (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]]) {
-        [childComponentView removeFromSuperview];
-        [_element invalidate];
-    } else {
-        [super unmountChildComponentView:childComponentView index:index];
-    }
+    unmountChildComponentView(childComponentView, index, _element);
 }
 
 #pragma mark - RCTComponentViewProtocol
