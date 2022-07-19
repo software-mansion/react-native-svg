@@ -51,7 +51,7 @@ using namespace facebook::react;
     _element.method = RCTNSStringFromStringNilIfEmpty(newProps.method);
     _element.midLine = RCTNSStringFromStringNilIfEmpty(newProps.midLine);
     _element.spacing = RCTNSStringFromStringNilIfEmpty(newProps.spacing);
-    _element.startOffset = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.spacing)];
+    _element.startOffset = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.startOffset)];
 
     [super updateProps:props oldProps:oldProps];
 }
