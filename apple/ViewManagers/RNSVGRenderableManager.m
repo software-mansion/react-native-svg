@@ -40,10 +40,8 @@ RCT_EXPORT_VIEW_PROPERTY(propList, NSArray<NSString *>)
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isPointInFill:(nonnull NSNumber *)reactTag options:(NSDictionary *)options)
 {
-    __block RNSVGPlatformView *view;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        view = [self.bridge.uiManager viewForReactTag:reactTag];
-    });
+    RNSVGPlatformView *view = [self getRenderableView:reactTag];
+
     if (![view isKindOfClass:[RNSVGRenderable class]]) {
         RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
         return [NSNumber numberWithBool:false];
@@ -70,10 +68,8 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isPointInFill:(nonnull NSNumber *)reactTa
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isPointInStroke:(nonnull NSNumber *)reactTag options:(NSDictionary *)options)
 {
-    __block RNSVGPlatformView *view;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        view = [self.bridge.uiManager viewForReactTag:reactTag];
-    });
+    RNSVGPlatformView *view = [self getRenderableView:reactTag];
+
     if (![view isKindOfClass:[RNSVGRenderable class]]) {
         RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
         return [NSNumber numberWithBool:false];
@@ -100,10 +96,8 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isPointInStroke:(nonnull NSNumber *)react
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getTotalLength:(nonnull NSNumber *)reactTag)
 {
-    __block RNSVGPlatformView *view;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        view = [self.bridge.uiManager viewForReactTag:reactTag];
-    });
+    RNSVGPlatformView *view = [self getRenderableView:reactTag];
+
     if (![view isKindOfClass:[RNSVGRenderable class]]) {
         RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
         return [NSNumber numberWithDouble:0];
@@ -119,10 +113,8 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getTotalLength:(nonnull NSNumber *)reactT
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getPointAtLength:(nonnull NSNumber *)reactTag options:(NSDictionary *)options)
 {
-    __block RNSVGPlatformView *view;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        view = [self.bridge.uiManager viewForReactTag:reactTag];
-    });
+    RNSVGPlatformView *view = [self getRenderableView:reactTag];
+
     if (![view isKindOfClass:[RNSVGRenderable class]]) {
         RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
         return nil;
@@ -149,10 +141,8 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getPointAtLength:(nonnull NSNumber *)reac
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getBBox:(nonnull NSNumber *)reactTag options:(NSDictionary *)options)
 {
-    __block RNSVGPlatformView *view;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        view = [self.bridge.uiManager viewForReactTag:reactTag];
-    });
+    RNSVGPlatformView *view = [self getRenderableView:reactTag];
+
     if (![view isKindOfClass:[RNSVGRenderable class]]) {
         RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
         return nil;
@@ -195,10 +185,8 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getBBox:(nonnull NSNumber *)reactTag opti
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getCTM:(nonnull NSNumber *)reactTag)
 {
-    __block RNSVGPlatformView *view;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        view = [self.bridge.uiManager viewForReactTag:reactTag];
-    });
+    RNSVGPlatformView *view = [self getRenderableView:reactTag];
+
     if (![view isKindOfClass:[RNSVGRenderable class]]) {
         RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
         return nil;
@@ -218,10 +206,8 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getCTM:(nonnull NSNumber *)reactTag)
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getScreenCTM:(nonnull NSNumber *)reactTag)
 {
-    __block RNSVGPlatformView *view;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        view = [self.bridge.uiManager viewForReactTag:reactTag];
-    });
+    RNSVGPlatformView *view = [self getRenderableView:reactTag];
+
     if (![view isKindOfClass:[RNSVGRenderable class]]) {
         RCTLogError(@"Invalid svg returned from registry, expecting RNSVGRenderable, got: %@", view);
         return nil;
@@ -237,6 +223,20 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getScreenCTM:(nonnull NSNumber *)reactTag
              @"e":@(ctm.tx),
              @"f":@(ctm.ty)
              };
+}
+
+- (RNSVGPlatformView *)getRenderableView:(NSNumber *)reactTag {
+    __block RNSVGPlatformView *view;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        view = [self.bridge.uiManager viewForReactTag:reactTag];
+    });
+    
+#ifdef RN_FABRIC_ENABLED
+        if ([view respondsToSelector:@selector(contentView)]) {
+            view = [view performSelector:@selector(contentView)];
+        }
+#endif
+    return view;
 }
 
 @end
