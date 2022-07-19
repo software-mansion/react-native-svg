@@ -57,43 +57,47 @@ type SvgRenderableCommonProps = $ReadOnly<{|
 |}>;
 
 type FontObject = $ReadOnly<{|
-    fontStyle?: string;
-    fontVariant?: string;
-    fontWeight?: string;
-    fontStretch?: string;
-    fontSize?: string;
-    fontFamily?: string;
-    textAnchor?: string;
-    textDecoration?: string;
-    letterSpacing?: string;
-    wordSpacing?: string;
-    kerning?: string;
-    fontFeatureSettings?: string;
-    fontVariantLigatures?: string;
-    fontVariationSettings?: string;
-  |}>;
+  fontStyle?: string;
+  fontVariant?: string;
+  fontWeight?: string;
+  fontStretch?: string;
+  fontSize?: string;
+  fontFamily?: string;
+  textAnchor?: string;
+  textDecoration?: string;
+  letterSpacing?: string;
+  wordSpacing?: string;
+  kerning?: string;
+  fontFeatureSettings?: string;
+  fontVariantLigatures?: string;
+  fontVariationSettings?: string;
+|}>;
+
+type SvgGroupCommonProps = $ReadOnly<{|
+  fontSize?: string,
+  fontWeight?: string,
+  font?: FontObject,
+|}>;
 
 type NativeProps = $ReadOnly<{|
-    ...ViewProps,
-    ...SvgNodeCommonProps,
-    ...SvgRenderableCommonProps,
-    textAnchor?: string,
-    dx?: $ReadOnlyArray<string>,
-    dy?: $ReadOnlyArray<string>,
-    positionX?: $ReadOnlyArray<string>,
-    positionY?: $ReadOnlyArray<string>,
-    x?: $ReadOnlyArray<string>,
-    y?: $ReadOnlyArray<string>,
-    rotate?: $ReadOnlyArray<string>,
-    font?: FontObject,
-    inlineSize?: string,
-    textLength?: string,
-    baselineShift?: string,
-    lengthAdjust?: string,
-    alignmentBaseline?: string,
-    fontSize?: string,
-    fontWeight?: string,
-    content?: string,
+  ...ViewProps,
+  ...SvgNodeCommonProps,
+  ...SvgRenderableCommonProps,
+  ...SvgGroupCommonProps,
+  textAnchor?: string,
+  dx?: $ReadOnlyArray<string>,
+  dy?: $ReadOnlyArray<string>,
+  positionX?: $ReadOnlyArray<string>,
+  positionY?: $ReadOnlyArray<string>,
+  x?: $ReadOnlyArray<string>,
+  y?: $ReadOnlyArray<string>,
+  rotate?: $ReadOnlyArray<string>,
+  inlineSize?: string,
+  textLength?: string,
+  baselineShift?: string,
+  lengthAdjust?: string,
+  alignmentBaseline?: string,
+  content?: string,
 |}>;
 
 type ComponentType = HostComponent<NativeProps>;

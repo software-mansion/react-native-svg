@@ -78,13 +78,17 @@ type FontObject = $ReadOnly<{|
   fontVariationSettings?: string;
 |}>;
 
+type SvgGroupCommonProps = $ReadOnly<{|
+  fontSize?: string,
+  fontWeight?: string,
+  font?: FontObject,
+|}>;
+
 type NativeProps = $ReadOnly<{|
   ...ViewProps,
   ...SvgNodeCommonProps,
   ...SvgRenderableCommonProps,
-  fontSize?: string,
-  fontWeight?: string,
-  font?: FontObject,
+  ...SvgGroupCommonProps,
 |}>;
 
 type ComponentType = HostComponent<NativeProps>;

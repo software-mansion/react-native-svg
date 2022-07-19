@@ -45,7 +45,7 @@ using namespace facebook::react;
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGTSpanProps>(props);
 
-    setCommonRenderableProps(newProps, _element);
+    setCommonGroupProps(newProps, _element);
     // textAnchor is in props of VM but not available on component
     _element.deltaX = createLengthArrayFromStrings(newProps.dx);
     _element.deltaY = createLengthArrayFromStrings(newProps.dy);
@@ -67,16 +67,6 @@ using namespace facebook::react;
     _element.baselineShift = RCTNSStringFromStringNilIfEmpty(newProps.baselineShift);
     _element.lengthAdjust = RCTNSStringFromStringNilIfEmpty(newProps.lengthAdjust);
     _element.alignmentBaseline = RCTNSStringFromStringNilIfEmpty(newProps.alignmentBaseline);
-    if (RCTNSStringFromStringNilIfEmpty(newProps.fontSize)) {
-        _element.font = @{ @"fontSize": RCTNSStringFromString(newProps.fontSize) };
-    }
-    if (RCTNSStringFromStringNilIfEmpty(newProps.fontWeight)) {
-        _element.font = @{ @"fontWeight": RCTNSStringFromString(newProps.fontWeight) };
-    }
-    NSDictionary *fontDict = parseFontStruct(newProps.font);
-    if (fontDict.count > 0) {
-        _element.font = fontDict;
-    }
     _element.content = RCTNSStringFromStringNilIfEmpty(newProps.content);
 
     [super updateProps:props oldProps:oldProps];

@@ -44,18 +44,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNSVGMarkerProps>(props);
-    setCommonRenderableProps(newProps, _element);
-    
-    if (RCTNSStringFromStringNilIfEmpty(newProps.fontSize)) {
-        _element.font = @{ @"fontSize": RCTNSStringFromString(newProps.fontSize) };
-    }
-    if (RCTNSStringFromStringNilIfEmpty(newProps.fontWeight)) {
-        _element.font = @{ @"fontWeight": RCTNSStringFromString(newProps.fontWeight) };
-    }
-    NSDictionary *fontDict = parseFontStruct(newProps.font);
-    if (fontDict.count > 0) {
-        _element.font = fontDict;
-    }
+    setCommonGroupProps(newProps, _element);
     
     _element.refX = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.refX)];
     _element.refY = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.refY)];

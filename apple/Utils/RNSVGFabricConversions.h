@@ -4,6 +4,7 @@
 #import "RNSVGRenderable.h"
 #import "RNSVGLength.h"
 #import "RNSVGVBMOS.h"
+#import "RNSVGGroup.h"
 
 #import "RCTFabricComponentsPlugins.h"
 #import "RCTConversions.h"
@@ -138,6 +139,25 @@ NSDictionary *parseFontStruct(T fontStruct)
     addValueToDict(fontDict, fontStruct.fontVariantLigatures, @"fontVariantLigatures");
     addValueToDict(fontDict, fontStruct.fontVariationSettings, @"fontVariationSettings");
     return [NSDictionary dictionaryWithDictionary:fontDict];
+}
+
+template<typename T>
+void setCommonGroupProps(T groupProps, RNSVGGroup *groupNode)
+{
+    setCommonRenderableProps(groupProps, groupNode);
+    
+    if (RCTNSStringFromStringNilIfEmpty(groupProps.fontSize)) {
+        groupNode.font = @{ @"fontSize": RCTNSStringFromString(groupProps.fontSize) };
+    }
+    if (RCTNSStringFromStringNilIfEmpty(groupProps.fontWeight)) {
+        groupNode.font = @{ @"fontWeight": RCTNSStringFromString(groupProps.fontWeight) };
+    }
+    NSDictionary *fontDict = parseFontStruct(groupProps.font);
+    if (groupNode.font == nil || fontDict.count > 0) {
+        // some of text's rendering logic requires that `font` is not nil so we always set it
+        // even if to an empty dict
+        groupNode.font = fontDict;
+    }
 }
 
 static RNSVGVBMOS intToRNSVGVBMOS(int value)
