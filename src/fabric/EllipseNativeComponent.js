@@ -69,4 +69,4 @@ type NativeProps = $ReadOnly<{|
 
 type ComponentType = HostComponent<NativeProps>;
 
-export default (codegenNativeComponent<NativeProps>('RNSVGEllipse', {}): ComponentType);
+// export default (codegenNativeComponent<NativeProps>('RNSVGEllipse', {}): ComponentType);
