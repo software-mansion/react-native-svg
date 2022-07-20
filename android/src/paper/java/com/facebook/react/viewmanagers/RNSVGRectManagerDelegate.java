@@ -16,8 +16,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
 
-public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGGroupManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
-  public RNSVGGroupManagerDelegate(U viewManager) {
+public class RNSVGRectManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGRectManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+  public RNSVGRectManagerDelegate(U viewManager) {
     super(viewManager);
   }
   @Override
@@ -95,14 +95,29 @@ public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManager
       case "propList":
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
-      case "fontSize":
-        mViewManager.setFontSize(view, value == null ? null : (String) value);
+      case "x":
+        mViewManager.setX(view, value == null ? null : (String) value);
         break;
-      case "fontWeight":
-        mViewManager.setFontWeight(view, value == null ? null : (String) value);
+      case "y":
+        mViewManager.setY(view, value == null ? null : (String) value);
         break;
-      case "font":
-        mViewManager.setFont(view, (ReadableMap) value);
+      case "rectheight":
+        mViewManager.setRectheight(view, value == null ? null : (String) value);
+        break;
+      case "rectwidth":
+        mViewManager.setRectwidth(view, value == null ? null : (String) value);
+        break;
+      case "height":
+        mViewManager.setHeight(view, value == null ? null : (String) value);
+        break;
+      case "width":
+        mViewManager.setWidth(view, value == null ? null : (String) value);
+        break;
+      case "rx":
+        mViewManager.setRx(view, value == null ? null : (String) value);
+        break;
+      case "ry":
+        mViewManager.setRy(view, value == null ? null : (String) value);
         break;
       default:
         super.setProperty(view, propName, value);

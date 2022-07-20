@@ -16,8 +16,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
 
-public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGGroupManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
-  public RNSVGGroupManagerDelegate(U viewManager) {
+public class RNSVGMaskManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGMaskManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+  public RNSVGMaskManagerDelegate(U viewManager) {
     super(viewManager);
   }
   @Override
@@ -103,6 +103,33 @@ public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManager
         break;
       case "font":
         mViewManager.setFont(view, (ReadableMap) value);
+        break;
+      case "x":
+        mViewManager.setX(view, value == null ? null : (String) value);
+        break;
+      case "y":
+        mViewManager.setY(view, value == null ? null : (String) value);
+        break;
+      case "maskheight":
+        mViewManager.setMaskheight(view, value == null ? null : (String) value);
+        break;
+      case "maskwidth":
+        mViewManager.setMaskwidth(view, value == null ? null : (String) value);
+        break;
+      case "height":
+        mViewManager.setHeight(view, value == null ? null : (String) value);
+        break;
+      case "width":
+        mViewManager.setWidth(view, value == null ? null : (String) value);
+        break;
+      case "maskUnits":
+        mViewManager.setMaskUnits(view, value == null ? 0 : ((Double) value).intValue());
+        break;
+      case "maskContentUnits":
+        mViewManager.setMaskContentUnits(view, value == null ? 0 : ((Double) value).intValue());
+        break;
+      case "maskTransform":
+        mViewManager.setMaskTransform(view, (ReadableArray) value);
         break;
       default:
         super.setProperty(view, propName, value);

@@ -16,8 +16,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
 
-public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGGroupManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
-  public RNSVGGroupManagerDelegate(U viewManager) {
+public class RNSVGUseManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGUseManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+  public RNSVGUseManagerDelegate(U viewManager) {
     super(viewManager);
   }
   @Override
@@ -95,14 +95,26 @@ public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManager
       case "propList":
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
-      case "fontSize":
-        mViewManager.setFontSize(view, value == null ? null : (String) value);
+      case "href":
+        mViewManager.setHref(view, value == null ? null : (String) value);
         break;
-      case "fontWeight":
-        mViewManager.setFontWeight(view, value == null ? null : (String) value);
+      case "x":
+        mViewManager.setX(view, value == null ? null : (String) value);
         break;
-      case "font":
-        mViewManager.setFont(view, (ReadableMap) value);
+      case "y":
+        mViewManager.setY(view, value == null ? null : (String) value);
+        break;
+      case "useheight":
+        mViewManager.setUseheight(view, value == null ? null : (String) value);
+        break;
+      case "usewidth":
+        mViewManager.setUsewidth(view, value == null ? null : (String) value);
+        break;
+      case "height":
+        mViewManager.setHeight(view, value == null ? null : (String) value);
+        break;
+      case "width":
+        mViewManager.setWidth(view, value == null ? null : (String) value);
         break;
       default:
         super.setProperty(view, propName, value);

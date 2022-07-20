@@ -16,8 +16,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
 
-public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGGroupManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
-  public RNSVGGroupManagerDelegate(U viewManager) {
+public class RNSVGTSpanManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGTSpanManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+  public RNSVGTSpanManagerDelegate(U viewManager) {
     super(viewManager);
   }
   @Override
@@ -103,6 +103,48 @@ public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManager
         break;
       case "font":
         mViewManager.setFont(view, (ReadableMap) value);
+        break;
+      case "textAnchor":
+        mViewManager.setTextAnchor(view, value == null ? null : (String) value);
+        break;
+      case "dx":
+        mViewManager.setDx(view, (ReadableArray) value);
+        break;
+      case "dy":
+        mViewManager.setDy(view, (ReadableArray) value);
+        break;
+      case "positionX":
+        mViewManager.setPositionX(view, (ReadableArray) value);
+        break;
+      case "positionY":
+        mViewManager.setPositionY(view, (ReadableArray) value);
+        break;
+      case "x":
+        mViewManager.setX(view, (ReadableArray) value);
+        break;
+      case "y":
+        mViewManager.setY(view, (ReadableArray) value);
+        break;
+      case "rotate":
+        mViewManager.setRotate(view, (ReadableArray) value);
+        break;
+      case "inlineSize":
+        mViewManager.setInlineSize(view, value == null ? null : (String) value);
+        break;
+      case "textLength":
+        mViewManager.setTextLength(view, value == null ? null : (String) value);
+        break;
+      case "baselineShift":
+        mViewManager.setBaselineShift(view, value == null ? null : (String) value);
+        break;
+      case "lengthAdjust":
+        mViewManager.setLengthAdjust(view, value == null ? null : (String) value);
+        break;
+      case "alignmentBaseline":
+        mViewManager.setAlignmentBaseline(view, value == null ? null : (String) value);
+        break;
+      case "content":
+        mViewManager.setContent(view, value == null ? null : (String) value);
         break;
       default:
         super.setProperty(view, propName, value);

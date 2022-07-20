@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
-public interface RNSVGCircleManagerInterface<T extends View> {
+public interface RNSVGTextPathManagerInterface<T extends View> {
   void setName(T view, @Nullable String value);
   void setOpacity(T view, float value);
   void setMatrix(T view, @Nullable ReadableArray value);
@@ -39,7 +39,10 @@ public interface RNSVGCircleManagerInterface<T extends View> {
   void setStrokeMiterlimit(T view, float value);
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
-  void setCx(T view, @Nullable String value);
-  void setCy(T view, @Nullable String value);
-  void setR(T view, @Nullable String value);
+  void setHref(T view, @Nullable String value);
+  void setSide(T view, @Nullable String value);
+  void setMethod(T view, @Nullable String value);
+  void setMidLine(T view, @Nullable String value);
+  void setSpacing(T view, @Nullable String value);
+  void setStartOffset(T view, @Nullable String value);
 }

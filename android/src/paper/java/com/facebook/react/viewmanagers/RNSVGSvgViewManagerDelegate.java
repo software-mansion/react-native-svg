@@ -11,6 +11,7 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.ColorPropConverter;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
 
@@ -21,6 +22,12 @@ public class RNSVGSvgViewManagerDelegate<T extends View, U extends BaseViewManag
   @Override
   public void setProperty(T view, String propName, @Nullable Object value) {
     switch (propName) {
+      case "bbWidth":
+        mViewManager.setBbWidth(view, value == null ? null : (String) value);
+        break;
+      case "bbHeight":
+        mViewManager.setBbHeight(view, value == null ? null : (String) value);
+        break;
       case "minX":
         mViewManager.setMinX(view, value == null ? Float.NaN : ((Double) value).floatValue());
         break;
@@ -38,6 +45,12 @@ public class RNSVGSvgViewManagerDelegate<T extends View, U extends BaseViewManag
         break;
       case "meetOrSlice":
         mViewManager.setMeetOrSlice(view, value == null ? 0 : ((Double) value).intValue());
+        break;
+      case "tintColor":
+        mViewManager.setTintColor(view, ColorPropConverter.getColor(value, view.getContext()));
+        break;
+      case "color":
+        mViewManager.setColor(view, ColorPropConverter.getColor(value, view.getContext()));
         break;
       default:
         super.setProperty(view, propName, value);

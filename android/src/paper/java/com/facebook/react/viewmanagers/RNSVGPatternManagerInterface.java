@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
-public interface RNSVGCircleManagerInterface<T extends View> {
+public interface RNSVGPatternManagerInterface<T extends View> {
   void setName(T view, @Nullable String value);
   void setOpacity(T view, float value);
   void setMatrix(T view, @Nullable ReadableArray value);
@@ -39,7 +39,22 @@ public interface RNSVGCircleManagerInterface<T extends View> {
   void setStrokeMiterlimit(T view, float value);
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
-  void setCx(T view, @Nullable String value);
-  void setCy(T view, @Nullable String value);
-  void setR(T view, @Nullable String value);
+  void setFontSize(T view, @Nullable String value);
+  void setFontWeight(T view, @Nullable String value);
+  void setFont(T view, @Nullable ReadableMap value);
+  void setX(T view, @Nullable String value);
+  void setY(T view, @Nullable String value);
+  void setPatternheight(T view, @Nullable String value);
+  void setPatternwidth(T view, @Nullable String value);
+  void setHeight(T view, @Nullable String value);
+  void setWidth(T view, @Nullable String value);
+  void setPatternUnits(T view, int value);
+  void setPatternContentUnits(T view, int value);
+  void setPatternTransform(T view, @Nullable ReadableArray value);
+  void setMinX(T view, float value);
+  void setMinY(T view, float value);
+  void setVbWidth(T view, float value);
+  void setVbHeight(T view, float value);
+  void setAlign(T view, @Nullable String value);
+  void setMeetOrSlice(T view, int value);
 }

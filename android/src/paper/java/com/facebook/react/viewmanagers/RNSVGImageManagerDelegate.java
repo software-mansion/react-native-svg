@@ -16,8 +16,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
 
-public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGGroupManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
-  public RNSVGGroupManagerDelegate(U viewManager) {
+public class RNSVGImageManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGImageManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+  public RNSVGImageManagerDelegate(U viewManager) {
     super(viewManager);
   }
   @Override
@@ -95,14 +95,32 @@ public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManager
       case "propList":
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
-      case "fontSize":
-        mViewManager.setFontSize(view, value == null ? null : (String) value);
+      case "x":
+        mViewManager.setX(view, value == null ? null : (String) value);
         break;
-      case "fontWeight":
-        mViewManager.setFontWeight(view, value == null ? null : (String) value);
+      case "y":
+        mViewManager.setY(view, value == null ? null : (String) value);
         break;
-      case "font":
-        mViewManager.setFont(view, (ReadableMap) value);
+      case "imagewidth":
+        mViewManager.setImagewidth(view, value == null ? null : (String) value);
+        break;
+      case "imageheight":
+        mViewManager.setImageheight(view, value == null ? null : (String) value);
+        break;
+      case "width":
+        mViewManager.setWidth(view, value == null ? null : (String) value);
+        break;
+      case "height":
+        mViewManager.setHeight(view, value == null ? null : (String) value);
+        break;
+      case "src":
+        mViewManager.setSrc(view, (ReadableMap) value);
+        break;
+      case "align":
+        mViewManager.setAlign(view, value == null ? null : (String) value);
+        break;
+      case "meetOrSlice":
+        mViewManager.setMeetOrSlice(view, value == null ? 0 : ((Double) value).intValue());
         break;
       default:
         super.setProperty(view, propName, value);

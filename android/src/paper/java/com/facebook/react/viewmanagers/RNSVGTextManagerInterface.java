@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
-public interface RNSVGCircleManagerInterface<T extends View> {
+public interface RNSVGTextManagerInterface<T extends View> {
   void setName(T view, @Nullable String value);
   void setOpacity(T view, float value);
   void setMatrix(T view, @Nullable ReadableArray value);
@@ -39,7 +39,20 @@ public interface RNSVGCircleManagerInterface<T extends View> {
   void setStrokeMiterlimit(T view, float value);
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
-  void setCx(T view, @Nullable String value);
-  void setCy(T view, @Nullable String value);
-  void setR(T view, @Nullable String value);
+  void setFontSize(T view, @Nullable String value);
+  void setFontWeight(T view, @Nullable String value);
+  void setFont(T view, @Nullable ReadableMap value);
+  void setTextAnchor(T view, @Nullable String value);
+  void setDx(T view, @Nullable ReadableArray value);
+  void setDy(T view, @Nullable ReadableArray value);
+  void setPositionX(T view, @Nullable ReadableArray value);
+  void setPositionY(T view, @Nullable ReadableArray value);
+  void setX(T view, @Nullable ReadableArray value);
+  void setY(T view, @Nullable ReadableArray value);
+  void setRotate(T view, @Nullable ReadableArray value);
+  void setInlineSize(T view, @Nullable String value);
+  void setTextLength(T view, @Nullable String value);
+  void setBaselineShift(T view, @Nullable String value);
+  void setLengthAdjust(T view, @Nullable String value);
+  void setAlignmentBaseline(T view, @Nullable String value);
 }

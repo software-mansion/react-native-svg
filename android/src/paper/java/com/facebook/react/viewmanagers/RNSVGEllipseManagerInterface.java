@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
-public interface RNSVGCircleManagerInterface<T extends View> {
+public interface RNSVGEllipseManagerInterface<T extends View> {
   void setName(T view, @Nullable String value);
   void setOpacity(T view, float value);
   void setMatrix(T view, @Nullable ReadableArray value);
@@ -41,5 +41,6 @@ public interface RNSVGCircleManagerInterface<T extends View> {
   void setPropList(T view, @Nullable ReadableArray value);
   void setCx(T view, @Nullable String value);
   void setCy(T view, @Nullable String value);
-  void setR(T view, @Nullable String value);
+  void setRx(T view, @Nullable String value);
+  void setRy(T view, @Nullable String value);
 }

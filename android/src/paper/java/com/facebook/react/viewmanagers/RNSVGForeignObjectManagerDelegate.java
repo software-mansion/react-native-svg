@@ -16,8 +16,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
 
-public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGGroupManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
-  public RNSVGGroupManagerDelegate(U viewManager) {
+public class RNSVGForeignObjectManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGForeignObjectManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+  public RNSVGForeignObjectManagerDelegate(U viewManager) {
     super(viewManager);
   }
   @Override
@@ -103,6 +103,24 @@ public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManager
         break;
       case "font":
         mViewManager.setFont(view, (ReadableMap) value);
+        break;
+      case "x":
+        mViewManager.setX(view, value == null ? null : (String) value);
+        break;
+      case "y":
+        mViewManager.setY(view, value == null ? null : (String) value);
+        break;
+      case "foreignObjectheight":
+        mViewManager.setForeignObjectheight(view, value == null ? null : (String) value);
+        break;
+      case "foreignObjectwidth":
+        mViewManager.setForeignObjectwidth(view, value == null ? null : (String) value);
+        break;
+      case "height":
+        mViewManager.setHeight(view, value == null ? null : (String) value);
+        break;
+      case "width":
+        mViewManager.setWidth(view, value == null ? null : (String) value);
         break;
       default:
         super.setProperty(view, propName, value);

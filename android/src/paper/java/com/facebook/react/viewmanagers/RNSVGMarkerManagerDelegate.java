@@ -16,8 +16,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
 
-public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGGroupManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
-  public RNSVGGroupManagerDelegate(U viewManager) {
+public class RNSVGMarkerManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGMarkerManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+  public RNSVGMarkerManagerDelegate(U viewManager) {
     super(viewManager);
   }
   @Override
@@ -103,6 +103,42 @@ public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManager
         break;
       case "font":
         mViewManager.setFont(view, (ReadableMap) value);
+        break;
+      case "refX":
+        mViewManager.setRefX(view, value == null ? null : (String) value);
+        break;
+      case "refY":
+        mViewManager.setRefY(view, value == null ? null : (String) value);
+        break;
+      case "markerHeight":
+        mViewManager.setMarkerHeight(view, value == null ? null : (String) value);
+        break;
+      case "markerWidth":
+        mViewManager.setMarkerWidth(view, value == null ? null : (String) value);
+        break;
+      case "markerUnits":
+        mViewManager.setMarkerUnits(view, value == null ? null : (String) value);
+        break;
+      case "orient":
+        mViewManager.setOrient(view, value == null ? null : (String) value);
+        break;
+      case "minX":
+        mViewManager.setMinX(view, value == null ? 0f : ((Double) value).floatValue());
+        break;
+      case "minY":
+        mViewManager.setMinY(view, value == null ? 0f : ((Double) value).floatValue());
+        break;
+      case "vbWidth":
+        mViewManager.setVbWidth(view, value == null ? 0f : ((Double) value).floatValue());
+        break;
+      case "vbHeight":
+        mViewManager.setVbHeight(view, value == null ? 0f : ((Double) value).floatValue());
+        break;
+      case "align":
+        mViewManager.setAlign(view, value == null ? null : (String) value);
+        break;
+      case "meetOrSlice":
+        mViewManager.setMeetOrSlice(view, value == null ? 0 : ((Double) value).intValue());
         break;
       default:
         super.setProperty(view, propName, value);

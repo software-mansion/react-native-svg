@@ -12,12 +12,11 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
 
-public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGGroupManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
-  public RNSVGGroupManagerDelegate(U viewManager) {
+public class RNSVGRadialGradientManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGRadialGradientManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+  public RNSVGRadialGradientManagerDelegate(U viewManager) {
     super(viewManager);
   }
   @Override
@@ -56,53 +55,32 @@ public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManager
       case "display":
         mViewManager.setDisplay(view, value == null ? null : (String) value);
         break;
-      case "fill":
-        mViewManager.setFill(view, (ReadableMap) value);
+      case "fx":
+        mViewManager.setFx(view, value == null ? null : (String) value);
         break;
-      case "fillOpacity":
-        mViewManager.setFillOpacity(view, value == null ? 1f : ((Double) value).floatValue());
+      case "fy":
+        mViewManager.setFy(view, value == null ? null : (String) value);
         break;
-      case "fillRule":
-        mViewManager.setFillRule(view, value == null ? 1 : ((Double) value).intValue());
+      case "cx":
+        mViewManager.setCx(view, value == null ? null : (String) value);
         break;
-      case "stroke":
-        mViewManager.setStroke(view, (ReadableMap) value);
+      case "cy":
+        mViewManager.setCy(view, value == null ? null : (String) value);
         break;
-      case "strokeOpacity":
-        mViewManager.setStrokeOpacity(view, value == null ? 1f : ((Double) value).floatValue());
+      case "rx":
+        mViewManager.setRx(view, value == null ? null : (String) value);
         break;
-      case "strokeWidth":
-        mViewManager.setStrokeWidth(view, value == null ? "1" : (String) value);
+      case "ry":
+        mViewManager.setRy(view, value == null ? null : (String) value);
         break;
-      case "strokeLinecap":
-        mViewManager.setStrokeLinecap(view, value == null ? 0 : ((Double) value).intValue());
+      case "gradient":
+        mViewManager.setGradient(view, (ReadableArray) value);
         break;
-      case "strokeLinejoin":
-        mViewManager.setStrokeLinejoin(view, value == null ? 0 : ((Double) value).intValue());
+      case "gradientUnits":
+        mViewManager.setGradientUnits(view, value == null ? 0 : ((Double) value).intValue());
         break;
-      case "strokeDasharray":
-        mViewManager.setStrokeDasharray(view, (ReadableArray) value);
-        break;
-      case "strokeDashoffset":
-        mViewManager.setStrokeDashoffset(view, value == null ? 0f : ((Double) value).floatValue());
-        break;
-      case "strokeMiterlimit":
-        mViewManager.setStrokeMiterlimit(view, value == null ? 0f : ((Double) value).floatValue());
-        break;
-      case "vectorEffect":
-        mViewManager.setVectorEffect(view, value == null ? 0 : ((Double) value).intValue());
-        break;
-      case "propList":
-        mViewManager.setPropList(view, (ReadableArray) value);
-        break;
-      case "fontSize":
-        mViewManager.setFontSize(view, value == null ? null : (String) value);
-        break;
-      case "fontWeight":
-        mViewManager.setFontWeight(view, value == null ? null : (String) value);
-        break;
-      case "font":
-        mViewManager.setFont(view, (ReadableMap) value);
+      case "gradientTransform":
+        mViewManager.setGradientTransform(view, (ReadableArray) value);
         break;
       default:
         super.setProperty(view, propName, value);

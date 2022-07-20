@@ -16,8 +16,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
 
-public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGGroupManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
-  public RNSVGGroupManagerDelegate(U viewManager) {
+public class RNSVGTextPathManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGTextPathManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+  public RNSVGTextPathManagerDelegate(U viewManager) {
     super(viewManager);
   }
   @Override
@@ -95,14 +95,23 @@ public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManager
       case "propList":
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
-      case "fontSize":
-        mViewManager.setFontSize(view, value == null ? null : (String) value);
+      case "href":
+        mViewManager.setHref(view, value == null ? null : (String) value);
         break;
-      case "fontWeight":
-        mViewManager.setFontWeight(view, value == null ? null : (String) value);
+      case "side":
+        mViewManager.setSide(view, value == null ? null : (String) value);
         break;
-      case "font":
-        mViewManager.setFont(view, (ReadableMap) value);
+      case "method":
+        mViewManager.setMethod(view, value == null ? null : (String) value);
+        break;
+      case "midLine":
+        mViewManager.setMidLine(view, value == null ? null : (String) value);
+        break;
+      case "spacing":
+        mViewManager.setSpacing(view, value == null ? null : (String) value);
+        break;
+      case "startOffset":
+        mViewManager.setStartOffset(view, value == null ? null : (String) value);
         break;
       default:
         super.setProperty(view, propName, value);
