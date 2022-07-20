@@ -35,7 +35,7 @@ using namespace facebook::react;
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGUseProps>(props);
 
-    setCommonRenderableProps(newProps, _element);
+    setCommonRenderableProps(newProps, _element, self);
 
     _element.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
     _element.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
@@ -59,6 +59,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGUse alloc] init];
     self.contentView = _element;
 }

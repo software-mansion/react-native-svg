@@ -52,13 +52,14 @@ using namespace facebook::react;
     _element.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
     _element.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
 
-    setCommonRenderableProps(newProps, _element);
+    setCommonRenderableProps(newProps, _element, self);
     [super updateProps:props oldProps:oldProps];
 }
 
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGRect alloc] init];
     self.contentView = _element;
 }

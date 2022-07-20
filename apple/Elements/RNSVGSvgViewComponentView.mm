@@ -32,16 +32,18 @@ using namespace facebook::react;
     } else {
         RCTLogError(@"Only child of SvgView should be a Group element, instead found %@", childComponentView);
     }
+    [self insertSubview:childComponentView atIndex:index+1];
 }
 
 - (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
     if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]]) {
-        [childComponentView removeFromSuperview];
+        [_element removeFromSuperview];
         [_element invalidate];
     } else {
         RCTLogError(@"Only child of SvgView should a be Group element, instead found %@", childComponentView);
     }
+    [childComponentView removeFromSuperview];
 }
 
 #pragma mark - RCTComponentViewProtocol
@@ -81,6 +83,15 @@ using namespace facebook::react;
     [super prepareForRecycle];
     _element = [[RNSVGSvgView alloc] init];
     self.contentView = _element;
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    UIView *result = [_element hitTest:point withEvent:event];
+    if ([result isKindOfClass:[RNSVGNode class]]) {
+        return ((RNSVGNode *) result).parentComponentView;
+    }
+    return result;
 }
 
 @end

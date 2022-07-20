@@ -34,7 +34,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGPathProps>(props);
-    setCommonRenderableProps(newProps, _element);
+    setCommonRenderableProps(newProps, _element, self);
     
     _element.d = [[RNSVGPathParser alloc] initWithPathString: RCTNSStringFromString(newProps.d)];
     [super updateProps:props oldProps:oldProps];
@@ -43,6 +43,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGPath alloc] init];
     self.contentView = _element;
 }

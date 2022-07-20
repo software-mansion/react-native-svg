@@ -45,7 +45,7 @@ using namespace facebook::react;
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGTextPathProps>(props);
 
-    setCommonRenderableProps(newProps, _element);
+    setCommonRenderableProps(newProps, _element, self);
     _element.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
     _element.side = RCTNSStringFromStringNilIfEmpty(newProps.side);
     _element.method = RCTNSStringFromStringNilIfEmpty(newProps.method);
@@ -59,6 +59,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGTextPath alloc] init];
     self.contentView = _element;
 }

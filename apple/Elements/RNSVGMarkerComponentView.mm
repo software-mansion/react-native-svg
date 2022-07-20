@@ -44,7 +44,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNSVGMarkerProps>(props);
-    setCommonGroupProps(newProps, _element);
+    setCommonGroupProps(newProps, _element, self);
     
     _element.refX = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.refX)];
     _element.refY = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.refY)];
@@ -66,6 +66,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGMarker alloc] init];
     self.contentView = _element;
 }

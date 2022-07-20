@@ -46,7 +46,7 @@ using namespace facebook::react;
   const auto &newProps = *std::static_pointer_cast<const RNSVGImageProps>(props);
     const auto &oldImageProps = *std::static_pointer_cast<const RNSVGImageProps>(oldProps);
 
-    setCommonRenderableProps(newProps, _element);
+    setCommonRenderableProps(newProps, _element, self);
     _element.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
     _element.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
     if (RCTNSStringFromStringNilIfEmpty(newProps.imageheight)) {
@@ -78,6 +78,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGImage alloc] init];
     _element.bridge = [RCTBridge currentBridge];
     self.contentView = _element;

@@ -45,7 +45,7 @@ using namespace facebook::react;
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGTSpanProps>(props);
 
-    setCommonGroupProps(newProps, _element);
+    setCommonGroupProps(newProps, _element, self);
     // textAnchor is in props of VM but not available on component
     _element.deltaX = createLengthArrayFromStrings(newProps.dx);
     _element.deltaY = createLengthArrayFromStrings(newProps.dy);
@@ -75,6 +75,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGTSpan alloc] init];
     self.contentView = _element;
 }

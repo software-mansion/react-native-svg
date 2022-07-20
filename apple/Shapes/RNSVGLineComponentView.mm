@@ -39,13 +39,14 @@ using namespace facebook::react;
     _element.y1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y1)];
     _element.x2  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x2)];
     _element.y2  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y2)];
-    setCommonRenderableProps(newProps, _element);
+    setCommonRenderableProps(newProps, _element, self);
     [super updateProps:props oldProps:oldProps];
 }
 
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGLine alloc] init];
     self.contentView = _element;
 }

@@ -37,6 +37,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, strong) NSString *markerStart;
 @property (nonatomic, strong) NSString *markerMid;
 @property (nonatomic, strong) NSString *markerEnd;
+@property (nonatomic, strong) UIView *parentComponentView;
 
 /**
  * Used to control how touch events are processed.

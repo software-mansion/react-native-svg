@@ -12,7 +12,7 @@ const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 const zeroDelta = {x: 0, y: 0};
 
 class PanExample extends PureComponent {
-  static title = 'Bind PanResponder on the SVG Shape';
+  static title = 'Bind PanResponder on the SVG Shape - It does not work on Fabric since it uses `setNativeProps`';
   panXY: any;
   constructor(props, context) {
     super(props, context);

@@ -44,7 +44,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNSVGPatternProps>(props);
-    setCommonGroupProps(newProps, _element);
+    setCommonGroupProps(newProps, _element, self);
 
     _element.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
     _element.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
@@ -77,6 +77,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGPattern alloc] init];
     self.contentView = _element;
 }

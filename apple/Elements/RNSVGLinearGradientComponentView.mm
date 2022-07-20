@@ -44,7 +44,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNSVGLinearGradientProps>(props);
-    setCommonNodeProps(newProps, _element);
+    setCommonNodeProps(newProps, _element, self);
         
     _element.x1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x1)];
     _element.y1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y1)];
@@ -68,6 +68,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGLinearGradient alloc] init];
     self.contentView = _element;
 }

@@ -44,7 +44,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNSVGGroupProps>(props);
-    setCommonGroupProps(newProps, _element);
+    setCommonGroupProps(newProps, _element, self);
 
     [super updateProps:props oldProps:oldProps];
 }
@@ -52,6 +52,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGGroup alloc] init];
     self.contentView = _element;
 }

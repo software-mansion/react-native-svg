@@ -44,7 +44,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNSVGSymbolProps>(props);
-    setCommonGroupProps(newProps, _element);
+    setCommonGroupProps(newProps, _element, self);
 
     _element.minX = newProps.minX;
     _element.minY = newProps.minY;
@@ -58,6 +58,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGSymbol alloc] init];
     self.contentView = _element;
 }

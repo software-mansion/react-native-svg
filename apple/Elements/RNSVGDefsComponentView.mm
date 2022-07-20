@@ -49,6 +49,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _element.parentComponentView = nil;
     _element = [[RNSVGDefs alloc] init];
     self.contentView = _element;
 }

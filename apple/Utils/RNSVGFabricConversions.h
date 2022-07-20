@@ -42,8 +42,9 @@ RNSVGBrush *brushFromColorStruct(T fillObject)
 }
 
 template<typename T>
-void setCommonNodeProps(T nodeProps, RNSVGNode *node)
+void setCommonNodeProps(T nodeProps, RNSVGNode *node, RCTViewComponentView *view)
 {
+    node.parentComponentView = view;
     node.name =  RCTNSStringFromStringNilIfEmpty(nodeProps.name);
     node.opacity = nodeProps.opacity;
     if (nodeProps.matrix.size() == 6) {
@@ -86,9 +87,9 @@ static NSMutableArray<RNSVGLength *> *createLengthArrayFromStrings(std::vector<s
 }
 
 template<typename T>
-void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode)
+void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode, RCTViewComponentView *view)
 {
-    setCommonNodeProps(renderableProps, renderableNode);
+    setCommonNodeProps(renderableProps, renderableNode, view);
     renderableNode.fill = brushFromColorStruct(renderableProps.fill);
     renderableNode.fillOpacity = renderableProps.fillOpacity;
     renderableNode.fillRule = renderableProps.fillRule == 0 ? kRNSVGCGFCRuleEvenodd : kRNSVGCGFCRuleNonzero;
@@ -142,9 +143,9 @@ NSDictionary *parseFontStruct(T fontStruct)
 }
 
 template<typename T>
-void setCommonGroupProps(T groupProps, RNSVGGroup *groupNode)
+void setCommonGroupProps(T groupProps, RNSVGGroup *groupNode, RCTViewComponentView *view)
 {
-    setCommonRenderableProps(groupProps, groupNode);
+    setCommonRenderableProps(groupProps, groupNode, view);
     
     if (RCTNSStringFromStringNilIfEmpty(groupProps.fontSize)) {
         groupNode.font = @{ @"fontSize": RCTNSStringFromString(groupProps.fontSize) };
@@ -181,13 +182,17 @@ static void mountChildComponentView(UIView<RCTComponentViewProtocol> *childCompo
     } else {
         RCTLogError(@"Children of SVG should only be of SVG type, instead found %@", childComponentView);
     }
+    // if we don't add componentView to native view hierarchy, RN responder system does not work for some reason
+    // We add it with `index+1` since first child is `contentView`
+    [element.superview insertSubview:childComponentView atIndex:index+1];
 }
 
 static void unmountChildComponentView(UIView<RCTComponentViewProtocol> *childComponentView, NSInteger index, RNSVGNode *element) {
     if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ([((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]] || [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGSvgView class]])) {
-        [childComponentView removeFromSuperview];
+        [element removeFromSuperview];
         [element invalidate];
     } else {
         RCTLogError(@"Children of SVG should only be of SVG type, instead found %@", childComponentView);
     }
+    [childComponentView removeFromSuperview];
 }
