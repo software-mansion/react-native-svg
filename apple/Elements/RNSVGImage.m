@@ -24,6 +24,13 @@
 
 #import <React/RCTLog.h>
 #import "RNSVGViewBox.h"
+#import "RCTBridge.h"
+
+// Some RN private method hacking below similar to how it is done in RNScreens:
+// https://github.com/software-mansion/react-native-screens/blob/90e548739f35b5ded2524a9d6410033fc233f586/ios/RNSScreenStackHeaderConfig.mm#L30
+@interface RCTBridge (Private)
++ (RCTBridge *)currentBridge;
+@end
 
 @implementation RNSVGImage
 {
@@ -78,7 +85,13 @@
         _reloadImageCancellationBlock = nil;
     }
 
-    _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:request callback:^(NSError *error, UIImage *image) {
+    _reloadImageCancellationBlock = [[
+#ifdef RN_FABRIC_ENABLED
+        [RCTBridge currentBridge]
+#else
+        self.bridge
+#endif
+        moduleForName:@"ImageLoader"] loadImageWithURLRequest:request callback:^(NSError *error, UIImage *image) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self->_image = CGImageRetain(image.CGImage);
             self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));

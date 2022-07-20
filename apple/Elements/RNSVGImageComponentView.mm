@@ -6,15 +6,8 @@
 #import "RCTFabricComponentsPlugins.h"
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
-#import "RCTBridge.h"
 #import "RCTImagePrimitivesConversions.h"
 #import "RCTImageSource.h"
-
-// Some RN private method hacking below similar to how it is done in RNScreens:
-// https://github.com/software-mansion/react-native-screens/blob/90e548739f35b5ded2524a9d6410033fc233f586/ios/RNSScreenStackHeaderConfig.mm#L30
-@interface RCTBridge (Private)
-+ (RCTBridge *)currentBridge;
-@end
 
 using namespace facebook::react;
 
@@ -28,7 +21,6 @@ using namespace facebook::react;
     static const auto defaultProps = std::make_shared<const RNSVGImageProps>();
     _props = defaultProps;
     _element = [[RNSVGImage alloc] init];
-    _element.bridge = [RCTBridge currentBridge];
     self.contentView = _element;
   }
   return self;
@@ -80,7 +72,6 @@ using namespace facebook::react;
     [super prepareForRecycle];
     _element.parentComponentView = nil;
     _element = [[RNSVGImage alloc] init];
-    _element.bridge = [RCTBridge currentBridge];
     self.contentView = _element;
 }
 
