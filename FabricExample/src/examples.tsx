@@ -32,6 +32,6 @@ export {
   Clipping,
   // Image,
   // TouchEvents,
-  // Reusable,
+  Reusable,
   // PanResponder,
 };

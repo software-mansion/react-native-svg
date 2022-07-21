@@ -39,7 +39,7 @@ RNSvgComponentsRegistry::sharedProviderRegistry() {
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGTextComponentDescriptor>());
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGTextPathComponentDescriptor>());
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGTSpanComponentDescriptor>());
-  // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGUseComponentDescriptor>());
+  providerRegistry->add(concreteComponentDescriptorProvider<RNSVGUseComponentDescriptor>());
 
   return providerRegistry;
 }

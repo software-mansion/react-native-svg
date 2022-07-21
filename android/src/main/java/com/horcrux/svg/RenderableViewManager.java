@@ -51,6 +51,8 @@ import com.facebook.react.viewmanagers.RNSVGRadialGradientManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGRadialGradientManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGRectManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGRectManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGUseManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGUseManagerInterface;
 
 import java.util.Locale;
 
@@ -1156,17 +1158,55 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
     }
 
-    static class UseViewManager extends RenderableViewManager {
-        UseViewManager() {
-            super(SVGClass.RNSVGUse);
-        }
+  static class UseViewManager extends RenderableViewManager<UseView> implements RNSVGUseManagerInterface<UseView> {
+
+    UseViewManager() {
+      super(SVGClass.RNSVGUse);
+      mDelegate = new RNSVGUseManagerDelegate(this);
+    }
+
+    private final ViewManagerDelegate<RectView> mDelegate;
+
+    protected ViewManagerDelegate getDelegate(){
+      return mDelegate;
+    }
 
         @ReactProp(name = "href")
         public void setHref(UseView node, String href) {
             node.setHref(href);
         }
 
-        @ReactProp(name = "x")
+    @Override
+    public void setX(UseView view, @Nullable String value) {
+      view.setX(value);
+    }
+
+    @Override
+    public void setY(UseView view, @Nullable String value) {
+      view.setY(value);
+    }
+
+    @Override
+    public void setUseheight(UseView view, @Nullable String value) {
+      view.setHeight(value);
+    }
+
+    @Override
+    public void setUsewidth(UseView view, @Nullable String value) {
+      view.setWidth(value);
+    }
+
+    @Override
+    public void setHeight(UseView view, @Nullable String value) {
+      view.setHeight(value);
+    }
+
+    @Override
+    public void setWidth(UseView view, @Nullable String value) {
+      view.setWidth(value);
+    }
+
+    @ReactProp(name = "x")
         public void setX(UseView node, Dynamic x) {
             node.setX(x);
         }
