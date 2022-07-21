@@ -28,7 +28,7 @@ export {
   // Text,
   Stroking,
   G,
-  // Gradients,
+  Gradients,
   Clipping,
   // Image,
   // TouchEvents,

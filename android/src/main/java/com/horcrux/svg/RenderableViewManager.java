@@ -43,8 +43,12 @@ import com.facebook.react.viewmanagers.RNSVGGroupManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGLineManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGLineManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGLinearGradientManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGLinearGradientManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGPathManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGPathManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGRadialGradientManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGRadialGradientManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGRectManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGRectManagerInterface;
 
@@ -119,102 +123,87 @@ import static com.horcrux.svg.RenderableView.FILL_RULE_NONZERO;
 import static com.horcrux.svg.RenderableView.JOIN_ROUND;
 
 /**
- * ViewManager for all RNSVG views
+ * ViewManager for DefinitionView RNSVG views
  */
-class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<VirtualView> {
+class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<VirtualView> {
 
-  private enum SVGClass {
-        RNSVGGroup,
-        RNSVGPath,
-        RNSVGText,
-        RNSVGTSpan,
-        RNSVGTextPath,
-        RNSVGImage,
-        RNSVGCircle,
-        RNSVGEllipse,
-        RNSVGLine,
-        RNSVGRect,
-        RNSVGClipPath,
-        RNSVGDefs,
-        RNSVGUse,
-        RNSVGSymbol,
-        RNSVGLinearGradient,
-        RNSVGRadialGradient,
-        RNSVGPattern,
-        RNSVGMask,
-        RNSVGMarker,
-        RNSVGForeignObject,
-    }
+  protected final SVGClass svgClass;
+  protected final String mClassName;
 
-    static class RenderableShadowNode extends LayoutShadowNode {
+  protected VirtualViewManager(SVGClass svgclass) {
+    svgClass = svgclass;
+    mClassName = svgclass.toString();
+  }
 
-        @SuppressWarnings({"unused", "EmptyMethod"})
-        @ReactPropGroup(
-            names = {
-                ALIGN_SELF,
-                ALIGN_ITEMS,
-                COLLAPSABLE,
-                FLEX,
-                FLEX_BASIS,
-                FLEX_DIRECTION,
-                FLEX_GROW,
-                FLEX_SHRINK,
-                FLEX_WRAP,
-                JUSTIFY_CONTENT,
-                OVERFLOW,
-                ALIGN_CONTENT,
-                DISPLAY,
+  static class RenderableShadowNode extends LayoutShadowNode {
 
-                /* position */
-                POSITION,
-                RIGHT,
-                TOP,
-                BOTTOM,
-                LEFT,
-                START,
-                END,
+    @SuppressWarnings({"unused", "EmptyMethod"})
+    @ReactPropGroup(
+      names = {
+        ALIGN_SELF,
+        ALIGN_ITEMS,
+        COLLAPSABLE,
+        FLEX,
+        FLEX_BASIS,
+        FLEX_DIRECTION,
+        FLEX_GROW,
+        FLEX_SHRINK,
+        FLEX_WRAP,
+        JUSTIFY_CONTENT,
+        OVERFLOW,
+        ALIGN_CONTENT,
+        DISPLAY,
 
-                /* dimensions */
-                WIDTH,
-                HEIGHT,
-                MIN_WIDTH,
-                MAX_WIDTH,
-                MIN_HEIGHT,
-                MAX_HEIGHT,
+        /* position */
+        POSITION,
+        RIGHT,
+        TOP,
+        BOTTOM,
+        LEFT,
+        START,
+        END,
 
-                /* margins */
-                MARGIN,
-                MARGIN_VERTICAL,
-                MARGIN_HORIZONTAL,
-                MARGIN_LEFT,
-                MARGIN_RIGHT,
-                MARGIN_TOP,
-                MARGIN_BOTTOM,
-                MARGIN_START,
-                MARGIN_END,
+        /* dimensions */
+        WIDTH,
+        HEIGHT,
+        MIN_WIDTH,
+        MAX_WIDTH,
+        MIN_HEIGHT,
+        MAX_HEIGHT,
 
-                /* paddings */
-                PADDING,
-                PADDING_VERTICAL,
-                PADDING_HORIZONTAL,
-                PADDING_LEFT,
-                PADDING_RIGHT,
-                PADDING_TOP,
-                PADDING_BOTTOM,
-                PADDING_START,
-                PADDING_END,
+        /* margins */
+        MARGIN,
+        MARGIN_VERTICAL,
+        MARGIN_HORIZONTAL,
+        MARGIN_LEFT,
+        MARGIN_RIGHT,
+        MARGIN_TOP,
+        MARGIN_BOTTOM,
+        MARGIN_START,
+        MARGIN_END,
 
-                BORDER_WIDTH,
-                BORDER_START_WIDTH,
-                BORDER_END_WIDTH,
-                BORDER_TOP_WIDTH,
-                BORDER_BOTTOM_WIDTH,
-                BORDER_LEFT_WIDTH,
-                BORDER_RIGHT_WIDTH,
-            }
-        )
-        public void ignoreLayoutProps(int index, Dynamic value) {}
-    }
+        /* paddings */
+        PADDING,
+        PADDING_VERTICAL,
+        PADDING_HORIZONTAL,
+        PADDING_LEFT,
+        PADDING_RIGHT,
+        PADDING_TOP,
+        PADDING_BOTTOM,
+        PADDING_START,
+        PADDING_END,
+
+        BORDER_WIDTH,
+        BORDER_START_WIDTH,
+        BORDER_END_WIDTH,
+        BORDER_TOP_WIDTH,
+        BORDER_BOTTOM_WIDTH,
+        BORDER_LEFT_WIDTH,
+        BORDER_RIGHT_WIDTH,
+      }
+    )
+    public void ignoreLayoutProps(int index, Dynamic value) {}
+  }
 
   @Override
   public LayoutShadowNode createShadowNodeInstance() {
@@ -226,191 +215,433 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
     return RenderableShadowNode.class;
   }
 
+  static class MatrixDecompositionContext extends MatrixMathHelper.MatrixDecompositionContext {
+    final double[] perspective = new double[4];
+    final double[] scale = new double[3];
+    final double[] skew = new double[3];
+    final double[] translation = new double[3];
+    final double[] rotationDegrees = new double[3];
+  }
 
-    private final SVGClass svgClass;
-    private final String mClassName;
+  private static final MatrixDecompositionContext sMatrixDecompositionContext =
+    new MatrixDecompositionContext();
+  private static final double[] sTransformDecompositionArray = new double[16];
 
-    static class MatrixDecompositionContext extends MatrixMathHelper.MatrixDecompositionContext {
-        final double[] perspective = new double[4];
-        final double[] scale = new double[3];
-        final double[] skew = new double[3];
-        final double[] translation = new double[3];
-        final double[] rotationDegrees = new double[3];
+  private static final int PERSPECTIVE_ARRAY_INVERTED_CAMERA_DISTANCE_INDEX = 2;
+  private static final float CAMERA_DISTANCE_NORMALIZATION_MULTIPLIER = 5;
+
+  private static final double EPSILON = .00001d;
+
+  private static boolean isZero(double d) {
+    return !Double.isNaN(d) && Math.abs(d) < EPSILON;
+  }
+
+  private static void decomposeMatrix() {
+
+    // output values
+    final double[] perspective = sMatrixDecompositionContext.perspective;
+    final double[] scale = sMatrixDecompositionContext.scale;
+    final double[] skew = sMatrixDecompositionContext.skew;
+    final double[] translation = sMatrixDecompositionContext.translation;
+    final double[] rotationDegrees = sMatrixDecompositionContext.rotationDegrees;
+
+    // create normalized, 2d array matrix
+    // and normalized 1d array perspectiveMatrix with redefined 4th column
+    if (isZero(sTransformDecompositionArray[15])) {
+      return;
+    }
+    double[][] matrix = new double[4][4];
+    double[] perspectiveMatrix = new double[16];
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++) {
+        double value = sTransformDecompositionArray[(i * 4) + j] / sTransformDecompositionArray[15];
+        matrix[i][j] = value;
+        perspectiveMatrix[(i * 4) + j] = j == 3 ? 0 : value;
+      }
+    }
+    perspectiveMatrix[15] = 1;
+
+    // test for singularity of upper 3x3 part of the perspective matrix
+    if (isZero(determinant(perspectiveMatrix))) {
+      return;
     }
 
-    private static final MatrixDecompositionContext sMatrixDecompositionContext =
-            new MatrixDecompositionContext();
-    private static final double[] sTransformDecompositionArray = new double[16];
+    // isolate perspective
+    if (!isZero(matrix[0][3]) || !isZero(matrix[1][3]) || !isZero(matrix[2][3])) {
+      // rightHandSide is the right hand side of the equation.
+      // rightHandSide is a vector, or point in 3d space relative to the origin.
+      double[] rightHandSide = { matrix[0][3], matrix[1][3], matrix[2][3], matrix[3][3] };
 
-    private static final int PERSPECTIVE_ARRAY_INVERTED_CAMERA_DISTANCE_INDEX = 2;
-    private static final float CAMERA_DISTANCE_NORMALIZATION_MULTIPLIER = 5;
-
-    private static final double EPSILON = .00001d;
-
-    private static boolean isZero(double d) {
-        return !Double.isNaN(d) && Math.abs(d) < EPSILON;
+      // Solve the equation by inverting perspectiveMatrix and multiplying
+      // rightHandSide by the inverse.
+      double[] inversePerspectiveMatrix = inverse(
+        perspectiveMatrix
+      );
+      double[] transposedInversePerspectiveMatrix = transpose(
+        inversePerspectiveMatrix
+      );
+      multiplyVectorByMatrix(rightHandSide, transposedInversePerspectiveMatrix, perspective);
+    } else {
+      // no perspective
+      perspective[0] = perspective[1] = perspective[2] = 0d;
+      perspective[3] = 1d;
     }
 
-    private static void decomposeMatrix() {
+    // translation is simple
+    System.arraycopy(matrix[3], 0, translation, 0, 3);
 
-        // output values
-        final double[] perspective = sMatrixDecompositionContext.perspective;
-        final double[] scale = sMatrixDecompositionContext.scale;
-        final double[] skew = sMatrixDecompositionContext.skew;
-        final double[] translation = sMatrixDecompositionContext.translation;
-        final double[] rotationDegrees = sMatrixDecompositionContext.rotationDegrees;
-
-        // create normalized, 2d array matrix
-        // and normalized 1d array perspectiveMatrix with redefined 4th column
-        if (isZero(sTransformDecompositionArray[15])) {
-            return;
-        }
-        double[][] matrix = new double[4][4];
-        double[] perspectiveMatrix = new double[16];
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                double value = sTransformDecompositionArray[(i * 4) + j] / sTransformDecompositionArray[15];
-                matrix[i][j] = value;
-                perspectiveMatrix[(i * 4) + j] = j == 3 ? 0 : value;
-            }
-        }
-        perspectiveMatrix[15] = 1;
-
-        // test for singularity of upper 3x3 part of the perspective matrix
-        if (isZero(determinant(perspectiveMatrix))) {
-            return;
-        }
-
-        // isolate perspective
-        if (!isZero(matrix[0][3]) || !isZero(matrix[1][3]) || !isZero(matrix[2][3])) {
-            // rightHandSide is the right hand side of the equation.
-            // rightHandSide is a vector, or point in 3d space relative to the origin.
-            double[] rightHandSide = { matrix[0][3], matrix[1][3], matrix[2][3], matrix[3][3] };
-
-            // Solve the equation by inverting perspectiveMatrix and multiplying
-            // rightHandSide by the inverse.
-            double[] inversePerspectiveMatrix = inverse(
-                    perspectiveMatrix
-            );
-            double[] transposedInversePerspectiveMatrix = transpose(
-                    inversePerspectiveMatrix
-            );
-            multiplyVectorByMatrix(rightHandSide, transposedInversePerspectiveMatrix, perspective);
-        } else {
-            // no perspective
-            perspective[0] = perspective[1] = perspective[2] = 0d;
-            perspective[3] = 1d;
-        }
-
-        // translation is simple
-        System.arraycopy(matrix[3], 0, translation, 0, 3);
-
-        // Now get scale and shear.
-        // 'row' is a 3 element array of 3 component vectors
-        double[][] row = new double[3][3];
-        for (int i = 0; i < 3; i++) {
-            row[i][0] = matrix[i][0];
-            row[i][1] = matrix[i][1];
-            row[i][2] = matrix[i][2];
-        }
-
-        // Compute X scale factor and normalize first row.
-        scale[0] = v3Length(row[0]);
-        row[0] = v3Normalize(row[0], scale[0]);
-
-        // Compute XY shear factor and make 2nd row orthogonal to 1st.
-        skew[0] = v3Dot(row[0], row[1]);
-        row[1] = v3Combine(row[1], row[0], 1.0, -skew[0]);
-
-        // Compute XY shear factor and make 2nd row orthogonal to 1st.
-        skew[0] = v3Dot(row[0], row[1]);
-        row[1] = v3Combine(row[1], row[0], 1.0, -skew[0]);
-
-        // Now, compute Y scale and normalize 2nd row.
-        scale[1] = v3Length(row[1]);
-        row[1] = v3Normalize(row[1], scale[1]);
-        skew[0] /= scale[1];
-
-        // Compute XZ and YZ shears, orthogonalize 3rd row
-        skew[1] = v3Dot(row[0], row[2]);
-        row[2] = v3Combine(row[2], row[0], 1.0, -skew[1]);
-        skew[2] = v3Dot(row[1], row[2]);
-        row[2] = v3Combine(row[2], row[1], 1.0, -skew[2]);
-
-        // Next, get Z scale and normalize 3rd row.
-        scale[2] = v3Length(row[2]);
-        row[2] = v3Normalize(row[2], scale[2]);
-        skew[1] /= scale[2];
-        skew[2] /= scale[2];
-
-        // At this point, the matrix (in rows) is orthonormal.
-        // Check for a coordinate system flip.  If the determinant
-        // is -1, then negate the matrix and the scaling factors.
-        double[] pdum3 = v3Cross(row[1], row[2]);
-        if (v3Dot(row[0], pdum3) < 0) {
-            for (int i = 0; i < 3; i++) {
-                scale[i] *= -1;
-                row[i][0] *= -1;
-                row[i][1] *= -1;
-                row[i][2] *= -1;
-            }
-        }
-
-        // Now, get the rotations out
-        // Based on: http://nghiaho.com/?page_id=846
-        double conv = 180 / Math.PI;
-        rotationDegrees[0] = roundTo3Places(-Math.atan2(row[2][1], row[2][2]) * conv);
-        rotationDegrees[1] = roundTo3Places(-Math.atan2(-row[2][0], Math.sqrt(row[2][1] * row[2][1] + row[2][2] * row[2][2])) * conv);
-        rotationDegrees[2] = roundTo3Places(-Math.atan2(row[1][0], row[0][0]) * conv);
+    // Now get scale and shear.
+    // 'row' is a 3 element array of 3 component vectors
+    double[][] row = new double[3][3];
+    for (int i = 0; i < 3; i++) {
+      row[i][0] = matrix[i][0];
+      row[i][1] = matrix[i][1];
+      row[i][2] = matrix[i][2];
     }
 
-    private static void setTransformProperty(View view, ReadableArray transforms) {
-        TransformHelper.processTransform(transforms, sTransformDecompositionArray);
-        decomposeMatrix();
-        view.setTranslationX(
-                PixelUtil.toPixelFromDIP((float) sMatrixDecompositionContext.translation[0]));
-        view.setTranslationY(
-                PixelUtil.toPixelFromDIP((float) sMatrixDecompositionContext.translation[1]));
-        view.setRotation((float) sMatrixDecompositionContext.rotationDegrees[2]);
-        view.setRotationX((float) sMatrixDecompositionContext.rotationDegrees[0]);
-        view.setRotationY((float) sMatrixDecompositionContext.rotationDegrees[1]);
-        view.setScaleX((float) sMatrixDecompositionContext.scale[0]);
-        view.setScaleY((float) sMatrixDecompositionContext.scale[1]);
+    // Compute X scale factor and normalize first row.
+    scale[0] = v3Length(row[0]);
+    row[0] = v3Normalize(row[0], scale[0]);
 
-        double[] perspectiveArray = sMatrixDecompositionContext.perspective;
+    // Compute XY shear factor and make 2nd row orthogonal to 1st.
+    skew[0] = v3Dot(row[0], row[1]);
+    row[1] = v3Combine(row[1], row[0], 1.0, -skew[0]);
 
-        if (perspectiveArray.length > PERSPECTIVE_ARRAY_INVERTED_CAMERA_DISTANCE_INDEX) {
-            float invertedCameraDistance = (float) perspectiveArray[PERSPECTIVE_ARRAY_INVERTED_CAMERA_DISTANCE_INDEX];
-            if (invertedCameraDistance == 0) {
-                // Default camera distance, before scale multiplier (1280)
-                invertedCameraDistance = 0.00078125f;
-            }
-            float cameraDistance = -1 / invertedCameraDistance;
-            float scale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
+    // Compute XY shear factor and make 2nd row orthogonal to 1st.
+    skew[0] = v3Dot(row[0], row[1]);
+    row[1] = v3Combine(row[1], row[0], 1.0, -skew[0]);
 
-            // The following converts the matrix's perspective to a camera distance
-            // such that the camera perspective looks the same on Android and iOS.
-            // The native Android implementation removed the screen density from the
-            // calculation, so squaring and a normalization value of
-            // sqrt(5) produces an exact replica with iOS.
-            // For more information, see https://github.com/facebook/react-native/pull/18302
-            float normalizedCameraDistance = scale * scale * cameraDistance * CAMERA_DISTANCE_NORMALIZATION_MULTIPLIER;
-            view.setCameraDistance(normalizedCameraDistance);
+    // Now, compute Y scale and normalize 2nd row.
+    scale[1] = v3Length(row[1]);
+    row[1] = v3Normalize(row[1], scale[1]);
+    skew[0] /= scale[1];
 
+    // Compute XZ and YZ shears, orthogonalize 3rd row
+    skew[1] = v3Dot(row[0], row[2]);
+    row[2] = v3Combine(row[2], row[0], 1.0, -skew[1]);
+    skew[2] = v3Dot(row[1], row[2]);
+    row[2] = v3Combine(row[2], row[1], 1.0, -skew[2]);
+
+    // Next, get Z scale and normalize 3rd row.
+    scale[2] = v3Length(row[2]);
+    row[2] = v3Normalize(row[2], scale[2]);
+    skew[1] /= scale[2];
+    skew[2] /= scale[2];
+
+    // At this point, the matrix (in rows) is orthonormal.
+    // Check for a coordinate system flip.  If the determinant
+    // is -1, then negate the matrix and the scaling factors.
+    double[] pdum3 = v3Cross(row[1], row[2]);
+    if (v3Dot(row[0], pdum3) < 0) {
+      for (int i = 0; i < 3; i++) {
+        scale[i] *= -1;
+        row[i][0] *= -1;
+        row[i][1] *= -1;
+        row[i][2] *= -1;
+      }
+    }
+
+    // Now, get the rotations out
+    // Based on: http://nghiaho.com/?page_id=846
+    double conv = 180 / Math.PI;
+    rotationDegrees[0] = roundTo3Places(-Math.atan2(row[2][1], row[2][2]) * conv);
+    rotationDegrees[1] = roundTo3Places(-Math.atan2(-row[2][0], Math.sqrt(row[2][1] * row[2][1] + row[2][2] * row[2][2])) * conv);
+    rotationDegrees[2] = roundTo3Places(-Math.atan2(row[1][0], row[0][0]) * conv);
+  }
+
+  private static void setTransformProperty(View view, ReadableArray transforms) {
+    TransformHelper.processTransform(transforms, sTransformDecompositionArray);
+    decomposeMatrix();
+    view.setTranslationX(
+      PixelUtil.toPixelFromDIP((float) sMatrixDecompositionContext.translation[0]));
+    view.setTranslationY(
+      PixelUtil.toPixelFromDIP((float) sMatrixDecompositionContext.translation[1]));
+    view.setRotation((float) sMatrixDecompositionContext.rotationDegrees[2]);
+    view.setRotationX((float) sMatrixDecompositionContext.rotationDegrees[0]);
+    view.setRotationY((float) sMatrixDecompositionContext.rotationDegrees[1]);
+    view.setScaleX((float) sMatrixDecompositionContext.scale[0]);
+    view.setScaleY((float) sMatrixDecompositionContext.scale[1]);
+
+    double[] perspectiveArray = sMatrixDecompositionContext.perspective;
+
+    if (perspectiveArray.length > PERSPECTIVE_ARRAY_INVERTED_CAMERA_DISTANCE_INDEX) {
+      float invertedCameraDistance = (float) perspectiveArray[PERSPECTIVE_ARRAY_INVERTED_CAMERA_DISTANCE_INDEX];
+      if (invertedCameraDistance == 0) {
+        // Default camera distance, before scale multiplier (1280)
+        invertedCameraDistance = 0.00078125f;
+      }
+      float cameraDistance = -1 / invertedCameraDistance;
+      float scale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
+
+      // The following converts the matrix's perspective to a camera distance
+      // such that the camera perspective looks the same on Android and iOS.
+      // The native Android implementation removed the screen density from the
+      // calculation, so squaring and a normalization value of
+      // sqrt(5) produces an exact replica with iOS.
+      // For more information, see https://github.com/facebook/react-native/pull/18302
+      float normalizedCameraDistance = scale * scale * cameraDistance * CAMERA_DISTANCE_NORMALIZATION_MULTIPLIER;
+      view.setCameraDistance(normalizedCameraDistance);
+
+    }
+  }
+
+  private static void resetTransformProperty(View view) {
+    view.setTranslationX(0);
+    view.setTranslationY(0);
+    view.setRotation(0);
+    view.setRotationX(0);
+    view.setRotationY(0);
+    view.setScaleX(1);
+    view.setScaleY(1);
+    view.setCameraDistance(0);
+  }
+
+  @Nonnull
+  public String getName() {
+    return mClassName;
+  }
+
+  @ReactProp(name = "mask")
+  public void setMask(V node, String mask) {
+    node.setMask(mask);
+  }
+
+  @ReactProp(name = "markerStart")
+  public void setMarkerStart(V node, String markerStart) {
+    node.setMarkerStart(markerStart);
+  }
+
+  @ReactProp(name = "markerMid")
+  public void setMarkerMid(V node, String markerMid) {
+    node.setMarkerMid(markerMid);
+  }
+
+  @ReactProp(name = "markerEnd")
+  public void setMarkerEnd(V node, String markerEnd) {
+    node.setMarkerEnd(markerEnd);
+  }
+
+  @ReactProp(name = "clipPath")
+  public void setClipPath(V node, String clipPath) {
+    node.setClipPath(clipPath);
+  }
+
+  @ReactProp(name = "clipRule")
+  public void setClipRule(V node, int clipRule) {
+    node.setClipRule(clipRule);
+  }
+
+  @ReactProp(name = "opacity", defaultFloat = 1f)
+  public void setOpacity(@Nonnull V node, float opacity) {
+    node.setOpacity(opacity);
+  }
+
+  @ReactProp(name = "responsible")
+  public void setResponsible(V node, boolean responsible) {
+    node.setResponsible(responsible);
+  }
+
+  @ReactProp(name = ViewProps.POINTER_EVENTS)
+  public void setPointerEvents(V view, @Nullable String pointerEventsStr) {
+    if (pointerEventsStr == null) {
+      view.setPointerEvents(PointerEvents.AUTO);
+    } else {
+      PointerEvents pointerEvents =
+        PointerEvents.valueOf(pointerEventsStr.toUpperCase(Locale.US).replace("-", "_"));
+      view.setPointerEvents(pointerEvents);
+    }
+  }
+
+  @ReactProp(name = "onLayout")
+  public void setOnLayout(V node, boolean onLayout) {
+    node.setOnLayout(onLayout);
+  }
+
+  @ReactProp(name = "name")
+  public void setName(V node, String name) {
+    node.setName(name);
+  }
+
+  @ReactProp(name = "display")
+  public void setDisplay(V node, String display) {
+    node.setDisplay(display);
+  }
+
+
+  @ReactProp(name = "matrix")
+  public void setMatrix(V node, Dynamic matrixArray) {
+    node.setMatrix(matrixArray);
+  }
+
+  public void setMatrix(V view, @Nullable ReadableArray value) {
+    view.setMatrix(value);
+  }
+
+  @ReactProp(name = "transform")
+  public void setTransform(V node, Dynamic matrix) {
+    if (matrix.getType() != ReadableType.Array) {
+      return;
+    }
+    ReadableArray ma = matrix.asArray();
+    if (ma == null) {
+      resetTransformProperty(node);
+    } else {
+      setTransformProperty(node, ma);
+    }
+    Matrix m = node.getMatrix();
+    node.mTransform = m;
+    node.mTransformInvertible = m.invert(node.mInvTransform);
+  }
+
+  private void invalidateSvgView(V node) {
+    SvgView view = node.getSvgView();
+    if (view!= null) {
+      view.invalidate();
+    }
+    if (node instanceof TextView) {
+      ((TextView)node).getTextContainer().clearChildCache();
+    }
+  }
+
+  @Override
+  protected void addEventEmitters(@Nonnull ThemedReactContext reactContext, @Nonnull VirtualView view) {
+    super.addEventEmitters(reactContext, view);
+    view.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+      @Override
+      public void onChildViewAdded(View view, View view1) {
+        if (view instanceof VirtualView) {
+          invalidateSvgView((V) view);
         }
-    }
+      }
 
-    private static void resetTransformProperty(View view) {
-        view.setTranslationX(0);
-        view.setTranslationY(0);
-        view.setRotation(0);
-        view.setRotationX(0);
-        view.setRotationY(0);
-        view.setScaleX(1);
-        view.setScaleY(1);
-        view.setCameraDistance(0);
-    }
+      @Override
+      public void onChildViewRemoved(View view, View view1) {
+        if (view instanceof VirtualView) {
+          invalidateSvgView((V) view);
+        }
+      }
+    });
+  }
 
+  /**
+   * Callback that will be triggered after all properties are updated in current update transaction
+   * (all @ReactProp handlers for properties updated in current transaction have been called). If
+   * you want to override this method you should call super.onAfterUpdateTransaction from it as
+   * the parent class of the ViewManager may rely on callback being executed.
+   */
+  protected void onAfterUpdateTransaction(@Nonnull V node) {
+    super.onAfterUpdateTransaction(node);
+    invalidateSvgView(node);
+  }
+
+  protected enum SVGClass {
+    RNSVGGroup,
+    RNSVGPath,
+    RNSVGText,
+    RNSVGTSpan,
+    RNSVGTextPath,
+    RNSVGImage,
+    RNSVGCircle,
+    RNSVGEllipse,
+    RNSVGLine,
+    RNSVGRect,
+    RNSVGClipPath,
+    RNSVGDefs,
+    RNSVGUse,
+    RNSVGSymbol,
+    RNSVGLinearGradient,
+    RNSVGRadialGradient,
+    RNSVGPattern,
+    RNSVGMask,
+    RNSVGMarker,
+    RNSVGForeignObject,
+  }
+
+  @Nonnull
+  @Override
+  protected VirtualView createViewInstance(@Nonnull ThemedReactContext reactContext) {
+    switch (svgClass) {
+      case RNSVGGroup:
+        return new GroupView(reactContext);
+      case RNSVGPath:
+        return new PathView(reactContext);
+      case RNSVGCircle:
+        return new CircleView(reactContext);
+      case RNSVGEllipse:
+        return new EllipseView(reactContext);
+      case RNSVGLine:
+        return new LineView(reactContext);
+      case RNSVGRect:
+        return new RectView(reactContext);
+      case RNSVGText:
+        return new TextView(reactContext);
+      case RNSVGTSpan:
+        return new TSpanView(reactContext);
+      case RNSVGTextPath:
+        return new TextPathView(reactContext);
+      case RNSVGImage:
+        return new ImageView(reactContext);
+      case RNSVGClipPath:
+        return new ClipPathView(reactContext);
+      case RNSVGDefs:
+        return new DefsView(reactContext);
+      case RNSVGUse:
+        return new UseView(reactContext);
+      case RNSVGSymbol:
+        return new SymbolView(reactContext);
+      case RNSVGLinearGradient:
+        return new LinearGradientView(reactContext);
+      case RNSVGRadialGradient:
+        return new RadialGradientView(reactContext);
+      case RNSVGPattern:
+        return new PatternView(reactContext);
+      case RNSVGMask:
+        return new MaskView(reactContext);
+      case RNSVGMarker:
+        return new MarkerView(reactContext);
+      case RNSVGForeignObject:
+        return new ForeignObjectView(reactContext);
+      default:
+        throw new IllegalStateException("Unexpected type " + svgClass.toString());
+    }
+  }
+
+
+  private static final SparseArray<RenderableView> mTagToRenderableView = new SparseArray<>();
+  private static final SparseArray<Runnable> mTagToRunnable = new SparseArray<>();
+
+  static void setRenderableView(int tag, RenderableView svg) {
+    mTagToRenderableView.put(tag, svg);
+    Runnable task = mTagToRunnable.get(tag);
+    if (task != null) {
+      task.run();
+      mTagToRunnable.delete(tag);
+    }
+  }
+
+  static void runWhenViewIsAvailable(int tag, Runnable task) {
+    mTagToRunnable.put(tag, task);
+  }
+
+  static @Nullable RenderableView getRenderableViewByTag(int tag) {
+    return mTagToRenderableView.get(tag);
+  }
+
+  @Override
+  public void onDropViewInstance(@Nonnull VirtualView view) {
+    super.onDropViewInstance(view);
+    mTagToRenderableView.remove(view.getId());
+  }
+
+}
+/**
+ * ViewManager for Renderable RNSVG views
+ */
+class RenderableViewManager<T extends RenderableView> extends VirtualViewManager<T> {
+
+  RenderableViewManager(SVGClass svgclass) {
+    super(svgclass);
+  }
     static class GroupViewManagerAbstract<U extends GroupView> extends RenderableViewManager<U> {
       GroupViewManagerAbstract(SVGClass svgClass) {
         super(svgClass);
@@ -911,7 +1142,7 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
       }
     }
 
-  static class DefsViewManager extends RenderableViewManager implements RNSVGDefsManagerInterface<DefsView> {
+  static class DefsViewManager extends VirtualViewManager<DefsView> implements RNSVGDefsManagerInterface<DefsView> {
 
     DefsViewManager() {
       super(SVGClass.RNSVGDefs);
@@ -1196,10 +1427,19 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
         }
     }
 
-    static class LinearGradientManager extends RenderableViewManager {
-        LinearGradientManager() {
-            super(SVGClass.RNSVGLinearGradient);
-        }
+  static class LinearGradientManager extends VirtualViewManager<LinearGradientView> implements RNSVGLinearGradientManagerInterface<LinearGradientView> {
+
+    LinearGradientManager() {
+      super(SVGClass.RNSVGLinearGradient);
+      mDelegate = new RNSVGLinearGradientManagerDelegate(this);
+    }
+
+    private final ViewManagerDelegate<RectView> mDelegate;
+
+    protected ViewManagerDelegate getDelegate(){
+      return mDelegate;
+    }
+
 
         @ReactProp(name = "x1")
         public void setX1(LinearGradientView node, Dynamic x1) {
@@ -1221,7 +1461,27 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
             node.setY2(y2);
         }
 
-        @ReactProp(name = "gradient")
+    @Override
+    public void setX1(LinearGradientView view, @Nullable String value) {
+      view.setX1(value);
+    }
+
+    @Override
+    public void setY1(LinearGradientView view, @Nullable String value) {
+      view.setY1(value);
+    }
+
+    @Override
+    public void setX2(LinearGradientView view, @Nullable String value) {
+      view.setX2(value);
+    }
+
+    @Override
+    public void setY2(LinearGradientView view, @Nullable String value) {
+      view.setY2(value);
+    }
+
+    @ReactProp(name = "gradient")
         public void setGradient(LinearGradientView node, ReadableArray gradient) {
             node.setGradient(gradient);
         }
@@ -1237,10 +1497,18 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
         }
     }
 
-    static class RadialGradientManager extends RenderableViewManager {
-        RadialGradientManager() {
-            super(SVGClass.RNSVGRadialGradient);
-        }
+  static class RadialGradientManager extends VirtualViewManager<RadialGradientView> implements RNSVGRadialGradientManagerInterface<RadialGradientView> {
+
+    RadialGradientManager() {
+      super(SVGClass.RNSVGRadialGradient);
+      mDelegate = new RNSVGRadialGradientManagerDelegate(this);
+    }
+
+    private final ViewManagerDelegate<RectView> mDelegate;
+
+    protected ViewManagerDelegate getDelegate(){
+      return mDelegate;
+    }
 
         @ReactProp(name = "fx")
         public void setFx(RadialGradientView node, Dynamic fx) {
@@ -1272,7 +1540,37 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
             node.setCy(cy);
         }
 
-        @ReactProp(name = "gradient")
+    @Override
+    public void setFx(RadialGradientView view, @Nullable String value) {
+      view.setFx(value);
+    }
+
+    @Override
+    public void setFy(RadialGradientView view, @Nullable String value) {
+      view.setFy(value);
+    }
+
+    @Override
+    public void setCx(RadialGradientView view, @Nullable String value) {
+      view.setCx(value);
+    }
+
+    @Override
+    public void setCy(RadialGradientView view, @Nullable String value) {
+      view.setCy(value);
+    }
+
+    @Override
+    public void setRx(RadialGradientView view, @Nullable String value) {
+      view.setRx(value);
+    }
+
+    @Override
+    public void setRy(RadialGradientView view, @Nullable String value) {
+      view.setRy(value);
+    }
+
+    @ReactProp(name = "gradient")
         public void setGradient(RadialGradientView node, ReadableArray gradient) {
             node.setGradient(gradient);
         }
@@ -1287,52 +1585,6 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
             node.setGradientTransform(matrixArray);
         }
     }
-
-    private RenderableViewManager(SVGClass svgclass) {
-        svgClass = svgclass;
-        mClassName = svgclass.toString();
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return mClassName;
-    }
-
-    @ReactProp(name = "mask")
-    public void setMask(T node, String mask) {
-        node.setMask(mask);
-    }
-
-    @ReactProp(name = "markerStart")
-    public void setMarkerStart(T node, String markerStart) {
-        node.setMarkerStart(markerStart);
-    }
-
-    @ReactProp(name = "markerMid")
-    public void setMarkerMid(T node, String markerMid) {
-        node.setMarkerMid(markerMid);
-    }
-
-    @ReactProp(name = "markerEnd")
-    public void setMarkerEnd(T node, String markerEnd) {
-        node.setMarkerEnd(markerEnd);
-    }
-
-    @ReactProp(name = "clipPath")
-    public void setClipPath(T node, String clipPath) {
-        node.setClipPath(clipPath);
-    }
-
-    @ReactProp(name = "clipRule")
-    public void setClipRule(T node, int clipRule) {
-        node.setClipRule(clipRule);
-    }
-
-   @ReactProp(name = "opacity", defaultFloat = 1f)
-   public void setOpacity(@Nonnull T node, float opacity) {
-       node.setOpacity(opacity);
-   }
 
   @ReactProp(name = "fill")
     public void setFill(T node, @Nullable Dynamic fill) {
@@ -1407,181 +1659,9 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
         node.setVectorEffect(vectorEffect);
     }
 
-    @ReactProp(name = "matrix")
-    public void setMatrix(T node, Dynamic matrixArray) {
-        node.setMatrix(matrixArray);
-    }
-
-  public void setMatrix(T view, @Nullable ReadableArray value) {
-    view.setMatrix(value);
-  }
-
-    @ReactProp(name = "transform")
-    public void setTransform(T node, Dynamic matrix) {
-        if (matrix.getType() != ReadableType.Array) {
-            return;
-        }
-        ReadableArray ma = matrix.asArray();
-        if (ma == null) {
-            resetTransformProperty(node);
-        } else {
-            setTransformProperty(node, ma);
-        }
-        Matrix m = node.getMatrix();
-        node.mTransform = m;
-        node.mTransformInvertible = m.invert(node.mInvTransform);
-    }
-
     @ReactProp(name = "propList")
     public void setPropList(T node, @Nullable ReadableArray propList) {
         node.setPropList(propList);
     }
 
-    @ReactProp(name = "responsible")
-    public void setResponsible(T node, boolean responsible) {
-        node.setResponsible(responsible);
-    }
-
-    @ReactProp(name = ViewProps.POINTER_EVENTS)
-    public void setPointerEvents(T view, @Nullable String pointerEventsStr) {
-        if (pointerEventsStr == null) {
-            view.setPointerEvents(PointerEvents.AUTO);
-        } else {
-            PointerEvents pointerEvents =
-                    PointerEvents.valueOf(pointerEventsStr.toUpperCase(Locale.US).replace("-", "_"));
-            view.setPointerEvents(pointerEvents);
-        }
-    }
-
-    @ReactProp(name = "onLayout")
-    public void setOnLayout(T node, boolean onLayout) {
-        node.setOnLayout(onLayout);
-    }
-
-    @ReactProp(name = "name")
-    public void setName(T node, String name) {
-        node.setName(name);
-    }
-
-    @ReactProp(name = "display")
-    public void setDisplay(T node, String display) {
-        node.setDisplay(display);
-    }
-
-    private void invalidateSvgView(VirtualView node) {
-        SvgView view = node.getSvgView();
-        if (view!= null) {
-            view.invalidate();
-        }
-        if (node instanceof TextView) {
-            ((TextView)node).getTextContainer().clearChildCache();
-        }
-    }
-
-    @Override
-    protected void addEventEmitters(@Nonnull ThemedReactContext reactContext, @Nonnull VirtualView view) {
-        super.addEventEmitters(reactContext, view);
-        view.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
-            @Override
-            public void onChildViewAdded(View view, View view1) {
-                if (view instanceof VirtualView) {
-                    invalidateSvgView((VirtualView) view);
-                }
-            }
-
-            @Override
-            public void onChildViewRemoved(View view, View view1) {
-                if (view instanceof VirtualView) {
-                    invalidateSvgView((VirtualView) view);
-                }
-            }
-        });
-    }
-
-    /**
-     * Callback that will be triggered after all properties are updated in current update transaction
-     * (all @ReactProp handlers for properties updated in current transaction have been called). If
-     * you want to override this method you should call super.onAfterUpdateTransaction from it as
-     * the parent class of the ViewManager may rely on callback being executed.
-     */
-    @Override
-    protected void onAfterUpdateTransaction(@Nonnull VirtualView node) {
-        super.onAfterUpdateTransaction(node);
-        invalidateSvgView(node);
-    }
-
-    @Nonnull
-    @Override
-    protected VirtualView createViewInstance(@Nonnull ThemedReactContext reactContext) {
-        switch (svgClass) {
-            case RNSVGGroup:
-                return new GroupView(reactContext);
-            case RNSVGPath:
-                return new PathView(reactContext);
-            case RNSVGCircle:
-                return new CircleView(reactContext);
-            case RNSVGEllipse:
-                return new EllipseView(reactContext);
-            case RNSVGLine:
-                return new LineView(reactContext);
-            case RNSVGRect:
-                return new RectView(reactContext);
-            case RNSVGText:
-                return new TextView(reactContext);
-            case RNSVGTSpan:
-                return new TSpanView(reactContext);
-            case RNSVGTextPath:
-                return new TextPathView(reactContext);
-            case RNSVGImage:
-                return new ImageView(reactContext);
-            case RNSVGClipPath:
-                return new ClipPathView(reactContext);
-            case RNSVGDefs:
-                return new DefsView(reactContext);
-            case RNSVGUse:
-                return new UseView(reactContext);
-            case RNSVGSymbol:
-                return new SymbolView(reactContext);
-            case RNSVGLinearGradient:
-                return new LinearGradientView(reactContext);
-            case RNSVGRadialGradient:
-                return new RadialGradientView(reactContext);
-            case RNSVGPattern:
-                return new PatternView(reactContext);
-            case RNSVGMask:
-                return new MaskView(reactContext);
-            case RNSVGMarker:
-                return new MarkerView(reactContext);
-            case RNSVGForeignObject:
-                return new ForeignObjectView(reactContext);
-            default:
-                throw new IllegalStateException("Unexpected type " + svgClass.toString());
-        }
-    }
-
-    private static final SparseArray<RenderableView> mTagToRenderableView = new SparseArray<>();
-    private static final SparseArray<Runnable> mTagToRunnable = new SparseArray<>();
-
-    static void setRenderableView(int tag, RenderableView svg) {
-        mTagToRenderableView.put(tag, svg);
-        Runnable task = mTagToRunnable.get(tag);
-        if (task != null) {
-            task.run();
-            mTagToRunnable.delete(tag);
-        }
-    }
-
-    static void runWhenViewIsAvailable(int tag, Runnable task) {
-        mTagToRunnable.put(tag, task);
-    }
-
-    static @Nullable RenderableView getRenderableViewByTag(int tag) {
-        return mTagToRenderableView.get(tag);
-    }
-
-    @Override
-    public void onDropViewInstance(@Nonnull VirtualView view) {
-        super.onDropViewInstance(view);
-        mTagToRenderableView.remove(view.getId());
-    }
 }
