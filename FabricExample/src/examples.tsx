@@ -31,7 +31,7 @@ export {
   Gradients,
   Clipping,
   Image,
-  // TouchEvents,
+  TouchEvents,
   Reusable,
-  // PanResponder,
+  PanResponder,
 };

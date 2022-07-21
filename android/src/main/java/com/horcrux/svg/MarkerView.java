@@ -49,11 +49,21 @@ class MarkerView extends GroupView {
         invalidate();
     }
 
+  public void setRefX(String refX) {
+    mRefX = SVGLength.from(refX);
+    invalidate();
+  }
+
     @ReactProp(name = "refY")
     public void setRefY(Dynamic refY) {
         mRefY = SVGLength.from(refY);
         invalidate();
     }
+
+  public void setRefY(String refY) {
+    mRefY = SVGLength.from(refY);
+    invalidate();
+  }
 
     @ReactProp(name = "markerWidth")
     public void setMarkerWidth(Dynamic markerWidth) {
@@ -61,11 +71,21 @@ class MarkerView extends GroupView {
         invalidate();
     }
 
+  public void setMarkerWidth(String markerWidth) {
+    mMarkerWidth = SVGLength.from(markerWidth);
+    invalidate();
+  }
+
     @ReactProp(name = "markerHeight")
     public void setMarkerHeight(Dynamic markerHeight) {
         mMarkerHeight = SVGLength.from(markerHeight);
         invalidate();
     }
+
+  public void setMarkerHeight(String markerHeight) {
+    mMarkerHeight = SVGLength.from(markerHeight);
+    invalidate();
+  }
 
     @ReactProp(name = "markerUnits")
     public void setMarkerUnits(String markerUnits) {
