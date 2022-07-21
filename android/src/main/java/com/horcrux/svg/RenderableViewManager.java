@@ -41,6 +41,8 @@ import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGPathManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGPathManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGRectManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGRectManagerInterface;
 
@@ -476,10 +478,17 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
 
     }
 
-    static class PathViewManager extends RenderableViewManager {
-        PathViewManager() {
-            super(SVGClass.RNSVGPath);
-        }
+  static class PathViewManager extends RenderableViewManager<PathView> implements RNSVGPathManagerInterface<PathView> {
+    PathViewManager() {
+      super(SVGClass.RNSVGPath);
+      mDelegate = new RNSVGPathManagerDelegate(this);
+    }
+
+    private final ViewManagerDelegate<CircleView> mDelegate;
+
+    protected ViewManagerDelegate getDelegate(){
+      return mDelegate;
+    }
 
         @ReactProp(name = "d")
         public void setD(PathView node, String d) {

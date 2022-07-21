@@ -24,7 +24,7 @@ export {
   // Line,
   // Polygon,
   // Polyline,
-  // Path,
+  Path,
   // Text,
   // Stroking,
   // G,

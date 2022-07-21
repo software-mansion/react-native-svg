@@ -30,7 +30,7 @@ RNSvgComponentsRegistry::sharedProviderRegistry() {
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGLineComponentDescriptor>());
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGMarkerComponentDescriptor>());
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGMaskComponentDescriptor>());
-  // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGPathComponentDescriptor>());
+  providerRegistry->add(concreteComponentDescriptorProvider<RNSVGPathComponentDescriptor>());
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGPatternComponentDescriptor>());
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGRadialGradientComponentDescriptor>());
   providerRegistry->add(concreteComponentDescriptorProvider<RNSVGRectComponentDescriptor>());
