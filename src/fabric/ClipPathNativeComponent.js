@@ -41,4 +41,4 @@ type NativeProps = $ReadOnly<{|
 
 type ComponentType = HostComponent<NativeProps>;
 
-// export default (codegenNativeComponent<NativeProps>('RNSVGClipPath', {}): ComponentType);
+export default (codegenNativeComponent<NativeProps>('RNSVGClipPath', {}): ComponentType);

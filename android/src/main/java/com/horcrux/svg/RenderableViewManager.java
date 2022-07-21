@@ -33,6 +33,10 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.facebook.react.viewmanagers.RNSVGCircleManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGCircleManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGClipPathManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGClipPathManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGDefsManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGDefsManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerDelegate;
@@ -403,7 +407,7 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
         view.setCameraDistance(0);
     }
 
-    static class GroupViewManagerAbstract<U extends GroupView> extends RenderableViewManager<GroupView> {
+    static class GroupViewManagerAbstract<U extends GroupView> extends RenderableViewManager<U> {
       GroupViewManagerAbstract(SVGClass svgClass) {
         super(svgClass);
       }
@@ -855,16 +859,31 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
     }
   }
 
-    static class ClipPathViewManager extends GroupViewManagerAbstract<ClipPathView> {
+    static class ClipPathViewManager extends GroupViewManagerAbstract<ClipPathView> implements RNSVGClipPathManagerInterface<ClipPathView>{
         ClipPathViewManager() {
             super(SVGClass.RNSVGClipPath);
+          mDelegate = new RNSVGClipPathManagerDelegate(this);
         }
+
+      private final ViewManagerDelegate<ClipPathView> mDelegate;
+
+      protected ViewManagerDelegate getDelegate(){
+        return mDelegate;
+      }
     }
 
-    static class DefsViewManager extends RenderableViewManager {
-        DefsViewManager() {
-            super(SVGClass.RNSVGDefs);
-        }
+  static class DefsViewManager extends RenderableViewManager implements RNSVGDefsManagerInterface<DefsView> {
+
+    DefsViewManager() {
+      super(SVGClass.RNSVGDefs);
+      mDelegate = new RNSVGDefsManagerDelegate(this);
+    }
+
+    private final ViewManagerDelegate<DefsView> mDelegate;
+
+    protected ViewManagerDelegate getDelegate(){
+      return mDelegate;
+    }
     }
 
     static class UseViewManager extends RenderableViewManager {
