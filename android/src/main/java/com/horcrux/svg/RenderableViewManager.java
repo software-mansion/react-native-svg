@@ -51,6 +51,8 @@ import com.facebook.react.viewmanagers.RNSVGRadialGradientManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGRadialGradientManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGRectManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGRectManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGSymbolManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGSymbolManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGUseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGUseManagerInterface;
 
@@ -1227,10 +1229,17 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
         }
     }
 
-    static class SymbolManager extends GroupViewManagerAbstract<SymbolView> {
-        SymbolManager() {
-            super(SVGClass.RNSVGSymbol);
-        }
+  static class SymbolManager extends GroupViewManagerAbstract<SymbolView> implements RNSVGSymbolManagerInterface<SymbolView> {
+    SymbolManager() {
+      super(SVGClass.RNSVGSymbol);
+      mDelegate = new RNSVGSymbolManagerDelegate(this);
+    }
+
+    private final ViewManagerDelegate<ClipPathView> mDelegate;
+
+    protected ViewManagerDelegate getDelegate(){
+      return mDelegate;
+    }
 
         @ReactProp(name = "minX")
         public void setMinX(SymbolView node, float minX) {
