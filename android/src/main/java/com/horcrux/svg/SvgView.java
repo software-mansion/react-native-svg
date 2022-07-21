@@ -191,6 +191,12 @@ public class SvgView extends FabricEnabledViewGroup implements ReactCompoundView
         clearChildCache();
     }
 
+  public void setTintColor(@Nullable Integer tintColor) {
+      mTintColor = tintColor;
+    invalidate();
+    clearChildCache();
+  }
+
     @ReactProp(name = "minX")
     public void setMinX(float minX) {
         mMinX = minX;
@@ -226,12 +232,24 @@ public class SvgView extends FabricEnabledViewGroup implements ReactCompoundView
         clearChildCache();
     }
 
+  public void setBbWidth(String bbWidth) {
+    mbbWidth = SVGLength.from(bbWidth);
+    invalidate();
+    clearChildCache();
+  }
+
     @ReactProp(name = "bbHeight")
     public void setBbHeight(Dynamic bbHeight) {
         mbbHeight = SVGLength.from(bbHeight);
         invalidate();
         clearChildCache();
     }
+
+  public void setBbHeight(String bbHeight) {
+    mbbHeight = SVGLength.from(bbHeight);
+    invalidate();
+    clearChildCache();
+  }
 
     @ReactProp(name = "align")
     public void setAlign(String align) {

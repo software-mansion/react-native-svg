@@ -36,7 +36,6 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
 
     private final ViewManagerDelegate<SvgView> mDelegate;
 
-//    @Override
     protected ViewManagerDelegate getDelegate(){
       return mDelegate;
     }
@@ -146,5 +145,25 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
     public void setMeetOrSlice(SvgView node, int meetOrSlice) {
         node.setMeetOrSlice(meetOrSlice);
     }
+
+  @Override
+  public void setTintColor(SvgView view, @androidx.annotation.Nullable Integer value) {
+    view.setTintColor(value);
+  }
+
+  @Override
+  public void setColor(SvgView view, @androidx.annotation.Nullable Integer value) {
+    view.setTintColor(value);
+  }
+
+  @Override
+  public void setBbWidth(SvgView view, @androidx.annotation.Nullable String value) {
+    view.setBbWidth(value);
+  }
+
+  @Override
+  public void setBbHeight(SvgView view, @androidx.annotation.Nullable String value) {
+    view.setBbHeight(value);
+  }
 
 }

@@ -101,8 +101,8 @@ class SVGLength {
         }
     }
 
-  static SVGLength from(double number) {
-      return new SVGLength(number);
+  static SVGLength from(String string) {
+      return new SVGLength(string);
   }
 
     static String toString(Dynamic dynamic) {

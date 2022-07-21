@@ -20,7 +20,9 @@ type LayoutEvent = $ReadOnly<{|
 
 type SvgNodeCommonProps = $ReadOnly<{|
   name?: string,
-  opacity?: WithDefault<Float, 1.0>,
+  // It has to be Double on Android no to clash with BaseViewManager method
+  // TODO: make it work with Float
+  opacity?: WithDefault<Double, 1.0>,
   matrix?: $ReadOnlyArray<Float>,//CGAffineTransform,
   // transform?: ____TransformStyle_Internal, // CATransform3D, custom handling
   mask?: string,

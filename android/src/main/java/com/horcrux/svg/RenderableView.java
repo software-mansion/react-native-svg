@@ -215,6 +215,28 @@ abstract public class RenderableView extends VirtualView {
         invalidate();
     }
 
+  public void setStroke(@Nullable ReadableMap stroke) {
+    if (stroke == null) {
+      this.stroke = null;
+      invalidate();
+      return;
+    }
+    int type = stroke.getInt("type");
+    if (type == 0) {
+      ReadableType valueType = stroke.getType("value");
+      if (valueType.equals(ReadableType.Number)) {
+        this.stroke = JavaOnlyArray.of(0, stroke.getInt("value"));
+      } else if (valueType.equals(ReadableType.Map)) {
+        this.stroke = JavaOnlyArray.of(0, stroke.getMap("value"));
+      }
+    } else if (type == 1) {
+      this.stroke = JavaOnlyArray.of(1, stroke.getString("brushRef"));
+    } else {
+      this.stroke = JavaOnlyArray.of(type);
+    }
+    invalidate();
+  }
+
     @ReactProp(name = "strokeOpacity", defaultFloat = 1f)
     public void setStrokeOpacity(float strokeOpacity) {
         this.strokeOpacity = strokeOpacity;
@@ -247,7 +269,7 @@ abstract public class RenderableView extends VirtualView {
         invalidate();
     }
 
-  public void setStrokeWidth(double strokeWidth) {
+  public void setStrokeWidth(String strokeWidth) {
     this.strokeWidth = SVGLength.from(strokeWidth);
     invalidate();
   }

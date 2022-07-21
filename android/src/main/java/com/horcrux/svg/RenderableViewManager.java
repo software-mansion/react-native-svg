@@ -109,9 +109,9 @@ import static com.horcrux.svg.RenderableView.JOIN_ROUND;
 /**
  * ViewManager for all RNSVG views
  */
-class RenderableViewManager extends ViewGroupManager<VirtualView> {
+class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<VirtualView> {
 
-    private enum SVGClass {
+  private enum SVGClass {
         RNSVGGroup,
         RNSVGPath,
         RNSVGText,
@@ -134,7 +134,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         RNSVGForeignObject,
     }
 
-    class RenderableShadowNode extends LayoutShadowNode {
+    static class RenderableShadowNode extends LayoutShadowNode {
 
         @SuppressWarnings({"unused", "EmptyMethod"})
         @ReactPropGroup(
@@ -204,15 +204,15 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         public void ignoreLayoutProps(int index, Dynamic value) {}
     }
 
-    @Override
-    public LayoutShadowNode createShadowNodeInstance() {
-        return new RenderableShadowNode();
-    }
+  @Override
+  public LayoutShadowNode createShadowNodeInstance() {
+    return new RenderableShadowNode();
+  }
 
-    @Override
-    public Class<RenderableShadowNode> getShadowNodeClass() {
-        return RenderableShadowNode.class;
-    }
+  @Override
+  public Class<? extends LayoutShadowNode> getShadowNodeClass() {
+    return RenderableShadowNode.class;
+  }
 
 
     private final SVGClass svgClass;
@@ -399,61 +399,77 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         view.setCameraDistance(0);
     }
 
-    static class GroupViewManager extends RenderableViewManager implements RNSVGGroupManagerInterface<GroupView> {
+    static class GroupViewManagerAbstract<U extends GroupView> extends RenderableViewManager<GroupView> {
+
+      GroupViewManagerAbstract() {
+        super(SVGClass.RNSVGGroup);
+      }
+
+
+      GroupViewManagerAbstract(SVGClass svgClass) {
+        super(svgClass);
+      }
+
+      @ReactProp(name = "font")
+      public void setFont(U node, @Nullable ReadableMap font) {
+        node.setFont(font);
+      }
+
+      @ReactProp(name = "fontSize")
+      public void setFontSize(U node, Dynamic fontSize) {
+        JavaOnlyMap map = new JavaOnlyMap();
+        switch (fontSize.getType()) {
+          case Number:
+            map.putDouble("fontSize", fontSize.asDouble());
+            break;
+          case String:
+            map.putString("fontSize", fontSize.asString());
+            break;
+          default:
+            return;
+        }
+        node.setFont(map);
+      }
+
+      public void setFontSize(U view, @Nullable String value) {
+        JavaOnlyMap map = new JavaOnlyMap();
+        map.putString("fontSize", value);
+        view.setFont(map);
+      }
+
+      @ReactProp(name = "fontWeight")
+      public void setFontWeight(U node, Dynamic fontWeight) {
+        JavaOnlyMap map = new JavaOnlyMap();
+        switch (fontWeight.getType()) {
+          case Number:
+            map.putDouble("fontWeight", fontWeight.asDouble());
+            break;
+          case String:
+            map.putString("fontWeight", fontWeight.asString());
+            break;
+          default:
+            return;
+        }
+        node.setFont(map);
+      }
+
+      public void setFontWeight(U view, @Nullable String value) {
+        JavaOnlyMap map = new JavaOnlyMap();
+        map.putString("fontWeight", value);
+        view.setFont(map);
+      }
+    }
+
+    static class GroupViewManager extends GroupViewManagerAbstract<GroupView> implements RNSVGGroupManagerInterface<GroupView> {
         GroupViewManager() {
-            super(SVGClass.RNSVGGroup);
-            mDelegate = new RNSVGGroupManagerDelegate(this);
+          super(SVGClass.RNSVGGroup);
         }
 
-      private final ViewManagerDelegate<GroupView> mDelegate;
-
-      protected ViewManagerDelegate getDelegate(){
-        return mDelegate;
-      }
 
       GroupViewManager(SVGClass svgClass) {
             super(svgClass);
-            mDelegate = new RNSVGGroupManagerDelegate(this);
       }
-
-        @ReactProp(name = "font")
-        public void setFont(GroupView node, @Nullable ReadableMap font) {
-            node.setFont(font);
-        }
-
-        @ReactProp(name = "fontSize")
-        public void setFontSize(GroupView node, Dynamic fontSize) {
-            JavaOnlyMap map = new JavaOnlyMap();
-            switch (fontSize.getType()) {
-                case Number:
-                    map.putDouble("fontSize", fontSize.asDouble());
-                    break;
-                case String:
-                    map.putString("fontSize", fontSize.asString());
-                    break;
-                default:
-                    return;
-            }
-            node.setFont(map);
-        }
-
-        @ReactProp(name = "fontWeight")
-        public void setFontWeight(GroupView node, Dynamic fontWeight) {
-            JavaOnlyMap map = new JavaOnlyMap();
-            switch (fontWeight.getType()) {
-                case Number:
-                    map.putDouble("fontWeight", fontWeight.asDouble());
-                    break;
-                case String:
-                    map.putString("fontWeight", fontWeight.asString());
-                    break;
-                default:
-                    return;
-            }
-            node.setFont(map);
-        }
     }
-
 
     static class PathViewManager extends RenderableViewManager {
         PathViewManager() {
@@ -466,7 +482,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class TextViewManager extends GroupViewManager {
+    static class TextViewManager extends GroupViewManagerAbstract<TextView> {
         TextViewManager() {
             super(SVGClass.RNSVGText);
         }
@@ -625,7 +641,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class CircleViewManager extends RenderableViewManager implements RNSVGCircleManagerInterface<CircleView>  {
+    static class CircleViewManager extends RenderableViewManager<CircleView> implements RNSVGCircleManagerInterface<CircleView>  {
         CircleViewManager() {
             super(SVGClass.RNSVGCircle);
             mDelegate = new RNSVGCircleManagerDelegate(this);
@@ -653,23 +669,18 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
 
       @Override
-      public void setCx(CircleView view, double value) {
+      public void setCx(CircleView view, String value) {
         view.setCx(value);
       }
 
       @Override
-      public void setCy(CircleView view, double value) {
+      public void setCy(CircleView view, String value) {
         view.setCy(value);
       }
 
       @Override
-      public void setR(CircleView view, double value) {
+      public void setR(CircleView view, String value) {
         view.setR(value);
-      }
-
-      @Override
-      public void setFill(CircleView view, ReadableMap value) {
-        view.setFill(value);
       }
     }
 
@@ -761,7 +772,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class ClipPathViewManager extends GroupViewManager {
+    static class ClipPathViewManager extends GroupViewManagerAbstract<ClipPathView> {
         ClipPathViewManager() {
             super(SVGClass.RNSVGClipPath);
         }
@@ -804,7 +815,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class SymbolManager extends GroupViewManager {
+    static class SymbolManager extends GroupViewManagerAbstract<SymbolView> {
         SymbolManager() {
             super(SVGClass.RNSVGSymbol);
         }
@@ -840,7 +851,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class PatternManager extends GroupViewManager {
+    static class PatternManager extends GroupViewManagerAbstract<PatternView> {
         PatternManager() {
             super(SVGClass.RNSVGPattern);
         }
@@ -911,7 +922,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class MaskManager extends GroupViewManager {
+    static class MaskManager extends GroupViewManagerAbstract<MaskView> {
         MaskManager() {
             super(SVGClass.RNSVGMask);
         }
@@ -952,7 +963,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class ForeignObjectManager extends GroupViewManager {
+    static class ForeignObjectManager extends GroupViewManagerAbstract<ForeignObjectView> {
         ForeignObjectManager() {
             super(SVGClass.RNSVGForeignObject);
         }
@@ -978,7 +989,7 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class MarkerManager extends GroupViewManager {
+    static class MarkerManager extends GroupViewManagerAbstract<MarkerView> {
         MarkerManager() {
             super(SVGClass.RNSVGMarker);
         }
@@ -1148,108 +1159,129 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
     }
 
     @ReactProp(name = "mask")
-    public void setMask(VirtualView node, String mask) {
+    public void setMask(T node, String mask) {
         node.setMask(mask);
     }
 
     @ReactProp(name = "markerStart")
-    public void setMarkerStart(VirtualView node, String markerStart) {
+    public void setMarkerStart(T node, String markerStart) {
         node.setMarkerStart(markerStart);
     }
 
     @ReactProp(name = "markerMid")
-    public void setMarkerMid(VirtualView node, String markerMid) {
+    public void setMarkerMid(T node, String markerMid) {
         node.setMarkerMid(markerMid);
     }
 
     @ReactProp(name = "markerEnd")
-    public void setMarkerEnd(VirtualView node, String markerEnd) {
+    public void setMarkerEnd(T node, String markerEnd) {
         node.setMarkerEnd(markerEnd);
     }
 
     @ReactProp(name = "clipPath")
-    public void setClipPath(VirtualView node, String clipPath) {
+    public void setClipPath(T node, String clipPath) {
         node.setClipPath(clipPath);
     }
 
     @ReactProp(name = "clipRule")
-    public void setClipRule(VirtualView node, int clipRule) {
+    public void setClipRule(T node, int clipRule) {
         node.setClipRule(clipRule);
     }
 
-    @ReactProp(name = "opacity", defaultFloat = 1f)
-    public void setOpacity(@Nonnull VirtualView node, float opacity) {
-        node.setOpacity(opacity);
-    }
+   @ReactProp(name = "opacity", defaultFloat = 1f)
+   public void setOpacity(@Nonnull T node, float opacity) {
+       node.setOpacity(opacity);
+   }
 
-    @ReactProp(name = "fill")
-    public void setFill(RenderableView node, @Nullable Dynamic fill) {
+   // needed for Fabric since it does not clash with BaseViewManager `setOpacity`
+  public void setOpacity(@Nonnull T node, double opacity) {
+    node.setOpacity((float)opacity);
+  }
+
+  @ReactProp(name = "fill")
+    public void setFill(T node, @Nullable Dynamic fill) {
         node.setFill(fill);
     }
 
+  public void setFill(T view, @androidx.annotation.Nullable ReadableMap value) {
+    view.setFill(value);
+  }
+
     @ReactProp(name = "fillOpacity", defaultFloat = 1f)
-    public void setFillOpacity(RenderableView node, float fillOpacity) {
+    public void setFillOpacity(T node, float fillOpacity) {
         node.setFillOpacity(fillOpacity);
     }
 
     @ReactProp(name = "fillRule", defaultInt = FILL_RULE_NONZERO)
-    public void setFillRule(RenderableView node, int fillRule) {
+    public void setFillRule(T node, int fillRule) {
         node.setFillRule(fillRule);
     }
 
 
     @ReactProp(name = "stroke")
-    public void setStroke(RenderableView node, @Nullable Dynamic strokeColors) {
+    public void setStroke(T node, @Nullable Dynamic strokeColors) {
         node.setStroke(strokeColors);
     }
 
+  public void setStroke(T view, @Nullable ReadableMap value) {
+      view.setStroke(value);
+  }
+
     @ReactProp(name = "strokeOpacity", defaultFloat = 1f)
-    public void setStrokeOpacity(RenderableView node, float strokeOpacity) {
+    public void setStrokeOpacity(T node, float strokeOpacity) {
         node.setStrokeOpacity(strokeOpacity);
     }
 
     @ReactProp(name = "strokeDasharray")
-    public void setStrokeDasharray(RenderableView node, @Nullable ReadableArray strokeDasharray) {
+    public void setStrokeDasharray(T node, @Nullable ReadableArray strokeDasharray) {
         node.setStrokeDasharray(strokeDasharray);
     }
 
     @ReactProp(name = "strokeDashoffset")
-    public void setStrokeDashoffset(RenderableView node, float strokeDashoffset) {
+    public void setStrokeDashoffset(T node, float strokeDashoffset) {
         node.setStrokeDashoffset(strokeDashoffset);
     }
 
     @ReactProp(name = "strokeWidth")
-    public void setStrokeWidth(RenderableView node, Dynamic strokeWidth) {
+    public void setStrokeWidth(T node, Dynamic strokeWidth) {
         node.setStrokeWidth(strokeWidth);
     }
 
+  public void setStrokeWidth(T view, @Nullable String value) {
+    view.setStrokeWidth(value);
+  }
+
     @ReactProp(name = "strokeMiterlimit", defaultFloat = 4f)
-    public void setStrokeMiterlimit(RenderableView node, float strokeMiterlimit) {
+    public void setStrokeMiterlimit(T node, float strokeMiterlimit) {
         node.setStrokeMiterlimit(strokeMiterlimit);
     }
 
     @ReactProp(name = "strokeLinecap", defaultInt = CAP_ROUND)
-    public void setStrokeLinecap(RenderableView node, int strokeLinecap) {
+    public void setStrokeLinecap(T node, int strokeLinecap) {
         node.setStrokeLinecap(strokeLinecap);
     }
 
     @ReactProp(name = "strokeLinejoin", defaultInt = JOIN_ROUND)
-    public void setStrokeLinejoin(RenderableView node, int strokeLinejoin) {
+    public void setStrokeLinejoin(T node, int strokeLinejoin) {
         node.setStrokeLinejoin(strokeLinejoin);
     }
 
     @ReactProp(name = "vectorEffect")
-    public void setVectorEffect(RenderableView node, int vectorEffect) {
+    public void setVectorEffect(T node, int vectorEffect) {
         node.setVectorEffect(vectorEffect);
     }
 
     @ReactProp(name = "matrix")
-    public void setMatrix(VirtualView node, Dynamic matrixArray) {
+    public void setMatrix(T node, Dynamic matrixArray) {
         node.setMatrix(matrixArray);
     }
 
+  public void setMatrix(T view, @Nullable ReadableArray value) {
+    view.setMatrix(value);
+  }
+
     @ReactProp(name = "transform")
-    public void setTransform(VirtualView node, Dynamic matrix) {
+    public void setTransform(T node, Dynamic matrix) {
         if (matrix.getType() != ReadableType.Array) {
             return;
         }
@@ -1265,17 +1297,17 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
     }
 
     @ReactProp(name = "propList")
-    public void setPropList(RenderableView node, @Nullable ReadableArray propList) {
+    public void setPropList(T node, @Nullable ReadableArray propList) {
         node.setPropList(propList);
     }
 
     @ReactProp(name = "responsible")
-    public void setResponsible(VirtualView node, boolean responsible) {
+    public void setResponsible(T node, boolean responsible) {
         node.setResponsible(responsible);
     }
 
     @ReactProp(name = ViewProps.POINTER_EVENTS)
-    public void setPointerEvents(VirtualView view, @androidx.annotation.Nullable String pointerEventsStr) {
+    public void setPointerEvents(T view, @androidx.annotation.Nullable String pointerEventsStr) {
         if (pointerEventsStr == null) {
             view.setPointerEvents(PointerEvents.AUTO);
         } else {
@@ -1286,17 +1318,17 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
     }
 
     @ReactProp(name = "onLayout")
-    public void setOnLayout(VirtualView node, boolean onLayout) {
+    public void setOnLayout(T node, boolean onLayout) {
         node.setOnLayout(onLayout);
     }
 
     @ReactProp(name = "name")
-    public void setName(VirtualView node, String name) {
+    public void setName(T node, String name) {
         node.setName(name);
     }
 
     @ReactProp(name = "display")
-    public void setDisplay(VirtualView node, String display) {
+    public void setDisplay(T node, String display) {
         node.setDisplay(display);
     }
 
