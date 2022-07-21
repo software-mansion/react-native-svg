@@ -36,11 +36,21 @@ class EllipseView extends RenderableView {
         invalidate();
     }
 
+  public void setCx(String cx) {
+    mCx = SVGLength.from(cx);
+    invalidate();
+  }
+
     @ReactProp(name = "cy")
     public void setCy(Dynamic cy) {
         mCy = SVGLength.from(cy);
         invalidate();
     }
+
+  public void setCy(String cy) {
+    mCy = SVGLength.from(cy);
+    invalidate();
+  }
 
     @ReactProp(name = "rx")
     public void setRx(Dynamic rx) {
@@ -48,11 +58,21 @@ class EllipseView extends RenderableView {
         invalidate();
     }
 
+  public void setRx(String rx) {
+    mRx = SVGLength.from(rx);
+    invalidate();
+  }
+
     @ReactProp(name = "ry")
     public void setRy(Dynamic ry) {
         mRy = SVGLength.from(ry);
         invalidate();
     }
+
+  public void setRy(String ry) {
+    mRy = SVGLength.from(ry);
+    invalidate();
+  }
 
     @Override
     Path getPath(Canvas canvas, Paint paint) {

@@ -33,6 +33,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.facebook.react.viewmanagers.RNSVGCircleManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGCircleManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerInterface;
 
@@ -400,12 +402,6 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
     }
 
     static class GroupViewManagerAbstract<U extends GroupView> extends RenderableViewManager<GroupView> {
-
-      GroupViewManagerAbstract() {
-        super(SVGClass.RNSVGGroup);
-      }
-
-
       GroupViewManagerAbstract(SVGClass svgClass) {
         super(svgClass);
       }
@@ -461,14 +457,17 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
     }
 
     static class GroupViewManager extends GroupViewManagerAbstract<GroupView> implements RNSVGGroupManagerInterface<GroupView> {
-        GroupViewManager() {
-          super(SVGClass.RNSVGGroup);
-        }
-
-
-      GroupViewManager(SVGClass svgClass) {
-            super(svgClass);
+      GroupViewManager() {
+        super(SVGClass.RNSVGGroup);
+        mDelegate = new RNSVGGroupManagerDelegate(this);
       }
+
+      private final ViewManagerDelegate<GroupView> mDelegate;
+
+      protected ViewManagerDelegate getDelegate(){
+        return mDelegate;
+      }
+
     }
 
     static class PathViewManager extends RenderableViewManager {
@@ -684,10 +683,17 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
       }
     }
 
-    static class EllipseViewManager extends RenderableViewManager {
-        EllipseViewManager() {
-            super(SVGClass.RNSVGEllipse);
-        }
+    static class EllipseViewManager extends RenderableViewManager<EllipseView> implements RNSVGEllipseManagerInterface<EllipseView> {
+      EllipseViewManager() {
+        super(SVGClass.RNSVGEllipse);
+        mDelegate = new RNSVGEllipseManagerDelegate(this);
+      }
+
+      private final ViewManagerDelegate<EllipseView> mDelegate;
+
+      protected ViewManagerDelegate getDelegate(){
+        return mDelegate;
+      }
 
         @ReactProp(name = "cx")
         public void setCx(EllipseView node, Dynamic cx) {
@@ -708,6 +714,26 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
         public void setRy(EllipseView node, Dynamic ry) {
             node.setRy(ry);
         }
+
+      @Override
+      public void setCx(EllipseView view, @Nullable String value) {
+        view.setCx(value);
+      }
+
+      @Override
+      public void setCy(EllipseView view, @Nullable String value) {
+        view.setCy(value);
+      }
+
+      @Override
+      public void setRx(EllipseView view, @Nullable String value) {
+        view.setRx(value);
+      }
+
+      @Override
+      public void setRy(EllipseView view, @Nullable String value) {
+        view.setRy(value);
+      }
     }
 
     static class LineViewManager extends RenderableViewManager {
@@ -1203,7 +1229,7 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
         node.setFill(fill);
     }
 
-  public void setFill(T view, @androidx.annotation.Nullable ReadableMap value) {
+  public void setFill(T view, @Nullable ReadableMap value) {
     view.setFill(value);
   }
 
