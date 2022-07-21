@@ -41,6 +41,8 @@ import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGImageManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGImageManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGLineManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGLineManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGLinearGradientManagerDelegate;
@@ -850,10 +852,17 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
         }
     }
 
-    static class ImageViewManager extends RenderableViewManager {
-        ImageViewManager(){
-            super(SVGClass.RNSVGImage);
-        }
+  static class ImageViewManager extends RenderableViewManager<ImageView> implements RNSVGImageManagerInterface<ImageView> {
+    ImageViewManager() {
+      super(SVGClass.RNSVGImage);
+      mDelegate = new RNSVGImageManagerDelegate(this);
+    }
+
+    private final ViewManagerDelegate<CircleView> mDelegate;
+
+    protected ViewManagerDelegate getDelegate(){
+      return mDelegate;
+    }
 
         @ReactProp(name = "x")
         public void setX(ImageView node, Dynamic x) {
@@ -875,7 +884,37 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
             node.setHeight(height);
         }
 
-        @ReactProp(name = "src")
+    @Override
+    public void setX(ImageView view, @androidx.annotation.Nullable String value) {
+      view.setX(value);
+    }
+
+    @Override
+    public void setY(ImageView view, @androidx.annotation.Nullable String value) {
+      view.setY(value);
+    }
+
+    @Override
+    public void setImagewidth(ImageView view, @androidx.annotation.Nullable String value) {
+      view.setWidth(value);
+    }
+
+    @Override
+    public void setImageheight(ImageView view, @androidx.annotation.Nullable String value) {
+      view.setHeight(value);
+    }
+
+    @Override
+    public void setWidth(ImageView view, @androidx.annotation.Nullable String value) {
+      view.setWidth(value);
+    }
+
+    @Override
+    public void setHeight(ImageView view, @androidx.annotation.Nullable String value) {
+      view.setHeight(value);
+    }
+
+    @ReactProp(name = "src")
         public void setSrc(ImageView node, @Nullable ReadableMap src) {
             node.setSrc(src);
         }

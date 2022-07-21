@@ -25,7 +25,7 @@ RNSvgComponentsRegistry::sharedProviderRegistry() {
   providerRegistry->add(concreteComponentDescriptorProvider<RNSVGEllipseComponentDescriptor>());
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGForeignObjectComponentDescriptor>());
   providerRegistry->add(concreteComponentDescriptorProvider<RNSVGGroupComponentDescriptor>());
-  // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGImageComponentDescriptor>());
+  providerRegistry->add(concreteComponentDescriptorProvider<RNSVGImageComponentDescriptor>());
   providerRegistry->add(concreteComponentDescriptorProvider<RNSVGLinearGradientComponentDescriptor>());
   providerRegistry->add(concreteComponentDescriptorProvider<RNSVGLineComponentDescriptor>());
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGMarkerComponentDescriptor>());

@@ -30,7 +30,7 @@ export {
   G,
   Gradients,
   Clipping,
-  // Image,
+  Image,
   // TouchEvents,
   Reusable,
   // PanResponder,
