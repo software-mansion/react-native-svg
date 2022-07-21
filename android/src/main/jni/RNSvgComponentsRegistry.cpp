@@ -33,7 +33,7 @@ RNSvgComponentsRegistry::sharedProviderRegistry() {
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGPathComponentDescriptor>());
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGPatternComponentDescriptor>());
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGRadialGradientComponentDescriptor>());
-  // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGRectComponentDescriptor>());
+  providerRegistry->add(concreteComponentDescriptorProvider<RNSVGRectComponentDescriptor>());
   providerRegistry->add(concreteComponentDescriptorProvider<RNSVGSvgViewComponentDescriptor>());
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGSymbolComponentDescriptor>());
   // providerRegistry->add(concreteComponentDescriptorProvider<RNSVGTextComponentDescriptor>());

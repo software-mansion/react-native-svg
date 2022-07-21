@@ -37,6 +37,8 @@ import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGRectManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGRectManagerInterface;
 
 import java.util.Locale;
 
@@ -762,10 +764,18 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
         }
     }
 
-    static class RectViewManager extends RenderableViewManager {
-        RectViewManager() {
-            super(SVGClass.RNSVGRect);
-        }
+  static class RectViewManager extends RenderableViewManager<RectView> implements RNSVGRectManagerInterface<RectView> {
+
+    RectViewManager() {
+      super(SVGClass.RNSVGRect);
+      mDelegate = new RNSVGRectManagerDelegate(this);
+    }
+
+    private final ViewManagerDelegate<RectView> mDelegate;
+
+    protected ViewManagerDelegate getDelegate(){
+      return mDelegate;
+    }
 
         @ReactProp(name = "x")
         public void setX(RectView node, Dynamic x) {
@@ -796,7 +806,54 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
         public void setRy(RectView node, Dynamic ry) {
             node.setRy(ry);
         }
+
+    @Override
+    public void setX(RectView view, @Nullable String value) {
+      view.setX(value);
     }
+
+    @Override
+    public void setY(RectView view, @Nullable String value) {
+      view.setY(value);
+
+    }
+
+    @Override
+    public void setRectheight(RectView view, @Nullable String value) {
+      view.setHeight(value);
+
+    }
+
+    @Override
+    public void setRectwidth(RectView view, @Nullable String value) {
+      view.setWidth(value);
+
+    }
+
+    @Override
+    public void setHeight(RectView view, @Nullable String value) {
+      view.setHeight(value);
+
+    }
+
+    @Override
+    public void setWidth(RectView view, @Nullable String value) {
+      view.setWidth(value);
+
+    }
+
+    @Override
+    public void setRx(RectView view, @Nullable String value) {
+      view.setRx(value);
+
+    }
+
+    @Override
+    public void setRy(RectView view, @Nullable String value) {
+      view.setRy(value);
+
+    }
+  }
 
     static class ClipPathViewManager extends GroupViewManagerAbstract<ClipPathView> {
         ClipPathViewManager() {
@@ -1219,11 +1276,6 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
        node.setOpacity(opacity);
    }
 
-   // needed for Fabric since it does not clash with BaseViewManager `setOpacity`
-  public void setOpacity(@Nonnull T node, double opacity) {
-    node.setOpacity((float)opacity);
-  }
-
   @ReactProp(name = "fill")
     public void setFill(T node, @Nullable Dynamic fill) {
         node.setFill(fill);
@@ -1333,7 +1385,7 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
     }
 
     @ReactProp(name = ViewProps.POINTER_EVENTS)
-    public void setPointerEvents(T view, @androidx.annotation.Nullable String pointerEventsStr) {
+    public void setPointerEvents(T view, @Nullable String pointerEventsStr) {
         if (pointerEventsStr == null) {
             view.setPointerEvents(PointerEvents.AUTO);
         } else {

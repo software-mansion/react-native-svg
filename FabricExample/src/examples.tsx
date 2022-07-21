@@ -18,7 +18,7 @@ import * as PanResponder from './examples/PanResponder';
 
 export {
   // Svg,
-  // Rect,
+  Rect,
   Circle,
   Ellipse,
   // Line,
