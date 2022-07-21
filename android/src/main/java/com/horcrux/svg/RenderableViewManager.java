@@ -41,6 +41,8 @@ import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGLineManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGLineManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGPathManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGPathManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGRectManagerDelegate;
@@ -751,10 +753,18 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
       }
     }
 
-    static class LineViewManager extends RenderableViewManager {
-        LineViewManager() {
-            super(SVGClass.RNSVGLine);
-        }
+  static class LineViewManager extends RenderableViewManager<LineView> implements RNSVGLineManagerInterface<LineView> {
+
+    LineViewManager() {
+      super(SVGClass.RNSVGLine);
+      mDelegate = new RNSVGLineManagerDelegate(this);
+    }
+
+    private final ViewManagerDelegate<RectView> mDelegate;
+
+    protected ViewManagerDelegate getDelegate(){
+      return mDelegate;
+    }
 
         @ReactProp(name = "x1")
         public void setX1(LineView node, Dynamic x1) {
@@ -775,7 +785,27 @@ class RenderableViewManager<T extends RenderableView> extends ViewGroupManager<V
         public void setY2(LineView node, Dynamic y2) {
             node.setY2(y2);
         }
+
+    @Override
+    public void setX1(LineView view, @Nullable String value) {
+      view.setX1(value);
     }
+
+    @Override
+    public void setY1(LineView view, @Nullable String value) {
+      view.setY1(value);
+    }
+
+    @Override
+    public void setX2(LineView view, @Nullable String value) {
+      view.setX2(value);
+    }
+
+    @Override
+    public void setY2(LineView view, @Nullable String value) {
+      view.setY2(value);
+    }
+  }
 
   static class RectViewManager extends RenderableViewManager<RectView> implements RNSVGRectManagerInterface<RectView> {
 
