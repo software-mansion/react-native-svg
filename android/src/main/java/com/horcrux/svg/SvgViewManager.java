@@ -147,22 +147,22 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
     }
 
   @Override
-  public void setTintColor(SvgView view, @androidx.annotation.Nullable Integer value) {
+  public void setTintColor(SvgView view, @Nullable Integer value) {
     view.setTintColor(value);
   }
 
   @Override
-  public void setColor(SvgView view, @androidx.annotation.Nullable Integer value) {
+  public void setColor(SvgView view, @Nullable Integer value) {
     view.setTintColor(value);
   }
 
   @Override
-  public void setBbWidth(SvgView view, @androidx.annotation.Nullable String value) {
+  public void setBbWidth(SvgView view, @Nullable String value) {
     view.setBbWidth(value);
   }
 
   @Override
-  public void setBbHeight(SvgView view, @androidx.annotation.Nullable String value) {
+  public void setBbHeight(SvgView view, @Nullable String value) {
     view.setBbHeight(value);
   }
 
