@@ -12,6 +12,8 @@ export type NumberArray = NumberProp[] | NumberProp;
 
 export type FillRule = 'evenodd' | 'nonzero';
 export type Units = 'userSpaceOnUse' | 'objectBoundingBox';
+export type MarkerUnits = 'strokeWidth' | 'userSpaceOnUse';
+export type Orient = 'auto' | 'auto-start-reverse';
 
 export type TextAnchor = 'start' | 'middle' | 'end';
 export type FontStyle = 'normal' | 'italic' | 'oblique';
@@ -464,15 +466,6 @@ export interface UseProps extends CommonPathProps {
 export const Use: React.ComponentClass<UseProps>;
 export type Use = React.ComponentClass<UseProps>;
 
-export enum EMaskUnits {
-  USER_SPACE_ON_USE = 'userSpaceOnUse',
-  OBJECT_BOUNDING_BOX = 'objectBoundingBox',
-}
-
-export type TMaskUnits =
-  | EMaskUnits.USER_SPACE_ON_USE
-  | EMaskUnits.OBJECT_BOUNDING_BOX;
-
 export interface MaskProps extends CommonPathProps {
   id?: string;
   x?: NumberProp;
@@ -480,21 +473,11 @@ export interface MaskProps extends CommonPathProps {
   width?: NumberProp;
   height?: NumberProp;
   maskTransform?: ColumnMajorTransformMatrix | string;
-  maskUnits?: TMaskUnits;
-  maskContentUnits?: TMaskUnits;
+  maskUnits?: Units;
+  maskContentUnits?: Units;
 }
 export const Mask: React.ComponentClass<MaskProps>;
 export type Mask = React.ComponentClass<MaskProps>;
-
-export enum MarkerUnits {
-  STROKE_WIDTH = 'strokeWidth',
-  USER_SPACE_ON_USE = 'userSpaceOnUse',
-}
-
-export enum Orient {
-  AUTO = 'auto',
-  AUTO_START_REVERSE = 'auto-start-reverse',
-}
 
 export interface MarkerProps {
   id?: string;
