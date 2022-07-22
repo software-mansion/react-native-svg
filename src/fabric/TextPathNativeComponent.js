@@ -71,4 +71,4 @@ type NativeProps = $ReadOnly<{|
 
 type ComponentType = HostComponent<NativeProps>;
 
-// export default (codegenNativeComponent<NativeProps>('RNSVGTextPath', {}): ComponentType);
+export default (codegenNativeComponent<NativeProps>('RNSVGTextPath', {}): ComponentType);

@@ -17,7 +17,7 @@ import * as TouchEvents from './examples/TouchEvents';
 import * as PanResponder from './examples/PanResponder';
 
 export {
-  // Svg,
+  Svg,
   Rect,
   Circle,
   Ellipse,
@@ -25,7 +25,7 @@ export {
   Polygon,
   Polyline,
   Path,
-  // Text,
+  Text,
   Stroking,
   G,
   Gradients,

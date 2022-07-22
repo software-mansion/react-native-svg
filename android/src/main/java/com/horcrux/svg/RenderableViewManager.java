@@ -63,6 +63,12 @@ import com.facebook.react.viewmanagers.RNSVGRectManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGRectManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGSymbolManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGSymbolManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGTSpanManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGTSpanManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGTextManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGTextManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGTextPathManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGTextPathManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGUseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGUseManagerInterface;
 
@@ -743,91 +749,179 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
         }
     }
 
-    static class TextViewManager extends GroupViewManagerAbstract<TextView> {
-        TextViewManager() {
-            super(SVGClass.RNSVGText);
-        }
+  static class TextViewManagerAbstract<K extends TextView> extends GroupViewManagerAbstract<K> {
+    TextViewManagerAbstract(SVGClass svgClass) {
+      super(svgClass);
+    }
+
+    @ReactProp(name = "inlineSize")
+    public void setInlineSize(K node, Dynamic inlineSize) {
+      node.setInlineSize(inlineSize);
+    }
+
+    @ReactProp(name = "textLength")
+    public void setTextLength(K node, Dynamic length) {
+      node.setTextLength(length);
+    }
+
+    @ReactProp(name = "lengthAdjust")
+    public void setLengthAdjust(K node, @Nullable String adjustment) {
+      node.setLengthAdjust(adjustment);
+    }
+
+    @ReactProp(name = "alignmentBaseline")
+    public void setMethod(K node, @Nullable String alignment) {
+      node.setMethod(alignment);
+    }
+
+    @ReactProp(name = "baselineShift")
+    public void setBaselineShift(K node, Dynamic baselineShift) {
+      node.setBaselineShift(baselineShift);
+    }
+
+    @ReactProp(name = "verticalAlign")
+    public void setVerticalAlign(K node, @Nullable String verticalAlign) {
+      node.setVerticalAlign(verticalAlign);
+    }
+
+    @ReactProp(name = "rotate")
+    public void setRotate(K node, Dynamic rotate) {
+      node.setRotate(rotate);
+    }
+
+    @ReactProp(name = "dx")
+    public void setDeltaX(K node, Dynamic deltaX) {
+      node.setDeltaX(deltaX);
+    }
+
+    @ReactProp(name = "dy")
+    public void setDeltaY(K node, Dynamic deltaY) {
+      node.setDeltaY(deltaY);
+    }
+
+    @ReactProp(name = "x")
+    public void setX(K node, Dynamic positionX) {
+      node.setPositionX(positionX);
+    }
+
+    @ReactProp(name = "y")
+    public void setY(K node, Dynamic positionY) {
+      node.setPositionY(positionY);
+    }
+
+    @ReactProp(name = "font")
+    public void setFont(K node, @Nullable ReadableMap font) {
+      node.setFont(font);
+    }
+
+    public void setAlignmentBaseline(K view, @Nullable String value) {
+      view.setMethod(value);
+    }
+
+    public void setTextAnchor(K view, @Nullable String value) {
+      // TODO: is it available on Android?
+    }
+
+    public void setDx(K view, @Nullable ReadableArray value) {
+      view.setDeltaX(value);
+    }
+
+    public void setDy(K view, @Nullable ReadableArray value) {
+      view.setDeltaY(value);
+    }
+
+    public void setPositionX(K view, @Nullable ReadableArray value) {
+      view.setPositionX(value);
+    }
+
+    public void setPositionY(K view, @Nullable ReadableArray value) {
+      view.setPositionY(value);
+    }
+
+    public void setX(K view, @Nullable ReadableArray value) {
+      view.setPositionX(value);
+    }
+
+    public void setY(K view, @Nullable ReadableArray value) {
+      view.setPositionY(value);
+    }
+
+    public void setRotate(K view, @Nullable ReadableArray value) {
+      view.setRotate(value);
+    }
+
+    public void setInlineSize(K view, @Nullable String value) {
+      view.setInlineSize(value);
+    }
+
+    public void setTextLength(K view, @Nullable String value) {
+      view.setTextLength(value);
+    }
+
+    public void setBaselineShift(K view, @Nullable String value) {
+      view.setBaselineShift(value);
+    }
+  }
+
+  static class TextViewManager extends TextViewManagerAbstract<TextView> implements RNSVGTextManagerInterface<TextView> {
+    TextViewManager() {
+      super(SVGClass.RNSVGText);
+      mDelegate = new RNSVGTextManagerDelegate(this);
+    }
+
+    private final ViewManagerDelegate<TextView> mDelegate;
+
+    protected ViewManagerDelegate getDelegate(){
+      return mDelegate;
+    }
 
         TextViewManager(SVGClass svgClass) {
             super(svgClass);
+          mDelegate = new RNSVGTextManagerDelegate(this);
         }
 
-        @ReactProp(name = "inlineSize")
-        public void setInlineSize(TextView node, Dynamic inlineSize) {
-            node.setInlineSize(inlineSize);
-        }
+  }
 
-        @ReactProp(name = "textLength")
-        public void setTextLength(TextView node, Dynamic length) {
-            node.setTextLength(length);
-        }
-
-        @ReactProp(name = "lengthAdjust")
-        public void setLengthAdjust(TextView node, @Nullable String adjustment) {
-            node.setLengthAdjust(adjustment);
-        }
-
-        @ReactProp(name = "alignmentBaseline")
-        public void setMethod(TextView node, @Nullable String alignment) {
-            node.setMethod(alignment);
-        }
-
-        @ReactProp(name = "baselineShift")
-        public void setBaselineShift(TextView node, Dynamic baselineShift) {
-            node.setBaselineShift(baselineShift);
-        }
-
-        @ReactProp(name = "verticalAlign")
-        public void setVerticalAlign(TextView node, @Nullable String verticalAlign) {
-            node.setVerticalAlign(verticalAlign);
-        }
-
-        @ReactProp(name = "rotate")
-        public void setRotate(TextView node, Dynamic rotate) {
-            node.setRotate(rotate);
-        }
-
-        @ReactProp(name = "dx")
-        public void setDeltaX(TextView node, Dynamic deltaX) {
-            node.setDeltaX(deltaX);
-        }
-
-        @ReactProp(name = "dy")
-        public void setDeltaY(TextView node, Dynamic deltaY) {
-            node.setDeltaY(deltaY);
-        }
-
-        @ReactProp(name = "x")
-        public void setX(TextView node, Dynamic positionX) {
-            node.setPositionX(positionX);
-        }
-
-        @ReactProp(name = "y")
-        public void setY(TextView node, Dynamic positionY) {
-            node.setPositionY(positionY);
-        }
-
-        @ReactProp(name = "font")
-        public void setFont(TextView node, @Nullable ReadableMap font) {
-            node.setFont(font);
-        }
+  static class TSpanViewManager extends TextViewManagerAbstract<TSpanView> implements RNSVGTSpanManagerInterface<TSpanView> {
+    TSpanViewManager() {
+      super(SVGClass.RNSVGTSpan);
+      mDelegate = new RNSVGTSpanManagerDelegate(this);
     }
 
-    static class TSpanViewManager extends TextViewManager {
-        TSpanViewManager() {
-            super(SVGClass.RNSVGTSpan);
-        }
+    TSpanViewManager(SVGClass svgClass) {
+      super(svgClass);
+      mDelegate = new RNSVGTSpanManagerDelegate(this);
+    }
+
+    private final ViewManagerDelegate<TSpanView> mDelegate;
+
+    protected ViewManagerDelegate getDelegate(){
+      return mDelegate;
+    }
 
         @ReactProp(name = "content")
         public void setContent(TSpanView node, @Nullable String content) {
             node.setContent(content);
         }
+
+  }
+
+  static class TextPathViewManager extends TextViewManagerAbstract<TextPathView> implements RNSVGTextPathManagerInterface<TextPathView> {
+    TextPathViewManager() {
+      super(SVGClass.RNSVGTextPath);
+      mDelegate = new RNSVGTextPathManagerDelegate(this);
     }
 
-    static class TextPathViewManager extends TextViewManager {
-        TextPathViewManager() {
-            super(SVGClass.RNSVGTextPath);
-        }
+    TextPathViewManager(SVGClass svgClass) {
+      super(svgClass);
+      mDelegate = new RNSVGTextPathManagerDelegate (this);
+    }
+
+    private final ViewManagerDelegate<TextPathView> mDelegate;
+
+    protected ViewManagerDelegate getDelegate(){
+      return mDelegate;
+    }
 
         @ReactProp(name = "href")
         public void setHref(TextPathView node, String href) {
@@ -844,12 +938,22 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
             node.setMethod(method);
         }
 
-        @ReactProp(name = "spacing")
+    @Override
+    public void setMidLine(TextPathView view, @Nullable String value) {
+      view.setSharp(value);
+    }
+
+    @ReactProp(name = "spacing")
         public void setSpacing(TextPathView node, @Nullable String spacing) {
             node.setSpacing(spacing);
         }
 
-        @ReactProp(name = "side")
+    @Override
+    public void setStartOffset(TextPathView view, @Nullable String value) {
+      view.setStartOffset(value);
+    }
+
+    @ReactProp(name = "side")
         public void setSide(TextPathView node, @Nullable String side) {
             node.setSide(side);
         }
