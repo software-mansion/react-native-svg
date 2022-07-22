@@ -117,7 +117,7 @@ const SvgTouchableMixin = {
 };
 
 const touchKeys = Object.keys(SvgTouchableMixin);
-const touchVals = touchKeys.map(key => SvgTouchableMixin[key]);
+const touchVals = touchKeys.map((key) => SvgTouchableMixin[key]);
 const numTouchKeys = touchKeys.length;
 
 export default (target: { [x: string]: unknown; state: unknown }) => {
