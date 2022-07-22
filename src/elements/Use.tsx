@@ -6,7 +6,7 @@ import Shape from './Shape';
 import { RNSVGUse } from './NativeComponents';
 
 export interface UseProps extends CommonPathProps {
-  children?: ReactNode | undefined;
+  children?: ReactNode;
   xlinkHref?: string;
   href?: string;
   width?: NumberProp;

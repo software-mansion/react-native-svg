@@ -20,7 +20,7 @@ export type TMaskUnits =
   | EMaskUnits.OBJECT_BOUNDING_BOX;
 
 export interface MaskProps extends CommonPathProps {
-  children?: ReactNode | undefined;
+  children?: ReactNode;
   id?: string;
   x?: NumberProp;
   y?: NumberProp;

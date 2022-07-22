@@ -5,7 +5,7 @@ import { RNSVGSymbol } from './NativeComponents';
 import { NumberProp } from '../lib/extract/types';
 
 export interface SymbolProps {
-  children?: ReactNode | undefined;
+  children?: ReactNode;
   id?: string;
   viewBox?: string;
   preserveAspectRatio?: string;

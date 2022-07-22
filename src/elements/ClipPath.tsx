@@ -4,7 +4,7 @@ import Shape from './Shape';
 import { RNSVGClipPath } from './NativeComponents';
 
 export interface ClipPathProps {
-  children?: ReactNode | undefined;
+  children?: ReactNode;
   id?: string;
 }
 

@@ -1,5 +1,9 @@
-import { ColorValue, GestureResponderEvent } from 'react-native';
-import * as ReactNative from 'react-native';
+import {
+  ColorValue,
+  GestureResponderEvent,
+  GestureResponderHandlers,
+  LayoutChangeEvent,
+} from 'react-native';
 import React from 'react';
 
 export type NumberProp = string | number;
@@ -88,7 +92,7 @@ export interface TouchableProps {
   delayLongPress?: number;
 }
 
-export interface ResponderProps extends ReactNative.GestureResponderHandlers {
+export interface ResponderProps extends GestureResponderHandlers {
   pointerEvents?: 'box-none' | 'none' | 'box-only' | 'auto';
 }
 
@@ -204,7 +208,7 @@ export type ColumnMajorTransformMatrix = [
 
 export interface TransformProps extends TransformObject {
   transform?: ColumnMajorTransformMatrix | string | TransformObject;
-  // | TransformsStyle['transform'];
+  // | TransformsStyle['transform']; // not used since it causes type problems
 }
 
 export interface TransformedProps {
@@ -261,7 +265,7 @@ export type extractedProps = {
   opacity?: number;
   matrix?: number[];
   propList?: string[];
-  onLayout?: (event: ReactNative.LayoutChangeEvent) => void;
+  onLayout?: (event: LayoutChangeEvent) => void;
   ref?: (instance: React.Component | null) => void;
   markerStart?: string;
   markerMid?: string;

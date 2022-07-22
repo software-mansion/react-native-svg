@@ -14,7 +14,7 @@ import './TSpan';
 import { RNSVGText } from './NativeComponents';
 
 export interface TextProps extends TextSpecificProps {
-  children?: ReactNode | undefined;
+  children?: ReactNode;
   x?: NumberArray;
   y?: NumberArray;
   dx?: NumberArray;

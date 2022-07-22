@@ -12,7 +12,7 @@ import Shape from './Shape';
 import { RNSVGGroup } from './NativeComponents';
 
 export interface GProps extends CommonPathProps, FontProps {
-  children?: ReactNode | undefined;
+  children?: ReactNode;
   opacity?: NumberProp;
 }
 

@@ -12,7 +12,7 @@ import Shape from './Shape';
 import { RNSVGPattern } from './NativeComponents';
 
 export interface PatternProps {
-  children?: ReactNode | undefined;
+  children?: ReactNode;
   id?: string;
   x?: NumberProp;
   y?: NumberProp;

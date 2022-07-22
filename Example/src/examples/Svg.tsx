@@ -132,13 +132,13 @@ class SvgNativeMethods extends Component {
     base64: null,
   };
   alert = () => {
-    this.root.toDataURL((base64: string) => {
+    this.root?.toDataURL((base64: string) => {
       this.setState({
         base64,
       });
     });
   };
-  root: any;
+  root?: Svg | null;
   render() {
     return (
       <View>

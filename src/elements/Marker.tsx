@@ -15,7 +15,7 @@ export enum Orient {
 }
 
 export interface MarkerProps {
-  children?: ReactNode | undefined;
+  children?: ReactNode;
   id?: string;
   viewBox?: string;
   preserveAspectRatio?: string;

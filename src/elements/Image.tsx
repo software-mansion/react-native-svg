@@ -1,6 +1,5 @@
 import React from 'react';
-import * as ReactNative from 'react-native';
-import { Image } from 'react-native';
+import { Image, ImageProps as RNImageProps } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
 import { withoutXY } from '../lib/extract/extractProps';
 import {
@@ -24,8 +23,8 @@ export interface ImageProps
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  xlinkHref?: ReactNative.ImageProps['source'];
-  href?: ReactNative.ImageProps['source'];
+  xlinkHref?: RNImageProps['source'];
+  href?: RNImageProps['source'];
   preserveAspectRatio?: string;
   opacity?: NumberProp;
   clipPath?: string;

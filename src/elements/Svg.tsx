@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import * as ReactNative from 'react-native';
 import {
   findNodeHandle,
   MeasureInWindowOnSuccessCallback,
@@ -9,6 +8,7 @@ import {
   processColor,
   StyleProp,
   StyleSheet,
+  ViewProps,
   ViewStyle,
 } from 'react-native';
 import {
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 });
 const defaultStyle = styles.svg;
 
-export interface SvgProps extends GProps, ReactNative.ViewProps {
+export interface SvgProps extends GProps, ViewProps {
   width?: NumberProp;
   height?: NumberProp;
   viewBox?: string;

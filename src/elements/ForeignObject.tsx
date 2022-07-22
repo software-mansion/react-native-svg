@@ -5,7 +5,7 @@ import G from './G';
 import { RNSVGForeignObject } from './NativeComponents';
 
 export interface ForeignObjectProps {
-  children?: ReactNode | undefined;
+  children?: ReactNode;
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
