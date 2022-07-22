@@ -55,7 +55,7 @@
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
     "prepare": "npm run bob && husky install",
     "release": "npm login && release-it",
-    "test": "npm run lint && npm run tsc && npm run flow && npm run jest",
+    "test": "npm run lint && npm run tsc && npm run jest",
     "tsc": "tsc --noEmit"
   },
   "peerDependencies": {
