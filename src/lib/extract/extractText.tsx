@@ -112,13 +112,17 @@ export function extractFont(props: fontProps) {
   return { ...baseFont, ...ownedFont };
 }
 
-let TSpan: ComponentType;
+let TSpan: ComponentType<React.PropsWithChildren<{}>>;
 
 export function setTSpan(TSpanImplementation: ComponentType) {
   TSpan = TSpanImplementation;
 }
 
-function getChild(child: undefined | string | number | ComponentType) {
+export type TextChild =
+  | (undefined | string | number | ComponentType | React.ReactElement)
+  | TextChild[];
+
+function getChild(child: TextChild) {
   if (typeof child === 'string' || typeof child === 'number') {
     return <TSpan>{String(child)}</TSpan>;
   } else {
@@ -132,7 +136,7 @@ export type TextProps = {
   dx?: NumberArray;
   dy?: NumberArray;
   rotate?: NumberArray;
-  children?: string | number | (string | number | ComponentType)[];
+  children?: TextChild;
   inlineSize?: NumberProp;
   baselineShift?: NumberProp;
   verticalAlign?: NumberProp;

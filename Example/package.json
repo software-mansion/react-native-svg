@@ -9,7 +9,8 @@
     "start": "react-native start",
     "start-webpack": "webpack serve",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "react": "17.0.2",
@@ -31,6 +32,7 @@
     "metro-react-native-babel-preset": "^0.67.0",
     "react-native-gradle-plugin": "^0.0.4",
     "react-test-renderer": "17.0.2",
+    "typescript": "^4.6.4",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4"

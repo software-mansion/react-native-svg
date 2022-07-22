@@ -1,8 +1,12 @@
 import { Component } from 'react';
+import { Color, NumberProp } from '../lib/extract/types';
 
-type StopProps = {
+export interface StopProps {
+  stopColor?: Color;
+  stopOpacity?: NumberProp;
+  offset?: NumberProp;
   parent?: Component;
-};
+}
 
 export default class Stop extends Component<StopProps, {}> {
   props!: StopProps;

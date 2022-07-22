@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { withoutXY } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import G from './G';
 import { RNSVGForeignObject } from './NativeComponents';
 
-export default class ForeignObject extends G<{
+export interface ForeignObjectProps {
+  children?: ReactNode;
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-}> {
+}
+
+export default class ForeignObject extends G<ForeignObjectProps> {
   static displayName = 'ForeignObject';
 
   static defaultProps = {
