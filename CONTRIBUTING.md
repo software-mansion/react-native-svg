@@ -13,17 +13,11 @@ We'd like to make contributions as pleasant as possible, so here's a small guide
 
 ### Testing your changes
 
-You can test your changes on any React Native application you have set up locally.
-You can also use the testing application available at https://github.com/msand/react-native-svg-e2e/
-or: https://github.com/magicismight/react-native-svg-example
-
-Just `cd` to your application and type `yarn link react-native-svg` to make your app use your local modified package instead of the one from npmjs.com (this is what point 5 was about in the previous section).
-
-If you made changes in the native code, don't forget to run `react-native link` before building your React Native application so that the latest changes are taken into account.
+Add test example in [TestsExample](https://github.com/react-native-svg/react-native-svg/tree/main/TestsExample) concerning your change following the convention of `TestX.tsx` where `X` is your PR number.
 
 ## Tests
 
-We use `typescript` for type checks, `eslint` with `prettier` for linting/formatting, `jest/detox` for tests (unit and e2e). All tests are run on travis-ci for all opened pull requests, but you should use them locally when making changes.
+We use `typescript` for type checks, `eslint` with `prettier` for linting/formatting. All tests are run by github actions for all opened pull requests.
 
 - `yarn test`: Run all tests, except for e2e (see note below).
 - `yarn lint`: Run `eslint` check.
@@ -44,14 +38,12 @@ When you're sending a pull request:
 
 ## Commits and versioning
 
-All PRs are merged into the `develop` branch, following [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0-beta.3). Combined with [semantic versioning](https://semver.org/), this allows us to have a frequent releases of the library.
-
-_Note_: We don't force this convention on Pull Requests from contributors, but it's a clean way to see what type of changes are made, so feel free to follow it.
+All PRs are merged into the `main` branch and released with `release-it`.
 
 Most notably prefixes you'll see:
 
-- **fix**: Bug fixes, triggers _patch_ release
-- **feat**: New feature implemented, triggers _minor_
+- **fix**: Bug fixes
+- **feat**: New feature implemented
 - **chore**: Changes that are not affecting end user (CI config changes, scripts, ["grunt work"](https://stackoverflow.com/a/26944812/3510245))
 - **docs**: Documentation changes.
 - **perf**: A code change that improves performance.
@@ -60,11 +52,11 @@ Most notably prefixes you'll see:
 
 ## Release process
 
-We use [Semantic Release](http://semantic-release.org) to release new versions of the library when changes are merged into the `master` branch, which we plan to keep stable. Bug fixes take priority in the release order. The master branch should always contain the latest released code.
+We use [release-it](https://github.com/release-it/release-it) to release new versions of library from `main` branch.
 
 ## Reporting issues
 
-You can report issues on our [bug tracker](https://github.com/react-native-community/react-native-svg/issues). Please search for existing issues and follow the issue template when opening an one. Except no need to add any notes to the changelog as semtice released handles that automatically based on the commit messages.
+You can report issues on our [bug tracker](https://github.com/react-native-community/react-native-svg/issues). Please search for existing issues and follow the issue template when opening one.
 
 ## License
 
