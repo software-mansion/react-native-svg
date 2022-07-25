@@ -70,7 +70,7 @@ export default class SvgExample extends React.Component {
 
 [Try this on Snack](https://snack.expo.io/@msand/react-native-svg-example)
 
-### Use with content loaded from uri
+# Use with content loaded from uri
 
 ```jsx
 import * as React from 'react';
@@ -85,7 +85,7 @@ export default () => (
 );
 ```
 
-#### CSS Support
+## CSS Support
 
 If remote SVG file contains CSS in `<style>` element, use `SvgCssUri`:
 
@@ -102,7 +102,30 @@ export default () => (
 );
 ```
 
-### Use with svg files
+## Error handling
+
+Both `SvgUri` and `SvgCssUri` log errors to the console, but otherwise ignore them.
+You can set property `onError` if you want to handle errors such as resource not
+existing in a different way.
+
+```jsx
+import * as React from 'react';
+import { SvgUri } from 'react-native-svg';
+
+export default () => {
+  const [uri, setUri] = React.useState('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/not_existing.svg')
+  return (
+    <SvgUri
+      onError={() => setUri('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg')}
+      width="100%"
+      height="100%"
+      uri={uri}
+    />
+  );
+}
+```
+
+# Use with svg files
 
 Try [react-native-svg-transformer](https://github.com/kristerkari/react-native-svg-transformer) to get compile time conversion and cached transformations.
 <https://github.com/kristerkari/react-native-svg-transformer#installation-and-configuration>
@@ -122,7 +145,7 @@ module.exports = (async () => {
       babelTransformerPath: require.resolve('react-native-svg-transformer'),
     },
     resolver: {
-      assetExts: assetExts.filter(ext => ext !== 'svg'),
+      assetExts: assetExts.filter((ext) => ext !== 'svg'),
       sourceExts: [...sourceExts, 'svg'],
     },
   };
@@ -168,7 +191,7 @@ import testSvg from './test.svg';
 export default () => <SvgXml width="200" height="200" xml={testSvg} />;
 ```
 
-### Use with xml strings
+# Use with xml strings
 
 ```jsx
 import * as React from 'react';
@@ -200,7 +223,7 @@ const xml = `
 export default () => <SvgXml xml={xml} width="100%" height="100%" />;
 ```
 
-#### CSS support
+## CSS support
 
 If xml string contains CSS in `<style>` element, use `SvgCss`:
 
@@ -222,7 +245,7 @@ const xml = `
 export default () => <SvgCss xml={xml} width="100%" height="100%" />;
 ```
 
-### Common props:
+# Common props:
 
 | Name             | Default  | Description                                                                                                                                                            |
 | ---------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -244,9 +267,9 @@ export default () => <SvgCss xml={xml} width="100%" height="100%" />;
 | originX          | 0        | Transform originX coordinates for the current object.                                                                                                                  |
 | originY          | 0        | Transform originY coordinates for the current object.                                                                                                                  |
 
-### Supported elements:
+# Supported elements:
 
-#### Svg
+## Svg
 
 ```jsx
 <Svg height="100" width="100">
@@ -285,7 +308,7 @@ Code explanation:
 - The stroke prop defines the color of the line drawn around the object.
 - The color prop is a bit special in the sense that it won't color anything by itself, but define a kind of color variable that can be used by children elements. In this example we're defining a "green" color in the Svg element and using it in the second Path element via stroke="currentColor". The "currentColor" is what refers to that "green" value, and it can be used in other props that accept colors too, e.g. fill="currentColor".
 
-#### Rect
+## Rect
 
 The <Rect> element is used to create a rectangle and variations of a rectangle shape:
 
@@ -311,7 +334,7 @@ Code explanation:
 - The x prop defines the left position of the rectangle (e.g. x="25" places the rectangle 25 px from the left margin).
 - The y prop defines the top position of the rectangle (e.g. y="5" places the rectangle 5 px from the top margin).
 
-#### Circle
+## Circle
 
 The <Circle> element is used to create a circle:
 
@@ -328,7 +351,7 @@ Code explanation:
 - The cx and cy props define the x and y coordinates of the center of the circle. If cx and cy are omitted, the circle's center is set to (0,0)
 - The r prop defines the radius of the circle
 
-#### Ellipse
+## Ellipse
 
 The <Ellipse> element is used to create an ellipse.
 
@@ -357,7 +380,7 @@ Code explanation:
 - The rx prop defines the horizontal radius
 - The ry prop defines the vertical radius
 
-#### Line
+## Line
 
 The <Line> element is an SVG basic shape, used to create a line connecting two points.
 
@@ -376,7 +399,7 @@ Code explanation:
 - The x2 prop defines the end of the line on the x-axis.
 - The y2 prop defines the end of the line on the y-axis.
 
-#### Polygon
+## Polygon
 
 The <Polygon> element is used to create a graphic that contains at least three sides. Polygons are made of straight lines, and the shape is "closed" (all the lines connect up).
 
@@ -397,7 +420,7 @@ Code explanation:
 
 - The points prop defines the x and y coordinates for each corner of the polygon
 
-#### Polyline
+## Polyline
 
 The <Polyline> element is used to create any shape that consists of only straight lines:
 
@@ -418,7 +441,7 @@ Code explanation:
 
 - The points prop defines the x and y coordinates for each point of the polyline
 
-#### Path
+## Path
 
 The <Path> element is used to define a path.
 
@@ -449,7 +472,7 @@ The following commands are available for path data:
 
 ![Rect](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/path.png)
 
-#### Text
+## Text
 
 The <Text> element is used to define text.
 
@@ -471,7 +494,7 @@ The <Text> element is used to define text.
 
 ![Text](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/text.png)
 
-#### TSpan
+## TSpan
 
 The <TSpan> element is used to draw multiple lines of text in SVG. Rather than having to position each line of text absolutely, the <TSpan> element makes it possible to position a line of text relatively to the previous line of text.
 
@@ -504,7 +527,7 @@ The <TSpan> element is used to draw multiple lines of text in SVG. Rather than h
 
 ![TSpan](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/tspan.png)
 
-#### TextPath
+## TextPath
 
 In addition to text drawn in a straight line, SVG also includes the ability to place text along the shape of a <Path> element. To specify that a block of text is to be rendered along the shape of a <Path>, include the given text within a <TextPath> element which includes an href attribute with a reference to a <Path> element.
 
@@ -529,7 +552,7 @@ In addition to text drawn in a straight line, SVG also includes the ability to p
 
 ![TextPath](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/text-path.png)
 
-#### G
+## G
 
 The <G> element is a container used to group other SVG elements. Transformations applied to the g element are performed on all of its child elements, and any of its props are inherited by its child elements. It can also group multiple elements to be referenced later with the [&lt;Use /&gt;](#use) element.
 
@@ -549,7 +572,7 @@ The <G> element is a container used to group other SVG elements. Transformations
 
 ![G](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/g.png)
 
-#### Use
+## Use
 
 The <Use> element can reuse an SVG shape from elsewhere in the SVG document, including <G> elements and <Symbol> elements. The reused shape can be defined inside the [&lt;Defs&gt;](#defs) element (which makes the shape invisible until used) or outside.
 
@@ -577,7 +600,7 @@ The <Use> element specifies where to show the reused shapes via its x and y prop
 
 ![use](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/use.png)
 
-#### Symbol
+## Symbol
 
 The SVG <Symbol> element is used to define reusable symbols. The shapes nested inside a <Symbol> are not displayed unless referenced by a <Use> element.
 
@@ -603,11 +626,11 @@ The SVG <Symbol> element is used to define reusable symbols. The shapes nested i
 
 ![Symbol](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/symbol.png)
 
-#### Defs
+## Defs
 
 The <Defs> element is used to embed definitions that can be reused inside an SVG image. For instance, you can group SVG shapes together and reuse them as a single shape.
 
-#### Image
+## Image
 
 The <Image> element allows a raster image to be included in an Svg component.
 
@@ -646,7 +669,7 @@ The <Image> element allows a raster image to be included in an Svg component.
 
 ![Image](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/image.png)
 
-#### ClipPath
+## ClipPath
 
 The <ClipPath> SVG element defines a clipping path. A clipping path is used/referenced using the clipPath property
 
@@ -698,7 +721,7 @@ The <ClipPath> SVG element defines a clipping path. A clipping path is used/refe
 
 ![ClipPath](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/clip-path.png)
 
-#### LinearGradient
+## LinearGradient
 
 The <LinearGradient> element is used to define a linear gradient.
 The <LinearGradient> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
@@ -742,7 +765,7 @@ LinearGradient also supports percentage as prop:
 
 This result is same as the example before. But it's recommend to use exact number instead; it has performance advantages over using percentages.
 
-#### RadialGradient
+## RadialGradient
 
 The <RadialGradient> element is used to define a radial gradient. The <RadialGradient> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
 
@@ -776,7 +799,7 @@ Code explanation:
 
 ![RadialGradient](https://raw.githubusercontent.com/react-native-community/react-native-svg/master/screenshots/radialgradient.png)
 
-#### Mask
+## Mask
 
 In SVG, you can specify that any other graphics object or ‘G’ element can be used as an alpha mask for compositing the current object into the background.
 
@@ -835,10 +858,10 @@ Code explanation: <https://www.w3.org/TR/SVG11/masking.html#MaskElement>
 
 v10 adds experimental support for using masks together with native elements.
 If you had native elements inside any Svg root before (which was unsupported),
-Then your content might change appearance when upgrading,
+then your content might change appearance when upgrading,
 as e.g. transforms and masks now take effect.
 
-#### Pattern
+## Pattern
 
 A pattern is used to fill or stroke an object using a pre-defined graphic object which can be replicated ("tiled") at fixed intervals in x and y to cover the areas to be painted. Patterns are defined using a ‘pattern’ element and then referenced by properties ‘fill’ and ‘stroke’ on a given graphics element to indicate that the given element shall be filled or stroked with the referenced pattern.
 The <Pattern> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;Defs&gt;](#defs) tag is short for definitions and contains definition of special elements (such as gradients).
@@ -877,7 +900,7 @@ Code explanation: <https://www.w3.org/TR/SVG11/pservers.html#PatternElement>
 
 ![Pattern](https://www.w3.org/TR/SVG11/images/pservers/pattern01.svg)
 
-#### Marker
+## Marker
 
 A marker is a symbol which is attached to one or more vertices of ‘path’, ‘line’, ‘polyline’ and ‘polygon’ elements. Typically, markers are used to make arrowheads or polymarkers. Arrowheads can be defined by attaching a marker to the start or end vertices of ‘path’, ‘line’ or ‘polyline’ elements. Polymarkers can be defined by attaching a marker to all vertices of a ‘path’, ‘line’, ‘polyline’ or ‘polygon’ element.
 
@@ -1021,7 +1044,7 @@ const styles = StyleSheet.create({
 
 Code explanation: <https://www.w3.org/TR/SVG2/painting.html#VertexMarkerProperties>
 
-#### ForeignObject
+## ForeignObject
 
 SVG is designed to be compatible with other XML languages for describing and rendering other types of content. The ‘foreignObject’ element allows for inclusion of elements in a non-SVG namespace which is rendered within a region of the SVG graphic using other user agent processes. The included foreign graphical content is subject to SVG transformations, filters, clipping, masking and compositing.
 
@@ -1105,7 +1128,7 @@ export default class App extends Component {
 }
 ```
 
-#### Touch Events
+## Touch Events
 
 Touch events are supported in react-native-svg. These include:
 
@@ -1134,7 +1157,7 @@ You can use these events to provide interactivity to your react-native-svg compo
 
 For more examples of touch in action, checkout the [TouchEvents.js examples](https://github.com/magicismight/react-native-svg-example/blob/master/examples/TouchEvents.js).
 
-### Serialize
+# Serialize
 
 ```jsx
 import * as React from 'react';
@@ -1144,7 +1167,7 @@ import ReactDOMServer from 'react-dom/server';
 
 const isWeb = Platform.OS === 'web';
 
-const childToWeb = child => {
+const childToWeb = (child) => {
   const { type, props } = child;
   const name = type && type.displayName;
   const webName = name && name[0].toLowerCase() + name.slice(1);
@@ -1152,7 +1175,7 @@ const childToWeb = child => {
   return <Tag {...props}>{toWeb(props.children)}</Tag>;
 };
 
-const toWeb = children => React.Children.map(children, childToWeb);
+const toWeb = (children) => React.Children.map(children, childToWeb);
 
 export default class App extends React.Component {
   renderSvg() {
