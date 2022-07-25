@@ -117,7 +117,7 @@ function existsOne(
   elems: Array<XmlAST | string>,
 ): boolean {
   return elems.some(
-    elem =>
+    (elem) =>
       typeof elem === 'object' &&
       (predicate(elem) || existsOne(predicate, elem.children)),
   );
@@ -140,7 +140,7 @@ function hasAttrib(elem: XmlAST, name: string): boolean {
 // finds the first node in the array that matches the test predicate, or one
 // of its children
 function findOne(
-  predicate: (v: XmlAST)=> boolean,
+  predicate: (v: XmlAST) => boolean,
   elems: Array<XmlAST | string>,
 ): XmlAST | null {
   let elem: XmlAST | null = null;
@@ -290,7 +290,7 @@ function filterByPseudos(selectors: FlatSelectorList) {
       csstree.generate({
         type: 'Selector',
         children: new List<CssNode>().fromArray(
-          pseudos.map(pseudo => pseudo.item.data),
+          pseudos.map((pseudo) => pseudo.item.data),
         ),
       }),
     ),
@@ -307,7 +307,7 @@ const usePseudos = [''];
  */
 function cleanPseudos(selectors: FlatSelectorList) {
   selectors.forEach(({ pseudos }) =>
-    pseudos.forEach(pseudo => pseudo.list.remove(pseudo.item)),
+    pseudos.forEach((pseudo) => pseudo.list.remove(pseudo.item)),
   );
 }
 
@@ -493,7 +493,7 @@ function sortSelectors(selectors: FlatSelectorList) {
     return selectors;
   }
   const specs = selectors.map(selectorWithSpecificity);
-  return exec(specs, len).map(s => s.selector);
+  return exec(specs, len).map((s) => s.selector);
 }
 
 const declarationParseProps = {
@@ -517,14 +517,17 @@ function CSSStyleDeclaration(ast: XmlAST) {
       styles,
       declarationParseProps,
     ) as DeclarationList;
-    declarations.children.each(node => {
+    declarations.children.each((node) => {
       try {
         const { property, value, important } = node as Declaration;
         const name = property.trim();
         priority.set(name, important);
         style[camelCase(name)] = csstree.generate(value).trim();
       } catch (styleError) {
-        if (styleError.message !== 'Unknown node type: undefined') {
+        if (
+          styleError instanceof Error &&
+          styleError.message !== 'Unknown node type: undefined'
+        ) {
           console.warn(
             "Warning: Parse error when parsing inline styles, style properties of this element cannot be used. The raw styles can still be get/set using .attr('style').value. Error details: " +
               styleError,
@@ -637,8 +640,10 @@ export const inlineStyles: Middleware = function inlineStyles(
     const selectorStr = csstree.generate(item.data);
     try {
       // apply <style/> to matched elements
-      const matched = cssSelect(selectorStr, document, cssSelectOpts).map(initStyle);
-      
+      const matched = cssSelect(selectorStr, document, cssSelectOpts).map(
+        initStyle,
+      );
+
       if (matched.length === 0) {
         continue;
       }
@@ -664,7 +669,7 @@ export const inlineStyles: Middleware = function inlineStyles(
         },
       });
     } catch (selectError) {
-      if (selectError.constructor === SyntaxError) {
+      if (selectError instanceof SyntaxError) {
         console.warn(
           'Warning: Syntax error when trying to select \n\n' +
             selectorStr +
@@ -690,15 +695,11 @@ export function SvgCss(props: XmlProps) {
 }
 
 export function SvgCssUri(props: UriProps) {
-  const { uri } = props;
+  const { uri, onError = err } = props;
   const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
-    uri
-      ? fetchText(uri)
-          .then(setXml)
-          .catch(err)
-      : setXml(null);
-  }, [uri]);
+    uri ? fetchText(uri).then(setXml).catch(onError) : setXml(null);
+  }, [onError, uri]);
   return <SvgCss xml={xml} override={props} />;
 }
 

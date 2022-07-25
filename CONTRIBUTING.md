@@ -31,7 +31,7 @@ Currently e2e tests exist here: https://github.com/msand/react-native-svg-e2e/
 
 When you're sending a pull request:
 
-- Communication is a key. If you want fix/add something, please open new/find existing issue, so we can discuss it.
+- Communication is a key. If you want fix/add something, please consider either opening a new issue or finding an existing one so we can further discuss it.
 - We prefer small pull requests focused on one change, as those are easier to test/check.
 - Please make sure that all tests are passing on your local machine.
 - Follow the template when opening a PR.

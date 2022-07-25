@@ -2,12 +2,12 @@ name: Test iOS build
 on:
   pull_request:
     branches:
-      - develop
+      - main
     paths:
       - 'apple/**'
   push:
     branches:
-      - develop
+      - main
   workflow_dispatch:
 jobs:
   build:

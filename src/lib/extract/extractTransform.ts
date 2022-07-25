@@ -3,17 +3,8 @@ import { parse } from './transform';
 import { NumberProp, TransformedProps, TransformProps } from './types';
 
 function appendTransformProps(props: TransformedProps) {
-  const {
-    x,
-    y,
-    originX,
-    originY,
-    scaleX,
-    scaleY,
-    rotation,
-    skewX,
-    skewY,
-  } = props;
+  const { x, y, originX, originY, scaleX, scaleY, rotation, skewX, skewY } =
+    props;
   appendTransform(
     x + originX,
     y + originY,

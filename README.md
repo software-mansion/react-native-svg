@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 [![NPM](https://img.shields.io/npm/dm/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 
-`react-native-svg` provides SVG support to React Native on iOS, macOS and Android, and a compatibility layer for the web.
+`react-native-svg` provides SVG support to React Native on iOS, Android, macOS, Windows, and a compatibility layer for the web.
 
 [Check out the Example app](https://github.com/react-native-svg/react-native-svg/tree/main/Example)
 
@@ -28,9 +28,9 @@
 
 Install the JavaScript with:
 
-  ```bash
-  expo install react-native-svg
-  ```
+```bash
+expo install react-native-svg
+```
 
 📚 See the [**Expo docs**](https://docs.expo.io/versions/latest/sdk/svg/) for more info or jump ahead to [Usage](#Usage).
 
@@ -39,10 +39,13 @@ Install the JavaScript with:
 1. Install library
 
    from npm
+
    ```bash
    npm install react-native-svg
    ```
+
    from yarn
+
    ```bash
    yarn add react-native-svg
    ```

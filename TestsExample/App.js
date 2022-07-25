@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import SampleTest from './src/SampleTest';
+import ColorTest from './src/ColorTest';
+import Test1718 from './src/Test1718';
 
 export default function App() {
-  return <SampleTest />;
+  return <ColorTest />;
 }

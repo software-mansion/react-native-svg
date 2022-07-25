@@ -1,14 +1,14 @@
 import extractBrush from './extractBrush';
 import extractOpacity from './extractOpacity';
-import { colorNames } from './extractColor';
 import { extractedProps, FillProps } from './types';
+import { processColor } from 'react-native';
 
 const fillRules: { evenodd: number; nonzero: number } = {
   evenodd: 0,
   nonzero: 1,
 };
 
-const defaultFill = colorNames.black;
+const defaultFill = processColor('black');
 
 export default function extractFill(
   o: extractedProps,

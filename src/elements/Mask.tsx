@@ -1,21 +1,37 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp, TransformProps } from '../lib/extract/types';
+import {
+  ColumnMajorTransformMatrix,
+  CommonPathProps,
+  NumberProp,
+} from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
 import { RNSVGMask } from './NativeComponents';
 
-export default class Mask extends Shape<{
+export enum EMaskUnits {
+  USER_SPACE_ON_USE = 'userSpaceOnUse',
+  OBJECT_BOUNDING_BOX = 'objectBoundingBox',
+}
+
+export type TMaskUnits =
+  | EMaskUnits.USER_SPACE_ON_USE
+  | EMaskUnits.OBJECT_BOUNDING_BOX;
+
+export interface MaskProps extends CommonPathProps {
+  children?: ReactNode;
+  id?: string;
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  transform?: number[] | string | TransformProps;
-  maskTransform?: number[] | string | TransformProps;
-  maskUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-  maskContentUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-}> {
+  maskTransform?: ColumnMajorTransformMatrix | string;
+  maskUnits?: TMaskUnits;
+  maskContentUnits?: TMaskUnits;
+}
+
+export default class Mask extends Shape<MaskProps> {
   static displayName = 'Mask';
 
   static defaultProps = {
