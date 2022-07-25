@@ -3,9 +3,11 @@
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 [![NPM](https://img.shields.io/npm/dm/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 
-`react-native-svg` provides SVG support to React Native on iOS and Android, and a compatibility layer for the web.
+`react-native-svg` provides SVG support to React Native on iOS, Android, macOS, Windows, and a compatibility layer for the web.
 
 [Check out the demo](https://snack.expo.io/@msand/react-native-svg-example)
+
+[Check out the Example app](https://github.com/react-native-svg/react-native-svg/tree/main/Example)
 
 ## Features
 
@@ -72,13 +74,15 @@ expo install react-native-svg
 
 ##### With react-native-cli
 
-1. Install library from `npm` or `yarn`
+1. Install library
+
+   from npm
 
    ```bash
    npm install react-native-svg
    ```
 
-   Or
+   from yarn
 
    ```bash
    yarn add react-native-svg
@@ -193,7 +197,7 @@ and run `pod install` from `ios` folder
 
 #### Problems with Proguard
 
-When Proguard is enabled (which it is by default for Android release builds), it causes runtine error
+When Proguard is enabled (which it is by default for Android release builds), it causes runtime error.
 To avoid this, add an exception to `android/app/proguard-rules.pro`:
 
 ```bash
@@ -275,11 +279,6 @@ import Svg, {
   Mask,
 } from 'react-native-svg';
 
-/* Use this if you are using Expo
-import * as Svg from 'react-native-svg';
-const { Circle, Rect } = Svg;
-*/
-
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
@@ -349,6 +348,29 @@ export default () => (
     uri="http://thenewcode.com/assets/svg/accessibility.svg"
   />
 );
+```
+
+#### Error handling
+
+Both `SvgUri` and `SvgCssUri` log errors to the console, but otherwise ignore them.
+You can set property `onError` if you want to handle errors such as resource not
+existing in a different way.
+
+```jsx
+import * as React from 'react';
+import { SvgUri } from 'react-native-svg';
+
+export default () => {
+  const [uri, setUri] = React.useState('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/not_existing.svg')
+  return (
+    <SvgUri
+      onError={() => setUri('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg')}
+      width="100%"
+      height="100%"
+      uri={uri}
+    />
+  );
+}
 ```
 
 ### Use with svg files
@@ -925,7 +947,7 @@ The <ClipPath> SVG element defines a clipping path. A clipping path is used/refe
           x="50"
           y="30"
           fontSize="32"
-          fonWeight="bold"
+          fontWeight="bold"
           textAnchor="middle"
           scale="1.2"
         >
@@ -1084,7 +1106,7 @@ Code explanation: <https://www.w3.org/TR/SVG11/masking.html#MaskElement>
 
 v10 adds experimental support for using masks together with native elements.
 If you had native elements inside any Svg root before (which was unsupported),
-Then your content might change appearance when upgrading,
+then your content might change appearance when upgrading,
 as e.g. transforms and masks now take effect.
 
 #### Pattern
