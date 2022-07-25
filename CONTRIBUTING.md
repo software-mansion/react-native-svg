@@ -40,12 +40,10 @@ When you're sending a pull request:
 
 All PRs are merged into the `main` branch and released with `release-it`.
 
-_Note_: We don't force this convention on Pull Requests from contributors, but it's a clean way to see what type of changes are made, so feel free to follow it.
-
 Most notably prefixes you'll see:
 
-- **fix**: Bug fixes, triggers _patch_ release
-- **feat**: New feature implemented, triggers _minor_
+- **fix**: Bug fixes
+- **feat**: New feature implemented
 - **chore**: Changes that are not affecting end user (CI config changes, scripts, ["grunt work"](https://stackoverflow.com/a/26944812/3510245))
 - **docs**: Documentation changes.
 - **perf**: A code change that improves performance.
@@ -58,7 +56,7 @@ We use [release-it](https://github.com/release-it/release-it) to release new ver
 
 ## Reporting issues
 
-You can report issues on our [bug tracker](https://github.com/react-native-community/react-native-svg/issues). Please search for existing issues and follow the issue template when opening an one. Except no need to add any notes to the changelog as semtice released handles that automatically based on the commit messages.
+You can report issues on our [bug tracker](https://github.com/react-native-community/react-native-svg/issues). Please search for existing issues and follow the issue template when opening one.
 
 ## License
 
