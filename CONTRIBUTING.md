@@ -1,6 +1,6 @@
 # Contributing to React Native Svg
 
-Thank you for helping out with react-native-svg! 
+Thank you for helping out with react-native-svg!
 We'd like to make contributions as pleasant as possible, so here's a small guide of how we see it. Happy to hear your feedback about anything, so please let us know.
 
 ### Modifying react-native-svg
