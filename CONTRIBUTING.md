@@ -19,7 +19,7 @@ or: https://github.com/magicismight/react-native-svg-example
 
 Just `cd` to your application and type `yarn link react-native-svg` to make your app use your local modified package instead of the one from npmjs.com (this is what point 5 was about in the previous section).
 
-If you made changes in the native code, don't forget to run `react-native link` before building your React Native application so that latest changes are taken into account.
+If you made changes in the native code, don't forget to run `react-native link` before building your React Native application so that the latest changes are taken into account.
 
 ## Tests
 
@@ -37,7 +37,7 @@ Currently e2e tests exist here: https://github.com/msand/react-native-svg-e2e/
 
 When you're sending a pull request:
 
-- Communication is a key. If you want fix/add something, please open new/find existing issue, so we can discuss it.
+- Communication is a key. If you want fix/add something, please consider either opening a new issue or finding an existing one so we can further discuss it.
 - We prefer small pull requests focused on one change, as those are easier to test/check.
 - Please make sure that all tests are passing on your local machine.
 - Follow the template when opening a PR.
