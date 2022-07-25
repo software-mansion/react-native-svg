@@ -66,9 +66,9 @@
 
 Install the JavaScript with:
 
-  ```bash
-  expo install react-native-svg
-  ```
+```bash
+expo install react-native-svg
+```
 
 📚 See the [**Expo docs**](https://docs.expo.io/versions/latest/sdk/svg/) for more info or jump ahead to [Usage](#Usage).
 
@@ -77,10 +77,13 @@ Install the JavaScript with:
 1. Install library
 
    from npm
+
    ```bash
    npm install react-native-svg
    ```
+
    from yarn
+
    ```bash
    yarn add react-native-svg
    ```
@@ -390,7 +393,7 @@ module.exports = (async () => {
       babelTransformerPath: require.resolve('react-native-svg-transformer'),
     },
     resolver: {
-      assetExts: assetExts.filter(ext => ext !== 'svg'),
+      assetExts: assetExts.filter((ext) => ext !== 'svg'),
       sourceExts: [...sourceExts, 'svg'],
     },
   };
@@ -1412,7 +1415,7 @@ import ReactDOMServer from 'react-dom/server';
 
 const isWeb = Platform.OS === 'web';
 
-const childToWeb = child => {
+const childToWeb = (child) => {
   const { type, props } = child;
   const name = type && type.displayName;
   const webName = name && name[0].toLowerCase() + name.slice(1);
@@ -1420,7 +1423,7 @@ const childToWeb = child => {
   return <Tag {...props}>{toWeb(props.children)}</Tag>;
 };
 
-const toWeb = children => React.Children.map(children, childToWeb);
+const toWeb = (children) => React.Children.map(children, childToWeb);
 
 export default class App extends React.Component {
   renderSvg() {
