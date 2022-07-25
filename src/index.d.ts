@@ -245,6 +245,7 @@ export type Circle = React.ComponentClass<CircleProps>;
 
 export interface ClipPathProps {
   id?: string;
+  clipRule?: FillRule;
 }
 export const ClipPath: React.ComponentClass<ClipPathProps>;
 export type ClipPath = React.ComponentClass<ClipPathProps>;
