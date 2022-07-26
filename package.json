@@ -47,7 +47,7 @@
     "bob": "bob build",
     "flow": "flow src",
     "flowtyped": "flow-typed install",
-    "format": "prettier README.md CONTRIBUTING.md CODE_OF_CONDUCT.md './src/**/*.{ts,tsx}'",
+    "format": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md './src/**/*.{ts,tsx}'",
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",

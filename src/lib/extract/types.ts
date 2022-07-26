@@ -96,10 +96,8 @@ export interface ResponderProps extends GestureResponderHandlers {
   pointerEvents?: 'box-none' | 'none' | 'box-only' | 'auto';
 }
 
-export type Color = ColorValue;
-
 export interface FillProps {
-  fill?: Color;
+  fill?: ColorValue;
   fillOpacity?: NumberProp;
   fillRule?: FillRule;
 }
@@ -124,7 +122,7 @@ export interface DefinitionProps {
 }
 
 export interface StrokeProps {
-  stroke?: Color;
+  stroke?: ColorValue;
   strokeWidth?: NumberProp;
   strokeOpacity?: NumberProp;
   strokeDasharray?: ReadonlyArray<NumberProp> | NumberProp;
