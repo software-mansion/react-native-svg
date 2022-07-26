@@ -530,17 +530,3 @@ declare export var SvgWithCss: React.ComponentClass<XmlProps, XmlState>;
 declare export var SvgCssUri: React.FunctionComponent<UriProps>;
 declare export var SvgWithCssUri: React.ComponentClass<UriProps, UriState>;
 declare export var inlineStyles: Middleware;
-export type LocalProps = {
-  asset?: string | number,
-  override?: Object,
-  ...
-};
-export type LocalState = {
-  xml: string | null,
-  ...
-};
-declare export function LocalSvg(props: LocalProps): React$Node;
-declare export var WithLocalSvg: React.ComponentClass<LocalProps, LocalState>;
-declare export var loadLocalRawResource: (
-  source?: string | number | void
-) => Promise<string>;
