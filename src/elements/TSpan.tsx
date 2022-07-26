@@ -1,13 +1,29 @@
 import React, { Component } from 'react';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import extractTransform from '../lib/extract/extractTransform';
-import extractText, { setTSpan } from '../lib/extract/extractText';
+import extractText, { setTSpan, TextChild } from '../lib/extract/extractText';
 import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
-import { TransformProps } from '../lib/extract/types';
+import {
+  CommonPathProps,
+  FontProps,
+  NumberArray,
+  NumberProp,
+  TransformProps,
+} from '../lib/extract/types';
 import { RNSVGTSpan } from './NativeComponents';
 
-export default class TSpan extends Shape<{}> {
+export interface TSpanProps extends CommonPathProps, FontProps {
+  children?: TextChild;
+  x?: NumberArray;
+  y?: NumberArray;
+  dx?: NumberArray;
+  dy?: NumberArray;
+  rotate?: NumberArray;
+  inlineSize?: NumberProp;
+}
+
+export default class TSpan extends Shape<TSpanProps> {
   static displayName = 'TSpan';
 
   setNativeProps = (

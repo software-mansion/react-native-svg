@@ -27,7 +27,7 @@ import csstree, {
   Selector,
   SelectorList,
 } from 'css-tree';
-import cssSelect, { Adapter, Options, Predicate, Query } from 'css-select';
+import cssSelect, { Options } from 'css-select';
 
 /*
  * Style element inlining experiment based on SVGO
@@ -113,11 +113,11 @@ function removeSubsets(nodes: Array<XmlAST | string>): Array<XmlAST | string> {
 
 // does at least one of passed element nodes pass the test predicate?
 function existsOne(
-  predicate: Predicate<XmlAST>,
+  predicate: (v: XmlAST) => boolean,
   elems: Array<XmlAST | string>,
 ): boolean {
   return elems.some(
-    elem =>
+    (elem) =>
       typeof elem === 'object' &&
       (predicate(elem) || existsOne(predicate, elem.children)),
   );
@@ -140,10 +140,10 @@ function hasAttrib(elem: XmlAST, name: string): boolean {
 // finds the first node in the array that matches the test predicate, or one
 // of its children
 function findOne(
-  predicate: Predicate<XmlAST>,
+  predicate: (v: XmlAST) => boolean,
   elems: Array<XmlAST | string>,
-): XmlAST | undefined {
-  let elem: XmlAST | undefined;
+): XmlAST | null {
+  let elem: XmlAST | null = null;
 
   for (let i = 0, l = elems.length; i < l && !elem; i++) {
     const node = elems[i];
@@ -164,7 +164,7 @@ function findOne(
 // finds all of the element nodes in the array that match the test predicate,
 // as well as any of their children that match it
 function findAll(
-  predicate: Predicate<XmlAST>,
+  predicate: (v: XmlAST) => boolean,
   nodes: Array<XmlAST | string>,
   result: Array<XmlAST> = [],
 ): Array<XmlAST> {
@@ -185,36 +185,23 @@ function findAll(
   return result;
 }
 
-const adapter: Adapter<XmlAST | string, XmlAST> = {
-  removeSubsets,
-  existsOne,
-  getSiblings,
-  hasAttrib,
-  findOne,
-  findAll,
-  isTag,
-  getParent,
-  getChildren,
-  getName,
-  getText,
-  getAttributeValue,
-};
-
 const cssSelectOpts: Options<XmlAST | string, XmlAST> = {
   xmlMode: true,
-  adapter,
+  adapter: {
+    removeSubsets,
+    existsOne,
+    getSiblings,
+    hasAttrib,
+    findOne,
+    findAll,
+    isTag,
+    getParent,
+    getChildren,
+    getName,
+    getText,
+    getAttributeValue,
+  },
 };
-
-/**
- * Evaluate a string of CSS selectors against the element and returns matched elements.
- *
- * @param {Query} query can be either a CSS selector string or a compiled query function.
- * @param {Array<XmlAST> | XmlAST} elems Elements to query. If it is an element, its children will be queried.
- * @return {Array<XmlAST>} All matching elements.
- */
-function querySelectorAll(query: Query, elems: XmlAST | XmlAST[]): XmlAST[] {
-  return cssSelect(query, elems, cssSelectOpts);
-}
 
 type FlatPseudoSelector = {
   item: ListItem<CssNode>;
@@ -303,7 +290,7 @@ function filterByPseudos(selectors: FlatSelectorList) {
       csstree.generate({
         type: 'Selector',
         children: new List<CssNode>().fromArray(
-          pseudos.map(pseudo => pseudo.item.data),
+          pseudos.map((pseudo) => pseudo.item.data),
         ),
       }),
     ),
@@ -320,7 +307,7 @@ const usePseudos = [''];
  */
 function cleanPseudos(selectors: FlatSelectorList) {
   selectors.forEach(({ pseudos }) =>
-    pseudos.forEach(pseudo => pseudo.list.remove(pseudo.item)),
+    pseudos.forEach((pseudo) => pseudo.list.remove(pseudo.item)),
   );
 }
 
@@ -506,7 +493,7 @@ function sortSelectors(selectors: FlatSelectorList) {
     return selectors;
   }
   const specs = selectors.map(selectorWithSpecificity);
-  return exec(specs, len).map(s => s.selector);
+  return exec(specs, len).map((s) => s.selector);
 }
 
 const declarationParseProps = {
@@ -530,14 +517,17 @@ function CSSStyleDeclaration(ast: XmlAST) {
       styles,
       declarationParseProps,
     ) as DeclarationList;
-    declarations.children.each(node => {
+    declarations.children.each((node) => {
       try {
         const { property, value, important } = node as Declaration;
         const name = property.trim();
         priority.set(name, important);
         style[camelCase(name)] = csstree.generate(value).trim();
       } catch (styleError) {
-        if (styleError.message !== 'Unknown node type: undefined') {
+        if (
+          styleError instanceof Error &&
+          styleError.message !== 'Unknown node type: undefined'
+        ) {
           console.warn(
             "Warning: Parse error when parsing inline styles, style properties of this element cannot be used. The raw styles can still be get/set using .attr('style').value. Error details: " +
               styleError,
@@ -602,7 +592,7 @@ export const inlineStyles: Middleware = function inlineStyles(
   document: XmlAST,
 ) {
   // collect <style/>s
-  const styleElements = querySelectorAll('style', document);
+  const styleElements = cssSelect('style', document, cssSelectOpts);
 
   //no <styles/>s, nothing to do
   if (styleElements.length === 0) {
@@ -650,7 +640,10 @@ export const inlineStyles: Middleware = function inlineStyles(
     const selectorStr = csstree.generate(item.data);
     try {
       // apply <style/> to matched elements
-      const matched = querySelectorAll(selectorStr, document).map(initStyle);
+      const matched = cssSelect(selectorStr, document, cssSelectOpts).map(
+        initStyle,
+      );
+
       if (matched.length === 0) {
         continue;
       }
@@ -676,7 +669,7 @@ export const inlineStyles: Middleware = function inlineStyles(
         },
       });
     } catch (selectError) {
-      if (selectError.constructor === SyntaxError) {
+      if (selectError instanceof SyntaxError) {
         console.warn(
           'Warning: Syntax error when trying to select \n\n' +
             selectorStr +
@@ -702,15 +695,11 @@ export function SvgCss(props: XmlProps) {
 }
 
 export function SvgCssUri(props: UriProps) {
-  const { uri } = props;
+  const { uri, onError = err } = props;
   const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
-    uri
-      ? fetchText(uri)
-          .then(setXml)
-          .catch(err)
-      : setXml(null);
-  }, [uri]);
+    uri ? fetchText(uri).then(setXml).catch(onError) : setXml(null);
+  }, [onError, uri]);
   return <SvgCss xml={xml} override={props} />;
 }
 
@@ -731,7 +720,7 @@ export class SvgWithCss extends Component<XmlProps, XmlState> {
     try {
       this.setState({ ast: xml ? parse(xml, inlineStyles) : null });
     } catch (e) {
-      console.error(e);
+      this.props.onError ? this.props.onError(e as Error) : console.error(e);
     }
   }
   render() {
@@ -758,7 +747,7 @@ export class SvgWithCssUri extends Component<UriProps, UriState> {
     try {
       this.setState({ xml: uri ? await fetchText(uri) : null });
     } catch (e) {
-      console.error(e);
+      this.props.onError ? this.props.onError(e as Error) : console.error(e);
     }
   }
   render() {
