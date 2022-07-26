@@ -5,6 +5,7 @@ import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 
 import { fetchText } from './xml';
 import { SvgCss, SvgWithCss } from './css';
+import { SvgProps } from './elements/Svg';
 
 const { getRawResource } = NativeModules.RNSVGRenderableManager || {};
 
@@ -48,7 +49,10 @@ export const loadLocalRawResource =
     ? loadLocalRawResourceDefault
     : loadLocalRawResourceAndroid;
 
-export type LocalProps = { asset?: string | number; override?: Object };
+export type LocalProps = SvgProps & {
+  asset?: string | number;
+  override?: Object;
+};
 export type LocalState = { xml: string | null };
 
 export function LocalSvg(props: LocalProps) {
