@@ -232,6 +232,10 @@ export interface CommonMarkerProps {
   markerEnd?: string;
 }
 
+export interface NativeProps {
+  onLayout?: (event: LayoutChangeEvent) => void;
+}
+
 export interface CommonPathProps
   extends FillProps,
     StrokeProps,
@@ -242,7 +246,8 @@ export interface CommonPathProps
     TouchableProps,
     DefinitionProps,
     CommonMarkerProps,
-    CommonMaskProps {}
+    CommonMaskProps,
+    NativeProps {}
 
 export type ResponderInstanceProps = {
   touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
