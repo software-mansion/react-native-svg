@@ -1,5 +1,10 @@
 import React, { useState, useEffect, Component } from 'react';
-import { NativeModules, Platform, Image, ImageSourcePropType } from 'react-native';
+import {
+  NativeModules,
+  Platform,
+  Image,
+  ImageSourcePropType,
+} from 'react-native';
 
 import { fetchText } from './xml';
 import { SvgCss, SvgWithCss } from './css';
