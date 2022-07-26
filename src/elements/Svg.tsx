@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  ColorValue,
   findNodeHandle,
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
@@ -12,7 +13,6 @@ import {
   ViewStyle,
 } from 'react-native';
 import {
-  Color,
   extractedProps,
   NumberProp,
   ResponderInstanceProps,
@@ -38,7 +38,7 @@ export interface SvgProps extends GProps, ViewProps {
   height?: NumberProp;
   viewBox?: string;
   preserveAspectRatio?: string;
-  color?: Color;
+  color?: ColorValue;
   title?: string;
 }
 
