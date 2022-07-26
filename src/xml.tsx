@@ -138,7 +138,7 @@ export function SvgUri(props: UriProps) {
   useEffect(() => {
     uri
       ? fetchText(uri)
-          .then(data => {
+          .then((data) => {
             setXml(data);
             onLoad?.();
           })
