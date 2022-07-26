@@ -42,7 +42,12 @@ import {
   SvgWithCssUri,
   inlineStyles,
 } from './css';
-import { LocalSvg, WithLocalSvg, loadLocalRawResource } from './LocalSvg';
+import {
+  LocalSvg,
+  WithLocalSvg,
+  loadLocalRawResource,
+  LocalProps,
+} from './LocalSvg';
 import {
   RNSVGCircle,
   RNSVGClipPath,
@@ -94,6 +99,7 @@ export {
   UriProps,
   XmlProps,
   AstProps,
+  LocalProps,
 };
 
 export {
