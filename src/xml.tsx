@@ -11,7 +11,7 @@ import Ellipse from './elements/Ellipse';
 import Polygon from './elements/Polygon';
 import Polyline from './elements/Polyline';
 import Line from './elements/Line';
-import Svg from './elements/Svg';
+import Svg, { SvgProps } from './elements/Svg';
 import Path from './elements/Path';
 import G from './elements/G';
 import Text from './elements/Text';
@@ -86,13 +86,13 @@ export type AdditionalProps = {
   override?: Object;
 };
 
-export type UriProps = { uri: string | null } & AdditionalProps;
+export type UriProps = SvgProps & { uri: string | null } & AdditionalProps;
 export type UriState = { xml: string | null };
 
-export type XmlProps = { xml: string | null } & AdditionalProps;
+export type XmlProps = SvgProps & { xml: string | null } & AdditionalProps;
 export type XmlState = { ast: JsxAST | null };
 
-export type AstProps = { ast: JsxAST | null } & AdditionalProps;
+export type AstProps = SvgProps & { ast: JsxAST | null } & AdditionalProps;
 
 export function SvgAst({ ast, override }: AstProps) {
   if (!ast) {

@@ -24,7 +24,17 @@ import Mask, { MaskProps } from './elements/Mask';
 import Marker, { MarkerProps } from './elements/Marker';
 import ForeignObject, { ForeignObjectProps } from './elements/ForeignObject';
 
-import { parse, SvgAst, SvgFromUri, SvgFromXml, SvgUri, SvgXml } from './xml';
+import {
+  parse,
+  SvgAst,
+  SvgFromUri,
+  SvgFromXml,
+  SvgUri,
+  SvgXml,
+  UriProps,
+  XmlProps,
+  AstProps,
+} from './xml';
 import {
   SvgCss,
   SvgCssUri,
@@ -81,6 +91,9 @@ export {
   MaskProps,
   MarkerProps,
   ForeignObjectProps,
+  UriProps,
+  XmlProps,
+  AstProps,
 };
 
 export {
