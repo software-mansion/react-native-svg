@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Midl Include="ReactPackageProvider.idl" />
+    <Midl Include="Views.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
+    <Midl Include="ViewManagers.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
+    <Midl Include="Types.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="ReactPackageProvider.cpp" />
+    <ClCompile Include="RectView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="SVGLength.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="RectViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="PathViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="PathView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="TextView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="TSpanView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipseViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipseView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="LineViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="LineView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="SvgView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="SymbolView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="SvgViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="TextViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="TSpanViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="UseView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="SymbolViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="UseViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="DefsViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearGradientViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="DefsView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearGradientView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="BrushView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="RadialGradientView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="RadialGradientViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="ReactPackageProvider.h" />
+    <ClInclude Include="RNSVGModule.h" />
+    <ClInclude Include="RectView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SVGLength.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="RectViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="PathViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="PathView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="TextView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="TSpanView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="EllipseViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="EllipseView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="LineViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="LineView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="SvgView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="SvgViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="TSpanViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="UseView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="UseViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="DefsViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearGradientViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="DefsView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearGradientView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="RadialGradientView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="RadialGradientViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PropertySheet.props" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Views">
+      <UniqueIdentifier>{e902587e-fe1d-4643-875b-d58996b40d98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewManagers">
+      <UniqueIdentifier>{cb3ce7b2-9fdf-4578-8e0d-4d6853b727bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{8a4e0664-0d52-46ca-b476-a1ad90239a09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\GroupViews">
+      <UniqueIdentifier>{96f26034-8559-4794-a806-4ecac541e02b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewManagers\GroupViewManagers">
+      <UniqueIdentifier>{5942afc3-8b5d-4d8c-bb09-e82581f606b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IDLs">
+      <UniqueIdentifier>{50f81ae3-d543-477a-a60c-a0f310289f29}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

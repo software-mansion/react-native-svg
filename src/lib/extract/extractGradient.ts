@@ -1,6 +1,6 @@
 import React, { Children, ReactElement } from 'react';
+import { processColor } from 'react-native';
 
-import extractColor from './extractColor';
 import extractOpacity from './extractOpacity';
 import extractTransform from './extractTransform';
 import { TransformProps } from './types';
@@ -54,7 +54,7 @@ export default function extractGradient(
 
   const stops = [];
   const childArray = children
-    ? Children.map(children, child =>
+    ? Children.map(children, (child) =>
         React.cloneElement(child, {
           parent,
         }),
@@ -71,7 +71,7 @@ export default function extractGradient(
       },
     } = childArray[i];
     const offsetNumber = percentToFloat(offset || 0);
-    const color = stopColor && extractColor(stopColor);
+    const color = stopColor && processColor(stopColor);
     if (typeof color !== 'number' || isNaN(offsetNumber)) {
       console.warn(
         `"${stopColor}" is not a valid color or "${offset}" is not a valid offset`,

@@ -1,11 +1,15 @@
 import { Component } from 'react';
+import { ColorValue } from 'react-native';
+import { NumberProp } from '../lib/extract/types';
 
-type StopProps = {
+export interface StopProps {
+  stopColor?: ColorValue;
+  stopOpacity?: NumberProp;
+  offset?: NumberProp;
   parent?: Component;
-};
+}
 
 export default class Stop extends Component<StopProps, {}> {
-  props!: StopProps;
   static displayName = 'Stop';
 
   setNativeProps = () => {

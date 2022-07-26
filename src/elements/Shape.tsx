@@ -252,8 +252,12 @@ export default class Shape<P> extends Component<P> {
    * representative example / reproduction.
    * */
   getBBox = (options?: SVGBoundingBoxOptions): SVGRect => {
-    const { fill = true, stroke = true, markers = true, clipped = true } =
-      options || {};
+    const {
+      fill = true,
+      stroke = true,
+      markers = true,
+      clipped = true,
+    } = options || {};
     const handle = findNodeHandle(this.root as Component);
     return RNSVGRenderableManager.getBBox(handle, {
       fill,

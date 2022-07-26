@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGMarker } from './NativeComponents';
 
-export default class Marker extends Shape<{
+export enum MarkerUnits {
+  STROKE_WIDTH = 'strokeWidth',
+  USER_SPACE_ON_USE = 'userSpaceOnUse',
+}
+
+export enum Orient {
+  AUTO = 'auto',
+  AUTO_START_REVERSE = 'auto-start-reverse',
+}
+
+export interface MarkerProps {
+  children?: ReactNode;
   id?: string;
   viewBox?: string;
   preserveAspectRatio?: string;
@@ -12,9 +23,11 @@ export default class Marker extends Shape<{
   refY?: NumberProp;
   markerWidth?: NumberProp;
   markerHeight?: NumberProp;
-  markerUnits?: 'strokeWidth' | 'userSpaceOnUse';
-  orient?: 'auto' | 'auto-start-reverse' | NumberProp;
-}> {
+  markerUnits?: MarkerUnits;
+  orient?: Orient | NumberProp;
+}
+
+export default class Marker extends Shape<MarkerProps> {
   static displayName = 'Marker';
 
   static defaultProps = {
