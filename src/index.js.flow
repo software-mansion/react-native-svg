@@ -492,6 +492,8 @@ export type UriProps = {
   uri: string | null,
   onError?: (error: Error) => void,
   override?: SvgProps,
+  onError?: (error: Error) => void,
+  onLoad?: () => void,
   ...
 } & SvgProps;
 export type UriState = {
