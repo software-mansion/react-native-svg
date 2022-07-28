@@ -10,14 +10,7 @@ import units from '../lib/units';
 import Shape from './Shape';
 import { RNSVGMask } from './NativeComponents';
 
-export enum EMaskUnits {
-  USER_SPACE_ON_USE = 'userSpaceOnUse',
-  OBJECT_BOUNDING_BOX = 'objectBoundingBox',
-}
-
-export type TMaskUnits =
-  | EMaskUnits.USER_SPACE_ON_USE
-  | EMaskUnits.OBJECT_BOUNDING_BOX;
+export type TMaskUnits = 'userSpaceOnUse' | 'objectBoundingBox';
 
 export interface MaskProps extends CommonPathProps {
   children?: ReactNode;

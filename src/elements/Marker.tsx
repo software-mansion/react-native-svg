@@ -4,15 +4,9 @@ import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGMarker } from './NativeComponents';
 
-export enum MarkerUnits {
-  STROKE_WIDTH = 'strokeWidth',
-  USER_SPACE_ON_USE = 'userSpaceOnUse',
-}
+export type MarkerUnits = 'strokeWidth' | 'userSpaceOnUse';
 
-export enum Orient {
-  AUTO = 'auto',
-  AUTO_START_REVERSE = 'auto-start-reverse',
-}
+export type Orient = 'auto' | 'auto-start-reverse';
 
 export interface MarkerProps {
   children?: ReactNode;
