@@ -300,7 +300,7 @@ UInt32 saturate(CGFloat value) {
 - (void)prepareStrokeDash:(NSUInteger)count strokeDasharray:(NSArray<RNSVGLength *> *)strokeDasharray {
     if (strokeDasharray != _sourceStrokeDashArray) {
         CGFloat *dash = _strokeDashArrayData;
-        _strokeDashArrayData = realloc(dash, sizeof(CGFloat) * count);
+        _strokeDashArrayData = (CGFloat *)realloc(dash, sizeof(CGFloat) * count);
         if (!_strokeDashArrayData) {
             free(dash);
             return;
@@ -510,7 +510,7 @@ UInt32 saturate(CGFloat value) {
     if (self.stroke && self.strokeWidth) {
         // Add stroke to hitArea
         CGFloat width = [self relativeOnOther:self.strokeWidth];
-        self.strokePath = CGPathRetain(CFAutorelease(CGPathCreateCopyByStrokingPath(path, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit)));
+        self.strokePath = CGPathRetain((CGPathRef)CFAutorelease(CGPathCreateCopyByStrokingPath(path, nil, width, self.strokeLinecap, self.strokeLinejoin, self.strokeMiterlimit)));
         // TODO add dashing
         // CGPathCreateCopyByDashingPath(CGPathRef  _Nullable path, const CGAffineTransform * _Nullable transform, CGFloat phase, const CGFloat * _Nullable lengths, size_t count)
     }

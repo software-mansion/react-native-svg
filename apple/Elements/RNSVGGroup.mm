@@ -124,7 +124,7 @@
 
 - (void)pushGlyphContext
 {
-    __weak typeof(self) weakSelf = self;
+    __typeof__(self) __weak weakSelf = self;
     [[self.textRoot getGlyphContext] pushContext:weakSelf font:self.font];
 }
 
@@ -155,7 +155,7 @@
         return YES;
     }];
 
-    cached = CGPathRetain(CFAutorelease(path));
+    cached = CGPathRetain((CGPathRef)CFAutorelease(path));
     self.path = cached;
     return cached;
 }
@@ -227,7 +227,7 @@
 {
     self.dirty = false;
     if (self.name) {
-        typeof(self) __weak weakSelf = self;
+        __typeof__(self) __weak weakSelf = self;
         [self.svgView defineTemplate:weakSelf templateName:self.name];
     }
 

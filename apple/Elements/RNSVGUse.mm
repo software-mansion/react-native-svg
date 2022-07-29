@@ -65,24 +65,24 @@
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
     CGContextTranslateCTM(context, [self relativeOnWidth:self.x], [self relativeOnHeight:self.y]);
-    RNSVGNode* template = [self.svgView getDefinedTemplate:self.href];
-    if (template) {
+    RNSVGNode* definedTemplate = [self.svgView getDefinedTemplate:self.href];
+    if (definedTemplate) {
         [self beginTransparencyLayer:context];
         [self clip:context];
 
-        if ([template isKindOfClass:[RNSVGRenderable class]]) {
-            [(RNSVGRenderable*)template mergeProperties:self];
+        if ([definedTemplate isKindOfClass:[RNSVGRenderable class]]) {
+            [(RNSVGRenderable*)definedTemplate mergeProperties:self];
         }
 
-        if ([template class] == [RNSVGSymbol class]) {
-            RNSVGSymbol *symbol = (RNSVGSymbol*)template;
+        if ([definedTemplate class] == [RNSVGSymbol class]) {
+            RNSVGSymbol *symbol = (RNSVGSymbol*)definedTemplate;
             [symbol renderSymbolTo:context width:[self relativeOnWidth:self.usewidth] height:[self relativeOnHeight:self.useheight]];
         } else {
-            [template renderTo:context rect:rect];
+            [definedTemplate renderTo:context rect:rect];
         }
 
-        if ([template isKindOfClass:[RNSVGRenderable class]]) {
-            [(RNSVGRenderable*)template resetProperties];
+        if ([definedTemplate isKindOfClass:[RNSVGRenderable class]]) {
+            [(RNSVGRenderable*)definedTemplate resetProperties];
         }
 
         [self endTransparencyLayer:context];
@@ -93,7 +93,7 @@
     } else {
         return;
     }
-    CGRect bounds = template.clientRect;
+    CGRect bounds = definedTemplate.clientRect;
     self.clientRect = bounds;
     
     CGAffineTransform current = CGContextGetCTM(context);
@@ -116,13 +116,13 @@
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
     transformed =  CGPointApplyAffineTransform(transformed, self.invTransform);
-    RNSVGNode const* template = [self.svgView getDefinedTemplate:self.href];
+    RNSVGNode const* definedTemplate = [self.svgView getDefinedTemplate:self.href];
     if (event) {
         self.active = NO;
     } else if (self.active) {
         return self;
     }
-    RNSVGPlatformView const* hitChild = [template hitTest:transformed withEvent:event];
+    RNSVGPlatformView const* hitChild = [definedTemplate hitTest:transformed withEvent:event];
     if (hitChild) {
         self.active = YES;
         return self;
@@ -133,11 +133,11 @@
 - (CGPathRef)getPath: (CGContextRef)context
 {
     CGAffineTransform transform = CGAffineTransformMakeTranslation([self relativeOnWidth:self.x], [self relativeOnHeight:self.y]);
-    RNSVGNode const* template = [self.svgView getDefinedTemplate:self.href];
-    if (!template) {
+    RNSVGNode const* definedTemplate = [self.svgView getDefinedTemplate:self.href];
+    if (!definedTemplate) {
         return nil;
     }
-    CGPathRef path = [template getPath:context];
+    CGPathRef path = [definedTemplate getPath:context];
     return CGPathCreateCopyByTransformingPath(path, &transform);
 }
 

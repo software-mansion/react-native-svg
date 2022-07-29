@@ -179,17 +179,20 @@ static void mountChildComponentView(UIView<RCTComponentViewProtocol> *childCompo
     if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ([((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]] || [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGSvgView class]])) {
         [element insertSubview:((RCTViewComponentView *)childComponentView).contentView atIndex:index];
         [element invalidate];
+        [element.superview insertSubview:childComponentView atIndex:index+1];
+    } else if ([childComponentView isKindOfClass:[RNSVGNode class]] || [childComponentView isKindOfClass:[RNSVGSvgView class]]) {
+        [element insertSubview:childComponentView atIndex:index];
+        [element invalidate];
     } else {
         RCTLogError(@"Children of SVG should only be of SVG type, instead found %@", childComponentView);
     }
-    // if we don't add componentView to native view hierarchy, RN responder system does not work for some reason
-    // We add it with `index+1` since first child is `contentView`
-    [element.superview insertSubview:childComponentView atIndex:index+1];
 }
 
 static void unmountChildComponentView(UIView<RCTComponentViewProtocol> *childComponentView, NSInteger index, RNSVGNode *element) {
     if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ([((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]] || [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGSvgView class]])) {
         [element removeFromSuperview];
+        [element invalidate];
+    } else if ([childComponentView isKindOfClass:[RNSVGNode class]] || [childComponentView isKindOfClass:[RNSVGSvgView class]]) {
         [element invalidate];
     } else {
         RCTLogError(@"Children of SVG should only be of SVG type, instead found %@", childComponentView);

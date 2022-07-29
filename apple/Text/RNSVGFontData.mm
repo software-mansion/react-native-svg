@@ -133,7 +133,7 @@ int lighter(int inherited) {
             NSString* weight = fontWeight;
             NSInteger fw = RNSVGFontWeightFromString(weight);
             if (fw != -1) {
-                data->absoluteFontWeight = AbsoluteFontWeight(fw, parent);
+                data->absoluteFontWeight = AbsoluteFontWeight((RNSVGFontWeight)fw, parent);
                 data->fontWeight = nearestFontWeight(data->absoluteFontWeight);
             } else if ([weight length] != 0) {
                 [data handleNumericWeight:parent weight:[weight doubleValue]];

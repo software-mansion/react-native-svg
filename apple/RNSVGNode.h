@@ -11,6 +11,10 @@
 #import "RNSVGCGFCRule.h"
 #import "RNSVGSvgView.h"
 
+#ifdef RN_FABRIC_ENABLED
+#import <React/RCTViewComponentView.h>
+#endif
+
 @class RNSVGGroup;
 
 /**
@@ -18,8 +22,12 @@
  ＊interfaces for all non-definition nodes.
  */
 
-@interface RNSVGNode : RNSVGView
-
+@interface RNSVGNode :
+#ifdef RN_FABRIC_ENABLED
+RCTViewComponentView
+#else
+RNSVGView
+#endif
 /*
  N[1/Sqrt[2], 36]
  The inverse of the square root of 2.
@@ -37,7 +45,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, strong) NSString *markerStart;
 @property (nonatomic, strong) NSString *markerMid;
 @property (nonatomic, strong) NSString *markerEnd;
-@property (nonatomic, strong) UIView *parentComponentView;
+@property (nonatomic, strong) RNSVGPlatformView *parentComponentView;
 
 /**
  * Used to control how touch events are processed.

@@ -15,7 +15,7 @@ enum RNSVGAlignmentBaseline RNSVGAlignmentBaselineFromString( NSString* s )
     const NSUInteger l = sizeof(RNSVGAlignmentBaselineStrings) / sizeof(NSString*);
     for (NSUInteger i = 0; i < l; i++) {
         if ([s isEqualToString:RNSVGAlignmentBaselineStrings[i]]) {
-            return i;
+            return (RNSVGAlignmentBaseline)i;
         }
     }
     return RNSVGAlignmentBaselineDEFAULT;
@@ -36,7 +36,7 @@ enum RNSVGFontStyle RNSVGFontStyleFromString( NSString* s )
     const NSUInteger l = sizeof(RNSVGFontStyleStrings) / sizeof(NSString*);
     for (NSUInteger i = 0; i < l; i++) {
         if ([s isEqualToString:RNSVGFontStyleStrings[i]]) {
-            return i;
+            return (RNSVGFontStyle)i;
         }
     }
     return RNSVGFontStyleDEFAULT;
@@ -57,7 +57,7 @@ enum RNSVGFontVariantLigatures RNSVGFontVariantLigaturesFromString( NSString* s 
     const NSUInteger l = sizeof(RNSVGFontVariantLigaturesStrings) / sizeof(NSString*);
     for (NSUInteger i = 0; i < l; i++) {
         if ([s isEqualToString:RNSVGFontVariantLigaturesStrings[i]]) {
-            return i;
+            return (RNSVGFontVariantLigatures)i;
         }
     }
     return RNSVGFontVariantLigaturesDEFAULT;
@@ -99,7 +99,7 @@ enum RNSVGTextAnchor RNSVGTextAnchorFromString( NSString* s )
     const NSUInteger l = sizeof(RNSVGTextAnchorStrings) / sizeof(NSString*);
     for (NSUInteger i = 0; i < l; i++) {
         if ([s isEqualToString:RNSVGTextAnchorStrings[i]]) {
-            return i;
+            return (RNSVGTextAnchor)i;
         }
     }
     return RNSVGTextAnchorDEFAULT;
@@ -120,7 +120,7 @@ enum RNSVGTextDecoration RNSVGTextDecorationFromString( NSString* s )
     const NSUInteger l = sizeof(RNSVGTextDecorationStrings) / sizeof(NSString*);
     for (NSUInteger i = 0; i < l; i++) {
         if ([s isEqualToString:RNSVGTextDecorationStrings[i]]) {
-            return i;
+            return (RNSVGTextDecoration)i;
         }
     }
     return RNSVGTextDecorationDEFAULT;
@@ -141,7 +141,7 @@ enum RNSVGTextLengthAdjust RNSVGTextLengthAdjustFromString( NSString* s )
     const NSUInteger l = sizeof(RNSVGTextLengthAdjustStrings) / sizeof(NSString*);
     for (NSUInteger i = 0; i < l; i++) {
         if ([s isEqualToString:RNSVGTextLengthAdjustStrings[i]]) {
-            return i;
+            return (RNSVGTextLengthAdjust)i;
         }
     }
     return RNSVGTextLengthAdjustDEFAULT;
@@ -162,7 +162,7 @@ enum RNSVGTextPathMethod RNSVGTextPathMethodFromString( NSString* s )
     const NSUInteger l = sizeof(RNSVGTextPathMethodStrings) / sizeof(NSString*);
     for (NSUInteger i = 0; i < l; i++) {
         if ([s isEqualToString:RNSVGTextPathMethodStrings[i]]) {
-            return i;
+            return (RNSVGTextPathMethod)i;
         }
     }
     return RNSVGTextPathMethodDEFAULT;
@@ -183,7 +183,7 @@ enum RNSVGTextPathMidLine RNSVGTextPathMidLineFromString( NSString* s )
     const NSUInteger l = sizeof(RNSVGTextPathMidLineStrings) / sizeof(NSString*);
     for (NSUInteger i = 0; i < l; i++) {
         if ([s isEqualToString:RNSVGTextPathMidLineStrings[i]]) {
-            return i;
+            return (RNSVGTextPathMidLine)i;
         }
     }
     return RNSVGTextPathMidLineDEFAULT;
@@ -204,7 +204,7 @@ enum RNSVGTextPathSide RNSVGTextPathSideFromString( NSString* s )
     const NSUInteger l = sizeof(RNSVGTextPathSideStrings) / sizeof(NSString*);
     for (NSUInteger i = 0; i < l; i++) {
         if ([s isEqualToString:RNSVGTextPathSideStrings[i]]) {
-            return i;
+            return (RNSVGTextPathSide)i;
         }
     }
     return RNSVGTextPathSideDEFAULT;
@@ -225,7 +225,7 @@ enum RNSVGTextPathSpacing RNSVGTextPathSpacingFromString( NSString* s )
     const NSUInteger l = sizeof(RNSVGTextPathSpacingStrings) / sizeof(NSString*);
     for (NSUInteger i = 0; i < l; i++) {
         if ([s isEqualToString:RNSVGTextPathSpacingStrings[i]]) {
-            return i;
+            return (RNSVGTextPathSpacing)i;
         }
     }
     return RNSVGTextPathSpacingDEFAULT;

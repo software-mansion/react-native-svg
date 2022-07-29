@@ -299,12 +299,12 @@
     return _clipPaths ? [_clipPaths objectForKey:clipPathName] : nil;
 }
 
-- (void)defineTemplate:(RNSVGNode *)template templateName:(NSString *)templateName
+- (void)defineTemplate:(RNSVGNode *)definedTemplate templateName:(NSString *)templateName
 {
     if (!_templates) {
         _templates = [[NSMutableDictionary alloc] init];
     }
-    [_templates setObject:template forKey:templateName];
+    [_templates setObject:definedTemplate forKey:templateName];
 }
 
 - (RNSVGNode *)getDefinedTemplate:(NSString *)templateName

@@ -867,7 +867,7 @@ RNSVGTopAlignedLabel *label;
     CFArrayRef runs = CTLineGetGlyphRuns(line);
     CFIndex runEnd = CFArrayGetCount(runs);
     for (CFIndex ri = 0; ri < runEnd; ri++) {
-        CTRunRef run = CFArrayGetValueAtIndex(runs, ri);
+        CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runs, ri);
         CFIndex runGlyphCount = CTRunGetGlyphCount(run);
         CFIndex indices[runGlyphCount];
         CGSize advances[runGlyphCount];
@@ -876,11 +876,11 @@ RNSVGTopAlignedLabel *label;
         // Grab the glyphs and font
         CTRunGetGlyphs(run, CFRangeMake(0, 0), glyphs);
         CTRunGetStringIndices(run, CFRangeMake(0, 0), indices);
-        CTFontRef runFont = CFDictionaryGetValue(CTRunGetAttributes(run), kCTFontAttributeName);
+        CTFontRef runFont = (CTFontRef)CFDictionaryGetValue(CTRunGetAttributes(run), kCTFontAttributeName);
         CTFontGetAdvancesForGlyphs(runFont, kCTFontOrientationHorizontal, glyphs, advances, runGlyphCount);
         CFIndex nextOrEndRunIndex = n;
         if (ri + 1 < runEnd) {
-            CTRunRef nextRun = CFArrayGetValueAtIndex(runs, ri + 1);
+            CTRunRef nextRun = (CTRunRef)CFArrayGetValueAtIndex(runs, ri + 1);
             CFIndex nextRunGlyphCount = CTRunGetGlyphCount(nextRun);
             CFIndex nextIndices[nextRunGlyphCount];
             CTRunGetStringIndices(nextRun, CFRangeMake(0, 0), nextIndices);
@@ -1049,8 +1049,8 @@ RNSVGTopAlignedLabel *label;
     while (parent) {
         if ([parent class] == [RNSVGTextPath class]) {
             textPath = (RNSVGTextPath*) parent;
-            RNSVGNode *template = [self.svgView getDefinedTemplate:textPath.href];
-            path = [template getPath:context];
+            RNSVGNode *definedTemplate = [self.svgView getDefinedTemplate:textPath.href];
+            path = [definedTemplate getPath:context];
             [measure extractPathData:path];
             break;
         } else if (![parent isKindOfClass:[RNSVGText class]]) {
