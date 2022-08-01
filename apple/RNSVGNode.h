@@ -82,6 +82,8 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 
 - (void)invalidate;
 
+- (void)fabricDealloc;
+
 - (RNSVGGroup *)getParentTextRoot;
 
 - (void)renderTo:(CGContextRef)context rect:(CGRect)rect;

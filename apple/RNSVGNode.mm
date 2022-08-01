@@ -587,4 +587,65 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     CGPathRelease(_path);
 }
 
+- (void)fabricDealloc
+{
+    self.opacity = 1;
+    self.opaque = false;
+    self.matrix = CGAffineTransformIdentity;
+    self.transforms = CGAffineTransformIdentity;
+    self.invTransform = CGAffineTransformIdentity;
+    _merging = false;
+    _dirty = false;
+    
+    _name = nil;
+    _display = nil;
+    _opacity = 0;
+    _clipRule = kRNSVGCGFCRuleEvenodd;
+    _clipPath = nil;
+    _mask = nil;
+    _markerStart = nil;
+    _markerMid = nil;
+    _markerEnd = nil;
+    _parentComponentView = nil;
+
+    _pointerEvents = RCTPointerEventsUnspecified;
+    _responsible = NO;
+
+    _ctm = CGAffineTransformIdentity;
+    _screenCTM = CGAffineTransformIdentity;
+    _matrix = CGAffineTransformIdentity;
+    _transforms = CGAffineTransformIdentity;
+    _invmatrix = CGAffineTransformIdentity;
+    _invTransform = CGAffineTransformIdentity;
+    _active = NO;
+    _skip = NO;
+    if (_markerPath) {
+        CGPathRelease(_markerPath);
+    }
+    _markerPath = nil;
+    _clientRect = CGRectZero;
+    _pathBounds = CGRectZero;
+    _fillBounds = CGRectZero;
+    _strokeBounds = CGRectZero;
+    _markerBounds = CGRectZero;
+    _onLayout = nil;
+
+    _svgView = nil;
+    _textRoot = nil;
+    
+    
+    glyphContext = nil;
+    _transparent = NO;
+    _clipNode = nil;
+    canvasWidth = 0;
+    canvasHeight = 0;
+    canvasDiagonal = 0;
+    CGPathRelease(_cachedClipPath);
+    _cachedClipPath = nil;
+    CGPathRelease(_strokePath);
+    _strokePath = nil;
+    CGPathRelease(_path);
+    _path = nil;
+}
+
 @end

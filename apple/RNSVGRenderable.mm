@@ -180,6 +180,42 @@ static RNSVGRenderable * _contextElement;
     _strokeDashArrayData = nil;
 }
 
+- (void)fabricDealloc
+{
+    [super fabricDealloc];
+    
+    _fillOpacity = 1;
+    _strokeOpacity = 1;
+    _strokeWidth = [RNSVGLength lengthWithNumber:1];
+    _fillRule = kRNSVGCGFCRuleNonzero;
+    
+    
+    _originProperties = nil;
+    _lastMergedList = nil;
+    _attributeList = nil;
+    _sourceStrokeDashArray = nil;
+    _strokeDashArrayData = nil;
+    _srcHitPath = nil;
+    CGPathRelease(_hitArea);
+    _hitArea = nil;
+    _sourceStrokeDashArray = nil;
+    if (_strokeDashArrayData) {
+        free(_strokeDashArrayData);
+    }
+    _strokeDashArrayData = nil;
+    
+    _contextElement = nil;
+    _fill = nil;
+    _stroke = nil;
+    _strokeLinecap = kCGLineCapButt;
+    _strokeLinejoin = kCGLineJoinMiter;
+    _strokeMiterlimit = 0;
+    _strokeDasharray = nil;
+    _strokeDashoffset = 0;
+    _vectorEffect = kRNSVGVectorEffectDefault;
+    _propList = nil;
+}
+
 UInt32 saturate(CGFloat value) {
     return value <= 0 ? 0 : value >= 255 ? 255 : (UInt32)value;
 }

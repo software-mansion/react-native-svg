@@ -42,4 +42,6 @@
 
 - (void)resetProperties;
 
+- (void)fabricDealloc;
+
 @end

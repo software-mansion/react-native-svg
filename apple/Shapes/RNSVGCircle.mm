@@ -52,7 +52,11 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
-    [self invalidate];
+    _cx = nil;
+    _cy = nil;
+    _r = nil;
+
+    [self fabricDealloc];
 }
 #endif
 
