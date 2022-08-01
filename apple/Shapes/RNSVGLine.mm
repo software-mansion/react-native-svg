@@ -9,7 +9,58 @@
 #import "RNSVGLine.h"
 #import <React/RCTLog.h>
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGLine
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGLineProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGLineComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+  const auto &newProps = *std::static_pointer_cast<const RNSVGLineProps>(props);
+
+    self.x1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x1)];
+    self.y1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y1)];
+    self.x2  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x2)];
+    self.y2  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y2)];
+    setCommonRenderableProps(newProps, self, self);
+    [super updateProps:props oldProps:oldProps];
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    _x1 = nil;
+    _y1 = nil;
+    _x2 = nil;
+    _y2 = nil;
+
+    [self fabricDealloc];
+}
+#endif
 
 - (void)setX1:(RNSVGLength *)x1
 {
@@ -61,3 +112,8 @@
 }
 
 @end
+
+Class<RCTComponentViewProtocol> RNSVGLineCls(void)
+{
+  return RNSVGLine.class;
+}

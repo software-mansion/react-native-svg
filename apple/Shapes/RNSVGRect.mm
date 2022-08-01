@@ -9,7 +9,75 @@
 #import "RNSVGRect.h"
 #import <React/RCTLog.h>
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGRect
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGRectProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGRectComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+  const auto &newProps = *std::static_pointer_cast<const RNSVGRectProps>(props);
+
+    self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
+    self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
+    if (RCTNSStringFromStringNilIfEmpty(newProps.rectheight)) {
+        self.rectheight =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rectheight)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.rectwidth)) {
+        self.rectwidth =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rectwidth)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
+        self.rectheight =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
+        self.rectwidth =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+    }
+    self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
+    self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
+
+    setCommonRenderableProps(newProps, self, self);
+    [super updateProps:props oldProps:oldProps];
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    
+    _x = nil;
+    _y = nil;
+    _rectwidth = nil;
+    _rectheight = nil;
+    _rx = nil;
+    _ry = nil;
+
+    [self fabricDealloc];
+}
+
+#endif
 
 - (void)setX:(RNSVGLength *)x
 {
@@ -104,3 +172,8 @@
 }
 
 @end
+
+Class<RCTComponentViewProtocol> RNSVGRectCls(void)
+{
+  return RNSVGRect.class;
+}

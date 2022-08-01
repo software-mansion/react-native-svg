@@ -9,7 +9,58 @@
 #import "RNSVGEllipse.h"
 #import <React/RCTLog.h>
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGEllipse
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGEllipseProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGEllipseComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+  const auto &newProps = *std::static_pointer_cast<const RNSVGEllipseProps>(props);
+
+    self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
+    self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
+    self.rx  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
+    self.ry  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
+    setCommonRenderableProps(newProps, self, self);
+    [super updateProps:props oldProps:oldProps];
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    _cx = nil;
+    _cy = nil;
+    _rx = nil;
+    _ry = nil;
+
+    [self fabricDealloc];
+}
+#endif
 
 - (void)setCx:(RNSVGLength *)cx
 {
@@ -59,3 +110,10 @@
 }
 
 @end
+
+#ifdef RN_FABRIC_ENABLED
+Class<RCTComponentViewProtocol> RNSVGEllipseCls(void)
+{
+  return RNSVGEllipse.class;
+}
+#endif
