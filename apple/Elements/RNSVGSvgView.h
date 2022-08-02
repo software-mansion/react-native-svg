@@ -12,9 +12,18 @@
 #import "RNSVGContainer.h"
 #import "RNSVGVBMOS.h"
 
+#ifdef RN_FABRIC_ENABLED
+#import <React/RCTViewComponentView.h>
+#endif
+
 @class RNSVGNode;
 
-@interface RNSVGSvgView : RNSVGView <RNSVGContainer>
+@interface RNSVGSvgView :
+#ifdef RN_FABRIC_ENABLED
+RCTViewComponentView <RNSVGContainer>
+#else
+RNSVGView <RNSVGContainer>
+#endif
 
 @property (nonatomic, strong) RNSVGLength *bbWidth;
 @property (nonatomic, strong) RNSVGLength *bbHeight;

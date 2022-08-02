@@ -11,6 +11,14 @@
 #import "RNSVGNode.h"
 #import <React/RCTLog.h>
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGSvgView
 {
     NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
@@ -22,6 +30,10 @@
     bool rendered;
 }
 
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+#endif
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
@@ -31,9 +43,73 @@
         self.contentMode = UIViewContentModeRedraw;
 #endif
         rendered = false;
+#ifdef RN_FABRIC_ENABLED
+        static const auto defaultProps = std::make_shared<const RNSVGSvgViewProps>();
+        _props = defaultProps;
+#endif
     }
     return self;
 }
+
+#ifdef RN_FABRIC_ENABLED
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGSvgViewComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+    const auto &newProps = *std::static_pointer_cast<const RNSVGSvgViewProps>(props);
+    
+    self.minX = newProps.minX;
+    self.minY = newProps.minY;
+    self.vbWidth = newProps.vbWidth;
+    self.vbHeight = newProps.vbHeight;
+    self.bbWidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.bbWidth)];
+    self.bbHeight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.bbHeight)];
+    self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
+    self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
+    if (RCTUIColorFromSharedColor(newProps.tintColor)) {
+        self.tintColor = RCTUIColorFromSharedColor(newProps.tintColor);
+    }
+    if (RCTUIColorFromSharedColor(newProps.color)) {
+        self.tintColor = RCTUIColorFromSharedColor(newProps.color);
+    }
+
+    [super updateProps:props oldProps:oldProps];
+}
+
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    _minX = 0;
+    _minY = 0;
+    _vbWidth = 0;
+    _vbHeight = 0;
+    _bbWidth = 0;
+    _bbHeight = 0;
+    _align = nil;
+    _meetOrSlice = kRNSVGVBMOSMeet;
+    
+    _responsible = NO;
+    _active = NO;
+    _boundingBox = CGRectZero;
+    _initialCTM = CGAffineTransformIdentity;
+    _invInitialCTM = CGAffineTransformIdentity;
+    _viewBoxTransform = CGAffineTransformIdentity;
+    
+    _clipPaths = nil;
+    _templates = nil;
+    _painters = nil;
+    _markers = nil;
+    _masks = nil;
+    _invviewBoxTransform = CGAffineTransformIdentity;
+    rendered = NO;
+}
+#endif
 
 - (void)insertReactSubview:(RNSVGView *)subview atIndex:(NSInteger)atIndex
 {
@@ -363,3 +439,8 @@
 }
 
 @end
+
+Class<RCTComponentViewProtocol> RNSVGSvgViewCls(void)
+{
+  return RNSVGSvgView.class;
+}
