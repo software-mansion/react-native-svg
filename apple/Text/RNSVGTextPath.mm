@@ -9,7 +9,61 @@
 
 #import "RNSVGTextPath.h"
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGTextPath
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGTextPathProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGTextPathComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+  const auto &newProps = *std::static_pointer_cast<const RNSVGTextPathProps>(props);
+
+    self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
+    self.side = RCTNSStringFromStringNilIfEmpty(newProps.side);
+    self.method = RCTNSStringFromStringNilIfEmpty(newProps.method);
+    self.midLine = RCTNSStringFromStringNilIfEmpty(newProps.midLine);
+    self.spacing = RCTNSStringFromStringNilIfEmpty(newProps.spacing);
+    self.startOffset = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.startOffset)];
+
+    setCommonRenderableProps(newProps, self, self);
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    
+    _href = nil;
+    _side = nil;
+    _method = nil;
+    _midLine = nil;
+    _spacing = nil;
+    _startOffset = nil;
+}
+#endif
 
 - (void)setHref:(NSString *)href
 {
@@ -86,3 +140,8 @@
 }
 
 @end
+
+Class<RCTComponentViewProtocol> RNSVGTextPathCls(void)
+{
+  return RNSVGTextPath.class;
+}
