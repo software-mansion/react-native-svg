@@ -7,8 +7,87 @@
  */
 #import "RNSVGRadialGradient.h"
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGRadialGradient
 
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGRadialGradientProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+    mountChildComponentView(childComponentView, index, self);
+}
+
+- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+    unmountChildComponentView(childComponentView, index, self);
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGRadialGradientComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+    const auto &newProps = *std::static_pointer_cast<const RNSVGRadialGradientProps>(props);
+    setCommonNodeProps(newProps, self, self);
+        
+    self.fx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.fx)];
+    self.fy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.fy)];
+    self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
+    self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
+    self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
+    self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
+    if (newProps.gradient.size() > 0) {
+        NSMutableArray<NSNumber *> *gradientArray = [NSMutableArray new];
+        for (auto number : newProps.gradient) {
+            [gradientArray addObject:[NSNumber numberWithDouble:number]];
+        }
+        self.gradient = gradientArray;
+    }
+    self.gradientUnits = newProps.gradientUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
+    if (newProps.gradientTransform.size() == 6) {
+        self.gradientTransform = CGAffineTransformMake(newProps.gradientTransform.at(0), newProps.gradientTransform.at(1), newProps.gradientTransform.at(2), newProps.gradientTransform.at(3), newProps.gradientTransform.at(4), newProps.gradientTransform.at(5));
+    }
+
+    [super updateProps:props oldProps:oldProps];
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    _fx = nil;
+    _fy = nil;
+    _cx = nil;
+    _cy = nil;
+    _rx = nil;
+    _ry = nil;
+    _gradient = nil;
+    _gradientUnits = kRNSVGUnitsObjectBoundingBox;
+    _gradientTransform = CGAffineTransformIdentity;
+
+    [self fabricDealloc];
+}
+#endif
 - (instancetype)init
 {
     if (self = [super init]) {
@@ -126,3 +205,7 @@
 
 @end
 
+Class<RCTComponentViewProtocol> RNSVGRadialGradientCls(void)
+{
+  return RNSVGRadialGradient.class;
+}
