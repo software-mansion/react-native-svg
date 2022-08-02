@@ -11,7 +11,74 @@
 #import "RNSVGNode.h"
 #import "RNSVGViewBox.h"
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGMarker
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGMarkerProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGMarkerComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+    const auto &newProps = *std::static_pointer_cast<const RNSVGMarkerProps>(props);
+    
+    self.refX = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.refX)];
+    self.refY = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.refY)];
+    self.markerHeight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.markerHeight)];
+    self.markerWidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.markerWidth)];
+    self.markerUnits = RCTNSStringFromStringNilIfEmpty(newProps.markerUnits);
+    self.orient = RCTNSStringFromStringNilIfEmpty(newProps.orient);
+
+    self.minX = newProps.minX;
+    self.minY = newProps.minY;
+    self.vbWidth = newProps.vbWidth;
+    self.vbHeight = newProps.vbHeight;
+    self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
+    self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
+
+    setCommonGroupProps(newProps, self, self);
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    _refX = nil;
+    _refY = nil;
+    _markerHeight = nil;
+    _markerWidth = nil;
+    _markerUnits = nil;
+    _orient = nil;
+    
+    _minX = 0;
+    _minY = 0;
+    _vbWidth = 0;
+    _vbHeight = 0;
+    _align = nil;
+    _meetOrSlice = kRNSVGVBMOSMeet;
+}
+#endif
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
@@ -198,3 +265,8 @@ double deg2rad(CGFloat deg) {
 
 @end
 
+
+Class<RCTComponentViewProtocol> RNSVGMarkerCls(void)
+{
+  return RNSVGMarker.class;
+}
