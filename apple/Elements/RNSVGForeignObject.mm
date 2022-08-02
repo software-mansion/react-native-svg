@@ -10,8 +10,66 @@
 #import "RNSVGMask.h"
 #import "RNSVGNode.h"
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGForeignObject
 
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGForeignObjectProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGForeignObjectComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+    const auto &newProps = *std::static_pointer_cast<const RNSVGForeignObjectProps>(props);
+
+    self.x =  RCTNSStringFromStringNilIfEmpty(newProps.x) ? [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)] : nil;
+    self.y =  RCTNSStringFromStringNilIfEmpty(newProps.y) ? [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)] : nil;
+    if (RCTNSStringFromStringNilIfEmpty(newProps.foreignObjectheight)) {
+        self.foreignObjectheight =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.foreignObjectheight)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.foreignObjectwidth)) {
+        self.foreignObjectwidth =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.foreignObjectwidth)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
+        self.foreignObjectheight =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
+        self.foreignObjectwidth =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+    }
+    
+    setCommonGroupProps(newProps, self, self);
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    _x = nil;
+    _y = nil;
+    _foreignObjectheight = nil;
+    _foreignObjectwidth = nil;
+}
+#endif
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     return nil;
@@ -158,3 +216,7 @@
 
 @end
 
+Class<RCTComponentViewProtocol> RNSVGForeignObjectCls(void)
+{
+  return RNSVGForeignObject.class;
+}
