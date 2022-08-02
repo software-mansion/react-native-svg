@@ -10,7 +10,86 @@
 #import "RNSVGBrushType.h"
 #import "RNSVGNode.h"
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGPattern
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGPatternProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGPatternComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+    const auto &newProps = *std::static_pointer_cast<const RNSVGPatternProps>(props);
+    setCommonGroupProps(newProps, self, self);
+
+    self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
+    self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
+    if (RCTNSStringFromStringNilIfEmpty(newProps.patternheight)) {
+        self.patternheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.patternheight)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.patternwidth)) {
+        self.patternwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.patternwidth)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
+        self.patternheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
+        self.patternwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+    }
+    self.patternUnits = newProps.patternUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
+    self.patternContentUnits = newProps.patternUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
+    if (newProps.patternTransform.size() == 6) {
+        self.patternTransform = CGAffineTransformMake(newProps.patternTransform.at(0), newProps.patternTransform.at(1), newProps.patternTransform.at(2), newProps.patternTransform.at(3), newProps.patternTransform.at(4), newProps.patternTransform.at(5));
+    }
+    self.minX = newProps.minX;
+    self.minY = newProps.minY;
+    self.vbWidth = newProps.vbWidth;
+    self.vbHeight = newProps.vbHeight;
+    self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
+    self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    _x = nil;
+    _y = nil;
+    _patternheight = nil;
+    _patternwidth = nil;
+    _patternUnits = kRNSVGUnitsObjectBoundingBox;
+    _patternContentUnits = kRNSVGUnitsObjectBoundingBox;
+    _patternTransform = CGAffineTransformIdentity;
+    
+    _minX = 0;
+    _minY = 0;
+    _vbWidth = 0;
+    _vbHeight = 0;
+    _align = nil;
+    _meetOrSlice = kRNSVGVBMOSMeet;
+}
+#endif
 
 - (instancetype)init
 {
@@ -170,3 +249,7 @@
 
 @end
 
+Class<RCTComponentViewProtocol> RNSVGPatternCls(void)
+{
+  return RNSVGPattern.class;
+}
