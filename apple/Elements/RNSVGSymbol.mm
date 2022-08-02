@@ -8,7 +8,6 @@
 #import "RNSVGSymbol.h"
 #import "RNSVGViewBox.h"
 
-
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import "RCTFabricComponentsPlugins.h"
@@ -64,7 +63,6 @@ using namespace facebook::react;
     _meetOrSlice = kRNSVGVBMOSMeet;
 }
 #endif
-
 
 - (void)setMinX:(CGFloat)minX
 {

@@ -13,6 +13,14 @@
 #import "RNSVGGlyphContext.h"
 #import "RNSVGTextProperties.h"
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGText
 {
     RNSVGGlyphContext *_glyphContext;
@@ -20,6 +28,76 @@
     NSString *_baselineShift;
     CGFloat cachedAdvance;
 }
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGTextProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGTextComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+  const auto &newProps = *std::static_pointer_cast<const RNSVGTextProps>(props);
+
+    // textAnchor is in props of VM but not available on component
+    self.deltaX = createLengthArrayFromStrings(newProps.dx);
+    self.deltaY = createLengthArrayFromStrings(newProps.dy);
+    if (!newProps.positionX.empty()){
+        self.positionX = createLengthArrayFromStrings(newProps.positionX);
+    }
+    if (!newProps.positionY.empty()){
+        self.positionY = createLengthArrayFromStrings(newProps.positionY);
+    }
+    if (!newProps.x.empty()){
+        self.positionX = createLengthArrayFromStrings(newProps.x);
+    }
+    if (!newProps.y.empty()){
+        self.positionY = createLengthArrayFromStrings(newProps.y);
+    }
+    self.rotate = createLengthArrayFromStrings(newProps.rotate);
+    self.inlineSize = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.inlineSize)];
+    self.textLength = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.textLength)];
+    self.baselineShift = RCTNSStringFromStringNilIfEmpty(newProps.baselineShift);
+    self.lengthAdjust = RCTNSStringFromStringNilIfEmpty(newProps.lengthAdjust);
+    self.alignmentBaseline = RCTNSStringFromStringNilIfEmpty(newProps.alignmentBaseline);
+
+    setCommonGroupProps(newProps, self, self);
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    
+    _deltaX = nil;
+    _deltaY = nil;
+    _positionX = nil;
+    _positionY = nil;
+    _rotate = nil;
+    _inlineSize = nil;
+    _textLength = nil;
+    _baselineShift = nil;
+    _lengthAdjust = nil;
+    _alignmentBaseline = nil;
+    
+    _glyphContext = nil;
+    _alignmentBaseline = nil;
+    _baselineShift = nil;
+    cachedAdvance = 0;
+}
+#endif
 
 - (void)invalidate
 {
@@ -302,3 +380,8 @@
 }
 
 @end
+
+Class<RCTComponentViewProtocol> RNSVGTextCls(void)
+{
+  return RNSVGText.class;
+}
