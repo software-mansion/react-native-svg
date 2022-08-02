@@ -17,6 +17,14 @@
 static NSCharacterSet *RNSVGTSpan_separators = nil;
 static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGTSpan
 {
     CGFloat startOffset;
@@ -29,6 +37,77 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
     CGFloat firstY;
     RNSVGPathMeasure *measure;
 }
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGTSpanProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGTSpanComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+  const auto &newProps = *std::static_pointer_cast<const RNSVGTSpanProps>(props);
+
+    // textAnchor is in props of VM but not available on component
+    self.deltaX = createLengthArrayFromStrings(newProps.dx);
+    self.deltaY = createLengthArrayFromStrings(newProps.dy);
+    if (!newProps.positionX.empty()) {
+        self.positionX = createLengthArrayFromStrings(newProps.positionX);
+    }
+    if (!newProps.positionY.empty()) {
+        self.positionY = createLengthArrayFromStrings(newProps.positionY);
+    }
+    if (!newProps.x.empty()) {
+        self.positionX = createLengthArrayFromStrings(newProps.x);
+    }
+    if (!newProps.y.empty()) {
+        self.positionY = createLengthArrayFromStrings(newProps.y);
+    }
+    self.rotate = createLengthArrayFromStrings(newProps.rotate);
+    self.inlineSize = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.inlineSize)];
+    self.textLength = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.textLength)];
+    self.baselineShift = RCTNSStringFromStringNilIfEmpty(newProps.baselineShift);
+    self.lengthAdjust = RCTNSStringFromStringNilIfEmpty(newProps.lengthAdjust);
+    self.alignmentBaseline = RCTNSStringFromStringNilIfEmpty(newProps.alignmentBaseline);
+    self.content = RCTNSStringFromStringNilIfEmpty(newProps.content);
+
+    setCommonGroupProps(newProps, self, self);
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    
+    _content = nil;
+    
+    startOffset = 0;
+    textPath = nil;
+    emoji = nil;
+    emojiTransform = nil;
+    cachedAdvance = 0;
+    // these crash, hopefully it is always released by here
+//    if (fontRef != nil) {
+//        CFRelease(fontRef);
+//    }
+    fontRef = nil;
+    firstX = 0;
+    firstY = 0;
+    measure = nil;
+}
+#endif
 
 - (id)init
 {
@@ -1064,3 +1143,8 @@ RNSVGTopAlignedLabel *label;
 }
 
 @end
+
+Class<RCTComponentViewProtocol> RNSVGTSpanCls(void)
+{
+  return RNSVGTSpan.class;
+}
