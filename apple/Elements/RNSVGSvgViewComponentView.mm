@@ -26,19 +26,17 @@ using namespace facebook::react;
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]]) {
-        [_element insertSubview:((RCTViewComponentView *)childComponentView).contentView atIndex:index];
+    if ([childComponentView isKindOfClass:[RNSVGNode class]]) {
+        [_element insertSubview:childComponentView atIndex:index];
         [_element invalidate];
     } else {
         RCTLogError(@"Only child of SvgView should be a Group element, instead found %@", childComponentView);
     }
-    [self insertSubview:childComponentView atIndex:index+1];
 }
 
 - (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]]) {
-        [_element removeFromSuperview];
+    if ([childComponentView isKindOfClass:[RNSVGNode class]]) {
         [_element invalidate];
     } else {
         RCTLogError(@"Only child of SvgView should a be Group element, instead found %@", childComponentView);
