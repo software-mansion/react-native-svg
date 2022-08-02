@@ -9,7 +9,72 @@
 #import "RNSVGSymbol.h"
 #import <React/RCTLog.h>
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGUse
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGUseProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGUseComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+  const auto &newProps = *std::static_pointer_cast<const RNSVGUseProps>(props);
+
+
+    self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
+    self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
+    if (RCTNSStringFromStringNilIfEmpty(newProps.useheight)) {
+        self.useheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.useheight)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.usewidth)) {
+        self.usewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.usewidth)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
+        self.useheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
+        self.usewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+    }
+    self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
+
+    setCommonRenderableProps(newProps, self, self);
+    [super updateProps:props oldProps:oldProps];
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    _x = nil;
+    _y = nil;
+    _useheight = nil;
+    _usewidth = nil;
+    _href = nil;
+
+    [self fabricDealloc];
+}
+#endif
 
 - (void)setHref:(NSString *)href
 {
@@ -143,3 +208,7 @@
 
 @end
 
+Class<RCTComponentViewProtocol> RNSVGUseCls(void)
+{
+  return RNSVGUse.class;
+}
