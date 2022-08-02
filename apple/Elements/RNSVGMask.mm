@@ -10,7 +10,75 @@
 #import "RNSVGBrushType.h"
 #import "RNSVGNode.h"
 
+
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGMask
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGMaskProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGMaskComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+    const auto &newProps = *std::static_pointer_cast<const RNSVGMaskProps>(props);
+    
+    self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
+    self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
+    if (RCTNSStringFromStringNilIfEmpty(newProps.maskheight)) {
+        self.maskheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.maskheight)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.maskwidth)) {
+        self.maskwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.maskwidth)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
+        self.maskheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+    }
+    if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
+        self.maskwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+    }
+    self.maskUnits = newProps.maskUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
+    self.maskContentUnits = newProps.maskUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
+    if (newProps.maskTransform.size() == 6) {
+        self.maskTransform = CGAffineTransformMake(newProps.maskTransform.at(0), newProps.maskTransform.at(1), newProps.maskTransform.at(2), newProps.maskTransform.at(3), newProps.maskTransform.at(4), newProps.maskTransform.at(5));
+    }
+    
+    setCommonGroupProps(newProps, self, self);
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    _x = nil;
+    _y = nil;
+    _maskheight = nil;
+    _maskwidth = nil;
+    _maskUnits = kRNSVGUnitsObjectBoundingBox;
+    _maskContentUnits = kRNSVGUnitsObjectBoundingBox;
+    _maskTransform = CGAffineTransformIdentity;
+}
+#endif
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
@@ -91,3 +159,7 @@
 
 @end
 
+Class<RCTComponentViewProtocol> RNSVGMaskCls(void)
+{
+  return RNSVGMask.class;
+}
