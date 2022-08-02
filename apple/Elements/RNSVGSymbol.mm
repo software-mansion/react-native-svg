@@ -8,9 +8,63 @@
 #import "RNSVGSymbol.h"
 #import "RNSVGViewBox.h"
 
-@class RNSVGNode;
+
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
 
 @implementation RNSVGSymbol
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGSymbolProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGSymbolComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+    const auto &newProps = *std::static_pointer_cast<const RNSVGSymbolProps>(props);
+
+    self.minX = newProps.minX;
+    self.minY = newProps.minY;
+    self.vbWidth = newProps.vbWidth;
+    self.vbHeight = newProps.vbHeight;
+    self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
+    self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
+    
+    setCommonGroupProps(newProps, self, self);
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    
+    _minX = 0;
+    _minY = 0;
+    _vbWidth = 0;
+    _vbHeight = 0;
+    _align = nil;
+    _meetOrSlice = kRNSVGVBMOSMeet;
+}
+#endif
+
 
 - (void)setMinX:(CGFloat)minX
 {
@@ -95,3 +149,7 @@
 
 @end
 
+Class<RCTComponentViewProtocol> RNSVGSymbolCls(void)
+{
+  return RNSVGSymbol.class;
+}

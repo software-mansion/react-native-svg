@@ -42,7 +42,6 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNSVGPatternProps>(props);
-    setCommonGroupProps(newProps, self, self);
 
     self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
     self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
@@ -69,6 +68,8 @@ using namespace facebook::react;
     self.vbHeight = newProps.vbHeight;
     self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
     self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
+    
+    setCommonGroupProps(newProps, self, self);
 }
 
 - (void)prepareForRecycle
