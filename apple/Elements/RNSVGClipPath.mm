@@ -8,7 +8,46 @@
 
 #import "RNSVGClipPath.h"
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGClipPath
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGClipPathProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGClipPathComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+    const auto &newProps = *std::static_pointer_cast<const RNSVGClipPathProps>(props);
+    setCommonNodeProps(newProps, self, self);
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+}
+#endif
 
 - (void)parseReference
 {
@@ -30,3 +69,8 @@
 }
 
 @end
+
+Class<RCTComponentViewProtocol> RNSVGClipPathCls(void)
+{
+  return RNSVGClipPath.class;
+}
