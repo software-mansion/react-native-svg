@@ -8,10 +8,59 @@
 
 #import "RNSVGPath.h"
 
+#ifdef RN_FABRIC_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import "RCTFabricComponentsPlugins.h"
+#import "RCTConversions.h"
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif
+
 @implementation RNSVGPath
 {
     CGPathRef _path;
 }
+
+#ifdef RN_FABRIC_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGPathProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGPathComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+    const auto &newProps = *std::static_pointer_cast<const RNSVGPathProps>(props);
+    self.d = [[RNSVGPathParser alloc] initWithPathString: RCTNSStringFromString(newProps.d)];
+    
+    setCommonRenderableProps(newProps, self, self);
+    [super updateProps:props oldProps:oldProps];
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    if (_path) {
+        CGPathRelease(_path);
+    }
+    _path = nil;
+    _d = nil;
+
+    [self fabricDealloc];
+}
+#endif
 
 - (void)setD:(RNSVGPathParser *)d
 {
@@ -36,3 +85,8 @@
 }
 
 @end
+
+Class<RCTComponentViewProtocol> RNSVGPathCls(void)
+{
+  return RNSVGPath.class;
+}
