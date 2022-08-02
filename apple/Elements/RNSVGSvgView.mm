@@ -46,6 +46,8 @@ using namespace facebook::react;
 #ifdef RN_FABRIC_ENABLED
         static const auto defaultProps = std::make_shared<const RNSVGSvgViewProps>();
         _props = defaultProps;
+        // TODO: think if we can do it better
+        self.opaque = NO;
 #endif
     }
     return self;
