@@ -49,7 +49,7 @@ using namespace facebook::react;
     self.spacing = RCTNSStringFromStringNilIfEmpty(newProps.spacing);
     self.startOffset = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.startOffset)];
 
-    setCommonRenderableProps(newProps, self, self);
+    setCommonRenderableProps(newProps, self);
 }
 
 - (void)prepareForRecycle

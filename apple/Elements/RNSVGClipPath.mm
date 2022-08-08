@@ -40,7 +40,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNSVGClipPathProps>(props);
-    setCommonNodeProps(newProps, self, self);
+    setCommonNodeProps(newProps, self);
 }
 
 - (void)prepareForRecycle

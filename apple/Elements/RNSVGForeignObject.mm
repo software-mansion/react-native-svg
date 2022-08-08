@@ -58,7 +58,7 @@ using namespace facebook::react;
         self.foreignObjectwidth =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
     }
     
-    setCommonGroupProps(newProps, self, self);
+    setCommonGroupProps(newProps, self);
 }
 
 - (void)prepareForRecycle

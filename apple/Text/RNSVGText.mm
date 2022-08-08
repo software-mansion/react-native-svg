@@ -74,7 +74,7 @@ using namespace facebook::react;
     self.lengthAdjust = RCTNSStringFromStringNilIfEmpty(newProps.lengthAdjust);
     self.alignmentBaseline = RCTNSStringFromStringNilIfEmpty(newProps.alignmentBaseline);
 
-    setCommonGroupProps(newProps, self, self);
+    setCommonGroupProps(newProps, self);
 }
 
 - (void)prepareForRecycle

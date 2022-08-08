@@ -59,7 +59,7 @@ using namespace facebook::react;
     self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
     self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
 
-    setCommonRenderableProps(newProps, self, self);
+    setCommonRenderableProps(newProps, self);
     [super updateProps:props oldProps:oldProps];
 }
 

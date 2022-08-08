@@ -99,7 +99,7 @@ using namespace facebook::react;
     self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
     self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
     
-    setCommonRenderableProps(newProps, self, self);
+    setCommonRenderableProps(newProps, self);
 
     [super updateProps:props oldProps:oldProps];
 }

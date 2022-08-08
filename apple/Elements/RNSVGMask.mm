@@ -64,7 +64,7 @@ using namespace facebook::react;
         self.maskTransform = CGAffineTransformMake(newProps.maskTransform.at(0), newProps.maskTransform.at(1), newProps.maskTransform.at(2), newProps.maskTransform.at(3), newProps.maskTransform.at(4), newProps.maskTransform.at(5));
     }
     
-    setCommonGroupProps(newProps, self, self);
+    setCommonGroupProps(newProps, self);
 }
 
 - (void)prepareForRecycle

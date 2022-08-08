@@ -59,7 +59,7 @@ using namespace facebook::react;
     }
     self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
 
-    setCommonRenderableProps(newProps, self, self);
+    setCommonRenderableProps(newProps, self);
     [super updateProps:props oldProps:oldProps];
 }
 

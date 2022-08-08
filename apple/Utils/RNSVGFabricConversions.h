@@ -42,9 +42,8 @@ RNSVGBrush *brushFromColorStruct(T fillObject)
 }
 
 template<typename T>
-void setCommonNodeProps(T nodeProps, RNSVGNode *node, RCTViewComponentView *view)
+void setCommonNodeProps(T nodeProps, RNSVGNode *node)
 {
-    node.parentComponentView = view;
     node.name =  RCTNSStringFromStringNilIfEmpty(nodeProps.name);
     node.opacity = nodeProps.opacity;
     if (nodeProps.matrix.size() == 6) {
@@ -87,9 +86,9 @@ static NSMutableArray<RNSVGLength *> *createLengthArrayFromStrings(std::vector<s
 }
 
 template<typename T>
-void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode, RCTViewComponentView *view)
+void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode)
 {
-    setCommonNodeProps(renderableProps, renderableNode, view);
+    setCommonNodeProps(renderableProps, renderableNode);
     renderableNode.fill = brushFromColorStruct(renderableProps.fill);
     renderableNode.fillOpacity = renderableProps.fillOpacity;
     renderableNode.fillRule = renderableProps.fillRule == 0 ? kRNSVGCGFCRuleEvenodd : kRNSVGCGFCRuleNonzero;
@@ -143,9 +142,9 @@ NSDictionary *parseFontStruct(T fontStruct)
 }
 
 template<typename T>
-void setCommonGroupProps(T groupProps, RNSVGGroup *groupNode, RCTViewComponentView *view)
+void setCommonGroupProps(T groupProps, RNSVGGroup *groupNode)
 {
-    setCommonRenderableProps(groupProps, groupNode, view);
+    setCommonRenderableProps(groupProps, groupNode);
     
     if (RCTNSStringFromStringNilIfEmpty(groupProps.fontSize)) {
         groupNode.font = @{ @"fontSize": RCTNSStringFromString(groupProps.fontSize) };
@@ -173,29 +172,4 @@ static RNSVGVBMOS intToRNSVGVBMOS(int value)
         default:
             return kRNSVGVBMOSMeet;
     }
-}
-
-static void mountChildComponentView(UIView<RCTComponentViewProtocol> *childComponentView, NSInteger index, RNSVGNode *element) {
-    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ([((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]] || [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGSvgView class]])) {
-        [element insertSubview:((RCTViewComponentView *)childComponentView).contentView atIndex:index];
-        [element invalidate];
-        [element.superview insertSubview:childComponentView atIndex:index+1];
-    } else if ([childComponentView isKindOfClass:[RNSVGNode class]] || [childComponentView isKindOfClass:[RNSVGSvgView class]]) {
-        [element insertSubview:childComponentView atIndex:index];
-        [element invalidate];
-    } else {
-        RCTLogError(@"Children of SVG should only be of SVG type, instead found %@", childComponentView);
-    }
-}
-
-static void unmountChildComponentView(UIView<RCTComponentViewProtocol> *childComponentView, NSInteger index, RNSVGNode *element) {
-    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ([((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]] || [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGSvgView class]])) {
-        [element removeFromSuperview];
-        [element invalidate];
-    } else if ([childComponentView isKindOfClass:[RNSVGNode class]] || [childComponentView isKindOfClass:[RNSVGSvgView class]]) {
-        [element invalidate];
-    } else {
-        RCTLogError(@"Children of SVG should only be of SVG type, instead found %@", childComponentView);
-    }
-    [childComponentView removeFromSuperview];
 }

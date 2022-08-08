@@ -58,7 +58,7 @@ using namespace facebook::react;
     self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
     self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
 
-    setCommonGroupProps(newProps, self, self);
+    setCommonGroupProps(newProps, self);
 }
 
 - (void)prepareForRecycle

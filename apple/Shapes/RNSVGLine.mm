@@ -46,7 +46,7 @@ using namespace facebook::react;
     self.y1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y1)];
     self.x2  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x2)];
     self.y2  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y2)];
-    setCommonRenderableProps(newProps, self, self);
+    setCommonRenderableProps(newProps, self);
     [super updateProps:props oldProps:oldProps];
 }
 

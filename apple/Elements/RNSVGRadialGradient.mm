@@ -29,16 +29,6 @@ using namespace facebook::react;
   return self;
 }
 
-- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
-{
-    mountChildComponentView(childComponentView, index, self);
-}
-
-- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
-{
-    unmountChildComponentView(childComponentView, index, self);
-}
-
 #pragma mark - RCTComponentViewProtocol
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -49,7 +39,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNSVGRadialGradientProps>(props);
-    setCommonNodeProps(newProps, self, self);
+    setCommonNodeProps(newProps, self);
         
     self.fx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.fx)];
     self.fy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.fy)];

@@ -31,16 +31,6 @@ using namespace facebook::react;
   return self;
 }
 
-- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
-{
-    mountChildComponentView(childComponentView, index, self);
-}
-
-- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
-{
-    unmountChildComponentView(childComponentView, index, self);
-}
-
 #pragma mark - RCTComponentViewProtocol
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -68,7 +58,7 @@ using namespace facebook::react;
         self.gradientTransform = CGAffineTransformMake(newProps.gradientTransform.at(0), newProps.gradientTransform.at(1), newProps.gradientTransform.at(2), newProps.gradientTransform.at(3), newProps.gradientTransform.at(4), newProps.gradientTransform.at(5));
     }
     
-    setCommonNodeProps(newProps, self, self);
+    setCommonNodeProps(newProps, self);
     [super updateProps:props oldProps:oldProps];
 }
 

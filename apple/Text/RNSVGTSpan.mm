@@ -84,7 +84,7 @@ using namespace facebook::react;
     self.alignmentBaseline = RCTNSStringFromStringNilIfEmpty(newProps.alignmentBaseline);
     self.content = RCTNSStringFromStringNilIfEmpty(newProps.content);
 
-    setCommonGroupProps(newProps, self, self);
+    setCommonGroupProps(newProps, self);
 }
 
 - (void)prepareForRecycle
@@ -95,8 +95,6 @@ using namespace facebook::react;
     
     startOffset = 0;
     textPath = nil;
-    emoji = nil;
-    emojiTransform = nil;
     cachedAdvance = 0;
     // these crash, hopefully it is always released by here
 //    if (fontRef != nil) {
@@ -105,7 +103,12 @@ using namespace facebook::react;
     fontRef = nil;
     firstX = 0;
     firstY = 0;
-    measure = nil;
+
+    emoji = [NSMutableArray arrayWithCapacity:0];
+    emojiTransform = [NSMutableArray arrayWithCapacity:0];
+    measure = [[RNSVGPathMeasure alloc]init];
+    RNSVGTSpan_separators = [NSCharacterSet whitespaceCharacterSet];
+
 }
 #endif // RN_FABRIC_ENABLED
 
