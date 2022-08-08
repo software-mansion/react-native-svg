@@ -49,7 +49,10 @@ void setCommonNodeProps(T nodeProps, RNSVGNode *node)
     if (nodeProps.matrix.size() == 6) {
         node.matrix = CGAffineTransformMake(nodeProps.matrix.at(0), nodeProps.matrix.at(1), nodeProps.matrix.at(2), nodeProps.matrix.at(3), nodeProps.matrix.at(4), nodeProps.matrix.at(5));
     }
-    // transform
+    CATransform3D transform3d = RCTCATransform3DFromTransformMatrix(nodeProps.transform);
+    CGAffineTransform transform = CATransform3DGetAffineTransform(transform3d);
+    node.invTransform = CGAffineTransformInvert(transform);
+    node.transforms = transform;
     node.mask =  RCTNSStringFromStringNilIfEmpty(nodeProps.mask);
     node.markerStart =  RCTNSStringFromStringNilIfEmpty(nodeProps.markerStart);
     node.markerMid =  RCTNSStringFromStringNilIfEmpty(nodeProps.markerMid);
