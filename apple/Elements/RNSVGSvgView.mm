@@ -79,8 +79,6 @@ using namespace facebook::react;
     if (RCTUIColorFromSharedColor(newProps.color)) {
         self.tintColor = RCTUIColorFromSharedColor(newProps.color);
     }
-
-    [super updateProps:props oldProps:oldProps];
 }
 
 

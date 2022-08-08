@@ -46,9 +46,8 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNSVGGroupProps>(props);
-    setCommonGroupProps(newProps, self);
 
-    [super updateProps:props oldProps:oldProps];
+    setCommonGroupProps(newProps, self);
 }
 
 - (void)prepareForRecycle
@@ -56,8 +55,6 @@ using namespace facebook::react;
     [super prepareForRecycle];
     _font = nil;
     _glyphContext = nil;
-
-    [self fabricDealloc];
 }
 #endif // RN_FABRIC_ENABLED
 

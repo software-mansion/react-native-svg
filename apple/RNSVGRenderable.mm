@@ -180,15 +180,14 @@ static RNSVGRenderable * _contextElement;
     _strokeDashArrayData = nil;
 }
 
-- (void)fabricDealloc
+- (void)prepareForRecycle
 {
-    [super fabricDealloc];
-    
+    [super prepareForRecycle];
+
     _fillOpacity = 1;
     _strokeOpacity = 1;
     _strokeWidth = [RNSVGLength lengthWithNumber:1];
     _fillRule = kRNSVGCGFCRuleNonzero;
-    
     
     _originProperties = nil;
     _lastMergedList = nil;

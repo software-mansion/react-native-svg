@@ -40,14 +40,14 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGLineProps>(props);
+    const auto &newProps = *std::static_pointer_cast<const RNSVGLineProps>(props);
 
     self.x1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x1)];
     self.y1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y1)];
     self.x2  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x2)];
     self.y2  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y2)];
+
     setCommonRenderableProps(newProps, self);
-    [super updateProps:props oldProps:oldProps];
 }
 
 - (void)prepareForRecycle
@@ -57,8 +57,6 @@ using namespace facebook::react;
     _y1 = nil;
     _x2 = nil;
     _y2 = nil;
-
-    [self fabricDealloc];
 }
 #endif // RN_FABRIC_ENABLED
 

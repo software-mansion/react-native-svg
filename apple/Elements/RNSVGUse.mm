@@ -40,8 +40,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGUseProps>(props);
-
+    const auto &newProps = *std::static_pointer_cast<const RNSVGUseProps>(props);
 
     self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
     self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
@@ -60,7 +59,6 @@ using namespace facebook::react;
     self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
 
     setCommonRenderableProps(newProps, self);
-    [super updateProps:props oldProps:oldProps];
 }
 
 - (void)prepareForRecycle
@@ -71,8 +69,6 @@ using namespace facebook::react;
     _useheight = nil;
     _usewidth = nil;
     _href = nil;
-
-    [self fabricDealloc];
 }
 #endif // RN_FABRIC_ENABLED
 

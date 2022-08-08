@@ -41,7 +41,7 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
     const auto &newProps = *std::static_pointer_cast<const RNSVGLinearGradientProps>(props);
-        
+
     self.x1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x1)];
     self.y1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y1)];
     self.x2 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x2)];
@@ -59,7 +59,6 @@ using namespace facebook::react;
     }
     
     setCommonNodeProps(newProps, self);
-    [super updateProps:props oldProps:oldProps];
 }
 
 - (void)prepareForRecycle
@@ -72,8 +71,6 @@ using namespace facebook::react;
     _gradient = nil;
     _gradientUnits = kRNSVGUnitsObjectBoundingBox;
     _gradientTransform = CGAffineTransformIdentity;
-
-    [self fabricDealloc];
 }
 #endif // RN_FABRIC_ENABLED
 

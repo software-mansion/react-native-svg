@@ -46,7 +46,6 @@ using namespace facebook::react;
     self.d = [[RNSVGPathParser alloc] initWithPathString: RCTNSStringFromString(newProps.d)];
     
     setCommonRenderableProps(newProps, self);
-    [super updateProps:props oldProps:oldProps];
 }
 
 - (void)prepareForRecycle
@@ -57,8 +56,6 @@ using namespace facebook::react;
     }
     _path = nil;
     _d = nil;
-
-    [self fabricDealloc];
 }
 #endif // RN_FABRIC_ENABLED
 

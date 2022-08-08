@@ -35,18 +35,6 @@ using namespace facebook::react;
 {
   return concreteComponentDescriptorProvider<RNSVGDefsComponentDescriptor>();
 }
-
-- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
-{
-    [super updateProps:props oldProps:oldProps];
-}
-
-- (void)prepareForRecycle
-{
-    [super prepareForRecycle];
-
-    [self fabricDealloc];
-}
 #endif // RN_FABRIC_ENABLED
 
 - (void)renderTo:(CGContextRef)context

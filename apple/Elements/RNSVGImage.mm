@@ -98,10 +98,8 @@ using namespace facebook::react;
     }
     self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
     self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
-    
-    setCommonRenderableProps(newProps, self);
 
-    [super updateProps:props oldProps:oldProps];
+    setCommonRenderableProps(newProps, self);
 }
 
 - (void)prepareForRecycle
@@ -121,8 +119,6 @@ using namespace facebook::react;
     _image = nil;
     _imageSize = CGSizeZero;
     _reloadImageCancellationBlock = nil;
-    
-    [self fabricDealloc];
 }
 #endif // RN_FABRIC_ENABLED
 

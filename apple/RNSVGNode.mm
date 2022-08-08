@@ -587,8 +587,10 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     CGPathRelease(_path);
 }
 
-- (void)fabricDealloc
+- (void)prepareForRecycle
 {
+    [super prepareForRecycle];
+    
     self.opacity = 1;
     self.opaque = false;
     self.matrix = CGAffineTransformIdentity;
