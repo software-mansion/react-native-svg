@@ -16,7 +16,7 @@
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGForeignObject
 
@@ -69,7 +69,7 @@ using namespace facebook::react;
     _foreignObjectheight = nil;
     _foreignObjectwidth = nil;
 }
-#endif
+#endif // RN_FABRIC_ENABLED
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     return nil;

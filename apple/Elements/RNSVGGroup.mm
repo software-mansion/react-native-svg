@@ -17,7 +17,7 @@
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGGroup
 {
@@ -69,7 +69,7 @@ using namespace facebook::react;
 
     [self fabricDealloc];
 }
-#endif
+#endif // RN_FABRIC_ENABLED
 
 - (void)setFont:(NSDictionary*)font
 {

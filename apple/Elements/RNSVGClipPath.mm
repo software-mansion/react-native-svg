@@ -14,7 +14,7 @@
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGClipPath
 
@@ -47,7 +47,7 @@ using namespace facebook::react;
 {
     [super prepareForRecycle];
 }
-#endif
+#endif // RN_FABRIC_ENABLED
 
 - (void)parseReference
 {

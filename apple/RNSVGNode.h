@@ -13,7 +13,7 @@
 
 #ifdef RN_FABRIC_ENABLED
 #import <React/RCTViewComponentView.h>
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @class RNSVGGroup;
 
@@ -27,7 +27,7 @@
 RCTViewComponentView
 #else
 RNSVGView
-#endif
+#endif // RN_FABRIC_ENABLED
 /*
  N[1/Sqrt[2], 36]
  The inverse of the square root of 2.

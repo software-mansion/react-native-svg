@@ -242,7 +242,7 @@ UInt32 saturate(CGFloat value) {
         CGFloat scale = [[NSScreen mainScreen] backingScaleFactor];
 #else
         CGFloat scale = [[UIScreen mainScreen] scale];
-#endif
+#endif // TARGET_OS_OSX
         NSUInteger iheight = (NSUInteger)height;
         NSUInteger iwidth = (NSUInteger)width;
         NSUInteger iscale = (NSUInteger)scale;

@@ -17,7 +17,7 @@
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGSvgView
 {
@@ -32,7 +32,7 @@
 
 #ifdef RN_FABRIC_ENABLED
 using namespace facebook::react;
-#endif
+#endif // RN_FABRIC_ENABLED
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -41,14 +41,14 @@ using namespace facebook::react;
         // This is necessary to ensure that [self setNeedsDisplay] actually triggers
         // a redraw when our parent transitions between hidden and visible.
         self.contentMode = UIViewContentModeRedraw;
-#endif
+#endif // TARGET_OS_OSX
         rendered = false;
 #ifdef RN_FABRIC_ENABLED
         static const auto defaultProps = std::make_shared<const RNSVGSvgViewProps>();
         _props = defaultProps;
         // TODO: think if we can do it better
         self.opaque = NO;
-#endif
+#endif // RN_FABRIC_ENABLED
     }
     return self;
 }
@@ -111,7 +111,7 @@ using namespace facebook::react;
     _invviewBoxTransform = CGAffineTransformIdentity;
     rendered = NO;
 }
-#endif
+#endif // RN_FABRIC_ENABLED
 
 - (void)insertReactSubview:(RNSVGView *)subview atIndex:(NSInteger)atIndex
 {

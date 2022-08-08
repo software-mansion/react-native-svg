@@ -19,7 +19,7 @@
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGText
 {
@@ -97,7 +97,7 @@ using namespace facebook::react;
     _baselineShift = nil;
     cachedAdvance = 0;
 }
-#endif
+#endif // RN_FABRIC_ENABLED
 
 - (void)invalidate
 {

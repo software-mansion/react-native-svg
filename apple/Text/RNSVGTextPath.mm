@@ -15,7 +15,7 @@
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGTextPath
 
@@ -63,7 +63,7 @@ using namespace facebook::react;
     _spacing = nil;
     _startOffset = nil;
 }
-#endif
+#endif // RN_FABRIC_ENABLED
 
 - (void)setHref:(NSString *)href
 {

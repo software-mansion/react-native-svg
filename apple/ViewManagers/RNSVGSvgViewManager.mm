@@ -49,7 +49,7 @@ RCT_CUSTOM_VIEW_PROPERTY(color, id, RNSVGSvgView)
         }
 #else
         __kindof RNSVGView *view = viewRegistry[reactTag];
-#endif
+#endif // RN_FABRIC_ENABLED
         NSString * b64;
         if ([view isKindOfClass:[RNSVGSvgView class]]) {
             RNSVGSvgView *svg = view;

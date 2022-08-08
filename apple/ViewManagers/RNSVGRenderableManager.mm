@@ -235,7 +235,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getScreenCTM:(nonnull NSNumber *)reactTag
         if ([view respondsToSelector:@selector(contentView)]) {
             view = [view performSelector:@selector(contentView)];
         }
-#endif
+#endif // RN_FABRIC_ENABLED
     return view;
 }
 

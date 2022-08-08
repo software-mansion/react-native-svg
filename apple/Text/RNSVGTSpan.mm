@@ -23,7 +23,7 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGTSpan
 {
@@ -107,7 +107,7 @@ using namespace facebook::react;
     firstY = 0;
     measure = nil;
 }
-#endif
+#endif // RN_FABRIC_ENABLED
 
 - (id)init
 {
@@ -208,7 +208,7 @@ using namespace facebook::react;
         [attrs setObject:kernAttr forKey:NSKernAttributeName];
     }
     else
-#endif
+#endif // DTCORETEXT_SUPPORT_NS_ATTRIBUTES
     {
         [attrs setObject:kernAttr forKey:(id)kCTKernAttributeName];
     }
@@ -260,7 +260,7 @@ RNSVGTopAlignedLabel *label;
     label.numberOfLines = 0;
 #if !TARGET_OS_OSX // On macOS, views are transparent by default
     label.opaque = NO;
-#endif
+#endif // TARGET_OS_OSX
     label.font = font;
     label.textColor = [RNSVGColor colorWithCGColor:color];
 
@@ -520,7 +520,7 @@ RNSVGTopAlignedLabel *label;
             [attrs setObject:noAutoKern forKey:NSKernAttributeName];
         }
         else
-#endif
+#endif // DTCORETEXT_SUPPORT_NS_ATTRIBUTES
         {
             [attrs setObject:noAutoKern forKey:(id)kCTKernAttributeName];
         }
@@ -1072,7 +1072,7 @@ RNSVGTopAlignedLabel *label;
 #else
                 label.text = currChars;
                 label.opaque = NO;
-#endif
+#endif // TARGET_OS_OSX
                 label.backgroundColor = RNSVGColor.clearColor;
                 UIFont * customFont = [UIFont systemFontOfSize:fontSize];
 

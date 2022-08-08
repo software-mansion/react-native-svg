@@ -9,7 +9,7 @@ on:
       - 'src/fabric/**'
       - 'FabricExample/**'
       - 'package.json'
-      - 'RNScreens.podspec'
+      - 'RNSVG.podspec'
   push:
     branches:
       - main

@@ -16,7 +16,7 @@
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGPattern
 
@@ -90,7 +90,7 @@ using namespace facebook::react;
     _align = nil;
     _meetOrSlice = kRNSVGVBMOSMeet;
 }
-#endif
+#endif // RN_FABRIC_ENABLED
 
 - (instancetype)init
 {

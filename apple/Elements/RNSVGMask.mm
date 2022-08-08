@@ -17,7 +17,7 @@
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGMask
 
@@ -78,7 +78,7 @@ using namespace facebook::react;
     _maskContentUnits = kRNSVGUnitsObjectBoundingBox;
     _maskTransform = CGAffineTransformIdentity;
 }
-#endif
+#endif // RN_FABRIC_ENABLED
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {

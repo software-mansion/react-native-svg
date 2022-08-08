@@ -177,7 +177,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     self.accessibilityModal = NO;
 #else
     self.accessibilityViewIsModal = NO;
-#endif
+#endif // TARGET_OS_OSX
   }
 }
 

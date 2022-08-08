@@ -14,7 +14,7 @@
 
 #ifdef RN_FABRIC_ENABLED
 #import <React/RCTViewComponentView.h>
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @class RNSVGNode;
 
@@ -23,7 +23,7 @@
 RCTViewComponentView <RNSVGContainer>
 #else
 RNSVGView <RNSVGContainer>
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @property (nonatomic, strong) RNSVGLength *bbWidth;
 @property (nonatomic, strong) RNSVGLength *bbHeight;

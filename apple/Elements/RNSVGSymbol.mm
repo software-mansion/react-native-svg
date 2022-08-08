@@ -14,7 +14,7 @@
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGSymbol
 
@@ -62,7 +62,7 @@ using namespace facebook::react;
     _align = nil;
     _meetOrSlice = kRNSVGVBMOSMeet;
 }
-#endif
+#endif // RN_FABRIC_ENABLED
 
 - (void)setMinX:(CGFloat)minX
 {

@@ -20,7 +20,7 @@
 #import <React/RCTImageView.h>
 #import <React/RCTImageLoaderProtocol.h>
 
-#endif
+#endif // RN_FABRIC_ENABLED
 
 #import <React/RCTLog.h>
 #import "RNSVGViewBox.h"
@@ -41,7 +41,7 @@
 + (RCTBridge *)currentBridge;
 @end
 
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGImage
 {
@@ -124,7 +124,7 @@ using namespace facebook::react;
     
     [self fabricDealloc];
 }
-#endif
+#endif // RN_FABRIC_ENABLED
 
 - (void)setSrc:(id)src
 {
@@ -177,7 +177,7 @@ using namespace facebook::react;
         [RCTBridge currentBridge]
 #else
         self.bridge
-#endif
+#endif // RN_FABRIC_ENABLED
         moduleForName:@"ImageLoader"] loadImageWithURLRequest:request callback:^(NSError *error, UIImage *image) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self->_image = CGImageRetain(image.CGImage);

@@ -14,7 +14,7 @@
 #import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif
+#endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGPath
 {
@@ -60,7 +60,7 @@ using namespace facebook::react;
 
     [self fabricDealloc];
 }
-#endif
+#endif // RN_FABRIC_ENABLED
 
 - (void)setD:(RNSVGPathParser *)d
 {

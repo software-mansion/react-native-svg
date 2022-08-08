@@ -163,7 +163,7 @@ void PatternFunction(void* info, CGContextRef context)
     // This is needed because macOS and iOS have different conventions for where the origin is.
     // For macOS, it's in the bottom-left corner. For iOS, it's in the top-left corner.
     viewbox = CGAffineTransformScale(viewbox, 1, -1);
-#endif
+#endif // TARGET_OS_OSX
     CGRect newBounds = CGRectMake(x, y, w, h);
     CGSize size = newBounds.size;
     self.useObjectBoundingBoxForContentUnits = _useContentObjectBoundingBox;
