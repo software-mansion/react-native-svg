@@ -86,7 +86,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGPathCls(void)
 {
   return RNSVGPath.class;
 }
+#endif // RN_FABRIC_ENABLED

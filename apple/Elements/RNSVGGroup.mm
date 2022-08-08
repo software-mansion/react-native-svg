@@ -307,7 +307,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGGroupCls(void)
 {
   return RNSVGGroup.class;
 }
+#endif // RN_FABRIC_ENABLED

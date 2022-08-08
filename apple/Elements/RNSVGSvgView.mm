@@ -442,7 +442,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGSvgViewCls(void)
 {
   return RNSVGSvgView.class;
 }
+#endif // RN_FABRIC_ENABLED

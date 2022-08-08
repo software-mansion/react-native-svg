@@ -216,7 +216,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGForeignObjectCls(void)
 {
   return RNSVGForeignObject.class;
 }
+#endif // RN_FABRIC_ENABLED

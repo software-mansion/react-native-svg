@@ -113,7 +113,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGLineCls(void)
 {
   return RNSVGLine.class;
 }
+#endif // RN_FABRIC_ENABLED

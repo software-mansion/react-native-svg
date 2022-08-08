@@ -205,7 +205,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGRadialGradientCls(void)
 {
   return RNSVGRadialGradient.class;
 }
+#endif // RN_FABRIC_ENABLED

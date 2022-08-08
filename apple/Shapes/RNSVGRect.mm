@@ -173,7 +173,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGRectCls(void)
 {
   return RNSVGRect.class;
 }
+#endif // RN_FABRIC_ENABLED

@@ -147,7 +147,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGSymbolCls(void)
 {
   return RNSVGSymbol.class;
 }
+#endif // RN_FABRIC_ENABLED

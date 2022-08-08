@@ -266,7 +266,9 @@ double deg2rad(CGFloat deg) {
 @end
 
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGMarkerCls(void)
 {
   return RNSVGMarker.class;
 }
+#endif // RN_FABRIC_ENABLED

@@ -250,7 +250,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGPatternCls(void)
 {
   return RNSVGPattern.class;
 }
+#endif // RN_FABRIC_ENABLED

@@ -159,7 +159,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGMaskCls(void)
 {
   return RNSVGMask.class;
 }
+#endif // RN_FABRIC_ENABLED

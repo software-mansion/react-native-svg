@@ -381,7 +381,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGTextCls(void)
 {
   return RNSVGText.class;
 }
+#endif // RN_FABRIC_ENABLED

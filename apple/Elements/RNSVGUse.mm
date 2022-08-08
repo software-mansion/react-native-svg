@@ -208,7 +208,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGUseCls(void)
 {
   return RNSVGUse.class;
 }
+#endif // RN_FABRIC_ENABLED

@@ -70,7 +70,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGClipPathCls(void)
 {
   return RNSVGClipPath.class;
 }
+#endif // RN_FABRIC_ENABLED

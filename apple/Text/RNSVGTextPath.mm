@@ -141,7 +141,9 @@ using namespace facebook::react;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGTextPathCls(void)
 {
   return RNSVGTextPath.class;
 }
+#endif // RN_FABRIC_ENABLED

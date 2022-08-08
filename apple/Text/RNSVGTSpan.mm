@@ -1144,7 +1144,9 @@ RNSVGTopAlignedLabel *label;
 
 @end
 
+#ifdef RN_FABRIC_ENABLED
 Class<RCTComponentViewProtocol> RNSVGTSpanCls(void)
 {
   return RNSVGTSpan.class;
 }
+#endif // RN_FABRIC_ENABLED
