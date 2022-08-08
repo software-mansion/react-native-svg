@@ -41,15 +41,7 @@ RCT_CUSTOM_VIEW_PROPERTY(color, id, RNSVGSvgView)
 
 - (void)toDataURL:(nonnull NSNumber *)reactTag options:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback attempt:(int)attempt {
     [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,RNSVGView *> *viewRegistry) {
-#ifdef RN_FABRIC_ENABLED
-        __kindof RNSVGView *view;
-        __kindof RNSVGView *componentView = [uiManager viewForReactTag:reactTag];
-        if ([componentView respondsToSelector:@selector(contentView)]) {
-            view = [componentView performSelector:@selector(contentView)];
-        }
-#else
-        __kindof RNSVGView *view = viewRegistry[reactTag];
-#endif // RN_FABRIC_ENABLED
+        __kindof RNSVGView *view = [uiManager viewForReactTag:reactTag];
         NSString * b64;
         if ([view isKindOfClass:[RNSVGSvgView class]]) {
             RNSVGSvgView *svg = view;
@@ -72,7 +64,7 @@ RCT_CUSTOM_VIEW_PROPERTY(color, id, RNSVGSvgView)
                 b64 = [svg getDataURLwithBounds:bounds];
             }
         } else {
-            RCTLogError(@"Invalid svg returned frin registry, expecting RNSVGSvgView, got: %@", view);
+            RCTLogError(@"Invalid svg returned from registry, expecting RNSVGSvgView, got: %@", view);
             return;
         }
         if (b64) {

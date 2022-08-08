@@ -230,15 +230,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getScreenCTM:(nonnull NSNumber *)reactTag
     dispatch_sync(dispatch_get_main_queue(), ^{
         view = [self.bridge.uiManager viewForReactTag:reactTag];
     });
-    
-#ifdef RN_FABRIC_ENABLED
-        if ([view respondsToSelector:@selector(contentView)]) {
-            view = [view performSelector:@selector(contentView)];
-        }
-#endif // RN_FABRIC_ENABLED
     return view;
 }
 
 @end
-
-
