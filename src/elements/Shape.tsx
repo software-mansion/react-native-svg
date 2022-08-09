@@ -230,8 +230,8 @@ export const ownerSVGElement = {
 export default class Shape<P> extends Component<P> {
   [x: string]: unknown;
   root: (Shape<P> & NativeMethods) | null = null;
-  constructor(props: P, context: {}) {
-    super(props, context);
+  constructor(props: Readonly<P> | P) {
+    super(props);
     SvgTouchableMixin(this);
   }
   refMethod: (instance: (Shape<P> & NativeMethods) | null) => void = (
