@@ -102,6 +102,8 @@ export {
   LocalProps,
 };
 
+export * from './lib/extract/types';
+
 export {
   Svg,
   Circle,
