@@ -56,7 +56,7 @@ export default class Marker extends Shape<MarkerProps> {
       orient: String(orient),
       markerWidth,
       markerHeight,
-    });;
+    });
 
     return (
       <RNSVGMarker

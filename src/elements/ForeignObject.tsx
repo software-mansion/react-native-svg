@@ -1,5 +1,8 @@
 import React, { ReactNode } from 'react';
-import { withoutXY, stringifyPropsForFabric } from '../lib/extract/extractProps';
+import {
+  withoutXY,
+  stringifyPropsForFabric,
+} from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import G from './G';
 import { RNSVGForeignObject } from './NativeComponents';

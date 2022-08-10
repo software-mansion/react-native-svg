@@ -110,9 +110,16 @@ export function extractFont(props: fontProps) {
 
   const baseFont = typeof font === 'string' ? parseFontString(font) : font;
 
-  const fontProps: { [prop: string]: string | number | null } = { ...baseFont, ...ownedFont };
-  const stringifiedFontProps: { [prop: string]: string | null }  = {};
-  Object.keys(fontProps).map(k => stringifiedFontProps[k] = fontProps[k] === null ? null : String(fontProps[k]));
+  const fontProps: { [prop: string]: string | number | null } = {
+    ...baseFont,
+    ...ownedFont,
+  };
+  const stringifiedFontProps: { [prop: string]: string | null } = {};
+  Object.keys(fontProps).map(
+    (k) =>
+      (stringifiedFontProps[k] =
+        fontProps[k] === null ? null : String(fontProps[k])),
+  );
 
   return stringifiedFontProps;
 }
@@ -173,7 +180,11 @@ export default function extractText(props: TextProps, container: boolean) {
       children
     );
 
-    const stringifiedTextProps = stringifyPropsForFabric({inlineSize, baselineShift, verticalAlign});
+  const stringifiedTextProps = stringifyPropsForFabric({
+    inlineSize,
+    baselineShift,
+    verticalAlign,
+  });
 
   return {
     content: textChildren === null ? String(children) : null,

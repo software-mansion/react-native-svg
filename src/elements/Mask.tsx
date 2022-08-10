@@ -1,6 +1,9 @@
 import React, { ReactNode } from 'react';
 import extractTransform from '../lib/extract/extractTransform';
-import { stringifyPropsForFabric, withoutXY } from '../lib/extract/extractProps';
+import {
+  stringifyPropsForFabric,
+  withoutXY,
+} from '../lib/extract/extractProps';
 import {
   ColumnMajorTransformMatrix,
   CommonPathProps,
@@ -47,7 +50,12 @@ export default class Mask extends Shape<MaskProps> {
       maskContentUnits,
       children,
     } = props;
-    const strigifiedMaskProps = stringifyPropsForFabric({x, y, width, height,});
+    const strigifiedMaskProps = stringifyPropsForFabric({
+      x,
+      y,
+      width,
+      height,
+    });
     const maskProps = {
       maskTransform: extractTransform(maskTransform || transform || props),
       maskUnits: maskUnits !== undefined ? units[maskUnits] : 0,

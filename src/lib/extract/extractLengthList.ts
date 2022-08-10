@@ -7,7 +7,7 @@ export default function extractLengthList(
   lengthList?: readonly NumberProp[] | NumberProp,
 ): string[] {
   if (Array.isArray(lengthList)) {
-    return lengthList.map(el => String(el));
+    return lengthList.map((el) => String(el));
   } else if (typeof lengthList === 'number') {
     return [String(lengthList)];
   } else if (typeof lengthList === 'string') {

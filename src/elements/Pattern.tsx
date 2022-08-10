@@ -54,7 +54,12 @@ export default class Pattern extends Shape<PatternProps> {
       preserveAspectRatio,
     } = props;
     const matrix = extractTransform(patternTransform || transform || props);
-    const strigifiedPatternProps = stringifyPropsForFabric({x, y, width, height});
+    const strigifiedPatternProps = stringifyPropsForFabric({
+      x,
+      y,
+      width,
+      height,
+    });
     const patternProps = {
       name: id,
       matrix,

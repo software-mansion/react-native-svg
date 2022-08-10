@@ -2,9 +2,9 @@ import { ColorValue, processColor } from 'react-native';
 
 const urlIdPattern = /^url\(#(.+)\)$/;
 
-const currentColorBrush = {type: 2};
-const contextFillBrush = {type: 3};
-const contextStrokeBrush = {type: 4};
+const currentColorBrush = { type: 2 };
+const contextFillBrush = { type: 3 };
+const contextStrokeBrush = { type: 4 };
 
 export default function extractBrush(color?: ColorValue) {
   if (!color || color === 'none') {
@@ -25,19 +25,19 @@ export default function extractBrush(color?: ColorValue) {
 
   const brush = typeof color === 'string' && color.match(urlIdPattern);
   if (brush) {
-    return {type: 1, brushRef: brush[1]};
+    return { type: 1, brushRef: brush[1] };
   }
 
   const processedColor = processColor(color);
   if (typeof processedColor === 'number') {
-    return {type: 0, value: processedColor};
+    return { type: 0, value: processedColor };
   }
 
   if (typeof processedColor === 'object' && processedColor !== null) {
     // if we got an object, it should be `PlatformColor` or `DynamicColorIOS`,
     // so we pass it as an object with `0` value as first item, which is interpreted
     // on the native side as color to be managed by `RCTConvert`.
-    return {type: 0, value: processedColor};
+    return { type: 0, value: processedColor };
   }
 
   console.warn(`"${String(color)}" is not a valid color or brush`);

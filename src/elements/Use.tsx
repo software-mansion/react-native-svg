@@ -1,5 +1,8 @@
 import React, { ReactNode } from 'react';
-import { stringifyPropsForFabric, withoutXY } from '../lib/extract/extractProps';
+import {
+  stringifyPropsForFabric,
+  withoutXY,
+} from '../lib/extract/extractProps';
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import { idPattern } from '../lib/util';
 import Shape from './Shape';

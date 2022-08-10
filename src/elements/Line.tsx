@@ -25,7 +25,10 @@ export default class Line extends Shape<LineProps> {
   render() {
     const { props } = this;
     const { x1, y1, x2, y2 } = props;
-    const lineProps = { ...extract(this, props), ...stringifyPropsForFabric({x1, y1, x2, y2}) };
+    const lineProps = {
+      ...extract(this, props),
+      ...stringifyPropsForFabric({ x1, y1, x2, y2 }),
+    };
     return <RNSVGLine ref={this.refMethod} {...lineProps} />;
   }
 }

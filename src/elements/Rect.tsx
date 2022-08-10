@@ -1,5 +1,8 @@
 import React from 'react';
-import { stringifyPropsForFabric, withoutXY } from '../lib/extract/extractProps';
+import {
+  stringifyPropsForFabric,
+  withoutXY,
+} from '../lib/extract/extractProps';
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGRect } from './NativeComponents';
