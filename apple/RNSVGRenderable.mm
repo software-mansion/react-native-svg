@@ -180,6 +180,7 @@ static RNSVGRenderable * _contextElement;
     _strokeDashArrayData = nil;
 }
 
+#ifdef RN_FABRIC_ENABLED
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
@@ -214,6 +215,7 @@ static RNSVGRenderable * _contextElement;
     _vectorEffect = kRNSVGVectorEffectDefault;
     _propList = nil;
 }
+#endif // RN_FABRIC_ENABLED
 
 UInt32 saturate(CGFloat value) {
     return value <= 0 ? 0 : value >= 255 ? 255 : (UInt32)value;

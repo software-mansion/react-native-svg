@@ -587,6 +587,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     CGPathRelease(_path);
 }
 
+#ifdef RN_FABRIC_ENABLED
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
@@ -649,5 +650,6 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     CGPathRelease(_path);
     _path = nil;
 }
+#endif // RN_FABRIC_ENABLED
 
 @end
