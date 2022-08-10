@@ -7,7 +7,6 @@ const contextFillBrush = {type: 3};
 const contextStrokeBrush = {type: 4};
 
 export default function extractBrush(color?: ColorValue) {
-
   if (!color || color === 'none') {
     return null;
   }

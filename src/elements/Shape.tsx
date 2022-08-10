@@ -230,8 +230,8 @@ export const ownerSVGElement = {
 export default class Shape<P> extends Component<P> {
   [x: string]: unknown;
   root: (Shape<P> & NativeMethods) | null = null;
-  constructor(props: P, context: {}) {
-    super(props, context);
+  constructor(props: Readonly<P> | P) {
+    super(props);
     SvgTouchableMixin(this);
   }
   refMethod: (instance: (Shape<P> & NativeMethods) | null) => void = (
@@ -252,8 +252,12 @@ export default class Shape<P> extends Component<P> {
    * representative example / reproduction.
    * */
   getBBox = (options?: SVGBoundingBoxOptions): SVGRect => {
-    const { fill = true, stroke = true, markers = true, clipped = true } =
-      options || {};
+    const {
+      fill = true,
+      stroke = true,
+      markers = true,
+      clipped = true,
+    } = options || {};
     const handle = findNodeHandle(this.root as Component);
     return RNSVGRenderableManager.getBBox(handle, {
       fill,

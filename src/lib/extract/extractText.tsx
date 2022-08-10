@@ -4,7 +4,8 @@ import { pickNotNil } from '../util';
 import { NumberArray, NumberProp } from './types';
 import { stringifyPropsForFabric } from './extractProps';
 
-const fontRegExp = /^\s*((?:(?:normal|bold|italic)\s+)*)(?:(\d+(?:\.\d+)?(?:%|px|em|pt|pc|mm|cm|in]))*(?:\s*\/.*?)?\s+)?\s*"?([^"]*)/i;
+const fontRegExp =
+  /^\s*((?:(?:normal|bold|italic)\s+)*)(?:(\d+(?:\.\d+)?(?:%|px|em|pt|pc|mm|cm|in]))*(?:\s*\/.*?)?\s+)?\s*"?([^"]*)/i;
 const fontFamilyPrefix = /^[\s"']*/;
 const fontFamilySuffix = /[\s"']*$/;
 const commaReg = /\s*,\s*/g;
@@ -116,13 +117,17 @@ export function extractFont(props: fontProps) {
   return stringifiedFontProps;
 }
 
-let TSpan: ComponentType;
+let TSpan: ComponentType<React.PropsWithChildren<{}>>;
 
 export function setTSpan(TSpanImplementation: ComponentType) {
   TSpan = TSpanImplementation;
 }
 
-function getChild(child: undefined | string | number | ComponentType) {
+export type TextChild =
+  | (undefined | string | number | ComponentType | React.ReactElement)
+  | TextChild[];
+
+function getChild(child: TextChild) {
   if (typeof child === 'string' || typeof child === 'number') {
     return <TSpan>{String(child)}</TSpan>;
   } else {
@@ -136,7 +141,7 @@ export type TextProps = {
   dx?: NumberArray;
   dy?: NumberArray;
   rotate?: NumberArray;
-  children?: string | number | (string | number | ComponentType)[];
+  children?: TextChild;
   inlineSize?: NumberProp;
   baselineShift?: NumberProp;
   verticalAlign?: NumberProp;
