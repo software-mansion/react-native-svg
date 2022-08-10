@@ -338,7 +338,7 @@ PODS:
     - React-jsi (= 0.66.17)
     - React-logger (= 0.66.17)
     - React-perflogger (= 0.66.17)
-  - RNSVG (12.2.0):
+  - RNSVG (12.4.4):
     - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -528,10 +528,10 @@ SPEC CHECKSUMS:
   React-RCTVibration: 2a3a67f22b60d7a8faa805c69a18dee356669320
   React-runtimeexecutor: 3404d9c610a682e710e91e69b45b1e07fb6efad0
   ReactCommon: 89d1b7528338d4ae4c44d3459582785d212832ea
-  RNSVG: 4ecc2e8f38b6ebe7889909570c26f3abe8059767
+  RNSVG: ce63dc0dfa033974c70812171a76a5973db7c64a
   Yoga: 0664982d23529e0767fc7f364ad9b8e06aa713c7
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 PODFILE CHECKSUM: 3977aa53ea9660368db33335fc1e16c0a720ca09
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

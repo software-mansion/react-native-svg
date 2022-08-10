@@ -40,8 +40,8 @@ RCT_CUSTOM_VIEW_PROPERTY(color, id, RNSVGSvgView)
 
 
 - (void)toDataURL:(nonnull NSNumber *)reactTag options:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback attempt:(int)attempt {
-    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,RNSVGView *> *viewRegistry) {
-        __kindof RNSVGView *view = [uiManager viewForReactTag:reactTag];
+    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,RNSVGPlatformView *> *viewRegistry) {
+        __kindof RNSVGPlatformView *view = [uiManager viewForReactTag:reactTag];
         NSString * b64;
         if ([view isKindOfClass:[RNSVGSvgView class]]) {
             RNSVGSvgView *svg = view;
