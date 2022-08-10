@@ -45,6 +45,8 @@ interface BaseProps {
   rejectResponderTermination?: boolean;
 
   translate: NumberArray;
+  translateX: NumberProp;
+  translateY: NumberProp;
   scale: NumberArray;
   rotation: NumberArray;
   skewX: NumberProp;
@@ -78,6 +80,8 @@ const prepare = <T extends BaseProps>(
 ) => {
   const {
     translate,
+    translateX,
+    translateY,
     scale,
     rotation,
     skewX,
@@ -127,6 +131,9 @@ const prepare = <T extends BaseProps>(
   }
   if (translate != null) {
     transform.push(`translate(${translate})`);
+  }
+  if (translateX != null || translateY != null) {
+    transform.push(`translate(${translateX || 0}, ${translateY || 0})`);
   }
   if (scale != null) {
     transform.push(`scale(${scale})`);
