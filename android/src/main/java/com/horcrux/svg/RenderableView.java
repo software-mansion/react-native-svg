@@ -26,7 +26,6 @@ import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.ColorPropConverter;
 import com.facebook.react.uimanager.PointerEvents;
@@ -118,18 +117,10 @@ abstract public class RenderableView extends VirtualView {
             invalidate();
             return;
         }
-
-        ReadableType fillType = fill.getType();
-        if (fillType.equals(ReadableType.Map)) {
-          ReadableMap fillMap = fill.asMap();
-          setFill(fillMap);
-        }
-
-
-        // This code will probably never be reached with current changes
-        if (fillType.equals(ReadableType.Number)) {
+        ReadableType type = fill.getType();
+        if (type.equals(ReadableType.Number)) {
             this.fill = JavaOnlyArray.of(0, fill.asInt());
-        } else if (fillType.equals(ReadableType.Array)) {
+        } else if (type.equals(ReadableType.Array)) {
             this.fill = fill.asArray();
         } else {
             JavaOnlyArray arr = new JavaOnlyArray();
@@ -144,28 +135,6 @@ abstract public class RenderableView extends VirtualView {
         }
         invalidate();
     }
-
-  public void setFill(ReadableMap fill) {
-    if (fill == null) {
-      this.fill = null;
-      invalidate();
-      return;
-    }
-    int type = fill.getInt("type");
-    if (type == 0) {
-      ReadableType valueType = fill.getType("value");
-      if (valueType.equals(ReadableType.Number)) {
-        this.fill = JavaOnlyArray.of(0, fill.getInt("value"));
-      } else if (valueType.equals(ReadableType.Map)) {
-        this.fill = JavaOnlyArray.of(0, fill.getMap("value"));
-      }
-    } else if (type == 1) {
-      this.fill = JavaOnlyArray.of(1, fill.getString("brushRef"));
-    } else {
-      this.fill = JavaOnlyArray.of(type);
-    }
-    invalidate();
-  }
 
     @ReactProp(name = "fillOpacity", defaultFloat = 1f)
     public void setFillOpacity(float fillOpacity) {
@@ -246,11 +215,6 @@ abstract public class RenderableView extends VirtualView {
         this.strokeWidth = SVGLength.from(strokeWidth);
         invalidate();
     }
-
-  public void setStrokeWidth(double strokeWidth) {
-    this.strokeWidth = SVGLength.from(strokeWidth);
-    invalidate();
-  }
 
     @ReactProp(name = "strokeMiterlimit", defaultFloat = 4f)
     public void setStrokeMiterlimit(float strokeMiterlimit) {

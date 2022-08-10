@@ -27,14 +27,9 @@ import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.TransformHelper;
 import com.facebook.react.uimanager.ViewGroupManager;
-import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
-import com.facebook.react.viewmanagers.RNSVGCircleManagerDelegate;
-import com.facebook.react.viewmanagers.RNSVGCircleManagerInterface;
-import com.facebook.react.viewmanagers.RNSVGGroupManagerDelegate;
-import com.facebook.react.viewmanagers.RNSVGGroupManagerInterface;
 
 import java.util.Locale;
 
@@ -399,22 +394,14 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         view.setCameraDistance(0);
     }
 
-    static class GroupViewManager extends RenderableViewManager implements RNSVGGroupManagerInterface<GroupView> {
+    static class GroupViewManager extends RenderableViewManager {
         GroupViewManager() {
             super(SVGClass.RNSVGGroup);
-            mDelegate = new RNSVGGroupManagerDelegate(this);
         }
 
-      private final ViewManagerDelegate<GroupView> mDelegate;
-
-      protected ViewManagerDelegate getDelegate(){
-        return mDelegate;
-      }
-
-      GroupViewManager(SVGClass svgClass) {
+        GroupViewManager(SVGClass svgClass) {
             super(svgClass);
-            mDelegate = new RNSVGGroupManagerDelegate(this);
-      }
+        }
 
         @ReactProp(name = "font")
         public void setFont(GroupView node, @Nullable ReadableMap font) {
@@ -625,19 +612,12 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         }
     }
 
-    static class CircleViewManager extends RenderableViewManager implements RNSVGCircleManagerInterface<CircleView>  {
+    static class CircleViewManager extends RenderableViewManager {
         CircleViewManager() {
             super(SVGClass.RNSVGCircle);
-            mDelegate = new RNSVGCircleManagerDelegate(this);
         }
 
-        private final ViewManagerDelegate<CircleView> mDelegate;
-
-      protected ViewManagerDelegate getDelegate(){
-        return mDelegate;
-      }
-
-      @ReactProp(name = "cx")
+        @ReactProp(name = "cx")
         public void setCx(CircleView node, Dynamic cx) {
             node.setCx(cx);
         }
@@ -651,26 +631,6 @@ class RenderableViewManager extends ViewGroupManager<VirtualView> {
         public void setR(CircleView node, Dynamic r) {
             node.setR(r);
         }
-
-      @Override
-      public void setCx(CircleView view, double value) {
-        view.setCx(value);
-      }
-
-      @Override
-      public void setCy(CircleView view, double value) {
-        view.setCy(value);
-      }
-
-      @Override
-      public void setR(CircleView view, double value) {
-        view.setR(value);
-      }
-
-      @Override
-      public void setFill(CircleView view, ReadableMap value) {
-        view.setFill(value);
-      }
     }
 
     static class EllipseViewManager extends RenderableViewManager {

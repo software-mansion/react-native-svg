@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its children.
  */
 @SuppressLint("ViewConstructor")
-public class SvgView extends FabricEnabledViewGroup implements ReactCompoundView, ReactCompoundViewGroup {
+public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactCompoundViewGroup {
 
     @Override
     public boolean interceptsTouchEvent(float touchX, float touchY) {
@@ -71,8 +71,6 @@ public class SvgView extends FabricEnabledViewGroup implements ReactCompoundView
     public SvgView(ReactContext reactContext) {
         super(reactContext);
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
-        // for some reason on Fabric the `onDraw` won't be called without it
-        setWillNotDraw(false);
     }
 
     @Override

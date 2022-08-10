@@ -13,12 +13,9 @@ import android.util.SparseArray;
 
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.facebook.react.views.view.ReactViewManager;
-import com.facebook.react.viewmanagers.RNSVGSvgViewManagerDelegate;
-import com.facebook.react.viewmanagers.RNSVGSvgViewManagerInterface;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,23 +24,12 @@ import javax.annotation.Nullable;
  * ViewManager for RNSVGSvgView React views. Renders as a {@link SvgView} and handles
  * invalidating the native view on view updates happening in the underlying tree.
  */
-class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInterface<SvgView> {
+class SvgViewManager extends ReactViewManager {
 
     private static final String REACT_CLASS = "RNSVGSvgView";
 
     private static final SparseArray<SvgView> mTagToSvgView = new SparseArray<>();
     private static final SparseArray<Runnable> mTagToRunnable = new SparseArray<>();
-
-    private final ViewManagerDelegate<SvgView> mDelegate;
-
-//    @Override
-    protected ViewManagerDelegate getDelegate(){
-      return mDelegate;
-    }
-
-    public SvgViewManager() {
-      mDelegate = new RNSVGSvgViewManagerDelegate(this);
-    }
 
     static void setSvgView(int tag, SvgView svg) {
         mTagToSvgView.put(tag, svg);
@@ -70,7 +56,7 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
 
     @Nonnull
     @Override
-    public ReactViewGroup createViewInstance(ThemedReactContext reactContext) {
+    public SvgView createViewInstance(ThemedReactContext reactContext) {
         return new SvgView(reactContext);
     }
 
@@ -102,25 +88,21 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
     }
 
     @ReactProp(name = "minX")
-    @Override
     public void setMinX(SvgView node, float minX) {
         node.setMinX(minX);
     }
 
     @ReactProp(name = "minY")
-    @Override
     public void setMinY(SvgView node, float minY) {
         node.setMinY(minY);
     }
 
     @ReactProp(name = "vbWidth")
-    @Override
     public void setVbWidth(SvgView node, float vbWidth) {
         node.setVbWidth(vbWidth);
     }
 
     @ReactProp(name = "vbHeight")
-    @Override
     public void setVbHeight(SvgView node, float vbHeight) {
         node.setVbHeight(vbHeight);
     }
@@ -136,15 +118,12 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
     }
 
     @ReactProp(name = "align")
-    @Override
     public void setAlign(SvgView node, String align) {
         node.setAlign(align);
     }
 
     @ReactProp(name = "meetOrSlice")
-    @Override
     public void setMeetOrSlice(SvgView node, int meetOrSlice) {
         node.setMeetOrSlice(meetOrSlice);
     }
-
 }

@@ -101,10 +101,6 @@ class SVGLength {
         }
     }
 
-  static SVGLength from(double number) {
-      return new SVGLength(number);
-  }
-
     static String toString(Dynamic dynamic) {
         switch (dynamic.getType()) {
             case Number:
