@@ -1,7 +1,10 @@
 import React from 'react';
 import { Image, ImageProps as RNImageProps } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
-import { withoutXY } from '../lib/extract/extractProps';
+import {
+  stringifyPropsForFabric,
+  withoutXY,
+} from '../lib/extract/extractProps';
 import {
   ClipProps,
   CommonMaskProps,
@@ -61,11 +64,14 @@ export default class SvgImage extends Shape<ImageProps> {
     const align = modes[0];
     const meetOrSlice: 'meet' | 'slice' | 'none' | string | undefined =
       modes[1];
-    const imageProps = {
+    const stringifiedImageProps = stringifyPropsForFabric({
       x,
       y,
       width,
       height,
+    });
+    const imageProps = {
+      ...stringifiedImageProps,
       meetOrSlice: meetOrSliceTypes[meetOrSlice] || 0,
       align: alignEnum[align] || 'xMidYMid',
       src: !href

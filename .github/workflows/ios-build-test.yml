@@ -6,6 +6,9 @@ on:
       - 'RNSVG.podspec'
       - 'apple/**'
       - 'Example/ios/**'
+      - 'src/fabric/**'
+      - 'FabricExample/**'
+      - 'package.json'
   push:
     branches:
       - main
@@ -15,7 +18,7 @@ jobs:
     runs-on: macos-12
     strategy:
       matrix:
-        working-directory: [Example]
+        working-directory: [Example, FabricExample]
     concurrency:
       group: ios-${{ matrix.working-directory }}-${{ github.ref }}
     steps:

@@ -96,5 +96,14 @@
     "ts-node": "^10.8.0",
     "typescript": "^4.7.2"
   },
-  "nativePackage": true
+  "nativePackage": true,
+  "codegenConfig": {
+    "libraries": [
+      {
+        "name": "rnsvg",
+        "type": "components",
+        "jsSrcsDir": "./src/fabric"
+      }
+    ]
+  }
 }
