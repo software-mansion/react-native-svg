@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  ColorValue,
   findNodeHandle,
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
@@ -12,7 +13,6 @@ import {
   ViewStyle,
 } from 'react-native';
 import {
-  Color,
   extractedProps,
   NumberProp,
   ResponderInstanceProps,
@@ -38,7 +38,7 @@ export interface SvgProps extends GProps, ViewProps {
   height?: NumberProp;
   viewBox?: string;
   preserveAspectRatio?: string;
-  color?: Color;
+  color?: ColorValue;
   title?: string;
 }
 
@@ -78,10 +78,10 @@ export default class Svg extends Shape<SvgProps> {
   ) => {
     const { width, height } = props;
     if (width) {
-      props.bbWidth = width;
+      props.bbWidth = String(width);
     }
     if (height) {
-      props.bbHeight = height;
+      props.bbHeight = String(height);
     }
     const { root } = this;
     root && root.setNativeProps(props);
@@ -168,10 +168,10 @@ export default class Svg extends Shape<SvgProps> {
     props.style = rootStyles.length > 1 ? rootStyles : defaultStyle;
 
     if (width != null) {
-      props.bbWidth = width;
+      props.bbWidth = String(width);
     }
     if (height != null) {
-      props.bbHeight = height;
+      props.bbHeight = String(height);
     }
 
     extractResponder(props, props, this as ResponderInstanceProps);

@@ -3,16 +3,11 @@ import extractViewBox from '../lib/extract/extractViewBox';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGMarker } from './NativeComponents';
+import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 
-export enum MarkerUnits {
-  STROKE_WIDTH = 'strokeWidth',
-  USER_SPACE_ON_USE = 'userSpaceOnUse',
-}
+export type MarkerUnits = 'strokeWidth' | 'userSpaceOnUse';
 
-export enum Orient {
-  AUTO = 'auto',
-  AUTO_START_REVERSE = 'auto-start-reverse',
-}
+export type Orient = 'auto' | 'auto-start-reverse';
 
 export interface MarkerProps {
   children?: ReactNode;
@@ -53,7 +48,7 @@ export default class Marker extends Shape<MarkerProps> {
       markerHeight,
       children,
     } = props;
-    const markerProps = {
+    const markerProps = stringifyPropsForFabric({
       name: id,
       refX,
       refY,
@@ -61,7 +56,7 @@ export default class Marker extends Shape<MarkerProps> {
       orient: String(orient),
       markerWidth,
       markerHeight,
-    };
+    });
 
     return (
       <RNSVGMarker

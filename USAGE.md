@@ -91,15 +91,31 @@ If remote SVG file contains CSS in `<style>` element, use `SvgCssUri`:
 
 ```jsx
 import * as React from 'react';
-import { SvgCssUri } from 'react-native-svg';
-
-export default () => (
-  <SvgCssUri
-    width="100%"
-    height="100%"
-    uri="http://thenewcode.com/assets/svg/accessibility.svg"
-  />
-);
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import { SvgUri } from 'react-native-svg';
+export default function TestComponent() {
+  const [loading, setLoading] = React.useState(true);
+  const onError = (e: Error) => {
+    console.log(e.message);
+    setLoading(false);
+  };
+  const onLoad = () => {
+    console.log('Svg loaded!');
+    setLoading(false);
+  };
+  return (
+    <>
+    <SvgUri
+      width="100"
+      height="100"
+      uri="https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg"
+      onError={onError}
+      onLoad={onLoad}
+    />
+    {loading && <ActivityIndicator size="large" color="#0000ff"/>}
+    </>
+  );
+}
 ```
 
 ## Error handling

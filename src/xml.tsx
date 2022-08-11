@@ -11,7 +11,7 @@ import Ellipse from './elements/Ellipse';
 import Polygon from './elements/Polygon';
 import Polyline from './elements/Polyline';
 import Line from './elements/Line';
-import Svg from './elements/Svg';
+import Svg, { SvgProps } from './elements/Svg';
 import Path from './elements/Path';
 import G from './elements/G';
 import Text from './elements/Text';
@@ -84,15 +84,16 @@ export interface JsxAST extends AST {
 export type AdditionalProps = {
   onError?: (error: Error) => void;
   override?: Object;
+  onLoad?: () => void;
 };
 
-export type UriProps = { uri: string | null } & AdditionalProps;
+export type UriProps = SvgProps & { uri: string | null } & AdditionalProps;
 export type UriState = { xml: string | null };
 
-export type XmlProps = { xml: string | null } & AdditionalProps;
+export type XmlProps = SvgProps & { xml: string | null } & AdditionalProps;
 export type XmlState = { ast: JsxAST | null };
 
-export type AstProps = { ast: JsxAST | null } & AdditionalProps;
+export type AstProps = SvgProps & { ast: JsxAST | null } & AdditionalProps;
 
 export function SvgAst({ ast, override }: AstProps) {
   if (!ast) {
@@ -132,11 +133,18 @@ export async function fetchText(uri: string) {
 }
 
 export function SvgUri(props: UriProps) {
-  const { onError = err, uri } = props;
+  const { onError = err, uri, onLoad } = props;
   const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
-    uri ? fetchText(uri).then(setXml).catch(onError) : setXml(null);
-  }, [onError, uri]);
+    uri
+      ? fetchText(uri)
+          .then((data) => {
+            setXml(data);
+            onLoad?.();
+          })
+          .catch(onError)
+      : setXml(null);
+  }, [onError, uri, onLoad]);
   return <SvgXml xml={xml} override={props} />;
 }
 
@@ -205,7 +213,7 @@ export type Styles = { [property: string]: string };
 
 export function getStyle(string: string): Styles {
   const style: Styles = {};
-  const declarations = string.split(';');
+  const declarations = string.split(';').filter((v) => v.trim());
   const { length } = declarations;
   for (let i = 0; i < length; i++) {
     const declaration = declarations[i];

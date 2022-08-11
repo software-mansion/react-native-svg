@@ -720,7 +720,7 @@ export class SvgWithCss extends Component<XmlProps, XmlState> {
     try {
       this.setState({ ast: xml ? parse(xml, inlineStyles) : null });
     } catch (e) {
-      console.error(e);
+      this.props.onError ? this.props.onError(e as Error) : console.error(e);
     }
   }
   render() {
@@ -747,7 +747,7 @@ export class SvgWithCssUri extends Component<UriProps, UriState> {
     try {
       this.setState({ xml: uri ? await fetchText(uri) : null });
     } catch (e) {
-      console.error(e);
+      this.props.onError ? this.props.onError(e as Error) : console.error(e);
     }
   }
   render() {
