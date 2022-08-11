@@ -12,8 +12,8 @@
 
 #import "RNSVGBrush.h"
 #import "RNSVGCGFCRule.h"
-#import "RNSVGNode.h"
 #import "RNSVGLength.h"
+#import "RNSVGNode.h"
 #import "RNSVGVectorEffect.h"
 
 @interface RNSVGRenderable : RNSVGNode

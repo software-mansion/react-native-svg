@@ -7,6 +7,6 @@
  */
 
 typedef CF_ENUM(int32_t, RNSVGCGFCRule) {
-    kRNSVGCGFCRuleEvenodd,
-    kRNSVGCGFCRuleNonzero
+  kRNSVGCGFCRuleEvenodd,
+  kRNSVGCGFCRuleNonzero
 };

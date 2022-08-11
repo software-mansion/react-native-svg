@@ -6,8 +6,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGNode.h"
 #import "RNSVGLength.h"
+#import "RNSVGNode.h"
 
 @interface RNSVGLinearGradient : RNSVGNode
 
