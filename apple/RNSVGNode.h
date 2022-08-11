@@ -6,10 +6,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#import "RNSVGSvgView.h"
 #import <React/UIView+React.h>
 #import <React/RCTPointerEvents.h>
 #import "RNSVGCGFCRule.h"
-#import "RNSVGSvgView.h"
+
+#ifdef RN_FABRIC_ENABLED
+#import <React/RCTViewComponentView.h>
+#endif // RN_FABRIC_ENABLED
 
 @class RNSVGGroup;
 
@@ -18,8 +22,12 @@
  ＊interfaces for all non-definition nodes.
  */
 
-@interface RNSVGNode : RNSVGView
-
+@interface RNSVGNode :
+#ifdef RN_FABRIC_ENABLED
+RCTViewComponentView
+#else
+RNSVGView
+#endif // RN_FABRIC_ENABLED
 /*
  N[1/Sqrt[2], 36]
  The inverse of the square root of 2.

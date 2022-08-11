@@ -124,7 +124,7 @@ static RNSVGFontWeight const RNSVGFontWeights[] = {
 
 NSString* RNSVGFontWeightToString( enum RNSVGFontWeight fw );
 
-enum RNSVGFontWeight RNSVGFontWeightFromString( NSString* s );
+NSInteger RNSVGFontWeightFromString( NSString* s );
 
 typedef NS_ENUM(NSInteger, RNSVGTextAnchor) {
     RNSVGTextAnchorStart,

@@ -42,15 +42,17 @@ RNSVGBrush *brushFromColorStruct(T fillObject)
 }
 
 template<typename T>
-void setCommonNodeProps(T nodeProps, RNSVGNode *node, RCTViewComponentView *view)
+void setCommonNodeProps(T nodeProps, RNSVGNode *node)
 {
-    node.parentComponentView = view;
     node.name =  RCTNSStringFromStringNilIfEmpty(nodeProps.name);
     node.opacity = nodeProps.opacity;
     if (nodeProps.matrix.size() == 6) {
         node.matrix = CGAffineTransformMake(nodeProps.matrix.at(0), nodeProps.matrix.at(1), nodeProps.matrix.at(2), nodeProps.matrix.at(3), nodeProps.matrix.at(4), nodeProps.matrix.at(5));
     }
-    // transform
+    CATransform3D transform3d = RCTCATransform3DFromTransformMatrix(nodeProps.transform);
+    CGAffineTransform transform = CATransform3DGetAffineTransform(transform3d);
+    node.invTransform = CGAffineTransformInvert(transform);
+    node.transforms = transform;
     node.mask =  RCTNSStringFromStringNilIfEmpty(nodeProps.mask);
     node.markerStart =  RCTNSStringFromStringNilIfEmpty(nodeProps.markerStart);
     node.markerMid =  RCTNSStringFromStringNilIfEmpty(nodeProps.markerMid);
@@ -87,9 +89,9 @@ static NSMutableArray<RNSVGLength *> *createLengthArrayFromStrings(std::vector<s
 }
 
 template<typename T>
-void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode, RCTViewComponentView *view)
+void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode)
 {
-    setCommonNodeProps(renderableProps, renderableNode, view);
+    setCommonNodeProps(renderableProps, renderableNode);
     renderableNode.fill = brushFromColorStruct(renderableProps.fill);
     renderableNode.fillOpacity = renderableProps.fillOpacity;
     renderableNode.fillRule = renderableProps.fillRule == 0 ? kRNSVGCGFCRuleEvenodd : kRNSVGCGFCRuleNonzero;
@@ -143,9 +145,9 @@ NSDictionary *parseFontStruct(T fontStruct)
 }
 
 template<typename T>
-void setCommonGroupProps(T groupProps, RNSVGGroup *groupNode, RCTViewComponentView *view)
+void setCommonGroupProps(T groupProps, RNSVGGroup *groupNode)
 {
-    setCommonRenderableProps(groupProps, groupNode, view);
+    setCommonRenderableProps(groupProps, groupNode);
     
     if (RCTNSStringFromStringNilIfEmpty(groupProps.fontSize)) {
         groupNode.font = @{ @"fontSize": RCTNSStringFromString(groupProps.fontSize) };
@@ -173,26 +175,4 @@ static RNSVGVBMOS intToRNSVGVBMOS(int value)
         default:
             return kRNSVGVBMOSMeet;
     }
-}
-
-static void mountChildComponentView(UIView<RCTComponentViewProtocol> *childComponentView, NSInteger index, RNSVGNode *element) {
-    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ([((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]] || [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGSvgView class]])) {
-        [element insertSubview:((RCTViewComponentView *)childComponentView).contentView atIndex:index];
-        [element invalidate];
-    } else {
-        RCTLogError(@"Children of SVG should only be of SVG type, instead found %@", childComponentView);
-    }
-    // if we don't add componentView to native view hierarchy, RN responder system does not work for some reason
-    // We add it with `index+1` since first child is `contentView`
-    [element.superview insertSubview:childComponentView atIndex:index+1];
-}
-
-static void unmountChildComponentView(UIView<RCTComponentViewProtocol> *childComponentView, NSInteger index, RNSVGNode *element) {
-    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ([((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGNode class]] || [((RCTViewComponentView *)childComponentView).contentView isKindOfClass:[RNSVGSvgView class]])) {
-        [element removeFromSuperview];
-        [element invalidate];
-    } else {
-        RCTLogError(@"Children of SVG should only be of SVG type, instead found %@", childComponentView);
-    }
-    [childComponentView removeFromSuperview];
 }

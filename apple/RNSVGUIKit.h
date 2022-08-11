@@ -12,7 +12,18 @@
 
 #else // TARGET_OS_OSX [
 
+// Due to name mangling, calling c-style functions from .mm files will fail, therefore we need to wrap them with extern "C"
+// so they are handled correctly. We also need to have imports positioned in a correct way,
+// so that this extern "C" wrapper is used before the functions from RCTUIKit are used.
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #import <React/RCTUIKit.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 #define RNSVGColor NSColor
 #define RNSVGPlatformView NSView
