@@ -6,10 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import <React/RCTPointerEvents.h>
-#import <React/UIView+React.h>
 #import "RNSVGCGFCRule.h"
 #import "RNSVGSvgView.h"
+
+#import <React/RCTPointerEvents.h>
+#import <React/UIView+React.h>
 
 #ifdef RN_FABRIC_ENABLED
 #import <React/RCTViewComponentView.h>
