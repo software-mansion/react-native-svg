@@ -28,7 +28,7 @@ export default class G<P> extends Shape<GProps & P> {
     if (matrix) {
       props.matrix = matrix;
     }
-    this.root && this.root.setNativeProps(props);
+    this.root?.setNativeProps(props);
   };
 
   render() {

@@ -1,5 +1,5 @@
 {
-  "version": "12.4.0",
+  "version": "12.4.4",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -106,5 +106,14 @@
     "src/**/*.{js,ts,tsx}": "yarn lint",
     "apple/**/*.{h,m,mm,cpp}": "yarn format-ios"
   },
-  "nativePackage": true
+  "nativePackage": true,
+  "codegenConfig": {
+    "libraries": [
+      {
+        "name": "rnsvg",
+        "type": "components",
+        "jsSrcsDir": "./src/fabric"
+      }
+    ]
+  }
 }

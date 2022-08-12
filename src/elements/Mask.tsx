@@ -1,6 +1,9 @@
 import React, { ReactNode } from 'react';
 import extractTransform from '../lib/extract/extractTransform';
-import { withoutXY } from '../lib/extract/extractProps';
+import {
+  stringifyPropsForFabric,
+  withoutXY,
+} from '../lib/extract/extractProps';
 import {
   ColumnMajorTransformMatrix,
   CommonPathProps,
@@ -10,14 +13,7 @@ import units from '../lib/units';
 import Shape from './Shape';
 import { RNSVGMask } from './NativeComponents';
 
-export enum EMaskUnits {
-  USER_SPACE_ON_USE = 'userSpaceOnUse',
-  OBJECT_BOUNDING_BOX = 'objectBoundingBox',
-}
-
-export type TMaskUnits =
-  | EMaskUnits.USER_SPACE_ON_USE
-  | EMaskUnits.OBJECT_BOUNDING_BOX;
+export type TMaskUnits = 'userSpaceOnUse' | 'objectBoundingBox';
 
 export interface MaskProps extends CommonPathProps {
   children?: ReactNode;
@@ -54,11 +50,13 @@ export default class Mask extends Shape<MaskProps> {
       maskContentUnits,
       children,
     } = props;
-    const maskProps = {
+    const strigifiedMaskProps = stringifyPropsForFabric({
       x,
       y,
       width,
       height,
+    });
+    const maskProps = {
       maskTransform: extractTransform(maskTransform || transform || props),
       maskUnits: maskUnits !== undefined ? units[maskUnits] : 0,
       maskContentUnits:
@@ -68,6 +66,7 @@ export default class Mask extends Shape<MaskProps> {
       <RNSVGMask
         ref={this.refMethod}
         {...withoutXY(this, props)}
+        {...strigifiedMaskProps}
         {...maskProps}
       >
         {children}

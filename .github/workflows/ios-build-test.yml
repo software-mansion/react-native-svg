@@ -1,37 +1,78 @@
 name: Test iOS build
 on:
   pull_request:
-    branches:
-      - main
     paths:
+      - '.github/workflows/ios-build-test.yml'
+      - 'RNSVG.podspec'
       - 'apple/**'
+      - 'Example/ios/**'
+      - 'src/fabric/**'
+      - 'FabricExample/**'
+      - 'package.json'
   push:
     branches:
       - main
-  workflow_dispatch:
+
 jobs:
   build:
-    runs-on: macos-latest
-    env:
-      WORKING_DIRECTORY: Example
+    runs-on: macos-12
+    strategy:
+      matrix:
+        working-directory: [Example, FabricExample]
     concurrency:
-      group: ios-${{ github.ref }}
-      cancel-in-progress: true
+      group: ios-${{ matrix.working-directory }}-${{ github.ref }}
     steps:
-      - name: checkout
+      - name: Check out Git repository
         uses: actions/checkout@v2
-      - name: Use Node.js 14
-        uses: actions/setup-node@v2
+
+      - name: Restore svg node_modules from cache
+        uses: actions/cache@v2
+        id: cache-node-modules-svg
         with:
-          node-version: 14
-          cache: 'yarn'
-          cache-dependency-path: 'Example/yarn.lock'
-      - name: Install node dependencies
-        working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: yarn
-      - name: Install pods
-        working-directory: ${{ env.WORKING_DIRECTORY }}/ios
+          path: |
+            node_modules
+          key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-svg
+      - name: Install svg node_modules
+        run: yarn install --frozen-lockfile
+
+      - name: Restore app node_modules from cache
+        uses: actions/cache@v2
+        id: cache-node-modules-app
+        with:
+          path: |
+            ${{ matrix.working-directory }}/node_modules
+          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.working-directory)) }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
+      - name: Install app node_modules
+        working-directory: ${{ matrix.working-directory }}
+        run: yarn install --frozen-lockfile
+
+      - name: Restore Pods from cache
+        uses: actions/cache@v2
+        id: cache-pods
+        with:
+          path: |
+            ${{ matrix.working-directory }}/ios/Pods
+            ~/Library/Caches/CocoaPods
+            ~/.cocoapods
+          key: ${{ runner.os }}-pods3-${{ matrix.working-directory }}-${{ hashFiles('yarn.lock', format('{0}/yarn.lock', matrix.working-directory), format('{0}/ios/Podfile.lock', matrix.working-directory)) }}
+
+      - name: Install Pods
+        working-directory: ${{ matrix.working-directory }}/ios
         run: pod install
+
+      - name: Restore build artifacts from cache
+        uses: actions/cache@v2
+        id: cache-build
+        with:
+          path: |
+            ${{ matrix.working-directory }}/ios/build
+            ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-build3-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/ios/Podfile.lock', matrix.working-directory)) }}
+
       - name: Build app
-        working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: yarn ios
+        working-directory: ${{ matrix.working-directory }}
+        run: npx react-native run-ios

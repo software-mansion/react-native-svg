@@ -1,8 +1,9 @@
 import { Component } from 'react';
-import { Color, NumberProp } from '../lib/extract/types';
+import { ColorValue } from 'react-native';
+import { NumberProp } from '../lib/extract/types';
 
 export interface StopProps {
-  stopColor?: Color;
+  stopColor?: ColorValue;
   stopOpacity?: NumberProp;
   offset?: NumberProp;
   parent?: Component;

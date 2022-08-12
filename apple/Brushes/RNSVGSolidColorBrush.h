@@ -11,5 +11,6 @@
 @interface RNSVGSolidColorBrush : RNSVGBrush
 
 - (instancetype)initWithNumber:(NSNumber *)number;
+- (instancetype)initWithColor:(RNSVGColor *)color;
 
 @end

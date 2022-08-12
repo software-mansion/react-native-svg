@@ -9,6 +9,7 @@ import * as ReactNative from "react-native";
 import {
   ColorValue,
   GestureResponderEvent,
+  LayoutChangeEvent,
   TransformsStyle,
 } from "react-native";
 export type NumberProp = string | number;
@@ -191,6 +192,9 @@ export interface CommonMarkerProps {
   markerMid?: string;
   markerEnd?: string;
 }
+export interface NativeProps {
+  onLayout?: (event: LayoutChangeEvent) => void;
+}
 export type CommonPathProps = { ... } & FillProps &
   StrokeProps &
   ClipProps &
@@ -200,7 +204,8 @@ export type CommonPathProps = { ... } & FillProps &
   TouchableProps &
   DefinitionProps &
   CommonMarkerProps &
-  CommonMaskProps;
+  CommonMaskProps &
+  NativeProps;
 export type CircleProps = {
   cx?: NumberProp,
   cy?: NumberProp,
@@ -487,6 +492,8 @@ export type UriProps = {
   uri: string | null,
   onError?: (error: Error) => void,
   override?: SvgProps,
+  onError?: (error: Error) => void,
+  onLoad?: () => void,
   ...
 } & SvgProps;
 export type UriState = {

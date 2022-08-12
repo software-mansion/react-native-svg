@@ -5,11 +5,11 @@ const commaReg = /,/g;
 
 export default function extractLengthList(
   lengthList?: readonly NumberProp[] | NumberProp,
-): readonly NumberProp[] {
+): string[] {
   if (Array.isArray(lengthList)) {
-    return lengthList as NumberProp[];
+    return lengthList.map((el) => String(el));
   } else if (typeof lengthList === 'number') {
-    return [lengthList];
+    return [String(lengthList)];
   } else if (typeof lengthList === 'string') {
     return lengthList.trim().replace(commaReg, ' ').split(spaceReg);
   } else {
