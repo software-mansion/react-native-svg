@@ -7,31 +7,30 @@
  */
 
 #import "RNSVGContextBrush.h"
-#import "RNSVGRenderable.h"
 #import "RNSVGNode.h"
+#import "RNSVGRenderable.h"
 
-#import "RCTConvert+RNSVG.h"
 #import <React/RCTLog.h>
+#import "RCTConvert+RNSVG.h"
 
-@implementation RNSVGContextBrush
-{
-    BOOL _isStroke;
+@implementation RNSVGContextBrush {
+  BOOL _isStroke;
 }
 
 - (instancetype)initFill
 {
-    if ((self = [super initWithArray:nil])) {
-        _isStroke = NO;
-    }
-    return self;
+  if ((self = [super initWithArray:nil])) {
+    _isStroke = NO;
+  }
+  return self;
 }
 
 - (instancetype)initStroke
 {
-    if ((self = [super initWithArray:nil])) {
-        _isStroke = YES;
-    }
-    return self;
+  if ((self = [super initWithArray:nil])) {
+    _isStroke = YES;
+  }
+  return self;
 }
 
 - (void)dealloc
@@ -40,46 +39,44 @@
 
 - (BOOL)applyFillColor:(CGContextRef)context opacity:(CGFloat)opacity
 {
-    RNSVGRenderable *element = RNSVGRenderable.contextElement;
-    if (!element) {
-        return NO;
-    }
+  RNSVGRenderable *element = RNSVGRenderable.contextElement;
+  if (!element) {
+    return NO;
+  }
 
-    RNSVGBrush *brush = _isStroke ? element.stroke : element.fill;
+  RNSVGBrush *brush = _isStroke ? element.stroke : element.fill;
 
-    BOOL fillColor;
+  BOOL fillColor;
 
-    if (brush.class == RNSVGBrush.class) {
-        CGContextSetFillColorWithColor(context, [element.tintColor CGColor]);
-        fillColor = YES;
-    } else {
-        fillColor = [brush applyFillColor:context opacity:opacity];
-    }
+  if (brush.class == RNSVGBrush.class) {
+    CGContextSetFillColorWithColor(context, [element.tintColor CGColor]);
+    fillColor = YES;
+  } else {
+    fillColor = [brush applyFillColor:context opacity:opacity];
+  }
 
-    return fillColor;
+  return fillColor;
 }
-
-
 
 - (BOOL)applyStrokeColor:(CGContextRef)context opacity:(CGFloat)opacity
 {
-    RNSVGRenderable *element = RNSVGRenderable.contextElement;
-    if (!element) {
-        return NO;
-    }
+  RNSVGRenderable *element = RNSVGRenderable.contextElement;
+  if (!element) {
+    return NO;
+  }
 
-    RNSVGBrush *brush = _isStroke ? element.stroke : element.fill;
+  RNSVGBrush *brush = _isStroke ? element.stroke : element.fill;
 
-    BOOL strokeColor;
+  BOOL strokeColor;
 
-    if (brush.class == RNSVGBrush.class) {
-        CGContextSetStrokeColorWithColor(context, [element.tintColor CGColor]);
-        strokeColor = YES;
-    } else {
-        strokeColor = [brush applyStrokeColor:context opacity:opacity];
-    }
+  if (brush.class == RNSVGBrush.class) {
+    CGContextSetStrokeColorWithColor(context, [element.tintColor CGColor]);
+    strokeColor = YES;
+  } else {
+    strokeColor = [brush applyStrokeColor:context opacity:opacity];
+  }
 
-    return YES;
+  return YES;
 }
 
 @end

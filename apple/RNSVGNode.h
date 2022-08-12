@@ -6,10 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGSvgView.h"
-#import <React/UIView+React.h>
 #import <React/RCTPointerEvents.h>
+#import <React/UIView+React.h>
 #import "RNSVGCGFCRule.h"
+#import "RNSVGSvgView.h"
 
 #ifdef RN_FABRIC_ENABLED
 #import <React/RCTViewComponentView.h>
@@ -24,9 +24,9 @@
 
 @interface RNSVGNode :
 #ifdef RN_FABRIC_ENABLED
-RCTViewComponentView
+    RCTViewComponentView
 #else
-RNSVGView
+    RNSVGView
 #endif // RN_FABRIC_ENABLED
 /*
  N[1/Sqrt[2], 36]
@@ -73,7 +73,6 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGRect markerBounds;
 @property (nonatomic, copy) RCTDirectEventBlock onLayout;
 
-
 /**
  * RNSVGSvgView which ownes current RNSVGNode
  */
@@ -111,7 +110,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 /**
  * getPath will return the path inside node as a ClipPath.
  */
-- (CGPathRef)getPath:(CGContextRef) context;
+- (CGPathRef)getPath:(CGContextRef)context;
 
 - (CGFloat)relativeOnWidthString:(NSString *)length;
 

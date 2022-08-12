@@ -8,8 +8,8 @@
 
 #import "RNSVGEllipseManager.h"
 
-#import "RNSVGEllipse.h"
 #import "RCTConvert+RNSVG.h"
+#import "RNSVGEllipse.h"
 
 @implementation RNSVGEllipseManager
 
@@ -20,9 +20,9 @@ RCT_EXPORT_MODULE()
   return [RNSVGEllipse new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(cx, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(cy, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(rx, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(ry, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(cx, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(cy, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(rx, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(ry, RNSVGLength *)
 
 @end

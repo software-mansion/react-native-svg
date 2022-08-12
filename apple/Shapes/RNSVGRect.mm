@@ -11,9 +11,9 @@
 
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import "RCTFabricComponentsPlugins.h"
-#import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
+#import "RCTConversions.h"
+#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -40,132 +40,132 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newProps = *std::static_pointer_cast<const RNSVGRectProps>(props);
+  const auto &newProps = *std::static_pointer_cast<const RNSVGRectProps>(props);
 
-    self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
-    self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-    if (RCTNSStringFromStringNilIfEmpty(newProps.rectheight)) {
-        self.rectheight =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rectheight)];
-    }
-    if (RCTNSStringFromStringNilIfEmpty(newProps.rectwidth)) {
-        self.rectwidth =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rectwidth)];
-    }
-    if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-        self.rectheight =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
-    }
-    if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-        self.rectwidth =  [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
-    }
-    self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
-    self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
+  self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
+  self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
+  if (RCTNSStringFromStringNilIfEmpty(newProps.rectheight)) {
+    self.rectheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rectheight)];
+  }
+  if (RCTNSStringFromStringNilIfEmpty(newProps.rectwidth)) {
+    self.rectwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rectwidth)];
+  }
+  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
+    self.rectheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  }
+  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
+    self.rectwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  }
+  self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
+  self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
 
-    setCommonRenderableProps(newProps, self);
+  setCommonRenderableProps(newProps, self);
 }
 
 - (void)prepareForRecycle
 {
-    [super prepareForRecycle];
-    
-    _x = nil;
-    _y = nil;
-    _rectwidth = nil;
-    _rectheight = nil;
-    _rx = nil;
-    _ry = nil;
+  [super prepareForRecycle];
+
+  _x = nil;
+  _y = nil;
+  _rectwidth = nil;
+  _rectheight = nil;
+  _rx = nil;
+  _ry = nil;
 }
 
 #endif // RN_FABRIC_ENABLED
 
 - (void)setX:(RNSVGLength *)x
 {
-    if ([x isEqualTo:_x]) {
-        return;
-    }
-    [self invalidate];
-    _x = x;
+  if ([x isEqualTo:_x]) {
+    return;
+  }
+  [self invalidate];
+  _x = x;
 }
 
 - (void)setY:(RNSVGLength *)y
 {
-    if ([y isEqualTo:_y]) {
-        return;
-    }
-    [self invalidate];
-    _y = y;
+  if ([y isEqualTo:_y]) {
+    return;
+  }
+  [self invalidate];
+  _y = y;
 }
 
 - (void)setRectwidth:(RNSVGLength *)rectwidth
 {
-    if ([rectwidth isEqualTo:_rectwidth]) {
-        return;
-    }
-    [self invalidate];
-    _rectwidth = rectwidth;
+  if ([rectwidth isEqualTo:_rectwidth]) {
+    return;
+  }
+  [self invalidate];
+  _rectwidth = rectwidth;
 }
 
 - (void)setRectheight:(RNSVGLength *)rectheight
 {
-    if ([rectheight isEqualTo:_rectheight]) {
-        return;
-    }
-    [self invalidate];
-    _rectheight = rectheight;
+  if ([rectheight isEqualTo:_rectheight]) {
+    return;
+  }
+  [self invalidate];
+  _rectheight = rectheight;
 }
 
 - (void)setRx:(RNSVGLength *)rx
 {
-    if ([rx isEqualTo:_rx]) {
-        return;
-    }
-    [self invalidate];
-    _rx = rx;
+  if ([rx isEqualTo:_rx]) {
+    return;
+  }
+  [self invalidate];
+  _rx = rx;
 }
 
 - (void)setRy:(RNSVGLength *)ry
 {
-    if ([ry isEqualTo:_ry]) {
-        return;
-    }
-    [self invalidate];
-    _ry = ry;
+  if ([ry isEqualTo:_ry]) {
+    return;
+  }
+  [self invalidate];
+  _ry = ry;
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGFloat x = [self relativeOnWidth:self.x];
-    CGFloat y = [self relativeOnHeight:self.y];
-    CGFloat width = [self relativeOnWidth:self.rectwidth];
-    CGFloat height = [self relativeOnHeight:self.rectheight];
+  CGMutablePathRef path = CGPathCreateMutable();
+  CGFloat x = [self relativeOnWidth:self.x];
+  CGFloat y = [self relativeOnHeight:self.y];
+  CGFloat width = [self relativeOnWidth:self.rectwidth];
+  CGFloat height = [self relativeOnHeight:self.rectheight];
 
-    if (self.rx != nil || self.ry != nil) {
-        CGFloat rx = 0;
-        CGFloat ry = 0;
-        if (self.rx == nil) {
-            ry = [self relativeOnHeight:self.ry];
-            rx = ry;
-        } else if (self.ry == nil) {
-            rx = [self relativeOnWidth:self.rx];
-            ry = rx;
-        } else {
-            rx = [self relativeOnWidth:self.rx];
-            ry = [self relativeOnHeight:self.ry];
-        }
-
-        if (rx > width / 2) {
-            rx = width / 2;
-        }
-
-        if (ry > height / 2) {
-            ry = height / 2;
-        }
-
-        CGPathAddRoundedRect(path, nil, CGRectMake(x, y, width, height), rx, ry);
+  if (self.rx != nil || self.ry != nil) {
+    CGFloat rx = 0;
+    CGFloat ry = 0;
+    if (self.rx == nil) {
+      ry = [self relativeOnHeight:self.ry];
+      rx = ry;
+    } else if (self.ry == nil) {
+      rx = [self relativeOnWidth:self.rx];
+      ry = rx;
     } else {
-        CGPathAddRect(path, nil, CGRectMake(x, y, width, height));
+      rx = [self relativeOnWidth:self.rx];
+      ry = [self relativeOnHeight:self.ry];
     }
 
-    return (CGPathRef)CFAutorelease(path);
+    if (rx > width / 2) {
+      rx = width / 2;
+    }
+
+    if (ry > height / 2) {
+      ry = height / 2;
+    }
+
+    CGPathAddRoundedRect(path, nil, CGRectMake(x, y, width, height), rx, ry);
+  } else {
+    CGPathAddRect(path, nil, CGRectMake(x, y, width, height));
+  }
+
+  return (CGPathRef)CFAutorelease(path);
 }
 
 @end

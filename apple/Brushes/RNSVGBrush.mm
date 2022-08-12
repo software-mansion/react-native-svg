@@ -13,31 +13,30 @@
 
 - (instancetype)initWithArray:(NSArray *)data
 {
-    return [super init];
+  return [super init];
 }
 
 - (void)paint:(CGContextRef)context opacity:(CGFloat)opacity painter:(RNSVGPainter *)painter bounds:(CGRect)bounds
 {
-
 }
 
 - (BOOL)applyFillColor:(CGContextRef)context opacity:(CGFloat)opacity
 {
-    return NO;
+  return NO;
 }
 
 - (BOOL)applyStrokeColor:(CGContextRef)context opacity:(CGFloat)opacity
 {
-    return NO;
+  return NO;
 }
 
 - (CGColorRef)getColorWithOpacity:(CGFloat)opacity
 {
-    return nil;
+  return nil;
 }
 
 - (void)paint:(CGContextRef)context opacity:(CGFloat)opacity painter:(RNSVGPainter *)painter
 {
-    // abstract
+  // abstract
 }
 @end

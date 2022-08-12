@@ -8,8 +8,8 @@
 
 #import "RNSVGLineManager.h"
 
-#import "RNSVGLine.h"
 #import "RCTConvert+RNSVG.h"
+#import "RNSVGLine.h"
 
 @implementation RNSVGLineManager
 
@@ -20,9 +20,9 @@ RCT_EXPORT_MODULE()
   return [RNSVGLine new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(x1, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(y1, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(x2, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(y2, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(x1, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(y1, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(x2, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(y2, RNSVGLength *)
 
 @end

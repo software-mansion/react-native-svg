@@ -9,9 +9,9 @@
 
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import "RCTFabricComponentsPlugins.h"
-#import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
+#import "RCTConversions.h"
+#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -39,23 +39,23 @@ using namespace facebook::react;
 
 - (void)renderTo:(CGContextRef)context
 {
-    // Defs do not render
+  // Defs do not render
 }
 
 - (void)parseReference
 {
-    self.dirty = false;
-    [self traverseSubviews:^(RNSVGNode *node) {
-        if ([node isKindOfClass:[RNSVGNode class]]) {
-            [node parseReference];
-        }
-        return YES;
-    }];
+  self.dirty = false;
+  [self traverseSubviews:^(RNSVGNode *node) {
+    if ([node isKindOfClass:[RNSVGNode class]]) {
+      [node parseReference];
+    }
+    return YES;
+  }];
 }
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    return nil;
+  return nil;
 }
 
 @end

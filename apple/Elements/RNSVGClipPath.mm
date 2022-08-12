@@ -10,9 +10,9 @@
 
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import "RCTFabricComponentsPlugins.h"
-#import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
+#import "RCTConversions.h"
+#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -39,33 +39,32 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newProps = *std::static_pointer_cast<const RNSVGClipPathProps>(props);
-    setCommonNodeProps(newProps, self);
+  const auto &newProps = *std::static_pointer_cast<const RNSVGClipPathProps>(props);
+  setCommonNodeProps(newProps, self);
 }
 
 - (void)prepareForRecycle
 {
-    [super prepareForRecycle];
+  [super prepareForRecycle];
 }
 #endif // RN_FABRIC_ENABLED
 
 - (void)parseReference
 {
-    self.dirty = false;
-    [self.svgView defineClipPath:self clipPathName:self.name];
+  self.dirty = false;
+  [self.svgView defineClipPath:self clipPathName:self.name];
 }
-
 
 - (BOOL)isSimpleClipPath
 {
-    NSArray<RNSVGView*> *children = self.subviews;
-    if (children.count == 1) {
-        RNSVGView* child = children[0];
-        if ([child class] != [RNSVGGroup class]) {
-            return true;
-        }
+  NSArray<RNSVGView *> *children = self.subviews;
+  if (children.count == 1) {
+    RNSVGView *child = children[0];
+    if ([child class] != [RNSVGGroup class]) {
+      return true;
     }
-    return false;
+  }
+  return false;
 }
 
 @end

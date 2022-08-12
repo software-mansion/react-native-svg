@@ -7,39 +7,38 @@
  */
 
 #import "RNSVGPainterBrush.h"
-#import "RNSVGPainter.h"
-#import "RCTConvert+RNSVG.h"
 #import <React/RCTLog.h>
+#import "RCTConvert+RNSVG.h"
+#import "RNSVGPainter.h"
 
 @implementation RNSVGPainterBrush
 
 - (instancetype)initWithArray:(NSArray *)array
 {
-    if ((self = [super initWithArray:array])) {
-        if (array.count != 2) {
-            RCTLogError(@"-[%@ %@] expects 2 elements, received %@",
-                        self.class, NSStringFromSelector(_cmd), array);
-            return nil;
-        }
-
-        self.brushRef = [array objectAtIndex:1];
+  if ((self = [super initWithArray:array])) {
+    if (array.count != 2) {
+      RCTLogError(@"-[%@ %@] expects 2 elements, received %@", self.class, NSStringFromSelector(_cmd), array);
+      return nil;
     }
-    return self;
+
+    self.brushRef = [array objectAtIndex:1];
+  }
+  return self;
 }
 
 - (void)paint:(CGContextRef)context opacity:(CGFloat)opacity painter:(RNSVGPainter *)painter bounds:(CGRect)bounds
 {
-    BOOL transparency = opacity < 1;
-    if (transparency) {
-        CGContextSetAlpha(context, opacity);
-        CGContextBeginTransparencyLayer(context, NULL);
-    }
+  BOOL transparency = opacity < 1;
+  if (transparency) {
+    CGContextSetAlpha(context, opacity);
+    CGContextBeginTransparencyLayer(context, NULL);
+  }
 
-    [painter paint:context bounds:bounds];
+  [painter paint:context bounds:bounds];
 
-    if (transparency) {
-        CGContextEndTransparencyLayer(context);
-    }
+  if (transparency) {
+    CGContextEndTransparencyLayer(context);
+  }
 }
 
 @end

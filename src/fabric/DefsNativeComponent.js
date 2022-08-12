@@ -8,9 +8,12 @@ import type { ViewProps } from 'react-native/Libraries/Components/View/ViewPropT
 import type { HostComponent } from 'react-native/Libraries/Renderer/shims/ReactNativeTypes';
 
 type NativeProps = $ReadOnly<{|
-    ...ViewProps,
+  ...ViewProps,
 |}>;
 
 type ComponentType = HostComponent<NativeProps>;
 
-export default (codegenNativeComponent<NativeProps>('RNSVGDefs', {}): ComponentType);
+export default (codegenNativeComponent<NativeProps>(
+  'RNSVGDefs',
+  {},
+): ComponentType);

@@ -12,9 +12,8 @@
 
 @interface RNSVGCircle : RNSVGRenderable
 
-@property (nonatomic, strong) RNSVGLength* cx;
-@property (nonatomic, strong) RNSVGLength* cy;
-@property (nonatomic, strong) RNSVGLength* r;
+@property (nonatomic, strong) RNSVGLength *cx;
+@property (nonatomic, strong) RNSVGLength *cy;
+@property (nonatomic, strong) RNSVGLength *r;
 
 @end
-

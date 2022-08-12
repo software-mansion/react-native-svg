@@ -7,9 +7,9 @@
  */
 
 #import "RNSVGSymbolManager.h"
+#import "RCTConvert+RNSVG.h"
 #import "RNSVGRenderable.h"
 #import "RNSVGSymbol.h"
-#import "RCTConvert+RNSVG.h"
 #import "RNSVGVBMOS.h"
 
 @implementation RNSVGSymbolManager

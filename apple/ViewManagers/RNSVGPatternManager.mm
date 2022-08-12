@@ -15,21 +15,21 @@ RCT_EXPORT_MODULE()
 
 - (RNSVGPattern *)node
 {
-    return [RNSVGPattern new];
+  return [RNSVGPattern new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(patternheight, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(patternwidth, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(patternheight, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(patternwidth, RNSVGLength *)
 RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGPattern)
 {
-    view.patternheight = [RCTConvert RNSVGLength:json];
+  view.patternheight = [RCTConvert RNSVGLength:json];
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGPattern)
 {
-    view.patternwidth = [RCTConvert RNSVGLength:json];
+  view.patternwidth = [RCTConvert RNSVGLength:json];
 }
 RCT_EXPORT_VIEW_PROPERTY(patternUnits, RNSVGUnits)
 RCT_EXPORT_VIEW_PROPERTY(patternContentUnits, RNSVGUnits)

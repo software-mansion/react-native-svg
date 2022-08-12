@@ -11,9 +11,9 @@
 
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import "RCTFabricComponentsPlugins.h"
-#import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
+#import "RCTConversions.h"
+#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -40,73 +40,73 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newProps = *std::static_pointer_cast<const RNSVGLineProps>(props);
+  const auto &newProps = *std::static_pointer_cast<const RNSVGLineProps>(props);
 
-    self.x1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x1)];
-    self.y1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y1)];
-    self.x2  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x2)];
-    self.y2  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y2)];
+  self.x1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x1)];
+  self.y1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y1)];
+  self.x2 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x2)];
+  self.y2 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y2)];
 
-    setCommonRenderableProps(newProps, self);
+  setCommonRenderableProps(newProps, self);
 }
 
 - (void)prepareForRecycle
 {
-    [super prepareForRecycle];
-    _x1 = nil;
-    _y1 = nil;
-    _x2 = nil;
-    _y2 = nil;
+  [super prepareForRecycle];
+  _x1 = nil;
+  _y1 = nil;
+  _x2 = nil;
+  _y2 = nil;
 }
 #endif // RN_FABRIC_ENABLED
 
 - (void)setX1:(RNSVGLength *)x1
 {
-    if ([x1 isEqualTo:_x1]) {
-        return;
-    }
-    [self invalidate];
-    _x1 = x1;
+  if ([x1 isEqualTo:_x1]) {
+    return;
+  }
+  [self invalidate];
+  _x1 = x1;
 }
 
 - (void)setY1:(RNSVGLength *)y1
 {
-    if ([y1 isEqualTo:_y1]) {
-        return;
-    }
-    [self invalidate];
-    _y1 = y1;
+  if ([y1 isEqualTo:_y1]) {
+    return;
+  }
+  [self invalidate];
+  _y1 = y1;
 }
 
 - (void)setX2:(RNSVGLength *)x2
 {
-    if ([x2 isEqualTo:_x2]) {
-        return;
-    }
-    [self invalidate];
-    _x2 = x2;
+  if ([x2 isEqualTo:_x2]) {
+    return;
+  }
+  [self invalidate];
+  _x2 = x2;
 }
 
 - (void)setY2:(RNSVGLength *)y2
 {
-    if ([y2 isEqualTo:_y2]) {
-        return;
-    }
-    [self invalidate];
-    _y2 = y2;
+  if ([y2 isEqualTo:_y2]) {
+    return;
+  }
+  [self invalidate];
+  _y2 = y2;
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGFloat x1 = [self relativeOnWidth:self.x1];
-    CGFloat y1 = [self relativeOnHeight:self.y1];
-    CGFloat x2 = [self relativeOnWidth:self.x2];
-    CGFloat y2 = [self relativeOnHeight:self.y2];
-    CGPathMoveToPoint(path, nil, x1, y1);
-    CGPathAddLineToPoint(path, nil, x2, y2);
-    
-    return (CGPathRef)CFAutorelease(path);
+  CGMutablePathRef path = CGPathCreateMutable();
+  CGFloat x1 = [self relativeOnWidth:self.x1];
+  CGFloat y1 = [self relativeOnHeight:self.y1];
+  CGFloat x2 = [self relativeOnWidth:self.x2];
+  CGFloat y2 = [self relativeOnHeight:self.y2];
+  CGPathMoveToPoint(path, nil, x1, y1);
+  CGPathAddLineToPoint(path, nil, x2, y2);
+
+  return (CGPathRef)CFAutorelease(path);
 }
 
 @end

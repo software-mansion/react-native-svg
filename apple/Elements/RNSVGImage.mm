@@ -15,25 +15,25 @@
 
 #else
 
-#import <React/RCTImageURLLoader.h>
-#import <React/RCTImageShadowView.h>
-#import <React/RCTImageView.h>
 #import <React/RCTImageLoaderProtocol.h>
+#import <React/RCTImageShadowView.h>
+#import <React/RCTImageURLLoader.h>
+#import <React/RCTImageView.h>
 
 #endif // RN_FABRIC_ENABLED
 
 #import <React/RCTLog.h>
-#import "RNSVGViewBox.h"
 #import "RCTBridge.h"
+#import "RNSVGViewBox.h"
 
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import "RCTFabricComponentsPlugins.h"
-#import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
-#import "RNSVGFabricConversions.h"
+#import "RCTConversions.h"
+#import "RCTFabricComponentsPlugins.h"
 #import "RCTImagePrimitivesConversions.h"
 #import "RCTImageSource.h"
+#import "RNSVGFabricConversions.h"
 
 // Some RN private method hacking below similar to how it is done in RNScreens:
 // https://github.com/software-mansion/react-native-screens/blob/90e548739f35b5ded2524a9d6410033fc233f586/ios/RNSScreenStackHeaderConfig.mm#L30
@@ -43,11 +43,10 @@
 
 #endif // RN_FABRIC_ENABLED
 
-@implementation RNSVGImage
-{
-    CGImageRef _image;
-    CGSize _imageSize;
-    RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
+@implementation RNSVGImage {
+  CGImageRef _image;
+  CGSize _imageSize;
+  RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
 }
 #ifdef RN_FABRIC_ENABLED
 using namespace facebook::react;
@@ -71,104 +70,106 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGImageProps>(props);
-    const auto &oldImageProps = *std::static_pointer_cast<const RNSVGImageProps>(oldProps);
+  const auto &oldImageProps = *std::static_pointer_cast<const RNSVGImageProps>(oldProps);
 
-    self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
-    self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-    if (RCTNSStringFromStringNilIfEmpty(newProps.imageheight)) {
-        self.imageheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.imageheight)];
-    }
-    if (RCTNSStringFromStringNilIfEmpty(newProps.imagewidth)) {
-        self.imagewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.imagewidth)];
-    }
-    if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-        self.imageheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
-    }
-    if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-        self.imagewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
-    }
-    
-    if (oldProps == nullptr || oldImageProps.src != newProps.src) {
-        // TODO: make it the same as in e.g. slider
-        NSURLRequest *request = NSURLRequestFromImageSource(newProps.src);
-        CGSize size = RCTCGSizeFromSize(newProps.src.size);
-        CGFloat scale = newProps.src.scale;
-        RCTImageSource *imageSource = [[RCTImageSource alloc] initWithURLRequest:request size:size scale:scale];
-        [self setImageSrc:imageSource request:request];
-    }
-    self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
-    self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
+  self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
+  self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
+  if (RCTNSStringFromStringNilIfEmpty(newProps.imageheight)) {
+    self.imageheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.imageheight)];
+  }
+  if (RCTNSStringFromStringNilIfEmpty(newProps.imagewidth)) {
+    self.imagewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.imagewidth)];
+  }
+  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
+    self.imageheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  }
+  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
+    self.imagewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  }
 
-    setCommonRenderableProps(newProps, self);
+  if (oldProps == nullptr || oldImageProps.src != newProps.src) {
+    // TODO: make it the same as in e.g. slider
+    NSURLRequest *request = NSURLRequestFromImageSource(newProps.src);
+    CGSize size = RCTCGSizeFromSize(newProps.src.size);
+    CGFloat scale = newProps.src.scale;
+    RCTImageSource *imageSource = [[RCTImageSource alloc] initWithURLRequest:request size:size scale:scale];
+    [self setImageSrc:imageSource request:request];
+  }
+  self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
+  self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
+
+  setCommonRenderableProps(newProps, self);
 }
 
 - (void)prepareForRecycle
 {
-    [super prepareForRecycle];
-    _x = nil;
-    _y = nil;
-    _imageheight = nil;
-    _imagewidth = nil;
-    _src = nil;
-    _align = nil;
-    _meetOrSlice = kRNSVGVBMOSMeet;
-    
-    if (_image) {
-        CGImageRelease(_image);
-    }
-    _image = nil;
-    _imageSize = CGSizeZero;
-    _reloadImageCancellationBlock = nil;
+  [super prepareForRecycle];
+  _x = nil;
+  _y = nil;
+  _imageheight = nil;
+  _imagewidth = nil;
+  _src = nil;
+  _align = nil;
+  _meetOrSlice = kRNSVGVBMOSMeet;
+
+  if (_image) {
+    CGImageRelease(_image);
+  }
+  _image = nil;
+  _imageSize = CGSizeZero;
+  _reloadImageCancellationBlock = nil;
 }
 #endif // RN_FABRIC_ENABLED
 
 - (void)setSrc:(id)src
 {
-    if (src == _src) {
-        return;
-    }
-    _src = src;
-    CGImageRelease(_image);
-    _image = nil;
-    RCTImageSource *source = [RCTConvert RCTImageSource:src];
-    if (source.size.width != 0 && source.size.height != 0) {
-        _imageSize = source.size;
-    } else {
-        _imageSize = CGSizeMake(0, 0);
-    }
+  if (src == _src) {
+    return;
+  }
+  _src = src;
+  CGImageRelease(_image);
+  _image = nil;
+  RCTImageSource *source = [RCTConvert RCTImageSource:src];
+  if (source.size.width != 0 && source.size.height != 0) {
+    _imageSize = source.size;
+  } else {
+    _imageSize = CGSizeMake(0, 0);
+  }
 
-    RCTImageLoaderCancellationBlock previousCancellationBlock = _reloadImageCancellationBlock;
-    if (previousCancellationBlock) {
-        previousCancellationBlock();
-        _reloadImageCancellationBlock = nil;
-    }
+  RCTImageLoaderCancellationBlock previousCancellationBlock = _reloadImageCancellationBlock;
+  if (previousCancellationBlock) {
+    previousCancellationBlock();
+    _reloadImageCancellationBlock = nil;
+  }
 
-    _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"] loadImageWithURLRequest:[RCTConvert NSURLRequest:src] callback:^(NSError *error, UIImage *image) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self->_image = CGImageRetain(image.CGImage);
-            self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
-            [self invalidate];
-        });
-    }];
+  _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"]
+      loadImageWithURLRequest:[RCTConvert NSURLRequest:src]
+                     callback:^(NSError *error, UIImage *image) {
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                         self->_image = CGImageRetain(image.CGImage);
+                         self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+                         [self invalidate];
+                       });
+                     }];
 }
 
 - (void)setImageSrc:(RCTImageSource *)source request:(NSURLRequest *)request
 {
-    CGImageRelease(_image);
-    _image = nil;
-    if (source.size.width != 0 && source.size.height != 0) {
-        _imageSize = source.size;
-    } else {
-        _imageSize = CGSizeMake(0, 0);
-    }
+  CGImageRelease(_image);
+  _image = nil;
+  if (source.size.width != 0 && source.size.height != 0) {
+    _imageSize = source.size;
+  } else {
+    _imageSize = CGSizeMake(0, 0);
+  }
 
-    RCTImageLoaderCancellationBlock previousCancellationBlock = _reloadImageCancellationBlock;
-    if (previousCancellationBlock) {
-        previousCancellationBlock();
-        _reloadImageCancellationBlock = nil;
-    }
+  RCTImageLoaderCancellationBlock previousCancellationBlock = _reloadImageCancellationBlock;
+  if (previousCancellationBlock) {
+    previousCancellationBlock();
+    _reloadImageCancellationBlock = nil;
+  }
 
-    _reloadImageCancellationBlock = [[
+  _reloadImageCancellationBlock = [[
 #ifdef RN_FABRIC_ENABLED
         [RCTBridge currentBridge]
 #else
@@ -185,130 +186,133 @@ using namespace facebook::react;
 
 - (void)setX:(RNSVGLength *)x
 {
-    if ([x isEqualTo:_x]) {
-        return;
-    }
-    [self invalidate];
-    _x = x;
+  if ([x isEqualTo:_x]) {
+    return;
+  }
+  [self invalidate];
+  _x = x;
 }
 
 - (void)setY:(RNSVGLength *)y
 {
-    if ([y isEqualTo:_y]) {
-        return;
-    }
-    [self invalidate];
-    _y = y;
+  if ([y isEqualTo:_y]) {
+    return;
+  }
+  [self invalidate];
+  _y = y;
 }
 
 - (void)setImagewidth:(RNSVGLength *)width
 {
-    if ([width isEqualTo:_imagewidth]) {
-        return;
-    }
-    [self invalidate];
-    _imagewidth = width;
+  if ([width isEqualTo:_imagewidth]) {
+    return;
+  }
+  [self invalidate];
+  _imagewidth = width;
 }
 
 - (void)setImageheight:(RNSVGLength *)height
 {
-    if ([height isEqualTo:_imageheight]) {
-        return;
-    }
-    [self invalidate];
-    _imageheight = height;
+  if ([height isEqualTo:_imageheight]) {
+    return;
+  }
+  [self invalidate];
+  _imageheight = height;
 }
 
 - (void)setAlign:(NSString *)align
 {
-    if ([align isEqualToString:_align]) {
-        return;
-    }
-    [self invalidate];
-    _align = align;
+  if ([align isEqualToString:_align]) {
+    return;
+  }
+  [self invalidate];
+  _align = align;
 }
 
 - (void)setMeetOrSlice:(RNSVGVBMOS)meetOrSlice
 {
-    if (meetOrSlice == _meetOrSlice) {
-        return;
-    }
-    [self invalidate];
-    _meetOrSlice = meetOrSlice;
+  if (meetOrSlice == _meetOrSlice) {
+    return;
+  }
+  [self invalidate];
+  _meetOrSlice = meetOrSlice;
 }
 
 - (void)dealloc
 {
-    CGImageRelease(_image);
+  CGImageRelease(_image);
 }
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
-    if (CGSizeEqualToSize(CGSizeZero, _imageSize)) {
-        return;
-    }
-    CGContextSaveGState(context);
+  if (CGSizeEqualToSize(CGSizeZero, _imageSize)) {
+    return;
+  }
+  CGContextSaveGState(context);
 
-    // add hit area
-    CGRect hitArea = [self getHitArea];
-    CGPathRef hitAreaPath = CGPathCreateWithRect(hitArea, nil);
-    [self setHitArea:hitAreaPath];
-    CGPathRelease(hitAreaPath);
-    self.pathBounds = hitArea;
-    self.fillBounds = hitArea;
-    self.strokeBounds = hitArea;
+  // add hit area
+  CGRect hitArea = [self getHitArea];
+  CGPathRef hitAreaPath = CGPathCreateWithRect(hitArea, nil);
+  [self setHitArea:hitAreaPath];
+  CGPathRelease(hitAreaPath);
+  self.pathBounds = hitArea;
+  self.fillBounds = hitArea;
+  self.strokeBounds = hitArea;
 
-    // apply viewBox transform on Image render.
-    CGRect imageBounds = CGRectMake(0, 0, _imageSize.width, _imageSize.height);
-    CGAffineTransform viewbox = [RNSVGViewBox getTransform:imageBounds eRect:hitArea align:self.align meetOrSlice:self.meetOrSlice];
+  // apply viewBox transform on Image render.
+  CGRect imageBounds = CGRectMake(0, 0, _imageSize.width, _imageSize.height);
+  CGAffineTransform viewbox = [RNSVGViewBox getTransform:imageBounds
+                                                   eRect:hitArea
+                                                   align:self.align
+                                             meetOrSlice:self.meetOrSlice];
 
-    [self clip:context];
-    CGContextClipToRect(context, hitArea);
-    CGContextConcatCTM(context, viewbox);
-    CGContextTranslateCTM(context, 0, imageBounds.size.height);
-    CGContextScaleCTM(context, 1, -1);
-    CGContextDrawImage(context, imageBounds, _image);
-    CGContextRestoreGState(context);
+  [self clip:context];
+  CGContextClipToRect(context, hitArea);
+  CGContextConcatCTM(context, viewbox);
+  CGContextTranslateCTM(context, 0, imageBounds.size.height);
+  CGContextScaleCTM(context, 1, -1);
+  CGContextDrawImage(context, imageBounds, _image);
+  CGContextRestoreGState(context);
 
-    CGRect bounds = hitArea;
-    self.clientRect = bounds;
+  CGRect bounds = hitArea;
+  self.clientRect = bounds;
 
-    CGAffineTransform current = CGContextGetCTM(context);
-    CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
+  CGAffineTransform current = CGContextGetCTM(context);
+  CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
 
-    self.ctm = svgToClientTransform;
-    self.screenCTM = current;
+  self.ctm = svgToClientTransform;
+  self.screenCTM = current;
 
-    CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
-    CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
-    CGPoint center = CGPointApplyAffineTransform(mid, transform);
+  CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
+  CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
+  CGPoint center = CGPointApplyAffineTransform(mid, transform);
 
-    self.bounds = bounds;
-    if (!isnan(center.x) && !isnan(center.y)) {
-        self.center = center;
-    }
-    self.frame = bounds;
+  self.bounds = bounds;
+  if (!isnan(center.x) && !isnan(center.y)) {
+    self.center = center;
+  }
+  self.frame = bounds;
 }
 
 - (CGRect)getHitArea
 {
-    CGFloat x = [self relativeOnWidth:self.x];
-    CGFloat y = [self relativeOnHeight:self.y];
-    CGFloat width = [self relativeOnWidth:self.imagewidth];
-    CGFloat height = [self relativeOnHeight:self.imageheight];
-    if (width == 0) {
-        width = _imageSize.width;
-    }
-    if (height == 0) {
-        height = _imageSize.height;
-    }
+  CGFloat x = [self relativeOnWidth:self.x];
+  CGFloat y = [self relativeOnHeight:self.y];
+  CGFloat width = [self relativeOnWidth:self.imagewidth];
+  CGFloat height = [self relativeOnHeight:self.imageheight];
+  if (width == 0) {
+    width = _imageSize.width;
+  }
+  if (height == 0) {
+    height = _imageSize.height;
+  }
 
-    return CGRectMake(x, y, width, height);
+  return CGRectMake(x, y, width, height);
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    return (CGPathRef)CFAutorelease(CGPathCreateWithRect([self getHitArea], nil));
+  return (CGPathRef)CFAutorelease(CGPathCreateWithRect([self getHitArea], nil));
 }
 
 @end

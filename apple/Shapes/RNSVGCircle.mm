@@ -11,9 +11,9 @@
 
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import "RCTFabricComponentsPlugins.h"
-#import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
+#import "RCTConversions.h"
+#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -40,59 +40,59 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newProps = *std::static_pointer_cast<const RNSVGCircleProps>(props);
+  const auto &newProps = *std::static_pointer_cast<const RNSVGCircleProps>(props);
 
-    self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
-    self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
-    self.r  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.r)];
-    
-    setCommonRenderableProps(newProps, self);
+  self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
+  self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
+  self.r = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.r)];
+
+  setCommonRenderableProps(newProps, self);
 }
 
 - (void)prepareForRecycle
 {
-    [super prepareForRecycle];
-    _cx = nil;
-    _cy = nil;
-    _r = nil;
+  [super prepareForRecycle];
+  _cx = nil;
+  _cy = nil;
+  _r = nil;
 }
 #endif // RN_FABRIC_ENABLED
 
 - (void)setCx:(RNSVGLength *)cx
 {
-    if ([cx isEqualTo:_cx]) {
-        return;
-    }
-    [self invalidate];
-    _cx = cx;
+  if ([cx isEqualTo:_cx]) {
+    return;
+  }
+  [self invalidate];
+  _cx = cx;
 }
 
 - (void)setCy:(RNSVGLength *)cy
 {
-    if ([cy isEqualTo:_cy]) {
-        return;
-    }
-    [self invalidate];
-    _cy = cy;
+  if ([cy isEqualTo:_cy]) {
+    return;
+  }
+  [self invalidate];
+  _cy = cy;
 }
 
 - (void)setR:(RNSVGLength *)r
 {
-    if ([r isEqualTo:_r]) {
-        return;
-    }
-    [self invalidate];
-    _r = r;
+  if ([r isEqualTo:_r]) {
+    return;
+  }
+  [self invalidate];
+  _r = r;
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGFloat cx = [self relativeOnWidth:self.cx];
-    CGFloat cy = [self relativeOnHeight:self.cy];
-    CGFloat r = [self relativeOnOther:self.r];
-    CGPathAddArc(path, nil, cx, cy, r, 0, 2 * (CGFloat)M_PI, NO);
-    return (CGPathRef)CFAutorelease(path);
+  CGMutablePathRef path = CGPathCreateMutable();
+  CGFloat cx = [self relativeOnWidth:self.cx];
+  CGFloat cy = [self relativeOnHeight:self.cy];
+  CGFloat r = [self relativeOnOther:self.r];
+  CGPathAddArc(path, nil, cx, cy, r, 0, 2 * (CGFloat)M_PI, NO);
+  return (CGPathRef)CFAutorelease(path);
 }
 
 @end

@@ -11,17 +11,17 @@ import type { Int32, Double } from 'react-native/Libraries/Types/CodegenTypes';
 
 type LayoutEvent = $ReadOnly<{|
   layout: $ReadOnly<{|
-      x: Float,
-      y: Float,
-      width: Float,
-      height: Float,
+    x: Float,
+    y: Float,
+    width: Float,
+    height: Float,
   |}>,
 |}>;
 
 type SvgNodeCommonProps = $ReadOnly<{|
   name?: string,
   opacity?: WithDefault<Float, 1.0>,
-  matrix?: $ReadOnlyArray<Float>,//CGAffineTransform,
+  matrix?: $ReadOnlyArray<Float>, //CGAffineTransform,
   // transform?: ____TransformStyle_Internal, // CATransform3D, custom handling
   mask?: string,
   markerStart?: string,
@@ -37,19 +37,22 @@ type SvgNodeCommonProps = $ReadOnly<{|
 type Units = 'userSpaceOnUse' | 'objectBoundingBox';
 
 type NativeProps = $ReadOnly<{|
-    ...ViewProps,
-    ...SvgNodeCommonProps,
-    fx?: string,
-    fy?: string,
-    cx?: string,
-    cy?: string,
-    rx?: string,
-    ry?: string,
-    gradient?: $ReadOnlyArray<Float>,
-    gradientUnits?: Int32,
-    gradientTransform?: $ReadOnlyArray<Float>,//CGAffineTransform,
+  ...ViewProps,
+  ...SvgNodeCommonProps,
+  fx?: string,
+  fy?: string,
+  cx?: string,
+  cy?: string,
+  rx?: string,
+  ry?: string,
+  gradient?: $ReadOnlyArray<Float>,
+  gradientUnits?: Int32,
+  gradientTransform?: $ReadOnlyArray<Float>, //CGAffineTransform,
 |}>;
 
 type ComponentType = HostComponent<NativeProps>;
 
-export default (codegenNativeComponent<NativeProps>('RNSVGRadialGradient', {}): ComponentType);
+export default (codegenNativeComponent<NativeProps>(
+  'RNSVGRadialGradient',
+  {},
+): ComponentType);

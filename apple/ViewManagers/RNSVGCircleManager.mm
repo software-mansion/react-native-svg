@@ -8,8 +8,8 @@
 
 #import "RNSVGCircleManager.h"
 
-#import "RNSVGCircle.h"
 #import "RCTConvert+RNSVG.h"
+#import "RNSVGCircle.h"
 
 @implementation RNSVGCircleManager
 
@@ -17,11 +17,11 @@ RCT_EXPORT_MODULE()
 
 - (RNSVGRenderable *)node
 {
-    return [RNSVGCircle new];
+  return [RNSVGCircle new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(cx, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(cy, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(r, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(cx, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(cy, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(r, RNSVGLength *)
 
 @end
