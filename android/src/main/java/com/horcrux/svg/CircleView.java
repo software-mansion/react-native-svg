@@ -35,17 +35,32 @@ class CircleView extends RenderableView {
         invalidate();
     }
 
+  public void setCx(String cx) {
+    mCx = SVGLength.from(cx);
+    invalidate();
+  }
+
     @ReactProp(name = "cy")
     public void setCy(Dynamic cy) {
         mCy = SVGLength.from(cy);
         invalidate();
     }
 
+  public void setCy(String cy) {
+    mCy = SVGLength.from(cy);
+    invalidate();
+  }
+
     @ReactProp(name = "r")
     public void setR(Dynamic r) {
         mR = SVGLength.from(r);
         invalidate();
     }
+
+  public void setR(String r) {
+    mR = SVGLength.from(r);
+    invalidate();
+  }
 
     @Override
     Path getPath(Canvas canvas, Paint paint) {

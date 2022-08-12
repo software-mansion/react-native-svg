@@ -13,6 +13,7 @@ import android.view.ViewParent;
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -306,26 +307,31 @@ abstract public class VirtualView extends ReactViewGroup {
     public void setMatrix(Dynamic matrixArray) {
         ReadableType type = matrixArray.getType();
         if (!matrixArray.isNull() && type.equals(ReadableType.Array)) {
-            int matrixSize = PropHelper.toMatrixData(matrixArray.asArray(), sRawMatrix, mScale);
-            if (matrixSize == 6) {
-                if (mMatrix == null) {
-                    mMatrix = new Matrix();
-                    mInvMatrix = new Matrix();
-                }
-                mMatrix.setValues(sRawMatrix);
-                mInvertible = mMatrix.invert(mInvMatrix);
-            } else if (matrixSize != -1) {
-                FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");
-            }
+            setMatrix((ReadableArray) matrixArray);
         } else {
             mMatrix.reset();
             mInvMatrix.reset();
             mInvertible = true;
+            super.invalidate();
+            clearParentCache();
         }
-
-        super.invalidate();
-        clearParentCache();
     }
+
+  public void setMatrix(ReadableArray matrixArray) {
+      int matrixSize = PropHelper.toMatrixData(matrixArray, sRawMatrix, mScale);
+      if (matrixSize == 6) {
+        if (mMatrix == null) {
+          mMatrix = new Matrix();
+          mInvMatrix = new Matrix();
+        }
+        mMatrix.setValues(sRawMatrix);
+        mInvertible = mMatrix.invert(mInvMatrix);
+      } else if (matrixSize != -1) {
+        FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");
+      }
+    super.invalidate();
+    clearParentCache();
+  }
 
     @ReactProp(name = "responsible")
     public void setResponsible(boolean responsible) {

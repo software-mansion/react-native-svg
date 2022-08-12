@@ -49,11 +49,21 @@ class RadialGradientView extends DefinitionView {
         invalidate();
     }
 
+  public void setFx(String fx) {
+    mFx = SVGLength.from(fx);
+    invalidate();
+  }
+
     @ReactProp(name = "fy")
     public void setFy(Dynamic fy) {
         mFy = SVGLength.from(fy);
         invalidate();
     }
+
+  public void setFy(String fy) {
+    mFy = SVGLength.from(fy);
+    invalidate();
+  }
 
     @ReactProp(name = "rx")
     public void setRx(Dynamic rx) {
@@ -61,11 +71,21 @@ class RadialGradientView extends DefinitionView {
         invalidate();
     }
 
+  public void setRx(String rx) {
+    mRx = SVGLength.from(rx);
+    invalidate();
+  }
+
     @ReactProp(name = "ry")
     public void setRy(Dynamic ry) {
         mRy = SVGLength.from(ry);
         invalidate();
     }
+
+  public void setRy(String ry) {
+    mRy = SVGLength.from(ry);
+    invalidate();
+  }
 
     @ReactProp(name = "cx")
     public void setCx(Dynamic cx) {
@@ -73,11 +93,21 @@ class RadialGradientView extends DefinitionView {
         invalidate();
     }
 
+  public void setCx(String cx) {
+    mCx = SVGLength.from(cx);
+    invalidate();
+  }
+
     @ReactProp(name = "cy")
     public void setCy(Dynamic cy) {
         mCy = SVGLength.from(cy);
         invalidate();
     }
+
+  public void setCy(String cy) {
+    mCy = SVGLength.from(cy);
+    invalidate();
+  }
 
     @ReactProp(name = "gradient")
     public void setGradient(ReadableArray gradient) {

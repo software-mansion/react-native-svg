@@ -19,6 +19,7 @@ import android.view.ViewParent;
 
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.util.ArrayList;
@@ -66,11 +67,21 @@ class TextView extends GroupView {
         invalidate();
     }
 
+  public void setInlineSize(String inlineSize) {
+    mInlineSize = SVGLength.from(inlineSize);
+    invalidate();
+  }
+
     @ReactProp(name = "textLength")
     public void setTextLength(Dynamic length) {
         mTextLength = SVGLength.from(length);
         invalidate();
     }
+
+  public void setTextLength(String length) {
+    mTextLength = SVGLength.from(length);
+    invalidate();
+  }
 
     @ReactProp(name = "lengthAdjust")
     public void setLengthAdjust(@Nullable String adjustment) {
@@ -89,6 +100,11 @@ class TextView extends GroupView {
         mBaselineShift = SVGLength.toString(baselineShift);
         invalidate();
     }
+
+  public void setBaselineShift(String baselineShift) {
+    mBaselineShift = baselineShift;
+    invalidate();
+  }
 
     @ReactProp(name = "verticalAlign")
     public void setVerticalAlign(@Nullable String verticalAlign) {
@@ -118,11 +134,21 @@ class TextView extends GroupView {
         invalidate();
     }
 
+  public void setRotate(ReadableArray rotate) {
+    mRotate = SVGLength.arrayFrom(rotate);
+    invalidate();
+  }
+
     @ReactProp(name = "dx")
     public void setDeltaX(Dynamic deltaX) {
         mDeltaX = SVGLength.arrayFrom(deltaX);
         invalidate();
     }
+
+  public void setDeltaX(ReadableArray deltaX) {
+    mDeltaX = SVGLength.arrayFrom(deltaX);
+    invalidate();
+  }
 
     @ReactProp(name = "dy")
     public void setDeltaY(Dynamic deltaY) {
@@ -130,17 +156,33 @@ class TextView extends GroupView {
         invalidate();
     }
 
+  public void setDeltaY(ReadableArray deltaY) {
+    mDeltaY = SVGLength.arrayFrom(deltaY);
+    invalidate();
+  }
+
     @ReactProp(name = "x")
     public void setPositionX(Dynamic positionX) {
         mPositionX = SVGLength.arrayFrom(positionX);
         invalidate();
     }
 
-    @ReactProp(name = "y")
+  public void setPositionX(ReadableArray positionX) {
+    mPositionX = SVGLength.arrayFrom(positionX);
+    invalidate();
+  }
+
+
+  @ReactProp(name = "y")
     public void setPositionY(Dynamic positionY) {
         mPositionY = SVGLength.arrayFrom(positionY);
         invalidate();
     }
+
+  public void setPositionY(ReadableArray positionY) {
+    mPositionY = SVGLength.arrayFrom(positionY);
+    invalidate();
+  }
 
     @Override
     void draw(Canvas canvas, Paint paint, float opacity) {

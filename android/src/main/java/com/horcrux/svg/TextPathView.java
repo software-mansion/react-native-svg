@@ -48,6 +48,11 @@ class TextPathView extends TextView {
         invalidate();
     }
 
+  public void setStartOffset(String startOffset) {
+    mStartOffset = SVGLength.from(startOffset);
+    invalidate();
+  }
+
     @ReactProp(name = "method")
     public void setMethod(@Nullable String method) {
         mMethod = TextPathMethod.valueOf(method);

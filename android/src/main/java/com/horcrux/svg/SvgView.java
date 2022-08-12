@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
  * Custom {@link View} implementation that draws an RNSVGSvg React view and its children.
  */
 @SuppressLint("ViewConstructor")
-public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactCompoundViewGroup {
+public class SvgView extends FabricEnabledViewGroup implements ReactCompoundView, ReactCompoundViewGroup {
 
     @Override
     public boolean interceptsTouchEvent(float touchX, float touchY) {
@@ -71,6 +71,8 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     public SvgView(ReactContext reactContext) {
         super(reactContext);
         mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
+        // for some reason on Fabric the `onDraw` won't be called without it
+        setWillNotDraw(false);
     }
 
     @Override
@@ -189,6 +191,12 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         clearChildCache();
     }
 
+  public void setTintColor(@Nullable Integer tintColor) {
+      mTintColor = tintColor;
+    invalidate();
+    clearChildCache();
+  }
+
     @ReactProp(name = "minX")
     public void setMinX(float minX) {
         mMinX = minX;
@@ -224,12 +232,24 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
         clearChildCache();
     }
 
+  public void setBbWidth(String bbWidth) {
+    mbbWidth = SVGLength.from(bbWidth);
+    invalidate();
+    clearChildCache();
+  }
+
     @ReactProp(name = "bbHeight")
     public void setBbHeight(Dynamic bbHeight) {
         mbbHeight = SVGLength.from(bbHeight);
         invalidate();
         clearChildCache();
     }
+
+  public void setBbHeight(String bbHeight) {
+    mbbHeight = SVGLength.from(bbHeight);
+    invalidate();
+    clearChildCache();
+  }
 
     @ReactProp(name = "align")
     public void setAlign(String align) {

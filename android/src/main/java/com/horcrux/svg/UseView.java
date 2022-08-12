@@ -45,11 +45,21 @@ class UseView extends RenderableView {
         invalidate();
     }
 
+  public void setX(String x) {
+    mX = SVGLength.from(x);
+    invalidate();
+  }
+
     @ReactProp(name = "y")
     public void setY(Dynamic y) {
         mY = SVGLength.from(y);
         invalidate();
     }
+
+  public void setY(String y) {
+    mY = SVGLength.from(y);
+    invalidate();
+  }
 
     @ReactProp(name = "width")
     public void setWidth(Dynamic width) {
@@ -57,11 +67,21 @@ class UseView extends RenderableView {
         invalidate();
     }
 
+  public void setWidth(String width) {
+    mW = SVGLength.from(width);
+    invalidate();
+  }
+
     @ReactProp(name = "height")
     public void setHeight(Dynamic height) {
         mH = SVGLength.from(height);
         invalidate();
     }
+
+  public void setHeight(String height) {
+    mH = SVGLength.from(height);
+    invalidate();
+  }
 
     @Override
     void draw(Canvas canvas, Paint paint, float opacity) {
