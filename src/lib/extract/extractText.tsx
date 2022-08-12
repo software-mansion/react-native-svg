@@ -4,7 +4,8 @@ import { pickNotNil } from '../util';
 import { NumberArray, NumberProp } from './types';
 import { stringifyPropsForFabric } from './extractProps';
 
-const fontRegExp = /^\s*((?:(?:normal|bold|italic)\s+)*)(?:(\d+(?:\.\d+)?(?:%|px|em|pt|pc|mm|cm|in]))*(?:\s*\/.*?)?\s+)?\s*"?([^"]*)/i;
+const fontRegExp =
+  /^\s*((?:(?:normal|bold|italic)\s+)*)(?:(\d+(?:\.\d+)?(?:%|px|em|pt|pc|mm|cm|in]))*(?:\s*\/.*?)?\s+)?\s*"?([^"]*)/i;
 const fontFamilyPrefix = /^[\s"']*/;
 const fontFamilySuffix = /[\s"']*$/;
 const commaReg = /\s*,\s*/g;
@@ -109,20 +110,31 @@ export function extractFont(props: fontProps) {
 
   const baseFont = typeof font === 'string' ? parseFontString(font) : font;
 
-  const fontProps: { [prop: string]: string | number | null } = { ...baseFont, ...ownedFont };
-  const stringifiedFontProps: { [prop: string]: string | null }  = {};
-  Object.keys(fontProps).map(k => stringifiedFontProps[k] = fontProps[k] === null ? null : String(fontProps[k]));
+  const fontProps: { [prop: string]: string | number | null } = {
+    ...baseFont,
+    ...ownedFont,
+  };
+  const stringifiedFontProps: { [prop: string]: string | null } = {};
+  Object.keys(fontProps).map(
+    (k) =>
+      (stringifiedFontProps[k] =
+        fontProps[k] === null ? null : String(fontProps[k])),
+  );
 
   return stringifiedFontProps;
 }
 
-let TSpan: ComponentType;
+let TSpan: ComponentType<React.PropsWithChildren<{}>>;
 
 export function setTSpan(TSpanImplementation: ComponentType) {
   TSpan = TSpanImplementation;
 }
 
-function getChild(child: undefined | string | number | ComponentType) {
+export type TextChild =
+  | (undefined | string | number | ComponentType | React.ReactElement)
+  | TextChild[];
+
+function getChild(child: TextChild) {
   if (typeof child === 'string' || typeof child === 'number') {
     return <TSpan>{String(child)}</TSpan>;
   } else {
@@ -136,7 +148,7 @@ export type TextProps = {
   dx?: NumberArray;
   dy?: NumberArray;
   rotate?: NumberArray;
-  children?: string | number | (string | number | ComponentType)[];
+  children?: TextChild;
   inlineSize?: NumberProp;
   baselineShift?: NumberProp;
   verticalAlign?: NumberProp;
@@ -168,7 +180,11 @@ export default function extractText(props: TextProps, container: boolean) {
       children
     );
 
-    const stringifiedTextProps = stringifyPropsForFabric({inlineSize, baselineShift, verticalAlign});
+  const stringifiedTextProps = stringifyPropsForFabric({
+    inlineSize,
+    baselineShift,
+    verticalAlign,
+  });
 
   return {
     content: textChildren === null ? String(children) : null,

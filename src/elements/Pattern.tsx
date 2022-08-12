@@ -1,25 +1,33 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import extractViewBox from '../lib/extract/extractViewBox';
-import { NumberProp, TransformProps } from '../lib/extract/types';
+import {
+  ColumnMajorTransformMatrix,
+  NumberProp,
+  TransformProps,
+  Units,
+} from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
 import { RNSVGPattern } from './NativeComponents';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 
-export default class Pattern extends Shape<{
+export interface PatternProps {
+  children?: ReactNode;
   id?: string;
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
+  patternTransform?: ColumnMajorTransformMatrix | string;
+  patternUnits?: Units;
+  patternContentUnits?: Units;
   viewBox?: string;
   preserveAspectRatio?: string;
-  transform?: number[] | string | TransformProps;
-  patternTransform?: number[] | string | TransformProps;
-  patternUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-  patternContentUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-}> {
+  transform?: ColumnMajorTransformMatrix | string | TransformProps;
+}
+
+export default class Pattern extends Shape<PatternProps> {
   static displayName = 'Pattern';
 
   static defaultProps = {
@@ -46,7 +54,12 @@ export default class Pattern extends Shape<{
       preserveAspectRatio,
     } = props;
     const matrix = extractTransform(patternTransform || transform || props);
-    const strigifiedPatternProps = stringifyPropsForFabric({x, y, width, height});
+    const strigifiedPatternProps = stringifyPropsForFabric({
+      x,
+      y,
+      width,
+      height,
+    });
     const patternProps = {
       name: id,
       matrix,
