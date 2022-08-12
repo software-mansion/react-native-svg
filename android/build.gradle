@@ -10,8 +10,13 @@ buildscript {
         
         dependencies {
             classpath("com.android.tools.build:gradle:3.6.1")
+            classpath "com.diffplug.spotless:spotless-plugin-gradle:5.15.0"
         }
     }
+}
+
+if (project == rootProject) {
+    apply from: 'spotless.gradle'
 }
 
 apply plugin: 'com.android.library'
