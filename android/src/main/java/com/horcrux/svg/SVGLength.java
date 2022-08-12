@@ -2,7 +2,6 @@ package com.horcrux.svg;
 
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
-
 import java.util.ArrayList;
 
 class SVGLength {
@@ -121,26 +120,29 @@ class SVGLength {
 
   static ArrayList<SVGLength> arrayFrom(Dynamic dynamic) {
     switch (dynamic.getType()) {
-      case Number: {
-        ArrayList<SVGLength> list = new ArrayList<>(1);
-        list.add(new SVGLength(dynamic.asDouble()));
-        return list;
-      }
-      case Array: {
-        ReadableArray arr = dynamic.asArray();
-        int size = arr.size();
-        ArrayList<SVGLength> list = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-          Dynamic val = arr.getDynamic(i);
-          list.add(from(val));
+      case Number:
+        {
+          ArrayList<SVGLength> list = new ArrayList<>(1);
+          list.add(new SVGLength(dynamic.asDouble()));
+          return list;
         }
-        return list;
-      }
-      case String: {
-        ArrayList<SVGLength> list = new ArrayList<>(1);
-        list.add(new SVGLength(dynamic.asString()));
-        return list;
-      }
+      case Array:
+        {
+          ReadableArray arr = dynamic.asArray();
+          int size = arr.size();
+          ArrayList<SVGLength> list = new ArrayList<>(size);
+          for (int i = 0; i < size; i++) {
+            Dynamic val = arr.getDynamic(i);
+            list.add(from(val));
+          }
+          return list;
+        }
+      case String:
+        {
+          ArrayList<SVGLength> list = new ArrayList<>(1);
+          list.add(new SVGLength(dynamic.asString()));
+          return list;
+        }
       default:
         return null;
     }
