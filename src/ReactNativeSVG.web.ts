@@ -7,7 +7,12 @@ import {
   // @ts-ignore
   createElement as cE,
 } from 'react-native';
-import { NumberArray, NumberProp } from './lib/extract/types';
+import {
+  ColumnMajorTransformMatrix,
+  NumberArray,
+  NumberProp,
+  TransformObject,
+} from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
 
@@ -44,13 +49,17 @@ interface BaseProps {
   pressRetentionOffset?: EdgeInsetsProp;
   rejectResponderTermination?: boolean;
 
+  transform: ColumnMajorTransformMatrix | string | TransformObject;
   translate: NumberArray;
   translateX: NumberProp;
   translateY: NumberProp;
   scale: NumberArray;
+  scaleX: NumberProp;
+  scaleY: NumberProp;
   rotation: NumberArray;
   skewX: NumberProp;
   skewY: NumberProp;
+  origin: NumberArray;
   originX: NumberProp;
   originY: NumberProp;
 
@@ -79,13 +88,17 @@ const prepare = <T extends BaseProps>(
   props = self.props,
 ) => {
   const {
+    transform,
     translate,
     translateX,
     translateY,
     scale,
+    scaleX,
+    scaleY,
     rotation,
     skewX,
     skewY,
+    origin,
     originX,
     originY,
     fontFamily,
@@ -105,7 +118,7 @@ const prepare = <T extends BaseProps>(
     onResponderRelease?: (e: GestureResponderEvent) => void;
     onResponderTerminate?: (e: GestureResponderEvent) => void;
     onResponderTerminationRequest?: (e: GestureResponderEvent) => boolean;
-    transform?: string;
+    transform?: ColumnMajorTransformMatrix | string | TransformObject;
     style?: {};
     ref?: {};
   } = {
@@ -124,36 +137,82 @@ const prepare = <T extends BaseProps>(
     ...rest,
   };
 
-  const transform = [];
+  const transformArray = [];
 
-  if (originX != null || originY != null) {
-    transform.push(`translate(${originX || 0}, ${originY || 0})`);
+  if (Array.isArray(transform) && transform.length === 6) {
+    transformArray.push(`matrix(${transform.join(' ')})`);
+  } else if (typeof transform === 'object') {
+    for (const key in transform) {
+      const value = transform[key];
+      // non standard SVG transforms
+      if (key === 'translateX' || key === 'x') {
+        transformArray.push(`translate(${value} 0)`);
+      } else if (key === 'translateY' || key === 'y') {
+        transformArray.push(`translate(0 ${value})`);
+      } else if (key === 'originX') {
+        transformArray.push(`translate(${-value} 0)`);
+      } else if (key === 'originX') {
+        transformArray.push(`translate(0 ${-value})`);
+      } else if (key === 'origin') {
+        if (Array.isArray(value)) {
+          transformArray.push(`translate(${value.join(' ')})`);
+        } else {
+          transformArray.push(`translate(${value})`);
+        }
+      } else if (key === 'scaleX') {
+        transformArray.push(`scaleX(${value} 1)`);
+      } else if (key === 'scaleY') {
+        transformArray.push(`scaleX(1 ${value})`);
+      } else if (key === 'skew') {
+        if (Array.isArray(value) && value.length === 2) {
+          transformArray.push(`skewX(${value[0]})`);
+          transformArray.push(`skewY(${value[1]})`);
+        } else {
+          throw new Error('Skew prop expect array of numbers');
+        }
+      } else {
+        if (Array.isArray(value)) {
+          transformArray.push(`${key}(${value.join(' ')})`);
+        } else {
+          transformArray.push(`${key}(${transform[key]})`);
+        }
+      }
+    }
+  } else {
+    transformArray.push(transform);
   }
+
   if (translate != null) {
-    transform.push(`translate(${translate})`);
+    transformArray.push(`translate(${translate})`);
   }
   if (translateX != null || translateY != null) {
-    transform.push(`translate(${translateX || 0}, ${translateY || 0})`);
+    transformArray.push(`translate(${translateX || 0}, ${translateY || 0})`);
   }
   if (scale != null) {
-    transform.push(`scale(${scale})`);
+    transformArray.push(`scale(${scale})`);
+  }
+  if (scaleX != null || scaleY != null) {
+    transformArray.push(`scale(${scaleX || 1}, ${scaleY || 1})`);
   }
   // rotation maps to rotate, not to collide with the text rotate attribute (which acts per glyph rather than block)
   if (rotation != null) {
-    transform.push(`rotate(${rotation})`);
+    transformArray.push(`rotate(${rotation})`);
   }
   if (skewX != null) {
-    transform.push(`skewX(${skewX})`);
+    transformArray.push(`skewX(${skewX})`);
   }
   if (skewY != null) {
-    transform.push(`skewY(${skewY})`);
+    transformArray.push(`skewY(${skewY})`);
+  }
+  if (origin != null) {
+    transformArray.push(`translate(${origin})`);
   }
   if (originX != null || originY != null) {
-    transform.push(`translate(${-originX || 0}, ${-originY || 0})`);
+    transformArray.push(`translate(${-originX || 0}, ${-originY || 0})`);
   }
 
-  if (transform.length) {
-    clean.transform = transform.join(' ');
+  if (transformArray.length) {
+    clean.transform = transformArray.join(' ');
   }
 
   if (forwardedRef) {
