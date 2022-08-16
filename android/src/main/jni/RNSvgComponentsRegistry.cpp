@@ -69,14 +69,6 @@ void RNSvgComponentsRegistry::registerNatives() {
   registerHybrid({
       makeNativeMethod("initHybrid", RNSvgComponentsRegistry::initHybrid),
   });
-
-  // This is a temporary solution that allows components exported by the svg
-  // library to be added to the main component registry. This code is triggered
-  // when c++ svg library is initialized and is needed because RN's autolinking
-  // does not currently support Fabric components. As a consequence, users would need
-  // to manually put library initialization calls in their ReactNativeHost implementation
-  // which is undesirable.
-  sharedProviderRegistry();
 }
 
 } // namespace react
