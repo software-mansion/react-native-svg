@@ -30,7 +30,7 @@ build/
 local.properties
 *.iml
 *.hprof
-.cxx/
+android/app/.cxx
 
 # node.js
 #
