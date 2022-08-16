@@ -6,14 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-
 #import "RNSVGTextPath.h"
 
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import "RCTFabricComponentsPlugins.h"
-#import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
+#import "RCTConversions.h"
+#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -42,101 +41,101 @@ using namespace facebook::react;
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGTextPathProps>(props);
 
-    self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
-    self.side = RCTNSStringFromStringNilIfEmpty(newProps.side);
-    self.method = RCTNSStringFromStringNilIfEmpty(newProps.method);
-    self.midLine = RCTNSStringFromStringNilIfEmpty(newProps.midLine);
-    self.spacing = RCTNSStringFromStringNilIfEmpty(newProps.spacing);
-    self.startOffset = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.startOffset)];
+  self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
+  self.side = RCTNSStringFromStringNilIfEmpty(newProps.side);
+  self.method = RCTNSStringFromStringNilIfEmpty(newProps.method);
+  self.midLine = RCTNSStringFromStringNilIfEmpty(newProps.midLine);
+  self.spacing = RCTNSStringFromStringNilIfEmpty(newProps.spacing);
+  self.startOffset = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.startOffset)];
 
-    setCommonRenderableProps(newProps, self);
+  setCommonRenderableProps(newProps, self);
 }
 
 - (void)prepareForRecycle
 {
-    [super prepareForRecycle];
-    
-    _href = nil;
-    _side = nil;
-    _method = nil;
-    _midLine = nil;
-    _spacing = nil;
-    _startOffset = nil;
+  [super prepareForRecycle];
+
+  _href = nil;
+  _side = nil;
+  _method = nil;
+  _midLine = nil;
+  _spacing = nil;
+  _startOffset = nil;
 }
 #endif // RN_FABRIC_ENABLED
 
 - (void)setHref:(NSString *)href
 {
-    if ([href isEqualToString:_href]) {
-        return;
-    }
-    [self invalidate];
-    _href = href;
+  if ([href isEqualToString:_href]) {
+    return;
+  }
+  [self invalidate];
+  _href = href;
 }
 
 - (void)setSide:(NSString *)side
 {
-    if ([side isEqualToString:_side]) {
-        return;
-    }
-    [self invalidate];
-    _side = side;
+  if ([side isEqualToString:_side]) {
+    return;
+  }
+  [self invalidate];
+  _side = side;
 }
 
 - (void)setMethod:(NSString *)method
 {
-    if ([method isEqualToString:_method]) {
-        return;
-    }
-    [self invalidate];
-    _method = method;
+  if ([method isEqualToString:_method]) {
+    return;
+  }
+  [self invalidate];
+  _method = method;
 }
 
 - (void)setMidLine:(NSString *)midLine
 {
-    if ([midLine isEqualToString:_midLine]) {
-        return;
-    }
-    [self invalidate];
-    _midLine = midLine;
+  if ([midLine isEqualToString:_midLine]) {
+    return;
+  }
+  [self invalidate];
+  _midLine = midLine;
 }
 
 - (void)setSpacing:(NSString *)spacing
 {
-    if ([spacing isEqualToString:_spacing]) {
-        return;
-    }
-    [self invalidate];
-    _spacing = spacing;
+  if ([spacing isEqualToString:_spacing]) {
+    return;
+  }
+  [self invalidate];
+  _spacing = spacing;
 }
 
 - (void)setStartOffset:(RNSVGLength *)startOffset
 {
-    if ([startOffset isEqualTo:_startOffset]) {
-        return;
-    }
-    [self invalidate];
-    _startOffset = startOffset;
+  if ([startOffset isEqualTo:_startOffset]) {
+    return;
+  }
+  [self invalidate];
+  _startOffset = startOffset;
 }
 
 - (void)renderLayerTo:(CGContextRef)context rect:(CGRect)rect
 {
-    [self renderGroupTo:context rect:rect];
+  [self renderGroupTo:context rect:rect];
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    return [self getGroupPath:context];
+  return [self getGroupPath:context];
 }
 
 - (void)pushGlyphContext
 {
-    // TextPath do not affect the glyphContext
+  // TextPath do not affect the glyphContext
 }
 
 - (void)popGlyphContext
 {
-    // TextPath do not affect the glyphContext
+  // TextPath do not affect the glyphContext
 }
 
 @end

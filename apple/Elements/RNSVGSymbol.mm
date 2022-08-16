@@ -10,9 +10,9 @@
 
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import "RCTFabricComponentsPlugins.h"
-#import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
+#import "RCTConversions.h"
+#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -39,110 +39,110 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newProps = *std::static_pointer_cast<const RNSVGSymbolProps>(props);
+  const auto &newProps = *std::static_pointer_cast<const RNSVGSymbolProps>(props);
 
-    self.minX = newProps.minX;
-    self.minY = newProps.minY;
-    self.vbWidth = newProps.vbWidth;
-    self.vbHeight = newProps.vbHeight;
-    self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
-    self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
-    
-    setCommonGroupProps(newProps, self);
+  self.minX = newProps.minX;
+  self.minY = newProps.minY;
+  self.vbWidth = newProps.vbWidth;
+  self.vbHeight = newProps.vbHeight;
+  self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
+  self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
+
+  setCommonGroupProps(newProps, self);
 }
 
 - (void)prepareForRecycle
 {
-    [super prepareForRecycle];
-    
-    _minX = 0;
-    _minY = 0;
-    _vbWidth = 0;
-    _vbHeight = 0;
-    _align = nil;
-    _meetOrSlice = kRNSVGVBMOSMeet;
+  [super prepareForRecycle];
+
+  _minX = 0;
+  _minY = 0;
+  _vbWidth = 0;
+  _vbHeight = 0;
+  _align = nil;
+  _meetOrSlice = kRNSVGVBMOSMeet;
 }
 #endif // RN_FABRIC_ENABLED
 
 - (void)setMinX:(CGFloat)minX
 {
-    if (minX == _minX) {
-        return;
-    }
-    
-    [self invalidate];
-    _minX = minX;
+  if (minX == _minX) {
+    return;
+  }
+
+  [self invalidate];
+  _minX = minX;
 }
 
 - (void)setMinY:(CGFloat)minY
 {
-    if (minY == _minY) {
-        return;
-    }
-    
-    [self invalidate];
-    _minY = minY;
+  if (minY == _minY) {
+    return;
+  }
+
+  [self invalidate];
+  _minY = minY;
 }
 
 - (void)setVbWidth:(CGFloat)vbWidth
 {
-    if (vbWidth == _vbWidth) {
-        return;
-    }
-    
-    [self invalidate];
-    _vbWidth = vbWidth;
+  if (vbWidth == _vbWidth) {
+    return;
+  }
+
+  [self invalidate];
+  _vbWidth = vbWidth;
 }
 
 - (void)setVbHeight:(CGFloat)vbHeight
 {
-    if (_vbHeight == vbHeight) {
-        return;
-    }
-    
-    [self invalidate];
-    _vbHeight = vbHeight;
+  if (_vbHeight == vbHeight) {
+    return;
+  }
+
+  [self invalidate];
+  _vbHeight = vbHeight;
 }
 
 - (void)setAlign:(NSString *)align
 {
-    if ([align isEqualToString:_align]) {
-        return;
-    }
-    
-    [self invalidate];
-    _align = align;
+  if ([align isEqualToString:_align]) {
+    return;
+  }
+
+  [self invalidate];
+  _align = align;
 }
 
 - (void)setMeetOrSlice:(RNSVGVBMOS)meetOrSlice
 {
-    if (meetOrSlice == _meetOrSlice) {
-        return;
-    }
-    
-    [self invalidate];
-    _meetOrSlice = meetOrSlice;
+  if (meetOrSlice == _meetOrSlice) {
+    return;
+  }
+
+  [self invalidate];
+  _meetOrSlice = meetOrSlice;
 }
 
 - (void)renderTo:(CGContextRef)context rect:(CGRect)rect
 {
-    self.dirty = false;
-    // Do not render Symbol
+  self.dirty = false;
+  // Do not render Symbol
 }
 
 - (void)renderSymbolTo:(CGContextRef)context width:(CGFloat)width height:(CGFloat)height
 {
-    CGRect eRect = CGRectMake(0, 0, width, height);
-    if (self.align) {
-        
-        CGAffineTransform viewBoxTransform = [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
-                                                                  eRect:eRect
-                                                                  align:self.align
-                                                            meetOrSlice:self.meetOrSlice];
-        
-        CGContextConcatCTM(context, viewBoxTransform);
-    }
-    [self renderGroupTo:context rect:eRect];
+  CGRect eRect = CGRectMake(0, 0, width, height);
+  if (self.align) {
+    CGAffineTransform viewBoxTransform =
+        [RNSVGViewBox getTransform:CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight)
+                             eRect:eRect
+                             align:self.align
+                       meetOrSlice:self.meetOrSlice];
+
+    CGContextConcatCTM(context, viewBoxTransform);
+  }
+  [self renderGroupTo:context rect:eRect];
 }
 
 @end

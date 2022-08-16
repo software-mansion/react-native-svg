@@ -8,8 +8,8 @@
 
 #import "RNSVGTSpanManager.h"
 
-#import "RNSVGTSpan.h"
 #import "RCTConvert+RNSVG.h"
+#import "RNSVGTSpan.h"
 
 @implementation RNSVGTSpanManager
 

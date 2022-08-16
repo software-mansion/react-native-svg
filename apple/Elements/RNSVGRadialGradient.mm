@@ -9,9 +9,9 @@
 
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import "RCTFabricComponentsPlugins.h"
-#import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
+#import "RCTConversions.h"
+#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -38,156 +38,162 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newProps = *std::static_pointer_cast<const RNSVGRadialGradientProps>(props);
-        
-    self.fx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.fx)];
-    self.fy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.fy)];
-    self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
-    self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
-    self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
-    self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
-    if (newProps.gradient.size() > 0) {
-        NSMutableArray<NSNumber *> *gradientArray = [NSMutableArray new];
-        for (auto number : newProps.gradient) {
-            [gradientArray addObject:[NSNumber numberWithDouble:number]];
-        }
-        self.gradient = gradientArray;
-    }
-    self.gradientUnits = newProps.gradientUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
-    if (newProps.gradientTransform.size() == 6) {
-        self.gradientTransform = CGAffineTransformMake(newProps.gradientTransform.at(0), newProps.gradientTransform.at(1), newProps.gradientTransform.at(2), newProps.gradientTransform.at(3), newProps.gradientTransform.at(4), newProps.gradientTransform.at(5));
-    }
+  const auto &newProps = *std::static_pointer_cast<const RNSVGRadialGradientProps>(props);
 
-    setCommonNodeProps(newProps, self);
+  self.fx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.fx)];
+  self.fy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.fy)];
+  self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
+  self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
+  self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
+  self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
+  if (newProps.gradient.size() > 0) {
+    NSMutableArray<NSNumber *> *gradientArray = [NSMutableArray new];
+    for (auto number : newProps.gradient) {
+      [gradientArray addObject:[NSNumber numberWithDouble:number]];
+    }
+    self.gradient = gradientArray;
+  }
+  self.gradientUnits = newProps.gradientUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
+  if (newProps.gradientTransform.size() == 6) {
+    self.gradientTransform = CGAffineTransformMake(
+        newProps.gradientTransform.at(0),
+        newProps.gradientTransform.at(1),
+        newProps.gradientTransform.at(2),
+        newProps.gradientTransform.at(3),
+        newProps.gradientTransform.at(4),
+        newProps.gradientTransform.at(5));
+  }
+
+  setCommonNodeProps(newProps, self);
 }
 
 - (void)prepareForRecycle
 {
-    [super prepareForRecycle];
-    _fx = nil;
-    _fy = nil;
-    _cx = nil;
-    _cy = nil;
-    _rx = nil;
-    _ry = nil;
-    _gradient = nil;
-    _gradientUnits = kRNSVGUnitsObjectBoundingBox;
-    _gradientTransform = CGAffineTransformIdentity;
+  [super prepareForRecycle];
+  _fx = nil;
+  _fy = nil;
+  _cx = nil;
+  _cy = nil;
+  _rx = nil;
+  _ry = nil;
+  _gradient = nil;
+  _gradientUnits = kRNSVGUnitsObjectBoundingBox;
+  _gradientTransform = CGAffineTransformIdentity;
 }
 #endif // RN_FABRIC_ENABLED
 - (instancetype)init
 {
-    if (self = [super init]) {
-        _gradientTransform = CGAffineTransformIdentity;
-    }
-    return self;
+  if (self = [super init]) {
+    _gradientTransform = CGAffineTransformIdentity;
+  }
+  return self;
 }
 
 - (void)setFx:(RNSVGLength *)fx
 {
-    if ([fx isEqualTo:_fx]) {
-        return;
-    }
+  if ([fx isEqualTo:_fx]) {
+    return;
+  }
 
-    _fx = fx;
-    [self invalidate];
+  _fx = fx;
+  [self invalidate];
 }
 
 - (void)setFy:(RNSVGLength *)fy
 {
-    if ([fy isEqualTo:_fy]) {
-        return;
-    }
+  if ([fy isEqualTo:_fy]) {
+    return;
+  }
 
-    _fy = fy;
-    [self invalidate];
+  _fy = fy;
+  [self invalidate];
 }
 
 - (void)setRx:(RNSVGLength *)rx
 {
-    if ([rx isEqualTo:_rx]) {
-        return;
-    }
+  if ([rx isEqualTo:_rx]) {
+    return;
+  }
 
-    _rx = rx;
-    [self invalidate];
+  _rx = rx;
+  [self invalidate];
 }
 
 - (void)setRy:(RNSVGLength *)ry
 {
-    if ([ry isEqualTo:_ry]) {
-        return;
-    }
+  if ([ry isEqualTo:_ry]) {
+    return;
+  }
 
-    _ry = ry;
-    [self invalidate];
+  _ry = ry;
+  [self invalidate];
 }
 
 - (void)setCx:(RNSVGLength *)cx
 {
-    if ([cx isEqualTo:_cx]) {
-        return;
-    }
+  if ([cx isEqualTo:_cx]) {
+    return;
+  }
 
-    _cx = cx;
-    [self invalidate];
+  _cx = cx;
+  [self invalidate];
 }
 
 - (void)setCy:(RNSVGLength *)cy
 {
-    if ([cy isEqualTo:_cy]) {
-        return;
-    }
+  if ([cy isEqualTo:_cy]) {
+    return;
+  }
 
-    _cy = cy;
-    [self invalidate];
+  _cy = cy;
+  [self invalidate];
 }
 
 - (void)setGradient:(NSArray<NSNumber *> *)gradient
 {
-    if (gradient == _gradient) {
-        return;
-    }
+  if (gradient == _gradient) {
+    return;
+  }
 
-    _gradient = gradient;
-    [self invalidate];
+  _gradient = gradient;
+  [self invalidate];
 }
 
 - (void)setGradientUnits:(RNSVGUnits)gradientUnits
 {
-    if (gradientUnits == _gradientUnits) {
-        return;
-    }
+  if (gradientUnits == _gradientUnits) {
+    return;
+  }
 
-    _gradientUnits = gradientUnits;
-    [self invalidate];
+  _gradientUnits = gradientUnits;
+  [self invalidate];
 }
 
 - (void)setGradientTransform:(CGAffineTransform)gradientTransform
 {
-    _gradientTransform = gradientTransform;
-    [self invalidate];
+  _gradientTransform = gradientTransform;
+  [self invalidate];
 }
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    return nil;
+  return nil;
 }
 
 - (void)parseReference
 {
-    self.dirty = false;
-    NSArray<RNSVGLength *> *points = @[self.fx, self.fy, self.rx, self.ry, self.cx, self.cy];
-    RNSVGPainter *painter = [[RNSVGPainter alloc] initWithPointsArray:points];
-    [painter setUnits:self.gradientUnits];
-    [painter setTransform:self.gradientTransform];
-    [painter setRadialGradientColors:self.gradient];
+  self.dirty = false;
+  NSArray<RNSVGLength *> *points = @[ self.fx, self.fy, self.rx, self.ry, self.cx, self.cy ];
+  RNSVGPainter *painter = [[RNSVGPainter alloc] initWithPointsArray:points];
+  [painter setUnits:self.gradientUnits];
+  [painter setTransform:self.gradientTransform];
+  [painter setRadialGradientColors:self.gradient];
 
-    if (self.gradientUnits == kRNSVGUnitsUserSpaceOnUse) {
-        [painter setUserSpaceBoundingBox:[self.svgView getContextBounds]];
-    }
+  if (self.gradientUnits == kRNSVGUnitsUserSpaceOnUse) {
+    [painter setUserSpaceBoundingBox:[self.svgView getContextBounds]];
+  }
 
-    [self.svgView definePainter:painter painterName:self.name];
+  [self.svgView definePainter:painter painterName:self.name];
 }
 
 @end

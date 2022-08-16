@@ -8,8 +8,8 @@
 
 #import "RNSVGPathManager.h"
 
-#import "RNSVGPath.h"
 #import "RCTConvert+RNSVG.h"
+#import "RNSVGPath.h"
 
 @implementation RNSVGPathManager
 

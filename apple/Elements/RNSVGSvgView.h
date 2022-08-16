@@ -8,8 +8,8 @@
 
 #import "RNSVGUIKit.h"
 
-#import "RNSVGPainter.h"
 #import "RNSVGContainer.h"
+#import "RNSVGPainter.h"
 #import "RNSVGVBMOS.h"
 
 #ifdef RN_FABRIC_ENABLED
@@ -20,9 +20,9 @@
 
 @interface RNSVGSvgView :
 #ifdef RN_FABRIC_ENABLED
-RCTViewComponentView <RNSVGContainer>
+    RCTViewComponentView <RNSVGContainer>
 #else
-RNSVGView <RNSVGContainer>
+    RNSVGView <RNSVGContainer>
 #endif // RN_FABRIC_ENABLED
 
 @property (nonatomic, strong) RNSVGLength *bbWidth;

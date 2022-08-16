@@ -9,65 +9,63 @@
 #import "RNSVGSolidColorBrush.h"
 #import "RNSVGUIKit.h"
 
-#import "RCTConvert+RNSVG.h"
 #import <React/RCTLog.h>
+#import "RCTConvert+RNSVG.h"
 
-@implementation RNSVGSolidColorBrush
-{
-    RNSVGColor *_color;
+@implementation RNSVGSolidColorBrush {
+  RNSVGColor *_color;
 }
 
 - (instancetype)initWithArray:(NSArray<RNSVGLength *> *)array
 {
-    if ((self = [super initWithArray:array])) {
-        _color = [RCTConvert RNSVGColor:array offset:1];
-    }
-    return self;
+  if ((self = [super initWithArray:array])) {
+    _color = [RCTConvert RNSVGColor:array offset:1];
+  }
+  return self;
 }
 
 - (instancetype)initWithNumber:(NSNumber *)number
 {
-    if ((self = [super init])) {
-        _color = [RCTConvert RNSVGColor:number];
-    }
-    return self;
+  if ((self = [super init])) {
+    _color = [RCTConvert RNSVGColor:number];
+  }
+  return self;
 }
 
 - (instancetype)initWithColor:(RNSVGColor *)color
 {
-    if ((self = [super init])) {
-        _color = color;
-    }
-    return self;
+  if ((self = [super init])) {
+    _color = color;
+  }
+  return self;
 }
-
 
 - (void)dealloc
 {
-    _color = nil;
+  _color = nil;
 }
 
 - (CGColorRef)getColorWithOpacity:(CGFloat)opacity
 {
-    CGColorRef baseColor = _color.CGColor;
-    CGColorRef color = CGColorCreateCopyWithAlpha(baseColor, opacity * CGColorGetAlpha(baseColor));
-    return color;
+  CGColorRef baseColor = _color.CGColor;
+  CGColorRef color = CGColorCreateCopyWithAlpha(baseColor, opacity * CGColorGetAlpha(baseColor));
+  return color;
 }
 
 - (BOOL)applyFillColor:(CGContextRef)context opacity:(CGFloat)opacity
 {
-    CGColorRef color = [self getColorWithOpacity:opacity];
-    CGContextSetFillColorWithColor(context, color);
-    CGColorRelease(color);
-    return YES;
+  CGColorRef color = [self getColorWithOpacity:opacity];
+  CGContextSetFillColorWithColor(context, color);
+  CGColorRelease(color);
+  return YES;
 }
 
 - (BOOL)applyStrokeColor:(CGContextRef)context opacity:(CGFloat)opacity
 {
-    CGColorRef color = [self getColorWithOpacity:opacity];
-    CGContextSetStrokeColorWithColor(context, color);
-    CGColorRelease(color);
-    return YES;
+  CGColorRef color = [self getColorWithOpacity:opacity];
+  CGContextSetStrokeColorWithColor(context, color);
+  CGColorRelease(color);
+  return YES;
 }
 
 @end

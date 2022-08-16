@@ -11,9 +11,9 @@
 
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import "RCTFabricComponentsPlugins.h"
-#import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
+#import "RCTConversions.h"
+#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -40,71 +40,71 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newProps = *std::static_pointer_cast<const RNSVGEllipseProps>(props);
+  const auto &newProps = *std::static_pointer_cast<const RNSVGEllipseProps>(props);
 
-    self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
-    self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
-    self.rx  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
-    self.ry  = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
+  self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
+  self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
+  self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
+  self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
 
-    setCommonRenderableProps(newProps, self);
+  setCommonRenderableProps(newProps, self);
 }
 
 - (void)prepareForRecycle
 {
-    [super prepareForRecycle];
-    _cx = nil;
-    _cy = nil;
-    _rx = nil;
-    _ry = nil;
+  [super prepareForRecycle];
+  _cx = nil;
+  _cy = nil;
+  _rx = nil;
+  _ry = nil;
 }
 #endif // RN_FABRIC_ENABLED
 
 - (void)setCx:(RNSVGLength *)cx
 {
-    if ([cx isEqualTo:_cx]) {
-        return;
-    }
-    [self invalidate];
-    _cx = cx;
+  if ([cx isEqualTo:_cx]) {
+    return;
+  }
+  [self invalidate];
+  _cx = cx;
 }
 
 - (void)setCy:(RNSVGLength *)cy
 {
-    if ([cy isEqualTo:_cy]) {
-        return;
-    }
-    [self invalidate];
-    _cy = cy;
+  if ([cy isEqualTo:_cy]) {
+    return;
+  }
+  [self invalidate];
+  _cy = cy;
 }
 
 - (void)setRx:(RNSVGLength *)rx
 {
-    if ([rx isEqualTo:_rx]) {
-        return;
-    }
-    [self invalidate];
-    _rx = rx;
+  if ([rx isEqualTo:_rx]) {
+    return;
+  }
+  [self invalidate];
+  _rx = rx;
 }
 
 - (void)setRy:(RNSVGLength *)ry
 {
-    if ([ry isEqualTo:_ry]) {
-        return;
-    }
-    [self invalidate];
-    _ry = ry;
+  if ([ry isEqualTo:_ry]) {
+    return;
+  }
+  [self invalidate];
+  _ry = ry;
 }
 
 - (CGPathRef)getPath:(CGContextRef)context
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGFloat cx = [self relativeOnWidth:self.cx];
-    CGFloat cy = [self relativeOnHeight:self.cy];
-    CGFloat rx = [self relativeOnWidth:self.rx];
-    CGFloat ry = [self relativeOnHeight:self.ry];
-    CGPathAddEllipseInRect(path, nil, CGRectMake(cx - rx, cy - ry, rx * 2, ry * 2));
-    return (CGPathRef)CFAutorelease(path);
+  CGMutablePathRef path = CGPathCreateMutable();
+  CGFloat cx = [self relativeOnWidth:self.cx];
+  CGFloat cy = [self relativeOnHeight:self.cy];
+  CGFloat rx = [self relativeOnWidth:self.rx];
+  CGFloat ry = [self relativeOnHeight:self.ry];
+  CGPathAddEllipseInRect(path, nil, CGRectMake(cx - rx, cy - ry, rx * 2, ry * 2));
+  return (CGPathRef)CFAutorelease(path);
 }
 
 @end

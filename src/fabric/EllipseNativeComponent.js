@@ -11,17 +11,17 @@ import type { Int32, Double } from 'react-native/Libraries/Types/CodegenTypes';
 
 type LayoutEvent = $ReadOnly<{|
   layout: $ReadOnly<{|
-      x: Float,
-      y: Float,
-      width: Float,
-      height: Float,
+    x: Float,
+    y: Float,
+    width: Float,
+    height: Float,
   |}>,
 |}>;
 
 type SvgNodeCommonProps = $ReadOnly<{|
   name?: string,
   opacity?: WithDefault<Float, 1.0>,
-  matrix?: $ReadOnlyArray<Float>,//CGAffineTransform,
+  matrix?: $ReadOnlyArray<Float>, //CGAffineTransform,
   // transform?: ____TransformStyle_Internal, // CATransform3D, custom handling
   mask?: string,
   markerStart?: string,
@@ -46,7 +46,7 @@ type SvgRenderableCommonProps = $ReadOnly<{|
   fillRule?: WithDefault<Int32, 1>,
   stroke?: ColorStruct,
   strokeOpacity?: WithDefault<Float, 1.0>,
-  strokeWidth?: WithDefault<string, "1">,
+  strokeWidth?: WithDefault<string, '1'>,
   strokeLinecap?: WithDefault<Int32, 0>,
   strokeLinejoin?: WithDefault<Int32, 0>,
   strokeDasharray?: $ReadOnlyArray<string>,
@@ -56,17 +56,19 @@ type SvgRenderableCommonProps = $ReadOnly<{|
   propList?: $ReadOnlyArray<string>,
 |}>;
 
-
 type NativeProps = $ReadOnly<{|
-    ...ViewProps,
-    ...SvgNodeCommonProps,
-    ...SvgRenderableCommonProps,
-    cx?: string,
-    cy?: string,
-    rx?: string,
-    ry?: string,
+  ...ViewProps,
+  ...SvgNodeCommonProps,
+  ...SvgRenderableCommonProps,
+  cx?: string,
+  cy?: string,
+  rx?: string,
+  ry?: string,
 |}>;
 
 type ComponentType = HostComponent<NativeProps>;
 
-export default (codegenNativeComponent<NativeProps>('RNSVGEllipse', {}): ComponentType);
+export default (codegenNativeComponent<NativeProps>(
+  'RNSVGEllipse',
+  {},
+): ComponentType);

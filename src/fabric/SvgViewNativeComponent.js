@@ -19,4 +19,7 @@ type NativeProps = $ReadOnly<{|
   color: ColorValue,
 |}>;
 
-export default (codegenNativeComponent<NativeProps>('RNSVGSvgView', {}): ComponentType);
+export default (codegenNativeComponent<NativeProps>(
+  'RNSVGSvgView',
+  {},
+): ComponentType);

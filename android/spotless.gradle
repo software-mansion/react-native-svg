@@ -1,0 +1,9 @@
+// formatter & linter configuration for java
+apply plugin: 'com.diffplug.spotless'
+
+spotless {
+  java {
+    target 'src/fabric/**/*.java', 'src/main/java/**/*.java', 'src/paper/java/com/horcrux/svg/**/*.java'
+    googleJavaFormat()
+  }
+}

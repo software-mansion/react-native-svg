@@ -6,16 +6,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 #import "RNSVGMask.h"
-#import "RNSVGPainter.h"
 #import "RNSVGBrushType.h"
 #import "RNSVGNode.h"
-
+#import "RNSVGPainter.h"
 
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import "RCTFabricComponentsPlugins.h"
-#import "RCTConversions.h"
 #import <react/renderer/components/view/conversions.h>
+#import "RCTConversions.h"
+#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -42,119 +41,125 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    const auto &newProps = *std::static_pointer_cast<const RNSVGMaskProps>(props);
-    
-    self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
-    self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-    if (RCTNSStringFromStringNilIfEmpty(newProps.maskheight)) {
-        self.maskheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.maskheight)];
-    }
-    if (RCTNSStringFromStringNilIfEmpty(newProps.maskwidth)) {
-        self.maskwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.maskwidth)];
-    }
-    if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-        self.maskheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
-    }
-    if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-        self.maskwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
-    }
-    self.maskUnits = newProps.maskUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
-    self.maskContentUnits = newProps.maskUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
-    if (newProps.maskTransform.size() == 6) {
-        self.maskTransform = CGAffineTransformMake(newProps.maskTransform.at(0), newProps.maskTransform.at(1), newProps.maskTransform.at(2), newProps.maskTransform.at(3), newProps.maskTransform.at(4), newProps.maskTransform.at(5));
-    }
-    
-    setCommonGroupProps(newProps, self);
+  const auto &newProps = *std::static_pointer_cast<const RNSVGMaskProps>(props);
+
+  self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
+  self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
+  if (RCTNSStringFromStringNilIfEmpty(newProps.maskheight)) {
+    self.maskheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.maskheight)];
+  }
+  if (RCTNSStringFromStringNilIfEmpty(newProps.maskwidth)) {
+    self.maskwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.maskwidth)];
+  }
+  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
+    self.maskheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  }
+  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
+    self.maskwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  }
+  self.maskUnits = newProps.maskUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
+  self.maskContentUnits = newProps.maskUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
+  if (newProps.maskTransform.size() == 6) {
+    self.maskTransform = CGAffineTransformMake(
+        newProps.maskTransform.at(0),
+        newProps.maskTransform.at(1),
+        newProps.maskTransform.at(2),
+        newProps.maskTransform.at(3),
+        newProps.maskTransform.at(4),
+        newProps.maskTransform.at(5));
+  }
+
+  setCommonGroupProps(newProps, self);
 }
 
 - (void)prepareForRecycle
 {
-    [super prepareForRecycle];
-    _x = nil;
-    _y = nil;
-    _maskheight = nil;
-    _maskwidth = nil;
-    _maskUnits = kRNSVGUnitsObjectBoundingBox;
-    _maskContentUnits = kRNSVGUnitsObjectBoundingBox;
-    _maskTransform = CGAffineTransformIdentity;
+  [super prepareForRecycle];
+  _x = nil;
+  _y = nil;
+  _maskheight = nil;
+  _maskwidth = nil;
+  _maskUnits = kRNSVGUnitsObjectBoundingBox;
+  _maskContentUnits = kRNSVGUnitsObjectBoundingBox;
+  _maskTransform = CGAffineTransformIdentity;
 }
 #endif // RN_FABRIC_ENABLED
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    return nil;
+  return nil;
 }
 
 - (void)parseReference
 {
-    self.dirty = false;
-    [self.svgView defineMask:self maskName:self.name];
+  self.dirty = false;
+  [self.svgView defineMask:self maskName:self.name];
 }
 
 - (void)setX:(RNSVGLength *)x
 {
-    if ([x isEqualTo:_x]) {
-        return;
-    }
-    
-    _x = x;
-    [self invalidate];
+  if ([x isEqualTo:_x]) {
+    return;
+  }
+
+  _x = x;
+  [self invalidate];
 }
 
 - (void)setY:(RNSVGLength *)y
 {
-    if ([y isEqualTo:_y]) {
-        return;
-    }
-    
-    _y = y;
-    [self invalidate];
+  if ([y isEqualTo:_y]) {
+    return;
+  }
+
+  _y = y;
+  [self invalidate];
 }
 
 - (void)setMaskwidth:(RNSVGLength *)maskwidth
 {
-    if ([maskwidth isEqualTo:_maskwidth]) {
-        return;
-    }
-    
-    _maskwidth = maskwidth;
-    [self invalidate];
+  if ([maskwidth isEqualTo:_maskwidth]) {
+    return;
+  }
+
+  _maskwidth = maskwidth;
+  [self invalidate];
 }
 
 - (void)setMaskheight:(RNSVGLength *)maskheight
 {
-    if ([maskheight isEqualTo:_maskheight]) {
-        return;
-    }
-    
-    _maskheight = maskheight;
-    [self invalidate];
+  if ([maskheight isEqualTo:_maskheight]) {
+    return;
+  }
+
+  _maskheight = maskheight;
+  [self invalidate];
 }
 
 - (void)setMaskUnits:(RNSVGUnits)maskUnits
 {
-    if (maskUnits == _maskUnits) {
-        return;
-    }
-    
-    _maskUnits = maskUnits;
-    [self invalidate];
+  if (maskUnits == _maskUnits) {
+    return;
+  }
+
+  _maskUnits = maskUnits;
+  [self invalidate];
 }
 
 - (void)setMaskContentUnits:(RNSVGUnits)maskContentUnits
 {
-    if (maskContentUnits == _maskContentUnits) {
-        return;
-    }
-    
-    _maskContentUnits = maskContentUnits;
-    [self invalidate];
+  if (maskContentUnits == _maskContentUnits) {
+    return;
+  }
+
+  _maskContentUnits = maskContentUnits;
+  [self invalidate];
 }
 
 - (void)setMaskTransform:(CGAffineTransform)maskTransform
 {
-    _maskTransform = maskTransform;
-    [self invalidate];
+  _maskTransform = maskTransform;
+  [self invalidate];
 }
 
 @end

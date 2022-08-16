@@ -15,20 +15,20 @@ RCT_EXPORT_MODULE()
 
 - (RNSVGForeignObject *)node
 {
-    return [RNSVGForeignObject new];
+  return [RNSVGForeignObject new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(foreignObjectheight, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(foreignObjectwidth, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(foreignObjectheight, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(foreignObjectwidth, RNSVGLength *)
 RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGForeignObject)
 {
-    view.foreignObjectheight = [RCTConvert RNSVGLength:json];
+  view.foreignObjectheight = [RCTConvert RNSVGLength:json];
 }
 RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGForeignObject)
 {
-    view.foreignObjectwidth = [RCTConvert RNSVGLength:json];
+  view.foreignObjectwidth = [RCTConvert RNSVGLength:json];
 }
 
 @end

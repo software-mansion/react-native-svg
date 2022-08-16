@@ -7,9 +7,9 @@
  */
 
 #import "RNSVGImageManager.h"
-#import "RNSVGVBMOS.h"
-#import "RNSVGImage.h"
 #import "RCTConvert+RNSVG.h"
+#import "RNSVGImage.h"
+#import "RNSVGVBMOS.h"
 
 @implementation RNSVGImageManager
 
@@ -17,23 +17,23 @@ RCT_EXPORT_MODULE()
 
 - (RNSVGRenderable *)node
 {
-    RNSVGImage *svgImage = [RNSVGImage new];
-    svgImage.bridge = self.bridge;
+  RNSVGImage *svgImage = [RNSVGImage new];
+  svgImage.bridge = self.bridge;
 
-    return svgImage;
+  return svgImage;
 }
 
-RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(imagewidth, RNSVGLength*)
-RCT_EXPORT_VIEW_PROPERTY(imageheight, RNSVGLength*)
+RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(imagewidth, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(imageheight, RNSVGLength *)
 RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGImage)
 {
-    view.imagewidth = [RCTConvert RNSVGLength:json];
+  view.imagewidth = [RCTConvert RNSVGLength:json];
 }
 RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGImage)
 {
-    view.imageheight = [RCTConvert RNSVGLength:json];
+  view.imageheight = [RCTConvert RNSVGLength:json];
 }
 RCT_EXPORT_VIEW_PROPERTY(src, id)
 RCT_EXPORT_VIEW_PROPERTY(align, NSString)

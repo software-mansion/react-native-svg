@@ -7,7 +7,7 @@
  */
 
 typedef CF_ENUM(int32_t, RNSVGVBMOS) {
-    kRNSVGVBMOSMeet,
-    kRNSVGVBMOSSlice,
-    kRNSVGVBMOSNone
+  kRNSVGVBMOSMeet,
+  kRNSVGVBMOSSlice,
+  kRNSVGVBMOSNone
 };
