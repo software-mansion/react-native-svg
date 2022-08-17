@@ -1,7 +1,6 @@
 SVG_MAIN_THIS_DIR := $(call my-dir)
 
 include $(SVG_MAIN_THIS_DIR)/../../../build/generated/source/codegen/jni/Android.mk
-include $(SVG_MAIN_THIS_DIR)/../../../../common/cpp/Android.mk
 
 include $(CLEAR_VARS)
 

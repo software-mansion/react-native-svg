@@ -4,7 +4,6 @@ on:
     paths:
       - '.github/workflows/android-build-test.yml'
       - 'android/**'
-      - 'common/**'
       - 'Example/android/**'
       - 'FabricExample/android/**'
   push:
