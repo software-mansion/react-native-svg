@@ -10,11 +10,11 @@
 
 #import "RNSVGUIKit.h"
 
-#import "RNSVGContainer.h"
 #import "RNSVGCGFCRule.h"
-#import "RNSVGSvgView.h"
-#import "RNSVGPath.h"
+#import "RNSVGContainer.h"
 #import "RNSVGGlyphContext.h"
+#import "RNSVGPath.h"
+#import "RNSVGSvgView.h"
 
 @interface RNSVGGroup : RNSVGPath <RNSVGContainer>
 

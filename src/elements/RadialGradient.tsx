@@ -1,23 +1,29 @@
 import React, { ReactElement } from 'react';
 import extractGradient from '../lib/extract/extractGradient';
-import { NumberProp, TransformProps } from '../lib/extract/types';
+import {
+  ColumnMajorTransformMatrix,
+  NumberProp,
+  Units,
+} from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGRadialGradient } from './NativeComponents';
+import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 
-export default class RadialGradient extends Shape<{
+export interface RadialGradientProps {
+  children?: ReactElement[];
   fx?: NumberProp;
   fy?: NumberProp;
   rx?: NumberProp;
   ry?: NumberProp;
-  r?: NumberProp;
   cx?: NumberProp;
   cy?: NumberProp;
+  r?: NumberProp;
+  gradientUnits?: Units;
+  gradientTransform?: ColumnMajorTransformMatrix | string;
   id?: string;
-  children?: ReactElement[];
-  transform?: number[] | string | TransformProps;
-  gradientTransform?: number[] | string | TransformProps;
-  gradientUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-}> {
+}
+
+export default class RadialGradient extends Shape<RadialGradientProps> {
   static displayName = 'RadialGradient';
 
   static defaultProps = {
@@ -29,14 +35,14 @@ export default class RadialGradient extends Shape<{
   render() {
     const { props } = this;
     const { rx, ry, r, cx, cy, fx = cx, fy = cy } = props;
-    const radialGradientProps = {
+    const radialGradientProps = stringifyPropsForFabric({
       fx,
       fy,
       rx: rx || r,
       ry: ry || r,
       cx,
       cy,
-    };
+    });
     return (
       <RNSVGRadialGradient
         ref={this.refMethod}

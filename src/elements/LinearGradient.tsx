@@ -1,20 +1,26 @@
 import React, { ReactElement } from 'react';
 import extractGradient from '../lib/extract/extractGradient';
-import { NumberProp, TransformProps } from '../lib/extract/types';
+import {
+  ColumnMajorTransformMatrix,
+  NumberProp,
+  Units,
+} from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGLinearGradient } from './NativeComponents';
+import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 
-export default class LinearGradient extends Shape<{
-  id?: string;
-  x1?: NumberProp;
-  y1?: NumberProp;
-  x2?: NumberProp;
-  y2?: NumberProp;
+export interface LinearGradientProps {
   children?: ReactElement[];
-  transform?: number[] | string | TransformProps;
-  gradientTransform?: number[] | string | TransformProps;
-  gradientUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-}> {
+  x1?: NumberProp;
+  x2?: NumberProp;
+  y1?: NumberProp;
+  y2?: NumberProp;
+  gradientUnits?: Units;
+  gradientTransform?: ColumnMajorTransformMatrix | string;
+  id?: string;
+}
+
+export default class LinearGradient extends Shape<LinearGradientProps> {
   static displayName = 'LinearGradient';
 
   static defaultProps = {
@@ -27,7 +33,7 @@ export default class LinearGradient extends Shape<{
   render() {
     const { props } = this;
     const { x1, y1, x2, y2 } = props;
-    const linearGradientProps = { x1, y1, x2, y2 };
+    const linearGradientProps = stringifyPropsForFabric({ x1, y1, x2, y2 });
     return (
       <RNSVGLinearGradient
         ref={this.refMethod}

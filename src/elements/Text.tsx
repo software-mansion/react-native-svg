@@ -1,14 +1,30 @@
-import React, { Component } from 'react';
+import React, { Component, ReactNode } from 'react';
 import extractText from '../lib/extract/extractText';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import extractTransform from '../lib/extract/extractTransform';
-import { TransformProps } from '../lib/extract/types';
+import {
+  NumberArray,
+  NumberProp,
+  TextSpecificProps,
+  TransformProps,
+} from '../lib/extract/types';
 import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import './TSpan';
 import { RNSVGText } from './NativeComponents';
 
-export default class Text extends Shape<{}> {
+export interface TextProps extends TextSpecificProps {
+  children?: ReactNode;
+  x?: NumberArray;
+  y?: NumberArray;
+  dx?: NumberArray;
+  dy?: NumberArray;
+  rotate?: NumberArray;
+  opacity?: NumberProp;
+  inlineSize?: NumberProp;
+}
+
+export default class Text extends Shape<TextProps> {
   static displayName = 'Text';
 
   setNativeProps = (

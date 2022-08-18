@@ -1,24 +1,32 @@
 import React, { Component } from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp, TransformProps } from '../lib/extract/types';
-import extractText from '../lib/extract/extractText';
+import {
+  NumberProp,
+  TextPathMethod,
+  TextPathMidLine,
+  TextPathSpacing,
+  TextSpecificProps,
+  TransformProps,
+} from '../lib/extract/types';
+import extractText, { TextChild } from '../lib/extract/extractText';
 import { idPattern, pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import TSpan from './TSpan';
 import { RNSVGTextPath } from './NativeComponents';
 
-export default class TextPath extends Shape<{
-  children?: NumberProp | [NumberProp | React.ComponentType];
-  alignmentBaseline?: string;
-  startOffset?: NumberProp;
+export interface TextPathProps extends TextSpecificProps {
+  children?: TextChild;
   xlinkHref?: string;
-  midLine?: string;
-  spacing?: string;
-  method?: string;
   href?: string;
+  startOffset?: NumberProp;
+  method?: TextPathMethod;
+  spacing?: TextPathSpacing;
+  midLine?: TextPathMidLine;
   side?: string;
-}> {
+}
+
+export default class TextPath extends Shape<TextPathProps> {
   static displayName = 'TextPath';
 
   setNativeProps = (
@@ -62,7 +70,7 @@ export default class TextPath extends Shape<{
         ),
         {
           href: match,
-          startOffset,
+          startOffset: startOffset === null ? null : String(startOffset),
           method,
           spacing,
           side,

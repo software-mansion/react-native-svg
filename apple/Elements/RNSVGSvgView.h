@@ -8,13 +8,22 @@
 
 #import "RNSVGUIKit.h"
 
-#import "RNSVGPainter.h"
 #import "RNSVGContainer.h"
+#import "RNSVGPainter.h"
 #import "RNSVGVBMOS.h"
+
+#ifdef RN_FABRIC_ENABLED
+#import <React/RCTViewComponentView.h>
+#endif // RN_FABRIC_ENABLED
 
 @class RNSVGNode;
 
-@interface RNSVGSvgView : RNSVGView <RNSVGContainer>
+@interface RNSVGSvgView :
+#ifdef RN_FABRIC_ENABLED
+    RCTViewComponentView <RNSVGContainer>
+#else
+    RNSVGView <RNSVGContainer>
+#endif // RN_FABRIC_ENABLED
 
 @property (nonatomic, strong) RNSVGLength *bbWidth;
 @property (nonatomic, strong) RNSVGLength *bbHeight;
@@ -38,7 +47,7 @@
 
 - (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathName;
 
-- (void)defineTemplate:(__kindof RNSVGNode *)template templateName:(NSString *)templateName;
+- (void)defineTemplate:(__kindof RNSVGNode *)definedTemplate templateName:(NSString *)templateName;
 
 - (RNSVGNode *)getDefinedTemplate:(NSString *)templateName;
 

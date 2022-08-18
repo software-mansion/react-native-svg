@@ -47,7 +47,7 @@ export default function extractStroke(
   }
   if (strokeWidth != null) {
     inherited.push('strokeWidth');
-    o.strokeWidth = strokeWidth;
+    o.strokeWidth = String(strokeWidth);
   }
   if (strokeOpacity != null) {
     inherited.push('strokeOpacity');
