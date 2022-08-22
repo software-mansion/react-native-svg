@@ -6,56 +6,68 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-
 package com.horcrux.svg;
-
 
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class CircleView extends RenderableView {
-    private SVGLength mCx;
-    private SVGLength mCy;
-    private SVGLength mR;
+  private SVGLength mCx;
+  private SVGLength mCy;
+  private SVGLength mR;
 
-    public CircleView(ReactContext reactContext) {
-        super(reactContext);
-    }
+  public CircleView(ReactContext reactContext) {
+    super(reactContext);
+  }
 
-    @ReactProp(name = "cx")
-    public void setCx(Dynamic cx) {
-        mCx = SVGLength.from(cx);
-        invalidate();
-    }
+  @ReactProp(name = "cx")
+  public void setCx(Dynamic cx) {
+    mCx = SVGLength.from(cx);
+    invalidate();
+  }
 
-    @ReactProp(name = "cy")
-    public void setCy(Dynamic cy) {
-        mCy = SVGLength.from(cy);
-        invalidate();
-    }
+  public void setCx(String cx) {
+    mCx = SVGLength.from(cx);
+    invalidate();
+  }
 
-    @ReactProp(name = "r")
-    public void setR(Dynamic r) {
-        mR = SVGLength.from(r);
-        invalidate();
-    }
+  @ReactProp(name = "cy")
+  public void setCy(Dynamic cy) {
+    mCy = SVGLength.from(cy);
+    invalidate();
+  }
 
-    @Override
-    Path getPath(Canvas canvas, Paint paint) {
-        Path path = new Path();
+  public void setCy(String cy) {
+    mCy = SVGLength.from(cy);
+    invalidate();
+  }
 
-        double cx = relativeOnWidth(mCx);
-        double cy = relativeOnHeight(mCy);
-        double r = relativeOnOther(mR);
+  @ReactProp(name = "r")
+  public void setR(Dynamic r) {
+    mR = SVGLength.from(r);
+    invalidate();
+  }
 
-        path.addCircle((float) cx, (float) cy, (float) r, Path.Direction.CW);
-        return path;
-    }
+  public void setR(String r) {
+    mR = SVGLength.from(r);
+    invalidate();
+  }
+
+  @Override
+  Path getPath(Canvas canvas, Paint paint) {
+    Path path = new Path();
+
+    double cx = relativeOnWidth(mCx);
+    double cy = relativeOnHeight(mCy);
+    double r = relativeOnOther(mR);
+
+    path.addCircle((float) cx, (float) cy, (float) r, Path.Direction.CW);
+    return path;
+  }
 }

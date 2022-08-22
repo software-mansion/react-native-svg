@@ -1,4 +1,12 @@
 import { requireNativeComponent as rnc } from 'react-native';
+import React from 'react';
+
+declare module 'react-native' {
+  function requireNativeComponent(
+    viewName: string,
+  ): // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  React.ComponentType<React.PropsWithChildren<any>>;
+}
 
 export const RNSVGSvg = rnc('RNSVGSvgView');
 export const RNSVGCircle = rnc('RNSVGCircle');

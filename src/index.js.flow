@@ -7,14 +7,17 @@
 import * as React from "react";
 import * as ReactNative from "react-native";
 import {
+  ColorValue,
   GestureResponderEvent,
+  LayoutChangeEvent,
   TransformsStyle,
-  OpaqueColorValue,
 } from "react-native";
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
 export type FillRule = "evenodd" | "nonzero";
 export type Units = "userSpaceOnUse" | "objectBoundingBox";
+export type MarkerUnits = "strokeWidth" | "userSpaceOnUse";
+export type Orient = "auto" | "auto-start-reverse";
 export type TextAnchor = "start" | "middle" | "end";
 export type FontStyle = "normal" | "italic" | "oblique";
 export type FontVariant = "normal" | "small-caps";
@@ -95,9 +98,7 @@ export type ResponderProps = {
   pointerEvents?: "box-none" | "none" | "box-only" | "auto",
   ...
 } & ReactNative.GestureResponderHandlers;
-export type rgbaArray = $ReadOnlyArray<number>;
-export type int32ARGBColor = number;
-export type Color = int32ARGBColor | rgbaArray | OpaqueColorValue | string;
+export type Color = ColorValue;
 export interface FillProps {
   fill?: Color;
   fillOpacity?: NumberProp;
@@ -191,6 +192,9 @@ export interface CommonMarkerProps {
   markerMid?: string;
   markerEnd?: string;
 }
+export interface NativeProps {
+  onLayout?: (event: LayoutChangeEvent) => void;
+}
 export type CommonPathProps = { ... } & FillProps &
   StrokeProps &
   ClipProps &
@@ -200,7 +204,8 @@ export type CommonPathProps = { ... } & FillProps &
   TouchableProps &
   DefinitionProps &
   CommonMarkerProps &
-  CommonMaskProps;
+  CommonMaskProps &
+  NativeProps;
 export type CircleProps = {
   cx?: NumberProp,
   cy?: NumberProp,
@@ -431,13 +436,6 @@ export type UseProps = {
 } & CommonPathProps;
 declare export var Use: React.ComponentClass<UseProps>;
 export type UseType = React.ComponentClass<UseProps>;
-declare export var EMaskUnits: {|
-  +USER_SPACE_ON_USE: "userSpaceOnUse", // "userSpaceOnUse"
-  +OBJECT_BOUNDING_BOX: "objectBoundingBox", // "objectBoundingBox"
-|};
-export type TMaskUnits =
-  | typeof EMaskUnits.USER_SPACE_ON_USE
-  | typeof EMaskUnits.OBJECT_BOUNDING_BOX;
 export type MaskProps = {
   id?: string,
   x?: NumberProp,
@@ -445,21 +443,12 @@ export type MaskProps = {
   width?: NumberProp,
   height?: NumberProp,
   maskTransform?: ColumnMajorTransformMatrix | string,
-  maskUnits?: TMaskUnits,
-  maskContentUnits?: TMaskUnits,
+  maskUnits?: Units,
+  maskContentUnits?: Units,
   ...
 } & CommonPathProps;
 declare export var Mask: React.ComponentClass<MaskProps>;
 export type MaskType = React.ComponentClass<MaskProps>;
-declare export var MarkerUnits: {|
-  +STROKE_WIDTH: "strokeWidth", // "strokeWidth"
-  +USER_SPACE_ON_USE: "userSpaceOnUse", // "userSpaceOnUse"
-|};
-
-declare export var Orient: {|
-  +AUTO: "auto", // "auto"
-  +AUTO_START_REVERSE: "auto-start-reverse", // "auto-start-reverse"
-|};
 export interface MarkerProps {
   id?: string;
   viewBox?: string;
@@ -468,8 +457,8 @@ export interface MarkerProps {
   refY?: NumberProp;
   markerWidth?: NumberProp;
   markerHeight?: NumberProp;
-  markerUnits?: $Values<typeof MarkerUnits>;
-  orient?: $Values<typeof Orient> | NumberProp;
+  markerUnits?: MarkerUnits;
+  orient?: Orient | NumberProp;
 }
 declare export var Marker: React.ComponentClass<MarkerProps>;
 export type MarkerType = React.ComponentClass<MarkerProps>;
@@ -501,7 +490,10 @@ export type JsxAST = {
 } & AST;
 export type UriProps = {
   uri: string | null,
+  onError?: (error: Error) => void,
   override?: SvgProps,
+  onError?: (error: Error) => void,
+  onLoad?: () => void,
   ...
 } & SvgProps;
 export type UriState = {
@@ -510,6 +502,7 @@ export type UriState = {
 };
 export type XmlProps = {
   xml: string | null,
+  onError?: (error: Error) => void,
   override?: SvgProps,
   ...
 } & SvgProps;

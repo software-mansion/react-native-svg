@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
 import { RNSVGSymbol } from './NativeComponents';
+import { NumberProp } from '../lib/extract/types';
 
-export default class Symbol extends Shape<{
+export interface SymbolProps {
+  children?: ReactNode;
   id?: string;
   viewBox?: string;
   preserveAspectRatio?: string;
-}> {
+  opacity?: NumberProp;
+}
+
+export default class Symbol extends Shape<SymbolProps> {
   static displayName = 'Symbol';
 
   render() {

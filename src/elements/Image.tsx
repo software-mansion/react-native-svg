@@ -1,22 +1,42 @@
 import React from 'react';
-import { Image, ImageSourcePropType } from 'react-native';
+import { Image, ImageProps as RNImageProps } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
-import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
+import {
+  stringifyPropsForFabric,
+  withoutXY,
+} from '../lib/extract/extractProps';
+import {
+  ClipProps,
+  CommonMaskProps,
+  NativeProps,
+  NumberProp,
+  ResponderProps,
+  TouchableProps,
+} from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGImage } from './NativeComponents';
 
 const spacesRegExp = /\s+/;
 
-export default class SvgImage extends Shape<{
-  preserveAspectRatio?: string;
+export interface ImageProps
+  extends ResponderProps,
+    CommonMaskProps,
+    ClipProps,
+    TouchableProps,
+    NativeProps {
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  xlinkHref?: string | number | ImageSourcePropType;
-  href?: string | number | ImageSourcePropType;
-}> {
+  xlinkHref?: RNImageProps['source'];
+  href?: RNImageProps['source'];
+  preserveAspectRatio?: string;
+  opacity?: NumberProp;
+  clipPath?: string;
+  id?: string;
+}
+
+export default class SvgImage extends Shape<ImageProps> {
   static displayName = 'Image';
 
   static defaultProps = {
@@ -44,11 +64,14 @@ export default class SvgImage extends Shape<{
     const align = modes[0];
     const meetOrSlice: 'meet' | 'slice' | 'none' | string | undefined =
       modes[1];
-    const imageProps = {
+    const stringifiedImageProps = stringifyPropsForFabric({
       x,
       y,
       width,
       height,
+    });
+    const imageProps = {
+      ...stringifiedImageProps,
       meetOrSlice: meetOrSliceTypes[meetOrSlice] || 0,
       align: alignEnum[align] || 'xMidYMid',
       src: !href
