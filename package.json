@@ -10,7 +10,7 @@
   "license": "MIT",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
-  "types": "lib/typescript/index.d.ts",
+  "types": "lib/typescript/src/index.d.ts",
   "react-native": [
     "src/index.ts",
     "css/index.ts"
