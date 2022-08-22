@@ -111,6 +111,13 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
 
     Path path;
 
+    try {
+      path = svg.getPath(null, null);
+    } catch (NullPointerException e) {
+      svg.invalidate();
+      return Arguments.createMap();
+    }
+
     PathMeasure pm = new PathMeasure(path, false);
     float length = (float) options.getDouble("length");
     float scale = svg.mScale;
