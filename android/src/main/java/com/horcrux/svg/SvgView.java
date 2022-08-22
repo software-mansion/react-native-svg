@@ -59,6 +59,7 @@ public class SvgView extends FabricEnabledViewGroup
   }
 
   private @Nullable Bitmap mBitmap;
+  private boolean mRemovedFromReactViewHierarchy;
 
   public SvgView(ReactContext reactContext) {
     super(reactContext);
@@ -73,6 +74,10 @@ public class SvgView extends FabricEnabledViewGroup
     SvgViewManager.setSvgView(id, this);
   }
 
+  public void setRemovedFromReactViewHierarchy() {
+    mRemovedFromReactViewHierarchy = true;
+  }
+
   @Override
   public void invalidate() {
     super.invalidate();
@@ -85,6 +90,20 @@ public class SvgView extends FabricEnabledViewGroup
       ((VirtualView) parent).getSvgView().invalidate();
       return;
     }
+    if (!mRemovedFromReactViewHierarchy) {
+      // when view is removed from the view hierarchy, we want to recycle the mBitmap when
+      // the view is detached from window, in order to preserve it for during animation, see
+      // https://github.com/react-native-svg/react-native-svg/pull/1542
+      if (mBitmap != null) {
+        mBitmap.recycle();
+      }
+      mBitmap = null;
+    }
+  }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
     if (mBitmap != null) {
       mBitmap.recycle();
     }

@@ -530,6 +530,10 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
           @Override
           public void onChildViewRemoved(View view, View view1) {
             if (view instanceof VirtualView) {
+              SvgView svgView = ((VirtualView) view).getSvgView();
+              if (svgView != null) {
+                svgView.setRemovedFromReactViewHierarchy();
+              }
               invalidateSvgView((V) view);
             }
           }
@@ -542,9 +546,10 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
    * you want to override this method you should call super.onAfterUpdateTransaction from it as the
    * parent class of the ViewManager may rely on callback being executed.
    */
-  protected void onAfterUpdateTransaction(@Nonnull V node) {
+  @Override
+  protected void onAfterUpdateTransaction(@Nonnull VirtualView node) {
     super.onAfterUpdateTransaction(node);
-    invalidateSvgView(node);
+    invalidateSvgView((V) node);
   }
 
   protected enum SVGClass {
