@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGMarker } from './NativeComponents';
+import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 
-export default class Marker extends Shape<{
+export type MarkerUnits = 'strokeWidth' | 'userSpaceOnUse';
+
+export type Orient = 'auto' | 'auto-start-reverse';
+
+export interface MarkerProps {
+  children?: ReactNode;
   id?: string;
   viewBox?: string;
   preserveAspectRatio?: string;
@@ -12,9 +18,11 @@ export default class Marker extends Shape<{
   refY?: NumberProp;
   markerWidth?: NumberProp;
   markerHeight?: NumberProp;
-  markerUnits?: 'strokeWidth' | 'userSpaceOnUse';
-  orient?: 'auto' | 'auto-start-reverse' | NumberProp;
-}> {
+  markerUnits?: MarkerUnits;
+  orient?: Orient | NumberProp;
+}
+
+export default class Marker extends Shape<MarkerProps> {
   static displayName = 'Marker';
 
   static defaultProps = {
@@ -40,16 +48,20 @@ export default class Marker extends Shape<{
       markerHeight,
       children,
     } = props;
+    const markerProps = stringifyPropsForFabric({
+      name: id,
+      refX,
+      refY,
+      markerUnits,
+      orient: String(orient),
+      markerWidth,
+      markerHeight,
+    });
+
     return (
       <RNSVGMarker
         ref={this.refMethod}
-        name={id}
-        refX={refX}
-        refY={refY}
-        orient={String(orient)}
-        markerUnits={markerUnits}
-        markerWidth={markerWidth}
-        markerHeight={markerHeight}
+        {...markerProps}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
       >
         {children}

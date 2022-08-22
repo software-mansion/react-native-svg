@@ -1,21 +1,33 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import extractTransform from '../lib/extract/extractTransform';
-import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp, TransformProps } from '../lib/extract/types';
+import {
+  stringifyPropsForFabric,
+  withoutXY,
+} from '../lib/extract/extractProps';
+import {
+  ColumnMajorTransformMatrix,
+  CommonPathProps,
+  NumberProp,
+} from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
 import { RNSVGMask } from './NativeComponents';
 
-export default class Mask extends Shape<{
+export type TMaskUnits = 'userSpaceOnUse' | 'objectBoundingBox';
+
+export interface MaskProps extends CommonPathProps {
+  children?: ReactNode;
+  id?: string;
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  transform?: number[] | string | TransformProps;
-  maskTransform?: number[] | string | TransformProps;
-  maskUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-  maskContentUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-}> {
+  maskTransform?: ColumnMajorTransformMatrix | string;
+  maskUnits?: TMaskUnits;
+  maskContentUnits?: TMaskUnits;
+}
+
+export default class Mask extends Shape<MaskProps> {
   static displayName = 'Mask';
 
   static defaultProps = {
@@ -38,19 +50,24 @@ export default class Mask extends Shape<{
       maskContentUnits,
       children,
     } = props;
+    const strigifiedMaskProps = stringifyPropsForFabric({
+      x,
+      y,
+      width,
+      height,
+    });
+    const maskProps = {
+      maskTransform: extractTransform(maskTransform || transform || props),
+      maskUnits: maskUnits !== undefined ? units[maskUnits] : 0,
+      maskContentUnits:
+        maskContentUnits !== undefined ? units[maskContentUnits] : 1,
+    };
     return (
       <RNSVGMask
         ref={this.refMethod}
         {...withoutXY(this, props)}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        maskTransform={extractTransform(maskTransform || transform || props)}
-        maskUnits={maskUnits !== undefined ? units[maskUnits] : 0}
-        maskContentUnits={
-          maskContentUnits !== undefined ? units[maskContentUnits] : 1
-        }
+        {...strigifiedMaskProps}
+        {...maskProps}
       >
         {children}
       </RNSVGMask>

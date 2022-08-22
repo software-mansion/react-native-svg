@@ -11,7 +11,7 @@ import Ellipse from './elements/Ellipse';
 import Polygon from './elements/Polygon';
 import Polyline from './elements/Polyline';
 import Line from './elements/Line';
-import Svg from './elements/Svg';
+import Svg, { SvgProps } from './elements/Svg';
 import Path from './elements/Path';
 import G from './elements/G';
 import Text from './elements/Text';
@@ -69,7 +69,7 @@ export interface AST {
   props: {
     [prop: string]: Styles | string | undefined;
   };
-  Tag: ComponentType;
+  Tag: ComponentType<React.PropsWithChildren<{}>>;
 }
 
 export interface XmlAST extends AST {
@@ -84,15 +84,16 @@ export interface JsxAST extends AST {
 export type AdditionalProps = {
   onError?: (error: Error) => void;
   override?: Object;
+  onLoad?: () => void;
 };
 
-export type UriProps = { uri: string | null } & AdditionalProps;
+export type UriProps = SvgProps & { uri: string | null } & AdditionalProps;
 export type UriState = { xml: string | null };
 
-export type XmlProps = { xml: string | null } & AdditionalProps;
+export type XmlProps = SvgProps & { xml: string | null } & AdditionalProps;
 export type XmlState = { ast: JsxAST | null };
 
-export type AstProps = { ast: JsxAST | null } & AdditionalProps;
+export type AstProps = SvgProps & { ast: JsxAST | null } & AdditionalProps;
 
 export function SvgAst({ ast, override }: AstProps) {
   if (!ast) {
@@ -110,9 +111,10 @@ export const err = console.error.bind(console);
 
 export function SvgXml(props: XmlProps) {
   const { onError = err, xml, override } = props;
-  const ast = useMemo<JsxAST | null>(() => (xml !== null ? parse(xml) : null), [
-    xml,
-  ]);
+  const ast = useMemo<JsxAST | null>(
+    () => (xml !== null ? parse(xml) : null),
+    [xml],
+  );
 
   try {
     return <SvgAst ast={ast} override={override || props} />;
@@ -124,19 +126,25 @@ export function SvgXml(props: XmlProps) {
 
 export async function fetchText(uri: string) {
   const response = await fetch(uri);
-  return await response.text();
+  if (response.ok) {
+    return await response.text();
+  }
+  throw new Error(`Fetching ${uri} failed with status ${response.status}`);
 }
 
 export function SvgUri(props: UriProps) {
-  const { onError = err, uri } = props;
+  const { onError = err, uri, onLoad } = props;
   const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
     uri
       ? fetchText(uri)
-          .then(setXml)
+          .then((data) => {
+            setXml(data);
+            onLoad?.();
+          })
           .catch(onError)
       : setXml(null);
-  }, [onError, uri]);
+  }, [onError, uri, onLoad]);
   return <SvgXml xml={xml} override={props} />;
 }
 
@@ -205,7 +213,7 @@ export type Styles = { [property: string]: string };
 
 export function getStyle(string: string): Styles {
   const style: Styles = {};
-  const declarations = string.split(';');
+  const declarations = string.split(';').filter((v) => v.trim());
   const { length } = declarations;
   for (let i = 0; i < length; i++) {
     const declaration = declarations[i];

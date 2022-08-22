@@ -45,6 +45,8 @@ interface BaseProps {
   rejectResponderTermination?: boolean;
 
   translate: NumberArray;
+  translateX: NumberProp;
+  translateY: NumberProp;
   scale: NumberArray;
   rotation: NumberArray;
   skewX: NumberProp;
@@ -59,6 +61,9 @@ interface BaseProps {
   forwardedRef: {};
   style: Iterable<{}>;
 }
+
+const hasTouchableProperty = (props: BaseProps) =>
+  props.onPress || props.onPressIn || props.onPressOut || props.onLongPress;
 
 /**
  * `react-native-svg` supports additional props that aren't defined in the spec.
@@ -75,6 +80,8 @@ const prepare = <T extends BaseProps>(
 ) => {
   const {
     translate,
+    translateX,
+    translateY,
     scale,
     rotation,
     skewX,
@@ -87,15 +94,10 @@ const prepare = <T extends BaseProps>(
     fontStyle,
     style,
     forwardedRef,
-    onPress,
-    onPressIn,
-    onPressOut,
-    onLongPress,
     // @ts-ignore
     ...rest
   } = props;
-  const hasTouchableProperty =
-    onPress || onPressIn || onPressOut || onLongPress;
+
   const clean: {
     onStartShouldSetResponder?: (e: GestureResponderEvent) => boolean;
     onResponderMove?: (e: GestureResponderEvent) => void;
@@ -107,7 +109,7 @@ const prepare = <T extends BaseProps>(
     style?: {};
     ref?: {};
   } = {
-    ...(hasTouchableProperty
+    ...(hasTouchableProperty(props)
       ? {
           onStartShouldSetResponder:
             self.touchableHandleStartShouldSetResponder,
@@ -129,6 +131,9 @@ const prepare = <T extends BaseProps>(
   }
   if (translate != null) {
     transform.push(`translate(${translate})`);
+  }
+  if (translateX != null || translateY != null) {
+    transform.push(`translate(${translateX || 0}, ${translateY || 0})`);
   }
   if (scale != null) {
     transform.push(`scale(${scale})`);
@@ -229,7 +234,7 @@ function remeasure() {
 
 export class WebShape<
   P extends BaseProps = BaseProps,
-  C = {}
+  C = {},
 > extends React.Component<P, C> {
   [x: string]: unknown;
   _remeasureMetricsOnActivation: () => void;
@@ -245,7 +250,12 @@ export class WebShape<
   ) => boolean;
   constructor(props: P, context: C) {
     super(props, context);
-    SvgTouchableMixin(this);
+
+    // Do not attach touchable mixin handlers if SVG element doesn't have a touchable prop
+    if (hasTouchableProperty(props)) {
+      SvgTouchableMixin(this);
+    }
+
     this._remeasureMetricsOnActivation = remeasure.bind(this);
   }
 }

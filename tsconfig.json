@@ -19,11 +19,8 @@
     "allowSyntheticDefaultImports": true,
     "types": ["react", "react-native"]
   },
-  "files": [
-    "src/index.d.ts"
-  ],
   "include": [
-    "src/index.ts",
+    "src/**/*",
     "css/index.ts"
   ]
 }
