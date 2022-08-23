@@ -20,8 +20,8 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
-#import "RCTConversions.h"
-#import "RCTFabricComponentsPlugins.h"
+#import <React/RCTConversions.h>
+#import <React/RCTFabricComponentsPlugins.h>
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 

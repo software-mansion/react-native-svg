@@ -23,16 +23,16 @@
 #endif // RN_FABRIC_ENABLED
 
 #import <React/RCTLog.h>
-#import "RCTBridge.h"
+#import <React/RCTBridge.h>
 #import "RNSVGViewBox.h"
 
 #ifdef RN_FABRIC_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
-#import "RCTConversions.h"
-#import "RCTFabricComponentsPlugins.h"
-#import "RCTImagePrimitivesConversions.h"
-#import "RCTImageSource.h"
+#import <React/RCTConversions.h>
+#import <React/RCTFabricComponentsPlugins.h>
+#import <React/RCTImagePrimitivesConversions.h>
+#import <React/RCTImageSource.h>
 #import "RNSVGFabricConversions.h"
 
 // Some RN private method hacking below similar to how it is done in RNScreens:
