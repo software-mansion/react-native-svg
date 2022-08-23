@@ -9,10 +9,10 @@
 #import "RNSVGClipPath.h"
 
 #ifdef RN_FABRIC_ENABLED
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import <react/renderer/components/view/conversions.h>
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
