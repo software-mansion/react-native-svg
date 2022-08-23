@@ -1,27 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 
-export const RNSVGSvg = codegenNativeComponent('RNSVGSvgView');
-export const RNSVGCircle = codegenNativeComponent('RNSVGCircle');
-export const RNSVGClipPath = codegenNativeComponent('RNSVGClipPath');
-export const RNSVGDefs = codegenNativeComponent('RNSVGDefs');
-export const RNSVGEllipse = codegenNativeComponent('RNSVGEllipse');
-export const RNSVGForeignObject = codegenNativeComponent('RNSVGForeignObject');
-export const RNSVGGroup = codegenNativeComponent('RNSVGGroup');
-export const RNSVGImage = codegenNativeComponent('RNSVGImage');
-export const RNSVGLine = codegenNativeComponent('RNSVGLine');
-export const RNSVGLinearGradient = codegenNativeComponent(
+export const RNSVGSvg = codegenNativeComponent<any>('RNSVGSvgView');
+export const RNSVGCircle = codegenNativeComponent<any>('RNSVGCircle');
+export const RNSVGClipPath = codegenNativeComponent<any>('RNSVGClipPath');
+export const RNSVGDefs = codegenNativeComponent<any>('RNSVGDefs');
+export const RNSVGEllipse = codegenNativeComponent<any>('RNSVGEllipse');
+export const RNSVGForeignObject =
+  codegenNativeComponent<any>('RNSVGForeignObject');
+export const RNSVGGroup = codegenNativeComponent<any>('RNSVGGroup');
+export const RNSVGImage = codegenNativeComponent<any>('RNSVGImage');
+export const RNSVGLine = codegenNativeComponent<any>('RNSVGLine');
+export const RNSVGLinearGradient = codegenNativeComponent<any>(
   'RNSVGLinearGradient',
 );
-export const RNSVGMarker = codegenNativeComponent('RNSVGMarker');
-export const RNSVGMask = codegenNativeComponent('RNSVGMask');
-export const RNSVGPath = codegenNativeComponent('RNSVGPath');
-export const RNSVGPattern = codegenNativeComponent('RNSVGPattern');
-export const RNSVGRadialGradient = codegenNativeComponent(
+export const RNSVGMarker = codegenNativeComponent<any>('RNSVGMarker');
+export const RNSVGMask = codegenNativeComponent<any>('RNSVGMask');
+export const RNSVGPath = codegenNativeComponent<any>('RNSVGPath');
+export const RNSVGPattern = codegenNativeComponent<any>('RNSVGPattern');
+export const RNSVGRadialGradient = codegenNativeComponent<any>(
   'RNSVGRadialGradient',
 );
-export const RNSVGRect = codegenNativeComponent('RNSVGRect');
-export const RNSVGSymbol = codegenNativeComponent('RNSVGSymbol');
-export const RNSVGText = codegenNativeComponent('RNSVGText');
-export const RNSVGTextPath = codegenNativeComponent('RNSVGTextPath');
-export const RNSVGTSpan = codegenNativeComponent('RNSVGTSpan');
-export const RNSVGUse = codegenNativeComponent('RNSVGUse');
+export const RNSVGRect = codegenNativeComponent<any>('RNSVGRect');
+export const RNSVGSymbol = codegenNativeComponent<any>('RNSVGSymbol');
+export const RNSVGText = codegenNativeComponent<any>('RNSVGText');
+export const RNSVGTextPath = codegenNativeComponent<any>('RNSVGTextPath');
+export const RNSVGTSpan = codegenNativeComponent<any>('RNSVGTSpan');
+export const RNSVGUse = codegenNativeComponent<any>('RNSVGUse');
