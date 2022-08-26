@@ -530,6 +530,10 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
           @Override
           public void onChildViewRemoved(View view, View view1) {
             if (view instanceof VirtualView) {
+              SvgView svgView = ((VirtualView) view).getSvgView();
+              if (svgView != null) {
+                svgView.setRemovedFromReactViewHierarchy();
+              }
               invalidateSvgView((V) view);
             }
           }
