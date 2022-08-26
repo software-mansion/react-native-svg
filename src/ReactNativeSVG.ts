@@ -49,7 +49,6 @@ import {
   LocalProps,
 } from './LocalSvg';
 import {
-  RNSVGCircle,
   RNSVGClipPath,
   RNSVGDefs,
   RNSVGEllipse,
@@ -71,6 +70,8 @@ import {
   RNSVGTSpan,
   RNSVGUse,
 } from './elements/NativeComponents';
+
+import RNSVGCircle from './fabric/CircleNativeComponent';
 
 export {
   RectProps,
