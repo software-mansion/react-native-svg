@@ -305,7 +305,8 @@ public abstract class VirtualView extends ReactViewGroup {
   public void setMatrix(Dynamic matrixArray) {
     ReadableType type = matrixArray.getType();
     if (!matrixArray.isNull() && type.equals(ReadableType.Array)) {
-      setMatrix((ReadableArray) matrixArray);
+      ReadableArray matrix = matrixArray.asArray();
+      setMatrix(matrix);
     } else {
       mMatrix.reset();
       mInvMatrix.reset();
