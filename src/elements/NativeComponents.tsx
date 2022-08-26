@@ -2,7 +2,6 @@
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 
 export const RNSVGSvg = codegenNativeComponent<any>('RNSVGSvgView');
-export const RNSVGCircle = codegenNativeComponent<any>('RNSVGCircle');
 export const RNSVGClipPath = codegenNativeComponent<any>('RNSVGClipPath');
 export const RNSVGDefs = codegenNativeComponent<any>('RNSVGDefs');
 export const RNSVGEllipse = codegenNativeComponent<any>('RNSVGEllipse');
