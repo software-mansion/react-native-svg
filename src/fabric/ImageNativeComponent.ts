@@ -1,11 +1,11 @@
 // @ts-ignore TODO: remove once there is a .d.ts file with definitions
 import codegenNativeComponentUntyped from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import type { ViewProps, HostComponent, ColorValue } from 'react-native';
-// @ts-ignore TODO: remove once there is a .d.ts file with definitions
 import type {
   Float,
   Int32,
   WithDefault,
+  // @ts-ignore TODO: remove once there is a .d.ts file with definitions
 } from 'react-native/Libraries/Types/CodegenTypes';
 // @ts-ignore TODO: remove once there is a .d.ts file with definitions
 import type { ImageSource } from 'react-native/Libraries/Image/ImageSource';

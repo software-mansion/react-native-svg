@@ -1,17 +1,17 @@
 // @ts-ignore TODO: remove once there is a .d.ts file with definitions
 import codegenNativeComponentUntyped from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import type { ViewProps, HostComponent, ColorValue } from 'react-native';
-// @ts-ignore TODO: remove once there is a .d.ts file with definitions
 import type {
   Float,
   Int32,
   WithDefault,
+  // @ts-ignore TODO: remove once there is a .d.ts file with definitions
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 interface SvgNodeCommonProps {
   name?: string;
   opacity?: WithDefault<Float, 1.0>;
-  matrix?: ReadonlyArray<Float>; //CGAffineTransform,
+  matrix?: ReadonlyArray<Float>;
   // transform?: ____TransformStyle_Internal, // CATransform3D, custom handling
   mask?: string;
   markerStart?: string;
@@ -81,7 +81,7 @@ interface NativeProps
   width?: string;
   patternUnits?: Int32;
   patternContentUnits?: Int32;
-  patternTransform?: ReadonlyArray<Float>; //CGAffineTransform,
+  patternTransform?: ReadonlyArray<Float>;
   minX?: Float;
   minY?: Float;
   vbWidth?: Float;
