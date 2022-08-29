@@ -2,7 +2,7 @@ import React from 'react';
 import { extract, stringifyPropsForFabric } from '../lib/extract/extractProps';
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import RNSVGCircle from '../fabric/CircleNativeComponent';
+import RNSVGCircle from '../ReactNativeSVG';
 
 export interface CircleProps extends CommonPathProps {
   cx?: NumberProp;

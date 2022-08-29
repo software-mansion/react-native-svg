@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
-import { RNSVGSymbol } from './NativeComponents';
+import { RNSVGSymbol } from '../ReactNativeSVG';
 import { NumberProp } from '../lib/extract/types';
 
 export interface SymbolProps {
@@ -21,6 +21,7 @@ export default class Symbol extends Shape<SymbolProps> {
     const symbolProps = { name: id };
     return (
       <RNSVGSymbol
+        // @ts-ignore TODO: handle ref correctly
         ref={this.refMethod}
         {...symbolProps}
         {...extractViewBox(props)}

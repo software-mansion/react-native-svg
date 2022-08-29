@@ -9,7 +9,7 @@ import {
 } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
-import { RNSVGPattern } from './NativeComponents';
+import { RNSVGPattern } from '../ReactNativeSVG';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 
 export interface PatternProps {
@@ -69,6 +69,7 @@ export default class Pattern extends Shape<PatternProps> {
     };
     return (
       <RNSVGPattern
+        // @ts-ignore TODO: handle ref correctly
         ref={this.refMethod}
         {...strigifiedPatternProps}
         {...patternProps}

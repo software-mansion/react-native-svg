@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGMarker } from './NativeComponents';
+import { RNSVGMarker } from '../ReactNativeSVG';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 
 export type MarkerUnits = 'strokeWidth' | 'userSpaceOnUse';
@@ -60,6 +60,7 @@ export default class Marker extends Shape<MarkerProps> {
 
     return (
       <RNSVGMarker
+        // @ts-ignore TODO: handle ref correctly
         ref={this.refMethod}
         {...markerProps}
         {...extractViewBox({ viewBox, preserveAspectRatio })}

@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { extract } from '../lib/extract/extractProps';
 import Shape from './Shape';
-import { RNSVGClipPath } from './NativeComponents';
+import { RNSVGClipPath } from '../ReactNativeSVG';
 
 export interface ClipPathProps {
   children?: ReactNode;

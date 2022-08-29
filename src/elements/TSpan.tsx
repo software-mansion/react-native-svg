@@ -11,7 +11,7 @@ import {
   NumberProp,
   TransformProps,
 } from '../lib/extract/types';
-import { RNSVGTSpan } from './NativeComponents';
+import { RNSVGTSpan } from '../ReactNativeSVG';
 
 export interface TSpanProps extends CommonPathProps, FontProps {
   children?: TextChild;

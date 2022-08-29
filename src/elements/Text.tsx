@@ -11,7 +11,7 @@ import {
 import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import './TSpan';
-import { RNSVGText } from './NativeComponents';
+import { RNSVGText } from '../ReactNativeSVG';
 
 export interface TextProps extends TextSpecificProps {
   children?: ReactNode;

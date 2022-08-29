@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RNSVGDefs } from './NativeComponents';
+import { RNSVGDefs } from '../ReactNativeSVG';
 
 export default class Defs extends Component<React.PropsWithChildren<{}>> {
   static displayName = 'Defs';

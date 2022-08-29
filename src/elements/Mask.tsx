@@ -11,7 +11,7 @@ import {
 } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
-import { RNSVGMask } from './NativeComponents';
+import { RNSVGMask } from '../ReactNativeSVG';
 
 export type TMaskUnits = 'userSpaceOnUse' | 'objectBoundingBox';
 
@@ -64,6 +64,7 @@ export default class Mask extends Shape<MaskProps> {
     };
     return (
       <RNSVGMask
+        // @ts-ignore TODO: handle ref correctly
         ref={this.refMethod}
         {...withoutXY(this, props)}
         {...strigifiedMaskProps}

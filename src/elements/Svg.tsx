@@ -21,7 +21,7 @@ import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
 import G, { GProps } from './G';
-import { RNSVGSvg } from './NativeComponents';
+import { RNSVGSvg } from '../ReactNativeSVG';
 
 const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
 
@@ -189,6 +189,7 @@ export default class Svg extends Shape<SvgProps> {
     return (
       <RNSVGSvg
         {...props}
+        // @ts-ignore TODO: handle ref correctly
         ref={this.refMethod}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
       >

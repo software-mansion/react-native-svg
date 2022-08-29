@@ -14,7 +14,7 @@ import {
   TouchableProps,
 } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGImage } from './NativeComponents';
+import { RNSVGImage } from '../ReactNativeSVG';
 
 const spacesRegExp = /\s+/;
 
@@ -82,6 +82,7 @@ export default class SvgImage extends Shape<ImageProps> {
     };
     return (
       <RNSVGImage
+        // @ts-ignore TODO: handle ref correctly
         ref={this.refMethod}
         {...withoutXY(this, props)}
         {...imageProps}

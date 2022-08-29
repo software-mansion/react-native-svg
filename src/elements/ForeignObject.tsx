@@ -5,7 +5,7 @@ import {
 } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import G from './G';
-import { RNSVGForeignObject } from './NativeComponents';
+import { RNSVGForeignObject } from '../ReactNativeSVG';
 
 export interface ForeignObjectProps {
   children?: ReactNode;
@@ -31,6 +31,7 @@ export default class ForeignObject extends G<ForeignObjectProps> {
     const foreignObjectProps = stringifyPropsForFabric({ x, y, width, height });
     return (
       <RNSVGForeignObject
+        // @ts-ignore TODO: handle ref correctly
         ref={this.refMethod}
         {...withoutXY(this, props)}
         {...foreignObjectProps}

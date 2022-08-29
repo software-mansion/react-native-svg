@@ -13,7 +13,7 @@ import extractText, { TextChild } from '../lib/extract/extractText';
 import { idPattern, pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import TSpan from './TSpan';
-import { RNSVGTextPath } from './NativeComponents';
+import { RNSVGTextPath } from '../ReactNativeSVG';
 
 export interface TextPathProps extends TextSpecificProps {
   children?: TextChild;
