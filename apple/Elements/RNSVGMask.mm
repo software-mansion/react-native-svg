@@ -45,12 +45,6 @@ using namespace facebook::react;
 
   self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
   self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.maskheight)) {
-    self.maskheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.maskheight)];
-  }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.maskwidth)) {
-    self.maskwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.maskwidth)];
-  }
   if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
     self.maskheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
   }

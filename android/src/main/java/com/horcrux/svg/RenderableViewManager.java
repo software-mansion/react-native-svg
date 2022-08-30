@@ -1238,16 +1238,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setRectheight(RectView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setRectwidth(RectView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
     public void setHeight(RectView view, @Nullable String value) {
       view.setHeight(value);
     }
@@ -1324,16 +1314,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @Override
     public void setY(UseView view, @Nullable String value) {
       view.setY(value);
-    }
-
-    @Override
-    public void setUseheight(UseView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setUsewidth(UseView view, @Nullable String value) {
-      view.setWidth(value);
     }
 
     @Override
@@ -1455,16 +1435,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setPatternheight(PatternView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setPatternwidth(PatternView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
     public void setHeight(PatternView view, @Nullable String value) {
       view.setHeight(value);
     }
@@ -1561,16 +1531,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @Override
     public void setY(MaskView view, @Nullable String value) {
       view.setY(value);
-    }
-
-    @Override
-    public void setMaskheight(MaskView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setMaskwidth(MaskView view, @Nullable String value) {
-      view.setWidth(value);
     }
 
     @Override
@@ -1755,7 +1715,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGLinearGradientManagerDelegate(this);
     }
 
-    private final ViewManagerDelegate<RectView> mDelegate;
+    private final ViewManagerDelegate<LinearGradientView> mDelegate;
 
     protected ViewManagerDelegate getDelegate() {
       return mDelegate;
@@ -1825,7 +1785,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGRadialGradientManagerDelegate(this);
     }
 
-    private final ViewManagerDelegate<RectView> mDelegate;
+    private final ViewManagerDelegate<RadialGradientView> mDelegate;
 
     protected ViewManagerDelegate getDelegate() {
       return mDelegate;

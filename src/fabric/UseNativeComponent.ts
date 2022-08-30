@@ -50,8 +50,6 @@ interface NativeProps
   href?: string;
   x?: string;
   y?: string;
-  useheight?: string;
-  usewidth?: string;
   height?: string;
   width?: string;
 }
