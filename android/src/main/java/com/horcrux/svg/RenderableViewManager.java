@@ -1653,16 +1653,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setForeignObjectheight(ForeignObjectView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setForeignObjectwidth(ForeignObjectView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
     public void setHeight(ForeignObjectView view, @Nullable String value) {
       view.setHeight(value);
     }

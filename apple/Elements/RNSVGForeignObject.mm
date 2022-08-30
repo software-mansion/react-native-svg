@@ -49,12 +49,6 @@ using namespace facebook::react;
   self.y = RCTNSStringFromStringNilIfEmpty(newProps.y)
       ? [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)]
       : nil;
-  if (RCTNSStringFromStringNilIfEmpty(newProps.foreignObjectheight)) {
-    self.foreignObjectheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.foreignObjectheight)];
-  }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.foreignObjectwidth)) {
-    self.foreignObjectwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.foreignObjectwidth)];
-  }
   if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
     self.foreignObjectheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
   }

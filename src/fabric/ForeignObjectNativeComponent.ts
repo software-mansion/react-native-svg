@@ -73,8 +73,6 @@ interface NativeProps
     SvgGroupCommonProps {
   x?: string;
   y?: string;
-  foreignObjectheight?: string;
-  foreignObjectwidth?: string;
   height?: string;
   width?: string;
 }
