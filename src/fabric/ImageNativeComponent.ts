@@ -4,7 +4,6 @@ import type {
   Float,
   Int32,
   WithDefault,
-  // @ts-ignore TODO: remove once there is a .d.ts file with definitions
 } from 'react-native/Libraries/Types/CodegenTypes';
 // @ts-ignore TODO: remove once there is a .d.ts file with definitions
 import type { ImageSource } from 'react-native/Libraries/Image/ImageSource';
