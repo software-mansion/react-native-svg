@@ -1014,7 +1014,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       view.setHeight(value);
     }
 
-    @ReactProp(name = "src")
+    @ReactProp(name = "src", customType = "ImageSource")
     public void setSrc(ImageView node, @Nullable ReadableMap src) {
       node.setSrc(src);
     }

@@ -33,7 +33,7 @@ RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGImage)
 {
   view.imageheight = [RCTConvert RNSVGLength:json];
 }
-RCT_EXPORT_VIEW_PROPERTY(src, id)
+RCT_EXPORT_VIEW_PROPERTY(src, UIImage)
 RCT_EXPORT_VIEW_PROPERTY(align, NSString)
 RCT_EXPORT_VIEW_PROPERTY(meetOrSlice, RNSVGVBMOS)
 
