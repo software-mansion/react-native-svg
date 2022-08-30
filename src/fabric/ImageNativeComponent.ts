@@ -51,8 +51,6 @@ interface NativeProps
     SvgRenderableCommonProps {
   x?: string;
   y?: string;
-  imagewidth?: string;
-  imageheight?: string;
   width?: string;
   height?: string;
   src?: ImageSource;

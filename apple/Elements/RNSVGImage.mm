@@ -74,12 +74,6 @@ using namespace facebook::react;
 
   self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
   self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.imageheight)) {
-    self.imageheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.imageheight)];
-  }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.imagewidth)) {
-    self.imagewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.imagewidth)];
-  }
   if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
     self.imageheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
   }

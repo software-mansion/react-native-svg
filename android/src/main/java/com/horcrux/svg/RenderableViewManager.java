@@ -1005,16 +1005,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setImagewidth(ImageView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
-    public void setImageheight(ImageView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
     public void setWidth(ImageView view, @Nullable String value) {
       view.setWidth(value);
     }

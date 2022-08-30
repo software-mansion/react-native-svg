@@ -25,8 +25,6 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength *)
 RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength *)
-RCT_EXPORT_VIEW_PROPERTY(imagewidth, RNSVGLength *)
-RCT_EXPORT_VIEW_PROPERTY(imageheight, RNSVGLength *)
 RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGImage)
 {
   view.imagewidth = [RCTConvert RNSVGLength:json];
