@@ -18,7 +18,7 @@
 @interface RNSVGImage : RNSVGRenderable
 
 @property (nonatomic, weak) RCTBridge *bridge;
-@property (nonatomic, assign) id src;
+@property (nonatomic, assign) RCTImageSource *src;
 @property (nonatomic, strong) RNSVGLength *x;
 @property (nonatomic, strong) RNSVGLength *y;
 @property (nonatomic, strong) RNSVGLength *imagewidth;
