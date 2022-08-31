@@ -60,17 +60,13 @@ type FontObject = Readonly<{
   fontVariationSettings?: string;
 }>;
 
-type SvgGroupCommonProps = Readonly<{
+interface SvgGroupCommonProps {
   fontSize?: string;
   fontWeight?: string;
   font?: FontObject;
-}>;
+}
 
-interface NativeProps
-  extends ViewProps,
-    SvgNodeCommonProps,
-    SvgRenderableCommonProps,
-    SvgGroupCommonProps {
+interface SvgTextCommonProps {
   dx?: ReadonlyArray<string>;
   dy?: ReadonlyArray<string>;
   x?: ReadonlyArray<string>;
@@ -83,5 +79,12 @@ interface NativeProps
   alignmentBaseline?: string;
   verticalAlign?: string;
 }
+
+interface NativeProps
+  extends ViewProps,
+    SvgNodeCommonProps,
+    SvgRenderableCommonProps,
+    SvgGroupCommonProps,
+    SvgTextCommonProps {}
 
 export default codegenNativeComponent<NativeProps>('RNSVGText');
