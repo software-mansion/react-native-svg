@@ -71,11 +71,8 @@ interface NativeProps
     SvgNodeCommonProps,
     SvgRenderableCommonProps,
     SvgGroupCommonProps {
-  textAnchor?: string;
   dx?: ReadonlyArray<string>;
   dy?: ReadonlyArray<string>;
-  positionX?: ReadonlyArray<string>;
-  positionY?: ReadonlyArray<string>;
   x?: ReadonlyArray<string>;
   y?: ReadonlyArray<string>;
   rotate?: ReadonlyArray<string>;
@@ -84,6 +81,7 @@ interface NativeProps
   baselineShift?: string;
   lengthAdjust?: string;
   alignmentBaseline?: string;
+  verticalAlign?: string;
   content?: string;
 }
 

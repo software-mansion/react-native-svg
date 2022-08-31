@@ -814,24 +814,12 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       view.setMethod(value);
     }
 
-    public void setTextAnchor(K view, @Nullable String value) {
-      // TODO: is it available on Android?
-    }
-
     public void setDx(K view, @Nullable ReadableArray value) {
       view.setDeltaX(value);
     }
 
     public void setDy(K view, @Nullable ReadableArray value) {
       view.setDeltaY(value);
-    }
-
-    public void setPositionX(K view, @Nullable ReadableArray value) {
-      view.setPositionX(value);
-    }
-
-    public void setPositionY(K view, @Nullable ReadableArray value) {
-      view.setPositionY(value);
     }
 
     public void setX(K view, @Nullable ReadableArray value) {
