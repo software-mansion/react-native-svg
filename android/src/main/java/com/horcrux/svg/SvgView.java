@@ -19,7 +19,6 @@ import android.graphics.Typeface;
 import android.util.Base64;
 import android.view.View;
 import android.view.ViewParent;
-import com.facebook.react.bridge.ColorPropConverter;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -187,21 +186,6 @@ public class SvgView extends FabricEnabledViewGroup
   }
 
   @ReactProp(name = "tintColor")
-  public void setTintColor(@Nullable Dynamic tintColor) {
-    switch (tintColor.getType()) {
-      case Map:
-        mTintColor = ColorPropConverter.getColor(tintColor.asMap(), getContext());
-        break;
-      case Number:
-        mTintColor = tintColor.asInt();
-        break;
-      default:
-        mTintColor = 0;
-    }
-    invalidate();
-    clearChildCache();
-  }
-
   public void setTintColor(@Nullable Integer tintColor) {
     mTintColor = tintColor;
     invalidate();

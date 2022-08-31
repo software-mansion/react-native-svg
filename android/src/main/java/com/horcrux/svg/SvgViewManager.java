@@ -87,13 +87,15 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
     return true;
   }
 
-  @ReactProp(name = "tintColor")
-  public void setTintColor(SvgView node, @Nullable Dynamic tintColor) {
+  @ReactProp(name = "tintColor", customType = "Color")
+  @Override
+  public void setTintColor(SvgView node, Integer tintColor) {
     node.setTintColor(tintColor);
   }
 
-  @ReactProp(name = "color")
-  public void setColor(SvgView node, @Nullable Dynamic color) {
+  @ReactProp(name = "color", customType = "Color")
+  @Override
+  public void setColor(SvgView node, Integer color) {
     node.setTintColor(color);
   }
 
@@ -141,16 +143,6 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
   @Override
   public void setMeetOrSlice(SvgView node, int meetOrSlice) {
     node.setMeetOrSlice(meetOrSlice);
-  }
-
-  @Override
-  public void setTintColor(SvgView view, @Nullable Integer value) {
-    view.setTintColor(value);
-  }
-
-  @Override
-  public void setColor(SvgView view, @Nullable Integer value) {
-    view.setTintColor(value);
   }
 
   @Override
