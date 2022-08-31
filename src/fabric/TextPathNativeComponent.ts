@@ -43,10 +43,48 @@ interface SvgRenderableCommonProps {
   propList?: ReadonlyArray<string>;
 }
 
+type FontObject = Readonly<{
+  fontStyle?: string;
+  fontVariant?: string;
+  fontWeight?: string;
+  fontStretch?: string;
+  fontSize?: string;
+  fontFamily?: string;
+  textAnchor?: string;
+  textDecoration?: string;
+  letterSpacing?: string;
+  wordSpacing?: string;
+  kerning?: string;
+  fontFeatureSettings?: string;
+  fontVariantLigatures?: string;
+  fontVariationSettings?: string;
+}>;
+
+interface SvgGroupCommonProps {
+  fontSize?: string;
+  fontWeight?: string;
+  font?: FontObject;
+}
+
+interface SvgTextCommonProps {
+  dx?: ReadonlyArray<string>;
+  dy?: ReadonlyArray<string>;
+  x?: ReadonlyArray<string>;
+  y?: ReadonlyArray<string>;
+  rotate?: ReadonlyArray<string>;
+  inlineSize?: string;
+  textLength?: string;
+  baselineShift?: string;
+  lengthAdjust?: string;
+  alignmentBaseline?: string;
+  verticalAlign?: string;
+}
 interface NativeProps
   extends ViewProps,
     SvgNodeCommonProps,
-    SvgRenderableCommonProps {
+    SvgRenderableCommonProps,
+    SvgGroupCommonProps,
+    SvgTextCommonProps {
   href?: string;
   side?: string;
   method?: string;

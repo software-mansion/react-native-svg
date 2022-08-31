@@ -51,22 +51,7 @@ using namespace facebook::react;
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGTextProps>(props);
 
-  self.deltaX = createLengthArrayFromStrings(newProps.dx);
-  self.deltaY = createLengthArrayFromStrings(newProps.dy);
-  if (!newProps.x.empty()) {
-    self.positionX = createLengthArrayFromStrings(newProps.x);
-  }
-  if (!newProps.y.empty()) {
-    self.positionY = createLengthArrayFromStrings(newProps.y);
-  }
-  self.rotate = createLengthArrayFromStrings(newProps.rotate);
-  self.inlineSize = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.inlineSize)];
-  self.textLength = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.textLength)];
-  self.baselineShift = RCTNSStringFromStringNilIfEmpty(newProps.baselineShift);
-  self.lengthAdjust = RCTNSStringFromStringNilIfEmpty(newProps.lengthAdjust);
-  self.alignmentBaseline = RCTNSStringFromStringNilIfEmpty(newProps.alignmentBaseline);
-
-  setCommonGroupProps(newProps, self);
+  setCommonTextProps(newProps, self);
 }
 
 - (void)prepareForRecycle

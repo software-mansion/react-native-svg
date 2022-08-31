@@ -48,7 +48,7 @@ using namespace facebook::react;
   self.spacing = RCTNSStringFromStringNilIfEmpty(newProps.spacing);
   self.startOffset = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.startOffset)];
 
-  setCommonRenderableProps(newProps, self);
+  setCommonTextProps(newProps, self);
 }
 
 - (void)prepareForRecycle
