@@ -87,7 +87,7 @@ using namespace facebook::react;
     CGSize size = RCTCGSizeFromSize(newProps.src.size);
     CGFloat scale = newProps.src.scale;
     RCTImageSource *imageSource = [[RCTImageSource alloc] initWithURLRequest:request size:size scale:scale];
-    [self setImageSrc:imageSource request:request];
+    [self setSrc:imageSource];
   }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
@@ -135,46 +135,19 @@ using namespace facebook::react;
     _reloadImageCancellationBlock = nil;
   }
 
-  _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"]
-      loadImageWithURLRequest:src.request
-                     callback:^(NSError *error, UIImage *image) {
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                         self->_image = CGImageRetain(image.CGImage);
-                         self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
-                         [self invalidate];
-                       });
-                     }];
-}
-
-- (void)setImageSrc:(RCTImageSource *)source request:(NSURLRequest *)request
-{
-  CGImageRelease(_image);
-  _image = nil;
-  if (source.size.width != 0 && source.size.height != 0) {
-    _imageSize = source.size;
-  } else {
-    _imageSize = CGSizeMake(0, 0);
-  }
-
-  RCTImageLoaderCancellationBlock previousCancellationBlock = _reloadImageCancellationBlock;
-  if (previousCancellationBlock) {
-    previousCancellationBlock();
-    _reloadImageCancellationBlock = nil;
-  }
-
   _reloadImageCancellationBlock = [[
 #ifdef RN_FABRIC_ENABLED
-        [RCTBridge currentBridge]
+          [RCTBridge currentBridge]
 #else
-        self.bridge
+          self.bridge
 #endif // RN_FABRIC_ENABLED
-        moduleForName:@"ImageLoader"] loadImageWithURLRequest:request callback:^(NSError *error, UIImage *image) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self->_image = CGImageRetain(image.CGImage);
-            self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
-            [self invalidate];
-        });
-    }];
+          moduleForName:@"ImageLoader"] loadImageWithURLRequest:src.request callback:^(NSError *error, UIImage *image) {
+          dispatch_async(dispatch_get_main_queue(), ^{
+              self->_image = CGImageRetain(image.CGImage);
+              self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+              [self invalidate];
+          });
+      }];
 }
 
 - (void)setX:(RNSVGLength *)x
