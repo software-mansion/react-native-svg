@@ -101,12 +101,6 @@ public class RNSVGRectManagerDelegate<T extends View, U extends BaseViewManagerI
       case "y":
         mViewManager.setY(view, value == null ? null : (String) value);
         break;
-      case "rectheight":
-        mViewManager.setRectheight(view, value == null ? null : (String) value);
-        break;
-      case "rectwidth":
-        mViewManager.setRectwidth(view, value == null ? null : (String) value);
-        break;
       case "height":
         mViewManager.setHeight(view, value == null ? null : (String) value);
         break;

@@ -41,8 +41,6 @@ public interface RNSVGRectManagerInterface<T extends View> {
   void setPropList(T view, @Nullable ReadableArray value);
   void setX(T view, @Nullable String value);
   void setY(T view, @Nullable String value);
-  void setRectheight(T view, @Nullable String value);
-  void setRectwidth(T view, @Nullable String value);
   void setHeight(T view, @Nullable String value);
   void setWidth(T view, @Nullable String value);
   void setRx(T view, @Nullable String value);

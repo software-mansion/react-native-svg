@@ -44,8 +44,6 @@ public interface RNSVGForeignObjectManagerInterface<T extends View> {
   void setFont(T view, @Nullable ReadableMap value);
   void setX(T view, @Nullable String value);
   void setY(T view, @Nullable String value);
-  void setForeignObjectheight(T view, @Nullable String value);
-  void setForeignObjectwidth(T view, @Nullable String value);
   void setHeight(T view, @Nullable String value);
   void setWidth(T view, @Nullable String value);
 }

@@ -42,8 +42,6 @@ public interface RNSVGUseManagerInterface<T extends View> {
   void setHref(T view, @Nullable String value);
   void setX(T view, @Nullable String value);
   void setY(T view, @Nullable String value);
-  void setUseheight(T view, @Nullable String value);
-  void setUsewidth(T view, @Nullable String value);
   void setHeight(T view, @Nullable String value);
   void setWidth(T view, @Nullable String value);
 }

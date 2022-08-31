@@ -110,12 +110,6 @@ public class RNSVGForeignObjectManagerDelegate<T extends View, U extends BaseVie
       case "y":
         mViewManager.setY(view, value == null ? null : (String) value);
         break;
-      case "foreignObjectheight":
-        mViewManager.setForeignObjectheight(view, value == null ? null : (String) value);
-        break;
-      case "foreignObjectwidth":
-        mViewManager.setForeignObjectwidth(view, value == null ? null : (String) value);
-        break;
       case "height":
         mViewManager.setHeight(view, value == null ? null : (String) value);
         break;
