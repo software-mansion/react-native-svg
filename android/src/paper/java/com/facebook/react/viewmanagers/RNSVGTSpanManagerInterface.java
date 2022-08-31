@@ -42,11 +42,8 @@ public interface RNSVGTSpanManagerInterface<T extends View> {
   void setFontSize(T view, @Nullable String value);
   void setFontWeight(T view, @Nullable String value);
   void setFont(T view, @Nullable ReadableMap value);
-  void setTextAnchor(T view, @Nullable String value);
   void setDx(T view, @Nullable ReadableArray value);
   void setDy(T view, @Nullable ReadableArray value);
-  void setPositionX(T view, @Nullable ReadableArray value);
-  void setPositionY(T view, @Nullable ReadableArray value);
   void setX(T view, @Nullable ReadableArray value);
   void setY(T view, @Nullable ReadableArray value);
   void setRotate(T view, @Nullable ReadableArray value);
@@ -55,5 +52,6 @@ public interface RNSVGTSpanManagerInterface<T extends View> {
   void setBaselineShift(T view, @Nullable String value);
   void setLengthAdjust(T view, @Nullable String value);
   void setAlignmentBaseline(T view, @Nullable String value);
+  void setVerticalAlign(T view, @Nullable String value);
   void setContent(T view, @Nullable String value);
 }
