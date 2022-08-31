@@ -60,11 +60,11 @@ type FontObject = Readonly<{
   fontVariationSettings?: string;
 }>;
 
-type SvgGroupCommonProps = Readonly<{
+interface SvgGroupCommonProps {
   fontSize?: string;
   fontWeight?: string;
   font?: FontObject;
-}>;
+}
 
 interface NativeProps
   extends ViewProps,
