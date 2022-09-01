@@ -133,6 +133,7 @@ abstract public class RenderableView extends VirtualView implements ReactHitSlop
     if (fillType.equals(ReadableType.Map)) {
       ReadableMap fillMap = fill.asMap();
       setFill(fillMap);
+      return;
     }
 
     // This code will probably never be reached with current changes
@@ -204,6 +205,15 @@ abstract public class RenderableView extends VirtualView implements ReactHitSlop
       invalidate();
       return;
     }
+
+    ReadableType strokeType = strokeColors.getType();
+    if (strokeType.equals(ReadableType.Map)) {
+      ReadableMap strokeMap = strokeColors.asMap();
+      setStroke(strokeMap);
+      return;
+    }
+
+    // This code will probably never be reached with current changes
     ReadableType type = strokeColors.getType();
     if (type.equals(ReadableType.Number)) {
       stroke = JavaOnlyArray.of(0, strokeColors.asInt());
