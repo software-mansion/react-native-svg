@@ -719,6 +719,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGGroupManagerDelegate(this);
     }
 
+    public static final String REACT_CLASS = "RNSVGGroup";
+
     private final ViewManagerDelegate<GroupView> mDelegate;
 
     protected ViewManagerDelegate getDelegate() {
@@ -732,6 +734,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       super(SVGClass.RNSVGPath);
       mDelegate = new RNSVGPathManagerDelegate(this);
     }
+
+    public static final String REACT_CLASS = "RNSVGPath";
 
     private final ViewManagerDelegate<PathView> mDelegate;
 
@@ -854,6 +858,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGTextManagerDelegate(this);
     }
 
+    public static final String REACT_CLASS = "RNSVGText";
+
     private final ViewManagerDelegate<TextView> mDelegate;
 
     protected ViewManagerDelegate getDelegate() {
@@ -872,6 +878,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       super(SVGClass.RNSVGTSpan);
       mDelegate = new RNSVGTSpanManagerDelegate(this);
     }
+
+    public static final String REACT_CLASS = "RNSVGTSpan";
 
     TSpanViewManager(SVGClass svgClass) {
       super(svgClass);
@@ -896,6 +904,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       super(SVGClass.RNSVGTextPath);
       mDelegate = new RNSVGTextPathManagerDelegate(this);
     }
+
+    public static final String REACT_CLASS = "RNSVGTextPath";
 
     TextPathViewManager(SVGClass svgClass) {
       super(svgClass);
@@ -955,6 +965,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       super(SVGClass.RNSVGImage);
       mDelegate = new RNSVGImageManagerDelegate(this);
     }
+
+    public static final String REACT_CLASS = "RNSVGImage";
 
     private final ViewManagerDelegate<ImageView> mDelegate;
 
@@ -1025,6 +1037,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGCircleManagerDelegate(this);
     }
 
+    public static final String REACT_CLASS = "RNSVGCircle";
+
     private final ViewManagerDelegate<CircleView> mDelegate;
 
     protected ViewManagerDelegate getDelegate() {
@@ -1068,6 +1082,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       super(SVGClass.RNSVGEllipse);
       mDelegate = new RNSVGEllipseManagerDelegate(this);
     }
+
+    public static final String REACT_CLASS = "RNSVGEllipse";
 
     private final ViewManagerDelegate<EllipseView> mDelegate;
 
@@ -1124,6 +1140,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGLineManagerDelegate(this);
     }
 
+    public static final String REACT_CLASS = "RNSVGLine";
+
     private final ViewManagerDelegate<LineView> mDelegate;
 
     protected ViewManagerDelegate getDelegate() {
@@ -1178,6 +1196,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       super(SVGClass.RNSVGRect);
       mDelegate = new RNSVGRectManagerDelegate(this);
     }
+
+    public static final String REACT_CLASS = "RNSVGRect";
 
     private final ViewManagerDelegate<RectView> mDelegate;
 
@@ -1253,6 +1273,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGClipPathManagerDelegate(this);
     }
 
+    public static final String REACT_CLASS = "RNSVGClipPath";
+
     private final ViewManagerDelegate<ClipPathView> mDelegate;
 
     protected ViewManagerDelegate getDelegate() {
@@ -1268,6 +1290,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGDefsManagerDelegate(this);
     }
 
+    public static final String REACT_CLASS = "RNSVGDefs";
+
     private final ViewManagerDelegate<DefsView> mDelegate;
 
     protected ViewManagerDelegate getDelegate() {
@@ -1282,6 +1306,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       super(SVGClass.RNSVGUse);
       mDelegate = new RNSVGUseManagerDelegate(this);
     }
+
+    public static final String REACT_CLASS = "RNSVGUse";
 
     private final ViewManagerDelegate<UseView> mDelegate;
 
@@ -1342,6 +1368,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGSymbolManagerDelegate(this);
     }
 
+    public static final String REACT_CLASS = "RNSVGSymbol";
+
     private final ViewManagerDelegate<SymbolView> mDelegate;
 
     protected ViewManagerDelegate getDelegate() {
@@ -1385,6 +1413,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       super(SVGClass.RNSVGPattern);
       mDelegate = new RNSVGPatternManagerDelegate(this);
     }
+
+    public static final String REACT_CLASS = "RNSVGPattern";
 
     private final ViewManagerDelegate<PatternView> mDelegate;
 
@@ -1485,6 +1515,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGMaskManagerDelegate(this);
     }
 
+    public static final String REACT_CLASS = "RNSVGMask";
+
     private final ViewManagerDelegate<MaskView> mDelegate;
 
     protected ViewManagerDelegate getDelegate() {
@@ -1554,6 +1586,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGForeignObjectManagerDelegate(this);
     }
 
+    public static final String REACT_CLASS = "RNSVGForeignObject";
+
     private final ViewManagerDelegate<ForeignObjectView> mDelegate;
 
     protected ViewManagerDelegate getDelegate() {
@@ -1607,6 +1641,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       super(SVGClass.RNSVGMarker);
       mDelegate = new RNSVGMarkerManagerDelegate(this);
     }
+
+    public static final String REACT_CLASS = "RNSVGMarker";
 
     private final ViewManagerDelegate<MarkerView> mDelegate;
 
@@ -1703,6 +1739,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGLinearGradientManagerDelegate(this);
     }
 
+    public static final String REACT_CLASS = "RNSVGLinearGradient";
+
     private final ViewManagerDelegate<LinearGradientView> mDelegate;
 
     protected ViewManagerDelegate getDelegate() {
@@ -1772,6 +1810,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       super(SVGClass.RNSVGRadialGradient);
       mDelegate = new RNSVGRadialGradientManagerDelegate(this);
     }
+
+    public static final String REACT_CLASS = "RNSVGRadialGradient";
 
     private final ViewManagerDelegate<RadialGradientView> mDelegate;
 

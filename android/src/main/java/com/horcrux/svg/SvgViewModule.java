@@ -14,17 +14,22 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.UiThreadUtil;
+import com.facebook.react.module.annotations.ReactModule;
 import javax.annotation.Nonnull;
 
+@ReactModule(name = SvgViewModule.MODULE_NAME)
 class SvgViewModule extends ReactContextBaseJavaModule {
   SvgViewModule(ReactApplicationContext reactContext) {
     super(reactContext);
   }
 
+  public static final String NAME = "RNSVGSvgViewManager";
+  public static final String MODULE_NAME = "SvgViewModule";
+
   @Nonnull
   @Override
   public String getName() {
-    return "RNSVGSvgViewManager";
+    return NAME;
   }
 
   private static void toDataURL(

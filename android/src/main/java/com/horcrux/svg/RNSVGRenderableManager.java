@@ -23,20 +23,25 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.module.annotations.ReactModule;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.annotation.Nonnull;
 
+@ReactModule(name = RNSVGRenderableManager.MODULE_NAME)
 class RNSVGRenderableManager extends ReactContextBaseJavaModule {
   RNSVGRenderableManager(ReactApplicationContext reactContext) {
     super(reactContext);
   }
 
+  public static final String NAME = "RNSVGRenderableManager";
+  public static final String MODULE_NAME = "RNSVGRenderableManager";
+
   @Nonnull
   @Override
   public String getName() {
-    return "RNSVGRenderableManager";
+    return NAME;
   }
 
   @SuppressWarnings("unused")

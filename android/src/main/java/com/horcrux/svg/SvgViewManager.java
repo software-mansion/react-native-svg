@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
  */
 class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInterface<SvgView> {
 
-  private static final String REACT_CLASS = "RNSVGSvgView";
+  public static final String REACT_CLASS = "RNSVGSvgView";
 
   private static final SparseArray<SvgView> mTagToSvgView = new SparseArray<>();
   private static final SparseArray<Runnable> mTagToRunnable = new SparseArray<>();
