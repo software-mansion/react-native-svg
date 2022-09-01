@@ -1,6 +1,8 @@
 package com.horcrux.svg;
 
 import android.content.Context;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
@@ -11,14 +13,12 @@ import com.facebook.react.uimanager.FabricViewStateManager.HasFabricViewStateMan
 import com.facebook.react.uimanager.FabricViewStateManager.StateUpdateCallback;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.views.view.ReactViewGroup;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class FabricEnabledViewGroup extends ReactViewGroup
     implements HasFabricViewStateManager {
   private final FabricViewStateManager mFabricViewStateManager = new FabricViewStateManager();
 
-  @NotNull
+  @NonNull
   public FabricViewStateManager getFabricViewStateManager() {
     return this.mFabricViewStateManager;
   }

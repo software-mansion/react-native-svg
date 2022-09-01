@@ -1,8 +1,9 @@
 package com.horcrux.svg;
 
+import androidx.annotation.Nullable;
+
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.views.view.ReactViewGroup;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class FabricEnabledViewGroup extends ReactViewGroup {
 
