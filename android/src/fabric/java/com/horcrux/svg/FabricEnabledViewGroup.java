@@ -11,14 +11,14 @@ import com.facebook.react.uimanager.FabricViewStateManager.HasFabricViewStateMan
 import com.facebook.react.uimanager.FabricViewStateManager.StateUpdateCallback;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.views.view.ReactViewGroup;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public abstract class FabricEnabledViewGroup extends ReactViewGroup
     implements HasFabricViewStateManager {
   private final FabricViewStateManager mFabricViewStateManager = new FabricViewStateManager();
 
-  @NotNull
+  @NonNull
   public FabricViewStateManager getFabricViewStateManager() {
     return this.mFabricViewStateManager;
   }
