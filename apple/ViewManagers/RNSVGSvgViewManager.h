@@ -8,6 +8,12 @@
 
 #import <React/RCTViewManager.h>
 
-@interface RNSVGSvgViewManager : RCTViewManager
+#ifdef RN_FABRIC_ENABLED
+#import <rnsvg/rnsvg.h>
+#endif
 
+@interface RNSVGSvgViewManager : RCTViewManager
+#ifdef RN_FABRIC_ENABLED
+                                 <NativeSvgViewModuleSpec>
+#endif
 @end

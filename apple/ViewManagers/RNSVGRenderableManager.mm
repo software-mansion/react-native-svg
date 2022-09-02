@@ -202,6 +202,10 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getScreenCTM : (nonnull NSNumber *)reactT
   return @{@"a" : @(ctm.a), @"b" : @(ctm.b), @"c" : @(ctm.c), @"d" : @(ctm.d), @"e" : @(ctm.tx), @"f" : @(ctm.ty)};
 }
 
+- (void)getRawResource:(NSString *)name resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject
+{
+}
+
 - (RNSVGPlatformView *)getRenderableView:(NSNumber *)reactTag
 {
   __block RNSVGPlatformView *view;
@@ -210,5 +214,13 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getScreenCTM : (nonnull NSNumber *)reactT
   });
   return view;
 }
+
+#ifdef RN_FABRIC_ENABLED
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+    (const facebook::react::ObjCTurboModule::InitParams &)params
+{
+  return std::make_shared<facebook::react::NativeSvgRenderableModuleSpecJSI>(params);
+}
+#endif
 
 @end

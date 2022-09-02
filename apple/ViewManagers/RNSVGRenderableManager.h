@@ -9,7 +9,14 @@
 #import "RNSVGNodeManager.h"
 #import "RNSVGRenderable.h"
 
+#ifdef RN_FABRIC_ENABLED
+#import <rnsvg/rnsvg.h>
+#endif
+
 @interface RNSVGRenderableManager : RNSVGNodeManager
+#ifdef RN_FABRIC_ENABLED
+                                    <NativeSvgRenderableModuleSpec>
+#endif
 
 - (RNSVGRenderable *)node;
 

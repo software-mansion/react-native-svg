@@ -86,4 +86,12 @@ RCT_EXPORT_METHOD(toDataURL
   [self toDataURL:reactTag options:options callback:callback attempt:0];
 }
 
+#ifdef RN_FABRIC_ENABLED
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+    (const facebook::react::ObjCTurboModule::InitParams &)params
+{
+  return std::make_shared<facebook::react::NativeSvgRenderableModuleSpecJSI>(params);
+}
+#endif
+
 @end

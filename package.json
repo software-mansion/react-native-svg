@@ -114,7 +114,7 @@
     "libraries": [
       {
         "name": "rnsvg",
-        "type": "components",
+        "type": "all",
         "jsSrcsDir": "./src/fabric"
       }
     ]
