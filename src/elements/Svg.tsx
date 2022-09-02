@@ -5,7 +5,6 @@ import {
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
-  NativeModules,
   processColor,
   StyleProp,
   StyleSheet,
@@ -22,8 +21,7 @@ import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
 import G, { GProps } from './G';
 import { RNSVGSvg } from '../ReactNativeSVG';
-
-const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
+import { RNSVGSvgViewManager } from '../fabric';
 
 const styles = StyleSheet.create({
   svg: {
@@ -92,7 +90,7 @@ export default class Svg extends Shape<SvgProps> {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
-    RNSVGSvgViewManager.toDataURL(handle, options, callback);
+    RNSVGSvgViewManager?.toDataURL(handle, options, callback);
   };
 
   render() {

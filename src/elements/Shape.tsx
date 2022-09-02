@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
-import { NativeModules, findNodeHandle, NativeMethods } from 'react-native';
+import { findNodeHandle, NativeMethods } from 'react-native';
 import { TransformProps } from '../lib/extract/types';
-const { RNSVGRenderableManager } = NativeModules;
+import { RNSVGRenderableManager } from '../fabric';
 
 export interface SVGBoundingBoxOptions {
   fill?: boolean;
@@ -244,22 +244,22 @@ export default class Shape<P> extends Component<P> {
       matrix?: [number, number, number, number, number, number];
     } & TransformProps,
   ) => {
-    this.root && this.root.setNativeProps(props);
+    this.root?.setNativeProps(props);
   };
   /*
    * The following native methods are experimental and likely broken in some
    * ways. If you have a use case for these, please open an issue with a
    * representative example / reproduction.
    * */
-  getBBox = (options?: SVGBoundingBoxOptions): SVGRect => {
+  getBBox = (options?: SVGBoundingBoxOptions): SVGRect | undefined => {
     const {
       fill = true,
       stroke = true,
       markers = true,
       clipped = true,
     } = options || {};
-    const handle = findNodeHandle(this.root as Component);
-    return RNSVGRenderableManager.getBBox(handle, {
+    const handle = findNodeHandle(this.root);
+    return RNSVGRenderableManager?.getBBox(handle, {
       fill,
       stroke,
       markers,
@@ -267,29 +267,29 @@ export default class Shape<P> extends Component<P> {
     });
   };
   getCTM = (): SVGMatrix => {
-    const handle = findNodeHandle(this.root as Component);
-    return new SVGMatrix(RNSVGRenderableManager.getCTM(handle));
+    const handle = findNodeHandle(this.root);
+    return new SVGMatrix(RNSVGRenderableManager?.getCTM(handle));
   };
   getScreenCTM = (): SVGMatrix => {
-    const handle = findNodeHandle(this.root as Component);
-    return new SVGMatrix(RNSVGRenderableManager.getScreenCTM(handle));
+    const handle = findNodeHandle(this.root);
+    return new SVGMatrix(RNSVGRenderableManager?.getScreenCTM(handle));
   };
-  isPointInFill = (options: DOMPointInit): boolean => {
-    const handle = findNodeHandle(this.root as Component);
-    return RNSVGRenderableManager.isPointInFill(handle, options);
+  isPointInFill = (options: DOMPointInit): boolean | undefined => {
+    const handle = findNodeHandle(this.root);
+    return RNSVGRenderableManager?.isPointInFill(handle, options);
   };
-  isPointInStroke = (options: DOMPointInit): boolean => {
-    const handle = findNodeHandle(this.root as Component);
-    return RNSVGRenderableManager.isPointInStroke(handle, options);
+  isPointInStroke = (options: DOMPointInit): boolean | undefined => {
+    const handle = findNodeHandle(this.root);
+    return RNSVGRenderableManager?.isPointInStroke(handle, options);
   };
-  getTotalLength = (): number => {
-    const handle = findNodeHandle(this.root as Component);
-    return RNSVGRenderableManager.getTotalLength(handle);
+  getTotalLength = (): number | undefined => {
+    const handle = findNodeHandle(this.root);
+    return RNSVGRenderableManager?.getTotalLength(handle);
   };
   getPointAtLength = (length: number): SVGPoint => {
-    const handle = findNodeHandle(this.root as Component);
+    const handle = findNodeHandle(this.root);
     return new SVGPoint(
-      RNSVGRenderableManager.getPointAtLength(handle, { length }),
+      RNSVGRenderableManager?.getPointAtLength(handle, { length }),
     );
   };
 }

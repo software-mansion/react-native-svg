@@ -19,24 +19,23 @@ import android.graphics.Region;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
+import com.horcrux.rnsvg.NativeSvgRenderableModuleSpec;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.annotation.Nonnull;
 
-@ReactModule(name = RNSVGRenderableManager.MODULE_NAME)
-class RNSVGRenderableManager extends ReactContextBaseJavaModule {
+@ReactModule(name = RNSVGRenderableManager.NAME)
+class RNSVGRenderableManager extends NativeSvgRenderableModuleSpec {
   RNSVGRenderableManager(ReactApplicationContext reactContext) {
     super(reactContext);
   }
 
   public static final String NAME = "RNSVGRenderableManager";
-  public static final String MODULE_NAME = "RNSVGRenderableManager";
 
   @Nonnull
   @Override
@@ -46,8 +45,9 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
 
   @SuppressWarnings("unused")
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public boolean isPointInFill(int tag, ReadableMap options) {
-    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+  @Override
+  public boolean isPointInFill(Double tag, ReadableMap options) {
+    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag.intValue());
     if (svg == null) {
       return false;
     }
@@ -62,8 +62,9 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
 
   @SuppressWarnings("unused")
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public boolean isPointInStroke(int tag, ReadableMap options) {
-    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+  @Override
+  public boolean isPointInStroke(Double tag, ReadableMap options) {
+    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag.intValue());
     if (svg == null) {
       return false;
     }
@@ -87,8 +88,9 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
 
   @SuppressWarnings("unused")
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public float getTotalLength(int tag) {
-    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+  @Override
+  public double getTotalLength(Double tag) {
+    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag.intValue());
     if (svg == null) {
       return 0;
     }
@@ -108,8 +110,9 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
 
   @SuppressWarnings("unused")
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public WritableMap getPointAtLength(int tag, ReadableMap options) {
-    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+  @Override
+  public WritableMap getPointAtLength(Double tag, ReadableMap options) {
+    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag.intValue());
     if (svg == null) {
       return Arguments.createMap();
     }
@@ -142,8 +145,9 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
 
   @SuppressWarnings("unused")
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public WritableMap getBBox(int tag, ReadableMap options) {
-    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+  @Override
+  public WritableMap getBBox(Double tag, ReadableMap options) {
+    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag.intValue());
     if (svg == null) {
       return Arguments.createMap();
     }
@@ -192,8 +196,9 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
 
   @SuppressWarnings("unused")
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public WritableMap getCTM(int tag) {
-    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+  @Override
+  public WritableMap getCTM(Double tag) {
+    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag.intValue());
     if (svg == null) {
       return Arguments.createMap();
     }
@@ -218,8 +223,9 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
 
   @SuppressWarnings("unused")
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public WritableMap getScreenCTM(int tag) {
-    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag);
+  @Override
+  public WritableMap getScreenCTM(Double tag) {
+    RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag.intValue());
     if (svg == null) {
       return Arguments.createMap();
     }
@@ -239,6 +245,7 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  @Override
   public void getRawResource(String name, Promise promise) {
     try {
       ReactApplicationContext context = getReactApplicationContext();
@@ -271,4 +278,10 @@ class RNSVGRenderableManager extends ReactContextBaseJavaModule {
 
   private static final int EOF = -1;
   private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
+
+  @Override
+  public void initialize() {}
+
+  @Override
+  public void invalidate() {}
 }

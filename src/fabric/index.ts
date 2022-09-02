@@ -20,6 +20,9 @@ import RNSVGTextPath from './TextPathNativeComponent';
 import RNSVGTSpan from './TSpanNativeComponent';
 import RNSVGUse from './UseNativeComponent';
 
+import RNSVGSvgViewManager from './NativeSvgViewModule';
+import RNSVGRenderableManager from './NativeSvgRenderableModule';
+
 export {
   RNSVGCircle,
   RNSVGClipPath,
@@ -42,4 +45,6 @@ export {
   RNSVGTextPath,
   RNSVGTSpan,
   RNSVGUse,
+  RNSVGSvgViewManager,
+  RNSVGRenderableManager,
 };
