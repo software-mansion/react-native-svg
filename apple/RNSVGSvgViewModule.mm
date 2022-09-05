@@ -17,6 +17,7 @@
 RCT_EXPORT_MODULE()
 
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
+@synthesize bridge = _bridge;
 
 RCT_EXPORT_VIEW_PROPERTY(bbWidth, RNSVGLength *)
 RCT_EXPORT_VIEW_PROPERTY(bbHeight, RNSVGLength *)
@@ -34,7 +35,7 @@ RCT_REMAP_VIEW_PROPERTY(color, tintColor, UIColor)
          callback:(RCTResponseSenderBlock)callback
           attempt:(int)attempt
 {
-  dispatch_sync(RCTGetUIManagerQueue(), ^{
+  void (^block)(void) = ^{
     [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
       __kindof RNSVGPlatformView *view = [viewRegistry viewForReactTag:reactTag];
       NSString *b64;
@@ -73,7 +74,12 @@ RCT_REMAP_VIEW_PROPERTY(color, tintColor, UIColor)
         callback(@[]);
       }
     }];
-  });
+  };
+  if (self.bridge) {
+    dispatch_sync(RCTGetUIManagerQueue(), block);
+  } else {
+    dispatch_sync(dispatch_get_main_queue(), block);
+  }
 }
 
 RCT_EXPORT_METHOD(toDataURL
