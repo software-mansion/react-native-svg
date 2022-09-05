@@ -84,10 +84,4 @@ class SvgViewModule extends NativeSvgViewModuleSpec {
   public void toDataURL(Double tag, ReadableMap options, Callback successCallback) {
     toDataURL(tag.intValue(), options, successCallback, 0);
   }
-
-  @Override
-  public void initialize() {}
-
-  @Override
-  public void invalidate() {}
 }

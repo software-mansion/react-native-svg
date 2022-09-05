@@ -278,10 +278,4 @@ class RNSVGRenderableManager extends NativeSvgRenderableModuleSpec {
 
   private static final int EOF = -1;
   private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
-
-  @Override
-  public void initialize() {}
-
-  @Override
-  public void invalidate() {}
 }
