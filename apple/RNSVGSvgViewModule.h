@@ -8,10 +8,14 @@
 
 #ifdef RN_FABRIC_ENABLED
 #import <rnsvg/rnsvg.h>
+#else
+#import <React/RCTBridge.h>
 #endif
 
 @interface RNSVGSvgViewModule : NSObject
 #ifdef RN_FABRIC_ENABLED
                                 <NativeSvgViewModuleSpec>
+#else
+                                <RCTBridgeModule>
 #endif
 @end

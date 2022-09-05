@@ -34,44 +34,46 @@ RCT_REMAP_VIEW_PROPERTY(color, tintColor, UIColor)
          callback:(RCTResponseSenderBlock)callback
           attempt:(int)attempt
 {
-  [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
-    __kindof RNSVGPlatformView *view = [viewRegistry viewForReactTag:reactTag];
-    NSString *b64;
-    if ([view isKindOfClass:[RNSVGSvgView class]]) {
-      RNSVGSvgView *svg = view;
-      if (options == nil) {
-        b64 = [svg getDataURL];
-      } else {
-        id width = [options objectForKey:@"width"];
-        id height = [options objectForKey:@"height"];
-        if (![width isKindOfClass:NSNumber.class] || ![height isKindOfClass:NSNumber.class]) {
-          RCTLogError(@"Invalid width or height given to toDataURL");
-          return;
+  dispatch_sync(RCTGetUIManagerQueue(), ^{
+    [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
+      __kindof RNSVGPlatformView *view = [viewRegistry viewForReactTag:reactTag];
+      NSString *b64;
+      if ([view isKindOfClass:[RNSVGSvgView class]]) {
+        RNSVGSvgView *svg = view;
+        if (options == nil) {
+          b64 = [svg getDataURL];
+        } else {
+          id width = [options objectForKey:@"width"];
+          id height = [options objectForKey:@"height"];
+          if (![width isKindOfClass:NSNumber.class] || ![height isKindOfClass:NSNumber.class]) {
+            RCTLogError(@"Invalid width or height given to toDataURL");
+            return;
+          }
+          NSNumber *w = width;
+          NSInteger wi = (NSInteger)[w intValue];
+          NSNumber *h = height;
+          NSInteger hi = (NSInteger)[h intValue];
+
+          CGRect bounds = CGRectMake(0, 0, wi, hi);
+          b64 = [svg getDataURLwithBounds:bounds];
         }
-        NSNumber *w = width;
-        NSInteger wi = (NSInteger)[w intValue];
-        NSNumber *h = height;
-        NSInteger hi = (NSInteger)[h intValue];
-
-        CGRect bounds = CGRectMake(0, 0, wi, hi);
-        b64 = [svg getDataURLwithBounds:bounds];
+      } else {
+        RCTLogError(@"Invalid svg returned from registry, expecting RNSVGSvgView, got: %@", view);
+        return;
       }
-    } else {
-      RCTLogError(@"Invalid svg returned from registry, expecting RNSVGSvgView, got: %@", view);
-      return;
-    }
-    if (b64) {
-      callback(@[ b64 ]);
-    } else if (attempt < 1) {
-      void (^retryBlock)(void) = ^{
-        [self toDataURL:reactTag options:options callback:callback attempt:(attempt + 1)];
-      };
+      if (b64) {
+        callback(@[ b64 ]);
+      } else if (attempt < 1) {
+        void (^retryBlock)(void) = ^{
+          [self toDataURL:reactTag options:options callback:callback attempt:(attempt + 1)];
+        };
 
-      RCTExecuteOnUIManagerQueue(retryBlock);
-    } else {
-      callback(@[]);
-    }
-  }];
+        RCTExecuteOnUIManagerQueue(retryBlock);
+      } else {
+        callback(@[]);
+      }
+    }];
+  });
 }
 
 RCT_EXPORT_METHOD(toDataURL

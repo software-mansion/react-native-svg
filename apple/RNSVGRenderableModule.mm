@@ -192,7 +192,11 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getScreenCTM : (nonnull NSNumber *)reactT
 
 - (RNSVGPlatformView *)getRenderableView:(NSNumber *)reactTag
 {
-  return [self.viewRegistry_DEPRECATED viewForReactTag:reactTag];
+  __block RNSVGPlatformView *view;
+  dispatch_sync(dispatch_get_main_queue(), ^{
+    view = [self.viewRegistry_DEPRECATED viewForReactTag:reactTag];
+  });
+  return view;
 }
 
 #ifdef RN_FABRIC_ENABLED
