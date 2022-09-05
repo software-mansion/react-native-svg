@@ -9,4 +9,4 @@ export interface Spec extends TurboModule {
   ): void;
 }
 
-export default TurboModuleRegistry.get<Spec>('RNSVGSvgViewManager');
+export default TurboModuleRegistry.get<Spec>('RNSVGSvgViewModule');

@@ -23,7 +23,7 @@ class SvgViewModule extends NativeSvgViewModuleSpec {
     super(reactContext);
   }
 
-  public static final String NAME = "RNSVGSvgViewManager";
+  public static final String NAME = "RNSVGSvgViewModule";
 
   @Nonnull
   @Override

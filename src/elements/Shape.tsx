@@ -2,7 +2,7 @@ import { Component } from 'react';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
 import { findNodeHandle, NativeMethods } from 'react-native';
 import { TransformProps } from '../lib/extract/types';
-import { RNSVGRenderableManager } from '../fabric';
+import { RNSVGRenderableModule } from '../fabric';
 
 export interface SVGBoundingBoxOptions {
   fill?: boolean;
@@ -259,7 +259,7 @@ export default class Shape<P> extends Component<P> {
       clipped = true,
     } = options || {};
     const handle = findNodeHandle(this.root);
-    return RNSVGRenderableManager?.getBBox(handle, {
+    return RNSVGRenderableModule?.getBBox(handle, {
       fill,
       stroke,
       markers,
@@ -268,28 +268,28 @@ export default class Shape<P> extends Component<P> {
   };
   getCTM = (): SVGMatrix => {
     const handle = findNodeHandle(this.root);
-    return new SVGMatrix(RNSVGRenderableManager?.getCTM(handle));
+    return new SVGMatrix(RNSVGRenderableModule?.getCTM(handle));
   };
   getScreenCTM = (): SVGMatrix => {
     const handle = findNodeHandle(this.root);
-    return new SVGMatrix(RNSVGRenderableManager?.getScreenCTM(handle));
+    return new SVGMatrix(RNSVGRenderableModule?.getScreenCTM(handle));
   };
   isPointInFill = (options: DOMPointInit): boolean | undefined => {
     const handle = findNodeHandle(this.root);
-    return RNSVGRenderableManager?.isPointInFill(handle, options);
+    return RNSVGRenderableModule?.isPointInFill(handle, options);
   };
   isPointInStroke = (options: DOMPointInit): boolean | undefined => {
     const handle = findNodeHandle(this.root);
-    return RNSVGRenderableManager?.isPointInStroke(handle, options);
+    return RNSVGRenderableModule?.isPointInStroke(handle, options);
   };
   getTotalLength = (): number | undefined => {
     const handle = findNodeHandle(this.root);
-    return RNSVGRenderableManager?.getTotalLength(handle);
+    return RNSVGRenderableModule?.getTotalLength(handle);
   };
   getPointAtLength = (length: number): SVGPoint => {
     const handle = findNodeHandle(this.root);
     return new SVGPoint(
-      RNSVGRenderableManager?.getPointAtLength(handle, { length }),
+      RNSVGRenderableModule?.getPointAtLength(handle, { length }),
     );
   };
 }

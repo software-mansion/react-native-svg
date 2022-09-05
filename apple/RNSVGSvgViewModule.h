@@ -6,11 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RNSVGNodeManager.h"
-#import "RNSVGRenderable.h"
+#ifdef RN_FABRIC_ENABLED
+#import <rnsvg/rnsvg.h>
+#endif
 
-@interface RNSVGRenderableManager : RNSVGNodeManager
-
-- (RNSVGRenderable *)node;
-
+@interface RNSVGSvgViewModule : NSObject
+#ifdef RN_FABRIC_ENABLED
+                                <NativeSvgViewModuleSpec>
+#endif
 @end

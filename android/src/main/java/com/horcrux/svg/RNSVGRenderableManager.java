@@ -35,7 +35,7 @@ class RNSVGRenderableManager extends NativeSvgRenderableModuleSpec {
     super(reactContext);
   }
 
-  public static final String NAME = "RNSVGRenderableManager";
+  public static final String NAME = "RNSVGRenderableModule";
 
   @Nonnull
   @Override
