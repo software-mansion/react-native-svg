@@ -58,7 +58,7 @@ expo install react-native-svg
 
 ## Supported react-native versions
 
-| react-native-svg | react-native | 
+| react-native-svg | react-native |
 | ---------------- | ------------ |
 | 3.2.0            | 0.29         |
 | 4.2.0            | 0.32         |
@@ -77,6 +77,7 @@ expo install react-native-svg
 | >=12.3.0         | >=0.63.0     |
 
 ## Support for Fabric
+
 [Fabric](https://reactnative.dev/architecture/fabric-renderer) is React Native's new rendering system. As of [version `13.0.0`](https://github.com/react-native-svg/react-native-svg/releases/tag/v13.0.0) of this project, Fabric is supported only for react-native 0.69.0+. Support for earlier versions is not possible due to breaking changes in configuration.
 
 | react-native-svg | react-native |
