@@ -1,12 +1,15 @@
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import type { ViewProps, ColorValue } from 'react-native';
+// TODO: import ImageSource from codegen types when it is available
+import type {
+  ViewProps,
+  ColorValue,
+  ImageSourcePropType as ImageSource,
+} from 'react-native';
 import type {
   Float,
   Int32,
   WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
-// @ts-ignore TODO: remove once there is a .d.ts file with definitions
-import type { ImageSource } from 'react-native/Libraries/Image/ImageSource';
 
 interface SvgNodeCommonProps {
   name?: string;
