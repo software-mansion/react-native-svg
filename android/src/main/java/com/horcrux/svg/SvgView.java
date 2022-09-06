@@ -25,6 +25,7 @@ import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.ReactCompoundView;
 import com.facebook.react.uimanager.ReactCompoundViewGroup;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.views.view.ReactViewGroup;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,8 +34,7 @@ import javax.annotation.Nullable;
 
 /** Custom {@link View} implementation that draws an RNSVGSvg React view and its children. */
 @SuppressLint("ViewConstructor")
-public class SvgView extends FabricEnabledViewGroup
-    implements ReactCompoundView, ReactCompoundViewGroup {
+public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactCompoundViewGroup {
 
   @Override
   public boolean interceptsTouchEvent(float touchX, float touchY) {

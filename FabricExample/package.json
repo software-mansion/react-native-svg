@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "react": "18.1.0",
-    "react-native": "0.70.0-rc.3",
+    "react-native": "0.70.0",
     "react-native-svg": "link:../"
   },
   "devDependencies": {
@@ -21,7 +21,7 @@
     "babel-jest": "^26.6.3",
     "eslint": "^7.32.0",
     "jest": "^26.6.3",
-    "metro-react-native-babel-preset": "^0.72.0",
+    "metro-react-native-babel-preset": "^0.72.1",
     "react-test-renderer": "18.1.0"
   },
   "jest": {
