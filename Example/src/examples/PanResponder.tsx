@@ -29,7 +29,9 @@ class PanExample extends PureComponent {
         xy.setOffset(offset);
         xy.setValue(zeroDelta);
       },
-      onPanResponderMove: Animated.event([null, {dx, dy}]),
+      onPanResponderMove: Animated.event([null, {dx, dy}], {
+        useNativeDriver: false,
+      }),
       onPanResponderRelease: () => {
         xy.flattenOffset();
       },
