@@ -65,20 +65,16 @@ RCT_REMAP_VIEW_PROPERTY(color, tintColor, UIColor)
       if (b64) {
         callback(@[ b64 ]);
       } else if (attempt < 1) {
-        void (^retryBlock)(void) = ^{
-          [self toDataURL:reactTag options:options callback:callback attempt:(attempt + 1)];
-        };
-
-        RCTExecuteOnUIManagerQueue(retryBlock);
+        [self toDataURL:reactTag options:options callback:callback attempt:(attempt + 1)];
       } else {
         callback(@[]);
       }
     }];
   };
   if (self.bridge) {
-    dispatch_sync(RCTGetUIManagerQueue(), block);
+    dispatch_async(RCTGetUIManagerQueue(), block);
   } else {
-    dispatch_sync(dispatch_get_main_queue(), block);
+    dispatch_async(dispatch_get_main_queue(), block);
   }
 }
 
