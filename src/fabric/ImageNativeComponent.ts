@@ -61,4 +61,6 @@ interface NativeProps
   meetOrSlice?: Int32;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGImage');
+export default codegenNativeComponent<NativeProps>('RNSVGImage', {
+  interfaceOnly: true,
+});
