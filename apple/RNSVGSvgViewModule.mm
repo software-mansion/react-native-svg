@@ -19,17 +19,6 @@ RCT_EXPORT_MODULE()
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
 @synthesize bridge = _bridge;
 
-RCT_EXPORT_VIEW_PROPERTY(bbWidth, RNSVGLength *)
-RCT_EXPORT_VIEW_PROPERTY(bbHeight, RNSVGLength *)
-RCT_EXPORT_VIEW_PROPERTY(minX, CGFloat)
-RCT_EXPORT_VIEW_PROPERTY(minY, CGFloat)
-RCT_EXPORT_VIEW_PROPERTY(vbWidth, CGFloat)
-RCT_EXPORT_VIEW_PROPERTY(vbHeight, CGFloat)
-RCT_EXPORT_VIEW_PROPERTY(align, NSString)
-RCT_EXPORT_VIEW_PROPERTY(meetOrSlice, RNSVGVBMOS)
-RCT_EXPORT_VIEW_PROPERTY(tintColor, UIColor)
-RCT_REMAP_VIEW_PROPERTY(color, tintColor, UIColor)
-
 - (void)toDataURL:(nonnull NSNumber *)reactTag
           options:(NSDictionary *)options
          callback:(RCTResponseSenderBlock)callback
