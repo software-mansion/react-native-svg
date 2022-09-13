@@ -39,7 +39,6 @@ import android.view.View;
 import android.view.ViewParent;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.text.ReactFontManager;
 import java.text.Bidi;
 import java.util.ArrayList;
@@ -66,7 +65,6 @@ class TSpanView extends TextView {
     assets = mContext.getResources().getAssets();
   }
 
-  @ReactProp(name = "content")
   public void setContent(@Nullable String content) {
     mContent = content;
     invalidate();

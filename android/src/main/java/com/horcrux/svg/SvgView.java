@@ -25,7 +25,6 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.ReactCompoundView;
 import com.facebook.react.uimanager.ReactCompoundViewGroup;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.view.ReactViewGroup;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -186,7 +185,6 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
   }
 
-  @ReactProp(name = "tintColor")
   public void setTintColor(@Nullable Dynamic tintColor) {
     switch (tintColor.getType()) {
       case Map:
@@ -208,35 +206,30 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     clearChildCache();
   }
 
-  @ReactProp(name = "minX")
   public void setMinX(float minX) {
     mMinX = minX;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "minY")
   public void setMinY(float minY) {
     mMinY = minY;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "vbWidth")
   public void setVbWidth(float vbWidth) {
     mVbWidth = vbWidth;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "vbHeight")
   public void setVbHeight(float vbHeight) {
     mVbHeight = vbHeight;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "bbWidth")
   public void setBbWidth(Dynamic bbWidth) {
     mbbWidth = SVGLength.from(bbWidth);
     invalidate();
@@ -249,7 +242,6 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     clearChildCache();
   }
 
-  @ReactProp(name = "bbHeight")
   public void setBbHeight(Dynamic bbHeight) {
     mbbHeight = SVGLength.from(bbHeight);
     invalidate();
@@ -262,14 +254,12 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     clearChildCache();
   }
 
-  @ReactProp(name = "align")
   public void setAlign(String align) {
     mAlign = align;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "meetOrSlice")
   public void setMeetOrSlice(int meetOrSlice) {
     mMeetOrSlice = meetOrSlice;
     invalidate();

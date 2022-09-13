@@ -21,7 +21,6 @@ import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.OnLayoutEvent;
 import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.UIManagerModule;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.view.ReactViewGroup;
 import java.util.ArrayList;
@@ -240,68 +239,57 @@ public abstract class VirtualView extends ReactViewGroup {
     canvas.restoreToCount(count);
   }
 
-  @ReactProp(name = "name")
   public void setName(String name) {
     mName = name;
     invalidate();
   }
 
-  @ReactProp(name = "display")
   public void setDisplay(String display) {
     mDisplay = display;
     invalidate();
   }
 
-  @ReactProp(name = "onLayout")
   public void setOnLayout(boolean onLayout) {
     mOnLayout = onLayout;
     invalidate();
   }
 
-  @ReactProp(name = "mask")
   public void setMask(String mask) {
     mMask = mask;
     invalidate();
   }
 
-  @ReactProp(name = "markerStart")
   public void setMarkerStart(String markerStart) {
     mMarkerStart = markerStart;
     invalidate();
   }
 
-  @ReactProp(name = "markerMid")
   public void setMarkerMid(String markerMid) {
     mMarkerMid = markerMid;
     invalidate();
   }
 
-  @ReactProp(name = "markerEnd")
   public void setMarkerEnd(String markerEnd) {
     mMarkerEnd = markerEnd;
     invalidate();
   }
 
-  @ReactProp(name = "clipPath")
   public void setClipPath(String clipPath) {
     mCachedClipPath = null;
     mClipPath = clipPath;
     invalidate();
   }
 
-  @ReactProp(name = "clipRule", defaultInt = CLIP_RULE_NONZERO)
   public void setClipRule(int clipRule) {
     mClipRule = clipRule;
     invalidate();
   }
 
-  @ReactProp(name = "opacity", defaultFloat = 1f)
   public void setOpacity(float opacity) {
     mOpacity = opacity;
     invalidate();
   }
 
-  @ReactProp(name = "matrix")
   public void setMatrix(Dynamic matrixArray) {
     ReadableType type = matrixArray.getType();
     if (!matrixArray.isNull() && type.equals(ReadableType.Array)) {
@@ -332,7 +320,6 @@ public abstract class VirtualView extends ReactViewGroup {
     clearParentCache();
   }
 
-  @ReactProp(name = "responsible")
   public void setResponsible(boolean responsible) {
     mResponsible = responsible;
     invalidate();

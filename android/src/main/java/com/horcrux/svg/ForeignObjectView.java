@@ -17,7 +17,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class ForeignObjectView extends GroupView {
@@ -48,7 +47,6 @@ class ForeignObjectView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "x")
   public void setX(Dynamic x) {
     mX = SVGLength.from(x);
     invalidate();
@@ -59,7 +57,6 @@ class ForeignObjectView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "y")
   public void setY(Dynamic y) {
     mY = SVGLength.from(y);
     invalidate();
@@ -70,7 +67,6 @@ class ForeignObjectView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "width")
   public void setWidth(Dynamic width) {
     mW = SVGLength.from(width);
     invalidate();
@@ -81,7 +77,6 @@ class ForeignObjectView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "height")
   public void setHeight(Dynamic height) {
     mH = SVGLength.from(height);
     invalidate();
