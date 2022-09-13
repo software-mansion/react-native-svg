@@ -20,7 +20,6 @@ RCT_EXPORT_MODULE()
   return [RNSVGText new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(textAnchor, RNSVGTextAnchor)
 RCT_CUSTOM_VIEW_PROPERTY(dx, id, RNSVGText)
 {
   view.deltaX = [RCTConvert RNSVGLengthArray:json];
