@@ -41,8 +41,6 @@ public interface RNSVGImageManagerInterface<T extends View> {
   void setPropList(T view, @Nullable ReadableArray value);
   void setX(T view, @Nullable String value);
   void setY(T view, @Nullable String value);
-  void setImagewidth(T view, @Nullable String value);
-  void setImageheight(T view, @Nullable String value);
   void setWidth(T view, @Nullable String value);
   void setHeight(T view, @Nullable String value);
   void setSrc(T view, @Nullable ReadableMap value);

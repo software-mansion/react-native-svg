@@ -104,20 +104,11 @@ public class RNSVGTSpanManagerDelegate<T extends View, U extends BaseViewManager
       case "font":
         mViewManager.setFont(view, (ReadableMap) value);
         break;
-      case "textAnchor":
-        mViewManager.setTextAnchor(view, value == null ? null : (String) value);
-        break;
       case "dx":
         mViewManager.setDx(view, (ReadableArray) value);
         break;
       case "dy":
         mViewManager.setDy(view, (ReadableArray) value);
-        break;
-      case "positionX":
-        mViewManager.setPositionX(view, (ReadableArray) value);
-        break;
-      case "positionY":
-        mViewManager.setPositionY(view, (ReadableArray) value);
         break;
       case "x":
         mViewManager.setX(view, (ReadableArray) value);
@@ -142,6 +133,9 @@ public class RNSVGTSpanManagerDelegate<T extends View, U extends BaseViewManager
         break;
       case "alignmentBaseline":
         mViewManager.setAlignmentBaseline(view, value == null ? null : (String) value);
+        break;
+      case "verticalAlign":
+        mViewManager.setVerticalAlign(view, value == null ? null : (String) value);
         break;
       case "content":
         mViewManager.setContent(view, value == null ? null : (String) value);

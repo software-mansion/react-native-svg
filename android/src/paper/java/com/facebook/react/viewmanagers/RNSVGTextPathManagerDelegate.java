@@ -95,6 +95,48 @@ public class RNSVGTextPathManagerDelegate<T extends View, U extends BaseViewMana
       case "propList":
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
+      case "fontSize":
+        mViewManager.setFontSize(view, value == null ? null : (String) value);
+        break;
+      case "fontWeight":
+        mViewManager.setFontWeight(view, value == null ? null : (String) value);
+        break;
+      case "font":
+        mViewManager.setFont(view, (ReadableMap) value);
+        break;
+      case "dx":
+        mViewManager.setDx(view, (ReadableArray) value);
+        break;
+      case "dy":
+        mViewManager.setDy(view, (ReadableArray) value);
+        break;
+      case "x":
+        mViewManager.setX(view, (ReadableArray) value);
+        break;
+      case "y":
+        mViewManager.setY(view, (ReadableArray) value);
+        break;
+      case "rotate":
+        mViewManager.setRotate(view, (ReadableArray) value);
+        break;
+      case "inlineSize":
+        mViewManager.setInlineSize(view, value == null ? null : (String) value);
+        break;
+      case "textLength":
+        mViewManager.setTextLength(view, value == null ? null : (String) value);
+        break;
+      case "baselineShift":
+        mViewManager.setBaselineShift(view, value == null ? null : (String) value);
+        break;
+      case "lengthAdjust":
+        mViewManager.setLengthAdjust(view, value == null ? null : (String) value);
+        break;
+      case "alignmentBaseline":
+        mViewManager.setAlignmentBaseline(view, value == null ? null : (String) value);
+        break;
+      case "verticalAlign":
+        mViewManager.setVerticalAlign(view, value == null ? null : (String) value);
+        break;
       case "href":
         mViewManager.setHref(view, value == null ? null : (String) value);
         break;
