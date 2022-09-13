@@ -28,15 +28,6 @@ RCT_CUSTOM_VIEW_PROPERTY(dy, id, RNSVGText)
 {
   view.deltaY = [RCTConvert RNSVGLengthArray:json];
 }
-RCT_CUSTOM_VIEW_PROPERTY(positionX, id, RNSVGText)
-{
-  view.positionX = [RCTConvert RNSVGLengthArray:json];
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(positionY, id, RNSVGText)
-{
-  view.positionY = [RCTConvert RNSVGLengthArray:json];
-}
 RCT_CUSTOM_VIEW_PROPERTY(x, id, RNSVGText)
 {
   view.positionX = [RCTConvert RNSVGLengthArray:json];
