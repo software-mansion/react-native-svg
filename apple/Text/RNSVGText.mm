@@ -54,12 +54,6 @@ using namespace facebook::react;
   // textAnchor is in props of VM but not available on component
   self.deltaX = createLengthArrayFromStrings(newProps.dx);
   self.deltaY = createLengthArrayFromStrings(newProps.dy);
-  if (!newProps.positionX.empty()) {
-    self.positionX = createLengthArrayFromStrings(newProps.positionX);
-  }
-  if (!newProps.positionY.empty()) {
-    self.positionY = createLengthArrayFromStrings(newProps.positionY);
-  }
   if (!newProps.x.empty()) {
     self.positionX = createLengthArrayFromStrings(newProps.x);
   }
