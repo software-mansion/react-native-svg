@@ -1,21 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
  import React from 'react';
  import {
    SafeAreaView,
-   View,
-   StyleSheet,
-   Text,
    useColorScheme,
  } from 'react-native';
- import {Svg, Path, Ellipse} from 'react-native-svg';
- import Animated, {processColor, useAnimatedProps, useSharedValue, withRepeat, withTiming} from 'react-native-reanimated';
+ import {Svg, Ellipse} from 'react-native-svg';
+ import Animated, {createAnimatedPropAdapter, processColor, useAnimatedProps, useSharedValue, withRepeat, withTiming} from 'react-native-reanimated';
  
  import {Colors} from 'react-native/Libraries/NewAppScreen';
  
@@ -33,7 +22,7 @@
    const ellipseAnimatedProps = 
    useAnimatedProps(() => 
    {
-     const coordinates = {cx: 50, cy: 50, rx: 40, ry: 40, fill: 'blue'};
+     const coordinates = {cx: 50, cy: 50, rx: 40, ry: 40};
  
      return {
        cx: coordinates.cx,
@@ -41,12 +30,21 @@
        rx: coordinates.rx,
        ry: coordinates.ry,
        stroke: 'rgb(255,0,0)',
-       fill: {type: 0, payload: processColor('blue')},
+       fill: 'yellow',
        opacity: offset.value,
        strokeWidth: 2,
      };
    }
-   , []);
+   , [], createAnimatedPropAdapter(
+    (props) => {
+      if (Object.keys(props).includes('fill')) {
+        props.fill = {type: 0, payload: processColor(props.fill)}
+      }
+      if (Object.keys(props).includes('stroke')) {
+        props.stroke = {type: 0, payload: processColor(props.stroke)}
+      }
+    },
+    ['fill', 'stroke']));
  
    return (
      <SafeAreaView style={backgroundStyle}>
