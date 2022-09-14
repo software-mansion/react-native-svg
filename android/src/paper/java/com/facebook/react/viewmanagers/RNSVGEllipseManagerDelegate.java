@@ -106,6 +106,8 @@ public class RNSVGEllipseManagerDelegate<T extends View, U extends BaseViewManag
           mViewManager.setCx(view, (String) value);
         } else if (value instanceof Double) {
           mViewManager.setCx(view, (Double) value);
+        } else {
+          mViewManager.setCx(view, (Double) null);
         }
         break;
       case "cy":
@@ -113,6 +115,8 @@ public class RNSVGEllipseManagerDelegate<T extends View, U extends BaseViewManag
           mViewManager.setCy(view, (String) value);
         } else if (value instanceof Double) {
           mViewManager.setCy(view, (Double) value);
+        } else {
+          mViewManager.setCy(view, (Double) null);
         }
         break;
       case "rx":
@@ -120,6 +124,8 @@ public class RNSVGEllipseManagerDelegate<T extends View, U extends BaseViewManag
           mViewManager.setRx(view, (String) value);
         } else if (value instanceof Double) {
           mViewManager.setRx(view, (Double) value);
+        } else {
+          mViewManager.setRx(view, (Double) null);
         }
         break;
       case "ry":
@@ -127,6 +133,8 @@ public class RNSVGEllipseManagerDelegate<T extends View, U extends BaseViewManag
           mViewManager.setRy(view, (String) value);
         } else if (value instanceof Double) {
           mViewManager.setRy(view, (Double) value);
+        } else {
+          mViewManager.setRy(view, (Double) null);
         }
         break;
       default:

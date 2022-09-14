@@ -26,9 +26,13 @@ public interface RNSVGLinearGradientManagerInterface<T extends View> {
   void setResponsible(T view, boolean value);
   void setDisplay(T view, @Nullable String value);
   void setX1(T view, @Nullable String value);
+  void setX1(T view, @Nullable Double value);
   void setY1(T view, @Nullable String value);
+  void setY1(T view, @Nullable Double value);
   void setX2(T view, @Nullable String value);
+  void setX2(T view, @Nullable Double value);
   void setY2(T view, @Nullable String value);
+  void setY2(T view, @Nullable Double value);
   void setGradient(T view, @Nullable ReadableArray value);
   void setGradientUnits(T view, int value);
   void setGradientTransform(T view, @Nullable ReadableArray value);
