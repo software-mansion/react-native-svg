@@ -14,7 +14,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class SymbolView extends GroupView {
@@ -30,37 +29,31 @@ class SymbolView extends GroupView {
     super(reactContext);
   }
 
-  @ReactProp(name = "minX")
   public void setMinX(float minX) {
     mMinX = minX;
     invalidate();
   }
 
-  @ReactProp(name = "minY")
   public void setMinY(float minY) {
     mMinY = minY;
     invalidate();
   }
 
-  @ReactProp(name = "vbWidth")
   public void setVbWidth(float vbWidth) {
     mVbWidth = vbWidth;
     invalidate();
   }
 
-  @ReactProp(name = "vbHeight")
   public void setVbHeight(float vbHeight) {
     mVbHeight = vbHeight;
     invalidate();
   }
 
-  @ReactProp(name = "align")
   public void setAlign(String align) {
     mAlign = align;
     invalidate();
   }
 
-  @ReactProp(name = "meetOrSlice")
   public void setMeetOrSlice(int meetOrSlice) {
     mMeetOrSlice = meetOrSlice;
     invalidate();

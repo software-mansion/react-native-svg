@@ -13,7 +13,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class PathView extends RenderableView {
@@ -25,7 +24,6 @@ class PathView extends RenderableView {
     mPath = new Path();
   }
 
-  @ReactProp(name = "d")
   public void setD(String d) {
     mPath = PathParser.parse(d);
     elements = PathParser.elements;

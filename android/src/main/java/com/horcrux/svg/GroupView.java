@@ -20,7 +20,6 @@ import android.os.Build;
 import android.view.View;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import javax.annotation.Nullable;
 
 @SuppressLint("ViewConstructor")
@@ -32,7 +31,6 @@ class GroupView extends RenderableView {
     super(reactContext);
   }
 
-  @ReactProp(name = "font")
   public void setFont(@Nullable ReadableMap font) {
     mFont = font;
     invalidate();

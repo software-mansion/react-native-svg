@@ -30,7 +30,6 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.ReactConstants;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.imagehelper.ImageSource;
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -54,7 +53,6 @@ class ImageView extends RenderableView {
     super(reactContext);
   }
 
-  @ReactProp(name = "x")
   public void setX(Dynamic x) {
     mX = SVGLength.from(x);
     invalidate();
@@ -65,7 +63,6 @@ class ImageView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "y")
   public void setY(Dynamic y) {
     mY = SVGLength.from(y);
     invalidate();
@@ -76,7 +73,6 @@ class ImageView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "width")
   public void setWidth(Dynamic width) {
     mW = SVGLength.from(width);
     invalidate();
@@ -87,7 +83,6 @@ class ImageView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "height")
   public void setHeight(Dynamic height) {
     mH = SVGLength.from(height);
     invalidate();
@@ -98,7 +93,6 @@ class ImageView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "src")
   public void setSrc(@Nullable ReadableMap src) {
     if (src != null) {
       uriString = src.getString("uri");
@@ -122,13 +116,11 @@ class ImageView extends RenderableView {
     }
   }
 
-  @ReactProp(name = "align")
   public void setAlign(String align) {
     mAlign = align;
     invalidate();
   }
 
-  @ReactProp(name = "meetOrSlice")
   public void setMeetOrSlice(int meetOrSlice) {
     mMeetOrSlice = meetOrSlice;
     invalidate();

@@ -24,7 +24,6 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.ReactCompoundView;
 import com.facebook.react.uimanager.ReactCompoundViewGroup;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.view.ReactViewGroup;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -58,7 +57,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   private @Nullable Bitmap mBitmap;
-  private boolean mRemovedFromReactViewHierarchy;
+  private boolean mRemovalTransitionStarted;
 
   public SvgView(ReactContext reactContext) {
     super(reactContext);
@@ -73,10 +72,6 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     SvgViewManager.setSvgView(id, this);
   }
 
-  public void setRemovedFromReactViewHierarchy() {
-    mRemovedFromReactViewHierarchy = true;
-  }
-
   @Override
   public void invalidate() {
     super.invalidate();
@@ -89,7 +84,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       ((VirtualView) parent).getSvgView().invalidate();
       return;
     }
-    if (!mRemovedFromReactViewHierarchy) {
+    if (!mRemovalTransitionStarted) {
       // when view is removed from the view hierarchy, we want to recycle the mBitmap when
       // the view is detached from window, in order to preserve it for during animation, see
       // https://github.com/react-native-svg/react-native-svg/pull/1542
@@ -98,6 +93,11 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       }
       mBitmap = null;
     }
+  }
+
+  @Override
+  public void startViewTransition(View view) {
+    mRemovalTransitionStarted = true;
   }
 
   @Override
@@ -185,42 +185,36 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
   }
 
-  @ReactProp(name = "tintColor")
-  public void setTintColor(@Nullable Integer tintColor) {
+  public void setTintColor(Integer tintColor) {
     mTintColor = tintColor;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "minX")
   public void setMinX(float minX) {
     mMinX = minX;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "minY")
   public void setMinY(float minY) {
     mMinY = minY;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "vbWidth")
   public void setVbWidth(float vbWidth) {
     mVbWidth = vbWidth;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "vbHeight")
   public void setVbHeight(float vbHeight) {
     mVbHeight = vbHeight;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "bbWidth")
   public void setBbWidth(Dynamic bbWidth) {
     mbbWidth = SVGLength.from(bbWidth);
     invalidate();
@@ -233,7 +227,6 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     clearChildCache();
   }
 
-  @ReactProp(name = "bbHeight")
   public void setBbHeight(Dynamic bbHeight) {
     mbbHeight = SVGLength.from(bbHeight);
     invalidate();
@@ -246,14 +239,12 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     clearChildCache();
   }
 
-  @ReactProp(name = "align")
   public void setAlign(String align) {
     mAlign = align;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "meetOrSlice")
   public void setMeetOrSlice(int meetOrSlice) {
     mMeetOrSlice = meetOrSlice;
     invalidate();

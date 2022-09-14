@@ -15,7 +15,6 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.ReactConstants;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import javax.annotation.Nullable;
 
 @SuppressLint("ViewConstructor")
@@ -45,7 +44,6 @@ class MaskView extends GroupView {
     super(reactContext);
   }
 
-  @ReactProp(name = "x")
   public void setX(Dynamic x) {
     mX = SVGLength.from(x);
     invalidate();
@@ -56,7 +54,6 @@ class MaskView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "y")
   public void setY(Dynamic y) {
     mY = SVGLength.from(y);
     invalidate();
@@ -67,7 +64,6 @@ class MaskView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "width")
   public void setWidth(Dynamic width) {
     mW = SVGLength.from(width);
     invalidate();
@@ -78,7 +74,6 @@ class MaskView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "height")
   public void setHeight(Dynamic height) {
     mH = SVGLength.from(height);
     invalidate();
@@ -89,7 +84,6 @@ class MaskView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "maskUnits")
   public void setMaskUnits(int maskUnits) {
     switch (maskUnits) {
       case 0:
@@ -102,7 +96,6 @@ class MaskView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "maskContentUnits")
   public void setMaskContentUnits(int maskContentUnits) {
     switch (maskContentUnits) {
       case 0:
@@ -115,7 +108,6 @@ class MaskView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "maskTransform")
   public void setMaskTransform(@Nullable ReadableArray matrixArray) {
     if (matrixArray != null) {
       int matrixSize = PropHelper.toMatrixData(matrixArray, sRawMatrix, mScale);

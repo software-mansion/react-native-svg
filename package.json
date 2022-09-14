@@ -79,7 +79,7 @@
     "@types/jest": "^27.5.2",
     "@types/node": "*",
     "@types/react": "~18.0.15",
-    "@types/react-native": "^0.69.5",
+    "@types/react-native": "^0.70.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^28.1.0",
     "clang-format": "^1.8.0",
