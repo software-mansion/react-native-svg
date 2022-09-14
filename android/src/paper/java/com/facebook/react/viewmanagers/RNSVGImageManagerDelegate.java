@@ -101,12 +101,6 @@ public class RNSVGImageManagerDelegate<T extends View, U extends BaseViewManager
       case "y":
         mViewManager.setY(view, value == null ? null : (String) value);
         break;
-      case "imagewidth":
-        mViewManager.setImagewidth(view, value == null ? null : (String) value);
-        break;
-      case "imageheight":
-        mViewManager.setImageheight(view, value == null ? null : (String) value);
-        break;
       case "width":
         mViewManager.setWidth(view, value == null ? null : (String) value);
         break;

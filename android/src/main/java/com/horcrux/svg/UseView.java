@@ -17,7 +17,6 @@ import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.common.ReactConstants;
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class UseView extends RenderableView {
@@ -31,13 +30,11 @@ class UseView extends RenderableView {
     super(reactContext);
   }
 
-  @ReactProp(name = "href")
   public void setHref(String href) {
     mHref = href;
     invalidate();
   }
 
-  @ReactProp(name = "x")
   public void setX(Dynamic x) {
     mX = SVGLength.from(x);
     invalidate();
@@ -48,7 +45,6 @@ class UseView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "y")
   public void setY(Dynamic y) {
     mY = SVGLength.from(y);
     invalidate();
@@ -59,7 +55,6 @@ class UseView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "width")
   public void setWidth(Dynamic width) {
     mW = SVGLength.from(width);
     invalidate();
@@ -70,7 +65,6 @@ class UseView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "height")
   public void setHeight(Dynamic height) {
     mH = SVGLength.from(height);
     invalidate();

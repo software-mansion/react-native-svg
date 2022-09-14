@@ -110,12 +110,6 @@ public class RNSVGMaskManagerDelegate<T extends View, U extends BaseViewManagerI
       case "y":
         mViewManager.setY(view, value == null ? null : (String) value);
         break;
-      case "maskheight":
-        mViewManager.setMaskheight(view, value == null ? null : (String) value);
-        break;
-      case "maskwidth":
-        mViewManager.setMaskwidth(view, value == null ? null : (String) value);
-        break;
       case "height":
         mViewManager.setHeight(view, value == null ? null : (String) value);
         break;

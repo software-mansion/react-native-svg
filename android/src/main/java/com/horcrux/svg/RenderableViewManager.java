@@ -1001,16 +1001,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setImagewidth(ImageView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
-    public void setImageheight(ImageView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
     public void setWidth(ImageView view, @Nullable String value) {
       view.setWidth(value);
     }
@@ -1020,7 +1010,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       view.setHeight(value);
     }
 
-    @ReactProp(name = "src")
+    @ReactProp(name = "src", customType = "ImageSource")
     public void setSrc(ImageView node, @Nullable ReadableMap src) {
       node.setSrc(src);
     }
@@ -1244,16 +1234,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setRectheight(RectView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setRectwidth(RectView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
     public void setHeight(RectView view, @Nullable String value) {
       view.setHeight(value);
     }
@@ -1330,16 +1310,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @Override
     public void setY(UseView view, @Nullable String value) {
       view.setY(value);
-    }
-
-    @Override
-    public void setUseheight(UseView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setUsewidth(UseView view, @Nullable String value) {
-      view.setWidth(value);
     }
 
     @Override
@@ -1461,16 +1431,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setPatternheight(PatternView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setPatternwidth(PatternView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
     public void setHeight(PatternView view, @Nullable String value) {
       view.setHeight(value);
     }
@@ -1570,16 +1530,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setMaskheight(MaskView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setMaskwidth(MaskView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
     public void setHeight(MaskView view, @Nullable String value) {
       view.setHeight(value);
     }
@@ -1646,16 +1596,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @Override
     public void setY(ForeignObjectView view, @Nullable String value) {
       view.setY(value);
-    }
-
-    @Override
-    public void setForeignObjectheight(ForeignObjectView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setForeignObjectwidth(ForeignObjectView view, @Nullable String value) {
-      view.setWidth(value);
     }
 
     @Override

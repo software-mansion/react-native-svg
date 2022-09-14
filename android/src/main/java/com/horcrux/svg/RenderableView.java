@@ -28,7 +28,6 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.PointerEvents;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -101,13 +100,11 @@ public abstract class RenderableView extends VirtualView {
     RenderableViewManager.setRenderableView(id, this);
   }
 
-  @ReactProp(name = "vectorEffect")
   public void setVectorEffect(int vectorEffect) {
     this.vectorEffect = vectorEffect;
     invalidate();
   }
 
-  @ReactProp(name = "fill")
   public void setFill(@Nullable Dynamic fill) {
     if (fill == null || fill.isNull()) {
       this.fill = null;
@@ -163,13 +160,11 @@ public abstract class RenderableView extends VirtualView {
     invalidate();
   }
 
-  @ReactProp(name = "fillOpacity", defaultFloat = 1f)
   public void setFillOpacity(float fillOpacity) {
     this.fillOpacity = fillOpacity;
     invalidate();
   }
 
-  @ReactProp(name = "fillRule", defaultInt = FILL_RULE_NONZERO)
   public void setFillRule(int fillRule) {
     switch (fillRule) {
       case FILL_RULE_EVENODD:
@@ -184,7 +179,6 @@ public abstract class RenderableView extends VirtualView {
     invalidate();
   }
 
-  @ReactProp(name = "stroke")
   public void setStroke(@Nullable Dynamic strokeColors) {
     if (strokeColors == null || strokeColors.isNull()) {
       stroke = null;
@@ -241,13 +235,11 @@ public abstract class RenderableView extends VirtualView {
     invalidate();
   }
 
-  @ReactProp(name = "strokeOpacity", defaultFloat = 1f)
   public void setStrokeOpacity(float strokeOpacity) {
     this.strokeOpacity = strokeOpacity;
     invalidate();
   }
 
-  @ReactProp(name = "strokeDasharray")
   public void setStrokeDasharray(@Nullable ReadableArray strokeDasharray) {
     if (strokeDasharray != null) {
       int fromSize = strokeDasharray.size();
@@ -261,13 +253,11 @@ public abstract class RenderableView extends VirtualView {
     invalidate();
   }
 
-  @ReactProp(name = "strokeDashoffset")
   public void setStrokeDashoffset(float strokeDashoffset) {
     this.strokeDashoffset = strokeDashoffset * mScale;
     invalidate();
   }
 
-  @ReactProp(name = "strokeWidth")
   public void setStrokeWidth(Dynamic strokeWidth) {
     this.strokeWidth = SVGLength.from(strokeWidth);
     invalidate();
@@ -278,13 +268,11 @@ public abstract class RenderableView extends VirtualView {
     invalidate();
   }
 
-  @ReactProp(name = "strokeMiterlimit", defaultFloat = 4f)
   public void setStrokeMiterlimit(float strokeMiterlimit) {
     this.strokeMiterlimit = strokeMiterlimit;
     invalidate();
   }
 
-  @ReactProp(name = "strokeLinecap", defaultInt = CAP_ROUND)
   public void setStrokeLinecap(int strokeLinecap) {
     switch (strokeLinecap) {
       case CAP_BUTT:
@@ -303,7 +291,6 @@ public abstract class RenderableView extends VirtualView {
     invalidate();
   }
 
-  @ReactProp(name = "strokeLinejoin", defaultInt = JOIN_ROUND)
   public void setStrokeLinejoin(int strokeLinejoin) {
     switch (strokeLinejoin) {
       case JOIN_MITER:
@@ -322,7 +309,6 @@ public abstract class RenderableView extends VirtualView {
     invalidate();
   }
 
-  @ReactProp(name = "propList")
   public void setPropList(@Nullable ReadableArray propList) {
     if (propList != null) {
       mPropList = mAttributeList = new ArrayList<>();

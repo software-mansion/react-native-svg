@@ -110,12 +110,6 @@ public class RNSVGPatternManagerDelegate<T extends View, U extends BaseViewManag
       case "y":
         mViewManager.setY(view, value == null ? null : (String) value);
         break;
-      case "patternheight":
-        mViewManager.setPatternheight(view, value == null ? null : (String) value);
-        break;
-      case "patternwidth":
-        mViewManager.setPatternwidth(view, value == null ? null : (String) value);
-        break;
       case "height":
         mViewManager.setHeight(view, value == null ? null : (String) value);
         break;

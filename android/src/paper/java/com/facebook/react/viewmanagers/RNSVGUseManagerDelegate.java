@@ -104,12 +104,6 @@ public class RNSVGUseManagerDelegate<T extends View, U extends BaseViewManagerIn
       case "y":
         mViewManager.setY(view, value == null ? null : (String) value);
         break;
-      case "useheight":
-        mViewManager.setUseheight(view, value == null ? null : (String) value);
-        break;
-      case "usewidth":
-        mViewManager.setUsewidth(view, value == null ? null : (String) value);
-        break;
       case "height":
         mViewManager.setHeight(view, value == null ? null : (String) value);
         break;

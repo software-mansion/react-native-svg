@@ -15,7 +15,6 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.ReactConstants;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import javax.annotation.Nullable;
 
 @SuppressLint("ViewConstructor")
@@ -41,7 +40,6 @@ class RadialGradientView extends DefinitionView {
     super(reactContext);
   }
 
-  @ReactProp(name = "fx")
   public void setFx(Dynamic fx) {
     mFx = SVGLength.from(fx);
     invalidate();
@@ -52,7 +50,6 @@ class RadialGradientView extends DefinitionView {
     invalidate();
   }
 
-  @ReactProp(name = "fy")
   public void setFy(Dynamic fy) {
     mFy = SVGLength.from(fy);
     invalidate();
@@ -63,7 +60,6 @@ class RadialGradientView extends DefinitionView {
     invalidate();
   }
 
-  @ReactProp(name = "rx")
   public void setRx(Dynamic rx) {
     mRx = SVGLength.from(rx);
     invalidate();
@@ -74,7 +70,6 @@ class RadialGradientView extends DefinitionView {
     invalidate();
   }
 
-  @ReactProp(name = "ry")
   public void setRy(Dynamic ry) {
     mRy = SVGLength.from(ry);
     invalidate();
@@ -85,7 +80,6 @@ class RadialGradientView extends DefinitionView {
     invalidate();
   }
 
-  @ReactProp(name = "cx")
   public void setCx(Dynamic cx) {
     mCx = SVGLength.from(cx);
     invalidate();
@@ -96,7 +90,6 @@ class RadialGradientView extends DefinitionView {
     invalidate();
   }
 
-  @ReactProp(name = "cy")
   public void setCy(Dynamic cy) {
     mCy = SVGLength.from(cy);
     invalidate();
@@ -107,13 +100,11 @@ class RadialGradientView extends DefinitionView {
     invalidate();
   }
 
-  @ReactProp(name = "gradient")
   public void setGradient(ReadableArray gradient) {
     mGradient = gradient;
     invalidate();
   }
 
-  @ReactProp(name = "gradientUnits")
   public void setGradientUnits(int gradientUnits) {
     switch (gradientUnits) {
       case 0:
@@ -126,7 +117,6 @@ class RadialGradientView extends DefinitionView {
     invalidate();
   }
 
-  @ReactProp(name = "gradientTransform")
   public void setGradientTransform(@Nullable ReadableArray matrixArray) {
     if (matrixArray != null) {
       int matrixSize = PropHelper.toMatrixData(matrixArray, sRawMatrix, mScale);

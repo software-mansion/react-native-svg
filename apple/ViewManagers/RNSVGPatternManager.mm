@@ -20,8 +20,6 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength *)
 RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength *)
-RCT_EXPORT_VIEW_PROPERTY(patternheight, RNSVGLength *)
-RCT_EXPORT_VIEW_PROPERTY(patternwidth, RNSVGLength *)
 RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGPattern)
 {
   view.patternheight = [RCTConvert RNSVGLength:json];
