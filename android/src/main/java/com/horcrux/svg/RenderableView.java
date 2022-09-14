@@ -146,11 +146,11 @@ public abstract class RenderableView extends VirtualView {
     }
     int type = fill.getInt("type");
     if (type == 0) {
-      ReadableType valueType = fill.getType("value");
+      ReadableType valueType = fill.getType("payload");
       if (valueType.equals(ReadableType.Number)) {
-        this.fill = JavaOnlyArray.of(0, fill.getInt("value"));
+        this.fill = JavaOnlyArray.of(0, fill.getInt("payload"));
       } else if (valueType.equals(ReadableType.Map)) {
-        this.fill = JavaOnlyArray.of(0, fill.getMap("value"));
+        this.fill = JavaOnlyArray.of(0, fill.getMap("payload"));
       }
     } else if (type == 1) {
       this.fill = JavaOnlyArray.of(1, fill.getString("brushRef"));
@@ -221,11 +221,11 @@ public abstract class RenderableView extends VirtualView {
     }
     int type = stroke.getInt("type");
     if (type == 0) {
-      ReadableType valueType = stroke.getType("value");
-      if (valueType.equals(ReadableType.Number)) {
-        this.stroke = JavaOnlyArray.of(0, stroke.getInt("value"));
-      } else if (valueType.equals(ReadableType.Map)) {
-        this.stroke = JavaOnlyArray.of(0, stroke.getMap("value"));
+      ReadableType payloadType = stroke.getType("payload");
+      if (payloadType.equals(ReadableType.Number)) {
+        this.stroke = JavaOnlyArray.of(0, stroke.getInt("payload"));
+      } else if (payloadType.equals(ReadableType.Map)) {
+        this.stroke = JavaOnlyArray.of(0, stroke.getMap("payload"));
       }
     } else if (type == 1) {
       this.stroke = JavaOnlyArray.of(1, stroke.getString("brushRef"));

@@ -28,7 +28,7 @@ interface SvgNodeCommonProps {
 
 type ColorStruct = Readonly<{
   type?: WithDefault<Int32, -1>;
-  value?: ColorValue;
+  payload?: ColorValue;
   brushRef?: string;
 }>;
 
