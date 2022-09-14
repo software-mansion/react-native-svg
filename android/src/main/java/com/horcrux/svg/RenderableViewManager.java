@@ -1122,6 +1122,22 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     public void setRy(EllipseView view, @Nullable String value) {
       view.setRy(value);
     }
+
+    public void setCx(EllipseView view, @Nullable Double value) {
+      view.setCx(value);
+    }
+
+    public void setCy(EllipseView view, @Nullable Double value) {
+      view.setCy(value);
+    }
+
+    public void setRx(EllipseView view, @Nullable Double value) {
+      view.setRx(value);
+    }
+
+    public void setRy(EllipseView view, @Nullable Double value) {
+      view.setRy(value);
+    }
   }
 
   static class LineViewManager extends RenderableViewManager<LineView>
@@ -1912,6 +1928,10 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
   }
 
   public void setStrokeWidth(T view, @Nullable String value) {
+    view.setStrokeWidth(value);
+  }
+
+  public void setStrokeWidth(T view, @Nullable Double value) {
     view.setStrokeWidth(value);
   }
 

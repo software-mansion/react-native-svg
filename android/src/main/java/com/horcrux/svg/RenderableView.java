@@ -268,6 +268,11 @@ public abstract class RenderableView extends VirtualView {
     invalidate();
   }
 
+  public void setStrokeWidth(Double strokeWidth) {
+    this.strokeWidth = SVGLength.from(strokeWidth);
+    invalidate();
+  }
+
   public void setStrokeMiterlimit(float strokeMiterlimit) {
     this.strokeMiterlimit = strokeMiterlimit;
     invalidate();
