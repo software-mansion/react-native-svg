@@ -59,7 +59,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   private @Nullable Bitmap mBitmap;
-  private boolean mRemovedFromReactViewHierarchy;
+  private boolean mRemovalTransitionStarted;
 
   public SvgView(ReactContext reactContext) {
     super(reactContext);
@@ -74,10 +74,6 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     SvgViewManager.setSvgView(id, this);
   }
 
-  public void setRemovedFromReactViewHierarchy() {
-    mRemovedFromReactViewHierarchy = true;
-  }
-
   @Override
   public void invalidate() {
     super.invalidate();
@@ -90,7 +86,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       ((VirtualView) parent).getSvgView().invalidate();
       return;
     }
-    if (!mRemovedFromReactViewHierarchy) {
+    if (!mRemovalTransitionStarted) {
       // when view is removed from the view hierarchy, we want to recycle the mBitmap when
       // the view is detached from window, in order to preserve it for during animation, see
       // https://github.com/react-native-svg/react-native-svg/pull/1542
@@ -99,6 +95,11 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       }
       mBitmap = null;
     }
+  }
+
+  @Override
+  public void startViewTransition(View view) {
+    mRemovalTransitionStarted = true;
   }
 
   @Override
