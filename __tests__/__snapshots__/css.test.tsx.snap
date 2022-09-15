@@ -157,8 +157,8 @@ exports[`supports CSS in style element 1`] = `
       <RNSVGRect
         fill={
           Object {
+            "payload": 4294901760,
             "type": 0,
-            "value": 4294901760,
           }
         }
         height="200"
@@ -171,8 +171,8 @@ exports[`supports CSS in style element 1`] = `
         }
         stroke={
           Object {
+            "payload": 4278190335,
             "type": 0,
-            "value": 4278190335,
           }
         }
         strokeWidth="16"
@@ -185,8 +185,8 @@ exports[`supports CSS in style element 1`] = `
       <RNSVGRect
         fill={
           Object {
+            "payload": 4294901760,
             "type": 0,
-            "value": 4294901760,
           }
         }
         fillOpacity={0.3}
@@ -201,8 +201,8 @@ exports[`supports CSS in style element 1`] = `
         }
         stroke={
           Object {
+            "payload": 4278190335,
             "type": 0,
-            "value": 4278190335,
           }
         }
         strokeWidth="16"

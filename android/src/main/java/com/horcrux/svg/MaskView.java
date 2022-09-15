@@ -54,12 +54,22 @@ class MaskView extends GroupView {
     invalidate();
   }
 
+  public void setX(Double x) {
+    mX = SVGLength.from(x);
+    invalidate();
+  }
+
   public void setY(Dynamic y) {
     mY = SVGLength.from(y);
     invalidate();
   }
 
   public void setY(String y) {
+    mY = SVGLength.from(y);
+    invalidate();
+  }
+
+  public void setY(Double y) {
     mY = SVGLength.from(y);
     invalidate();
   }
@@ -74,12 +84,22 @@ class MaskView extends GroupView {
     invalidate();
   }
 
+  public void setWidth(Double width) {
+    mW = SVGLength.from(width);
+    invalidate();
+  }
+
   public void setHeight(Dynamic height) {
     mH = SVGLength.from(height);
     invalidate();
   }
 
   public void setHeight(String height) {
+    mH = SVGLength.from(height);
+    invalidate();
+  }
+
+  public void setHeight(Double height) {
     mH = SVGLength.from(height);
     invalidate();
   }

@@ -32,6 +32,7 @@ public interface RNSVGEllipseManagerInterface<T extends View> {
   void setStroke(T view, @Nullable ReadableMap value);
   void setStrokeOpacity(T view, float value);
   void setStrokeWidth(T view, @Nullable String value);
+  void setStrokeWidth(T view, @Nullable Double value);
   void setStrokeLinecap(T view, int value);
   void setStrokeLinejoin(T view, int value);
   void setStrokeDasharray(T view, @Nullable ReadableArray value);
@@ -40,7 +41,11 @@ public interface RNSVGEllipseManagerInterface<T extends View> {
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
   void setCx(T view, @Nullable String value);
+  void setCx(T view, @Nullable Double value);
   void setCy(T view, @Nullable String value);
+  void setCy(T view, @Nullable Double value);
   void setRx(T view, @Nullable String value);
+  void setRx(T view, @Nullable Double value);
   void setRy(T view, @Nullable String value);
+  void setRy(T view, @Nullable Double value);
 }
