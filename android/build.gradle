@@ -92,13 +92,3 @@ dependencies {
         implementation 'com.facebook.react:react-native:+'
     }
 }
-
-if (isNewArchitectureEnabled()) {
-    react {
-        reactRoot = rootProject.file("../node_modules/react-native/")
-        jsRootDir = file("../src/fabric/")
-        codegenDir = rootProject.file("../node_modules/react-native-codegen/")
-        libraryName = "rnsvg"
-        codegenJavaPackageName = "com.horcrux.rnsvg"
-    }
-}

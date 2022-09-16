@@ -12,18 +12,19 @@
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/imagemanager/ImageManager.h>
 #include <react/renderer/imagemanager/primitives.h>
+#include <jsi/jsi.h>
 
 #include "RNSVGImageState.h"
 
 namespace facebook {
 namespace react {
 
-extern const char RNSVGImageComponentName[];
+JSI_EXPORT extern const char RNSVGImageComponentName[];
 
 /*
  * `ShadowNode` for <RNSVGImage> component.
  */
-class RNSVGImageShadowNode final : public ConcreteViewShadowNode<
+class JSI_EXPORT RNSVGImageShadowNode final : public ConcreteViewShadowNode<
 RNSVGImageComponentName,
 RNSVGImageProps,
 ViewEventEmitter,

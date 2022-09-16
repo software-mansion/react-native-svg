@@ -51,6 +51,7 @@ class RNSVGImageState final {
   /*
    * Empty implementation for Android because it doesn't use this class.
    */
+  __attribute__((visibility("default")))
   folly::dynamic getDynamic() const {
     return {};
   };

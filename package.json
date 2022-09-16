@@ -111,12 +111,11 @@
   },
   "nativePackage": true,
   "codegenConfig": {
-    "libraries": [
-      {
-        "name": "rnsvg",
-        "type": "all",
-        "jsSrcsDir": "./src/fabric"
-      }
-    ]
+    "name": "rnsvg",
+    "type": "all",
+    "jsSrcsDir": "./src/fabric",
+    "android": {
+      "javaPackageName": "com.horcrux.svg"
+    }
   }
 }
