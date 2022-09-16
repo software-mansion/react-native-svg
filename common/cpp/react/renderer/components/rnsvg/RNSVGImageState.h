@@ -45,8 +45,7 @@ class RNSVGImageState final {
 
 
 #ifdef ANDROID
-    RNSVGImageState(RNSVGImageState const &previousState, folly::dynamic data)
-      : {};
+    RNSVGImageState(RNSVGImageState const &previousState, folly::dynamic data){};
 
   /*
    * Empty implementation for Android because it doesn't use this class.
