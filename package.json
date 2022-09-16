@@ -115,7 +115,7 @@
     "type": "all",
     "jsSrcsDir": "./src/fabric",
     "android": {
-      "javaPackageName": "com.horcrux.svg"
+      "javaPackageName": "com.horcrux.rnsvg"
     }
   }
 }
