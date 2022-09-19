@@ -72,12 +72,16 @@ void setCommonNodeProps(T nodeProps, RNSVGNode *node)
   switch (nodeProps.pointerEvents) {
     case facebook::react::PointerEventsMode::Auto:
       node.pointerEvents = RCTPointerEventsUnspecified;
+      break;
     case facebook::react::PointerEventsMode::None:
       node.pointerEvents = RCTPointerEventsNone;
+      break;
     case facebook::react::PointerEventsMode::BoxNone:
       node.pointerEvents = RCTPointerEventsBoxNone;
+      break;
     case facebook::react::PointerEventsMode::BoxOnly:
       node.pointerEvents = RCTPointerEventsBoxOnly;
+      break;
     default:
       node.pointerEvents = RCTPointerEventsUnspecified;
   }

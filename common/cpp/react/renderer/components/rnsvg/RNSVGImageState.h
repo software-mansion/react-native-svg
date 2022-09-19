@@ -21,7 +21,7 @@ namespace react {
 /*
  * State for <Image> component.
  */
-class RNSVGImageState final {
+class JSI_EXPORT RNSVGImageState final {
  public:
     RNSVGImageState(
       ImageSource const &imageSource,

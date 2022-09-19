@@ -134,7 +134,6 @@ import com.facebook.react.viewmanagers.RNSVGTextPathManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGTextPathManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGUseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGUseManagerInterface;
-import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -455,13 +454,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
 
   @ReactProp(name = ViewProps.POINTER_EVENTS)
   public void setPointerEvents(V view, @Nullable String pointerEventsStr) {
-    if (pointerEventsStr == null) {
-      view.setPointerEvents(PointerEvents.AUTO);
-    } else {
-      PointerEvents pointerEvents =
-          PointerEvents.valueOf(pointerEventsStr.toUpperCase(Locale.US).replace("-", "_"));
-      view.setPointerEvents(pointerEvents);
-    }
+    PointerEvents pointerEvents = PointerEvents.parsePointerEvents(pointerEventsStr);
+    view.setPointerEvents(pointerEvents);
   }
 
   @ReactProp(name = "onLayout")
