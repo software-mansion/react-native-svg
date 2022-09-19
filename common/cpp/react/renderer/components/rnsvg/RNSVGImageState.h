@@ -9,6 +9,7 @@
 
 #include <react/renderer/imagemanager/ImageRequest.h>
 #include <react/renderer/imagemanager/primitives.h>
+#include <jsi/jsi.h>
 
 #ifdef ANDROID
 #include <react/renderer/mapbuffer/MapBuffer.h>
@@ -40,7 +41,7 @@ class JSI_EXPORT RNSVGImageState final {
    * `ImageRequest` object cannot be copied or moved from `ImageLocalData`.
    */
   ImageRequest const &getImageRequest() const;
-    
+
 //    Float getBlurRadius() const;
 
 
@@ -50,7 +51,6 @@ class JSI_EXPORT RNSVGImageState final {
   /*
    * Empty implementation for Android because it doesn't use this class.
    */
-  __attribute__((visibility("default")))
   folly::dynamic getDynamic() const {
     return {};
   };
