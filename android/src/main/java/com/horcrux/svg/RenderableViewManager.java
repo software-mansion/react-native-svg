@@ -149,6 +149,12 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     mClassName = svgclass.toString();
   }
 
+  protected ViewManagerDelegate<V> mDelegate;
+
+  protected ViewManagerDelegate getDelegate() {
+    return mDelegate;
+  }
+
   static class RenderableShadowNode extends LayoutShadowNode {
 
     @SuppressWarnings({"unused", "EmptyMethod"})
@@ -724,13 +730,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGGroupManagerInterface<GroupView> {
     GroupViewManager() {
       super(SVGClass.RNSVGGroup);
-      mDelegate = new RNSVGGroupManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<GroupView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGGroupManagerDelegate(this));
     }
   }
 
@@ -738,13 +738,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGPathManagerInterface<PathView> {
     PathViewManager() {
       super(SVGClass.RNSVGPath);
-      mDelegate = new RNSVGPathManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<PathView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGPathManagerDelegate(this));
     }
 
     @ReactProp(name = "d")
@@ -883,18 +877,12 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGTextManagerInterface<TextView> {
     TextViewManager() {
       super(SVGClass.RNSVGText);
-      mDelegate = new RNSVGTextManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<TextView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGTextManagerDelegate(this));
     }
 
     TextViewManager(SVGClass svgClass) {
       super(svgClass);
-      mDelegate = new RNSVGTextManagerDelegate(this);
+      mDelegate = new MissingPropsDelegate(this, new RNSVGTextManagerDelegate(this));
     }
   }
 
@@ -902,18 +890,12 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGTSpanManagerInterface<TSpanView> {
     TSpanViewManager() {
       super(SVGClass.RNSVGTSpan);
-      mDelegate = new RNSVGTSpanManagerDelegate(this);
+      mDelegate = new MissingPropsDelegate(this, new RNSVGTSpanManagerDelegate(this));
     }
 
     TSpanViewManager(SVGClass svgClass) {
       super(svgClass);
-      mDelegate = new RNSVGTSpanManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<TSpanView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGTSpanManagerDelegate(this));
     }
 
     @ReactProp(name = "content")
@@ -926,18 +908,12 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGTextPathManagerInterface<TextPathView> {
     TextPathViewManager() {
       super(SVGClass.RNSVGTextPath);
-      mDelegate = new RNSVGTextPathManagerDelegate(this);
+      mDelegate = new MissingPropsDelegate(this, new RNSVGTextPathManagerDelegate(this));
     }
 
     TextPathViewManager(SVGClass svgClass) {
       super(svgClass);
-      mDelegate = new RNSVGTextPathManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<TextPathView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGTextPathManagerDelegate(this));
     }
 
     @ReactProp(name = "href")
@@ -989,13 +965,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGImageManagerInterface<ImageView> {
     ImageViewManager() {
       super(SVGClass.RNSVGImage);
-      mDelegate = new RNSVGImageManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<ImageView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGImageManagerDelegate(this));
     }
 
     @ReactProp(name = "x")
@@ -1074,13 +1044,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGCircleManagerInterface<CircleView> {
     CircleViewManager() {
       super(SVGClass.RNSVGCircle);
-      mDelegate = new RNSVGCircleManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<CircleView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGCircleManagerDelegate(this));
     }
 
     @ReactProp(name = "cx")
@@ -1130,13 +1094,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGEllipseManagerInterface<EllipseView> {
     EllipseViewManager() {
       super(SVGClass.RNSVGEllipse);
-      mDelegate = new RNSVGEllipseManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<EllipseView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGEllipseManagerDelegate(this));
     }
 
     @ReactProp(name = "cx")
@@ -1201,13 +1159,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
 
     LineViewManager() {
       super(SVGClass.RNSVGLine);
-      mDelegate = new RNSVGLineManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<LineView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGLineManagerDelegate(this));
     }
 
     @ReactProp(name = "x1")
@@ -1272,13 +1224,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
 
     RectViewManager() {
       super(SVGClass.RNSVGRect);
-      mDelegate = new RNSVGRectManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<RectView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGRectManagerDelegate(this));
     }
 
     @ReactProp(name = "x")
@@ -1370,13 +1316,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGClipPathManagerInterface<ClipPathView> {
     ClipPathViewManager() {
       super(SVGClass.RNSVGClipPath);
-      mDelegate = new RNSVGClipPathManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<ClipPathView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGClipPathManagerDelegate(this));
     }
   }
 
@@ -1385,13 +1325,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
 
     DefsViewManager() {
       super(SVGClass.RNSVGDefs);
-      mDelegate = new RNSVGDefsManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<DefsView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGDefsManagerDelegate(this));
     }
   }
 
@@ -1400,13 +1334,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
 
     UseViewManager() {
       super(SVGClass.RNSVGUse);
-      mDelegate = new RNSVGUseManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<UseView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGUseManagerDelegate(this));
     }
 
     @ReactProp(name = "href")
@@ -1475,13 +1403,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGSymbolManagerInterface<SymbolView> {
     SymbolManager() {
       super(SVGClass.RNSVGSymbol);
-      mDelegate = new RNSVGSymbolManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<SymbolView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGSymbolManagerDelegate(this));
     }
 
     @ReactProp(name = "minX")
@@ -1519,13 +1441,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGPatternManagerInterface<PatternView> {
     PatternManager() {
       super(SVGClass.RNSVGPattern);
-      mDelegate = new RNSVGPatternManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<PatternView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGPatternManagerDelegate(this));
     }
 
     @ReactProp(name = "x")
@@ -1634,13 +1550,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGMaskManagerInterface<MaskView> {
     MaskManager() {
       super(SVGClass.RNSVGMask);
-      mDelegate = new RNSVGMaskManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<MaskView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGMaskManagerDelegate(this));
     }
 
     @ReactProp(name = "x")
@@ -1719,13 +1629,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGForeignObjectManagerInterface<ForeignObjectView> {
     ForeignObjectManager() {
       super(SVGClass.RNSVGForeignObject);
-      mDelegate = new RNSVGForeignObjectManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<ForeignObjectView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGForeignObjectManagerDelegate(this));
     }
 
     @ReactProp(name = "x")
@@ -1789,13 +1693,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       implements RNSVGMarkerManagerInterface<MarkerView> {
     MarkerManager() {
       super(SVGClass.RNSVGMarker);
-      mDelegate = new RNSVGMarkerManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<MarkerView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGMarkerManagerDelegate(this));
     }
 
     @ReactProp(name = "refX")
@@ -1900,13 +1798,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
 
     LinearGradientManager() {
       super(SVGClass.RNSVGLinearGradient);
-      mDelegate = new RNSVGLinearGradientManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<RectView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGLinearGradientManagerDelegate(this));
     }
 
     @ReactProp(name = "x1")
@@ -1986,13 +1878,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
 
     RadialGradientManager() {
       super(SVGClass.RNSVGRadialGradient);
-      mDelegate = new RNSVGRadialGradientManagerDelegate(this);
-    }
-
-    private final ViewManagerDelegate<RectView> mDelegate;
-
-    protected ViewManagerDelegate getDelegate() {
-      return mDelegate;
+      mDelegate = new MissingPropsDelegate(this, new RNSVGRadialGradientManagerDelegate(this));
     }
 
     @ReactProp(name = "fx")
