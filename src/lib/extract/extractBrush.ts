@@ -30,14 +30,14 @@ export default function extractBrush(color?: ColorValue) {
 
   const processedColor = processColor(color);
   if (typeof processedColor === 'number') {
-    return { type: 0, value: processedColor };
+    return { type: 0, payload: processedColor };
   }
 
   if (typeof processedColor === 'object' && processedColor !== null) {
     // if we got an object, it should be `PlatformColor` or `DynamicColorIOS`,
     // so we pass it as an object with `0` value as first item, which is interpreted
     // on the native side as color to be managed by `RCTConvert`.
-    return { type: 0, value: processedColor };
+    return { type: 0, payload: processedColor };
   }
 
   console.warn(`"${String(color)}" is not a valid color or brush`);

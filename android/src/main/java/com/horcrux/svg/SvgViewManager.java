@@ -150,8 +150,16 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
     view.setBbWidth(value);
   }
 
+  public void setBbWidth(SvgView view, @Nullable Double value) {
+    view.setBbWidth(value);
+  }
+
   @Override
   public void setBbHeight(SvgView view, @Nullable String value) {
+    view.setBbHeight(value);
+  }
+
+  public void setBbHeight(SvgView view, @Nullable Double value) {
     view.setBbHeight(value);
   }
 }

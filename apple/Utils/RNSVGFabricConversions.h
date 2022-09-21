@@ -22,7 +22,7 @@ RNSVGBrush *brushFromColorStruct(T fillObject)
     {
       // These are probably expensive allocations since it's often the same value.
       // We should memoize colors but look ups may be just as expensive.
-      RNSVGColor *color = RCTUIColorFromSharedColor(fillObject.value) ?: [RNSVGColor clearColor];
+      RNSVGColor *color = RCTUIColorFromSharedColor(fillObject.payload) ?: [RNSVGColor clearColor];
       return [[RNSVGSolidColorBrush alloc] initWithColor:color];
     }
     case 1: // brush

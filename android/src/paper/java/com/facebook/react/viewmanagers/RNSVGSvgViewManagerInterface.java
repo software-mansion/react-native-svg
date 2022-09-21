@@ -14,7 +14,9 @@ import androidx.annotation.Nullable;
 
 public interface RNSVGSvgViewManagerInterface<T extends View> {
   void setBbWidth(T view, @Nullable String value);
+  void setBbWidth(T view, @Nullable Double value);
   void setBbHeight(T view, @Nullable String value);
+  void setBbHeight(T view, @Nullable Double value);
   void setMinX(T view, float value);
   void setMinY(T view, float value);
   void setVbWidth(T view, float value);

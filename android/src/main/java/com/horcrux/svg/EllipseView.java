@@ -37,12 +37,22 @@ class EllipseView extends RenderableView {
     invalidate();
   }
 
+  public void setCx(Double cx) {
+    mCx = SVGLength.from(cx);
+    invalidate();
+  }
+
   public void setCy(Dynamic cy) {
     mCy = SVGLength.from(cy);
     invalidate();
   }
 
   public void setCy(String cy) {
+    mCy = SVGLength.from(cy);
+    invalidate();
+  }
+
+  public void setCy(Double cy) {
     mCy = SVGLength.from(cy);
     invalidate();
   }
@@ -57,12 +67,22 @@ class EllipseView extends RenderableView {
     invalidate();
   }
 
+  public void setRx(Double rx) {
+    mRx = SVGLength.from(rx);
+    invalidate();
+  }
+
   public void setRy(Dynamic ry) {
     mRy = SVGLength.from(ry);
     invalidate();
   }
 
   public void setRy(String ry) {
+    mRy = SVGLength.from(ry);
+    invalidate();
+  }
+
+  public void setRy(Double ry) {
     mRy = SVGLength.from(ry);
     invalidate();
   }

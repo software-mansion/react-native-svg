@@ -32,6 +32,7 @@ public interface RNSVGPathManagerInterface<T extends View> {
   void setStroke(T view, @Nullable ReadableMap value);
   void setStrokeOpacity(T view, float value);
   void setStrokeWidth(T view, @Nullable String value);
+  void setStrokeWidth(T view, @Nullable Double value);
   void setStrokeLinecap(T view, int value);
   void setStrokeLinejoin(T view, int value);
   void setStrokeDasharray(T view, @Nullable ReadableArray value);
