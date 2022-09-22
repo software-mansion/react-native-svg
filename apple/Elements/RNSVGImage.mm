@@ -74,12 +74,6 @@ using namespace facebook::react;
 
   self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
   self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.imageheight)) {
-    self.imageheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.imageheight)];
-  }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.imagewidth)) {
-    self.imagewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.imagewidth)];
-  }
   if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
     self.imageheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
   }
@@ -121,7 +115,7 @@ using namespace facebook::react;
 }
 #endif // RN_FABRIC_ENABLED
 
-- (void)setSrc:(id)src
+- (void)setImageSrc:(RCTImageSource *)src request:(NSURLRequest *)request
 {
   if (src == _src) {
     return;
@@ -129,36 +123,8 @@ using namespace facebook::react;
   _src = src;
   CGImageRelease(_image);
   _image = nil;
-  RCTImageSource *source = [RCTConvert RCTImageSource:src];
-  if (source.size.width != 0 && source.size.height != 0) {
-    _imageSize = source.size;
-  } else {
-    _imageSize = CGSizeMake(0, 0);
-  }
-
-  RCTImageLoaderCancellationBlock previousCancellationBlock = _reloadImageCancellationBlock;
-  if (previousCancellationBlock) {
-    previousCancellationBlock();
-    _reloadImageCancellationBlock = nil;
-  }
-
-  _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"]
-      loadImageWithURLRequest:[RCTConvert NSURLRequest:src]
-                     callback:^(NSError *error, UIImage *image) {
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                         self->_image = CGImageRetain(image.CGImage);
-                         self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
-                         [self invalidate];
-                       });
-                     }];
-}
-
-- (void)setImageSrc:(RCTImageSource *)source request:(NSURLRequest *)request
-{
-  CGImageRelease(_image);
-  _image = nil;
-  if (source.size.width != 0 && source.size.height != 0) {
-    _imageSize = source.size;
+  if (src.size.width != 0 && src.size.height != 0) {
+    _imageSize = src.size;
   } else {
     _imageSize = CGSizeMake(0, 0);
   }
@@ -182,6 +148,11 @@ using namespace facebook::react;
             [self invalidate];
         });
     }];
+}
+
+- (void)setSrc:(RCTImageSource *)src
+{
+  [self setImageSrc:src request:src.request];
 }
 
 - (void)setX:(RNSVGLength *)x

@@ -32,6 +32,7 @@ public interface RNSVGMarkerManagerInterface<T extends View> {
   void setStroke(T view, @Nullable ReadableMap value);
   void setStrokeOpacity(T view, float value);
   void setStrokeWidth(T view, @Nullable String value);
+  void setStrokeWidth(T view, @Nullable Double value);
   void setStrokeLinecap(T view, int value);
   void setStrokeLinejoin(T view, int value);
   void setStrokeDasharray(T view, @Nullable ReadableArray value);
@@ -40,12 +41,18 @@ public interface RNSVGMarkerManagerInterface<T extends View> {
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
   void setFontSize(T view, @Nullable String value);
+  void setFontSize(T view, @Nullable Double value);
   void setFontWeight(T view, @Nullable String value);
+  void setFontWeight(T view, @Nullable Double value);
   void setFont(T view, @Nullable ReadableMap value);
   void setRefX(T view, @Nullable String value);
+  void setRefX(T view, @Nullable Double value);
   void setRefY(T view, @Nullable String value);
+  void setRefY(T view, @Nullable Double value);
   void setMarkerHeight(T view, @Nullable String value);
+  void setMarkerHeight(T view, @Nullable Double value);
   void setMarkerWidth(T view, @Nullable String value);
+  void setMarkerWidth(T view, @Nullable Double value);
   void setMarkerUnits(T view, @Nullable String value);
   void setOrient(T view, @Nullable String value);
   void setMinX(T view, float value);

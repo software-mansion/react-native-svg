@@ -28,7 +28,6 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.PointerEvents;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.touch.ReactHitSlopView;
 
 import java.lang.reflect.Field;
@@ -115,13 +114,11 @@ abstract public class RenderableView extends VirtualView implements ReactHitSlop
         RenderableViewManager.setRenderableView(id, this);
     }
 
-  @ReactProp(name = "vectorEffect")
   public void setVectorEffect(int vectorEffect) {
     this.vectorEffect = vectorEffect;
     invalidate();
   }
 
-  @ReactProp(name = "fill")
   public void setFill(@Nullable Dynamic fill) {
     if (fill == null || fill.isNull()) {
       this.fill = null;
@@ -163,11 +160,11 @@ abstract public class RenderableView extends VirtualView implements ReactHitSlop
     }
     int type = fill.getInt("type");
     if (type == 0) {
-      ReadableType valueType = fill.getType("value");
+      ReadableType valueType = fill.getType("payload");
       if (valueType.equals(ReadableType.Number)) {
-        this.fill = JavaOnlyArray.of(0, fill.getInt("value"));
+        this.fill = JavaOnlyArray.of(0, fill.getInt("payload"));
       } else if (valueType.equals(ReadableType.Map)) {
-        this.fill = JavaOnlyArray.of(0, fill.getMap("value"));
+        this.fill = JavaOnlyArray.of(0, fill.getMap("payload"));
       }
     } else if (type == 1) {
       this.fill = JavaOnlyArray.of(1, fill.getString("brushRef"));
@@ -177,13 +174,11 @@ abstract public class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  @ReactProp(name = "fillOpacity", defaultFloat = 1f)
   public void setFillOpacity(float fillOpacity) {
     this.fillOpacity = fillOpacity;
     invalidate();
   }
 
-  @ReactProp(name = "fillRule", defaultInt = FILL_RULE_NONZERO)
   public void setFillRule(int fillRule) {
     switch (fillRule) {
       case FILL_RULE_EVENODD:
@@ -198,7 +193,6 @@ abstract public class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  @ReactProp(name = "stroke")
   public void setStroke(@Nullable Dynamic strokeColors) {
     if (strokeColors == null || strokeColors.isNull()) {
       stroke = null;
@@ -241,11 +235,11 @@ abstract public class RenderableView extends VirtualView implements ReactHitSlop
     }
     int type = stroke.getInt("type");
     if (type == 0) {
-      ReadableType valueType = stroke.getType("value");
-      if (valueType.equals(ReadableType.Number)) {
-        this.stroke = JavaOnlyArray.of(0, stroke.getInt("value"));
-      } else if (valueType.equals(ReadableType.Map)) {
-        this.stroke = JavaOnlyArray.of(0, stroke.getMap("value"));
+      ReadableType payloadType = stroke.getType("payload");
+      if (payloadType.equals(ReadableType.Number)) {
+        this.stroke = JavaOnlyArray.of(0, stroke.getInt("payload"));
+      } else if (payloadType.equals(ReadableType.Map)) {
+        this.stroke = JavaOnlyArray.of(0, stroke.getMap("payload"));
       }
     } else if (type == 1) {
       this.stroke = JavaOnlyArray.of(1, stroke.getString("brushRef"));
@@ -255,13 +249,11 @@ abstract public class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  @ReactProp(name = "strokeOpacity", defaultFloat = 1f)
   public void setStrokeOpacity(float strokeOpacity) {
     this.strokeOpacity = strokeOpacity;
     invalidate();
   }
 
-  @ReactProp(name = "strokeDasharray")
   public void setStrokeDasharray(@Nullable ReadableArray strokeDasharray) {
     if (strokeDasharray != null) {
       int fromSize = strokeDasharray.size();
@@ -275,13 +267,11 @@ abstract public class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  @ReactProp(name = "strokeDashoffset")
   public void setStrokeDashoffset(float strokeDashoffset) {
     this.strokeDashoffset = strokeDashoffset * mScale;
     invalidate();
   }
 
-  @ReactProp(name = "strokeWidth")
   public void setStrokeWidth(Dynamic strokeWidth) {
     this.strokeWidth = SVGLength.from(strokeWidth);
     invalidate();
@@ -292,13 +282,16 @@ abstract public class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  @ReactProp(name = "strokeMiterlimit", defaultFloat = 4f)
+  public void setStrokeWidth(Double strokeWidth) {
+    this.strokeWidth = SVGLength.from(strokeWidth);
+    invalidate();
+  }
+
   public void setStrokeMiterlimit(float strokeMiterlimit) {
     this.strokeMiterlimit = strokeMiterlimit;
     invalidate();
   }
 
-  @ReactProp(name = "strokeLinecap", defaultInt = CAP_ROUND)
   public void setStrokeLinecap(int strokeLinecap) {
     switch (strokeLinecap) {
       case CAP_BUTT:
@@ -317,7 +310,6 @@ abstract public class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  @ReactProp(name = "strokeLinejoin", defaultInt = JOIN_ROUND)
   public void setStrokeLinejoin(int strokeLinejoin) {
     switch (strokeLinejoin) {
       case JOIN_MITER:
@@ -336,7 +328,6 @@ abstract public class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  @ReactProp(name = "propList")
   public void setPropList(@Nullable ReadableArray propList) {
     if (propList != null) {
       mPropList = mAttributeList = new ArrayList<>();

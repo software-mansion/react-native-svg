@@ -530,10 +530,6 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
           @Override
           public void onChildViewRemoved(View view, View view1) {
             if (view instanceof VirtualView) {
-              SvgView svgView = ((VirtualView) view).getSvgView();
-              if (svgView != null) {
-                svgView.setRemovedFromReactViewHierarchy();
-              }
               invalidateSvgView((V) view);
             }
           }
@@ -689,6 +685,12 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       view.setFont(map);
     }
 
+    public void setFontSize(U view, @Nullable Double value) {
+      JavaOnlyMap map = new JavaOnlyMap();
+      map.putDouble("fontSize", value);
+      view.setFont(map);
+    }
+
     @ReactProp(name = "fontWeight")
     public void setFontWeight(U node, Dynamic fontWeight) {
       JavaOnlyMap map = new JavaOnlyMap();
@@ -708,6 +710,12 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     public void setFontWeight(U view, @Nullable String value) {
       JavaOnlyMap map = new JavaOnlyMap();
       map.putString("fontWeight", value);
+      view.setFont(map);
+    }
+
+    public void setFontWeight(U view, @Nullable Double value) {
+      JavaOnlyMap map = new JavaOnlyMap();
+      map.putDouble("fontWeight", value);
       view.setFont(map);
     }
   }
@@ -857,6 +865,18 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     public void setBaselineShift(K view, @Nullable String value) {
       view.setBaselineShift(value);
     }
+
+    public void setInlineSize(K view, @Nullable Double value) {
+      view.setInlineSize(value);
+    }
+
+    public void setTextLength(K view, @Nullable Double value) {
+      view.setTextLength(value);
+    }
+
+    public void setBaselineShift(K view, @Nullable Double value) {
+      view.setBaselineShift(value);
+    }
   }
 
   static class TextViewManager extends TextViewManagerAbstract<TextView>
@@ -950,6 +970,10 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       view.setStartOffset(value);
     }
 
+    public void setStartOffset(TextPathView view, @Nullable Double value) {
+      view.setStartOffset(value);
+    }
+
     @ReactProp(name = "side")
     public void setSide(TextPathView node, @Nullable String side) {
       node.setSide(side);
@@ -1005,16 +1029,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setImagewidth(ImageView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
-    public void setImageheight(ImageView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
     public void setWidth(ImageView view, @Nullable String value) {
       view.setWidth(value);
     }
@@ -1024,7 +1038,23 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       view.setHeight(value);
     }
 
-    @ReactProp(name = "src")
+    public void setX(ImageView view, @Nullable Double value) {
+      view.setX(value);
+    }
+
+    public void setY(ImageView view, @Nullable Double value) {
+      view.setY(value);
+    }
+
+    public void setWidth(ImageView view, @Nullable Double value) {
+      view.setWidth(value);
+    }
+
+    public void setHeight(ImageView view, @Nullable Double value) {
+      view.setHeight(value);
+    }
+
+    @ReactProp(name = "src", customType = "ImageSource")
     public void setSrc(ImageView node, @Nullable ReadableMap src) {
       node.setSrc(src);
     }
@@ -1073,13 +1103,25 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       view.setCx(value);
     }
 
+    public void setCx(CircleView view, Double value) {
+      view.setCx(value);
+    }
+
     @Override
     public void setCy(CircleView view, String value) {
       view.setCy(value);
     }
 
+    public void setCy(CircleView view, Double value) {
+      view.setCy(value);
+    }
+
     @Override
     public void setR(CircleView view, String value) {
+      view.setR(value);
+    }
+
+    public void setR(CircleView view, Double value) {
       view.setR(value);
     }
   }
@@ -1136,6 +1178,22 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     public void setRy(EllipseView view, @Nullable String value) {
       view.setRy(value);
     }
+
+    public void setCx(EllipseView view, @Nullable Double value) {
+      view.setCx(value);
+    }
+
+    public void setCy(EllipseView view, @Nullable Double value) {
+      view.setCy(value);
+    }
+
+    public void setRx(EllipseView view, @Nullable Double value) {
+      view.setRx(value);
+    }
+
+    public void setRy(EllipseView view, @Nullable Double value) {
+      view.setRy(value);
+    }
   }
 
   static class LineViewManager extends RenderableViewManager<LineView>
@@ -1189,6 +1247,22 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
 
     @Override
     public void setY2(LineView view, @Nullable String value) {
+      view.setY2(value);
+    }
+
+    public void setX1(LineView view, @Nullable Double value) {
+      view.setX1(value);
+    }
+
+    public void setY1(LineView view, @Nullable Double value) {
+      view.setY1(value);
+    }
+
+    public void setX2(LineView view, @Nullable Double value) {
+      view.setX2(value);
+    }
+
+    public void setY2(LineView view, @Nullable Double value) {
       view.setY2(value);
     }
   }
@@ -1248,16 +1322,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setRectheight(RectView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setRectwidth(RectView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
     public void setHeight(RectView view, @Nullable String value) {
       view.setHeight(value);
     }
@@ -1274,6 +1338,30 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
 
     @Override
     public void setRy(RectView view, @Nullable String value) {
+      view.setRy(value);
+    }
+
+    public void setX(RectView view, @Nullable Double value) {
+      view.setX(value);
+    }
+
+    public void setY(RectView view, @Nullable Double value) {
+      view.setY(value);
+    }
+
+    public void setHeight(RectView view, @Nullable Double value) {
+      view.setHeight(value);
+    }
+
+    public void setWidth(RectView view, @Nullable Double value) {
+      view.setWidth(value);
+    }
+
+    public void setRx(RectView view, @Nullable Double value) {
+      view.setRx(value);
+    }
+
+    public void setRy(RectView view, @Nullable Double value) {
       view.setRy(value);
     }
   }
@@ -1337,17 +1425,23 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setUseheight(UseView view, @Nullable String value) {
+    public void setHeight(UseView view, @Nullable String value) {
       view.setHeight(value);
     }
 
-    @Override
-    public void setUsewidth(UseView view, @Nullable String value) {
+    public void setWidth(UseView view, @Nullable Double value) {
       view.setWidth(value);
     }
 
-    @Override
-    public void setHeight(UseView view, @Nullable String value) {
+    public void setX(UseView view, @Nullable Double value) {
+      view.setX(value);
+    }
+
+    public void setY(UseView view, @Nullable Double value) {
+      view.setY(value);
+    }
+
+    public void setHeight(UseView view, @Nullable Double value) {
       view.setHeight(value);
     }
 
@@ -1465,22 +1559,28 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setPatternheight(PatternView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setPatternwidth(PatternView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
     public void setHeight(PatternView view, @Nullable String value) {
       view.setHeight(value);
     }
 
     @Override
     public void setWidth(PatternView view, @Nullable String value) {
+      view.setWidth(value);
+    }
+
+    public void setX(PatternView view, @Nullable Double value) {
+      view.setX(value);
+    }
+
+    public void setY(PatternView view, @Nullable Double value) {
+      view.setY(value);
+    }
+
+    public void setHeight(PatternView view, @Nullable Double value) {
+      view.setHeight(value);
+    }
+
+    public void setWidth(PatternView view, @Nullable Double value) {
       view.setWidth(value);
     }
 
@@ -1574,22 +1674,28 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setMaskheight(MaskView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setMaskwidth(MaskView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
     public void setHeight(MaskView view, @Nullable String value) {
       view.setHeight(value);
     }
 
     @Override
     public void setWidth(MaskView view, @Nullable String value) {
+      view.setWidth(value);
+    }
+
+    public void setX(MaskView view, @Nullable Double value) {
+      view.setX(value);
+    }
+
+    public void setY(MaskView view, @Nullable Double value) {
+      view.setY(value);
+    }
+
+    public void setHeight(MaskView view, @Nullable Double value) {
+      view.setHeight(value);
+    }
+
+    public void setWidth(MaskView view, @Nullable Double value) {
       view.setWidth(value);
     }
 
@@ -1653,22 +1759,28 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @Override
-    public void setForeignObjectheight(ForeignObjectView view, @Nullable String value) {
-      view.setHeight(value);
-    }
-
-    @Override
-    public void setForeignObjectwidth(ForeignObjectView view, @Nullable String value) {
-      view.setWidth(value);
-    }
-
-    @Override
     public void setHeight(ForeignObjectView view, @Nullable String value) {
       view.setHeight(value);
     }
 
     @Override
     public void setWidth(ForeignObjectView view, @Nullable String value) {
+      view.setWidth(value);
+    }
+
+    public void setX(ForeignObjectView view, @Nullable Double value) {
+      view.setX(value);
+    }
+
+    public void setY(ForeignObjectView view, @Nullable Double value) {
+      view.setY(value);
+    }
+
+    public void setHeight(ForeignObjectView view, @Nullable Double value) {
+      view.setHeight(value);
+    }
+
+    public void setWidth(ForeignObjectView view, @Nullable Double value) {
       view.setWidth(value);
     }
   }
@@ -1723,6 +1835,22 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
 
     @Override
     public void setMarkerWidth(MarkerView view, @Nullable String value) {
+      view.setMarkerWidth(value);
+    }
+
+    public void setRefX(MarkerView view, @Nullable Double value) {
+      view.setRefX(value);
+    }
+
+    public void setRefY(MarkerView view, @Nullable Double value) {
+      view.setRefY(value);
+    }
+
+    public void setMarkerHeight(MarkerView view, @Nullable Double value) {
+      view.setMarkerHeight(value);
+    }
+
+    public void setMarkerWidth(MarkerView view, @Nullable Double value) {
       view.setMarkerWidth(value);
     }
 
@@ -1821,6 +1949,22 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       view.setY2(value);
     }
 
+    public void setX1(LinearGradientView view, @Nullable Double value) {
+      view.setX1(value);
+    }
+
+    public void setY1(LinearGradientView view, @Nullable Double value) {
+      view.setY1(value);
+    }
+
+    public void setX2(LinearGradientView view, @Nullable Double value) {
+      view.setX2(value);
+    }
+
+    public void setY2(LinearGradientView view, @Nullable Double value) {
+      view.setY2(value);
+    }
+
     @ReactProp(name = "gradient")
     public void setGradient(LinearGradientView node, ReadableArray gradient) {
       node.setGradient(gradient);
@@ -1911,6 +2055,30 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       view.setRy(value);
     }
 
+    public void setFx(RadialGradientView view, @Nullable Double value) {
+      view.setFx(value);
+    }
+
+    public void setFy(RadialGradientView view, @Nullable Double value) {
+      view.setFy(value);
+    }
+
+    public void setCx(RadialGradientView view, @Nullable Double value) {
+      view.setCx(value);
+    }
+
+    public void setCy(RadialGradientView view, @Nullable Double value) {
+      view.setCy(value);
+    }
+
+    public void setRx(RadialGradientView view, @Nullable Double value) {
+      view.setRx(value);
+    }
+
+    public void setRy(RadialGradientView view, @Nullable Double value) {
+      view.setRy(value);
+    }
+
     @ReactProp(name = "gradient")
     public void setGradient(RadialGradientView node, ReadableArray gradient) {
       node.setGradient(gradient);
@@ -1976,6 +2144,10 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
   }
 
   public void setStrokeWidth(T view, @Nullable String value) {
+    view.setStrokeWidth(value);
+  }
+
+  public void setStrokeWidth(T view, @Nullable Double value) {
     view.setStrokeWidth(value);
   }
 

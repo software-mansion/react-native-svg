@@ -14,7 +14,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class CircleView extends RenderableView {
@@ -26,7 +25,6 @@ class CircleView extends RenderableView {
     super(reactContext);
   }
 
-  @ReactProp(name = "cx")
   public void setCx(Dynamic cx) {
     mCx = SVGLength.from(cx);
     invalidate();
@@ -37,7 +35,11 @@ class CircleView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "cy")
+  public void setCx(Double cx) {
+    mCx = SVGLength.from(cx);
+    invalidate();
+  }
+
   public void setCy(Dynamic cy) {
     mCy = SVGLength.from(cy);
     invalidate();
@@ -48,13 +50,22 @@ class CircleView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "r")
+  public void setCy(Double cy) {
+    mCy = SVGLength.from(cy);
+    invalidate();
+  }
+
   public void setR(Dynamic r) {
     mR = SVGLength.from(r);
     invalidate();
   }
 
   public void setR(String r) {
+    mR = SVGLength.from(r);
+    invalidate();
+  }
+
+  public void setR(Double r) {
     mR = SVGLength.from(r);
     invalidate();
   }

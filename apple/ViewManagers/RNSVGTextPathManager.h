@@ -8,6 +8,6 @@
 
 #import "RNSVGTextManager.h"
 
-@interface RNSVGTextPathManager : RNSVGRenderableManager
+@interface RNSVGTextPathManager : RNSVGTextManager
 
 @end

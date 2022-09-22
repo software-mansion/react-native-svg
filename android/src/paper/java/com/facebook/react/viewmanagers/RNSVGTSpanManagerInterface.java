@@ -32,6 +32,7 @@ public interface RNSVGTSpanManagerInterface<T extends View> {
   void setStroke(T view, @Nullable ReadableMap value);
   void setStrokeOpacity(T view, float value);
   void setStrokeWidth(T view, @Nullable String value);
+  void setStrokeWidth(T view, @Nullable Double value);
   void setStrokeLinecap(T view, int value);
   void setStrokeLinejoin(T view, int value);
   void setStrokeDasharray(T view, @Nullable ReadableArray value);
@@ -40,20 +41,23 @@ public interface RNSVGTSpanManagerInterface<T extends View> {
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
   void setFontSize(T view, @Nullable String value);
+  void setFontSize(T view, @Nullable Double value);
   void setFontWeight(T view, @Nullable String value);
+  void setFontWeight(T view, @Nullable Double value);
   void setFont(T view, @Nullable ReadableMap value);
-  void setTextAnchor(T view, @Nullable String value);
   void setDx(T view, @Nullable ReadableArray value);
   void setDy(T view, @Nullable ReadableArray value);
-  void setPositionX(T view, @Nullable ReadableArray value);
-  void setPositionY(T view, @Nullable ReadableArray value);
   void setX(T view, @Nullable ReadableArray value);
   void setY(T view, @Nullable ReadableArray value);
   void setRotate(T view, @Nullable ReadableArray value);
   void setInlineSize(T view, @Nullable String value);
+  void setInlineSize(T view, @Nullable Double value);
   void setTextLength(T view, @Nullable String value);
+  void setTextLength(T view, @Nullable Double value);
   void setBaselineShift(T view, @Nullable String value);
+  void setBaselineShift(T view, @Nullable Double value);
   void setLengthAdjust(T view, @Nullable String value);
   void setAlignmentBaseline(T view, @Nullable String value);
+  void setVerticalAlign(T view, @Nullable String value);
   void setContent(T view, @Nullable String value);
 }

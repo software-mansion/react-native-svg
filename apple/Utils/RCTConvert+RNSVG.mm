@@ -77,7 +77,7 @@ RCT_ENUM_CONVERTER(
             // These are probably expensive allocations since it's often the same value.
             // We should memoize colors but look ups may be just as expensive.
     {
-      NSArray *arr = @[ @(0), dict[@"value"] ];
+      NSArray *arr = @[ @(0), dict[@"payload"] ];
       return [[RNSVGSolidColorBrush alloc] initWithArray:arr];
     }
     case 1: // brush

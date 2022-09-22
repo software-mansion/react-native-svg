@@ -87,13 +87,15 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
     return true;
   }
 
-  @ReactProp(name = "tintColor")
-  public void setTintColor(SvgView node, @Nullable Dynamic tintColor) {
+  @ReactProp(name = "tintColor", customType = "Color")
+  @Override
+  public void setTintColor(SvgView node, Integer tintColor) {
     node.setTintColor(tintColor);
   }
 
-  @ReactProp(name = "color")
-  public void setColor(SvgView node, @Nullable Dynamic color) {
+  @ReactProp(name = "color", customType = "Color")
+  @Override
+  public void setColor(SvgView node, Integer color) {
     node.setTintColor(color);
   }
 
@@ -144,22 +146,20 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
   }
 
   @Override
-  public void setTintColor(SvgView view, @Nullable Integer value) {
-    view.setTintColor(value);
-  }
-
-  @Override
-  public void setColor(SvgView view, @Nullable Integer value) {
-    view.setTintColor(value);
-  }
-
-  @Override
   public void setBbWidth(SvgView view, @Nullable String value) {
+    view.setBbWidth(value);
+  }
+
+  public void setBbWidth(SvgView view, @Nullable Double value) {
     view.setBbWidth(value);
   }
 
   @Override
   public void setBbHeight(SvgView view, @Nullable String value) {
+    view.setBbHeight(value);
+  }
+
+  public void setBbHeight(SvgView view, @Nullable Double value) {
     view.setBbHeight(value);
   }
 }

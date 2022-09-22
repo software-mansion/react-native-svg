@@ -32,6 +32,7 @@ public interface RNSVGTextPathManagerInterface<T extends View> {
   void setStroke(T view, @Nullable ReadableMap value);
   void setStrokeOpacity(T view, float value);
   void setStrokeWidth(T view, @Nullable String value);
+  void setStrokeWidth(T view, @Nullable Double value);
   void setStrokeLinecap(T view, int value);
   void setStrokeLinejoin(T view, int value);
   void setStrokeDasharray(T view, @Nullable ReadableArray value);
@@ -39,10 +40,30 @@ public interface RNSVGTextPathManagerInterface<T extends View> {
   void setStrokeMiterlimit(T view, float value);
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
+  void setFontSize(T view, @Nullable String value);
+  void setFontSize(T view, @Nullable Double value);
+  void setFontWeight(T view, @Nullable String value);
+  void setFontWeight(T view, @Nullable Double value);
+  void setFont(T view, @Nullable ReadableMap value);
+  void setDx(T view, @Nullable ReadableArray value);
+  void setDy(T view, @Nullable ReadableArray value);
+  void setX(T view, @Nullable ReadableArray value);
+  void setY(T view, @Nullable ReadableArray value);
+  void setRotate(T view, @Nullable ReadableArray value);
+  void setInlineSize(T view, @Nullable String value);
+  void setInlineSize(T view, @Nullable Double value);
+  void setTextLength(T view, @Nullable String value);
+  void setTextLength(T view, @Nullable Double value);
+  void setBaselineShift(T view, @Nullable String value);
+  void setBaselineShift(T view, @Nullable Double value);
+  void setLengthAdjust(T view, @Nullable String value);
+  void setAlignmentBaseline(T view, @Nullable String value);
+  void setVerticalAlign(T view, @Nullable String value);
   void setHref(T view, @Nullable String value);
   void setSide(T view, @Nullable String value);
   void setMethod(T view, @Nullable String value);
   void setMidLine(T view, @Nullable String value);
   void setSpacing(T view, @Nullable String value);
   void setStartOffset(T view, @Nullable String value);
+  void setStartOffset(T view, @Nullable Double value);
 }

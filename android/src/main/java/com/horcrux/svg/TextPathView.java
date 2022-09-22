@@ -16,7 +16,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import javax.annotation.Nullable;
 
 @SuppressLint("ViewConstructor")
@@ -33,13 +32,11 @@ class TextPathView extends TextView {
     super(reactContext);
   }
 
-  @ReactProp(name = "href")
   public void setHref(String href) {
     mHref = href;
     invalidate();
   }
 
-  @ReactProp(name = "startOffset")
   public void setStartOffset(Dynamic startOffset) {
     mStartOffset = SVGLength.from(startOffset);
     invalidate();
@@ -50,25 +47,26 @@ class TextPathView extends TextView {
     invalidate();
   }
 
-  @ReactProp(name = "method")
+  public void setStartOffset(Double startOffset) {
+    mStartOffset = SVGLength.from(startOffset);
+    invalidate();
+  }
+
   public void setMethod(@Nullable String method) {
     mMethod = TextPathMethod.valueOf(method);
     invalidate();
   }
 
-  @ReactProp(name = "spacing")
   public void setSpacing(@Nullable String spacing) {
     mSpacing = TextPathSpacing.valueOf(spacing);
     invalidate();
   }
 
-  @ReactProp(name = "side")
   public void setSide(@Nullable String side) {
     mSide = TextPathSide.valueOf(side);
     invalidate();
   }
 
-  @ReactProp(name = "midLine")
   public void setSharp(@Nullable String midLine) {
     mMidLine = TextPathMidLine.valueOf(midLine);
     invalidate();

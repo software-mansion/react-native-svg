@@ -4,6 +4,7 @@
 #import "RNSVGPainterBrush.h"
 #import "RNSVGRenderable.h"
 #import "RNSVGSolidColorBrush.h"
+#import "RNSVGText.h"
 #import "RNSVGVBMOS.h"
 
 #import <React/RCTConversions.h>
@@ -21,7 +22,7 @@ RNSVGBrush *brushFromColorStruct(T fillObject)
     {
       // These are probably expensive allocations since it's often the same value.
       // We should memoize colors but look ups may be just as expensive.
-      RNSVGColor *color = RCTUIColorFromSharedColor(fillObject.value) ?: [RNSVGColor clearColor];
+      RNSVGColor *color = RCTUIColorFromSharedColor(fillObject.payload) ?: [RNSVGColor clearColor];
       return [[RNSVGSolidColorBrush alloc] initWithColor:color];
     }
     case 1: // brush
@@ -175,6 +176,26 @@ void setCommonGroupProps(T groupProps, RNSVGGroup *groupNode)
     // even if to an empty dict
     groupNode.font = fontDict;
   }
+}
+
+template <typename T>
+void setCommonTextProps(T textProps, RNSVGText *textNode)
+{
+  setCommonGroupProps(textProps, textNode);
+  textNode.deltaX = createLengthArrayFromStrings(textProps.dx);
+  textNode.deltaY = createLengthArrayFromStrings(textProps.dy);
+  if (!textProps.x.empty()) {
+    textNode.positionX = createLengthArrayFromStrings(textProps.x);
+  }
+  if (!textProps.y.empty()) {
+    textNode.positionY = createLengthArrayFromStrings(textProps.y);
+  }
+  textNode.rotate = createLengthArrayFromStrings(textProps.rotate);
+  textNode.inlineSize = [RNSVGLength lengthWithString:RCTNSStringFromString(textProps.inlineSize)];
+  textNode.textLength = [RNSVGLength lengthWithString:RCTNSStringFromString(textProps.textLength)];
+  textNode.baselineShift = RCTNSStringFromStringNilIfEmpty(textProps.baselineShift);
+  textNode.lengthAdjust = RCTNSStringFromStringNilIfEmpty(textProps.lengthAdjust);
+  textNode.alignmentBaseline = RCTNSStringFromStringNilIfEmpty(textProps.alignmentBaseline);
 }
 
 static RNSVGVBMOS intToRNSVGVBMOS(int value)

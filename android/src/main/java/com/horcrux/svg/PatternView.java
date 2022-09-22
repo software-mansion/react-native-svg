@@ -16,7 +16,6 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.ReactConstants;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import javax.annotation.Nullable;
 
 @SuppressLint("ViewConstructor")
@@ -48,7 +47,6 @@ class PatternView extends GroupView {
     super(reactContext);
   }
 
-  @ReactProp(name = "x")
   public void setX(Dynamic x) {
     mX = SVGLength.from(x);
     invalidate();
@@ -59,7 +57,11 @@ class PatternView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "y")
+  public void setX(Double x) {
+    mX = SVGLength.from(x);
+    invalidate();
+  }
+
   public void setY(Dynamic y) {
     mY = SVGLength.from(y);
     invalidate();
@@ -70,7 +72,11 @@ class PatternView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "width")
+  public void setY(Double y) {
+    mY = SVGLength.from(y);
+    invalidate();
+  }
+
   public void setWidth(Dynamic width) {
     mW = SVGLength.from(width);
     invalidate();
@@ -81,7 +87,11 @@ class PatternView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "height")
+  public void setWidth(Double width) {
+    mW = SVGLength.from(width);
+    invalidate();
+  }
+
   public void setHeight(Dynamic height) {
     mH = SVGLength.from(height);
     invalidate();
@@ -92,7 +102,11 @@ class PatternView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "patternUnits")
+  public void setHeight(Double height) {
+    mH = SVGLength.from(height);
+    invalidate();
+  }
+
   public void setPatternUnits(int patternUnits) {
     switch (patternUnits) {
       case 0:
@@ -105,7 +119,6 @@ class PatternView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "patternContentUnits")
   public void setPatternContentUnits(int patternContentUnits) {
     switch (patternContentUnits) {
       case 0:
@@ -118,7 +131,6 @@ class PatternView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "patternTransform")
   public void setPatternTransform(@Nullable ReadableArray matrixArray) {
     if (matrixArray != null) {
       int matrixSize = PropHelper.toMatrixData(matrixArray, sRawMatrix, mScale);
@@ -137,37 +149,31 @@ class PatternView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "minX")
   public void setMinX(float minX) {
     mMinX = minX;
     invalidate();
   }
 
-  @ReactProp(name = "minY")
   public void setMinY(float minY) {
     mMinY = minY;
     invalidate();
   }
 
-  @ReactProp(name = "vbWidth")
   public void setVbWidth(float vbWidth) {
     mVbWidth = vbWidth;
     invalidate();
   }
 
-  @ReactProp(name = "vbHeight")
   public void setVbHeight(float vbHeight) {
     mVbHeight = vbHeight;
     invalidate();
   }
 
-  @ReactProp(name = "align")
   public void setAlign(String align) {
     mAlign = align;
     invalidate();
   }
 
-  @ReactProp(name = "meetOrSlice")
   public void setMeetOrSlice(int meetOrSlice) {
     mMeetOrSlice = meetOrSlice;
     invalidate();
