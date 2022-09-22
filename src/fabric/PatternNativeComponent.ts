@@ -11,7 +11,6 @@ interface SvgNodeCommonProps {
   name?: string;
   opacity?: WithDefault<Float, 1.0>;
   matrix?: ReadonlyArray<Float>;
-  // transform?: ____TransformStyle_Internal, // CATransform3D, custom handling
   mask?: string;
   markerStart?: string;
   markerMid?: string;

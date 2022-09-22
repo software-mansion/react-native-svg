@@ -488,6 +488,19 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     view.setMatrix(value);
   }
 
+  @Override
+  public void setTransform(VirtualView node, @Nullable ReadableArray matrix) {
+    if (matrix == null) {
+      resetTransformProperty(node);
+    } else {
+      setTransformProperty(node, matrix);
+    }
+
+    Matrix m = node.getMatrix();
+    node.mTransform = m;
+    node.mTransformInvertible = m.invert(node.mInvTransform);
+  }
+
   @ReactProp(name = "transform")
   public void setTransform(V node, Dynamic matrix) {
     if (matrix.getType() != ReadableType.Array) {
