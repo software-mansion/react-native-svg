@@ -49,6 +49,7 @@ using namespace facebook::react;
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
 
   setCommonGroupProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGSymbolProps const>(props);
 }
 
 - (void)prepareForRecycle

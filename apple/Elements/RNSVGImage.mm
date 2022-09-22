@@ -93,6 +93,7 @@ using namespace facebook::react;
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
 
   setCommonRenderableProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGImageProps const>(props);
 }
 
 - (void)prepareForRecycle

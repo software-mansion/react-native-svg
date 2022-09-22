@@ -45,6 +45,7 @@ using namespace facebook::react;
   self.d = [[RNSVGPathParser alloc] initWithPathString:RCTNSStringFromString(newProps.d)];
 
   setCommonRenderableProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGPathProps const>(props);
 }
 
 - (void)prepareForRecycle
