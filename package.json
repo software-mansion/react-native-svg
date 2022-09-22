@@ -16,6 +16,7 @@
     "__tests__",
     "android",
     "apple",
+    "common",
     "elements",
     "lib",
     "src",
