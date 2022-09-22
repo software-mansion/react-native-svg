@@ -17,8 +17,12 @@ import com.facebook.react.viewmanagers.RNSVGSvgViewManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGSvgViewManagerInterface;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.facebook.react.views.view.ReactViewManager;
+import com.facebook.react.uimanager.PointerEvents;
+import com.facebook.react.uimanager.ViewProps;
+import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import com.horcrux.svg.SvgView;
 
 /**
  * ViewManager for RNSVGSvgView React views. Renders as a {@link SvgView} and handles invalidating
@@ -161,5 +165,16 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
 
   public void setBbHeight(SvgView view, @Nullable Double value) {
     view.setBbHeight(value);
+  }
+
+  @ReactProp(name = ViewProps.POINTER_EVENTS)
+  public void setPointerEvents(SvgView view, @Nullable String pointerEventsStr) {
+    if (pointerEventsStr == null) {
+      view.setPointerEvents(PointerEvents.AUTO);
+    } else {
+      PointerEvents pointerEvents =
+        PointerEvents.valueOf(pointerEventsStr.toUpperCase(Locale.US).replace("-", "_"));
+      view.setPointerEvents(pointerEvents);
+    }
   }
 }
