@@ -61,11 +61,7 @@ android {
 
     sourceSets.main {
         java {
-            if (isNewArchitectureEnabled()) {
-                srcDirs += [
-                    "src/fabric/java",
-                ]
-            } else {
+            if (!isNewArchitectureEnabled()) {
                 srcDirs += [
                     "src/paper/java", 
                     "build/generated/source/codegen/java"
