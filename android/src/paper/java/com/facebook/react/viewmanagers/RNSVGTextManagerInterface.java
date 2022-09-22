@@ -26,6 +26,7 @@ public interface RNSVGTextManagerInterface<T extends View> {
   void setClipRule(T view, int value);
   void setResponsible(T view, boolean value);
   void setDisplay(T view, @Nullable String value);
+  void setPointerEvents(T view, @Nullable String value);
   void setFill(T view, @Nullable ReadableMap value);
   void setFillOpacity(T view, float value);
   void setFillRule(T view, int value);
