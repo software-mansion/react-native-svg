@@ -69,7 +69,7 @@ void setCommonNodeProps(T nodeProps, RNSVGNode *node)
   node.responsible = nodeProps.responsible;
   // onLayout
   node.display = RCTNSStringFromStringNilIfEmpty(nodeProps.display);
-  NSString *pointerEventsString = RCTNSStringFromString(nodeProps.pointerEvents);
+  NSString *pointerEventsString = RCTNSStringFromStringNilIfEmpty(nodeProps.pointerEvents);
   if ([pointerEventsString isEqualToString:@"auto"]) {
     node.pointerEvents = RCTPointerEventsUnspecified;
   } else if ([pointerEventsString isEqualToString:@"none"]) {
