@@ -52,6 +52,7 @@ using namespace facebook::react;
   const auto &newProps = *std::static_pointer_cast<const RNSVGTextProps>(props);
 
   setCommonTextProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGTextProps const>(props);
 }
 
 - (void)prepareForRecycle

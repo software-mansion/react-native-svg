@@ -53,6 +53,7 @@ using namespace facebook::react;
   self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
 
   setCommonRenderableProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGUseProps const>(props);
 }
 
 - (void)prepareForRecycle
