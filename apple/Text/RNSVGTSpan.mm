@@ -63,6 +63,7 @@ using namespace facebook::react;
   self.content = RCTNSStringFromStringNilIfEmpty(newProps.content);
 
   setCommonTextProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGTSpanProps const>(props);
 }
 
 - (void)prepareForRecycle

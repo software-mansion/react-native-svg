@@ -48,6 +48,7 @@ using namespace facebook::react;
   self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
 
   setCommonRenderableProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGEllipseProps const>(props);
 }
 
 - (void)prepareForRecycle

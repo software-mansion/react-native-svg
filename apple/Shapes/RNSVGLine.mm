@@ -48,6 +48,7 @@ using namespace facebook::react;
   self.y2 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y2)];
 
   setCommonRenderableProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGLineProps const>(props);
 }
 
 - (void)prepareForRecycle
