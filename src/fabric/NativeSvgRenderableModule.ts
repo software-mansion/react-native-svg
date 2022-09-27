@@ -33,4 +33,4 @@ export interface Spec extends TurboModule {
   getRawResource(name: string): Promise<string>;
 }
 
-export default TurboModuleRegistry.get<Spec>('RNSVGRenderableModule');
+export default TurboModuleRegistry.getEnforcing<Spec>('RNSVGRenderableModule');

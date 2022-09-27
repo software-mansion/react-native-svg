@@ -21,7 +21,7 @@ import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
 import G, { GProps } from './G';
 import { RNSVGSvg } from '../ReactNativeSVG';
-import { RNSVGSvgViewModule } from '../fabric';
+import type { Spec } from '../fabric/NativeSvgViewModule';
 
 const styles = StyleSheet.create({
   svg: {
@@ -90,7 +90,9 @@ export default class Svg extends Shape<SvgProps> {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
-    RNSVGSvgViewModule?.toDataURL(handle, options, callback);
+    const RNSVGSvgViewModule: Spec =
+      require('../fabric/NativeSvgViewModule').default;
+    RNSVGSvgViewModule.toDataURL(handle, options, callback);
   };
 
   render() {

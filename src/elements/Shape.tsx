@@ -2,7 +2,7 @@ import { Component } from 'react';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
 import { findNodeHandle, NativeMethods } from 'react-native';
 import { TransformProps } from '../lib/extract/types';
-import { RNSVGRenderableModule } from '../fabric';
+import type { Spec } from '../fabric/NativeSvgRenderableModule';
 
 export interface SVGBoundingBoxOptions {
   fill?: boolean;
@@ -259,7 +259,9 @@ export default class Shape<P> extends Component<P> {
       clipped = true,
     } = options || {};
     const handle = findNodeHandle(this.root);
-    return RNSVGRenderableModule?.getBBox(handle, {
+    const RNSVGRenderableModule =
+      require('../fabric/NativeSvgRenderableModule').default;
+    return RNSVGRenderableModule.getBBox(handle, {
       fill,
       stroke,
       markers,
@@ -268,28 +270,40 @@ export default class Shape<P> extends Component<P> {
   };
   getCTM = (): SVGMatrix => {
     const handle = findNodeHandle(this.root);
-    return new SVGMatrix(RNSVGRenderableModule?.getCTM(handle));
+    const RNSVGRenderableModule: Spec =
+      require('../fabric/NativeSvgRenderableModule').default;
+    return new SVGMatrix(RNSVGRenderableModule.getCTM(handle));
   };
   getScreenCTM = (): SVGMatrix => {
     const handle = findNodeHandle(this.root);
-    return new SVGMatrix(RNSVGRenderableModule?.getScreenCTM(handle));
+    const RNSVGRenderableModule: Spec =
+      require('../fabric/NativeSvgRenderableModule').default;
+    return new SVGMatrix(RNSVGRenderableModule.getScreenCTM(handle));
   };
   isPointInFill = (options: DOMPointInit): boolean | undefined => {
     const handle = findNodeHandle(this.root);
-    return RNSVGRenderableModule?.isPointInFill(handle, options);
+    const RNSVGRenderableModule: Spec =
+      require('../fabric/NativeSvgRenderableModule').default;
+    return RNSVGRenderableModule.isPointInFill(handle, options);
   };
   isPointInStroke = (options: DOMPointInit): boolean | undefined => {
     const handle = findNodeHandle(this.root);
-    return RNSVGRenderableModule?.isPointInStroke(handle, options);
+    const RNSVGRenderableModule: Spec =
+      require('../fabric/NativeSvgRenderableModule').default;
+    return RNSVGRenderableModule.isPointInStroke(handle, options);
   };
   getTotalLength = (): number | undefined => {
     const handle = findNodeHandle(this.root);
-    return RNSVGRenderableModule?.getTotalLength(handle);
+    const RNSVGRenderableModule: Spec =
+      require('../fabric/NativeSvgRenderableModule').default;
+    return RNSVGRenderableModule.getTotalLength(handle);
   };
   getPointAtLength = (length: number): SVGPoint => {
     const handle = findNodeHandle(this.root);
+    const RNSVGRenderableModule: Spec =
+      require('../fabric/NativeSvgRenderableModule').default;
     return new SVGPoint(
-      RNSVGRenderableModule?.getPointAtLength(handle, { length }),
+      RNSVGRenderableModule.getPointAtLength(handle, { length }),
     );
   };
 }
