@@ -47,6 +47,7 @@ using namespace facebook::react;
   self.r = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.r)];
 
   setCommonRenderableProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGCircleProps const>(props);
 }
 
 - (void)prepareForRecycle

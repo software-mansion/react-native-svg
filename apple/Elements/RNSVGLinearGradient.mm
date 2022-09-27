@@ -65,6 +65,7 @@ using namespace facebook::react;
   }
 
   setCommonNodeProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGLinearGradientProps const>(props);
 }
 
 - (void)prepareForRecycle

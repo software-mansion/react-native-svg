@@ -507,14 +507,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
       return;
     }
     ReadableArray ma = matrix.asArray();
-    if (ma == null) {
-      resetTransformProperty(node);
-    } else {
-      setTransformProperty(node, ma);
-    }
-    Matrix m = node.getMatrix();
-    node.mTransform = m;
-    node.mTransformInvertible = m.invert(node.mInvTransform);
+    setTransform(node, ma);
   }
 
   private void invalidateSvgView(V node) {
