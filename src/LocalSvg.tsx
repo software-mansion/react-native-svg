@@ -56,7 +56,7 @@ export type LocalState = { xml: string | null };
 
 export function LocalSvg(props: LocalProps) {
   const { asset, ...rest } = props;
-  const [xml, setXml] = useState(null);
+  const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
     loadLocalRawResource(asset).then(setXml);
   }, [asset]);
