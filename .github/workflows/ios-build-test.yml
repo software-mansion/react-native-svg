@@ -63,6 +63,11 @@ jobs:
         working-directory: ${{ matrix.working-directory }}/ios
         run: pod install
 
+      - name: Generate output of codegen
+        uses: actions/upload-artifact@v3
+        with:
+          path: ${{ matrix.working-directory }}/ios/build/generated/ios
+
       - name: Restore build artifacts from cache
         uses: actions/cache@v3
         with:
