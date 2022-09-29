@@ -58,7 +58,9 @@ interface BaseProps {
   fontWeight?: NumberProp;
   fontSize?: NumberProp;
   fontFamily?: string;
-  forwardedRef: {};
+  forwardedRef?:
+    | React.RefCallback<SVGElement>
+    | React.MutableRefObject<SVGElement | null>;
   style: Iterable<{}>;
 }
 
@@ -156,9 +158,14 @@ const prepare = <T extends BaseProps>(
     clean.transform = transform.join(' ');
   }
 
-  if (forwardedRef) {
-    clean.ref = forwardedRef;
-  }
+  clean.ref = (el: SVGElement | null) => {
+    self.elementRef.current = el;
+    if (typeof forwardedRef === 'function') {
+      forwardedRef(el);
+    } else if (forwardedRef) {
+      forwardedRef.current = el;
+    }
+  };
 
   const styles: {
     fontStyle?: string;
@@ -237,6 +244,41 @@ export class WebShape<
   C = {},
 > extends React.Component<P, C> {
   [x: string]: unknown;
+  protected tag?: React.ElementType;
+  protected prepareProps(props: P) {
+    return props;
+  }
+
+  elementRef =
+    React.createRef<SVGElement>() as React.MutableRefObject<SVGElement | null>;
+  lastMergedProps: Partial<P> = {};
+
+  /**
+   * disclaimer: I am not sure why the props are wrapped in a `style` attribute here, but that's how reanimated calls it
+   */
+  setNativeProps(props: { style: P }) {
+    const merged = Object.assign(
+      {},
+      this.props,
+      this.lastMergedProps,
+      props.style,
+    );
+    this.lastMergedProps = merged;
+    const prepared = prepare(this, this.prepareProps(merged));
+    const current = this.elementRef.current;
+
+    if (current) {
+      if (prepared.transform) {
+        // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+        current.setAttribute('transform', prepared.transform);
+      }
+      if (prepared.style) {
+        // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+        Object.assign(current.style, prepared.style);
+      }
+    }
+  }
+
   _remeasureMetricsOnActivation: () => void;
   touchableHandleStartShouldSetResponder?: (
     e: GestureResponderEvent,
@@ -258,30 +300,35 @@ export class WebShape<
 
     this._remeasureMetricsOnActivation = remeasure.bind(this);
   }
+
+  render(): JSX.Element {
+    if (!this.tag) {
+      throw new Error(
+        'When extending `WebShape` you need to overwrite either `tag` or `render`!',
+      );
+    }
+    this.lastMergedProps = {};
+    return createElement(
+      this.tag,
+      prepare(this, this.prepareProps(this.props)),
+    );
+  }
 }
 
 export class Circle extends WebShape {
-  render(): JSX.Element {
-    return createElement('circle', prepare(this));
-  }
+  tag = 'circle' as const;
 }
 
 export class ClipPath extends WebShape {
-  render(): JSX.Element {
-    return createElement('clipPath', prepare(this));
-  }
+  tag = 'clipPath' as const;
 }
 
 export class Defs extends WebShape {
-  render(): JSX.Element {
-    return createElement('defs', prepare(this));
-  }
+  tag = 'defs' as const;
 }
 
 export class Ellipse extends WebShape {
-  render(): JSX.Element {
-    return createElement('ellipse', prepare(this));
-  }
+  tag = 'ellipse' as const;
 }
 
 export class G extends WebShape<
@@ -291,129 +338,98 @@ export class G extends WebShape<
     translate?: string;
   }
 > {
-  render(): JSX.Element {
-    const { x, y, ...rest } = this.props;
+  tag = 'g' as const;
+  prepareProps(
+    props: BaseProps & {
+      x?: NumberProp;
+      y?: NumberProp;
+      translate?: string;
+    },
+  ) {
+    const { x, y, ...rest } = props;
 
     if ((x || y) && !rest.translate) {
       rest.translate = `${x || 0}, ${y || 0}`;
     }
 
-    return createElement('g', prepare(this, rest));
+    return rest;
   }
 }
 
 export class Image extends WebShape {
-  render(): JSX.Element {
-    return createElement('image', prepare(this));
-  }
+  tag = 'image' as const;
 }
 
 export class Line extends WebShape {
-  render(): JSX.Element {
-    return createElement('line', prepare(this));
-  }
+  tag = 'line' as const;
 }
 
 export class LinearGradient extends WebShape {
-  render(): JSX.Element {
-    return createElement('linearGradient', prepare(this));
-  }
+  tag = 'linearGradient' as const;
 }
 
 export class Path extends WebShape {
-  render(): JSX.Element {
-    return createElement('path', prepare(this));
-  }
+  tag = 'path' as const;
 }
 
 export class Polygon extends WebShape {
-  render(): JSX.Element {
-    return createElement('polygon', prepare(this));
-  }
+  tag = 'polygon' as const;
 }
 
 export class Polyline extends WebShape {
-  render(): JSX.Element {
-    return createElement('polyline', prepare(this));
-  }
+  tag = 'polyline' as const;
 }
 
 export class RadialGradient extends WebShape {
-  render(): JSX.Element {
-    return createElement('radialGradient', prepare(this));
-  }
+  tag = 'radialGradient' as const;
 }
 
 export class Rect extends WebShape {
-  render(): JSX.Element {
-    return createElement('rect', prepare(this));
-  }
+  tag = 'rect' as const;
 }
 
 export class Stop extends WebShape {
-  render(): JSX.Element {
-    return createElement('stop', prepare(this));
-  }
+  tag = 'stop' as const;
 }
 
 export class Svg extends WebShape {
-  render(): JSX.Element {
-    return createElement('svg', prepare(this));
-  }
+  tag = 'svg' as const;
 }
 
 export class Symbol extends WebShape {
-  render(): JSX.Element {
-    return createElement('symbol', prepare(this));
-  }
+  tag = 'symbol' as const;
 }
 
 export class Text extends WebShape {
-  render(): JSX.Element {
-    return createElement('text', prepare(this));
-  }
+  tag = 'text' as const;
 }
 
 export class TSpan extends WebShape {
-  render(): JSX.Element {
-    return createElement('tspan', prepare(this));
-  }
+  tag = 'tspan' as const;
 }
 
 export class TextPath extends WebShape {
-  render(): JSX.Element {
-    return createElement('textPath', prepare(this));
-  }
+  tag = 'textPath' as const;
 }
 
 export class Use extends WebShape {
-  render(): JSX.Element {
-    return createElement('use', prepare(this));
-  }
+  tag = 'use' as const;
 }
 
 export class Mask extends WebShape {
-  render(): JSX.Element {
-    return createElement('mask', prepare(this));
-  }
+  tag = 'mask' as const;
 }
 
 export class ForeignObject extends WebShape {
-  render(): JSX.Element {
-    return createElement('foreignObject', prepare(this));
-  }
+  tag = 'foreignObject' as const;
 }
 
 export class Marker extends WebShape {
-  render(): JSX.Element {
-    return createElement('marker', prepare(this));
-  }
+  tag = 'marker' as const;
 }
 
 export class Pattern extends WebShape {
-  render(): JSX.Element {
-    return createElement('pattern', prepare(this));
-  }
+  tag = 'pattern' as const;
 }
 
 export default Svg;
