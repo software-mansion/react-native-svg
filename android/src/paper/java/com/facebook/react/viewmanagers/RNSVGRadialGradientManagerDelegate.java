@@ -55,6 +55,9 @@ public class RNSVGRadialGradientManagerDelegate<T extends View, U extends BaseVi
       case "display":
         mViewManager.setDisplay(view, value == null ? null : (String) value);
         break;
+      case "pointerEvents":
+        mViewManager.setPointerEvents(view, value == null ? null : (String) value);
+        break;
       case "fx":
         if (value instanceof String) {
           mViewManager.setFx(view, (String) value);

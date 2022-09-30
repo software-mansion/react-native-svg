@@ -55,6 +55,9 @@ public class RNSVGLinearGradientManagerDelegate<T extends View, U extends BaseVi
       case "display":
         mViewManager.setDisplay(view, value == null ? null : (String) value);
         break;
+      case "pointerEvents":
+        mViewManager.setPointerEvents(view, value == null ? null : (String) value);
+        break;
       case "x1":
         if (value instanceof String) {
           mViewManager.setX1(view, (String) value);

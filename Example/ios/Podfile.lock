@@ -368,7 +368,7 @@ PODS:
     - React-jsi (= 0.70.0)
     - React-logger (= 0.70.0)
     - React-perflogger (= 0.70.0)
-  - RNSVG (13.1.0):
+  - RNSVG (13.2.0):
     - React-Core
   - SocketRocket (0.6.0)
   - Yoga (1.14.0)
@@ -530,7 +530,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
   FBLazyVector: 6c76fe46345039d5cf0549e9ddaf5aa169630a4a
   FBReactNativeSpec: 1a270246542f5c52248cb26a96db119cfe3cb760
   Flipper: 26fc4b7382499f1281eb8cb921e5c3ad6de91fe0
@@ -543,7 +543,7 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  glog: 476ee3e89abb49e07f822b48323c51c57124b572
   hermes-engine: 8e84f1284180801c1a1b241f443ba64f931ff561
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
@@ -574,7 +574,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 5499b77c0fd57f346a5f0b36bb79fdb020d17d3e
   React-runtimeexecutor: 80c195ffcafb190f531fdc849dc2d19cb4bb2b34
   ReactCommon: de55f940495d7bf87b5d7bf55b5b15cdd50d7d7b
-  RNSVG: 1153e8eeb34c788841016c517dba9f57f20b762f
+  RNSVG: 07037623c36f12e41312730622d5f6b3656227ca
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 82c9e8f652789f67d98bed5aef9d6653f71b04a9
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

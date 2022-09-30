@@ -1,7 +1,6 @@
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 // TODO: import ImageSource from codegen types when it is available
 import type {
-  ViewProps,
   ColorValue,
   ImageSourcePropType as ImageSource,
 } from 'react-native';
@@ -10,12 +9,12 @@ import type {
   Int32,
   WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
+import type { ViewProps } from './utils';
 
 interface SvgNodeCommonProps {
   name?: string;
   opacity?: WithDefault<Float, 1.0>;
   matrix?: ReadonlyArray<Float>;
-  // transform?: ____TransformStyle_Internal, // CATransform3D, custom handling
   mask?: string;
   markerStart?: string;
   markerMid?: string;
@@ -24,6 +23,7 @@ interface SvgNodeCommonProps {
   clipRule?: WithDefault<Int32, 0>;
   responsible?: boolean;
   display?: string;
+  pointerEvents?: string;
 }
 
 type ColorStruct = Readonly<{

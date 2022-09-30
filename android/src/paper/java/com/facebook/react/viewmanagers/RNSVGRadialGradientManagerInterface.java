@@ -25,6 +25,7 @@ public interface RNSVGRadialGradientManagerInterface<T extends View> {
   void setClipRule(T view, int value);
   void setResponsible(T view, boolean value);
   void setDisplay(T view, @Nullable String value);
+  void setPointerEvents(T view, @Nullable String value);
   void setFx(T view, @Nullable String value);
   void setFx(T view, @Nullable Double value);
   void setFy(T view, @Nullable String value);

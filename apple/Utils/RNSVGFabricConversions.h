@@ -69,17 +69,18 @@ void setCommonNodeProps(T nodeProps, RNSVGNode *node)
   node.responsible = nodeProps.responsible;
   // onLayout
   node.display = RCTNSStringFromStringNilIfEmpty(nodeProps.display);
-  switch (nodeProps.pointerEvents) {
-    case facebook::react::PointerEventsMode::Auto:
-      node.pointerEvents = RCTPointerEventsUnspecified;
-    case facebook::react::PointerEventsMode::None:
-      node.pointerEvents = RCTPointerEventsNone;
-    case facebook::react::PointerEventsMode::BoxNone:
-      node.pointerEvents = RCTPointerEventsBoxNone;
-    case facebook::react::PointerEventsMode::BoxOnly:
-      node.pointerEvents = RCTPointerEventsBoxOnly;
-    default:
-      node.pointerEvents = RCTPointerEventsUnspecified;
+  std::string pointerEvents = nodeProps.pointerEvents;
+  NSString *pointerEventsString = RCTNSStringFromStringNilIfEmpty(pointerEvents);
+  if ([pointerEventsString isEqualToString:@"auto"]) {
+    node.pointerEvents = RCTPointerEventsUnspecified;
+  } else if ([pointerEventsString isEqualToString:@"none"]) {
+    node.pointerEvents = RCTPointerEventsNone;
+  } else if ([pointerEventsString isEqualToString:@"box-none"]) {
+    node.pointerEvents = RCTPointerEventsNone;
+  } else if ([pointerEventsString isEqualToString:@"box-only"]) {
+    node.pointerEvents = RCTPointerEventsNone;
+  } else {
+    node.pointerEvents = RCTPointerEventsUnspecified;
   }
 }
 

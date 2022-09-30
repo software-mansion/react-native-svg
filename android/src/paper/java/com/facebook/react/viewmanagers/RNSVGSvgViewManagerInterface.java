@@ -25,4 +25,5 @@ public interface RNSVGSvgViewManagerInterface<T extends View> {
   void setMeetOrSlice(T view, int value);
   void setTintColor(T view, @Nullable Integer value);
   void setColor(T view, @Nullable Integer value);
+  void setPointerEvents(T view, @Nullable String value);
 }
