@@ -20,6 +20,7 @@ import com.facebook.react.viewmanagers.RNSVGSvgViewManagerInterface;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.facebook.react.views.view.ReactViewManager;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Locale;
 import java.lang.reflect.Method;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
