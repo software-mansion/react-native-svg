@@ -6,7 +6,6 @@ import {
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
   NativeModules,
-  processColor,
   StyleProp,
   StyleSheet,
   ViewProps,
@@ -176,11 +175,7 @@ export default class Svg extends Shape<SvgProps> {
 
     extractResponder(props, props, this as ResponderInstanceProps);
 
-    const tint = processColor(color);
-    if (tint != null) {
-      props.color = tint;
-      props.tintColor = tint;
-    }
+    props.tintColor = color;
 
     if (onLayout != null) {
       props.onLayout = onLayout;
