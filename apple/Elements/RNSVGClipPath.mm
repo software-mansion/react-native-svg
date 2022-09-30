@@ -41,6 +41,7 @@ using namespace facebook::react;
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGClipPathProps>(props);
   setCommonNodeProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGClipPathProps const>(props);
 }
 
 - (void)prepareForRecycle

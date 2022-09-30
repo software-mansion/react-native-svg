@@ -1,6 +1,7 @@
-import type { ColorValue, ViewProps } from 'react-native';
 import type { Float, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
+import type { ColorValue } from 'react-native';
+import type { ViewProps } from './utils';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 
 interface NativeProps extends ViewProps {

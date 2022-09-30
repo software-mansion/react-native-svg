@@ -49,6 +49,7 @@ using namespace facebook::react;
   self.startOffset = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.startOffset)];
 
   setCommonTextProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGTextPathProps const>(props);
 }
 
 - (void)prepareForRecycle

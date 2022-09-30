@@ -64,6 +64,7 @@ using namespace facebook::react;
   }
 
   setCommonGroupProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGMaskProps const>(props);
 }
 
 - (void)prepareForRecycle

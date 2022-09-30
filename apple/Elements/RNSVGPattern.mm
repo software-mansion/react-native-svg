@@ -70,6 +70,7 @@ using namespace facebook::react;
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
 
   setCommonGroupProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGPatternProps const>(props);
 }
 
 - (void)prepareForRecycle
