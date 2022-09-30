@@ -176,7 +176,8 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
         method.setAccessible(true);
         method.invoke(view, PointerEvents.parsePointerEvents(pointerEventsStr));
       }
-    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
+    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+      e.printStackTrace();
     }
   }
 }
