@@ -205,7 +205,11 @@ class RNSVGRenderableManager extends NativeSvgRenderableModuleSpec {
 
     float scale = svg.mScale;
     Matrix ctm = new Matrix(svg.mCTM);
-    Matrix invViewBoxMatrix = svg.getSvgView().mInvViewBoxMatrix;
+    SvgView svgView = svg.getSvgView();
+    if (svgView == null) {
+      throw new RuntimeException("Did not find parent SvgView for view with tag: " + tag);
+    }
+    Matrix invViewBoxMatrix = svgView.mInvViewBoxMatrix;
     ctm.preConcat(invViewBoxMatrix);
 
     float[] values = new float[9];
