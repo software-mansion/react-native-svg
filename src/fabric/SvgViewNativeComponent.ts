@@ -1,8 +1,7 @@
-import type { Float, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
-
-import type { ColorValue } from 'react-native';
-import type { ViewProps } from './utils';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
+import type { ColorValue } from 'react-native';
+import type { Float, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import type { ViewProps } from './utils';
 
 interface NativeProps extends ViewProps {
   bbWidth: string;

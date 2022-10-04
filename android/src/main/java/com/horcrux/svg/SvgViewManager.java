@@ -23,7 +23,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.horcrux.svg.SvgView;
 
 /**
  * ViewManager for RNSVGSvgView React views. Renders as a {@link SvgView} and handles invalidating
