@@ -35,9 +35,6 @@ import javax.annotation.Nullable;
 /** Custom {@link View} implementation that draws an RNSVGSvg React view and its children. */
 @SuppressLint("ViewConstructor")
 public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactCompoundViewGroup {
-
-  PointerEvents mPointerEvents;
-
   @Override
   public boolean interceptsTouchEvent(float touchX, float touchY) {
     return true;
@@ -445,13 +442,5 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
   VirtualView getDefinedMarker(String markerRef) {
     return mDefinedMarkers.get(markerRef);
-  }
-
-  void setPointerEvents(PointerEvents pointerEvents) {
-    mPointerEvents = pointerEvents;
-  }
-
-  public PointerEvents getPointerEvents() {
-    return mPointerEvents;
   }
 }

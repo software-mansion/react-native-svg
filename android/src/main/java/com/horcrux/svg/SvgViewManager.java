@@ -169,13 +169,17 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
     view.setBbHeight(value);
   }
 
+  @ReactProp(name = ViewProps.POINTER_EVENTS)
   public void setPointerEvents(SvgView view, @Nullable String pointerEventsStr) {
-    if (pointerEventsStr == null) {
-      view.setPointerEvents(PointerEvents.AUTO);
-    } else {
-      PointerEvents pointerEvents =
-        PointerEvents.valueOf(pointerEventsStr.toUpperCase(Locale.US).replace("-", "_"));
-      view.setPointerEvents(pointerEvents);
+    try {
+      Class<?> superclass = view.getClass().getSuperclass();
+      if (superclass != null) {
+        Method method = superclass.getDeclaredMethod("setPointerEvents", PointerEvents.class);
+        method.setAccessible(true);
+        method.invoke(view, PointerEvents.parsePointerEvents(pointerEventsStr));
+      }
+    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+      e.printStackTrace();
     }
   }
 }
