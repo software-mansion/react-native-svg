@@ -25,7 +25,6 @@ import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.ReactCompoundView;
 import com.facebook.react.uimanager.ReactCompoundViewGroup;
 import com.facebook.react.views.view.ReactViewGroup;
-import com.facebook.react.uimanager.PointerEvents;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
