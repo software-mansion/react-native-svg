@@ -64,6 +64,9 @@ public class RNSVGSvgViewManagerDelegate<T extends View, U extends BaseViewManag
       case "color":
         mViewManager.setColor(view, ColorPropConverter.getColor(value, view.getContext()));
         break;
+      case "pointerEvents":
+        mViewManager.setPointerEvents(view, value == null ? null : (String) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }

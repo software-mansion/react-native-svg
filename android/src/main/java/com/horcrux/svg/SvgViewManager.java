@@ -10,13 +10,17 @@ package com.horcrux.svg;
 
 import android.util.SparseArray;
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewManagerDelegate;
+import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.viewmanagers.RNSVGSvgViewManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGSvgViewManagerInterface;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.facebook.react.views.view.ReactViewManager;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -161,5 +165,19 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
 
   public void setBbHeight(SvgView view, @Nullable Double value) {
     view.setBbHeight(value);
+  }
+
+  @ReactProp(name = ViewProps.POINTER_EVENTS)
+  public void setPointerEvents(SvgView view, @Nullable String pointerEventsStr) {
+    try {
+      Class<?> superclass = view.getClass().getSuperclass();
+      if (superclass != null) {
+        Method method = superclass.getDeclaredMethod("setPointerEvents", PointerEvents.class);
+        method.setAccessible(true);
+        method.invoke(view, PointerEvents.parsePointerEvents(pointerEventsStr));
+      }
+    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+      e.printStackTrace();
+    }
   }
 }
