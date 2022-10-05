@@ -28,6 +28,8 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.PointerEvents;
+import com.facebook.react.touch.ReactHitSlopView;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -35,7 +37,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 @SuppressWarnings({"WeakerAccess", "RedundantSuppression"})
-public abstract class RenderableView extends VirtualView {
+abstract public class RenderableView extends VirtualView implements ReactHitSlopView {
 
   RenderableView(ReactContext reactContext) {
     super(reactContext);
@@ -94,11 +96,23 @@ public abstract class RenderableView extends VirtualView {
 
   private static final Pattern regex = Pattern.compile("[0-9.-]+");
 
-  @Override
-  public void setId(int id) {
-    super.setId(id);
-    RenderableViewManager.setRenderableView(id, this);
-  }
+    @Nullable
+    public Rect getHitSlopRect() {
+        /*
+         * In order to make the isTouchPointInView fail we need to return a very improbable Rect for the View
+         * This way an SVG with box_none carrying its last descendent with box_none will have the expected behavior of just having events on the actual painted area
+        */
+        if (mPointerEvents == PointerEvents.BOX_NONE) {
+            return new Rect(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
+        }
+        return null;
+    }
+
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+        RenderableViewManager.setRenderableView(id, this);
+    }
 
   public void setVectorEffect(int vectorEffect) {
     this.vectorEffect = vectorEffect;
