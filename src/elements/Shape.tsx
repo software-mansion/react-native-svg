@@ -239,6 +239,10 @@ export default class Shape<P> extends Component<P> {
   ) => {
     this.root = instance;
   };
+  // Hack to make Animated work with Shape components.
+  getNativeScrollRef(): (Shape<P> & NativeMethods) | null {
+    return this.root;
+  }
   setNativeProps = (
     props: Object & {
       matrix?: [number, number, number, number, number, number];
