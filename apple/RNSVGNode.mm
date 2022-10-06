@@ -71,7 +71,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   RNSVGView *container = self.superview;
   // on Fabric, when the child components are added to hierarchy and their props are set,
   // their superview is not set yet.
-  if ([container conformsToProtocol:@protocol(RNSVGContainer)]) {
+  if (container != nil) {
     [(id<RNSVGContainer>)container invalidate];
   }
   [self clearPath];
