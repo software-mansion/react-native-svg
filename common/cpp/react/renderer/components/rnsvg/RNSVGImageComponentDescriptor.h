@@ -22,7 +22,7 @@ namespace react {
 class RNSVGImageComponentDescriptor final
     : public ConcreteComponentDescriptor<RNSVGImageShadowNode> {
  public:
-        RNSVGImageComponentDescriptor(ComponentDescriptorParameters const &parameters)
+  RNSVGImageComponentDescriptor(ComponentDescriptorParameters const &parameters)
       : ConcreteComponentDescriptor(parameters),
         imageManager_(std::make_shared<ImageManager>(contextContainer_)){};
 

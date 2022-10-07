@@ -17,10 +17,5 @@ ImageSource RNSVGImageState::getImageSource() const {
 ImageRequest const &RNSVGImageState::getImageRequest() const {
   return *imageRequest_;
 }
-//
-//Float ImageState::getBlurRadius() const {
-//  return blurRadius_;
-//}
-
 } // namespace react
 } // namespace facebook

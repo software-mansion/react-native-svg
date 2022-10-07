@@ -7,9 +7,9 @@
 
 #pragma once
 
+#include <jsi/jsi.h>
 #include <react/renderer/imagemanager/ImageRequest.h>
 #include <react/renderer/imagemanager/primitives.h>
-#include <jsi/jsi.h>
 
 #ifdef ANDROID
 #include <react/renderer/mapbuffer/MapBuffer.h>
@@ -24,12 +24,10 @@ namespace react {
  */
 class JSI_EXPORT RNSVGImageState final {
  public:
-    RNSVGImageState(
-      ImageSource const &imageSource,
-      ImageRequest imageRequest)
+  RNSVGImageState(ImageSource const &imageSource, ImageRequest imageRequest)
       : imageSource_(imageSource),
-        imageRequest_(std::make_shared<ImageRequest>(std::move(imageRequest)))
-    {};
+        imageRequest_(
+            std::make_shared<ImageRequest>(std::move(imageRequest))){};
 
   /*
    * Returns stored ImageSource object.
@@ -42,11 +40,8 @@ class JSI_EXPORT RNSVGImageState final {
    */
   ImageRequest const &getImageRequest() const;
 
-//    Float getBlurRadius() const;
-
-
 #ifdef ANDROID
-    RNSVGImageState(RNSVGImageState const &previousState, folly::dynamic data){};
+  RNSVGImageState(RNSVGImageState const &previousState, folly::dynamic data){};
 
   /*
    * Empty implementation for Android because it doesn't use this class.

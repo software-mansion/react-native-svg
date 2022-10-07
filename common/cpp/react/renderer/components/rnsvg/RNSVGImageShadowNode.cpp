@@ -17,7 +17,8 @@ namespace react {
 
 const char RNSVGImageComponentName[] = "RNSVGImage";
 
-void RNSVGImageShadowNode::setImageManager(const SharedImageManager &imageManager) {
+void RNSVGImageShadowNode::setImageManager(
+    const SharedImageManager &imageManager) {
   ensureUnsealed();
   imageManager_ = imageManager;
 }
@@ -28,9 +29,9 @@ ImageSource RNSVGImageShadowNode::getImageSource() const {
   auto layoutMetrics = getLayoutMetrics();
   auto size = layoutMetrics.getContentFrame().size;
   auto scale = layoutMetrics.pointScaleFactor;
-    source.size = size;
-    source.scale = scale;
-    return source;
+  source.size = size;
+  source.scale = scale;
+  return source;
 }
 
 void RNSVGImageShadowNode::updateStateIfNeeded() {
@@ -38,19 +39,15 @@ void RNSVGImageShadowNode::updateStateIfNeeded() {
 
   auto imageSource = getImageSource();
   auto const &currentState = getStateData();
-//  bool hasSameRadius =
-//      getConcreteProps().blurRadius == currentState.getBlurRadius();
   bool hasSameImageSource = currentState.getImageSource() == imageSource;
 
-    if (hasSameImageSource ){ //TODO: maybe should use this //&& hasSameRadius) {
+  if (hasSameImageSource) {
     return;
   }
 
   auto state = RNSVGImageState{
       imageSource,
       imageManager_->requestImage(imageSource, getSurfaceId()),
-      //getConcreteProps().blurRadius
-      
   };
   setStateData(std::move(state));
 }

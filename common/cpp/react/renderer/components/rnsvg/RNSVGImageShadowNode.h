@@ -7,12 +7,12 @@
 
 #pragma once
 
+#include <jsi/jsi.h>
 #include <react/renderer/components/rnsvg/EventEmitters.h>
 #include <react/renderer/components/rnsvg/Props.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/imagemanager/ImageManager.h>
 #include <react/renderer/imagemanager/primitives.h>
-#include <jsi/jsi.h>
 
 #include "RNSVGImageState.h"
 
@@ -25,10 +25,10 @@ JSI_EXPORT extern const char RNSVGImageComponentName[];
  * `ShadowNode` for <RNSVGImage> component.
  */
 class JSI_EXPORT RNSVGImageShadowNode final : public ConcreteViewShadowNode<
-RNSVGImageComponentName,
-RNSVGImageProps,
-ViewEventEmitter,
-RNSVGImageState> {
+                                                  RNSVGImageComponentName,
+                                                  RNSVGImageProps,
+                                                  ViewEventEmitter,
+                                                  RNSVGImageState> {
  public:
   using ConcreteViewShadowNode::ConcreteViewShadowNode;
 
