@@ -150,10 +150,6 @@ class SvgNativeMethods extends Component {
   root: Svg | null;
   circle: Circle | null;
 
-  componentDidMount() {
-      this.alert();
-  }
-
   render() {
     return (
       <View>
