@@ -158,30 +158,12 @@ const prepare = <T extends BaseProps>(
     clean.transform = transform.join(' ');
   }
 
-  clean.ref = (element: SVGElement | null) => {
-    self.elementRef.current = element;
-    /**
-     * If the TouchableMixin is used, this already has been
-     * set to `element` in `componentDidMount`.
-     * We want to override `element.setAttribute`, so we replace
-     *  it with a proxied version (not touching the real DOM node).
-     */
-    self._touchableNode = !element
-      ? element
-      : new Proxy(element, {
-          get(target, p) {
-            if (p === 'setAttribute') {
-              return self.schedulePropUpdate.bind(self);
-            }
-            // @ts-expect-error this is always non-typesafe
-            return target[p];
-          },
-        });
-    // handle `forwardedRef` if it was present
+  clean.ref = (el: SVGElement | null) => {
+    self.elementRef.current = el;
     if (typeof forwardedRef === 'function') {
-      forwardedRef(element);
+      forwardedRef(el);
     } else if (forwardedRef) {
-      forwardedRef.current = element;
+      forwardedRef.current = el;
     }
   };
 
@@ -257,13 +239,6 @@ function remeasure() {
   measureLayout(tag, this._handleQueryLayout);
 }
 
-function dashedToCamelCase(dashedKey: string) {
-  return dashedKey.replace(/-[a-z]/g, (m) => m[1].toUpperCase());
-}
-function camelCaseToDashed(camelCase: string) {
-  return camelCase.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
-}
-
 export class WebShape<
   P extends BaseProps = BaseProps,
   C = {},
@@ -276,52 +251,30 @@ export class WebShape<
 
   elementRef =
     React.createRef<SVGElement>() as React.MutableRefObject<SVGElement | null>;
+  lastMergedProps: Partial<P> = {};
 
-  updatedProps: Record<string, unknown> = {};
-  propUpdatesScheduled: number | undefined;
-  schedulePropUpdate(dashedKey: string, value: unknown) {
-    const key = dashedToCamelCase(dashedKey);
-    this.updatedProps[key] = value;
-
-    if (!this.propUpdatesScheduled) {
-      this.propUpdatesScheduled = requestAnimationFrame(
-        this.applyPropUpdates.bind(this),
-      );
-    }
-  }
-  resetPropUpdates() {
-    this.updatedProps = {};
-    if (this.propUpdatesScheduled) {
-      cancelAnimationFrame(this.propUpdatesScheduled);
-      this.propUpdatesScheduled = undefined;
-    }
-  }
-  applyPropUpdates() {
-    this.propUpdatesScheduled = undefined;
-
-    const clean = prepare(
-      this,
-      this.prepareProps({ ...this.props, ...this.updatedProps }),
+  /**
+   * disclaimer: I am not sure why the props are wrapped in a `style` attribute here, but that's how reanimated calls it
+   */
+  setNativeProps(props: { style: P }) {
+    const merged = Object.assign(
+      {},
+      this.props,
+      this.lastMergedProps,
+      props.style,
     );
-
+    this.lastMergedProps = merged;
+    const prepared = prepare(this, this.prepareProps(merged));
     const current = this.elementRef.current;
-    if (!current) {
-      return;
-    }
-    for (const cleanAttribute of Object.keys(clean)) {
-      const cleanValue = clean[cleanAttribute as keyof typeof clean];
-      switch (cleanAttribute) {
-        case 'ref':
-        case 'children':
-          break;
-        case 'style':
-          // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
-          Object.assign(current.style, cleanValue);
-          break;
-        default:
-          // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
-          current.setAttribute(camelCaseToDashed(cleanAttribute), cleanValue);
-          break;
+
+    if (current) {
+      if (prepared.transform) {
+        // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+        current.setAttribute('transform', prepared.transform);
+      }
+      if (prepared.style) {
+        // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+        Object.assign(current.style, prepared.style);
       }
     }
   }
@@ -354,7 +307,7 @@ export class WebShape<
         'When extending `WebShape` you need to overwrite either `tag` or `render`!',
       );
     }
-    this.resetPropUpdates();
+    this.lastMergedProps = {};
     return createElement(
       this.tag,
       prepare(this, this.prepareProps(this.props)),
