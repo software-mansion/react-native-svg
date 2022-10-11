@@ -49,7 +49,8 @@ import {
   RNSVGPattern,
   RNSVGRadialGradient,
   RNSVGRect,
-  RNSVGSvg,
+  RNSVGSvgAndroid,
+  RNSVGSvgIOS,
   RNSVGSymbol,
   RNSVGText,
   RNSVGTextPath,
@@ -144,7 +145,8 @@ export {
   RNSVGEllipse,
   RNSVGCircle,
   RNSVGRect,
-  RNSVGSvg,
+  RNSVGSvgAndroid,
+  RNSVGSvgIOS,
   RNSVGForeignObject,
 };
 

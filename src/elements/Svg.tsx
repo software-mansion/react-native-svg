@@ -5,6 +5,7 @@ import {
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
+  Platform,
   StyleProp,
   StyleSheet,
   ViewProps,
@@ -19,7 +20,7 @@ import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
 import G, { GProps } from './G';
-import { RNSVGSvg } from '../ReactNativeSVG';
+import { RNSVGSvgAndroid, RNSVGSvgIOS } from '../ReactNativeSVG';
 import type { Spec } from '../fabric/NativeSvgViewModule';
 
 const styles = StyleSheet.create({
@@ -180,6 +181,8 @@ export default class Svg extends Shape<SvgProps> {
     if (onLayout != null) {
       props.onLayout = onLayout;
     }
+
+    const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
 
     return (
       <RNSVGSvg
