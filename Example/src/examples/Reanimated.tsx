@@ -28,7 +28,7 @@ function ReanimatedRectExample() {
 
   return (
     <Svg height="150" width="300">
-      <ReanimatedRect animatedProps={animatedProps} />
+      <ReanimatedRect animatedProps={animatedProps} fill="red" />
     </Svg>
   );
 }
