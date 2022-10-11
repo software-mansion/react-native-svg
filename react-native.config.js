@@ -18,7 +18,7 @@ module.exports = {
             "RNSVGPatternComponentDescriptor",
             "RNSVGRadialGradientComponentDescriptor",
             "RNSVGRectComponentDescriptor",
-            "RNSVGSvgViewComponentDescriptor",
+            "RNSVGSvgViewAndroidComponentDescriptor",
             "RNSVGSymbolComponentDescriptor",
             "RNSVGTextComponentDescriptor",
             "RNSVGTextPathComponentDescriptor",

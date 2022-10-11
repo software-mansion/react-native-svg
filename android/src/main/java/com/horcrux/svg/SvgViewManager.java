@@ -17,8 +17,8 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.viewmanagers.RNSVGSvgViewManagerDelegate;
-import com.facebook.react.viewmanagers.RNSVGSvgViewManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGSvgViewAndroidManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGSvgViewAndroidManagerInterface;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.facebook.react.views.view.ReactViewManager;
 import java.lang.reflect.InvocationTargetException;
@@ -30,9 +30,10 @@ import javax.annotation.Nullable;
  * ViewManager for RNSVGSvgView React views. Renders as a {@link SvgView} and handles invalidating
  * the native view on view updates happening in the underlying tree.
  */
-class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInterface<SvgView> {
+class SvgViewManager extends ReactViewManager
+    implements RNSVGSvgViewAndroidManagerInterface<SvgView> {
 
-  public static final String REACT_CLASS = "RNSVGSvgView";
+  public static final String REACT_CLASS = "RNSVGSvgViewAndroid";
 
   private static final SparseArray<SvgView> mTagToSvgView = new SparseArray<>();
   private static final SparseArray<Runnable> mTagToRunnable = new SparseArray<>();
@@ -44,7 +45,7 @@ class SvgViewManager extends ReactViewManager implements RNSVGSvgViewManagerInte
   }
 
   public SvgViewManager() {
-    mDelegate = new RNSVGSvgViewManagerDelegate(this);
+    mDelegate = new RNSVGSvgViewAndroidManagerDelegate(this);
   }
 
   static void setSvgView(int tag, SvgView svg) {
