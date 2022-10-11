@@ -22,7 +22,8 @@
     "src",
     "RNSVG.podspec",
     "!android/build",
-    "windows"
+    "windows",
+    "react-native-config.js"
   ],
   "@react-native-community/bob": {
     "source": "src",
