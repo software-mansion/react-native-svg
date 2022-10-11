@@ -17,4 +17,6 @@ interface NativeProps extends ViewProps {
   pointerEvents?: string;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGSvgView');
+export default codegenNativeComponent<NativeProps>('RNSVGSvgView', {
+  excludedPlatforms: ['android'],
+});

@@ -61,4 +61,6 @@ interface NativeProps extends ViewProps {
   // borderTopLeftRadius?: Float;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGSvgViewAndroid');
+export default codegenNativeComponent<NativeProps>('RNSVGSvgView', {
+  excludedPlatforms: ['iOS'],
+});
