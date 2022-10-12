@@ -3,6 +3,7 @@ import { extract, stringifyPropsForFabric } from '../lib/extract/extractProps';
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGEllipse } from '../ReactNativeSVG';
+import { NativeMethods } from 'react-native';
 
 export interface EllipseProps extends CommonPathProps {
   cx?: NumberProp;
@@ -29,7 +30,11 @@ export default class Ellipse extends Shape<EllipseProps> {
       ...extract(this, props),
       ...stringifyPropsForFabric({ cx, cy, rx, ry }),
     };
-    // @ts-ignore TODO: handle ref correctly
-    return <RNSVGEllipse ref={this.refMethod} {...ellipseProps} />;
+    return (
+      <RNSVGEllipse
+        ref={(ref) => this.refMethod(ref as (Ellipse & NativeMethods) | null)}
+        {...ellipseProps}
+      />
+    );
   }
 }

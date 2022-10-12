@@ -7,6 +7,7 @@ import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import { idPattern } from '../lib/util';
 import Shape from './Shape';
 import { RNSVGUse } from '../ReactNativeSVG';
+import { NativeMethods } from 'react-native';
 
 export interface UseProps extends CommonPathProps {
   children?: ReactNode;
@@ -59,8 +60,11 @@ export default class Use extends Shape<UseProps> {
       height,
     });
     return (
-      // @ts-ignore TODO: handle ref correctly
-      <RNSVGUse ref={this.refMethod} {...withoutXY(this, props)} {...useProps}>
+      <RNSVGUse
+        ref={(ref) => this.refMethod(ref as (Use & NativeMethods) | null)}
+        {...withoutXY(this, props)}
+        {...useProps}
+      >
         {children}
       </RNSVGUse>
     );

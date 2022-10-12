@@ -11,6 +11,7 @@ import units from '../lib/units';
 import Shape from './Shape';
 import { RNSVGPattern } from '../ReactNativeSVG';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
+import { NativeMethods } from 'react-native';
 
 export interface PatternProps {
   children?: ReactNode;
@@ -69,8 +70,7 @@ export default class Pattern extends Shape<PatternProps> {
     };
     return (
       <RNSVGPattern
-        // @ts-ignore TODO: handle ref correctly
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (Pattern & NativeMethods) | null)}
         {...strigifiedPatternProps}
         {...patternProps}
         {...extractViewBox({ viewBox, preserveAspectRatio })}

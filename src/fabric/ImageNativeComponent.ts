@@ -56,7 +56,7 @@ interface NativeProps
   y?: string;
   width?: string;
   height?: string;
-  src?: ImageSource;
+  src?: ImageSource | null;
   align?: string;
   meetOrSlice?: Int32;
 }

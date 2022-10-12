@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ImageProps as RNImageProps } from 'react-native';
+import { Image, ImageProps as RNImageProps, NativeMethods } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
 import {
   stringifyPropsForFabric,
@@ -82,8 +82,7 @@ export default class SvgImage extends Shape<ImageProps> {
     };
     return (
       <RNSVGImage
-        // @ts-ignore TODO: handle ref correctly
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (SvgImage & NativeMethods) | null)}
         {...withoutXY(this, props)}
         {...imageProps}
       />

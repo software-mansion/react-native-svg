@@ -3,6 +3,7 @@ import { extract } from '../lib/extract/extractProps';
 import Shape from './Shape';
 import { RNSVGPath } from '../ReactNativeSVG';
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
+import { NativeMethods } from 'react-native';
 
 export interface PathProps extends CommonPathProps {
   d?: string;
@@ -16,7 +17,12 @@ export default class Path extends Shape<PathProps> {
     const { props } = this;
     const { d } = props;
     const pathProps = { ...extract(this, props), d };
-    // @ts-ignore TODO: handle ref correctly
-    return <RNSVGPath ref={this.refMethod} {...pathProps} />;
+
+    return (
+      <RNSVGPath
+        ref={(ref) => this.refMethod(ref as (Path & NativeMethods) | null)}
+        {...pathProps}
+      />
+    );
   }
 }

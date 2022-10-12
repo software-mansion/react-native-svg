@@ -5,6 +5,7 @@ import {
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
+  NativeMethods,
   Platform,
   StyleProp,
   StyleSheet,
@@ -187,8 +188,7 @@ export default class Svg extends Shape<SvgProps> {
     return (
       <RNSVGSvg
         {...props}
-        // @ts-ignore TODO: handle ref correctly
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (Svg & NativeMethods) | null)}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
       >
         <G

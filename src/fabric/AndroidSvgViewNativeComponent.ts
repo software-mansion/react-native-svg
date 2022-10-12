@@ -11,16 +11,16 @@ type NativeBackgroundProp = Readonly<{
 }>;
 
 interface NativeProps extends ViewProps {
-  bbWidth: string;
-  bbHeight: string;
-  minX: Float;
-  minY: Float;
-  vbWidth: Float;
-  vbHeight: Float;
-  align: string;
-  meetOrSlice: Int32;
-  tintColor: ColorValue;
-  color: ColorValue;
+  bbWidth?: string;
+  bbHeight?: string;
+  minX?: Float;
+  minY?: Float;
+  vbWidth?: Float;
+  vbHeight?: Float;
+  align?: string;
+  meetOrSlice?: Int32;
+  tintColor?: ColorValue;
+  color?: ColorValue;
   pointerEvents?: string;
 
   // props needed for Android SvgView
@@ -30,12 +30,12 @@ interface NativeProps extends ViewProps {
   borderBottomColor?: ColorValue;
   nextFocusDown?: Int32;
   borderRightColor?: ColorValue;
-  nextFocusRight: Int32;
+  nextFocusRight?: Int32;
   borderLeftColor?: ColorValue;
   borderColor?: ColorValue;
   removeClippedSubviews?: boolean;
-  nextFocusForward: Int32;
-  nextFocusUp: Int32;
+  nextFocusForward?: Int32;
+  nextFocusUp?: Int32;
   accessible?: boolean;
   borderStartColor?: ColorValue;
   borderBottomEndRadius?: Float;
@@ -49,7 +49,7 @@ interface NativeProps extends ViewProps {
   needsOffscreenAlphaCompositing?: boolean;
   hitSlop?: EdgeInsetsValue; // TODO: It says that the type is wrong on `Android`, but correct on `iOS` for some reason
   borderTopColor?: ColorValue;
-  nextFocusLeft: Int32;
+  nextFocusLeft?: Int32;
   // TODO: those props are present in the `ReactPropGroup` but are not supported
   // (https://github.com/facebook/react-native/blob/35556dba600fbb28e0f41340a74b6c4a59bc6018/ReactAndroid/src/main/java/com/facebook/react/uimanager/BaseViewManager.java#L613)
   // and static view config validator says that they are missing, but for now I don't know

@@ -8,6 +8,7 @@ import {
 import Shape from './Shape';
 import { RNSVGLinearGradient } from '../ReactNativeSVG';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
+import { NativeMethods } from 'react-native';
 
 export interface LinearGradientProps {
   children?: ReactElement[];
@@ -36,8 +37,9 @@ export default class LinearGradient extends Shape<LinearGradientProps> {
     const linearGradientProps = stringifyPropsForFabric({ x1, y1, x2, y2 });
     return (
       <RNSVGLinearGradient
-        // @ts-ignore TODO: handle ref correctly
-        ref={this.refMethod}
+        ref={(ref) =>
+          this.refMethod(ref as (LinearGradient & NativeMethods) | null)
+        }
         {...linearGradientProps}
         {...extractGradient(props, this)}
       />
