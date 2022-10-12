@@ -15,7 +15,9 @@ import com.facebook.react.bridge.ReadableMap;
 
 public interface RNSVGSvgViewAndroidManagerInterface<T extends View> {
   void setBbWidth(T view, @Nullable String value);
+  void setBbWidth(T view, @Nullable Double value);
   void setBbHeight(T view, @Nullable String value);
+  void setBbHeight(T view, @Nullable Double value);
   void setMinX(T view, float value);
   void setMinY(T view, float value);
   void setVbWidth(T view, float value);
@@ -51,4 +53,9 @@ public interface RNSVGSvgViewAndroidManagerInterface<T extends View> {
   void setHitSlop(T view, @Nullable ReadableMap value);
   void setBorderTopColor(T view, @Nullable Integer value);
   void setNextFocusLeft(T view, int value);
+  void setBorderTopRightRadiusAndroid(T view, float value);
+  void setBorderBottomRightRadiusAndroid(T view, float value);
+  void setBorderRadiusAndroid(T view, float value);
+  void setBorderBottomLeftRadiusAndroid(T view, float value);
+  void setBorderTopLeftRadiusAndroid(T view, float value);
 }

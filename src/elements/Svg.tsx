@@ -183,6 +183,15 @@ export default class Svg extends Shape<SvgProps> {
       props.onLayout = onLayout;
     }
 
+    // This is needed for tricking codegen, see `AndroidSvgViewNativeComponent.ts` for more info.
+    if (Platform.OS === 'android') {
+      props.borderTopRightRadiusAndroid = props.borderTopRightRadius;
+      props.borderBottomRightRadiusAndroid = props.borderBottomRightRadius;
+      props.borderRadiusAndroid = props.borderRadius;
+      props.borderBottomLeftRadiusAndroid = props.borderBottomLeftRadius;
+      props.borderTopLeftRadiusAndroid = props.borderTopLeftRadius;
+    }
+
     const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
 
     return (

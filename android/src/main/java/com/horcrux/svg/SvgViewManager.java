@@ -314,28 +314,33 @@ class SvgViewManager extends ReactViewManager
     super.nextFocusLeft(view, value);
   }
 
-  //  @Override
-  //  public void setBorderBottomLeftRadius(SvgView view, float value) {
-  //
-  //  }
-  //
-  //  @Override
-  //  public void setBorderBottomRightRadius(SvgView view, float value) {
-  //
-  //  }
-  //
-  //  @Override
-  //  public void setBorderRadius(SvgView view, float value) {
-  //
-  //  }
-  //
-  //  @Override
-  //  public void setBorderTopRightRadius(SvgView view, float value) {
-  //
-  //  }
-  //
-  //  @Override
-  //  public void setBorderTopLeftRadius(SvgView view, float value) {
-  //
-  //  }
+  @Override
+  @ReactProp(name = "borderBottomLeftRadiusAndroid")
+  public void setBorderBottomLeftRadiusAndroid(SvgView view, float value) {
+    super.setBorderBottomLeftRadius(view, value);
+  }
+
+  @Override
+  @ReactProp(name = "borderBottomRightRadiusAndroid")
+  public void setBorderBottomRightRadiusAndroid(SvgView view, float value) {
+    super.setBorderBottomRightRadius(view, value);
+  }
+
+  @Override
+  @ReactProp(name = "borderRadiusAndroid")
+  public void setBorderRadiusAndroid(SvgView view, float value) {
+    super.setBorderRadius(view, value);
+  }
+
+  @Override
+  @ReactProp(name = "borderTopRightRadiusAndroid")
+  public void setBorderTopRightRadiusAndroid(SvgView view, float value) {
+    super.setBorderTopRightRadius(view, value);
+  }
+
+  @Override
+  @ReactProp(name = "borderTopLeftRadiusAndroid")
+  public void setBorderTopLeftRadiusAndroid(SvgView view, float value) {
+    super.setBorderTopLeftRadius(view, value);
+  }
 }

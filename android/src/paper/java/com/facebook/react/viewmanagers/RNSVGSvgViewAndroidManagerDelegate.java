@@ -24,10 +24,22 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
   public void setProperty(T view, String propName, @Nullable Object value) {
     switch (propName) {
       case "bbWidth":
-        mViewManager.setBbWidth(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setBbWidth(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setBbWidth(view, (Double) value);
+        } else {
+          mViewManager.setBbWidth(view, (Double) null);
+        }
         break;
       case "bbHeight":
-        mViewManager.setBbHeight(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setBbHeight(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setBbHeight(view, (Double) value);
+        } else {
+          mViewManager.setBbHeight(view, (Double) null);
+        }
         break;
       case "minX":
         mViewManager.setMinX(view, value == null ? Float.NaN : ((Double) value).floatValue());
@@ -133,6 +145,21 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
         break;
       case "nextFocusLeft":
         mViewManager.setNextFocusLeft(view, value == null ? 0 : ((Double) value).intValue());
+        break;
+      case "borderTopRightRadiusAndroid":
+        mViewManager.setBorderTopRightRadiusAndroid(view, value == null ? 0f : ((Double) value).floatValue());
+        break;
+      case "borderBottomRightRadiusAndroid":
+        mViewManager.setBorderBottomRightRadiusAndroid(view, value == null ? 0f : ((Double) value).floatValue());
+        break;
+      case "borderRadiusAndroid":
+        mViewManager.setBorderRadiusAndroid(view, value == null ? 0f : ((Double) value).floatValue());
+        break;
+      case "borderBottomLeftRadiusAndroid":
+        mViewManager.setBorderBottomLeftRadiusAndroid(view, value == null ? 0f : ((Double) value).floatValue());
+        break;
+      case "borderTopLeftRadiusAndroid":
+        mViewManager.setBorderTopLeftRadiusAndroid(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       default:
         super.setProperty(view, propName, value);
