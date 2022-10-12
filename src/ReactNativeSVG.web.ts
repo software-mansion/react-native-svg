@@ -67,6 +67,10 @@ interface BaseProps {
 const hasTouchableProperty = (props: BaseProps) =>
   props.onPress || props.onPressIn || props.onPressOut || props.onLongPress;
 
+const camelCaseToDashed = (camelCase: string) => {
+  return camelCase.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
+};
+
 /**
  * `react-native-svg` supports additional props that aren't defined in the spec.
  * This function replaces them in a spec conforming manner.
@@ -264,17 +268,24 @@ export class WebShape<
       props.style,
     );
     this.lastMergedProps = merged;
-    const prepared = prepare(this, this.prepareProps(merged));
+    const clean = prepare(this, this.prepareProps(merged));
     const current = this.elementRef.current;
-
     if (current) {
-      if (prepared.transform) {
-        // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
-        current.setAttribute('transform', prepared.transform);
-      }
-      if (prepared.style) {
-        // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
-        Object.assign(current.style, prepared.style);
+      for (const cleanAttribute of Object.keys(clean)) {
+        const cleanValue = clean[cleanAttribute as keyof typeof clean];
+        switch (cleanAttribute) {
+          case 'ref':
+          case 'children':
+            break;
+          case 'style':
+            // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+            Object.assign(current.style, cleanValue);
+            break;
+          default:
+            // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+            current.setAttribute(camelCaseToDashed(cleanAttribute), cleanValue);
+            break;
+        }
       }
     }
   }
