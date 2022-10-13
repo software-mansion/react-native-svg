@@ -278,8 +278,11 @@ export class WebShape<
           case 'children':
             break;
           case 'style':
-            // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
-            Object.assign(current.style, cleanValue);
+            // style can be an object here or an array, so we convert it to an array and assign each element
+            for (const partialStyle of ([] as {}[]).concat(clean.style ?? [])) {
+              // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+              Object.assign(current.style, partialStyle);
+            }
             break;
           default:
             // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
