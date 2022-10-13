@@ -285,6 +285,8 @@ export class WebShape<
             }
             break;
           default:
+            // apply all other incoming prop updates as attributes on the node
+            // same logic as in https://github.com/software-mansion/react-native-reanimated/blob/d04720c82f5941532991b235787285d36d717247/src/reanimated2/js-reanimated/index.ts#L38-L39
             // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
             current.setAttribute(camelCaseToDashed(cleanAttribute), cleanValue);
             break;
