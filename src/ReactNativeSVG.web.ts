@@ -151,7 +151,7 @@ const prepare = <T extends BaseProps>(
         transformArray.push(`translate(0 ${value})`);
       } else if (key === 'originX') {
         transformArray.push(`translate(${-value} 0)`);
-      } else if (key === 'originX') {
+      } else if (key === 'originY') {
         transformArray.push(`translate(0 ${-value})`);
       } else if (key === 'origin') {
         if (Array.isArray(value)) {
