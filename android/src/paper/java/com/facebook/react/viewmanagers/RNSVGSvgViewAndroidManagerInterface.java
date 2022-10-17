@@ -53,9 +53,9 @@ public interface RNSVGSvgViewAndroidManagerInterface<T extends View> {
   void setHitSlop(T view, @Nullable ReadableMap value);
   void setBorderTopColor(T view, @Nullable Integer value);
   void setNextFocusLeft(T view, int value);
-  void setBorderTopRightRadiusAndroid(T view, float value);
-  void setBorderBottomRightRadiusAndroid(T view, float value);
-  void setBorderRadiusAndroid(T view, float value);
-  void setBorderBottomLeftRadiusAndroid(T view, float value);
-  void setBorderTopLeftRadiusAndroid(T view, float value);
+  void setBorderTopRightRadius(T view, double value);
+  void setBorderBottomRightRadius(T view, double value);
+  void setBorderRadius(T view, double value);
+  void setBorderBottomLeftRadius(T view, double value);
+  void setBorderTopLeftRadius(T view, double value);
 }

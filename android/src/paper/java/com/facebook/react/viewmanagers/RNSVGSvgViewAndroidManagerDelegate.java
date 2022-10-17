@@ -146,20 +146,20 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
       case "nextFocusLeft":
         mViewManager.setNextFocusLeft(view, value == null ? 0 : ((Double) value).intValue());
         break;
-      case "borderTopRightRadiusAndroid":
-        mViewManager.setBorderTopRightRadiusAndroid(view, value == null ? 0f : ((Double) value).floatValue());
+      case "borderTopRightRadius":
+        mViewManager.setBorderTopRightRadius(view, value == null ? 0f : ((Double) value).doubleValue());
         break;
-      case "borderBottomRightRadiusAndroid":
-        mViewManager.setBorderBottomRightRadiusAndroid(view, value == null ? 0f : ((Double) value).floatValue());
+      case "borderBottomRightRadius":
+        mViewManager.setBorderBottomRightRadius(view, value == null ? 0f : ((Double) value).doubleValue());
         break;
-      case "borderRadiusAndroid":
-        mViewManager.setBorderRadiusAndroid(view, value == null ? 0f : ((Double) value).floatValue());
+      case "borderRadius":
+        mViewManager.setBorderRadius(view, value == null ? 0f : ((Double) value).doubleValue());
         break;
-      case "borderBottomLeftRadiusAndroid":
-        mViewManager.setBorderBottomLeftRadiusAndroid(view, value == null ? 0f : ((Double) value).floatValue());
+      case "borderBottomLeftRadius":
+        mViewManager.setBorderBottomLeftRadius(view, value == null ? 0f : ((Double) value).doubleValue());
         break;
-      case "borderTopLeftRadiusAndroid":
-        mViewManager.setBorderTopLeftRadiusAndroid(view, value == null ? 0f : ((Double) value).floatValue());
+      case "borderTopLeftRadius":
+        mViewManager.setBorderTopLeftRadius(view, value == null ? 0f : ((Double) value).doubleValue());
         break;
       default:
         super.setProperty(view, propName, value);
