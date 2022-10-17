@@ -1,6 +1,10 @@
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import type { ColorValue } from 'react-native';
-import type { Float, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import type {
+  Double,
+  Float,
+  Int32,
+} from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
 
 type NativeBackgroundProp = Readonly<{
@@ -59,13 +63,13 @@ interface NativeProps extends ViewProps {
   nextFocusLeft?: Int32;
   // TODO: those props are present in the `ReactPropGroup` but are not supported
   // (https://github.com/facebook/react-native/blob/35556dba600fbb28e0f41340a74b6c4a59bc6018/ReactAndroid/src/main/java/com/facebook/react/uimanager/BaseViewManager.java#L613)
-  // and static view config validator says that they are missing. We then add additionals setters for those props with `Android` suffix
-  // and set them to the values of the original ones in `Svg.tsx`. We also call proper setters on the native side for them.
-  borderTopRightRadiusAndroid?: Float;
-  borderBottomRightRadiusAndroid?: Float;
-  borderRadiusAndroid?: Float;
-  borderBottomLeftRadiusAndroid?: Float;
-  borderTopLeftRadiusAndroid?: Float;
+  // and static view config validator says that they are missing.
+  // We pass them as doubles although they should be floats, and cast them to floats again on the native side.
+  borderTopRightRadius?: Double;
+  borderBottomRightRadius?: Double;
+  borderRadius?: Double;
+  borderBottomLeftRadius?: Double;
+  borderTopLeftRadius?: Double;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGSvgViewAndroid', {
