@@ -321,21 +321,21 @@ class SvgViewManager extends ReactViewManager
 
   @Override
   public void setBorderTopLeftRadius(SvgView view, double value) {
-    super.setBorderTopLeftRadius(view, (float) value);
+    super.setBorderRadius(view, 1, (float) value);
   }
 
   @Override
   public void setBorderTopRightRadius(SvgView view, double value) {
-    super.setBorderTopRightRadius(view, (float) value);
+    super.setBorderRadius(view, 2, (float) value);
   }
 
   @Override
   public void setBorderBottomRightRadius(SvgView view, double value) {
-    super.setBorderBottomRightRadius(view, (float) value);
+    super.setBorderRadius(view, 3, (float) value);
   }
 
   @Override
   public void setBorderBottomLeftRadius(SvgView view, double value) {
-    super.setBorderBottomLeftRadius(view, (float) value);
+    super.setBorderRadius(view, 4, (float) value);
   }
 }
