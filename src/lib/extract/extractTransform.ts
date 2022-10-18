@@ -1,6 +1,11 @@
 import { append, appendTransform, identity, reset, toArray } from '../Matrix2D';
 import { parse } from './transform';
-import { NumberProp, TransformedProps, TransformProps } from './types';
+import {
+  ColumnMajorTransformMatrix,
+  NumberProp,
+  TransformedProps,
+  TransformProps,
+} from './types';
 
 function appendTransformProps(props: TransformedProps) {
   const { x, y, originX, originY, scaleX, scaleY, rotation, skewX, skewY } =
@@ -165,7 +170,7 @@ export function transformToMatrix(
 }
 
 export default function extractTransform(
-  props: number[] | string | TransformProps,
+  props: ColumnMajorTransformMatrix | string | TransformProps,
 ) {
   if (Array.isArray(props)) {
     return props;

@@ -11,7 +11,7 @@ import {
   ColumnMajorTransformMatrix,
   NumberArray,
   NumberProp,
-  TransformObject,
+  TransformProps,
 } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
@@ -49,7 +49,7 @@ interface BaseProps {
   pressRetentionOffset?: EdgeInsetsProp;
   rejectResponderTermination?: boolean;
 
-  transform: ColumnMajorTransformMatrix | string | TransformObject;
+  transform: TransformProps['transform'];
   translate: NumberArray;
   translateX: NumberProp;
   translateY: NumberProp;
@@ -124,7 +124,8 @@ const prepare = <T extends BaseProps>(
     onResponderRelease?: (e: GestureResponderEvent) => void;
     onResponderTerminate?: (e: GestureResponderEvent) => void;
     onResponderTerminationRequest?: (e: GestureResponderEvent) => boolean;
-    transform?: ColumnMajorTransformMatrix | string | TransformObject;
+    transform?: ColumnMajorTransformMatrix | string;
+    'transform-origin'?: string;
     style?: {};
     ref?: {};
   } = {
@@ -143,48 +144,11 @@ const prepare = <T extends BaseProps>(
     ...rest,
   };
 
-  const transformArray = [];
+  const transformArray: string[] = [];
 
   if (Array.isArray(transform) && transform.length === 6) {
     transformArray.push(`matrix(${transform.join(' ')})`);
-  } else if (typeof transform === 'object') {
-    for (const key in transform) {
-      const value = transform[key];
-      // non standard SVG transforms
-      if (key === 'translateX' || key === 'x') {
-        transformArray.push(`translate(${value} 0)`);
-      } else if (key === 'translateY' || key === 'y') {
-        transformArray.push(`translate(0 ${value})`);
-      } else if (key === 'originX') {
-        transformArray.push(`translate(${-value} 0)`);
-      } else if (key === 'originY') {
-        transformArray.push(`translate(0 ${-value})`);
-      } else if (key === 'origin') {
-        if (Array.isArray(value)) {
-          transformArray.push(`translate(${value.join(' ')})`);
-        } else {
-          transformArray.push(`translate(${value})`);
-        }
-      } else if (key === 'scaleX') {
-        transformArray.push(`scaleX(${value} 1)`);
-      } else if (key === 'scaleY') {
-        transformArray.push(`scaleX(1 ${value})`);
-      } else if (key === 'skew') {
-        if (Array.isArray(value) && value.length === 2) {
-          transformArray.push(`skewX(${value[0]})`);
-          transformArray.push(`skewY(${value[1]})`);
-        } else {
-          throw new Error('Skew prop expect array of numbers');
-        }
-      } else {
-        if (Array.isArray(value)) {
-          transformArray.push(`${key}(${value.join(' ')})`);
-        } else {
-          transformArray.push(`${key}(${transform[key]})`);
-        }
-      }
-    }
-  } else {
+  } else if (typeof transform === 'string') {
     transformArray.push(transform);
   }
 
@@ -211,10 +175,9 @@ const prepare = <T extends BaseProps>(
     transformArray.push(`skewY(${skewY})`);
   }
   if (origin != null) {
-    transformArray.push(`translate(${origin})`);
-  }
-  if (originX != null || originY != null) {
-    transformArray.push(`translate(${-originX || 0}, ${-originY || 0})`);
+    clean['transform-origin'] = origin.toString().replace(',', ' ');
+  } else if (originX != null || originY != null) {
+    clean['transform-origin'] = `${originX || 0} ${originY || 0}`;
   }
 
   if (transformArray.length) {

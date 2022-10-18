@@ -12,7 +12,7 @@ import Shape from './Shape';
 import { RNSVGPattern } from './NativeComponents';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 
-export interface PatternProps {
+export interface PatternProps extends TransformProps {
   children?: ReactNode;
   id?: string;
   x?: NumberProp;
@@ -24,7 +24,6 @@ export interface PatternProps {
   patternContentUnits?: Units;
   viewBox?: string;
   preserveAspectRatio?: string;
-  transform?: ColumnMajorTransformMatrix | string | TransformProps;
 }
 
 export default class Pattern extends Shape<PatternProps> {
