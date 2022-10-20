@@ -3,7 +3,7 @@ import { processColor } from 'react-native';
 
 import extractOpacity from './extractOpacity';
 import extractTransform from './extractTransform';
-import { ColumnMajorTransformMatrix, TransformProps } from './types';
+import { TransformProps } from './types';
 import units from '../units';
 
 const percentReg = /^([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)(%?)$/;
@@ -41,8 +41,8 @@ export default function extractGradient(
   props: {
     id?: string;
     children?: ReactElement[];
-    transform?: ColumnMajorTransformMatrix | string | TransformProps;
-    gradientTransform?: ColumnMajorTransformMatrix | string | TransformProps;
+    transform?: TransformProps['transform'];
+    gradientTransform?: TransformProps['transform'];
     gradientUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
   } & TransformProps,
   parent: {},

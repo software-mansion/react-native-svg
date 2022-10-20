@@ -1,6 +1,6 @@
 import extractFill from './extractFill';
 import extractStroke from './extractStroke';
-import { props2transform, transformToMatrix } from './extractTransform';
+import extractTransform from './extractTransform';
 import extractResponder from './extractResponder';
 import extractOpacity from './extractOpacity';
 import { idPattern } from '../util';
@@ -49,7 +49,6 @@ export default function extractProps(
     display?: string;
     opacity?: NumberProp;
     onLayout?: () => void;
-    transform?: number[] | string | TransformProps;
   } & TransformProps &
     ResponderProps &
     StrokeProps &
@@ -69,7 +68,6 @@ export default function extractProps(
     markerStart = marker,
     markerMid = marker,
     markerEnd = marker,
-    transform,
   } = props;
   const extracted: extractedProps = {};
 
@@ -82,8 +80,7 @@ export default function extractProps(
     extracted.propList = inherited;
   }
 
-  const transformProps = props2transform(props);
-  const matrix = transformToMatrix(transformProps, transform);
+  const matrix = extractTransform(props);
   if (matrix !== null) {
     extracted.matrix = matrix;
   }

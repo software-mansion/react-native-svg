@@ -1,12 +1,7 @@
 import React, { ReactNode } from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import extractViewBox from '../lib/extract/extractViewBox';
-import {
-  ColumnMajorTransformMatrix,
-  NumberProp,
-  TransformProps,
-  Units,
-} from '../lib/extract/types';
+import { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
 import { RNSVGPattern } from './NativeComponents';
@@ -19,7 +14,7 @@ export interface PatternProps extends TransformProps {
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  patternTransform?: ColumnMajorTransformMatrix | string;
+  patternTransform?: TransformProps['transform'];
   patternUnits?: Units;
   patternContentUnits?: Units;
   viewBox?: string;

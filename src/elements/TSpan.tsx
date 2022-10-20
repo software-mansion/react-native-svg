@@ -5,6 +5,7 @@ import extractText, { setTSpan, TextChild } from '../lib/extract/extractText';
 import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import {
+  ColumnMajorTransformMatrix,
   CommonPathProps,
   FontProps,
   NumberArray,
@@ -28,7 +29,7 @@ export default class TSpan extends Shape<TSpanProps> {
 
   setNativeProps = (
     props: Object & {
-      matrix?: number[];
+      matrix?: ColumnMajorTransformMatrix;
       style?: [] | {};
     } & TransformProps,
   ) => {

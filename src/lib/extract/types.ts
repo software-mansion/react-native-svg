@@ -5,7 +5,7 @@ import {
   LayoutChangeEvent,
 } from 'react-native';
 import React from 'react';
-// import type {TransformsStyle} from 'react-native';
+import type { TransformsStyle } from 'react-native';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
@@ -203,7 +203,10 @@ export interface TransformProps {
   rotation?: NumberProp;
   x?: NumberArray;
   y?: NumberArray;
-  transform?: ColumnMajorTransformMatrix | string; // | TransformsStyle['transform']; // not used since it causes type problems
+  transform?:
+    | ColumnMajorTransformMatrix
+    | string
+    | TransformsStyle['transform'];
 }
 
 export interface TransformedProps {

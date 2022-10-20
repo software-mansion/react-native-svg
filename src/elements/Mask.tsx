@@ -5,9 +5,9 @@ import {
   withoutXY,
 } from '../lib/extract/extractProps';
 import {
-  ColumnMajorTransformMatrix,
   CommonPathProps,
   NumberProp,
+  TransformProps,
 } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
@@ -22,7 +22,7 @@ export interface MaskProps extends CommonPathProps {
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  maskTransform?: ColumnMajorTransformMatrix | string;
+  maskTransform?: TransformProps['transform'];
   maskUnits?: TMaskUnits;
   maskContentUnits?: TMaskUnits;
 }
