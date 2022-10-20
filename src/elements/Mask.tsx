@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import extractTransform from '../lib/extract/extractTransform';
 import {
   stringifyPropsForFabric,
   withoutXY,
@@ -7,7 +6,6 @@ import {
 import {
   CommonPathProps,
   NumberProp,
-  TransformProps,
 } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
@@ -39,7 +37,6 @@ export default class Mask extends Shape<MaskProps> {
   render() {
     const { props } = this;
     const {
-      transform,
       x,
       y,
       width,
