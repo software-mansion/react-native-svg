@@ -3,10 +3,7 @@ import {
   stringifyPropsForFabric,
   withoutXY,
 } from '../lib/extract/extractProps';
-import {
-  CommonPathProps,
-  NumberProp,
-} from '../lib/extract/types';
+import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
 import { RNSVGMask } from './NativeComponents';
@@ -36,15 +33,8 @@ export default class Mask extends Shape<MaskProps> {
 
   render() {
     const { props } = this;
-    const {
-      x,
-      y,
-      width,
-      height,
-      maskUnits,
-      maskContentUnits,
-      children,
-    } = props;
+    const { x, y, width, height, maskUnits, maskContentUnits, children } =
+      props;
     const strigifiedMaskProps = stringifyPropsForFabric({
       x,
       y,
