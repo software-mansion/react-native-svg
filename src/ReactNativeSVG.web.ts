@@ -1,20 +1,15 @@
-// @ts-ignore
 import * as React from 'react';
 import {
   GestureResponderEvent,
   // @ts-ignore
   unstable_createElement as ucE,
-  // @ts-ignore
   createElement as cE,
+  TransformsStyle,
 } from 'react-native';
-import {
-  ColumnMajorTransformMatrix,
-  NumberArray,
-  NumberProp,
-  TransformProps,
-} from './lib/extract/types';
+import { NumberArray, NumberProp, TransformProps } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
+import { transformsArrayToProps } from './lib/extract/extractTransform';
 
 const createElement = cE || ucE;
 
@@ -49,19 +44,19 @@ interface BaseProps {
   pressRetentionOffset?: EdgeInsetsProp;
   rejectResponderTermination?: boolean;
 
-  transform: TransformProps['transform'];
-  translate: NumberArray;
-  translateX: NumberProp;
-  translateY: NumberProp;
-  scale: NumberArray;
-  scaleX: NumberProp;
-  scaleY: NumberProp;
-  rotation: NumberArray;
-  skewX: NumberProp;
-  skewY: NumberProp;
-  origin: NumberArray;
-  originX: NumberProp;
-  originY: NumberProp;
+  transform?: TransformProps['transform'];
+  translate?: NumberArray;
+  translateX?: NumberProp;
+  translateY?: NumberProp;
+  scale?: NumberArray;
+  scaleX?: NumberProp;
+  scaleY?: NumberProp;
+  rotation?: NumberProp;
+  skewX?: NumberProp;
+  skewY?: NumberProp;
+  origin?: NumberArray;
+  originX?: NumberProp;
+  originY?: NumberProp;
 
   fontStyle?: string;
   fontWeight?: NumberProp;
@@ -71,6 +66,10 @@ interface BaseProps {
     | React.RefCallback<SVGElement>
     | React.MutableRefObject<SVGElement | null>;
   style: Iterable<{}>;
+
+  // different tranform props
+  gradientTransform: TransformProps['transform'];
+  patternTransform: TransformProps['transform'];
 }
 
 const hasTouchableProperty = (props: BaseProps) =>
@@ -79,6 +78,62 @@ const hasTouchableProperty = (props: BaseProps) =>
 const camelCaseToDashed = (camelCase: string) => {
   return camelCase.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
 };
+
+function stringifyTransformProps(transformProps: TransformProps) {
+  const transformArray = [];
+  if (transformProps.translate != null) {
+    transformArray.push(`translate(${transformProps.translate})`);
+  }
+  if (transformProps.translateX != null || transformProps.translateY != null) {
+    transformArray.push(
+      `translate(${transformProps.translateX || 0}, ${
+        transformProps.translateY || 0
+      })`,
+    );
+  }
+  if (transformProps.scale != null) {
+    transformArray.push(`scale(${transformProps.scale})`);
+  }
+  if (transformProps.scaleX != null || transformProps.scaleY != null) {
+    transformArray.push(
+      `scale(${transformProps.scaleX || 1}, ${transformProps.scaleY || 1})`,
+    );
+  }
+  // rotation maps to rotate, not to collide with the text rotate attribute (which acts per glyph rather than block)
+  if (transformProps.rotation != null) {
+    transformArray.push(`rotate(${transformProps.rotation})`);
+  }
+  if (transformProps.skewX != null) {
+    transformArray.push(`skewX(${transformProps.skewX})`);
+  }
+  if (transformProps.skewY != null) {
+    transformArray.push(`skewY(${transformProps.skewY})`);
+  }
+  return transformArray;
+}
+
+function parseTransformProp(
+  transform: TransformProps['transform'],
+  props?: BaseProps,
+) {
+  const transformArray: string[] = [];
+
+  if (Array.isArray(transform)) {
+    if (typeof transform[0] === 'number') {
+      transformArray.push(`matrix(${transform.join(' ')})`);
+    } else {
+      const stringifiedProps = transformsArrayToProps(
+        transform as TransformsStyle['transform'],
+      );
+      transformArray.push(...stringifyTransformProps(stringifiedProps));
+    }
+  } else if (typeof transform === 'string') {
+    transformArray.push(transform);
+  }
+
+  props && transformArray.push(...stringifyTransformProps(props));
+  return transformArray.length ? transformArray.join(' ') : undefined;
+}
 
 /**
  * `react-native-svg` supports additional props that aren't defined in the spec.
@@ -95,15 +150,6 @@ const prepare = <T extends BaseProps>(
 ) => {
   const {
     transform,
-    translate,
-    translateX,
-    translateY,
-    scale,
-    scaleX,
-    scaleY,
-    rotation,
-    skewX,
-    skewY,
     origin,
     originX,
     originY,
@@ -113,7 +159,8 @@ const prepare = <T extends BaseProps>(
     fontStyle,
     style,
     forwardedRef,
-    // @ts-ignore
+    gradientTransform,
+    patternTransform,
     ...rest
   } = props;
 
@@ -124,7 +171,9 @@ const prepare = <T extends BaseProps>(
     onResponderRelease?: (e: GestureResponderEvent) => void;
     onResponderTerminate?: (e: GestureResponderEvent) => void;
     onResponderTerminationRequest?: (e: GestureResponderEvent) => boolean;
-    transform?: ColumnMajorTransformMatrix | string;
+    transform?: string;
+    gradientTransform?: string;
+    patternTransform?: string;
     'transform-origin'?: string;
     style?: {};
     ref?: {};
@@ -144,45 +193,15 @@ const prepare = <T extends BaseProps>(
     ...rest,
   };
 
-  const transformArray: string[] = [];
-
-  if (Array.isArray(transform) && transform.length === 6) {
-    transformArray.push(`matrix(${transform.join(' ')})`);
-  } else if (typeof transform === 'string') {
-    transformArray.push(transform);
-  }
-
-  if (translate != null) {
-    transformArray.push(`translate(${translate})`);
-  }
-  if (translateX != null || translateY != null) {
-    transformArray.push(`translate(${translateX || 0}, ${translateY || 0})`);
-  }
-  if (scale != null) {
-    transformArray.push(`scale(${scale})`);
-  }
-  if (scaleX != null || scaleY != null) {
-    transformArray.push(`scale(${scaleX || 1}, ${scaleY || 1})`);
-  }
-  // rotation maps to rotate, not to collide with the text rotate attribute (which acts per glyph rather than block)
-  if (rotation != null) {
-    transformArray.push(`rotate(${rotation})`);
-  }
-  if (skewX != null) {
-    transformArray.push(`skewX(${skewX})`);
-  }
-  if (skewY != null) {
-    transformArray.push(`skewY(${skewY})`);
-  }
   if (origin != null) {
     clean['transform-origin'] = origin.toString().replace(',', ' ');
   } else if (originX != null || originY != null) {
     clean['transform-origin'] = `${originX || 0} ${originY || 0}`;
   }
 
-  if (transformArray.length) {
-    clean.transform = transformArray.join(' ');
-  }
+  clean.transform = parseTransformProp(transform, props);
+  clean.gradientTransform = parseTransformProp(gradientTransform);
+  clean.patternTransform = parseTransformProp(patternTransform);
 
   clean.ref = (el: SVGElement | null) => {
     self.elementRef.current = el;
@@ -212,7 +231,6 @@ const prepare = <T extends BaseProps>(
   if (fontStyle != null) {
     styles.fontStyle = fontStyle;
   }
-
   clean.style = resolve(style, styles);
 
   return clean;

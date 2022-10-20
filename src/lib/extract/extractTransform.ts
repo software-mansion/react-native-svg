@@ -64,7 +64,7 @@ function universal2axis(
   return [x || defaultValue || 0, y || defaultValue || 0];
 }
 
-function transformsArrayToProps(
+export function transformsArrayToProps(
   transformObjectsArray: TransformsStyle['transform'],
 ) {
   const props: TransformProps = {};
