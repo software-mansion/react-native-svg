@@ -1714,11 +1714,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     public void setMaskContentUnits(MaskView node, int maskContentUnits) {
       node.setMaskContentUnits(maskContentUnits);
     }
-
-    @ReactProp(name = "maskTransform")
-    public void setMaskTransform(MaskView node, @Nullable ReadableArray matrixArray) {
-      node.setMaskTransform(matrixArray);
-    }
   }
 
   static class ForeignObjectManager extends GroupViewManagerAbstract<ForeignObjectView>

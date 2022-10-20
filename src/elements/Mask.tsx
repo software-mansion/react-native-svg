@@ -22,7 +22,6 @@ export interface MaskProps extends CommonPathProps {
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  maskTransform?: TransformProps['transform'];
   maskUnits?: TMaskUnits;
   maskContentUnits?: TMaskUnits;
 }
@@ -40,7 +39,6 @@ export default class Mask extends Shape<MaskProps> {
   render() {
     const { props } = this;
     const {
-      maskTransform,
       transform,
       x,
       y,
@@ -57,7 +55,6 @@ export default class Mask extends Shape<MaskProps> {
       height,
     });
     const maskProps = {
-      maskTransform: extractTransform(maskTransform || transform || props),
       maskUnits: maskUnits !== undefined ? units[maskUnits] : 0,
       maskContentUnits:
         maskContentUnits !== undefined ? units[maskContentUnits] : 1,
