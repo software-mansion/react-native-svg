@@ -118,6 +118,8 @@ function parseTransformProp(
 ) {
   const transformArray: string[] = [];
 
+  props && transformArray.push(...stringifyTransformProps(props));
+
   if (Array.isArray(transform)) {
     if (typeof transform[0] === 'number') {
       transformArray.push(`matrix(${transform.join(' ')})`);
@@ -131,7 +133,6 @@ function parseTransformProp(
     transformArray.push(transform);
   }
 
-  props && transformArray.push(...stringifyTransformProps(props));
   return transformArray.length ? transformArray.join(' ') : undefined;
 }
 
