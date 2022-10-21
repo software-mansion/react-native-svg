@@ -82,7 +82,6 @@ class DataURI extends Component {
           y="5%"
           width="90%"
           height="90%"
-          // @ts-expect-error
           href={Platform.OS === 'web' ? dataUriExample : {uri: dataUriExample}}
           opacity="0.6"
         />
