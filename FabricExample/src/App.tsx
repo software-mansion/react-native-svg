@@ -112,6 +112,7 @@ const names = [
   'TouchEvents',
   'PanResponder',
   'Reusable',
+  'Transforms',
 ];
 
 const initialState = {

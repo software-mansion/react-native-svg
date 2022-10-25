@@ -16,6 +16,7 @@ import * as Reusable from './examples/Reusable';
 import * as TouchEvents from './examples/TouchEvents';
 import * as PanResponder from './examples/PanResponder';
 import * as Reanimated from './examples/Reanimated';
+import * as Transforms from './examples/Transforms';
 
 export {
   Svg,
@@ -36,4 +37,5 @@ export {
   Reusable,
   PanResponder,
   Reanimated,
+  Transforms,
 };
