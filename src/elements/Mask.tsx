@@ -1,14 +1,9 @@
 import React, { ReactNode } from 'react';
-import extractTransform from '../lib/extract/extractTransform';
 import {
   stringifyPropsForFabric,
   withoutXY,
 } from '../lib/extract/extractProps';
-import {
-  ColumnMajorTransformMatrix,
-  CommonPathProps,
-  NumberProp,
-} from '../lib/extract/types';
+import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
 import { RNSVGMask } from './NativeComponents';
@@ -22,7 +17,6 @@ export interface MaskProps extends CommonPathProps {
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  maskTransform?: ColumnMajorTransformMatrix | string;
   maskUnits?: TMaskUnits;
   maskContentUnits?: TMaskUnits;
 }
@@ -39,17 +33,8 @@ export default class Mask extends Shape<MaskProps> {
 
   render() {
     const { props } = this;
-    const {
-      maskTransform,
-      transform,
-      x,
-      y,
-      width,
-      height,
-      maskUnits,
-      maskContentUnits,
-      children,
-    } = props;
+    const { x, y, width, height, maskUnits, maskContentUnits, children } =
+      props;
     const strigifiedMaskProps = stringifyPropsForFabric({
       x,
       y,
@@ -57,7 +42,6 @@ export default class Mask extends Shape<MaskProps> {
       height,
     });
     const maskProps = {
-      maskTransform: extractTransform(maskTransform || transform || props),
       maskUnits: maskUnits !== undefined ? units[maskUnits] : 0,
       maskContentUnits:
         maskContentUnits !== undefined ? units[maskContentUnits] : 1,

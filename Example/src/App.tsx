@@ -113,6 +113,7 @@ const names: (keyof typeof examples)[] = [
   'PanResponder',
   'Reusable',
   'Reanimated',
+  'Transforms',
 ];
 
 const initialState = {

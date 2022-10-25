@@ -52,7 +52,8 @@ using namespace facebook::react;
     self.patternwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
   }
   self.patternUnits = newProps.patternUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
-  self.patternContentUnits = newProps.patternUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
+  self.patternContentUnits =
+      newProps.patternContentUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
   if (newProps.patternTransform.size() == 6) {
     self.patternTransform = CGAffineTransformMake(
         newProps.patternTransform.at(0),

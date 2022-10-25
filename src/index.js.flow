@@ -442,7 +442,6 @@ export type MaskProps = {
   y?: NumberProp,
   width?: NumberProp,
   height?: NumberProp,
-  maskTransform?: ColumnMajorTransformMatrix | string,
   maskUnits?: Units,
   maskContentUnits?: Units,
   ...

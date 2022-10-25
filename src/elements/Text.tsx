@@ -3,6 +3,7 @@ import extractText from '../lib/extract/extractText';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import extractTransform from '../lib/extract/extractTransform';
 import {
+  ColumnMajorTransformMatrix,
   NumberArray,
   NumberProp,
   TextSpecificProps,
@@ -29,7 +30,7 @@ export default class Text extends Shape<TextProps> {
 
   setNativeProps = (
     props: Object & {
-      matrix?: number[];
+      matrix?: ColumnMajorTransformMatrix;
       style?: [] | {};
     } & TransformProps,
   ) => {

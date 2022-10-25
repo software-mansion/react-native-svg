@@ -53,15 +53,6 @@ using namespace facebook::react;
   }
   self.maskUnits = newProps.maskUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
   self.maskContentUnits = newProps.maskUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
-  if (newProps.maskTransform.size() == 6) {
-    self.maskTransform = CGAffineTransformMake(
-        newProps.maskTransform.at(0),
-        newProps.maskTransform.at(1),
-        newProps.maskTransform.at(2),
-        newProps.maskTransform.at(3),
-        newProps.maskTransform.at(4),
-        newProps.maskTransform.at(5));
-  }
 
   setCommonGroupProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGMaskProps const>(props);
@@ -76,7 +67,6 @@ using namespace facebook::react;
   _maskwidth = nil;
   _maskUnits = kRNSVGUnitsObjectBoundingBox;
   _maskContentUnits = kRNSVGUnitsObjectBoundingBox;
-  _maskTransform = CGAffineTransformIdentity;
 }
 #endif // RN_FABRIC_ENABLED
 
@@ -148,12 +138,6 @@ using namespace facebook::react;
   }
 
   _maskContentUnits = maskContentUnits;
-  [self invalidate];
-}
-
-- (void)setMaskTransform:(CGAffineTransform)maskTransform
-{
-  _maskTransform = maskTransform;
   [self invalidate];
 }
 
