@@ -28,8 +28,8 @@ export interface ImageProps
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  xlinkHref?: RNImageProps['source'];
-  href?: RNImageProps['source'];
+  xlinkHref?: RNImageProps['source'] | string;
+  href?: RNImageProps['source'] | string;
   preserveAspectRatio?: string;
   opacity?: NumberProp;
   clipPath?: string;

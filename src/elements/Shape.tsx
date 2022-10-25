@@ -1,7 +1,10 @@
 import { Component } from 'react';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
 import { findNodeHandle, NativeMethods } from 'react-native';
-import { TransformProps } from '../lib/extract/types';
+import {
+  ColumnMajorTransformMatrix,
+  TransformProps,
+} from '../lib/extract/types';
 import type { Spec } from '../fabric/NativeSvgRenderableModule';
 
 export interface SVGBoundingBoxOptions {
@@ -245,7 +248,7 @@ export default class Shape<P> extends Component<P> {
   }
   setNativeProps = (
     props: Object & {
-      matrix?: [number, number, number, number, number, number];
+      matrix?: ColumnMajorTransformMatrix;
     } & TransformProps,
   ) => {
     this.root?.setNativeProps(props);

@@ -41,8 +41,8 @@ export default function extractGradient(
   props: {
     id?: string;
     children?: ReactElement[];
-    transform?: number[] | string | TransformProps;
-    gradientTransform?: number[] | string | TransformProps;
+    transform?: TransformProps['transform'];
+    gradientTransform?: TransformProps['transform'];
     gradientUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
   } & TransformProps,
   parent: {},

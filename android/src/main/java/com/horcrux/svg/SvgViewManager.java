@@ -23,6 +23,7 @@ import com.facebook.react.views.view.ReactViewGroup;
 import com.facebook.react.views.view.ReactViewManager;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -177,7 +178,8 @@ class SvgViewManager extends ReactViewManager
       if (superclass != null) {
         Method method = superclass.getDeclaredMethod("setPointerEvents", PointerEvents.class);
         method.setAccessible(true);
-        method.invoke(view, PointerEvents.parsePointerEvents(pointerEventsStr));
+        method.invoke(
+            view, PointerEvents.valueOf(pointerEventsStr.toUpperCase(Locale.US).replace("-", "_")));
       }
     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       e.printStackTrace();

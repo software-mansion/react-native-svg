@@ -23,6 +23,7 @@ module.exports = {
           fromRoot('index.js'),
           fromRoot('src'),
           fromRoot('node_modules/react-native-svg'),
+          fromRoot('node_modules/react-native-reanimated'),
         ],
       },
       {
@@ -52,4 +53,5 @@ module.exports = {
       '.jsx',
     ],
   },
+  plugins: [new (require('webpack').DefinePlugin)({process: {env: {}}})],
 };

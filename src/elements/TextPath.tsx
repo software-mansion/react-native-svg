@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import { withoutXY } from '../lib/extract/extractProps';
 import {
+  ColumnMajorTransformMatrix,
   NumberProp,
   TextPathMethod,
   TextPathMidLine,
@@ -31,7 +32,7 @@ export default class TextPath extends Shape<TextPathProps> {
 
   setNativeProps = (
     props: Object & {
-      matrix?: number[];
+      matrix?: ColumnMajorTransformMatrix;
       style?: [] | {};
     } & TransformProps,
   ) => {

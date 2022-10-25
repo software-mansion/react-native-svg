@@ -78,7 +78,6 @@ interface NativeProps
   width?: string;
   maskUnits?: Int32;
   maskContentUnits?: Int32;
-  maskTransform?: ReadonlyArray<Float> | null;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGMask');

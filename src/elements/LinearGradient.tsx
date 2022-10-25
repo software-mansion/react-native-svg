@@ -1,10 +1,6 @@
 import React, { ReactElement } from 'react';
 import extractGradient from '../lib/extract/extractGradient';
-import {
-  ColumnMajorTransformMatrix,
-  NumberProp,
-  Units,
-} from '../lib/extract/types';
+import { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import Shape from './Shape';
 import { RNSVGLinearGradient } from '../ReactNativeSVG';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
@@ -17,7 +13,7 @@ export interface LinearGradientProps {
   y1?: NumberProp;
   y2?: NumberProp;
   gradientUnits?: Units;
-  gradientTransform?: ColumnMajorTransformMatrix | string;
+  gradientTransform?: TransformProps['transform'];
   id?: string;
 }
 

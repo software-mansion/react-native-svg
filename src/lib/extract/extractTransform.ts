@@ -1,6 +1,12 @@
+import { TransformsStyle } from 'react-native';
 import { append, appendTransform, identity, reset, toArray } from '../Matrix2D';
 import { parse } from './transform';
-import { NumberProp, TransformedProps, TransformProps } from './types';
+import {
+  ColumnMajorTransformMatrix,
+  NumberProp,
+  TransformedProps,
+  TransformProps,
+} from './types';
 
 function appendTransformProps(props: TransformedProps) {
   const { x, y, originX, originY, scaleX, scaleY, rotation, skewX, skewY } =
@@ -58,9 +64,33 @@ function universal2axis(
   return [x || defaultValue || 0, y || defaultValue || 0];
 }
 
+export function transformsArrayToProps(
+  transformObjectsArray: TransformsStyle['transform'],
+) {
+  const props: TransformProps = {};
+  transformObjectsArray?.forEach((transformObject) => {
+    const keys = Object.keys(transformObject);
+    if (keys.length !== 1) {
+      console.error(
+        'You must specify exactly one property per transform object.',
+      );
+    }
+    const key = keys[0] as keyof TransformProps;
+    const value = transformObject[key as keyof typeof transformObject];
+    props[key] = value;
+  });
+  return props;
+}
+
 export function props2transform(
-  props: TransformProps,
+  props: TransformProps | undefined,
 ): TransformedProps | null {
+  if (!props) {
+    return null;
+  }
+  const extractedProps = Array.isArray(props)
+    ? transformsArrayToProps(props)
+    : props;
   const {
     rotation,
     translate,
@@ -77,7 +107,7 @@ export function props2transform(
     skewY,
     x,
     y,
-  } = props;
+  } = extractedProps;
   if (
     rotation == null &&
     translate == null &&
@@ -127,8 +157,8 @@ export function props2transform(
 
 export function transformToMatrix(
   props: TransformedProps | null,
-  transform: number[] | string | TransformProps | void | null | undefined,
-): [number, number, number, number, number, number] | null {
+  transform: TransformProps['transform'],
+): ColumnMajorTransformMatrix | null {
   if (!props && !transform) {
     return null;
   }
@@ -138,16 +168,21 @@ export function transformToMatrix(
   if (transform) {
     if (Array.isArray(transform)) {
       if (typeof transform[0] === 'number') {
+        const columnMatrix = transform as ColumnMajorTransformMatrix;
         append(
-          transform[0],
-          transform[1],
-          transform[2],
-          transform[3],
-          transform[4],
-          transform[5],
+          columnMatrix[0],
+          columnMatrix[1],
+          columnMatrix[2],
+          columnMatrix[3],
+          columnMatrix[4],
+          columnMatrix[5],
         );
+      } else {
+        const transformProps = props2transform(
+          transformsArrayToProps(transform as TransformsStyle['transform']),
+        );
+        transformProps && appendTransformProps(transformProps);
       }
-      // noop for react-native transform arrays, let animated handle them
     } else if (typeof transform === 'string') {
       try {
         const t = parse(transform);
@@ -165,10 +200,10 @@ export function transformToMatrix(
 }
 
 export default function extractTransform(
-  props: number[] | string | TransformProps,
-) {
-  if (Array.isArray(props)) {
-    return props;
+  props: TransformProps | TransformProps['transform'],
+): ColumnMajorTransformMatrix | null {
+  if (Array.isArray(props) && typeof props[0] === 'number') {
+    return props as ColumnMajorTransformMatrix;
   }
   if (typeof props === 'string') {
     try {
@@ -179,5 +214,11 @@ export default function extractTransform(
       return identity;
     }
   }
-  return transformToMatrix(props2transform(props), props.transform);
+  // this type is not correct since props can be of type TransformsStyle['transform'] too
+  // but it satisfies TS and should not produce any type errors
+  const transformProps = props as TransformProps;
+  return transformToMatrix(
+    props2transform(transformProps),
+    transformProps?.transform,
+  );
 }

@@ -252,8 +252,8 @@ export type ImageProps = {
   y?: NumberProp,
   width?: NumberProp,
   height?: NumberProp,
-  xlinkHref?: $PropertyType<ReactNative.ImageProps, "source">,
-  href?: $PropertyType<ReactNative.ImageProps, "source">,
+  xlinkHref?: $PropertyType<ReactNative.ImageProps, "source"> | string,
+  href?: $PropertyType<ReactNative.ImageProps, "source"> | string,
   preserveAspectRatio?: string,
   opacity?: NumberProp,
   clipPath?: string,
@@ -442,7 +442,6 @@ export type MaskProps = {
   y?: NumberProp,
   width?: NumberProp,
   height?: NumberProp,
-  maskTransform?: ColumnMajorTransformMatrix | string,
   maskUnits?: Units,
   maskContentUnits?: Units,
   ...

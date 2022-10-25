@@ -5,6 +5,7 @@ import {
   LayoutChangeEvent,
 } from 'react-native';
 import React from 'react';
+import type { TransformsStyle } from 'react-native';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
@@ -162,24 +163,6 @@ export interface FontProps extends FontObject {
   font?: FontObject;
 }
 
-export interface TransformObject {
-  translate?: NumberArray;
-  translateX?: NumberProp;
-  translateY?: NumberProp;
-  origin?: NumberArray;
-  originX?: NumberProp;
-  originY?: NumberProp;
-  scale?: NumberArray;
-  scaleX?: NumberProp;
-  scaleY?: NumberProp;
-  skew?: NumberArray;
-  skewX?: NumberProp;
-  skewY?: NumberProp;
-  rotation?: NumberProp;
-  x?: NumberArray;
-  y?: NumberArray;
-}
-
 /*
 
   ColumnMajorTransformMatrix
@@ -204,9 +187,26 @@ export type ColumnMajorTransformMatrix = [
   number,
 ];
 
-export interface TransformProps extends TransformObject {
-  transform?: ColumnMajorTransformMatrix | string | TransformObject;
-  // | TransformsStyle['transform']; // not used since it causes type problems
+export interface TransformProps {
+  translate?: NumberArray;
+  translateX?: NumberProp;
+  translateY?: NumberProp;
+  origin?: NumberArray;
+  originX?: NumberProp;
+  originY?: NumberProp;
+  scale?: NumberArray;
+  scaleX?: NumberProp;
+  scaleY?: NumberProp;
+  skew?: NumberArray;
+  skewX?: NumberProp;
+  skewY?: NumberProp;
+  rotation?: NumberProp;
+  x?: NumberArray;
+  y?: NumberArray;
+  transform?:
+    | ColumnMajorTransformMatrix
+    | string
+    | TransformsStyle['transform'];
 }
 
 export interface TransformedProps {
