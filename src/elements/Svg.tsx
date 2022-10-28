@@ -118,7 +118,6 @@ export default class Svg extends Shape<SvgProps> {
 
       // Inherited G properties
       font,
-      transform,
       fill,
       fillOpacity,
       fillRule,
@@ -183,6 +182,11 @@ export default class Svg extends Shape<SvgProps> {
       props.onLayout = onLayout;
     }
 
+    // transform should not be passed down since it is already used in svgView
+    // and would be doubled in G causing double transformations
+    const gStyle = Object.assign({}, style) as ViewStyle;
+    gStyle.transform = undefined;
+
     const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
 
     return (
@@ -194,9 +198,8 @@ export default class Svg extends Shape<SvgProps> {
         <G
           {...{
             children,
-            style,
+            style: gStyle,
             font,
-            transform,
             fill,
             fillOpacity,
             fillRule,
