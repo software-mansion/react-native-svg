@@ -74,6 +74,9 @@
     "@babel/plugin-syntax-flow": "^7.17.12",
     "@babel/plugin-transform-react-jsx": "^7.17.12",
     "@react-native-community/bob": "^0.9.7",
+    "@react-native-community/cli": "^9.0.0",
+    "@react-native-community/cli-platform-android": "^9.0.0",
+    "@react-native-community/cli-platform-ios": "^9.0.0",
     "@react-native-community/eslint-config": "^3.0.2",
     "@react-native-community/eslint-plugin": "^1.2.0",
     "@react-native/babel-plugin-codegen": "^0.71.0",
@@ -104,6 +107,11 @@
     "release-it": "^14.12.5",
     "ts-node": "^10.8.0",
     "typescript": "^4.7.2"
+  },
+  "resolutions": {
+    "@react-native-community/cli-platform-android": "^9.0.0",
+    "@react-native-community/cli": "^9.0.0",
+    "@react-native-community/cli-platform-ios": "^9.0.0"
   },
   "lint-staged": {
     "{src,Example}/**/*.{js,ts,tsx}": "yarn format-js",
