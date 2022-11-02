@@ -5537,7 +5537,7 @@ react-native-gradle-plugin@^0.70.3:
   version "0.0.0"
   uid ""
 
-react-native@^0.70.4:
+react-native@0.70.4:
   version "0.70.4"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.70.4.tgz#f2a3a7996431a47a45ce1f5097352c5721417516"
   integrity sha512-1e4jWotS20AJ/4lGVkZQs2wE0PvCpIRmPQEQ1FyH7wdyuewFFIxbUHqy6vAj1JWVFfAzbDakOQofrIkkHWLqNA==
