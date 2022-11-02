@@ -186,7 +186,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   public void setTintColor(Integer tintColor) {
-    mTintColor = tintColor;
+    mTintColor = tintColor != null ? tintColor : 0;
     invalidate();
     clearChildCache();
   }
