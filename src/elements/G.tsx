@@ -9,7 +9,8 @@ import {
   TransformProps,
 } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGGroup } from './NativeComponents';
+import { RNSVGGroup } from '../ReactNativeSVG';
+import { NativeMethods } from 'react-native';
 
 export interface GProps extends CommonPathProps, FontProps {
   children?: ReactNode;
@@ -40,7 +41,10 @@ export default class G<P> extends Shape<GProps & P> {
       extractedProps.font = font;
     }
     return (
-      <RNSVGGroup ref={this.refMethod} {...extractedProps}>
+      <RNSVGGroup
+        ref={(ref) => this.refMethod(ref as (G<P> & NativeMethods) | null)}
+        {...extractedProps}
+      >
         {props.children}
       </RNSVGGroup>
     );

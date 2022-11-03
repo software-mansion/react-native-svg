@@ -5,7 +5,8 @@ import {
 } from '../lib/extract/extractProps';
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGRect } from './NativeComponents';
+import { RNSVGRect } from '../ReactNativeSVG';
+import { NativeMethods } from 'react-native';
 
 export interface RectProps extends CommonPathProps {
   x?: NumberProp;
@@ -33,7 +34,7 @@ export default class Rect extends Shape<RectProps> {
     const rectProps = stringifyPropsForFabric({ x, y, width, height, rx, ry });
     return (
       <RNSVGRect
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (Rect & NativeMethods) | null)}
         {...withoutXY(this, props)}
         {...rectProps}
       />

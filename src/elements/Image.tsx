@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ImageProps as RNImageProps } from 'react-native';
+import { Image, ImageProps as RNImageProps, NativeMethods } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
 import {
   stringifyPropsForFabric,
@@ -14,7 +14,7 @@ import {
   TouchableProps,
 } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGImage } from './NativeComponents';
+import { RNSVGImage } from '../ReactNativeSVG';
 
 const spacesRegExp = /\s+/;
 
@@ -82,7 +82,7 @@ export default class SvgImage extends Shape<ImageProps> {
     };
     return (
       <RNSVGImage
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (SvgImage & NativeMethods) | null)}
         {...withoutXY(this, props)}
         {...imageProps}
       />

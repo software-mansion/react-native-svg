@@ -49,13 +49,14 @@ import {
   RNSVGPattern,
   RNSVGRadialGradient,
   RNSVGRect,
-  RNSVGSvg,
+  RNSVGSvgAndroid,
+  RNSVGSvgIOS,
   RNSVGSymbol,
   RNSVGText,
   RNSVGTextPath,
   RNSVGTSpan,
   RNSVGUse,
-} from './elements/NativeComponents';
+} from './fabric';
 
 export type { RectProps } from './elements/Rect';
 export type { CircleProps } from './elements/Circle';
@@ -144,7 +145,8 @@ export {
   RNSVGEllipse,
   RNSVGCircle,
   RNSVGRect,
-  RNSVGSvg,
+  RNSVGSvgAndroid,
+  RNSVGSvgIOS,
   RNSVGForeignObject,
 };
 

@@ -56,9 +56,11 @@ interface NativeProps
   y?: string;
   width?: string;
   height?: string;
-  src?: ImageSource;
+  src?: ImageSource | null;
   align?: string;
   meetOrSlice?: Int32;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGImage');
+export default codegenNativeComponent<NativeProps>('RNSVGImage', {
+  interfaceOnly: true,
+});

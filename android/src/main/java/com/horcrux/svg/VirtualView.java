@@ -373,6 +373,7 @@ public abstract class VirtualView extends ReactViewGroup {
 
   abstract Path getPath(Canvas canvas, Paint paint);
 
+  @Nullable
   SvgView getSvgView() {
     if (svgView != null) {
       return svgView;

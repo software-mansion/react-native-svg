@@ -2,7 +2,8 @@ import React from 'react';
 import { extract, stringifyPropsForFabric } from '../lib/extract/extractProps';
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGCircle } from './NativeComponents';
+import { RNSVGCircle } from '../ReactNativeSVG';
+import { NativeMethods } from 'react-native';
 
 export interface CircleProps extends CommonPathProps {
   cx?: NumberProp;
@@ -28,6 +29,11 @@ export default class Circle extends Shape<CircleProps> {
       ...stringifyPropsForFabric({ cx, cy, r }),
     };
 
-    return <RNSVGCircle ref={this.refMethod} {...circleProps} />;
+    return (
+      <RNSVGCircle
+        ref={(ref) => this.refMethod(ref as (Circle & NativeMethods) | null)}
+        {...circleProps}
+      />
+    );
   }
 }

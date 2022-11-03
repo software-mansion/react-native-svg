@@ -5,7 +5,8 @@ import {
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
-  NativeModules,
+  NativeMethods,
+  Platform,
   StyleProp,
   StyleSheet,
   ViewProps,
@@ -20,9 +21,8 @@ import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
 import G, { GProps } from './G';
-import { RNSVGSvg } from './NativeComponents';
-
-const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
+import { RNSVGSvgAndroid, RNSVGSvgIOS } from '../ReactNativeSVG';
+import type { Spec } from '../fabric/NativeSvgViewModule';
 
 const styles = StyleSheet.create({
   svg: {
@@ -91,7 +91,9 @@ export default class Svg extends Shape<SvgProps> {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
-    RNSVGSvgViewManager.toDataURL(handle, options, callback);
+    const RNSVGSvgViewModule: Spec =
+      require('../fabric/NativeSvgViewModule').default;
+    RNSVGSvgViewModule.toDataURL(handle, options, callback);
   };
 
   render() {
@@ -116,7 +118,6 @@ export default class Svg extends Shape<SvgProps> {
 
       // Inherited G properties
       font,
-      transform,
       fill,
       fillOpacity,
       fillRule,
@@ -181,18 +182,24 @@ export default class Svg extends Shape<SvgProps> {
       props.onLayout = onLayout;
     }
 
+    // transform should not be passed down since it is already used in svgView
+    // and would be doubled in G causing double transformations
+    const gStyle = Object.assign({}, style) as ViewStyle;
+    gStyle.transform = undefined;
+
+    const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
+
     return (
       <RNSVGSvg
         {...props}
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (Svg & NativeMethods) | null)}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
       >
         <G
           {...{
             children,
-            style,
+            style: gStyle,
             font,
-            transform,
             fill,
             fillOpacity,
             fillRule,

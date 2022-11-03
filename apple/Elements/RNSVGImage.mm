@@ -29,17 +29,13 @@
 #ifdef RN_FABRIC_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
+#import <React/RCTImageResponseObserverProxy.h>
 #import <React/RCTImageSource.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import <react/renderer/imagemanager/RCTImagePrimitivesConversions.h>
+#import <rnsvg/RNSVGImageComponentDescriptor.h>
 #import "RNSVGFabricConversions.h"
-
-// Some RN private method hacking below similar to how it is done in RNScreens:
-// https://github.com/software-mansion/react-native-screens/blob/90e548739f35b5ded2524a9d6410033fc233f586/ios/RNSScreenStackHeaderConfig.mm#L30
-@interface RCTBridge (Private)
-+ (RCTBridge *)currentBridge;
-@end
 
 #endif // RN_FABRIC_ENABLED
 
@@ -47,6 +43,11 @@
   CGImageRef _image;
   CGSize _imageSize;
   RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
+
+#ifdef RN_FABRIC_ENABLED
+  RNSVGImageShadowNode::ConcreteState::Shared _state;
+  RCTImageResponseObserverProxy _imageResponseObserverProxy;
+#endif // RN_FABRIC_ENABLED
 }
 #ifdef RN_FABRIC_ENABLED
 using namespace facebook::react;
@@ -56,6 +57,10 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNSVGImageProps>();
     _props = defaultProps;
+
+#ifdef RN_FABRIC_ENABLED
+    _imageResponseObserverProxy = RCTImageResponseObserverProxy(self);
+#endif
   }
   return self;
 }
@@ -70,7 +75,6 @@ using namespace facebook::react;
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGImageProps>(props);
-  const auto &oldImageProps = *std::static_pointer_cast<const RNSVGImageProps>(oldProps);
 
   self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
   self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
@@ -80,15 +84,6 @@ using namespace facebook::react;
   if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
     self.imagewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
   }
-
-  if (oldProps == nullptr || oldImageProps.src != newProps.src) {
-    // TODO: make it the same as in e.g. slider
-    NSURLRequest *request = NSURLRequestFromImageSource(newProps.src);
-    CGSize size = RCTCGSizeFromSize(newProps.src.size);
-    CGFloat scale = newProps.src.scale;
-    RCTImageSource *imageSource = [[RCTImageSource alloc] initWithURLRequest:request size:size scale:scale];
-    [self setImageSrc:imageSource request:request];
-  }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
 
@@ -96,9 +91,68 @@ using namespace facebook::react;
   _props = std::static_pointer_cast<RNSVGImageProps const>(props);
 }
 
+- (void)updateState:(State::Shared const &)state oldState:(State::Shared const &)oldState
+{
+  RCTAssert(state, @"`state` must not be null.");
+  RCTAssert(
+      std::dynamic_pointer_cast<RNSVGImageShadowNode::ConcreteState const>(state),
+      @"`state` must be a pointer to `RNSVGImageShadowNode::ConcreteState`.");
+
+  auto oldImageState = std::static_pointer_cast<RNSVGImageShadowNode::ConcreteState const>(_state);
+  auto newImageState = std::static_pointer_cast<RNSVGImageShadowNode::ConcreteState const>(state);
+
+  [self _setStateAndResubscribeImageResponseObserver:newImageState];
+}
+
+- (void)_setStateAndResubscribeImageResponseObserver:(RNSVGImageShadowNode::ConcreteState::Shared const &)state
+{
+  if (_state) {
+    auto &observerCoordinator = _state->getData().getImageRequest().getObserverCoordinator();
+    observerCoordinator.removeObserver(_imageResponseObserverProxy);
+  }
+
+  _state = state;
+
+  if (_state) {
+    auto &observerCoordinator = _state->getData().getImageRequest().getObserverCoordinator();
+    observerCoordinator.addObserver(_imageResponseObserverProxy);
+  }
+}
+
+#pragma mark - RCTImageResponseDelegate
+
+- (void)didReceiveImage:(UIImage *)image metadata:(id)metadata fromObserver:(void const *)observer
+{
+  if (!_eventEmitter || !_state) {
+    // Notifications are delivered asynchronously and might arrive after the view is already recycled.
+    // In the future, we should incorporate an `EventEmitter` into a separate object owned by `ImageRequest` or `State`.
+    // See for more info: T46311063.
+    return;
+  }
+  dispatch_async(dispatch_get_main_queue(), ^{
+    self->_image = CGImageRetain(image.CGImage);
+    self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+    [self invalidate];
+  });
+}
+
+- (void)didReceiveProgress:(float)progress fromObserver:(void const *)observer
+{
+}
+
+- (void)didReceiveFailureFromObserver:(void const *)observer
+{
+  if (_image) {
+    CGImageRelease(_image);
+  }
+  _image = nil;
+}
+
 - (void)prepareForRecycle
 {
   [super prepareForRecycle];
+  [self _setStateAndResubscribeImageResponseObserver:nullptr];
+
   _x = nil;
   _y = nil;
   _imageheight = nil;
@@ -116,8 +170,10 @@ using namespace facebook::react;
 }
 #endif // RN_FABRIC_ENABLED
 
-- (void)setImageSrc:(RCTImageSource *)src request:(NSURLRequest *)request
+- (void)setSrc:(RCTImageSource *)src
 {
+#ifdef RN_FABRIC_ENABLED
+#else
   if (src == _src) {
     return;
   }
@@ -136,24 +192,16 @@ using namespace facebook::react;
     _reloadImageCancellationBlock = nil;
   }
 
-  _reloadImageCancellationBlock = [[
-#ifdef RN_FABRIC_ENABLED
-        [RCTBridge currentBridge]
-#else
-        self.bridge
+  _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"]
+      loadImageWithURLRequest:src.request
+                     callback:^(NSError *error, UIImage *image) {
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                         self->_image = CGImageRetain(image.CGImage);
+                         self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+                         [self invalidate];
+                       });
+                     }];
 #endif // RN_FABRIC_ENABLED
-        moduleForName:@"ImageLoader"] loadImageWithURLRequest:request callback:^(NSError *error, UIImage *image) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self->_image = CGImageRetain(image.CGImage);
-            self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
-            [self invalidate];
-        });
-    }];
-}
-
-- (void)setSrc:(RCTImageSource *)src
-{
-  [self setImageSrc:src request:src.request];
 }
 
 - (void)setX:(RNSVGLength *)x

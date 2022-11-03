@@ -78,7 +78,7 @@ using namespace facebook::react;
   if (RCTUIColorFromSharedColor(newProps.color)) {
     self.tintColor = RCTUIColorFromSharedColor(newProps.color);
   }
-  _props = std::static_pointer_cast<RNSVGSvgViewProps const>(props);
+  [super updateProps:props oldProps:oldProps];
 }
 
 - (void)prepareForRecycle

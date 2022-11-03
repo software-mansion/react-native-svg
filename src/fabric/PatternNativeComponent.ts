@@ -10,7 +10,7 @@ import type { ViewProps } from './utils';
 interface SvgNodeCommonProps {
   name?: string;
   opacity?: WithDefault<Float, 1.0>;
-  matrix?: ReadonlyArray<Float>;
+  matrix?: ReadonlyArray<Float> | null;
   mask?: string;
   markerStart?: string;
   markerMid?: string;
@@ -78,7 +78,7 @@ interface NativeProps
   width?: string;
   patternUnits?: Int32;
   patternContentUnits?: Int32;
-  patternTransform?: ReadonlyArray<Float>;
+  patternTransform?: ReadonlyArray<Float> | null;
   minX?: Float;
   minY?: Float;
   vbWidth?: Float;

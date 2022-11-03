@@ -4,8 +4,9 @@ import extractViewBox from '../lib/extract/extractViewBox';
 import { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
-import { RNSVGPattern } from './NativeComponents';
+import { RNSVGPattern } from '../ReactNativeSVG';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
+import { NativeMethods } from 'react-native';
 
 export interface PatternProps extends TransformProps {
   children?: ReactNode;
@@ -63,7 +64,7 @@ export default class Pattern extends Shape<PatternProps> {
     };
     return (
       <RNSVGPattern
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (Pattern & NativeMethods) | null)}
         {...strigifiedPatternProps}
         {...patternProps}
         {...extractViewBox({ viewBox, preserveAspectRatio })}

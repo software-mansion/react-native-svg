@@ -30,7 +30,7 @@ interface NativeProps extends ViewProps, SvgNodeCommonProps {
   ry?: string;
   gradient?: ReadonlyArray<Float>;
   gradientUnits?: Int32;
-  gradientTransform?: ReadonlyArray<Float>;
+  gradientTransform?: ReadonlyArray<Float> | null;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGRadialGradient');

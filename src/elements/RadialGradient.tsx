@@ -2,8 +2,9 @@ import React, { ReactElement } from 'react';
 import extractGradient from '../lib/extract/extractGradient';
 import { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGRadialGradient } from './NativeComponents';
+import { RNSVGRadialGradient } from '../ReactNativeSVG';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
+import { NativeMethods } from 'react-native';
 
 export interface RadialGradientProps {
   children?: ReactElement[];
@@ -41,7 +42,9 @@ export default class RadialGradient extends Shape<RadialGradientProps> {
     });
     return (
       <RNSVGRadialGradient
-        ref={this.refMethod}
+        ref={(ref) =>
+          this.refMethod(ref as (RadialGradient & NativeMethods) | null)
+        }
         {...radialGradientProps}
         {...extractGradient(props, this)}
       />

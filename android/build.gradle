@@ -61,11 +61,7 @@ android {
 
     sourceSets.main {
         java {
-            if (isNewArchitectureEnabled()) {
-                srcDirs += [
-                    "src/fabric/java",
-                ]
-            } else {
+            if (!isNewArchitectureEnabled()) {
                 srcDirs += [
                     "src/paper/java", 
                     "build/generated/source/codegen/java"
@@ -90,15 +86,5 @@ dependencies {
         implementation project(":ReactAndroid")
     } else {
         implementation 'com.facebook.react:react-native:+'
-    }
-}
-
-if (isNewArchitectureEnabled()) {
-    react {
-        reactRoot = rootProject.file("../node_modules/react-native/")
-        jsRootDir = file("../src/fabric/")
-        codegenDir = rootProject.file("../node_modules/react-native-codegen/")
-        libraryName = "rnsvg"
-        codegenJavaPackageName = "com.horcrux.rnsvg"
     }
 }
