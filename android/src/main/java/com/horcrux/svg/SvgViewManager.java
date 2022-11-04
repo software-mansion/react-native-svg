@@ -8,10 +8,11 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Rect;
 import android.util.SparseArray;
 import com.facebook.react.bridge.Dynamic;
-import com.facebook.react.bridge.DynamicFromObject;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewManagerDelegate;
@@ -302,8 +303,25 @@ class SvgViewManager extends ReactViewManager
   }
 
   @Override
-  public void setHitSlop(SvgView view, @Nullable ReadableMap value) {
-    super.setHitSlop(view, new DynamicFromObject(value));
+  public void setHitSlop(SvgView view, @Nullable ReadableMap hitSlopMap) {
+    // we don't call super here since its signature changed in RN 0.69 and we want backwards
+    // compatibility
+    if (hitSlopMap != null) {
+      view.setHitSlopRect(
+          new Rect(
+              hitSlopMap.hasKey("left")
+                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("left"))
+                  : 0,
+              hitSlopMap.hasKey("top")
+                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("top"))
+                  : 0,
+              hitSlopMap.hasKey("right")
+                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("right"))
+                  : 0,
+              hitSlopMap.hasKey("bottom")
+                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("bottom"))
+                  : 0));
+    }
   }
 
   @Override

@@ -25,12 +25,12 @@ import com.facebook.react.module.model.ReactModuleInfoProvider;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import com.facebook.react.uimanager.ViewManager;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import javax.inject.Provider;
 
 @ReactModuleList(
     nativeModules = {
@@ -45,47 +45,194 @@ public class SvgPackage extends TurboReactPackage implements ViewManagerOnDemand
     if (mViewManagers == null) {
       Map<String, ModuleSpec> specs = MapBuilder.newHashMap();
       specs.put(
-          GroupViewManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new GroupViewManager()));
+          GroupViewManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new GroupViewManager();
+                }
+              }));
       specs.put(
-          PathViewManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new PathViewManager()));
+          PathViewManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new PathViewManager();
+                }
+              }));
       specs.put(
-          CircleViewManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new CircleViewManager()));
+          CircleViewManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new CircleViewManager();
+                }
+              }));
       specs.put(
           EllipseViewManager.REACT_CLASS,
-          ModuleSpec.viewManagerSpec(() -> new EllipseViewManager()));
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new EllipseViewManager();
+                }
+              }));
       specs.put(
-          LineViewManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new LineViewManager()));
+          LineViewManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new LineViewManager();
+                }
+              }));
       specs.put(
-          RectViewManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new RectViewManager()));
+          RectViewManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new RectViewManager();
+                }
+              }));
       specs.put(
-          TextViewManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new TextViewManager()));
+          TextViewManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new TextViewManager();
+                }
+              }));
       specs.put(
-          TSpanViewManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new TSpanViewManager()));
+          TSpanViewManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new TSpanViewManager();
+                }
+              }));
       specs.put(
           TextPathViewManager.REACT_CLASS,
-          ModuleSpec.viewManagerSpec(() -> new TextPathViewManager()));
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new TextPathViewManager();
+                }
+              }));
       specs.put(
-          ImageViewManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new ImageViewManager()));
+          ImageViewManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new ImageViewManager();
+                }
+              }));
       specs.put(
           ClipPathViewManager.REACT_CLASS,
-          ModuleSpec.viewManagerSpec(() -> new ClipPathViewManager()));
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new ClipPathViewManager();
+                }
+              }));
       specs.put(
-          DefsViewManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new DefsViewManager()));
-      specs.put(UseViewManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new UseViewManager()));
-      specs.put(SymbolManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new SymbolManager()));
+          DefsViewManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new DefsViewManager();
+                }
+              }));
+      specs.put(
+          UseViewManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new UseViewManager();
+                }
+              }));
+      specs.put(
+          SymbolManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new SymbolManager();
+                }
+              }));
       specs.put(
           LinearGradientManager.REACT_CLASS,
-          ModuleSpec.viewManagerSpec(() -> new LinearGradientManager()));
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new LinearGradientManager();
+                }
+              }));
       specs.put(
           RadialGradientManager.REACT_CLASS,
-          ModuleSpec.viewManagerSpec(() -> new RadialGradientManager()));
-      specs.put(PatternManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new PatternManager()));
-      specs.put(MaskManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new MaskManager()));
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new RadialGradientManager();
+                }
+              }));
+      specs.put(
+          PatternManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new PatternManager();
+                }
+              }));
+      specs.put(
+          MaskManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new MaskManager();
+                }
+              }));
       specs.put(
           ForeignObjectManager.REACT_CLASS,
-          ModuleSpec.viewManagerSpec(() -> new ForeignObjectManager()));
-      specs.put(MarkerManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new MarkerManager()));
-      specs.put(SvgViewManager.REACT_CLASS, ModuleSpec.viewManagerSpec(() -> new SvgViewManager()));
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new ForeignObjectManager();
+                }
+              }));
+      specs.put(
+          MarkerManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new MarkerManager();
+                }
+              }));
+      specs.put(
+          SvgViewManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new SvgViewManager();
+                }
+              }));
       mViewManagers = specs;
     }
     return mViewManagers;
@@ -93,8 +240,8 @@ public class SvgPackage extends TurboReactPackage implements ViewManagerOnDemand
 
   /** {@inheritDoc} */
   @Override
-  public Collection<String> getViewManagerNames(ReactApplicationContext reactContext) {
-    return getViewManagersMap(reactContext).keySet();
+  public List<String> getViewManagerNames(ReactApplicationContext reactContext) {
+    return (List<String>) getViewManagersMap(reactContext).keySet();
   }
 
   @Override
@@ -131,30 +278,33 @@ public class SvgPackage extends TurboReactPackage implements ViewManagerOnDemand
     } catch (ClassNotFoundException e) {
       // ReactModuleSpecProcessor does not run at build-time. Create this ReactModuleInfoProvider by
       // hand.
-      return () -> {
-        final Map<String, ReactModuleInfo> reactModuleInfoMap = new HashMap<>();
+      return new ReactModuleInfoProvider() {
+        @Override
+        public Map<String, ReactModuleInfo> getReactModuleInfos() {
+          final Map<String, ReactModuleInfo> reactModuleInfoMap = new HashMap<>();
 
-        Class<? extends NativeModule>[] moduleList =
-            new Class[] {
-              SvgViewModule.class, RNSVGRenderableManager.class,
-            };
+          Class<? extends NativeModule>[] moduleList =
+              new Class[] {
+                SvgViewModule.class, RNSVGRenderableManager.class,
+              };
 
-        for (Class<? extends NativeModule> moduleClass : moduleList) {
-          ReactModule reactModule = moduleClass.getAnnotation(ReactModule.class);
+          for (Class<? extends NativeModule> moduleClass : moduleList) {
+            ReactModule reactModule = moduleClass.getAnnotation(ReactModule.class);
 
-          reactModuleInfoMap.put(
-              reactModule.name(),
-              new ReactModuleInfo(
-                  reactModule.name(),
-                  moduleClass.getName(),
-                  reactModule.canOverrideExistingModule(),
-                  reactModule.needsEagerInit(),
-                  reactModule.hasConstants(),
-                  reactModule.isCxxModule(),
-                  TurboModule.class.isAssignableFrom(moduleClass)));
+            reactModuleInfoMap.put(
+                reactModule.name(),
+                new ReactModuleInfo(
+                    reactModule.name(),
+                    moduleClass.getName(),
+                    reactModule.canOverrideExistingModule(),
+                    reactModule.needsEagerInit(),
+                    reactModule.hasConstants(),
+                    reactModule.isCxxModule(),
+                    TurboModule.class.isAssignableFrom(moduleClass)));
+          }
+
+          return reactModuleInfoMap;
         }
-
-        return reactModuleInfoMap;
       };
     } catch (InstantiationException | IllegalAccessException e) {
       throw new RuntimeException(

@@ -16,7 +16,9 @@
 
 RCT_EXPORT_MODULE()
 
+#ifdef RN_FABRIC_ENABLED
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
+#endif // RN_FABRIC_ENABLED
 @synthesize bridge = _bridge;
 
 - (void)toDataURL:(nonnull NSNumber *)reactTag
@@ -25,8 +27,14 @@ RCT_EXPORT_MODULE()
           attempt:(int)attempt
 {
   void (^block)(void) = ^{
+#ifdef RN_FABRIC_ENABLED
     [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
       __kindof RNSVGPlatformView *view = [viewRegistry viewForReactTag:reactTag];
+#else
+    [self.bridge.uiManager
+        addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RNSVGPlatformView *> *viewRegistry) {
+          __kindof RNSVGPlatformView *view = [uiManager viewForReactTag:reactTag];
+#endif // RN_FABRIC_ENABLED
       NSString *b64;
       if ([view isKindOfClass:[RNSVGSvgView class]]) {
         RNSVGSvgView *svg = view;
