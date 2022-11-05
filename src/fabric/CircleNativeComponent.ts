@@ -53,4 +53,6 @@ interface NativeProps
   r?: string;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGCircle');
+export default codegenNativeComponent<NativeProps>('RNSVGCircle', {
+  interfaceOnly: true,
+});

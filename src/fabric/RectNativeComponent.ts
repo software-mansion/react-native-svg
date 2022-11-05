@@ -56,4 +56,6 @@ interface NativeProps
   ry?: string;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGRect');
+export default codegenNativeComponent<NativeProps>('RNSVGRect', {
+  interfaceOnly: true,
+});

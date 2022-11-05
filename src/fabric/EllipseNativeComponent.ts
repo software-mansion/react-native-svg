@@ -54,4 +54,6 @@ interface NativeProps
   ry?: string;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGEllipse');
+export default codegenNativeComponent<NativeProps>('RNSVGEllipse', {
+  interfaceOnly: true,
+});

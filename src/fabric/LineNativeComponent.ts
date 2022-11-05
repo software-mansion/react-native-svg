@@ -54,4 +54,6 @@ interface NativeProps
   y2?: string;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGLine');
+export default codegenNativeComponent<NativeProps>('RNSVGLine', {
+  interfaceOnly: true,
+});

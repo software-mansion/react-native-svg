@@ -51,4 +51,6 @@ interface NativeProps
   d?: string;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGPath');
+export default codegenNativeComponent<NativeProps>('RNSVGPath', {
+  interfaceOnly: true,
+});

@@ -73,4 +73,6 @@ interface NativeProps
     SvgRenderableCommonProps,
     SvgGroupCommonProps {}
 
-export default codegenNativeComponent<NativeProps>('RNSVGClipPath');
+export default codegenNativeComponent<NativeProps>('RNSVGClipPath', {
+  interfaceOnly: true,
+});

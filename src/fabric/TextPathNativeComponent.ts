@@ -94,4 +94,6 @@ interface NativeProps
   startOffset?: string;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGTextPath');
+export default codegenNativeComponent<NativeProps>('RNSVGTextPath', {
+  interfaceOnly: true,
+});

@@ -78,4 +78,6 @@ interface NativeProps
   width?: string;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGForeignObject');
+export default codegenNativeComponent<NativeProps>('RNSVGForeignObject', {
+  interfaceOnly: true,
+});

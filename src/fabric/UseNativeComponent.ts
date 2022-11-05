@@ -55,4 +55,6 @@ interface NativeProps
   width?: string;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGUse');
+export default codegenNativeComponent<NativeProps>('RNSVGUse', {
+  interfaceOnly: true,
+});

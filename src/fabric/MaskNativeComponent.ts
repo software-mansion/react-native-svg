@@ -80,4 +80,6 @@ interface NativeProps
   maskContentUnits?: Int32;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGMask');
+export default codegenNativeComponent<NativeProps>('RNSVGMask', {
+  interfaceOnly: true,
+});
