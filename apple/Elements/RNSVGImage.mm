@@ -37,6 +37,7 @@
 #import <rnsvg/RNSVGImageComponentDescriptor.h>
 #import "RNSVGFabricConversions.h"
 
+using namespace facebook::react;
 #endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGImage {
@@ -50,17 +51,13 @@
 #endif // RN_FABRIC_ENABLED
 }
 #ifdef RN_FABRIC_ENABLED
-using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNSVGImageProps>();
     _props = defaultProps;
-
-#ifdef RN_FABRIC_ENABLED
     _imageResponseObserverProxy = RCTImageResponseObserverProxy(self);
-#endif
   }
   return self;
 }
