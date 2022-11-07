@@ -376,33 +376,6 @@ PODS:
     - React-jsidynamic (= 0.71.0-rc.0)
     - React-logger (= 0.71.0-rc.0)
     - React-perflogger (= 0.71.0-rc.0)
-  - RNReanimated (2.12.0):
-    - DoubleConversion
-    - FBLazyVector
-    - FBReactNativeSpec
-    - glog
-    - RCT-Folly
-    - RCTRequired
-    - RCTTypeSafety
-    - React-callinvoker
-    - React-Core
-    - React-Core/DevSupport
-    - React-Core/RCTWebSocket
-    - React-CoreModules
-    - React-cxxreact
-    - React-jsi
-    - React-jsiexecutor
-    - React-jsinspector
-    - React-RCTActionSheet
-    - React-RCTAnimation
-    - React-RCTBlob
-    - React-RCTImage
-    - React-RCTLinking
-    - React-RCTNetwork
-    - React-RCTSettings
-    - React-RCTText
-    - ReactCommon/turbomodule/core
-    - Yoga
   - RNSVG (13.5.0):
     - React-Core
   - SocketRocket (0.6.0)
@@ -471,7 +444,6 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -564,8 +536,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  RNReanimated:
-    :path: "../node_modules/react-native-reanimated"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -620,7 +590,6 @@ SPEC CHECKSUMS:
   React-RCTVibration: 64be373eed57a9fd53cf8e0d0bfd781e60814ec3
   React-runtimeexecutor: 7a1ac2b06a997a985f9fbdc6abbac38dd9e9aa48
   ReactCommon: d30ce0c7a6d0df825870d4706f2370f57bbc2b38
-  RNReanimated: dca939a830ba6101b6a9a21b1839b7362e28fd8f
   RNSVG: 38ca962c970dbce1ca38991a5aebf26d163f9efb
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 167c6bcfbcd203adef48d2310491e85c51daeaf2
