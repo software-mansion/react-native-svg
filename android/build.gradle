@@ -7,7 +7,7 @@ buildscript {
             mavenCentral()
             google()
         }
-        
+
         dependencies {
             classpath("com.android.tools.build:gradle:3.6.1")
             classpath "com.diffplug.spotless:spotless-plugin-gradle:5.15.0"
@@ -63,7 +63,7 @@ android {
         java {
             if (!isNewArchitectureEnabled()) {
                 srcDirs += [
-                    "src/paper/java", 
+                    "src/paper/java",
                     "build/generated/source/codegen/java"
                 ]
             }
