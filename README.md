@@ -1,4 +1,4 @@
-# react-native-svg
+<img src="https://user-images.githubusercontent.com/39658211/200319759-006c214f-941c-496c-a3c2-7de5b7ce33dc.png" width="100%" alt="React Native SVG at Software Mansion" >
 
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 [![NPM](https://img.shields.io/npm/dm/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
