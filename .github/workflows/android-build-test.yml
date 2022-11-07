@@ -4,8 +4,12 @@ on:
     paths:
       - '.github/workflows/android-build-test.yml'
       - 'android/**'
+      - 'src/fabric/**'
+      - 'package.json'
       - 'Example/android/**'
+      - 'Example/package.json'
       - 'FabricExample/android/**'
+      - 'FabricExample/package.json'
   push:
     branches:
       - main
