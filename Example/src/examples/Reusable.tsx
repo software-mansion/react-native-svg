@@ -21,8 +21,8 @@ class UseExample extends Component {
       <Svg height="100" width="300">
         <Defs>
           <G id="reuse-shape">
-            <Circle cx="50" cy="50" r="50" />
-            <Rect x="50" y="50" width="50" height="50" />
+            <Circle cx="50" cy="50" r="50" fill="black" />
+            <Rect x="50" y="50" width="50" height="50" fill="black" />
             <Circle cx="50" cy="50" r="5" fill="blue" />
           </G>
         </Defs>
