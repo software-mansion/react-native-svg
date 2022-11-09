@@ -168,7 +168,7 @@ class MarkerView extends GroupView {
 
     boolean useStrokeWidth = "strokeWidth".equals(mMarkerUnits);
     if (useStrokeWidth) {
-      markerTransform.preScale(strokeWidth, strokeWidth);
+      markerTransform.preScale(strokeWidth / mScale, strokeWidth / mScale);
     }
 
     double width = relativeOnWidth(mMarkerWidth) / mScale;
