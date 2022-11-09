@@ -9,6 +9,7 @@ import {
   Platform,
   StyleProp,
   StyleSheet,
+  TransformsStyle,
   ViewProps,
   ViewStyle,
 } from 'react-native';
@@ -39,6 +40,7 @@ export interface SvgProps extends GProps, ViewProps {
   preserveAspectRatio?: string;
   color?: ColorValue;
   title?: string;
+  transform?: TransformsStyle['transform'];
 }
 
 export default class Svg extends Shape<SvgProps> {
