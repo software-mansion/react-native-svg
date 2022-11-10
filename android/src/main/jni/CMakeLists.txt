@@ -52,6 +52,7 @@ target_link_libraries(
   turbomodulejsijni
   yoga
   react_render_imagemanager
+  rrc_image
 )
 
 target_compile_options(
