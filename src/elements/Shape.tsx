@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
-import { findNodeHandle, NativeMethods } from 'react-native';
+import extractBrush from '../lib/extract/extractBrush';
+import { ColorValue, findNodeHandle, NativeMethods } from 'react-native';
 import {
   ColumnMajorTransformMatrix,
   TransformProps,
@@ -249,8 +250,13 @@ export default class Shape<P> extends Component<P> {
   setNativeProps = (
     props: Object & {
       matrix?: ColumnMajorTransformMatrix;
+      fill?: ColorValue;
     } & TransformProps,
   ) => {
+    if (props.fill) {
+      // @ts-ignore TODO: native `fill` prop differs from the one passed in props
+      props.fill = extractBrush(props.fill);
+    }
     this.root?.setNativeProps(props);
   };
   /*

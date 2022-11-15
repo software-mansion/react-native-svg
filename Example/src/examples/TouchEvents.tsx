@@ -79,6 +79,7 @@ class GroupExample extends Component {
         <G onPress={() => Alert.alert('Pressed on G')} scale="1.4">
           <Circle cx="80" cy="80" r="30" fill="green" x="20" scale="1.2" />
           <Text
+            fill="black"
             fontWeight="bold"
             fontSize="40"
             x="100"

@@ -9,6 +9,8 @@ import {
   RadialGradient,
   Stop,
   SvgXml,
+  Defs,
+  G,
 } from 'react-native-svg';
 
 const patternXml = `
@@ -62,6 +64,28 @@ class PatternTransformExample extends Component {
             fill="url(#p2)"
             transform={[{translateX: 100}]}
           />
+        </Svg>
+        <Svg height="100" width="100" viewBox="0 0 100 100">
+          <Defs>
+            <Pattern
+              id="stripe"
+              patternUnits="userSpaceOnUse"
+              patternContentUnits="userSpaceOnUse"
+              width="8"
+              height="12"
+              patternTransform="rotate(45)">
+              <Rect width="4" height="8" fill="white" x="0" y="0"></Rect>
+              <Rect width="4" height="12" fill="black" x="4" y="0"></Rect>
+            </Pattern>
+          </Defs>
+          <G transform="matrix(1 0 0 -1 0 140)">
+            <Rect
+              x="0"
+              y="0"
+              width="100"
+              height="100"
+              fill="url(#stripe)"></Rect>
+          </G>
         </Svg>
         {Platform.OS !== 'web' && (
           <SvgXml width="100" height="100" xml={patternXml} />

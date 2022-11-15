@@ -8,7 +8,7 @@ const fillRules: { evenodd: number; nonzero: number } = {
   nonzero: 1,
 };
 
-const defaultFill = processColor('black');
+const defaultFill = { type: 0, payload: processColor('black') };
 
 export default function extractFill(
   o: extractedProps,

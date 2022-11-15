@@ -115,6 +115,7 @@ export default class Svg extends Shape<SvgProps> {
       width,
       height,
       focusable,
+      transform,
 
       // Inherited G properties
       font,
@@ -182,10 +183,18 @@ export default class Svg extends Shape<SvgProps> {
       props.onLayout = onLayout;
     }
 
-    // transform should not be passed down since it is already used in svgView
-    // and would be doubled in G causing double transformations
     const gStyle = Object.assign({}, style) as ViewStyle;
-    gStyle.transform = undefined;
+    // if transform prop is of RN style's kind, we want `SvgView` to handle it
+    // since it can be done here. Otherwise, if transform is of `svg` kind, e.g. string,
+    // we want G element to parse it since `Svg` does not include parsing of those custom transforms.
+    // It is problematic due to fact that we either move the `Svg` or just its `G` child, and in the
+    // second case, when the `G` leaves the area of `Svg`, it will just disappear.
+    if (Array.isArray(transform) && typeof transform[0] === 'object') {
+      gStyle.transform = undefined;
+    } else {
+      props.transform = undefined;
+      gStyle.transform = transform;
+    }
 
     const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
 

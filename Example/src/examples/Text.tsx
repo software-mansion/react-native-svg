@@ -144,7 +144,7 @@ class TSpanExample extends Component {
   render() {
     return (
       <Svg height="160" width="200">
-        <Text y="20" dx="5 5">
+        <Text y="20" dx="5 5" fill="black">
           <TSpan x="10">tspan line 1</TSpan>
           <TSpan x="10" dy="15">
             tspan line 2
@@ -163,7 +163,7 @@ class TSpanExample extends Component {
             89a
           </TSpan>
         </Text>
-        <Text y="140" dx="0 5 5" dy="0 -5 -5">
+        <Text y="140" dx="0 5 5" dy="0 -5 -5" fill="black">
           delta on text
         </Text>
       </Svg>
