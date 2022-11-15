@@ -82,7 +82,8 @@ expo install react-native-svg
 
 | react-native-svg | react-native |
 | ---------------- | ------------ |
-| 13.0.0+          | 0.69.0+      |
+| >=13.0.0         | 0.69.0+      |
+| >=13.6.0         | 0.70.0+      |
 
 ## Troubleshooting
 
