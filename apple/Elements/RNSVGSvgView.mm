@@ -291,7 +291,12 @@ using namespace facebook::react;
     return;
   }
   _boundingBox = rect;
+
+#if TARGET_OS_OSX
+  CGContextRef context = [NSGraphicsContext currentContext].CGContext;
+#else
   CGContextRef context = UIGraphicsGetCurrentContext();
+#endif
 
   [self drawToContext:context withRect:rect];
 }
@@ -323,27 +328,95 @@ using namespace facebook::react;
 
 - (NSString *)getDataURL
 {
+#if TARGET_OS_OSX
+  NSImage *image = [[NSImage alloc] initWithSize:_boundingBox.size];
+  NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+                                                                  pixelsWide:_boundingBox.size.width
+                                                                  pixelsHigh:_boundingBox.size.height
+                                                               bitsPerSample:8
+                                                             samplesPerPixel:4
+                                                                    hasAlpha:YES
+                                                                    isPlanar:NO
+                                                              colorSpaceName:NSCalibratedRGBColorSpace
+                                                                 bytesPerRow:0
+                                                                bitsPerPixel:0];
+
+  [image addRepresentation:rep];
+  [image lockFocus];
+  
+  // flip y-axis on MacOS
+  CGContextRef context = [NSGraphicsContext currentContext].CGContext;
+  CGContextTranslateCTM(context, 0.0, _boundingBox.size.height);
+  CGContextScaleCTM(context, 1.0, -1.0);
+  [image drawAtPoint:NSMakePoint(0, 0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+#else
   UIGraphicsBeginImageContextWithOptions(_boundingBox.size, NO, 0);
+#endif
+
   [self clearChildCache];
   [self drawRect:_boundingBox];
   [self clearChildCache];
   [self invalidate];
+
+#if TARGET_OS_OSX
+  [image unlockFocus];
+  NSData *imageData = [image TIFFRepresentation];
+  NSBitmapImageRep *newRep = [NSBitmapImageRep imageRepWithData:imageData];
+  NSData *pngData = [newRep representationUsingType:NSPNGFileType properties:nil];
+  NSString *base64 = [pngData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+#else
   NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
   NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
   UIGraphicsEndImageContext();
+#endif
+
   return base64;
 }
 
 - (NSString *)getDataURLwithBounds:(CGRect)bounds
 {
+#if TARGET_OS_OSX
+  NSImage *image = [[NSImage alloc] initWithSize:bounds.size];
+  NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+                                                                  pixelsWide:bounds.size.width
+                                                                  pixelsHigh:bounds.size.height
+                                                               bitsPerSample:8
+                                                             samplesPerPixel:4
+                                                                    hasAlpha:YES
+                                                                    isPlanar:NO
+                                                              colorSpaceName:NSCalibratedRGBColorSpace
+                                                                 bytesPerRow:0
+                                                                bitsPerPixel:0];
+
+  [image addRepresentation:rep];
+  [image lockFocus];
+  
+  // flip y-axis on MacOS
+  CGContextRef context = [NSGraphicsContext currentContext].CGContext;
+  CGContextTranslateCTM(context, 0.0, bounds.size.height);
+  CGContextScaleCTM(context, 1.0, -1.0);
+  [image drawAtPoint:NSMakePoint(0, 0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+#else
   UIGraphicsBeginImageContextWithOptions(bounds.size, NO, 1);
+#endif
+
   [self clearChildCache];
   [self drawRect:bounds];
   [self clearChildCache];
   [self invalidate];
+
+#if TARGET_OS_OSX
+  [image unlockFocus];
+  NSData *imageData = [image TIFFRepresentation];
+  NSBitmapImageRep *newRep = [NSBitmapImageRep imageRepWithData:imageData];
+  NSData *pngData = [newRep representationUsingType:NSPNGFileType properties:nil];
+  NSString *base64 = [pngData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+#else
   NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
   NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
   UIGraphicsEndImageContext();
+#endif
+
   return base64;
 }
 

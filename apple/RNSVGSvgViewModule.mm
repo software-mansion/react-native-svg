@@ -27,14 +27,21 @@ RCT_EXPORT_MODULE()
           attempt:(int)attempt
 {
   void (^block)(void) = ^{
-#ifdef RCT_NEW_ARCH_ENABLED
-    [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
-      __kindof RNSVGPlatformView *view = [viewRegistry viewForReactTag:reactTag];
-#else
-    [self.bridge.uiManager
-        addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RNSVGPlatformView *> *viewRegistry) {
-          __kindof RNSVGPlatformView *view = [uiManager viewForReactTag:reactTag];
-#endif // RCT_NEW_ARCH_ENABLED
+#if TARGET_OS_OSX
+  dispatch_async(dispatch_get_main_queue(), ^{
+    __kindof RNSVGPlatformView *view = [self.bridge.uiManager viewForReactTag:reactTag];
+#endif
+
+#if !TARGET_OS_OSX
+  #ifdef RCT_NEW_ARCH_ENABLED
+      [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
+        __kindof RNSVGPlatformView *view = [viewRegistry viewForReactTag:reactTag];
+  #else
+      [self.bridge.uiManager
+          addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RNSVGPlatformView *> *viewRegistry) {
+            __kindof RNSVGPlatformView *view = [uiManager viewForReactTag:reactTag];
+  #endif // RCT_NEW_ARCH_ENABLED
+#endif
       NSString *b64;
       if ([view isKindOfClass:[RNSVGSvgView class]]) {
         RNSVGSvgView *svg = view;
@@ -66,7 +73,11 @@ RCT_EXPORT_MODULE()
       } else {
         callback(@[]);
       }
+#if TARGET_OS_OSX
+    });
+#else
     }];
+#endif
   };
   if (self.bridge) {
     dispatch_async(RCTGetUIManagerQueue(), block);
