@@ -150,6 +150,7 @@ react-native run-android
 #### Pre RN 0.68
 
 4. Scroll to the bottom until you find:
+
    ```xml
    <ImportGroup Label="ExtensionTargets">
    ```

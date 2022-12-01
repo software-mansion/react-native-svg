@@ -92,7 +92,7 @@ If remote SVG file contains CSS in `<style>` element, use `SvgCssUri`:
 ```jsx
 import * as React from 'react';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
-import { SvgUri } from 'react-native-svg';
+import { SvgCssUri } from 'react-native-svg';
 export default function TestComponent() {
   const [loading, setLoading] = React.useState(true);
   const onError = (e: Error) => {
@@ -105,7 +105,7 @@ export default function TestComponent() {
   };
   return (
     <>
-      <SvgUri
+      <SvgCssUri
         width="100"
         height="100"
         uri="https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg"
