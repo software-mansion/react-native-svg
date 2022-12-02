@@ -81,6 +81,8 @@ void SvgView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
         m_align = Utils::JSValueAsString(propertyValue);
       } else if (propertyName == "meetOrSlice") {
         m_meetOrSlice = Utils::GetMeetOrSlice(propertyValue);
+      } else if (propertyName == "color") {
+        m_currentColor = Utils::JSValueAsColor(propertyValue);
       }
     }
 
