@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
 import { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGMarker } from '../ReactNativeSVG';
+import RNSVGMarker from '../fabric/MarkerNativeComponent';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 import { NativeMethods } from 'react-native';
 

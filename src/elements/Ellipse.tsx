@@ -2,7 +2,7 @@ import React from 'react';
 import { extract, stringifyPropsForFabric } from '../lib/extract/extractProps';
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGEllipse } from '../ReactNativeSVG';
+import RNSVGEllipse from '../fabric/EllipseNativeComponent';
 import { NativeMethods } from 'react-native';
 
 export interface EllipseProps extends CommonPathProps {

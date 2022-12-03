@@ -14,7 +14,7 @@ import extractText, { TextChild } from '../lib/extract/extractText';
 import { idPattern, pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import TSpan from './TSpan';
-import { RNSVGTextPath } from '../ReactNativeSVG';
+import RNSVGTextPath from '../fabric/TextPathNativeComponent';
 
 export interface TextPathProps extends TextSpecificProps {
   children?: TextChild;

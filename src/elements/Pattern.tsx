@@ -4,7 +4,7 @@ import extractViewBox from '../lib/extract/extractViewBox';
 import { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
-import { RNSVGPattern } from '../ReactNativeSVG';
+import RNSVGPattern from '../fabric/PatternNativeComponent';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 import { NativeMethods } from 'react-native';
 

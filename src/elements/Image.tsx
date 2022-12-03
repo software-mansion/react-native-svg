@@ -14,7 +14,7 @@ import {
   TouchableProps,
 } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGImage } from '../ReactNativeSVG';
+import RNSVGImage from '../fabric/ImageNativeComponent';
 
 const spacesRegExp = /\s+/;
 

@@ -5,7 +5,7 @@ import {
 } from '../lib/extract/extractProps';
 import { NumberProp } from '../lib/extract/types';
 import G from './G';
-import { RNSVGForeignObject } from '../ReactNativeSVG';
+import RNSVGForeignObject from '../fabric/ForeignObjectNativeComponent';
 import { NativeMethods } from 'react-native';
 
 export interface ForeignObjectProps {

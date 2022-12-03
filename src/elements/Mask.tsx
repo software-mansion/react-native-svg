@@ -6,7 +6,7 @@ import {
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
-import { RNSVGMask } from '../ReactNativeSVG';
+import RNSVGMask from '../fabric/MaskNativeComponent';
 import { NativeMethods } from 'react-native';
 
 export type TMaskUnits = 'userSpaceOnUse' | 'objectBoundingBox';
