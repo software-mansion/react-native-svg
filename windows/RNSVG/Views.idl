@@ -26,6 +26,7 @@ namespace RNSVG
 
     Single SvgScale{ get; };
     GroupView Group;
+    Windows.UI.Color CurrentColor{ get; };
     Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl Canvas{ get; };
     Windows.Foundation.Collections.IMap<String, IRenderable> Templates{ get; };
     Windows.Foundation.Collections.IMap<String, BrushView> Brushes{ get; };

@@ -22,6 +22,8 @@ struct SvgView : SvgViewT<SvgView> {
 
   float SvgScale() { return m_scale; }
 
+  Windows::UI::Color CurrentColor() { return m_currentColor; }
+
   Windows::Foundation::Collections::IMap<hstring, RNSVG::IRenderable> Templates() {
     return m_templates;
   }
@@ -78,6 +80,7 @@ struct SvgView : SvgViewT<SvgView> {
   RNSVG::SVGLength m_height{};
   std::string m_align{""};
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
+  Windows::UI::Color m_currentColor{Windows::UI::Colors::Black()};
 
   Windows::Foundation::Collections::IMap<hstring, RNSVG::IRenderable> m_templates{
       winrt::single_threaded_map<hstring, RNSVG::IRenderable>()};
