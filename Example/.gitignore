@@ -32,6 +32,10 @@ local.properties
 *.hprof
 .cxx/
 
+# Windows
+#
+*.binlog
+
 # node.js
 #
 node_modules/

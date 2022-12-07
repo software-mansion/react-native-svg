@@ -6,6 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "macos": "react-native run-macos",
+    "windows": "react-native run-windows",
     "start": "react-native start",
     "start-webpack": "webpack serve",
     "test": "jest",
