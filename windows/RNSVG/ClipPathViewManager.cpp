@@ -19,9 +19,6 @@ IMapView<hstring, ViewManagerPropertyType> ClipPathViewManager::NativeProps() {
     nativeProps.Insert(prop.Key(), prop.Value());
   }
 
-  nativeProps.Insert(L"x", ViewManagerPropertyType::String);
-  nativeProps.Insert(L"y", ViewManagerPropertyType::String);
-
   return nativeProps.GetView();
 }
 } // namespace winrt::RNSVG::implementation
