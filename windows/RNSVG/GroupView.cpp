@@ -174,4 +174,31 @@ void GroupView::Unload() {
 
   __super::Unload();
 }
+
+winrt::RNSVG::IRenderable GroupView::HitTest(Windows::Foundation::Point const &point) {
+  RNSVG::IRenderable renderable{nullptr};
+  if (IsResponsible()) {
+    for (auto const &child : Children()) {
+      if (auto const &hit{child.HitTest(point)}) {
+        renderable = hit;
+      }
+    }
+    if (renderable && !renderable.IsResponsible()) {
+      renderable = *this;
+    } else if (!renderable){
+      if (!Geometry()) {
+        if (auto const &svgRoot{SvgRoot()}) {
+          CreateGeometry(svgRoot.Canvas());
+        }
+      }
+      if (Geometry()) {
+        auto const &bounds{Geometry().ComputeBounds()};
+        if (Windows::UI::Xaml::RectHelper::Contains(bounds, point)) {
+          renderable = *this;
+        }
+      }
+    }
+  }
+  return renderable;
+}
 } // namespace winrt::RNSVG::implementation
