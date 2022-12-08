@@ -122,12 +122,14 @@
     <ClInclude Include="BrushView.h" />
     <ClInclude Include="CircleView.h" />
     <ClInclude Include="CircleViewManager.h" />
+    <ClInclude Include="ClipPathView.h" />
     <ClInclude Include="DefsView.h" />
     <ClInclude Include="DefsViewManager.h" />
     <ClInclude Include="EllipseView.h" />
     <ClInclude Include="EllipseViewManager.h" />
     <ClInclude Include="GroupView.h" />
     <ClInclude Include="GroupViewManager.h" />
+    <ClInclude Include="ClipPathViewManager.h" />
     <ClInclude Include="ImageView.h" />
     <ClInclude Include="ImageViewManager.h" />
     <ClInclude Include="LinearGradientView.h" />
@@ -166,6 +168,8 @@
     <ClCompile Include="BrushView.cpp" />
     <ClCompile Include="CircleView.cpp" />
     <ClCompile Include="CircleViewManager.cpp" />
+    <ClCompile Include="ClipPathView.cpp" />
+    <ClCompile Include="ClipPathViewManager.cpp" />
     <ClCompile Include="DefsView.cpp" />
     <ClCompile Include="DefsViewManager.cpp" />
     <ClCompile Include="EllipseView.cpp" />

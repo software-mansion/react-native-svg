@@ -40,6 +40,8 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
       return winrt::RNSVG::RadialGradientView();
     case RNSVG::SVGClass::RNSVGPattern:
       return winrt::RNSVG::PatternView();
+    case RNSVG::SVGClass::RNSVGClipPath:
+      return winrt::RNSVG::ClipPathView();
   }
 
   throw hresult_not_implemented();
