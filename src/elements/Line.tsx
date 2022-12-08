@@ -2,7 +2,7 @@ import React from 'react';
 import { extract, stringifyPropsForFabric } from '../lib/extract/extractProps';
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGLine } from '../ReactNativeSVG';
+import RNSVGLine from '../fabric/LineNativeComponent';
 import { NativeMethods } from 'react-native';
 
 export interface LineProps extends CommonPathProps {

@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
-import { RNSVGSymbol } from '../ReactNativeSVG';
+import RNSVGSymbol from '../fabric/SymbolNativeComponent';
 import { NumberProp } from '../lib/extract/types';
 import { NativeMethods } from 'react-native';
 

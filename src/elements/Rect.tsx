@@ -5,7 +5,7 @@ import {
 } from '../lib/extract/extractProps';
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGRect } from '../ReactNativeSVG';
+import RNSVGRect from '../fabric/RectNativeComponent';
 import { NativeMethods } from 'react-native';
 
 export interface RectProps extends CommonPathProps {

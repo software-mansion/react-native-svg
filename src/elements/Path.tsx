@@ -1,7 +1,7 @@
 import React from 'react';
 import { extract } from '../lib/extract/extractProps';
 import Shape from './Shape';
-import { RNSVGPath } from '../ReactNativeSVG';
+import RNSVGPath from '../fabric/PathNativeComponent';
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import { NativeMethods } from 'react-native';
 

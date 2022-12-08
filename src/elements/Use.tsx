@@ -6,7 +6,7 @@ import {
 import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import { idPattern } from '../lib/util';
 import Shape from './Shape';
-import { RNSVGUse } from '../ReactNativeSVG';
+import RNSVGUse from '../fabric/UseNativeComponent';
 import { NativeMethods } from 'react-native';
 
 export interface UseProps extends CommonPathProps {

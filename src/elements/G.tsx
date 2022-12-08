@@ -9,7 +9,7 @@ import {
   TransformProps,
 } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGGroup } from '../ReactNativeSVG';
+import RNSVGGroup from '../fabric/GroupNativeComponent';
 import { NativeMethods } from 'react-native';
 
 export interface GProps extends CommonPathProps, FontProps {
