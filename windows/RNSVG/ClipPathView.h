@@ -8,7 +8,6 @@ struct ClipPathView : ClipPathViewT<ClipPathView, RNSVG::implementation::GroupVi
   ClipPathView() = default;
 
   // RenderableView
-  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
   void Render(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const & /*canvas*/,
       Microsoft::Graphics::Canvas::CanvasDrawingSession const & /*session*/){};

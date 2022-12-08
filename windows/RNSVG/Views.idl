@@ -17,6 +17,7 @@ namespace RNSVG
     void MergeProperties(RenderableView other);
     void SaveDefinition();
     void Unload();
+    void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
   };
 
   [default_interface]
@@ -55,8 +56,7 @@ namespace RNSVG
     Microsoft.Graphics.Canvas.Geometry.CanvasCapStyle StrokeLineCap{ get; };
     Microsoft.Graphics.Canvas.Geometry.CanvasLineJoin StrokeLineJoin{ get; };
     Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule{ get; };
-
-    void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
+    Microsoft.Graphics.Canvas.Geometry.CanvasGeometry ClipPathGeometry { get; };
   };
 
   [default_interface]

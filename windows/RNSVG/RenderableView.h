@@ -33,6 +33,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle StrokeLineCap() { return m_strokeLineCap; }
   Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin StrokeLineJoin() { return m_strokeLineJoin; }
   Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination FillRule() { return m_fillRule; }
+  Microsoft::Graphics::Canvas::Geometry::CanvasGeometry ClipPathGeometry();
 
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
   virtual void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const & /*canvas*/) {}
@@ -71,6 +72,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   bool m_recreateResources{true};
 
   hstring m_id{L""};
+  hstring m_clipPathId{L""};
   Numerics::float3x2 m_transformMatrix{Numerics::make_float3x2_rotation(0)};
   Windows::UI::Color m_fill{Windows::UI::Colors::Black()};
   Windows::UI::Color m_stroke{Windows::UI::Colors::Transparent()};

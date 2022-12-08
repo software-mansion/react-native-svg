@@ -105,6 +105,9 @@ void GroupView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
   auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   std::vector<Geometry::CanvasGeometry> geometries;
   for (auto const &child : Children()) {
+    if (!child.Geometry()) {
+      child.CreateGeometry(canvas);
+    }
     geometries.push_back(child.Geometry());
   }
 
@@ -134,7 +137,9 @@ void GroupView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
     session.Transform(transform * SvgTransform());
   }
 
-  if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
+  auto const &clipPathGeometry{ClipPathGeometry()};
+
+  if (auto const &opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
     if (Children().Size() == 0) {
       __super::Render(canvas, session);
     } else {

@@ -104,7 +104,9 @@ void ImageView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
     transformEffect.TransformMatrix(Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
   }
 
-  if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
+  auto const &clipPathGeometry{ClipPathGeometry()};
+
+  if (auto const &opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
     if (m_source.format == ImageSourceFormat::Bitmap && m_bitmap) {
       auto const &transform{session.Transform()};
       if (m_propSetMap[RNSVG::BaseProp::Matrix]) {

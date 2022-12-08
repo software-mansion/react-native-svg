@@ -157,6 +157,12 @@ void SvgView::CreateResources(ICanvasResourceCreator const &resourceCreator, UI:
   }
 }
 
+void SvgView::CreateGeometry(UI::Xaml::CanvasControl const& canvas) {
+  if (m_group) {
+    m_group.CreateGeometry(canvas);
+  }
+}
+
 void SvgView::Canvas_CreateResources(UI::Xaml::CanvasControl const &sender, UI::CanvasCreateResourcesEventArgs const &args) {
   CreateResources(sender, args);
 }

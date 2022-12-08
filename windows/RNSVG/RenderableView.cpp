@@ -187,6 +187,8 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
       }
     } else if (propertyName == "opacity" && forceUpdate) {
       m_opacity = Utils::JSValueAsFloat(propertyValue, 1.0f);
+    } else if (propertyName == "clipPath") {
+      m_clipPathId = to_hstring(Utils::JSValueAsString(propertyValue));
     }
 
     // forceUpdate = true means the property is being set on an element
@@ -230,9 +232,11 @@ void RenderableView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawing
     geometry = geometry.Transform(SvgTransform());
   }
 
+  auto const &clipPathGeometry{ClipPathGeometry()};
+
   geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
 
-  if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
+  if (auto const &opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
     if (auto const &fillLayer{session.CreateLayer(FillOpacity())}) {
       auto const &fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), geometry, resourceCreator)};
       session.FillGeometry(geometry, fill);
@@ -322,6 +326,18 @@ RNSVG::SvgView RenderableView::SvgRoot() {
     }
   }
 
+  return nullptr;
+}
+
+Geometry::CanvasGeometry RenderableView::ClipPathGeometry() {
+  if (!m_clipPathId.empty()) {
+    if (auto const &clipPath{SvgRoot().Templates().TryLookup(m_clipPathId)}) {
+      if (!clipPath.Geometry()) {
+        clipPath.CreateGeometry(SvgRoot().Canvas());
+      }
+      return clipPath.Geometry();
+    }
+  }
   return nullptr;
 }
 

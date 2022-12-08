@@ -42,6 +42,7 @@ struct SvgView : SvgViewT<SvgView> {
   void CreateResources(
       Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
       Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args);
+  void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas);
 
   // Overrides
   Windows::Foundation::Size MeasureOverride(Windows::Foundation::Size availableSize);

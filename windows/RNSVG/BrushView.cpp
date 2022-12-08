@@ -16,9 +16,11 @@ void BrushView::SetBounds(Windows::Foundation::Rect const &rect) {
 }
 
 void BrushView::Unload() {
-  m_brush.Close();
-  m_brush = nullptr;
-
+  if (m_brush) {
+    m_brush.Close();
+    m_brush = nullptr;
+  }
+  
   __super::Unload();
 }
 } // namespace winrt::RNSVG::implementation
