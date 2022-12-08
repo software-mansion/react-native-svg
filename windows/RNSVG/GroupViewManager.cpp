@@ -43,6 +43,10 @@ void GroupViewManager::AddView(FrameworkElement const &parent, UIElement const &
       groupView.Children().Append(childView);
       childView.MergeProperties(groupView);
 
+      if (childView.IsResponsible() && !groupView.IsResponsible()) {
+        groupView.IsResponsible(true);
+      }
+
       if (auto const &root{groupView.SvgRoot()}) {
         root.InvalidateCanvas();
       }

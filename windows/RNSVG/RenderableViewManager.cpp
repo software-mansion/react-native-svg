@@ -67,6 +67,7 @@ IMapView<hstring, ViewManagerPropertyType> RenderableViewManager::NativeProps() 
   nativeProps.Insert(L"opacity", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"propList", ViewManagerPropertyType::Array);
   nativeProps.Insert(L"clipPath", ViewManagerPropertyType::String);
+  nativeProps.Insert(L"responsible", ViewManagerPropertyType::Boolean);
 
   return nativeProps.GetView();
 }

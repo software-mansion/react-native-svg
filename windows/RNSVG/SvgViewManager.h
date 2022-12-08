@@ -30,6 +30,11 @@ struct SvgViewManager : SvgViewManagerT<SvgViewManager> {
       Windows::UI::Xaml::UIElement const &oldChild,
       Windows::UI::Xaml::UIElement const &newChild);
 
+  // IViewManagerWithPointerEvents
+  void OnPointerEvent(
+      Windows::Foundation::IInspectable const &view,
+      Microsoft::ReactNative::ReactPointerEventArgs const &args);
+
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
 };

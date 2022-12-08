@@ -6,6 +6,7 @@ namespace RNSVG
   {
     Windows.UI.Xaml.FrameworkElement SvgParent;
     Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
+    Boolean IsResponsible;
 
     void CreateResources(
       Microsoft.Graphics.Canvas.ICanvasResourceCreator resourceCreator,
@@ -18,6 +19,7 @@ namespace RNSVG
     void SaveDefinition();
     void Unload();
     void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
+    IRenderable HitTest(Windows.Foundation.Point point);
   };
 
   [default_interface]

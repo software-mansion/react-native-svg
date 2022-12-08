@@ -83,6 +83,8 @@ void SvgView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
         m_meetOrSlice = Utils::GetMeetOrSlice(propertyValue);
       } else if (propertyName == "color") {
         m_currentColor = Utils::JSValueAsColor(propertyValue);
+      } else if (propertyName == "responsible") {
+        m_isResponsible = propertyValue.AsBoolean();
       }
     }
 

@@ -20,6 +20,9 @@ struct RenderableView : RenderableViewT<RenderableView> {
   hstring Id() { return m_id; }
   Numerics::float3x2 SvgTransform() { return m_transformMatrix; }
 
+  bool IsResponsible() { return m_isResponsible; }
+  void IsResponsible(bool isResponsible) { m_isResponsible = isResponsible; }
+
   hstring FillBrushId() { return m_fillBrushId; }
   Windows::UI::Color Fill() { return m_fill; }
   float FillOpacity() { return m_fillOpacity; }
@@ -46,6 +49,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   virtual void CreateResources(
       Microsoft::Graphics::Canvas::ICanvasResourceCreator const & /*resourceCreator*/,
       Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const & /*args*/) { }
+  virtual RNSVG::IRenderable HitTest(Windows::Foundation::Point const &point);
 
  protected:
   float m_opacity{1.0f};
@@ -70,7 +74,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Windows::UI::Xaml::FrameworkElement m_parent{nullptr};
   Microsoft::Graphics::Canvas::Geometry::CanvasGeometry m_geometry{nullptr};
   bool m_recreateResources{true};
-
+  bool m_isResponsible{false};
+  
   hstring m_id{L""};
   hstring m_clipPathId{L""};
   Numerics::float3x2 m_transformMatrix{Numerics::make_float3x2_rotation(0)};
