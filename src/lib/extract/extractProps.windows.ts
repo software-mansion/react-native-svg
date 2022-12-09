@@ -151,7 +151,6 @@ export function extract(instance: Object, props: Object & { style?: [] | {} }) {
 export function stringifyPropsForFabric(props: {
   [key: string]: NumberProp | undefined | null;
 }) {
-  console.log('stringifyPropsForFabric', props);
   const extracted: { [key: string]: NumberProp } = {};
   Object.keys(props).forEach((k) => {
     const prop = props[k];
@@ -163,7 +162,6 @@ export function stringifyPropsForFabric(props: {
     }
   });
 
-  console.log(extracted);
   return extracted;
 }
 
