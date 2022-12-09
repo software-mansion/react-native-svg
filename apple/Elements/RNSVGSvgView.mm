@@ -252,6 +252,11 @@ using namespace facebook::react;
 
 - (void)drawToContext:(CGContextRef)context withRect:(CGRect)rect
 {
+  _clipPaths = nil;
+  _templates = nil;
+  _painters = nil;
+  _boundingBox = rect;
+
   for (RNSVGPlatformView *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGNode class]]) {
       RNSVGNode *svg = (RNSVGNode *)node;
@@ -292,11 +297,9 @@ using namespace facebook::react;
   if ([parent isKindOfClass:[RNSVGNode class]]) {
     return;
   }
+
   rendered = true;
-  _clipPaths = nil;
-  _templates = nil;
-  _painters = nil;
-  _boundingBox = rect;
+
   CGContextRef context = UIGraphicsGetCurrentContext();
 
   [self drawToContext:context withRect:rect];
