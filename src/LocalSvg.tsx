@@ -1,30 +1,30 @@
 import React, { useState, useEffect, Component } from 'react';
-import { NativeModules, Platform } from 'react-native';
-// @ts-ignore
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
+import { Platform, Image, ImageSourcePropType } from 'react-native';
 
 import { fetchText } from './xml';
 import { SvgCss, SvgWithCss } from './css';
+import { SvgProps } from './elements/Svg';
+import type { Spec } from './fabric/NativeSvgRenderableModule';
 
-const { getRawResource } = NativeModules.RNSVGRenderableManager || {};
-
-export function getUriFromSource(source?: string | number) {
-  const resolvedAssetSource = resolveAssetSource(source);
+export function getUriFromSource(source: ImageSourcePropType) {
+  const resolvedAssetSource = Image.resolveAssetSource(source);
   return resolvedAssetSource.uri;
 }
 
-export function loadLocalRawResourceDefault(source?: string | number) {
+export function loadLocalRawResourceDefault(source: ImageSourcePropType) {
   const uri = getUriFromSource(source);
   return fetchText(uri);
 }
 
-export function isUriAnAndroidResourceIdentifier(uri?: string | number) {
+export function isUriAnAndroidResourceIdentifier(uri?: string) {
   return typeof uri === 'string' && uri.indexOf('/') <= -1;
 }
 
-export async function loadAndroidRawResource(uri?: string | number) {
+export async function loadAndroidRawResource(uri: string) {
   try {
-    return await getRawResource(uri);
+    const RNSVGRenderableModule: Spec =
+      require('./fabric/NativeSvgRenderableModule').default;
+    return await RNSVGRenderableModule.getRawResource(uri);
   } catch (e) {
     console.error(
       'Error in RawResourceUtils while trying to natively load an Android raw resource: ',
@@ -34,7 +34,7 @@ export async function loadAndroidRawResource(uri?: string | number) {
   }
 }
 
-export function loadLocalRawResourceAndroid(source?: string | number) {
+export function loadLocalRawResourceAndroid(source: ImageSourcePropType) {
   const uri = getUriFromSource(source);
   if (isUriAnAndroidResourceIdentifier(uri)) {
     return loadAndroidRawResource(uri);
@@ -48,12 +48,15 @@ export const loadLocalRawResource =
     ? loadLocalRawResourceDefault
     : loadLocalRawResourceAndroid;
 
-export type LocalProps = { asset?: string | number; override?: Object };
+export type LocalProps = SvgProps & {
+  asset: ImageSourcePropType;
+  override?: Object;
+};
 export type LocalState = { xml: string | null };
 
 export function LocalSvg(props: LocalProps) {
   const { asset, ...rest } = props;
-  const [xml, setXml] = useState(null);
+  const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
     loadLocalRawResource(asset).then(setXml);
   }, [asset]);
@@ -65,13 +68,13 @@ export class WithLocalSvg extends Component<LocalProps, LocalState> {
   componentDidMount() {
     this.load(this.props.asset);
   }
-  componentDidUpdate(prevProps: { asset?: string | number }) {
+  componentDidUpdate(prevProps: { asset: ImageSourcePropType }) {
     const { asset } = this.props;
     if (asset !== prevProps.asset) {
       this.load(asset);
     }
   }
-  async load(asset?: string | number) {
+  async load(asset: ImageSourcePropType) {
     try {
       this.setState({ xml: asset ? await loadLocalRawResource(asset) : null });
     } catch (e) {

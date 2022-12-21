@@ -1,32 +1,29 @@
 import React, { Component } from 'react';
 import {
+  ColorValue,
   findNodeHandle,
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
-  NativeModules,
+  NativeMethods,
+  Platform,
+  StyleProp,
   StyleSheet,
+  ViewProps,
   ViewStyle,
 } from 'react-native';
 import {
-  ClipProps,
-  Color,
   extractedProps,
-  FillProps,
   NumberProp,
   ResponderInstanceProps,
-  ResponderProps,
-  StrokeProps,
-  TransformProps,
 } from '../lib/extract/types';
 import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
-import extractColor from '../lib/extract/extractColor';
 import Shape from './Shape';
-import G from './G';
-import { RNSVGSvg } from './NativeComponents';
-
-const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
+import G, { GProps } from './G';
+import RNSVGSvgAndroid from '../fabric/AndroidSvgViewNativeComponent';
+import RNSVGSvgIOS from '../fabric/IOSSvgViewNativeComponent';
+import type { Spec } from '../fabric/NativeSvgViewModule';
 
 const styles = StyleSheet.create({
   svg: {
@@ -36,20 +33,16 @@ const styles = StyleSheet.create({
 });
 const defaultStyle = styles.svg;
 
-export default class Svg extends Shape<
-  {
-    color?: Color;
-    viewBox?: string;
-    opacity?: NumberProp;
-    onLayout?: () => void;
-    preserveAspectRatio?: string;
-    style?: ViewStyle[] | ViewStyle;
-  } & TransformProps &
-    ResponderProps &
-    StrokeProps &
-    FillProps &
-    ClipProps
-> {
+export interface SvgProps extends GProps, ViewProps {
+  width?: NumberProp;
+  height?: NumberProp;
+  viewBox?: string;
+  preserveAspectRatio?: string;
+  color?: ColorValue;
+  title?: string;
+}
+
+export default class Svg extends Shape<SvgProps> {
   static displayName = 'Svg';
 
   static defaultProps = {
@@ -85,21 +78,23 @@ export default class Svg extends Shape<
   ) => {
     const { width, height } = props;
     if (width) {
-      props.bbWidth = width;
+      props.bbWidth = String(width);
     }
     if (height) {
-      props.bbHeight = height;
+      props.bbHeight = String(height);
     }
     const { root } = this;
     root && root.setNativeProps(props);
   };
 
-  toDataURL = (callback: () => void, options?: Object) => {
+  toDataURL = (callback: (base64: string) => void, options?: Object) => {
     if (!callback) {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
-    RNSVGSvgViewManager.toDataURL(handle, options, callback);
+    const RNSVGSvgViewModule: Spec =
+      require('../fabric/NativeSvgViewModule').default;
+    RNSVGSvgViewModule.toDataURL(handle, options, callback);
   };
 
   render() {
@@ -121,10 +116,10 @@ export default class Svg extends Shape<
       width,
       height,
       focusable,
+      transform,
 
       // Inherited G properties
       font,
-      transform,
       fill,
       fillOpacity,
       fillRule,
@@ -143,7 +138,7 @@ export default class Svg extends Shape<
 
     const props: extractedProps = extracted as extractedProps;
     props.focusable = Boolean(focusable) && focusable !== 'false';
-    const rootStyles: (ViewStyle | ViewStyle[])[] = [defaultStyle];
+    const rootStyles: StyleProp<ViewStyle>[] = [defaultStyle];
 
     if (style) {
       rootStyles.push(style);
@@ -175,36 +170,46 @@ export default class Svg extends Shape<
     props.style = rootStyles.length > 1 ? rootStyles : defaultStyle;
 
     if (width != null) {
-      props.bbWidth = width;
+      props.bbWidth = String(width);
     }
     if (height != null) {
-      props.bbHeight = height;
+      props.bbHeight = String(height);
     }
 
     extractResponder(props, props, this as ResponderInstanceProps);
 
-    const tint = extractColor(color);
-    if (tint != null) {
-      props.color = tint;
-      props.tintColor = tint;
-    }
+    props.tintColor = color;
 
     if (onLayout != null) {
       props.onLayout = onLayout;
     }
 
+    const gStyle = Object.assign({}, style) as ViewStyle;
+    // if transform prop is of RN style's kind, we want `SvgView` to handle it
+    // since it can be done here. Otherwise, if transform is of `svg` kind, e.g. string,
+    // we want G element to parse it since `Svg` does not include parsing of those custom transforms.
+    // It is problematic due to fact that we either move the `Svg` or just its `G` child, and in the
+    // second case, when the `G` leaves the area of `Svg`, it will just disappear.
+    if (Array.isArray(transform) && typeof transform[0] === 'object') {
+      gStyle.transform = undefined;
+    } else {
+      props.transform = undefined;
+      gStyle.transform = transform;
+    }
+
+    const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
+
     return (
       <RNSVGSvg
         {...props}
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (Svg & NativeMethods) | null)}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
       >
         <G
           {...{
             children,
-            style,
+            style: gStyle,
             font,
-            transform,
             fill,
             fillOpacity,
             fillRule,

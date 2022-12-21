@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { RNSVGDefs } from './NativeComponents';
+import RNSVGDefs from '../fabric/DefsNativeComponent';
 
-export default class Defs extends Component {
+export default class Defs extends Component<React.PropsWithChildren<{}>> {
   static displayName = 'Defs';
 
   render() {

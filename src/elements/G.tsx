@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import { extractFont } from '../lib/extract/extractText';
 import extractTransform from '../lib/extract/extractTransform';
-import { TransformProps } from '../lib/extract/types';
+import {
+  CommonPathProps,
+  FontProps,
+  NumberProp,
+  TransformProps,
+} from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGGroup } from './NativeComponents';
+import RNSVGGroup from '../fabric/GroupNativeComponent';
+import { NativeMethods } from 'react-native';
 
-export default class G<P> extends Shape<P> {
+export interface GProps extends CommonPathProps, FontProps {
+  children?: ReactNode;
+  opacity?: NumberProp;
+}
+
+export default class G<P> extends Shape<GProps & P> {
   static displayName = 'G';
 
   setNativeProps = (
@@ -18,7 +29,7 @@ export default class G<P> extends Shape<P> {
     if (matrix) {
       props.matrix = matrix;
     }
-    this.root && this.root.setNativeProps(props);
+    this.root?.setNativeProps(props);
   };
 
   render() {
@@ -30,7 +41,10 @@ export default class G<P> extends Shape<P> {
       extractedProps.font = font;
     }
     return (
-      <RNSVGGroup ref={this.refMethod} {...extractedProps}>
+      <RNSVGGroup
+        ref={(ref) => this.refMethod(ref as (G<P> & NativeMethods) | null)}
+        {...extractedProps}
+      >
         {props.children}
       </RNSVGGroup>
     );

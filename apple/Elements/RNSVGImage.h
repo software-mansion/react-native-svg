@@ -9,18 +9,27 @@
 #import <Foundation/Foundation.h>
 
 #import <React/RCTBridge.h>
+#import "RNSVGLength.h"
 #import "RNSVGRenderable.h"
 #import "RNSVGVBMOS.h"
-#import "RNSVGLength.h"
+
+#import <React/RCTImageSource.h>
+
+#ifdef RN_FABRIC_ENABLED
+#import <React/RCTImageResponseDelegate.h>
+#endif
 
 @interface RNSVGImage : RNSVGRenderable
+#ifdef RN_FABRIC_ENABLED
+                        <RCTImageResponseDelegate>
+#endif
 
 @property (nonatomic, weak) RCTBridge *bridge;
-@property (nonatomic, assign) id src;
-@property (nonatomic, strong) RNSVGLength* x;
-@property (nonatomic, strong) RNSVGLength* y;
-@property (nonatomic, strong) RNSVGLength* imagewidth;
-@property (nonatomic, strong) RNSVGLength* imageheight;
+@property (nonatomic, assign) RCTImageSource *src;
+@property (nonatomic, strong) RNSVGLength *x;
+@property (nonatomic, strong) RNSVGLength *y;
+@property (nonatomic, strong) RNSVGLength *imagewidth;
+@property (nonatomic, strong) RNSVGLength *imageheight;
 @property (nonatomic, strong) NSString *align;
 @property (nonatomic, assign) RNSVGVBMOS meetOrSlice;
 

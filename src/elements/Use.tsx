@@ -1,18 +1,26 @@
-import React from 'react';
-import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
+import React, { ReactNode } from 'react';
+import {
+  stringifyPropsForFabric,
+  withoutXY,
+} from '../lib/extract/extractProps';
+import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import { idPattern } from '../lib/util';
 import Shape from './Shape';
-import { RNSVGUse } from './NativeComponents';
+import RNSVGUse from '../fabric/UseNativeComponent';
+import { NativeMethods } from 'react-native';
 
-export default class Use extends Shape<{
-  x?: NumberProp;
-  y?: NumberProp;
-  width?: NumberProp;
-  height?: NumberProp;
+export interface UseProps extends CommonPathProps {
+  children?: ReactNode;
   xlinkHref?: string;
   href?: string;
-}> {
+  width?: NumberProp;
+  height?: NumberProp;
+  x?: NumberProp;
+  y?: NumberProp;
+  opacity?: NumberProp;
+}
+
+export default class Use extends Shape<UseProps> {
   static displayName = 'Use';
 
   static defaultProps = {
@@ -44,16 +52,18 @@ export default class Use extends Shape<{
           '"',
       );
     }
-
+    const useProps = stringifyPropsForFabric({
+      href: match,
+      x,
+      y,
+      width,
+      height,
+    });
     return (
       <RNSVGUse
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (Use & NativeMethods) | null)}
         {...withoutXY(this, props)}
-        href={match}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
+        {...useProps}
       >
         {children}
       </RNSVGUse>

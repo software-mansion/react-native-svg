@@ -1,15 +1,19 @@
 import React from 'react';
-import { extract } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
+import { extract, stringifyPropsForFabric } from '../lib/extract/extractProps';
+import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGEllipse } from './NativeComponents';
+import RNSVGEllipse from '../fabric/EllipseNativeComponent';
+import { NativeMethods } from 'react-native';
 
-export default class Ellipse extends Shape<{
+export interface EllipseProps extends CommonPathProps {
   cx?: NumberProp;
   cy?: NumberProp;
+  opacity?: NumberProp;
   rx?: NumberProp;
   ry?: NumberProp;
-}> {
+}
+
+export default class Ellipse extends Shape<EllipseProps> {
   static displayName = 'Ellipse';
 
   static defaultProps = {
@@ -22,14 +26,14 @@ export default class Ellipse extends Shape<{
   render() {
     const { props } = this;
     const { cx, cy, rx, ry } = props;
+    const ellipseProps = {
+      ...extract(this, props),
+      ...stringifyPropsForFabric({ cx, cy, rx, ry }),
+    };
     return (
       <RNSVGEllipse
-        ref={this.refMethod}
-        {...extract(this, props)}
-        cx={cx}
-        cy={cy}
-        rx={rx}
-        ry={ry}
+        ref={(ref) => this.refMethod(ref as (Ellipse & NativeMethods) | null)}
+        {...ellipseProps}
       />
     );
   }

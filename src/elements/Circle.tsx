@@ -1,14 +1,18 @@
 import React from 'react';
-import { extract } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
+import { extract, stringifyPropsForFabric } from '../lib/extract/extractProps';
+import { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGCircle } from './NativeComponents';
+import RNSVGCircle from '../fabric/CircleNativeComponent';
+import { NativeMethods } from 'react-native';
 
-export default class Circle extends Shape<{
+export interface CircleProps extends CommonPathProps {
   cx?: NumberProp;
   cy?: NumberProp;
+  opacity?: NumberProp;
   r?: NumberProp;
-}> {
+}
+
+export default class Circle extends Shape<CircleProps> {
   static displayName = 'Circle';
 
   static defaultProps = {
@@ -20,13 +24,15 @@ export default class Circle extends Shape<{
   render() {
     const { props } = this;
     const { cx, cy, r } = props;
+    const circleProps = {
+      ...extract(this, props),
+      ...stringifyPropsForFabric({ cx, cy, r }),
+    };
+
     return (
       <RNSVGCircle
-        ref={this.refMethod}
-        {...extract(this, props)}
-        cx={cx}
-        cy={cy}
-        r={r}
+        ref={(ref) => this.refMethod(ref as (Circle & NativeMethods) | null)}
+        {...circleProps}
       />
     );
   }
