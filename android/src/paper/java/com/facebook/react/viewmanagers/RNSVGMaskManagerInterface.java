@@ -26,12 +26,14 @@ public interface RNSVGMaskManagerInterface<T extends View> {
   void setClipRule(T view, int value);
   void setResponsible(T view, boolean value);
   void setDisplay(T view, @Nullable String value);
+  void setPointerEvents(T view, @Nullable String value);
   void setFill(T view, @Nullable ReadableMap value);
   void setFillOpacity(T view, float value);
   void setFillRule(T view, int value);
   void setStroke(T view, @Nullable ReadableMap value);
   void setStrokeOpacity(T view, float value);
   void setStrokeWidth(T view, @Nullable String value);
+  void setStrokeWidth(T view, @Nullable Double value);
   void setStrokeLinecap(T view, int value);
   void setStrokeLinejoin(T view, int value);
   void setStrokeDasharray(T view, @Nullable ReadableArray value);
@@ -40,15 +42,18 @@ public interface RNSVGMaskManagerInterface<T extends View> {
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
   void setFontSize(T view, @Nullable String value);
+  void setFontSize(T view, @Nullable Double value);
   void setFontWeight(T view, @Nullable String value);
+  void setFontWeight(T view, @Nullable Double value);
   void setFont(T view, @Nullable ReadableMap value);
   void setX(T view, @Nullable String value);
+  void setX(T view, @Nullable Double value);
   void setY(T view, @Nullable String value);
-  void setMaskheight(T view, @Nullable String value);
-  void setMaskwidth(T view, @Nullable String value);
+  void setY(T view, @Nullable Double value);
   void setHeight(T view, @Nullable String value);
+  void setHeight(T view, @Nullable Double value);
   void setWidth(T view, @Nullable String value);
+  void setWidth(T view, @Nullable Double value);
   void setMaskUnits(T view, int value);
   void setMaskContentUnits(T view, int value);
-  void setMaskTransform(T view, @Nullable ReadableArray value);
 }

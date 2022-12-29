@@ -1,8 +1,12 @@
 import { Component } from 'react';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
-import { NativeModules, findNodeHandle, NativeMethods } from 'react-native';
-import { TransformProps } from '../lib/extract/types';
-const { RNSVGRenderableManager } = NativeModules;
+import extractBrush from '../lib/extract/extractBrush';
+import { ColorValue, findNodeHandle, NativeMethods } from 'react-native';
+import {
+  ColumnMajorTransformMatrix,
+  TransformProps,
+} from '../lib/extract/types';
+import type { Spec } from '../fabric/NativeSvgRenderableModule';
 
 export interface SVGBoundingBoxOptions {
   fill?: boolean;
@@ -239,27 +243,38 @@ export default class Shape<P> extends Component<P> {
   ) => {
     this.root = instance;
   };
+  // Hack to make Animated work with Shape components.
+  getNativeScrollRef(): (Shape<P> & NativeMethods) | null {
+    return this.root;
+  }
   setNativeProps = (
     props: Object & {
-      matrix?: [number, number, number, number, number, number];
+      matrix?: ColumnMajorTransformMatrix;
+      fill?: ColorValue;
     } & TransformProps,
   ) => {
-    this.root && this.root.setNativeProps(props);
+    if (props.fill) {
+      // @ts-ignore TODO: native `fill` prop differs from the one passed in props
+      props.fill = extractBrush(props.fill);
+    }
+    this.root?.setNativeProps(props);
   };
   /*
    * The following native methods are experimental and likely broken in some
    * ways. If you have a use case for these, please open an issue with a
    * representative example / reproduction.
    * */
-  getBBox = (options?: SVGBoundingBoxOptions): SVGRect => {
+  getBBox = (options?: SVGBoundingBoxOptions): SVGRect | undefined => {
     const {
       fill = true,
       stroke = true,
       markers = true,
       clipped = true,
     } = options || {};
-    const handle = findNodeHandle(this.root as Component);
-    return RNSVGRenderableManager.getBBox(handle, {
+    const handle = findNodeHandle(this.root);
+    const RNSVGRenderableModule =
+      require('../fabric/NativeSvgRenderableModule').default;
+    return RNSVGRenderableModule.getBBox(handle, {
       fill,
       stroke,
       markers,
@@ -267,29 +282,41 @@ export default class Shape<P> extends Component<P> {
     });
   };
   getCTM = (): SVGMatrix => {
-    const handle = findNodeHandle(this.root as Component);
-    return new SVGMatrix(RNSVGRenderableManager.getCTM(handle));
+    const handle = findNodeHandle(this.root);
+    const RNSVGRenderableModule: Spec =
+      require('../fabric/NativeSvgRenderableModule').default;
+    return new SVGMatrix(RNSVGRenderableModule.getCTM(handle));
   };
   getScreenCTM = (): SVGMatrix => {
-    const handle = findNodeHandle(this.root as Component);
-    return new SVGMatrix(RNSVGRenderableManager.getScreenCTM(handle));
+    const handle = findNodeHandle(this.root);
+    const RNSVGRenderableModule: Spec =
+      require('../fabric/NativeSvgRenderableModule').default;
+    return new SVGMatrix(RNSVGRenderableModule.getScreenCTM(handle));
   };
-  isPointInFill = (options: DOMPointInit): boolean => {
-    const handle = findNodeHandle(this.root as Component);
-    return RNSVGRenderableManager.isPointInFill(handle, options);
+  isPointInFill = (options: DOMPointInit): boolean | undefined => {
+    const handle = findNodeHandle(this.root);
+    const RNSVGRenderableModule: Spec =
+      require('../fabric/NativeSvgRenderableModule').default;
+    return RNSVGRenderableModule.isPointInFill(handle, options);
   };
-  isPointInStroke = (options: DOMPointInit): boolean => {
-    const handle = findNodeHandle(this.root as Component);
-    return RNSVGRenderableManager.isPointInStroke(handle, options);
+  isPointInStroke = (options: DOMPointInit): boolean | undefined => {
+    const handle = findNodeHandle(this.root);
+    const RNSVGRenderableModule: Spec =
+      require('../fabric/NativeSvgRenderableModule').default;
+    return RNSVGRenderableModule.isPointInStroke(handle, options);
   };
-  getTotalLength = (): number => {
-    const handle = findNodeHandle(this.root as Component);
-    return RNSVGRenderableManager.getTotalLength(handle);
+  getTotalLength = (): number | undefined => {
+    const handle = findNodeHandle(this.root);
+    const RNSVGRenderableModule: Spec =
+      require('../fabric/NativeSvgRenderableModule').default;
+    return RNSVGRenderableModule.getTotalLength(handle);
   };
   getPointAtLength = (length: number): SVGPoint => {
-    const handle = findNodeHandle(this.root as Component);
+    const handle = findNodeHandle(this.root);
+    const RNSVGRenderableModule: Spec =
+      require('../fabric/NativeSvgRenderableModule').default;
     return new SVGPoint(
-      RNSVGRenderableManager.getPointAtLength(handle, { length }),
+      RNSVGRenderableModule.getPointAtLength(handle, { length }),
     );
   };
 }

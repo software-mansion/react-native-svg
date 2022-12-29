@@ -1,5 +1,5 @@
 {
-  "version": "13.0.0",
+  "version": "13.6.0",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -16,12 +16,14 @@
     "__tests__",
     "android",
     "apple",
+    "common",
     "elements",
     "lib",
     "src",
     "RNSVG.podspec",
     "!android/build",
-    "windows"
+    "windows",
+    "react-native-config.js"
   ],
   "@react-native-community/bob": {
     "source": "src",
@@ -48,7 +50,7 @@
     "flow": "flow src",
     "flowtyped": "flow-typed install",
     "format": "yarn format-js && yarn format-ios && yarn format-java",
-    "format-ios": "find apple/ -iname *.h -o -iname *.m -o -iname *.cpp -o -iname *.mm | xargs clang-format -i",
+    "format-ios": "find apple/ common/ -iname *.h -o -iname *.m -o -iname *.cpp -o -iname *.mm | xargs clang-format -i",
     "format-java": "node ./scripts/format-java.js",
     "format-js": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md USAGE.md './src/**/*.{ts,tsx}' './Example/**/*.{ts,tsx}'",
     "jest": "jest",
@@ -56,7 +58,7 @@
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
     "prepare": "npm run bob && husky install",
     "release": "npm login && release-it",
-    "test": "npm run lint && npm run tsc && npm run jest",
+    "test": "npm run lint && npm run tsc",
     "tsc": "tsc --noEmit"
   },
   "peerDependencies": {
@@ -72,13 +74,17 @@
     "@babel/plugin-syntax-flow": "^7.17.12",
     "@babel/plugin-transform-react-jsx": "^7.17.12",
     "@react-native-community/bob": "^0.9.7",
+    "@react-native-community/cli": "^9.0.0",
+    "@react-native-community/cli-platform-android": "^9.0.0",
+    "@react-native-community/cli-platform-ios": "^9.0.0",
     "@react-native-community/eslint-config": "^3.0.2",
     "@react-native-community/eslint-plugin": "^1.2.0",
+    "@react-native/babel-plugin-codegen": "^0.71.0",
     "@types/css-tree": "^1.0.3",
     "@types/jest": "^27.5.2",
     "@types/node": "*",
     "@types/react": "~18.0.15",
-    "@types/react-native": "^0.69.3",
+    "@types/react-native": "^0.70.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^28.1.0",
     "clang-format": "^1.8.0",
@@ -102,6 +108,11 @@
     "ts-node": "^10.8.0",
     "typescript": "^4.7.2"
   },
+  "resolutions": {
+    "@react-native-community/cli-platform-android": "^9.0.0",
+    "@react-native-community/cli": "^9.0.0",
+    "@react-native-community/cli-platform-ios": "^9.0.0"
+  },
   "lint-staged": {
     "{src,Example}/**/*.{js,ts,tsx}": "yarn format-js",
     "src/**/*.{js,ts,tsx}": "yarn lint",
@@ -110,12 +121,11 @@
   },
   "nativePackage": true,
   "codegenConfig": {
-    "libraries": [
-      {
-        "name": "rnsvg",
-        "type": "components",
-        "jsSrcsDir": "./src/fabric"
-      }
-    ]
+    "name": "rnsvg",
+    "type": "all",
+    "jsSrcsDir": "./src/fabric",
+    "android": {
+      "javaPackageName": "com.horcrux.rnsvg"
+    }
   }
 }

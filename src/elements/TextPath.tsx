@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import { withoutXY } from '../lib/extract/extractProps';
 import {
+  ColumnMajorTransformMatrix,
   NumberProp,
   TextPathMethod,
   TextPathMidLine,
@@ -13,7 +14,7 @@ import extractText, { TextChild } from '../lib/extract/extractText';
 import { idPattern, pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import TSpan from './TSpan';
-import { RNSVGTextPath } from './NativeComponents';
+import RNSVGTextPath from '../fabric/TextPathNativeComponent';
 
 export interface TextPathProps extends TextSpecificProps {
   children?: TextChild;
@@ -31,7 +32,7 @@ export default class TextPath extends Shape<TextPathProps> {
 
   setNativeProps = (
     props: Object & {
-      matrix?: number[];
+      matrix?: ColumnMajorTransformMatrix;
       style?: [] | {};
     } & TransformProps,
   ) => {

@@ -56,6 +56,9 @@ public class RNSVGRectManagerDelegate<T extends View, U extends BaseViewManagerI
       case "display":
         mViewManager.setDisplay(view, value == null ? null : (String) value);
         break;
+      case "pointerEvents":
+        mViewManager.setPointerEvents(view, value == null ? null : (String) value);
+        break;
       case "fill":
         mViewManager.setFill(view, (ReadableMap) value);
         break;
@@ -72,7 +75,13 @@ public class RNSVGRectManagerDelegate<T extends View, U extends BaseViewManagerI
         mViewManager.setStrokeOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "strokeWidth":
-        mViewManager.setStrokeWidth(view, value == null ? "1" : (String) value);
+        if (value instanceof String) {
+          mViewManager.setStrokeWidth(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setStrokeWidth(view, (Double) value);
+        } else {
+          mViewManager.setStrokeWidth(view, "1");
+        }
         break;
       case "strokeLinecap":
         mViewManager.setStrokeLinecap(view, value == null ? 0 : ((Double) value).intValue());
@@ -96,28 +105,58 @@ public class RNSVGRectManagerDelegate<T extends View, U extends BaseViewManagerI
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
       case "x":
-        mViewManager.setX(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setX(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setX(view, (Double) value);
+        } else {
+          mViewManager.setX(view, (Double) null);
+        }
         break;
       case "y":
-        mViewManager.setY(view, value == null ? null : (String) value);
-        break;
-      case "rectheight":
-        mViewManager.setRectheight(view, value == null ? null : (String) value);
-        break;
-      case "rectwidth":
-        mViewManager.setRectwidth(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setY(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setY(view, (Double) value);
+        } else {
+          mViewManager.setY(view, (Double) null);
+        }
         break;
       case "height":
-        mViewManager.setHeight(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setHeight(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setHeight(view, (Double) value);
+        } else {
+          mViewManager.setHeight(view, (Double) null);
+        }
         break;
       case "width":
-        mViewManager.setWidth(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setWidth(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setWidth(view, (Double) value);
+        } else {
+          mViewManager.setWidth(view, (Double) null);
+        }
         break;
       case "rx":
-        mViewManager.setRx(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setRx(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setRx(view, (Double) value);
+        } else {
+          mViewManager.setRx(view,  (Double) null);
+        }
         break;
       case "ry":
-        mViewManager.setRy(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setRy(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setRy(view, (Double) value);
+        } else {
+          mViewManager.setRy(view, (Double) null);
+        }
         break;
       default:
         super.setProperty(view, propName, value);

@@ -1,40 +1,30 @@
 import Shape from './elements/Shape';
-import Rect, { RectProps } from './elements/Rect';
-import Circle, { CircleProps } from './elements/Circle';
-import Ellipse, { EllipseProps } from './elements/Ellipse';
-import Polygon, { PolygonProps } from './elements/Polygon';
-import Polyline, { PolylineProps } from './elements/Polyline';
-import Line, { LineProps } from './elements/Line';
-import Svg, { SvgProps } from './elements/Svg';
-import Path, { PathProps } from './elements/Path';
-import G, { GProps } from './elements/G';
-import Text, { TextProps } from './elements/Text';
-import TSpan, { TSpanProps } from './elements/TSpan';
-import TextPath, { TextPathProps } from './elements/TextPath';
-import Use, { UseProps } from './elements/Use';
-import Image, { ImageProps } from './elements/Image';
-import Symbol, { SymbolProps } from './elements/Symbol';
+import Rect from './elements/Rect';
+import Circle from './elements/Circle';
+import Ellipse from './elements/Ellipse';
+import Polygon from './elements/Polygon';
+import Polyline from './elements/Polyline';
+import Line from './elements/Line';
+import Svg from './elements/Svg';
+import Path from './elements/Path';
+import G from './elements/G';
+import Text from './elements/Text';
+import TSpan from './elements/TSpan';
+import TextPath from './elements/TextPath';
+import Use from './elements/Use';
+import Image from './elements/Image';
+import Symbol from './elements/Symbol';
 import Defs from './elements/Defs';
-import LinearGradient, { LinearGradientProps } from './elements/LinearGradient';
-import RadialGradient, { RadialGradientProps } from './elements/RadialGradient';
-import Stop, { StopProps } from './elements/Stop';
-import ClipPath, { ClipPathProps } from './elements/ClipPath';
-import Pattern, { PatternProps } from './elements/Pattern';
-import Mask, { MaskProps } from './elements/Mask';
-import Marker, { MarkerProps } from './elements/Marker';
-import ForeignObject, { ForeignObjectProps } from './elements/ForeignObject';
+import LinearGradient from './elements/LinearGradient';
+import RadialGradient from './elements/RadialGradient';
+import Stop from './elements/Stop';
+import ClipPath from './elements/ClipPath';
+import Pattern from './elements/Pattern';
+import Mask from './elements/Mask';
+import Marker from './elements/Marker';
+import ForeignObject from './elements/ForeignObject';
 
-import {
-  parse,
-  SvgAst,
-  SvgFromUri,
-  SvgFromXml,
-  SvgUri,
-  SvgXml,
-  UriProps,
-  XmlProps,
-  AstProps,
-} from './xml';
+import { parse, SvgAst, SvgFromUri, SvgFromXml, SvgUri, SvgXml } from './xml';
 import {
   SvgCss,
   SvgCssUri,
@@ -42,12 +32,7 @@ import {
   SvgWithCssUri,
   inlineStyles,
 } from './css';
-import {
-  LocalSvg,
-  WithLocalSvg,
-  loadLocalRawResource,
-  LocalProps,
-} from './LocalSvg';
+import { LocalSvg, WithLocalSvg, loadLocalRawResource } from './LocalSvg';
 import {
   RNSVGCircle,
   RNSVGClipPath,
@@ -64,43 +49,40 @@ import {
   RNSVGPattern,
   RNSVGRadialGradient,
   RNSVGRect,
-  RNSVGSvg,
+  RNSVGSvgAndroid,
+  RNSVGSvgIOS,
   RNSVGSymbol,
   RNSVGText,
   RNSVGTextPath,
   RNSVGTSpan,
   RNSVGUse,
-} from './elements/NativeComponents';
+} from './fabric';
 
-export {
-  RectProps,
-  CircleProps,
-  EllipseProps,
-  PolygonProps,
-  PolylineProps,
-  LineProps,
-  SvgProps,
-  PathProps,
-  GProps,
-  TextProps,
-  TSpanProps,
-  TextPathProps,
-  UseProps,
-  ImageProps,
-  SymbolProps,
-  LinearGradientProps,
-  RadialGradientProps,
-  StopProps,
-  ClipPathProps,
-  PatternProps,
-  MaskProps,
-  MarkerProps,
-  ForeignObjectProps,
-  UriProps,
-  XmlProps,
-  AstProps,
-  LocalProps,
-};
+export type { RectProps } from './elements/Rect';
+export type { CircleProps } from './elements/Circle';
+export type { EllipseProps } from './elements/Ellipse';
+export type { PolygonProps } from './elements/Polygon';
+export type { PolylineProps } from './elements/Polyline';
+export type { LineProps } from './elements/Line';
+export type { SvgProps } from './elements/Svg';
+export type { PathProps } from './elements/Path';
+export type { GProps } from './elements/G';
+export type { TextProps } from './elements/Text';
+export type { TSpanProps } from './elements/TSpan';
+export type { TextPathProps } from './elements/TextPath';
+export type { UseProps } from './elements/Use';
+export type { ImageProps } from './elements/Image';
+export type { SymbolProps } from './elements/Symbol';
+export type { LinearGradientProps } from './elements/LinearGradient';
+export type { RadialGradientProps } from './elements/RadialGradient';
+export type { StopProps } from './elements/Stop';
+export type { ClipPathProps } from './elements/ClipPath';
+export type { PatternProps } from './elements/Pattern';
+export type { MaskProps } from './elements/Mask';
+export type { MarkerProps } from './elements/Marker';
+export type { ForeignObjectProps } from './elements/ForeignObject';
+export type { LocalProps } from './LocalSvg';
+export type { UriProps, XmlProps, AstProps } from './xml';
 
 export * from './lib/extract/types';
 
@@ -163,7 +145,8 @@ export {
   RNSVGEllipse,
   RNSVGCircle,
   RNSVGRect,
-  RNSVGSvg,
+  RNSVGSvgAndroid,
+  RNSVGSvgIOS,
   RNSVGForeignObject,
 };
 

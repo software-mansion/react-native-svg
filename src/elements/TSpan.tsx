@@ -5,13 +5,14 @@ import extractText, { setTSpan, TextChild } from '../lib/extract/extractText';
 import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import {
+  ColumnMajorTransformMatrix,
   CommonPathProps,
   FontProps,
   NumberArray,
   NumberProp,
   TransformProps,
 } from '../lib/extract/types';
-import { RNSVGTSpan } from './NativeComponents';
+import RNSVGTSpan from '../fabric/TSpanNativeComponent';
 
 export interface TSpanProps extends CommonPathProps, FontProps {
   children?: TextChild;
@@ -28,7 +29,7 @@ export default class TSpan extends Shape<TSpanProps> {
 
   setNativeProps = (
     props: Object & {
-      matrix?: number[];
+      matrix?: ColumnMajorTransformMatrix;
       style?: [] | {};
     } & TransformProps,
   ) => {

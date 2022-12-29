@@ -19,13 +19,12 @@ import android.graphics.Typeface;
 import android.util.Base64;
 import android.view.View;
 import android.view.ViewParent;
-import com.facebook.react.bridge.ColorPropConverter;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.ReactCompoundView;
 import com.facebook.react.uimanager.ReactCompoundViewGroup;
-import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.views.view.ReactViewGroup;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,8 +33,7 @@ import javax.annotation.Nullable;
 
 /** Custom {@link View} implementation that draws an RNSVGSvg React view and its children. */
 @SuppressLint("ViewConstructor")
-public class SvgView extends FabricEnabledViewGroup
-    implements ReactCompoundView, ReactCompoundViewGroup {
+public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactCompoundViewGroup {
 
   @Override
   public boolean interceptsTouchEvent(float touchX, float touchY) {
@@ -59,6 +57,7 @@ public class SvgView extends FabricEnabledViewGroup
   }
 
   private @Nullable Bitmap mBitmap;
+  private boolean mRemovalTransitionStarted;
 
   public SvgView(ReactContext reactContext) {
     super(reactContext);
@@ -85,6 +84,25 @@ public class SvgView extends FabricEnabledViewGroup
       ((VirtualView) parent).getSvgView().invalidate();
       return;
     }
+    if (!mRemovalTransitionStarted) {
+      // when view is removed from the view hierarchy, we want to recycle the mBitmap when
+      // the view is detached from window, in order to preserve it for during animation, see
+      // https://github.com/react-native-svg/react-native-svg/pull/1542
+      if (mBitmap != null) {
+        mBitmap.recycle();
+      }
+      mBitmap = null;
+    }
+  }
+
+  @Override
+  public void startViewTransition(View view) {
+    mRemovalTransitionStarted = true;
+  }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
     if (mBitmap != null) {
       mBitmap.recycle();
     }
@@ -167,57 +185,36 @@ public class SvgView extends FabricEnabledViewGroup
     }
   }
 
-  @ReactProp(name = "tintColor")
-  public void setTintColor(@Nullable Dynamic tintColor) {
-    switch (tintColor.getType()) {
-      case Map:
-        mTintColor = ColorPropConverter.getColor(tintColor.asMap(), getContext());
-        break;
-      case Number:
-        mTintColor = tintColor.asInt();
-        break;
-      default:
-        mTintColor = 0;
-    }
+  public void setTintColor(Integer tintColor) {
+    mTintColor = tintColor != null ? tintColor : 0;
     invalidate();
     clearChildCache();
   }
 
-  public void setTintColor(@Nullable Integer tintColor) {
-    mTintColor = tintColor;
-    invalidate();
-    clearChildCache();
-  }
-
-  @ReactProp(name = "minX")
   public void setMinX(float minX) {
     mMinX = minX;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "minY")
   public void setMinY(float minY) {
     mMinY = minY;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "vbWidth")
   public void setVbWidth(float vbWidth) {
     mVbWidth = vbWidth;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "vbHeight")
   public void setVbHeight(float vbHeight) {
     mVbHeight = vbHeight;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "bbWidth")
   public void setBbWidth(Dynamic bbWidth) {
     mbbWidth = SVGLength.from(bbWidth);
     invalidate();
@@ -230,7 +227,12 @@ public class SvgView extends FabricEnabledViewGroup
     clearChildCache();
   }
 
-  @ReactProp(name = "bbHeight")
+  public void setBbWidth(Double bbWidth) {
+    mbbWidth = SVGLength.from(bbWidth);
+    invalidate();
+    clearChildCache();
+  }
+
   public void setBbHeight(Dynamic bbHeight) {
     mbbHeight = SVGLength.from(bbHeight);
     invalidate();
@@ -243,14 +245,18 @@ public class SvgView extends FabricEnabledViewGroup
     clearChildCache();
   }
 
-  @ReactProp(name = "align")
+  public void setBbHeight(Double bbHeight) {
+    mbbHeight = SVGLength.from(bbHeight);
+    invalidate();
+    clearChildCache();
+  }
+
   public void setAlign(String align) {
     mAlign = align;
     invalidate();
     clearChildCache();
   }
 
-  @ReactProp(name = "meetOrSlice")
   public void setMeetOrSlice(int meetOrSlice) {
     mMeetOrSlice = meetOrSlice;
     invalidate();

@@ -55,23 +55,62 @@ public class RNSVGRadialGradientManagerDelegate<T extends View, U extends BaseVi
       case "display":
         mViewManager.setDisplay(view, value == null ? null : (String) value);
         break;
+      case "pointerEvents":
+        mViewManager.setPointerEvents(view, value == null ? null : (String) value);
+        break;
       case "fx":
-        mViewManager.setFx(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setFx(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setFx(view, (Double) value);
+        } else {
+          mViewManager.setFx(view, (Double) null);
+        }
         break;
       case "fy":
-        mViewManager.setFy(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setFy(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setFy(view, (Double) value);
+        } else {
+          mViewManager.setFy(view, (Double) null);
+        }
         break;
       case "cx":
-        mViewManager.setCx(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setCx(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setCx(view, (Double) value);
+        } else {
+          mViewManager.setCx(view, (Double) null);
+        }
         break;
       case "cy":
-        mViewManager.setCy(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setCy(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setCy(view, (Double) value);
+        } else {
+          mViewManager.setCy(view, (Double) null);
+        }
         break;
       case "rx":
-        mViewManager.setRx(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setRx(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setRx(view, (Double) value);
+        } else {
+          mViewManager.setRx(view, (Double) null);
+        }
         break;
       case "ry":
-        mViewManager.setRy(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setRy(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setRy(view, (Double) value);
+        } else {
+          mViewManager.setRy(view, (Double) null);
+        }
         break;
       case "gradient":
         mViewManager.setGradient(view, (ReadableArray) value);

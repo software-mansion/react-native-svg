@@ -10,6 +10,7 @@ import {
   Defs,
   ClipPath,
 } from 'react-native-svg';
+import {Alert} from 'react-native';
 
 class PressExample extends Component {
   static title =
@@ -22,7 +23,7 @@ class PressExample extends Component {
           cy="50%"
           r="38%"
           fill="red"
-          onPress={() => alert('Press on Circle')}
+          onPress={() => Alert.alert('Press on Circle')}
         />
         <Rect
           x="20%"
@@ -30,7 +31,7 @@ class PressExample extends Component {
           width="60%"
           height="60%"
           fill="blue"
-          onLongPress={() => alert('Long press on Rect')}
+          onLongPress={() => Alert.alert('Long press on Rect')}
         />
         <Path d="M50,5L20,99L95,39L5,39L80,99z" fill="pink" />
       </Svg>
@@ -75,14 +76,15 @@ class GroupExample extends Component {
   render() {
     return (
       <Svg height="120" width="120" viewBox="0 0 240 240">
-        <G onPress={() => alert('Pressed on G')} scale="1.4">
+        <G onPress={() => Alert.alert('Pressed on G')} scale="1.4">
           <Circle cx="80" cy="80" r="30" fill="green" x="20" scale="1.2" />
           <Text
+            fill="black"
             fontWeight="bold"
             fontSize="40"
             x="100"
             y="40"
-            onPress={() => alert('Pressed on Text')}>
+            onPress={() => Alert.alert('Pressed on Text')}>
             H
           </Text>
           <Rect x="20" y="20" width="40" height="40" fill="yellow" />

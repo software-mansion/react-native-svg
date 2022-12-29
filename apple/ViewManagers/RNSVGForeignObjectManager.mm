@@ -20,8 +20,6 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength *)
 RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength *)
-RCT_EXPORT_VIEW_PROPERTY(foreignObjectheight, RNSVGLength *)
-RCT_EXPORT_VIEW_PROPERTY(foreignObjectwidth, RNSVGLength *)
 RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGForeignObject)
 {
   view.foreignObjectheight = [RCTConvert RNSVGLength:json];

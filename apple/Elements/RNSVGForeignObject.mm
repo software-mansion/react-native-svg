@@ -11,10 +11,10 @@
 #import "RNSVGNode.h"
 
 #ifdef RN_FABRIC_ENABLED
+#import <React/RCTConversions.h>
+#import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
-#import "RCTConversions.h"
-#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -49,12 +49,6 @@ using namespace facebook::react;
   self.y = RCTNSStringFromStringNilIfEmpty(newProps.y)
       ? [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)]
       : nil;
-  if (RCTNSStringFromStringNilIfEmpty(newProps.foreignObjectheight)) {
-    self.foreignObjectheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.foreignObjectheight)];
-  }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.foreignObjectwidth)) {
-    self.foreignObjectwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.foreignObjectwidth)];
-  }
   if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
     self.foreignObjectheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
   }
@@ -63,6 +57,7 @@ using namespace facebook::react;
   }
 
   setCommonGroupProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGForeignObjectProps const>(props);
 }
 
 - (void)prepareForRecycle

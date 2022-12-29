@@ -1,15 +1,15 @@
-// @ts-ignore
 import * as React from 'react';
 import {
   GestureResponderEvent,
   // @ts-ignore
   unstable_createElement as ucE,
-  // @ts-ignore
   createElement as cE,
+  TransformsStyle,
 } from 'react-native';
-import { NumberArray, NumberProp } from './lib/extract/types';
+import { NumberArray, NumberProp, TransformProps } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
+import { transformsArrayToProps } from './lib/extract/extractTransform';
 
 const createElement = cE || ucE;
 
@@ -44,26 +44,97 @@ interface BaseProps {
   pressRetentionOffset?: EdgeInsetsProp;
   rejectResponderTermination?: boolean;
 
-  translate: NumberArray;
-  translateX: NumberProp;
-  translateY: NumberProp;
-  scale: NumberArray;
-  rotation: NumberArray;
-  skewX: NumberProp;
-  skewY: NumberProp;
-  originX: NumberProp;
-  originY: NumberProp;
+  transform?: TransformProps['transform'];
+  translate?: NumberArray;
+  translateX?: NumberProp;
+  translateY?: NumberProp;
+  scale?: NumberArray;
+  scaleX?: NumberProp;
+  scaleY?: NumberProp;
+  rotation?: NumberProp;
+  skewX?: NumberProp;
+  skewY?: NumberProp;
+  origin?: NumberArray;
+  originX?: NumberProp;
+  originY?: NumberProp;
 
   fontStyle?: string;
   fontWeight?: NumberProp;
   fontSize?: NumberProp;
   fontFamily?: string;
-  forwardedRef: {};
+  forwardedRef?:
+    | React.RefCallback<SVGElement>
+    | React.MutableRefObject<SVGElement | null>;
   style: Iterable<{}>;
+
+  // different tranform props
+  gradientTransform: TransformProps['transform'];
+  patternTransform: TransformProps['transform'];
 }
 
 const hasTouchableProperty = (props: BaseProps) =>
   props.onPress || props.onPressIn || props.onPressOut || props.onLongPress;
+
+const camelCaseToDashed = (camelCase: string) => {
+  return camelCase.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
+};
+
+function stringifyTransformProps(transformProps: TransformProps) {
+  const transformArray = [];
+  if (transformProps.translate != null) {
+    transformArray.push(`translate(${transformProps.translate})`);
+  }
+  if (transformProps.translateX != null || transformProps.translateY != null) {
+    transformArray.push(
+      `translate(${transformProps.translateX || 0}, ${
+        transformProps.translateY || 0
+      })`,
+    );
+  }
+  if (transformProps.scale != null) {
+    transformArray.push(`scale(${transformProps.scale})`);
+  }
+  if (transformProps.scaleX != null || transformProps.scaleY != null) {
+    transformArray.push(
+      `scale(${transformProps.scaleX || 1}, ${transformProps.scaleY || 1})`,
+    );
+  }
+  // rotation maps to rotate, not to collide with the text rotate attribute (which acts per glyph rather than block)
+  if (transformProps.rotation != null) {
+    transformArray.push(`rotate(${transformProps.rotation})`);
+  }
+  if (transformProps.skewX != null) {
+    transformArray.push(`skewX(${transformProps.skewX})`);
+  }
+  if (transformProps.skewY != null) {
+    transformArray.push(`skewY(${transformProps.skewY})`);
+  }
+  return transformArray;
+}
+
+function parseTransformProp(
+  transform: TransformProps['transform'],
+  props?: BaseProps,
+) {
+  const transformArray: string[] = [];
+
+  props && transformArray.push(...stringifyTransformProps(props));
+
+  if (Array.isArray(transform)) {
+    if (typeof transform[0] === 'number') {
+      transformArray.push(`matrix(${transform.join(' ')})`);
+    } else {
+      const stringifiedProps = transformsArrayToProps(
+        transform as TransformsStyle['transform'],
+      );
+      transformArray.push(...stringifyTransformProps(stringifiedProps));
+    }
+  } else if (typeof transform === 'string') {
+    transformArray.push(transform);
+  }
+
+  return transformArray.length ? transformArray.join(' ') : undefined;
+}
 
 /**
  * `react-native-svg` supports additional props that aren't defined in the spec.
@@ -79,13 +150,8 @@ const prepare = <T extends BaseProps>(
   props = self.props,
 ) => {
   const {
-    translate,
-    translateX,
-    translateY,
-    scale,
-    rotation,
-    skewX,
-    skewY,
+    transform,
+    origin,
     originX,
     originY,
     fontFamily,
@@ -94,7 +160,8 @@ const prepare = <T extends BaseProps>(
     fontStyle,
     style,
     forwardedRef,
-    // @ts-ignore
+    gradientTransform,
+    patternTransform,
     ...rest
   } = props;
 
@@ -106,6 +173,9 @@ const prepare = <T extends BaseProps>(
     onResponderTerminate?: (e: GestureResponderEvent) => void;
     onResponderTerminationRequest?: (e: GestureResponderEvent) => boolean;
     transform?: string;
+    gradientTransform?: string;
+    patternTransform?: string;
+    'transform-origin'?: string;
     style?: {};
     ref?: {};
   } = {
@@ -124,41 +194,24 @@ const prepare = <T extends BaseProps>(
     ...rest,
   };
 
-  const transform = [];
-
-  if (originX != null || originY != null) {
-    transform.push(`translate(${originX || 0}, ${originY || 0})`);
-  }
-  if (translate != null) {
-    transform.push(`translate(${translate})`);
-  }
-  if (translateX != null || translateY != null) {
-    transform.push(`translate(${translateX || 0}, ${translateY || 0})`);
-  }
-  if (scale != null) {
-    transform.push(`scale(${scale})`);
-  }
-  // rotation maps to rotate, not to collide with the text rotate attribute (which acts per glyph rather than block)
-  if (rotation != null) {
-    transform.push(`rotate(${rotation})`);
-  }
-  if (skewX != null) {
-    transform.push(`skewX(${skewX})`);
-  }
-  if (skewY != null) {
-    transform.push(`skewY(${skewY})`);
-  }
-  if (originX != null || originY != null) {
-    transform.push(`translate(${-originX || 0}, ${-originY || 0})`);
+  if (origin != null) {
+    clean['transform-origin'] = origin.toString().replace(',', ' ');
+  } else if (originX != null || originY != null) {
+    clean['transform-origin'] = `${originX || 0} ${originY || 0}`;
   }
 
-  if (transform.length) {
-    clean.transform = transform.join(' ');
-  }
+  clean.transform = parseTransformProp(transform, props);
+  clean.gradientTransform = parseTransformProp(gradientTransform);
+  clean.patternTransform = parseTransformProp(patternTransform);
 
-  if (forwardedRef) {
-    clean.ref = forwardedRef;
-  }
+  clean.ref = (el: SVGElement | null) => {
+    self.elementRef.current = el;
+    if (typeof forwardedRef === 'function') {
+      forwardedRef(el);
+    } else if (forwardedRef) {
+      forwardedRef.current = el;
+    }
+  };
 
   const styles: {
     fontStyle?: string;
@@ -179,7 +232,6 @@ const prepare = <T extends BaseProps>(
   if (fontStyle != null) {
     styles.fontStyle = fontStyle;
   }
-
   clean.style = resolve(style, styles);
 
   return clean;
@@ -237,6 +289,53 @@ export class WebShape<
   C = {},
 > extends React.Component<P, C> {
   [x: string]: unknown;
+  protected tag?: React.ElementType;
+  protected prepareProps(props: P) {
+    return props;
+  }
+
+  elementRef =
+    React.createRef<SVGElement>() as React.MutableRefObject<SVGElement | null>;
+  lastMergedProps: Partial<P> = {};
+
+  /**
+   * disclaimer: I am not sure why the props are wrapped in a `style` attribute here, but that's how reanimated calls it
+   */
+  setNativeProps(props: { style: P }) {
+    const merged = Object.assign(
+      {},
+      this.props,
+      this.lastMergedProps,
+      props.style,
+    );
+    this.lastMergedProps = merged;
+    const clean = prepare(this, this.prepareProps(merged));
+    const current = this.elementRef.current;
+    if (current) {
+      for (const cleanAttribute of Object.keys(clean)) {
+        const cleanValue = clean[cleanAttribute as keyof typeof clean];
+        switch (cleanAttribute) {
+          case 'ref':
+          case 'children':
+            break;
+          case 'style':
+            // style can be an object here or an array, so we convert it to an array and assign each element
+            for (const partialStyle of ([] as {}[]).concat(clean.style ?? [])) {
+              // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+              Object.assign(current.style, partialStyle);
+            }
+            break;
+          default:
+            // apply all other incoming prop updates as attributes on the node
+            // same logic as in https://github.com/software-mansion/react-native-reanimated/blob/d04720c82f5941532991b235787285d36d717247/src/reanimated2/js-reanimated/index.ts#L38-L39
+            // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+            current.setAttribute(camelCaseToDashed(cleanAttribute), cleanValue);
+            break;
+        }
+      }
+    }
+  }
+
   _remeasureMetricsOnActivation: () => void;
   touchableHandleStartShouldSetResponder?: (
     e: GestureResponderEvent,
@@ -258,30 +357,35 @@ export class WebShape<
 
     this._remeasureMetricsOnActivation = remeasure.bind(this);
   }
+
+  render(): JSX.Element {
+    if (!this.tag) {
+      throw new Error(
+        'When extending `WebShape` you need to overwrite either `tag` or `render`!',
+      );
+    }
+    this.lastMergedProps = {};
+    return createElement(
+      this.tag,
+      prepare(this, this.prepareProps(this.props)),
+    );
+  }
 }
 
 export class Circle extends WebShape {
-  render(): JSX.Element {
-    return createElement('circle', prepare(this));
-  }
+  tag = 'circle' as const;
 }
 
 export class ClipPath extends WebShape {
-  render(): JSX.Element {
-    return createElement('clipPath', prepare(this));
-  }
+  tag = 'clipPath' as const;
 }
 
 export class Defs extends WebShape {
-  render(): JSX.Element {
-    return createElement('defs', prepare(this));
-  }
+  tag = 'defs' as const;
 }
 
 export class Ellipse extends WebShape {
-  render(): JSX.Element {
-    return createElement('ellipse', prepare(this));
-  }
+  tag = 'ellipse' as const;
 }
 
 export class G extends WebShape<
@@ -291,129 +395,98 @@ export class G extends WebShape<
     translate?: string;
   }
 > {
-  render(): JSX.Element {
-    const { x, y, ...rest } = this.props;
+  tag = 'g' as const;
+  prepareProps(
+    props: BaseProps & {
+      x?: NumberProp;
+      y?: NumberProp;
+      translate?: string;
+    },
+  ) {
+    const { x, y, ...rest } = props;
 
     if ((x || y) && !rest.translate) {
       rest.translate = `${x || 0}, ${y || 0}`;
     }
 
-    return createElement('g', prepare(this, rest));
+    return rest;
   }
 }
 
 export class Image extends WebShape {
-  render(): JSX.Element {
-    return createElement('image', prepare(this));
-  }
+  tag = 'image' as const;
 }
 
 export class Line extends WebShape {
-  render(): JSX.Element {
-    return createElement('line', prepare(this));
-  }
+  tag = 'line' as const;
 }
 
 export class LinearGradient extends WebShape {
-  render(): JSX.Element {
-    return createElement('linearGradient', prepare(this));
-  }
+  tag = 'linearGradient' as const;
 }
 
 export class Path extends WebShape {
-  render(): JSX.Element {
-    return createElement('path', prepare(this));
-  }
+  tag = 'path' as const;
 }
 
 export class Polygon extends WebShape {
-  render(): JSX.Element {
-    return createElement('polygon', prepare(this));
-  }
+  tag = 'polygon' as const;
 }
 
 export class Polyline extends WebShape {
-  render(): JSX.Element {
-    return createElement('polyline', prepare(this));
-  }
+  tag = 'polyline' as const;
 }
 
 export class RadialGradient extends WebShape {
-  render(): JSX.Element {
-    return createElement('radialGradient', prepare(this));
-  }
+  tag = 'radialGradient' as const;
 }
 
 export class Rect extends WebShape {
-  render(): JSX.Element {
-    return createElement('rect', prepare(this));
-  }
+  tag = 'rect' as const;
 }
 
 export class Stop extends WebShape {
-  render(): JSX.Element {
-    return createElement('stop', prepare(this));
-  }
+  tag = 'stop' as const;
 }
 
 export class Svg extends WebShape {
-  render(): JSX.Element {
-    return createElement('svg', prepare(this));
-  }
+  tag = 'svg' as const;
 }
 
 export class Symbol extends WebShape {
-  render(): JSX.Element {
-    return createElement('symbol', prepare(this));
-  }
+  tag = 'symbol' as const;
 }
 
 export class Text extends WebShape {
-  render(): JSX.Element {
-    return createElement('text', prepare(this));
-  }
+  tag = 'text' as const;
 }
 
 export class TSpan extends WebShape {
-  render(): JSX.Element {
-    return createElement('tspan', prepare(this));
-  }
+  tag = 'tspan' as const;
 }
 
 export class TextPath extends WebShape {
-  render(): JSX.Element {
-    return createElement('textPath', prepare(this));
-  }
+  tag = 'textPath' as const;
 }
 
 export class Use extends WebShape {
-  render(): JSX.Element {
-    return createElement('use', prepare(this));
-  }
+  tag = 'use' as const;
 }
 
 export class Mask extends WebShape {
-  render(): JSX.Element {
-    return createElement('mask', prepare(this));
-  }
+  tag = 'mask' as const;
 }
 
 export class ForeignObject extends WebShape {
-  render(): JSX.Element {
-    return createElement('foreignObject', prepare(this));
-  }
+  tag = 'foreignObject' as const;
 }
 
 export class Marker extends WebShape {
-  render(): JSX.Element {
-    return createElement('marker', prepare(this));
-  }
+  tag = 'marker' as const;
 }
 
 export class Pattern extends WebShape {
-  render(): JSX.Element {
-    return createElement('pattern', prepare(this));
-  }
+  tag = 'pattern' as const;
 }
 
 export default Svg;

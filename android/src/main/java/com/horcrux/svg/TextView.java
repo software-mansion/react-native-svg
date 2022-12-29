@@ -21,7 +21,6 @@ import android.view.ViewParent;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 
@@ -57,7 +56,6 @@ class TextView extends GroupView {
     super.clearCache();
   }
 
-  @ReactProp(name = "inlineSize")
   public void setInlineSize(Dynamic inlineSize) {
     mInlineSize = SVGLength.from(inlineSize);
     invalidate();
@@ -68,7 +66,11 @@ class TextView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "textLength")
+  public void setInlineSize(Double inlineSize) {
+    mInlineSize = SVGLength.from(inlineSize);
+    invalidate();
+  }
+
   public void setTextLength(Dynamic length) {
     mTextLength = SVGLength.from(length);
     invalidate();
@@ -79,19 +81,21 @@ class TextView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "lengthAdjust")
+  public void setTextLength(Double length) {
+    mTextLength = SVGLength.from(length);
+    invalidate();
+  }
+
   public void setLengthAdjust(@Nullable String adjustment) {
     mLengthAdjust = TextLengthAdjust.valueOf(adjustment);
     invalidate();
   }
 
-  @ReactProp(name = "alignmentBaseline")
   public void setMethod(@Nullable String alignment) {
     mAlignmentBaseline = AlignmentBaseline.getEnum(alignment);
     invalidate();
   }
 
-  @ReactProp(name = "baselineShift")
   public void setBaselineShift(Dynamic baselineShift) {
     mBaselineShift = SVGLength.toString(baselineShift);
     invalidate();
@@ -102,7 +106,11 @@ class TextView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "verticalAlign")
+  public void setBaselineShift(Double baselineShift) {
+    mBaselineShift = String.valueOf(baselineShift);
+    invalidate();
+  }
+
   public void setVerticalAlign(@Nullable String verticalAlign) {
     if (verticalAlign != null) {
       verticalAlign = verticalAlign.trim();
@@ -124,7 +132,6 @@ class TextView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "rotate")
   public void setRotate(Dynamic rotate) {
     mRotate = SVGLength.arrayFrom(rotate);
     invalidate();
@@ -135,7 +142,6 @@ class TextView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "dx")
   public void setDeltaX(Dynamic deltaX) {
     mDeltaX = SVGLength.arrayFrom(deltaX);
     invalidate();
@@ -146,7 +152,6 @@ class TextView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "dy")
   public void setDeltaY(Dynamic deltaY) {
     mDeltaY = SVGLength.arrayFrom(deltaY);
     invalidate();
@@ -157,7 +162,6 @@ class TextView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "x")
   public void setPositionX(Dynamic positionX) {
     mPositionX = SVGLength.arrayFrom(positionX);
     invalidate();
@@ -168,7 +172,6 @@ class TextView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "y")
   public void setPositionY(Dynamic positionY) {
     mPositionY = SVGLength.arrayFrom(positionY);
     invalidate();

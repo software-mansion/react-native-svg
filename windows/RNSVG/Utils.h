@@ -325,7 +325,9 @@ struct Utils {
       ICanvasResourceCreator const &resourceCreator) {
     Brushes::ICanvasBrush brush{nullptr};
     if (root && brushId != L"") {
-      if (auto const &brushView{root.Brushes().TryLookup(brushId)}) {
+      if (brushId == L"currentColor") {
+        brush = Brushes::CanvasSolidColorBrush(resourceCreator, root.CurrentColor());
+      } else if (auto const &brushView{root.Brushes().TryLookup(brushId)}) {
         brushView.SetBounds(geometry.ComputeBounds());
         brush = brushView.Brush();
       }

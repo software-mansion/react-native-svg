@@ -20,8 +20,6 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength *)
 RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength *)
-RCT_EXPORT_VIEW_PROPERTY(maskheight, RNSVGLength *)
-RCT_EXPORT_VIEW_PROPERTY(maskwidth, RNSVGLength *)
 RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGMask)
 {
   view.maskheight = [RCTConvert RNSVGLength:json];
@@ -32,6 +30,5 @@ RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGMask)
 }
 RCT_EXPORT_VIEW_PROPERTY(maskUnits, RNSVGUnits)
 RCT_EXPORT_VIEW_PROPERTY(maskContentUnits, RNSVGUnits)
-RCT_EXPORT_VIEW_PROPERTY(maskTransform, CGAffineTransform)
 
 @end

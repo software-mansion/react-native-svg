@@ -56,6 +56,9 @@ public class RNSVGLineManagerDelegate<T extends View, U extends BaseViewManagerI
       case "display":
         mViewManager.setDisplay(view, value == null ? null : (String) value);
         break;
+      case "pointerEvents":
+        mViewManager.setPointerEvents(view, value == null ? null : (String) value);
+        break;
       case "fill":
         mViewManager.setFill(view, (ReadableMap) value);
         break;
@@ -72,7 +75,13 @@ public class RNSVGLineManagerDelegate<T extends View, U extends BaseViewManagerI
         mViewManager.setStrokeOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "strokeWidth":
-        mViewManager.setStrokeWidth(view, value == null ? "1" : (String) value);
+        if (value instanceof String) {
+          mViewManager.setStrokeWidth(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setStrokeWidth(view, (Double) value);
+        } else {
+          mViewManager.setStrokeWidth(view, "1");
+        }
         break;
       case "strokeLinecap":
         mViewManager.setStrokeLinecap(view, value == null ? 0 : ((Double) value).intValue());
@@ -96,16 +105,40 @@ public class RNSVGLineManagerDelegate<T extends View, U extends BaseViewManagerI
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
       case "x1":
-        mViewManager.setX1(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setX1(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setX1(view, (Double) value);
+        } else {
+          mViewManager.setX1(view, (Double) null);
+        }
         break;
       case "y1":
-        mViewManager.setY1(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setY1(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setY1(view, (Double) value);
+        } else {
+          mViewManager.setY1(view, (Double) null);
+        }
         break;
       case "x2":
-        mViewManager.setX2(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setX2(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setX2(view, (Double) value);
+        } else {
+          mViewManager.setX2(view, (Double) null);
+        }
         break;
       case "y2":
-        mViewManager.setY2(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setY2(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setY2(view, (Double) value);
+        } else {
+          mViewManager.setY2(view, (Double) null);
+        }
         break;
       default:
         super.setProperty(view, propName, value);

@@ -10,10 +10,10 @@
 #import "RNSVGSymbol.h"
 
 #ifdef RN_FABRIC_ENABLED
+#import <React/RCTConversions.h>
+#import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
-#import "RCTConversions.h"
-#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -44,12 +44,6 @@ using namespace facebook::react;
 
   self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
   self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.useheight)) {
-    self.useheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.useheight)];
-  }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.usewidth)) {
-    self.usewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.usewidth)];
-  }
   if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
     self.useheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
   }
@@ -59,6 +53,7 @@ using namespace facebook::react;
   self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
 
   setCommonRenderableProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGUseProps const>(props);
 }
 
 - (void)prepareForRecycle

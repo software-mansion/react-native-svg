@@ -1,4 +1,4 @@
-# react-native-svg
+<img src="https://user-images.githubusercontent.com/39658211/200319759-006c214f-941c-496c-a3c2-7de5b7ce33dc.png" width="100%" alt="React Native SVG at Software Mansion" >
 
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 [![NPM](https://img.shields.io/npm/dm/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
@@ -58,7 +58,7 @@ expo install react-native-svg
 
 ## Supported react-native versions
 
-| react-native-svg | react-native | 
+| react-native-svg | react-native |
 | ---------------- | ------------ |
 | 3.2.0            | 0.29         |
 | 4.2.0            | 0.32         |
@@ -74,14 +74,16 @@ expo install react-native-svg
 | >=7              | >=0.57.4     |
 | >=8              | >=0.57.4     |
 | >=9              | >=0.57.4     |
-| >=12.3.0         | >=0.63.0     |
+| >=12.3.0         | >=0.64.0     |
 
 ## Support for Fabric
+
 [Fabric](https://reactnative.dev/architecture/fabric-renderer) is React Native's new rendering system. As of [version `13.0.0`](https://github.com/react-native-svg/react-native-svg/releases/tag/v13.0.0) of this project, Fabric is supported only for react-native 0.69.0+. Support for earlier versions is not possible due to breaking changes in configuration.
 
 | react-native-svg | react-native |
 | ---------------- | ------------ |
-| 13.0.0+          | 0.69.0+      |
+| >=13.0.0         | 0.69.0+      |
+| >=13.6.0         | 0.70.0+      |
 
 ## Troubleshooting
 
@@ -102,6 +104,37 @@ Make a reproduction of the problem in `App.js`
 react-native run-ios
 react-native run-android
 ```
+
+### Adding Windows support
+
+1. `npx react-native-windows-init --overwrite`
+2. `cd windows\<AppName>`
+3. Open `<AppName>.vcxproj`
+
+#### RN 0.68+
+
+4. Scroll to the bottom until you find:
+   ```xml
+   <ItemGroup>
+      <PackageReference Include="Microsoft.Windows.CppWinRT" Version="X.X.XXXXXX.X" />
+   </ItemGroup>
+   ```
+5. Add the following to that `<ItemGroup>`
+   ```xml
+   <PackageReference Include="Win2D.uwp" Version="1.26.0" />
+   ```
+
+#### Pre RN 0.68
+
+4. Scroll to the bottom until you find:
+   ```xml
+   <ImportGroup Label="ExtensionTargets">
+   ```
+
+5. Add the following to that `<ImportGroup>`
+   ```xml
+   <Import Project="$(SolutionDir)\packages\Win2D.uwp.1.26.0\build\native\Win2D.uwp.targets" Condition="Exists('$(SolutionDir)\packages\Win2D.uwp.1.26.0\build\native\Win2D.uwp.targets')" />
+   ```
 
 ## Opening issues
 

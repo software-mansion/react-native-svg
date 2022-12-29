@@ -15,7 +15,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class EllipseView extends RenderableView {
@@ -28,7 +27,6 @@ class EllipseView extends RenderableView {
     super(reactContext);
   }
 
-  @ReactProp(name = "cx")
   public void setCx(Dynamic cx) {
     mCx = SVGLength.from(cx);
     invalidate();
@@ -39,7 +37,11 @@ class EllipseView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "cy")
+  public void setCx(Double cx) {
+    mCx = SVGLength.from(cx);
+    invalidate();
+  }
+
   public void setCy(Dynamic cy) {
     mCy = SVGLength.from(cy);
     invalidate();
@@ -50,7 +52,11 @@ class EllipseView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "rx")
+  public void setCy(Double cy) {
+    mCy = SVGLength.from(cy);
+    invalidate();
+  }
+
   public void setRx(Dynamic rx) {
     mRx = SVGLength.from(rx);
     invalidate();
@@ -61,13 +67,22 @@ class EllipseView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "ry")
+  public void setRx(Double rx) {
+    mRx = SVGLength.from(rx);
+    invalidate();
+  }
+
   public void setRy(Dynamic ry) {
     mRy = SVGLength.from(ry);
     invalidate();
   }
 
   public void setRy(String ry) {
+    mRy = SVGLength.from(ry);
+    invalidate();
+  }
+
+  public void setRy(Double ry) {
     mRy = SVGLength.from(ry);
     invalidate();
   }

@@ -56,6 +56,9 @@ public class RNSVGMarkerManagerDelegate<T extends View, U extends BaseViewManage
       case "display":
         mViewManager.setDisplay(view, value == null ? null : (String) value);
         break;
+      case "pointerEvents":
+        mViewManager.setPointerEvents(view, value == null ? null : (String) value);
+        break;
       case "fill":
         mViewManager.setFill(view, (ReadableMap) value);
         break;
@@ -72,7 +75,13 @@ public class RNSVGMarkerManagerDelegate<T extends View, U extends BaseViewManage
         mViewManager.setStrokeOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "strokeWidth":
-        mViewManager.setStrokeWidth(view, value == null ? "1" : (String) value);
+        if (value instanceof String) {
+          mViewManager.setStrokeWidth(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setStrokeWidth(view, (Double) value);
+        } else {
+          mViewManager.setStrokeWidth(view, "1");
+        }
         break;
       case "strokeLinecap":
         mViewManager.setStrokeLinecap(view, value == null ? 0 : ((Double) value).intValue());
@@ -96,25 +105,61 @@ public class RNSVGMarkerManagerDelegate<T extends View, U extends BaseViewManage
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
       case "fontSize":
-        mViewManager.setFontSize(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setFontSize(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setFontSize(view, (Double) value);
+        } else {
+          mViewManager.setFontSize(view, (Double) null);
+        }
         break;
       case "fontWeight":
-        mViewManager.setFontWeight(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setFontWeight(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setFontWeight(view, (Double) value);
+        } else {
+          mViewManager.setFontWeight(view, (Double) null);
+        }
         break;
       case "font":
         mViewManager.setFont(view, (ReadableMap) value);
         break;
       case "refX":
-        mViewManager.setRefX(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setRefX(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setRefX(view, (Double) value);
+        } else {
+          mViewManager.setRefX(view, (Double) null);
+        }
         break;
       case "refY":
-        mViewManager.setRefY(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setRefY(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setRefY(view, (Double) value);
+        } else {
+          mViewManager.setRefY(view, (Double) null);
+        }
         break;
       case "markerHeight":
-        mViewManager.setMarkerHeight(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setMarkerHeight(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setMarkerHeight(view, (Double) value);
+        } else {
+          mViewManager.setMarkerHeight(view, (Double) null);
+        }
         break;
       case "markerWidth":
-        mViewManager.setMarkerWidth(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setMarkerWidth(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setMarkerWidth(view, (Double) value);
+        } else {
+          mViewManager.setMarkerWidth(view, (Double) null);
+        }
         break;
       case "markerUnits":
         mViewManager.setMarkerUnits(view, value == null ? null : (String) value);

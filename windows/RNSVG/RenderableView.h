@@ -89,6 +89,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
       Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin::Miter};
   Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination m_fillRule{
       Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination::Winding};
+
+  void SetColor(const Microsoft::ReactNative::JSValueObject &propValue, Windows::UI::Color fallbackColor, std::string propName);
 };
 } // namespace winrt::RNSVG::implementation
 

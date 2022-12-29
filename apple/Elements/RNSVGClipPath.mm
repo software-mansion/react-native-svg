@@ -9,10 +9,10 @@
 #import "RNSVGClipPath.h"
 
 #ifdef RN_FABRIC_ENABLED
+#import <React/RCTConversions.h>
+#import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
-#import "RCTConversions.h"
-#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -41,6 +41,7 @@ using namespace facebook::react;
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGClipPathProps>(props);
   setCommonNodeProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGClipPathProps const>(props);
 }
 
 - (void)prepareForRecycle

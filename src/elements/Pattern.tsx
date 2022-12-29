@@ -1,30 +1,25 @@
 import React, { ReactNode } from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import extractViewBox from '../lib/extract/extractViewBox';
-import {
-  ColumnMajorTransformMatrix,
-  NumberProp,
-  TransformProps,
-  Units,
-} from '../lib/extract/types';
+import { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
-import { RNSVGPattern } from './NativeComponents';
+import RNSVGPattern from '../fabric/PatternNativeComponent';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
+import { NativeMethods } from 'react-native';
 
-export interface PatternProps {
+export interface PatternProps extends TransformProps {
   children?: ReactNode;
   id?: string;
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  patternTransform?: ColumnMajorTransformMatrix | string;
+  patternTransform?: TransformProps['transform'];
   patternUnits?: Units;
   patternContentUnits?: Units;
   viewBox?: string;
   preserveAspectRatio?: string;
-  transform?: ColumnMajorTransformMatrix | string | TransformProps;
 }
 
 export default class Pattern extends Shape<PatternProps> {
@@ -69,7 +64,7 @@ export default class Pattern extends Shape<PatternProps> {
     };
     return (
       <RNSVGPattern
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (Pattern & NativeMethods) | null)}
         {...strigifiedPatternProps}
         {...patternProps}
         {...extractViewBox({ viewBox, preserveAspectRatio })}

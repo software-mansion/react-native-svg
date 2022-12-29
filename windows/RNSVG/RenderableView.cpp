@@ -66,30 +66,29 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
     } else if (propertyName == "stroke") {
       prop = RNSVG::BaseProp::Stroke;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (propertyValue.Type() == JSValueType::Array) {
-          auto const &brush{propertyValue.AsArray()};
-          m_strokeBrushId = to_hstring(Utils::JSValueAsString(brush.at(1)));
-        } else {
-          Windows::UI::Color fallbackColor{(parent && !strokeSet) ? parent.Stroke() : Windows::UI::Colors::Transparent()};
-          m_stroke = Utils::JSValueAsColor(propertyValue, fallbackColor);
+        Windows::UI::Color fallbackColor{(parent && !strokeSet) ? parent.Stroke() : Windows::UI::Colors::Transparent()};
+
+        if (!m_strokeBrushId.empty()) {
+          m_strokeBrushId.clear();
         }
+
+        SetColor(propertyValue.AsObject(), fallbackColor, propertyName);
       }
     } else if (propertyName == "fill") {
       prop = RNSVG::BaseProp::Fill;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (propertyValue.Type() == JSValueType::Array) {
-          auto const &brush{propertyValue.AsArray()};
-          m_fillBrushId = to_hstring(Utils::JSValueAsString(brush.at(1)));
-        } else {
-          Windows::UI::Color fallbackColor{Windows::UI::Colors::Black()};
-          if (propertyValue.IsNull() && fillSet) {
-            fallbackColor = Windows::UI::Colors::Transparent();
-          } else if (parent) {
-            fallbackColor = parent.Fill();
-          }
-
-          m_fill = Utils::JSValueAsColor(propertyValue, fallbackColor);
+        Windows::UI::Color fallbackColor{Windows::UI::Colors::Black()};
+        if (propertyValue.IsNull() && fillSet) {
+          fallbackColor = Windows::UI::Colors::Transparent();
+        } else if (parent) {
+          fallbackColor = parent.Fill();
         }
+
+        if (!m_fillBrushId.empty()) {
+          m_fillBrushId.clear();
+        }
+
+        SetColor(propertyValue.AsObject(), fallbackColor, propertyName);
       }
     } else if (propertyName == "strokeLinecap") {
       prop = RNSVG::BaseProp::StrokeLineCap;
@@ -337,5 +336,25 @@ void RenderableView::Unload() {
   m_propList.clear();
   m_propSetMap.clear();
   m_strokeDashArray.Clear();
+}
+
+void RenderableView::SetColor(const JSValueObject& propValue, Windows::UI::Color fallbackColor, std::string propName) {
+  switch (propValue["type"].AsInt64()) {
+    case 1: {
+      auto const &brushId{to_hstring(Utils::JSValueAsString(propValue["brushRef"]))};
+      propName == "fill" ? m_fillBrushId = brushId : m_strokeBrushId = brushId;
+      break;
+    }
+    case 2: // currentColor
+    case 3: // context-fill
+    case 4: // context-stroke
+      propName == "fill" ? m_fillBrushId = L"currentColor" : m_strokeBrushId = L"currentColor";
+      break;
+    default: {
+      auto const &color {Utils::JSValueAsColor(propValue["payload"], fallbackColor)};
+      propName == "fill" ? m_fill = color : m_stroke = color;
+      break;
+    }
+  }
 }
 } // namespace winrt::RNSVG::implementation

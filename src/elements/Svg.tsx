@@ -5,8 +5,8 @@ import {
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
-  NativeModules,
-  processColor,
+  NativeMethods,
+  Platform,
   StyleProp,
   StyleSheet,
   ViewProps,
@@ -21,9 +21,9 @@ import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
 import G, { GProps } from './G';
-import { RNSVGSvg } from './NativeComponents';
-
-const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
+import RNSVGSvgAndroid from '../fabric/AndroidSvgViewNativeComponent';
+import RNSVGSvgIOS from '../fabric/IOSSvgViewNativeComponent';
+import type { Spec } from '../fabric/NativeSvgViewModule';
 
 const styles = StyleSheet.create({
   svg: {
@@ -92,7 +92,9 @@ export default class Svg extends Shape<SvgProps> {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
-    RNSVGSvgViewManager.toDataURL(handle, options, callback);
+    const RNSVGSvgViewModule: Spec =
+      require('../fabric/NativeSvgViewModule').default;
+    RNSVGSvgViewModule.toDataURL(handle, options, callback);
   };
 
   render() {
@@ -114,10 +116,10 @@ export default class Svg extends Shape<SvgProps> {
       width,
       height,
       focusable,
+      transform,
 
       // Inherited G properties
       font,
-      transform,
       fill,
       fillOpacity,
       fillRule,
@@ -176,28 +178,38 @@ export default class Svg extends Shape<SvgProps> {
 
     extractResponder(props, props, this as ResponderInstanceProps);
 
-    const tint = processColor(color);
-    if (tint != null) {
-      props.color = tint;
-      props.tintColor = tint;
-    }
+    props.tintColor = color;
 
     if (onLayout != null) {
       props.onLayout = onLayout;
     }
 
+    const gStyle = Object.assign({}, style) as ViewStyle;
+    // if transform prop is of RN style's kind, we want `SvgView` to handle it
+    // since it can be done here. Otherwise, if transform is of `svg` kind, e.g. string,
+    // we want G element to parse it since `Svg` does not include parsing of those custom transforms.
+    // It is problematic due to fact that we either move the `Svg` or just its `G` child, and in the
+    // second case, when the `G` leaves the area of `Svg`, it will just disappear.
+    if (Array.isArray(transform) && typeof transform[0] === 'object') {
+      gStyle.transform = undefined;
+    } else {
+      props.transform = undefined;
+      gStyle.transform = transform;
+    }
+
+    const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
+
     return (
       <RNSVGSvg
         {...props}
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (Svg & NativeMethods) | null)}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
       >
         <G
           {...{
             children,
-            style,
+            style: gStyle,
             font,
-            transform,
             fill,
             fillOpacity,
             fillRule,

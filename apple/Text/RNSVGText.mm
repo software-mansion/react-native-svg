@@ -14,10 +14,10 @@
 #import "RNSVGTextProperties.h"
 
 #ifdef RN_FABRIC_ENABLED
+#import <React/RCTConversions.h>
+#import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
-#import "RCTConversions.h"
-#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -51,29 +51,8 @@ using namespace facebook::react;
 {
   const auto &newProps = *std::static_pointer_cast<const RNSVGTextProps>(props);
 
-  // textAnchor is in props of VM but not available on component
-  self.deltaX = createLengthArrayFromStrings(newProps.dx);
-  self.deltaY = createLengthArrayFromStrings(newProps.dy);
-  if (!newProps.positionX.empty()) {
-    self.positionX = createLengthArrayFromStrings(newProps.positionX);
-  }
-  if (!newProps.positionY.empty()) {
-    self.positionY = createLengthArrayFromStrings(newProps.positionY);
-  }
-  if (!newProps.x.empty()) {
-    self.positionX = createLengthArrayFromStrings(newProps.x);
-  }
-  if (!newProps.y.empty()) {
-    self.positionY = createLengthArrayFromStrings(newProps.y);
-  }
-  self.rotate = createLengthArrayFromStrings(newProps.rotate);
-  self.inlineSize = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.inlineSize)];
-  self.textLength = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.textLength)];
-  self.baselineShift = RCTNSStringFromStringNilIfEmpty(newProps.baselineShift);
-  self.lengthAdjust = RCTNSStringFromStringNilIfEmpty(newProps.lengthAdjust);
-  self.alignmentBaseline = RCTNSStringFromStringNilIfEmpty(newProps.alignmentBaseline);
-
-  setCommonGroupProps(newProps, self);
+  setCommonTextProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGTextProps const>(props);
 }
 
 - (void)prepareForRecycle

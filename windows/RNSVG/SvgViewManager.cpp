@@ -43,6 +43,7 @@ IMapView<hstring, ViewManagerPropertyType> SvgViewManager::NativeProps() {
 
   nativeProps.Insert(L"height", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"width", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"color", ViewManagerPropertyType::Color);
 
   // viewBox
   nativeProps.Insert(L"minX", ViewManagerPropertyType::Number);

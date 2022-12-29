@@ -16,7 +16,6 @@ import android.graphics.RectF;
 import android.os.Build;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class RectView extends RenderableView {
@@ -31,7 +30,6 @@ class RectView extends RenderableView {
     super(reactContext);
   }
 
-  @ReactProp(name = "x")
   public void setX(Dynamic x) {
     mX = SVGLength.from(x);
     invalidate();
@@ -42,7 +40,11 @@ class RectView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "y")
+  public void setX(Double x) {
+    mX = SVGLength.from(x);
+    invalidate();
+  }
+
   public void setY(Dynamic y) {
     mY = SVGLength.from(y);
     invalidate();
@@ -53,7 +55,11 @@ class RectView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "width")
+  public void setY(Double y) {
+    mY = SVGLength.from(y);
+    invalidate();
+  }
+
   public void setWidth(Dynamic width) {
     mW = SVGLength.from(width);
     invalidate();
@@ -64,7 +70,11 @@ class RectView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "height")
+  public void setWidth(Double width) {
+    mW = SVGLength.from(width);
+    invalidate();
+  }
+
   public void setHeight(Dynamic height) {
     mH = SVGLength.from(height);
     invalidate();
@@ -75,7 +85,11 @@ class RectView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "rx")
+  public void setHeight(Double height) {
+    mH = SVGLength.from(height);
+    invalidate();
+  }
+
   public void setRx(Dynamic rx) {
     mRx = SVGLength.from(rx);
     invalidate();
@@ -86,13 +100,22 @@ class RectView extends RenderableView {
     invalidate();
   }
 
-  @ReactProp(name = "ry")
+  public void setRx(Double rx) {
+    mRx = SVGLength.from(rx);
+    invalidate();
+  }
+
   public void setRy(Dynamic ry) {
     mRy = SVGLength.from(ry);
     invalidate();
   }
 
   public void setRy(String ry) {
+    mRy = SVGLength.from(ry);
+    invalidate();
+  }
+
+  public void setRy(Double ry) {
     mRy = SVGLength.from(ry);
     invalidate();
   }

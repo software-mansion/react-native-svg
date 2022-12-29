@@ -11,10 +11,10 @@
 #import "RNSVGPainter.h"
 
 #ifdef RN_FABRIC_ENABLED
+#import <React/RCTConversions.h>
+#import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
-#import "RCTConversions.h"
-#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -45,12 +45,6 @@ using namespace facebook::react;
 
   self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
   self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.patternheight)) {
-    self.patternheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.patternheight)];
-  }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.patternwidth)) {
-    self.patternwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.patternwidth)];
-  }
   if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
     self.patternheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
   }
@@ -58,7 +52,8 @@ using namespace facebook::react;
     self.patternwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
   }
   self.patternUnits = newProps.patternUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
-  self.patternContentUnits = newProps.patternUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
+  self.patternContentUnits =
+      newProps.patternContentUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
   if (newProps.patternTransform.size() == 6) {
     self.patternTransform = CGAffineTransformMake(
         newProps.patternTransform.at(0),
@@ -76,6 +71,7 @@ using namespace facebook::react;
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
 
   setCommonGroupProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGPatternProps const>(props);
 }
 
 - (void)prepareForRecycle

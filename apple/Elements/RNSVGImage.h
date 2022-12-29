@@ -15,17 +15,22 @@
 
 #import <React/RCTImageSource.h>
 
+#ifdef RN_FABRIC_ENABLED
+#import <React/RCTImageResponseDelegate.h>
+#endif
+
 @interface RNSVGImage : RNSVGRenderable
+#ifdef RN_FABRIC_ENABLED
+                        <RCTImageResponseDelegate>
+#endif
 
 @property (nonatomic, weak) RCTBridge *bridge;
-@property (nonatomic, assign) id src;
+@property (nonatomic, assign) RCTImageSource *src;
 @property (nonatomic, strong) RNSVGLength *x;
 @property (nonatomic, strong) RNSVGLength *y;
 @property (nonatomic, strong) RNSVGLength *imagewidth;
 @property (nonatomic, strong) RNSVGLength *imageheight;
 @property (nonatomic, strong) NSString *align;
 @property (nonatomic, assign) RNSVGVBMOS meetOrSlice;
-
-- (void)setImageSrc:(RCTImageSource *)source request:(NSURLRequest *)request;
 
 @end

@@ -1,13 +1,10 @@
 import React, { ReactElement } from 'react';
 import extractGradient from '../lib/extract/extractGradient';
-import {
-  ColumnMajorTransformMatrix,
-  NumberProp,
-  Units,
-} from '../lib/extract/types';
+import { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGRadialGradient } from './NativeComponents';
+import RNSVGRadialGradient from '../fabric/RadialGradientNativeComponent';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
+import { NativeMethods } from 'react-native';
 
 export interface RadialGradientProps {
   children?: ReactElement[];
@@ -19,7 +16,7 @@ export interface RadialGradientProps {
   cy?: NumberProp;
   r?: NumberProp;
   gradientUnits?: Units;
-  gradientTransform?: ColumnMajorTransformMatrix | string;
+  gradientTransform?: TransformProps['transform'];
   id?: string;
 }
 
@@ -45,7 +42,9 @@ export default class RadialGradient extends Shape<RadialGradientProps> {
     });
     return (
       <RNSVGRadialGradient
-        ref={this.refMethod}
+        ref={(ref) =>
+          this.refMethod(ref as (RadialGradient & NativeMethods) | null)
+        }
         {...radialGradientProps}
         {...extractGradient(props, this)}
       />

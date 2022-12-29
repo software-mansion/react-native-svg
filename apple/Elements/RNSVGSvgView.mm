@@ -12,10 +12,10 @@
 #import "RNSVGViewBox.h"
 
 #ifdef RN_FABRIC_ENABLED
+#import <React/RCTConversions.h>
+#import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
-#import "RCTConversions.h"
-#import "RCTFabricComponentsPlugins.h"
 #import "RNSVGFabricConversions.h"
 #endif // RN_FABRIC_ENABLED
 
@@ -78,6 +78,7 @@ using namespace facebook::react;
   if (RCTUIColorFromSharedColor(newProps.color)) {
     self.tintColor = RCTUIColorFromSharedColor(newProps.color);
   }
+  [super updateProps:props oldProps:oldProps];
 }
 
 - (void)prepareForRecycle

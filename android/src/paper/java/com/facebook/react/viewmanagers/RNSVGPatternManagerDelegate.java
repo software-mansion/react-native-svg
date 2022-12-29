@@ -56,6 +56,9 @@ public class RNSVGPatternManagerDelegate<T extends View, U extends BaseViewManag
       case "display":
         mViewManager.setDisplay(view, value == null ? null : (String) value);
         break;
+      case "pointerEvents":
+        mViewManager.setPointerEvents(view, value == null ? null : (String) value);
+        break;
       case "fill":
         mViewManager.setFill(view, (ReadableMap) value);
         break;
@@ -72,7 +75,13 @@ public class RNSVGPatternManagerDelegate<T extends View, U extends BaseViewManag
         mViewManager.setStrokeOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "strokeWidth":
-        mViewManager.setStrokeWidth(view, value == null ? "1" : (String) value);
+        if (value instanceof String) {
+          mViewManager.setStrokeWidth(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setStrokeWidth(view, (Double) value);
+        } else {
+          mViewManager.setStrokeWidth(view, "1");
+        }
         break;
       case "strokeLinecap":
         mViewManager.setStrokeLinecap(view, value == null ? 0 : ((Double) value).intValue());
@@ -96,31 +105,61 @@ public class RNSVGPatternManagerDelegate<T extends View, U extends BaseViewManag
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
       case "fontSize":
-        mViewManager.setFontSize(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setFontSize(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setFontSize(view, (Double) value);
+        } else {
+          mViewManager.setFontSize(view, (Double) null);
+        }
         break;
       case "fontWeight":
-        mViewManager.setFontWeight(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setFontWeight(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setFontWeight(view, (Double) value);
+        } else {
+          mViewManager.setFontWeight(view, (Double) null);
+        }
         break;
       case "font":
         mViewManager.setFont(view, (ReadableMap) value);
         break;
       case "x":
-        mViewManager.setX(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setX(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setX(view, (Double) value);
+        } else {
+          mViewManager.setX(view, (Double) null);
+        }
         break;
       case "y":
-        mViewManager.setY(view, value == null ? null : (String) value);
-        break;
-      case "patternheight":
-        mViewManager.setPatternheight(view, value == null ? null : (String) value);
-        break;
-      case "patternwidth":
-        mViewManager.setPatternwidth(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setY(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setY(view, (Double) value);
+        } else {
+          mViewManager.setY(view, (Double) null);
+        }
         break;
       case "height":
-        mViewManager.setHeight(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setHeight(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setHeight(view, (Double) value);
+        } else {
+          mViewManager.setHeight(view, (Double) null);
+        }
         break;
       case "width":
-        mViewManager.setWidth(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setWidth(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setWidth(view, (Double) value);
+        } else {
+          mViewManager.setWidth(view, (Double) null);
+        }
         break;
       case "patternUnits":
         mViewManager.setPatternUnits(view, value == null ? 0 : ((Double) value).intValue());

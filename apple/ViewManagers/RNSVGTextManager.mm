@@ -20,7 +20,6 @@ RCT_EXPORT_MODULE()
   return [RNSVGText new];
 }
 
-RCT_EXPORT_VIEW_PROPERTY(textAnchor, RNSVGTextAnchor)
 RCT_CUSTOM_VIEW_PROPERTY(dx, id, RNSVGText)
 {
   view.deltaX = [RCTConvert RNSVGLengthArray:json];
@@ -29,20 +28,10 @@ RCT_CUSTOM_VIEW_PROPERTY(dy, id, RNSVGText)
 {
   view.deltaY = [RCTConvert RNSVGLengthArray:json];
 }
-RCT_CUSTOM_VIEW_PROPERTY(positionX, id, RNSVGText)
-{
-  view.positionX = [RCTConvert RNSVGLengthArray:json];
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(positionY, id, RNSVGText)
-{
-  view.positionY = [RCTConvert RNSVGLengthArray:json];
-}
 RCT_CUSTOM_VIEW_PROPERTY(x, id, RNSVGText)
 {
   view.positionX = [RCTConvert RNSVGLengthArray:json];
 }
-
 RCT_CUSTOM_VIEW_PROPERTY(y, id, RNSVGText)
 {
   view.positionY = [RCTConvert RNSVGLengthArray:json];
@@ -71,6 +60,7 @@ RCT_CUSTOM_VIEW_PROPERTY(baselineShift, id, RNSVGText)
 }
 RCT_EXPORT_VIEW_PROPERTY(lengthAdjust, NSString)
 RCT_EXPORT_VIEW_PROPERTY(alignmentBaseline, NSString)
+RCT_EXPORT_VIEW_PROPERTY(verticalAlign, NSString) // unused on iOS
 
 RCT_CUSTOM_VIEW_PROPERTY(fontSize, id, RNSVGText)
 {

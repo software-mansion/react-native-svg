@@ -56,6 +56,9 @@ public class RNSVGTSpanManagerDelegate<T extends View, U extends BaseViewManager
       case "display":
         mViewManager.setDisplay(view, value == null ? null : (String) value);
         break;
+      case "pointerEvents":
+        mViewManager.setPointerEvents(view, value == null ? null : (String) value);
+        break;
       case "fill":
         mViewManager.setFill(view, (ReadableMap) value);
         break;
@@ -72,7 +75,13 @@ public class RNSVGTSpanManagerDelegate<T extends View, U extends BaseViewManager
         mViewManager.setStrokeOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "strokeWidth":
-        mViewManager.setStrokeWidth(view, value == null ? "1" : (String) value);
+        if (value instanceof String) {
+          mViewManager.setStrokeWidth(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setStrokeWidth(view, (Double) value);
+        } else {
+          mViewManager.setStrokeWidth(view, "1");
+        }
         break;
       case "strokeLinecap":
         mViewManager.setStrokeLinecap(view, value == null ? 0 : ((Double) value).intValue());
@@ -96,28 +105,31 @@ public class RNSVGTSpanManagerDelegate<T extends View, U extends BaseViewManager
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
       case "fontSize":
-        mViewManager.setFontSize(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setFontSize(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setFontSize(view, (Double) value);
+        } else {
+          mViewManager.setFontSize(view, (Double) null);
+        }
         break;
       case "fontWeight":
-        mViewManager.setFontWeight(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setFontWeight(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setFontWeight(view, (Double) value);
+        } else {
+          mViewManager.setFontWeight(view, (Double) null);
+        }
         break;
       case "font":
         mViewManager.setFont(view, (ReadableMap) value);
-        break;
-      case "textAnchor":
-        mViewManager.setTextAnchor(view, value == null ? null : (String) value);
         break;
       case "dx":
         mViewManager.setDx(view, (ReadableArray) value);
         break;
       case "dy":
         mViewManager.setDy(view, (ReadableArray) value);
-        break;
-      case "positionX":
-        mViewManager.setPositionX(view, (ReadableArray) value);
-        break;
-      case "positionY":
-        mViewManager.setPositionY(view, (ReadableArray) value);
         break;
       case "x":
         mViewManager.setX(view, (ReadableArray) value);
@@ -129,19 +141,40 @@ public class RNSVGTSpanManagerDelegate<T extends View, U extends BaseViewManager
         mViewManager.setRotate(view, (ReadableArray) value);
         break;
       case "inlineSize":
-        mViewManager.setInlineSize(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setInlineSize(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setInlineSize(view, (Double) value);
+        } else {
+          mViewManager.setInlineSize(view, (Double) null);
+        }
         break;
       case "textLength":
-        mViewManager.setTextLength(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setTextLength(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setTextLength(view, (Double) value);
+        } else {
+          mViewManager.setTextLength(view, (Double) null);
+        }
         break;
       case "baselineShift":
-        mViewManager.setBaselineShift(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setBaselineShift(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setBaselineShift(view, (Double) value);
+        } else {
+          mViewManager.setBaselineShift(view, (Double) null);
+        }
         break;
       case "lengthAdjust":
         mViewManager.setLengthAdjust(view, value == null ? null : (String) value);
         break;
       case "alignmentBaseline":
         mViewManager.setAlignmentBaseline(view, value == null ? null : (String) value);
+        break;
+      case "verticalAlign":
+        mViewManager.setVerticalAlign(view, value == null ? null : (String) value);
         break;
       case "content":
         mViewManager.setContent(view, value == null ? null : (String) value);

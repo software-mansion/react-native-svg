@@ -16,7 +16,6 @@ import android.graphics.RectF;
 import android.view.View;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class MarkerView extends GroupView {
@@ -41,7 +40,6 @@ class MarkerView extends GroupView {
     super(reactContext);
   }
 
-  @ReactProp(name = "refX")
   public void setRefX(Dynamic refX) {
     mRefX = SVGLength.from(refX);
     invalidate();
@@ -52,7 +50,11 @@ class MarkerView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "refY")
+  public void setRefX(Double refX) {
+    mRefX = SVGLength.from(refX);
+    invalidate();
+  }
+
   public void setRefY(Dynamic refY) {
     mRefY = SVGLength.from(refY);
     invalidate();
@@ -63,7 +65,11 @@ class MarkerView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "markerWidth")
+  public void setRefY(Double refY) {
+    mRefY = SVGLength.from(refY);
+    invalidate();
+  }
+
   public void setMarkerWidth(Dynamic markerWidth) {
     mMarkerWidth = SVGLength.from(markerWidth);
     invalidate();
@@ -74,7 +80,11 @@ class MarkerView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "markerHeight")
+  public void setMarkerWidth(Double markerWidth) {
+    mMarkerWidth = SVGLength.from(markerWidth);
+    invalidate();
+  }
+
   public void setMarkerHeight(Dynamic markerHeight) {
     mMarkerHeight = SVGLength.from(markerHeight);
     invalidate();
@@ -85,49 +95,46 @@ class MarkerView extends GroupView {
     invalidate();
   }
 
-  @ReactProp(name = "markerUnits")
+  public void setMarkerHeight(Double markerHeight) {
+    mMarkerHeight = SVGLength.from(markerHeight);
+    invalidate();
+  }
+
   public void setMarkerUnits(String markerUnits) {
     mMarkerUnits = markerUnits;
     invalidate();
   }
 
-  @ReactProp(name = "orient")
   public void setOrient(String orient) {
     mOrient = orient;
     invalidate();
   }
 
-  @ReactProp(name = "minX")
   public void setMinX(float minX) {
     mMinX = minX;
     invalidate();
   }
 
-  @ReactProp(name = "minY")
   public void setMinY(float minY) {
     mMinY = minY;
     invalidate();
   }
 
-  @ReactProp(name = "vbWidth")
   public void setVbWidth(float vbWidth) {
     mVbWidth = vbWidth;
     invalidate();
   }
 
-  @ReactProp(name = "vbHeight")
   public void setVbHeight(float vbHeight) {
     mVbHeight = vbHeight;
     invalidate();
   }
 
-  @ReactProp(name = "align")
   public void setAlign(String align) {
     mAlign = align;
     invalidate();
   }
 
-  @ReactProp(name = "meetOrSlice")
   public void setMeetOrSlice(int meetOrSlice) {
     mMeetOrSlice = meetOrSlice;
     invalidate();

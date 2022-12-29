@@ -55,17 +55,44 @@ public class RNSVGLinearGradientManagerDelegate<T extends View, U extends BaseVi
       case "display":
         mViewManager.setDisplay(view, value == null ? null : (String) value);
         break;
+      case "pointerEvents":
+        mViewManager.setPointerEvents(view, value == null ? null : (String) value);
+        break;
       case "x1":
-        mViewManager.setX1(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setX1(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setX1(view, (Double) value);
+        } else {
+          mViewManager.setX1(view, (Double) null);
+        }
         break;
       case "y1":
-        mViewManager.setY1(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setY1(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setY1(view, (Double) value);
+        } else {
+          mViewManager.setY1(view, (Double) null);
+        }
         break;
       case "x2":
-        mViewManager.setX2(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setX2(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setX2(view, (Double) value);
+        } else {
+          mViewManager.setX2(view, (Double) null);
+        }
         break;
       case "y2":
-        mViewManager.setY2(view, value == null ? null : (String) value);
+        if (value instanceof String) {
+          mViewManager.setY2(view, (String) value);
+        } else if (value instanceof Double) {
+          mViewManager.setY2(view, (Double) value);
+        } else {
+          mViewManager.setY2(view, (Double) null);
+        }
         break;
       case "gradient":
         mViewManager.setGradient(view, (ReadableArray) value);

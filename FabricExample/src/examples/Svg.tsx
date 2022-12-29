@@ -133,26 +133,22 @@ class SvgNativeMethods extends Component {
   };
   alert = () => {
     console.log("PRESSED");
-    this.root.toDataURL(base64 => {
+    this.root?.toDataURL(base64 => {
       this.setState({
         base64,
       });
     });
 
-    console.log(this.circle.isPointInFill({x: 200, y: 100}));
-    console.log(this.circle.isPointInStroke({x: 200, y: 100}));
-    console.log(this.circle.getTotalLength());
-    console.log(this.circle.getPointAtLength(25));
-    console.log(this.circle.getBBox({fill: true}));
-    console.log(this.circle.getCTM());
-    console.log(this.circle.getScreenCTM());
+    console.log(this.circle?.isPointInFill({x: 200, y: 100}));
+    console.log(this.circle?.isPointInStroke({x: 200, y: 100}));
+    console.log(this.circle?.getTotalLength());
+    console.log(this.circle?.getPointAtLength(25));
+    console.log(this.circle?.getBBox({fill: true}));
+    console.log(this.circle?.getCTM());
+    console.log(this.circle?.getScreenCTM());
   };
-  root: any;
-  circle: any;
-
-  componentDidMount() {
-      this.alert();
-  }
+  root: Svg | null;
+  circle: Circle | null;
 
   render() {
     return (

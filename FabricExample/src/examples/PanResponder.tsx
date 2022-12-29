@@ -1,20 +1,20 @@
 import React, {PureComponent} from 'react';
 import {
-  PanResponder,
-  View,
   Animated,
+  PanResponder,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import {Svg, G, Text, Path, Polyline, Line} from 'react-native-svg';
+import {G, Line, Path, Polyline, Svg, Text} from 'react-native-svg';
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
 const zeroDelta = {x: 0, y: 0};
 
 class PanExample extends PureComponent {
-  static title = 'Bind PanResponder on the SVG Shape - It does not work on Fabric since it uses `setNativeProps`';
+  static title = 'Bind PanResponder on the SVG Shape';
   panXY: any;
-  constructor(props, context) {
+  constructor(props: {}, context: {}) {
     super(props, context);
     const xy = new Animated.ValueXY();
     const {x: dx, y: dy} = xy;
@@ -29,7 +29,9 @@ class PanExample extends PureComponent {
         xy.setOffset(offset);
         xy.setValue(zeroDelta);
       },
-      onPanResponderMove: Animated.event([null, {dx, dy}]),
+      onPanResponderMove: Animated.event([null, {dx, dy}], {
+        useNativeDriver: false,
+      }),
       onPanResponderRelease: () => {
         xy.flattenOffset();
       },
