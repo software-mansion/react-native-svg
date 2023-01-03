@@ -7,9 +7,7 @@ const pack = require('../package.json');
 
 const root = path.resolve(__dirname, '..');
 
-const modules = [
-  ...Object.keys(pack.peerDependencies),
-];
+const modules = [...Object.keys(pack.peerDependencies)];
 
 module.exports = {
   projectRoot: __dirname,
@@ -20,8 +18,7 @@ module.exports = {
   resolver: {
     blacklistRE: exclusionList(
       modules.map(
-        (m) =>
-          new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`),
+        m => new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`),
       ),
     ),
 
