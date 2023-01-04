@@ -695,11 +695,18 @@ export function SvgCss(props: XmlProps) {
 }
 
 export function SvgCssUri(props: UriProps) {
-  const { uri, onError = err } = props;
+  const { uri, onError = err, onLoad } = props;
   const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
-    uri ? fetchText(uri).then(setXml).catch(onError) : setXml(null);
-  }, [onError, uri]);
+    uri
+      ? fetchText(uri)
+          .then((data) => {
+            setXml(data);
+            onLoad?.();
+          })
+          .catch(onError)
+      : setXml(null);
+  }, [onError, uri, onLoad]);
   return <SvgCss xml={xml} override={props} />;
 }
 
