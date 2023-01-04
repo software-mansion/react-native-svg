@@ -8,6 +8,7 @@ namespace RNSVG
     , Microsoft.ReactNative.IViewManagerWithReactContext
     , Microsoft.ReactNative.IViewManagerWithNativeProperties
     , Microsoft.ReactNative.IViewManagerWithChildren
+    , Microsoft.ReactNative.IViewManagerWithPointerEvents
   {
     SvgViewManager();
   };
@@ -99,6 +100,12 @@ namespace RNSVG
   runtimeclass SymbolViewManager : GroupViewManager
   {
     SymbolViewManager();
+  };
+
+  [default_interface]
+  runtimeclass ClipPathViewManager : GroupViewManager
+  {
+    ClipPathViewManager();
   };
 
   [default_interface]

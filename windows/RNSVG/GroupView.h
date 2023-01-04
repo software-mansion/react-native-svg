@@ -40,6 +40,8 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
 
   virtual void Unload();
 
+  virtual RNSVG::IRenderable HitTest(Windows::Foundation::Point const &point);
+
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Windows::Foundation::Collections::IVector<RNSVG::IRenderable> m_children{

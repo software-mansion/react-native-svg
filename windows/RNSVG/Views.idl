@@ -6,6 +6,7 @@ namespace RNSVG
   {
     Windows.UI.Xaml.FrameworkElement SvgParent;
     Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
+    Boolean IsResponsible;
 
     void CreateResources(
       Microsoft.Graphics.Canvas.ICanvasResourceCreator resourceCreator,
@@ -17,6 +18,8 @@ namespace RNSVG
     void MergeProperties(RenderableView other);
     void SaveDefinition();
     void Unload();
+    void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
+    IRenderable HitTest(Windows.Foundation.Point point);
   };
 
   [default_interface]
@@ -55,8 +58,7 @@ namespace RNSVG
     Microsoft.Graphics.Canvas.Geometry.CanvasCapStyle StrokeLineCap{ get; };
     Microsoft.Graphics.Canvas.Geometry.CanvasLineJoin StrokeLineJoin{ get; };
     Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule{ get; };
-
-    void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
+    Microsoft.Graphics.Canvas.Geometry.CanvasGeometry ClipPathGeometry { get; };
   };
 
   [default_interface]
@@ -150,6 +152,12 @@ namespace RNSVG
     Single VbHeight{ get; };
     String Align{ get; };
     MeetOrSlice MeetOrSlice{ get; };
+  };
+
+  [default_interface]
+  runtimeclass ClipPathView : GroupView
+  {
+    ClipPathView();
   };
 
   [default_interface]

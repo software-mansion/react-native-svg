@@ -187,6 +187,10 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
       }
     } else if (propertyName == "opacity" && forceUpdate) {
       m_opacity = Utils::JSValueAsFloat(propertyValue, 1.0f);
+    } else if (propertyName == "clipPath") {
+      m_clipPathId = to_hstring(Utils::JSValueAsString(propertyValue));
+    }  else if (propertyName == "responsible") {
+      m_isResponsible = propertyValue.AsBoolean();
     }
 
     // forceUpdate = true means the property is being set on an element
@@ -230,9 +234,11 @@ void RenderableView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawing
     geometry = geometry.Transform(SvgTransform());
   }
 
+  auto const &clipPathGeometry{ClipPathGeometry()};
+
   geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
 
-  if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
+  if (auto const &opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
     if (auto const &fillLayer{session.CreateLayer(FillOpacity())}) {
       auto const &fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), geometry, resourceCreator)};
       session.FillGeometry(geometry, fill);
@@ -325,6 +331,18 @@ RNSVG::SvgView RenderableView::SvgRoot() {
   return nullptr;
 }
 
+Geometry::CanvasGeometry RenderableView::ClipPathGeometry() {
+  if (!m_clipPathId.empty()) {
+    if (auto const &clipPath{SvgRoot().Templates().TryLookup(m_clipPathId)}) {
+      if (!clipPath.Geometry()) {
+        clipPath.CreateGeometry(SvgRoot().Canvas());
+      }
+      return clipPath.Geometry();
+    }
+  }
+  return nullptr;
+}
+
 void RenderableView::Unload() {
   if (m_geometry) {
     m_geometry.Close();
@@ -336,6 +354,21 @@ void RenderableView::Unload() {
   m_propList.clear();
   m_propSetMap.clear();
   m_strokeDashArray.Clear();
+}
+
+RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
+  if (m_geometry) {
+    bool strokeContainsPoint{false};
+    if (auto const &svgRoot{SvgRoot()}) {
+      float canvasDiagonal{Utils::GetCanvasDiagonal(svgRoot.Canvas().Size())};
+      float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
+      strokeContainsPoint = m_geometry.StrokeContainsPoint(point, strokeWidth);
+    }
+    if (m_geometry.FillContainsPoint(point) || strokeContainsPoint) {
+      return *this;
+    }
+  }
+  return nullptr;
 }
 
 void RenderableView::SetColor(const JSValueObject& propValue, Windows::UI::Color fallbackColor, std::string propName) {

@@ -41,7 +41,7 @@ void PathView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
   auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   Svg::CanvasSvgDocument doc{resourceCreator};
   auto const &path{doc.CreatePathAttribute(m_segmentData, m_commands)};
-  Geometry(path.CreatePathGeometry());
+  Geometry(path.CreatePathGeometry(FillRule()));
 }
 
 void PathView::ParsePath() {

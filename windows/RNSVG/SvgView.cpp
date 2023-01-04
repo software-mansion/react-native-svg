@@ -83,6 +83,8 @@ void SvgView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
         m_meetOrSlice = Utils::GetMeetOrSlice(propertyValue);
       } else if (propertyName == "color") {
         m_currentColor = Utils::JSValueAsColor(propertyValue);
+      } else if (propertyName == "responsible") {
+        m_isResponsible = propertyValue.AsBoolean();
       }
     }
 
@@ -154,6 +156,12 @@ void SvgView::Canvas_Draw(UI::Xaml::CanvasControl const &sender, UI::Xaml::Canva
 void SvgView::CreateResources(ICanvasResourceCreator const &resourceCreator, UI::CanvasCreateResourcesEventArgs const &args) {
   if (m_group) {
     m_group.CreateResources(resourceCreator, args);
+  }
+}
+
+void SvgView::CreateGeometry(UI::Xaml::CanvasControl const& canvas) {
+  if (m_group) {
+    m_group.CreateGeometry(canvas);
   }
 }
 

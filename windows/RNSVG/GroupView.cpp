@@ -105,6 +105,9 @@ void GroupView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
   auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
   std::vector<Geometry::CanvasGeometry> geometries;
   for (auto const &child : Children()) {
+    if (!child.Geometry()) {
+      child.CreateGeometry(canvas);
+    }
     geometries.push_back(child.Geometry());
   }
 
@@ -134,7 +137,9 @@ void GroupView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
     session.Transform(transform * SvgTransform());
   }
 
-  if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
+  auto const &clipPathGeometry{ClipPathGeometry()};
+
+  if (auto const &opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
     if (Children().Size() == 0) {
       __super::Render(canvas, session);
     } else {
@@ -168,5 +173,32 @@ void GroupView::Unload() {
   m_children.Clear();
 
   __super::Unload();
+}
+
+winrt::RNSVG::IRenderable GroupView::HitTest(Windows::Foundation::Point const &point) {
+  RNSVG::IRenderable renderable{nullptr};
+  if (IsResponsible()) {
+    for (auto const &child : Children()) {
+      if (auto const &hit{child.HitTest(point)}) {
+        renderable = hit;
+      }
+    }
+    if (renderable && !renderable.IsResponsible()) {
+      renderable = *this;
+    } else if (!renderable){
+      if (!Geometry()) {
+        if (auto const &svgRoot{SvgRoot()}) {
+          CreateGeometry(svgRoot.Canvas());
+        }
+      }
+      if (Geometry()) {
+        auto const &bounds{Geometry().ComputeBounds()};
+        if (Windows::UI::Xaml::RectHelper::Contains(bounds, point)) {
+          renderable = *this;
+        }
+      }
+    }
+  }
+  return renderable;
 }
 } // namespace winrt::RNSVG::implementation
