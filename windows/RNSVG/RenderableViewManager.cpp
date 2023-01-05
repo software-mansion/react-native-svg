@@ -40,6 +40,8 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
       return winrt::RNSVG::RadialGradientView();
     case RNSVG::SVGClass::RNSVGPattern:
       return winrt::RNSVG::PatternView();
+    case RNSVG::SVGClass::RNSVGClipPath:
+      return winrt::RNSVG::ClipPathView();
   }
 
   throw hresult_not_implemented();
@@ -64,6 +66,8 @@ IMapView<hstring, ViewManagerPropertyType> RenderableViewManager::NativeProps() 
   nativeProps.Insert(L"matrix", ViewManagerPropertyType::Array);
   nativeProps.Insert(L"opacity", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"propList", ViewManagerPropertyType::Array);
+  nativeProps.Insert(L"clipPath", ViewManagerPropertyType::String);
+  nativeProps.Insert(L"responsible", ViewManagerPropertyType::Boolean);
 
   return nativeProps.GetView();
 }

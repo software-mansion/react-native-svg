@@ -24,6 +24,9 @@ struct SvgView : SvgViewT<SvgView> {
 
   Windows::UI::Color CurrentColor() { return m_currentColor; }
 
+  bool IsResponsible() { return m_isResponsible; }
+  void IsResponsible(bool isResponsible) { m_isResponsible = isResponsible; }
+
   Windows::Foundation::Collections::IMap<hstring, RNSVG::IRenderable> Templates() {
     return m_templates;
   }
@@ -42,6 +45,8 @@ struct SvgView : SvgViewT<SvgView> {
   void CreateResources(
       Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
       Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args);
+  void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas);
+  RNSVG::IRenderable HitTest(Windows::Foundation::Point const & /*point*/) { return nullptr; }
 
   // Overrides
   Windows::Foundation::Size MeasureOverride(Windows::Foundation::Size availableSize);
@@ -64,6 +69,7 @@ struct SvgView : SvgViewT<SvgView> {
 
  private:
   bool m_hasRendered{false};
+  bool m_isResponsible{false};
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl m_canvas{};
   Windows::UI::Xaml::FrameworkElement m_parent{nullptr};

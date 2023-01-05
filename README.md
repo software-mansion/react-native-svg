@@ -87,29 +87,6 @@ expo install react-native-svg
 
 ## Troubleshooting
 
-### Problems with Proguard
-
-When Proguard is enabled (which it is by default for Android release builds), it causes runtime error.
-To avoid this, add an exception to `android/app/proguard-rules.pro`:
-
-```bash
--keep public class com.horcrux.svg.** {*;}
-```
-
-If you have build errors, then it might be caused by caching issues, please try:
-
-```bash
-watchman watch-del-all
-rm -fr $TMPDIR/react-*
-react-native start --reset-cache
-
-Or,
-
-rm -rf node_modules
-yarn
-react-native start --reset-cache
-```
-
 ### Unexpected behavior
 
 If you have unexpected behavior, please create a clean project with the latest versions of react-native and react-native-svg
@@ -150,6 +127,7 @@ react-native run-android
 #### Pre RN 0.68
 
 4. Scroll to the bottom until you find:
+
    ```xml
    <ImportGroup Label="ExtensionTargets">
    ```

@@ -253,6 +253,9 @@ using namespace facebook::react;
 - (void)drawToContext:(CGContextRef)context withRect:(CGRect)rect
 {
   rendered = true;
+  _clipPaths = nil;
+  _templates = nil;
+  _painters = nil;
   self.initialCTM = CGContextGetCTM(context);
   self.invInitialCTM = CGAffineTransformInvert(self.initialCTM);
   if (self.align) {
@@ -264,10 +267,14 @@ using namespace facebook::react;
     _viewBoxTransform = CGAffineTransformIdentity;
     _invviewBoxTransform = CGAffineTransformIdentity;
   }
-
   for (RNSVGView *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGNode class]]) {
       RNSVGNode *svg = (RNSVGNode *)node;
+      if (svg.responsible && !self.responsible) {
+        self.responsible = YES;
+      }
+
+      [svg parseReference];
       [svg renderTo:context rect:rect];
     } else {
       [node drawRect:rect];
@@ -281,23 +288,8 @@ using namespace facebook::react;
   if ([parent isKindOfClass:[RNSVGNode class]]) {
     return;
   }
-  rendered = true;
-  _clipPaths = nil;
-  _templates = nil;
-  _painters = nil;
   _boundingBox = rect;
   CGContextRef context = UIGraphicsGetCurrentContext();
-
-  for (RNSVGPlatformView *node in self.subviews) {
-    if ([node isKindOfClass:[RNSVGNode class]]) {
-      RNSVGNode *svg = (RNSVGNode *)node;
-      if (svg.responsible && !self.responsible) {
-        self.responsible = YES;
-      }
-
-      [svg parseReference];
-    }
-  }
 
   [self drawToContext:context withRect:rect];
 }

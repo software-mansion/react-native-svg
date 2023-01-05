@@ -20,6 +20,9 @@ export default function extractFill(
     inherited.push('fill');
     o.fill =
       !fill && typeof fill !== 'number' ? defaultFill : extractBrush(fill);
+  } else {
+    // we want the default value of fill to be black to match the spec
+    o.fill = defaultFill;
   }
   if (fillOpacity != null) {
     inherited.push('fillOpacity');
