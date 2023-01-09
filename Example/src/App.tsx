@@ -14,7 +14,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
-import {Modal} from 'react-native';
+import {Modal, Platform} from 'react-native';
 import {Svg, Circle, Line} from 'react-native-svg';
 
 import * as examples from './examples';
@@ -203,13 +203,17 @@ export default class SvgExample extends Component {
       <View style={styles.container}>
         <Text style={styles.welcome}>SVG library for React Apps</Text>
         <View style={styles.contentContainer}>{this.getExamples()}</View>
-        <Modal
-          transparent={false}
-          animationType="fade"
-          visible={this.state.modal}
-          onRequestClose={this.hide}>
-          {this.modalContent()}
-        </Modal>
+        {Platform.OS === 'windows' && this.state.modal ? (
+          <View style={styles.scroll}>{this.modalContent()}</View>
+        ) : (
+          <Modal
+            transparent={false}
+            animationType="fade"
+            visible={this.state.modal}
+            onRequestClose={this.hide}>
+            {this.modalContent()}
+          </Modal>
+        )}
       </View>
     );
   }

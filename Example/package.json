@@ -6,6 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "macos": "react-native run-macos",
+    "windows": "react-native run-windows",
     "start": "react-native start",
     "start-webpack": "webpack serve",
     "test": "jest",
@@ -16,6 +17,7 @@
     "react": "18.1.0",
     "react-dom": "^18.2.0",
     "react-native": "0.70.5",
+    "react-native-windows": "0.70.7",
     "react-native-reanimated": "^2.10.0",
     "react-native-svg": "link:../",
     "react-native-web": "^0.17.7"
