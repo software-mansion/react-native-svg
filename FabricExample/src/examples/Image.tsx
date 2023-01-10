@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform} from 'react-native';
+import {Alert, Platform} from 'react-native';
 import {Svg, Circle, Text, Rect, Defs, ClipPath, Image} from 'react-native-svg';
 
 class ImageExample extends Component {
@@ -49,7 +49,7 @@ class ClipImage extends Component {
           </ClipPath>
         </Defs>
         <Image
-          onPress={() => alert('press on Image')}
+          onPress={() => Alert.alert('press on Image')}
           x="5%"
           y="5%"
           width="90%"

@@ -37,6 +37,7 @@
 #import <rnsvg/RNSVGImageComponentDescriptor.h>
 #import "RNSVGFabricConversions.h"
 
+using namespace facebook::react;
 #endif // RN_FABRIC_ENABLED
 
 @implementation RNSVGImage {
@@ -50,7 +51,6 @@
 #endif // RN_FABRIC_ENABLED
 }
 #ifdef RN_FABRIC_ENABLED
-using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {

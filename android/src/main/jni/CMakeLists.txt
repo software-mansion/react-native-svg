@@ -48,6 +48,7 @@ target_link_libraries(
   react_render_debug
   react_render_graphics
   react_render_mapbuffer
+  rrc_image
   rrc_view
   turbomodulejsijni
   yoga

@@ -14,6 +14,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
+import {Modal, Platform} from 'react-native';
 import {Svg, Circle, Line} from 'react-native-svg';
 
 import * as examples from './examples';
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const names = [
+const names: (keyof typeof examples)[] = [
   'Svg',
   'Stroking',
   'Path',
@@ -126,7 +127,7 @@ export default class SvgExample extends Component {
     scroll?: boolean;
   } = initialState;
 
-  show = name => {
+  show = (name: keyof typeof examples) => {
     if (this.state.modal) {
       return;
     }
@@ -145,7 +146,7 @@ export default class SvgExample extends Component {
             ))}
           </View>
         ),
-        scroll: example.scroll !== false,
+        scroll: (example as {scroll?: boolean}).scroll !== false,
       });
     }
   };
@@ -197,15 +198,22 @@ export default class SvgExample extends Component {
   );
 
   render() {
-    if (this.state.modal) {
-      return this.modalContent();
-    } else {
-      return (
-        <View style={styles.container}>
-          <Text style={styles.welcome}>SVG library for React Apps</Text>
-          <View style={styles.contentContainer}>{this.getExamples()}</View>
-        </View>
-      );
-    }
+    return (
+      <View style={styles.container}>
+        <Text style={styles.welcome}>SVG library for React Apps</Text>
+        <View style={styles.contentContainer}>{this.getExamples()}</View>
+        {Platform.OS === 'windows' && this.state.modal ? (
+          <View style={styles.scroll}>{this.modalContent()}</View>
+        ) : (
+          <Modal
+            transparent={false}
+            animationType="fade"
+            visible={this.state.modal}
+            onRequestClose={this.hide}>
+            {this.modalContent()}
+          </Modal>
+        )}
+      </View>
+    );
   }
 }
