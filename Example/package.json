@@ -17,7 +17,6 @@
     "react": "18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "0.71.0-rc.6",
-    "react-native-windows": "0.70.7",
     "react-native-reanimated": "3.0.0-rc.10",
     "react-native-svg": "link:../",
     "react-native-web": "^0.17.7"
