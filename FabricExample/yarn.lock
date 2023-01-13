@@ -5893,10 +5893,10 @@ react-native-gradle-plugin@^0.71.12:
   version "0.0.0"
   uid ""
 
-react-native@0.71.0-rc.6:
-  version "0.71.0-rc.6"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.71.0-rc.6.tgz#a509ea105e58c1b329ddb822160bd4abdee88f7f"
-  integrity sha512-1eT8bjuCz7Khi1aDlhNQGc4bVsxqKfZ6epwIe6kzzjGNbhDbL0O3BIijrP62DV6EDPTTHyqUZKOMMsNeORNONA==
+react-native@0.71.0:
+  version "0.71.0"
+  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.71.0.tgz#ce47c3cb6239484fcd686d1f45b363b7014b6c62"
+  integrity sha512-b5oCS/cPVqXT5E2K+0CfQMERAoRu6/6g1no9XRAcjQ4b5JG608WgDh5QgXPHaMSVhAvsJ1DuRoU8C/xqTjQITA==
   dependencies:
     "@jest/create-cache-key-function" "^29.2.1"
     "@react-native-community/cli" "10.0.0"
