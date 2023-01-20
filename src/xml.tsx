@@ -1,17 +1,13 @@
-import React, {
-  Component,
-  ComponentType,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import type { ComponentType } from 'react';
+import React, { Component, useEffect, useMemo, useState } from 'react';
 import Rect from './elements/Rect';
 import Circle from './elements/Circle';
 import Ellipse from './elements/Ellipse';
 import Polygon from './elements/Polygon';
 import Polyline from './elements/Polyline';
 import Line from './elements/Line';
-import Svg, { SvgProps } from './elements/Svg';
+import type { SvgProps } from './elements/Svg';
+import Svg from './elements/Svg';
 import Path from './elements/Path';
 import G from './elements/G';
 import Text from './elements/Text';

@@ -1,10 +1,10 @@
-import {
+import type {
   ColorValue,
   GestureResponderEvent,
   GestureResponderHandlers,
   LayoutChangeEvent,
 } from 'react-native';
-import React from 'react';
+import type React from 'react';
 import type { TransformsStyle } from 'react-native';
 
 export type NumberProp = string | number;

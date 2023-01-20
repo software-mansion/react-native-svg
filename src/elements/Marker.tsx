@@ -1,10 +1,11 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
-import { NumberProp } from '../lib/extract/types';
+import type { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGMarker from '../fabric/MarkerNativeComponent';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
-import { NativeMethods } from 'react-native';
+import type { NativeMethods } from 'react-native';
 
 export type MarkerUnits = 'strokeWidth' | 'userSpaceOnUse';
 

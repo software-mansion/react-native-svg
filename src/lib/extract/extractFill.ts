@@ -1,6 +1,6 @@
 import extractBrush from './extractBrush';
 import extractOpacity from './extractOpacity';
-import { extractedProps, FillProps } from './types';
+import type { extractedProps, FillProps } from './types';
 import { processColor } from 'react-native';
 
 const fillRules: { evenodd: number; nonzero: number } = {

@@ -4,7 +4,7 @@ import extractTransform from './extractTransform';
 import extractResponder from './extractResponder';
 import extractOpacity from './extractOpacity';
 import { idPattern } from '../util';
-import {
+import type {
   ClipProps,
   extractedProps,
   FillProps,

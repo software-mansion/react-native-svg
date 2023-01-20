@@ -3,10 +3,10 @@ import {
   stringifyPropsForFabric,
   withoutXY,
 } from '../lib/extract/extractProps';
-import { CommonPathProps, NumberProp } from '../lib/extract/types';
+import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGRect from '../fabric/RectNativeComponent';
-import { NativeMethods } from 'react-native';
+import type { NativeMethods } from 'react-native';
 
 export interface RectProps extends CommonPathProps {
   x?: NumberProp;

@@ -1,8 +1,9 @@
 import { Component } from 'react';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
 import extractBrush from '../lib/extract/extractBrush';
-import { ColorValue, findNodeHandle, NativeMethods } from 'react-native';
-import {
+import type { ColorValue, NativeMethods } from 'react-native';
+import { findNodeHandle } from 'react-native';
+import type {
   ColumnMajorTransformMatrix,
   TransformProps,
 } from '../lib/extract/types';

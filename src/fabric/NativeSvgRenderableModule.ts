@@ -1,5 +1,6 @@
-import { TurboModuleRegistry, TurboModule } from 'react-native';
-import { Int32, Float } from 'react-native/Libraries/Types/CodegenTypes';
+import type { TurboModule } from 'react-native';
+import { TurboModuleRegistry } from 'react-native';
+import type { Int32, Float } from 'react-native/Libraries/Types/CodegenTypes';
 
 type Rect = {
   x: Float;

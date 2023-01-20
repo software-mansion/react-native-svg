@@ -1,13 +1,14 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 import {
   stringifyPropsForFabric,
   withoutXY,
 } from '../lib/extract/extractProps';
-import { CommonPathProps, NumberProp } from '../lib/extract/types';
+import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
 import RNSVGMask from '../fabric/MaskNativeComponent';
-import { NativeMethods } from 'react-native';
+import type { NativeMethods } from 'react-native';
 
 export type TMaskUnits = 'userSpaceOnUse' | 'objectBoundingBox';
 

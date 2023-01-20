@@ -1,4 +1,4 @@
-import { NumberProp } from './types';
+import type { NumberProp } from './types';
 
 export const meetOrSliceTypes: {
   [meetOrSlice: string]: number;

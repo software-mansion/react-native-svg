@@ -1,9 +1,10 @@
 import React, { useState, useEffect, Component } from 'react';
-import { Platform, Image, ImageSourcePropType } from 'react-native';
+import type { ImageSourcePropType } from 'react-native';
+import { Platform, Image } from 'react-native';
 
 import { fetchText } from './xml';
 import { SvgCss, SvgWithCss } from './css';
-import { SvgProps } from './elements/Svg';
+import type { SvgProps } from './elements/Svg';
 import type { Spec } from './fabric/NativeSvgRenderableModule';
 
 export function getUriFromSource(source: ImageSourcePropType) {

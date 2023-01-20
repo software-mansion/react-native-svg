@@ -1,9 +1,10 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
 import RNSVGSymbol from '../fabric/SymbolNativeComponent';
-import { NumberProp } from '../lib/extract/types';
-import { NativeMethods } from 'react-native';
+import type { NumberProp } from '../lib/extract/types';
+import type { NativeMethods } from 'react-native';
 
 export interface SymbolProps {
   children?: ReactNode;
