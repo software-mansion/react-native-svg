@@ -16,9 +16,9 @@
 
 RCT_EXPORT_MODULE()
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 @synthesize bridge = _bridge;
 
 - (void)toDataURL:(nonnull NSNumber *)reactTag
@@ -27,14 +27,14 @@ RCT_EXPORT_MODULE()
           attempt:(int)attempt
 {
   void (^block)(void) = ^{
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
     [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
       __kindof RNSVGPlatformView *view = [viewRegistry viewForReactTag:reactTag];
 #else
     [self.bridge.uiManager
         addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RNSVGPlatformView *> *viewRegistry) {
           __kindof RNSVGPlatformView *view = [uiManager viewForReactTag:reactTag];
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
       NSString *b64;
       if ([view isKindOfClass:[RNSVGSvgView class]]) {
         RNSVGSvgView *svg = view;
@@ -83,7 +83,7 @@ RCT_EXPORT_METHOD(toDataURL
   [self toDataURL:reactTag options:options callback:callback attempt:0];
 }
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
