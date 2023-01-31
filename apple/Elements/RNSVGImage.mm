@@ -58,9 +58,7 @@ using namespace facebook::react;
     static const auto defaultProps = std::make_shared<const RNSVGImageProps>();
     _props = defaultProps;
 
-#ifdef RCT_NEW_ARCH_ENABLED
     _imageResponseObserverProxy = RCTImageResponseObserverProxy(self);
-#endif
   }
   return self;
 }
