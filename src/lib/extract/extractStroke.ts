@@ -1,7 +1,7 @@
 import extractBrush from './extractBrush';
 import extractOpacity from './extractOpacity';
 import extractLengthList from './extractLengthList';
-import { extractedProps, StrokeProps } from './types';
+import type { extractedProps, StrokeProps } from './types';
 
 const caps = {
   butt: 0,

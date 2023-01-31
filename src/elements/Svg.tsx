@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
-import {
+import type { Component } from 'react';
+import React from 'react';
+import type {
   ColorValue,
-  findNodeHandle,
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
   NativeMethods,
-  Platform,
   StyleProp,
-  StyleSheet,
   ViewProps,
   ViewStyle,
 } from 'react-native';
-import {
+import { findNodeHandle, Platform, StyleSheet } from 'react-native';
+import type {
   extractedProps,
   NumberProp,
   ResponderInstanceProps,
@@ -20,7 +19,8 @@ import {
 import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
-import G, { GProps } from './G';
+import type { GProps } from './G';
+import G from './G';
 import RNSVGSvgAndroid from '../fabric/AndroidSvgViewNativeComponent';
 import RNSVGSvgIOS from '../fabric/IOSSvgViewNativeComponent';
 import type { Spec } from '../fabric/NativeSvgViewModule';

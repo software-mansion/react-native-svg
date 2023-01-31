@@ -1,8 +1,9 @@
-import React, { Component, ReactNode } from 'react';
+import type { Component, ReactNode } from 'react';
+import React from 'react';
 import extractText from '../lib/extract/extractText';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import extractTransform from '../lib/extract/extractTransform';
-import {
+import type {
   ColumnMajorTransformMatrix,
   NumberArray,
   NumberProp,

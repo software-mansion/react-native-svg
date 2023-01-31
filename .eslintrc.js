@@ -1,4 +1,12 @@
 module.exports = {
   extends: '@react-native-community',
-  rules: { 'no-bitwise': 0, '@typescript-eslint/no-explicit-any': 2 },
+  parserOptions: {
+    project: ["./tsconfig.json"],
+  },
+  rules: {
+    'no-bitwise': 'off',
+    '@typescript-eslint/consistent-type-exports': 'error',
+    '@typescript-eslint/consistent-type-imports': 'error',
+    '@typescript-eslint/no-explicit-any': 'error',
+  },
 };

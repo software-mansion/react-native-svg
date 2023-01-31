@@ -1,11 +1,12 @@
 import React from 'react';
-import { Image, ImageProps as RNImageProps, NativeMethods } from 'react-native';
+import type { ImageProps as RNImageProps, NativeMethods } from 'react-native';
+import { Image } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
 import {
   stringifyPropsForFabric,
   withoutXY,
 } from '../lib/extract/extractProps';
-import {
+import type {
   ClipProps,
   CommonMaskProps,
   NativeProps,

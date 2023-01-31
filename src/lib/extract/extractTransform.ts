@@ -1,7 +1,7 @@
-import { TransformsStyle } from 'react-native';
+import type { TransformsStyle } from 'react-native';
 import { append, appendTransform, identity, reset, toArray } from '../Matrix2D';
 import { parse } from './transform';
-import {
+import type {
   ColumnMajorTransformMatrix,
   NumberProp,
   TransformedProps,

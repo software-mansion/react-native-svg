@@ -1,33 +1,30 @@
 import React, { Component, useEffect, useMemo, useState } from 'react';
-import {
-  camelCase,
-  err,
-  fetchText,
+import type {
   JsxAST,
   Middleware,
-  parse,
   Styles,
-  SvgAst,
   UriProps,
   UriState,
   XmlAST,
   XmlProps,
   XmlState,
 } from './xml';
-import csstree, {
+import { camelCase, err, fetchText, parse, SvgAst } from './xml';
+import type {
   Atrule,
   AtrulePrelude,
   CssNode,
   Declaration,
   DeclarationList,
-  List,
   ListItem,
   PseudoClassSelector,
   Rule,
   Selector,
   SelectorList,
 } from 'css-tree';
-import cssSelect, { Options } from 'css-select';
+import csstree, { List } from 'css-tree';
+import type { Options } from 'css-select';
+import cssSelect from 'css-select';
 
 /*
  * Style element inlining experiment based on SVGO

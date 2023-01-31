@@ -1,12 +1,15 @@
 import * as React from 'react';
+import type { GestureResponderEvent, TransformsStyle } from 'react-native';
 import {
-  GestureResponderEvent,
   // @ts-ignore
   unstable_createElement as ucE,
   createElement as cE,
-  TransformsStyle,
 } from 'react-native';
-import { NumberArray, NumberProp, TransformProps } from './lib/extract/types';
+import type {
+  NumberArray,
+  NumberProp,
+  TransformProps,
+} from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
 import { transformsArrayToProps } from './lib/extract/extractTransform';

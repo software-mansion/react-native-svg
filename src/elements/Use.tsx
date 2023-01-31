@@ -1,13 +1,14 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 import {
   stringifyPropsForFabric,
   withoutXY,
 } from '../lib/extract/extractProps';
-import { CommonPathProps, NumberProp } from '../lib/extract/types';
+import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import { idPattern } from '../lib/util';
 import Shape from './Shape';
 import RNSVGUse from '../fabric/UseNativeComponent';
-import { NativeMethods } from 'react-native';
+import type { NativeMethods } from 'react-native';
 
 export interface UseProps extends CommonPathProps {
   children?: ReactNode;

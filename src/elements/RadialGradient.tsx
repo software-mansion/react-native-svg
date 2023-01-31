@@ -1,10 +1,11 @@
-import React, { ReactElement } from 'react';
+import type { ReactElement } from 'react';
+import React from 'react';
 import extractGradient from '../lib/extract/extractGradient';
-import { NumberProp, TransformProps, Units } from '../lib/extract/types';
+import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGRadialGradient from '../fabric/RadialGradientNativeComponent';
 import { stringifyPropsForFabric } from '../lib/extract/extractProps';
-import { NativeMethods } from 'react-native';
+import type { NativeMethods } from 'react-native';
 
 export interface RadialGradientProps {
   children?: ReactElement[];

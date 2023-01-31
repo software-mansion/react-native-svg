@@ -1,7 +1,8 @@
-import React, { Children, ComponentType } from 'react';
+import type { ComponentType } from 'react';
+import React, { Children } from 'react';
 import extractLengthList from './extractLengthList';
 import { pickNotNil } from '../util';
-import { NumberArray, NumberProp } from './types';
+import type { NumberArray, NumberProp } from './types';
 import { stringifyPropsForFabric } from './extractProps';
 
 const fontRegExp =
