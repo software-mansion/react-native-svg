@@ -951,7 +951,7 @@ SPEC CHECKSUMS:
   React-rncore: cfeb5532ec459f562410e8058b8f49e07cd215d4
   React-runtimeexecutor: ac80782d9d76ba2b0f709f4de0c427fe33c352dc
   ReactCommon: 20e38a9be5fe1341b5e422220877cc94034776ba
-  RNSVG: f49e247b4ea8b56c27ac52aa92259361b202ba7e
+  RNSVG: 27a7d7438182ca3323de0c57695e3bdaf1aa5eb4
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: c618b544ff8bd8865cdca602f00cbcdb92fd6d31
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

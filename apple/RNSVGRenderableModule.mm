@@ -20,9 +20,9 @@
 
 RCT_EXPORT_MODULE()
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 @synthesize bridge = _bridge;
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isPointInFill : (nonnull NSNumber *)reactTag options : (NSDictionary *)options)
@@ -196,7 +196,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getScreenCTM : (nonnull NSNumber *)reactT
 - (RNSVGPlatformView *)getRenderableView:(NSNumber *)reactTag
 {
   __block RNSVGPlatformView *view;
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
   dispatch_sync(dispatch_get_main_queue(), ^{
     view = [self.viewRegistry_DEPRECATED viewForReactTag:reactTag];
   });
@@ -204,11 +204,11 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getScreenCTM : (nonnull NSNumber *)reactT
   dispatch_sync(dispatch_get_main_queue(), ^{
     view = [self.bridge.uiManager viewForReactTag:reactTag];
   });
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
   return view;
 }
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {

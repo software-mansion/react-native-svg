@@ -20,13 +20,13 @@
 #import <React/RCTImageURLLoader.h>
 #import <React/RCTImageView.h>
 
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 #import <React/RCTBridge.h>
 #import <React/RCTLog.h>
 #import "RNSVGViewBox.h"
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <React/RCTImageResponseObserverProxy.h>
@@ -38,19 +38,19 @@
 #import "RNSVGFabricConversions.h"
 
 using namespace facebook::react;
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGImage {
   CGImageRef _image;
   CGSize _imageSize;
   RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
   RNSVGImageShadowNode::ConcreteState::Shared _state;
   RCTImageResponseObserverProxy _imageResponseObserverProxy;
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 }
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -58,7 +58,7 @@ using namespace facebook::react;
     static const auto defaultProps = std::make_shared<const RNSVGImageProps>();
     _props = defaultProps;
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
     _imageResponseObserverProxy = RCTImageResponseObserverProxy(self);
 #endif
   }
@@ -168,11 +168,11 @@ using namespace facebook::react;
   _imageSize = CGSizeZero;
   _reloadImageCancellationBlock = nil;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 - (void)setSrc:(RCTImageSource *)src
 {
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #else
   if (src == _src) {
     return;
@@ -201,7 +201,7 @@ using namespace facebook::react;
                          [self invalidate];
                        });
                      }];
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 }
 
 - (void)setX:(RNSVGLength *)x
@@ -337,9 +337,9 @@ using namespace facebook::react;
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGImageCls(void)
 {
   return RNSVGImage.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

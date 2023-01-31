@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
       "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
     }
     s.platforms       = { ios: '11.0', tvos: '11.0' }
-    s.compiler_flags  = folly_compiler_flags + ' -DRN_FABRIC_ENABLED'
+    s.compiler_flags  = folly_compiler_flags + ' -DRCT_NEW_ARCH_ENABLED'
     s.source_files    = 'apple/**/*.{h,m,mm,cpp}'
     s.ios.exclude_files = '**/*.macos.{h,m,mm,cpp}'
     s.tvos.exclude_files = '**/*.macos.{h,m,mm,cpp}'

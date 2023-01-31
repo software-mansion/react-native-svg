@@ -15,12 +15,12 @@
 
 #import <React/RCTImageSource.h>
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTImageResponseDelegate.h>
 #endif
 
 @interface RNSVGImage : RNSVGRenderable
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
                         <RCTImageResponseDelegate>
 #endif
 
