@@ -9,8 +9,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
@@ -105,6 +107,33 @@ public abstract class VirtualView extends ReactViewGroup {
 
   void setPointerEvents(PointerEvents pointerEvents) {
     mPointerEvents = pointerEvents;
+  }
+
+  @Override
+  public void onInitializeAccessibilityNodeInfo (AccessibilityNodeInfo info) {
+    super.onInitializeAccessibilityNodeInfo(info);
+    if (mClientRect != null) {
+
+    SvgView root = getSvgView();
+
+    int[] rootPositionOnScreen = new int[2];
+    getSvgView().getLocationOnScreen(rootPositionOnScreen);
+    Rect infoBoundsInScreen = new Rect();
+    infoBoundsInScreen.left = rootPositionOnScreen[0] + (int) Math.floor(mClientRect.left);
+    infoBoundsInScreen.top = rootPositionOnScreen[1] + (int) Math.floor(mClientRect.top);
+    infoBoundsInScreen.right = infoBoundsInScreen.left + (int) Math.ceil(mClientRect.width());
+    infoBoundsInScreen.bottom = infoBoundsInScreen.top + (int) Math.ceil(mClientRect.height());
+
+    Rect rootVisibleRect = new Rect();
+    boolean isRootVisible = root.getGlobalVisibleRect(rootVisibleRect);
+    boolean infoIsVisibleToUser = isRootVisible && infoBoundsInScreen.intersect(rootVisibleRect);
+
+
+    String infoClassName = this.getClass().getCanonicalName();
+    info.setBoundsInScreen(infoBoundsInScreen);
+    info.setClassName(infoClassName);
+    info.setVisibleToUser(infoIsVisibleToUser);
+    }
   }
 
   @Override
