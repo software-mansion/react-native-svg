@@ -244,6 +244,21 @@ public abstract class VirtualView extends ReactViewGroup {
     invalidate();
   }
 
+  public void setAccessible(boolean accessible) {
+      this.setFocusable(accessible);
+      invalidate();
+  }
+
+  public void setAccessibilityLabel(String accessibilityLabel) {
+      this.setContentDescription(accessibilityLabel);
+      invalidate();
+  }
+
+  public void setTestID(String testID) {
+      this.setTag(testID);
+      invalidate();
+  }
+
   public void setDisplay(String display) {
     mDisplay = display;
     invalidate();

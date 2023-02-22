@@ -480,6 +480,21 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     node.setName(name);
   }
 
+  @ReactProp(name = "accessible")
+  public void setAccessible(VirtualView node, boolean accessible) {
+      node.setAccessible(accessible);
+  }
+
+  @ReactProp(name = "accessibilityLabel")
+  public void setAccessibilityLabel(VirtualView node, String accessibilityLabel) {
+      node.setAccessibilityLabel(accessibilityLabel);
+  }
+
+  @ReactProp(name = "testID")
+  public void setTestID(VirtualView node, String testID) {
+      node.setTestID(testID);
+  }
+
   @ReactProp(name = "display")
   public void setDisplay(V node, String display) {
     node.setDisplay(display);
