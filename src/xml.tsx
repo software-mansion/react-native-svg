@@ -96,8 +96,41 @@ export function SvgAst({ ast, override }: AstProps) {
     return null;
   }
   const { props, children } = ast;
+
+
+  let styles: Styles | string =  {};
+
+  if (!props.style) {
+    return (
+      <Svg {...props} {...override}>
+        {children}
+      </Svg>
+    )
+  }
+
+  if (typeof props.style === 'string' || typeof props.style === 'object' && !props.style.borderRadius) {
+    return (
+      <Svg {...props} {...override}>
+        {children}
+      </Svg>
+    );
+  }
+
+  let borderRadius: string = styles.borderRadius;
+
+  if (borderRadius && typeof borderRadius === 'string' && borderRadius.includes("%")) {
+    borderRadius = borderRadius.replace("%", "");
+    const width = parseFloat(props.width as string ?? "0");
+    const height = parseFloat(props.height as string ?? "1");
+    const percent = parseFloat(borderRadius)/100;
+
+    borderRadius = ((height + width)/2 * percent).toString();
+  }
+
+  props.style.borderRadius = borderRadius;
+
   return (
-    <Svg {...props} {...override}>
+    <Svg {...props}  {...override}>
       {children}
     </Svg>
   );
