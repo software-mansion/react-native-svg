@@ -42,4 +42,5 @@ public interface RNSVGPathManagerInterface<T extends View> {
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
   void setD(T view, @Nullable String value);
+  void setOnLayout(T view, @Nullable Boolean value);
 }

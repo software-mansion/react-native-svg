@@ -107,6 +107,9 @@ public class RNSVGPathManagerDelegate<T extends View, U extends BaseViewManagerI
       case "d":
         mViewManager.setD(view, value == null ? null : (String) value);
         break;
+      case "onLayout":
+        mViewManager.setOnLayout(view, value == null ? null : (Boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }

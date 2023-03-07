@@ -47,4 +47,5 @@ public interface RNSVGCircleManagerInterface<T extends View> {
   void setCy(T view, @Nullable Double value);
   void setR(T view, @Nullable String value);
   void setR(T view, @Nullable Double value);
+  void setOnLayout(T view, @Nullable Boolean value);
 }

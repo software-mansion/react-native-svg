@@ -131,6 +131,9 @@ public class RNSVGCircleManagerDelegate<T extends View, U extends BaseViewManage
           mViewManager.setR(view, (Double) null);
         }
         break;
+      case "onLayout":
+        mViewManager.setOnLayout(view, value == null ? null : (Boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }
