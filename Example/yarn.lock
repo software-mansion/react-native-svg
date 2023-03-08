@@ -7521,10 +7521,10 @@ react-native-gradle-plugin@^0.71.12, react-native-gradle-plugin@^0.71.15:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.16.tgz#822bb0c680e03b5df5aa65f2e5ffc2bc2930854a"
   integrity sha512-H2BjG2zk7B7Wii9sXvd9qhCVRQYDAHSWdMw9tscmZBqSP62DkIWEQSk4/B2GhQ4aK9ydVXgtqR6tBeg3yy8TSA==
 
-react-native-reanimated@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.0.1.tgz#e5b15b0b5d2e02eaecb7dbccc1fdcb379379a6ef"
-  integrity sha512-zesX0VwzqUjcD6aY+jlDLqZWMn/nUx8RfIRHUMEn0NzcFHXk3TnMkWL2K/gx4k6NOMhtaBAx866ShRtR+i1hgQ==
+react-native-reanimated@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.0.2.tgz#8f7284fab2b0cd949779429e48f32d19a966bbd6"
+  integrity sha512-8Et90yTI9yxchGbDP79k391XZqc/64zNbASbGy8X3Vgv4EbZ1M3IkKwcIbZmbVwpA804VJ6V9nJAGUh9fP0LrA==
   dependencies:
     "@babel/plugin-transform-object-assign" "^7.16.7"
     "@babel/preset-typescript" "^7.16.7"
@@ -7551,7 +7551,7 @@ react-native-web@^0.18.12:
     postcss-value-parser "^4.2.0"
     styleq "^0.1.2"
 
-react-native-windows@^0.71.3:
+react-native-windows@0.71.3:
   version "0.71.3"
   resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.71.3.tgz#8c9b6606ce2d2d417fd9e7ee7d8cd59ef1ea1c27"
   integrity sha512-EcUcDKN+05nojbcTo6MjGaO0FlVsNE6L3rfoCz3234fuQC7DPe74gLgIXWfQoVDCqs0qibwWT6viupXiPxPaxg==
