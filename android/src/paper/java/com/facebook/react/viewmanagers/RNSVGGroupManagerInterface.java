@@ -46,4 +46,5 @@ public interface RNSVGGroupManagerInterface<T extends View> {
   void setFontWeight(T view, @Nullable String value);
   void setFontWeight(T view, @Nullable Double value);
   void setFont(T view, @Nullable ReadableMap value);
+  void setOnLayout(T view, @Nullable Boolean value);
 }

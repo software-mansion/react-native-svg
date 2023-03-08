@@ -140,6 +140,9 @@ public class RNSVGEllipseManagerDelegate<T extends View, U extends BaseViewManag
           mViewManager.setRy(view, (Double) null);
         }
         break;
+      case "onLayout":
+        mViewManager.setOnLayout(view, value == null ? null : (Boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }

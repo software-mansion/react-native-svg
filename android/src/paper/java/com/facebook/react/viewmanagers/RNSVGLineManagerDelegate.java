@@ -140,6 +140,9 @@ public class RNSVGLineManagerDelegate<T extends View, U extends BaseViewManagerI
           mViewManager.setY2(view, (Double) null);
         }
         break;
+      case "onLayout":
+        mViewManager.setOnLayout(view, value == null ? null : (Boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }
