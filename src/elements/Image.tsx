@@ -35,6 +35,7 @@ export interface ImageProps
   opacity?: NumberProp;
   clipPath?: string;
   id?: string;
+  transform?:string
 }
 
 export default class SvgImage extends Shape<ImageProps> {
