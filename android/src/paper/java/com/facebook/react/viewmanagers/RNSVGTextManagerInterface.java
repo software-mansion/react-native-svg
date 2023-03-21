@@ -60,5 +60,4 @@ public interface RNSVGTextManagerInterface<T extends View> {
   void setLengthAdjust(T view, @Nullable String value);
   void setAlignmentBaseline(T view, @Nullable String value);
   void setVerticalAlign(T view, @Nullable String value);
-  void setOnLayout(T view, @Nullable Boolean value);
 }

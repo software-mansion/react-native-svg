@@ -49,5 +49,4 @@ public interface RNSVGLineManagerInterface<T extends View> {
   void setX2(T view, @Nullable Double value);
   void setY2(T view, @Nullable String value);
   void setY2(T view, @Nullable Double value);
-  void setOnLayout(T view, @Nullable Boolean value);
 }
