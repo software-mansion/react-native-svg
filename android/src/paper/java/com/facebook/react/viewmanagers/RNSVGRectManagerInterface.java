@@ -53,5 +53,4 @@ public interface RNSVGRectManagerInterface<T extends View> {
   void setRx(T view, @Nullable Double value);
   void setRy(T view, @Nullable String value);
   void setRy(T view, @Nullable Double value);
-  void setOnLayout(T view, @Nullable Boolean value);
 }
