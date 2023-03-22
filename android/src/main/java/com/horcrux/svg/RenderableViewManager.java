@@ -82,7 +82,6 @@ import com.facebook.react.bridge.JavaOnlyMap;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
-import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.MatrixMathHelper;
@@ -136,7 +135,6 @@ import com.facebook.react.viewmanagers.RNSVGTextPathManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGUseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGUseManagerInterface;
 import java.util.Locale;
-import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -653,18 +651,6 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
   public void onDropViewInstance(@Nonnull VirtualView view) {
     super.onDropViewInstance(view);
     mTagToRenderableView.remove(view.getId());
-  }
-
-  @Nullable
-  @Override
-  public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
-    Map<String, Object> map = super.getExportedCustomDirectEventTypeConstants();
-    if (map != null) {
-      map.put("topLayout", MapBuilder.of("registrationName", "onLayout"));
-    } else {
-      map = MapBuilder.of("topLayout", MapBuilder.of("registrationName", "onLayout"));
-    }
-    return map;
   }
 }
 /** ViewManager for Renderable RNSVG views */
