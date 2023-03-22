@@ -429,6 +429,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
       );
     }
 
+    allowSpaces();
     if (source[i] !== '>') {
       error('Expected >');
     }
