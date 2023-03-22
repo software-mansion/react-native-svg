@@ -22,6 +22,7 @@ import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.OnLayoutEvent;
 import com.facebook.react.uimanager.PointerEvents;
+import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.view.ReactViewGroup;
@@ -75,7 +76,6 @@ public abstract class VirtualView extends ReactViewGroup {
 
   final float mScale;
   private boolean mResponsible;
-  private boolean mOnLayout;
   String mDisplay;
   String mName;
 
@@ -290,11 +290,6 @@ public abstract class VirtualView extends ReactViewGroup {
 
   public void setDisplay(String display) {
     mDisplay = display;
-    invalidate();
-  }
-
-  public void setOnLayout(boolean onLayout) {
-    mOnLayout = onLayout;
     invalidate();
   }
 
@@ -619,12 +614,10 @@ public abstract class VirtualView extends ReactViewGroup {
       setRight(right);
       setBottom(bottom);
     }
-    if (!mOnLayout) {
-      return;
+    EventDispatcher eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
+    if (eventDispatcher != null) {
+      eventDispatcher.dispatchEvent(OnLayoutEvent.obtain(this.getId(), left, top, width, height));
     }
-    EventDispatcher eventDispatcher =
-        mContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
-    eventDispatcher.dispatchEvent(OnLayoutEvent.obtain(this.getId(), left, top, width, height));
   }
 
   RectF getClientRect() {
