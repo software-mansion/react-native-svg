@@ -7,6 +7,7 @@ import {
   withoutXY,
 } from '../lib/extract/extractProps';
 import type {
+  AccessibilityProps,
   ClipProps,
   CommonMaskProps,
   NativeProps,
@@ -24,7 +25,8 @@ export interface ImageProps
     CommonMaskProps,
     ClipProps,
     TouchableProps,
-    NativeProps {
+    NativeProps,
+    AccessibilityProps {
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
