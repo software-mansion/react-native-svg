@@ -1,21 +1,26 @@
 import React from 'react';
-import type { NativeMethods } from 'react-native';
+import type { ImageProps as RNImageProps, NativeMethods } from 'react-native';
 import { Image } from 'react-native';
-import RNSVGImage from '../fabric/ImageNativeComponent';
+import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
 import {
   stringifyPropsForFabric,
-  withoutXY
+  withoutXY,
 } from '../lib/extract/extractProps';
-import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
-import type {
-  CommonPathProps
-} from '../lib/extract/types';
+import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
+import RNSVGImage from '../fabric/ImageNativeComponent';
 
 const spacesRegExp = /\s+/;
 
-export interface ImageProps extends CommonPathProps{
-  transform?:string
+export interface ImageProps extends CommonPathProps {
+  x?: NumberProp;
+  y?: NumberProp;
+  width?: NumberProp;
+  height?: NumberProp;
+  xlinkHref?: RNImageProps['source'] | string;
+  href?: RNImageProps['source'] | string;
+  preserveAspectRatio?: string;
+  opacity?: NumberProp;
 }
 
 export default class SvgImage extends Shape<ImageProps> {
