@@ -118,15 +118,15 @@ export default function extractProps(
   }
 
   if (testID) {
-    extracted.testID = String(testID);
+    extracted.testID = testID;
   }
 
   if (accessibilityLabel) {
-    extracted.accessibilityLabel = String(accessibilityLabel);
+    extracted.accessibilityLabel = accessibilityLabel;
   }
 
   if (accessible) {
-    extracted.accessible = Boolean(accessible);
+    extracted.accessible = accessible;
   }
 
   if (clipRule) {

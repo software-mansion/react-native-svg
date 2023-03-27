@@ -236,6 +236,12 @@ export interface NativeProps {
   onLayout?: (event: LayoutChangeEvent) => void;
 }
 
+export interface AccessibilityProps {
+  accessibilityLabel?: string;
+  accessible?: boolean;
+  testID?: string;
+}
+
 export interface CommonPathProps
   extends FillProps,
     StrokeProps,
@@ -247,7 +253,8 @@ export interface CommonPathProps
     DefinitionProps,
     CommonMarkerProps,
     CommonMaskProps,
-    NativeProps {}
+    NativeProps,
+    AccessibilityProps {}
 
 export type ResponderInstanceProps = {
   touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
