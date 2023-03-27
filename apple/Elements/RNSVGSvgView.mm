@@ -45,8 +45,10 @@ using namespace facebook::react;
 #ifdef RCT_NEW_ARCH_ENABLED
     static const auto defaultProps = std::make_shared<const RNSVGSvgViewProps>();
     _props = defaultProps;
+#if !TARGET_OS_OSX // On macOS, views are transparent by default
     // TODO: think if we can do it better
     self.opaque = NO;
+#endif // TARGET_OS_OSX
 #endif // RCT_NEW_ARCH_ENABLED
   }
   return self;

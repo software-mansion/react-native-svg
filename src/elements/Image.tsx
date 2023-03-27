@@ -6,27 +6,13 @@ import {
   stringifyPropsForFabric,
   withoutXY,
 } from '../lib/extract/extractProps';
-import type {
-  AccessibilityProps,
-  ClipProps,
-  CommonMaskProps,
-  NativeProps,
-  NumberProp,
-  ResponderProps,
-  TouchableProps,
-} from '../lib/extract/types';
+import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGImage from '../fabric/ImageNativeComponent';
 
 const spacesRegExp = /\s+/;
 
-export interface ImageProps
-  extends ResponderProps,
-    CommonMaskProps,
-    ClipProps,
-    TouchableProps,
-    NativeProps,
-    AccessibilityProps {
+export interface ImageProps extends CommonPathProps {
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
@@ -35,8 +21,6 @@ export interface ImageProps
   href?: RNImageProps['source'] | string;
   preserveAspectRatio?: string;
   opacity?: NumberProp;
-  clipPath?: string;
-  id?: string;
 }
 
 export default class SvgImage extends Shape<ImageProps> {
