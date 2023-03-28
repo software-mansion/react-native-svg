@@ -33,9 +33,9 @@ struct RenderableView : RenderableViewT<RenderableView> {
   float StrokeDashOffset() { return m_strokeDashOffset; }
   RNSVG::SVGLength StrokeWidth() { return m_strokeWidth; }
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> StrokeDashArray() { return m_strokeDashArray; }
-  Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle StrokeLineCap() { return m_strokeLineCap; }
-  Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin StrokeLineJoin() { return m_strokeLineJoin; }
-  Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination FillRule() { return m_fillRule; }
+  int32_t StrokeLineCap() { return m_strokeLineCap; }
+  int32_t StrokeLineJoin() { return m_strokeLineJoin; }
+  int32_t FillRule() { return m_fillRule; }
   Microsoft::Graphics::Canvas::Geometry::CanvasGeometry ClipPathGeometry();
 
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
@@ -87,15 +87,13 @@ struct RenderableView : RenderableViewT<RenderableView> {
   float m_strokeOpacity{1.0f};
   float m_strokeMiterLimit{0.0f};
   float m_strokeDashOffset{0.0f};
+  std::vector<float> m_adjustedStrokeDashArray;
   RNSVG::SVGLength m_strokeWidth{1.0f, RNSVG::LengthType::Pixel};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_strokeDashArray{
       winrt::single_threaded_vector<RNSVG::SVGLength>()};
-  Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle m_strokeLineCap{
-      Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle::Flat};
-  Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin m_strokeLineJoin{
-      Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin::Miter};
-  Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination m_fillRule{
-      Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination::Winding};
+  int32_t m_strokeLineCap{0};
+  int32_t m_strokeLineJoin{0};
+  int32_t m_fillRule{1};
 
   void SetColor(const Microsoft::ReactNative::JSValueObject &propValue, Windows::UI::Color fallbackColor, std::string propName);
 };

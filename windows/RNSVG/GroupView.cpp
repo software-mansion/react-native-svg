@@ -9,14 +9,15 @@
 
 #include "SVGLength.h"
 #include "Utils.h"
-
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
+#include "D2DHelpers.h"
 
 namespace winrt::RNSVG::implementation {
-void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+void GroupView::UpdateProperties(
+    winrt::Microsoft::ReactNative::IJSValueReader const &reader,
+    bool forceUpdate,
+    bool invalidate) {
+  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
+      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   auto const &parent{SvgParent().try_as<RNSVG::GroupView>()};
   auto fontProp{RNSVG::FontProp::Unknown};
@@ -101,9 +102,9 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
   }
 }
 
-void GroupView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
-  std::vector<Geometry::CanvasGeometry> geometries;
+void GroupView::CreateGeometry(winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas) {
+  auto const &resourceCreator{canvas.try_as<winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator>()};
+  std::vector<winrt::Microsoft::Graphics::Canvas::Geometry::CanvasGeometry> geometries;
   for (auto const &child : Children()) {
     if (!child.Geometry()) {
       child.CreateGeometry(canvas);
@@ -111,7 +112,8 @@ void GroupView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
     geometries.push_back(child.Geometry());
   }
 
-  Geometry(Geometry::CanvasGeometry::CreateGroup(resourceCreator, geometries, FillRule()));
+  Geometry(winrt::Microsoft::Graphics::Canvas::Geometry::CanvasGeometry::CreateGroup(
+      resourceCreator, geometries, D2DHelpers::GetFillRule(FillRule())));
 }
 
 void GroupView::SaveDefinition() {
@@ -130,7 +132,9 @@ void GroupView::MergeProperties(RNSVG::RenderableView const &other) {
   }
 }
 
-void GroupView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
+void GroupView::Render(
+    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
+    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
   auto const &transform{session.Transform()};
 
   if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
@@ -151,13 +155,17 @@ void GroupView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
   session.Transform(transform);
 }
 
-void GroupView::RenderGroup(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
+void GroupView::RenderGroup(
+    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
+    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
   for (auto const &child : Children()) {
     child.Render(canvas, session);
   }
 }
 
-void GroupView::CreateResources(ICanvasResourceCreator const &resourceCreator, UI::CanvasCreateResourcesEventArgs const &args) {
+void GroupView::CreateResources(
+    winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
+    winrt::Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args) {
   for (auto const &child : Children()) {
     child.CreateResources(resourceCreator, args);
   }
@@ -175,7 +183,7 @@ void GroupView::Unload() {
   __super::Unload();
 }
 
-winrt::RNSVG::IRenderable GroupView::HitTest(Windows::Foundation::Point const &point) {
+winrt::RNSVG::IRenderable GroupView::HitTest(winrt::Windows::Foundation::Point const &point) {
   RNSVG::IRenderable renderable{nullptr};
   if (IsResponsible()) {
     for (auto const &child : Children()) {
@@ -193,7 +201,7 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Windows::Foundation::Point const &p
       }
       if (Geometry()) {
         auto const &bounds{Geometry().ComputeBounds()};
-        if (Windows::UI::Xaml::RectHelper::Contains(bounds, point)) {
+        if (winrt::Windows::UI::Xaml::RectHelper::Contains(bounds, point)) {
           renderable = *this;
         }
       }

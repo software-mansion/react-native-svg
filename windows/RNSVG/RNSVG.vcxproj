@@ -123,6 +123,7 @@
     <ClInclude Include="CircleView.h" />
     <ClInclude Include="CircleViewManager.h" />
     <ClInclude Include="ClipPathView.h" />
+    <ClInclude Include="D2DHelpers.h" />
     <ClInclude Include="DefsView.h" />
     <ClInclude Include="DefsViewManager.h" />
     <ClInclude Include="EllipseView.h" />

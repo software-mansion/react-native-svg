@@ -8,14 +8,12 @@
 
 #include "JSValueXaml.h"
 #include "Utils.h"
-
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
+#include "D2DHelpers.h"
 
 namespace winrt::RNSVG::implementation {
-void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+void PathView::UpdateProperties(winrt::Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
+      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -37,11 +35,11 @@ void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void PathView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
-  Svg::CanvasSvgDocument doc{resourceCreator};
+void PathView::CreateGeometry(winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas) {
+  auto const &resourceCreator{canvas.try_as<winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator>()};
+  winrt::Microsoft::Graphics::Canvas::Svg::CanvasSvgDocument doc{resourceCreator};
   auto const &path{doc.CreatePathAttribute(m_segmentData, m_commands)};
-  Geometry(path.CreatePathGeometry(FillRule()));
+  Geometry(path.CreatePathGeometry(D2DHelpers::GetFillRule(FillRule())));
 }
 
 void PathView::ParsePath() {

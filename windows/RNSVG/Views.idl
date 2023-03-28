@@ -55,10 +55,10 @@ namespace RNSVG
     Single StrokeMiterLimit{ get; };
     Single StrokeDashOffset{ get; };
     Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
-    Microsoft.Graphics.Canvas.Geometry.CanvasCapStyle StrokeLineCap{ get; };
-    Microsoft.Graphics.Canvas.Geometry.CanvasLineJoin StrokeLineJoin{ get; };
-    Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule{ get; };
-    Microsoft.Graphics.Canvas.Geometry.CanvasGeometry ClipPathGeometry { get; };
+    Int32 StrokeLineCap{ get; };
+    Int32 StrokeLineJoin{ get; };
+    Int32 FillRule{ get; };
+    Microsoft.Graphics.Canvas.Geometry.CanvasGeometry ClipPathGeometry{ get; };
   };
 
   [default_interface]

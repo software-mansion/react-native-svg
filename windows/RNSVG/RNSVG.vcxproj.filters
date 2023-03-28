@@ -252,6 +252,9 @@
     <ClInclude Include="ClipPathView.h">
       <Filter>Views\GroupViews</Filter>
     </ClInclude>
+    <ClInclude Include="D2DHelpers.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />

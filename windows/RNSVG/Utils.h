@@ -10,12 +10,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
-using namespace Windows::UI;
-using namespace Windows::UI::Text;
-
 namespace winrt::RNSVG {
 struct Utils {
  public:
@@ -31,7 +25,7 @@ struct Utils {
       result.push_back(absValue / (strokeWidth == 0.0f ? 1.0f : strokeWidth));
     }
 
-    return std::move(result);
+    return result;
   }
 
   static float GetCanvasDiagonal(Windows::Foundation::Size const &size) {
@@ -78,15 +72,18 @@ struct Utils {
     return Numerics::make_float3x2_rotation(radians);
   }
 
-  static FontWeight FontWeightFrom(hstring const& weight, Xaml::FrameworkElement const& parent) {
+  static winrt::Windows::UI::Text::FontWeight FontWeightFrom(
+      hstring const &weight,
+      winrt::Windows::UI::Xaml::FrameworkElement const &parent) {
     if (weight == L"normal") {
-      return FontWeights::Normal();
+      return winrt::Windows::UI::Text::FontWeights::Normal();
     } else if (weight == L"bold") {
-      return FontWeights::Bold();
+      return winrt::Windows::UI::Text::FontWeights::Bold();
     } else if (weight == L"bolder" || weight == L"lighter" || weight == L"auto") {
       auto const &groupView{parent.try_as<RNSVG::GroupView>()};
-      FontWeight parentWeight{
-          groupView ? FontWeightFrom(groupView.FontWeight(), groupView.SvgParent()) : FontWeights::Normal()};
+      winrt::Windows::UI::Text::FontWeight parentWeight{
+          groupView ? FontWeightFrom(groupView.FontWeight(), groupView.SvgParent())
+                    : winrt::Windows::UI::Text::FontWeights::Normal()};
 
       if (weight == L"bolder") {
         return Bolder(parentWeight.Weight);
@@ -100,55 +97,55 @@ struct Utils {
     return GetClosestFontWeight(std::stof(weight.c_str(), nullptr));
   }
 
-  static FontWeight GetClosestFontWeight(float weight) {
+  static winrt::Windows::UI::Text::FontWeight GetClosestFontWeight(float weight) {
     if (weight > 325 && weight < 375) {
-      return FontWeights::SemiLight();
+      return winrt::Windows::UI::Text::FontWeights::SemiLight();
     } else if (weight > 925) {
-      return FontWeights::ExtraBlack();
+      return winrt::Windows::UI::Text::FontWeights::ExtraBlack();
     } else {
       switch (static_cast<uint16_t>(std::round(weight / 100.0f))) {
         case 1:
-          return FontWeights::Thin();
+          return winrt::Windows::UI::Text::FontWeights::Thin();
         case 2:
-          return FontWeights::ExtraLight();
+          return winrt::Windows::UI::Text::FontWeights::ExtraLight();
         case 3:
-          return FontWeights::Light();
+          return winrt::Windows::UI::Text::FontWeights::Light();
         case 4:
-          return FontWeights::Normal();
+          return winrt::Windows::UI::Text::FontWeights::Normal();
         case 5:
-          return FontWeights::Medium();
+          return winrt::Windows::UI::Text::FontWeights::Medium();
         case 6:
-          return FontWeights::SemiBold();
+          return winrt::Windows::UI::Text::FontWeights::SemiBold();
         case 7:
-          return FontWeights::Bold();
+          return winrt::Windows::UI::Text::FontWeights::Bold();
         case 8:
-          return FontWeights::ExtraBold();
+          return winrt::Windows::UI::Text::FontWeights::ExtraBold();
         case 9:
         default:
-          return FontWeights::ExtraBlack();
+          return winrt::Windows::UI::Text::FontWeights::ExtraBlack();
       }
     }
   }
 
-  static FontWeight Bolder(uint16_t weight) {
+  static winrt::Windows::UI::Text::FontWeight Bolder(uint16_t weight) {
     if (weight < 350) {
-      return FontWeights::Normal();
+      return winrt::Windows::UI::Text::FontWeights::Normal();
     } else if (weight < 550) {
-      return FontWeights::Bold();
+      return winrt::Windows::UI::Text::FontWeights::Bold();
     } else if (weight < 900) {
-      return FontWeights::Black();
+      return winrt::Windows::UI::Text::FontWeights::Black();
     } else {
-      return FontWeights::ExtraBlack();
+      return winrt::Windows::UI::Text::FontWeights::ExtraBlack();
     }
   }
 
-  static FontWeight Lighter(uint16_t weight) {
+  static winrt::Windows::UI::Text::FontWeight Lighter(uint16_t weight) {
     if (weight < 550) {
-      return FontWeights::Thin();
+      return winrt::Windows::UI::Text::FontWeights::Thin();
     } else if (weight < 750) {
-      return FontWeights::Normal();
+      return winrt::Windows::UI::Text::FontWeights::Normal();
     } else {
-      return FontWeights::Bold();
+      return winrt::Windows::UI::Text::FontWeights::Bold();
     }
   }
 
@@ -217,7 +214,7 @@ struct Utils {
     return scale * translate;
   }
 
-  static RNSVG::MeetOrSlice GetMeetOrSlice(JSValue const &value) {
+  static RNSVG::MeetOrSlice GetMeetOrSlice(winrt::Microsoft::ReactNative::JSValue const &value) {
     if (value.IsNull()) {
       return RNSVG::MeetOrSlice::Meet;
     }
@@ -233,7 +230,9 @@ struct Utils {
     }
   }
 
-  static std::string JSValueAsBrushUnits(JSValue const &value, std::string defaultValue = "objectBoundingBox") {
+  static std::string JSValueAsBrushUnits(
+      winrt::Microsoft::ReactNative::JSValue const &value,
+      std::string defaultValue = "objectBoundingBox") {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -247,7 +246,7 @@ struct Utils {
     }
   }
 
-  static float JSValueAsFloat(JSValue const &value, float defaultValue = 0.0f) {
+  static float JSValueAsFloat(winrt::Microsoft::ReactNative::JSValue const &value, float defaultValue = 0.0f) {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -255,7 +254,9 @@ struct Utils {
     }
   }
 
-  static std::string JSValueAsString(JSValue const &value, std::string defaultValue = "") {
+  static std::string JSValueAsString(
+      winrt::Microsoft::ReactNative::JSValue const &value,
+      std::string defaultValue = "") {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -263,11 +264,13 @@ struct Utils {
     }
   }
 
-  static Color JSValueAsColor(JSValue const &value, Color defaultValue = Colors::Transparent()) {
+  static winrt::Windows::UI::Color JSValueAsColor(
+      winrt::Microsoft::ReactNative::JSValue const &value,
+      winrt::Windows::UI::Color defaultValue = Colors::Transparent()) {
     if (value.IsNull()) {
       return defaultValue;
-    } else if (auto const &brush{value.To<Xaml::Media::Brush>()}) {
-      if (auto const &scb{brush.try_as<Xaml::Media::SolidColorBrush>()}) {
+    } else if (auto const &brush{value.To<winrt::Windows::UI::Xaml::Media::Brush>()}) {
+      if (auto const &scb{brush.try_as<winrt::Windows::UI::Xaml::Media::SolidColorBrush>()}) {
         return scb.Color();
       }
     }
@@ -275,7 +278,9 @@ struct Utils {
     return defaultValue;
   }
 
-  static SVGLength JSValueAsSVGLength(JSValue const &value, SVGLength const &defaultValue = {}) {
+  static SVGLength JSValueAsSVGLength(
+      winrt::Microsoft::ReactNative::JSValue const &value,
+      SVGLength const &defaultValue = {}) {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -283,7 +288,9 @@ struct Utils {
     }
   }
 
-  static Numerics::float3x2 JSValueAsTransform(JSValue const& value, Numerics::float3x2 defaultValue = {}) {
+  static Numerics::float3x2 JSValueAsTransform(
+      winrt::Microsoft::ReactNative::JSValue const &value,
+      Numerics::float3x2 defaultValue = {}) {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -299,16 +306,17 @@ struct Utils {
     }
   }
 
-  static std::vector<Brushes::CanvasGradientStop> JSValueAsStops(JSValue const& value) {
+  static std::vector<winrt::Microsoft::Graphics::Canvas::Brushes::CanvasGradientStop> JSValueAsStops(
+      winrt::Microsoft::ReactNative::JSValue const &value) {
     if (value.IsNull()) {
       return {};
     }
 
     auto const &stops{value.AsArray()};
-    std::vector<Brushes::CanvasGradientStop> canvasStops{};
+    std::vector<winrt::Microsoft::Graphics::Canvas::Brushes::CanvasGradientStop> canvasStops{};
 
     for (size_t i = 0; i < stops.size(); ++i) {
-      Brushes::CanvasGradientStop stop{};
+      winrt::Microsoft::Graphics::Canvas::Brushes::CanvasGradientStop stop{};
       stop.Position = Utils::JSValueAsFloat(stops.at(i));
       stop.Color = Utils::JSValueAsColor(stops.at(++i));
       canvasStops.push_back(stop);
@@ -317,16 +325,17 @@ struct Utils {
     return canvasStops;
   }
 
-  static Brushes::ICanvasBrush GetCanvasBrush(
+  static winrt::Microsoft::Graphics::Canvas::Brushes::ICanvasBrush GetCanvasBrush(
       hstring const &brushId,
-      Color color,
+      winrt::Windows::UI::Color color,
       RNSVG::SvgView const &root,
-      Geometry::CanvasGeometry const &geometry,
-      ICanvasResourceCreator const &resourceCreator) {
-    Brushes::ICanvasBrush brush{nullptr};
+      winrt::Microsoft::Graphics::Canvas::Geometry::CanvasGeometry const &geometry,
+      winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator) {
+    winrt::Microsoft::Graphics::Canvas::Brushes::ICanvasBrush brush{nullptr};
     if (root && brushId != L"") {
       if (brushId == L"currentColor") {
-        brush = Brushes::CanvasSolidColorBrush(resourceCreator, root.CurrentColor());
+        brush =
+            winrt::Microsoft::Graphics::Canvas::Brushes::CanvasSolidColorBrush(resourceCreator, root.CurrentColor());
       } else if (auto const &brushView{root.Brushes().TryLookup(brushId)}) {
         brushView.SetBounds(geometry.ComputeBounds());
         brush = brushView.Brush();
@@ -334,7 +343,7 @@ struct Utils {
     }
 
     if (!brush) {
-      brush = Brushes::CanvasSolidColorBrush(resourceCreator, color);
+      brush = winrt::Microsoft::Graphics::Canvas::Brushes::CanvasSolidColorBrush(resourceCreator, color);
     }
 
     return brush;

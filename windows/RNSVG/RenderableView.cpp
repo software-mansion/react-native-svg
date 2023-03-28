@@ -7,14 +7,15 @@
 #include "JSValueXaml.h"
 #include "SvgView.h"
 #include "Utils.h"
-
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
+#include "D2DHelpers.h"
 
 namespace winrt::RNSVG::implementation {
-void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+void RenderableView::UpdateProperties(
+    winrt::Microsoft::ReactNative::IJSValueReader const &reader,
+    bool forceUpdate,
+    bool invalidate) {
+  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
+      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
   auto const &parent{SvgParent().try_as<RNSVG::RenderableView>()};
 
   auto const &propList{propertyMap.find("propList")};
@@ -96,40 +97,42 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
         if (propertyValue.IsNull()) {
           m_strokeLineCap = parent.StrokeLineCap();
         } else {
-          auto const &strokeLineCap{propertyValue.AsInt32()};
-          switch (strokeLineCap) {
-            case 2:
-              m_strokeLineCap = Geometry::CanvasCapStyle::Square;
-              break;
-            case 1:
-              m_strokeLineCap = Geometry::CanvasCapStyle::Round;
-              break;
-            case 0:
-            default:
-              m_strokeLineCap = Geometry::CanvasCapStyle::Flat;
-              break;
-          }
+          m_strokeLineCap = propertyValue.AsInt32();
+          //auto const &strokeLineCap{propertyValue.AsInt32()};
+          //switch (strokeLineCap) {
+          //  case 2:
+          //    m_strokeLineCap = Geometry::CanvasCapStyle::Square;
+          //    break;
+          //  case 1:
+          //    m_strokeLineCap = Geometry::CanvasCapStyle::Round;
+          //    break;
+          //  case 0:
+          //  default:
+          //    m_strokeLineCap = Geometry::CanvasCapStyle::Flat;
+          //    break;
+          //}
         }
       }
     } else if (propertyName == "strokeLinejoin") {
       prop = RNSVG::BaseProp::StrokeLineJoin;
       if (forceUpdate || !m_propSetMap[prop]) {
         if (propertyValue.IsNull()) {
-          m_strokeLineCap = parent.StrokeLineCap();
+          m_strokeLineJoin = parent.StrokeLineJoin();
         } else {
-          auto const &strokeLineJoin{propertyValue.AsInt32()};
-          switch (strokeLineJoin) {
-            case 2:
-              m_strokeLineJoin = Geometry::CanvasLineJoin::Bevel;
-              break;
-            case 1:
-              m_strokeLineJoin = Geometry::CanvasLineJoin::Round;
-              break;
-            case 0:
-            default:
-              m_strokeLineJoin = Geometry::CanvasLineJoin::Miter;
-              break;
-          }
+          m_strokeLineJoin = propertyValue.AsInt32();
+          //auto const &strokeLineJoin{propertyValue.AsInt32()};
+          //switch (strokeLineJoin) {
+          //  case 2:
+          //    m_strokeLineJoin = Geometry::CanvasLineJoin::Bevel;
+          //    break;
+          //  case 1:
+          //    m_strokeLineJoin = Geometry::CanvasLineJoin::Round;
+          //    break;
+          //  case 0:
+          //  default:
+          //    m_strokeLineJoin = Geometry::CanvasLineJoin::Miter;
+          //    break;
+          //}
         }
       }
     } else if (propertyName == "fillRule") {
@@ -138,7 +141,8 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
         if (propertyValue.IsNull()) {
           m_fillRule = parent.FillRule();
         } else {
-          auto const &fillRule{propertyValue.AsInt32()};
+          m_fillRule = propertyValue.AsInt32();
+          /*auto const &fillRule{propertyValue.AsInt32()};
           switch (fillRule) {
             case 0:
               m_fillRule = Geometry::CanvasFilledRegionDetermination::Alternate;
@@ -147,7 +151,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
             default:
               m_fillRule = Geometry::CanvasFilledRegionDetermination::Winding;
               break;
-          }
+          }*/
         }
       }
     } else if (propertyName == "strokeDashoffset") {
@@ -223,8 +227,10 @@ void RenderableView::SaveDefinition() {
   }
 }
 
-void RenderableView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+void RenderableView::Render(
+    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
+    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
+  auto const &resourceCreator{canvas.try_as<winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator>()};
   if (m_recreateResources) {
     CreateGeometry(canvas);
   }
@@ -236,7 +242,7 @@ void RenderableView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawing
 
   auto const &clipPathGeometry{ClipPathGeometry()};
 
-  geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
+  //geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
 
   if (auto const &opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
     if (auto const &fillLayer{session.CreateLayer(FillOpacity())}) {
@@ -246,19 +252,52 @@ void RenderableView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawing
     }
 
     if (auto const &strokeLayer{session.CreateLayer(StrokeOpacity())}) {
-      Geometry::CanvasStrokeStyle strokeStyle{};
-      strokeStyle.StartCap(StrokeLineCap());
-      strokeStyle.EndCap(StrokeLineCap());
-      strokeStyle.LineJoin(StrokeLineJoin());
-      strokeStyle.DashOffset(StrokeDashOffset());
-      strokeStyle.MiterLimit(StrokeMiterLimit());
+      D2D1_CAP_STYLE capStyle{D2DHelpers::GetLineCap(m_strokeLineCap)};
+      D2D1_LINE_JOIN lineJoin{D2DHelpers::GetLineJoin(m_strokeLineJoin)};
+
+      D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties;
+      strokeStyleProperties.startCap = capStyle;
+      strokeStyleProperties.endCap = capStyle;
+      strokeStyleProperties.dashCap = capStyle;
+      strokeStyleProperties.lineJoin = lineJoin;
+      strokeStyleProperties.dashOffset = StrokeDashOffset();
+      strokeStyleProperties.miterLimit = StrokeMiterLimit();
+      strokeStyleProperties.dashStyle = D2D1_DASH_STYLE_SOLID;
 
       float canvasDiagonal{Utils::GetCanvasDiagonal(canvas.Size())};
       float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
-      strokeStyle.CustomDashStyle(Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal));
+
+      float *dashArray = nullptr;
+      if (StrokeDashArray().Size() > 0) {
+        strokeStyleProperties.dashStyle = D2D1_DASH_STYLE_CUSTOM;
+        m_adjustedStrokeDashArray = Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal);
+        dashArray = &m_adjustedStrokeDashArray[0];
+      }
+
+      winrt::com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
+
+      winrt::com_ptr<ID2D1Factory> factory;
+      deviceContext->GetFactory(factory.put());
+
+      winrt::com_ptr<ID2D1StrokeStyle> strokeStyle;
+      winrt::check_hresult(factory->CreateStrokeStyle(
+          strokeStyleProperties, dashArray, m_strokeDashArray.Size(), strokeStyle.put()));
+
+      //winrt::Microsoft::Graphics::Canvas::Geometry::CanvasStrokeStyle strokeStyle{};
+
+      //strokeStyle.StartCap(StrokeLineCap());
+      //strokeStyle.EndCap(StrokeLineCap());
+      //strokeStyle.LineJoin(StrokeLineJoin());
+      //strokeStyle.DashOffset(StrokeDashOffset());
+      //strokeStyle.MiterLimit(StrokeMiterLimit());
+
+      //float canvasDiagonal{Utils::GetCanvasDiagonal(canvas.Size())};
+      //float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
+      //strokeStyle.CustomDashStyle(Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal));
 
       auto const &stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry, resourceCreator)};
-      session.DrawGeometry(geometry, stroke, strokeWidth, strokeStyle);
+      //deviceContext->DrawGeometry(nullptr, nullptr, strokeWidth, strokeStyle.get());
+      session.DrawGeometry(geometry, stroke, strokeWidth, D2DHelpers::GetStrokeStyle(strokeStyle));
       strokeLayer.Close();
     }
 
@@ -331,7 +370,7 @@ RNSVG::SvgView RenderableView::SvgRoot() {
   return nullptr;
 }
 
-Geometry::CanvasGeometry RenderableView::ClipPathGeometry() {
+winrt::Microsoft::Graphics::Canvas::Geometry::CanvasGeometry RenderableView::ClipPathGeometry() {
   if (!m_clipPathId.empty()) {
     if (auto const &clipPath{SvgRoot().Templates().TryLookup(m_clipPathId)}) {
       if (!clipPath.Geometry()) {
@@ -371,7 +410,10 @@ RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
   return nullptr;
 }
 
-void RenderableView::SetColor(const JSValueObject& propValue, Windows::UI::Color fallbackColor, std::string propName) {
+void RenderableView::SetColor(
+    const winrt::Microsoft::ReactNative::JSValueObject &propValue,
+    Windows::UI::Color fallbackColor,
+    std::string propName) {
   switch (propValue["type"].AsInt64()) {
     case 1: {
       auto const &brushId{to_hstring(Utils::JSValueAsString(propValue["brushRef"]))};
