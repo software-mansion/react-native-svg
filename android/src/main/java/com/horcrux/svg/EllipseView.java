@@ -15,7 +15,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
-
 import java.util.ArrayList;
 
 @SuppressLint("ViewConstructor")
@@ -101,11 +100,25 @@ class EllipseView extends RenderableView {
     path.addOval(oval, Path.Direction.CW);
 
     elements = new ArrayList<>();
-    elements.add(new PathElement(ElementType.kCGPathElementMoveToPoint, new Point[]{new Point(mCx.value,mCy.value - mRy.value )}));
-    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mCx.value,mCy.value - mRy.value ), new Point(mCx.value + mRx.value,mCy.value  )}));
-    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{ new Point(mCx.value + mRx.value,mCy.value  ),  new Point(mCx.value,mCy.value  + mRy.value ) }));
-    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mCx.value,mCy.value  + mRy.value ),new Point(mCx.value - mRx.value,mCy.value  )}));
-    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mCx.value - mRx.value,mCy.value  ), new Point(mCx.value,mCy.value - mRy.value ) }));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementMoveToPoint, new Point[] {new Point(cx, cy - ry)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx, cy - ry), new Point(cx + rx, cy)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx + rx, cy), new Point(cx, cy + ry)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx, cy + ry), new Point(cx - rx, cy)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx - rx, cy), new Point(cx, cy - ry)}));
 
     return path;
   }

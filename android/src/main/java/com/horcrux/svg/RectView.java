@@ -16,7 +16,6 @@ import android.graphics.RectF;
 import android.os.Build;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
-
 import java.util.ArrayList;
 
 @SuppressLint("ViewConstructor")
@@ -174,11 +173,19 @@ class RectView extends RenderableView {
     }
 
     elements = new ArrayList<>();
-    elements.add(new PathElement(ElementType.kCGPathElementMoveToPoint, new Point[]{new Point(mX.value,mY.value)}));
-    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mX.value + mW.value,mY.value)}));
-    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mX.value + mW.value,mY.value + mH.value)}));
-    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mX.value,mY.value + mH.value)}));
-    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mX.value,mY.value)}));
+    elements.add(
+        new PathElement(ElementType.kCGPathElementMoveToPoint, new Point[] {new Point(x, y)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint, new Point[] {new Point(x + w, y)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint, new Point[] {new Point(x + w, y + h)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint, new Point[] {new Point(x, y + h)}));
+    elements.add(
+        new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[] {new Point(x, y)}));
 
     return path;
   }

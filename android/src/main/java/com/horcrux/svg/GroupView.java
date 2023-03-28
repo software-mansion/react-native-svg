@@ -20,8 +20,8 @@ import android.os.Build;
 import android.view.View;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
+import javax.annotation.Nullable;
 
 @SuppressLint("ViewConstructor")
 class GroupView extends RenderableView {
@@ -99,7 +99,7 @@ class GroupView extends RenderableView {
         int count = node.saveAndSetupCanvas(canvas, mCTM);
         node.render(canvas, paint, opacity * mOpacity);
         RectF r = node.getClientRect();
-      
+
         if (r != null) {
           groupRect.union(r);
         }
@@ -114,10 +114,10 @@ class GroupView extends RenderableView {
           svg.enableTouchEvents();
         }
 
-        if(node.elements != null){
+        if (node.elements != null) {
           elements.addAll(node.elements);
         }
-        
+
       } else if (child instanceof SvgView) {
         SvgView svgView = (SvgView) child;
         svgView.drawChildren(canvas);

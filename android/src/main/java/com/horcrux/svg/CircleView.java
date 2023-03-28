@@ -14,7 +14,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
-
 import java.util.ArrayList;
 
 @SuppressLint("ViewConstructor")
@@ -83,11 +82,25 @@ class CircleView extends RenderableView {
     path.addCircle((float) cx, (float) cy, (float) r, Path.Direction.CW);
 
     elements = new ArrayList<>();
-    elements.add(new PathElement(ElementType.kCGPathElementMoveToPoint, new Point[]{new Point(mCx.value,mCy.value - mR.value )}));
-    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mCx.value,mCy.value - mR.value ), new Point(mCx.value + mR.value,mCy.value  )}));
-    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{ new Point(mCx.value + mR.value,mCy.value  ),  new Point(mCx.value,mCy.value  + mR.value ) }));
-    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mCx.value,mCy.value  + mR.value ),new Point(mCx.value - mR.value,mCy.value  )}));
-    elements.add(new PathElement(ElementType.kCGPathElementAddLineToPoint, new Point[]{new Point(mCx.value - mR.value,mCy.value  ), new Point(mCx.value,mCy.value - mR.value ) }));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementMoveToPoint, new Point[] {new Point(cx, cy - r)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx, cy - r), new Point(cx + r, cy)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx + r, cy), new Point(cx, cy + r)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx, cy + r), new Point(cx - r, cy)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx - r, cy), new Point(cx, cy - r)}));
 
     return path;
   }
