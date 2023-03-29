@@ -9,15 +9,16 @@ struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {
 
   void SaveDefinition();
 
-  Microsoft::Graphics::Canvas::Brushes::ICanvasBrush Brush() { return m_brush; }
-  virtual void CreateBrush() {}
+  winrt::Windows::Foundation::IInspectable Brush() { return m_brush; }
+  virtual void CreateBrush(winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &/*session*/) {}
   virtual void Unload();
   void SetBounds(Windows::Foundation::Rect const &rect);
 
 
  protected:
-  Microsoft::Graphics::Canvas::Brushes::ICanvasBrush m_brush{nullptr};
-  Windows::Foundation::Rect m_bounds{};
+  winrt::Windows::Foundation::IInspectable m_brush{nullptr};
+   //Microsoft::Graphics::Canvas::Brushes::ICanvasBrush m_brush{nullptr};
+  D2D1_RECT_F m_bounds;
 
   virtual void UpdateBounds() {}
 };

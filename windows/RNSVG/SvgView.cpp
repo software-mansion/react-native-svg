@@ -10,14 +10,9 @@
 #include "GroupView.h"
 #include "Utils.h"
 
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
-using namespace Windows::Graphics::Display;
-
 namespace winrt::RNSVG::implementation {
-SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
-  m_scale = static_cast<float>(DisplayInformation::GetForCurrentView().ResolutionScale()) / 100;
+SvgView::SvgView(winrt::Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {
+  m_scale = static_cast<float>(winrt::Windows::Graphics::Display::DisplayInformation::GetForCurrentView().ResolutionScale()) / 100;
 
   m_canvasDrawRevoker = m_canvas.Draw(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_Draw});
   m_canvasCreateResourcesRevoker = m_canvas.CreateResources(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_CreateResources});
@@ -39,13 +34,16 @@ void SvgView::SvgParent(Windows::UI::Xaml::FrameworkElement const &value) {
   }
 }
 
-void SvgView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+void SvgView::UpdateProperties(
+    winrt::Microsoft::ReactNative::IJSValueReader const &reader,
+    bool forceUpdate,
+    bool invalidate) {
   // If forceUpdate is false, that means this is a nested Svg
   // and we're inheriting props. Pass those along to the group.
   if (!forceUpdate && m_group) {
     m_group.UpdateProperties(reader, forceUpdate, invalidate);
   } else {
-    auto const &propertyMap{JSValueObject::ReadFrom(reader)};
+    auto const &propertyMap{winrt::Microsoft::ReactNative::JSValueObject::ReadFrom(reader)};
 
     for (auto const &pair : propertyMap) {
       auto const &propertyName{pair.first};
@@ -119,7 +117,9 @@ Size SvgView::ArrangeOverride(Size finalSize) {
   return finalSize;
 }
 
-void SvgView::Render(UI::Xaml::CanvasControl const & canvas, CanvasDrawingSession const & session) {
+void SvgView::Render(
+    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
+    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
   if (m_align != "") {
     Rect vbRect{m_minX * m_scale, m_minY * m_scale, m_vbWidth * m_scale, m_vbHeight * m_scale};
     float width{static_cast<float>(canvas.ActualWidth())};
@@ -142,7 +142,9 @@ void SvgView::Render(UI::Xaml::CanvasControl const & canvas, CanvasDrawingSessio
   }
 }
 
-void SvgView::Canvas_Draw(UI::Xaml::CanvasControl const &sender, UI::Xaml::CanvasDrawEventArgs const &args) {
+void SvgView::Canvas_Draw(
+    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &sender,
+    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasDrawEventArgs const &args) {
   if (!m_hasRendered) {
     m_hasRendered = true;
   }
@@ -153,19 +155,23 @@ void SvgView::Canvas_Draw(UI::Xaml::CanvasControl const &sender, UI::Xaml::Canva
   Render(sender, args.DrawingSession());
 }
 
-void SvgView::CreateResources(ICanvasResourceCreator const &resourceCreator, UI::CanvasCreateResourcesEventArgs const &args) {
+void SvgView::CreateResources(
+    winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
+    winrt::Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args) {
   if (m_group) {
     m_group.CreateResources(resourceCreator, args);
   }
 }
 
-void SvgView::CreateGeometry(UI::Xaml::CanvasControl const& canvas) {
+void SvgView::CreateGeometry(winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas) {
   if (m_group) {
     m_group.CreateGeometry(canvas);
   }
 }
 
-void SvgView::Canvas_CreateResources(UI::Xaml::CanvasControl const &sender, UI::CanvasCreateResourcesEventArgs const &args) {
+void SvgView::Canvas_CreateResources(
+    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &sender,
+    winrt::Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args) {
   CreateResources(sender, args);
 }
 

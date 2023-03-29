@@ -6,6 +6,7 @@
 #include <winrt/Windows.Foundation.Numerics.h>
 #include <winrt/Windows.UI.Text.h>
 #include "JSValueReader.h"
+#include "D2DHelpers.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -306,44 +307,80 @@ struct Utils {
     }
   }
 
-  static std::vector<winrt::Microsoft::Graphics::Canvas::Brushes::CanvasGradientStop> JSValueAsStops(
+  static D2D1_MATRIX_3X2_F JSValueAsD2DTransform(
+    winrt::Microsoft::ReactNative::JSValue const& value,
+    D2D1_MATRIX_3X2_F defaultValue = {}) {
+    if (value.IsNull()) {
+      return defaultValue;
+    } else {
+      auto const &matrix{value.AsArray()};
+
+      return D2D1::Matrix3x2F(
+          matrix.at(0).AsSingle(),
+          matrix.at(1).AsSingle(),
+          matrix.at(2).AsSingle(),
+          matrix.at(3).AsSingle(),
+          matrix.at(4).AsSingle(),
+          matrix.at(5).AsSingle());
+    }
+  }
+
+  static std::vector<D2D1_GRADIENT_STOP> JSValueAsStops(
       winrt::Microsoft::ReactNative::JSValue const &value) {
     if (value.IsNull()) {
       return {};
     }
 
     auto const &stops{value.AsArray()};
-    std::vector<winrt::Microsoft::Graphics::Canvas::Brushes::CanvasGradientStop> canvasStops{};
+    std::vector<D2D1_GRADIENT_STOP> gradientStops{};
 
     for (size_t i = 0; i < stops.size(); ++i) {
-      winrt::Microsoft::Graphics::Canvas::Brushes::CanvasGradientStop stop{};
-      stop.Position = Utils::JSValueAsFloat(stops.at(i));
-      stop.Color = Utils::JSValueAsColor(stops.at(++i));
-      canvasStops.push_back(stop);
+      D2D1_GRADIENT_STOP stop{};
+      stop.position = Utils::JSValueAsFloat(stops.at(i));
+      stop.color = D2DHelpers::AsD2DColor(Utils::JSValueAsColor(stops.at(++i)));
+      gradientStops.push_back(stop);
     }
 
-    return canvasStops;
+    return gradientStops;
   }
 
-  static winrt::Microsoft::Graphics::Canvas::Brushes::ICanvasBrush GetCanvasBrush(
+  static winrt::com_ptr<ID2D1Brush> GetCanvasBrush(
       hstring const &brushId,
       winrt::Windows::UI::Color color,
       RNSVG::SvgView const &root,
       winrt::Microsoft::Graphics::Canvas::Geometry::CanvasGeometry const &geometry,
-      winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator) {
-    winrt::Microsoft::Graphics::Canvas::Brushes::ICanvasBrush brush{nullptr};
+          winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
+    winrt::com_ptr<ID2D1Brush> brush;
+    winrt::com_ptr<ID2D1DeviceContext1> deviceContext = D2DHelpers::GetDeviceContext(session);
     if (root && brushId != L"") {
       if (brushId == L"currentColor") {
-        brush =
-            winrt::Microsoft::Graphics::Canvas::Brushes::CanvasSolidColorBrush(resourceCreator, root.CurrentColor());
+        try {
+          winrt::com_ptr<ID2D1SolidColorBrush> scb;
+          deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(root.CurrentColor()), scb.put());
+          brush = scb.as<ID2D1Brush>();
+        } catch (winrt::hresult_error const &e) {
+          winrt::hresult hr = e.code();
+        }
       } else if (auto const &brushView{root.Brushes().TryLookup(brushId)}) {
-        brushView.SetBounds(geometry.ComputeBounds());
-        brush = brushView.Brush();
+        try {
+          brushView.CreateBrush(session);
+          brushView.SetBounds(geometry.ComputeBounds());
+
+          winrt::copy_to_abi(brushView.Brush(), *brush.put_void());
+        } catch (winrt::hresult_error const &e) {
+          winrt::hresult hr = e.code();
+        }
       }
     }
 
     if (!brush) {
-      brush = winrt::Microsoft::Graphics::Canvas::Brushes::CanvasSolidColorBrush(resourceCreator, color);
+      try {
+      winrt::com_ptr<ID2D1SolidColorBrush> scb;
+      deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(color), scb.put());
+      brush = scb.as<ID2D1Brush>();
+      } catch (winrt::hresult_error const &e) {
+        winrt::hresult hr = e.code();
+      }
     }
 
     return brush;

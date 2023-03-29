@@ -5,13 +5,13 @@
 #include "Utils.h"
 #include <winrt/Microsoft.Graphics.Canvas.Text.h>
 
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
-
 namespace winrt::RNSVG::implementation {
-void TSpanView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+void TSpanView::UpdateProperties(
+    winrt::Microsoft::ReactNative::IJSValueReader const &reader,
+    bool forceUpdate,
+    bool invalidate) {
+  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
+      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -25,17 +25,20 @@ void TSpanView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void TSpanView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+void TSpanView::CreateGeometry(winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas) {
+  auto const &resourceCreator{canvas.try_as<winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator>()};
   Microsoft::Graphics::Canvas::Text::CanvasTextFormat const& textFormat{};
   textFormat.FontSize(FontSize());
   textFormat.FontFamily(FontFamily());
   textFormat.FontWeight(Utils::FontWeightFrom(FontWeight(), SvgParent()));
 
-  Geometry(Geometry::CanvasGeometry::CreateText({resourceCreator, to_hstring(m_content), textFormat, canvas.Size().Width, canvas.Size().Height}));
+  Geometry(winrt::Microsoft::Graphics::Canvas::Geometry::CanvasGeometry::CreateText(
+      {resourceCreator, to_hstring(m_content), textFormat, canvas.Size().Width, canvas.Size().Height}));
 }
 
-void TSpanView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
+void TSpanView::Render(
+    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
+    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
   auto const &transform{session.Transform()};
   bool translateXY{X().Size() > 0 || Y().Size() > 0};
 

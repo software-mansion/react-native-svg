@@ -4,13 +4,13 @@
 
 #include "Utils.h"
 
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
-
 namespace winrt::RNSVG::implementation {
-void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+void UseView::UpdateProperties(
+    winrt::Microsoft::ReactNative::IJSValueReader const &reader,
+    bool forceUpdate,
+    bool invalidate) {
+  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
+      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -32,7 +32,9 @@ void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void UseView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
+void UseView::Render(
+    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
+    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
   if (auto const &view{GetRenderableTemplate()}) {
     auto const &originalTransform{session.Transform()};
     auto transform{Numerics::make_float3x2_scale(1)};

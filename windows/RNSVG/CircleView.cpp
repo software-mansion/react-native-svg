@@ -5,13 +5,10 @@
 #include "JSValueXaml.h"
 #include "Utils.h"
 
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
-
 namespace winrt::RNSVG::implementation {
-void CircleView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+void CircleView::UpdateProperties(winrt::Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
+      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -29,13 +26,13 @@ void CircleView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void CircleView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+void CircleView::CreateGeometry(winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas) {
+  auto const &resourceCreator{canvas.try_as<winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator>()};
 
   float cx{Utils::GetAbsoluteLength(m_cx, canvas.Size().Width)};
   float cy{Utils::GetAbsoluteLength(m_cy, canvas.Size().Height)};
   float r{Utils::GetAbsoluteLength(m_r, Utils::GetCanvasDiagonal(canvas.Size()))};
 
-  Geometry(Geometry::CanvasGeometry::CreateCircle(resourceCreator, cx, cy, r));
+  Geometry(winrt::Microsoft::Graphics::Canvas::Geometry::CanvasGeometry::CreateCircle(resourceCreator, cx, cy, r));
 }
 } // namespace winrt::RNSVG::implementation

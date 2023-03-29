@@ -242,66 +242,66 @@ void RenderableView::Render(
 
   auto const &clipPathGeometry{ClipPathGeometry()};
 
-  //geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
+  geometry = winrt::Microsoft::Graphics::Canvas::Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, D2DHelpers::GetFillRule(FillRule()));
 
   if (auto const &opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
     if (auto const &fillLayer{session.CreateLayer(FillOpacity())}) {
-      auto const &fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), geometry, resourceCreator)};
-      session.FillGeometry(geometry, fill);
-      fillLayer.Close();
+      try {
+        auto const &fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), geometry, session)};
+        session.FillGeometry(geometry, D2DHelpers::GetCanvasBrush(fill));
+        // deviceContext->FillGeometry(d2dGeometry?, fill.get());
+        fillLayer.Close();
+      } catch (winrt::hresult_error const &e) {
+        winrt::hresult hr = e.code();
+        winrt::hstring message = e.message();
+      }
     }
 
     if (auto const &strokeLayer{session.CreateLayer(StrokeOpacity())}) {
-      D2D1_CAP_STYLE capStyle{D2DHelpers::GetLineCap(m_strokeLineCap)};
-      D2D1_LINE_JOIN lineJoin{D2DHelpers::GetLineJoin(m_strokeLineJoin)};
+      try {
+        D2D1_CAP_STYLE capStyle{D2DHelpers::GetLineCap(m_strokeLineCap)};
+        D2D1_LINE_JOIN lineJoin{D2DHelpers::GetLineJoin(m_strokeLineJoin)};
 
-      D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties;
-      strokeStyleProperties.startCap = capStyle;
-      strokeStyleProperties.endCap = capStyle;
-      strokeStyleProperties.dashCap = capStyle;
-      strokeStyleProperties.lineJoin = lineJoin;
-      strokeStyleProperties.dashOffset = StrokeDashOffset();
-      strokeStyleProperties.miterLimit = StrokeMiterLimit();
-      strokeStyleProperties.dashStyle = D2D1_DASH_STYLE_SOLID;
+        D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties;
+        strokeStyleProperties.startCap = capStyle;
+        strokeStyleProperties.endCap = capStyle;
+        strokeStyleProperties.dashCap = capStyle;
+        strokeStyleProperties.lineJoin = lineJoin;
+        strokeStyleProperties.dashOffset = StrokeDashOffset();
+        strokeStyleProperties.miterLimit = StrokeMiterLimit();
+        strokeStyleProperties.dashStyle = D2D1_DASH_STYLE_SOLID;
 
-      float canvasDiagonal{Utils::GetCanvasDiagonal(canvas.Size())};
-      float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
+        float canvasDiagonal{Utils::GetCanvasDiagonal(canvas.Size())};
+        float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
 
-      float *dashArray = nullptr;
-      if (StrokeDashArray().Size() > 0) {
-        strokeStyleProperties.dashStyle = D2D1_DASH_STYLE_CUSTOM;
-        m_adjustedStrokeDashArray = Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal);
-        dashArray = &m_adjustedStrokeDashArray[0];
+        float *dashArray = nullptr;
+        if (StrokeDashArray().Size() > 0) {
+          strokeStyleProperties.dashStyle = D2D1_DASH_STYLE_CUSTOM;
+          m_adjustedStrokeDashArray = Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal);
+          dashArray = &m_adjustedStrokeDashArray[0];
+        }
+
+        winrt::com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
+
+        winrt::com_ptr<ID2D1Factory> factory;
+        deviceContext->GetFactory(factory.put());
+
+        winrt::com_ptr<ID2D1StrokeStyle> strokeStyle;
+        winrt::check_hresult(
+            factory->CreateStrokeStyle(strokeStyleProperties, dashArray, m_strokeDashArray.Size(), strokeStyle.put()));
+
+        auto const &stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry, session)};
+        // deviceContext->DrawGeometry(d2dGeometry?, stroke.get(), strokeWidth, strokeStyle.get());
+        session.DrawGeometry(
+            geometry, D2DHelpers::GetCanvasBrush(stroke), strokeWidth, D2DHelpers::GetStrokeStyle(strokeStyle));
+        strokeLayer.Close();
+      } catch (winrt::hresult_error const &e) {
+        winrt::hresult hr = e.code();
+        winrt::hstring message = e.message();
       }
 
-      winrt::com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
-
-      winrt::com_ptr<ID2D1Factory> factory;
-      deviceContext->GetFactory(factory.put());
-
-      winrt::com_ptr<ID2D1StrokeStyle> strokeStyle;
-      winrt::check_hresult(factory->CreateStrokeStyle(
-          strokeStyleProperties, dashArray, m_strokeDashArray.Size(), strokeStyle.put()));
-
-      //winrt::Microsoft::Graphics::Canvas::Geometry::CanvasStrokeStyle strokeStyle{};
-
-      //strokeStyle.StartCap(StrokeLineCap());
-      //strokeStyle.EndCap(StrokeLineCap());
-      //strokeStyle.LineJoin(StrokeLineJoin());
-      //strokeStyle.DashOffset(StrokeDashOffset());
-      //strokeStyle.MiterLimit(StrokeMiterLimit());
-
-      //float canvasDiagonal{Utils::GetCanvasDiagonal(canvas.Size())};
-      //float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
-      //strokeStyle.CustomDashStyle(Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal));
-
-      auto const &stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry, resourceCreator)};
-      //deviceContext->DrawGeometry(nullptr, nullptr, strokeWidth, strokeStyle.get());
-      session.DrawGeometry(geometry, stroke, strokeWidth, D2DHelpers::GetStrokeStyle(strokeStyle));
-      strokeLayer.Close();
+      opacityLayer.Close();
     }
-
-    opacityLayer.Close();
   }
 }
 

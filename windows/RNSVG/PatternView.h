@@ -29,13 +29,17 @@ struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView>
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
 
   // BrushView
-  void CreateBrush();
+  void CreateBrush(winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
   void UpdateBounds();
 
   // Helpers
-  void CreateBrush(Windows::Foundation::Rect const &rect);
-  Windows::Foundation::Rect GetAdjustedRect(Windows::Foundation::Rect const &bounds);
-  Microsoft::Graphics::Canvas::CanvasCommandList GetCommandList(Windows::Foundation::Rect const &elRect);
+  void CreateBrush(
+      D2D1_RECT_F rect,
+      winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  D2D1_RECT_F GetAdjustedRect(D2D1_RECT_F bounds);
+  winrt::com_ptr<ID2D1CommandList> GetCommandList(
+      D2D1_RECT_F elRect,
+      winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
 };
 } // namespace winrt::RNSVG::implementation
 

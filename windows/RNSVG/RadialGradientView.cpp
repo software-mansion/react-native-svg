@@ -4,13 +4,13 @@
 
 #include "Utils.h"
 
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
-
 namespace winrt::RNSVG::implementation {
-void RadialGradientView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+void RadialGradientView::UpdateProperties(
+    winrt::Microsoft::ReactNative::IJSValueReader const &reader,
+    bool forceUpdate,
+    bool invalidate) {
+  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
+      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -34,7 +34,7 @@ void RadialGradientView::UpdateProperties(IJSValueReader const &reader, bool for
       m_gradientUnits = Utils::JSValueAsBrushUnits(propertyValue);
     } else if (propertyName == "gradientTransform") {
       m_transformSet = true;
-      m_transform = Utils::JSValueAsTransform(propertyValue);
+      m_transform = Utils::JSValueAsD2DTransform(propertyValue);
 
       if (propertyValue.IsNull()) {
         m_transformSet = false;
@@ -52,41 +52,53 @@ void RadialGradientView::Unload() {
   __super::Unload();
 }
 
-void RadialGradientView::CreateBrush() {
+void RadialGradientView::CreateBrush(winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
   auto const &canvas{SvgRoot().Canvas()};
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()}; 
-  Brushes::CanvasRadialGradientBrush brush{resourceCreator, m_stops};
 
-  SetPoints(brush, {0, 0, canvas.Size().Width, canvas.Size().Height});
+  winrt::com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
+  winrt::com_ptr<ID2D1GradientStopCollection> stopCollection;
+  winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], m_stops.size(), stopCollection.put()));
+
+  D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES brushProperties;
+  winrt::com_ptr<ID2D1RadialGradientBrush> radialBrush;
+  winrt::check_hresult(
+      deviceContext->CreateRadialGradientBrush(brushProperties, stopCollection.get(), radialBrush.put()));
+
+  SetPoints(radialBrush.get(), {0, 0, canvas.Size().Width, canvas.Size().Height});
 
   if (m_transformSet) {
-    brush.Transform(m_transform);
+    radialBrush->SetTransform(m_transform);
   }
 
-  m_brush = brush;
+  winrt::copy_from_abi(m_brush, radialBrush.get());
 }
 
 void RadialGradientView::UpdateBounds() {
   if (m_gradientUnits == "objectBoundingBox") {
-    SetPoints(m_brush.as<Brushes::CanvasRadialGradientBrush>(), m_bounds);
+    winrt::com_ptr<ID2D1RadialGradientBrush> brush;
+    winrt::copy_to_abi(m_brush, *brush.put_void());
+    SetPoints(brush.get(), m_bounds);
   }
 }
 
-void RadialGradientView::SetPoints(Brushes::CanvasRadialGradientBrush brush, Windows::Foundation::Rect const &bounds) {
-  float rx{Utils::GetAbsoluteLength(m_rx, bounds.Width)};
-  float ry{Utils::GetAbsoluteLength(m_ry, bounds.Height)};
+void RadialGradientView::SetPoints(ID2D1RadialGradientBrush *brush, D2D1_RECT_F bounds) {
+  float width{bounds.right - bounds.left};
+  float height{bounds.bottom - bounds.top};
 
-  float fx{Utils::GetAbsoluteLength(m_fx, bounds.Width) + bounds.X};
-  float fy{Utils::GetAbsoluteLength(m_fy, bounds.Height) + bounds.Y};
+  float rx{Utils::GetAbsoluteLength(m_rx, width)};
+  float ry{Utils::GetAbsoluteLength(m_ry, height)};
 
-  float cx{Utils::GetAbsoluteLength(m_cx, bounds.Width) + bounds.X};
-  float cy{Utils::GetAbsoluteLength(m_cy, bounds.Height) + bounds.Y};
+  float fx{Utils::GetAbsoluteLength(m_fx, width) + bounds.left};
+  float fy{Utils::GetAbsoluteLength(m_fy, height) + bounds.top};
 
-  brush.RadiusX(rx);
-  brush.RadiusY(ry);
+  float cx{Utils::GetAbsoluteLength(m_cx, width) + bounds.left};
+  float cy{Utils::GetAbsoluteLength(m_cy, height) + bounds.top};
 
-  brush.Center({cx, cy});
-  brush.OriginOffset({(fx - cx), (fy - cy)});
+  brush->SetRadiusX(rx);
+  brush->SetRadiusY(ry);
+
+  brush->SetCenter({cx, cy});
+  brush->SetGradientOriginOffset({(fx - cx), (fy - cy)});
 }
 
 } // namespace winrt::RNSVG::implementation

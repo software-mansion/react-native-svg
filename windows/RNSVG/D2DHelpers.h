@@ -18,17 +18,6 @@ struct D2DHelpers {
     return deviceContext;
    }
 
-   static winrt::com_ptr<ID2D1DeviceContext1> GetDeviceContext(
-      winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator) {
-     winrt::com_ptr<ABI::Microsoft::Graphics::Canvas::ICanvasResourceWrapperNative> nativeDeviceContextWrapper =
-         resourceCreator.as<ABI::Microsoft::Graphics::Canvas::ICanvasResourceWrapperNative>();
-     winrt::com_ptr<ID2D1DeviceContext1> deviceContext{nullptr};
-     winrt::check_hresult(nativeDeviceContextWrapper->GetNativeResource(
-        nullptr, 0.0f, guid_of<ID2D1DeviceContext1>(), deviceContext.put_void()));
-
-    return deviceContext;
-   }
-
    static winrt::Microsoft::Graphics::Canvas::Geometry::CanvasStrokeStyle GetStrokeStyle(
      winrt::com_ptr<ID2D1StrokeStyle> strokeStyleD2D) {
      auto canvasDevice{winrt::Microsoft::Graphics::Canvas::CanvasDevice::GetSharedDevice()};
@@ -74,6 +63,40 @@ struct D2DHelpers {
        default:
          return winrt::Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination::Winding;
      }
+   }
+
+   static winrt::Microsoft::Graphics::Canvas::Brushes::ICanvasBrush GetCanvasBrush(
+       winrt::com_ptr<ID2D1Brush> brushD2D) {
+     auto canvasDevice{winrt::Microsoft::Graphics::Canvas::CanvasDevice::GetSharedDevice()};
+     winrt::com_ptr<::IInspectable> brushAsInspectable{nullptr};
+
+     auto factory{winrt::get_activation_factory<
+         winrt::Microsoft::Graphics::Canvas::CanvasDevice,
+         ABI::Microsoft::Graphics::Canvas::ICanvasFactoryNative>()};
+
+     try {
+     winrt::check_hresult(factory->GetOrCreate(
+         canvasDevice.as<ABI::Microsoft::Graphics::Canvas::ICanvasDevice>().get(),
+         brushD2D.as<::IUnknown>().get(),
+         0.0f,
+         brushAsInspectable.put()));
+     } catch (winrt::hresult_error const &e) {
+       winrt::hresult hr = e.code();
+     }
+
+     return brushAsInspectable.as<winrt::Microsoft::Graphics::Canvas::Brushes::ICanvasBrush>();
+   }
+
+   static D2D1::ColorF AsD2DColor(winrt::Windows::UI::Color const& color) {
+     return {
+         color.R / 255.0f,
+         color.G / 255.0f,
+         color.B / 255.0f,
+         color.A / 255.0f};
+   }
+
+   static winrt::Windows::UI::Color FromD2DColor(D2D1::ColorF const color) {
+     return winrt::Windows::UI::ColorHelper::FromArgb(color.a, color.r, color.g, color.b);
    }
 };
 } // namespace winrt::RNSVG

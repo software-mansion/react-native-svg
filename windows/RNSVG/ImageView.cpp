@@ -10,16 +10,10 @@
 
 #include "Utils.h"
 
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
-using namespace Windows::Security::Cryptography;
-using namespace Windows::Storage::Streams;
-using namespace Windows::Web::Http;
-
 namespace winrt::RNSVG::implementation {
-void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+void ImageView::UpdateProperties(winrt::Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
+      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -77,7 +71,9 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void ImageView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
+void ImageView::Render(
+    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
+    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
   if (m_source.width == 0 || m_source.height == 0) {
     m_source.width = canvas.Size().Width;
     m_source.height = canvas.Size().Height;
@@ -96,11 +92,11 @@ void ImageView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
     height = m_source.height * m_source.scale;
   }
 
-  Effects::Transform2DEffect transformEffect{nullptr};
+  winrt::Microsoft::Graphics::Canvas::Effects::Transform2DEffect transformEffect{nullptr};
   if (m_align != "") {
     Rect elRect{x, y, width, height};
     Rect vbRect{0, 0, m_source.width, m_source.height};
-    transformEffect = Effects::Transform2DEffect{};
+    transformEffect = winrt::Microsoft::Graphics::Canvas::Effects::Transform2DEffect{};
     transformEffect.TransformMatrix(Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
   }
 
@@ -115,7 +111,7 @@ void ImageView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
 
       if (m_align != "" && transformEffect) {
         transformEffect.Source(m_bitmap);
-        Effects::CropEffect cropEffect{};
+        winrt::Microsoft::Graphics::Canvas::Effects::CropEffect cropEffect{};
         cropEffect.SourceRectangle({x, y, width, height});
         cropEffect.Source(transformEffect);
         session.DrawImage(cropEffect);
@@ -130,7 +126,9 @@ void ImageView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
   }
 }
 
-void ImageView::CreateResources(ICanvasResourceCreator const &resourceCreator, UI::CanvasCreateResourcesEventArgs const &args) {
+void ImageView::CreateResources(
+    winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
+    winrt::Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args) {
   args.TrackAsyncAction(LoadImageSourceAsync(resourceCreator, false));
 }
 
@@ -141,7 +139,9 @@ void ImageView::Unload() {
   }
 }
 
-IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCreator, bool invalidate) {
+IAsyncAction ImageView::LoadImageSourceAsync(
+    winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator resourceCreator,
+    bool invalidate) {
   Uri uri{m_source.uri};
   hstring scheme{uri ? uri.SchemeName() : L""};
   hstring ext{uri ? uri.Extension() : L""};
@@ -163,7 +163,7 @@ IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCrea
 
   const bool fromStream{m_source.type == ImageSourceType::Download || m_source.type == ImageSourceType::InlineData};
 
-  InMemoryRandomAccessStream stream{nullptr};
+  winrt::Windows::Storage::Streams::InMemoryRandomAccessStream stream{nullptr};
 
   // get weak reference before any co_await calls
   auto weak_this{get_weak()};
@@ -179,9 +179,9 @@ IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCrea
   }
 
   if (stream) {
-    m_bitmap = co_await CanvasBitmap::LoadAsync(resourceCreator, stream);
+    m_bitmap = co_await winrt::Microsoft::Graphics::Canvas::CanvasBitmap::LoadAsync(resourceCreator, stream);
   } else {
-    m_bitmap = co_await CanvasBitmap::LoadAsync(resourceCreator, uri);
+    m_bitmap = co_await winrt::Microsoft::Graphics::Canvas::CanvasBitmap::LoadAsync(resourceCreator, uri);
   }
 
   m_source.width = m_bitmap.Size().Width;
@@ -194,7 +194,8 @@ IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCrea
   }
 }
 
-IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageMemoryStreamAsync(ImageSource source) {
+IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream> ImageView::GetImageMemoryStreamAsync(
+    ImageSource source) {
   switch (source.type) {
     case ImageSourceType::Download:
       co_return co_await GetImageStreamAsync(source);
@@ -205,14 +206,17 @@ IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageMemoryStreamAsync
   }
 }
 
-IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(ImageSource source) {
+IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(
+    ImageSource source) {
   try {
     co_await resume_background();
 
-    auto httpMethod{source.method.empty() ? HttpMethod::Get() : HttpMethod{source.method}};
+    auto httpMethod{
+        source.method.empty() ? winrt::Windows::Web::Http::HttpMethod::Get()
+                              : winrt::Windows::Web::Http::HttpMethod{source.method}};
 
     Uri uri{source.uri};
-    HttpRequestMessage request{httpMethod, uri};
+    winrt::Windows::Web::Http::HttpRequestMessage request{httpMethod, uri};
 
     if (!source.headers.empty()) {
       for (auto const &header : source.headers) {
@@ -224,13 +228,13 @@ IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(Image
       }
     }
 
-    HttpClient httpClient;
-    HttpResponseMessage response{co_await httpClient.SendRequestAsync(request)};
+    winrt::Windows::Web::Http::HttpClient httpClient;
+    winrt::Windows::Web::Http::HttpResponseMessage response{co_await httpClient.SendRequestAsync(request)};
 
-    if (response && response.StatusCode() == HttpStatusCode::Ok) {
-      IInputStream inputStream{co_await response.Content().ReadAsInputStreamAsync()};
-      InMemoryRandomAccessStream memoryStream;
-      co_await RandomAccessStream::CopyAsync(inputStream, memoryStream);
+    if (response && response.StatusCode() == winrt::Windows::Web::Http::HttpStatusCode::Ok) {
+      winrt::Windows::Storage::Streams::IInputStream inputStream{co_await response.Content().ReadAsInputStreamAsync()};
+      winrt::Windows::Storage::Streams::InMemoryRandomAccessStream memoryStream;
+      co_await winrt::Windows::Storage::Streams::RandomAccessStream::CopyAsync(inputStream, memoryStream);
       memoryStream.Seek(0);
 
       co_return memoryStream;
@@ -241,7 +245,8 @@ IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(Image
   co_return nullptr;
 }
 
-IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageInlineDataAsync(ImageSource source) {
+IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream> ImageView::GetImageInlineDataAsync(
+    ImageSource source) {
   std::string uri{to_string(source.uri)};
 
   size_t start = uri.find(',');
@@ -253,9 +258,10 @@ IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageInlineDataAsync(I
     co_await winrt::resume_background();
 
     std::string_view base64String{uri.c_str() + start + 1, uri.length() - start - 1};
-    auto const &buffer{CryptographicBuffer::DecodeFromBase64String(to_hstring(base64String))};
+    auto const &buffer{
+        winrt::Windows::Security::Cryptography::CryptographicBuffer::DecodeFromBase64String(to_hstring(base64String))};
 
-    InMemoryRandomAccessStream memoryStream;
+    winrt::Windows::Storage::Streams::InMemoryRandomAccessStream memoryStream;
     co_await memoryStream.WriteAsync(buffer);
     memoryStream.Seek(0);
 

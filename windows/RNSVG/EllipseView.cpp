@@ -5,13 +5,10 @@
 #include "JSValueXaml.h"
 #include "Utils.h"
 
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
-
 namespace winrt::RNSVG::implementation {
-void EllipseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+void EllipseView::UpdateProperties(winrt::Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
+      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -31,14 +28,15 @@ void EllipseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void EllipseView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+void EllipseView::CreateGeometry(winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas) {
+  auto const &resourceCreator{canvas.try_as<winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator>()};
 
   float cx{Utils::GetAbsoluteLength(m_cx, canvas.Size().Width)};
   float cy{Utils::GetAbsoluteLength(m_cy, canvas.Size().Height)};
   float rx{Utils::GetAbsoluteLength(m_rx, canvas.Size().Width)};
   float ry{Utils::GetAbsoluteLength(m_ry, canvas.Size().Height)};
 
-  Geometry(Geometry::CanvasGeometry::CreateEllipse(resourceCreator, cx, cy, rx, ry));
+  Geometry(
+      winrt::Microsoft::Graphics::Canvas::Geometry::CanvasGeometry::CreateEllipse(resourceCreator, cx, cy, rx, ry));
 }
 } // namespace winrt::RNSVG::implementation

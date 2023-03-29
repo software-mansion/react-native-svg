@@ -4,13 +4,13 @@
 
 #include "Utils.h"
 
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
-
 namespace winrt::RNSVG::implementation {
-void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+void PatternView::UpdateProperties(
+    winrt::Microsoft::ReactNative::IJSValueReader const &reader,
+    bool forceUpdate,
+    bool invalidate) {
+  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
+      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -61,50 +61,80 @@ void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
 
 void PatternView::UpdateBounds() {
   if (m_patternUnits == "objectBoundingBox") {
-    Rect rect{GetAdjustedRect(m_bounds)};
-    CreateBrush(rect);
+    winrt::com_ptr<ID2D1ImageBrush> brush;
+    winrt::copy_to_abi(m_brush, *brush.put_void());
+
+    D2D1_RECT_F rect{GetAdjustedRect(m_bounds)};
+    brush->SetSourceRectangle(&rect);
   }
 }
 
-void PatternView::CreateBrush() {
+void PatternView::CreateBrush(winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
   auto const &canvas{SvgRoot().Canvas()};
 
-  Rect elRect{GetAdjustedRect({0, 0, canvas.Size().Width, canvas.Size().Height})};
-  CreateBrush(elRect);
+  D2D1_RECT_F elRect{GetAdjustedRect({0, 0, canvas.Size().Width, canvas.Size().Height})};
+  CreateBrush(elRect, session);
 }
 
-void PatternView::CreateBrush(Windows::Foundation::Rect const &rect) {
+void PatternView::CreateBrush(
+    D2D1_RECT_F rect,
+    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
   auto const &canvas{SvgRoot().Canvas()};
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+  winrt::com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
 
-  if (auto const &cmdList{GetCommandList(rect)}) {
-    Brushes::CanvasImageBrush brush{resourceCreator, cmdList};
+  if (auto const &cmdList{GetCommandList(rect, session)}) {
+    D2D1_IMAGE_BRUSH_PROPERTIES brushProperties;
+    brushProperties.extendModeX = D2D1_EXTEND_MODE_WRAP;
+    brushProperties.extendModeY = D2D1_EXTEND_MODE_WRAP;
+    brushProperties.sourceRectangle = rect;
 
-    brush.SourceRectangle(rect);
-    brush.ExtendX(Microsoft::Graphics::Canvas::CanvasEdgeBehavior::Wrap);
-    brush.ExtendY(Microsoft::Graphics::Canvas::CanvasEdgeBehavior::Wrap);
+    winrt::com_ptr<ID2D1ImageBrush> imageBrush;
+    winrt::check_hresult(deviceContext->CreateImageBrush(cmdList.get(), brushProperties, imageBrush.put()));
 
-    cmdList.Close();
+    cmdList->Close();
 
-    m_brush = brush;
+    winrt::copy_from_abi(m_brush, imageBrush.get());
   }
 }
 
-Windows::Foundation::Rect PatternView::GetAdjustedRect(Windows::Foundation::Rect const &bounds) {
-  float x{Utils::GetAbsoluteLength(m_x, bounds.Width) + bounds.X};
-  float y{Utils::GetAbsoluteLength(m_y, bounds.Height) + bounds.Y};
-  float width{Utils::GetAbsoluteLength(m_width, bounds.Width)};
-  float height{Utils::GetAbsoluteLength(m_height, bounds.Height)};
+D2D1_RECT_F PatternView::GetAdjustedRect(D2D1_RECT_F bounds) {
+  float width{bounds.right - bounds.left};
+  float height{bounds.bottom - bounds.top};
 
-  return {x, y, width, height};
+  float x{Utils::GetAbsoluteLength(m_x, width) + bounds.left};
+  float y{Utils::GetAbsoluteLength(m_y, height) + bounds.top};
+  float adjWidth{Utils::GetAbsoluteLength(m_width, width)};
+  float adjHeight{Utils::GetAbsoluteLength(m_height, height)};
+
+  return {x, y, adjWidth, adjHeight};
 }
 
-Microsoft::Graphics::Canvas::CanvasCommandList PatternView::GetCommandList(Windows::Foundation::Rect const &rect) {
+winrt::com_ptr<ID2D1CommandList> PatternView::GetCommandList(
+    D2D1_RECT_F rect,
+    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
   auto const &root{SvgRoot()};
   auto const &canvas{root.Canvas()};
-  auto const &cmdList{CanvasCommandList(canvas)};
-  auto const &session{cmdList.CreateDrawingSession()};
+
+  auto sharedDevice{winrt::Microsoft::Graphics::Canvas::CanvasDevice::GetSharedDevice()};
+  // First we need to get an ID2D1Device1 pointer from the shared CanvasDevice
+  winrt::com_ptr<ABI::Microsoft::Graphics::Canvas::ICanvasResourceWrapperNative> nativeDeviceWrapper =
+      sharedDevice.as<ABI::Microsoft::Graphics::Canvas::ICanvasResourceWrapperNative>();
+  winrt::com_ptr<ID2D1Device1> device{nullptr};
+  winrt::check_hresult(nativeDeviceWrapper->GetNativeResource(nullptr, 0.0f, guid_of<ID2D1Device1>(), device.put_void()));
   
+  winrt::com_ptr<ID2D1DeviceContext> deviceContext;
+  winrt::check_hresult(device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, deviceContext.put()));
+
+  winrt::com_ptr<ID2D1CommandList> cmdList;
+  deviceContext->CreateCommandList(cmdList.put());
+
+  deviceContext->SetTarget(cmdList.get());
+
+  winrt::com_ptr<ID2D1CommandSink> sink;
+
+  //auto const &cmdList{winrt::Microsoft::Graphics::Canvas::CanvasCommandList(canvas)};
+  //auto const &session{cmdList.CreateDrawingSession()};
+
   if (m_align != "") {
     Rect vbRect{
         m_minX * root.SvgScale(),
@@ -112,20 +142,31 @@ Microsoft::Graphics::Canvas::CanvasCommandList PatternView::GetCommandList(Windo
         (m_vbWidth + m_minX) * root.SvgScale(),
         (m_vbHeight + m_minY) * root.SvgScale()};
 
-    auto transform{Utils::GetViewBoxTransform(vbRect, rect, m_align, m_meetOrSlice)};
+    auto transform{Utils::GetViewBoxTransform(
+        vbRect,
+        {
+            rect.left,
+            rect.top,
+            rect.left+rect.right,
+            rect.top+rect.bottom
+        },
+        m_align,
+        m_meetOrSlice)};
 
     if (m_transformSet) {
       transform = transform * m_transform;
     }
 
-    session.Transform(transform);
+    //session.Transform(transform);
   }
 
-  for (auto const &child : Children()) {
-    child.Render(canvas, session);
-  }
+  //for (auto const &child : Children()) {
+  //  child.Render(canvas, session);
+  //}
 
-  session.Close();
+  //session.Close();
+
+  // TODO: Fix after Geometry switch
   return cmdList;
 }
 

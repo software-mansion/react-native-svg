@@ -165,8 +165,8 @@ namespace RNSVG
   {
     BrushView();
 
-    Microsoft.Graphics.Canvas.Brushes.ICanvasBrush Brush{ get; };
-    void CreateBrush();
+    Object Brush{ get; };
+    void CreateBrush(Microsoft.Graphics.Canvas.CanvasDrawingSession session);
     void SetBounds(Windows.Foundation.Rect rect);
   };
 

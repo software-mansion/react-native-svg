@@ -18,14 +18,14 @@ struct RadialGradientView : RadialGradientViewT<RadialGradientView, RNSVG::imple
   RNSVG::SVGLength m_ry{};
   RNSVG::SVGLength m_cx{};
   RNSVG::SVGLength m_cy{};
-  std::vector<Microsoft::Graphics::Canvas::Brushes::CanvasGradientStop> m_stops{};
+  std::vector<D2D1_GRADIENT_STOP> m_stops{};
   std::string m_gradientUnits{"objectBoundingBox"};
   bool m_transformSet{false};
-  Numerics::float3x2 m_transform{Numerics::make_float3x2_scale(1)};
+  D2D1_MATRIX_3X2_F m_transform;
 
-  void CreateBrush();
+  void CreateBrush(winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
   void UpdateBounds();
-  void SetPoints(Microsoft::Graphics::Canvas::Brushes::CanvasRadialGradientBrush brush, Windows::Foundation::Rect const &bounds);
+  void SetPoints(ID2D1RadialGradientBrush *brush, D2D1_RECT_F bounds);
 };
 } // namespace winrt::RNSVG::implementation
 
