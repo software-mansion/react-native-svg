@@ -74,7 +74,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   @Override
-  public void onInitializeAccessibilityNodeInfo (AccessibilityNodeInfo info) {
+  public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
     super.onInitializeAccessibilityNodeInfo(info);
 
     Rect r = new Rect();
