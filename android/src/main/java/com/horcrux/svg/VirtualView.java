@@ -7,9 +7,9 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewParent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -23,7 +23,6 @@ import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.OnLayoutEvent;
 import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.UIManagerHelper;
-import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.view.ReactViewGroup;
 import java.util.ArrayList;
@@ -110,29 +109,28 @@ public abstract class VirtualView extends ReactViewGroup {
   }
 
   @Override
-  public void onInitializeAccessibilityNodeInfo (AccessibilityNodeInfo info) {
+  public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
     super.onInitializeAccessibilityNodeInfo(info);
     if (mClientRect != null) {
 
-    SvgView root = getSvgView();
+      SvgView root = getSvgView();
 
-    int[] rootPositionOnScreen = new int[2];
-    getSvgView().getLocationOnScreen(rootPositionOnScreen);
-    Rect infoBoundsInScreen = new Rect();
-    infoBoundsInScreen.left = rootPositionOnScreen[0] + (int) Math.floor(mClientRect.left);
-    infoBoundsInScreen.top = rootPositionOnScreen[1] + (int) Math.floor(mClientRect.top);
-    infoBoundsInScreen.right = infoBoundsInScreen.left + (int) Math.ceil(mClientRect.width());
-    infoBoundsInScreen.bottom = infoBoundsInScreen.top + (int) Math.ceil(mClientRect.height());
+      int[] rootPositionOnScreen = new int[2];
+      getSvgView().getLocationOnScreen(rootPositionOnScreen);
+      Rect infoBoundsInScreen = new Rect();
+      infoBoundsInScreen.left = rootPositionOnScreen[0] + (int) Math.floor(mClientRect.left);
+      infoBoundsInScreen.top = rootPositionOnScreen[1] + (int) Math.floor(mClientRect.top);
+      infoBoundsInScreen.right = infoBoundsInScreen.left + (int) Math.ceil(mClientRect.width());
+      infoBoundsInScreen.bottom = infoBoundsInScreen.top + (int) Math.ceil(mClientRect.height());
 
-    Rect rootVisibleRect = new Rect();
-    boolean isRootVisible = root.getGlobalVisibleRect(rootVisibleRect);
-    boolean infoIsVisibleToUser = isRootVisible && infoBoundsInScreen.intersect(rootVisibleRect);
+      Rect rootVisibleRect = new Rect();
+      boolean isRootVisible = root.getGlobalVisibleRect(rootVisibleRect);
+      boolean infoIsVisibleToUser = isRootVisible && infoBoundsInScreen.intersect(rootVisibleRect);
 
-
-    String infoClassName = this.getClass().getCanonicalName();
-    info.setBoundsInScreen(infoBoundsInScreen);
-    info.setClassName(infoClassName);
-    info.setVisibleToUser(infoIsVisibleToUser);
+      String infoClassName = this.getClass().getCanonicalName();
+      info.setBoundsInScreen(infoBoundsInScreen);
+      info.setClassName(infoClassName);
+      info.setVisibleToUser(infoIsVisibleToUser);
     }
   }
 
@@ -599,7 +597,8 @@ public abstract class VirtualView extends ReactViewGroup {
       setRight(right);
       setBottom(bottom);
     }
-    EventDispatcher eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
+    EventDispatcher eventDispatcher =
+        UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
     if (eventDispatcher != null) {
       eventDispatcher.dispatchEvent(OnLayoutEvent.obtain(this.getId(), left, top, width, height));
     }
