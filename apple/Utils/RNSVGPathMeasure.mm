@@ -206,6 +206,16 @@ static void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint be
                   return [obj1 compare:obj2];
                 }];
 
+
+  // This is here to avoid crashes in case i value gets out of array bounds.
+  // Problem ends up with error - *** -[__NSArrayM objectAtIndexedSubscript:]: index 69 beyond bounds [0 .. 68]
+  // Example for an NFT that crashes with this cause - 
+  // https://nft-cdn.alchemy.com/eth-mainnet/639b2c9860f8861f1e0ac49dd8f2cb19
+
+  if (i >= _lineCount) {
+      i = _lineCount - 1;
+  }
+
   CGFloat totalLength = (CGFloat)[_lengths[i] doubleValue];
   CGFloat prevLength = i == 0 ? 0 : (CGFloat)[_lengths[i - 1] doubleValue];
 
