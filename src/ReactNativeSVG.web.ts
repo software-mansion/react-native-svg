@@ -2,8 +2,7 @@ import * as React from 'react';
 import type { GestureResponderEvent, TransformsStyle } from 'react-native';
 import {
   // @ts-ignore
-  unstable_createElement as ucE,
-  createElement as cE,
+  unstable_createElement as createElement,
 } from 'react-native';
 import type {
   NumberArray,
@@ -13,8 +12,6 @@ import type {
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
 import { transformsArrayToProps } from './lib/extract/extractTransform';
-
-const createElement = cE || ucE;
 
 type BlurEvent = Object;
 type FocusEvent = Object;
