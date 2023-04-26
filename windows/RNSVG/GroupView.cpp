@@ -184,7 +184,7 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Windows::Foundation::Point const &p
       }
     }
     if (renderable && !renderable.IsResponsible()) {
-      renderable = *this;
+      return *this;
     } else if (!renderable){
       if (!Geometry()) {
         if (auto const &svgRoot{SvgRoot()}) {
@@ -194,7 +194,7 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Windows::Foundation::Point const &p
       if (Geometry()) {
         auto const &bounds{Geometry().ComputeBounds()};
         if (Windows::UI::Xaml::RectHelper::Contains(bounds, point)) {
-          renderable = *this;
+          return *this;
         }
       }
     }
