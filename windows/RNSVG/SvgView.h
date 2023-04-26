@@ -17,8 +17,8 @@ struct SvgView : SvgViewT<SvgView> {
   RNSVG::GroupView Group() { return m_group; }
   void Group(RNSVG::GroupView const &value) { m_group = value; }
 
-  Microsoft::Graphics::Canvas::Geometry::CanvasGeometry Geometry() { return m_group ? m_group.Geometry() : nullptr; }
-  void Geometry(Microsoft::Graphics::Canvas::Geometry::CanvasGeometry /*value*/) { }
+  Windows::Foundation::IInspectable Geometry() { return m_group ? m_group.Geometry() : nullptr; }
+  void Geometry(Windows::Foundation::IInspectable /*value*/) {}
 
   float SvgScale() { return m_scale; }
 

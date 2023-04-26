@@ -57,7 +57,7 @@ void RadialGradientView::CreateBrush(winrt::Microsoft::Graphics::Canvas::CanvasD
 
   winrt::com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
   winrt::com_ptr<ID2D1GradientStopCollection> stopCollection;
-  winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], m_stops.size(), stopCollection.put()));
+  winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], static_cast<uint32_t>(m_stops.size()), stopCollection.put()));
 
   D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES brushProperties;
   winrt::com_ptr<ID2D1RadialGradientBrush> radialBrush;

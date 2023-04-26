@@ -4,16 +4,16 @@
 #include "PathView.g.cpp"
 #endif
 
-#include <winrt/Microsoft.Graphics.Canvas.Svg.h>
+#include "d2d1svg.h"
 
 #include "JSValueXaml.h"
 #include "Utils.h"
 #include "D2DHelpers.h"
 
 namespace winrt::RNSVG::implementation {
-void PathView::UpdateProperties(winrt::Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
-      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+void PathView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const Microsoft::ReactNative::JSValueObject &propertyMap{
+      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -35,11 +35,24 @@ void PathView::UpdateProperties(winrt::Microsoft::ReactNative::IJSValueReader co
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void PathView::CreateGeometry(winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas) {
-  auto const &resourceCreator{canvas.try_as<winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator>()};
-  winrt::Microsoft::Graphics::Canvas::Svg::CanvasSvgDocument doc{resourceCreator};
-  auto const &path{doc.CreatePathAttribute(m_segmentData, m_commands)};
-  Geometry(path.CreatePathGeometry(D2DHelpers::GetFillRule(FillRule())));
+void PathView::CreateGeometry(win2d::UI::Xaml::CanvasControl const &canvas) {
+  com_ptr<ID2D1SvgDocument> doc;
+  auto deviceContext{D2DHelpers::GetDeviceContext(canvas).as<ID2D1DeviceContext5>()};
+  check_hresult(deviceContext->CreateSvgDocument(nullptr, D2D1::SizeF(static_cast<float>(canvas.Width()), static_cast<float>(canvas.Height())), doc.put()));
+
+  m_segmentData.resize(m_segmentData.size());
+  m_commands.resize(m_commands.size());
+
+  com_ptr<ID2D1SvgPathData> path;
+  check_hresult(doc->CreatePathData(&m_segmentData[0], static_cast<uint32_t>(m_segmentData.size()), &m_commands[0], static_cast<uint32_t>(m_commands.size()), path.put()));
+
+  com_ptr<ID2D1PathGeometry1> geometry;
+  check_hresult(path->CreatePathGeometry(D2DHelpers::GetFillRule(FillRule()), geometry.put()));
+
+  IInspectable asInspectable;
+  copy_from_abi(asInspectable, geometry.get());
+
+  Geometry(asInspectable);
 }
 
 void PathView::ParsePath() {

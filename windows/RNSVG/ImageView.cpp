@@ -2,7 +2,8 @@
 #include "ImageView.h"
 #include "ImageView.g.cpp"
 
-#include <winrt/Microsoft.Graphics.Canvas.Effects.h>
+#include "d2d1effects.h"
+
 #include <winrt/Windows.Security.Cryptography.h>
 #include <winrt/Windows.Storage.Streams.h>
 #include <winrt/Windows.Web.Http.Headers.h>
@@ -11,9 +12,9 @@
 #include "Utils.h"
 
 namespace winrt::RNSVG::implementation {
-void ImageView::UpdateProperties(winrt::Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
-      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+void ImageView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const Microsoft::ReactNative::JSValueObject &propertyMap{
+      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -72,8 +73,8 @@ void ImageView::UpdateProperties(winrt::Microsoft::ReactNative::IJSValueReader c
 }
 
 void ImageView::Render(
-    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
+    win2d::UI::Xaml::CanvasControl const &canvas,
+    win2d::CanvasDrawingSession const &session) {
   if (m_source.width == 0 || m_source.height == 0) {
     m_source.width = canvas.Size().Width;
     m_source.height = canvas.Size().Height;
@@ -92,15 +93,22 @@ void ImageView::Render(
     height = m_source.height * m_source.scale;
   }
 
-  winrt::Microsoft::Graphics::Canvas::Effects::Transform2DEffect transformEffect{nullptr};
+  auto deviceContext{D2DHelpers::GetDeviceContext(session)};
+
+  com_ptr<ID2D1Effect> transformEffect;
+
   if (m_align != "") {
     Rect elRect{x, y, width, height};
     Rect vbRect{0, 0, m_source.width, m_source.height};
-    transformEffect = winrt::Microsoft::Graphics::Canvas::Effects::Transform2DEffect{};
-    transformEffect.TransformMatrix(Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
+    //deviceContext->CreateEffect(CLSID_D2D12DAffineTransform, transformEffect.put());
+    transformEffect->SetValue(
+        D2D1_2DAFFINETRANSFORM_PROP_TRANSFORM_MATRIX,
+        Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
   }
 
-  auto const &clipPathGeometry{ClipPathGeometry()};
+  winrt::com_ptr<ID2D1Geometry> clipPathGeometryD2D;
+  winrt::copy_to_abi(ClipPathGeometry(), *clipPathGeometryD2D.put_void());
+  auto const &clipPathGeometry{D2DHelpers::GetGeometry(clipPathGeometryD2D.get())};
 
   if (auto const &opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
     if (m_source.format == ImageSourceFormat::Bitmap && m_bitmap) {
@@ -110,13 +118,14 @@ void ImageView::Render(
       }
 
       if (m_align != "" && transformEffect) {
-        transformEffect.Source(m_bitmap);
-        winrt::Microsoft::Graphics::Canvas::Effects::CropEffect cropEffect{};
-        cropEffect.SourceRectangle({x, y, width, height});
-        cropEffect.Source(transformEffect);
-        session.DrawImage(cropEffect);
+        
+        //transformEffect.Source(m_bitmap);
+        //winrt::Microsoft::Graphics::Canvas::Effects::CropEffect cropEffect{};
+        //cropEffect.SourceRectangle({x, y, width, height});
+        //cropEffect.Source(transformEffect);
+        //session.DrawImage(cropEffect);
       } else {
-        session.DrawImage(m_bitmap, {x, y, width, height});
+        //session.DrawImage(m_bitmap, {x, y, width, height});
       }
 
       session.Transform(transform);

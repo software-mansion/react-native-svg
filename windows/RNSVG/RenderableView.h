@@ -14,8 +14,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Windows::UI::Xaml::FrameworkElement SvgParent() { return m_parent; }
   void SvgParent(Windows::UI::Xaml::FrameworkElement const &value) { m_parent = value; }
 
-  Microsoft::Graphics::Canvas::Geometry::CanvasGeometry Geometry() { return m_geometry; }
-  void Geometry(Microsoft::Graphics::Canvas::Geometry::CanvasGeometry value) { m_geometry = value; }
+  Windows::Foundation::IInspectable Geometry() { return m_geometry; }
+  void Geometry(Windows::Foundation::IInspectable value) { m_geometry = value; }
 
   hstring Id() { return m_id; }
   Numerics::float3x2 SvgTransform() { return m_transformMatrix; }
@@ -36,7 +36,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   int32_t StrokeLineCap() { return m_strokeLineCap; }
   int32_t StrokeLineJoin() { return m_strokeLineJoin; }
   int32_t FillRule() { return m_fillRule; }
-  Microsoft::Graphics::Canvas::Geometry::CanvasGeometry ClipPathGeometry();
+  Windows::Foundation::IInspectable ClipPathGeometry();
 
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
   virtual void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const & /*canvas*/) {}
@@ -72,7 +72,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Windows::UI::Xaml::FrameworkElement m_parent{nullptr};
-  Microsoft::Graphics::Canvas::Geometry::CanvasGeometry m_geometry{nullptr};
+  Windows::Foundation::IInspectable m_geometry{nullptr};
   bool m_recreateResources{true};
   bool m_isResponsible{false};
   

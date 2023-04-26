@@ -108,7 +108,7 @@ const names: (keyof typeof examples)[] = [
   'Text',
   'Gradients',
   'Clipping',
-  'Image',
+  //'Image',
   'TouchEvents',
   'PanResponder',
   'Reusable',

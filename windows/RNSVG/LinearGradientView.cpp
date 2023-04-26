@@ -6,11 +6,11 @@
 
 namespace winrt::RNSVG::implementation {
 void LinearGradientView::UpdateProperties(
-    winrt::Microsoft::ReactNative::IJSValueReader const &reader,
+    Microsoft::ReactNative::IJSValueReader const &reader,
     bool forceUpdate,
     bool invalidate) {
-  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
-      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+  const Microsoft::ReactNative::JSValueObject &propertyMap{
+      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -48,12 +48,12 @@ void LinearGradientView::Unload() {
   __super::Unload();
 }
 
-void LinearGradientView::CreateBrush(winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
+void LinearGradientView::CreateBrush(win2d::CanvasDrawingSession const &session) {
   auto const &canvas{SvgRoot().Canvas()};
 
   winrt::com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
   winrt::com_ptr<ID2D1GradientStopCollection> stopCollection;
-  winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], m_stops.size(), stopCollection.put()));
+  winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], static_cast<uint32_t>(m_stops.size()), stopCollection.put()));
 
   D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES brushProperties;
   brushProperties.startPoint = {0, 0};

@@ -6,9 +6,9 @@
 #include "Utils.h"
 
 namespace winrt::RNSVG::implementation {
-void EllipseView::UpdateProperties(winrt::Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
-      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+void EllipseView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const Microsoft::ReactNative::JSValueObject &propertyMap{
+      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -28,15 +28,19 @@ void EllipseView::UpdateProperties(winrt::Microsoft::ReactNative::IJSValueReader
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void EllipseView::CreateGeometry(winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas) {
-  auto const &resourceCreator{canvas.try_as<winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator>()};
-
+void EllipseView::CreateGeometry(win2d::UI::Xaml::CanvasControl const &canvas) {
   float cx{Utils::GetAbsoluteLength(m_cx, canvas.Size().Width)};
   float cy{Utils::GetAbsoluteLength(m_cy, canvas.Size().Height)};
   float rx{Utils::GetAbsoluteLength(m_rx, canvas.Size().Width)};
   float ry{Utils::GetAbsoluteLength(m_ry, canvas.Size().Height)};
 
-  Geometry(
-      winrt::Microsoft::Graphics::Canvas::Geometry::CanvasGeometry::CreateEllipse(resourceCreator, cx, cy, rx, ry));
+  auto factory{D2DHelpers::GetFactory(canvas)};
+  com_ptr<ID2D1EllipseGeometry> geometry;
+  check_hresult(factory->CreateEllipseGeometry(D2D1::Ellipse({cx, cy}, rx, ry), geometry.put()));
+
+  IInspectable asInspectable;
+  copy_from_abi(asInspectable, geometry.get());
+
+  Geometry(asInspectable);
 }
 } // namespace winrt::RNSVG::implementation

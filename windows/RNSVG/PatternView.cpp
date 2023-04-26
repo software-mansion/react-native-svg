@@ -6,11 +6,11 @@
 
 namespace winrt::RNSVG::implementation {
 void PatternView::UpdateProperties(
-    winrt::Microsoft::ReactNative::IJSValueReader const &reader,
+    Microsoft::ReactNative::IJSValueReader const &reader,
     bool forceUpdate,
     bool invalidate) {
-  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
-      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+  const Microsoft::ReactNative::JSValueObject &propertyMap{
+      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -61,15 +61,15 @@ void PatternView::UpdateProperties(
 
 void PatternView::UpdateBounds() {
   if (m_patternUnits == "objectBoundingBox") {
-    winrt::com_ptr<ID2D1ImageBrush> brush;
-    winrt::copy_to_abi(m_brush, *brush.put_void());
+    com_ptr<ID2D1ImageBrush> brush;
+    copy_to_abi(m_brush, *brush.put_void());
 
     D2D1_RECT_F rect{GetAdjustedRect(m_bounds)};
     brush->SetSourceRectangle(&rect);
   }
 }
 
-void PatternView::CreateBrush(winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
+void PatternView::CreateBrush(win2d::CanvasDrawingSession const &session) {
   auto const &canvas{SvgRoot().Canvas()};
 
   D2D1_RECT_F elRect{GetAdjustedRect({0, 0, canvas.Size().Width, canvas.Size().Height})};
@@ -78,9 +78,9 @@ void PatternView::CreateBrush(winrt::Microsoft::Graphics::Canvas::CanvasDrawingS
 
 void PatternView::CreateBrush(
     D2D1_RECT_F rect,
-    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
-  auto const &canvas{SvgRoot().Canvas()};
-  winrt::com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
+    win2d::CanvasDrawingSession const &session) {
+  //auto const &canvas{SvgRoot().Canvas()};
+  com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
 
   if (auto const &cmdList{GetCommandList(rect, session)}) {
     D2D1_IMAGE_BRUSH_PROPERTIES brushProperties;
@@ -88,12 +88,12 @@ void PatternView::CreateBrush(
     brushProperties.extendModeY = D2D1_EXTEND_MODE_WRAP;
     brushProperties.sourceRectangle = rect;
 
-    winrt::com_ptr<ID2D1ImageBrush> imageBrush;
-    winrt::check_hresult(deviceContext->CreateImageBrush(cmdList.get(), brushProperties, imageBrush.put()));
+    com_ptr<ID2D1ImageBrush> imageBrush;
+    check_hresult(deviceContext->CreateImageBrush(cmdList.get(), brushProperties, imageBrush.put()));
 
     cmdList->Close();
 
-    winrt::copy_from_abi(m_brush, imageBrush.get());
+    copy_from_abi(m_brush, imageBrush.get());
   }
 }
 
@@ -109,28 +109,27 @@ D2D1_RECT_F PatternView::GetAdjustedRect(D2D1_RECT_F bounds) {
   return {x, y, adjWidth, adjHeight};
 }
 
-winrt::com_ptr<ID2D1CommandList> PatternView::GetCommandList(
+com_ptr<ID2D1CommandList> PatternView::GetCommandList(
     D2D1_RECT_F rect,
-    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
+    win2d::CanvasDrawingSession const &/*session*/) {
   auto const &root{SvgRoot()};
-  auto const &canvas{root.Canvas()};
+  //auto const &canvas{root.Canvas()};
 
-  auto sharedDevice{winrt::Microsoft::Graphics::Canvas::CanvasDevice::GetSharedDevice()};
+  auto sharedDevice{win2d::CanvasDevice::GetSharedDevice()};
   // First we need to get an ID2D1Device1 pointer from the shared CanvasDevice
-  winrt::com_ptr<ABI::Microsoft::Graphics::Canvas::ICanvasResourceWrapperNative> nativeDeviceWrapper =
-      sharedDevice.as<ABI::Microsoft::Graphics::Canvas::ICanvasResourceWrapperNative>();
-  winrt::com_ptr<ID2D1Device1> device{nullptr};
-  winrt::check_hresult(nativeDeviceWrapper->GetNativeResource(nullptr, 0.0f, guid_of<ID2D1Device1>(), device.put_void()));
+  com_ptr<abi::ICanvasResourceWrapperNative> nativeDeviceWrapper = sharedDevice.as<abi::ICanvasResourceWrapperNative>();
+  com_ptr<ID2D1Device1> device{nullptr};
+  check_hresult(nativeDeviceWrapper->GetNativeResource(nullptr, 0.0f, guid_of<ID2D1Device1>(), device.put_void()));
   
-  winrt::com_ptr<ID2D1DeviceContext> deviceContext;
-  winrt::check_hresult(device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, deviceContext.put()));
+  com_ptr<ID2D1DeviceContext> deviceContext;
+  check_hresult(device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, deviceContext.put()));
 
-  winrt::com_ptr<ID2D1CommandList> cmdList;
-  deviceContext->CreateCommandList(cmdList.put());
+  com_ptr<ID2D1CommandList> cmdList;
+  check_hresult(deviceContext->CreateCommandList(cmdList.put()));
 
   deviceContext->SetTarget(cmdList.get());
 
-  winrt::com_ptr<ID2D1CommandSink> sink;
+  com_ptr<ID2D1CommandSink> sink;
 
   //auto const &cmdList{winrt::Microsoft::Graphics::Canvas::CanvasCommandList(canvas)};
   //auto const &session{cmdList.CreateDrawingSession()};

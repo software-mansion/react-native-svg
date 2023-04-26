@@ -11,8 +11,8 @@
 #include "Utils.h"
 
 namespace winrt::RNSVG::implementation {
-SvgView::SvgView(winrt::Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {
-  m_scale = static_cast<float>(winrt::Windows::Graphics::Display::DisplayInformation::GetForCurrentView().ResolutionScale()) / 100;
+SvgView::SvgView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {
+  m_scale = static_cast<float>(Windows::Graphics::Display::DisplayInformation::GetForCurrentView().ResolutionScale()) / 100;
 
   m_canvasDrawRevoker = m_canvas.Draw(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_Draw});
   m_canvasCreateResourcesRevoker = m_canvas.CreateResources(winrt::auto_revoke, {get_weak(), &SvgView::Canvas_CreateResources});
@@ -22,7 +22,7 @@ SvgView::SvgView(winrt::Microsoft::ReactNative::IReactContext const &context) : 
   Children().Append(m_canvas);
 }
 
-void SvgView::SvgParent(Windows::UI::Xaml::FrameworkElement const &value) {
+void SvgView::SvgParent(xaml::FrameworkElement const &value) {
   if (value) {
     m_canvasDrawRevoker.revoke();
     m_canvasCreateResourcesRevoker.revoke();
@@ -35,7 +35,7 @@ void SvgView::SvgParent(Windows::UI::Xaml::FrameworkElement const &value) {
 }
 
 void SvgView::UpdateProperties(
-    winrt::Microsoft::ReactNative::IJSValueReader const &reader,
+    Microsoft::ReactNative::IJSValueReader const &reader,
     bool forceUpdate,
     bool invalidate) {
   // If forceUpdate is false, that means this is a nested Svg
@@ -43,7 +43,7 @@ void SvgView::UpdateProperties(
   if (!forceUpdate && m_group) {
     m_group.UpdateProperties(reader, forceUpdate, invalidate);
   } else {
-    auto const &propertyMap{winrt::Microsoft::ReactNative::JSValueObject::ReadFrom(reader)};
+    auto const &propertyMap{Microsoft::ReactNative::JSValueObject::ReadFrom(reader)};
 
     for (auto const &pair : propertyMap) {
       auto const &propertyName{pair.first};
@@ -118,8 +118,8 @@ Size SvgView::ArrangeOverride(Size finalSize) {
 }
 
 void SvgView::Render(
-    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
+    win2d::UI::Xaml::CanvasControl const &canvas,
+    win2d::CanvasDrawingSession const &session) {
   if (m_align != "") {
     Rect vbRect{m_minX * m_scale, m_minY * m_scale, m_vbWidth * m_scale, m_vbHeight * m_scale};
     float width{static_cast<float>(canvas.ActualWidth())};
@@ -143,8 +143,8 @@ void SvgView::Render(
 }
 
 void SvgView::Canvas_Draw(
-    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &sender,
-    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasDrawEventArgs const &args) {
+    win2d::UI::Xaml::CanvasControl const &sender,
+    win2d::UI::Xaml::CanvasDrawEventArgs const &args) {
   if (!m_hasRendered) {
     m_hasRendered = true;
   }
@@ -156,32 +156,30 @@ void SvgView::Canvas_Draw(
 }
 
 void SvgView::CreateResources(
-    winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
-    winrt::Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args) {
+    win2d::ICanvasResourceCreator const &resourceCreator,
+    win2d::UI::CanvasCreateResourcesEventArgs const &args) {
   if (m_group) {
     m_group.CreateResources(resourceCreator, args);
   }
 }
 
-void SvgView::CreateGeometry(winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas) {
+void SvgView::CreateGeometry(win2d::UI::Xaml::CanvasControl const &canvas) {
   if (m_group) {
     m_group.CreateGeometry(canvas);
   }
 }
 
 void SvgView::Canvas_CreateResources(
-    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &sender,
-    winrt::Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args) {
+    win2d::UI::Xaml::CanvasControl const &sender,
+    win2d::UI::CanvasCreateResourcesEventArgs const &args) {
   CreateResources(sender, args);
 }
 
-void SvgView::Canvas_SizeChanged(
-    IInspectable const & /*sender*/,
-    Windows::UI::Xaml::SizeChangedEventArgs const & /*args*/) {
+void SvgView::Canvas_SizeChanged(IInspectable const & /*sender*/, xaml::SizeChangedEventArgs const & /*args*/) {
   // sender.Invalidate();
 }
 
-void SvgView::Panel_Unloaded(IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const & /*args*/) {
+void SvgView::Panel_Unloaded(IInspectable const &sender, xaml::RoutedEventArgs const & /*args*/) {
   if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
     svgView.Unload();
   }

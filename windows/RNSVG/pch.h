@@ -2,7 +2,7 @@
 
 #define NOMINMAX
 
-#include <d2d1_2.h>
+#include <d2d1_3.h>
 #include <hstring.h>
 #include <restrictederrorinfo.h>
 #include <unknwn.h>

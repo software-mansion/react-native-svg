@@ -13,11 +13,11 @@
 
 namespace winrt::RNSVG::implementation {
 void GroupView::UpdateProperties(
-    winrt::Microsoft::ReactNative::IJSValueReader const &reader,
+    Microsoft::ReactNative::IJSValueReader const &reader,
     bool forceUpdate,
     bool invalidate) {
-  const winrt::Microsoft::ReactNative::JSValueObject &propertyMap{
-      winrt::Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+  const Microsoft::ReactNative::JSValueObject &propertyMap{
+      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
   auto const &parent{SvgParent().try_as<RNSVG::GroupView>()};
   auto fontProp{RNSVG::FontProp::Unknown};
@@ -102,18 +102,27 @@ void GroupView::UpdateProperties(
   }
 }
 
-void GroupView::CreateGeometry(winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas) {
-  auto const &resourceCreator{canvas.try_as<winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator>()};
-  std::vector<winrt::Microsoft::Graphics::Canvas::Geometry::CanvasGeometry> geometries;
-  for (auto const &child : Children()) {
+void GroupView::CreateGeometry(win2d::UI::Xaml::CanvasControl const &canvas) {
+  std::vector<ID2D1Geometry*> geometries(Children().Size());
+
+  for (uint32_t i = 0; i < Children().Size(); ++i) {
+    auto child{Children().GetAt(i)};
     if (!child.Geometry()) {
       child.CreateGeometry(canvas);
     }
-    geometries.push_back(child.Geometry());
+
+    com_ptr<ID2D1Geometry> geometry;
+    copy_to_abi(child.Geometry(), *geometry.put_void());
+    geometries[i] = geometry.get();
   }
 
-  Geometry(winrt::Microsoft::Graphics::Canvas::Geometry::CanvasGeometry::CreateGroup(
-      resourceCreator, geometries, D2DHelpers::GetFillRule(FillRule())));
+  auto factory{D2DHelpers::GetFactory(canvas)};
+  com_ptr<ID2D1GeometryGroup> group;
+  check_hresult(factory->CreateGeometryGroup(D2DHelpers::GetFillRule(FillRule()), &geometries[0], static_cast<uint32_t>(geometries.size()), group.put()));
+
+  IInspectable asInspectable;
+  copy_from_abi(asInspectable, group.get());
+  Geometry(asInspectable);
 }
 
 void GroupView::SaveDefinition() {
@@ -133,15 +142,17 @@ void GroupView::MergeProperties(RNSVG::RenderableView const &other) {
 }
 
 void GroupView::Render(
-    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
+    win2d::UI::Xaml::CanvasControl const &canvas,
+    win2d::CanvasDrawingSession const &session) {
   auto const &transform{session.Transform()};
 
   if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
     session.Transform(transform * SvgTransform());
   }
 
-  auto const &clipPathGeometry{ClipPathGeometry()};
+  com_ptr<ID2D1Geometry> clipPathGeometryD2D;
+  copy_to_abi(ClipPathGeometry(), *clipPathGeometryD2D.put_void());
+  auto const &clipPathGeometry{D2DHelpers::GetGeometry(clipPathGeometryD2D.get())};
 
   if (auto const &opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
     if (Children().Size() == 0) {
@@ -156,16 +167,16 @@ void GroupView::Render(
 }
 
 void GroupView::RenderGroup(
-    winrt::Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-    winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
+    win2d::UI::Xaml::CanvasControl const &canvas,
+    win2d::CanvasDrawingSession const &session) {
   for (auto const &child : Children()) {
     child.Render(canvas, session);
   }
 }
 
 void GroupView::CreateResources(
-    winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
-    winrt::Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args) {
+    win2d::ICanvasResourceCreator const &resourceCreator,
+    win2d::UI::CanvasCreateResourcesEventArgs const &args) {
   for (auto const &child : Children()) {
     child.CreateResources(resourceCreator, args);
   }
@@ -183,7 +194,7 @@ void GroupView::Unload() {
   __super::Unload();
 }
 
-winrt::RNSVG::IRenderable GroupView::HitTest(winrt::Windows::Foundation::Point const &point) {
+winrt::RNSVG::IRenderable GroupView::HitTest(Point const &point) {
   RNSVG::IRenderable renderable{nullptr};
   if (IsResponsible()) {
     for (auto const &child : Children()) {
@@ -200,8 +211,14 @@ winrt::RNSVG::IRenderable GroupView::HitTest(winrt::Windows::Foundation::Point c
         }
       }
       if (Geometry()) {
-        auto const &bounds{Geometry().ComputeBounds()};
-        if (winrt::Windows::UI::Xaml::RectHelper::Contains(bounds, point)) {
+        com_ptr<ID2D1Geometry> geometry;
+        copy_to_abi(Geometry(), *geometry.put_void());
+
+        D2D1_RECT_F bounds;
+        check_hresult(geometry->GetBounds(nullptr, &bounds));
+
+
+        if (xaml::RectHelper::Contains(D2DHelpers::FromD2DRect(bounds), point)) {
           renderable = *this;
         }
       }

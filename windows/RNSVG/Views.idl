@@ -5,7 +5,7 @@ namespace RNSVG
   interface IRenderable
   {
     Windows.UI.Xaml.FrameworkElement SvgParent;
-    Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
+    Object Geometry;
     Boolean IsResponsible;
 
     void CreateResources(
@@ -58,7 +58,7 @@ namespace RNSVG
     Int32 StrokeLineCap{ get; };
     Int32 StrokeLineJoin{ get; };
     Int32 FillRule{ get; };
-    Microsoft.Graphics.Canvas.Geometry.CanvasGeometry ClipPathGeometry{ get; };
+    Object ClipPathGeometry{ get; };
   };
 
   [default_interface]

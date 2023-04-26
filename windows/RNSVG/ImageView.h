@@ -41,6 +41,7 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
 
   ImageSource m_source{};
+  //com_ptr<ID2D1Bitmap> m_bitmap{nullptr};
   Microsoft::Graphics::Canvas::CanvasBitmap m_bitmap{nullptr};
 
   Windows::Foundation::IAsyncAction LoadImageSourceAsync(Microsoft::Graphics::Canvas::ICanvasResourceCreator resourceCreator, bool invalidate);
