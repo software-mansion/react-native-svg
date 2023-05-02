@@ -41,8 +41,7 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
 
   ImageSource m_source{};
-  //com_ptr<ID2D1Bitmap> m_bitmap{nullptr};
-  Microsoft::Graphics::Canvas::CanvasBitmap m_bitmap{nullptr};
+  com_ptr<IWICBitmap> m_wicbitmap{nullptr};
 
   Windows::Foundation::IAsyncAction LoadImageSourceAsync(Microsoft::Graphics::Canvas::ICanvasResourceCreator resourceCreator, bool invalidate);
   winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream>
@@ -51,6 +50,9 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   GetImageStreamAsync(ImageSource source);
   Windows::Foundation::IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream>
   GetImageInlineDataAsync(ImageSource source);
+  winrt::com_ptr<IWICBitmapSource> ImageView::wicBitmapSourceFromStream(
+      winrt::Windows::Storage::Streams::InMemoryRandomAccessStream const &stream);
+  void generateBitmap(winrt::Windows::Storage::Streams::InMemoryRandomAccessStream const &results);
 };
 } // namespace winrt::RNSVG::implementation
 

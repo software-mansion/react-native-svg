@@ -2,14 +2,16 @@
 #include "ImageView.h"
 #include "ImageView.g.cpp"
 
-#include "d2d1effects.h"
+#include "Utils.h"
 
 #include <winrt/Windows.Security.Cryptography.h>
 #include <winrt/Windows.Storage.Streams.h>
 #include <winrt/Windows.Web.Http.Headers.h>
 #include <winrt/Windows.Web.Http.h>
 
-#include "Utils.h"
+#include <d2d1effects.h>
+#include <shcore.h>
+#include <wincodec.h>
 
 namespace winrt::RNSVG::implementation {
 void ImageView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
@@ -75,6 +77,21 @@ void ImageView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &r
 void ImageView::Render(
     win2d::UI::Xaml::CanvasControl const &canvas,
     win2d::CanvasDrawingSession const &session) {
+
+  auto deviceContext{D2DHelpers::GetDeviceContext(session)};
+  com_ptr<ID2D1Bitmap1> bitmap;
+
+  if (m_wicbitmap) {
+    uint32_t width, height = 0;
+
+    winrt::check_hresult(m_wicbitmap->GetSize(&width, &height));
+
+    m_source.width = static_cast<float>(width);
+    m_source.height = static_cast<float>(height);
+
+    check_hresult(deviceContext->CreateBitmapFromWicBitmap(m_wicbitmap.get(), nullptr, bitmap.put()));
+  }
+
   if (m_source.width == 0 || m_source.height == 0) {
     m_source.width = canvas.Size().Width;
     m_source.height = canvas.Size().Height;
@@ -93,14 +110,12 @@ void ImageView::Render(
     height = m_source.height * m_source.scale;
   }
 
-  auto deviceContext{D2DHelpers::GetDeviceContext(session)};
-
   com_ptr<ID2D1Effect> transformEffect;
 
   if (m_align != "") {
     Rect elRect{x, y, width, height};
     Rect vbRect{0, 0, m_source.width, m_source.height};
-    //deviceContext->CreateEffect(CLSID_D2D12DAffineTransform, transformEffect.put());
+    deviceContext->CreateEffect(CLSID_D2D12DAffineTransform, transformEffect.put());
     transformEffect->SetValue(
         D2D1_2DAFFINETRANSFORM_PROP_TRANSFORM_MATRIX,
         Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
@@ -111,21 +126,27 @@ void ImageView::Render(
   auto const &clipPathGeometry{D2DHelpers::GetGeometry(clipPathGeometryD2D.get())};
 
   if (auto const &opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
-    if (m_source.format == ImageSourceFormat::Bitmap && m_bitmap) {
+    if (m_source.format == ImageSourceFormat::Bitmap && m_wicbitmap) {
       auto const &transform{session.Transform()};
       if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
         session.Transform(SvgTransform());
       }
 
       if (m_align != "" && transformEffect) {
-        
-        //transformEffect.Source(m_bitmap);
-        //winrt::Microsoft::Graphics::Canvas::Effects::CropEffect cropEffect{};
-        //cropEffect.SourceRectangle({x, y, width, height});
-        //cropEffect.Source(transformEffect);
-        //session.DrawImage(cropEffect);
+        winrt::com_ptr<ID2D1Effect> bitmapEffects;
+        winrt::check_hresult(deviceContext->CreateEffect(CLSID_D2D1BitmapSource, bitmapEffects.put()));
+        winrt::check_hresult(bitmapEffects->SetValue(D2D1_BITMAPSOURCE_PROP_WIC_BITMAP_SOURCE, m_wicbitmap.get()));
+
+        transformEffect->SetInputEffect(0, bitmapEffects.get());
+
+        com_ptr<ID2D1Effect> cropEffect{nullptr};
+        deviceContext->CreateEffect(CLSID_D2D1Crop, cropEffect.put());
+        cropEffect->SetValue(D2D1_CROP_PROP_RECT, D2D1::RectF(x, y, x + width, y + height));
+        cropEffect->SetInputEffect(0, transformEffect.get());
+
+        deviceContext->DrawImage(cropEffect.get());
       } else {
-        //session.DrawImage(m_bitmap, {x, y, width, height});
+        deviceContext->DrawBitmap(bitmap.get(), D2D1::RectF(x, y, x + width, y + height));
       }
 
       session.Transform(transform);
@@ -142,9 +163,8 @@ void ImageView::CreateResources(
 }
 
 void ImageView::Unload() {
-  if (m_bitmap) {
-    m_bitmap.Close();
-    m_bitmap = nullptr;
+  if (m_wicbitmap) {
+    m_wicbitmap = nullptr;
   }
 }
 
@@ -188,13 +208,8 @@ IAsyncAction ImageView::LoadImageSourceAsync(
   }
 
   if (stream) {
-    m_bitmap = co_await winrt::Microsoft::Graphics::Canvas::CanvasBitmap::LoadAsync(resourceCreator, stream);
-  } else {
-    m_bitmap = co_await winrt::Microsoft::Graphics::Canvas::CanvasBitmap::LoadAsync(resourceCreator, uri);
+    generateBitmap(stream);
   }
-
-  m_source.width = m_bitmap.Size().Width;
-  m_source.height = m_bitmap.Size().Height;
 
   if (invalidate) {
     if (auto strong_this{weak_this.get()}) {
@@ -280,5 +295,54 @@ IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream> Im
   }
 
   co_return nullptr;
+}
+
+winrt::com_ptr<IWICBitmapSource> ImageView::wicBitmapSourceFromStream(
+    Windows::Storage::Streams::InMemoryRandomAccessStream const &results) {
+  if (!results) {
+    return nullptr;
+  }
+
+  winrt::com_ptr<IWICImagingFactory> imagingFactory{nullptr};
+  check_hresult(CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(imagingFactory.put())));
+
+  winrt::com_ptr<IStream> istream;
+  winrt::check_hresult(
+      CreateStreamOverRandomAccessStream(results.as<::IUnknown>().get(), __uuidof(IStream), istream.put_void()));
+
+  winrt::com_ptr<IWICBitmapDecoder> bitmapDecoder;
+  if (imagingFactory->CreateDecoderFromStream(
+          istream.get(), nullptr, WICDecodeMetadataCacheOnDemand, bitmapDecoder.put()) < 0) {
+    return nullptr;
+  }
+
+  winrt::com_ptr<IWICBitmapFrameDecode> decodedFrame;
+  winrt::check_hresult(bitmapDecoder->GetFrame(0, decodedFrame.put()));
+  return decodedFrame;
+}
+
+void ImageView::generateBitmap(Windows::Storage::Streams::InMemoryRandomAccessStream const &results) {
+  winrt::com_ptr<IWICBitmapSource> decodedFrame = wicBitmapSourceFromStream(results);
+
+  if (!decodedFrame) {
+    return;
+  }
+
+  winrt::com_ptr<IWICImagingFactory> imagingFactory{nullptr};
+  check_hresult(
+      CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(imagingFactory.put())));
+  winrt::com_ptr<IWICFormatConverter> converter;
+  winrt::check_hresult(imagingFactory->CreateFormatConverter(converter.put()));
+
+  winrt::check_hresult(converter->Initialize(
+      decodedFrame.get(),
+      GUID_WICPixelFormat32bppPBGRA,
+      WICBitmapDitherTypeNone,
+      nullptr,
+      0.0f,
+      WICBitmapPaletteTypeMedianCut));
+
+  winrt::check_hresult(
+      imagingFactory->CreateBitmapFromSource(converter.get(), WICBitmapCacheOnLoad, m_wicbitmap.put()));
 }
 } // namespace winrt::RNSVG::implementation
