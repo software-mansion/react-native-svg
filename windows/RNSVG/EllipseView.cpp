@@ -28,19 +28,26 @@ void EllipseView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void EllipseView::CreateGeometry(win2d::UI::Xaml::CanvasControl const &canvas) {
-  float cx{Utils::GetAbsoluteLength(m_cx, canvas.Size().Width)};
-  float cy{Utils::GetAbsoluteLength(m_cy, canvas.Size().Height)};
-  float rx{Utils::GetAbsoluteLength(m_rx, canvas.Size().Width)};
-  float ry{Utils::GetAbsoluteLength(m_ry, canvas.Size().Height)};
+void EllipseView::CreateGeometry() {
+  if (auto const &root{SvgRoot()}) {
+    float cx{Utils::GetAbsoluteLength(m_cx, root.ActualWidth())};
+    float cy{Utils::GetAbsoluteLength(m_cy, root.ActualHeight())};
+    float rx{Utils::GetAbsoluteLength(m_rx, root.ActualWidth())};
+    float ry{Utils::GetAbsoluteLength(m_ry, root.ActualHeight())};
 
-  auto factory{D2DHelpers::GetFactory(canvas)};
-  com_ptr<ID2D1EllipseGeometry> geometry;
-  check_hresult(factory->CreateEllipseGeometry(D2D1::Ellipse({cx, cy}, rx, ry), geometry.put()));
+    com_ptr<ID2D1DeviceContext1> deviceContext;
+    copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
 
-  IInspectable asInspectable;
-  copy_from_abi(asInspectable, geometry.get());
+    com_ptr<ID2D1Factory> factory;
+    deviceContext->GetFactory(factory.put());
 
-  Geometry(asInspectable);
+    com_ptr<ID2D1EllipseGeometry> geometry;
+    check_hresult(factory->CreateEllipseGeometry(D2D1::Ellipse({cx, cy}, rx, ry), geometry.put()));
+
+    IInspectable asInspectable;
+    copy_from_abi(asInspectable, geometry.get());
+
+    Geometry(asInspectable);
+  }
 }
 } // namespace winrt::RNSVG::implementation

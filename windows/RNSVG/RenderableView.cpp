@@ -181,7 +181,7 @@ void RenderableView::UpdateProperties(
   m_recreateResources = true;
 
   if (invalidate && SvgParent()) {
-    SvgRoot().InvalidateCanvas();
+    SvgRoot().Invalidate();
   }
 }
 
@@ -191,88 +191,89 @@ void RenderableView::SaveDefinition() {
   }
 }
 
-void RenderableView::Render(
-    win2d::UI::Xaml::CanvasControl const &canvas, win2d::CanvasDrawingSession const &session) {
+void RenderableView::Draw() {
   if (m_recreateResources) {
-    CreateGeometry(canvas);
+    CreateGeometry();
   }
 
   winrt::com_ptr<ID2D1Geometry> geometry;
   winrt::copy_to_abi(m_geometry, *geometry.put_void());
 
-  if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
-    //geometry = geometry.Transform(SvgTransform());
-  }
+  if (auto const &root{SvgRoot()}) {
+    com_ptr<ID2D1DeviceContext1> deviceContext;
+    copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
 
-  com_ptr<ID2D1Geometry> clipPathGeometryD2D;
-  copy_to_abi(ClipPathGeometry(), *clipPathGeometryD2D.put_void());
-  auto const clipPathGeometry{D2DHelpers::GetGeometry(clipPathGeometryD2D.get())};
+    com_ptr<ID2D1Layer> transformLayer;
+    check_hresult(deviceContext->CreateLayer(nullptr, transformLayer.put()));
 
-  com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
-  com_ptr<ID2D1Factory> factory;
-  deviceContext->GetFactory(factory.put());
+    D2D1_MATRIX_3X2_F transform;
+    deviceContext->GetTransform(&transform);
 
-  com_ptr<ID2D1GeometryGroup> geometryGroup;
-  ID2D1Geometry *geometries[] = {geometry.get()};
-  check_hresult(factory->CreateGeometryGroup(D2DHelpers::GetFillRule(FillRule()), geometries, 1, geometryGroup.put()));
-
-  geometry = geometryGroup;
-
-  try {
-    if (auto opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
-      if (auto fillLayer{session.CreateLayer(FillOpacity())}) {
-        try {
-          auto fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), geometry, session)};
-          deviceContext->FillGeometry(geometry.get(), fill.get());
-          fillLayer.Close();
-        } catch (hresult_error const &e) {
-          hresult hr = e.code();
-          hstring message = e.message();
-        }
-      }
-
-      if (auto const &strokeLayer{session.CreateLayer(StrokeOpacity())}) {
-        try {
-          D2D1_CAP_STYLE capStyle{D2DHelpers::GetLineCap(m_strokeLineCap)};
-          D2D1_LINE_JOIN lineJoin{D2DHelpers::GetLineJoin(m_strokeLineJoin)};
-
-          D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties;
-          strokeStyleProperties.startCap = capStyle;
-          strokeStyleProperties.endCap = capStyle;
-          strokeStyleProperties.dashCap = capStyle;
-          strokeStyleProperties.lineJoin = lineJoin;
-          strokeStyleProperties.dashOffset = StrokeDashOffset();
-          strokeStyleProperties.miterLimit = StrokeMiterLimit();
-          strokeStyleProperties.dashStyle = D2D1_DASH_STYLE_SOLID;
-
-          float canvasDiagonal{Utils::GetCanvasDiagonal(canvas.Size())};
-          float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
-
-          float *dashArray = nullptr;
-          if (StrokeDashArray().Size() > 0) {
-            strokeStyleProperties.dashStyle = D2D1_DASH_STYLE_CUSTOM;
-            m_adjustedStrokeDashArray = Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal);
-            dashArray = &m_adjustedStrokeDashArray[0];
-          }
-
-          com_ptr<ID2D1StrokeStyle> strokeStyle;
-          check_hresult(factory->CreateStrokeStyle(
-              strokeStyleProperties, dashArray, m_strokeDashArray.Size(), strokeStyle.put()));
-
-          auto const stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry, session)};
-          deviceContext->DrawGeometry(geometry.get(), stroke.get(), strokeWidth, strokeStyle.get());
-          strokeLayer.Close();
-        } catch (hresult_error const &e) {
-          hresult hr = e.code();
-          hstring message = e.message();
-        }
-
-        opacityLayer.Close();
-      }
+    if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
+      transform = D2DHelpers::AsD2DTransform(SvgTransform());
     }
-  } catch (hresult_error const &e) {
-    hresult hr = e.code();
-    hstring message = e.message();
+
+    com_ptr<ID2D1Geometry> clipPathGeometry;
+    copy_to_abi(ClipPathGeometry(), *clipPathGeometry.put_void());
+
+    com_ptr<ID2D1Factory> factory;
+    deviceContext->GetFactory(factory.put());
+
+    com_ptr<ID2D1GeometryGroup> geometryGroup;
+    ID2D1Geometry *geometries[] = {geometry.get()};
+    check_hresult(
+        factory->CreateGeometryGroup(D2DHelpers::GetFillRule(FillRule()), geometries, 1, geometryGroup.put()));
+
+    geometry = geometryGroup;
+
+    D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity, transform);
+
+    if (FillOpacity()) {
+      // session.CreateLayer(FillOpacity())
+      D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), FillOpacity());
+
+      auto fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), geometry)};
+      deviceContext->FillGeometry(geometry.get(), fill.get());
+
+      deviceContext->PopLayer();
+    }
+
+    if (StrokeOpacity()) {
+      // session.CreateLayer(StrokeOpacity())
+      D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), StrokeOpacity());
+
+      D2D1_CAP_STYLE capStyle{D2DHelpers::GetLineCap(m_strokeLineCap)};
+      D2D1_LINE_JOIN lineJoin{D2DHelpers::GetLineJoin(m_strokeLineJoin)};
+
+      D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties;
+      strokeStyleProperties.startCap = capStyle;
+      strokeStyleProperties.endCap = capStyle;
+      strokeStyleProperties.dashCap = capStyle;
+      strokeStyleProperties.lineJoin = lineJoin;
+      strokeStyleProperties.dashOffset = StrokeDashOffset();
+      strokeStyleProperties.miterLimit = StrokeMiterLimit();
+      strokeStyleProperties.dashStyle = D2D1_DASH_STYLE_SOLID;
+
+      float canvasDiagonal{Utils::GetCanvasDiagonal(root.ActualSize())};
+      float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
+
+      float *dashArray = nullptr;
+      if (StrokeDashArray().Size() > 0) {
+        strokeStyleProperties.dashStyle = D2D1_DASH_STYLE_CUSTOM;
+        m_adjustedStrokeDashArray = Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal);
+        dashArray = &m_adjustedStrokeDashArray[0];
+      }
+
+      com_ptr<ID2D1StrokeStyle> strokeStyle;
+      check_hresult(factory->CreateStrokeStyle(
+          strokeStyleProperties, dashArray, m_strokeDashArray.Size(), strokeStyle.put()));
+
+      auto const stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry)};
+      deviceContext->DrawGeometry(geometry.get(), stroke.get(), strokeWidth, strokeStyle.get());
+      deviceContext->PopLayer();
+    }
+
+    deviceContext->PopLayer();
   }
 }
 
@@ -345,7 +346,7 @@ IInspectable RenderableView::ClipPathGeometry() {
   if (!m_clipPathId.empty()) {
     if (auto const &clipPath{SvgRoot().Templates().TryLookup(m_clipPathId)}) {
       if (!clipPath.Geometry()) {
-        clipPath.CreateGeometry(SvgRoot().Canvas());
+        clipPath.CreateGeometry();
       }
       return clipPath.Geometry();
     }
@@ -375,7 +376,7 @@ RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
     copy_to_abi(m_geometry, *geometry.put_void());
 
     if (auto const &svgRoot{SvgRoot()}) {
-      float canvasDiagonal{Utils::GetCanvasDiagonal(svgRoot.Canvas().Size())};
+      float canvasDiagonal{Utils::GetCanvasDiagonal(svgRoot.ActualSize())};
       float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
       
       check_hresult(geometry->StrokeContainsPoint(pointD2D, strokeWidth, nullptr, nullptr, &strokeContainsPoint));

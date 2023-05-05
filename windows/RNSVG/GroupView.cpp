@@ -98,31 +98,39 @@ void GroupView::UpdateProperties(
   }
 
   if (invalidate && SvgParent()) {
-    SvgRoot().InvalidateCanvas();
+    SvgRoot().Invalidate();
   }
 }
 
-void GroupView::CreateGeometry(win2d::UI::Xaml::CanvasControl const &canvas) {
-  std::vector<ID2D1Geometry*> geometries(Children().Size());
+void GroupView::CreateGeometry() {
+  if (auto const &root{SvgRoot()}) {
+    std::vector<ID2D1Geometry *> geometries(Children().Size());
 
-  for (uint32_t i = 0; i < Children().Size(); ++i) {
-    auto child{Children().GetAt(i)};
-    if (!child.Geometry()) {
-      child.CreateGeometry(canvas);
+    for (uint32_t i = 0; i < Children().Size(); ++i) {
+      auto child{Children().GetAt(i)};
+      if (!child.Geometry()) {
+        child.CreateGeometry();
+      }
+
+      com_ptr<ID2D1Geometry> geometry;
+      copy_to_abi(child.Geometry(), *geometry.put_void());
+      geometries[i] = geometry.get();
     }
 
-    com_ptr<ID2D1Geometry> geometry;
-    copy_to_abi(child.Geometry(), *geometry.put_void());
-    geometries[i] = geometry.get();
+    com_ptr<ID2D1DeviceContext1> deviceContext;
+    copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+
+    com_ptr<ID2D1Factory> factory;
+    deviceContext->GetFactory(factory.put());
+
+    com_ptr<ID2D1GeometryGroup> group;
+    check_hresult(factory->CreateGeometryGroup(
+        D2DHelpers::GetFillRule(FillRule()), &geometries[0], static_cast<uint32_t>(geometries.size()), group.put()));
+
+    IInspectable asInspectable;
+    copy_from_abi(asInspectable, group.get());
+    Geometry(asInspectable);
   }
-
-  auto factory{D2DHelpers::GetFactory(canvas)};
-  com_ptr<ID2D1GeometryGroup> group;
-  check_hresult(factory->CreateGeometryGroup(D2DHelpers::GetFillRule(FillRule()), &geometries[0], static_cast<uint32_t>(geometries.size()), group.put()));
-
-  IInspectable asInspectable;
-  copy_from_abi(asInspectable, group.get());
-  Geometry(asInspectable);
 }
 
 void GroupView::SaveDefinition() {
@@ -141,44 +149,44 @@ void GroupView::MergeProperties(RNSVG::RenderableView const &other) {
   }
 }
 
-void GroupView::Render(
-    win2d::UI::Xaml::CanvasControl const &canvas,
-    win2d::CanvasDrawingSession const &session) {
-  auto const &transform{session.Transform()};
+void GroupView::Draw() {
+  if (auto const &root{SvgRoot()}) {
+    com_ptr<ID2D1DeviceContext1> deviceContext;
+    copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
 
-  if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
-    session.Transform(transform * SvgTransform());
-  }
+    D2D1_MATRIX_3X2_F transform;
+    deviceContext->GetTransform(&transform);
 
-  com_ptr<ID2D1Geometry> clipPathGeometryD2D;
-  copy_to_abi(ClipPathGeometry(), *clipPathGeometryD2D.put_void());
-  auto const &clipPathGeometry{D2DHelpers::GetGeometry(clipPathGeometryD2D.get())};
-
-  if (auto const &opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
-    if (Children().Size() == 0) {
-      __super::Render(canvas, session);
-    } else {
-      RenderGroup(canvas, session);
+    if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
+      deviceContext->SetTransform(transform * D2DHelpers::AsD2DTransform(SvgTransform()));
     }
 
-    opacityLayer.Close();
+    com_ptr<ID2D1Geometry> clipPathGeometry;
+    copy_to_abi(ClipPathGeometry(), *clipPathGeometry.put_void());
+
+    D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
+
+    if (Children().Size() == 0) {
+      __super::Draw();
+    } else {
+      DrawGroup();
+    }
+
+    deviceContext->PopLayer();
+
+    deviceContext->SetTransform(transform);
   }
-  session.Transform(transform);
 }
 
-void GroupView::RenderGroup(
-    win2d::UI::Xaml::CanvasControl const &canvas,
-    win2d::CanvasDrawingSession const &session) {
+void GroupView::DrawGroup() {
   for (auto const &child : Children()) {
-    child.Render(canvas, session);
+    child.Draw();
   }
 }
 
-void GroupView::CreateResources(
-    win2d::ICanvasResourceCreator const &resourceCreator,
-    win2d::UI::CanvasCreateResourcesEventArgs const &args) {
+void GroupView::CreateResources() {
   for (auto const &child : Children()) {
-    child.CreateResources(resourceCreator, args);
+    child.CreateResources();
   }
 }
 
@@ -206,9 +214,7 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Point const &point) {
       renderable = *this;
     } else if (!renderable){
       if (!Geometry()) {
-        if (auto const &svgRoot{SvgRoot()}) {
-          CreateGeometry(svgRoot.Canvas());
-        }
+        CreateGeometry();
       }
       if (Geometry()) {
         com_ptr<ID2D1Geometry> geometry;

@@ -16,9 +16,7 @@ struct SymbolView : SymbolViewT<SymbolView, RNSVG::implementation::GroupView> {
 
   // RenderableView
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  void Render(
-      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &/*canvas*/,
-      Microsoft::Graphics::Canvas::CanvasDrawingSession const &/*session*/){};
+  void Draw(){};
 
  private:
   float m_minX{0.0f};

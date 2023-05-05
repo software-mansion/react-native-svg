@@ -48,21 +48,23 @@ void LinearGradientView::Unload() {
   __super::Unload();
 }
 
-void LinearGradientView::CreateBrush(win2d::CanvasDrawingSession const &session) {
-  auto const &canvas{SvgRoot().Canvas()};
+void LinearGradientView::CreateBrush() {
+  auto const root{SvgRoot()};
 
-  winrt::com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
+  com_ptr<ID2D1DeviceContext1> deviceContext;
+  copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+
   winrt::com_ptr<ID2D1GradientStopCollection> stopCollection;
   winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], static_cast<uint32_t>(m_stops.size()), stopCollection.put()));
 
   D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES brushProperties;
   brushProperties.startPoint = {0, 0};
-  brushProperties.endPoint = {canvas.Size().Width, canvas.Size().Height};
+  brushProperties.endPoint = {static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())};
 
   winrt::com_ptr<ID2D1LinearGradientBrush> linearBrush;
   winrt::check_hresult(deviceContext->CreateLinearGradientBrush(brushProperties, stopCollection.get(), linearBrush.put()));
 
-  SetPoints(linearBrush.get(), {0, 0, canvas.Size().Width, canvas.Size().Height});
+  SetPoints(linearBrush.get(), {0, 0, static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())});
 
   if (m_transformSet) {
     linearBrush->SetTransform(m_transform);

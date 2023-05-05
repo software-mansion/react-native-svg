@@ -55,7 +55,7 @@ void PatternView::UpdateProperties(
   SaveDefinition();
 
   if (auto const &root{SvgRoot()}) {
-    root.InvalidateCanvas();
+    root.Invalidate();
   }
 }
 
@@ -69,20 +69,19 @@ void PatternView::UpdateBounds() {
   }
 }
 
-void PatternView::CreateBrush(win2d::CanvasDrawingSession const &session) {
-  auto const &canvas{SvgRoot().Canvas()};
+void PatternView::CreateBrush() {
+  auto const root{SvgRoot()};
 
-  D2D1_RECT_F elRect{GetAdjustedRect({0, 0, canvas.Size().Width, canvas.Size().Height})};
-  CreateBrush(elRect, session);
+  D2D1_RECT_F elRect{GetAdjustedRect({0, 0, static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())})};
+  CreateBrush(elRect);
 }
 
-void PatternView::CreateBrush(
-    D2D1_RECT_F rect,
-    win2d::CanvasDrawingSession const &session) {
-  //auto const &canvas{SvgRoot().Canvas()};
-  com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
+void PatternView::CreateBrush(D2D1_RECT_F rect) {
+  auto const &root{SvgRoot()};
+  com_ptr<ID2D1DeviceContext1> deviceContext;
+  copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
 
-  if (auto const &cmdList{GetCommandList(rect, session)}) {
+  if (auto const &cmdList{GetCommandList(rect)}) {
     D2D1_IMAGE_BRUSH_PROPERTIES brushProperties;
     brushProperties.extendModeX = D2D1_EXTEND_MODE_WRAP;
     brushProperties.extendModeY = D2D1_EXTEND_MODE_WRAP;
@@ -109,20 +108,11 @@ D2D1_RECT_F PatternView::GetAdjustedRect(D2D1_RECT_F bounds) {
   return {x, y, adjWidth, adjHeight};
 }
 
-com_ptr<ID2D1CommandList> PatternView::GetCommandList(
-    D2D1_RECT_F rect,
-    win2d::CanvasDrawingSession const &/*session*/) {
+com_ptr<ID2D1CommandList> PatternView::GetCommandList(D2D1_RECT_F rect) {
   auto const &root{SvgRoot()};
-  //auto const &canvas{root.Canvas()};
 
-  auto sharedDevice{win2d::CanvasDevice::GetSharedDevice()};
-  // First we need to get an ID2D1Device1 pointer from the shared CanvasDevice
-  com_ptr<abi::ICanvasResourceWrapperNative> nativeDeviceWrapper = sharedDevice.as<abi::ICanvasResourceWrapperNative>();
-  com_ptr<ID2D1Device1> device{nullptr};
-  check_hresult(nativeDeviceWrapper->GetNativeResource(nullptr, 0.0f, guid_of<ID2D1Device1>(), device.put_void()));
-  
-  com_ptr<ID2D1DeviceContext> deviceContext;
-  check_hresult(device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, deviceContext.put()));
+  com_ptr<ID2D1DeviceContext1> deviceContext;
+  copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
 
   com_ptr<ID2D1CommandList> cmdList;
   check_hresult(deviceContext->CreateCommandList(cmdList.put()));
@@ -136,10 +126,10 @@ com_ptr<ID2D1CommandList> PatternView::GetCommandList(
 
   if (m_align != "") {
     Rect vbRect{
-        m_minX * root.SvgScale(),
-        m_minY * root.SvgScale(),
-        (m_vbWidth + m_minX) * root.SvgScale(),
-        (m_vbHeight + m_minY) * root.SvgScale()};
+        m_minX * SvgScale(),
+        m_minY * SvgScale(),
+        (m_vbWidth + m_minX) * SvgScale(),
+        (m_vbHeight + m_minY) * SvgScale()};
 
     auto transform{Utils::GetViewBoxTransform(
         vbRect,

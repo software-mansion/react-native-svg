@@ -8,9 +8,7 @@ public:
   TSpanView() = default;
 
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  virtual void Render(
-      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  virtual void Draw();
 
  private:
   std::string m_content;

@@ -6,9 +6,7 @@ namespace winrt::RNSVG::implementation {
 struct DefsView : DefsViewT<DefsView, RNSVG::implementation::GroupView> {
   DefsView() = default;
 
-  void Render(
-      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  void Draw();
 };
 } // namespace winrt::RNSVG::implementation
 

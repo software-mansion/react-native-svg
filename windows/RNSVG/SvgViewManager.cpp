@@ -15,7 +15,6 @@
 namespace winrt {
 using namespace Windows::Foundation;
 using namespace Windows::Foundation::Collections;
-using namespace Microsoft::Graphics::Canvas::UI::Xaml;
 using namespace Microsoft::ReactNative;
 using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Controls;

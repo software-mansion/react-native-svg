@@ -37,7 +37,7 @@ void ImageView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &r
           m_source.height = 0;
 
           if (SvgParent()) {
-            LoadImageSourceAsync(SvgRoot().Canvas(), true);
+            LoadImageSourceAsync(true);
           }
         } else if (key == "width") {
           m_source.width = Utils::JSValueAsFloat(value);
@@ -74,68 +74,70 @@ void ImageView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &r
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void ImageView::Render(
-    win2d::UI::Xaml::CanvasControl const &canvas,
-    win2d::CanvasDrawingSession const &session) {
+void ImageView::Draw() {
+  if (auto const &root{SvgRoot()}) {
+    com_ptr<ID2D1DeviceContext1> deviceContext;
+    copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
 
-  auto deviceContext{D2DHelpers::GetDeviceContext(session)};
-  com_ptr<ID2D1Bitmap1> bitmap;
+    com_ptr<ID2D1Bitmap1> bitmap;
 
-  if (m_wicbitmap) {
-    uint32_t width, height = 0;
+    if (m_wicbitmap) {
+      uint32_t width, height = 0;
 
-    winrt::check_hresult(m_wicbitmap->GetSize(&width, &height));
+      check_hresult(m_wicbitmap->GetSize(&width, &height));
 
-    m_source.width = static_cast<float>(width);
-    m_source.height = static_cast<float>(height);
+      m_source.width = static_cast<float>(width);
+      m_source.height = static_cast<float>(height);
 
-    check_hresult(deviceContext->CreateBitmapFromWicBitmap(m_wicbitmap.get(), nullptr, bitmap.put()));
-  }
+      check_hresult(deviceContext->CreateBitmapFromWicBitmap(m_wicbitmap.get(), nullptr, bitmap.put()));
+    }
 
-  if (m_source.width == 0 || m_source.height == 0) {
-    m_source.width = canvas.Size().Width;
-    m_source.height = canvas.Size().Height;
-  }
+    if (m_source.width == 0 || m_source.height == 0) {
+      m_source.width = root.ActualWidth();
+      m_source.height = root.ActualHeight();
+    }
 
-  float x{Utils::GetAbsoluteLength(m_x, canvas.Size().Width)};
-  float y{Utils::GetAbsoluteLength(m_y, canvas.Size().Height)};
-  float width{Utils::GetAbsoluteLength(m_width, canvas.Size().Width)};
-  float height{Utils::GetAbsoluteLength(m_height, canvas.Size().Height)};
+    float x{Utils::GetAbsoluteLength(m_x, root.ActualWidth())};
+    float y{Utils::GetAbsoluteLength(m_y, root.ActualHeight())};
+    float width{Utils::GetAbsoluteLength(m_width, root.ActualWidth())};
+    float height{Utils::GetAbsoluteLength(m_height, root.ActualHeight())};
 
-  if (width == 0) {
-    width = m_source.width * m_source.scale;
-  }
+    if (width == 0) {
+      width = m_source.width * m_source.scale;
+    }
 
-  if (height == 0) {
-    height = m_source.height * m_source.scale;
-  }
+    if (height == 0) {
+      height = m_source.height * m_source.scale;
+    }
 
-  com_ptr<ID2D1Effect> transformEffect;
+    com_ptr<ID2D1Effect> transformEffect;
 
-  if (m_align != "") {
-    Rect elRect{x, y, width, height};
-    Rect vbRect{0, 0, m_source.width, m_source.height};
-    deviceContext->CreateEffect(CLSID_D2D12DAffineTransform, transformEffect.put());
-    transformEffect->SetValue(
-        D2D1_2DAFFINETRANSFORM_PROP_TRANSFORM_MATRIX,
-        Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
-  }
+    if (m_align != "") {
+      Rect elRect{x, y, width, height};
+      Rect vbRect{0, 0, m_source.width, m_source.height};
+      deviceContext->CreateEffect(CLSID_D2D12DAffineTransform, transformEffect.put());
+      transformEffect->SetValue(
+          D2D1_2DAFFINETRANSFORM_PROP_TRANSFORM_MATRIX,
+          Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
+    }
 
-  winrt::com_ptr<ID2D1Geometry> clipPathGeometryD2D;
-  winrt::copy_to_abi(ClipPathGeometry(), *clipPathGeometryD2D.put_void());
-  auto const &clipPathGeometry{D2DHelpers::GetGeometry(clipPathGeometryD2D.get())};
+    com_ptr<ID2D1Geometry> clipPathGeometry;
+    copy_to_abi(ClipPathGeometry(), *clipPathGeometry.put_void());
 
-  if (auto const &opacityLayer{clipPathGeometry ? session.CreateLayer(m_opacity, clipPathGeometry) : session.CreateLayer(m_opacity)}) {
+    D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
+
     if (m_source.format == ImageSourceFormat::Bitmap && m_wicbitmap) {
-      auto const &transform{session.Transform()};
+      D2D1_MATRIX_3X2_F transform;
+      deviceContext->GetTransform(&transform);
+
       if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
-        session.Transform(SvgTransform());
+        deviceContext->SetTransform(D2DHelpers::AsD2DTransform(SvgTransform()));
       }
 
       if (m_align != "" && transformEffect) {
-        winrt::com_ptr<ID2D1Effect> bitmapEffects;
-        winrt::check_hresult(deviceContext->CreateEffect(CLSID_D2D1BitmapSource, bitmapEffects.put()));
-        winrt::check_hresult(bitmapEffects->SetValue(D2D1_BITMAPSOURCE_PROP_WIC_BITMAP_SOURCE, m_wicbitmap.get()));
+        com_ptr<ID2D1Effect> bitmapEffects;
+        check_hresult(deviceContext->CreateEffect(CLSID_D2D1BitmapSource, bitmapEffects.put()));
+        check_hresult(bitmapEffects->SetValue(D2D1_BITMAPSOURCE_PROP_WIC_BITMAP_SOURCE, m_wicbitmap.get()));
 
         transformEffect->SetInputEffect(0, bitmapEffects.get());
 
@@ -149,17 +151,15 @@ void ImageView::Render(
         deviceContext->DrawBitmap(bitmap.get(), D2D1::RectF(x, y, x + width, y + height));
       }
 
-      session.Transform(transform);
+      deviceContext->SetTransform(transform);
     }
 
-    opacityLayer.Close();
+    deviceContext->PopLayer();
   }
 }
 
-void ImageView::CreateResources(
-    winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
-    winrt::Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args) {
-  args.TrackAsyncAction(LoadImageSourceAsync(resourceCreator, false));
+void ImageView::CreateResources() {
+  LoadImageSourceAsync(false);
 }
 
 void ImageView::Unload() {
@@ -168,9 +168,7 @@ void ImageView::Unload() {
   }
 }
 
-IAsyncAction ImageView::LoadImageSourceAsync(
-    winrt::Microsoft::Graphics::Canvas::ICanvasResourceCreator resourceCreator,
-    bool invalidate) {
+IAsyncAction ImageView::LoadImageSourceAsync(bool invalidate) {
   Uri uri{m_source.uri};
   hstring scheme{uri ? uri.SchemeName() : L""};
   hstring ext{uri ? uri.Extension() : L""};
@@ -213,7 +211,7 @@ IAsyncAction ImageView::LoadImageSourceAsync(
 
   if (invalidate) {
     if (auto strong_this{weak_this.get()}) {
-      strong_this->SvgRoot().InvalidateCanvas();
+      strong_this->SvgRoot().Invalidate();
     }
   }
 }

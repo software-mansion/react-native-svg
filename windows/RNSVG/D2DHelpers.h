@@ -4,79 +4,45 @@
 
 #include "dwrite.h"
 
-#include <Microsoft.Graphics.Canvas.h> //This defines the low-level ABI interfaces for the Win2D Windows Runtime Components
-#include <Microsoft.Graphics.Canvas.native.h> //This is for interop
-
-namespace abi {
-using namespace ABI::Microsoft::Graphics::Canvas;
-}
-
-namespace win2d {
-using namespace winrt::Microsoft::Graphics::Canvas;
-}
-
 namespace winrt::RNSVG {
 struct D2DHelpers {
  public:
-  static com_ptr<ID2D1DeviceContext1> GetDeviceContext(win2d::CanvasDrawingSession const &session) {
-    com_ptr<abi::ICanvasResourceWrapperNative> nativeDeviceContextWrapper =
-        session.as<abi::ICanvasResourceWrapperNative>();
-    com_ptr<ID2D1DeviceContext1> deviceContext{nullptr};
-    check_hresult(nativeDeviceContextWrapper->GetNativeResource(
-        nullptr, 0.0f, guid_of<ID2D1DeviceContext1>(), deviceContext.put_void()));
 
-    return deviceContext;
+   static void PushOpacityLayer(
+      ID2D1DeviceContext1 *deviceContext,
+      ID2D1Geometry *clipPathGeometry,
+      float opacity) {
+    com_ptr<ID2D1Layer> opacityLayer;
+    check_hresult(deviceContext->CreateLayer(nullptr, opacityLayer.put()));
+
+    D2D1_LAYER_PARAMETERS layerParams{D2D1::LayerParameters()};
+    layerParams.opacity = opacity;
+
+    if (clipPathGeometry) {
+      layerParams.geometricMask = clipPathGeometry;
+    }
+
+    deviceContext->PushLayer(layerParams, opacityLayer.get());
   }
 
-  static com_ptr<ID2D1Factory> GetFactory(win2d::CanvasDrawingSession const &session) {
-    com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
-    com_ptr<ID2D1Factory> factory;
-    deviceContext->GetFactory(factory.put());
+   static void PushOpacityLayer(
+      ID2D1DeviceContext1 *deviceContext,
+      ID2D1Geometry *clipPathGeometry,
+      float opacity,
+      D2D1_MATRIX_3X2_F transform) {
+    com_ptr<ID2D1Layer> opacityLayer;
+    check_hresult(deviceContext->CreateLayer(nullptr, opacityLayer.put()));
 
-    return factory;
+    D2D1_LAYER_PARAMETERS layerParams{D2D1::LayerParameters()};
+    layerParams.opacity = opacity;
+    layerParams.maskTransform = transform;
+
+    if (clipPathGeometry) {
+      layerParams.geometricMask = clipPathGeometry;
+    }
+
+    deviceContext->PushLayer(layerParams, opacityLayer.get());
   }
-
-   static com_ptr<ID2D1DeviceContext1> GetDeviceContext(win2d::UI::Xaml::CanvasControl const &canvas) {
-    win2d::CanvasDevice canvasDevice = canvas.Device();
-
-    // First we need to get an ID2D1Device1 pointer from the shared CanvasDevice
-    com_ptr<abi::ICanvasResourceWrapperNative> nativeDeviceWrapper =
-        canvasDevice.as<abi::ICanvasResourceWrapperNative>();
-    com_ptr<ID2D1Device1> device{nullptr};
-    check_hresult(nativeDeviceWrapper->GetNativeResource(nullptr, 0.0f, guid_of<ID2D1Device1>(), device.put_void()));
-
-    // Next we need to call some Direct2D functions to create the object
-    com_ptr<ID2D1DeviceContext1> context{nullptr};
-    check_hresult(device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, context.put()));
-
-    return context;
-   }
-
-   static com_ptr<ID2D1Factory> GetFactory(win2d::UI::Xaml::CanvasControl const &canvas) {
-     com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(canvas)};
-     com_ptr<ID2D1Factory> factory;
-     deviceContext->GetFactory(factory.put());
-
-     return factory;
-   }
-
-   static win2d::Geometry::CanvasGeometry GetGeometry(ID2D1Geometry* geometryD2D) {
-     if (geometryD2D) {
-       auto canvasDevice{win2d::CanvasDevice::GetSharedDevice()};
-       com_ptr<::IInspectable> asInspectable{nullptr};
-
-       auto factory{get_activation_factory<win2d::CanvasDevice, abi::ICanvasFactoryNative>()};
-       check_hresult(factory->GetOrCreate(
-           canvasDevice.as<abi::ICanvasDevice>().get(),
-           geometryD2D,
-           0.0f,
-           asInspectable.put()));
-
-       return asInspectable.as<win2d::Geometry::CanvasGeometry>();
-     }
-
-     return nullptr;
-   }
 
    static D2D1_CAP_STYLE GetLineCap(int32_t const lineCap) {
      switch (lineCap) {

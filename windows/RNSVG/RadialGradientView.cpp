@@ -52,10 +52,12 @@ void RadialGradientView::Unload() {
   __super::Unload();
 }
 
-void RadialGradientView::CreateBrush(winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session) {
-  auto const &canvas{SvgRoot().Canvas()};
+void RadialGradientView::CreateBrush() {
+  auto const root{SvgRoot()};
 
-  winrt::com_ptr<ID2D1DeviceContext1> deviceContext{D2DHelpers::GetDeviceContext(session)};
+  com_ptr<ID2D1DeviceContext1> deviceContext;
+  copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+
   winrt::com_ptr<ID2D1GradientStopCollection> stopCollection;
   winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], static_cast<uint32_t>(m_stops.size()), stopCollection.put()));
 
@@ -64,7 +66,7 @@ void RadialGradientView::CreateBrush(winrt::Microsoft::Graphics::Canvas::CanvasD
   winrt::check_hresult(
       deviceContext->CreateRadialGradientBrush(brushProperties, stopCollection.get(), radialBrush.put()));
 
-  SetPoints(radialBrush.get(), {0, 0, canvas.Size().Width, canvas.Size().Height});
+  SetPoints(radialBrush.get(), {0, 0, static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())});
 
   if (m_transformSet) {
     radialBrush->SetTransform(m_transform);

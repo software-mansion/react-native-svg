@@ -21,7 +21,7 @@ struct LinearGradientView : LinearGradientViewT<LinearGradientView, RNSVG::imple
   bool m_transformSet{false};
   D2D1_MATRIX_3X2_F m_transform;
 
-  void CreateBrush(winrt::Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  void CreateBrush();
   void UpdateBounds();
   void SetPoints(ID2D1LinearGradientBrush *brush, D2D1_RECT_F bounds);
 };

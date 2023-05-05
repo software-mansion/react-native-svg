@@ -22,12 +22,8 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   ImageView() = default;
 
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  void Render(
-      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
-  void CreateResources(
-      Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
-      Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args);
+  void Draw();
+  void CreateResources();
   void Unload();
 
  private:
@@ -43,7 +39,7 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   ImageSource m_source{};
   com_ptr<IWICBitmap> m_wicbitmap{nullptr};
 
-  Windows::Foundation::IAsyncAction LoadImageSourceAsync(Microsoft::Graphics::Canvas::ICanvasResourceCreator resourceCreator, bool invalidate);
+  Windows::Foundation::IAsyncAction LoadImageSourceAsync(bool invalidate);
   winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream>
   GetImageMemoryStreamAsync(ImageSource source);
   Windows::Foundation::IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream>

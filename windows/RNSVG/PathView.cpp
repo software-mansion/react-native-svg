@@ -35,24 +35,36 @@ void PathView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &re
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void PathView::CreateGeometry(win2d::UI::Xaml::CanvasControl const &canvas) {
-  com_ptr<ID2D1SvgDocument> doc;
-  auto deviceContext{D2DHelpers::GetDeviceContext(canvas).as<ID2D1DeviceContext5>()};
-  check_hresult(deviceContext->CreateSvgDocument(nullptr, D2D1::SizeF(static_cast<float>(canvas.Width()), static_cast<float>(canvas.Height())), doc.put()));
+void PathView::CreateGeometry() {
+  if (auto const &root{SvgRoot()}) {
+    com_ptr<ID2D1SvgDocument> doc;
+    com_ptr<ID2D1DeviceContext5> deviceContext;
+    copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
 
-  m_segmentData.resize(m_segmentData.size());
-  m_commands.resize(m_commands.size());
+    check_hresult(deviceContext->CreateSvgDocument(
+        nullptr,
+        D2D1::SizeF(static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())),
+        doc.put()));
 
-  com_ptr<ID2D1SvgPathData> path;
-  check_hresult(doc->CreatePathData(&m_segmentData[0], static_cast<uint32_t>(m_segmentData.size()), &m_commands[0], static_cast<uint32_t>(m_commands.size()), path.put()));
+    m_segmentData.resize(m_segmentData.size());
+    m_commands.resize(m_commands.size());
 
-  com_ptr<ID2D1PathGeometry1> geometry;
-  check_hresult(path->CreatePathGeometry(D2DHelpers::GetFillRule(FillRule()), geometry.put()));
+    com_ptr<ID2D1SvgPathData> path;
+    check_hresult(doc->CreatePathData(
+        &m_segmentData[0],
+        static_cast<uint32_t>(m_segmentData.size()),
+        &m_commands[0],
+        static_cast<uint32_t>(m_commands.size()),
+        path.put()));
 
-  IInspectable asInspectable;
-  copy_from_abi(asInspectable, geometry.get());
+    com_ptr<ID2D1PathGeometry1> geometry;
+    check_hresult(path->CreatePathGeometry(D2DHelpers::GetFillRule(FillRule()), geometry.put()));
 
-  Geometry(asInspectable);
+    IInspectable asInspectable;
+    copy_from_abi(asInspectable, geometry.get());
+
+    Geometry(asInspectable);
+  }
 }
 
 void PathView::ParsePath() {

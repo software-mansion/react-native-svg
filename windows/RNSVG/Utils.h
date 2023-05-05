@@ -2,7 +2,6 @@
 
 #include "pch.h"
 
-#include <winrt/Microsoft.Graphics.Canvas.Brushes.h>
 #include <winrt/Windows.Foundation.Numerics.h>
 #include <winrt/Windows.UI.Text.h>
 #include "JSValueReader.h"
@@ -36,7 +35,7 @@ struct Utils {
     return std::sqrtf(powX + powY) * static_cast<float>(M_SQRT1_2);
   }
 
-  static float GetAbsoluteLength(SVGLength const &length, float relativeTo) {
+  static float GetAbsoluteLength(SVGLength const &length, double relativeTo) {
     auto value{length.Value()};
 
     // 1in = 2.54cm = 96px
@@ -135,6 +134,9 @@ struct Utils {
     auto const &translate{Numerics::make_float3x2_translation(translateX, translateY)};
     auto const &scale{Numerics::make_float3x2_scale(scaleX, scaleY)};
 
+    /*static D2D1_MATRIX_3X2_F AsD2DTransform(Numerics::float3x2 const transform) {
+      return D2D1::Matrix3x2F(transform.m11, transform.m12, transform.m21, transform.m22, transform.m31, transform.m32);
+    }*/
     return scale * translate;
   }
 
@@ -271,10 +273,11 @@ struct Utils {
       hstring const &brushId,
       ui::Color color,
       RNSVG::SvgView const &root,
-      com_ptr<ID2D1Geometry> const &geometry,
-      win2d::CanvasDrawingSession const &session) {
+      com_ptr<ID2D1Geometry> const &geometry) {
     com_ptr<ID2D1Brush> brush;
-    com_ptr<ID2D1DeviceContext1> deviceContext = D2DHelpers::GetDeviceContext(session);
+    com_ptr<ID2D1DeviceContext1> deviceContext;
+    copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+
     if (root && brushId != L"") {
       if (brushId == L"currentColor") {
         try {
@@ -286,7 +289,7 @@ struct Utils {
         }
       } else if (auto const &brushView{root.Brushes().TryLookup(brushId)}) {
         try {
-          brushView.CreateBrush(session);
+          brushView.CreateBrush();
 
           if (geometry) {
             D2D1_RECT_F bounds;
@@ -312,6 +315,17 @@ struct Utils {
     }
 
     return brush;
+  }
+
+  static Point GetScale(D2D1_MATRIX_3X2_F matrix) {
+    auto scaleX = std::sqrt(matrix.m11 * matrix.m11 + matrix.m12 * matrix.m12);
+    auto scaleY = std::sqrt(matrix.m21 * matrix.m21 + matrix.m22 * matrix.m22);
+
+    return {scaleX, scaleY};
+  }
+
+  static Point GetScale(Numerics::float3x2 matrix) {
+    return GetScale(D2DHelpers::AsD2DTransform(matrix));
   }
 };
 } // namespace winrt::RNSVG

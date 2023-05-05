@@ -10,7 +10,7 @@ struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {
   void SaveDefinition();
 
   Windows::Foundation::IInspectable Brush() { return m_brush; }
-  virtual void CreateBrush(Microsoft::Graphics::Canvas::CanvasDrawingSession const &/*session*/) {}
+  virtual void CreateBrush() {}
   virtual void Unload();
   void SetBounds(Windows::Foundation::Rect const &rect);
 

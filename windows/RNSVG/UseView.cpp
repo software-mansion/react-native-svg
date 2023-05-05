@@ -32,66 +32,78 @@ void UseView::UpdateProperties(
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void UseView::Render(win2d::UI::Xaml::CanvasControl const &canvas, win2d::CanvasDrawingSession const &session) {
-  if (auto const &view{GetRenderableTemplate()}) {
-    auto const &originalTransform{session.Transform()};
-    auto transform{Numerics::make_float3x2_scale(1)};
+void UseView::Draw() {
+  if (auto const &root{SvgRoot()}) {
+    if (auto const &view{GetRenderableTemplate()}) {
+      com_ptr<ID2D1DeviceContext1> deviceContext;
+      copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
 
-    // Figure out any necessary transforms
-    if (auto const &symbol{view.try_as<RNSVG::SymbolView>()}) {
-      if (symbol.Align() != L"") {
-        if (auto const &root{SvgRoot()}) {
+      D2D1_MATRIX_3X2_F originalTransform;
+      deviceContext->GetTransform(&originalTransform);
+
+      auto originalScale = Utils::GetScale(originalTransform);
+      auto svgTransformScale = Utils::GetScale(SvgTransform());
+
+      auto transform{Numerics::make_float3x2_scale(1)};
+
+      // Figure out any necessary transforms
+      if (auto const &symbol{view.try_as<RNSVG::SymbolView>()}) {
+        if (symbol.Align() != L"") {
           Rect vbRect{
-              symbol.MinX() * root.SvgScale(),
-              symbol.MinY() * root.SvgScale(),
-              (symbol.MinX() + symbol.VbWidth()) * root.SvgScale(),
-              (symbol.MinY() + symbol.VbHeight()) * root.SvgScale()};
+              symbol.MinX() * SvgScale(),
+              symbol.MinY() * SvgScale(),
+              (symbol.MinX() + symbol.VbWidth()) * SvgScale(),
+              (symbol.MinY() + symbol.VbHeight()) * SvgScale()};
 
-          float elX{Utils::GetAbsoluteLength(m_x, canvas.Size().Width)};
-          float elY{Utils::GetAbsoluteLength(m_y, canvas.Size().Height)};
-          float elWidth{Utils::GetAbsoluteLength(m_width, canvas.Size().Width)};
-          float elHeight{Utils::GetAbsoluteLength(m_height, canvas.Size().Height)};
+          float elX{Utils::GetAbsoluteLength(m_x, root.ActualWidth())};
+          float elY{Utils::GetAbsoluteLength(m_y, root.ActualHeight())};
+          float elWidth{Utils::GetAbsoluteLength(m_width, root.ActualWidth())};
+          float elHeight{Utils::GetAbsoluteLength(m_height, root.ActualHeight())};
           Rect elRect{elX, elY, elWidth, elHeight};
 
           transform = Utils::GetViewBoxTransform(vbRect, elRect, to_string(symbol.Align()), symbol.MeetOrSlice());
         }
-      }
-    } else {
-      float x{Utils::GetAbsoluteLength(m_x, canvas.Size().Width)};
-      float y{Utils::GetAbsoluteLength(m_y, canvas.Size().Height)};
-      transform = Numerics::make_float3x2_translation({x, y});
-    }
-
-    // Combine new transform with existing one if it's set
-    if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
-      transform = transform * SvgTransform();
-    }
-
-    session.Transform(transform);
-
-    // Propagate props to template
-    view.MergeProperties(*this);
-
-    // Set opacity and render
-    if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
-      if (auto const &symbol{view.try_as<RNSVG::SymbolView>()}) {
-        symbol.RenderGroup(canvas, session);
       } else {
-        view.Render(canvas, session);
+        float x{Utils::GetAbsoluteLength(m_x, root.ActualWidth())};
+        float y{Utils::GetAbsoluteLength(m_y, root.ActualHeight())};
+        transform = Numerics::make_float3x2_translation({x, y});
       }
-      opacityLayer.Close();
+
+      // Combine new transform with existing one if it's set
+      if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
+        transform = transform * SvgTransform();
+      }
+
+      if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
+        deviceContext->SetTransform(D2DHelpers::AsD2DTransform(transform * SvgTransform()));
+      }
+
+      // Propagate props to template
+      view.MergeProperties(*this);
+
+      // Set opacity and render
+      D2DHelpers::PushOpacityLayer(deviceContext.get(), nullptr, m_opacity);
+      if (auto const &symbol{view.try_as<RNSVG::SymbolView>()}) {
+        symbol.DrawGroup();
+      } else {
+        view.Draw();
+      }
+
+      deviceContext->PopLayer();
+
+      // Restore original template props
+      if (auto const &parent{view.SvgParent().try_as<RNSVG::RenderableView>()}) {
+        view.MergeProperties(parent);
+      }
+
+      // Restore session transform
+      deviceContext->SetTransform(originalTransform);
+
+    } else {
+      throw hresult_not_implemented(
+          L"'Use' element expected a pre-defined svg template as 'href' prop. Template named: " + m_href +
+          L" is not defined");
     }
-
-    // Restore original template props
-    if (auto const &parent{view.SvgParent().try_as<RNSVG::RenderableView>()}) {
-      view.MergeProperties(parent);
-    }
-
-    // Restore session transform
-    session.Transform(originalTransform);
-
-  } else {
-    throw hresult_not_implemented(L"'Use' element expected a pre-defined svg template as 'href' prop. Template named: " + m_href + L" is not defined");
   }
 }
 

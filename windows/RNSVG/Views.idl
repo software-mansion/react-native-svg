@@ -8,17 +8,13 @@ namespace RNSVG
     Object Geometry;
     Boolean IsResponsible;
 
-    void CreateResources(
-      Microsoft.Graphics.Canvas.ICanvasResourceCreator resourceCreator,
-      Microsoft.Graphics.Canvas.UI.CanvasCreateResourcesEventArgs args);
-    void Render(
-      Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
-      Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+    void CreateResources();
+    void Draw();
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
     void MergeProperties(RenderableView other);
     void SaveDefinition();
     void Unload();
-    void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
+    void CreateGeometry();
     IRenderable HitTest(Windows.Foundation.Point point);
   };
 
@@ -27,14 +23,13 @@ namespace RNSVG
   {
     SvgView(Microsoft.ReactNative.IReactContext context);
 
-    Single SvgScale{ get; };
     GroupView Group;
     Windows.UI.Color CurrentColor{ get; };
-    Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl Canvas{ get; };
+    Object DeviceContext{ get; };
     Windows.Foundation.Collections.IMap<String, IRenderable> Templates{ get; };
     Windows.Foundation.Collections.IMap<String, BrushView> Brushes{ get; };
 
-    void InvalidateCanvas();
+    void Invalidate();
   };
 
   [default_interface]
@@ -45,6 +40,7 @@ namespace RNSVG
 
     String Id{ get; };
     Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
+    Single SvgScale{ get; };
     Windows.UI.Color Fill{ get; };
     Single FillOpacity{ get; };
     String FillBrushId{ get; };
@@ -113,9 +109,7 @@ namespace RNSVG
     String FontFamily;
     String FontWeight;
 
-    void RenderGroup(
-        Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
-        Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+    void DrawGroup();
   };
 
   [default_interface]
@@ -166,7 +160,7 @@ namespace RNSVG
     BrushView();
 
     Object Brush{ get; };
-    void CreateBrush(Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+    void CreateBrush();
     void SetBounds(Windows.Foundation.Rect rect);
   };
 

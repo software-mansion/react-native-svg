@@ -2,9 +2,9 @@
 #include "TextView.h"
 #include "TextView.g.cpp"
 
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
+#include "D2DHelpers.h"
+
+using namespace winrt::Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 void TextView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
@@ -45,17 +45,22 @@ void TextView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void TextView::RenderGroup(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
-  auto const &transform{session.Transform()};
+void TextView::DrawGroup() {
+  com_ptr<ID2D1DeviceContext1> deviceContext;
+  copy_to_abi(SvgRoot().DeviceContext(), *deviceContext.put_void());
+
+  D2D1_MATRIX_3X2_F transform;
+  deviceContext->GetTransform(&transform);
+
   bool translateXY{X().Size() > 0 || Y().Size() > 0};
   if (translateXY) {
     float x{X().Size() > 0 ? X().GetAt(0).Value() : 0};
     float y{Y().Size() > 0 ? Y().GetAt(0).Value() : 0};
-    session.Transform(transform * Numerics::make_float3x2_translation(x, y));
+    deviceContext->SetTransform(transform * D2DHelpers::AsD2DTransform(Numerics::make_float3x2_translation(x, y)));
   }
-  __super::RenderGroup(canvas, session);
+  __super::DrawGroup();
   if (translateXY) {
-    session.Transform(transform);
+    deviceContext->SetTransform(transform);
   }
 }
 } // namespace winrt::RNSVG::implementation
