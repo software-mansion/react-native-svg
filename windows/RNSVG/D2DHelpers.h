@@ -98,6 +98,11 @@ struct D2DHelpers {
      return {rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top};
    }
 
+   static Numerics::float3x2 FromD2DTransform(D2D1_MATRIX_3X2_F const transform) {
+     return Numerics::float3x2(
+         transform.m11, transform.m12, transform.m21, transform.m22, transform._31, transform._32);
+   }
+
    static D2D1_MATRIX_3X2_F AsD2DTransform(Numerics::float3x2 const transform) {
      return D2D1::Matrix3x2F(transform.m11, transform.m12, transform.m21, transform.m22, transform.m31, transform.m32);
    }

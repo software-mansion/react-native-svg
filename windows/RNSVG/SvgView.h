@@ -64,6 +64,7 @@ struct SvgView : SvgViewT<SvgView> {
   void Invalidate();
 
  private:
+  bool m_loaded{false};
   bool m_hasRendered{false};
   bool m_isResponsible{false};
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
@@ -91,8 +92,6 @@ struct SvgView : SvgViewT<SvgView> {
       winrt::single_threaded_map<hstring, RNSVG::BrushView>()};
   Windows::UI::Xaml::FrameworkElement::Loaded_revoker m_panelLoadedRevoker{};
   Windows::UI::Xaml::FrameworkElement::Unloaded_revoker m_panelUnloadedRevoker{};
-
-  void Draw2(Windows::Foundation::IInspectable const &deviceContext, Windows::Foundation::Size size);
 };
 } // namespace winrt::RNSVG::implementation
 

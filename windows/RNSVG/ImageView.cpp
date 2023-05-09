@@ -75,29 +75,22 @@ void ImageView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &r
 }
 
 void ImageView::Draw(IInspectable const &context, Size size) {
+  if (!m_wicbitmap) {
+    return;
+  }
+
   com_ptr<ID2D1DeviceContext1> deviceContext;
   copy_to_abi(context, *deviceContext.put_void());
 
+  uint32_t imgWidth, imgHeight = 0;
+
+  check_hresult(m_wicbitmap->GetSize(&imgWidth, &imgHeight));
+
+  m_source.width = static_cast<float>(imgWidth);
+  m_source.height = static_cast<float>(imgHeight);
+
   com_ptr<ID2D1Bitmap1> bitmap;
-
-  //if (!m_wicbitmap) {
-  //  m_imageLoaded.Completed([](auto asyncOp, auto status) {
-  //    if (status == AsyncStatus::Completed) {
-  //      generateBitmap();
-  //    }
-  //  }
-  //}
-
-  if (m_wicbitmap) {
-    uint32_t width, height = 0;
-
-    check_hresult(m_wicbitmap->GetSize(&width, &height));
-
-    m_source.width = static_cast<float>(width);
-    m_source.height = static_cast<float>(height);
-
-    check_hresult(deviceContext->CreateBitmapFromWicBitmap(m_wicbitmap.get(), nullptr, bitmap.put()));
-  }
+  check_hresult(deviceContext->CreateBitmapFromWicBitmap(m_wicbitmap.get(), nullptr, bitmap.put()));
 
   if (m_source.width == 0 || m_source.height == 0) {
     m_source.width = size.Width;
@@ -117,34 +110,30 @@ void ImageView::Draw(IInspectable const &context, Size size) {
     height = m_source.height * m_source.scale;
   }
 
-  com_ptr<ID2D1Effect> transformEffect;
-
-  if (m_align != "") {
-    Rect elRect{x, y, width, height};
-    Rect vbRect{0, 0, m_source.width, m_source.height};
-    deviceContext->CreateEffect(CLSID_D2D12DAffineTransform, transformEffect.put());
-    transformEffect->SetValue(
-        D2D1_2DAFFINETRANSFORM_PROP_TRANSFORM_MATRIX,
-        Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
-  }
-
   com_ptr<ID2D1Geometry> clipPathGeometry;
   copy_to_abi(ClipPathGeometry(), *clipPathGeometry.put_void());
 
   D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
 
-  if (m_source.format == ImageSourceFormat::Bitmap && m_wicbitmap) {
+  if (m_source.format == ImageSourceFormat::Bitmap) {
     D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
 
     if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
-      deviceContext->SetTransform(D2DHelpers::AsD2DTransform(SvgTransform()));
+      deviceContext->SetTransform(transform * D2DHelpers::AsD2DTransform(SvgTransform()));
     }
 
-    if (m_align != "" && transformEffect) {
+    if (m_align != "") {
       com_ptr<ID2D1Effect> bitmapEffects;
       check_hresult(deviceContext->CreateEffect(CLSID_D2D1BitmapSource, bitmapEffects.put()));
       check_hresult(bitmapEffects->SetValue(D2D1_BITMAPSOURCE_PROP_WIC_BITMAP_SOURCE, m_wicbitmap.get()));
 
+      com_ptr<ID2D1Effect> transformEffect;
+      Rect elRect{x, y, width, height};
+      Rect vbRect{0, 0, m_source.width, m_source.height};
+      deviceContext->CreateEffect(CLSID_D2D12DAffineTransform, transformEffect.put());
+      transformEffect->SetValue(
+          D2D1_2DAFFINETRANSFORM_PROP_TRANSFORM_MATRIX,
+          Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
       transformEffect->SetInputEffect(0, bitmapEffects.get());
 
       com_ptr<ID2D1Effect> cropEffect{nullptr};
@@ -152,7 +141,14 @@ void ImageView::Draw(IInspectable const &context, Size size) {
       cropEffect->SetValue(D2D1_CROP_PROP_RECT, D2D1::RectF(x, y, x + width, y + height));
       cropEffect->SetInputEffect(0, transformEffect.get());
 
+      com_ptr<ID2D1Image> image;
+      cropEffect->GetOutput(image.put());
+
+      D2D1_RECT_F imageBounds;
+      check_hresult(deviceContext->GetImageLocalBounds(image.get(), &imageBounds));
+
       deviceContext->DrawImage(cropEffect.get());
+      //deviceContext->DrawImage(cropEffect.get(), {0, 0}, imageBounds);
     } else {
       deviceContext->DrawBitmap(bitmap.get(), D2D1::RectF(x, y, x + width, y + height));
     }
@@ -164,7 +160,7 @@ void ImageView::Draw(IInspectable const &context, Size size) {
 }
 
 void ImageView::CreateResources() {
-  LoadImageSourceAsync(false);
+  LoadImageSourceAsync(true);
 }
 
 void ImageView::Unload() {
@@ -211,7 +207,7 @@ IAsyncAction ImageView::LoadImageSourceAsync(bool invalidate) {
   }
 
   if (stream) {
-    //generateBitmap(stream);
+    generateBitmap(stream);
   }
 
   if (invalidate) {

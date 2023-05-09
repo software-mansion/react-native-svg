@@ -138,9 +138,6 @@ struct Utils {
     auto const &translate{Numerics::make_float3x2_translation(translateX, translateY)};
     auto const &scale{Numerics::make_float3x2_scale(scaleX, scaleY)};
 
-    /*static D2D1_MATRIX_3X2_F AsD2DTransform(Numerics::float3x2 const transform) {
-      return D2D1::Matrix3x2F(transform.m11, transform.m12, transform.m21, transform.m22, transform.m31, transform.m32);
-    }*/
     return scale * translate;
   }
 

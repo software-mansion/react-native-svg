@@ -199,6 +199,10 @@ void RenderableView::Draw(IInspectable const &context, Size size) {
   winrt::com_ptr<ID2D1Geometry> geometry;
   winrt::copy_to_abi(m_geometry, *geometry.put_void());
 
+  if (!geometry) {
+    return;
+  }
+
   com_ptr<ID2D1DeviceContext1> deviceContext;
   copy_to_abi(context, *deviceContext.put_void());
 
@@ -261,8 +265,8 @@ void RenderableView::Draw(IInspectable const &context, Size size) {
     }
 
     com_ptr<ID2D1StrokeStyle> strokeStyle;
-    check_hresult(factory->CreateStrokeStyle(
-        strokeStyleProperties, dashArray, m_strokeDashArray.Size(), strokeStyle.put()));
+    check_hresult(
+        factory->CreateStrokeStyle(strokeStyleProperties, dashArray, m_strokeDashArray.Size(), strokeStyle.put()));
 
     auto const stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry)};
     deviceContext->DrawGeometry(geometry.get(), stroke.get(), strokeWidth, strokeStyle.get());

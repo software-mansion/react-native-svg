@@ -149,65 +149,11 @@ Size SvgView::ArrangeOverride(Size finalSize) {
 }
 
 void SvgView::Draw(IInspectable const &context, Size size) {
-  if (!m_hasRendered) {
-    m_hasRendered = true;
-  }
-
-  m_brushes.Clear();
-  m_templates.Clear();
-
-  com_ptr<ID2D1DeviceContext1> deviceContext;
-  copy_to_abi(context, *deviceContext.put_void());
-
-  if (!m_parent) {
-    xaml::Media::Imaging::SurfaceImageSource surfaceImageSource(
-        static_cast<int32_t>(size.Width), static_cast<int32_t>(size.Height));
-    com_ptr<ISurfaceImageSourceNativeWithD2D> sisNativeWithD2D{
-        surfaceImageSource.as<ISurfaceImageSourceNativeWithD2D>()};
-
-    // Associate the Direct2D device with the SurfaceImageSource.
-    sisNativeWithD2D->SetDevice(m_device.get());
-
-    com_ptr<IDXGISurface> dxgiSurface;
-
-    RECT updateRect{0, 0, size.Width, size.Height};
-    POINT offset{0,0};
-    check_hresult(sisNativeWithD2D->BeginDraw(updateRect, __uuidof(IDXGISurface), dxgiSurface.put_void(), &offset));
-
-    // Create render target.
-    com_ptr<ID2D1Bitmap1> bitmap;
-    check_hresult(m_deviceContext->CreateBitmapFromDxgiSurface(dxgiSurface.get(), nullptr, bitmap.put()));
-
-    // Set context's render target.
-    m_deviceContext->SetTarget(bitmap.get());
-
-    // Draw using Direct2D context
-    m_deviceContext->BeginDraw();
-
-    auto transform = Numerics::make_float3x2_translation({static_cast<float>(offset.x), static_cast<float>(offset.y)});
-    m_deviceContext->SetTransform(D2DHelpers::AsD2DTransform(transform));
-
-    m_deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Orange, 0.0f));
-
-    Draw2(context, size);
-
-    m_deviceContext->EndDraw();
-
-    sisNativeWithD2D->EndDraw();
-
-    m_image.Source(surfaceImageSource);
-  } else {
-    Draw2(context, size);
-  }
-}
-
-void SvgView::Draw2(Windows::Foundation::IInspectable const &context, Size size) {
   com_ptr<ID2D1DeviceContext1> deviceContext;
   copy_to_abi(context, *deviceContext.put_void());
 
   if (m_align != "") {
     Rect vbRect{m_minX, m_minY, m_vbWidth, m_vbHeight};
-    //Rect vbRect{m_minX, m_minY, m_vbWidth, m_vbHeight};
     float width{size.Width};
     float height{size.Height};
 
@@ -227,6 +173,10 @@ void SvgView::Draw2(Windows::Foundation::IInspectable const &context, Size size)
     m_group.SaveDefinition();
     m_group.Draw(context, size);
   }
+
+  if (!m_hasRendered) {
+    m_hasRendered = true;
+  }
 }
 
 void SvgView::CreateGeometry() {
@@ -240,8 +190,7 @@ void SvgView::CreateResources() {
     m_group.CreateResources();
   }
 
-  Size size{static_cast<float>(ActualWidth()), static_cast<float>(ActualHeight())};
-  Draw(DeviceContext(), size);
+  Invalidate();
 
   m_image.Width(ActualWidth());
   m_image.Height(ActualHeight());
@@ -252,6 +201,7 @@ void SvgView::CreateResources() {
 
 void SvgView::Panel_Loaded(IInspectable const &sender, xaml::RoutedEventArgs const & /*args*/) {
   if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
+    m_loaded = true;
     svgView.CreateResources();
   }
 }
@@ -278,8 +228,51 @@ void SvgView::Unload() {
 }
 
 void SvgView::Invalidate() {
-  if (m_hasRendered) {
-    //Draw();
+  if (!m_loaded) {
+    return;
   }
+
+  m_brushes.Clear();
+  m_templates.Clear();
+
+  com_ptr<ID2D1DeviceContext1> deviceContext;
+  copy_to_abi(DeviceContext(), *deviceContext.put_void());
+
+  Size size{static_cast<float>(ActualWidth()), static_cast<float>(ActualHeight())};
+
+  xaml::Media::Imaging::SurfaceImageSource surfaceImageSource(
+      static_cast<int32_t>(size.Width), static_cast<int32_t>(size.Height));
+  com_ptr<ISurfaceImageSourceNativeWithD2D> sisNativeWithD2D{surfaceImageSource.as<ISurfaceImageSourceNativeWithD2D>()};
+
+  // Associate the Direct2D device with the SurfaceImageSource.
+  sisNativeWithD2D->SetDevice(m_device.get());
+
+  com_ptr<IDXGISurface> dxgiSurface;
+
+  RECT updateRect{0, 0, static_cast<long>(size.Width), static_cast<long>(size.Height)};
+  POINT offset{0, 0};
+  check_hresult(sisNativeWithD2D->BeginDraw(updateRect, __uuidof(IDXGISurface), dxgiSurface.put_void(), &offset));
+
+  // Create render target.
+  com_ptr<ID2D1Bitmap1> bitmap;
+  check_hresult(deviceContext->CreateBitmapFromDxgiSurface(dxgiSurface.get(), nullptr, bitmap.put()));
+
+  // Set context's render target.
+  deviceContext->SetTarget(bitmap.get());
+
+  // Draw using Direct2D context
+  deviceContext->BeginDraw();
+
+  auto transform = Numerics::make_float3x2_translation({static_cast<float>(offset.x), static_cast<float>(offset.y)});
+  deviceContext->SetTransform(D2DHelpers::AsD2DTransform(transform));
+
+  deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Orange, 0.0f));
+
+  Draw(DeviceContext(), size);
+
+  deviceContext->EndDraw();
+  sisNativeWithD2D->EndDraw();
+
+  m_image.Source(surfaceImageSource);
 }
 } // namespace winrt::RNSVG::implementation
