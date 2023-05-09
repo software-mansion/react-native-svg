@@ -16,8 +16,6 @@
 
 namespace winrt::RNSVG::implementation {
 SvgView::SvgView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {
-  //m_scale = static_cast<float>(Windows::Graphics::Display::DisplayInformation::GetForCurrentView().ResolutionScale()) / 100;
-
   uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
   D3D_FEATURE_LEVEL featureLevels[] = {
@@ -150,7 +148,7 @@ Size SvgView::ArrangeOverride(Size finalSize) {
   return finalSize;
 }
 
-void SvgView::Draw() {
+void SvgView::Draw(IInspectable const &context, Size size) {
   if (!m_hasRendered) {
     m_hasRendered = true;
   }
@@ -158,9 +156,12 @@ void SvgView::Draw() {
   m_brushes.Clear();
   m_templates.Clear();
 
+  com_ptr<ID2D1DeviceContext1> deviceContext;
+  copy_to_abi(context, *deviceContext.put_void());
+
   if (!m_parent) {
     xaml::Media::Imaging::SurfaceImageSource surfaceImageSource(
-        static_cast<int32_t>(ActualWidth()), static_cast<int32_t>(ActualHeight()));
+        static_cast<int32_t>(size.Width), static_cast<int32_t>(size.Height));
     com_ptr<ISurfaceImageSourceNativeWithD2D> sisNativeWithD2D{
         surfaceImageSource.as<ISurfaceImageSourceNativeWithD2D>()};
 
@@ -169,7 +170,7 @@ void SvgView::Draw() {
 
     com_ptr<IDXGISurface> dxgiSurface;
 
-    RECT updateRect{0, 0, static_cast<long>(ActualWidth()), static_cast<long>(ActualHeight())};
+    RECT updateRect{0, 0, size.Width, size.Height};
     POINT offset{0,0};
     check_hresult(sisNativeWithD2D->BeginDraw(updateRect, __uuidof(IDXGISurface), dxgiSurface.put_void(), &offset));
 
@@ -188,7 +189,7 @@ void SvgView::Draw() {
 
     m_deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Orange, 0.0f));
 
-    Draw(m_deviceContext.get());
+    Draw2(context, size);
 
     m_deviceContext->EndDraw();
 
@@ -196,18 +197,19 @@ void SvgView::Draw() {
 
     m_image.Source(surfaceImageSource);
   } else {
-    com_ptr<ID2D1DeviceContext1> deviceContext;
-    copy_to_abi(m_group.SvgRoot().DeviceContext(), *deviceContext.put_void());
-    Draw(deviceContext.get());
+    Draw2(context, size);
   }
 }
 
-void SvgView::Draw(ID2D1DeviceContext* deviceContext) {
+void SvgView::Draw2(Windows::Foundation::IInspectable const &context, Size size) {
+  com_ptr<ID2D1DeviceContext1> deviceContext;
+  copy_to_abi(context, *deviceContext.put_void());
+
   if (m_align != "") {
-    Rect vbRect{m_minX * m_scale, m_minY * m_scale, m_vbWidth * m_scale, m_vbHeight * m_scale};
+    Rect vbRect{m_minX, m_minY, m_vbWidth, m_vbHeight};
     //Rect vbRect{m_minX, m_minY, m_vbWidth, m_vbHeight};
-    float width{static_cast<float>(ActualWidth())};
-    float height{static_cast<float>(ActualHeight())};
+    float width{size.Width};
+    float height{size.Height};
 
     if (m_parent) {
       width = Utils::GetAbsoluteLength(m_bbWidth, width);
@@ -216,13 +218,14 @@ void SvgView::Draw(ID2D1DeviceContext* deviceContext) {
 
     Rect elRect{0, 0, width, height};
 
-    deviceContext->SetTransform(
-        D2DHelpers::AsD2DTransform(Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice)));
+    D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
+
+    deviceContext->SetTransform(transform * Utils::GetViewBoxTransformD2D(vbRect, elRect, m_align, m_meetOrSlice));
   }
 
   if (m_group) {
     m_group.SaveDefinition();
-    m_group.Draw();
+    m_group.Draw(context, size);
   }
 }
 
@@ -237,7 +240,8 @@ void SvgView::CreateResources() {
     m_group.CreateResources();
   }
 
-  Draw();
+  Size size{static_cast<float>(ActualWidth()), static_cast<float>(ActualHeight())};
+  Draw(DeviceContext(), size);
 
   m_image.Width(ActualWidth());
   m_image.Height(ActualHeight());

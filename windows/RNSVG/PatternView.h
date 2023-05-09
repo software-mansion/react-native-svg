@@ -9,6 +9,7 @@ struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView>
 
   // RenderableView
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+  void Draw(Windows::Foundation::IInspectable const & /*deviceContext*/, Windows::Foundation::Size /*size*/){};
 
  private:
   RNSVG::SVGLength m_x{};
@@ -35,7 +36,7 @@ struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView>
   // Helpers
   void CreateBrush(D2D1_RECT_F rect);
   D2D1_RECT_F GetAdjustedRect(D2D1_RECT_F bounds);
-  winrt::com_ptr<ID2D1CommandList> GetCommandList(D2D1_RECT_F elRect);
+  winrt::com_ptr<ID2D1CommandList> GetCommandList(ID2D1Device* device, D2D1_RECT_F elRect);
 };
 } // namespace winrt::RNSVG::implementation
 

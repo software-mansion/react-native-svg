@@ -102,6 +102,13 @@ struct D2DHelpers {
      return D2D1::Matrix3x2F(transform.m11, transform.m12, transform.m21, transform.m22, transform.m31, transform.m32);
    }
 
+   static D2D1_MATRIX_3X2_F GetTransform(ID2D1DeviceContext* deviceContext) {
+     D2D1_MATRIX_3X2_F transform;
+     deviceContext->GetTransform(&transform);
+
+     return transform;
+   }
+
    static DWRITE_FONT_WEIGHT FontWeightFrom(hstring const &weight, xaml::FrameworkElement const &parent) {
      if (weight == L"normal") {
        return DWRITE_FONT_WEIGHT_NORMAL;

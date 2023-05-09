@@ -35,7 +35,11 @@ struct Utils {
     return std::sqrtf(powX + powY) * static_cast<float>(M_SQRT1_2);
   }
 
-  static float GetAbsoluteLength(SVGLength const &length, double relativeTo) {
+  static float GetAbsoluteLength(SVGLength const& length, double relativeTo) {
+    return GetAbsoluteLength(length, static_cast<float>(relativeTo));
+  }
+
+  static float GetAbsoluteLength(SVGLength const &length, float relativeTo) {
     auto value{length.Value()};
 
     // 1in = 2.54cm = 96px
@@ -138,6 +142,10 @@ struct Utils {
       return D2D1::Matrix3x2F(transform.m11, transform.m12, transform.m21, transform.m22, transform.m31, transform.m32);
     }*/
     return scale * translate;
+  }
+
+  static D2D1_MATRIX_3X2_F GetViewBoxTransformD2D(Rect vbRect, Rect elRect, std::string align, RNSVG::MeetOrSlice meetOrSlice) {
+    return D2DHelpers::AsD2DTransform(GetViewBoxTransform(vbRect, elRect, align, meetOrSlice));
   }
 
   static RNSVG::MeetOrSlice GetMeetOrSlice(Microsoft::ReactNative::JSValue const &value) {

@@ -45,12 +45,11 @@ void TextView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void TextView::DrawGroup() {
+void TextView::DrawGroup(IInspectable const &context, Size size) {
   com_ptr<ID2D1DeviceContext1> deviceContext;
-  copy_to_abi(SvgRoot().DeviceContext(), *deviceContext.put_void());
+  copy_to_abi(context, *deviceContext.put_void());
 
-  D2D1_MATRIX_3X2_F transform;
-  deviceContext->GetTransform(&transform);
+  D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
 
   bool translateXY{X().Size() > 0 || Y().Size() > 0};
   if (translateXY) {
@@ -58,7 +57,7 @@ void TextView::DrawGroup() {
     float y{Y().Size() > 0 ? Y().GetAt(0).Value() : 0};
     deviceContext->SetTransform(transform * D2DHelpers::AsD2DTransform(Numerics::make_float3x2_translation(x, y)));
   }
-  __super::DrawGroup();
+  __super::DrawGroup(context, size);
   if (translateXY) {
     deviceContext->SetTransform(transform);
   }

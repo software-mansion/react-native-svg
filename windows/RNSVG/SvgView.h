@@ -15,6 +15,13 @@ struct SvgView : SvgViewT<SvgView> {
   RNSVG::GroupView Group() { return m_group; }
   void Group(RNSVG::GroupView const &value) { m_group = value; }
 
+  Windows::Foundation::IInspectable Device() {
+    Windows::Foundation::IInspectable asInspectable;
+    copy_from_abi(asInspectable, m_device.get());
+
+    return asInspectable;
+  }
+
   Windows::Foundation::IInspectable DeviceContext() {
     Windows::Foundation::IInspectable asInspectable;
     copy_from_abi(asInspectable, m_deviceContext.get());
@@ -42,7 +49,7 @@ struct SvgView : SvgViewT<SvgView> {
   void MergeProperties(RNSVG::RenderableView const &other);
   void SaveDefinition();
   void Unload();
-  void Draw();
+  void Draw(Windows::Foundation::IInspectable const& deviceContext, Windows::Foundation::Size size);
   void CreateResources();
   void CreateGeometry();
   RNSVG::IRenderable HitTest(Windows::Foundation::Point const & /*point*/) { return nullptr; }
@@ -66,7 +73,6 @@ struct SvgView : SvgViewT<SvgView> {
   Windows::UI::Xaml::Controls::Image m_image;
   RNSVG::GroupView m_group{nullptr};
   hstring m_id{L""};
-  float m_scale{1.0f};
   float m_minX{0.0f};
   float m_minY{0.0f};
   float m_vbWidth{0.0f};
@@ -86,7 +92,7 @@ struct SvgView : SvgViewT<SvgView> {
   Windows::UI::Xaml::FrameworkElement::Loaded_revoker m_panelLoadedRevoker{};
   Windows::UI::Xaml::FrameworkElement::Unloaded_revoker m_panelUnloadedRevoker{};
 
-  void Draw(ID2D1DeviceContext *deviceContext);
+  void Draw2(Windows::Foundation::IInspectable const &deviceContext, Windows::Foundation::Size size);
 };
 } // namespace winrt::RNSVG::implementation
 

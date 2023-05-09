@@ -22,7 +22,7 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   ImageView() = default;
 
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  void Draw();
+  void Draw(Windows::Foundation::IInspectable const &deviceContext, Windows::Foundation::Size size);
   void CreateResources();
   void Unload();
 
@@ -37,18 +37,22 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
 
   ImageSource m_source{};
+  Windows::Storage::Streams::InMemoryRandomAccessStream m_stream{nullptr};
   com_ptr<IWICBitmap> m_wicbitmap{nullptr};
 
+  Windows::Foundation::IAsyncOperation<Windows::Storage::Streams::InMemoryRandomAccessStream> m_imageLoaded{nullptr};
+
   Windows::Foundation::IAsyncAction LoadImageSourceAsync(bool invalidate);
-  winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream>
+  Windows::Foundation::IAsyncOperation<Windows::Storage::Streams::InMemoryRandomAccessStream>
   GetImageMemoryStreamAsync(ImageSource source);
-  Windows::Foundation::IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream>
+  Windows::Foundation::IAsyncOperation<Windows::Storage::Streams::InMemoryRandomAccessStream>
   GetImageStreamAsync(ImageSource source);
-  Windows::Foundation::IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream>
+  Windows::Foundation::IAsyncOperation<Windows::Storage::Streams::InMemoryRandomAccessStream>
   GetImageInlineDataAsync(ImageSource source);
-  winrt::com_ptr<IWICBitmapSource> ImageView::wicBitmapSourceFromStream(
-      winrt::Windows::Storage::Streams::InMemoryRandomAccessStream const &stream);
-  void generateBitmap(winrt::Windows::Storage::Streams::InMemoryRandomAccessStream const &results);
+  com_ptr<IWICBitmapSource> ImageView::wicBitmapSourceFromStream(
+      Windows::Storage::Streams::InMemoryRandomAccessStream const &stream);
+  void generateBitmap(
+      Windows::Storage::Streams::InMemoryRandomAccessStream const &results);
 };
 } // namespace winrt::RNSVG::implementation
 

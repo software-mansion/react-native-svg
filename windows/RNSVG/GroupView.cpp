@@ -105,30 +105,33 @@ void GroupView::UpdateProperties(
 void GroupView::CreateGeometry() {
   if (auto const &root{SvgRoot()}) {
     std::vector<ID2D1Geometry *> geometries(Children().Size());
+    IInspectable asInspectable{nullptr};
 
-    for (uint32_t i = 0; i < Children().Size(); ++i) {
-      auto child{Children().GetAt(i)};
-      if (!child.Geometry()) {
-        child.CreateGeometry();
+    if (geometries.size() > 0) {
+      for (uint32_t i = 0; i < Children().Size(); ++i) {
+        auto child{Children().GetAt(i)};
+        if (!child.Geometry()) {
+          child.CreateGeometry();
+        }
+
+        com_ptr<ID2D1Geometry> geometry;
+        copy_to_abi(child.Geometry(), *geometry.put_void());
+        geometries[i] = geometry.get();
       }
 
-      com_ptr<ID2D1Geometry> geometry;
-      copy_to_abi(child.Geometry(), *geometry.put_void());
-      geometries[i] = geometry.get();
+      com_ptr<ID2D1DeviceContext1> deviceContext;
+      copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+
+      com_ptr<ID2D1Factory> factory;
+      deviceContext->GetFactory(factory.put());
+
+      com_ptr<ID2D1GeometryGroup> group;
+      check_hresult(factory->CreateGeometryGroup(
+          D2DHelpers::GetFillRule(FillRule()), &geometries[0], static_cast<uint32_t>(geometries.size()), group.put()));
+
+      copy_from_abi(asInspectable, group.get());
     }
 
-    com_ptr<ID2D1DeviceContext1> deviceContext;
-    copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
-
-    com_ptr<ID2D1Factory> factory;
-    deviceContext->GetFactory(factory.put());
-
-    com_ptr<ID2D1GeometryGroup> group;
-    check_hresult(factory->CreateGeometryGroup(
-        D2DHelpers::GetFillRule(FillRule()), &geometries[0], static_cast<uint32_t>(geometries.size()), group.put()));
-
-    IInspectable asInspectable;
-    copy_from_abi(asInspectable, group.get());
     Geometry(asInspectable);
   }
 }
@@ -149,38 +152,35 @@ void GroupView::MergeProperties(RNSVG::RenderableView const &other) {
   }
 }
 
-void GroupView::Draw() {
-  if (auto const &root{SvgRoot()}) {
-    com_ptr<ID2D1DeviceContext1> deviceContext;
-    copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+void GroupView::Draw(IInspectable const &context, Size size) {
+  com_ptr<ID2D1DeviceContext1> deviceContext;
+  copy_to_abi(context, *deviceContext.put_void());
 
-    D2D1_MATRIX_3X2_F transform;
-    deviceContext->GetTransform(&transform);
+  D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
 
-    if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
-      deviceContext->SetTransform(transform * D2DHelpers::AsD2DTransform(SvgTransform()));
-    }
-
-    com_ptr<ID2D1Geometry> clipPathGeometry;
-    copy_to_abi(ClipPathGeometry(), *clipPathGeometry.put_void());
-
-    D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
-
-    if (Children().Size() == 0) {
-      __super::Draw();
-    } else {
-      DrawGroup();
-    }
-
-    deviceContext->PopLayer();
-
-    deviceContext->SetTransform(transform);
+  if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
+    deviceContext->SetTransform(transform * D2DHelpers::AsD2DTransform(SvgTransform()));
   }
+
+  com_ptr<ID2D1Geometry> clipPathGeometry;
+  copy_to_abi(ClipPathGeometry(), *clipPathGeometry.put_void());
+
+  D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
+
+  if (Children().Size() == 0) {
+    __super::Draw(context, size);
+  } else {
+    DrawGroup(context, size);
+  }
+
+  deviceContext->PopLayer();
+
+  deviceContext->SetTransform(transform);
 }
 
-void GroupView::DrawGroup() {
+void GroupView::DrawGroup(IInspectable const &context, Size size) {
   for (auto const &child : Children()) {
-    child.Draw();
+    child.Draw(context, size);
   }
 }
 

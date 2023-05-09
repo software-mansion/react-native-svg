@@ -9,7 +9,7 @@ namespace RNSVG
     Boolean IsResponsible;
 
     void CreateResources();
-    void Draw();
+    void Draw(Object deviceContext, Windows.Foundation.Size size);
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
     void MergeProperties(RenderableView other);
     void SaveDefinition();
@@ -25,6 +25,7 @@ namespace RNSVG
 
     GroupView Group;
     Windows.UI.Color CurrentColor{ get; };
+    Object Device{ get; };
     Object DeviceContext{ get; };
     Windows.Foundation.Collections.IMap<String, IRenderable> Templates{ get; };
     Windows.Foundation.Collections.IMap<String, BrushView> Brushes{ get; };
@@ -40,7 +41,6 @@ namespace RNSVG
 
     String Id{ get; };
     Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
-    Single SvgScale{ get; };
     Windows.UI.Color Fill{ get; };
     Single FillOpacity{ get; };
     String FillBrushId{ get; };
@@ -109,7 +109,7 @@ namespace RNSVG
     String FontFamily;
     String FontWeight;
 
-    void DrawGroup();
+    void DrawGroup(Object deviceContext, Windows.Foundation.Size size);
   };
 
   [default_interface]

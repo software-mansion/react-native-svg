@@ -8,7 +8,7 @@ public:
   TSpanView() = default;
 
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  virtual void Draw();
+  virtual void Draw(Windows::Foundation::IInspectable const &deviceContext, Windows::Foundation::Size size);
 
  private:
   std::string m_content;

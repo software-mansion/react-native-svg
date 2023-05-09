@@ -19,7 +19,6 @@ struct RenderableView : RenderableViewT<RenderableView> {
 
   hstring Id() { return m_id; }
   Numerics::float3x2 SvgTransform() { return m_transformMatrix; }
-  float SvgScale() { return m_scale; }
 
   bool IsResponsible() { return m_isResponsible; }
   void IsResponsible(bool isResponsible) { m_isResponsible = isResponsible; }
@@ -44,8 +43,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
   virtual void MergeProperties(RNSVG::RenderableView const &other);
   virtual void SaveDefinition();
   virtual void Unload();
-  virtual void Draw();
-  virtual void CreateResources() { }
+  virtual void Draw(Windows::Foundation::IInspectable const &deviceContext, Windows::Foundation::Size size);
+  virtual void CreateResources() {}
   virtual RNSVG::IRenderable HitTest(Windows::Foundation::Point const &point);
 
  protected:
@@ -80,7 +79,6 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Windows::UI::Color m_stroke{Windows::UI::Colors::Transparent()};
   hstring m_fillBrushId{L""};
   hstring m_strokeBrushId{L""};
-  float m_scale{1.0f};
   float m_fillOpacity{1.0f};
   float m_strokeOpacity{1.0f};
   float m_strokeMiterLimit{0.0f};
