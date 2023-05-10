@@ -251,13 +251,13 @@ struct Utils {
     }
 
     auto const &stops{value.AsArray()};
-    std::vector<D2D1_GRADIENT_STOP> gradientStops(stops.size());
+    std::vector<D2D1_GRADIENT_STOP> gradientStops;
 
     for (size_t i = 0; i < stops.size(); ++i) {
       D2D1_GRADIENT_STOP stop{};
       stop.position = Utils::JSValueAsFloat(stops.at(i));
       stop.color = D2DHelpers::AsD2DColor(Utils::JSValueAsColor(stops.at(++i)));
-      gradientStops[i] = stop;
+      gradientStops.emplace_back(stop);
     }
 
     return gradientStops;
