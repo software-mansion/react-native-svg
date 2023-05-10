@@ -4,10 +4,12 @@
 
 #include "Utils.h"
 
+using namespace winrt;
+using namespace Microsoft::ReactNative;
+
 namespace winrt::RNSVG::implementation {
-void SymbolView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const Microsoft::ReactNative::JSValueObject &propertyMap{
-      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+void SymbolView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};

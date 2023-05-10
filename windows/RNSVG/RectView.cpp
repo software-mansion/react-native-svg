@@ -7,10 +7,12 @@
 #include "JSValueXaml.h"
 #include "Utils.h"
 
+using namespace winrt;
+using namespace Microsoft::ReactNative;
+
 namespace winrt::RNSVG::implementation {
-void RectView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const Microsoft::ReactNative::JSValueObject &propertyMap{
-      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+void RectView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -35,31 +37,31 @@ void RectView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &re
 }
 
 void RectView::CreateGeometry() {
-  if (auto const &root{SvgRoot()}) {
-    float x{Utils::GetAbsoluteLength(m_x, root.ActualWidth())};
-    float y{Utils::GetAbsoluteLength(m_y, root.ActualHeight())};
-    float width{Utils::GetAbsoluteLength(m_width, root.ActualWidth())};
-    float height{Utils::GetAbsoluteLength(m_height, root.ActualHeight())};
+  auto const &root{SvgRoot()};
 
-    auto const &rxLength{m_rx.Unit() == RNSVG::LengthType::Unknown ? m_ry : m_rx};
-    auto const &ryLength{m_ry.Unit() == RNSVG::LengthType::Unknown ? m_rx : m_ry};
-    float rx{Utils::GetAbsoluteLength(rxLength, root.ActualWidth())};
-    float ry{Utils::GetAbsoluteLength(ryLength, root.ActualHeight())};
+  float x{Utils::GetAbsoluteLength(m_x, root.ActualWidth())};
+  float y{Utils::GetAbsoluteLength(m_y, root.ActualHeight())};
+  float width{Utils::GetAbsoluteLength(m_width, root.ActualWidth())};
+  float height{Utils::GetAbsoluteLength(m_height, root.ActualHeight())};
 
-    com_ptr<ID2D1DeviceContext1> deviceContext;
-    copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+  auto const rxLength{m_rx.Unit() == RNSVG::LengthType::Unknown ? m_ry : m_rx};
+  auto const ryLength{m_ry.Unit() == RNSVG::LengthType::Unknown ? m_rx : m_ry};
+  float rx{Utils::GetAbsoluteLength(rxLength, root.ActualWidth())};
+  float ry{Utils::GetAbsoluteLength(ryLength, root.ActualHeight())};
 
-    com_ptr<ID2D1Factory> factory;
-    deviceContext->GetFactory(factory.put());
+  com_ptr<ID2D1DeviceContext1> deviceContext;
+  copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
 
-    com_ptr<ID2D1RoundedRectangleGeometry> geometry;
-    check_hresult(factory->CreateRoundedRectangleGeometry(
-        D2D1::RoundedRect(D2D1::RectF(x, y, width + x, height + y), rx, ry), geometry.put()));
+  com_ptr<ID2D1Factory> factory;
+  deviceContext->GetFactory(factory.put());
 
-    IInspectable asInspectable;
-    copy_from_abi(asInspectable, geometry.get());
+  com_ptr<ID2D1RoundedRectangleGeometry> geometry;
+  check_hresult(factory->CreateRoundedRectangleGeometry(
+      D2D1::RoundedRect(D2D1::RectF(x, y, width + x, height + y), rx, ry), geometry.put()));
 
-    Geometry(asInspectable);
-  }
+  IInspectable asInspectable;
+  copy_from_abi(asInspectable, geometry.get());
+
+  Geometry(asInspectable);
 }
 } // namespace winrt::RNSVG::implementation

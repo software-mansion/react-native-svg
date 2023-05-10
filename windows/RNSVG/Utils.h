@@ -10,6 +10,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+using namespace winrt::Microsoft::ReactNative;
+
 namespace winrt::RNSVG {
 struct Utils {
  public:
@@ -145,7 +147,7 @@ struct Utils {
     return D2DHelpers::AsD2DTransform(GetViewBoxTransform(vbRect, elRect, align, meetOrSlice));
   }
 
-  static RNSVG::MeetOrSlice GetMeetOrSlice(Microsoft::ReactNative::JSValue const &value) {
+  static RNSVG::MeetOrSlice GetMeetOrSlice(JSValue const &value) {
     if (value.IsNull()) {
       return RNSVG::MeetOrSlice::Meet;
     }
@@ -161,9 +163,7 @@ struct Utils {
     }
   }
 
-  static std::string JSValueAsBrushUnits(
-      Microsoft::ReactNative::JSValue const &value,
-      std::string defaultValue = "objectBoundingBox") {
+  static std::string JSValueAsBrushUnits(JSValue const &value, std::string defaultValue = "objectBoundingBox") {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -177,7 +177,7 @@ struct Utils {
     }
   }
 
-  static float JSValueAsFloat(Microsoft::ReactNative::JSValue const &value, float defaultValue = 0.0f) {
+  static float JSValueAsFloat(JSValue const &value, float defaultValue = 0.0f) {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -185,9 +185,7 @@ struct Utils {
     }
   }
 
-  static std::string JSValueAsString(
-      Microsoft::ReactNative::JSValue const &value,
-      std::string defaultValue = "") {
+  static std::string JSValueAsString(JSValue const &value, std::string defaultValue = "") {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -195,9 +193,7 @@ struct Utils {
     }
   }
 
-  static ui::Color JSValueAsColor(
-      Microsoft::ReactNative::JSValue const &value,
-      ui::Color defaultValue = Colors::Transparent()) {
+  static ui::Color JSValueAsColor(JSValue const &value, ui::Color defaultValue = Colors::Transparent()) {
     if (value.IsNull()) {
       return defaultValue;
     } else if (auto const &brush{value.To<xaml::Media::Brush>()}) {
@@ -209,9 +205,7 @@ struct Utils {
     return defaultValue;
   }
 
-  static SVGLength JSValueAsSVGLength(
-      Microsoft::ReactNative::JSValue const &value,
-      SVGLength const &defaultValue = {}) {
+  static SVGLength JSValueAsSVGLength(JSValue const &value, SVGLength const &defaultValue = {}) {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -219,9 +213,7 @@ struct Utils {
     }
   }
 
-  static Numerics::float3x2 JSValueAsTransform(
-      Microsoft::ReactNative::JSValue const &value,
-      Numerics::float3x2 defaultValue = {}) {
+  static Numerics::float3x2 JSValueAsTransform(JSValue const &value, Numerics::float3x2 defaultValue = {}) {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -237,9 +229,7 @@ struct Utils {
     }
   }
 
-  static D2D1_MATRIX_3X2_F JSValueAsD2DTransform(
-    Microsoft::ReactNative::JSValue const& value,
-    D2D1_MATRIX_3X2_F defaultValue = {}) {
+  static D2D1_MATRIX_3X2_F JSValueAsD2DTransform(JSValue const& value, D2D1_MATRIX_3X2_F defaultValue = {}) {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -255,8 +245,7 @@ struct Utils {
     }
   }
 
-  static std::vector<D2D1_GRADIENT_STOP> JSValueAsStops(
-      Microsoft::ReactNative::JSValue const &value) {
+  static std::vector<D2D1_GRADIENT_STOP> JSValueAsStops(JSValue const &value) {
     if (value.IsNull()) {
       return {};
     }

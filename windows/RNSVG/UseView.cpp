@@ -4,11 +4,11 @@
 
 #include "Utils.h"
 
+using namespace winrt;
+using namespace Microsoft::ReactNative;
+
 namespace winrt::RNSVG::implementation {
-void UseView::UpdateProperties(
-    Microsoft::ReactNative::IJSValueReader const &reader,
-    bool forceUpdate,
-    bool invalidate) {
+void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const Microsoft::ReactNative::JSValueObject &propertyMap{
       Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
 
@@ -72,9 +72,7 @@ void UseView::Draw(IInspectable const &context, Size size) {
       transform = transform * SvgTransform();
     }
 
-    if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
-      deviceContext->SetTransform(D2DHelpers::AsD2DTransform(transform * SvgTransform()));
-    }
+    deviceContext->SetTransform(originalTransform * D2DHelpers::AsD2DTransform(transform));
 
     // Propagate props to template
     view.MergeProperties(*this);

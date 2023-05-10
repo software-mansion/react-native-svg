@@ -5,13 +5,12 @@
 #include "JSValueXaml.h"
 #include "Utils.h"
 
+using namespace winrt;
+using namespace Microsoft::ReactNative;
+
 namespace winrt::RNSVG::implementation {
-void LineView::UpdateProperties(
-    Microsoft::ReactNative::IJSValueReader const &reader,
-    bool forceUpdate,
-    bool invalidate) {
-  const Microsoft::ReactNative::JSValueObject &propertyMap{
-      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+void LineView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -31,33 +30,33 @@ void LineView::UpdateProperties(
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 void LineView::CreateGeometry() {
-  if (auto const &root{SvgRoot()}) {
-    float x1{Utils::GetAbsoluteLength(m_x1, root.ActualWidth())};
-    float y1{Utils::GetAbsoluteLength(m_y1, root.ActualHeight())};
-    float x2{Utils::GetAbsoluteLength(m_x2, root.ActualWidth())};
-    float y2{Utils::GetAbsoluteLength(m_y2, root.ActualHeight())};
+  auto const &root{SvgRoot()};
 
-    com_ptr<ID2D1DeviceContext1> deviceContext;
-    copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+  float x1{Utils::GetAbsoluteLength(m_x1, root.ActualWidth())};
+  float y1{Utils::GetAbsoluteLength(m_y1, root.ActualHeight())};
+  float x2{Utils::GetAbsoluteLength(m_x2, root.ActualWidth())};
+  float y2{Utils::GetAbsoluteLength(m_y2, root.ActualHeight())};
 
-    com_ptr<ID2D1Factory> factory;
-    deviceContext->GetFactory(factory.put());
+  com_ptr<ID2D1DeviceContext1> deviceContext;
+  copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
 
-    com_ptr<ID2D1PathGeometry> geometry;
-    check_hresult(factory->CreatePathGeometry(geometry.put()));
+  com_ptr<ID2D1Factory> factory;
+  deviceContext->GetFactory(factory.put());
 
-    com_ptr<ID2D1GeometrySink> sink;
-    check_hresult(geometry->Open(sink.put()));
+  com_ptr<ID2D1PathGeometry> geometry;
+  check_hresult(factory->CreatePathGeometry(geometry.put()));
 
-    // hollow instead of filled??
-    sink->BeginFigure({x1, y1}, D2D1_FIGURE_BEGIN_FILLED);
-    sink->AddLine({x2, y2});
-    sink->EndFigure(D2D1_FIGURE_END_OPEN);
+  com_ptr<ID2D1GeometrySink> sink;
+  check_hresult(geometry->Open(sink.put()));
 
-    IInspectable asInspectable;
-    copy_from_abi(asInspectable, geometry.get());
+  // hollow instead of filled??
+  sink->BeginFigure({x1, y1}, D2D1_FIGURE_BEGIN_FILLED);
+  sink->AddLine({x2, y2});
+  sink->EndFigure(D2D1_FIGURE_END_OPEN);
 
-    Geometry(asInspectable);
-  }
+  IInspectable asInspectable;
+  copy_from_abi(asInspectable, geometry.get());
+
+  Geometry(asInspectable);
 }
 } // namespace winrt::RNSVG::implementation

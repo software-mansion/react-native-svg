@@ -7,15 +7,13 @@
 #include "JSValueXaml.h"
 #include "SvgView.h"
 #include "Utils.h"
-#include "D2DHelpers.h"
+
+using namespace winrt;
+using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void RenderableView::UpdateProperties(
-    Microsoft::ReactNative::IJSValueReader const &reader,
-    bool forceUpdate,
-    bool invalidate) {
-  const Microsoft::ReactNative::JSValueObject &propertyMap{
-      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
   auto const &parent{SvgParent().try_as<RNSVG::RenderableView>()};
 
   auto const &propList{propertyMap.find("propList")};
@@ -391,10 +389,7 @@ RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
   return nullptr;
 }
 
-void RenderableView::SetColor(
-    const Microsoft::ReactNative::JSValueObject &propValue,
-    ui::Color fallbackColor,
-    std::string propName) {
+void RenderableView::SetColor(const JSValueObject &propValue, ui::Color fallbackColor, std::string propName) {
   switch (propValue["type"].AsInt64()) {
     case 1: {
       auto const &brushId{to_hstring(Utils::JSValueAsString(propValue["brushRef"]))};

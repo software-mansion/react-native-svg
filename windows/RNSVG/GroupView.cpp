@@ -9,15 +9,13 @@
 
 #include "SVGLength.h"
 #include "Utils.h"
-#include "D2DHelpers.h"
+
+using namespace winrt;
+using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void GroupView::UpdateProperties(
-    Microsoft::ReactNative::IJSValueReader const &reader,
-    bool forceUpdate,
-    bool invalidate) {
-  const Microsoft::ReactNative::JSValueObject &propertyMap{
-      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   auto const &parent{SvgParent().try_as<RNSVG::GroupView>()};
   auto fontProp{RNSVG::FontProp::Unknown};
@@ -103,37 +101,37 @@ void GroupView::UpdateProperties(
 }
 
 void GroupView::CreateGeometry() {
-  if (auto const &root{SvgRoot()}) {
-    std::vector<ID2D1Geometry *> geometries(Children().Size());
-    IInspectable asInspectable{nullptr};
+  if (Children().Size() == 0) {
+    return;
+  }
 
-    if (geometries.size() > 0) {
-      for (uint32_t i = 0; i < Children().Size(); ++i) {
-        auto child{Children().GetAt(i)};
-        if (!child.Geometry()) {
-          child.CreateGeometry();
-        }
+  std::vector<ID2D1Geometry *> geometries(Children().Size());
 
-        com_ptr<ID2D1Geometry> geometry;
-        copy_to_abi(child.Geometry(), *geometry.put_void());
-        geometries[i] = geometry.get();
-      }
-
-      com_ptr<ID2D1DeviceContext1> deviceContext;
-      copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
-
-      com_ptr<ID2D1Factory> factory;
-      deviceContext->GetFactory(factory.put());
-
-      com_ptr<ID2D1GeometryGroup> group;
-      check_hresult(factory->CreateGeometryGroup(
-          D2DHelpers::GetFillRule(FillRule()), &geometries[0], static_cast<uint32_t>(geometries.size()), group.put()));
-
-      copy_from_abi(asInspectable, group.get());
+  for (uint32_t i = 0; i < Children().Size(); ++i) {
+    auto child{Children().GetAt(i)};
+    if (!child.Geometry()) {
+      child.CreateGeometry();
     }
 
-    Geometry(asInspectable);
+    com_ptr<ID2D1Geometry> geometry;
+    copy_to_abi(child.Geometry(), *geometry.put_void());
+    geometries[i] = geometry.get();
   }
+
+  com_ptr<ID2D1DeviceContext1> deviceContext;
+  copy_to_abi(SvgRoot().DeviceContext(), *deviceContext.put_void());
+
+  com_ptr<ID2D1Factory> factory;
+  deviceContext->GetFactory(factory.put());
+
+  com_ptr<ID2D1GeometryGroup> group;
+  check_hresult(factory->CreateGeometryGroup(
+      D2DHelpers::GetFillRule(FillRule()), &geometries[0], static_cast<uint32_t>(geometries.size()), group.put()));
+
+  IInspectable asInspectable{nullptr};
+  copy_from_abi(asInspectable, group.get());
+
+  Geometry(asInspectable);
 }
 
 void GroupView::SaveDefinition() {

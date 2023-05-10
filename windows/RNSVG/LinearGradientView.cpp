@@ -4,13 +4,12 @@
 
 #include "Utils.h"
 
+using namespace winrt;
+using namespace Microsoft::ReactNative;
+
 namespace winrt::RNSVG::implementation {
-void LinearGradientView::UpdateProperties(
-    Microsoft::ReactNative::IJSValueReader const &reader,
-    bool forceUpdate,
-    bool invalidate) {
-  const Microsoft::ReactNative::JSValueObject &propertyMap{
-      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+void LinearGradientView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -57,14 +56,16 @@ void LinearGradientView::CreateBrush() {
   winrt::com_ptr<ID2D1GradientStopCollection> stopCollection;
   winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], static_cast<uint32_t>(m_stops.size()), stopCollection.put()));
 
+  Size size{static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())};
+
   D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES brushProperties;
   brushProperties.startPoint = {0, 0};
-  brushProperties.endPoint = {static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())};
+  brushProperties.endPoint = {size.Width, size.Height};
 
   winrt::com_ptr<ID2D1LinearGradientBrush> linearBrush;
   winrt::check_hresult(deviceContext->CreateLinearGradientBrush(brushProperties, stopCollection.get(), linearBrush.put()));
 
-  SetPoints(linearBrush.get(), {0, 0, static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())});
+  SetPoints(linearBrush.get(), {0, 0, size.Width, size.Height});
 
   if (m_transformSet) {
     linearBrush->SetTransform(m_transform);

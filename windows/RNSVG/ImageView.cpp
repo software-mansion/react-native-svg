@@ -2,21 +2,25 @@
 #include "ImageView.h"
 #include "ImageView.g.cpp"
 
-#include "Utils.h"
-
 #include <winrt/Windows.Security.Cryptography.h>
 #include <winrt/Windows.Storage.Streams.h>
 #include <winrt/Windows.Web.Http.Headers.h>
 #include <winrt/Windows.Web.Http.h>
 
+#include "Utils.h"
+
 #include <d2d1effects.h>
 #include <shcore.h>
 #include <wincodec.h>
 
+using namespace winrt::Microsoft::ReactNative;
+using namespace winrt::Windows::Security::Cryptography;
+using namespace winrt::Windows::Storage::Streams;
+using namespace winrt::Windows::Web::Http;
+
 namespace winrt::RNSVG::implementation {
-void ImageView::UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const Microsoft::ReactNative::JSValueObject &propertyMap{
-      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};
@@ -191,7 +195,7 @@ IAsyncAction ImageView::LoadImageSourceAsync(bool invalidate) {
 
   const bool fromStream{m_source.type == ImageSourceType::Download || m_source.type == ImageSourceType::InlineData};
 
-  winrt::Windows::Storage::Streams::InMemoryRandomAccessStream stream{nullptr};
+  InMemoryRandomAccessStream stream{nullptr};
 
   // get weak reference before any co_await calls
   auto weak_this{get_weak()};
@@ -217,7 +221,7 @@ IAsyncAction ImageView::LoadImageSourceAsync(bool invalidate) {
   }
 }
 
-IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream> ImageView::GetImageMemoryStreamAsync(
+IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageMemoryStreamAsync(
     ImageSource source) {
   switch (source.type) {
     case ImageSourceType::Download:
@@ -229,17 +233,15 @@ IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream> Im
   }
 }
 
-IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(
+IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(
     ImageSource source) {
   try {
     co_await resume_background();
 
-    auto httpMethod{
-        source.method.empty() ? winrt::Windows::Web::Http::HttpMethod::Get()
-                              : winrt::Windows::Web::Http::HttpMethod{source.method}};
+    auto httpMethod{source.method.empty() ? HttpMethod::Get() : HttpMethod{source.method}};
 
     Uri uri{source.uri};
-    winrt::Windows::Web::Http::HttpRequestMessage request{httpMethod, uri};
+    HttpRequestMessage request{httpMethod, uri};
 
     if (!source.headers.empty()) {
       for (auto const &header : source.headers) {
@@ -251,13 +253,13 @@ IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream> Im
       }
     }
 
-    winrt::Windows::Web::Http::HttpClient httpClient;
-    winrt::Windows::Web::Http::HttpResponseMessage response{co_await httpClient.SendRequestAsync(request)};
+    HttpClient httpClient;
+    HttpResponseMessage response{co_await httpClient.SendRequestAsync(request)};
 
-    if (response && response.StatusCode() == winrt::Windows::Web::Http::HttpStatusCode::Ok) {
-      winrt::Windows::Storage::Streams::IInputStream inputStream{co_await response.Content().ReadAsInputStreamAsync()};
-      winrt::Windows::Storage::Streams::InMemoryRandomAccessStream memoryStream;
-      co_await winrt::Windows::Storage::Streams::RandomAccessStream::CopyAsync(inputStream, memoryStream);
+    if (response && response.StatusCode() == HttpStatusCode::Ok) {
+      IInputStream inputStream{co_await response.Content().ReadAsInputStreamAsync()};
+      InMemoryRandomAccessStream memoryStream;
+      co_await RandomAccessStream::CopyAsync(inputStream, memoryStream);
       memoryStream.Seek(0);
 
       co_return memoryStream;
@@ -268,7 +270,7 @@ IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream> Im
   co_return nullptr;
 }
 
-IAsyncOperation<Windows::Storage::Streams::InMemoryRandomAccessStream> ImageView::GetImageInlineDataAsync(
+IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageInlineDataAsync(
     ImageSource source) {
   std::string uri{to_string(source.uri)};
 
@@ -281,10 +283,9 @@ IAsyncOperation<Windows::Storage::Streams::InMemoryRandomAccessStream> ImageView
     co_await winrt::resume_background();
 
     std::string_view base64String{uri.c_str() + start + 1, uri.length() - start - 1};
-    auto const &buffer{
-        Windows::Security::Cryptography::CryptographicBuffer::DecodeFromBase64String(to_hstring(base64String))};
+    auto const &buffer{CryptographicBuffer::DecodeFromBase64String(to_hstring(base64String))};
 
-    Windows::Storage::Streams::InMemoryRandomAccessStream memoryStream;
+    InMemoryRandomAccessStream memoryStream;
     co_await memoryStream.WriteAsync(buffer);
     memoryStream.Seek(0);
 
@@ -296,8 +297,7 @@ IAsyncOperation<Windows::Storage::Streams::InMemoryRandomAccessStream> ImageView
   co_return nullptr;
 }
 
-com_ptr<IWICBitmapSource> ImageView::wicBitmapSourceFromStream(
-    Windows::Storage::Streams::InMemoryRandomAccessStream const &results) {
+com_ptr<IWICBitmapSource> ImageView::wicBitmapSourceFromStream(InMemoryRandomAccessStream const &results) {
   if (!results) {
     return nullptr;
   }
@@ -319,8 +319,7 @@ com_ptr<IWICBitmapSource> ImageView::wicBitmapSourceFromStream(
   return decodedFrame;
 }
 
-void ImageView::generateBitmap(
-    Windows::Storage::Streams::InMemoryRandomAccessStream const &results) {
+void ImageView::generateBitmap(InMemoryRandomAccessStream const &results) {
   com_ptr<IWICBitmapSource> decodedFrame = wicBitmapSourceFromStream(results);
 
   if (!decodedFrame) {

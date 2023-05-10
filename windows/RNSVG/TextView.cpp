@@ -4,7 +4,8 @@
 
 #include "D2DHelpers.h"
 
-using namespace winrt::Microsoft::ReactNative;
+using namespace winrt;
+using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 void TextView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {

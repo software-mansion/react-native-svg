@@ -5,6 +5,7 @@
 namespace winrt::RNSVG::implementation {
 void BrushView::SaveDefinition() {
   if (auto const &root{SvgRoot()}) {
+    CreateBrush();
     root.Brushes().Insert(Id(), *this);
   }
 }

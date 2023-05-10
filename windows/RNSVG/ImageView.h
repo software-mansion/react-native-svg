@@ -37,10 +37,7 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
 
   ImageSource m_source{};
-  Windows::Storage::Streams::InMemoryRandomAccessStream m_stream{nullptr};
   com_ptr<IWICBitmap> m_wicbitmap{nullptr};
-
-  Windows::Foundation::IAsyncOperation<Windows::Storage::Streams::InMemoryRandomAccessStream> m_imageLoaded{nullptr};
 
   Windows::Foundation::IAsyncAction LoadImageSourceAsync(bool invalidate);
   Windows::Foundation::IAsyncOperation<Windows::Storage::Streams::InMemoryRandomAccessStream>

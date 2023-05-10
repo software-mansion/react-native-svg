@@ -14,8 +14,11 @@
 
 #include <d3d11_4.h>
 
+using namespace winrt;
+using namespace Microsoft::ReactNative;
+
 namespace winrt::RNSVG::implementation {
-SvgView::SvgView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {
+SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
   uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
   D3D_FEATURE_LEVEL featureLevels[] = {
@@ -65,16 +68,13 @@ void SvgView::SvgParent(xaml::FrameworkElement const &value) {
   }
 }
 
-void SvgView::UpdateProperties(
-    Microsoft::ReactNative::IJSValueReader const &reader,
-    bool forceUpdate,
-    bool invalidate) {
+void SvgView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   // If forceUpdate is false, that means this is a nested Svg
   // and we're inheriting props. Pass those along to the group.
   if (!forceUpdate && m_group) {
     m_group.UpdateProperties(reader, forceUpdate, invalidate);
   } else {
-    auto const &propertyMap{Microsoft::ReactNative::JSValueObject::ReadFrom(reader)};
+    auto const &propertyMap{JSValueObject::ReadFrom(reader)};
 
     for (auto const &pair : propertyMap) {
       auto const &propertyName{pair.first};
