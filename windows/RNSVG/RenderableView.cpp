@@ -204,13 +204,10 @@ void RenderableView::Draw(IInspectable const &context, Size size) {
   com_ptr<ID2D1DeviceContext1> deviceContext;
   copy_to_abi(context, *deviceContext.put_void());
 
-  com_ptr<ID2D1Layer> transformLayer;
-  check_hresult(deviceContext->CreateLayer(nullptr, transformLayer.put()));
-
   D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
 
   if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
-    transform = D2DHelpers::AsD2DTransform(SvgTransform());
+    deviceContext->SetTransform(D2DHelpers::AsD2DTransform(SvgTransform()) * transform);
   }
 
   com_ptr<ID2D1Geometry> clipPathGeometry;
@@ -226,7 +223,7 @@ void RenderableView::Draw(IInspectable const &context, Size size) {
 
   geometry = geometryGroup;
 
-  D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity, transform);
+  D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
 
   if (FillOpacity()) {
     D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), FillOpacity());
@@ -272,6 +269,8 @@ void RenderableView::Draw(IInspectable const &context, Size size) {
   }
 
   deviceContext->PopLayer();
+
+  deviceContext->SetTransform(transform);
 }
 
 void RenderableView::MergeProperties(RNSVG::RenderableView const &other) {

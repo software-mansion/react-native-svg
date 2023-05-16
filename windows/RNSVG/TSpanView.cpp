@@ -36,7 +36,7 @@ void TSpanView::Draw(IInspectable const &context, Size size) {
   if (translateXY) {
     float x{X().Size() > 0 ? X().GetAt(0).Value() : 0};
     float y{Y().Size() > 0 ? Y().GetAt(0).Value() : 0};
-    deviceContext->SetTransform(transform * D2DHelpers::AsD2DTransform(Numerics::make_float3x2_translation(x, y)));
+    deviceContext->SetTransform(D2D1::Matrix3x2F::Translation({x, y}) * transform);
   }
 
   com_ptr<ID2D1Factory> d2dFactory;

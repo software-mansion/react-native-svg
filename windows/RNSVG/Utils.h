@@ -311,14 +311,14 @@ struct Utils {
     return brush;
   }
 
-  static Point GetScale(D2D1_MATRIX_3X2_F matrix) {
+  static D2D1_VECTOR_2F GetScale(D2D1_MATRIX_3X2_F matrix) {
     auto scaleX = std::sqrt(matrix.m11 * matrix.m11 + matrix.m12 * matrix.m12);
     auto scaleY = std::sqrt(matrix.m21 * matrix.m21 + matrix.m22 * matrix.m22);
 
     return {scaleX, scaleY};
   }
 
-  static Point GetScale(Numerics::float3x2 matrix) {
+  static D2D1_VECTOR_2F GetScale(Numerics::float3x2 matrix) {
     return GetScale(D2DHelpers::AsD2DTransform(matrix));
   }
 };

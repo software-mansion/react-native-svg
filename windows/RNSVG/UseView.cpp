@@ -38,11 +38,17 @@ void UseView::Draw(IInspectable const &context, Size size) {
     copy_to_abi(context, *deviceContext.put_void());
 
     D2D1_MATRIX_3X2_F originalTransform{D2DHelpers::GetTransform(deviceContext.get())};
+    auto transform{originalTransform};
 
-    auto originalScale = Utils::GetScale(originalTransform);
-    auto svgTransformScale = Utils::GetScale(SvgTransform());
+    float x{Utils::GetAbsoluteLength(m_x, size.Width)};
+    float y{Utils::GetAbsoluteLength(m_y, size.Height)};
 
-    auto transform{Numerics::make_float3x2_scale(1)};
+    transform = D2D1::Matrix3x2F::Translation({x, y}) * originalTransform;
+
+    // Combine new transform with existing one if it's set
+    if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
+      transform = transform * D2DHelpers::AsD2DTransform(SvgTransform());
+    }
 
     // Figure out any necessary transforms
     if (auto const &symbol{view.try_as<RNSVG::SymbolView>()}) {
@@ -53,26 +59,16 @@ void UseView::Draw(IInspectable const &context, Size size) {
             (symbol.MinX() + symbol.VbWidth()),
             (symbol.MinY() + symbol.VbHeight())};
 
-        float elX{Utils::GetAbsoluteLength(m_x, size.Width)};
-        float elY{Utils::GetAbsoluteLength(m_y, size.Height)};
         float elWidth{Utils::GetAbsoluteLength(m_width, size.Width)};
         float elHeight{Utils::GetAbsoluteLength(m_height, size.Height)};
-        Rect elRect{elX, elY, elWidth, elHeight};
+        Rect elRect{0.0f, 0.0f, elWidth, elHeight};
 
-        transform = Utils::GetViewBoxTransform(vbRect, elRect, to_string(symbol.Align()), symbol.MeetOrSlice());
+        auto vbTransform{Utils::GetViewBoxTransformD2D(vbRect, elRect, to_string(symbol.Align()), symbol.MeetOrSlice())};
+        transform = vbTransform * transform;
       }
-    } else {
-      float x{Utils::GetAbsoluteLength(m_x, size.Width)};
-      float y{Utils::GetAbsoluteLength(m_y, size.Height)};
-      transform = Numerics::make_float3x2_translation({x, y});
     }
 
-    // Combine new transform with existing one if it's set
-    if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
-      transform = transform * SvgTransform();
-    }
-
-    deviceContext->SetTransform(originalTransform * D2DHelpers::AsD2DTransform(transform));
+    deviceContext->SetTransform(transform);
 
     // Propagate props to template
     view.MergeProperties(*this);
@@ -95,10 +91,6 @@ void UseView::Draw(IInspectable const &context, Size size) {
     // Restore session transform
     deviceContext->SetTransform(originalTransform);
 
-  } else {
-    throw hresult_not_implemented(
-        L"'Use' element expected a pre-defined svg template as 'href' prop. Template named: " + m_href +
-        L" is not defined");
   }
 }
 

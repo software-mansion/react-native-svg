@@ -103,7 +103,7 @@ struct D2DHelpers {
          transform.m11, transform.m12, transform.m21, transform.m22, transform._31, transform._32);
    }
 
-   static D2D1_MATRIX_3X2_F AsD2DTransform(Numerics::float3x2 const transform) {
+   static D2D1::Matrix3x2F AsD2DTransform(Numerics::float3x2 const transform) {
      return D2D1::Matrix3x2F(transform.m11, transform.m12, transform.m21, transform.m22, transform.m31, transform.m32);
    }
 

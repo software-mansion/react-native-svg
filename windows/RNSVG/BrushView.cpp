@@ -11,7 +11,7 @@ void BrushView::SaveDefinition() {
 }
 
 void BrushView::SetBounds(Rect const &rect) {
-  m_bounds = {rect.X, rect.Y, rect.Width+rect.X, rect.Height+rect.Y};
+  m_bounds = {rect.X, rect.Y, rect.Width + rect.X, rect.Height + rect.Y};
   UpdateBounds();
 }
 

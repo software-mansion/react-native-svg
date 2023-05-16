@@ -64,7 +64,7 @@ void PatternView::UpdateBounds() {
     copy_to_abi(m_brush, *brush.put_void());
 
     D2D1_RECT_F rect{GetAdjustedRect(m_bounds)};
-    brush->SetSourceRectangle(&rect);
+    CreateBrush(rect);
   }
 }
 
@@ -89,14 +89,15 @@ void PatternView::CreateBrush(D2D1_RECT_F rect) {
     com_ptr<ID2D1DeviceContext> deviceContext;
     copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
 
-    //cmdList->Close();
-
-    //com_ptr<ID2D1CommandSink> sink;
-
     com_ptr<ID2D1ImageBrush> imageBrush;
     check_hresult(deviceContext->CreateImageBrush(cmdList.get(), brushProperties, imageBrush.put()));
 
-    //cmdList->Close();
+    auto transform{D2D1::Matrix3x2F::Translation({rect.left, rect.top})};
+    if (m_transformSet) {
+      transform = transform * D2DHelpers::AsD2DTransform(m_transform);
+    }
+
+    imageBrush->SetTransform(transform);
 
     copy_from_abi(m_brush, imageBrush.get());
   }
@@ -111,7 +112,7 @@ D2D1_RECT_F PatternView::GetAdjustedRect(D2D1_RECT_F bounds) {
   float adjWidth{Utils::GetAbsoluteLength(m_width, width)};
   float adjHeight{Utils::GetAbsoluteLength(m_height, height)};
 
-  return {x, y, adjWidth, adjHeight};
+  return {x, y, adjWidth + x, adjHeight + y};
 }
 
 com_ptr<ID2D1CommandList> PatternView::GetCommandList(ID2D1Device* device, D2D1_RECT_F rect) {
@@ -123,11 +124,10 @@ com_ptr<ID2D1CommandList> PatternView::GetCommandList(ID2D1Device* device, D2D1_
 
   deviceContext->SetTarget(cmdList.get());
 
-  //auto const &cmdList{winrt::Microsoft::Graphics::Canvas::CanvasCommandList(canvas)};
-  //auto const &session{cmdList.CreateDrawingSession()};
-
   deviceContext->BeginDraw();
   deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Orange, 0.0f));
+
+  auto transform{D2D1::Matrix3x2F::Identity()};
 
   if (m_align != "") {
     Rect vbRect{
@@ -136,45 +136,35 @@ com_ptr<ID2D1CommandList> PatternView::GetCommandList(ID2D1Device* device, D2D1_
         (m_vbWidth + m_minX),
         (m_vbHeight + m_minY)};
 
-    auto originalTransform{D2DHelpers::GetTransform(deviceContext.get())};
-
-    auto transform{Utils::GetViewBoxTransform(
+    auto viewboxTransform{Utils::GetViewBoxTransform(
         vbRect,
         {
             rect.left,
             rect.top,
-            rect.left+rect.right,
-            rect.top+rect.bottom
+            rect.left + rect.right,
+            rect.top + rect.bottom
         },
         m_align,
         m_meetOrSlice)};
 
-    if (m_transformSet) {
-      transform = transform * m_transform;
-    }
-
-    //deviceContext->SetTransform(D2DHelpers::AsD2DTransform(transform));
-    deviceContext->SetTransform(originalTransform * D2DHelpers::AsD2DTransform(transform));
-    //session.Transform(transform);
+    transform = D2DHelpers::AsD2DTransform(viewboxTransform) * transform;
   }
 
-  auto root{SvgRoot()};
-  Size size{static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())};
+  deviceContext->SetTransform(transform);
+
+  Size size{rect.right - rect.left, rect.bottom - rect.top};
 
   for (auto const &child : Children()) {
     IInspectable asInspectable;
     copy_from_abi(asInspectable, deviceContext.get());
 
-    // child geometry size??
     child.Draw(asInspectable, size);
   }
 
   cmdList->Close();
 
-  //session.Close();
   deviceContext->EndDraw();
 
-  // TODO: Fix after Geometry switch
   return cmdList;
 }
 

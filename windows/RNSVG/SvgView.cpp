@@ -152,6 +152,8 @@ void SvgView::Draw(IInspectable const &context, Size size) {
   com_ptr<ID2D1DeviceContext1> deviceContext;
   copy_to_abi(context, *deviceContext.put_void());
 
+  D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
+
   if (m_align != "") {
     Rect vbRect{m_minX, m_minY, m_vbWidth, m_vbHeight};
     float width{size.Width};
@@ -163,10 +165,7 @@ void SvgView::Draw(IInspectable const &context, Size size) {
     }
 
     Rect elRect{0, 0, width, height};
-
-    D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
-
-    deviceContext->SetTransform(transform * Utils::GetViewBoxTransformD2D(vbRect, elRect, m_align, m_meetOrSlice));
+    deviceContext->SetTransform(Utils::GetViewBoxTransformD2D(vbRect, elRect, m_align, m_meetOrSlice) * transform);
   }
 
   if (m_group) {
@@ -177,6 +176,8 @@ void SvgView::Draw(IInspectable const &context, Size size) {
   if (!m_hasRendered) {
     m_hasRendered = true;
   }
+
+  deviceContext->SetTransform(transform);
 }
 
 void SvgView::CreateGeometry() {

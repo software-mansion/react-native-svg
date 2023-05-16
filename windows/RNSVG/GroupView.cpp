@@ -101,37 +101,35 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
 }
 
 void GroupView::CreateGeometry() {
-  if (Children().Size() == 0) {
-    return;
-  }
-
-  std::vector<ID2D1Geometry *> geometries(Children().Size());
-
-  for (uint32_t i = 0; i < Children().Size(); ++i) {
-    auto child{Children().GetAt(i)};
+  std::vector<ID2D1Geometry*> geometries;
+  for (auto const child : Children()) {
     if (!child.Geometry()) {
       child.CreateGeometry();
     }
 
-    com_ptr<ID2D1Geometry> geometry;
-    copy_to_abi(child.Geometry(), *geometry.put_void());
-    geometries[i] = geometry.get();
+    if (child.Geometry()) {
+      com_ptr<ID2D1Geometry> geometry;
+      copy_to_abi(child.Geometry(), *geometry.put_void());
+      geometries.emplace_back(geometry.get());
+    }
   }
 
-  com_ptr<ID2D1DeviceContext1> deviceContext;
-  copy_to_abi(SvgRoot().DeviceContext(), *deviceContext.put_void());
+  if (!geometries.empty()) {
+    com_ptr<ID2D1DeviceContext1> deviceContext;
+    copy_to_abi(SvgRoot().DeviceContext(), *deviceContext.put_void());
 
-  com_ptr<ID2D1Factory> factory;
-  deviceContext->GetFactory(factory.put());
+    com_ptr<ID2D1Factory> factory;
+    deviceContext->GetFactory(factory.put());
 
-  com_ptr<ID2D1GeometryGroup> group;
-  check_hresult(factory->CreateGeometryGroup(
-      D2DHelpers::GetFillRule(FillRule()), &geometries[0], static_cast<uint32_t>(geometries.size()), group.put()));
+    com_ptr<ID2D1GeometryGroup> group;
+    check_hresult(factory->CreateGeometryGroup(
+        D2DHelpers::GetFillRule(FillRule()), &geometries[0], static_cast<uint32_t>(geometries.size()), group.put()));
 
-  IInspectable asInspectable{nullptr};
-  copy_from_abi(asInspectable, group.get());
+    IInspectable asInspectable{nullptr};
+    copy_from_abi(asInspectable, group.get());
 
-  Geometry(asInspectable);
+    Geometry(asInspectable);
+  }
 }
 
 void GroupView::SaveDefinition() {
@@ -157,7 +155,7 @@ void GroupView::Draw(IInspectable const &context, Size size) {
   D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
 
   if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
-    deviceContext->SetTransform(transform * D2DHelpers::AsD2DTransform(SvgTransform()));
+    deviceContext->SetTransform(D2DHelpers::AsD2DTransform(SvgTransform()) * transform);
   }
 
   com_ptr<ID2D1Geometry> clipPathGeometry;

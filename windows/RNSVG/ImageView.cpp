@@ -142,19 +142,12 @@ void ImageView::Draw(IInspectable const &context, Size size) {
 
       com_ptr<ID2D1Effect> cropEffect{nullptr};
       deviceContext->CreateEffect(CLSID_D2D1Crop, cropEffect.put());
-      cropEffect->SetValue(D2D1_CROP_PROP_RECT, D2D1::RectF(x, y, x + width, y + height));
+      cropEffect->SetValue(D2D1_CROP_PROP_RECT, D2D1::RectF(x, y, width, height));
       cropEffect->SetInputEffect(0, transformEffect.get());
 
-      com_ptr<ID2D1Image> image;
-      cropEffect->GetOutput(image.put());
-
-      D2D1_RECT_F imageBounds;
-      check_hresult(deviceContext->GetImageLocalBounds(image.get(), &imageBounds));
-
       deviceContext->DrawImage(cropEffect.get());
-      //deviceContext->DrawImage(cropEffect.get(), {0, 0}, imageBounds);
     } else {
-      deviceContext->DrawBitmap(bitmap.get(), D2D1::RectF(x, y, x + width, y + height));
+      deviceContext->DrawBitmap(bitmap.get());
     }
 
     deviceContext->SetTransform(transform);
