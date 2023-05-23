@@ -5,6 +5,7 @@
 #endif
 
 #include <winrt/Microsoft.Graphics.Canvas.Svg.h>
+#include <cctype>
 
 #include "JSValueXaml.h"
 #include "Utils.h"
