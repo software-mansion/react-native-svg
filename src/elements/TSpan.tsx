@@ -12,7 +12,6 @@ import type {
   FontProps,
   NumberArray,
   NumberProp,
-  TransformProps,
 } from '../lib/extract/types';
 import RNSVGTSpan from '../fabric/TSpanNativeComponent';
 
@@ -30,10 +29,10 @@ export default class TSpan extends Shape<TSpanProps> {
   static displayName = 'TSpan';
 
   setNativeProps = (
-    props: Object & {
+    props: TSpanProps & {
       matrix?: ColumnMajorTransformMatrix;
       style?: [] | {};
-    } & TransformProps,
+    },
   ) => {
     const matrix = !props.matrix && extractTransform(props);
     if (matrix) {

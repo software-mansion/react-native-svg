@@ -69,9 +69,7 @@ export default class Svg extends Shape<SvgProps> {
   };
 
   setNativeProps = (
-    props: Object & {
-      width?: NumberProp;
-      height?: NumberProp;
+    props: SvgProps & {
       bbWidth?: NumberProp;
       bbHeight?: NumberProp;
     },

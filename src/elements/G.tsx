@@ -7,7 +7,6 @@ import type {
   CommonPathProps,
   FontProps,
   NumberProp,
-  TransformProps,
 } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGGroup from '../fabric/GroupNativeComponent';
@@ -22,9 +21,10 @@ export default class G<P> extends Shape<GProps & P> {
   static displayName = 'G';
 
   setNativeProps = (
-    props: Object & {
-      matrix?: number[];
-    } & TransformProps,
+    props: GProps &
+      P & {
+        matrix?: number[];
+      },
   ) => {
     const matrix = !props.matrix && extractTransform(props);
     if (matrix) {
