@@ -470,11 +470,6 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     }
   }
 
-  @ReactProp(name = "onLayout")
-  public void setOnLayout(V node, boolean onLayout) {
-    node.setOnLayout(onLayout);
-  }
-
   @ReactProp(name = "name")
   public void setName(V node, String name) {
     node.setName(name);

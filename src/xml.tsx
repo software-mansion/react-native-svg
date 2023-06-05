@@ -122,7 +122,7 @@ export function SvgXml(props: XmlProps) {
 
 export async function fetchText(uri: string) {
   const response = await fetch(uri);
-  if (response.ok) {
+  if (response.ok || (response.status === 0 && uri.startsWith('file://'))) {
     return await response.text();
   }
   throw new Error(`Fetching ${uri} failed with status ${response.status}`);
@@ -429,6 +429,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
       );
     }
 
+    allowSpaces();
     if (source[i] !== '>') {
       error('Expected >');
     }

@@ -366,7 +366,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
       float maskY = (float) relativeOnHeight(mask.mY);
       float maskWidth = (float) relativeOnWidth(mask.mW);
       float maskHeight = (float) relativeOnHeight(mask.mH);
-      maskCanvas.clipRect(maskX, maskY, maskWidth, maskHeight);
+      maskCanvas.clipRect(maskX, maskY, maskWidth + maskX, maskHeight + maskY);
 
       Paint maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
       mask.draw(maskCanvas, maskPaint, 1);

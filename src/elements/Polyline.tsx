@@ -17,8 +17,7 @@ export default class Polyline extends Shape<PolylineProps> {
   };
 
   setNativeProps = (
-    props: Object & {
-      points?: string | NumberProp[];
+    props: PolylineProps & {
       d?: string;
     },
   ) => {

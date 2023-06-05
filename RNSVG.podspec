@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
       'HEADER_SEARCH_PATHS' => '"$(PODS_ROOT)/boost" "$(PODS_ROOT)/boost-for-react-native"  "$(PODS_ROOT)/RCT-Folly"',
       "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
     }
-    s.platforms       = { ios: '11.0', tvos: '11.0' }
+    s.platforms       = { ios: '12.4', tvos: '11.0' }
     s.compiler_flags  = folly_compiler_flags + ' -DRCT_NEW_ARCH_ENABLED'
     s.source_files    = 'apple/**/*.{h,m,mm,cpp}'
     s.ios.exclude_files = '**/*.macos.{h,m,mm,cpp}'

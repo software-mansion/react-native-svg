@@ -17,8 +17,7 @@ export default class Polygon extends Shape<PolygonProps> {
   };
 
   setNativeProps = (
-    props: Object & {
-      points?: string | NumberProp[];
+    props: PolygonProps & {
       d?: string;
     },
   ) => {

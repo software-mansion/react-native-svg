@@ -8,7 +8,6 @@ import type {
   NumberArray,
   NumberProp,
   TextSpecificProps,
-  TransformProps,
 } from '../lib/extract/types';
 import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
@@ -30,10 +29,10 @@ export default class Text extends Shape<TextProps> {
   static displayName = 'Text';
 
   setNativeProps = (
-    props: Object & {
+    props: TextProps & {
       matrix?: ColumnMajorTransformMatrix;
       style?: [] | {};
-    } & TransformProps,
+    },
   ) => {
     const matrix = props && !props.matrix && extractTransform(props);
     if (matrix) {

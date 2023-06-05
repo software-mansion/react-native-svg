@@ -49,6 +49,9 @@ export default function extractProps(
     display?: string;
     opacity?: NumberProp;
     onLayout?: () => void;
+    testID?: string;
+    accessibilityLabel?: string;
+    accessible?: boolean;
   } & TransformProps &
     ResponderProps &
     StrokeProps &
@@ -68,6 +71,9 @@ export default function extractProps(
     markerStart = marker,
     markerMid = marker,
     markerEnd = marker,
+    testID,
+    accessibilityLabel,
+    accessible,
   } = props;
   const extracted: extractedProps = {};
 
@@ -109,6 +115,18 @@ export default function extractProps(
 
   if (id) {
     extracted.name = String(id);
+  }
+
+  if (testID) {
+    extracted.testID = testID;
+  }
+
+  if (accessibilityLabel) {
+    extracted.accessibilityLabel = accessibilityLabel;
+  }
+
+  if (accessible) {
+    extracted.accessible = accessible;
   }
 
   if (clipRule) {
