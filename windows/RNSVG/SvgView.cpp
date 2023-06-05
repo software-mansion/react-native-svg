@@ -52,18 +52,13 @@ SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
 
   check_hresult(m_device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, m_deviceContext.put()));
 
-  //m_panelUnloadedRevoker = Unloaded(winrt::auto_revoke, {get_weak(), &SvgView::Panel_Unloaded});
   m_panelLoadedRevoker = Loaded(winrt::auto_revoke, {get_weak(), &SvgView::Panel_Loaded});
+  m_panelUnloadedRevoker = Unloaded(winrt::auto_revoke, {get_weak(), &SvgView::Panel_Unloaded});
 }
 
 void SvgView::SvgParent(xaml::FrameworkElement const &value) {
   if (value) {
-    //m_canvasDrawRevoker.revoke();
-    //m_canvasCreateResourcesRevoker.revoke();
-    //m_canvasSizeChangedRevoker.revoke();
     m_panelUnloadedRevoker.revoke();
-    //m_canvas.RemoveFromVisualTree();
-    //m_canvas = nullptr;
     m_parent = value;
   }
 }
@@ -221,11 +216,6 @@ void SvgView::Unload() {
   if (m_group) {
     m_group.Unload();
   }
-
-  //if (m_canvas) {
-  //  m_canvas.RemoveFromVisualTree();
-  //  m_canvas = nullptr;
-  //}
 }
 
 void SvgView::Invalidate() {

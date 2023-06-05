@@ -17,7 +17,6 @@ void BrushView::SetBounds(Rect const &rect) {
 
 void BrushView::Unload() {
   if (m_brush) {
-    //m_brush.Close();
     m_brush = nullptr;
   }
   

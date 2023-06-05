@@ -162,7 +162,7 @@ void ImageView::CreateResources() {
 
 void ImageView::Unload() {
   if (m_wicbitmap) {
-    //m_wicbitmap = nullptr;
+    m_wicbitmap = nullptr;
   }
 }
 

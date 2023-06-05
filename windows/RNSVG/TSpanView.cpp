@@ -68,41 +68,6 @@ void TSpanView::Draw(IInspectable const &context, Size size) {
       D2D1::RectF(0, 0, size.Width, size.Height),
       fill.get());
 
-  // com_ptr<IDWriteTextLayout> textLayout;
-  // check_hresult(dwriteFactory->CreateTextLayout(
-  //    to_hstring(m_content).c_str(),
-  //    static_cast<uint32_t>(m_content.size()),
-  //    textFormat.get(),
-  //    static_cast<float>(canvas.Width()),
-  //    static_cast<float>(canvas.Height()),
-  //    textLayout.put()));
-
-  // com_ptr<IDWriteTextRenderer> textRenderer;
-  // textLayout->Draw(nullptr, textRenderer.get(), 0, 0);
-
-  // ComPtr<CanvasGeometry> CanvasGeometry::CreateNew(ICanvasTextLayout * canvasTextLayout) {
-  //  auto dwriteTextLayout = GetWrappedResource<IDWriteTextLayout2>(canvasTextLayout);
-
-  //  ComPtr<ICanvasDevice> canvasDevice;
-  //  ThrowIfFailed(canvasTextLayout->get_Device(&canvasDevice));
-
-  //  GeometryDevicePtr device(canvasDevice.Get());
-
-  //  auto outlineTextRenderer = Make<OutlineTextRenderer>(device);
-
-  //  ThrowIfFailed(dwriteTextLayout->Draw(nullptr, outlineTextRenderer.Get(), 0, 0));
-
-  //  auto d2dGeometry = outlineTextRenderer->CloseAndGetPath();
-
-  //  auto outlineGeometry = Make<CanvasGeometry>(device, d2dGeometry.Get());
-
-  //  return outlineGeometry;
-  //}
-
-  // fix point
-  // deviceContext->DrawTextLayout({0, 0}, textLayout.get(), fill.get());
-
-  // __super::Render(canvas, session);
   if (translateXY) {
     deviceContext->SetTransform(transform);
   }

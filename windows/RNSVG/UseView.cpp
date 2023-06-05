@@ -9,8 +9,7 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const Microsoft::ReactNative::JSValueObject &propertyMap{
-      Microsoft::ReactNative::JSValue::ReadObjectFrom(reader)};
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
   for (auto const &pair : propertyMap) {
     auto const &propertyName{pair.first};

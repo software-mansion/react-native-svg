@@ -207,7 +207,7 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Point const &point) {
       }
     }
     if (renderable && !renderable.IsResponsible()) {
-      renderable = *this;
+      return *this;
     } else if (!renderable){
       if (!Geometry()) {
         CreateGeometry();
@@ -221,7 +221,7 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Point const &point) {
 
 
         if (xaml::RectHelper::Contains(D2DHelpers::FromD2DRect(bounds), point)) {
-          renderable = *this;
+          return *this;
         }
       }
     }

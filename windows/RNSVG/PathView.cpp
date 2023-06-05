@@ -5,6 +5,7 @@
 #endif
 
 #include "d2d1svg.h"
+#include <cctype>
 
 #include "JSValueXaml.h"
 #include "Utils.h"
@@ -27,6 +28,7 @@ void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
       if (propertyValue.IsNull()) {
         m_d.clear();
       } else {
+
         m_d = propertyValue.AsString();
         ParsePath();
       }
