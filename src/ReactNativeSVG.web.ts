@@ -449,6 +449,7 @@ export class Stop extends WebShape {
   tag = 'stop' as const;
 }
 
+/* Taken from here: https://gist.github.com/jennyknuth/222825e315d45a738ed9d6e04c7a88d0 */
 function encodeSvg(svgString: string) {
   return svgString
     .replace(
