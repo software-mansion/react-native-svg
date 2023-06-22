@@ -122,11 +122,13 @@ export default function TestComponent() {
 
 Both `SvgUri` and `SvgCssUri` log errors to the console, but otherwise ignore them.
 You can set property `onError` if you want to handle errors such as resource not
-existing in a different way.
+existing in a different way and `fallback` if you want to render another component 
+instead in such case.
 
 ```jsx
 import * as React from 'react';
 import { SvgUri } from 'react-native-svg';
+import { SvgFallback } from './components/SvgFallback';
 
 export default () => {
   const [uri, setUri] = React.useState(
@@ -140,6 +142,7 @@ export default () => {
       width="100%"
       height="100%"
       uri={uri}
+      fallback={<SvgFallback />}
     />
   );
 };
