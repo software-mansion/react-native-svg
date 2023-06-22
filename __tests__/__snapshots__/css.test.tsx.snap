@@ -155,8 +155,13 @@ exports[`supports CSS in style element 1`] = `
     <RNSVGDefs />
     <RNSVGGroup>
       <RNSVGRect
-        fill={4294901760}
-        height={200}
+        fill={
+          Object {
+            "payload": 4294901760,
+            "type": 0,
+          }
+        }
+        height="200"
         propList={
           Array [
             "fill",
@@ -164,18 +169,28 @@ exports[`supports CSS in style element 1`] = `
             "strokeWidth",
           ]
         }
-        stroke={4278190335}
+        stroke={
+          Object {
+            "payload": 4278190335,
+            "type": 0,
+          }
+        }
         strokeWidth="16"
-        width={1000}
-        x={100}
-        y={0}
+        width="1000"
+        x="100"
+        y="0"
       />
     </RNSVGGroup>
     <RNSVGGroup>
       <RNSVGRect
-        fill={4294901760}
+        fill={
+          Object {
+            "payload": 4294901760,
+            "type": 0,
+          }
+        }
         fillOpacity={0.3}
-        height={200}
+        height="200"
         propList={
           Array [
             "fill",
@@ -184,11 +199,16 @@ exports[`supports CSS in style element 1`] = `
             "strokeWidth",
           ]
         }
-        stroke={4278190335}
+        stroke={
+          Object {
+            "payload": 4278190335,
+            "type": 0,
+          }
+        }
         strokeWidth="16"
-        width={750}
-        x={100}
-        y={350}
+        width="750"
+        x="100"
+        y="350"
       />
     </RNSVGGroup>
   </RNSVGGroup>

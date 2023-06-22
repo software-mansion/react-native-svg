@@ -1,5 +1,6 @@
 // @ts-ignore
-import { Touchable, GestureResponderEvent } from 'react-native';
+import type { GestureResponderEvent } from 'react-native';
+import { Touchable } from 'react-native';
 const PRESS_RETENTION_OFFSET = { top: 20, left: 20, right: 20, bottom: 30 };
 // @ts-ignore
 const { Mixin } = Touchable;
@@ -117,7 +118,7 @@ const SvgTouchableMixin = {
 };
 
 const touchKeys = Object.keys(SvgTouchableMixin);
-const touchVals = touchKeys.map(key => SvgTouchableMixin[key]);
+const touchVals = touchKeys.map((key) => SvgTouchableMixin[key]);
 const numTouchKeys = touchKeys.length;
 
 export default (target: { [x: string]: unknown; state: unknown }) => {

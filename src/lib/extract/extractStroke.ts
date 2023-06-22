@@ -1,7 +1,7 @@
 import extractBrush from './extractBrush';
 import extractOpacity from './extractOpacity';
 import extractLengthList from './extractLengthList';
-import { extractedProps, StrokeProps } from './types';
+import type { extractedProps, StrokeProps } from './types';
 
 const caps = {
   butt: 0,
@@ -47,7 +47,7 @@ export default function extractStroke(
   }
   if (strokeWidth != null) {
     inherited.push('strokeWidth');
-    o.strokeWidth = strokeWidth;
+    o.strokeWidth = String(strokeWidth);
   }
   if (strokeOpacity != null) {
     inherited.push('strokeOpacity');

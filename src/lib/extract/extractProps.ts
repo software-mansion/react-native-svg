@@ -1,10 +1,10 @@
 import extractFill from './extractFill';
 import extractStroke from './extractStroke';
-import { props2transform, transformToMatrix } from './extractTransform';
+import extractTransform from './extractTransform';
 import extractResponder from './extractResponder';
 import extractOpacity from './extractOpacity';
 import { idPattern } from '../util';
-import {
+import type {
   ClipProps,
   extractedProps,
   FillProps,
@@ -49,7 +49,9 @@ export default function extractProps(
     display?: string;
     opacity?: NumberProp;
     onLayout?: () => void;
-    transform?: number[] | string | TransformProps;
+    testID?: string;
+    accessibilityLabel?: string;
+    accessible?: boolean;
   } & TransformProps &
     ResponderProps &
     StrokeProps &
@@ -69,7 +71,9 @@ export default function extractProps(
     markerStart = marker,
     markerMid = marker,
     markerEnd = marker,
-    transform,
+    testID,
+    accessibilityLabel,
+    accessible,
   } = props;
   const extracted: extractedProps = {};
 
@@ -82,8 +86,7 @@ export default function extractProps(
     extracted.propList = inherited;
   }
 
-  const transformProps = props2transform(props);
-  const matrix = transformToMatrix(transformProps, transform);
+  const matrix = extractTransform(props);
   if (matrix !== null) {
     extracted.matrix = matrix;
   }
@@ -112,6 +115,18 @@ export default function extractProps(
 
   if (id) {
     extracted.name = String(id);
+  }
+
+  if (testID) {
+    extracted.testID = testID;
+  }
+
+  if (accessibilityLabel) {
+    extracted.accessibilityLabel = accessibilityLabel;
+  }
+
+  if (accessible) {
+    extracted.accessible = accessible;
   }
 
   if (clipRule) {
@@ -149,6 +164,19 @@ export default function extractProps(
 
 export function extract(instance: Object, props: Object & { style?: [] | {} }) {
   return extractProps(propsAndStyles(props), instance);
+}
+
+export function stringifyPropsForFabric(props: {
+  [key: string]: NumberProp | undefined | null;
+}): { [key: string]: string } {
+  const extracted: { [key: string]: string } = {};
+  Object.keys(props).forEach((k) => {
+    if (props[k] !== undefined && props[k] !== null) {
+      extracted[k] = String(props[k]);
+    }
+  });
+
+  return extracted;
 }
 
 export function withoutXY(

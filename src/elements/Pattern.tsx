@@ -1,24 +1,29 @@
+import type { ReactNode } from 'react';
 import React from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import extractViewBox from '../lib/extract/extractViewBox';
-import { NumberProp, TransformProps } from '../lib/extract/types';
+import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
-import { RNSVGPattern } from './NativeComponents';
+import RNSVGPattern from '../fabric/PatternNativeComponent';
+import { stringifyPropsForFabric } from '../lib/extract/extractProps';
+import type { NativeMethods } from 'react-native';
 
-export default class Pattern extends Shape<{
+export interface PatternProps extends TransformProps {
+  children?: ReactNode;
   id?: string;
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
+  patternTransform?: TransformProps['transform'];
+  patternUnits?: Units;
+  patternContentUnits?: Units;
   viewBox?: string;
   preserveAspectRatio?: string;
-  transform?: number[] | string | TransformProps;
-  patternTransform?: number[] | string | TransformProps;
-  patternUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-  patternContentUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-}> {
+}
+
+export default class Pattern extends Shape<PatternProps> {
   static displayName = 'Pattern';
 
   static defaultProps = {
@@ -45,20 +50,24 @@ export default class Pattern extends Shape<{
       preserveAspectRatio,
     } = props;
     const matrix = extractTransform(patternTransform || transform || props);
+    const strigifiedPatternProps = stringifyPropsForFabric({
+      x,
+      y,
+      width,
+      height,
+    });
+    const patternProps = {
+      name: id,
+      matrix,
+      patternTransform: matrix,
+      patternUnits: (patternUnits && units[patternUnits]) || 0,
+      patternContentUnits: patternContentUnits ? units[patternContentUnits] : 1,
+    };
     return (
       <RNSVGPattern
-        ref={this.refMethod}
-        name={id}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        matrix={matrix}
-        patternTransform={matrix}
-        patternUnits={(patternUnits && units[patternUnits]) || 0}
-        patternContentUnits={
-          patternContentUnits ? units[patternContentUnits] : 1
-        }
+        ref={(ref) => this.refMethod(ref as (Pattern & NativeMethods) | null)}
+        {...strigifiedPatternProps}
+        {...patternProps}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
       >
         {children}

@@ -1,4 +1,4 @@
-import { NumberProp } from './types';
+import type { NumberProp } from './types';
 
 export default function extractOpacity(opacity: NumberProp | void) {
   const value = +opacity;

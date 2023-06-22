@@ -1,4 +1,4 @@
-import { NumberProp } from './types';
+import type { NumberProp } from './types';
 
 export const meetOrSliceTypes: {
   [meetOrSlice: string]: number;
@@ -36,9 +36,10 @@ export default function extractViewBox(props: {
     return null;
   }
 
-  const params = (Array.isArray(viewBox)
-    ? viewBox
-    : viewBox.trim().split(spacesRegExp)
+  const params = (
+    Array.isArray(viewBox)
+      ? viewBox
+      : viewBox.trim().replace(/,/g, ' ').split(spacesRegExp)
   ).map(Number);
 
   if (params.length !== 4 || params.some(isNaN)) {
