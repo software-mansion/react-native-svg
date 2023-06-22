@@ -449,6 +449,24 @@ export class Stop extends WebShape {
   tag = 'stop' as const;
 }
 
+function encodeSvg(svgString: string) {
+  return svgString
+    .replace(
+      '<svg',
+      ~svgString.indexOf('xmlns')
+        ? '<svg'
+        : '<svg xmlns="http://www.w3.org/2000/svg"',
+    )
+    .replace(/"/g, "'")
+    .replace(/%/g, '%25')
+    .replace(/#/g, '%23')
+    .replace(/{/g, '%7B')
+    .replace(/}/g, '%7D')
+    .replace(/</g, '%3C')
+    .replace(/>/g, '%3E')
+    .replace(/\s+/g, ' ');
+}
+
 export class Svg extends WebShape {
   render(): React.ReactElement {
     return createElement('svg', {
@@ -486,9 +504,9 @@ export class Svg extends WebShape {
             callback(canvas.toDataURL().replace('data:image/png;base64,', ''));
           };
 
-          // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
-          img.src = `data:image/svg+xml;utf8,${new window.XMLSerializer().serializeToString(
-            svg,
+          img.src = `data:image/svg+xml;utf8,${encodeSvg(
+            // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+            new window.XMLSerializer().serializeToString(svg),
           )}`;
         };
       },
