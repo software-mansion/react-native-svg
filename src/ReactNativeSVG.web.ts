@@ -450,7 +450,50 @@ export class Stop extends WebShape {
 }
 
 export class Svg extends WebShape {
-  tag = 'svg' as const;
+  render(): React.ReactElement {
+    return createElement('svg', {
+      ...prepare(this, this.prepareProps(this.props)),
+      ref: (ref: SVGElement) => {
+        this.toDataURL = (
+          callback: (data: string) => void,
+          options: { width?: number; height?: number } = {},
+        ) => {
+          const rect = getBoundingClientRect(ref);
+
+          const width = Number(options.width) || rect.width;
+          const height = Number(options.height) || rect.height;
+
+          // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+          const svg = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'svg',
+          );
+          svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+          svg.setAttribute('width', String(width));
+          svg.setAttribute('height', String(height));
+          // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+          svg.appendChild(ref.cloneNode(true));
+
+          // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+          const img = new window.Image();
+          img.onload = () => {
+            // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const context = canvas.getContext('2d');
+            context?.drawImage(img, 0, 0);
+            callback(canvas.toDataURL().replace('data:image/png;base64,', ''));
+          };
+
+          // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+          img.src = `data:image/svg+xml;utf8,${new window.XMLSerializer().serializeToString(
+            svg,
+          )}`;
+        };
+      },
+    });
+  }
 }
 
 export class Symbol extends WebShape {
