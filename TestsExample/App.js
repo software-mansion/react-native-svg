@@ -6,9 +6,9 @@ import Test1374 from './src/Test1374';
 import Test1718 from './src/Test1718';
 import Test1813 from './src/Test1813';
 import Test1845 from './src/Test1845';
-import Test9999 from './src/Test9999';
+import Test2080 from './src/Test2080';
 import PointerEventsBoxNone from './src/PointerEventsBoxNone';
 
 export default function App() {
-  return <Test9999 />;
+  return <Test2080 />;
 }
