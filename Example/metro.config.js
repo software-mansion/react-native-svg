@@ -1,5 +1,11 @@
-/* eslint-disable import/no-commonjs */
+const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
+/**
+ * Metro configuration
+ * https://facebook.github.io/metro/docs/configuration
+ *
+ * @type {import('metro-config').MetroConfig}
+ */
 const path = require('path');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
 const escape = require('escape-string-regexp');
@@ -14,7 +20,7 @@ const rnwPath = fs.realpathSync(
 
 const modules = [...Object.keys(pack.peerDependencies), 'react-native-windows'];
 
-module.exports = {
+const config = {
   projectRoot: __dirname,
   watchFolders: [root],
 
@@ -51,3 +57,5 @@ module.exports = {
     }),
   },
 };
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);
