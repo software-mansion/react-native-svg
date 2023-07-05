@@ -48,7 +48,7 @@ class JSI_EXPORT RNSVGImageShadowNode final : public ConcreteViewShadowNode<
       ShadowNodeFamilyFragment const &familyFragment,
       ComponentDescriptor const &componentDescriptor) {
     auto imageSource = ImageSource{ImageSource::Type::Invalid};
-    return {imageSource, {imageSource, nullptr}};
+    return {imageSource, {imageSource, nullptr, {}}};
   }
 
 #pragma mark - LayoutableShadowNode
