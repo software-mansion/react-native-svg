@@ -15,6 +15,7 @@ import * as Image from './examples/Image';
 import * as Reusable from './examples/Reusable';
 import * as TouchEvents from './examples/TouchEvents';
 import * as PanResponder from './examples/PanResponder';
+import * as Reanimated from './examples/Reanimated';
 import * as Transforms from './examples/Transforms';
 import * as Markers from './examples/Markers';
 
@@ -36,6 +37,7 @@ export {
   TouchEvents,
   Reusable,
   PanResponder,
+  Reanimated,
   Transforms,
   Markers,
 };
