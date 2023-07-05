@@ -570,8 +570,10 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         }
       case 2:
         {
-          int brush = getSvgView().mTintColor;
-          paint.setColor(brush);
+          int color = getSvgView().mTintColor;
+          int alpha = color >>> 24;
+          alpha = Math.round((float) alpha * opacity);
+          paint.setColor(alpha << 24 | (color & 0x00ffffff));
           break;
         }
       case 3:
