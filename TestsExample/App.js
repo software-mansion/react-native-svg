@@ -10,5 +10,5 @@ import Test2080 from './src/Test2080';
 import PointerEventsBoxNone from './src/PointerEventsBoxNone';
 
 export default function App() {
-  return <Test2080 />;
+  return <ColorTest />;
 }
