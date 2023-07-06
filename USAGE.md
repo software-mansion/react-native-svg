@@ -122,8 +122,7 @@ export default function TestComponent() {
 
 Both `SvgUri` and `SvgCssUri` log errors to the console, but otherwise ignore them.
 You can set property `onError` if you want to handle errors such as resource not
-existing in a different way and `fallback` if you want to render another component 
-instead in such case.
+existing in a different way and `fallback` if you want to render another component instead in such case.
 
 ```jsx
 import * as React from 'react';
