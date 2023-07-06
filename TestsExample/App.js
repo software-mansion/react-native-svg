@@ -12,5 +12,5 @@ import Test2071 from './src/Test2071';
 import Test2089 from './src/Test2089';
 
 export default function App() {
-  return <ColorTest />;
+  return <Test2089 />;
 }

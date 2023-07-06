@@ -1,23 +1,48 @@
 import React, {useEffect} from 'react';
-import {Animated, Easing, View} from 'react-native';
+import Animated, {
+  useSharedValue,
+  withTiming,
+  Easing,
+  withRepeat,
+  interpolate,
+  useDerivedValue,
+  useAnimatedProps,
+} from 'react-native-reanimated';
 import {Svg, Circle} from 'react-native-svg';
 
 export default () => {
   const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-  const animatedValue = new Animated.Value(0);
-  useEffect(() => {
-    Animated.loop(
-      Animated.timing(animatedValue, {
-        toValue: 100,
+  const animatedValue = useSharedValue(0);
+  const timingAnimatedValue = useDerivedValue(() =>
+    withRepeat(
+      withTiming(animatedValue.value, {
         duration: 1250,
-        easing: Easing.linear,
-        useNativeDriver: true,
+        easing: Easing.out(Easing.cubic),
       }),
-    ).start();
+      -1,
+    ),
+  );
+  const animatedProps = useAnimatedProps(() => ({
+    strokeDasharray: [
+      interpolate(
+        timingAnimatedValue.value,
+        [0, 50, 100],
+        [8.1681408993, 40.8407044967, 8.1681408993],
+      ),
+      interpolate(
+        timingAnimatedValue.value,
+        [0, 50, 100],
+        [73.513268094, 40.8407045967, 73.513268094],
+      ),
+    ],
+  }));
+
+  useEffect(() => {
+    animatedValue.value = 100;
   }, []);
 
   return (
-    <View
+    <Animated.View
       style={{
         flex: 1,
         paddingTop: 200,
@@ -32,17 +57,10 @@ export default () => {
           stroke="red"
           strokeWidth="2.5"
           strokeLinecap="round"
-          strokeDasharray={animatedValue.interpolate({
-            inputRange: [0, 50, 100],
-            outputRange: [
-              '8.1681408993,73.513268094',
-              '40.8407044967,40.8407045967',
-              '8.1681408993,73.513268094',
-            ],
-          })}
+          animatedProps={animatedProps}
           fill="none"
         />
       </Svg>
-    </View>
+    </Animated.View>
   );
 };
