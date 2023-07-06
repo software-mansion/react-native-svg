@@ -142,12 +142,15 @@ export function SvgUri(props: UriProps) {
             onLoad?.();
           })
           .catch((e) => {
-            onError(e)
+            onError(e);
             setIsError(true);
           })
       : setXml(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onError, uri, onLoad]);
-  if (isError) return fallback ?? null;
+  if (isError) {
+    return fallback ?? null;
+  }
   return <SvgXml xml={xml} override={props} fallback={fallback} />;
 }
 
