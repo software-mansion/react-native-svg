@@ -81,6 +81,7 @@ export type AdditionalProps = {
   onError?: (error: Error) => void;
   override?: Object;
   onLoad?: () => void;
+  fallback?: JSX.Element;
 };
 
 export type UriProps = SvgProps & { uri: string | null } & AdditionalProps;
@@ -106,17 +107,17 @@ export function SvgAst({ ast, override }: AstProps) {
 export const err = console.error.bind(console);
 
 export function SvgXml(props: XmlProps) {
-  const { onError = err, xml, override } = props;
-  const ast = useMemo<JsxAST | null>(
-    () => (xml !== null ? parse(xml) : null),
-    [xml],
-  );
+  const { onError = err, xml, override, fallback } = props;
 
   try {
+    const ast = useMemo<JsxAST | null>(
+      () => (xml !== null ? parse(xml) : null),
+      [xml],
+    );
     return <SvgAst ast={ast} override={override || props} />;
   } catch (error) {
     onError(error);
-    return null;
+    return fallback ?? null;
   }
 }
 
@@ -129,19 +130,25 @@ export async function fetchText(uri: string) {
 }
 
 export function SvgUri(props: UriProps) {
-  const { onError = err, uri, onLoad } = props;
+  const { onError = err, uri, onLoad, fallback } = props;
   const [xml, setXml] = useState<string | null>(null);
+  const [isError, setIsError] = useState(false);
   useEffect(() => {
     uri
       ? fetchText(uri)
           .then((data) => {
             setXml(data);
+            isError && setIsError(false);
             onLoad?.();
           })
-          .catch(onError)
+          .catch((e) => {
+            onError(e)
+            setIsError(true);
+          })
       : setXml(null);
   }, [onError, uri, onLoad]);
-  return <SvgXml xml={xml} override={props} />;
+  if (isError) return fallback ?? null;
+  return <SvgXml xml={xml} override={props} fallback={fallback} />;
 }
 
 // Extending Component is required for Animated support.
