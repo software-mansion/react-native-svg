@@ -249,7 +249,7 @@ export default class Shape<P> extends Component<P> {
     return this.root;
   }
   setNativeProps = (
-    props: Object & {
+    props: P & {
       matrix?: ColumnMajorTransformMatrix;
       fill?: ColorValue;
     } & TransformProps,

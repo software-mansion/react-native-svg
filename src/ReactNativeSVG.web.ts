@@ -2,8 +2,7 @@ import * as React from 'react';
 import type { GestureResponderEvent, TransformsStyle } from 'react-native';
 import {
   // @ts-ignore
-  unstable_createElement as ucE,
-  createElement as cE,
+  unstable_createElement as createElement,
 } from 'react-native';
 import type {
   NumberArray,
@@ -13,8 +12,6 @@ import type {
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
 import { transformsArrayToProps } from './lib/extract/extractTransform';
-
-const createElement = cE || ucE;
 
 type BlurEvent = Object;
 type FocusEvent = Object;
@@ -452,8 +449,67 @@ export class Stop extends WebShape {
   tag = 'stop' as const;
 }
 
+/* Taken from here: https://gist.github.com/jennyknuth/222825e315d45a738ed9d6e04c7a88d0 */
+function encodeSvg(svgString: string) {
+  return svgString
+    .replace(
+      '<svg',
+      ~svgString.indexOf('xmlns')
+        ? '<svg'
+        : '<svg xmlns="http://www.w3.org/2000/svg"',
+    )
+    .replace(/"/g, "'")
+    .replace(/%/g, '%25')
+    .replace(/#/g, '%23')
+    .replace(/{/g, '%7B')
+    .replace(/}/g, '%7D')
+    .replace(/</g, '%3C')
+    .replace(/>/g, '%3E')
+    .replace(/\s+/g, ' ');
+}
+
 export class Svg extends WebShape {
   tag = 'svg' as const;
+  toDataURL(
+    callback: (data: string) => void,
+    options: { width?: number; height?: number } = {},
+  ) {
+    const ref = this.elementRef.current;
+
+    if (ref == null) {
+      return;
+    }
+
+    const rect = getBoundingClientRect(ref);
+
+    const width = Number(options.width) || rect.width;
+    const height = Number(options.height) || rect.height;
+
+    // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+    svg.setAttribute('width', String(width));
+    svg.setAttribute('height', String(height));
+    // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+    svg.appendChild(ref.cloneNode(true));
+
+    // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+    const img = new window.Image();
+    img.onload = () => {
+      // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext('2d');
+      context?.drawImage(img, 0, 0);
+      callback(canvas.toDataURL().replace('data:image/png;base64,', ''));
+    };
+
+    img.src = `data:image/svg+xml;utf8,${encodeSvg(
+      // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+      new window.XMLSerializer().serializeToString(svg),
+    )}`;
+  }
 }
 
 export class Symbol extends WebShape {

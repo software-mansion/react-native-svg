@@ -147,8 +147,8 @@ class SvgNativeMethods extends Component {
     console.log(this.circle?.getCTM());
     console.log(this.circle?.getScreenCTM());
   };
-  root: Svg | null;
-  circle: Circle | null;
+  root?: Svg | null;
+  circle?: Circle | null;
 
   render() {
     return (
