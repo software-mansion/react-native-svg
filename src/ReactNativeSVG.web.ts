@@ -1,4 +1,27 @@
 import * as React from 'react';
+import type { CircleProps } from './elements/Circle';
+import type { ClipPathProps } from './elements/ClipPath';
+import type { EllipseProps } from './elements/Ellipse';
+import type { ForeignObjectProps } from './elements/ForeignObject';
+import type { GProps } from './elements/G';
+import type { ImageProps } from './elements/Image';
+import type { LineProps } from './elements/Line';
+import type { LinearGradientProps } from './elements/LinearGradient';
+import type { MarkerProps } from './elements/Marker';
+import type { MaskProps } from './elements/Mask';
+import type { PathProps } from './elements/Path';
+import type { PatternProps } from './elements/Pattern';
+import type { PolygonProps } from './elements/Polygon';
+import type { PolylineProps } from './elements/Polyline';
+import type { RadialGradientProps } from './elements/RadialGradient';
+import type { RectProps } from './elements/Rect';
+import type { StopProps } from './elements/Stop';
+import type { SvgProps } from './elements/Svg';
+import type { SymbolProps } from './elements/Symbol';
+import type { TextProps } from './elements/Text';
+import type { TextPathProps } from './elements/TextPath';
+import type { TSpanProps } from './elements/TSpan';
+import type { UseProps } from './elements/Use';
 import type { GestureResponderEvent, TransformsStyle } from 'react-native';
 import {
   // @ts-ignore
@@ -65,11 +88,11 @@ interface BaseProps {
   forwardedRef?:
     | React.RefCallback<SVGElement>
     | React.MutableRefObject<SVGElement | null>;
-  style: Iterable<{}>;
+  style?: Iterable<{}>;
 
   // different tranform props
-  gradientTransform: TransformProps['transform'];
-  patternTransform: TransformProps['transform'];
+  gradientTransform?: TransformProps['transform'];
+  patternTransform?: TransformProps['transform'];
 }
 
 const hasTouchableProperty = (props: BaseProps) =>
@@ -372,11 +395,11 @@ export class WebShape<
   }
 }
 
-export class Circle extends WebShape {
+export class Circle extends WebShape<BaseProps & CircleProps> {
   tag = 'circle' as const;
 }
 
-export class ClipPath extends WebShape {
+export class ClipPath extends WebShape<BaseProps & ClipPathProps> {
   tag = 'clipPath' as const;
 }
 
@@ -384,25 +407,13 @@ export class Defs extends WebShape {
   tag = 'defs' as const;
 }
 
-export class Ellipse extends WebShape {
+export class Ellipse extends WebShape<BaseProps & EllipseProps> {
   tag = 'ellipse' as const;
 }
 
-export class G extends WebShape<
-  BaseProps & {
-    x?: NumberProp;
-    y?: NumberProp;
-    translate?: string;
-  }
-> {
+export class G extends WebShape<BaseProps & GProps> {
   tag = 'g' as const;
-  prepareProps(
-    props: BaseProps & {
-      x?: NumberProp;
-      y?: NumberProp;
-      translate?: string;
-    },
-  ) {
+  prepareProps(props: BaseProps & GProps) {
     const { x, y, ...rest } = props;
 
     if ((x || y) && !rest.translate) {
@@ -413,39 +424,39 @@ export class G extends WebShape<
   }
 }
 
-export class Image extends WebShape {
+export class Image extends WebShape<BaseProps & ImageProps> {
   tag = 'image' as const;
 }
 
-export class Line extends WebShape {
+export class Line extends WebShape<BaseProps & LineProps> {
   tag = 'line' as const;
 }
 
-export class LinearGradient extends WebShape {
+export class LinearGradient extends WebShape<BaseProps & LinearGradientProps> {
   tag = 'linearGradient' as const;
 }
 
-export class Path extends WebShape {
+export class Path extends WebShape<BaseProps & PathProps> {
   tag = 'path' as const;
 }
 
-export class Polygon extends WebShape {
+export class Polygon extends WebShape<BaseProps & PolygonProps> {
   tag = 'polygon' as const;
 }
 
-export class Polyline extends WebShape {
+export class Polyline extends WebShape<BaseProps & PolylineProps> {
   tag = 'polyline' as const;
 }
 
-export class RadialGradient extends WebShape {
+export class RadialGradient extends WebShape<BaseProps & RadialGradientProps> {
   tag = 'radialGradient' as const;
 }
 
-export class Rect extends WebShape {
+export class Rect extends WebShape<BaseProps & RectProps> {
   tag = 'rect' as const;
 }
 
-export class Stop extends WebShape {
+export class Stop extends WebShape<BaseProps & StopProps> {
   tag = 'stop' as const;
 }
 
@@ -468,7 +479,7 @@ function encodeSvg(svgString: string) {
     .replace(/\s+/g, ' ');
 }
 
-export class Svg extends WebShape {
+export class Svg extends WebShape<BaseProps & SvgProps> {
   tag = 'svg' as const;
   toDataURL(
     callback: (data: string) => void,
@@ -512,39 +523,39 @@ export class Svg extends WebShape {
   }
 }
 
-export class Symbol extends WebShape {
+export class Symbol extends WebShape<BaseProps & SymbolProps> {
   tag = 'symbol' as const;
 }
 
-export class Text extends WebShape {
+export class Text extends WebShape<BaseProps & TextProps> {
   tag = 'text' as const;
 }
 
-export class TSpan extends WebShape {
+export class TSpan extends WebShape<BaseProps & TSpanProps> {
   tag = 'tspan' as const;
 }
 
-export class TextPath extends WebShape {
+export class TextPath extends WebShape<BaseProps & TextPathProps> {
   tag = 'textPath' as const;
 }
 
-export class Use extends WebShape {
+export class Use extends WebShape<BaseProps & UseProps> {
   tag = 'use' as const;
 }
 
-export class Mask extends WebShape {
+export class Mask extends WebShape<BaseProps & MaskProps> {
   tag = 'mask' as const;
 }
 
-export class ForeignObject extends WebShape {
+export class ForeignObject extends WebShape<BaseProps & ForeignObjectProps> {
   tag = 'foreignObject' as const;
 }
 
-export class Marker extends WebShape {
+export class Marker extends WebShape<BaseProps & MarkerProps> {
   tag = 'marker' as const;
 }
 
-export class Pattern extends WebShape {
+export class Pattern extends WebShape<BaseProps & PatternProps> {
   tag = 'pattern' as const;
 }
 
