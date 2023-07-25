@@ -153,7 +153,34 @@ Try [react-native-svg-transformer](https://github.com/kristerkari/react-native-s
 <https://github.com/kristerkari/react-native-svg-transformer#installation-and-configuration>
 <https://github.com/kristerkari/react-native-svg-transformer#for-react-native-v057-or-newer--expo-sdk-v3100-or-newer>
 
-`metro.config.js`
+`metro.config.js` for react-native >= 0.72
+
+```js
+const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
+
+const defaultConfig = getDefaultConfig(__dirname);
+const { assetExts, sourceExts } = defaultConfig.resolver;
+
+/**
+ * Metro configuration
+ * https://facebook.github.io/metro/docs/configuration
+ *
+ * @type {import('metro-config').MetroConfig}
+ */
+const config = {
+  transformer: {
+    babelTransformerPath: require.resolve("react-native-svg-transformer")
+  },
+  resolver: {
+    assetExts: assetExts.filter((ext) => ext !== "svg"),
+    sourceExts: [...sourceExts, "svg"]
+  }
+};
+
+module.exports = mergeConfig(defaultConfig, config);
+```
+
+`metro.config.js` for react-native < 0.72
 
 ```js
 const { getDefaultConfig } = require('metro-config');
