@@ -32,7 +32,7 @@ Install the JavaScript with:
 expo install react-native-svg
 ```
 
-📚 See the [**Expo docs**](https://docs.expo.io/versions/latest/sdk/svg/) for more info or jump ahead to [Usage](./USAGE.md).
+📚 See the [**Expo docs**](https://docs.expo.io/versions/latest/sdk/svg/) for more info or jump ahead to [Usage](#usage).
 
 ### With react-native-cli
 
