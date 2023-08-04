@@ -22,7 +22,6 @@ We use `typescript` for type checks, `eslint` with `prettier` for linting/format
 - `yarn test`: Run all tests, except for e2e (see note below).
 - `yarn lint`: Run `eslint` check.
 - `yarn tsc`: Run `typescript` check.
-- `yarn flow`: Run `flow` type check.
 - `yarn jest`: Run `jest` type check.
 
 Currently e2e tests exist here: https://github.com/msand/react-native-svg-e2e/

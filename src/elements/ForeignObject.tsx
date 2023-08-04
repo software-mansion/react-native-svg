@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import React from 'react';
+import * as React from 'react';
 import {
   withoutXY,
   stringifyPropsForFabric,
@@ -37,8 +37,7 @@ export default class ForeignObject extends G<ForeignObjectProps> {
           this.refMethod(ref as (ForeignObject & NativeMethods) | null)
         }
         {...withoutXY(this, props)}
-        {...foreignObjectProps}
-      >
+        {...foreignObjectProps}>
         {children}
       </RNSVGForeignObject>
     );

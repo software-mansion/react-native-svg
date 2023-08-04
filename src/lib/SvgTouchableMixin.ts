@@ -1,8 +1,7 @@
-// @ts-ignore
 import type { GestureResponderEvent } from 'react-native';
 import { Touchable } from 'react-native';
 const PRESS_RETENTION_OFFSET = { top: 20, left: 20, right: 20, bottom: 30 };
-// @ts-ignore
+// @ts-expect-error: Mixin is not typed
 const { Mixin } = Touchable;
 const {
   touchableHandleStartShouldSetResponder,

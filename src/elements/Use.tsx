@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import React from 'react';
+import * as React from 'react';
 import {
   stringifyPropsForFabric,
   withoutXY,
@@ -50,7 +50,7 @@ export default class Use extends Shape<UseProps> {
       console.warn(
         'Invalid `href` prop for `Use` element, expected a href like "#id", but got: "' +
           href +
-          '"',
+          '"'
       );
     }
     const useProps = stringifyPropsForFabric({
@@ -64,8 +64,7 @@ export default class Use extends Shape<UseProps> {
       <RNSVGUse
         ref={(ref) => this.refMethod(ref as (Use & NativeMethods) | null)}
         {...withoutXY(this, props)}
-        {...useProps}
-      >
+        {...useProps}>
         {children}
       </RNSVGUse>
     );

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import type { ImageProps as RNImageProps, NativeMethods } from 'react-native';
 import { Image } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
@@ -64,7 +64,7 @@ export default class SvgImage extends Shape<ImageProps> {
       src: !href
         ? null
         : Image.resolveAssetSource(
-            typeof href === 'string' ? { uri: href } : href,
+            typeof href === 'string' ? { uri: href } : href
           ),
     };
     return (

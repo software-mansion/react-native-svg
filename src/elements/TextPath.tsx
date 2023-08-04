@@ -1,5 +1,5 @@
 import type { Component } from 'react';
-import React from 'react';
+import * as React from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import { withoutXY } from '../lib/extract/extractProps';
 import type {
@@ -33,10 +33,10 @@ export default class TextPath extends Shape<TextPathProps> {
   static displayName = 'TextPath';
 
   setNativeProps = (
-    props: Object & {
+    props: object & {
       matrix?: ColumnMajorTransformMatrix;
-      style?: [] | {};
-    } & TransformProps,
+      style?: [] | unknown;
+    } & TransformProps
   ) => {
     const matrix = !props.matrix && extractTransform(props);
     if (matrix) {
@@ -69,7 +69,7 @@ export default class TextPath extends Shape<TextPathProps> {
           {
             children,
           },
-          true,
+          true
         ),
         {
           href: match,
@@ -79,7 +79,7 @@ export default class TextPath extends Shape<TextPathProps> {
           side,
           alignmentBaseline,
           midLine,
-        },
+        }
       );
       props.ref = this.refMethod as (instance: Component | null) => void;
       return <RNSVGTextPath {...props} />;
@@ -88,7 +88,7 @@ export default class TextPath extends Shape<TextPathProps> {
     console.warn(
       'Invalid `href` prop for `TextPath` element, expected a href like "#id", but got: "' +
         href +
-        '"',
+        '"'
     );
     return (
       <TSpan ref={this.refMethod as (instance: Component | null) => void}>

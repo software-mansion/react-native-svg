@@ -3,9 +3,9 @@ import type {
   GestureResponderEvent,
   GestureResponderHandlers,
   LayoutChangeEvent,
+  TransformsStyle,
 } from 'react-native';
 import type React from 'react';
-import type { TransformsStyle } from 'react-native';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
@@ -262,10 +262,10 @@ export type ResponderInstanceProps = {
   touchableHandleResponderRelease?: (e: GestureResponderEvent) => void;
   touchableHandleResponderTerminate?: (e: GestureResponderEvent) => void;
   touchableHandleStartShouldSetResponder?: (
-    e: GestureResponderEvent,
+    e: GestureResponderEvent
   ) => boolean;
   touchableHandleResponderTerminationRequest?: (
-    e: GestureResponderEvent,
+    e: GestureResponderEvent
   ) => boolean;
 };
 

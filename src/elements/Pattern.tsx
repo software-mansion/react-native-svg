@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import React from 'react';
+import * as React from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import extractViewBox from '../lib/extract/extractViewBox';
 import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
@@ -68,8 +68,7 @@ export default class Pattern extends Shape<PatternProps> {
         ref={(ref) => this.refMethod(ref as (Pattern & NativeMethods) | null)}
         {...strigifiedPatternProps}
         {...patternProps}
-        {...extractViewBox({ viewBox, preserveAspectRatio })}
-      >
+        {...extractViewBox({ viewBox, preserveAspectRatio })}>
         {children}
       </RNSVGPattern>
     );

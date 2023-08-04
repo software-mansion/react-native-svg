@@ -1,23 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "lib": ["es6", "es2016"],
+    "baseUrl": ".",
+    "declaration": true,
+    "preserveSymlinks": true,
+    "target": "es6",
+    "module": "ESNext",
     "jsx": "react-native",
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
+    "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["react", "react-native"]
+    "moduleResolution": "node",
+    "lib": ["es6", "dom"],
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*"]
+  "include": ["src"]
 }

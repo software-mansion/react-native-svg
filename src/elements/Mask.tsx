@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import React from 'react';
+import * as React from 'react';
 import {
   stringifyPropsForFabric,
   withoutXY,
@@ -53,8 +53,7 @@ export default class Mask extends Shape<MaskProps> {
         ref={(ref) => this.refMethod(ref as (Mask & NativeMethods) | null)}
         {...withoutXY(this, props)}
         {...strigifiedMaskProps}
-        {...maskProps}
-      >
+        {...maskProps}>
         {children}
       </RNSVGMask>
     );

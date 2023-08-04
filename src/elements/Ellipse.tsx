@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { extract, stringifyPropsForFabric } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';

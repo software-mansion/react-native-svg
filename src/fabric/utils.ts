@@ -1,5 +1,5 @@
 import type { ViewProps as VP } from 'react-native';
 
-interface ViewProps extends Omit<VP, 'pointerEvents'> {}
+type ViewProps = Omit<VP, 'pointerEvents'>;
 
 export type { ViewProps };

@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 // Kept in separate file, to avoid name collision with Symbol element
 export function resolve<T>(
   styleProp: Iterable<T> | undefined,
-  cleanedProps: T,
+  cleanedProps: T
 ) {
   if (styleProp) {
     return StyleSheet
