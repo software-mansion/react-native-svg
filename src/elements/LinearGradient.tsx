@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import React from 'react';
+import * as React from 'react';
 import extractGradient from '../lib/extract/extractGradient';
 import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import Shape from './Shape';

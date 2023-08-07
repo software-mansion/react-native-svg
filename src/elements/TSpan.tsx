@@ -1,5 +1,5 @@
 import type { Component } from 'react';
-import React from 'react';
+import * as React from 'react';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import extractTransform from '../lib/extract/extractTransform';
 import type { TextChild } from '../lib/extract/extractText';
@@ -31,8 +31,8 @@ export default class TSpan extends Shape<TSpanProps> {
   setNativeProps = (
     props: TSpanProps & {
       matrix?: ColumnMajorTransformMatrix;
-      style?: [] | {};
-    },
+      style?: [] | unknown;
+    }
   ) => {
     const matrix = !props.matrix && extractTransform(props);
     if (matrix) {
@@ -51,7 +51,7 @@ export default class TSpan extends Shape<TSpanProps> {
         x: null,
         y: null,
       },
-      this,
+      this
     );
     Object.assign(props, extractText(prop, false));
     props.ref = this.refMethod as (instance: Component | null) => void;

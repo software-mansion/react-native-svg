@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-types */
+// its needed for codegen to work
 import type { TurboModule } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
 import type { Int32, Float } from 'react-native/Libraries/Types/CodegenTypes';

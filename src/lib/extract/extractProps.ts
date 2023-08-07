@@ -19,7 +19,7 @@ const clipRules: { evenodd: number; nonzero: number } = {
   nonzero: 1,
 };
 
-export function propsAndStyles(props: Object & { style?: [] | {} }) {
+export function propsAndStyles(props: object & { style?: [] | unknown }) {
   const { style } = props;
   return !style
     ? props
@@ -57,7 +57,7 @@ export default function extractProps(
     StrokeProps &
     FillProps &
     ClipProps,
-  ref: Object,
+  ref: object
 ) {
   const {
     id,
@@ -140,7 +140,7 @@ export default function extractProps(
       console.warn(
         'Invalid `clipPath` prop, expected a clipPath like "#id", but got: "' +
           clipPath +
-          '"',
+          '"'
       );
     }
   }
@@ -154,7 +154,7 @@ export default function extractProps(
       console.warn(
         'Invalid `mask` prop, expected a mask like "#id", but got: "' +
           mask +
-          '"',
+          '"'
       );
     }
   }
@@ -162,7 +162,10 @@ export default function extractProps(
   return extracted;
 }
 
-export function extract(instance: Object, props: Object & { style?: [] | {} }) {
+export function extract(
+  instance: object,
+  props: object & { style?: [] | unknown }
+) {
   return extractProps(propsAndStyles(props), instance);
 }
 
@@ -180,8 +183,8 @@ export function stringifyPropsForFabric(props: {
 }
 
 export function withoutXY(
-  instance: Object,
-  props: Object & { style?: [] | {} },
+  instance: object,
+  props: object & { style?: [] | unknown }
 ) {
   return extractProps({ ...propsAndStyles(props), x: null, y: null }, instance);
 }

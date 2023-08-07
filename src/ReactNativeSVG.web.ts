@@ -24,7 +24,7 @@ import type { TSpanProps } from './elements/TSpan';
 import type { UseProps } from './elements/Use';
 import type { GestureResponderEvent, TransformsStyle } from 'react-native';
 import {
-  // @ts-ignore
+  // @ts-ignore it is not seen in exports
   unstable_createElement as createElement,
 } from 'react-native';
 import type {
@@ -36,11 +36,11 @@ import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
 import { transformsArrayToProps } from './lib/extract/extractTransform';
 
-type BlurEvent = Object;
-type FocusEvent = Object;
-type PressEvent = Object;
-type LayoutEvent = Object;
-type EdgeInsetsProp = Object;
+type BlurEvent = object;
+type FocusEvent = object;
+type PressEvent = object;
+type LayoutEvent = object;
+type EdgeInsetsProp = object;
 
 interface BaseProps {
   accessible?: boolean;
@@ -48,7 +48,7 @@ interface BaseProps {
   accessibilityHint?: string;
   accessibilityIgnoresInvertColors?: boolean;
   accessibilityRole?: string;
-  accessibilityState?: Object;
+  accessibilityState?: object;
   delayLongPress?: number;
   delayPressIn?: number;
   delayPressOut?: number;
@@ -88,7 +88,7 @@ interface BaseProps {
   forwardedRef?:
     | React.RefCallback<SVGElement>
     | React.MutableRefObject<SVGElement | null>;
-  style?: Iterable<{}>;
+  style?: Iterable<unknown>;
 
   // different tranform props
   gradientTransform?: TransformProps['transform'];
@@ -111,7 +111,7 @@ function stringifyTransformProps(transformProps: TransformProps) {
     transformArray.push(
       `translate(${transformProps.translateX || 0}, ${
         transformProps.translateY || 0
-      })`,
+      })`
     );
   }
   if (transformProps.scale != null) {
@@ -119,7 +119,7 @@ function stringifyTransformProps(transformProps: TransformProps) {
   }
   if (transformProps.scaleX != null || transformProps.scaleY != null) {
     transformArray.push(
-      `scale(${transformProps.scaleX || 1}, ${transformProps.scaleY || 1})`,
+      `scale(${transformProps.scaleX || 1}, ${transformProps.scaleY || 1})`
     );
   }
   // rotation maps to rotate, not to collide with the text rotate attribute (which acts per glyph rather than block)
@@ -137,7 +137,7 @@ function stringifyTransformProps(transformProps: TransformProps) {
 
 function parseTransformProp(
   transform: TransformProps['transform'],
-  props?: BaseProps,
+  props?: BaseProps
 ) {
   const transformArray: string[] = [];
 
@@ -148,7 +148,7 @@ function parseTransformProp(
       transformArray.push(`matrix(${transform.join(' ')})`);
     } else {
       const stringifiedProps = transformsArrayToProps(
-        transform as TransformsStyle['transform'],
+        transform as TransformsStyle['transform']
       );
       transformArray.push(...stringifyTransformProps(stringifiedProps));
     }
@@ -170,7 +170,7 @@ function parseTransformProp(
  */
 const prepare = <T extends BaseProps>(
   self: WebShape<T>,
-  props = self.props,
+  props = self.props
 ) => {
   const {
     transform,
@@ -199,8 +199,8 @@ const prepare = <T extends BaseProps>(
     gradientTransform?: string;
     patternTransform?: string;
     'transform-origin'?: string;
-    style?: {};
-    ref?: {};
+    style?: object;
+    ref?: unknown;
   } = {
     ...(hasTouchableProperty(props)
       ? {
@@ -262,14 +262,12 @@ const prepare = <T extends BaseProps>(
 
 const getBoundingClientRect = (node: SVGElement) => {
   if (node) {
-    // @ts-ignore
     const isElement = node.nodeType === 1; /* Node.ELEMENT_NODE */
-    // @ts-ignore
     if (isElement && typeof node.getBoundingClientRect === 'function') {
-      // @ts-ignore
       return node.getBoundingClientRect();
     }
   }
+  throw new Error('Can not get boundingClientRect of ' + node || 'undefined');
 };
 
 const measureLayout = (
@@ -280,14 +278,13 @@ const measureLayout = (
     width: number,
     height: number,
     left: number,
-    top: number,
-  ) => void,
+    top: number
+  ) => void
 ) => {
-  // @ts-ignore
-  const relativeNode = node && node.parentNode;
+  const relativeNode = node?.parentNode;
   if (relativeNode) {
     setTimeout(() => {
-      // @ts-ignore
+      // @ts-expect-error TODO: handle it better
       const relativeRect = getBoundingClientRect(relativeNode);
       const { height, left, top, width } = getBoundingClientRect(node);
       const x = left - relativeRect.left;
@@ -297,20 +294,18 @@ const measureLayout = (
   }
 };
 
-function remeasure() {
-  // @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function remeasure(this: any) {
   const tag = this.state.touchable.responderID;
-  if (tag == null) {
+  if (tag === null) {
     return;
   }
-  // @ts-ignore
   measureLayout(tag, this._handleQueryLayout);
 }
 
 export class WebShape<
   P extends BaseProps = BaseProps,
-  C = {},
-> extends React.Component<P, C> {
+> extends React.Component<P> {
   [x: string]: unknown;
   protected tag?: React.ElementType;
   protected prepareProps(props: P) {
@@ -319,6 +314,7 @@ export class WebShape<
 
   elementRef =
     React.createRef<SVGElement>() as React.MutableRefObject<SVGElement | null>;
+
   lastMergedProps: Partial<P> = {};
 
   /**
@@ -329,7 +325,7 @@ export class WebShape<
       {},
       this.props,
       this.lastMergedProps,
-      props.style,
+      props.style
     );
     this.lastMergedProps = merged;
     const clean = prepare(this, this.prepareProps(merged));
@@ -343,15 +339,16 @@ export class WebShape<
             break;
           case 'style':
             // style can be an object here or an array, so we convert it to an array and assign each element
-            for (const partialStyle of ([] as {}[]).concat(clean.style ?? [])) {
-              // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+            for (const partialStyle of ([] as unknown[]).concat(
+              clean.style ?? []
+            )) {
               Object.assign(current.style, partialStyle);
             }
             break;
           default:
             // apply all other incoming prop updates as attributes on the node
             // same logic as in https://github.com/software-mansion/react-native-reanimated/blob/d04720c82f5941532991b235787285d36d717247/src/reanimated2/js-reanimated/index.ts#L38-L39
-            // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
+            // @ts-expect-error TODO: fix this
             current.setAttribute(camelCaseToDashed(cleanAttribute), cleanValue);
             break;
         }
@@ -361,17 +358,19 @@ export class WebShape<
 
   _remeasureMetricsOnActivation: () => void;
   touchableHandleStartShouldSetResponder?: (
-    e: GestureResponderEvent,
+    e: GestureResponderEvent
   ) => boolean;
+
   touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
   touchableHandleResponderGrant?: (e: GestureResponderEvent) => void;
   touchableHandleResponderRelease?: (e: GestureResponderEvent) => void;
   touchableHandleResponderTerminate?: (e: GestureResponderEvent) => void;
   touchableHandleResponderTerminationRequest?: (
-    e: GestureResponderEvent,
+    e: GestureResponderEvent
   ) => boolean;
-  constructor(props: P, context: C) {
-    super(props, context);
+
+  constructor(props: P) {
+    super(props);
 
     // Do not attach touchable mixin handlers if SVG element doesn't have a touchable prop
     if (hasTouchableProperty(props)) {
@@ -384,13 +383,13 @@ export class WebShape<
   render(): JSX.Element {
     if (!this.tag) {
       throw new Error(
-        'When extending `WebShape` you need to overwrite either `tag` or `render`!',
+        'When extending `WebShape` you need to overwrite either `tag` or `render`!'
       );
     }
     this.lastMergedProps = {};
     return createElement(
       this.tag,
-      prepare(this, this.prepareProps(this.props)),
+      prepare(this, this.prepareProps(this.props))
     );
   }
 }
@@ -467,7 +466,7 @@ function encodeSvg(svgString: string) {
       '<svg',
       ~svgString.indexOf('xmlns')
         ? '<svg'
-        : '<svg xmlns="http://www.w3.org/2000/svg"',
+        : '<svg xmlns="http://www.w3.org/2000/svg"'
     )
     .replace(/"/g, "'")
     .replace(/%/g, '%25')
@@ -483,11 +482,11 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
   tag = 'svg' as const;
   toDataURL(
     callback: (data: string) => void,
-    options: { width?: number; height?: number } = {},
+    options: { width?: number; height?: number } = {}
   ) {
     const ref = this.elementRef.current;
 
-    if (ref == null) {
+    if (ref === null) {
       return;
     }
 
@@ -496,18 +495,14 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
     const width = Number(options.width) || rect.width;
     const height = Number(options.height) || rect.height;
 
-    // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
     svg.setAttribute('width', String(width));
     svg.setAttribute('height', String(height));
-    // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
     svg.appendChild(ref.cloneNode(true));
 
-    // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
     const img = new window.Image();
     img.onload = () => {
-      // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
       const canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
@@ -517,8 +512,7 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
     };
 
     img.src = `data:image/svg+xml;utf8,${encodeSvg(
-      // @ts-expect-error "DOM" is not part of `compilerOptions.lib`
-      new window.XMLSerializer().serializeToString(svg),
+      new window.XMLSerializer().serializeToString(svg)
     )}`;
   }
 }

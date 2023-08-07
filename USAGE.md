@@ -41,8 +41,7 @@ export default class SvgExample extends React.Component {
         style={[
           StyleSheet.absoluteFill,
           { alignItems: 'center', justifyContent: 'center' },
-        ]}
-      >
+        ]}>
         <Svg height="50%" width="50%" viewBox="0 0 100 100">
           <Circle
             cx="50"
@@ -131,7 +130,7 @@ import { SvgFallback } from './components/SvgFallback';
 
 export default () => {
   const [uri, setUri] = React.useState(
-    'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/not_existing.svg',
+    'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/not_existing.svg'
   );
   return (
     <SvgUri
@@ -156,7 +155,7 @@ Try [react-native-svg-transformer](https://github.com/kristerkari/react-native-s
 `metro.config.js` for react-native >= 0.72
 
 ```js
-const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
 const defaultConfig = getDefaultConfig(__dirname);
 const { assetExts, sourceExts } = defaultConfig.resolver;
@@ -169,12 +168,12 @@ const { assetExts, sourceExts } = defaultConfig.resolver;
  */
 const config = {
   transformer: {
-    babelTransformerPath: require.resolve("react-native-svg-transformer")
+    babelTransformerPath: require.resolve('react-native-svg-transformer'),
   },
   resolver: {
-    assetExts: assetExts.filter((ext) => ext !== "svg"),
-    sourceExts: [...sourceExts, "svg"]
-  }
+    assetExts: assetExts.filter((ext) => ext !== 'svg'),
+    sourceExts: [...sourceExts, 'svg'],
+  },
 };
 
 module.exports = mergeConfig(defaultConfig, config);
@@ -339,8 +338,7 @@ Colors set in the Svg element are inherited by its children:
   fill="blue"
   stroke="red"
   color="green"
-  viewBox="-16 -16 544 544"
->
+  viewBox="-16 -16 544 544">
   <Path
     d="M318.37,85.45L422.53,190.11,158.89,455,54.79,350.38ZM501.56,60.2L455.11,13.53a45.93,45.93,0,0,0-65.11,0L345.51,58.24,449.66,162.9l51.9-52.15A35.8,35.8,0,0,0,501.56,60.2ZM0.29,497.49a11.88,11.88,0,0,0,14.34,14.17l116.06-28.28L26.59,378.72Z"
     strokeWidth="32"
@@ -534,8 +532,7 @@ The <Text> element is used to define text.
     fontWeight="bold"
     x="100"
     y="20"
-    textAnchor="middle"
-  >
+    textAnchor="middle">
     STROKED TEXT
   </Text>
 </Svg>
@@ -709,8 +706,7 @@ The <Image> element allows a raster image to be included in an Svg component.
     textAnchor="middle"
     fontWeight="bold"
     fontSize="16"
-    fill="blue"
-  >
+    fill="blue">
     HOGWARTS
   </Text>
 </Svg>
@@ -733,8 +729,7 @@ The <ClipPath> SVG element defines a clipping path. A clipping path is used/refe
       ry="50%"
       fx="50%"
       fy="50%"
-      gradientUnits="userSpaceOnUse"
-    >
+      gradientUnits="userSpaceOnUse">
       <Stop offset="0%" stopColor="#ff0" stopOpacity="1" />
       <Stop offset="100%" stopColor="#00f" stopOpacity="1" />
     </RadialGradient>
@@ -750,8 +745,7 @@ The <ClipPath> SVG element defines a clipping path. A clipping path is used/refe
           fontSize="32"
           fontWeight="bold"
           textAnchor="middle"
-          scale="1.2"
-        >
+          scale="1.2">
           Q
         </Text>
       </G>
@@ -829,8 +823,7 @@ The <RadialGradient> element is used to define a radial gradient. The <RadialGra
       ry="55"
       fx="150"
       fy="75"
-      gradientUnits="userSpaceOnUse"
-    >
+      gradientUnits="userSpaceOnUse">
       <Stop offset="0" stopColor="#ff0" stopOpacity="1" />
       <Stop offset="1" stopColor="#83a" stopOpacity="1" />
     </RadialGradient>
@@ -869,8 +862,7 @@ The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;D
       x1="0"
       y1="0"
       x2="800"
-      y2="0"
-    >
+      y2="0">
       <Stop offset="0" stopColor="white" stopOpacity="0" />
       <Stop offset="1" stopColor="white" stopOpacity="1" />
     </LinearGradient>
@@ -880,8 +872,7 @@ The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;D
       x="0"
       y="0"
       width="800"
-      height="300"
-    >
+      height="300">
       <Rect x="0" y="0" width="800" height="300" fill="url(#Gradient)" />
     </Mask>
     <Text
@@ -890,8 +881,7 @@ The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;D
       y="200"
       fontFamily="Verdana"
       fontSize="100"
-      textAnchor="middle"
-    >
+      textAnchor="middle">
       Masked text
     </Text>
   </Defs>
@@ -927,8 +917,7 @@ The <Pattern> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&l
       y="0"
       width="100"
       height="100"
-      viewBox="0 0 10 10"
-    >
+      viewBox="0 0 10 10">
       <Path d="M 0 0 L 7 0 L 3.5 7 z" fill="red" stroke="blue" />
     </Pattern>
   </Defs>
@@ -968,8 +957,7 @@ The graphics for a marker are defined by a ‘marker’ element. To indicate tha
       markerUnits="strokeWidth"
       markerWidth="4"
       markerHeight="3"
-      orient="auto"
-    >
+      orient="auto">
       <Path d="M 0 0 L 10 5 L 0 10 z" />
     </Marker>
   </Defs>
@@ -1129,8 +1117,7 @@ export default class App extends Component {
               x1="0"
               y1="0"
               x2="800"
-              y2="0"
-            >
+              y2="0">
               <Stop offset="0" stopColor="white" stopOpacity="0.2" />
               <Stop offset="1" stopColor="white" stopOpacity="1" />
             </LinearGradient>
@@ -1140,8 +1127,7 @@ export default class App extends Component {
               x="0"
               y="0"
               width="800"
-              height="300"
-            >
+              height="300">
               <Rect
                 x="0"
                 y="0"

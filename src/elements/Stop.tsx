@@ -9,7 +9,7 @@ export interface StopProps {
   parent?: Component;
 }
 
-export default class Stop extends Component<StopProps, {}> {
+export default class Stop extends Component<StopProps> {
   static displayName = 'Stop';
 
   setNativeProps = () => {

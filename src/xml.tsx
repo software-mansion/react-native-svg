@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
-import React, { Component, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
+import { Component, useEffect, useMemo, useState } from 'react';
 import Rect from './elements/Rect';
 import Circle from './elements/Circle';
 import Ellipse from './elements/Ellipse';
@@ -65,7 +66,7 @@ export interface AST {
   props: {
     [prop: string]: Styles | string | undefined;
   };
-  Tag: ComponentType<React.PropsWithChildren<{}>>;
+  Tag: ComponentType<React.PropsWithChildren>;
 }
 
 export interface XmlAST extends AST {
@@ -79,7 +80,7 @@ export interface JsxAST extends AST {
 
 export type AdditionalProps = {
   onError?: (error: Error) => void;
-  override?: Object;
+  override?: object;
   onLoad?: () => void;
   fallback?: JSX.Element;
 };
@@ -112,7 +113,7 @@ export function SvgXml(props: XmlProps) {
   try {
     const ast = useMemo<JsxAST | null>(
       () => (xml !== null ? parse(xml) : null),
-      [xml],
+      [xml]
     );
     return <SvgAst ast={ast} override={override || props} />;
   } catch (error) {
@@ -161,12 +162,14 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
   componentDidMount() {
     this.parse(this.props.xml);
   }
+
   componentDidUpdate(prevProps: { xml: string | null }) {
     const { xml } = this.props;
     if (xml !== prevProps.xml) {
       this.parse(xml);
     }
   }
+
   parse(xml: string | null) {
     try {
       this.setState({ ast: xml ? parse(xml) : null });
@@ -174,6 +177,7 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
       console.error(e);
     }
   }
+
   render() {
     const {
       props,
@@ -188,12 +192,14 @@ export class SvgFromUri extends Component<UriProps, UriState> {
   componentDidMount() {
     this.fetch(this.props.uri);
   }
+
   componentDidUpdate(prevProps: { uri: string | null }) {
     const { uri } = this.props;
     if (uri !== prevProps.uri) {
       this.fetch(uri);
     }
   }
+
   async fetch(uri: string | null) {
     try {
       this.setState({ xml: uri ? await fetchText(uri) : null });
@@ -201,6 +207,7 @@ export class SvgFromUri extends Component<UriProps, UriState> {
       console.error(e);
     }
   }
+
   render() {
     const {
       props,
@@ -235,7 +242,7 @@ export function getStyle(string: string): Styles {
 
 export function astToReact(
   value: AST | string,
-  index: number,
+  index: number
 ): JSX.Element | string {
   if (typeof value === 'object') {
     const { Tag, props, children } = value;
@@ -296,12 +303,12 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
   let state = metadata;
   let children = null;
   let root: XmlAST | undefined;
-  let stack: XmlAST[] = [];
+  const stack: XmlAST[] = [];
 
   function error(message: string) {
     const { line, column, snippet } = locate(source, i);
     throw new Error(
-      `${message} (${line}:${column}). If this is valid SVG, it's probably a bug. Please raise an issue\n\n${snippet}`,
+      `${message} (${line}:${column}). If this is valid SVG, it's probably a bug. Please raise an issue\n\n${snippet}`
     );
   }
 
@@ -435,7 +442,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
 
     if (currentElement && tag !== currentElement.tag) {
       error(
-        `Expected closing tag </${tag}> to match opening tag <${currentElement.tag}>`,
+        `Expected closing tag </${tag}> to match opening tag <${currentElement.tag}>`
       );
     }
 

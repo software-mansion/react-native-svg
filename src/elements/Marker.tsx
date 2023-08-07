@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import React from 'react';
+import * as React from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
 import type { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
@@ -64,8 +64,7 @@ export default class Marker extends Shape<MarkerProps> {
       <RNSVGMarker
         ref={(ref) => this.refMethod(ref as (Marker & NativeMethods) | null)}
         {...markerProps}
-        {...extractViewBox({ viewBox, preserveAspectRatio })}
-      >
+        {...extractViewBox({ viewBox, preserveAspectRatio })}>
         {children}
       </RNSVGMarker>
     );

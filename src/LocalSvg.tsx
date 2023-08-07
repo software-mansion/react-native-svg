@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Component } from 'react';
+import * as React from 'react';
+import { useState, useEffect, Component } from 'react';
 import type { ImageSourcePropType } from 'react-native';
 import { Platform, Image } from 'react-native';
 
@@ -24,12 +25,14 @@ export function isUriAnAndroidResourceIdentifier(uri?: string) {
 export async function loadAndroidRawResource(uri: string) {
   try {
     const RNSVGRenderableModule: Spec =
+      // neeeded for new arch
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('./fabric/NativeSvgRenderableModule').default;
     return await RNSVGRenderableModule.getRawResource(uri);
   } catch (e) {
     console.error(
       'Error in RawResourceUtils while trying to natively load an Android raw resource: ',
-      e,
+      e
     );
     return null;
   }
@@ -51,7 +54,7 @@ export const loadLocalRawResource =
 
 export type LocalProps = SvgProps & {
   asset: ImageSourcePropType;
-  override?: Object;
+  override?: object;
 };
 export type LocalState = { xml: string | null };
 
@@ -69,12 +72,14 @@ export class WithLocalSvg extends Component<LocalProps, LocalState> {
   componentDidMount() {
     this.load(this.props.asset);
   }
+
   componentDidUpdate(prevProps: { asset: ImageSourcePropType }) {
     const { asset } = this.props;
     if (asset !== prevProps.asset) {
       this.load(asset);
     }
   }
+
   async load(asset: ImageSourcePropType) {
     try {
       this.setState({ xml: asset ? await loadLocalRawResource(asset) : null });
@@ -82,6 +87,7 @@ export class WithLocalSvg extends Component<LocalProps, LocalState> {
       console.error(e);
     }
   }
+
   render() {
     const {
       props,
