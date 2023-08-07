@@ -267,7 +267,7 @@ const getBoundingClientRect = (node: SVGElement) => {
       return node.getBoundingClientRect();
     }
   }
-  return new DOMRect();
+  throw new Error('Can not get boundingClientRect of ' + node || 'undefined');
 };
 
 const measureLayout = (
