@@ -11,25 +11,25 @@ Pod::Spec.new do |s|
   s.license           = package['license']
   s.homepage          = package['homepage']
   s.authors           = 'Horcrux Chen'
-  s.platforms         = { :osx => "10.14", :ios => "9.0", :tvos => "9.2" }
   s.source            = { :git => 'https://github.com/react-native-community/react-native-svg.git', :tag => "v#{s.version}" }
+  s.source_files    = 'apple/**/*.{h,m,mm}'
+  s.ios.exclude_files = '**/*.macos.{h,m,mm}'
+  s.tvos.exclude_files = '**/*.macos.{h,m,mm}'
+  s.osx.exclude_files = '**/*.ios.{h,m,mm}'
+  s.requires_arc    = true
 
   if fabric_enabled
-    s.platforms       = { ios: '12.4', tvos: '11.0' }
+    s.platforms = { :osx => "10.14", ios: '12.4', tvos: '11.0' }
     install_modules_dependencies(s)
-    
+
     s.subspec "common" do |ss|
       ss.source_files         = "common/cpp/**/*.{cpp,h}"
       ss.header_dir           = "rnsvg"
       ss.pod_target_xcconfig  = { "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/common/cpp\"" }
     end
   else 
-    s.source_files       = 'apple/**/*.{h,m,mm}'
+    s.platforms         = { :osx => "10.14", :ios => "9.0", :tvos => "9.2" }
     s.exclude_files      = 'apple/Utils/RNSVGFabricConversions.h'
-    s.ios.exclude_files  = '**/*.macos.{h,m,mm}'
-    s.tvos.exclude_files = '**/*.macos.{h,m,mm}'
-    s.osx.exclude_files  = '**/*.ios.{h,m,mm}'
-    s.requires_arc       = true
     s.dependency           'React-Core'
   end
 end

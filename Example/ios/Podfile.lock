@@ -484,7 +484,7 @@ PODS:
     - React-jsi (= 0.72.1)
     - React-logger (= 0.72.1)
     - React-perflogger (= 0.72.1)
-  - RNReanimated (3.3.0):
+  - RNReanimated (3.4.2):
     - DoubleConversion
     - FBLazyVector
     - glog
@@ -740,8 +740,8 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 67707a955b9ecc628cc38bdc721fbc498910f0fd
   React-utils: 0a70ea97d4e2749f336b450c082905be1d389435
   ReactCommon: e593d19c9e271a6da4d0bd7f13b28cfeae5d164b
-  RNReanimated: 9f7068e43b9358a46a688d94a5a3adb258139457
-  RNSVG: 80584470ff1ffc7994923ea135a3e5ad825546b9
+  RNReanimated: 726395a2fa2f04cea340274ba57a4e659bc0d9c1
+  RNSVG: ee7e4ae98adade9ad8a12e7f9276504e71bd3ef7
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 65286bb6a07edce5e4fe8c90774da977ae8fc009
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
