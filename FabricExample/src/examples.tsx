@@ -18,6 +18,7 @@ import * as PanResponder from './examples/PanResponder';
 import * as Reanimated from './examples/Reanimated';
 import * as Transforms from './examples/Transforms';
 import * as Markers from './examples/Markers';
+import * as Mask from './examples/Mask';
 
 export {
   Svg,
@@ -40,4 +41,5 @@ export {
   Reanimated,
   Transforms,
   Markers,
+  Mask,
 };

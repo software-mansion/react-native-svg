@@ -63,8 +63,6 @@
 
 - (RNSVGNode *)getDefinedMask:(NSString *)maskName;
 
-- (NSString *)getDataURL;
-
 - (NSString *)getDataURLwithBounds:(CGRect)bounds;
 
 - (CGRect)getContextBounds;

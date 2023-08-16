@@ -321,29 +321,22 @@ using namespace facebook::react;
   return nil;
 }
 
-- (NSString *)getDataURL
-{
-  UIGraphicsBeginImageContextWithOptions(_boundingBox.size, NO, 0);
-  [self clearChildCache];
-  [self drawRect:_boundingBox];
-  [self clearChildCache];
-  [self invalidate];
-  NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
-  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-  UIGraphicsEndImageContext();
-  return base64;
-}
-
 - (NSString *)getDataURLwithBounds:(CGRect)bounds
 {
-  UIGraphicsBeginImageContextWithOptions(bounds.size, NO, 1);
-  [self clearChildCache];
-  [self drawRect:bounds];
-  [self clearChildCache];
-  [self invalidate];
-  NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
+  UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat defaultFormat];
+
+  UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size format:format];
+
+  UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
+    [self clearChildCache];
+    [self drawRect:bounds];
+    [self clearChildCache];
+    [self invalidate];
+  }];
+
+  NSData *imageData = UIImagePNGRepresentation(image);
   NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-  UIGraphicsEndImageContext();
+
   return base64;
 }
 
