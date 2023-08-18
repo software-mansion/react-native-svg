@@ -321,11 +321,9 @@ using namespace facebook::react;
   return nil;
 }
 
-- (NSString *)getDataURLwithBounds:(CGRect)bounds
+- (NSString *)getDataURLWithBounds:(CGRect)bounds
 {
-  UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat defaultFormat];
-
-  UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size format:format];
+  UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size];
 
   UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
     [self clearChildCache];
