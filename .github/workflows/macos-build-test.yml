@@ -8,8 +8,6 @@ on:
       - Example/package.json
       - Example/macos/**
       - src/fabric/**
-      - FabricExample/package.json
-      - FabricExample/macos/**
       - package.json
   push:
     branches:
@@ -20,7 +18,7 @@ jobs:
     runs-on: macos-12
     strategy:
       matrix:
-        working-directory: [Example, FabricExample]
+        working-directory: [Example]
       fail-fast: false
     concurrency:
       group: macos-${{ matrix.working-directory }}-${{ github.ref }}
