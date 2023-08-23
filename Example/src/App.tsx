@@ -205,7 +205,8 @@ export default class SvgExample extends Component {
       <View style={styles.container}>
         <Text style={styles.welcome}>SVG library for React Apps</Text>
         <View style={styles.contentContainer}>{this.getExamples()}</View>
-        {Platform.OS === 'windows' && this.state.modal ? (
+        {(Platform.OS === 'windows' || Platform.OS === 'macos') &&
+        this.state.modal ? (
           <View style={styles.scroll}>{this.modalContent()}</View>
         ) : (
           <Modal
