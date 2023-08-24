@@ -18,7 +18,11 @@ const rnwPath = fs.realpathSync(
   path.resolve(require.resolve('react-native-windows/package.json'), '..'),
 );
 
-const modules = [...Object.keys(pack.peerDependencies), 'react-native-windows'];
+const modules = [
+  ...Object.keys(pack.peerDependencies),
+  'react-native-windows',
+  'react-native-macos',
+];
 
 const config = {
   projectRoot: __dirname,
@@ -36,6 +40,7 @@ const config = {
       new RegExp(
         `${path.join(__dirname, 'windows').replace(/[/\\]+/g, '/')}.*`,
       ),
+      new RegExp(`${path.join(__dirname, 'macos').replace(/[/\\]+/g, '/')}.*`),
       // This prevents "react-native run-windows" from hitting: EBUSY: resource busy or locked, open msbuild.ProjectImports.zip or other files produced by msbuild
       new RegExp(`${rnwPath}/build/.*`),
       new RegExp(`${rnwPath}/target/.*`),

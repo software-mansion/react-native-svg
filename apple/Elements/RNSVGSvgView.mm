@@ -323,18 +323,27 @@ using namespace facebook::react;
 
 - (NSString *)getDataURLWithBounds:(CGRect)bounds
 {
+#if !TARGET_OS_OSX // [macOS]
   UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size];
-
   UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
+#else // [macOS
+  UIGraphicsBeginImageContextWithOptions(bounds.size, NO, 1);
+#endif // macOS]
     [self clearChildCache];
     [self drawRect:bounds];
     [self clearChildCache];
     [self invalidate];
+#if !TARGET_OS_OSX // [macOS]
   }];
-
+#endif
+#if !TARGET_OS_OSX // [macOS]
   NSData *imageData = UIImagePNGRepresentation(image);
   NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-
+#else // [macOS
+  NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
+  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  UIGraphicsEndImageContext();
+#endif // macOS]
   return base64;
 }
 
