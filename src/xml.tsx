@@ -174,6 +174,7 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
     try {
       this.setState({ ast: xml ? parse(xml) : null });
     } catch (e) {
+      this.props.onError?.(e);
       console.error(e);
     }
   }
@@ -204,6 +205,7 @@ export class SvgFromUri extends Component<UriProps, UriState> {
     try {
       this.setState({ xml: uri ? await fetchText(uri) : null });
     } catch (e) {
+      this.props.onError?.(e);
       console.error(e);
     }
   }
