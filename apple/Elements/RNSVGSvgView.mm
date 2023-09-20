@@ -293,7 +293,7 @@ using namespace facebook::react;
   _boundingBox = rect;
   CGContextRef context = UIGraphicsGetCurrentContext();
 
-  [self drawToContext:context withRect:rect];
+  [self drawToContext:context withRect:[self bounds]];
 }
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
