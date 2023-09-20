@@ -53,5 +53,10 @@ module.exports = {
       '.jsx',
     ],
   },
-  plugins: [new (require('webpack').DefinePlugin)({process: {env: {}}})],
+  plugins: [
+    new (require('webpack').DefinePlugin)({
+      process: {env: {}},
+      __DEV__: 'true',
+    }),
+  ],
 };
