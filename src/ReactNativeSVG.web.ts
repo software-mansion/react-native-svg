@@ -223,9 +223,19 @@ const prepare = <T extends BaseProps>(
     clean['transform-origin'] = `${originX || 0} ${originY || 0}`;
   }
 
-  clean.transform = parseTransformProp(transform, props);
-  clean.gradientTransform = parseTransformProp(gradientTransform);
-  clean.patternTransform = parseTransformProp(patternTransform);
+  // we do it like this because setting transform as undefined causes error in web
+  const parsedTransform = parseTransformProp(transform, props);
+  if (parsedTransform) {
+    clean.transform = parsedTransform;
+  }
+  const parsedGradientTransform = parseTransformProp(gradientTransform);
+  if (parsedGradientTransform) {
+    clean.gradientTransform = parsedGradientTransform;
+  }
+  const parsedPatternTransform = parseTransformProp(patternTransform);
+  if (parsedPatternTransform) {
+    clean.patternTransform = parsedPatternTransform;
+  }
 
   clean.ref = (el: SVGElement | null) => {
     self.elementRef.current = el;
