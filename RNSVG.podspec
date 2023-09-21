@@ -20,8 +20,6 @@ Pod::Spec.new do |s|
 
   if fabric_enabled
     s.platforms = { :osx => "10.14", ios: '12.4', tvos: '11.0' }
-    s.pod_target_xcconfig = { "CLANG_CXX_LANGUAGE_STANDARD" => "c++20" }
-
     install_modules_dependencies(s)
 
     s.subspec "common" do |ss|
