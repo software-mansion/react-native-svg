@@ -141,6 +141,15 @@ using namespace facebook::react;
   [self invalidate];
 }
 
+- (void)setMaskType:(NSString *)maskType
+{
+    if ([maskType isEqualToString:_maskType]) {
+        return;
+    }
+    _maskType = maskType;
+    [self invalidate];
+}
+
 @end
 
 #ifdef RCT_NEW_ARCH_ENABLED

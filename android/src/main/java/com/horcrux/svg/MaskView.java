@@ -20,6 +20,8 @@ class MaskView extends GroupView {
   SVGLength mW;
   SVGLength mH;
 
+  String mType;
+
   // TODO implement proper support for units
   @SuppressWarnings({"FieldCanBeLocal", "unused"})
   private Brush.BrushUnits mMaskUnits;
@@ -112,6 +114,11 @@ class MaskView extends GroupView {
         mMaskContentUnits = Brush.BrushUnits.USER_SPACE_ON_USE;
         break;
     }
+    invalidate();
+  }
+
+  public void setMaskType(String maskType) {
+    mType = maskType;
     invalidate();
   }
 

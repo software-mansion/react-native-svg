@@ -11,6 +11,7 @@ import RNSVGMask from '../fabric/MaskNativeComponent';
 import type { NativeMethods } from 'react-native';
 
 export type TMaskUnits = 'userSpaceOnUse' | 'objectBoundingBox';
+export type TMakType = 'alpha' | 'luminance';
 
 export interface MaskProps extends CommonPathProps {
   children?: ReactNode;
@@ -21,6 +22,10 @@ export interface MaskProps extends CommonPathProps {
   height?: NumberProp;
   maskUnits?: TMaskUnits;
   maskContentUnits?: TMaskUnits;
+  maskType?: TMakType;
+  style?: {
+    maskType: TMakType,
+  }
 }
 
 export default class Mask extends Shape<MaskProps> {
@@ -35,7 +40,7 @@ export default class Mask extends Shape<MaskProps> {
 
   render() {
     const { props } = this;
-    const { x, y, width, height, maskUnits, maskContentUnits, children } =
+    const { x, y, width, height, maskUnits, maskContentUnits, children, maskType, style } =
       props;
     const strigifiedMaskProps = stringifyPropsForFabric({
       x,
@@ -47,6 +52,7 @@ export default class Mask extends Shape<MaskProps> {
       maskUnits: maskUnits !== undefined ? units[maskUnits] : 0,
       maskContentUnits:
         maskContentUnits !== undefined ? units[maskContentUnits] : 1,
+      maskType: maskType || style?.maskType || 'luminance'
     };
     return (
       <RNSVGMask

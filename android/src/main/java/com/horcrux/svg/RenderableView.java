@@ -399,18 +399,20 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
       int[] pixels = new int[nPixels];
       maskBitmap.getPixels(pixels, 0, width, 0, 0, width, height);
 
-      for (int i = 0; i < nPixels; i++) {
-        int color = pixels[i];
+      if (mask.mType.equals("luminance")) {
+        for (int i = 0; i < nPixels; i++) {
+          int color = pixels[i];
 
-        int r = (color >> 16) & 0xFF;
-        int g = (color >> 8) & 0xFF;
-        int b = color & 0xFF;
-        int a = color >>> 24;
+          int r = (color >> 16) & 0xFF;
+          int g = (color >> 8) & 0xFF;
+          int b = color & 0xFF;
+          int a = color >>> 24;
 
-        double luminance = saturate(((0.299 * r) + (0.587 * g) + (0.144 * b)) / 255);
-        int alpha = (int) (a * luminance);
-        int pixel = (alpha << 24);
-        pixels[i] = pixel;
+          double luminance = saturate(((0.299 * r) + (0.587 * g) + (0.144 * b)) / 255);
+          int alpha = (int) (a * luminance);
+          int pixel = (alpha << 24);
+          pixels[i] = pixel;
+        }
       }
 
       maskBitmap.setPixels(pixels, 0, width, 0, 0, width, height);
