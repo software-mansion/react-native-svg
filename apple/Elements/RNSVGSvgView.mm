@@ -64,7 +64,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGSvgViewProps>(props);
+  const auto &newProps = static_cast<const RNSVGSvgViewProps &>(*props);
 
   self.minX = newProps.minX;
   self.minY = newProps.minY;
