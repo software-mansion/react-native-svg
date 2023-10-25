@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
       ss.header_dir           = "rnsvg"
       ss.pod_target_xcconfig  = { "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/common/cpp\"" }
     end
-  else 
+  else
     s.platforms         = { :osx => "10.14", :ios => "10.0", :tvos => "9.2" }
     s.exclude_files      = 'apple/Utils/RNSVGFabricConversions.h'
     s.dependency           'React-Core'

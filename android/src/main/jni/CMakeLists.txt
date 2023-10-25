@@ -10,7 +10,7 @@ set(RNS_GENERATED_REACT_DIR ${RNS_GENERATED_JNI_DIR}/react/renderer/components/r
 add_compile_options(
   -fexceptions
   -frtti
-  -std=c++17
+  -std=c++20
   -Wall
   -Wpedantic
   -Wno-gnu-zero-variadic-macro-arguments
