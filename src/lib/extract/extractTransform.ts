@@ -20,7 +20,7 @@ function appendTransformProps(props: TransformedProps) {
     skewX,
     skewY,
     originX,
-    originY,
+    originY
   );
 }
 
@@ -28,7 +28,7 @@ function universal2axis(
   universal: NumberProp | NumberProp[] | undefined,
   axisX: NumberProp | void,
   axisY: NumberProp | void,
-  defaultValue?: number,
+  defaultValue?: number
 ): [number, number] {
   let x;
   let y;
@@ -65,14 +65,14 @@ function universal2axis(
 }
 
 export function transformsArrayToProps(
-  transformObjectsArray: TransformsStyle['transform'],
+  transformObjectsArray: TransformsStyle['transform']
 ) {
   const props: TransformProps = {};
   transformObjectsArray?.forEach((transformObject) => {
     const keys = Object.keys(transformObject);
     if (keys.length !== 1) {
       console.error(
-        'You must specify exactly one property per transform object.',
+        'You must specify exactly one property per transform object.'
       );
     }
     const key = keys[0] as keyof TransformProps;
@@ -83,7 +83,7 @@ export function transformsArrayToProps(
 }
 
 export function props2transform(
-  props: TransformProps | undefined,
+  props: TransformProps | undefined
 ): TransformedProps | null {
   if (!props) {
     return null;
@@ -130,13 +130,13 @@ export function props2transform(
 
   if (Array.isArray(x) || Array.isArray(y)) {
     console.warn(
-      'Passing SvgLengthList to x or y attribute where SvgLength expected',
+      'Passing SvgLengthList to x or y attribute where SvgLength expected'
     );
   }
   const tr = universal2axis(
     translate,
     translateX || (Array.isArray(x) ? x[0] : x),
-    translateY || (Array.isArray(y) ? y[0] : y),
+    translateY || (Array.isArray(y) ? y[0] : y)
   );
   const or = universal2axis(origin, originX, originY);
   const sc = universal2axis(scale, scaleX, scaleY, 1);
@@ -157,10 +157,10 @@ export function props2transform(
 
 export function transformToMatrix(
   props: TransformedProps | null,
-  transform: TransformProps['transform'],
-): ColumnMajorTransformMatrix | null {
+  transform: TransformProps['transform']
+): ColumnMajorTransformMatrix | undefined {
   if (!props && !transform) {
-    return null;
+    return undefined;
   }
   reset();
   props && appendTransformProps(props);
@@ -175,11 +175,11 @@ export function transformToMatrix(
           columnMatrix[2],
           columnMatrix[3],
           columnMatrix[4],
-          columnMatrix[5],
+          columnMatrix[5]
         );
       } else {
         const transformProps = props2transform(
-          transformsArrayToProps(transform as TransformsStyle['transform']),
+          transformsArrayToProps(transform as TransformsStyle['transform'])
         );
         transformProps && appendTransformProps(transformProps);
       }
@@ -200,8 +200,8 @@ export function transformToMatrix(
 }
 
 export default function extractTransform(
-  props: TransformProps | TransformProps['transform'],
-): ColumnMajorTransformMatrix | null {
+  props: TransformProps | TransformProps['transform']
+): ColumnMajorTransformMatrix | undefined {
   if (Array.isArray(props) && typeof props[0] === 'number') {
     return props as ColumnMajorTransformMatrix;
   }
@@ -219,6 +219,6 @@ export default function extractTransform(
   const transformProps = props as TransformProps;
   return transformToMatrix(
     props2transform(transformProps),
-    transformProps?.transform,
+    transformProps?.transform
   );
 }
