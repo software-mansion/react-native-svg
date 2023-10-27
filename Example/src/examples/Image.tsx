@@ -55,6 +55,7 @@ class ClipImage extends Component {
           width="90%"
           height="90%"
           href={require('../assets/image.jpg')}
+          opacity="0.6"
           clipPath="url(#clip-image)"
         />
         <Text
