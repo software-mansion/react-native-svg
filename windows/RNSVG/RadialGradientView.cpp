@@ -54,8 +54,7 @@ void RadialGradientView::Unload() {
 void RadialGradientView::CreateBrush() {
   auto const root{SvgRoot()};
 
-  com_ptr<ID2D1DeviceContext1> deviceContext;
-  copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
 
   winrt::com_ptr<ID2D1GradientStopCollection> stopCollection;
   winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], static_cast<uint32_t>(m_stops.size()), stopCollection.put()));
@@ -71,13 +70,12 @@ void RadialGradientView::CreateBrush() {
     radialBrush->SetTransform(m_transform);
   }
 
-  winrt::copy_from_abi(m_brush, radialBrush.get());
+  m_brush = make<RNSVG::implementation::D2DBrush>(radialBrush.as<ID2D1Brush>());
 }
 
 void RadialGradientView::UpdateBounds() {
   if (m_gradientUnits == "objectBoundingBox") {
-    winrt::com_ptr<ID2D1RadialGradientBrush> brush;
-    winrt::copy_to_abi(m_brush, *brush.put_void());
+    com_ptr<ID2D1RadialGradientBrush> brush{get_self<D2DBrush>(m_brush)->Get().as<ID2D1RadialGradientBrush>()};
     SetPoints(brush.get(), m_bounds);
   }
 }

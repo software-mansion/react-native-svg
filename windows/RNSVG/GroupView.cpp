@@ -108,15 +108,13 @@ void GroupView::CreateGeometry() {
     }
 
     if (child.Geometry()) {
-      com_ptr<ID2D1Geometry> geometry;
-      copy_to_abi(child.Geometry(), *geometry.put_void());
+      com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(child.Geometry())->Get()};
       geometries.emplace_back(geometry.get());
     }
   }
 
   if (!geometries.empty()) {
-    com_ptr<ID2D1DeviceContext1> deviceContext;
-    copy_to_abi(SvgRoot().DeviceContext(), *deviceContext.put_void());
+    com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(SvgRoot().DeviceContext())->Get()};
 
     com_ptr<ID2D1Factory> factory;
     deviceContext->GetFactory(factory.put());
@@ -125,10 +123,7 @@ void GroupView::CreateGeometry() {
     check_hresult(factory->CreateGeometryGroup(
         D2DHelpers::GetFillRule(FillRule()), &geometries[0], static_cast<uint32_t>(geometries.size()), group.put()));
 
-    IInspectable asInspectable{nullptr};
-    copy_from_abi(asInspectable, group.get());
-
-    Geometry(asInspectable);
+    Geometry(make<RNSVG::implementation::D2DGeometry>(group.as<ID2D1Geometry>()));
   }
 }
 
@@ -148,9 +143,8 @@ void GroupView::MergeProperties(RNSVG::RenderableView const &other) {
   }
 }
 
-void GroupView::Draw(IInspectable const &context, Size size) {
-  com_ptr<ID2D1DeviceContext1> deviceContext;
-  copy_to_abi(context, *deviceContext.put_void());
+void GroupView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
   D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
 
@@ -158,8 +152,11 @@ void GroupView::Draw(IInspectable const &context, Size size) {
     deviceContext->SetTransform(D2DHelpers::AsD2DTransform(SvgTransform()) * transform);
   }
 
-  com_ptr<ID2D1Geometry> clipPathGeometry;
-  copy_to_abi(ClipPathGeometry(), *clipPathGeometry.put_void());
+  com_ptr<ID2D1Geometry> clipPathGeometry{nullptr};
+
+  if (ClipPathGeometry()) {
+    clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry())->Get();
+  }
 
   D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
 
@@ -174,7 +171,7 @@ void GroupView::Draw(IInspectable const &context, Size size) {
   deviceContext->SetTransform(transform);
 }
 
-void GroupView::DrawGroup(IInspectable const &context, Size size) {
+void GroupView::DrawGroup(RNSVG::D2DDeviceContext const &context, Size size) {
   for (auto const &child : Children()) {
     child.Draw(context, size);
   }
@@ -213,8 +210,7 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Point const &point) {
         CreateGeometry();
       }
       if (Geometry()) {
-        com_ptr<ID2D1Geometry> geometry;
-        copy_to_abi(Geometry(), *geometry.put_void());
+        com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(Geometry())->Get()};
 
         D2D1_RECT_F bounds;
         check_hresult(geometry->GetBounds(nullptr, &bounds));

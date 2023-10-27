@@ -37,8 +37,7 @@ void LineView::CreateGeometry() {
   float x2{Utils::GetAbsoluteLength(m_x2, root.ActualWidth())};
   float y2{Utils::GetAbsoluteLength(m_y2, root.ActualHeight())};
 
-  com_ptr<ID2D1DeviceContext1> deviceContext;
-  copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
 
   com_ptr<ID2D1Factory> factory;
   deviceContext->GetFactory(factory.put());
@@ -54,9 +53,6 @@ void LineView::CreateGeometry() {
   sink->AddLine({x2, y2});
   sink->EndFigure(D2D1_FIGURE_END_OPEN);
 
-  IInspectable asInspectable;
-  copy_from_abi(asInspectable, geometry.get());
-
-  Geometry(asInspectable);
+  Geometry(make<RNSVG::implementation::D2DGeometry>(geometry.as<ID2D1Geometry>()));
 }
 } // namespace winrt::RNSVG::implementation

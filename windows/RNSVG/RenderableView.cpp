@@ -189,20 +189,18 @@ void RenderableView::SaveDefinition() {
   }
 }
 
-void RenderableView::Draw(IInspectable const &context, Size size) {
+void RenderableView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
   if (m_recreateResources) {
     CreateGeometry();
   }
 
-  winrt::com_ptr<ID2D1Geometry> geometry;
-  winrt::copy_to_abi(m_geometry, *geometry.put_void());
+  com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(m_geometry)->Get()};
 
   if (!geometry) {
     return;
   }
 
-  com_ptr<ID2D1DeviceContext1> deviceContext;
-  copy_to_abi(context, *deviceContext.put_void());
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
   D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
 
@@ -210,18 +208,19 @@ void RenderableView::Draw(IInspectable const &context, Size size) {
     deviceContext->SetTransform(D2DHelpers::AsD2DTransform(SvgTransform()) * transform);
   }
 
-  com_ptr<ID2D1Geometry> clipPathGeometry;
-  copy_to_abi(ClipPathGeometry(), *clipPathGeometry.put_void());
-
   com_ptr<ID2D1Factory> factory;
   deviceContext->GetFactory(factory.put());
 
   com_ptr<ID2D1GeometryGroup> geometryGroup;
   ID2D1Geometry *geometries[] = {geometry.get()};
-  check_hresult(
-      factory->CreateGeometryGroup(D2DHelpers::GetFillRule(FillRule()), geometries, 1, geometryGroup.put()));
+  check_hresult(factory->CreateGeometryGroup(D2DHelpers::GetFillRule(FillRule()), geometries, 1, geometryGroup.put()));
 
   geometry = geometryGroup;
+
+  com_ptr<ID2D1Geometry> clipPathGeometry{nullptr};
+  if (ClipPathGeometry()) {
+    clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry())->Get();
+  }
 
   D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
 
@@ -338,7 +337,7 @@ RNSVG::SvgView RenderableView::SvgRoot() {
   return nullptr;
 }
 
-IInspectable RenderableView::ClipPathGeometry() {
+RNSVG::D2DGeometry RenderableView::ClipPathGeometry() {
   if (!m_clipPathId.empty()) {
     if (auto const &clipPath{SvgRoot().Templates().TryLookup(m_clipPathId)}) {
       if (!clipPath.Geometry()) {
@@ -368,8 +367,7 @@ RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
     BOOL strokeContainsPoint{false};
     D2D1_POINT_2F pointD2D{point.X, point.Y};
 
-    com_ptr<ID2D1Geometry> geometry;
-    copy_to_abi(m_geometry, *geometry.put_void());
+    com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(m_geometry)->Get()};
 
     if (auto const &svgRoot{SvgRoot()}) {
       float canvasDiagonal{Utils::GetCanvasDiagonal(svgRoot.ActualSize())};

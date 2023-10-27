@@ -9,6 +9,8 @@
 #include <winrt/Windows.UI.Xaml.Media.Imaging.h>
 #include <winrt/Windows.Graphics.Display.h>
 
+#include "D2DDevice.h"
+#include "D2DDeviceContext.h"
 #include "GroupView.h"
 #include "Utils.h"
 
@@ -48,9 +50,13 @@ SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
   com_ptr<IDXGIDevice> dxgiDevice{d3dDevice.as<IDXGIDevice>()};
 
   // Create the Direct2D device and a corresponding context.
-  check_hresult(D2D1CreateDevice(dxgiDevice.get(), nullptr, m_device.put()));
+  com_ptr<ID2D1Device> device;
+  check_hresult(D2D1CreateDevice(dxgiDevice.get(), nullptr, device.put()));
+  m_device = make<RNSVG::implementation::D2DDevice>(device);
 
-  check_hresult(m_device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, m_deviceContext.put()));
+  com_ptr<ID2D1DeviceContext> deviceContext;
+  check_hresult(device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, deviceContext.put()));
+  m_deviceContext = make<RNSVG::implementation::D2DDeviceContext>(deviceContext);
 
   m_panelLoadedRevoker = Loaded(winrt::auto_revoke, {get_weak(), &SvgView::Panel_Loaded});
   m_panelUnloadedRevoker = Unloaded(winrt::auto_revoke, {get_weak(), &SvgView::Panel_Unloaded});
@@ -143,9 +149,8 @@ Size SvgView::ArrangeOverride(Size finalSize) {
   return finalSize;
 }
 
-void SvgView::Draw(IInspectable const &context, Size size) {
-  com_ptr<ID2D1DeviceContext1> deviceContext;
-  copy_to_abi(context, *deviceContext.put_void());
+void SvgView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
   D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
 
@@ -226,8 +231,7 @@ void SvgView::Invalidate() {
   m_brushes.Clear();
   m_templates.Clear();
 
-  com_ptr<ID2D1DeviceContext1> deviceContext;
-  copy_to_abi(DeviceContext(), *deviceContext.put_void());
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(DeviceContext())->Get()};
 
   Size size{static_cast<float>(ActualWidth()), static_cast<float>(ActualHeight())};
 
@@ -236,7 +240,8 @@ void SvgView::Invalidate() {
   com_ptr<ISurfaceImageSourceNativeWithD2D> sisNativeWithD2D{surfaceImageSource.as<ISurfaceImageSourceNativeWithD2D>()};
 
   // Associate the Direct2D device with the SurfaceImageSource.
-  sisNativeWithD2D->SetDevice(m_device.get());
+  com_ptr<ID2D1Device> device{get_self<D2DDevice>(Device())->Get()};
+  sisNativeWithD2D->SetDevice(device.get());
 
   com_ptr<IDXGISurface> dxgiSurface;
 

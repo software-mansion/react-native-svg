@@ -15,22 +15,12 @@ struct SvgView : SvgViewT<SvgView> {
   RNSVG::GroupView Group() { return m_group; }
   void Group(RNSVG::GroupView const &value) { m_group = value; }
 
-  Windows::Foundation::IInspectable Device() {
-    Windows::Foundation::IInspectable asInspectable;
-    copy_from_abi(asInspectable, m_device.get());
+  RNSVG::D2DDevice Device() { return m_device; }
 
-    return asInspectable;
-  }
+  RNSVG::D2DDeviceContext DeviceContext() { return m_deviceContext; }
 
-  Windows::Foundation::IInspectable DeviceContext() {
-    Windows::Foundation::IInspectable asInspectable;
-    copy_from_abi(asInspectable, m_deviceContext.get());
-
-    return asInspectable;
-  }
-
-  Windows::Foundation::IInspectable Geometry() { return m_group ? m_group.Geometry() : nullptr; }
-  void Geometry(Windows::Foundation::IInspectable /*value*/) {}
+  RNSVG::D2DGeometry Geometry() { return m_group ? m_group.Geometry() : nullptr; }
+  void Geometry(RNSVG::D2DGeometry /*value*/) {}
 
   Windows::UI::Color CurrentColor() { return m_currentColor; }
 
@@ -49,7 +39,7 @@ struct SvgView : SvgViewT<SvgView> {
   void MergeProperties(RNSVG::RenderableView const &other);
   void SaveDefinition();
   void Unload();
-  void Draw(Windows::Foundation::IInspectable const& deviceContext, Windows::Foundation::Size size);
+  void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size size);
   void CreateResources();
   void CreateGeometry();
   RNSVG::IRenderable HitTest(Windows::Foundation::Point const & /*point*/) { return nullptr; }
@@ -69,8 +59,8 @@ struct SvgView : SvgViewT<SvgView> {
   bool m_isResponsible{false};
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Windows::UI::Xaml::FrameworkElement m_parent{nullptr};
-  com_ptr<ID2D1Device> m_device{nullptr};
-  com_ptr<ID2D1DeviceContext> m_deviceContext{nullptr};
+  RNSVG::D2DDevice m_device;
+  RNSVG::D2DDeviceContext m_deviceContext;
   Windows::UI::Xaml::Controls::Image m_image;
   RNSVG::GroupView m_group{nullptr};
   hstring m_id{L""};

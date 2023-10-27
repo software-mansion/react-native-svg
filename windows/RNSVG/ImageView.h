@@ -22,7 +22,7 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   ImageView() = default;
 
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  void Draw(Windows::Foundation::IInspectable const &deviceContext, Windows::Foundation::Size size);
+  void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size size);
   void CreateResources();
   void Unload();
 

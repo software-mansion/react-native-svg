@@ -49,8 +49,7 @@ void RectView::CreateGeometry() {
   float rx{Utils::GetAbsoluteLength(rxLength, root.ActualWidth())};
   float ry{Utils::GetAbsoluteLength(ryLength, root.ActualHeight())};
 
-  com_ptr<ID2D1DeviceContext1> deviceContext;
-  copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
 
   com_ptr<ID2D1Factory> factory;
   deviceContext->GetFactory(factory.put());
@@ -59,9 +58,6 @@ void RectView::CreateGeometry() {
   check_hresult(factory->CreateRoundedRectangleGeometry(
       D2D1::RoundedRect(D2D1::RectF(x, y, width + x, height + y), rx, ry), geometry.put()));
 
-  IInspectable asInspectable;
-  copy_from_abi(asInspectable, geometry.get());
-
-  Geometry(asInspectable);
+  Geometry(make<RNSVG::implementation::D2DGeometry>(geometry.as<ID2D1Geometry>()));
 }
 } // namespace winrt::RNSVG::implementation

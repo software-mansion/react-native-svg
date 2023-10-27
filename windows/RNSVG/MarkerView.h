@@ -1,11 +1,11 @@
 #pragma once
-#include "ClipPathView.g.h"
+#include "MarkerView.g.h"
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
-struct ClipPathView : ClipPathViewT<ClipPathView, RNSVG::implementation::GroupView> {
+struct MarkerView : MarkerViewT<MarkerView, RNSVG::implementation::GroupView> {
  public:
-  ClipPathView() = default;
+  MarkerView() = default;
 
   // RenderableView
   void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size /*size*/){};
@@ -13,5 +13,5 @@ struct ClipPathView : ClipPathViewT<ClipPathView, RNSVG::implementation::GroupVi
 } // namespace winrt::RNSVG::implementation
 
 namespace winrt::RNSVG::factory_implementation {
-struct ClipPathView : ClipPathViewT<ClipPathView, implementation::ClipPathView> {};
+struct MarkerView : MarkerViewT<MarkerView, implementation::MarkerView> {};
 } // namespace winrt::RNSVG::factory_implementation

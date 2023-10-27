@@ -6,6 +6,7 @@
 #include <winrt/Windows.UI.Text.h>
 #include "JSValueReader.h"
 #include "D2DHelpers.h"
+#include "D2DBrush.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -269,8 +270,7 @@ struct Utils {
       RNSVG::SvgView const &root,
       com_ptr<ID2D1Geometry> const &geometry) {
     com_ptr<ID2D1Brush> brush;
-    com_ptr<ID2D1DeviceContext1> deviceContext;
-    copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+    com_ptr<ID2D1DeviceContext> deviceContext{get_self<RNSVG::implementation::D2DDeviceContext>(root.DeviceContext())->Get()};
 
     if (root && brushId != L"") {
       if (brushId == L"currentColor") {
@@ -291,7 +291,7 @@ struct Utils {
             brushView.SetBounds(D2DHelpers::FromD2DRect(bounds));
           }
 
-          copy_to_abi(brushView.Brush(), *brush.put_void());
+          brush = get_self<RNSVG::implementation::D2DBrush>(brushView.Brush())->Get();
         } catch (hresult_error const &e) {
           hresult hr = e.code();
         }

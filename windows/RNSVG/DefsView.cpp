@@ -5,5 +5,5 @@
 using namespace winrt;
 
 namespace winrt::RNSVG::implementation {
-void DefsView::Draw(IInspectable const& /*deviceContext*/, Size /*size*/) {}
+void DefsView::Draw(RNSVG::D2DDeviceContext const& /*deviceContext*/, Size /*size*/) {}
 } // namespace winrt::RNSVG::implementation

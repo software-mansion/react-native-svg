@@ -1,6 +1,7 @@
 #pragma once
 #include "BrushView.g.h"
 #include "GroupView.h"
+#include "D2DBrush.h"
 
 namespace winrt::RNSVG::implementation {
 struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {
@@ -9,14 +10,14 @@ struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {
 
   void SaveDefinition();
 
-  Windows::Foundation::IInspectable Brush() { return m_brush; }
+  RNSVG::D2DBrush Brush() { return m_brush; }
   virtual void CreateBrush() {}
   virtual void Unload();
   void SetBounds(Windows::Foundation::Rect const &rect);
 
 
  protected:
-  Windows::Foundation::IInspectable m_brush{nullptr};
+  RNSVG::D2DBrush m_brush;
   D2D1_RECT_F m_bounds;
 
   virtual void UpdateBounds() {}

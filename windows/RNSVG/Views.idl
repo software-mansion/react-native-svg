@@ -5,11 +5,11 @@ namespace RNSVG
   interface IRenderable
   {
     Windows.UI.Xaml.FrameworkElement SvgParent;
-    Object Geometry;
+    D2DGeometry Geometry;
     Boolean IsResponsible;
 
     void CreateResources();
-    void Draw(Object deviceContext, Windows.Foundation.Size size);
+    void Draw(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
     void MergeProperties(RenderableView other);
     void SaveDefinition();
@@ -25,8 +25,8 @@ namespace RNSVG
 
     GroupView Group;
     Windows.UI.Color CurrentColor{ get; };
-    Object Device{ get; };
-    Object DeviceContext{ get; };
+    D2DDevice Device{ get; };
+    D2DDeviceContext DeviceContext{ get; };
     Windows.Foundation.Collections.IMap<String, IRenderable> Templates{ get; };
     Windows.Foundation.Collections.IMap<String, BrushView> Brushes{ get; };
 
@@ -54,7 +54,7 @@ namespace RNSVG
     Int32 StrokeLineCap{ get; };
     Int32 StrokeLineJoin{ get; };
     Int32 FillRule{ get; };
-    Object ClipPathGeometry{ get; };
+    D2DGeometry ClipPathGeometry{ get; };
   };
 
   [default_interface]
@@ -109,7 +109,7 @@ namespace RNSVG
     String FontFamily;
     String FontWeight;
 
-    void DrawGroup(Object deviceContext, Windows.Foundation.Size size);
+    void DrawGroup(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
   };
 
   [default_interface]
@@ -155,11 +155,17 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass MarkerView : GroupView
+  {
+    MarkerView();
+  };
+
+  [default_interface]
   unsealed runtimeclass BrushView : GroupView
   {
     BrushView();
 
-    Object Brush{ get; };
+    D2DBrush Brush{ get; };
     void CreateBrush();
     void SetBounds(Windows.Foundation.Rect rect);
   };

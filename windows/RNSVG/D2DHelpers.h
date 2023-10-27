@@ -9,7 +9,7 @@ struct D2DHelpers {
  public:
 
    static void PushOpacityLayer(
-      ID2D1DeviceContext1 *deviceContext,
+      ID2D1DeviceContext *deviceContext,
       ID2D1Geometry *clipPathGeometry,
       float opacity) {
     com_ptr<ID2D1Layer> opacityLayer;
@@ -26,7 +26,7 @@ struct D2DHelpers {
   }
 
    static void PushOpacityLayer(
-      ID2D1DeviceContext1 *deviceContext,
+      ID2D1DeviceContext *deviceContext,
       ID2D1Geometry *clipPathGeometry,
       float opacity,
       D2D1_MATRIX_3X2_F transform) {

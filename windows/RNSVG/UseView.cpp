@@ -31,10 +31,9 @@ void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void UseView::Draw(IInspectable const &context, Size size) {
+void UseView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
   if (auto const &view{GetRenderableTemplate()}) {
-    com_ptr<ID2D1DeviceContext1> deviceContext;
-    copy_to_abi(context, *deviceContext.put_void());
+    com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
     D2D1_MATRIX_3X2_F originalTransform{D2DHelpers::GetTransform(deviceContext.get())};
     auto transform{originalTransform};

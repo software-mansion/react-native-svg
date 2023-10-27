@@ -76,4 +76,24 @@ namespace RNSVG {
     Single Value{ get; };
     LengthType Unit{ get; };
   };
-}
+
+  [default_interface]
+  runtimeclass D2DDevice {
+    D2DDevice();
+  };
+
+  [default_interface]
+  runtimeclass D2DDeviceContext {
+    D2DDeviceContext();
+  };
+
+  [default_interface]
+  runtimeclass D2DGeometry {
+    D2DGeometry();
+  };
+
+  [default_interface]
+  runtimeclass D2DBrush {
+    D2DBrush();
+  };
+ }

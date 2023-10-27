@@ -42,6 +42,8 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
       return winrt::RNSVG::PatternView();
     case RNSVG::SVGClass::RNSVGClipPath:
       return winrt::RNSVG::ClipPathView();
+    case RNSVG::SVGClass::RNSVGMarker:
+      return winrt::RNSVG::MarkerView();
   }
 
   throw hresult_not_implemented();

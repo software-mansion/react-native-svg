@@ -22,6 +22,7 @@
 #include "RadialGradientViewManager.h"
 #include "PatternViewManager.h"
 #include "ClipPathViewManager.h"
+#include "MarkerViewManager.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -47,6 +48,7 @@ namespace winrt::RNSVG::implementation
     packageBuilder.AddViewManager(L"RadialGradientViewManager", []() { return winrt::make<RadialGradientViewManager>(); });
     packageBuilder.AddViewManager(L"PatternViewManager", []() { return winrt::make<PatternViewManager>(); });
     packageBuilder.AddViewManager(L"ClipPathViewManager", []() { return winrt::make<ClipPathViewManager>(); });
+    packageBuilder.AddViewManager(L"MarkerViewManager", []() { return winrt::make<MarkerViewManager>(); });
   }
 
 } // namespace winrt::RNSVG::implementation

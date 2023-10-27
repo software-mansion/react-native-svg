@@ -26,9 +26,9 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
 
   virtual void MergeProperties(RNSVG::RenderableView const &other);
 
-  virtual void Draw(Windows::Foundation::IInspectable const &deviceContext, Windows::Foundation::Size size);
+  void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size size);
 
-  virtual void DrawGroup(Windows::Foundation::IInspectable const &deviceContext, Windows::Foundation::Size size);
+  virtual void DrawGroup(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size size);
 
   virtual void CreateResources();
 

@@ -102,6 +102,7 @@ class DefsExample extends Component {
           href="#basic-path"
           clipPath="url(#basic-clip)"
           fillOpacity="0.6"
+          fill="yellow"
           stroke="#000"
           strokeWidth="1"
         />

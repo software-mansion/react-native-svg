@@ -2,6 +2,8 @@
 
 #include "RenderableView.g.h"
 #include "SVGLength.h"
+#include "D2DDeviceContext.h"
+#include "D2DGeometry.h"
 
 namespace winrt::RNSVG::implementation {
 struct RenderableView : RenderableViewT<RenderableView> {
@@ -14,8 +16,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Windows::UI::Xaml::FrameworkElement SvgParent() { return m_parent; }
   void SvgParent(Windows::UI::Xaml::FrameworkElement const &value) { m_parent = value; }
 
-  Windows::Foundation::IInspectable Geometry() { return m_geometry; }
-  void Geometry(Windows::Foundation::IInspectable value) { m_geometry = value; }
+  RNSVG::D2DGeometry Geometry() { return m_geometry; }
+  void Geometry(RNSVG::D2DGeometry value) { m_geometry = value; }
 
   hstring Id() { return m_id; }
   Numerics::float3x2 SvgTransform() { return m_transformMatrix; }
@@ -36,14 +38,14 @@ struct RenderableView : RenderableViewT<RenderableView> {
   int32_t StrokeLineCap() { return m_strokeLineCap; }
   int32_t StrokeLineJoin() { return m_strokeLineJoin; }
   int32_t FillRule() { return m_fillRule; }
-  Windows::Foundation::IInspectable ClipPathGeometry();
+  RNSVG::D2DGeometry ClipPathGeometry();
 
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
   virtual void CreateGeometry() {}
   virtual void MergeProperties(RNSVG::RenderableView const &other);
   virtual void SaveDefinition();
   virtual void Unload();
-  virtual void Draw(Windows::Foundation::IInspectable const &deviceContext, Windows::Foundation::Size size);
+  virtual void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size size);
   virtual void CreateResources() {}
   virtual RNSVG::IRenderable HitTest(Windows::Foundation::Point const &point);
 
@@ -68,7 +70,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Windows::UI::Xaml::FrameworkElement m_parent{nullptr};
-  Windows::Foundation::IInspectable m_geometry{nullptr};
+  RNSVG::D2DGeometry m_geometry;
   bool m_recreateResources{true};
   bool m_isResponsible{false};
   

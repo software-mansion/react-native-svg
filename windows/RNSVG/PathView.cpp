@@ -42,8 +42,7 @@ void PathView::CreateGeometry() {
   auto const &root{SvgRoot()};
 
   com_ptr<ID2D1SvgDocument> doc;
-  com_ptr<ID2D1DeviceContext5> deviceContext;
-  copy_to_abi(root.DeviceContext(), *deviceContext.put_void());
+  com_ptr<ID2D1DeviceContext5> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get().as<ID2D1DeviceContext5>()};
 
   check_hresult(deviceContext->CreateSvgDocument(
       nullptr,
@@ -64,10 +63,7 @@ void PathView::CreateGeometry() {
   com_ptr<ID2D1PathGeometry1> geometry;
   check_hresult(path->CreatePathGeometry(D2DHelpers::GetFillRule(FillRule()), geometry.put()));
 
-  IInspectable asInspectable;
-  copy_from_abi(asInspectable, geometry.get());
-
-  Geometry(asInspectable);
+  Geometry(make<RNSVG::implementation::D2DGeometry>(geometry.as<ID2D1Geometry>()));
 }
 
 void PathView::ParsePath() {

@@ -78,13 +78,12 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void ImageView::Draw(IInspectable const &context, Size size) {
+void ImageView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
   if (!m_wicbitmap) {
     return;
   }
 
-  com_ptr<ID2D1DeviceContext1> deviceContext;
-  copy_to_abi(context, *deviceContext.put_void());
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
   uint32_t imgWidth, imgHeight = 0;
 
@@ -114,8 +113,10 @@ void ImageView::Draw(IInspectable const &context, Size size) {
     height = m_source.height * m_source.scale;
   }
 
-  com_ptr<ID2D1Geometry> clipPathGeometry;
-  copy_to_abi(ClipPathGeometry(), *clipPathGeometry.put_void());
+  com_ptr<ID2D1Geometry> clipPathGeometry{nullptr};
+  if (ClipPathGeometry()) {
+    clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry())->Get();
+  }
 
   D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
 
