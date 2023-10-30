@@ -1,43 +1,37 @@
-export function showErrorFunctionCSS(name: string): never {
+export function showErrorCSS(name: string, type: string): never {
   throw Error(
-    `[react-native-svg] You are trying to import a function: \`${name}\` that has been moved to \`css\` package. Change your import from \`react-native-svg\` to \`react-native-svg/css\`.`
-  );
-}
-
-export function showErrorComponentCSS(name: string): never {
-  throw Error(
-    `[react-native-svg] You are trying to import a component: \`${name}\` that has been moved to \`css\` package. Change your import from \`react-native-svg\` to \`react-native-svg/css\`.`
+    `[react-native-svg] You are trying to import a ${type}: \`${name}\` that has been moved to \`css\` package. Change your import from \`react-native-svg\` to \`react-native-svg/css\`.`
   );
 }
 
 export function SvgCss(): never {
-  showErrorComponentCSS('SvgCss');
+  showErrorCSS('SvgCss', 'component');
 }
 
 export function SvgCssUri(): never {
-  showErrorComponentCSS('SvgCssUri');
+  showErrorCSS('SvgCssUri', 'component');
 }
 
 export function SvgWithCss(): never {
-  showErrorComponentCSS('SvgWithCss');
+  showErrorCSS('SvgWithCss', 'component');
 }
 
 export function SvgWithCssUri(): never {
-  showErrorComponentCSS('SvgWithCssUri');
+  showErrorCSS('SvgWithCssUri', 'component');
 }
 
 export function inlineStyles(): never {
-  showErrorFunctionCSS('inlineStyles');
+  showErrorCSS('inlineStyles', 'function');
 }
 
 export function LocalSvg(): never {
-  showErrorComponentCSS('LocalSvg');
+  showErrorCSS('LocalSvg', 'component');
 }
 
 export function WithLocalSvg(): never {
-  showErrorComponentCSS('WithLocalSvg');
+  showErrorCSS('WithLocalSvg', 'component');
 }
 
 export function loadLocalRawResource(): never {
-  showErrorFunctionCSS('loadLocalRawResource');
+  showErrorCSS('loadLocalRawResource', 'function');
 }
