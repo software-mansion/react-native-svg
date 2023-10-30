@@ -18,6 +18,7 @@
     "common",
     "lib",
     "src",
+    "css",
     "RNSVG.podspec",
     "!android/build",
     "windows",

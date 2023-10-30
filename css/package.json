@@ -1,0 +1,6 @@
+{
+    "main": "../lib/commonjs/css/index",
+    "module": "../lib/module/css/index",
+    "react-native": "../src/css/index",
+    "types": "../lib/typescript/css/index"
+  }

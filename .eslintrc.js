@@ -12,6 +12,10 @@ module.exports = {
     'react-native/react-native': true,
   },
   settings: {
+    'import/core-modules': [
+      'react-native-svg',
+      'react-native-svg/css',
+    ],
     'import/resolver': {
       'babel-module': {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
