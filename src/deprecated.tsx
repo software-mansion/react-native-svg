@@ -1,6 +1,6 @@
 export function showErrorCSS(name: string, type: string): never {
   throw Error(
-    `[react-native-svg] You are trying to import a ${type}: \`${name}\` that has been moved to \`css\` package. Change your import from \`react-native-svg\` to \`react-native-svg/css\`.`
+    `[react-native-svg] You are trying to import a ${type} \`${name}\` that has been moved to a sub-package. Change your import from \`react-native-svg\` to \`react-native-svg/css\`.`
   );
 }
 
