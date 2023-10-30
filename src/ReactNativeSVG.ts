@@ -44,6 +44,7 @@ import {
   XmlState,
   AstProps,
 } from './xml';
+
 import {
   RNSVGCircle,
   RNSVGClipPath,
@@ -68,6 +69,17 @@ import {
   RNSVGTSpan,
   RNSVGUse,
 } from './fabric';
+
+export {
+  SvgCss,
+  SvgCssUri,
+  SvgWithCss,
+  SvgWithCssUri,
+  inlineStyles,
+  LocalSvg,
+  WithLocalSvg,
+  loadLocalRawResource,
+} from './deprecated';
 
 export type { RectProps } from './elements/Rect';
 export type { CircleProps } from './elements/Circle';
