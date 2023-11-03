@@ -29,11 +29,10 @@ void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
     } else if (propertyName == "patternContentUnits") {
       m_patternContentUnits = Utils::JSValueAsBrushUnits(propertyValue, "userSpaceOnUse");
     } else if (propertyName == "patternTransform") {
-      m_transformSet = true;
-      m_transform = Utils::JSValueAsTransform(propertyValue);
+      m_transform = Utils::JSValueAsD2DTransform(propertyValue);
 
       if (propertyValue.IsNull()) {
-        m_transformSet = false;
+        m_transform = D2D1::Matrix3x2F::Identity();
       }
     } else if (propertyName == "vbWidth") {
       m_vbWidth = Utils::JSValueAsFloat(propertyValue);
@@ -90,11 +89,7 @@ void PatternView::CreateBrush(D2D1_RECT_F rect) {
     com_ptr<ID2D1ImageBrush> imageBrush;
     check_hresult(deviceContext->CreateImageBrush(cmdList.get(), brushProperties, imageBrush.put()));
 
-    auto transform{D2D1::Matrix3x2F::Translation({rect.left, rect.top})};
-    if (m_transformSet) {
-      transform = transform * D2DHelpers::AsD2DTransform(m_transform);
-    }
-
+    auto transform{D2D1::Matrix3x2F::Translation({rect.left, rect.top}) * m_transform};
     imageBrush->SetTransform(transform);
 
     m_brush = make<RNSVG::implementation::D2DBrush>(imageBrush.as<ID2D1Brush>());

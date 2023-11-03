@@ -230,7 +230,7 @@ struct Utils {
     }
   }
 
-  static D2D1_MATRIX_3X2_F JSValueAsD2DTransform(JSValue const& value, D2D1_MATRIX_3X2_F defaultValue = {}) {
+  static D2D1::Matrix3x2F JSValueAsD2DTransform(JSValue const& value, D2D1::Matrix3x2F defaultValue = {}) {
     if (value.IsNull()) {
       return defaultValue;
     } else {

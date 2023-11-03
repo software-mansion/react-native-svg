@@ -20,8 +20,6 @@ struct RadialGradientView : RadialGradientViewT<RadialGradientView, RNSVG::imple
   RNSVG::SVGLength m_cy{};
   std::vector<D2D1_GRADIENT_STOP> m_stops{};
   std::string m_gradientUnits{"objectBoundingBox"};
-  bool m_transformSet{false};
-  D2D1_MATRIX_3X2_F m_transform;
 
   void CreateBrush();
   void UpdateBounds();

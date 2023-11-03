@@ -18,8 +18,6 @@ struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView>
   RNSVG::SVGLength m_height{};
   std::string m_patternUnits{"objectBoundingBox"};
   std::string m_patternContentUnits{"userSpaceOnUse"};
-  bool m_transformSet{false};
-  Numerics::float3x2 m_transform{Numerics::make_float3x2_scale(1)};
 
   // ViewBox
   float m_minX{0.0f};

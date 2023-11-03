@@ -32,11 +32,10 @@ void RadialGradientView::UpdateProperties(IJSValueReader const &reader, bool for
     } else if (propertyName == "gradientUnits") {
       m_gradientUnits = Utils::JSValueAsBrushUnits(propertyValue);
     } else if (propertyName == "gradientTransform") {
-      m_transformSet = true;
       m_transform = Utils::JSValueAsD2DTransform(propertyValue);
 
       if (propertyValue.IsNull()) {
-        m_transformSet = false;
+       m_transform = D2D1::Matrix3x2F::Identity();
       }
     }
   }
@@ -66,9 +65,7 @@ void RadialGradientView::CreateBrush() {
 
   SetPoints(radialBrush.get(), {0, 0, static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())});
 
-  if (m_transformSet) {
-    radialBrush->SetTransform(m_transform);
-  }
+  radialBrush->SetTransform(m_transform);
 
   m_brush = make<RNSVG::implementation::D2DBrush>(radialBrush.as<ID2D1Brush>());
 }

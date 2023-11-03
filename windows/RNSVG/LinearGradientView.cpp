@@ -28,11 +28,10 @@ void LinearGradientView::UpdateProperties(IJSValueReader const &reader, bool for
     } else if (propertyName == "gradientUnits") {
       m_gradientUnits = Utils::JSValueAsBrushUnits(propertyValue);
     } else if (propertyName == "gradientTransform") {
-      m_transformSet = true;
       m_transform = Utils::JSValueAsD2DTransform(propertyValue);
 
       if (propertyValue.IsNull()) {
-        m_transformSet = false;
+        m_transform = D2D1::Matrix3x2F::Identity();
       }
     }
   }
@@ -66,9 +65,7 @@ void LinearGradientView::CreateBrush() {
 
   SetPoints(linearBrush.get(), {0, 0, size.Width, size.Height});
 
-  if (m_transformSet) {
-    linearBrush->SetTransform(m_transform);
-  }
+  linearBrush->SetTransform(m_transform);
 
   m_brush = make<RNSVG::implementation::D2DBrush>(linearBrush.as<ID2D1Brush>());
 }
