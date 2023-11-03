@@ -217,7 +217,7 @@ void RenderableView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
 
   geometry = geometryGroup;
 
-  com_ptr<ID2D1Geometry> clipPathGeometry{nullptr};
+  com_ptr<ID2D1Geometry> clipPathGeometry;
   if (ClipPathGeometry()) {
     clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry())->Get();
   }

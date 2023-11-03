@@ -113,7 +113,7 @@ void ImageView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
     height = m_source.height * m_source.scale;
   }
 
-  com_ptr<ID2D1Geometry> clipPathGeometry{nullptr};
+  com_ptr<ID2D1Geometry> clipPathGeometry;
   if (ClipPathGeometry()) {
     clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry())->Get();
   }
@@ -141,7 +141,7 @@ void ImageView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
           Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
       transformEffect->SetInputEffect(0, bitmapEffects.get());
 
-      com_ptr<ID2D1Effect> cropEffect{nullptr};
+      com_ptr<ID2D1Effect> cropEffect;
       deviceContext->CreateEffect(CLSID_D2D1Crop, cropEffect.put());
       cropEffect->SetValue(D2D1_CROP_PROP_RECT, D2D1::RectF(x, y, width, height));
       cropEffect->SetInputEffect(0, transformEffect.get());
@@ -296,7 +296,7 @@ com_ptr<IWICBitmapSource> ImageView::wicBitmapSourceFromStream(InMemoryRandomAcc
     return nullptr;
   }
 
-  com_ptr<IWICImagingFactory> imagingFactory{nullptr};
+  com_ptr<IWICImagingFactory> imagingFactory;
   check_hresult(CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(imagingFactory.put())));
 
   com_ptr<IStream> istream;
@@ -320,7 +320,7 @@ void ImageView::generateBitmap(InMemoryRandomAccessStream const &results) {
     return;
   }
 
-  com_ptr<IWICImagingFactory> imagingFactory{nullptr};
+  com_ptr<IWICImagingFactory> imagingFactory;
   check_hresult(
       CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(imagingFactory.put())));
   com_ptr<IWICFormatConverter> converter;

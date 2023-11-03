@@ -152,7 +152,7 @@ void GroupView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
     deviceContext->SetTransform(D2DHelpers::AsD2DTransform(SvgTransform()) * transform);
   }
 
-  com_ptr<ID2D1Geometry> clipPathGeometry{nullptr};
+  com_ptr<ID2D1Geometry> clipPathGeometry;
 
   if (ClipPathGeometry()) {
     clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry())->Get();

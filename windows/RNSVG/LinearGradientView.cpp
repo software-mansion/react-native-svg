@@ -81,7 +81,7 @@ void LinearGradientView::SetPoints(ID2D1LinearGradientBrush * brush, D2D1_RECT_F
   float width{bounds.right - bounds.left};
   float height{bounds.bottom - bounds.top};
 
-  float x1{Utils::GetAbsoluteLength(m_x1, width) + bounds.left}; // just right?
+  float x1{Utils::GetAbsoluteLength(m_x1, width) + bounds.left};
   float y1{Utils::GetAbsoluteLength(m_y1, height) + bounds.top};
   float x2{Utils::GetAbsoluteLength(m_x2, width) + bounds.left};
   float y2{Utils::GetAbsoluteLength(m_y2, height) + bounds.top};

@@ -58,7 +58,7 @@ void RadialGradientView::CreateBrush() {
   winrt::com_ptr<ID2D1GradientStopCollection> stopCollection;
   winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], static_cast<uint32_t>(m_stops.size()), stopCollection.put()));
 
-  D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES brushProperties;
+  D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES brushProperties{};
   winrt::com_ptr<ID2D1RadialGradientBrush> radialBrush;
   winrt::check_hresult(
       deviceContext->CreateRadialGradientBrush(brushProperties, stopCollection.get(), radialBrush.put()));
