@@ -67,6 +67,26 @@ namespace RNSVG {
     Pica,
   };
 
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractStroke.ts#L6-L10
+  enum LineCap {
+    Butt,
+    Round,
+    Square,
+  };
+
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractStroke.ts#L12-L16
+  enum LineJoin {
+    Miter,
+    Round,
+    Bevel,
+  };
+
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractFill.ts#L6-L9
+  enum FillRule {
+    EvenOdd,
+    NonZero,
+  };
+
   [default_interface]
   runtimeclass SVGLength {
     SVGLength();

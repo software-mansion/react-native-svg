@@ -51,9 +51,9 @@ namespace RNSVG
     Single StrokeMiterLimit{ get; };
     Single StrokeDashOffset{ get; };
     Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
-    Int32 StrokeLineCap{ get; };
-    Int32 StrokeLineJoin{ get; };
-    Int32 FillRule{ get; };
+    LineCap StrokeLineCap{ get; };
+    LineJoin StrokeLineJoin{ get; };
+    FillRule FillRule{ get; };
     D2DGeometry ClipPathGeometry{ get; };
   };
 

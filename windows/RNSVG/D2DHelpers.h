@@ -42,37 +42,37 @@ struct D2DHelpers {
     }
 
     deviceContext->PushLayer(layerParams, opacityLayer.get());
-  }
+   }
 
-   static D2D1_CAP_STYLE GetLineCap(int32_t const lineCap) {
+   static D2D1_CAP_STYLE GetLineCap(RNSVG::LineCap const lineCap) {
      switch (lineCap) {
-       case 2:
+       case RNSVG::LineCap::Square:
          return D2D1_CAP_STYLE_SQUARE;
-       case 1:
+       case RNSVG::LineCap::Round:
          return D2D1_CAP_STYLE_ROUND;
-       case 0:
+       case RNSVG::LineCap::Butt:
        default:
          return D2D1_CAP_STYLE_FLAT;
      }
    }
 
-   static D2D1_LINE_JOIN GetLineJoin(int32_t const lineJoin) {
+   static D2D1_LINE_JOIN GetLineJoin(RNSVG::LineJoin const &lineJoin) {
      switch (lineJoin) {
-       case 2:
+       case RNSVG::LineJoin::Bevel:
          return D2D1_LINE_JOIN_BEVEL;
-       case 1:
+       case RNSVG::LineJoin::Round:
          return D2D1_LINE_JOIN_ROUND;
-       case 0:
+       case RNSVG::LineJoin::Miter:
        default:
          return D2D1_LINE_JOIN_MITER;
      }
    }
 
-   static D2D1_FILL_MODE GetFillRule(int32_t const fillRule) {
+   static D2D1_FILL_MODE GetFillRule(RNSVG::FillRule const &fillRule) {
      switch (fillRule) {
-       case 0:
+       case RNSVG::FillRule::EvenOdd:
          return D2D1_FILL_MODE_ALTERNATE;
-       case 1:
+       case RNSVG::FillRule::NonZero:
        default:
          return D2D1_FILL_MODE_WINDING;
      }
@@ -96,6 +96,10 @@ struct D2DHelpers {
 
    static Rect FromD2DRect(D2D1_RECT_F const rect) {
      return {rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top};
+   }
+
+   static D2D1_RECT_F AsD2DRect(Rect const& rect) {
+     return {rect.X, rect.Y, rect.Width + rect.X, rect.Height + rect.Y};
    }
 
    static Numerics::float3x2 FromD2DTransform(D2D1_MATRIX_3X2_F const transform) {

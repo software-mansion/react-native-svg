@@ -95,7 +95,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
         if (propertyValue.IsNull()) {
           m_strokeLineCap = parent.StrokeLineCap();
         } else {
-          m_strokeLineCap = propertyValue.AsInt32();
+          m_strokeLineCap = static_cast<RNSVG::LineCap>(propertyValue.AsInt32());
         }
       }
     } else if (propertyName == "strokeLinejoin") {
@@ -104,7 +104,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
         if (propertyValue.IsNull()) {
           m_strokeLineJoin = parent.StrokeLineJoin();
         } else {
-          m_strokeLineJoin = propertyValue.AsInt32();
+          m_strokeLineJoin = static_cast<RNSVG::LineJoin>(propertyValue.AsInt32());
         }
       }
     } else if (propertyName == "fillRule") {
@@ -113,7 +113,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
         if (propertyValue.IsNull()) {
           m_fillRule = parent.FillRule();
         } else {
-          m_fillRule = propertyValue.AsInt32();
+          m_fillRule = static_cast<RNSVG::FillRule>(propertyValue.AsInt32());
         }
       }
     } else if (propertyName == "strokeDashoffset") {

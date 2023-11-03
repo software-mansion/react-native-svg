@@ -5,7 +5,6 @@
 #include "JSValueXaml.h"
 #include "Utils.h"
 
-
 using namespace winrt;
 using namespace Microsoft::ReactNative;
 
