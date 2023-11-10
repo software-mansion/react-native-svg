@@ -135,18 +135,18 @@ struct D2DHelpers {
        return DWRITE_FONT_WEIGHT_NORMAL;
      } else if (weight == L"bold") {
        return DWRITE_FONT_WEIGHT_BOLD;
-     } else if (weight == L"bolder" || weight == L"lighter" || weight == L"auto") {
-       auto const &groupView{parent.try_as<RNSVG::GroupView>()};
-       DWRITE_FONT_WEIGHT parentWeight{
-           groupView ? D2DHelpers::FontWeightFrom(groupView.FontWeight(), groupView.SvgParent()) : DWRITE_FONT_WEIGHT_NORMAL};
+     }
 
-       if (weight == L"bolder") {
-         return D2DHelpers::Bolder(parentWeight);
-       } else if (weight == L"lighter") {
-         return D2DHelpers::Lighter(parentWeight);
-       } else if (weight == L"auto") {
-         return parentWeight;
-       }
+     auto const &groupView{parent.try_as<RNSVG::GroupView>()};
+     DWRITE_FONT_WEIGHT parentWeight{
+     groupView ? D2DHelpers::FontWeightFrom(groupView.FontWeight(), groupView.SvgParent()) : DWRITE_FONT_WEIGHT_NORMAL};
+
+     if (weight == L"bolder") {
+       return D2DHelpers::Bolder(parentWeight);
+     } else if (weight == L"lighter") {
+       return D2DHelpers::Lighter(parentWeight);
+     } else if (weight == L"auto") {
+       return parentWeight;
      }
 
      return D2DHelpers::GetClosestFontWeight(std::stof(weight.c_str(), nullptr));

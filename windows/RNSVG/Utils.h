@@ -274,38 +274,26 @@ struct Utils {
 
     if (root && brushId != L"") {
       if (brushId == L"currentColor") {
-        try {
-          com_ptr<ID2D1SolidColorBrush> scb;
-          deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(root.CurrentColor()), scb.put());
-          brush = scb.as<ID2D1Brush>();
-        } catch (hresult_error const &e) {
-          hresult hr = e.code();
-        }
+        com_ptr<ID2D1SolidColorBrush> scb;
+        deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(root.CurrentColor()), scb.put());
+        brush = scb.as<ID2D1Brush>();
       } else if (auto const &brushView{root.Brushes().TryLookup(brushId)}) {
-        try {
-          brushView.CreateBrush();
+        brushView.CreateBrush();
 
-          if (geometry) {
-            D2D1_RECT_F bounds;
-            geometry->GetBounds(nullptr, &bounds);
-            brushView.SetBounds(D2DHelpers::FromD2DRect(bounds));
-          }
-
-          brush = get_self<RNSVG::implementation::D2DBrush>(brushView.Brush())->Get();
-        } catch (hresult_error const &e) {
-          hresult hr = e.code();
+        if (geometry) {
+          D2D1_RECT_F bounds;
+          geometry->GetBounds(nullptr, &bounds);
+          brushView.SetBounds(D2DHelpers::FromD2DRect(bounds));
         }
+
+        brush = get_self<RNSVG::implementation::D2DBrush>(brushView.Brush())->Get();
       }
     }
 
     if (!brush) {
-      try {
       com_ptr<ID2D1SolidColorBrush> scb;
       deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(color), scb.put());
       brush = scb.as<ID2D1Brush>();
-      } catch (hresult_error const &e) {
-        hresult hr = e.code();
-      }
     }
 
     return brush;
