@@ -14,7 +14,7 @@ struct TextView : TextViewT<TextView, RNSVG::implementation::GroupView> {
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> Rotate() { return m_rotate; }
 
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  virtual void DrawGroup(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size size);
+  virtual void DrawGroup(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 
  private:
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_x{winrt::single_threaded_vector<RNSVG::SVGLength>()};

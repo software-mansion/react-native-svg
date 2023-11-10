@@ -135,21 +135,21 @@ void SvgView::MergeProperties(RNSVG::RenderableView const &other) {
   }
 }
 
-Size SvgView::MeasureOverride(Size availableSize) {
+Size SvgView::MeasureOverride(Size const &availableSize) {
   for (auto const &child : Children()) {
     child.Measure(availableSize);
   }
   return availableSize;
 }
 
-Size SvgView::ArrangeOverride(Size finalSize) {
+Size SvgView::ArrangeOverride(Size const &finalSize) {
   for (auto const &child : Children()) {
     child.Arrange({0, 0, finalSize.Width, finalSize.Height});
   }
   return finalSize;
 }
 
-void SvgView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
+void SvgView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
   D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};

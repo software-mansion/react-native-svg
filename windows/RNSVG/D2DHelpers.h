@@ -44,7 +44,7 @@ struct D2DHelpers {
     deviceContext->PushLayer(layerParams, opacityLayer.get());
    }
 
-   static D2D1_CAP_STYLE GetLineCap(RNSVG::LineCap const lineCap) {
+   static D2D1_CAP_STYLE GetLineCap(RNSVG::LineCap const &lineCap) {
      switch (lineCap) {
        case RNSVG::LineCap::Square:
          return D2D1_CAP_STYLE_SQUARE;
@@ -78,7 +78,7 @@ struct D2DHelpers {
      }
    }
 
-   static D2D1::ColorF AsD2DColor(ui::Color const& color) {
+   static D2D1::ColorF AsD2DColor(ui::Color const &color) {
      return {
          color.R / 255.0f,
          color.G / 255.0f,
@@ -94,12 +94,12 @@ struct D2DHelpers {
          static_cast<uint8_t>(color.b));
    }
 
-   static Rect FromD2DRect(D2D1_RECT_F const rect) {
-     return {rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top};
+   static D2D1_RECT_F AsD2DRect(Rect const &rect) {
+     return {rect.X, rect.Y, rect.Width + rect.X, rect.Height + rect.Y};
    }
 
-   static D2D1_RECT_F AsD2DRect(Rect const& rect) {
-     return {rect.X, rect.Y, rect.Width + rect.X, rect.Height + rect.Y};
+   static Rect FromD2DRect(D2D1_RECT_F const rect) {
+     return {rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top};
    }
 
    static Size SizeFromD2DRect(D2D1_RECT_F const rect) {
@@ -119,7 +119,7 @@ struct D2DHelpers {
          transform.m11, transform.m12, transform.m21, transform.m22, transform._31, transform._32);
    }
 
-   static D2D1::Matrix3x2F AsD2DTransform(Numerics::float3x2 const transform) {
+   static D2D1::Matrix3x2F AsD2DTransform(Numerics::float3x2 const &transform) {
      return D2D1::Matrix3x2F(transform.m11, transform.m12, transform.m21, transform.m22, transform.m31, transform.m32);
    }
 

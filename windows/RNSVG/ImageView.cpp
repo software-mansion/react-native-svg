@@ -78,7 +78,7 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void ImageView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
+void ImageView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   if (!m_wicbitmap) {
     return;
   }

@@ -20,7 +20,7 @@ struct SvgView : SvgViewT<SvgView> {
   RNSVG::D2DDeviceContext DeviceContext() { return m_deviceContext; }
 
   RNSVG::D2DGeometry Geometry() { return m_group ? m_group.Geometry() : nullptr; }
-  void Geometry(RNSVG::D2DGeometry /*value*/) {}
+  void Geometry(RNSVG::D2DGeometry const & /*value*/) {}
 
   Windows::UI::Color CurrentColor() { return m_currentColor; }
 
@@ -39,14 +39,14 @@ struct SvgView : SvgViewT<SvgView> {
   void MergeProperties(RNSVG::RenderableView const &other);
   void SaveDefinition();
   void Unload();
-  void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size size);
+  void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
   void CreateResources();
   void CreateGeometry();
   RNSVG::IRenderable HitTest(Windows::Foundation::Point const & /*point*/) { return nullptr; }
 
   // Overrides
-  Windows::Foundation::Size MeasureOverride(Windows::Foundation::Size availableSize);
-  Windows::Foundation::Size ArrangeOverride(Windows::Foundation::Size finalSize);
+  Windows::Foundation::Size MeasureOverride(Windows::Foundation::Size const &availableSize);
+  Windows::Foundation::Size ArrangeOverride(Windows::Foundation::Size const &finalSize);
 
   void Panel_Loaded(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &args);
   void Panel_Unloaded(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &args);

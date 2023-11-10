@@ -17,7 +17,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   void SvgParent(Windows::UI::Xaml::FrameworkElement const &value) { m_parent = value; }
 
   RNSVG::D2DGeometry Geometry() { return m_geometry; }
-  void Geometry(RNSVG::D2DGeometry value) { m_geometry = value; }
+  void Geometry(RNSVG::D2DGeometry const &value) { m_geometry = value; }
 
   hstring Id() { return m_id; }
   Numerics::float3x2 SvgTransform() { return m_transformMatrix; }
@@ -45,7 +45,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   virtual void MergeProperties(RNSVG::RenderableView const &other);
   virtual void SaveDefinition();
   virtual void Unload();
-  virtual void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size size);
+  virtual void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
   virtual void CreateResources() {}
   virtual RNSVG::IRenderable HitTest(Windows::Foundation::Point const &point);
 
@@ -93,7 +93,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   RNSVG::LineJoin m_strokeLineJoin{RNSVG::LineJoin::Miter};
   RNSVG::FillRule m_fillRule{RNSVG::FillRule::NonZero};
 
-  void SetColor(const Microsoft::ReactNative::JSValueObject &propValue, Windows::UI::Color fallbackColor, std::string propName);
+  void SetColor(const Microsoft::ReactNative::JSValueObject &propValue, Windows::UI::Color const &fallbackColor, std::string propName);
 };
 } // namespace winrt::RNSVG::implementation
 

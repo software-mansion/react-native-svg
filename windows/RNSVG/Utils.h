@@ -79,7 +79,7 @@ struct Utils {
     return Numerics::make_float3x2_rotation(radians);
   }
 
-  static Numerics::float3x2 GetViewBoxTransform(Rect vbRect, Rect elRect, std::string align, RNSVG::MeetOrSlice meetOrSlice) {
+  static Numerics::float3x2 GetViewBoxTransform(Rect const &vbRect, Rect const &elRect, std::string align, RNSVG::MeetOrSlice const &meetOrSlice) {
     // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform
 
     // Let vb-x, vb-y, vb-width, vb-height be the min-x, min-y, width and height values of the viewBox attribute
@@ -144,7 +144,7 @@ struct Utils {
     return scale * translate;
   }
 
-  static D2D1_MATRIX_3X2_F GetViewBoxTransformD2D(Rect vbRect, Rect elRect, std::string align, RNSVG::MeetOrSlice meetOrSlice) {
+  static D2D1_MATRIX_3X2_F GetViewBoxTransformD2D(Rect const &vbRect, Rect const &elRect, std::string align, RNSVG::MeetOrSlice const &meetOrSlice) {
     return D2DHelpers::AsD2DTransform(GetViewBoxTransform(vbRect, elRect, align, meetOrSlice));
   }
 
@@ -194,7 +194,7 @@ struct Utils {
     }
   }
 
-  static ui::Color JSValueAsColor(JSValue const &value, ui::Color defaultValue = Colors::Transparent()) {
+  static ui::Color JSValueAsColor(JSValue const &value, ui::Color const &defaultValue = Colors::Transparent()) {
     if (value.IsNull()) {
       return defaultValue;
     } else if (auto const &brush{value.To<xaml::Media::Brush>()}) {
@@ -214,7 +214,7 @@ struct Utils {
     }
   }
 
-  static Numerics::float3x2 JSValueAsTransform(JSValue const &value, Numerics::float3x2 defaultValue = {}) {
+  static Numerics::float3x2 JSValueAsTransform(JSValue const &value, Numerics::float3x2 const &defaultValue = {}) {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -230,7 +230,7 @@ struct Utils {
     }
   }
 
-  static D2D1::Matrix3x2F JSValueAsD2DTransform(JSValue const& value, D2D1::Matrix3x2F defaultValue = {}) {
+  static D2D1::Matrix3x2F JSValueAsD2DTransform(JSValue const& value, D2D1::Matrix3x2F const defaultValue = {}) {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -266,7 +266,7 @@ struct Utils {
 
   static com_ptr<ID2D1Brush> GetCanvasBrush(
       hstring const &brushId,
-      ui::Color color,
+      ui::Color const &color,
       RNSVG::SvgView const &root,
       com_ptr<ID2D1Geometry> const &geometry) {
     com_ptr<ID2D1Brush> brush;
@@ -311,14 +311,14 @@ struct Utils {
     return brush;
   }
 
-  static D2D1_VECTOR_2F GetScale(D2D1_MATRIX_3X2_F matrix) {
+  static D2D1_VECTOR_2F GetScale(D2D1_MATRIX_3X2_F const matrix) {
     auto scaleX = std::sqrt(matrix.m11 * matrix.m11 + matrix.m12 * matrix.m12);
     auto scaleY = std::sqrt(matrix.m21 * matrix.m21 + matrix.m22 * matrix.m22);
 
     return {scaleX, scaleY};
   }
 
-  static D2D1_VECTOR_2F GetScale(Numerics::float3x2 matrix) {
+  static D2D1_VECTOR_2F GetScale(Numerics::float3x2 const &matrix) {
     return GetScale(D2DHelpers::AsD2DTransform(matrix));
   }
 };

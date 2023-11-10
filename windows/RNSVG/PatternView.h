@@ -9,7 +9,7 @@ struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView>
 
   // RenderableView
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size /*size*/){};
+  void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size const & /*size*/){};
 
  private:
   RNSVG::SVGLength m_x{};

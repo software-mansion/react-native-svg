@@ -8,7 +8,7 @@ struct UseView : UseViewT<UseView, RNSVG::implementation::RenderableView> {
   UseView() = default;
 
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size size);
+  void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 
  private:
   hstring m_href{L""};

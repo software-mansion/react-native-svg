@@ -8,7 +8,7 @@ struct ClipPathView : ClipPathViewT<ClipPathView, RNSVG::implementation::GroupVi
   ClipPathView() = default;
 
   // RenderableView
-  void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size /*size*/){};
+  void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size const & /*size*/){};
 };
 } // namespace winrt::RNSVG::implementation
 

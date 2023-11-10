@@ -31,7 +31,7 @@ void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void UseView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
+void UseView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   if (auto const &view{GetRenderableTemplate()}) {
     com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 

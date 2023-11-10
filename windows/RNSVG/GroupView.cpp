@@ -146,7 +146,7 @@ void GroupView::MergeProperties(RNSVG::RenderableView const &other) {
   }
 }
 
-void GroupView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
+void GroupView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
   D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
@@ -174,7 +174,7 @@ void GroupView::Draw(RNSVG::D2DDeviceContext const &context, Size size) {
   deviceContext->SetTransform(transform);
 }
 
-void GroupView::DrawGroup(RNSVG::D2DDeviceContext const &context, Size size) {
+void GroupView::DrawGroup(RNSVG::D2DDeviceContext const &context, Size const &size) {
   for (auto const &child : Children()) {
     child.Draw(context, size);
   }
