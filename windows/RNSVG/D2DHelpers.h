@@ -102,6 +102,18 @@ struct D2DHelpers {
      return {rect.X, rect.Y, rect.Width + rect.X, rect.Height + rect.Y};
    }
 
+   static Size SizeFromD2DRect(D2D1_RECT_F const rect) {
+     return {rect.right - rect.left, rect.bottom - rect.top};
+   }
+
+   static float WidthFromD2DRect(D2D1_RECT_F const rect) {
+     return rect.right - rect.left;
+   }
+
+   static float HeightFromD2DRect(D2D1_RECT_F const rect) {
+     return rect.bottom - rect.top;
+   }
+
    static Numerics::float3x2 FromD2DTransform(D2D1_MATRIX_3X2_F const transform) {
      return Numerics::float3x2(
          transform.m11, transform.m12, transform.m21, transform.m22, transform._31, transform._32);

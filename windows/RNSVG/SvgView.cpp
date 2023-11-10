@@ -245,6 +245,7 @@ void SvgView::Invalidate() {
 
   com_ptr<IDXGISurface> dxgiSurface;
 
+  // RECT is a LTRB rect, but since we're using 0 for LT, we are using width/height for RB.
   RECT updateRect{0, 0, static_cast<long>(size.Width), static_cast<long>(size.Height)};
   POINT offset{0, 0};
   check_hresult(sisNativeWithD2D->BeginDraw(updateRect, __uuidof(IDXGISurface), dxgiSurface.put_void(), &offset));

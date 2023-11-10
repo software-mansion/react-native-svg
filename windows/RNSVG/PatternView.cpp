@@ -97,8 +97,8 @@ void PatternView::CreateBrush(D2D1_RECT_F rect) {
 }
 
 D2D1_RECT_F PatternView::GetAdjustedRect(D2D1_RECT_F bounds) {
-  float width{bounds.right - bounds.left};
-  float height{bounds.bottom - bounds.top};
+  float width{D2DHelpers::WidthFromD2DRect(bounds)};
+  float height{D2DHelpers::HeightFromD2DRect(bounds)};
 
   float x{Utils::GetAbsoluteLength(m_x, width) + bounds.left};
   float y{Utils::GetAbsoluteLength(m_y, height) + bounds.top};
@@ -131,12 +131,7 @@ com_ptr<ID2D1CommandList> PatternView::GetCommandList(ID2D1Device* device, D2D1_
 
     auto viewboxTransform{Utils::GetViewBoxTransform(
         vbRect,
-        {
-            rect.left,
-            rect.top,
-            rect.right - rect.left,
-            rect.bottom - rect.top
-        },
+        D2DHelpers::FromD2DRect(rect),
         m_align,
         m_meetOrSlice)};
 
@@ -145,11 +140,9 @@ com_ptr<ID2D1CommandList> PatternView::GetCommandList(ID2D1Device* device, D2D1_
 
   deviceContext->SetTransform(transform);
 
-  Size size{rect.right - rect.left, rect.bottom - rect.top};
-
   auto context = make<D2DDeviceContext>(deviceContext);
   for (auto const &child : Children()) {
-    child.Draw(context, size);
+    child.Draw(context, D2DHelpers::SizeFromD2DRect(rect));
   }
 
   cmdList->Close();

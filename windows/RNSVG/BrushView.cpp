@@ -2,6 +2,8 @@
 #include "BrushView.h"
 #include "BrushView.g.cpp"
 
+#include "D2DHelpers.h"
+
 namespace winrt::RNSVG::implementation {
 void BrushView::SaveDefinition() {
   if (auto const &root{SvgRoot()}) {
@@ -11,7 +13,7 @@ void BrushView::SaveDefinition() {
 }
 
 void BrushView::SetBounds(Rect const &rect) {
-  m_bounds = {rect.X, rect.Y, rect.Width + rect.X, rect.Height + rect.Y};
+  m_bounds = D2DHelpers::AsD2DRect(rect);
   UpdateBounds();
 }
 
