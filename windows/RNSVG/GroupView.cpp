@@ -109,6 +109,9 @@ void GroupView::CreateGeometry() {
 
     if (child.Geometry()) {
       com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(child.Geometry())->Get()};
+
+      // This takes advantage of the fact that geometry elements are alive for
+      // the duration of this method and so are their D2D resources.
       geometries.emplace_back(geometry.get());
     }
   }

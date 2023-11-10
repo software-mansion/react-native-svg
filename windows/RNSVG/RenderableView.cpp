@@ -351,7 +351,6 @@ RNSVG::D2DGeometry RenderableView::ClipPathGeometry() {
 
 void RenderableView::Unload() {
   if (m_geometry) {
-    //m_geometry.Close();
     m_geometry = nullptr;
   }
 
@@ -364,7 +363,7 @@ void RenderableView::Unload() {
 
 RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
   if (m_geometry) {
-    BOOL strokeContainsPoint{false};
+    BOOL strokeContainsPoint = FALSE;
     D2D1_POINT_2F pointD2D{point.X, point.Y};
 
     com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(m_geometry)->Get()};
@@ -376,7 +375,7 @@ RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
       check_hresult(geometry->StrokeContainsPoint(pointD2D, strokeWidth, nullptr, nullptr, &strokeContainsPoint));
     }
 
-    BOOL fillContainsPoint{false};
+    BOOL fillContainsPoint = FALSE;
     check_hresult(geometry->FillContainsPoint(pointD2D, nullptr, &fillContainsPoint));
 
     if (fillContainsPoint || strokeContainsPoint) {
@@ -388,11 +387,13 @@ RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
 
 void RenderableView::SetColor(const JSValueObject &propValue, ui::Color fallbackColor, std::string propName) {
   switch (propValue["type"].AsInt64()) {
+    // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractBrush.ts#L29
     case 1: {
       auto const &brushId{to_hstring(Utils::JSValueAsString(propValue["brushRef"]))};
       propName == "fill" ? m_fillBrushId = brushId : m_strokeBrushId = brushId;
       break;
     }
+    // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractBrush.ts#L6-L8
     case 2: // currentColor
     case 3: // context-fill
     case 4: // context-stroke

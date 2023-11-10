@@ -118,7 +118,7 @@ com_ptr<ID2D1CommandList> PatternView::GetCommandList(ID2D1Device* device, D2D1_
   deviceContext->SetTarget(cmdList.get());
 
   deviceContext->BeginDraw();
-  deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Orange, 0.0f));
+  deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Black, 0.0f));
 
   auto transform{D2D1::Matrix3x2F::Identity()};
 
@@ -134,8 +134,8 @@ com_ptr<ID2D1CommandList> PatternView::GetCommandList(ID2D1Device* device, D2D1_
         {
             rect.left,
             rect.top,
-            rect.left + rect.right,
-            rect.top + rect.bottom
+            rect.right - rect.left,
+            rect.bottom - rect.top
         },
         m_align,
         m_meetOrSlice)};

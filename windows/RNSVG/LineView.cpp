@@ -48,7 +48,6 @@ void LineView::CreateGeometry() {
   com_ptr<ID2D1GeometrySink> sink;
   check_hresult(geometry->Open(sink.put()));
 
-  // hollow instead of filled??
   sink->BeginFigure({x1, y1}, D2D1_FIGURE_BEGIN_FILLED);
   sink->AddLine({x2, y2});
   sink->EndFigure(D2D1_FIGURE_END_OPEN);

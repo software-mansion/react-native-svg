@@ -262,7 +262,7 @@ void SvgView::Invalidate() {
   auto transform = Numerics::make_float3x2_translation({static_cast<float>(offset.x), static_cast<float>(offset.y)});
   deviceContext->SetTransform(D2DHelpers::AsD2DTransform(transform));
 
-  deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Orange, 0.0f));
+  deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Black, 0.0f));
 
   Draw(DeviceContext(), size);
 

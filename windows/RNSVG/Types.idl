@@ -23,6 +23,7 @@ namespace RNSVG {
     Unknown,
   };
 
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractViewBox.ts#L3-L10
   enum MeetOrSlice {
     Meet,
     Slice,
