@@ -65,7 +65,9 @@ void RadialGradientView::CreateBrush() {
 
   SetPoints(radialBrush.get(), {0, 0, static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())});
 
-  radialBrush->SetTransform(m_transform);
+  if (!m_transform.IsIdentity()) {
+    radialBrush->SetTransform(m_transform);
+  }
 
   m_brush = make<RNSVG::implementation::D2DBrush>(radialBrush.as<ID2D1Brush>());
 }
