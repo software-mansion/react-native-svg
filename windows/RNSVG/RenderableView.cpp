@@ -194,12 +194,11 @@ void RenderableView::Draw(RNSVG::D2DDeviceContext const &context, Size const &si
     CreateGeometry();
   }
 
-  com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(m_geometry)->Get()};
-
-  if (!geometry) {
+  if (!Geometry()) {
     return;
   }
 
+  com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(m_geometry)->Get()};
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
   D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};

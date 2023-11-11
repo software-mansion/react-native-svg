@@ -208,10 +208,11 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Point const &point) {
     }
     if (renderable && !renderable.IsResponsible()) {
       return *this;
-    } else if (!renderable){
+    } else if (!renderable) {
       if (!Geometry()) {
         CreateGeometry();
       }
+
       if (Geometry()) {
         com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(Geometry())->Get()};
 

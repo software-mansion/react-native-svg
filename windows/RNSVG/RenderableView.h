@@ -70,7 +70,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Windows::UI::Xaml::FrameworkElement m_parent{nullptr};
-  RNSVG::D2DGeometry m_geometry;
+  RNSVG::D2DGeometry m_geometry{nullptr};
   bool m_recreateResources{true};
   bool m_isResponsible{false};
   
