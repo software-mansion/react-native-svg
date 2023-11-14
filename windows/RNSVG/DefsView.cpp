@@ -3,8 +3,7 @@
 #include "DefsView.g.cpp"
 
 using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
 
 namespace winrt::RNSVG::implementation {
-void DefsView::Render(UI::Xaml::CanvasControl const &/*canvas*/, CanvasDrawingSession const &/*session*/) {}
+void DefsView::Draw(RNSVG::D2DDeviceContext const& /*deviceContext*/, Size const & /*size*/) {}
 } // namespace winrt::RNSVG::implementation

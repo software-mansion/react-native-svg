@@ -8,7 +8,6 @@
 #include "Utils.h"
 
 using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
@@ -37,19 +36,28 @@ void RectView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void RectView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+void RectView::CreateGeometry() {
+  auto const &root{SvgRoot()};
 
-  float x{Utils::GetAbsoluteLength(m_x, canvas.Size().Width)};
-  float y{Utils::GetAbsoluteLength(m_y, canvas.Size().Height)};
-  float width{Utils::GetAbsoluteLength(m_width, canvas.Size().Width)};
-  float height{Utils::GetAbsoluteLength(m_height, canvas.Size().Height)};
+  float x{Utils::GetAbsoluteLength(m_x, root.ActualWidth())};
+  float y{Utils::GetAbsoluteLength(m_y, root.ActualHeight())};
+  float width{Utils::GetAbsoluteLength(m_width, root.ActualWidth())};
+  float height{Utils::GetAbsoluteLength(m_height, root.ActualHeight())};
 
-  auto const &rxLength{m_rx.Unit() == RNSVG::LengthType::Unknown ? m_ry : m_rx};
-  auto const &ryLength{m_ry.Unit() == RNSVG::LengthType::Unknown ? m_rx : m_ry};
-  float rx{Utils::GetAbsoluteLength(rxLength, canvas.Size().Width)};
-  float ry{Utils::GetAbsoluteLength(ryLength, canvas.Size().Height)};
+  auto const rxLength{m_rx.Unit() == RNSVG::LengthType::Unknown ? m_ry : m_rx};
+  auto const ryLength{m_ry.Unit() == RNSVG::LengthType::Unknown ? m_rx : m_ry};
+  float rx{Utils::GetAbsoluteLength(rxLength, root.ActualWidth())};
+  float ry{Utils::GetAbsoluteLength(ryLength, root.ActualHeight())};
 
-  Geometry(Geometry::CanvasGeometry::CreateRoundedRectangle(resourceCreator, x, y, width, height, rx, ry));
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
+
+  com_ptr<ID2D1Factory> factory;
+  deviceContext->GetFactory(factory.put());
+
+  com_ptr<ID2D1RoundedRectangleGeometry> geometry;
+  check_hresult(factory->CreateRoundedRectangleGeometry(
+      D2D1::RoundedRect(D2D1::RectF(x, y, width + x, height + y), rx, ry), geometry.put()));
+
+  Geometry(make<RNSVG::implementation::D2DGeometry>(geometry.as<ID2D1Geometry>()));
 }
 } // namespace winrt::RNSVG::implementation

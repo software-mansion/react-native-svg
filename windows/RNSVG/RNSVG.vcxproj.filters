@@ -130,6 +130,24 @@
     <ClCompile Include="ClipPathView.cpp">
       <Filter>Views\GroupViews</Filter>
     </ClCompile>
+    <ClCompile Include="D2DGeometry.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="MarkerViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="MarkerView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DDeviceContext.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DDevice.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DBrush.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -252,6 +270,27 @@
     <ClInclude Include="ClipPathView.h">
       <Filter>Views\GroupViews</Filter>
     </ClInclude>
+    <ClInclude Include="D2DHelpers.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DGeometry.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="MarkerViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="MarkerView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DDeviceContext.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DDevice.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DBrush.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />
@@ -275,6 +314,9 @@
     </Filter>
     <Filter Include="IDLs">
       <UniqueIdentifier>{50f81ae3-d543-477a-a60c-a0f310289f29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D2DWrappers">
+      <UniqueIdentifier>{d4e16389-e870-4046-b1fe-61bc171edad9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

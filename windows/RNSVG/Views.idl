@@ -5,20 +5,16 @@ namespace RNSVG
   interface IRenderable
   {
     Windows.UI.Xaml.FrameworkElement SvgParent;
-    Microsoft.Graphics.Canvas.Geometry.CanvasGeometry Geometry;
+    D2DGeometry Geometry;
     Boolean IsResponsible;
 
-    void CreateResources(
-      Microsoft.Graphics.Canvas.ICanvasResourceCreator resourceCreator,
-      Microsoft.Graphics.Canvas.UI.CanvasCreateResourcesEventArgs args);
-    void Render(
-      Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
-      Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+    void CreateResources();
+    void Draw(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
     void MergeProperties(RenderableView other);
     void SaveDefinition();
     void Unload();
-    void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
+    void CreateGeometry();
     IRenderable HitTest(Windows.Foundation.Point point);
   };
 
@@ -27,14 +23,14 @@ namespace RNSVG
   {
     SvgView(Microsoft.ReactNative.IReactContext context);
 
-    Single SvgScale{ get; };
     GroupView Group;
     Windows.UI.Color CurrentColor{ get; };
-    Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl Canvas{ get; };
+    D2DDevice Device{ get; };
+    D2DDeviceContext DeviceContext{ get; };
     Windows.Foundation.Collections.IMap<String, IRenderable> Templates{ get; };
     Windows.Foundation.Collections.IMap<String, BrushView> Brushes{ get; };
 
-    void InvalidateCanvas();
+    void Invalidate();
   };
 
   [default_interface]
@@ -55,10 +51,10 @@ namespace RNSVG
     Single StrokeMiterLimit{ get; };
     Single StrokeDashOffset{ get; };
     Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
-    Microsoft.Graphics.Canvas.Geometry.CanvasCapStyle StrokeLineCap{ get; };
-    Microsoft.Graphics.Canvas.Geometry.CanvasLineJoin StrokeLineJoin{ get; };
-    Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule{ get; };
-    Microsoft.Graphics.Canvas.Geometry.CanvasGeometry ClipPathGeometry { get; };
+    LineCap StrokeLineCap{ get; };
+    LineJoin StrokeLineJoin{ get; };
+    FillRule FillRule{ get; };
+    D2DGeometry ClipPathGeometry{ get; };
   };
 
   [default_interface]
@@ -113,9 +109,7 @@ namespace RNSVG
     String FontFamily;
     String FontWeight;
 
-    void RenderGroup(
-        Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
-        Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+    void DrawGroup(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
   };
 
   [default_interface]
@@ -161,11 +155,17 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass MarkerView : GroupView
+  {
+    MarkerView();
+  };
+
+  [default_interface]
   unsealed runtimeclass BrushView : GroupView
   {
     BrushView();
 
-    Microsoft.Graphics.Canvas.Brushes.ICanvasBrush Brush{ get; };
+    D2DBrush Brush{ get; };
     void CreateBrush();
     void SetBounds(Windows.Foundation.Rect rect);
   };

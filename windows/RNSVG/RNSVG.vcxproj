@@ -112,6 +112,9 @@
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">dxguid.lib;WindowsApp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
@@ -123,6 +126,11 @@
     <ClInclude Include="CircleView.h" />
     <ClInclude Include="CircleViewManager.h" />
     <ClInclude Include="ClipPathView.h" />
+    <ClInclude Include="D2DBrush.h" />
+    <ClInclude Include="D2DDevice.h" />
+    <ClInclude Include="D2DDeviceContext.h" />
+    <ClInclude Include="D2DGeometry.h" />
+    <ClInclude Include="D2DHelpers.h" />
     <ClInclude Include="DefsView.h" />
     <ClInclude Include="DefsViewManager.h" />
     <ClInclude Include="EllipseView.h" />
@@ -136,6 +144,8 @@
     <ClInclude Include="LinearGradientViewManager.h" />
     <ClInclude Include="LineView.h" />
     <ClInclude Include="LineViewManager.h" />
+    <ClInclude Include="MarkerView.h" />
+    <ClInclude Include="MarkerViewManager.h" />
     <ClInclude Include="PathView.h" />
     <ClInclude Include="PathViewManager.h" />
     <ClInclude Include="PatternView.h" />
@@ -170,6 +180,10 @@
     <ClCompile Include="CircleViewManager.cpp" />
     <ClCompile Include="ClipPathView.cpp" />
     <ClCompile Include="ClipPathViewManager.cpp" />
+    <ClCompile Include="D2DBrush.cpp" />
+    <ClCompile Include="D2DDevice.cpp" />
+    <ClCompile Include="D2DDeviceContext.cpp" />
+    <ClCompile Include="D2DGeometry.cpp" />
     <ClCompile Include="DefsView.cpp" />
     <ClCompile Include="DefsViewManager.cpp" />
     <ClCompile Include="EllipseView.cpp" />
@@ -182,6 +196,8 @@
     <ClCompile Include="LinearGradientViewManager.cpp" />
     <ClCompile Include="LineView.cpp" />
     <ClCompile Include="LineViewManager.cpp" />
+    <ClCompile Include="MarkerView.cpp" />
+    <ClCompile Include="MarkerViewManager.cpp" />
     <ClCompile Include="PathView.cpp" />
     <ClCompile Include="PatternView.cpp" />
     <ClCompile Include="PatternViewManager.cpp" />
@@ -231,7 +247,6 @@
   </ImportGroup>
   <ItemGroup Condition="$(RnwUsesPackageReference)=='true'">
     <PackageReference Include="Microsoft.Windows.CppWinRT" Version="$(CppWinRTVersion)" PrivateAssets="all" />
-    <PackageReference Include="Win2D.uwp" Version="1.26.0" />
   </ItemGroup>
   <Target Name="EnsureReactNativeWindowsTargets" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -243,7 +258,6 @@
   <ImportGroup Label="ExtensionTargets" Condition="$(RnwUsesPackageReference)!='true'">
     <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.targets')" />
     <Import Project="$(SolutionDir)\packages\$(WinUIPackageName).$(WinUIPackageVersion)\build\native\$(WinUIPackageName).targets" Condition="'$(OverrideWinUIPackage)'!='true' And Exists('$(SolutionDir)\packages\$(WinUIPackageName).$(WinUIPackageVersion)\build\native\$(WinUIPackageName).targets')" />
-    <Import Project="$(SolutionDir)\packages\Win2D.uwp.1.26.0\build\native\Win2D.uwp.targets" Condition="Exists('$(SolutionDir)\packages\Win2D.uwp.1.26.0\build\native\Win2D.uwp.targets')" />
     <Import Project="$(SolutionDir)\packages\Microsoft.ReactNative.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.targets" Condition="'$(UseExperimentalNuget)'=='true' And Exists('$(SolutionDir)\packages\Microsoft.ReactNative.Cxx.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.Cxx.targets')" />
     <Import Project="$(SolutionDir)\packages\Microsoft.ReactNative.Cxx.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.Cxx.targets" Condition="'$(UseExperimentalNuget)'=='true' And Exists('$(SolutionDir)\packages\Microsoft.ReactNative.Cxx.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.Cxx.targets')" />
   </ImportGroup>
@@ -254,7 +268,6 @@
     <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.props'))" />
     <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.targets'))" />
     <Error Condition="'$(OverrideWinUIPackage)'!='true' And !Exists('$(SolutionDir)\packages\$(WinUIPackageName).$(WinUIPackageVersion)\build\native\$(WinUIPackageName).targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\$(WinUIPackageName).$(WinUIPackageVersion)\build\native\$(WinUIPackageName).targets'))" />
-    <Error Condition="!Exists('$(SolutionDir)\packages\Win2D.uwp.1.26.0\build\native\Win2D.uwp.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Win2D.uwp.1.26.0\build\native\Win2D.uwp.targets'))" />
     <Error Condition="'$(UseExperimentalNuget)'=='true' And !Exists('$(SolutionDir)\packages\Microsoft.ReactNative.Cxx.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.Cxx.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.ReactNative.Cxx.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.Cxx.targets'))" />
     <Error Condition="'$(UseExperimentalNuget)'=='true' And !Exists('$(SolutionDir)\packages\Microsoft.ReactNative.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.ReactNative.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.targets'))" />
   </Target>

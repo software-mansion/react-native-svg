@@ -7,7 +7,7 @@ struct EllipseView : EllipseViewT<EllipseView, RNSVG::implementation::Renderable
  public:
   EllipseView() = default;
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas);
+  void CreateGeometry();
 
  private:
   RNSVG::SVGLength m_cx{};

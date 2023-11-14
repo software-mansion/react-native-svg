@@ -48,7 +48,7 @@ void GroupViewManager::AddView(FrameworkElement const &parent, UIElement const &
       }
 
       if (auto const &root{groupView.SvgRoot()}) {
-        root.InvalidateCanvas();
+        root.Invalidate();
       }
     }
   }
@@ -64,7 +64,7 @@ void GroupViewManager::RemoveAllChildren(FrameworkElement const &parent) {
     groupView.Children().Clear();
 
     if (auto const &root{groupView.SvgRoot()}) {
-      root.InvalidateCanvas();
+      root.Invalidate();
     }
   }
 }
@@ -78,7 +78,7 @@ void GroupViewManager::RemoveChildAt(FrameworkElement const &parent, int64_t ind
     groupView.Children().RemoveAt(static_cast<uint32_t>(index));
 
     if (auto const &root{groupView.SvgRoot()}) {
-      root.InvalidateCanvas();
+      root.Invalidate();
     }
   }
 }
@@ -103,7 +103,7 @@ void GroupViewManager::ReplaceChild(
       newChildView.MergeProperties(groupView);
 
       if (auto const &root{groupView.SvgRoot()}) {
-        root.InvalidateCanvas();
+        root.Invalidate();
       }
     }
   }

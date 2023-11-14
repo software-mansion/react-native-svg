@@ -5,7 +5,6 @@
 #include "Utils.h"
 
 using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
@@ -33,11 +32,10 @@ void RadialGradientView::UpdateProperties(IJSValueReader const &reader, bool for
     } else if (propertyName == "gradientUnits") {
       m_gradientUnits = Utils::JSValueAsBrushUnits(propertyValue);
     } else if (propertyName == "gradientTransform") {
-      m_transformSet = true;
-      m_transform = Utils::JSValueAsTransform(propertyValue);
+      m_transform = Utils::JSValueAsD2DTransform(propertyValue);
 
       if (propertyValue.IsNull()) {
-        m_transformSet = false;
+       m_transform = D2D1::Matrix3x2F::Identity();
       }
     }
   }
@@ -53,40 +51,52 @@ void RadialGradientView::Unload() {
 }
 
 void RadialGradientView::CreateBrush() {
-  auto const &canvas{SvgRoot().Canvas()};
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()}; 
-  Brushes::CanvasRadialGradientBrush brush{resourceCreator, m_stops};
+  auto const root{SvgRoot()};
 
-  SetPoints(brush, {0, 0, canvas.Size().Width, canvas.Size().Height});
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
 
-  if (m_transformSet) {
-    brush.Transform(m_transform);
+  winrt::com_ptr<ID2D1GradientStopCollection> stopCollection;
+  winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], static_cast<uint32_t>(m_stops.size()), stopCollection.put()));
+
+  D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES brushProperties{};
+  winrt::com_ptr<ID2D1RadialGradientBrush> radialBrush;
+  winrt::check_hresult(
+      deviceContext->CreateRadialGradientBrush(brushProperties, stopCollection.get(), radialBrush.put()));
+
+  SetPoints(radialBrush.get(), {0, 0, static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())});
+
+  if (!m_transform.IsIdentity()) {
+    radialBrush->SetTransform(m_transform);
   }
 
-  m_brush = brush;
+  m_brush = make<RNSVG::implementation::D2DBrush>(radialBrush.as<ID2D1Brush>());
 }
 
 void RadialGradientView::UpdateBounds() {
   if (m_gradientUnits == "objectBoundingBox") {
-    SetPoints(m_brush.as<Brushes::CanvasRadialGradientBrush>(), m_bounds);
+    com_ptr<ID2D1RadialGradientBrush> brush{get_self<D2DBrush>(m_brush)->Get().as<ID2D1RadialGradientBrush>()};
+    SetPoints(brush.get(), m_bounds);
   }
 }
 
-void RadialGradientView::SetPoints(Brushes::CanvasRadialGradientBrush brush, Windows::Foundation::Rect const &bounds) {
-  float rx{Utils::GetAbsoluteLength(m_rx, bounds.Width)};
-  float ry{Utils::GetAbsoluteLength(m_ry, bounds.Height)};
+void RadialGradientView::SetPoints(ID2D1RadialGradientBrush *brush, D2D1_RECT_F bounds) {
+  float width{D2DHelpers::WidthFromD2DRect(bounds)};
+  float height{D2DHelpers::HeightFromD2DRect(bounds)};
 
-  float fx{Utils::GetAbsoluteLength(m_fx, bounds.Width) + bounds.X};
-  float fy{Utils::GetAbsoluteLength(m_fy, bounds.Height) + bounds.Y};
+  float rx{Utils::GetAbsoluteLength(m_rx, width)};
+  float ry{Utils::GetAbsoluteLength(m_ry, height)};
 
-  float cx{Utils::GetAbsoluteLength(m_cx, bounds.Width) + bounds.X};
-  float cy{Utils::GetAbsoluteLength(m_cy, bounds.Height) + bounds.Y};
+  float fx{Utils::GetAbsoluteLength(m_fx, width) + bounds.left};
+  float fy{Utils::GetAbsoluteLength(m_fy, height) + bounds.top};
 
-  brush.RadiusX(rx);
-  brush.RadiusY(ry);
+  float cx{Utils::GetAbsoluteLength(m_cx, width) + bounds.left};
+  float cy{Utils::GetAbsoluteLength(m_cy, height) + bounds.top};
 
-  brush.Center({cx, cy});
-  brush.OriginOffset({(fx - cx), (fy - cy)});
+  brush->SetRadiusX(rx);
+  brush->SetRadiusY(ry);
+
+  brush->SetCenter({cx, cy});
+  brush->SetGradientOriginOffset({(fx - cx), (fy - cy)});
 }
 
 } // namespace winrt::RNSVG::implementation

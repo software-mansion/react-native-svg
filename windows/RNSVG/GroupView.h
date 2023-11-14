@@ -20,23 +20,17 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
   void FontWeight(hstring const &value) { m_fontWeight = value; }
 
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  virtual void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas);
+  virtual void CreateGeometry();
 
   virtual void SaveDefinition();
 
   virtual void MergeProperties(RNSVG::RenderableView const &other);
 
-  virtual void Render(
-      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 
-  virtual void RenderGroup(
-      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  virtual void DrawGroup(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 
-  virtual void CreateResources(
-      Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
-      Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args);
+  virtual void CreateResources();
 
   virtual void Unload();
 

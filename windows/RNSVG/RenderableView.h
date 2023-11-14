@@ -2,6 +2,8 @@
 
 #include "RenderableView.g.h"
 #include "SVGLength.h"
+#include "D2DDeviceContext.h"
+#include "D2DGeometry.h"
 
 namespace winrt::RNSVG::implementation {
 struct RenderableView : RenderableViewT<RenderableView> {
@@ -14,8 +16,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
   Windows::UI::Xaml::FrameworkElement SvgParent() { return m_parent; }
   void SvgParent(Windows::UI::Xaml::FrameworkElement const &value) { m_parent = value; }
 
-  Microsoft::Graphics::Canvas::Geometry::CanvasGeometry Geometry() { return m_geometry; }
-  void Geometry(Microsoft::Graphics::Canvas::Geometry::CanvasGeometry value) { m_geometry = value; }
+  RNSVG::D2DGeometry Geometry() { return m_geometry; }
+  void Geometry(RNSVG::D2DGeometry const &value) { m_geometry = value; }
 
   hstring Id() { return m_id; }
   Numerics::float3x2 SvgTransform() { return m_transformMatrix; }
@@ -33,22 +35,18 @@ struct RenderableView : RenderableViewT<RenderableView> {
   float StrokeDashOffset() { return m_strokeDashOffset; }
   RNSVG::SVGLength StrokeWidth() { return m_strokeWidth; }
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> StrokeDashArray() { return m_strokeDashArray; }
-  Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle StrokeLineCap() { return m_strokeLineCap; }
-  Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin StrokeLineJoin() { return m_strokeLineJoin; }
-  Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination FillRule() { return m_fillRule; }
-  Microsoft::Graphics::Canvas::Geometry::CanvasGeometry ClipPathGeometry();
+  RNSVG::LineCap StrokeLineCap() { return m_strokeLineCap; }
+  RNSVG::LineJoin StrokeLineJoin() { return m_strokeLineJoin; }
+  RNSVG::FillRule FillRule() { return m_fillRule; }
+  RNSVG::D2DGeometry ClipPathGeometry();
 
   virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
-  virtual void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const & /*canvas*/) {}
+  virtual void CreateGeometry() {}
   virtual void MergeProperties(RNSVG::RenderableView const &other);
   virtual void SaveDefinition();
   virtual void Unload();
-  virtual void Render(
-      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
-      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
-  virtual void CreateResources(
-      Microsoft::Graphics::Canvas::ICanvasResourceCreator const & /*resourceCreator*/,
-      Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const & /*args*/) { }
+  virtual void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
+  virtual void CreateResources() {}
   virtual RNSVG::IRenderable HitTest(Windows::Foundation::Point const &point);
 
  protected:
@@ -72,7 +70,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Windows::UI::Xaml::FrameworkElement m_parent{nullptr};
-  Microsoft::Graphics::Canvas::Geometry::CanvasGeometry m_geometry{nullptr};
+  RNSVG::D2DGeometry m_geometry{nullptr};
   bool m_recreateResources{true};
   bool m_isResponsible{false};
   
@@ -87,17 +85,15 @@ struct RenderableView : RenderableViewT<RenderableView> {
   float m_strokeOpacity{1.0f};
   float m_strokeMiterLimit{0.0f};
   float m_strokeDashOffset{0.0f};
+  std::vector<float> m_adjustedStrokeDashArray;
   RNSVG::SVGLength m_strokeWidth{1.0f, RNSVG::LengthType::Pixel};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_strokeDashArray{
       winrt::single_threaded_vector<RNSVG::SVGLength>()};
-  Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle m_strokeLineCap{
-      Microsoft::Graphics::Canvas::Geometry::CanvasCapStyle::Flat};
-  Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin m_strokeLineJoin{
-      Microsoft::Graphics::Canvas::Geometry::CanvasLineJoin::Miter};
-  Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination m_fillRule{
-      Microsoft::Graphics::Canvas::Geometry::CanvasFilledRegionDetermination::Winding};
+  RNSVG::LineCap m_strokeLineCap{RNSVG::LineCap::Butt};
+  RNSVG::LineJoin m_strokeLineJoin{RNSVG::LineJoin::Miter};
+  RNSVG::FillRule m_fillRule{RNSVG::FillRule::NonZero};
 
-  void SetColor(const Microsoft::ReactNative::JSValueObject &propValue, Windows::UI::Color fallbackColor, std::string propName);
+  void SetColor(const Microsoft::ReactNative::JSValueObject &propValue, Windows::UI::Color const &fallbackColor, std::string propName);
 };
 } // namespace winrt::RNSVG::implementation
 

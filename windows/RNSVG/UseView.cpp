@@ -5,7 +5,6 @@
 #include "Utils.h"
 
 using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
@@ -32,55 +31,55 @@ void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void UseView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
+void UseView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   if (auto const &view{GetRenderableTemplate()}) {
-    auto const &originalTransform{session.Transform()};
-    auto transform{Numerics::make_float3x2_scale(1)};
+    com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
+
+    D2D1_MATRIX_3X2_F originalTransform{D2DHelpers::GetTransform(deviceContext.get())};
+    auto transform{originalTransform};
+
+    float x{Utils::GetAbsoluteLength(m_x, size.Width)};
+    float y{Utils::GetAbsoluteLength(m_y, size.Height)};
+
+    transform = D2D1::Matrix3x2F::Translation({x, y}) * originalTransform;
+
+    // Combine new transform with existing one if it's set
+    if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
+      transform = transform * D2DHelpers::AsD2DTransform(SvgTransform());
+    }
 
     // Figure out any necessary transforms
     if (auto const &symbol{view.try_as<RNSVG::SymbolView>()}) {
       if (symbol.Align() != L"") {
-        if (auto const &root{SvgRoot()}) {
-          Rect vbRect{
-              symbol.MinX() * root.SvgScale(),
-              symbol.MinY() * root.SvgScale(),
-              (symbol.MinX() + symbol.VbWidth()) * root.SvgScale(),
-              (symbol.MinY() + symbol.VbHeight()) * root.SvgScale()};
+        Rect vbRect{
+            symbol.MinX(),
+            symbol.MinY(),
+            (symbol.MinX() + symbol.VbWidth()),
+            (symbol.MinY() + symbol.VbHeight())};
 
-          float elX{Utils::GetAbsoluteLength(m_x, canvas.Size().Width)};
-          float elY{Utils::GetAbsoluteLength(m_y, canvas.Size().Height)};
-          float elWidth{Utils::GetAbsoluteLength(m_width, canvas.Size().Width)};
-          float elHeight{Utils::GetAbsoluteLength(m_height, canvas.Size().Height)};
-          Rect elRect{elX, elY, elWidth, elHeight};
+        float elWidth{Utils::GetAbsoluteLength(m_width, size.Width)};
+        float elHeight{Utils::GetAbsoluteLength(m_height, size.Height)};
+        Rect elRect{0.0f, 0.0f, elWidth, elHeight};
 
-          transform = Utils::GetViewBoxTransform(vbRect, elRect, to_string(symbol.Align()), symbol.MeetOrSlice());
-        }
+        auto vbTransform{Utils::GetViewBoxTransformD2D(vbRect, elRect, to_string(symbol.Align()), symbol.MeetOrSlice())};
+        transform = vbTransform * transform;
       }
-    } else {
-      float x{Utils::GetAbsoluteLength(m_x, canvas.Size().Width)};
-      float y{Utils::GetAbsoluteLength(m_y, canvas.Size().Height)};
-      transform = Numerics::make_float3x2_translation({x, y});
     }
 
-    // Combine new transform with existing one if it's set
-    if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
-      transform = transform * SvgTransform();
-    }
-
-    session.Transform(transform);
+    deviceContext->SetTransform(transform);
 
     // Propagate props to template
     view.MergeProperties(*this);
 
     // Set opacity and render
-    if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
-      if (auto const &symbol{view.try_as<RNSVG::SymbolView>()}) {
-        symbol.RenderGroup(canvas, session);
-      } else {
-        view.Render(canvas, session);
-      }
-      opacityLayer.Close();
+    D2DHelpers::PushOpacityLayer(deviceContext.get(), nullptr, m_opacity);
+    if (auto const &symbol{view.try_as<RNSVG::SymbolView>()}) {
+      symbol.DrawGroup(context, size);
+    } else {
+      view.Draw(context, size);
     }
+
+    deviceContext->PopLayer();
 
     // Restore original template props
     if (auto const &parent{view.SvgParent().try_as<RNSVG::RenderableView>()}) {
@@ -88,10 +87,8 @@ void UseView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession
     }
 
     // Restore session transform
-    session.Transform(originalTransform);
+    deviceContext->SetTransform(originalTransform);
 
-  } else {
-    throw hresult_not_implemented(L"'Use' element expected a pre-defined svg template as 'href' prop. Template named: " + m_href + L" is not defined");
   }
 }
 

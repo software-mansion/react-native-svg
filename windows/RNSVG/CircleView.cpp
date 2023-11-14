@@ -6,7 +6,6 @@
 #include "Utils.h"
 
 using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
@@ -29,13 +28,21 @@ void CircleView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void CircleView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+void CircleView::CreateGeometry() {
+  auto const root{SvgRoot()};
+  
+  float cx{Utils::GetAbsoluteLength(m_cx, root.ActualWidth())};
+  float cy{Utils::GetAbsoluteLength(m_cy, root.ActualHeight())};
+  float r{Utils::GetAbsoluteLength(m_r, Utils::GetCanvasDiagonal(root.ActualSize()))};
 
-  float cx{Utils::GetAbsoluteLength(m_cx, canvas.Size().Width)};
-  float cy{Utils::GetAbsoluteLength(m_cy, canvas.Size().Height)};
-  float r{Utils::GetAbsoluteLength(m_r, Utils::GetCanvasDiagonal(canvas.Size()))};
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
 
-  Geometry(Geometry::CanvasGeometry::CreateCircle(resourceCreator, cx, cy, r));
+  com_ptr<ID2D1Factory> factory;
+  deviceContext->GetFactory(factory.put());
+
+  com_ptr<ID2D1EllipseGeometry> geometry;
+  check_hresult(factory->CreateEllipseGeometry(D2D1::Ellipse({cx, cy}, r, r), geometry.put()));
+
+  Geometry(make<RNSVG::implementation::D2DGeometry>(geometry.as<ID2D1Geometry>()));
 }
 } // namespace winrt::RNSVG::implementation

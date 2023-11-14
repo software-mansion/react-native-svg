@@ -2,19 +2,16 @@
 
 #include "pch.h"
 
-#include <winrt/Microsoft.Graphics.Canvas.Brushes.h>
 #include <winrt/Windows.Foundation.Numerics.h>
 #include <winrt/Windows.UI.Text.h>
 #include "JSValueReader.h"
+#include "D2DHelpers.h"
+#include "D2DBrush.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
-using namespace Microsoft::ReactNative;
-using namespace Windows::UI;
-using namespace Windows::UI::Text;
+using namespace winrt::Microsoft::ReactNative;
 
 namespace winrt::RNSVG {
 struct Utils {
@@ -22,7 +19,7 @@ struct Utils {
   static std::vector<float> GetAdjustedStrokeArray(IVector<SVGLength> const &value, float strokeWidth, float canvasDiagonal) {
     std::vector<float> result;
 
-    for (auto const &item : value) {
+    for (auto const item : value) {
       float absValue{GetAbsoluteLength(item, canvasDiagonal)};
 
       // Win2D sets the length of each dash as the product of the element value in array and stroke width,
@@ -31,14 +28,18 @@ struct Utils {
       result.push_back(absValue / (strokeWidth == 0.0f ? 1.0f : strokeWidth));
     }
 
-    return std::move(result);
+    return result;
   }
 
-  static float GetCanvasDiagonal(Windows::Foundation::Size const &size) {
+  static float GetCanvasDiagonal(Size const &size) {
     float powX{std::powf(size.Width, 2)};
     float powY{std::powf(size.Height, 2)};
 
     return std::sqrtf(powX + powY) * static_cast<float>(M_SQRT1_2);
+  }
+
+  static float GetAbsoluteLength(SVGLength const& length, double relativeTo) {
+    return GetAbsoluteLength(length, static_cast<float>(relativeTo));
   }
 
   static float GetAbsoluteLength(SVGLength const &length, float relativeTo) {
@@ -78,81 +79,7 @@ struct Utils {
     return Numerics::make_float3x2_rotation(radians);
   }
 
-  static FontWeight FontWeightFrom(hstring const& weight, Xaml::FrameworkElement const& parent) {
-    if (weight == L"normal") {
-      return FontWeights::Normal();
-    } else if (weight == L"bold") {
-      return FontWeights::Bold();
-    } else if (weight == L"bolder" || weight == L"lighter" || weight == L"auto") {
-      auto const &groupView{parent.try_as<RNSVG::GroupView>()};
-      FontWeight parentWeight{
-          groupView ? FontWeightFrom(groupView.FontWeight(), groupView.SvgParent()) : FontWeights::Normal()};
-
-      if (weight == L"bolder") {
-        return Bolder(parentWeight.Weight);
-      } else if (weight == L"lighter") {
-        return Lighter(parentWeight.Weight);
-      } else if (weight == L"auto") {
-        return parentWeight;
-      }
-    }
-
-    return GetClosestFontWeight(std::stof(weight.c_str(), nullptr));
-  }
-
-  static FontWeight GetClosestFontWeight(float weight) {
-    if (weight > 325 && weight < 375) {
-      return FontWeights::SemiLight();
-    } else if (weight > 925) {
-      return FontWeights::ExtraBlack();
-    } else {
-      switch (static_cast<uint16_t>(std::round(weight / 100.0f))) {
-        case 1:
-          return FontWeights::Thin();
-        case 2:
-          return FontWeights::ExtraLight();
-        case 3:
-          return FontWeights::Light();
-        case 4:
-          return FontWeights::Normal();
-        case 5:
-          return FontWeights::Medium();
-        case 6:
-          return FontWeights::SemiBold();
-        case 7:
-          return FontWeights::Bold();
-        case 8:
-          return FontWeights::ExtraBold();
-        case 9:
-        default:
-          return FontWeights::ExtraBlack();
-      }
-    }
-  }
-
-  static FontWeight Bolder(uint16_t weight) {
-    if (weight < 350) {
-      return FontWeights::Normal();
-    } else if (weight < 550) {
-      return FontWeights::Bold();
-    } else if (weight < 900) {
-      return FontWeights::Black();
-    } else {
-      return FontWeights::ExtraBlack();
-    }
-  }
-
-  static FontWeight Lighter(uint16_t weight) {
-    if (weight < 550) {
-      return FontWeights::Thin();
-    } else if (weight < 750) {
-      return FontWeights::Normal();
-    } else {
-      return FontWeights::Bold();
-    }
-  }
-
-  static Numerics::float3x2 GetViewBoxTransform(Rect vbRect, Rect elRect, std::string align, RNSVG::MeetOrSlice meetOrSlice) {
+  static Numerics::float3x2 GetViewBoxTransform(Rect const &vbRect, Rect const &elRect, std::string align, RNSVG::MeetOrSlice const &meetOrSlice) {
     // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform
 
     // Let vb-x, vb-y, vb-width, vb-height be the min-x, min-y, width and height values of the viewBox attribute
@@ -217,6 +144,10 @@ struct Utils {
     return scale * translate;
   }
 
+  static D2D1_MATRIX_3X2_F GetViewBoxTransformD2D(Rect const &vbRect, Rect const &elRect, std::string align, RNSVG::MeetOrSlice const &meetOrSlice) {
+    return D2DHelpers::AsD2DTransform(GetViewBoxTransform(vbRect, elRect, align, meetOrSlice));
+  }
+
   static RNSVG::MeetOrSlice GetMeetOrSlice(JSValue const &value) {
     if (value.IsNull()) {
       return RNSVG::MeetOrSlice::Meet;
@@ -263,11 +194,11 @@ struct Utils {
     }
   }
 
-  static Color JSValueAsColor(JSValue const &value, Color defaultValue = Colors::Transparent()) {
+  static ui::Color JSValueAsColor(JSValue const &value, ui::Color const &defaultValue = Colors::Transparent()) {
     if (value.IsNull()) {
       return defaultValue;
-    } else if (auto const &brush{value.To<Xaml::Media::Brush>()}) {
-      if (auto const &scb{brush.try_as<Xaml::Media::SolidColorBrush>()}) {
+    } else if (auto const &brush{value.To<xaml::Media::Brush>()}) {
+      if (auto const &scb{brush.try_as<xaml::Media::SolidColorBrush>()}) {
         return scb.Color();
       }
     }
@@ -283,7 +214,7 @@ struct Utils {
     }
   }
 
-  static Numerics::float3x2 JSValueAsTransform(JSValue const& value, Numerics::float3x2 defaultValue = {}) {
+  static Numerics::float3x2 JSValueAsTransform(JSValue const &value, Numerics::float3x2 const &defaultValue = {}) {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -299,45 +230,84 @@ struct Utils {
     }
   }
 
-  static std::vector<Brushes::CanvasGradientStop> JSValueAsStops(JSValue const& value) {
+  static D2D1::Matrix3x2F JSValueAsD2DTransform(JSValue const& value, D2D1::Matrix3x2F const defaultValue = {}) {
+    if (value.IsNull()) {
+      return defaultValue;
+    } else {
+      auto const &matrix{value.AsArray()};
+
+      return D2D1::Matrix3x2F(
+          matrix.at(0).AsSingle(),
+          matrix.at(1).AsSingle(),
+          matrix.at(2).AsSingle(),
+          matrix.at(3).AsSingle(),
+          matrix.at(4).AsSingle(),
+          matrix.at(5).AsSingle());
+    }
+  }
+
+  static std::vector<D2D1_GRADIENT_STOP> JSValueAsStops(JSValue const &value) {
     if (value.IsNull()) {
       return {};
     }
 
     auto const &stops{value.AsArray()};
-    std::vector<Brushes::CanvasGradientStop> canvasStops{};
+    std::vector<D2D1_GRADIENT_STOP> gradientStops;
 
     for (size_t i = 0; i < stops.size(); ++i) {
-      Brushes::CanvasGradientStop stop{};
-      stop.Position = Utils::JSValueAsFloat(stops.at(i));
-      stop.Color = Utils::JSValueAsColor(stops.at(++i));
-      canvasStops.push_back(stop);
+      D2D1_GRADIENT_STOP stop{};
+      stop.position = Utils::JSValueAsFloat(stops.at(i));
+      stop.color = D2DHelpers::AsD2DColor(Utils::JSValueAsColor(stops.at(++i)));
+      gradientStops.emplace_back(stop);
     }
 
-    return canvasStops;
+    return gradientStops;
   }
 
-  static Brushes::ICanvasBrush GetCanvasBrush(
+  static com_ptr<ID2D1Brush> GetCanvasBrush(
       hstring const &brushId,
-      Color color,
+      ui::Color const &color,
       RNSVG::SvgView const &root,
-      Geometry::CanvasGeometry const &geometry,
-      ICanvasResourceCreator const &resourceCreator) {
-    Brushes::ICanvasBrush brush{nullptr};
+      com_ptr<ID2D1Geometry> const &geometry) {
+    com_ptr<ID2D1Brush> brush;
+    com_ptr<ID2D1DeviceContext> deviceContext{get_self<RNSVG::implementation::D2DDeviceContext>(root.DeviceContext())->Get()};
+
     if (root && brushId != L"") {
       if (brushId == L"currentColor") {
-        brush = Brushes::CanvasSolidColorBrush(resourceCreator, root.CurrentColor());
+        com_ptr<ID2D1SolidColorBrush> scb;
+        deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(root.CurrentColor()), scb.put());
+        brush = scb.as<ID2D1Brush>();
       } else if (auto const &brushView{root.Brushes().TryLookup(brushId)}) {
-        brushView.SetBounds(geometry.ComputeBounds());
-        brush = brushView.Brush();
+        brushView.CreateBrush();
+
+        if (geometry) {
+          D2D1_RECT_F bounds;
+          geometry->GetBounds(nullptr, &bounds);
+          brushView.SetBounds(D2DHelpers::FromD2DRect(bounds));
+        }
+
+        brush = get_self<RNSVG::implementation::D2DBrush>(brushView.Brush())->Get();
       }
     }
 
     if (!brush) {
-      brush = Brushes::CanvasSolidColorBrush(resourceCreator, color);
+      com_ptr<ID2D1SolidColorBrush> scb;
+      deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(color), scb.put());
+      brush = scb.as<ID2D1Brush>();
     }
 
     return brush;
+  }
+
+  static D2D1_VECTOR_2F GetScale(D2D1_MATRIX_3X2_F const matrix) {
+    auto scaleX = std::sqrt(matrix.m11 * matrix.m11 + matrix.m12 * matrix.m12);
+    auto scaleY = std::sqrt(matrix.m21 * matrix.m21 + matrix.m22 * matrix.m22);
+
+    return {scaleX, scaleY};
+  }
+
+  static D2D1_VECTOR_2F GetScale(Numerics::float3x2 const &matrix) {
+    return GetScale(D2DHelpers::AsD2DTransform(matrix));
   }
 };
 } // namespace winrt::RNSVG

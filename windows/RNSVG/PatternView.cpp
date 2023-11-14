@@ -3,9 +3,9 @@
 #include "PatternView.g.cpp"
 
 #include "Utils.h"
+#include "D2DDevice.h"
 
 using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
@@ -29,11 +29,10 @@ void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
     } else if (propertyName == "patternContentUnits") {
       m_patternContentUnits = Utils::JSValueAsBrushUnits(propertyValue, "userSpaceOnUse");
     } else if (propertyName == "patternTransform") {
-      m_transformSet = true;
-      m_transform = Utils::JSValueAsTransform(propertyValue);
+      m_transform = Utils::JSValueAsD2DTransform(propertyValue);
 
       if (propertyValue.IsNull()) {
-        m_transformSet = false;
+        m_transform = D2D1::Matrix3x2F::Identity();
       }
     } else if (propertyName == "vbWidth") {
       m_vbWidth = Utils::JSValueAsFloat(propertyValue);
@@ -55,77 +54,101 @@ void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
   SaveDefinition();
 
   if (auto const &root{SvgRoot()}) {
-    root.InvalidateCanvas();
+    root.Invalidate();
   }
 }
 
 void PatternView::UpdateBounds() {
   if (m_patternUnits == "objectBoundingBox") {
-    Rect rect{GetAdjustedRect(m_bounds)};
+    com_ptr<ID2D1ImageBrush> brush{get_self<D2DBrush>(m_brush)->Get().as<ID2D1ImageBrush>()};
+
+    D2D1_RECT_F rect{GetAdjustedRect(m_bounds)};
     CreateBrush(rect);
   }
 }
 
 void PatternView::CreateBrush() {
-  auto const &canvas{SvgRoot().Canvas()};
+  auto const root{SvgRoot()};
 
-  Rect elRect{GetAdjustedRect({0, 0, canvas.Size().Width, canvas.Size().Height})};
+  D2D1_RECT_F elRect{GetAdjustedRect({0, 0, static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())})};
   CreateBrush(elRect);
 }
 
-void PatternView::CreateBrush(Windows::Foundation::Rect const &rect) {
-  auto const &canvas{SvgRoot().Canvas()};
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+void PatternView::CreateBrush(D2D1_RECT_F rect) {
+  auto const &root{SvgRoot()};
 
-  if (auto const &cmdList{GetCommandList(rect)}) {
-    Brushes::CanvasImageBrush brush{resourceCreator, cmdList};
+  com_ptr<ID2D1Device> device{get_self<D2DDevice>(root.Device())->Get()};
 
-    brush.SourceRectangle(rect);
-    brush.ExtendX(Microsoft::Graphics::Canvas::CanvasEdgeBehavior::Wrap);
-    brush.ExtendY(Microsoft::Graphics::Canvas::CanvasEdgeBehavior::Wrap);
+  if (auto const &cmdList{GetCommandList(device.get(), rect)}) {
+    D2D1_IMAGE_BRUSH_PROPERTIES brushProperties{D2D1::ImageBrushProperties(rect)};
+    brushProperties.extendModeX = D2D1_EXTEND_MODE_WRAP;
+    brushProperties.extendModeY = D2D1_EXTEND_MODE_WRAP;
 
-    cmdList.Close();
+    com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
 
-    m_brush = brush;
+    com_ptr<ID2D1ImageBrush> imageBrush;
+    check_hresult(deviceContext->CreateImageBrush(cmdList.get(), brushProperties, imageBrush.put()));
+
+    auto transform{D2D1::Matrix3x2F::Translation({rect.left, rect.top}) * m_transform};
+    imageBrush->SetTransform(transform);
+
+    m_brush = make<RNSVG::implementation::D2DBrush>(imageBrush.as<ID2D1Brush>());
   }
 }
 
-Windows::Foundation::Rect PatternView::GetAdjustedRect(Windows::Foundation::Rect const &bounds) {
-  float x{Utils::GetAbsoluteLength(m_x, bounds.Width) + bounds.X};
-  float y{Utils::GetAbsoluteLength(m_y, bounds.Height) + bounds.Y};
-  float width{Utils::GetAbsoluteLength(m_width, bounds.Width)};
-  float height{Utils::GetAbsoluteLength(m_height, bounds.Height)};
+D2D1_RECT_F PatternView::GetAdjustedRect(D2D1_RECT_F bounds) {
+  float width{D2DHelpers::WidthFromD2DRect(bounds)};
+  float height{D2DHelpers::HeightFromD2DRect(bounds)};
 
-  return {x, y, width, height};
+  float x{Utils::GetAbsoluteLength(m_x, width) + bounds.left};
+  float y{Utils::GetAbsoluteLength(m_y, height) + bounds.top};
+  float adjWidth{Utils::GetAbsoluteLength(m_width, width)};
+  float adjHeight{Utils::GetAbsoluteLength(m_height, height)};
+
+  return {x, y, adjWidth + x, adjHeight + y};
 }
 
-Microsoft::Graphics::Canvas::CanvasCommandList PatternView::GetCommandList(Windows::Foundation::Rect const &rect) {
-  auto const &root{SvgRoot()};
-  auto const &canvas{root.Canvas()};
-  auto const &cmdList{CanvasCommandList(canvas)};
-  auto const &session{cmdList.CreateDrawingSession()};
-  
+com_ptr<ID2D1CommandList> PatternView::GetCommandList(ID2D1Device* device, D2D1_RECT_F rect) {
+  com_ptr<ID2D1DeviceContext> deviceContext;
+  check_hresult(device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, deviceContext.put()));
+
+  com_ptr<ID2D1CommandList> cmdList;
+  check_hresult(deviceContext->CreateCommandList(cmdList.put()));
+
+  deviceContext->SetTarget(cmdList.get());
+
+  deviceContext->BeginDraw();
+  deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Black, 0.0f));
+
+  auto transform{D2D1::Matrix3x2F::Identity()};
+
   if (m_align != "") {
     Rect vbRect{
-        m_minX * root.SvgScale(),
-        m_minY * root.SvgScale(),
-        (m_vbWidth + m_minX) * root.SvgScale(),
-        (m_vbHeight + m_minY) * root.SvgScale()};
+        m_minX,
+        m_minY,
+        (m_vbWidth + m_minX),
+        (m_vbHeight + m_minY)};
 
-    auto transform{Utils::GetViewBoxTransform(vbRect, rect, m_align, m_meetOrSlice)};
+    auto viewboxTransform{Utils::GetViewBoxTransform(
+        vbRect,
+        D2DHelpers::FromD2DRect(rect),
+        m_align,
+        m_meetOrSlice)};
 
-    if (m_transformSet) {
-      transform = transform * m_transform;
-    }
-
-    session.Transform(transform);
+    transform = D2DHelpers::AsD2DTransform(viewboxTransform) * transform;
   }
 
+  deviceContext->SetTransform(transform);
+
+  auto context = make<D2DDeviceContext>(deviceContext);
   for (auto const &child : Children()) {
-    child.Render(canvas, session);
+    child.Draw(context, D2DHelpers::SizeFromD2DRect(rect));
   }
 
-  session.Close();
+  cmdList->Close();
+
+  deviceContext->EndDraw();
+
   return cmdList;
 }
 
