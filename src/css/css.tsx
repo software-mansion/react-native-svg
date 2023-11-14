@@ -697,8 +697,9 @@ export function SvgCss(props: XmlProps) {
 }
 
 export function SvgCssUri(props: UriProps) {
-  const { uri, onError = err, onLoad } = props;
+  const { uri, onError = err, onLoad, fallback } = props;
   const [xml, setXml] = useState<string | null>(null);
+  const [isError, setIsError] = useState(false);
   useEffect(() => {
     uri
       ? fetchText(uri)
@@ -706,9 +707,15 @@ export function SvgCssUri(props: UriProps) {
             setXml(data);
             onLoad?.();
           })
-          .catch(onError)
+          .catch((e) => {
+            onError(e);
+            setIsError(true);
+          })
       : setXml(null);
   }, [onError, uri, onLoad]);
+  if (isError) {
+    return fallback ?? null;
+  }
   return <SvgCss xml={xml} override={props} />;
 }
 
