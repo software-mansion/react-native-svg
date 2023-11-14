@@ -9,8 +9,8 @@ import type {
   XmlAST,
   XmlProps,
   XmlState,
-} from './xml';
-import { camelCase, err, fetchText, parse, SvgAst } from './xml';
+} from 'react-native-svg';
+import { camelCase, err, fetchText, parse, SvgAst } from 'react-native-svg';
 import type {
   Atrule,
   AtrulePrelude,

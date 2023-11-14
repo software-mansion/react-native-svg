@@ -24,15 +24,27 @@ import Mask from './elements/Mask';
 import Marker from './elements/Marker';
 import ForeignObject from './elements/ForeignObject';
 
-import { parse, SvgAst, SvgFromUri, SvgFromXml, SvgUri, SvgXml } from './xml';
 import {
-  SvgCss,
-  SvgCssUri,
-  SvgWithCss,
-  SvgWithCssUri,
-  inlineStyles,
-} from './css';
-import { LocalSvg, WithLocalSvg, loadLocalRawResource } from './LocalSvg';
+  parse,
+  SvgAst,
+  SvgFromUri,
+  SvgFromXml,
+  SvgUri,
+  SvgXml,
+  camelCase,
+  err,
+  fetchText,
+  JsxAST,
+  Middleware,
+  Styles,
+  UriProps,
+  UriState,
+  XmlAST,
+  XmlProps,
+  XmlState,
+  AstProps,
+} from './xml';
+
 import {
   RNSVGCircle,
   RNSVGClipPath,
@@ -58,6 +70,17 @@ import {
   RNSVGUse,
 } from './fabric';
 
+export {
+  SvgCss,
+  SvgCssUri,
+  SvgWithCss,
+  SvgWithCssUri,
+  inlineStyles,
+  LocalSvg,
+  WithLocalSvg,
+  loadLocalRawResource,
+} from './deprecated';
+
 export type { RectProps } from './elements/Rect';
 export type { CircleProps } from './elements/Circle';
 export type { EllipseProps } from './elements/Ellipse';
@@ -81,8 +104,6 @@ export type { PatternProps } from './elements/Pattern';
 export type { MaskProps } from './elements/Mask';
 export type { MarkerProps } from './elements/Marker';
 export type { ForeignObjectProps } from './elements/ForeignObject';
-export type { LocalProps } from './LocalSvg';
-export type { UriProps, XmlProps, AstProps } from './xml';
 
 export * from './lib/extract/types';
 
@@ -117,14 +138,18 @@ export {
   SvgFromXml,
   SvgUri,
   SvgXml,
-  SvgCss,
-  SvgCssUri,
-  SvgWithCss,
-  SvgWithCssUri,
-  inlineStyles,
-  LocalSvg,
-  WithLocalSvg,
-  loadLocalRawResource,
+  camelCase,
+  err,
+  fetchText,
+  JsxAST,
+  Middleware,
+  Styles,
+  UriProps,
+  UriState,
+  XmlAST,
+  XmlProps,
+  XmlState,
+  AstProps,
   Shape,
   RNSVGMarker,
   RNSVGMask,

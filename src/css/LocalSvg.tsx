@@ -3,10 +3,9 @@ import { useState, useEffect, Component } from 'react';
 import type { ImageSourcePropType } from 'react-native';
 import { Platform, Image } from 'react-native';
 
-import { fetchText } from './xml';
+import { fetchText } from 'react-native-svg';
 import { SvgCss, SvgWithCss } from './css';
-import type { SvgProps } from './elements/Svg';
-import type { Spec } from './fabric/NativeSvgRenderableModule';
+import type { SvgProps } from 'react-native-svg';
 
 export function getUriFromSource(source: ImageSourcePropType) {
   const resolvedAssetSource = Image.resolveAssetSource(source);
@@ -24,7 +23,7 @@ export function isUriAnAndroidResourceIdentifier(uri?: string) {
 
 export async function loadAndroidRawResource(uri: string) {
   try {
-    const RNSVGRenderableModule: Spec =
+    const RNSVGRenderableModule: any =
       // neeeded for new arch
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('./fabric/NativeSvgRenderableModule').default;
