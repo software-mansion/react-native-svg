@@ -1088,7 +1088,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (13.14.0):
+  - RNSVG (14.0.0):
     - hermes-engine
     - RCT-Folly (= 2021.07.22.00)
     - RCTRequired
@@ -1103,9 +1103,9 @@ PODS:
     - React-utils
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 13.14.0)
+    - RNSVG/common (= 14.0.0)
     - Yoga
-  - RNSVG/common (13.14.0):
+  - RNSVG/common (14.0.0):
     - hermes-engine
     - RCT-Folly (= 2021.07.22.00)
     - RCTRequired
@@ -1360,7 +1360,7 @@ SPEC CHECKSUMS:
   React-utils: fa59c9a3375fb6f4aeb66714fd3f7f76b43a9f16
   ReactCommon: dd03c17275c200496f346af93a7b94c53f3093a4
   RNReanimated: 5008fe999d57038a1c5c1163044854d453f41b98
-  RNSVG: df9aaada196f6a61c8e30dc55d41e6c108a954e7
+  RNSVG: 854ab5ccc2d96c22305d105abf576e8fc251df10
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
