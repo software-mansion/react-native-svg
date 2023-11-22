@@ -1,7 +1,10 @@
 {
   "version": "13.14.0",
-  "name": "react-native-svg",
+  "name": "@react-native-oh-library/react-native-svg",
   "description": "SVG library for react-native",
+  "harmony": {
+    "alias": "@software-mansion/react-native-svg"
+  },
   "homepage": "https://github.com/react-native-community/react-native-svg",
   "repository": {
     "type": "git",
@@ -13,13 +16,20 @@
   "types": "lib/typescript/index.d.ts",
   "react-native": "src/index.ts",
   "files": [
+    "__tests__",
     "android",
     "apple",
+    "harmony",
     "common",
+    "elements",
     "lib",
     "src",
     "RNSVG.podspec",
     "!android/build",
+    "!harmony/oh_modules",
+    "!harmony/**/build",
+    "!harmony/**/oh_modules",
+    "!harmony/rnoh",
     "windows",
     "react-native-config.js"
   ],

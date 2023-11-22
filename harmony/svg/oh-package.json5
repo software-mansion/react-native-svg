@@ -1,0 +1,13 @@
+{
+  "license": "ISC",
+  "types": "",
+  "devDependencies": {
+    "rnoh": "file:../rnoh"
+  }
+  "name": "rnoh-svg",
+  "description": "Native part of react-native-svg",
+  "main": "Index.ets",
+  "version": "0.1.3",
+  "dependencies": {
+  }
+}
