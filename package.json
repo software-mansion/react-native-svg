@@ -1,10 +1,7 @@
 {
-  "version": "13.14.0",
+  "version": "13.14.0-0.0.1",
   "name": "@react-native-oh-library/react-native-svg",
   "description": "SVG library for react-native",
-  "harmony": {
-    "alias": "@react-native-svg"
-  },
   "homepage": "https://github.com/react-native-community/react-native-svg",
   "repository": {
     "type": "git",
