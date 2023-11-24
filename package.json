@@ -3,7 +3,7 @@
   "name": "@react-native-oh-library/react-native-svg",
   "description": "SVG library for react-native",
   "harmony": {
-    "alias": "@software-mansion/react-native-svg"
+    "alias": "@react-native-svg"
   },
   "homepage": "https://github.com/react-native-community/react-native-svg",
   "repository": {
@@ -120,6 +120,9 @@
     "android/src/**/*.java": "yarn format-java"
   },
   "nativePackage": true,
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "codegenConfig": {
     "name": "rnsvg",
     "type": "all",
