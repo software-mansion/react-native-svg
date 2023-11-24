@@ -3,7 +3,7 @@
   "types": "",
   "devDependencies": {
     "rnoh": "file:../rnoh"
-  }
+  },
   "name": "rnoh-svg",
   "description": "Native part of react-native-svg",
   "main": "Index.ets",
