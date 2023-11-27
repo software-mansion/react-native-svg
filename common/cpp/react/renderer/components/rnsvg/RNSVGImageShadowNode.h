@@ -44,8 +44,8 @@ class JSI_EXPORT RNSVGImageShadowNode final : public ConcreteViewShadowNode<
   void setImageManager(const SharedImageManager &imageManager);
 
   static RNSVGImageState initialStateData(
-      ShadowNodeFragment const &fragment,
-      ShadowNodeFamilyFragment const &familyFragment,
+      Props::Shared const &props,
+      ShadowNodeFamily::Shared const &family,
       ComponentDescriptor const &componentDescriptor) {
     auto imageSource = ImageSource{ImageSource::Type::Invalid};
     return {imageSource, {imageSource, nullptr, {}}};
