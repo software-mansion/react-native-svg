@@ -117,6 +117,7 @@ PODS:
     - React-Core
     - React-debug
     - React-Fabric
+    - React-FabricImage
     - React-graphics
     - React-jsi
     - React-jsiexecutor
@@ -911,7 +912,6 @@ PODS:
     - React-debug
     - React-Fabric
     - React-graphics
-    - React-RCTImage
     - React-rendererdebug
     - React-utils
   - React-jserrorhandler (0.73.0-rc.5):
@@ -1152,34 +1152,23 @@ PODS:
     - React-jsi (= 0.73.0-rc.5)
     - React-logger (= 0.73.0-rc.5)
     - React-perflogger (= 0.73.0-rc.5)
-  - RNReanimated (3.5.4):
-    - DoubleConversion
-    - FBLazyVector
+  - RNReanimated (3.6.0-nightly-20231126-39683bbd4):
     - glog
     - hermes-engine
-    - RCT-Folly
+    - RCT-Folly (= 2022.05.16.00)
     - RCTRequired
     - RCTTypeSafety
-    - React-callinvoker
     - React-Codegen
     - React-Core
-    - React-Core/DevSupport
-    - React-Core/RCTWebSocket
-    - React-CoreModules
-    - React-cxxreact
-    - React-hermes
-    - React-jsi
-    - React-jsiexecutor
-    - React-jsinspector
-    - React-RCTActionSheet
-    - React-RCTAnimation
-    - React-RCTBlob
+    - React-debug
+    - React-Fabric
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
     - React-RCTFabric
-    - React-RCTImage
-    - React-RCTLinking
-    - React-RCTNetwork
-    - React-RCTSettings
-    - React-RCTText
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
   - RNSVG (14.0.0):
@@ -1452,7 +1441,7 @@ SPEC CHECKSUMS:
   RCTTypeSafety: 834daf2695e2766d0a08082403a6c622e3581a36
   React: ae410e0d71bdbce181d7e5fdde31bf3dec8861ef
   React-callinvoker: adcef32af8fd0558a6790969610fc3e96368732f
-  React-Codegen: 5cf166aea33a4d7503b3d823f527785685e6b305
+  React-Codegen: 2cb0780f3ddcec7bc0265b0357e1250e85d45491
   React-Core: d9b9a00aecd051ff919d2def123d91a158744897
   React-CoreModules: 49698ebd4f456668c26f4e19b42fd61721d258b3
   React-cxxreact: d7ec1e7a83b063998341a9b65f5854f020a172f7
@@ -1461,7 +1450,7 @@ SPEC CHECKSUMS:
   React-FabricImage: c58f0b34fe2d4d72ddc4ede3be1ca706e0f78db7
   React-graphics: 609f00796ef90ab40bb7fcf827987a463ebfc584
   React-hermes: a2b258069b57823b6b93f9cf2110f3321d36d9e8
-  React-ImageManager: 4c75c2c56949693df52a2fe59ae3113222fd829e
+  React-ImageManager: ef9d43d25b67d6b62e526295dc0a911a442a706c
   React-jserrorhandler: 24ec1c0f242850296e84d6dfd433417a31bb3624
   React-jsi: 84df4e55c583fbc8af83da558799a4bedfc3e7f0
   React-jsiexecutor: d5fa8c5107577a0f51e42828a4305716a19442c7
@@ -1492,7 +1481,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: a80659eb4504ad696295b3e51b90805a97c34129
   React-utils: 2e199c0f64d49f8ca4175d878e365d2701ad41f7
   ReactCommon: 82a6500a0906815f2e6079d6a3f226bd2f58e61d
-  RNReanimated: 6d80917d429da88850dd835dac085775d0e22de5
+  RNReanimated: c2f58006d1b6d7cd80b1858620e5dd1092deee8b
   RNSVG: 6464ef1b5dc77a1de3d4a9b70624a87180cd61f7
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 1b395db8632a574e065f5e7f0f97f8f613675b64
