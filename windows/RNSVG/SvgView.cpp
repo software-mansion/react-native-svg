@@ -202,8 +202,10 @@ void SvgView::CreateResources() {
 
 void SvgView::Panel_Loaded(IInspectable const &sender, xaml::RoutedEventArgs const & /*args*/) {
   if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
-    m_loaded = true;
-    svgView.CreateResources();
+    if (!m_loaded) {
+      m_loaded = true;
+      svgView.CreateResources();
+    }
   }
 }
 
