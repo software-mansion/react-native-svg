@@ -53,6 +53,7 @@ target_link_libraries(
   turbomodulejsijni
   yoga
   react_render_imagemanager
+  react_utils
 )
 
 target_compile_options(

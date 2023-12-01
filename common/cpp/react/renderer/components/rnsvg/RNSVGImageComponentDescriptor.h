@@ -26,10 +26,10 @@ class RNSVGImageComponentDescriptor final
       : ConcreteComponentDescriptor(parameters),
         imageManager_(std::make_shared<ImageManager>(contextContainer_)){};
 
-  void adopt(ShadowNode::Unshared const &shadowNode) const override {
+  void adopt(ShadowNode &shadowNode) const override {
     ConcreteComponentDescriptor::adopt(shadowNode);
 
-    auto &imageShadowNode = static_cast<RNSVGImageShadowNode &>(*shadowNode);
+    auto &imageShadowNode = static_cast<RNSVGImageShadowNode &>(shadowNode);
 
     // `RNSVGImageShadowNode` uses `ImageManager` to initiate image loading and
     // communicate the loading state and results to mounting layer.
