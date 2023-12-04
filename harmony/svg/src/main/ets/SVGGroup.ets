@@ -57,6 +57,7 @@ export struct SVGGroup {
     this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
       (newDescriptor) => {
         this.descriptor = (newDescriptor as SVGGroupDescriptor)
+		setGroupDescriptor(this.tag, this.descriptor)
       }
     )
     setGroupDescriptor(this.tag, this.descriptor)

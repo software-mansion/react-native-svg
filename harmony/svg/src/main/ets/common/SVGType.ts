@@ -80,7 +80,7 @@ export type SVGCommonProps = {
 
 export type SVGBaseProps = SVGCommonProps & {
   fill?: SVGColorValue,
-  fillOpacity?: number,
+  fillOpacity: number,
   fillRule?: number,
   stroke?: SVGColorValue,
   strokeOpacity?: number,
@@ -151,6 +151,12 @@ export type SVGRectProps = SVGBaseProps & {
   height?: string,
   rx?: string,
   ry?: string
+}
+
+export type SVGClipPathObj = {
+  type: string,
+  tag: number,
+  value: object
 }
 
 /** Text 部分 */

@@ -23,12 +23,12 @@
  */
 
 import { ColorSegments, convertColorSegmentsToString, TransformMatrix } from 'rnoh'
-import { getGroupDescriptor, hasViewKey } from './SVGTempCache'
+import { getGroupDescriptor, getViewDescriptor, hasViewKey } from './SVGTempCache'
 import { SVGOffset } from './SVGType'
 import { SVGViewDescriptor } from '../SVGView'
 import matrix4 from '@ohos.matrix4'
 
-export function getOffset(x?: string, y?: string): SVGOffset {
+export function getOffset(x?: string | number, y?: string | number): SVGOffset {
   let offset: SVGOffset = { x: x ? x : 0,
     y: y ? y : 0 }
   return offset
@@ -74,11 +74,26 @@ export function getColor(color: ColorSegments): string | undefined {
   return convertColorSegmentsToString(color)
 }
 
+export function getRadius(rx?: string, ry?: string): string | number | undefined {
+  if (rx === '\u0000') {
+    return ry !== '\u0000' ? ry : 0
+  }
+  return rx
+}
+
 export function parseCoordinateValue(value?: string): number {
   if (value?.indexOf('%') != -1) {
     value = value?.replace('%', '')
   }
   return value ? Number(value) : 0
+}
+
+export function getSvgViewHeight(groupTag?: number): number {
+  let height = getViewDescriptor(getSvgViewTag(groupTag))?.layoutMetrics
+	.frame
+	.size
+	.height
+  return height ? height : 0
 }
 
 export function getSvgViewTag(groupTag?: number): number | undefined {
@@ -91,4 +106,9 @@ export function getSvgViewTag(groupTag?: number): number | undefined {
   return tag
 }
 
-
+function parseOffsetValue(value?: string | number): string | number | undefined {
+  if (typeof value == 'string' && !value.includes('%')) {
+    value = Number(value)
+  }
+  return value
+}

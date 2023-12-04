@@ -24,8 +24,9 @@
 
 import { Descriptor, RNOHContext } from 'rnoh'
 import Logger from './common/log/Logger'
-import { getOffset, getTransform, getColor } from './common/SVGCommon'
-import { SVGRectProps } from './common/SVGType'
+import { getOffset, getTransform, getColor, getRadius } from './common/SVGCommon'
+import { getClipPathDescriptor } from './common/SVGTempCache'
+import { SVGClipPathObj , SVGRectProps } from './common/SVGType'
 
 export const SVG_RECT_TYPE_NAME: string = "RNSVGRect"
 
@@ -52,18 +53,41 @@ export struct SVGRect {
     this.unregisterDescriptorChangesListener?.()
   }
 
+  getClipPath() {
+    if (!this.descriptor.props.clipPath) {
+      return undefined
+	}
+	let clipPathObjTemp: objet | undefined = getClipPathDescriptor(this.descriptor.props.clipPath)
+	if (!clipPathObjTemp) {
+      return undefined
+	}
+	let clipPathObj: SVGClipPathObj = clipPathObjTemp as SVGClipPathObj
+	if (!(clipPathObj.type && clipPathObj.value)) {
+      return undefined
+	}
+	if (clipPathObj.type == 'RNSVGRect') {
+      return clipPathObj.value as RectAttribute
+	}
+	return undefined
+  }
+
+  getOffset() {
+    return getOffset(this.descriptor.props.x, this.descriptor.props.y)
+  }
+
   build() {
     Rect()
       .width(this.descriptor.props.width)
       .height(this.descriptor.props.height)
-      .position(this.descriptor.layoutMetrics.frame.origin)
+      .position(this.getOffset())
       .fill(getColor(this.descriptor.props.fill?.payload))
       .fillOpacity(this.descriptor.props.fill?.payload ? this.descriptor.props.fillOpacity : 0)
       .stroke(getColor(this.descriptor.props.stroke?.payload))
       .strokeWidth(this.descriptor.props.strokeWidth)
-      .offset(getOffset(this.descriptor.props.x, this.descriptor.props.y))
-      .radiusWidth(this.descriptor.props.rx ?? 0)
-      .radiusHeight(this.descriptor.props.ry ?? 0)
+      .radiusWidth(getRadius(this.descriptor.props.rx, this.descriptor.props.ry))
+      .radiusHeight(getRadius(this.descriptor.props.ry, this.descriptor.props.rx))
+	  .opacity(this.descriptor.props.opacity)
       .transform(getTransform(this.descriptor.props.matrix))
+	  .clip(this.getClipPath())
   }
 }

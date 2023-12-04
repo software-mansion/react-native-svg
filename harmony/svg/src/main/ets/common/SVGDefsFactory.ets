@@ -52,19 +52,23 @@ function componentProcessing(ctx: RNOHContext, tag: Tag) {
   let type: string = ctx.descriptorRegistry.getDescriptor(tag).type
   if (type === SVG_PATH_TYPE_NAME) {
     let descriptorTemp: SVGPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(tag)
-    setDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
+    storageDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
   } else if (type === SVG_RECT_TYPE_NAME) {
     let descriptorTemp: SVGRectDescriptor = ctx.descriptorRegistry.getDescriptor<SVGRectDescriptor>(tag)
-    setDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
+    storageDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
   } else if (type === SVG_IMAGE_TYPE_NAME) {
     let descriptorTemp: SVGImageDescriptor = ctx.descriptorRegistry.getDescriptor<SVGImageDescriptor>(tag)
-    setDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
+    storageDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
   } else if (type === SVG_LINEAR_GRADIENT_TYPE_NAME) {
     let descriptorTemp: SVGLinearGradientDescriptor = ctx.descriptorRegistry.getDescriptor<SVGLinearGradientDescriptor>(tag)
-    setDefsDescriptor(descriptorTemp.props.name, parseLinearGradient(descriptorTemp))
+    storageDefsDescriptor(descriptorTemp.props.name, parseLinearGradient(descriptorTemp))
   } else if (type === SVG_CLIP_PATH_TYPE_NAME) {
-    let descriptorTemp: SVGClipPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGClipPathDescriptor>(tag)
     SVGClipPathFactory(ctx, tag)
-    // setDefsProps(descriptorTemp.props.name, descriptorTemp.props)
+  }
+}
+
+function storageDefsDescriptor(key?: string, value?: object) {
+  if (key && value) {
+    setDefsDescriptor(key, value)
   }
 }

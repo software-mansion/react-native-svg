@@ -27,30 +27,42 @@ import { SVG_PATH_TYPE_NAME, SVGPathDescriptor } from "../SVGPath"
 import { SVG_RECT_TYPE_NAME, SVGRectDescriptor } from "../SVGRect"
 import { SVG_IMAGE_TYPE_NAME, SVGImageDescriptor } from "../SVGImage"
 import { SVG_LINEAR_GRADIENT_TYPE_NAME, SVGLinearGradientDescriptor } from "./SVGLinearGradient"
-import { SVGClipPathProps } from './SVGType'
+import { SVGClipPathObj, SVGClipPathProps, SVGRectProps } from './SVGType'
 import Logger from './log/Logger'
+import { getRadius } from './SVGCommon'
+import { setClipPathDescriptor } from './SVGTempCache'
 
 export const SVG_CLIP_PATH_TYPE_NAME: string = "RNSVGClipPath"
 
 export type SVGClipPathDescriptor = Descriptor<"RNSVGClipPath", SVGClipPathProps>
 
+let descriptor: SVGClipPathDescriptor = {} as SVGClipPathDescriptor
+
 export function SVGClipPathFactory(ctx: RNOHContext, tag: number): void {
-  const descriptor = ctx.descriptorRegistry.getDescriptor(tag)
-  if (descriptor) {
+  const descriptor = ctx.descriptorRegistry.getDescriptor<SVGClipPathDescriptor>(tag)
+  if (descriptor.props.name && descriptor) {
+	let key: string = descriptor.props.name
     descriptor.childrenTags.forEach((childrenTag) => {
       Logger.debug("RNOH SVGClipPathFactory childrenTag=", JSON.stringify(childrenTag))
-      componentProcessing(ctx, childrenTag)
+      componentProcessing(ctx, childrenTag, key)
     })
   }
 }
 
-function componentProcessing(ctx: RNOHContext, tag: Tag) {
+function componentProcessing(ctx: RNOHContext, tag: Tag, key: string) {
   //TODO 需要转换成鸿蒙对应使用格式后进行缓存
   let type: string = ctx.descriptorRegistry.getDescriptor(tag).type
   if (type === SVG_PATH_TYPE_NAME) {
     let descriptorTemp: SVGPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(tag)
   } else if (type === SVG_RECT_TYPE_NAME) {
     let descriptorTemp: SVGRectDescriptor = ctx.descriptorRegistry.getDescriptor<SVGRectDescriptor>(tag)
+	let value: SVGClipPathObj = { type, tag, value: new Rect({
+	  width("100%"),
+	  height("100%"),
+	  radiusWidth: getRadius(descriptorTemp.props.rx, descriptorTemp.props.ry),
+	  radiusHeight: getRadius(descriptorTemp.props.ry, descriptorTemp.props.rx)
+	}) }
+	setClipPathDescriptor(key, value)
   } else if (type === SVG_IMAGE_TYPE_NAME) {
     let descriptorTemp: SVGImageDescriptor = ctx.descriptorRegistry.getDescriptor<SVGImageDescriptor>(tag)
   } else if (type === SVG_LINEAR_GRADIENT_TYPE_NAME) {

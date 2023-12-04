@@ -69,6 +69,6 @@ export function getDefsDescriptor(cacheKey?: string): object | undefined {
   return cacheKey ? defsCache.get(cacheKey) : undefined
 }
 
-export function setDefsDescriptor(cacheKey?: string, descriptor?: object): void {
+export function setDefsDescriptor(cacheKey: string, descriptor?: object): void {
   defsCache.set(cacheKey, descriptor)
 }

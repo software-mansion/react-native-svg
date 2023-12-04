@@ -24,7 +24,7 @@
 
 import { Descriptor, RNOHContext, } from 'rnoh'
 import Logger from './common/log/Logger'
-import { getColor, getOffset } from './common/SVGCommon'
+import { getColor, getOffset, getTransform } from './common/SVGCommon'
 import { NumberProp, FontWeight, SVGTextProps, SVGTSpanProps } from './common/SVGType'
 
 export const SVG_TEXT_TYPE_NAME: string = "RNSVGText"
@@ -101,13 +101,16 @@ export struct SVGText {
         Span(tSpanDescriptor.props.content)
           .fontSize(this.getFontSize(tSpanDescriptor.props.font?.fontSize))
           .fontWeight(this.getFontWeight(tSpanDescriptor.props.font?.fontWeight))
+		  .opacity(tSpanDescriptor.props.opacity)
         // .fontColor(getColor(tSpanDescriptor.props.fill?.payload))
       })
     }
-    .offset(this.getOffset(this.descriptor.props?.x, this.descriptor.props?.y))
+    .position(this.getOffset(this.descriptor.props?.x, this.descriptor.props?.y))
     .fontColor(getColor(this.descriptor.props.fill?.payload))
     .fontSize(this.descriptor.props.font?.fontSize)
     .fontWeight(this.descriptor.props.font?.fontWeight)
     .textAlign(this.getTextAlign(this.descriptor.props.font?.textAnchor))
+	.opacity(this.descriptor.props.opacity)
+	.transform(getTransform(this.descriptor.props.matrix))
   }
 }

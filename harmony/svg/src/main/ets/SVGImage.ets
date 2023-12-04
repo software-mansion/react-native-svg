@@ -69,9 +69,8 @@ export struct SVGImage {
       .width(this.descriptor.props.width)
       .height(this.descriptor.props.height)
       .autoResize(true)
-      .position(this.descriptor.layoutMetrics.frame.origin)
+      .position(getOffset(this.descriptor.props.x, this.descriptor.props.y))
       .opacity(this.descriptor.props.opacity)
       .transform(getTransform(this.descriptor.props.matrix))
-      // .offset(getOffset(this.descriptor.props.x, this.descriptor.props.y))
   }
 }

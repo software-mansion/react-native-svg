@@ -31,9 +31,16 @@ export const SVG_LINEAR_GRADIENT_TYPE_NAME: string = "RNSVGLinearGradient"
 
 export type SVGLinearGradientDescriptor = Descriptor<"RNSVGLinearGradient", SVGLinearGradientProps>
 
-class LinearGradient {
+export class SVGLinearGradient {
   colors: Array<[ResourceColor, number]> = []
   direction: GradientDirection = GradientDirection.Bottom
+}
+
+export class SVGLinearGradientValue {
+  angle?: number | string = 0
+  direction?: GradientDirection = GradientDirection.Bottom
+  colors: Array<[ResourceColor, number]> = []
+  repeating?: boolean = true
 }
 
 export function parseLinearGradient(descriptor: SVGLinearGradientDescriptor): object {
@@ -43,7 +50,7 @@ export function parseLinearGradient(descriptor: SVGLinearGradientDescriptor): ob
   let direction = parseGradientDirection(descriptor.props)
   Logger.debug("RNOH SVGLinearGradient direction=", JSON.stringify(direction))
 
-  let linearGradient: LinearGradient = { colors, direction }
+  let linearGradient: SVGLinearGradient = { colors, direction }
   return linearGradient
 }
 

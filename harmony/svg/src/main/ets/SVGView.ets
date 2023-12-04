@@ -52,6 +52,7 @@ export struct SVGView {
     this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
       (newDescriptor) => {
         this.descriptor = (newDescriptor as SVGViewDescriptor)
+		setViewDescriptor(this.tag, this.descriptor)
       }
     )
     setViewDescriptor(this.tag, this.descriptor)
@@ -63,9 +64,7 @@ export struct SVGView {
   }
 
   scaleValue() {
-    let scale = Math.min(getScaleX(this.descriptor), getScaleY(this.descriptor))
-    Logger.debug("RNOH SVGView scaleValue", JSON.stringify(scale))
-    return scale
+    return Math.min(getScaleX(this.descriptor), getScaleY(this.descriptor))
   }
 
   build() {
