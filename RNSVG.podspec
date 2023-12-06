@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.requires_arc    = true
 
   if fabric_enabled
-    s.platforms = { :osx => "10.14", ios => "12.4", tvos => "11.0", :visionos => "1.0" }
+    s.platforms = { :osx => "10.14", :ios => "12.4", :tvos => "11.0", :visionos => "1.0" }
     install_modules_dependencies(s)
 
     s.subspec "common" do |ss|
