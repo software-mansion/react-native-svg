@@ -245,10 +245,17 @@ UInt32 saturate(CGFloat value)
     CGSize boundsSize = bounds.size;
     CGFloat height = boundsSize.height;
     CGFloat width = boundsSize.width;
+    CGFloat scale = 0.0;
 #if TARGET_OS_OSX
-    CGFloat scale = [[NSScreen mainScreen] backingScaleFactor];
+    scale = [[NSScreen mainScreen] backingScaleFactor];
 #else
-    CGFloat scale = [[UIScreen mainScreen] scale];
+    if (@available(iOS 13.0, *)) {
+      scale = [UITraitCollection currentTraitCollection].displayScale;
+    } else {
+#if !TARGET_OS_VISION
+      scale = [[UIScreen mainScreen] scale];
+#endif
+    }
 #endif // TARGET_OS_OSX
     NSUInteger iheight = (NSUInteger)height;
     NSUInteger iwidth = (NSUInteger)width;

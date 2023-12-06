@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.requires_arc    = true
 
   if fabric_enabled
-    s.platforms = { :osx => "10.14", ios: '12.4', tvos: '11.0' }
+    s.platforms = { :osx => "10.14", :ios => "12.4", :tvos => "11.0", :visionos => "1.0" }
     install_modules_dependencies(s)
 
     s.subspec "common" do |ss|
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
       ss.pod_target_xcconfig  = { "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/common/cpp\"" }
     end
   else
-    s.platforms         = { :osx => "10.14", :ios => "10.0", :tvos => "9.2" }
+    s.platforms         = { :osx => "10.14", :ios => "10.0", :tvos => "9.2", :visionos => "1.0" }
     s.exclude_files      = 'apple/Utils/RNSVGFabricConversions.h'
     s.dependency           'React-Core'
   end
