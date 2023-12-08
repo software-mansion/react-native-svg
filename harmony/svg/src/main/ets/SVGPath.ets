@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -25,9 +25,10 @@
 import { Descriptor, RNOHContext } from 'rnoh'
 import Logger from './common/log/Logger'
 import { getColor, getScaleX, getScaleY, getSvgViewTag, getTransform } from './common/SVGCommon'
-import { getViewDescriptor } from './common/SVGTempCache'
+import { getViewDescriptor, getDefsDescriptor } from './common/SVGTempCache'
 import { SVGPathProps } from './common/SVGType'
 import { SVGViewDescriptor } from './SVGView'
+import { SVGLinearGradient, SVGLinearGradientValue } from './common/SVGLinearGradient'
 
 export const SVG_PATH_TYPE_NAME: string = "RNSVGPath"
 
@@ -39,6 +40,8 @@ export struct SVGPath {
   tag: number = 0
   @State descriptor: SVGPathDescriptor = {} as SVGPathDescriptor
   @State scaleValue: number = 1
+  @State gradient: SVGLinearGradient = {} as SVGLinearGradient
+  @State gradientEnable: boolean = false
   private unregisterDescriptorChangesListener?: () => void = undefined
   private vp2pxValue: number = vp2px(1)
 
@@ -47,14 +50,29 @@ export struct SVGPath {
     this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
       (newDescriptor) => {
         this.descriptor = (newDescriptor as SVGPathDescriptor)
+		this.getGradientEnable()
+		Logger.debug("RNOH SVGPath New", JSON.stringify(this.descriptor))
       }
     )
     Logger.debug("RNOH SVGPath", JSON.stringify(this.descriptor))
     this.initScale()
+	this.getGradientEnable()
   }
 
   aboutToDisappear() {
     this.unregisterDescriptorChangesListener?.()
+  }
+
+  getGradientEnable() {
+    if (this.descriptor.props.fill?.type == 1) {
+      let gradientTemp: SVGLinearGradient | undefined = getDefsDescriptor(this.descriptor.props.fill?.brushRef) as SVGLinearGradient
+      if (gradientTemp) {
+		this.gradient = gradientTemp
+		this.gradientEnable = true
+		return
+      }
+    }
+	this.gradientEnable = false
   }
 
   initScale() {
@@ -64,23 +82,47 @@ export struct SVGPath {
     }
   }
 
+  getOrigin() {
+    return this.descriptor.layoutMetrics.frame.origin
+  }
+
   getStrokeWidth(strokeWidth?: string) {
     return strokeWidth ? Number(strokeWidth) / this.vp2pxValue : 0
+  }
+
+  getLinearGradient() {
+    if (this.gradientEnable) {
+      let linearGradientValue: SVGLinearGradientValue = {
+		direction: thia.gradient.direction,
+		repeating: true,
+		colors: this.gradient.colors
+	  }
+	  return linearGradientValue
+    }
+	return undefined
+  }
+
+  getClip() {
+	return this.gradientEnable ? new Path({
+    width: "100%",
+    heigth: "100%",
+	  commands: this.descriptor.props.d }) : undefined
   }
 
   build() {
     Path()
       .antiAlias(true)
       .commands(this.descriptor.props.d)
-      .position(this.descriptor.layoutMetrics.frame.origin)
+      .position(this.getOrigin())
       .fill(getColor(this.descriptor.props.fill?.payload))
       .fillOpacity(this.descriptor.props.fill?.payload ? this.descriptor.props.fillOpacity : 0)
       .stroke(getColor(this.descriptor.props.stroke?.payload))
       .strokeWidth(this.getStrokeWidth(this.descriptor.props.strokeWidth))
       .strokeLineCap(this.descriptor.props.strokeLinecap)
+      .opacity(this.descriptor.props.opacity)
       .transform(getTransform(this.descriptor.props.matrix, this.scaleValue))
       .scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 })
-    // .width("100%")
-    // .height("100%")
+      .linearGradient(this.getLinearGradient())
+      .clip(this.getClip())
   }
 }

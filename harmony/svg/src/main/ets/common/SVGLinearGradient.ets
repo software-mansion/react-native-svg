@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -31,9 +31,16 @@ export const SVG_LINEAR_GRADIENT_TYPE_NAME: string = "RNSVGLinearGradient"
 
 export type SVGLinearGradientDescriptor = Descriptor<"RNSVGLinearGradient", SVGLinearGradientProps>
 
-class LinearGradient {
+export class SVGLinearGradient {
   colors: Array<[ResourceColor, number]> = []
   direction: GradientDirection = GradientDirection.Bottom
+}
+
+export class SVGLinearGradientValue {
+  angle?: number | string = 0
+  direction?: GradientDirection = GradientDirection.Bottom
+  colors: Array<[ResourceColor, number]> = []
+  repeating?: boolean = true
 }
 
 export function parseLinearGradient(descriptor: SVGLinearGradientDescriptor): object {
@@ -43,7 +50,7 @@ export function parseLinearGradient(descriptor: SVGLinearGradientDescriptor): ob
   let direction = parseGradientDirection(descriptor.props)
   Logger.debug("RNOH SVGLinearGradient direction=", JSON.stringify(direction))
 
-  let linearGradient: LinearGradient = { colors, direction }
+  let linearGradient: SVGLinearGradient = { colors, direction }
   return linearGradient
 }
 
@@ -75,7 +82,6 @@ function parseGradientDirection(props: SVGLinearGradientProps): GradientDirectio
     return y1 < y2 ? GradientDirection.Top : GradientDirection.Bottom
   }
   if (y1 !== y2 && x1 !== x2) {
-    // angle TODO 需要完善角度判断逻辑
     return GradientDirection.Bottom
   }
   return GradientDirection.Bottom

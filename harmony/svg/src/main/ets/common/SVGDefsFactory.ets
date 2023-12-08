@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -48,23 +48,26 @@ export function SVGDefsFactory(ctx: RNOHContext, tag: number): void {
 }
 
 function componentProcessing(ctx: RNOHContext, tag: Tag) {
-  //TODO 需要转换成鸿蒙对应使用格式后进行缓存
   let type: string = ctx.descriptorRegistry.getDescriptor(tag).type
   if (type === SVG_PATH_TYPE_NAME) {
     let descriptorTemp: SVGPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(tag)
-    setDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
+    storageDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
   } else if (type === SVG_RECT_TYPE_NAME) {
     let descriptorTemp: SVGRectDescriptor = ctx.descriptorRegistry.getDescriptor<SVGRectDescriptor>(tag)
-    setDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
+    storageDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
   } else if (type === SVG_IMAGE_TYPE_NAME) {
     let descriptorTemp: SVGImageDescriptor = ctx.descriptorRegistry.getDescriptor<SVGImageDescriptor>(tag)
-    setDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
+    storageDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
   } else if (type === SVG_LINEAR_GRADIENT_TYPE_NAME) {
     let descriptorTemp: SVGLinearGradientDescriptor = ctx.descriptorRegistry.getDescriptor<SVGLinearGradientDescriptor>(tag)
-    setDefsDescriptor(descriptorTemp.props.name, parseLinearGradient(descriptorTemp))
+    storageDefsDescriptor(descriptorTemp.props.name, parseLinearGradient(descriptorTemp))
   } else if (type === SVG_CLIP_PATH_TYPE_NAME) {
-    let descriptorTemp: SVGClipPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGClipPathDescriptor>(tag)
     SVGClipPathFactory(ctx, tag)
-    // setDefsProps(descriptorTemp.props.name, descriptorTemp.props)
+  }
+}
+
+function storageDefsDescriptor(key?: string, value?: object) {
+  if (key && value) {
+    setDefsDescriptor(key, value)
   }
 }

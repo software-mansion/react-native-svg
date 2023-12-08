@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -31,44 +31,44 @@
 namespace facebook {
 namespace react {
 
-extern const char RNSVGGroupComponentName[] = "RNSVGGroup";
-extern const char RNSVGSvgViewComponentName[] = "RNSVGSvgView";
-extern const char RNSVGPathComponentName[] = "RNSVGPath";
-extern const char RNSVGRectComponentName[] = "RNSVGRect";
-extern const char RNSVGImageComponentName[] = "RNSVGImage";
-extern const char RNSVGLinearGradientComponentName[] = "RNSVGLinearGradient";
-extern const char RNSVGDefsComponentName[] = "RNSVGDefs";
-extern const char RNSVGTextComponentName[] = "RNSVGText";
-extern const char RNSVGTSpanComponentName[] = "RNSVGTSpan";
-extern const char RNSVGClipPathComponentName[] = "RNSVGClipPath";
-
-using RNSVGGroupShadowNode =
-    ConcreteViewShadowNode<RNSVGGroupComponentName, RNSVGGroupProps>;
+extern const char RN_SVG_SVG_VIEW_COMPONENT_NAME[] = "RNSVGSvgView";
+extern const char RN_SVG_GROUP_COMPONENT_NAME[] = "RNSVGGroup";
+extern const char RN_SVG_PATH_COMPONENT_NAME[] = "RNSVGPath";
+extern const char RN_SVG_RECT_COMPONENT_NAME[] = "RNSVGRect";
+extern const char RN_SVG_IMAGE_COMPONENT_NAME[] = "RNSVGImage";
+extern const char RN_SVG_LINEAR_GRADIENT_COMPONENT_NAME[] = "RNSVGLinearGradient";
+extern const char RN_SVG_DEFS_COMPONENT_NAME[] = "RNSVGDefs";
+extern const char RN_SVG_TEXT_COMPONENT_NAME[] = "RNSVGText";
+extern const char RN_SVG_T_SPAN_COMPONENT_NAME[] = "RNSVGTSpan";
+extern const char RN_SVG_CLIP_PATH_COMPONENT_NAME[] = "RNSVGClipPath";
 
 using RNSVGSvgViewShadowNode =
-    ConcreteViewShadowNode<RNSVGSvgViewComponentName, RNSVGSvgViewProps>;
+    ConcreteViewShadowNode<RN_SVG_SVG_VIEW_COMPONENT_NAME, RNSVGSvgViewProps>;
+
+using RNSVGGroupShadowNode =
+    ConcreteViewShadowNode<RN_SVG_GROUP_COMPONENT_NAME, RNSVGGroupProps>;
 
 using RNSVGPathShadowNode =
-    ConcreteViewShadowNode<RNSVGPathComponentName, RNSVGPathProps>;
+    ConcreteViewShadowNode<RN_SVG_PATH_COMPONENT_NAME, RNSVGPathProps>;
 
 using RNSVGRectShadowNode =
-    ConcreteViewShadowNode<RNSVGRectComponentName, RNSVGRectProps>;
+    ConcreteViewShadowNode<RN_SVG_RECT_COMPONENT_NAME, RNSVGRectProps>;
 
 using RNSVGImageShadowNode =
-    ConcreteViewShadowNode<RNSVGImageComponentName, RNSVGImageProps>;
+    ConcreteViewShadowNode<RN_SVG_IMAGE_COMPONENT_NAME, RNSVGImageProps>;
 
 using RNSVGLinearGradientShadowNode =
-    ConcreteViewShadowNode<RNSVGLinearGradientComponentName, RNSVGLinearGradientProps>;
+    ConcreteViewShadowNode<RN_SVG_LINEAR_GRADIENT_COMPONENT_NAME, RNSVGLinearGradientProps>;
 
 using RNSVGDefsShadowNode =
-    ConcreteViewShadowNode<RNSVGDefsComponentName, RNSVGDefsProps>;
+    ConcreteViewShadowNode<RN_SVG_DEFS_COMPONENT_NAME, RNSVGDefsProps>;
 
 using RNSVGTextShadowNode =
-    ConcreteViewShadowNode<RNSVGTextComponentName, RNSVGTextProps>;
+    ConcreteViewShadowNode<RN_SVG_TEXT_COMPONENT_NAME, RNSVGTextProps>;
 
-using RNSVGTSpanShadowNode = ConcreteViewShadowNode<RNSVGTSpanComponentName, RNSVGTSpanProps>;
+using RNSVGTSpanShadowNode = ConcreteViewShadowNode<RN_SVG_T_SPAN_COMPONENT_NAME, RNSVGTSpanProps>;
 
-using RNSVGClipPathShadowNode = ConcreteViewShadowNode<RNSVGClipPathComponentName, RNSVGClipPathProps>;
+using RNSVGClipPathShadowNode = ConcreteViewShadowNode<RN_SVG_CLIP_PATH_COMPONENT_NAME, RNSVGClipPathProps>;
 
 using RNSVGGroupComponentDescriptor = ConcreteComponentDescriptor<RNSVGGroupShadowNode>;
 using RNSVGSvgViewComponentDescriptor = ConcreteComponentDescriptor<RNSVGSvgViewShadowNode>;

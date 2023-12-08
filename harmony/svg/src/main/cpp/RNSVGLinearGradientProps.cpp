@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -54,6 +54,6 @@ RNSVGLinearGradientProps::RNSVGLinearGradientProps(
     gradient(convertRawProp(context, rawProps, "gradient", sourceProps.gradient, {})),
     gradientUnits(convertRawProp(context, rawProps, "gradientUnits", sourceProps.gradientUnits, {0})),
     gradientTransform(convertRawProp(context, rawProps, "gradientTransform", sourceProps.gradientTransform, {}))
-      {}
+    {}
 } // namespace react
 } // namespace facebook

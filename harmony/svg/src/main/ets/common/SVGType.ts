@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -80,7 +80,7 @@ export type SVGCommonProps = {
 
 export type SVGBaseProps = SVGCommonProps & {
   fill?: SVGColorValue,
-  fillOpacity?: number,
+  fillOpacity: number,
   fillRule?: number,
   stroke?: SVGColorValue,
   strokeOpacity?: number,
@@ -151,6 +151,12 @@ export type SVGRectProps = SVGBaseProps & {
   height?: string,
   rx?: string,
   ry?: string
+}
+
+export type SVGClipPathObj = {
+  type: string,
+  tag: number,
+  value: object
 }
 
 /** Text 部分 */

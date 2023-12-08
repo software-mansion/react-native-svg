@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -29,6 +29,54 @@
 
 namespace facebook {
 namespace react {
+
+static inline void fromRawValue(const PropsParserContext &context, const RawValue &value,
+                                RNSVGRectFillStruct &result)
+{
+    auto map = (butter::map<std::string, RawValue>)value;
+
+    auto tmp_type = map.find("type");
+    if (tmp_type != map.end()) {
+        fromRawValue(context, tmp_type->second, result.type);
+    }
+    auto tmp_payload = map.find("payload");
+    if (tmp_payload != map.end()) {
+        fromRawValue(context, tmp_payload->second, result.payload);
+    }
+    auto tmp_brushRef = map.find("brushRef");
+    if (tmp_brushRef != map.end()) {
+        fromRawValue(context, tmp_brushRef->second, result.brushRef);
+    }
+}
+
+static inline std::string toString(const RNSVGRectFillStruct &value)
+{
+    return "[Object RNSVGRectFillStruct]";
+}
+
+static inline void fromRawValue(const PropsParserContext &context, const RawValue &value,
+                                RNSVGRectStrokeStruct &result)
+{
+    auto map = (butter::map<std::string, RawValue>)value;
+
+    auto tmp_type = map.find("type");
+    if (tmp_type != map.end()) {
+        fromRawValue(context, tmp_type->second, result.type);
+    }
+    auto tmp_payload = map.find("payload");
+    if (tmp_payload != map.end()) {
+        fromRawValue(context, tmp_payload->second, result.payload);
+    }
+    auto tmp_brushRef = map.find("brushRef");
+    if (tmp_brushRef != map.end()) {
+        fromRawValue(context, tmp_brushRef->second, result.brushRef);
+    }
+}
+
+static inline std::string toString(const RNSVGRectStrokeStruct &value)
+{
+    return "[Object RNSVGRectStrokeStruct]";
+}
 
 RNSVGRectProps::RNSVGRectProps(
     const PropsParserContext &context,
@@ -66,7 +114,7 @@ RNSVGRectProps::RNSVGRectProps(
     width(convertRawProp(context, rawProps, "width", sourceProps.width, {0})),
     rx(convertRawProp(context, rawProps, "rx", sourceProps.rx, {0})),
     ry(convertRawProp(context, rawProps, "ry", sourceProps.ry, {0}))
-      {}
+    {}
 
 } // namespace react
 } // namespace facebook
