@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -57,7 +57,7 @@ export struct SVGRect {
     if (!this.descriptor.props.clipPath) {
       return undefined
 	}
-	let clipPathObjTemp: objet | undefined = getClipPathDescriptor(this.descriptor.props.clipPath)
+	let clipPathObjTemp: object | undefined = getClipPathDescriptor(this.descriptor.props.clipPath)
 	if (!clipPathObjTemp) {
       return undefined
 	}
@@ -86,8 +86,8 @@ export struct SVGRect {
       .strokeWidth(this.descriptor.props.strokeWidth)
       .radiusWidth(getRadius(this.descriptor.props.rx, this.descriptor.props.ry))
       .radiusHeight(getRadius(this.descriptor.props.ry, this.descriptor.props.rx))
-	  .opacity(this.descriptor.props.opacity)
+      .opacity(this.descriptor.props.opacity)
       .transform(getTransform(this.descriptor.props.matrix))
-	  .clip(this.getClipPath())
+      .clip(this.getClipPath())
   }
 }

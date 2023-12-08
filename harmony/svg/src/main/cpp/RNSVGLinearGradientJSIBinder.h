@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -29,7 +29,8 @@
 namespace rnoh {
 
 class RNSVGLinearGradientJSIBinder : public ViewComponentJSIBinder {
-    facebook::jsi::Object createNativeProps(facebook::jsi::Runtime &rt) override {
+    facebook::jsi::Object createNativeProps(facebook::jsi::Runtime &rt) override
+    {
         auto object = ViewComponentJSIBinder::createNativeProps(rt);
         object.setProperty(rt, "name", "string");
         object.setProperty(rt, "opacity", "float");
@@ -53,7 +54,8 @@ class RNSVGLinearGradientJSIBinder : public ViewComponentJSIBinder {
         return object;
     }
 
-    facebook::jsi::Object createBubblingEventTypes(facebook::jsi::Runtime &rt) override {
+    facebook::jsi::Object createBubblingEventTypes(facebook::jsi::Runtime &rt) override
+    {
         return facebook::jsi::Object(rt);
     }
 };

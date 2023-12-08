@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -38,29 +38,30 @@ namespace react {
 class JSI_EXPORT RNSVGLinearGradientProps final : public ViewProps {
  public:
   RNSVGLinearGradientProps() = default;
-  RNSVGLinearGradientProps(const PropsParserContext& context, const RNSVGLinearGradientProps &sourceProps, const RawProps &rawProps);
+  RNSVGLinearGradientProps(const PropsParserContext& context, const RNSVGLinearGradientProps &sourceProps,
+                            const RawProps &rawProps);
 
 #pragma mark - Props
 
-  std::string name{};
-  Float opacity{1.0};
-  std::vector<Float> matrix{};
-  std::string mask{};
-  std::string markerStart{};
-  std::string markerMid{};
-  std::string markerEnd{};
-  std::string clipPath{};
-  int clipRule{0};
-  bool responsible{false};
-  std::string display{};
-  std::string pointerEvents{};
-  std::string x1{};
-  std::string y1{};
-  std::string x2{};
-  std::string y2{};
-  std::vector<Float> gradient{};
-  int gradientUnits{0};
-  std::vector<Float> gradientTransform{};
+    std::string name{};
+    Float opacity{1.0};
+    std::vector<Float> matrix{};
+    std::string mask{};
+    std::string markerStart{};
+    std::string markerMid{};
+    std::string markerEnd{};
+    std::string clipPath{};
+    int clipRule{0};
+    bool responsible{false};
+    std::string display{};
+    std::string pointerEvents{};
+    std::string x1{};
+    std::string y1{};
+    std::string x2{};
+    std::string y2{};
+    std::vector<Float> gradient{};
+    int gradientUnits{0};
+    std::vector<Float> gradientTransform{};
 };
 } // namespace react
 } // namespace facebook

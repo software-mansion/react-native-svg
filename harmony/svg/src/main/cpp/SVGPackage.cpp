@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -25,7 +25,6 @@
 #pragma once
 
 #include <glog/logging.h>
-#include "SVGPackage.h"
 #include "ComponentDescriptors.h"
 #include "RNSVGGroupNapiBinder.h"
 #include "RNSVGSvgViewNapiBinder.h"
@@ -49,10 +48,13 @@
 #include "RNSVGTSpanJSIBinder.h"
 #include "RNSVGClipPathJSIBinder.h"
 
+#include "SVGPackage.h"
+
 using namespace rnoh;
 using namespace facebook;
 
-std::vector<react::ComponentDescriptorProvider> SVGPackage::createComponentDescriptorProviders() {
+std::vector<react::ComponentDescriptorProvider> SVGPackage::createComponentDescriptorProviders()
+{
     return {react::concreteComponentDescriptorProvider<react::RNSVGSvgViewComponentDescriptor>(),
             react::concreteComponentDescriptorProvider<react::RNSVGGroupComponentDescriptor>(),
             react::concreteComponentDescriptorProvider<react::RNSVGPathComponentDescriptor>(),
@@ -65,9 +67,10 @@ std::vector<react::ComponentDescriptorProvider> SVGPackage::createComponentDescr
             react::concreteComponentDescriptorProvider<react::RNSVGClipPathComponentDescriptor>()};
 }
 
-ComponentNapiBinderByString rnoh::SVGPackage::createComponentNapiBinderByName() {
-    return {{"RNSVGGroup", std::make_shared<RNSVGGroupNapiBinder>()},
-            {"RNSVGSvgView", std::make_shared<RNSVGSvgViewNapiBinder>()},
+ComponentNapiBinderByString rnoh::SVGPackage::createComponentNapiBinderByName()
+{
+    return {{"RNSVGSvgView", std::make_shared<RNSVGSvgViewNapiBinder>()},
+            {"RNSVGGroup", std::make_shared<RNSVGGroupNapiBinder>()},
             {"RNSVGPath", std::make_shared<RNSVGPathNapiBinder>()},
             {"RNSVGRect", std::make_shared<RNSVGRectNapiBinder>()},
             {"RNSVGImage", std::make_shared<RNSVGImageNapiBinder>()},
@@ -78,9 +81,10 @@ ComponentNapiBinderByString rnoh::SVGPackage::createComponentNapiBinderByName() 
             {"RNSVGClipPath", std::make_shared<RNSVGClipPathNapiBinder>()}};
 }
 
-ComponentJSIBinderByString rnoh::SVGPackage::createComponentJSIBinderByName() {
-    return {{"RNSVGGroup", std::make_shared<RNSVGGroupJSIBinder>()},
-            {"RNSVGSvgView", std::make_shared<RNSVGSvgViewJSIBinder>()},
+ComponentJSIBinderByString rnoh::SVGPackage::createComponentJSIBinderByName()
+{
+    return {{"RNSVGSvgView", std::make_shared<RNSVGSvgViewJSIBinder>()},
+            {"RNSVGGroup", std::make_shared<RNSVGGroupJSIBinder>()},
             {"RNSVGPath", std::make_shared<RNSVGPathJSIBinder>()},
             {"RNSVGRect", std::make_shared<RNSVGRectJSIBinder>()},
             {"RNSVGImage", std::make_shared<RNSVGImageJSIBinder>()},

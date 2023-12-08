@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -30,73 +30,101 @@
 
 namespace rnoh {
 
-    class RNSVGGroupNapiBinder : public ViewComponentNapiBinder {
-    public:
-        napi_value createProps(napi_env env, facebook::react::ShadowView const shadowView) override {
-            napi_value napiViewProps = ViewComponentNapiBinder::createProps(env, shadowView);
-            auto propsObjBuilder = ArkJS(env).getObjectBuilder(napiViewProps);
-            if (auto props = std::dynamic_pointer_cast<const facebook::react::RNSVGGroupProps>(shadowView.props)) {
-                propsObjBuilder.addProperty("name", props->name)
-                    .addProperty("opacity", props->opacity)
-                    .addProperty("mask", props->mask)
-                    .addProperty("markerStart", props->markerStart)
-                    .addProperty("markerMid", props->markerMid)
-                    .addProperty("markerEnd", props->markerEnd)
-                    .addProperty("clipPath", props->clipPath)
-                    .addProperty("clipRule", props->clipRule)
-                    .addProperty("responsible", props->responsible)
-                    .addProperty("display", props->display)
-                    .addProperty("pointerEvents", props->pointerEvents)
-                    .addProperty("fillOpacity", props->fillOpacity)
-                    .addProperty("fillRule", props->fillRule)
-                    .addProperty("strokeOpacity", props->strokeOpacity)
-                    .addProperty("strokeWidth", props->strokeWidth)
-                    .addProperty("strokeLinecap", props->strokeLinecap)
-                    .addProperty("strokeLinejoin", props->strokeLinejoin)
-                    //                .addProperty("strokeDasharray", props->strokeDasharray)
-                    .addProperty("strokeDashoffset", props->strokeDashoffset)
-                    .addProperty("strokeMiterlimit", props->strokeMiterlimit)
-                    .addProperty("vectorEffect", props->vectorEffect)
-                    .addProperty("propList", facebook::react::vectorStringToString(props->propList))
-                    .addProperty("fontSize", props->fontSize)
-                    //                                  .addProperty("font", props->font);
-                    .addProperty("fontWeight", props->fontWeight);
+class RNSVGGroupNapiBinder : public ViewComponentNapiBinder {
+public:
+    napi_value createProps(napi_env env, facebook::react::ShadowView const shadowView) override
+    {
+        napi_value napiViewProps = ViewComponentNapiBinder::createProps(env, shadowView);
+        auto propsObjBuilder = ArkJS(env).getObjectBuilder(napiViewProps);
+        if (auto props = std::dynamic_pointer_cast<const facebook::react::RNSVGGroupProps>(shadowView.props)) {
+            propsObjBuilder.addProperty("name", props->name)
+                .addProperty("opacity", props->opacity)
+                .addProperty("mask", props->mask)
+                .addProperty("markerStart", props->markerStart)
+                .addProperty("markerMid", props->markerMid)
+                .addProperty("markerEnd", props->markerEnd)
+                .addProperty("clipPath", props->clipPath)
+                .addProperty("clipRule", props->clipRule)
+                .addProperty("responsible", props->responsible)
+                .addProperty("display", props->display)
+                .addProperty("pointerEvents", props->pointerEvents)
+                .addProperty("fillOpacity", props->fillOpacity)
+                .addProperty("fillRule", props->fillRule)
+                .addProperty("strokeOpacity", props->strokeOpacity)
+                .addProperty("strokeWidth", props->strokeWidth)
+                .addProperty("strokeLinecap", props->strokeLinecap)
+                .addProperty("strokeLinejoin", props->strokeLinejoin)
+                .addProperty("strokeDashoffset", props->strokeDashoffset)
+                .addProperty("strokeMiterlimit", props->strokeMiterlimit)
+                .addProperty("vectorEffect", props->vectorEffect)
+                .addProperty("fontSize", props->fontSize)
+                .addProperty("fontWeight", props->fontWeight);
 
-                auto matrix = std::vector<napi_value>();
-                for (auto item : props->matrix) {
-                    matrix.push_back(ArkJS(env).createDouble(item));
-                }
-                propsObjBuilder.addProperty("matrix", ArkJS(env).createArray(matrix));
-
-                auto fillRaw = props->fill;
-                auto fillObjBuilder = ArkJS(env).createObjectBuilder();
-                fillObjBuilder.addProperty("type", fillRaw.type)
-                    .addProperty("payload", fillRaw.payload)
-                    .addProperty("brushRef", fillRaw.brushRef);
-                propsObjBuilder.addProperty("fill", fillObjBuilder.build());
-
-                auto strokeRaw = props->stroke;
-                auto strokeObjBuilder = ArkJS(env).createObjectBuilder();
-                strokeObjBuilder.addProperty("type", strokeRaw.type)
-                    .addProperty("payload", strokeRaw.payload)
-                    .addProperty("brushRef", strokeRaw.brushRef);
-                propsObjBuilder.addProperty("stroke", strokeObjBuilder.build());
-
-                auto propList = std::vector<napi_value>();
-                auto propListRaw = props->propList;
-
-                for (auto item : propListRaw) {
-                    auto itemObjBuilder = ArkJS(env).createString(item);
-                    propList.push_back(itemObjBuilder);
-                }
-
-                auto propListArray = ArkJS(env).createArray(propList);
-
-                propsObjBuilder.addProperty("propList", propListArray);
-
-                return propsObjBuilder.build();
+            auto matrix = std::vector<napi_value>();
+            for (auto item : props->matrix) {
+                matrix.push_back(ArkJS(env).createDouble(item));
             }
-            return napiViewProps;
-        };
+            propsObjBuilder.addProperty("matrix", ArkJS(env).createArray(matrix));
+
+            auto fillRaw = props->fill;
+            auto fillObjBuilder = ArkJS(env).createObjectBuilder();
+            fillObjBuilder.addProperty("type", fillRaw.type)
+                .addProperty("payload", fillRaw.payload)
+                .addProperty("brushRef", fillRaw.brushRef);
+            propsObjBuilder.addProperty("fill", fillObjBuilder.build());
+
+            auto strokeRaw = props->stroke;
+            auto strokeObjBuilder = ArkJS(env).createObjectBuilder();
+            strokeObjBuilder.addProperty("type", strokeRaw.type)
+                .addProperty("payload", strokeRaw.payload)
+                .addProperty("brushRef", strokeRaw.brushRef);
+            propsObjBuilder.addProperty("stroke", strokeObjBuilder.build());
+            
+            auto fontRaw = props->font;
+            auto fontObjBuilder = ArkJS(env).createObjectBuilder();
+            fontObjBuilder.addProperty("fontStyle", fontRaw.fontStyle)
+                .addProperty("fontVariant", fontRaw.fontVariant)
+                .addProperty("fontWeight", fontRaw.fontWeight)
+                .addProperty("fontStretch", fontRaw.fontStretch)
+                .addProperty("fontSize", fontRaw.fontSize)
+                .addProperty("fontFamily", fontRaw.fontFamily)
+                .addProperty("textAnchor", fontRaw.textAnchor)
+                .addProperty("textDecoration", fontRaw.textDecoration)
+                .addProperty("letterSpacing", fontRaw.letterSpacing)
+                .addProperty("wordSpacing", fontRaw.wordSpacing)
+                .addProperty("kerning", fontRaw.kerning)
+                .addProperty("fontFeatureSettings", fontRaw.fontFeatureSettings)
+                .addProperty("fontVariantLigatures", fontRaw.fontVariantLigatures)
+                .addProperty("fontVariationSettings", fontRaw.fontVariationSettings);
+            propsObjBuilder.addProperty("font", fontObjBuilder.build());
+        
+            auto strokeDasharray = std::vector<napi_value>();
+            auto strokeDasharrayRaw = props->strokeDasharray;
+
+            for (auto item : strokeDasharrayRaw) {
+                auto itemObjBuilder = ArkJS(env).createString(item);
+                strokeDasharray.push_back(itemObjBuilder);
+            }
+
+            auto strokeDasharrayArray = ArkJS(env).createArray(strokeDasharray);
+
+            propsObjBuilder.addProperty("strokeDasharray", strokeDasharrayArray);
+
+            auto propList = std::vector<napi_value>();
+            auto propListRaw = props->propList;
+
+            for (auto item : propListRaw) {
+                auto itemObjBuilder = ArkJS(env).createString(item);
+                propList.push_back(itemObjBuilder);
+            }
+
+            auto propListArray = ArkJS(env).createArray(propList);
+
+            propsObjBuilder.addProperty("propList", propListArray);
+
+            return propsObjBuilder.build();
+        }
+        return napiViewProps;
     };
+};
 } // namespace rnoh

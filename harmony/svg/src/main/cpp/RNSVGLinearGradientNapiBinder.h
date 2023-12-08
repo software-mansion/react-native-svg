@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -32,7 +32,8 @@ namespace rnoh {
 
 class RNSVGLinearGradientNapiBinder : public ViewComponentNapiBinder {
 public:
-    napi_value createProps(napi_env env, facebook::react::ShadowView const shadowView) override {
+    napi_value createProps(napi_env env, facebook::react::ShadowView const shadowView) override
+    {
         napi_value napiViewProps = ViewComponentNapiBinder::createProps(env, shadowView);
         auto propsObjBuilder = ArkJS(env).getObjectBuilder(napiViewProps);
         if (auto props = std::dynamic_pointer_cast<const facebook::react::RNSVGLinearGradientProps>(shadowView.props)) {
@@ -51,8 +52,6 @@ public:
                 .addProperty("y1", props->y1)
                 .addProperty("x2", props->x2)
                 .addProperty("y2", props->y2)
-                .addProperty("gradient", facebook::react::vectorFloatToString(props->gradient))
-//                .addProperty("gradientTransform", props->gradientTransform)
                 .addProperty("gradientUnits", props->gradientUnits);
 
             auto matrix = std::vector<napi_value>();

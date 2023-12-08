@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -50,19 +50,18 @@ export function SVGClipPathFactory(ctx: RNOHContext, tag: number): void {
 }
 
 function componentProcessing(ctx: RNOHContext, tag: Tag, key: string) {
-  //TODO 需要转换成鸿蒙对应使用格式后进行缓存
   let type: string = ctx.descriptorRegistry.getDescriptor(tag).type
   if (type === SVG_PATH_TYPE_NAME) {
     let descriptorTemp: SVGPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(tag)
   } else if (type === SVG_RECT_TYPE_NAME) {
     let descriptorTemp: SVGRectDescriptor = ctx.descriptorRegistry.getDescriptor<SVGRectDescriptor>(tag)
-	let value: SVGClipPathObj = { type, tag, value: new Rect({
-	  width("100%"),
-	  height("100%"),
-	  radiusWidth: getRadius(descriptorTemp.props.rx, descriptorTemp.props.ry),
-	  radiusHeight: getRadius(descriptorTemp.props.ry, descriptorTemp.props.rx)
-	}) }
-	setClipPathDescriptor(key, value)
+    let value: SVGClipPathObj = { type, tag, value: new Rect({
+      width: '100%',
+      heigth: '100%',
+      radiusWidth: getRadius(descriptorTemp.props.rx, descriptorTemp.props.ry),
+      radiusHeight: getRadius(descriptorTemp.props.ry, descriptorTemp.props.rx)
+    }) }
+    setClipPathDescriptor(key, value)
   } else if (type === SVG_IMAGE_TYPE_NAME) {
     let descriptorTemp: SVGImageDescriptor = ctx.descriptorRegistry.getDescriptor<SVGImageDescriptor>(tag)
   } else if (type === SVG_LINEAR_GRADIENT_TYPE_NAME) {

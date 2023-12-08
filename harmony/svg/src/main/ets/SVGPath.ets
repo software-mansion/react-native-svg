@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -104,8 +104,8 @@ export struct SVGPath {
 
   getClip() {
 	return this.gradientEnable ? new Path({
-      width: '100%',
-      heigth: '100%',
+    width: "100%",
+    heigth: "100%",
 	  commands: this.descriptor.props.d }) : undefined
   }
 
@@ -119,10 +119,10 @@ export struct SVGPath {
       .stroke(getColor(this.descriptor.props.stroke?.payload))
       .strokeWidth(this.getStrokeWidth(this.descriptor.props.strokeWidth))
       .strokeLineCap(this.descriptor.props.strokeLinecap)
-	  .opacity(this.descriptor.props.opacity)
+      .opacity(this.descriptor.props.opacity)
       .transform(getTransform(this.descriptor.props.matrix, this.scaleValue))
       .scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 })
-	  .linearGradient(this.getLinearGradient())
-	  .clip(this.getClip())
+      .linearGradient(this.getLinearGradient())
+      .clip(this.getClip())
   }
 }

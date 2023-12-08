@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -110,7 +110,7 @@ export struct SVGText {
     .fontSize(this.descriptor.props.font?.fontSize)
     .fontWeight(this.descriptor.props.font?.fontWeight)
     .textAlign(this.getTextAlign(this.descriptor.props.font?.textAnchor))
-	.opacity(this.descriptor.props.opacity)
-	.transform(getTransform(this.descriptor.props.matrix))
+    .opacity(this.descriptor.props.opacity)
+    .transform(getTransform(this.descriptor.props.matrix))
   }
 }

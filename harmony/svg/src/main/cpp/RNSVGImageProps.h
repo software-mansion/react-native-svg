@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANT KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -36,58 +36,17 @@ namespace facebook {
 namespace react {
 
 struct RNSVGImageFillStruct {
-  int type;
-  SharedColor payload;
-  std::string brushRef;
+    int type;
+    SharedColor payload;
+    std::string brushRef;
 };
-
-static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNSVGImageFillStruct &result) {
-  auto map = (butter::map<std::string, RawValue>)value;
-
-  auto tmp_type = map.find("type");
-  if (tmp_type != map.end()) {
-    fromRawValue(context, tmp_type->second, result.type);
-  }
-  auto tmp_payload = map.find("payload");
-  if (tmp_payload != map.end()) {
-    fromRawValue(context, tmp_payload->second, result.payload);
-  }
-  auto tmp_brushRef = map.find("brushRef");
-  if (tmp_brushRef != map.end()) {
-    fromRawValue(context, tmp_brushRef->second, result.brushRef);
-  }
-}
-
-static inline std::string toString(const RNSVGImageFillStruct &value) {
-  return "[Object RNSVGImageFillStruct]";
-}
 
 struct RNSVGImageStrokeStruct {
-  int type;
-  SharedColor payload;
-  std::string brushRef;
+    int type;
+    SharedColor payload;
+    std::string brushRef;
 };
 
-static inline void fromRawValue(const PropsParserContext& context, const RawValue &value, RNSVGImageStrokeStruct &result) {
-  auto map = (butter::map<std::string, RawValue>)value;
-
-  auto tmp_type = map.find("type");
-  if (tmp_type != map.end()) {
-    fromRawValue(context, tmp_type->second, result.type);
-  }
-  auto tmp_payload = map.find("payload");
-  if (tmp_payload != map.end()) {
-    fromRawValue(context, tmp_payload->second, result.payload);
-  }
-  auto tmp_brushRef = map.find("brushRef");
-  if (tmp_brushRef != map.end()) {
-    fromRawValue(context, tmp_brushRef->second, result.brushRef);
-  }
-}
-
-static inline std::string toString(const RNSVGImageStrokeStruct &value) {
-  return "[Object RNSVGImageStrokeStruct]";
-}
 class JSI_EXPORT RNSVGImageProps final : public ViewProps {
  public:
   RNSVGImageProps() = default;
@@ -95,40 +54,39 @@ class JSI_EXPORT RNSVGImageProps final : public ViewProps {
 
 #pragma mark - Props
 
-  std::string name{};
-  Float opacity{1.0};
-  std::vector<Float> matrix{};
-  std::string mask{};
-  std::string markerStart{};
-  std::string markerMid{};
-  std::string markerEnd{};
-  std::string clipPath{};
-  int clipRule{0};
-  bool responsible{false};
-  std::string display{};
-  std::string pointerEvents{};
-  RNSVGImageFillStruct fill{};
-  Float fillOpacity{1.0};
-  int fillRule{1};
-  RNSVGImageStrokeStruct stroke{};
-  Float strokeOpacity{1.0};
-  std::string strokeWidth{"1"};
-  int strokeLinecap{0};
-  int strokeLinejoin{0};
-  std::vector<std::string> strokeDasharray{};
-  Float strokeDashoffset{0.0};
-  Float strokeMiterlimit{0.0};
-  int vectorEffect{0};
-  std::vector<std::string> propList{};
-  std::string x{};
-  std::string y{};
-  std::string width{};
-  std::string height{};
-  ImageSource src{};
-  std::string align{};
-  int meetOrSlice{0};
+    std::string name{};
+    Float opacity{1.0};
+    std::vector<Float> matrix{};
+    std::string mask{};
+    std::string markerStart{};
+    std::string markerMid{};
+    std::string markerEnd{};
+    std::string clipPath{};
+    int clipRule{0};
+    bool responsible{false};
+    std::string display{};
+    std::string pointerEvents{};
+    RNSVGImageFillStruct fill{};
+    Float fillOpacity{1.0};
+    int fillRule{1};
+    RNSVGImageStrokeStruct stroke{};
+    Float strokeOpacity{1.0};
+    std::string strokeWidth{"1"};
+    int strokeLinecap{0};
+    int strokeLinejoin{0};
+    std::vector<std::string> strokeDasharray{};
+    Float strokeDashoffset{0.0};
+    Float strokeMiterlimit{0.0};
+    int vectorEffect{0};
+    std::vector<std::string> propList{};
+    std::string x{};
+    std::string y{};
+    std::string width{};
+    std::string height{};
+    ImageSource src{};
+    std::string align{};
+    int meetOrSlice{0};
 };
 
-
-} // namespace react 
+} // namespace react
 } // namespace facebook
