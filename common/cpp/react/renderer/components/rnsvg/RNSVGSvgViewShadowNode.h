@@ -26,6 +26,13 @@ class JSI_EXPORT RNSVGSvgViewShadowNode final : public ConcreteViewShadowNode<
  public:
   using ConcreteViewShadowNode::ConcreteViewShadowNode;
 
+  static ShadowNodeTraits BaseTraits() {
+    auto traits = ConcreteViewShadowNode::BaseTraits();
+    traits.set(ShadowNodeTraits::Trait::LeafYogaNode);
+    traits.set(ShadowNodeTraits::Trait::MeasurableYogaNode);
+    return traits;
+  }
+
 #pragma mark - LayoutableShadowNode
 
   Size measureContent(

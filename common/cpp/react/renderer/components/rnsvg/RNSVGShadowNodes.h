@@ -9,15 +9,23 @@
 
 #include <jsi/jsi.h>
 #include <react/renderer/components/rnsvg/Props.h>
+#include <react/renderer/components/view/ViewEventEmitter.h>
 #include <react/renderer/core/ConcreteShadowNode.h>
 #include <react/renderer/core/ShadowNode.h>
 
-#include "RNSVGNodeShadowNode.h"
+#include "RNSVGNodeBaseShadowNode.h"
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char RNSVGCircleComponentName[];
+template <ComponentName concreteComponentName, typename PropsT>
+using RNSVGNodeShadowNode = ConcreteShadowNode<
+    concreteComponentName,
+    RNSVGNodeBaseShadowNode,
+    PropsT,
+    ViewEventEmitter>;
+
+extern const char RNSVGCircleComponentName[];
 
 /*
  * `ShadowNode` for <RNSVGCircle> component.

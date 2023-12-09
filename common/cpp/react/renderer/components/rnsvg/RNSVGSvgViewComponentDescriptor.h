@@ -17,24 +17,8 @@ namespace react {
 /*
  * Descriptor for <RNSVGSvgView> component.
  */
-class RNSVGSvgViewComponentDescriptor final
-    : public ConcreteComponentDescriptor<RNSVGSvgViewShadowNode> {
- public:
-  RNSVGSvgViewComponentDescriptor(
-      ComponentDescriptorParameters const &parameters)
-      : ConcreteComponentDescriptor(parameters) {}
-
-  void adopt(ShadowNode::Unshared const &shadowNode) const override {
-    ConcreteComponentDescriptor::adopt(shadowNode);
-
-    auto svgViewShadowNode =
-        std::static_pointer_cast<RNSVGSvgViewShadowNode>(shadowNode);
-
-    // All `RNSVGSvgViewShadowNode`s must have leaf Yoga nodes with
-    // properly setup measure function.
-    svgViewShadowNode->enableMeasurement();
-  }
-};
+using RNSVGSvgViewComponentDescriptor =
+    ConcreteComponentDescriptor<RNSVGSvgViewShadowNode>;
 
 } // namespace react
 } // namespace facebook

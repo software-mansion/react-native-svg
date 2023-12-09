@@ -7,6 +7,8 @@
 
 #include "RNSVGSvgViewMeasurement.h"
 
+#include <algorithm>
+
 namespace facebook {
 namespace react {
 

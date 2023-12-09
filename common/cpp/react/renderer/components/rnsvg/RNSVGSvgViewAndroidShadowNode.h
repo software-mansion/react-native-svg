@@ -30,6 +30,7 @@ class JSI_EXPORT RNSVGSvgViewAndroidShadowNode final
   static ShadowNodeTraits BaseTraits() {
     auto traits = ConcreteViewShadowNode::BaseTraits();
     traits.set(ShadowNodeTraits::Trait::LeafYogaNode);
+    traits.set(ShadowNodeTraits::Trait::MeasurableYogaNode);
     return traits;
   }
 
