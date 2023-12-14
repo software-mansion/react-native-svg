@@ -1,5 +1,5 @@
 {
-  "version": "13.14.0-0.0.2",
+  "version": "13.14.0-0.0.3",
   "name": "@react-native-oh-tpl/react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -118,7 +118,8 @@
   },
   "nativePackage": true,
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "codegenConfig": {
     "name": "rnsvg",
