@@ -3,6 +3,9 @@
   "name": "@react-native-oh-tpl/react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
+  "harmony": {
+    "alias": "react-native-svg"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/react-native-oh-library/react-native-svg.git"
