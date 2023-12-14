@@ -25,6 +25,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
   bool IsResponsible() { return m_isResponsible; }
   void IsResponsible(bool isResponsible) { m_isResponsible = isResponsible; }
 
+  bool IsUnloaded() { return m_isUnloaded; }
+
   hstring FillBrushId() { return m_fillBrushId; }
   Windows::UI::Color Fill() { return m_fill; }
   float FillOpacity() { return m_fillOpacity; }
@@ -73,7 +75,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
   RNSVG::D2DGeometry m_geometry{nullptr};
   bool m_recreateResources{true};
   bool m_isResponsible{false};
-  
+  bool m_isUnloaded{false};
+
   hstring m_id{L""};
   hstring m_clipPathId{L""};
   Numerics::float3x2 m_transformMatrix{Numerics::make_float3x2_rotation(0)};
