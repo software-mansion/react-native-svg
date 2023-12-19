@@ -1,9 +1,0 @@
-namespace RNSVG
-{
-    [webhosthidden]
-    [default_interface]
-    runtimeclass ReactPackageProvider : Microsoft.ReactNative.IReactPackageProvider
-    {
-        ReactPackageProvider();
-    };
-}
