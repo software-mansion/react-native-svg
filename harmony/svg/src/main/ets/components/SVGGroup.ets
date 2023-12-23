@@ -27,7 +27,7 @@ import { Descriptor, RNOHContext, ComponentBuilderContext, Tag, ViewDescriptorWr
 import { SVGGroupProps, SVGViewCommon } from '../common/SVGType'
 import { setGroupDescriptor } from '../common/SVGTempCache'
 import { SVG_DEFS_TYPE_NAME, SVGDefsFactory } from '../common/SVGDefsFactory'
-import { getTransform } from './common/SVGCommon'
+import { getTransform } from '../common/SVGCommon'
 import Logger from '../common/log/Logger'
 import { SVGPathDescriptor, SVG_PATH_TYPE_NAME } from './SVGPath'
 import { SVGRectDescriptor, SVG_RECT_TYPE_NAME } from './SVGRect'
@@ -52,7 +52,7 @@ export class SVGGroupDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGG
 export struct SVGGroup {
   ctx!: RNOHContext
   tag: number = 0
-  @State svgViewCommon: SVGViewCommon | undefined = function
+  @State svgViewCommon: SVGViewCommon | undefined = undefined
   @BuilderParam buildCustomComponent: (ctx: ComponentBuilderContext) => void
   @State private descriptorWrapper: SVGGroupDescriptorWrapper | undefined = undefined
   @State descriptor: SVGGroupDescriptor = {} as SVGGroupDescriptor
