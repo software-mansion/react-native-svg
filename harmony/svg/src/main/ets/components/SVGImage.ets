@@ -24,7 +24,7 @@
 
 import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
 import { ImageLoaderTurboModule } from 'rnoh/src/main/ets/RNOHCorePackage/turboModules';
-import { SVGImageModifier } from '../attributeModifiers/SVGImageModifier'
+import { SVGImageModifier } from '../attributeModifiers/SVGImageModifier';
 import Logger from '../common/log/Logger';
 
 import { SVGImageProps, SVGViewCommon } from '../common/SVGType'
@@ -77,15 +77,7 @@ export struct SVGImage {
 
   build() {
     Image(this.getSource(this.descriptor.props.src))
-
       .attributeModifier(SVGImageModifier.getInstance()
         .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
-
-    // .width(this.descriptor.props.width)
-    // .height(this.descriptor.props.height)
-    // .autoResize(true)
-    // .position(getOffset(this.descriptor.props.x, this.descriptor.props.y))
-    // .opacity(this.descriptor.props.opacity)
-    // .transform(getTransform(this.descriptor.props.matrix))
   }
 }

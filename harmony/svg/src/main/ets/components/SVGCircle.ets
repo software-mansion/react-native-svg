@@ -69,6 +69,7 @@ export struct SVGCircle {
     Circle()
       .attributeModifier(SVGCircleModifier.getInstance()
         .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
+<<<<<<< HEAD
       // .width(this.diameter)
       // .height(this.diameter)
       // .position(this.getOrigin())
@@ -80,5 +81,7 @@ export struct SVGCircle {
       // .opacity(this.descriptor.props.opacity)
       // .transform(getTransform(this.descriptor.props.matrix))
       // .scale({ centerX: this.descriptor.props.cx, centerY: this.descriptor.props.cy })
+=======
+>>>>>>> origin/sig_dev
   }
 }

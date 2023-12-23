@@ -66,15 +66,5 @@ export struct SVGRect {
     Rect()
       .attributeModifier(SVGRectModifier.getInstance()
         .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon)) // .width(this.descriptor.props.width) // .height(this.descriptor.props.height)
-    // .position(this.getOffset())
-    // .fill(getColor(this.descriptor.props.fill?.payload))
-    // .fillOpacity(this.descriptor.props.fill?.payload ? this.descriptor.props.fillOpacity : 0)
-    // .stroke(getColor(this.descriptor.props.stroke?.payload))
-    // .strokeWidth(this.descriptor.props.strokeWidth)
-    // .radiusWidth(getRadius(this.descriptor.props.rx, this.descriptor.props.ry))
-    // .radiusHeight(getRadius(this.descriptor.props.ry, this.descriptor.props.rx))
-    // .opacity(this.descriptor.props.opacity)
-    // .transform(getTransform(this.descriptor.props.matrix))
-    // .clip(this.getClipPath())
   }
 }

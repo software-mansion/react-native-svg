@@ -65,34 +65,18 @@ export struct SVGGroup {
       this.descriptor = newDescriptor as SVGGroupDescriptor
       this.setDescriptorWrapper(this.descriptor)
       Logger.debug("RNOH SVGGroup New", JSON.stringify(this.descriptor))
-    }) // this.getEmitterData()
+    })
     Logger.debug("RNOH SVGGroup", JSON.stringify(this.descriptor))
   }
 
   aboutToDisappear() {
-    this.unregisterDescriptorChangesListener?.() // emitter.off(this.svgViewCommon.svgTag)
+    this.unregisterDescriptorChangesListener?.()
   }
 
   setDescriptorWrapper(descriptor: SVGGroupDescriptor) {
     setGroupDescriptor(this.tag, this.descriptor)
     this.descriptorWrapper = new SVGGroupDescriptorWrapper(descriptor)
   }
-
-  // getEmitterData(){
-  //   if(!this.svgViewCommon.svgTag){
-  //     return
-  //   }
-  //   let innerEvent: emitter.InnerEvent = {
-  //     eventId: this.svgViewCommon.svgTag
-  //   }
-  //   emitter.on(innerEvent, ()=>{
-  //     Logger.debug("RNOH SVGGroup emitter 接收", JSON.stringify(innerEvent))
-  //     this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGGroupDescriptor>(this.tag)
-  //     setGroupDescriptor(this.tag,this.descriptor)
-  //     this.getChildrenDescriptors()
-  //   })
-  // }
-
 
   mergeProperties(type: string, tag: number) {
     if (type == SVG_GROUP_TYPE_NAME) {
@@ -129,7 +113,7 @@ export struct SVGGroup {
   }
 
   commonPropMerge(type: string, tag: number) {
-    let descriptor: SVGPathDescriptor | SVGRectDescriptor | SVGImageDescriptor | SVGTextDescriptor | undefined = undefined
+    let descriptor: SVGPathDescriptor | SVGRectDescriptor | SVGImageDescriptor | SVGTextDescriptor | SVGCircleDescriptor | undefined = undefined
     switch (type) {
       case SVG_PATH_TYPE_NAME:
         descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(tag)
@@ -145,6 +129,7 @@ export struct SVGGroup {
         break;
       case SVG_CIRCLE_TYPE_NAME:
         descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGCircleDescriptor>(tag)
+        break;
       default:
         break;
     }
@@ -173,8 +158,7 @@ export struct SVGGroup {
   build() {
     Shape() {
       ForEach(this.getChildrenDescriptors(), (childrenTag: Tag) => {
-        svgComponentFactoryBuilder(this.ctx, childrenTag, this.ctx.rnInstance, getComponentNameFromDescriptorType(this.ctx.descriptorRegistry.getDescriptor(childrenTag)?.type), this.svgViewCommon)
-
+        svgComponentFactoryBuilder(this.ctx, childrenTag, this.ctx.rnInstance.getComponentNameFromDescriptorType(this.ctx.descriptorRegistry.getDescriptor(childrenTag)?.type), this.svgViewCommon)
       }, (childrenTag: Tag) => childrenTag.toString())
     }
     .attributeModifier(SVGGroupModifier.getInstance()

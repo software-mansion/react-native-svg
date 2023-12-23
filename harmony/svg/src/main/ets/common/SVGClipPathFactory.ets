@@ -50,23 +50,22 @@ export function SVGClipPathFactory(ctx: RNOHContext, tag: number): void {
 }
 
 function componentProcessing(ctx: RNOHContext, tag: Tag, key: string) {
-  //TODO 需要转换成鸿蒙对应使用格式后进行缓存
   let type: string = ctx.descriptorRegistry.getDescriptor(tag).type
   if (type === SVG_PATH_TYPE_NAME) {
-    let descriptorTemp: SVGPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(tag)
+    // let descriptorTemp: SVGPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(tag)
   } else if (type === SVG_RECT_TYPE_NAME) {
     let descriptorTemp: SVGRectDescriptor = ctx.descriptorRegistry.getDescriptor<SVGRectDescriptor>(tag)
     let value: SVGClipPathObj = { type, tag, value: new Rect({
       width: '100%',
-      heigth: '100%',
+      height: '100%',
       radiusWidth: getRadius(descriptorTemp.props.rx, descriptorTemp.props.ry),
       radiusHeight: getRadius(descriptorTemp.props.ry, descriptorTemp.props.rx)
     }) }
     Logger.debug("RNOH SVGRect componentProcessing", JSON.stringify(value))
     setClipPathDescriptor(key, value)
   } else if (type === SVG_IMAGE_TYPE_NAME) {
-    let descriptorTemp: SVGImageDescriptor = ctx.descriptorRegistry.getDescriptor<SVGImageDescriptor>(tag)
+    // let descriptorTemp: SVGImageDescriptor = ctx.descriptorRegistry.getDescriptor<SVGImageDescriptor>(tag)
   } else if (type === SVG_LINEAR_GRADIENT_TYPE_NAME) {
-    let descriptorTemp: SVGLinearGradientDescriptor = ctx.descriptorRegistry.getDescriptor<SVGLinearGradientDescriptor>(tag)
+    // let descriptorTemp: SVGLinearGradientDescriptor = ctx.descriptorRegistry.getDescriptor<SVGLinearGradientDescriptor>(tag)
   }
 }

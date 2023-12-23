@@ -39,7 +39,7 @@ export class SVGLinearGradientValue {
 }
 
 export function parseLinearGradient(descriptor: SVGLinearGradientDescriptor): object {
-  console.log("RNOH SVGLinearGradient parseLinearGradient=", JSON.stringify(descriptor))
+  console.log("RNOH SVGLinearGradient descriptor" + JSON.stringify(descriptor))
   let linearGradient: SVGLinearGradientValue = {
     colors: parseGradientColors(descriptor.props.gradient),
     repeating: true
@@ -56,8 +56,8 @@ export function parseLinearGradient(descriptor: SVGLinearGradientDescriptor): ob
   } else if (y1 !== y2 && x1 !== x2) {
     linearGradient.angle = Math.round(Math.atan((y2 - y1) / (x2 - x1)) / (Math.PI / 180))
   }
-  Logger.debug("RNOH SVGLinearGradient parseLinearGradient=", JSON.stringify(linearGradient))
-  Logger.debug("RNOH SVGLinearGradient parseLinearGradient=", JSON.stringify(linearGradient))
+  Logger.debug("RNOH SVGLinearGradient parseLinearGradient"+JSON.stringify(linearGradient))
+  console.log("RNOH SVGLinearGradient parseLinearGradient"+JSON.stringify(linearGradient))
   return linearGradient
 }
 

@@ -27,7 +27,7 @@ import {
   ComponentBuilderContext,
   RNOHContext,
   Tag,
-  colorSegments,
+  ColorSegments,
   RNViewManager,
   ViewDescriptorWrapperBase,
 } from 'rnoh'
@@ -57,16 +57,16 @@ export struct SVGView {
   private unregisterDescriptorChangesListener?: () => void = undefined
   private unregisterComponentManager?: () => void = undefined
   private unregisterCommandCallback?: () => void = undefined
-  @State @Watch('onEventChanged') color: colorSegments = [0, 0, 0, 1]
+  @State @Watch('onEventChanged') color: ColorSegments = [0, 0, 0, 1]
   @State private childrenTags: Tag[] = []
   @State private svgViewCommon: SVGViewCommon | undefined = undefined
-  private defaultColor: colorSegments = [0, 0, 0, 1]
+  private defaultColor: ColorSegments = [0, 0, 0, 1]
 
   aboutToAppear() {
     this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGViewDescriptor>(this.tag)
     this.initComponent()
     this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag, (newDescriptor) => {
-      this.setViewDescriptor(newDescriptor as SVGViewDescriptor)
+      this.setDescriptorWrapper(newDescriptor as SVGViewDescriptor)
     })
     this.setEventData()
   }
@@ -89,7 +89,7 @@ export struct SVGView {
   private setDescriptorWrapper(descriptor: SVGViewDescriptor) {
     this.descriptorWrapper = new SVGViewDescriptorWrapper(descriptor)
     this.childrenTags = descriptor.childrenTags;
-    this.svgViewCommon = { svgTag: this.tag, scaleVaule: getScaleValue(descriptor), groupBox: getGroupBox(descriptor) }
+    this.svgViewCommon = { svgTag: this.tag, scaleValue: getScaleValue(descriptor), groupBox: getGroupBox(descriptor) }
     setViewDescriptor(this.tag, descriptor)
     this.color = descriptor.props.color ?? this.defaultColor
     Logger.debug("RNOH SVGView", JSON.stringify(descriptor))
@@ -113,8 +113,8 @@ export struct SVGView {
     }.attributeModifier(SVGViewModifier.getInstance().setDescriptor(this.descriptorWrapper))
 
     // .offset({
-    //   x: -(this.descriptor.props?.minX * this.getscaleValue() || 0),
-    //   y: -(this.descriptor.props?.minY * this.getscaleValue() || 0)
+    //   x: -(this.descriptor.props?.minX * this.getScaleValue() || 0),
+    //   y: -(this.descriptor.props?.minY * this.getScaleValue() || 0)
     // })
 
   }

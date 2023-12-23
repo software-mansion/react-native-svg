@@ -25,7 +25,7 @@
 import { ColorSegments, convertColorSegmentsToString, TransformMatrix } from 'rnoh'
 import { getGroupDescriptor, hasViewKey } from './SVGTempCache'
 import { SVGGroupBox, SVGOffset } from './SVGType'
-import { SVGViewDescriptor, SVGViewDescriptorWrapper } from '../SVGView'
+import { SVGViewDescriptor } from '../SVGView'
 import matrix4 from '@ohos.matrix4'
 
 const defaultScaleValue: number = vp2px(1)
@@ -36,12 +36,14 @@ export function getGroupBox(descriptor: SVGViewDescriptor): SVGGroupBox {
   let svgHeight = descriptor.layoutMetrics.frame.size.height
   let contentWidth = descriptor.props.vbWidth ? descriptor.props.vbWidth : svgWidth
   let contentHeight = descriptor.props.vbHeight ? descriptor.props.vbHeight : svgHeight
-  if (svgWidth / svgHeight > contentWidth / contentHeight) { // 宽高比较大时,高度撑满
+  if (svgWidth / svgHeight > contentWidth / contentHeight) {
+    // 宽高比较大时,高度撑满
     groupBox.width = svgHeight * (contentWidth / contentHeight);
     groupBox.height = svgHeight
   } else {
+    // 宽高比较小时,宽度撑满
     groupBox.width = svgWidth
-    groupBox.height = svgHeight * (contentWidth / contentHeight);
+    groupBox.height = svgHeight * (contentHeight / contentWidth);
   }
   return groupBox
 }
@@ -60,14 +62,14 @@ export function getScaleX(descriptor: SVGViewDescriptor): number {
   if (!descriptor.props.vbWidth) {
     return 1;
   }
-  return descriptor.layoutMetrics.frame.size.width / descriptor.props.vbWidth
+  return descriptor.layoutMetrics.frame.size.width / descriptor.props.vbWidth;
 }
 
 export function getScaleY(descriptor: SVGViewDescriptor): number {
   if (!descriptor.props.vbHeight) {
     return 1;
   }
-  return descriptor.layoutMetrics.frame.size.height / descriptor.props.vbHeight
+  return descriptor.layoutMetrics.frame.size.height / descriptor.props.vbHeight;
 }
 
 export function getTransform(matrix?: number[], scaleValue: number = defaultScaleValue): object {
@@ -88,13 +90,13 @@ export function getStrokeWidth(strokeWidth?: string, scaleValue: number = defaul
   return strokeWidth ? Number(strokeWidth) / scaleValue : 0;
 }
 
-export function getColor(color: ColorSegments): string | undefined {
-  return convertColorSegmentsToString(color)
+export function getColor(color?: ColorSegments): string | undefined {
+  return convertColorSegmentsToString(color);
 }
 
 export function getRadius(rx?: string, ry?: string): string | number | undefined {
   if (rx === '\u0000') {
-    return ry !== '\u0000' ? ry : 0
+    return ry !== '\u0000' ? ry : 0;
   }
   return rx;
 }

@@ -66,13 +66,13 @@ export function setClipPathDescriptor(cacheKey: string, descriptor: object): voi
 }
 
 export function getDefsDescriptor(cacheKey?: string): object | undefined {
-  console.log("RNOH SVGLinearGradient getDefsDescriptor cacheKey=" + JSON.stringify(cacheKey));
-  console.log("RNOH SVGLinearGradient getDefsDescriptor descriptor=" + JSON.stringify(defsCache.get(cacheKey)));
+  console.log("RNOH SVGLinearGradient getDefsDescriptor cacheKey=" + JSON.stringify(cacheKey))
+  console.log("RNOH SVGLinearGradient getDefsDescriptor descriptor=" + JSON.stringify(defsCache.get(cacheKey)))
   return cacheKey ? defsCache.get(cacheKey) : undefined
 }
 
 export function setDefsDescriptor(cacheKey: string, descriptor?: object): void {
-  console.log("RNOH SVGLinearGradient setDefsDescriptor cacheKey=" + JSON.stringify(cacheKey));
-  console.log("RNOH SVGLinearGradient setDefsDescriptor descriptor=" + JSON.stringify(descriptor));
+  console.log("RNOH SVGLinearGradient setDefsDescriptor cacheKey=" + JSON.stringify(cacheKey))
+  console.log("RNOH SVGLinearGradient setDefsDescriptor descriptor=" + JSON.stringify(descriptor))
   defsCache.set(cacheKey, descriptor)
 }

@@ -61,8 +61,7 @@ function componentProcessing(ctx: RNOHContext, tag: Tag) {
     storageDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
   } else if (type === SVG_LINEAR_GRADIENT_TYPE_NAME) {
     let descriptorTemp: SVGLinearGradientDescriptor = ctx.descriptorRegistry.getDescriptor<SVGLinearGradientDescriptor>(tag)
-    Logger.debug("RNOH SVGLinearGradient DescriptorTemp=", JSON.stringify(descriptorTemp))
-    console.log("RNOH SVGLinearGradient DescriptorTemp=", JSON.stringify(descriptorTemp))
+    Logger.debug("RNOH SVGLinearGradient descriptorTemp" + JSON.stringify(descriptorTemp))
     storageDefsDescriptor(descriptorTemp.props.name, parseLinearGradient(descriptorTemp))
   } else if (type === SVG_CLIP_PATH_TYPE_NAME) {
     SVGClipPathFactory(ctx, tag)
