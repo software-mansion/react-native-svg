@@ -25,54 +25,55 @@
 import { Descriptor, RNOHContext } from 'rnoh'
 import Logger from './common/log/Logger';
 import { getColor, getTransform } from './common/SVGCommon'
-import { SVGCircleProps } from './common/SVGType'
+import { SVGEllipseProps } from './common/SVGType'
 
-export const SVG_CIRCLE_TYPE_NAME: string = "RNSVGCircle"
+export const SVG_Ellipse_TYPE_NAME: string = "RNSVGEllipse"
 
-export type SVGCircleDescriptor = Descriptor<"RNSVGCircle", SVGCircleProps>
+export type SVGEllipseDescriptor = Descriptor<"RNSVGEllipse", SVGEllipseProps>
 
 @Component
-export struct SVGCircle {
+export struct SVGEllipse {
   ctx!: RNOHContext
   tag: number = 0
   svgTag: number = 0
-  @State descriptor: SVGCircleDescriptor = {} as SVGCircleDescriptor
-  @State diameter: number = 0
+  @State descriptor: SVGEllipseDescriptor = {} as SVGEllipseDescriptor
   private unregisterDescriptorChangesListener?: () => void = undefined
 
   aboutToAppear() {
-    this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGCircleDescriptor>(this.tag)
+    this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGEllipseDescriptor>(this.tag)
     this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
       (newDescriptor) => {
-        this.descriptor = (newDescriptor as SVGCircleDescriptor)
-        this.setDiameter()
-        Logger.debug("RNOH SVGCircle New", JSON.stringify(this.descriptor))
+        this.descriptor = (newDescriptor as SVGEllipseDescriptor)
+        Logger.debug("RNOH SVGEllipse New", JSON.stringify(this.descriptor))
       }
     )
-    this.setDiameter()
-    Logger.debug("RNOH SVGCircle", JSON.stringify(this.descriptor))
+    Logger.debug("RNOH SVGEllipse", JSON.stringify(this.descriptor))
   }
 
   aboutToDisappear() {
     this.unregisterDescriptorChangesListener?.()
   }
 
-  setDiameter() {
-    this.diameter = Number(this.descriptor.props.r) * 2
-  }
-
   getOrigin() {
     return this.descriptor.props.layoutMetrics.frame.origin
   }
+  
+  getEllipseWidth() {
+    return Number(this.descriptor.props.rx) * 2
+  }
 
+  getEllipseHeight() {
+    return Number(this.descriptor.props.ry) * 2
+  }
+  
   getStrokeWidth(strockWidth?: string) {
     return strockWidth ? Number(strockWidth) : 0
   }
 
   build() {
-    Circle()
-      .width(this.diameter)
-      .height(this.diameter)
+    Ellipse()
+      .width(this.getEllipseWidth())
+      .height(this.getEllipseHeight())
       .position(this.getOrigin())
       .fill(getColor(this.descriptor.props.fill?.payload))
       .fillOpacity(this.descriptor.props.fill?.payload ? this.descriptor.props.fillOpacity : 0)
