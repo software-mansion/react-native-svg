@@ -81,7 +81,7 @@ export struct SVGView {
     if (!this.componentManager) {
       this.componentManager = new RNViewManager(this.tag, this.ctx)
     }
-    this.unregisterComponentManager = this.ctx.componentMaagerRegistry.registerComponentManager(this.tag, this.componentManager)
+    this.unregisterComponentManager = this.ctx.componentManagerRegistry.registerComponentManager(this.tag, this.componentManager)
     this.componentManager.setParentTag(this.descriptor.parentTag)
     this.setDescriptorWrapper(this.descriptor)
   }

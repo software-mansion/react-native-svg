@@ -54,7 +54,9 @@ export struct SVGComponentFactory {
     if (descriptor) {
       this.setDescriptor(descriptor)
     }
-    this.cleanupCallback = this.ctx.descriptorRegistry.subsrcibeToDescriptorChanges(this.tag, (newDescriptor) => this.setDescriptor(newDescriptor))
+    this.cleanupCallback = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(
+      this.tag, (newDescriptor) => this.setDescriptor(newDescriptor)
+    )
   }
 
   aboutToDisappear() {
@@ -96,20 +98,20 @@ export function svgComponentFactoryBuilder(ctx: RNOHContext, tag: Tag, component
     SVGGroup({
       ctx: ctx,
       tag: tag,
-      svgViewCommon: this.svgViewCommon,
+      svgViewCommon: svgViewCommon,
       buildCustomComponent: BuilderProxy.buildCustomComponent
     })
-  } else if (this.componentName === SVG_PATH_TYPE_NAME) {
+  } else if (componentName === SVG_PATH_TYPE_NAME) {
     SVGPath({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
-  } else if (this.componentName === SVG_RECT_TYPE_NAME) {
+  } else if (componentName === SVG_RECT_TYPE_NAME) {
     SVGRect({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
-  } else if (this.componentName === SVG_IMAGE_TYPE_NAME) {
+  } else if (componentName === SVG_IMAGE_TYPE_NAME) {
     SVGImage({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
-  } else if (this.componentName === SVG_TEXT_TYPE_NAME) {
+  } else if (componentName === SVG_TEXT_TYPE_NAME) {
     SVGText({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
-  } else if (this.componentName === SVG_CIRCLE_TYPE_NAME) {
+  } else if (componentName === SVG_CIRCLE_TYPE_NAME) {
     SVGCircle({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
-  } else if (this.componentName === SVG_ELLIPSE_TYPE_NAME) {
+  } else if (componentName === SVG_ELLIPSE_TYPE_NAME) {
     SVGEllipse({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
   }
 }

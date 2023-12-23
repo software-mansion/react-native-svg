@@ -69,19 +69,5 @@ export struct SVGCircle {
     Circle()
       .attributeModifier(SVGCircleModifier.getInstance()
         .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
-<<<<<<< HEAD
-      // .width(this.diameter)
-      // .height(this.diameter)
-      // .position(this.getOrigin())
-      // .fill(getColor(this.descriptor.props.fill?.payload))
-      // .fillOpacity(this.descriptor.props.fill?.payload ? this.descriptor.props.fillOpacity : 0)
-      // .stroke(getColor(this.descriptor.props.fill?.payload))
-      // .strokeWidth(this.getStrokeWidth(this.descriptor.props.strokeWidth))
-      // .strokeLineCap(this.descriptor.props.strokeLinecap)
-      // .opacity(this.descriptor.props.opacity)
-      // .transform(getTransform(this.descriptor.props.matrix))
-      // .scale({ centerX: this.descriptor.props.cx, centerY: this.descriptor.props.cy })
-=======
->>>>>>> origin/sig_dev
   }
 }

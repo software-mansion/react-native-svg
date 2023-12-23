@@ -15,8 +15,3 @@
  */
 
  export * from './src/main/ets/SVGView'
- export * from './src/main/ets/SVGGroup'
- export * from './src/main/ets/SVGPath'
- export * from './src/main/ets/SVGRect'
- export * from './src/main/ets/SVGImage'
- export * from './src/main/ets/SVGText'

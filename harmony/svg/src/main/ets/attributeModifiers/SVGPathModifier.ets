@@ -29,27 +29,27 @@ import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
 import { getDefsDescriptor } from '../common/SVGTempCache';
 import Logger from '../common/log/Logger';
 
-export class SVPathModifier implements AttributeModifier<PathAttribute> {
+export class SVGPathModifier implements AttributeModifier<PathAttribute> {
   private constructor() {
   }
 
-  private static instance: SVPathModifier;
+  private static instance: SVGPathModifier;
   protected descriptor: SVGPathDescriptor = Object() as SVGPathDescriptor;
   protected descriptorWrapper: SVGPathDescriptorWrapper | undefined = undefined;
   protected svgViewCommon: SVGViewCommon | undefined = undefined;
   private scaleValue: number = 1;
   private gradient: SVGLinearGradientValue | undefined = undefined;
 
-  public static getInstance(): SVPathModifier {
-    if (!SVPathModifier.instance) {
-      SVPathModifier.instance = new SVPathModifier();
+  public static getInstance(): SVGPathModifier {
+    if (!SVGPathModifier.instance) {
+      SVGPathModifier.instance = new SVGPathModifier();
     }
-    return SVPathModifier.instance;
+    return SVGPathModifier.instance;
   }
 
   setDescriptor(descriptor: SVGPathDescriptor,
                 descriptorWrapper: SVGPathDescriptorWrapper | undefined,
-                svgViewCommon: SVGViewCommon | undefined): SVPathModifier {
+                svgViewCommon: SVGViewCommon | undefined): SVGPathModifier {
     this.descriptor = descriptor;
     this.descriptorWrapper = descriptorWrapper;
     this.svgViewCommon = svgViewCommon;
@@ -57,7 +57,7 @@ export class SVPathModifier implements AttributeModifier<PathAttribute> {
       this.scaleValue = svgViewCommon.scaleValue * vp2px(1);
     }
     this.getGradient();
-    return SVPathModifier.instance;
+    return SVGPathModifier.instance;
   }
 
   applyNormalAttribute(instance: PathAttribute): void {
