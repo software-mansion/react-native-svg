@@ -52,7 +52,7 @@ class RNSVGPathJSIBinder : public ViewComponentJSIBinder {
         object.setProperty(rt, "strokeWidth", "string");
         object.setProperty(rt, "strokeLinecap", "int");
         object.setProperty(rt, "strokeLinejoin", "int");
-        object.setProperty(rt, "strokeDasharray", "string");
+        object.setProperty(rt, "strokeDasharray", "array");
         object.setProperty(rt, "strokeDashoffset", "float");
         object.setProperty(rt, "strokeMiterlimit", "float");
         object.setProperty(rt, "vectorEffect", "int");

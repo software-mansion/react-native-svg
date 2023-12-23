@@ -24,7 +24,7 @@
 
 import HashMap from '@ohos.util.HashMap'
 import { SVGViewDescriptor } from '../SVGView'
-import { SVGGroupDescriptor } from '../SVGGroup'
+import { SVGGroupDescriptor } from '../components/SVGGroup'
 
 const viewCache: HashMap<number, SVGViewDescriptor> = new HashMap()
 const groupCache: HashMap<number, SVGGroupDescriptor> = new HashMap()
@@ -66,9 +66,13 @@ export function setClipPathDescriptor(cacheKey: string, descriptor: object): voi
 }
 
 export function getDefsDescriptor(cacheKey?: string): object | undefined {
+  console.log("RNOH SVGLinearGradient getDefsDescriptor cacheKey=" + JSON.stringify(cacheKey));
+  console.log("RNOH SVGLinearGradient getDefsDescriptor descriptor=" + JSON.stringify(defsCache.get(cacheKey)));
   return cacheKey ? defsCache.get(cacheKey) : undefined
 }
 
 export function setDefsDescriptor(cacheKey: string, descriptor?: object): void {
+  console.log("RNOH SVGLinearGradient setDefsDescriptor cacheKey=" + JSON.stringify(cacheKey));
+  console.log("RNOH SVGLinearGradient setDefsDescriptor descriptor=" + JSON.stringify(descriptor));
   defsCache.set(cacheKey, descriptor)
 }

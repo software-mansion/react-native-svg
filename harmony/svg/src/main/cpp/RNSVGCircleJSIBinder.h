@@ -28,7 +28,7 @@
 
 namespace rnoh {
 
-class RNSVGImageJSIBinder : public ViewComponentJSIBinder {
+class RNSVGCircleJSIBinder : public ViewComponentJSIBinder {
     facebook::jsi::Object createNativeProps(facebook::jsi::Runtime &rt) override
     {
         auto object = ViewComponentJSIBinder::createNativeProps(rt);
@@ -57,13 +57,9 @@ class RNSVGImageJSIBinder : public ViewComponentJSIBinder {
         object.setProperty(rt, "strokeMiterlimit", "float");
         object.setProperty(rt, "vectorEffect", "int");
         object.setProperty(rt, "propList", "array");
-        object.setProperty(rt, "x", "string");
-        object.setProperty(rt, "y", "string");
-        object.setProperty(rt, "width", "string");
-        object.setProperty(rt, "height", "string");
-        object.setProperty(rt, "src", "string");
-        object.setProperty(rt, "align", "string");
-        object.setProperty(rt, "meetOrSlice", "int");
+        object.setProperty(rt, "cx", "string");
+        object.setProperty(rt, "cy", "string");
+        object.setProperty(rt, "r", "string");
         return object;
     }
 

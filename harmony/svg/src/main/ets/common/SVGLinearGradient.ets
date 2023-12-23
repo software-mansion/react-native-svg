@@ -31,31 +31,37 @@ export const SVG_LINEAR_GRADIENT_TYPE_NAME: string = "RNSVGLinearGradient"
 
 export type SVGLinearGradientDescriptor = Descriptor<"RNSVGLinearGradient", SVGLinearGradientProps>
 
-export class SVGLinearGradient {
-  colors: Array<[ResourceColor, number]> = []
-  direction: GradientDirection = GradientDirection.Bottom
-}
-
 export class SVGLinearGradientValue {
   angle?: number | string = 0
   direction?: GradientDirection = GradientDirection.Bottom
   colors: Array<[ResourceColor, number]> = []
-  repeating?: boolean = true
+  repeating?: boolean = false
 }
 
 export function parseLinearGradient(descriptor: SVGLinearGradientDescriptor): object {
-  Logger.debug("RNOH SVGLinearGradient parseLinearGradient=", JSON.stringify(descriptor))
-  let colors = parseGradientColors(descriptor.props.gradient)
-  Logger.debug("RNOH SVGLinearGradient colors=", JSON.stringify(colors))
-  let direction = parseGradientDirection(descriptor.props)
-  Logger.debug("RNOH SVGLinearGradient direction=", JSON.stringify(direction))
+  console.log("RNOH SVGLinearGradient parseLinearGradient=", JSON.stringify(descriptor))
+  let linearGradient: SVGLinearGradientValue = {
+    colors: parseGradientColors(descriptor.props.gradient),
+    repeating: true
+  }
+  let x1: number = parseCoordinateValue(descriptor.props.x1)
+  let y1: number = parseCoordinateValue(descriptor.props.y1)
+  let x2: number = parseCoordinateValue(descriptor.props.x2)
+  let y2: number = parseCoordinateValue(descriptor.props.y2)
 
-  let linearGradient: SVGLinearGradient = { colors, direction }
+  if (y1 === y2 && x1 !== x2) {
+    linearGradient.direction = x1 < x2 ? GradientDirection.Right : GradientDirection.Left
+  } else if (y1 !== y2 && x1 === x2) {
+    linearGradient.direction = y1 < y2 ? GradientDirection.Top : GradientDirection.Bottom
+  } else if (y1 !== y2 && x1 !== x2) {
+    linearGradient.angle = Math.round(Math.atan((y2 - y1) / (x2 - x1)) / (Math.PI / 180))
+  }
+  Logger.debug("RNOH SVGLinearGradient parseLinearGradient=", JSON.stringify(linearGradient))
+  Logger.debug("RNOH SVGLinearGradient parseLinearGradient=", JSON.stringify(linearGradient))
   return linearGradient
 }
 
-function parseGradientColors(convertColors: string): Array<[ResourceColor, number]> {
-  let gradient: number[] = convertColors.replace(new RegExp("\\[|]", "g"), '').split(',').map(Number)
+function parseGradientColors(gradient: number[]): Array<[ResourceColor, number]> {
   let size: number = gradient.length
   if (size == 0) {
     Logger.debug("RNOH SVGLinearGradient Gradient contains no stops")
@@ -68,21 +74,4 @@ function parseGradientColors(convertColors: string): Array<[ResourceColor, numbe
     colors[i] = [convertColorValueToRGBA(gradient[stopIndex+1]), gradient[stopIndex]]
   }
   return colors
-}
-
-function parseGradientDirection(props: SVGLinearGradientProps): GradientDirection {
-  let x1: number = parseCoordinateValue(props.x1)
-  let y1: number = parseCoordinateValue(props.y1)
-  let x2: number = parseCoordinateValue(props.x2)
-  let y2: number = parseCoordinateValue(props.y2)
-  if (y1 === y2 && x1 !== x2) {
-    return x1 < x2 ? GradientDirection.Right : GradientDirection.Left
-  }
-  if (y1 !== y2 && x1 === x2) {
-    return y1 < y2 ? GradientDirection.Top : GradientDirection.Bottom
-  }
-  if (y1 !== y2 && x1 !== x2) {
-    return GradientDirection.Bottom
-  }
-  return GradientDirection.Bottom
 }

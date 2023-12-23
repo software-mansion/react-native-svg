@@ -36,6 +36,8 @@
 #include "RNSVGPathProps.h"
 #include "RNSVGRectProps.h"
 #include "RNSVGImageProps.h"
+#include "RNSVGCircleProps.h"
+#include "RNSVGEllipseProps.h"
 #include "RNSVGLinearGradientProps.h"
 #include "RNSVGDefsProps.h"
 #include "RNSVGTextProps.h"

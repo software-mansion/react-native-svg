@@ -26,17 +26,17 @@
 
 #include "RNOHCorePackage/ComponentBinders/ViewComponentNapiBinder.h"
 #include "RNOH/ArkJS.h"
-#include "RNSVGLinearGradientProps.h"
+#include "RNSVGCircleProps.h"
 
 namespace rnoh {
 
-class RNSVGLinearGradientNapiBinder : public ViewComponentNapiBinder {
+class RNSVGCircleNapiBinder : public ViewComponentNapiBinder {
 public:
     napi_value createProps(napi_env env, facebook::react::ShadowView const shadowView) override
     {
         napi_value napiViewProps = ViewComponentNapiBinder::createProps(env, shadowView);
         auto propsObjBuilder = ArkJS(env).getObjectBuilder(napiViewProps);
-        if (auto props = std::dynamic_pointer_cast<const facebook::react::RNSVGLinearGradientProps>(shadowView.props)) {
+        if (auto props = std::dynamic_pointer_cast<const facebook::react::RNSVGCircleProps>(shadowView.props)) {
             propsObjBuilder.addProperty("name", props->name)
                 .addProperty("opacity", props->opacity)
                 .addProperty("mask", props->mask)
@@ -48,30 +48,63 @@ public:
                 .addProperty("responsible", props->responsible)
                 .addProperty("display", props->display)
                 .addProperty("pointerEvents", props->pointerEvents)
-                .addProperty("x1", props->x1)
-                .addProperty("y1", props->y1)
-                .addProperty("x2", props->x2)
-                .addProperty("y2", props->y2)
-                .addProperty("gradientUnits", props->gradientUnits);
+                .addProperty("fillOpacity", props->fillOpacity)
+                .addProperty("fillRule", props->fillRule)
+                .addProperty("strokeOpacity", props->strokeOpacity)
+                .addProperty("strokeWidth", props->strokeWidth)
+                .addProperty("strokeLinecap", props->strokeLinecap)
+                .addProperty("strokeLinejoin", props->strokeLinejoin)
+                .addProperty("strokeDashoffset", props->strokeDashoffset)
+                .addProperty("strokeMiterlimit", props->strokeMiterlimit)
+                .addProperty("vectorEffect", props->vectorEffect)
+                .addProperty("cx", props->cx)
+                .addProperty("cy", props->cy)
+                .addProperty("r", props->r);
 
             auto matrix = std::vector<napi_value>();
             for (auto item : props->matrix) {
                 matrix.push_back(ArkJS(env).createDouble(item));
             }
             propsObjBuilder.addProperty("matrix", ArkJS(env).createArray(matrix));
+
+            auto fillRaw = props->fill;
+            auto fillObjBuilder = ArkJS(env).createObjectBuilder();
+            fillObjBuilder.addProperty("type", fillRaw.type)
+                .addProperty("payload", fillRaw.payload)
+                .addProperty("brushRef", fillRaw.brushRef);
+            propsObjBuilder.addProperty("fill", fillObjBuilder.build());
+
+            auto strokeRaw = props->stroke;
+            auto strokeObjBuilder = ArkJS(env).createObjectBuilder();
+            strokeObjBuilder.addProperty("type", strokeRaw.type)
+                .addProperty("payload", strokeRaw.payload)
+                .addProperty("brushRef", strokeRaw.brushRef);
+            propsObjBuilder.addProperty("stroke", strokeObjBuilder.build());
             
-            auto gradient = std::vector<napi_value>();
-            for (auto item : props->gradient) {
-                gradient.push_back(ArkJS(env).createDouble(item));
+            auto strokeDasharray = std::vector<napi_value>();
+            auto strokeDasharrayRaw = props->strokeDasharray;
+            
+            for (auto item : strokeDasharrayRaw) {
+                auto itemObjBuilder = ArkJS(env).createString(item);
+                strokeDasharray.push_back(itemObjBuilder);
             }
-            propsObjBuilder.addProperty("gradient", ArkJS(env).createArray(gradient));
-            
-            auto gradientTransform = std::vector<napi_value>();
-            for (auto item : props->gradientTransform) {
-                gradientTransform.push_back(ArkJS(env).createDouble(item));
+
+            auto strokeDasharrayArray = ArkJS(env).createArray(strokeDasharray);
+
+            propsObjBuilder.addProperty("strokeDasharray", strokeDasharrayArray);
+
+            auto propList = std::vector<napi_value>();
+            auto propListRaw = props->propList;
+
+            for (auto item : propListRaw) {
+                auto itemObjBuilder = ArkJS(env).createString(item);
+                propList.push_back(itemObjBuilder);
             }
-            propsObjBuilder.addProperty("gradientTransform", ArkJS(env).createArray(gradientTransform));
-            
+
+            auto propListArray = ArkJS(env).createArray(propList);
+
+            propsObjBuilder.addProperty("propList", propListArray);
+
             return propsObjBuilder.build();
         }
         return napiViewProps;

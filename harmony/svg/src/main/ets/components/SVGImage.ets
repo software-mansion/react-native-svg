@@ -22,35 +22,46 @@
  * SOFTWARE.
  */
 
-import { Descriptor, RNOHContext } from 'rnoh'
+import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
 import { ImageLoaderTurboModule } from 'rnoh/src/main/ets/RNOHCorePackage/turboModules';
-import Logger from './common/log/Logger';
-import { getOffset, getTransform } from './common/SVGCommon'
-import { SVGImageProps } from './common/SVGType'
+import { SVGImageModifier } from '../attributeModifiers/SVGImageModifier'
+import Logger from '../common/log/Logger';
+
+import { SVGImageProps, SVGViewCommon } from '../common/SVGType'
 
 export const SVG_IMAGE_TYPE_NAME: string = "RNSVGImage"
 
 export type SVGImageDescriptor = Descriptor<"RNSVGImage", SVGImageProps>
 
+export class SVGImageDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGImage", SVGImageProps> {
+}
+
 @Component
 export struct SVGImage {
   ctx!: RNOHContext
   tag: number = 0
+  @State svgViewCommon: SVGViewCommon | undefined = undefined
   @State descriptor: SVGImageDescriptor = {} as SVGImageDescriptor
+  @State descriptorWrapper: SVGImageDescriptorWrapper | undefined = undefined
   private unregisterDescriptorChangesListener?: () => void = undefined
 
   aboutToAppear() {
     this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGImageDescriptor>(this.tag)
-    this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
-      (newDescriptor) => {
-        this.descriptor = (newDescriptor as SVGImageDescriptor)
-      }
-    )
+    this.setDescriptorWrapper(this.descriptor)
+    this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag, (newDescriptor) => {
+      this.descriptor = newDescriptor as SVGImageDescriptor
+      this.setDescriptorWrapper(this.descriptor)
+      Logger.debug("RNOH SVGImage New", JSON.stringify(this.descriptor))
+    })
     Logger.debug("RNOH SVGImage", JSON.stringify(this.descriptor))
   }
 
   aboutToDisappear() {
     this.unregisterDescriptorChangesListener?.()
+  }
+
+  setDescriptorWrapper(descriptor: SVGImageDescriptor) {
+    this.descriptorWrapper = new SVGImageDescriptorWrapper(descriptor)
   }
 
   getSource(source: string) {
@@ -66,11 +77,15 @@ export struct SVGImage {
 
   build() {
     Image(this.getSource(this.descriptor.props.src))
-      .width(this.descriptor.props.width)
-      .height(this.descriptor.props.height)
-      .autoResize(true)
-      .position(getOffset(this.descriptor.props.x, this.descriptor.props.y))
-      .opacity(this.descriptor.props.opacity)
-      .transform(getTransform(this.descriptor.props.matrix))
+
+      .attributeModifier(SVGImageModifier.getInstance()
+        .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
+
+    // .width(this.descriptor.props.width)
+    // .height(this.descriptor.props.height)
+    // .autoResize(true)
+    // .position(getOffset(this.descriptor.props.x, this.descriptor.props.y))
+    // .opacity(this.descriptor.props.opacity)
+    // .transform(getTransform(this.descriptor.props.matrix))
   }
 }

@@ -36,35 +36,33 @@ extern const char RN_SVG_GROUP_COMPONENT_NAME[] = "RNSVGGroup";
 extern const char RN_SVG_PATH_COMPONENT_NAME[] = "RNSVGPath";
 extern const char RN_SVG_RECT_COMPONENT_NAME[] = "RNSVGRect";
 extern const char RN_SVG_IMAGE_COMPONENT_NAME[] = "RNSVGImage";
+extern const char RN_SVG_CIRCLE_COMPONENT_NAME[] = "RNSVGCircle";
+extern const char RN_SVG_ELLIPSE_COMPONENT_NAME[] = "RNSVGEllipse";
 extern const char RN_SVG_LINEAR_GRADIENT_COMPONENT_NAME[] = "RNSVGLinearGradient";
 extern const char RN_SVG_DEFS_COMPONENT_NAME[] = "RNSVGDefs";
 extern const char RN_SVG_TEXT_COMPONENT_NAME[] = "RNSVGText";
 extern const char RN_SVG_T_SPAN_COMPONENT_NAME[] = "RNSVGTSpan";
 extern const char RN_SVG_CLIP_PATH_COMPONENT_NAME[] = "RNSVGClipPath";
 
-using RNSVGSvgViewShadowNode =
-    ConcreteViewShadowNode<RN_SVG_SVG_VIEW_COMPONENT_NAME, RNSVGSvgViewProps>;
+using RNSVGSvgViewShadowNode = ConcreteViewShadowNode<RN_SVG_SVG_VIEW_COMPONENT_NAME, RNSVGSvgViewProps>;
 
-using RNSVGGroupShadowNode =
-    ConcreteViewShadowNode<RN_SVG_GROUP_COMPONENT_NAME, RNSVGGroupProps>;
+using RNSVGGroupShadowNode = ConcreteViewShadowNode<RN_SVG_GROUP_COMPONENT_NAME, RNSVGGroupProps>;
 
-using RNSVGPathShadowNode =
-    ConcreteViewShadowNode<RN_SVG_PATH_COMPONENT_NAME, RNSVGPathProps>;
+using RNSVGPathShadowNode = ConcreteViewShadowNode<RN_SVG_PATH_COMPONENT_NAME, RNSVGPathProps>;
 
-using RNSVGRectShadowNode =
-    ConcreteViewShadowNode<RN_SVG_RECT_COMPONENT_NAME, RNSVGRectProps>;
+using RNSVGRectShadowNode = ConcreteViewShadowNode<RN_SVG_RECT_COMPONENT_NAME, RNSVGRectProps>;
 
-using RNSVGImageShadowNode =
-    ConcreteViewShadowNode<RN_SVG_IMAGE_COMPONENT_NAME, RNSVGImageProps>;
+using RNSVGImageShadowNode = ConcreteViewShadowNode<RN_SVG_IMAGE_COMPONENT_NAME, RNSVGImageProps>;
 
-using RNSVGLinearGradientShadowNode =
-    ConcreteViewShadowNode<RN_SVG_LINEAR_GRADIENT_COMPONENT_NAME, RNSVGLinearGradientProps>;
+using RNSVGCircleShadowNode = ConcreteViewShadowNode<RN_SVG_CIRCLE_COMPONENT_NAME, RNSVGCircleProps>;
 
-using RNSVGDefsShadowNode =
-    ConcreteViewShadowNode<RN_SVG_DEFS_COMPONENT_NAME, RNSVGDefsProps>;
+using RNSVGEllipseShadowNode = ConcreteViewShadowNode<RN_SVG_ELLIPSE_COMPONENT_NAME, RNSVGEllipseProps>;
 
-using RNSVGTextShadowNode =
-    ConcreteViewShadowNode<RN_SVG_TEXT_COMPONENT_NAME, RNSVGTextProps>;
+using RNSVGLinearGradientShadowNode = ConcreteViewShadowNode<RN_SVG_LINEAR_GRADIENT_COMPONENT_NAME, RNSVGLinearGradientProps>;
+
+using RNSVGDefsShadowNode = ConcreteViewShadowNode<RN_SVG_DEFS_COMPONENT_NAME, RNSVGDefsProps>;
+
+using RNSVGTextShadowNode = ConcreteViewShadowNode<RN_SVG_TEXT_COMPONENT_NAME, RNSVGTextProps>;
 
 using RNSVGTSpanShadowNode = ConcreteViewShadowNode<RN_SVG_T_SPAN_COMPONENT_NAME, RNSVGTSpanProps>;
 
@@ -75,6 +73,8 @@ using RNSVGSvgViewComponentDescriptor = ConcreteComponentDescriptor<RNSVGSvgView
 using RNSVGPathComponentDescriptor = ConcreteComponentDescriptor<RNSVGPathShadowNode>;
 using RNSVGRectComponentDescriptor = ConcreteComponentDescriptor<RNSVGRectShadowNode>;
 using RNSVGImageComponentDescriptor = ConcreteComponentDescriptor<RNSVGImageShadowNode>;
+using RNSVGCircleComponentDescriptor = ConcreteComponentDescriptor<RNSVGCircleShadowNode>;
+using RNSVGEllipseComponentDescriptor = ConcreteComponentDescriptor<RNSVGEllipseShadowNode>;
 using RNSVGLinearGradientComponentDescriptor = ConcreteComponentDescriptor<RNSVGLinearGradientShadowNode>;
 using RNSVGDefsComponentDescriptor = ConcreteComponentDescriptor<RNSVGDefsShadowNode>;
 using RNSVGTextComponentDescriptor = ConcreteComponentDescriptor<RNSVGTextShadowNode>;

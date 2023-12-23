@@ -30,23 +30,21 @@
 namespace facebook {
 namespace react {
 
-RNSVGDefsProps::RNSVGDefsProps(
-    const PropsParserContext &context,
-    const RNSVGDefsProps &sourceProps,
-    const RawProps &rawProps): ViewProps(context, sourceProps, rawProps),
-
-    name(convertRawProp(context, rawProps, "name", sourceProps.name, {})),
-    opacity(convertRawProp(context, rawProps, "opacity", sourceProps.opacity, {1.0})),
-    matrix(convertRawProp(context, rawProps, "matrix", sourceProps.matrix, {})),
-    mask(convertRawProp(context, rawProps, "mask", sourceProps.mask, {})),
-    markerStart(convertRawProp(context, rawProps, "markerStart", sourceProps.markerStart, {})),
-    markerMid(convertRawProp(context, rawProps, "markerMid", sourceProps.markerMid, {})),
-    markerEnd(convertRawProp(context, rawProps, "markerEnd", sourceProps.markerEnd, {})),
-    clipPath(convertRawProp(context, rawProps, "clipPath", sourceProps.clipPath, {})),
-    clipRule(convertRawProp(context, rawProps, "clipRule", sourceProps.clipRule, {0})),
-    responsible(convertRawProp(context, rawProps, "responsible", sourceProps.responsible, {false})),
-    display(convertRawProp(context, rawProps, "display", sourceProps.display, {})),
-    pointerEvents(convertRawProp(context, rawProps, "pointerEvents", sourceProps.pointerEvents, {}))
-    {}
-} // namespace react
+    RNSVGDefsProps::RNSVGDefsProps(const PropsParserContext &context, const RNSVGDefsProps &sourceProps,
+                                   const RawProps &rawProps)
+        : ViewProps(context, sourceProps, rawProps),
+    
+          name(convertRawProp(context, rawProps, "name", sourceProps.name, {})),
+          opacity(convertRawProp(context, rawProps, "opacity", sourceProps.opacity, {1.0})),
+          matrix(convertRawProp(context, rawProps, "matrix", sourceProps.matrix, {})),
+          mask(convertRawProp(context, rawProps, "mask", sourceProps.mask, {})),
+          markerStart(convertRawProp(context, rawProps, "markerStart", sourceProps.markerStart, {})),
+          markerMid(convertRawProp(context, rawProps, "markerMid", sourceProps.markerMid, {})),
+          markerEnd(convertRawProp(context, rawProps, "markerEnd", sourceProps.markerEnd, {})),
+          clipPath(convertRawProp(context, rawProps, "clipPath", sourceProps.clipPath, {})),
+          clipRule(convertRawProp(context, rawProps, "clipRule", sourceProps.clipRule, {0})),
+          responsible(convertRawProp(context, rawProps, "responsible", sourceProps.responsible, {false})),
+          display(convertRawProp(context, rawProps, "display", sourceProps.display, {})),
+          pointerEvents(convertRawProp(context, rawProps, "pointerEvents", sourceProps.pointerEvents, {})){}
+    } // namespace react
 } // namespace facebook

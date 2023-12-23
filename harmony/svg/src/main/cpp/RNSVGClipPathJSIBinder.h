@@ -29,8 +29,7 @@
 namespace rnoh {
 
 class RNSVGClipPathJSIBinder : public ViewComponentJSIBinder {
-    facebook::jsi::Object createNativeProps(facebook::jsi::Runtime &rt) override
-    {
+    facebook::jsi::Object createNativeProps(facebook::jsi::Runtime &rt) override {
         auto object = ViewComponentJSIBinder::createNativeProps(rt);
         object.setProperty(rt, "name", "string");
         object.setProperty(rt, "opacity", "float");
@@ -44,15 +43,15 @@ class RNSVGClipPathJSIBinder : public ViewComponentJSIBinder {
         object.setProperty(rt, "responsible", "boolean");
         object.setProperty(rt, "display", "string");
         object.setProperty(rt, "pointerEvents", "string");
-        object.setProperty(rt, "fill", "string");
+        object.setProperty(rt, "fill", "object");
         object.setProperty(rt, "fillOpacity", "float");
         object.setProperty(rt, "fillRule", "int");
-        object.setProperty(rt, "stroke", "int");
+        object.setProperty(rt, "stroke", "object");
         object.setProperty(rt, "strokeOpacity", "float");
         object.setProperty(rt, "strokeWidth", "string");
         object.setProperty(rt, "strokeLinecap", "int");
         object.setProperty(rt, "strokeLinejoin", "int");
-        object.setProperty(rt, "strokeDasharray", "string");
+        object.setProperty(rt, "strokeDasharray", "array");
         object.setProperty(rt, "strokeDashoffset", "float");
         object.setProperty(rt, "strokeMiterlimit", "float");
         object.setProperty(rt, "vectorEffect", "int");
@@ -63,8 +62,7 @@ class RNSVGClipPathJSIBinder : public ViewComponentJSIBinder {
         return object;
     }
 
-    facebook::jsi::Object createBubblingEventTypes(facebook::jsi::Runtime &rt) override
-    {
+    facebook::jsi::Object createBubblingEventTypes(facebook::jsi::Runtime &rt) override {
         return facebook::jsi::Object(rt);
     }
 };

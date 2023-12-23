@@ -32,8 +32,7 @@ namespace rnoh {
 
 class RNSVGDefsNapiBinder : public ViewComponentNapiBinder {
 public:
-    napi_value createProps(napi_env env, facebook::react::ShadowView const shadowView) override
-    {
+    napi_value createProps(napi_env env, facebook::react::ShadowView const shadowView) override {
         napi_value napiViewProps = ViewComponentNapiBinder::createProps(env, shadowView);
         if (auto props = std::dynamic_pointer_cast<const facebook::react::RNSVGDefsProps>(shadowView.props)) {
             return ArkJS(env)

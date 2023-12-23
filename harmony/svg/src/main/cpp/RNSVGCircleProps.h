@@ -33,13 +33,25 @@
 #include <vector>
 
 namespace facebook {
-namespace react {
+    namespace react {
 
-class JSI_EXPORT RNSVGDefsProps final : public ViewProps {
- public:
-  RNSVGDefsProps() = default;
-  RNSVGDefsProps(const PropsParserContext& context, const RNSVGDefsProps &sourceProps, 
-                 const RawProps &rawProps);
+        struct RNSVGCircleFillStruct {
+            int type;
+            SharedColor payload;
+            std::string brushRef;
+        };
+
+        struct RNSVGCircleStrokeStruct {
+            int type;
+            SharedColor payload;
+            std::string brushRef;
+        };
+
+        class JSI_EXPORT RNSVGCircleProps final : public ViewProps {
+        public:
+            RNSVGCircleProps() = default;
+            RNSVGCircleProps(const PropsParserContext &context, const RNSVGCircleProps &sourceProps,
+                             const RawProps &rawProps);
 
 #pragma mark - Props
 
@@ -55,6 +67,22 @@ class JSI_EXPORT RNSVGDefsProps final : public ViewProps {
             bool responsible{false};
             std::string display{};
             std::string pointerEvents{};
+            RNSVGCircleFillStruct fill{};
+            Float fillOpacity{1.0};
+            int fillRule{1};
+            RNSVGCircleStrokeStruct stroke{};
+            Float strokeOpacity{1.0};
+            std::string strokeWidth{"1"};
+            int strokeLinecap{0};
+            int strokeLinejoin{0};
+            std::vector<std::string> strokeDasharray{};
+            Float strokeDashoffset{0.0};
+            Float strokeMiterlimit{0.0};
+            int vectorEffect{0};
+            std::vector<std::string> propList{};
+            std::string cx{};
+            std::string cy{};
+            std::string r{};
         };
     } // namespace react
 } // namespace facebook

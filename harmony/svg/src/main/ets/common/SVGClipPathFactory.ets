@@ -23,9 +23,9 @@
  */
 
 import { Tag, RNOHContext, Descriptor } from 'rnoh'
-import { SVG_PATH_TYPE_NAME, SVGPathDescriptor } from "../SVGPath"
-import { SVG_RECT_TYPE_NAME, SVGRectDescriptor } from "../SVGRect"
-import { SVG_IMAGE_TYPE_NAME, SVGImageDescriptor } from "../SVGImage"
+import { SVG_PATH_TYPE_NAME, SVGPathDescriptor } from "../components/SVGPath"
+import { SVG_RECT_TYPE_NAME, SVGRectDescriptor } from "../components/SVGRect"
+import { SVG_IMAGE_TYPE_NAME, SVGImageDescriptor } from "../components/SVGImage"
 import { SVG_LINEAR_GRADIENT_TYPE_NAME, SVGLinearGradientDescriptor } from "./SVGLinearGradient"
 import { SVGClipPathObj, SVGClipPathProps, SVGRectProps } from './SVGType'
 import Logger from './log/Logger'
@@ -39,7 +39,7 @@ export type SVGClipPathDescriptor = Descriptor<"RNSVGClipPath", SVGClipPathProps
 let descriptor: SVGClipPathDescriptor = {} as SVGClipPathDescriptor
 
 export function SVGClipPathFactory(ctx: RNOHContext, tag: number): void {
-  const descriptor = ctx.descriptorRegistry.getDescriptor<SVGClipPathDescriptor>(tag)
+  descriptor = ctx.descriptorRegistry.getDescriptor<SVGClipPathDescriptor>(tag)
   if (descriptor.props.name && descriptor) {
 	let key: string = descriptor.props.name
     descriptor.childrenTags.forEach((childrenTag) => {
@@ -50,6 +50,7 @@ export function SVGClipPathFactory(ctx: RNOHContext, tag: number): void {
 }
 
 function componentProcessing(ctx: RNOHContext, tag: Tag, key: string) {
+  //TODO 需要转换成鸿蒙对应使用格式后进行缓存
   let type: string = ctx.descriptorRegistry.getDescriptor(tag).type
   if (type === SVG_PATH_TYPE_NAME) {
     let descriptorTemp: SVGPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(tag)
@@ -61,6 +62,7 @@ function componentProcessing(ctx: RNOHContext, tag: Tag, key: string) {
       radiusWidth: getRadius(descriptorTemp.props.rx, descriptorTemp.props.ry),
       radiusHeight: getRadius(descriptorTemp.props.ry, descriptorTemp.props.rx)
     }) }
+    Logger.debug("RNOH SVGRect componentProcessing", JSON.stringify(value))
     setClipPathDescriptor(key, value)
   } else if (type === SVG_IMAGE_TYPE_NAME) {
     let descriptorTemp: SVGImageDescriptor = ctx.descriptorRegistry.getDescriptor<SVGImageDescriptor>(tag)
