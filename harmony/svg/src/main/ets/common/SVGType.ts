@@ -81,7 +81,8 @@ export interface SVGBaseProps extends SVGCommonProps {
   strokeDashoffset?: number,
   strokeMiterlimit?: number,
   vectorEffect?: number,
-  propList?: string[]
+  propList?: string[],
+  svgViewTag?: number
 }
 
 export interface SVGViewProps extends ViewBaseProps {
@@ -217,7 +218,7 @@ export interface SVGTSpanProps extends SVGTextProps {
   content?: string
 }
 
-export interface SVGLinearGradientProps extends SVGCommonProps {
+export type SVGLinearGradientProps = SVGCommonProps & {
   x1?: string,
   y1?: string,
   x2?: string,

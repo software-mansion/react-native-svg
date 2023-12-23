@@ -23,48 +23,50 @@
  */
 
 import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
-import { SVGRectModifier } from '../attributeModifiers/SVGRectModifier'
-import Logger from '../common/log/Logger'
-import { SVGRectProps, SVGViewCommon } from '../common/SVGType'
+import { SVGEllipseModifier } from '../attributeModifiers/SVGEllipseModifier'
+import Logger from '../common/log/Logger';
+import { SVGEllipseProps, SVGViewCommon } from '../common/SVGType'
 
-export const SVG_RECT_TYPE_NAME: string = "RNSVGRect"
+export const SVG_ELLIPSE_TYPE_NAME: string = "RNSVGEllipse"
 
-export type SVGRectDescriptor = Descriptor<"RNSVGRect", SVGRectProps>
+export type SVGEllipseDescriptor = Descriptor<"RNSVGEllipse", SVGEllipseProps>
 
-export class SVGRectDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGRect", SVGRectProps> {
+export class SVGEllipseDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGEllipse", SVGEllipseProps>{
 }
 
 @Component
-export struct SVGRect {
+export struct SVGEllipse {
   ctx!: RNOHContext
   tag: number = 0
   @State svgViewCommon: SVGViewCommon | undefined = undefined
-  @State descriptor: SVGRectDescriptor = {} as SVGRectDescriptor
-  @State descriptorWrapper: SVGRectDescriptorWrapper | undefined = undefined
+  @State descriptor: SVGEllipseDescriptor = {} as SVGEllipseDescriptor
+  @State descriptorWrapper: SVGEllipseDescriptorWrapper | undefined = undefined
   private unregisterDescriptorChangesListener?: () => void = undefined
 
   aboutToAppear() {
-    this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGRectDescriptor>(this.tag)
+    this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGEllipseDescriptor>(this.tag)
     this.setDescriptorWrapper(this.descriptor)
-    this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag, (newDescriptor) => {
-      this.descriptor = newDescriptor as SVGRectDescriptor
-      this.setDescriptorWrapper(this.descriptor)
-      Logger.debug("RNOH SVGRect New", JSON.stringify(this.descriptor))
-    })
-    Logger.debug("RNOH SVGRect", JSON.stringify(this.descriptor))
+    this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
+      (newDescriptor) => {
+        this.descriptor = (newDescriptor as SVGEllipseDescriptor)
+        this.setDescriptorWrapper(this.descriptor)
+        Logger.debug("RNOH SVGEllipse New", JSON.stringify(this.descriptor))
+      }
+    )
+    Logger.debug("RNOH SVGEllipse", JSON.stringify(this.descriptor))
   }
 
   aboutToDisappear() {
     this.unregisterDescriptorChangesListener?.()
   }
 
-  setDescriptorWrapper(descriptor: SVGRectDescriptor) {
-    this.descriptorWrapper = new SVGRectDescriptorWrapper(descriptor)
+  setDescriptorWrapper(descriptor: SVGEllipseDescriptor) {
+    this.descriptorWrapper = new SVGEllipseDescriptorWrapper(descriptor)
   }
 
   build() {
-    Rect()
-      .attributeModifier(SVGRectModifier.getInstance()
-        .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon)) // .width(this.descriptor.props.width) // .height(this.descriptor.props.height)
+    Ellipse()
+      .attributeModifier(SVGEllipseModifier.getInstance()
+        .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
   }
 }

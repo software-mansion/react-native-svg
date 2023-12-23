@@ -33,7 +33,7 @@ export function parseFill(fill?: SVGColorValue, parentFill?: SVGColorValue, svgT
       }
       break;
     case 2:
-      fill.payload = getViewDescriptor((svgTag)?.props.color
+      fill.payload = getViewDescriptor(svgTag)?.props.color
       break;
     case 3:
       fill = parentFill
@@ -55,9 +55,6 @@ export function parseStroke(stroke?: SVGColorValue, parentStroke?: SVGColorValue
       break;
     case 4:
       stroke = parentStroke
-      break;
-
-    default:
       break;
   }
   return stroke

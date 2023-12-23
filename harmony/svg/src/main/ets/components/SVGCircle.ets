@@ -23,48 +23,51 @@
  */
 
 import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
-import { SVGRectModifier } from '../attributeModifiers/SVGRectModifier'
-import Logger from '../common/log/Logger'
-import { SVGRectProps, SVGViewCommon } from '../common/SVGType'
+import { SVGCircleModifier } from '../attributeModifiers/SVGCircleModifier'
+import Logger from '../common/log/Logger';
+import { SVGCircleProps, SVGViewCommon } from '../common/SVGType'
 
-export const SVG_RECT_TYPE_NAME: string = "RNSVGRect"
+export const SVG_CIRCLE_TYPE_NAME: string = "RNSVGCircle"
 
-export type SVGRectDescriptor = Descriptor<"RNSVGRect", SVGRectProps>
+export type SVGCircleDescriptor = Descriptor<"RNSVGCircle", SVGCircleProps>
 
-export class SVGRectDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGRect", SVGRectProps> {
+export class SVGCircleDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGCircle", SVGCircleProps>{
 }
 
 @Component
-export struct SVGRect {
+export struct SVGCircle {
   ctx!: RNOHContext
   tag: number = 0
   @State svgViewCommon: SVGViewCommon | undefined = undefined
-  @State descriptor: SVGRectDescriptor = {} as SVGRectDescriptor
-  @State descriptorWrapper: SVGRectDescriptorWrapper | undefined = undefined
+  @State descriptor: SVGCircleDescriptor = {} as SVGCircleDescriptor
+  @State descriptorWrapper: SVGCircleDescriptorWrapper | undefined = undefined
+  @State diameter: number = 0
   private unregisterDescriptorChangesListener?: () => void = undefined
 
   aboutToAppear() {
-    this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGRectDescriptor>(this.tag)
+    this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGCircleDescriptor>(this.tag)
     this.setDescriptorWrapper(this.descriptor)
-    this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag, (newDescriptor) => {
-      this.descriptor = newDescriptor as SVGRectDescriptor
-      this.setDescriptorWrapper(this.descriptor)
-      Logger.debug("RNOH SVGRect New", JSON.stringify(this.descriptor))
-    })
-    Logger.debug("RNOH SVGRect", JSON.stringify(this.descriptor))
+    this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
+      (newDescriptor) => {
+        this.descriptor = (newDescriptor as SVGCircleDescriptor)
+        this.setDescriptorWrapper(this.descriptor)
+        Logger.debug("RNOH SVGCircle New", JSON.stringify(this.descriptor))
+      }
+    )
+    Logger.debug("RNOH SVGCircle", JSON.stringify(this.descriptor))
   }
 
   aboutToDisappear() {
     this.unregisterDescriptorChangesListener?.()
   }
 
-  setDescriptorWrapper(descriptor: SVGRectDescriptor) {
-    this.descriptorWrapper = new SVGRectDescriptorWrapper(descriptor)
+  setDescriptorWrapper(descriptor: SVGCircleDescriptor) {
+    this.descriptorWrapper = new SVGCircleDescriptorWrapper(descriptor)
   }
 
   build() {
-    Rect()
-      .attributeModifier(SVGRectModifier.getInstance()
-        .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon)) // .width(this.descriptor.props.width) // .height(this.descriptor.props.height)
+    Circle()
+      .attributeModifier(SVGCircleModifier.getInstance()
+        .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
   }
 }

@@ -41,7 +41,7 @@ export struct SVGPath {
   ctx!: RNOHContext
   tag: number = 0
   @State svgViewCommon: SVGViewCommon | undefined = undefined
-  @State descriptor: SVGPathDescriptor = {} as SVGPathDescriptor
+  @State descriptor: SVGPathDescriptor = Object() as SVGPathDescriptor
   @State descriptorWrapper: SVGPathDescriptorWrapper | undefined = undefined
   @State scaleValue: number = 1
   @State gradient: SVGLinearGradientValue | undefined = undefined
@@ -54,8 +54,6 @@ export struct SVGPath {
     this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag, (newDescriptor) => {
       this.descriptor = newDescriptor as SVGPathDescriptor
       this.setDescriptorWrapper(this.descriptor)
-
-
       Logger.debug("RNOH SVGPath New", JSON.stringify(this.descriptor))
     })
     Logger.debug("RNOH SVGPath", JSON.stringify(this.descriptor)) // this.getEmitterData()
@@ -71,7 +69,7 @@ export struct SVGPath {
   }
 
   getEmitterData() {
-    if (!this.svgViewCommon.svgTag) {
+    if (!this.svgViewCommon?.svgTag) {
       return
     }
     let innerEvent: emitter.InnerEvent = { eventId: this.svgViewCommon.svgTag }
@@ -85,18 +83,5 @@ export struct SVGPath {
     Path()
       .attributeModifier(SVGPathModifier.getInstance()
         .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
-
-    // .commands(this.descriptor.props.d)
-    // .position(this.getOrigin())
-    // .fill(getColor(this.descriptor.props.fill?.payload))
-    // .fillOpacity(this.descriptor.props.fill?.payload ? this.descriptor.props.fillOpacity : 0)
-    // .stroke(getColor(this.descriptor.props.stroke?.payload))
-    // .strokeWidth(this.getStrokeWidth(this.descriptor.props.strokeWidth))
-    // .strokeLineCap(this.descriptor.props.strokeLinecap)
-    // .opacity(this.descriptor.props.opacity)
-    // .transform(getTransform(this.descriptor.props.matrix, this.scaleValue))
-    // .scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 })
-    // .linearGradient(this.getLinearGradient())
-    // .clip(this.getClip())
   }
 }

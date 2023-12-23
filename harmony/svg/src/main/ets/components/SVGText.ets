@@ -26,14 +26,14 @@ import { Descriptor, RNOHContext, Tag, ViewDescriptorWrapperBase } from 'rnoh'
 import { SVGTextModifier } from '../attributeModifiers/SVGTextModifier'
 import Logger from '../common/log/Logger'
 import { getOffset } from '../common/SVGCommon'
-import { NumberProp, FontWeight, SVGTextProps, SVGTSpanProps } from '../common/SVGType'
+import { NumberProp, FontWeight, SVGTextProps, SVGViewCommon } from '../common/SVGType'
 import { SVGTSpan, SVGTSpanDescriptor } from './SVGTSpan'
 
 export const SVG_TEXT_TYPE_NAME: string = "RNSVGText"
 
 export type SVGTextDescriptor = Descriptor<"RNSVGText", SVGTextProps>
 
-export class SVGTextDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGTSpan", SVGTextProps> {
+export class SVGTextDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGText", SVGTextProps> {
 }
 
 export const SVG_TSPAN_TYPE_NAME: string = "RNSVGTSpan"
@@ -50,6 +50,7 @@ export struct SVGText {
 
   aboutToAppear() {
     this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGTextDescriptor>(this.tag)
+    this.setDescriptorWrapper(this.descriptor)
     this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag, (newDescriptor) => {
       this.descriptor = newDescriptor as SVGTextDescriptor
       this.setDescriptorWrapper(this.descriptor)
@@ -65,7 +66,7 @@ export struct SVGText {
   setDescriptorWrapper(descriptor: SVGTextDescriptor) {
 
     this.descriptorWrapper = new SVGTextDescriptorWrapper(descriptor)
-    this.childrenTags = descriptor.childrenTags
+    this.childrenTags = descriptor.childrenTags;
   }
 
   getFontSize(fontSize?: NumberProp) {
@@ -105,13 +106,5 @@ export struct SVGText {
     }
     .attributeModifier(SVGTextModifier.getInstance()
       .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
-
-    // .position(this.getOffset(this.descriptor.props?.x, this.descriptor.props?.y))
-    // .fontColor(getColor(this.descriptor.props.fill?.payload))
-    // .fontSize(this.descriptor.props.font?.fontSize)
-    // .fontWeight(this.descriptor.props.font?.fontWeight)
-    // .textAlign(this.getTextAlign(this.descriptor.props.font?.textAnchor))
-    // .opacity(this.descriptor.props.opacity)
-    // .transform(getTransform(this.descriptor.props.matrix))
   }
 }

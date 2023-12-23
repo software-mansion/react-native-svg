@@ -32,9 +32,6 @@ import { SVGText, SVG_TEXT_TYPE_NAME } from './components/SVGText'
 import { SVGCircle, SVG_CIRCLE_TYPE_NAME } from './components/SVGCircle'
 import { SVGEllipse, SVG_ELLIPSE_TYPE_NAME } from './components/SVGEllipse'
 import { SVGViewCommon } from './common/SVGType'
-import { SVGGroup } from './SVGGroup'
-import { SVGPath } from './SVGPath'
-import { SVGRect } from './SVGRect'
 
 export type CustomComponentBuilder = (ctx: ComponentBuilderContext) => void
 
@@ -74,21 +71,21 @@ export struct SVGComponentFactory {
       SVGGroup({
         ctx: this.ctx,
         tag: this.tag,
-        SVGViewCommon: this.svgViewCommon,
+        svgViewCommon: this.svgViewCommon,
         buildCustomComponent: this.buildCustomComponent
       })
     } else if (this.componentName === SVG_PATH_TYPE_NAME) {
-      SVGPath({ ctx: this.ctx, tag: this.tag, SVGViewCommon: this.svgViewCommon })
+      SVGPath({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
     } else if (this.componentName === SVG_RECT_TYPE_NAME) {
-      SVGRect({ ctx: this.ctx, tag: this.tag, SVGViewCommon: this.svgViewCommon })
+      SVGRect({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
     } else if (this.componentName === SVG_IMAGE_TYPE_NAME) {
-      SVGImage({ ctx: this.ctx, tag: this.tag, SVGViewCommon: this.svgViewCommon })
+      SVGImage({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
     } else if (this.componentName === SVG_TEXT_TYPE_NAME) {
-      SVGText({ ctx: this.ctx, tag: this.tag, SVGViewCommon: this.svgViewCommon })
+      SVGText({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
     } else if (this.componentName === SVG_CIRCLE_TYPE_NAME) {
-      SVGCircle({ ctx: this.ctx, tag: this.tag, SVGViewCommon: this.svgViewCommon })
+      SVGCircle({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
     } else if (this.componentName === SVG_ELLIPSE_TYPE_NAME) {
-      SVGEllipse({ ctx: this.ctx, tag: this.tag, SVGViewCommon: this.svgViewCommon })
+      SVGEllipse({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
     }
   }
 }
@@ -97,23 +94,23 @@ export struct SVGComponentFactory {
 export function svgComponentFactoryBuilder(ctx: RNOHContext, tag: Tag, componentName: string, svgViewCommon?: SVGViewCommon) {
   if (componentName === SVG_GROUP_TYPE_NAME) {
     SVGGroup({
-      ctx: this.ctx,
-      tag: this.tag,
-      SVGViewCommon: this.svgViewCommon,
-      buildCustomComponent: this.buildCustomComponent
+      ctx: ctx,
+      tag: tag,
+      svgViewCommon: this.svgViewCommon,
+      buildCustomComponent: BuilderProxy.buildCustomComponent
     })
   } else if (this.componentName === SVG_PATH_TYPE_NAME) {
-    SVGPath({ ctx: ctx, tag: tag, SVGViewCommon: svgViewCommon })
+    SVGPath({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
   } else if (this.componentName === SVG_RECT_TYPE_NAME) {
-    SVGRect({ ctx: ctx, tag: tag, SVGViewCommon: svgViewCommon })
+    SVGRect({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
   } else if (this.componentName === SVG_IMAGE_TYPE_NAME) {
-    SVGImage({ ctx: ctx, tag: tag, SVGViewCommon: svgViewCommon })
+    SVGImage({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
   } else if (this.componentName === SVG_TEXT_TYPE_NAME) {
-    SVGText({ ctx: ctx, tag: tag, SVGViewCommon: svgViewCommon })
+    SVGText({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
   } else if (this.componentName === SVG_CIRCLE_TYPE_NAME) {
-    SVGCircle({ ctx: ctx, tag: tag, SVGViewCommon: svgViewCommon })
+    SVGCircle({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
   } else if (this.componentName === SVG_ELLIPSE_TYPE_NAME) {
-    SVGEllipse({ ctx: ctx, tag: tag, SVGViewCommon: svgViewCommon })
+    SVGEllipse({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
   }
 }
 

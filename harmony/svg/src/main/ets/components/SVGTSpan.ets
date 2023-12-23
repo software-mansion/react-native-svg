@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { Descriptor, RNOHContext, Tag, ViewDescriptorWrapperBase } from 'rnoh'
+import { Descriptor, RNOHContext,ViewDescriptorWrapperBase } from 'rnoh'
 import { SVGTSpanModifier } from '../attributeModifiers/SVGTSpanModifier'
 import Logger from '../common/log/Logger'
 import { getOffset } from '../common/SVGCommon'
