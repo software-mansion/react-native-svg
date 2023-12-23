@@ -34,7 +34,7 @@ class RNSVGRectJSIBinder : public ViewComponentJSIBinder {
         auto object = ViewComponentJSIBinder::createNativeProps(rt);
         object.setProperty(rt, "name", "string");
         object.setProperty(rt, "opacity", "float");
-        object.setProperty(rt, "matrix", "string");
+        object.setProperty(rt, "matrix", "array");
         object.setProperty(rt, "mask", "string");
         object.setProperty(rt, "markerStart", "string");
         object.setProperty(rt, "markerMid", "string");
@@ -52,7 +52,7 @@ class RNSVGRectJSIBinder : public ViewComponentJSIBinder {
         object.setProperty(rt, "strokeWidth", "string");
         object.setProperty(rt, "strokeLinecap", "int");
         object.setProperty(rt, "strokeLinejoin", "int");
-        object.setProperty(rt, "strokeDasharray", "string");
+        object.setProperty(rt, "strokeDasharray", "array");
         object.setProperty(rt, "strokeDashoffset", "float");
         object.setProperty(rt, "strokeMiterlimit", "float");
         object.setProperty(rt, "vectorEffect", "int");

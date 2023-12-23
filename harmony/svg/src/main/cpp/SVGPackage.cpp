@@ -31,6 +31,8 @@
 #include "RNSVGPathNapiBinder.h"
 #include "RNSVGRectNapiBinder.h"
 #include "RNSVGImageNapiBinder.h"
+#include "RNSVGCircleNapiBinder.h"
+#include "RNSVGEllipseNapiBinder.h"
 #include "RNSVGLinearGradientNapiBinder.h"
 #include "RNSVGDefsNapiBinder.h"
 #include "RNSVGTextNapiBinder.h"
@@ -42,6 +44,8 @@
 #include "RNSVGPathJSIBinder.h"
 #include "RNSVGRectJSIBinder.h"
 #include "RNSVGImageJSIBinder.h"
+#include "RNSVGCircleJSIBinder.h"
+#include "RNSVGEllipseJSIBinder.h"
 #include "RNSVGLinearGradientJSIBinder.h"
 #include "RNSVGDefsJSIBinder.h"
 #include "RNSVGTextJSIBinder.h"
@@ -60,6 +64,8 @@ std::vector<react::ComponentDescriptorProvider> SVGPackage::createComponentDescr
             react::concreteComponentDescriptorProvider<react::RNSVGPathComponentDescriptor>(),
             react::concreteComponentDescriptorProvider<react::RNSVGRectComponentDescriptor>(),
             react::concreteComponentDescriptorProvider<react::RNSVGImageComponentDescriptor>(),
+            react::concreteComponentDescriptorProvider<react::RNSVGCircleComponentDescriptor>(),
+            react::concreteComponentDescriptorProvider<react::RNSVGEllipseComponentDescriptor>(),
             react::concreteComponentDescriptorProvider<react::RNSVGLinearGradientComponentDescriptor>(),
             react::concreteComponentDescriptorProvider<react::RNSVGDefsComponentDescriptor>(),
             react::concreteComponentDescriptorProvider<react::RNSVGTextComponentDescriptor>(),
@@ -74,6 +80,8 @@ ComponentNapiBinderByString rnoh::SVGPackage::createComponentNapiBinderByName()
             {"RNSVGPath", std::make_shared<RNSVGPathNapiBinder>()},
             {"RNSVGRect", std::make_shared<RNSVGRectNapiBinder>()},
             {"RNSVGImage", std::make_shared<RNSVGImageNapiBinder>()},
+            {"RNSVGCircle", std::make_shared<RNSVGCircleNapiBinder>()},
+            {"RNSVGEllipse", std::make_shared<RNSVGEllipseNapiBinder>()},
             {"RNSVGLinearGradient", std::make_shared<RNSVGLinearGradientNapiBinder>()},
             {"RNSVGDefs", std::make_shared<RNSVGDefsNapiBinder>()},
             {"RNSVGText", std::make_shared<RNSVGTextNapiBinder>()},
@@ -88,6 +96,8 @@ ComponentJSIBinderByString rnoh::SVGPackage::createComponentJSIBinderByName()
             {"RNSVGPath", std::make_shared<RNSVGPathJSIBinder>()},
             {"RNSVGRect", std::make_shared<RNSVGRectJSIBinder>()},
             {"RNSVGImage", std::make_shared<RNSVGImageJSIBinder>()},
+            {"RNSVGCircle", std::make_shared<RNSVGCircleJSIBinder>()},
+            {"RNSVGEllipse", std::make_shared<RNSVGEllipseJSIBinder>()},
             {"RNSVGLinearGradient", std::make_shared<RNSVGLinearGradientJSIBinder>()},
             {"RNSVGDefs", std::make_shared<RNSVGDefsJSIBinder>()},
             {"RNSVGText", std::make_shared<RNSVGTextJSIBinder>()},

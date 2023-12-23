@@ -29,8 +29,7 @@
 namespace rnoh {
 
 class RNSVGDefsJSIBinder : public ViewComponentJSIBinder {
-    facebook::jsi::Object createNativeProps(facebook::jsi::Runtime &rt) override
-    {
+    facebook::jsi::Object createNativeProps(facebook::jsi::Runtime &rt) override {
         auto object = ViewComponentJSIBinder::createNativeProps(rt);
         object.setProperty(rt, "name", "string");
         object.setProperty(rt, "opacity", "float");
@@ -47,8 +46,7 @@ class RNSVGDefsJSIBinder : public ViewComponentJSIBinder {
         return object;
     }
 
-    facebook::jsi::Object createBubblingEventTypes(facebook::jsi::Runtime &rt) override
-    {
+    facebook::jsi::Object createBubblingEventTypes(facebook::jsi::Runtime &rt) override {
         return facebook::jsi::Object(rt);
     }
 };

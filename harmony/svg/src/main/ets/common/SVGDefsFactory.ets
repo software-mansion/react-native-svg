@@ -23,9 +23,9 @@
  */
 
 import { Tag, RNOHContext, Descriptor } from 'rnoh'
-import { SVG_PATH_TYPE_NAME, SVGPathDescriptor } from "../SVGPath"
-import { SVG_RECT_TYPE_NAME, SVGRectDescriptor } from "../SVGRect"
-import { SVG_IMAGE_TYPE_NAME, SVGImageDescriptor } from "../SVGImage"
+import { SVG_PATH_TYPE_NAME, SVGPathDescriptor } from "../components/SVGPath"
+import { SVG_RECT_TYPE_NAME, SVGRectDescriptor } from "../components/SVGRect"
+import { SVG_IMAGE_TYPE_NAME, SVGImageDescriptor } from "../components/SVGImage"
 import { SVG_LINEAR_GRADIENT_TYPE_NAME, SVGLinearGradientDescriptor } from "./SVGLinearGradient"
 import { SVG_CLIP_PATH_TYPE_NAME, SVGClipPathDescriptor, SVGClipPathFactory } from './SVGClipPathFactory'
 import { parseLinearGradient } from './SVGLinearGradient'
@@ -42,6 +42,7 @@ export function SVGDefsFactory(ctx: RNOHContext, tag: number): void {
   if (descriptor) {
     descriptor.childrenTags.forEach((childrenTag) => {
       Logger.debug("RNOH SVGDefsFactory childrenTag=", JSON.stringify(childrenTag))
+      console.log("RNOH SVGDefsFactory childrenTag=", JSON.stringify(childrenTag))
       componentProcessing(ctx, childrenTag)
     })
   }
@@ -60,6 +61,8 @@ function componentProcessing(ctx: RNOHContext, tag: Tag) {
     storageDefsDescriptor(descriptorTemp.props.name, descriptorTemp.props)
   } else if (type === SVG_LINEAR_GRADIENT_TYPE_NAME) {
     let descriptorTemp: SVGLinearGradientDescriptor = ctx.descriptorRegistry.getDescriptor<SVGLinearGradientDescriptor>(tag)
+    Logger.debug("RNOH SVGLinearGradient DescriptorTemp=", JSON.stringify(descriptorTemp))
+    console.log("RNOH SVGLinearGradient DescriptorTemp=", JSON.stringify(descriptorTemp))
     storageDefsDescriptor(descriptorTemp.props.name, parseLinearGradient(descriptorTemp))
   } else if (type === SVG_CLIP_PATH_TYPE_NAME) {
     SVGClipPathFactory(ctx, tag)

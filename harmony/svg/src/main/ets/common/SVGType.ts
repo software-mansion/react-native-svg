@@ -21,36 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import { ViewBaseProps } from 'rnoh/ts';
 
 /** 0-1 */
 export type NormalizedScalar = number
 
 /** RGBA */
-export type ColorSegments = [
-  NormalizedScalar,
-  NormalizedScalar,
-  NormalizedScalar,
-  NormalizedScalar
-]
+export type ColorSegments = [NormalizedScalar, NormalizedScalar, NormalizedScalar, NormalizedScalar]
 
-export type TransformMatrix = [
-  number,
-  number,
-  number,
-  number,
-  number,
-  number,
-  number,
-  number,
-  number,
-  number,
-  number,
-  number,
-  number,
-  number,
-  number,
-  number
-];
+export type TransformMatrix = [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
 
 export type SVGOffset = {
   x: string | number,
@@ -63,7 +42,18 @@ export type SVGColorValue = {
   brushRef?: string
 }
 
-export type SVGCommonProps = {
+export type SVGGroupBox = {
+  width: string | number,
+  height: string | number
+}
+
+export type SVGViewCommon = {
+  svgTag: number,
+  scaleValue: number,
+  groupBox: SVGGroupBox
+}
+
+export interface SVGCommonProps extends ViewBaseProps {
   name?: string,
   opacity?: number,
   matrix?: number[],
@@ -78,7 +68,7 @@ export type SVGCommonProps = {
   pointerEvents?: string
 }
 
-export type SVGBaseProps = SVGCommonProps & {
+export interface SVGBaseProps extends SVGCommonProps {
   fill?: SVGColorValue,
   fillOpacity: number,
   fillRule?: number,
@@ -94,7 +84,7 @@ export type SVGBaseProps = SVGCommonProps & {
   propList?: string[]
 }
 
-export type SVGViewProps = {
+export interface SVGViewProps extends ViewBaseProps {
   bbWidth?: string,
   bbHeight?: string,
   minX: number,
@@ -108,7 +98,7 @@ export type SVGViewProps = {
   pointerEvents?: number
 }
 
-export type SVGGroupProps = SVGBaseProps & {
+export interface SVGGroupProps extends SVGBaseProps {
   fontSize?: string,
   fontWeight?: string,
   font: object
@@ -130,7 +120,7 @@ export type SVGClipPathProps = SVGBaseProps & {
   font: object
 }
 
-export type SVGImageProps = SVGBaseProps & {
+export interface SVGImageProps extends SVGBaseProps {
   x?: string,
   y?: string,
   width?: string,
@@ -140,17 +130,30 @@ export type SVGImageProps = SVGBaseProps & {
   meetOrSlice?: number
 }
 
-export type SVGPathProps = SVGBaseProps & {
+export interface SVGPathProps extends SVGBaseProps {
   d: string
 }
 
-export type SVGRectProps = SVGBaseProps & {
+export interface SVGRectProps extends SVGBaseProps {
   x?: string,
   y?: string,
   width?: string,
   height?: string,
   rx?: string,
   ry?: string
+}
+
+export interface SVGCircleProps extends SVGBaseProps {
+  cx?: string,
+  cy?: string,
+  r: string
+}
+
+export interface SVGEllipseProps extends SVGBaseProps {
+  cx?: string,
+  cy?: string,
+  rx: string,
+  ry: string
 }
 
 export type SVGClipPathObj = {
@@ -168,41 +171,11 @@ export type FontStyle = 'normal' | 'italic' | 'oblique';
 
 export type FontVariant = 'normal' | 'small-caps';
 
-export type FontWeight =
-| NumberProp
-  | 'normal'
-  | 'bold'
-  | 'bolder'
-  | 'lighter'
-  | '100'
-  | '200'
-  | '300'
-  | '400'
-  | '500'
-  | '600'
-  | '700'
-  | '800'
-  | '900';
+export type FontWeight = | NumberProp | 'normal' | 'bold' | 'bolder' | 'lighter' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
 
-export type FontStretch =
-| 'normal'
-  | 'wider'
-  | 'narrower'
-  | 'ultra-condensed'
-  | 'extra-condensed'
-  | 'condensed'
-  | 'semi-condensed'
-  | 'semi-expanded'
-  | 'expanded'
-  | 'extra-expanded'
-  | 'ultra-expanded';
+export type FontStretch = | 'normal' | 'wider' | 'narrower' | 'ultra-condensed' | 'extra-condensed' | 'condensed' | 'semi-condensed' | 'semi-expanded' | 'expanded' | 'extra-expanded' | 'ultra-expanded';
 
-export type TextDecoration =
-| 'none'
-  | 'underline'
-  | 'overline'
-  | 'line-through'
-  | 'blink';
+export type TextDecoration = | 'none' | 'underline' | 'overline' | 'line-through' | 'blink';
 
 export type FontVariantLigatures = 'normal' | 'none';
 
@@ -223,7 +196,7 @@ export type SVGFontProps = {
   fontVariationSettings?: string;
 }
 
-export type SVGTextProps = SVGBaseProps & {
+export interface SVGTextProps extends SVGBaseProps {
   fontSize?: string,
   fontWeight?: string,
   font?: SVGFontProps,
@@ -240,16 +213,16 @@ export type SVGTextProps = SVGBaseProps & {
   verticalAlign?: string
 }
 
-export type SVGTSpanProps = SVGTextProps & {
+export interface SVGTSpanProps extends SVGTextProps {
   content?: string
 }
 
-export type SVGLinearGradientProps = SVGCommonProps & {
+export interface SVGLinearGradientProps extends SVGCommonProps {
   x1?: string,
   y1?: string,
   x2?: string,
   y2?: string,
-  gradient: string,
+  gradient: number[],
   gradientUnits: number,
-  gradientTransform: object
+  gradientTransform: number[]
 }

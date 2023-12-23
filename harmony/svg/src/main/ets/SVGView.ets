@@ -25,64 +25,97 @@
 import {
   Descriptor,
   ComponentBuilderContext,
-  RNComponentFactory,
   RNOHContext,
-  RNViewBase,
   Tag,
+  colorSegments,
+  RNViewManager,
+  ViewDescriptorWrapperBase,
 } from 'rnoh'
 import Logger from './common/log/Logger'
-import { getScaleX, getScaleY } from './common/SVGCommon'
+import { getGroupBox, getScaleValue } from './common/SVGCommon'
 import { setViewDescriptor } from './common/SVGTempCache'
-import { SVGViewProps } from './common/SVGType'
+import { SVGViewCommon, SVGViewProps } from './common/SVGType'
+import emitter from '@ohos.events.emitter';
+import { svgComponentFactoryBuilder } from './SVGComponentFactory'
+import { SVGViewModifier } from './attributeModifiers/SVGViewModifier'
 
 export const SVG_VIEW_TYPE_NAME: string = "RNSVGSvgView"
 
 export type SVGViewDescriptor = Descriptor<"RNSVGSvgView", SVGViewProps>
 
+export class SVGViewDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGSvgView", SVGViewProps> {
+}
+
 @Component
 export struct SVGView {
   ctx!: RNOHContext
   tag: number = 0
-  @BuilderParam buildCustomComponent: (ctx: ComponentBuilderContext) => void
-  @State descriptor: SVGViewDescriptor = {} as SVGViewDescriptor
+  @BuilderParam public buildCustomComponent: (ctx: ComponentBuilderContext) => void
+  public componentManager!: RNViewManager;
+  @State descriptor: SVGViewDescriptor = Object() as SVGViewDescriptor
+  @State private descriptorWrapper: SVGViewDescriptorWrapper | undefined = undefined
   private unregisterDescriptorChangesListener?: () => void = undefined
+  private unregisterComponentManager?: () => void = undefined
+  private unregisterCommandCallback?: () => void = undefined
+  @State @Watch('onEventChanged') color: colorSegments = [0, 0, 0, 1]
+  @State private childrenTags: Tag[] = []
+  @State private svgViewCommon: SVGViewCommon | undefined = undefined
+  private defaultColor: colorSegments = [0, 0, 0, 1]
 
   aboutToAppear() {
     this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGViewDescriptor>(this.tag)
-    this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
-      (newDescriptor) => {
-        this.descriptor = (newDescriptor as SVGViewDescriptor)
-		setViewDescriptor(this.tag, this.descriptor)
-      }
-    )
-    setViewDescriptor(this.tag, this.descriptor)
-    Logger.debug("RNOH SVGView", JSON.stringify(this.descriptor))
+    this.initComponent()
+    this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag, (newDescriptor) => {
+      this.setViewDescriptor(newDescriptor as SVGViewDescriptor)
+    })
+    this.setEventData()
   }
 
   aboutToDisappear() {
     this.unregisterDescriptorChangesListener?.()
+    this.unregisterComponentManager?.()
+    this.unregisterCommandCallback?.()
   }
 
-  scaleValue() {
-    return Math.min(getScaleX(this.descriptor), getScaleY(this.descriptor))
+  initComponent() {
+    if (!this.componentManager) {
+      this.componentManager = new RNViewManager(this.tag, this.ctx)
+    }
+    this.unregisterComponentManager = this.ctx.componentMaagerRegistry.registerComponentManager(this.tag, this.componentManager)
+    this.componentManager.setParentTag(this.descriptor.parentTag)
+    this.setDescriptorWrapper(this.descriptor)
+  }
+
+  private setDescriptorWrapper(descriptor: SVGViewDescriptor) {
+    this.descriptorWrapper = new SVGViewDescriptorWrapper(descriptor)
+    this.childrenTags = descriptor.childrenTags;
+    this.svgViewCommon = { svgTag: this.tag, scaleVaule: getScaleValue(descriptor), groupBox: getGroupBox(descriptor) }
+    setViewDescriptor(this.tag, descriptor)
+    this.color = descriptor.props.color ?? this.defaultColor
+    Logger.debug("RNOH SVGView", JSON.stringify(descriptor))
+  }
+
+  onEventChanged() {
+    this.setEventData()
+  }
+
+  setEventData() {
+    let innerEvent: emitter.InnerEvent = { eventId: this.tag, priority: emitter.EventPriority.HIGH }
+    emitter.emit(innerEvent)
+    Logger.debug("RNOH SVGView emitter 发送", JSON.stringify(innerEvent))
   }
 
   build() {
-    RNViewBase({
-      ctx: this.ctx,
-      tag: this.tag,
-    }) {
-      Stack() {
-        ForEach(this.descriptor.childrenTags, (tag: Tag) => {
-          RNComponentFactory({ ctx: this.ctx, tag: tag, buildCustomComponent: this.buildCustomComponent })
-        }, (tag: Tag) => tag.toString())
-      }
-      .width("100%")
-      .height("100%")
-      .offset({
-        x: -(this.descriptor.props?.minX * this.scaleValue() || 0),
-        y: -(this.descriptor.props?.minY * this.scaleValue() || 0)
-      })
-    }
+    Stack() {
+      ForEach(this.childrenTags, (childrenTag: Tag) => {
+        svgComponentFactoryBuilder(this.ctx, childrenTag, this.ctx.rnInstance.getComponentNameFromDescriptorType(this.ctx.descriptorRegistry.getDescriptor(childrenTag)?.type), this.svgViewCommon)
+      }, (childrenTags: Tag) => childrenTags.toString())
+    }.attributeModifier(SVGViewModifier.getInstance().setDescriptor(this.descriptorWrapper))
+
+    // .offset({
+    //   x: -(this.descriptor.props?.minX * this.getscaleValue() || 0),
+    //   y: -(this.descriptor.props?.minY * this.getscaleValue() || 0)
+    // })
+
   }
 }

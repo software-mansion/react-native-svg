@@ -34,7 +34,7 @@ class RNSVGLinearGradientJSIBinder : public ViewComponentJSIBinder {
         auto object = ViewComponentJSIBinder::createNativeProps(rt);
         object.setProperty(rt, "name", "string");
         object.setProperty(rt, "opacity", "float");
-        object.setProperty(rt, "matrix", "float");
+        object.setProperty(rt, "matrix", "array");
         object.setProperty(rt, "mask", "float");
         object.setProperty(rt, "markerStart", "string");
         object.setProperty(rt, "markerMid", "string");
@@ -48,9 +48,9 @@ class RNSVGLinearGradientJSIBinder : public ViewComponentJSIBinder {
         object.setProperty(rt, "y1", "string");
         object.setProperty(rt, "x2", "string");
         object.setProperty(rt, "y2", "string");
-        object.setProperty(rt, "gradient", "string");
+        object.setProperty(rt, "gradient", "array");
         object.setProperty(rt, "gradientUnits", "int");
-        object.setProperty(rt, "gradientTransform", "object");
+        object.setProperty(rt, "gradientTransform", "array");
         return object;
     }
 

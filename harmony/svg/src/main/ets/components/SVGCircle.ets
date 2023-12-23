@@ -23,9 +23,9 @@
  */
 
 import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
-import { SVGCircleModifier } from './attributeModifiers/SVGCircleModifier'
-import Logger from './common/log/Logger';
-import { SVGCircleProps, SVGViewCommon } from './common/SVGType'
+import { SVGCircleModifier } from '../attributeModifiers/SVGCircleModifier'
+import Logger from '../common/log/Logger';
+import { SVGCircleProps, SVGViewCommon } from '../common/SVGType'
 
 export const SVG_CIRCLE_TYPE_NAME: string = "RNSVGCircle"
 

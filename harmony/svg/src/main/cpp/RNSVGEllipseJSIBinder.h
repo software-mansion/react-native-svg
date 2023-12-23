@@ -28,13 +28,13 @@
 
 namespace rnoh {
 
-    class RNSVGGroupJSIBinder : public ViewComponentJSIBinder {
+    class RNSVGEllipseJSIBinder : public ViewComponentJSIBinder {
         facebook::jsi::Object createNativeProps(facebook::jsi::Runtime &rt) override {
             auto object = ViewComponentJSIBinder::createNativeProps(rt);
             object.setProperty(rt, "name", "string");
             object.setProperty(rt, "opacity", "float");
             object.setProperty(rt, "matrix", "array");
-            object.setProperty(rt, "mask", "string");
+            object.setProperty(rt, "mask", "float");
             object.setProperty(rt, "markerStart", "string");
             object.setProperty(rt, "markerMid", "string");
             object.setProperty(rt, "markerEnd", "string");
@@ -56,13 +56,15 @@ namespace rnoh {
             object.setProperty(rt, "strokeMiterlimit", "float");
             object.setProperty(rt, "vectorEffect", "int");
             object.setProperty(rt, "propList", "array");
-            object.setProperty(rt, "fontSize", "string");
-            object.setProperty(rt, "fontWeight", "string");
-            object.setProperty(rt, "font", "object");
+            object.setProperty(rt, "cx", "string");
+            object.setProperty(rt, "cy", "string");
+            object.setProperty(rt, "rx", "string");
+            object.setProperty(rt, "ry", "string");
             return object;
         }
     
-        facebook::jsi::Object createBubblingEventTypes(facebook::jsi::Runtime &rt) override {
+        facebook::jsi::Object createBubblingEventTypes(facebook::jsi::Runtime &rt) override
+        {
             return facebook::jsi::Object(rt);
         }
     };

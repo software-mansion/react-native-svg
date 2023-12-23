@@ -23,10 +23,10 @@
  */
 
 import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
-import { SVGEllipseModifier } from './attributeModifiers/SVGEllipseModifier'
-import Logger from './common/log/Logger';
-import { getColor, getTransform } from './common/SVGCommon'
-import { SVGEllipseProps, SVGViewCommon } from './common/SVGType'
+import { SVGEllipseModifier } from '../attributeModifiers/SVGEllipseModifier'
+import Logger from '../common/log/Logger';
+import { getColor, getTransform } from '../common/SVGCommon'
+import { SVGEllipseProps, SVGViewCommon } from '../common/SVGType'
 
 export const SVG_ELLIPSE_TYPE_NAME: string = "RNSVGEllipse"
 

@@ -1,0 +1,93 @@
+import { SVGPathDescriptor, SVGPathDescriptorWrapper } from '../components/SVGPath';
+import { getColor, getStrokeWidth, getTransform } from '../common/SVGCommon';
+import { SVGViewCommon } from '../common/SVGType';
+import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
+import { getDefsDescriptor } from '../common/SVGTempCache';
+import Logger from '../common/log/Logger';
+
+export class SVPathModifier implements AttributeModifier<PathAttribute> {
+  private constructor() {
+  }
+
+  private static instance: SVPathModifier;
+  protected descriptor: SVGPathDescriptor = Object() as SVGPathDescriptor;
+  protected descriptorWrapper: SVGPathDescriptorWrapper | undefined = undefined;
+  protected svgViewCommon: SVGViewCommon | undefined = undefined;
+  private scaleValue: number = 1;
+  private gradient: SVGLinearGradientValue | undefined = undefined;
+
+  public static getInstance(): SVPathModifier {
+    if (!SVPathModifier.instance) {
+      SVPathModifier.instance = new SVPathModifier();
+    }
+    return SVPathModifier.instance;
+  }
+
+  setDescriptor(descriptor: SVGPathDescriptor,
+                descriptorWrapper: SVGPathDescriptorWrapper | undefined,
+                svgViewCommon: SVGViewCommon | undefined): SVPathModifier {
+    this.descriptor = descriptor;
+    this.descriptorWrapper = descriptorWrapper;
+    this.svgViewCommon = svgViewCommon;
+    if (svgViewCommon?.scaleValue) {
+      this.scaleValue = svgViewCommon.scaleValue * vp2px(1);
+    }
+    this.getGradient();
+    return SVPathModifier.instance;
+  }
+
+  applyNormalAttribute(instance: PathAttribute): void {
+    instance.position(this.descriptor.layoutMetrics.frame.origin);
+
+    if (this.descriptor.props.d) {
+      instance.commands(this.descriptor.props.d);
+    }
+
+    let fill = getColor(this.descriptor.props.fill?.payload)
+    if (fill && fill !== '[0,0,0,1]') {
+      instance.fill(fill);
+    }
+
+    let fillOpacity = this.descriptor.props.fill?.payload ? this.descriptor.props.fillOpacity : 0
+    if (fillOpacity !== 1) {
+      instance.fillOpacity(fillOpacity);
+    }
+
+    if (this.descriptor.props.stroke?.payload) {
+    }
+    instance.stroke(getColor(this.descriptor.props.stroke?.payload));
+
+    if (getStrokeWidth(this.descriptor.props.strokeWidth) !== 1) {
+      instance.strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth));
+    }
+
+    // instance.strokeLineCap(this.descriptor.props.strokeLinecap);
+
+    if (this.descriptor.props.opacity !== 1) {
+      instance.opacity(this.descriptor.props.opacity);
+    }
+
+    instance.transform(getTransform(this.descriptor.props.matrix, this.scaleValue));
+
+    instance.scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 });
+
+    if (this.gradient) {
+      instance.linearGradient(this.gradient);
+      instance.clip(this.getClip());
+    }
+  }
+
+  getGradient() {
+    if (this.descriptor.props.fill?.type == 1) {
+      this.gradient = getDefsDescriptor(this.descriptor.props.fill?.brushRef) as SVGLinearGradientValue
+      Logger.debug("RNOH SVGLinearGradient Path gradient=" + JSON.stringify(this.gradient))
+    }
+  }
+
+  getClip() {
+    return new Path({
+      width: '100%',
+      height: '100%',
+      commands: this.descriptor.props.d });
+  }
+}
