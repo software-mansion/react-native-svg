@@ -65,7 +65,7 @@ export struct SVGEllipse {
   }
   
   getOrigin() {
-    return this.descriptor.props.layoutMetrics.frame.origin
+    return this.descriptor.layoutMetrics.frame.origin
   }
 
   getEllipseWidth() {
