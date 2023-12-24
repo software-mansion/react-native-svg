@@ -42,7 +42,7 @@ export class SVGViewModifier implements AttributeModifier<StackAttribute> {
   }
 
   private static instance: SVGViewModifier;
-  protected descriptor: SVGGroupDescriptor = Object() as SVGGroupDescriptor;
+  protected descriptor: SVGViewDescriptor = Object() as SVGViewDescriptor;
   protected descriptorWrapper: SVGViewDescriptorWrapper | undefined = undefined
 
   public static getInstance(): SVGViewModifier {
@@ -52,7 +52,7 @@ export class SVGViewModifier implements AttributeModifier<StackAttribute> {
     return SVGViewModifier.instance;
   }
 
-  setDescriptor(descriptor: SVGGroupDescriptor, descriptorWrapper: SVGViewDescriptorWrapper | undefined): SVGViewModifier {
+  setDescriptor(descriptor: SVGViewDescriptor, descriptorWrapper: SVGViewDescriptorWrapper | undefined): SVGViewModifier {
     this.descriptor = descriptor;
     this.descriptorWrapper = descriptorWrapper;
     return SVGViewModifier.instance;

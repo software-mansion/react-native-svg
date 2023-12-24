@@ -98,11 +98,23 @@ export struct SVGText {
     return getOffset(x1, y1)
   }
 
+  getChildrenDescriptors() {
+    let childrenDescriptors: SVGTSpanDescriptor[] = []
+    for (let i = 0; i < this.descriptor.childrenTags.length; i++) {
+      let tSpanDescriptor = this.ctx.descriptorRegistry.getDescriptor<SVGTSpanDescriptor>(this.descriptor.childrenTags[i])
+      childrenDescriptors.push(tSpanDescriptor)
+    }
+    return childrenDescriptors
+  }
+
   build() {
     Text() {
-      ForEach(this.childrenTags, (childrenTag: Tag) => {
-        SVGTSpan({ ctx: this.ctx, tag: childrenTag, svgViewCommon: this.svgViewCommon })
-      }, (childrenTags: Tag) => childrenTags.toString())
+      ForEach(this.getChildrenDescriptors(), (tSpanDescriptor: SVGTSpanDescriptor) => {
+        Span(tSpanDescriptor.props.content)
+          .fontSize(this.getFontSize(tSpanDescriptor.props.font?.fontSize))
+          .fontWeight(this.getFontWeight(tSpanDescriptor.props.font?.fontWeight))
+          .opacity(tSpanDescriptor.props.opacity)
+      })
     }
     .attributeModifier(SVGTextModifier.getInstance()
       .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
