@@ -59,6 +59,14 @@ export class SVGGroupModifier implements AttributeModifier<ShapeAttribute> {
     if (this.parentType == SVG_VIEW_TYPE_NAME && this.svgViewCommon) {
       instance.width(this.svgViewCommon.groupBox.width);
       instance.height(this.svgViewCommon.groupBox.height);
+
+      if (this.svgViewCommon.groupBox.minX !== 0 || this.svgViewCommon.groupBox.minY !== 0) {
+        instance.offset({
+          x: -(this.svgViewCommon.groupBox.minX * this.svgViewCommon.scaleValue || 0),
+          y: -(this.svgViewCommon.groupBox.minY * this.svgViewCommon.scaleValue || 0)
+        })
+      }
+
     } else {
       instance.width('100%');
       instance.height('100%');

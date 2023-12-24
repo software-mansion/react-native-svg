@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { Descriptor, ComponentBuilderContext, RNOHContext, Tag } from 'rnoh'
+import { Descriptor, ComponentBuilderContext, RNOHContext, Tag, rnComponentFactoryBuilder } from 'rnoh'
 import { SVG_VIEW_TYPE_NAME } from './SVGView'
 import { SVGGroup, SVG_GROUP_TYPE_NAME } from './components/SVGGroup'
 import { SVGPath, SVG_PATH_TYPE_NAME } from './components/SVGPath'
@@ -109,10 +109,15 @@ export function svgComponentFactoryBuilder(ctx: RNOHContext, tag: Tag, component
     SVGImage({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
   } else if (componentName === SVG_TEXT_TYPE_NAME) {
     SVGText({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
-  } else if (componentName === SVG_CIRCLE_TYPE_NAME) {
-    SVGCircle({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
-  } else if (componentName === SVG_ELLIPSE_TYPE_NAME) {
-    SVGEllipse({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
   }
+  // else if (componentName === SVG_CIRCLE_TYPE_NAME) {
+  //   SVGCircle({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
+  // } else if (componentName === SVG_ELLIPSE_TYPE_NAME) {
+  //   SVGEllipse({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
+  // }
+  else if (componentName !== '') {
+    rnComponentFactoryBuilder(ctx, tag, componentName)
+  }
+
 }
 

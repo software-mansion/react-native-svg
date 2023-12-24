@@ -51,9 +51,7 @@ export struct SVGImage {
     this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag, (newDescriptor) => {
       this.descriptor = newDescriptor as SVGImageDescriptor
       this.setDescriptorWrapper(this.descriptor)
-      Logger.debug("RNOH SVGImage New", JSON.stringify(this.descriptor))
     })
-    Logger.debug("RNOH SVGImage", JSON.stringify(this.descriptor))
   }
 
   aboutToDisappear() {
@@ -62,6 +60,7 @@ export struct SVGImage {
 
   setDescriptorWrapper(descriptor: SVGImageDescriptor) {
     this.descriptorWrapper = new SVGImageDescriptorWrapper(descriptor)
+    Logger.debug("RNOH SVGImage", JSON.stringify(this.descriptor))
   }
 
   getSource(source: string) {

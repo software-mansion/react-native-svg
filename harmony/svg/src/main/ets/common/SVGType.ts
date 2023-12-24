@@ -44,7 +44,9 @@ export type SVGColorValue = {
 
 export type SVGGroupBox = {
   width: string | number,
-  height: string | number
+  height: string | number,
+  minX: number,
+  minY: number
 }
 
 export type SVGViewCommon = {

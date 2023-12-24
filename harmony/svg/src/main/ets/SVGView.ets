@@ -108,14 +108,12 @@ export struct SVGView {
   build() {
     Stack() {
       ForEach(this.childrenTags, (childrenTag: Tag) => {
-        svgComponentFactoryBuilder(this.ctx, childrenTag, this.ctx.rnInstance.getComponentNameFromDescriptorType(this.ctx.descriptorRegistry.getDescriptor(childrenTag)?.type), this.svgViewCommon)
+        svgComponentFactoryBuilder(
+          this.ctx,
+          childrenTag,
+          this.ctx.rnInstance.getComponentNameFromDescriptorType(this.ctx.descriptorRegistry.getDescriptor(childrenTag)?.type),
+          this.svgViewCommon)
       }, (childrenTags: Tag) => childrenTags.toString())
-    }.attributeModifier(SVGViewModifier.getInstance().setDescriptor(this.descriptorWrapper))
-
-    // .offset({
-    //   x: -(this.descriptor.props?.minX * this.getScaleValue() || 0),
-    //   y: -(this.descriptor.props?.minY * this.getScaleValue() || 0)
-    // })
-
+    }.attributeModifier(SVGViewModifier.getInstance().setDescriptor(this.descriptor, this.descriptorWrapper))
   }
 }

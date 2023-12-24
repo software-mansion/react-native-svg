@@ -66,7 +66,7 @@ export class SVGImageModifier implements AttributeModifier<ImageAttribute> {
     }
 
     if (this.descriptor.props.height !== '0') {
-      instance.width(this.descriptor.props.height);
+      instance.height(this.descriptor.props.height);
     }
 
     instance.position(getOffset(this.descriptor.props.x, this.descriptor.props.y));

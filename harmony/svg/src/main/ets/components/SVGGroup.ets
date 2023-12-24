@@ -158,10 +158,18 @@ export struct SVGGroup {
   build() {
     Shape() {
       ForEach(this.getChildrenDescriptors(), (childrenTag: Tag) => {
-        svgComponentFactoryBuilder(this.ctx, childrenTag, this.ctx.rnInstance.getComponentNameFromDescriptorType(this.ctx.descriptorRegistry.getDescriptor(childrenTag)?.type), this.svgViewCommon)
+        svgComponentFactoryBuilder(
+          this.ctx,
+          childrenTag,
+          this.ctx.rnInstance.getComponentNameFromDescriptorType(this.ctx.descriptorRegistry.getDescriptor(childrenTag)?.type),
+          this.svgViewCommon)
       }, (childrenTag: Tag) => childrenTag.toString())
     }
     .attributeModifier(SVGGroupModifier.getInstance()
-      .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon, this.ctx.descriptorRegistry.getDescriptor<Descriptor>(this.descriptor.parentTag).type))
+      .setDescriptor(
+        this.descriptor,
+        this.descriptorWrapper,
+        this.svgViewCommon,
+        this.ctx.descriptorRegistry.getDescriptor<Descriptor>(this.descriptor.parentTag).type))
   }
 }

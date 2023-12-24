@@ -32,15 +32,18 @@ import {
   OverflowMode,
   resolveBorderMetrics,
   RNOHContext,
-  TransformMatrix,
-  ViewDescriptorWrapper
+  TransformMatrix
 } from 'rnoh';
 import matrix4 from '@ohos.matrix4';
+import { SVGViewDescriptor, SVGViewDescriptorWrapper } from '../SVGView';
 
 export class SVGViewModifier implements AttributeModifier<StackAttribute> {
-  private constructor() {}
+  private constructor() {
+  }
+
   private static instance: SVGViewModifier;
-  protected descriptorWrapper: ViewDescriptorWrapper | undefined = undefined
+  protected descriptor: SVGGroupDescriptor = Object() as SVGGroupDescriptor;
+  protected descriptorWrapper: SVGViewDescriptorWrapper | undefined = undefined
 
   public static getInstance(): SVGViewModifier {
     if (!SVGViewModifier.instance) {
@@ -49,7 +52,8 @@ export class SVGViewModifier implements AttributeModifier<StackAttribute> {
     return SVGViewModifier.instance;
   }
 
-  setDescriptor(descriptorWrapper: ViewDescriptorWrapper | undefined): SVGViewModifier {
+  setDescriptor(descriptor: SVGGroupDescriptor, descriptorWrapper: SVGViewDescriptorWrapper | undefined): SVGViewModifier {
+    this.descriptor = descriptor;
     this.descriptorWrapper = descriptorWrapper;
     return SVGViewModifier.instance;
   }
@@ -113,9 +117,9 @@ export class SVGViewModifier implements AttributeModifier<StackAttribute> {
     if (this.descriptorWrapper?.opacity) {
       instance.opacity(this.descriptorWrapper?.opacity)
     }
-    // if (this.descriptorWrapper?.transformStringify !== '[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]') {
-    //   instance.transform(this.getTransform())
-    // }
+    if (this.descriptorWrapper?.transformStringify !== '[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]') {
+      instance.transform(this.getTransform())
+    }
     if (this.descriptorWrapper?.isClipping) {
       instance.clip(this.descriptorWrapper?.isClipping)
     }
@@ -125,6 +129,9 @@ export class SVGViewModifier implements AttributeModifier<StackAttribute> {
     }
     if (this.descriptorWrapper?.shadow) {
       instance.shadow(this.descriptorWrapper?.shadow)
+    }
+    if (this.descriptor.props?.minY !== 0 || this.descriptor.props?.minY !== 0) {
+      instance.clip(new Rect({ width: '100%', height: '100%' }))
     }
   }
 }

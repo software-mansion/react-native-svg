@@ -31,7 +31,7 @@ import matrix4 from '@ohos.matrix4'
 const defaultScaleValue: number = vp2px(1)
 
 export function getGroupBox(descriptor: SVGViewDescriptor): SVGGroupBox {
-  let groupBox: SVGGroupBox = { width: '100%', height: '100%' }
+  let groupBox: SVGGroupBox = { width: '100%', height: '100%', minX: 0, minY: 0 }
   let svgWidth = descriptor.layoutMetrics.frame.size.width
   let svgHeight = descriptor.layoutMetrics.frame.size.height
   let contentWidth = descriptor.props.vbWidth ? descriptor.props.vbWidth : svgWidth
@@ -43,7 +43,13 @@ export function getGroupBox(descriptor: SVGViewDescriptor): SVGGroupBox {
   } else {
     // 宽高比较小时,宽度撑满
     groupBox.width = svgWidth
-    groupBox.height = svgHeight * (contentHeight / contentWidth);
+    groupBox.height = svgWidth * (contentHeight / contentWidth);
+  }
+  if (descriptor.props?.minX) {
+    groupBox.minX = descriptor.props?.minX
+  }
+  if (descriptor.props?.minY) {
+    groupBox.minY = descriptor.props?.minY
   }
   return groupBox
 }

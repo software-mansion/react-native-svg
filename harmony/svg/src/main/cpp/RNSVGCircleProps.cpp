@@ -73,7 +73,7 @@ namespace facebook {
         }
 
         RNSVGCircleProps::RNSVGCircleProps(const PropsParserContext &context, const RNSVGCircleProps &sourceProps,
-                                           const RawProps &rawProps
+                                           const RawProps &rawProps)
             : ViewProps(context, sourceProps, rawProps),
         
               name(convertRawProp(context, rawProps, "name", sourceProps.name, {})),
