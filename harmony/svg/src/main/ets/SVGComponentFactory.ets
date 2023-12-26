@@ -23,7 +23,6 @@
  */
 
 import { Descriptor, ComponentBuilderContext, RNOHContext, Tag, rnComponentFactoryBuilder } from 'rnoh'
-import { SVG_VIEW_TYPE_NAME } from './SVGView'
 import { SVGGroup, SVG_GROUP_TYPE_NAME } from './components/SVGGroup'
 import { SVGPath, SVG_PATH_TYPE_NAME } from './components/SVGPath'
 import { SVGRect, SVG_RECT_TYPE_NAME } from './components/SVGRect'
@@ -73,22 +72,22 @@ export struct SVGComponentFactory {
       SVGGroup({
         ctx: this.ctx,
         tag: this.tag,
-        svgViewCommon: this.svgViewCommon,
         buildCustomComponent: this.buildCustomComponent
       })
     } else if (this.componentName === SVG_PATH_TYPE_NAME) {
-      SVGPath({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
+      SVGPath({ ctx: this.ctx, tag: this.tag })
     } else if (this.componentName === SVG_RECT_TYPE_NAME) {
-      SVGRect({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
+      SVGRect({ ctx: this.ctx, tag: this.tag })
     } else if (this.componentName === SVG_IMAGE_TYPE_NAME) {
-      SVGImage({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
+      SVGImage({ ctx: this.ctx, tag: this.tag })
     } else if (this.componentName === SVG_TEXT_TYPE_NAME) {
-      SVGText({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
-    } else if (this.componentName === SVG_CIRCLE_TYPE_NAME) {
-      SVGCircle({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
-    } else if (this.componentName === SVG_ELLIPSE_TYPE_NAME) {
-      SVGEllipse({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
+      SVGText({ ctx: this.ctx, tag: this.tag })
     }
+    // else if (this.componentName === SVG_CIRCLE_TYPE_NAME) {
+    //   SVGCircle({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
+    // } else if (this.componentName === SVG_ELLIPSE_TYPE_NAME) {
+    //   SVGEllipse({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
+    // }
   }
 }
 
@@ -102,13 +101,13 @@ export function svgComponentFactoryBuilder(ctx: RNOHContext, tag: Tag, component
       buildCustomComponent: BuilderProxy.buildCustomComponent
     })
   } else if (componentName === SVG_PATH_TYPE_NAME) {
-    SVGPath({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
+    SVGPath({ ctx: ctx, tag: tag })
   } else if (componentName === SVG_RECT_TYPE_NAME) {
-    SVGRect({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
+    SVGRect({ ctx: ctx, tag: tag })
   } else if (componentName === SVG_IMAGE_TYPE_NAME) {
-    SVGImage({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
+    SVGImage({ ctx: ctx, tag: tag })
   } else if (componentName === SVG_TEXT_TYPE_NAME) {
-    SVGText({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
+    SVGText({ ctx: ctx, tag: tag })
   }
   // else if (componentName === SVG_CIRCLE_TYPE_NAME) {
   //   SVGCircle({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })

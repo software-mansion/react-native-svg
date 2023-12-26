@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { Descriptor, RNOHContext, RNViewManager, ViewDescriptorWrapperBase } from 'rnoh'
+import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
 import Logger from '../common/log/Logger'
 import { SVGPathProps, SVGViewCommon } from '../common/SVGType'
 import { SVGLinearGradientValue } from '../common/SVGLinearGradient'
@@ -40,7 +40,7 @@ export class SVGPathDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGPa
 export struct SVGPath {
   ctx!: RNOHContext
   tag: number = 0
-  @State svgViewCommon: SVGViewCommon | undefined = undefined
+  @Consume svgViewCommon: SVGViewCommon | undefined
   @State descriptor: SVGPathDescriptor = Object() as SVGPathDescriptor
   @State descriptorWrapper: SVGPathDescriptorWrapper | undefined = undefined
   @State scaleValue: number = 1
@@ -56,27 +56,15 @@ export struct SVGPath {
       this.setDescriptorWrapper(this.descriptor)
       Logger.debug("RNOH SVGPath New", JSON.stringify(this.descriptor))
     })
-    Logger.debug("RNOH SVGPath", JSON.stringify(this.descriptor)) // this.getEmitterData()
-
+    Logger.debug("RNOH SVGPath", JSON.stringify(this.descriptor))
   }
 
   aboutToDisappear() {
-    this.unregisterDescriptorChangesListener?.() // emitter.off(this.svgViewCommon.svgTag)
+    this.unregisterDescriptorChangesListener?.()
   }
 
   setDescriptorWrapper(descriptor: SVGPathDescriptor) {
     this.descriptorWrapper = new SVGPathDescriptorWrapper(descriptor)
-  }
-
-  getEmitterData() {
-    if (!this.svgViewCommon?.svgTag) {
-      return
-    }
-    let innerEvent: emitter.InnerEvent = { eventId: this.svgViewCommon.svgTag }
-    emitter.on(innerEvent, () => {
-      Logger.debug("RNOH SVGPath emitter 接收", JSON.stringify(innerEvent))
-      this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(this.tag)
-    })
   }
 
   build() {

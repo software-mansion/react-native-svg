@@ -42,7 +42,7 @@ export const SVG_TSPAN_TYPE_NAME: string = "RNSVGTSpan"
 export struct SVGText {
   ctx!: RNOHContext
   tag: number = 0
-  @State svgViewCommon: SVGViewCommon | undefined = undefined
+  @Consume svgViewCommon: SVGViewCommon | undefined
   @State descriptor: SVGTextDescriptor = {} as SVGTextDescriptor
   @State descriptorWrapper: SVGTextDescriptorWrapper | undefined = undefined
   private unregisterDescriptorChangesListener?: () => void = undefined

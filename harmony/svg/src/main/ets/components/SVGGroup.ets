@@ -27,15 +27,13 @@ import { Descriptor, RNOHContext, ComponentBuilderContext, Tag, ViewDescriptorWr
 import { SVGGroupProps, SVGViewCommon } from '../common/SVGType'
 import { setGroupDescriptor } from '../common/SVGTempCache'
 import { SVG_DEFS_TYPE_NAME, SVGDefsFactory } from '../common/SVGDefsFactory'
-import { getTransform } from '../common/SVGCommon'
 import Logger from '../common/log/Logger'
 import { SVGPathDescriptor, SVG_PATH_TYPE_NAME } from './SVGPath'
 import { SVGRectDescriptor, SVG_RECT_TYPE_NAME } from './SVGRect'
 import { parseFill, parseStroke } from '../common/SVGMergeProperties'
 import { SVGTextDescriptor, SVG_TEXT_TYPE_NAME } from './SVGText'
 import { SVGImageDescriptor, SVG_IMAGE_TYPE_NAME } from './SVGImage'
-import emitter from '@ohos.events.emitter';
-import { SVGComponentFactory, svgComponentFactoryBuilder } from '../SVGComponentFactory'
+import { svgComponentFactoryBuilder } from '../SVGComponentFactory'
 import { SVGCircleDescriptor, SVG_CIRCLE_TYPE_NAME } from './SVGCircle'
 import { SVGGroupModifier } from '../attributeModifiers/SVGGroupModifier'
 
@@ -52,7 +50,7 @@ export class SVGGroupDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGG
 export struct SVGGroup {
   ctx!: RNOHContext
   tag: number = 0
-  @State svgViewCommon: SVGViewCommon | undefined = undefined
+  @Consume svgViewCommon: SVGViewCommon | undefined
   @BuilderParam buildCustomComponent: (ctx: ComponentBuilderContext) => void
   @State private descriptorWrapper: SVGGroupDescriptorWrapper | undefined = undefined
   @State descriptor: SVGGroupDescriptor = {} as SVGGroupDescriptor
@@ -170,6 +168,6 @@ export struct SVGGroup {
         this.descriptor,
         this.descriptorWrapper,
         this.svgViewCommon,
-        this.ctx.descriptorRegistry.getDescriptor<Descriptor>(this.descriptor.parentTag).type))
+        this.ctx.descriptorRegistry.getDescriptor<Descriptor>(this.descriptor.parentTag)?.type))
   }
 }

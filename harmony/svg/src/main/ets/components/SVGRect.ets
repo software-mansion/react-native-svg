@@ -38,7 +38,7 @@ export class SVGRectDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGRe
 export struct SVGRect {
   ctx!: RNOHContext
   tag: number = 0
-  @State svgViewCommon: SVGViewCommon | undefined = undefined
+  @Consume svgViewCommon: SVGViewCommon | undefined
   @State descriptor: SVGRectDescriptor = {} as SVGRectDescriptor
   @State descriptorWrapper: SVGRectDescriptorWrapper | undefined = undefined
   private unregisterDescriptorChangesListener?: () => void = undefined
@@ -65,6 +65,6 @@ export struct SVGRect {
   build() {
     Rect()
       .attributeModifier(SVGRectModifier.getInstance()
-        .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon)) // .width(this.descriptor.props.width) // .height(this.descriptor.props.height)
+        .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
   }
 }

@@ -57,10 +57,8 @@ export struct SVGView {
   private unregisterDescriptorChangesListener?: () => void = undefined
   private unregisterComponentManager?: () => void = undefined
   private unregisterCommandCallback?: () => void = undefined
-  @State @Watch('onEventChanged') color: ColorSegments = [0, 0, 0, 1]
   @State private childrenTags: Tag[] = []
-  @State private svgViewCommon: SVGViewCommon | undefined = undefined
-  private defaultColor: ColorSegments = [0, 0, 0, 1]
+  @Provide svgViewCommon: SVGViewCommon | undefined = undefined
 
   aboutToAppear() {
     this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGViewDescriptor>(this.tag)
@@ -68,7 +66,6 @@ export struct SVGView {
     this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag, (newDescriptor) => {
       this.setDescriptorWrapper(newDescriptor as SVGViewDescriptor)
     })
-    this.setEventData()
   }
 
   aboutToDisappear() {
@@ -90,19 +87,9 @@ export struct SVGView {
     this.descriptorWrapper = new SVGViewDescriptorWrapper(descriptor)
     this.childrenTags = descriptor.childrenTags;
     this.svgViewCommon = { svgTag: this.tag, scaleValue: getScaleValue(descriptor), groupBox: getGroupBox(descriptor) }
+    Logger.debug("RNOH SVGView svgViewCommon=", JSON.stringify(this.svgViewCommon))
     setViewDescriptor(this.tag, descriptor)
-    this.color = descriptor.props.color ?? this.defaultColor
     Logger.debug("RNOH SVGView", JSON.stringify(descriptor))
-  }
-
-  onEventChanged() {
-    this.setEventData()
-  }
-
-  setEventData() {
-    let innerEvent: emitter.InnerEvent = { eventId: this.tag, priority: emitter.EventPriority.HIGH }
-    emitter.emit(innerEvent)
-    Logger.debug("RNOH SVGView emitter 发送", JSON.stringify(innerEvent))
   }
 
   build() {

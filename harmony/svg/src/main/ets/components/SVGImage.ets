@@ -40,7 +40,7 @@ export class SVGImageDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGI
 export struct SVGImage {
   ctx!: RNOHContext
   tag: number = 0
-  @State svgViewCommon: SVGViewCommon | undefined = undefined
+  @Consume svgViewCommon: SVGViewCommon | undefined
   @State descriptor: SVGImageDescriptor = {} as SVGImageDescriptor
   @State descriptorWrapper: SVGImageDescriptorWrapper | undefined = undefined
   private unregisterDescriptorChangesListener?: () => void = undefined
