@@ -83,7 +83,7 @@ export class SVGRectModifier implements AttributeModifier<RectAttribute> {
     }
 
     if (getStrokeWidth(this.descriptor.props.strokeWidth) !== 1) {
-      instance.strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth));
+      instance.strokeWidth(this.descriptor.props.strokeWidth);
     }
 
     // instance.strokeLineCap(this.descriptor.props.strokeLinecap);
