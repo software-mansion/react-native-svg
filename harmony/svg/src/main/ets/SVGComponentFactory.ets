@@ -97,7 +97,6 @@ export function svgComponentFactoryBuilder(ctx: RNOHContext, tag: Tag, component
     SVGGroup({
       ctx: ctx,
       tag: tag,
-      svgViewCommon: svgViewCommon,
       buildCustomComponent: BuilderProxy.buildCustomComponent
     })
   } else if (componentName === SVG_PATH_TYPE_NAME) {
