@@ -6,8 +6,8 @@
   },
   "name": "rnoh-svg",
   "description": "Native part of react-native-svg",
-  "main": "Index.ets",
-  "version": "0.0.5",
+  "main": "index.ets",
+  "version": "0.0.7",
   "dependencies": {
   }
 }
