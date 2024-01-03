@@ -38,6 +38,7 @@ namespace RNSVG
   {
     RenderableView(Microsoft.ReactNative.IReactContext context);
     SvgView SvgRoot{ get; };
+    Boolean IsUnloaded { get; };
 
     String Id{ get; };
     Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
