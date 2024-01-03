@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {G, Line, Path, Polyline, Svg, Text} from 'react-native-svg';
 
-const AnimatedSvg = Animated.createAnimatedComponent(Svg);
+const AnimatedSvg = Animated.createAnimatedComponent(Svg as any);
 
 const zeroDelta = {x: 0, y: 0};
 
