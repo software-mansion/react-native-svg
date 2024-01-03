@@ -10,6 +10,7 @@ import Test2080 from './src/Test2080';
 import PointerEventsBoxNone from './src/PointerEventsBoxNone';
 import Test2071 from './src/Test2071';
 import Test2089 from './src/Test2089';
+import Test2196 from './src/Test2196';
 
 export default function App() {
   return <ColorTest />;
