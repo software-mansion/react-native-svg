@@ -141,15 +141,6 @@ export {
   camelCase,
   err,
   fetchText,
-  JsxAST,
-  Middleware,
-  Styles,
-  UriProps,
-  UriState,
-  XmlAST,
-  XmlProps,
-  XmlState,
-  AstProps,
   Shape,
   RNSVGMarker,
   RNSVGMask,
@@ -173,6 +164,18 @@ export {
   RNSVGSvgAndroid,
   RNSVGSvgIOS,
   RNSVGForeignObject,
+};
+
+export type {
+  JsxAST,
+  Middleware,
+  Styles,
+  UriProps,
+  UriState,
+  XmlAST,
+  XmlProps,
+  XmlState,
+  AstProps,
 };
 
 export default Svg;
