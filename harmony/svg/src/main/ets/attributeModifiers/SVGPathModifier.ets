@@ -27,7 +27,6 @@ import { getColor, getStrokeWidth, getTransform } from '../common/SVGCommon';
 import { SVGViewCommon } from '../common/SVGType';
 import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
 import { getDefsDescriptor } from '../common/SVGTempCache';
-import Logger from '../common/log/Logger';
 
 export class SVGPathModifier implements AttributeModifier<PathAttribute> {
   private constructor() {
@@ -38,6 +37,7 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
   protected descriptorWrapper: SVGPathDescriptorWrapper | undefined = undefined;
   protected svgViewCommon: SVGViewCommon | undefined = undefined;
   private scaleValue: number = 1;
+  private percentage: string = '100%';
   private gradient: SVGLinearGradientValue | undefined = undefined;
 
   public static getInstance(): SVGPathModifier {
@@ -55,6 +55,7 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
     this.svgViewCommon = svgViewCommon;
     if (svgViewCommon?.scaleValue) {
       this.scaleValue = svgViewCommon.scaleValue * vp2px(1);
+      this.percentage = 100 / this.scaleValue + '%';
     }
     this.getGradient();
     return SVGPathModifier.instance;
@@ -65,6 +66,11 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
 
     if (this.descriptor.props.d) {
       instance.commands(this.descriptor.props.d);
+    } else {
+      // 规避首次空路径，再更新路径后path不显示问题
+      instance.commands('M 50,100');
+      instance.opacity(0);
+      return
     }
 
     let fill = getColor(this.descriptor.props.fill?.payload)
@@ -77,8 +83,6 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
       instance.fillOpacity(fillOpacity);
     }
 
-    if (this.descriptor.props.stroke?.payload) {
-    }
     instance.stroke(getColor(this.descriptor.props.stroke?.payload));
 
     if (getStrokeWidth(this.descriptor.props.strokeWidth) !== 1) {
@@ -96,6 +100,8 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
     instance.scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 });
 
     if (this.gradient) {
+      instance.width(this.svgViewCommon?.svgWidth ? this.svgViewCommon?.svgWidth / this.scaleValue : this.percentage);
+      instance.height(this.svgViewCommon?.svgHeight ? this.svgViewCommon?.svgHeight / this.scaleValue : this.percentage);
       instance.linearGradient(this.gradient);
       instance.clip(this.getClip());
     }
@@ -104,7 +110,8 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
   getGradient() {
     if (this.descriptor.props.fill?.type == 1) {
       this.gradient = getDefsDescriptor(this.descriptor.props.fill?.brushRef) as SVGLinearGradientValue
-      Logger.debug("RNOH SVGLinearGradient Path gradient=" + JSON.stringify(this.gradient))
+    } else {
+      this.gradient = undefined
     }
   }
 

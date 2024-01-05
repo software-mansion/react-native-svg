@@ -52,7 +52,9 @@ export type SVGGroupBox = {
 export type SVGViewCommon = {
   svgTag: number,
   scaleValue: number,
-  groupBox: SVGGroupBox
+  groupBox: SVGGroupBox,
+  svgWidth: number,
+  svgHeight: number
 }
 
 export interface SVGCommonProps extends ViewBaseProps {

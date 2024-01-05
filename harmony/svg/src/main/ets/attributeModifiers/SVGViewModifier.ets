@@ -130,8 +130,6 @@ export class SVGViewModifier implements AttributeModifier<StackAttribute> {
     if (this.descriptorWrapper?.shadow) {
       instance.shadow(this.descriptorWrapper?.shadow)
     }
-    if (this.descriptor.props?.minY !== 0 || this.descriptor.props?.minY !== 0) {
-      instance.clip(new Rect({ width: '100%', height: '100%' }))
-    }
+    instance.clip(new Rect({ width: '100%', height: '100%' }))
   }
 }

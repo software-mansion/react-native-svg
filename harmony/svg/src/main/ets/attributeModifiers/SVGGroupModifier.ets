@@ -27,7 +27,7 @@ import { SVGGroupDescriptor, SVGGroupDescriptorWrapper } from '../components/SVG
 import { SVGViewCommon } from '../common/SVGType';
 import { SVG_VIEW_TYPE_NAME } from '../SVGView';
 
-export class SVGGroupModifier implements AttributeModifier<ShapeAttribute> {
+export class SVGGroupModifier implements AttributeModifier<StackAttribute> {
   private constructor() {
   }
 
@@ -55,7 +55,7 @@ export class SVGGroupModifier implements AttributeModifier<ShapeAttribute> {
     return SVGGroupModifier.instance;
   }
 
-  applyNormalAttribute(instance: ShapeAttribute): void {
+  applyNormalAttribute(instance: StackAttribute): void {
     if (this.parentType == SVG_VIEW_TYPE_NAME && this.svgViewCommon) {
       instance.width(this.svgViewCommon.groupBox.width);
       instance.height(this.svgViewCommon.groupBox.height);

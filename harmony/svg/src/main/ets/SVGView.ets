@@ -35,7 +35,6 @@ import Logger from './common/log/Logger'
 import { getGroupBox, getScaleValue } from './common/SVGCommon'
 import { setViewDescriptor } from './common/SVGTempCache'
 import { SVGViewCommon, SVGViewProps } from './common/SVGType'
-import emitter from '@ohos.events.emitter';
 import { svgComponentFactoryBuilder } from './SVGComponentFactory'
 import { SVGViewModifier } from './attributeModifiers/SVGViewModifier'
 
@@ -86,7 +85,13 @@ export struct SVGView {
   private setDescriptorWrapper(descriptor: SVGViewDescriptor) {
     this.descriptorWrapper = new SVGViewDescriptorWrapper(descriptor)
     this.childrenTags = descriptor.childrenTags;
-    this.svgViewCommon = { svgTag: this.tag, scaleValue: getScaleValue(descriptor), groupBox: getGroupBox(descriptor) }
+    this.svgViewCommon = {
+      svgTag: this.tag,
+      scaleValue: getScaleValue(descriptor),
+      groupBox: getGroupBox(descriptor),
+      svgWidth: this.descriptorWrapper?.width,
+      svgHeight: this.descriptorWrapper?.height
+    }
     Logger.debug("RNOH SVGView svgViewCommon=", JSON.stringify(this.svgViewCommon))
     setViewDescriptor(this.tag, descriptor)
     Logger.debug("RNOH SVGView", JSON.stringify(descriptor))

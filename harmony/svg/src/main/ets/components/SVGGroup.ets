@@ -154,7 +154,7 @@ export struct SVGGroup {
   }
 
   build() {
-    Shape() {
+    Stack() {
       ForEach(this.getChildrenDescriptors(), (childrenTag: Tag) => {
         svgComponentFactoryBuilder(
           this.ctx,
