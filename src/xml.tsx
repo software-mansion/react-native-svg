@@ -174,8 +174,7 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
     try {
       this.setState({ ast: xml ? parse(xml) : null });
     } catch (e) {
-      this.props.onError?.(e);
-      console.error(e);
+    this.props.onError ? this.props.onError(e) : console.error(e);
     }
   }
 
