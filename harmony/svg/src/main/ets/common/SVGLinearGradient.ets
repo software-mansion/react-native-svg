@@ -57,7 +57,6 @@ export function parseLinearGradient(descriptor: SVGLinearGradientDescriptor): ob
     linearGradient.angle = Math.round(Math.atan((y2 - y1) / (x2 - x1)) / (Math.PI / 180))
   }
   Logger.debug("RNOH SVGLinearGradient parseLinearGradient"+JSON.stringify(linearGradient))
-  console.log("RNOH SVGLinearGradient parseLinearGradient"+JSON.stringify(linearGradient))
   return linearGradient
 }
 

@@ -42,7 +42,6 @@ export function SVGDefsFactory(ctx: RNOHContext, tag: number): void {
   if (descriptor) {
     descriptor.childrenTags.forEach((childrenTag) => {
       Logger.debug("RNOH SVGDefsFactory childrenTag=", JSON.stringify(childrenTag))
-      console.log("RNOH SVGDefsFactory childrenTag=", JSON.stringify(childrenTag))
       componentProcessing(ctx, childrenTag)
     })
   }
