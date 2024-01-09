@@ -1,4 +1,3 @@
-import { describe } from '@ohos/hypium'
 import { Descriptor, RNOHContext, Tag } from 'rnoh'
 import { SVGCircleDescriptor, SVG_CIRCLE_TYPE_NAME } from '../components/SVGCircle'
 import { SVGPathDescriptor, SVG_PATH_TYPE_NAME } from '../components/SVGPath'
@@ -18,8 +17,7 @@ export function SVGMask(ctx: RNOHContext, tag: number): void {
     let name = descriptor.props.name as string
     if (descriptor.childrenTags.length == 1) {
       descriptor.childrenTags.forEach((childrenTag) => {
-        Logger.debug("RNOH SVGMask childrenTag=", JSON.stringify(childrenTag))
-        console.log("RNOH SVGMask childrenTag=", JSON.stringify(childrenTag))
+        Logger.debug("RNOH SVGMask childrenTag=" + JSON.stringify(childrenTag))
         componentProcessing(name, ctx, childrenTag)
       })
     }

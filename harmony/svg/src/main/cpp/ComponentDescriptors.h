@@ -70,6 +70,7 @@ using RNSVGTSpanShadowNode = ConcreteViewShadowNode<RN_SVG_T_SPAN_COMPONENT_NAME
 using RNSVGClipPathShadowNode = ConcreteViewShadowNode<RN_SVG_CLIP_PATH_COMPONENT_NAME, RNSVGClipPathProps>;
 
 using RNSVGMaskShadowNode = ConcreteViewShadowNode<RN_SVG_MASK_COMPONENT_NAME, RNSVGMaskProps>;
+
 using RNSVGGroupComponentDescriptor = ConcreteComponentDescriptor<RNSVGGroupShadowNode>;
 using RNSVGSvgViewComponentDescriptor = ConcreteComponentDescriptor<RNSVGSvgViewShadowNode>;
 using RNSVGPathComponentDescriptor = ConcreteComponentDescriptor<RNSVGPathShadowNode>;
