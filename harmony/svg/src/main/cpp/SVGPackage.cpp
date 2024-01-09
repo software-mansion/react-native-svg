@@ -38,6 +38,7 @@
 #include "RNSVGTextNapiBinder.h"
 #include "RNSVGTSpanNapiBinder.h"
 #include "RNSVGClipPathNapiBinder.h"
+#include "RNSVGMaskNapiBinder.h"
 
 #include "RNSVGGroupJSIBinder.h"
 #include "RNSVGSvgViewJSIBinder.h"
@@ -51,6 +52,7 @@
 #include "RNSVGTextJSIBinder.h"
 #include "RNSVGTSpanJSIBinder.h"
 #include "RNSVGClipPathJSIBinder.h"
+#include "RNSVGMaskJSIBinder.h"
 
 #include "SVGPackage.h"
 
@@ -70,7 +72,8 @@ std::vector<react::ComponentDescriptorProvider> SVGPackage::createComponentDescr
             react::concreteComponentDescriptorProvider<react::RNSVGDefsComponentDescriptor>(),
             react::concreteComponentDescriptorProvider<react::RNSVGTextComponentDescriptor>(),
             react::concreteComponentDescriptorProvider<react::RNSVGTSpanComponentDescriptor>(),
-            react::concreteComponentDescriptorProvider<react::RNSVGClipPathComponentDescriptor>()};
+            react::concreteComponentDescriptorProvider<react::RNSVGClipPathComponentDescriptor>(),
+            react::concreteComponentDescriptorProvider<react::RNSVGMaskComponentDescriptor>()};
 }
 
 ComponentNapiBinderByString rnoh::SVGPackage::createComponentNapiBinderByName()
@@ -86,7 +89,8 @@ ComponentNapiBinderByString rnoh::SVGPackage::createComponentNapiBinderByName()
             {"RNSVGDefs", std::make_shared<RNSVGDefsNapiBinder>()},
             {"RNSVGText", std::make_shared<RNSVGTextNapiBinder>()},
             {"RNSVGTSpan", std::make_shared<RNSVGTSpanNapiBinder>()},
-            {"RNSVGClipPath", std::make_shared<RNSVGClipPathNapiBinder>()}};
+            {"RNSVGClipPath", std::make_shared<RNSVGClipPathNapiBinder>()},
+            {"RNSVGMask", std::make_shared<RNSVGMaskNapiBinder>()}};
 }
 
 ComponentJSIBinderByString rnoh::SVGPackage::createComponentJSIBinderByName()
@@ -102,5 +106,6 @@ ComponentJSIBinderByString rnoh::SVGPackage::createComponentJSIBinderByName()
             {"RNSVGDefs", std::make_shared<RNSVGDefsJSIBinder>()},
             {"RNSVGText", std::make_shared<RNSVGTextJSIBinder>()},
             {"RNSVGTSpan", std::make_shared<RNSVGTSpanJSIBinder>()},
-            {"RNSVGClipPath", std::make_shared<RNSVGClipPathJSIBinder>()}};
+            {"RNSVGClipPath", std::make_shared<RNSVGClipPathJSIBinder>()},
+            {"RNSVGMask", std::make_shared<RNSVGMaskJSIBinder>()}};
 };

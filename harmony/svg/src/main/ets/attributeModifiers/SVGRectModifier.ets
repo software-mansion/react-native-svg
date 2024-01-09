@@ -24,7 +24,7 @@
 
 import { getColor, getOffset, getRadius, getStrokeWidth, getTransform } from '../common/SVGCommon';
 import { SVGClipPathObj, SVGViewCommon } from '../common/SVGType';
-import { getClipPathDescriptor } from '../common/SVGTempCache';
+import { getClipPathDescriptor, getMaskDescriptor } from '../common/SVGTempCache';
 import Logger from '../common/log/Logger';
 import { SVGRectDescriptor, SVGRectDescriptorWrapper } from '../components/SVGRect';
 
@@ -104,6 +104,12 @@ export class SVGRectModifier implements AttributeModifier<RectAttribute> {
 
     if (this.descriptor.props.clipPath) {
       instance.clip(this.getClipPath());
+    }
+    if (this.descriptor.props.mask) {
+      let maskDescriptor = getMaskDescriptor(this.descriptor.props.mask)
+      if (maskDescriptor) {
+        instance.mask(maskDescriptor)
+      }
     }
   }
 

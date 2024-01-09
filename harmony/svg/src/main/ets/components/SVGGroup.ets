@@ -36,6 +36,7 @@ import { SVGImageDescriptor, SVG_IMAGE_TYPE_NAME } from './SVGImage'
 import { svgComponentFactoryBuilder } from '../SVGComponentFactory'
 import { SVGCircleDescriptor, SVG_CIRCLE_TYPE_NAME } from './SVGCircle'
 import { SVGGroupModifier } from '../attributeModifiers/SVGGroupModifier'
+import { SVGMask, SVG_Mask_TYPE_NAME } from '../common/SVGMask'
 
 export const SVG_GROUP_TYPE_NAME: string = "RNSVGGroup"
 
@@ -145,6 +146,8 @@ export struct SVGGroup {
       type = this.ctx.descriptorRegistry.getDescriptor<Descriptor>(tag).type
       if (type === SVG_DEFS_TYPE_NAME) {
         SVGDefsFactory(this.ctx, tag)
+      } else if (type === SVG_Mask_TYPE_NAME) {
+        SVGMask(this.ctx, tag)
       } else {
         childrenTag.push(tag)
         this.mergeProperties(type, tag)

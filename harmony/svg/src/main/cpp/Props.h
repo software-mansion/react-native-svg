@@ -43,6 +43,7 @@
 #include "RNSVGTextProps.h"
 #include "RNSVGTSpanProps.h"
 #include "RNSVGClipPathProps.h"
+#include "RNSVGMaskProps.h"
 
 namespace facebook {
 namespace react {

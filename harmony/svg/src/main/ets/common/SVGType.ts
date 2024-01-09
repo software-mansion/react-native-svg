@@ -72,6 +72,10 @@ export interface SVGCommonProps extends ViewBaseProps {
   pointerEvents?: string
 }
 
+export interface SVGMaskProps extends SVGCommonProps {
+
+}
+
 export interface SVGBaseProps extends SVGCommonProps {
   fill?: SVGColorValue,
   fillOpacity: number,

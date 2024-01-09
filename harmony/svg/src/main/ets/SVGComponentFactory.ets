@@ -31,6 +31,7 @@ import { SVGText, SVG_TEXT_TYPE_NAME } from './components/SVGText'
 import { SVGCircle, SVG_CIRCLE_TYPE_NAME } from './components/SVGCircle'
 import { SVGEllipse, SVG_ELLIPSE_TYPE_NAME } from './components/SVGEllipse'
 import { SVGViewCommon } from './common/SVGType'
+import { SVG_Mask_TYPE_NAME } from './common/SVGMask'
 
 export type CustomComponentBuilder = (ctx: ComponentBuilderContext) => void
 
@@ -113,6 +114,8 @@ export function svgComponentFactoryBuilder(ctx: RNOHContext, tag: Tag, component
   // } else if (componentName === SVG_ELLIPSE_TYPE_NAME) {
   //   SVGEllipse({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
   // }
+  else if (componentName === SVG_Mask_TYPE_NAME) {
+  }
   else if (componentName !== '') {
     rnComponentFactoryBuilder(ctx, tag, componentName)
   }

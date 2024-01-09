@@ -43,6 +43,7 @@ extern const char RN_SVG_DEFS_COMPONENT_NAME[] = "RNSVGDefs";
 extern const char RN_SVG_TEXT_COMPONENT_NAME[] = "RNSVGText";
 extern const char RN_SVG_T_SPAN_COMPONENT_NAME[] = "RNSVGTSpan";
 extern const char RN_SVG_CLIP_PATH_COMPONENT_NAME[] = "RNSVGClipPath";
+extern const char RN_SVG_MASK_COMPONENT_NAME[] = "RNSVGMask";
 
 using RNSVGSvgViewShadowNode = ConcreteViewShadowNode<RN_SVG_SVG_VIEW_COMPONENT_NAME, RNSVGSvgViewProps>;
 
@@ -68,6 +69,7 @@ using RNSVGTSpanShadowNode = ConcreteViewShadowNode<RN_SVG_T_SPAN_COMPONENT_NAME
 
 using RNSVGClipPathShadowNode = ConcreteViewShadowNode<RN_SVG_CLIP_PATH_COMPONENT_NAME, RNSVGClipPathProps>;
 
+using RNSVGMaskShadowNode = ConcreteViewShadowNode<RN_SVG_MASK_COMPONENT_NAME, RNSVGMaskProps>;
 using RNSVGGroupComponentDescriptor = ConcreteComponentDescriptor<RNSVGGroupShadowNode>;
 using RNSVGSvgViewComponentDescriptor = ConcreteComponentDescriptor<RNSVGSvgViewShadowNode>;
 using RNSVGPathComponentDescriptor = ConcreteComponentDescriptor<RNSVGPathShadowNode>;
@@ -80,6 +82,7 @@ using RNSVGDefsComponentDescriptor = ConcreteComponentDescriptor<RNSVGDefsShadow
 using RNSVGTextComponentDescriptor = ConcreteComponentDescriptor<RNSVGTextShadowNode>;
 using RNSVGTSpanComponentDescriptor = ConcreteComponentDescriptor<RNSVGTSpanShadowNode>;
 using RNSVGClipPathComponentDescriptor = ConcreteComponentDescriptor<RNSVGClipPathShadowNode>;
+using RNSVGMaskComponentDescriptor = ConcreteComponentDescriptor<RNSVGMaskShadowNode>;
 
 } // namespace react
 } // namespace facebook

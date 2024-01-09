@@ -26,7 +26,7 @@ import { SVGPathDescriptor, SVGPathDescriptorWrapper } from '../components/SVGPa
 import { getColor, getStrokeWidth, getTransform } from '../common/SVGCommon';
 import { SVGViewCommon } from '../common/SVGType';
 import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
-import { getDefsDescriptor } from '../common/SVGTempCache';
+import { getDefsDescriptor, getMaskDescriptor } from '../common/SVGTempCache';
 
 export class SVGPathModifier implements AttributeModifier<PathAttribute> {
   private constructor() {
@@ -104,6 +104,12 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
       instance.height(this.svgViewCommon?.svgHeight ? this.svgViewCommon?.svgHeight / this.scaleValue : this.percentage);
       instance.linearGradient(this.gradient);
       instance.clip(this.getClip());
+    }
+    if (this.descriptor.props.mask) {
+      let maskDescriptor = getMaskDescriptor(this.descriptor.props.mask)
+      if (maskDescriptor) {
+        instance.mask(maskDescriptor)
+      }
     }
   }
 

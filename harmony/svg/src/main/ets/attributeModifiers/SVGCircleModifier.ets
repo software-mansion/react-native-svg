@@ -23,6 +23,7 @@
  */
 
 import { getColor, getTransform } from '../common/SVGCommon';
+import { getMaskDescriptor } from '../common/SVGTempCache';
 import { SVGViewCommon } from '../common/SVGType';
 import { SVGCircleDescriptor, SVGCircleDescriptorWrapper } from '../components/SVGCircle';
 
@@ -89,6 +90,12 @@ export class SVGCircleModifier implements AttributeModifier<CircleAttribute> {
     }
 
     instance.transform(getTransform(this.descriptor.props.matrix));
+    if (this.descriptor.props.mask) {
+      let maskDescriptor = getMaskDescriptor(this.descriptor.props.mask)
+      if (maskDescriptor) {
+        instance.mask(maskDescriptor)
+      }
+    }
   }
 
   getDiameter() {

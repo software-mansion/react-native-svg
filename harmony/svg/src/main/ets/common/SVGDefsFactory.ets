@@ -32,6 +32,7 @@ import { parseLinearGradient } from './SVGLinearGradient'
 import { setDefsDescriptor } from './SVGTempCache'
 import { SVGDefsProps } from './SVGType'
 import Logger from './log/Logger'
+import { SVGMask, SVG_Mask_TYPE_NAME } from './SVGMask'
 
 export const SVG_DEFS_TYPE_NAME: string = "RNSVGDefs"
 
@@ -64,6 +65,8 @@ function componentProcessing(ctx: RNOHContext, tag: Tag) {
     storageDefsDescriptor(descriptorTemp.props.name, parseLinearGradient(descriptorTemp))
   } else if (type === SVG_CLIP_PATH_TYPE_NAME) {
     SVGClipPathFactory(ctx, tag)
+  } else if (type === SVG_Mask_TYPE_NAME) {
+    SVGMask(ctx, tag)
   }
 }
 

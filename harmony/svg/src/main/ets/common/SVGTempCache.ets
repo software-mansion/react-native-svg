@@ -25,6 +25,7 @@
 import HashMap from '@ohos.util.HashMap'
 import { SVGViewDescriptor } from '../SVGView'
 import { SVGGroupDescriptor } from '../components/SVGGroup'
+import { SVGMaskType } from './SVGMask'
 
 const viewCache: HashMap<number, SVGViewDescriptor> = new HashMap()
 const groupCache: HashMap<number, SVGGroupDescriptor> = new HashMap()
@@ -32,6 +33,8 @@ const groupCache: HashMap<number, SVGGroupDescriptor> = new HashMap()
 const clipPathCache: HashMap<string, object> = new HashMap()
 
 const defsCache: HashMap<string, object> = new HashMap()
+
+const maskCache: HashMap<string, SVGMaskType> = new HashMap()
 
 export function getViewDescriptor(cacheKey?: number): SVGViewDescriptor | undefined {
   return cacheKey ? viewCache.get(cacheKey) : undefined
@@ -71,4 +74,12 @@ export function getDefsDescriptor(cacheKey?: string): object | undefined {
 
 export function setDefsDescriptor(cacheKey: string, descriptor?: object): void {
   defsCache.set(cacheKey, descriptor)
+}
+
+export function getMaskDescriptor(cacheKey?: string): SVGMaskType | undefined {
+  return cacheKey ? maskCache.get(cacheKey) : undefined
+}
+
+export function setMaskDescriptor(cacheKey: string, descriptor?: SVGMaskType): void {
+  maskCache.set(cacheKey, descriptor)
 }
