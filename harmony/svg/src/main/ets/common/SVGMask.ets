@@ -32,13 +32,13 @@ function componentProcessing(name: string, ctx: RNOHContext, tag: Tag) {
   Logger.debug("RNOH SVGMask name=", name)
   if (type === SVG_PATH_TYPE_NAME) {
     let descriptorTemp: SVGPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(tag)
-    storagDescriptor(descriptorTemp.props.name, getPathAttribute(descriptorTemp))
+    storagDescriptor(name, getPathAttribute(descriptorTemp))
   } else if (type === SVG_RECT_TYPE_NAME) {
     let descriptorTemp: SVGRectDescriptor = ctx.descriptorRegistry.getDescriptor<SVGRectDescriptor>(tag)
-    storagDescriptor(descriptorTemp.props.name, getRectAttribute(descriptorTemp))
+    storagDescriptor(name, getRectAttribute(descriptorTemp))
   } else if (type === SVG_CIRCLE_TYPE_NAME) {
     let descriptorTemp: SVGCircleDescriptor = ctx.descriptorRegistry.getDescriptor<SVGCircleDescriptor>(tag)
-    storagDescriptor(descriptorTemp.props.name, getCircleAttribute(descriptorTemp))
+    storagDescriptor(name, getCircleAttribute(descriptorTemp))
   }
 }
 
