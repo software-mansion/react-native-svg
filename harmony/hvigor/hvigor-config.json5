@@ -1,6 +1,6 @@
 {
-  "hvigorVersion": "3.0.3-rc.15.s",
+  "hvigorVersion": "2.4.2",
   "dependencies": {
-    "@ohos/hvigor-ohos-plugin": "3.0.3-rc.15.s"
+    "@ohos/hvigor-ohos-plugin": "2.4.2"
   }
 }

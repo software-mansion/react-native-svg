@@ -69,7 +69,7 @@ export class SVGRectModifier implements AttributeModifier<RectAttribute> {
     instance.position(getOffset(this.descriptor.props.x, this.descriptor.props.y));
 
     let fill = getColor(this.descriptor.props.fill?.payload)
-    if (fill && fill !== '[0,0,0,1]') {
+    if (fill && JSON.stringify(this.descriptor?.props.fill?.payload) !== '[0,0,0,1]') {
       instance.fill(fill);
     }
 

@@ -2,13 +2,13 @@
   "app": {
     "signingConfigs": [
     ],
+    "compileSdkVersion": 9,
+    "compatibleSdkVersion": 9,
     "products": [
       {
         "name": "default",
         "signingConfig": "default",
-        "compileSdkVersion": "4.0.0(10)",
-        "compatibleSdkVersion": "4.0.0(10)",
-        "runtimeOS": "HarmonyOS"
+
       }
     ]
   },

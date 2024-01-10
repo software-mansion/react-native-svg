@@ -32,6 +32,7 @@ import { SVGCircle, SVG_CIRCLE_TYPE_NAME } from './components/SVGCircle'
 import { SVGEllipse, SVG_ELLIPSE_TYPE_NAME } from './components/SVGEllipse'
 import { SVGViewCommon } from './common/SVGType'
 import { SVG_Mask_TYPE_NAME } from './common/SVGMask'
+import { SVGUse, SVG_USE_TYPE_NAME } from './components/SVGUse'
 
 export type CustomComponentBuilder = (ctx: ComponentBuilderContext) => void
 
@@ -108,6 +109,8 @@ export function svgComponentFactoryBuilder(ctx: RNOHContext, tag: Tag, component
     SVGImage({ ctx: ctx, tag: tag })
   } else if (componentName === SVG_TEXT_TYPE_NAME) {
     SVGText({ ctx: ctx, tag: tag })
+  } else if (componentName === SVG_USE_TYPE_NAME) {
+    SVGUse({ ctx: ctx, tag: tag })
   }
   // else if (componentName === SVG_CIRCLE_TYPE_NAME) {
   //   SVGCircle({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })

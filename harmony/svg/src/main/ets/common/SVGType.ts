@@ -171,6 +171,14 @@ export type SVGClipPathObj = {
   value: object
 }
 
+export interface SVGUseProps extends SVGBaseProps {
+  href?:string;
+  width?:string;
+  height?:string;
+  x?:NumberProp;
+  y?:NumberProp;
+}
+
 /** Text 部分 */
 export type NumberProp = string | number;
 

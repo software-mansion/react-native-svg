@@ -25,7 +25,7 @@
 
 import { Descriptor, RNOHContext, ComponentBuilderContext, Tag, ViewDescriptorWrapperBase } from 'rnoh'
 import { SVGGroupProps, SVGViewCommon } from '../common/SVGType'
-import { setGroupDescriptor } from '../common/SVGTempCache'
+import { setDefsDescriptor, setGroupDescriptor } from '../common/SVGTempCache'
 import { SVG_DEFS_TYPE_NAME, SVGDefsFactory } from '../common/SVGDefsFactory'
 import Logger from '../common/log/Logger'
 import { SVGPathDescriptor, SVG_PATH_TYPE_NAME } from './SVGPath'
@@ -143,7 +143,11 @@ export struct SVGGroup {
     let childrenTag: Tag[] = []
     let type: string = ''
     this.descriptor.childrenTags.forEach((tag) => {
-      type = this.ctx.descriptorRegistry.getDescriptor<Descriptor>(tag).type
+      const descriptor = this.ctx.descriptorRegistry.getDescriptor<Descriptor>(tag)
+      if(descriptor.props.name){
+        setDefsDescriptor(descriptor.props.name,descriptor)
+      }
+      type = descriptor.type
       if (type === SVG_DEFS_TYPE_NAME) {
         SVGDefsFactory(this.ctx, tag)
       } else if (type === SVG_Mask_TYPE_NAME) {

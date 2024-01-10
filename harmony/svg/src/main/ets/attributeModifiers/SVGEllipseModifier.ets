@@ -64,7 +64,7 @@ export class SVGEllipseModifier implements AttributeModifier<EllipseAttribute> {
     instance.position(this.descriptor.layoutMetrics.frame.origin);
 
     let fill = getColor(this.descriptor.props.fill?.payload)
-    if (fill && fill !== '[0,0,0,1]') {
+    if (fill && JSON.stringify(this.descriptor?.props.fill?.payload) !== '[0,0,0,1]') {
       instance.fill(fill);
     }
 

@@ -115,7 +115,7 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
 
   getGradient() {
     if (this.descriptor.props.fill?.type == 1) {
-      this.gradient = getDefsDescriptor(this.descriptor.props.fill?.brushRef) as SVGLinearGradientValue
+      this.gradient = getDefsDescriptor(this.descriptor.props.fill?.brushRef)?.props as SVGLinearGradientValue
     } else {
       this.gradient = undefined
     }
