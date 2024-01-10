@@ -31,23 +31,60 @@
 #include <react/renderer/graphics/Color.h>
 #include <react/renderer/imagemanager/primitives.h>
 #include <vector>
-#include "RNSVGGroupProps.h"
-#include "RNSVGSvgViewProps.h"
-#include "RNSVGPathProps.h"
-#include "RNSVGRectProps.h"
-#include "RNSVGImageProps.h"
-#include "RNSVGCircleProps.h"
-#include "RNSVGEllipseProps.h"
-#include "RNSVGLinearGradientProps.h"
-#include "RNSVGDefsProps.h"
-#include "RNSVGTextProps.h"
-#include "RNSVGTSpanProps.h"
-#include "RNSVGClipPathProps.h"
-#include "RNSVGMaskProps.h"
-#include "RNSVGUseProps.h"
 
 namespace facebook {
 namespace react {
+
+struct RNSVGUseFillStruct {
+  int type;
+  SharedColor payload;
+  std::string brushRef;
+};
+
+struct RNSVGUseStrokeStruct {
+  int type;
+  SharedColor payload;
+  std::string brushRef;
+};
+
+class JSI_EXPORT RNSVGUseProps final : public ViewProps {
+ public:
+  RNSVGUseProps() = default;
+  RNSVGUseProps(const PropsParserContext& context, const RNSVGUseProps &sourceProps, const RawProps &rawProps);
+
+#pragma mark - Props
+
+  std::string name{};
+  Float opacity{1.0};
+  std::vector<Float> matrix{};
+  std::string mask{};
+  std::string markerStart{};
+  std::string markerMid{};
+  std::string markerEnd{};
+  std::string clipPath{};
+  int clipRule{0};
+  bool responsible{false};
+  std::string display{};
+  std::string pointerEvents{};
+  RNSVGUseFillStruct fill{};
+  Float fillOpacity{1.0};
+  int fillRule{1};
+  RNSVGUseStrokeStruct stroke{};
+  Float strokeOpacity{1.0};
+  std::string strokeWidth{"1"};
+  int strokeLinecap{0};
+  int strokeLinejoin{0};
+  std::vector<std::string> strokeDasharray{};
+  Float strokeDashoffset{0.0};
+  Float strokeMiterlimit{0.0};
+  int vectorEffect{0};
+  std::vector<std::string> propList{};
+  std::string href{};
+  std::string x{};
+  std::string y{};
+  std::string height{};
+  std::string width{};
+};
 
 } // namespace react
 } // namespace facebook
