@@ -27,12 +27,16 @@ import { SVGViewDescriptor } from '../SVGView'
 import { SVGGroupDescriptor } from '../components/SVGGroup'
 import { SVGMaskType } from './SVGMask'
 import { Descriptor } from "rnoh";
+import { SVGLinearGradientValue } from './SVGLinearGradient'
+
 const viewCache: HashMap<number, SVGViewDescriptor> = new HashMap()
 const groupCache: HashMap<number, SVGGroupDescriptor> = new HashMap()
 
 const clipPathCache: HashMap<string, object> = new HashMap()
 
 const defsCache: HashMap<string, Descriptor> = new HashMap()
+
+const linearGradientCache: HashMap<string, SVGLinearGradientValue> = new HashMap()
 
 const maskCache: HashMap<string, SVGMaskType> = new HashMap()
 
@@ -74,6 +78,14 @@ export function getDefsDescriptor(cacheKey?: string): Descriptor | undefined {
 
 export function setDefsDescriptor(cacheKey: string, descriptor?: Descriptor): void {
   defsCache.set(cacheKey, descriptor)
+}
+
+export function getLinearGradientValue(cacheKey?: string): SVGLinearGradientValue | undefined {
+  return cacheKey ? linearGradientCache.get(cacheKey) : undefined
+}
+
+export function setLinearGradientValue(cacheKey: string, linearGradientValue?: SVGLinearGradientValue): void {
+  linearGradientCache.set(cacheKey, linearGradientValue)
 }
 
 export function getMaskDescriptor(cacheKey?: string): SVGMaskType | undefined {

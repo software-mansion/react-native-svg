@@ -44,8 +44,6 @@ export struct SVGPath {
   @State descriptor: SVGPathDescriptor = Object() as SVGPathDescriptor
   @State descriptorWrapper: SVGPathDescriptorWrapper | undefined = undefined
   @State scaleValue: number = 1
-  @State gradient: SVGLinearGradientValue | undefined = undefined
-  @State gradientEnable: boolean = false
   private unregisterDescriptorChangesListener?: () => void = undefined
 
   aboutToAppear() {

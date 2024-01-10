@@ -103,8 +103,7 @@ export struct SVGView {
         svgComponentFactoryBuilder(
           this.ctx,
           childrenTag,
-          this.ctx.rnInstance.getComponentNameFromDescriptorType(this.ctx.descriptorRegistry.getDescriptor(childrenTag)?.type),
-          this.svgViewCommon)
+          this.ctx.rnInstance.getComponentNameFromDescriptorType(this.ctx.descriptorRegistry.getDescriptor(childrenTag)?.type))
       }, (childrenTags: Tag) => childrenTags.toString())
     }.attributeModifier(SVGViewModifier.getInstance().setDescriptor(this.descriptor, this.descriptorWrapper))
   }

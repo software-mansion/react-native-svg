@@ -23,10 +23,11 @@
  */
 
 import { ColorSegments, convertColorSegmentsToString, TransformMatrix } from 'rnoh'
-import { getGroupDescriptor, hasViewKey } from './SVGTempCache'
-import { SVGGroupBox, SVGOffset } from './SVGType'
+import { getDefsDescriptor, getGroupDescriptor, hasViewKey } from './SVGTempCache'
+import { SVGColorValue, SVGGroupBox, SVGOffset } from './SVGType'
 import { SVGViewDescriptor } from '../SVGView'
 import matrix4 from '@ohos.matrix4'
+import { SVGLinearGradientValue } from './SVGLinearGradient'
 
 const defaultScaleValue: number = vp2px(1)
 
@@ -92,8 +93,16 @@ export function getTransform(matrix?: number[], scaleValue: number = defaultScal
   return matrix4.init(transform);
 }
 
-export function getStrokeWidth(strokeWidth?: string, scaleValue: number = defaultScaleValue): number {
+export function getStrokeWidth(strokeWidth?: string, scaleValue: number = 1): number {
   return strokeWidth ? Number(strokeWidth) / scaleValue : 0;
+}
+
+export function getFillOpacity(fill: SVGColorValue | undefined, fillOpacity: number): number {
+  if (fill?.payload) {
+    //部分组件fill [0,0,0,0] 无法显示透明，手动处理
+    return fill?.payload[3] == 0 ? 0 : fillOpacity
+  }
+  return 0
 }
 
 export function getColor(color?: ColorSegments): string | undefined {
@@ -114,13 +123,11 @@ export function parseCoordinateValue(value?: string): number {
   return value ? Number(value) : 0;
 }
 
-export function getSvgViewTag(groupTag?: number): number | undefined {
-  let tag = groupTag;
-  if (tag && !hasViewKey(tag)) {
-    while (tag && !hasViewKey(tag)) {
-      tag = getGroupDescriptor(tag)?.parentTag
-    }
+export function getGradient(fill?: SVGColorValue): SVGLinearGradientValue | undefined {
+  if (fill?.type == 1) {
+    return getDefsDescriptor(fill?.brushRef)?.props as SVGLinearGradientValue
+  } else {
+    return undefined
   }
-  return tag;
 }
 

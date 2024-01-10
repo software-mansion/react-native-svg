@@ -22,11 +22,20 @@
  * SOFTWARE.
  */
 
-import { getColor, getOffset, getRadius, getStrokeWidth, getTransform } from '../common/SVGCommon';
+import {
+  getColor,
+  getFillOpacity,
+  getGradient,
+  getOffset,
+  getRadius,
+  getStrokeWidth,
+  getTransform
+} from '../common/SVGCommon';
 import { SVGClipPathObj, SVGViewCommon } from '../common/SVGType';
 import { getClipPathDescriptor, getMaskDescriptor } from '../common/SVGTempCache';
 import Logger from '../common/log/Logger';
 import { SVGRectDescriptor, SVGRectDescriptorWrapper } from '../components/SVGRect';
+import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
 
 export class SVGRectModifier implements AttributeModifier<RectAttribute> {
   private constructor() {
@@ -37,6 +46,7 @@ export class SVGRectModifier implements AttributeModifier<RectAttribute> {
   protected descriptorWrapper: SVGRectDescriptorWrapper | undefined = undefined;
   protected svgViewCommon: SVGViewCommon | undefined = undefined;
   private scaleValue: number = 1;
+  private gradient: SVGLinearGradientValue | undefined = undefined;
 
   public static getInstance(): SVGRectModifier {
     if (!SVGRectModifier.instance) {
@@ -52,8 +62,9 @@ export class SVGRectModifier implements AttributeModifier<RectAttribute> {
     this.descriptorWrapper = descriptorWrapper;
     this.svgViewCommon = svgViewCommon;
     if (svgViewCommon?.scaleValue) {
-      this.scaleValue = svgViewCommon.scaleValue * vp2px(1);
+      this.scaleValue = svgViewCommon.scaleValue;
     }
+    this.gradient = getGradient(this.descriptor.props.fill);
     return SVGRectModifier.instance;
   }
 
@@ -68,12 +79,11 @@ export class SVGRectModifier implements AttributeModifier<RectAttribute> {
 
     instance.position(getOffset(this.descriptor.props.x, this.descriptor.props.y));
 
-    let fill = getColor(this.descriptor.props.fill?.payload)
-    if (fill && JSON.stringify(this.descriptor?.props.fill?.payload) !== '[0,0,0,1]') {
-      instance.fill(fill);
+    if (JSON.stringify(this.descriptor?.props.fill?.payload) !== '[0,0,0,1]') {
+      instance.fill(getColor(this.descriptor.props.fill?.payload));
     }
 
-    let fillOpacity = this.getFillOpacity()
+    let fillOpacity = getFillOpacity(this.descriptor.props.fill, this.descriptor.props.fillOpacity)
     if (fillOpacity !== 1) {
       instance.fillOpacity(fillOpacity);
     }
@@ -92,34 +102,38 @@ export class SVGRectModifier implements AttributeModifier<RectAttribute> {
       instance.opacity(this.descriptor.props.opacity);
     }
 
-    if (getRadius(this.descriptor.props.rx, this.descriptor.props.ry) !== 1) {
+    if (getRadius(this.descriptor.props.rx, this.descriptor.props.ry) != 0) {
       instance.radiusWidth(getRadius(this.descriptor.props.rx, this.descriptor.props.ry));
     }
 
-    if (getRadius(this.descriptor.props.ry, this.descriptor.props.rx) !== 1) {
+    if (getRadius(this.descriptor.props.ry, this.descriptor.props.rx) != 0) {
       instance.radiusHeight(getRadius(this.descriptor.props.ry, this.descriptor.props.rx));
     }
 
     instance.transform(getTransform(this.descriptor.props.matrix));
 
+    instance.scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 });
+
+    if (this.gradient) {
+      instance.linearGradient(this.gradient);
+      instance.clip(new Rect({
+        width: '100%',
+        height: '100%',
+        radiusWidth: getRadius(this.descriptor.props.rx, this.descriptor.props.ry),
+        radiusHeight: getRadius(this.descriptor.props.ry, this.descriptor.props.rx)
+      }));
+    }
+
     if (this.descriptor.props.clipPath) {
       instance.clip(this.getClipPath());
     }
+
     if (this.descriptor.props.mask) {
       let maskDescriptor = getMaskDescriptor(this.descriptor.props.mask)
       if (maskDescriptor) {
         instance.mask(maskDescriptor)
       }
     }
-  }
-
-  getFillOpacity() {
-    // Rect组件的fill [0,0,0,0] 无法显示透明，目前手动处理
-    if (this.descriptor.props.fill?.payload) {
-      Logger.debug("RNOH SVGRect payload", JSON.stringify(this.descriptor.props.fill?.payload[3]))
-      return this.descriptor.props.fill?.payload[3] == 0 ? 0 : this.descriptor.props.fillOpacity
-    }
-    return 0
   }
 
   getClipPath() {

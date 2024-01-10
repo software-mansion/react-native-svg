@@ -25,22 +25,26 @@
 import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
 import { SVGCircleModifier } from '../attributeModifiers/SVGCircleModifier'
 import Logger from '../common/log/Logger';
+import { getColor, getFillOpacity, getGradient, getOffset, getStrokeWidth, getTransform } from '../common/SVGCommon';
+import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
 import { SVGCircleProps, SVGViewCommon } from '../common/SVGType'
 
 export const SVG_CIRCLE_TYPE_NAME: string = "RNSVGCircle"
 
 export type SVGCircleDescriptor = Descriptor<"RNSVGCircle", SVGCircleProps>
 
-export class SVGCircleDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGCircle", SVGCircleProps>{
+export class SVGCircleDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGCircle", SVGCircleProps> {
 }
 
 @Component
 export struct SVGCircle {
   ctx!: RNOHContext
   tag: number = 0
-  @State svgViewCommon: SVGViewCommon | undefined = undefined
+  @Consume svgViewCommon: SVGViewCommon | undefined
   @State descriptor: SVGCircleDescriptor = {} as SVGCircleDescriptor
   @State descriptorWrapper: SVGCircleDescriptorWrapper | undefined = undefined
+  @State scaleValue: number = 1
+  @State gradient: SVGLinearGradientValue | undefined = undefined
   @State diameter: number = 0
   private unregisterDescriptorChangesListener?: () => void = undefined
 
@@ -63,11 +67,51 @@ export struct SVGCircle {
 
   setDescriptorWrapper(descriptor: SVGCircleDescriptor) {
     this.descriptorWrapper = new SVGCircleDescriptorWrapper(descriptor)
+    if (this.svgViewCommon?.scaleValue) {
+      this.scaleValue = this.svgViewCommon.scaleValue;
+    }
+    this.gradient = getGradient(this.descriptor.props.fill)
   }
 
   build() {
     Circle()
-      .attributeModifier(SVGCircleModifier.getInstance()
-        .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
+      .width(this.getDiameter())
+      .height(this.getDiameter())
+      .fill(getColor(this.descriptor.props.fill?.payload))
+      .fillOpacity(getFillOpacity(this.descriptor.props.fill, this.descriptor.props.fillOpacity))
+      .stroke(getColor(this.descriptor.props.stroke?.payload))
+      .strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth))
+      .opacity(this.descriptor.props.opacity)
+      .transform(getTransform(this.descriptor.props.matrix))
+      .position(getOffset(this.getCenterX(), this.getCenterY()))
+      .scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 })
+      .linearGradient(this.gradient)
+      .clip(this.getLinearGradientClip())
+
+    // Circle还不支持attributeModifier
+    // .attributeModifier(SVGCircleModifier.getInstance()
+    //   .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
+  }
+
+  getDiameter() {
+    return Number(this.descriptor.props.r) * 2
+  }
+
+  getCenterX() {
+    return Number(this.descriptor.props.cx) - Number(this.descriptor.props.r)
+  }
+
+  getCenterY() {
+    return Number(this.descriptor.props.cy) - Number(this.descriptor.props.r)
+  }
+
+  getLinearGradientClip() {
+    if (this.gradient) {
+      return new Circle({
+        width: '100%',
+        height: '100%'
+      })
+    }
+    return undefined
   }
 }

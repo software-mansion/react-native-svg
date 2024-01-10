@@ -30,13 +30,13 @@ function componentProcessing(name: string, ctx: RNOHContext, tag: Tag) {
   Logger.debug("RNOH SVGMask name=", name)
   if (type === SVG_PATH_TYPE_NAME) {
     let descriptorTemp: SVGPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(tag)
-    storagDescriptor(name, getPathAttribute(descriptorTemp))
+    storageDescriptor(name, getPathAttribute(descriptorTemp))
   } else if (type === SVG_RECT_TYPE_NAME) {
     let descriptorTemp: SVGRectDescriptor = ctx.descriptorRegistry.getDescriptor<SVGRectDescriptor>(tag)
-    storagDescriptor(name, getRectAttribute(descriptorTemp))
+    storageDescriptor(name, getRectAttribute(descriptorTemp))
   } else if (type === SVG_CIRCLE_TYPE_NAME) {
     let descriptorTemp: SVGCircleDescriptor = ctx.descriptorRegistry.getDescriptor<SVGCircleDescriptor>(tag)
-    storagDescriptor(name, getCircleAttribute(descriptorTemp))
+    storageDescriptor(name, getCircleAttribute(descriptorTemp))
   }
 }
 
@@ -67,7 +67,7 @@ function getCircleAttribute(descriptor: SVGCircleDescriptor): SVGMaskType {
   return circle
 }
 
-function storagDescriptor(key?: string, value?: SVGMaskType) {
+function storageDescriptor(key?: string, value?: SVGMaskType) {
   if (key && value) {
     setMaskDescriptor(key, value)
   }

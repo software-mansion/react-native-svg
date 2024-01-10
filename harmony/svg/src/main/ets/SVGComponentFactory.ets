@@ -94,7 +94,7 @@ export struct SVGComponentFactory {
 }
 
 @Builder
-export function svgComponentFactoryBuilder(ctx: RNOHContext, tag: Tag, componentName: string, svgViewCommon?: SVGViewCommon) {
+export function svgComponentFactoryBuilder(ctx: RNOHContext, tag: Tag, componentName: string) {
   if (componentName === SVG_GROUP_TYPE_NAME) {
     SVGGroup({
       ctx: ctx,
@@ -111,11 +111,11 @@ export function svgComponentFactoryBuilder(ctx: RNOHContext, tag: Tag, component
     SVGText({ ctx: ctx, tag: tag })
   } else if (componentName === SVG_USE_TYPE_NAME) {
     SVGUse({ ctx: ctx, tag: tag })
+  } else if (componentName === SVG_CIRCLE_TYPE_NAME) {
+    SVGCircle({ ctx: ctx, tag: tag })
   }
-  // else if (componentName === SVG_CIRCLE_TYPE_NAME) {
-  //   SVGCircle({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
-  // } else if (componentName === SVG_ELLIPSE_TYPE_NAME) {
-  //   SVGEllipse({ ctx: ctx, tag: tag, svgViewCommon: svgViewCommon })
+  // else if (componentName === SVG_ELLIPSE_TYPE_NAME) {
+  //   SVGEllipse({ ctx: ctx, tag: tag })
   // }
   else if (componentName === SVG_Mask_TYPE_NAME) {
   }

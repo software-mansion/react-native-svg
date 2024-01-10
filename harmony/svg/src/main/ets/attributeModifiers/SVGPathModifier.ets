@@ -23,7 +23,7 @@
  */
 
 import { SVGPathDescriptor, SVGPathDescriptorWrapper } from '../components/SVGPath';
-import { getColor, getStrokeWidth, getTransform } from '../common/SVGCommon';
+import { getColor, getGradient, getStrokeWidth, getTransform } from '../common/SVGCommon';
 import { SVGViewCommon } from '../common/SVGType';
 import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
 import { getDefsDescriptor, getMaskDescriptor } from '../common/SVGTempCache';
@@ -57,7 +57,7 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
       this.scaleValue = svgViewCommon.scaleValue * vp2px(1);
       this.percentage = 100 / this.scaleValue + '%';
     }
-    this.getGradient();
+    this.gradient = getGradient(this.descriptor.props.fill);
     return SVGPathModifier.instance;
   }
 
@@ -73,9 +73,8 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
       return
     }
 
-    let fill = getColor(this.descriptor.props.fill?.payload)
-    if (fill && fill !== '[0,0,0,1]') {
-      instance.fill(fill);
+    if (JSON.stringify(this.descriptor?.props.fill?.payload) !== '[0,0,0,1]') {
+      instance.fill(getColor(this.descriptor.props.fill?.payload));
     }
 
     let fillOpacity = this.descriptor.props.fill?.payload ? this.descriptor.props.fillOpacity : 0
@@ -103,28 +102,17 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
       instance.width(this.svgViewCommon?.svgWidth ? this.svgViewCommon?.svgWidth / this.scaleValue : this.percentage);
       instance.height(this.svgViewCommon?.svgHeight ? this.svgViewCommon?.svgHeight / this.scaleValue : this.percentage);
       instance.linearGradient(this.gradient);
-      instance.clip(this.getClip());
+      instance.clip(new Path({
+        width: '100%',
+        height: '100%',
+        commands: this.descriptor.props.d }));
     }
+
     if (this.descriptor.props.mask) {
       let maskDescriptor = getMaskDescriptor(this.descriptor.props.mask)
       if (maskDescriptor) {
         instance.mask(maskDescriptor)
       }
     }
-  }
-
-  getGradient() {
-    if (this.descriptor.props.fill?.type == 1) {
-      this.gradient = getDefsDescriptor(this.descriptor.props.fill?.brushRef)?.props as SVGLinearGradientValue
-    } else {
-      this.gradient = undefined
-    }
-  }
-
-  getClip() {
-    return new Path({
-      width: '100%',
-      height: '100%',
-      commands: this.descriptor.props.d });
   }
 }

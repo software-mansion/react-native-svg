@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { getColor, getTransform } from '../common/SVGCommon';
+import { getColor, getStrokeWidth, getTransform } from '../common/SVGCommon';
 import { getMaskDescriptor } from '../common/SVGTempCache';
 import { SVGViewCommon } from '../common/SVGType';
 import { SVGCircleDescriptor, SVGCircleDescriptorWrapper } from '../components/SVGCircle';
@@ -65,9 +65,8 @@ export class SVGCircleModifier implements AttributeModifier<CircleAttribute> {
 
     instance.position(this.descriptor.layoutMetrics.frame.origin);
 
-    let fill = getColor(this.descriptor.props.fill?.payload)
-    if (fill && JSON.stringify(this.descriptor?.props.fill?.payload) !== '[0,0,0,1]') {
-      instance.fill(fill);
+    if (JSON.stringify(this.descriptor?.props.fill?.payload) !== '[0,0,0,1]') {
+      instance.fill(getColor(this.descriptor.props.fill?.payload));
     }
 
     let fillOpacity = this.getFillOpacity()
@@ -79,8 +78,8 @@ export class SVGCircleModifier implements AttributeModifier<CircleAttribute> {
       instance.stroke(getColor(this.descriptor.props.stroke?.payload));
     }
 
-    if (this.getStrokeWidth(this.descriptor.props.strokeWidth) !== 1) {
-      instance.strokeWidth(this.getStrokeWidth(this.descriptor.props.strokeWidth));
+    if (getStrokeWidth(this.descriptor.props.strokeWidth) !== 1) {
+      instance.strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth));
     }
 
     // instance.strokeLineCap(this.descriptor.props.strokeLinecap);
@@ -90,6 +89,7 @@ export class SVGCircleModifier implements AttributeModifier<CircleAttribute> {
     }
 
     instance.transform(getTransform(this.descriptor.props.matrix));
+
     if (this.descriptor.props.mask) {
       let maskDescriptor = getMaskDescriptor(this.descriptor.props.mask)
       if (maskDescriptor) {
@@ -100,10 +100,6 @@ export class SVGCircleModifier implements AttributeModifier<CircleAttribute> {
 
   getDiameter() {
     return Number(this.descriptor.props.r) * 2
-  }
-
-  getStrokeWidth(strokeWidth?: string) {
-    return strokeWidth ? Number(strokeWidth) : 0
   }
 
   getFillOpacity() {
