@@ -43,7 +43,8 @@ function componentProcessing(name: string, ctx: RNOHContext, tag: Tag) {
 function getPathAttribute(descriptor: SVGPathDescriptor): SVGMaskType {
   let path = new Path({width: '100%', height: '100%'}).fill(getColor(descriptor.props.fill?.payload))
   path.position(descriptor.layoutMetrics.frame.origin)
-  path.commands(descriptor.props.d)
+  path.commands(descriptor.props.d.replace(new RegExp("[-+]?\\d+(\\.\\d+)?","g"),
+    match=>vp2px(parseFloat(match)).toString()))
   return path
 }
 
@@ -63,10 +64,13 @@ function getRectAttribute(descriptor: SVGRectDescriptor): SVGMaskType {
 function getCircleAttribute(descriptor: SVGCircleDescriptor): SVGMaskType {
   let diameter = Number(descriptor.props.r) * 2
   let circle = new Circle({width: diameter, height: diameter}).fill(getColor(descriptor.props.fill?.payload))
-  circle.position(descriptor.layoutMetrics.frame.origin)
+  circle.position(getOffset(getCenterPosition(descriptor.props.cx, descriptor.props.r),
+    getCenterPosition(descriptor.props.cy, descriptor.props.r)))
   return circle
 }
-
+function getCenterPosition(x: string | undefined, r: string | undefined) {
+  return Number(x) - Number(r)
+}
 function storageDescriptor(key?: string, value?: SVGMaskType) {
   if (key && value) {
     setMaskDescriptor(key, value)

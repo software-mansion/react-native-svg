@@ -27,6 +27,7 @@ import { SVGCircleModifier } from '../attributeModifiers/SVGCircleModifier'
 import Logger from '../common/log/Logger';
 import { getColor, getFillOpacity, getGradient, getOffset, getStrokeWidth, getTransform } from '../common/SVGCommon';
 import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
+import { getMaskDescriptor } from '../common/SVGTempCache';
 import { SVGCircleProps, SVGViewCommon } from '../common/SVGType'
 
 export const SVG_CIRCLE_TYPE_NAME: string = "RNSVGCircle"
@@ -87,6 +88,7 @@ export struct SVGCircle {
       .scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 })
       .linearGradient(this.gradient)
       .clip(this.getLinearGradientClip())
+      .mask(this.descriptor.props.mask ? getMaskDescriptor(this.descriptor.props.mask) : undefined)
 
     // Circle还不支持attributeModifier
     // .attributeModifier(SVGCircleModifier.getInstance()
