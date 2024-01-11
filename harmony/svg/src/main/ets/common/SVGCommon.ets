@@ -23,7 +23,7 @@
  */
 
 import { ColorSegments, convertColorSegmentsToString, TransformMatrix } from 'rnoh'
-import { getDefsDescriptor, getGroupDescriptor, hasViewKey } from './SVGTempCache'
+import { getLinearGradientValue } from './SVGTempCache'
 import { SVGColorValue, SVGGroupBox, SVGOffset } from './SVGType'
 import { SVGViewDescriptor } from '../SVGView'
 import matrix4 from '@ohos.matrix4'
@@ -54,7 +54,6 @@ export function getGroupBox(descriptor: SVGViewDescriptor): SVGGroupBox {
   }
   return groupBox
 }
-
 
 export function getOffset(x?: string | number, y?: string | number): SVGOffset {
   let offset: SVGOffset = { x: x ? x : 0, y: y ? y : 0 };
@@ -125,7 +124,7 @@ export function parseCoordinateValue(value?: string): number {
 
 export function getGradient(fill?: SVGColorValue): SVGLinearGradientValue | undefined {
   if (fill?.type == 1) {
-    return getDefsDescriptor(fill?.brushRef)?.props as SVGLinearGradientValue
+    return getLinearGradientValue(fill?.brushRef)
   } else {
     return undefined
   }
