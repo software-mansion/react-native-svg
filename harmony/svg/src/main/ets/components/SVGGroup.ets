@@ -144,9 +144,9 @@ export struct SVGGroup {
     let type: string = ''
     this.descriptor.childrenTags.forEach((tag) => {
       const descriptor = this.ctx.descriptorRegistry.getDescriptor<Descriptor>(tag)
-      if (descriptor.props.name) {
-        setDefsDescriptor(descriptor.props.name, descriptor)
-      }
+      // if (descriptor.props.name) {
+      //   setDefsDescriptor(descriptor.props.name, descriptor)
+      // }
       type = descriptor.type
       if (type === SVG_DEFS_TYPE_NAME) {
         SVGDefsFactory(this.ctx, tag)

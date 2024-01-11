@@ -50,7 +50,7 @@ export class SVGTextModifier implements AttributeModifier<TextAttribute> {
     this.descriptorWrapper = descriptorWrapper;
     this.svgViewCommon = svgViewCommon;
     if (svgViewCommon?.scaleValue) {
-      this.scaleValue = svgViewCommon.scaleValue * vp2px(1);
+      this.scaleValue = svgViewCommon.scaleValue;
     }
     return SVGTextModifier.instance;
   }

@@ -53,7 +53,7 @@ export class SVGImageModifier implements AttributeModifier<ImageAttribute> {
     this.descriptorWrapper = descriptorWrapper;
     this.svgViewCommon = svgViewCommon;
     if (svgViewCommon?.scaleValue) {
-      this.scaleValue = svgViewCommon.scaleValue * vp2px(1);
+      this.scaleValue = svgViewCommon.scaleValue;
     }
     return SVGImageModifier.instance;
   }
@@ -76,5 +76,7 @@ export class SVGImageModifier implements AttributeModifier<ImageAttribute> {
     }
 
     instance.transform(getTransform(this.descriptor.props.matrix));
+
+    instance.scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 });
   }
 }

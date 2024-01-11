@@ -22,7 +22,14 @@
  * SOFTWARE.
  */
 
-import { getColor, getStrokeWidth, getTransform } from '../common/SVGCommon';
+import {
+  getColor,
+  getFillOpacity,
+  getStrokeLineCap,
+  getStrokeLineJoin,
+  getStrokeWidth,
+  getTransform
+} from '../common/SVGCommon';
 import { SVGViewCommon } from '../common/SVGType';
 import { SVGEllipseDescriptor, SVGEllipseDescriptorWrapper } from '../components/SVGEllipse';
 
@@ -49,6 +56,9 @@ export class SVGEllipseModifier implements AttributeModifier<EllipseAttribute> {
     this.descriptor = descriptor;
     this.descriptorWrapper = descriptorWrapper;
     this.svgViewCommon = svgViewCommon;
+    if (svgViewCommon?.scaleValue) {
+      this.scaleValue = svgViewCommon.scaleValue;
+    }
     return SVGEllipseModifier.instance;
   }
 
@@ -61,33 +71,53 @@ export class SVGEllipseModifier implements AttributeModifier<EllipseAttribute> {
       instance.height(this.getEllipseHeight());
     }
 
-    instance.position(this.descriptor.layoutMetrics.frame.origin);
+    // 定位需要处理
+    // instance.position(this.descriptor.layoutMetrics.frame.origin);
 
-    let fill = getColor(this.descriptor.props.fill?.payload)
-    if (fill && JSON.stringify(this.descriptor?.props.fill?.payload) !== '[0,0,0,1]') {
-      instance.fill(fill);
+    if (JSON.stringify(this.descriptor?.props.fill?.payload) !== '[0,0,0,1]') {
+      instance.fill(getColor(this.descriptor.props.fill?.payload));
     }
 
-    let fillOpacity = this.getFillOpacity()
+    let fillOpacity = getFillOpacity(this.descriptor.props.fill, this.descriptor.props.fillOpacity)
     if (fillOpacity !== 1) {
       instance.fillOpacity(fillOpacity);
     }
 
     if (this.descriptor.props.stroke?.payload) {
       instance.stroke(getColor(this.descriptor.props.stroke?.payload));
-    }
 
-    if (getStrokeWidth(this.descriptor.props.strokeWidth) !== 1) {
-      instance.strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth));
-    }
+      if (getStrokeWidth(this.descriptor.props.strokeWidth) !== 1) {
+        instance.strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth));
+      }
 
-    // instance.strokeLineCap(this.descriptor.props.strokeLinecap);
+      if (this.descriptor.props.strokeDasharray?.length !== 0) {
+        instance.strokeDashArray(this.descriptor.props.strokeDasharray);
+      }
+
+      if (this.descriptor.props.strokeDashoffset !== 0) {
+        instance.strokeDashOffset(this.descriptor.props.strokeDashoffset);
+      }
+
+      if (getStrokeLineCap(this.descriptor.props.strokeLinecap) !== LineCapStyle.Butt) {
+        instance.strokeLineCap(getStrokeLineCap(this.descriptor.props.strokeLinecap));
+      }
+
+      if (getStrokeLineJoin(this.descriptor.props.strokeLinejoin) !== LineJoinStyle.Miter) {
+        instance.strokeLineJoin(getStrokeLineJoin(this.descriptor.props.strokeLinejoin));
+      }
+
+      if (this.descriptor.props.strokeMiterlimit !== 0) {
+        instance.strokeMiterLimit(this.descriptor.props.strokeMiterlimit);
+      }
+    }
 
     if (this.descriptor.props.opacity !== 1) {
       instance.opacity(this.descriptor.props.opacity);
     }
 
     instance.transform(getTransform(this.descriptor.props.matrix));
+
+    instance.scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 });
   }
 
   getEllipseWidth() {
@@ -96,12 +126,5 @@ export class SVGEllipseModifier implements AttributeModifier<EllipseAttribute> {
 
   getEllipseHeight() {
     return Number(this.descriptor.props.ry) * 2
-  }
-
-  getFillOpacity() {
-    if (this.descriptor.props.fill?.payload) {
-      return this.descriptor.props.fill?.payload[3] == 0 ? 0 : this.descriptor.props.fillOpacity
-    }
-    return 0
   }
 }

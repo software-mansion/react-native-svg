@@ -38,7 +38,7 @@ export class SVGEllipseDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSV
 export struct SVGEllipse {
   ctx!: RNOHContext
   tag: number = 0
-  @State svgViewCommon: SVGViewCommon | undefined = undefined
+  @Consume svgViewCommon: SVGViewCommon | undefined
   @State descriptor: SVGEllipseDescriptor = {} as SVGEllipseDescriptor
   @State descriptorWrapper: SVGEllipseDescriptorWrapper | undefined = undefined
   private unregisterDescriptorChangesListener?: () => void = undefined

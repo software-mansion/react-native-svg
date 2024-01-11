@@ -46,8 +46,7 @@ export function SVGLinearGradient(ctx: RNOHContext, tag: Tag): void {
   }
 }
 
-function parseLinearGradient(descriptor: SVGLinearGradientDescriptor): object {
-  console.log("RNOH SVGLinearGradient descriptor" + JSON.stringify(descriptor))
+function parseLinearGradient(descriptor: SVGLinearGradientDescriptor): void {
   let linearGradientValue: SVGLinearGradientValue = {
     colors: parseGradientColors(descriptor.props.gradient),
     repeating: false

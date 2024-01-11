@@ -84,11 +84,11 @@ export struct SVGComponentFactory {
       SVGImage({ ctx: this.ctx, tag: this.tag })
     } else if (this.componentName === SVG_TEXT_TYPE_NAME) {
       SVGText({ ctx: this.ctx, tag: this.tag })
+    } else if (this.componentName === SVG_CIRCLE_TYPE_NAME) {
+      SVGCircle({ ctx: this.ctx, tag: this.tag })
     }
-    // else if (this.componentName === SVG_CIRCLE_TYPE_NAME) {
-    //   SVGCircle({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
-    // } else if (this.componentName === SVG_ELLIPSE_TYPE_NAME) {
-    //   SVGEllipse({ ctx: this.ctx, tag: this.tag, svgViewCommon: this.svgViewCommon })
+    // else if (this.componentName === SVG_ELLIPSE_TYPE_NAME) {
+    //   SVGEllipse({ ctx: this.ctx, tag: this.tag })
     // }
   }
 }

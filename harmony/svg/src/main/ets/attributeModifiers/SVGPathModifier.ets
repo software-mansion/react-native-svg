@@ -23,10 +23,17 @@
  */
 
 import { SVGPathDescriptor, SVGPathDescriptorWrapper } from '../components/SVGPath';
-import { getColor, getGradient, getStrokeWidth, getTransform } from '../common/SVGCommon';
+import {
+  getColor,
+  getGradient,
+  getStrokeLineCap,
+  getStrokeLineJoin,
+  getStrokeWidth,
+  getTransform
+} from '../common/SVGCommon';
 import { SVGViewCommon } from '../common/SVGType';
 import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
-import { getDefsDescriptor, getMaskDescriptor } from '../common/SVGTempCache';
+import { getMaskDescriptor } from '../common/SVGTempCache';
 
 export class SVGPathModifier implements AttributeModifier<PathAttribute> {
   private constructor() {
@@ -82,13 +89,33 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
       instance.fillOpacity(fillOpacity);
     }
 
-    instance.stroke(getColor(this.descriptor.props.stroke?.payload));
+    if (this.descriptor.props.stroke?.payload) {
+      instance.stroke(getColor(this.descriptor.props.stroke?.payload));
 
-    if (getStrokeWidth(this.descriptor.props.strokeWidth) !== 1) {
-      instance.strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth));
+      if (getStrokeWidth(this.descriptor.props.strokeWidth, vp2px(1)) !== 1) {
+        instance.strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth, vp2px(1)));
+      }
+
+      if (this.descriptor.props.strokeDasharray?.length !== 0) {
+        instance.strokeDashArray(this.descriptor.props.strokeDasharray);
+      }
+
+      if (this.descriptor.props.strokeDashoffset !== 0) {
+        instance.strokeDashOffset(this.descriptor.props.strokeDashoffset);
+      }
+
+      if (getStrokeLineCap(this.descriptor.props.strokeLinecap) !== LineCapStyle.Butt) {
+        instance.strokeLineCap(getStrokeLineCap(this.descriptor.props.strokeLinecap));
+      }
+
+      if (getStrokeLineJoin(this.descriptor.props.strokeLinejoin) !== LineJoinStyle.Miter) {
+        instance.strokeLineJoin(getStrokeLineJoin(this.descriptor.props.strokeLinejoin));
+      }
+
+      if (this.descriptor.props.strokeMiterlimit !== 0) {
+        instance.strokeMiterLimit(this.descriptor.props.strokeMiterlimit);
+      }
     }
-
-    // instance.strokeLineCap(this.descriptor.props.strokeLinecap);
 
     if (this.descriptor.props.opacity !== 1) {
       instance.opacity(this.descriptor.props.opacity);

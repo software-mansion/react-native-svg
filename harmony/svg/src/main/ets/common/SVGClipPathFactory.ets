@@ -41,7 +41,7 @@ let descriptor: SVGClipPathDescriptor = {} as SVGClipPathDescriptor
 export function SVGClipPathFactory(ctx: RNOHContext, tag: number): void {
   descriptor = ctx.descriptorRegistry.getDescriptor<SVGClipPathDescriptor>(tag)
   if (descriptor.props.name && descriptor) {
-	let key: string = descriptor.props.name
+    let key: string = descriptor.props.name
     descriptor.childrenTags.forEach((childrenTag) => {
       Logger.debug("RNOH SVGClipPathFactory childrenTag=", JSON.stringify(childrenTag))
       componentProcessing(ctx, childrenTag, key)
@@ -51,9 +51,7 @@ export function SVGClipPathFactory(ctx: RNOHContext, tag: number): void {
 
 function componentProcessing(ctx: RNOHContext, tag: Tag, key: string) {
   let type: string = ctx.descriptorRegistry.getDescriptor(tag).type
-  if (type === SVG_PATH_TYPE_NAME) {
-    // let descriptorTemp: SVGPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(tag)
-  } else if (type === SVG_RECT_TYPE_NAME) {
+  if (type === SVG_RECT_TYPE_NAME) {
     let descriptorTemp: SVGRectDescriptor = ctx.descriptorRegistry.getDescriptor<SVGRectDescriptor>(tag)
     let value: SVGClipPathObj = { type, tag, value: new Rect({
       width: '100%',
@@ -63,9 +61,12 @@ function componentProcessing(ctx: RNOHContext, tag: Tag, key: string) {
     }) }
     Logger.debug("RNOH SVGRect componentProcessing", JSON.stringify(value))
     setClipPathDescriptor(key, value)
-  } else if (type === SVG_IMAGE_TYPE_NAME) {
-    // let descriptorTemp: SVGImageDescriptor = ctx.descriptorRegistry.getDescriptor<SVGImageDescriptor>(tag)
-  } else if (type === SVG_LINEAR_GRADIENT_TYPE_NAME) {
-    // let descriptorTemp: SVGLinearGradientDescriptor = ctx.descriptorRegistry.getDescriptor<SVGLinearGradientDescriptor>(tag)
   }
+  // else if (type === SVG_PATH_TYPE_NAME) {
+  //   let descriptorTemp: SVGPathDescriptor = ctx.descriptorRegistry.getDescriptor<SVGPathDescriptor>(tag)
+  // } else if (type === SVG_IMAGE_TYPE_NAME) {
+  //   let descriptorTemp: SVGImageDescriptor = ctx.descriptorRegistry.getDescriptor<SVGImageDescriptor>(tag)
+  // } else if (type === SVG_LINEAR_GRADIENT_TYPE_NAME) {
+  //   let descriptorTemp: SVGLinearGradientDescriptor = ctx.descriptorRegistry.getDescriptor<SVGLinearGradientDescriptor>(tag)
+  // }
 }

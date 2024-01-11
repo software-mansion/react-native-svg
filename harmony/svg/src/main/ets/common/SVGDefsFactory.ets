@@ -26,9 +26,8 @@ import { Tag, RNOHContext, Descriptor } from 'rnoh'
 import { SVG_PATH_TYPE_NAME, SVGPathDescriptor } from "../components/SVGPath"
 import { SVG_RECT_TYPE_NAME, SVGRectDescriptor } from "../components/SVGRect"
 import { SVG_IMAGE_TYPE_NAME, SVGImageDescriptor } from "../components/SVGImage"
-import { SVG_LINEAR_GRADIENT_TYPE_NAME, SVGLinearGradientDescriptor, SVGLinearGradient } from "./SVGLinearGradient"
-import { SVG_CLIP_PATH_TYPE_NAME, SVGClipPathDescriptor, SVGClipPathFactory } from './SVGClipPathFactory'
-import { parseLinearGradient } from './SVGLinearGradient'
+import { SVG_LINEAR_GRADIENT_TYPE_NAME, SVGLinearGradient } from "./SVGLinearGradient"
+import { SVG_CLIP_PATH_TYPE_NAME, SVGClipPathFactory } from './SVGClipPathFactory'
 import { setDefsDescriptor } from './SVGTempCache'
 import { SVGBaseProps, SVGDefsProps } from './SVGType'
 import Logger from './log/Logger'
@@ -85,7 +84,7 @@ function componentProcessing(ctx: RNOHContext, tag: Tag) {
   }
 }
 
-function storageDefsDescriptor(key?: string, value?: object) {
+function storageDefsDescriptor(key?: string, value?: Descriptor) {
   if (key && value) {
     setDefsDescriptor(key, value)
   }

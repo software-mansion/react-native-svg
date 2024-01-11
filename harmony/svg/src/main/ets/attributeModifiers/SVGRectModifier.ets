@@ -28,12 +28,13 @@ import {
   getGradient,
   getOffset,
   getRadius,
+  getStrokeLineCap,
+  getStrokeLineJoin,
   getStrokeWidth,
   getTransform
 } from '../common/SVGCommon';
 import { SVGClipPathObj, SVGViewCommon } from '../common/SVGType';
 import { getClipPathDescriptor, getMaskDescriptor } from '../common/SVGTempCache';
-import Logger from '../common/log/Logger';
 import { SVGRectDescriptor, SVGRectDescriptorWrapper } from '../components/SVGRect';
 import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
 
@@ -90,13 +91,31 @@ export class SVGRectModifier implements AttributeModifier<RectAttribute> {
 
     if (this.descriptor.props.stroke?.payload) {
       instance.stroke(getColor(this.descriptor.props.stroke?.payload));
-    }
 
-    if (getStrokeWidth(this.descriptor.props.strokeWidth) !== 1) {
-      instance.strokeWidth(this.descriptor.props.strokeWidth);
-    }
+      if (getStrokeWidth(this.descriptor.props.strokeWidth) !== 1) {
+        instance.strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth));
+      }
 
-    // instance.strokeLineCap(this.descriptor.props.strokeLinecap);
+      if (this.descriptor.props.strokeDasharray?.length !== 0) {
+        instance.strokeDashArray(this.descriptor.props.strokeDasharray);
+      }
+
+      if (this.descriptor.props.strokeDashoffset !== 0) {
+        instance.strokeDashOffset(this.descriptor.props.strokeDashoffset);
+      }
+
+      if (getStrokeLineCap(this.descriptor.props.strokeLinecap) !== LineCapStyle.Butt) {
+        instance.strokeLineCap(getStrokeLineCap(this.descriptor.props.strokeLinecap));
+      }
+
+      if (getStrokeLineJoin(this.descriptor.props.strokeLinejoin) !== LineJoinStyle.Miter) {
+        instance.strokeLineJoin(getStrokeLineJoin(this.descriptor.props.strokeLinejoin));
+      }
+
+      if (this.descriptor.props.strokeMiterlimit !== 0) {
+        instance.strokeMiterLimit(this.descriptor.props.strokeMiterlimit);
+      }
+    }
 
     if (this.descriptor.props.opacity !== 1) {
       instance.opacity(this.descriptor.props.opacity);

@@ -93,7 +93,29 @@ export function getTransform(matrix?: number[], scaleValue: number = defaultScal
 }
 
 export function getStrokeWidth(strokeWidth?: string, scaleValue: number = 1): number {
-  return strokeWidth ? Number(strokeWidth) / scaleValue : 0;
+  return strokeWidth ? Number(strokeWidth) / scaleValue : 1;
+}
+
+export function getStrokeLineCap(strokeLineCap?: number): number {
+  switch (strokeLineCap) {
+    case 1:
+      return LineCapStyle.Round
+    case 2:
+      return LineCapStyle.Square
+    default:
+      return LineCapStyle.Butt
+  }
+}
+
+export function getStrokeLineJoin(strokeLineJoin?: number): number {
+  switch (strokeLineJoin) {
+    case 1:
+      return LineJoinStyle.Round
+    case 2:
+      return LineJoinStyle.Bevel
+    default:
+      return LineJoinStyle.Miter
+  }
 }
 
 export function getFillOpacity(fill: SVGColorValue | undefined, fillOpacity: number): number {
