@@ -89,8 +89,9 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
       instance.fillOpacity(fillOpacity);
     }
 
-    instance.stroke(getColor(this.descriptor.props.stroke?.payload));
     if (this.descriptor.props.stroke?.payload) {
+      instance.stroke(getColor(this.descriptor.props.stroke?.payload));
+
       if (getStrokeWidth(this.descriptor.props.strokeWidth, vp2px(1)) !== 1) {
         instance.strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth, vp2px(1)));
       }
@@ -114,6 +115,8 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
       if (this.descriptor.props.strokeMiterlimit !== 0) {
         instance.strokeMiterLimit(this.descriptor.props.strokeMiterlimit);
       }
+    } else {
+      instance.strokeWidth(0);
     }
 
     if (this.descriptor.props.opacity !== 1) {
@@ -134,11 +137,14 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
         commands: this.descriptor.props.d }));
     }
 
-    // if (this.descriptor.props.mask) {
-    //   let maskDescriptor = getMaskDescriptor(this.descriptor.props.mask)
-    //   if (maskDescriptor) {
-    //     instance.mask(maskDescriptor)
-    //   }
-    // }
+    if (this.descriptor.props.mask) {
+      instance.commands(this.descriptor.props.d.replace(new RegExp("[-+]?\\d+(\\.\\d+)?","g"),
+        match=>vp2px(parseFloat(match)).toString()))
+      instance.scale({x: 1, y: 1, centerX: 0, centerY: 0})
+      let maskDescriptor = getMaskDescriptor(this.descriptor.props.mask)
+      if (maskDescriptor) {
+        instance.mask(maskDescriptor)
+      }
+    }
   }
 }

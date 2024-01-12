@@ -68,9 +68,11 @@ function getCircleAttribute(descriptor: SVGCircleDescriptor): SVGMaskType {
     getCenterPosition(descriptor.props.cy, descriptor.props.r)))
   return circle
 }
+
 function getCenterPosition(x: string | undefined, r: string | undefined) {
   return Number(x) - Number(r)
 }
+
 function storageDescriptor(key?: string, value?: SVGMaskType) {
   if (key && value) {
     setMaskDescriptor(key, value)

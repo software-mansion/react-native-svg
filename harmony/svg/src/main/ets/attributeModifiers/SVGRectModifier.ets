@@ -89,8 +89,9 @@ export class SVGRectModifier implements AttributeModifier<RectAttribute> {
       instance.fillOpacity(fillOpacity);
     }
 
-    instance.stroke(getColor(this.descriptor.props.stroke?.payload));
     if (this.descriptor.props.stroke?.payload) {
+      instance.stroke(getColor(this.descriptor.props.stroke?.payload));
+
       if (getStrokeWidth(this.descriptor.props.strokeWidth) !== 1) {
         instance.strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth));
       }
