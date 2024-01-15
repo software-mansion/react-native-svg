@@ -69,4 +69,4 @@ jobs:
 
       - name: Build app
         working-directory: ${{ matrix.working-directory }}
-        run: npx react-native run-macos --mode Debug --verbose --terminal /bin/zsh
+        run: npx react-native@latest run-macos --verbose --terminal /bin/zsh
