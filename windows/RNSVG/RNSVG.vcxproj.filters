@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReactPackageProvider.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RNSVGModule.h" />
     <ClInclude Include="RectView.h">
       <Filter>Views</Filter>
@@ -318,5 +319,13 @@
     <Filter Include="D2DWrappers">
       <UniqueIdentifier>{d4e16389-e870-4046-b1fe-61bc171edad9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{0856150b-509d-49ee-90b9-c9c9d1a2aa4a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="RNSVG.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
