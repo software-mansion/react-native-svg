@@ -54,7 +54,8 @@ export type SVGViewCommon = {
   scaleValue: number,
   groupBox: SVGGroupBox,
   svgWidth: number,
-  svgHeight: number
+  svgHeight: number,
+  childrenIsImage?: Boolean,
 }
 
 export interface SVGCommonProps extends ViewBaseProps {
@@ -72,9 +73,7 @@ export interface SVGCommonProps extends ViewBaseProps {
   pointerEvents?: string
 }
 
-export interface SVGMaskProps extends SVGCommonProps {
-
-}
+export interface SVGMaskProps extends SVGCommonProps {}
 
 export interface SVGBaseProps extends SVGCommonProps {
   fill?: SVGColorValue,
@@ -172,11 +171,11 @@ export type SVGClipPathObj = {
 }
 
 export interface SVGUseProps extends SVGBaseProps {
-  href?:string;
-  width?:string;
-  height?:string;
-  x?:NumberProp;
-  y?:NumberProp;
+  href?: string;
+  width?: string;
+  height?: string;
+  x?: NumberProp;
+  y?: NumberProp;
 }
 
 /** Text 部分 */

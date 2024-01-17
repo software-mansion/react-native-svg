@@ -72,7 +72,16 @@ export class SVGGroupModifier implements AttributeModifier<StackAttribute> {
       instance.height('100%');
     }
 
-    if (JSON.stringify(this.descriptor.props.matrix) !== '[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]') {
+    //规避QRCODE-SVG logo偏移位置不在中心问题
+    if (this.svgViewCommon.childrenIsImage && this.descriptor.childrenTags.length === 1 &&
+      (this.svgViewCommon.groupBox.minX !== 0 || this.svgViewCommon.groupBox.minY !== 0)) {
+      instance.offset({
+        x: this.svgViewCommon.groupBox.minX * this.svgViewCommon.scaleValue,
+        y: this.svgViewCommon.groupBox.minY * this.svgViewCommon.scaleValue
+      })
+    }
+
+    if (this.descriptor.props.matrix.length === 6) {
       instance.transform(getTransform(this.descriptor.props.matrix));
     }
   }
