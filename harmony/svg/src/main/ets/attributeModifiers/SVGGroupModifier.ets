@@ -73,7 +73,7 @@ export class SVGGroupModifier implements AttributeModifier<StackAttribute> {
     }
 
     //规避QRCODE-SVG logo偏移位置不在中心问题
-    if (this.svgViewCommon.childrenIsImage && this.descriptor.childrenTags.length === 1 &&
+    if (this.svgViewCommon.renderLogoTag === this.descriptor.tag &&
       (this.svgViewCommon.groupBox.minX !== 0 || this.svgViewCommon.groupBox.minY !== 0)) {
       instance.offset({
         x: this.svgViewCommon.groupBox.minX * this.svgViewCommon.scaleValue,
