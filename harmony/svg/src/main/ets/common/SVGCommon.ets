@@ -32,7 +32,7 @@ import { SVGLinearGradientValue } from './SVGLinearGradient'
 const defaultScaleValue: number = vp2px(1)
 
 export function getGroupBox(descriptor: SVGViewDescriptor): SVGGroupBox {
-  let groupBox: SVGGroupBox = { width: '100%', height: '100%', minX: 0, minY: 0 }
+  let groupBox: SVGGroupBox = { width: 0, height: 0, minX: 0, minY: 0 }
   let svgWidth = descriptor.layoutMetrics.frame.size.width
   let svgHeight = descriptor.layoutMetrics.frame.size.height
   let contentWidth = descriptor.props.vbWidth ? descriptor.props.vbWidth : svgWidth

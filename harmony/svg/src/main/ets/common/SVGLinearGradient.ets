@@ -62,6 +62,10 @@ function parseLinearGradient(descriptor: SVGLinearGradientDescriptor): void {
     linearGradientValue.direction = y1 > y2 ? GradientDirection.Top : GradientDirection.Bottom
   } else if (y1 !== y2 && x1 !== x2) {
     linearGradientValue.angle = 180 - Math.round(Math.atan((y2 - y1) / (x2 - x1)) / (Math.PI / 180))
+  } else {
+    if (linearGradientValue.colors.length > 1) {
+      linearGradientValue.colors = [linearGradientValue.colors[linearGradientValue.colors.length -1]]
+    }
   }
 
   storageLinearGradientValue(descriptor.props.name, linearGradientValue)

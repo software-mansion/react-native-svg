@@ -115,9 +115,10 @@ export class SVGEllipseModifier implements AttributeModifier<EllipseAttribute> {
       instance.opacity(this.descriptor.props.opacity);
     }
 
-    instance.transform(getTransform(this.descriptor.props.matrix));
+    if (this.descriptor.props.matrix?.length === 6) {
+      instance.transform(getTransform(this.descriptor.props.matrix));
+    }
 
-    instance.scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 });
   }
 
   getEllipseWidth() {

@@ -85,14 +85,13 @@ export struct SVGCircle {
       .opacity(this.descriptor.props.opacity)
       .transform(getTransform(this.descriptor.props.matrix))
       .position(getOffset(this.getCenterX(), this.getCenterY()))
-      .scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 })
       .linearGradient(this.gradient)
       .clip(this.getLinearGradientClip())
       .mask(this.descriptor.props.mask ? getMaskDescriptor(this.descriptor.props.mask) : undefined)
 
     // Circle还不支持attributeModifier
     // .attributeModifier(SVGCircleModifier.getInstance()
-    //   .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
+    //   .setDescriptor(this.descriptor, this.descriptorWrapper))
   }
 
   getDiameter() {

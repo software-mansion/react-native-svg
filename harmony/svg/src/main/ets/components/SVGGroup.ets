@@ -100,10 +100,10 @@ export struct SVGGroup {
         } else {
           switch (prop) {
             case 'fill':
-              descriptor.props.fill = parseFill(descriptor.props.fill, this.descriptor.props.fill, this.svgViewCommon?.svgTag)
+              descriptor.props.fill = parseFill(descriptor.props.fill, this.descriptor.props.fill, this.svgViewCommon?.svgColor)
               break;
             case 'stroke':
-              descriptor.props.stroke = parseStroke(descriptor.props.stroke, this.descriptor.props.stroke, this.svgViewCommon?.svgTag)
+              descriptor.props.stroke = parseStroke(descriptor.props.stroke, this.descriptor.props.stroke, this.svgViewCommon?.svgColor)
               break;
           }
         }
@@ -134,8 +134,8 @@ export struct SVGGroup {
     }
     if (descriptor) {
       descriptor.layoutMetrics.frame.origin = this.descriptor.layoutMetrics.frame.origin
-      descriptor.props.fill = parseFill(descriptor.props.fill, this.descriptor.props.fill, this.svgViewCommon?.svgTag)
-      descriptor.props.stroke = parseStroke(descriptor.props.stroke, this.descriptor.props.stroke, this.svgViewCommon?.svgTag)
+      descriptor.props.fill = parseFill(descriptor.props.fill, this.descriptor.props.fill, this.svgViewCommon?.svgColor)
+      descriptor.props.stroke = parseStroke(descriptor.props.stroke, this.descriptor.props.stroke, this.svgViewCommon?.svgColor)
     }
   }
 
@@ -165,7 +165,7 @@ export struct SVGGroup {
   }
 
   build() {
-    Stack() {
+    Shape() {
       ForEach(this.getChildrenDescriptors(), (childrenTag: Tag) => {
         svgComponentFactoryBuilder(
           this.ctx,

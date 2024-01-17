@@ -43,8 +43,8 @@ export type SVGColorValue = {
 }
 
 export type SVGGroupBox = {
-  width: string | number,
-  height: string | number,
+  width: number,
+  height: number,
   minX: number,
   minY: number
 }
@@ -55,7 +55,7 @@ export type SVGViewCommon = {
   groupBox: SVGGroupBox,
   svgWidth: number,
   svgHeight: number,
-  childrenIsImage?: Boolean,
+  svgColor: ColorSegments,
 }
 
 export interface SVGCommonProps extends ViewBaseProps {

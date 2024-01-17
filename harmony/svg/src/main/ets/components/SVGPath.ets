@@ -43,7 +43,6 @@ export struct SVGPath {
   @Consume svgViewCommon: SVGViewCommon | undefined
   @State descriptor: SVGPathDescriptor = Object() as SVGPathDescriptor
   @State descriptorWrapper: SVGPathDescriptorWrapper | undefined = undefined
-  @State scaleValue: number = 1
   private unregisterDescriptorChangesListener?: () => void = undefined
 
   aboutToAppear() {

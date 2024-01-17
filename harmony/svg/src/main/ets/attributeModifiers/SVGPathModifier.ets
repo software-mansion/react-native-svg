@@ -44,6 +44,7 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
   protected descriptorWrapper: SVGPathDescriptorWrapper | undefined = undefined;
   protected svgViewCommon: SVGViewCommon | undefined = undefined;
   private scaleValue: number = 1;
+  private defaultScaleValue: number = vp2px(1);
   private percentage: string = '100%';
   private gradient: SVGLinearGradientValue | undefined = undefined;
 
@@ -92,8 +93,8 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
     if (this.descriptor.props.stroke?.payload) {
       instance.stroke(getColor(this.descriptor.props.stroke?.payload));
 
-      if (getStrokeWidth(this.descriptor.props.strokeWidth, vp2px(1)) !== 1) {
-        instance.strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth, vp2px(1)));
+      if (getStrokeWidth(this.descriptor.props.strokeWidth, this.defaultScaleValue) !== 1) {
+        instance.strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth, this.defaultScaleValue));
       }
 
       if (this.descriptor.props.strokeDasharray?.length !== 0) {
@@ -123,9 +124,11 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
       instance.opacity(this.descriptor.props.opacity);
     }
 
-    instance.transform(getTransform(this.descriptor.props.matrix, this.scaleValue));
+    if (this.descriptor.props.matrix?.length === 6) {
+      instance.transform(getTransform(this.descriptor.props.matrix));
+    }
 
-    instance.scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 });
+    instance.scale({ x: this.defaultScaleValue, y: this.defaultScaleValue, centerX: 0, centerY: 0 });
 
     if (this.gradient) {
       instance.width(this.svgViewCommon?.svgWidth ? this.svgViewCommon?.svgWidth / this.scaleValue : this.percentage);
@@ -138,9 +141,9 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
     }
 
     if (this.descriptor.props.mask) {
-      instance.commands(this.descriptor.props.d.replace(new RegExp("[-+]?\\d+(\\.\\d+)?","g"),
-        match=>vp2px(parseFloat(match)).toString()))
-      instance.scale({x: 1, y: 1, centerX: 0, centerY: 0})
+      instance.commands(this.descriptor.props.d.replace(new RegExp("[-+]?\\d+(\\.\\d+)?", "g"),
+        match => vp2px(parseFloat(match)).toString()))
+      instance.scale({ x: 1, y: 1, centerX: 0, centerY: 0 })
       let maskDescriptor = getMaskDescriptor(this.descriptor.props.mask)
       if (maskDescriptor) {
         instance.mask(maskDescriptor)

@@ -22,11 +22,8 @@
  * SOFTWARE.
  */
 
-import { getColor, getOffset, getRadius, getStrokeWidth, getTransform } from '../common/SVGCommon';
-import { SVGClipPathObj, SVGViewCommon } from '../common/SVGType';
-import { getClipPathDescriptor } from '../common/SVGTempCache';
-import Logger from '../common/log/Logger';
-import { SVGRectDescriptor, SVGRectDescriptorWrapper } from '../components/SVGRect';
+import { getOffset, getTransform } from '../common/SVGCommon';
+import { SVGViewCommon } from '../common/SVGType';
 import { SVGImageDescriptor, SVGImageDescriptorWrapper } from '../components/SVGImage';
 
 export class SVGImageModifier implements AttributeModifier<ImageAttribute> {
@@ -75,8 +72,9 @@ export class SVGImageModifier implements AttributeModifier<ImageAttribute> {
       instance.opacity(this.descriptor.props.opacity);
     }
 
-    instance.transform(getTransform(this.descriptor.props.matrix));
+    if (this.descriptor.props.matrix?.length === 6) {
+      instance.transform(getTransform(this.descriptor.props.matrix));
+    }
 
-    instance.scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 });
   }
 }

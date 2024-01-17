@@ -27,7 +27,7 @@ import { SVGGroupDescriptor, SVGGroupDescriptorWrapper } from '../components/SVG
 import { SVGViewCommon } from '../common/SVGType';
 import { SVG_VIEW_TYPE_NAME } from '../SVGView';
 
-export class SVGGroupModifier implements AttributeModifier<StackAttribute> {
+export class SVGGroupModifier implements AttributeModifier<ShapeAttribute> {
   private constructor() {
   }
 
@@ -35,6 +35,7 @@ export class SVGGroupModifier implements AttributeModifier<StackAttribute> {
   protected descriptor: SVGGroupDescriptor = Object() as SVGGroupDescriptor;
   protected descriptorWrapper: SVGGroupDescriptorWrapper | undefined = undefined;
   protected svgViewCommon: SVGViewCommon | undefined = undefined;
+  private scaleValue: number = 1;
   protected parentType: string | undefined = undefined;
 
   public static getInstance(): SVGGroupModifier {
@@ -51,37 +52,38 @@ export class SVGGroupModifier implements AttributeModifier<StackAttribute> {
     this.descriptor = descriptor;
     this.descriptorWrapper = descriptorWrapper;
     this.svgViewCommon = svgViewCommon;
+    if (svgViewCommon?.scaleValue) {
+      this.scaleValue = svgViewCommon.scaleValue;
+    }
     this.parentType = parentType;
     return SVGGroupModifier.instance;
   }
 
-  applyNormalAttribute(instance: StackAttribute): void {
+  applyNormalAttribute(instance: ShapeAttribute): void {
     if (this.parentType == SVG_VIEW_TYPE_NAME && this.svgViewCommon) {
-      instance.width(this.svgViewCommon.groupBox.width);
-      instance.height(this.svgViewCommon.groupBox.height);
+      instance.width(this.svgViewCommon.svgWidth / this.scaleValue);
+      instance.height(this.svgViewCommon.svgHeight / this.scaleValue);
 
       if (this.svgViewCommon.groupBox.minX !== 0 || this.svgViewCommon.groupBox.minY !== 0) {
         instance.offset({
           x: -(this.svgViewCommon.groupBox.minX * this.svgViewCommon.scaleValue || 0),
           y: -(this.svgViewCommon.groupBox.minY * this.svgViewCommon.scaleValue || 0)
         })
+      } else {
+        instance.offset({
+          x: -(this.svgViewCommon.svgWidth - this.svgViewCommon.groupBox.width) / 2,
+          y: -(this.svgViewCommon.svgHeight - this.svgViewCommon.groupBox.height) / 2
+        })
       }
+
+      instance.scale({ x: this.scaleValue, y: this.scaleValue });
 
     } else {
       instance.width('100%');
       instance.height('100%');
     }
 
-    //规避QRCODE-SVG logo偏移位置不在中心问题
-    if (this.svgViewCommon.renderLogoTag === this.descriptor.tag &&
-      (this.svgViewCommon.groupBox.minX !== 0 || this.svgViewCommon.groupBox.minY !== 0)) {
-      instance.offset({
-        x: this.svgViewCommon.groupBox.minX * this.svgViewCommon.scaleValue,
-        y: this.svgViewCommon.groupBox.minY * this.svgViewCommon.scaleValue
-      })
-    }
-
-    if (this.descriptor.props.matrix.length === 6) {
+    if (this.descriptor.props.matrix?.length === 6) {
       instance.transform(getTransform(this.descriptor.props.matrix));
     }
   }

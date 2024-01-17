@@ -129,9 +129,9 @@ export class SVGRectModifier implements AttributeModifier<RectAttribute> {
       instance.radiusHeight(getRadius(this.descriptor.props.ry, this.descriptor.props.rx));
     }
 
-    instance.transform(getTransform(this.descriptor.props.matrix));
-
-    instance.scale({ x: this.scaleValue, y: this.scaleValue, centerX: 0, centerY: 0 });
+    if (this.descriptor.props.matrix?.length === 6) {
+      instance.transform(getTransform(this.descriptor.props.matrix));
+    }
 
     if (this.gradient) {
       instance.linearGradient(this.gradient);

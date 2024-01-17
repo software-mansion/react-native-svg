@@ -22,10 +22,9 @@
  * SOFTWARE.
  */
 
-import { getViewDescriptor } from './SVGTempCache'
-import { SVGColorValue } from './SVGType'
+import { ColorSegments, SVGColorValue } from './SVGType'
 
-export function parseFill(fill?: SVGColorValue, parentFill?: SVGColorValue, svgTag?: number): SVGColorValue | undefined {
+export function parseFill(fill?: SVGColorValue, parentFill?: SVGColorValue, svgColor?: ColorSegments): SVGColorValue | undefined {
   switch (fill?.type) {
     case 0:
       if (fill.payload && JSON.stringify(fill.payload) == '[0,0,0,1]') {
@@ -33,7 +32,7 @@ export function parseFill(fill?: SVGColorValue, parentFill?: SVGColorValue, svgT
       }
       break;
     case 2:
-      fill.payload = getViewDescriptor(svgTag)?.props.color
+      fill.payload = svgColor
       break;
     case 3:
       fill = parentFill
@@ -42,7 +41,7 @@ export function parseFill(fill?: SVGColorValue, parentFill?: SVGColorValue, svgT
   return fill
 }
 
-export function parseStroke(stroke?: SVGColorValue, parentStroke?: SVGColorValue, svgTag?: number): SVGColorValue | undefined {
+export function parseStroke(stroke?: SVGColorValue, parentStroke?: SVGColorValue, svgColor?: ColorSegments): SVGColorValue | undefined {
   if ((!stroke) && !parentStroke) {
     return stroke
   }
@@ -51,7 +50,7 @@ export function parseStroke(stroke?: SVGColorValue, parentStroke?: SVGColorValue
       stroke.payload = stroke.payload ? stroke.payload : parentStroke?.payload
       break;
     case 2:
-      stroke.payload = getViewDescriptor(svgTag)?.props.color
+      stroke.payload = svgColor
       break;
     case 4:
       stroke = parentStroke

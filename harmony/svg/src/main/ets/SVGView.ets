@@ -90,7 +90,8 @@ export struct SVGView {
       scaleValue: getScaleValue(descriptor),
       groupBox: getGroupBox(descriptor),
       svgWidth: this.descriptorWrapper?.width,
-      svgHeight: this.descriptorWrapper?.height
+      svgHeight: this.descriptorWrapper?.height,
+      svgColor: descriptor.props.color
     }
     Logger.debug("RNOH SVGView svgViewCommon=", JSON.stringify(this.svgViewCommon))
     setViewDescriptor(this.tag, descriptor)
