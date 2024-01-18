@@ -71,8 +71,8 @@ export class SVGGroupModifier implements AttributeModifier<ShapeAttribute> {
         })
       } else {
         instance.offset({
-          x: -(this.svgViewCommon.svgWidth - this.svgViewCommon.groupBox.width) / 2,
-          y: -(this.svgViewCommon.svgHeight - this.svgViewCommon.groupBox.height) / 2
+          x: (this.svgViewCommon.svgWidth - this.svgViewCommon.groupBox.width) / 2,
+          y: (this.svgViewCommon.svgHeight - this.svgViewCommon.groupBox.height) / 2
         })
       }
 
@@ -81,6 +81,10 @@ export class SVGGroupModifier implements AttributeModifier<ShapeAttribute> {
     } else {
       instance.width('100%');
       instance.height('100%');
+    }
+
+    if (this.descriptor.props.opacity !== 1) {
+      instance.opacity(this.descriptor.props.opacity);
     }
 
     if (this.descriptor.props.matrix?.length === 6) {

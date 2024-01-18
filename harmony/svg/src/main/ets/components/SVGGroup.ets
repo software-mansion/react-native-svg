@@ -153,10 +153,6 @@ export struct SVGGroup {
       } else if (type === SVG_Mask_TYPE_NAME) {
         SVGMask(this.ctx, tag)
       } else {
-        if (type === SVG_IMAGE_TYPE_NAME &&
-          this.ctx.descriptorRegistry.getDescriptor<Descriptor>(this.descriptor.parentTag).childrenTags.length === 3) {
-          this.svgViewCommon.renderLogoTag = this.descriptor.parentTag
-        }
         childrenTag.push(tag)
         this.mergeProperties(type, tag)
       }
