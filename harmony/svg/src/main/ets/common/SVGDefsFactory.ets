@@ -26,6 +26,7 @@ import { Tag, RNOHContext, Descriptor } from 'rnoh'
 import { SVG_PATH_TYPE_NAME, SVGPathDescriptor } from "../components/SVGPath"
 import { SVG_RECT_TYPE_NAME, SVGRectDescriptor } from "../components/SVGRect"
 import { SVG_IMAGE_TYPE_NAME, SVGImageDescriptor } from "../components/SVGImage"
+import { SVGCircleDescriptor, SVG_CIRCLE_TYPE_NAME } from '../components/SVGCircle'
 import { SVG_LINEAR_GRADIENT_TYPE_NAME, SVGLinearGradient } from "./SVGLinearGradient"
 import { SVG_CLIP_PATH_TYPE_NAME, SVGClipPathFactory } from './SVGClipPathFactory'
 import { setDefsDescriptor } from './SVGTempCache'
@@ -71,6 +72,9 @@ function componentProcessing(ctx: RNOHContext, tag: Tag) {
     storageDefsDescriptor(descriptorTemp.props.name, descriptorTemp)
   } else if (type === SVG_IMAGE_TYPE_NAME) {
     let descriptorTemp: SVGImageDescriptor = ctx.descriptorRegistry.getDescriptor<SVGImageDescriptor>(tag)
+    storageDefsDescriptor(descriptorTemp.props.name, descriptorTemp)
+  } else if (type === SVG_CIRCLE_TYPE_NAME) {
+    let descriptorTemp: SVGCircleDescriptor = ctx.descriptorRegistry.getDescriptor<SVGCircleDescriptor>(tag)
     storageDefsDescriptor(descriptorTemp.props.name, descriptorTemp)
   } else if (type === SVG_LINEAR_GRADIENT_TYPE_NAME) {
     SVGLinearGradient(ctx, tag)
