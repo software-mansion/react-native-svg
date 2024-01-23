@@ -85,6 +85,9 @@ repositories {
     mavenCentral()
     mavenLocal()
     google()
+
+    // This line 90 is working when tesed at TestExamples hope that all right 
+    maven { url 'https://maven.google.com' }
     maven {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url "$rootDir/../node_modules/react-native/android"
