@@ -6,7 +6,7 @@
   "name": "rnoh-svg",
   "description": "Native part of react-native-svg",
   "main": "index.ets",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "dependencies": {
     "rnoh": "file:../rnoh"
   }
