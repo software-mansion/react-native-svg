@@ -15,6 +15,7 @@ Pod::Spec.new do |s|
   s.source_files    = 'apple/**/*.{h,m,mm}'
   s.ios.exclude_files = '**/*.macos.{h,m,mm}'
   s.tvos.exclude_files = '**/*.macos.{h,m,mm}'
+  s.visionos.exclude_files = '**/*.macos.{h,m,mm}'
   s.osx.exclude_files = '**/*.ios.{h,m,mm}'
   s.requires_arc    = true
 
