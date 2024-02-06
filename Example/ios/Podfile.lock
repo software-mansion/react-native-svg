@@ -1378,7 +1378,7 @@ SPEC CHECKSUMS:
   React-utils: debda2c206770ee2785bdebb7f16d8db9f18838a
   ReactCommon: ddb128564dcbfa0287d3d1a2d10f8c7457c971f6
   RNReanimated: 57f436e7aa3d277fbfed05e003230b43428157c0
-  RNSVG: bfabf2d466107f38d894f7e7a73bd73fafd1f52e
+  RNSVG: 4ddf4baa2fdd87abd32e5fdd2c5e10522c97b204
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 4f53dc50008d626fa679c7a1cb4bed898f8c0bde
 
