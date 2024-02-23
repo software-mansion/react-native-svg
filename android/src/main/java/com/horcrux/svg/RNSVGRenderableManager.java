@@ -8,7 +8,7 @@
 
 package com.horcrux.svg;
 
-import static com.facebook.react.common.StandardCharsets.UTF_8;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import android.content.res.Resources;
 import android.graphics.Matrix;

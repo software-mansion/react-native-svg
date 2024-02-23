@@ -49,6 +49,7 @@ target_link_libraries(
   react_render_graphics
   react_render_mapbuffer
   rrc_image
+  react_render_componentregistry
   rrc_view
   turbomodulejsijni
   yoga
@@ -62,7 +63,7 @@ target_compile_options(
   -DLOG_TAG=\"ReactNative\"
   -fexceptions
   -frtti
-  -std=c++17
+  -std=c++20
   -Wall
 )
 message(WARNING "CMAKE_CURRENT_SORUCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}")
