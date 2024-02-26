@@ -26,7 +26,7 @@ export async function loadAndroidRawResource(uri: string) {
     const RNSVGRenderableModule: any =
       // neeeded for new arch
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      require('./fabric/NativeSvgRenderableModule').default;
+      require('../fabric/NativeSvgRenderableModule').default;
     return await RNSVGRenderableModule.getRawResource(uri);
   } catch (e) {
     console.error(
