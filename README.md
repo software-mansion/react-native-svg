@@ -75,6 +75,7 @@ npx expo install react-native-svg
 | >=8              | >=0.57.4     |
 | >=9              | >=0.57.4     |
 | >=12.3.0         | >=0.64.0     |
+| >=15.0.0         | >=0.70.0     |
 
 ## Support for Fabric
 
