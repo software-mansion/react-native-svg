@@ -26,7 +26,7 @@ RCT_EXPORT_MODULE()
          callback:(RCTResponseSenderBlock)callback
           attempt:(int)attempt
 {
-  void (^block)(void) = ^{
+
 #ifdef RCT_NEW_ARCH_ENABLED
     [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
       __kindof RNSVGPlatformView *view = [viewRegistry viewForReactTag:reactTag];
@@ -67,12 +67,6 @@ RCT_EXPORT_MODULE()
         callback(@[]);
       }
     }];
-  };
-  if (self.bridge) {
-    dispatch_async(RCTGetUIManagerQueue(), block);
-  } else {
-    dispatch_async(dispatch_get_main_queue(), block);
-  }
 }
 
 RCT_EXPORT_METHOD(toDataURL
@@ -90,5 +84,13 @@ RCT_EXPORT_METHOD(toDataURL
   return std::make_shared<facebook::react::NativeSvgViewModuleSpecJSI>(params);
 }
 #endif
+    
+- (dispatch_queue_t)methodQueue {
+    #ifdef RCT_NEW_ARCH_ENABLED
+        return dispatch_get_main_queue();
+    #else
+        return _bridge.uiManager.methodQueue;
+    #endif // RCT_NEW_ARCH_ENABLED
+}
 
 @end
