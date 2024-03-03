@@ -26,14 +26,22 @@ import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
 import { ImageLoaderTurboModule } from 'rnoh/src/main/ets/RNOHCorePackage/turboModules';
 import { SVGImageModifier } from '../attributeModifiers/SVGImageModifier';
 import Logger from '../common/log/Logger';
-
 import { SVGImageProps, SVGViewCommon } from '../common/SVGType'
+import { RemoteImageLoaderError } from 'rnoh/src/main/ets/RemoteImageLoader/RemoteImageLoaderError';
 
 export const SVG_IMAGE_TYPE_NAME: string = "RNSVGImage"
 
 export type SVGImageDescriptor = Descriptor<"RNSVGImage", SVGImageProps>
 
 export class SVGImageDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGImage", SVGImageProps> {
+}
+
+class ImageSourceHolder {
+  public source: string | Resource | PixelMap
+
+  constructor(source: string | Resource | PixelMap) {
+    this.source = source
+  }
 }
 
 @Component
@@ -43,14 +51,17 @@ export struct SVGImage {
   @Consume svgViewCommon: SVGViewCommon | undefined
   @State descriptor: SVGImageDescriptor = {} as SVGImageDescriptor
   @State descriptorWrapper: SVGImageDescriptorWrapper | undefined = undefined
+  @State imageSource: ImageSourceHolder | undefined = undefined
   private unregisterDescriptorChangesListener?: () => void = undefined
 
   aboutToAppear() {
     this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGImageDescriptor>(this.tag)
     this.setDescriptorWrapper(this.descriptor)
+    this.updateImageSource();
     this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag, (newDescriptor) => {
       this.descriptor = newDescriptor as SVGImageDescriptor
       this.setDescriptorWrapper(this.descriptor)
+      this.updateImageSource();
     })
   }
 
@@ -63,19 +74,44 @@ export struct SVGImage {
     Logger.debug("RNOH SVGImage", JSON.stringify(this.descriptor))
   }
 
-  getSource(source: string) {
-    if (source.startsWith("asset://")) {
-      return $rawfile(source.replace("asset://", "assets/"));
+  updateImageSource() {
+    const uri = this.descriptor.props.src;
+    if (uri.startsWith("asset://")) {
+      this.imageSource = new ImageSourceHolder($rawfile(uri.replace("asset://", "assets/")));
+      return;
     }
-    if (source.startsWith("file://assets/src/assets/")) {
-      return $rawfile(source.replace("file://assets/src/assets/", "assets/"));
+    if (uri.startsWith("data:")) {
+      this.imageSource = new ImageSourceHolder(uri);
+      return;
     }
-    const filePath = this.ctx.rnInstance.getTurboModule<ImageLoaderTurboModule>("ImageLoader").getCachedImage(source)
-    return filePath ?? source
+    const imageLoader = this.ctx.rnInstance.getTurboModule<ImageLoaderTurboModule>("ImageLoader");
+    this.imageSource = undefined;
+    imageLoader.getRemoteImageSource(uri).then(async (remoteImage) => {
+      try {
+        const imageSource = remoteImage.getImageSource();
+        const frameCounter = await imageSource.getFrameCount();
+        if (frameCounter === 1) {
+          // use the downloaded or cached image source
+          this.imageSource = new ImageSourceHolder(await imageLoader.getPixelMap(uri));
+        } else {
+          // an animated GIF
+          this.imageSource = new ImageSourceHolder(remoteImage.getLocation())
+        }
+      } catch (error) {
+        this.dispatchOnError(error.message);
+      }
+    }).catch((error: RemoteImageLoaderError) => {
+      this.dispatchOnError(error.message)
+    })
+  }
+
+  dispatchOnError(message?: string) {
+    const errorMessage = message ? message : "Failed to load the image";
+    this.ctx.rnInstance.emitComponentEvent(this.descriptor.tag, "error", errorMessage)
   }
 
   build() {
-    Image(this.getSource(this.descriptor.props.src))
+    Image(this.imageSource?.source)
       .attributeModifier(SVGImageModifier.getInstance()
         .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
   }

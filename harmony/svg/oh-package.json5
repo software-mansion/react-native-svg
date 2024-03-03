@@ -2,11 +2,12 @@
   "license": "ISC",
   "types": "",
   "devDependencies": {
+
   },
   "name": "rnoh-svg",
   "description": "Native part of react-native-svg",
   "main": "index.ets",
-  "version": "0.1.0",
+  "version": "13.14.0-0.1.2",
   "dependencies": {
     "rnoh": "file:../rnoh"
   }

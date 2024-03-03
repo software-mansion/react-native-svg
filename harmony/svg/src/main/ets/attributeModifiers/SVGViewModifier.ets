@@ -120,9 +120,9 @@ export class SVGViewModifier implements AttributeModifier<StackAttribute> {
     if (this.descriptorWrapper?.transformStringify !== '[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]') {
       instance.transform(this.getTransform())
     }
-    if (this.descriptorWrapper?.isClipping) {
-      instance.clip(this.descriptorWrapper?.isClipping)
-    }
+    // if (this.descriptorWrapper?.isClipping) {
+    //   instance.clip(this.descriptorWrapper?.isClipping)
+    // }
     let hitTestBehavior: HitTestMode = this.getHitTestMode();
     if (hitTestBehavior !== HitTestMode.Default) {
       instance.hitTestBehavior(hitTestBehavior)
@@ -130,6 +130,7 @@ export class SVGViewModifier implements AttributeModifier<StackAttribute> {
     if (this.descriptorWrapper?.shadow) {
       instance.shadow(this.descriptorWrapper?.shadow)
     }
-    instance.clip(new Rect({ width: '100%', height: '100%' }))
+    // instance.clip(new Rect({ width: '100%', height: '100%' }))
+    instance.clip(true)
   }
 }
