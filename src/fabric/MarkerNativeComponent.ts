@@ -7,6 +7,9 @@ import type {
 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
 
+import type { UnsafeMixed } from './codegenUtils';
+import { NumberProp } from '../lib/extract/types';
+
 interface SvgNodeCommonProps {
   name?: string;
   opacity?: WithDefault<Float, 1.0>;
@@ -72,10 +75,10 @@ interface NativeProps
     SvgNodeCommonProps,
     SvgRenderableCommonProps,
     SvgGroupCommonProps {
-  refX?: string;
-  refY?: string;
-  markerHeight?: string;
-  markerWidth?: string;
+  refX?: UnsafeMixed<NumberProp>;
+  refY?: UnsafeMixed<NumberProp>;
+  markerHeight?: UnsafeMixed<NumberProp>;
+  markerWidth?: UnsafeMixed<NumberProp>;
   markerUnits?: string;
   orient?: string;
   minX?: Float;

@@ -31,42 +31,12 @@ class CircleView extends RenderableView {
     invalidate();
   }
 
-  public void setCx(String cx) {
-    mCx = SVGLength.from(cx);
-    invalidate();
-  }
-
-  public void setCx(Double cx) {
-    mCx = SVGLength.from(cx);
-    invalidate();
-  }
-
   public void setCy(Dynamic cy) {
     mCy = SVGLength.from(cy);
     invalidate();
   }
 
-  public void setCy(String cy) {
-    mCy = SVGLength.from(cy);
-    invalidate();
-  }
-
-  public void setCy(Double cy) {
-    mCy = SVGLength.from(cy);
-    invalidate();
-  }
-
   public void setR(Dynamic r) {
-    mR = SVGLength.from(r);
-    invalidate();
-  }
-
-  public void setR(String r) {
-    mR = SVGLength.from(r);
-    invalidate();
-  }
-
-  public void setR(Double r) {
     mR = SVGLength.from(r);
     invalidate();
   }

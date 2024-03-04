@@ -7,6 +7,9 @@ import type {
 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
 
+import type { UnsafeMixed } from './codegenUtils';
+import { NumberProp } from '../lib/extract/types';
+
 interface SvgNodeCommonProps {
   name?: string;
   opacity?: WithDefault<Float, 1.0>;
@@ -72,10 +75,10 @@ interface NativeProps
     SvgNodeCommonProps,
     SvgRenderableCommonProps,
     SvgGroupCommonProps {
-  x?: string;
-  y?: string;
-  height?: string;
-  width?: string;
+  x?: UnsafeMixed<NumberProp>;
+  y?: UnsafeMixed<NumberProp>;
+  height?: UnsafeMixed<NumberProp>;
+  width?: UnsafeMixed<NumberProp>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGForeignObject');
