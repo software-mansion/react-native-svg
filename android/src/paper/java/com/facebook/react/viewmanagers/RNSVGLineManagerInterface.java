@@ -11,6 +11,7 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
@@ -32,22 +33,16 @@ public interface RNSVGLineManagerInterface<T extends View> {
   void setFillRule(T view, int value);
   void setStroke(T view, @Nullable ReadableMap value);
   void setStrokeOpacity(T view, float value);
-  void setStrokeWidth(T view, @Nullable String value);
-  void setStrokeWidth(T view, @Nullable Double value);
+  void setStrokeWidth(T view, Dynamic value);
   void setStrokeLinecap(T view, int value);
   void setStrokeLinejoin(T view, int value);
-  void setStrokeDasharray(T view, @Nullable ReadableArray value);
-  void setStrokeDasharray(T view, @Nullable String value);  
+  void setStrokeDasharray(T view, Dynamic value);
   void setStrokeDashoffset(T view, float value);
   void setStrokeMiterlimit(T view, float value);
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
-  void setX1(T view, @Nullable String value);
-  void setX1(T view, @Nullable Double value);
-  void setY1(T view, @Nullable String value);
-  void setY1(T view, @Nullable Double value);
-  void setX2(T view, @Nullable String value);
-  void setX2(T view, @Nullable Double value);
-  void setY2(T view, @Nullable String value);
-  void setY2(T view, @Nullable Double value);
+  void setX1(T view, Dynamic value);
+  void setY1(T view, Dynamic value);
+  void setX2(T view, Dynamic value);
+  void setY2(T view, Dynamic value);
 }

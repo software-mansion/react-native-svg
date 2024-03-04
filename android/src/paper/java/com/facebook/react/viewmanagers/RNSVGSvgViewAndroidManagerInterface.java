@@ -11,13 +11,12 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableMap;
 
 public interface RNSVGSvgViewAndroidManagerInterface<T extends View> {
-  void setBbWidth(T view, @Nullable String value);
-  void setBbWidth(T view, @Nullable Double value);
-  void setBbHeight(T view, @Nullable String value);
-  void setBbHeight(T view, @Nullable Double value);
+  void setBbWidth(T view, Dynamic value);
+  void setBbHeight(T view, Dynamic value);
   void setMinX(T view, float value);
   void setMinY(T view, float value);
   void setVbWidth(T view, float value);

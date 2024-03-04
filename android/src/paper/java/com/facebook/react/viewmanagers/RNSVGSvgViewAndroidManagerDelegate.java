@@ -12,6 +12,7 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ColorPropConverter;
+import com.facebook.react.bridge.DynamicFromObject;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
@@ -24,34 +25,22 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
   public void setProperty(T view, String propName, @Nullable Object value) {
     switch (propName) {
       case "bbWidth":
-        if (value instanceof String) {
-          mViewManager.setBbWidth(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setBbWidth(view, (Double) value);
-        } else {
-          mViewManager.setBbWidth(view, (Double) null);
-        }
+        mViewManager.setBbWidth(view, new DynamicFromObject(value));
         break;
       case "bbHeight":
-        if (value instanceof String) {
-          mViewManager.setBbHeight(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setBbHeight(view, (Double) value);
-        } else {
-          mViewManager.setBbHeight(view, (Double) null);
-        }
+        mViewManager.setBbHeight(view, new DynamicFromObject(value));
         break;
       case "minX":
-        mViewManager.setMinX(view, value == null ? Float.NaN : ((Double) value).floatValue());
+        mViewManager.setMinX(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       case "minY":
-        mViewManager.setMinY(view, value == null ? Float.NaN : ((Double) value).floatValue());
+        mViewManager.setMinY(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       case "vbWidth":
-        mViewManager.setVbWidth(view, value == null ? Float.NaN : ((Double) value).floatValue());
+        mViewManager.setVbWidth(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       case "vbHeight":
-        mViewManager.setVbHeight(view, value == null ? Float.NaN : ((Double) value).floatValue());
+        mViewManager.setVbHeight(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       case "align":
         mViewManager.setAlign(view, value == null ? null : (String) value);
