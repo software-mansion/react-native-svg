@@ -793,12 +793,12 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @ReactProp(name = "dx")
-    public void setDeltaX(K node, Dynamic deltaX) {
+    public void setDx(K node, Dynamic deltaX) {
       node.setDeltaX(deltaX);
     }
 
     @ReactProp(name = "dy")
-    public void setDeltaY(K node, Dynamic deltaY) {
+    public void setDy(K node, Dynamic deltaY) {
       node.setDeltaY(deltaY);
     }
 
@@ -820,27 +820,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     public void setAlignmentBaseline(K view, @Nullable String value) {
       view.setMethod(value);
     }
-
-    public void setDx(K view, @Nullable ReadableArray value) {
-      view.setDeltaX(value);
-    }
-
-    public void setDy(K view, @Nullable ReadableArray value) {
-      view.setDeltaY(value);
-    }
-
-    public void setX(K view, @Nullable ReadableArray value) {
-      view.setPositionX(value);
-    }
-
-    public void setY(K view, @Nullable ReadableArray value) {
-      view.setPositionY(value);
-    }
-
-    public void setRotate(K view, @Nullable ReadableArray value) {
-      view.setRotate(value);
-    }
-
   }
 
   static class TextViewManager extends TextViewManagerAbstract<TextView>
@@ -996,10 +975,9 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     public void setR(CircleView node, Dynamic r) {
       node.setR(r);
     }
-
   }
 
- static class EllipseViewManager extends RenderableViewManager<EllipseView>
+  static class EllipseViewManager extends RenderableViewManager<EllipseView>
       implements RNSVGEllipseManagerInterface<EllipseView> {
     EllipseViewManager() {
       super(SVGClass.RNSVGEllipse);

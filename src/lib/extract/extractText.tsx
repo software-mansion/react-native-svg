@@ -111,18 +111,7 @@ export function extractFont(props: fontProps) {
 
   const baseFont = typeof font === 'string' ? parseFontString(font) : font;
 
-  const fontProps: { [prop: string]: string | number | null } = {
-    ...baseFont,
-    ...ownedFont,
-  };
-  const stringifiedFontProps: { [prop: string]: string | null } = {};
-  Object.keys(fontProps).map(
-    (k) =>
-      (stringifiedFontProps[k] =
-        fontProps[k] === null ? null : String(fontProps[k]))
-  );
-
-  return stringifiedFontProps;
+  return { ...baseFont, ...ownedFont };
 }
 
 let TSpan: ComponentType<React.PropsWithChildren>;

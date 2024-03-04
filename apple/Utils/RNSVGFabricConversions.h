@@ -131,19 +131,6 @@ void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
   node.accessibilityLabel = RCTNSStringFromStringNilIfEmpty(nodeProps.accessibilityLabel);
 }
 
-static NSMutableArray<RNSVGLength *> *createLengthArrayFromStrings(const std::vector<std::string> &stringArray)
-{
-  if (stringArray.empty()) {
-    return nil;
-  }
-  NSMutableArray<RNSVGLength *> *lengthArray = [NSMutableArray new];
-  for (auto str : stringArray) {
-    RNSVGLength *lengthFromString = [RNSVGLength lengthWithString:RCTNSStringFromString(str)];
-    [lengthArray addObject:lengthFromString];
-  }
-  return lengthArray;
-}
-
 template <typename T>
 void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *renderableNode)
 {
@@ -236,15 +223,26 @@ template <typename T>
 void setCommonTextProps(const T &textProps, RNSVGText *textNode)
 {
   setCommonGroupProps(textProps, textNode);
-  textNode.deltaX = createLengthArrayFromStrings(textProps.dx);
-  textNode.deltaY = createLengthArrayFromStrings(textProps.dy);
-  if (!textProps.x.empty()) {
-    textNode.positionX = createLengthArrayFromStrings(textProps.x);
+  id deltaX = RNSVGConvertFollyDynamicToId(textProps.dx);
+  if (deltaX != nil) {
+    textNode.deltaX = [RCTConvert RNSVGLengthArray:deltaX];
   }
-  if (!textProps.y.empty()) {
-    textNode.positionY = createLengthArrayFromStrings(textProps.y);
+  id deltaY = RNSVGConvertFollyDynamicToId(textProps.dy);
+  if (deltaY != nil) {
+    textNode.deltaY = [RCTConvert RNSVGLengthArray:deltaY];
   }
-  textNode.rotate = createLengthArrayFromStrings(textProps.rotate);
+  id positionX = RNSVGConvertFollyDynamicToId(textProps.x);
+  if (positionX != nil) {
+    textNode.positionX = [RCTConvert RNSVGLengthArray:positionX];
+  }
+  id positionY = RNSVGConvertFollyDynamicToId(textProps.y);
+  if (positionY != nil) {
+    textNode.positionY = [RCTConvert RNSVGLengthArray:positionY];
+  }
+  id rotate = RNSVGConvertFollyDynamicToId(textProps.rotate);
+  if (rotate != nil) {
+    textNode.rotate = [RCTConvert RNSVGLengthArray:rotate];
+  }
   id textLength = RNSVGConvertFollyDynamicToId(textProps.textLength);
   if (textLength != nil) {
     textNode.textLength = [RCTConvert RNSVGLength:textLength];
