@@ -70,8 +70,14 @@ using namespace facebook::react;
   self.minY = newProps.minY;
   self.vbWidth = newProps.vbWidth;
   self.vbHeight = newProps.vbHeight;
-  self.bbWidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.bbWidth)];
-  self.bbHeight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.bbHeight)];
+  id bbWidth = RNSVGConvertFollyDynamicToId(newProps.bbWidth);
+  if (bbWidth != nil) {
+    self.bbWidth = [RCTConvert RNSVGLength:bbWidth];
+  }
+  id bbHeight = RNSVGConvertFollyDynamicToId(newProps.bbHeight);
+  if (bbHeight != nil) {
+    self.bbHeight = [RCTConvert RNSVGLength:bbHeight];
+  }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
   if (RCTUIColorFromSharedColor(newProps.tintColor)) {
