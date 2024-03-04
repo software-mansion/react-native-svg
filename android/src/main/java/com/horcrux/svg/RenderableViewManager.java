@@ -666,7 +666,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @ReactProp(name = "font")
-    public void setFont(U node, @Nullable ReadableMap font) {
+    public void setFont(U node, Dynamic font) {
       node.setFont(font);
     }
 
@@ -686,18 +686,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       node.setFont(map);
     }
 
-    public void setFontSize(U view, @Nullable String value) {
-      JavaOnlyMap map = new JavaOnlyMap();
-      map.putString("fontSize", value);
-      view.setFont(map);
-    }
-
-    public void setFontSize(U view, @Nullable Double value) {
-      JavaOnlyMap map = new JavaOnlyMap();
-      map.putDouble("fontSize", value);
-      view.setFont(map);
-    }
-
     @ReactProp(name = "fontWeight")
     public void setFontWeight(U node, Dynamic fontWeight) {
       JavaOnlyMap map = new JavaOnlyMap();
@@ -712,18 +700,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
           return;
       }
       node.setFont(map);
-    }
-
-    public void setFontWeight(U view, @Nullable String value) {
-      JavaOnlyMap map = new JavaOnlyMap();
-      map.putString("fontWeight", value);
-      view.setFont(map);
-    }
-
-    public void setFontWeight(U view, @Nullable Double value) {
-      JavaOnlyMap map = new JavaOnlyMap();
-      map.putDouble("fontWeight", value);
-      view.setFont(map);
     }
   }
 
@@ -813,7 +789,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @ReactProp(name = "font")
-    public void setFont(K node, @Nullable ReadableMap font) {
+    public void setFont(K node, Dynamic font) {
       node.setFont(font);
     }
 

@@ -169,53 +169,27 @@ void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *rendera
   }
 }
 
-static void addValueToDict(NSMutableDictionary *dict, const std::string &value, NSString *key)
-{
-  NSString *valueOrNil = RCTNSStringFromStringNilIfEmpty(value);
-  if (valueOrNil) {
-    dict[key] = valueOrNil;
-  }
-}
-
-template <typename T>
-NSDictionary *parseFontStruct(const T &fontStruct)
-{
-  NSMutableDictionary *fontDict = [NSMutableDictionary new];
-
-  // TODO: do it better maybe
-  addValueToDict(fontDict, fontStruct.fontStyle, @"fontStyle");
-  addValueToDict(fontDict, fontStruct.fontVariant, @"fontVariant");
-  addValueToDict(fontDict, fontStruct.fontWeight, @"fontWeight");
-  addValueToDict(fontDict, fontStruct.fontStretch, @"fontStretch");
-  addValueToDict(fontDict, fontStruct.fontSize, @"fontSize");
-  addValueToDict(fontDict, fontStruct.fontFamily, @"fontFamily");
-  addValueToDict(fontDict, fontStruct.textAnchor, @"textAnchor");
-  addValueToDict(fontDict, fontStruct.textDecoration, @"textDecoration");
-  addValueToDict(fontDict, fontStruct.letterSpacing, @"letterSpacing");
-  addValueToDict(fontDict, fontStruct.wordSpacing, @"wordSpacing");
-  addValueToDict(fontDict, fontStruct.kerning, @"kerning");
-  addValueToDict(fontDict, fontStruct.fontFeatureSettings, @"fontFeatureSettings");
-  addValueToDict(fontDict, fontStruct.fontVariantLigatures, @"fontVariantLigatures");
-  addValueToDict(fontDict, fontStruct.fontVariationSettings, @"fontVariationSettings");
-  return [NSDictionary dictionaryWithDictionary:fontDict];
-}
-
 template <typename T>
 void setCommonGroupProps(const T &groupProps, RNSVGGroup *groupNode)
 {
   setCommonRenderableProps(groupProps, groupNode);
 
-  if (RCTNSStringFromStringNilIfEmpty(groupProps.fontSize)) {
-    groupNode.font = @{@"fontSize" : RCTNSStringFromString(groupProps.fontSize)};
+  id fontSize = RNSVGConvertFollyDynamicToId(groupProps.fontSize);
+  if (fontSize != nil) {
+    groupNode.font = @{@"fontSize" : fontSize};
   }
-  if (RCTNSStringFromStringNilIfEmpty(groupProps.fontWeight)) {
-    groupNode.font = @{@"fontWeight" : RCTNSStringFromString(groupProps.fontWeight)};
+  id fontWeight = RNSVGConvertFollyDynamicToId(groupProps.fontWeight);
+  if (fontWeight != nil) {
+    groupNode.font = @{@"fontWeight" : fontWeight};
   }
-  NSDictionary *fontDict = parseFontStruct(groupProps.font);
-  if (groupNode.font == nil || fontDict.count > 0) {
-    // some of text's rendering logic requires that `font` is not nil so we always set it
-    // even if to an empty dict
-    groupNode.font = fontDict;
+  id font = RNSVGConvertFollyDynamicToId(groupProps.font);
+  if (font != nil) {
+    NSDictionary *fontDict = (NSDictionary *)font;
+    if (groupNode.font == nil || fontDict.count > 0) {
+      // some of text's rendering logic requires that `font` is not nil so we always set it
+      // even if to an empty dict
+      groupNode.font = fontDict;
+    }
   }
 }
 

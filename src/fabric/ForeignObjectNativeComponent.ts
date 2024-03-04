@@ -47,27 +47,10 @@ interface SvgRenderableCommonProps {
   propList?: ReadonlyArray<string>;
 }
 
-type FontObject = Readonly<{
-  fontStyle?: string;
-  fontVariant?: string;
-  fontWeight?: string;
-  fontStretch?: string;
-  fontSize?: string;
-  fontFamily?: string;
-  textAnchor?: string;
-  textDecoration?: string;
-  letterSpacing?: string;
-  wordSpacing?: string;
-  kerning?: string;
-  fontFeatureSettings?: string;
-  fontVariantLigatures?: string;
-  fontVariationSettings?: string;
-}>;
-
 interface SvgGroupCommonProps {
-  fontSize?: string;
-  fontWeight?: string;
-  font?: FontObject;
+  fontSize?: UnsafeMixed<NumberProp>;
+  fontWeight?: UnsafeMixed<NumberProp>;
+  font?: UnsafeMixed<FontObject>;
 }
 
 interface NativeProps
