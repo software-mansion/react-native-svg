@@ -783,7 +783,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @ReactProp(name = "verticalAlign")
-    public void setVerticalAlign(K node, @Nullable String verticalAlign) {
+    public void setVerticalAlign(K node, @Nullable Dynamic verticalAlign) {
       node.setVerticalAlign(verticalAlign);
     }
 
@@ -841,29 +841,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       view.setRotate(value);
     }
 
-    public void setInlineSize(K view, @Nullable String value) {
-      view.setInlineSize(value);
-    }
-
-    public void setTextLength(K view, @Nullable String value) {
-      view.setTextLength(value);
-    }
-
-    public void setBaselineShift(K view, @Nullable String value) {
-      view.setBaselineShift(value);
-    }
-
-    public void setInlineSize(K view, @Nullable Double value) {
-      view.setInlineSize(value);
-    }
-
-    public void setTextLength(K view, @Nullable Double value) {
-      view.setTextLength(value);
-    }
-
-    public void setBaselineShift(K view, @Nullable Double value) {
-      view.setBaselineShift(value);
-    }
   }
 
   static class TextViewManager extends TextViewManagerAbstract<TextView>
@@ -938,15 +915,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "spacing")
     public void setSpacing(TextPathView node, @Nullable String spacing) {
       node.setSpacing(spacing);
-    }
-
-    @Override
-    public void setStartOffset(TextPathView view, @Nullable String value) {
-      view.setStartOffset(value);
-    }
-
-    public void setStartOffset(TextPathView view, @Nullable Double value) {
-      view.setStartOffset(value);
     }
 
     @ReactProp(name = "side")
@@ -1581,12 +1549,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
   }
 
   @ReactProp(name = "strokeDasharray")
-  public void setStrokeDasharray(T node, @Nullable ReadableArray strokeDasharray) {
-    node.setStrokeDasharray(strokeDasharray);
-  }
-
-  @ReactProp(name = "strokeDasharray")
-  public void setStrokeDasharray(T node, @Nullable String strokeDasharray) {
+  public void setStrokeDasharray(T node, Dynamic strokeDasharray) {
     node.setStrokeDasharray(strokeDasharray);
   }
 
@@ -1598,14 +1561,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
   @ReactProp(name = "strokeWidth")
   public void setStrokeWidth(T node, Dynamic strokeWidth) {
     node.setStrokeWidth(strokeWidth);
-  }
-
-  public void setStrokeWidth(T view, @Nullable String value) {
-    view.setStrokeWidth(value);
-  }
-
-  public void setStrokeWidth(T view, @Nullable Double value) {
-    view.setStrokeWidth(value);
   }
 
   @ReactProp(name = "strokeMiterlimit", defaultFloat = 4f)

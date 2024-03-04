@@ -3,9 +3,12 @@ import type { ColorValue } from 'react-native';
 import type { Float, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
 
+import type { UnsafeMixed } from './codegenUtils';
+import { NumberProp } from '../lib/extract/types';
+
 interface NativeProps extends ViewProps {
-  bbWidth?: string;
-  bbHeight?: string;
+  bbWidth?: UnsafeMixed<NumberProp>;
+  bbHeight?: UnsafeMixed<NumberProp>;
   minX?: Float;
   minY?: Float;
   vbWidth?: Float;

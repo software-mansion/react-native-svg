@@ -153,14 +153,20 @@ void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *rendera
   renderableNode.fillRule = renderableProps.fillRule == 0 ? kRNSVGCGFCRuleEvenodd : kRNSVGCGFCRuleNonzero;
   renderableNode.stroke = brushFromColorStruct(renderableProps.stroke);
   renderableNode.strokeOpacity = renderableProps.strokeOpacity;
-  renderableNode.strokeWidth = [RNSVGLength lengthWithString:RCTNSStringFromString(renderableProps.strokeWidth)];
+  id strokeWidth = RNSVGConvertFollyDynamicToId(renderableProps.strokeWidth);
+  if (strokeWidth != nil) {
+    renderableNode.strokeWidth = [RCTConvert RNSVGLength:strokeWidth];
+  }
   renderableNode.strokeLinecap = renderableProps.strokeLinecap == 0 ? kCGLineCapButt
       : renderableProps.strokeLinecap == 1                          ? kCGLineCapRound
                                                                     : kCGLineCapSquare;
   renderableNode.strokeLinejoin = renderableProps.strokeLinejoin == 0 ? kCGLineJoinMiter
       : renderableProps.strokeLinejoin == 1                           ? kCGLineJoinRound
                                                                       : kCGLineJoinBevel;
-  renderableNode.strokeDasharray = createLengthArrayFromStrings(renderableProps.strokeDasharray);
+  id strokeDasharray = RNSVGConvertFollyDynamicToId(renderableProps.strokeDasharray);
+  if (strokeDasharray != nil) {
+    renderableNode.strokeDasharray = [RCTConvert RNSVGLengthArray:strokeDasharray];
+  }
   renderableNode.strokeDashoffset = renderableProps.strokeDashoffset;
   renderableNode.strokeMiterlimit = renderableProps.strokeMiterlimit;
   renderableNode.vectorEffect = renderableProps.vectorEffect == 0 ? kRNSVGVectorEffectDefault
@@ -239,9 +245,23 @@ void setCommonTextProps(const T &textProps, RNSVGText *textNode)
     textNode.positionY = createLengthArrayFromStrings(textProps.y);
   }
   textNode.rotate = createLengthArrayFromStrings(textProps.rotate);
-  textNode.inlineSize = [RNSVGLength lengthWithString:RCTNSStringFromString(textProps.inlineSize)];
-  textNode.textLength = [RNSVGLength lengthWithString:RCTNSStringFromString(textProps.textLength)];
-  textNode.baselineShift = RCTNSStringFromStringNilIfEmpty(textProps.baselineShift);
+  id textLength = RNSVGConvertFollyDynamicToId(textProps.textLength);
+  if (textLength != nil) {
+    textNode.textLength = [RCTConvert RNSVGLength:textLength];
+  }
+  id inlineSize = RNSVGConvertFollyDynamicToId(textProps.inlineSize);
+  if (inlineSize != nil) {
+    textNode.inlineSize = [RCTConvert RNSVGLength:inlineSize];
+  }
+  id baselineShift = RNSVGConvertFollyDynamicToId(textProps.baselineShift);
+  if (baselineShift != nil) {
+    if ([baselineShift isKindOfClass:[NSString class]]) {
+      NSString *stringValue = (NSString *)baselineShift;
+      textNode.baselineShift = stringValue;
+    } else {
+      textNode.baselineShift = [NSString stringWithFormat:@"%f", [baselineShift doubleValue]];
+    }
+  }
   textNode.lengthAdjust = RCTNSStringFromStringNilIfEmpty(textProps.lengthAdjust);
   textNode.alignmentBaseline = RCTNSStringFromStringNilIfEmpty(textProps.alignmentBaseline);
 }

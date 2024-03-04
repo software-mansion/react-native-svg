@@ -61,27 +61,7 @@ class TextView extends GroupView {
     invalidate();
   }
 
-  public void setInlineSize(String inlineSize) {
-    mInlineSize = SVGLength.from(inlineSize);
-    invalidate();
-  }
-
-  public void setInlineSize(Double inlineSize) {
-    mInlineSize = SVGLength.from(inlineSize);
-    invalidate();
-  }
-
   public void setTextLength(Dynamic length) {
-    mTextLength = SVGLength.from(length);
-    invalidate();
-  }
-
-  public void setTextLength(String length) {
-    mTextLength = SVGLength.from(length);
-    invalidate();
-  }
-
-  public void setTextLength(Double length) {
     mTextLength = SVGLength.from(length);
     invalidate();
   }
@@ -101,17 +81,8 @@ class TextView extends GroupView {
     invalidate();
   }
 
-  public void setBaselineShift(String baselineShift) {
-    mBaselineShift = baselineShift;
-    invalidate();
-  }
-
-  public void setBaselineShift(Double baselineShift) {
-    mBaselineShift = String.valueOf(baselineShift);
-    invalidate();
-  }
-
-  public void setVerticalAlign(@Nullable String verticalAlign) {
+  public void setVerticalAlign(Dynamic dynamicVerticalAlign) {
+    String verticalAlign = SVGLength.toString(dynamicVerticalAlign);
     if (verticalAlign != null) {
       verticalAlign = verticalAlign.trim();
       int i = verticalAlign.lastIndexOf(' ');

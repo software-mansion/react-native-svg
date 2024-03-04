@@ -151,23 +151,6 @@ export function extract(
   return extractProps(propsAndStyles(props), instance);
 }
 
-export function stringifyPropsForFabric(props: {
-  [key: string]: NumberProp | undefined | null;
-}) {
-  const extracted: { [key: string]: NumberProp } = {};
-  Object.keys(props).forEach((k) => {
-    const prop = props[k];
-    if (prop !== undefined && prop !== null) {
-      const propStr = prop as string;
-      const propNum = parseInt(propStr, 10);
-      const doNotParse = isNaN(propNum) || propStr[propStr.length - 1] === '%';
-      extracted[k] = doNotParse ? propStr : propNum;
-    }
-  });
-
-  return extracted;
-}
-
 export function withoutXY(
   instance: object,
   props: object & { style?: [] | unknown }
