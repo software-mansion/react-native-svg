@@ -8,7 +8,7 @@ import type {
 import type { ViewProps } from './utils';
 
 import type { UnsafeMixed } from './codegenUtils';
-import { NumberProp } from '../lib/extract/types';
+import { NumberProp, FontObject } from '../lib/extract/types';
 
 interface SvgNodeCommonProps {
   name?: string;
