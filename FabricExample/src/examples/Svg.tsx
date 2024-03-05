@@ -188,6 +188,68 @@ class SvgNativeMethods extends Component {
   }
 }
 
+class SvgAutoHeight extends Component {
+  static title = 'SVG with auto height';
+  render() {
+    return (
+      <Svg
+        width="50"
+        height="auto"
+        viewBox="0 0 100 100"
+        style={{backgroundColor: 'gray'}}>
+        <Circle
+          cx="50"
+          cy="50"
+          r="45"
+          stroke="blue"
+          strokeWidth="2.5"
+          fill="green"
+        />
+        <Rect
+          x="15"
+          y="15"
+          width="70"
+          height="70"
+          stroke="red"
+          strokeWidth="2"
+          fill="yellow"
+        />
+      </Svg>
+    );
+  }
+}
+
+class SvgAutoWidth extends Component {
+  static title = 'SVG with auto width';
+  render() {
+    return (
+      <Svg
+        width="auto"
+        height="75"
+        viewBox="0 0 100 100"
+        style={{backgroundColor: 'gray'}}>
+        <Circle
+          cx="50"
+          cy="50"
+          r="45"
+          stroke="blue"
+          strokeWidth="2.5"
+          fill="green"
+        />
+        <Rect
+          x="15"
+          y="15"
+          width="70"
+          height="70"
+          stroke="red"
+          strokeWidth="2"
+          fill="yellow"
+        />
+      </Svg>
+    );
+  }
+}
+
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
     <Circle cx="10" cy="10" r="8" stroke="blue" strokeWidth="1" fill="green" />
@@ -208,6 +270,8 @@ const samples = [
   SvgOpacity,
   SvgViewbox,
   SvgLayout,
+  SvgAutoHeight,
+  SvgAutoWidth,
   SvgNativeMethods,
 ];
 

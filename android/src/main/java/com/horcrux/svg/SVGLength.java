@@ -37,7 +37,7 @@ class SVGLength {
     length = length.trim();
     int stringLength = length.length();
     int percentIndex = stringLength - 1;
-    if (stringLength == 0 || length.equals("normal")) {
+    if (stringLength == 0 || length.equals("normal") || length.equals("auto")) {
       unit = UnitType.UNKNOWN;
       value = 0;
     } else if (length.codePointAt(percentIndex) == '%') {

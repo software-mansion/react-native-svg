@@ -3,6 +3,8 @@
 #include <ReactCommon/JavaTurboModule.h>
 #include <ReactCommon/TurboModule.h>
 #include <jsi/jsi.h>
+#include <react/renderer/components/rnsvg/RNSVGComponentDescriptors.h>
+#include <react/renderer/components/rnsvg/RNSVGSvgViewAndroidComponentDescriptor.h>
 #include <react/renderer/components/rnsvg/RNSVGImageComponentDescriptor.h>
 
 namespace facebook {

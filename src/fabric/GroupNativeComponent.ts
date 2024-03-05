@@ -59,4 +59,6 @@ interface NativeProps
     SvgRenderableCommonProps,
     SvgGroupCommonProps {}
 
-export default codegenNativeComponent<NativeProps>('RNSVGGroup');
+export default codegenNativeComponent<NativeProps>('RNSVGGroup', {
+  interfaceOnly: true,
+});

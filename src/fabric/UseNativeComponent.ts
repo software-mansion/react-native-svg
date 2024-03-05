@@ -58,4 +58,6 @@ interface NativeProps
   width?: UnsafeMixed<NumberProp>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGUse');
+export default codegenNativeComponent<NativeProps>('RNSVGUse', {
+  interfaceOnly: true,
+});
