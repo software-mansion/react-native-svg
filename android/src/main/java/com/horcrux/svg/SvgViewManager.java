@@ -154,24 +154,6 @@ class SvgViewManager extends ReactViewManager
     node.setMeetOrSlice(meetOrSlice);
   }
 
-  @Override
-  public void setBbWidth(SvgView view, @Nullable String value) {
-    view.setBbWidth(value);
-  }
-
-  public void setBbWidth(SvgView view, @Nullable Double value) {
-    view.setBbWidth(value);
-  }
-
-  @Override
-  public void setBbHeight(SvgView view, @Nullable String value) {
-    view.setBbHeight(value);
-  }
-
-  public void setBbHeight(SvgView view, @Nullable Double value) {
-    view.setBbHeight(value);
-  }
-
   @ReactProp(name = ViewProps.POINTER_EVENTS)
   public void setPointerEvents(SvgView view, @Nullable String pointerEventsStr) {
     try {

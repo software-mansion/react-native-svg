@@ -74,13 +74,6 @@ export default class Svg extends Shape<SvgProps> {
       bbHeight?: NumberProp;
     }
   ) => {
-    const { width, height } = props;
-    if (width) {
-      props.bbWidth = String(width);
-    }
-    if (height) {
-      props.bbHeight = String(height);
-    }
     const { root } = this;
     root && root.setNativeProps(props);
   };
@@ -169,10 +162,10 @@ export default class Svg extends Shape<SvgProps> {
     props.style = rootStyles.length > 1 ? rootStyles : defaultStyle;
 
     if (width != null) {
-      props.bbWidth = String(width);
+      props.bbWidth = width;
     }
     if (height != null) {
-      props.bbHeight = String(height);
+      props.bbHeight = height;
     }
 
     extractResponder(props, props, this as ResponderInstanceProps);

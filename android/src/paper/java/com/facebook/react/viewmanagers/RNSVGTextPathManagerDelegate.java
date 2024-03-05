@@ -11,6 +11,7 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.DynamicFromObject;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
@@ -75,13 +76,7 @@ public class RNSVGTextPathManagerDelegate<T extends View, U extends BaseViewMana
         mViewManager.setStrokeOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "strokeWidth":
-        if (value instanceof String) {
-          mViewManager.setStrokeWidth(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setStrokeWidth(view, (Double) value);
-        } else {
-          mViewManager.setStrokeWidth(view, "1");
-        }
+        mViewManager.setStrokeWidth(view, new DynamicFromObject(value));
         break;
       case "strokeLinecap":
         mViewManager.setStrokeLinecap(view, value == null ? 0 : ((Double) value).intValue());
@@ -90,11 +85,7 @@ public class RNSVGTextPathManagerDelegate<T extends View, U extends BaseViewMana
         mViewManager.setStrokeLinejoin(view, value == null ? 0 : ((Double) value).intValue());
         break;
       case "strokeDasharray":
-        if (value instanceof String) {
-          mViewManager.setStrokeDasharray(view, (String) value);
-        } else if (value instanceof ReadableArray) {
-          mViewManager.setStrokeDasharray(view, (ReadableArray) value);
-        }
+        mViewManager.setStrokeDasharray(view, new DynamicFromObject(value));
         break;
       case "strokeDashoffset":
         mViewManager.setStrokeDashoffset(view, value == null ? 0f : ((Double) value).floatValue());
@@ -109,67 +100,37 @@ public class RNSVGTextPathManagerDelegate<T extends View, U extends BaseViewMana
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
       case "fontSize":
-        if (value instanceof String) {
-          mViewManager.setFontSize(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setFontSize(view, (Double) value);
-        } else {
-          mViewManager.setFontSize(view, (Double) null);
-        }
+        mViewManager.setFontSize(view, new DynamicFromObject(value));
         break;
       case "fontWeight":
-        if (value instanceof String) {
-          mViewManager.setFontWeight(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setFontWeight(view, (Double) value);
-        } else {
-          mViewManager.setFontWeight(view, (Double) null);
-        }
+        mViewManager.setFontWeight(view, new DynamicFromObject(value));
         break;
       case "font":
-        mViewManager.setFont(view, (ReadableMap) value);
+        mViewManager.setFont(view, new DynamicFromObject(value));
         break;
       case "dx":
-        mViewManager.setDx(view, (ReadableArray) value);
+        mViewManager.setDx(view, new DynamicFromObject(value));
         break;
       case "dy":
-        mViewManager.setDy(view, (ReadableArray) value);
+        mViewManager.setDy(view, new DynamicFromObject(value));
         break;
       case "x":
-        mViewManager.setX(view, (ReadableArray) value);
+        mViewManager.setX(view, new DynamicFromObject(value));
         break;
       case "y":
-        mViewManager.setY(view, (ReadableArray) value);
+        mViewManager.setY(view, new DynamicFromObject(value));
         break;
       case "rotate":
-        mViewManager.setRotate(view, (ReadableArray) value);
+        mViewManager.setRotate(view, new DynamicFromObject(value));
         break;
       case "inlineSize":
-        if (value instanceof String) {
-          mViewManager.setInlineSize(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setInlineSize(view, (Double) value);
-        } else {
-          mViewManager.setInlineSize(view, (Double) null);
-        }
+        mViewManager.setInlineSize(view, new DynamicFromObject(value));
         break;
       case "textLength":
-        if (value instanceof String) {
-          mViewManager.setTextLength(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setTextLength(view, (Double) value);
-        } else {
-          mViewManager.setTextLength(view, (Double) null);
-        }
+        mViewManager.setTextLength(view, new DynamicFromObject(value));
         break;
       case "baselineShift":
-        if (value instanceof String) {
-          mViewManager.setBaselineShift(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setBaselineShift(view, (Double) value);
-        } else {
-          mViewManager.setBaselineShift(view, (Double) null);
-        }
+        mViewManager.setBaselineShift(view, new DynamicFromObject(value));
         break;
       case "lengthAdjust":
         mViewManager.setLengthAdjust(view, value == null ? null : (String) value);
@@ -178,7 +139,7 @@ public class RNSVGTextPathManagerDelegate<T extends View, U extends BaseViewMana
         mViewManager.setAlignmentBaseline(view, value == null ? null : (String) value);
         break;
       case "verticalAlign":
-        mViewManager.setVerticalAlign(view, value == null ? null : (String) value);
+        mViewManager.setVerticalAlign(view, new DynamicFromObject(value));
         break;
       case "href":
         mViewManager.setHref(view, value == null ? null : (String) value);
@@ -196,13 +157,7 @@ public class RNSVGTextPathManagerDelegate<T extends View, U extends BaseViewMana
         mViewManager.setSpacing(view, value == null ? null : (String) value);
         break;
       case "startOffset":
-        if (value instanceof String) {
-          mViewManager.setStartOffset(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setStartOffset(view, (Double) value);
-        } else {
-          mViewManager.setStartOffset(view, (Double) null);
-        }
+        mViewManager.setStartOffset(view, new DynamicFromObject(value));
         break;
       default:
         super.setProperty(view, propName, value);

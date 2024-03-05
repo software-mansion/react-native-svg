@@ -1,9 +1,6 @@
 import type { ReactNode } from 'react';
 import * as React from 'react';
-import {
-  withoutXY,
-  stringifyPropsForFabric,
-} from '../lib/extract/extractProps';
+import { withoutXY } from '../lib/extract/extractProps';
 import type { NumberProp } from '../lib/extract/types';
 import G from './G';
 import RNSVGForeignObject from '../fabric/ForeignObjectNativeComponent';
@@ -30,7 +27,7 @@ export default class ForeignObject extends G<ForeignObjectProps> {
   render() {
     const { props } = this;
     const { x, y, width, height, children } = props;
-    const foreignObjectProps = stringifyPropsForFabric({ x, y, width, height });
+    const foreignObjectProps = { x, y, width, height };
     return (
       <RNSVGForeignObject
         ref={(ref) =>

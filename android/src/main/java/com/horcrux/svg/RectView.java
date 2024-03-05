@@ -36,27 +36,7 @@ class RectView extends RenderableView {
     invalidate();
   }
 
-  public void setX(String x) {
-    mX = SVGLength.from(x);
-    invalidate();
-  }
-
-  public void setX(Double x) {
-    mX = SVGLength.from(x);
-    invalidate();
-  }
-
   public void setY(Dynamic y) {
-    mY = SVGLength.from(y);
-    invalidate();
-  }
-
-  public void setY(String y) {
-    mY = SVGLength.from(y);
-    invalidate();
-  }
-
-  public void setY(Double y) {
     mY = SVGLength.from(y);
     invalidate();
   }
@@ -66,27 +46,7 @@ class RectView extends RenderableView {
     invalidate();
   }
 
-  public void setWidth(String width) {
-    mW = SVGLength.from(width);
-    invalidate();
-  }
-
-  public void setWidth(Double width) {
-    mW = SVGLength.from(width);
-    invalidate();
-  }
-
   public void setHeight(Dynamic height) {
-    mH = SVGLength.from(height);
-    invalidate();
-  }
-
-  public void setHeight(String height) {
-    mH = SVGLength.from(height);
-    invalidate();
-  }
-
-  public void setHeight(Double height) {
     mH = SVGLength.from(height);
     invalidate();
   }
@@ -96,27 +56,7 @@ class RectView extends RenderableView {
     invalidate();
   }
 
-  public void setRx(String rx) {
-    mRx = SVGLength.from(rx);
-    invalidate();
-  }
-
-  public void setRx(Double rx) {
-    mRx = SVGLength.from(rx);
-    invalidate();
-  }
-
   public void setRy(Dynamic ry) {
-    mRy = SVGLength.from(ry);
-    invalidate();
-  }
-
-  public void setRy(String ry) {
-    mRy = SVGLength.from(ry);
-    invalidate();
-  }
-
-  public void setRy(Double ry) {
     mRy = SVGLength.from(ry);
     invalidate();
   }

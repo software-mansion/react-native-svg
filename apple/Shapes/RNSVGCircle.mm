@@ -42,9 +42,18 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGCircleProps &>(*props);
 
-  self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
-  self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
-  self.r = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.r)];
+  id cx = RNSVGConvertFollyDynamicToId(newProps.cx);
+  if (cx != nil) {
+    self.cx = [RCTConvert RNSVGLength:cx];
+  }
+  id cy = RNSVGConvertFollyDynamicToId(newProps.cy);
+  if (cy != nil) {
+    self.cy = [RCTConvert RNSVGLength:cy];
+  }
+  id r = RNSVGConvertFollyDynamicToId(newProps.r);
+  if (r != nil) {
+    self.r = [RCTConvert RNSVGLength:r];
+  }
 
   setCommonRenderableProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGCircleProps const>(props);

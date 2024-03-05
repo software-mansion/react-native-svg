@@ -253,34 +253,13 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  public void setStrokeDasharray(@Nullable ReadableArray strokeDasharray) {
-    if (strokeDasharray != null) {
+  public void setStrokeDasharray(Dynamic dynamicStrokeDasharray) {
+    if (!dynamicStrokeDasharray.isNull()) {
+      ReadableArray strokeDasharray = dynamicStrokeDasharray.asArray();
       int fromSize = strokeDasharray.size();
       this.strokeDasharray = new SVGLength[fromSize];
       for (int i = 0; i < fromSize; i++) {
         this.strokeDasharray[i] = SVGLength.from(strokeDasharray.getDynamic(i));
-      }
-    } else {
-      this.strokeDasharray = null;
-    }
-    invalidate();
-  }
-
-  public void setStrokeDasharray(@Nullable String strokeDasharray) {
-    if (strokeDasharray != null) {
-      String stringValue = strokeDasharray.trim();
-      stringValue = stringValue.replaceAll(",", " ");
-      String[] strings = stringValue.split(" ");
-      ArrayList<SVGLength> list = new ArrayList<>(strings.length);
-      for (String length : strings) {
-        list.add(new SVGLength(length));
-      }
-      this.strokeDasharray = new SVGLength[Math.max(list.size(), 2)];
-      for (int i = 0; i < list.size(); i++) {
-        this.strokeDasharray[i] = list.get(i);
-      }
-      if (list.size() == 1) {
-        this.strokeDasharray[1] = this.strokeDasharray[0];
       }
     } else {
       this.strokeDasharray = null;
@@ -294,16 +273,6 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   }
 
   public void setStrokeWidth(Dynamic strokeWidth) {
-    this.strokeWidth = SVGLength.from(strokeWidth);
-    invalidate();
-  }
-
-  public void setStrokeWidth(String strokeWidth) {
-    this.strokeWidth = SVGLength.from(strokeWidth);
-    invalidate();
-  }
-
-  public void setStrokeWidth(Double strokeWidth) {
     this.strokeWidth = SVGLength.from(strokeWidth);
     invalidate();
   }
