@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { extract, stringifyPropsForFabric } from '../lib/extract/extractProps';
+import { extract } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGCircle from '../fabric/CircleNativeComponent';
@@ -24,10 +24,7 @@ export default class Circle extends Shape<CircleProps> {
   render() {
     const { props } = this;
     const { cx, cy, r } = props;
-    const circleProps = {
-      ...extract(this, props),
-      ...stringifyPropsForFabric({ cx, cy, r }),
-    };
+    const circleProps = { ...extract(this, props), cx, cy, r };
 
     return (
       <RNSVGCircle

@@ -232,31 +232,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     clearChildCache();
   }
 
-  public void setBbWidth(String bbWidth) {
-    mbbWidth = SVGLength.from(bbWidth);
-    invalidate();
-    clearChildCache();
-  }
-
-  public void setBbWidth(Double bbWidth) {
-    mbbWidth = SVGLength.from(bbWidth);
-    invalidate();
-    clearChildCache();
-  }
-
   public void setBbHeight(Dynamic bbHeight) {
-    mbbHeight = SVGLength.from(bbHeight);
-    invalidate();
-    clearChildCache();
-  }
-
-  public void setBbHeight(String bbHeight) {
-    mbbHeight = SVGLength.from(bbHeight);
-    invalidate();
-    clearChildCache();
-  }
-
-  public void setBbHeight(Double bbHeight) {
     mbbHeight = SVGLength.from(bbHeight);
     invalidate();
     clearChildCache();

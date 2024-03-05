@@ -11,6 +11,7 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 
 public interface RNSVGRadialGradientManagerInterface<T extends View> {
@@ -26,18 +27,12 @@ public interface RNSVGRadialGradientManagerInterface<T extends View> {
   void setResponsible(T view, boolean value);
   void setDisplay(T view, @Nullable String value);
   void setPointerEvents(T view, @Nullable String value);
-  void setFx(T view, @Nullable String value);
-  void setFx(T view, @Nullable Double value);
-  void setFy(T view, @Nullable String value);
-  void setFy(T view, @Nullable Double value);
-  void setCx(T view, @Nullable String value);
-  void setCx(T view, @Nullable Double value);
-  void setCy(T view, @Nullable String value);
-  void setCy(T view, @Nullable Double value);
-  void setRx(T view, @Nullable String value);
-  void setRx(T view, @Nullable Double value);
-  void setRy(T view, @Nullable String value);
-  void setRy(T view, @Nullable Double value);
+  void setFx(T view, Dynamic value);
+  void setFy(T view, Dynamic value);
+  void setCx(T view, Dynamic value);
+  void setCy(T view, Dynamic value);
+  void setRx(T view, Dynamic value);
+  void setRy(T view, Dynamic value);
   void setGradient(T view, @Nullable ReadableArray value);
   void setGradientUnits(T view, int value);
   void setGradientTransform(T view, @Nullable ReadableArray value);

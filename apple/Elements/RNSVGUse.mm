@@ -42,13 +42,21 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGUseProps &>(*props);
 
-  self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
-  self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-    self.useheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  id x = RNSVGConvertFollyDynamicToId(newProps.x);
+  if (x != nil) {
+    self.x = [RCTConvert RNSVGLength:x];
   }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-    self.usewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  id y = RNSVGConvertFollyDynamicToId(newProps.y);
+  if (y != nil) {
+    self.y = [RCTConvert RNSVGLength:y];
+  }
+  id useheight = RNSVGConvertFollyDynamicToId(newProps.height);
+  if (useheight != nil) {
+    self.useheight = [RCTConvert RNSVGLength:useheight];
+  }
+  id usewidth = RNSVGConvertFollyDynamicToId(newProps.width);
+  if (usewidth != nil) {
+    self.usewidth = [RCTConvert RNSVGLength:usewidth];
   }
   self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
 

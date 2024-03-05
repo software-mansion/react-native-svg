@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { extract, stringifyPropsForFabric } from '../lib/extract/extractProps';
+import { extract } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGLine from '../fabric/LineNativeComponent';
@@ -28,7 +28,10 @@ export default class Line extends Shape<LineProps> {
     const { x1, y1, x2, y2 } = props;
     const lineProps = {
       ...extract(this, props),
-      ...stringifyPropsForFabric({ x1, y1, x2, y2 }),
+      x1,
+      y1,
+      x2,
+      y2,
     };
     return (
       <RNSVGLine

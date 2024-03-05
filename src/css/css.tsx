@@ -688,7 +688,7 @@ export const inlineStyles: Middleware = function inlineStyles(
 };
 
 export function SvgCss(props: XmlProps) {
-  const {xml, override, fallback, onError = err} = props;
+  const { xml, override, fallback, onError = err } = props;
   try {
     const ast = useMemo<JsxAST | null>(
       () => (xml !== null ? parse(xml, inlineStyles) : null),
@@ -721,7 +721,7 @@ export function SvgCssUri(props: UriProps) {
   if (isError) {
     return fallback ?? null;
   }
-  return <SvgCss xml={xml} override={props} fallback={fallback}/>;
+  return <SvgCss xml={xml} override={props} fallback={fallback} />;
 }
 
 // Extending Component is required for Animated support.
