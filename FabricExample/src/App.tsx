@@ -112,7 +112,7 @@ const names: (keyof typeof examples)[] = [
   'TouchEvents',
   'PanResponder',
   'Reusable',
-  // 'Reanimated',
+  'Reanimated',
   'Transforms',
   'Markers',
   'Mask',
