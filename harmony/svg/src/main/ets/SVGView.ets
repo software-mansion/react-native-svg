@@ -43,13 +43,13 @@ export const SVG_VIEW_TYPE_NAME: string = "RNSVGSvgView"
 export type SVGViewDescriptor = Descriptor<"RNSVGSvgView", SVGViewProps>
 
 export class SVGViewDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGSvgView", SVGViewProps> {
+  transformStringify: string = '0'
 }
 
 @Component
 export struct SVGView {
   ctx!: RNOHContext
   tag: number = 0
-  @BuilderParam public buildCustomComponent: (ctx: ComponentBuilderContext) => void
   public componentManager!: RNViewManager;
   @State descriptor: SVGViewDescriptor = Object() as SVGViewDescriptor
   @State private descriptorWrapper: SVGViewDescriptorWrapper | undefined = undefined

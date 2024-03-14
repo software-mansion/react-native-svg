@@ -23,15 +23,61 @@
  */
 
 #pragma once
-
 #include "RNOH/Package.h"
+#include <glog/logging.h>
+
+#include "RNOH/ArkTSComponentInstance.h"
+using namespace rnoh;
+using namespace facebook;
+
+class SVGComponentInstanceFactoryDelegate : public ComponentInstanceFactoryDelegate {
+public:
+    using ComponentInstanceFactoryDelegate::ComponentInstanceFactoryDelegate;
+
+    ComponentInstance::Shared create(ComponentInstanceFactoryContext ctx) override {
+        if (ctx.componentName == "RNSVGSvgView") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGGroup") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGPath") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGRect") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGImage") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGCircle") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGEllipse") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGLinearGradient") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGDefs") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGText") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGTSpan") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGClipPath") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGMask") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        } else if (ctx.componentName == "RNSVGUse") {
+            return std::make_shared<ArkTSComponentInstance>(m_ctx, ctx.tag);
+        }
+        return nullptr;
+    }
+};
 
 namespace rnoh {
 
 class SVGPackage : public Package {
 public:
     explicit SVGPackage(Package::Context ctx) : Package(ctx) {}
-    
+
+    ComponentInstanceFactoryDelegate::Shared createComponentInstanceFactoryDelegate() override {
+            return std::make_shared<SVGComponentInstanceFactoryDelegate>(m_ctx);
+    }
+
     std::vector<facebook::react::ComponentDescriptorProvider> createComponentDescriptorProviders() override;
     
     ComponentNapiBinderByString createComponentNapiBinderByName() override;

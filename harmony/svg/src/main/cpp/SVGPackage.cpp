@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <glog/logging.h>
+#include "SVGPackage.h"
 #include "ComponentDescriptors.h"
 #include "RNSVGGroupNapiBinder.h"
 #include "RNSVGSvgViewNapiBinder.h"
@@ -55,8 +55,6 @@
 #include "RNSVGClipPathJSIBinder.h"
 #include "RNSVGMaskJSIBinder.h"
 #include "RNSVGUseJSIBinder.h"
-
-#include "SVGPackage.h"
 
 using namespace rnoh;
 using namespace facebook;
