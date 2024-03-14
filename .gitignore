@@ -49,3 +49,5 @@ experimental/
 
 # VS Code
 .vscode/
+
+*.tgz

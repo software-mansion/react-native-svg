@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/react-native-oh-library/react-native-svg.git"
+    "url": "https://github.com/react-native-oh-library/react-native-svg"
   },
   "license": "MIT",
   "main": "lib/commonjs/index.js",
@@ -16,22 +16,13 @@
   "types": "lib/typescript/index.d.ts",
   "react-native": "src/index.ts",
   "files": [
-    "__tests__",
-    "android",
-    "apple",
     "harmony",
-    "common",
-    "elements",
     "lib",
     "src",
-    "RNSVG.podspec",
-    "!android/build",
     "!harmony/oh_modules",
     "!harmony/**/build",
     "!harmony/**/oh_modules",
-    "!harmony/rnoh",
-    "windows",
-    "react-native-config.js"
+    "!harmony/rnoh"
   ],
   "react-native-builder-bob": {
     "source": "src",
@@ -39,12 +30,7 @@
     "targets": [
       "commonjs",
       "module",
-      [
-        "typescript",
-        {
-          "project": "tsconfig.build.json"
-        }
-      ]
+      "typescript"
     ]
   },
   "keywords": [
@@ -117,7 +103,7 @@
     "react-test-renderer": "^18.2.0",
     "release-it": "^14.12.5",
     "ts-node": "^10.8.0",
-    "typescript": "5.1.6"
+    "typescript": "^5.1.6"
   },
   "lint-staged": {
     "{src,Example}/**/*.{js,ts,tsx}": "yarn format-js",

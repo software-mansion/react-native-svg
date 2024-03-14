@@ -1,0 +1,32 @@
+name: Test JS build
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: js-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+          cache: 'yarn'
+          cache-dependency-path: 'yarn.lock'
+      - name: Install node dependencies
+        run: yarn
+      - name: Build
+        run: yarn bob
+      - name: Test and lint
+        run: yarn test
+      - name: Build Example App
+        working-directory: Example/
+        run: yarn && yarn tsc
