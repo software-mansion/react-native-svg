@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { ViewBaseProps } from 'rnoh/ts';
+import { ViewBaseProps, ViewRawProps } from 'rnoh/ts';
 
 /** 0-1 */
 export type NormalizedScalar = number
@@ -90,6 +90,10 @@ export interface SVGBaseProps extends SVGCommonProps {
   vectorEffect?: number,
   propList?: string[],
   svgViewTag?: number
+}
+
+export interface SVGBaseRawProps extends ViewRawProps {
+  fill?: SVGColorValue,
 }
 
 export interface SVGViewProps extends ViewBaseProps {

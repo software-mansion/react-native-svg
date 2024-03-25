@@ -144,6 +144,9 @@ export struct SVGGroup {
     let type: string = ''
     this.descriptor.childrenTags.forEach((tag) => {
       const descriptor = this.ctx.descriptorRegistry.getDescriptor<Descriptor<"", SVGBaseProps>>(tag)
+      if (descriptor === undefined) {
+        Logger.error(`SVGGroup Get Children Descriptor return undefined!`)
+      }
       if (descriptor.props.name) {
         setDefsDescriptor(descriptor.props.name, descriptor)
       }

@@ -61,4 +61,4 @@ class Logger {
   }
 }
 
-export default new Logger('AsyncStorage', 0xFF00, false)
+export default new Logger('SVG', 0xFF00, false)
