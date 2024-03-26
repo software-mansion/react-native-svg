@@ -85,7 +85,7 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
       instance.fill(getColor(this.descriptor.props.fill?.payload));
     }
 
-    let fillOpacity = this.descriptor.rawProps.fill?.payload ? this.descriptor.props.fillOpacity : 0
+    let fillOpacity = this.descriptor.props.fill?.payload ? this.descriptor.props.fillOpacity : 0
     if (fillOpacity !== 1) {
       instance.fillOpacity(fillOpacity);
     }
