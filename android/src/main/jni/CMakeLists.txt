@@ -66,7 +66,7 @@ target_compile_options(
   -std=c++20
   -Wall
 )
-message(WARNING "CMAKE_CURRENT_SORUCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}")
+message(WARNING "CMAKE_CURRENT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}")
 
 target_include_directories(
  ${CMAKE_PROJECT_NAME}
