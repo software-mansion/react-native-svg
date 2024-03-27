@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.source_files    = 'apple/**/*.{h,m,mm}'
   s.ios.exclude_files = '**/*.macos.{h,m,mm}'
   s.tvos.exclude_files = '**/*.macos.{h,m,mm}'
-  s.visionos.exclude_files = '**/*.macos.{h,m,mm}'
+  s.visionos.exclude_files = '**/*.macos.{h,m,mm}' if s.respond_to?(:visionos)
   s.osx.exclude_files = '**/*.ios.{h,m,mm}'
   s.requires_arc    = true
   s.platforms         = { :osx => "10.14", :ios => "12.4", :tvos => "12.4", :visionos => "1.0" }
