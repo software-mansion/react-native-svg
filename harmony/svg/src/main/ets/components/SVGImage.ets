@@ -26,12 +26,12 @@ import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
 import { ImageLoaderTurboModule } from 'rnoh/src/main/ets/RNOHCorePackage/turboModules';
 import { SVGImageModifier } from '../attributeModifiers/SVGImageModifier';
 import Logger from '../common/log/Logger';
-import { SVGImageProps, SVGViewCommon } from '../common/SVGType'
+import { SVGImageProps, SVGViewCommon, SVGViewRawCommon, SVGBaseRawProps, SVGState } from '../common/SVGType'
 import { RemoteImageLoaderError } from 'rnoh/src/main/ets/RemoteImageLoader/RemoteImageLoaderError';
 
 export const SVG_IMAGE_TYPE_NAME: string = "RNSVGImage"
 
-export type SVGImageDescriptor = Descriptor<"RNSVGImage", SVGImageProps>
+export type SVGImageDescriptor = Descriptor<"RNSVGImage", SVGImageProps, SVGState, SVGBaseRawProps>
 
 export class SVGImageDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGImage", SVGImageProps> {
 }
@@ -48,7 +48,7 @@ class ImageSourceHolder {
 export struct SVGImage {
   ctx!: RNOHContext
   tag: number = 0
-  @Consume svgViewCommon: SVGViewCommon | undefined
+  @Consume svgViewCommon: SVGViewRawCommon | undefined
   @State descriptor: SVGImageDescriptor = {} as SVGImageDescriptor
   @State descriptorWrapper: SVGImageDescriptorWrapper | undefined = undefined
   @State imageSource: ImageSourceHolder | undefined = undefined

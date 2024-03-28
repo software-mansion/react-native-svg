@@ -1,4 +1,5 @@
-import { getColor } from "../common/SVGCommon";
+import { convertColorValueToColorSegments } from 'rnoh';
+import { getColor, getRawColor } from "../common/SVGCommon";
 import { SVGUseDescriptor } from "../components/SVGUse";
 
 
@@ -29,8 +30,8 @@ export class SVGUseModifier implements AttributeModifier<ShapeAttribute> {
       instance.padding({ left: this.descriptor?.props.x, top: this.descriptor?.props.y });
     }
 
-    if (JSON.stringify(this.descriptor?.props.fill?.payload) !== "[0,0,0,1]") {
-      instance.fill(getColor(this.descriptor?.props.fill?.payload));
+    if (JSON.stringify(convertColorValueToColorSegments(this.descriptor?.rawProps.fill?.payload)) !== '[0,0,0,1]') {
+      instance.fill(getRawColor(this.descriptor?.rawProps.fill?.payload));
     }
 
     if (this.descriptor?.props.fillOpacity) {

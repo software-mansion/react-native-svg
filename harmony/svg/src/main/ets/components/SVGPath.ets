@@ -24,14 +24,12 @@
 
 import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
 import Logger from '../common/log/Logger'
-import { SVGPathProps, SVGViewCommon, SVGBaseRawProps } from '../common/SVGType'
+import { SVGPathProps, SVGViewCommon, SVGViewRawCommon, SVGBaseRawProps, SVGState } from '../common/SVGType'
 import { SVGLinearGradientValue } from '../common/SVGLinearGradient'
 import emitter from '@ohos.events.emitter';
 import { SVGPathModifier } from '../attributeModifiers/SVGPathModifier'
 
 export const SVG_PATH_TYPE_NAME: string = "RNSVGPath"
-
-export interface SVGState {};
 
 export type SVGPathDescriptor = Descriptor<"RNSVGPath", SVGPathProps, SVGState, SVGBaseRawProps>
 
@@ -42,7 +40,7 @@ export class SVGPathDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGPa
 export struct SVGPath {
   ctx!: RNOHContext
   tag: number = 0
-  @Consume svgViewCommon: SVGViewCommon | undefined
+  @Consume svgViewCommon: SVGViewRawCommon | undefined
   @State descriptor: SVGPathDescriptor = Object() as SVGPathDescriptor
   @State descriptorWrapper: SVGPathDescriptorWrapper | undefined = undefined
   private unregisterDescriptorChangesListener?: () => void = undefined

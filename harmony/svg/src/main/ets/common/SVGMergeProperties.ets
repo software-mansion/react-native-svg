@@ -21,13 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import { convertColorValueToColorSegments } from 'rnoh';
 
-import { ColorSegments, SVGColorValue } from './SVGType'
+import { ColorSegments, SVGColorValue, SVGRawColorValue } from './SVGType'
 
 export function parseFill(fill?: SVGColorValue, parentFill?: SVGColorValue, svgColor?: ColorSegments): SVGColorValue | undefined {
   switch (fill?.type) {
     case 0:
       if (fill.payload && JSON.stringify(fill.payload) == '[0,0,0,1]') {
+        fill = parentFill
+      }
+      break;
+    case 2:
+      fill.payload = svgColor
+      break;
+    case 3:
+      fill = parentFill
+      break;
+  }
+  return fill
+}
+
+export function parseRawFill(fill?: SVGRawColorValue, parentFill?: SVGRawColorValue, svgColor?: number): SVGRawColorValue | undefined {
+  switch (fill?.type) {
+    case 0:
+      if (fill.payload && JSON.stringify(convertColorValueToColorSegments(fill.payload)) == '[0,0,0,1]' && parentFill?.payload) {
         fill = parentFill
       }
       break;

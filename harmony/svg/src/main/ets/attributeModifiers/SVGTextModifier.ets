@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-import { getColor, getOffset, getTransform } from '../common/SVGCommon';
-import { SVGViewCommon } from '../common/SVGType';
+import { getColor, getRawColor, getOffset, getTransform } from '../common/SVGCommon';
+import { SVGViewCommon, SVGViewRawCommon } from '../common/SVGType';
 import { SVGTextDescriptor, SVGTextDescriptorWrapper } from '../components/SVGText';
 
 export class SVGTextModifier implements AttributeModifier<TextAttribute> {
@@ -33,7 +33,7 @@ export class SVGTextModifier implements AttributeModifier<TextAttribute> {
   private static instance: SVGTextModifier;
   protected descriptor: SVGTextDescriptor = Object() as SVGTextDescriptor;
   protected descriptorWrapper: SVGTextDescriptorWrapper | undefined = undefined;
-  protected svgViewCommon: SVGViewCommon | undefined = undefined;
+  protected svgViewCommon: SVGViewRawCommon | undefined = undefined;
   private scaleValue: number = 1;
 
   public static getInstance(): SVGTextModifier {
@@ -45,7 +45,7 @@ export class SVGTextModifier implements AttributeModifier<TextAttribute> {
 
   setDescriptor(descriptor: SVGTextDescriptor,
                 descriptorWrapper: SVGTextDescriptorWrapper | undefined,
-                svgViewCommon: SVGViewCommon | undefined): SVGTextModifier {
+                svgViewCommon: SVGViewRawCommon | undefined): SVGTextModifier {
     this.descriptor = descriptor;
     this.descriptorWrapper = descriptorWrapper;
     this.svgViewCommon = svgViewCommon;
@@ -58,7 +58,7 @@ export class SVGTextModifier implements AttributeModifier<TextAttribute> {
   applyNormalAttribute(instance: TextAttribute): void {
     instance.position(this.getOffset(this.descriptor.props.x, this.descriptor.props.y));
 
-    instance.fontColor(getColor(this.descriptor.props.fill?.payload));
+    instance.fontColor(getRawColor(this.descriptor.rawProps.fill?.payload));
 
     if (this.descriptor.props.font?.fontSize) {
       instance.fontSize(this.descriptor.props.font?.fontSize);

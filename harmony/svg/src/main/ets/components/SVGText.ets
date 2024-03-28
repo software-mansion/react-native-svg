@@ -26,12 +26,12 @@ import { Descriptor, RNOHContext, Tag, ViewDescriptorWrapperBase } from 'rnoh'
 import { SVGTextModifier } from '../attributeModifiers/SVGTextModifier'
 import Logger from '../common/log/Logger'
 import { getOffset } from '../common/SVGCommon'
-import { NumberProp, FontWeight, SVGTextProps, SVGViewCommon } from '../common/SVGType'
+import { NumberProp, FontWeight, SVGTextProps, SVGViewCommon, SVGViewRawCommon, SVGState, SVGBaseRawProps, } from '../common/SVGType'
 import { SVGTSpan, SVGTSpanDescriptor } from './SVGTSpan'
 
 export const SVG_TEXT_TYPE_NAME: string = "RNSVGText"
 
-export type SVGTextDescriptor = Descriptor<"RNSVGText", SVGTextProps>
+export type SVGTextDescriptor = Descriptor<"RNSVGText", SVGTextProps, SVGState, SVGBaseRawProps>
 
 export class SVGTextDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGText", SVGTextProps> {
 }
@@ -42,7 +42,7 @@ export const SVG_TSPAN_TYPE_NAME: string = "RNSVGTSpan"
 export struct SVGText {
   ctx!: RNOHContext
   tag: number = 0
-  @Consume svgViewCommon: SVGViewCommon | undefined
+  @Consume svgViewCommon: SVGViewRawCommon | undefined
   @State descriptor: SVGTextDescriptor = {} as SVGTextDescriptor
   @State descriptorWrapper: SVGTextDescriptorWrapper | undefined = undefined
   private unregisterDescriptorChangesListener?: () => void = undefined

@@ -34,13 +34,13 @@ import {
 import Logger from './common/log/Logger'
 import { getGroupBox, getScaleValue } from './common/SVGCommon'
 import { setViewDescriptor } from './common/SVGTempCache'
-import { SVGViewCommon, SVGViewProps } from './common/SVGType'
+import { SVGViewCommon, SVGViewRawCommon, SVGViewProps, SVGState, SVGViewRawProps } from './common/SVGType'
 import { svgComponentFactoryBuilder } from './SVGComponentFactory'
 import { SVGViewModifier } from './attributeModifiers/SVGViewModifier'
 
 export const SVG_VIEW_TYPE_NAME: string = "RNSVGSvgView"
 
-export type SVGViewDescriptor = Descriptor<"RNSVGSvgView", SVGViewProps>
+export type SVGViewDescriptor = Descriptor<"RNSVGSvgView", SVGViewProps, SVGState, SVGViewRawProps>
 
 export class SVGViewDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGSvgView", SVGViewProps> {
   transformStringify: string = '0'
@@ -57,7 +57,7 @@ export struct SVGView {
   private unregisterComponentManager?: () => void = undefined
   private unregisterCommandCallback?: () => void = undefined
   @State private childrenTags: Tag[] = []
-  @Provide svgViewCommon: SVGViewCommon | undefined = undefined
+  @Provide svgViewCommon: SVGViewRawCommon | undefined = undefined
 
   aboutToAppear() {
     this.descriptor = this.ctx.descriptorRegistry.getDescriptor<SVGViewDescriptor>(this.tag)
@@ -91,7 +91,7 @@ export struct SVGView {
       groupBox: getGroupBox(descriptor),
       svgWidth: this.descriptorWrapper?.width,
       svgHeight: this.descriptorWrapper?.height,
-      svgColor: descriptor.props.color
+      svgColor: descriptor.rawProps.color,
     }
     Logger.debug("RNOH SVGView svgViewCommon=", JSON.stringify(this.svgViewCommon))
     setViewDescriptor(this.tag, descriptor)

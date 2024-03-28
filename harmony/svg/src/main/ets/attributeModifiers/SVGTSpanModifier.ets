@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { SVGViewCommon } from '../common/SVGType';
+import { SVGViewCommon, SVGViewRawCommon, } from '../common/SVGType';
 import { SVGTSpanDescriptor, SVGTSpanDescriptorWrapper } from '../components/SVGTSpan';
 
 export class SVGTSpanModifier implements AttributeModifier<SpanAttribute> {
@@ -32,7 +32,7 @@ export class SVGTSpanModifier implements AttributeModifier<SpanAttribute> {
   private static instance: SVGTSpanModifier;
   protected descriptor: SVGTSpanDescriptor = Object() as SVGTSpanDescriptor;
   protected descriptorWrapper: SVGTSpanDescriptorWrapper | undefined = undefined;
-  protected svgViewCommon: SVGViewCommon | undefined = undefined;
+  protected svgViewCommon: SVGViewRawCommon | undefined = undefined;
 
   public static getInstance(): SVGTSpanModifier {
     if (!SVGTSpanModifier.instance) {
@@ -43,7 +43,7 @@ export class SVGTSpanModifier implements AttributeModifier<SpanAttribute> {
 
   setDescriptor(descriptor: SVGTSpanDescriptor,
                 descriptorWrapper: SVGTSpanDescriptorWrapper | undefined,
-                svgViewCommon: SVGViewCommon | undefined): SVGTSpanModifier {
+                svgViewCommon: SVGViewRawCommon | undefined): SVGTSpanModifier {
     this.descriptor = descriptor;
     this.descriptorWrapper = descriptorWrapper;
     this.svgViewCommon = svgViewCommon;

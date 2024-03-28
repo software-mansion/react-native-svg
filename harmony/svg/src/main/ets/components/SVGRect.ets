@@ -25,11 +25,11 @@
 import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
 import { SVGRectModifier } from '../attributeModifiers/SVGRectModifier'
 import Logger from '../common/log/Logger'
-import { SVGRectProps, SVGViewCommon } from '../common/SVGType'
+import { SVGRectProps, SVGViewCommon, SVGViewRawCommon, SVGBaseRawProps, SVGState } from '../common/SVGType'
 
 export const SVG_RECT_TYPE_NAME: string = "RNSVGRect"
 
-export type SVGRectDescriptor = Descriptor<"RNSVGRect", SVGRectProps>
+export type SVGRectDescriptor = Descriptor<"RNSVGRect", SVGRectProps, SVGState, SVGBaseRawProps>
 
 export class SVGRectDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGRect", SVGRectProps> {
 }
@@ -38,7 +38,7 @@ export class SVGRectDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGRe
 export struct SVGRect {
   ctx!: RNOHContext
   tag: number = 0
-  @Consume svgViewCommon: SVGViewCommon | undefined
+  @Consume svgViewCommon: SVGViewRawCommon | undefined
   @State descriptor: SVGRectDescriptor = {} as SVGRectDescriptor
   @State descriptorWrapper: SVGRectDescriptorWrapper | undefined = undefined
   private unregisterDescriptorChangesListener?: () => void = undefined

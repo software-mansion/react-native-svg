@@ -21,16 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import { convertColorValueToColorSegments } from 'rnoh';
 
 import {
   getColor,
+  getRawColor,
   getFillOpacity,
+  getRawFillOpacity,
   getStrokeLineCap,
   getStrokeLineJoin,
   getStrokeWidth,
   getTransform
 } from '../common/SVGCommon';
-import { SVGViewCommon } from '../common/SVGType';
+import { SVGViewCommon, SVGViewRawCommon } from '../common/SVGType';
 import { SVGEllipseDescriptor, SVGEllipseDescriptorWrapper } from '../components/SVGEllipse';
 
 export class SVGEllipseModifier implements AttributeModifier<EllipseAttribute> {
@@ -40,7 +43,7 @@ export class SVGEllipseModifier implements AttributeModifier<EllipseAttribute> {
   private static instance: SVGEllipseModifier;
   protected descriptor: SVGEllipseDescriptor = Object() as SVGEllipseDescriptor;
   protected descriptorWrapper: SVGEllipseDescriptorWrapper | undefined = undefined;
-  protected svgViewCommon: SVGViewCommon | undefined = undefined;
+  protected svgViewCommon: SVGViewRawCommon | undefined = undefined;
   private scaleValue: number = 1;
 
   public static getInstance(): SVGEllipseModifier {
@@ -52,7 +55,7 @@ export class SVGEllipseModifier implements AttributeModifier<EllipseAttribute> {
 
   setDescriptor(descriptor: SVGEllipseDescriptor,
                 descriptorWrapper: SVGEllipseDescriptorWrapper | undefined,
-                svgViewCommon: SVGViewCommon | undefined): SVGEllipseModifier {
+                svgViewCommon: SVGViewRawCommon | undefined): SVGEllipseModifier {
     this.descriptor = descriptor;
     this.descriptorWrapper = descriptorWrapper;
     this.svgViewCommon = svgViewCommon;
@@ -74,11 +77,11 @@ export class SVGEllipseModifier implements AttributeModifier<EllipseAttribute> {
     // 定位需要处理
     // instance.position(this.descriptor.layoutMetrics.frame.origin);
 
-    if (JSON.stringify(this.descriptor?.props.fill?.payload) !== '[0,0,0,1]') {
-      instance.fill(getColor(this.descriptor.props.fill?.payload));
+    if (JSON.stringify(convertColorValueToColorSegments(this.descriptor?.rawProps.fill?.payload)) !== '[0,0,0,1]') {
+      instance.fill(getRawColor(this.descriptor.rawProps.fill?.payload));
     }
 
-    let fillOpacity = getFillOpacity(this.descriptor.props.fill, this.descriptor.props.fillOpacity)
+    let fillOpacity = getRawFillOpacity(this.descriptor.rawProps.fill, this.descriptor.props.fillOpacity)
     if (fillOpacity !== 1) {
       instance.fillOpacity(fillOpacity);
     }

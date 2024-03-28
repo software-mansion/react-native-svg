@@ -1,12 +1,12 @@
 import { Descriptor, RNOHContext, Tag } from "rnoh";
 import { SVGUseModifier } from "../attributeModifiers/SVGUseModifier";
 import { getDefsDescriptor } from "../common/SVGTempCache";
-import { SVGUseProps } from "../common/SVGType";
+import { SVGUseProps, SVGState, SVGBaseRawProps } from "../common/SVGType";
 import { svgComponentFactoryBuilder } from "../SVGComponentFactory";
 
 export const SVG_USE_TYPE_NAME = "RNSVGUse";
 
-export type SVGUseDescriptor = Descriptor<"RNSVGUse", SVGUseProps>;
+export type SVGUseDescriptor = Descriptor<"RNSVGUse", SVGUseProps, SVGState, SVGBaseRawProps>;
 
 @Component
 export struct SVGUse {

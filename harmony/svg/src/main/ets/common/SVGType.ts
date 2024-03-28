@@ -42,6 +42,14 @@ export type SVGColorValue = {
   brushRef?: string
 }
 
+export type SVGRawColorValue = {
+  type: number,
+  payload?: number,
+  brushRef?: string
+}
+
+export interface SVGState {};
+
 export type SVGGroupBox = {
   width: number,
   height: number,
@@ -56,6 +64,15 @@ export type SVGViewCommon = {
   svgWidth: number,
   svgHeight: number,
   svgColor?: ColorSegments,
+}
+
+export type SVGViewRawCommon = {
+  svgTag: number,
+  scaleValue: number,
+  groupBox: SVGGroupBox,
+  svgWidth: number,
+  svgHeight: number,
+  svgColor?: number,
 }
 
 export interface SVGCommonProps extends ViewBaseProps {
@@ -93,7 +110,7 @@ export interface SVGBaseProps extends SVGCommonProps {
 }
 
 export interface SVGBaseRawProps extends ViewRawProps {
-  fill?: SVGColorValue,
+  fill?: SVGRawColorValue,
 }
 
 export interface SVGViewProps extends ViewBaseProps {
@@ -108,6 +125,11 @@ export interface SVGViewProps extends ViewBaseProps {
   tintColor?: ColorSegments,
   color?: ColorSegments,
   pointerEvents?: number
+}
+
+export interface SVGViewRawProps extends ViewRawProps {
+  fill?: SVGRawColorValue,
+  color?: number,
 }
 
 export interface SVGGroupProps extends SVGBaseProps {

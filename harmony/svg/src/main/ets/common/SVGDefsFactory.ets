@@ -51,7 +51,7 @@ export type SVGDefsDescriptor = Descriptor<"RNSVGDefs", SVGDefsProps>
 
 export function SVGDefsFactory(ctx: RNOHContext, tag: number) {
   const descriptor: Descriptor<"", SVGBaseProps> = ctx.descriptorRegistry.getDescriptor(tag);
-  if (descriptor.childrenTags && (descriptor.childrenTags.length != 0)) {
+  if (descriptor?.childrenTags && (descriptor?.childrenTags.length != 0)) {
     for (const childTag of descriptor.childrenTags) {
       SVGDefsFactory(ctx, childTag);
     }

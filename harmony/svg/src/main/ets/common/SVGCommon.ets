@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-import { ColorSegments, convertColorSegmentsToString, TransformMatrix } from 'rnoh'
+import { ColorSegments, convertColorSegmentsToString, convertColorValueToHex, TransformMatrix } from 'rnoh'
 import { getLinearGradientValue } from './SVGTempCache'
-import { SVGColorValue, SVGGroupBox, SVGOffset } from './SVGType'
+import { SVGColorValue, SVGRawColorValue, SVGGroupBox, SVGOffset } from './SVGType'
 import { SVGViewDescriptor } from '../SVGView'
 import matrix4 from '@ohos.matrix4'
 import { SVGLinearGradientValue } from './SVGLinearGradient'
@@ -126,8 +126,20 @@ export function getFillOpacity(fill: SVGColorValue | undefined, fillOpacity: num
   return 0
 }
 
+export function getRawFillOpacity(fill: SVGRawColorValue | undefined, fillOpacity: number): number {
+  if (fill?.payload) {
+    //部分组件fill [0,0,0,0] 无法显示透明，手动处理
+    return fill?.payload[3] == 0 ? 0 : fillOpacity
+  }
+  return 0
+}
+
 export function getColor(color?: ColorSegments): string | undefined {
   return convertColorSegmentsToString(color);
+}
+
+export function getRawColor(color?: number): string | undefined {
+  return convertColorValueToHex(color);
 }
 
 export function getRadius(rx?: string, ry?: string): string | number | undefined {

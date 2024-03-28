@@ -23,7 +23,7 @@
  */
 
 import { getOffset, getTransform } from '../common/SVGCommon';
-import { SVGViewCommon } from '../common/SVGType';
+import { SVGViewCommon, SVGViewRawCommon } from '../common/SVGType';
 import { SVGImageDescriptor, SVGImageDescriptorWrapper } from '../components/SVGImage';
 
 export class SVGImageModifier implements AttributeModifier<ImageAttribute> {
@@ -33,7 +33,7 @@ export class SVGImageModifier implements AttributeModifier<ImageAttribute> {
   private static instance: SVGImageModifier;
   protected descriptor: SVGImageDescriptor = Object() as SVGImageDescriptor;
   protected descriptorWrapper: SVGImageDescriptorWrapper | undefined = undefined;
-  protected svgViewCommon: SVGViewCommon | undefined = undefined;
+  protected svgViewCommon: SVGViewRawCommon | undefined = undefined;
   private scaleValue: number = 1;
 
   public static getInstance(): SVGImageModifier {
@@ -45,7 +45,7 @@ export class SVGImageModifier implements AttributeModifier<ImageAttribute> {
 
   setDescriptor(descriptor: SVGImageDescriptor,
                 descriptorWrapper: SVGImageDescriptorWrapper | undefined,
-                svgViewCommon: SVGViewCommon | undefined): SVGImageModifier {
+                svgViewCommon: SVGViewRawCommon | undefined): SVGImageModifier {
     this.descriptor = descriptor;
     this.descriptorWrapper = descriptorWrapper;
     this.svgViewCommon = svgViewCommon;

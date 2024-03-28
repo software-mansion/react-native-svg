@@ -25,11 +25,11 @@
 import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
 import { SVGEllipseModifier } from '../attributeModifiers/SVGEllipseModifier'
 import Logger from '../common/log/Logger';
-import { SVGEllipseProps, SVGViewCommon } from '../common/SVGType'
+import { SVGEllipseProps, SVGViewCommon, SVGViewRawCommon, SVGState, SVGBaseRawProps } from '../common/SVGType'
 
 export const SVG_ELLIPSE_TYPE_NAME: string = "RNSVGEllipse"
 
-export type SVGEllipseDescriptor = Descriptor<"RNSVGEllipse", SVGEllipseProps>
+export type SVGEllipseDescriptor = Descriptor<"RNSVGEllipse", SVGEllipseProps, SVGState, SVGBaseRawProps>
 
 export class SVGEllipseDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGEllipse", SVGEllipseProps>{
 }
@@ -38,7 +38,7 @@ export class SVGEllipseDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSV
 export struct SVGEllipse {
   ctx!: RNOHContext
   tag: number = 0
-  @Consume svgViewCommon: SVGViewCommon | undefined
+  @Consume svgViewCommon: SVGViewRawCommon | undefined
   @State descriptor: SVGEllipseDescriptor = {} as SVGEllipseDescriptor
   @State descriptorWrapper: SVGEllipseDescriptorWrapper | undefined = undefined
   private unregisterDescriptorChangesListener?: () => void = undefined
