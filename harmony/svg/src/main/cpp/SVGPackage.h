@@ -34,7 +34,7 @@ namespace rnoh {
 class SVGPackage : public Package {
 public:
     explicit SVGPackage(Package::Context ctx) : Package(ctx) {}
-    
+
     std::vector<facebook::react::ComponentDescriptorProvider> createComponentDescriptorProviders() override;
     
     ComponentNapiBinderByString createComponentNapiBinderByName() override;

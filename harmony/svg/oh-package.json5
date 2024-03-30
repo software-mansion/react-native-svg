@@ -4,10 +4,10 @@
   "devDependencies": {
 
   },
-  "name": "rnoh-svg",
+  "name": "@react-native-oh-tpl/react-native-svg",
   "description": "Native part of react-native-svg",
   "main": "index.ets",
-  "version": "13.14.0-0.2.3",
+  "version": "13.14.0-0.2.4",
   "dependencies": {
     "rnoh": "file:../rnoh"
   }
