@@ -3,7 +3,7 @@
 #include "pch.h"
 
 #include <winrt/Windows.Foundation.Numerics.h>
-#include <winrt/Windows.UI.Text.h>
+#include <UI.Text.h>
 #include "JSValueReader.h"
 #include "D2DHelpers.h"
 #include "D2DBrush.h"
@@ -194,7 +194,7 @@ struct Utils {
     }
   }
 
-  static ui::Color JSValueAsColor(JSValue const &value, ui::Color const &defaultValue = Colors::Transparent()) {
+  static Windows::UI::Color JSValueAsColor(JSValue const &value, Windows::UI::Color const &defaultValue = Colors::Transparent()) {
     if (value.IsNull()) {
       return defaultValue;
     } else if (auto const &brush{value.To<xaml::Media::Brush>()}) {
@@ -266,7 +266,7 @@ struct Utils {
 
   static com_ptr<ID2D1Brush> GetCanvasBrush(
       hstring const &brushId,
-      ui::Color const &color,
+      Windows::UI::Color const &color,
       RNSVG::SvgView const &root,
       com_ptr<ID2D1Geometry> const &geometry) {
     com_ptr<ID2D1Brush> brush;

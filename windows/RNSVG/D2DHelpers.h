@@ -78,7 +78,7 @@ struct D2DHelpers {
      }
    }
 
-   static D2D1::ColorF AsD2DColor(ui::Color const &color) {
+   static D2D1::ColorF AsD2DColor(Windows::UI::Color const &color) {
      return {
          color.R / 255.0f,
          color.G / 255.0f,
@@ -86,12 +86,13 @@ struct D2DHelpers {
          color.A / 255.0f};
    }
 
-   static ui::Color FromD2DColor(D2D1::ColorF const color) {
-     return ui::ColorHelper::FromArgb(
+   static Windows::UI::Color FromD2DColor(D2D1::ColorF const color) {
+     return Windows::UI::Color{
          static_cast<uint8_t>(color.a),
          static_cast<uint8_t>(color.r),
          static_cast<uint8_t>(color.g),
-         static_cast<uint8_t>(color.b));
+         static_cast<uint8_t>(color.b),
+     };
    }
 
    static D2D1_RECT_F AsD2DRect(Rect const &rect) {

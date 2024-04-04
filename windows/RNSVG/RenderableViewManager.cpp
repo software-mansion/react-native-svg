@@ -8,7 +8,7 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
+xaml::FrameworkElement RenderableViewManager::CreateView() {
   switch (m_class) {
     case RNSVG::SVGClass::RNSVGGroup:
       return winrt::RNSVG::GroupView(m_reactContext);
@@ -75,7 +75,7 @@ IMapView<hstring, ViewManagerPropertyType> RenderableViewManager::NativeProps() 
 }
 
 void RenderableViewManager::UpdateProperties(
-    Windows::UI::Xaml::FrameworkElement const &view,
+    xaml::FrameworkElement const &view,
     Microsoft::ReactNative::IJSValueReader const &propertyMapReader) {
   if (auto const &renderable{view.try_as<RenderableView>()}) {
     renderable->UpdateProperties(propertyMapReader);
