@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { ViewBaseProps, ViewRawProps } from 'rnoh/ts';
+import { ViewBaseProps, ViewRawProps } from '@rnoh/react-native-openharmony/ts';
 
 /** 0-1 */
 export type NormalizedScalar = number

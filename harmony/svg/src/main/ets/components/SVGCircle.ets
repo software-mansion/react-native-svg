@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
+import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from '@rnoh/react-native-openharmony'
 import { SVGCircleModifier } from '../attributeModifiers/SVGCircleModifier'
 import Logger from '../common/log/Logger';
 import { getColor, getRawColor, getFillOpacity, getRawFillOpacity, getGradient, getOffset, getStrokeWidth, getTransform } from '../common/SVGCommon';

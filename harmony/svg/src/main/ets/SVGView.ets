@@ -30,7 +30,7 @@ import {
   ColorSegments,
   RNViewManager,
   ViewDescriptorWrapperBase,
-} from 'rnoh'
+} from '@rnoh/react-native-openharmony'
 import Logger from './common/log/Logger'
 import { getGroupBox, getScaleValue } from './common/SVGCommon'
 import { setViewDescriptor } from './common/SVGTempCache'

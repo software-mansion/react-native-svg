@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { convertColorValueToColorSegments } from 'rnoh';
+import { convertColorValueToColorSegments } from '@rnoh/react-native-openharmony';
 
 import { ColorSegments, SVGColorValue, SVGRawColorValue } from './SVGType'
 

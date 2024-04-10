@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { convertColorValueToRGBA, Descriptor, RNOHContext, Tag } from 'rnoh'
+import { convertColorValueToRGBA, Descriptor, RNOHContext, Tag } from '@rnoh/react-native-openharmony'
 import Logger from './log/Logger'
 import { parseCoordinateValue } from './SVGCommon'
 import { setLinearGradientValue } from './SVGTempCache'

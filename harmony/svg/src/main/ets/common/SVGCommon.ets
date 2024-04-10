@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { ColorSegments, convertColorSegmentsToString, convertColorValueToHex, TransformMatrix } from 'rnoh'
+import { ColorSegments, convertColorSegmentsToString, convertColorValueToHex, TransformMatrix } from '@rnoh/react-native-openharmony'
 import { getLinearGradientValue } from './SVGTempCache'
 import { SVGColorValue, SVGRawColorValue, SVGGroupBox, SVGOffset } from './SVGType'
 import { SVGViewDescriptor } from '../SVGView'

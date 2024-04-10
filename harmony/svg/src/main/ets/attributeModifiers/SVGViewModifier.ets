@@ -33,7 +33,7 @@ import {
   resolveBorderMetrics,
   RNOHContext,
   TransformMatrix
-} from 'rnoh';
+} from '@rnoh/react-native-openharmony';
 import matrix4 from '@ohos.matrix4';
 import { SVGViewDescriptor, SVGViewDescriptorWrapper } from '../SVGView';
 

@@ -36,7 +36,7 @@ import {
 import { SVGViewCommon, SVGViewRawCommon } from '../common/SVGType';
 import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
 import { getMaskDescriptor } from '../common/SVGTempCache';
-import { convertColorValueToColorSegments } from 'rnoh';
+import { convertColorValueToColorSegments } from '@rnoh/react-native-openharmony';
 
 export class SVGPathModifier implements AttributeModifier<PathAttribute> {
   private constructor() {

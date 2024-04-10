@@ -22,11 +22,9 @@
  * SOFTWARE.
  */
 
-import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
+import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from '@rnoh/react-native-openharmony'
 import Logger from '../common/log/Logger'
 import { SVGPathProps, SVGViewCommon, SVGViewRawCommon, SVGBaseRawProps, SVGState } from '../common/SVGType'
-import { SVGLinearGradientValue } from '../common/SVGLinearGradient'
-import emitter from '@ohos.events.emitter';
 import { SVGPathModifier } from '../attributeModifiers/SVGPathModifier'
 
 export const SVG_PATH_TYPE_NAME: string = "RNSVGPath"

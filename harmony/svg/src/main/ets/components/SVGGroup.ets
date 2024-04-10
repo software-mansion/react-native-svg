@@ -24,7 +24,7 @@
  */
 
 import { Descriptor, RNOHContext, ComponentBuilderContext, Tag, ViewDescriptorWrapperBase,
-  convertColorValueToColorSegments } from 'rnoh'
+  convertColorValueToColorSegments } from '@rnoh/react-native-openharmony'
 import { SVGBaseProps, SVGBaseRawProps, SVGState, SVGGroupProps, SVGViewCommon, SVGViewRawCommon } from '../common/SVGType'
 import { setDefsDescriptor, setGroupDescriptor } from '../common/SVGTempCache'
 import { SVG_DEFS_TYPE_NAME, SVGDefsFactory } from '../common/SVGDefsFactory'
@@ -144,6 +144,9 @@ export struct SVGGroup {
       descriptor.layoutMetrics.frame.origin = this.descriptor.layoutMetrics.frame.origin
       descriptor.rawProps.fill = parseRawFill(descriptor.rawProps.fill, this.descriptor.rawProps.fill, this.svgViewCommon?.svgColor)
       descriptor.props.stroke = parseStroke(descriptor.props.stroke, this.descriptor.props.stroke, convertColorValueToColorSegments(this.svgViewCommon?.svgColor))
+      if (this.descriptor.props.mask) {
+        descriptor.props.mask = this.descriptor.props.mask
+      }
     }
   }
 

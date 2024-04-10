@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { Descriptor, RNOHContext, Tag, ViewDescriptorWrapperBase } from 'rnoh'
+import { Descriptor, RNOHContext, Tag, ViewDescriptorWrapperBase } from '@rnoh/react-native-openharmony'
 import { SVGTextModifier } from '../attributeModifiers/SVGTextModifier'
 import Logger from '../common/log/Logger'
 import { getOffset } from '../common/SVGCommon'

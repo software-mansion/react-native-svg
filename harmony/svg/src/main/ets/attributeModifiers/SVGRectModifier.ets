@@ -39,7 +39,7 @@ import { SVGClipPathObj, SVGViewCommon, SVGViewRawCommon } from '../common/SVGTy
 import { getClipPathDescriptor, getMaskDescriptor } from '../common/SVGTempCache';
 import { SVGRectDescriptor, SVGRectDescriptorWrapper } from '../components/SVGRect';
 import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
-import { convertColorValueToColorSegments } from 'rnoh';
+import { convertColorValueToColorSegments } from '@rnoh/react-native-openharmony';
 
 export class SVGRectModifier implements AttributeModifier<RectAttribute> {
   private constructor() {

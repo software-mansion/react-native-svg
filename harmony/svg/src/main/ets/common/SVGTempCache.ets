@@ -26,7 +26,7 @@ import HashMap from '@ohos.util.HashMap'
 import { SVGViewDescriptor } from '../SVGView'
 import { SVGGroupDescriptor } from '../components/SVGGroup'
 import { SVGMaskType } from './SVGMask'
-import { Descriptor } from "rnoh";
+import { Descriptor } from "@rnoh/react-native-openharmony";
 import { SVGLinearGradientValue } from './SVGLinearGradient'
 
 const viewCache: HashMap<number, SVGViewDescriptor> = new HashMap()

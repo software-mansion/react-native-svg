@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from 'rnoh'
-import { ImageLoaderTurboModule } from 'rnoh/src/main/ets/RNOHCorePackage/turboModules';
+import { Descriptor, RNOHContext, ViewDescriptorWrapperBase } from '@rnoh/react-native-openharmony'
+import { ImageLoaderTurboModule } from '@rnoh/react-native-openharmony/src/main/ets/RNOHCorePackage/turboModules';
 import { SVGImageModifier } from '../attributeModifiers/SVGImageModifier';
 import Logger from '../common/log/Logger';
 import { SVGImageProps, SVGViewCommon, SVGViewRawCommon, SVGBaseRawProps, SVGState } from '../common/SVGType'
-import { RemoteImageLoaderError } from 'rnoh/src/main/ets/RemoteImageLoader/RemoteImageLoaderError';
+import { RemoteImageLoaderError } from '@rnoh/react-native-openharmony/src/main/ets/RemoteImageLoader/RemoteImageLoaderError';
 
 export const SVG_IMAGE_TYPE_NAME: string = "RNSVGImage"
 

@@ -1,4 +1,4 @@
-import { Descriptor, RNOHContext, Tag } from 'rnoh'
+import { Descriptor, RNOHContext, Tag } from '@rnoh/react-native-openharmony'
 import { SVGCircleDescriptor, SVG_CIRCLE_TYPE_NAME } from '../components/SVGCircle'
 import { SVGPathDescriptor, SVG_PATH_TYPE_NAME } from '../components/SVGPath'
 import { SVGRectDescriptor, SVG_RECT_TYPE_NAME } from '../components/SVGRect'

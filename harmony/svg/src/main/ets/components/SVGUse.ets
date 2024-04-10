@@ -1,4 +1,4 @@
-import { Descriptor, RNOHContext, Tag } from "rnoh";
+import { Descriptor, RNOHContext, Tag } from "@rnoh/react-native-openharmony";
 import { SVGUseModifier } from "../attributeModifiers/SVGUseModifier";
 import { getDefsDescriptor } from "../common/SVGTempCache";
 import { SVGUseProps, SVGState, SVGBaseRawProps } from "../common/SVGType";

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { Descriptor, ComponentBuilderContext, RNOHContext, Tag, RNComponentFactory } from 'rnoh'
+import { Descriptor, ComponentBuilderContext, RNOHContext, Tag, RNComponentFactory } from '@rnoh/react-native-openharmony'
 import { SVGGroup, SVG_GROUP_TYPE_NAME } from './components/SVGGroup'
 import { SVGPath, SVG_PATH_TYPE_NAME } from './components/SVGPath'
 import { SVGRect, SVG_RECT_TYPE_NAME } from './components/SVGRect'

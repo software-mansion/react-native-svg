@@ -1,4 +1,4 @@
-import { convertColorValueToColorSegments } from 'rnoh';
+import { convertColorValueToColorSegments } from '@rnoh/react-native-openharmony';
 import { getColor, getRawColor } from "../common/SVGCommon";
 import { SVGUseDescriptor } from "../components/SVGUse";
 
