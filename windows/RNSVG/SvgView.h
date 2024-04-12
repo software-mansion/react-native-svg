@@ -9,8 +9,8 @@ struct SvgView : SvgViewT<SvgView> {
 
   SvgView(Microsoft::ReactNative::IReactContext const &context);
 
-  Windows::UI::Xaml::FrameworkElement SvgParent() { return m_parent; }
-  void SvgParent(Windows::UI::Xaml::FrameworkElement const &value);
+  xaml::FrameworkElement SvgParent() { return m_parent; }
+  void SvgParent(xaml::FrameworkElement const &value);
 
   RNSVG::GroupView Group() { return m_group; }
   void Group(RNSVG::GroupView const &value) { m_group = value; }
@@ -48,8 +48,8 @@ struct SvgView : SvgViewT<SvgView> {
   Windows::Foundation::Size MeasureOverride(Windows::Foundation::Size const &availableSize);
   Windows::Foundation::Size ArrangeOverride(Windows::Foundation::Size const &finalSize);
 
-  void Panel_Loaded(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &args);
-  void Panel_Unloaded(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &args);
+  void Panel_Loaded(Windows::Foundation::IInspectable const &sender, xaml::RoutedEventArgs const &args);
+  void Panel_Unloaded(Windows::Foundation::IInspectable const &sender, xaml::RoutedEventArgs const &args);
 
   void Invalidate();
 
@@ -58,10 +58,10 @@ struct SvgView : SvgViewT<SvgView> {
   bool m_hasRendered{false};
   bool m_isResponsible{false};
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
-  Windows::UI::Xaml::FrameworkElement m_parent{nullptr};
+  xaml::FrameworkElement m_parent{nullptr};
   RNSVG::D2DDevice m_device;
   RNSVG::D2DDeviceContext m_deviceContext;
-  Windows::UI::Xaml::Controls::Image m_image;
+  xaml::Controls::Image m_image;
   RNSVG::GroupView m_group{nullptr};
   hstring m_id{L""};
   float m_minX{0.0f};
@@ -74,14 +74,14 @@ struct SvgView : SvgViewT<SvgView> {
   RNSVG::SVGLength m_height{};
   std::string m_align{""};
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
-  Windows::UI::Color m_currentColor{Windows::UI::Colors::Black()};
+  Windows::UI::Color m_currentColor{Colors::Black()};
 
   Windows::Foundation::Collections::IMap<hstring, RNSVG::IRenderable> m_templates{
       winrt::single_threaded_map<hstring, RNSVG::IRenderable>()};
   Windows::Foundation::Collections::IMap<hstring, RNSVG::BrushView> m_brushes{
       winrt::single_threaded_map<hstring, RNSVG::BrushView>()};
-  Windows::UI::Xaml::FrameworkElement::Loaded_revoker m_panelLoadedRevoker{};
-  Windows::UI::Xaml::FrameworkElement::Unloaded_revoker m_panelUnloadedRevoker{};
+  xaml::FrameworkElement::Loaded_revoker m_panelLoadedRevoker{};
+  xaml::FrameworkElement::Unloaded_revoker m_panelUnloadedRevoker{};
 };
 } // namespace winrt::RNSVG::implementation
 

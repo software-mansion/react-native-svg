@@ -1,10 +1,11 @@
 import "Types.idl";
+#include <NamespaceRedirect.h>
 
 namespace RNSVG
 {
   interface IRenderable
   {
-    Windows.UI.Xaml.FrameworkElement SvgParent;
+    XAML_NAMESPACE.FrameworkElement SvgParent;
     D2DGeometry Geometry;
     Boolean IsResponsible;
 
@@ -19,7 +20,7 @@ namespace RNSVG
   };
 
   [default_interface]
-  runtimeclass SvgView : Windows.UI.Xaml.Controls.Panel, IRenderable
+  runtimeclass SvgView : XAML_NAMESPACE.Controls.Panel, IRenderable
   {
     SvgView(Microsoft.ReactNative.IReactContext context);
 
@@ -34,7 +35,7 @@ namespace RNSVG
   };
 
   [default_interface]
-  unsealed runtimeclass RenderableView : Windows.UI.Xaml.FrameworkElement, IRenderable
+  unsealed runtimeclass RenderableView : XAML_NAMESPACE.FrameworkElement, IRenderable
   {
     RenderableView(Microsoft.ReactNative.IReactContext context);
     SvgView SvgRoot{ get; };

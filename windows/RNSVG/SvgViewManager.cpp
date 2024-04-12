@@ -4,10 +4,10 @@
 #include "SvgViewManager.g.cpp"
 #endif
 
-#include <winrt/Windows.UI.Input.h>
-#include <winrt/Windows.UI.Xaml.Input.h>
-#include <winrt/Windows.UI.Xaml.Media.h>
-#include <winrt/Windows.UI.Xaml.Shapes.h>
+#include <UI.Input.h>
+#include <UI.Xaml.Input.h>
+#include <UI.Xaml.Media.h>
+#include <UI.Xaml.Shapes.h>
 
 #include "RenderableView.h"
 #include "SvgView.h"
@@ -16,8 +16,8 @@ namespace winrt {
 using namespace Windows::Foundation;
 using namespace Windows::Foundation::Collections;
 using namespace Microsoft::ReactNative;
-using namespace Windows::UI::Xaml;
-using namespace Windows::UI::Xaml::Controls;
+using namespace xaml;
+using namespace xaml::Controls;
 } // namespace winrt
 
 namespace winrt::RNSVG::implementation {
