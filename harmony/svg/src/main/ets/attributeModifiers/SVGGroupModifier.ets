@@ -87,8 +87,8 @@ export class SVGGroupModifier implements AttributeModifier<ShapeAttribute> {
       instance.opacity(this.descriptor.props.opacity);
     }
 
-    if (this.descriptor.props.matrix?.length === 6) {
-      instance.transform(getTransform(this.descriptor.props.matrix));
-    }
+    // if (this.descriptor.props.matrix?.length === 6) {
+    //   instance.transform(getTransform(this.descriptor.props.matrix));
+    // }
   }
 }

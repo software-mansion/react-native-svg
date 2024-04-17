@@ -72,7 +72,12 @@ export class SVGImageModifier implements AttributeModifier<ImageAttribute> {
       instance.opacity(this.descriptor.props.opacity);
     }
 
-    if (this.descriptor.props.matrix?.length === 6) {
+    // if (this.descriptor.props.matrix?.length === 6) {
+    //   instance.transform(getTransform(this.descriptor.props.matrix));
+    // }
+    if(this.descriptor.props.combineMetrics) {
+      instance.transform(this.descriptor.props.combineMetrics)
+    } else if (this.descriptor.props.matrix?.length === 6) {
       instance.transform(getTransform(this.descriptor.props.matrix));
     }
 

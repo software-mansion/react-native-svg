@@ -43,7 +43,6 @@ export const SVG_VIEW_TYPE_NAME: string = "RNSVGSvgView"
 export type SVGViewDescriptor = Descriptor<"RNSVGSvgView", SVGViewProps, SVGState, SVGViewRawProps>
 
 export class SVGViewDescriptorWrapper extends ViewDescriptorWrapperBase<"RNSVGSvgView", SVGViewProps> {
-  transformStringify: string = '0'
 }
 
 @Component

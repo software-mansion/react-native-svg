@@ -21,17 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import { convertColorValueToColorSegments } from '@rnoh/react-native-openharmony';
 
 import {
   getColor,
   getFillOpacity,
+  getRawColor,
+  getRawFillOpacity,
   getStrokeLineCap,
   getStrokeLineJoin,
   getStrokeWidth,
   getTransform
 } from '../common/SVGCommon';
 import { getMaskDescriptor } from '../common/SVGTempCache';
-import { SVGViewCommon } from '../common/SVGType';
+import { SVGViewCommon, SVGViewRawCommon } from '../common/SVGType';
 import { SVGCircleDescriptor, SVGCircleDescriptorWrapper } from '../components/SVGCircle';
 
 export class SVGCircleModifier implements AttributeModifier<CircleAttribute> {
@@ -41,7 +44,7 @@ export class SVGCircleModifier implements AttributeModifier<CircleAttribute> {
   private static instance: SVGCircleModifier;
   protected descriptor: SVGCircleDescriptor = Object() as SVGCircleDescriptor;
   protected descriptorWrapper: SVGCircleDescriptorWrapper | undefined = undefined;
-  protected svgViewCommon: SVGViewCommon | undefined = undefined;
+  protected svgViewCommon: SVGViewRawCommon | undefined = undefined;
   private scaleValue: number = 1;
 
   public static getInstance(): SVGCircleModifier {
@@ -53,7 +56,7 @@ export class SVGCircleModifier implements AttributeModifier<CircleAttribute> {
 
   setDescriptor(descriptor: SVGCircleDescriptor,
                 descriptorWrapper: SVGCircleDescriptorWrapper | undefined,
-                svgViewCommon: SVGViewCommon | undefined): SVGCircleModifier {
+                svgViewCommon: SVGViewRawCommon | undefined): SVGCircleModifier {
     this.descriptor = descriptor;
     this.descriptorWrapper = descriptorWrapper;
     this.svgViewCommon = svgViewCommon;
@@ -72,11 +75,12 @@ export class SVGCircleModifier implements AttributeModifier<CircleAttribute> {
 
     instance.position(this.descriptor.layoutMetrics.frame.origin);
 
-    if (JSON.stringify(this.descriptor?.props.fill?.payload) !== '[0,0,0,1]') {
-      instance.fill(getColor(this.descriptor.props.fill?.payload));
+    if (JSON.stringify(convertColorValueToColorSegments(this.descriptor?.rawProps.fill?.payload)) !== '[0,0,0,1]') {
+      instance.fill(getRawColor(this.descriptor.rawProps.fill?.payload));
     }
 
-    let fillOpacity = getFillOpacity(this.descriptor.props.fill, this.descriptor.props.fillOpacity)
+    // let fillOpacity = this.descriptor.rawProps.fill?.payload ? this.descriptor.props.fillOpacity : 0
+    let fillOpacity = getRawFillOpacity(this.descriptor.rawProps.fill, this.descriptor.props.fillOpacity)
     if (fillOpacity !== 1) {
       instance.fillOpacity(fillOpacity);
     }
@@ -113,8 +117,13 @@ export class SVGCircleModifier implements AttributeModifier<CircleAttribute> {
       instance.opacity(this.descriptor.props.opacity);
     }
 
-    if (this.descriptor.props.matrix?.length === 6) {
-      instance.transform(getTransform(this.descriptor.props.matrix));
+    // if (this.descriptor.props.matrix?.length === 6) {
+    //   instance.transform(getTransform(this.descriptor.props.matrix));
+    // }
+    if(this.descriptor.props.combineMetrics) {
+      instance.transform(this.descriptor.props.combineMetrics)
+    } else if (this.descriptor.props.matrix?.length === 6) {
+        instance.transform(getTransform(this.descriptor.props.matrix));
     }
 
     if (this.descriptor.props.mask) {

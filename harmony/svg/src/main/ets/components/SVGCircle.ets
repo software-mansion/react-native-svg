@@ -83,7 +83,7 @@ export struct SVGCircle {
       .stroke(getColor(this.descriptor.props.stroke?.payload))
       .strokeWidth(getStrokeWidth(this.descriptor.props.strokeWidth))
       .opacity(this.descriptor.props.opacity)
-      .transform(getTransform(this.descriptor.props.matrix))
+      .transform(this.descriptor.props.combineMetrics)
       .position(getOffset(this.getCenterX(), this.getCenterY()))
       .linearGradient(this.gradient)
       .clip(this.getLinearGradientClip())
@@ -91,7 +91,7 @@ export struct SVGCircle {
 
     // Circle还不支持attributeModifier
     // .attributeModifier(SVGCircleModifier.getInstance()
-    //   .setDescriptor(this.descriptor, this.descriptorWrapper))
+    //   .setDescriptor(this.descriptor, this.descriptorWrapper, this.svgViewCommon))
   }
 
   getDiameter() {

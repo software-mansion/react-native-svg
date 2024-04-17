@@ -38,6 +38,8 @@ import { svgComponentFactoryBuilder } from '../SVGComponentFactory'
 import { SVGCircleDescriptor, SVG_CIRCLE_TYPE_NAME } from './SVGCircle'
 import { SVGGroupModifier } from '../attributeModifiers/SVGGroupModifier'
 import { SVGMask, SVG_Mask_TYPE_NAME } from '../common/SVGMask'
+import { getTransform } from '../common/SVGCommon'
+import matrix4 from '@ohos.matrix4';
 
 export const SVG_GROUP_TYPE_NAME: string = "RNSVGGroup"
 
@@ -119,6 +121,28 @@ export struct SVGGroup {
     }
   }
 
+  basicMerge (tag: number, type: string) {
+    const childDescriptor = this.ctx.descriptorRegistry.getDescriptor<SVGGroupDescriptor | SVGPathDescriptor | SVGRectDescriptor | SVGImageDescriptor | SVGTextDescriptor | SVGCircleDescriptor>(tag)
+    if (!childDescriptor) {
+      return
+    }
+    const parentDescriptor = this.descriptor
+    if (parentDescriptor.props.mask) {
+      if (!childDescriptor.props.mask) {
+        childDescriptor.props.mask = parentDescriptor.props.mask
+      }
+    }
+    let perentMatrics : matrix4.Matrix4Transit
+    if (!parentDescriptor.props.combineMetrics) {
+      perentMatrics = getTransform(parentDescriptor.props.matrix) as matrix4.Matrix4Transit
+    } else {
+      perentMatrics = parentDescriptor.props.combineMetrics
+    }
+    const childMatrics = getTransform(childDescriptor.props.matrix) as matrix4.Matrix4Transit
+    const combineMetrics: matrix4.Matrix4Transit = perentMatrics.copy().combine(childMatrics)
+    childDescriptor.props.combineMetrics = combineMetrics
+  }
+
   commonPropMerge(type: string, tag: number) {
     let descriptor: SVGPathDescriptor | SVGRectDescriptor | SVGImageDescriptor | SVGTextDescriptor | SVGCircleDescriptor | undefined = undefined
     switch (type) {
@@ -170,6 +194,7 @@ export struct SVGGroup {
         childrenTag.push(tag)
         this.mergeProperties(type, tag)
       }
+      this.basicMerge(tag, type)
     })
     return childrenTag
   }

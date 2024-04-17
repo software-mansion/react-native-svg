@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 import { ViewBaseProps, ViewRawProps } from '@rnoh/react-native-openharmony/ts';
+import matrix4 from '@ohos.matrix4';
 
 /** 0-1 */
 export type NormalizedScalar = number
@@ -88,6 +89,7 @@ export interface SVGCommonProps extends ViewBaseProps {
   responsible?: boolean,
   display?: string,
   pointerEvents?: string
+  combineMetrics: matrix4.Matrix4Transit
 }
 
 export interface SVGMaskProps extends SVGCommonProps {}
