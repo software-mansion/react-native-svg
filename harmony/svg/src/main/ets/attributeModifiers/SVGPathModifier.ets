@@ -31,9 +31,10 @@ import {
   getStrokeLineCap,
   getStrokeLineJoin,
   getStrokeWidth,
-  getTransform
+  getTransform,
+  calculateOffset,
 } from '../common/SVGCommon';
-import { SVGViewCommon, SVGViewRawCommon } from '../common/SVGType';
+import { SVGViewCommon, SVGViewRawCommon, SVGOffset } from '../common/SVGType';
 import { SVGLinearGradientValue } from '../common/SVGLinearGradient';
 import { getMaskDescriptor } from '../common/SVGTempCache';
 import { convertColorValueToColorSegments } from '@rnoh/react-native-openharmony';
@@ -74,6 +75,19 @@ export class SVGPathModifier implements AttributeModifier<PathAttribute> {
 
   applyNormalAttribute(instance: PathAttribute): void {
     instance.position(this.descriptor.layoutMetrics.frame.origin);
+
+    if (this.svgViewCommon) {
+      const groupBox = this.svgViewCommon.groupBox
+      const svgWidth = this.svgViewCommon.svgWidth
+      const svgHeight = this.svgViewCommon.svgHeight
+      if ((svgWidth / svgHeight) != (groupBox.width / groupBox.height)) {
+        const offset: SVGOffset = calculateOffset(svgWidth, svgHeight, groupBox.width, groupBox.height)
+        instance.translate({
+          x : `${offset.x as number / this.svgViewCommon.scaleValue}`,
+          y: `${offset.y as number / this.svgViewCommon.scaleValue }`,
+        })
+      }
+    }
 
     if (this.descriptor.props.d) {
       instance.commands(this.descriptor.props.d);
