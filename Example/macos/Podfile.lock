@@ -1015,12 +1015,12 @@ PODS:
     - React-jsi (= 0.73.2)
     - React-logger (= 0.73.2)
     - React-perflogger (= 0.73.2)
-  - RNReanimated (3.6.1):
+  - RNReanimated (3.9.0-nightly-20240421-474f6983d):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNSVG (14.1.0):
+  - RNSVG (15.2.0-rc.0):
     - React-Core
   - SocketRocket (0.7.0)
   - Yoga (1.14.0)
@@ -1231,8 +1231,8 @@ SPEC CHECKSUMS:
   React-runtimescheduler: ba4b5adaf8396250b73c880574a866617236c259
   React-utils: a59446d0f4d3dc0f0c231211236dbfc9584207fe
   ReactCommon: 7c8bee1aa36c2858b5db198445976713db53efa3
-  RNReanimated: 57f436e7aa3d277fbfed05e003230b43428157c0
-  RNSVG: 4ddf4baa2fdd87abd32e5fdd2c5e10522c97b204
+  RNReanimated: 1dc3058de4aeea5266c962ab43c184043bb0e9f2
+  RNSVG: 55bf7e6e90717321191cde721072df87e9f8a024
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 88c1183f66254fdae21331e195458e5b57514832
 
