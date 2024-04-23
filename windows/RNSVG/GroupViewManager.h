@@ -13,13 +13,13 @@ struct GroupViewManager : GroupViewManagerT<GroupViewManager, RNSVG::implementat
 
   // IViewManagerWithChildren
   void
-  AddView(Windows::UI::Xaml::FrameworkElement const &parent, Windows::UI::Xaml::UIElement const &child, int64_t index);
-  void RemoveAllChildren(Windows::UI::Xaml::FrameworkElement const &parent);
-  void RemoveChildAt(Windows::UI::Xaml::FrameworkElement const &parent, int64_t index);
+  AddView(xaml::FrameworkElement const &parent, xaml::UIElement const &child, int64_t index);
+  void RemoveAllChildren(xaml::FrameworkElement const &parent);
+  void RemoveChildAt(xaml::FrameworkElement const &parent, int64_t index);
   void ReplaceChild(
-      Windows::UI::Xaml::FrameworkElement const &parent,
-      Windows::UI::Xaml::UIElement const &oldChild,
-      Windows::UI::Xaml::UIElement const &newChild);
+      xaml::FrameworkElement const &parent,
+      xaml::UIElement const &oldChild,
+      xaml::UIElement const &newChild);
 };
 } // namespace winrt::RNSVG::implementation
 

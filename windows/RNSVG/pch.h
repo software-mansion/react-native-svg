@@ -9,7 +9,7 @@
 #include <windows.h>
 #include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Windows.Foundation.h>
-#include <winrt/Windows.UI.Xaml.Media.h>
-#include <winrt/Windows.UI.Xaml.h>
+#include <CppWinRTIncludes.h>
+#include <UI.Xaml.Media.h>
 
 #include <winrt/Microsoft.ReactNative.h>

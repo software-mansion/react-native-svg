@@ -385,7 +385,7 @@ RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
   return nullptr;
 }
 
-void RenderableView::SetColor(const JSValueObject &propValue, ui::Color const &fallbackColor, std::string propName) {
+void RenderableView::SetColor(const JSValueObject &propValue, Windows::UI::Color const &fallbackColor, std::string propName) {
   switch (propValue["type"].AsInt64()) {
     // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractBrush.ts#L29
     case 1: {
