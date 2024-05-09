@@ -3,9 +3,9 @@ import { useState, useEffect, Component } from 'react';
 import type { ImageSourcePropType } from 'react-native';
 import { Platform, Image } from 'react-native';
 
-import type { SvgProps } from '../elements/Svg';
-import { fetchText } from '../xml';
+import { fetchText } from 'react-native-svg';
 import { SvgCss, SvgWithCss } from './css';
+import type { SvgProps } from 'react-native-svg';
 
 export function getUriFromSource(source: ImageSourcePropType) {
   const resolvedAssetSource = Image.resolveAssetSource(source);
