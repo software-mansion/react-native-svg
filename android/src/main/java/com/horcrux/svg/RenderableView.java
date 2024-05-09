@@ -273,7 +273,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   }
 
   public void setStrokeWidth(Dynamic strokeWidth) {
-    this.strokeWidth = SVGLength.from(strokeWidth);
+    this.strokeWidth = strokeWidth.isNull() ? new SVGLength(1) : SVGLength.from(strokeWidth);
     invalidate();
   }
 
