@@ -10,7 +10,7 @@ import type {
   XmlProps,
   XmlState,
 } from 'react-native-svg';
-import { camelCase, err, fetchText, parse, SvgAst } from 'react-native-svg';
+import { camelCase, fetchText, parse, SvgAst } from 'react-native-svg';
 import type {
   Atrule,
   AtrulePrelude,
@@ -26,6 +26,8 @@ import type {
 import csstree, { List } from 'css-tree';
 import type { Options } from 'css-select';
 import cssSelect from 'css-select';
+
+const err = console.error.bind(console);
 
 /*
  * Style element inlining experiment based on SVGO
