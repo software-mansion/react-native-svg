@@ -1,17 +1,6 @@
 import * as React from 'react';
 import { Component, useEffect, useMemo, useState } from 'react';
 import type {
-  JsxAST,
-  Middleware,
-  Styles,
-  UriProps,
-  UriState,
-  XmlAST,
-  XmlProps,
-  XmlState,
-} from 'react-native-svg';
-import { camelCase, err, fetchText, parse, SvgAst } from 'react-native-svg';
-import type {
   Atrule,
   AtrulePrelude,
   CssNode,
@@ -26,6 +15,17 @@ import type {
 import csstree, { List } from 'css-tree';
 import type { Options } from 'css-select';
 import cssSelect from 'css-select';
+import type {
+  JsxAST,
+  Middleware,
+  Styles,
+  UriProps,
+  UriState,
+  XmlAST,
+  XmlProps,
+  XmlState,
+} from '../xml';
+import { camelCase, fetchText, parse, SvgAst, err } from '../xml';
 
 /*
  * Style element inlining experiment based on SVGO
