@@ -40,7 +40,7 @@ export default function App() {
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <SvgXml width={400} height={300} xml={svgXml} />
       <Svg width={400} height={300}>
-        <RadialGradient id="a" r={5}>
+        <RadialGradient id="a" r={0}>
           <Stop offset={0} stopColor="#f00" />
           <Stop offset="50%" stopColor="#0f0" />
           <Stop offset="100%" stopColor="#00f" />
