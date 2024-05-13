@@ -317,6 +317,21 @@ class SvgViewManager extends ReactViewManager
   }
 
   @Override
+  public void setBorderBlockColor(SvgView view, @Nullable Integer value) {
+    super.setBorderColor(view, 9, value);
+  }
+
+  @Override
+  public void setBorderBlockEndColor(SvgView view, @Nullable Integer value) {
+    super.setBorderColor(view, 10, value);
+  }
+
+  @Override
+  public void setBorderBlockStartColor(SvgView view, @Nullable Integer value) {
+    super.setBorderColor(view, 11, value);
+  }
+
+  @Override
   public void setBorderRadius(SvgView view, double value) {
     super.setBorderRadius(view, 0, (float) value);
   }
@@ -339,5 +354,25 @@ class SvgViewManager extends ReactViewManager
   @Override
   public void setBorderBottomLeftRadius(SvgView view, double value) {
     super.setBorderRadius(view, 4, (float) value);
+  }
+
+  @Override
+  public void setBorderEndEndRadius(SvgView view, double value) {
+    super.setBorderRadius(view, 9, (float) value);
+  }
+
+  @Override
+  public void setBorderEndStartRadius(SvgView view, double value) {
+    super.setBorderRadius(view, 10, (float) value);
+  }
+
+  @Override
+  public void setBorderStartEndRadius(SvgView view, double value) {
+    super.setBorderRadius(view, 11, (float) value);
+  }
+
+  @Override
+  public void setBorderStartStartRadius(SvgView view, double value) {
+    super.setBorderRadius(view, 12, (float) value);
   }
 }
