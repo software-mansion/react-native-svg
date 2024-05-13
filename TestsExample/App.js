@@ -12,6 +12,7 @@ import Test2071 from './src/Test2071';
 import Test2089 from './src/Test2089';
 import Test2196 from './src/Test2196';
 import Test2266 from './src/Test2266';
+import Test1986 from './src/Test1986';
 
 export default function App() {
   return <ColorTest />;
