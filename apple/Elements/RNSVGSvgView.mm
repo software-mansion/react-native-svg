@@ -344,10 +344,10 @@ using namespace facebook::react;
 #endif
 #if !TARGET_OS_OSX // [macOS]
   NSData *imageData = UIImagePNGRepresentation(image);
-  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
 #else // [macOS
   NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
-  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
   UIGraphicsEndImageContext();
 #endif // macOS]
   return base64;
