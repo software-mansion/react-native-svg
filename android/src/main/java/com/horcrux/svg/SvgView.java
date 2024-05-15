@@ -339,7 +339,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
     bitmap.recycle();
     byte[] bitmapBytes = stream.toByteArray();
-    return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+    return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
   }
 
   String toDataURL(int width, int height) {
@@ -353,7 +353,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
     bitmap.recycle();
     byte[] bitmapBytes = stream.toByteArray();
-    return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+    return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
   }
 
   void enableTouchEvents() {
