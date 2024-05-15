@@ -23,7 +23,6 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
-import com.horcrux.rnsvg.NativeSvgRenderableModuleSpec;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
