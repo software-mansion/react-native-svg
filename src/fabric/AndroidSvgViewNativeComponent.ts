@@ -70,6 +70,13 @@ interface NativeProps extends ViewProps {
   borderRadius?: Double;
   borderBottomLeftRadius?: Double;
   borderTopLeftRadius?: Double;
+  borderBlockColor?: ColorValue;
+  borderBlockEndColor?: ColorValue;
+  borderBlockStartColor?: ColorValue;
+  borderEndEndRadius?: Double;
+  borderEndStartRadius?: Double;
+  borderStartEndRadius?: Double;
+  borderStartStartRadius?: Double;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGSvgViewAndroid', {
