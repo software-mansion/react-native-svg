@@ -150,6 +150,27 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
       case "borderTopLeftRadius":
         mViewManager.setBorderTopLeftRadius(view, value == null ? 0f : ((Double) value).doubleValue());
         break;
+      case "borderBlockColor":
+        mViewManager.setBorderBlockColor(view, ColorPropConverter.getColor(value, view.getContext()));
+        break;
+      case "borderBlockEndColor":
+        mViewManager.setBorderBlockEndColor(view, ColorPropConverter.getColor(value, view.getContext()));
+        break;
+      case "borderBlockStartColor":
+        mViewManager.setBorderBlockStartColor(view, ColorPropConverter.getColor(value, view.getContext()));
+        break;
+      case "borderEndEndRadius":
+        mViewManager.setBorderEndEndRadius(view, value == null ? 0f : ((Double) value).doubleValue());
+        break;
+      case "borderEndStartRadius":
+        mViewManager.setBorderEndStartRadius(view, value == null ? 0f : ((Double) value).doubleValue());
+        break;
+      case "borderStartEndRadius":
+        mViewManager.setBorderStartEndRadius(view, value == null ? 0f : ((Double) value).doubleValue());
+        break;
+      case "borderStartStartRadius":
+        mViewManager.setBorderStartStartRadius(view, value == null ? 0f : ((Double) value).doubleValue());
+        break;
       default:
         super.setProperty(view, propName, value);
     }
