@@ -57,4 +57,11 @@ public interface RNSVGSvgViewAndroidManagerInterface<T extends View> {
   void setBorderRadius(T view, double value);
   void setBorderBottomLeftRadius(T view, double value);
   void setBorderTopLeftRadius(T view, double value);
+  void setBorderBlockColor(T view, @Nullable Integer value);
+  void setBorderBlockEndColor(T view, @Nullable Integer value);
+  void setBorderBlockStartColor(T view, @Nullable Integer value);
+  void setBorderEndEndRadius(T view, double value);
+  void setBorderEndStartRadius(T view, double value);
+  void setBorderStartEndRadius(T view, double value);
+  void setBorderStartStartRadius(T view, double value);
 }
