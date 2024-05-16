@@ -317,8 +317,10 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     while (
       i + 1 < length &&
       (source[i] !== '<' ||
-        (!validNameCharacters.test(source[i + 1]) &&
-          !commentStart.test(source.slice(i, i + 4))))
+        !(
+          validNameCharacters.test(source[i + 1]) ||
+          commentStart.test(source.slice(i, i + 4))
+        ))
     ) {
       i++;
     }
