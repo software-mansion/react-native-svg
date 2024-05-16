@@ -292,6 +292,7 @@ function locate(source: string, i: number) {
 }
 
 const validNameCharacters = /[a-zA-Z0-9:_-]/;
+const commentStart = /<!--/;
 const whitespace = /[\s\t\r\n]/;
 const quotemarks = /['"]/;
 
@@ -315,7 +316,9 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
   function metadata() {
     while (
       i + 1 < length &&
-      (source[i] !== '<' || !validNameCharacters.test(source[i + 1]))
+      (source[i] !== '<' ||
+        (!validNameCharacters.test(source[i + 1]) &&
+          !commentStart.test(source.slice(i, i + 4))))
     ) {
       i++;
     }
