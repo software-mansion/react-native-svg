@@ -93,3 +93,79 @@ repositories {
 dependencies {
     implementation 'com.facebook.react:react-native:+'
 }
+
+def isRNSVGExampleApp() {
+    return project.hasProperty('isRNSVGExampleApp') && project.property('isRNSVGExampleApp') == "true"
+}
+
+def getAbsoluteCodegenArtifactsPaperDestination() {
+    if (!project.hasProperty('codegenArtifactsPaperDestination')) {
+        throw new Exception('[RNSVG] Please fill codegenArtifactsPaperDestination variable in android/gradle.properties correct path to paper paper destination')
+    }
+
+    return "${project.rootDir}/../../${project.property('codegenArtifactsPaperDestination')}"
+}
+
+def getAbsoluteCodegenArtifactsSource() {
+    if (!project.hasProperty('codegenArtifactsSource')) {
+        throw new Exception('[RNSVG] Please fill codegenArtifactsSource variable in android/gradle.properties correct path to codegenerated artifacts')
+    }
+
+    return "${project.rootDir}/../../${project.property('codegenArtifactsSource')}"
+}
+
+
+tasks.register("copyCodegenArtifacts") {
+    group 'After build tasks'
+    description 'Tasks which copy codegen artifacts to paper architecture'
+    
+    if (!isRNSVGExampleApp() || !isNewArchitectureEnabled()) {
+        return
+    }
+
+    dependsOn tasks.generateCodegenArtifactsFromSchema
+
+    doLast {
+
+        def absoluteCodegenArtifactsPaperDestination = getAbsoluteCodegenArtifactsPaperDestination()
+        def absoluteCodegenArtifactsSource = getAbsoluteCodegenArtifactsSource()
+
+        def existingFiles = fileTree(absoluteCodegenArtifactsPaperDestination).matching {
+            include '**/*.java'
+        }
+
+        def generatedFiles = fileTree(absoluteCodegenArtifactsSource).matching {
+            include '**/*.java'
+        }
+
+        def existingFilesMap = [:]
+
+        existingFiles.forEach { existingFile ->
+            existingFilesMap[existingFile.name] = 1
+        }
+
+        generatedFiles.forEach { generatedFile -> 
+            if (!existingFilesMap.containsKey(generatedFile.name)) {
+                logger.warn("[RNSVG] ${generatedFile.name} not found in paper dir, if it's used in Android you need to copy it manually and implement yourself before using auto-copy feature")
+            }
+        }
+
+        if (existingFiles.size() == 0) {
+            logger.warn("[RNSVG] Paper destination with codegen interfaces is empty. This might be okay if you don't have any interfaces/delegates used in Android, if that's not the case please check if codegenArtifactsPaperDestination in android/gradle.properties is correct")
+        }
+
+        if (existingFiles.size() > generatedFiles.size()) {
+            throw new Exception("[RNSVG] Number od generated artifacts should be greather then or equal to paper interfaces. Please check if codegenArtifactsSource in android/gradle.properties is correct")
+        }
+
+        copy {
+            from absoluteCodegenArtifactsSource
+            include existingFiles.collect { it.name }
+            into absoluteCodegenArtifactsPaperDestination
+        }
+    }
+}
+
+if (isRNSVGExampleApp() && isNewArchitectureEnabled()) {
+    tasks.generateCodegenArtifactsFromSchema.finalizedBy('copyCodegenArtifacts')
+}
