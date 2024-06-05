@@ -14,7 +14,8 @@ import Test2196 from './src/Test2196';
 import Test2266 from './src/Test2266';
 import Test1986 from './src/Test1986';
 import Test2276 from './src/Test2276';
+import Test2148 from './src/Test2148';
 
 export default function App() {
-  return <ColorTest />;
+  return <Test2148 />;
 }

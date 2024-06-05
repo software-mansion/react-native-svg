@@ -171,10 +171,15 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
   }
 
   parse(xml: string | null) {
+    const { onError = err } = this.props;
     try {
       this.setState({ ast: xml ? parse(xml) : null });
     } catch (e) {
-      console.error(e);
+      const error = e as Error;
+      onError({
+        ...error,
+        message: `Couldn't parse SVG, case: ${error.message}`,
+      });
     }
   }
 
@@ -213,7 +218,7 @@ export class SvgFromUri extends Component<UriProps, UriState> {
       props,
       state: { xml },
     } = this;
-    return <SvgFromXml xml={xml} override={props} />;
+    return <SvgFromXml xml={xml} override={props} onError={props.onError} />;
   }
 }
 
