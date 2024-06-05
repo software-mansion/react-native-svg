@@ -100,7 +100,7 @@ def isRNSVGExampleApp() {
 
 def getAbsoluteCodegenArtifactsPaperDestination() {
     if (!project.hasProperty('codegenArtifactsPaperDestination')) {
-        throw new Exception('[RNSVG] Please fill codegenArtifactsPaperDestination variable in android/gradle.properties correct path to paper paper destination')
+        throw new Exception('[RNSVG] Please fill codegenArtifactsPaperDestination variable in android/gradle.properties to point to the correct path to generated specs for paper')
     }
 
     return "${project.rootDir}/../../${project.property('codegenArtifactsPaperDestination')}"
@@ -108,7 +108,7 @@ def getAbsoluteCodegenArtifactsPaperDestination() {
 
 def getAbsoluteCodegenArtifactsSource() {
     if (!project.hasProperty('codegenArtifactsSource')) {
-        throw new Exception('[RNSVG] Please fill codegenArtifactsSource variable in android/gradle.properties correct path to codegenerated artifacts')
+        throw new Exception('[RNSVG] Please fill codegenArtifactsSource variable in android/gradle.properties to point to the correct path to generated specs for paper')
     }
 
     return "${project.rootDir}/../../${project.property('codegenArtifactsSource')}"
@@ -117,7 +117,7 @@ def getAbsoluteCodegenArtifactsSource() {
 
 tasks.register("copyCodegenArtifacts") {
     group 'After build tasks'
-    description 'Tasks which copy codegen artifacts to paper architecture'
+    description 'Task which copies codegen artifacts to paper architecture'
     
     if (!isRNSVGExampleApp() || !isNewArchitectureEnabled()) {
         return
@@ -155,7 +155,7 @@ tasks.register("copyCodegenArtifacts") {
         }
 
         if (existingFiles.size() > generatedFiles.size()) {
-            throw new Exception("[RNSVG] Number od generated artifacts should be greather then or equal to paper interfaces. Please check if codegenArtifactsSource in android/gradle.properties is correct")
+            throw new Exception("[RNSVG] Number od generated artifacts should be greater than or equal to paper interfaces. Please check if codegenArtifactsSource in android/gradle.properties is correct")
         }
 
         copy {
