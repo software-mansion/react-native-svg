@@ -178,7 +178,7 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
       const error = e as Error;
       onError({
         ...error,
-        message: `Couldn't parse SVG, case: ${error.message}`,
+        message: `[RNSVG] Couldn't parse SVG, reason: ${error.message}`,
       });
     }
   }
