@@ -302,7 +302,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
   const length = source.length;
   let currentElement: XmlAST | null = null;
   let state = metadata;
-  let children = null;
+  let children = [];
   let root: XmlAST | undefined;
   const stack: XmlAST[] = [];
 
