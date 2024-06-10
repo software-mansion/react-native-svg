@@ -237,8 +237,7 @@ void PatternFunction(void *info, CGContextRef context)
     rx = width;
     ry = height;
     CGGradientRelease(gradient);
-    NSArray<NSNumber *> *gradientArray =
-        @[ _colors.firstObject, _colors.lastObject, _colors[_colors.count - 2], _colors.lastObject ];
+    NSArray<NSNumber *> *gradientArray = @[ _colors.firstObject, _colors.lastObject, _colors[_colors.count - 2], _colors.lastObject ];
     gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:gradientArray]);
   }
 
