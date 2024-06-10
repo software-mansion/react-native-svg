@@ -56,7 +56,8 @@
     "prepare": "npm run bob && husky install",
     "release": "npm login && release-it",
     "test": "npm run lint && npm run tsc",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "checkIntegrity": "(cd ./FabricExample/android && ./gradlew generateCodegenArtifactsFromSchema -PskipCodegenCopyTask) && (cd ./android && ./gradlew checkIntegrityBetweenArchitectures)"
   },
   "peerDependencies": {
     "react": "*",
