@@ -2,7 +2,6 @@ name: Test Paper Architecture integrity
 on: [pull_request]
 jobs:
   check:
-    if: github.repository == 'software-mansion/react-native-gesture-handler'
     runs-on: ubuntu-latest
     concurrency:
       group: kotlin-lint-${{ github.ref }}
