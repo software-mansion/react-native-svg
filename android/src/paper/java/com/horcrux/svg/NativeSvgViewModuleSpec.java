@@ -20,8 +20,7 @@ import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class NativeSvgViewModuleSpec extends ReactContextBaseJavaModule
-    implements TurboModule {
+public abstract class NativeSvgViewModuleSpec extends ReactContextBaseJavaModule implements TurboModule {
   public static final String NAME = "RNSVGSvgViewModule";
 
   public NativeSvgViewModuleSpec(ReactApplicationContext reactContext) {

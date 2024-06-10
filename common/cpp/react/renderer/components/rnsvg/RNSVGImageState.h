@@ -26,8 +26,8 @@ class JSI_EXPORT RNSVGImageState final {
  public:
   RNSVGImageState(ImageSource const &imageSource, ImageRequest imageRequest)
       : imageSource_(imageSource),
-        imageRequest_(std::make_shared<ImageRequest>(std::move(imageRequest))) {
-        };
+        imageRequest_(
+            std::make_shared<ImageRequest>(std::move(imageRequest))){};
 
   /*
    * Returns stored ImageSource object.
@@ -41,7 +41,7 @@ class JSI_EXPORT RNSVGImageState final {
   ImageRequest const &getImageRequest() const;
 
 #ifdef ANDROID
-  RNSVGImageState(RNSVGImageState const &previousState, folly::dynamic data) {};
+  RNSVGImageState(RNSVGImageState const &previousState, folly::dynamic data){};
 
   /*
    * Empty implementation for Android because it doesn't use this class.
