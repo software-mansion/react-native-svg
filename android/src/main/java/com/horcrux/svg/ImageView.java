@@ -32,9 +32,10 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.events.EventDispatcher;
-import com.facebook.react.views.image.ImageLoadEvent;
 import com.facebook.react.views.imagehelper.ImageSource;
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
+import com.horcrux.svg.events.SvgLoadEvent;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -143,11 +144,11 @@ class ImageView extends RenderableView {
         new BaseBitmapDataSubscriber() {
           @Override
           public void onNewResultImpl(Bitmap bitmap) {
-            mEventDispatcher.dispatchEvent(
-                ImageLoadEvent.createLoadEvent(
+            final EventDispatcher mEventDispatcher =
+            UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
+            mEventDispatcher.dispatchEvent(new SvgLoadEvent(
                     UIManagerHelper.getSurfaceId(ImageView.this),
-                    getId(),
-                    imageSource.getSource(),
+                    getId(), imageSource.getSource(),
                     bitmap.getWidth(),
                     bitmap.getHeight()));
             mLoading.set(false);

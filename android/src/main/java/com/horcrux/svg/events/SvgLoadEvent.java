@@ -12,11 +12,11 @@ public class SvgLoadEvent extends Event<SvgLoadEvent> {
   private final float height;
   private final String uri;
 
-  public SvgLoadEvent(int viewId, float width, float height, String uri) {
-    super(viewId);
+  public SvgLoadEvent(int surfaceId, int viewId, String uri, float width, float height) {
+    super(surfaceId, viewId);
+    this.uri = uri;
     this.width = width;
     this.height = height;
-    this.uri = uri;
   }
 
   @Override
