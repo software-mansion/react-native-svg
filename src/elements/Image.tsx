@@ -1,5 +1,9 @@
 import * as React from 'react';
-import type { ImageProps as RNImageProps, NativeMethods } from 'react-native';
+import type {
+  ImageProps as RNImageProps,
+  NativeMethods,
+  NativeSyntheticEvent,
+} from 'react-native';
 import { Image } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
 import { withoutXY } from '../lib/extract/extractProps';
@@ -8,7 +12,6 @@ import Shape from './Shape';
 import RNSVGImage, {
   type ImageLoadEventData,
 } from '../fabric/ImageNativeComponent';
-import { DirectEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
 
 const spacesRegExp = /\s+/;
 
@@ -21,7 +24,7 @@ export interface ImageProps extends CommonPathProps {
   href?: RNImageProps['source'] | string;
   preserveAspectRatio?: string;
   opacity?: NumberProp;
-  onLoad?: DirectEventHandler<ImageLoadEventData>;
+  onLoad?: (e: NativeSyntheticEvent<ImageLoadEventData>) => void;
 }
 
 export default class SvgImage extends Shape<ImageProps> {
