@@ -24,7 +24,7 @@ class RNSVGImageComponentDescriptor final
  public:
   RNSVGImageComponentDescriptor(ComponentDescriptorParameters const &parameters)
       : ConcreteComponentDescriptor(parameters),
-        imageManager_(std::make_shared<ImageManager>(contextContainer_)){};
+        imageManager_(std::make_shared<ImageManager>(contextContainer_)) {};
 
   void adopt(ShadowNode &shadowNode) const override {
     ConcreteComponentDescriptor::adopt(shadowNode);

@@ -5,7 +5,10 @@ import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
 import { withoutXY } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import RNSVGImage from '../fabric/ImageNativeComponent';
+import RNSVGImage, {
+  type ImageLoadEventData,
+} from '../fabric/ImageNativeComponent';
+import { DirectEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
 
 const spacesRegExp = /\s+/;
 
@@ -18,6 +21,7 @@ export interface ImageProps extends CommonPathProps {
   href?: RNImageProps['source'] | string;
   preserveAspectRatio?: string;
   opacity?: NumberProp;
+  onLoad?: DirectEventHandler<ImageLoadEventData>;
 }
 
 export default class SvgImage extends Shape<ImageProps> {
@@ -41,6 +45,7 @@ export default class SvgImage extends Shape<ImageProps> {
       height,
       xlinkHref,
       href = xlinkHref,
+      onLoad,
     } = props;
     const modes = preserveAspectRatio
       ? preserveAspectRatio.trim().split(spacesRegExp)
@@ -53,6 +58,7 @@ export default class SvgImage extends Shape<ImageProps> {
       y,
       width,
       height,
+      onLoad,
       meetOrSlice: meetOrSliceTypes[meetOrSlice] || 0,
       align: alignEnum[align] || 'xMidYMid',
       src: !href

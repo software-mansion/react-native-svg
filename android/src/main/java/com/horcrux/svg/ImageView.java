@@ -30,6 +30,9 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.ReactConstants;
+import com.facebook.react.uimanager.UIManagerHelper;
+import com.facebook.react.uimanager.events.EventDispatcher;
+import com.facebook.react.views.image.ImageLoadEvent;
 import com.facebook.react.views.imagehelper.ImageSource;
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -48,6 +51,8 @@ class ImageView extends RenderableView {
   private String mAlign;
   private int mMeetOrSlice;
   private final AtomicBoolean mLoading = new AtomicBoolean(false);
+  private final EventDispatcher mEventDispatcher =
+      UIManagerHelper.getEventDispatcherForReactTag((ReactContext) getContext(), getId());
 
   public ImageView(ReactContext reactContext) {
     super(reactContext);
@@ -133,10 +138,18 @@ class ImageView extends RenderableView {
     mLoading.set(true);
     final DataSource<CloseableReference<CloseableImage>> dataSource =
         imagePipeline.fetchDecodedImage(request, mContext);
+    ImageSource imageSource = new ImageSource(mContext, uriString);
     BaseBitmapDataSubscriber subscriber =
         new BaseBitmapDataSubscriber() {
           @Override
           public void onNewResultImpl(Bitmap bitmap) {
+            mEventDispatcher.dispatchEvent(
+                ImageLoadEvent.createLoadEvent(
+                    UIManagerHelper.getSurfaceId(ImageView.this),
+                    getId(),
+                    imageSource.getSource(),
+                    bitmap.getWidth(),
+                    bitmap.getHeight()));
             mLoading.set(false);
             SvgView view = getSvgView();
             if (view != null) {

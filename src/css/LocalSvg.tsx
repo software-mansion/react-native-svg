@@ -23,7 +23,7 @@ export function isUriAnAndroidResourceIdentifier(uri?: string) {
 
 export async function loadAndroidRawResource(uri: string) {
   try {
-    const RNSVGRenderableModule: any =
+    const RNSVGRenderableModule =
       // neeeded for new arch
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('../fabric/NativeSvgRenderableModule').default;

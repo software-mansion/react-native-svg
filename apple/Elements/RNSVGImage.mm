@@ -133,6 +133,10 @@ using namespace facebook::react;
     // See for more info: T46311063.
     return;
   }
+  auto source = _state->getData().getImageSource();
+  static_cast<const RNSVGImageEventEmitter &>(*_eventEmitter)
+      .onLoad({source.size.width, source.size.height, source.uri});
+
   dispatch_async(dispatch_get_main_queue(), ^{
     self->_image = CGImageRetain(image.CGImage);
     self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
@@ -202,6 +206,12 @@ using namespace facebook::react;
                        dispatch_async(dispatch_get_main_queue(), ^{
                          self->_image = CGImageRetain(image.CGImage);
                          self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+                         RCTImageSource *sourceLoaded = [src imageSourceWithSize:image.size scale:src.scale];
+                         self->_onLoad(@{
+                           @"width" : @(sourceLoaded.size.width),
+                           @"height" : @(sourceLoaded.size.height),
+                           @"uri" : sourceLoaded.request.URL.absoluteString
+                         });
                          [self invalidate];
                        });
                      }];
