@@ -8,8 +8,9 @@
 
 package com.horcrux.svg;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -329,10 +330,6 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  private static double saturate(double v) {
-    return v <= 0 ? 0 : (v >= 1 ? 1 : v);
-  }
-
   void render(Canvas canvas, Paint paint, float opacity) {
     MaskView mask = null;
     if (mMask != null) {
@@ -340,60 +337,34 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
       mask = (MaskView) root.getDefinedMask(mMask);
     }
     if (mask != null) {
-      Rect clipBounds = canvas.getClipBounds();
-      int height = clipBounds.height();
-      int width = clipBounds.width();
+      // draw element to new layer
+      canvas.saveLayer(null, paint);
+      draw(canvas, paint, opacity);
 
-      Bitmap maskBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-      Bitmap original = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-      Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+      // prepare maskPaint with luminanceToAlpha + PorterDuffXfermode and create new layer with it
+      Paint maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+      // luminanceToAlpha conversion TODO: use filters
+      ColorMatrix luminanceToAlpha =
+          new ColorMatrix(
+              new float[] {
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2125f, 0.7154f, 0.0721f, 0, 0
+              });
+      maskPaint.setColorFilter(new ColorMatrixColorFilter(luminanceToAlpha));
+      maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+      canvas.saveLayer(null, maskPaint);
 
-      Canvas originalCanvas = new Canvas(original);
-      Canvas maskCanvas = new Canvas(maskBitmap);
-      Canvas resultCanvas = new Canvas(result);
-
-      // Clip to mask bounds and render the mask
+      // clip to mask bounds and render the mask
       float maskX = (float) relativeOnWidth(mask.mX);
       float maskY = (float) relativeOnHeight(mask.mY);
       float maskWidth = (float) relativeOnWidth(mask.mW);
       float maskHeight = (float) relativeOnHeight(mask.mH);
-      maskCanvas.clipRect(maskX, maskY, maskWidth + maskX, maskHeight + maskY);
+      canvas.clipRect(maskX, maskY, maskWidth + maskX, maskHeight + maskY);
+      mask.draw(canvas, maskPaint, 1f);
 
-      Paint maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-      mask.draw(maskCanvas, maskPaint, 1);
-
-      // Apply luminanceToAlpha filter primitive
-      // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
-      int nPixels = width * height;
-      int[] pixels = new int[nPixels];
-      maskBitmap.getPixels(pixels, 0, width, 0, 0, width, height);
-
-      for (int i = 0; i < nPixels; i++) {
-        int color = pixels[i];
-
-        int r = (color >> 16) & 0xFF;
-        int g = (color >> 8) & 0xFF;
-        int b = color & 0xFF;
-        int a = color >>> 24;
-
-        double luminance = saturate(((0.299 * r) + (0.587 * g) + (0.144 * b)) / 255);
-        int alpha = (int) (a * luminance);
-        int pixel = (alpha << 24);
-        pixels[i] = pixel;
-      }
-
-      maskBitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-
-      // Render content of current SVG Renderable to image
-      draw(originalCanvas, paint, opacity);
-
-      // Blend current element and mask
-      maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-      resultCanvas.drawBitmap(original, 0, 0, null);
-      resultCanvas.drawBitmap(maskBitmap, 0, 0, maskPaint);
-
-      // Render composited result into current render context
-      canvas.drawBitmap(result, 0, 0, paint);
+      // close mask layer
+      canvas.restore();
+      // close element layer
+      canvas.restore();
     } else {
       draw(canvas, paint, opacity);
     }
