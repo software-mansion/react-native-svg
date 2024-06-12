@@ -1,9 +1,11 @@
 package com.horcrux.svg.events;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.Event;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.facebook.react.views.imagehelper.ImageSource;
 
 public class SvgLoadEvent extends Event<SvgLoadEvent> {
 
@@ -12,9 +14,10 @@ public class SvgLoadEvent extends Event<SvgLoadEvent> {
   private final float height;
   private final String uri;
 
-  public SvgLoadEvent(int surfaceId, int viewId, String uri, float width, float height) {
+  public SvgLoadEvent(int surfaceId, int viewId, ReactContext mContext, String uriString, float width, float height) {
     super(surfaceId, viewId);
-    this.uri = uri;
+    ImageSource imageSource = new ImageSource(mContext, uriString);
+    this.uri = imageSource.getSource();;
     this.width = width;
     this.height = height;
   }

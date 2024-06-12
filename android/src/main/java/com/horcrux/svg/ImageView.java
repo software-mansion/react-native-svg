@@ -137,7 +137,6 @@ class ImageView extends RenderableView {
     mLoading.set(true);
     final DataSource<CloseableReference<CloseableImage>> dataSource =
         imagePipeline.fetchDecodedImage(request, mContext);
-    ImageSource imageSource = new ImageSource(mContext, uriString);
     BaseBitmapDataSubscriber subscriber =
         new BaseBitmapDataSubscriber() {
           @Override
@@ -146,7 +145,9 @@ class ImageView extends RenderableView {
             UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
             mEventDispatcher.dispatchEvent(new SvgLoadEvent(
                     UIManagerHelper.getSurfaceId(ImageView.this),
-                    getId(), imageSource.getSource(),
+                    getId(),
+                    mContext,
+                    uriString,
                     bitmap.getWidth(),
                     bitmap.getHeight()));
             mLoading.set(false);
