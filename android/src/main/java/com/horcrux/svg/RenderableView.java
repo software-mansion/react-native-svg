@@ -257,6 +257,8 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     ArrayList<SVGLength> arrayList = SVGLength.arrayFrom(dynamicStrokeDasharray);
     if (arrayList != null) {
       this.strokeDasharray = arrayList.toArray(new SVGLength[0]);
+    } else {
+      this.strokeDasharray = null;
     }
     invalidate();
   }
