@@ -240,6 +240,7 @@ void PatternFunction(void *info, CGContextRef context)
     NSArray<NSNumber *> *gradientArray = @[_colors.firstObject, _colors.lastObject, _colors[_colors.count-2], _colors.lastObject];
     gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:gradientArray]);
   }
+    
   double ratio = ry / rx;
 
   CGFloat fx = [self getVal:[_points objectAtIndex:0] relative:width] + offsetX;

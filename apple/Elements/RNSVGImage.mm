@@ -208,8 +208,8 @@ using namespace facebook::react;
                          self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
                          RCTImageSource *sourceLoaded = [src imageSourceWithSize:image.size scale:src.scale];
                          self->_onLoad(@{
-                           @"width" : @(sourceLoaded.size.width),
-                           @"height" : @(sourceLoaded.size.height),
+                            @"width" : @(sourceLoaded.size.width),
+                            @"height" : @(sourceLoaded.size.height),
                            @"uri" : sourceLoaded.request.URL.absoluteString
                          });
                          [self invalidate];

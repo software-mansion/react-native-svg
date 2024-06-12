@@ -52,8 +52,6 @@ class ImageView extends RenderableView {
   private String mAlign;
   private int mMeetOrSlice;
   private final AtomicBoolean mLoading = new AtomicBoolean(false);
-  private final EventDispatcher mEventDispatcher =
-      UIManagerHelper.getEventDispatcherForReactTag((ReactContext) getContext(), getId());
 
   public ImageView(ReactContext reactContext) {
     super(reactContext);

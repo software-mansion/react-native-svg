@@ -16,8 +16,8 @@ import type { UnsafeMixed } from './codegenUtils';
 import { NumberProp } from '../lib/extract/types';
 
 export type ImageLoadEventData = {
-  height: Float;
   width: Float;
+  height: Float;
   uri: string;
 };
 
