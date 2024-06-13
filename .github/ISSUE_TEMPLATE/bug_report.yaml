@@ -48,7 +48,7 @@ body:
       required: true
 
   - type: input
-    id: react-native-svg version
+    id: react-native-svg-version
     attributes:
       label: SVG version
       description: What version of react-native-svg are you using?
