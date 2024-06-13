@@ -133,9 +133,9 @@ using namespace facebook::react;
     // See for more info: T46311063.
     return;
   }
-  auto source = _state->getData().getImageSource();
-  static_cast<const RNSVGImageEventEmitter &>(*_eventEmitter)
-      .onLoad({source.size.width, source.size.height, source.uri});
+    auto imageSource = _state->getData().getImageSource();
+    imageSource.size = {image.size.width, image.size.height};
+    static_cast<const RNSVGImageEventEmitter &>(*_eventEmitter).onLoad({imageSource.size.width, imageSource.size.height, imageSource.uri});
 
   dispatch_async(dispatch_get_main_queue(), ^{
     self->_image = CGImageRetain(image.CGImage);

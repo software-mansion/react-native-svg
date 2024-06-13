@@ -6,6 +6,24 @@ export default function Test1442() {
   return <JPEGImageFromUrl />;
 }
 
+function TestWithStrictSize(): React.JSX.Element {
+  return (
+    <Svg>
+      <Image
+        width={'100%'}
+        height={'100%'}
+        href={'https://image-placeholder.com/images/actual-size/75x75.png'}
+        onLoad={e => {
+          console.log(
+            `RNImage:${Platform.OS} load JPEG image from url`,
+            e.nativeEvent,
+          );
+        }}
+      />
+    </Svg>
+  );
+}
+
 const PNGImageFromUrl = () => {
   return (
     <Svg>
