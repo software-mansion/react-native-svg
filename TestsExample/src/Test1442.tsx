@@ -1,21 +1,46 @@
-import React from 'react';
-import {Platform} from 'react-native';
+import React, {useState} from 'react';
+import {ImageLoadEventData, Platform, Image as RNImage} from 'react-native';
 import {Svg, Image} from 'react-native-svg';
 
 export default function Test1442() {
-  return <JPEGImageFromUrl />;
+  return <TestWithStrictSize />;
 }
 
+function TestRNImage() {
+  const [state, setState] = useState<ImageLoadEventData['source']>();
+  console.log(`${Platform.OS} state:`, state);
+
+  return (
+    <RNImage
+      style={{width: state?.width || '100%', height: state?.height || '100%'}}
+      source={{
+        uri: 'https://image-placeholder.com/images/actual-size/75x75.png',
+      }}
+      onLoad={e => {
+        setState(e.nativeEvent.source as any);
+        console.log(
+          `RNImage:${Platform.OS} load PNG image from url with strict size`,
+          e.nativeEvent,
+        );
+      }}
+    />
+  );
+}
 function TestWithStrictSize(): React.JSX.Element {
+  const [state, setState] = useState<
+    ImageLoadEventData['source'] | undefined
+  >();
+  console.log(`${Platform.OS} state:`, state);
   return (
     <Svg>
       <Image
-        width={'100%'}
-        height={'100%'}
+        width={state?.width || '100%'}
+        height={state?.height || '100%'}
         href={'https://image-placeholder.com/images/actual-size/75x75.png'}
         onLoad={e => {
+          setState(e.nativeEvent);
           console.log(
-            `RNImage:${Platform.OS} load JPEG image from url`,
+            `Image:${Platform.OS} load PNG image from url with strict size`,
             e.nativeEvent,
           );
         }}

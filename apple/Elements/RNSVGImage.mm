@@ -203,18 +203,18 @@ using namespace facebook::react;
   _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"]
       loadImageWithURLRequest:src.request
                      callback:^(NSError *error, UIImage *image) {
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                         self->_image = CGImageRetain(image.CGImage);
-                         self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
-                         RCTImageSource *sourceLoaded = [src imageSourceWithSize:image.size scale:src.scale];
-                         self->_onLoad(@{
-                            @"width" : @(sourceLoaded.size.width),
-                            @"height" : @(sourceLoaded.size.height),
-                           @"uri" : sourceLoaded.request.URL.absoluteString
-                         });
-                         [self invalidate];
-                       });
-                     }];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                          self->_image = CGImageRetain(image.CGImage);
+                          self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+                          RCTImageSource *sourceLoaded = [src imageSourceWithSize:image.size scale:image.scale];
+                          self->_onLoad(@{
+                              @"width" : @(sourceLoaded.size.width),
+                              @"height" : @(sourceLoaded.size.height),
+                            @"uri" : sourceLoaded.request.URL.absoluteString
+                          });
+                          [self invalidate];
+                        });
+                      }];
 #endif // RCT_NEW_ARCH_ENABLED
 }
 
@@ -296,9 +296,9 @@ using namespace facebook::react;
   // apply viewBox transform on Image render.
   CGRect imageBounds = CGRectMake(0, 0, _imageSize.width, _imageSize.height);
   CGAffineTransform viewbox = [RNSVGViewBox getTransform:imageBounds
-                                                   eRect:hitArea
-                                                   align:self.align
-                                             meetOrSlice:self.meetOrSlice];
+                                                  eRect:hitArea
+                                                  align:self.align
+                                            meetOrSlice:self.meetOrSlice];
 
   [self clip:context];
   CGContextClipToRect(context, hitArea);
