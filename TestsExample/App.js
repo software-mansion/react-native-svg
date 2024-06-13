@@ -13,6 +13,7 @@ import Test2080 from './src/Test2080';
 import Test2089 from './src/Test2089';
 import Test2148 from './src/Test2148';
 import Test2196 from './src/Test2196';
+import Test2248 from './src/Test2248';
 import Test2266 from './src/Test2266';
 import Test2276 from './src/Test2276';
 
