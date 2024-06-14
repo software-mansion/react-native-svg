@@ -66,4 +66,6 @@ interface NativeProps
   meetOrSlice?: Int32;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGSymbol');
+export default codegenNativeComponent<NativeProps>('RNSVGSymbol', {
+  interfaceOnly: true,
+});

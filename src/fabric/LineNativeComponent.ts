@@ -57,4 +57,6 @@ interface NativeProps
   y2?: UnsafeMixed<NumberProp>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGLine');
+export default codegenNativeComponent<NativeProps>('RNSVGLine', {
+  interfaceOnly: true,
+});

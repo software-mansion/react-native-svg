@@ -72,4 +72,6 @@ interface NativeProps
   meetOrSlice?: Int32;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGMarker');
+export default codegenNativeComponent<NativeProps>('RNSVGMarker', {
+  interfaceOnly: true,
+});

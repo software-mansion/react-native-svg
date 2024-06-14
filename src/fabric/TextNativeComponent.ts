@@ -74,4 +74,6 @@ interface NativeProps
     SvgGroupCommonProps,
     SvgTextCommonProps {}
 
-export default codegenNativeComponent<NativeProps>('RNSVGText');
+export default codegenNativeComponent<NativeProps>('RNSVGText', {
+  interfaceOnly: true,
+});
