@@ -344,6 +344,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
       // prepare maskPaint with luminanceToAlpha + PorterDuffXfermode and create new layer with it
       Paint maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
       // luminanceToAlpha conversion TODO: use filters
+      // https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFEMergeElement:~:text=not%20applicable.%20A-,luminanceToAlpha,-operation%20is%20equivalent
       ColorMatrix luminanceToAlpha =
           new ColorMatrix(
               new float[] {

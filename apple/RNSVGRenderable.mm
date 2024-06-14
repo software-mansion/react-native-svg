@@ -258,19 +258,24 @@ UInt32 saturate(CGFloat value)
     }
 #endif // TARGET_OS_OSX
     // TODO: make it the right way, currently this is a hack to get the correct scale for the mask
+    // current element scale: screen scale * current element scale * viewBox scale
     scale = scale * self.matrix.a * self.svgView.viewBoxTransform.a;
     CGRect scaledRect = CGRectMake(0, 0, rect.size.width * scale, rect.size.height * scale);
 
     NSUInteger npixels = scaledRect.size.width * scaledRect.size.height;
     UInt32 *pixels = (UInt32 *)calloc(npixels, sizeof(UInt32));
 
+    NSUInteger bytesPerPixel = 4;
+    NSUInteger bitsPerComponent = 8;
+    NSUInteger bytesPerRow = bytesPerPixel * (NSUInteger)scaledRect.size.width;
+
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef offscreenContext = CGBitmapContextCreate(
         pixels,
         scaledRect.size.width,
         scaledRect.size.height,
-        8,
-        4 * (NSUInteger)scaledRect.size.width,
+        bitsPerComponent,
+        bytesPerRow,
         colorSpace,
         kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
     CGContextScaleCTM(offscreenContext, scale, scale);
