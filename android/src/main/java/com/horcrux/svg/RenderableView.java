@@ -332,38 +332,61 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
 
   void render(Canvas canvas, Paint paint, float opacity) {
     MaskView mask = null;
+
     if (mMask != null) {
       SvgView root = getSvgView();
       mask = (MaskView) root.getDefinedMask(mMask);
     }
-    if (mask != null) {
-      // draw element to new layer
-      canvas.saveLayer(null, paint);
-      draw(canvas, paint, opacity);
 
-      // prepare maskPaint with luminanceToAlpha + PorterDuffXfermode and create new layer with it
-      Paint maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-      // luminanceToAlpha conversion TODO: use filters
+    if (mask != null) {
+      // https://www.w3.org/TR/SVG11/masking.html
+      // Adding a mask involves several steps
+      // 1. applying luminanceToAlpha to the mask element
+      // 2. merging the alpha channel of the element with the alpha channel from the previous step
+      // 3. applying the result from step 2 to the target element
+
+      Paint dstInPaint = new Paint();
+      dstInPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+
+      // calculate mask bounds
+      float maskX = (float) relativeOnWidth(mask.mX);
+      float maskY = (float) relativeOnHeight(mask.mY);
+      float maskWidth = (float) relativeOnWidth(mask.mW);
+      float maskHeight = (float) relativeOnHeight(mask.mH);
+
+      // step 3 - combined layer
+      canvas.saveLayer(null, dstInPaint);
+
+      // step 1 - luminance layer
+      // prepare maskPaint with luminanceToAlpha
       // https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFEMergeElement:~:text=not%20applicable.%20A-,luminanceToAlpha,-operation%20is%20equivalent
+      Paint luminancePaint = new Paint();
       ColorMatrix luminanceToAlpha =
           new ColorMatrix(
               new float[] {
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2125f, 0.7154f, 0.0721f, 0, 0
               });
-      maskPaint.setColorFilter(new ColorMatrixColorFilter(luminanceToAlpha));
-      maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-      canvas.saveLayer(null, maskPaint);
+      luminancePaint.setColorFilter(new ColorMatrixColorFilter(luminanceToAlpha));
+      canvas.saveLayer(null, luminancePaint);
+      canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
 
-      // clip to mask bounds and render the mask
-      float maskX = (float) relativeOnWidth(mask.mX);
-      float maskY = (float) relativeOnHeight(mask.mY);
-      float maskWidth = (float) relativeOnWidth(mask.mW);
-      float maskHeight = (float) relativeOnHeight(mask.mH);
-      canvas.clipRect(maskX, maskY, maskWidth + maskX, maskHeight + maskY);
-      mask.draw(canvas, maskPaint, 1f);
+      mask.draw(canvas, paint, 1f);
 
-      // close mask layer
+      // close luminance layer
       canvas.restore();
+
+      // step 2 - alpha layer
+      canvas.saveLayer(null, dstInPaint);
+      canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
+
+      mask.draw(canvas, paint, 1f);
+
+      // close alpha layer
+      canvas.restore();
+
+      // close combined layer
+      canvas.restore();
+
       // close element layer
       canvas.restore();
     } else {
