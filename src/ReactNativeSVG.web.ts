@@ -228,14 +228,17 @@ const prepare = <T extends BaseProps>(
   const parsedTransform = parseTransformProp(transform, props);
   if (parsedTransform) {
     clean.transform = parsedTransform;
+    clean['transform-origin'] = '50% 50%';
   }
   const parsedGradientTransform = parseTransformProp(gradientTransform);
   if (parsedGradientTransform) {
     clean.gradientTransform = parsedGradientTransform;
+    clean['transform-origin'] = '50% 50%';
   }
   const parsedPatternTransform = parseTransformProp(patternTransform);
   if (parsedPatternTransform) {
     clean.patternTransform = parsedPatternTransform;
+    clean['transform-origin'] = '50% 50%';
   }
 
   clean.ref = (el: SVGElement | null) => {
