@@ -195,6 +195,7 @@ const prepare = <T extends BaseProps>(
     onResponderRelease?: (e: GestureResponderEvent) => void;
     onResponderTerminate?: (e: GestureResponderEvent) => void;
     onResponderTerminationRequest?: (e: GestureResponderEvent) => boolean;
+    onClick?: (e: GestureResponderEvent) => void;
     transform?: string;
     gradientTransform?: string;
     patternTransform?: string;
@@ -266,7 +267,9 @@ const prepare = <T extends BaseProps>(
     styles.fontStyle = fontStyle;
   }
   clean.style = resolve(style, styles);
-
+  if (props.onPress != null) {
+    clean.onClick = props.onPress;
+  }
   return clean;
 };
 
