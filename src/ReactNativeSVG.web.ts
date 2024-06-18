@@ -197,7 +197,7 @@ const prepare = <T extends BaseProps>(
     onResponderTerminationRequest?: (e: GestureResponderEvent) => boolean;
     onClick?: (e: GestureResponderEvent) => void;
     transform?: string;
-    gradientTransform?: string;
+    'gradient-transform'?: string;
     patternTransform?: string;
     'transform-origin'?: string;
     style?: object;
@@ -231,7 +231,7 @@ const prepare = <T extends BaseProps>(
   }
   const parsedGradientTransform = parseTransformProp(gradientTransform);
   if (parsedGradientTransform) {
-    clean.gradientTransform = parsedGradientTransform;
+    clean['gradient-transform'] = parsedGradientTransform;
   }
   const parsedPatternTransform = parseTransformProp(patternTransform);
   if (parsedPatternTransform) {
