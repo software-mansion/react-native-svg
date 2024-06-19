@@ -345,16 +345,13 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
       // 2. merging the alpha channel of the element with the alpha channel from the previous step
       // 3. applying the result from step 2 to the target element
 
+      canvas.saveLayer(null, paint);
+      draw(canvas, paint, opacity);
+
       Paint dstInPaint = new Paint();
       dstInPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
 
-      // calculate mask bounds
-      float maskX = (float) relativeOnWidth(mask.mX);
-      float maskY = (float) relativeOnHeight(mask.mY);
-      float maskWidth = (float) relativeOnWidth(mask.mW);
-      float maskHeight = (float) relativeOnHeight(mask.mH);
-
-      // step 3 - combined layer
+      // prepare step 3 - combined layer
       canvas.saveLayer(null, dstInPaint);
 
       // step 1 - luminance layer
@@ -368,6 +365,13 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
               });
       luminancePaint.setColorFilter(new ColorMatrixColorFilter(luminanceToAlpha));
       canvas.saveLayer(null, luminancePaint);
+
+      // calculate mask bounds
+      float maskX = (float) relativeOnWidth(mask.mX);
+      float maskY = (float) relativeOnHeight(mask.mY);
+      float maskWidth = (float) relativeOnWidth(mask.mW);
+      float maskHeight = (float) relativeOnHeight(mask.mH);
+      // clip to mask bounds
       canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
 
       mask.draw(canvas, paint, 1f);
@@ -377,6 +381,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
 
       // step 2 - alpha layer
       canvas.saveLayer(null, dstInPaint);
+      // clip to mask bounds
       canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
 
       mask.draw(canvas, paint, 1f);

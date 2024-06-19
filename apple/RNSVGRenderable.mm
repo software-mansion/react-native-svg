@@ -8,12 +8,13 @@
 
 #import "RNSVGRenderable.h"
 #import <React/RCTPointerEvents.h>
-#import "LuminanceToAlpha.h"
 #import "RNSVGBezierElement.h"
 #import "RNSVGClipPath.h"
 #import "RNSVGMarker.h"
 #import "RNSVGMarkerPosition.h"
 #import "RNSVGMask.h"
+#import "RNSVGMaskUtils.h"
+#import "RNSVGRenderUtils.h"
 #import "RNSVGVectorEffect.h"
 #import "RNSVGViewBox.h"
 
@@ -176,6 +177,15 @@ static RNSVGRenderable *_contextElement;
   [self invalidate];
 }
 
+- (void)setMask:(NSString *)mask
+{
+  if ([_mask isEqualToString:mask]) {
+    return;
+  }
+  _mask = mask;
+  [self invalidate];
+}
+
 - (void)dealloc
 {
   CGPathRelease(_hitArea);
@@ -220,23 +230,9 @@ static RNSVGRenderable *_contextElement;
   _strokeDashoffset = 0;
   _vectorEffect = kRNSVGVectorEffectDefault;
   _propList = nil;
+  _mask = nil;
 }
 #endif // RCT_NEW_ARCH_ENABLED
-
-static CGImageRef renderToImage(RNSVGRenderable *object, CGSize bounds, CGRect rect, CGRect *clip)
-{
-  UIGraphicsBeginImageContextWithOptions(bounds, NO, 1.0);
-  CGContextRef cgContext = UIGraphicsGetCurrentContext();
-  CGContextTranslateCTM(cgContext, 0.0, bounds.height);
-  CGContextScaleCTM(cgContext, 1.0, -1.0);
-  if (clip) {
-    CGContextClipToRect(cgContext, *clip);
-  }
-  [object renderLayerTo:cgContext rect:rect];
-  CGImageRef contentImage = CGBitmapContextCreateImage(cgContext);
-  UIGraphicsEndImageContext();
-  return contentImage;
-}
 
 + (CIContext *)sharedCIContext
 {
@@ -272,28 +268,30 @@ static CGImageRef renderToImage(RNSVGRenderable *object, CGSize bounds, CGRect r
     CIImage *contentSrcImage = [CIImage imageWithCGImage:currentContent];
 
     // https://www.w3.org/TR/SVG11/masking.html#MaskElement
-    RNSVGMask *_maskNode = (RNSVGMask *)[self.svgView getDefinedMask:self.mask];
-      
+    RNSVGMask *maskNode = (RNSVGMask *)[self.svgView getDefinedMask:self.mask];
+
     // Clip to mask bounds and render the mask
-    CGFloat x = [self relativeOn:[_maskNode x] relative:width];
-    CGFloat y = [self relativeOn:[_maskNode y] relative:height];
-    CGFloat w = [self relativeOn:[_maskNode maskwidth] relative:width];
-    CGFloat h = [self relativeOn:[_maskNode maskheight] relative:height];
+    CGFloat x = [self relativeOn:[maskNode x] relative:width];
+    CGFloat y = [self relativeOn:[maskNode y] relative:height];
+    CGFloat w = [self relativeOn:[maskNode maskwidth] relative:width];
+    CGFloat h = [self relativeOn:[maskNode maskheight] relative:height];
     CGRect maskBounds = CGRectMake(x, y, w, h);
-    CGImageRef maskContent = renderToImage(_maskNode, boundsSize, rect, &maskBounds);
+    CGImageRef maskContent = renderToImage(maskNode, boundsSize, rect, &maskBounds);
     CIImage *maskSrcImage = [CIImage imageWithCGImage:maskContent];
 
     // Create mask with mask element alpha and mask luminance
     CIImage *alphaMask = transformImageIntoAlphaMask(maskSrcImage);
-      
+
     // Compose source image with alpha mask
     CIImage *composite = applyBlendWithAlphaMask(contentSrcImage, alphaMask);
 
-    // Create masked image and release memory
+    // Create composed CGImage
     CGImageRef compositeImage = [[RNSVGRenderable sharedCIContext] createCGImage:composite fromRect:drawBounds];
 
-    // Render composited result into current render context
+    // Render result into context
     CGContextDrawImage(context, drawBounds, compositeImage);
+
+    // Release memory
     CGImageRelease(compositeImage);
     CGImageRelease(maskContent);
     CGImageRelease(currentContent);
@@ -626,50 +624,6 @@ static CGImageRef renderToImage(RNSVGRenderable *object, CGSize bounds, CGRect r
   _lastMergedList = nil;
   _attributeList = _propList;
   self.merging = false;
-}
-
-static CIImage *transparentImage()
-{
-  static CIImage *transparentImage = nil;
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    CIFilter *transparent = [CIFilter filterWithName:@"CIConstantColorGenerator"];
-    [transparent setValue:[CIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0] forKey:@"inputColor"];
-    transparentImage = [transparent valueForKey:@"outputImage"];
-  });
-  return transparentImage;
-}
-
-static CIImage *blackImage()
-{
-  static CIImage *blackImage = nil;
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    CIFilter *black = [CIFilter filterWithName:@"CIConstantColorGenerator"];
-    [black setValue:[CIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0] forKey:@"inputColor"];
-    blackImage = [black valueForKey:@"outputImage"];
-  });
-  return blackImage;
-}
-
-static CIImage *transformImageIntoAlphaMask(CIImage *inputImage)
-{
-  CIImage *blackBackground = blackImage();
-  CIFilter *layerOverBlack = [CIFilter filterWithName:@"CISourceOverCompositing"];
-  [layerOverBlack setValue:blackBackground forKey:@"inputBackgroundImage"];
-  [layerOverBlack setValue:inputImage forKey:@"inputImage"];
-  return applyLuminanceToAlphaFilter([layerOverBlack valueForKey:@"outputImage"]);
-}
-
-static CIImage *applyBlendWithAlphaMask(CIImage *inputImage, CIImage *inputMaskImage)
-{
-  CIImage *transparent = transparentImage();
-  CIFilter *blendWithAlphaMask = [CIFilter filterWithName:@"CIBlendWithAlphaMask"];
-  [blendWithAlphaMask setDefaults];
-  [blendWithAlphaMask setValue:inputImage forKey:@"inputImage"];
-  [blendWithAlphaMask setValue:transparent forKey:@"inputBackgroundImage"];
-  [blendWithAlphaMask setValue:inputMaskImage forKey:@"inputMaskImage"];
-  return [blendWithAlphaMask valueForKey:@"outputImage"];
 }
 
 @end
