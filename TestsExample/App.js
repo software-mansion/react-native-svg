@@ -5,6 +5,7 @@ import ColorTest from './src/ColorTest';
 import PointerEventsBoxNone from './src/PointerEventsBoxNone';
 import Test1374 from './src/Test1374';
 import Test1718 from './src/Test1718';
+import Test1740 from './src/Test1740';
 import Test1813 from './src/Test1813';
 import Test1845 from './src/Test1845';
 import Test1986 from './src/Test1986';
