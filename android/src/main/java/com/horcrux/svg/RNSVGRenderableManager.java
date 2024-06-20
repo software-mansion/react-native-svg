@@ -88,7 +88,7 @@ class RNSVGRenderableManager extends NativeSvgRenderableModuleSpec {
   @SuppressWarnings("unused")
   @ReactMethod(isBlockingSynchronousMethod = true)
   @Override
-  public double getTotalLength(Double tag) {
+  public float getTotalLength(Double tag) {
     RenderableView svg = RenderableViewManager.getRenderableViewByTag(tag.intValue());
     if (svg == null) {
       return 0;
