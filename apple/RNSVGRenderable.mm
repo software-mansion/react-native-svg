@@ -175,15 +175,6 @@ static RNSVGRenderable *_contextElement;
   [self invalidate];
 }
 
-- (void)setMask:(NSString *)mask
-{
-  if ([_mask isEqualToString:mask]) {
-    return;
-  }
-  _mask = mask;
-  [self invalidate];
-}
-
 - (void)dealloc
 {
   CGPathRelease(_hitArea);

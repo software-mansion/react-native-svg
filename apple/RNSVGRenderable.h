@@ -33,7 +33,6 @@
 @property (nonatomic, assign) RNSVGVectorEffect vectorEffect;
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 @property (nonatomic, assign) CGPathRef hitArea;
-@property (nonatomic, strong) NSString *mask;
 
 - (void)setHitArea:(CGPathRef)path;
 

@@ -42,6 +42,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGFloat opacity;
 @property (nonatomic, assign) RNSVGCGFCRule clipRule;
 @property (nonatomic, strong) NSString *clipPath;
+@property (nonatomic, strong) NSString *mask;
 @property (nonatomic, strong) NSString *markerStart;
 @property (nonatomic, strong) NSString *markerMid;
 @property (nonatomic, strong) NSString *markerEnd;
