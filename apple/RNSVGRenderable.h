@@ -34,7 +34,6 @@
 @property (nonatomic, copy) NSArray<NSString *> *propList;
 @property (nonatomic, assign) CGPathRef hitArea;
 @property (nonatomic, strong) NSString *mask;
-@property (nonatomic, strong) NSString *filter;
 
 - (void)setHitArea:(CGPathRef)path;
 
@@ -43,7 +42,5 @@
 - (void)mergeProperties:(__kindof RNSVGRenderable *)target;
 
 - (void)resetProperties;
-
-+ (CIContext *)sharedCIContext;
 
 @end

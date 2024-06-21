@@ -11,7 +11,7 @@ export default () => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(zoom, {
-          toValue: 2,
+          toValue: 4,
           duration: 2000,
           useNativeDriver: true,
         }),
@@ -27,7 +27,7 @@ export default () => {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <View style={{borderWidth: 3}}>
-        <Svg width="400" height="400" viewBox="0 0 300 300">
+        <Svg width="400" height="400" viewBox="0 0 400 400">
           <Mask id="myMask">
             <Rect x="0" y="0" width="100" height="100" fill="white" />
             <Path
