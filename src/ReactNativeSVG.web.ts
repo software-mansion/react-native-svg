@@ -228,6 +228,7 @@ const prepare = <T extends BaseProps>(
   const parsedTransform = parseTransformProp(transform, props);
   if (parsedTransform) {
     clean.transform = parsedTransform;
+    // we set default value for transform-origin based in that documentation: https://drafts.csswg.org/css-transforms/#propdef-transform-origin
     clean['transform-origin'] = '50% 50%';
   }
   const parsedGradientTransform = parseTransformProp(gradientTransform);
