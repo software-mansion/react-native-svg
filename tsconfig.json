@@ -20,5 +20,5 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": ["src"]
+  "include": ["src", "index.d.ts"]
 }

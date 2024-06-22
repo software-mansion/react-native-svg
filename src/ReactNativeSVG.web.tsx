@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { forwardRef, useRef } from 'react';
 import type { CircleProps } from './elements/Circle';
 import type { ClipPathProps } from './elements/ClipPath';
 import type { EllipseProps } from './elements/Ellipse';
@@ -27,6 +27,9 @@ import {
   // @ts-ignore it is not seen in exports
   unstable_createElement as createElement,
 } from 'react-native';
+import useResponderEvents from 'react-native-web/src/modules/useResponderEvents/index';
+import useMergeRefs from 'react-native-web/src/modules/useMergeRefs/index';
+
 import type {
   NumberArray,
   NumberProp,
@@ -41,6 +44,86 @@ type FocusEvent = object;
 type PressEvent = object;
 type LayoutEvent = object;
 type EdgeInsetsProp = object;
+
+interface CreateComponentProps {
+  onMoveShouldSetResponder?: (event: GestureResponderEvent) => boolean;
+  onMoveShouldSetResponderCapture?: (event: any) => boolean;
+  onResponderEnd?: (event: GestureResponderEvent) => void;
+  onResponderGrant?: (event: GestureResponderEvent) => void;
+  onResponderMove?: (event: GestureResponderEvent) => void;
+  onResponderReject?: (event: GestureResponderEvent) => void;
+  onResponderRelease?: (event: GestureResponderEvent) => void;
+  onResponderStart?: (event: GestureResponderEvent) => void;
+  onResponderTerminate?: (event: GestureResponderEvent) => void;
+  onResponderTerminationRequest?: (event: GestureResponderEvent) => boolean;
+  onScrollShouldSetResponder?: (event: GestureResponderEvent) => boolean;
+  onScrollShouldSetResponderCapture?: (event: GestureResponderEvent) => boolean;
+  onSelectionChangeShouldSetResponder?: (
+    event: GestureResponderEvent
+  ) => boolean;
+  onSelectionChangeShouldSetResponderCapture?: (
+    event: GestureResponderEvent
+  ) => boolean;
+  onStartShouldSetResponder?: (event: GestureResponderEvent) => boolean;
+  onStartShouldSetResponderCapture?: (event: GestureResponderEvent) => boolean;
+  tag: keyof JSX.IntrinsicElements;
+  [key: string]: any;
+}
+
+const CreateComponent = React.forwardRef<any, CreateComponentProps>(
+  (props, forwardedRef) => {
+    const {
+      onMoveShouldSetResponder,
+      onMoveShouldSetResponderCapture,
+      onResponderEnd,
+      onResponderGrant,
+      onResponderMove,
+      onResponderReject,
+      onResponderRelease,
+      onResponderStart,
+      onResponderTerminate,
+      onResponderTerminationRequest,
+      onScrollShouldSetResponder,
+      onScrollShouldSetResponderCapture,
+      onSelectionChangeShouldSetResponder,
+      onSelectionChangeShouldSetResponderCapture,
+      onStartShouldSetResponder,
+      onStartShouldSetResponderCapture,
+      tag,
+      ...rest
+    } = props;
+
+    const hostRef = useRef(null);
+    useResponderEvents(hostRef, {
+      onMoveShouldSetResponder,
+      onMoveShouldSetResponderCapture,
+      onResponderEnd,
+      onResponderGrant,
+      onResponderMove,
+      onResponderReject,
+      onResponderRelease,
+      onResponderStart,
+      onResponderTerminate,
+      onResponderTerminationRequest,
+      onScrollShouldSetResponder,
+      onScrollShouldSetResponderCapture,
+      onSelectionChangeShouldSetResponder,
+      onSelectionChangeShouldSetResponderCapture,
+      onStartShouldSetResponder,
+      onStartShouldSetResponderCapture,
+    });
+
+    const setRef = useMergeRefs(hostRef, forwardedRef);
+
+    return createElement(tag, { ...rest, ref: setRef });
+  }
+);
+
+const createComponent = (tag: keyof JSX.IntrinsicElements) => {
+  return React.forwardRef<any, Omit<any, 'tag'>>((props, ref) => (
+    <CreateComponent {...props} tag={tag} ref={ref} />
+  ));
+};
 
 interface BaseProps {
   accessible?: boolean;
@@ -534,9 +617,11 @@ export class Symbol extends WebShape<BaseProps & SymbolProps> {
   tag = 'symbol' as const;
 }
 
-export class Text extends WebShape<BaseProps & TextProps> {
-  tag = 'text' as const;
-}
+// export class Text extends WebShape<BaseProps & TextProps> {
+//   tag = 'text' as const;
+// }
+
+export const Text = createComponent('text');
 
 export class TSpan extends WebShape<BaseProps & TSpanProps> {
   tag = 'tspan' as const;
