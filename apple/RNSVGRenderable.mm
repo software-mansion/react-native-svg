@@ -280,12 +280,7 @@ UInt32 saturate(CGFloat value)
         bytesPerRow,
         colorSpace,
         kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-
-    //      CGContextTranslateCTM(bcontext, 0.0, scaledHeight);
-    //      CGContextScaleCTM(bcontext, 1, -1);
     CGContextConcatCTM(bcontext, currentCTM);
-
-    //    CGContextScaleCTM(bcontext, iscale, iscale);
 
     // Clip to mask bounds and render the mask
     CGFloat x = [self relativeOn:[_maskNode x] relative:width];
