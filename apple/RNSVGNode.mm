@@ -623,6 +623,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _opacity = 0;
   _clipRule = kRNSVGCGFCRuleEvenodd;
   _clipPath = nil;
+  _mask = nil;
   _markerStart = nil;
   _markerMid = nil;
   _markerEnd = nil;
