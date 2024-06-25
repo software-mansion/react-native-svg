@@ -29,6 +29,7 @@ import {
 } from 'react-native';
 import useResponderEvents from 'react-native-web/src/modules/useResponderEvents/index';
 import useMergeRefs from 'react-native-web/src/modules/useMergeRefs/index';
+import usePressEvents from 'react-native-web/src/modules/useMergeRefs/index';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { BaseProps, CreateComponentProps } from './types';
 import {
@@ -145,17 +146,9 @@ const WebShape = <T,>(
     SvgTouchableMixin({ ...elementRef.current, state: state.current });
   }
 
-  if ((rest as any)?.onPress) {
-    console.log('on Press here ');
-  }
-
-  const prepareProps = prepare(rest as any);
   const setRef = useMergeRefs(elementRef, state, lastMergedProps, forwardedRef);
-  if (hasTouchableProperty(rest as BaseProps)) {
-    console.log(prepareProps, 'prepareProps');
-  }
   return createElement(Tag, {
-    ...{ ...prepareProps, collapsable: undefined },
+    ...{ ...rest, collapsable: undefined },
     ref: setRef,
   });
 };
