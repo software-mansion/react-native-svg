@@ -174,21 +174,8 @@ export const prepare = <T extends BaseProps & Props>(props: T) => {
     styles.fontStyle = fontStyle;
   }
   clean.style = resolve(style, styles);
-  if (hasTouchableProperty(props)) {
-    delete props?.onPress;
-    delete rest?.onPress;
-    delete props?.onLongPress;
-    delete rest?.onLongPress;
-    delete props?.onPressIn;
-    delete rest?.onPressIn;
-    delete props?.onPressOut;
-    delete rest?.onPressOut;
-    console.log('here: hasTouchableProperty');
-    clean.onClick =
-      props?.onPress ||
-      props.onLongPress ||
-      props?.onPressIn ||
-      props?.onPressOut;
+  if (props.onPress != null) {
+    clean.onClick = props.onPress;
   }
   return clean;
 };

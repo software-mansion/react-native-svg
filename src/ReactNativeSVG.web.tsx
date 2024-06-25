@@ -70,7 +70,6 @@ const WebShape = <T,>(
   const elementRef = useRef<T | null>(null);
   const lastMergedProps = useRef<Partial<typeof props>>({});
   const state = useRef(touchableGetInitialState());
-  const setRef = useMergeRefs(elementRef, forwardedRef);
   const remeasureMetricsOnActivation = useRef(() => {
     const element = elementRef.current as HTMLElement | null;
     const metrics = remeasure(element);
@@ -98,12 +97,12 @@ const WebShape = <T,>(
     onStartShouldSetResponderCapture,
   });
 
-  const setNativeProps = (props: { style: typeof rest }) => {
+  const setNativeProps = (nativeProps: { style: typeof rest }) => {
     const merged = Object.assign(
       {},
       rest,
       lastMergedProps.current,
-      props.style
+      nativeProps.style
     );
     lastMergedProps.current = merged;
     const clean = prepare(merged as any);
@@ -146,7 +145,19 @@ const WebShape = <T,>(
     SvgTouchableMixin({ ...elementRef.current, state: state.current });
   }
 
-  return createElement(Tag, { ...rest, collapsable: undefined, ref: setRef });
+  if ((rest as any)?.onPress) {
+    console.log('on Press here ');
+  }
+
+  const prepareProps = prepare(rest as any);
+  const setRef = useMergeRefs(elementRef, state, lastMergedProps, forwardedRef);
+  if (hasTouchableProperty(rest as BaseProps)) {
+    console.log(prepareProps, 'prepareProps');
+  }
+  return createElement(Tag, {
+    ...{ ...prepareProps, collapsable: undefined },
+    ref: setRef,
+  });
 };
 
 const CreateComponent = React.forwardRef(WebShape);

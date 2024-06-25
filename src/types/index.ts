@@ -85,7 +85,7 @@ export interface BaseProps {
   fontFamily?: string;
   forwardedRef?:
     | React.RefCallback<SVGElement>
-    | React.MutableRefObject<SVGElement | null>;
+    | React.MutableRefObject<SVGElement>;
   style?: Iterable<unknown>;
 
   // different transform props
