@@ -99,6 +99,9 @@ public class RNSVGImageManagerDelegate<T extends View, U extends BaseViewManager
       case "propList":
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
+      case "filter":
+        mViewManager.setFilter(view, value == null ? null : (String) value);
+        break;
       case "x":
         mViewManager.setX(view, new DynamicFromObject(value));
         break;
