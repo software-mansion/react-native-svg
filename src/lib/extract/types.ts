@@ -82,6 +82,13 @@ export type TextPathMidLine = 'sharp' | 'smooth';
 export type Linecap = 'butt' | 'square' | 'round';
 export type Linejoin = 'miter' | 'bevel' | 'round';
 
+export type FilterEdgeMode = 'duplicate' | 'wrap' | 'none';
+export type FilterColorMatrixType =
+  | 'matrix'
+  | 'saturate'
+  | 'hueRotate'
+  | 'luminanceToAlpha';
+
 export interface TouchableProps {
   disabled?: boolean;
   onPress?: (event: GestureResponderEvent) => void;
@@ -225,6 +232,10 @@ export interface CommonMaskProps {
   mask?: string;
 }
 
+export interface CommonFilterProps {
+  filter?: string;
+}
+
 export interface CommonMarkerProps {
   marker?: string;
   markerStart?: string;
@@ -242,6 +253,7 @@ export interface AccessibilityProps {
   testID?: string;
 }
 
+// FIXME: This interface should probably be named CommonRenderableProps
 export interface CommonPathProps
   extends FillProps,
     StrokeProps,
@@ -253,6 +265,7 @@ export interface CommonPathProps
     DefinitionProps,
     CommonMarkerProps,
     CommonMaskProps,
+    CommonFilterProps,
     NativeProps,
     AccessibilityProps {}
 
