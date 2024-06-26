@@ -1,4 +1,11 @@
-import React, { MutableRefObject, useImperativeHandle, useRef } from 'react';
+import React, {
+  MutableRefObject,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import type { CircleProps } from './elements/Circle';
 import type { ClipPathProps } from './elements/ClipPath';
 import type { EllipseProps } from './elements/Ellipse';
@@ -29,7 +36,7 @@ import {
 } from 'react-native';
 import useResponderEvents from 'react-native-web/src/modules/useResponderEvents/index';
 import useMergeRefs from 'react-native-web/src/modules/useMergeRefs/index';
-import usePressEvents from 'react-native-web/src/modules/useMergeRefs/index';
+import usePressEvents from 'react-native-web/src/modules/usePressEvents/index';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { BaseProps, CreateComponentProps } from './types';
 import {
@@ -42,6 +49,33 @@ import {
 // @ts-expect-error: Mixin is not typed
 const { Mixin } = Touchable;
 const { touchableGetInitialState } = Mixin;
+
+const listOfIgnoreEvents = [
+  'onMoveShouldSetResponder',
+  'onMoveShouldSetResponderCapture',
+  'onResponderEnd',
+  'onResponderGrant',
+  'onResponderMove',
+  'onResponderReject',
+  'onResponderRelease',
+  'onResponderStart',
+  'onResponderTerminate',
+  'onResponderTerminationRequest',
+  'onScrollShouldSetResponder',
+  'onScrollShouldSetResponderCapture',
+  'onSelectionChangeShouldSetResponder',
+  'onSelectionChangeShouldSetResponderCapture',
+  'onStartShouldSetResponder',
+  'onStartShouldSetResponderCapture',
+];
+
+function removeKeys<T extends object>(obj: T, keys: string[]): Partial<T> {
+  const result = { ...obj };
+  keys.forEach((key) => {
+    delete result[key as keyof T];
+  });
+  return result;
+}
 
 const WebShape = <T,>(
   props: CreateComponentProps<T>,
@@ -64,6 +98,16 @@ const WebShape = <T,>(
     onSelectionChangeShouldSetResponderCapture,
     onStartShouldSetResponder,
     onStartShouldSetResponderCapture,
+    activeOpacity,
+    delayPressIn,
+    delayPressOut,
+    delayLongPress,
+    disabled,
+    onLongPress,
+    onPress,
+    onPressIn,
+    onPressOut,
+    rejectResponderTermination,
     tag: Tag,
     ...rest
   } = props;
@@ -78,6 +122,81 @@ const WebShape = <T,>(
       console.log('Re-measured metrics:', metrics);
     }
   });
+
+  const [duration, setDuration] = useState('0s');
+  const [opacityOverride, setOpacityOverride] = useState<null | number>(null);
+
+  const setOpacityTo = useCallback(
+    (value: number | null, duration: number) => {
+      setOpacityOverride(value);
+      setDuration(duration ? `${duration / 1000}s` : '0s');
+    },
+    [setOpacityOverride, setDuration]
+  );
+
+  const setOpacityActive = useCallback(
+    (duration: number) => {
+      setOpacityTo(activeOpacity ?? 0.2, duration);
+    },
+    [activeOpacity, setOpacityTo]
+  );
+
+  const setOpacityInactive = useCallback(
+    (duration: number) => {
+      setOpacityTo(null, duration);
+    },
+    [setOpacityTo]
+  );
+
+  let simplePressEventHandlers = null;
+  if (hasTouchableProperty(props)) {
+    const pressConfig = useMemo(
+      () => ({
+        cancelable: !rejectResponderTermination,
+        disabled,
+        delayLongPress,
+        delayPressStart: delayPressIn,
+        delayPressEnd: delayPressOut,
+        onLongPress,
+        onPress,
+        onPressStart(event: any) {
+          const isGrant =
+            event.dispatchConfig != null
+              ? event.dispatchConfig.registrationName === 'onResponderGrant'
+              : event.type === 'keydown';
+          setOpacityActive(isGrant ? 0 : 150);
+          if (onPressIn != null) {
+            onPressIn(event);
+          }
+        },
+        onPressEnd(event: any) {
+          setOpacityInactive(250);
+          if (onPressOut != null) {
+            onPressOut(event);
+          }
+        },
+      }),
+      [
+        delayLongPress,
+        delayPressIn,
+        delayPressOut,
+        disabled,
+        onLongPress,
+        onPress,
+        onPressIn,
+        onPressOut,
+        rejectResponderTermination,
+        setOpacityActive,
+        setOpacityInactive,
+      ]
+    );
+
+    const pressEventHandlers = usePressEvents(elementRef, pressConfig);
+    simplePressEventHandlers = removeKeys(
+      pressEventHandlers,
+      listOfIgnoreEvents
+    );
+  }
 
   useResponderEvents(elementRef as MutableRefObject<SVGElement>, {
     onMoveShouldSetResponder,
@@ -142,13 +261,21 @@ const WebShape = <T,>(
     remeasure: remeasureMetricsOnActivation.current,
   }));
 
-  if (hasTouchableProperty(rest as BaseProps)) {
-    SvgTouchableMixin({ ...elementRef.current, state: state.current });
+  if (hasTouchableProperty(props)) {
+    const instance = { ...elementRef.current, state: state.current };
+    SvgTouchableMixin(instance);
   }
 
   const setRef = useMergeRefs(elementRef, state, lastMergedProps, forwardedRef);
+
   return createElement(Tag, {
-    ...{ ...rest, collapsable: undefined },
+    ...{
+      ...rest,
+      collapsable: undefined,
+      ...simplePressEventHandlers,
+      transitionduration: duration,
+      opacity: opacityOverride !== null ? opacityOverride : null,
+    },
     ref: setRef,
   });
 };

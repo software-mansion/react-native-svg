@@ -5,11 +5,8 @@ import type {
   TransformProps,
 } from '../lib/extract/types';
 
-export interface CreateComponentProps<T>
-  extends React.HTMLAttributes<T>,
-    Props {
+export interface CreateComponentProps<T> extends BaseProps {
   tag: keyof React.JSX.IntrinsicElements;
-
   forwardedRef?: React.Ref<T>;
 }
 
@@ -32,28 +29,7 @@ export interface Props {
   onSelectionChangeShouldSetResponderCapture?: GestureResponder;
   onStartShouldSetResponder?: (event: GestureResponderEvent) => boolean;
   onStartShouldSetResponderCapture?: GestureResponder;
-}
 
-type BlurEvent = object;
-type FocusEvent = object;
-type PressEvent = object;
-type LayoutEvent = object;
-type EdgeInsetsProp = object;
-
-export interface BaseProps {
-  accessible?: boolean;
-  accessibilityLabel?: string;
-  accessibilityHint?: string;
-  accessibilityIgnoresInvertColors?: boolean;
-  accessibilityRole?: string;
-  accessibilityState?: object;
-  delayLongPress?: number;
-  delayPressIn?: number;
-  delayPressOut?: number;
-  disabled?: boolean;
-  hitSlop?: EdgeInsetsProp;
-  nativeID?: string;
-  touchSoundDisabled?: boolean;
   onBlur?: (e: BlurEvent) => void;
   onFocus?: (e: FocusEvent) => void;
   onLayout?: (event: LayoutEvent) => object;
@@ -62,9 +38,33 @@ export interface BaseProps {
   onPress?: (event: PressEvent) => object;
   onPressIn?: (event: PressEvent) => object;
   onPressOut?: (event: PressEvent) => object;
+}
+
+type BlurEvent = object;
+type FocusEvent = object;
+type PressEvent = object;
+type LayoutEvent = object;
+type EdgeInsetsProp = object;
+
+export interface BaseProps extends Props {
+  accessible?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  accessibilityIgnoresInvertColors?: boolean;
+  accessibilityRole?: string;
+  accessibilityState?: object;
+  delayLongPress?: number;
+  delayPressIn?: number;
+  delaypressin?: number;
+  delayPressOut?: number;
+  disabled?: boolean;
+  hitSlop?: EdgeInsetsProp;
+  nativeID?: string;
+  touchSoundDisabled?: boolean;
   pressRetentionOffset?: EdgeInsetsProp;
   rejectResponderTermination?: boolean;
 
+  activeOpacity?: number;
   transform?: TransformProps['transform'];
   translate?: NumberArray;
   translateX?: NumberProp;
@@ -83,9 +83,6 @@ export interface BaseProps {
   fontWeight?: NumberProp;
   fontSize?: NumberProp;
   fontFamily?: string;
-  forwardedRef?:
-    | React.RefCallback<SVGElement>
-    | React.MutableRefObject<SVGElement>;
   style?: Iterable<unknown>;
 
   // different transform props

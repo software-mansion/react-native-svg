@@ -28,8 +28,19 @@ export function parseTransformProp(
   return transformArray.length ? transformArray.join(' ') : undefined;
 }
 
-export const hasTouchableProperty = (props: BaseProps) =>
-  props.onPress || props.onPressIn || props.onPressOut || props.onLongPress;
+export function hasTouchableProperty(props: BaseProps): boolean {
+  return !!(
+    props.onPress ||
+    props.onPressIn ||
+    props.onPressOut ||
+    props.onLongPress ||
+    props.onResponderGrant ||
+    props.onResponderMove ||
+    props.onResponderRelease ||
+    props.onResponderTerminate ||
+    props.onResponderTerminationRequest
+  );
+}
 
 export function stringifyTransformProps(transformProps: TransformProps) {
   const transformArray = [];
