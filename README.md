@@ -160,3 +160,7 @@ To check how to use the library, see [USAGE.md](https://github.com/react-native-
 ## Known issues:
 
 1. Unable to apply focus point of RadialGradient on Android.
+
+## React Native SVG is maintained by Software Mansion
+
+Since 2012 [Software Mansion](https://swmansion.com) is a software agency with experience in building web and mobile apps. We are Core React Native Contributors and experts in dealing with all kinds of React Native issues. We can help you build your next dream product – [Hire us](https://swmansion.com/contact/projects?utm_source=svg&utm_medium=readme).

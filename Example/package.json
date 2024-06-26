@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "react": "18.2.0",
+    "react-dom": "^18.2.0",
     "react-native": "0.74.0",
     "react-native-reanimated": "3.9.0-nightly-20240421-474f6983d",
     "react-native-svg": "link:../",
