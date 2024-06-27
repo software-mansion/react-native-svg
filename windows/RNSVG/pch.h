@@ -7,9 +7,15 @@
 #include <restrictederrorinfo.h>
 #include <unknwn.h>
 #include <windows.h>
-#include <winrt/Windows.Foundation.Collections.h>
-#include <winrt/Windows.Foundation.h>
 #include <CppWinRTIncludes.h>
-#include <UI.Xaml.Media.h>
+#if __has_include(<VersionMacros.h>)
+  #include <VersionMacros.h>
+#endif
 
 #include <winrt/Microsoft.ReactNative.h>
+
+#include <UI.Xaml.Automation.Peers.h>
+#include <UI.Xaml.Controls.Primitives.h>
+#include <UI.Xaml.Controls.h>
+#include <UI.Xaml.Media.h>
+#include <winrt/Microsoft.UI.Xaml.XamlTypeInfo.h>
