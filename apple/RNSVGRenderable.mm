@@ -290,8 +290,9 @@ UInt32 saturate(CGFloat value)
 
       content = [filterNode applyFilter:content
                           backgroundImg:background
-                       renderableBounds:CGRectApplyAffineTransform(self.bounds, screenScaleCTM)
-                           canvasBounds:scaledRect];
+                       renderableBounds:self.bounds
+                           canvasBounds:rect
+                                    ctm:currentCTM];
 
       CGImageRelease(contentImage);
       contentImage = [[RNSVGRenderUtils sharedCIContext] createCGImage:content fromRect:scaledRect];

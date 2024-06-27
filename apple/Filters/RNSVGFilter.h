@@ -12,6 +12,7 @@
 - (CIImage *)applyFilter:(CIImage *)img
            backgroundImg:(CIImage *)backgroundImg
         renderableBounds:(CGRect)renderableBounds
-            canvasBounds:(CGRect)canvasBounds;
+            canvasBounds:(CGRect)canvasBounds
+                     ctm:(CGAffineTransform)ctm;
 
 @end
