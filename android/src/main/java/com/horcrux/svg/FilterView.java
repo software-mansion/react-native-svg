@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.view.View;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
@@ -69,7 +70,8 @@ class FilterView extends DefinitionView {
     }
   }
 
-  public Bitmap applyFilter(Bitmap source, Rect bounds, Bitmap background) {
+  public Bitmap applyFilter(
+      Bitmap source, Bitmap background, RectF renderableBounds, Rect canvasBounds) {
     resultsMap.clear();
     resultsMap.put("SourceGraphic", source);
     resultsMap.put("SourceAlpha", FilterUtils.applySourceAlphaFilter(source));
@@ -92,23 +94,15 @@ class FilterView extends DefinitionView {
     // crop image to filter x, y, width, height
     int x, y, width, height;
     if (this.mFilterUnits == FilterProperties.Units.USER_SPACE_ON_USE) {
-      Rect canvasRect = this.getSvgView().getCanvasBounds();
-      x = (int) (this.relativeOn(this.mX, canvasRect.width()));
-      y = (int) (this.relativeOn(this.mY, canvasRect.height()));
-      width = (int) this.relativeOn(this.mW, canvasRect.width());
-      height = (int) this.relativeOn(this.mH, canvasRect.height());
-    } else if (this.mFilterUnits == FilterProperties.Units.OBJECT_BOUNDING_BOX) {
-      // FIXME: implement similar to above / iOS
-      x = (int) (bounds.left + this.relativeOn(this.mX, bounds.width()));
-      y = (int) (bounds.top + this.relativeOn(this.mY, bounds.height()));
-      width = (int) this.relativeOn(this.mW, bounds.width());
-      height = (int) this.relativeOn(this.mH, bounds.height());
-    } else {
-      // this code should never be executed
-      x = bounds.left;
-      y = bounds.top;
-      width = bounds.width();
-      height = bounds.height();
+      x = (int) (this.relativeOn(this.mX, canvasBounds.width()));
+      y = (int) (this.relativeOn(this.mY, canvasBounds.height()));
+      width = (int) this.relativeOn(this.mW, canvasBounds.width());
+      height = (int) this.relativeOn(this.mH, canvasBounds.height());
+    } else { // FilterProperties.Units.OBJECT_BOUNDING_BOX
+      x = (int) (this.relativeOnFraction(this.mX, renderableBounds.width()));
+      y = (int) (this.relativeOnFraction(this.mY, renderableBounds.height()));
+      width = (int) this.relativeOnFraction(this.mW, renderableBounds.width());
+      height = (int) this.relativeOnFraction(this.mH, renderableBounds.height());
     }
     Rect cropRect = new Rect(x, y, x + width, y + height);
     Bitmap resultBitmap = Bitmap.createBitmap(res.getWidth(), res.getHeight(), res.getConfig());

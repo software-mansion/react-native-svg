@@ -448,6 +448,16 @@ public abstract class VirtualView extends ReactViewGroup {
     return fromRelativeFast(length);
   }
 
+  double relativeOnFraction(SVGLength length, float relative) {
+    SVGLength.UnitType unit = length.unit;
+    if (unit == SVGLength.UnitType.NUMBER) {
+      return (relative * length.value);
+    } else if (unit == SVGLength.UnitType.PERCENTAGE) {
+      return length.value / 100 * relative;
+    }
+    return fromRelativeFast(length);
+  }
+
   double relativeOnOther(SVGLength length) {
     SVGLength.UnitType unit = length.unit;
     if (unit == SVGLength.UnitType.NUMBER) {
