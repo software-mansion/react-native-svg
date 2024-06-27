@@ -296,9 +296,9 @@ using namespace facebook::react;
   // apply viewBox transform on Image render.
   CGRect imageBounds = CGRectMake(0, 0, _imageSize.width, _imageSize.height);
   CGAffineTransform viewbox = [RNSVGViewBox getTransform:imageBounds
-                                                  eRect:hitArea
-                                                  align:self.align
-                                            meetOrSlice:self.meetOrSlice];
+                                                 eRect:hitArea
+                                                 align:self.align
+                                           meetOrSlice:self.meetOrSlice];
 
   [self clip:context];
   CGContextClipToRect(context, hitArea);
