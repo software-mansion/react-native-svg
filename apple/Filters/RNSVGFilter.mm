@@ -80,7 +80,10 @@ using namespace facebook::react;
   return self;
 }
 
-- (CIImage *)applyFilter:(CIImage *)img bounds:(CGRect)imgBounds backgroundImg:(CIImage *)backgroundImg
+- (CIImage *)applyFilter:(CIImage *)img
+           backgroundImg:(CIImage *)backgroundImg
+        renderableBounds:(CGRect)renderableBounds
+            canvasBounds:(CGRect)canvasBounds
 {
   [resultsMap removeAllObjects];
   [resultsMap setObject:img forKey:@"SourceGraphic"];
@@ -100,30 +103,31 @@ using namespace facebook::react;
     }
   }
 
-  return result;
+  // Crop results to filter bounds
+  CIFilter *crop = [CIFilter filterWithName:@"CICrop"];
 
-  // FIXME: Crop results to filter bounds
-  //  CIFilter *filter = [CIFilter filterWithName:@"CICrop"];
-  //
-  //  [filter setDefaults];
-  //  [filter setValue:result forKey:@"inputImage"];
-  //  CIVector *cropRect;
-  //  if (self.filterUnits == kRNSVGUnitsUserSpaceOnUse) {
-  //    CGFloat x = [self relativeOnWidth:self.x];
-  //    CGFloat y = [self relativeOnHeight:self.y];
-  //    CGFloat width = [self relativeOnWidth:self.width];
-  //    CGFloat height = [self relativeOnHeight:self.height];
-  //    cropRect = [CIVector vectorWithX:x Y:y Z:width W:height];
-  //  } else if (self.filterUnits == kRNSVGUnitsObjectBoundingBox) {
-  //    CGFloat x = [self relativeOn:self.x relative:imgBounds.size.width];
-  //    CGFloat y = [self relativeOn:self.y relative:imgBounds.size.height];
-  //    CGFloat width = [self relativeOn:self.width relative:imgBounds.size.width];
-  //    CGFloat height = [self relativeOn:self.height relative:imgBounds.size.height];
-  //    cropRect = [CIVector vectorWithX:imgBounds.origin.x + x Y:imgBounds.origin.y + y Z:width W:height];
-  //  }
-  //  [filter setValue:cropRect forKey:@"inputRectangle"];
-  //
-  //  return [filter valueForKey:@"outputImage"];
+  [crop setDefaults];
+  [crop setValue:result forKey:@"inputImage"];
+  CIVector *cropRect;
+  CGAffineTransform inverseMatrix = CGAffineTransformMake(1, 0, 0, -1, 0, canvasBounds.size.height);
+
+  CGFloat x, y, width, height;
+  if (self.filterUnits == kRNSVGUnitsUserSpaceOnUse) {
+    x = [self relativeOnFraction:self.x relative:canvasBounds.size.width];
+    y = [self relativeOnFraction:self.y relative:canvasBounds.size.height];
+    width = [self relativeOnFraction:self.width relative:canvasBounds.size.width];
+    height = [self relativeOnFraction:self.height relative:canvasBounds.size.height];
+  } else {
+    x = [self relativeOnFraction:self.x relative:renderableBounds.size.width];
+    y = [self relativeOnFraction:self.y relative:renderableBounds.size.height];
+    width = [self relativeOnFraction:self.width relative:renderableBounds.size.width];
+    height = [self relativeOnFraction:self.height relative:renderableBounds.size.height];
+  }
+  CGRect cropCGRect = CGRectApplyAffineTransform(CGRectMake(x, y, width, height), inverseMatrix);
+  cropRect = [CIVector vectorWithCGRect:cropCGRect];
+  [crop setValue:cropRect forKey:@"inputRectangle"];
+
+  return [crop valueForKey:@"outputImage"];
 }
 
 static CIFilter *sourceAlphaFilter()

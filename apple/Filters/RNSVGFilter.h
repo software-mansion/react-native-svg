@@ -9,6 +9,9 @@
 @property (nonatomic, assign) RNSVGUnits filterUnits;
 @property (nonatomic, assign) RNSVGUnits primitiveUnits;
 
-- (CIImage *)applyFilter:(CIImage *)img bounds:(CGRect)imgBounds backgroundImg:(CIImage *)backgroundImg;
+- (CIImage *)applyFilter:(CIImage *)img
+           backgroundImg:(CIImage *)backgroundImg
+        renderableBounds:(CGRect)renderableBounds
+            canvasBounds:(CGRect)canvasBounds;
 
 @end

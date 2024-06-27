@@ -457,6 +457,17 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   return [self fromRelative:length];
 }
 
+- (CGFloat)relativeOnFraction:(RNSVGLength *)length relative:(CGFloat)relative
+{
+  RNSVGLengthUnitType unit = length.unit;
+  if (unit == SVG_LENGTHTYPE_NUMBER) {
+    return relative * length.value;
+  } else if (unit == SVG_LENGTHTYPE_PERCENTAGE) {
+    return length.value / 100 * relative;
+  }
+  return [self fromRelative:length];
+}
+
 - (CGFloat)relativeOnWidth:(RNSVGLength *)length
 {
   RNSVGLengthUnitType unit = length.unit;

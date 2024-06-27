@@ -288,7 +288,10 @@ UInt32 saturate(CGFloat value)
       CIImage *background =
           (backgroundImage != nil) ? [CIImage imageWithCGImage:backgroundImage] : [CIImage emptyImage];
 
-      content = [filterNode applyFilter:content bounds:rect backgroundImg:background];
+      content = [filterNode applyFilter:content
+                          backgroundImg:background
+                       renderableBounds:CGRectApplyAffineTransform(self.bounds, screenScaleCTM)
+                           canvasBounds:scaledRect];
 
       CGImageRelease(contentImage);
       contentImage = [[RNSVGRenderUtils sharedCIContext] createCGImage:content fromRect:scaledRect];
