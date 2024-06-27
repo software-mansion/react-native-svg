@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {View} from 'react-native';
-import {Image, Svg} from 'react-native-svg';
 import {FilterImage} from 'react-native-svg/filter-image';
 
 const testImage = require('../../assets/image.jpg');
