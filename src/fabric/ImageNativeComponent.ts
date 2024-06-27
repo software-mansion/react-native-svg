@@ -5,6 +5,7 @@ import type {
   ImageSourcePropType as ImageSource,
 } from 'react-native';
 import type {
+  DirectEventHandler,
   Float,
   Int32,
   WithDefault,
@@ -13,6 +14,12 @@ import type { ViewProps } from './utils';
 
 import type { UnsafeMixed } from './codegenUtils';
 import { NumberProp } from '../lib/extract/types';
+
+export type ImageLoadEventData = {
+  width: Float;
+  height: Float;
+  uri: string;
+};
 
 interface SvgNodeCommonProps {
   name?: string;
@@ -62,6 +69,7 @@ interface NativeProps
   src?: ImageSource | null;
   align?: string;
   meetOrSlice?: Int32;
+  onLoad?: DirectEventHandler<ImageLoadEventData>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGImage', {

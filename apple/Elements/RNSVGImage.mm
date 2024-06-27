@@ -133,6 +133,10 @@ using namespace facebook::react;
     // See for more info: T46311063.
     return;
   }
+    auto imageSource = _state->getData().getImageSource();
+    imageSource.size = {image.size.width, image.size.height};
+    static_cast<const RNSVGImageEventEmitter &>(*_eventEmitter).onLoad({imageSource.size.width, imageSource.size.height, imageSource.uri});
+
   dispatch_async(dispatch_get_main_queue(), ^{
     self->_image = CGImageRetain(image.CGImage);
     self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
@@ -199,12 +203,18 @@ using namespace facebook::react;
   _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"]
       loadImageWithURLRequest:src.request
                      callback:^(NSError *error, UIImage *image) {
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                         self->_image = CGImageRetain(image.CGImage);
-                         self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
-                         [self invalidate];
-                       });
-                     }];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                          self->_image = CGImageRetain(image.CGImage);
+                          self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+                          RCTImageSource *sourceLoaded = [src imageSourceWithSize:image.size scale:image.scale];
+                          self->_onLoad(@{
+                              @"width" : @(sourceLoaded.size.width),
+                              @"height" : @(sourceLoaded.size.height),
+                            @"uri" : sourceLoaded.request.URL.absoluteString
+                          });
+                          [self invalidate];
+                        });
+                      }];
 #endif // RCT_NEW_ARCH_ENABLED
 }
 
