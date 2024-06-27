@@ -58,6 +58,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   private @Nullable Bitmap mBitmap;
+  public @Nullable Bitmap mBitmapTmp;
   private boolean mRemovalTransitionStarted;
 
   public SvgView(ReactContext reactContext) {
@@ -265,7 +266,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       return null;
     }
     Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_8888);
-
+    mBitmapTmp = bitmap;
     drawChildren(new Canvas(bitmap));
     return bitmap;
   }

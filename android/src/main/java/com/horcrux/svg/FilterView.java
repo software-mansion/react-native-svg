@@ -75,7 +75,6 @@ class FilterView extends DefinitionView {
     resultsMap.clear();
     resultsMap.put("SourceGraphic", source);
     resultsMap.put("SourceAlpha", FilterUtils.applySourceAlphaFilter(source));
-    // TODO: implement
     resultsMap.put("BackgroundImage", background);
     resultsMap.put("BackgroundAlpha", FilterUtils.applySourceAlphaFilter(background));
 
@@ -91,7 +90,7 @@ class FilterView extends DefinitionView {
       }
     }
 
-    // crop image to filter x, y, width, height
+    // crop Bitmap to filter coordinates
     int x, y, width, height;
     if (this.mFilterUnits == FilterProperties.Units.USER_SPACE_ON_USE) {
       x = (int) (this.relativeOn(this.mX, canvasBounds.width()));
