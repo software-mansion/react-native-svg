@@ -133,6 +133,8 @@
     <ClInclude Include="LineViewManager.h" />
     <ClInclude Include="MarkerView.h" />
     <ClInclude Include="MarkerViewManager.h" />
+    <ClInclude Include="MaskView.h" />
+    <ClInclude Include="MaskViewManager.h" />
     <ClInclude Include="PathView.h" />
     <ClInclude Include="PathViewManager.h" />
     <ClInclude Include="PatternView.h" />
@@ -185,6 +187,8 @@
     <ClCompile Include="LineViewManager.cpp" />
     <ClCompile Include="MarkerView.cpp" />
     <ClCompile Include="MarkerViewManager.cpp" />
+    <ClCompile Include="MaskView.cpp" />
+    <ClCompile Include="MaskViewManager.cpp" />
     <ClCompile Include="PathView.cpp" />
     <ClCompile Include="PatternView.cpp" />
     <ClCompile Include="PatternViewManager.cpp" />
