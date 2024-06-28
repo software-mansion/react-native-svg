@@ -108,27 +108,23 @@ using namespace facebook::react;
   CIFilter *crop = [CIFilter filterWithName:@"CICrop"];
   [crop setDefaults];
   [crop setValue:result forKey:@"inputImage"];
-  CIVector *cropRect;
-  CGAffineTransform inverseMatrix = CGAffineTransformMake(1, 0, 0, -1, 0, canvasBounds.size.height);
 
+  CGFloat scaleX = ctm.a, scaleY = fabs(ctm.d);
   CGFloat x, y, width, height;
-  CGRect cropCGRect;
   if (self.filterUnits == kRNSVGUnitsUserSpaceOnUse) {
-    x = [self relativeOn:self.x relative:canvasBounds.size.width];
-    y = [self relativeOn:self.y relative:canvasBounds.size.height];
-    width = [self relativeOn:self.width relative:canvasBounds.size.width];
-    height = [self relativeOn:self.height relative:canvasBounds.size.height];
-    cropCGRect = CGRectMake(x, y, width, height);
+    x = [self relativeOn:self.x relative:canvasBounds.size.width / scaleX];
+    y = [self relativeOn:self.y relative:canvasBounds.size.height / scaleY];
+    width = [self relativeOn:self.width relative:canvasBounds.size.width / scaleX];
+    height = [self relativeOn:self.height relative:canvasBounds.size.height / scaleY];
   } else { // kRNSVGUnitsObjectBoundingBox
-    x = [self relativeOnFraction:self.x relative:renderableBounds.size.width];
-    y = [self relativeOnFraction:self.y relative:renderableBounds.size.height];
+    x = renderableBounds.origin.x + [self relativeOnFraction:self.x relative:renderableBounds.size.width];
+    y = renderableBounds.origin.y + [self relativeOnFraction:self.y relative:renderableBounds.size.height];
     width = [self relativeOnFraction:self.width relative:renderableBounds.size.width];
     height = [self relativeOnFraction:self.height relative:renderableBounds.size.height];
-    cropCGRect = CGRectApplyAffineTransform(cropCGRect, inverseMatrix);
-    cropCGRect = CGRectMake(x, y, width, height);
   }
+  CGRect cropCGRect = CGRectMake(x, y, width, height);
   cropCGRect = CGRectApplyAffineTransform(cropCGRect, ctm);
-  cropRect = [CIVector vectorWithCGRect:cropCGRect];
+  CIVector *cropRect = [CIVector vectorWithCGRect:cropCGRect];
   [crop setValue:cropRect forKey:@"inputRectangle"];
 
   return [crop valueForKey:@"outputImage"];

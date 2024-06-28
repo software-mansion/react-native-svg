@@ -290,8 +290,8 @@ UInt32 saturate(CGFloat value)
 
       content = [filterNode applyFilter:content
                           backgroundImg:background
-                       renderableBounds:self.bounds
-                           canvasBounds:rect
+                       renderableBounds:self.pathBounds
+                           canvasBounds:scaledRect
                                     ctm:currentCTM];
 
       CGImageRelease(contentImage);
