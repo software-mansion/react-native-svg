@@ -4,7 +4,7 @@
  */
 'use strict';
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -14,10 +14,10 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
-import {Modal, Platform} from 'react-native';
-import {Svg, Circle, Line} from 'react-native-svg';
+import { Modal, Platform } from 'react-native';
+import { Svg, Circle, Line } from 'react-native-svg';
 
-import * as examples from './examples';
+import * as examples from './src/examples';
 
 const hairline = StyleSheet.hairlineWidth;
 
@@ -149,7 +149,7 @@ export default class SvgExample extends Component {
             ))}
           </View>
         ),
-        scroll: (example as {scroll?: boolean}).scroll !== false,
+        scroll: (example as { scroll?: boolean }).scroll !== false,
       });
     }
   };
@@ -159,7 +159,7 @@ export default class SvgExample extends Component {
   };
 
   getExamples = () => {
-    return names.map(name => {
+    return names.map((name) => {
       var icon;
       let example = examples[name];
       if (example) {

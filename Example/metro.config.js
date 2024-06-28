@@ -12,6 +12,7 @@ const escape = require('escape-string-regexp');
 const pack = require('../package.json');
 
 const root = path.resolve(__dirname, '..');
+const projectNodeModules = path.join(__dirname, 'node_modules');
 
 const fs = require('fs');
 const rnwPath = fs.realpathSync(
@@ -46,7 +47,7 @@ const config = {
       new RegExp(`${rnwPath}/target/.*`),
       /.*\.ProjectImports\.zip/,
     ),
-
+    nodeModulesPaths: [projectNodeModules, path.join(__dirname, '../../')],
     extraNodeModules: modules.reduce((acc, name) => {
       acc[name] = path.join(__dirname, 'node_modules', name);
       return acc;
