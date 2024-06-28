@@ -153,10 +153,6 @@ If you suspect that you've found a spec conformance bug, then you can test using
 
 To check how to use the library, see [USAGE.md](https://github.com/react-native-svg/react-native-svg/blob/main/USAGE.md)
 
-## TODO:
-
-1. Filters ([connected PR](https://github.com/react-native-svg/react-native-svg/pull/896))
-
 ## Known issues:
 
 1. Unable to apply focus point of RadialGradient on Android.
