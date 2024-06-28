@@ -1288,6 +1288,8 @@ export default () => {
 };
 ```
 
+![FeColorMatrix](./screenshots/feColorMatrix.png)
+
 More info: <https://www.w3.org/TR/SVG11/filters.html>
 
 ## FilterImage
@@ -1297,21 +1299,37 @@ More info: <https://www.w3.org/TR/SVG11/filters.html>
 ### Example
 
 ```tsx
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import { FilterImage } from 'react-native-svg/filter-image';
 
 const myImage = require('./myImage.jpg');
-const FilterImageExample = () => (
-  <FilterImage
-    style={styles.image}
-    source={myImage}
-    filters={[
-      { name: 'colorMatrix', type: 'saturate', values: 0.2 },
-      {
-        name: 'colorMatrix',
-        type: 'matrix',
-        values: [1, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0],
-      },
-    ]}
-  />
-);
+
+export default () => {
+  return (
+    <FilterImage
+      style={styles.image}
+      source={myImage}
+      filters={[
+        { name: 'colorMatrix', type: 'saturate', values: 0.2 },
+        {
+          name: 'colorMatrix',
+          type: 'matrix',
+          values: [
+            0.2, 0.2, 0.2, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0, 0,
+            0, 1, 0,
+          ],
+        },
+      ]}
+    />
+  );
+};
+const styles = StyleSheet.create({
+  image: {
+    width: 200,
+    height: 200,
+  },
+});
 ```
+
+![FilterImage](./screenshots/filterImage.png)
