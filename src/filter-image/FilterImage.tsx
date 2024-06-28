@@ -36,7 +36,15 @@ export const FilterImage = (props: FilterImageProps) => {
   const height = props.height || styles?.height || src.height;
 
   return (
-    <View style={[styles, { width, height }]}>
+    <View
+      style={[
+        styles,
+        {
+          width,
+          height,
+          overflow: 'hidden',
+        },
+      ]}>
       <Svg width="100%" height="100%">
         <Filter id={`filter`}>{getFilters(props.filters)}</Filter>
         <Image
