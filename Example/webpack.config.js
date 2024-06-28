@@ -24,7 +24,6 @@ module.exports = {
           fromRoot('src'),
           fromRoot('node_modules/react-native-svg'),
           fromRoot('node_modules/react-native-reanimated'),
-          fromRoot('node_modules/react-native-web'),
         ],
       },
       {

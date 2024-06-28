@@ -1,7 +1,7 @@
 import type { GestureResponderEvent, TransformsStyle } from 'react-native';
 import type { NumberProp, TransformProps } from '../lib/extract/types';
 import { transformsArrayToProps } from '../lib/extract/extractTransform';
-import { BaseProps, Props } from '../types';
+import { BaseProps, CreateComponentProps, Props } from '../types';
 import { resolve } from '../lib/resolve';
 
 export function parseTransformProp(
@@ -104,7 +104,9 @@ export const remeasure = (element: HTMLElement | null) => {
  * `react-native-svg` supports additional props that aren't defined in the spec.
  * This function replaces them in a spec conforming manner.
  */
-export const prepare = <T extends BaseProps & Props>(props: T) => {
+export const prepare = <T extends CreateComponentProps<SVGElement> & Props>(
+  props: T
+) => {
   const {
     transform,
     origin,
@@ -160,7 +162,9 @@ export const prepare = <T extends BaseProps & Props>(props: T) => {
       if (typeof forwardedRef === 'function') {
         forwardedRef(el);
       } else if (forwardedRef) {
-        forwardedRef.current = el;
+        (
+          forwardedRef as unknown as React.MutableRefObject<SVGElement>
+        ).current = el;
       }
     }
   };

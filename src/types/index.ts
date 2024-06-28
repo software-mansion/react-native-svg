@@ -7,7 +7,7 @@ import type {
 
 export interface CreateComponentProps<T> extends BaseProps {
   tag: keyof React.JSX.IntrinsicElements;
-  forwardedRef?: React.Ref<T>;
+  forwardedRef?: React.Ref<T> | React.MutableRefObject<T>;
 }
 
 type GestureResponder = (event: GestureResponderEvent) => boolean | void;
