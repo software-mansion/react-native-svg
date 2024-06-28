@@ -42,6 +42,9 @@ public class SvgLoadEvent extends Event<SvgLoadEvent> {
     eventData.putDouble("width", width);
     eventData.putDouble("height", height);
     eventData.putString("uri", uri);
-    return eventData;
+
+    WritableMap event = Arguments.createMap();
+    event.putMap("source", eventData);
+    return event;
   }
 }

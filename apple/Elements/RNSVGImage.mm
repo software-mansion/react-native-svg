@@ -145,8 +145,10 @@ static NSDictionary *onLoadParamsForSource(RCTImageSource *source)
   }
   auto imageSource = _state->getData().getImageSource();
   imageSource.size = {image.size.width, image.size.height};
-  static_cast<const RNSVGImageEventEmitter &>(*_eventEmitter)
-      .onLoad({imageSource.size.width, imageSource.size.height, imageSource.uri});
+    static_cast<const RNSVGImageEventEmitter &>(*_eventEmitter).onLoad({.source = {
+        .width = imageSource.size.width * imageSource.scale,
+        .height = imageSource.size.height * imageSource.scale,
+        .uri = imageSource.uri, }});
 
   dispatch_async(dispatch_get_main_queue(), ^{
     self->_image = CGImageRetain(image.CGImage);
