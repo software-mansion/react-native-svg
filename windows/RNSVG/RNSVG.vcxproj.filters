@@ -67,21 +67,6 @@
     <ClCompile Include="D2DGeometry.cpp">
       <Filter>D2DWrappers</Filter>
     </ClCompile>
-    <ClCompile Include="SVGLength.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="UseView.cpp">
-      <Filter>Views</Filter>
-    </ClCompile>
-    <ClCompile Include="SvgView.cpp">
-      <Filter>Views</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderableView.cpp">
-      <Filter>Views</Filter>
-    </ClCompile>
-    <ClCompile Include="RectView.cpp">
-      <Filter>Views</Filter>
-    </ClCompile>
     <ClCompile Include="PathView.cpp">
       <Filter>Views</Filter>
     </ClCompile>
@@ -127,11 +112,26 @@
     <ClCompile Include="RadialGradientView.cpp">
       <Filter>Views\Group\Brush</Filter>
     </ClCompile>
+    <ClCompile Include="RenderableView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="SvgView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="UseView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="RectView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
     <ClCompile Include="TextView.cpp">
       <Filter>Views\Group\Text</Filter>
     </ClCompile>
     <ClCompile Include="TSpanView.cpp">
       <Filter>Views\Group\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="SVGLength.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="ClipPathViewManager.cpp">
       <Filter>ViewManagers\Group</Filter>
@@ -352,5 +352,8 @@
     <Filter Include="ViewManagers\Group\Text">
       <UniqueIdentifier>{89263b15-eac2-4cbd-9e22-0ddbbb893da3}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="RNSVG.rc" />
   </ItemGroup>
 </Project>

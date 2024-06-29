@@ -220,6 +220,14 @@
       <DependentUpon>ReactPackageProvider.idl</DependentUpon>
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="RectView.cpp" />
+    <ClCompile Include="RenderableView.cpp" />
+    <ClCompile Include="SVGLength.cpp" />
+    <ClCompile Include="SvgView.cpp" />
+    <ClCompile Include="SymbolView.cpp" />
+    <ClCompile Include="TextView.cpp" />
+    <ClCompile Include="TSpanView.cpp" />
+    <ClCompile Include="UseView.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(UseFabric)'!='true'">
     <ClCompile Include="CircleViewManager.cpp" />
@@ -235,20 +243,12 @@
     <ClCompile Include="PathViewManager.cpp" />
     <ClCompile Include="PatternViewManager.cpp" />
     <ClCompile Include="RadialGradientViewManager.cpp" />
-    <ClCompile Include="RectView.cpp" />
     <ClCompile Include="RectViewManager.cpp" />
-    <ClCompile Include="RenderableView.cpp" />
     <ClCompile Include="RenderableViewManager.cpp" />
-    <ClCompile Include="SVGLength.cpp" />
-    <ClCompile Include="SvgView.cpp" />
     <ClCompile Include="SvgViewManager.cpp" />
-    <ClCompile Include="SymbolView.cpp" />
     <ClCompile Include="SymbolViewManager.cpp" />
-    <ClCompile Include="TextView.cpp" />
     <ClCompile Include="TextViewManager.cpp" />
-    <ClCompile Include="TSpanView.cpp" />
     <ClCompile Include="TSpanViewManager.cpp" />
-    <ClCompile Include="UseView.cpp" />
     <ClCompile Include="UseViewManager.cpp" />
   </ItemGroup>
   <ItemGroup>
