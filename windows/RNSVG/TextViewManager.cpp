@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "TextViewManager.h"
+#if __has_include("TextViewManager.g.cpp")
 #include "TextViewManager.g.cpp"
+#endif
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;

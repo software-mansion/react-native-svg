@@ -11,6 +11,51 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
+#ifdef USE_FABRIC
+RectProps::RectProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
+
+void RectProps::SetProp(
+    uint32_t hash,
+    winrt::hstring propName,
+    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
+}
+
+RectView::RectView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
+
+void RectView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      L"RNSVGRect", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::RectProps>(props);
+        });
+        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::RectView>(args);
+        });
+      });
+}
+
+void RectView::UpdateProperties(
+    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+    bool forceUpdate,
+    bool invalidate) noexcept {
+  auto rectProps = props.try_as<RectProps>();
+  if (rectProps) {
+    m_props = rectProps;
+
+    m_x = m_props->x;
+    m_y = m_props->y;
+    m_width = m_props->width;
+    m_height = m_props->height;
+    m_rx = m_props->rx;
+    m_ry = m_props->ry;
+  }
+
+  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
+}
+#else
 void RectView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -35,21 +80,31 @@ void RectView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
+#endif
 
-void RectView::CreateGeometry() {
+void RectView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const &root{SvgRoot()};
 
-  float x{Utils::GetAbsoluteLength(m_x, root.ActualWidth())};
-  float y{Utils::GetAbsoluteLength(m_y, root.ActualHeight())};
-  float width{Utils::GetAbsoluteLength(m_width, root.ActualWidth())};
-  float height{Utils::GetAbsoluteLength(m_height, root.ActualHeight())};
+  float canvasWidth{root.CanvasSize().Width};
+  float canvasHeight{root.CanvasSize().Height};
 
+  float x{Utils::GetAbsoluteLength(m_x, canvasWidth)};
+  float y{Utils::GetAbsoluteLength(m_y, canvasHeight)};
+  float width{Utils::GetAbsoluteLength(m_width, canvasWidth)};
+  float height{Utils::GetAbsoluteLength(m_height, canvasHeight)};
+
+#ifdef USE_FABRIC
+  auto const rxLength{m_rx.Unit == RNSVG::LengthType::Unknown ? m_ry : m_rx};
+  auto const ryLength{m_ry.Unit == RNSVG::LengthType::Unknown ? m_rx : m_ry};
+#else
   auto const rxLength{m_rx.Unit() == RNSVG::LengthType::Unknown ? m_ry : m_rx};
   auto const ryLength{m_ry.Unit() == RNSVG::LengthType::Unknown ? m_rx : m_ry};
-  float rx{Utils::GetAbsoluteLength(rxLength, root.ActualWidth())};
-  float ry{Utils::GetAbsoluteLength(ryLength, root.ActualHeight())};
+#endif
 
-  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
+  float rx{Utils::GetAbsoluteLength(rxLength, canvasWidth)};
+  float ry{Utils::GetAbsoluteLength(ryLength, canvasHeight)};
+
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
   com_ptr<ID2D1Factory> factory;
   deviceContext->GetFactory(factory.put());
