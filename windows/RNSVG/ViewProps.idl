@@ -77,6 +77,11 @@ namespace RNSVG
 
   [experimental]
   [default_interface]
+  unsealed runtimeclass MaskProps : SvgGroupCommonProps {
+  };
+
+  [experimental]
+  [default_interface]
   unsealed runtimeclass LinearGradientProps : SvgGroupCommonProps {
   };
 

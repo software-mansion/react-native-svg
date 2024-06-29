@@ -146,6 +146,13 @@ namespace RNSVG
 
   [experimental]
   [default_interface]
+  runtimeclass MaskView : GroupView
+  {
+    MaskView(Microsoft.ReactNative.CreateComponentViewArgs args);
+  };
+
+  [experimental]
+  [default_interface]
   unsealed runtimeclass BrushView : GroupView, IBrushView
   {
     BrushView(Microsoft.ReactNative.CreateComponentViewArgs args);
