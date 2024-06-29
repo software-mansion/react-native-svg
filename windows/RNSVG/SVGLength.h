@@ -1,9 +1,19 @@
 #pragma once
 
+#ifdef USE_FABRIC
+#include <winrt/RNSVG.h>
+#else
 #include "SVGLength.g.h"
 
 #include "JSValueXaml.h"
+#endif
 
+#ifdef USE_FABRIC
+namespace winrt::Microsoft::ReactNative {
+void WriteValue(IJSValueWriter const &writer, const winrt::RNSVG::SVGLength &value) noexcept;
+void ReadValue(IJSValueReader const &reader, /*out*/ winrt::RNSVG::SVGLength &value) noexcept;
+} // namespace winrt::Microsoft::ReactNative
+#else
 namespace winrt::RNSVG::implementation {
 struct SVGLength : SVGLengthT<SVGLength> {
  public:
@@ -26,3 +36,4 @@ struct SVGLength : SVGLengthT<SVGLength> {
 namespace winrt::RNSVG::factory_implementation {
 struct SVGLength : SVGLengthT<SVGLength, implementation::SVGLength> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif
