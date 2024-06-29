@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "TSpanViewManager.h"
+#if __has_include("TSpanViewManager.g.cpp")
 #include "TSpanViewManager.g.cpp"
+#endif
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;
