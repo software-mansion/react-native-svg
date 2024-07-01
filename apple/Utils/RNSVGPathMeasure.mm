@@ -194,7 +194,7 @@ static void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint be
 {
   // Investigation suggests binary search is faster at lineCount >= 16
   // https://gist.github.com/msand/4c7993319425f9d7933be58ad9ada1a4
-  NSUInteger i = _lineCount < 16
+  NSUInteger index = _lineCount < 16
       ? [_lengths indexOfObjectPassingTest:^(NSNumber *length, NSUInteger index, BOOL *_Nonnull stop) {
           BOOL contains = midPoint <= [length doubleValue];
           return contains;
@@ -205,22 +205,25 @@ static void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint be
                 usingComparator:^(NSNumber *obj1, NSNumber *obj2) {
                   return [obj1 compare:obj2];
                 }];
+  if (index >= _lineCount) {
+    index = _lineCount - 1;
+  }
 
-  CGFloat totalLength = (CGFloat)[_lengths[i] doubleValue];
-  CGFloat prevLength = i == 0 ? 0 : (CGFloat)[_lengths[i - 1] doubleValue];
+  CGFloat totalLength = (CGFloat)[_lengths[index] doubleValue];
+  CGFloat prevLength = index == 0 ? 0 : (CGFloat)[_lengths[index - 1] doubleValue];
 
   CGFloat length = totalLength - prevLength;
   CGFloat percent = (midPoint - prevLength) / length;
 
-  NSArray *points = [_lines objectAtIndex:i];
-  CGPoint p1 = [[points objectAtIndex:0] CGPointValue];
-  CGPoint p2 = [[points objectAtIndex:1] CGPointValue];
+  NSArray *points = [_lines objectAtIndex:index];
+  CGPoint startPoint = [[points objectAtIndex:0] CGPointValue];
+  CGPoint endPoint = [[points objectAtIndex:1] CGPointValue];
 
-  CGFloat ldx = p2.x - p1.x;
-  CGFloat ldy = p2.y - p1.y;
-  *angle = atan2(ldy, ldx);
-  *x = p1.x + ldx * percent;
-  *y = p1.y + ldy * percent;
+  CGFloat deltaX = endPoint.x - startPoint.x;
+  CGFloat deltaY = endPoint.y - startPoint.y;
+  *angle = atan2(deltaY, deltaX);
+  *x = startPoint.x + deltaX * percent;
+  *y = startPoint.y + deltaY * percent;
 }
 
 @end
