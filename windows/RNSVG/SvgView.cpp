@@ -249,23 +249,15 @@ void SvgView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
           SaveDefinition();
         }
       } else if (propertyName == "width") {
-        m_width = SVGLength::From(propertyValue);
+        m_width = propertyValue.To<RNSVG::SVGLength>();
       } else if (propertyName == "height") {
-        m_height = SVGLength::From(propertyValue);
+        m_height = propertyValue.To<RNSVG::SVGLength>();
       } else if (propertyName == "bbWidth") {
-        m_bbWidth = SVGLength::From(propertyValue);
-#ifdef USE_FABRIC
+        m_bbWidth = propertyValue.To<RNSVG::SVGLength>();
         Width(m_bbWidth.Value);
-#else
-        Width(m_bbWidth.Value());
-#endif
       } else if (propertyName == "bbHeight") {
-        m_bbHeight = SVGLength::From(propertyValue);
-#ifdef USE_FABRIC
+        m_bbHeight = propertyValue.To<RNSVG::SVGLength>();
         Height(m_bbHeight.Value);
-#else
-        Height(m_bbHeight.Value());
-#endif
       } else if (propertyName == "vbWidth") {
         m_vbWidth = Utils::JSValueAsFloat(propertyValue);
       } else if (propertyName == "vbHeight") {

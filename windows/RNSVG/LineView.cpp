@@ -62,13 +62,13 @@ void LineView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
     auto const &propertyValue{pair.second};
 
     if (propertyName == "x1") {
-      m_x1 = SVGLength::From(propertyValue);
+      m_x1 = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "y1") {
-      m_y1 = SVGLength::From(propertyValue);
+      m_y1 = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "x2") {
-      m_x2 = SVGLength::From(propertyValue);
+      m_x2 = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "y2") {
-      m_y2 = SVGLength::From(propertyValue);
+      m_y2 = propertyValue.To<RNSVG::SVGLength>();
     }
   }
 

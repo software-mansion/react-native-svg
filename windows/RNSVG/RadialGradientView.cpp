@@ -71,17 +71,17 @@ void RadialGradientView::UpdateProperties(IJSValueReader const &reader, bool for
     auto const &propertyValue{pair.second};
 
     if (propertyName == "fx") {
-      m_fx = SVGLength::From(propertyValue);
+      m_fx = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "fy") {
-      m_fy = SVGLength::From(propertyValue);
+      m_fy = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "rx") {
-      m_rx = SVGLength::From(propertyValue);
+      m_rx = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "ry") {
-      m_ry = SVGLength::From(propertyValue);
+      m_ry = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "cx") {
-      m_cx = SVGLength::From(propertyValue);
+      m_cx = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "cy") {
-      m_cy = SVGLength::From(propertyValue);
+      m_cy = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "gradient") {
       m_stops = Utils::JSValueAsStops(propertyValue);
     } else if (propertyName == "gradientUnits") {

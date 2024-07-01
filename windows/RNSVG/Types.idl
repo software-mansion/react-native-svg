@@ -96,6 +96,11 @@ namespace RNSVG {
   //  Uri,
   //};
 
+  struct SVGLength {
+    Single Value;
+    LengthType Unit;
+  };
+
   [default_interface]
   runtimeclass D2DDevice {
     D2DDevice();

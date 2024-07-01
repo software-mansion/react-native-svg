@@ -49,13 +49,8 @@ struct Utils {
   }
 
   static float GetAbsoluteLength(SVGLength const &length, float relativeTo) {
-#ifdef USE_FABRIC
     auto value{length.Value};
     auto unit{length.Unit};
-#else
-    auto value{length.Value()};
-    auto unit{length.Unit()};
-#endif
 
     // 1in = 2.54cm = 96px
     auto inch{96.0f};
@@ -268,7 +263,7 @@ struct Utils {
   }
 
   static SVGLength JSValueAsSVGLength(JSValue const &value, SVGLength const &defaultValue = {}) {
-    return value.IsNull() ? defaultValue : RNSVG::implementation::SVGLength::From(value);
+    return value.IsNull() ? defaultValue : value.To<RNSVG::SVGLength>();
   }
 
   static Numerics::float3x2 JSValueAsTransform(JSValue const &value, Numerics::float3x2 const &defaultValue = {}) {
