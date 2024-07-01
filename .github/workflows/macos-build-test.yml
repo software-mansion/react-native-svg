@@ -18,7 +18,7 @@ jobs:
     runs-on: macos-12
     strategy:
       matrix:
-        working-directory: [Example]
+        working-directory: [macos-example]
       fail-fast: false
     concurrency:
       group: macos-${{ matrix.working-directory }}-${{ github.ref }}
