@@ -6,10 +6,10 @@ on:
       - 'android/**'
       - 'src/fabric/**'
       - 'package.json'
-      - 'Example/android/**'
-      - 'Example/package.json'
-      - 'FabricExample/android/**'
-      - 'FabricExample/package.json'
+      - 'example/android/**'
+      - 'example/package.json'
+      - 'fabric-example/android/**'
+      - 'fabric-example/package.json'
   push:
     branches:
       - main
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        working-directory: [Example, FabricExample]
+        working-directory: [example, fabric-example]
     concurrency:
       group: android-${{ matrix.working-directory }}-${{ github.ref }}
       cancel-in-progress: true

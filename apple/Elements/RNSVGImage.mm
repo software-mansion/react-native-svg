@@ -206,7 +206,12 @@ using namespace facebook::react;
                         dispatch_async(dispatch_get_main_queue(), ^{
                           self->_image = CGImageRetain(image.CGImage);
                           self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
-                          RCTImageSource *sourceLoaded = [src imageSourceWithSize:image.size scale:image.scale];
+                            RCTImageSource *sourceLoaded;
+#if TARGET_OS_OSX // [macOS]
+                            sourceLoaded = [src imageSourceWithSize:image.size scale:1];
+#else
+                            sourceLoaded = [src imageSourceWithSize:image.size scale:image.scale];
+#endif
                           self->_onLoad(@{
                               @"width" : @(sourceLoaded.size.width),
                               @"height" : @(sourceLoaded.size.height),

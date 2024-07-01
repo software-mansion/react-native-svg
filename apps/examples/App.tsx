@@ -4,7 +4,7 @@
  */
 'use strict';
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -13,9 +13,10 @@ import {
   ScrollView,
   TouchableHighlight,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
-import { Modal, Platform } from 'react-native';
-import { Svg, Circle, Line } from 'react-native-svg';
+import {Modal, Platform} from 'react-native';
+import {Svg, Circle, Line} from 'react-native-svg';
 
 import * as examples from './src/examples';
 
@@ -149,7 +150,7 @@ export default class SvgExample extends Component {
             ))}
           </View>
         ),
-        scroll: (example as { scroll?: boolean }).scroll !== false,
+        scroll: (example as {scroll?: boolean}).scroll !== false,
       });
     }
   };
@@ -159,7 +160,7 @@ export default class SvgExample extends Component {
   };
 
   getExamples = () => {
-    return names.map((name) => {
+    return names.map(name => {
       var icon;
       let example = examples[name];
       if (example) {
@@ -189,7 +190,10 @@ export default class SvgExample extends Component {
         {this.state.content}
       </ScrollView>
       <View style={styles.close}>
-        <TouchableOpacity activeOpacity={0.7} onPress={this.hide}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={{padding: 5}}
+          onPress={this.hide}>
           <Svg height="20" width="20">
             <Circle cx="10" cy="10" r="10" fill="red" />
             <Line x1="4" y1="4" x2="16" y2="16" stroke="#fff" strokeWidth="2" />
@@ -202,7 +206,7 @@ export default class SvgExample extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Text style={styles.welcome}>SVG library for React Apps</Text>
         <View style={styles.contentContainer}>{this.getExamples()}</View>
         {(Platform.OS === 'windows' || Platform.OS === 'macos') &&
@@ -217,7 +221,7 @@ export default class SvgExample extends Component {
             {this.modalContent()}
           </Modal>
         )}
-      </View>
+      </SafeAreaView>
     );
   }
 }
