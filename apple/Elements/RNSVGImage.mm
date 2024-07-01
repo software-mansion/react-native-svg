@@ -38,16 +38,6 @@
 using namespace facebook::react;
 #endif // RCT_NEW_ARCH_ENABLED
 
-static NSDictionary *onLoadParamsForSource(RCTImageSource *source)
-{
-  NSDictionary *dict = @{
-    @"uri" : source.request.URL.absoluteString,
-    @"width" : @(source.size.width),
-    @"height" : @(source.size.height),
-  };
-  return @{@"source" : dict};
-}
-
 @implementation RNSVGImage {
   CGImageRef _image;
   CGSize _imageSize;
@@ -145,11 +135,12 @@ static NSDictionary *onLoadParamsForSource(RCTImageSource *source)
   }
   auto imageSource = _state->getData().getImageSource();
   imageSource.size = {image.size.width, image.size.height};
+  if (_eventEmitter != nullptr) {
     static_cast<const RNSVGImageEventEmitter &>(*_eventEmitter).onLoad({.source = {
         .width = imageSource.size.width * imageSource.scale,
         .height = imageSource.size.height * imageSource.scale,
         .uri = imageSource.uri, }});
-
+  }
   dispatch_async(dispatch_get_main_queue(), ^{
     self->_image = CGImageRetain(image.CGImage);
     self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
@@ -221,7 +212,12 @@ static NSDictionary *onLoadParamsForSource(RCTImageSource *source)
                          self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
                          if (self->_onLoad) {
                            RCTImageSource *sourceLoaded = [src imageSourceWithSize:image.size scale:image.scale];
-                           self->_onLoad(onLoadParamsForSource(sourceLoaded));
+                             NSDictionary *dict = @{
+                               @"uri" : sourceLoaded.request.URL.absoluteString,
+                               @"width" : @(sourceLoaded.size.width),
+                               @"height" : @(sourceLoaded.size.height),
+                             };
+                             self->_onLoad(@{@"source" : dict});
                          }
                          [self invalidate];
                        });
