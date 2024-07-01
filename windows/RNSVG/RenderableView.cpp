@@ -529,7 +529,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
             m_strokeDashArray.Clear();
 
             for (auto const &item : asArray) {
-              m_strokeDashArray.Append(SVGLength::From(item));
+              m_strokeDashArray.Append(item.To<RNSVG::SVGLength>());
             }
           }
         }

@@ -64,17 +64,17 @@ void RectView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
     auto const &propertyValue{pair.second};
 
     if (propertyName == "width") {
-      m_width = SVGLength::From(propertyValue);
+      m_width = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "height") {
-      m_height = SVGLength::From(propertyValue);
+      m_height = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "x") {
-      m_x = SVGLength::From(propertyValue);
+      m_x = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "y") {
-      m_y = SVGLength::From(propertyValue);
+      m_y = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "rx") {
-      m_rx = SVGLength::From(propertyValue);
+      m_rx = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "ry") {
-      m_ry = SVGLength::From(propertyValue);
+      m_ry = propertyValue.To<RNSVG::SVGLength>();
     }
   }
 
@@ -93,13 +93,8 @@ void RectView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   float width{Utils::GetAbsoluteLength(m_width, canvasWidth)};
   float height{Utils::GetAbsoluteLength(m_height, canvasHeight)};
 
-#ifdef USE_FABRIC
   auto const rxLength{m_rx.Unit == RNSVG::LengthType::Unknown ? m_ry : m_rx};
   auto const ryLength{m_ry.Unit == RNSVG::LengthType::Unknown ? m_rx : m_ry};
-#else
-  auto const rxLength{m_rx.Unit() == RNSVG::LengthType::Unknown ? m_ry : m_rx};
-  auto const ryLength{m_ry.Unit() == RNSVG::LengthType::Unknown ? m_rx : m_ry};
-#endif
 
   float rx{Utils::GetAbsoluteLength(rxLength, canvasWidth)};
   float ry{Utils::GetAbsoluteLength(ryLength, canvasHeight)};

@@ -3,16 +3,6 @@ import "Views.idl";
 
 namespace RNSVG
 {
-  [default_interface]
-  runtimeclass SVGLength {
-    SVGLength();
-    SVGLength(Single param);
-    SVGLength(Single param, LengthType type);
-
-    Single Value{ get; };
-    LengthType Unit{ get; };
-  };
-
   [experimental]
   interface IRenderablePaper
   {
@@ -39,8 +29,6 @@ namespace RNSVG
     SvgView SvgRoot{ get; };
     Windows.UI.Color Fill{ get; };
     Windows.UI.Color Stroke{ get; };
-    SVGLength StrokeWidth{ get; };
-    Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
   };
 
   [experimental]
@@ -102,23 +90,16 @@ namespace RNSVG
 
   [experimental]
   [default_interface]
-  unsealed runtimeclass TextView : GroupView
+  unsealed runtimeclass TextView : GroupView, ITextView
   {
     TextView();
-
-    Windows.Foundation.Collections.IVector<SVGLength> X{ get; };
-    Windows.Foundation.Collections.IVector<SVGLength> Y{ get; };
-    Windows.Foundation.Collections.IVector<SVGLength> DX{ get; };
-    Windows.Foundation.Collections.IVector<SVGLength> DY{ get; };
   };
 
   [experimental]
   [default_interface]
-  runtimeclass TSpanView : TextView
+  runtimeclass TSpanView : TextView, ITSpanView
   {
     TSpanView();
-
-    Windows.Foundation.Collections.IVector<SVGLength> Rotate { get; };
   };
 
   [experimental]

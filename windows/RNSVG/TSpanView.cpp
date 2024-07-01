@@ -75,13 +75,8 @@ void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   bool translateXY{X().Size() > 0 || Y().Size() > 0};
 
   if (translateXY) {
-#ifdef USE_FABRIC
     float x{X().Size() > 0 ? X().GetAt(0).Value : 0};
     float y{Y().Size() > 0 ? Y().GetAt(0).Value : 0};
-#else
-    float x{X().Size() > 0 ? X().GetAt(0).Value() : 0};
-    float y{Y().Size() > 0 ? Y().GetAt(0).Value() : 0};
-#endif
 
     deviceContext->SetTransform(D2D1::Matrix3x2F::Translation({x, y}) * transform);
   }

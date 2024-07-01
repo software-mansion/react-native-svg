@@ -98,27 +98,27 @@ void TextView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
     if (propertyName == "x") {
       m_x.Clear();
       for (auto const &item : propertyValue.AsArray()) {
-        m_x.Append(SVGLength::From(item));
+        m_x.Append(item.To<RNSVG::SVGLength>());
       }
     } else if (propertyName == "y") {
       m_y.Clear();
       for (auto const &item : propertyValue.AsArray()) {
-        m_y.Append(SVGLength::From(item));
+        m_y.Append(item.To<RNSVG::SVGLength>());
       }
     } else if (propertyName == "dx") {
       m_dx.Clear();
       for (auto const &item : propertyValue.AsArray()) {
-        m_dx.Append(SVGLength::From(item));
+        m_dx.Append(item.To<RNSVG::SVGLength>());
       }
     } else if (propertyName == "dy") {
       m_dy.Clear();
       for (auto const &item : propertyValue.AsArray()) {
-        m_dy.Append(SVGLength::From(item));
+        m_dy.Append(item.To<RNSVG::SVGLength>());
       }
     } else if (propertyName == "rotate") {
       m_rotate.Clear();
       for (auto const &item : propertyValue.AsArray()) {
-        m_rotate.Append(SVGLength::From(item));
+        m_rotate.Append(item.To<RNSVG::SVGLength>());
       }
     }
   }
@@ -134,13 +134,8 @@ void TextView::DrawGroup(RNSVG::D2DDeviceContext const &context, Size const &siz
 
   bool translateXY{X().Size() > 0 || Y().Size() > 0};
   if (translateXY) {
-#ifdef USE_FABRIC
     float x{X().Size() > 0 ? X().GetAt(0).Value : 0};
     float y{Y().Size() > 0 ? Y().GetAt(0).Value : 0};
-#else
-    float x{X().Size() > 0 ? X().GetAt(0).Value() : 0};
-    float y{Y().Size() > 0 ? Y().GetAt(0).Value() : 0};
-#endif
 
     deviceContext->SetTransform(D2D1::Matrix3x2F::Translation({x,y}) * transform);
   }
