@@ -39,9 +39,11 @@ namespace RNSVG
     Single FillOpacity{ get; };
     String FillBrushId{ get; };
     Single StrokeOpacity{ get; };
+    SVGLength StrokeWidth{ get; };
     String StrokeBrushId{ get; };
     Single StrokeMiterLimit{ get; };
     Single StrokeDashOffset{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
     LineCap StrokeLineCap{ get; };
     LineJoin StrokeLineJoin{ get; };
     FillRule FillRule{ get; };
@@ -56,6 +58,21 @@ namespace RNSVG
     String FontWeight;
 
     void DrawGroup(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
+  };
+
+  [experimental]
+  interface ITextView
+  {
+    Windows.Foundation.Collections.IVector<SVGLength> X{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> Y{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> DX{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> DY{ get; };
+  };
+
+  [experimental]
+  interface ITSpanView
+  {
+    Windows.Foundation.Collections.IVector<SVGLength> Rotate { get; };
   };
 
   [experimental]

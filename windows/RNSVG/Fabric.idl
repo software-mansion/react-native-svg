@@ -2,12 +2,6 @@ import "Views.idl";
 
 namespace RNSVG
 {
-  struct SVGLength
-  {
-    Single Value;
-    LengthType Unit;
-  };
-
   [experimental]
   interface IRenderableFabric
   {
@@ -35,8 +29,6 @@ namespace RNSVG
     SvgView SvgRoot{ get; };
     Microsoft.ReactNative.Color Fill{ get; };
     Microsoft.ReactNative.Color Stroke{ get; };
-    SVGLength StrokeWidth{ get; };
-    Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
   };
 
   [experimental]
@@ -97,23 +89,16 @@ namespace RNSVG
 
   [experimental]
   [default_interface]
-  unsealed runtimeclass TextView : GroupView
+  unsealed runtimeclass TextView : GroupView, ITextView
   {
     TextView(Microsoft.ReactNative.CreateComponentViewArgs args);
-
-    Windows.Foundation.Collections.IVector<SVGLength> X{ get; };
-    Windows.Foundation.Collections.IVector<SVGLength> Y{ get; };
-    Windows.Foundation.Collections.IVector<SVGLength> DX{ get; };
-    Windows.Foundation.Collections.IVector<SVGLength> DY{ get; };
   };
 
   [experimental]
   [default_interface]
-  runtimeclass TSpanView : TextView
+  runtimeclass TSpanView : TextView, ITSpanView
   {
     TSpanView(Microsoft.ReactNative.CreateComponentViewArgs args);
-
-    Windows.Foundation.Collections.IVector<SVGLength> Rotate { get; };
   };
 
   [experimental]

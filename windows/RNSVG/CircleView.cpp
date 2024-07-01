@@ -61,11 +61,11 @@ void CircleView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate
     auto const &propertyValue{pair.second};
 
     if (propertyName == "r") {
-      m_r = SVGLength::From(propertyValue);
+      m_r = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "cx") {
-      m_cx = SVGLength::From(propertyValue);
+      m_cx = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "cy") {
-      m_cy = SVGLength::From(propertyValue);
+      m_cy = propertyValue.To<RNSVG::SVGLength>();
     }
   }
 
