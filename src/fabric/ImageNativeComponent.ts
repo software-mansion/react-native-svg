@@ -16,9 +16,11 @@ import type { UnsafeMixed } from './codegenUtils';
 import { NumberProp } from '../lib/extract/types';
 
 export type ImageLoadEventData = {
-  width: Float;
-  height: Float;
-  uri: string;
+  source: {
+    width: Float;
+    height: Float;
+    uri: string;
+  };
 };
 
 interface SvgNodeCommonProps {

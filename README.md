@@ -110,34 +110,7 @@ react-native run-android
 ### Adding Windows support
 
 1. `npx react-native-windows-init --overwrite`
-2. `cd windows\<AppName>`
-3. Open `<AppName>.vcxproj`
-
-#### RN 0.68+
-
-4. Scroll to the bottom until you find:
-   ```xml
-   <ItemGroup>
-      <PackageReference Include="Microsoft.Windows.CppWinRT" Version="X.X.XXXXXX.X" />
-   </ItemGroup>
-   ```
-5. Add the following to that `<ItemGroup>`
-   ```xml
-   <PackageReference Include="Win2D.uwp" Version="1.26.0" />
-   ```
-
-#### Pre RN 0.68
-
-4. Scroll to the bottom until you find:
-
-   ```xml
-   <ImportGroup Label="ExtensionTargets">
-   ```
-
-5. Add the following to that `<ImportGroup>`
-   ```xml
-   <Import Project="$(SolutionDir)\packages\Win2D.uwp.1.26.0\build\native\Win2D.uwp.targets" Condition="Exists('$(SolutionDir)\packages\Win2D.uwp.1.26.0\build\native\Win2D.uwp.targets')" />
-   ```
+2. `react-native run-windows`
 
 ## Opening issues
 
