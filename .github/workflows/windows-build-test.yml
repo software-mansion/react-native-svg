@@ -18,9 +18,9 @@ jobs:
     strategy:
       matrix:
         working-directory: [Example]
-      concurrency:
-        group: windows-${{ matrix.working-directory }}-${{ github.ref }}
-        cancel-in-progress: true
+    concurrency:
+      group: windows-${{ matrix.working-directory }}-${{ github.ref }}
+      cancel-in-progress: true
 
     steps:
       - name: Check out Git repository
