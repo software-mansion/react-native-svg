@@ -150,8 +150,8 @@ void ImageView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
 
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
-  uint32_t imgWidth = 0;
-  uint32_t imgHeight = 0;
+  uint32_t imgWidth{0};
+  uint32_t imgHeight{0};
   check_hresult(m_wicbitmap->GetSize(&imgWidth, &imgHeight));
 
   m_source.width = static_cast<float>(imgWidth);

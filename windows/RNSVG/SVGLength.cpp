@@ -1,7 +1,6 @@
 #pragma once
 
 #include "pch.h"
-
 #include "SVGLength.h"
 
 #include <JSValueReader.h>

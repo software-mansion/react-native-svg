@@ -10,8 +10,7 @@ namespace winrt::RNSVG::implementation {
 
 #ifdef USE_FABRIC
 BrushView::BrushView(
-    const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args)
-    : base_type(args) {}
+    const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
 #endif
 
 void BrushView::SaveDefinition() {
@@ -30,6 +29,7 @@ void BrushView::Unload() {
   if (m_brush) {
     m_brush = nullptr;
   }
+
   __super::Unload();
 }
 } // namespace winrt::RNSVG::implementation

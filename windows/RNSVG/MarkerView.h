@@ -43,7 +43,7 @@ struct MarkerProps : MarkerPropsT<MarkerProps, SvgGroupCommonProps> {
   REACT_FIELD(align)
   std::string align{""};
   REACT_FIELD(meetOrSlice)
-  uint32_t meetOrSlice{0}; // RNSVG::MeetOrSlice::Meet
+  RNSVG::MeetOrSlice meetOrSlice{RNSVG::MeetOrSlice::Meet};
 };
 #endif
 

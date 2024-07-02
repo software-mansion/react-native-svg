@@ -116,26 +116,11 @@ void SvgView::UpdateProperties(
     return;
   }
 
-  /*
-else if (propertyName == "width")
-{
-   m_width = SVGLength::From(propertyValue);
-    }
-else if (propertyName == "height")
-{
-   m_height = SVGLength::From(propertyValue);
-    }
-    */
-
   if (!oldSvgProps || svgProps->bbWidth != oldSvgProps->bbWidth) {
     m_bbWidth = svgProps->bbWidth;
-    // assert(false);
-    // Width(m_bbWidth.Value());
   }
   if (!oldSvgProps || svgProps->bbHeight != oldSvgProps->bbHeight) {
     m_bbHeight = svgProps->bbHeight;
-    // assert(false);
-    // Height(m_bbHeight.Value());
   }
   if (!oldSvgProps || svgProps->vbWidth != oldSvgProps->vbWidth) {
     m_vbWidth = svgProps->vbWidth;
@@ -153,17 +138,11 @@ else if (propertyName == "height")
     m_align = svgProps->align;
   }
   if (!oldSvgProps || svgProps->meetOrSlice != oldSvgProps->meetOrSlice) {
-    m_meetOrSlice = Utils::GetMeetOrSlice(svgProps->meetOrSlice);
+    m_meetOrSlice = svgProps->meetOrSlice;
   }
   if (!oldSvgProps || svgProps->color != oldSvgProps->color) {
     m_currentColor = svgProps->color;
   }
-  /*
-else if (propertyName == "responsible")
-{
-   m_isResponsible = propertyValue.AsBoolean();
-   }
-   */
 
   Invalidate();
 }
@@ -342,7 +321,7 @@ void SvgView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
     float width{size.Width};
     float height{size.Height};
 
-    if (Parent()) {
+    if (SvgParent()) {
       width = Utils::GetAbsoluteLength(m_bbWidth, width);
       height = Utils::GetAbsoluteLength(m_bbHeight, height);
     }
@@ -376,10 +355,7 @@ void SvgView::CreateResources() {
 
   Invalidate();
 
-// TODO: When to call CreateResources for Fabric?
-#ifdef USE_FABRIC
-  assert(false);
-#else
+#ifndef USE_FABRIC
   m_image.Width(ActualWidth());
   m_image.Height(ActualHeight());
   m_image.Stretch(xaml::Media::Stretch::UniformToFill);

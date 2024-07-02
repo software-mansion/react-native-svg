@@ -89,10 +89,11 @@ void PathView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   com_ptr<ID2D1SvgDocument> doc;
   com_ptr<ID2D1DeviceContext5> deviceContext{get_self<D2DDeviceContext>(context)->Get().as<ID2D1DeviceContext5>()};
 
-  float width{root.CanvasSize().Width};
-  float height{root.CanvasSize().Height};
-
-  check_hresult(deviceContext->CreateSvgDocument(nullptr, D2D1::SizeF(width, height), doc.put()));
+  auto size{root.CanvasSize()};
+  check_hresult(deviceContext->CreateSvgDocument(
+      nullptr,
+      D2D1::SizeF(size.Width, size.Height),
+      doc.put()));
 
   m_segmentData.resize(m_segmentData.size());
   m_commands.resize(m_commands.size());
