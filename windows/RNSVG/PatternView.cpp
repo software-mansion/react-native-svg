@@ -22,8 +22,7 @@ void PatternProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-PatternView::PatternView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args)
-    : base_type(args) {}
+PatternView::PatternView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
 
 void PatternView::RegisterComponent(
     const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
@@ -135,11 +134,9 @@ void PatternView::UpdateBounds() {
 
 void PatternView::CreateBrush() {
   auto const root{SvgRoot()};
+  auto const size{root.CanvasSize()};
 
-  float width{root.CanvasSize().Width};
-  float height{root.CanvasSize().Height};
-
-  D2D1_RECT_F elRect{GetAdjustedRect({0, 0, width, height})};
+  D2D1_RECT_F elRect{GetAdjustedRect({0, 0, size.Width, size.Height})};
   CreateBrush(elRect);
 }
 
