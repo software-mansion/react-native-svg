@@ -163,6 +163,12 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass MaskView : GroupView
+  {
+    MaskView();
+  };
+
+  [default_interface]
   unsealed runtimeclass BrushView : GroupView
   {
     BrushView();

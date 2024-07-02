@@ -44,6 +44,8 @@ xaml::FrameworkElement RenderableViewManager::CreateView() {
       return winrt::RNSVG::ClipPathView();
     case RNSVG::SVGClass::RNSVGMarker:
       return winrt::RNSVG::MarkerView();
+    case RNSVG::SVGClass::RNSVGMask:
+      return winrt::RNSVG::MaskView();
   }
 
   throw hresult_not_implemented();
