@@ -7,12 +7,15 @@ export default function Test1442() {
 }
 
 function TestRNImage() {
-  const [state, setState] = useState<ImageLoadEventData['source']>();
+  const [state, setState] = useState<ImageLoadEventData>();
   console.log(`${Platform.OS} state:`, state);
 
   return (
     <RNImage
-      style={{width: state?.width || '100%', height: state?.height || '100%'}}
+      style={{
+        width: state?.source?.width || '100%',
+        height: state?.source?.height || '100%',
+      }}
       source={{
         uri: 'https://image-placeholder.com/images/actual-size/75x75.png',
       }}
@@ -27,15 +30,13 @@ function TestRNImage() {
   );
 }
 function TestWithStrictSize(): React.JSX.Element {
-  const [state, setState] = useState<
-    ImageLoadEventData['source'] | undefined
-  >();
+  const [state, setState] = useState<ImageLoadEventData | undefined>();
   console.log(`${Platform.OS} state:`, state);
   return (
     <Svg>
       <Image
-        width={state?.width || '100%'}
-        height={state?.height || '100%'}
+        width={state?.source?.width || '100%'}
+        height={state?.source?.height || '100%'}
         href={'https://image-placeholder.com/images/actual-size/75x75.png'}
         onLoad={e => {
           setState(e.nativeEvent);

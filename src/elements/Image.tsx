@@ -3,15 +3,14 @@ import type {
   ImageProps as RNImageProps,
   NativeMethods,
   NativeSyntheticEvent,
+  ImageLoadEventData,
 } from 'react-native';
 import { Image } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
 import { withoutXY } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import RNSVGImage, {
-  type ImageLoadEventData,
-} from '../fabric/ImageNativeComponent';
+import RNSVGImage from '../fabric/ImageNativeComponent';
 
 const spacesRegExp = /\s+/;
 

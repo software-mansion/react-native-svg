@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Midl Include="ReactPackageProvider.idl" />
     <Midl Include="Views.idl">
@@ -148,11 +148,16 @@
     <ClCompile Include="D2DBrush.cpp">
       <Filter>D2DWrappers</Filter>
     </ClCompile>
+    <ClCompile Include="MaskView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="MaskViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReactPackageProvider.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="RNSVGModule.h" />
     <ClInclude Include="RectView.h">
       <Filter>Views</Filter>
@@ -292,10 +297,15 @@
     <ClInclude Include="D2DBrush.h">
       <Filter>D2DWrappers</Filter>
     </ClInclude>
+    <ClInclude Include="MaskView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="MaskViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Views">
@@ -319,13 +329,5 @@
     <Filter Include="D2DWrappers">
       <UniqueIdentifier>{d4e16389-e870-4046-b1fe-61bc171edad9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{0856150b-509d-49ee-90b9-c9c9d1a2aa4a}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="RNSVG.rc">
-      <Filter>Resources</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>
