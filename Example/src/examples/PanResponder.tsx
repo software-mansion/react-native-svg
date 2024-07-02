@@ -1,53 +1,40 @@
-import React, {PureComponent} from 'react';
-import {
-  Animated,
-  PanResponder,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import {G, Line, Path, Polyline, Svg, Text} from 'react-native-svg';
+import React, {Component} from 'react';
+import {Animated, PanResponder, Pressable, View} from 'react-native';
+import {G, Line, Path, Polyline, Text, Svg} from 'react-native-svg';
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg as any);
 
-const zeroDelta = {x: 0, y: 0};
-
-class PanExample extends PureComponent {
+class PanExample extends Component {
   static title = 'Bind PanResponder on the SVG Shape';
-  panXY: any;
-  constructor(props: {}, context: {}) {
-    super(props, context);
-    const xy = new Animated.ValueXY();
-    const {x: dx, y: dy} = xy;
-    let offset = zeroDelta;
-    xy.addListener(flatOffset => {
-      offset = flatOffset;
-    });
-    const {panHandlers} = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponderCapture: () => true,
-      onPanResponderGrant: () => {
-        xy.setOffset(offset);
-        xy.setValue(zeroDelta);
-      },
-      onPanResponderMove: Animated.event([null, {dx, dy}], {
-        useNativeDriver: false,
-      }),
+  pan: Animated.ValueXY;
+  panResponder: any;
+  constructor(props: {}) {
+    super(props);
+
+    this.pan = new Animated.ValueXY();
+
+    this.panResponder = PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: Animated.event(
+        [null, {dx: this.pan.x, dy: this.pan.y}],
+        {useNativeDriver: false},
+      ),
       onPanResponderRelease: () => {
-        xy.flattenOffset();
+        this.pan.extractOffset();
       },
     });
-    this.panXY = {
-      style: {
-        transform: xy.getTranslateTransform(),
-      },
-      ...panHandlers,
-    };
   }
   render() {
     return (
-      <TouchableWithoutFeedback>
+      <Pressable>
         <View>
-          <AnimatedSvg height="200" width="200" {...this.panXY}>
+          <AnimatedSvg
+            height="200"
+            width="200"
+            style={{
+              transform: [{translateX: this.pan.x}, {translateY: this.pan.y}],
+            }}
+            {...this.panResponder.panHandlers}>
             <Path
               d="M50,5L20,99L95,39L5,39L80,99z"
               stroke={'black'}
@@ -66,7 +53,7 @@ class PanExample extends PureComponent {
             </Text>
           </AnimatedSvg>
         </View>
-      </TouchableWithoutFeedback>
+      </Pressable>
     );
   }
 }
