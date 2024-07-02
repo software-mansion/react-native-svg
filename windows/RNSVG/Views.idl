@@ -1,52 +1,43 @@
 import "Types.idl";
-#include <NamespaceRedirect.h>
 
 namespace RNSVG
 {
+  [experimental]
   interface IRenderable
   {
-    XAML_NAMESPACE.FrameworkElement SvgParent;
     D2DGeometry Geometry;
     Boolean IsResponsible;
 
     void CreateResources();
     void Draw(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
-    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
-    void MergeProperties(RenderableView other);
+    void MergeProperties(IRenderable other);
     void SaveDefinition();
     void Unload();
-    void CreateGeometry();
+    void CreateGeometry(D2DDeviceContext deviceContext);
     IRenderable HitTest(Windows.Foundation.Point point);
   };
 
-  [default_interface]
-  runtimeclass SvgView : XAML_NAMESPACE.Controls.Panel, IRenderable
+  [experimental]
+  interface ISvgView
   {
-    SvgView(Microsoft.ReactNative.IReactContext context);
-
-    GroupView Group;
-    Windows.UI.Color CurrentColor{ get; };
     D2DDevice Device{ get; };
     D2DDeviceContext DeviceContext{ get; };
+    Windows.Foundation.Size CanvasSize { get; };
     Windows.Foundation.Collections.IMap<String, IRenderable> Templates{ get; };
-    Windows.Foundation.Collections.IMap<String, BrushView> Brushes{ get; };
+    Windows.Foundation.Collections.IMap<String, IBrushView> Brushes{ get; };
 
     void Invalidate();
   };
 
-  [default_interface]
-  unsealed runtimeclass RenderableView : XAML_NAMESPACE.FrameworkElement, IRenderable
+  [experimental]
+  interface IRenderableView
   {
-    RenderableView(Microsoft.ReactNative.IReactContext context);
-    SvgView SvgRoot{ get; };
     Boolean IsUnloaded { get; };
 
     String Id{ get; };
     Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
-    Windows.UI.Color Fill{ get; };
     Single FillOpacity{ get; };
     String FillBrushId{ get; };
-    Windows.UI.Color Stroke{ get; };
     Single StrokeOpacity{ get; };
     String StrokeBrushId{ get; };
     SVGLength StrokeWidth{ get; };
@@ -56,57 +47,12 @@ namespace RNSVG
     LineCap StrokeLineCap{ get; };
     LineJoin StrokeLineJoin{ get; };
     FillRule FillRule{ get; };
-    D2DGeometry ClipPathGeometry{ get; };
+    D2DGeometry ClipPathGeometry(D2DDeviceContext deviceContext);
   };
 
-  [default_interface]
-  runtimeclass RectView : RenderableView
+  [experimental]
+  interface IGroupView
   {
-    RectView();
-  };
-
-  [default_interface]
-  runtimeclass CircleView : RenderableView
-  {
-    CircleView();
-  };
-
-  [default_interface]
-  runtimeclass EllipseView : RenderableView
-  {
-    EllipseView();
-  };
-
-  [default_interface]
-  runtimeclass LineView : RenderableView
-  {
-    LineView();
-  };
-
-  [default_interface]
-  runtimeclass PathView : RenderableView
-  {
-    PathView();
-  };
-
-  [default_interface]
-  runtimeclass UseView : RenderableView
-  {
-    UseView();
-  };
-
-  [default_interface]
-  runtimeclass ImageView : RenderableView
-  {
-    ImageView();
-  };
-
-  [default_interface]
-  unsealed runtimeclass GroupView : RenderableView
-  {
-    GroupView(Microsoft.ReactNative.IReactContext context);
-    Windows.Foundation.Collections.IVector<IRenderable> Children { get; };
-
     Single FontSize;
     String FontFamily;
     String FontWeight;
@@ -114,34 +60,24 @@ namespace RNSVG
     void DrawGroup(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
   };
 
-  [default_interface]
-  unsealed runtimeclass TextView : GroupView
+  [experimental]
+  interface ITextView
   {
-    TextView();
     Windows.Foundation.Collections.IVector<SVGLength> X{ get; };
     Windows.Foundation.Collections.IVector<SVGLength> Y{ get; };
     Windows.Foundation.Collections.IVector<SVGLength> DX{ get; };
     Windows.Foundation.Collections.IVector<SVGLength> DY{ get; };
   };
 
-  [default_interface]
-  runtimeclass TSpanView : TextView
+  [experimental]
+  interface ITSpanView
   {
-    TSpanView();
-
     Windows.Foundation.Collections.IVector<SVGLength> Rotate { get; };
   };
 
-  [default_interface]
-  runtimeclass DefsView : GroupView
+  [experimental]
+  interface ISymbolView
   {
-    DefsView();
-  };
-
-  [default_interface]
-  runtimeclass SymbolView : GroupView
-  {
-    SymbolView();
     Single MinX{ get; };
     Single MinY{ get; };
     Single VbWidth{ get; };
@@ -150,49 +86,11 @@ namespace RNSVG
     MeetOrSlice MeetOrSlice{ get; };
   };
 
-  [default_interface]
-  runtimeclass ClipPathView : GroupView
+  [experimental]
+  interface IBrushView
   {
-    ClipPathView();
-  };
-
-  [default_interface]
-  runtimeclass MarkerView : GroupView
-  {
-    MarkerView();
-  };
-
-  [default_interface]
-  runtimeclass MaskView : GroupView
-  {
-    MaskView();
-  };
-
-  [default_interface]
-  unsealed runtimeclass BrushView : GroupView
-  {
-    BrushView();
-
     D2DBrush Brush{ get; };
     void CreateBrush();
     void SetBounds(Windows.Foundation.Rect rect);
-  };
-
-  [default_interface]
-  runtimeclass LinearGradientView : BrushView
-  {
-    LinearGradientView();
-  };
-
-  [default_interface]
-  runtimeclass RadialGradientView : BrushView
-  {
-    RadialGradientView();
-  };
-
-  [default_interface]
-  runtimeclass PatternView : BrushView
-  {
-    PatternView();
   };
 }

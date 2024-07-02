@@ -21,8 +21,7 @@ struct SvgViewManager : SvgViewManagerT<SvgViewManager> {
       Microsoft::ReactNative::IJSValueReader const &propertyMapReader);
 
   // IViewManagerWithChildren
-  void
-  AddView(xaml::FrameworkElement const &parent, xaml::UIElement const &child, int64_t index);
+  void AddView(xaml::FrameworkElement const &parent, xaml::UIElement const &child, int64_t index);
   void RemoveAllChildren(xaml::FrameworkElement const &parent);
   void RemoveChildAt(xaml::FrameworkElement const &parent, int64_t index);
   void ReplaceChild(

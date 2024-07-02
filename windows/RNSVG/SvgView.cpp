@@ -17,14 +17,149 @@
 #include "D2DDevice.h"
 #include "D2DDeviceContext.h"
 #include "GroupView.h"
-#include "Utils.h"
+
+#ifdef USE_FABRIC
+#include <AutoDraw.h>
+#include <CompositionSwitcher.Experimental.interop.h>
+#endif
 
 #include <d3d11_4.h>
 
 using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
+#ifdef USE_FABRIC
+SvgViewProps::SvgViewProps(
+    const winrt::Microsoft::ReactNative::ViewProps &props)
+    : m_props(props) {}
+
+void SvgViewProps::SetProp(
+    uint32_t hash,
+    winrt::hstring propName,
+    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
+}
+
+SvgView::SvgView(const winrt::Microsoft::ReactNative::Composition::CreateCompositionComponentViewArgs &args)
+    : base_type(args),
+      m_reactContext(args.ReactContext()),
+      m_compContext(
+            args.as<winrt::Microsoft::ReactNative::Composition::Experimental::IInternalCreateComponentViewArgs>()
+                .CompositionContext()) {}
+
+winrt::Microsoft::ReactNative::Composition::Experimental::IVisual SvgView::CreateInternalVisual() {
+  m_visual = m_compContext.CreateSpriteVisual();
+  m_visual.Comment(L"SVGRoot");
+  return m_visual;
+}
+
+void SvgView::MountChildComponentView(
+    const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
+    uint32_t index) noexcept {
+  auto const &group{childComponentView.try_as<RNSVG::GroupView>()};
+
+  if (group) {
+    // Every SvgView has exactly one child - a Group that gets
+    // all of Svg's children piped through.
+    Group(group);
+  }
+
+  base_type::MountChildComponentView(childComponentView, index);
+}
+
+void SvgView::UnmountChildComponentView(
+    const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
+    uint32_t index) noexcept {
+  if (Group()) {
+    Group().Unload();
+  }
+  Group(nullptr);
+
+  base_type::UnmountChildComponentView(childComponentView, index);
+}
+
+void SvgView::OnThemeChanged() noexcept {
+  Invalidate();
+  base_type::OnThemeChanged();
+}
+
+void SvgView::UpdateProps(
+    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept {
+  UpdateProperties(props, oldProps);
+}
+
+void SvgView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(L"RNSVGSvgView", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+    builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+      return winrt::make<winrt::RNSVG::implementation::SvgViewProps>(props);
+    });
+    auto compBuilder = builder.as<winrt::Microsoft::ReactNative::Composition::IReactCompositionViewComponentBuilder>();
+    compBuilder.SetCreateViewComponentView([](const winrt::Microsoft::ReactNative::Composition::CreateCompositionComponentViewArgs &args) noexcept {
+      args.Features(args.Features() & ~winrt::Microsoft::ReactNative::Composition::ComponentViewFeatures::Background);
+      return winrt::make<winrt::RNSVG::implementation::SvgView>(args);
+    });
+  });
+}
+
+void SvgView::UpdateProperties(
+    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+    bool forceUpdate,
+    bool invalidate) {
+  auto svgProps = props.try_as<SvgViewProps>();
+  auto oldSvgProps = oldProps ? oldProps.try_as<SvgViewProps>() : nullptr;
+
+  // If forceUpdate is false, that means this is a nested Svg
+  // and we're inheriting props. Pass those along to the group.
+  if (!forceUpdate && m_group) {
+    m_group.UpdateProperties(props, oldProps, forceUpdate, invalidate);
+    return;
+  }
+
+  if (!oldSvgProps || svgProps->bbWidth != oldSvgProps->bbWidth) {
+    m_bbWidth = svgProps->bbWidth;
+  }
+  if (!oldSvgProps || svgProps->bbHeight != oldSvgProps->bbHeight) {
+    m_bbHeight = svgProps->bbHeight;
+  }
+  if (!oldSvgProps || svgProps->vbWidth != oldSvgProps->vbWidth) {
+    m_vbWidth = svgProps->vbWidth;
+  }
+  if (!oldSvgProps || svgProps->vbHeight != oldSvgProps->vbHeight) {
+    m_vbHeight = svgProps->vbHeight;
+  }
+  if (!oldSvgProps || svgProps->minX != oldSvgProps->minX) {
+    m_minX = svgProps->minX;
+  }
+  if (!oldSvgProps || svgProps->minY != oldSvgProps->minY) {
+    m_minY = svgProps->minY;
+  }
+  if (!oldSvgProps || svgProps->align != oldSvgProps->align) {
+    m_align = svgProps->align;
+  }
+  if (!oldSvgProps || svgProps->meetOrSlice != oldSvgProps->meetOrSlice) {
+    m_meetOrSlice = svgProps->meetOrSlice;
+  }
+  if (!oldSvgProps || svgProps->color != oldSvgProps->color) {
+    m_currentColor = svgProps->color;
+  }
+
+  Invalidate();
+}
+
+void SvgView::UpdateLayoutMetrics(
+    const LayoutMetrics &metrics,
+    const LayoutMetrics &oldMetrics) {
+  m_layoutMetrics = metrics;
+  base_type::UpdateLayoutMetrics(metrics, oldMetrics);
+
+  if (metrics != oldMetrics) {
+    Invalidate();
+  }
+}
+#else
 SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
   uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
@@ -95,15 +230,15 @@ void SvgView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
           SaveDefinition();
         }
       } else if (propertyName == "width") {
-        m_width = SVGLength::From(propertyValue);
+        m_width = propertyValue.To<RNSVG::SVGLength>();
       } else if (propertyName == "height") {
-        m_height = SVGLength::From(propertyValue);
+        m_height = propertyValue.To<RNSVG::SVGLength>();
       } else if (propertyName == "bbWidth") {
-        m_bbWidth = SVGLength::From(propertyValue);
-        Width(m_bbWidth.Value());
+        m_bbWidth = propertyValue.To<RNSVG::SVGLength>();
+        Width(m_bbWidth.Value);
       } else if (propertyName == "bbHeight") {
-        m_bbHeight = SVGLength::From(propertyValue);
-        Height(m_bbHeight.Value());
+        m_bbHeight = propertyValue.To<RNSVG::SVGLength>();
+        Height(m_bbHeight.Value);
       } else if (propertyName == "vbWidth") {
         m_vbWidth = Utils::JSValueAsFloat(propertyValue);
       } else if (propertyName == "vbHeight") {
@@ -127,19 +262,6 @@ void SvgView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
   }
 }
 
-void SvgView::SaveDefinition() {
-  if (m_id != L"" && m_group) {
-    m_group.SvgRoot().Templates().Insert(m_id, *this);
-    m_group.SaveDefinition();
-  }
-}
-
-void SvgView::MergeProperties(RNSVG::RenderableView const &other) {
-  if (m_group) {
-    m_group.MergeProperties(other);
-  }
-}
-
 Size SvgView::MeasureOverride(Size const &availableSize) {
   for (auto const &child : Children()) {
     child.Measure(availableSize);
@@ -154,6 +276,43 @@ Size SvgView::ArrangeOverride(Size const &finalSize) {
   return finalSize;
 }
 
+void SvgView::Panel_Loaded(IInspectable const &sender, xaml::RoutedEventArgs const & ) {
+  if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) { 
+    if (!m_loaded) { 
+      m_loaded = true; 
+      svgView.CreateResources();
+    }
+  }
+}
+
+void SvgView::Panel_Unloaded(IInspectable const &sender, xaml::RoutedEventArgs const & ) {
+  if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
+    svgView.Unload();
+  }
+}
+#endif
+
+winrt::Windows::Foundation::Size SvgView::CanvasSize() noexcept {
+#ifdef USE_FABRIC
+  return winrt::Windows::Foundation::Size{m_layoutMetrics.Frame.Width, m_layoutMetrics.Frame.Height};
+#else
+  return ActualSize();
+#endif
+}
+
+void SvgView::SaveDefinition() {
+  if (m_id != L"" && m_group) {
+    m_group.SvgRoot().Templates().Insert(m_id, *this);
+    m_group.SaveDefinition();
+  }
+}
+
+void SvgView::MergeProperties(RNSVG::IRenderable const &other) {
+  if (m_group) {
+    m_group.MergeProperties(other);
+  }
+}
+
 void SvgView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
@@ -164,7 +323,7 @@ void SvgView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
     float width{size.Width};
     float height{size.Height};
 
-    if (m_parent) {
+    if (SvgParent()) {
       width = Utils::GetAbsoluteLength(m_bbWidth, width);
       height = Utils::GetAbsoluteLength(m_bbHeight, height);
     }
@@ -185,9 +344,9 @@ void SvgView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   deviceContext->SetTransform(transform);
 }
 
-void SvgView::CreateGeometry() {
+void SvgView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   if (m_group) {
-    m_group.CreateGeometry();
+    m_group.CreateGeometry(context);
   }
 }
 
@@ -198,26 +357,12 @@ void SvgView::CreateResources() {
 
   Invalidate();
 
+#ifndef USE_FABRIC
   m_image.Width(ActualWidth());
   m_image.Height(ActualHeight());
   m_image.Stretch(xaml::Media::Stretch::UniformToFill);
-
   Children().Append(m_image);
-}
-
-void SvgView::Panel_Loaded(IInspectable const &sender, xaml::RoutedEventArgs const & /*args*/) {
-  if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
-    if (!m_loaded) {
-      m_loaded = true;
-      svgView.CreateResources();
-    }
-  }
-}
-
-void SvgView::Panel_Unloaded(IInspectable const &sender, xaml::RoutedEventArgs const & /*args*/) {
-  if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
-    svgView.Unload();
-  }
+#endif
 }
 
 void SvgView::Unload() {
@@ -231,12 +376,54 @@ void SvgView::Unload() {
 }
 
 void SvgView::Invalidate() {
-  if (!m_loaded) {
+  m_brushes.Clear();
+  m_templates.Clear();
+
+#ifdef USE_FABRIC
+  Size size = CanvasSize();
+
+  if (size.Height == 0 || size.Width == 0) {
     return;
   }
 
-  m_brushes.Clear();
-  m_templates.Clear();
+  if (Theme().IsEmpty()) {
+    return;
+  }
+
+  auto drawingSurface = m_compContext.CreateDrawingSurfaceBrush(
+      size,
+      winrt::Windows::Graphics::DirectX::DirectXPixelFormat::B8G8R8A8UIntNormalized,
+      winrt::Windows::Graphics::DirectX::DirectXAlphaMode::Premultiplied);
+
+  POINT offset;
+  {
+    ::Microsoft::ReactNative::Composition::AutoDrawDrawingSurface autoDraw(drawingSurface, 1.0, &offset);
+    if (auto deviceContext = autoDraw.GetRenderTarget()) {
+      auto transform = Numerics::make_float3x2_translation({static_cast<float>(offset.x), static_cast<float>(offset.y)});
+      deviceContext->SetTransform(D2DHelpers::AsD2DTransform(transform));
+
+      deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Black, 0.0f));
+
+      com_ptr<ID2D1DeviceContext> spDeviceContext;
+      spDeviceContext.copy_from(deviceContext);
+
+      m_deviceContext = winrt::make<RNSVG::implementation::D2DDeviceContext>(spDeviceContext);
+
+      com_ptr<ID2D1Device> spDevice;
+      spDeviceContext->GetDevice(spDevice.put());
+
+      m_device = winrt::make<RNSVG::implementation::D2DDevice>(spDevice);
+
+      Draw(m_deviceContext, size);
+    }
+  }
+
+  m_visual.Brush(drawingSurface);
+
+#else
+  if (!m_loaded) {
+    return;
+  }
 
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(DeviceContext())->Get()};
 
@@ -278,5 +465,6 @@ void SvgView::Invalidate() {
   sisNativeWithD2D->EndDraw();
 
   m_image.Source(surfaceImageSource);
+#endif
 }
 } // namespace winrt::RNSVG::implementation
