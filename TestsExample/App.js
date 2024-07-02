@@ -20,7 +20,8 @@ import Test2196 from './src/Test2196';
 import Test2248 from './src/Test2248';
 import Test2266 from './src/Test2266';
 import Test2276 from './src/Test2276';
+import TestSvgUriUpdating from './src/TestSvgUriUpdating';
 
 export default function App() {
-  return <ColorTest />;
+  return <TestSvgUriUpdating />;
 }
