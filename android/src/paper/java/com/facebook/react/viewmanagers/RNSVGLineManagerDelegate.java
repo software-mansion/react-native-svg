@@ -99,6 +99,9 @@ public class RNSVGLineManagerDelegate<T extends View, U extends BaseViewManagerI
       case "propList":
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
+      case "filter":
+        mViewManager.setFilter(view, value == null ? null : (String) value);
+        break;
       case "x1":
         mViewManager.setX1(view, new DynamicFromObject(value));
         break;

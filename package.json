@@ -19,6 +19,7 @@
     "lib",
     "src",
     "css",
+    "filter-image",
     "RNSVG.podspec",
     "!android/build",
     "windows",

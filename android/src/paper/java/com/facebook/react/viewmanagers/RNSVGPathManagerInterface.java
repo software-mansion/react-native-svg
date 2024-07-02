@@ -41,5 +41,6 @@ public interface RNSVGPathManagerInterface<T extends View> {
   void setStrokeMiterlimit(T view, float value);
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
+  void setFilter(T view, @Nullable String value);
   void setD(T view, @Nullable String value);
 }

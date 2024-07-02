@@ -41,6 +41,7 @@ export default function extractProps(
   props: {
     id?: string;
     mask?: string;
+    filter?: string;
     marker?: string;
     markerStart?: string;
     markerMid?: string;
@@ -67,6 +68,7 @@ export default function extractProps(
     clipRule,
     display,
     mask,
+    filter,
     marker,
     markerStart = marker,
     markerMid = marker,
@@ -154,6 +156,20 @@ export default function extractProps(
       console.warn(
         'Invalid `mask` prop, expected a mask like "#id", but got: "' +
           mask +
+          '"'
+      );
+    }
+  }
+
+  if (filter) {
+    const matched = filter.match(idPattern);
+
+    if (matched) {
+      extracted.filter = matched[1];
+    } else {
+      console.warn(
+        'Invalid `filter` prop, expected a filter like "#id", but got: "' +
+          filter +
           '"'
       );
     }

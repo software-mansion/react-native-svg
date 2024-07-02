@@ -13,86 +13,13 @@ import {
   ScrollView,
   TouchableHighlight,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import {Modal, Platform} from 'react-native';
 import {Svg, Circle, Line} from 'react-native-svg';
 
 import * as examples from './examples';
-
-const hairline = StyleSheet.hairlineWidth;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 20,
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
-  contentContainer: {
-    alignSelf: 'stretch',
-    borderTopWidth: hairline,
-    borderTopColor: '#ccc',
-    borderBottomWidth: hairline,
-    borderBottomColor: '#ccc',
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    marginHorizontal: 10,
-  },
-  welcome: {
-    padding: 10,
-    color: '#f60',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  link: {
-    height: 40,
-    alignSelf: 'stretch',
-    width: Dimensions.get('window').width / 2 - 10,
-  },
-  title: {
-    marginLeft: 10,
-  },
-  cell: {
-    height: 40,
-    paddingHorizontal: 10,
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    flexDirection: 'row',
-    borderTopWidth: hairline,
-    borderTopColor: '#ccc',
-    marginTop: -hairline,
-    backgroundColor: 'transparent',
-  },
-  close: {
-    position: 'absolute',
-    right: 20,
-    top: 40,
-  },
-  scroll: {
-    position: 'absolute',
-    top: 30,
-    right: 10,
-    bottom: 20,
-    left: 10,
-    backgroundColor: '#fff',
-  },
-  scrollContent: {
-    borderTopWidth: hairline,
-    borderTopColor: '#ccc',
-  },
-  example: {
-    paddingVertical: 25,
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    borderBottomWidth: hairline,
-    borderBottomColor: '#ccc',
-  },
-  sampleTitle: {
-    marginHorizontal: 15,
-    fontSize: 16,
-    color: '#666',
-  },
-});
+import {commonStyles} from './commonStyles';
 
 const names: (keyof typeof examples)[] = [
   'Svg',
@@ -116,6 +43,8 @@ const names: (keyof typeof examples)[] = [
   'Transforms',
   'Markers',
   'Mask',
+  'Filters',
+  'FilterImage',
 ];
 
 const initialState = {
@@ -142,8 +71,8 @@ export default class SvgExample extends Component {
         content: (
           <View>
             {samples.map((Sample, i) => (
-              <View style={styles.example} key={`sample-${i}`}>
-                <Text style={styles.sampleTitle}>{Sample.title}</Text>
+              <View style={commonStyles.example} key={`sample-${i}`}>
+                <Text style={commonStyles.sampleTitle}>{Sample.title}</Text>
                 <Sample />
               </View>
             ))}
@@ -171,9 +100,9 @@ export default class SvgExample extends Component {
           underlayColor="#ccc"
           key={`example-${name}`}
           onPress={() => this.show(name)}>
-          <View style={styles.cell}>
+          <View style={commonStyles.cell}>
             {icon}
-            <Text style={styles.title}>{name}</Text>
+            <Text style={commonStyles.title}>{name}</Text>
           </View>
         </TouchableHighlight>
       );
@@ -182,13 +111,15 @@ export default class SvgExample extends Component {
 
   modalContent = () => (
     <>
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
-        scrollEnabled={this.state.scroll}>
-        {this.state.content}
-      </ScrollView>
-      <View style={styles.close}>
+      <SafeAreaView style={{flex: 1}}>
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.scrollContent}
+          scrollEnabled={this.state.scroll}>
+          {this.state.content}
+        </ScrollView>
+      </SafeAreaView>
+      <SafeAreaView style={styles.close}>
         <TouchableOpacity activeOpacity={0.7} onPress={this.hide}>
           <Svg height="20" width="20">
             <Circle cx="10" cy="10" r="10" fill="red" />
@@ -196,16 +127,17 @@ export default class SvgExample extends Component {
             <Line x1="4" y1="16" x2="16" y2="4" stroke="#fff" strokeWidth="2" />
           </Svg>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     </>
   );
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>SVG library for React Apps</Text>
+      <SafeAreaView style={styles.container}>
+        <Text style={commonStyles.welcome}>SVG library for React Apps</Text>
         <View style={styles.contentContainer}>{this.getExamples()}</View>
-        {Platform.OS === 'windows' && this.state.modal ? (
+        {(Platform.OS === 'windows' || Platform.OS === 'macos') &&
+        this.state.modal ? (
           <View style={styles.scroll}>{this.modalContent()}</View>
         ) : (
           <Modal
@@ -216,7 +148,50 @@ export default class SvgExample extends Component {
             {this.modalContent()}
           </Modal>
         )}
-      </View>
+      </SafeAreaView>
     );
   }
 }
+
+const hairline = StyleSheet.hairlineWidth;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 20,
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  contentContainer: {
+    alignSelf: 'stretch',
+    borderTopWidth: hairline,
+    borderTopColor: '#ccc',
+    borderBottomWidth: hairline,
+    borderBottomColor: '#ccc',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    marginHorizontal: 10,
+  },
+  link: {
+    height: 40,
+    alignSelf: 'stretch',
+    width: Dimensions.get('window').width / 2 - 10,
+  },
+  close: {
+    position: 'absolute',
+    right: 20,
+    top: 20,
+  },
+  scroll: {
+    position: 'absolute',
+    top: 30,
+    right: 10,
+    bottom: 20,
+    left: 10,
+    backgroundColor: '#fff',
+  },
+  scrollContent: {
+    borderTopWidth: hairline,
+    borderTopColor: '#ccc',
+  },
+});

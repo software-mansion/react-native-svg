@@ -41,6 +41,7 @@ public interface RNSVGImageManagerInterface<T extends View> {
   void setStrokeMiterlimit(T view, float value);
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
+  void setFilter(T view, @Nullable String value);
   void setX(T view, Dynamic value);
   void setY(T view, Dynamic value);
   void setWidth(T view, Dynamic value);

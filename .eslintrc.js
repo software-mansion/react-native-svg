@@ -7,7 +7,13 @@ module.exports = {
     'prettier',
     'plugin:import/typescript',
   ],
-  plugins: ['react', 'react-native', 'import', '@typescript-eslint', 'react-hooks'],
+  plugins: [
+    'react',
+    'react-native',
+    'import',
+    '@typescript-eslint',
+    'react-hooks',
+  ],
   env: {
     'react-native/react-native': true,
   },
@@ -15,6 +21,7 @@ module.exports = {
     'import/core-modules': [
       'react-native-svg',
       'react-native-svg/css',
+      'react-native-svg/filter-image',
     ],
     'import/resolver': {
       'babel-module': {

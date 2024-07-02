@@ -41,6 +41,7 @@ public interface RNSVGGroupManagerInterface<T extends View> {
   void setStrokeMiterlimit(T view, float value);
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
+  void setFilter(T view, @Nullable String value);
   void setFontSize(T view, Dynamic value);
   void setFontWeight(T view, Dynamic value);
   void setFont(T view, Dynamic value);

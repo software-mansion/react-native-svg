@@ -121,6 +121,8 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 
 - (CGFloat)relativeOn:(RNSVGLength *)length relative:(CGFloat)relative;
 
+- (CGFloat)relativeOnFraction:(RNSVGLength *)length relative:(CGFloat)relative;
+
 - (CGFloat)relativeOnWidth:(RNSVGLength *)length;
 
 - (CGFloat)relativeOnHeight:(RNSVGLength *)length;
