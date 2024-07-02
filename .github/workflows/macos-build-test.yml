@@ -15,7 +15,8 @@ on:
 
 jobs:
   build:
-    runs-on: macos-12
+    if: github.repository == 'software-mansion/react-native-svg'
+    runs-on: macos-14
     strategy:
       matrix:
         working-directory: [macos-example]
@@ -35,7 +36,7 @@ jobs:
           restore-keys: ${{ runner.os }}-node-modules-svg-
 
       - name: Install react-native-svg node_modules
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
       - name: Restore app node_modules from cache
         uses: actions/cache@v3
@@ -46,7 +47,7 @@ jobs:
 
       - name: Install app node_modules
         working-directory: ${{ matrix.working-directory }}
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
       - name: Restore Pods from cache
         uses: actions/cache@v3
@@ -69,4 +70,4 @@ jobs:
 
       - name: Build app
         working-directory: ${{ matrix.working-directory }}
-        run: npx react-native@latest run-macos --verbose --terminal /bin/zsh
+        run: yarn macos
