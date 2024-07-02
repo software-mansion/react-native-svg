@@ -30,13 +30,5 @@ void ClipPathView::RegisterComponent(const winrt::Microsoft::ReactNative::IReact
         });
       });
 }
-
-void ClipPathView::UpdateProperties(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
-    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-    bool forceUpdate,
-    bool invalidate) noexcept {
-  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
-}
 #endif
 } // namespace winrt::RNSVG::implementation

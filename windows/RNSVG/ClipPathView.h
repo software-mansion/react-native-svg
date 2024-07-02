@@ -29,13 +29,6 @@ struct ClipPathView : ClipPathViewT<ClipPathView, RNSVG::implementation::GroupVi
   ClipPathView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
-  
-  // IRenderableFabric
-  void UpdateProperties(
-      const winrt::Microsoft::ReactNative::IComponentProps &props,
-      const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-      bool forceUpdate = true,
-      bool invalidate = true) noexcept override;
 #endif
 
   // IRenderable

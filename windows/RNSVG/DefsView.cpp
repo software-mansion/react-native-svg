@@ -31,12 +31,6 @@ void DefsView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPack
         });
       });
 }
-
-void DefsView::UpdateProperties(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
-    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-    bool forceUpdate,
-    bool invalidate) noexcept {}
 #endif
 
 void DefsView::Draw(RNSVG::D2DDeviceContext const& /*deviceContext*/, Size const & /*size*/) {}
