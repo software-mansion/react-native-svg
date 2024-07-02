@@ -28,5 +28,5 @@ jobs:
       - name: Test and lint
         run: yarn test
       - name: Build Example App
-        working-directory: Example/
+        working-directory: example/
         run: yarn && yarn tsc

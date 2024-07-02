@@ -207,21 +207,26 @@ using namespace facebook::react;
   _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"]
       loadImageWithURLRequest:src.request
                      callback:^(NSError *error, UIImage *image) {
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                         self->_image = CGImageRetain(image.CGImage);
-                         self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
-                         if (self->_onLoad) {
-                           RCTImageSource *sourceLoaded = [src imageSourceWithSize:image.size scale:image.scale];
-                             NSDictionary *dict = @{
-                               @"uri" : sourceLoaded.request.URL.absoluteString,
-                               @"width" : @(sourceLoaded.size.width),
-                               @"height" : @(sourceLoaded.size.height),
-                             };
-                             self->_onLoad(@{@"source" : dict});
-                         }
-                         [self invalidate];
-                       });
-                     }];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                          self->_image = CGImageRetain(image.CGImage);
+                          self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+                            RCTImageSource *sourceLoaded;
+#if TARGET_OS_OSX // [macOS]
+                            sourceLoaded = [src imageSourceWithSize:image.size scale:1];
+#else
+                            sourceLoaded = [src imageSourceWithSize:image.size scale:image.scale];
+#endif
+                          if (self->_onLoad) {
+                              NSDictionary *dict = @{
+                                @"uri" : sourceLoaded.request.URL.absoluteString,
+                                @"width" : @(sourceLoaded.size.width),
+                                @"height" : @(sourceLoaded.size.height),
+                              };
+                              self->_onLoad(@{@"source" : dict});
+                          }
+                          [self invalidate];
+                        });
+                      }];
 #endif // RCT_NEW_ARCH_ENABLED
 }
 

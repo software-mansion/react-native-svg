@@ -346,7 +346,7 @@ UInt32 saturate(CGFloat value)
     CGImageRelease(maskImage);
 #else // [macOS
       // Render content of current SVG Renderable to image
-    UIGraphicsBeginImageContextWithOptions(boundsSize, NO, 0.0);
+    UIGraphicsBeginImageContextWithOptions(maskBounds.size, NO, 0.0);
     CGContextRef newContext = UIGraphicsGetCurrentContext();
     CGContextTranslateCTM(newContext, 0.0, height);
     CGContextScaleCTM(newContext, 1.0, -1.0);
@@ -355,24 +355,24 @@ UInt32 saturate(CGFloat value)
     UIGraphicsEndImageContext();
 
     // Blend current element and mask
-    UIGraphicsBeginImageContextWithOptions(boundsSize, NO, 0.0);
+    UIGraphicsBeginImageContextWithOptions(maskBounds.size, NO, 0.0);
     newContext = UIGraphicsGetCurrentContext();
     CGContextTranslateCTM(newContext, 0.0, height);
     CGContextScaleCTM(newContext, 1.0, -1.0);
 
     CGContextSetBlendMode(newContext, kCGBlendModeCopy);
-    CGContextDrawImage(newContext, drawBounds, maskImage);
+      CGContextDrawImage(newContext, maskBounds, maskImage);
     CGImageRelease(maskImage);
 
     CGContextSetBlendMode(newContext, kCGBlendModeSourceIn);
-    CGContextDrawImage(newContext, drawBounds, contentImage);
+      CGContextDrawImage(newContext, maskBounds, contentImage);
     CGImageRelease(contentImage);
 
     CGImageRef blendedImage = CGBitmapContextCreateImage(newContext);
     UIGraphicsEndImageContext();
 
     // Render blended result into current render context
-    CGContextDrawImage(context, drawBounds, blendedImage);
+    CGContextDrawImage(context, maskBounds, blendedImage);
     CGImageRelease(blendedImage);
 #endif // macOS]
   } else {
