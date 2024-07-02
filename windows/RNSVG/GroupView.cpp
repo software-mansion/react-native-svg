@@ -31,14 +31,13 @@ GroupView::GroupView(const winrt::Microsoft::ReactNative::CreateComponentViewArg
 
 void GroupView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
   builder.AddViewComponent(
-      L"RNSVGGroup",
-      [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+      L"RNSVGGroup", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
         builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
           return winrt::make<winrt::RNSVG::implementation::SvgGroupCommonProps>(props);
         });
         builder.SetCreateComponentView(
         [](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-            return winrt::make<winrt::RNSVG::implementation::GroupView>(args);
+          return winrt::make<winrt::RNSVG::implementation::GroupView>(args);
         });
       });
 }
@@ -296,12 +295,6 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Point const &point) {
     if (renderable && !renderable.IsResponsible()) {
       return *this;
     } else if (!renderable) {
-      if (!Geometry()) {
-        assert(false); // Do we need a real context here... I think the geometry
-                       // should already be created by the time we get here?
-        CreateGeometry(nullptr);
-      }
-
       if (Geometry()) {
         com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(Geometry())->Get()};
 
