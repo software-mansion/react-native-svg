@@ -59,6 +59,20 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   [self invalidate];
 }
 
+#ifdef RCT_NEW_ARCH_ENABLED
+- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  [super mountChildComponentView:childComponentView index:index];
+  [self invalidate];
+}
+
+- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  [super unmountChildComponentView:childComponentView index:index];
+  [self invalidate];
+}
+#endif
+
 - (void)didUpdateReactSubviews
 {
   // Do nothing, as subviews are inserted by insertReactSubview:

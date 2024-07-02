@@ -27,7 +27,7 @@ JSI_EXPORT extern const char RNSVGImageComponentName[];
 class JSI_EXPORT RNSVGImageShadowNode final : public ConcreteViewShadowNode<
                                                   RNSVGImageComponentName,
                                                   RNSVGImageProps,
-                                                  ViewEventEmitter,
+                                                  RNSVGImageEventEmitter,
                                                   RNSVGImageState> {
  public:
   using ConcreteViewShadowNode::ConcreteViewShadowNode;

@@ -30,8 +30,12 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.ReactConstants;
+import com.facebook.react.uimanager.UIManagerHelper;
+import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.imagehelper.ImageSource;
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
+import com.horcrux.svg.events.SvgLoadEvent;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -137,6 +141,15 @@ class ImageView extends RenderableView {
         new BaseBitmapDataSubscriber() {
           @Override
           public void onNewResultImpl(Bitmap bitmap) {
+            final EventDispatcher mEventDispatcher =
+            UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
+            mEventDispatcher.dispatchEvent(new SvgLoadEvent(
+                    UIManagerHelper.getSurfaceId(ImageView.this),
+                    getId(),
+                    mContext,
+                    uriString,
+                    bitmap.getWidth(),
+                    bitmap.getHeight()));
             mLoading.set(false);
             SvgView view = getSvgView();
             if (view != null) {

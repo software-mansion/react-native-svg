@@ -241,10 +241,8 @@ UInt32 saturate(CGFloat value)
   if (self.mask) {
     // https://www.w3.org/TR/SVG11/masking.html#MaskElement
     RNSVGMask *_maskNode = (RNSVGMask *)[self.svgView getDefinedMask:self.mask];
-    CGRect bounds = CGContextGetClipBoundingBox(context);
-    CGSize boundsSize = bounds.size;
-    CGFloat height = boundsSize.height;
-    CGFloat width = boundsSize.width;
+    CGFloat height = rect.size.height;
+    CGFloat width = rect.size.width;
     CGFloat scale = 0.0;
 #if TARGET_OS_OSX
     scale = [[NSScreen mainScreen] backingScaleFactor];
@@ -263,7 +261,10 @@ UInt32 saturate(CGFloat value)
     NSUInteger scaledHeight = iheight * iscale;
     NSUInteger scaledWidth = iwidth * iscale;
     NSUInteger npixels = scaledHeight * scaledWidth;
-    CGRect drawBounds = CGRectMake(0, 0, width, height);
+    CGAffineTransform screenScaleCTM = CGAffineTransformMake(scale, 0, 0, scale, 0, 0);
+    CGRect scaledRect = CGRectApplyAffineTransform(rect, screenScaleCTM);
+    // Get current context transformations for offscreenContext
+    CGAffineTransform currentCTM = CGContextGetCTM(context);
 
     // Allocate pixel buffer and bitmap context for mask
     NSUInteger bytesPerPixel = 4;
@@ -279,16 +280,16 @@ UInt32 saturate(CGFloat value)
         bytesPerRow,
         colorSpace,
         kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-    CGContextScaleCTM(bcontext, iscale, iscale);
+    CGContextConcatCTM(bcontext, currentCTM);
 
     // Clip to mask bounds and render the mask
     CGFloat x = [self relativeOn:[_maskNode x] relative:width];
     CGFloat y = [self relativeOn:[_maskNode y] relative:height];
     CGFloat w = [self relativeOn:[_maskNode maskwidth] relative:width];
     CGFloat h = [self relativeOn:[_maskNode maskheight] relative:height];
-    CGRect maskBounds = CGRectMake(x, y, w, h);
+    CGRect maskBounds = CGRectApplyAffineTransform(CGRectMake(x, y, w, h), screenScaleCTM);
     CGContextClipToRect(bcontext, maskBounds);
-    [_maskNode renderLayerTo:bcontext rect:rect];
+    [_maskNode renderLayerTo:bcontext rect:scaledRect];
 
     // Apply luminanceToAlpha filter primitive
     // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
@@ -313,26 +314,33 @@ UInt32 saturate(CGFloat value)
 
 #if !TARGET_OS_OSX // [macOS]
     UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat defaultFormat];
-    format.scale = scale;
-    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:boundsSize format:format];
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:rect.size format:format];
 
     // Get the content image
     UIImage *contentImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
-      CGContextTranslateCTM(rendererContext.CGContext, 0.0, height);
-      CGContextScaleCTM(rendererContext.CGContext, 1.0, -1.0);
-      [self renderLayerTo:rendererContext.CGContext rect:rect];
+      CGContextConcatCTM(
+          rendererContext.CGContext, CGAffineTransformInvert(CGContextGetCTM(rendererContext.CGContext)));
+      CGContextConcatCTM(rendererContext.CGContext, currentCTM);
+      [self renderLayerTo:rendererContext.CGContext rect:scaledRect];
     }];
 
     // Blend current element and mask
     UIImage *blendedImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
+      CGContextConcatCTM(
+          rendererContext.CGContext, CGAffineTransformInvert(CGContextGetCTM(rendererContext.CGContext)));
+      CGContextTranslateCTM(rendererContext.CGContext, 0.0, scaledHeight);
+      CGContextScaleCTM(rendererContext.CGContext, 1.0, -1.0);
+
       CGContextSetBlendMode(rendererContext.CGContext, kCGBlendModeCopy);
-      CGContextDrawImage(rendererContext.CGContext, drawBounds, maskImage);
+      CGContextDrawImage(rendererContext.CGContext, scaledRect, maskImage);
       CGContextSetBlendMode(rendererContext.CGContext, kCGBlendModeSourceIn);
-      CGContextDrawImage(rendererContext.CGContext, drawBounds, contentImage.CGImage);
+      CGContextDrawImage(rendererContext.CGContext, scaledRect, contentImage.CGImage);
     }];
 
     // Render blended result into current render context
-    [blendedImage drawInRect:drawBounds];
+    CGContextConcatCTM(context, CGAffineTransformInvert(currentCTM));
+    [blendedImage drawInRect:scaledRect];
+    CGContextConcatCTM(context, currentCTM);
 
     // Render blended result into current render context
     CGImageRelease(maskImage);

@@ -3,7 +3,10 @@ import React from 'react';
 
 import ColorTest from './src/ColorTest';
 import PointerEventsBoxNone from './src/PointerEventsBoxNone';
+import MountUnmount from './src/MountUnmount';
 import Test1374 from './src/Test1374';
+import Test1442 from './src/Test1442';
+import Test1451 from './src/Test1451';
 import Test1718 from './src/Test1718';
 import Test1813 from './src/Test1813';
 import Test1845 from './src/Test1845';
