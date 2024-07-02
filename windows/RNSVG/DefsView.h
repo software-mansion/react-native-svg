@@ -30,13 +30,6 @@ struct DefsView : DefsViewT<DefsView, RNSVG::implementation::GroupView> {
   DefsView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
-
-  // IRenderableFabric
-  void UpdateProperties(
-      const winrt::Microsoft::ReactNative::IComponentProps &props,
-      const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-      bool forceUpdate = true,
-      bool invalidate = true) noexcept override;
 #endif
 
   // IRenderable

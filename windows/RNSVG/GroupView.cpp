@@ -47,39 +47,39 @@ void GroupView::UpdateProperties(
     const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
     bool forceUpdate,
     bool invalidate) noexcept {
-  auto renderableProps = props.as<SvgGroupCommonProps>();
-  auto oldRenderableProps = oldProps ? oldProps.as<SvgGroupCommonProps>() : nullptr;
+  auto groupProps = props.as<SvgGroupCommonProps>();
+  auto oldGroupProps = oldProps ? oldProps.as<SvgGroupCommonProps>() : nullptr;
 
   auto const &parent{Parent().try_as<RNSVG::GroupView>()};
 
-  if (!oldRenderableProps || renderableProps->font != oldRenderableProps->font) {
+  if (!oldGroupProps || groupProps->font != oldGroupProps->font) {
     if (forceUpdate || !m_fontPropMap[RNSVG::FontProp::FontSize]) {
-      if (renderableProps->font.fontSize) {
-        m_fontSize = renderableProps->font.fontSize != std::nullopt
-            ? *renderableProps->font.fontSize
+      if (groupProps->font.fontSize) {
+        m_fontSize = groupProps->font.fontSize != std::nullopt
+            ? *groupProps->font.fontSize
             : (parent ? parent.FontSize() : 12.0f);
       }
 
-      m_fontPropMap[RNSVG::FontProp::FontSize] = !!renderableProps->font.fontSize;
+      m_fontPropMap[RNSVG::FontProp::FontSize] = !!groupProps->font.fontSize;
     }
 
     if (forceUpdate || !m_fontPropMap[RNSVG::FontProp::FontFamily]) {
-      if (renderableProps->font.fontFamily) {
-        m_fontFamily = !(*renderableProps->font.fontFamily).empty()
-            ? winrt::to_hstring(*renderableProps->font.fontFamily)
+      if (groupProps->font.fontFamily) {
+        m_fontFamily = !(*groupProps->font.fontFamily).empty()
+            ? winrt::to_hstring(*groupProps->font.fontFamily)
             : (parent ? parent.FontFamily() : L"Segoe UI");
 
-        m_fontPropMap[RNSVG::FontProp::FontFamily] = !(*renderableProps->font.fontFamily).empty();
+        m_fontPropMap[RNSVG::FontProp::FontFamily] = !(*groupProps->font.fontFamily).empty();
       }
     }
 
     if (forceUpdate || !m_fontPropMap[RNSVG::FontProp::FontWeight]) {
-      if (renderableProps->font.fontWeight) {
-        m_fontWeight = !(*renderableProps->font.fontWeight).empty()
-            ? winrt::to_hstring(*renderableProps->font.fontWeight)
+      if (groupProps->font.fontWeight) {
+        m_fontWeight = !(*groupProps->font.fontWeight).empty()
+            ? winrt::to_hstring(*groupProps->font.fontWeight)
             : (parent ? parent.FontWeight() : L"auto");
 
-        m_fontPropMap[RNSVG::FontProp::FontWeight] = !(*renderableProps->font.fontWeight).empty();
+        m_fontPropMap[RNSVG::FontProp::FontWeight] = !(*groupProps->font.fontWeight).empty();
       }
     }
   }

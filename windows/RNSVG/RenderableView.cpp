@@ -83,6 +83,9 @@ void RenderableView::UnmountChildComponentView(
 void RenderableView::UpdateProps(
     const winrt::Microsoft::ReactNative::IComponentProps &props,
     const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept {
+  if (!props && !oldProps)
+    return;
+
   UpdateProperties(props, oldProps);
 }
 
@@ -171,7 +174,8 @@ void RenderableView::UpdateProperties(
   //}
 
   // clipPath
-  if (!oldRenderableProps || renderableProps->clipPath != oldRenderableProps->clipPath) {
+  // not a prop we want to propagate to child elements so we only set it when forceUpdate = true
+  if (forceUpdate && (!oldRenderableProps || renderableProps->clipPath != oldRenderableProps->clipPath)) {
     m_clipPathId = to_hstring(Utils::JSValueAsString(renderableProps->clipPath));
   }
 

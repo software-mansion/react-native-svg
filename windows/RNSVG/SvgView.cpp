@@ -111,7 +111,9 @@ void SvgView::UpdateProperties(
   auto svgProps = props.try_as<SvgViewProps>();
   auto oldSvgProps = oldProps ? oldProps.try_as<SvgViewProps>() : nullptr;
 
-  if (!svgProps && m_group) {
+  // If forceUpdate is false, that means this is a nested Svg
+  // and we're inheriting props. Pass those along to the group.
+  if (!forceUpdate && m_group) {
     m_group.UpdateProperties(props, oldProps, forceUpdate, invalidate);
     return;
   }
