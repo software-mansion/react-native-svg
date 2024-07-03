@@ -56,7 +56,8 @@
     "prepare": "npm run bob && husky install",
     "release": "npm login && release-it",
     "test": "npm run lint && npm run tsc",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "e2e": "jest e2e"
   },
   "peerDependencies": {
     "react": "*",
@@ -75,6 +76,7 @@
     "@types/jest": "^27.5.2",
     "@types/node": "*",
     "@types/react": "^18.2.18",
+    "@types/ws": "^8.5.10",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
     "babel-eslint": "^10.1.0",
@@ -102,7 +104,8 @@
     "react-test-renderer": "^18.2.0",
     "release-it": "^14.12.5",
     "ts-node": "^10.8.0",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "ws": "^8.18.0"
   },
   "lint-staged": {
     "{src,Example}/**/*.{js,ts,tsx}": "yarn format-js",

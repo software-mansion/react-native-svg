@@ -116,6 +116,7 @@ const names: (keyof typeof examples)[] = [
   'Transforms',
   'Markers',
   'Mask',
+  'E2E',
 ];
 
 const initialState = {
