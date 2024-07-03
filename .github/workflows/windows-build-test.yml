@@ -8,6 +8,8 @@ on:
       - 'package.json'
       - 'Example/windows/**'
       - 'Example/package.json'
+      - 'FabricExample/windows/**'
+      - 'FabricExample/package.json'
   push:
     branches:
       - main
@@ -17,7 +19,7 @@ jobs:
     runs-on: windows-2022
     strategy:
       matrix:
-        working-directory: [Example]
+        working-directory: [Example, FabricExample]
     concurrency:
       group: windows-${{ matrix.working-directory }}-${{ github.ref }}
       cancel-in-progress: true
