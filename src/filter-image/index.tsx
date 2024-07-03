@@ -1,7 +1,6 @@
-import { FilterImage } from './FilterImage';
-import type { FilterImageProps } from './FilterImage';
+import { FilterImage, FilterImageProps } from './FilterImage';
+import { Filters } from './types';
 
 export { FilterImage };
 
-type Filters = FilterImageProps['filters'];
 export type { FilterImageProps, Filters };

@@ -1,18 +1,9 @@
-import { ImageProps, View, Image as RNImage, StyleSheet } from 'react-native';
-import {
-  Svg,
-  FeColorMatrix,
-  Filter,
-  Image,
-  FeColorMatrixProps,
-} from '../index';
-import { FilterPrimitiveStandardAttributes } from '../elements/filters/FilterPrimitive';
+import { ImageProps, Image as RNImage, StyleSheet, View } from 'react-native';
+import { FeColorMatrix, Filter, Image, Svg } from '../index';
+import { Filters } from './types';
 
 export interface FilterImageProps extends ImageProps {
-  filters: Array<
-    ({ name: 'colorMatrix' } & FeColorMatrixProps) &
-      FilterPrimitiveStandardAttributes
-  >;
+  filters: Filters;
 }
 
 const getFilters = (filters: FilterImageProps['filters']) => {
