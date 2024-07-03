@@ -22,7 +22,7 @@ type HitSlop = Readonly<{
   top?: Float;
   right?: Float;
   bottom?: Float;
-}>;
+} | Float>;
 
 interface NativeProps extends ViewProps {
   bbWidth?: UnsafeMixed<NumberProp>;
