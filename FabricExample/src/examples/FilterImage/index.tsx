@@ -44,6 +44,7 @@ const FilterImageList = () => {
     </View>
   );
 };
+FilterImageList.title = '';
 
 const styles = StyleSheet.create({
   container: {width: '100%'},
