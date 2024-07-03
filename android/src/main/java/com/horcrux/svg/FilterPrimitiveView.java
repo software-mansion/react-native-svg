@@ -12,7 +12,7 @@ class FilterPrimitiveView extends DefinitionView {
   SVGLength mY;
   SVGLength mW;
   SVGLength mH;
-  String mResult;
+  private String mResult;
 
   public FilterPrimitiveView(ReactContext reactContext) {
     super(reactContext);
@@ -41,6 +41,10 @@ class FilterPrimitiveView extends DefinitionView {
   public void setResult(String result) {
     mResult = result;
     invalidate();
+  }
+
+  public String getResult() {
+    return mResult;
   }
 
   protected static Bitmap getSource(

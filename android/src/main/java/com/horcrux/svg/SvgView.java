@@ -58,7 +58,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   private @Nullable Bitmap mBitmap;
-  public @Nullable Bitmap mBitmapTmp;
+  private @Nullable Bitmap mCurrentBitmap;
   private boolean mRemovalTransitionStarted;
 
   public SvgView(ReactContext reactContext) {
@@ -266,7 +266,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       return null;
     }
     Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_8888);
-    mBitmapTmp = bitmap;
+    mCurrentBitmap = bitmap;
     drawChildren(new Canvas(bitmap));
     return bitmap;
   }
@@ -439,5 +439,9 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
   VirtualView getDefinedMarker(String markerRef) {
     return mDefinedMarkers.get(markerRef);
+  }
+
+  public Bitmap getCurrentBitmap() {
+    return mCurrentBitmap;
   }
 }
