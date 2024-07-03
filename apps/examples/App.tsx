@@ -13,7 +13,6 @@ import {
   ScrollView,
   TouchableHighlight,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
 import {Modal, Platform} from 'react-native';
 import {Svg, Circle, Line} from 'react-native-svg';
@@ -190,10 +189,7 @@ export default class SvgExample extends Component {
         {this.state.content}
       </ScrollView>
       <View style={styles.close}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={{padding: 5}}
-          onPress={this.hide}>
+        <TouchableOpacity activeOpacity={0.7} onPress={this.hide}>
           <Svg height="20" width="20">
             <Circle cx="10" cy="10" r="10" fill="red" />
             <Line x1="4" y1="4" x2="16" y2="16" stroke="#fff" strokeWidth="2" />
@@ -206,7 +202,7 @@ export default class SvgExample extends Component {
 
   render() {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <Text style={styles.welcome}>SVG library for React Apps</Text>
         <View style={styles.contentContainer}>{this.getExamples()}</View>
         {(Platform.OS === 'windows' || Platform.OS === 'macos') &&
@@ -221,7 +217,7 @@ export default class SvgExample extends Component {
             {this.modalContent()}
           </Modal>
         )}
-      </SafeAreaView>
+      </View>
     );
   }
 }
