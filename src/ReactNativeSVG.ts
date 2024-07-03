@@ -109,7 +109,7 @@ export type { MarkerProps } from './elements/Marker';
 export type { ForeignObjectProps } from './elements/ForeignObject';
 export type { FilterProps } from './elements/filters/Filter';
 export type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
-export type { FilterPrimitiveStandardAttributes } from './elements/filters/FilterPrimitive';
+export type { FilterPrimitiveCommonProps } from './elements/filters/FilterPrimitive';
 
 export * from './lib/extract/types';
 
