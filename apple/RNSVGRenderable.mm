@@ -226,7 +226,7 @@ UInt32 saturate(CGFloat value)
 {
   return value <= 0 ? 0 : value >= 255 ? 255 : (UInt32)value;
 }
-
+#if TARGET_OS_OSX // [macOS]
 // Helper function to create an NSImage by rendering with Core Graphics
 NSImage *renderImageWithActions(CGSize size, void (^actions)(CGContextRef)) 
 {
@@ -239,6 +239,7 @@ NSImage *renderImageWithActions(CGSize size, void (^actions)(CGContextRef))
     [image unlockFocus];
     return image;
 }
+#endif
 
 - (void)renderTo:(CGContextRef)context rect:(CGRect)rect
 {
