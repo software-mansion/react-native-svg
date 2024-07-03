@@ -207,9 +207,9 @@ using namespace facebook::react;
   _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"]
       loadImageWithURLRequest:src.request
                      callback:^(NSError *error, UIImage *image) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                          self->_image = CGImageRetain(image.CGImage);
-                          self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                         self->_image = CGImageRetain(image.CGImage);
+                         self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
                           if (self->_onLoad) {
                             RCTImageSource *sourceLoaded;
 #if TARGET_OS_OSX // [macOS]
@@ -224,9 +224,9 @@ using namespace facebook::react;
                               };
                               self->_onLoad(@{@"source" : dict});
                           }
-                          [self invalidate];
-                        });
-                      }];
+                         [self invalidate];
+                       });
+                     }];
 #endif // RCT_NEW_ARCH_ENABLED
 }
 
