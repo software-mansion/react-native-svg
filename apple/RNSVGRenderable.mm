@@ -227,6 +227,19 @@ UInt32 saturate(CGFloat value)
   return value <= 0 ? 0 : value >= 255 ? 255 : (UInt32)value;
 }
 
+// Helper function to create an NSImage by rendering with Core Graphics
+NSImage *renderImageWithActions(CGSize size, void (^actions)(CGContextRef)) 
+{
+    NSImage *image = [[NSImage alloc] initWithSize:size];
+    [image lockFocus];
+    CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
+    if (actions) {
+        actions(context);
+    }
+    [image unlockFocus];
+    return image;
+}
+
 - (void)renderTo:(CGContextRef)context rect:(CGRect)rect
 {
   self.dirty = false;
@@ -345,35 +358,44 @@ UInt32 saturate(CGFloat value)
     // Render blended result into current render context
     CGImageRelease(maskImage);
 #else // [macOS
-      // Render content of current SVG Renderable to image
-    UIGraphicsBeginImageContextWithOptions(boundsSize, NO, 0.0);
-    CGContextRef newContext = UIGraphicsGetCurrentContext();
-    CGContextTranslateCTM(newContext, 0.0, height);
-    CGContextScaleCTM(newContext, 1.0, -1.0);
-    [self renderLayerTo:newContext rect:rect];
-    CGImageRef contentImage = CGBitmapContextCreateImage(newContext);
-    UIGraphicsEndImageContext();
+    // Render content of current SVG Renderable to image
+    NSImage *contentImage = renderImageWithActions(rect.size, ^(CGContextRef rendererContext) {
+      CGContextConcatCTM(rendererContext, CGAffineTransformInvert(CGContextGetCTM(rendererContext)));
+      CGContextConcatCTM(rendererContext, currentCTM);
+      [self renderLayerTo:rendererContext rect:scaledRect];
+    });
 
     // Blend current element and mask
-    UIGraphicsBeginImageContextWithOptions(boundsSize, NO, 0.0);
-    newContext = UIGraphicsGetCurrentContext();
-    CGContextTranslateCTM(newContext, 0.0, height);
-    CGContextScaleCTM(newContext, 1.0, -1.0);
+    NSImage *blendedImage = renderImageWithActions(rect.size, ^(CGContextRef rendererContext) {
+      CGContextConcatCTM(rendererContext, CGAffineTransformInvert(CGContextGetCTM(rendererContext)));
 
-    CGContextSetBlendMode(newContext, kCGBlendModeCopy);
-    CGContextDrawImage(newContext, drawBounds, maskImage);
-    CGImageRelease(maskImage);
+      // Flip the context for correct rendering
+      CGContextTranslateCTM(rendererContext, 0.0, rect.size.height);
+      CGContextScaleCTM(rendererContext, 1.0, -1.0);
 
-    CGContextSetBlendMode(newContext, kCGBlendModeSourceIn);
-    CGContextDrawImage(newContext, drawBounds, contentImage);
-    CGImageRelease(contentImage);
-
-    CGImageRef blendedImage = CGBitmapContextCreateImage(newContext);
-    UIGraphicsEndImageContext();
+      CGContextSetBlendMode(rendererContext, kCGBlendModeCopy);
+      CGContextDrawImage(rendererContext, scaledRect, maskImage);
+      CGContextSetBlendMode(rendererContext, kCGBlendModeSourceIn);
+      CGContextDrawImage(rendererContext, scaledRect, [contentImage CGImageForProposedRect:NULL context:[NSGraphicsContext currentContext] hints:nil]);
+    });
 
     // Render blended result into current render context
-    CGContextDrawImage(context, drawBounds, blendedImage);
-    CGImageRelease(blendedImage);
+    CGContextRef cgContext = [[NSGraphicsContext currentContext] CGContext];
+    CGContextSaveGState(cgContext);  // Save the current state
+
+    CGContextConcatCTM(cgContext, CGAffineTransformInvert(currentCTM));
+
+    // Flip the context for correct rendering
+    CGContextTranslateCTM(cgContext, 0.0, rect.size.height);
+    CGContextScaleCTM(cgContext, 1.0, -1.0);
+
+    [blendedImage drawInRect:scaledRect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1.0];
+
+    // Restore the context state
+    CGContextRestoreGState(cgContext);
+
+    // Release the mask image if it was created elsewhere
+    CGImageRelease(maskImage);
 #endif // macOS]
   } else {
     [self renderLayerTo:context rect:rect];
