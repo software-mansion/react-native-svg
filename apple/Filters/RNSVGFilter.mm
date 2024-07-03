@@ -101,6 +101,8 @@ using namespace facebook::react;
       if (currentFilter.result) {
         [resultsMap setObject:result forKey:currentFilter.result];
       }
+    } else {
+      RCTLogError(@"Invalid `Filter` subview: Filter children can only be `Fe...` components");
     }
   }
 

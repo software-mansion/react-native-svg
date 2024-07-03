@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
@@ -85,6 +86,8 @@ class FilterView extends DefinitionView {
         if (resultName != null) {
           mResultsMap.put(resultName, res);
         }
+      } else {
+        Log.e("RNSVG", "Invalid `Filter` child: Filter children can only be `Fe...` components");
       }
     }
 
