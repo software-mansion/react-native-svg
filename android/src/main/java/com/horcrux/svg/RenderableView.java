@@ -354,20 +354,22 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
 
         Rect canvasBounds = this.getSvgView().getCanvasBounds();
 
-        // draw element to temporary bitmap
-        Bitmap tmpBitmap =
+        // draw element to self bitmap
+        Bitmap elementBitmap =
             Bitmap.createBitmap(
                 canvasBounds.width(), canvasBounds.height(), Bitmap.Config.ARGB_8888);
-        Canvas tmpCanvas = new Canvas(tmpBitmap);
+        Canvas elementCanvas = new Canvas(elementBitmap);
 
-        draw(tmpCanvas, paint, opacity);
+        draw(elementCanvas, paint, opacity);
 
         // apply filters
-        Bitmap backgroundBitmap = this.getSvgView().mBitmapTmp;
-        tmpBitmap = filter.applyFilter(tmpBitmap, backgroundBitmap, this.mBox, canvasBounds);
+        Bitmap backgroundBitmap = this.getSvgView().getCurrentBitmap();
+        elementBitmap =
+            filter.applyFilter(
+                elementBitmap, backgroundBitmap, elementCanvas.getClipBounds(), canvasBounds);
 
         // draw bitmap to canvas
-        canvas.drawBitmap(tmpBitmap, 0, 0, bitmapPaint);
+        canvas.drawBitmap(elementBitmap, 0, 0, bitmapPaint);
       } else {
         canvas.saveLayer(null, paint);
         draw(canvas, paint, opacity);
