@@ -124,9 +124,6 @@ using namespace facebook::react;
       float saturation = [array[0] floatValue];
       filter = [CIFilter filterWithName:@"CIColorControls"];
       [filter setDefaults];
-      if ((saturation < 0.0) || (saturation > 1.0)) {
-        NSLog(@"WARNING: Saturation adjustment: %f outside supported range.", saturation);
-      }
       [filter setValue:[NSNumber numberWithFloat:saturation] forKey:@"inputSaturation"];
       break;
     }
