@@ -418,22 +418,12 @@ public abstract class VirtualView extends ReactViewGroup {
     return svgView;
   }
 
-  double relativeOnWidth(SVGLength length) {
+  double relativeOnFraction(SVGLength length, float relative) {
     SVGLength.UnitType unit = length.unit;
     if (unit == SVGLength.UnitType.NUMBER) {
-      return length.value * mScale;
+      return length.value * relative;
     } else if (unit == SVGLength.UnitType.PERCENTAGE) {
-      return length.value / 100 * getCanvasWidth();
-    }
-    return fromRelativeFast(length);
-  }
-
-  double relativeOnHeight(SVGLength length) {
-    SVGLength.UnitType unit = length.unit;
-    if (unit == SVGLength.UnitType.NUMBER) {
-      return length.value * mScale;
-    } else if (unit == SVGLength.UnitType.PERCENTAGE) {
-      return length.value / 100 * getCanvasHeight();
+      return length.value / 100 * relative;
     }
     return fromRelativeFast(length);
   }
@@ -448,24 +438,16 @@ public abstract class VirtualView extends ReactViewGroup {
     return fromRelativeFast(length);
   }
 
-  double relativeOnFraction(SVGLength length, float relative) {
-    SVGLength.UnitType unit = length.unit;
-    if (unit == SVGLength.UnitType.NUMBER) {
-      return (relative * length.value);
-    } else if (unit == SVGLength.UnitType.PERCENTAGE) {
-      return length.value / 100 * relative;
-    }
-    return fromRelativeFast(length);
+  double relativeOnWidth(SVGLength length) {
+    return relativeOn(length, getCanvasHeight());
+  }
+
+  double relativeOnHeight(SVGLength length) {
+    return relativeOn(length, getCanvasHeight());
   }
 
   double relativeOnOther(SVGLength length) {
-    SVGLength.UnitType unit = length.unit;
-    if (unit == SVGLength.UnitType.NUMBER) {
-      return length.value * mScale;
-    } else if (unit == SVGLength.UnitType.PERCENTAGE) {
-      return length.value / 100 * getCanvasDiagonal();
-    }
-    return fromRelativeFast(length);
+    return relativeOn(length, (float) getCanvasDiagonal());
   }
 
   /**
