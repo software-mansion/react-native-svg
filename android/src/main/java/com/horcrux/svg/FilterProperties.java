@@ -18,7 +18,7 @@ class FilterProperties {
 
     static Units getEnum(String strVal) {
       if (!unitsToEnum.containsKey(strVal)) {
-        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+        throw new IllegalArgumentException("Unknown 'Unit' Value: " + strVal);
       }
       return unitsToEnum.get(strVal);
     }
@@ -53,7 +53,7 @@ class FilterProperties {
 
     static EdgeMode getEnum(String strVal) {
       if (!edgeModeToEnum.containsKey(strVal)) {
-        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+        throw new IllegalArgumentException("Unknown 'edgeMode' Value: " + strVal);
       }
       return edgeModeToEnum.get(strVal);
     }
