@@ -34,8 +34,24 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Restore react-native-svg node_modules from cache
+        uses: actions/cache@v3.2.3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
+          restore-keys: ${{ runner.os }}-node-modules-svg-
+          enableCrossOsArchive: true
+
       - name: Install svg node_modules
         run: yarn install --frozen-lockfile
+
+      - name: Restore app node_modules from cache
+        uses: actions/cache@v3.2.3
+        with:
+          path: ${{ matrix.working-directory }}/node_modules
+          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.working-directory)) }}
+          restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
+          enableCrossOsArchive: true
 
       - name: Install app node_modules
         working-directory: ${{ matrix.working-directory }}
