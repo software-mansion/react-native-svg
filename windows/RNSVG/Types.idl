@@ -88,14 +88,17 @@ namespace RNSVG {
     NonZero,
   };
 
-  [default_interface]
-  runtimeclass SVGLength {
-    SVGLength();
-    SVGLength(Single param);
-    SVGLength(Single param, LengthType type);
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractStroke.ts#L18-L25
+  //enum VectorEffect {
+  //  None,
+  //  NonScalingStroke,
+  //  Inherit,
+  //  Uri,
+  //};
 
-    Single Value{ get; };
-    LengthType Unit{ get; };
+  struct SVGLength {
+    Single Value;
+    LengthType Unit;
   };
 
   [default_interface]
@@ -117,4 +120,4 @@ namespace RNSVG {
   runtimeclass D2DBrush {
     D2DBrush();
   };
- }
+}

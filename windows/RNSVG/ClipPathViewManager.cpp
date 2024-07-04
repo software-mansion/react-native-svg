@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ClipPathViewManager.h"
+#if __has_include("ClipPathViewManager.g.cpp")
 #include "ClipPathViewManager.g.cpp"
+#endif
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;
