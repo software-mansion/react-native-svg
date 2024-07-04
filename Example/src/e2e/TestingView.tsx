@@ -1,52 +1,13 @@
 import React, {Component, useEffect, useRef, useState} from 'react';
-import {
-    Svg,
-    Circle,
-    Ellipse,
-    G,
-    Text,
-    TSpan,
-    TextPath,
-    Path,
-    Polygon,
-    Polyline,
-    Line,
-    Rect,
-    Use, Image, Marker, Mask, Pattern, ClipPath, Stop, RadialGradient, LinearGradient, Defs
-} from 'react-native-svg';
 import {Platform} from 'react-native';
-import {deserialize} from "./asd";
+import * as RNSVG from 'react-native-svg';
 
 const wsUri = 'ws://10.0.2.2:7123';
-const tags = {
-    svg: Svg,
-    circle: Circle,
-    ellipse: Ellipse,
-    g: G,
-    text: Text,
-    tspan: TSpan,
-    textPath: TextPath,
-    path: Path,
-    polygon: Polygon,
-    polyline: Polyline,
-    line: Line,
-    rect: Rect,
-    use: Use,
-    image: Image,
-    symbol: Symbol,
-    defs: Defs,
-    linearGradient: LinearGradient,
-    radialGradient: RadialGradient,
-    stop: Stop,
-    clipPath: ClipPath,
-    pattern: Pattern,
-    mask: Mask,
-    marker: Marker
-};
+
 const TestingView = () => {
     const [renderedContent, setRenderedContent] = useState(<></>);
     const [wsClient, setWsClient] = useState<WebSocket>(new WebSocket(wsUri));
-    const svgWrapperRef = useRef<Svg>(null);
+    const svgWrapperRef = useRef<RNSVG.Svg>(null);
 
     useEffect(() => {
         wsClient.onopen = () => {
@@ -70,12 +31,11 @@ const TestingView = () => {
             );
         };
         wsClient.onmessage = ({data: rawMessage}) => {
-            console.log(rawMessage)
-
             const message = JSON.parse(rawMessage)
             if (message.type == "renderRequest") {
-                //todo: create element from message.data
-                //setRenderedContent(element)
+                setRenderedContent(
+                    createElementFromObject(message.data.type, message.data.props),
+                );
             }
         };
         wsClient.onclose = event => {
@@ -83,7 +43,15 @@ const TestingView = () => {
         };
     }, [wsClient]);
 
-    return <Svg ref={svgWrapperRef}>{renderedContent}</Svg>;
+    useEffect(() => {
+        svgWrapperRef.current?.toDataURL((base64RenderedImage) => {
+            wsClient.send(JSON.stringify({
+                type: "renderResponse",
+                data: base64RenderedImage
+            }))
+        })
+    }, [renderedContent])
+    return <RNSVG.Svg ref={svgWrapperRef}>{renderedContent}</RNSVG.Svg>;
 };
 
 class TestingViewWrapper extends Component {
@@ -96,9 +64,16 @@ class TestingViewWrapper extends Component {
 
 const samples = [TestingViewWrapper];
 const icon = (
-    <Svg height="30" width="30" viewBox="0 0 20 20">
-        <Circle cx="10" cy="10" r="8" stroke="purple" strokeWidth="1" fill="pink"/>
-    </Svg>
+    <RNSVG.Svg height="30" width="30" viewBox="0 0 20 20">
+        <RNSVG.Circle
+            cx="10"
+            cy="10"
+            r="8"
+            stroke="purple"
+            strokeWidth="1"
+            fill="pink"
+        />
+    </RNSVG.Svg>
 );
 
 function isFabric(): boolean {
@@ -108,11 +83,14 @@ function isFabric(): boolean {
 
 export {samples, icon};
 
-const createElementFromObject = (element: string, props: any): any => {
+const createElementFromObject = (
+    element: keyof typeof RNSVG,
+    props: any,
+): any => {
     const children: any[] = [];
     if (props.children) {
         if (Array.isArray(props.children)) {
-            props?.children.forEach((child: { type: any; props: any; }) =>
+            props?.children.forEach((child: { type: any; props: any }) =>
                 children.push(createElementFromObject(child.type, child?.props)),
             );
             console.log(children);
@@ -124,6 +102,5 @@ const createElementFromObject = (element: string, props: any): any => {
             children.push(props.children);
         }
     }
-    // @ts-ignore
-    return React.createElement(tags[element], {...props, children});
+    return React.createElement(RNSVG[element] as any, {...props, children,});
 };
