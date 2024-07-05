@@ -43,6 +43,15 @@ RCT_ENUM_CONVERTER(
     intValue)
 
 RCT_ENUM_CONVERTER(
+    RNSVGMaskType,
+    (@{
+      @"luminance" : @(kRNSVGMaskTypeLuminance),
+      @"alpha" : @(kRNSVGMaskTypeAlpha),
+    }),
+    kRNSVGMaskTypeLuminance,
+    intValue)
+
+RCT_ENUM_CONVERTER(
     RNSVGEdgeModeTypes,
     (@{
       @"duplicate" : @(SVG_EDGEMODE_DUPLICATE),

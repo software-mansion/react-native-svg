@@ -65,6 +65,7 @@ interface NativeProps
   width?: UnsafeMixed<NumberProp>;
   maskUnits?: Int32;
   maskContentUnits?: Int32;
+  maskType?: Int32;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGMask');

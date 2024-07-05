@@ -14,6 +14,7 @@
 #import "RNSVGColorMatrixType.h"
 #import "RNSVGEdgeModeTypes.h"
 #import "RNSVGLength.h"
+#import "RNSVGMaskType.h"
 #import "RNSVGPathParser.h"
 #import "RNSVGUnits.h"
 #import "RNSVGVBMOS.h"
@@ -27,6 +28,7 @@
 + (RNSVGCGFCRule)RNSVGCGFCRule:(id)json;
 + (RNSVGVBMOS)RNSVGVBMOS:(id)json;
 + (RNSVGUnits)RNSVGUnits:(id)json;
++ (RNSVGMaskType)RNSVGMaskType:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;
 + (RNSVGPathParser *)RNSVGCGPath:(NSString *)d;
 + (CGRect)RNSVGCGRect:(id)json offset:(NSUInteger)offset;

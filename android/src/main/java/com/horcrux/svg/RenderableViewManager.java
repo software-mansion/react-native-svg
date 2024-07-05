@@ -1290,6 +1290,11 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     public void setMaskContentUnits(MaskView node, int maskContentUnits) {
       node.setMaskContentUnits(maskContentUnits);
     }
+
+    @ReactProp(name = "maskType")
+    public void setMaskType(MaskView node, int maskType) {
+      node.setMaskType(maskType);
+    }
   }
 
   static class FilterManager extends VirtualViewManager<FilterView>

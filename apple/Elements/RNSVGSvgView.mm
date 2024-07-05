@@ -118,6 +118,19 @@ using namespace facebook::react;
   _invviewBoxTransform = CGAffineTransformIdentity;
   rendered = NO;
 }
+
+- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  [super mountChildComponentView:childComponentView index:index];
+  [self invalidate];
+}
+
+- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  [super unmountChildComponentView:childComponentView index:index];
+  [self invalidate];
+}
+
 #endif // RCT_NEW_ARCH_ENABLED
 
 - (void)insertReactSubview:(RNSVGView *)subview atIndex:(NSInteger)atIndex

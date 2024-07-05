@@ -13,7 +13,7 @@ We'd like to make contributions as pleasant as possible, so here's a small guide
 
 ### Testing your changes
 
-Add test example in [TestsExample](https://github.com/react-native-svg/react-native-svg/tree/main/TestsExample) concerning your change following the convention of `TestX.tsx` where `X` is your PR number.
+Add test example in [tests-example](https://github.com/react-native-svg/react-native-svg/tree/main/tests-example) concerning your change following the convention of `TestX.tsx` where `X` is your PR number.
 
 ## Tests
 

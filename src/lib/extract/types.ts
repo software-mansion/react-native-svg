@@ -228,6 +228,8 @@ export interface TransformedProps {
   y: number;
 }
 
+export type MaskType = 'alpha' | 'luminance';
+
 export interface CommonMaskProps {
   mask?: string;
 }
