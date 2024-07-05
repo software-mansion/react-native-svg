@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { View } from 'react-native';
+import React from 'react';
+import {View} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
@@ -21,12 +21,15 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" vi
 `;
 
 export default function App() {
-
   return (
-    <View style={{flex: 1, backgroundColor: 'red', alignItems: 'center', justifyContent: 'center'}}>
-
-      <SvgXml xml={svg}/>
-
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <SvgXml xml={svg} />
     </View>
   );
 }
