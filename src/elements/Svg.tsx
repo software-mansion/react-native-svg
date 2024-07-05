@@ -24,6 +24,7 @@ import G from './G';
 import RNSVGSvgAndroid from '../fabric/AndroidSvgViewNativeComponent';
 import RNSVGSvgIOS from '../fabric/IOSSvgViewNativeComponent';
 import type { Spec } from '../fabric/NativeSvgViewModule';
+import extractOpacity from '../lib/extract/extractOpacity';
 
 const styles = StyleSheet.create({
   svg: {
@@ -138,7 +139,7 @@ export default class Svg extends Shape<SvgProps> {
 
     let override = false;
     const overrideStyles: ViewStyle = {};
-    const o = opacity != null ? +opacity : NaN;
+    const o = opacity != null ? extractOpacity(opacity) : NaN;
     if (!isNaN(o)) {
       override = true;
       overrideStyles.opacity = o;
