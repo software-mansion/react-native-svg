@@ -1,3 +1,3 @@
-import { samples as App } from '../apps/examples/src/examples/Image';
+import  App from '../apps/examples';
 
-export default App[0];
+export default App;
