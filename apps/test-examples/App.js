@@ -2,13 +2,13 @@
 import React from 'react';
 
 import ColorTest from './src/ColorTest';
-import MaskTypeTest from './src/MaskTypeTest';
 import PointerEventsBoxNone from './src/PointerEventsBoxNone';
 import MountUnmount from './src/MountUnmount';
 import Test1374 from './src/Test1374';
 import Test1442 from './src/Test1442';
 import Test1451 from './src/Test1451';
 import Test1718 from './src/Test1718';
+import Test1790 from './src/Test1790';
 import Test1813 from './src/Test1813';
 import Test1845 from './src/Test1845';
 import Test1986 from './src/Test1986';
@@ -24,5 +24,5 @@ import Test2276 from './src/Test2276';
 import Test2327 from './src/Test2327';
 
 export default function App() {
-  return <ColorTest />;
+  return <MaskTypeTest />;
 }

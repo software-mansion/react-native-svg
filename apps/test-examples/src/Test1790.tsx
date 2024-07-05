@@ -20,7 +20,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" vi
 </svg>
 `;
 
-export default function App() {
+export default function Test1790() {
   return (
     <View
       style={{
