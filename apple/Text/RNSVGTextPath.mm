@@ -39,14 +39,17 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGTextPathProps>(props);
+  const auto &newProps = static_cast<const RNSVGTextPathProps &>(*props);
 
   self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
   self.side = RCTNSStringFromStringNilIfEmpty(newProps.side);
   self.method = RCTNSStringFromStringNilIfEmpty(newProps.method);
   self.midLine = RCTNSStringFromStringNilIfEmpty(newProps.midLine);
   self.spacing = RCTNSStringFromStringNilIfEmpty(newProps.spacing);
-  self.startOffset = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.startOffset)];
+  id startOffset = RNSVGConvertFollyDynamicToId(newProps.startOffset);
+  if (startOffset != nil) {
+    self.startOffset = [RCTConvert RNSVGLength:startOffset];
+  }
 
   setCommonTextProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGTextPathProps const>(props);

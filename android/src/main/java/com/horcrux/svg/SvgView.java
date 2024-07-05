@@ -232,31 +232,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     clearChildCache();
   }
 
-  public void setBbWidth(String bbWidth) {
-    mbbWidth = SVGLength.from(bbWidth);
-    invalidate();
-    clearChildCache();
-  }
-
-  public void setBbWidth(Double bbWidth) {
-    mbbWidth = SVGLength.from(bbWidth);
-    invalidate();
-    clearChildCache();
-  }
-
   public void setBbHeight(Dynamic bbHeight) {
-    mbbHeight = SVGLength.from(bbHeight);
-    invalidate();
-    clearChildCache();
-  }
-
-  public void setBbHeight(String bbHeight) {
-    mbbHeight = SVGLength.from(bbHeight);
-    invalidate();
-    clearChildCache();
-  }
-
-  public void setBbHeight(Double bbHeight) {
     mbbHeight = SVGLength.from(bbHeight);
     invalidate();
     clearChildCache();
@@ -363,7 +339,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
     bitmap.recycle();
     byte[] bitmapBytes = stream.toByteArray();
-    return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+    return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
   }
 
   String toDataURL(int width, int height) {
@@ -377,7 +353,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
     bitmap.recycle();
     byte[] bitmapBytes = stream.toByteArray();
-    return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+    return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
   }
 
   void enableTouchEvents() {

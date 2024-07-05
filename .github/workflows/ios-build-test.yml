@@ -17,7 +17,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-12
+    runs-on: macos-14
     strategy:
       matrix:
         working-directory: [Example, FabricExample]
@@ -28,6 +28,11 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v3
+
+      - name: Use latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
 
       - name: Restore react-native-svg node_modules from cache
         uses: actions/cache@v3
@@ -71,4 +76,4 @@ jobs:
 
       - name: Build app
         working-directory: ${{ matrix.working-directory }}
-        run: npx react-native run-ios
+        run: npx react-native@latest run-ios --simulator="iPhone 14 Pro" --mode Debug --verbose --terminal /bin/zsh

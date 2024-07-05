@@ -7,6 +7,9 @@ import type {
 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
 
+import type { UnsafeMixed } from './codegenUtils';
+import { NumberProp } from '../lib/extract/types';
+
 interface SvgNodeCommonProps {
   name?: string;
   opacity?: WithDefault<Float, 1.0>;
@@ -34,10 +37,10 @@ interface SvgRenderableCommonProps {
   fillRule?: WithDefault<Int32, 1>;
   stroke?: ColorStruct;
   strokeOpacity?: WithDefault<Float, 1.0>;
-  strokeWidth?: WithDefault<string, '1'>;
+  strokeWidth?: UnsafeMixed<NumberProp>;
   strokeLinecap?: WithDefault<Int32, 0>;
   strokeLinejoin?: WithDefault<Int32, 0>;
-  strokeDasharray?: ReadonlyArray<string>;
+  strokeDasharray?: UnsafeMixed<ReadonlyArray<NumberProp> | NumberProp>;
   strokeDashoffset?: Float;
   strokeMiterlimit?: Float;
   vectorEffect?: WithDefault<Int32, 0>;
@@ -48,10 +51,10 @@ interface NativeProps
   extends ViewProps,
     SvgNodeCommonProps,
     SvgRenderableCommonProps {
-  cx?: string;
-  cy?: string;
-  rx?: string;
-  ry?: string;
+  cx?: UnsafeMixed<NumberProp>;
+  cy?: UnsafeMixed<NumberProp>;
+  rx?: UnsafeMixed<NumberProp>;
+  ry?: UnsafeMixed<NumberProp>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGEllipse');

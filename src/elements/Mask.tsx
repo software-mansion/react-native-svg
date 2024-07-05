@@ -1,9 +1,6 @@
 import type { ReactNode } from 'react';
 import * as React from 'react';
-import {
-  stringifyPropsForFabric,
-  withoutXY,
-} from '../lib/extract/extractProps';
+import { withoutXY } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
@@ -24,8 +21,8 @@ export interface MaskProps extends CommonPathProps {
   maskContentUnits?: TMaskUnits;
   maskType?: TMaskType;
   style?: {
-    maskType: TMaskType,
-  }
+    maskType: TMaskType;
+  };
 }
 
 export default class Mask extends Shape<MaskProps> {
@@ -40,25 +37,31 @@ export default class Mask extends Shape<MaskProps> {
 
   render() {
     const { props } = this;
-    const { x, y, width, height, maskUnits, maskContentUnits, children, maskType, style } =
-      props;
-    const strigifiedMaskProps = stringifyPropsForFabric({
+    const {
       x,
       y,
       width,
       height,
-    });
+      maskUnits,
+      maskContentUnits,
+      children,
+      maskType,
+      style,
+    } = props;
     const maskProps = {
+      x,
+      y,
+      width,
+      height,
       maskUnits: maskUnits !== undefined ? units[maskUnits] : 0,
       maskContentUnits:
         maskContentUnits !== undefined ? units[maskContentUnits] : 1,
-      maskType: maskType || style?.maskType || 'luminance'
+      maskType: maskType || style?.maskType || 'luminance',
     };
     return (
       <RNSVGMask
         ref={(ref) => this.refMethod(ref as (Mask & NativeMethods) | null)}
         {...withoutXY(this, props)}
-        {...strigifiedMaskProps}
         {...maskProps}>
         {children}
       </RNSVGMask>

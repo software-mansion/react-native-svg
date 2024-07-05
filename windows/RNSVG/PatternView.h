@@ -9,6 +9,7 @@ struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView>
 
   // RenderableView
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+  void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size const & /*size*/){};
 
  private:
   RNSVG::SVGLength m_x{};
@@ -17,8 +18,6 @@ struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView>
   RNSVG::SVGLength m_height{};
   std::string m_patternUnits{"objectBoundingBox"};
   std::string m_patternContentUnits{"userSpaceOnUse"};
-  bool m_transformSet{false};
-  Numerics::float3x2 m_transform{Numerics::make_float3x2_scale(1)};
 
   // ViewBox
   float m_minX{0.0f};
@@ -33,9 +32,9 @@ struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView>
   void UpdateBounds();
 
   // Helpers
-  void CreateBrush(Windows::Foundation::Rect const &rect);
-  Windows::Foundation::Rect GetAdjustedRect(Windows::Foundation::Rect const &bounds);
-  Microsoft::Graphics::Canvas::CanvasCommandList GetCommandList(Windows::Foundation::Rect const &elRect);
+  void CreateBrush(D2D1_RECT_F rect);
+  D2D1_RECT_F GetAdjustedRect(D2D1_RECT_F bounds);
+  winrt::com_ptr<ID2D1CommandList> GetCommandList(ID2D1Device* device, D2D1_RECT_F elRect);
 };
 } // namespace winrt::RNSVG::implementation
 

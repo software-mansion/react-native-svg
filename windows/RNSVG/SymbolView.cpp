@@ -5,7 +5,6 @@
 #include "Utils.h"
 
 using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {

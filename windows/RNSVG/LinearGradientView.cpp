@@ -5,7 +5,6 @@
 #include "Utils.h"
 
 using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
@@ -29,11 +28,10 @@ void LinearGradientView::UpdateProperties(IJSValueReader const &reader, bool for
     } else if (propertyName == "gradientUnits") {
       m_gradientUnits = Utils::JSValueAsBrushUnits(propertyValue);
     } else if (propertyName == "gradientTransform") {
-      m_transformSet = true;
-      m_transform = Utils::JSValueAsTransform(propertyValue);
+      m_transform = Utils::JSValueAsD2DTransform(propertyValue);
 
       if (propertyValue.IsNull()) {
-        m_transformSet = false;
+        m_transform = D2D1::Matrix3x2F::Identity();
       }
     }
   }
@@ -49,33 +47,47 @@ void LinearGradientView::Unload() {
 }
 
 void LinearGradientView::CreateBrush() {
-  auto const &canvas{SvgRoot().Canvas()};
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
-  Brushes::CanvasLinearGradientBrush brush{resourceCreator, m_stops};
+  auto const root{SvgRoot()};
 
-  SetPoints(brush, {0, 0, canvas.Size().Width, canvas.Size().Height});
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
 
-  if (m_transformSet) {
-    brush.Transform(m_transform);
-  }
+  winrt::com_ptr<ID2D1GradientStopCollection> stopCollection;
+  winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], static_cast<uint32_t>(m_stops.size()), stopCollection.put()));
 
-  m_brush = brush;
+  Size size{static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())};
+
+  D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES brushProperties;
+  brushProperties.startPoint = {0, 0};
+  brushProperties.endPoint = {size.Width, size.Height};
+
+  winrt::com_ptr<ID2D1LinearGradientBrush> linearBrush;
+  winrt::check_hresult(deviceContext->CreateLinearGradientBrush(brushProperties, stopCollection.get(), linearBrush.put()));
+
+  SetPoints(linearBrush.get(), {0, 0, size.Width, size.Height});
+
+  linearBrush->SetTransform(m_transform);
+
+  m_brush = make<RNSVG::implementation::D2DBrush>(linearBrush.as<ID2D1Brush>());
 }
 
 void LinearGradientView::UpdateBounds() {
   if (m_gradientUnits == "objectBoundingBox") {
-    SetPoints(m_brush.as<Brushes::CanvasLinearGradientBrush>(), m_bounds);
+    com_ptr<ID2D1LinearGradientBrush> brush{get_self<D2DBrush>(m_brush)->Get().as<ID2D1LinearGradientBrush>()};
+    SetPoints(brush.get(), m_bounds);
   }
 }
 
-void LinearGradientView::SetPoints(Brushes::CanvasLinearGradientBrush brush, Windows::Foundation::Rect const &bounds) {
-  float x1{Utils::GetAbsoluteLength(m_x1, bounds.Width) + bounds.X};
-  float y1{Utils::GetAbsoluteLength(m_y1, bounds.Height) + bounds.Y};
-  float x2{Utils::GetAbsoluteLength(m_x2, bounds.Width) + bounds.X};
-  float y2{Utils::GetAbsoluteLength(m_y2, bounds.Height) + bounds.Y};
+void LinearGradientView::SetPoints(ID2D1LinearGradientBrush * brush, D2D1_RECT_F bounds) {
+  float width{D2DHelpers::WidthFromD2DRect(bounds)};
+  float height{D2DHelpers::HeightFromD2DRect(bounds)};
 
-  brush.StartPoint({x1, y1});
-  brush.EndPoint({x2, y2});
+  float x1{Utils::GetAbsoluteLength(m_x1, width) + bounds.left};
+  float y1{Utils::GetAbsoluteLength(m_y1, height) + bounds.top};
+  float x2{Utils::GetAbsoluteLength(m_x2, width) + bounds.left};
+  float y2{Utils::GetAbsoluteLength(m_y2, height) + bounds.top};
+
+  brush->SetStartPoint({x1, y1});
+  brush->SetEndPoint({x2, y2});
 }
 
 } // namespace winrt::RNSVG::implementation

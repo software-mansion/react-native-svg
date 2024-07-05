@@ -105,7 +105,7 @@ export function SvgAst({ ast, override }: AstProps) {
   );
 }
 
-export const err = console.error.bind(console);
+const err = console.error.bind(console);
 
 export function SvgXml(props: XmlProps) {
   const { onError = err, xml, override, fallback } = props;
@@ -171,10 +171,15 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
   }
 
   parse(xml: string | null) {
+    const { onError = err } = this.props;
     try {
       this.setState({ ast: xml ? parse(xml) : null });
     } catch (e) {
-      console.error(e);
+      const error = e as Error;
+      onError({
+        ...error,
+        message: `[RNSVG] Couldn't parse SVG, reason: ${error.message}`,
+      });
     }
   }
 
@@ -213,7 +218,7 @@ export class SvgFromUri extends Component<UriProps, UriState> {
       props,
       state: { xml },
     } = this;
-    return <SvgFromXml xml={xml} override={props} />;
+    return <SvgFromXml xml={xml} override={props} onError={props.onError} />;
   }
 }
 
@@ -292,6 +297,7 @@ function locate(source: string, i: number) {
 }
 
 const validNameCharacters = /[a-zA-Z0-9:_-]/;
+const commentStart = /<!--/;
 const whitespace = /[\s\t\r\n]/;
 const quotemarks = /['"]/;
 
@@ -315,7 +321,11 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
   function metadata() {
     while (
       i + 1 < length &&
-      (source[i] !== '<' || !validNameCharacters.test(source[i + 1]))
+      (source[i] !== '<' ||
+        !(
+          validNameCharacters.test(source[i + 1]) ||
+          commentStart.test(source.slice(i, i + 4))
+        ))
     ) {
       i++;
     }

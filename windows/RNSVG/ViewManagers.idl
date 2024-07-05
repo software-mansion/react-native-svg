@@ -109,6 +109,18 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass MarkerViewManager : GroupViewManager
+  {
+    MarkerViewManager();
+  };
+
+  [default_interface]
+  runtimeclass MaskViewManager : GroupViewManager
+  {
+    MaskViewManager();
+  };
+
+  [default_interface]
   unsealed runtimeclass TextViewManager : GroupViewManager
   {
     TextViewManager();

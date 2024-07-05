@@ -10,7 +10,7 @@ set(RNS_GENERATED_REACT_DIR ${RNS_GENERATED_JNI_DIR}/react/renderer/components/r
 add_compile_options(
   -fexceptions
   -frtti
-  -std=c++17
+  -std=c++20
   -Wall
   -Wpedantic
   -Wno-gnu-zero-variadic-macro-arguments
@@ -49,10 +49,12 @@ target_link_libraries(
   react_render_graphics
   react_render_mapbuffer
   rrc_image
+  react_render_componentregistry
   rrc_view
   turbomodulejsijni
   yoga
   react_render_imagemanager
+  react_utils
 )
 
 target_compile_options(
@@ -61,10 +63,10 @@ target_compile_options(
   -DLOG_TAG=\"ReactNative\"
   -fexceptions
   -frtti
-  -std=c++17
+  -std=c++20
   -Wall
 )
-message(WARNING "CMAKE_CURRENT_SORUCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}")
+message(WARNING "CMAKE_CURRENT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}")
 
 target_include_directories(
  ${CMAKE_PROJECT_NAME}

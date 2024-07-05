@@ -9,7 +9,7 @@ struct SVGLength : SVGLengthT<SVGLength> {
  public:
   SVGLength() = default;
   SVGLength(float value);
-  SVGLength(float value, RNSVG::LengthType type);
+  SVGLength(float value, RNSVG::LengthType const &type);
 
   float Value() { return m_value; }
   RNSVG::LengthType Unit() { return m_unit; }

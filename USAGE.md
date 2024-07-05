@@ -91,7 +91,7 @@ If remote SVG file contains CSS in `<style>` element, use `SvgCssUri`:
 ```jsx
 import * as React from 'react';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
-import { SvgCssUri } from 'react-native-svg';
+import { SvgCssUri } from 'react-native-svg/css';
 export default function TestComponent() {
   const [loading, setLoading] = React.useState(true);
   const onError = (e: Error) => {
@@ -125,7 +125,7 @@ existing in a different way and `fallback` if you want to render another compone
 
 ```jsx
 import * as React from 'react';
-import { SvgUri } from 'react-native-svg';
+import { SvgUri } from 'react-native-svg/css';
 import { SvgFallback } from './components/SvgFallback';
 
 export default () => {

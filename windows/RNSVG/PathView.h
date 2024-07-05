@@ -9,34 +9,34 @@ struct PathView : PathViewT<PathView, RNSVG::implementation::RenderableView> {
   PathView() = default;
 
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas);
+  void CreateGeometry();
 
  private:
   std::string m_d;
   std::vector<float> m_segmentData;
-  std::vector<Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand> m_commands;
+  std::vector<D2D1_SVG_PATH_COMMAND> m_commands;
 
-  std::map<char, Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand> m_cmds{
-      {'M', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::MoveAbsolute},
-      {'m', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::MoveRelative},
-      {'Z', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::ClosePath},
-      {'z', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::ClosePath},
-      {'L', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::LineAbsolute},
-      {'l', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::LineRelative},
-      {'H', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::HorizontalAbsolute},
-      {'h', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::HorizontalRelative},
-      {'V', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::VerticalAbsolute},
-      {'v', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::VerticalRelative},
-      {'C', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::CubicAbsolute},
-      {'c', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::CubicRelative},
-      {'S', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::CubicSmoothAbsolute},
-      {'s', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::CubicSmoothRelative},
-      {'Q', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::QuadraticAbsolute},
-      {'q', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::QuadraticRelative},
-      {'T', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::QuadraticSmoothAbsolute},
-      {'t', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::QuadraticSmoothRelative},
-      {'A', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::ArcAbsolute},
-      {'a', Microsoft::Graphics::Canvas::Svg::CanvasSvgPathCommand::ArcRelative},
+  std::unordered_map<char, D2D1_SVG_PATH_COMMAND> m_cmds{
+      {'M', D2D1_SVG_PATH_COMMAND_MOVE_ABSOLUTE},
+      {'m', D2D1_SVG_PATH_COMMAND_MOVE_RELATIVE},
+      {'Z', D2D1_SVG_PATH_COMMAND_CLOSE_PATH},
+      {'z', D2D1_SVG_PATH_COMMAND_CLOSE_PATH},
+      {'L', D2D1_SVG_PATH_COMMAND_LINE_ABSOLUTE},
+      {'l', D2D1_SVG_PATH_COMMAND_LINE_RELATIVE},
+      {'H', D2D1_SVG_PATH_COMMAND_HORIZONTAL_ABSOLUTE},
+      {'h', D2D1_SVG_PATH_COMMAND_HORIZONTAL_RELATIVE},
+      {'V', D2D1_SVG_PATH_COMMAND_VERTICAL_ABSOLUTE},
+      {'v', D2D1_SVG_PATH_COMMAND_VERTICAL_RELATIVE},
+      {'C', D2D1_SVG_PATH_COMMAND_CUBIC_ABSOLUTE},
+      {'c', D2D1_SVG_PATH_COMMAND_CUBIC_RELATIVE},
+      {'S', D2D1_SVG_PATH_COMMAND_CUBIC_SMOOTH_ABSOLUTE},
+      {'s', D2D1_SVG_PATH_COMMAND_CUBIC_SMOOTH_RELATIVE},
+      {'Q', D2D1_SVG_PATH_COMMAND_QUADRADIC_ABSOLUTE},
+      {'q', D2D1_SVG_PATH_COMMAND_QUADRADIC_RELATIVE},
+      {'T', D2D1_SVG_PATH_COMMAND_QUADRADIC_SMOOTH_ABSOLUTE},
+      {'t', D2D1_SVG_PATH_COMMAND_QUADRADIC_SMOOTH_RELATIVE},
+      {'A', D2D1_SVG_PATH_COMMAND_ARC_ABSOLUTE},
+      {'a', D2D1_SVG_PATH_COMMAND_ARC_RELATIVE},
   };
 
   void ParsePath();

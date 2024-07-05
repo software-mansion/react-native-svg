@@ -1,0 +1,46 @@
+name: Test Windows build
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/windows-build-test.yml'
+      - 'windows/**'
+      - 'src/fabric/**'
+      - 'package.json'
+      - 'Example/windows/**'
+      - 'Example/package.json'
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        working-directory: [Example]
+    concurrency:
+      group: windows-${{ matrix.working-directory }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '^18'
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Install svg node_modules
+        run: yarn install --frozen-lockfile
+
+      - name: Install app node_modules
+        working-directory: ${{ matrix.working-directory }}
+        run: yarn --frozen-lockfile
+
+      - name: Build app
+        working-directory: ${{ matrix.working-directory }}/windows
+        run: npx react-native run-windows --logging --no-packager --no-deploy

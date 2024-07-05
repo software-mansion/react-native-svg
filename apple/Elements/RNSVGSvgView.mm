@@ -64,14 +64,20 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGSvgViewProps>(props);
+  const auto &newProps = static_cast<const RNSVGSvgViewProps &>(*props);
 
   self.minX = newProps.minX;
   self.minY = newProps.minY;
   self.vbWidth = newProps.vbWidth;
   self.vbHeight = newProps.vbHeight;
-  self.bbWidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.bbWidth)];
-  self.bbHeight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.bbHeight)];
+  id bbWidth = RNSVGConvertFollyDynamicToId(newProps.bbWidth);
+  if (bbWidth != nil) {
+    self.bbWidth = [RCTConvert RNSVGLength:bbWidth];
+  }
+  id bbHeight = RNSVGConvertFollyDynamicToId(newProps.bbHeight);
+  if (bbHeight != nil) {
+    self.bbHeight = [RCTConvert RNSVGLength:bbHeight];
+  }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
   if (RCTUIColorFromSharedColor(newProps.tintColor)) {
@@ -110,6 +116,19 @@ using namespace facebook::react;
   _invviewBoxTransform = CGAffineTransformIdentity;
   rendered = NO;
 }
+
+- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  [super mountChildComponentView:childComponentView index:index];
+  [self invalidate];
+}
+
+- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  [super unmountChildComponentView:childComponentView index:index];
+  [self invalidate];
+}
+
 #endif // RCT_NEW_ARCH_ENABLED
 
 - (void)insertReactSubview:(RNSVGView *)subview atIndex:(NSInteger)atIndex
@@ -338,10 +357,10 @@ using namespace facebook::react;
 #endif
 #if !TARGET_OS_OSX // [macOS]
   NSData *imageData = UIImagePNGRepresentation(image);
-  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
 #else // [macOS
   NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
-  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
   UIGraphicsEndImageContext();
 #endif // macOS]
   return base64;

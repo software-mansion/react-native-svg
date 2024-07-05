@@ -10,8 +10,52 @@
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 
+#import <folly/dynamic.h>
+
+// copied from RCTFollyConvert
+static id RNSVGConvertFollyDynamicToId(const folly::dynamic &dyn)
+{
+  // I could imagine an implementation which avoids copies by wrapping the
+  // dynamic in a derived class of NSDictionary.  We can do that if profiling
+  // implies it will help.
+
+  switch (dyn.type()) {
+    case folly::dynamic::NULLT:
+      return nil;
+    case folly::dynamic::BOOL:
+      return dyn.getBool() ? @YES : @NO;
+    case folly::dynamic::INT64:
+      return @(dyn.getInt());
+    case folly::dynamic::DOUBLE:
+      return @(dyn.getDouble());
+    case folly::dynamic::STRING:
+      return [[NSString alloc] initWithBytes:dyn.c_str() length:dyn.size() encoding:NSUTF8StringEncoding];
+    case folly::dynamic::ARRAY: {
+      NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:dyn.size()];
+      for (const auto &elem : dyn) {
+        id value = RNSVGConvertFollyDynamicToId(elem);
+        if (value) {
+          [array addObject:value];
+        }
+      }
+      return array;
+    }
+    case folly::dynamic::OBJECT: {
+      NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:dyn.size()];
+      for (const auto &elem : dyn.items()) {
+        id key = RNSVGConvertFollyDynamicToId(elem.first);
+        id value = RNSVGConvertFollyDynamicToId(elem.second);
+        if (key && value) {
+          dict[key] = value;
+        }
+      }
+      return dict;
+    }
+  }
+}
+
 template <typename T>
-RNSVGBrush *brushFromColorStruct(T fillObject)
+RNSVGBrush *brushFromColorStruct(const T &fillObject)
 {
   int type = fillObject.type;
 
@@ -43,7 +87,7 @@ RNSVGBrush *brushFromColorStruct(T fillObject)
 }
 
 template <typename T>
-void setCommonNodeProps(T nodeProps, RNSVGNode *node)
+void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
 {
   node.name = RCTNSStringFromStringNilIfEmpty(nodeProps.name);
   node.opacity = nodeProps.opacity;
@@ -87,21 +131,8 @@ void setCommonNodeProps(T nodeProps, RNSVGNode *node)
   node.accessibilityLabel = RCTNSStringFromStringNilIfEmpty(nodeProps.accessibilityLabel);
 }
 
-static NSMutableArray<RNSVGLength *> *createLengthArrayFromStrings(std::vector<std::string> stringArray)
-{
-  if (stringArray.empty()) {
-    return nil;
-  }
-  NSMutableArray<RNSVGLength *> *lengthArray = [NSMutableArray new];
-  for (auto str : stringArray) {
-    RNSVGLength *lengthFromString = [RNSVGLength lengthWithString:RCTNSStringFromString(str)];
-    [lengthArray addObject:lengthFromString];
-  }
-  return lengthArray;
-}
-
 template <typename T>
-void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode)
+void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *renderableNode)
 {
   setCommonNodeProps(renderableProps, renderableNode);
   renderableNode.fill = brushFromColorStruct(renderableProps.fill);
@@ -109,14 +140,20 @@ void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode
   renderableNode.fillRule = renderableProps.fillRule == 0 ? kRNSVGCGFCRuleEvenodd : kRNSVGCGFCRuleNonzero;
   renderableNode.stroke = brushFromColorStruct(renderableProps.stroke);
   renderableNode.strokeOpacity = renderableProps.strokeOpacity;
-  renderableNode.strokeWidth = [RNSVGLength lengthWithString:RCTNSStringFromString(renderableProps.strokeWidth)];
+  id strokeWidth = RNSVGConvertFollyDynamicToId(renderableProps.strokeWidth);
+  if (strokeWidth != nil) {
+    renderableNode.strokeWidth = [RCTConvert RNSVGLength:strokeWidth];
+  }
   renderableNode.strokeLinecap = renderableProps.strokeLinecap == 0 ? kCGLineCapButt
       : renderableProps.strokeLinecap == 1                          ? kCGLineCapRound
                                                                     : kCGLineCapSquare;
   renderableNode.strokeLinejoin = renderableProps.strokeLinejoin == 0 ? kCGLineJoinMiter
       : renderableProps.strokeLinejoin == 1                           ? kCGLineJoinRound
                                                                       : kCGLineJoinBevel;
-  renderableNode.strokeDasharray = createLengthArrayFromStrings(renderableProps.strokeDasharray);
+  id strokeDasharray = RNSVGConvertFollyDynamicToId(renderableProps.strokeDasharray);
+  if (strokeDasharray != nil) {
+    renderableNode.strokeDasharray = [RCTConvert RNSVGLengthArray:strokeDasharray];
+  }
   renderableNode.strokeDashoffset = renderableProps.strokeDashoffset;
   renderableNode.strokeMiterlimit = renderableProps.strokeMiterlimit;
   renderableNode.vectorEffect = renderableProps.vectorEffect == 0 ? kRNSVGVectorEffectDefault
@@ -132,72 +169,71 @@ void setCommonRenderableProps(T renderableProps, RNSVGRenderable *renderableNode
   }
 }
 
-static void addValueToDict(NSMutableDictionary *dict, std::string value, NSString *key)
-{
-  NSString *valueOrNil = RCTNSStringFromStringNilIfEmpty(value);
-  if (valueOrNil) {
-    dict[key] = valueOrNil;
-  }
-}
-
 template <typename T>
-NSDictionary *parseFontStruct(T fontStruct)
-{
-  NSMutableDictionary *fontDict = [NSMutableDictionary new];
-
-  // TODO: do it better maybe
-  addValueToDict(fontDict, fontStruct.fontStyle, @"fontStyle");
-  addValueToDict(fontDict, fontStruct.fontVariant, @"fontVariant");
-  addValueToDict(fontDict, fontStruct.fontWeight, @"fontWeight");
-  addValueToDict(fontDict, fontStruct.fontStretch, @"fontStretch");
-  addValueToDict(fontDict, fontStruct.fontSize, @"fontSize");
-  addValueToDict(fontDict, fontStruct.fontFamily, @"fontFamily");
-  addValueToDict(fontDict, fontStruct.textAnchor, @"textAnchor");
-  addValueToDict(fontDict, fontStruct.textDecoration, @"textDecoration");
-  addValueToDict(fontDict, fontStruct.letterSpacing, @"letterSpacing");
-  addValueToDict(fontDict, fontStruct.wordSpacing, @"wordSpacing");
-  addValueToDict(fontDict, fontStruct.kerning, @"kerning");
-  addValueToDict(fontDict, fontStruct.fontFeatureSettings, @"fontFeatureSettings");
-  addValueToDict(fontDict, fontStruct.fontVariantLigatures, @"fontVariantLigatures");
-  addValueToDict(fontDict, fontStruct.fontVariationSettings, @"fontVariationSettings");
-  return [NSDictionary dictionaryWithDictionary:fontDict];
-}
-
-template <typename T>
-void setCommonGroupProps(T groupProps, RNSVGGroup *groupNode)
+void setCommonGroupProps(const T &groupProps, RNSVGGroup *groupNode)
 {
   setCommonRenderableProps(groupProps, groupNode);
 
-  if (RCTNSStringFromStringNilIfEmpty(groupProps.fontSize)) {
-    groupNode.font = @{@"fontSize" : RCTNSStringFromString(groupProps.fontSize)};
+  id fontSize = RNSVGConvertFollyDynamicToId(groupProps.fontSize);
+  if (fontSize != nil) {
+    groupNode.font = @{@"fontSize" : fontSize};
   }
-  if (RCTNSStringFromStringNilIfEmpty(groupProps.fontWeight)) {
-    groupNode.font = @{@"fontWeight" : RCTNSStringFromString(groupProps.fontWeight)};
+  id fontWeight = RNSVGConvertFollyDynamicToId(groupProps.fontWeight);
+  if (fontWeight != nil) {
+    groupNode.font = @{@"fontWeight" : fontWeight};
   }
-  NSDictionary *fontDict = parseFontStruct(groupProps.font);
-  if (groupNode.font == nil || fontDict.count > 0) {
-    // some of text's rendering logic requires that `font` is not nil so we always set it
-    // even if to an empty dict
-    groupNode.font = fontDict;
+  id font = RNSVGConvertFollyDynamicToId(groupProps.font);
+  if (font != nil) {
+    NSDictionary *fontDict = (NSDictionary *)font;
+    if (groupNode.font == nil || fontDict.count > 0) {
+      // some of text's rendering logic requires that `font` is not nil so we always set it
+      // even if to an empty dict
+      groupNode.font = fontDict;
+    }
   }
 }
 
 template <typename T>
-void setCommonTextProps(T textProps, RNSVGText *textNode)
+void setCommonTextProps(const T &textProps, RNSVGText *textNode)
 {
   setCommonGroupProps(textProps, textNode);
-  textNode.deltaX = createLengthArrayFromStrings(textProps.dx);
-  textNode.deltaY = createLengthArrayFromStrings(textProps.dy);
-  if (!textProps.x.empty()) {
-    textNode.positionX = createLengthArrayFromStrings(textProps.x);
+  id deltaX = RNSVGConvertFollyDynamicToId(textProps.dx);
+  if (deltaX != nil) {
+    textNode.deltaX = [RCTConvert RNSVGLengthArray:deltaX];
   }
-  if (!textProps.y.empty()) {
-    textNode.positionY = createLengthArrayFromStrings(textProps.y);
+  id deltaY = RNSVGConvertFollyDynamicToId(textProps.dy);
+  if (deltaY != nil) {
+    textNode.deltaY = [RCTConvert RNSVGLengthArray:deltaY];
   }
-  textNode.rotate = createLengthArrayFromStrings(textProps.rotate);
-  textNode.inlineSize = [RNSVGLength lengthWithString:RCTNSStringFromString(textProps.inlineSize)];
-  textNode.textLength = [RNSVGLength lengthWithString:RCTNSStringFromString(textProps.textLength)];
-  textNode.baselineShift = RCTNSStringFromStringNilIfEmpty(textProps.baselineShift);
+  id positionX = RNSVGConvertFollyDynamicToId(textProps.x);
+  if (positionX != nil) {
+    textNode.positionX = [RCTConvert RNSVGLengthArray:positionX];
+  }
+  id positionY = RNSVGConvertFollyDynamicToId(textProps.y);
+  if (positionY != nil) {
+    textNode.positionY = [RCTConvert RNSVGLengthArray:positionY];
+  }
+  id rotate = RNSVGConvertFollyDynamicToId(textProps.rotate);
+  if (rotate != nil) {
+    textNode.rotate = [RCTConvert RNSVGLengthArray:rotate];
+  }
+  id textLength = RNSVGConvertFollyDynamicToId(textProps.textLength);
+  if (textLength != nil) {
+    textNode.textLength = [RCTConvert RNSVGLength:textLength];
+  }
+  id inlineSize = RNSVGConvertFollyDynamicToId(textProps.inlineSize);
+  if (inlineSize != nil) {
+    textNode.inlineSize = [RCTConvert RNSVGLength:inlineSize];
+  }
+  id baselineShift = RNSVGConvertFollyDynamicToId(textProps.baselineShift);
+  if (baselineShift != nil) {
+    if ([baselineShift isKindOfClass:[NSString class]]) {
+      NSString *stringValue = (NSString *)baselineShift;
+      textNode.baselineShift = stringValue;
+    } else {
+      textNode.baselineShift = [NSString stringWithFormat:@"%f", [baselineShift doubleValue]];
+    }
+  }
   textNode.lengthAdjust = RCTNSStringFromStringNilIfEmpty(textProps.lengthAdjust);
   textNode.alignmentBaseline = RCTNSStringFromStringNilIfEmpty(textProps.alignmentBaseline);
 }

@@ -1,9 +1,18 @@
 import React from 'react';
-import { SvgFromUri, SvgFromXml, SvgUri, SvgXml, SvgCss, SvgCssUri, SvgWithCss, SvgWithCssUri, WithLocalSvg, LocalSvg } from 'react-native-svg';
+import {SvgFromUri, SvgFromXml, SvgUri, SvgXml} from 'react-native-svg';
+import {
+  SvgCss,
+  SvgCssUri,
+  SvgWithCss,
+  SvgWithCssUri,
+  WithLocalSvg,
+  LocalSvg,
+} from 'react-native-svg/css';
 
 const asset = require('../assets/ruby.svg');
-const normalUri = "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg";
-const uriWithCss = "http://thenewcode.com/assets/svg/accessibility.svg";
+const normalUri =
+  'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg';
+const uriWithCss = 'http://thenewcode.com/assets/svg/accessibility.svg';
 const xml = `
   <svg width="32" height="32" viewBox="0 0 32 32">
     <path
@@ -39,7 +48,9 @@ const css = `
 `;
 
 export default () => {
-  const [uri, setUri] = React.useState('https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/not_existing.svg')
+  const [uri, setUri] = React.useState(
+    'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/not_existing.svg',
+  );
 
   return (
     <>
@@ -49,54 +60,30 @@ export default () => {
         height="100"
         uri={uri}
       />
-    <SvgFromUri
-        onError={(error) => console.log(error)}
+      <SvgFromUri
+        onError={error => console.log(error)}
         width="100"
         height="100"
         uri={normalUri}
       />
-    <SvgFromXml
-        width="100"
-        height="100"
-        xml={xml}
-      />
-    <SvgXml
-        width="100"
-        height="100"
-        xml={xml}
-      />
-    <SvgCss
-        width="100"
-        height="100"
-        xml={css}
-      />
-    <SvgCssUri
-        onError={(error) => console.log(error)}
+      <SvgFromXml width="100" height="100" xml={xml} />
+      <SvgXml width="100" height="100" xml={xml} />
+      <SvgCss width="100" height="100" xml={css} />
+      <SvgCssUri
+        onError={error => console.log(error)}
         width="100"
         height="100"
         uri={uriWithCss}
       />
-    <SvgWithCss
-        width="100"
-        height="100"
-        xml={css}
-      />
-    <SvgWithCssUri
-        onError={(error) => console.log(error)}
+      <SvgWithCss width="100" height="100" xml={css} />
+      <SvgWithCssUri
+        onError={error => console.log(error)}
         width="100"
         height="100"
         uri={uriWithCss}
       />
-    <WithLocalSvg
-        width="100"
-        height="100"
-        asset={asset}
-      />
-    <LocalSvg
-        width="100"
-        height="100"
-        asset={asset}
-      />
+      <WithLocalSvg width="100" height="100" asset={asset} />
+      <LocalSvg width="100" height="100" asset={asset} />
     </>
   );
-}
+};

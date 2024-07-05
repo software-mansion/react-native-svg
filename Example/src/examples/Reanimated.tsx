@@ -9,6 +9,7 @@ import Reanimated, {
 } from 'react-native-reanimated';
 import {Svg, Rect} from 'react-native-svg';
 
+// @ts-ignore broken reanimated types
 const ReanimatedRect = Reanimated.createAnimatedComponent(Rect);
 
 function ReanimatedRectExample() {
@@ -28,6 +29,7 @@ function ReanimatedRectExample() {
 
   return (
     <Svg height="150" width="300">
+      {/* @ts-ignore broken reanimated types */}
       <ReanimatedRect animatedProps={animatedProps} fill="red" />
     </Svg>
   );

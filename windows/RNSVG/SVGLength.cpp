@@ -7,7 +7,7 @@
 namespace winrt::RNSVG::implementation {
 SVGLength::SVGLength(float value) : m_value(value), m_unit(RNSVG::LengthType::Number) {}
 
-SVGLength::SVGLength(float value, RNSVG::LengthType type) : m_value(value), m_unit(type) {}
+SVGLength::SVGLength(float value, RNSVG::LengthType const &type) : m_value(value), m_unit(type) {}
 
 RNSVG::SVGLength SVGLength::From(std::string value) {
   auto strLength{value.size()};

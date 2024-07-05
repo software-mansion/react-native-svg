@@ -42,12 +42,24 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGMarkerProps>(props);
+  const auto &newProps = static_cast<const RNSVGMarkerProps &>(*props);
 
-  self.refX = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.refX)];
-  self.refY = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.refY)];
-  self.markerHeight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.markerHeight)];
-  self.markerWidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.markerWidth)];
+  id refX = RNSVGConvertFollyDynamicToId(newProps.refX);
+  if (refX != nil) {
+    self.refX = [RCTConvert RNSVGLength:refX];
+  }
+  id refY = RNSVGConvertFollyDynamicToId(newProps.refY);
+  if (refY != nil) {
+    self.refY = [RCTConvert RNSVGLength:refY];
+  }
+  id markerHeight = RNSVGConvertFollyDynamicToId(newProps.markerHeight);
+  if (markerHeight != nil) {
+    self.markerHeight = [RCTConvert RNSVGLength:markerHeight];
+  }
+  id markerWidth = RNSVGConvertFollyDynamicToId(newProps.markerWidth);
+  if (markerWidth != nil) {
+    self.markerWidth = [RCTConvert RNSVGLength:markerWidth];
+  }
   self.markerUnits = RCTNSStringFromStringNilIfEmpty(newProps.markerUnits);
   self.orient = RCTNSStringFromStringNilIfEmpty(newProps.orient);
 

@@ -23,6 +23,7 @@ namespace RNSVG {
     Unknown,
   };
 
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractViewBox.ts#L3-L10
   enum MeetOrSlice {
     Meet,
     Slice,
@@ -67,6 +68,26 @@ namespace RNSVG {
     Pica,
   };
 
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractStroke.ts#L6-L10
+  enum LineCap {
+    Butt,
+    Round,
+    Square,
+  };
+
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractStroke.ts#L12-L16
+  enum LineJoin {
+    Miter,
+    Round,
+    Bevel,
+  };
+
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractFill.ts#L6-L9
+  enum FillRule {
+    EvenOdd,
+    NonZero,
+  };
+
   [default_interface]
   runtimeclass SVGLength {
     SVGLength();
@@ -76,4 +97,24 @@ namespace RNSVG {
     Single Value{ get; };
     LengthType Unit{ get; };
   };
-}
+
+  [default_interface]
+  runtimeclass D2DDevice {
+    D2DDevice();
+  };
+
+  [default_interface]
+  runtimeclass D2DDeviceContext {
+    D2DDeviceContext();
+  };
+
+  [default_interface]
+  runtimeclass D2DGeometry {
+    D2DGeometry();
+  };
+
+  [default_interface]
+  runtimeclass D2DBrush {
+    D2DBrush();
+  };
+ }
