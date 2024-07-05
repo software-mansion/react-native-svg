@@ -62,6 +62,7 @@ using namespace facebook::react;
 
   self.maskUnits = newProps.maskUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
   self.maskContentUnits = newProps.maskUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
+  self.maskType = newProps.maskType == 0 ? kRNSVGMaskTypeLuminance : kRNSVGMaskTypeAlpha;
 
   setCommonGroupProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGMaskProps const>(props);
@@ -76,6 +77,7 @@ using namespace facebook::react;
   _maskwidth = nil;
   _maskUnits = kRNSVGUnitsObjectBoundingBox;
   _maskContentUnits = kRNSVGUnitsObjectBoundingBox;
+  _maskType = kRNSVGMaskTypeLuminance;
 }
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -147,6 +149,15 @@ using namespace facebook::react;
   }
 
   _maskContentUnits = maskContentUnits;
+  [self invalidate];
+}
+
+- (void)setMaskType:(RNSVGMaskType)maskType
+{
+  if (maskType == _maskType) {
+    return;
+  }
+  _maskType = maskType;
   [self invalidate];
 }
 
