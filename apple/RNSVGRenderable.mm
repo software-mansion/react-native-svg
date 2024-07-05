@@ -294,16 +294,18 @@ UInt32 saturate(CGFloat value)
     // Apply luminanceToAlpha filter primitive
     // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
     UInt32 *currentPixel = pixels;
-    for (NSUInteger i = 0; i < npixels; i++) {
-      UInt32 color = *currentPixel;
+    if (_maskNode.maskType == kRNSVGMaskTypeLuminance) {
+      for (NSUInteger i = 0; i < npixels; i++) {
+        UInt32 color = *currentPixel;
 
-      UInt32 r = color & 0xFF;
-      UInt32 g = (color >> 8) & 0xFF;
-      UInt32 b = (color >> 16) & 0xFF;
+        UInt32 r = color & 0xFF;
+        UInt32 g = (color >> 8) & 0xFF;
+        UInt32 b = (color >> 16) & 0xFF;
 
-      CGFloat luma = (CGFloat)(0.299 * r + 0.587 * g + 0.144 * b);
-      *currentPixel = saturate(luma) << 24;
-      currentPixel++;
+        CGFloat luma = (CGFloat)(0.299 * r + 0.587 * g + 0.144 * b);
+        *currentPixel = saturate(luma) << 24;
+        currentPixel++;
+      }
     }
 
     // Create mask image and release memory
@@ -361,11 +363,11 @@ UInt32 saturate(CGFloat value)
     CGContextScaleCTM(newContext, 1.0, -1.0);
 
     CGContextSetBlendMode(newContext, kCGBlendModeCopy);
-      CGContextDrawImage(newContext, maskBounds, maskImage);
+    CGContextDrawImage(newContext, maskBounds, maskImage);
     CGImageRelease(maskImage);
 
     CGContextSetBlendMode(newContext, kCGBlendModeSourceIn);
-      CGContextDrawImage(newContext, maskBounds, contentImage);
+    CGContextDrawImage(newContext, maskBounds, contentImage);
     CGImageRelease(contentImage);
 
     CGImageRef blendedImage = CGBitmapContextCreateImage(newContext);
