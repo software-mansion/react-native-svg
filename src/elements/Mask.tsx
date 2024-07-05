@@ -6,6 +6,7 @@ import units from '../lib/units';
 import Shape from './Shape';
 import RNSVGMask from '../fabric/MaskNativeComponent';
 import type { NativeMethods } from 'react-native';
+import { maskType } from '../lib/maskType';
 
 export type TMaskUnits = 'userSpaceOnUse' | 'objectBoundingBox';
 export type TMaskType = 'alpha' | 'luminance';
@@ -45,7 +46,6 @@ export default class Mask extends Shape<MaskProps> {
       maskUnits,
       maskContentUnits,
       children,
-      maskType,
       style,
     } = props;
     const maskProps = {
@@ -56,7 +56,7 @@ export default class Mask extends Shape<MaskProps> {
       maskUnits: maskUnits !== undefined ? units[maskUnits] : 0,
       maskContentUnits:
         maskContentUnits !== undefined ? units[maskContentUnits] : 1,
-      maskType: maskType || style?.maskType || 'luminance',
+      maskType: maskType[props?.maskType || style?.maskType || 'luminance'],
     };
     return (
       <RNSVGMask
