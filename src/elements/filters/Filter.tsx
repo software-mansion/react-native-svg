@@ -3,6 +3,7 @@ import { NativeMethods } from 'react-native';
 import RNSVGFilter from '../../fabric/FilterNativeComponent';
 import { NumberProp, Units } from '../../lib/extract/types';
 import Shape from '../Shape';
+import warnOnce from 'warn-once';
 
 export interface FilterProps {
   children?: React.ReactNode;
@@ -30,10 +31,10 @@ export default class Filter extends Shape<FilterProps> {
 
   render() {
     const { id, x, y, width, height, filterUnits, primitiveUnits } = this.props;
-    if (primitiveUnits)
-      console.warn(
-        "WARNING: Filter's `primitiveUnits` prop is not supported yet"
-      );
+    warnOnce(
+      !!primitiveUnits,
+      "WARNING: Filter's `primitiveUnits` prop is not supported yet"
+    );
     const filterProps = {
       name: id,
       x,
