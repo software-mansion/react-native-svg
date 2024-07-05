@@ -294,7 +294,7 @@ UInt32 saturate(CGFloat value)
     // Apply luminanceToAlpha filter primitive
     // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
     UInt32 *currentPixel = pixels;
-    if ([_maskNode.maskType isEqualToString:@"luminance"]) {
+    if (_maskNode.maskType == kRNSVGMaskTypeLuminance) {
       for (NSUInteger i = 0; i < npixels; i++) {
         UInt32 color = *currentPixel;
 
