@@ -20,14 +20,19 @@ class MaskView extends GroupView {
   SVGLength mW;
   SVGLength mH;
 
-  String mType;
-
   // TODO implement proper support for units
   @SuppressWarnings({"FieldCanBeLocal", "unused"})
   private Brush.BrushUnits mMaskUnits;
 
   @SuppressWarnings({"FieldCanBeLocal", "unused"})
   private Brush.BrushUnits mMaskContentUnits;
+
+  MaskType mMaskType;
+
+  enum MaskType {
+    LUMINANCE,
+    ALPHA
+  }
 
   public MaskView(ReactContext reactContext) {
     super(reactContext);
@@ -77,8 +82,19 @@ class MaskView extends GroupView {
     invalidate();
   }
 
-  public void setMaskType(String maskType) {
-    mType = maskType;
+  public MaskType getMaskType() {
+    return mMaskType;
+  }
+
+  public void setMaskType(int maskType) {
+    switch (maskType) {
+      case 0:
+        mMaskType = MaskType.LUMINANCE;
+        break;
+      case 1:
+        mMaskType = MaskType.ALPHA;
+        break;
+    }
     invalidate();
   }
 

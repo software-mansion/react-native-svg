@@ -1277,7 +1277,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
 
     @ReactProp(name = "maskType")
-    public void setMaskType(MaskView node, String maskType) {
+    public void setMaskType(MaskView node, int maskType) {
       node.setMaskType(maskType);
     }
   }

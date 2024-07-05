@@ -127,7 +127,7 @@ public class RNSVGMaskManagerDelegate<T extends View, U extends BaseViewManagerI
         mViewManager.setMaskContentUnits(view, value == null ? 0 : ((Double) value).intValue());
         break;
       case "maskType":
-        mViewManager.setMaskType(view, (String) value);
+        mViewManager.setMaskType(view, value == null ? 0 : ((Double) value).intValue());
         break;
       default:
         super.setProperty(view, propName, value);
