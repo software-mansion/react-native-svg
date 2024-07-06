@@ -20,5 +20,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "e2e"
+  ]
 }

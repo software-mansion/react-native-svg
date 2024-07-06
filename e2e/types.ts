@@ -1,6 +1,6 @@
-type E2EMessage = HandshakeMessage | RenderRequest | RenderResponse;
+export type E2EMessage = HandshakeMessage | RenderRequest | RenderResponse;
 
-interface HandshakeMessage {
+export interface HandshakeMessage {
   type: 'handshake';
   data: {
     os: string;
@@ -9,12 +9,12 @@ interface HandshakeMessage {
   };
 }
 
-interface RenderRequest {
+export interface RenderRequest {
   type: 'renderRequest';
   data: any;
 }
 
-interface RenderResponse {
+export interface RenderResponse {
   type: 'renderResponse';
   data: string; // as base64
 }
