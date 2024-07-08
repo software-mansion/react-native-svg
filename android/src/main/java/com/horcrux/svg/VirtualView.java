@@ -439,7 +439,7 @@ public abstract class VirtualView extends ReactViewGroup {
   }
 
   double relativeOnWidth(SVGLength length) {
-    return relativeOn(length, getCanvasHeight());
+    return relativeOn(length, getCanvasWidth());
   }
 
   double relativeOnHeight(SVGLength length) {
