@@ -12,7 +12,7 @@ export default function extractResponder(
   o: extractedProps,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   props: { [x: string]: any } & ResponderProps,
-  ref: ResponderInstanceProps,
+  ref: ResponderInstanceProps
 ) {
   const {
     onPress,

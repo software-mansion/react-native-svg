@@ -58,9 +58,13 @@
     "test": "npm run lint && npm run tsc",
     "tsc": "tsc --noEmit"
   },
+  "optionalDependencies": {
+    "react-native-web": ">=0.14.0"
+  },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-web": ">=0.14.0"
   },
   "dependencies": {
     "css-select": "^5.1.0",

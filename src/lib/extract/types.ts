@@ -51,6 +51,7 @@ export type TextDecoration =
   | 'blink';
 export type FontVariantLigatures = 'normal' | 'none';
 export type AlignmentBaseline =
+  | 'auto'
   | 'baseline'
   | 'text-bottom'
   | 'alphabetic'
@@ -67,6 +68,7 @@ export type AlignmentBaseline =
   | 'before-edge'
   | 'after-edge'
   | 'hanging';
+export type DominantBaseline = AlignmentBaseline;
 export type BaselineShift =
   | 'sub'
   | 'super'
@@ -290,6 +292,7 @@ export type extractedProps = {
 };
 
 export interface TextSpecificProps extends CommonPathProps, FontProps {
+  dominantBaseline?: DominantBaseline;
   alignmentBaseline?: AlignmentBaseline;
   baselineShift?: BaselineShift;
   verticalAlign?: NumberProp;

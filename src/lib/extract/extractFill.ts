@@ -13,7 +13,7 @@ const defaultFill = { type: 0, payload: processColor('black') };
 export default function extractFill(
   o: extractedProps,
   props: FillProps,
-  inherited: string[],
+  inherited: string[]
 ) {
   const { fill, fillRule, fillOpacity } = props;
   if (fill != null) {
