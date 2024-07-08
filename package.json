@@ -58,7 +58,7 @@
     "test": "npm run lint && npm run tsc",
     "tsc": "tsc --noEmit",
     "e2e": "jest e2e",
-    "generateE2eReferences": "ts-node e2e/generateReference.ts"
+    "generateE2eReferences": "ts-node e2e/generateReferences.ts"
   },
   "peerDependencies": {
     "react": "*",
