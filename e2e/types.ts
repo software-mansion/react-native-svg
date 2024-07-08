@@ -12,6 +12,8 @@ export interface HandshakeMessage {
 export interface RenderRequest {
   type: 'renderRequest';
   data: any;
+  width: number,
+  height: number,
 }
 
 export interface RenderResponse {

@@ -1,36 +1,36 @@
-import Svg, { Line } from 'react-native-svg';
+import { SvgFromXml } from 'react-native-svg';
 import * as fs from 'node:fs';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 import { sendToDeviceAndReceive } from '../../../../e2e/helpers';
 import { RenderResponse } from '../../../../e2e/types';
+import path from 'path';
 
-const width = 250;
-const height = 100;
-const maxPixelDiff = width * height * 0.02;
+const width = 200;
+const height = 200;
+const maxPixelDiff = width * height * 0.005;
 
-for (let i = 0; i < 10; i++) {
-  test(`rendered line difference should be less than 2% (${
-    i + 1
-  })`, async () => {
+const testCases = fs.readdirSync(path.resolve('e2e', 'cases'));
+testCases.forEach((testCase) => {
+  test(`rendered SVG (${testCase}) difference should be less than 0.5%`, async () => {
+    const base = path.resolve('e2e', 'cases', testCase);
     const response = await sendToDeviceAndReceive<RenderResponse>({
       type: 'renderRequest',
-      data: (
-        <Svg height={height} width={width}>
-          <Line
-            x1="10%"
-            y1="10%"
-            x2="90%"
-            y2="90%"
-            stroke="red"
-            strokeWidth={Math.floor(Math.random() * 10)}
-          />
-        </Svg>
-      ),
+      data: <SvgFromXml xml={fs.readFileSync(base).toString('utf-8')} />,
+      height,
+      width,
     });
-    const referencePng = PNG.sync.read(fs.readFileSync('test.png'));
+    const referencePng = PNG.sync.read(
+      fs.readFileSync(
+        path.resolve('e2e', 'references', testCase.replace('.svg', '.png'))
+      )
+    );
     const responsePng = PNG.sync.read(Buffer.from(response.data, 'base64'));
-    const diffPng = new PNG({ height: height * 3, width: width * 3 });
+
+    const diffPng = new PNG({
+      height: referencePng.height,
+      width: referencePng.width,
+    });
     const pixelDiff = pixelmatch(
       referencePng.data,
       responsePng.data,
@@ -50,4 +50,4 @@ for (let i = 0; i < 10; i++) {
     // Check if there is more than 2% different pixels in whole snapshot
     expect(pixelDiff).toBeLessThan(maxPixelDiff * 3);
   });
-}
+});

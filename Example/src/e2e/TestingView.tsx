@@ -1,5 +1,5 @@
 import React, {Component, useEffect, useRef, useState} from 'react';
-import {Platform, View} from 'react-native';
+import {PixelRatio, Platform, View} from 'react-native';
 import * as RNSVG from 'react-native-svg';
 import ViewShot from 'react-native-view-shot';
 
@@ -10,6 +10,7 @@ const TestingView = () => {
   const [wsClient, setWsClient] = useState<WebSocket>(new WebSocket(wsUri));
   const [readyToSnapshot, setReadyToSnapshot] = useState(false);
   const wrapperRef = useRef<ViewShot>(null);
+  const [resolution, setResolution] = useState([600, 600]);
 
   useEffect(() => {
     wsClient.onopen = () => {
@@ -35,8 +36,12 @@ const TestingView = () => {
     wsClient.onmessage = ({data: rawMessage}) => {
       const message = JSON.parse(rawMessage);
       if (message.type == 'renderRequest') {
+        setResolution([message.width, message.height]);
         setRenderedContent(
-          createElementFromObject(message.data.type, message.data.props),
+          createElementFromObject(
+            message.data.type || 'SvgFromXml',
+            message.data.props,
+          ),
         );
         setReadyToSnapshot(true);
       }
@@ -62,7 +67,10 @@ const TestingView = () => {
   }, [wrapperRef, readyToSnapshot]);
 
   return (
-    <ViewShot ref={wrapperRef} options={{result: 'base64'}}>
+    <ViewShot
+      ref={wrapperRef}
+      style={{width: resolution[0], height: resolution[1]}}
+      options={{result: 'base64'}}>
       {renderedContent}
     </ViewShot>
   );
