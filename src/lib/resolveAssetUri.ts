@@ -15,6 +15,7 @@ export type PackagerAsset = {
 
 const svgDataUriPattern = /^(data:image\/svg\+xml;utf8,)(.*)/;
 
+// https://github.com/necolas/react-native-web/blob/54c14d64dabd175e8055e1dc92e9196c821f9b7d/packages/react-native-web/src/exports/Image/index.js#L118-L156
 export function resolveAssetUri(
   source?: RNImageProps['source'] | string | number
 ): string | null {
