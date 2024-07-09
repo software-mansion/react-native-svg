@@ -5,11 +5,11 @@ on:
       - .github/workflows/ios-build-test.yml
       - RNSVG.podspec
       - apple/**
-      - Example/package.json
-      - Example/ios/**
+      - example/package.json
+      - example/ios/**
       - src/fabric/**
-      - FabricExample/package.json
-      - FabricExample/ios/**
+      - fabric-example/package.json
+      - fabric-example/ios/**
       - package.json
   push:
     branches:
@@ -20,7 +20,7 @@ jobs:
     runs-on: macos-14
     strategy:
       matrix:
-        working-directory: [Example, FabricExample]
+        working-directory: [example, fabric-example]
       fail-fast: false
     concurrency:
       group: ios-${{ matrix.working-directory }}-${{ github.ref }}

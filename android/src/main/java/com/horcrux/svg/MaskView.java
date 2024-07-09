@@ -27,6 +27,13 @@ class MaskView extends GroupView {
   @SuppressWarnings({"FieldCanBeLocal", "unused"})
   private Brush.BrushUnits mMaskContentUnits;
 
+  MaskType mMaskType;
+
+  enum MaskType {
+    LUMINANCE,
+    ALPHA
+  }
+
   public MaskView(ReactContext reactContext) {
     super(reactContext);
   }
@@ -70,6 +77,22 @@ class MaskView extends GroupView {
         break;
       case 1:
         mMaskContentUnits = Brush.BrushUnits.USER_SPACE_ON_USE;
+        break;
+    }
+    invalidate();
+  }
+
+  public MaskType getMaskType() {
+    return mMaskType;
+  }
+
+  public void setMaskType(int maskType) {
+    switch (maskType) {
+      case 0:
+        mMaskType = MaskType.LUMINANCE;
+        break;
+      case 1:
+        mMaskType = MaskType.ALPHA;
         break;
     }
     invalidate();
