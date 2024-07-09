@@ -6,8 +6,8 @@ on:
       - 'windows/**'
       - 'src/fabric/**'
       - 'package.json'
-      - 'Example/windows/**'
-      - 'Example/package.json'
+      - 'example/windows/**'
+      - 'example/package.json'
   push:
     branches:
       - main
