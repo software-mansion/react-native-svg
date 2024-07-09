@@ -126,6 +126,22 @@ If you suspect that you've found a spec conformance bug, then you can test using
 
 To check how to use the library, see [USAGE.md](https://github.com/react-native-svg/react-native-svg/blob/main/USAGE.md)
 
+## Testing
+
+### Running E2E tests:
+1. Navigate to the example application's directory and initiate the Metro server using the yarn start command.
+2. To run the example application on your preferred platform (note: currently only Android and iOS are supported), execute the command `yarn android` or `yarn ios` within the example app's directory.
+3. Start the Jest server by running `yarn e2e` in the project's root directory.
+4. In the example application, select the E2E tab.
+5. Allow the tests to complete.
+6. The test results, along with any differences (i.e. the actual rendered svg versus the reference image), can be viewed in the `e2e/diffs` directory.
+
+### To add new test cases, proceed as follows:
+1. Put an SVG file of your selection into the `e2e/cases` directory.
+2. Execute `yarn generateE2eRefrences`. This action launches a headless Chrome browser via Puppeteer, capturing snapshots of all rendered SVGs as .png files. These files will serve as a reference during testing.
+3. Check the `e2e/references` directory to observe newly created .png files.
+4. When you rerun the E2E tests, the new test case(s) you've added will be incorporated.
+
 ## TODO:
 
 1. Filters ([connected PR](https://github.com/react-native-svg/react-native-svg/pull/896))
