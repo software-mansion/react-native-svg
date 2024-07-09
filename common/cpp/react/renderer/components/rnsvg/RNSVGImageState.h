@@ -14,6 +14,7 @@
 #ifdef ANDROID
 #include <react/renderer/mapbuffer/MapBuffer.h>
 #include <react/renderer/mapbuffer/MapBufferBuilder.h>
+#include <folly/dynamic.h>
 #endif
 
 namespace facebook {
