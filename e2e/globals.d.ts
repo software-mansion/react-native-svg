@@ -5,5 +5,7 @@ declare global {
     // Leave it as var, changing to let will cause it not to work
     var server: WebSocketServer;
     var client: WsWebSocket;
+    var os: string;
+    var arch: string;
   }
 }

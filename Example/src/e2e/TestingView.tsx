@@ -3,7 +3,7 @@ import {Platform} from 'react-native';
 import * as RNSVG from 'react-native-svg';
 import ViewShot from 'react-native-view-shot';
 
-const address = Platform.OS == 'ios' ? 'localhost' : '10.0.2.2';
+const address = ['ios', 'web'].includes(Platform.OS) ? 'localhost' : '10.0.2.2';
 const wsUri = `ws://${address}:7123`;
 
 const TestingView = () => {

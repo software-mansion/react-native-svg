@@ -17,6 +17,10 @@ const setupJest = () =>
             parsedMessage
           )}`
         );
+
+        global.os = parsedMessage.os
+        global.arch = parsedMessage.arch
+
         console.log(`[react-native-svg] Running E2E test suites...\n`);
         resolve();
       });

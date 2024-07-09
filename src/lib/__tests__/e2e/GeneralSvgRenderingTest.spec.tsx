@@ -29,7 +29,7 @@ testCases.forEach((testCase) => {
     const diffFilePath = path.resolve(
       'e2e',
       'diffs',
-      `${testCase.replace('.svg', '')}-diff.png`
+      `${testCase.replace('.svg', '')}-${global.os}-${global.arch}-diff.png`
     );
     const referenceFileBuffer = fs.readFileSync(referenceFilePath);
     const renderedDataBuffer = Buffer.from(response.data, 'base64');
@@ -46,7 +46,6 @@ testCases.forEach((testCase) => {
         diffFilePath,
       }
     );
-
     // Check if there is more than 0.5% different pixels in whole snapshot
     expect(amountOfDifferentPixels).toBeLessThan(
       maxPixelDiff * targetPixelRatio

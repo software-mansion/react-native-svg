@@ -7936,10 +7936,10 @@ react-native-reanimated@3.9.0-nightly-20240421-474f6983d:
   version "0.0.0"
   uid ""
 
-react-native-view-shot@^3.8.0:
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/react-native-view-shot/-/react-native-view-shot-3.8.0.tgz#1aa1905f0e79428ca32bf80c16fd4abc719c600b"
-  integrity sha512-4cU8SOhMn3YQIrskh+5Q8VvVRxQOu8/s1M9NAL4z5BY1Rm0HXMWkQJ4N0XsZ42+Yca+y86ISF3LC5qdLPvPuiA==
+react-native-view-shot@4.0.0-alpha.2:
+  version "4.0.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/react-native-view-shot/-/react-native-view-shot-4.0.0-alpha.2.tgz#389f5323722c3acad1c002bf4f0f0539fd2508c9"
+  integrity sha512-BNQ+FoOUrB2Y6zxwhSZtZMMXVLewN2Ic8y5gS+5Y7hdgphqWmlHZIGbcLn/NmJS+soz0Pe3WO1sM5vX6u7h6VQ==
   dependencies:
     html2canvas "^1.4.1"
 
