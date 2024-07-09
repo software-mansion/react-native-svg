@@ -36,3 +36,16 @@ index bd55b92..6a20e9d 100644
          NSString *imageFormat = ([format isEqualToString:@"jpg"]) ? @"jpeg" : format;
          res = [NSString stringWithFormat:@"data:image/%@;base64,%@", imageFormat, base64];
        }
+diff --git a/node_modules/react-native-view-shot/src/specs/NativeRNViewShot.ts b/node_modules/react-native-view-shot/src/specs/NativeRNViewShot.ts
+index a6f4c00..1e9e6ce 100644
+--- a/node_modules/react-native-view-shot/src/specs/NativeRNViewShot.ts
++++ b/node_modules/react-native-view-shot/src/specs/NativeRNViewShot.ts
+@@ -2,7 +2,7 @@ import type { TurboModule } from 'react-native';
+ import { TurboModuleRegistry } from 'react-native';
+
+ export interface Spec extends TurboModule {
+-  releaseCapture: () => string;
++  releaseCapture: (uri: string) => void;
+   captureRef: (tag: number, options: Object) => Promise<string>
+   captureScreen: (options: Object) => Promise<string>;
+ }
