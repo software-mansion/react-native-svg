@@ -117,13 +117,13 @@ using namespace facebook::react;
   rendered = NO;
 }
 
-- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+- (void)mountChildComponentView:(RNSVGView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
   [super mountChildComponentView:childComponentView index:index];
   [self invalidate];
 }
 
-- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+- (void)unmountChildComponentView:(RNSVGView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
   [super unmountChildComponentView:childComponentView index:index];
   [self invalidate];

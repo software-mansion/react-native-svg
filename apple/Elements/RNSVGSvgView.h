@@ -12,18 +12,9 @@
 #import "RNSVGPainter.h"
 #import "RNSVGVBMOS.h"
 
-#ifdef RCT_NEW_ARCH_ENABLED
-#import <React/RCTViewComponentView.h>
-#endif // RCT_NEW_ARCH_ENABLED
-
 @class RNSVGNode;
 
-@interface RNSVGSvgView :
-#ifdef RCT_NEW_ARCH_ENABLED
-    RCTViewComponentView <RNSVGContainer>
-#else
-    RNSVGView <RNSVGContainer>
-#endif // RCT_NEW_ARCH_ENABLED
+@interface RNSVGSvgView : RNSVGView <RNSVGContainer>
 
 @property (nonatomic, strong) RNSVGLength *bbWidth;
 @property (nonatomic, strong) RNSVGLength *bbHeight;

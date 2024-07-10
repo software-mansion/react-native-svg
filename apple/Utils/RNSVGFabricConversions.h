@@ -127,7 +127,11 @@ void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
     node.pointerEvents = RCTPointerEventsUnspecified;
   }
   node.accessibilityIdentifier = RCTNSStringFromStringNilIfEmpty(nodeProps.testId);
+#if !TARGET_OS_OSX
   node.isAccessibilityElement = nodeProps.accessible;
+#else
+  node.accessibilityElement = nodeProps.accessible;
+#endif // !TARGET_OS_OSX
   node.accessibilityLabel = RCTNSStringFromStringNilIfEmpty(nodeProps.accessibilityLabel);
 }
 
