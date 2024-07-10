@@ -23,7 +23,7 @@
 }
 #endif // RCT_NEW_ARCH_ENABLED
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+- (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
   return nil;
 }

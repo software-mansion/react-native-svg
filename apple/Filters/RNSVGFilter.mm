@@ -94,7 +94,7 @@ using namespace facebook::react;
 
   CIImage *result = img;
   RNSVGFilterPrimitive *currentFilter;
-  for (UIView *node in self.subviews) {
+  for (RNSVGNode *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGFilterPrimitive class]]) {
       currentFilter = (RNSVGFilterPrimitive *)node;
       result = [currentFilter applyFilter:resultsMap previousFilterResult:result];
@@ -152,7 +152,7 @@ static CIImage *applySourceAlphaFilter(CIImage *inputImage)
   return [sourceAlpha valueForKey:@"outputImage"];
 }
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+- (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
   return nil;
 }
