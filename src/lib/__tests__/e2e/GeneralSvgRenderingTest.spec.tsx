@@ -47,6 +47,20 @@ testCases.forEach((testCase) => {
     const referenceFileBuffer = fs.readFileSync(referenceFilePath);
     const renderedDataBuffer = Buffer.from(response.data, 'base64');
 
+
+    // We use await everywhere instead Promise.all as we need to maintain order for ease of inspecting tests
+    // Adding reference & rendered before comparison in case compareImages fails, so we can see why it failed
+    await addAttach({
+      attach: fs.readFileSync(referenceFilePath),
+      description: 'Reference image',
+      bufferFormat: 'png',
+    });
+    await addAttach({
+      attach: fs.readFileSync(renderedFilePath),
+      description: 'Actual rendered image',
+      bufferFormat: 'png',
+    });
+
     // Compare reference file (from /e2e/references) with SVG rendered on actual device.
     // Reference files can be generated off of /e2e/cases with `yarn generateE2eReferences`.
     const amountOfDifferentPixels = compareImages(
@@ -60,17 +74,7 @@ testCases.forEach((testCase) => {
         renderedFilePath,
       }
     );
-    // 3x await instead Promise.all as we need to maintain order for ease of inspecting tests
-    await addAttach({
-      attach: fs.readFileSync(referenceFilePath),
-      description: 'Reference image',
-      bufferFormat: 'png',
-    });
-    await addAttach({
-      attach: fs.readFileSync(renderedFilePath),
-      description: 'Actual rendered image',
-      bufferFormat: 'png',
-    });
+
     await addAttach({
       attach: fs.readFileSync(diffFilePath),
       description: 'Differences',
