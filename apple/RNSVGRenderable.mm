@@ -323,6 +323,10 @@ UInt32 saturate(CGFloat value)
           bytesPerRow,
           colorSpace,
           kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+#if TARGET_OS_OSX // [macOS]
+      // on macOS currentCTM is not scaled properly with screen scale so we need to scale it manually
+      CGContextConcatCTM(bcontext, screenScaleCTM);
+#endif // [macOS]
       CGContextConcatCTM(bcontext, currentCTM);
 
       // Clip to mask bounds and render the mask
@@ -383,33 +387,36 @@ UInt32 saturate(CGFloat value)
       CGImageRelease(maskImage);
 #else // [macOS
       // Render content of current SVG Renderable to image
-      UIGraphicsBeginImageContextWithOptions(maskBounds.size, NO, 0.0);
+      UIGraphicsBeginImageContextWithOptions(scaledRect.size, NO, 1.0);
       CGContextRef newContext = UIGraphicsGetCurrentContext();
-      CGContextTranslateCTM(newContext, 0.0, height);
-      CGContextScaleCTM(newContext, 1.0, -1.0);
-      [self renderLayerTo:newContext rect:rect];
+      CGContextConcatCTM(newContext, CGAffineTransformInvert(CGContextGetCTM(newContext)));
+      CGContextConcatCTM(newContext, screenScaleCTM);
+      CGContextConcatCTM(newContext, currentCTM);
+      [self renderLayerTo:newContext rect:scaledRect];
       CGImageRef contentImage = CGBitmapContextCreateImage(newContext);
       UIGraphicsEndImageContext();
 
       // Blend current element and mask
-      UIGraphicsBeginImageContextWithOptions(maskBounds.size, NO, 0.0);
+      UIGraphicsBeginImageContextWithOptions(scaledRect.size, NO, 0.0);
       newContext = UIGraphicsGetCurrentContext();
       CGContextTranslateCTM(newContext, 0.0, height);
       CGContextScaleCTM(newContext, 1.0, -1.0);
 
       CGContextSetBlendMode(newContext, kCGBlendModeCopy);
-      CGContextDrawImage(newContext, maskBounds, maskImage);
+      CGContextDrawImage(newContext, scaledRect, maskImage);
       CGImageRelease(maskImage);
 
       CGContextSetBlendMode(newContext, kCGBlendModeSourceIn);
-      CGContextDrawImage(newContext, maskBounds, contentImage);
+      CGContextDrawImage(newContext, scaledRect, contentImage);
       CGImageRelease(contentImage);
 
       CGImageRef blendedImage = CGBitmapContextCreateImage(newContext);
       UIGraphicsEndImageContext();
 
       // Render blended result into current render context
-      CGContextDrawImage(context, maskBounds, blendedImage);
+      CGContextConcatCTM(context, CGAffineTransformInvert(currentCTM));
+      CGContextDrawImage(context, rect, blendedImage);
+      CGContextConcatCTM(context, currentCTM);
       CGImageRelease(blendedImage);
 #endif // macOS]
     }
