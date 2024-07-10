@@ -42,6 +42,15 @@ RCT_ENUM_CONVERTER(
     kRNSVGUnitsObjectBoundingBox,
     intValue)
 
+RCT_ENUM_CONVERTER(
+    RNSVGMaskType,
+    (@{
+      @"luminance" : @(kRNSVGMaskTypeLuminance),
+      @"alpha" : @(kRNSVGMaskTypeAlpha),
+    }),
+    kRNSVGMaskTypeLuminance,
+    intValue)
+
 + (RNSVGBrush *)RNSVGBrush:(id)json
 {
   if ([json isKindOfClass:[NSNumber class]]) {

@@ -82,6 +82,7 @@ import com.facebook.react.bridge.JavaOnlyMap;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.MatrixMathHelper;
@@ -134,7 +135,10 @@ import com.facebook.react.viewmanagers.RNSVGTextPathManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGTextPathManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGUseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGUseManagerInterface;
+import com.horcrux.svg.events.SvgLoadEvent;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -926,6 +930,12 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     public void setMeetOrSlice(ImageView node, int meetOrSlice) {
       node.setMeetOrSlice(meetOrSlice);
     }
+
+    public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
+      Map<String, Object> eventTypes = new HashMap<>();
+      eventTypes.put(SvgLoadEvent.EVENT_NAME, MapBuilder.of("registrationName", "onLoad"));
+      return eventTypes;
+    }
   }
 
   static class CircleViewManager extends RenderableViewManager<CircleView>
@@ -1264,6 +1274,11 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "maskContentUnits")
     public void setMaskContentUnits(MaskView node, int maskContentUnits) {
       node.setMaskContentUnits(maskContentUnits);
+    }
+
+    @ReactProp(name = "maskType")
+    public void setMaskType(MaskView node, int maskType) {
+      node.setMaskType(maskType);
     }
   }
 

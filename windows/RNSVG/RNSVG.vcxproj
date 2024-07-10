@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Label="ReactNativeWindowsProps">
-    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove($(SolutionDir), 'node_modules\react-native-windows\package.json'))\node_modules\react-native-windows\</ReactNativeWindowsDir>
-  </PropertyGroup>
-  <ImportGroup Label="ReactNativeWindowsPropertySheets">
-    <Import Project="$(ReactNativeWindowsDir)\PropertySheets\external\Microsoft.ReactNative.Uwp.CppLib.props" Condition="Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.props')" />
-  </ImportGroup>
-  <PropertyGroup>
-    <RnwUsesPackageReference Condition="$(RnwUsesPackageReference)=='' And $(ReactNativeWindowsVersion)!='' And $([MSBuild]::VersionGreaterThanOrEquals('$(ReactNativeWindowsVersion)', '0.68.0'))">true</RnwUsesPackageReference>
-  </PropertyGroup>
-  <PropertyGroup>
-    <CppWinRTVersion Condition="'$(CppWinRTVersion)'=='' Or $([MSBuild]::VersionLessThan('$(CppWinRTVersion)', '2.0.210309.3'))">2.0.210309.3</CppWinRTVersion>
-  </PropertyGroup>
-  <Import Project="$(SolutionDir)\packages\$(WinUIPackageProps)" Condition="$(RnwUsesPackageReference)!='true' And '$(OverrideWinUIPackage)'!='true' And '$(WinUIPackageProps)'!='' And Exists('$(SolutionDir)\packages\$(WinUIPackageProps)')" />
-  <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.props" Condition="$(RnwUsesPackageReference)!='true' And Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.props')" />
+<!-- This project was created with react-native-windows 0.74.9 -->
+<Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(SolutionDir)\ExperimentalFeatures.props" Condition="Exists('$(SolutionDir)\ExperimentalFeatures.props')" />
   <PropertyGroup Label="Globals">
     <CppWinRTOptimized>true</CppWinRTOptimized>
     <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
@@ -22,24 +10,21 @@
     <ProjectName>RNSVG</ProjectName>
     <RootNamespace>RNSVG</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>
     <ApplicationType>Windows Store</ApplicationType>
     <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <WindowsTargetPlatformMinVersion>10.0.22621.0</WindowsTargetPlatformMinVersion>
+  </PropertyGroup>
+  <PropertyGroup Label="ReactNativeWindowsProps">
+    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove($(SolutionDir), 'node_modules\react-native-windows\package.json'))\node_modules\react-native-windows\</ReactNativeWindowsDir>
   </PropertyGroup>
   <Import Project="$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.WindowsSdk.Default.props" Condition="Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.WindowsSdk.Default.props')" />
   <PropertyGroup Label="Fallback Windows SDK Versions">
-    <WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)'=='' Or $([MSBuild]::VersionLessThan('$(WindowsTargetPlatformVersion)', '10.0.18362.0'))">10.0.18362.0</WindowsTargetPlatformVersion>
-    <WindowsTargetPlatformMinVersion Condition=" '$(WindowsTargetPlatformMinVersion)' == '' ">10.0.16299.0</WindowsTargetPlatformMinVersion>
+    <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion Condition=" '$(WindowsTargetPlatformMinVersion)' == '' ">10.0.17763.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|ARM">
-      <Configuration>Debug</Configuration>
-      <Platform>ARM</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|ARM64">
       <Configuration>Debug</Configuration>
       <Platform>ARM64</Platform>
@@ -51,10 +36,6 @@
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|ARM">
-      <Configuration>Release</Configuration>
-      <Platform>ARM</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|ARM64">
       <Configuration>Release</Configuration>
@@ -84,13 +65,15 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionSettings"></ImportGroup>
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets">
     <Import Project="PropertySheet.props" />
+  </ImportGroup>
+  <ImportGroup Label="ReactNativeWindowsPropertySheets">
+    <Import Project="$(ReactNativeWindowsDir)\PropertySheets\external\Microsoft.ReactNative.Uwp.CppLib.props" Condition="Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.props')" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup>
@@ -104,7 +87,12 @@
       <PreprocessorDefinitions>_WINRT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalUsingDirectories>$(WindowsSDK_WindowsMetadata);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
     </ClCompile>
+    <Midl>
+      <!-- This allows applications targetting older Windows SDKs (e.g. RNW 0.65 apps) to consume the library generated WinMD -->
+      <AdditionalOptions>%(AdditionalOptions) /noattributename</AdditionalOptions>
+    </Midl>
     <Link>
+      <AdditionalDependencies>dxguid.lib;windowsapp.lib;%(AdditionalDependenices)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <GenerateWindowsMetadata>true</GenerateWindowsMetadata>
       <ModuleDefinitionFile>RNSVG.def</ModuleDefinitionFile>
@@ -114,17 +102,11 @@
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">dxguid.lib;WindowsApp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>dxguid.lib;WindowsApp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BrushView.h" />
@@ -151,6 +133,8 @@
     <ClInclude Include="LineViewManager.h" />
     <ClInclude Include="MarkerView.h" />
     <ClInclude Include="MarkerViewManager.h" />
+    <ClInclude Include="MaskView.h" />
+    <ClInclude Include="MaskViewManager.h" />
     <ClInclude Include="PathView.h" />
     <ClInclude Include="PathViewManager.h" />
     <ClInclude Include="PatternView.h" />
@@ -176,7 +160,6 @@
     <ClInclude Include="ReactPackageProvider.h">
       <DependentUpon>ReactPackageProvider.idl</DependentUpon>
     </ClInclude>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="RNSVGModule.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
@@ -204,6 +187,8 @@
     <ClCompile Include="LineViewManager.cpp" />
     <ClCompile Include="MarkerView.cpp" />
     <ClCompile Include="MarkerViewManager.cpp" />
+    <ClCompile Include="MaskView.cpp" />
+    <ClCompile Include="MaskViewManager.cpp" />
     <ClCompile Include="PathView.cpp" />
     <ClCompile Include="PatternView.cpp" />
     <ClCompile Include="PatternViewManager.cpp" />
@@ -244,40 +229,19 @@
     </Midl>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="PropertySheet.props" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="RNSVG.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ReactNativeWindowsTargets">
     <Import Project="$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets" Condition="Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets')" />
   </ImportGroup>
-  <ItemGroup Condition="$(RnwUsesPackageReference)=='true'">
-    <PackageReference Include="Microsoft.Windows.CppWinRT" Version="$(CppWinRTVersion)" PrivateAssets="all" />
-  </ItemGroup>
   <Target Name="EnsureReactNativeWindowsTargets" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references targets in your node_modules\react-native-windows folder that are missing. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.props')" Text="$([System.String]::Format('$(ErrorText)', '$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.props'))" />
     <Error Condition="!Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets'))" />
-  </Target>
-  <ImportGroup Label="ExtensionTargets" Condition="$(RnwUsesPackageReference)!='true'">
-    <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.targets')" />
-    <Import Project="$(SolutionDir)\packages\$(WinUIPackageName).$(WinUIPackageVersion)\build\native\$(WinUIPackageName).targets" Condition="'$(OverrideWinUIPackage)'!='true' And Exists('$(SolutionDir)\packages\$(WinUIPackageName).$(WinUIPackageVersion)\build\native\$(WinUIPackageName).targets')" />
-    <Import Project="$(SolutionDir)\packages\Microsoft.ReactNative.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.targets" Condition="'$(UseExperimentalNuget)'=='true' And Exists('$(SolutionDir)\packages\Microsoft.ReactNative.Cxx.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.Cxx.targets')" />
-    <Import Project="$(SolutionDir)\packages\Microsoft.ReactNative.Cxx.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.Cxx.targets" Condition="'$(UseExperimentalNuget)'=='true' And Exists('$(SolutionDir)\packages\Microsoft.ReactNative.Cxx.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.Cxx.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild" Condition="$(RnwUsesPackageReference)!='true'">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.props'))" />
-    <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.targets'))" />
-    <Error Condition="'$(OverrideWinUIPackage)'!='true' And !Exists('$(SolutionDir)\packages\$(WinUIPackageName).$(WinUIPackageVersion)\build\native\$(WinUIPackageName).targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\$(WinUIPackageName).$(WinUIPackageVersion)\build\native\$(WinUIPackageName).targets'))" />
-    <Error Condition="'$(UseExperimentalNuget)'=='true' And !Exists('$(SolutionDir)\packages\Microsoft.ReactNative.Cxx.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.Cxx.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.ReactNative.Cxx.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.Cxx.targets'))" />
-    <Error Condition="'$(UseExperimentalNuget)'=='true' And !Exists('$(SolutionDir)\packages\Microsoft.ReactNative.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.ReactNative.$(ReactNativeWindowsVersion)\build\native\Microsoft.ReactNative.targets'))" />
   </Target>
 </Project>
