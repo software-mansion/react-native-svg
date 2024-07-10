@@ -5,8 +5,6 @@ import { RenderResponse } from '../../../../e2e/types';
 import path from 'path';
 import { addAttach } from 'jest-html-reporters/helper';
 
-// import { metadata } from 'jest-metadata';
-
 const width = 200;
 const height = 200;
 const maxPixelDiff = width * height * 0.005;
@@ -15,6 +13,13 @@ const targetPixelRatio = 3.0;
 const testCases = fs.readdirSync(path.resolve('e2e', 'cases'));
 testCases.forEach((testCase) => {
   test(`Web browser rendered SVG should have less than 0.05% differences between device rendered SVG (${testCase})`, async () => {
+    await addAttach({
+      attach: JSON.stringify({
+        os: global.os,
+        arch: global.arch,
+      }),
+      description: 'Platform information',
+    });
     const testCaseSvg = path.resolve('e2e', 'cases', testCase);
 
     const svgXml = fs.readFileSync(testCaseSvg).toString('utf-8');
