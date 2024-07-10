@@ -1,5 +1,4 @@
 export default () => {
-  global.client.terminate();
-  global.server.clients.forEach((client) => client.terminate())
+  global.server.clients.forEach((client) => client.close(1000))
   global.server.close()
 };

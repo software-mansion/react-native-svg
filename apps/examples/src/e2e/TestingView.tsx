@@ -1,5 +1,5 @@
-import React, { Component, useEffect, useRef, useState } from 'react';
-import { Platform } from 'react-native';
+import React, {Component, useEffect, useRef, useState} from 'react';
+import {Platform, Text, View} from 'react-native';
 import * as RNSVG from 'react-native-svg';
 import ViewShot from 'react-native-view-shot';
 
@@ -7,12 +7,12 @@ const address = ['ios', 'web'].includes(Platform.OS) ? 'localhost' : '10.0.2.2';
 const wsUri = `ws://${address}:7123`;
 
 const TestingView = () => {
-  const [renderedContent, setRenderedContent] = useState(null);
+  const [renderedContent, setRenderedContent] = useState();
   const [wsClient, setWsClient] = useState<WebSocket>(new WebSocket(wsUri));
   const [readyToSnapshot, setReadyToSnapshot] = useState(false);
   const wrapperRef = useRef<ViewShot>(null);
   const [resolution, setResolution] = useState([600, 600]);
-
+  const [message, setMessage] = useState('⏳ Connecting to Jest server...');
   useEffect(() => {
     wsClient.onopen = () => {
       wsClient.send(
@@ -20,35 +20,44 @@ const TestingView = () => {
           os: Platform.OS,
           version: Platform.Version,
           arch: isFabric() ? 'fabric' : 'paper',
-        })
+        }),
       );
+      setMessage('✅ Connected to Jest server. Waiting for render requests.')
     };
     //todo: find out why there is 1005 close when closing WS on Jest side
-    wsClient.onerror = (err) => {
+    wsClient.onerror = err => {
       console.log(err);
-      if (!err) {
+      if (!err.message) {
         // when gracefully stopping WS, the err is null however the callback is still being called for some reason
         return;
       }
       console.error(
-        `Error while connecting to E2E WebSocket server at ${wsUri}: ${err.message}. Reopen this tab to retry.`
+        `Error while connecting to E2E WebSocket server at ${wsUri}: ${err.message}. Reopen this tab to retry.`,
+      );
+      setMessage(
+        `🚨 Failed to connect to Jest server at ${wsUri}: ${err.message}! Please reopen this tab to retry.`,
       );
     };
-    wsClient.onmessage = ({ data: rawMessage }) => {
+    wsClient.onmessage = ({data: rawMessage}) => {
       const message = JSON.parse(rawMessage);
       if (message.type == 'renderRequest') {
+        setMessage(`✅ Rendering tests, please don't close this tab.`)
         setResolution([message.width, message.height]);
         setRenderedContent(
           createElementFromObject(
             message.data.type || 'SvgFromXml',
-            message.data.props
-          )
+            message.data.props,
+          ),
         );
         setReadyToSnapshot(true);
       }
     };
-    wsClient.onclose = (event) => {
-      console.log(`E2E WebSocket connection has been closed (${event.code})`);
+    wsClient.onclose = event => {
+      if(event.code == 1006 && event.reason) {
+        // this is an error, let error handler take care of it
+        return
+      }
+      setMessage(`✅ Connection to Jest server has been closed. You can close this tab safely. (${event.code})`)
     };
   }, [wsClient]);
 
@@ -56,24 +65,27 @@ const TestingView = () => {
     if (!readyToSnapshot || !wrapperRef.current) {
       return;
     }
-    wrapperRef.current.capture?.().then((value) => {
+    wrapperRef.current.capture?.().then(value => {
       wsClient.send(
         JSON.stringify({
           type: 'renderResponse',
           data: value,
-        })
+        }),
       );
       setReadyToSnapshot(false);
     });
   }, [wrapperRef, readyToSnapshot]);
 
   return (
-    <ViewShot
-      ref={wrapperRef}
-      style={{ width: resolution[0], height: resolution[1] }}
-      options={{ result: 'base64' }}>
-      {renderedContent}
-    </ViewShot>
+    <View>
+      <Text style={{marginLeft: 'auto', marginRight: 'auto'}}>{message}</Text>
+      <ViewShot
+        ref={wrapperRef}
+        style={{width: resolution[0], height: resolution[1]}}
+        options={{result: 'base64'}}>
+        {renderedContent}
+      </ViewShot>
+    </View>
   );
 };
 
@@ -104,26 +116,26 @@ function isFabric(): boolean {
   return !!global?.nativeFabricUIManager;
 }
 
-export { samples, icon };
+export {samples, icon};
 
 const createElementFromObject = (
   element: keyof typeof RNSVG,
-  props: any
+  props: any,
 ): any => {
   const children: any[] = [];
   if (props.children) {
     if (Array.isArray(props.children)) {
-      props?.children.forEach((child: { type: any; props: any }) =>
-        children.push(createElementFromObject(child.type, child?.props))
+      props?.children.forEach((child: {type: any; props: any}) =>
+        children.push(createElementFromObject(child.type, child?.props)),
       );
       console.log(children);
     } else if (typeof props.children === 'object') {
       children.push(
-        createElementFromObject(props.children.type, props.children?.props)
+        createElementFromObject(props.children.type, props.children?.props),
       );
     } else {
       children.push(props.children);
     }
   }
-  return React.createElement(RNSVG[element] as any, { ...props, children });
+  return React.createElement(RNSVG[element] as any, {...props, children});
 };

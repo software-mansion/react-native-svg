@@ -47,7 +47,6 @@ testCases.forEach((testCase) => {
     const referenceFileBuffer = fs.readFileSync(referenceFilePath);
     const renderedDataBuffer = Buffer.from(response.data, 'base64');
 
-
     // We use await everywhere instead Promise.all as we need to maintain order for ease of inspecting tests
     // Adding reference & rendered before comparison in case compareImages fails, so we can see why it failed
     await addAttach({
