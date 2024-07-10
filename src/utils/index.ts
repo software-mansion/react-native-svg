@@ -38,7 +38,18 @@ export function hasTouchableProperty(props: BaseProps): boolean {
     props.onResponderMove ||
     props.onResponderRelease ||
     props.onResponderTerminate ||
-    props.onResponderTerminationRequest
+    props.onResponderTerminationRequest ||
+    props.onMoveShouldSetResponder ||
+    props.onMoveShouldSetResponderCapture ||
+    props.onResponderEnd ||
+    props.onResponderReject ||
+    props.onResponderStart ||
+    props.onScrollShouldSetResponder ||
+    props.onScrollShouldSetResponderCapture ||
+    props.onSelectionChangeShouldSetResponder ||
+    props.onSelectionChangeShouldSetResponderCapture ||
+    props.onStartShouldSetResponder ||
+    props.onStartShouldSetResponderCapture
   );
 }
 
