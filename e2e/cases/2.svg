@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="130" width="500">
+<svg xmlns="http://www.w3.org/2000/svg">
     <defs>
         <linearGradient id="grad1">
             <stop offset="0%" stop-color="yellow" />
