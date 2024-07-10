@@ -26,6 +26,7 @@ export const compareImages = (
     height: number;
     pixelRatio: number;
     diffFilePath?: string;
+    renderedFilePath?: string;
   }
 ) => {
   const referencePng = PNG.sync.read(image1);
@@ -46,6 +47,9 @@ export const compareImages = (
       diffColor: [95, 0, 160],
     }
   );
+  if (opts.renderedFilePath) {
+    fs.writeFileSync(opts.renderedFilePath, PNG.sync.write(responsePng));
+  }
   if (opts.diffFilePath) {
     fs.writeFileSync(opts.diffFilePath, PNG.sync.write(diffPng));
   }

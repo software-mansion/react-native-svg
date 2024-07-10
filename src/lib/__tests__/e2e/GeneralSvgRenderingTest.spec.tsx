@@ -26,6 +26,11 @@ testCases.forEach((testCase) => {
       'references',
       testCase.replace('.svg', '.png')
     );
+    const renderedFilePath = path.resolve(
+      'e2e',
+      'rendered',
+      `${testCase.replace('.svg', '')}-${global.os}-${global.arch}-rendered.png`
+    );
     const diffFilePath = path.resolve(
       'e2e',
       'diffs',
@@ -44,6 +49,7 @@ testCases.forEach((testCase) => {
         height,
         pixelRatio: targetPixelRatio,
         diffFilePath,
+        renderedFilePath,
       }
     );
     // Check if there is more than 0.5% different pixels in whole snapshot
