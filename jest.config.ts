@@ -1,4 +1,4 @@
-import {Config} from '@jest/types';
+import { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
   testPathIgnorePatterns: [
@@ -9,9 +9,16 @@ const config: Config.InitialOptions = {
   ],
   preset: 'react-native',
   verbose: true,
-  globalSetup: "<rootDir>/e2e/setupJest.ts",
-  globalTeardown: "<rootDir>/e2e/teardownJest.ts",
-  modulePathIgnorePatterns: ["lib/typescript", "helpers.ts|globals.d.ts|setupJest.ts|teardownJest.ts"],
+  globalSetup: '<rootDir>/e2e/setupJest.ts',
+  globalTeardown: '<rootDir>/e2e/teardownJest.ts',
+  modulePathIgnorePatterns: [
+    'lib/typescript',
+    'helpers.ts|globals.d.ts|setupJest.ts|teardownJest.ts',
+  ],
+  reporters: [
+    'default',
+    "jest-html-reporters"
+  ],
 };
 
 export default config;
