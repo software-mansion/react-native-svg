@@ -1,4 +1,5 @@
 export default () => {
-  if (global.client) global.client.close();
-  if (global.server) global.server.close();
+  global.client.terminate();
+  global.server.clients.forEach((client) => client.terminate())
+  global.server.close()
 };
