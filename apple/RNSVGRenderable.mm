@@ -338,7 +338,7 @@ UInt32 saturate(CGFloat value)
       CGFloat y = [self relativeOnFraction:[_maskNode y] relative:currentBoundsSize.height];
       CGFloat w = [self relativeOnFraction:[_maskNode maskwidth] relative:currentBoundsSize.width];
       CGFloat h = [self relativeOnFraction:[_maskNode maskheight] relative:currentBoundsSize.height];
-      CGRect maskBounds = CGRectMake(x, y, w, h);
+      CGRect maskBounds = CGRectApplyAffineTransform(CGRectMake(x, y, w, h), screenScaleCTM);
       CGContextClipToRect(bcontext, maskBounds);
       [_maskNode renderLayerTo:bcontext rect:bounds];
 
