@@ -20,6 +20,8 @@ import RNSVGText from './TextNativeComponent';
 import RNSVGTextPath from './TextPathNativeComponent';
 import RNSVGTSpan from './TSpanNativeComponent';
 import RNSVGUse from './UseNativeComponent';
+import RNSVGFilter from './FilterNativeComponent';
+import RNSVGFeColorMatrix from './FeColorMatrixNativeComponent';
 
 export {
   RNSVGCircle,
@@ -44,4 +46,6 @@ export {
   RNSVGTextPath,
   RNSVGTSpan,
   RNSVGUse,
+  RNSVGFilter,
+  RNSVGFeColorMatrix,
 };
