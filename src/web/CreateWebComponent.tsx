@@ -13,6 +13,7 @@ export const createComponent = <T,>(
     if (prepareProps) {
       createComponentProps = prepareProps(props);
     }
+
     return <CreateComponent {...createComponentProps} tag={tag} ref={ref} />;
   });
 };

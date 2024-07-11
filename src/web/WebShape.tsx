@@ -21,6 +21,7 @@ import {
   prepare,
   remeasure,
 } from '../utils';
+import { useHandleEvents } from './hooks/useHandleEvents';
 
 export const WebShape = <T,>(
   props: CreateComponentProps<T>,
@@ -53,6 +54,7 @@ export const WebShape = <T,>(
 
   const elementRef = useRef<T | null>(null);
   const lastMergedProps = useRef<Partial<typeof props>>({});
+  // elementRef = useHandleEvents(elementRef, props);
   const remeasureMetricsOnActivation = useRef(() => {
     const element = elementRef.current as HTMLElement | null;
     const metrics = remeasure(element);
@@ -105,45 +107,44 @@ export const WebShape = <T,>(
     remeasure: remeasureMetricsOnActivation.current,
   }));
 
-  let pressEventHandlers = {};
+  // let pressEventHandlers = {};
   if (hasTouchableProperty(props)) {
-    const pressConfig = useMemo(
-      () => ({
-        onPress,
-        onLongPress,
-        onPressStart: onPressIn,
-        onPressEnd: onPressOut,
-      }),
-      [onPress, onLongPress, onPressIn, onPressOut]
-    );
-
-    pressEventHandlers = usePressEvents(elementRef, pressConfig);
-
-    useResponderEvents(elementRef as MutableRefObject<SVGElement>, {
-      onMoveShouldSetResponder,
-      onMoveShouldSetResponderCapture,
-      onResponderEnd,
-      onResponderGrant,
-      onResponderMove,
-      onResponderReject,
-      onResponderRelease,
-      onResponderStart,
-      onResponderTerminate,
-      onResponderTerminationRequest,
-      onScrollShouldSetResponder,
-      onScrollShouldSetResponderCapture,
-      onSelectionChangeShouldSetResponder,
-      onSelectionChangeShouldSetResponderCapture,
-      onStartShouldSetResponder,
-      onStartShouldSetResponderCapture,
-      ...pressEventHandlers,
-    });
+    // const pressConfig = useMemo(
+    //   () => ({
+    //     onPress,
+    //     onLongPress,
+    //     onPressStart: onPressIn,
+    //     onPressEnd: onPressOut,
+    //   }),
+    //   [onPress, onLongPress, onPressIn, onPressOut]
+    // );
+    // pressEventHandlers = usePressEvents(elementRef, pressConfig);
   }
-  const setRef = useMergeRefs(elementRef, lastMergedProps, forwardedRef);
+  useResponderEvents(elementRef as MutableRefObject<SVGElement>, {
+    onMoveShouldSetResponder,
+    onMoveShouldSetResponderCapture,
+    onResponderEnd,
+    onResponderGrant,
+    onResponderMove,
+    onResponderReject,
+    onResponderRelease,
+    onResponderStart,
+    onResponderTerminate,
+    onResponderTerminationRequest,
+    onScrollShouldSetResponder,
+    onScrollShouldSetResponderCapture,
+    onSelectionChangeShouldSetResponder,
+    onSelectionChangeShouldSetResponderCapture,
+    onStartShouldSetResponder,
+    onStartShouldSetResponderCapture,
+    // ...pressEventHandlers,
+  });
 
+  const setRef = useMergeRefs(elementRef, lastMergedProps, forwardedRef);
   return createElement(Tag, {
     ...{
-      ...rest,
+      // ...rest,
+      ...prepare(rest as any),
       collapsable: undefined,
     },
     ref: setRef,

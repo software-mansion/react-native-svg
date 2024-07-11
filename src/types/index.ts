@@ -34,6 +34,7 @@ export interface Props {
   onFocus?: (e: FocusEvent) => void;
   onLayout?: (event: LayoutEvent) => object;
   onLongPress?: (event: PressEvent) => object;
+  onPressMove?: (event: PressEvent) => object;
   onClick?: (event: PressEvent) => object;
   onPress?: (event: PressEvent) => object;
   onPressIn?: (event: PressEvent) => object;
