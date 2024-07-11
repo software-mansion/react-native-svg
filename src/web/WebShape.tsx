@@ -1,60 +1,27 @@
-import React, {
-  MutableRefObject,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-} from 'react';
+import React, { useImperativeHandle, useRef } from 'react';
 import {
   // @ts-ignore it is not seen in exports
   unstable_createElement as createElement,
 } from 'react-native';
 // eslint-disable-next-line import/no-unresolved
-import useResponderEvents from 'react-native-web/src/modules/useResponderEvents/index';
-// eslint-disable-next-line import/no-unresolved
 import useMergeRefs from 'react-native-web/src/modules/useMergeRefs/index';
-// eslint-disable-next-line import/no-unresolved
-import usePressEvents from 'react-native-web/src/modules/usePressEvents/index';
 import { CreateComponentProps } from '../types';
-import {
-  camelCaseToDashed,
-  hasTouchableProperty,
-  prepare,
-  remeasure,
-} from '../utils';
+import { camelCaseToDashed, prepare, remeasure } from '../utils';
 import { useHandleEvents } from './hooks/useHandleEvents';
 
 export const WebShape = <T,>(
   props: CreateComponentProps<T>,
   forwardedRef: React.Ref<T | null>
 ) => {
+  const { tag: Tag } = props;
+  const currentRef = useRef<T | null>(null);
   const {
-    onMoveShouldSetResponder,
-    onMoveShouldSetResponderCapture,
-    onResponderEnd,
-    onResponderGrant,
-    onResponderMove,
-    onResponderReject,
-    onResponderRelease,
-    onResponderStart,
-    onResponderTerminate,
-    onResponderTerminationRequest,
-    onScrollShouldSetResponder,
-    onScrollShouldSetResponderCapture,
-    onSelectionChangeShouldSetResponder,
-    onSelectionChangeShouldSetResponderCapture,
-    onStartShouldSetResponder,
-    onStartShouldSetResponderCapture,
-    onPress,
-    onLongPress,
-    onPressIn,
-    onPressOut,
-    tag: Tag,
-    ...rest
-  } = props;
+    elementRef,
+    rest: cleanProps,
+    onClick,
+  } = useHandleEvents<T>(currentRef, props);
+  const lastMergedProps = useRef<Partial<typeof cleanProps>>({});
 
-  const elementRef = useRef<T | null>(null);
-  const lastMergedProps = useRef<Partial<typeof props>>({});
-  // elementRef = useHandleEvents(elementRef, props);
   const remeasureMetricsOnActivation = useRef(() => {
     const element = elementRef.current as HTMLElement | null;
     const metrics = remeasure(element);
@@ -63,10 +30,10 @@ export const WebShape = <T,>(
     }
   });
 
-  const setNativeProps = (nativeProps: { style: typeof rest }) => {
+  const setNativeProps = (nativeProps: { style: typeof cleanProps }) => {
     const merged = Object.assign(
       {},
-      rest,
+      cleanProps,
       lastMergedProps.current,
       nativeProps.style
     );
@@ -107,46 +74,13 @@ export const WebShape = <T,>(
     remeasure: remeasureMetricsOnActivation.current,
   }));
 
-  // let pressEventHandlers = {};
-  if (hasTouchableProperty(props)) {
-    // const pressConfig = useMemo(
-    //   () => ({
-    //     onPress,
-    //     onLongPress,
-    //     onPressStart: onPressIn,
-    //     onPressEnd: onPressOut,
-    //   }),
-    //   [onPress, onLongPress, onPressIn, onPressOut]
-    // );
-    // pressEventHandlers = usePressEvents(elementRef, pressConfig);
-  }
-  useResponderEvents(elementRef as MutableRefObject<SVGElement>, {
-    onMoveShouldSetResponder,
-    onMoveShouldSetResponderCapture,
-    onResponderEnd,
-    onResponderGrant,
-    onResponderMove,
-    onResponderReject,
-    onResponderRelease,
-    onResponderStart,
-    onResponderTerminate,
-    onResponderTerminationRequest,
-    onScrollShouldSetResponder,
-    onScrollShouldSetResponderCapture,
-    onSelectionChangeShouldSetResponder,
-    onSelectionChangeShouldSetResponderCapture,
-    onStartShouldSetResponder,
-    onStartShouldSetResponderCapture,
-    // ...pressEventHandlers,
-  });
-
   const setRef = useMergeRefs(elementRef, lastMergedProps, forwardedRef);
   return createElement(Tag, {
     ...{
-      // ...rest,
-      ...prepare(rest as any),
+      ...prepare(cleanProps as any),
       collapsable: undefined,
     },
+    onClick,
     ref: setRef,
   });
 };

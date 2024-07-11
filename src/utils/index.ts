@@ -33,7 +33,12 @@ export function hasTouchableProperty(props: BaseProps): boolean {
     props.onPress ||
     props.onPressIn ||
     props.onPressOut ||
-    props.onLongPress ||
+    props.onLongPress
+  );
+}
+
+export function hasResponderEvents(props: BaseProps): boolean {
+  return !!(
     props.onResponderGrant ||
     props.onResponderMove ||
     props.onResponderRelease ||

@@ -3,7 +3,7 @@ import { MutableRefObject, useMemo } from 'react';
 import usePressEvents from 'react-native-web/src/modules/usePressEvents/index';
 // eslint-disable-next-line import/no-unresolved
 import useResponderEvents from 'react-native-web/src/modules/useResponderEvents/index';
-import { hasTouchableProperty } from '../../utils';
+import { hasResponderEvents, hasTouchableProperty } from '../../utils';
 import { CreateComponentProps } from '../../types';
 
 export function useHandleEvents<T>(
@@ -31,26 +31,27 @@ export function useHandleEvents<T>(
     onLongPress,
     onPressIn,
     onPressOut,
-    // onPressMove,
+    onPressMove,
+    ...rest
   } = props;
-  console.log(hasTouchableProperty(props), 'hasTouchableProperty(props)');
+
+  let pressEventHandlers: any = {};
   if (hasTouchableProperty(props)) {
-    console.log('here ');
-    let pressEventHandlers = {};
     const pressConfig = useMemo(
       () => ({
         onLongPress,
         onPress,
+        onPressMove,
         onPressStart: onPressIn,
-        // onPressMove,
         onPressEnd: onPressOut,
       }),
       [onLongPress, onPress, onPressIn, onPressOut]
     );
 
     pressEventHandlers = usePressEvents(elementRef, pressConfig);
-    console.log(pressEventHandlers, 'pressEventHandlers');
-    useResponderEvents(elementRef as MutableRefObject<SVGElement>, {
+    useResponderEvents(elementRef, pressEventHandlers);
+  } else if (hasResponderEvents(props)) {
+    useResponderEvents(elementRef, {
       onMoveShouldSetResponder,
       onMoveShouldSetResponderCapture,
       onResponderEnd,
@@ -67,9 +68,8 @@ export function useHandleEvents<T>(
       onSelectionChangeShouldSetResponderCapture,
       onStartShouldSetResponder,
       onStartShouldSetResponderCapture,
-      ...pressEventHandlers,
     });
   }
 
-  return elementRef;
+  return { elementRef, rest, onClick: pressEventHandlers?.onClick };
 }
