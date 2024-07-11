@@ -5,9 +5,9 @@ import type {
   TransformProps,
 } from '../lib/extract/types';
 
-export interface CreateComponentProps<T> extends BaseProps {
+export interface CreateComponentProps extends BaseProps {
   tag: keyof React.JSX.IntrinsicElements;
-  forwardedRef?: React.Ref<T> | React.MutableRefObject<T>;
+  forwardedRef?: React.Ref<SVGElement> | React.MutableRefObject<SVGElement>;
 }
 
 type GestureResponder = (event: GestureResponderEvent) => boolean | void;

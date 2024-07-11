@@ -10,17 +10,13 @@ import { camelCaseToDashed, prepare, remeasure } from '../utils';
 import { useHandleEvents } from './hooks/useHandleEvents';
 
 export const WebShape = <T,>(
-  props: CreateComponentProps<T>,
+  props: CreateComponentProps,
   forwardedRef: React.Ref<T | null>
 ) => {
   const { tag: Tag } = props;
   const currentRef = useRef<T | null>(null);
-  const {
-    elementRef,
-    rest: cleanProps,
-    onClick,
-  } = useHandleEvents<T>(currentRef, props);
-  const lastMergedProps = useRef<Partial<typeof cleanProps>>({});
+  const { elementRef, rest, onClick } = useHandleEvents<T>(currentRef, props);
+  const lastMergedProps = useRef<Partial<typeof rest>>({});
 
   const remeasureMetricsOnActivation = useRef(() => {
     const element = elementRef.current as HTMLElement | null;
@@ -30,10 +26,10 @@ export const WebShape = <T,>(
     }
   });
 
-  const setNativeProps = (nativeProps: { style: typeof cleanProps }) => {
+  const setNativeProps = (nativeProps: { style: typeof rest }) => {
     const merged = Object.assign(
       {},
-      cleanProps,
+      rest,
       lastMergedProps.current,
       nativeProps.style
     );
@@ -77,7 +73,7 @@ export const WebShape = <T,>(
   const setRef = useMergeRefs(elementRef, lastMergedProps, forwardedRef);
   return createElement(Tag, {
     ...{
-      ...prepare(cleanProps as any),
+      ...prepare(rest),
       collapsable: undefined,
     },
     onClick,

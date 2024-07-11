@@ -120,9 +120,7 @@ export const remeasure = (element: HTMLElement | null) => {
  * `react-native-svg` supports additional props that aren't defined in the spec.
  * This function replaces them in a spec conforming manner.
  */
-export const prepare = <T extends CreateComponentProps<SVGElement> & Props>(
-  props: T
-) => {
+export const prepare = <T extends CreateComponentProps & Props>(props: T) => {
   const {
     transform,
     origin,

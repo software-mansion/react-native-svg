@@ -8,7 +8,7 @@ import { CreateComponentProps } from '../../types';
 
 export function useHandleEvents<T>(
   elementRef: MutableRefObject<T | null>,
-  props: CreateComponentProps<T>
+  props: CreateComponentProps
 ) {
   const {
     onMoveShouldSetResponder,
