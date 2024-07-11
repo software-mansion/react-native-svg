@@ -1,4 +1,4 @@
-name: Test macOS build
+name: Test new architecture macOS build
 on:
   pull_request:
     paths:
