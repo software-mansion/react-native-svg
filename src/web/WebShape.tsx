@@ -136,15 +136,14 @@ export const WebShape = <T,>(
       onSelectionChangeShouldSetResponderCapture,
       onStartShouldSetResponder,
       onStartShouldSetResponderCapture,
+      ...pressEventHandlers,
     });
   }
-
   const setRef = useMergeRefs(elementRef, lastMergedProps, forwardedRef);
 
   return createElement(Tag, {
     ...{
       ...rest,
-      ...pressEventHandlers,
       collapsable: undefined,
     },
     ref: setRef,
