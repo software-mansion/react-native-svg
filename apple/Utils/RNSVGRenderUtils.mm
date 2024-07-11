@@ -13,14 +13,34 @@
   return sharedCIContext;
 }
 
++ (CGFloat)getScreenScale
+{
+  CGFloat scale = 0.0;
+#if TARGET_OS_OSX
+  scale = [[NSScreen mainScreen] backingScaleFactor];
+#else
+  if (@available(iOS 13.0, *)) {
+    scale = [UITraitCollection currentTraitCollection].displayScale;
+  } else {
+#if !TARGET_OS_VISION
+    scale = [[UIScreen mainScreen] scale];
+#endif
+  }
+#endif // TARGET_OS_OSX
+  return scale;
+}
+
 + (CGImage *)renderToImage:(RNSVGRenderable *)renderable
                        ctm:(CGAffineTransform)ctm
                       rect:(CGRect)rect
                       clip:(CGRect *)clip
 {
-  UIGraphicsBeginImageContextWithOptions(rect.size, NO, 1.0);
+  CGFloat scale = [self getScreenScale];
+  UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
   CGContextRef cgContext = UIGraphicsGetCurrentContext();
+#if !TARGET_OS_OSX
   CGContextConcatCTM(cgContext, CGAffineTransformInvert(CGContextGetCTM(cgContext)));
+#endif
   CGContextConcatCTM(cgContext, ctm);
 
   if (clip) {
