@@ -106,30 +106,8 @@ using namespace facebook::react;
     }
   }
 
-  // Crop results to filter bounds
-  CIFilter *crop = [CIFilter filterWithName:@"CICrop"];
-  [crop setDefaults];
-  [crop setValue:result forKey:@"inputImage"];
-
-  CGFloat scaleX = ctm.a, scaleY = fabs(ctm.d);
-  CGFloat x, y, width, height;
-  if (self.filterUnits == kRNSVGUnitsUserSpaceOnUse) {
-    x = [self relativeOn:self.x relative:canvasBounds.size.width / scaleX];
-    y = [self relativeOn:self.y relative:canvasBounds.size.height / scaleY];
-    width = [self relativeOn:self.width relative:canvasBounds.size.width / scaleX];
-    height = [self relativeOn:self.height relative:canvasBounds.size.height / scaleY];
-  } else { // kRNSVGUnitsObjectBoundingBox
-    x = renderableBounds.origin.x + [self relativeOnFraction:self.x relative:renderableBounds.size.width];
-    y = renderableBounds.origin.y + [self relativeOnFraction:self.y relative:renderableBounds.size.height];
-    width = [self relativeOnFraction:self.width relative:renderableBounds.size.width];
-    height = [self relativeOnFraction:self.height relative:renderableBounds.size.height];
-  }
-  CGRect cropCGRect = CGRectMake(x, y, width, height);
-  cropCGRect = CGRectApplyAffineTransform(cropCGRect, ctm);
-  CIVector *cropRect = [CIVector vectorWithCGRect:cropCGRect];
-  [crop setValue:cropRect forKey:@"inputRectangle"];
-
-  return [crop valueForKey:@"outputImage"];
+  return result;
+  // TODO: Crop element to filter's x, y, width, height
 }
 
 static CIFilter *sourceAlphaFilter()
