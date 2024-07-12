@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewParent;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReadableArray;
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 

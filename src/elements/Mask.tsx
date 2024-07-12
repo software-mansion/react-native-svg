@@ -1,15 +1,17 @@
 import type { ReactNode } from 'react';
 import * as React from 'react';
 import { withoutXY } from '../lib/extract/extractProps';
-import type { CommonPathProps, NumberProp } from '../lib/extract/types';
+import type {
+  CommonPathProps,
+  MaskType,
+  NumberProp,
+  Units,
+} from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
 import RNSVGMask from '../fabric/MaskNativeComponent';
 import type { NativeMethods } from 'react-native';
 import { maskType } from '../lib/maskType';
-
-export type TMaskUnits = 'userSpaceOnUse' | 'objectBoundingBox';
-export type TMaskType = 'alpha' | 'luminance';
 
 export interface MaskProps extends CommonPathProps {
   children?: ReactNode;
@@ -18,11 +20,11 @@ export interface MaskProps extends CommonPathProps {
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  maskUnits?: TMaskUnits;
-  maskContentUnits?: TMaskUnits;
-  maskType?: TMaskType;
+  maskUnits?: Units;
+  maskContentUnits?: Units;
+  maskType?: MaskType;
   style?: {
-    maskType: TMaskType;
+    maskType: MaskType;
   };
 }
 
