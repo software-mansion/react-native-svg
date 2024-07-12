@@ -32,6 +32,9 @@ export function useHandleEvents<T>(
     onPressIn,
     onPressOut,
     onPressMove,
+    delayPressIn,
+    delayPressOut,
+    delayLongPress,
     ...rest
   } = props;
 
@@ -42,10 +45,21 @@ export function useHandleEvents<T>(
         onLongPress,
         onPress,
         onPressMove,
+        delayLongPress,
+        delayPressStart: delayPressIn,
+        delayPressEnd: delayPressOut,
         onPressStart: onPressIn,
         onPressEnd: onPressOut,
       }),
-      [onLongPress, onPress, onPressIn, onPressOut]
+      [
+        delayPressIn,
+        delayPressOut,
+        onLongPress,
+        delayLongPress,
+        onPress,
+        onPressIn,
+        onPressOut,
+      ]
     );
 
     pressEventHandlers = usePressEvents(elementRef, pressConfig);
@@ -70,6 +84,9 @@ export function useHandleEvents<T>(
       onStartShouldSetResponderCapture,
     });
   }
-
-  return { elementRef, rest, onClick: pressEventHandlers?.onClick };
+  return {
+    elementRef,
+    rest,
+    onClick: pressEventHandlers?.onClick,
+  };
 }
