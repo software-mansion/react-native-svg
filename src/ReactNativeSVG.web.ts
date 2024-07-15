@@ -278,7 +278,7 @@ const prepare = <T extends BaseProps>(
     clean.onClick = props.onPress;
   }
   if (props.href !== null) {
-    clean.href = resolveAssetUri(props.href);
+    clean.href = resolveAssetUri(props.href)?.uri;
   }
   return clean;
 };
