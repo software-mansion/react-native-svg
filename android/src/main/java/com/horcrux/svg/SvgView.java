@@ -58,6 +58,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   private @Nullable Bitmap mBitmap;
+  private @Nullable Bitmap mCurrentBitmap;
   private boolean mRemovalTransitionStarted;
 
   public SvgView(ReactContext reactContext) {
@@ -161,6 +162,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   private final Map<String, VirtualView> mDefinedTemplates = new HashMap<>();
   private final Map<String, VirtualView> mDefinedMarkers = new HashMap<>();
   private final Map<String, VirtualView> mDefinedMasks = new HashMap<>();
+  private final Map<String, VirtualView> mDefinedFilters = new HashMap<>();
   private final Map<String, Brush> mDefinedBrushes = new HashMap<>();
   private Canvas mCanvas;
   private final float mScale;
@@ -264,7 +266,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       return null;
     }
     Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_8888);
-
+    mCurrentBitmap = bitmap;
     drawChildren(new Canvas(bitmap));
     return bitmap;
   }
@@ -423,11 +425,23 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     return mDefinedMasks.get(maskRef);
   }
 
+  void defineFilter(VirtualView filter, String filterRef) {
+    mDefinedFilters.put(filterRef, filter);
+  }
+
+  VirtualView getDefinedFilter(String filterRef) {
+    return mDefinedFilters.get(filterRef);
+  }
+
   void defineMarker(VirtualView marker, String markerRef) {
     mDefinedMarkers.put(markerRef, marker);
   }
 
   VirtualView getDefinedMarker(String markerRef) {
     return mDefinedMarkers.get(markerRef);
+  }
+
+  public Bitmap getCurrentBitmap() {
+    return mCurrentBitmap;
   }
 }

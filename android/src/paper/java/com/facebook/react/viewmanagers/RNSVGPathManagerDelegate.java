@@ -99,6 +99,9 @@ public class RNSVGPathManagerDelegate<T extends View, U extends BaseViewManagerI
       case "propList":
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
+      case "filter":
+        mViewManager.setFilter(view, value == null ? null : (String) value);
+        break;
       case "d":
         mViewManager.setD(view, value == null ? null : (String) value);
         break;
