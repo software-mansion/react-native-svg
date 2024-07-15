@@ -1,4 +1,5 @@
 #import "RNSVGContextBrush.h"
+#import "RNSVGFilterPrimitive.h"
 #import "RNSVGGroup.h"
 #import "RNSVGLength.h"
 #import "RNSVGPainterBrush.h"
@@ -167,6 +168,7 @@ void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *rendera
     }
     renderableNode.propList = propArray;
   }
+  renderableNode.filter = RCTNSStringFromStringNilIfEmpty(renderableProps.filter);
 }
 
 template <typename T>
@@ -191,6 +193,28 @@ void setCommonGroupProps(const T &groupProps, RNSVGGroup *groupNode)
       groupNode.font = fontDict;
     }
   }
+}
+
+template <typename T>
+void setCommonFilterProps(const T &filterProps, RNSVGFilterPrimitive *filterPrimitiveNode)
+{
+  id x = RNSVGConvertFollyDynamicToId(filterProps.x);
+  if (x != nil) {
+    filterPrimitiveNode.x = [RCTConvert RNSVGLength:x];
+  }
+  id y = RNSVGConvertFollyDynamicToId(filterProps.y);
+  if (y != nil) {
+    filterPrimitiveNode.y = [RCTConvert RNSVGLength:y];
+  }
+  id height = RNSVGConvertFollyDynamicToId(filterProps.height);
+  if (height != nil) {
+    filterPrimitiveNode.height = [RCTConvert RNSVGLength:height];
+  }
+  id width = RNSVGConvertFollyDynamicToId(filterProps.width);
+  if (width != nil) {
+    filterPrimitiveNode.width = [RCTConvert RNSVGLength:width];
+  }
+  filterPrimitiveNode.result = RCTNSStringFromStringNilIfEmpty(filterProps.result);
 }
 
 template <typename T>

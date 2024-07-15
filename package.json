@@ -1,5 +1,5 @@
 {
-  "version": "15.3.0",
+  "version": "15.4.0",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -19,6 +19,7 @@
     "lib",
     "src",
     "css",
+    "filter-image",
     "RNSVG.podspec",
     "!android/build",
     "windows",
@@ -49,7 +50,7 @@
     "format": "yarn format-js && yarn format-ios && yarn format-java",
     "format-ios": "find apple/ common/ -iname *.h -o -iname *.m -o -iname *.cpp -o -iname *.mm | xargs clang-format -i",
     "format-java": "node ./scripts/format-java.js",
-    "format-js": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md USAGE.md ./src/**/*.{ts,tsx} ./Example/src/**/*.tsx",
+    "format-js": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md USAGE.md ./src/**/*.{ts,tsx} ./apps/**/*.tsx ./example/**/*.tsx ./*-example/**/*.tsx",
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
@@ -64,7 +65,8 @@
   },
   "dependencies": {
     "css-select": "^5.1.0",
-    "css-tree": "^1.1.3"
+    "css-tree": "^1.1.3",
+    "warn-once": "0.1.1"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.0.2",
