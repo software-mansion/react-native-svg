@@ -43,7 +43,7 @@ jobs:
           node-version: 18
           cache: 'yarn'
       - name: Install root node dependencies
-        run: yarn install && yarn submodules
+        run: yarn install
       - name: Install node dependencies
         id: install_deps
         working-directory: ${{ env.WORKING_DIRECTORY }}
