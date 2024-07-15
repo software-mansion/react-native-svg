@@ -1,7 +1,7 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <react/renderer/components/rnsvg/Props.h>
 #import "RNSVGColorMatrixType.h"
-#import "RNSVGEdgeModeTypes.h"
+#import "RNSVGEdgeMode.h"
 #import "RNSVGUnits.h"
 
 namespace react = facebook::react;
@@ -11,6 +11,7 @@ namespace react = facebook::react;
 + (RNSVGUnits)RNSVGUnitsFromFilterUnitsCppEquivalent:(react::RNSVGFilterFilterUnits)svgUnits;
 + (RNSVGUnits)RNSVGUnitsFromPrimitiveUnitsCppEquivalent:(react::RNSVGFilterPrimitiveUnits)svgUnits;
 + (RNSVGColorMatrixType)RNSVGColorMatrixTypeFromCppEquivalent:(react::RNSVGFeColorMatrixType)type;
++ (RNSVGEdgeMode)RNSVGEdgeModeFromCppEquivalent:(react::RNSVGFeGaussianBlurEdgeMode)edgeMode;
 
 @end
 
