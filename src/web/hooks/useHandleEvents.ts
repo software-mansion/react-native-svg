@@ -6,6 +6,23 @@ import useResponderEvents from 'react-native-web/src/modules/useResponderEvents/
 import { hasResponderEvents, hasTouchableProperty } from '../../utils';
 import { CreateComponentProps } from '../../types';
 
+type ClickEvent = any;
+type KeyboardEvent = any;
+type ResponderEvent = any;
+
+// https://github.com/necolas/react-native-web/blob/54c14d64dabd175e8055e1dc92e9196c821f9b7d/packages/react-native-web/src/modules/usePressEvents/PressResponder.js#L44-L54
+export type EventHandlers = Readonly<{
+  onClick: (event: ClickEvent) => void;
+  onContextMenu: (event: ClickEvent) => void;
+  onKeyDown: (event: KeyboardEvent) => void;
+  onResponderGrant: (event: ResponderEvent) => void;
+  onResponderMove: (event: ResponderEvent) => void;
+  onResponderRelease: (event: ResponderEvent) => void;
+  onResponderTerminate: (event: ResponderEvent) => void;
+  onResponderTerminationRequest: (event: ResponderEvent) => boolean;
+  onStartShouldSetResponder: (event: ResponderEvent) => boolean;
+}>;
+
 export function useHandleEvents<T>(
   elementRef: MutableRefObject<T | null>,
   props: CreateComponentProps
@@ -38,7 +55,7 @@ export function useHandleEvents<T>(
     ...rest
   } = props;
 
-  let pressEventHandlers: any = {};
+  let pressEventHandlers: EventHandlers | null = null;
   if (hasTouchableProperty(props)) {
     const pressConfig = useMemo(
       () => ({
