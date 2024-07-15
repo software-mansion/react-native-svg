@@ -13,6 +13,7 @@ const TestingView = () => {
   const wrapperRef = useRef<ViewShot>(null);
   const [resolution, setResolution] = useState([600, 600]);
   const [message, setMessage] = useState('⏳ Connecting to Jest server...');
+
   useEffect(() => {
     wsClient.onopen = () => {
       wsClient.send(
@@ -22,13 +23,10 @@ const TestingView = () => {
           arch: isFabric() ? 'fabric' : 'paper',
         }),
       );
-      setMessage('✅ Connected to Jest server. Waiting for render requests.')
+      setMessage('✅ Connected to Jest server. Waiting for render requests.');
     };
-    //todo: find out why there is 1005 close when closing WS on Jest side
     wsClient.onerror = err => {
-      console.log(err);
       if (!err.message) {
-        // when gracefully stopping WS, the err is null however the callback is still being called for some reason
         return;
       }
       console.error(
@@ -41,7 +39,7 @@ const TestingView = () => {
     wsClient.onmessage = ({data: rawMessage}) => {
       const message = JSON.parse(rawMessage);
       if (message.type == 'renderRequest') {
-        setMessage(`✅ Rendering tests, please don't close this tab.`)
+        setMessage(`✅ Rendering tests, please don't close this tab.`);
         setResolution([message.width, message.height]);
         setRenderedContent(
           createElementFromObject(
@@ -53,11 +51,13 @@ const TestingView = () => {
       }
     };
     wsClient.onclose = event => {
-      if(event.code == 1006 && event.reason) {
+      if (event.code == 1006 && event.reason) {
         // this is an error, let error handler take care of it
-        return
+        return;
       }
-      setMessage(`✅ Connection to Jest server has been closed. You can close this tab safely. (${event.code})`)
+      setMessage(
+        `✅ Connection to Jest server has been closed. You can close this tab safely. (${event.code})`,
+      );
     };
   }, [wsClient]);
 

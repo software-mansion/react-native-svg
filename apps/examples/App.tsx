@@ -20,6 +20,7 @@ import {Svg, Circle, Line} from 'react-native-svg';
 
 import * as examples from './src/examples';
 import {commonStyles} from './src/commonStyles';
+import {E2E} from './src/examples';
 
 const names: (keyof typeof examples)[] = [
   'Svg',
@@ -133,6 +134,10 @@ export default class SvgExample extends Component {
   );
 
   render() {
+    if (process.env.E2E) {
+      const e2eTab = React.createElement(E2E.samples[0]);
+      return <SafeAreaView>{e2eTab}</SafeAreaView>;
+    }
     return (
       <SafeAreaView style={styles.container}>
         <Text style={commonStyles.welcome}>SVG library for React Apps</Text>
