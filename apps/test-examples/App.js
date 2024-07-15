@@ -24,5 +24,5 @@ import Test2276 from './src/Test2276';
 import Test2327 from './src/Test2327';
 
 export default function App() {
-  return <Test1790 />;
+  return <ColorTest />;
 }
