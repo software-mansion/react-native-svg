@@ -8,20 +8,16 @@
 
 package com.horcrux.svg;
 
-import android.graphics.Rect;
 import android.util.SparseArray;
 import com.facebook.react.bridge.Dynamic;
-import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.viewmanagers.RNSVGSvgViewAndroidManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGSvgViewAndroidManagerInterface;
-import com.facebook.react.views.view.ReactViewGroup;
-import com.facebook.react.views.view.ReactViewManager;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
@@ -32,7 +28,7 @@ import javax.annotation.Nullable;
  * ViewManager for RNSVGSvgView React views. Renders as a {@link SvgView} and handles invalidating
  * the native view on view updates happening in the underlying tree.
  */
-class SvgViewManager extends ReactViewManager
+class SvgViewManager extends ViewGroupManager<SvgView>
     implements RNSVGSvgViewAndroidManagerInterface<SvgView> {
 
   public static final String REACT_CLASS = "RNSVGSvgViewAndroid";
@@ -42,12 +38,12 @@ class SvgViewManager extends ReactViewManager
 
   private final ViewManagerDelegate<SvgView> mDelegate;
 
-  protected ViewManagerDelegate getDelegate() {
+  protected ViewManagerDelegate<SvgView> getDelegate() {
     return mDelegate;
   }
 
   public SvgViewManager() {
-    mDelegate = new RNSVGSvgViewAndroidManagerDelegate(this);
+    mDelegate = new RNSVGSvgViewAndroidManagerDelegate<>(this);
   }
 
   static void setSvgView(int tag, SvgView svg) {
@@ -75,18 +71,18 @@ class SvgViewManager extends ReactViewManager
 
   @Nonnull
   @Override
-  public ReactViewGroup createViewInstance(ThemedReactContext reactContext) {
+  public SvgView createViewInstance(ThemedReactContext reactContext) {
     return new SvgView(reactContext);
   }
 
   @Override
-  public void updateExtraData(ReactViewGroup root, Object extraData) {
+  public void updateExtraData(SvgView root, Object extraData) {
     super.updateExtraData(root, extraData);
     root.invalidate();
   }
 
   @Override
-  public void onDropViewInstance(@Nonnull ReactViewGroup view) {
+  public void onDropViewInstance(@Nonnull SvgView view) {
     super.onDropViewInstance(view);
     mTagToSvgView.remove(view.getId());
   }
@@ -167,212 +163,5 @@ class SvgViewManager extends ReactViewManager
     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       e.printStackTrace();
     }
-  }
-
-  @Override
-  public void setHasTVPreferredFocus(SvgView view, boolean value) {
-    super.setTVPreferredFocus(view, value);
-  }
-
-  @Override
-  public void setBorderTopEndRadius(SvgView view, float value) {
-    super.setBorderRadius(view, 6, value);
-  }
-
-  @Override
-  public void setBorderBottomStartRadius(SvgView view, float value) {
-    super.setBorderRadius(view, 7, value);
-  }
-
-  @Override
-  public void setBorderBottomColor(SvgView view, @Nullable Integer value) {
-    super.setBorderColor(view, 4, value);
-  }
-
-  @Override
-  public void setNextFocusDown(SvgView view, int value) {
-    super.nextFocusDown(view, value);
-  }
-
-  @Override
-  public void setBorderRightColor(SvgView view, @Nullable Integer value) {
-    super.setBorderColor(view, 2, value);
-  }
-
-  @Override
-  public void setNextFocusRight(SvgView view, int value) {
-    super.nextFocusRight(view, value);
-  }
-
-  @Override
-  public void setBorderLeftColor(SvgView view, @Nullable Integer value) {
-    super.setBorderColor(view, 1, value);
-  }
-
-  @Override
-  public void setBorderColor(SvgView view, @Nullable Integer value) {
-    super.setBorderColor(view, 0, value);
-  }
-
-  @Override
-  public void setRemoveClippedSubviews(SvgView view, boolean value) {
-    super.setRemoveClippedSubviews(view, value);
-  }
-
-  @Override
-  public void setNextFocusForward(SvgView view, int value) {
-    super.nextFocusForward(view, value);
-  }
-
-  @Override
-  public void setNextFocusUp(SvgView view, int value) {
-    super.nextFocusUp(view, value);
-  }
-
-  @Override
-  public void setAccessible(SvgView view, boolean value) {
-    super.setAccessible(view, value);
-  }
-
-  @Override
-  public void setBorderStartColor(SvgView view, @Nullable Integer value) {
-    super.setBorderColor(view, 5, value);
-  }
-
-  @Override
-  public void setBorderBottomEndRadius(SvgView view, float value) {
-    super.setBorderRadius(view, 8, value);
-  }
-
-  @Override
-  public void setBorderEndColor(SvgView view, @Nullable Integer value) {
-    super.setBorderColor(view, 6, value);
-  }
-
-  @Override
-  public void setFocusable(SvgView view, boolean value) {
-    super.setFocusable(view, value);
-  }
-
-  @Override
-  public void setNativeBackgroundAndroid(SvgView view, @Nullable ReadableMap value) {
-    super.setNativeBackground(view, value);
-  }
-
-  @Override
-  public void setBorderTopStartRadius(SvgView view, float value) {
-    super.setBorderRadius(view, 5, value);
-  }
-
-  @Override
-  public void setNativeForegroundAndroid(SvgView view, @Nullable ReadableMap value) {
-    super.setNativeForeground(view, value);
-  }
-
-  @Override
-  public void setBackfaceVisibility(SvgView view, @Nullable String value) {
-    super.setBackfaceVisibility(view, value);
-  }
-
-  @Override
-  public void setBorderStyle(SvgView view, @Nullable String value) {
-    super.setBorderStyle(view, value);
-  }
-
-  @Override
-  public void setNeedsOffscreenAlphaCompositing(SvgView view, boolean value) {
-    super.setNeedsOffscreenAlphaCompositing(view, value);
-  }
-
-  @Override
-  public void setHitSlop(SvgView view, @Nullable ReadableMap hitSlopMap) {
-    // we don't call super here since its signature changed in RN 0.69 and we want backwards
-    // compatibility
-    if (hitSlopMap != null) {
-      view.setHitSlopRect(
-          new Rect(
-              hitSlopMap.hasKey("left")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("left"))
-                  : 0,
-              hitSlopMap.hasKey("top")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("top"))
-                  : 0,
-              hitSlopMap.hasKey("right")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("right"))
-                  : 0,
-              hitSlopMap.hasKey("bottom")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("bottom"))
-                  : 0));
-    }
-  }
-
-  @Override
-  public void setBorderTopColor(SvgView view, @Nullable Integer value) {
-    super.setBorderColor(view, 3, value);
-  }
-
-  @Override
-  public void setNextFocusLeft(SvgView view, int value) {
-    super.nextFocusLeft(view, value);
-  }
-
-  @Override
-  public void setBorderBlockColor(SvgView view, @Nullable Integer value) {
-    super.setBorderColor(view, 9, value);
-  }
-
-  @Override
-  public void setBorderBlockEndColor(SvgView view, @Nullable Integer value) {
-    super.setBorderColor(view, 10, value);
-  }
-
-  @Override
-  public void setBorderBlockStartColor(SvgView view, @Nullable Integer value) {
-    super.setBorderColor(view, 11, value);
-  }
-
-  @Override
-  public void setBorderRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 0, (float) value);
-  }
-
-  @Override
-  public void setBorderTopLeftRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 1, (float) value);
-  }
-
-  @Override
-  public void setBorderTopRightRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 2, (float) value);
-  }
-
-  @Override
-  public void setBorderBottomRightRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 3, (float) value);
-  }
-
-  @Override
-  public void setBorderBottomLeftRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 4, (float) value);
-  }
-
-  @Override
-  public void setBorderEndEndRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 9, (float) value);
-  }
-
-  @Override
-  public void setBorderEndStartRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 10, (float) value);
-  }
-
-  @Override
-  public void setBorderStartEndRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 11, (float) value);
-  }
-
-  @Override
-  public void setBorderStartStartRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 12, (float) value);
   }
 }
