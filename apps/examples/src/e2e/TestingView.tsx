@@ -1,4 +1,10 @@
-import React, {Component, useEffect, useRef, useState} from 'react';
+import React, {
+  Component,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {Platform, Text, View} from 'react-native';
 import * as RNSVG from 'react-native-svg';
 import ViewShot from 'react-native-view-shot';
@@ -8,15 +14,18 @@ const wsUri = `ws://${address}:7123`;
 
 const TestingView = () => {
   const [renderedContent, setRenderedContent] = useState();
-  const [wsClient, setWsClient] = useState<WebSocket>(new WebSocket(wsUri));
+  const [wsClient, setWsClient] = useState<WebSocket | null>(null);
   const [readyToSnapshot, setReadyToSnapshot] = useState(false);
   const wrapperRef = useRef<ViewShot>(null);
   const [resolution, setResolution] = useState([600, 600]);
   const [message, setMessage] = useState('⏳ Connecting to Jest server...');
 
-  useEffect(() => {
-    wsClient.onopen = () => {
-      wsClient.send(
+  const connect = useCallback(() => {
+    const client = new WebSocket(wsUri);
+    setWsClient(client);
+    setMessage('⏳ Connecting to Jest server...');
+    client.onopen = () => {
+      client.send(
         JSON.stringify({
           os: Platform.OS,
           version: Platform.Version,
@@ -25,18 +34,21 @@ const TestingView = () => {
       );
       setMessage('✅ Connected to Jest server. Waiting for render requests.');
     };
-    wsClient.onerror = err => {
+    client.onerror = (err: any) => {
       if (!err.message) {
         return;
       }
       console.error(
-        `Error while connecting to E2E WebSocket server at ${wsUri}: ${err.message}. Reopen this tab to retry.`,
+        `Error while connecting to E2E WebSocket server at ${wsUri}: ${err.message}. Will retry in 3 seconds.`,
       );
       setMessage(
-        `🚨 Failed to connect to Jest server at ${wsUri}: ${err.message}! Please reopen this tab to retry.`,
+        `🚨 Failed to connect to Jest server at ${wsUri}: ${err.message}! Will retry in 3 seconds.`,
       );
+      setTimeout(() => {
+        connect();
+      }, 3000);
     };
-    wsClient.onmessage = ({data: rawMessage}) => {
+    client.onmessage = ({data: rawMessage}) => {
       const message = JSON.parse(rawMessage);
       if (message.type == 'renderRequest') {
         setMessage(`✅ Rendering tests, please don't close this tab.`);
@@ -50,7 +62,7 @@ const TestingView = () => {
         setReadyToSnapshot(true);
       }
     };
-    wsClient.onclose = event => {
+    client.onclose = event => {
       if (event.code == 1006 && event.reason) {
         // this is an error, let error handler take care of it
         return;
@@ -60,13 +72,13 @@ const TestingView = () => {
       );
     };
   }, [wsClient]);
-
+  useEffect(connect, []);
   useEffect(() => {
     if (!readyToSnapshot || !wrapperRef.current) {
       return;
     }
-    wrapperRef.current.capture?.().then(value => {
-      wsClient.send(
+    wrapperRef.current.capture?.().then((value: string) => {
+      wsClient?.send(
         JSON.stringify({
           type: 'renderResponse',
           data: value,

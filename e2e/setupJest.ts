@@ -6,8 +6,10 @@ import { WebSocket, WebSocketServer } from 'ws';
 const setupJest = () =>
   new Promise<void>((resolve) => {
     const wsServer = new WebSocketServer({ port: 7123 });
-    wsServer.on('connection', (client: WebSocket) => {
+    wsServer.on('connection', (client) => {
+      console.log('connection received from ' + client);
       global.client = client;
+      console.log('connection opened ' + client);
 
       // Add handler for one-time handshake message that confirms the client has connected properly
       client.once('message', (message) => {
@@ -18,8 +20,8 @@ const setupJest = () =>
           )}`
         );
 
-        global.os = parsedMessage.os
-        global.arch = parsedMessage.arch
+        global.os = parsedMessage.os;
+        global.arch = parsedMessage.arch;
 
         console.log(`[react-native-svg] Running E2E test suites...\n`);
         resolve();
