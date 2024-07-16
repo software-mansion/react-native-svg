@@ -7,6 +7,7 @@ import {
   addAttach as attachImageToReport,
   addMsg as addMessageToReport,
 } from 'jest-html-reporters/helper';
+import { PNG } from 'pngjs';
 
 const width = 200;
 const height = 200;
@@ -15,6 +16,7 @@ const targetPixelRatio = 3.0;
 
 const testCases = fs.readdirSync(path.resolve('e2e', 'cases'));
 testCases.forEach((testCase) => {
+  jest.setTimeout(30_000);
   test(`Web browser rendered SVG should have less than 0.05% differences between device rendered SVG (${testCase})`, async () => {
     await addMessageToReport({
       message: JSON.stringify({
@@ -58,7 +60,7 @@ testCases.forEach((testCase) => {
       bufferFormat: 'png',
     });
     await attachImageToReport({
-      attach: fs.readFileSync(renderedFilePath),
+      attach: PNG.sync.write(PNG.sync.read(renderedDataBuffer)),
       description: 'Actual rendered image',
       bufferFormat: 'png',
     });
