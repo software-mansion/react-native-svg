@@ -19,6 +19,7 @@ module.exports = {
               'RNSVGDefsComponentDescriptor',
               'RNSVGFeColorMatrixComponentDescriptor',
               'RNSVGFeGaussianBlurComponentDescriptor',
+              'RNSVGFeOffsetComponentDescriptor',
               'RNSVGFilterComponentDescriptor',
               'RNSVGEllipseComponentDescriptor',
               'RNSVGForeignObjectComponentDescriptor',
