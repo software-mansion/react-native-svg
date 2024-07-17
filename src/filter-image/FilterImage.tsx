@@ -1,5 +1,5 @@
 import { ImageProps, Image as RNImage, StyleSheet, View } from 'react-native';
-import { FeColorMatrix, Filter, Image, Svg } from '../index';
+import { FeColorMatrix, FeGaussianBlur, Filter, Image, Svg } from '../index';
 import { Filters } from './types';
 import { extractResizeMode } from './extractImage';
 
@@ -13,6 +13,8 @@ const getFilters = (filters: FilterImageProps['filters']) => {
     switch (name) {
       case 'colorMatrix':
         return <FeColorMatrix key={`${filter}-${index}`} {...filterProps} />;
+      case 'gaussianBlur':
+        return <FeGaussianBlur key={`${filter}-${index}`} {...filterProps} />;
       default:
         return null;
     }
