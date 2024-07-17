@@ -1260,6 +1260,7 @@ Filter effects are a way of processing an element’s rendering before it is dis
 Currently supported\* filters are:
 
 - FeColorMatrix
+- FeGaussianBlur
 
 \*_More filters are coming soon_
 
