@@ -107,6 +107,8 @@ import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFilterManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFilterManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGForeignObjectManagerDelegate;
@@ -587,6 +589,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGFilter,
     RNSVGFeColorMatrix,
     RNSVGFeGaussianBlur,
+    RNSVGFeOffset,
     RNSVGMarker,
     RNSVGForeignObject,
   }
@@ -637,6 +640,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FeColorMatrixView(reactContext);
       case RNSVGFeGaussianBlur:
         return new FeGaussianBlurView(reactContext);
+      case RNSVGFeOffset:
+        return new FeOffsetView(reactContext);
       case RNSVGMarker:
         return new MarkerView(reactContext);
       case RNSVGForeignObject:
@@ -1441,9 +1446,60 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       node.setStdDeviationY(stdDeviationY);
     }
 
-    @ReactProp(name = "values")
+    @ReactProp(name = "edgeMode")
     public void setEdgeMode(FeGaussianBlurView node, String edgeMode) {
       node.setEdgeMode(edgeMode);
+    }
+  }
+
+  static class FeOffsetManager extends VirtualViewManager<FeOffsetView>
+      implements RNSVGFeOffsetManagerInterface<FeOffsetView> {
+    FeOffsetManager() {
+      super(SVGClass.RNSVGFeOffset);
+      mDelegate = new RNSVGFeOffsetManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeOffset";
+
+
+    @ReactProp(name = "x")
+    public void setX(FeOffsetView node, Dynamic x) {
+      node.setX(x);
+    }
+
+    @ReactProp(name = "y")
+    public void setY(FeOffsetView node, Dynamic y) {
+      node.setY(y);
+    }
+
+    @ReactProp(name = "width")
+    public void setWidth(FeOffsetView node, Dynamic width) {
+      node.setWidth(width);
+    }
+
+    @ReactProp(name = "height")
+    public void setHeight(FeOffsetView node, Dynamic height) {
+      node.setHeight(height);
+    }
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeOffsetView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "dx")
+    public void setDx(FeOffsetView node, Dynamic dx) {
+      node.setDx(dx);
+    }
+
+    @ReactProp(name = "dy")
+    public void setDy(FeOffsetView node, Dynamic dy) {
+      node.setDy(dy);
+    }
+
+    @ReactProp(name = "result")
+    public void setResult(FeOffsetView node, String result) {
+      node.setResult(result);
     }
   }
 
