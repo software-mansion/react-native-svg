@@ -48,7 +48,8 @@ class FeGaussianBlurView extends FilterPrimitiveView {
   }
 
   private Bitmap blur(Context context, Bitmap bitmap) {
-    float stdDeviation = Math.max(mStdDeviationX, mStdDeviationY);
+    // Android blur radius is much weaker than SVG's, so we need to scale it up.
+    float stdDeviation = Math.max(mStdDeviationX, mStdDeviationY) * 2;
     if (stdDeviation <= 0) return bitmap;
     final float maxRadius = 25.0f;
     float radius = Math.min(stdDeviation, maxRadius);
