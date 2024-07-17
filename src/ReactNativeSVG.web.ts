@@ -71,15 +71,7 @@ function encodeSvg(svgString: string) {
     .replace(/\s+/g, ' ');
 }
 
-const SvgComponent = createComponent<SvgProps & BaseProps>('svg', (props) => {
-  const { x, y, ...rest } = props;
-
-  if ((x || y) && !rest.transform) {
-    rest.transform = `translate(${x || 0}, ${y || 0})`;
-  }
-
-  return rest;
-});
+const SvgComponent = createComponent<SvgProps & BaseProps>('svg');
 
 (SvgComponent as SvgProps).toDataURL = (
   svgString: string,

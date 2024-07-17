@@ -56,6 +56,7 @@ export interface BaseProps extends Props {
   accessibilityState?: object;
   delayLongPress?: number;
   delayPressIn?: number;
+  delaypressin?: number;
   delayPressOut?: number;
   disabled?: boolean;
   hitSlop?: EdgeInsetsProp;

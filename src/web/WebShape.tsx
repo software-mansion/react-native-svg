@@ -5,9 +5,10 @@ import {
 } from 'react-native';
 // eslint-disable-next-line import/no-unresolved
 import useMergeRefs from 'react-native-web/src/modules/useMergeRefs/index';
-import { BaseProps, CreateComponentProps } from '../types';
-import { camelCaseToDashed, prepare } from '../utils';
+import { type CreateComponentProps } from '../types';
+import { prepare } from '../utils';
 import { useHandleEvents } from './hooks/useHandleEvents';
+import { setNativeProps } from './utils';
 
 export const WebShape = <T,>(
   props: CreateComponentProps,
@@ -18,55 +19,18 @@ export const WebShape = <T,>(
   const { elementRef, rest, onClick } = useHandleEvents(currentRef, props);
   const lastMergedProps = useRef<Partial<typeof rest>>({});
 
-  const setNativeProps = (
-    nativeProps: BaseProps,
-    elementRef: React.MutableRefObject<SVGElement | null>
-  ) => {
-    const { style, ...rest } = nativeProps;
-    if (elementRef.current) {
-      const current = elementRef.current;
-
-      // Set attributes and styles
-      Object.keys(rest).forEach((cleanAttribute) => {
-        const cleanValue = rest[cleanAttribute as keyof typeof rest];
-        switch (cleanAttribute) {
-          case 'ref':
-          case 'children':
-            break;
-          case 'style':
-            Object.assign(current.style, cleanValue);
-            break;
-          default:
-            (current as unknown as SVGElement).setAttribute(
-              camelCaseToDashed(cleanAttribute),
-              String(cleanValue)
-            );
-            break;
-        }
-      });
-
-      const mergedProps = { ...rest, style };
-      const mergedStyle = Array.isArray(style)
-        ? Object.assign({}, ...style)
-        : style;
-      const merged = { ...mergedProps, style: mergedStyle };
-      lastMergedProps.current = merged;
-    }
-  };
-
   useLayoutEffect(() => {
     setNativeProps(
       props,
-      elementRef as React.MutableRefObject<SVGElement | null>
+      elementRef as React.MutableRefObject<SVGElement | null>,
+      lastMergedProps
     );
   }, [props]);
 
   const setRef = useMergeRefs(elementRef, lastMergedProps, forwardedRef);
   return createElement(Tag, {
-    ...{
-      ...prepare(rest),
-      collapsable: undefined,
-    },
+    ...prepare(rest),
+    collapsable: undefined,
     onClick,
     ref: setRef,
   });
