@@ -80,7 +80,8 @@ class FilterView extends DefinitionView {
 
     for (int i = 0; i < getChildCount(); i++) {
       View node = getChildAt(i);
-      if (node instanceof FilterPrimitiveView currentFilter) {
+      if (node instanceof FilterPrimitiveView) {
+        FilterPrimitiveView currentFilter = (FilterPrimitiveView) node;
         res = currentFilter.applyFilter(mResultsMap, res);
         String resultName = currentFilter.getResult();
         if (resultName != null) {
