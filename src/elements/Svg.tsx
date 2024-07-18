@@ -183,7 +183,7 @@ export default class Svg extends Shape<SvgProps> {
       props.onLayout = onLayout;
     }
 
-    const gStyle = Object.assign({}, StyleSheet.flatten(style ?? {}));
+    const gStyle = StyleSheet.flatten(style);
     // if transform prop is of RN style's kind, we want `SvgView` to handle it
     // since it can be done here. Otherwise, if transform is of `svg` kind, e.g. string,
     // we want G element to parse it since `Svg` does not include parsing of those custom transforms.
