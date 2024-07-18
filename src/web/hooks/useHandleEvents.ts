@@ -1,8 +1,8 @@
 import { MutableRefObject, useMemo } from 'react';
 // eslint-disable-next-line import/no-unresolved
-import usePressEvents from 'react-native-web/src/modules/usePressEvents/index';
+import usePressEvents from 'react-native-web/src/modules/usePressEvents';
 // eslint-disable-next-line import/no-unresolved
-import useResponderEvents from 'react-native-web/src/modules/useResponderEvents/index';
+import useResponderEvents from 'react-native-web/src/modules/useResponderEvents';
 import { hasResponderEvents, hasTouchableProperty } from '../../utils';
 import { CreateComponentProps } from '../../types';
 
@@ -78,7 +78,6 @@ export function useHandleEvents<T>(
         onPressOut,
       ]
     );
-
     pressEventHandlers = usePressEvents(elementRef, pressConfig);
     useResponderEvents(elementRef, pressEventHandlers);
   } else if (hasResponderEvents(props)) {

@@ -1,7 +1,7 @@
 import type { TransformsStyle } from 'react-native';
 import type { NumberProp, TransformProps } from '../lib/extract/types';
 import { transformsArrayToProps } from '../lib/extract/extractTransform';
-import { BaseProps, CreateComponentProps } from '../types';
+import type { BaseProps, CreateComponentProps } from '../types';
 import { resolve } from '../lib/resolve';
 
 export function parseTransformProp(
@@ -142,7 +142,7 @@ export const prepare = (props: CreateComponentProps) => {
     ...rest
   } = props;
 
-  const clean: PrepareComponentProps = { ...rest };
+  const clean: PrepareComponentProps = rest;
 
   if (origin != null) {
     clean['transform-origin'] = origin.toString().replace(',', ' ');
@@ -196,6 +196,9 @@ export const prepare = (props: CreateComponentProps) => {
   }
   if (fontStyle != null) {
     styles.fontStyle = fontStyle;
+  }
+  if (props.onPress != null) {
+    clean.onClick = props.onPress;
   }
   clean.style = resolve(style, styles);
   return clean;

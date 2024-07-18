@@ -4,7 +4,7 @@ import {
   unstable_createElement as createElement,
 } from 'react-native';
 // eslint-disable-next-line import/no-unresolved
-import useMergeRefs from 'react-native-web/src/modules/useMergeRefs/index';
+import useMergeRefs from 'react-native-web/src/modules/useMergeRefs';
 import { type CreateComponentProps } from '../types';
 import { prepare } from '../utils';
 import { useHandleEvents } from './hooks/useHandleEvents';
@@ -27,7 +27,7 @@ export const WebShape = <T,>(
     );
   }, [props]);
 
-  const setRef = useMergeRefs(elementRef, lastMergedProps, forwardedRef);
+  const setRef = useMergeRefs(elementRef, forwardedRef);
   return createElement(Tag, {
     ...prepare(rest),
     collapsable: undefined,

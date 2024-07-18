@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo, forwardRef } from 'react';
 import { WebShape } from './WebShape';
 import { BaseProps } from '../types';
 
-const CreateComponent = React.forwardRef(WebShape);
+const CreateComponent = memo(forwardRef(WebShape));
 
 export const createComponent = <T,>(
   tag: keyof JSX.IntrinsicElements,
