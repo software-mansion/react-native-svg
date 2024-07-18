@@ -35,7 +35,6 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.imagehelper.ImageSource;
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
 import com.horcrux.svg.events.SvgLoadEvent;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -142,8 +141,9 @@ class ImageView extends RenderableView {
           @Override
           public void onNewResultImpl(Bitmap bitmap) {
             final EventDispatcher mEventDispatcher =
-            UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
-            mEventDispatcher.dispatchEvent(new SvgLoadEvent(
+                UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
+            mEventDispatcher.dispatchEvent(
+                new SvgLoadEvent(
                     UIManagerHelper.getSurfaceId(ImageView.this),
                     getId(),
                     mContext,
