@@ -3,6 +3,7 @@ import {
   PixelRatio,
   type ImageProps as RNImageProps,
 } from 'react-native';
+// @ts-expect-error react-native/assets-registry doesn't export types.
 import { getAssetByID } from '@react-native/assets-registry/registry';
 
 export type PackagerAsset = {
