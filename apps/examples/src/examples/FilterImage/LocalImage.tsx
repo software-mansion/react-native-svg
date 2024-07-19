@@ -7,10 +7,7 @@ const testImage = require('../../assets/image.jpg');
 const FilterImageLocalExample = () => {
   return (
     <View>
-      <FilterImage
-        filters={[{name: 'colorMatrix', type: 'saturate', values: [0.5]}]}
-        source={testImage}
-      />
+      <FilterImage source={testImage} style={{filter: 'saturate(0.5)'}} />
     </View>
   );
 };
@@ -18,10 +15,10 @@ FilterImageLocalExample.title = 'Local image with filter';
 
 const icon = (
   <FilterImage
-    filters={[{name: 'colorMatrix', type: 'saturate', values: [0.5]}]}
     source={testImage}
     width={30}
     height={30}
+    style={{filter: 'saturate(0.5)'}}
   />
 );
 

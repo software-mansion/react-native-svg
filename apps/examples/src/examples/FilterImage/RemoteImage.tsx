@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {FilterImage} from 'react-native-svg/filter-image';
 
 const testSource = {
@@ -9,11 +9,7 @@ const testSource = {
 const FilterImageRemoteExample = () => {
   return (
     <View>
-      <FilterImage
-        filters={[{name: 'colorMatrix', type: 'saturate', values: [3]}]}
-        source={testSource}
-        style={{width: 200, height: 200}}
-      />
+      <FilterImage source={testSource} style={styles.image} />
     </View>
   );
 };
@@ -24,9 +20,9 @@ const FilterImageFewFiltersExample = () => {
     <View>
       <FilterImage
         filters={[
-          {name: 'colorMatrix', type: 'saturate', values: [10]},
+          {name: 'feColorMatrix', type: 'saturate', values: [10]},
           {
-            name: 'colorMatrix',
+            name: 'feColorMatrix',
             type: 'matrix',
             values: '0.2 0.2 0.2 0 0 0.2 0.2 0.2 0 0 0.2 0.2 0.2 0 0 0 0 0 1 0',
           },
@@ -41,12 +37,20 @@ FilterImageFewFiltersExample.title = 'Remote image with filters';
 
 const icon = (
   <FilterImage
-    filters={[{name: 'colorMatrix', type: 'saturate', values: [0.5]}]}
     source={testSource}
     width={30}
     height={30}
+    style={{filter: 'saturate(0.5)'}}
   />
 );
+
+const styles = StyleSheet.create({
+  image: {
+    width: 200,
+    height: 200,
+    filter: 'saturate(3)',
+  },
+});
 
 const samples = [FilterImageRemoteExample, FilterImageFewFiltersExample];
 export {icon, samples};
