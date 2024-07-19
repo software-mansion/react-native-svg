@@ -446,6 +446,17 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
                                           fontSize:[self getFontSizeFromContext]];
 }
 
+- (CGFloat)relativeOnFraction:(RNSVGLength *)length relative:(CGFloat)relative
+{
+  RNSVGLengthUnitType unit = length.unit;
+  if (unit == SVG_LENGTHTYPE_NUMBER) {
+    return relative * length.value;
+  } else if (unit == SVG_LENGTHTYPE_PERCENTAGE) {
+    return length.value / 100 * relative;
+  }
+  return [self fromRelative:length];
+}
+
 - (CGFloat)relativeOn:(RNSVGLength *)length relative:(CGFloat)relative
 {
   RNSVGLengthUnitType unit = length.unit;
@@ -459,35 +470,17 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (CGFloat)relativeOnWidth:(RNSVGLength *)length
 {
-  RNSVGLengthUnitType unit = length.unit;
-  if (unit == SVG_LENGTHTYPE_NUMBER) {
-    return length.value;
-  } else if (unit == SVG_LENGTHTYPE_PERCENTAGE) {
-    return length.value / 100 * [self getCanvasWidth];
-  }
-  return [self fromRelative:length];
+  return [self relativeOn:length relative:[self getCanvasWidth]];
 }
 
 - (CGFloat)relativeOnHeight:(RNSVGLength *)length
 {
-  RNSVGLengthUnitType unit = length.unit;
-  if (unit == SVG_LENGTHTYPE_NUMBER) {
-    return length.value;
-  } else if (unit == SVG_LENGTHTYPE_PERCENTAGE) {
-    return length.value / 100 * [self getCanvasHeight];
-  }
-  return [self fromRelative:length];
+  return [self relativeOn:length relative:[self getCanvasHeight]];
 }
 
 - (CGFloat)relativeOnOther:(RNSVGLength *)length
 {
-  RNSVGLengthUnitType unit = length.unit;
-  if (unit == SVG_LENGTHTYPE_NUMBER) {
-    return length.value;
-  } else if (unit == SVG_LENGTHTYPE_PERCENTAGE) {
-    return length.value / 100 * [self getCanvasDiagonal];
-  }
-  return [self fromRelative:length];
+  return [self relativeOn:length relative:[self getCanvasDiagonal]];
 }
 
 - (CGFloat)fromRelative:(RNSVGLength *)length

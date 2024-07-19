@@ -4,6 +4,10 @@ PODS:
   - FBLazyVector (0.73.32)
   - fmt (9.1.0)
   - glog (0.3.5)
+  - hermes-engine (0.73.9):
+    - hermes-engine/Pre-built (= 0.73.9)
+  - hermes-engine/Pre-built (0.73.9)
+  - libevent (2.1.12)
   - RCT-Folly (2022.05.16.00):
     - boost
     - DoubleConversion
@@ -1047,7 +1051,7 @@ PODS:
     - React-jsi (= 0.73.32)
     - React-logger (= 0.73.32)
     - React-perflogger (= 0.73.32)
-  - RNReanimated (3.8.1):
+  - RNReanimated (3.9.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - RCTRequired
@@ -1065,13 +1069,7 @@ PODS:
     - React-utils
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Yoga
-  - RNSVG (15.3.0):
-    - glog
-    - RCT-Folly (= 2022.05.16.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
+  - RNSVG (15.4.0):
     - React-Core
     - React-debug
     - React-Fabric
@@ -1280,6 +1278,8 @@ SPEC CHECKSUMS:
   FBLazyVector: ec230eb0579ecfb1f0e0315a1f97161c21098b0e
   fmt: 03574da4b7ba40de39da59677ca66610ce8c4a02
   glog: 3a72874c0322c7caf24931d3a2777cb7a3090529
+  hermes-engine: ed62e0dcd013bf4a3b487f164feec1c4e705b5b5
+  libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   RCT-Folly: 68e9c0fd4c0f05964afd447041d3ac2d67298f27
   RCTRequired: 5d75ee7b031673f6ba14c9676034399529792ed5
   RCTTypeSafety: b8394b9791f4650512e04d6989ef2db232f7ca68
@@ -1323,9 +1323,9 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 573cf1a5a27ba24d2a09abcc88c52f159f47ff28
   React-runtimescheduler: 508ec4adf3a3a5ffb7b3d10d1f236a2a9022ce5a
   React-utils: 52afeb88f90c5a40fa42a145df7877595302f6cf
-  ReactCommon: ddcf7d2e41fbb7d047c169f7c56364e69f5036a8
-  RNReanimated: aa8ee3ec522f87dc4476d4ecbcb03e81dd0a9451
-  RNSVG: 769c1aa16710e0727290d70825eeb9d5dfcf04a7
+  ReactCommon: 41305560b33e9d8f059560e65a283d40c6885fa0
+  RNReanimated: e4276a6afc57c02056daa5ea1afb41a5ec497d9b
+  RNSVG: cb24fb322de8c1ebf59904e7aca0447bb8dbed5a
   SocketRocket: f6c6249082c011e6de2de60ed641ef8bbe0cfac9
   Yoga: b734a95cb36e2b7e9e7b5733ce679a97e4f37da4
 

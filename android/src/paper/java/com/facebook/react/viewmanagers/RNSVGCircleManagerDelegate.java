@@ -99,6 +99,9 @@ public class RNSVGCircleManagerDelegate<T extends View, U extends BaseViewManage
       case "propList":
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
+      case "filter":
+        mViewManager.setFilter(view, value == null ? null : (String) value);
+        break;
       case "cx":
         mViewManager.setCx(view, new DynamicFromObject(value));
         break;
