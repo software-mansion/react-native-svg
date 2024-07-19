@@ -46,14 +46,14 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   return self;
 }
 
-- (void)insertReactSubview:(RNSVGView *)subview atIndex:(NSInteger)atIndex
+- (void)insertReactSubview:(RNSVGPlatformView *)subview atIndex:(NSInteger)atIndex
 {
   [super insertReactSubview:subview atIndex:atIndex];
   [self insertSubview:subview atIndex:atIndex];
   [self invalidate];
 }
 
-- (void)removeReactSubview:(RNSVGView *)subview
+- (void)removeReactSubview:(RNSVGPlatformView *)subview
 {
   [super removeReactSubview:subview];
   [self invalidate];
@@ -84,7 +84,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     return;
   }
   _dirty = true;
-  RNSVGView *container = self.superview;
+  RNSVGPlatformView *container = self.superview;
   // on Fabric, when the child components are added to hierarchy and their props are set,
   // their superview is not set yet.
   if (container != nil) {
@@ -240,7 +240,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   }
   _matrix = matrix;
   _invmatrix = CGAffineTransformInvert(matrix);
-  RNSVGView *container = self.superview;
+  RNSVGPlatformView *container = self.superview;
   // on Fabric, when the child components are added to hierarchy and their props are set,
   // their superview is still their componentView, we change it in `mountChildComponentView` method.
   if ([container conformsToProtocol:@protocol(RNSVGContainer)]) {
