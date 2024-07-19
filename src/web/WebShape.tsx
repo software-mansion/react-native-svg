@@ -29,9 +29,8 @@ export const WebShape = <T,>(
 
   const setRef = useMergeRefs(elementRef, forwardedRef);
   return createElement(Tag, {
-    ...prepare(rest),
+    ...{ ...prepare(rest), ref: setRef },
     collapsable: undefined,
     onClick,
-    ref: setRef,
   });
 };
