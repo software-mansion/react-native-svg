@@ -4,8 +4,8 @@ on:
   workflow_call:
     secrets:
       new_arch_enabled:
-      required: true
-      type: string
+        required: true
+        type: string
 
 jobs:
   build:
