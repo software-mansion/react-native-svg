@@ -13,7 +13,6 @@
 package com.horcrux.svg;
 
 import com.facebook.proguard.annotations.DoNotStrip;
-import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -63,8 +62,4 @@ public abstract class NativeSvgRenderableModuleSpec extends ReactContextBaseJava
   @ReactMethod(isBlockingSynchronousMethod = true)
   @DoNotStrip
   public abstract WritableMap getScreenCTM(@Nullable Double tag);
-
-  @ReactMethod
-  @DoNotStrip
-  public abstract void getRawResource(String name, Promise promise);
 }
