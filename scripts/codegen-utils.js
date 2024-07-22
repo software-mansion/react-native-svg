@@ -3,7 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 const packageJSON = require('../package.json');
 
-const ERROR_PREFIX = 'react-native-gesture-handler';
+const ERROR_PREFIX = 'RNSVG';
 const ROOT_DIR = path.resolve(__dirname, '..');
 const ANDROID_DIR = path.resolve(ROOT_DIR, 'android');
 const GENERATED_DIR = path.resolve(ANDROID_DIR, 'build/generated');
