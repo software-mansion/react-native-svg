@@ -2,7 +2,7 @@ name: Test new architecture macOS build
 on:
   pull_request:
     paths:
-      - '.github/workflows/macos-fabric-test.yml'
+      - '.github/workflows/macos-build-fabric-test.yml'
       - 'RNSVG.podspec'
       - 'apple/**'
       - 'macos-example/package.json'
@@ -14,8 +14,18 @@ on:
       - main
 
 jobs:
+  set-ref:
+    runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.set-ref.outputs.ref }}
+    steps:
+      - name: Set reference
+        id: set-ref
+        run: echo "ref=${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" >> $GITHUB_ENV
+
   test-build:
+    needs: set-ref
     if: github.repository == 'software-mansion/react-native-svg'
-    uses: 'software-mansion/react-native-svg/.github/workflows/reusable-macos-build.yml@${{ github.head_ref || github.ref_name }}'
+    uses: 'software-mansion/react-native-svg/.github/workflows/reusable-macos-build.yml@${{ needs.set-ref.outputs.ref }}'
     with:
-      new_arch_enabled: '1'
+      new_arch_enabled: 1
