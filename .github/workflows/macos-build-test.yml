@@ -14,8 +14,8 @@ on:
       - main
 
 jobs:
-  test-build:
+  reusable-macos-build:
     if: github.repository == 'software-mansion/react-native-svg'
-    uses: 'software-mansion/react-native-svg/.github/workflows/reusable-macos-build.yml@${{ github.head_ref || github.ref_name }}'
+    uses: ./.github/workflows/reusable-macos-build.yml
     with:
       new_arch_enabled: '0'
