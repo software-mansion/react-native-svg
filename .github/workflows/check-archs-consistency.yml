@@ -6,6 +6,7 @@ on:
     paths: 
       - src/fabric/**
       - android/src/paper/java/com/facebook/react/viewmanagers/**
+      - android/src/paper/java/com/horcrux/svg/**
 jobs:
   check:
     runs-on: ubuntu-latest

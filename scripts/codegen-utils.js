@@ -16,9 +16,14 @@ const RN_CODEGEN_DIR = path.resolve(
   'node_modules/@react-native/codegen'
 );
 
-const SOURCE_FOLDERS = 'java/com/facebook/react/viewmanagers';
-const CODEGEN_FILES_DIR = `${GENERATED_DIR}/source/codegen/${SOURCE_FOLDERS}`;
-const OLD_ARCH_FILES_DIR = `${OLD_ARCH_DIR}/${SOURCE_FOLDERS}`;
+const SOURCE_FOLDER = 'java/com/facebook/react/viewmanagers';
+const SOURCE_FOLDER_HORCRUX = 'java/com/horcrux/svg';
+
+const SOURCE_FOLDERS = [
+  {codegenPath: `${GENERATED_DIR}/source/codegen/${SOURCE_FOLDER}`, oldArchPath: `${OLD_ARCH_DIR}/${SOURCE_FOLDER}`},
+  {codegenPath: `${GENERATED_DIR}/source/codegen/${SOURCE_FOLDER_HORCRUX}`, oldArchPath: `${OLD_ARCH_DIR}/${SOURCE_FOLDER_HORCRUX}`},
+  
+]
 
 function exec(command) {
   console.log(`[${ERROR_PREFIX}]> ` + command);
@@ -70,34 +75,34 @@ async function generateCodegen() {
 async function generateCodegenJavaOldArch() {
   await generateCodegen();
 
-  const generatedFiles = fs.readdirSync(CODEGEN_FILES_DIR);
-  const oldArchFiles = fs.readdirSync(OLD_ARCH_FILES_DIR);
-  const existingFilesSet = new Set(oldArchFiles.map(fileName => fileName));
+  SOURCE_FOLDERS.forEach(({codegenPath, oldArchPath}) => {
+    const generatedFiles = fs.readdirSync(codegenPath);
+    const oldArchFiles = fs.readdirSync(oldArchPath);
+    const existingFilesSet = new Set(oldArchFiles.map(fileName => fileName));
 
-  generatedFiles.forEach(generatedFile => {
-    if (!existingFilesSet.has(generatedFile)) {
+    generatedFiles.forEach(generatedFile => {
+      if (!existingFilesSet.has(generatedFile)) {
+        console.warn(
+          `[${ERROR_PREFIX}] ${generatedFile} not found in paper dir, if it's used on Android you need to copy it manually and implement yourself before using auto-copy feature.`
+        );
+      }
+    });
+
+    if (oldArchFiles.length === 0) {
       console.warn(
-        `[${ERROR_PREFIX}] ${generatedFile} not found in paper dir, if it's used on Android you need to copy it manually and implement yourself before using auto-copy feature.`
+        `[${ERROR_PREFIX}] Paper destination with codegen interfaces is empty. This might be okay if you don't have any interfaces/delegates used on Android, otherwise please check if OLD_ARCH_DIR and SOURCE_FOLDERS are set properly.`
       );
     }
-  });
 
-  if (oldArchFiles.length === 0) {
-    console.warn(
-      `[${ERROR_PREFIX}] Paper destination with codegen interfaces is empty. This might be okay if you don't have any interfaces/delegates used on Android, otherwise please check if OLD_ARCH_DIR and SOURCE_FOLDERS are set properly.`
-    );
-  }
-
-  oldArchFiles.forEach(oldArchFile => {
-    if (!fs.existsSync(`${CODEGEN_FILES_DIR}/${oldArchFile}`)) {
-      console.warn(
-        `[${ERROR_PREFIX}] ${existingFile.name} file does not exist in codegen artifacts source destination. Please check if you still need this interface/delagete.`
-      );
-    }
-  });
-
-  oldArchFiles.forEach(file => {
-    exec(`cp -rf ${CODEGEN_FILES_DIR}/${file} ${OLD_ARCH_FILES_DIR}/${file}`);
+    oldArchFiles.forEach(file => {
+      if (!fs.existsSync(`${codegenPath}/${file}`)) {
+        console.warn(
+          `[${ERROR_PREFIX}] ${file} file does not exist in codegen artifacts source destination. Please check if you still need this interface/delagete.`
+        );
+      } else {
+        exec(`cp -rf ${codegenPath}/${file} ${oldArchPath}/${file}`);
+      }
+    });
   });
 }
 
@@ -115,9 +120,11 @@ function compareFileAtTwoPaths(filename, firstPath, secondPath) {
 async function checkCodegenIntegrity() {
   await generateCodegen();
 
-  const oldArchFiles = fs.readdirSync(OLD_ARCH_FILES_DIR);
-  oldArchFiles.forEach(file => {
-    compareFileAtTwoPaths(file, CODEGEN_FILES_DIR, OLD_ARCH_FILES_DIR);
+  SOURCE_FOLDERS.forEach(({codegenPath, oldArchPath}) => {
+    const oldArchFiles = fs.readdirSync(oldArchPath);
+    oldArchFiles.forEach(file => {
+      compareFileAtTwoPaths(file, codegenPath, oldArchPath);
+    });
   });
 }
 
