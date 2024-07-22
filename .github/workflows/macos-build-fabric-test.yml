@@ -17,4 +17,4 @@ jobs:
   reusable-macos-build:
     uses: ./.github/workflows/reusable-macos-build.yml
     with:
-    new_arch_enabled: '1'
+      new_arch_enabled: '1'
