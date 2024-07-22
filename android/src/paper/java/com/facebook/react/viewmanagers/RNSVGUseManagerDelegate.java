@@ -99,9 +99,6 @@ public class RNSVGUseManagerDelegate<T extends View, U extends BaseViewManagerIn
       case "propList":
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
-      case "filter":
-        mViewManager.setFilter(view, value == null ? null : (String) value);
-        break;
       case "href":
         mViewManager.setHref(view, value == null ? null : (String) value);
         break;
