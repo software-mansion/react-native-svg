@@ -33,7 +33,6 @@ export interface Spec extends TurboModule {
   getBBox(tag: Double | null, options?: Object): Rect;
   getCTM(tag: Double | null): Matrix;
   getScreenCTM(tag: Double | null): Matrix;
-  getRawResource(name: string): Promise<string>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNSVGRenderableModule');
