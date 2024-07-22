@@ -44,11 +44,8 @@ const names: (keyof typeof examples)[] = [
   'Markers',
   'Mask',
   'Filters',
+  'FilterImage',
 ];
-
-if (Platform.OS !== 'web') {
-  names.push('FilterImage');
-}
 
 const initialState = {
   modal: false,
