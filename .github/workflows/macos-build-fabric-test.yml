@@ -15,13 +15,14 @@ on:
 
 jobs:
   - name: Extract branch name
-    shell: bash
-    run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
     id: extract_branch
+    uses: keptn/gh-action-extract-branch-name@main
+    with:
+      GITHUB_REF: ${{ github.ref }}
 
   test-build:
     needs: set-ref
     if: github.repository == 'software-mansion/react-native-svg'
-    uses: 'software-mansion/react-native-svg/.github/workflows/reusable-macos-build.yml@${{ steps.extract_branch.outputs.branch }}'
+    uses: 'software-mansion/react-native-svg/.github/workflows/reusable-macos-build.yml@${{ steps.extract_branch.outputs.BRANCH }}'
     with:
       new_arch_enabled: 1
