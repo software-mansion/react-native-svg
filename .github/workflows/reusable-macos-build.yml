@@ -2,7 +2,7 @@ name: Reusable macOS Build
 
 on:
   workflow_call:
-    secrets:
+    inputs:
       new_arch_enabled:
         required: true
         type: string
