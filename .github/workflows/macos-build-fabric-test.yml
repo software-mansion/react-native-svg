@@ -2,7 +2,7 @@ name: Test new architecture macOS build
 on:
   pull_request:
     paths:
-      - .github/workflows/macos-build-test.yml
+      - .github/workflows/macos-fabric-test.yml
       - RNSVG.podspec
       - apple/**
       - macos-example/package.json

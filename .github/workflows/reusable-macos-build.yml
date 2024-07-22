@@ -1,4 +1,3 @@
-# .github/workflows/reusable-macos-build.yml
 name: Reusable macOS Build
 
 on:
@@ -7,7 +6,7 @@ on:
       new_arch_enabled:
         description: 'Enable new architecture'
         required: true
-        type: boolean
+        type: number
     secrets:
       required:
         - new_arch_enabled
