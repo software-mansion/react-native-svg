@@ -17,6 +17,9 @@
 #endif // RCT_NEW_ARCH_ENABLED
 
 @class RNSVGNode;
+@class RNSVGMarker;
+@class RNSVGMask;
+@class RNSVGFilter;
 
 @interface RNSVGSvgView :
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -55,17 +58,17 @@
 
 - (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;
 
-- (void)defineMarker:(RNSVGNode *)marker markerName:(NSString *)markerName;
+- (void)defineMarker:(RNSVGMarker *)marker markerName:(NSString *)markerName;
 
-- (RNSVGNode *)getDefinedMarker:(NSString *)markerName;
+- (RNSVGMarker *)getDefinedMarker:(NSString *)markerName;
 
-- (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName;
+- (void)defineMask:(RNSVGMask *)mask maskName:(NSString *)maskName;
 
-- (RNSVGNode *)getDefinedMask:(NSString *)maskName;
+- (RNSVGMask *)getDefinedMask:(NSString *)maskName;
 
-- (void)defineFilter:(RNSVGNode *)filter filterName:(NSString *)filterName;
+- (void)defineFilter:(RNSVGFilter *)filter filterName:(NSString *)filterName;
 
-- (RNSVGNode *)getDefinedFilter:(NSString *)filterName;
+- (RNSVGFilter *)getDefinedFilter:(NSString *)filterName;
 
 - (NSString *)getDataURLWithBounds:(CGRect)bounds;
 
