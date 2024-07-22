@@ -1163,7 +1163,7 @@ PODS:
     - React-logger (= 0.74.0)
     - React-perflogger (= 0.74.0)
     - React-utils (= 0.74.0)
-  - RNReanimated (3.9.0-nightly-20240421-474f6983d):
+  - RNReanimated (3.13.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1463,7 +1463,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 7fe561d179b97cecd0c2bec0bbd08f9fd8581c26
   React-utils: f013537c3371270d2095bff1d594d00d4bc9261b
   ReactCommon: 2cde697fd80bd31da1d6448d25a5803088585219
-  RNReanimated: 0543bb8fcb02558bb9beaa278f44436664634f46
+  RNReanimated: 065c74f1b5674571be918adf7f67b8689708a7cb
   RNSVG: 7b44aa4df2587946e28496adf2e10a16f08c1250
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: ff1d575b119f510a5de23c22a794872562078ccf
