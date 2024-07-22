@@ -1316,6 +1316,7 @@ const myImage = require('./myImage.jpg');
 export default () => {
   return <FilterImage style={styles.image} source={myImage} />;
 };
+
 const styles = StyleSheet.create({
   image: {
     width: 200,
@@ -1353,6 +1354,7 @@ export default () => {
     />
   );
 };
+
 const styles = StyleSheet.create({
   image: {
     width: 200,

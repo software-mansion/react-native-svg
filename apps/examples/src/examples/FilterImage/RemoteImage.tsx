@@ -6,14 +6,30 @@ const testSource = {
   uri: 'https://cdn.pixabay.com/photo/2023/03/17/11/39/mountain-7858482_1280.jpg',
 };
 
-const FilterImageRemoteExample = () => {
+const FilterImageRemoteExampleCSS = () => {
   return (
     <View>
-      <FilterImage source={testSource} style={styles.image} />
+      <FilterImage
+        source={testSource}
+        style={[styles.image, {filter: 'saturate(3)'}]}
+      />
     </View>
   );
 };
-FilterImageRemoteExample.title = 'Remote image with filter';
+FilterImageRemoteExampleCSS.title = 'Remote image with CSS filter';
+
+const FilterImageRemoteExample = () => {
+  return (
+    <View>
+      <FilterImage
+        source={testSource}
+        style={styles.image}
+        filters={[{name: 'feColorMatrix', type: 'saturate', values: [3]}]}
+      />
+    </View>
+  );
+};
+FilterImageRemoteExample.title = 'Remote image with prop filters';
 
 const FilterImageFewFiltersExample = () => {
   return (
@@ -48,9 +64,12 @@ const styles = StyleSheet.create({
   image: {
     width: 200,
     height: 200,
-    filter: 'saturate(3)',
   },
 });
 
-const samples = [FilterImageRemoteExample, FilterImageFewFiltersExample];
+const samples = [
+  FilterImageRemoteExampleCSS,
+  FilterImageRemoteExample,
+  FilterImageFewFiltersExample,
+];
 export {icon, samples};
