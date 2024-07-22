@@ -9,6 +9,8 @@ import {
 import { FeColorMatrix, Filter, Image, Svg } from '../index';
 import { Filters } from './types';
 import { extractResizeMode } from './extractImage';
+import { resolveAssetUri } from '../lib/resolveAssetUri';
+import { getRandomNumber } from '../lib/util';
 
 export interface FilterImageProps extends ImageProps {
   filters: Filters;
@@ -26,29 +28,15 @@ const getFilters = (filters: Filters) => {
   });
 };
 
-const getFilterName = (filter: Filters) => {
-  return (
-    'filter' +
-    filter.reduce(
-      (acc, curr) =>
-        acc +
-        curr.name +
-        (Array.isArray(curr.values) ? curr.values.join(',') : curr.values) +
-        ';',
-      ''
-    )
-  );
-};
-
 export const FilterImage = (props: FilterImageProps) => {
-  const { source, style, ...imageProps } = props;
-  const hasFilter = props.filters.length > 0;
-  const filterId = useMemo(() => getFilterName(props.filters), [props.filters]);
+  const { filters, source, style, ...imageProps } = props;
+  const hasFilter = filters.length > 0;
+  const filterId = useMemo(() => `RNSVG-${getRandomNumber()}`, [filters]);
 
-  // FIXME: resolveAssetSource is not available on web
-  // We need to find a way to get the source asset and its dimensions
   const src =
-    Platform.OS !== 'web' ? RNImage.resolveAssetSource(source) : undefined;
+    Platform.OS === 'web'
+      ? resolveAssetUri(source)
+      : RNImage.resolveAssetSource(source);
   const styles = StyleSheet.flatten(style);
   const width = props.width || styles?.width || src?.width;
   const height = props.height || styles?.height || src?.height;
