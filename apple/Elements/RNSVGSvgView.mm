@@ -23,9 +23,9 @@
   NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
   NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
   NSMutableDictionary<NSString *, RNSVGPainter *> *_painters;
-  NSMutableDictionary<NSString *, RNSVGMarker *> *_markers;
-  NSMutableDictionary<NSString *, RNSVGMask *> *_masks;
-  NSMutableDictionary<NSString *, RNSVGFilter *> *_filters;
+  NSMutableDictionary<NSString *, RNSVGNode *> *_markers;
+  NSMutableDictionary<NSString *, RNSVGNode *> *_masks;
+  NSMutableDictionary<NSString *, RNSVGNode *> *_filters;
   CGAffineTransform _invviewBoxTransform;
   bool rendered;
 }
@@ -412,7 +412,7 @@ using namespace facebook::react;
   return _painters ? [_painters objectForKey:painterName] : nil;
 }
 
-- (void)defineMarker:(RNSVGMarker *)marker markerName:(NSString *)markerName
+- (void)defineMarker:(RNSVGNode *)marker markerName:(NSString *)markerName
 {
   if (!_markers) {
     _markers = [[NSMutableDictionary alloc] init];
@@ -420,12 +420,12 @@ using namespace facebook::react;
   [_markers setObject:marker forKey:markerName];
 }
 
-- (RNSVGMarker *)getDefinedMarker:(NSString *)markerName;
+- (RNSVGNode *)getDefinedMarker:(NSString *)markerName;
 {
   return _markers ? [_markers objectForKey:markerName] : nil;
 }
 
-- (void)defineMask:(RNSVGMask *)mask maskName:(NSString *)maskName
+- (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName
 {
   if (!_masks) {
     _masks = [[NSMutableDictionary alloc] init];
@@ -433,12 +433,12 @@ using namespace facebook::react;
   [_masks setObject:mask forKey:maskName];
 }
 
-- (RNSVGMask *)getDefinedMask:(NSString *)maskName;
+- (RNSVGNode *)getDefinedMask:(NSString *)maskName;
 {
   return _masks ? [_masks objectForKey:maskName] : nil;
 }
 
-- (void)defineFilter:(RNSVGFilter *)filter filterName:(NSString *)filterName
+- (void)defineFilter:(RNSVGNode *)filter filterName:(NSString *)filterName
 {
   if (!_filters) {
     _filters = [[NSMutableDictionary alloc] init];
@@ -446,7 +446,7 @@ using namespace facebook::react;
   [_filters setObject:filter forKey:filterName];
 }
 
-- (RNSVGFilter *)getDefinedFilter:(NSString *)filterName
+- (RNSVGNode *)getDefinedFilter:(NSString *)filterName
 {
   return _filters ? [_filters objectForKey:filterName] : nil;
 }

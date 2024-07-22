@@ -9,9 +9,6 @@
 #import "RNSVGUIKit.h"
 
 #import "RNSVGContainer.h"
-#import "RNSVGFilter.h"
-#import "RNSVGMarker.h"
-#import "RNSVGMask.h"
 #import "RNSVGPainter.h"
 #import "RNSVGVBMOS.h"
 
@@ -58,17 +55,17 @@
 
 - (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;
 
-- (void)defineMarker:(RNSVGMarker *)marker markerName:(NSString *)markerName;
+- (void)defineMarker:(RNSVGNode *)marker markerName:(NSString *)markerName;
 
-- (RNSVGMarker *)getDefinedMarker:(NSString *)markerName;
+- (RNSVGNode *)getDefinedMarker:(NSString *)markerName;
 
-- (void)defineMask:(RNSVGMask *)mask maskName:(NSString *)maskName;
+- (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName;
 
-- (RNSVGMask *)getDefinedMask:(NSString *)maskName;
+- (RNSVGNode *)getDefinedMask:(NSString *)maskName;
 
-- (void)defineFilter:(RNSVGFilter *)filter filterName:(NSString *)filterName;
+- (void)defineFilter:(RNSVGNode *)filter filterName:(NSString *)filterName;
 
-- (RNSVGFilter *)getDefinedFilter:(NSString *)filterName;
+- (RNSVGNode *)getDefinedFilter:(NSString *)filterName;
 
 - (NSString *)getDataURLWithBounds:(CGRect)bounds;
 

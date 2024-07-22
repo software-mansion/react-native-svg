@@ -250,8 +250,8 @@ UInt32 saturate(CGFloat value)
 
   [self beginTransparencyLayer:context];
 
-  RNSVGFilter *filterNode = self.filter ? [self.svgView getDefinedFilter:self.filter] : nil;
-  RNSVGMask *maskNode = self.mask ? [self.svgView getDefinedMask:self.mask] : nil;
+  RNSVGFilter *filterNode = self.filter ? (RNSVGFilter *)[self.svgView getDefinedFilter:self.filter] : nil;
+  RNSVGMask *maskNode = self.mask ? (RNSVGMask *)[self.svgView getDefinedMask:self.mask] : nil;
 
   if (maskNode || filterNode) {
     CGRect bounds = CGContextGetClipBoundingBox(context);
