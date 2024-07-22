@@ -1,4 +1,5 @@
 name: Test new architecture macOS build
+
 on:
   pull_request:
     paths:
@@ -15,13 +16,16 @@ on:
 
 jobs:
   test-build:
-  - name: Extract branch name
-    id: extract_branch
-    uses: keptn/gh-action-extract-branch-name@main
-    with:
-      GITHUB_REF: ${{ github.ref }}
-
+    runs-on: ubuntu-latest
     if: github.repository == 'software-mansion/react-native-svg'
-    uses: 'software-mansion/react-native-svg/.github/workflows/reusable-macos-build.yml@${{ steps.extract_branch.outputs.BRANCH }}'
-    with:
-      new_arch_enabled: '1'
+    steps:
+    - name: Extract branch name
+      id: extract_branch
+      uses: keptn/gh-action-extract-branch-name@main
+      with:
+        GITHUB_REF: ${{ github.ref }}
+
+      - name: Call reusable workflow
+      uses: 'software-mansion/react-native-svg/.github/workflows/reusable-macos-build.yml@${{ steps.extract_branch.outputs.BRANCH }}'
+      with:
+        new_arch_enabled: '1'
