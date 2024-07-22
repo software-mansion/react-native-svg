@@ -14,10 +14,7 @@ on:
       - main
 
 jobs:
-  test-build:
-    runs-on: macos-14
-    steps:
-      - name: Call reusable workflow
-        uses: ./.github/workflows/reusable-macos-build.yml
-        with:
-          new_arch_enabled: '1'
+  reusable-macos-build:
+    uses: ./.github/workflows/reusable-macos-build.yml
+    with:
+    new_arch_enabled: '1'
