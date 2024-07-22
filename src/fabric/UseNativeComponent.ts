@@ -45,7 +45,6 @@ interface SvgRenderableCommonProps {
   strokeMiterlimit?: Float;
   vectorEffect?: WithDefault<Int32, 0>;
   propList?: ReadonlyArray<string>;
-  filter?: string;
 }
 
 interface NativeProps
