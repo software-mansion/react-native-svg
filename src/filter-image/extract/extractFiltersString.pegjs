@@ -42,10 +42,10 @@ start "filters or 'none'"
   / filtersList
 
 none "'none'"
-  = _ "none" _ { return null; }
+  = "none" { return null; }
 
 filtersList "filters"
-  = head:function tail:(_ function)* {
+  = head:(function) tail:(_ function)* {
     const results = [head];
     tail.forEach(element => {
       if (Array.isArray(element[1])) {
@@ -73,7 +73,7 @@ function "filter"
 // https://www.w3.org/TR/filter-effects-1/#ShorthandEquivalents
 
 grayscale "grayscale"
-  = "grayscale(" _ value:numberPercentage _ ")" {
+  = _ "grayscale(" _ value:numberPercentage _ ")" _ {
     return {
       name: "feColorMatrix",
       type: "matrix",
@@ -87,7 +87,7 @@ grayscale "grayscale"
   }
 
 sepia "sepia"
-  = "sepia(" _ value:numberPercentage _ ")" {
+  = _ "sepia(" _ value:numberPercentage _ ")" _ {
     return {
       name: "feColorMatrix",
       type: "matrix",
@@ -101,7 +101,7 @@ sepia "sepia"
   }
 
 saturate "saturate"
-  = "saturate(" _ value:numberPercentage _ ")" {
+  = _ "saturate(" _ value:numberPercentage _ ")" _ {
     return {
       name: "feColorMatrix",
       type: "saturate",
@@ -110,7 +110,7 @@ saturate "saturate"
   }
 
 hueRotate "hue-rotate"
-  = "hue-rotate(" _ value:(angleZero) _ ")" {
+  = _ "hue-rotate(" _ value:(angleZero) _ ")" _ {
     return {
       name: "feColorMatrix",
       type: "hueRotate",
@@ -119,7 +119,7 @@ hueRotate "hue-rotate"
   }
 
 invert "invert"
-  = "invert(" _ value:numberPercentage _ ")" {
+  = _ "invert(" _ value:numberPercentage _ ")" _ {
     return {
       name: "feComponentTransfer",
       children: [
@@ -143,7 +143,7 @@ invert "invert"
   }
 
 opacity "opacity"
-  = "opacity(" _ value:numberPercentage _ ")" {
+  = _ "opacity(" _ value:numberPercentage _ ")" _ {
     return {
       name: "feComponentTransfer",
       children: [
@@ -157,7 +157,7 @@ opacity "opacity"
   }
 
 brightness "brightness"
-  = "brightness(" _ value:numberPercentage _ ")" {
+  = _ "brightness(" _ value:numberPercentage _ ")" _ {
     return {
       name: "feComponentTransfer",
       children: [
@@ -181,7 +181,7 @@ brightness "brightness"
   }
 
 contrast "contrast"
-  = "contrast(" _ value:numberPercentage _ ")" {
+  = _ "contrast(" _ value:numberPercentage _ ")" _ {
     return {
       name: "feComponentTransfer",
       children: [
@@ -208,7 +208,7 @@ contrast "contrast"
   }
 
 blur "blur"
-  = "blur(" _ value:NUM IDENTIFIER? _ ")" {
+  = _ "blur(" _ value:NUM IDENTIFIER? _ ")" _ {
     return {
       name: "feGaussianBlur",
       stdDeviation: value
@@ -216,10 +216,10 @@ blur "blur"
   }
 
 dropShadow "drop-shadow"
-  = "drop-shadow(" _ offsetX:NUM IDENTIFIER? _ offsetY:NUM IDENTIFIER? _ blurRadius:NUM? IDENTIFIER? _ color:COLOR? _ ")" {
+  = _ "drop-shadow(" _ offsetX:NUM IDENTIFIER? _ offsetY:NUM IDENTIFIER? _ blurRadius:NUM? IDENTIFIER? _ color:COLOR? _ ")" _ {
     return buildDropShadow(offsetX, offsetY, blurRadius, color);
   }
-  / "drop-shadow(" _ color:COLOR _ offsetX:NUM IDENTIFIER? _ offsetY:NUM IDENTIFIER? _ blurRadius:NUM? IDENTIFIER? _ ")" {
+  / _ "drop-shadow(" _ color:COLOR _ offsetX:NUM IDENTIFIER? _ offsetY:NUM IDENTIFIER? _ blurRadius:NUM? IDENTIFIER? _ ")" _ {
     return buildDropShadow(offsetX, offsetY, blurRadius, color);
   }
 
