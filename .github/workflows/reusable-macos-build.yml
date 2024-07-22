@@ -2,14 +2,10 @@ name: Reusable macOS Build
 
 on:
   workflow_call:
-    inputs:
-      new_arch_enabled:
-        description: 'Enable new architecture'
-        required: true
-        type: string
     secrets:
-      required:
-        - new_arch_enabled
+      new_arch_enabled:
+      required: true
+      type: string
 
 jobs:
   build:
