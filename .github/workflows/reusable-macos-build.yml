@@ -15,7 +15,7 @@ jobs:
         working-directory: [macos-example]
       fail-fast: false
     concurrency:
-      group: macos-${{ matrix.working-directory }}-${{ github.ref }}
+      group: macos-${{ matrix.working-directory }}-${{ github.ref  }}-${{ secrets.new_arch_enabled }}
       cancel-in-progress: true
     steps:
       - name: Check out Git repository
