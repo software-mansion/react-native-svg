@@ -6,7 +6,7 @@ on:
       new_arch_enabled:
         description: 'Enable new architecture'
         required: true
-        type: number
+        type: string
     secrets:
       required:
         - new_arch_enabled
@@ -32,7 +32,7 @@ jobs:
           key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
           restore-keys: ${{ runner.os }}-node-modules-svg-
 
-      - name: Install react-native-svg node_modules
+      - name: Install react-native-svg node modules
         run: yarn install
 
       - name: Restore app node_modules from cache
@@ -42,7 +42,7 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.working-directory)) }}
           restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
 
-      - name: Install app node_modules
+      - name: Install app node modules
         working-directory: ${{ matrix.working-directory }}
         run: yarn install
 
