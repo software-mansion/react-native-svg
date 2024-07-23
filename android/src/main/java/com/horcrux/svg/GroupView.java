@@ -18,8 +18,11 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
 import android.view.View;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
+import java.util.ArrayList;
 import javax.annotation.Nullable;
 
 @SuppressLint("ViewConstructor")
@@ -29,6 +32,15 @@ class GroupView extends RenderableView {
 
   public GroupView(ReactContext reactContext) {
     super(reactContext);
+  }
+
+  public void setFont(Dynamic dynamic) {
+    if (dynamic.getType() == ReadableType.Map) {
+      mFont = dynamic.asMap();
+    } else {
+      mFont = null;
+    }
+    invalidate();
   }
 
   public void setFont(@Nullable ReadableMap font) {
@@ -72,6 +84,7 @@ class GroupView extends RenderableView {
     setupGlyphContext(canvas);
     clip(canvas, paint);
     drawGroup(canvas, paint, opacity);
+    renderMarkers(canvas, paint, opacity);
   }
 
   void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {
@@ -79,6 +92,7 @@ class GroupView extends RenderableView {
     final SvgView svg = getSvgView();
     final GroupView self = this;
     final RectF groupRect = new RectF();
+    elements = new ArrayList<>();
     for (int i = 0; i < getChildCount(); i++) {
       View child = getChildAt(i);
       if (child instanceof MaskView) {
@@ -96,6 +110,7 @@ class GroupView extends RenderableView {
         int count = node.saveAndSetupCanvas(canvas, mCTM);
         node.render(canvas, paint, opacity * mOpacity);
         RectF r = node.getClientRect();
+
         if (r != null) {
           groupRect.union(r);
         }
@@ -109,6 +124,11 @@ class GroupView extends RenderableView {
         if (node.isResponsible()) {
           svg.enableTouchEvents();
         }
+
+        if (node.elements != null) {
+          elements.addAll(node.elements);
+        }
+
       } else if (child instanceof SvgView) {
         SvgView svgView = (SvgView) child;
         svgView.drawChildren(canvas);

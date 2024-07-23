@@ -1,12 +1,10 @@
-import React, { ReactNode } from 'react';
-import {
-  withoutXY,
-  stringifyPropsForFabric,
-} from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
+import type { ReactNode } from 'react';
+import * as React from 'react';
+import { withoutXY } from '../lib/extract/extractProps';
+import type { NumberProp } from '../lib/extract/types';
 import G from './G';
-import { RNSVGForeignObject } from '../ReactNativeSVG';
-import { NativeMethods } from 'react-native';
+import RNSVGForeignObject from '../fabric/ForeignObjectNativeComponent';
+import type { NativeMethods } from 'react-native';
 
 export interface ForeignObjectProps {
   children?: ReactNode;
@@ -29,15 +27,14 @@ export default class ForeignObject extends G<ForeignObjectProps> {
   render() {
     const { props } = this;
     const { x, y, width, height, children } = props;
-    const foreignObjectProps = stringifyPropsForFabric({ x, y, width, height });
+    const foreignObjectProps = { x, y, width, height };
     return (
       <RNSVGForeignObject
         ref={(ref) =>
           this.refMethod(ref as (ForeignObject & NativeMethods) | null)
         }
         {...withoutXY(this, props)}
-        {...foreignObjectProps}
-      >
+        {...foreignObjectProps}>
         {children}
       </RNSVGForeignObject>
     );

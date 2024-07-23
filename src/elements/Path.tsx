@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import { extract } from '../lib/extract/extractProps';
 import Shape from './Shape';
-import { RNSVGPath } from '../ReactNativeSVG';
-import { CommonPathProps, NumberProp } from '../lib/extract/types';
-import { NativeMethods } from 'react-native';
+import RNSVGPath from '../fabric/PathNativeComponent';
+import type { CommonPathProps, NumberProp } from '../lib/extract/types';
+import type { NativeMethods } from 'react-native';
 
 export interface PathProps extends CommonPathProps {
   d?: string;

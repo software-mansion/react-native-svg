@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import type { Component } from 'react';
+import * as React from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import { withoutXY } from '../lib/extract/extractProps';
-import {
+import type {
   ColumnMajorTransformMatrix,
   NumberProp,
   TextPathMethod,
@@ -10,11 +11,12 @@ import {
   TextSpecificProps,
   TransformProps,
 } from '../lib/extract/types';
-import extractText, { TextChild } from '../lib/extract/extractText';
+import type { TextChild } from '../lib/extract/extractText';
+import extractText from '../lib/extract/extractText';
 import { idPattern, pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import TSpan from './TSpan';
-import { RNSVGTextPath } from '../ReactNativeSVG';
+import RNSVGTextPath from '../fabric/TextPathNativeComponent';
 
 export interface TextPathProps extends TextSpecificProps {
   children?: TextChild;
@@ -31,10 +33,10 @@ export default class TextPath extends Shape<TextPathProps> {
   static displayName = 'TextPath';
 
   setNativeProps = (
-    props: Object & {
+    props: object & {
       matrix?: ColumnMajorTransformMatrix;
-      style?: [] | {};
-    } & TransformProps,
+      style?: [] | unknown;
+    } & TransformProps
   ) => {
     const matrix = !props.matrix && extractTransform(props);
     if (matrix) {
@@ -67,17 +69,17 @@ export default class TextPath extends Shape<TextPathProps> {
           {
             children,
           },
-          true,
+          true
         ),
         {
           href: match,
-          startOffset: startOffset === null ? null : String(startOffset),
+          startOffset,
           method,
           spacing,
           side,
           alignmentBaseline,
           midLine,
-        },
+        }
       );
       props.ref = this.refMethod as (instance: Component | null) => void;
       return <RNSVGTextPath {...props} />;
@@ -86,7 +88,7 @@ export default class TextPath extends Shape<TextPathProps> {
     console.warn(
       'Invalid `href` prop for `TextPath` element, expected a href like "#id", but got: "' +
         href +
-        '"',
+        '"'
     );
     return (
       <TSpan ref={this.refMethod as (instance: Component | null) => void}>

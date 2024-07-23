@@ -16,9 +16,9 @@
 
 RCT_EXPORT_MODULE()
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 @synthesize bridge = _bridge;
 
 - (void)toDataURL:(nonnull NSNumber *)reactTag
@@ -27,19 +27,19 @@ RCT_EXPORT_MODULE()
           attempt:(int)attempt
 {
   void (^block)(void) = ^{
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
     [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
       __kindof RNSVGPlatformView *view = [viewRegistry viewForReactTag:reactTag];
 #else
     [self.bridge.uiManager
         addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RNSVGPlatformView *> *viewRegistry) {
           __kindof RNSVGPlatformView *view = [uiManager viewForReactTag:reactTag];
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
       NSString *b64;
       if ([view isKindOfClass:[RNSVGSvgView class]]) {
         RNSVGSvgView *svg = view;
         if (options == nil) {
-          b64 = [svg getDataURL];
+          b64 = [svg getDataURLWithBounds:svg.boundingBox];
         } else {
           id width = [options objectForKey:@"width"];
           id height = [options objectForKey:@"height"];
@@ -53,7 +53,7 @@ RCT_EXPORT_MODULE()
           NSInteger hi = (NSInteger)[h intValue];
 
           CGRect bounds = CGRectMake(0, 0, wi, hi);
-          b64 = [svg getDataURLwithBounds:bounds];
+          b64 = [svg getDataURLWithBounds:bounds];
         }
       } else {
         RCTLogError(@"Invalid svg returned from registry, expecting RNSVGSvgView, got: %@", view);
@@ -83,7 +83,7 @@ RCT_EXPORT_METHOD(toDataURL
   [self toDataURL:reactTag options:options callback:callback attempt:0];
 }
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {

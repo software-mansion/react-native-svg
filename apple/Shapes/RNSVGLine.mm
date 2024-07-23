@@ -9,17 +9,17 @@
 #import "RNSVGLine.h"
 #import <React/RCTLog.h>
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGLine
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -40,12 +40,24 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGLineProps>(props);
+  const auto &newProps = static_cast<const RNSVGLineProps &>(*props);
 
-  self.x1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x1)];
-  self.y1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y1)];
-  self.x2 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x2)];
-  self.y2 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y2)];
+  id x1 = RNSVGConvertFollyDynamicToId(newProps.x1);
+  if (x1 != nil) {
+    self.x1 = [RCTConvert RNSVGLength:x1];
+  }
+  id y1 = RNSVGConvertFollyDynamicToId(newProps.y1);
+  if (y1 != nil) {
+    self.y1 = [RCTConvert RNSVGLength:y1];
+  }
+  id x2 = RNSVGConvertFollyDynamicToId(newProps.x2);
+  if (x2 != nil) {
+    self.x2 = [RCTConvert RNSVGLength:x2];
+  }
+  id y2 = RNSVGConvertFollyDynamicToId(newProps.y2);
+  if (y2 != nil) {
+    self.y2 = [RCTConvert RNSVGLength:y2];
+  }
 
   setCommonRenderableProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGLineProps const>(props);
@@ -59,7 +71,7 @@ using namespace facebook::react;
   _x2 = nil;
   _y2 = nil;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 - (void)setX1:(RNSVGLength *)x1
 {
@@ -112,9 +124,9 @@ using namespace facebook::react;
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGLineCls(void)
 {
   return RNSVGLine.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

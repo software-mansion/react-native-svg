@@ -1,12 +1,60 @@
-import React, {
-  Component,
-  ComponentType,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import type { ComponentType } from 'react';
+import * as React from 'react';
+import { Component, useEffect, useMemo, useState } from 'react';
+import Rect from './elements/Rect';
+import Circle from './elements/Circle';
+import Ellipse from './elements/Ellipse';
+import Polygon from './elements/Polygon';
+import Polyline from './elements/Polyline';
+import Line from './elements/Line';
 import type { SvgProps } from './elements/Svg';
-import { tags } from './tags';
+import Svg from './elements/Svg';
+import Path from './elements/Path';
+import G from './elements/G';
+import Text from './elements/Text';
+import TSpan from './elements/TSpan';
+import TextPath from './elements/TextPath';
+import Use from './elements/Use';
+import Image from './elements/Image';
+import Symbol from './elements/Symbol';
+import Defs from './elements/Defs';
+import LinearGradient from './elements/LinearGradient';
+import RadialGradient from './elements/RadialGradient';
+import Stop from './elements/Stop';
+import ClipPath from './elements/ClipPath';
+import Pattern from './elements/Pattern';
+import Mask from './elements/Mask';
+import Marker from './elements/Marker';
+import Filter from './elements/filters/Filter';
+import FeColorMatrix from './elements/filters/FeColorMatrix';
+
+export const tags: { [tag: string]: ComponentType } = {
+  svg: Svg,
+  circle: Circle,
+  ellipse: Ellipse,
+  g: G,
+  text: Text,
+  tspan: TSpan,
+  textPath: TextPath,
+  path: Path,
+  polygon: Polygon,
+  polyline: Polyline,
+  line: Line,
+  rect: Rect,
+  use: Use,
+  image: Image,
+  symbol: Symbol,
+  defs: Defs,
+  linearGradient: LinearGradient,
+  radialGradient: RadialGradient,
+  stop: Stop,
+  clipPath: ClipPath,
+  pattern: Pattern,
+  mask: Mask,
+  marker: Marker,
+  filter: Filter,
+  feColorMatrix: FeColorMatrix,
+};
 
 function missingTag() {
   return null;
@@ -22,7 +70,7 @@ export interface AST {
   props: {
     [prop: string]: Styles | string | undefined;
   };
-  Tag: ComponentType<React.PropsWithChildren<{}>>;
+  Tag: ComponentType<React.PropsWithChildren>;
 }
 
 export interface XmlAST extends AST {
@@ -36,8 +84,9 @@ export interface JsxAST extends AST {
 
 export type AdditionalProps = {
   onError?: (error: Error) => void;
-  override?: Object;
+  override?: object;
   onLoad?: () => void;
+  fallback?: JSX.Element;
 };
 
 export type UriProps = SvgProps & { uri: string | null } & AdditionalProps;
@@ -63,45 +112,54 @@ export function SvgAst({ ast, override }: AstProps) {
   );
 }
 
-export const err = console.error.bind(console);
+const err = console.error.bind(console);
 
 export function SvgXml(props: XmlProps) {
-  const { onError = err, xml, override } = props;
-  const ast = useMemo<JsxAST | null>(
-    () => (xml !== null ? parse(xml) : null),
-    [xml],
-  );
+  const { onError = err, xml, override, fallback } = props;
 
   try {
+    const ast = useMemo<JsxAST | null>(
+      () => (xml !== null ? parse(xml) : null),
+      [xml]
+    );
     return <SvgAst ast={ast} override={override || props} />;
   } catch (error) {
     onError(error);
-    return null;
+    return fallback ?? null;
   }
 }
 
 export async function fetchText(uri: string) {
   const response = await fetch(uri);
-  if (response.ok) {
+  if (response.ok || (response.status === 0 && uri.startsWith('file://'))) {
     return await response.text();
   }
   throw new Error(`Fetching ${uri} failed with status ${response.status}`);
 }
 
 export function SvgUri(props: UriProps) {
-  const { onError = err, uri, onLoad } = props;
+  const { onError = err, uri, onLoad, fallback } = props;
   const [xml, setXml] = useState<string | null>(null);
+  const [isError, setIsError] = useState(false);
   useEffect(() => {
     uri
       ? fetchText(uri)
           .then((data) => {
             setXml(data);
+            isError && setIsError(false);
             onLoad?.();
           })
-          .catch(onError)
+          .catch((e) => {
+            onError(e);
+            setIsError(true);
+          })
       : setXml(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onError, uri, onLoad]);
-  return <SvgXml xml={xml} override={props} />;
+  if (isError) {
+    return fallback ?? null;
+  }
+  return <SvgXml xml={xml} override={props} fallback={fallback} />;
 }
 
 // Extending Component is required for Animated support.
@@ -111,19 +169,27 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
   componentDidMount() {
     this.parse(this.props.xml);
   }
+
   componentDidUpdate(prevProps: { xml: string | null }) {
     const { xml } = this.props;
     if (xml !== prevProps.xml) {
       this.parse(xml);
     }
   }
+
   parse(xml: string | null) {
+    const { onError = err } = this.props;
     try {
       this.setState({ ast: xml ? parse(xml) : null });
     } catch (e) {
-      console.error(e);
+      const error = e as Error;
+      onError({
+        ...error,
+        message: `[RNSVG] Couldn't parse SVG, reason: ${error.message}`,
+      });
     }
   }
+
   render() {
     const {
       props,
@@ -138,12 +204,14 @@ export class SvgFromUri extends Component<UriProps, UriState> {
   componentDidMount() {
     this.fetch(this.props.uri);
   }
+
   componentDidUpdate(prevProps: { uri: string | null }) {
     const { uri } = this.props;
     if (uri !== prevProps.uri) {
       this.fetch(uri);
     }
   }
+
   async fetch(uri: string | null) {
     try {
       this.setState({ xml: uri ? await fetchText(uri) : null });
@@ -151,12 +219,13 @@ export class SvgFromUri extends Component<UriProps, UriState> {
       console.error(e);
     }
   }
+
   render() {
     const {
       props,
       state: { xml },
     } = this;
-    return <SvgFromXml xml={xml} override={props} />;
+    return <SvgFromXml xml={xml} override={props} onError={props.onError} />;
   }
 }
 
@@ -185,7 +254,7 @@ export function getStyle(string: string): Styles {
 
 export function astToReact(
   value: AST | string,
-  index: number,
+  index: number
 ): JSX.Element | string {
   if (typeof value === 'object') {
     const { Tag, props, children } = value;
@@ -235,6 +304,7 @@ function locate(source: string, i: number) {
 }
 
 const validNameCharacters = /[a-zA-Z0-9:_-]/;
+const commentStart = /<!--/;
 const whitespace = /[\s\t\r\n]/;
 const quotemarks = /['"]/;
 
@@ -246,19 +316,23 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
   let state = metadata;
   let children = null;
   let root: XmlAST | undefined;
-  let stack: XmlAST[] = [];
+  const stack: XmlAST[] = [];
 
   function error(message: string) {
     const { line, column, snippet } = locate(source, i);
     throw new Error(
-      `${message} (${line}:${column}). If this is valid SVG, it's probably a bug. Please raise an issue\n\n${snippet}`,
+      `${message} (${line}:${column}). If this is valid SVG, it's probably a bug. Please raise an issue\n\n${snippet}`
     );
   }
 
   function metadata() {
     while (
       i + 1 < length &&
-      (source[i] !== '<' || !validNameCharacters.test(source[i + 1]))
+      (source[i] !== '<' ||
+        !(
+          validNameCharacters.test(source[i + 1]) ||
+          commentStart.test(source.slice(i, i + 4))
+        ))
     ) {
       i++;
     }
@@ -385,10 +459,11 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
 
     if (currentElement && tag !== currentElement.tag) {
       error(
-        `Expected closing tag </${tag}> to match opening tag <${currentElement.tag}>`,
+        `Expected closing tag </${tag}> to match opening tag <${currentElement.tag}>`
       );
     }
 
+    allowSpaces();
     if (source[i] !== '>') {
       error('Expected >');
     }
@@ -414,7 +489,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
   }
 
   function getTag(name: string): ComponentType<React.PropsWithChildren<{}>> {
-    type Element = typeof tags[keyof typeof tags];
+    type Element = (typeof tags)[keyof typeof tags];
     // @ts-ignore
     const Tag: Element | undefined = tags[name];
     // @ts-ignore

@@ -45,27 +45,7 @@ class MarkerView extends GroupView {
     invalidate();
   }
 
-  public void setRefX(String refX) {
-    mRefX = SVGLength.from(refX);
-    invalidate();
-  }
-
-  public void setRefX(Double refX) {
-    mRefX = SVGLength.from(refX);
-    invalidate();
-  }
-
   public void setRefY(Dynamic refY) {
-    mRefY = SVGLength.from(refY);
-    invalidate();
-  }
-
-  public void setRefY(String refY) {
-    mRefY = SVGLength.from(refY);
-    invalidate();
-  }
-
-  public void setRefY(Double refY) {
     mRefY = SVGLength.from(refY);
     invalidate();
   }
@@ -75,27 +55,7 @@ class MarkerView extends GroupView {
     invalidate();
   }
 
-  public void setMarkerWidth(String markerWidth) {
-    mMarkerWidth = SVGLength.from(markerWidth);
-    invalidate();
-  }
-
-  public void setMarkerWidth(Double markerWidth) {
-    mMarkerWidth = SVGLength.from(markerWidth);
-    invalidate();
-  }
-
   public void setMarkerHeight(Dynamic markerHeight) {
-    mMarkerHeight = SVGLength.from(markerHeight);
-    invalidate();
-  }
-
-  public void setMarkerHeight(String markerHeight) {
-    mMarkerHeight = SVGLength.from(markerHeight);
-    invalidate();
-  }
-
-  public void setMarkerHeight(Double markerHeight) {
     mMarkerHeight = SVGLength.from(markerHeight);
     invalidate();
   }
@@ -160,7 +120,7 @@ class MarkerView extends GroupView {
 
     markerTransform.reset();
     Point origin = position.origin;
-    markerTransform.setTranslate((float) origin.x * mScale, (float) origin.y * mScale);
+    markerTransform.setTranslate((float) origin.x, (float) origin.y);
 
     double markerAngle = "auto".equals(mOrient) ? -1 : Double.parseDouble(mOrient);
     float degrees = 180 + (float) (markerAngle == -1 ? position.angle : markerAngle);
@@ -168,7 +128,7 @@ class MarkerView extends GroupView {
 
     boolean useStrokeWidth = "strokeWidth".equals(mMarkerUnits);
     if (useStrokeWidth) {
-      markerTransform.preScale(strokeWidth, strokeWidth);
+      markerTransform.preScale(strokeWidth / mScale, strokeWidth / mScale);
     }
 
     double width = relativeOnWidth(mMarkerWidth) / mScale;

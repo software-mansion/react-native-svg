@@ -14,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
+import java.util.ArrayList;
 
 @SuppressLint("ViewConstructor")
 class CircleView extends RenderableView {
@@ -30,42 +31,12 @@ class CircleView extends RenderableView {
     invalidate();
   }
 
-  public void setCx(String cx) {
-    mCx = SVGLength.from(cx);
-    invalidate();
-  }
-
-  public void setCx(Double cx) {
-    mCx = SVGLength.from(cx);
-    invalidate();
-  }
-
   public void setCy(Dynamic cy) {
     mCy = SVGLength.from(cy);
     invalidate();
   }
 
-  public void setCy(String cy) {
-    mCy = SVGLength.from(cy);
-    invalidate();
-  }
-
-  public void setCy(Double cy) {
-    mCy = SVGLength.from(cy);
-    invalidate();
-  }
-
   public void setR(Dynamic r) {
-    mR = SVGLength.from(r);
-    invalidate();
-  }
-
-  public void setR(String r) {
-    mR = SVGLength.from(r);
-    invalidate();
-  }
-
-  public void setR(Double r) {
     mR = SVGLength.from(r);
     invalidate();
   }
@@ -79,6 +50,28 @@ class CircleView extends RenderableView {
     double r = relativeOnOther(mR);
 
     path.addCircle((float) cx, (float) cy, (float) r, Path.Direction.CW);
+
+    elements = new ArrayList<>();
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementMoveToPoint, new Point[] {new Point(cx, cy - r)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx, cy - r), new Point(cx + r, cy)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx + r, cy), new Point(cx, cy + r)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx, cy + r), new Point(cx - r, cy)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx - r, cy), new Point(cx, cy - r)}));
+
     return path;
   }
 }

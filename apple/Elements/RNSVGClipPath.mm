@@ -8,17 +8,17 @@
 
 #import "RNSVGClipPath.h"
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGClipPath
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -39,7 +39,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGClipPathProps>(props);
+  const auto &newProps = static_cast<const RNSVGClipPathProps &>(*props);
   setCommonNodeProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGClipPathProps const>(props);
 }
@@ -48,7 +48,7 @@ using namespace facebook::react;
 {
   [super prepareForRecycle];
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 - (void)parseReference
 {
@@ -58,9 +58,9 @@ using namespace facebook::react;
 
 - (BOOL)isSimpleClipPath
 {
-  NSArray<RNSVGView *> *children = self.subviews;
+  NSArray<RNSVGPlatformView *> *children = self.subviews;
   if (children.count == 1) {
-    RNSVGView *child = children[0];
+    RNSVGPlatformView *child = children[0];
     if ([child class] != [RNSVGGroup class]) {
       return true;
     }
@@ -70,9 +70,9 @@ using namespace facebook::react;
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGClipPathCls(void)
 {
   return RNSVGClipPath.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

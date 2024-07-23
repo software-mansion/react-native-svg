@@ -9,17 +9,17 @@
 #import <React/RCTLog.h>
 #import "RNSVGSymbol.h"
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGUse
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -40,15 +40,23 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGUseProps>(props);
+  const auto &newProps = static_cast<const RNSVGUseProps &>(*props);
 
-  self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
-  self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-    self.useheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  id x = RNSVGConvertFollyDynamicToId(newProps.x);
+  if (x != nil) {
+    self.x = [RCTConvert RNSVGLength:x];
   }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-    self.usewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  id y = RNSVGConvertFollyDynamicToId(newProps.y);
+  if (y != nil) {
+    self.y = [RCTConvert RNSVGLength:y];
+  }
+  id useheight = RNSVGConvertFollyDynamicToId(newProps.height);
+  if (useheight != nil) {
+    self.useheight = [RCTConvert RNSVGLength:useheight];
+  }
+  id usewidth = RNSVGConvertFollyDynamicToId(newProps.width);
+  if (usewidth != nil) {
+    self.usewidth = [RCTConvert RNSVGLength:usewidth];
   }
   self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
 
@@ -65,7 +73,7 @@ using namespace facebook::react;
   _usewidth = nil;
   _href = nil;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 - (void)setHref:(NSString *)href
 {
@@ -204,9 +212,9 @@ using namespace facebook::react;
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGUseCls(void)
 {
   return RNSVGUse.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

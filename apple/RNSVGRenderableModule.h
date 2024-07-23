@@ -6,14 +6,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <rnsvg/rnsvg.h>
 #else
 #import <React/RCTBridge.h>
 #endif
 
 @interface RNSVGRenderableModule : NSObject
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
                                    <NativeSvgRenderableModuleSpec>
 #else
                                    <RCTBridgeModule>

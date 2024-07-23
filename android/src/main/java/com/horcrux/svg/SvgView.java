@@ -19,6 +19,7 @@ import android.graphics.Typeface;
 import android.util.Base64;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -57,6 +58,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   private @Nullable Bitmap mBitmap;
+  private @Nullable Bitmap mCurrentBitmap;
   private boolean mRemovalTransitionStarted;
 
   public SvgView(ReactContext reactContext) {
@@ -70,6 +72,16 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   public void setId(int id) {
     super.setId(id);
     SvgViewManager.setSvgView(id, this);
+  }
+
+  @Override
+  public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+    super.onInitializeAccessibilityNodeInfo(info);
+
+    Rect r = new Rect();
+    boolean isVisible = this.getGlobalVisibleRect(r);
+    info.setVisibleToUser(isVisible);
+    info.setClassName(this.getClass().getCanonicalName());
   }
 
   @Override
@@ -150,6 +162,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   private final Map<String, VirtualView> mDefinedTemplates = new HashMap<>();
   private final Map<String, VirtualView> mDefinedMarkers = new HashMap<>();
   private final Map<String, VirtualView> mDefinedMasks = new HashMap<>();
+  private final Map<String, VirtualView> mDefinedFilters = new HashMap<>();
   private final Map<String, Brush> mDefinedBrushes = new HashMap<>();
   private Canvas mCanvas;
   private final float mScale;
@@ -221,31 +234,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     clearChildCache();
   }
 
-  public void setBbWidth(String bbWidth) {
-    mbbWidth = SVGLength.from(bbWidth);
-    invalidate();
-    clearChildCache();
-  }
-
-  public void setBbWidth(Double bbWidth) {
-    mbbWidth = SVGLength.from(bbWidth);
-    invalidate();
-    clearChildCache();
-  }
-
   public void setBbHeight(Dynamic bbHeight) {
-    mbbHeight = SVGLength.from(bbHeight);
-    invalidate();
-    clearChildCache();
-  }
-
-  public void setBbHeight(String bbHeight) {
-    mbbHeight = SVGLength.from(bbHeight);
-    invalidate();
-    clearChildCache();
-  }
-
-  public void setBbHeight(Double bbHeight) {
     mbbHeight = SVGLength.from(bbHeight);
     invalidate();
     clearChildCache();
@@ -277,7 +266,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       return null;
     }
     Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_8888);
-
+    mCurrentBitmap = bitmap;
     drawChildren(new Canvas(bitmap));
     return bitmap;
   }
@@ -352,7 +341,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
     bitmap.recycle();
     byte[] bitmapBytes = stream.toByteArray();
-    return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+    return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
   }
 
   String toDataURL(int width, int height) {
@@ -366,7 +355,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
     bitmap.recycle();
     byte[] bitmapBytes = stream.toByteArray();
-    return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+    return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
   }
 
   void enableTouchEvents() {
@@ -436,11 +425,23 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     return mDefinedMasks.get(maskRef);
   }
 
+  void defineFilter(VirtualView filter, String filterRef) {
+    mDefinedFilters.put(filterRef, filter);
+  }
+
+  VirtualView getDefinedFilter(String filterRef) {
+    return mDefinedFilters.get(filterRef);
+  }
+
   void defineMarker(VirtualView marker, String markerRef) {
     mDefinedMarkers.put(markerRef, marker);
   }
 
   VirtualView getDefinedMarker(String markerRef) {
     return mDefinedMarkers.get(markerRef);
+  }
+
+  public Bitmap getCurrentBitmap() {
+    return mCurrentBitmap;
   }
 }

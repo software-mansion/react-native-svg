@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import Path from './Path';
 import Shape from './Shape';
-import { CommonPathProps, NumberProp } from '../lib/extract/types';
+import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import extractPolyPoints from '../lib/extract/extractPolyPoints';
 
 export interface PolylineProps extends CommonPathProps {
@@ -17,10 +17,9 @@ export default class Polyline extends Shape<PolylineProps> {
   };
 
   setNativeProps = (
-    props: Object & {
-      points?: string | NumberProp[];
+    props: PolylineProps & {
       d?: string;
-    },
+    }
   ) => {
     const { points } = props;
     if (points) {

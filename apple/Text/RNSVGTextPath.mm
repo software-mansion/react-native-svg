@@ -8,17 +8,17 @@
 
 #import "RNSVGTextPath.h"
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGTextPath
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -39,14 +39,17 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGTextPathProps>(props);
+  const auto &newProps = static_cast<const RNSVGTextPathProps &>(*props);
 
   self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
   self.side = RCTNSStringFromStringNilIfEmpty(newProps.side);
   self.method = RCTNSStringFromStringNilIfEmpty(newProps.method);
   self.midLine = RCTNSStringFromStringNilIfEmpty(newProps.midLine);
   self.spacing = RCTNSStringFromStringNilIfEmpty(newProps.spacing);
-  self.startOffset = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.startOffset)];
+  id startOffset = RNSVGConvertFollyDynamicToId(newProps.startOffset);
+  if (startOffset != nil) {
+    self.startOffset = [RCTConvert RNSVGLength:startOffset];
+  }
 
   setCommonTextProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGTextPathProps const>(props);
@@ -63,7 +66,7 @@ using namespace facebook::react;
   _spacing = nil;
   _startOffset = nil;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 - (void)setHref:(NSString *)href
 {
@@ -141,9 +144,9 @@ using namespace facebook::react;
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGTextPathCls(void)
 {
   return RNSVGTextPath.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

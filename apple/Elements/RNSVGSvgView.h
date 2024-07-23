@@ -12,18 +12,12 @@
 #import "RNSVGPainter.h"
 #import "RNSVGVBMOS.h"
 
-#ifdef RN_FABRIC_ENABLED
-#import <React/RCTViewComponentView.h>
-#endif // RN_FABRIC_ENABLED
-
 @class RNSVGNode;
+@class RNSVGMarker;
+@class RNSVGMask;
+@class RNSVGFilter;
 
-@interface RNSVGSvgView :
-#ifdef RN_FABRIC_ENABLED
-    RCTViewComponentView <RNSVGContainer>
-#else
-    RNSVGView <RNSVGContainer>
-#endif // RN_FABRIC_ENABLED
+@interface RNSVGSvgView : RNSVGView <RNSVGContainer>
 
 @property (nonatomic, strong) RNSVGLength *bbWidth;
 @property (nonatomic, strong) RNSVGLength *bbHeight;
@@ -55,17 +49,19 @@
 
 - (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;
 
-- (void)defineMarker:(RNSVGNode *)marker markerName:(NSString *)markerName;
+- (void)defineMarker:(RNSVGMarker *)marker markerName:(NSString *)markerName;
 
-- (RNSVGNode *)getDefinedMarker:(NSString *)markerName;
+- (RNSVGMarker *)getDefinedMarker:(NSString *)markerName;
 
-- (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName;
+- (void)defineMask:(RNSVGMask *)mask maskName:(NSString *)maskName;
 
-- (RNSVGNode *)getDefinedMask:(NSString *)maskName;
+- (RNSVGMask *)getDefinedMask:(NSString *)maskName;
 
-- (NSString *)getDataURL;
+- (void)defineFilter:(RNSVGFilter *)filter filterName:(NSString *)filterName;
 
-- (NSString *)getDataURLwithBounds:(CGRect)bounds;
+- (RNSVGFilter *)getDefinedFilter:(NSString *)filterName;
+
+- (NSString *)getDataURLWithBounds:(CGRect)bounds;
 
 - (CGRect)getContextBounds;
 

@@ -23,16 +23,29 @@ import Pattern from './elements/Pattern';
 import Mask from './elements/Mask';
 import Marker from './elements/Marker';
 import ForeignObject from './elements/ForeignObject';
+import Filter from './elements/filters/Filter';
+import FeColorMatrix from './elements/filters/FeColorMatrix';
 
-import { parse, SvgAst, SvgFromUri, SvgFromXml, SvgUri, SvgXml } from './xml';
 import {
-  SvgCss,
-  SvgCssUri,
-  SvgWithCss,
-  SvgWithCssUri,
-  inlineStyles,
-} from './css';
-import { LocalSvg, WithLocalSvg, loadLocalRawResource } from './LocalSvg';
+  parse,
+  SvgAst,
+  SvgFromUri,
+  SvgFromXml,
+  SvgUri,
+  SvgXml,
+  camelCase,
+  fetchText,
+  JsxAST,
+  Middleware,
+  Styles,
+  UriProps,
+  UriState,
+  XmlAST,
+  XmlProps,
+  XmlState,
+  AstProps,
+} from './xml';
+
 import {
   RNSVGCircle,
   RNSVGClipPath,
@@ -56,7 +69,20 @@ import {
   RNSVGTextPath,
   RNSVGTSpan,
   RNSVGUse,
+  RNSVGFilter,
+  RNSVGFeColorMatrix,
 } from './fabric';
+
+export {
+  SvgCss,
+  SvgCssUri,
+  SvgWithCss,
+  SvgWithCssUri,
+  inlineStyles,
+  LocalSvg,
+  WithLocalSvg,
+  loadLocalRawResource,
+} from './deprecated';
 
 export type { RectProps } from './elements/Rect';
 export type { CircleProps } from './elements/Circle';
@@ -81,8 +107,9 @@ export type { PatternProps } from './elements/Pattern';
 export type { MaskProps } from './elements/Mask';
 export type { MarkerProps } from './elements/Marker';
 export type { ForeignObjectProps } from './elements/ForeignObject';
-export type { LocalProps } from './LocalSvg';
-export type { UriProps, XmlProps, AstProps } from './xml';
+export type { FilterProps } from './elements/filters/Filter';
+export type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
+export type { FilterPrimitiveCommonProps } from './elements/filters/FilterPrimitive';
 
 export * from './lib/extract/types';
 
@@ -117,15 +144,11 @@ export {
   SvgFromXml,
   SvgUri,
   SvgXml,
-  SvgCss,
-  SvgCssUri,
-  SvgWithCss,
-  SvgWithCssUri,
-  inlineStyles,
-  LocalSvg,
-  WithLocalSvg,
-  loadLocalRawResource,
+  camelCase,
+  fetchText,
   Shape,
+  Filter,
+  FeColorMatrix,
   RNSVGMarker,
   RNSVGMask,
   RNSVGPattern,
@@ -148,6 +171,20 @@ export {
   RNSVGSvgAndroid,
   RNSVGSvgIOS,
   RNSVGForeignObject,
+  RNSVGFilter,
+  RNSVGFeColorMatrix,
+};
+
+export type {
+  JsxAST,
+  Middleware,
+  Styles,
+  UriProps,
+  UriState,
+  XmlAST,
+  XmlProps,
+  XmlState,
+  AstProps,
 };
 
 export default Svg;

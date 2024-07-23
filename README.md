@@ -22,17 +22,17 @@
 
 ## Installation
 
-### With expo-cli
+### With expo
 
 > ✅ The [Expo client app](https://expo.io/tools) comes with the native code installed!
 
 Install the JavaScript with:
 
 ```bash
-expo install react-native-svg
+npx expo install react-native-svg
 ```
 
-📚 See the [**Expo docs**](https://docs.expo.io/versions/latest/sdk/svg/) for more info or jump ahead to [Usage](#Usage).
+📚 See the [**Expo docs**](https://docs.expo.io/versions/latest/sdk/svg/) for more info or jump ahead to [Usage](#usage).
 
 ### With react-native-cli
 
@@ -75,6 +75,7 @@ expo install react-native-svg
 | >=8              | >=0.57.4     |
 | >=9              | >=0.57.4     |
 | >=12.3.0         | >=0.64.0     |
+| >=15.0.0         | >=0.70.0     |
 
 ## Support for Fabric
 
@@ -82,32 +83,11 @@ expo install react-native-svg
 
 | react-native-svg | react-native |
 | ---------------- | ------------ |
-| 13.0.0+          | 0.69.0+      |
+| >=13.0.0         | 0.69.0+      |
+| >=13.6.0         | 0.70.0+      |
+| >=13.10.0        | 0.72.0+      |
 
 ## Troubleshooting
-
-### Problems with Proguard
-
-When Proguard is enabled (which it is by default for Android release builds), it causes runtime error.
-To avoid this, add an exception to `android/app/proguard-rules.pro`:
-
-```bash
--keep public class com.horcrux.svg.** {*;}
-```
-
-If you have build errors, then it might be caused by caching issues, please try:
-
-```bash
-watchman watch-del-all
-rm -fr $TMPDIR/react-*
-react-native start --reset-cache
-
-Or,
-
-rm -rf node_modules
-yarn
-react-native start --reset-cache
-```
 
 ### Unexpected behavior
 
@@ -127,6 +107,11 @@ react-native run-ios
 react-native run-android
 ```
 
+### Adding Windows support
+
+1. `npx react-native-windows-init --overwrite`
+2. `react-native run-windows`
+
 ## Opening issues
 
 Verify that it is still an issue with the latest version as specified in the previous step. If so, open a new issue, include the entire `App.js` file, specify what platforms you've tested, and the results of running this command:
@@ -141,10 +126,10 @@ If you suspect that you've found a spec conformance bug, then you can test using
 
 To check how to use the library, see [USAGE.md](https://github.com/react-native-svg/react-native-svg/blob/main/USAGE.md)
 
-## TODO:
-
-1. Filters ([connected PR](https://github.com/react-native-svg/react-native-svg/pull/896))
-
 ## Known issues:
 
 1. Unable to apply focus point of RadialGradient on Android.
+
+## React Native SVG is maintained by Software Mansion
+
+Since 2012 [Software Mansion](https://swmansion.com) is a software agency with experience in building web and mobile apps. We are Core React Native Contributors and experts in dealing with all kinds of React Native issues. We can help you build your next dream product – [Hire us](https://swmansion.com/contact/projects?utm_source=svg&utm_medium=readme).

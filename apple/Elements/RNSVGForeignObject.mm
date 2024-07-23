@@ -10,17 +10,17 @@
 #import "RNSVGMask.h"
 #import "RNSVGNode.h"
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGForeignObject
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -41,19 +41,23 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGForeignObjectProps>(props);
+  const auto &newProps = static_cast<const RNSVGForeignObjectProps &>(*props);
 
-  self.x = RCTNSStringFromStringNilIfEmpty(newProps.x)
-      ? [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)]
-      : nil;
-  self.y = RCTNSStringFromStringNilIfEmpty(newProps.y)
-      ? [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)]
-      : nil;
-  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-    self.foreignObjectheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  id x = RNSVGConvertFollyDynamicToId(newProps.x);
+  if (x != nil) {
+    self.x = [RCTConvert RNSVGLength:x];
   }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-    self.foreignObjectwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  id y = RNSVGConvertFollyDynamicToId(newProps.y);
+  if (y != nil) {
+    self.y = [RCTConvert RNSVGLength:y];
+  }
+  id height = RNSVGConvertFollyDynamicToId(newProps.height);
+  if (height != nil) {
+    self.foreignObjectheight = [RCTConvert RNSVGLength:height];
+  }
+  id width = RNSVGConvertFollyDynamicToId(newProps.width);
+  if (width != nil) {
+    self.foreignObjectwidth = [RCTConvert RNSVGLength:width];
   }
 
   setCommonGroupProps(newProps, self);
@@ -68,7 +72,7 @@ using namespace facebook::react;
   _foreignObjectheight = nil;
   _foreignObjectwidth = nil;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
   return nil;
@@ -211,9 +215,9 @@ using namespace facebook::react;
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGForeignObjectCls(void)
 {
   return RNSVGForeignObject.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

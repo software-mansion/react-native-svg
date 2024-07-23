@@ -41,8 +41,7 @@ export default class SvgExample extends React.Component {
         style={[
           StyleSheet.absoluteFill,
           { alignItems: 'center', justifyContent: 'center' },
-        ]}
-      >
+        ]}>
         <Svg height="50%" width="50%" viewBox="0 0 100 100">
           <Circle
             cx="50"
@@ -92,7 +91,7 @@ If remote SVG file contains CSS in `<style>` element, use `SvgCssUri`:
 ```jsx
 import * as React from 'react';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
-import { SvgUri } from 'react-native-svg';
+import { SvgCssUri } from 'react-native-svg/css';
 export default function TestComponent() {
   const [loading, setLoading] = React.useState(true);
   const onError = (e: Error) => {
@@ -105,7 +104,7 @@ export default function TestComponent() {
   };
   return (
     <>
-      <SvgUri
+      <SvgCssUri
         width="100"
         height="100"
         uri="https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg"
@@ -122,15 +121,16 @@ export default function TestComponent() {
 
 Both `SvgUri` and `SvgCssUri` log errors to the console, but otherwise ignore them.
 You can set property `onError` if you want to handle errors such as resource not
-existing in a different way.
+existing in a different way and `fallback` if you want to render another component instead in such case.
 
 ```jsx
 import * as React from 'react';
-import { SvgUri } from 'react-native-svg';
+import { SvgUri } from 'react-native-svg/css';
+import { SvgFallback } from './components/SvgFallback';
 
 export default () => {
   const [uri, setUri] = React.useState(
-    'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/not_existing.svg',
+    'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/not_existing.svg'
   );
   return (
     <SvgUri
@@ -140,6 +140,7 @@ export default () => {
       width="100%"
       height="100%"
       uri={uri}
+      fallback={<SvgFallback />}
     />
   );
 };
@@ -151,7 +152,34 @@ Try [react-native-svg-transformer](https://github.com/kristerkari/react-native-s
 <https://github.com/kristerkari/react-native-svg-transformer#installation-and-configuration>
 <https://github.com/kristerkari/react-native-svg-transformer#for-react-native-v057-or-newer--expo-sdk-v3100-or-newer>
 
-`metro.config.js`
+`metro.config.js` for react-native >= 0.72
+
+```js
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+
+const defaultConfig = getDefaultConfig(__dirname);
+const { assetExts, sourceExts } = defaultConfig.resolver;
+
+/**
+ * Metro configuration
+ * https://facebook.github.io/metro/docs/configuration
+ *
+ * @type {import('metro-config').MetroConfig}
+ */
+const config = {
+  transformer: {
+    babelTransformerPath: require.resolve('react-native-svg-transformer'),
+  },
+  resolver: {
+    assetExts: assetExts.filter((ext) => ext !== 'svg'),
+    sourceExts: [...sourceExts, 'svg'],
+  },
+};
+
+module.exports = mergeConfig(defaultConfig, config);
+```
+
+`metro.config.js` for react-native < 0.72
 
 ```js
 const { getDefaultConfig } = require('metro-config');
@@ -310,8 +338,7 @@ Colors set in the Svg element are inherited by its children:
   fill="blue"
   stroke="red"
   color="green"
-  viewBox="-16 -16 544 544"
->
+  viewBox="-16 -16 544 544">
   <Path
     d="M318.37,85.45L422.53,190.11,158.89,455,54.79,350.38ZM501.56,60.2L455.11,13.53a45.93,45.93,0,0,0-65.11,0L345.51,58.24,449.66,162.9l51.9-52.15A35.8,35.8,0,0,0,501.56,60.2ZM0.29,497.49a11.88,11.88,0,0,0,14.34,14.17l116.06-28.28L26.59,378.72Z"
     strokeWidth="32"
@@ -505,8 +532,7 @@ The <Text> element is used to define text.
     fontWeight="bold"
     x="100"
     y="20"
-    textAnchor="middle"
-  >
+    textAnchor="middle">
     STROKED TEXT
   </Text>
 </Svg>
@@ -680,8 +706,7 @@ The <Image> element allows a raster image to be included in an Svg component.
     textAnchor="middle"
     fontWeight="bold"
     fontSize="16"
-    fill="blue"
-  >
+    fill="blue">
     HOGWARTS
   </Text>
 </Svg>
@@ -704,8 +729,7 @@ The <ClipPath> SVG element defines a clipping path. A clipping path is used/refe
       ry="50%"
       fx="50%"
       fy="50%"
-      gradientUnits="userSpaceOnUse"
-    >
+      gradientUnits="userSpaceOnUse">
       <Stop offset="0%" stopColor="#ff0" stopOpacity="1" />
       <Stop offset="100%" stopColor="#00f" stopOpacity="1" />
     </RadialGradient>
@@ -721,8 +745,7 @@ The <ClipPath> SVG element defines a clipping path. A clipping path is used/refe
           fontSize="32"
           fontWeight="bold"
           textAnchor="middle"
-          scale="1.2"
-        >
+          scale="1.2">
           Q
         </Text>
       </G>
@@ -800,8 +823,7 @@ The <RadialGradient> element is used to define a radial gradient. The <RadialGra
       ry="55"
       fx="150"
       fy="75"
-      gradientUnits="userSpaceOnUse"
-    >
+      gradientUnits="userSpaceOnUse">
       <Stop offset="0" stopColor="#ff0" stopOpacity="1" />
       <Stop offset="1" stopColor="#83a" stopOpacity="1" />
     </RadialGradient>
@@ -840,8 +862,7 @@ The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;D
       x1="0"
       y1="0"
       x2="800"
-      y2="0"
-    >
+      y2="0">
       <Stop offset="0" stopColor="white" stopOpacity="0" />
       <Stop offset="1" stopColor="white" stopOpacity="1" />
     </LinearGradient>
@@ -851,8 +872,7 @@ The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;D
       x="0"
       y="0"
       width="800"
-      height="300"
-    >
+      height="300">
       <Rect x="0" y="0" width="800" height="300" fill="url(#Gradient)" />
     </Mask>
     <Text
@@ -861,8 +881,7 @@ The <Mask> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&lt;D
       y="200"
       fontFamily="Verdana"
       fontSize="100"
-      textAnchor="middle"
-    >
+      textAnchor="middle">
       Masked text
     </Text>
   </Defs>
@@ -898,8 +917,7 @@ The <Pattern> element must be nested within a [&lt;Defs&gt;](#defs) tag. The [&l
       y="0"
       width="100"
       height="100"
-      viewBox="0 0 10 10"
-    >
+      viewBox="0 0 10 10">
       <Path d="M 0 0 L 7 0 L 3.5 7 z" fill="red" stroke="blue" />
     </Pattern>
   </Defs>
@@ -939,8 +957,7 @@ The graphics for a marker are defined by a ‘marker’ element. To indicate tha
       markerUnits="strokeWidth"
       markerWidth="4"
       markerHeight="3"
-      orient="auto"
-    >
+      orient="auto">
       <Path d="M 0 0 L 10 5 L 0 10 z" />
     </Marker>
   </Defs>
@@ -1100,8 +1117,7 @@ export default class App extends Component {
               x1="0"
               y1="0"
               x2="800"
-              y2="0"
-            >
+              y2="0">
               <Stop offset="0" stopColor="white" stopOpacity="0.2" />
               <Stop offset="1" stopColor="white" stopOpacity="1" />
             </LinearGradient>
@@ -1111,8 +1127,7 @@ export default class App extends Component {
               x="0"
               y="0"
               width="800"
-              height="300"
-            >
+              height="300">
               <Rect
                 x="0"
                 y="0"
@@ -1237,3 +1252,84 @@ const styles = StyleSheet.create({
   },
 });
 ```
+
+## Filters
+
+Filter effects are a way of processing an element’s rendering before it is displayed in the document. Typically, rendering an element via CSS or SVG can conceptually be described as if the element, including its children, are drawn into a buffer (such as a raster image) and then that buffer is composited into the elements parent. Filters apply an effect before the compositing stage. Examples of such effects are blurring, changing color intensity and warping the image.
+
+Currently supported\* filters are:
+
+- FeColorMatrix
+
+\*_More filters are coming soon_
+
+Exmaple use of filters:
+
+```jsx
+import React from 'react';
+import { FeColorMatrix, Filter, Rect, Svg } from 'react-native-svg';
+
+export default () => {
+  return (
+    <Svg height="300" width="300">
+      <Filter id="myFilter">
+        <FeColorMatrix type="saturate" values="0.2" />
+      </Filter>
+      <Rect
+        x="0"
+        y="0"
+        width="300"
+        height="300"
+        fill="red"
+        filter="url(#myFilter)"
+      />
+    </Svg>
+  );
+};
+```
+
+![FeColorMatrix](./screenshots/feColorMatrix.png)
+
+More info: <https://www.w3.org/TR/SVG11/filters.html>
+
+## FilterImage
+
+`FilterImage` is a new component that is not strictly related to SVG. Its behavior should be the same as a regular `Image` component from React Native with one exception - the additional prop `filters`, which accepts an array of filters to apply to the image.
+
+### Example
+
+```tsx
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { FilterImage } from 'react-native-svg/filter-image';
+
+const myImage = require('./myImage.jpg');
+
+export default () => {
+  return (
+    <FilterImage
+      style={styles.image}
+      source={myImage}
+      filters={[
+        { name: 'colorMatrix', type: 'saturate', values: 0.2 },
+        {
+          name: 'colorMatrix',
+          type: 'matrix',
+          values: [
+            0.2, 0.2, 0.2, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0, 0,
+            0, 1, 0,
+          ],
+        },
+      ]}
+    />
+  );
+};
+const styles = StyleSheet.create({
+  image: {
+    width: 200,
+    height: 200,
+  },
+});
+```
+
+![FilterImage](./screenshots/filterImage.png)

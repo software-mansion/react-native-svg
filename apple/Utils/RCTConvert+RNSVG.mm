@@ -42,6 +42,36 @@ RCT_ENUM_CONVERTER(
     kRNSVGUnitsObjectBoundingBox,
     intValue)
 
+RCT_ENUM_CONVERTER(
+    RNSVGMaskType,
+    (@{
+      @"luminance" : @(kRNSVGMaskTypeLuminance),
+      @"alpha" : @(kRNSVGMaskTypeAlpha),
+    }),
+    kRNSVGMaskTypeLuminance,
+    intValue)
+
+RCT_ENUM_CONVERTER(
+    RNSVGEdgeModeTypes,
+    (@{
+      @"duplicate" : @(SVG_EDGEMODE_DUPLICATE),
+      @"wrap" : @(SVG_EDGEMODE_WRAP),
+      @"none" : @(SVG_EDGEMODE_NONE),
+    }),
+    SVG_FECOLORMATRIX_TYPE_UNKNOWN,
+    intValue)
+
+RCT_ENUM_CONVERTER(
+    RNSVGColorMatrixType,
+    (@{
+      @"matrix" : @(SVG_FECOLORMATRIX_TYPE_MATRIX),
+      @"saturate" : @(SVG_FECOLORMATRIX_TYPE_SATURATE),
+      @"hueRotate" : @(SVG_FECOLORMATRIX_TYPE_HUEROTATE),
+      @"luminanceToAlpha" : @(SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA),
+    }),
+    SVG_FECOLORMATRIX_TYPE_UNKNOWN,
+    intValue)
+
 + (RNSVGBrush *)RNSVGBrush:(id)json
 {
   if ([json isKindOfClass:[NSNumber class]]) {
@@ -128,8 +158,20 @@ RCT_ENUM_CONVERTER(
     return lengths;
   } else if ([json isKindOfClass:[NSString class]]) {
     NSString *stringValue = (NSString *)json;
-    RNSVGLength *length = [RNSVGLength lengthWithString:stringValue];
-    return [NSArray arrayWithObject:length];
+    stringValue = [stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    stringValue = [stringValue stringByReplacingOccurrencesOfString:@","
+                                                         withString:@" "
+                                                            options:NSRegularExpressionSearch
+                                                              range:NSMakeRange(0, stringValue.length)];
+    NSArray<NSString *> *array = [stringValue componentsSeparatedByString:@" "];
+    NSMutableArray<RNSVGLength *> *svgLengthArray = [NSMutableArray array];
+
+    for (NSString *string in array) {
+      RNSVGLength *length = [RNSVGLength lengthWithString:string];
+      [svgLengthArray addObject:length];
+    }
+
+    return svgLengthArray;
   } else {
     return nil;
   }

@@ -20,37 +20,35 @@
 #import <React/RCTImageURLLoader.h>
 #import <React/RCTImageView.h>
 
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 #import <React/RCTBridge.h>
 #import <React/RCTLog.h>
 #import "RNSVGViewBox.h"
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <React/RCTImageResponseObserverProxy.h>
 #import <React/RCTImageSource.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
-#import <react/renderer/components/view/conversions.h>
-#import <react/renderer/imagemanager/RCTImagePrimitivesConversions.h>
 #import <rnsvg/RNSVGImageComponentDescriptor.h>
 #import "RNSVGFabricConversions.h"
 
-#endif // RN_FABRIC_ENABLED
+using namespace facebook::react;
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGImage {
   CGImageRef _image;
   CGSize _imageSize;
   RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
   RNSVGImageShadowNode::ConcreteState::Shared _state;
   RCTImageResponseObserverProxy _imageResponseObserverProxy;
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 }
-#ifdef RN_FABRIC_ENABLED
-using namespace facebook::react;
+#ifdef RCT_NEW_ARCH_ENABLED
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -58,9 +56,7 @@ using namespace facebook::react;
     static const auto defaultProps = std::make_shared<const RNSVGImageProps>();
     _props = defaultProps;
 
-#ifdef RN_FABRIC_ENABLED
     _imageResponseObserverProxy = RCTImageResponseObserverProxy(self);
-#endif
   }
   return self;
 }
@@ -74,15 +70,23 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGImageProps>(props);
+  const auto &newProps = static_cast<const RNSVGImageProps &>(*props);
 
-  self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
-  self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-    self.imageheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  id x = RNSVGConvertFollyDynamicToId(newProps.x);
+  if (x != nil) {
+    self.x = [RCTConvert RNSVGLength:x];
   }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-    self.imagewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  id y = RNSVGConvertFollyDynamicToId(newProps.y);
+  if (y != nil) {
+    self.y = [RCTConvert RNSVGLength:y];
+  }
+  id height = RNSVGConvertFollyDynamicToId(newProps.height);
+  if (height != nil) {
+    self.imageheight = [RCTConvert RNSVGLength:height];
+  }
+  id width = RNSVGConvertFollyDynamicToId(newProps.width);
+  if (width != nil) {
+    self.imagewidth = [RCTConvert RNSVGLength:width];
   }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
@@ -129,6 +133,17 @@ using namespace facebook::react;
     // See for more info: T46311063.
     return;
   }
+  auto imageSource = _state->getData().getImageSource();
+  imageSource.size = {image.size.width, image.size.height};
+  if (_eventEmitter != nullptr) {
+    static_cast<const RNSVGImageEventEmitter &>(*_eventEmitter)
+        .onLoad(
+            {.source = {
+                 .width = imageSource.size.width * imageSource.scale,
+                 .height = imageSource.size.height * imageSource.scale,
+                 .uri = imageSource.uri,
+             }});
+  }
   dispatch_async(dispatch_get_main_queue(), ^{
     self->_image = CGImageRetain(image.CGImage);
     self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
@@ -168,11 +183,11 @@ using namespace facebook::react;
   _imageSize = CGSizeZero;
   _reloadImageCancellationBlock = nil;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 - (void)setSrc:(RCTImageSource *)src
 {
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #else
   if (src == _src) {
     return;
@@ -198,10 +213,24 @@ using namespace facebook::react;
                        dispatch_async(dispatch_get_main_queue(), ^{
                          self->_image = CGImageRetain(image.CGImage);
                          self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+                         if (self->_onLoad) {
+                           RCTImageSource *sourceLoaded;
+#if TARGET_OS_OSX // [macOS]
+                           sourceLoaded = [src imageSourceWithSize:image.size scale:1];
+#else
+                            sourceLoaded = [src imageSourceWithSize:image.size scale:image.scale];
+#endif
+                           NSDictionary *dict = @{
+                             @"uri" : sourceLoaded.request.URL.absoluteString,
+                             @"width" : @(sourceLoaded.size.width),
+                             @"height" : @(sourceLoaded.size.height),
+                           };
+                           self->_onLoad(@{@"source" : dict});
+                         }
                          [self invalidate];
                        });
                      }];
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 }
 
 - (void)setX:(RNSVGLength *)x
@@ -337,9 +366,9 @@ using namespace facebook::react;
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGImageCls(void)
 {
   return RNSVGImage.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

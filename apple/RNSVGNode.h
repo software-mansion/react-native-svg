@@ -12,10 +12,6 @@
 #import <React/RCTPointerEvents.h>
 #import <React/UIView+React.h>
 
-#ifdef RN_FABRIC_ENABLED
-#import <React/RCTViewComponentView.h>
-#endif // RN_FABRIC_ENABLED
-
 @class RNSVGGroup;
 
 /**
@@ -23,12 +19,7 @@
  ＊interfaces for all non-definition nodes.
  */
 
-@interface RNSVGNode :
-#ifdef RN_FABRIC_ENABLED
-    RCTViewComponentView
-#else
-    RNSVGView
-#endif // RN_FABRIC_ENABLED
+@interface RNSVGNode : RNSVGView
 /*
  N[1/Sqrt[2], 36]
  The inverse of the square root of 2.
@@ -120,6 +111,8 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 - (CGFloat)relativeOnOtherString:(NSString *)length;
 
 - (CGFloat)relativeOn:(RNSVGLength *)length relative:(CGFloat)relative;
+
+- (CGFloat)relativeOnFraction:(RNSVGLength *)length relative:(CGFloat)relative;
 
 - (CGFloat)relativeOnWidth:(RNSVGLength *)length;
 

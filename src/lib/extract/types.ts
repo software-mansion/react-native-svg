@@ -1,11 +1,11 @@
-import {
+import type {
   ColorValue,
   GestureResponderEvent,
   GestureResponderHandlers,
   LayoutChangeEvent,
+  TransformsStyle,
 } from 'react-native';
-import React from 'react';
-import type { TransformsStyle } from 'react-native';
+import type React from 'react';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
@@ -81,6 +81,13 @@ export type TextPathMidLine = 'sharp' | 'smooth';
 
 export type Linecap = 'butt' | 'square' | 'round';
 export type Linejoin = 'miter' | 'bevel' | 'round';
+
+export type FilterEdgeMode = 'duplicate' | 'wrap' | 'none';
+export type FilterColorMatrixType =
+  | 'matrix'
+  | 'saturate'
+  | 'hueRotate'
+  | 'luminanceToAlpha';
 
 export interface TouchableProps {
   disabled?: boolean;
@@ -221,8 +228,14 @@ export interface TransformedProps {
   y: number;
 }
 
+export type MaskType = 'alpha' | 'luminance';
+
 export interface CommonMaskProps {
   mask?: string;
+}
+
+export interface CommonFilterProps {
+  filter?: string;
 }
 
 export interface CommonMarkerProps {
@@ -236,6 +249,13 @@ export interface NativeProps {
   onLayout?: (event: LayoutChangeEvent) => void;
 }
 
+export interface AccessibilityProps {
+  accessibilityLabel?: string;
+  accessible?: boolean;
+  testID?: string;
+}
+
+// FIXME: This interface should probably be named CommonRenderableProps
 export interface CommonPathProps
   extends FillProps,
     StrokeProps,
@@ -247,7 +267,9 @@ export interface CommonPathProps
     DefinitionProps,
     CommonMarkerProps,
     CommonMaskProps,
-    NativeProps {}
+    CommonFilterProps,
+    NativeProps,
+    AccessibilityProps {}
 
 export type ResponderInstanceProps = {
   touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
@@ -255,10 +277,10 @@ export type ResponderInstanceProps = {
   touchableHandleResponderRelease?: (e: GestureResponderEvent) => void;
   touchableHandleResponderTerminate?: (e: GestureResponderEvent) => void;
   touchableHandleStartShouldSetResponder?: (
-    e: GestureResponderEvent,
+    e: GestureResponderEvent
   ) => boolean;
   touchableHandleResponderTerminationRequest?: (
-    e: GestureResponderEvent,
+    e: GestureResponderEvent
   ) => boolean;
 };
 
@@ -276,6 +298,9 @@ export type extractedProps = {
   clipPath?: string;
   clipRule?: number;
   display?: string;
+  testID?: string;
+  accessibilityLabel?: string;
+  accessible?: boolean;
   [touchableProperty: string]: unknown;
 };
 

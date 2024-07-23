@@ -27,7 +27,7 @@ JSI_EXPORT extern const char RNSVGImageComponentName[];
 class JSI_EXPORT RNSVGImageShadowNode final : public ConcreteViewShadowNode<
                                                   RNSVGImageComponentName,
                                                   RNSVGImageProps,
-                                                  ViewEventEmitter,
+                                                  RNSVGImageEventEmitter,
                                                   RNSVGImageState> {
  public:
   using ConcreteViewShadowNode::ConcreteViewShadowNode;
@@ -44,11 +44,11 @@ class JSI_EXPORT RNSVGImageShadowNode final : public ConcreteViewShadowNode<
   void setImageManager(const SharedImageManager &imageManager);
 
   static RNSVGImageState initialStateData(
-      ShadowNodeFragment const &fragment,
-      ShadowNodeFamilyFragment const &familyFragment,
+      Props::Shared const &props,
+      ShadowNodeFamily::Shared const &family,
       ComponentDescriptor const &componentDescriptor) {
     auto imageSource = ImageSource{ImageSource::Type::Invalid};
-    return {imageSource, {imageSource, nullptr}};
+    return {imageSource, {imageSource, nullptr, {}}};
   }
 
 #pragma mark - LayoutableShadowNode

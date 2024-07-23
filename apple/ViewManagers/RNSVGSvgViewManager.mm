@@ -13,7 +13,7 @@
 
 RCT_EXPORT_MODULE()
 
-- (RNSVGView *)view
+- (RNSVGPlatformView *)view
 {
   return [RNSVGSvgView new];
 }

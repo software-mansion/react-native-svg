@@ -11,17 +11,17 @@
 #import "RNSVGPainter.h"
 #import "RNSVGViewBox.h"
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGMarker
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -42,12 +42,24 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGMarkerProps>(props);
+  const auto &newProps = static_cast<const RNSVGMarkerProps &>(*props);
 
-  self.refX = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.refX)];
-  self.refY = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.refY)];
-  self.markerHeight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.markerHeight)];
-  self.markerWidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.markerWidth)];
+  id refX = RNSVGConvertFollyDynamicToId(newProps.refX);
+  if (refX != nil) {
+    self.refX = [RCTConvert RNSVGLength:refX];
+  }
+  id refY = RNSVGConvertFollyDynamicToId(newProps.refY);
+  if (refY != nil) {
+    self.refY = [RCTConvert RNSVGLength:refY];
+  }
+  id markerHeight = RNSVGConvertFollyDynamicToId(newProps.markerHeight);
+  if (markerHeight != nil) {
+    self.markerHeight = [RCTConvert RNSVGLength:markerHeight];
+  }
+  id markerWidth = RNSVGConvertFollyDynamicToId(newProps.markerWidth);
+  if (markerWidth != nil) {
+    self.markerWidth = [RCTConvert RNSVGLength:markerWidth];
+  }
   self.markerUnits = RCTNSStringFromStringNilIfEmpty(newProps.markerUnits);
   self.orient = RCTNSStringFromStringNilIfEmpty(newProps.orient);
 
@@ -79,7 +91,7 @@ using namespace facebook::react;
   _align = nil;
   _meetOrSlice = kRNSVGVBMOSMeet;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
@@ -271,9 +283,9 @@ double deg2rad(CGFloat deg)
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGMarkerCls(void)
 {
   return RNSVGMarker.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

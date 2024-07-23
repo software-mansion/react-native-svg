@@ -1,9 +1,10 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import * as React from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
-import { RNSVGSymbol } from '../ReactNativeSVG';
-import { NumberProp } from '../lib/extract/types';
-import { NativeMethods } from 'react-native';
+import RNSVGSymbol from '../fabric/SymbolNativeComponent';
+import type { NumberProp } from '../lib/extract/types';
+import type { NativeMethods } from 'react-native';
 
 export interface SymbolProps {
   children?: ReactNode;
@@ -22,10 +23,9 @@ export default class Symbol extends Shape<SymbolProps> {
     const symbolProps = { name: id };
     return (
       <RNSVGSymbol
-        ref={(ref) => this.refMethod(ref as (Symbol & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as Shape<SymbolProps> & NativeMethods)}
         {...symbolProps}
-        {...extractViewBox(props)}
-      >
+        {...extractViewBox(props)}>
         {children}
       </RNSVGSymbol>
     );

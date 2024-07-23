@@ -13,13 +13,13 @@
 #import "RNSVGTextPath.h"
 #import "RNSVGTextProperties.h"
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGText {
   RNSVGGlyphContext *_glyphContext;
@@ -28,7 +28,7 @@
   CGFloat cachedAdvance;
 }
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -49,7 +49,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGTextProps>(props);
+  const auto &newProps = static_cast<const RNSVGTextProps &>(*props);
 
   setCommonTextProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGTextProps const>(props);
@@ -75,7 +75,7 @@ using namespace facebook::react;
   _baselineShift = nil;
   cachedAdvance = 0;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 - (void)invalidate
 {
@@ -345,7 +345,7 @@ using namespace facebook::react;
     return cachedAdvance;
   }
   CGFloat advance = 0;
-  for (RNSVGView *node in self.subviews) {
+  for (RNSVGPlatformView *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGText class]]) {
       RNSVGText *text = (RNSVGText *)node;
       advance += [text getSubtreeTextChunksTotalAdvance];
@@ -357,9 +357,9 @@ using namespace facebook::react;
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGTextCls(void)
 {
   return RNSVGText.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

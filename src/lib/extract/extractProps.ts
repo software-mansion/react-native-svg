@@ -4,7 +4,7 @@ import extractTransform from './extractTransform';
 import extractResponder from './extractResponder';
 import extractOpacity from './extractOpacity';
 import { idPattern } from '../util';
-import {
+import type {
   ClipProps,
   extractedProps,
   FillProps,
@@ -19,7 +19,7 @@ const clipRules: { evenodd: number; nonzero: number } = {
   nonzero: 1,
 };
 
-export function propsAndStyles(props: Object & { style?: [] | {} }) {
+export function propsAndStyles(props: object & { style?: [] | unknown }) {
   const { style } = props;
   return !style
     ? props
@@ -41,6 +41,7 @@ export default function extractProps(
   props: {
     id?: string;
     mask?: string;
+    filter?: string;
     marker?: string;
     markerStart?: string;
     markerMid?: string;
@@ -49,12 +50,15 @@ export default function extractProps(
     display?: string;
     opacity?: NumberProp;
     onLayout?: () => void;
+    testID?: string;
+    accessibilityLabel?: string;
+    accessible?: boolean;
   } & TransformProps &
     ResponderProps &
     StrokeProps &
     FillProps &
     ClipProps,
-  ref: Object,
+  ref: object
 ) {
   const {
     id,
@@ -64,10 +68,14 @@ export default function extractProps(
     clipRule,
     display,
     mask,
+    filter,
     marker,
     markerStart = marker,
     markerMid = marker,
     markerEnd = marker,
+    testID,
+    accessibilityLabel,
+    accessible,
   } = props;
   const extracted: extractedProps = {};
 
@@ -111,6 +119,18 @@ export default function extractProps(
     extracted.name = String(id);
   }
 
+  if (testID) {
+    extracted.testID = testID;
+  }
+
+  if (accessibilityLabel) {
+    extracted.accessibilityLabel = accessibilityLabel;
+  }
+
+  if (accessible) {
+    extracted.accessible = accessible;
+  }
+
   if (clipRule) {
     extracted.clipRule = clipRules[clipRule] === 0 ? 0 : 1;
   }
@@ -122,7 +142,7 @@ export default function extractProps(
       console.warn(
         'Invalid `clipPath` prop, expected a clipPath like "#id", but got: "' +
           clipPath +
-          '"',
+          '"'
       );
     }
   }
@@ -136,7 +156,21 @@ export default function extractProps(
       console.warn(
         'Invalid `mask` prop, expected a mask like "#id", but got: "' +
           mask +
-          '"',
+          '"'
+      );
+    }
+  }
+
+  if (filter) {
+    const matched = filter.match(idPattern);
+
+    if (matched) {
+      extracted.filter = matched[1];
+    } else {
+      console.warn(
+        'Invalid `filter` prop, expected a filter like "#id", but got: "' +
+          filter +
+          '"'
       );
     }
   }
@@ -144,26 +178,16 @@ export default function extractProps(
   return extracted;
 }
 
-export function extract(instance: Object, props: Object & { style?: [] | {} }) {
+export function extract(
+  instance: object,
+  props: object & { style?: [] | unknown }
+) {
   return extractProps(propsAndStyles(props), instance);
 }
 
-export function stringifyPropsForFabric(props: {
-  [key: string]: NumberProp | undefined | null;
-}): { [key: string]: string } {
-  const extracted: { [key: string]: string } = {};
-  Object.keys(props).forEach((k) => {
-    if (props[k] !== undefined && props[k] !== null) {
-      extracted[k] = String(props[k]);
-    }
-  });
-
-  return extracted;
-}
-
 export function withoutXY(
-  instance: Object,
-  props: Object & { style?: [] | {} },
+  instance: object,
+  props: object & { style?: [] | unknown }
 ) {
   return extractProps({ ...propsAndStyles(props), x: null, y: null }, instance);
 }

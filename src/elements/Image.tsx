@@ -1,29 +1,20 @@
-import React from 'react';
-import { Image, ImageProps as RNImageProps, NativeMethods } from 'react-native';
+import * as React from 'react';
+import type {
+  ImageProps as RNImageProps,
+  NativeMethods,
+  NativeSyntheticEvent,
+  ImageLoadEventData,
+} from 'react-native';
+import { Image } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
-import {
-  stringifyPropsForFabric,
-  withoutXY,
-} from '../lib/extract/extractProps';
-import {
-  ClipProps,
-  CommonMaskProps,
-  NativeProps,
-  NumberProp,
-  ResponderProps,
-  TouchableProps,
-} from '../lib/extract/types';
+import { withoutXY } from '../lib/extract/extractProps';
+import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGImage } from '../ReactNativeSVG';
+import RNSVGImage from '../fabric/ImageNativeComponent';
 
 const spacesRegExp = /\s+/;
 
-export interface ImageProps
-  extends ResponderProps,
-    CommonMaskProps,
-    ClipProps,
-    TouchableProps,
-    NativeProps {
+export interface ImageProps extends CommonPathProps {
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
@@ -32,8 +23,7 @@ export interface ImageProps
   href?: RNImageProps['source'] | string;
   preserveAspectRatio?: string;
   opacity?: NumberProp;
-  clipPath?: string;
-  id?: string;
+  onLoad?: (e: NativeSyntheticEvent<ImageLoadEventData>) => void;
 }
 
 export default class SvgImage extends Shape<ImageProps> {
@@ -57,6 +47,7 @@ export default class SvgImage extends Shape<ImageProps> {
       height,
       xlinkHref,
       href = xlinkHref,
+      onLoad,
     } = props;
     const modes = preserveAspectRatio
       ? preserveAspectRatio.trim().split(spacesRegExp)
@@ -64,20 +55,18 @@ export default class SvgImage extends Shape<ImageProps> {
     const align = modes[0];
     const meetOrSlice: 'meet' | 'slice' | 'none' | string | undefined =
       modes[1];
-    const stringifiedImageProps = stringifyPropsForFabric({
+    const imageProps = {
       x,
       y,
       width,
       height,
-    });
-    const imageProps = {
-      ...stringifiedImageProps,
+      onLoad,
       meetOrSlice: meetOrSliceTypes[meetOrSlice] || 0,
       align: alignEnum[align] || 'xMidYMid',
       src: !href
         ? null
         : Image.resolveAssetSource(
-            typeof href === 'string' ? { uri: href } : href,
+            typeof href === 'string' ? { uri: href } : href
           ),
     };
     return (

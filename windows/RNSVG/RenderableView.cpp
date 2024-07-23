@@ -9,7 +9,6 @@
 #include "Utils.h"
 
 using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
@@ -66,30 +65,29 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
     } else if (propertyName == "stroke") {
       prop = RNSVG::BaseProp::Stroke;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (propertyValue.Type() == JSValueType::Array) {
-          auto const &brush{propertyValue.AsArray()};
-          m_strokeBrushId = to_hstring(Utils::JSValueAsString(brush.at(1)));
-        } else {
-          Windows::UI::Color fallbackColor{(parent && !strokeSet) ? parent.Stroke() : Windows::UI::Colors::Transparent()};
-          m_stroke = Utils::JSValueAsColor(propertyValue, fallbackColor);
+        Windows::UI::Color fallbackColor{(parent && !strokeSet) ? parent.Stroke() : Windows::UI::Colors::Transparent()};
+
+        if (!m_strokeBrushId.empty()) {
+          m_strokeBrushId.clear();
         }
+
+        SetColor(propertyValue.AsObject(), fallbackColor, propertyName);
       }
     } else if (propertyName == "fill") {
       prop = RNSVG::BaseProp::Fill;
       if (forceUpdate || !m_propSetMap[prop]) {
-        if (propertyValue.Type() == JSValueType::Array) {
-          auto const &brush{propertyValue.AsArray()};
-          m_fillBrushId = to_hstring(Utils::JSValueAsString(brush.at(1)));
-        } else {
-          Windows::UI::Color fallbackColor{Windows::UI::Colors::Black()};
-          if (propertyValue.IsNull() && fillSet) {
-            fallbackColor = Windows::UI::Colors::Transparent();
-          } else if (parent) {
-            fallbackColor = parent.Fill();
-          }
-
-          m_fill = Utils::JSValueAsColor(propertyValue, fallbackColor);
+        Windows::UI::Color fallbackColor{Windows::UI::Colors::Black()};
+        if (propertyValue.IsNull() && fillSet) {
+          fallbackColor = Windows::UI::Colors::Transparent();
+        } else if (parent) {
+          fallbackColor = parent.Fill();
         }
+
+        if (!m_fillBrushId.empty()) {
+          m_fillBrushId.clear();
+        }
+
+        SetColor(propertyValue.AsObject(), fallbackColor, propertyName);
       }
     } else if (propertyName == "strokeLinecap") {
       prop = RNSVG::BaseProp::StrokeLineCap;
@@ -97,40 +95,16 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
         if (propertyValue.IsNull()) {
           m_strokeLineCap = parent.StrokeLineCap();
         } else {
-          auto const &strokeLineCap{propertyValue.AsInt32()};
-          switch (strokeLineCap) {
-            case 2:
-              m_strokeLineCap = Geometry::CanvasCapStyle::Square;
-              break;
-            case 1:
-              m_strokeLineCap = Geometry::CanvasCapStyle::Round;
-              break;
-            case 0:
-            default:
-              m_strokeLineCap = Geometry::CanvasCapStyle::Flat;
-              break;
-          }
+          m_strokeLineCap = static_cast<RNSVG::LineCap>(propertyValue.AsInt32());
         }
       }
     } else if (propertyName == "strokeLinejoin") {
       prop = RNSVG::BaseProp::StrokeLineJoin;
       if (forceUpdate || !m_propSetMap[prop]) {
         if (propertyValue.IsNull()) {
-          m_strokeLineCap = parent.StrokeLineCap();
+          m_strokeLineJoin = parent.StrokeLineJoin();
         } else {
-          auto const &strokeLineJoin{propertyValue.AsInt32()};
-          switch (strokeLineJoin) {
-            case 2:
-              m_strokeLineJoin = Geometry::CanvasLineJoin::Bevel;
-              break;
-            case 1:
-              m_strokeLineJoin = Geometry::CanvasLineJoin::Round;
-              break;
-            case 0:
-            default:
-              m_strokeLineJoin = Geometry::CanvasLineJoin::Miter;
-              break;
-          }
+          m_strokeLineJoin = static_cast<RNSVG::LineJoin>(propertyValue.AsInt32());
         }
       }
     } else if (propertyName == "fillRule") {
@@ -139,16 +113,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
         if (propertyValue.IsNull()) {
           m_fillRule = parent.FillRule();
         } else {
-          auto const &fillRule{propertyValue.AsInt32()};
-          switch (fillRule) {
-            case 0:
-              m_fillRule = Geometry::CanvasFilledRegionDetermination::Alternate;
-              break;
-            case 1:
-            default:
-              m_fillRule = Geometry::CanvasFilledRegionDetermination::Winding;
-              break;
-          }
+          m_fillRule = static_cast<RNSVG::FillRule>(propertyValue.AsInt32());
         }
       }
     } else if (propertyName == "strokeDashoffset") {
@@ -188,6 +153,10 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
       }
     } else if (propertyName == "opacity" && forceUpdate) {
       m_opacity = Utils::JSValueAsFloat(propertyValue, 1.0f);
+    } else if (propertyName == "clipPath") {
+      m_clipPathId = to_hstring(Utils::JSValueAsString(propertyValue));
+    }  else if (propertyName == "responsible") {
+      m_isResponsible = propertyValue.AsBoolean();
     }
 
     // forceUpdate = true means the property is being set on an element
@@ -210,7 +179,7 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
   m_recreateResources = true;
 
   if (invalidate && SvgParent()) {
-    SvgRoot().InvalidateCanvas();
+    SvgRoot().Invalidate();
   }
 }
 
@@ -220,45 +189,86 @@ void RenderableView::SaveDefinition() {
   }
 }
 
-void RenderableView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+void RenderableView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   if (m_recreateResources) {
-    CreateGeometry(canvas);
+    CreateGeometry();
   }
 
-  auto geometry{Geometry()};
+  if (!Geometry()) {
+    return;
+  }
+
+  com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(m_geometry)->Get()};
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
+
+  D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
+
   if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
-    geometry = geometry.Transform(SvgTransform());
+    deviceContext->SetTransform(D2DHelpers::AsD2DTransform(SvgTransform()) * transform);
   }
 
-  geometry = Geometry::CanvasGeometry::CreateGroup(resourceCreator, {geometry}, FillRule());
+  com_ptr<ID2D1Factory> factory;
+  deviceContext->GetFactory(factory.put());
 
-  if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
-    if (auto const &fillLayer{session.CreateLayer(FillOpacity())}) {
-      auto const &fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), geometry, resourceCreator)};
-      session.FillGeometry(geometry, fill);
-      fillLayer.Close();
-    }
+  com_ptr<ID2D1GeometryGroup> geometryGroup;
+  ID2D1Geometry *geometries[] = {geometry.get()};
+  check_hresult(factory->CreateGeometryGroup(D2DHelpers::GetFillRule(FillRule()), geometries, 1, geometryGroup.put()));
 
-    if (auto const &strokeLayer{session.CreateLayer(StrokeOpacity())}) {
-      Geometry::CanvasStrokeStyle strokeStyle{};
-      strokeStyle.StartCap(StrokeLineCap());
-      strokeStyle.EndCap(StrokeLineCap());
-      strokeStyle.LineJoin(StrokeLineJoin());
-      strokeStyle.DashOffset(StrokeDashOffset());
-      strokeStyle.MiterLimit(StrokeMiterLimit());
+  geometry = geometryGroup;
 
-      float canvasDiagonal{Utils::GetCanvasDiagonal(canvas.Size())};
-      float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
-      strokeStyle.CustomDashStyle(Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal));
-
-      auto const &stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry, resourceCreator)};
-      session.DrawGeometry(geometry, stroke, strokeWidth, strokeStyle);
-      strokeLayer.Close();
-    }
-
-    opacityLayer.Close();
+  com_ptr<ID2D1Geometry> clipPathGeometry;
+  if (ClipPathGeometry()) {
+    clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry())->Get();
   }
+
+  D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
+
+  if (FillOpacity()) {
+    D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), FillOpacity());
+
+    auto fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), geometry)};
+    deviceContext->FillGeometry(geometry.get(), fill.get());
+
+    deviceContext->PopLayer();
+  }
+
+  if (StrokeOpacity()) {
+    D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), StrokeOpacity());
+
+    D2D1_CAP_STYLE capStyle{D2DHelpers::GetLineCap(m_strokeLineCap)};
+    D2D1_LINE_JOIN lineJoin{D2DHelpers::GetLineJoin(m_strokeLineJoin)};
+
+    D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties;
+    strokeStyleProperties.startCap = capStyle;
+    strokeStyleProperties.endCap = capStyle;
+    strokeStyleProperties.dashCap = capStyle;
+    strokeStyleProperties.lineJoin = lineJoin;
+    strokeStyleProperties.dashOffset = StrokeDashOffset();
+    strokeStyleProperties.miterLimit = StrokeMiterLimit();
+    strokeStyleProperties.dashStyle = D2D1_DASH_STYLE_SOLID;
+
+    float canvasDiagonal{Utils::GetCanvasDiagonal(size)};
+    float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
+
+    float *dashArray = nullptr;
+    if (StrokeDashArray().Size() > 0) {
+      strokeStyleProperties.dashStyle = D2D1_DASH_STYLE_CUSTOM;
+      m_adjustedStrokeDashArray = Utils::GetAdjustedStrokeArray(StrokeDashArray(), strokeWidth, canvasDiagonal);
+      dashArray = &m_adjustedStrokeDashArray[0];
+    }
+
+    com_ptr<ID2D1StrokeStyle> strokeStyle;
+    check_hresult(
+        factory->CreateStrokeStyle(strokeStyleProperties, dashArray, m_strokeDashArray.Size(), strokeStyle.put()));
+
+    auto const stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry)};
+    deviceContext->DrawGeometry(geometry.get(), stroke.get(), strokeWidth, strokeStyle.get());
+    deviceContext->PopLayer();
+  }
+
+  deviceContext->PopLayer();
+
+  deviceContext->SetTransform(transform);
 }
 
 void RenderableView::MergeProperties(RNSVG::RenderableView const &other) {
@@ -326,9 +336,20 @@ RNSVG::SvgView RenderableView::SvgRoot() {
   return nullptr;
 }
 
+RNSVG::D2DGeometry RenderableView::ClipPathGeometry() {
+  if (!m_clipPathId.empty()) {
+    if (auto const &clipPath{SvgRoot().Templates().TryLookup(m_clipPathId)}) {
+      if (!clipPath.Geometry()) {
+        clipPath.CreateGeometry();
+      }
+      return clipPath.Geometry();
+    }
+  }
+  return nullptr;
+}
+
 void RenderableView::Unload() {
   if (m_geometry) {
-    m_geometry.Close();
     m_geometry = nullptr;
   }
 
@@ -337,5 +358,52 @@ void RenderableView::Unload() {
   m_propList.clear();
   m_propSetMap.clear();
   m_strokeDashArray.Clear();
+  m_isUnloaded = true;
+}
+
+RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
+  if (m_geometry) {
+    BOOL strokeContainsPoint = FALSE;
+    D2D1_POINT_2F pointD2D{point.X, point.Y};
+
+    com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(m_geometry)->Get()};
+
+    if (auto const &svgRoot{SvgRoot()}) {
+      float canvasDiagonal{Utils::GetCanvasDiagonal(svgRoot.ActualSize())};
+      float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
+
+      check_hresult(geometry->StrokeContainsPoint(pointD2D, strokeWidth, nullptr, nullptr, &strokeContainsPoint));
+    }
+
+    BOOL fillContainsPoint = FALSE;
+    check_hresult(geometry->FillContainsPoint(pointD2D, nullptr, &fillContainsPoint));
+
+    if (fillContainsPoint || strokeContainsPoint) {
+      return *this;
+    }
+  }
+  return nullptr;
+}
+
+void RenderableView::SetColor(const JSValueObject &propValue, Windows::UI::Color const &fallbackColor, std::string propName) {
+  switch (propValue["type"].AsInt64()) {
+    // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractBrush.ts#L29
+    case 1: {
+      auto const &brushId{to_hstring(Utils::JSValueAsString(propValue["brushRef"]))};
+      propName == "fill" ? m_fillBrushId = brushId : m_strokeBrushId = brushId;
+      break;
+    }
+    // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractBrush.ts#L6-L8
+    case 2: // currentColor
+    case 3: // context-fill
+    case 4: // context-stroke
+      propName == "fill" ? m_fillBrushId = L"currentColor" : m_strokeBrushId = L"currentColor";
+      break;
+    default: {
+      auto const &color {Utils::JSValueAsColor(propValue["payload"], fallbackColor)};
+      propName == "fill" ? m_fill = color : m_stroke = color;
+      break;
+    }
+  }
 }
 } // namespace winrt::RNSVG::implementation

@@ -1,12 +1,9 @@
-import React from 'react';
-import {
-  stringifyPropsForFabric,
-  withoutXY,
-} from '../lib/extract/extractProps';
-import { CommonPathProps, NumberProp } from '../lib/extract/types';
+import * as React from 'react';
+import { withoutXY } from '../lib/extract/extractProps';
+import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGRect } from '../ReactNativeSVG';
-import { NativeMethods } from 'react-native';
+import RNSVGRect from '../fabric/RectNativeComponent';
+import type { NativeMethods } from 'react-native';
 
 export interface RectProps extends CommonPathProps {
   x?: NumberProp;
@@ -31,7 +28,7 @@ export default class Rect extends Shape<RectProps> {
   render() {
     const { props } = this;
     const { x, y, width, height, rx, ry } = props;
-    const rectProps = stringifyPropsForFabric({ x, y, width, height, rx, ry });
+    const rectProps = { x, y, width, height, rx, ry };
     return (
       <RNSVGRect
         ref={(ref) => this.refMethod(ref as (Rect & NativeMethods) | null)}

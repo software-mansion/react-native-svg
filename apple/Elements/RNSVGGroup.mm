@@ -10,19 +10,19 @@
 #import "RNSVGClipPath.h"
 #import "RNSVGMask.h"
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGGroup {
   RNSVGGlyphContext *_glyphContext;
 }
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -43,7 +43,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGGroupProps>(props);
+  const auto &newProps = static_cast<const RNSVGGroupProps &>(*props);
 
   setCommonGroupProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGGroupProps const>(props);
@@ -55,7 +55,7 @@ using namespace facebook::react;
   _font = nil;
   _glyphContext = nil;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 - (void)setFont:(NSDictionary *)font
 {
@@ -293,9 +293,9 @@ using namespace facebook::react;
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGGroupCls(void)
 {
   return RNSVGGroup.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

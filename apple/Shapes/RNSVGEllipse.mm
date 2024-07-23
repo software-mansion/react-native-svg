@@ -9,17 +9,17 @@
 #import "RNSVGEllipse.h"
 #import <React/RCTLog.h>
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGEllipse
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -40,12 +40,24 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGEllipseProps>(props);
+  const auto &newProps = static_cast<const RNSVGEllipseProps &>(*props);
 
-  self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
-  self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
-  self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
-  self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
+  id cx = RNSVGConvertFollyDynamicToId(newProps.cx);
+  if (cx != nil) {
+    self.cx = [RCTConvert RNSVGLength:cx];
+  }
+  id cy = RNSVGConvertFollyDynamicToId(newProps.cy);
+  if (cy != nil) {
+    self.cy = [RCTConvert RNSVGLength:cy];
+  }
+  id rx = RNSVGConvertFollyDynamicToId(newProps.rx);
+  if (rx != nil) {
+    self.rx = [RCTConvert RNSVGLength:rx];
+  }
+  id ry = RNSVGConvertFollyDynamicToId(newProps.ry);
+  if (ry != nil) {
+    self.ry = [RCTConvert RNSVGLength:ry];
+  }
 
   setCommonRenderableProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGEllipseProps const>(props);
@@ -59,7 +71,7 @@ using namespace facebook::react;
   _rx = nil;
   _ry = nil;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 - (void)setCx:(RNSVGLength *)cx
 {
@@ -110,9 +122,9 @@ using namespace facebook::react;
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGEllipseCls(void)
 {
   return RNSVGEllipse.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

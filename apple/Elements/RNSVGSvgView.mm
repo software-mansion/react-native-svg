@@ -11,27 +11,28 @@
 #import "RNSVGNode.h"
 #import "RNSVGViewBox.h"
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGSvgView {
   NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
   NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
   NSMutableDictionary<NSString *, RNSVGPainter *> *_painters;
-  NSMutableDictionary<NSString *, RNSVGNode *> *_markers;
-  NSMutableDictionary<NSString *, RNSVGNode *> *_masks;
+  NSMutableDictionary<NSString *, RNSVGMarker *> *_markers;
+  NSMutableDictionary<NSString *, RNSVGMask *> *_masks;
+  NSMutableDictionary<NSString *, RNSVGFilter *> *_filters;
   CGAffineTransform _invviewBoxTransform;
   bool rendered;
 }
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -42,17 +43,19 @@ using namespace facebook::react;
     self.contentMode = UIViewContentModeRedraw;
 #endif // TARGET_OS_OSX
     rendered = false;
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
     static const auto defaultProps = std::make_shared<const RNSVGSvgViewProps>();
     _props = defaultProps;
+#if !TARGET_OS_OSX // On macOS, views are transparent by default
     // TODO: think if we can do it better
     self.opaque = NO;
-#endif // RN_FABRIC_ENABLED
+#endif // TARGET_OS_OSX
+#endif // RCT_NEW_ARCH_ENABLED
   }
   return self;
 }
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #pragma mark - RCTComponentViewProtocol
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -62,14 +65,20 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGSvgViewProps>(props);
+  const auto &newProps = static_cast<const RNSVGSvgViewProps &>(*props);
 
   self.minX = newProps.minX;
   self.minY = newProps.minY;
   self.vbWidth = newProps.vbWidth;
   self.vbHeight = newProps.vbHeight;
-  self.bbWidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.bbWidth)];
-  self.bbHeight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.bbHeight)];
+  id bbWidth = RNSVGConvertFollyDynamicToId(newProps.bbWidth);
+  if (bbWidth != nil) {
+    self.bbWidth = [RCTConvert RNSVGLength:bbWidth];
+  }
+  id bbHeight = RNSVGConvertFollyDynamicToId(newProps.bbHeight);
+  if (bbHeight != nil) {
+    self.bbHeight = [RCTConvert RNSVGLength:bbHeight];
+  }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
   if (RCTUIColorFromSharedColor(newProps.tintColor)) {
@@ -105,19 +114,33 @@ using namespace facebook::react;
   _painters = nil;
   _markers = nil;
   _masks = nil;
+  _filters = nil;
   _invviewBoxTransform = CGAffineTransformIdentity;
   rendered = NO;
 }
-#endif // RN_FABRIC_ENABLED
 
-- (void)insertReactSubview:(RNSVGView *)subview atIndex:(NSInteger)atIndex
+- (void)mountChildComponentView:(RNSVGView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  [super mountChildComponentView:childComponentView index:index];
+  [self invalidate];
+}
+
+- (void)unmountChildComponentView:(RNSVGView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  [super unmountChildComponentView:childComponentView index:index];
+  [self invalidate];
+}
+
+#endif // RCT_NEW_ARCH_ENABLED
+
+- (void)insertReactSubview:(RNSVGPlatformView *)subview atIndex:(NSInteger)atIndex
 {
   [super insertReactSubview:subview atIndex:atIndex];
   [self insertSubview:subview atIndex:atIndex];
   [self invalidate];
 }
 
-- (void)removeReactSubview:(RNSVGView *)subview
+- (void)removeReactSubview:(RNSVGPlatformView *)subview
 {
   [super removeReactSubview:subview];
   [self invalidate];
@@ -253,6 +276,9 @@ using namespace facebook::react;
 - (void)drawToContext:(CGContextRef)context withRect:(CGRect)rect
 {
   rendered = true;
+  _clipPaths = nil;
+  _templates = nil;
+  _painters = nil;
   self.initialCTM = CGContextGetCTM(context);
   self.invInitialCTM = CGAffineTransformInvert(self.initialCTM);
   if (self.align) {
@@ -264,10 +290,14 @@ using namespace facebook::react;
     _viewBoxTransform = CGAffineTransformIdentity;
     _invviewBoxTransform = CGAffineTransformIdentity;
   }
-
-  for (RNSVGView *node in self.subviews) {
+  for (RNSVGPlatformView *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGNode class]]) {
       RNSVGNode *svg = (RNSVGNode *)node;
+      if (svg.responsible && !self.responsible) {
+        self.responsible = YES;
+      }
+
+      [svg parseReference];
       [svg renderTo:context rect:rect];
     } else {
       [node drawRect:rect];
@@ -281,25 +311,10 @@ using namespace facebook::react;
   if ([parent isKindOfClass:[RNSVGNode class]]) {
     return;
   }
-  rendered = true;
-  _clipPaths = nil;
-  _templates = nil;
-  _painters = nil;
   _boundingBox = rect;
   CGContextRef context = UIGraphicsGetCurrentContext();
 
-  for (RNSVGPlatformView *node in self.subviews) {
-    if ([node isKindOfClass:[RNSVGNode class]]) {
-      RNSVGNode *svg = (RNSVGNode *)node;
-      if (svg.responsible && !self.responsible) {
-        self.responsible = YES;
-      }
-
-      [svg parseReference];
-    }
-  }
-
-  [self drawToContext:context withRect:rect];
+  [self drawToContext:context withRect:[self bounds]];
 }
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
@@ -327,29 +342,29 @@ using namespace facebook::react;
   return nil;
 }
 
-- (NSString *)getDataURL
+- (NSString *)getDataURLWithBounds:(CGRect)bounds
 {
-  UIGraphicsBeginImageContextWithOptions(_boundingBox.size, NO, 0);
-  [self clearChildCache];
-  [self drawRect:_boundingBox];
-  [self clearChildCache];
-  [self invalidate];
-  NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
-  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-  UIGraphicsEndImageContext();
-  return base64;
-}
-
-- (NSString *)getDataURLwithBounds:(CGRect)bounds
-{
+#if !TARGET_OS_OSX // [macOS]
+  UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size];
+  UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
+#else // [macOS
   UIGraphicsBeginImageContextWithOptions(bounds.size, NO, 1);
-  [self clearChildCache];
-  [self drawRect:bounds];
-  [self clearChildCache];
-  [self invalidate];
+#endif // macOS]
+    [self clearChildCache];
+    [self drawRect:bounds];
+    [self clearChildCache];
+    [self invalidate];
+#if !TARGET_OS_OSX // [macOS]
+  }];
+#endif
+#if !TARGET_OS_OSX // [macOS]
+  NSData *imageData = UIImagePNGRepresentation(image);
+  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+#else // [macOS
   NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
-  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
   UIGraphicsEndImageContext();
+#endif // macOS]
   return base64;
 }
 
@@ -397,7 +412,7 @@ using namespace facebook::react;
   return _painters ? [_painters objectForKey:painterName] : nil;
 }
 
-- (void)defineMarker:(RNSVGNode *)marker markerName:(NSString *)markerName
+- (void)defineMarker:(RNSVGMarker *)marker markerName:(NSString *)markerName
 {
   if (!_markers) {
     _markers = [[NSMutableDictionary alloc] init];
@@ -405,12 +420,12 @@ using namespace facebook::react;
   [_markers setObject:marker forKey:markerName];
 }
 
-- (RNSVGNode *)getDefinedMarker:(NSString *)markerName;
+- (RNSVGMarker *)getDefinedMarker:(NSString *)markerName;
 {
   return _markers ? [_markers objectForKey:markerName] : nil;
 }
 
-- (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName
+- (void)defineMask:(RNSVGMask *)mask maskName:(NSString *)maskName
 {
   if (!_masks) {
     _masks = [[NSMutableDictionary alloc] init];
@@ -418,9 +433,22 @@ using namespace facebook::react;
   [_masks setObject:mask forKey:maskName];
 }
 
-- (RNSVGNode *)getDefinedMask:(NSString *)maskName;
+- (RNSVGMask *)getDefinedMask:(NSString *)maskName;
 {
   return _masks ? [_masks objectForKey:maskName] : nil;
+}
+
+- (void)defineFilter:(RNSVGFilter *)filter filterName:(NSString *)filterName
+{
+  if (!_filters) {
+    _filters = [[NSMutableDictionary alloc] init];
+  }
+  [_filters setObject:filter forKey:filterName];
+}
+
+- (RNSVGFilter *)getDefinedFilter:(NSString *)filterName
+{
+  return _filters ? [_filters objectForKey:filterName] : nil;
 }
 
 - (CGRect)getContextBounds
@@ -435,9 +463,9 @@ using namespace facebook::react;
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGSvgViewCls(void)
 {
   return RNSVGSvgView.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

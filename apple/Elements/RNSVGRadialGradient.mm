@@ -7,17 +7,17 @@
  */
 #import "RNSVGRadialGradient.h"
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGFabricConversions.h"
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGRadialGradient
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -38,14 +38,32 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNSVGRadialGradientProps>(props);
+  const auto &newProps = static_cast<const RNSVGRadialGradientProps &>(*props);
 
-  self.fx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.fx)];
-  self.fy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.fy)];
-  self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
-  self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
-  self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
-  self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
+  id fx = RNSVGConvertFollyDynamicToId(newProps.fx);
+  if (fx != nil) {
+    self.fx = [RCTConvert RNSVGLength:fx];
+  }
+  id fy = RNSVGConvertFollyDynamicToId(newProps.fy);
+  if (fy != nil) {
+    self.fy = [RCTConvert RNSVGLength:fy];
+  }
+  id cx = RNSVGConvertFollyDynamicToId(newProps.cx);
+  if (cx != nil) {
+    self.cx = [RCTConvert RNSVGLength:cx];
+  }
+  id cy = RNSVGConvertFollyDynamicToId(newProps.cy);
+  if (cy != nil) {
+    self.cy = [RCTConvert RNSVGLength:cy];
+  }
+  id rx = RNSVGConvertFollyDynamicToId(newProps.rx);
+  if (rx != nil) {
+    self.rx = [RCTConvert RNSVGLength:rx];
+  }
+  id ry = RNSVGConvertFollyDynamicToId(newProps.ry);
+  if (ry != nil) {
+    self.ry = [RCTConvert RNSVGLength:ry];
+  }
   if (newProps.gradient.size() > 0) {
     NSMutableArray<NSNumber *> *gradientArray = [NSMutableArray new];
     for (auto number : newProps.gradient) {
@@ -81,7 +99,7 @@ using namespace facebook::react;
   _gradientUnits = kRNSVGUnitsObjectBoundingBox;
   _gradientTransform = CGAffineTransformIdentity;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED
 - (instancetype)init
 {
   if (self = [super init]) {
@@ -199,9 +217,9 @@ using namespace facebook::react;
 
 @end
 
-#ifdef RN_FABRIC_ENABLED
+#ifdef RCT_NEW_ARCH_ENABLED
 Class<RCTComponentViewProtocol> RNSVGRadialGradientCls(void)
 {
   return RNSVGRadialGradient.class;
 }
-#endif // RN_FABRIC_ENABLED
+#endif // RCT_NEW_ARCH_ENABLED

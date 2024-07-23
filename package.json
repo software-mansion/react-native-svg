@@ -1,5 +1,5 @@
 {
-  "version": "13.5.0",
+  "version": "15.4.0",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -13,19 +13,19 @@
   "types": "lib/typescript/index.d.ts",
   "react-native": "src/index.ts",
   "files": [
-    "__tests__",
     "android",
     "apple",
     "common",
-    "elements",
     "lib",
     "src",
+    "css",
+    "filter-image",
     "RNSVG.podspec",
     "!android/build",
     "windows",
-    "react-native-config.js"
+    "react-native.config.js"
   ],
-  "@react-native-community/bob": {
+  "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
     "targets": [
@@ -47,19 +47,19 @@
   ],
   "scripts": {
     "bob": "bob build",
-    "flow": "flow src",
-    "flowtyped": "flow-typed install",
     "format": "yarn format-js && yarn format-ios && yarn format-java",
     "format-ios": "find apple/ common/ -iname *.h -o -iname *.m -o -iname *.cpp -o -iname *.mm | xargs clang-format -i",
     "format-java": "node ./scripts/format-java.js",
-    "format-js": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md USAGE.md './src/**/*.{ts,tsx}' './Example/**/*.{ts,tsx}'",
+    "format-js": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md USAGE.md ./src/**/*.{ts,tsx} ./apps/**/*.tsx ./example/**/*.tsx ./*-example/**/*.tsx",
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
     "prepare": "npm run bob && husky install",
     "release": "npm login && release-it",
     "test": "npm run lint && npm run tsc",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "check-archs-consistency": "node ./scripts/codegen-check-consistency.js",
+    "sync-archs": "node ./scripts/codegen-sync-archs.js"
   },
   "peerDependencies": {
     "react": "*",
@@ -67,57 +67,53 @@
   },
   "dependencies": {
     "css-select": "^5.1.0",
-    "css-tree": "^1.1.3"
+    "css-tree": "^1.1.3",
+    "warn-once": "0.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.2",
-    "@babel/plugin-syntax-flow": "^7.17.12",
-    "@babel/plugin-transform-react-jsx": "^7.17.12",
-    "@react-native-community/bob": "^0.9.7",
-    "@react-native-community/cli": "^9.0.0",
-    "@react-native-community/cli-platform-android": "^9.0.0",
-    "@react-native-community/cli-platform-ios": "^9.0.0",
     "@react-native-community/eslint-config": "^3.0.2",
     "@react-native-community/eslint-plugin": "^1.2.0",
     "@react-native/babel-plugin-codegen": "^0.71.0",
+    "@react-native/eslint-config": "^0.72.2",
     "@types/css-tree": "^1.0.3",
     "@types/jest": "^27.5.2",
     "@types/node": "*",
-    "@types/react": "~18.0.15",
-    "@types/react-native": "^0.70.0",
+    "@types/react": "^18.2.18",
+    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "@typescript-eslint/parser": "^5.11.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^28.1.0",
+    "babel-plugin-module-resolver": "^5.0.0",
     "clang-format": "^1.8.0",
-    "eslint": "^8.16.0",
-    "eslint-plugin-flowtype": "^8.0.3",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.30.0",
-    "flow-bin": "^0.119.1",
-    "flow-typed": "^3.0.0",
-    "flowgen": "^1.10.0",
+    "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-import-resolver-babel-module": "^5.3.2",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-n": "^16.0.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-standard": "^5.0.0",
     "husky": "^8.0.1",
     "jest": "^28.1.0",
     "lint-staged": "^13.0.3",
     "pegjs": "^0.10.0",
-    "prettier": "^2.6.2",
-    "react": "^17.0.1",
-    "react-native": "^0.64.0",
-    "react-native-windows": "^0.64.0",
-    "react-test-renderer": "^16.13.0",
+    "prettier": "3.0.1",
+    "react": "^18.2.0",
+    "react-native": "^0.72.3",
+    "react-native-builder-bob": "^0.20.4",
+    "react-native-windows": "^0.72.4",
+    "react-test-renderer": "^18.2.0",
     "release-it": "^14.12.5",
     "ts-node": "^10.8.0",
-    "typescript": "^4.7.2"
-  },
-  "resolutions": {
-    "@react-native-community/cli-platform-android": "^9.0.0",
-    "@react-native-community/cli": "^9.0.0",
-    "@react-native-community/cli-platform-ios": "^9.0.0"
+    "typescript": "^5.1.6"
   },
   "lint-staged": {
     "{src,Example}/**/*.{js,ts,tsx}": "yarn format-js",
     "src/**/*.{js,ts,tsx}": "yarn lint",
     "apple/**/*.{h,m,mm,cpp}": "yarn format-ios",
-    "android/src/**/*.java": "yarn format-java"
+    "android/src/**/*.java": "yarn format-java",
+    "src/fabric/*.ts": "yarn sync-archs"
   },
   "nativePackage": true,
   "codegenConfig": {
@@ -125,7 +121,7 @@
     "type": "all",
     "jsSrcsDir": "./src/fabric",
     "android": {
-      "javaPackageName": "com.horcrux.rnsvg"
+      "javaPackageName": "com.horcrux.svg"
     }
   }
 }

@@ -13,7 +13,7 @@ We'd like to make contributions as pleasant as possible, so here's a small guide
 
 ### Testing your changes
 
-Add test example in [TestsExample](https://github.com/react-native-svg/react-native-svg/tree/main/TestsExample) concerning your change following the convention of `TestX.tsx` where `X` is your PR number.
+Add test example in [tests-example](https://github.com/react-native-svg/react-native-svg/tree/main/tests-example) concerning your change following the convention of `TestX.tsx` where `X` is your PR number.
 
 ## Tests
 
@@ -22,7 +22,6 @@ We use `typescript` for type checks, `eslint` with `prettier` for linting/format
 - `yarn test`: Run all tests, except for e2e (see note below).
 - `yarn lint`: Run `eslint` check.
 - `yarn tsc`: Run `typescript` check.
-- `yarn flow`: Run `flow` type check.
 - `yarn jest`: Run `jest` type check.
 
 Currently e2e tests exist here: https://github.com/msand/react-native-svg-e2e/

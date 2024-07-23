@@ -1,4 +1,5 @@
-import { ColorValue, processColor } from 'react-native';
+import type { ColorValue } from 'react-native';
+import { processColor } from 'react-native';
 
 const urlIdPattern = /^url\(#(.+)\)$/;
 

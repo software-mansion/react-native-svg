@@ -1,16 +1,16 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import * as React from 'react';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import { extractFont } from '../lib/extract/extractText';
 import extractTransform from '../lib/extract/extractTransform';
-import {
+import type {
   CommonPathProps,
   FontProps,
   NumberProp,
-  TransformProps,
 } from '../lib/extract/types';
 import Shape from './Shape';
-import { RNSVGGroup } from '../ReactNativeSVG';
-import { NativeMethods } from 'react-native';
+import RNSVGGroup from '../fabric/GroupNativeComponent';
+import type { NativeMethods } from 'react-native';
 
 export interface GProps extends CommonPathProps, FontProps {
   children?: ReactNode;
@@ -21,9 +21,10 @@ export default class G<P> extends Shape<GProps & P> {
   static displayName = 'G';
 
   setNativeProps = (
-    props: Object & {
-      matrix?: number[];
-    } & TransformProps,
+    props: GProps &
+      P & {
+        matrix?: number[];
+      }
   ) => {
     const matrix = !props.matrix && extractTransform(props);
     if (matrix) {
@@ -43,16 +44,16 @@ export default class G<P> extends Shape<GProps & P> {
     return (
       <RNSVGGroup
         ref={(ref) => this.refMethod(ref as (G<P> & NativeMethods) | null)}
-        {...extractedProps}
-      >
+        {...extractedProps}>
         {props.children}
       </RNSVGGroup>
     );
   }
 }
 
-const hasProps = (obj: {}) => {
-  for (let _ in obj) {
+const hasProps = (obj: object) => {
+  // eslint-disable-next-line no-unreachable-loop
+  for (const _ in obj) {
     return true;
   }
   return false;

@@ -8,7 +8,7 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
+xaml::FrameworkElement RenderableViewManager::CreateView() {
   switch (m_class) {
     case RNSVG::SVGClass::RNSVGGroup:
       return winrt::RNSVG::GroupView(m_reactContext);
@@ -40,6 +40,12 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
       return winrt::RNSVG::RadialGradientView();
     case RNSVG::SVGClass::RNSVGPattern:
       return winrt::RNSVG::PatternView();
+    case RNSVG::SVGClass::RNSVGClipPath:
+      return winrt::RNSVG::ClipPathView();
+    case RNSVG::SVGClass::RNSVGMarker:
+      return winrt::RNSVG::MarkerView();
+    case RNSVG::SVGClass::RNSVGMask:
+      return winrt::RNSVG::MaskView();
   }
 
   throw hresult_not_implemented();
@@ -64,12 +70,14 @@ IMapView<hstring, ViewManagerPropertyType> RenderableViewManager::NativeProps() 
   nativeProps.Insert(L"matrix", ViewManagerPropertyType::Array);
   nativeProps.Insert(L"opacity", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"propList", ViewManagerPropertyType::Array);
+  nativeProps.Insert(L"clipPath", ViewManagerPropertyType::String);
+  nativeProps.Insert(L"responsible", ViewManagerPropertyType::Boolean);
 
   return nativeProps.GetView();
 }
 
 void RenderableViewManager::UpdateProperties(
-    Windows::UI::Xaml::FrameworkElement const &view,
+    xaml::FrameworkElement const &view,
     Microsoft::ReactNative::IJSValueReader const &propertyMapReader) {
   if (auto const &renderable{view.try_as<RenderableView>()}) {
     renderable->UpdateProperties(propertyMapReader);

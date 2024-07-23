@@ -4,13 +4,13 @@
 #include "PathView.g.cpp"
 #endif
 
-#include <winrt/Microsoft.Graphics.Canvas.Svg.h>
+#include "d2d1svg.h"
+#include <cctype>
 
 #include "JSValueXaml.h"
 #include "Utils.h"
 
 using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
@@ -28,6 +28,7 @@ void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
       if (propertyValue.IsNull()) {
         m_d.clear();
       } else {
+
         m_d = propertyValue.AsString();
         ParsePath();
       }
@@ -37,11 +38,32 @@ void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void PathView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
-  Svg::CanvasSvgDocument doc{resourceCreator};
-  auto const &path{doc.CreatePathAttribute(m_segmentData, m_commands)};
-  Geometry(path.CreatePathGeometry());
+void PathView::CreateGeometry() {
+  auto const &root{SvgRoot()};
+
+  com_ptr<ID2D1SvgDocument> doc;
+  com_ptr<ID2D1DeviceContext5> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get().as<ID2D1DeviceContext5>()};
+
+  check_hresult(deviceContext->CreateSvgDocument(
+      nullptr,
+      D2D1::SizeF(static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())),
+      doc.put()));
+
+  m_segmentData.resize(m_segmentData.size());
+  m_commands.resize(m_commands.size());
+
+  com_ptr<ID2D1SvgPathData> path;
+  check_hresult(doc->CreatePathData(
+      &m_segmentData[0],
+      static_cast<uint32_t>(m_segmentData.size()),
+      &m_commands[0],
+      static_cast<uint32_t>(m_commands.size()),
+      path.put()));
+
+  com_ptr<ID2D1PathGeometry1> geometry;
+  check_hresult(path->CreatePathGeometry(D2DHelpers::GetFillRule(FillRule()), geometry.put()));
+
+  Geometry(make<RNSVG::implementation::D2DGeometry>(geometry.as<ID2D1Geometry>()));
 }
 
 void PathView::ParsePath() {

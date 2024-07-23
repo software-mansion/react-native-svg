@@ -6,7 +6,6 @@
 #include "Utils.h"
 
 using namespace winrt;
-using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
@@ -31,14 +30,22 @@ void EllipseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void EllipseView::CreateGeometry(UI::Xaml::CanvasControl const &canvas) {
-  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()};
+void EllipseView::CreateGeometry() {
+  auto const root{SvgRoot()};
 
-  float cx{Utils::GetAbsoluteLength(m_cx, canvas.Size().Width)};
-  float cy{Utils::GetAbsoluteLength(m_cy, canvas.Size().Height)};
-  float rx{Utils::GetAbsoluteLength(m_rx, canvas.Size().Width)};
-  float ry{Utils::GetAbsoluteLength(m_ry, canvas.Size().Height)};
+  float cx{Utils::GetAbsoluteLength(m_cx, root.ActualWidth())};
+  float cy{Utils::GetAbsoluteLength(m_cy, root.ActualHeight())};
+  float rx{Utils::GetAbsoluteLength(m_rx, root.ActualWidth())};
+  float ry{Utils::GetAbsoluteLength(m_ry, root.ActualHeight())};
 
-  Geometry(Geometry::CanvasGeometry::CreateEllipse(resourceCreator, cx, cy, rx, ry));
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
+
+  com_ptr<ID2D1Factory> factory;
+  deviceContext->GetFactory(factory.put());
+
+  com_ptr<ID2D1EllipseGeometry> geometry;
+  check_hresult(factory->CreateEllipseGeometry(D2D1::Ellipse({cx, cy}, rx, ry), geometry.put()));
+
+  Geometry(make<RNSVG::implementation::D2DGeometry>(geometry.as<ID2D1Geometry>()));
 }
 } // namespace winrt::RNSVG::implementation

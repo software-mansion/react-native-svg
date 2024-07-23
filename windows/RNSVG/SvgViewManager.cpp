@@ -4,18 +4,20 @@
 #include "SvgViewManager.g.cpp"
 #endif
 
-#include <winrt/Windows.UI.Xaml.Media.h>
-#include <winrt/Windows.UI.Xaml.Shapes.h>
+#include <UI.Input.h>
+#include <UI.Xaml.Input.h>
+#include <UI.Xaml.Media.h>
+#include <UI.Xaml.Shapes.h>
 
 #include "RenderableView.h"
 #include "SvgView.h"
 
 namespace winrt {
+using namespace Windows::Foundation;
 using namespace Windows::Foundation::Collections;
-using namespace Microsoft::Graphics::Canvas::UI::Xaml;
 using namespace Microsoft::ReactNative;
-using namespace Windows::UI::Xaml;
-using namespace Windows::UI::Xaml::Controls;
+using namespace xaml;
+using namespace xaml::Controls;
 } // namespace winrt
 
 namespace winrt::RNSVG::implementation {
@@ -43,6 +45,8 @@ IMapView<hstring, ViewManagerPropertyType> SvgViewManager::NativeProps() {
 
   nativeProps.Insert(L"height", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"width", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"color", ViewManagerPropertyType::Color);
+  nativeProps.Insert(L"responsible", ViewManagerPropertyType::Boolean);
 
   // viewBox
   nativeProps.Insert(L"minX", ViewManagerPropertyType::Number);
@@ -103,6 +107,20 @@ void SvgViewManager::ReplaceChild(
     oldGroup.Unload();
     newGroup.SvgParent(parent);
     svgView.Group(newGroup);
+  }
+}
+
+void SvgViewManager::OnPointerEvent(IInspectable const& view, ReactPointerEventArgs const& args) {
+  if (auto const &svgView{view.try_as<RNSVG::SvgView>()}) {
+    auto const &group{svgView.Group()};
+    if (group.IsResponsible()) {
+      auto const& point{args.Args().GetCurrentPoint(svgView).Position()};
+      for (auto const &child : group.Children()) {
+        if (auto const &target{child.HitTest(point)}) {
+          args.Target(target);
+        }
+      }
+    }
   }
 }
 } // namespace winrt::RNSVG::implementation

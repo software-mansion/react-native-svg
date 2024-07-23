@@ -62,7 +62,8 @@ class PathParser {
 
       if (!has_prev_cmd && first_char != 'M' && first_char != 'm') {
         // The first segment must be a MoveTo.
-        throw new Error(String.format("Unexpected character '%c' (i=%d, s=%s)", first_char, i, s));
+        throw new IllegalArgumentException(
+            String.format("Unexpected character '%c' (i=%d, s=%s)", first_char, i, s));
       }
 
       // TODO: simplify
@@ -75,7 +76,8 @@ class PathParser {
       } else if (is_number_start(first_char) && has_prev_cmd) {
         if (prev_cmd == 'Z' || prev_cmd == 'z') {
           // ClosePath cannot be followed by a number.
-          throw new Error(String.format("Unexpected number after 'z' (s=%s)", s));
+          throw new IllegalArgumentException(
+              String.format("Unexpected number after 'z' (s=%s)", s));
         }
 
         if (prev_cmd == 'M' || prev_cmd == 'm') {
@@ -93,7 +95,8 @@ class PathParser {
           cmd = prev_cmd;
         }
       } else {
-        throw new Error(String.format("Unexpected character '%c' (i=%d, s=%s)", first_char, i, s));
+        throw new IllegalArgumentException(
+            String.format("Unexpected character '%c' (i=%d, s=%s)", first_char, i, s));
       }
 
       boolean absolute = is_absolute(cmd);
@@ -226,7 +229,8 @@ class PathParser {
           }
         default:
           {
-            throw new Error(String.format("Unexpected comand '%c' (s=%s)", cmd, s));
+            throw new IllegalArgumentException(
+                String.format("Unexpected comand '%c' (s=%s)", cmd, s));
           }
       }
 
@@ -623,7 +627,7 @@ class PathParser {
         c = s.charAt(i);
       }
     } else if (c != '.') {
-      throw new Error(
+      throw new IllegalArgumentException(
           String.format("Invalid number formating character '%c' (i=%d, s=%s)", c, i, s));
     }
 
@@ -649,7 +653,7 @@ class PathParser {
         } else if (c >= '0' && c <= '9') {
           skip_digits();
         } else {
-          throw new Error(
+          throw new IllegalArgumentException(
               String.format("Invalid number formating character '%c' (i=%d, s=%s)", c, i, s));
         }
       }
@@ -660,7 +664,7 @@ class PathParser {
 
     // inf, nan, etc. are an error.
     if (Float.isInfinite(n) || Float.isNaN(n)) {
-      throw new Error(
+      throw new IllegalArgumentException(
           String.format("Invalid number '%s' (start=%d, i=%d, s=%s)", num, start, i, s));
     }
 

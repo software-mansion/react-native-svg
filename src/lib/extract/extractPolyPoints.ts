@@ -1,4 +1,4 @@
-import { NumberProp } from './types';
+import type { NumberProp } from './types';
 
 export default function extractPolyPoints(
   points: string | readonly NumberProp[],

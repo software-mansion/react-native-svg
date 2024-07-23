@@ -1,6 +1,6 @@
 import extractBrush from './extractBrush';
 import extractOpacity from './extractOpacity';
-import { extractedProps, FillProps } from './types';
+import type { extractedProps, FillProps } from './types';
 import { processColor } from 'react-native';
 
 const fillRules: { evenodd: number; nonzero: number } = {
@@ -8,7 +8,7 @@ const fillRules: { evenodd: number; nonzero: number } = {
   nonzero: 1,
 };
 
-const defaultFill = processColor('black');
+const defaultFill = { type: 0, payload: processColor('black') };
 
 export default function extractFill(
   o: extractedProps,
@@ -20,6 +20,9 @@ export default function extractFill(
     inherited.push('fill');
     o.fill =
       !fill && typeof fill !== 'number' ? defaultFill : extractBrush(fill);
+  } else {
+    // we want the default value of fill to be black to match the spec
+    o.fill = defaultFill;
   }
   if (fillOpacity != null) {
     inherited.push('fillOpacity');
