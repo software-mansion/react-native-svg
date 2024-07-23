@@ -1,60 +1,8 @@
 import type { ComponentType } from 'react';
 import * as React from 'react';
 import { Component, useEffect, useMemo, useState } from 'react';
-import Rect from './elements/Rect';
-import Circle from './elements/Circle';
-import Ellipse from './elements/Ellipse';
-import Polygon from './elements/Polygon';
-import Polyline from './elements/Polyline';
-import Line from './elements/Line';
 import type { SvgProps } from './elements/Svg';
-import Svg from './elements/Svg';
-import Path from './elements/Path';
-import G from './elements/G';
-import Text from './elements/Text';
-import TSpan from './elements/TSpan';
-import TextPath from './elements/TextPath';
-import Use from './elements/Use';
-import Image from './elements/Image';
-import Symbol from './elements/Symbol';
-import Defs from './elements/Defs';
-import LinearGradient from './elements/LinearGradient';
-import RadialGradient from './elements/RadialGradient';
-import Stop from './elements/Stop';
-import ClipPath from './elements/ClipPath';
-import Pattern from './elements/Pattern';
-import Mask from './elements/Mask';
-import Marker from './elements/Marker';
-import Filter from './elements/filters/Filter';
-import FeColorMatrix from './elements/filters/FeColorMatrix';
-
-export const tags: { [tag: string]: ComponentType } = {
-  svg: Svg,
-  circle: Circle,
-  ellipse: Ellipse,
-  g: G,
-  text: Text,
-  tspan: TSpan,
-  textPath: TextPath,
-  path: Path,
-  polygon: Polygon,
-  polyline: Polyline,
-  line: Line,
-  rect: Rect,
-  use: Use,
-  image: Image,
-  symbol: Symbol,
-  defs: Defs,
-  linearGradient: LinearGradient,
-  radialGradient: RadialGradient,
-  stop: Stop,
-  clipPath: ClipPath,
-  pattern: Pattern,
-  mask: Mask,
-  marker: Marker,
-  filter: Filter,
-  feColorMatrix: FeColorMatrix,
-};
+import { tags } from './tags';
 
 function missingTag() {
   return null;
@@ -391,7 +339,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
       props,
       children: [],
       parent: currentElement,
-      Tag: getTag(tag),
+      Tag: getTag(tag as keyof typeof tags),
     };
 
     if (currentElement) {
@@ -488,10 +436,12 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     return name;
   }
 
-  function getTag(name: string): ComponentType<React.PropsWithChildren<{}>> {
+  function getTag(
+    name: keyof typeof tags
+  ): ComponentType<{ children?: React.ReactNode }> {
     type Element = (typeof tags)[keyof typeof tags];
-    // @ts-ignore
     const Tag: Element | undefined = tags[name];
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return Tag || missingTag;
   }

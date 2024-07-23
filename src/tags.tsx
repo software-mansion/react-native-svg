@@ -21,12 +21,16 @@ import ClipPath from './elements/ClipPath';
 import Pattern from './elements/Pattern';
 import Mask from './elements/Mask';
 import Marker from './elements/Marker';
+import Filter from './elements/filters/Filter';
+import FeColorMatrix from './elements/filters/FeColorMatrix';
 
 export const tags = {
   circle: Circle,
   clipPath: ClipPath,
   defs: Defs,
   ellipse: Ellipse,
+  filter: Filter,
+  feColorMatrix: FeColorMatrix,
   g: G,
   image: Image,
   line: Line,
