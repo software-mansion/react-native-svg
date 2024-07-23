@@ -1,5 +1,8 @@
 // Most (if not all) of this file could probably go away once react-native-macos's version of RCTUIKit.h makes its way
 // upstream. https://github.com/microsoft/react-native-macos/issues/242
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <React/RCTViewComponentView.h>
+#endif // RCT_NEW_ARCH_ENABLED
 
 #if !TARGET_OS_OSX
 
@@ -8,7 +11,11 @@
 #define RNSVGColor UIColor
 #define RNSVGPlatformView UIView
 #define RNSVGTextView UILabel
+#ifdef RCT_NEW_ARCH_ENABLED
+#define RNSVGView RCTViewComponentView
+#else
 #define RNSVGView UIView
+#endif // RCT_NEW_ARCH_ENABLED
 
 #else // TARGET_OS_OSX [
 
@@ -29,7 +36,16 @@ extern "C" {
 #define RNSVGPlatformView NSView
 #define RNSVGTextView NSTextView
 
-@interface RNSVGView : RCTUIView
+@interface RNSVGColor (CGColor)
+- (NSColor *)CGColor;
+@end
+
+@interface RNSVGView :
+#ifdef RCT_NEW_ARCH_ENABLED
+    RCTViewComponentView
+#else
+    RCTUIView
+#endif // RCT_NEW_ARCH_ENABLED
 
 @property CGPoint center;
 @property (nonatomic, strong) RNSVGColor *tintColor;
