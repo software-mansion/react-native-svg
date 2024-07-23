@@ -198,9 +198,6 @@ export const prepare = (props: CreateComponentProps) => {
   if (fontStyle != null) {
     styles.fontStyle = fontStyle;
   }
-  if (props.onPress != null) {
-    clean.onClick = props.onPress;
-  }
   if (props.href !== null) {
     clean.href = resolveAssetUri(props.href)?.uri;
   }
