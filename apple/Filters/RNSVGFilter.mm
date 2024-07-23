@@ -97,7 +97,7 @@ using namespace facebook::react;
   for (RNSVGNode *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGFilterPrimitive class]]) {
       currentFilter = (RNSVGFilterPrimitive *)node;
-      result = [currentFilter applyFilter:resultsMap previousFilterResult:result];
+      result = [currentFilter applyFilter:resultsMap previousFilterResult:result ctm:ctm];
       if (currentFilter.result) {
         [resultsMap setObject:result forKey:currentFilter.result];
       }
