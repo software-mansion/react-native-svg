@@ -51,7 +51,9 @@ export const extractFeColorMatrix = (
       console.warn('Invalid value for FeColorMatrix `values` prop');
     }
   }
-  if (props.type) extracted.type = props.type;
+  if (props.type) {
+    extracted.type = props.type;
+  }
 
   return extracted;
 };
@@ -61,8 +63,15 @@ export const extractFeOffset = (
 ): FeOffsetNativeProps => {
   const extracted: FeOffsetNativeProps = {};
 
-  if (props.dx) extracted.dx = props.dx;
-  if (props.dy) extracted.dy = props.dy;
+  if (props.in) {
+    extracted.in1 = props.in;
+  }
+  if (props.dx) {
+    extracted.dx = props.dx;
+  }
+  if (props.dy) {
+    extracted.dy = props.dy;
+  }
 
   return extracted;
 };
