@@ -1,5 +1,7 @@
 import { FeColorMatrixProps as FeColorMatrixComponentProps } from '../../elements/filters/FeColorMatrix';
 import { NativeProps as FeColorMatrixNativeProps } from '../../fabric/FeColorMatrixNativeComponent';
+import { FeOffsetProps as FeOffsetComponentProps } from '../../elements/filters/FeOffset';
+import { NativeProps as FeOffsetNativeProps } from '../../fabric/FeOffsetNativeComponent';
 import { NumberProp } from './types';
 
 const spaceReg = /\s+/;
@@ -50,6 +52,17 @@ export const extractFeColorMatrix = (
     }
   }
   if (props.type) extracted.type = props.type;
+
+  return extracted;
+};
+
+export const extractFeOffset = (
+  props: FeOffsetComponentProps
+): FeOffsetNativeProps => {
+  const extracted: FeOffsetNativeProps = {};
+
+  if (props.dx) extracted.dx = props.dx;
+  if (props.dy) extracted.dy = props.dy;
 
   return extracted;
 };

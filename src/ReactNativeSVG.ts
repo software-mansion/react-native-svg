@@ -25,6 +25,7 @@ import Marker from './elements/Marker';
 import ForeignObject from './elements/ForeignObject';
 import Filter from './elements/filters/Filter';
 import FeColorMatrix from './elements/filters/FeColorMatrix';
+import FeOffset from './elements/filters/FeOffset';
 
 import {
   parse,
@@ -71,6 +72,7 @@ import {
   RNSVGUse,
   RNSVGFilter,
   RNSVGFeColorMatrix,
+  RNSVGFeOffset,
 } from './fabric';
 
 export {
@@ -109,6 +111,7 @@ export type { MarkerProps } from './elements/Marker';
 export type { ForeignObjectProps } from './elements/ForeignObject';
 export type { FilterProps } from './elements/filters/Filter';
 export type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
+export type { FeOffsetProps } from './elements/filters/FeOffset';
 export type { FilterPrimitiveCommonProps } from './elements/filters/FilterPrimitive';
 
 export * from './lib/extract/types';
@@ -149,6 +152,7 @@ export {
   Shape,
   Filter,
   FeColorMatrix,
+  FeOffset,
   RNSVGMarker,
   RNSVGMask,
   RNSVGPattern,
@@ -173,6 +177,7 @@ export {
   RNSVGForeignObject,
   RNSVGFilter,
   RNSVGFeColorMatrix,
+  RNSVGFeOffset,
 };
 
 export type {

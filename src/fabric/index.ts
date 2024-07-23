@@ -22,6 +22,7 @@ import RNSVGTSpan from './TSpanNativeComponent';
 import RNSVGUse from './UseNativeComponent';
 import RNSVGFilter from './FilterNativeComponent';
 import RNSVGFeColorMatrix from './FeColorMatrixNativeComponent';
+import RNSVGFeOffset from './FeOffsetNativeComponent';
 
 export {
   RNSVGCircle,
@@ -48,4 +49,5 @@ export {
   RNSVGUse,
   RNSVGFilter,
   RNSVGFeColorMatrix,
+  RNSVGFeOffset,
 };
