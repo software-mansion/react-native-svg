@@ -4,7 +4,7 @@ import type { ViewProps } from './utils';
 import { NumberProp } from '../lib/extract/types';
 import type { UnsafeMixed } from './codegenUtils';
 
-interface FilterPrimitiveStandardAttributes {
+interface FilterPrimitiveCommonProps {
   x?: UnsafeMixed<NumberProp>;
   y?: UnsafeMixed<NumberProp>;
   width?: UnsafeMixed<NumberProp>;
@@ -12,9 +12,7 @@ interface FilterPrimitiveStandardAttributes {
   result?: string;
 }
 
-export interface NativeProps
-  extends ViewProps,
-    FilterPrimitiveStandardAttributes {
+export interface NativeProps extends ViewProps, FilterPrimitiveCommonProps {
   in1?: string;
   dx?: UnsafeMixed<NumberProp>;
   dy?: UnsafeMixed<NumberProp>;
