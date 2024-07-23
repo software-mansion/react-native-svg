@@ -7,7 +7,7 @@ import { Float, WithDefault } from 'react-native/Libraries/Types/CodegenTypes';
 
 type FilterEdgeMode = 'duplicate' | 'wrap' | 'none';
 
-interface FilterPrimitiveStandardAttributes {
+interface FilterPrimitiveCommonProps {
   x?: UnsafeMixed<NumberProp>;
   y?: UnsafeMixed<NumberProp>;
   width?: UnsafeMixed<NumberProp>;
@@ -15,9 +15,7 @@ interface FilterPrimitiveStandardAttributes {
   result?: string;
 }
 
-export interface NativeProps
-  extends ViewProps,
-    FilterPrimitiveStandardAttributes {
+export interface NativeProps extends ViewProps, FilterPrimitiveCommonProps {
   in1?: string;
   stdDeviationX?: Float;
   stdDeviationY?: Float;
