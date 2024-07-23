@@ -250,7 +250,10 @@ UInt32 saturate(CGFloat value)
 
   [self beginTransparencyLayer:context];
 
-  if (self.mask || self.filter) {
+  RNSVGFilter *filterNode = self.filter ? [self.svgView getDefinedFilter:self.filter] : nil;
+  RNSVGMask *maskNode = self.mask ? [self.svgView getDefinedMask:self.mask] : nil;
+
+  if (maskNode || filterNode) {
     CGRect bounds = CGContextGetClipBoundingBox(context);
     // Get current context transformations for offscreenContext
     CGAffineTransform currentCTM = CGContextGetCTM(context);
@@ -269,9 +272,8 @@ UInt32 saturate(CGFloat value)
 
     CGImage *contentImage = [RNSVGRenderUtils renderToImage:self ctm:currentCTM rect:rect clip:nil];
 
-    if (self.filter) {
+    if (filterNode) {
       // https://www.w3.org/TR/SVG11/filters.html#FilterElement
-      RNSVGFilter *filterNode = (RNSVGFilter *)[self.svgView getDefinedFilter:self.filter];
 
       CIImage *content = [CIImage imageWithCGImage:contentImage];
 
@@ -288,7 +290,7 @@ UInt32 saturate(CGFloat value)
       CGImageRelease(contentImage);
       contentImage = [[RNSVGRenderUtils sharedCIContext] createCGImage:content fromRect:scaledRect];
 
-      if (!self.mask) {
+      if (!maskNode) {
         CGContextConcatCTM(context, CGAffineTransformInvert(currentCTM));
 
         // On macOS the currentCTM is inverted, so we need to transform it again
@@ -306,9 +308,8 @@ UInt32 saturate(CGFloat value)
 
       CGImageRelease(backgroundImage);
     }
-    if (self.mask) {
+    if (maskNode) {
       // https://www.w3.org/TR/SVG11/masking.html#MaskElement
-      RNSVGMask *_maskNode = (RNSVGMask *)[self.svgView getDefinedMask:self.mask];
 
       // Allocate pixel buffer and bitmap context for mask
       NSUInteger bytesPerPixel = 4;
@@ -334,18 +335,18 @@ UInt32 saturate(CGFloat value)
       CGContextConcatCTM(bcontext, currentCTM);
       // Clip to mask bounds and render the mask
       CGSize currentBoundsSize = self.pathBounds.size;
-      CGFloat x = [self relativeOnFraction:[_maskNode x] relative:currentBoundsSize.width];
-      CGFloat y = [self relativeOnFraction:[_maskNode y] relative:currentBoundsSize.height];
-      CGFloat w = [self relativeOnFraction:[_maskNode maskwidth] relative:currentBoundsSize.width];
-      CGFloat h = [self relativeOnFraction:[_maskNode maskheight] relative:currentBoundsSize.height];
+      CGFloat x = [self relativeOnFraction:[maskNode x] relative:currentBoundsSize.width];
+      CGFloat y = [self relativeOnFraction:[maskNode y] relative:currentBoundsSize.height];
+      CGFloat w = [self relativeOnFraction:[maskNode maskwidth] relative:currentBoundsSize.width];
+      CGFloat h = [self relativeOnFraction:[maskNode maskheight] relative:currentBoundsSize.height];
       CGRect maskBounds = CGRectApplyAffineTransform(CGRectMake(x, y, w, h), screenScaleCTM);
       CGContextClipToRect(bcontext, maskBounds);
-      [_maskNode renderLayerTo:bcontext rect:bounds];
+      [maskNode renderLayerTo:bcontext rect:bounds];
 
       // Apply luminanceToAlpha filter primitive
       // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
       UInt32 *currentPixel = pixels;
-      if (_maskNode.maskType == kRNSVGMaskTypeLuminance) {
+      if (maskNode.maskType == kRNSVGMaskTypeLuminance) {
         for (NSUInteger i = 0; i < npixels; i++) {
           UInt32 color = *currentPixel;
 

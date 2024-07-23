@@ -1,4 +1,7 @@
-import type { GestureResponderEvent } from 'react-native';
+import type {
+  GestureResponderEvent,
+  ImageProps as RNImageProps,
+} from 'react-native';
 import type {
   NumberArray,
   NumberProp,
@@ -60,6 +63,7 @@ export interface BaseProps extends Props {
   delayPressOut?: number;
   disabled?: boolean;
   hitSlop?: EdgeInsetsProp;
+  href?: RNImageProps['source'] | string | number;
   nativeID?: string;
   touchSoundDisabled?: boolean;
   pressRetentionOffset?: EdgeInsetsProp;

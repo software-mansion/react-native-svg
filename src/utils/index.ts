@@ -3,6 +3,7 @@ import type { NumberProp, TransformProps } from '../lib/extract/types';
 import { transformsArrayToProps } from '../lib/extract/extractTransform';
 import type { BaseProps, CreateComponentProps } from '../types';
 import { resolve } from '../lib/resolve';
+import { resolveAssetUri } from '../lib/resolveAssetUri';
 
 export function parseTransformProp(
   transform: TransformProps['transform'],
@@ -199,6 +200,9 @@ export const prepare = (props: CreateComponentProps) => {
   }
   if (props.onPress != null) {
     clean.onClick = props.onPress;
+  }
+  if (props.href !== null) {
+    clean.href = resolveAssetUri(props.href)?.uri;
   }
   clean.style = resolve(style, styles);
   return clean;
