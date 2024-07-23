@@ -1,3 +1,13 @@
+const RGB_PATTERN = /^rgb\((\d+(\.\d+)?%)?,(\d+(\.\d+)?%)?,(\d+(\.\d+)?%)?\)$/;
+const RGBA_PATTERN =
+  /^rgba\((\d+(\.\d+)?%)?,(\d+(\.\d+)?%)?,(\d+(\.\d+)?%)?,\s*(\d+(\.\d+)?%?)\)$/;
+
+const percentTo255 = (percent: string) =>
+  Math.round(parseFloat(percent) * 2.55);
+
+const parseAlpha = (alpha: string) =>
+  alpha.endsWith('%') ? parseFloat(alpha) / 100 : parseFloat(alpha);
+
 /**
  * Parses a color string in percentage RGB or RGBA format and converts it to a standard RGB or RGBA string.
  *
@@ -9,31 +19,27 @@
  * to a decimal if it is provided as a percentage.
  *
  * @param {string} color - The color string in percentage RGB or RGBA format.
- * @returns {string | null} - The converted color string in standard RGB or RGBA format, or null if the input is invalid.
+ * @returns {string | undefined} - The converted color string in standard RGB or RGBA format, or null if the input is invalid.
  *
  * @example
  * parsePercentageRGBColor("rgb(13.730068%,12.159915%,12.54902%)"); // Returns "rgb(35, 31, 32)"
  * parsePercentageRGBColor("rgba(13.730068%,12.159915%,12.54902%,50%)"); // Returns "rgba(35, 31, 32, 0.5)"
  */
-export function parsePercentageRGBColor(color: string) {
-  const percentTo255 = (percent: string) =>
-    Math.round(parseFloat(percent) * 2.55);
-  const parseAlpha = (alpha: string) =>
-    alpha.endsWith('%') ? parseFloat(alpha) / 100 : parseFloat(alpha);
-  const rgbPattern = /^rgb\((\d+(\.\d+)?%)?,(\d+(\.\d+)?%)?,(\d+(\.\d+)?%)?\)$/;
-  const rgbaPattern =
-    /^rgba\((\d+(\.\d+)?%)?,(\d+(\.\d+)?%)?,(\d+(\.\d+)?%)?,\s*(\d+(\.\d+)?%?)\)$/;
-  let match;
+export function parsePercentageRGBColor(color: string): string | undefined {
+  const rgbMatch = color.match(RGB_PATTERN);
+  const rgbaMatch = color.match(RGBA_PATTERN);
 
-  if ((match = color.match(rgbPattern))) {
-    const [, r, , g, , b] = match;
+  if (!rgbMatch && !rgbaMatch) {
+    return undefined;
+  }
+
+  if (rgbMatch) {
+    const [, r, , g, , b] = rgbMatch;
     return `rgb(${percentTo255(r)}, ${percentTo255(g)}, ${percentTo255(b)})`;
-  } else if ((match = color.match(rgbaPattern))) {
-    const [, r, , g, , b, , a] = match;
+  } else if (rgbaMatch) {
+    const [, r, , g, , b, , a] = rgbaMatch;
     return `rgba(${percentTo255(r)}, ${percentTo255(g)}, ${percentTo255(
       b
     )}, ${parseAlpha(a)})`;
   }
-
-  return null;
 }

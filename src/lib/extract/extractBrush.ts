@@ -31,15 +31,15 @@ export default function extractBrush(color?: ColorValue) {
   }
 
   // Convert percentage RGB/RGBA color to standard RGB/RGBA color
-  if (
+  const isPercentageRgb =
     typeof color === 'string' &&
     (color.startsWith('rgb(') || color.startsWith('rgba(')) &&
-    color.includes('%')
-  ) {
-    color = parsePercentageRGBColor(color) as ColorValue;
-  }
+    color.includes('%');
+  const colorToProcess = isPercentageRgb
+    ? parsePercentageRGBColor(color)
+    : color;
 
-  const processedColor = processColor(color);
+  const processedColor = processColor(colorToProcess);
   if (typeof processedColor === 'number') {
     return { type: 0, payload: processedColor };
   }
