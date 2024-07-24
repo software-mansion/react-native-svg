@@ -31,7 +31,7 @@ const getFilters = (filters: Filters) => {
 export const FilterImage = (props: FilterImageProps) => {
   const { filters, source, style, ...imageProps } = props;
   const hasFilter = filters.length > 0;
-  const filterId = useMemo(() => `RNSVG-${getRandomNumber()}`, [filters]);
+  const filterId = useMemo(() => `RNSVG-${getRandomNumber()}`, []);
 
   const src =
     Platform.OS === 'web'
