@@ -23,9 +23,9 @@
   NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
   NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
   NSMutableDictionary<NSString *, RNSVGPainter *> *_painters;
-  NSMutableDictionary<NSString *, RNSVGNode *> *_markers;
-  NSMutableDictionary<NSString *, RNSVGNode *> *_masks;
-  NSMutableDictionary<NSString *, RNSVGNode *> *_filters;
+  NSMutableDictionary<NSString *, RNSVGMarker *> *_markers;
+  NSMutableDictionary<NSString *, RNSVGMask *> *_masks;
+  NSMutableDictionary<NSString *, RNSVGFilter *> *_filters;
   CGAffineTransform _invviewBoxTransform;
   bool rendered;
 }
@@ -119,13 +119,13 @@ using namespace facebook::react;
   rendered = NO;
 }
 
-- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+- (void)mountChildComponentView:(RNSVGView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
   [super mountChildComponentView:childComponentView index:index];
   [self invalidate];
 }
 
-- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+- (void)unmountChildComponentView:(RNSVGView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
   [super unmountChildComponentView:childComponentView index:index];
   [self invalidate];
@@ -133,14 +133,14 @@ using namespace facebook::react;
 
 #endif // RCT_NEW_ARCH_ENABLED
 
-- (void)insertReactSubview:(RNSVGView *)subview atIndex:(NSInteger)atIndex
+- (void)insertReactSubview:(RNSVGPlatformView *)subview atIndex:(NSInteger)atIndex
 {
   [super insertReactSubview:subview atIndex:atIndex];
   [self insertSubview:subview atIndex:atIndex];
   [self invalidate];
 }
 
-- (void)removeReactSubview:(RNSVGView *)subview
+- (void)removeReactSubview:(RNSVGPlatformView *)subview
 {
   [super removeReactSubview:subview];
   [self invalidate];
@@ -290,7 +290,7 @@ using namespace facebook::react;
     _viewBoxTransform = CGAffineTransformIdentity;
     _invviewBoxTransform = CGAffineTransformIdentity;
   }
-  for (RNSVGView *node in self.subviews) {
+  for (RNSVGPlatformView *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGNode class]]) {
       RNSVGNode *svg = (RNSVGNode *)node;
       if (svg.responsible && !self.responsible) {
@@ -412,7 +412,7 @@ using namespace facebook::react;
   return _painters ? [_painters objectForKey:painterName] : nil;
 }
 
-- (void)defineMarker:(RNSVGNode *)marker markerName:(NSString *)markerName
+- (void)defineMarker:(RNSVGMarker *)marker markerName:(NSString *)markerName
 {
   if (!_markers) {
     _markers = [[NSMutableDictionary alloc] init];
@@ -420,12 +420,12 @@ using namespace facebook::react;
   [_markers setObject:marker forKey:markerName];
 }
 
-- (RNSVGNode *)getDefinedMarker:(NSString *)markerName;
+- (RNSVGMarker *)getDefinedMarker:(NSString *)markerName;
 {
   return _markers ? [_markers objectForKey:markerName] : nil;
 }
 
-- (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName
+- (void)defineMask:(RNSVGMask *)mask maskName:(NSString *)maskName
 {
   if (!_masks) {
     _masks = [[NSMutableDictionary alloc] init];
@@ -433,12 +433,12 @@ using namespace facebook::react;
   [_masks setObject:mask forKey:maskName];
 }
 
-- (RNSVGNode *)getDefinedMask:(NSString *)maskName;
+- (RNSVGMask *)getDefinedMask:(NSString *)maskName;
 {
   return _masks ? [_masks objectForKey:maskName] : nil;
 }
 
-- (void)defineFilter:(RNSVGNode *)filter filterName:(NSString *)filterName
+- (void)defineFilter:(RNSVGFilter *)filter filterName:(NSString *)filterName
 {
   if (!_filters) {
     _filters = [[NSMutableDictionary alloc] init];
@@ -446,7 +446,7 @@ using namespace facebook::react;
   [_filters setObject:filter forKey:filterName];
 }
 
-- (RNSVGNode *)getDefinedFilter:(NSString *)filterName
+- (RNSVGFilter *)getDefinedFilter:(NSString *)filterName
 {
   return _filters ? [_filters objectForKey:filterName] : nil;
 }
