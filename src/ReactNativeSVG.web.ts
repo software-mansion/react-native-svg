@@ -22,7 +22,10 @@ import type { TextProps } from './elements/Text';
 import type { TextPathProps } from './elements/TextPath';
 import type { TSpanProps } from './elements/TSpan';
 import type { UseProps } from './elements/Use';
-import type { GestureResponderEvent } from 'react-native';
+import type {
+  GestureResponderEvent,
+  ImageProps as RNImageProps,
+} from 'react-native';
 import {
   // @ts-ignore it is not seen in exports
   unstable_createElement as createElement,
@@ -38,6 +41,8 @@ import {
   transformsArrayToProps,
   TransformsStyleArray,
 } from './lib/extract/extractTransform';
+import { resolveAssetUri } from './lib/resolveAssetUri';
+
 export { default as SvgXml } from './SvgXml.web';
 export { default as SvgCss } from './SvgXml.web';
 export { default as SvgUri } from './SvgUri.web';
@@ -60,6 +65,7 @@ interface BaseProps {
   delayPressOut?: number;
   disabled?: boolean;
   hitSlop?: EdgeInsetsProp;
+  href?: RNImageProps['source'] | string | number;
   nativeID?: string;
   touchSoundDisabled?: boolean;
   onBlur?: (e: BlurEvent) => void;
@@ -206,6 +212,7 @@ const prepare = <T extends BaseProps>(
     gradientTransform?: string;
     patternTransform?: string;
     'transform-origin'?: string;
+    href?: RNImageProps['source'] | string | null;
     style?: object;
     ref?: unknown;
   } = {
@@ -275,6 +282,9 @@ const prepare = <T extends BaseProps>(
   clean.style = resolve(style, styles);
   if (props.onPress != null) {
     clean.onClick = props.onPress;
+  }
+  if (props.href !== null) {
+    clean.href = resolveAssetUri(props.href)?.uri;
   }
   return clean;
 };

@@ -8,6 +8,7 @@
 
 package com.horcrux.svg;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -93,6 +94,8 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   private @Nullable ArrayList<Object> mOriginProperties;
   private @Nullable ArrayList<String> mPropList;
   private @Nullable ArrayList<String> mAttributeList;
+
+  @Nullable String mFilter;
 
   private static final Pattern regex = Pattern.compile("[0-9.-]+");
 
@@ -326,72 +329,107 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
+  public void setFilter(String filter) {
+    mFilter = filter;
+    invalidate();
+  }
+
   void render(Canvas canvas, Paint paint, float opacity) {
     MaskView mask = null;
+    FilterView filter = null;
 
     if (mMask != null) {
       SvgView root = getSvgView();
       mask = (MaskView) root.getDefinedMask(mMask);
     }
+    if (mFilter != null) {
+      SvgView root = getSvgView();
+      filter = (FilterView) root.getDefinedFilter(mFilter);
+    }
 
-    if (mask != null) {
-      // https://www.w3.org/TR/SVG11/masking.html
-      // Adding a mask involves several steps
-      // 1. applying luminanceToAlpha to the mask element
-      // 2. merging the alpha channel of the element with the alpha channel from the previous step
-      // 3. applying the result from step 2 to the target element
+    if (mask != null || filter != null) {
+      if (filter != null) {
+        Paint bitmapPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
+        canvas.saveLayer(null, bitmapPaint);
 
-      canvas.saveLayer(null, paint);
-      draw(canvas, paint, opacity);
+        Rect canvasBounds = this.getSvgView().getCanvasBounds();
 
-      Paint dstInPaint = new Paint();
-      dstInPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        // draw element to self bitmap
+        Bitmap elementBitmap =
+            Bitmap.createBitmap(
+                canvasBounds.width(), canvasBounds.height(), Bitmap.Config.ARGB_8888);
+        Canvas elementCanvas = new Canvas(elementBitmap);
 
-      // prepare step 3 - combined layer
-      canvas.saveLayer(null, dstInPaint);
+        draw(elementCanvas, paint, opacity);
 
-      if (mask.getMaskType() == MaskView.MaskType.LUMINANCE) {
-        // step 1 - luminance layer
-        // prepare maskPaint with luminanceToAlpha
-        // https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFEMergeElement:~:text=not%20applicable.%20A-,luminanceToAlpha,-operation%20is%20equivalent
-        Paint luminancePaint = new Paint();
-        ColorMatrix luminanceToAlpha =
-                new ColorMatrix(
-                        new float[]{
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2125f, 0.7154f, 0.0721f, 0, 0
-                        });
-        luminancePaint.setColorFilter(new ColorMatrixColorFilter(luminanceToAlpha));
-        canvas.saveLayer(null, luminancePaint);
+        // apply filters
+        Bitmap backgroundBitmap = this.getSvgView().getCurrentBitmap();
+        elementBitmap =
+            filter.applyFilter(
+                elementBitmap, backgroundBitmap, elementCanvas.getClipBounds(), canvasBounds);
+
+        // draw bitmap to canvas
+        canvas.drawBitmap(elementBitmap, 0, 0, bitmapPaint);
       } else {
         canvas.saveLayer(null, paint);
+        draw(canvas, paint, opacity);
       }
 
-      // calculate mask bounds
-      float maskX = (float) relativeOnWidth(mask.mX);
-      float maskY = (float) relativeOnHeight(mask.mY);
-      float maskWidth = (float) relativeOnWidth(mask.mW);
-      float maskHeight = (float) relativeOnHeight(mask.mH);
-      // clip to mask bounds
-      canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
+      if (mask != null) {
+        // https://www.w3.org/TR/SVG11/masking.html
+        // Adding a mask involves several steps
+        // 1. applying luminanceToAlpha to the mask element
+        // 2. merging the alpha channel of the element with the alpha channel from the previous step
+        // 3. applying the result from step 2 to the target element
 
-      mask.draw(canvas, paint, 1f);
+        Paint dstInPaint = new Paint();
+        dstInPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
 
-      // close luminance layer
-      canvas.restore();
+        // prepare step 3 - combined layer
+        canvas.saveLayer(null, dstInPaint);
 
-      // step 2 - alpha layer
-      canvas.saveLayer(null, dstInPaint);
-      // clip to mask bounds
-      canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
+        if (mask.getMaskType() == MaskView.MaskType.LUMINANCE) {
+          // step 1 - luminance layer
+          // prepare maskPaint with luminanceToAlpha
+          // https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFEMergeElement:~:text=not%20applicable.%20A-,luminanceToAlpha,-operation%20is%20equivalent
+          Paint luminancePaint = new Paint();
+          ColorMatrix luminanceToAlpha =
+              new ColorMatrix(
+                  new float[] {
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2125f, 0.7154f, 0.0721f, 0, 0
+                  });
+          luminancePaint.setColorFilter(new ColorMatrixColorFilter(luminanceToAlpha));
+          canvas.saveLayer(null, luminancePaint);
+        } else {
+          canvas.saveLayer(null, paint);
+        }
 
-      mask.draw(canvas, paint, 1f);
+        // calculate mask bounds
+        float maskX = (float) relativeOnWidth(mask.mX);
+        float maskY = (float) relativeOnHeight(mask.mY);
+        float maskWidth = (float) relativeOnWidth(mask.mW);
+        float maskHeight = (float) relativeOnHeight(mask.mH);
+        // clip to mask bounds
+        canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
 
-      // close alpha layer
-      canvas.restore();
+        mask.draw(canvas, paint, 1f);
 
-      // close combined layer
-      canvas.restore();
+        // close luminance layer
+        canvas.restore();
 
+        // step 2 - alpha layer
+        canvas.saveLayer(null, dstInPaint);
+        // clip to mask bounds
+        canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
+
+        mask.draw(canvas, paint, 1f);
+
+        // close alpha layer
+        canvas.restore();
+
+        // close combined layer
+        canvas.restore();
+      }
       // close element layer
       canvas.restore();
     } else {

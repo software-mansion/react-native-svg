@@ -23,6 +23,8 @@ import Pattern from './elements/Pattern';
 import Mask from './elements/Mask';
 import Marker from './elements/Marker';
 import ForeignObject from './elements/ForeignObject';
+import Filter from './elements/filters/Filter';
+import FeColorMatrix from './elements/filters/FeColorMatrix';
 
 import {
   parse,
@@ -67,6 +69,8 @@ import {
   RNSVGTextPath,
   RNSVGTSpan,
   RNSVGUse,
+  RNSVGFilter,
+  RNSVGFeColorMatrix,
 } from './fabric';
 
 export {
@@ -103,6 +107,9 @@ export type { PatternProps } from './elements/Pattern';
 export type { MaskProps } from './elements/Mask';
 export type { MarkerProps } from './elements/Marker';
 export type { ForeignObjectProps } from './elements/ForeignObject';
+export type { FilterProps } from './elements/filters/Filter';
+export type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
+export type { FilterPrimitiveCommonProps } from './elements/filters/FilterPrimitive';
 
 export * from './lib/extract/types';
 
@@ -140,6 +147,8 @@ export {
   camelCase,
   fetchText,
   Shape,
+  Filter,
+  FeColorMatrix,
   RNSVGMarker,
   RNSVGMask,
   RNSVGPattern,
@@ -162,6 +171,8 @@ export {
   RNSVGSvgAndroid,
   RNSVGSvgIOS,
   RNSVGForeignObject,
+  RNSVGFilter,
+  RNSVGFeColorMatrix,
 };
 
 export type {

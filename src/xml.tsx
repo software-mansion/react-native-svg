@@ -25,6 +25,8 @@ import ClipPath from './elements/ClipPath';
 import Pattern from './elements/Pattern';
 import Mask from './elements/Mask';
 import Marker from './elements/Marker';
+import Filter from './elements/filters/Filter';
+import FeColorMatrix from './elements/filters/FeColorMatrix';
 
 export const tags: { [tag: string]: ComponentType } = {
   svg: Svg,
@@ -50,6 +52,8 @@ export const tags: { [tag: string]: ComponentType } = {
   pattern: Pattern,
   mask: Mask,
   marker: Marker,
+  filter: Filter,
+  feColorMatrix: FeColorMatrix,
 };
 
 function missingTag() {

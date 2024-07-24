@@ -103,6 +103,10 @@ import com.facebook.react.viewmanagers.RNSVGDefsManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGDefsManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFilterManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFilterManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGForeignObjectManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGForeignObjectManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerDelegate;
@@ -578,6 +582,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGRadialGradient,
     RNSVGPattern,
     RNSVGMask,
+    RNSVGFilter,
+    RNSVGFeColorMatrix,
     RNSVGMarker,
     RNSVGForeignObject,
   }
@@ -622,6 +628,10 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new PatternView(reactContext);
       case RNSVGMask:
         return new MaskView(reactContext);
+      case RNSVGFilter:
+        return new FilterView(reactContext);
+      case RNSVGFeColorMatrix:
+        return new FeColorMatrixView(reactContext);
       case RNSVGMarker:
         return new MarkerView(reactContext);
       case RNSVGForeignObject:
@@ -662,6 +672,11 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
 
   RenderableViewManager(SVGClass svgclass) {
     super(svgclass);
+  }
+
+  @ReactProp(name = "filter")
+  public void setFilter(T node, String filter) {
+    node.setFilter(filter);
   }
 
   static class GroupViewManagerAbstract<U extends GroupView> extends RenderableViewManager<U> {
@@ -1279,6 +1294,96 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "maskType")
     public void setMaskType(MaskView node, int maskType) {
       node.setMaskType(maskType);
+    }
+  }
+
+  static class FilterManager extends VirtualViewManager<FilterView>
+      implements RNSVGFilterManagerInterface<FilterView> {
+    FilterManager() {
+      super(SVGClass.RNSVGFilter);
+      mDelegate = new RNSVGFilterManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFilter";
+
+    @ReactProp(name = "x")
+    public void setX(FilterView node, Dynamic x) {
+      node.setX(x);
+    }
+
+    @ReactProp(name = "y")
+    public void setY(FilterView node, Dynamic y) {
+      node.setY(y);
+    }
+
+    @ReactProp(name = "width")
+    public void setWidth(FilterView node, Dynamic width) {
+      node.setWidth(width);
+    }
+
+    @ReactProp(name = "height")
+    public void setHeight(FilterView node, Dynamic height) {
+      node.setHeight(height);
+    }
+
+    @ReactProp(name = "filterUnits")
+    public void setFilterUnits(FilterView node, String filterUnits) {
+      node.setFilterUnits(filterUnits);
+    }
+
+    @ReactProp(name = "primitiveUnits")
+    public void setPrimitiveUnits(FilterView node, String primitiveUnits) {
+      node.setPrimitiveUnits(primitiveUnits);
+    }
+  }
+
+  static class FeColorMatrixManager extends VirtualViewManager<FeColorMatrixView>
+      implements RNSVGFeColorMatrixManagerInterface<FeColorMatrixView> {
+    FeColorMatrixManager() {
+      super(SVGClass.RNSVGFeColorMatrix);
+      mDelegate = new RNSVGFeColorMatrixManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeColorMatrix";
+
+    @ReactProp(name = "x")
+    public void setX(FeColorMatrixView node, Dynamic x) {
+      node.setX(x);
+    }
+
+    @ReactProp(name = "y")
+    public void setY(FeColorMatrixView node, Dynamic y) {
+      node.setY(y);
+    }
+
+    @ReactProp(name = "width")
+    public void setWidth(FeColorMatrixView node, Dynamic width) {
+      node.setWidth(width);
+    }
+
+    @ReactProp(name = "height")
+    public void setHeight(FeColorMatrixView node, Dynamic height) {
+      node.setHeight(height);
+    }
+
+    @ReactProp(name = "result")
+    public void setResult(FeColorMatrixView node, String result) {
+      node.setResult(result);
+    }
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeColorMatrixView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "type")
+    public void setType(FeColorMatrixView node, String type) {
+      node.setType(type);
+    }
+
+    @ReactProp(name = "values")
+    public void setValues(FeColorMatrixView node, @Nullable ReadableArray values) {
+      node.setValues(values);
     }
   }
 
