@@ -18,6 +18,9 @@ jobs:
       group: macos-${{ matrix.working-directory }}-${{ github.ref  }}-${{ inputs.new_arch_enabled }}
       cancel-in-progress: true
     steps:
+      - name: Show variable
+        run: echo ${{ inputs.new_arch_enabled }}
+
       - name: Check out Git repository
         uses: actions/checkout@v3
 
