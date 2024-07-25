@@ -1,0 +1,102 @@
+#import "RNSVGFeMerge.h"
+
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <React/RCTConversions.h>
+#import <React/RCTFabricComponentsPlugins.h>
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+#import <react/renderer/components/view/conversions.h>
+#import "RNSVGFabricConversions.h"
+#endif // RCT_NEW_ARCH_ENABLED
+
+@implementation RNSVGFeMerge
+
+#ifdef RCT_NEW_ARCH_ENABLED
+using namespace facebook::react;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNSVGFeMergeProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNSVGFeMergeComponentDescriptor>();
+}
+
+- (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
+{
+  const auto &newProps = static_cast<const RNSVGFeMergeProps &>(*props);
+
+  if (newProps.nodes.size() > 0) {
+    NSMutableArray *nodesArray = [NSMutableArray new];
+    for (auto node : newProps.nodes) {
+      id json = RNSVGConvertFollyDynamicToId(node);
+      if ([json isKindOfClass:[NSString class]]) {
+        [nodesArray addObject:[json stringValue]];
+      } else {
+        [nodesArray addObject:[NSNull null]];
+      }
+    }
+    self.nodes = nodesArray;
+  }
+
+  setCommonFilterProps(newProps, self);
+  _props = std::static_pointer_cast<RNSVGFeMergeProps const>(props);
+}
+
+- (void)prepareForRecycle
+{
+  [super prepareForRecycle];
+  _nodes = nil;
+}
+#endif // RCT_NEW_ARCH_ENABLED
+
+- (void)setNodes:(NSArray<NSString *> *)nodes
+{
+  if (nodes == _nodes) {
+    return;
+  }
+
+  _nodes = nodes;
+  [self invalidate];
+}
+
+- (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results
+    previousFilterResult:(CIImage *)previous
+                     ctm:(CGAffineTransform)ctm
+{
+  CIFilter *filter = [CIFilter filterWithName:@"CISourceOverCompositing"];
+  [filter setDefaults];
+
+  CIImage *result;
+
+  for (int i = 0; i < [self.nodes count]; i++) {
+    NSString *nodeKey = [self.nodes objectAtIndex:i];
+    CIImage *inputImage =
+        [nodeKey isEqual:[NSNull null]] ? previous : [results objectForKey:[self.nodes objectAtIndex:i]];
+    if (i == 0) {
+      result = inputImage;
+      continue;
+    }
+    [filter setValue:result forKey:@"inputBackgroundImage"];
+    [filter setValue:inputImage forKey:@"inputImage"];
+
+    result = [filter valueForKey:@"outputImage"];
+  }
+  return result;
+}
+
+#ifdef RCT_NEW_ARCH_ENABLED
+Class<RCTComponentViewProtocol> RNSVGFeMergeCls(void)
+{
+  return RNSVGFeMerge.class;
+}
+#endif // RCT_NEW_ARCH_ENABLED
+
+@end
