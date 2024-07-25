@@ -53,10 +53,10 @@ const styles = StyleSheet.create({
 
 const icon = (
   <FilterImage
-    filters={[{name: 'colorMatrix', type: 'saturate', values: [0.5]}]}
     source={require('../../assets/image.jpg')}
     width={30}
     height={30}
+    style={{filter: 'saturate(3.5)'}}
   />
 );
 
