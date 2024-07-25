@@ -99,7 +99,8 @@ using namespace facebook::react;
     if ([node isKindOfClass:[RNSVGFilterPrimitive class]]) {
       currentFilter = (RNSVGFilterPrimitive *)node;
       CGImageRef cgResult = [[RNSVGRenderUtils sharedCIContext] createCGImage:[currentFilter applyFilter:resultsMap
-                                                                                    previousFilterResult:result]
+                                                                                    previousFilterResult:result
+                                                                                                     ctm:ctm]
                                                                      fromRect:[result extent]];
       result = [CIImage imageWithCGImage:cgResult];
       CGImageRelease(cgResult);
