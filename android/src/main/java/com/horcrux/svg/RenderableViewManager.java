@@ -105,6 +105,8 @@ import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFilterManagerDelegate;
@@ -586,6 +588,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGMask,
     RNSVGFilter,
     RNSVGFeColorMatrix,
+    RNSVGFeGaussianBlur,
     RNSVGFeOffset,
     RNSVGMarker,
     RNSVGForeignObject,
@@ -635,6 +638,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FilterView(reactContext);
       case RNSVGFeColorMatrix:
         return new FeColorMatrixView(reactContext);
+      case RNSVGFeGaussianBlur:
+        return new FeGaussianBlurView(reactContext);
       case RNSVGFeOffset:
         return new FeOffsetView(reactContext);
       case RNSVGMarker:
@@ -1389,6 +1394,61 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "values")
     public void setValues(FeColorMatrixView node, @Nullable ReadableArray values) {
       node.setValues(values);
+    }
+  }
+
+  static class FeGaussianBlurManager extends VirtualViewManager<FeGaussianBlurView>
+      implements RNSVGFeGaussianBlurManagerInterface<FeGaussianBlurView> {
+    FeGaussianBlurManager() {
+      super(SVGClass.RNSVGFeGaussianBlur);
+      mDelegate = new RNSVGFeGaussianBlurManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeGaussianBlur";
+
+    @ReactProp(name = "x")
+    public void setX(FeGaussianBlurView node, Dynamic x) {
+      node.setX(x);
+    }
+
+    @ReactProp(name = "y")
+    public void setY(FeGaussianBlurView node, Dynamic y) {
+      node.setY(y);
+    }
+
+    @ReactProp(name = "width")
+    public void setWidth(FeGaussianBlurView node, Dynamic width) {
+      node.setWidth(width);
+    }
+
+    @ReactProp(name = "height")
+    public void setHeight(FeGaussianBlurView node, Dynamic height) {
+      node.setHeight(height);
+    }
+
+    @ReactProp(name = "result")
+    public void setResult(FeGaussianBlurView node, String result) {
+      node.setResult(result);
+    }
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeGaussianBlurView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "stdDeviationX")
+    public void setStdDeviationX(FeGaussianBlurView node, float stdDeviationX) {
+      node.setStdDeviationX(stdDeviationX);
+    }
+
+    @ReactProp(name = "stdDeviationY")
+    public void setStdDeviationY(FeGaussianBlurView node, float stdDeviationY) {
+      node.setStdDeviationY(stdDeviationY);
+    }
+
+    @ReactProp(name = "values")
+    public void setEdgeMode(FeGaussianBlurView node, String edgeMode) {
+      node.setEdgeMode(edgeMode);
     }
   }
 

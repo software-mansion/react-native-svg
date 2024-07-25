@@ -25,6 +25,7 @@ import Marker from './elements/Marker';
 import ForeignObject from './elements/ForeignObject';
 import Filter from './elements/filters/Filter';
 import FeColorMatrix from './elements/filters/FeColorMatrix';
+import FeGaussianBlur from './elements/filters/FeGaussianBlur';
 import FeOffset from './elements/filters/FeOffset';
 
 import {
@@ -72,6 +73,7 @@ import {
   RNSVGUse,
   RNSVGFilter,
   RNSVGFeColorMatrix,
+  RNSVGFeGaussianBlur,
   RNSVGFeOffset,
 } from './fabric';
 
@@ -111,6 +113,7 @@ export type { MarkerProps } from './elements/Marker';
 export type { ForeignObjectProps } from './elements/ForeignObject';
 export type { FilterProps } from './elements/filters/Filter';
 export type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
+export type { FeGaussianBlurProps } from './elements/filters/FeGaussianBlur';
 export type { FeOffsetProps } from './elements/filters/FeOffset';
 export type { FilterPrimitiveCommonProps } from './elements/filters/FilterPrimitive';
 
@@ -152,6 +155,7 @@ export {
   Shape,
   Filter,
   FeColorMatrix,
+  FeGaussianBlur,
   FeOffset,
   RNSVGMarker,
   RNSVGMask,
@@ -177,6 +181,7 @@ export {
   RNSVGForeignObject,
   RNSVGFilter,
   RNSVGFeColorMatrix,
+  RNSVGFeGaussianBlur,
   RNSVGFeOffset,
 };
 
