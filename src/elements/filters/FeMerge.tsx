@@ -16,7 +16,6 @@ export default class FeMerge extends FilterPrimitive<FeMergeProps> {
   };
 
   render() {
-    console.log(extractFeMerge(this.props, this));
     return (
       <RNSVGFeMerge
         ref={(ref) => this.refMethod(ref as (FeMerge & NativeMethods) | null)}
