@@ -1,8 +1,11 @@
+import React from 'react';
 import { FeColorMatrixProps as FeColorMatrixComponentProps } from '../../elements/filters/FeColorMatrix';
-import { NativeProps as FeColorMatrixNativeProps } from '../../fabric/FeColorMatrixNativeComponent';
 import { FeGaussianBlurProps as FeGaussianBlurComponentProps } from '../../elements/filters/FeGaussianBlur';
-import { NativeProps as FeGaussianBlurNativeProps } from '../../fabric/FeGaussianBlurNativeComponent';
+import { FeMergeProps as FeMergeComponentProps } from '../../elements/filters/FeMerge';
 import { FeOffsetProps as FeOffsetComponentProps } from '../../elements/filters/FeOffset';
+import { NativeProps as FeColorMatrixNativeProps } from '../../fabric/FeColorMatrixNativeComponent';
+import { NativeProps as FeGaussianBlurNativeProps } from '../../fabric/FeGaussianBlurNativeComponent';
+import { NativeProps as FeMergeNativeProps } from '../../fabric/FeMergeNativeComponent';
 import { NativeProps as FeOffsetNativeProps } from '../../fabric/FeOffsetNativeComponent';
 import { NumberProp } from './types';
 
@@ -58,6 +61,27 @@ export const extractFeColorMatrix = (
   }
 
   return extracted;
+};
+
+export const extractFeMerge = (
+  props: FeMergeComponentProps,
+  parent: unknown
+): FeMergeNativeProps => {
+  const nodes: Array<string | undefined> = [];
+  const childArray = props.children
+    ? React.Children.map(props.children, (child) =>
+        React.cloneElement(child, { parent })
+      )
+    : [];
+  const l = childArray.length;
+  for (let i = 0; i < l; i++) {
+    const {
+      props: { in: in1 },
+    } = childArray[i];
+    nodes.push(in1);
+  }
+
+  return { nodes };
 };
 
 export const extractFeOffset = (

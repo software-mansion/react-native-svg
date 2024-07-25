@@ -28,6 +28,8 @@ import Marker from './elements/Marker';
 import Filter from './elements/filters/Filter';
 import FeColorMatrix from './elements/filters/FeColorMatrix';
 import FeGaussianBlur from './elements/filters/FeGaussianBlur';
+import FeMerge from './elements/filters/FeMerge';
+import FeMergeNode from './elements/filters/FeMergeNode';
 import FeOffset from './elements/filters/FeOffset';
 
 export const tags: { [tag: string]: ComponentType } = {
@@ -57,6 +59,8 @@ export const tags: { [tag: string]: ComponentType } = {
   filter: Filter,
   feColorMatrix: FeColorMatrix,
   feGaussianBlur: FeGaussianBlur,
+  feMerge: FeMerge,
+  feMergeNode: FeMergeNode,
   feOffset: FeOffset,
 };
 

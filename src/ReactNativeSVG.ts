@@ -26,6 +26,8 @@ import ForeignObject from './elements/ForeignObject';
 import Filter from './elements/filters/Filter';
 import FeColorMatrix from './elements/filters/FeColorMatrix';
 import FeGaussianBlur from './elements/filters/FeGaussianBlur';
+import FeMerge from './elements/filters/FeMerge';
+import FeMergeNode from './elements/filters/FeMergeNode';
 import FeOffset from './elements/filters/FeOffset';
 
 import {
@@ -74,6 +76,7 @@ import {
   RNSVGFilter,
   RNSVGFeColorMatrix,
   RNSVGFeGaussianBlur,
+  RNSVGFeMerge,
   RNSVGFeOffset,
 } from './fabric';
 
@@ -111,10 +114,12 @@ export type { PatternProps } from './elements/Pattern';
 export type { MaskProps } from './elements/Mask';
 export type { MarkerProps } from './elements/Marker';
 export type { ForeignObjectProps } from './elements/ForeignObject';
-export type { FilterProps } from './elements/filters/Filter';
 export type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
 export type { FeGaussianBlurProps } from './elements/filters/FeGaussianBlur';
+export type { FeMergeProps } from './elements/filters/FeMerge';
+export type { FeMergeNodeProps } from './elements/filters/FeMergeNode';
 export type { FeOffsetProps } from './elements/filters/FeOffset';
+export type { FilterProps } from './elements/filters/Filter';
 export type { FilterPrimitiveCommonProps } from './elements/filters/FilterPrimitive';
 
 export * from './lib/extract/types';
@@ -156,6 +161,8 @@ export {
   Filter,
   FeColorMatrix,
   FeGaussianBlur,
+  FeMerge,
+  FeMergeNode,
   FeOffset,
   RNSVGMarker,
   RNSVGMask,
@@ -182,6 +189,7 @@ export {
   RNSVGFilter,
   RNSVGFeColorMatrix,
   RNSVGFeGaussianBlur,
+  RNSVGFeMerge,
   RNSVGFeOffset,
 };
 
