@@ -7,7 +7,7 @@ import {
   // @ts-ignore it is not seen in exports
   unstable_createElement as uce,
 } from 'react-native';
-
+import DOMPurify from 'dompurify';
 // @ts-ignore not exported by react-native-web
 import useElementLayout from 'react-native-web/dist/modules/useElementLayout';
 // @ts-ignore not exported by react-native-web
@@ -178,12 +178,19 @@ export interface XmlProps extends SvgProps {
   override?: SvgProps;
 }
 
+const sanitizeSvg = (svg: string): string => {
+  return DOMPurify.sanitize(svg, {
+    USE_PROFILES: { svg: true, svgFilters: true },
+  });
+};
+
 const SvgXml = React.forwardRef<HTMLOrSVGElement, XmlProps>(
   ({ xml, ...props }: XmlProps, forwardedRef) => {
+    const sanitizedXml = React.useMemo(() => sanitizeSvg(xml || ''), [xml]);
     const { innerSVG, svgAttributes } = React.useMemo(() => {
-      const { attributes, innerHTML } = parseSVG(xml || '');
+      const { attributes, innerHTML } = parseSVG(sanitizedXml || '');
       return { innerSVG: innerHTML, svgAttributes: kebabToCamel(attributes) };
-    }, [xml]);
+    }, [sanitizedXml]);
 
     const svgRef = React.useRef<SVGElement>(null);
     React.useLayoutEffect(() => {
@@ -306,9 +313,9 @@ const SvgXml = React.forwardRef<HTMLOrSVGElement, XmlProps>(
     // these props should override the xml props
     const overrideProps = React.useMemo(
       () => ({
-        ...removeUndefined(svgAttributes),
+        ...removeUndefined({ ...svgAttributes, dataName: undefined }),
         ...removeUndefined({
-          style: svgStyle,
+          style: { ...svgStyle, pointerEvents },
           transform: svgTransform,
           viewBox,
           preserveAspectRatio,
@@ -328,7 +335,6 @@ const SvgXml = React.forwardRef<HTMLOrSVGElement, XmlProps>(
           clipRule,
           clipPath,
           vectorEffect,
-          pointerEvents,
           id,
           markerStart,
           markerMid,

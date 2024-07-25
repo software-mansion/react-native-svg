@@ -61,13 +61,9 @@
     "check-archs-consistency": "node ./scripts/codegen-check-consistency.js",
     "sync-archs": "node ./scripts/codegen-sync-archs.js"
   },
-  "optionalDependencies": {
-    "react-native-web": ">=0.14.0"
-  },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*",
-    "react-native-web": ">=0.14.0"
+    "react-native": "*"
   },
   "dependencies": {
     "css-select": "^5.1.0",
@@ -80,6 +76,7 @@
     "@react-native/babel-plugin-codegen": "^0.71.0",
     "@react-native/eslint-config": "^0.72.2",
     "@types/css-tree": "^1.0.3",
+    "@types/dompurify": "^3.0.5",
     "@types/jest": "^27.5.2",
     "@types/node": "*",
     "@types/react": "^18.2.18",
@@ -89,6 +86,7 @@
     "babel-jest": "^28.1.0",
     "babel-plugin-module-resolver": "^5.0.0",
     "clang-format": "^1.8.0",
+    "dompurify": "^3.1.6",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^17.0.0",
@@ -106,6 +104,7 @@
     "react": "^18.2.0",
     "react-native": "^0.72.3",
     "react-native-builder-bob": "^0.20.4",
+    "react-native-web": "^0.19.10",
     "react-native-windows": "^0.72.4",
     "react-test-renderer": "^18.2.0",
     "release-it": "^14.12.5",

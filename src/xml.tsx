@@ -7,7 +7,6 @@ import Ellipse from './elements/Ellipse';
 import Polygon from './elements/Polygon';
 import Polyline from './elements/Polyline';
 import Line from './elements/Line';
-import type { SvgProps } from './elements/Svg';
 import Svg from './elements/Svg';
 import Path from './elements/Path';
 import G from './elements/G';
@@ -27,6 +26,18 @@ import Mask from './elements/Mask';
 import Marker from './elements/Marker';
 import Filter from './elements/filters/Filter';
 import FeColorMatrix from './elements/filters/FeColorMatrix';
+import type {
+  AST,
+  AstProps,
+  JsxAST,
+  Styles,
+  UriProps,
+  UriState,
+  XmlAST,
+  XmlProps,
+  XmlState,
+} from './commonTypes';
+import { fetchText } from './utils';
 
 export const tags: { [tag: string]: ComponentType } = {
   svg: Svg,
@@ -60,43 +71,6 @@ function missingTag() {
   return null;
 }
 
-export interface AST {
-  tag: string;
-  style?: Styles;
-  styles?: string;
-  priority?: Map<string, boolean | undefined>;
-  parent: AST | null;
-  children: (AST | string)[] | (JSX.Element | string)[];
-  props: {
-    [prop: string]: Styles | string | undefined;
-  };
-  Tag: ComponentType<React.PropsWithChildren>;
-}
-
-export interface XmlAST extends AST {
-  children: (XmlAST | string)[];
-  parent: XmlAST | null;
-}
-
-export interface JsxAST extends AST {
-  children: (JSX.Element | string)[];
-}
-
-export type AdditionalProps = {
-  onError?: (error: Error) => void;
-  override?: object;
-  onLoad?: () => void;
-  fallback?: JSX.Element;
-};
-
-export type UriProps = SvgProps & { uri: string | null } & AdditionalProps;
-export type UriState = { xml: string | null };
-
-export type XmlProps = SvgProps & { xml: string | null } & AdditionalProps;
-export type XmlState = { ast: JsxAST | null };
-
-export type AstProps = SvgProps & { ast: JsxAST | null } & AdditionalProps;
-
 export function SvgAst({ ast, override }: AstProps) {
   if (!ast) {
     return null;
@@ -124,14 +98,6 @@ export function SvgXml(props: XmlProps) {
     onError(error);
     return fallback ?? null;
   }
-}
-
-export async function fetchText(uri: string) {
-  const response = await fetch(uri);
-  if (response.ok || (response.status === 0 && uri.startsWith('file://'))) {
-    return await response.text();
-  }
-  throw new Error(`Fetching ${uri} failed with status ${response.status}`);
 }
 
 export function SvgUri(props: UriProps) {
@@ -230,8 +196,6 @@ const upperCase = (_match: string, letter: string) => letter.toUpperCase();
 
 export const camelCase = (phrase: string) =>
   phrase.replace(/[:-]([a-z])/g, upperCase);
-
-export type Styles = { [property: string]: string };
 
 export function getStyle(string: string): Styles {
   const style: Styles = {};
