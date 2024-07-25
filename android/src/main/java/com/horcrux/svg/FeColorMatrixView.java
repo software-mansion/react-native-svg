@@ -44,7 +44,7 @@ class FeColorMatrixView extends FilterPrimitiveView {
         float[] rawMatrix = new float[mValues.size()];
 
         for (int i = 0; i < this.mValues.size(); i++) {
-          rawMatrix[i] = (float) this.mValues.getDouble(i);
+          rawMatrix[i] = (float) this.mValues.getDouble(i) * (i % 5 == 4 ? 255 : 1);
         }
 
         colorMatrix.set(rawMatrix);
@@ -88,8 +88,7 @@ class FeColorMatrixView extends FilterPrimitiveView {
       case LUMINANCE_TO_ALPHA:
         colorMatrix.set(
             new float[] {
-              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2125f, 0.7154f, 0.0721f, 0, 0, 0, 0, 0,
-              0, 1
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2125f, 0.7154f, 0.0721f, 0, 0,
             });
         break;
     }
