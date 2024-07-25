@@ -9,6 +9,9 @@
 @property (nonatomic, strong) NSString *result;
 
 - (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results previousFilterResult:(CIImage *)previous;
+- (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results
+    previousFilterResult:(CIImage *)previous
+                     ctm:(CGAffineTransform)ctm;
 - (CIImage *)cropResult:(CIImage *)result;
 
 @end

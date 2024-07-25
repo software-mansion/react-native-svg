@@ -22,6 +22,8 @@ import type { TextProps } from './elements/Text';
 import type { TextPathProps } from './elements/TextPath';
 import type { TSpanProps } from './elements/TSpan';
 import type { UseProps } from './elements/Use';
+import type { FilterProps } from './elements/filters/Filter';
+import type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
 import type {
   GestureResponderEvent,
   TransformsStyle,
@@ -574,6 +576,14 @@ export class Marker extends WebShape<BaseProps & MarkerProps> {
 
 export class Pattern extends WebShape<BaseProps & PatternProps> {
   tag = 'pattern' as const;
+}
+
+export class Filter extends WebShape<BaseProps & FilterProps> {
+  tag = 'filter' as const;
+}
+
+export class FeColorMatrix extends WebShape<BaseProps & FeColorMatrixProps> {
+  tag = 'feColorMatrix' as const;
 }
 
 export default Svg;

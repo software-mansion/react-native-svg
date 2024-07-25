@@ -1,4 +1,4 @@
-typedef CF_ENUM(int32_t, RNSVGEdgeModeTypes) {
+typedef CF_ENUM(int32_t, RNSVGEdgeMode) {
   SVG_EDGEMODE_UNKNOWN,
   SVG_EDGEMODE_DUPLICATE,
   SVG_EDGEMODE_WRAP,
