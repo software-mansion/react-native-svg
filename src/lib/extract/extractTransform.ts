@@ -8,7 +8,10 @@ import type {
   TransformProps,
 } from './types';
 
-type TransformsStyleArray = Exclude<TransformsStyle['transform'], string>;
+export type TransformsStyleArray = Exclude<
+  TransformsStyle['transform'],
+  string
+>;
 
 function appendTransformProps(props: TransformedProps) {
   const { x, y, originX, originY, scaleX, scaleY, rotation, skewX, skewY } =

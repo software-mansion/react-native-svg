@@ -35,9 +35,13 @@ import {
   SvgUri,
   SvgXml,
   camelCase,
-  fetchText,
-  JsxAST,
   Middleware,
+} from './xml';
+
+import { fetchText } from './utils';
+
+import type {
+  JsxAST,
   Styles,
   UriProps,
   UriState,
@@ -45,7 +49,7 @@ import {
   XmlProps,
   XmlState,
   AstProps,
-} from './xml';
+} from './commonTypes';
 
 import {
   RNSVGCircle,

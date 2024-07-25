@@ -1,7 +1,7 @@
 import type { NumberProp } from './types';
 
 export default function extractPolyPoints(
-  points: string | readonly NumberProp[],
+  points: string | readonly NumberProp[]
 ) {
   const polyPoints = Array.isArray(points) ? points.join(',') : points;
   return (polyPoints as string)

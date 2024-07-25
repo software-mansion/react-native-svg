@@ -26,7 +26,6 @@ import type { FilterProps } from './elements/filters/Filter';
 import type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
 import type {
   GestureResponderEvent,
-  TransformsStyle,
   ImageProps as RNImageProps,
 } from 'react-native';
 import {
@@ -40,8 +39,15 @@ import type {
 } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
-import { transformsArrayToProps } from './lib/extract/extractTransform';
+import {
+  transformsArrayToProps,
+  TransformsStyleArray,
+} from './lib/extract/extractTransform';
 import { resolveAssetUri } from './lib/resolveAssetUri';
+
+export { default as SvgXml } from './SvgXml.web';
+export { default as SvgCss } from './SvgXml.web';
+export { default as SvgUri } from './SvgUri.web';
 
 type BlurEvent = object;
 type FocusEvent = object;
@@ -153,15 +159,15 @@ function parseTransformProp(
 
   if (Array.isArray(transform)) {
     if (typeof transform[0] === 'number') {
-      transformArray.push(`matrix(${transform.join(' ')})`);
+      transformArray.unshift(`matrix(${transform.join(' ')})`);
     } else {
       const stringifiedProps = transformsArrayToProps(
-        transform as TransformsStyle['transform']
+        transform as TransformsStyleArray
       );
-      transformArray.push(...stringifyTransformProps(stringifiedProps));
+      transformArray.unshift(...stringifyTransformProps(stringifiedProps));
     }
   } else if (typeof transform === 'string') {
-    transformArray.push(transform);
+    transformArray.unshift(transform);
   }
 
   return transformArray.length ? transformArray.join(' ') : undefined;
@@ -311,7 +317,11 @@ const measureLayout = (
     setTimeout(() => {
       // @ts-expect-error TODO: handle it better
       const relativeRect = getBoundingClientRect(relativeNode);
-      const { height, left, top, width } = getBoundingClientRect(node);
+      const nodeRect = getBoundingClientRect(node);
+      if (!nodeRect || !relativeRect) {
+        return;
+      }
+      const { height, left, top, width } = nodeRect;
       const x = left - relativeRect.left;
       const y = top - relativeRect.top;
       callback(x, y, width, height, left, top);
