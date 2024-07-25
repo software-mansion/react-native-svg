@@ -542,3 +542,4 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
 
   return null;
 }
+export { tags };

@@ -17,7 +17,7 @@ export type FeColorMatrixProps = {
 export default class FeColorMatrix extends FilterPrimitive<FeColorMatrixProps> {
   static displayName = 'FeColorMatrix';
 
-  static defaultProps = {
+  static defaultProps: FeColorMatrixProps = {
     ...this.defaultPrimitiveProps,
     type: 'matrix',
     values: '',

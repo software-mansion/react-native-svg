@@ -20,7 +20,7 @@ export interface FeGaussianBlurProps {
 export default class FeGaussianBlur extends FilterPrimitive<FeGaussianBlurProps> {
   static displayName = 'FeGaussianBlur';
 
-  static defaultProps = {
+  static defaultProps: FeGaussianBlurProps = {
     ...this.defaultPrimitiveProps,
     stdDeviation: 0,
     edgeMode: 'none',
