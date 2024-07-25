@@ -12,3 +12,6 @@ export function pickNotNil(object: { [prop: string]: unknown }) {
 }
 
 export const idPattern = /#([^)]+)\)?$/;
+
+export const getRandomNumber = () =>
+  Math.floor(Math.random() * Math.floor(Math.random() * Date.now()));

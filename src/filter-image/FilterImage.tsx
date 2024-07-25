@@ -1,18 +1,22 @@
+import { useMemo } from 'react';
 import {
   ImageProps,
   ImageStyle,
+  Platform,
   Image as RNImage,
   StyleProp,
   StyleSheet,
   View,
 } from 'react-native';
 import { Filter, Image, Svg } from '../index';
-import { extractResizeMode } from './extract/extractImage';
-import { Filters } from './types';
+import { resolveAssetUri } from '../lib/resolveAssetUri';
+import { getRandomNumber } from '../lib/util';
 import {
   extractFiltersCss,
   mapFilterToComponent,
 } from './extract/extractFilters';
+import { extractResizeMode } from './extract/extractImage';
+import { Filters } from './types';
 
 export interface FilterImageProps extends ImageProps {
   style?: StyleProp<ImageStyle & { filter?: string | Filters }> | undefined;
@@ -23,10 +27,14 @@ export const FilterImage = (props: FilterImageProps) => {
   const { filters = [], source, style, ...imageProps } = props;
   const styles = StyleSheet.flatten(style);
   const extractedFilters = [...filters, ...extractFiltersCss(styles?.filter)];
+  const filterId = useMemo(() => `RNSVG-${getRandomNumber()}`, []);
 
-  const src = RNImage.resolveAssetSource(source);
-  const width = props.width || styles?.width || src.width;
-  const height = props.height || styles?.height || src.height;
+  const src =
+    Platform.OS === 'web'
+      ? resolveAssetUri(source)
+      : RNImage.resolveAssetSource(source);
+  const width = props.width || styles?.width || src?.width;
+  const height = props.height || styles?.height || src?.height;
   const preserveAspectRatio = extractResizeMode(props.resizeMode);
 
   return (
@@ -41,7 +49,7 @@ export const FilterImage = (props: FilterImageProps) => {
           width="100%"
           height="100%"
           preserveAspectRatio={preserveAspectRatio}
-          filter={extractedFilters.length > 0 ? 'url(#filter)' : undefined}
+          filter={extractedFilters.length > 0 ? `url(#${filterId})` : undefined}
         />
       </Svg>
     </View>
