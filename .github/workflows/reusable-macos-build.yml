@@ -49,7 +49,7 @@ jobs:
             ${{ matrix.working-directory }}/macos/Pods
             ~/Library/Caches/CocoaPods
             ~/.cocoapods
-          key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/macos/Podfile.lock', matrix.working-directory)) }}
+          key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/macos/Podfile.lock', matrix.working-directory)) }}-${{ inputs.new_arch_enabled }}
 
       - name: Install Pods
         working-directory: ${{ matrix.working-directory }}/macos
@@ -59,7 +59,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-macos-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/macos/Podfile.lock', matrix.working-directory)) }}
+          key: ${{ runner.os }}-macos-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/macos/Podfile.lock', matrix.working-directory)) }}-${{ inputs.new_arch_enabled }}
 
       - name: Build app
         working-directory: ${{ matrix.working-directory }}
