@@ -52,13 +52,13 @@ RCT_ENUM_CONVERTER(
     intValue)
 
 RCT_ENUM_CONVERTER(
-    RNSVGEdgeModeTypes,
+    RNSVGEdgeMode,
     (@{
       @"duplicate" : @(SVG_EDGEMODE_DUPLICATE),
       @"wrap" : @(SVG_EDGEMODE_WRAP),
       @"none" : @(SVG_EDGEMODE_NONE),
     }),
-    SVG_FECOLORMATRIX_TYPE_UNKNOWN,
+    SVG_EDGEMODE_UNKNOWN,
     intValue)
 
 RCT_ENUM_CONVERTER(
