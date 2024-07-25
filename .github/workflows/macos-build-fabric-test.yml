@@ -1,8 +1,8 @@
-name: Test paper macOS build
+name: Test new architecture macOS build
 on:
   pull_request:
     paths:
-      - '.github/workflows/macos-build-test.yml'
+      - '.github/workflows/macos-fabric-test.yml'
       - 'RNSVG.podspec'
       - 'apple/**'
       - 'macos-example/package.json'
@@ -18,4 +18,4 @@ jobs:
     if: github.repository == 'software-mansion/react-native-svg'
     uses: ./.github/workflows/reusable-macos-build.yml
     with:
-      new_arch_enabled: '0'
+      new_arch_enabled: '1'

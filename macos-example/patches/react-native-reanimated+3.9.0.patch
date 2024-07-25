@@ -1,0 +1,16 @@
+diff --git a/node_modules/react-native-reanimated/Common/cpp/NativeModules/NativeReanimatedModule.cpp b/node_modules/react-native-reanimated/Common/cpp/NativeModules/NativeReanimatedModule.cpp
+index a1ace04..58d0303 100644
+--- a/node_modules/react-native-reanimated/Common/cpp/NativeModules/NativeReanimatedModule.cpp
++++ b/node_modules/react-native-reanimated/Common/cpp/NativeModules/NativeReanimatedModule.cpp
+@@ -37,11 +37,6 @@
+ 
+ using namespace facebook;
+ 
+-#if REACT_NATIVE_MINOR_VERSION == 73 && defined(RCT_NEW_ARCH_ENABLED)
+-// Android can't find the definition of this static field
+-bool CoreFeatures::useNativeState;
+-#endif
+-
+ namespace reanimated {
+ 
+ NativeReanimatedModule::NativeReanimatedModule(

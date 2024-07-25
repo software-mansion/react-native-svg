@@ -1297,7 +1297,37 @@ More info: <https://www.w3.org/TR/SVG11/filters.html>
 
 `FilterImage` is a new component that is not strictly related to SVG. Its behavior should be the same as a regular `Image` component from React Native with one exception - the additional prop `filters`, which accepts an array of filters to apply to the image.
 
-### Example
+Filters can be applied in two ways
+
+- through `filters` prop
+- or with CSS API through style prop
+  https://developer.mozilla.org/en-US/docs/Web/CSS/filter
+
+### Examples
+
+#### CSS filter API
+
+```tsx
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { FilterImage } from 'react-native-svg/filter-image';
+
+const myImage = require('./myImage.jpg');
+
+export default () => {
+  return <FilterImage style={styles.image} source={myImage} />;
+};
+
+const styles = StyleSheet.create({
+  image: {
+    width: 200,
+    height: 200,
+    filter: 'saturate(3) grayscale(100%)',
+  },
+});
+```
+
+#### `filters` prop
 
 ```tsx
 import React from 'react';
@@ -1312,9 +1342,9 @@ export default () => {
       style={styles.image}
       source={myImage}
       filters={[
-        { name: 'colorMatrix', type: 'saturate', values: 0.2 },
+        { name: 'feColorMatrix', type: 'saturate', values: 0.2 },
         {
-          name: 'colorMatrix',
+          name: 'feColorMatrix',
           type: 'matrix',
           values: [
             0.2, 0.2, 0.2, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0, 0,
@@ -1325,6 +1355,7 @@ export default () => {
     />
   );
 };
+
 const styles = StyleSheet.create({
   image: {
     width: 200,
