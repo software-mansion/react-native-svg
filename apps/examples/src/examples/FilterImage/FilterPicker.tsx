@@ -14,14 +14,14 @@ const img = require('../../assets/office.jpg');
 const normal: Filters = [];
 const losAngeles: Filters = [
   {
-    name: 'colorMatrix',
+    name: 'feColorMatrix',
     type: 'matrix',
     values: [1.8, 0, 0, 0, 0, 0, 1.3, 0, 0, 0, 0, 0, 1.2, 0, 0, 0, 0, 0, 1, 0],
   },
 ];
 const lagos: Filters = [
   {
-    name: 'colorMatrix',
+    name: 'feColorMatrix',
     type: 'matrix',
     values: [
       1.4, 0, 0, 0, 0, 0, 1.2, 0, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 0, 0.9, 0,
@@ -29,11 +29,10 @@ const lagos: Filters = [
   },
 ];
 const tokyo: Filters = [
-  {name: 'colorMatrix', type: 'saturate', values: [1.5]},
+  {name: 'feColorMatrix', type: 'saturate', values: [1.5]},
   {
-    name: 'colorMatrix',
+    name: 'feColorMatrix',
     type: 'matrix',
-
     values: [
       0.2, 0.2, 0.2, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0, 0, 0, 1,
       0,
@@ -41,11 +40,11 @@ const tokyo: Filters = [
   },
 ];
 const saturated: Filters = [
-  {name: 'colorMatrix', type: 'saturate', values: [1.5]},
+  {name: 'feColorMatrix', type: 'saturate', values: [1.5]},
 ];
 const boring: Filters = [
   {
-    name: 'colorMatrix',
+    name: 'feColorMatrix',
     type: 'matrix',
     values: [
       0.6965, 0.3845, 0.0945, 0, 0, 0.1745, 0.8430000000000001, 0.084, 0, 0,
@@ -131,10 +130,10 @@ const styles = StyleSheet.create({
 
 const icon = (
   <FilterImage
-    filters={[{name: 'colorMatrix', type: 'saturate', values: [0.5]}]}
     source={img}
     width={30}
     height={30}
+    style={{filter: 'saturate(2.5)'}}
   />
 );
 

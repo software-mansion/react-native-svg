@@ -26,6 +26,7 @@ import Mask from './elements/Mask';
 import Marker from './elements/Marker';
 import Filter from './elements/filters/Filter';
 import FeColorMatrix from './elements/filters/FeColorMatrix';
+import FeGaussianBlur from './elements/filters/FeGaussianBlur';
 import type {
   AST,
   AstProps,
@@ -65,6 +66,7 @@ export const tags: { [tag: string]: ComponentType } = {
   marker: Marker,
   filter: Filter,
   feColorMatrix: FeColorMatrix,
+  feGaussianBlur: FeGaussianBlur,
 };
 
 function missingTag() {

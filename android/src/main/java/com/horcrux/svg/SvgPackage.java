@@ -224,6 +224,15 @@ public class SvgPackage extends TurboReactPackage implements ViewManagerOnDemand
                 }
               }));
       specs.put(
+          FeGaussianBlurManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new FeGaussianBlurManager();
+                }
+              }));
+      specs.put(
           ForeignObjectManager.REACT_CLASS,
           ModuleSpec.viewManagerSpec(
               new Provider<NativeModule>() {

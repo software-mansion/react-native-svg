@@ -160,8 +160,6 @@ using namespace facebook::react;
   [filter setValue:inputImage forKey:@"inputImage"];
 
   return [filter valueForKey:@"outputImage"];
-
-  return nil;
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
