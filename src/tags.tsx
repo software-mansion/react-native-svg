@@ -23,6 +23,8 @@ import Mask from './elements/Mask';
 import Marker from './elements/Marker';
 import Filter from './elements/filters/Filter';
 import FeColorMatrix from './elements/filters/FeColorMatrix';
+import FeGaussianBlur from './elements/filters/FeGaussianBlur';
+import FeOffset from './elements/filters/FeOffset';
 
 export const tags = {
   circle: Circle,
@@ -31,6 +33,8 @@ export const tags = {
   ellipse: Ellipse,
   filter: Filter,
   feColorMatrix: FeColorMatrix,
+  feGaussianBlur: FeGaussianBlur,
+  feOffset: FeOffset,
   g: G,
   image: Image,
   line: Line,
