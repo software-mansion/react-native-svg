@@ -47,4 +47,4 @@ export const tags = {
   textPath: TextPath,
   tspan: TSpan,
   use: Use,
-};
+} as const;

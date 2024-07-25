@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import type { ComponentType, ComponentProps } from 'react';
 import * as React from 'react';
 import { Component, useEffect, useMemo, useState } from 'react';
 import type { SvgProps } from './elements/Svg';
@@ -8,6 +8,7 @@ function missingTag() {
   return null;
 }
 
+type Tag = ComponentType<ComponentProps<(typeof tags)[keyof typeof tags]>>;
 export interface AST {
   tag: string;
   style?: Styles;
@@ -18,7 +19,7 @@ export interface AST {
   props: {
     [prop: string]: Styles | string | undefined;
   };
-  Tag: ComponentType<React.PropsWithChildren>;
+  Tag: Tag;
 }
 
 export interface XmlAST extends AST {
@@ -332,14 +333,14 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
       return closingTag;
     }
 
-    const tag = getName();
+    const tag = getName() as keyof typeof tags;
     const props: { [prop: string]: Styles | string | undefined } = {};
     const element: XmlAST = {
       tag,
       props,
       children: [],
       parent: currentElement,
-      Tag: getTag(tag as keyof typeof tags),
+      Tag: (tags[tag] || missingTag) as Tag,
     };
 
     if (currentElement) {
@@ -434,16 +435,6 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     }
 
     return name;
-  }
-
-  function getTag(
-    name: keyof typeof tags
-  ): ComponentType<{ children?: React.ReactNode }> {
-    type Element = (typeof tags)[keyof typeof tags];
-    const Tag: Element | undefined = tags[name];
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return Tag || missingTag;
   }
 
   function getAttributes(props: {
