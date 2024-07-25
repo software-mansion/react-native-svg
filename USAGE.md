@@ -1261,6 +1261,7 @@ Currently supported\* filters are:
 
 - FeColorMatrix
 - FeGaussianBlur
+- FeMerge
 - FeOffset
 
 \*_More filters are coming soon_
