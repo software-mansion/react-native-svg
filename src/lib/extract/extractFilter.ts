@@ -61,21 +61,26 @@ export const extractFeGaussianBlur = (
 ): FeGaussianBlurNativeProps => {
   const extracted: FeGaussianBlurNativeProps = {};
 
-  if (props.in) extracted.in1 = props.in;
-  if (props.stdDeviation !== undefined) {
-    if (
-      typeof props.stdDeviation === 'number' ||
-      (typeof props.stdDeviation === 'string' &&
-        !props.stdDeviation.match(spaceReg))
-    ) {
-      extracted.stdDeviationX = Number(props.stdDeviation) || 0;
-      extracted.stdDeviationY = Number(props.stdDeviation) || 0;
-    } else {
-      const stdDeviation = props.stdDeviation.split(spaceReg);
-      extracted.stdDeviationX = Number(stdDeviation[0]) || 0;
-      extracted.stdDeviationY = Number(stdDeviation[1]) || 0;
-    }
+  if (props.in) {
+    extracted.in1 = props.in;
   }
-  if (props.edgeMode) extracted.edgeMode = props.edgeMode;
+  if (
+    typeof props.stdDeviation === 'string' &&
+    props.stdDeviation.match(spaceReg)
+  ) {
+    const stdDeviation = props.stdDeviation.split(spaceReg);
+    extracted.stdDeviationX = Number(stdDeviation[0]) || 0;
+    extracted.stdDeviationY = Number(stdDeviation[1]) || 0;
+  } else if (
+    typeof props.stdDeviation === 'number' ||
+    (typeof props.stdDeviation === 'string' &&
+      !props.stdDeviation.match(spaceReg))
+  ) {
+    extracted.stdDeviationX = Number(props.stdDeviation) || 0;
+    extracted.stdDeviationY = Number(props.stdDeviation) || 0;
+  }
+  if (props.edgeMode) {
+    extracted.edgeMode = props.edgeMode;
+  }
   return extracted;
 };

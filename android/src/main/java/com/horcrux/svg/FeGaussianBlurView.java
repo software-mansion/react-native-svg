@@ -56,18 +56,23 @@ class FeGaussianBlurView extends FilterPrimitiveView {
 
     Bitmap outputBitmap = Bitmap.createBitmap(bitmap);
 
+    // Create a RenderScript with blur
     RenderScript rs = RenderScript.create(context);
     ScriptIntrinsicBlur blurScript = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
 
+    // Allocate memory for Renderscript to work with
     Allocation tmpIn = Allocation.createFromBitmap(rs, bitmap);
     Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
 
+    // Set the radius of the blur, allocation input, and output
     blurScript.setRadius(radius);
     blurScript.setInput(tmpIn);
     blurScript.forEach(tmpOut);
 
+    // Copy the allocation output to the output bitmap and release memory
     tmpOut.copyTo(outputBitmap);
-
+    tmpIn.destroy();
+    tmpOut.destroy();
     rs.destroy();
 
     return Bitmap.createScaledBitmap(outputBitmap, bitmap.getWidth(), bitmap.getHeight(), false);
