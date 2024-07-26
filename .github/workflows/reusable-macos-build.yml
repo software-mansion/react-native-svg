@@ -52,14 +52,8 @@ jobs:
           key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/macos/Podfile.lock', matrix.working-directory)) }}-${{ inputs.new_arch_enabled }}
 
       - name: Install Pods
-        if: ${{ inputs.new_arch_enabled == '1' }}
         working-directory: ${{ matrix.working-directory }}/macos
-        run: RCT_NEW_ARCH_ENABLED=1 pod install
-
-      - name: Install Pods
-        if: ${{ inputs.new_arch_enabled == '0' }}
-        working-directory: ${{ matrix.working-directory }}/macos
-        run: pod install
+        run: rm -rf Pods && rm -rf build && pod install
 
       - name: Restore build artifacts from cache
         uses: actions/cache@v3
