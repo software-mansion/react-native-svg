@@ -12,8 +12,8 @@ target 'FabricMacOSExample-macOS' do
 
   use_react_native!(
     :path => '../node_modules/react-native-macos',
-    :hermes_enabled => false,
-    :fabric_enabled => true,
+    :hermes_enabled => true,
+    :fabric_enabled => false,
     # Flipper is not compatible w/ macOS
     :flipper_configuration => FlipperConfiguration.disabled,
     # An absolute path to your application root.

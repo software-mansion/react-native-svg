@@ -19,7 +19,7 @@ jobs:
     runs-on: macos-14
     strategy:
       matrix:
-        working-directory: [macos-example]
+        working-directory: [fabricmacos-example]
       fail-fast: false
     concurrency:
       group: macos-${{ matrix.working-directory }}-${{ github.ref }}
@@ -60,7 +60,7 @@ jobs:
 
       - name: Install Pods
         working-directory: ${{ matrix.working-directory }}/macos
-        run: pod install
+        run: RCT_NEW_ARCH_ENABLED=1 pod install
 
       - name: Restore build artifacts from cache
         uses: actions/cache@v3
