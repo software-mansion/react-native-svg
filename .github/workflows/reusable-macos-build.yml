@@ -51,13 +51,13 @@ jobs:
             ~/.cocoapods
           key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/macos/Podfile.lock', matrix.working-directory)) }}-${{ inputs.new_arch_enabled }}
 
-      if: ${{ inputs.new_arch_enabled }} == 1
       - name: Install Pods
+        if: ${{ inputs.new_arch_enabled == '1' }}
         working-directory: ${{ matrix.working-directory }}/macos
         run: RCT_NEW_ARCH_ENABLED=1 pod install
 
-      if: ${{ inputs.new_arch_enabled }} == 0
-        - name: Install Pods
+      - name: Install Pods
+        if: ${{ inputs.new_arch_enabled == '0' }}
         working-directory: ${{ matrix.working-directory }}/macos
         run: pod install
 
