@@ -26,7 +26,6 @@ import type { FilterProps } from './elements/filters/Filter';
 import type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
 import type {
   GestureResponderEvent,
-  TransformsStyle,
   ImageProps as RNImageProps,
 } from 'react-native';
 import {
