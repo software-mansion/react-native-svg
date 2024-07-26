@@ -80,7 +80,10 @@ using namespace facebook::react;
     NSString *nodeKey = [self.nodes objectAtIndex:i];
     CIImage *inputImage =
         [nodeKey isEqual:[NSNull null]] ? previous : [results objectForKey:[self.nodes objectAtIndex:i]];
-    if (i == 0) {
+    if (inputImage == nil) {
+      continue;
+    }
+    if (result == nil) {
       result = inputImage;
       continue;
     }
