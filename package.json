@@ -124,5 +124,6 @@
     "android": {
       "javaPackageName": "com.horcrux.svg"
     }
-  }
+  },
+  "packageManager": "yarn@3.6.4"
 }
