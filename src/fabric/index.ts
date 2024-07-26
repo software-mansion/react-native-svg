@@ -23,6 +23,7 @@ import RNSVGUse from './UseNativeComponent';
 import RNSVGFilter from './FilterNativeComponent';
 import RNSVGFeColorMatrix from './FeColorMatrixNativeComponent';
 import RNSVGFeGaussianBlur from './FeGaussianBlurNativeComponent';
+import RNSVGFeOffset from './FeOffsetNativeComponent';
 
 export {
   RNSVGCircle,
@@ -50,4 +51,5 @@ export {
   RNSVGFilter,
   RNSVGFeColorMatrix,
   RNSVGFeGaussianBlur,
+  RNSVGFeOffset,
 };
