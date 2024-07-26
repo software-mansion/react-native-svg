@@ -29,7 +29,6 @@ class FeMergeView extends FilterPrimitiveView {
     Canvas canvas = new Canvas(result);
     int nodesSize = this.mNodes.size();
     for (int i = 0; i < nodesSize; i++) {
-      ;
       Bitmap sourceFromResults =
           this.mNodes.getType(i) == ReadableType.String
               ? resultsMap.get(this.mNodes.getString(i))
