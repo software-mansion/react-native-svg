@@ -53,7 +53,9 @@ jobs:
 
       - name: Install Pods
         working-directory: ${{ matrix.working-directory }}/macos
+        if: ${{ inputs.new_arch_enabled }} == 1
         run: RCT_NEW_ARCH_ENABLED=${{ inputs.new_arch_enabled }} pod install
+        else: pod install
 
       - name: Restore build artifacts from cache
         uses: actions/cache@v3
