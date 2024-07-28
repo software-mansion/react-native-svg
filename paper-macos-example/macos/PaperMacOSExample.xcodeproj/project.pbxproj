@@ -7,27 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D0CB14318F69CC1F86D93C5 /* libPods-FabricMacOSExample-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A4FB6D0F9CF65D2316A4C2E /* libPods-FabricMacOSExample-macOS.a */; };
 		5142014D2437B4B30078DB4F /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5142014C2437B4B30078DB4F /* AppDelegate.mm */; };
 		514201522437B4B40078DB4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 514201512437B4B40078DB4F /* Assets.xcassets */; };
 		514201552437B4B40078DB4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 514201532437B4B40078DB4F /* Main.storyboard */; };
 		514201582437B4B40078DB4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 514201572437B4B40078DB4F /* main.m */; };
+		982B0FFA8A60B718DA7D3A56 /* libPods-PaperMacOSExample-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1656368CC5B48B587F373209 /* libPods-PaperMacOSExample-macOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		13B07F961A680F5B00A75B9A /* FabricMacOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FabricMacOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2C6097186FED0C3F65640CFE /* Pods-FabricMacOSExample-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FabricMacOSExample-macOS.release.xcconfig"; path = "Target Support Files/Pods-FabricMacOSExample-macOS/Pods-FabricMacOSExample-macOS.release.xcconfig"; sourceTree = "<group>"; };
-		514201492437B4B30078DB4F /* FabricMacOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FabricMacOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* PaperMacOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperMacOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1656368CC5B48B587F373209 /* libPods-PaperMacOSExample-macOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PaperMacOSExample-macOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		514201492437B4B30078DB4F /* PaperMacOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperMacOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5142014B2437B4B30078DB4F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5142014C2437B4B30078DB4F /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		514201512437B4B40078DB4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		514201542437B4B40078DB4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		514201562437B4B40078DB4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		514201572437B4B40078DB4F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		514201592437B4B40078DB4F /* FabricMacOSExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FabricMacOSExample.entitlements; sourceTree = "<group>"; };
-		7A4FB6D0F9CF65D2316A4C2E /* libPods-FabricMacOSExample-macOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FabricMacOSExample-macOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D7D86233CAA4A4D7507EC2C8 /* Pods-FabricMacOSExample-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FabricMacOSExample-macOS.debug.xcconfig"; path = "Target Support Files/Pods-FabricMacOSExample-macOS/Pods-FabricMacOSExample-macOS.debug.xcconfig"; sourceTree = "<group>"; };
+		514201592437B4B40078DB4F /* PaperMacOSExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PaperMacOSExample.entitlements; sourceTree = "<group>"; };
+		ACBD3C18F70A8C7C955A2CE0 /* Pods-PaperMacOSExample-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PaperMacOSExample-macOS.release.xcconfig"; path = "Target Support Files/Pods-PaperMacOSExample-macOS/Pods-PaperMacOSExample-macOS.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EF69AF76FA250837EEAAC288 /* Pods-PaperMacOSExample-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PaperMacOSExample-macOS.debug.xcconfig"; path = "Target Support Files/Pods-PaperMacOSExample-macOS/Pods-PaperMacOSExample-macOS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,7 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D0CB14318F69CC1F86D93C5 /* libPods-FabricMacOSExample-macOS.a in Frameworks */,
+				982B0FFA8A60B718DA7D3A56 /* libPods-PaperMacOSExample-macOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,22 +53,12 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				7A4FB6D0F9CF65D2316A4C2E /* libPods-FabricMacOSExample-macOS.a */,
+				1656368CC5B48B587F373209 /* libPods-PaperMacOSExample-macOS.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3C71D9F51455BED832A9A679 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				D7D86233CAA4A4D7507EC2C8 /* Pods-FabricMacOSExample-macOS.debug.xcconfig */,
-				2C6097186FED0C3F65640CFE /* Pods-FabricMacOSExample-macOS.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		5142014A2437B4B30078DB4F /* FabricMacOSExample-macOS */ = {
+		5142014A2437B4B30078DB4F /* PaperMacOSExample-macOS */ = {
 			isa = PBXGroup;
 			children = (
 				5142014B2437B4B30078DB4F /* AppDelegate.h */,
@@ -77,9 +67,9 @@
 				514201532437B4B40078DB4F /* Main.storyboard */,
 				514201562437B4B40078DB4F /* Info.plist */,
 				514201572437B4B40078DB4F /* main.m */,
-				514201592437B4B40078DB4F /* FabricMacOSExample.entitlements */,
+				514201592437B4B40078DB4F /* PaperMacOSExample.entitlements */,
 			);
-			path = "FabricMacOSExample-macOS";
+			path = "PaperMacOSExample-macOS";
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -92,11 +82,11 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				5142014A2437B4B30078DB4F /* FabricMacOSExample-macOS */,
+				5142014A2437B4B30078DB4F /* PaperMacOSExample-macOS */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				3C71D9F51455BED832A9A679 /* Pods */,
+				9348B3E2C8EED0C8F847828C /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -106,18 +96,28 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* FabricMacOSExample.app */,
-				514201492437B4B30078DB4F /* FabricMacOSExample.app */,
+				13B07F961A680F5B00A75B9A /* PaperMacOSExample.app */,
+				514201492437B4B30078DB4F /* PaperMacOSExample.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9348B3E2C8EED0C8F847828C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EF69AF76FA250837EEAAC288 /* Pods-PaperMacOSExample-macOS.debug.xcconfig */,
+				ACBD3C18F70A8C7C955A2CE0 /* Pods-PaperMacOSExample-macOS.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		13B07F861A680F5B00A75B9A /* FabricMacOSExample-iOS */ = {
+		13B07F861A680F5B00A75B9A /* PaperMacOSExample-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "FabricMacOSExample-iOS" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PaperMacOSExample-iOS" */;
 			buildPhases = (
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
@@ -128,30 +128,30 @@
 			);
 			dependencies = (
 			);
-			name = "FabricMacOSExample-iOS";
-			productName = FabricMacOSExample;
-			productReference = 13B07F961A680F5B00A75B9A /* FabricMacOSExample.app */;
+			name = "PaperMacOSExample-iOS";
+			productName = PaperMacOSExample;
+			productReference = 13B07F961A680F5B00A75B9A /* PaperMacOSExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		514201482437B4B30078DB4F /* FabricMacOSExample-macOS */ = {
+		514201482437B4B30078DB4F /* PaperMacOSExample-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5142015A2437B4B40078DB4F /* Build configuration list for PBXNativeTarget "FabricMacOSExample-macOS" */;
+			buildConfigurationList = 5142015A2437B4B40078DB4F /* Build configuration list for PBXNativeTarget "PaperMacOSExample-macOS" */;
 			buildPhases = (
 				1A938104A937498D81B3BD3B /* [CP] Check Pods Manifest.lock */,
 				514201452437B4B30078DB4F /* Sources */,
 				514201462437B4B30078DB4F /* Frameworks */,
 				514201472437B4B30078DB4F /* Resources */,
 				381D8A6E24576A4E00465D17 /* Bundle React Native code and images */,
-				AB250294988F3DD4697BDF77 /* [CP] Copy Pods Resources */,
-				D9638351349CFE02CE7C80A3 /* [CP] Embed Pods Frameworks */,
+				D63F043FB5BA4885270555AE /* [CP] Copy Pods Resources */,
+				384E31E09B8542AF46C4CDBF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "FabricMacOSExample-macOS";
-			productName = FabricMacOSExample;
-			productReference = 514201492437B4B30078DB4F /* FabricMacOSExample.app */;
+			name = "PaperMacOSExample-macOS";
+			productName = PaperMacOSExample;
+			productReference = 514201492437B4B30078DB4F /* PaperMacOSExample.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -171,7 +171,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "FabricMacOSExample" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "PaperMacOSExample" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -184,8 +184,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* FabricMacOSExample-iOS */,
-				514201482437B4B30078DB4F /* FabricMacOSExample-macOS */,
+				13B07F861A680F5B00A75B9A /* PaperMacOSExample-iOS */,
+				514201482437B4B30078DB4F /* PaperMacOSExample-macOS */,
 			);
 		};
 /* End PBXProject section */
@@ -239,7 +239,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FabricMacOSExample-macOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-PaperMacOSExample-macOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -264,31 +264,13 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native-macos/scripts/react-native-xcode.sh\n";
 		};
-		AB250294988F3DD4697BDF77 /* [CP] Copy Pods Resources */ = {
+		384E31E09B8542AF46C4CDBF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FabricMacOSExample-macOS/Pods-FabricMacOSExample-macOS-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/RCTI18nStrings.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCTI18nStrings.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FabricMacOSExample-macOS/Pods-FabricMacOSExample-macOS-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D9638351349CFE02CE7C80A3 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FabricMacOSExample-macOS/Pods-FabricMacOSExample-macOS-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-PaperMacOSExample-macOS/Pods-PaperMacOSExample-macOS-frameworks.sh",
 				"${PODS_ROOT}/hermes-engine/destroot/Library/Frameworks/macosx/hermes.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -297,7 +279,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FabricMacOSExample-macOS/Pods-FabricMacOSExample-macOS-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PaperMacOSExample-macOS/Pods-PaperMacOSExample-macOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D63F043FB5BA4885270555AE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PaperMacOSExample-macOS/Pods-PaperMacOSExample-macOS-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/RCTI18nStrings.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCTI18nStrings.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PaperMacOSExample-macOS/Pods-PaperMacOSExample-macOS-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -340,7 +340,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = "FabricMacOSExample-iOS/Info.plist";
+				INFOPLIST_FILE = "PaperMacOSExample-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -348,7 +348,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = FabricMacOSExample;
+				PRODUCT_NAME = PaperMacOSExample;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -361,7 +361,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = "FabricMacOSExample-iOS/Info.plist";
+				INFOPLIST_FILE = "PaperMacOSExample-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -369,7 +369,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = FabricMacOSExample;
+				PRODUCT_NAME = PaperMacOSExample;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -377,13 +377,13 @@
 		};
 		5142015B2437B4B40078DB4F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D7D86233CAA4A4D7507EC2C8 /* Pods-FabricMacOSExample-macOS.debug.xcconfig */;
+			baseConfigurationReference = EF69AF76FA250837EEAAC288 /* Pods-PaperMacOSExample-macOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				INFOPLIST_FILE = "FabricMacOSExample-macos/Info.plist";
+				INFOPLIST_FILE = "PaperMacOSExample-macos/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_LDFLAGS = (
@@ -392,7 +392,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = FabricMacOSExample;
+				PRODUCT_NAME = PaperMacOSExample;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -401,12 +401,12 @@
 		};
 		5142015C2437B4B40078DB4F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2C6097186FED0C3F65640CFE /* Pods-FabricMacOSExample-macOS.release.xcconfig */;
+			baseConfigurationReference = ACBD3C18F70A8C7C955A2CE0 /* Pods-PaperMacOSExample-macOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = "FabricMacOSExample-macos/Info.plist";
+				INFOPLIST_FILE = "PaperMacOSExample-macos/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_LDFLAGS = (
@@ -415,7 +415,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = FabricMacOSExample;
+				PRODUCT_NAME = PaperMacOSExample;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
 			};
@@ -478,14 +478,8 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = (
-					"$(inherited)",
-					" ",
-				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					" ",
@@ -545,14 +539,8 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = (
-					"$(inherited)",
-					" ",
-				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					" ",
@@ -567,7 +555,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "FabricMacOSExample-iOS" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PaperMacOSExample-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -576,7 +564,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5142015A2437B4B40078DB4F /* Build configuration list for PBXNativeTarget "FabricMacOSExample-macOS" */ = {
+		5142015A2437B4B40078DB4F /* Build configuration list for PBXNativeTarget "PaperMacOSExample-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5142015B2437B4B40078DB4F /* Debug */,
@@ -585,7 +573,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "FabricMacOSExample" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "PaperMacOSExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

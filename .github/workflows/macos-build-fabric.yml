@@ -19,7 +19,7 @@ jobs:
     runs-on: macos-14
     strategy:
       matrix:
-        working-directory: [macos-example]
+        working-directory: [fabric-macos-example]
       fail-fast: false
     concurrency:
       group: macos-${{ matrix.working-directory }}-${{ github.ref }}
