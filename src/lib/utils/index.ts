@@ -1,1 +1,1 @@
-export * from './parsePercentageRGBColor';
+export * from './convertPercentageColor';
