@@ -30,14 +30,14 @@ const ReanimatedHueRotateExample = () => {
 
   return (
     <Svg height="100" width="150">
-      <Filter id="filter">
+      <Filter id="filterLizard">
         <AnimatedFeColorMatrix type="hueRotate" animatedProps={animatedProps} />
       </Filter>
       <Image
         href="https://cdn.pixabay.com/photo/2024/05/26/00/40/lizard-8787888_1280.jpg"
         height="100"
         width="150"
-        filter="url(#filter)"
+        filter="url(#filterLizard)"
       />
     </Svg>
   );
