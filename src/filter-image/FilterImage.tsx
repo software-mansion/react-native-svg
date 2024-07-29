@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import * as React from 'react';
 import {
   ImageProps,
   ImageStyle,
@@ -27,7 +27,7 @@ export const FilterImage = (props: FilterImageProps) => {
   const { filters = [], source, style, ...imageProps } = props;
   const styles = StyleSheet.flatten(style);
   const extractedFilters = [...filters, ...extractFiltersCss(styles?.filter)];
-  const filterId = useMemo(() => `RNSVG-${getRandomNumber()}`, []);
+  const filterId = React.useMemo(() => `RNSVG-${getRandomNumber()}`, []);
 
   const src =
     Platform.OS === 'web'
