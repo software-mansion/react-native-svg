@@ -25,6 +25,8 @@ import type { UseProps } from './elements/Use';
 import type { FilterProps } from './elements/filters/Filter';
 import type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
 import type { FeGaussianBlurProps } from './elements/filters/FeGaussianBlur';
+import type { FeMergeProps } from './elements/filters/FeMerge';
+import type { FeMergeNodeProps } from './elements/filters/FeMergeNode';
 import type { FeOffsetProps } from './elements/filters/FeOffset';
 import type {
   GestureResponderEvent,
@@ -592,6 +594,14 @@ export class FeColorMatrix extends WebShape<BaseProps & FeColorMatrixProps> {
 
 export class FeGaussianBlur extends WebShape<BaseProps & FeGaussianBlurProps> {
   tag = 'feGaussianBlur' as const;
+}
+
+export class FeMerge extends WebShape<BaseProps & FeMergeProps> {
+  tag = 'feMerge' as const;
+}
+
+export class FeMergeNode extends WebShape<BaseProps & FeMergeNodeProps> {
+  tag = 'feMergeNode' as const;
 }
 
 export class FeOffset extends WebShape<BaseProps & FeOffsetProps> {
