@@ -1,69 +1,14 @@
-import type { ComponentType } from 'react';
+import type { ComponentType, ComponentProps } from 'react';
 import * as React from 'react';
 import { Component, useEffect, useMemo, useState } from 'react';
-import Rect from './elements/Rect';
-import Circle from './elements/Circle';
-import Ellipse from './elements/Ellipse';
-import Polygon from './elements/Polygon';
-import Polyline from './elements/Polyline';
-import Line from './elements/Line';
 import type { SvgProps } from './elements/Svg';
-import Svg from './elements/Svg';
-import Path from './elements/Path';
-import G from './elements/G';
-import Text from './elements/Text';
-import TSpan from './elements/TSpan';
-import TextPath from './elements/TextPath';
-import Use from './elements/Use';
-import Image from './elements/Image';
-import Symbol from './elements/Symbol';
-import Defs from './elements/Defs';
-import LinearGradient from './elements/LinearGradient';
-import RadialGradient from './elements/RadialGradient';
-import Stop from './elements/Stop';
-import ClipPath from './elements/ClipPath';
-import Pattern from './elements/Pattern';
-import Mask from './elements/Mask';
-import Marker from './elements/Marker';
-import Filter from './elements/filters/Filter';
-import FeColorMatrix from './elements/filters/FeColorMatrix';
-import FeGaussianBlur from './elements/filters/FeGaussianBlur';
-import FeOffset from './elements/filters/FeOffset';
-
-export const tags: { [tag: string]: ComponentType } = {
-  svg: Svg,
-  circle: Circle,
-  ellipse: Ellipse,
-  g: G,
-  text: Text,
-  tspan: TSpan,
-  textPath: TextPath,
-  path: Path,
-  polygon: Polygon,
-  polyline: Polyline,
-  line: Line,
-  rect: Rect,
-  use: Use,
-  image: Image,
-  symbol: Symbol,
-  defs: Defs,
-  linearGradient: LinearGradient,
-  radialGradient: RadialGradient,
-  stop: Stop,
-  clipPath: ClipPath,
-  pattern: Pattern,
-  mask: Mask,
-  marker: Marker,
-  filter: Filter,
-  feColorMatrix: FeColorMatrix,
-  feGaussianBlur: FeGaussianBlur,
-  feOffset: FeOffset,
-};
+import { tags } from './tags';
 
 function missingTag() {
   return null;
 }
 
+type Tag = ComponentType<ComponentProps<(typeof tags)[keyof typeof tags]>>;
 export interface AST {
   tag: string;
   style?: Styles;
@@ -74,7 +19,7 @@ export interface AST {
   props: {
     [prop: string]: Styles | string | undefined;
   };
-  Tag: ComponentType<React.PropsWithChildren>;
+  Tag: Tag;
 }
 
 export interface XmlAST extends AST {
@@ -106,6 +51,9 @@ export function SvgAst({ ast, override }: AstProps) {
     return null;
   }
   const { props, children } = ast;
+
+  const Svg = tags.svg;
+
   return (
     <Svg {...props} {...override}>
       {children}
@@ -385,14 +333,14 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
       return closingTag;
     }
 
-    const tag = getName();
+    const tag = getName() as keyof typeof tags;
     const props: { [prop: string]: Styles | string | undefined } = {};
     const element: XmlAST = {
       tag,
       props,
       children: [],
       parent: currentElement,
-      Tag: tags[tag] || missingTag,
+      Tag: (tags[tag] || missingTag) as Tag,
     };
 
     if (currentElement) {
@@ -594,3 +542,4 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
 
   return null;
 }
+export { tags };
