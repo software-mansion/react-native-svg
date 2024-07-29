@@ -1,5 +1,5 @@
 import React from 'react';
-import { tags } from '../../xml';
+import { tags } from '../../tags';
 import { FilterElement, Filters } from '../types';
 import { parse } from './extractFiltersString';
 
