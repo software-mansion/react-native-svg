@@ -53,13 +53,15 @@
     "format-js": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md USAGE.md ./src/**/*.{ts,tsx} ./apps/**/*.tsx ./example/**/*.tsx ./*-example/**/*.tsx",
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
-    "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg",
+    "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg && peggy -o src/filter-image/extract/extractFiltersString.js src/filter-image/extract/extractFiltersString.pegjs",
     "prepare": "npm run bob && husky install",
     "release": "npm login && release-it",
     "test": "npm run lint && npm run tsc",
     "tsc": "tsc --noEmit",
     "e2e": "jest e2e",
-    "generateE2eReferences": "ts-node e2e/generateReferences.ts"
+    "generateE2eReferences": "ts-node e2e/generateReferences.ts",
+    "check-archs-consistency": "node ./scripts/codegen-check-consistency.js",
+    "sync-archs": "node ./scripts/codegen-sync-archs.js"
   },
   "peerDependencies": {
     "react": "*",
@@ -101,6 +103,7 @@
     "jest": "^28.1.0",
     "jest-html-reporters": "^3.1.7",
     "lint-staged": "^13.0.3",
+    "peggy": "4.0.3",
     "pegjs": "^0.10.0",
     "pixelmatch": "5.3.0",
     "pngjs": "^7.0.0",
@@ -120,7 +123,8 @@
     "{src,Example}/**/*.{js,ts,tsx}": "yarn format-js",
     "src/**/*.{js,ts,tsx}": "yarn lint",
     "apple/**/*.{h,m,mm,cpp}": "yarn format-ios",
-    "android/src/**/*.java": "yarn format-java"
+    "android/src/**/*.java": "yarn format-java",
+    "src/fabric/*.ts": "yarn sync-archs"
   },
   "nativePackage": true,
   "codegenConfig": {

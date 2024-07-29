@@ -388,21 +388,21 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         // prepare step 3 - combined layer
         canvas.saveLayer(null, dstInPaint);
 
-      if (mask.getMaskType() == MaskView.MaskType.LUMINANCE) {
-        // step 1 - luminance layer
-        // prepare maskPaint with luminanceToAlpha
-        // https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFEMergeElement:~:text=not%20applicable.%20A-,luminanceToAlpha,-operation%20is%20equivalent
-        Paint luminancePaint = new Paint();
-        ColorMatrix luminanceToAlpha =
-                new ColorMatrix(
-                        new float[]{
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2125f, 0.7154f, 0.0721f, 0, 0
-                        });
-        luminancePaint.setColorFilter(new ColorMatrixColorFilter(luminanceToAlpha));
-        canvas.saveLayer(null, luminancePaint);
-      } else {
-        canvas.saveLayer(null, paint);
-      }
+        if (mask.getMaskType() == MaskView.MaskType.LUMINANCE) {
+          // step 1 - luminance layer
+          // prepare maskPaint with luminanceToAlpha
+          // https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFEMergeElement:~:text=not%20applicable.%20A-,luminanceToAlpha,-operation%20is%20equivalent
+          Paint luminancePaint = new Paint();
+          ColorMatrix luminanceToAlpha =
+              new ColorMatrix(
+                  new float[] {
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2125f, 0.7154f, 0.0721f, 0, 0
+                  });
+          luminancePaint.setColorFilter(new ColorMatrixColorFilter(luminanceToAlpha));
+          canvas.saveLayer(null, luminancePaint);
+        } else {
+          canvas.saveLayer(null, paint);
+        }
 
         // calculate mask bounds
         float maskX = (float) relativeOnWidth(mask.mX);

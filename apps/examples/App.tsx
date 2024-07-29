@@ -135,6 +135,9 @@ export default class SvgExample extends Component {
 
   render() {
     if (process.env.E2E) {
+      console.log(
+        'Opening E2E example, as E2E env is set to ' + process.env.E2E,
+      );
       const e2eTab = React.createElement(E2E.samples[0]);
       return <SafeAreaView>{e2eTab}</SafeAreaView>;
     }

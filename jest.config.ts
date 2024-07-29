@@ -17,7 +17,12 @@ const config: Config.InitialOptions = {
   ],
   reporters: [
     'default',
-    "jest-html-reporters"
+    [
+      'jest-html-reporters',
+      {
+        filename: 'report.html',
+      },
+    ],
   ],
 };
 

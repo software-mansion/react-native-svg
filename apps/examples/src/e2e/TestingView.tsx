@@ -13,11 +13,11 @@ const address = ['ios', 'web'].includes(Platform.OS) ? 'localhost' : '10.0.2.2';
 const wsUri = `ws://${address}:7123`;
 
 const TestingView = () => {
-  const [renderedContent, setRenderedContent] = useState();
-  const [wsClient, setWsClient] = useState<WebSocket | null>(null);
-  const [readyToSnapshot, setReadyToSnapshot] = useState(false);
   const wrapperRef = useRef<ViewShot>(null);
-  const [resolution, setResolution] = useState([600, 600]);
+  const [wsClient, setWsClient] = useState<WebSocket | null>(null);
+  const [renderedContent, setRenderedContent] = useState();
+  const [readyToSnapshot, setReadyToSnapshot] = useState(false);
+  const [resolution, setResolution] = useState([0, 0]); // placeholder value, later updated by incoming render requests
   const [message, setMessage] = useState('⏳ Connecting to Jest server...');
 
   const connect = useCallback(() => {
@@ -30,6 +30,7 @@ const TestingView = () => {
           os: Platform.OS,
           version: Platform.Version,
           arch: isFabric() ? 'fabric' : 'paper',
+          connectionTime: new Date(),
         }),
       );
       setMessage('✅ Connected to Jest server. Waiting for render requests.');
@@ -72,7 +73,11 @@ const TestingView = () => {
       );
     };
   }, [wsClient]);
-  useEffect(connect, []);
+
+  // Create initial connection when rendering the view
+  useEffect(connect, [])
+
+  // Whenever new content is rendered, send renderResponse with snapshot view
   useEffect(() => {
     if (!readyToSnapshot || !wrapperRef.current) {
       return;
@@ -140,7 +145,6 @@ const createElementFromObject = (
       props?.children.forEach((child: {type: any; props: any}) =>
         children.push(createElementFromObject(child.type, child?.props)),
       );
-      console.log(children);
     } else if (typeof props.children === 'object') {
       children.push(
         createElementFromObject(props.children.type, props.children?.props),

@@ -27,6 +27,8 @@ import Mask from './elements/Mask';
 import Marker from './elements/Marker';
 import Filter from './elements/filters/Filter';
 import FeColorMatrix from './elements/filters/FeColorMatrix';
+import FeGaussianBlur from './elements/filters/FeGaussianBlur';
+import FeOffset from './elements/filters/FeOffset';
 
 export const tags: { [tag: string]: ComponentType } = {
   svg: Svg,
@@ -54,6 +56,8 @@ export const tags: { [tag: string]: ComponentType } = {
   marker: Marker,
   filter: Filter,
   feColorMatrix: FeColorMatrix,
+  feGaussianBlur: FeGaussianBlur,
+  feOffset: FeOffset,
 };
 
 function missingTag() {

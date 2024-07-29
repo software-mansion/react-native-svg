@@ -1,5 +1,6 @@
 #import "RNSVGFilter.h"
 #import "RNSVGFilterPrimitive.h"
+#import "RNSVGRenderUtils.h"
 
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
@@ -97,7 +98,12 @@ using namespace facebook::react;
   for (RNSVGNode *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGFilterPrimitive class]]) {
       currentFilter = (RNSVGFilterPrimitive *)node;
-      result = [currentFilter applyFilter:resultsMap previousFilterResult:result];
+      CGImageRef cgResult = [[RNSVGRenderUtils sharedCIContext] createCGImage:[currentFilter applyFilter:resultsMap
+                                                                                    previousFilterResult:result
+                                                                                                     ctm:ctm]
+                                                                     fromRect:[result extent]];
+      result = [CIImage imageWithCGImage:cgResult];
+      CGImageRelease(cgResult);
       if (currentFilter.result) {
         [resultsMap setObject:result forKey:currentFilter.result];
       }

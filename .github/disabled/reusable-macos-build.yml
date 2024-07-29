@@ -1,28 +1,21 @@
-name: Test macOS build
+name: Reusable macOS Build
+
 on:
-  pull_request:
-    paths:
-      - .github/workflows/macos-build-test.yml
-      - RNSVG.podspec
-      - apple/**
-      - macos-example/package.json
-      - macos-example/macos/**
-      - src/fabric/**
-      - package.json
-  push:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      new_arch_enabled:
+        required: true
+        type: string
 
 jobs:
   build:
-    if: github.repository == 'software-mansion/react-native-svg'
     runs-on: macos-14
     strategy:
       matrix:
         working-directory: [macos-example]
       fail-fast: false
     concurrency:
-      group: macos-${{ matrix.working-directory }}-${{ github.ref }}
+      group: macos-${{ matrix.working-directory }}-${{ github.ref  }}-${{ inputs.new_arch_enabled }}
       cancel-in-progress: true
     steps:
       - name: Check out Git repository
@@ -35,7 +28,7 @@ jobs:
           key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
           restore-keys: ${{ runner.os }}-node-modules-svg-
 
-      - name: Install react-native-svg node_modules
+      - name: Install react-native-svg node modules
         run: yarn install
 
       - name: Restore app node_modules from cache
@@ -45,7 +38,7 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.working-directory)) }}
           restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
 
-      - name: Install app node_modules
+      - name: Install app node modules
         working-directory: ${{ matrix.working-directory }}
         run: yarn install
 
@@ -60,7 +53,7 @@ jobs:
 
       - name: Install Pods
         working-directory: ${{ matrix.working-directory }}/macos
-        run: pod install
+        run: RCT_NEW_ARCH_ENABLED=${{ inputs.new_arch_enabled }} pod install
 
       - name: Restore build artifacts from cache
         uses: actions/cache@v3

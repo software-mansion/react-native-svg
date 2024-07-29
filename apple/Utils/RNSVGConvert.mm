@@ -23,7 +23,7 @@
   }
 }
 
-+ (RNSVGColorMatrixType)RNSVGColorMatrixTypeFromCppEquivalent:(react::RNSVGFeColorMatrixType)type;
++ (RNSVGColorMatrixType)RNSVGColorMatrixTypeFromCppEquivalent:(react::RNSVGFeColorMatrixType)type
 {
   switch (type) {
     case react::RNSVGFeColorMatrixType::Matrix:
@@ -34,6 +34,20 @@
       return SVG_FECOLORMATRIX_TYPE_HUEROTATE;
     case react::RNSVGFeColorMatrixType::LuminanceToAlpha:
       return SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA;
+  }
+}
+
++ (RNSVGEdgeMode)RNSVGEdgeModeFromCppEquivalent:(react::RNSVGFeGaussianBlurEdgeMode)edgeMode
+{
+  switch (edgeMode) {
+    case react::RNSVGFeGaussianBlurEdgeMode::Duplicate:
+      return SVG_EDGEMODE_DUPLICATE;
+    case react::RNSVGFeGaussianBlurEdgeMode::Wrap:
+      return SVG_EDGEMODE_WRAP;
+    case react::RNSVGFeGaussianBlurEdgeMode::None:
+      return SVG_EDGEMODE_NONE;
+    default:
+      return SVG_EDGEMODE_UNKNOWN;
   }
 }
 
