@@ -40,7 +40,7 @@ export const FilterImage = (props: FilterImageProps) => {
   return (
     <View style={[styles, { width, height, overflow: 'hidden' }]}>
       <Svg width="100%" height="100%">
-        <Filter id={`filter`}>
+        <Filter id={filterId}>
           {extractedFilters.map(mapFilterToComponent)}
         </Filter>
         <Image
