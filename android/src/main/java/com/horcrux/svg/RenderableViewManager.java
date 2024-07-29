@@ -1635,8 +1635,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
   }
 
-  static class FeMergeManager extends FilterPrimitiveManager<FeOffsetView>
-      implements RNSVGFeMergeManagerInterface<FeOffsetView> {
+  static class FeMergeManager extends FilterPrimitiveManager<FeMergeView>
+      implements RNSVGFeMergeManagerInterface<FeMergeView> {
     FeMergeManager() {
       super(SVGClass.RNSVGFeMerge);
       mDelegate = new RNSVGFeMergeManagerDelegate(this);
