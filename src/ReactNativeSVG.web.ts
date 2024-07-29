@@ -24,9 +24,10 @@ import type { TSpanProps } from './elements/TSpan';
 import type { UseProps } from './elements/Use';
 import type { FilterProps } from './elements/filters/Filter';
 import type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
+import type { FeGaussianBlurProps } from './elements/filters/FeGaussianBlur';
+import type { FeOffsetProps } from './elements/filters/FeOffset';
 import type {
   GestureResponderEvent,
-  TransformsStyle,
   ImageProps as RNImageProps,
 } from 'react-native';
 import {
@@ -40,7 +41,10 @@ import type {
 } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
-import { transformsArrayToProps } from './lib/extract/extractTransform';
+import {
+  transformsArrayToProps,
+  type TransformsStyleArray,
+} from './lib/extract/extractTransform';
 import { resolveAssetUri } from './lib/resolveAssetUri';
 
 type BlurEvent = object;
@@ -156,7 +160,7 @@ function parseTransformProp(
       transformArray.push(`matrix(${transform.join(' ')})`);
     } else {
       const stringifiedProps = transformsArrayToProps(
-        transform as TransformsStyle['transform']
+        transform as TransformsStyleArray
       );
       transformArray.push(...stringifyTransformProps(stringifiedProps));
     }
@@ -584,6 +588,14 @@ export class Filter extends WebShape<BaseProps & FilterProps> {
 
 export class FeColorMatrix extends WebShape<BaseProps & FeColorMatrixProps> {
   tag = 'feColorMatrix' as const;
+}
+
+export class FeGaussianBlur extends WebShape<BaseProps & FeGaussianBlurProps> {
+  tag = 'feGaussianBlur' as const;
+}
+
+export class FeOffset extends WebShape<BaseProps & FeOffsetProps> {
+  tag = 'feOffset' as const;
 }
 
 export default Svg;
