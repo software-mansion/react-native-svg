@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import * as React from 'react';
 import {
   ImageProps,
   ImageStyle,
@@ -27,7 +27,7 @@ export const FilterImage = (props: FilterImageProps) => {
   const { filters = [], source, style, ...imageProps } = props;
   const styles = StyleSheet.flatten(style);
   const extractedFilters = [...filters, ...extractFiltersCss(styles?.filter)];
-  const filterId = useMemo(() => `RNSVG-${getRandomNumber()}`, []);
+  const filterId = React.useMemo(() => `RNSVG-${getRandomNumber()}`, []);
 
   const src =
     Platform.OS === 'web'
@@ -40,7 +40,7 @@ export const FilterImage = (props: FilterImageProps) => {
   return (
     <View style={[styles, { width, height, overflow: 'hidden' }]}>
       <Svg width="100%" height="100%">
-        <Filter id={`filter`}>
+        <Filter id={filterId}>
           {extractedFilters.map(mapFilterToComponent)}
         </Filter>
         <Image
