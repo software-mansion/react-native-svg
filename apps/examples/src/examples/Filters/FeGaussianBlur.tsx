@@ -6,10 +6,10 @@ class StdDeviation5Example extends Component {
   render() {
     return (
       <Svg height="150" width="150">
-        <Filter id="filter">
+        <Filter id="filter1">
           <FeGaussianBlur stdDeviation="5" />
         </Filter>
-        <G filter="url(#filter)">
+        <G filter="url(#filter1)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
           <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
           <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
@@ -23,10 +23,10 @@ class StdDeviation20Example extends Component {
   render() {
     return (
       <Svg height="150" width="150">
-        <Filter id="filter">
+        <Filter id="filter2">
           <FeGaussianBlur stdDeviation="20" />
         </Filter>
-        <G filter="url(#filter)">
+        <G filter="url(#filter2)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
           <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
           <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
@@ -40,10 +40,10 @@ class StdDeviation250Example extends Component {
   render() {
     return (
       <Svg height="150" width="150">
-        <Filter id="filter">
+        <Filter id="filter3">
           <FeGaussianBlur stdDeviation="25 0" />
         </Filter>
-        <G filter="url(#filter)">
+        <G filter="url(#filter3)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
           <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
           <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
@@ -57,10 +57,10 @@ class StdDeviation050Example extends Component {
   render() {
     return (
       <Svg height="150" width="150">
-        <Filter id="filter">
+        <Filter id="filter4">
           <FeGaussianBlur stdDeviation="0 50" />
         </Filter>
-        <G filter="url(#filter)">
+        <G filter="url(#filter4)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
           <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
           <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
@@ -72,10 +72,10 @@ class StdDeviation050Example extends Component {
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
-    <Filter id="filter">
+    <Filter id="filter5">
       <FeGaussianBlur stdDeviation="6" />
     </Filter>
-    <G filter="url(#filter)">
+    <G filter="url(#filter5)">
       <Circle cx="10" cy="7.5" r="5" fill="blue" fillOpacity="0.5" />
       <Circle cx="7.5" cy="12.5" r="5" fill="green" fillOpacity="0.5" />
       <Circle cx="12.5" cy="12.5" r="5" fill="red" fillOpacity="0.5" />
