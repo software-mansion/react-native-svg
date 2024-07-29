@@ -17,7 +17,7 @@ export interface FeOffsetProps {
 export default class FeOffset extends FilterPrimitive<FeOffsetProps> {
   static displayName = 'FeOffset';
 
-  static defaultProps = {
+  static defaultProps: React.ComponentProps<typeof FeOffset> = {
     ...this.defaultPrimitiveProps,
     dx: 0,
     dy: 0,
