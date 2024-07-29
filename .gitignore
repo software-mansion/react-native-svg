@@ -1,7 +1,8 @@
 # OSX
 #
 .DS_Store
-
+.yarn
+.yarnrc.yml
 # Xcode
 #
 *.pbxuser
