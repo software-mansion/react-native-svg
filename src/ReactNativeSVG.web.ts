@@ -26,7 +26,6 @@ import type { FilterProps } from './elements/filters/Filter';
 import type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
 import type {
   GestureResponderEvent,
-  TransformsStyle,
   ImageProps as RNImageProps,
 } from 'react-native';
 import {
@@ -40,7 +39,10 @@ import type {
 } from './lib/extract/types';
 import SvgTouchableMixin from './lib/SvgTouchableMixin';
 import { resolve } from './lib/resolve';
-import { transformsArrayToProps } from './lib/extract/extractTransform';
+import {
+  transformsArrayToProps,
+  type TransformsStyleArray,
+} from './lib/extract/extractTransform';
 import { resolveAssetUri } from './lib/resolveAssetUri';
 
 type BlurEvent = object;
@@ -156,7 +158,7 @@ function parseTransformProp(
       transformArray.push(`matrix(${transform.join(' ')})`);
     } else {
       const stringifiedProps = transformsArrayToProps(
-        transform as TransformsStyle['transform']
+        transform as TransformsStyleArray
       );
       transformArray.push(...stringifyTransformProps(stringifiedProps));
     }
