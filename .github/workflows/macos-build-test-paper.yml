@@ -1,4 +1,4 @@
-name: Paper macOS build
+name: Test paper macOS build
 on:
   pull_request:
     paths:

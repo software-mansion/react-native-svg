@@ -1,4 +1,4 @@
-name: Fabric macOS build
+name: Test fabric macOS build
 on:
   pull_request:
     paths:
