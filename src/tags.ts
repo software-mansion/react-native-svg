@@ -36,6 +36,7 @@ export const tags = {
   feColorMatrix: FeColorMatrix,
   feGaussianBlur: FeGaussianBlur,
   feOffset: FeOffset,
+  foreignObject: ForeignObject,
   g: G,
   image: Image,
   line: Line,
@@ -55,5 +56,4 @@ export const tags = {
   textPath: TextPath,
   tspan: TSpan,
   use: Use,
-  foreignObject: ForeignObject,
 } as const;
