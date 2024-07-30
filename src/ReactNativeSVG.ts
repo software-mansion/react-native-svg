@@ -1,5 +1,5 @@
-import { tags } from './tags';
 import Shape from './elements/Shape';
+import { Svg } from './elements';
 
 import {
   parse,
@@ -50,37 +50,6 @@ import {
   RNSVGFeOffset,
 } from './fabric';
 
-const {
-  circle: Circle,
-  clipPath: ClipPath,
-  defs: Defs,
-  ellipse: Ellipse,
-  filter: Filter,
-  feColorMatrix: FeColorMatrix,
-  feGaussianBlur: FeGaussianBlur,
-  feOffset: FeOffset,
-  g: G,
-  image: Image,
-  line: Line,
-  linearGradient: LinearGradient,
-  marker: Marker,
-  mask: Mask,
-  path: Path,
-  pattern: Pattern,
-  polygon: Polygon,
-  polyline: Polyline,
-  radialGradient: RadialGradient,
-  rect: Rect,
-  stop: Stop,
-  svg: Svg,
-  symbol: Symbol,
-  text: Text,
-  textPath: TextPath,
-  tspan: TSpan,
-  use: Use,
-  foreignObject: ForeignObject,
-} = tags;
-
 export {
   SvgCss,
   SvgCssUri,
@@ -124,30 +93,6 @@ export type { FilterPrimitiveCommonProps } from './elements/filters/FilterPrimit
 export * from './lib/extract/types';
 
 export {
-  Svg,
-  Circle,
-  Ellipse,
-  G,
-  Text,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-  Marker,
-  ForeignObject,
   parse,
   SvgAst,
   SvgFromUri,
@@ -157,10 +102,6 @@ export {
   camelCase,
   fetchText,
   Shape,
-  Filter,
-  FeColorMatrix,
-  FeGaussianBlur,
-  FeOffset,
   RNSVGMarker,
   RNSVGMask,
   RNSVGPattern,
@@ -201,4 +142,5 @@ export type {
   AstProps,
 };
 
+export * from './elements';
 export default Svg;

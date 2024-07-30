@@ -2,7 +2,7 @@ import type { ComponentType, ComponentProps } from 'react';
 import * as React from 'react';
 import { Component, useEffect, useMemo, useState } from 'react';
 import type { SvgProps } from './elements/Svg';
-import { tags } from './tags';
+import { tags } from './xmlTags';
 
 function missingTag() {
   return null;
@@ -534,6 +534,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
 
   if (root) {
     const xml: XmlAST = (middleware ? middleware(root) : root) || root;
+    console.log(xml.children.map((el) => console.log(el)));
     const ast: (JSX.Element | string)[] = xml.children.map(astToReact);
     const jsx: JsxAST = xml as JsxAST;
     jsx.children = ast;

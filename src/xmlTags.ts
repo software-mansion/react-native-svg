@@ -9,6 +9,7 @@ import {
   FeOffset,
   ForeignObject,
   G,
+  Image,
   Line,
   LinearGradient,
   Marker,
@@ -26,7 +27,7 @@ import {
   TextPath,
   TSpan,
   Use,
-} from './web/elements';
+} from './elements';
 
 export const tags = {
   circle: Circle,
