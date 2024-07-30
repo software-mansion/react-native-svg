@@ -534,7 +534,6 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
 
   if (root) {
     const xml: XmlAST = (middleware ? middleware(root) : root) || root;
-    console.log(xml.children.map((el) => console.log(el)));
     const ast: (JSX.Element | string)[] = xml.children.map(astToReact);
     const jsx: JsxAST = xml as JsxAST;
     jsx.children = ast;
