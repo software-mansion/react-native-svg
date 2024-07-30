@@ -19,7 +19,7 @@ export interface AST {
   props: {
     [prop: string]: Styles | string | undefined;
   };
-  Tag: Tag;
+  Tag: ComponentType<React.PropsWithChildren>;
 }
 
 export interface XmlAST extends AST {
