@@ -78,7 +78,10 @@ export function SvgXml(props: XmlProps) {
   }
 }
 
-export async function fetchText(uri: string) {
+export async function fetchText(uri?: string) {
+  if (!uri) {
+    return null;
+  }
   const response = await fetch(uri);
   if (response.ok || (response.status === 0 && uri.startsWith('file://'))) {
     return await response.text();
@@ -207,6 +210,11 @@ export function astToReact(
 ): JSX.Element | string {
   if (typeof value === 'object') {
     const { Tag, props, children } = value;
+    if (props?.class) {
+      props.className = props.class;
+      delete props.class;
+    }
+
     return (
       <Tag key={index} {...props}>
         {(children as (AST | string)[]).map(astToReact)}
@@ -534,7 +542,6 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
 
   if (root) {
     const xml: XmlAST = (middleware ? middleware(root) : root) || root;
-    console.log(xml.children.map((el) => console.log(el)));
     const ast: (JSX.Element | string)[] = xml.children.map(astToReact);
     const jsx: JsxAST = xml as JsxAST;
     jsx.children = ast;
