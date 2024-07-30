@@ -598,4 +598,26 @@ export class FeOffset extends WebShape<BaseProps & FeOffsetProps> {
   tag = 'feOffset' as const;
 }
 
+export {
+  parse,
+  SvgAst,
+  SvgFromUri,
+  SvgFromXml,
+  SvgUri,
+  SvgXml,
+  camelCase,
+  fetchText,
+} from './xml';
+
+export {
+  SvgCss,
+  SvgCssUri,
+  SvgWithCss,
+  SvgWithCssUri,
+  inlineStyles,
+  LocalSvg,
+  WithLocalSvg,
+  loadLocalRawResource,
+} from './deprecated';
+
 export default Svg;
