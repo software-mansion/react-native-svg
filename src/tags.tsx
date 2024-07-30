@@ -1,4 +1,3 @@
-import Shape from './elements/Shape';
 import Rect from './elements/Rect';
 import Circle from './elements/Circle';
 import Ellipse from './elements/Ellipse';
@@ -57,5 +56,4 @@ export const tags = {
   tspan: TSpan,
   use: Use,
   foreignObject: ForeignObject,
-  Shape,
 } as const;

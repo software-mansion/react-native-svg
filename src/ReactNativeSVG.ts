@@ -1,4 +1,5 @@
 import { tags } from './tags';
+import Shape from './elements/Shape';
 
 import {
   parse,
@@ -78,7 +79,6 @@ const {
   tspan: TSpan,
   use: Use,
   foreignObject: ForeignObject,
-  Shape,
 } = tags;
 
 export {
