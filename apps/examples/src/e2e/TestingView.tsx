@@ -15,7 +15,8 @@ const wsUri = `ws://${address}:7123`;
 const TestingView = () => {
   const wrapperRef = useRef<ViewShot>(null);
   const [wsClient, setWsClient] = useState<WebSocket | null>(null);
-  const [renderedContent, setRenderedContent] = useState();
+  const [renderedContent, setRenderedContent] =
+    useState<React.ReactElement | null>();
   const [readyToSnapshot, setReadyToSnapshot] = useState(false);
   const [resolution, setResolution] = useState([0, 0]); // placeholder value, later updated by incoming render requests
   const [message, setMessage] = useState('⏳ Connecting to Jest server...');
@@ -75,7 +76,7 @@ const TestingView = () => {
   }, [wsClient]);
 
   // Create initial connection when rendering the view
-  useEffect(connect, [])
+  useEffect(connect, []);
 
   // Whenever new content is rendered, send renderResponse with snapshot view
   useEffect(() => {
@@ -138,7 +139,7 @@ export {samples, icon};
 const createElementFromObject = (
   element: keyof typeof RNSVG,
   props: any,
-): any => {
+): React.ReactElement => {
   const children: any[] = [];
   if (props.children) {
     if (Array.isArray(props.children)) {
