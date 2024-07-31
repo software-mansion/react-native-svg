@@ -1,6 +1,6 @@
 import type { ColorValue } from 'react-native';
 import { processColor } from 'react-native';
-import { convertPercentageColor } from '../utils';
+import { convertPercentageColor } from '../utils/convertPercentageColor';
 
 const urlIdPattern = /^url\(#(.+)\)$/;
 
