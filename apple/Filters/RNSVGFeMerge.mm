@@ -34,16 +34,12 @@ using namespace facebook::react;
   const auto &newProps = static_cast<const RNSVGFeMergeProps &>(*props);
 
   if (newProps.nodes.size() > 0) {
-    NSMutableArray *nodesArray = [NSMutableArray new];
+    NSMutableArray<NSString *> *nodesArray = [NSMutableArray new];
     for (auto node : newProps.nodes) {
-      id json = RNSVGConvertFollyDynamicToId(node);
-      if ([json isKindOfClass:[NSString class]]) {
-        [nodesArray addObject:[json stringValue]];
-      }
+      [nodesArray addObject:[NSString stringWithCString:node.c_str() encoding:NSUTF8StringEncoding]];
     }
     self.nodes = nodesArray;
   }
-
   setCommonFilterProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGFeMergeProps const>(props);
 }
