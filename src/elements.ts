@@ -24,6 +24,8 @@ import TextPath from './elements/TextPath';
 import Use from './elements/Use';
 import FeColorMatrix from './elements/filters/FeColorMatrix';
 import FeGaussianBlur from './elements/filters/FeGaussianBlur';
+import FeMerge from './elements/filters/FeMerge';
+import FeMergeNode from './elements/filters/FeMergeNode';
 import FeOffset from './elements/filters/FeOffset';
 import Filter from './elements/filters/Filter';
 
@@ -34,6 +36,8 @@ export {
   Ellipse,
   FeColorMatrix,
   FeGaussianBlur,
+  FeMerge,
+  FeMergeNode,
   FeOffset,
   Filter,
   ForeignObject,

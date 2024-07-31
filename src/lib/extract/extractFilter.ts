@@ -1,7 +1,10 @@
+import React from 'react';
 import { FeColorMatrixProps as FeColorMatrixComponentProps } from '../../elements/filters/FeColorMatrix';
 import { FeGaussianBlurProps as FeGaussianBlurComponentProps } from '../../elements/filters/FeGaussianBlur';
+import { FeMergeProps as FeMergeComponentProps } from '../../elements/filters/FeMerge';
 import { NativeProps as FeColorMatrixNativeProps } from '../../fabric/FeColorMatrixNativeComponent';
 import { NativeProps as FeGaussianBlurNativeProps } from '../../fabric/FeGaussianBlurNativeComponent';
+import { NativeProps as FeMergeNativeProps } from '../../fabric/FeMergeNativeComponent';
 import { NumberProp } from './types';
 
 const spaceReg = /\s+/;
@@ -29,14 +32,18 @@ export const extractFilter = (
   return extracted;
 };
 
+export const extractIn = (props: { in?: string }) => {
+  if (props.in) {
+    return { in1: props.in };
+  }
+  return {};
+};
+
 export const extractFeColorMatrix = (
   props: FeColorMatrixComponentProps
 ): FeColorMatrixNativeProps => {
   const extracted: FeColorMatrixNativeProps = {};
 
-  if (props.in) {
-    extracted.in1 = props.in;
-  }
   if (props.values !== undefined) {
     if (Array.isArray(props.values)) {
       extracted.values = props.values;
@@ -63,9 +70,6 @@ export const extractFeGaussianBlur = (
 ): FeGaussianBlurNativeProps => {
   const extracted: FeGaussianBlurNativeProps = {};
 
-  if (props.in) {
-    extracted.in1 = props.in;
-  }
   if (
     typeof props.stdDeviation === 'string' &&
     props.stdDeviation.match(spaceReg)
@@ -85,4 +89,25 @@ export const extractFeGaussianBlur = (
     extracted.edgeMode = props.edgeMode;
   }
   return extracted;
+};
+
+export const extractFeMerge = (
+  props: FeMergeComponentProps,
+  parent: unknown
+): FeMergeNativeProps => {
+  const nodes: Array<string | undefined> = [];
+  const childArray = props.children
+    ? React.Children.map(props.children, (child) =>
+        React.cloneElement(child, { parent })
+      )
+    : [];
+  const l = childArray.length;
+  for (let i = 0; i < l; i++) {
+    const {
+      props: { in: in1 },
+    } = childArray[i];
+    nodes.push(in1);
+  }
+
+  return { nodes };
 };

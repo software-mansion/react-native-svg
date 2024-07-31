@@ -1,5 +1,4 @@
 import Shape from './elements/Shape';
-
 import {
   AstProps,
   camelCase,
@@ -27,6 +26,7 @@ import {
   RNSVGEllipse,
   RNSVGFeColorMatrix,
   RNSVGFeGaussianBlur,
+  RNSVGFeMerge,
   RNSVGFeOffset,
   RNSVGFilter,
   RNSVGForeignObject,
@@ -65,6 +65,8 @@ export type { ClipPathProps } from './elements/ClipPath';
 export type { EllipseProps } from './elements/Ellipse';
 export type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
 export type { FeGaussianBlurProps } from './elements/filters/FeGaussianBlur';
+export type { FeMergeProps } from './elements/filters/FeMerge';
+export type { FeMergeNodeProps } from './elements/filters/FeMergeNode';
 export type { FeOffsetProps } from './elements/filters/FeOffset';
 export type { FilterProps } from './elements/filters/Filter';
 export type { FilterPrimitiveCommonProps } from './elements/filters/FilterPrimitive';
@@ -101,6 +103,7 @@ export {
   RNSVGEllipse,
   RNSVGFeColorMatrix,
   RNSVGFeGaussianBlur,
+  RNSVGFeMerge,
   RNSVGFeOffset,
   RNSVGFilter,
   RNSVGForeignObject,

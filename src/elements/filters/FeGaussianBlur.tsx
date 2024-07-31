@@ -4,6 +4,7 @@ import RNSVGFeGaussianBlur from '../../fabric/FeGaussianBlurNativeComponent';
 import {
   extractFeGaussianBlur,
   extractFilter,
+  extractIn,
 } from '../../lib/extract/extractFilter';
 import { FilterEdgeMode, NumberProp } from '../../lib/extract/types';
 import FilterPrimitive from './FilterPrimitive';
@@ -33,6 +34,7 @@ export default class FeGaussianBlur extends FilterPrimitive<FeGaussianBlurProps>
           this.refMethod(ref as (FeGaussianBlur & NativeMethods) | null)
         }
         {...extractFilter(this.props)}
+        {...extractIn(this.props)}
         {...extractFeGaussianBlur(this.props)}
       />
     );
