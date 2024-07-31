@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { useState, useEffect, Component } from 'react';
-import type { ImageSourcePropType } from 'react-native';
-import { Platform, Image } from 'react-native';
-
-import { fetchText } from 'react-native-svg';
+import { Image, Platform, type ImageSourcePropType } from 'react-native';
+import { fetchText, type SvgProps } from 'react-native-svg';
+import { resolveAssetUri } from '../lib/resolveAssetUri';
 import { SvgCss, SvgWithCss } from './css';
-import type { SvgProps } from 'react-native-svg';
 
 export function getUriFromSource(source: ImageSourcePropType) {
-  const resolvedAssetSource = Image.resolveAssetSource(source);
-  return resolvedAssetSource.uri;
+  const resolvedAssetSource =
+    Platform.OS === 'web'
+      ? resolveAssetUri(source)
+      : Image.resolveAssetSource(source);
+  return resolvedAssetSource?.uri;
 }
 
 export function loadLocalRawResourceDefault(source: ImageSourcePropType) {
@@ -39,7 +40,7 @@ export async function loadAndroidRawResource(uri: string) {
 
 export function loadLocalRawResourceAndroid(source: ImageSourcePropType) {
   const uri = getUriFromSource(source);
-  if (isUriAnAndroidResourceIdentifier(uri)) {
+  if (uri && isUriAnAndroidResourceIdentifier(uri)) {
     return loadAndroidRawResource(uri);
   } else {
     return fetchText(uri);
