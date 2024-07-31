@@ -1,36 +1,57 @@
-import { Svg } from './elements';
 import {
+  AstProps,
+  camelCase,
+  fetchText,
+  JsxAST,
+  Middleware,
   parse,
+  Styles,
   SvgAst,
   SvgFromUri,
   SvgFromXml,
   SvgUri,
   SvgXml,
-  camelCase,
-  fetchText,
+  UriProps,
+  UriState,
+  XmlAST,
+  XmlProps,
+  XmlState,
 } from './xml';
 
 export {
-  parse,
-  SvgAst,
-  SvgFromUri,
-  SvgFromXml,
-  SvgUri,
-  SvgXml,
-  camelCase,
-  fetchText,
-};
-
-export {
+  inlineStyles,
+  loadLocalRawResource,
+  LocalSvg,
   SvgCss,
   SvgCssUri,
   SvgWithCss,
   SvgWithCssUri,
-  inlineStyles,
-  LocalSvg,
   WithLocalSvg,
-  loadLocalRawResource,
 } from './deprecated';
 
+export {
+  camelCase,
+  fetchText,
+  parse,
+  SvgAst,
+  SvgFromUri,
+  SvgFromXml,
+  SvgUri,
+  SvgXml,
+};
+
+export * from './lib/extract/types';
+
 export * from './elements';
-export default Svg;
+export { default } from './elements';
+export type {
+  AstProps,
+  JsxAST,
+  Middleware,
+  Styles,
+  UriProps,
+  UriState,
+  XmlAST,
+  XmlProps,
+  XmlState,
+};

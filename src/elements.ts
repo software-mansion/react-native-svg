@@ -1,59 +1,61 @@
-import Rect from './elements/Rect';
 import Circle from './elements/Circle';
+import ClipPath from './elements/ClipPath';
+import Defs from './elements/Defs';
 import Ellipse from './elements/Ellipse';
+import ForeignObject from './elements/ForeignObject';
+import G from './elements/G';
+import Image from './elements/Image';
+import Line from './elements/Line';
+import LinearGradient from './elements/LinearGradient';
+import Marker from './elements/Marker';
+import Mask from './elements/Mask';
+import Path from './elements/Path';
+import Pattern from './elements/Pattern';
 import Polygon from './elements/Polygon';
 import Polyline from './elements/Polyline';
-import Line from './elements/Line';
+import RadialGradient from './elements/RadialGradient';
+import Rect from './elements/Rect';
+import Stop from './elements/Stop';
 import Svg from './elements/Svg';
-import Path from './elements/Path';
-import G from './elements/G';
-import Text from './elements/Text';
+import Symbol from './elements/Symbol';
 import TSpan from './elements/TSpan';
+import Text from './elements/Text';
 import TextPath from './elements/TextPath';
 import Use from './elements/Use';
-import Image from './elements/Image';
-import Symbol from './elements/Symbol';
-import Defs from './elements/Defs';
-import LinearGradient from './elements/LinearGradient';
-import RadialGradient from './elements/RadialGradient';
-import Stop from './elements/Stop';
-import ClipPath from './elements/ClipPath';
-import Pattern from './elements/Pattern';
-import Mask from './elements/Mask';
-import Marker from './elements/Marker';
-import ForeignObject from './elements/ForeignObject';
-import Filter from './elements/filters/Filter';
 import FeColorMatrix from './elements/filters/FeColorMatrix';
 import FeGaussianBlur from './elements/filters/FeGaussianBlur';
 import FeOffset from './elements/filters/FeOffset';
+import Filter from './elements/filters/Filter';
 
 export {
-  Rect,
   Circle,
-  Ellipse,
-  Polygon,
-  Polyline,
-  Line,
-  Svg,
-  Path,
-  G,
-  Text,
-  TSpan,
-  TextPath,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
   ClipPath,
-  Pattern,
-  Mask,
-  Marker,
-  ForeignObject,
-  Filter,
+  Defs,
+  Ellipse,
   FeColorMatrix,
   FeGaussianBlur,
   FeOffset,
+  Filter,
+  ForeignObject,
+  G,
+  Image,
+  Line,
+  LinearGradient,
+  Marker,
+  Mask,
+  Path,
+  Pattern,
+  Polygon,
+  Polyline,
+  RadialGradient,
+  Rect,
+  Stop,
+  Svg,
+  Symbol,
+  TSpan,
+  Text,
+  TextPath,
+  Use,
 };
+
+export default Svg;
