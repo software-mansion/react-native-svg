@@ -60,7 +60,7 @@ jobs:
 
       - name: Install Pods
         working-directory: ${{ matrix.working-directory }}/macos
-        run: RCT_NEW_ARCH_ENABLED=${{ inputs.new_arch_enabled }} pod install
+        run: pod install
 
       - name: Restore build artifacts from cache
         uses: actions/cache@v3
