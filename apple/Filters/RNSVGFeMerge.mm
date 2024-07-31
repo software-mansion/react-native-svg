@@ -39,8 +39,6 @@ using namespace facebook::react;
       id json = RNSVGConvertFollyDynamicToId(node);
       if ([json isKindOfClass:[NSString class]]) {
         [nodesArray addObject:[json stringValue]];
-      } else {
-        [nodesArray addObject:[NSNull null]];
       }
     }
     self.nodes = nodesArray;
@@ -78,8 +76,7 @@ using namespace facebook::react;
 
   for (int i = 0; i < [self.nodes count]; i++) {
     NSString *nodeKey = [self.nodes objectAtIndex:i];
-    CIImage *inputImage =
-        [nodeKey isEqual:[NSNull null]] ? previous : [results objectForKey:[self.nodes objectAtIndex:i]];
+    CIImage *inputImage = [nodeKey isEqual:@""] ? previous : [results objectForKey:nodeKey];
     if (inputImage == nil) {
       continue;
     }
