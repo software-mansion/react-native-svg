@@ -2,7 +2,7 @@ import type { ComponentType, ComponentProps } from 'react';
 import * as React from 'react';
 import { Component, useEffect, useMemo, useState } from 'react';
 import type { SvgProps } from './elements/Svg';
-import { tags } from './tags';
+import { tags } from './xmlTags';
 
 function missingTag() {
   return null;
@@ -78,7 +78,10 @@ export function SvgXml(props: XmlProps) {
   }
 }
 
-export async function fetchText(uri: string) {
+export async function fetchText(uri?: string) {
+  if (!uri) {
+    return null;
+  }
   const response = await fetch(uri);
   if (response.ok || (response.status === 0 && uri.startsWith('file://'))) {
     return await response.text();
@@ -207,6 +210,11 @@ export function astToReact(
 ): JSX.Element | string {
   if (typeof value === 'object') {
     const { Tag, props, children } = value;
+    if (props?.class) {
+      props.className = props.class;
+      delete props.class;
+    }
+
     return (
       <Tag key={index} {...props}>
         {(children as (AST | string)[]).map(astToReact)}
