@@ -1,7 +1,6 @@
 import { E2EMessage } from './types';
 import { PNG } from 'pngjs';
 import fs from 'node:fs';
-import path from 'path';
 import pixelmatch from 'pixelmatch';
 
 const replacer = (key: string, value: any) => {

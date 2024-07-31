@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 import { WebSocket as WsWebSocket, WebSocketServer } from 'ws';
 
 declare global {

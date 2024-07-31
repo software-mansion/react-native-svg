@@ -1,4 +1,4 @@
-import { WebSocket, WebSocketServer } from 'ws';
+import { WebSocketServer } from 'ws';
 
 // This is little hack, we don't use syntax sugar with `async` here as we need to manually resolve promise
 // whenever a client connects using resolve callback. In result the Jest will wait until some device connects,
