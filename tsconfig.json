@@ -21,8 +21,5 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": [
-    "src",
-    "e2e"
-  ]
+  "include": ["src", "e2e", "__tests__/e2e/GeneralSvgRenderingTest.spec.tsx"]
 }

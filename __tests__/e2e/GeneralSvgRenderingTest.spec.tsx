@@ -1,7 +1,7 @@
 import { SvgFromXml } from 'react-native-svg';
 import * as fs from 'node:fs';
-import { compareImages, sendToDeviceAndReceive } from '../../../../e2e/helpers';
-import { RenderResponse } from '../../../../e2e/types';
+import { compareImages, sendToDeviceAndReceive } from '../../e2e/helpers';
+import { RenderResponse } from '../../e2e/types';
 import path from 'path';
 import {
   addAttach as attachImageToReport,
