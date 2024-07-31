@@ -43,6 +43,7 @@ export const compareImages = (
     opts.width * opts.pixelRatio,
     opts.height * opts.pixelRatio,
     {
+      // That #5f00a0 is the color of the diff pixels
       diffColor: [95, 0, 160],
     }
   );
