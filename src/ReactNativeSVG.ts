@@ -1,3 +1,4 @@
+import Shape from './elements/Shape';
 import {
   AstProps,
   camelCase,
@@ -6,6 +7,11 @@ import {
   Middleware,
   parse,
   Styles,
+  SvgAst,
+  SvgFromUri,
+  SvgFromXml,
+  SvgUri,
+  SvgXml,
   UriProps,
   UriState,
   XmlAST,
@@ -36,6 +42,11 @@ import {
   RNSVGRect,
   RNSVGSvgAndroid,
   RNSVGSvgIOS,
+  RNSVGSymbol,
+  RNSVGText,
+  RNSVGTextPath,
+  RNSVGTSpan,
+  RNSVGUse,
 } from './fabric';
 
 export {
@@ -108,6 +119,17 @@ export {
   RNSVGRect,
   RNSVGSvgAndroid,
   RNSVGSvgIOS,
+  RNSVGSymbol,
+  RNSVGText,
+  RNSVGTextPath,
+  RNSVGTSpan,
+  RNSVGUse,
+  Shape,
+  SvgAst,
+  SvgFromUri,
+  SvgFromXml,
+  SvgUri,
+  SvgXml,
 };
 
 export type {
