@@ -2,7 +2,7 @@ import type { ComponentType, ComponentProps } from 'react';
 import * as React from 'react';
 import { Component, useEffect, useMemo, useState } from 'react';
 import type { SvgProps } from './elements/Svg';
-import { tags } from './tags';
+import { tags } from './xmlTags';
 
 function missingTag() {
   return null;
