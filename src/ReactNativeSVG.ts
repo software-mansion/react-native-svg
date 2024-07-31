@@ -1,24 +1,23 @@
 import Shape from './elements/Shape';
-import { Svg } from './elements';
 
 import {
+  AstProps,
+  camelCase,
+  fetchText,
+  JsxAST,
+  Middleware,
   parse,
+  Styles,
   SvgAst,
   SvgFromUri,
   SvgFromXml,
   SvgUri,
   SvgXml,
-  camelCase,
-  fetchText,
-  JsxAST,
-  Middleware,
-  Styles,
   UriProps,
   UriState,
   XmlAST,
   XmlProps,
   XmlState,
-  AstProps,
 } from './xml';
 
 import {
@@ -26,6 +25,10 @@ import {
   RNSVGClipPath,
   RNSVGDefs,
   RNSVGEllipse,
+  RNSVGFeColorMatrix,
+  RNSVGFeGaussianBlur,
+  RNSVGFeOffset,
+  RNSVGFilter,
   RNSVGForeignObject,
   RNSVGGroup,
   RNSVGImage,
@@ -44,93 +47,90 @@ import {
   RNSVGTextPath,
   RNSVGTSpan,
   RNSVGUse,
-  RNSVGFilter,
-  RNSVGFeColorMatrix,
-  RNSVGFeGaussianBlur,
-  RNSVGFeOffset,
 } from './fabric';
 
 export {
+  inlineStyles,
+  loadLocalRawResource,
+  LocalSvg,
   SvgCss,
   SvgCssUri,
   SvgWithCss,
   SvgWithCssUri,
-  inlineStyles,
-  LocalSvg,
   WithLocalSvg,
-  loadLocalRawResource,
 } from './deprecated';
 
-export type { RectProps } from './elements/Rect';
 export type { CircleProps } from './elements/Circle';
-export type { EllipseProps } from './elements/Ellipse';
-export type { PolygonProps } from './elements/Polygon';
-export type { PolylineProps } from './elements/Polyline';
-export type { LineProps } from './elements/Line';
-export type { SvgProps } from './elements/Svg';
-export type { PathProps } from './elements/Path';
-export type { GProps } from './elements/G';
-export type { TextProps } from './elements/Text';
-export type { TSpanProps } from './elements/TSpan';
-export type { TextPathProps } from './elements/TextPath';
-export type { UseProps } from './elements/Use';
-export type { ImageProps } from './elements/Image';
-export type { SymbolProps } from './elements/Symbol';
-export type { LinearGradientProps } from './elements/LinearGradient';
-export type { RadialGradientProps } from './elements/RadialGradient';
-export type { StopProps } from './elements/Stop';
 export type { ClipPathProps } from './elements/ClipPath';
-export type { PatternProps } from './elements/Pattern';
-export type { MaskProps } from './elements/Mask';
-export type { MarkerProps } from './elements/Marker';
-export type { ForeignObjectProps } from './elements/ForeignObject';
-export type { FilterProps } from './elements/filters/Filter';
+export type { EllipseProps } from './elements/Ellipse';
 export type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
 export type { FeGaussianBlurProps } from './elements/filters/FeGaussianBlur';
 export type { FeOffsetProps } from './elements/filters/FeOffset';
+export type { FilterProps } from './elements/filters/Filter';
 export type { FilterPrimitiveCommonProps } from './elements/filters/FilterPrimitive';
+export type { ForeignObjectProps } from './elements/ForeignObject';
+export type { GProps } from './elements/G';
+export type { ImageProps } from './elements/Image';
+export type { LineProps } from './elements/Line';
+export type { LinearGradientProps } from './elements/LinearGradient';
+export type { MarkerProps } from './elements/Marker';
+export type { MaskProps } from './elements/Mask';
+export type { PathProps } from './elements/Path';
+export type { PatternProps } from './elements/Pattern';
+export type { PolygonProps } from './elements/Polygon';
+export type { PolylineProps } from './elements/Polyline';
+export type { RadialGradientProps } from './elements/RadialGradient';
+export type { RectProps } from './elements/Rect';
+export type { StopProps } from './elements/Stop';
+export type { SvgProps } from './elements/Svg';
+export type { SymbolProps } from './elements/Symbol';
+export type { TextProps } from './elements/Text';
+export type { TextPathProps } from './elements/TextPath';
+export type { TSpanProps } from './elements/TSpan';
+export type { UseProps } from './elements/Use';
 
 export * from './lib/extract/types';
 
 export {
+  camelCase,
+  fetchText,
   parse,
+  RNSVGCircle,
+  RNSVGClipPath,
+  RNSVGDefs,
+  RNSVGEllipse,
+  RNSVGFeColorMatrix,
+  RNSVGFeGaussianBlur,
+  RNSVGFeOffset,
+  RNSVGFilter,
+  RNSVGForeignObject,
+  RNSVGGroup,
+  RNSVGImage,
+  RNSVGLine,
+  RNSVGLinearGradient,
+  RNSVGMarker,
+  RNSVGMask,
+  RNSVGPath,
+  RNSVGPattern,
+  RNSVGRadialGradient,
+  RNSVGRect,
+  RNSVGSvgAndroid,
+  RNSVGSvgIOS,
+  RNSVGSymbol,
+  RNSVGText,
+  RNSVGTextPath,
+  RNSVGTSpan,
+  RNSVGUse,
+  Shape,
   SvgAst,
   SvgFromUri,
   SvgFromXml,
   SvgUri,
   SvgXml,
-  camelCase,
-  fetchText,
-  Shape,
-  RNSVGMarker,
-  RNSVGMask,
-  RNSVGPattern,
-  RNSVGClipPath,
-  RNSVGRadialGradient,
-  RNSVGLinearGradient,
-  RNSVGDefs,
-  RNSVGSymbol,
-  RNSVGImage,
-  RNSVGUse,
-  RNSVGTextPath,
-  RNSVGTSpan,
-  RNSVGText,
-  RNSVGGroup,
-  RNSVGPath,
-  RNSVGLine,
-  RNSVGEllipse,
-  RNSVGCircle,
-  RNSVGRect,
-  RNSVGSvgAndroid,
-  RNSVGSvgIOS,
-  RNSVGForeignObject,
-  RNSVGFilter,
-  RNSVGFeColorMatrix,
-  RNSVGFeGaussianBlur,
-  RNSVGFeOffset,
 };
 
 export type {
+  AstProps,
   JsxAST,
   Middleware,
   Styles,
@@ -139,8 +139,7 @@ export type {
   XmlAST,
   XmlProps,
   XmlState,
-  AstProps,
 };
 
 export * from './elements';
-export default Svg;
+export { default } from './elements';
