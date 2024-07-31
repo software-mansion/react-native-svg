@@ -23,7 +23,7 @@ jobs:
       SYSTEM_IMAGES: system-images;android-34;google_apis;x86_64
       AVD_NAME: rn-svg-avd
     concurrency:
-      group: android-example-${{ github.ref }}
+      group: android-e2e-example-${{ github.ref }}
       cancel-in-progress: true
     steps:
       - name: checkout

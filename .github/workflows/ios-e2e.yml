@@ -22,7 +22,7 @@ jobs:
       DEVICE: iPhone 14 Pro
       XCODE_VERSION: latest-stable
     concurrency:
-      group: ios-example-${{ github.ref }}
+      group: ios-e2e-example-${{ github.ref }}
       cancel-in-progress: true
     steps:
       - name: checkout
