@@ -26,7 +26,7 @@ import type { TextPathProps } from './elements/TextPath';
 import type { TSpanProps } from './elements/TSpan';
 import type { UseProps } from './elements/Use';
 import type { BaseProps } from './web/types';
-import { getBoundingClientRect } from './web/utils';
+import { encodeSvg, getBoundingClientRect } from './web/utils';
 import { WebShape } from './web/WebShape';
 
 export class Circle extends WebShape<BaseProps & CircleProps> {
@@ -124,25 +124,6 @@ export class Rect extends WebShape<BaseProps & RectProps> {
 
 export class Stop extends WebShape<BaseProps & StopProps> {
   tag = 'stop' as const;
-}
-
-/* Taken from here: https://gist.github.com/jennyknuth/222825e315d45a738ed9d6e04c7a88d0 */
-function encodeSvg(svgString: string) {
-  return svgString
-    .replace(
-      '<svg',
-      ~svgString.indexOf('xmlns')
-        ? '<svg'
-        : '<svg xmlns="http://www.w3.org/2000/svg"'
-    )
-    .replace(/"/g, "'")
-    .replace(/%/g, '%25')
-    .replace(/#/g, '%23')
-    .replace(/{/g, '%7B')
-    .replace(/}/g, '%7D')
-    .replace(/</g, '%3C')
-    .replace(/>/g, '%3E')
-    .replace(/\s+/g, ' ');
 }
 
 export class Svg extends WebShape<BaseProps & SvgProps> {
