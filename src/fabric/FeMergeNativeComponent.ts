@@ -13,7 +13,7 @@ interface FilterPrimitiveCommonProps {
 }
 
 export interface NativeProps extends ViewProps, FilterPrimitiveCommonProps {
-  nodes?: ReadonlyArray<UnsafeMixed<string | undefined>>;
+  nodes?: ReadonlyArray<string>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGFeMerge');

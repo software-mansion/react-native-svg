@@ -95,7 +95,7 @@ export const extractFeMerge = (
   props: FeMergeComponentProps,
   parent: unknown
 ): FeMergeNativeProps => {
-  const nodes: Array<string | undefined> = [];
+  const nodes: Array<string> = [];
   const childArray = props.children
     ? React.Children.map(props.children, (child) =>
         React.cloneElement(child, { parent })
@@ -106,7 +106,7 @@ export const extractFeMerge = (
     const {
       props: { in: in1 },
     } = childArray[i];
-    nodes.push(in1);
+    nodes.push(in1 || '');
   }
 
   return { nodes };
