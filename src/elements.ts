@@ -57,3 +57,5 @@ export {
   TextPath,
   Use,
 };
+
+export default Svg;

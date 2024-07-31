@@ -1,36 +1,35 @@
-import { Svg } from './elements';
 import {
+  camelCase,
+  fetchText,
   parse,
   SvgAst,
   SvgFromUri,
   SvgFromXml,
   SvgUri,
   SvgXml,
-  camelCase,
-  fetchText,
 } from './xml';
 
 export {
+  camelCase,
+  fetchText,
   parse,
   SvgAst,
   SvgFromUri,
   SvgFromXml,
   SvgUri,
   SvgXml,
-  camelCase,
-  fetchText,
 };
 
 export {
+  inlineStyles,
+  loadLocalRawResource,
+  LocalSvg,
   SvgCss,
   SvgCssUri,
   SvgWithCss,
   SvgWithCssUri,
-  inlineStyles,
-  LocalSvg,
   WithLocalSvg,
-  loadLocalRawResource,
 } from './deprecated';
 
 export * from './elements';
-export default Svg;
+export { default } from './elements';
