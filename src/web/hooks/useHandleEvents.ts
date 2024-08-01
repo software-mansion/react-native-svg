@@ -1,8 +1,8 @@
 import { MutableRefObject, useMemo } from 'react';
-// eslint-disable-next-line import/no-unresolved
-import usePressEvents from 'react-native-web/src/modules/usePressEvents';
-// eslint-disable-next-line import/no-unresolved
-import useResponderEvents from 'react-native-web/src/modules/useResponderEvents';
+// @ts-ignore not exported by react-native-web
+import usePressEvents from 'react-native-web/dist/modules/usePressEvents';
+// @ts-ignore not exported by react-native-web
+import useResponderEvents from 'react-native-web/dist/modules/useResponderEvents';
 import { hasResponderEvents, hasTouchableProperty } from '../../utils';
 import { CreateComponentProps } from '../../types';
 

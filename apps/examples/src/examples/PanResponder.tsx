@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Animated, PanResponder, Pressable, View} from 'react-native';
+import {Animated, PanResponder, View} from 'react-native';
 import {G, Line, Path, Polyline, Text, Svg} from 'react-native-svg';
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg as any);
@@ -26,34 +26,32 @@ class PanExample extends Component {
   }
   render() {
     return (
-      <Pressable>
-        <View>
-          <AnimatedSvg
-            height="200"
-            width="200"
-            style={{
-              transform: [{translateX: this.pan.x}, {translateY: this.pan.y}],
-            }}
-            {...this.panResponder.panHandlers}>
-            <Path
-              d="M50,5L20,99L95,39L5,39L80,99z"
-              stroke={'black'}
-              fill={'red'}
-              strokeWidth="6"
-              scale="0.8"
-            />
-            <Text
-              fontSize="20"
-              fontWeight="bold"
-              fill="blue"
-              textAnchor="middle"
-              x="40"
-              y="80">
-              STAR
-            </Text>
-          </AnimatedSvg>
-        </View>
-      </Pressable>
+      <View>
+        <AnimatedSvg
+          height="200"
+          width="200"
+          style={{
+            transform: [{translateX: this.pan.x}, {translateY: this.pan.y}],
+          }}
+          {...this.panResponder.panHandlers}>
+          <Path
+            d="M50,5L20,99L95,39L5,39L80,99z"
+            stroke={'black'}
+            fill={'red'}
+            strokeWidth="6"
+            scale="0.8"
+          />
+          <Text
+            fontSize="20"
+            fontWeight="bold"
+            fill="blue"
+            textAnchor="middle"
+            x="40"
+            y="80">
+            STAR
+          </Text>
+        </AnimatedSvg>
+      </View>
     );
   }
 }
