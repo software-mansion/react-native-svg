@@ -1281,6 +1281,7 @@ Not supported yet:
 - FeFuncB
 - FeFuncG
 - FeFuncR
+- FeImage
 - FeMorphology
 - FePointLight
 - FeSpecularLighting

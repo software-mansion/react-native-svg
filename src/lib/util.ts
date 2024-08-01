@@ -36,6 +36,7 @@ export const warnUnimplementedFilter = () => {
         'FeFuncB',
         'FeFuncG',
         'FeFuncR',
+        'FeImage',
         'FeMorphology',
         'FePointLight',
         'FeSpecularLighting',
