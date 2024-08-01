@@ -55,7 +55,7 @@ export interface BaseProps extends Props {
   accessibilityLabel?: string;
   accessibilityHint?: string;
   accessibilityIgnoresInvertColors?: boolean;
-  accessibilityRole?: string;
+  // accessibilityRole?: string;
   accessibilityState?: object;
   delayLongPress?: number;
   delayPressIn?: number;

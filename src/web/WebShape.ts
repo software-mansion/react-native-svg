@@ -7,7 +7,11 @@ import {
 
 import { BaseProps } from './types';
 import { prepare } from './utils/prepare';
-import { camelCaseToDashed, hasTouchableProperty, remeasure } from './utils';
+import {
+  camelCaseToDashed,
+  hasTouchableProperty,
+  remeasure,
+} from './utils/index';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
 
 export class WebShape<
