@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Circle, FeGaussianBlur, Filter, G, Svg} from 'react-native-svg';
 
-class StdDeviation5Example extends Component {
+class StdDeviation3Example extends Component {
   static title = 'stdDeviation="3"';
   render() {
     return (
@@ -18,7 +18,7 @@ class StdDeviation5Example extends Component {
     );
   }
 }
-class StdDeviation20Example extends Component {
+class StdDeviation7Example extends Component {
   static title = 'stdDeviation="7"';
   render() {
     return (
@@ -35,7 +35,7 @@ class StdDeviation20Example extends Component {
     );
   }
 }
-class StdDeviation250Example extends Component {
+class StdDeviation150Example extends Component {
   static title = 'stdDeviation="15 0"';
   render() {
     return (
@@ -52,7 +52,7 @@ class StdDeviation250Example extends Component {
     );
   }
 }
-class StdDeviation050Example extends Component {
+class StdDeviation025Example extends Component {
   static title = 'stdDeviation="0 25"';
   render() {
     return (
@@ -84,9 +84,9 @@ const icon = (
 );
 
 const samples = [
-  StdDeviation5Example,
-  StdDeviation20Example,
-  StdDeviation250Example,
-  StdDeviation050Example,
+  StdDeviation3Example,
+  StdDeviation7Example,
+  StdDeviation150Example,
+  StdDeviation025Example,
 ];
 export {icon, samples};
