@@ -8,6 +8,7 @@ module.exports = {
         extensions: ['.js', '.ts', '.tsx'],
         alias: {
           react: './node_modules/react',
+          'react-native': './node_modules/react-native-web',
         },
       },
     ],

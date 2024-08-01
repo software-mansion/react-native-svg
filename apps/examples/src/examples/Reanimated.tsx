@@ -6,6 +6,7 @@ import Reanimated, {
   withRepeat,
   withSpring,
   withTiming,
+  withClamp,
 } from 'react-native-reanimated';
 import {Svg, Rect} from 'react-native-svg';
 
@@ -17,9 +18,11 @@ function ReanimatedRectExample() {
   const position = useSharedValue(0);
 
   useEffect(() => {
-    height.value = withRepeat(withSpring(100), -1, true);
+    height.value = withClamp({min: 0}, withRepeat(withSpring(100), -1, true));
+
     position.value = withRepeat(withTiming(300, {duration: 5000}), -1);
   });
+
   const animatedProps = useAnimatedProps(() => ({
     width: 30,
     height: height.value,
