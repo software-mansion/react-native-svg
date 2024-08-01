@@ -46,9 +46,7 @@ export const extractFeColorMatrix = (
 
   if (props.values !== undefined) {
     if (Array.isArray(props.values)) {
-      extracted.values = props.values.map((num) =>
-        typeof num === 'number' ? num : parseFloat(num)
-      );
+      extracted.values = props.values;
     } else if (typeof props.values === 'number') {
       extracted.values = [props.values];
     } else if (typeof props.values === 'string') {
@@ -72,10 +70,7 @@ export const extractFeGaussianBlur = (
 ): FeGaussianBlurNativeProps => {
   const extracted: FeGaussianBlurNativeProps = {};
 
-  if (Array.isArray(props.stdDeviation)) {
-    extracted.stdDeviationX = Number(props.stdDeviation[0]) || 0;
-    extracted.stdDeviationY = Number(props.stdDeviation[1]) || 0;
-  } else if (
+  if (
     typeof props.stdDeviation === 'string' &&
     props.stdDeviation.match(spaceReg)
   ) {

@@ -6,12 +6,12 @@ import {
   extractFilter,
   extractIn,
 } from '../../lib/extract/extractFilter';
-import { FilterEdgeMode, NumberArray } from '../../lib/extract/types';
+import { FilterEdgeMode, NumberProp } from '../../lib/extract/types';
 import FilterPrimitive from './FilterPrimitive';
 
 export interface FeGaussianBlurProps {
   in?: string;
-  stdDeviation?: NumberArray;
+  stdDeviation?: NumberProp;
   // edgeMode is hard to implement and not supported by any
   // browser except safari, so it's not implemented for now
   // https://caniuse.com/mdn-api_svgfegaussianblurelement_edgemode
