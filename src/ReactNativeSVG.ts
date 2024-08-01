@@ -63,11 +63,32 @@ export {
 export type { CircleProps } from './elements/Circle';
 export type { ClipPathProps } from './elements/ClipPath';
 export type { EllipseProps } from './elements/Ellipse';
+export type { FeBlendProps } from './elements/filters/FeBlend';
 export type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
+export type { FeComponentTransferProps } from './elements/filters/FeComponentTransfer';
+export type {
+  FeFuncAProps,
+  FeFuncBProps,
+  FeFuncGProps,
+  FeFuncRProps,
+} from './elements/filters/FeComponentTransferFunction';
+export type { FeCompositeProps } from './elements/filters/FeComposite';
+export type { FeConvolveMatrixProps } from './elements/filters/FeConvolveMatrix';
+export type { FeDiffuseLightingProps } from './elements/filters/FeDiffuseLighting';
+export type { FeDisplacementMapProps } from './elements/filters/FeDisplacementMap';
+export type { FeDistantLightProps } from './elements/filters/FeDistantLight';
+export type { FeDropShadowProps } from './elements/filters/FeDropShadow';
+export type { FeFloodProps } from './elements/filters/FeFlood';
 export type { FeGaussianBlurProps } from './elements/filters/FeGaussianBlur';
 export type { FeMergeProps } from './elements/filters/FeMerge';
 export type { FeMergeNodeProps } from './elements/filters/FeMergeNode';
+export type { FeMorphologyProps } from './elements/filters/FeMorphology';
 export type { FeOffsetProps } from './elements/filters/FeOffset';
+export type { FePointLightProps } from './elements/filters/FePointLight';
+export type { FeSpecularLightingProps } from './elements/filters/FeSpecularLighting';
+export type { FeSpotLightProps } from './elements/filters/FeSpotLight';
+export type { FeTileProps } from './elements/filters/FeTile';
+export type { FeTurbulenceProps } from './elements/filters/FeTurbulence';
 export type { FilterProps } from './elements/filters/Filter';
 export type { FilterPrimitiveCommonProps } from './elements/filters/FilterPrimitive';
 export type { ForeignObjectProps } from './elements/ForeignObject';
