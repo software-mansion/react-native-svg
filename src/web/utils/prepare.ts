@@ -34,6 +34,7 @@ export const prepare = <T extends BaseProps>(
     forwardedRef,
     gradientTransform,
     patternTransform,
+    onPress,
     ...rest
   } = props;
 
@@ -117,7 +118,7 @@ export const prepare = <T extends BaseProps>(
     styles.fontStyle = fontStyle;
   }
   clean.style = resolve(style, styles);
-  if (props.onPress != null) {
+  if (onPress !== null) {
     clean.onClick = props.onPress;
   }
   if (props.href !== null) {
