@@ -10,6 +10,7 @@ import {
   FeConvolveMatrix,
   FeDiffuseLighting,
   FeDisplacementMap,
+  FeDistantLight,
   FeDropShadow,
   FeFlood,
   FeGaussianBlur,
@@ -45,7 +46,6 @@ import {
   TSpan,
   Use,
 } from './elements';
-import FeDistantLight from './elements/filters/FeDistantLight';
 
 export const tags = {
   circle: Circle,
