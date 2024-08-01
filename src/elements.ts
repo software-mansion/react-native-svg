@@ -39,6 +39,7 @@ import FeDistantLight from './elements/filters/FeDistantLight';
 import FeDropShadow from './elements/filters/FeDropShadow';
 import FeFlood from './elements/filters/FeFlood';
 import FeGaussianBlur from './elements/filters/FeGaussianBlur';
+import FeImage from './elements/filters/FeImage';
 import FeMerge from './elements/filters/FeMerge';
 import FeMergeNode from './elements/filters/FeMergeNode';
 import FeMorphology from './elements/filters/FeMorphology';
@@ -70,6 +71,7 @@ export {
   FeFuncG,
   FeFuncR,
   FeGaussianBlur,
+  FeImage,
   FeMerge,
   FeMergeNode,
   FeMorphology,

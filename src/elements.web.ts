@@ -14,10 +14,11 @@ import type { FeCompositeProps } from './elements/filters/FeComposite';
 import type { FeConvolveMatrixProps } from './elements/filters/FeConvolveMatrix';
 import type { FeDiffuseLightingProps } from './elements/filters/FeDiffuseLighting';
 import type { FeDisplacementMapProps } from './elements/filters/FeDisplacementMap';
-import { FeDistantLightProps } from './elements/filters/FeDistantLight';
+import type { FeDistantLightProps } from './elements/filters/FeDistantLight';
 import type { FeDropShadowProps } from './elements/filters/FeDropShadow';
 import type { FeFloodProps } from './elements/filters/FeFlood';
 import type { FeGaussianBlurProps } from './elements/filters/FeGaussianBlur';
+import type { FeImageProps } from './elements/filters/FeImage';
 import type { FeMergeProps } from './elements/filters/FeMerge';
 import type { FeMergeNodeProps } from './elements/filters/FeMergeNode';
 import type { FeMorphologyProps } from './elements/filters/FeMorphology';
@@ -134,6 +135,10 @@ export class FeFuncR extends WebShape<BaseProps & FeFuncRProps> {
 
 export class FeGaussianBlur extends WebShape<BaseProps & FeGaussianBlurProps> {
   tag = 'feGaussianBlur' as const;
+}
+
+export class FeImage extends WebShape<BaseProps & FeImageProps> {
+  tag = 'feImage' as const;
 }
 
 export class FeMerge extends WebShape<BaseProps & FeMergeProps> {

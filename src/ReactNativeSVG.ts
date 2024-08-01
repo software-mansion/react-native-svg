@@ -80,6 +80,7 @@ export type { FeDistantLightProps } from './elements/filters/FeDistantLight';
 export type { FeDropShadowProps } from './elements/filters/FeDropShadow';
 export type { FeFloodProps } from './elements/filters/FeFlood';
 export type { FeGaussianBlurProps } from './elements/filters/FeGaussianBlur';
+export type { FeImageProps } from './elements/filters/FeImage';
 export type { FeMergeProps } from './elements/filters/FeMerge';
 export type { FeMergeNodeProps } from './elements/filters/FeMergeNode';
 export type { FeMorphologyProps } from './elements/filters/FeMorphology';
