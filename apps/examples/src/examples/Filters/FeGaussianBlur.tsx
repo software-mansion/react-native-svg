@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {Circle, FeGaussianBlur, Filter, G, Svg} from 'react-native-svg';
 
-class StdDeviation5Example extends Component {
-  static title = 'stdDeviation="5"';
+class StdDeviation3Example extends Component {
+  static title = 'stdDeviation="3"';
   render() {
     return (
       <Svg height="150" width="150">
         <Filter id="filter1">
-          <FeGaussianBlur stdDeviation="5" />
+          <FeGaussianBlur stdDeviation="3" />
         </Filter>
         <G filter="url(#filter1)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
@@ -18,13 +18,13 @@ class StdDeviation5Example extends Component {
     );
   }
 }
-class StdDeviation20Example extends Component {
-  static title = 'stdDeviation="20"';
+class StdDeviation7Example extends Component {
+  static title = 'stdDeviation="7"';
   render() {
     return (
       <Svg height="150" width="150">
         <Filter id="filter2">
-          <FeGaussianBlur stdDeviation="20" />
+          <FeGaussianBlur stdDeviation="7" />
         </Filter>
         <G filter="url(#filter2)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
@@ -35,13 +35,13 @@ class StdDeviation20Example extends Component {
     );
   }
 }
-class StdDeviation250Example extends Component {
-  static title = 'stdDeviation="25 0"';
+class StdDeviation150Example extends Component {
+  static title = 'stdDeviation="15 0"';
   render() {
     return (
       <Svg height="150" width="150">
         <Filter id="filter3">
-          <FeGaussianBlur stdDeviation="25 0" />
+          <FeGaussianBlur stdDeviation="15 0" />
         </Filter>
         <G filter="url(#filter3)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
@@ -52,13 +52,13 @@ class StdDeviation250Example extends Component {
     );
   }
 }
-class StdDeviation050Example extends Component {
-  static title = 'stdDeviation="0 50"';
+class StdDeviation025Example extends Component {
+  static title = 'stdDeviation="0 25"';
   render() {
     return (
       <Svg height="150" width="150">
         <Filter id="filter4">
-          <FeGaussianBlur stdDeviation="0 50" />
+          <FeGaussianBlur stdDeviation="0 25" />
         </Filter>
         <G filter="url(#filter4)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
@@ -73,7 +73,7 @@ class StdDeviation050Example extends Component {
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
     <Filter id="filter5">
-      <FeGaussianBlur stdDeviation="6" />
+      <FeGaussianBlur stdDeviation="3" />
     </Filter>
     <G filter="url(#filter5)">
       <Circle cx="10" cy="7.5" r="5" fill="blue" fillOpacity="0.5" />
@@ -84,9 +84,9 @@ const icon = (
 );
 
 const samples = [
-  StdDeviation5Example,
-  StdDeviation20Example,
-  StdDeviation250Example,
-  StdDeviation050Example,
+  StdDeviation3Example,
+  StdDeviation7Example,
+  StdDeviation150Example,
+  StdDeviation025Example,
 ];
 export {icon, samples};
