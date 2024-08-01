@@ -93,6 +93,13 @@
   return previous;
 }
 
+- (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results
+    previousFilterResult:(CIImage *)previous
+                     ctm:(CGAffineTransform)ctm
+{
+  return [self applyFilter:results previousFilterResult:previous];
+}
+
 - (CIImage *)cropResult:(CIImage *)result
 {
   CIFilter *filter = [CIFilter filterWithName:@"CICrop"];

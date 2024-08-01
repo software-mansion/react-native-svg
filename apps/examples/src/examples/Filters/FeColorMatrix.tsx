@@ -18,10 +18,10 @@ class IdentityExample extends Component {
   render() {
     return (
       <Svg height="150" width="150">
-        <Filter id="filter">
+        <Filter id="filterIdentity">
           <FeColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" />
         </Filter>
-        <G filter="url(#filter)">
+        <G filter="url(#filterIdentity)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
           <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
           <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
@@ -35,7 +35,7 @@ class RgbToGreenExample extends Component {
   render() {
     return (
       <Svg height="150" width="150">
-        <Filter id="filter">
+        <Filter id="filterGreen">
           <FeColorMatrix
             values="0 0 0 0 0
                     1 1 1 1 0
@@ -43,7 +43,7 @@ class RgbToGreenExample extends Component {
                     0 0 0 1 0"
           />
         </Filter>
-        <G filter="url(#filter)">
+        <G filter="url(#filterGreen)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
           <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
           <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
@@ -57,10 +57,10 @@ class SaturateExample extends Component {
   render() {
     return (
       <Svg height="150" width="150">
-        <Filter id="filter">
+        <Filter id="filterSaturate">
           <FeColorMatrix type="saturate" values="0.2" />
         </Filter>
-        <G filter="url(#filter)">
+        <G filter="url(#filterSaturate)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
           <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
           <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
@@ -75,10 +75,10 @@ class HueRotateExample extends Component {
   render() {
     return (
       <Svg height="150" width="150">
-        <Filter id="filter">
+        <Filter id="filterHue">
           <FeColorMatrix type="hueRotate" values="180" />
         </Filter>
-        <G filter="url(#filter)">
+        <G filter="url(#filterHue)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
           <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
           <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
@@ -93,10 +93,10 @@ class LuminanceToAlphaExample extends Component {
   render() {
     return (
       <Svg height="150" width="150">
-        <Filter id="filter">
+        <Filter id="filterLuminance">
           <FeColorMatrix type="luminanceToAlpha" />
         </Filter>
-        <G filter="url(#filter)">
+        <G filter="url(#filterLuminance)">
           <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
           <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
           <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
@@ -108,10 +108,10 @@ class LuminanceToAlphaExample extends Component {
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
-    <Filter id="filter">
+    <Filter id="filterIcon">
       <FeColorMatrix values="0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 0 1 0" />
     </Filter>
-    <G filter="url(#filter)">
+    <G filter="url(#filterIcon)">
       <Circle cx="10" cy="7.5" r="5" fill="blue" fillOpacity="0.5" />
       <Circle cx="7.5" cy="12.5" r="5" fill="green" fillOpacity="0.5" />
       <Circle cx="12.5" cy="12.5" r="5" fill="red" fillOpacity="0.5" />

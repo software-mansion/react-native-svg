@@ -311,7 +311,7 @@ RNSVGTopAlignedLabel *label;
 
   NSString *str = self.content;
   if (!str) {
-    for (RNSVGView *node in self.subviews) {
+    for (RNSVGPlatformView *node in self.subviews) {
       if ([node isKindOfClass:[RNSVGText class]]) {
         RNSVGText *text = (RNSVGText *)node;
         advance += [text getSubtreeTextChunksTotalAdvance];

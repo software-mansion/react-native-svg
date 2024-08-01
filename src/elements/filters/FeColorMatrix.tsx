@@ -4,6 +4,7 @@ import RNSVGFeColorMatrix from '../../fabric/FeColorMatrixNativeComponent';
 import {
   extractFeColorMatrix,
   extractFilter,
+  extractIn,
 } from '../../lib/extract/extractFilter';
 import { FilterColorMatrixType } from '../../lib/extract/types';
 import FilterPrimitive from './FilterPrimitive';
@@ -17,7 +18,7 @@ export type FeColorMatrixProps = {
 export default class FeColorMatrix extends FilterPrimitive<FeColorMatrixProps> {
   static displayName = 'FeColorMatrix';
 
-  static defaultProps = {
+  static defaultProps: React.ComponentProps<typeof FeColorMatrix> = {
     ...this.defaultPrimitiveProps,
     type: 'matrix',
     values: '',
@@ -30,6 +31,7 @@ export default class FeColorMatrix extends FilterPrimitive<FeColorMatrixProps> {
           this.refMethod(ref as (FeColorMatrix & NativeMethods) | null)
         }
         {...extractFilter(this.props)}
+        {...extractIn(this.props)}
         {...extractFeColorMatrix(this.props)}
       />
     );

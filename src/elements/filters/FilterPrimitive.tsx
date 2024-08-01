@@ -16,7 +16,7 @@ export default class FilterPrimitive<P> extends Component<
   [x: string]: unknown;
   root: (FilterPrimitive<P> & NativeMethods) | null = null;
 
-  static defaultPrimitiveProps = {
+  static defaultPrimitiveProps: React.ComponentProps<typeof FilterPrimitive> = {
     x: '0%',
     y: '0%',
     width: '100%',

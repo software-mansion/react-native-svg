@@ -1,52 +1,55 @@
-import { ImageProps, Image as RNImage, StyleSheet, View } from 'react-native';
-import { FeColorMatrix, Filter, Image, Svg } from '../index';
+import * as React from 'react';
+import {
+  ImageProps,
+  ImageStyle,
+  Platform,
+  Image as RNImage,
+  StyleProp,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { Filter, Image, Svg } from '../index';
+import { resolveAssetUri } from '../lib/resolveAssetUri';
+import { getRandomNumber } from '../lib/util';
+import {
+  extractFiltersCss,
+  mapFilterToComponent,
+} from './extract/extractFilters';
+import { extractResizeMode } from './extract/extractImage';
 import { Filters } from './types';
-import { extractResizeMode } from './extractImage';
 
 export interface FilterImageProps extends ImageProps {
-  filters: Filters;
+  style?: StyleProp<ImageStyle & { filter?: string | Filters }> | undefined;
+  filters?: Filters;
 }
 
-const getFilters = (filters: FilterImageProps['filters']) => {
-  return filters?.map((filter, index) => {
-    const { name, ...filterProps } = filter;
-    switch (name) {
-      case 'colorMatrix':
-        return <FeColorMatrix key={`${filter}-${index}`} {...filterProps} />;
-      default:
-        return null;
-    }
-  });
-};
-
 export const FilterImage = (props: FilterImageProps) => {
-  const { source, style, ...imageProps } = props;
+  const { filters = [], source, style, ...imageProps } = props;
+  const { filter: stylesFilter, ...styles } = StyleSheet.flatten(style);
+  const extractedFilters = [...filters, ...extractFiltersCss(stylesFilter)];
+  const filterId = React.useMemo(() => `RNSVG-${getRandomNumber()}`, []);
 
-  const src = RNImage.resolveAssetSource(source);
-  const styles = StyleSheet.flatten(style);
-  const width = props.width || styles?.width || src.width;
-  const height = props.height || styles?.height || src.height;
+  const src =
+    Platform.OS === 'web'
+      ? resolveAssetUri(source)
+      : RNImage.resolveAssetSource(source);
+  const width = props.width || styles?.width || src?.width;
+  const height = props.height || styles?.height || src?.height;
   const preserveAspectRatio = extractResizeMode(props.resizeMode);
 
   return (
-    <View
-      style={[
-        styles,
-        {
-          width,
-          height,
-          overflow: 'hidden',
-        },
-      ]}>
+    <View style={[styles, { width, height, overflow: 'hidden' }]}>
       <Svg width="100%" height="100%">
-        <Filter id={`filter`}>{getFilters(props.filters)}</Filter>
+        <Filter id={filterId}>
+          {extractedFilters.map(mapFilterToComponent)}
+        </Filter>
         <Image
           {...imageProps}
           href={props.src || props.source}
           width="100%"
           height="100%"
           preserveAspectRatio={preserveAspectRatio}
-          filter={props.filters && 'url(#filter)'}
+          filter={extractedFilters.length > 0 ? `url(#${filterId})` : undefined}
         />
       </Svg>
     </View>

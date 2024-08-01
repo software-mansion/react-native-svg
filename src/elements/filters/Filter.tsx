@@ -20,7 +20,7 @@ export interface FilterProps {
 export default class Filter extends Shape<FilterProps> {
   static displayName = 'Filter';
 
-  static defaultProps = {
+  static defaultProps: React.ComponentProps<typeof Filter> = {
     x: '-10%',
     y: '-10%',
     width: '120%',
