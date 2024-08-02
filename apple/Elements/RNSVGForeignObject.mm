@@ -43,17 +43,21 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGForeignObjectProps &>(*props);
 
-  self.x = RCTNSStringFromStringNilIfEmpty(newProps.x)
-      ? [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)]
-      : nil;
-  self.y = RCTNSStringFromStringNilIfEmpty(newProps.y)
-      ? [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)]
-      : nil;
-  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-    self.foreignObjectheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  id x = RNSVGConvertFollyDynamicToId(newProps.x);
+  if (x != nil) {
+    self.x = [RCTConvert RNSVGLength:x];
   }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-    self.foreignObjectwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  id y = RNSVGConvertFollyDynamicToId(newProps.y);
+  if (y != nil) {
+    self.y = [RCTConvert RNSVGLength:y];
+  }
+  id height = RNSVGConvertFollyDynamicToId(newProps.height);
+  if (height != nil) {
+    self.foreignObjectheight = [RCTConvert RNSVGLength:height];
+  }
+  id width = RNSVGConvertFollyDynamicToId(newProps.width);
+  if (width != nil) {
+    self.foreignObjectwidth = [RCTConvert RNSVGLength:width];
   }
 
   setCommonGroupProps(newProps, self);

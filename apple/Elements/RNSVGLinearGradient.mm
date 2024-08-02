@@ -42,10 +42,22 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGLinearGradientProps &>(*props);
 
-  self.x1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x1)];
-  self.y1 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y1)];
-  self.x2 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x2)];
-  self.y2 = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y2)];
+  id x1 = RNSVGConvertFollyDynamicToId(newProps.x1);
+  if (x1 != nil) {
+    self.x1 = [RCTConvert RNSVGLength:x1];
+  }
+  id y1 = RNSVGConvertFollyDynamicToId(newProps.y1);
+  if (y1 != nil) {
+    self.y1 = [RCTConvert RNSVGLength:y1];
+  }
+  id x2 = RNSVGConvertFollyDynamicToId(newProps.x2);
+  if (x2 != nil) {
+    self.x2 = [RCTConvert RNSVGLength:x2];
+  }
+  id y2 = RNSVGConvertFollyDynamicToId(newProps.y2);
+  if (y2 != nil) {
+    self.y2 = [RCTConvert RNSVGLength:y2];
+  }
   if (newProps.gradient.size() > 0) {
     NSMutableArray<NSNumber *> *gradientArray = [NSMutableArray new];
     for (auto number : newProps.gradient) {

@@ -42,10 +42,22 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGEllipseProps &>(*props);
 
-  self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
-  self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
-  self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
-  self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
+  id cx = RNSVGConvertFollyDynamicToId(newProps.cx);
+  if (cx != nil) {
+    self.cx = [RCTConvert RNSVGLength:cx];
+  }
+  id cy = RNSVGConvertFollyDynamicToId(newProps.cy);
+  if (cy != nil) {
+    self.cy = [RCTConvert RNSVGLength:cy];
+  }
+  id rx = RNSVGConvertFollyDynamicToId(newProps.rx);
+  if (rx != nil) {
+    self.rx = [RCTConvert RNSVGLength:rx];
+  }
+  id ry = RNSVGConvertFollyDynamicToId(newProps.ry);
+  if (ry != nil) {
+    self.ry = [RCTConvert RNSVGLength:ry];
+  }
 
   setCommonRenderableProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGEllipseProps const>(props);

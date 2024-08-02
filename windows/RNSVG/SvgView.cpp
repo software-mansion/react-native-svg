@@ -5,9 +5,14 @@
 #include "SvgView.g.cpp"
 #endif
 
+#include <UI.Xaml.Media.Imaging.h>
+#ifdef USE_WINUI3
+#include <microsoft.ui.xaml.media.dxinterop.h>
+#include <winrt/Microsoft.Graphics.Display.h>
+#else
 #include <windows.ui.xaml.media.dxinterop.h>
-#include <winrt/Windows.UI.Xaml.Media.Imaging.h>
 #include <winrt/Windows.Graphics.Display.h>
+#endif
 
 #include "D2DDevice.h"
 #include "D2DDeviceContext.h"

@@ -18,8 +18,10 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
 import android.view.View;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 
@@ -30,6 +32,15 @@ class GroupView extends RenderableView {
 
   public GroupView(ReactContext reactContext) {
     super(reactContext);
+  }
+
+  public void setFont(Dynamic dynamic) {
+    if (dynamic.getType() == ReadableType.Map) {
+      mFont = dynamic.asMap();
+    } else {
+      mFont = null;
+    }
+    invalidate();
   }
 
   public void setFont(@Nullable ReadableMap font) {

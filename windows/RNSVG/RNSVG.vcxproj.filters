@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Midl Include="ReactPackageProvider.idl" />
     <Midl Include="Views.idl">
@@ -148,6 +148,12 @@
     <ClCompile Include="D2DBrush.cpp">
       <Filter>D2DWrappers</Filter>
     </ClCompile>
+    <ClCompile Include="MaskView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="MaskViewManager.cpp">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -291,10 +297,15 @@
     <ClInclude Include="D2DBrush.h">
       <Filter>D2DWrappers</Filter>
     </ClInclude>
+    <ClInclude Include="MaskView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="MaskViewManager.h">
+      <Filter>ViewManagers\GroupViewManagers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Views">

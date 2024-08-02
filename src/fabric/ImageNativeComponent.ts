@@ -5,11 +5,23 @@ import type {
   ImageSourcePropType as ImageSource,
 } from 'react-native';
 import type {
+  DirectEventHandler,
   Float,
   Int32,
   WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
+
+import type { UnsafeMixed } from './codegenUtils';
+import { NumberProp } from '../lib/extract/types';
+
+export type ImageLoadEventData = {
+  source: {
+    width: Float;
+    height: Float;
+    uri: string;
+  };
+};
 
 interface SvgNodeCommonProps {
   name?: string;
@@ -38,27 +50,29 @@ interface SvgRenderableCommonProps {
   fillRule?: WithDefault<Int32, 1>;
   stroke?: ColorStruct;
   strokeOpacity?: WithDefault<Float, 1.0>;
-  strokeWidth?: WithDefault<string, '1'>;
+  strokeWidth?: UnsafeMixed<NumberProp>;
   strokeLinecap?: WithDefault<Int32, 0>;
   strokeLinejoin?: WithDefault<Int32, 0>;
-  strokeDasharray?: ReadonlyArray<string>;
+  strokeDasharray?: UnsafeMixed<ReadonlyArray<NumberProp> | NumberProp>;
   strokeDashoffset?: Float;
   strokeMiterlimit?: Float;
   vectorEffect?: WithDefault<Int32, 0>;
   propList?: ReadonlyArray<string>;
+  filter?: string;
 }
 
 interface NativeProps
   extends ViewProps,
     SvgNodeCommonProps,
     SvgRenderableCommonProps {
-  x?: string;
-  y?: string;
-  width?: string;
-  height?: string;
+  x?: UnsafeMixed<NumberProp>;
+  y?: UnsafeMixed<NumberProp>;
+  width?: UnsafeMixed<NumberProp>;
+  height?: UnsafeMixed<NumberProp>;
   src?: ImageSource | null;
   align?: string;
   meetOrSlice?: Int32;
+  onLoad?: DirectEventHandler<ImageLoadEventData>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGImage', {

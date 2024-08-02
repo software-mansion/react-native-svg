@@ -10,6 +10,8 @@ package com.horcrux.svg;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -92,6 +94,8 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   private @Nullable ArrayList<Object> mOriginProperties;
   private @Nullable ArrayList<String> mPropList;
   private @Nullable ArrayList<String> mAttributeList;
+
+  @Nullable String mFilter;
 
   private static final Pattern regex = Pattern.compile("[0-9.-]+");
 
@@ -253,35 +257,10 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  public void setStrokeDasharray(@Nullable ReadableArray strokeDasharray) {
-    if (strokeDasharray != null) {
-      int fromSize = strokeDasharray.size();
-      this.strokeDasharray = new SVGLength[fromSize];
-      for (int i = 0; i < fromSize; i++) {
-        this.strokeDasharray[i] = SVGLength.from(strokeDasharray.getDynamic(i));
-      }
-    } else {
-      this.strokeDasharray = null;
-    }
-    invalidate();
-  }
-
-  public void setStrokeDasharray(@Nullable String strokeDasharray) {
-    if (strokeDasharray != null) {
-      String stringValue = strokeDasharray.trim();
-      stringValue = stringValue.replaceAll(",", " ");
-      String[] strings = stringValue.split(" ");
-      ArrayList<SVGLength> list = new ArrayList<>(strings.length);
-      for (String length : strings) {
-        list.add(new SVGLength(length));
-      }
-      this.strokeDasharray = new SVGLength[Math.max(list.size(), 2)];
-      for (int i = 0; i < list.size(); i++) {
-        this.strokeDasharray[i] = list.get(i);
-      }
-      if (list.size() == 1) {
-        this.strokeDasharray[1] = this.strokeDasharray[0];
-      }
+  public void setStrokeDasharray(Dynamic dynamicStrokeDasharray) {
+    ArrayList<SVGLength> arrayList = SVGLength.arrayFrom(dynamicStrokeDasharray);
+    if (arrayList != null) {
+      this.strokeDasharray = arrayList.toArray(new SVGLength[0]);
     } else {
       this.strokeDasharray = null;
     }
@@ -294,17 +273,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   }
 
   public void setStrokeWidth(Dynamic strokeWidth) {
-    this.strokeWidth = SVGLength.from(strokeWidth);
-    invalidate();
-  }
-
-  public void setStrokeWidth(String strokeWidth) {
-    this.strokeWidth = SVGLength.from(strokeWidth);
-    invalidate();
-  }
-
-  public void setStrokeWidth(Double strokeWidth) {
-    this.strokeWidth = SVGLength.from(strokeWidth);
+    this.strokeWidth = strokeWidth.isNull() ? new SVGLength(1) : SVGLength.from(strokeWidth);
     invalidate();
   }
 
@@ -360,71 +329,109 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  private static double saturate(double v) {
-    return v <= 0 ? 0 : (v >= 1 ? 1 : v);
+  public void setFilter(String filter) {
+    mFilter = filter;
+    invalidate();
   }
 
   void render(Canvas canvas, Paint paint, float opacity) {
     MaskView mask = null;
+    FilterView filter = null;
+
     if (mMask != null) {
       SvgView root = getSvgView();
       mask = (MaskView) root.getDefinedMask(mMask);
     }
-    if (mask != null) {
-      Rect clipBounds = canvas.getClipBounds();
-      int height = clipBounds.height();
-      int width = clipBounds.width();
+    if (mFilter != null) {
+      SvgView root = getSvgView();
+      filter = (FilterView) root.getDefinedFilter(mFilter);
+    }
 
-      Bitmap maskBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-      Bitmap original = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-      Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+    if (mask != null || filter != null) {
+      if (filter != null) {
+        Paint bitmapPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
+        canvas.saveLayer(null, bitmapPaint);
 
-      Canvas originalCanvas = new Canvas(original);
-      Canvas maskCanvas = new Canvas(maskBitmap);
-      Canvas resultCanvas = new Canvas(result);
+        Rect canvasBounds = this.getSvgView().getCanvasBounds();
 
-      // Clip to mask bounds and render the mask
-      float maskX = (float) relativeOnWidth(mask.mX);
-      float maskY = (float) relativeOnHeight(mask.mY);
-      float maskWidth = (float) relativeOnWidth(mask.mW);
-      float maskHeight = (float) relativeOnHeight(mask.mH);
-      maskCanvas.clipRect(maskX, maskY, maskWidth + maskX, maskHeight + maskY);
+        // draw element to self bitmap
+        Bitmap elementBitmap =
+            Bitmap.createBitmap(
+                canvasBounds.width(), canvasBounds.height(), Bitmap.Config.ARGB_8888);
+        Canvas elementCanvas = new Canvas(elementBitmap);
 
-      Paint maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-      mask.draw(maskCanvas, maskPaint, 1);
+        draw(elementCanvas, paint, opacity);
 
-      // Apply luminanceToAlpha filter primitive
-      // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
-      int nPixels = width * height;
-      int[] pixels = new int[nPixels];
-      maskBitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+        // apply filters
+        Bitmap backgroundBitmap = this.getSvgView().getCurrentBitmap();
+        elementBitmap =
+            filter.applyFilter(
+                elementBitmap, backgroundBitmap, elementCanvas.getClipBounds(), canvasBounds);
 
-      for (int i = 0; i < nPixels; i++) {
-        int color = pixels[i];
-
-        int r = (color >> 16) & 0xFF;
-        int g = (color >> 8) & 0xFF;
-        int b = color & 0xFF;
-        int a = color >>> 24;
-
-        double luminance = saturate(((0.299 * r) + (0.587 * g) + (0.144 * b)) / 255);
-        int alpha = (int) (a * luminance);
-        int pixel = (alpha << 24);
-        pixels[i] = pixel;
+        // draw bitmap to canvas
+        canvas.drawBitmap(elementBitmap, 0, 0, bitmapPaint);
+      } else {
+        canvas.saveLayer(null, paint);
+        draw(canvas, paint, opacity);
       }
 
-      maskBitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+      if (mask != null) {
+        // https://www.w3.org/TR/SVG11/masking.html
+        // Adding a mask involves several steps
+        // 1. applying luminanceToAlpha to the mask element
+        // 2. merging the alpha channel of the element with the alpha channel from the previous step
+        // 3. applying the result from step 2 to the target element
 
-      // Render content of current SVG Renderable to image
-      draw(originalCanvas, paint, opacity);
+        Paint dstInPaint = new Paint();
+        dstInPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
 
-      // Blend current element and mask
-      maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-      resultCanvas.drawBitmap(original, 0, 0, null);
-      resultCanvas.drawBitmap(maskBitmap, 0, 0, maskPaint);
+        // prepare step 3 - combined layer
+        canvas.saveLayer(null, dstInPaint);
 
-      // Render composited result into current render context
-      canvas.drawBitmap(result, 0, 0, paint);
+        if (mask.getMaskType() == MaskView.MaskType.LUMINANCE) {
+          // step 1 - luminance layer
+          // prepare maskPaint with luminanceToAlpha
+          // https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFEMergeElement:~:text=not%20applicable.%20A-,luminanceToAlpha,-operation%20is%20equivalent
+          Paint luminancePaint = new Paint();
+          ColorMatrix luminanceToAlpha =
+              new ColorMatrix(
+                  new float[] {
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2125f, 0.7154f, 0.0721f, 0, 0
+                  });
+          luminancePaint.setColorFilter(new ColorMatrixColorFilter(luminanceToAlpha));
+          canvas.saveLayer(null, luminancePaint);
+        } else {
+          canvas.saveLayer(null, paint);
+        }
+
+        // calculate mask bounds
+        float maskX = (float) relativeOnWidth(mask.mX);
+        float maskY = (float) relativeOnHeight(mask.mY);
+        float maskWidth = (float) relativeOnWidth(mask.mW);
+        float maskHeight = (float) relativeOnHeight(mask.mH);
+        // clip to mask bounds
+        canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
+
+        mask.draw(canvas, paint, 1f);
+
+        // close luminance layer
+        canvas.restore();
+
+        // step 2 - alpha layer
+        canvas.saveLayer(null, dstInPaint);
+        // clip to mask bounds
+        canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
+
+        mask.draw(canvas, paint, 1f);
+
+        // close alpha layer
+        canvas.restore();
+
+        // close combined layer
+        canvas.restore();
+      }
+      // close element layer
+      canvas.restore();
     } else {
       draw(canvas, paint, opacity);
     }

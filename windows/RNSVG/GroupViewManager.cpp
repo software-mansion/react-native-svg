@@ -13,7 +13,7 @@ using namespace Microsoft::ReactNative;
 
 using namespace Windows::Foundation;
 using namespace Windows::Foundation::Collections;
-using namespace Windows::UI::Xaml;
+using namespace xaml;
 
 namespace winrt::RNSVG::implementation {
 GroupViewManager::GroupViewManager() {
@@ -71,11 +71,13 @@ void GroupViewManager::RemoveAllChildren(FrameworkElement const &parent) {
 
 void GroupViewManager::RemoveChildAt(FrameworkElement const &parent, int64_t index) {
   if (auto const &groupView{parent.try_as<RNSVG::GroupView>()}) {
-    auto const &child{groupView.Children().GetAt(static_cast<uint32_t>(index))};
-    child.Unload();
-    child.SvgParent(nullptr);
+    if (!groupView.IsUnloaded()) {
+      auto const &child{groupView.Children().GetAt(static_cast<uint32_t>(index))};
+      child.Unload();
+      child.SvgParent(nullptr);
 
-    groupView.Children().RemoveAt(static_cast<uint32_t>(index));
+      groupView.Children().RemoveAt(static_cast<uint32_t>(index));
+    }
 
     if (auto const &root{groupView.SvgRoot()}) {
       root.Invalidate();

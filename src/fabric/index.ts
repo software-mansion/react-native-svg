@@ -20,6 +20,11 @@ import RNSVGText from './TextNativeComponent';
 import RNSVGTextPath from './TextPathNativeComponent';
 import RNSVGTSpan from './TSpanNativeComponent';
 import RNSVGUse from './UseNativeComponent';
+import RNSVGFilter from './FilterNativeComponent';
+import RNSVGFeColorMatrix from './FeColorMatrixNativeComponent';
+import RNSVGFeGaussianBlur from './FeGaussianBlurNativeComponent';
+import RNSVGFeMerge from './FeMergeNativeComponent';
+import RNSVGFeOffset from './FeOffsetNativeComponent';
 
 export {
   RNSVGCircle,
@@ -44,4 +49,9 @@ export {
   RNSVGTextPath,
   RNSVGTSpan,
   RNSVGUse,
+  RNSVGFilter,
+  RNSVGFeColorMatrix,
+  RNSVGFeGaussianBlur,
+  RNSVGFeMerge,
+  RNSVGFeOffset,
 };

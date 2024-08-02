@@ -1252,3 +1252,141 @@ const styles = StyleSheet.create({
   },
 });
 ```
+
+## Filters
+
+Filter effects are a way of processing an element’s rendering before it is displayed in the document. Typically, rendering an element via CSS or SVG can conceptually be described as if the element, including its children, are drawn into a buffer (such as a raster image) and then that buffer is composited into the elements parent. Filters apply an effect before the compositing stage. Examples of such effects are blurring, changing color intensity and warping the image.
+
+> [!NOTE]
+> Not all filters have been implemented on native platforms yet. However, they do work on the Web, so we added them. Some filters will display a warning indicating they are not currently supported.
+
+The following filters have been implemented:
+
+- FeColorMatrix
+- FeGaussianBlur
+- FeMerge
+- FeOffset
+
+Not supported yet:
+
+- FeBlend
+- FeComponentTransfer
+- FeComposite
+- FeConvolveMatrix
+- FeDiffuseLighting
+- FeDisplacementMap
+- FeDropShadow
+- FeFlood
+- FeFuncA
+- FeFuncB
+- FeFuncG
+- FeFuncR
+- FeImage
+- FeMorphology
+- FePointLight
+- FeSpecularLighting
+- FeSpotLight
+- FeTile
+- FeTurbulence
+
+Exmaple use of filters:
+
+```jsx
+import React from 'react';
+import { FeColorMatrix, Filter, Rect, Svg } from 'react-native-svg';
+
+export default () => {
+  return (
+    <Svg height="300" width="300">
+      <Filter id="myFilter">
+        <FeColorMatrix type="saturate" values="0.2" />
+      </Filter>
+      <Rect
+        x="0"
+        y="0"
+        width="300"
+        height="300"
+        fill="red"
+        filter="url(#myFilter)"
+      />
+    </Svg>
+  );
+};
+```
+
+![FeColorMatrix](./screenshots/feColorMatrix.png)
+
+More info: <https://www.w3.org/TR/SVG11/filters.html>
+
+## FilterImage
+
+`FilterImage` is a new component that is not strictly related to SVG. Its behavior should be the same as a regular `Image` component from React Native with one exception - the additional prop `filters`, which accepts an array of filters to apply to the image.
+
+Filters can be applied in two ways
+
+- through `filters` prop
+- or with CSS API through style prop
+  https://developer.mozilla.org/en-US/docs/Web/CSS/filter
+
+### Examples
+
+#### CSS filter API
+
+```tsx
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { FilterImage } from 'react-native-svg/filter-image';
+
+const myImage = require('./myImage.jpg');
+
+export default () => {
+  return <FilterImage style={styles.image} source={myImage} />;
+};
+
+const styles = StyleSheet.create({
+  image: {
+    width: 200,
+    height: 200,
+    filter: 'saturate(3) grayscale(100%)',
+  },
+});
+```
+
+#### `filters` prop
+
+```tsx
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { FilterImage } from 'react-native-svg/filter-image';
+
+const myImage = require('./myImage.jpg');
+
+export default () => {
+  return (
+    <FilterImage
+      style={styles.image}
+      source={myImage}
+      filters={[
+        { name: 'feColorMatrix', type: 'saturate', values: 0.2 },
+        {
+          name: 'feColorMatrix',
+          type: 'matrix',
+          values: [
+            0.2, 0.2, 0.2, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0, 0,
+            0, 1, 0,
+          ],
+        },
+      ]}
+    />
+  );
+};
+
+const styles = StyleSheet.create({
+  image: {
+    width: 200,
+    height: 200,
+  },
+});
+```
+
+![FilterImage](./screenshots/filterImage.png)

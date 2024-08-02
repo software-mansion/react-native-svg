@@ -10,7 +10,7 @@ import type {
   XmlProps,
   XmlState,
 } from 'react-native-svg';
-import { camelCase, err, fetchText, parse, SvgAst } from 'react-native-svg';
+import { camelCase, fetchText, parse, SvgAst } from 'react-native-svg';
 import type {
   Atrule,
   AtrulePrelude,
@@ -26,6 +26,8 @@ import type {
 import csstree, { List } from 'css-tree';
 import type { Options } from 'css-select';
 import cssSelect from 'css-select';
+
+const err = console.error.bind(console);
 
 /*
  * Style element inlining experiment based on SVGO
@@ -688,12 +690,17 @@ export const inlineStyles: Middleware = function inlineStyles(
 };
 
 export function SvgCss(props: XmlProps) {
-  const { xml, override } = props;
-  const ast = useMemo<JsxAST | null>(
-    () => (xml !== null ? parse(xml, inlineStyles) : null),
-    [xml]
-  );
-  return <SvgAst ast={ast} override={override || props} />;
+  const { xml, override, fallback, onError = err } = props;
+  try {
+    const ast = useMemo<JsxAST | null>(
+      () => (xml !== null ? parse(xml, inlineStyles) : null),
+      [xml]
+    );
+    return <SvgAst ast={ast} override={override || props} />;
+  } catch (error) {
+    onError(error);
+    return fallback ?? null;
+  }
 }
 
 export function SvgCssUri(props: UriProps) {
@@ -716,7 +723,7 @@ export function SvgCssUri(props: UriProps) {
   if (isError) {
     return fallback ?? null;
   }
-  return <SvgCss xml={xml} override={props} />;
+  return <SvgCss xml={xml} override={props} fallback={fallback} />;
 }
 
 // Extending Component is required for Animated support.

@@ -58,9 +58,9 @@ using namespace facebook::react;
 
 - (BOOL)isSimpleClipPath
 {
-  NSArray<RNSVGView *> *children = self.subviews;
+  NSArray<RNSVGPlatformView *> *children = self.subviews;
   if (children.count == 1) {
-    RNSVGView *child = children[0];
+    RNSVGPlatformView *child = children[0];
     if ([child class] != [RNSVGGroup class]) {
       return true;
     }

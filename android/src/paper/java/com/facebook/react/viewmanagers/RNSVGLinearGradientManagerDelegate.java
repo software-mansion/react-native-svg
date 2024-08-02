@@ -11,6 +11,7 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.DynamicFromObject;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
@@ -59,40 +60,16 @@ public class RNSVGLinearGradientManagerDelegate<T extends View, U extends BaseVi
         mViewManager.setPointerEvents(view, value == null ? null : (String) value);
         break;
       case "x1":
-        if (value instanceof String) {
-          mViewManager.setX1(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setX1(view, (Double) value);
-        } else {
-          mViewManager.setX1(view, (Double) null);
-        }
+        mViewManager.setX1(view, new DynamicFromObject(value));
         break;
       case "y1":
-        if (value instanceof String) {
-          mViewManager.setY1(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setY1(view, (Double) value);
-        } else {
-          mViewManager.setY1(view, (Double) null);
-        }
+        mViewManager.setY1(view, new DynamicFromObject(value));
         break;
       case "x2":
-        if (value instanceof String) {
-          mViewManager.setX2(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setX2(view, (Double) value);
-        } else {
-          mViewManager.setX2(view, (Double) null);
-        }
+        mViewManager.setX2(view, new DynamicFromObject(value));
         break;
       case "y2":
-        if (value instanceof String) {
-          mViewManager.setY2(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setY2(view, (Double) value);
-        } else {
-          mViewManager.setY2(view, (Double) null);
-        }
+        mViewManager.setY2(view, new DynamicFromObject(value));
         break;
       case "gradient":
         mViewManager.setGradient(view, (ReadableArray) value);

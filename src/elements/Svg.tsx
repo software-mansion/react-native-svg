@@ -24,6 +24,7 @@ import G from './G';
 import RNSVGSvgAndroid from '../fabric/AndroidSvgViewNativeComponent';
 import RNSVGSvgIOS from '../fabric/IOSSvgViewNativeComponent';
 import type { Spec } from '../fabric/NativeSvgViewModule';
+import extractOpacity from '../lib/extract/extractOpacity';
 
 const styles = StyleSheet.create({
   svg: {
@@ -74,13 +75,6 @@ export default class Svg extends Shape<SvgProps> {
       bbHeight?: NumberProp;
     }
   ) => {
-    const { width, height } = props;
-    if (width) {
-      props.bbWidth = String(width);
-    }
-    if (height) {
-      props.bbHeight = String(height);
-    }
     const { root } = this;
     root && root.setNativeProps(props);
   };
@@ -145,7 +139,7 @@ export default class Svg extends Shape<SvgProps> {
 
     let override = false;
     const overrideStyles: ViewStyle = {};
-    const o = opacity != null ? +opacity : NaN;
+    const o = opacity != null ? extractOpacity(opacity) : NaN;
     if (!isNaN(o)) {
       override = true;
       overrideStyles.opacity = o;
@@ -169,10 +163,10 @@ export default class Svg extends Shape<SvgProps> {
     props.style = rootStyles.length > 1 ? rootStyles : defaultStyle;
 
     if (width != null) {
-      props.bbWidth = String(width);
+      props.bbWidth = width;
     }
     if (height != null) {
-      props.bbHeight = String(height);
+      props.bbHeight = height;
     }
 
     extractResponder(props, props, this as ResponderInstanceProps);
@@ -183,7 +177,7 @@ export default class Svg extends Shape<SvgProps> {
       props.onLayout = onLayout;
     }
 
-    const gStyle = Object.assign({}, style) as ViewStyle;
+    const gStyle = Object.assign({}, StyleSheet.flatten(style));
     // if transform prop is of RN style's kind, we want `SvgView` to handle it
     // since it can be done here. Otherwise, if transform is of `svg` kind, e.g. string,
     // we want G element to parse it since `Svg` does not include parsing of those custom transforms.

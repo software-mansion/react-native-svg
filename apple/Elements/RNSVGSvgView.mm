@@ -24,8 +24,9 @@
   NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
   NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
   NSMutableDictionary<NSString *, RNSVGPainter *> *_painters;
-  NSMutableDictionary<NSString *, RNSVGNode *> *_markers;
-  NSMutableDictionary<NSString *, RNSVGNode *> *_masks;
+  NSMutableDictionary<NSString *, RNSVGMarker *> *_markers;
+  NSMutableDictionary<NSString *, RNSVGMask *> *_masks;
+  NSMutableDictionary<NSString *, RNSVGFilter *> *_filters;
   CGAffineTransform _invviewBoxTransform;
   bool rendered;
 }
@@ -71,8 +72,14 @@ using namespace facebook::react;
   self.minY = newProps.minY;
   self.vbWidth = newProps.vbWidth;
   self.vbHeight = newProps.vbHeight;
-  self.bbWidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.bbWidth)];
-  self.bbHeight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.bbHeight)];
+  id bbWidth = RNSVGConvertFollyDynamicToId(newProps.bbWidth);
+  if (bbWidth != nil) {
+    self.bbWidth = [RCTConvert RNSVGLength:bbWidth];
+  }
+  id bbHeight = RNSVGConvertFollyDynamicToId(newProps.bbHeight);
+  if (bbHeight != nil) {
+    self.bbHeight = [RCTConvert RNSVGLength:bbHeight];
+  }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
   if (RCTUIColorFromSharedColor(newProps.tintColor)) {
@@ -108,19 +115,33 @@ using namespace facebook::react;
   _painters = nil;
   _markers = nil;
   _masks = nil;
+  _filters = nil;
   _invviewBoxTransform = CGAffineTransformIdentity;
   rendered = NO;
 }
+
+- (void)mountChildComponentView:(RNSVGView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  [super mountChildComponentView:childComponentView index:index];
+  [self invalidate];
+}
+
+- (void)unmountChildComponentView:(RNSVGView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  [super unmountChildComponentView:childComponentView index:index];
+  [self invalidate];
+}
+
 #endif // RCT_NEW_ARCH_ENABLED
 
-- (void)insertReactSubview:(RNSVGView *)subview atIndex:(NSInteger)atIndex
+- (void)insertReactSubview:(RNSVGPlatformView *)subview atIndex:(NSInteger)atIndex
 {
   [super insertReactSubview:subview atIndex:atIndex];
   [self insertSubview:subview atIndex:atIndex];
   [self invalidate];
 }
 
-- (void)removeReactSubview:(RNSVGView *)subview
+- (void)removeReactSubview:(RNSVGPlatformView *)subview
 {
   [super removeReactSubview:subview];
   [self invalidate];
@@ -270,7 +291,7 @@ using namespace facebook::react;
     _viewBoxTransform = CGAffineTransformIdentity;
     _invviewBoxTransform = CGAffineTransformIdentity;
   }
-  for (RNSVGView *node in self.subviews) {
+  for (RNSVGPlatformView *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGNode class]]) {
       RNSVGNode *svg = (RNSVGNode *)node;
       if (svg.responsible && !self.responsible) {
@@ -339,10 +360,10 @@ using namespace facebook::react;
 #endif
 #if !TARGET_OS_OSX // [macOS]
   NSData *imageData = UIImagePNGRepresentation(image);
-  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
 #else // [macOS
   NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
-  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
   UIGraphicsEndImageContext();
 #endif // macOS]
   return base64;
@@ -392,7 +413,7 @@ using namespace facebook::react;
   return _painters ? [_painters objectForKey:painterName] : nil;
 }
 
-- (void)defineMarker:(RNSVGNode *)marker markerName:(NSString *)markerName
+- (void)defineMarker:(RNSVGMarker *)marker markerName:(NSString *)markerName
 {
   if (!_markers) {
     _markers = [[NSMutableDictionary alloc] init];
@@ -400,12 +421,12 @@ using namespace facebook::react;
   [_markers setObject:marker forKey:markerName];
 }
 
-- (RNSVGNode *)getDefinedMarker:(NSString *)markerName;
+- (RNSVGMarker *)getDefinedMarker:(NSString *)markerName;
 {
   return _markers ? [_markers objectForKey:markerName] : nil;
 }
 
-- (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName
+- (void)defineMask:(RNSVGMask *)mask maskName:(NSString *)maskName
 {
   if (!_masks) {
     _masks = [[NSMutableDictionary alloc] init];
@@ -413,9 +434,22 @@ using namespace facebook::react;
   [_masks setObject:mask forKey:maskName];
 }
 
-- (RNSVGNode *)getDefinedMask:(NSString *)maskName;
+- (RNSVGMask *)getDefinedMask:(NSString *)maskName;
 {
   return _masks ? [_masks objectForKey:maskName] : nil;
+}
+
+- (void)defineFilter:(RNSVGFilter *)filter filterName:(NSString *)filterName
+{
+  if (!_filters) {
+    _filters = [[NSMutableDictionary alloc] init];
+  }
+  [_filters setObject:filter forKey:filterName];
+}
+
+- (RNSVGFilter *)getDefinedFilter:(NSString *)filterName
+{
+  return _filters ? [_filters objectForKey:filterName] : nil;
 }
 
 - (CGRect)getContextBounds

@@ -1,9 +1,6 @@
 import type { ReactNode } from 'react';
 import * as React from 'react';
-import {
-  stringifyPropsForFabric,
-  withoutXY,
-} from '../lib/extract/extractProps';
+import { withoutXY } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import { idPattern } from '../lib/util';
 import Shape from './Shape';
@@ -53,13 +50,13 @@ export default class Use extends Shape<UseProps> {
           '"'
       );
     }
-    const useProps = stringifyPropsForFabric({
-      href: match,
+    const useProps = {
+      href: match ?? undefined,
       x,
       y,
       width,
       height,
-    });
+    };
     return (
       <RNSVGUse
         ref={(ref) => this.refMethod(ref as (Use & NativeMethods) | null)}

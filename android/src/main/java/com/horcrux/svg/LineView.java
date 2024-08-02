@@ -32,27 +32,7 @@ class LineView extends RenderableView {
     invalidate();
   }
 
-  public void setX1(String x1) {
-    mX1 = SVGLength.from(x1);
-    invalidate();
-  }
-
-  public void setX1(Double x1) {
-    mX1 = SVGLength.from(x1);
-    invalidate();
-  }
-
   public void setY1(Dynamic y1) {
-    mY1 = SVGLength.from(y1);
-    invalidate();
-  }
-
-  public void setY1(String y1) {
-    mY1 = SVGLength.from(y1);
-    invalidate();
-  }
-
-  public void setY1(Double y1) {
     mY1 = SVGLength.from(y1);
     invalidate();
   }
@@ -62,27 +42,7 @@ class LineView extends RenderableView {
     invalidate();
   }
 
-  public void setX2(String x2) {
-    mX2 = SVGLength.from(x2);
-    invalidate();
-  }
-
-  public void setX2(Double x2) {
-    mX2 = SVGLength.from(x2);
-    invalidate();
-  }
-
   public void setY2(Dynamic y2) {
-    mY2 = SVGLength.from(y2);
-    invalidate();
-  }
-
-  public void setY2(String y2) {
-    mY2 = SVGLength.from(y2);
-    invalidate();
-  }
-
-  public void setY2(Double y2) {
     mY2 = SVGLength.from(y2);
     invalidate();
   }

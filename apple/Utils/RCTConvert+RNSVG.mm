@@ -42,6 +42,36 @@ RCT_ENUM_CONVERTER(
     kRNSVGUnitsObjectBoundingBox,
     intValue)
 
+RCT_ENUM_CONVERTER(
+    RNSVGMaskType,
+    (@{
+      @"luminance" : @(kRNSVGMaskTypeLuminance),
+      @"alpha" : @(kRNSVGMaskTypeAlpha),
+    }),
+    kRNSVGMaskTypeLuminance,
+    intValue)
+
+RCT_ENUM_CONVERTER(
+    RNSVGEdgeMode,
+    (@{
+      @"duplicate" : @(SVG_EDGEMODE_DUPLICATE),
+      @"wrap" : @(SVG_EDGEMODE_WRAP),
+      @"none" : @(SVG_EDGEMODE_NONE),
+    }),
+    SVG_EDGEMODE_UNKNOWN,
+    intValue)
+
+RCT_ENUM_CONVERTER(
+    RNSVGColorMatrixType,
+    (@{
+      @"matrix" : @(SVG_FECOLORMATRIX_TYPE_MATRIX),
+      @"saturate" : @(SVG_FECOLORMATRIX_TYPE_SATURATE),
+      @"hueRotate" : @(SVG_FECOLORMATRIX_TYPE_HUEROTATE),
+      @"luminanceToAlpha" : @(SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA),
+    }),
+    SVG_FECOLORMATRIX_TYPE_UNKNOWN,
+    intValue)
+
 + (RNSVGBrush *)RNSVGBrush:(id)json
 {
   if ([json isKindOfClass:[NSNumber class]]) {

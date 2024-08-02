@@ -232,6 +232,16 @@ void PatternFunction(void *info, CGContextRef context)
   CGFloat rx = [self getVal:[_points objectAtIndex:2] relative:width];
   CGFloat ry = [self getVal:[_points objectAtIndex:3] relative:height];
 
+  if (rx <= 0 || ry <= 0) {
+    // Gradient with radius = 0 should be rendered as solid color of the last stop
+    rx = width;
+    ry = height;
+    CGGradientRelease(gradient);
+    NSArray<NSNumber *> *gradientArray =
+        @[ _colors.firstObject, _colors.lastObject, _colors[_colors.count - 2], _colors.lastObject ];
+    gradient = CGGradientRetain([RCTConvert RNSVGCGGradient:gradientArray]);
+  }
+
   double ratio = ry / rx;
 
   CGFloat fx = [self getVal:[_points objectAtIndex:0] relative:width] + offsetX;

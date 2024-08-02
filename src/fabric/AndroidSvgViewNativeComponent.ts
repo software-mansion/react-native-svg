@@ -7,6 +7,9 @@ import type {
 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
 
+import type { UnsafeMixed } from './codegenUtils';
+import { NumberProp } from '../lib/extract/types';
+
 type NativeBackgroundProp = Readonly<{
   type?: string;
   color?: Float;
@@ -22,8 +25,8 @@ type HitSlop = Readonly<{
 }>;
 
 interface NativeProps extends ViewProps {
-  bbWidth?: string;
-  bbHeight?: string;
+  bbWidth?: UnsafeMixed<NumberProp>;
+  bbHeight?: UnsafeMixed<NumberProp>;
   minX?: Float;
   minY?: Float;
   vbWidth?: Float;
@@ -70,6 +73,13 @@ interface NativeProps extends ViewProps {
   borderRadius?: Double;
   borderBottomLeftRadius?: Double;
   borderTopLeftRadius?: Double;
+  borderBlockColor?: ColorValue;
+  borderBlockEndColor?: ColorValue;
+  borderBlockStartColor?: ColorValue;
+  borderEndEndRadius?: Double;
+  borderEndStartRadius?: Double;
+  borderStartEndRadius?: Double;
+  borderStartStartRadius?: Double;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGSvgViewAndroid', {

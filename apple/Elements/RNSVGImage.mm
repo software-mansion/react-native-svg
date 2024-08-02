@@ -72,13 +72,21 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGImageProps &>(*props);
 
-  self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
-  self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-    self.imageheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  id x = RNSVGConvertFollyDynamicToId(newProps.x);
+  if (x != nil) {
+    self.x = [RCTConvert RNSVGLength:x];
   }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-    self.imagewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  id y = RNSVGConvertFollyDynamicToId(newProps.y);
+  if (y != nil) {
+    self.y = [RCTConvert RNSVGLength:y];
+  }
+  id height = RNSVGConvertFollyDynamicToId(newProps.height);
+  if (height != nil) {
+    self.imageheight = [RCTConvert RNSVGLength:height];
+  }
+  id width = RNSVGConvertFollyDynamicToId(newProps.width);
+  if (width != nil) {
+    self.imagewidth = [RCTConvert RNSVGLength:width];
   }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
@@ -124,6 +132,17 @@ using namespace facebook::react;
     // In the future, we should incorporate an `EventEmitter` into a separate object owned by `ImageRequest` or `State`.
     // See for more info: T46311063.
     return;
+  }
+  auto imageSource = _state->getData().getImageSource();
+  imageSource.size = {image.size.width, image.size.height};
+  if (_eventEmitter != nullptr) {
+    static_cast<const RNSVGImageEventEmitter &>(*_eventEmitter)
+        .onLoad(
+            {.source = {
+                 .width = imageSource.size.width * imageSource.scale,
+                 .height = imageSource.size.height * imageSource.scale,
+                 .uri = imageSource.uri,
+             }});
   }
   dispatch_async(dispatch_get_main_queue(), ^{
     self->_image = CGImageRetain(image.CGImage);
@@ -194,6 +213,20 @@ using namespace facebook::react;
                        dispatch_async(dispatch_get_main_queue(), ^{
                          self->_image = CGImageRetain(image.CGImage);
                          self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+                         if (self->_onLoad) {
+                           RCTImageSource *sourceLoaded;
+#if TARGET_OS_OSX // [macOS]
+                           sourceLoaded = [src imageSourceWithSize:image.size scale:1];
+#else
+                            sourceLoaded = [src imageSourceWithSize:image.size scale:image.scale];
+#endif
+                           NSDictionary *dict = @{
+                             @"uri" : sourceLoaded.request.URL.absoluteString,
+                             @"width" : @(sourceLoaded.size.width),
+                             @"height" : @(sourceLoaded.size.height),
+                           };
+                           self->_onLoad(@{@"source" : dict});
+                         }
                          [self invalidate];
                        });
                      }];

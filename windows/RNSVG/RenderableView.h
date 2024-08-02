@@ -13,8 +13,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
 
   RNSVG::SvgView SvgRoot();
 
-  Windows::UI::Xaml::FrameworkElement SvgParent() { return m_parent; }
-  void SvgParent(Windows::UI::Xaml::FrameworkElement const &value) { m_parent = value; }
+  xaml::FrameworkElement SvgParent() { return m_parent; }
+  void SvgParent(xaml::FrameworkElement const &value) { m_parent = value; }
 
   RNSVG::D2DGeometry Geometry() { return m_geometry; }
   void Geometry(RNSVG::D2DGeometry const &value) { m_geometry = value; }
@@ -24,6 +24,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
 
   bool IsResponsible() { return m_isResponsible; }
   void IsResponsible(bool isResponsible) { m_isResponsible = isResponsible; }
+
+  bool IsUnloaded() { return m_isUnloaded; }
 
   hstring FillBrushId() { return m_fillBrushId; }
   Windows::UI::Color Fill() { return m_fill; }
@@ -69,16 +71,17 @@ struct RenderableView : RenderableViewT<RenderableView> {
 
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
-  Windows::UI::Xaml::FrameworkElement m_parent{nullptr};
+  xaml::FrameworkElement m_parent{nullptr};
   RNSVG::D2DGeometry m_geometry{nullptr};
   bool m_recreateResources{true};
   bool m_isResponsible{false};
-  
+  bool m_isUnloaded{false};
+
   hstring m_id{L""};
   hstring m_clipPathId{L""};
   Numerics::float3x2 m_transformMatrix{Numerics::make_float3x2_rotation(0)};
-  Windows::UI::Color m_fill{Windows::UI::Colors::Black()};
-  Windows::UI::Color m_stroke{Windows::UI::Colors::Transparent()};
+  Windows::UI::Color m_fill{Colors::Black()};
+  Windows::UI::Color m_stroke{Colors::Transparent()};
   hstring m_fillBrushId{L""};
   hstring m_strokeBrushId{L""};
   float m_fillOpacity{1.0f};

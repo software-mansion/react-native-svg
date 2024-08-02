@@ -4,7 +4,6 @@ import { Children } from 'react';
 import extractLengthList from './extractLengthList';
 import { pickNotNil } from '../util';
 import type { NumberArray, NumberProp } from './types';
-import { stringifyPropsForFabric } from './extractProps';
 
 const fontRegExp =
   /^\s*((?:(?:normal|bold|italic)\s+)*)(?:(\d+(?:\.\d+)?(?:%|px|em|pt|pc|mm|cm|in]))*(?:\s*\/.*?)?\s+)?\s*"?([^"]*)/i;
@@ -112,18 +111,7 @@ export function extractFont(props: fontProps) {
 
   const baseFont = typeof font === 'string' ? parseFontString(font) : font;
 
-  const fontProps: { [prop: string]: string | number | null } = {
-    ...baseFont,
-    ...ownedFont,
-  };
-  const stringifiedFontProps: { [prop: string]: string | null } = {};
-  Object.keys(fontProps).map(
-    (k) =>
-      (stringifiedFontProps[k] =
-        fontProps[k] === null ? null : String(fontProps[k]))
-  );
-
-  return stringifiedFontProps;
+  return { ...baseFont, ...ownedFont };
 }
 
 let TSpan: ComponentType<React.PropsWithChildren>;
@@ -182,16 +170,12 @@ export default function extractText(props: TextProps, container: boolean) {
       children
     );
 
-  const stringifiedTextProps = stringifyPropsForFabric({
-    inlineSize,
-    baselineShift,
-    verticalAlign,
-  });
-
   return {
     content: textChildren === null ? String(children) : null,
     children: textChildren,
-    ...stringifiedTextProps,
+    inlineSize,
+    baselineShift,
+    verticalAlign,
     alignmentBaseline,
     font: extractFont(props),
     x: extractLengthList(x),

@@ -41,6 +41,7 @@ export default function extractProps(
   props: {
     id?: string;
     mask?: string;
+    filter?: string;
     marker?: string;
     markerStart?: string;
     markerMid?: string;
@@ -67,6 +68,7 @@ export default function extractProps(
     clipRule,
     display,
     mask,
+    filter,
     marker,
     markerStart = marker,
     markerMid = marker,
@@ -159,6 +161,20 @@ export default function extractProps(
     }
   }
 
+  if (filter) {
+    const matched = filter.match(idPattern);
+
+    if (matched) {
+      extracted.filter = matched[1];
+    } else {
+      console.warn(
+        'Invalid `filter` prop, expected a filter like "#id", but got: "' +
+          filter +
+          '"'
+      );
+    }
+  }
+
   return extracted;
 }
 
@@ -167,19 +183,6 @@ export function extract(
   props: object & { style?: [] | unknown }
 ) {
   return extractProps(propsAndStyles(props), instance);
-}
-
-export function stringifyPropsForFabric(props: {
-  [key: string]: NumberProp | undefined | null;
-}): { [key: string]: string } {
-  const extracted: { [key: string]: string } = {};
-  Object.keys(props).forEach((k) => {
-    if (props[k] !== undefined && props[k] !== null) {
-      extracted[k] = String(props[k]);
-    }
-  });
-
-  return extracted;
 }
 
 export function withoutXY(

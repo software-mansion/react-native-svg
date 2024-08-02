@@ -358,6 +358,7 @@ void RenderableView::Unload() {
   m_propList.clear();
   m_propSetMap.clear();
   m_strokeDashArray.Clear();
+  m_isUnloaded = true;
 }
 
 RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
@@ -370,7 +371,7 @@ RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
     if (auto const &svgRoot{SvgRoot()}) {
       float canvasDiagonal{Utils::GetCanvasDiagonal(svgRoot.ActualSize())};
       float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
-      
+
       check_hresult(geometry->StrokeContainsPoint(pointD2D, strokeWidth, nullptr, nullptr, &strokeContainsPoint));
     }
 
@@ -384,7 +385,7 @@ RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
   return nullptr;
 }
 
-void RenderableView::SetColor(const JSValueObject &propValue, ui::Color const &fallbackColor, std::string propName) {
+void RenderableView::SetColor(const JSValueObject &propValue, Windows::UI::Color const &fallbackColor, std::string propName) {
   switch (propValue["type"].AsInt64()) {
     // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractBrush.ts#L29
     case 1: {

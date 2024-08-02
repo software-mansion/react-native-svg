@@ -40,12 +40,30 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGRadialGradientProps &>(*props);
 
-  self.fx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.fx)];
-  self.fy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.fy)];
-  self.cx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cx)];
-  self.cy = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.cy)];
-  self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
-  self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
+  id fx = RNSVGConvertFollyDynamicToId(newProps.fx);
+  if (fx != nil) {
+    self.fx = [RCTConvert RNSVGLength:fx];
+  }
+  id fy = RNSVGConvertFollyDynamicToId(newProps.fy);
+  if (fy != nil) {
+    self.fy = [RCTConvert RNSVGLength:fy];
+  }
+  id cx = RNSVGConvertFollyDynamicToId(newProps.cx);
+  if (cx != nil) {
+    self.cx = [RCTConvert RNSVGLength:cx];
+  }
+  id cy = RNSVGConvertFollyDynamicToId(newProps.cy);
+  if (cy != nil) {
+    self.cy = [RCTConvert RNSVGLength:cy];
+  }
+  id rx = RNSVGConvertFollyDynamicToId(newProps.rx);
+  if (rx != nil) {
+    self.rx = [RCTConvert RNSVGLength:rx];
+  }
+  id ry = RNSVGConvertFollyDynamicToId(newProps.ry);
+  if (ry != nil) {
+    self.ry = [RCTConvert RNSVGLength:ry];
+  }
   if (newProps.gradient.size() > 0) {
     NSMutableArray<NSNumber *> *gradientArray = [NSMutableArray new];
     for (auto number : newProps.gradient) {
