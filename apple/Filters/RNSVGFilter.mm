@@ -104,7 +104,7 @@ using namespace facebook::react;
                                                                      fromRect:[result extent]];
       result = [CIImage imageWithCGImage:cgResult];
       CGImageRelease(cgResult);
-      if (currentFilter.result) {
+      if (result != nil && currentFilter.result) {
         [resultsMap setObject:result forKey:currentFilter.result];
       }
     } else {
