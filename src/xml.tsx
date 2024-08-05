@@ -1,6 +1,7 @@
 import type { ComponentType, ComponentProps } from 'react';
 import * as React from 'react';
 import { Component, useEffect, useMemo, useState } from 'react';
+import { fetchText } from './utils/fetchData';
 import type { SvgProps } from './elements/Svg';
 import { tags } from './xmlTags';
 
@@ -76,17 +77,6 @@ export function SvgXml(props: XmlProps) {
     onError(error);
     return fallback ?? null;
   }
-}
-
-export async function fetchText(uri?: string) {
-  if (!uri) {
-    return null;
-  }
-  const response = await fetch(uri);
-  if (response.ok || (response.status === 0 && uri.startsWith('file://'))) {
-    return await response.text();
-  }
-  throw new Error(`Fetching ${uri} failed with status ${response.status}`);
 }
 
 export function SvgUri(props: UriProps) {

@@ -4,6 +4,7 @@ import React from 'react';
 import ColorTest from './src/ColorTest';
 import PointerEventsBoxNone from './src/PointerEventsBoxNone';
 import MountUnmount from './src/MountUnmount';
+import Test1318 from './src/Test1318';
 import Test1374 from './src/Test1374';
 import Test1442 from './src/Test1442';
 import Test1451 from './src/Test1451';
@@ -25,5 +26,5 @@ import Test2327 from './src/Test2327';
 import Test2366 from './src/Test2366';
 
 export default function App() {
-  return <ColorTest />;
+  return <Test1318 />;
 }
