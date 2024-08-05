@@ -19,8 +19,12 @@
   return self;
 }
 
-static YGSize
-RNSVGSvgShadowViewMeasure(YGNodeRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
+static YGSize RNSVGSvgShadowViewMeasure(
+    const struct YGNode *node,
+    float width,
+    YGMeasureMode widthMode,
+    float height,
+    YGMeasureMode heightMode)
 {
   RNSVGSvgShadowView *shadowView = (__bridge RNSVGSvgShadowView *)YGNodeGetContext(node);
 
