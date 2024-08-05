@@ -102,11 +102,6 @@ public abstract class VirtualView extends ReactViewGroup {
   Region mStrokeRegion;
   Region mClipRegion;
   ArrayList<PathElement> elements;
-  PointerEvents mPointerEvents;
-
-  void setPointerEvents(PointerEvents pointerEvents) {
-    mPointerEvents = pointerEvents;
-  }
 
   @Override
   public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {

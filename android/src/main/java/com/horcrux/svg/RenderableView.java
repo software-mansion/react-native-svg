@@ -105,7 +105,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
      * In order to make the isTouchPointInView fail we need to return a very improbable Rect for the View
      * This way an SVG with box_none carrying its last descendent with box_none will have the expected behavior of just having events on the actual painted area
      */
-    if (mPointerEvents == PointerEvents.BOX_NONE) {
+    if (this.getPointerEvents() == PointerEvents.BOX_NONE) {
       return new Rect(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
     }
     return null;
@@ -630,7 +630,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
       return -1;
     }
 
-    if (mPointerEvents == PointerEvents.NONE) {
+    if (this.getPointerEvents() == PointerEvents.NONE) {
       return -1;
     }
 
