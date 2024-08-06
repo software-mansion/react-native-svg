@@ -285,25 +285,30 @@ class SvgViewManager extends ReactViewManager
   }
 
   @Override
-  public void setHitSlop(SvgView view, @Nullable ReadableMap hitSlopMap) {
+  public void setHitSlop(SvgView view, ReadableMap hitSlopMap) {
     // we don't call super here since its signature changed in RN 0.69 and we want backwards
     // compatibility
-    if (hitSlopMap != null) {
-      view.setHitSlopRect(
-          new Rect(
-              hitSlopMap.hasKey("left")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("left"))
-                  : 0,
-              hitSlopMap.hasKey("top")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("top"))
-                  : 0,
-              hitSlopMap.hasKey("right")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("right"))
-                  : 0,
-              hitSlopMap.hasKey("bottom")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("bottom"))
-                  : 0));
-    }
+    view.setHitSlopRect(
+        new Rect(
+            hitSlopMap.hasKey("left")
+                ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("left"))
+                : 0,
+            hitSlopMap.hasKey("top")
+                ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("top"))
+                : 0,
+            hitSlopMap.hasKey("right")
+                ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("right"))
+                : 0,
+            hitSlopMap.hasKey("bottom")
+                ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("bottom"))
+                : 0)
+    );
+  }
+
+  @Override
+  public void setHitSlop(SvgView view, Double hitSlopValue) {
+    int pixelValue = (int) PixelUtil.toPixelFromDIP(hitSlopValue);
+    view.setHitSlopRect(new Rect(pixelValue, pixelValue, pixelValue, pixelValue));
   }
 
   @Override
