@@ -163,7 +163,6 @@ class RNSVGRenderableManager extends NativeSvgRenderableModuleSpec {
       return Arguments.createMap();
     }
 
-    float scale = svg.mScale;
     svg.initBounds();
 
     RectF bounds = new RectF();
@@ -186,10 +185,10 @@ class RNSVGRenderableManager extends NativeSvgRenderableModuleSpec {
     }
 
     WritableMap result = Arguments.createMap();
-    result.putDouble("x", bounds.left / scale);
-    result.putDouble("y", bounds.top / scale);
-    result.putDouble("width", bounds.width() / scale);
-    result.putDouble("height", bounds.height() / scale);
+    result.putDouble("x", bounds.left);
+    result.putDouble("y", bounds.top);
+    result.putDouble("width", bounds.width());
+    result.putDouble("height", bounds.height());
     return result;
   }
 
