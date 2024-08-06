@@ -74,4 +74,6 @@ interface NativeProps
   meetOrSlice?: Int32;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGPattern');
+export default codegenNativeComponent<NativeProps>('RNSVGPattern', {
+  interfaceOnly: true,
+});

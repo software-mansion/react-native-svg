@@ -60,4 +60,6 @@ interface NativeProps
   ry?: UnsafeMixed<NumberProp>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGRect');
+export default codegenNativeComponent<NativeProps>('RNSVGRect', {
+  interfaceOnly: true,
+});

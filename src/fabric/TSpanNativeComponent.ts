@@ -77,4 +77,6 @@ interface NativeProps
   content?: string;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGTSpan');
+export default codegenNativeComponent<NativeProps>('RNSVGTSpan', {
+  interfaceOnly: true,
+});
