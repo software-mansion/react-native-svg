@@ -14,8 +14,14 @@ const height = 200;
 const maxPixelDiff = width * height * 0.005;
 const targetPixelRatio = 3.0;
 
-const testCases = fs.readdirSync(path.resolve('e2e', 'cases'));
-testCases.forEach((testCase) => {
+const successTestCases = fs.readdirSync(path.resolve('e2e', 'cases'));
+const failingTestCases = fs.readdirSync(path.resolve('e2e', 'failingCases'));
+const testCases = [
+  ...successTestCases.map((testCase) => ({ success: true, testCase })),
+  ...failingTestCases.map((testCase) => ({ success: false, testCase })),
+];
+
+testCases.forEach(({ testCase, success }) => {
   jest.setTimeout(90_000);
   test(`Web browser rendered SVG should have less than 0.05% differences between device rendered SVG (${testCase})`, async () => {
     await addMessageToReport({
@@ -24,7 +30,11 @@ testCases.forEach((testCase) => {
         arch: global.arch,
       }),
     });
-    const testCaseSvg = path.resolve('e2e', 'cases', testCase);
+    const testCaseSvg = path.resolve(
+      'e2e',
+      success ? 'cases' : 'failingCases',
+      testCase
+    );
 
     const svgXml = fs.readFileSync(testCaseSvg).toString('utf-8');
     const response = await sendToDeviceAndReceive<RenderResponse>({
@@ -86,8 +96,11 @@ testCases.forEach((testCase) => {
     });
 
     // Check if there is more than 0.5% different pixels in whole snapshot
-    expect(amountOfDifferentPixels).toBeLessThan(
-      maxPixelDiff * targetPixelRatio
-    );
+    const maxDiff = maxPixelDiff * targetPixelRatio;
+    if (success) {
+      expect(amountOfDifferentPixels).toBeLessThan(maxDiff);
+    } else {
+      expect(amountOfDifferentPixels).toBeGreaterThan(maxDiff);
+    }
   });
 });
