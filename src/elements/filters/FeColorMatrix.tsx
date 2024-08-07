@@ -4,14 +4,15 @@ import RNSVGFeColorMatrix from '../../fabric/FeColorMatrixNativeComponent';
 import {
   extractFeColorMatrix,
   extractFilter,
+  extractIn,
 } from '../../lib/extract/extractFilter';
-import { FilterColorMatrixType } from '../../lib/extract/types';
+import { FilterColorMatrixType, NumberArray } from '../../lib/extract/types';
 import FilterPrimitive from './FilterPrimitive';
 
 export type FeColorMatrixProps = {
   in?: string;
   type?: FilterColorMatrixType;
-  values?: number | Array<number> | string;
+  values?: NumberArray;
 };
 
 export default class FeColorMatrix extends FilterPrimitive<FeColorMatrixProps> {
@@ -30,6 +31,7 @@ export default class FeColorMatrix extends FilterPrimitive<FeColorMatrixProps> {
           this.refMethod(ref as (FeColorMatrix & NativeMethods) | null)
         }
         {...extractFilter(this.props)}
+        {...extractIn(this.props)}
         {...extractFeColorMatrix(this.props)}
       />
     );

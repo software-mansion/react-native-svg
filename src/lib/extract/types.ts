@@ -9,6 +9,7 @@ import type React from 'react';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
+export type BooleanProp = boolean | 'true' | 'false';
 
 export type FillRule = 'evenodd' | 'nonzero';
 export type Units = 'userSpaceOnUse' | 'objectBoundingBox';

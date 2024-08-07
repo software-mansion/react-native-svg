@@ -22,9 +22,33 @@ import TSpan from './elements/TSpan';
 import Text from './elements/Text';
 import TextPath from './elements/TextPath';
 import Use from './elements/Use';
+import FeBlend from './elements/filters/FeBlend';
 import FeColorMatrix from './elements/filters/FeColorMatrix';
+import FeComponentTransfer from './elements/filters/FeComponentTransfer';
+import {
+  FeFuncA,
+  FeFuncB,
+  FeFuncG,
+  FeFuncR,
+} from './elements/filters/FeComponentTransferFunction';
+import FeComposite from './elements/filters/FeComposite';
+import FeConvolveMatrix from './elements/filters/FeConvolveMatrix';
+import FeDiffuseLighting from './elements/filters/FeDiffuseLighting';
+import FeDisplacementMap from './elements/filters/FeDisplacementMap';
+import FeDistantLight from './elements/filters/FeDistantLight';
+import FeDropShadow from './elements/filters/FeDropShadow';
+import FeFlood from './elements/filters/FeFlood';
 import FeGaussianBlur from './elements/filters/FeGaussianBlur';
+import FeImage from './elements/filters/FeImage';
+import FeMerge from './elements/filters/FeMerge';
+import FeMergeNode from './elements/filters/FeMergeNode';
+import FeMorphology from './elements/filters/FeMorphology';
 import FeOffset from './elements/filters/FeOffset';
+import FePointLight from './elements/filters/FePointLight';
+import FeSpecularLighting from './elements/filters/FeSpecularLighting';
+import FeSpotLight from './elements/filters/FeSpotLight';
+import FeTile from './elements/filters/FeTile';
+import FeTurbulence from './elements/filters/FeTurbulence';
 import Filter from './elements/filters/Filter';
 
 export {
@@ -32,9 +56,31 @@ export {
   ClipPath,
   Defs,
   Ellipse,
+  FeBlend,
   FeColorMatrix,
+  FeComponentTransfer,
+  FeComposite,
+  FeConvolveMatrix,
+  FeDiffuseLighting,
+  FeDisplacementMap,
+  FeDistantLight,
+  FeDropShadow,
+  FeFlood,
+  FeFuncA,
+  FeFuncB,
+  FeFuncG,
+  FeFuncR,
   FeGaussianBlur,
+  FeImage,
+  FeMerge,
+  FeMergeNode,
+  FeMorphology,
   FeOffset,
+  FePointLight,
+  FeSpecularLighting,
+  FeSpotLight,
+  FeTile,
+  FeTurbulence,
   Filter,
   ForeignObject,
   G,
@@ -52,9 +98,9 @@ export {
   Stop,
   Svg,
   Symbol,
-  TSpan,
   Text,
   TextPath,
+  TSpan,
   Use,
 };
 

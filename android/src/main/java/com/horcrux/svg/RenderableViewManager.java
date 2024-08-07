@@ -107,6 +107,8 @@ import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeMergeManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeMergeManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFilterManagerDelegate;
@@ -589,6 +591,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGFilter,
     RNSVGFeColorMatrix,
     RNSVGFeGaussianBlur,
+    RNSVGFeMerge,
     RNSVGFeOffset,
     RNSVGMarker,
     RNSVGForeignObject,
@@ -640,6 +643,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FeColorMatrixView(reactContext);
       case RNSVGFeGaussianBlur:
         return new FeGaussianBlurView(reactContext);
+      case RNSVGFeMerge:
+        return new FeMergeView(reactContext);
       case RNSVGFeOffset:
         return new FeOffsetView(reactContext);
       case RNSVGMarker:
@@ -1627,6 +1632,21 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "values")
     public void setEdgeMode(FeGaussianBlurView node, String edgeMode) {
       node.setEdgeMode(edgeMode);
+    }
+  }
+
+  static class FeMergeManager extends FilterPrimitiveManager<FeMergeView>
+      implements RNSVGFeMergeManagerInterface<FeMergeView> {
+    FeMergeManager() {
+      super(SVGClass.RNSVGFeMerge);
+      mDelegate = new RNSVGFeMergeManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeMerge";
+
+    @ReactProp(name = "nodes")
+    public void setNodes(FeMergeView node, ReadableArray nodes) {
+      node.setNodes(nodes);
     }
   }
 

@@ -4,13 +4,14 @@ import RNSVGFeGaussianBlur from '../../fabric/FeGaussianBlurNativeComponent';
 import {
   extractFeGaussianBlur,
   extractFilter,
+  extractIn,
 } from '../../lib/extract/extractFilter';
-import { FilterEdgeMode, NumberProp } from '../../lib/extract/types';
+import { FilterEdgeMode, NumberArray } from '../../lib/extract/types';
 import FilterPrimitive from './FilterPrimitive';
 
 export interface FeGaussianBlurProps {
   in?: string;
-  stdDeviation?: NumberProp;
+  stdDeviation?: NumberArray;
   // edgeMode is hard to implement and not supported by any
   // browser except safari, so it's not implemented for now
   // https://caniuse.com/mdn-api_svgfegaussianblurelement_edgemode
@@ -33,6 +34,7 @@ export default class FeGaussianBlur extends FilterPrimitive<FeGaussianBlurProps>
           this.refMethod(ref as (FeGaussianBlur & NativeMethods) | null)
         }
         {...extractFilter(this.props)}
+        {...extractIn(this.props)}
         {...extractFeGaussianBlur(this.props)}
       />
     );
