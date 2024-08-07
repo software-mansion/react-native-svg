@@ -125,7 +125,16 @@ export default class Svg extends Shape<SvgProps> {
       strokeLinejoin,
       strokeMiterlimit,
     } = stylesAndProps;
-    if (width === undefined && height === undefined) {
+    if (height !== undefined && width === undefined && viewBox) {
+      const viewBoxValues = viewBox.split(' ');
+      if (viewBoxValues.length === 4) {
+        const viewBoxWidth = parseFloat(viewBoxValues[2]);
+        const viewBoxHeight = parseFloat(viewBoxValues[3]);
+        if (!isNaN(viewBoxWidth) && !isNaN(viewBoxHeight)) {
+          width = `${(parseFloat(height) * viewBoxWidth) / viewBoxHeight}`;
+        }
+      }
+    } else if (width === undefined && height === undefined) {
       width = height = '100%';
     }
 
