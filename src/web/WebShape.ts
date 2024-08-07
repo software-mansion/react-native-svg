@@ -7,6 +7,7 @@ import {
 
 import { BaseProps } from './types';
 import { prepare } from './utils/prepare';
+import { convertInt32ColorToRGBA } from './utils/convertInt32Color';
 import { camelCaseToDashed, hasTouchableProperty, remeasure } from './utils';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
 
@@ -50,6 +51,24 @@ export class WebShape<
               clean.style ?? []
             )) {
               Object.assign(current.style, partialStyle);
+            }
+            break;
+          case 'fill':
+            if (cleanValue && typeof cleanValue === 'object') {
+              const value = cleanValue as { payload: number };
+              current.setAttribute(
+                'fill',
+                convertInt32ColorToRGBA(value.payload)
+              );
+            }
+            break;
+          case 'stroke':
+            if (cleanValue && typeof cleanValue === 'object') {
+              const value = cleanValue as { payload: number };
+              current.setAttribute(
+                'stroke',
+                convertInt32ColorToRGBA(value.payload)
+              );
             }
             break;
           default:
