@@ -9,14 +9,30 @@ export interface HandshakeMessage {
   };
 }
 
+type OS = 'ios' | 'android';
+type Arch = 'paper' | 'fabric';
+export interface HandshakeMessageData {
+  os: OS;
+  arch: Arch;
+  platformVersion: string;
+}
+
 export interface RenderRequest {
   type: 'renderRequest';
   data: any;
-  width: number,
-  height: number,
+  width: number;
+  height: number;
 }
 
 export interface RenderResponse {
   type: 'renderResponse';
   data: string; // as base64
+}
+
+export interface FailedResults {
+  ios: {
+    paper: string[];
+    fabric: string[];
+  };
+  android: { paper: string[]; fabric: string[] };
 }

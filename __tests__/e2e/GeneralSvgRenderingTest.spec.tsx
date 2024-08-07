@@ -1,27 +1,19 @@
 import { SvgFromXml } from 'react-native-svg';
 import * as fs from 'node:fs';
 import { compareImages, sendToDeviceAndReceive } from '../../e2e/helpers';
-import { RenderResponse } from '../../e2e/types';
+import { HandshakeMessageData, RenderResponse } from '../../e2e/types';
 import path from 'path';
 import {
   addAttach as attachImageToReport,
   addMsg as addMessageToReport,
 } from 'jest-html-reporters/helper';
 import { PNG } from 'pngjs';
+import failedCases from '../../e2e/failedResult.json';
+import { checkFailedCases } from '../../e2e/matchTestCases';
+import { height, targetPixelRatio, width } from '../../e2e/env';
 
-const width = 200;
-const height = 200;
-const maxPixelDiff = width * height * 0.005;
-const targetPixelRatio = 3.0;
-
-const successTestCases = fs.readdirSync(path.resolve('e2e', 'cases'));
-const failingTestCases = fs.readdirSync(path.resolve('e2e', 'failingCases'));
-const testCases = [
-  ...successTestCases.map((testCase) => ({ success: true, testCase })),
-  ...failingTestCases.map((testCase) => ({ success: false, testCase })),
-];
-
-testCases.forEach(({ testCase, success }) => {
+const testCases = fs.readdirSync(path.resolve('e2e', 'cases'));
+testCases.forEach((testCase) => {
   jest.setTimeout(90_000);
   test(`Web browser rendered SVG should have less than 0.05% differences between device rendered SVG (${testCase})`, async () => {
     await addMessageToReport({
@@ -30,11 +22,7 @@ testCases.forEach(({ testCase, success }) => {
         arch: global.arch,
       }),
     });
-    const testCaseSvg = path.resolve(
-      'e2e',
-      success ? 'cases' : 'failingCases',
-      testCase
-    );
+    const testCaseSvg = path.resolve('e2e', 'cases', testCase);
 
     const svgXml = fs.readFileSync(testCaseSvg).toString('utf-8');
     const response = await sendToDeviceAndReceive<RenderResponse>({
@@ -96,11 +84,11 @@ testCases.forEach(({ testCase, success }) => {
     });
 
     // Check if there is more than 0.5% different pixels in whole snapshot
-    const maxDiff = maxPixelDiff * targetPixelRatio;
-    if (success) {
-      expect(amountOfDifferentPixels).toBeLessThan(maxDiff);
-    } else {
-      expect(amountOfDifferentPixels).toBeGreaterThan(maxDiff);
-    }
+    checkFailedCases(
+      amountOfDifferentPixels,
+      failedCases,
+      global as unknown as HandshakeMessageData,
+      testCase
+    );
   });
 });
