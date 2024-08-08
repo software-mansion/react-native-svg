@@ -20,7 +20,7 @@ function readFileOrCreateIfNotExists(filePath: string): object {
   }
 }
 
-export interface UpdateFailedResults {
+interface UpdateFailedResults {
   ios?: {
     paper?: string[];
     fabric?: string[];
@@ -40,12 +40,12 @@ export function storeFailedResult(
       data[platform] = {};
     }
 
-    if (!data[platform][architecture]) {
-      data[platform][architecture] = [];
+    if (!data[platform]?.[architecture]) {
+      data[platform]![architecture] = [];
     }
 
-    if (!data[platform][architecture].includes(value)) {
-      data[platform][architecture].push(value);
+    if (!data[platform]?.[architecture]?.includes(value)) {
+      data[platform]?.[architecture]?.push(value);
     }
 
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
