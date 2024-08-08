@@ -2,7 +2,7 @@ import { Arch, OS } from './types';
 import path from 'path';
 import fs from 'fs';
 
-const filePath = path.join(__dirname, 'failedsCases.json');
+const filePath = path.join(__dirname, 'failedCases.json');
 
 function readFileOrCreateIfNotExists(filePath: string): object {
   try {
