@@ -9,8 +9,8 @@ export interface HandshakeMessage {
   };
 }
 
-type OS = 'ios' | 'android';
-type Arch = 'paper' | 'fabric';
+export type OS = 'ios' | 'android';
+export type Arch = 'paper' | 'fabric';
 export interface HandshakeMessageData {
   os: OS;
   arch: Arch;

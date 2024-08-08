@@ -8,8 +8,8 @@ import {
   addMsg as addMessageToReport,
 } from 'jest-html-reporters/helper';
 import { PNG } from 'pngjs';
-import failedCases from '../../e2e/failedResult.json';
-import { checkFailedCases } from '../../e2e/matchTestCases';
+import failedCases from '../../e2e/failedCases.json';
+import { verifyComparisons } from '../../e2e/matchTestCases';
 import { height, targetPixelRatio, width } from '../../e2e/env';
 
 const testCases = fs.readdirSync(path.resolve('e2e', 'cases'));
@@ -84,7 +84,7 @@ testCases.forEach((testCase) => {
     });
 
     // Check if there is more than 0.5% different pixels in whole snapshot
-    checkFailedCases(
+    verifyComparisons(
       amountOfDifferentPixels,
       failedCases,
       global as unknown as HandshakeMessageData,
