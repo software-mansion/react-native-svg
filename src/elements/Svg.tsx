@@ -85,7 +85,6 @@ export default class Svg extends Shape<SvgProps> {
     }
     const handle = findNodeHandle(this.root as Component);
     const RNSVGSvgViewModule: Spec =
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('../fabric/NativeSvgViewModule').default;
     RNSVGSvgViewModule.toDataURL(handle, options, callback);
   };
@@ -125,16 +124,32 @@ export default class Svg extends Shape<SvgProps> {
       strokeLinejoin,
       strokeMiterlimit,
     } = stylesAndProps;
-    if (height !== undefined && width === undefined && viewBox) {
+
+    // Ensure width and height are treated correctly if they are percentages
+    const isWidthPercentage = typeof width === 'string' && width.includes('%');
+    const isHeightPercentage =
+      typeof height === 'string' && height.includes('%');
+
+    if (viewBox) {
       const viewBoxValues = viewBox.split(' ');
       if (viewBoxValues.length === 4) {
         const viewBoxWidth = parseFloat(viewBoxValues[2]);
         const viewBoxHeight = parseFloat(viewBoxValues[3]);
         if (!isNaN(viewBoxWidth) && !isNaN(viewBoxHeight)) {
-          width = `${(parseFloat(height) * viewBoxWidth) / viewBoxHeight}`;
+          if (width !== undefined && height === undefined) {
+            height = isWidthPercentage
+              ? `${(parseFloat(width) * viewBoxHeight) / viewBoxWidth}%`
+              : `${(parseFloat(width) * viewBoxHeight) / viewBoxWidth}`;
+          } else if (height !== undefined && width === undefined) {
+            width = isHeightPercentage
+              ? `${(parseFloat(height) * viewBoxWidth) / viewBoxHeight}%`
+              : `${(parseFloat(height) * viewBoxWidth) / viewBoxHeight}`;
+          }
         }
       }
-    } else if (width === undefined && height === undefined) {
+    }
+
+    if (width === undefined && height === undefined) {
       width = height = '100%';
     }
 
