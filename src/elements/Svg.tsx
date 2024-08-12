@@ -25,6 +25,7 @@ import RNSVGSvgAndroid from '../fabric/AndroidSvgViewNativeComponent';
 import RNSVGSvgIOS from '../fabric/IOSSvgViewNativeComponent';
 import type { Spec } from '../fabric/NativeSvgViewModule';
 import extractOpacity from '../lib/extract/extractOpacity';
+import { extractTransformSvgView } from '../lib/extract/extractTransform';
 
 const styles = StyleSheet.create({
   svg: {
@@ -178,16 +179,12 @@ export default class Svg extends Shape<SvgProps> {
     }
 
     const gStyle = Object.assign({}, StyleSheet.flatten(style));
-    // if transform prop is of RN style's kind, we want `SvgView` to handle it
-    // since it can be done here. Otherwise, if transform is of `svg` kind, e.g. string,
-    // we want G element to parse it since `Svg` does not include parsing of those custom transforms.
-    // It is problematic due to fact that we either move the `Svg` or just its `G` child, and in the
-    // second case, when the `G` leaves the area of `Svg`, it will just disappear.
-    if (Array.isArray(transform) && typeof transform[0] === 'object') {
-      gStyle.transform = undefined;
-    } else {
-      props.transform = undefined;
-      gStyle.transform = transform;
+    if (transform) {
+      if (gStyle.transform) {
+        props.transform = gStyle.transform;
+        gStyle.transform = undefined;
+      }
+      props.transform = extractTransformSvgView(props as any);
     }
 
     const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
