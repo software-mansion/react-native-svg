@@ -1,0 +1,50 @@
+{
+  "name": "React-jsi",
+  "version": "0.73.34",
+  "summary": "JavaScript Interface layer for React Native",
+  "homepage": "https://reactnative.dev/",
+  "license": "MIT",
+  "authors": "Meta Platforms, Inc. and its affiliates",
+  "platforms": {
+    "ios": "13.4",
+    "osx": "10.15",
+    "visionos": "1.0"
+  },
+  "source": {
+    "git": "https://github.com/facebook/react-native.git",
+    "tag": "v0.73.34"
+  },
+  "header_dir": "jsi",
+  "compiler_flags": "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_CFG_NO_COROUTINES=1 -Wno-comma -Wno-shorten-64-to-32 -Wno-documentation",
+  "pod_target_xcconfig": {
+    "HEADER_SEARCH_PATHS": "\"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/RCT-Folly\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/fmt/include\"",
+    "DEFINES_MODULE": "YES"
+  },
+  "dependencies": {
+    "boost": [
+      "1.83.0"
+    ],
+    "DoubleConversion": [
+
+    ],
+    "fmt": [
+      "9.1.0"
+    ],
+    "RCT-Folly": [
+      "2022.05.16.00"
+    ],
+    "glog": [
+
+    ],
+    "hermes-engine": [
+
+    ]
+  },
+  "source_files": "**/*.{cpp,h}",
+  "exclude_files": [
+    "jsi/jsilib-posix.cpp",
+    "jsi/jsilib-windows.cpp",
+    "**/test/*",
+    "jsi/jsi.cpp"
+  ]
+}

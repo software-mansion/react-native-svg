@@ -1,0 +1,38 @@
+{
+  "name": "RNSVG",
+  "version": "15.5.0",
+  "summary": "SVG library for react-native",
+  "license": "MIT",
+  "homepage": "https://github.com/react-native-community/react-native-svg",
+  "authors": "Horcrux Chen",
+  "source": {
+    "git": "https://github.com/react-native-community/react-native-svg.git",
+    "tag": "v15.5.0"
+  },
+  "source_files": "apple/**/*.{h,m,mm}",
+  "ios": {
+    "exclude_files": "**/*.macos.{h,m,mm}"
+  },
+  "tvos": {
+    "exclude_files": "**/*.macos.{h,m,mm}"
+  },
+  "visionos": {
+    "exclude_files": "**/*.macos.{h,m,mm}"
+  },
+  "osx": {
+    "exclude_files": "**/*.ios.{h,m,mm}"
+  },
+  "requires_arc": true,
+  "platforms": {
+    "osx": "10.14",
+    "ios": "12.4",
+    "tvos": "12.4",
+    "visionos": "1.0"
+  },
+  "exclude_files": "apple/Utils/RNSVGFabricConversions.h",
+  "dependencies": {
+    "React-Core": [
+
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "SocketRocket",
+  "version": "0.7.0",
+  "summary": "A conforming WebSocket (RFC 6455) client library for iOS, macOS and tvOS.",
+  "homepage": "https://github.com/facebook/SocketRocket",
+  "authors": {
+    "Nikita Lutsenko": "nlutsenko@me.com",
+    "Dan Federman": "federman@squareup.com",
+    "Mike Lewis": "mikelikespie@gmail.com"
+  },
+  "license": "BSD",
+  "source": {
+    "git": "https://github.com/facebook/SocketRocket.git",
+    "tag": "0.7.0"
+  },
+  "requires_arc": true,
+  "source_files": "SocketRocket/**/*.{h,m}",
+  "public_header_files": "SocketRocket/*.h",
+  "platforms": {
+    "ios": "13.4",
+    "osx": "10.15",
+    "visionos": "1.0"
+  },
+  "ios": {
+    "frameworks": [
+      "CFNetwork",
+      "Security"
+    ]
+  },
+  "osx": {
+    "frameworks": [
+      "CoreServices",
+      "Security"
+    ]
+  },
+  "tvos": {
+    "frameworks": [
+      "CFNetwork",
+      "Security"
+    ]
+  },
+  "visionos": {
+    "frameworks": [
+      "CFNetwork",
+      "Security"
+    ]
+  },
+  "libraries": "icucore"
+}

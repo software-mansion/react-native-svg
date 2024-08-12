@@ -1,0 +1,1 @@
+../../../../../../node_modules/react-native-macos/ReactCommon/jsinspector-modern/InspectorInterfaces.h

@@ -1,0 +1,24 @@
+{
+  "name": "boost",
+  "version": "1.83.0",
+  "license": {
+    "type": "Boost Software License",
+    "file": "LICENSE_1_0.txt"
+  },
+  "homepage": "http://www.boost.org",
+  "summary": "Boost provides free peer-reviewed portable C++ source libraries.",
+  "authors": "Rene Rivera",
+  "source": {
+    "http": "https://archives.boost.io/release/1.83.0/source/boost_1_83_0.tar.bz2",
+    "sha256": "6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e"
+  },
+  "platforms": {
+    "ios": "13.4",
+    "osx": "10.15",
+    "visionos": "1.0"
+  },
+  "requires_arc": false,
+  "module_name": "boost",
+  "header_dir": "boost",
+  "preserve_paths": "boost"
+}

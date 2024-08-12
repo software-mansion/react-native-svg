@@ -1,0 +1,1 @@
+../../../../../../node_modules/react-native-macos/ReactCommon/cxxreact/RAMBundleRegistry.h

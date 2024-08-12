@@ -1,0 +1,102 @@
+{
+  "name": "React-RCTAppDelegate",
+  "version": "0.73.34",
+  "summary": "An utility library to simplify common operations for the New Architecture",
+  "homepage": "https://reactnative.dev/",
+  "documentation_url": "https://reactnative.dev/",
+  "license": "MIT",
+  "authors": "Meta Platforms, Inc. and its affiliates",
+  "platforms": {
+    "ios": "13.4",
+    "osx": "10.15",
+    "visionos": "1.0"
+  },
+  "source": {
+    "git": "https://github.com/facebook/react-native.git",
+    "tag": "v0.73.34"
+  },
+  "source_files": "**/*.{c,h,m,mm,S,cpp}",
+  "compiler_flags": "$(inherited) -DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_CFG_NO_COROUTINES=1 -DRCT_NEW_ARCH_ENABLED -DRN_FABRIC_ENABLED",
+  "pod_target_xcconfig": {
+    "HEADER_SEARCH_PATHS": "$(PODS_TARGET_SRCROOT)/../../ReactCommon $(PODS_ROOT)/Headers/Private/React-Core $(PODS_ROOT)/boost $(PODS_ROOT)/DoubleConversion $(PODS_ROOT)/fmt/include $(PODS_ROOT)/RCT-Folly ${PODS_ROOT}/Headers/Public/FlipperKit $(PODS_ROOT)/Headers/Public/ReactCommon $(PODS_ROOT)/Headers/Public/React-RCTFabric $(PODS_ROOT)/Headers/Private/Yoga \"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers\" \"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-runtimescheduler/React_runtimescheduler.framework/Headers\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTFabric/RCTFabric.framework/Headers\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-RuntimeCore/React_RuntimeCore.framework/Headers\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-RuntimeApple/React_RuntimeApple.framework/Headers\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-utils/React_utils.framework/Headers\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-debug/React_debug.framework/Headers\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-rendererdebug/React_rendererdebug.framework/Headers\"",
+    "OTHER_CPLUSPLUSFLAGS": "$(inherited) -DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_CFG_NO_COROUTINES=1 -DRCT_NEW_ARCH_ENABLED -DRN_FABRIC_ENABLED",
+    "CLANG_CXX_LANGUAGE_STANDARD": "c++20",
+    "DEFINES_MODULE": "YES"
+  },
+  "user_target_xcconfig": {
+    "HEADER_SEARCH_PATHS": "\"$(PODS_ROOT)/Headers/Private/React-Core\""
+  },
+  "dependencies": {
+    "React-Core": [
+
+    ],
+    "RCT-Folly": [
+
+    ],
+    "RCTRequired": [
+
+    ],
+    "RCTTypeSafety": [
+
+    ],
+    "React-RCTNetwork": [
+
+    ],
+    "React-RCTImage": [
+
+    ],
+    "React-CoreModules": [
+
+    ],
+    "React-nativeconfig": [
+
+    ],
+    "ReactCommon": [
+
+    ],
+    "React-NativeModulesApple": [
+
+    ],
+    "React-runtimescheduler": [
+
+    ],
+    "React-RCTFabric": [
+
+    ],
+    "React-RuntimeCore": [
+
+    ],
+    "React-RuntimeApple": [
+
+    ],
+    "React-jsc": [
+
+    ],
+    "React-Fabric": [
+
+    ],
+    "React-graphics": [
+
+    ],
+    "React-utils": [
+
+    ],
+    "React-debug": [
+
+    ],
+    "React-rendererdebug": [
+
+    ]
+  },
+  "script_phases": {
+    "name": "Generate Legacy Components Interop",
+    "script": "\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nsource $WITH_ENVIRONMENT\n${NODE_BINARY} ${REACT_NATIVE_PATH}/scripts/codegen/generate-legacy-interop-components.js -p ../.. -o ${REACT_NATIVE_PATH}/Libraries/AppDelegate\n      ",
+    "execution_position": "before_compile",
+    "input_files": [
+      "../react-native.config.js"
+    ],
+    "output_files": [
+      "${REACT_NATIVE_PATH}/Libraries/AppDelegate/RCTLegacyInteropComponents.mm"
+    ]
+  }
+}

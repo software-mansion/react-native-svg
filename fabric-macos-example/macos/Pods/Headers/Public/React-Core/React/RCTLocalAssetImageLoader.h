@@ -1,0 +1,1 @@
+../../../../../../node_modules/react-native-macos/Libraries/Image/RCTLocalAssetImageLoader.h
