@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-import {Platform, View} from 'react-native';
+import {View} from 'react-native';
 import * as RNSVG from 'react-native-svg';
-
-const address = ['ios', 'web'].includes(Platform.OS) ? 'localhost' : '10.0.2.2';
-const wsUri = `ws://${address}:7123`;
 
 const TestingView = () => {
   return <View></View>;
