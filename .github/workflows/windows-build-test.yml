@@ -57,4 +57,4 @@ jobs:
 
       - name: Build app
         working-directory: ${{ matrix.working-directory }}/windows
-        run: npx react-native run-windows --logging --no-packager --no-deploy
+        run: npx react-native run-windows --logging --no-packager --no-deploy --no-autolink
