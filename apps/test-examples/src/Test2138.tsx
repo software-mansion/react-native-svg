@@ -7,9 +7,22 @@ export default function App() {
   return (
     <View style={styles.outer}>
       <View style={styles.inner}>
-        <Shape height={100} /*width={100}*/ />
-        {/* Uncomment to make it work on native */}
-        <Shape height={100} /*width={100}*/ />
+        {/* Test Case 1 */}
+        <Shape width={100} height={100} />
+        {/* Test Case 2 */}
+        <Shape width="50%" />
+        {/* Test Case 3 */}
+        <Shape height="50%" />
+        {/* Test Case 4 */}
+        <Shape width="50%" height="50%" />
+        {/* Test Case 5 */}
+        <Shape />
+        {/* Test Case 6 */}
+        <Shape width={200} />
+        {/* Test Case 7 */}
+        <Svg viewBox="0 0 100 50" width="100%" height="50%">
+          <Rect x="0" y="0" width="100" height="50" fill="blue" />
+        </Svg>
       </View>
     </View>
   );
