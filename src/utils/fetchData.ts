@@ -1,47 +1,31 @@
-import { Buffer } from 'buffer';
+import { Platform } from 'react-native';
 
 export function fetchText(uri?: string): Promise<string | null> {
-  if (uri && uri.startsWith('data:')) {
+  if (
+    uri &&
+    uri.startsWith('data:image/svg+xml;utf8') &&
+    Platform.OS === 'android'
+  ) {
     return new Promise((resolve) => {
       resolve(dataUriToXml(uri));
     });
   } else {
-    return localFetch(uri);
+    return fetchUriData(uri);
   }
 }
 
-// copy from https://www.npmjs.com/package/data-uri-to-buffer
-function dataUriToXml(uri: string) {
-  if (!/^data:/i.test(uri)) {
-    throw new TypeError(
-      '`uri` does not appear to be a Data URI (must begin with "data:")'
-    );
+function dataUriToXml(uri: string): string | null {
+  try {
+    // decode and remove data:image/svg+xml;utf8, prefix
+    const xml = decodeURIComponent(uri).split(',').slice(1).join(',');
+    return xml;
+  } catch (error) {
+    console.log('error', error);
+    return null;
   }
-  // strip newlines
-  uri = uri.replace(/\r?\n/g, '');
-  // split the URI up into the "metadata" and the "data" portions
-  const firstComma = uri.indexOf(',');
-  if (firstComma === -1 || firstComma <= 4) {
-    throw new TypeError('malformed data: URI');
-  }
-  // remove the "data:" scheme and parse the metadata
-  const meta = uri.substring(5, firstComma).split(';');
-  let base64 = false;
-  for (let i = 1; i < meta.length; i++) {
-    if (meta[i] === 'base64') {
-      base64 = true;
-    }
-  }
-
-  // get the encoded data portion and decode URI-encoded chars
-  const data = unescape(uri.substring(firstComma + 1));
-  if (!base64) {
-    return data;
-  }
-  return Buffer.from(data).toString('base64');
 }
 
-async function localFetch(uri?: string) {
+async function fetchUriData(uri?: string) {
   if (!uri) {
     return null;
   }
