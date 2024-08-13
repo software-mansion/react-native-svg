@@ -1,14 +1,11 @@
 import { Platform } from 'react-native';
 
-export function fetchText(uri?: string): Promise<string | null> {
-  if (
-    uri &&
-    uri.startsWith('data:image/svg+xml;utf8') &&
-    Platform.OS === 'android'
-  ) {
-    return new Promise((resolve) => {
-      resolve(dataUriToXml(uri));
-    });
+export async function fetchText(uri?: string): Promise<string | null> {
+  if (!uri) {
+    return null;
+  }
+  if (uri.startsWith('data:image/svg+xml;utf8') && Platform.OS === 'android') {
+    return dataUriToXml(uri);
   } else {
     return fetchUriData(uri);
   }
@@ -17,18 +14,13 @@ export function fetchText(uri?: string): Promise<string | null> {
 function dataUriToXml(uri: string): string | null {
   try {
     // decode and remove data:image/svg+xml;utf8, prefix
-    const xml = decodeURIComponent(uri).split(',').slice(1).join(',');
-    return xml;
+    return decodeURIComponent(uri).split(',').slice(1).join(',');
   } catch (error) {
-    console.log('error', error);
-    return null;
+    throw new Error(`Decoding ${uri} failed with error: ${error}`);
   }
 }
 
-async function fetchUriData(uri?: string) {
-  if (!uri) {
-    return null;
-  }
+async function fetchUriData(uri: string) {
   const response = await fetch(uri);
   if (response.ok || (response.status === 0 && uri.startsWith('file://'))) {
     return await response.text();
