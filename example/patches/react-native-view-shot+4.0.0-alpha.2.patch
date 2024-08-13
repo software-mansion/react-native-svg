@@ -1,25 +1,25 @@
 diff --git a/node_modules/react-native-view-shot/ios/RNViewShot.m b/node_modules/react-native-view-shot/ios/RNViewShot.m
-index bd55b92..6a20e9d 100644
+index bd55b92..323a7aa 100644
 --- a/node_modules/react-native-view-shot/ios/RNViewShot.m
 +++ b/node_modules/react-native-view-shot/ios/RNViewShot.m
 @@ -106,7 +106,7 @@ - (dispatch_queue_t)methodQueue
        scrollView.frame = CGRectMake(0, 0, scrollView.contentSize.width, scrollView.contentSize.height);
      }
-
+ 
 -    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:size];
 +    UIGraphicsBeginImageContextWithOptions(size, NO, 0);
-
+     
      if (renderInContext) {
        // this comes with some trade-offs such as inability to capture gradients or scrollview's content in full but it works for large views
 @@ -117,8 +117,8 @@ - (dispatch_queue_t)methodQueue
        // this doesn't work for large views and reports incorrect success even though the image is blank
        success = [rendered drawViewHierarchyInRect:(CGRect){CGPointZero, size} afterScreenUpdates:YES];
      }
--
+-   
 -    UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {}];
 +    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
 +    UIGraphicsEndImageContext();
-
+ 
      if (snapshotContentContainer) {
        // Restore scroll & frame
 @@ -152,11 +152,11 @@ - (dispatch_queue_t)methodQueue
@@ -37,15 +37,28 @@ index bd55b92..6a20e9d 100644
          res = [NSString stringWithFormat:@"data:image/%@;base64,%@", imageFormat, base64];
        }
 diff --git a/node_modules/react-native-view-shot/src/specs/NativeRNViewShot.ts b/node_modules/react-native-view-shot/src/specs/NativeRNViewShot.ts
-index a6f4c00..1e9e6ce 100644
+index a6f4c00..d428cc7 100644
 --- a/node_modules/react-native-view-shot/src/specs/NativeRNViewShot.ts
 +++ b/node_modules/react-native-view-shot/src/specs/NativeRNViewShot.ts
 @@ -2,7 +2,7 @@ import type { TurboModule } from 'react-native';
  import { TurboModuleRegistry } from 'react-native';
-
+ 
  export interface Spec extends TurboModule {
 -  releaseCapture: () => string;
 +  releaseCapture: (uri: string) => void;
    captureRef: (tag: number, options: Object) => Promise<string>
    captureScreen: (options: Object) => Promise<string>;
  }
+diff --git a/node_modules/react-native-view-shot/windows/RNViewShot/RNViewShot.csproj b/node_modules/react-native-view-shot/windows/RNViewShot/RNViewShot.csproj
+index 14a2322..186ae50 100644
+--- a/node_modules/react-native-view-shot/windows/RNViewShot/RNViewShot.csproj
++++ b/node_modules/react-native-view-shot/windows/RNViewShot/RNViewShot.csproj
+@@ -14,7 +14,7 @@
+     <AssemblyName>RNViewShot</AssemblyName>
+     <DefaultLanguage>en-US</DefaultLanguage>
+     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0</TargetPlatformVersion>
++    <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
+     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+     <MinimumVisualStudioVersion>16</MinimumVisualStudioVersion>
+     <FileAlignment>512</FileAlignment>
