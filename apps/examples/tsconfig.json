@@ -1,7 +1,4 @@
 {
-  "compilerOptions": {
-    "moduleSuffixes": [".ios", ".android", ".native", ".windows", ""]
-  },
   "extends": "../../tsconfig.json",
   "include": ["**/*.ts", "**/*.tsx", "**/*.js"]
 }
