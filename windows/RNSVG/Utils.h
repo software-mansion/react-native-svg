@@ -175,16 +175,7 @@ struct Utils {
   static std::string JSValueAsBrushUnits(
       std::optional<int32_t> const &value,
       std::string defaultValue = "objectBoundingBox") {
-    if (value.has_value()) {
-      switch (value.value()) {
-        case 1:
-          return "userSpaceOnUse";
-        case 0:
-        default:
-          return "objectBoundingBox";
-      }
-    }
-    return defaultValue;
+    return (value.has_value() && *value == 1) ? "userSpaceOnUse" : defaultValue;
   }
 
   static float JSValueAsFloat(std::optional<float> const &value, float defaultValue = 0.0f) {
