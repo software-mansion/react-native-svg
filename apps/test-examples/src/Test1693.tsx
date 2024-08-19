@@ -4,7 +4,7 @@ import {Svg, Text, SvgXml, TSpan, Defs, Path, TextPath} from 'react-native-svg';
 export default function App() {
   return (
     <Svg viewBox="0 0 100 100">
-      {/* <Defs>
+      <Defs>
         <Path
           id="MyPath"
           fill="none"
@@ -25,7 +25,7 @@ export default function App() {
 
       <TSpan y="30" textLength="10em">
         Small text length
-      </TSpan> */}
+      </TSpan>
       <TSpan y="40" textLength="90%">
         Big text length
       </TSpan>
