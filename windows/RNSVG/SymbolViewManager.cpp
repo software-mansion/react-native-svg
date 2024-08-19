@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "SymbolViewManager.h"
+#if __has_include("SymbolViewManager.g.cpp")
 #include "SymbolViewManager.g.cpp"
+#endif
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;
