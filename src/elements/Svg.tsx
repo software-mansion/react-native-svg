@@ -7,12 +7,12 @@ import type {
   MeasureOnSuccessCallback,
   NativeMethods,
   StyleProp,
-  ViewProps,
   ViewStyle,
 } from 'react-native';
 import { findNodeHandle, Platform, StyleSheet } from 'react-native';
 import type {
   extractedProps,
+  HitSlop,
   NumberProp,
   ResponderInstanceProps,
 } from '../lib/extract/types';
@@ -25,6 +25,7 @@ import RNSVGSvgAndroid from '../fabric/AndroidSvgViewNativeComponent';
 import RNSVGSvgIOS from '../fabric/IOSSvgViewNativeComponent';
 import type { Spec } from '../fabric/NativeSvgViewModule';
 import extractOpacity from '../lib/extract/extractOpacity';
+import { ViewProps } from '../fabric/utils';
 
 const styles = StyleSheet.create({
   svg: {
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
 });
 const defaultStyle = styles.svg;
 
-export interface SvgProps extends GProps, ViewProps {
+export interface SvgProps extends GProps, ViewProps, HitSlop {
   width?: NumberProp;
   height?: NumberProp;
   viewBox?: string;

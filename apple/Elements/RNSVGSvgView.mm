@@ -317,6 +317,15 @@ using namespace facebook::react;
   [self drawToContext:context withRect:[self bounds]];
 }
 
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
+  if (UIEdgeInsetsEqualToEdgeInsets(self.hitTestEdgeInsets, UIEdgeInsetsZero)) {
+    return [super pointInside:point withEvent:event];
+  }
+  CGRect hitFrame = UIEdgeInsetsInsetRect(self.bounds, self.hitTestEdgeInsets);
+  return CGRectContainsPoint(hitFrame, point);
+}
+
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
   CGPoint transformed = point;
@@ -339,7 +348,8 @@ using namespace facebook::react;
       return (node.responsible || (node != hitChild)) ? hitChild : self;
     }
   }
-  return nil;
+  BOOL isPointInside = [self pointInside:point withEvent:event];
+  return isPointInside ? self : nil;
 }
 
 - (NSString *)getDataURLWithBounds:(CGRect)bounds
