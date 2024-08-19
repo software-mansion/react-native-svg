@@ -9,12 +9,12 @@ const percentTo255 = (percent: string) =>
 const parseAlpha = (alpha: string) =>
   alpha.endsWith('%') ? parseFloat(alpha) / 100 : parseFloat(alpha);
 
-function parsePercentageRGBColor(color: string): string | undefined {
+function parsePercentageRGBColor(color: string): string {
   const currentMatch = RGB_RGBA_PATTERN.exec(color);
 
   if (!currentMatch) {
     console.warn(`"${color}" is not a valid percentage rgb/rgba color`);
-    return undefined;
+    return color;
   }
 
   const red = currentMatch[1];
@@ -30,10 +30,11 @@ function parsePercentageRGBColor(color: string): string | undefined {
 }
 
 export const convertPercentageColor = (color: ColorValue) => {
-  const rgbColorWithoutSpaces =
-    typeof color === 'string' ? color.replace(/\s/g, '') : undefined;
-  const isPercentageRgb =
-    rgbColorWithoutSpaces && RGB_RGBA_PATTERN.test(rgbColorWithoutSpaces);
+  if (typeof color !== 'string') {
+    return color;
+  }
+  const rgbColorWithoutSpaces = color.replace(/\s/g, '');
+  const isPercentageRgb = RGB_RGBA_PATTERN.test(rgbColorWithoutSpaces);
   return isPercentageRgb
     ? parsePercentageRGBColor(rgbColorWithoutSpaces)
     : color;
