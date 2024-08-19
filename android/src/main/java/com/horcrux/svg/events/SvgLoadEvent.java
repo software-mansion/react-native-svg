@@ -14,10 +14,16 @@ public class SvgLoadEvent extends Event<SvgLoadEvent> {
   private final float height;
   private final String uri;
 
-  public SvgLoadEvent(int surfaceId, int viewId, ReactContext mContext, String uriString, float width, float height) {
+  public SvgLoadEvent(
+      int surfaceId,
+      int viewId,
+      ReactContext mContext,
+      String uriString,
+      float width,
+      float height) {
     super(surfaceId, viewId);
     ImageSource imageSource = new ImageSource(mContext, uriString);
-    this.uri = imageSource.getSource();;
+    this.uri = imageSource.getSource();
     this.width = width;
     this.height = height;
   }

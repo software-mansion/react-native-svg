@@ -61,7 +61,7 @@ interface NativeProps extends ViewProps {
   backfaceVisibility?: string;
   borderStyle?: string;
   needsOffscreenAlphaCompositing?: boolean;
-  hitSlop?: HitSlop;
+  hitSlop?: UnsafeMixed<HitSlop | null | number | undefined>;
   borderTopColor?: ColorValue;
   nextFocusLeft?: Int32;
   // TODO: those props are present in the `ReactPropGroup` but are not supported

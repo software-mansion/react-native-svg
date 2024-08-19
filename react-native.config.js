@@ -9,34 +9,41 @@ try {
 }
 
 module.exports = {
-    dependency: {
-      platforms: {
-        android: supportsCodegenConfig ? {
-          componentDescriptors: [
-            "RNSVGCircleComponentDescriptor",
-            "RNSVGClipPathComponentDescriptor",
-            "RNSVGDefsComponentDescriptor",
-            "RNSVGEllipseComponentDescriptor",
-            "RNSVGForeignObjectComponentDescriptor",
-            "RNSVGGroupComponentDescriptor",
-            "RNSVGImageComponentDescriptor",
-            "RNSVGLinearGradientComponentDescriptor",
-            "RNSVGLineComponentDescriptor",
-            "RNSVGMarkerComponentDescriptor",
-            "RNSVGMaskComponentDescriptor",
-            "RNSVGPathComponentDescriptor",
-            "RNSVGPatternComponentDescriptor",
-            "RNSVGRadialGradientComponentDescriptor",
-            "RNSVGRectComponentDescriptor",
-            "RNSVGSvgViewAndroidComponentDescriptor",
-            "RNSVGSymbolComponentDescriptor",
-            "RNSVGTextComponentDescriptor",
-            "RNSVGTextPathComponentDescriptor",
-            "RNSVGTSpanComponentDescriptor",
-            "RNSVGUseComponentDescriptor"
-          ],
-          cmakeListsPath: "../android/src/main/jni/CMakeLists.txt"
-        } : {},
-      },
+  dependency: {
+    platforms: {
+      android: supportsCodegenConfig
+        ? {
+            componentDescriptors: [
+              'RNSVGCircleComponentDescriptor',
+              'RNSVGClipPathComponentDescriptor',
+              'RNSVGDefsComponentDescriptor',
+              'RNSVGFeColorMatrixComponentDescriptor',
+              'RNSVGFeGaussianBlurComponentDescriptor',
+              'RNSVGFeMergeComponentDescriptor',
+              'RNSVGFeOffsetComponentDescriptor',
+              'RNSVGFilterComponentDescriptor',
+              'RNSVGEllipseComponentDescriptor',
+              'RNSVGForeignObjectComponentDescriptor',
+              'RNSVGGroupComponentDescriptor',
+              'RNSVGImageComponentDescriptor',
+              'RNSVGLinearGradientComponentDescriptor',
+              'RNSVGLineComponentDescriptor',
+              'RNSVGMarkerComponentDescriptor',
+              'RNSVGMaskComponentDescriptor',
+              'RNSVGPathComponentDescriptor',
+              'RNSVGPatternComponentDescriptor',
+              'RNSVGRadialGradientComponentDescriptor',
+              'RNSVGRectComponentDescriptor',
+              'RNSVGSvgViewAndroidComponentDescriptor',
+              'RNSVGSymbolComponentDescriptor',
+              'RNSVGTextComponentDescriptor',
+              'RNSVGTextPathComponentDescriptor',
+              'RNSVGTSpanComponentDescriptor',
+              'RNSVGUseComponentDescriptor',
+            ],
+            cmakeListsPath: '../android/src/main/jni/CMakeLists.txt',
+          }
+        : {},
     },
-  }
+  },
+};

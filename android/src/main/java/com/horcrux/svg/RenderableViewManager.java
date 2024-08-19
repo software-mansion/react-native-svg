@@ -103,6 +103,16 @@ import com.facebook.react.viewmanagers.RNSVGDefsManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGDefsManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeMergeManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeMergeManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFilterManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFilterManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGForeignObjectManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGForeignObjectManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGGroupManagerDelegate;
@@ -578,6 +588,11 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGRadialGradient,
     RNSVGPattern,
     RNSVGMask,
+    RNSVGFilter,
+    RNSVGFeColorMatrix,
+    RNSVGFeGaussianBlur,
+    RNSVGFeMerge,
+    RNSVGFeOffset,
     RNSVGMarker,
     RNSVGForeignObject,
   }
@@ -622,6 +637,16 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new PatternView(reactContext);
       case RNSVGMask:
         return new MaskView(reactContext);
+      case RNSVGFilter:
+        return new FilterView(reactContext);
+      case RNSVGFeColorMatrix:
+        return new FeColorMatrixView(reactContext);
+      case RNSVGFeGaussianBlur:
+        return new FeGaussianBlurView(reactContext);
+      case RNSVGFeMerge:
+        return new FeMergeView(reactContext);
+      case RNSVGFeOffset:
+        return new FeOffsetView(reactContext);
       case RNSVGMarker:
         return new MarkerView(reactContext);
       case RNSVGForeignObject:
@@ -1482,6 +1507,177 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     public void setGradientTransform(RadialGradientView node, @Nullable ReadableArray matrixArray) {
       node.setGradientTransform(matrixArray);
     }
+  }
+
+  static class FilterManager extends VirtualViewManager<FilterView>
+      implements RNSVGFilterManagerInterface<FilterView> {
+    FilterManager() {
+      super(SVGClass.RNSVGFilter);
+      mDelegate = new RNSVGFilterManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFilter";
+
+    @ReactProp(name = "x")
+    public void setX(FilterView node, Dynamic x) {
+      node.setX(x);
+    }
+
+    @ReactProp(name = "y")
+    public void setY(FilterView node, Dynamic y) {
+      node.setY(y);
+    }
+
+    @ReactProp(name = "width")
+    public void setWidth(FilterView node, Dynamic width) {
+      node.setWidth(width);
+    }
+
+    @ReactProp(name = "height")
+    public void setHeight(FilterView node, Dynamic height) {
+      node.setHeight(height);
+    }
+
+    @ReactProp(name = "filterUnits")
+    public void setFilterUnits(FilterView node, String filterUnits) {
+      node.setFilterUnits(filterUnits);
+    }
+
+    @ReactProp(name = "primitiveUnits")
+    public void setPrimitiveUnits(FilterView node, String primitiveUnits) {
+      node.setPrimitiveUnits(primitiveUnits);
+    }
+  }
+
+  static class FilterPrimitiveManager<T extends FilterPrimitiveView> extends VirtualViewManager<T> {
+    protected FilterPrimitiveManager(SVGClass svgclass) {
+      super(svgclass);
+    }
+
+    @ReactProp(name = "x")
+    public void setX(T node, Dynamic x) {
+      node.setX(x);
+    }
+
+    @ReactProp(name = "y")
+    public void setY(T node, Dynamic y) {
+      node.setY(y);
+    }
+
+    @ReactProp(name = "width")
+    public void setWidth(T node, Dynamic width) {
+      node.setWidth(width);
+    }
+
+    @ReactProp(name = "height")
+    public void setHeight(T node, Dynamic height) {
+      node.setHeight(height);
+    }
+
+    @ReactProp(name = "result")
+    public void setResult(T node, String result) {
+      node.setResult(result);
+    }
+  }
+
+  static class FeColorMatrixManager extends FilterPrimitiveManager<FeColorMatrixView>
+      implements RNSVGFeColorMatrixManagerInterface<FeColorMatrixView> {
+    FeColorMatrixManager() {
+      super(SVGClass.RNSVGFeColorMatrix);
+      mDelegate = new RNSVGFeColorMatrixManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeColorMatrix";
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeColorMatrixView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "type")
+    public void setType(FeColorMatrixView node, String type) {
+      node.setType(type);
+    }
+
+    @ReactProp(name = "values")
+    public void setValues(FeColorMatrixView node, @Nullable ReadableArray values) {
+      node.setValues(values);
+    }
+  }
+
+  static class FeGaussianBlurManager extends FilterPrimitiveManager<FeGaussianBlurView>
+      implements RNSVGFeGaussianBlurManagerInterface<FeGaussianBlurView> {
+    FeGaussianBlurManager() {
+      super(SVGClass.RNSVGFeGaussianBlur);
+      mDelegate = new RNSVGFeGaussianBlurManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeGaussianBlur";
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeGaussianBlurView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "stdDeviationX")
+    public void setStdDeviationX(FeGaussianBlurView node, float stdDeviationX) {
+      node.setStdDeviationX(stdDeviationX);
+    }
+
+    @ReactProp(name = "stdDeviationY")
+    public void setStdDeviationY(FeGaussianBlurView node, float stdDeviationY) {
+      node.setStdDeviationY(stdDeviationY);
+    }
+
+    @ReactProp(name = "values")
+    public void setEdgeMode(FeGaussianBlurView node, String edgeMode) {
+      node.setEdgeMode(edgeMode);
+    }
+  }
+
+  static class FeMergeManager extends FilterPrimitiveManager<FeMergeView>
+      implements RNSVGFeMergeManagerInterface<FeMergeView> {
+    FeMergeManager() {
+      super(SVGClass.RNSVGFeMerge);
+      mDelegate = new RNSVGFeMergeManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeMerge";
+
+    @ReactProp(name = "nodes")
+    public void setNodes(FeMergeView node, ReadableArray nodes) {
+      node.setNodes(nodes);
+    }
+  }
+
+  static class FeOffsetManager extends FilterPrimitiveManager<FeOffsetView>
+      implements RNSVGFeOffsetManagerInterface<FeOffsetView> {
+    FeOffsetManager() {
+      super(SVGClass.RNSVGFeOffset);
+      mDelegate = new RNSVGFeOffsetManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeOffset";
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeOffsetView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "dx")
+    public void setDx(FeOffsetView node, Dynamic dx) {
+      node.setDx(dx);
+    }
+
+    @ReactProp(name = "dy")
+    public void setDy(FeOffsetView node, Dynamic dy) {
+      node.setDy(dy);
+    }
+  }
+
+  @ReactProp(name = "filter")
+  public void setFilter(T node, String filter) {
+    node.setFilter(filter);
   }
 
   @ReactProp(name = "fill")

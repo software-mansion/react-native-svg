@@ -2,6 +2,7 @@ import type {
   ColorValue,
   GestureResponderEvent,
   GestureResponderHandlers,
+  Insets,
   LayoutChangeEvent,
   TransformsStyle,
 } from 'react-native';
@@ -9,6 +10,7 @@ import type React from 'react';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
+export type BooleanProp = boolean | 'true' | 'false';
 
 export type FillRule = 'evenodd' | 'nonzero';
 export type Units = 'userSpaceOnUse' | 'objectBoundingBox';
@@ -81,6 +83,13 @@ export type TextPathMidLine = 'sharp' | 'smooth';
 
 export type Linecap = 'butt' | 'square' | 'round';
 export type Linejoin = 'miter' | 'bevel' | 'round';
+
+export type FilterEdgeMode = 'duplicate' | 'wrap' | 'none';
+export type FilterColorMatrixType =
+  | 'matrix'
+  | 'saturate'
+  | 'hueRotate'
+  | 'luminanceToAlpha';
 
 export interface TouchableProps {
   disabled?: boolean;
@@ -221,8 +230,14 @@ export interface TransformedProps {
   y: number;
 }
 
+export type MaskType = 'alpha' | 'luminance';
+
 export interface CommonMaskProps {
   mask?: string;
+}
+
+export interface CommonFilterProps {
+  filter?: string;
 }
 
 export interface CommonMarkerProps {
@@ -242,6 +257,7 @@ export interface AccessibilityProps {
   testID?: string;
 }
 
+// FIXME: This interface should probably be named CommonRenderableProps
 export interface CommonPathProps
   extends FillProps,
     StrokeProps,
@@ -253,8 +269,13 @@ export interface CommonPathProps
     DefinitionProps,
     CommonMarkerProps,
     CommonMaskProps,
+    CommonFilterProps,
     NativeProps,
     AccessibilityProps {}
+
+export interface HitSlop {
+  hitSlop?: Insets | number | undefined;
+}
 
 export type ResponderInstanceProps = {
   touchableHandleResponderMove?: (e: GestureResponderEvent) => void;

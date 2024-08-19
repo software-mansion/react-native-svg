@@ -13,7 +13,7 @@
 
 RCT_EXPORT_MODULE()
 
-- (RNSVGView *)view
+- (RNSVGPlatformView *)view
 {
   return [RNSVGSvgView new];
 }
@@ -28,5 +28,20 @@ RCT_EXPORT_VIEW_PROPERTY(align, NSString)
 RCT_EXPORT_VIEW_PROPERTY(meetOrSlice, RNSVGVBMOS)
 RCT_EXPORT_VIEW_PROPERTY(tintColor, UIColor)
 RCT_REMAP_VIEW_PROPERTY(color, tintColor, UIColor)
+RCT_CUSTOM_VIEW_PROPERTY(hitSlop, UIEdgeInsets, RNSVGSvgView)
+{
+  if ([view respondsToSelector:@selector(setHitTestEdgeInsets:)]) {
+    if (json) {
+      UIEdgeInsets hitSlopInsets = [RCTConvert UIEdgeInsets:json];
+      [view setHitTestEdgeInsets:UIEdgeInsetsMake(
+                                     -hitSlopInsets.top,
+                                     -hitSlopInsets.left,
+                                     -hitSlopInsets.bottom,
+                                     -hitSlopInsets.right)];
+    } else {
+      view.hitTestEdgeInsets = defaultView.hitTestEdgeInsets;
+    }
+  }
+}
 
 @end
