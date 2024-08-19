@@ -10,8 +10,10 @@ package com.horcrux.svg;
 
 import android.graphics.Rect;
 import android.util.SparseArray;
+import androidx.annotation.NonNull;
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.PixelUtil;
@@ -389,5 +391,14 @@ class SvgViewManager extends ReactViewManager
   @Override
   public void setBorderStartStartRadius(SvgView view, double value) {
     super.setBorderRadius(view, 12, (float) value);
+  }
+
+  @Override
+  public void setTransformProperty(
+          @NonNull ReactViewGroup view,
+          @androidx.annotation.Nullable ReadableArray transforms,
+          @androidx.annotation.Nullable ReadableArray transformOrigin) {
+    super.setTransformProperty(view, transforms, transformOrigin);
+    ((SvgView) view).setTransformProperty();
   }
 }
