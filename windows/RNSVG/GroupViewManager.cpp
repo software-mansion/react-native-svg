@@ -39,7 +39,7 @@ IMapView<hstring, ViewManagerPropertyType> GroupViewManager::NativeProps() {
 void GroupViewManager::AddView(FrameworkElement const &parent, UIElement const &child, int64_t /*index*/) {
   if (auto const &groupView{parent.try_as<RNSVG::GroupView>()}) {
     if (auto const &childView{child.try_as<IRenderable>()}) {
-      childView.SvgParent(parent);
+      childView.as<IRenderablePaper>().SvgParent(parent);
       groupView.Children().Append(childView);
       childView.MergeProperties(groupView);
 
@@ -58,7 +58,7 @@ void GroupViewManager::RemoveAllChildren(FrameworkElement const &parent) {
   if (auto const &groupView{parent.try_as<RNSVG::GroupView>()}) {
     for (auto const &child : groupView.Children()) {
       child.Unload();
-      child.SvgParent(nullptr);
+      child.as<IRenderablePaper>().SvgParent(nullptr);
     }
 
     groupView.Children().Clear();
@@ -74,7 +74,7 @@ void GroupViewManager::RemoveChildAt(FrameworkElement const &parent, int64_t ind
     if (!groupView.IsUnloaded()) {
       auto const &child{groupView.Children().GetAt(static_cast<uint32_t>(index))};
       child.Unload();
-      child.SvgParent(nullptr);
+      child.as<IRenderablePaper>().SvgParent(nullptr);
 
       groupView.Children().RemoveAt(static_cast<uint32_t>(index));
     }
@@ -99,8 +99,8 @@ void GroupViewManager::ReplaceChild(
     if (groupView.Children().IndexOf(oldChildView, index)) {
       groupView.Children().RemoveAt(index);
       oldChildView.Unload();
-      oldChildView.SvgParent(nullptr);
-      newChildView.SvgParent(parent);
+      oldChildView.as<IRenderablePaper>().SvgParent(nullptr);
+      newChildView.as<IRenderablePaper>().SvgParent(parent);
       groupView.Children().Append(newChildView);
       newChildView.MergeProperties(groupView);
 

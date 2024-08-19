@@ -1,0 +1,167 @@
+import "Views.idl";
+#include <NamespaceRedirect.h>
+
+namespace RNSVG
+{
+  [experimental]
+  interface IRenderablePaper
+  {
+    XAML_NAMESPACE.FrameworkElement SvgParent;
+
+    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass SvgView : XAML_NAMESPACE.Controls.Panel, IRenderable, IRenderablePaper, ISvgView
+  {
+    SvgView(Microsoft.ReactNative.IReactContext context);
+
+    GroupView Group;
+    Windows.UI.Color CurrentColor{ get; };
+  };
+
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass RenderableView : XAML_NAMESPACE.FrameworkElement, IRenderable, IRenderablePaper, IRenderableView
+  {
+    RenderableView(Microsoft.ReactNative.IReactContext context);
+    SvgView SvgRoot{ get; };
+    Windows.UI.Color Fill{ get; };
+    Windows.UI.Color Stroke{ get; };
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass RectView : RenderableView
+  {
+    RectView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass CircleView : RenderableView
+  {
+    CircleView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass EllipseView : RenderableView
+  {
+    EllipseView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass LineView : RenderableView
+  {
+    LineView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass PathView : RenderableView
+  {
+    PathView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass UseView : RenderableView
+  {
+    UseView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass ImageView : RenderableView
+  {
+    ImageView();
+  };
+
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass GroupView : RenderableView, IGroupView
+  {
+    GroupView(Microsoft.ReactNative.IReactContext context);
+    Windows.Foundation.Collections.IVector<IRenderable> Children { get; };
+  };
+
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass TextView : GroupView, ITextView
+  {
+    TextView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass TSpanView : TextView, ITSpanView
+  {
+    TSpanView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass DefsView : GroupView
+  {
+    DefsView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass SymbolView : GroupView, ISymbolView
+  {
+    SymbolView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass ClipPathView : GroupView
+  {
+    ClipPathView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass MarkerView : GroupView
+  {
+    MarkerView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass MaskView : GroupView
+  {
+    MaskView();
+  };
+
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass BrushView : GroupView, IBrushView
+  {
+    BrushView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass LinearGradientView : BrushView
+  {
+    LinearGradientView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass RadialGradientView : BrushView
+  {
+    RadialGradientView();
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass PatternView : BrushView
+  {
+    PatternView();
+  };
+}
