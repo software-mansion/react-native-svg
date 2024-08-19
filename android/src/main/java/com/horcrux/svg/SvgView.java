@@ -64,6 +64,11 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   public SvgView(ReactContext reactContext) {
     super(reactContext);
     mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
+    mScaleX = 1;
+    mScaleY = 1;
+    mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
+    mPaint.setTypeface(Typeface.DEFAULT);
+
     // for some reason on Fabric the `onDraw` won't be called without it
     setWillNotDraw(false);
   }
@@ -131,7 +136,15 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       mBitmap = drawOutput();
     }
     if (mBitmap != null) {
-      canvas.drawBitmap(mBitmap, 0, 0, null);
+      if (mScaleX != 1 || mScaleY != 1) {
+        canvas.drawBitmap(
+            mBitmap,
+            -(float) (mBitmap.getWidth() - getWidth()) / 2,
+            -(float) (mBitmap.getHeight() - getHeight()) / 2,
+            mPaint);
+      } else {
+        canvas.drawBitmap(mBitmap, 0, 0, mPaint);
+      }
       if (toDataUrlTask != null) {
         toDataUrlTask.run();
         toDataUrlTask = null;
@@ -166,6 +179,9 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   private final Map<String, Brush> mDefinedBrushes = new HashMap<>();
   private Canvas mCanvas;
   private final float mScale;
+  private float mScaleX;
+  private float mScaleY;
+  private final Paint mPaint = new Paint();
 
   private float mMinX;
   private float mMinY;
@@ -265,7 +281,9 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     if (invalid) {
       return null;
     }
-    Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_8888);
+    Bitmap bitmap =
+        Bitmap.createBitmap(
+            (int) (width * mScaleX), (int) (height * mScaleY), Bitmap.Config.ARGB_8888);
     mCurrentBitmap = bitmap;
     drawChildren(new Canvas(bitmap));
     return bitmap;
@@ -297,12 +315,6 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       canvas.concat(mViewBoxMatrix);
     }
 
-    final Paint paint = new Paint();
-
-    paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
-
-    paint.setTypeface(Typeface.DEFAULT);
-
     for (int i = 0; i < getChildCount(); i++) {
       View node = getChildAt(i);
       if (node instanceof VirtualView) {
@@ -315,7 +327,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       if (lNode instanceof VirtualView) {
         VirtualView node = (VirtualView) lNode;
         int count = node.saveAndSetupCanvas(canvas, mViewBoxMatrix);
-        node.render(canvas, paint, 1f);
+        node.render(canvas, mPaint, 1f);
         node.restoreCanvas(canvas, count);
 
         if (node.isResponsible() && !mResponsible) {
@@ -374,7 +386,11 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
 
     float[] transformed = {touchX, touchY};
-    mInvViewBoxMatrix.mapPoints(transformed);
+    int width = getWidth();
+    int height = getHeight();
+    Matrix invViewBoxMatrix = new Matrix(mInvViewBoxMatrix);
+    invViewBoxMatrix.preTranslate((width * mScaleX - width) / 2, (height * mScaleY - height) / 2);
+    invViewBoxMatrix.mapPoints(transformed);
 
     int count = getChildCount();
     int viewTag = -1;
@@ -443,5 +459,13 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
   public Bitmap getCurrentBitmap() {
     return mCurrentBitmap;
+  }
+
+  public void setTransformProperty() {
+    mScaleX = super.getScaleX();
+    mScaleY = super.getScaleY();
+    super.setScaleX(1);
+    super.setScaleY(1);
+    invalidate();
   }
 }
