@@ -2,6 +2,7 @@ import type {
   ColorValue,
   GestureResponderEvent,
   GestureResponderHandlers,
+  Insets,
   LayoutChangeEvent,
   TransformsStyle,
 } from 'react-native';
@@ -271,6 +272,10 @@ export interface CommonPathProps
     CommonFilterProps,
     NativeProps,
     AccessibilityProps {}
+
+export interface HitSlop {
+  hitSlop?: Insets | number | undefined;
+}
 
 export type ResponderInstanceProps = {
   touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
