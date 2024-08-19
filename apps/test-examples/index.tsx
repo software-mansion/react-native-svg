@@ -7,6 +7,7 @@ import MountUnmount from './src/MountUnmount';
 import Test1374 from './src/Test1374';
 import Test1442 from './src/Test1442';
 import Test1451 from './src/Test1451';
+import Test1693 from './src/Test1693';
 import Test1718 from './src/Test1718';
 import Test1790 from './src/Test1790';
 import Test1813 from './src/Test1813';
@@ -27,5 +28,5 @@ import Test2366 from './src/Test2366';
 import Test2397 from './src/Test2397';
 
 export default function App() {
-  return <ColorTest />;
+  return <Test1693 />;
 }
