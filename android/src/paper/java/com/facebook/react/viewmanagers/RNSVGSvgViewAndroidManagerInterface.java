@@ -49,7 +49,7 @@ public interface RNSVGSvgViewAndroidManagerInterface<T extends View> {
   void setBackfaceVisibility(T view, @Nullable String value);
   void setBorderStyle(T view, @Nullable String value);
   void setNeedsOffscreenAlphaCompositing(T view, boolean value);
-  void setHitSlop(T view, @Nullable ReadableMap value);
+  void setHitSlop(T view, Dynamic value);
   void setBorderTopColor(T view, @Nullable Integer value);
   void setNextFocusLeft(T view, int value);
   void setBorderTopRightRadius(T view, double value);
