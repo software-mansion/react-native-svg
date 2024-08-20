@@ -9,9 +9,9 @@ on:
       - 'src/**'
       - 'e2e/**'
       - 'package.json'
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
 jobs:
   test:
