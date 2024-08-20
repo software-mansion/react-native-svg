@@ -7,21 +7,21 @@
 import React, {Component} from 'react';
 import {
   Dimensions,
+  Modal,
+  Platform,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
-  View,
-  ScrollView,
   TouchableHighlight,
   TouchableOpacity,
-  SafeAreaView,
+  View,
 } from 'react-native';
-import {Modal, Platform} from 'react-native';
-import {Svg, Circle, Line} from 'react-native-svg';
+import {Circle, Line, Svg} from 'react-native-svg';
 
-import * as examples from './src/examples';
 import {commonStyles} from './src/commonStyles';
-// @ts-expect-error
-import {E2E} from './src/examples';
+import E2eTestingView from './src/e2e';
+import * as examples from './src/examples';
 import {names} from './utils/names';
 
 const initialState = {
@@ -65,25 +65,30 @@ export default class SvgExample extends Component {
   };
 
   getExamples = () => {
-    return names.map(name => {
-      var icon;
-      let example = examples[name];
-      if (example) {
-        icon = example.icon;
-      }
-      return (
-        <TouchableHighlight
-          style={styles.link}
-          underlayColor="#ccc"
-          key={`example-${name}`}
-          onPress={() => this.show(name)}>
-          <View style={commonStyles.cell}>
-            {icon}
-            <Text style={commonStyles.title}>{name}</Text>
-          </View>
-        </TouchableHighlight>
-      );
-    });
+    return names
+      .filter(el => {
+        if (el !== 'E2E') return true;
+        return Platform.OS === 'android' || Platform.OS === 'ios';
+      })
+      .map(name => {
+        var icon;
+        let example = examples[name as keyof typeof examples];
+        if (example) {
+          icon = example.icon;
+        }
+        return (
+          <TouchableHighlight
+            style={styles.link}
+            underlayColor="#ccc"
+            key={`example-${name}`}
+            onPress={() => this.show(name as keyof typeof examples)}>
+            <View style={commonStyles.cell}>
+              {icon}
+              <Text style={commonStyles.title}>{name}</Text>
+            </View>
+          </TouchableHighlight>
+        );
+      });
   };
 
   modalContent = () => (
@@ -113,8 +118,7 @@ export default class SvgExample extends Component {
       console.log(
         'Opening E2E example, as E2E env is set to ' + process.env.E2E,
       );
-      const e2eTab = React.createElement(E2E.samples[0]);
-      return <SafeAreaView>{e2eTab}</SafeAreaView>;
+      return <E2eTestingView />;
     }
     return (
       <SafeAreaView style={styles.container}>

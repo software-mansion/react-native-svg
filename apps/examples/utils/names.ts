@@ -1,8 +1,6 @@
 import {ExamplesKey} from './type';
 
-type ExamplesKeyName = ExamplesKey | 'E2E';
-
-export const names: ExamplesKeyName[] = [
+export const names: ExamplesKey[] = [
   'Svg',
   'Stroking',
   'Path',
