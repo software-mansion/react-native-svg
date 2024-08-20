@@ -32,5 +32,5 @@ import Test2403 from './src/Test2403';
 import Test2407 from './src/Test2407';
 
 export default function App() {
-  return <Test1693 />;
+  return <ColorTest />;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Svg, Text, SvgXml, TSpan, Defs, Path, TextPath} from 'react-native-svg';
+import {Svg, Text, TSpan, Defs, Path, TextPath} from 'react-native-svg';
 
 export default function App() {
   return (
