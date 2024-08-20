@@ -19,7 +19,6 @@ function ReanimatedRectExample() {
 
   useEffect(() => {
     height.value = withClamp({min: 0}, withRepeat(withSpring(100), -1, true));
-
     position.value = withRepeat(withTiming(300, {duration: 5000}), -1);
   });
 

@@ -23,6 +23,35 @@ import type { TSpanProps } from './elements/TSpan';
 import type { UseProps } from './elements/Use';
 import { createComponent } from './web/CreateWebComponent';
 import { BaseProps } from './types';
+import type { FeBlendProps } from './elements/filters/FeBlend';
+import type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
+import type { FeComponentTransferProps } from './elements/filters/FeComponentTransfer';
+import type {
+  FeFuncAProps,
+  FeFuncBProps,
+  FeFuncGProps,
+  FeFuncRProps,
+} from './elements/filters/FeComponentTransferFunction';
+import type { FeCompositeProps } from './elements/filters/FeComposite';
+import type { FeConvolveMatrixProps } from './elements/filters/FeConvolveMatrix';
+import type { FeDiffuseLightingProps } from './elements/filters/FeDiffuseLighting';
+import type { FeDisplacementMapProps } from './elements/filters/FeDisplacementMap';
+import type { FeDistantLightProps } from './elements/filters/FeDistantLight';
+import type { FeDropShadowProps } from './elements/filters/FeDropShadow';
+import type { FeFloodProps } from './elements/filters/FeFlood';
+import type { FeGaussianBlurProps } from './elements/filters/FeGaussianBlur';
+import type { FeImageProps } from './elements/filters/FeImage';
+import type { FeMergeProps } from './elements/filters/FeMerge';
+import type { FeMergeNodeProps } from './elements/filters/FeMergeNode';
+import type { FeMorphologyProps } from './elements/filters/FeMorphology';
+import type { FeOffsetProps } from './elements/filters/FeOffset';
+import type { FePointLightProps } from './elements/filters/FePointLight';
+import type { FeSpecularLightingProps } from './elements/filters/FeSpecularLighting';
+import type { FeSpotLightProps } from './elements/filters/FeSpotLight';
+import type { FeTileProps } from './elements/filters/FeTile';
+import type { FeTurbulenceProps } from './elements/filters/FeTurbulence';
+import type { FilterProps } from './elements/filters/Filter';
+import { encodeSvg } from './web/utils/index';
 
 export const Circle = createComponent<BaseProps & CircleProps>('circle');
 export const ClipPath = createComponent<BaseProps & ClipPathProps>('clipPath');
@@ -36,6 +65,63 @@ const prepareGProps = (props: BaseProps & GProps) => {
   }
   return rest;
 };
+
+export const FeBlend = createComponent<BaseProps & FeBlendProps>('feBlend');
+export const FeColorMatrix = createComponent<BaseProps & FeColorMatrixProps>(
+  'feColorMatrix'
+);
+export const FeComponentTransfer = createComponent<
+  BaseProps & FeComponentTransferProps
+>('feComponentTransfer');
+export const FeComposite = createComponent<BaseProps & FeCompositeProps>(
+  'feComposite'
+);
+export const FeConvolveMatrix = createComponent<
+  BaseProps & FeConvolveMatrixProps
+>('feConvolveMatrix');
+export const FeDiffuseLighting = createComponent<
+  BaseProps & FeDiffuseLightingProps
+>('feDiffuseLighting');
+export const FeDisplacementMap = createComponent<
+  BaseProps & FeDisplacementMapProps
+>('feDisplacementMap');
+export const FeDistantLight = createComponent<BaseProps & FeDistantLightProps>(
+  'feDistantLight'
+);
+export const FeDropShadow = createComponent<BaseProps & FeDropShadowProps>(
+  'feDropShadow'
+);
+export const FeFlood = createComponent<BaseProps & FeFloodProps>('feFlood');
+export const FeFuncA = createComponent<BaseProps & FeFuncAProps>('feFuncA');
+export const FeFuncB = createComponent<BaseProps & FeFuncBProps>('feFuncB');
+export const FeFuncG = createComponent<BaseProps & FeFuncGProps>('feFuncG');
+export const FeFuncR = createComponent<BaseProps & FeFuncRProps>('feFuncR');
+export const FeGaussianBlur = createComponent<BaseProps & FeGaussianBlurProps>(
+  'feGaussianBlur'
+);
+export const FeImage = createComponent<BaseProps & FeImageProps>('feImage');
+export const FeMerge = createComponent<BaseProps & FeMergeProps>('feMerge');
+export const FeMergeNode = createComponent<BaseProps & FeMergeNodeProps>(
+  'feMergeNode'
+);
+export const FeMorphology = createComponent<BaseProps & FeMorphologyProps>(
+  'feMorphology'
+);
+export const FeOffset = createComponent<BaseProps & FeOffsetProps>('feOffset');
+export const FePointLight = createComponent<BaseProps & FePointLightProps>(
+  'fePointLight'
+);
+export const FeSpecularLighting = createComponent<
+  BaseProps & FeSpecularLightingProps
+>('feSpecularLighting');
+export const FeSpotLight = createComponent<BaseProps & FeSpotLightProps>(
+  'feSpotLight'
+);
+export const FeTile = createComponent<BaseProps & FeTileProps>('feTile');
+export const FeTurbulence = createComponent<BaseProps & FeTurbulenceProps>(
+  'feTurbulence'
+);
+export const Filter = createComponent<BaseProps & FilterProps>('filter');
 export const G = createComponent<BaseProps & GProps>('g', prepareGProps);
 
 export const Image = createComponent<BaseProps & ImageProps>('image');
@@ -51,26 +137,6 @@ export const RadialGradient = createComponent<BaseProps & RadialGradientProps>(
 );
 export const Rect = createComponent<BaseProps & RectProps>('rect');
 export const Stop = createComponent<BaseProps & StopProps>('stop');
-
-/* Taken from here: https://gist.github.com/jennyknuth/222825e315d45a738ed9d6e04c7a88d0 */
-function encodeSvg(svgString: string) {
-  return svgString
-    .replace(
-      '<svg',
-      ~svgString.indexOf('xmlns')
-        ? '<svg'
-        : '<svg xmlns="http://www.w3.org/2000/svg"'
-    )
-    .replace(/"/g, "'")
-    .replace(/%/g, '%25')
-    .replace(/#/g, '%23')
-    .replace(/{/g, '%7B')
-    .replace(/}/g, '%7D')
-    .replace(/</g, '%3C')
-    .replace(/>/g, '%3E')
-    .replace(/\s+/g, ' ');
-}
-
 const SvgComponent = createComponent<SvgProps & BaseProps>('svg');
 
 (SvgComponent as SvgProps).toDataURL = (

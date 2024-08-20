@@ -25,7 +25,7 @@ export interface FilterImageProps extends ImageProps {
 
 export const FilterImage = (props: FilterImageProps) => {
   const { filters = [], source, style, ...imageProps } = props;
-  const { filter: stylesFilter, ...styles } = StyleSheet.flatten(style);
+  const { filter: stylesFilter, ...styles } = StyleSheet.flatten(style ?? {});
   const extractedFilters = [...filters, ...extractFiltersCss(stylesFilter)];
   const filterId = React.useMemo(() => `RNSVG-${getRandomNumber()}`, []);
 

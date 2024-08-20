@@ -1257,14 +1257,37 @@ const styles = StyleSheet.create({
 
 Filter effects are a way of processing an element’s rendering before it is displayed in the document. Typically, rendering an element via CSS or SVG can conceptually be described as if the element, including its children, are drawn into a buffer (such as a raster image) and then that buffer is composited into the elements parent. Filters apply an effect before the compositing stage. Examples of such effects are blurring, changing color intensity and warping the image.
 
-Currently supported\* filters are:
+> [!NOTE]
+> Not all filters have been implemented on native platforms yet. However, they do work on the Web, so we added them. Some filters will display a warning indicating they are not currently supported.
+
+The following filters have been implemented:
 
 - FeColorMatrix
 - FeGaussianBlur
 - FeMerge
 - FeOffset
 
-\*_More filters are coming soon_
+Not supported yet:
+
+- FeBlend
+- FeComponentTransfer
+- FeComposite
+- FeConvolveMatrix
+- FeDiffuseLighting
+- FeDisplacementMap
+- FeDropShadow
+- FeFlood
+- FeFuncA
+- FeFuncB
+- FeFuncG
+- FeFuncR
+- FeImage
+- FeMorphology
+- FePointLight
+- FeSpecularLighting
+- FeSpotLight
+- FeTile
+- FeTurbulence
 
 Exmaple use of filters:
 

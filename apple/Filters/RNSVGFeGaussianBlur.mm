@@ -1,4 +1,5 @@
 #import "RNSVGFeGaussianBlur.h"
+#import "RNSVGRenderUtils.h"
 
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
@@ -62,17 +63,20 @@ using namespace facebook::react;
     return nil;
   }
 
+  // We need to multiply stdDeviation by screenScale to achive the same results as on web
+  CGFloat screenScale = [RNSVGRenderUtils getScreenScale];
+
   CIFilter *filter = [CIFilter filterWithName:(_stdDeviationX == _stdDeviationY ? @"CIGaussianBlur" : @"CIMotionBlur")];
   [filter setDefaults];
   [filter setValue:inputImage forKey:@"inputImage"];
-  [filter setValue:_stdDeviationX forKey:@"inputRadius"];
+  [filter setValue:@([_stdDeviationX floatValue] * screenScale) forKey:@"inputRadius"];
 
   if (_stdDeviationX != _stdDeviationY) {
     // X axis
     [filter setValue:[NSNumber numberWithFloat:0] forKey:@"inputAngle"];
     // Y axis
     [filter setValue:[filter valueForKey:@"outputImage"] forKey:@"inputImage"];
-    [filter setValue:_stdDeviationY forKey:@"inputRadius"];
+    [filter setValue:@([_stdDeviationY floatValue] * screenScale) forKey:@"inputRadius"];
     [filter setValue:[NSNumber numberWithFloat:M_PI_2] forKey:@"inputAngle"];
   }
 

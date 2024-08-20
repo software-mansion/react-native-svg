@@ -1,7 +1,6 @@
 import {
   AstProps,
   camelCase,
-  fetchText,
   JsxAST,
   Middleware,
   parse,
@@ -17,6 +16,8 @@ import {
   XmlProps,
   XmlState,
 } from './xml';
+
+import { fetchText } from './utils/fetchData';
 
 export {
   inlineStyles,

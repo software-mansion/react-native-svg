@@ -127,7 +127,7 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
         mViewManager.setNeedsOffscreenAlphaCompositing(view, value == null ? false : (boolean) value);
         break;
       case "hitSlop":
-        mViewManager.setHitSlop(view, (ReadableMap) value);
+        mViewManager.setHitSlop(view, new DynamicFromObject(value));
         break;
       case "borderTopColor":
         mViewManager.setBorderTopColor(view, ColorPropConverter.getColor(value, view.getContext()));

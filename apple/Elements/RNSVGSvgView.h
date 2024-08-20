@@ -33,6 +33,7 @@
 @property (nonatomic, assign) CGAffineTransform initialCTM;
 @property (nonatomic, assign) CGAffineTransform invInitialCTM;
 @property (nonatomic, assign) CGAffineTransform viewBoxTransform;
+@property (nonatomic, assign) UIEdgeInsets hitTestEdgeInsets;
 
 /**
  * define <ClipPath></ClipPath> content as clipPath template.

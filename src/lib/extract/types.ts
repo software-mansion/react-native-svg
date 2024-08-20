@@ -2,6 +2,7 @@ import type {
   ColorValue,
   GestureResponderEvent,
   GestureResponderHandlers,
+  Insets,
   LayoutChangeEvent,
   TransformsStyle,
 } from 'react-native';
@@ -9,6 +10,7 @@ import type React from 'react';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
+export type BooleanProp = boolean | 'true' | 'false';
 
 export type FillRule = 'evenodd' | 'nonzero';
 export type Units = 'userSpaceOnUse' | 'objectBoundingBox';
@@ -270,6 +272,10 @@ export interface CommonPathProps
     CommonFilterProps,
     NativeProps,
     AccessibilityProps {}
+
+export interface HitSlop {
+  hitSlop?: Insets | number | undefined;
+}
 
 export type ResponderInstanceProps = {
   touchableHandleResponderMove?: (e: GestureResponderEvent) => void;

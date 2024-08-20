@@ -6,6 +6,13 @@ import type { ViewProps } from './utils';
 import type { UnsafeMixed } from './codegenUtils';
 import { NumberProp } from '../lib/extract/types';
 
+type HitSlop = Readonly<{
+  left?: Float;
+  top?: Float;
+  right?: Float;
+  bottom?: Float;
+}>;
+
 interface NativeProps extends ViewProps {
   bbWidth?: UnsafeMixed<NumberProp>;
   bbHeight?: UnsafeMixed<NumberProp>;
@@ -18,6 +25,7 @@ interface NativeProps extends ViewProps {
   tintColor?: ColorValue;
   color?: ColorValue;
   pointerEvents?: string;
+  hitSlop?: UnsafeMixed<HitSlop | null | number | undefined>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGSvgView', {

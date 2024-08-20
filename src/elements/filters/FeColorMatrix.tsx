@@ -6,13 +6,13 @@ import {
   extractFilter,
   extractIn,
 } from '../../lib/extract/extractFilter';
-import { FilterColorMatrixType } from '../../lib/extract/types';
+import { FilterColorMatrixType, NumberArray } from '../../lib/extract/types';
 import FilterPrimitive from './FilterPrimitive';
 
 export type FeColorMatrixProps = {
   in?: string;
   type?: FilterColorMatrixType;
-  values?: number | Array<number> | string;
+  values?: NumberArray;
 };
 
 export default class FeColorMatrix extends FilterPrimitive<FeColorMatrixProps> {

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "RadialGradientView.h"
+#if __has_include("RadialGradientView.g.cpp")
 #include "RadialGradientView.g.cpp"
+#endif
 
 #include "Utils.h"
 
@@ -8,6 +10,59 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
+#ifdef USE_FABRIC
+RadialGradientProps::RadialGradientProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
+
+void RadialGradientProps::SetProp(
+    uint32_t hash,
+    winrt::hstring propName,
+    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
+}
+
+RadialGradientView::RadialGradientView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args)
+    : base_type(args) {}
+
+void RadialGradientView::RegisterComponent(
+    const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      L"RNSVGRadialGradient", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::RadialGradientProps>(props);
+        });
+        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::RadialGradientView>(args);
+        });
+      });
+}
+
+void RadialGradientView::UpdateProperties(
+    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+    bool forceUpdate,
+    bool invalidate) noexcept {
+  auto radialGradientProps = props.try_as<RadialGradientProps>();
+  if (radialGradientProps) {
+    m_props = radialGradientProps;
+
+    m_rx = m_props->rx;
+    m_ry = m_props->ry;
+    m_fx = m_props->fx;
+    m_fy = m_props->fy;
+    m_cx = m_props->cx;
+    m_cy = m_props->cy;
+
+    m_stops = Utils::JSValueAsGradientStops(m_props->gradient);
+    m_gradientUnits = Utils::JSValueAsBrushUnits(m_props->gradientUnits);
+    m_transform = Utils::JSValueAsD2DTransform(m_props->gradientTransform);
+  }
+
+  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
+
+  SaveDefinition();
+}
+#else
 void RadialGradientView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -16,17 +71,17 @@ void RadialGradientView::UpdateProperties(IJSValueReader const &reader, bool for
     auto const &propertyValue{pair.second};
 
     if (propertyName == "fx") {
-      m_fx = SVGLength::From(propertyValue);
+      m_fx = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "fy") {
-      m_fy = SVGLength::From(propertyValue);
+      m_fy = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "rx") {
-      m_rx = SVGLength::From(propertyValue);
+      m_rx = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "ry") {
-      m_ry = SVGLength::From(propertyValue);
+      m_ry = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "cx") {
-      m_cx = SVGLength::From(propertyValue);
+      m_cx = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "cy") {
-      m_cy = SVGLength::From(propertyValue);
+      m_cy = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "gradient") {
       m_stops = Utils::JSValueAsStops(propertyValue);
     } else if (propertyName == "gradientUnits") {
@@ -44,6 +99,7 @@ void RadialGradientView::UpdateProperties(IJSValueReader const &reader, bool for
 
   SaveDefinition();
 }
+#endif
 
 void RadialGradientView::Unload() {
   m_stops.clear();
@@ -60,10 +116,10 @@ void RadialGradientView::CreateBrush() {
 
   D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES brushProperties{};
   winrt::com_ptr<ID2D1RadialGradientBrush> radialBrush;
-  winrt::check_hresult(
-      deviceContext->CreateRadialGradientBrush(brushProperties, stopCollection.get(), radialBrush.put()));
+  winrt::check_hresult(deviceContext->CreateRadialGradientBrush(brushProperties, stopCollection.get(), radialBrush.put()));
 
-  SetPoints(radialBrush.get(), {0, 0, static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())});
+  auto size{root.CanvasSize()};
+  SetPoints(radialBrush.get(), {0, 0, size.Width, size.Height});
 
   if (!m_transform.IsIdentity()) {
     radialBrush->SetTransform(m_transform);
