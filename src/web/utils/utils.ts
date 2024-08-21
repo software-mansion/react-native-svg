@@ -200,7 +200,7 @@ export const prepare = (props: CreateComponentProps) => {
   if (fontStyle != null) {
     styles.fontStyle = fontStyle;
   }
-  if (props.href !== null) {
+  if (props.href !== null && props.href !== undefined) {
     clean.href = resolveAssetUri(props.href)?.uri;
   }
   clean.style = resolve(style, styles);
