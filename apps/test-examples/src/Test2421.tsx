@@ -4,9 +4,11 @@ import Svg, {Rect} from 'react-native-svg';
 export default function App() {
   return (
     <View style={styles.main}>
-      <Svg style={styles.svg}>
-        <Rect x="0" y="0" width="100%" height="100%" fill="#080" />
-      </Svg>
+      <View style={styles.main}>
+        <Svg style={styles.svg} viewBox="0 0 100 100" fill="none">
+          <Rect x="0" y="0" width="100%" height="100%" fill="#080" />
+        </Svg>
+      </View>
     </View>
   );
 }
