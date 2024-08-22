@@ -278,7 +278,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
             || width < 1
             || height < 1
             || (Math.log10(width) + Math.log10(height) > 42);
-    if (invalid) {
+    if (invalid || mScaleX == 0 || mScaleY == 0) {
       return null;
     }
     Bitmap bitmap =
