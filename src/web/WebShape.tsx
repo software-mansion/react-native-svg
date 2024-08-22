@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import {
   // @ts-ignore it is not seen in exports
   unstable_createElement as createElement,
@@ -20,13 +20,11 @@ export const WebShape = <T,>(
   const { elementRef, rest, onClick } = useHandleEvents(currentRef, props);
   const lastMergedProps = useRef<Partial<typeof rest>>({});
 
-  useLayoutEffect(() => {
-    setNativeProps(
-      props,
-      elementRef as React.MutableRefObject<SVGElement | null>,
-      lastMergedProps
-    );
-  }, [props]);
+  setNativeProps(
+    rest,
+    elementRef as React.MutableRefObject<SVGElement | null>,
+    lastMergedProps
+  );
 
   const setRef = useMergeRefs(elementRef, forwardedRef);
   return createElement(Tag, {
