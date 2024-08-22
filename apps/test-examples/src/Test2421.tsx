@@ -1,14 +1,16 @@
 import {StyleSheet, View} from 'react-native';
-import Svg, {Rect} from 'react-native-svg';
+import Svg, {Circle, Mask, Path, Rect} from 'react-native-svg';
 
 export default function App() {
   return (
     <View style={styles.main}>
-      <View style={styles.main}>
-        <Svg style={styles.svg} viewBox="0 0 100 100" fill="none">
-          <Rect x="0" y="0" width="100%" height="100%" fill="#080" />
-        </Svg>
-      </View>
+      <Svg
+        height="200"
+        viewBox="0 0 200 200"
+        width="200"
+        transform={[{scale: -2}]}>
+        <Path d="M10,35 A20,20,0,0,1,50,35 A20,20,0,0,1,90,35 Q90,65,50,95 Q10,65,10,35 Z" />
+      </Svg>
     </View>
   );
 }
