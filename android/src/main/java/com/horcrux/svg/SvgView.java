@@ -128,7 +128,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
   @Override
   protected void onDraw(Canvas canvas) {
-    if (getParent() instanceof VirtualView) {
+    if (getParent() instanceof VirtualView || mScaleX <= 0 || mScaleY <= 0) {
       return;
     }
     super.onDraw(canvas);
