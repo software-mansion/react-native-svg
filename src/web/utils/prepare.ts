@@ -121,7 +121,7 @@ export const prepare = <T extends BaseProps>(
   if (onPress !== null) {
     clean.onClick = props.onPress;
   }
-  if (props.href !== null) {
+  if (props.href !== null && props.href !== undefined) {
     clean.href = resolveAssetUri(props.href)?.uri;
   }
   return clean;
