@@ -1,34 +1,40 @@
 import React from 'react';
-import {Svg, Text, TSpan, Defs, Path, TextPath} from 'react-native-svg';
+import {View} from 'react-native';
+import {Defs, G, Path, Svg, Text, TextPath, TSpan} from 'react-native-svg';
 
 export default function App() {
   return (
-    <Svg viewBox="0 0 100 100">
-      <Defs>
-        <Path
-          id="MyPath"
-          fill="none"
-          stroke="red"
-          d="M10,90 Q90,90 90,45 Q90,10 50,10 Q10,10 10,40 Q10,70 45,70 Q70,70 75,50"
-        />
-      </Defs>
-      <Text x={20} y={40}>
-        <TextPath href="#MyPath" textLength="100%">
-          Quick brown fox jumps over the lazy dog.
-        </TextPath>
-      </Text>
-
-      <Text textLength="6em">Small text length</Text>
-      <Text y="10" textLength="120%">
-        Big text length
-      </Text>
-
-      <TSpan y="30" textLength="10em">
-        Small text length
-      </TSpan>
-      <TSpan y="40" textLength="90%">
-        Big text length
-      </TSpan>
-    </Svg>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Svg viewBox="0 -50 200 200">
+        <Text x="0" textLength="6em">
+          Text length 6em
+        </Text>
+        <Text x="0" y="15" textLength="120%">
+          Text length 120%
+        </Text>
+        <Text>
+          <TSpan x="0" y="30" textLength="6em">
+            Text length 6em
+          </TSpan>
+        </Text>
+        <Text>
+          <TSpan x="0" y="45" fontWeight="bold" textLength="10em">
+            Text Length 10em
+          </TSpan>
+        </Text>
+        <Defs>
+          <Path id="path" d="M10 50 H290" />
+        </Defs>
+        <G x="0" y="60">
+          <Text fill="blue">
+            <TextPath href="#path">
+              We go up and down,
+              <TSpan fill="red">then up again</TSpan>
+            </TextPath>
+          </Text>
+          <Path d="M10 50 H290" stroke="red" stroke-width="1" />
+        </G>
+      </Svg>
+    </View>
   );
 }
