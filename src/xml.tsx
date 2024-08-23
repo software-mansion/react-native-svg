@@ -272,7 +272,6 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     );
   }
 
-  // New function to decode HTML entities
   function decodeEntities(text: string): string {
     return text
       .replace(/&amp;/g, '&')
