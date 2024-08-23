@@ -272,6 +272,14 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     );
   }
 
+  // New function to decode HTML entities
+  function decodeEntities(text: string): string {
+    return text
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>');
+  }
+
   function metadata() {
     while (
       i + 1 < length &&
@@ -296,7 +304,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     }
 
     if (/\S/.test(text)) {
-      children.push(text);
+      children.push(decodeEntities(text)); // Decode entities before pushing text to children
     }
 
     if (source[i] === '<') {
@@ -391,7 +399,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
       error('expected ]]>');
     }
 
-    children.push(source.slice(i + 7, index));
+    children.push(decodeEntities(source.slice(i + 7, index))); // Decode entities in CDATA section
 
     i = index + 2;
     return neutral;
@@ -457,7 +465,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
         i += 1;
         allowSpaces();
 
-        value = getAttributeValue();
+        value = decodeEntities(getAttributeValue()); // Decode entities in attribute values
         if (!isNaN(+value) && value.trim() !== '') {
           value = +value;
         }
