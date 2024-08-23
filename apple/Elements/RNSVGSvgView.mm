@@ -471,6 +471,13 @@ using namespace facebook::react;
   return _viewBoxTransform;
 }
 
+#if !RCT_NEW_ARCH_ENABLED && TARGET_OS_OSX // [macOS
+- (void)updateReactTransformInternal:(CATransform3D)transform
+{
+  [self setTransform:CATransform3DGetAffineTransform(transform)];
+}
+#endif // macOS]
+
 @end
 
 #ifdef RCT_NEW_ARCH_ENABLED
