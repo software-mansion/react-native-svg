@@ -7,7 +7,7 @@ import {
 // eslint-disable-next-line import/no-unresolved
 import useMergeRefs from 'react-native-web/dist/modules/useMergeRefs';
 import { type CreateComponentProps } from '../types';
-import { prepare } from './utils/utils';
+import { prepare } from './utils/prepare';
 import { useHandleEvents } from './hooks/useHandleEvents';
 import { setNativeProps } from './utils/setNativeProps';
 
