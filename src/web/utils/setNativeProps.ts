@@ -1,5 +1,5 @@
 import { BaseProps, CreateComponentProps } from '../../types';
-import { camelCaseToDashed } from './utils';
+import { camelCaseToDashed } from '.';
 import { convertInt32ColorToRGBA } from './convertInt32Color';
 
 export const setNativeProps = (
@@ -23,19 +23,21 @@ export const setNativeProps = (
           break;
         case 'fill':
           if (cleanValue && typeof cleanValue === 'object') {
-            const value = cleanValue as { payload: number };
             current.setAttribute(
               'fill',
-              convertInt32ColorToRGBA(value.payload)
+              convertInt32ColorToRGBA(
+                (cleanValue as { payload: number }).payload
+              )
             );
           }
           break;
         case 'stroke':
           if (cleanValue && typeof cleanValue === 'object') {
-            const value = cleanValue as { payload: number };
             current.setAttribute(
               'stroke',
-              convertInt32ColorToRGBA(value.payload)
+              convertInt32ColorToRGBA(
+                (cleanValue as { payload: number }).payload
+              )
             );
           }
           break;
