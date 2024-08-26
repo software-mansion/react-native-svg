@@ -1,28 +1,6 @@
 import type { CircleProps } from './elements/Circle';
 import type { ClipPathProps } from './elements/ClipPath';
 import type { EllipseProps } from './elements/Ellipse';
-import type { ForeignObjectProps } from './elements/ForeignObject';
-import type { GProps } from './elements/G';
-import type { ImageProps } from './elements/Image';
-import type { LineProps } from './elements/Line';
-import type { LinearGradientProps } from './elements/LinearGradient';
-import type { MarkerProps } from './elements/Marker';
-import type { MaskProps } from './elements/Mask';
-import type { PathProps } from './elements/Path';
-import type { PatternProps } from './elements/Pattern';
-import type { PolygonProps } from './elements/Polygon';
-import type { PolylineProps } from './elements/Polyline';
-import type { RadialGradientProps } from './elements/RadialGradient';
-import type { RectProps } from './elements/Rect';
-import type { StopProps } from './elements/Stop';
-import type { SvgProps } from './elements/Svg';
-import type { SymbolProps } from './elements/Symbol';
-import type { TextProps } from './elements/Text';
-import type { TextPathProps } from './elements/TextPath';
-import type { TSpanProps } from './elements/TSpan';
-import type { UseProps } from './elements/Use';
-import { createComponent } from './web/CreateWebComponent';
-import { BaseProps } from './types';
 import type { FeBlendProps } from './elements/filters/FeBlend';
 import type { FeColorMatrixProps } from './elements/filters/FeColorMatrix';
 import type { FeComponentTransferProps } from './elements/filters/FeComponentTransfer';
@@ -51,7 +29,29 @@ import type { FeSpotLightProps } from './elements/filters/FeSpotLight';
 import type { FeTileProps } from './elements/filters/FeTile';
 import type { FeTurbulenceProps } from './elements/filters/FeTurbulence';
 import type { FilterProps } from './elements/filters/Filter';
-import { encodeSvg } from './web/utils/index';
+import type { ForeignObjectProps } from './elements/ForeignObject';
+import type { GProps } from './elements/G';
+import type { ImageProps } from './elements/Image';
+import type { LineProps } from './elements/Line';
+import type { LinearGradientProps } from './elements/LinearGradient';
+import type { MarkerProps } from './elements/Marker';
+import type { MaskProps } from './elements/Mask';
+import type { PathProps } from './elements/Path';
+import type { PatternProps } from './elements/Pattern';
+import type { PolygonProps } from './elements/Polygon';
+import type { PolylineProps } from './elements/Polyline';
+import type { RadialGradientProps } from './elements/RadialGradient';
+import type { RectProps } from './elements/Rect';
+import type { StopProps } from './elements/Stop';
+import type { SvgProps } from './elements/Svg';
+import type { SymbolProps } from './elements/Symbol';
+import type { TextProps } from './elements/Text';
+import type { TextPathProps } from './elements/TextPath';
+import type { TSpanProps } from './elements/TSpan';
+import type { UseProps } from './elements/Use';
+import { BaseProps } from './types';
+import { createComponent } from './web/CreateWebComponent';
+import { encodeSvg } from './web/utils';
 
 export const Circle = createComponent<BaseProps & CircleProps>('circle');
 export const ClipPath = createComponent<BaseProps & ClipPathProps>('clipPath');
@@ -122,6 +122,9 @@ export const FeTurbulence = createComponent<BaseProps & FeTurbulenceProps>(
   'feTurbulence'
 );
 export const Filter = createComponent<BaseProps & FilterProps>('filter');
+export const ForeignObject = createComponent<BaseProps & ForeignObjectProps>(
+  'foreignObject'
+);
 export const G = createComponent<BaseProps & GProps>('g', prepareGProps);
 
 export const Image = createComponent<BaseProps & ImageProps>('image');
@@ -129,7 +132,10 @@ export const Line = createComponent<BaseProps & LineProps>('line');
 export const LinearGradient = createComponent<BaseProps & LinearGradientProps>(
   'linearGradient'
 );
+export const Mask = createComponent<BaseProps & MaskProps>('mask');
+export const Marker = createComponent<BaseProps & MarkerProps>('marker');
 export const Path = createComponent<BaseProps & PathProps>('path');
+export const Pattern = createComponent<BaseProps & PatternProps>('pattern');
 export const Polygon = createComponent<BaseProps & PolygonProps>('polygon');
 export const Polyline = createComponent<BaseProps & PolylineProps>('polyline');
 export const RadialGradient = createComponent<BaseProps & RadialGradientProps>(
@@ -177,11 +183,5 @@ export const Text = createComponent<BaseProps & TextProps>('text');
 export const TSpan = createComponent<BaseProps & TSpanProps>('tspan');
 export const TextPath = createComponent<BaseProps & TextPathProps>('textPath');
 export const Use = createComponent<BaseProps & UseProps>('use');
-export const Mask = createComponent<BaseProps & MaskProps>('mask');
-export const ForeignObject = createComponent<BaseProps & ForeignObjectProps>(
-  'foreignObject'
-);
-export const Marker = createComponent<BaseProps & MarkerProps>('marker');
-export const Pattern = createComponent<BaseProps & PatternProps>('pattern');
 
 export default Svg;
