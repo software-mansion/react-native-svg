@@ -23,6 +23,7 @@ export interface TextProps extends TextSpecificProps {
   rotate?: NumberArray;
   opacity?: NumberProp;
   inlineSize?: NumberProp;
+  textLength?: NumberProp;
 }
 
 export default class Text extends Shape<TextProps> {
