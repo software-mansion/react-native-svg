@@ -8,7 +8,7 @@ import { parseTransformProp } from './parseTransform';
  * `react-native-svg` supports additional props that aren't defined in the spec.
  * This function replaces them in a spec conforming manner.
  */
-interface PrepareComponentProps extends CreateComponentProps {
+interface PreparedComponentProps extends CreateComponentProps {
   'transform-origin'?: string;
   ref?: unknown;
 }
@@ -30,7 +30,7 @@ export const prepare = (props: CreateComponentProps) => {
     ...rest
   } = props;
 
-  const clean: PrepareComponentProps = rest;
+  const clean: PreparedComponentProps = rest;
 
   if (origin !== null && origin !== undefined) {
     clean['transform-origin'] = origin.toString().replace(',', ' ');
