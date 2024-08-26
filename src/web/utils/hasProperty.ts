@@ -10,22 +10,24 @@ export function hasTouchableProperty(props: BaseProps): boolean {
 }
 
 export function hasResponderEvents(props: BaseProps): boolean {
-  return !!(
-    props.onResponderGrant ||
-    props.onResponderMove ||
-    props.onResponderRelease ||
-    props.onResponderTerminate ||
-    props.onResponderTerminationRequest ||
-    props.onMoveShouldSetResponder ||
-    props.onMoveShouldSetResponderCapture ||
-    props.onResponderEnd ||
-    props.onResponderReject ||
-    props.onResponderStart ||
-    props.onScrollShouldSetResponder ||
-    props.onScrollShouldSetResponderCapture ||
-    props.onSelectionChangeShouldSetResponder ||
-    props.onSelectionChangeShouldSetResponderCapture ||
-    props.onStartShouldSetResponder ||
-    props.onStartShouldSetResponderCapture
-  );
+  const responderEvents = [
+    'onResponderGrant',
+    'onResponderMove',
+    'onResponderRelease',
+    'onResponderTerminate',
+    'onResponderTerminationRequest',
+    'onMoveShouldSetResponder',
+    'onMoveShouldSetResponderCapture',
+    'onResponderEnd',
+    'onResponderReject',
+    'onResponderStart',
+    'onScrollShouldSetResponder',
+    'onScrollShouldSetResponderCapture',
+    'onSelectionChangeShouldSetResponder',
+    'onSelectionChangeShouldSetResponderCapture',
+    'onStartShouldSetResponder',
+    'onStartShouldSetResponderCapture',
+  ];
+
+  return responderEvents.some((event) => !!props[event as keyof BaseProps]);
 }
