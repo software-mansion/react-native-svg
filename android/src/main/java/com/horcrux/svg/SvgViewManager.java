@@ -10,8 +10,12 @@ package com.horcrux.svg;
 
 import android.graphics.Rect;
 import android.util.SparseArray;
+import androidx.annotation.NonNull;
+import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -285,24 +289,37 @@ class SvgViewManager extends ReactViewManager
   }
 
   @Override
-  public void setHitSlop(SvgView view, @Nullable ReadableMap hitSlopMap) {
+  public void setHitSlop(SvgView view, Dynamic hitSlop) {
     // we don't call super here since its signature changed in RN 0.69 and we want backwards
     // compatibility
-    if (hitSlopMap != null) {
-      view.setHitSlopRect(
-          new Rect(
-              hitSlopMap.hasKey("left")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("left"))
-                  : 0,
-              hitSlopMap.hasKey("top")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("top"))
-                  : 0,
-              hitSlopMap.hasKey("right")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("right"))
-                  : 0,
-              hitSlopMap.hasKey("bottom")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("bottom"))
-                  : 0));
+    switch (hitSlop.getType()) {
+      case Map:
+        ReadableMap hitSlopMap = hitSlop.asMap();
+        view.setHitSlopRect(
+            new Rect(
+                hitSlopMap.hasKey("left")
+                    ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("left"))
+                    : 0,
+                hitSlopMap.hasKey("top")
+                    ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("top"))
+                    : 0,
+                hitSlopMap.hasKey("right")
+                    ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("right"))
+                    : 0,
+                hitSlopMap.hasKey("bottom")
+                    ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("bottom"))
+                    : 0));
+        break;
+      case Number:
+        int hitSlopValue = (int) PixelUtil.toPixelFromDIP(hitSlop.asDouble());
+        view.setHitSlopRect(new Rect(hitSlopValue, hitSlopValue, hitSlopValue, hitSlopValue));
+        break;
+      default:
+        FLog.w(ReactConstants.TAG, "Invalid type for 'hitSlop' value " + hitSlop.getType());
+        /* falls through */
+      case Null:
+        view.setHitSlopRect(null);
+        break;
     }
   }
 
@@ -374,5 +391,14 @@ class SvgViewManager extends ReactViewManager
   @Override
   public void setBorderStartStartRadius(SvgView view, double value) {
     super.setBorderRadius(view, 12, (float) value);
+  }
+
+  @Override
+  public void setTransformProperty(
+          @NonNull ReactViewGroup view,
+          @androidx.annotation.Nullable ReadableArray transforms,
+          @androidx.annotation.Nullable ReadableArray transformOrigin) {
+    super.setTransformProperty(view, transforms, transformOrigin);
+    ((SvgView) view).setTransformProperty();
   }
 }

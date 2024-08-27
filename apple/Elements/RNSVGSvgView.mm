@@ -34,6 +34,12 @@
 using namespace facebook::react;
 #endif // RCT_NEW_ARCH_ENABLED
 
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
@@ -317,6 +323,15 @@ using namespace facebook::react;
   [self drawToContext:context withRect:[self bounds]];
 }
 
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
+  if (UIEdgeInsetsEqualToEdgeInsets(self.hitTestEdgeInsets, UIEdgeInsetsZero)) {
+    return [super pointInside:point withEvent:event];
+  }
+  CGRect hitFrame = UIEdgeInsetsInsetRect(self.bounds, self.hitTestEdgeInsets);
+  return CGRectContainsPoint(hitFrame, point);
+}
+
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
   CGPoint transformed = point;
@@ -339,7 +354,8 @@ using namespace facebook::react;
       return (node.responsible || (node != hitChild)) ? hitChild : self;
     }
   }
-  return nil;
+  BOOL isPointInside = [self pointInside:point withEvent:event];
+  return isPointInside ? self : nil;
 }
 
 - (NSString *)getDataURLWithBounds:(CGRect)bounds
@@ -460,6 +476,13 @@ using namespace facebook::react;
 {
   return _viewBoxTransform;
 }
+
+#if !RCT_NEW_ARCH_ENABLED && TARGET_OS_OSX // [macOS
+- (void)updateReactTransformInternal:(CATransform3D)transform
+{
+  [self setTransform:CATransform3DGetAffineTransform(transform)];
+}
+#endif // macOS]
 
 @end
 

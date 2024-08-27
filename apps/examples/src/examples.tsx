@@ -19,6 +19,7 @@ import * as Reanimated from './examples/Reanimated';
 import * as Transforms from './examples/Transforms';
 import * as Markers from './examples/Markers';
 import * as Mask from './examples/Mask';
+import * as E2E from './e2e/TestingView';
 import * as Filters from './examples/Filters';
 import * as FilterImage from './examples/FilterImage';
 
@@ -44,6 +45,7 @@ export {
   Transforms,
   Markers,
   Mask,
+  E2E,
   Filters,
   FilterImage,
 };

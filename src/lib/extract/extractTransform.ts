@@ -1,6 +1,7 @@
 import type { TransformsStyle } from 'react-native';
 import { append, appendTransform, identity, reset, toArray } from '../Matrix2D';
 import { parse } from './transform';
+import { parse as parseTransformSvgToRnStyle } from './transformToRn';
 import type {
   ColumnMajorTransformMatrix,
   NumberProp,
@@ -223,4 +224,13 @@ export default function extractTransform(
     props2transform(transformProps),
     transformProps?.transform
   );
+}
+
+export function extractTransformSvgView(
+  props: TransformsStyle
+): TransformsStyle['transform'] {
+  if (typeof props.transform === 'string') {
+    return parseTransformSvgToRnStyle(props.transform);
+  }
+  return props.transform as TransformsStyle['transform'];
 }

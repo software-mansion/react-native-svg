@@ -935,6 +935,8 @@ PODS:
   - React-Mapbuffer (0.74.2):
     - glog
     - React-debug
+  - react-native-view-shot (4.0.0-alpha.2):
+    - React-Core
   - React-nativeconfig (0.74.2)
   - React-NativeModulesApple (0.74.2):
     - glog
@@ -1185,7 +1187,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.3.0):
+  - RNSVG (15.6.0):
     - React-Core
   - SocketRocket (0.7.0)
   - Yoga (0.0.0)
@@ -1223,6 +1225,7 @@ DEPENDENCIES:
   - React-jsitracing (from `../node_modules/react-native/ReactCommon/hermes/executor/`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
+  - react-native-view-shot (from `../node_modules/react-native-view-shot`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -1316,6 +1319,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
+  react-native-view-shot:
+    :path: "../node_modules/react-native-view-shot"
   React-nativeconfig:
     :path: "../node_modules/react-native/ReactCommon"
   React-NativeModulesApple:
@@ -1400,6 +1405,7 @@ SPEC CHECKSUMS:
   React-jsitracing: 0fa7f78d8fdda794667cb2e6f19c874c1cf31d7e
   React-logger: 29fa3e048f5f67fe396bc08af7606426d9bd7b5d
   React-Mapbuffer: bf56147c9775491e53122a94c423ac201417e326
+  react-native-view-shot: 8ffbe24e3b5207d66816afb5b3c2ca82731ab636
   React-nativeconfig: 9f223cd321823afdecf59ed00861ab2d69ee0fc1
   React-NativeModulesApple: ff7efaff7098639db5631236cfd91d60abff04c0
   React-perflogger: 32ed45d9cee02cf6639acae34251590dccd30994
@@ -1424,7 +1430,7 @@ SPEC CHECKSUMS:
   React-utils: 4476b7fcbbd95cfd002f3e778616155241d86e31
   ReactCommon: ecad995f26e0d1e24061f60f4e5d74782f003f12
   RNReanimated: 9c213184c27dc4a2ed7e9ff41a4b0b9258bb54f0
-  RNSVG: a48668fd382115bc89761ce291a81c4ca5f2fd2e
+  RNSVG: 5da7a24f31968ec74f0b091e3440080f347e279b
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 2f71ecf38d934aecb366e686278102a51679c308
 

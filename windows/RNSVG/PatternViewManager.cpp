@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "PatternViewManager.h"
+#if __has_include("PatternViewManager.g.cpp")
 #include "PatternViewManager.g.cpp"
+#endif
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;

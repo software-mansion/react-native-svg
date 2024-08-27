@@ -50,6 +50,12 @@ using namespace facebook::react;
 }
 #ifdef RCT_NEW_ARCH_ENABLED
 
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
@@ -151,6 +157,23 @@ using namespace facebook::react;
   });
 }
 
+- (void)didReceiveFailure:(nonnull NSError *)error fromObserver:(nonnull const void *)observer
+{
+  if (_image) {
+    CGImageRelease(_image);
+  }
+  _image = nil;
+}
+
+- (void)didReceiveProgress:(float)progress
+                    loaded:(int64_t)loaded
+                     total:(int64_t)total
+              fromObserver:(nonnull const void *)observer
+{
+}
+
+#pragma mark - RCTImageResponseDelegate - < RN 0.75
+
 - (void)didReceiveProgress:(float)progress fromObserver:(void const *)observer
 {
 }
@@ -183,6 +206,7 @@ using namespace facebook::react;
   _imageSize = CGSizeZero;
   _reloadImageCancellationBlock = nil;
 }
+
 #endif // RCT_NEW_ARCH_ENABLED
 
 - (void)setSrc:(RCTImageSource *)src
@@ -218,7 +242,7 @@ using namespace facebook::react;
 #if TARGET_OS_OSX // [macOS]
                            sourceLoaded = [src imageSourceWithSize:image.size scale:1];
 #else
-                            sourceLoaded = [src imageSourceWithSize:image.size scale:image.scale];
+                sourceLoaded = [src imageSourceWithSize:image.size scale:image.scale];
 #endif
                            NSDictionary *dict = @{
                              @"uri" : sourceLoaded.request.URL.absoluteString,

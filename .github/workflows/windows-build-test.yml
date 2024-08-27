@@ -17,7 +17,7 @@ jobs:
     runs-on: windows-2022
     strategy:
       matrix:
-        working-directory: [example]
+        working-directory: [example, fabric-windows-example]
     concurrency:
       group: windows-${{ matrix.working-directory }}-${{ github.ref }}
       cancel-in-progress: true
@@ -57,4 +57,4 @@ jobs:
 
       - name: Build app
         working-directory: ${{ matrix.working-directory }}/windows
-        run: npx react-native run-windows --logging --no-packager --no-deploy
+        run: npx react-native run-windows --logging --no-packager --no-deploy --no-autolink
