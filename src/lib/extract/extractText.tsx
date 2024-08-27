@@ -124,9 +124,9 @@ export type TextChild =
   | (undefined | string | number | ComponentType | React.ReactElement)
   | TextChild[];
 
-function getChild(child: TextChild) {
+function getChild(child: TextChild, textLength: NumberProp | undefined) {
   if (typeof child === 'string' || typeof child === 'number') {
-    return <TSpan>{String(child)}</TSpan>;
+    return <TSpan textLength={textLength}>{String(child)}</TSpan>;
   } else {
     return child;
   }
@@ -146,6 +146,42 @@ export type TextProps = {
   textLength?: NumberProp;
 } & fontProps;
 
+function getTextChildren(
+  children: TextChild,
+  textLength: NumberProp | undefined,
+  container: boolean
+) {
+  let textChildren;
+  if (typeof children === 'string' || typeof children === 'number') {
+    if (container) {
+      textChildren = <TSpan textLength={textLength}>{String(children)}</TSpan>;
+    } else {
+      textChildren = null;
+    }
+  } else {
+    if (Children.count(children) > 1 || Array.isArray(children)) {
+      textChildren = Children.map(children, (child: TextChild) => {
+        if (React.isValidElement<TextProps>(child)) {
+          return React.cloneElement(child, {
+            textLength: child.props.textLength || textLength,
+          });
+        } else {
+          return getChild(child, textLength);
+        }
+      });
+    } else {
+      if (React.isValidElement<TextProps>(children)) {
+        textChildren = React.cloneElement(children, {
+          textLength: children.props.textLength || textLength,
+        });
+      } else {
+        textChildren = children;
+      }
+    }
+  }
+  return textChildren;
+}
+
 export default function extractText(props: TextProps, container: boolean) {
   const {
     x,
@@ -161,17 +197,7 @@ export default function extractText(props: TextProps, container: boolean) {
     textLength,
   } = props;
 
-  const textChildren =
-    typeof children === 'string' || typeof children === 'number' ? (
-      container ? (
-        <TSpan textLength={textLength}>{String(children)}</TSpan>
-      ) : null
-    ) : Children.count(children) > 1 || Array.isArray(children) ? (
-      Children.map(children, getChild)
-    ) : (
-      children
-    );
-
+  const textChildren = getTextChildren(children, textLength, container);
   return {
     content: textChildren === null ? String(children) : null,
     children: textChildren,
