@@ -43,7 +43,6 @@ import type { PolylineProps } from './elements/Polyline';
 import type { RadialGradientProps } from './elements/RadialGradient';
 import type { RectProps } from './elements/Rect';
 import type { StopProps } from './elements/Stop';
-import type { SvgProps } from './elements/Svg';
 import type { SymbolProps } from './elements/Symbol';
 import type { TextProps } from './elements/Text';
 import type { TextPathProps } from './elements/TextPath';
@@ -51,7 +50,7 @@ import type { TSpanProps } from './elements/TSpan';
 import type { UseProps } from './elements/Use';
 import { BaseProps } from './types';
 import { createComponent } from './web/CreateWebComponent';
-import { encodeSvg } from './web/utils';
+import { SvgComponent } from './web/Svg';
 
 export const Circle = createComponent<BaseProps & CircleProps>('circle');
 export const ClipPath = createComponent<BaseProps & ClipPathProps>('clipPath');
@@ -143,39 +142,6 @@ export const RadialGradient = createComponent<BaseProps & RadialGradientProps>(
 );
 export const Rect = createComponent<BaseProps & RectProps>('rect');
 export const Stop = createComponent<BaseProps & StopProps>('stop');
-const SvgComponent = createComponent<SvgProps & BaseProps>('svg');
-
-(SvgComponent as SvgProps).toDataURL = (
-  svgString: string,
-  callback: (data: string) => void,
-  options: { width?: number; height?: number } = {}
-) => {
-  const tempSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  tempSvg.innerHTML = svgString;
-
-  const rect = tempSvg.getBoundingClientRect();
-  const width = options.width || rect.width;
-  const height = options.height || rect.height;
-
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
-  svg.setAttribute('width', String(width));
-  svg.setAttribute('height', String(height));
-  svg.innerHTML = svgString;
-
-  const img = new window.Image();
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext('2d');
-    context?.drawImage(img, 0, 0);
-    callback(canvas.toDataURL().replace('data:image/png;base64,', ''));
-  };
-
-  img.src = `data:image/svg+xml;utf8,${encodeSvg(svgString)}`;
-};
-
 export const Svg = SvgComponent;
 
 export const Symbol = createComponent<BaseProps & SymbolProps>('symbol');
