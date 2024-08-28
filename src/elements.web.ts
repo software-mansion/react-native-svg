@@ -43,7 +43,7 @@ import type { PolylineProps } from './elements/Polyline';
 import type { RadialGradientProps } from './elements/RadialGradient';
 import type { RectProps } from './elements/Rect';
 import type { StopProps } from './elements/Stop';
-import type { SvgProps } from './elements/Svg';
+import type { SvgProps, ToDataUrlOptions } from './elements/Svg';
 import type { SymbolProps } from './elements/Symbol';
 import type { TextProps } from './elements/Text';
 import type { TextPathProps } from './elements/TextPath';
@@ -250,10 +250,7 @@ export class Stop extends WebShape<BaseProps & StopProps> {
 
 export class Svg extends WebShape<BaseProps & SvgProps> {
   tag = 'svg' as const;
-  toDataURL(
-    callback: (data: string) => void,
-    options: { width?: number; height?: number } = {}
-  ) {
+  toDataURL(callback: (data: string) => void, options: ToDataUrlOptions) {
     const ref = this.elementRef.current;
 
     if (ref === null) {
@@ -264,6 +261,14 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
 
     const width = Number(options.width) || rect.width;
     const height = Number(options.height) || rect.height;
+    // Set format, defaulting to 'png'
+    const format = options.format === 'jpeg' ? 'image/jpeg' : 'image/png';
+    // Get quality, only applicable for JPEG
+
+    let quality = 0.92; // Default quality is 0.92 for JPEG
+    if (options && options.format === 'jpeg' && options.quality) {
+      quality = options.quality;
+    }
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
@@ -278,7 +283,14 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
       canvas.height = height;
       const context = canvas.getContext('2d');
       context?.drawImage(img, 0, 0);
-      callback(canvas.toDataURL().replace('data:image/png;base64,', ''));
+      // Get the data URL with the specified format and quality
+      const dataURL =
+        format === 'image/jpeg'
+          ? canvas.toDataURL(format, quality)
+          : canvas.toDataURL(format);
+      // Return the data URL, removing the prefix if it's PNG to match your original implementation
+      const base64Data = dataURL.replace(`data:${format};base64,`, '');
+      callback(base64Data);
     };
 
     img.src = `data:image/svg+xml;utf8,${encodeSvg(
