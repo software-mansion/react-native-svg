@@ -62,8 +62,12 @@ interface PngOptions {
 
 function checkOptions(options?: ToDataUrlOptions) {
   if (options) {
-    if (options?.format === 'jpeg') {
-      validateJpegQualityParameter(options);
+    if (options.format === 'jpeg') {
+      if (!validateJpegQualityParameter(options)) {
+        throw new Error(
+          'toDataURL: Invalid quality parameter for JPEG format.'
+        );
+      }
     }
     if (!options.width && !options.height) {
       throw new Error('toDataURL: Please provide width and height in options.');
@@ -84,7 +88,11 @@ function validateJpegQualityParameter(options: JpegOptions): boolean {
     ) {
       return false;
     }
-  } else if (Platform.OS === 'ios' || Platform.OS === 'macos') {
+  } else if (
+    Platform.OS === 'ios' ||
+    Platform.OS === 'macos' ||
+    Platform.OS === 'web'
+  ) {
     if (
       options.quality !== undefined &&
       (options.quality < 0.1 || options.quality > 1)
