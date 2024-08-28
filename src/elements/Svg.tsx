@@ -45,6 +45,21 @@ export interface SvgProps extends GProps, ViewProps, HitSlop {
   title?: string;
 }
 
+export type ToDataUrlOptions = JpegOptions | PngOptions;
+
+interface JpegOptions {
+  format: 'jpeg';
+  quality?: number; // Quality is optional but only available when format is 'jpeg'
+  width?: number;
+  height?: number;
+}
+
+interface PngOptions {
+  format: 'png';
+  width?: number;
+  height?: number;
+}
+
 export default class Svg extends Shape<SvgProps> {
   static displayName = 'Svg';
 
@@ -81,10 +96,29 @@ export default class Svg extends Shape<SvgProps> {
     root && root.setNativeProps(props);
   };
 
-  toDataURL = (callback: (base64: string) => void, options?: object) => {
+  someFunction(options?: ToDataUrlOptions) {
+    if (options) {
+      if (!options.width && !options.height) {
+        throw new Error(
+          'toDataURL: Please provide width and height in options.'
+        );
+      }
+      if (options.width && !options.height) {
+        options.height = options.width;
+      } else if (!options.width && options.height) {
+        options.width = options.height;
+      }
+    }
+  }
+
+  toDataURL = (
+    callback: (base64: string) => void,
+    options?: ToDataUrlOptions
+  ) => {
     if (!callback) {
       return;
     }
+    this.someFunction(options);
     const handle = findNodeHandle(this.root as Component);
     const RNSVGSvgViewModule: Spec =
       // eslint-disable-next-line @typescript-eslint/no-var-requires
