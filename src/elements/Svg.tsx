@@ -84,7 +84,7 @@ function validateJpegQualityParameter(options: JpegOptions): boolean {
     ) {
       return false;
     }
-  } else if (Platform.OS === 'ios') {
+  } else if (Platform.OS === 'ios' || Platform.OS === 'macos') {
     if (
       options.quality !== undefined &&
       (options.quality < 0.1 || options.quality > 1)
