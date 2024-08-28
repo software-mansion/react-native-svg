@@ -38,7 +38,7 @@ RCT_EXPORT_MODULE()
     if ([view isKindOfClass:[RNSVGSvgView class]]) {
       RNSVGSvgView *svg = view;
       if (options == nil) {
-        b64 = [svg getDataURLWithBounds:svg.boundingBox];
+        b64 = [svg getDataURLWithBounds:svg.boundingBox format:@"png"];
       } else {
         id width = [options objectForKey:@"width"];
         id height = [options objectForKey:@"height"];
@@ -52,7 +52,9 @@ RCT_EXPORT_MODULE()
         NSInteger hi = (NSInteger)[h intValue];
 
         CGRect bounds = CGRectMake(0, 0, wi, hi);
-        b64 = [svg getDataURLWithBounds:bounds];
+        NSString *format = [options objectForKey:@"format"];
+        NSNumber *quality = [options objectForKey:@"quality"];
+        b64 = [svg getDataURLWithBounds:bounds format:format quality:quality];
       }
     } else {
       RCTLogError(@"Invalid svg returned from registry, expecting RNSVGSvgView, got: %@", view);
