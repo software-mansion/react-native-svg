@@ -53,7 +53,8 @@ RCT_EXPORT_MODULE()
 
         CGRect bounds = CGRectMake(0, 0, wi, hi);
         NSString *format = [options objectForKey:@"format"];
-        NSNumber *quality = [options objectForKey:@"quality"];
+        NSNumber *qualityNumber = [options objectForKey:@"quality"];
+        CGFloat quality = qualityNumber ? [qualityNumber doubleValue] : 1.0;
         b64 = [svg getDataURLWithBounds:bounds format:format quality:quality];
       }
     } else {
