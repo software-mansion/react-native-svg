@@ -1,16 +1,30 @@
 import * as React from 'react';
 import {Button, SafeAreaView, View} from 'react-native';
-import Svg, {Path} from 'react-native-svg';
+import Svg, {Path, type ToDataUrlOptions} from 'react-native-svg';
 
 const SvgLogoWelcome = () => {
   const ref = React.useRef<Svg | null>(null);
+
+  const optionsWithJPEGFormat: ToDataUrlOptions = {
+    format: 'jpeg',
+    width: 100,
+    height: 100,
+    quality: 1,
+  };
+
+  const optionsWithPNGFormat: ToDataUrlOptions = {
+    format: 'png',
+    width: 100,
+    height: 100,
+  };
+
   return (
     <View>
       <Button
         onPress={() => {
           ref.current?.toDataURL(base64Image => {
             console.log(base64Image, 'data');
-          });
+          }, optionsWithJPEGFormat);
         }}
         title="log"
       />
