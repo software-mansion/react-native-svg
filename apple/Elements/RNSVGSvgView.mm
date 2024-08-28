@@ -382,7 +382,13 @@ using namespace facebook::react;
   }
   NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
 #else // [macOS
-  NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
+  NSData *imageData;
+  NSImage *image = UIGraphicsGetImageFromCurrentImageContext();
+  if ([format isEqual:@"jpeg"]) {
+    imageData = UIImageJPEGRepresentation(image, quality);
+  } else {
+    imageData = UIImagePNGRepresentation(image);
+  }
   NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
   UIGraphicsEndImageContext();
 #endif // macOS]
