@@ -61,7 +61,8 @@
     "e2e": "jest e2e",
     "generateE2eReferences": "ts-node e2e/generateReferences.ts",
     "check-archs-consistency": "node ./scripts/codegen-check-consistency.js",
-    "sync-archs": "node ./scripts/codegen-sync-archs.js"
+    "sync-archs": "node ./scripts/codegen-sync-archs.js",
+    "metal-to-ci": "node ./scripts/metal.js"
   },
   "peerDependencies": {
     "react": "*",
