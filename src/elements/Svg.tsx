@@ -60,6 +60,41 @@ interface PngOptions {
   height?: number;
 }
 
+function checkOptions(options?: ToDataUrlOptions) {
+  if (options) {
+    if (options?.format === 'jpeg') {
+      validateJpegQualityParameter(options);
+    }
+    if (!options.width && !options.height) {
+      throw new Error('toDataURL: Please provide width and height in options.');
+    }
+    if (options.width && !options.height) {
+      options.height = options.width;
+    } else if (!options.width && options.height) {
+      options.width = options.height;
+    }
+  }
+}
+
+function validateJpegQualityParameter(options: JpegOptions): boolean {
+  if (Platform.OS === 'android') {
+    if (
+      options.quality !== undefined &&
+      (options.quality < 1 || options.quality > 100)
+    ) {
+      return false;
+    }
+  } else if (Platform.OS === 'ios') {
+    if (
+      options.quality !== undefined &&
+      (options.quality < 0.1 || options.quality > 1)
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export default class Svg extends Shape<SvgProps> {
   static displayName = 'Svg';
 
@@ -96,21 +131,6 @@ export default class Svg extends Shape<SvgProps> {
     root && root.setNativeProps(props);
   };
 
-  someFunction(options?: ToDataUrlOptions) {
-    if (options) {
-      if (!options.width && !options.height) {
-        throw new Error(
-          'toDataURL: Please provide width and height in options.'
-        );
-      }
-      if (options.width && !options.height) {
-        options.height = options.width;
-      } else if (!options.width && options.height) {
-        options.width = options.height;
-      }
-    }
-  }
-
   toDataURL = (
     callback: (base64: string) => void,
     options?: ToDataUrlOptions
@@ -118,7 +138,7 @@ export default class Svg extends Shape<SvgProps> {
     if (!callback) {
       return;
     }
-    this.someFunction(options);
+    checkOptions(options);
     const handle = findNodeHandle(this.root as Component);
     const RNSVGSvgViewModule: Spec =
       // eslint-disable-next-line @typescript-eslint/no-var-requires
