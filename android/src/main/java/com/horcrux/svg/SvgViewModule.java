@@ -67,8 +67,10 @@ class SvgViewModule extends NativeSvgViewModuleSpec {
                   });
             } else {
               if (options != null) {
+                  Integer quality = options.hasKey("quality") ? options.getInt("quality") : null;
+                  String format = options.hasKey("format") ? options.getString("format") : null;
                 successCallback.invoke(
-                    svg.toDataURL(options.getInt("width"), options.getInt("height")));
+                    svg.toDataURL(options.getInt("width"), options.getInt("height"), format, quality));
               } else {
                 successCallback.invoke(svg.toDataURL());
               }
