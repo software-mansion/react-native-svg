@@ -1,21 +1,22 @@
 import * as React from 'react';
-import {Button, SafeAreaView, View} from 'react-native';
+import {Button, Dimensions, SafeAreaView, View} from 'react-native';
 import Svg, {Path, type ToDataUrlOptions} from 'react-native-svg';
 
 const SvgLogoWelcome = () => {
   const ref = React.useRef<Svg | null>(null);
 
+  const {width, height} = Dimensions.get('window');
   const optionsWithJPEGFormat: ToDataUrlOptions = {
     format: 'jpeg',
-    width: 100,
-    height: 100,
-    quality: 1,
+    width,
+    height,
+    quality: 100,
   };
 
   const optionsWithPNGFormat: ToDataUrlOptions = {
     format: 'png',
-    width: 100,
-    height: 100,
+    width,
+    height,
   };
 
   return (
