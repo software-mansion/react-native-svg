@@ -50,55 +50,31 @@ export type ToDataUrlOptions = JpegOptions | PngOptions;
 interface JpegOptions {
   format: 'jpeg';
   quality?: number; // Quality is optional but only available when format is 'jpeg'
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
 }
 
 interface PngOptions {
   format: 'png';
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
 }
 
 function checkOptions(options?: ToDataUrlOptions) {
-  if (options) {
-    if (options.format === 'jpeg') {
-      if (!validateJpegQualityParameter(options)) {
-        throw new Error(
-          'toDataURL: Invalid quality parameter for JPEG format.'
-        );
-      }
-    }
-    if (!options.width && !options.height) {
-      throw new Error('toDataURL: Please provide width and height in options.');
-    }
-    if (options.width && !options.height) {
-      options.height = options.width;
-    } else if (!options.width && options.height) {
-      options.width = options.height;
+  if (options && options?.format === 'jpeg') {
+    if (!validateJpegQualityParameter(options)) {
+      throw new Error('toDataURL: Invalid quality parameter for JPEG format.');
     }
   }
 }
 
 function validateJpegQualityParameter(options: JpegOptions): boolean {
-  if (Platform.OS === 'android') {
-    if (
-      options.quality !== undefined &&
-      (options.quality < 1 || options.quality > 100)
-    ) {
-      return false;
-    }
-  } else if (
-    Platform.OS === 'ios' ||
-    Platform.OS === 'macos' ||
-    Platform.OS === 'web'
-  ) {
-    if (
-      options.quality !== undefined &&
-      (options.quality < 0.1 || options.quality > 1)
-    ) {
-      return false;
-    }
+  if (options.quality && (options.quality < 0.1 || options.quality > 1)) {
+    return false;
+  }
+  // Android requires quality to be a number between 0 and 100
+  if (Platform.OS === 'android' && options.quality) {
+    options.quality = Math.round(options.quality * 100);
   }
   return true;
 }
