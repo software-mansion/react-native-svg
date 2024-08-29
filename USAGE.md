@@ -1390,3 +1390,85 @@ const styles = StyleSheet.create({
 ```
 
 ![FilterImage](./screenshots/filterImage.png)
+
+# toDataURL Method
+
+The `toDataURL` method is a utility function designed to convert an SVG element into a Base64-encoded image format (PNG or JPEG). 
+
+```ts 
+toDataURL(
+  callback: (base64: string) => void,
+  options?: ToDataUrlOptions
+)
+```
+
+## Parameters
+```ts
+callback: (base64: string) => void
+```
+A function that receives the Base64-encoded string as its argument once the SVG conversion is complete. The string represents the converted image data.
+
+`options?: ToDataUrlOptions`
+An object specifying the format and dimensions of the output image. The options object can include the following properties:
+``` ts
+format: 'png' | 'jpeg'
+Specifies the output image format. If not provided any options, the default format is PNG.
+
+quality?: number
+(Only applicable for jpeg format)
+A value between 0 and 1 specifying the image quality, with 1 being the highest quality. The default value is 1.
+
+width: number
+The desired width of the output image.
+
+height: number
+The desired height of the output image.
+```
+
+## Example: 
+
+```tsx
+import * as React from 'react';
+import {Button, Dimensions, View} from 'react-native';
+import Svg, {Path, type ToDataUrlOptions} from 'react-native-svg';
+
+const SvgLogoWelcome = () => {
+  const ref = React.useRef<Svg | null>(null);
+  const {width, height} = Dimensions.get('screen');
+
+  const optionsWithJPEGFormat: ToDataUrlOptions = {
+    format: 'jpeg',
+    width,
+    height,
+    quality: 100,
+  };
+
+  const optionsWithPNGFormat: ToDataUrlOptions = {
+    format: 'png',
+    width,
+    height,
+  };
+
+  return (
+    <View
+      style={{
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <Button
+        onPress={() => {
+          ref.current?.toDataURL(base64Image => {
+            console.log(base64Image, 'base64Image');
+          }, optionsWithJPEGFormat);
+        }}
+        title="show data URL"
+      />
+      <Svg ref={ref} viewBox="0 0 24 24" fill="black" width={250} height={250}>
+        <Path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10S2 17.514 2 12 6.486 2 12 2zm0-2C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.507 13.941c-1.512 1.195-3.174 1.931-5.506 1.931-2.334 0-3.996-.736-5.508-1.931L6 14.434C7.127 16.154 9.2 18 12.001 18c2.8 0 4.872-1.846 5.999-3.566l-.493-.493zM8.5 8a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm7 0a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+      </Svg>
+    </View>
+  );
+};
+```
