@@ -240,17 +240,20 @@ class ReferenceExample extends Component {
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
-    <Filter id="iconOffset">
-      <FeOffset dx="5" dy="5" />
+    <Filter id="iconCompositeIn" width="200%">
+      <FeComposite
+        in="SourceGraphic"
+        in2="BackgroundImage"
+        operator="in"
+        result="comp"
+      />
     </Filter>
-    <Rect x="0" y="0" width="15" height="15" fill="red" />
-    <Rect
-      x="0"
-      y="0"
-      width="15"
-      height="15"
-      fill="blue"
-      filter="url(#iconOffset)"
+    <Path id="Blue100" d="M 0 0 L 20 0 L 20 20 z" fill="#00ffff" />
+    <Path
+      id="Red100"
+      d="M 0 0 L 0 20 L 20 0 z"
+      fill="#ff00ff"
+      filter="url(#iconCompositeIn)"
     />
   </Svg>
 );
