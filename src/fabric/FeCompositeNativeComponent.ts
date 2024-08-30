@@ -31,6 +31,4 @@ export interface NativeProps extends ViewProps, FilterPrimitiveCommonProps {
   k4?: Float;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGFeComposite', {
-  excludedPlatforms: ['android'],
-});
+export default codegenNativeComponent<NativeProps>('RNSVGFeComposite');

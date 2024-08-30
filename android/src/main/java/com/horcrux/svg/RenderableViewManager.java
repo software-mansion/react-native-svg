@@ -105,6 +105,8 @@ import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeCompositeManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeCompositeManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeMergeManagerDelegate;
@@ -590,6 +592,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGMask,
     RNSVGFilter,
     RNSVGFeColorMatrix,
+    RNSVGFeComposite,
     RNSVGFeGaussianBlur,
     RNSVGFeMerge,
     RNSVGFeOffset,
@@ -641,6 +644,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FilterView(reactContext);
       case RNSVGFeColorMatrix:
         return new FeColorMatrixView(reactContext);
+      case RNSVGFeComposite:
+        return new FeCompositeView(reactContext);
       case RNSVGFeGaussianBlur:
         return new FeGaussianBlurView(reactContext);
       case RNSVGFeMerge:
@@ -1602,6 +1607,51 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "values")
     public void setValues(FeColorMatrixView node, @Nullable ReadableArray values) {
       node.setValues(values);
+    }
+  }
+
+  static class FeCompositeManager extends FilterPrimitiveManager<FeCompositeView>
+      implements RNSVGFeCompositeManagerInterface<FeCompositeView> {
+    FeCompositeManager() {
+      super(SVGClass.RNSVGFeComposite);
+      mDelegate = new RNSVGFeCompositeManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeComposite";
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeCompositeView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "in2")
+    public void setIn2(FeCompositeView node, String in2) {
+      node.setIn2(in2);
+    }
+
+    @ReactProp(name = "operator1")
+    public void setOperator1(FeCompositeView node, String operator) {
+      node.setOperator(operator);
+    }
+
+    @ReactProp(name = "k1")
+    public void setK1(FeCompositeView node, float value) {
+      node.setK1(value);
+    }
+
+    @ReactProp(name = "k2")
+    public void setK2(FeCompositeView node, float value) {
+      node.setK2(value);
+    }
+
+    @ReactProp(name = "k3")
+    public void setK3(FeCompositeView node, float value) {
+      node.setK3(value);
+    }
+
+    @ReactProp(name = "k4")
+    public void setK4(FeCompositeView node, float value) {
+      node.setK4(value);
     }
   }
 
