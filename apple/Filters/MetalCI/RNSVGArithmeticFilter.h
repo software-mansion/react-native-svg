@@ -1,3 +1,5 @@
+#import <CoreImage/CoreImage.h>
+
 @interface RNSVGArithmeticFilter : CIFilter {
   CIImage *inputImage1;
   CIImage *inputImage2;
