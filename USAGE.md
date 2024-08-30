@@ -146,6 +146,62 @@ export default () => {
 };
 ```
 
+## Metro bundler
+You can set up your mobile and web applications using the Metro bundler, and you shouldn't face any issues using our library. 
+
+### Why Use Metro and Expo for Native and Web Development?
+
+Using Metro and Expo provides several advantages when developing for both native and web platforms:
+
+1. **Unified Development Experience**: Metro is the default bundler for React Native, providing a consistent experience across iOS, Android, and web platforms. This eliminates the need for managing separate build configurations for different platforms.
+
+2. **Optimized Performance**: Metro is designed specifically for React Native, offering faster build times and optimized performance, especially when dealing with large codebases.
+
+3. **Seamless Integration**: Expo offers out-of-the-box integration with Metro, simplifying the development process and reducing the need for complex configuration setups, which can be particularly beneficial when targeting multiple platforms.
+
+4. **Active Maintenance**: Unlike Webpack, Metro is actively maintained and continuously improved to support the latest React Native features. This ensures better support and access to new functionalities as they are released.
+
+5. **Simplified Configuration**: With Metro and Expo, there’s less overhead in terms of configuration compared to Webpack. This can make the setup process faster and less error-prone, especially for developers who are not as familiar with Webpack.
+
+## Webpack bundler
+> [!WARNING] `expo/webpack-config`
+> 
+> `@expo/webpack-config` is deprecated and will not receive any new feature updates.
+
+> [!TIP] Migrate from Expo Webpack
+> 
+> If you are still using the Webpack bundler, we recommend migrating to Metro. This [documentation](https://docs.expo.dev/router/migrate/from-expo-webpack/) provides a good guide on how to migrate a website from Expo Webpack to Expo Metro.
+
+If, for some reason, you are using the Webpack bundler, the following steps are important:
+
+- Install `@react-native/assets-registry/registry` as a project dependency.
+- Ensure that you have the proper configuration to parse flow files from `@react-native/assets-registry/registry`.
+- Configure the Webpack `module -> rules` section and include an important rule for `node_modules/@react-native/assets-registry/registry`.
+
+> [!NOTE] Webpack Configuration
+> 
+> ```ts
+> const babelLoaderConfiguration = {
+>  include: [
+>    path.resolve(
+>      appDirectory,
+>      // Important!
+>      'node_modules/@react-native/assets-registry/registry',
+>    ),
+>  ],
+>  ...
+>};
+>
+>module.exports = {
+>  ...config,
+>  module: {
+>      rules: [babelLoaderConfiguration],
+>    },
+>};
+> ```
+
+For more details on the complete Webpack configuration, you can refer to this [documentation](https://necolas.github.io/react-native-web/docs/multi-platform/#compiling-and-bundling) on how to set up a `webpack.config` file for React Native Web.
+
 # Use with svg files
 
 Try [react-native-svg-transformer](https://github.com/kristerkari/react-native-svg-transformer) to get compile time conversion and cached transformations.
