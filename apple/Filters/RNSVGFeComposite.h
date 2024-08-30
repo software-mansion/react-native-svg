@@ -1,4 +1,6 @@
+#import "RNSVGArithmeticFilter.h"
 #import "RNSVGCompositeOperator.h"
+#import "RNSVGCompositeXor.h"
 #import "RNSVGFilterPrimitive.h"
 
 @interface RNSVGFeComposite : RNSVGFilterPrimitive
