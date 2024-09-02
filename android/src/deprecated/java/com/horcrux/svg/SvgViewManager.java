@@ -1,4 +1,7 @@
 /*
+ * this file can be removed when dropping support for react-native 0.72
+ */
+/*
  * Copyright (c) 2015-present, Horcrux.
  * All rights reserved.
  *
@@ -392,13 +395,4 @@ class SvgViewManager extends ReactViewManager
   public void setBorderStartStartRadius(SvgView view, double value) {
     super.setBorderRadius(view, 12, (float) value);
   }
-
-  // @Override
-  // public void setTransformProperty(
-  //         @NonNull ReactViewGroup view,
-  //         @androidx.annotation.Nullable ReadableArray transforms,
-  //         @androidx.annotation.Nullable ReadableArray transformOrigin) {
-  //   super.setTransformProperty(view, transforms, transformOrigin);
-  //   ((SvgView) view).setTransformProperty();
-  // }
 }
