@@ -105,11 +105,10 @@ android {
                     "src/paper/java",
                 ]
             }
-            if (getReactNativeMinorVersion() <= 72) {
-                srcDirs += [
-                    "src/transformFix72/java",
-                ]
-//                exclude += ["src/main/java/com/horcrux/svg/SvgViewManager.java"]
+            if (getReactNativeMinorVersion() >= 73) {
+                srcDirs += "src/transformRn73/java"
+            } else {
+                srcDirs += "src/deprecated/java"
             }
         }
     }

@@ -393,12 +393,12 @@ class SvgViewManager extends ReactViewManager
     super.setBorderRadius(view, 12, (float) value);
   }
 
-  @Override
-  public void setTransformProperty(
-          @NonNull ReactViewGroup view,
-          @androidx.annotation.Nullable ReadableArray transforms,
-          @androidx.annotation.Nullable ReadableArray transformOrigin) {
-    super.setTransformProperty(view, transforms, transformOrigin);
-    ((SvgView) view).setTransformProperty();
-  }
+  // @Override
+  // public void setTransformProperty(
+  //         @NonNull ReactViewGroup view,
+  //         @androidx.annotation.Nullable ReadableArray transforms,
+  //         @androidx.annotation.Nullable ReadableArray transformOrigin) {
+  //   super.setTransformProperty(view, transforms, transformOrigin);
+  //   ((SvgView) view).setTransformProperty();
+  // }
 }
