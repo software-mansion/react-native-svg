@@ -49,15 +49,15 @@ export type DataUrlOptions = JpegOptions | PngOptions;
 
 interface JpegOptions {
   format: 'jpeg';
-  quality?: number; // Quality is optional but only available when format is 'jpeg'
-  width: number;
-  height: number;
+  quality?: number;
+  width: NumberProp;
+  height: NumberProp;
 }
 
 interface PngOptions {
   format: 'png';
-  width: number;
-  height: number;
+  width: NumberProp;
+  height: NumberProp;
 }
 
 function checkOptions(options?: DataUrlOptions) {
