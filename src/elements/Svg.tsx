@@ -69,7 +69,7 @@ function checkOptions(options?: DataUrlOptions) {
 }
 
 function validateJpegQualityParameter(options: JpegOptions): boolean {
-  if (options.quality && (options.quality < 0.1 || options.quality > 1)) {
+  if (options.quality && (options.quality < 0 || options.quality > 1)) {
     return false;
   }
   // Android requires quality to be a number between 0 and 100
