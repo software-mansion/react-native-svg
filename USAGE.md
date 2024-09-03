@@ -145,9 +145,10 @@ export default () => {
   );
 };
 ```
+# Web configuration
 
 ## Metro bundler
-You can set up your mobile and web applications using the Metro bundler, and you shouldn't face any issues using our library. 
+No additional steps are required when using Metro bundler.
 
 ### Why Use Metro and Expo for Native and Web Development?
 
@@ -163,7 +164,7 @@ Using Metro and Expo provides several advantages when developing for both native
 
 5. **Simplified Configuration**: With Metro and Expo, there’s less overhead in terms of configuration compared to Webpack. This can make the setup process faster and less error-prone, especially for developers who are not as familiar with Webpack.
 
-## Webpack bundler
+## Webpack
 > [!WARNING] `expo/webpack-config`
 > 
 > `@expo/webpack-config` is deprecated and will not receive any new feature updates.
@@ -172,7 +173,7 @@ Using Metro and Expo provides several advantages when developing for both native
 > 
 > If you are still using the Webpack bundler, we recommend migrating to Metro. This [documentation](https://docs.expo.dev/router/migrate/from-expo-webpack/) provides a good guide on how to migrate a website from Expo Webpack to Expo Metro.
 
-If, for some reason, you are using the Webpack bundler, the following steps are important:
+If you are using the Webpack bundler, the following steps are needed:
 
 - Install `@react-native/assets-registry/registry` as a project dependency.
 - Ensure that you have the proper configuration to parse flow files from `@react-native/assets-registry/registry`.
