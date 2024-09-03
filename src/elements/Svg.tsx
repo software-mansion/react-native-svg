@@ -45,7 +45,7 @@ export interface SvgProps extends GProps, ViewProps, HitSlop {
   title?: string;
 }
 
-export type ToDataUrlOptions = JpegOptions | PngOptions;
+export type DataUrlOptions = JpegOptions | PngOptions;
 
 interface JpegOptions {
   format: 'jpeg';
@@ -60,7 +60,7 @@ interface PngOptions {
   height: number;
 }
 
-function checkOptions(options?: ToDataUrlOptions) {
+function checkOptions(options?: DataUrlOptions) {
   if (options && options?.format === 'jpeg') {
     if (!validateJpegQualityParameter(options)) {
       throw new Error('toDataURL: Invalid quality parameter for JPEG format.');
@@ -117,7 +117,7 @@ export default class Svg extends Shape<SvgProps> {
 
   toDataURL = (
     callback: (base64: string) => void,
-    options?: ToDataUrlOptions
+    options?: DataUrlOptions
   ) => {
     if (!callback) {
       return;

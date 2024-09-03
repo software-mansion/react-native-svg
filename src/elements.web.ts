@@ -43,7 +43,7 @@ import type { PolylineProps } from './elements/Polyline';
 import type { RadialGradientProps } from './elements/RadialGradient';
 import type { RectProps } from './elements/Rect';
 import type { StopProps } from './elements/Stop';
-import type { SvgProps, ToDataUrlOptions } from './elements/Svg';
+import type { SvgProps, DataUrlOptions } from './elements/Svg';
 import type { SymbolProps } from './elements/Symbol';
 import type { TextProps } from './elements/Text';
 import type { TextPathProps } from './elements/TextPath';
@@ -250,7 +250,7 @@ export class Stop extends WebShape<BaseProps & StopProps> {
 
 export class Svg extends WebShape<BaseProps & SvgProps> {
   tag = 'svg' as const;
-  toDataURL(callback: (data: string) => void, options: ToDataUrlOptions) {
+  toDataURL(callback: (data: string) => void, options: DataUrlOptions) {
     const ref = this.elementRef.current;
 
     if (ref === null) {
