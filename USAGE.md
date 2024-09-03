@@ -157,7 +157,7 @@ If you are using the Webpack bundler, the following steps are needed:
 - Ensure that you have the proper configuration to parse flow files from `@react-native/assets-registry/registry`.
 - Configure the Webpack `module -> rules` section and include an important rule for `node_modules/@react-native/assets-registry/registry`.
 
-#### Webpack Configuration
+webpack.config.js
  ```ts
  const babelLoaderConfiguration = {
   include: [
