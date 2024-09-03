@@ -38,7 +38,7 @@ RCT_EXPORT_MODULE()
     if ([view isKindOfClass:[RNSVGSvgView class]]) {
       RNSVGSvgView *svg = view;
       if (options == nil) {
-        b64 = [svg getDataURLWithBounds:svg.boundingBox format:@"png"];
+        b64 = [svg getDataURLWithBounds:svg.boundingBox format:@"png" quality:1.0];
       } else {
         id width = [options objectForKey:@"width"];
         id height = [options objectForKey:@"height"];
