@@ -365,8 +365,8 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     this.invalidate();
     ByteArrayOutputStream stream = new ByteArrayOutputStream();
     if (format.equals("jpeg")) {
-      int checkQualityValue = (quality != null) ? quality : 100;
-      bitmap.compress(Bitmap.CompressFormat.JPEG, checkQualityValue, stream);
+      int qualityValue = (quality != null) ? quality : 100;
+      bitmap.compress(Bitmap.CompressFormat.JPEG, qualityValue, stream);
     } else {
       bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
     }
