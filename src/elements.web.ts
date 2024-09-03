@@ -261,11 +261,9 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
 
     const width = Number(options.width) || rect.width;
     const height = Number(options.height) || rect.height;
-    // Set format, defaulting to 'png'
     const format = options.format === 'jpeg' ? 'image/jpeg' : 'image/png';
-    // Get quality, only applicable for JPEG
 
-    let quality = 0.92; // Default quality is 0.92 for JPEG
+    let quality = 0.92;
     if (options && options.format === 'jpeg' && options.quality) {
       quality = options.quality;
     }
@@ -283,12 +281,7 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
       canvas.height = height;
       const context = canvas.getContext('2d');
       context?.drawImage(img, 0, 0);
-      // Get the data URL with the specified format and quality
-      const dataURL =
-        format === 'image/jpeg'
-          ? canvas.toDataURL(format, quality)
-          : canvas.toDataURL(format);
-      // Return the data URL, removing the prefix if it's PNG to match your original implementation
+      const dataURL = canvas.toDataURL(format, quality);
       const base64Data = dataURL.replace(`data:${format};base64,`, '');
       callback(base64Data);
     };
