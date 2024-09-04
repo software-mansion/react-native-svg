@@ -147,8 +147,13 @@ using namespace facebook::react;
 {
   UIGraphicsBeginImageContextWithOptions(size, NO, 1.0);
   CGContextRef cropContext = UIGraphicsGetCurrentContext();
+#if TARGET_OS_OSX
+  CGFloat scale = [RNSVGRenderUtils getScreenScale];
+  CGContextScaleCTM(cropContext, scale, scale);
+#else
   CGContextTranslateCTM(cropContext, 0, size.height);
   CGContextScaleCTM(cropContext, 1, -1);
+#endif
   return cropContext;
 }
 
