@@ -50,14 +50,14 @@ export type DataUrlOptions = JpegOptions | PngOptions;
 interface JpegOptions {
   format: 'jpeg';
   quality?: number;
-  width: NumberProp;
-  height: NumberProp;
+  width?: NumberProp;
+  height?: NumberProp;
 }
 
 interface PngOptions {
   format: 'png';
-  width: NumberProp;
-  height: NumberProp;
+  width?: NumberProp;
+  height?: NumberProp;
 }
 
 function checkOptions(options?: DataUrlOptions) {
