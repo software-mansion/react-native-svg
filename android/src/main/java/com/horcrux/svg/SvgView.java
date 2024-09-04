@@ -22,6 +22,7 @@ import android.view.ViewParent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.ReactCompoundView;
 import com.facebook.react.uimanager.ReactCompoundViewGroup;
@@ -356,7 +357,9 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
   }
 
-  String toDataURL(int width, int height, String format, Integer quality) {
+  String toDataURL(final ReadableMap options) {
+    int width = options.hasKey("width") ? options.getInt("width") : getWidth();
+    int height = options.hasKey("height") ? options.getInt("height") : getHeight();
     Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
     clearChildCache();
@@ -364,8 +367,11 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     clearChildCache();
     this.invalidate();
     ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+    Integer quality = options.hasKey("quality") ? options.getInt("quality") : null;
+    String format = options.hasKey("format") ? options.getString("format") : null;
     if (format.equals("jpeg")) {
-      int qualityValue = (quality != null) ? quality : 100;
+      int qualityValue = (quality != null) ? Math.round(quality * 100) : 100;
       bitmap.compress(Bitmap.CompressFormat.JPEG, qualityValue, stream);
     } else {
       bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
