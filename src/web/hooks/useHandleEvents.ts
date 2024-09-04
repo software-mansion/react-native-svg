@@ -2,11 +2,11 @@ import { MutableRefObject, useMemo } from 'react';
 // @ts-ignore not exported by react-native-web
 // eslint-disable-next-line import/no-unresolved
 import usePressEvents from 'react-native-web/dist/modules/usePressEvents';
-// @ts-ignore not exported by react-native-web
 // eslint-disable-next-line import/no-unresolved
-import useResponderEvents from 'react-native-web/dist/modules/useResponderEvents';
+import useResponderEvents from './useResponderEvents';
 import { hasResponderEvents, hasTouchableProperty } from '../utils/hasProperty';
 import { CreateComponentProps } from '../../types';
+import { ResponderConfig } from './useResponderEvents/ResponderSystem';
 
 type ClickEvent = any;
 type KeyboardEvent = any;
@@ -57,7 +57,7 @@ export function useHandleEvents<T>(
     ...rest
   } = props;
 
-  let pressEventHandlers: EventHandlers | null = null;
+  let pressEventHandlers: ResponderConfig | undefined;
   if (hasTouchableProperty(props)) {
     const pressConfig = useMemo(
       () => ({
@@ -105,6 +105,6 @@ export function useHandleEvents<T>(
   return {
     elementRef,
     rest,
-    onClick: pressEventHandlers?.onClick,
+    onClick: (pressEventHandlers as any)?.onClick,
   };
 }

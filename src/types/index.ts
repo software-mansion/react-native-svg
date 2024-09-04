@@ -1,7 +1,5 @@
-import type {
-  GestureResponderEvent,
-  ImageProps as RNImageProps,
-} from 'react-native';
+import { ResponderConfig } from '../web/hooks/useResponderEvents/ResponderSystem';
+import type { ImageProps as RNImageProps } from 'react-native';
 import type {
   NumberArray,
   NumberProp,
@@ -13,26 +11,7 @@ export interface CreateComponentProps extends BaseProps {
   forwardedRef?: React.Ref<SVGElement> | React.MutableRefObject<SVGElement>;
 }
 
-type GestureResponder = (event: GestureResponderEvent) => boolean | void;
-
-export interface Props {
-  onMoveShouldSetResponder?: GestureResponder;
-  onMoveShouldSetResponderCapture?: GestureResponder;
-  onResponderEnd?: GestureResponder;
-  onResponderGrant?: GestureResponder;
-  onResponderMove?: GestureResponder;
-  onResponderReject?: GestureResponder;
-  onResponderRelease?: GestureResponder;
-  onResponderStart?: GestureResponder;
-  onResponderTerminate?: GestureResponder;
-  onResponderTerminationRequest?: (event: GestureResponderEvent) => boolean;
-  onScrollShouldSetResponder?: GestureResponder;
-  onScrollShouldSetResponderCapture?: GestureResponder;
-  onSelectionChangeShouldSetResponder?: GestureResponder;
-  onSelectionChangeShouldSetResponderCapture?: GestureResponder;
-  onStartShouldSetResponder?: (event: GestureResponderEvent) => boolean;
-  onStartShouldSetResponderCapture?: GestureResponder;
-
+export interface Props extends ResponderConfig {
   onBlur?: (e: BlurEvent) => void;
   onFocus?: (e: FocusEvent) => void;
   onLayout?: (event: LayoutEvent) => object;
