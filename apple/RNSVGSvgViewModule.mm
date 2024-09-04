@@ -40,18 +40,18 @@ RCT_EXPORT_MODULE()
       if (options == nil) {
         b64 = [svg getDataURLWithBounds:svg.boundingBox format:@"png" quality:1.0];
       } else {
+        CGRect bounds;
         id width = [options objectForKey:@"width"];
         id height = [options objectForKey:@"height"];
-        if (![width isKindOfClass:NSNumber.class] || ![height isKindOfClass:NSNumber.class]) {
-          RCTLogError(@"Invalid width or height given to toDataURL");
-          return;
+        if (![width isKindOfClass:NSNumber.class] && ![height isKindOfClass:NSNumber.class]) {
+          bounds = svg.boundingBox;
+        } else {
+          NSNumber *w = width;
+          NSInteger wi = w ? (NSInteger)[w intValue] : svg.boundingBox.size.width;
+          NSNumber *h = height;
+          NSInteger hi = h ? (NSInteger)[h intValue] : svg.boundingBox.size.height;
+          bounds = CGRectMake(0, 0, wi, hi);
         }
-        NSNumber *w = width;
-        NSInteger wi = (NSInteger)[w intValue];
-        NSNumber *h = height;
-        NSInteger hi = (NSInteger)[h intValue];
-
-        CGRect bounds = CGRectMake(0, 0, wi, hi);
         NSString *format = [options objectForKey:@"format"];
         NSNumber *qualityNumber = [options objectForKey:@"quality"];
         CGFloat quality = qualityNumber ? [qualityNumber doubleValue] : 1.0;
