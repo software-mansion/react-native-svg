@@ -15,18 +15,13 @@
 - (void)prepareForRecycle
 {
   [super prepareForRecycle];
-  [_filterRegion resetProperties];
+  _x = nil;
+  _y = nil;
+  _width = nil;
+  _height = nil;
   _result = nil;
 }
 #endif // RCT_NEW_ARCH_ENABLED
-
-- (id)init
-{
-  if (self = [super init]) {
-    _filterRegion = [[RNSVGFilterRegion alloc] init];
-  }
-  return self;
-}
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
@@ -45,41 +40,41 @@
 
 - (void)setX:(RNSVGLength *)x
 {
-  if ([x isEqualTo:_filterRegion.x]) {
+  if ([x isEqualTo:_x]) {
     return;
   }
 
-  [_filterRegion setX:x];
+  _x = x;
   [self invalidate];
 }
 
 - (void)setY:(RNSVGLength *)y
 {
-  if ([y isEqualTo:_filterRegion.y]) {
+  if ([y isEqualTo:_y]) {
     return;
   }
 
-  [_filterRegion setY:y];
+  _y = y;
   [self invalidate];
 }
 
 - (void)setWidth:(RNSVGLength *)width
 {
-  if ([width isEqualTo:_filterRegion.width]) {
+  if ([width isEqualTo:_width]) {
     return;
   }
 
-  [_filterRegion setWidth:width];
+  _width = width;
   [self invalidate];
 }
 
 - (void)setHeight:(RNSVGLength *)height
 {
-  if ([height isEqualTo:_filterRegion.height]) {
+  if ([height isEqualTo:_height]) {
     return;
   }
 
-  [_filterRegion setHeight:height];
+  _height = height;
   [self invalidate];
 }
 

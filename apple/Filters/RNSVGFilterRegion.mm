@@ -5,7 +5,23 @@
 - (instancetype)init
 {
   self = [super init];
+  if (self) {
+    _x = [RNSVGLength lengthWithNumber:0];
+    _y = [RNSVGLength lengthWithNumber:0];
+    _width = [RNSVGLength lengthWithNumber:0];
+    _height = [RNSVGLength lengthWithNumber:0];
+  }
   return self;
+}
+
++ (instancetype)regionWithX:(RNSVGLength *)x y:(RNSVGLength *)y width:(RNSVGLength *)width height:(RNSVGLength *)height
+{
+  RNSVGFilterRegion *filterRegion = [[self alloc] init];
+  filterRegion.x = x;
+  filterRegion.y = y;
+  filterRegion.width = width;
+  filterRegion.height = height;
+  return filterRegion;
 }
 
 - (void)setX:(RNSVGLength *)x
@@ -44,14 +60,6 @@
     height = [node relativeOnHeight:self.height];
     return CGRectMake(x, y, width, height);
   }
-}
-
-- (void)resetProperties
-{
-  _x = nil;
-  _y = nil;
-  _width = nil;
-  _height = nil;
 }
 
 @end

@@ -70,7 +70,6 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
   [super prepareForRecycle];
-  [_filterRegion resetProperties];
   _filterUnits = kRNSVGUnitsObjectBoundingBox;
   _primitiveUnits = kRNSVGUnitsUserSpaceOnUse;
 }
@@ -80,7 +79,6 @@ using namespace facebook::react;
 {
   if (self = [super init]) {
     resultsMap = [NSMutableDictionary dictionary];
-    _filterRegion = [[RNSVGFilterRegion alloc] init];
   }
   return self;
 }
@@ -110,9 +108,12 @@ using namespace facebook::react;
   for (RNSVGNode *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGFilterPrimitive class]]) {
       currentFilter = (RNSVGFilterPrimitive *)node;
-      cropRect = [[currentFilter filterRegion] getCropRect:currentFilter
-                                                     units:self.primitiveUnits
-                                          renderableBounds:renderableBounds];
+      cropRect = [[RNSVGFilterRegion regionWithX:currentFilter.x
+                                               y:currentFilter.y
+                                           width:currentFilter.width
+                                          height:currentFilter.height] getCropRect:currentFilter
+                                                                             units:self.primitiveUnits
+                                                                  renderableBounds:renderableBounds];
       mask = [self getMaskFromRect:cropContext rect:cropRect ctm:ctm];
       [cropFilter setValue:[currentFilter applyFilter:resultsMap previousFilterResult:result ctm:ctm]
                     forKey:@"inputImage"];
@@ -131,7 +132,10 @@ using namespace facebook::react;
     }
   }
 
-  cropRect = [[self filterRegion] getCropRect:self units:self.filterUnits renderableBounds:renderableBounds];
+  cropRect = [[RNSVGFilterRegion regionWithX:self.x y:self.y width:self.width
+                                      height:self.height] getCropRect:self
+                                                                units:self.filterUnits
+                                                     renderableBounds:renderableBounds];
   mask = [self getMaskFromRect:cropContext rect:cropRect ctm:ctm];
   [cropFilter setValue:result forKey:@"inputImage"];
   [cropFilter setValue:mask forKey:@"inputMaskImage"];
@@ -199,41 +203,41 @@ static CIImage *applySourceAlphaFilter(CIImage *inputImage)
 
 - (void)setX:(RNSVGLength *)x
 {
-  if ([x isEqualTo:_filterRegion.x]) {
+  if ([x isEqualTo:_x]) {
     return;
   }
 
-  [_filterRegion setX:x];
+  _x = x;
   [self invalidate];
 }
 
 - (void)setY:(RNSVGLength *)y
 {
-  if ([y isEqualTo:_filterRegion.y]) {
+  if ([y isEqualTo:_y]) {
     return;
   }
 
-  [_filterRegion setY:y];
+  _y = y;
   [self invalidate];
 }
 
 - (void)setWidth:(RNSVGLength *)width
 {
-  if ([width isEqualTo:_filterRegion.width]) {
+  if ([width isEqualTo:_width]) {
     return;
   }
 
-  [_filterRegion setWidth:width];
+  _width = width;
   [self invalidate];
 }
 
 - (void)setHeight:(RNSVGLength *)height
 {
-  if ([height isEqualTo:_filterRegion.height]) {
+  if ([height isEqualTo:_height]) {
     return;
   }
 
-  [_filterRegion setHeight:height];
+  _height = height;
   [self invalidate];
 }
 

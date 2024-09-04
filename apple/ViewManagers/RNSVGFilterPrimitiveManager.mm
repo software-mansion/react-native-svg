@@ -10,21 +10,15 @@ RCT_EXPORT_MODULE()
   return [RNSVGFilterPrimitive new];
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(x, id, RNSVGFilterPrimitive)
-{
-  view.filterRegion.x = [RCTConvert RNSVGLength:json];
-}
-RCT_CUSTOM_VIEW_PROPERTY(y, id, RNSVGFilterPrimitive)
-{
-  view.filterRegion.y = [RCTConvert RNSVGLength:json];
-}
+RCT_EXPORT_VIEW_PROPERTY(x, RNSVGLength *)
+RCT_EXPORT_VIEW_PROPERTY(y, RNSVGLength *)
 RCT_CUSTOM_VIEW_PROPERTY(width, id, RNSVGFilterPrimitive)
 {
-  view.filterRegion.width = [RCTConvert RNSVGLength:json];
+  view.width = [RCTConvert RNSVGLength:json];
 }
 RCT_CUSTOM_VIEW_PROPERTY(height, id, RNSVGFilterPrimitive)
 {
-  view.filterRegion.height = [RCTConvert RNSVGLength:json];
+  view.height = [RCTConvert RNSVGLength:json];
 }
 RCT_EXPORT_VIEW_PROPERTY(result, NSString)
 

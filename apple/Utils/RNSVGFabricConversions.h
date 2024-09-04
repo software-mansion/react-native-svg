@@ -204,19 +204,19 @@ void setCommonFilterProps(const T &filterProps, RNSVGFilterPrimitive *filterPrim
 {
   id x = RNSVGConvertFollyDynamicToId(filterProps.x);
   if (x != nil) {
-    filterPrimitiveNode.filterRegion.x = [RCTConvert RNSVGLength:x];
+    filterPrimitiveNode.x = [RCTConvert RNSVGLength:x];
   }
   id y = RNSVGConvertFollyDynamicToId(filterProps.y);
   if (y != nil) {
-    filterPrimitiveNode.filterRegion.y = [RCTConvert RNSVGLength:y];
+    filterPrimitiveNode.y = [RCTConvert RNSVGLength:y];
   }
   id height = RNSVGConvertFollyDynamicToId(filterProps.height);
   if (height != nil) {
-    filterPrimitiveNode.filterRegion.height = [RCTConvert RNSVGLength:height];
+    filterPrimitiveNode.height = [RCTConvert RNSVGLength:height];
   }
   id width = RNSVGConvertFollyDynamicToId(filterProps.width);
   if (width != nil) {
-    filterPrimitiveNode.filterRegion.width = [RCTConvert RNSVGLength:width];
+    filterPrimitiveNode.width = [RCTConvert RNSVGLength:width];
   }
   filterPrimitiveNode.result = RCTNSStringFromStringNilIfEmpty(filterProps.result);
 }

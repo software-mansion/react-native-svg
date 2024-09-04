@@ -11,8 +11,8 @@
 @property (nonatomic, strong) RNSVGLength *width;
 @property (nonatomic, strong) RNSVGLength *height;
 
++ (instancetype)regionWithX:(RNSVGLength *)x y:(RNSVGLength *)y width:(RNSVGLength *)width height:(RNSVGLength *)height;
 - (CGRect)getCropRect:(RNSVGNode *)node units:(RNSVGUnits)units renderableBounds:(CGRect)renderableBounds;
-- (void)resetProperties;
 
 @end
 
