@@ -72,10 +72,6 @@ function validateJpegQualityParameter(options: JpegOptions): boolean {
   if (options.quality && (options.quality < 0 || options.quality > 1)) {
     return false;
   }
-  // Android requires quality to be a number between 0 and 100
-  if (Platform.OS === 'android' && options.quality) {
-    options.quality = Math.round(options.quality * 100);
-  }
   return true;
 }
 
