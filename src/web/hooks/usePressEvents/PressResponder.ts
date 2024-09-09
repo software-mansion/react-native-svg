@@ -1,13 +1,3 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @flow strict-local
- * @format
- */
-
 'use strict';
 
 type ClickEvent = any;
@@ -220,13 +210,13 @@ const DEFAULT_PRESS_DELAY_MS = 50;
  * `click` event is `onPress` invoked.
  */
 export default class PressResponder {
-  _config?: PressResponderConfig | null;
-  _eventHandlers?: EventHandlers | null;
+  _config!: PressResponderConfig;
+  _eventHandlers?: EventHandlers | null = null;
   _isPointerTouch?: boolean = false;
-  _longPressDelayTimeout?: TimeoutID = null;
+  _longPressDelayTimeout?: NodeJS.Timeout | null = null;
   _longPressDispatched?: boolean = false;
-  _pressDelayTimeout?: TimeoutID = null;
-  _pressOutDelayTimeout: TimeoutID = null;
+  _pressDelayTimeout?: NodeJS.Timeout | null = null;
+  _pressOutDelayTimeout: NodeJS.Timeout | null = null;
   _selectionTerminated?: boolean;
   _touchActivatePosition?: Readonly<{
     pageX: number;
@@ -242,6 +232,7 @@ export default class PressResponder {
 
   configure(config: PressResponderConfig): void {
     this._config = config;
+    console.log(config, 'config');
   }
 
   /**
@@ -305,7 +296,7 @@ export default class PressResponder {
     };
 
     const keyupHandler = (event: KeyboardEvent) => {
-      const { onPress } = this._config ?? {};
+      const { onPress } = this._config;
       const { target } = event;
 
       if (this._touchState !== NOT_RESPONDER && isValidKeyPress(event)) {
@@ -334,7 +325,7 @@ export default class PressResponder {
 
     return {
       onStartShouldSetResponder: (event): boolean => {
-        const { disabled } = this._config ?? {};
+        const { disabled } = this._config;
         if (disabled && isButtonRole(event.currentTarget)) {
           event.stopPropagation();
         }
@@ -345,7 +336,7 @@ export default class PressResponder {
       },
 
       onKeyDown: (event) => {
-        const { disabled } = this._config ?? {};
+        const { disabled } = this._config;
         const { key, target } = event;
         if (!disabled && isValidKeyPress(event)) {
           if (this._touchState === NOT_RESPONDER) {
@@ -396,7 +387,7 @@ export default class PressResponder {
       },
 
       onResponderTerminationRequest: (event): boolean => {
-        const { cancelable, disabled, onLongPress } = this._config ?? {};
+        const { cancelable, disabled, onLongPress } = this._config;
         // If `onLongPress` is provided, don't terminate on `contextmenu` as default
         // behavior will be prevented for non-mouse pointers.
         if (
@@ -422,7 +413,7 @@ export default class PressResponder {
       //   `click` target that is using the PressResponder.
       // * The event's `nativeEvent` is a `MouseEvent` not a `TouchEvent`.
       onClick: (event: any): void => {
-        const { disabled, onPress } = this._config ?? {};
+        const { disabled, onPress } = this._config;
         if (!disabled) {
           // If long press dispatched, cancel default click behavior.
           // If the responder terminated because text was selected during the gesture,
@@ -443,7 +434,7 @@ export default class PressResponder {
       // If `onLongPress` is provided and a touch pointer is being used, prevent the
       // default context menu from opening.
       onContextMenu: (event: any): void => {
-        const { disabled, onLongPress } = this._config ?? {};
+        const { disabled, onLongPress } = this._config;
         if (!disabled) {
           if (
             onLongPress != null &&
@@ -480,8 +471,13 @@ export default class PressResponder {
         `PressResponder: Invalid signal ${signal} for state ${prevState} on responder`
       );
     } else if (!!prevState && !!nextState && prevState !== nextState) {
-      this._performTransitionSideEffects(prevState, nextState, signal, event);
-      this._touchState = nextState;
+      this._performTransitionSideEffects(
+        prevState,
+        nextState as TouchState,
+        signal,
+        event
+      );
+      this._touchState = nextState as TouchState;
     }
   }
 
@@ -507,7 +503,7 @@ export default class PressResponder {
     }
 
     if (isPressStartSignal(prevState) && signal === LONG_PRESS_DETECTED) {
-      const { onLongPress } = this._config ?? {};
+      const { onLongPress } = this._config;
       // Long press is not supported for keyboards because 'click' can be dispatched
       // immediately (and multiple times) after 'keydown'.
       if (onLongPress != null && event.nativeEvent.key == null) {
@@ -526,7 +522,7 @@ export default class PressResponder {
     }
 
     if (isPressStartSignal(prevState) && signal === RESPONDER_RELEASE) {
-      const { onLongPress, onPress } = this._config ?? {};
+      const { onLongPress, onPress } = this._config;
       if (onPress != null) {
         const isPressCanceledByLongPress =
           onLongPress != null &&
@@ -545,7 +541,7 @@ export default class PressResponder {
   }
 
   _activate(event: ResponderEvent): void {
-    const { onPressChange, onPressStart } = this._config ?? {};
+    const { onPressChange, onPressStart } = this._config;
     const touch = getTouchFromResponderEvent(event);
     this._touchActivatePosition = {
       pageX: touch.pageX,
@@ -560,7 +556,7 @@ export default class PressResponder {
   }
 
   _deactivate(event: ResponderEvent): void {
-    const { onPressChange, onPressEnd } = this._config ?? {};
+    const { onPressChange, onPressEnd } = this._config;
     function end() {
       if (onPressEnd != null) {
         onPressEnd(event);

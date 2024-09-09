@@ -1,29 +1,13 @@
 import { MutableRefObject, useMemo } from 'react';
-// @ts-ignore not exported by react-native-web
-// eslint-disable-next-line import/no-unresolved
+// eslint-disable-next-line import/no-unresolved, @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import usePressEvents from 'react-native-web/dist/modules/usePressEvents';
-// eslint-disable-next-line import/no-unresolved
-import useResponderEvents from './useResponderEvents';
+// eslint-disable-next-line import/no-unresolved, @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import useResponderEvents from 'react-native-web/dist/modules/useResponderEvents';
 import { hasResponderEvents, hasTouchableProperty } from '../utils/hasProperty';
 import { CreateComponentProps } from '../../types';
-import { ResponderConfig } from './useResponderEvents/ResponderSystem';
-
-type ClickEvent = any;
-type KeyboardEvent = any;
-type ResponderEvent = any;
-
-// https://github.com/necolas/react-native-web/blob/54c14d64dabd175e8055e1dc92e9196c821f9b7d/packages/react-native-web/src/modules/usePressEvents/PressResponder.js#L44-L54
-export type EventHandlers = Readonly<{
-  onClick: (event: ClickEvent) => void;
-  onContextMenu: (event: ClickEvent) => void;
-  onKeyDown: (event: KeyboardEvent) => void;
-  onResponderGrant: (event: ResponderEvent) => void;
-  onResponderMove: (event: ResponderEvent) => void;
-  onResponderRelease: (event: ResponderEvent) => void;
-  onResponderTerminate: (event: ResponderEvent) => void;
-  onResponderTerminationRequest: (event: ResponderEvent) => boolean;
-  onStartShouldSetResponder: (event: ResponderEvent) => boolean;
-}>;
+// import { ResponderConfig } from './useResponderEvents/ResponderSystem';
 
 export function useHandleEvents<T>(
   elementRef: MutableRefObject<T | null>,
@@ -57,7 +41,7 @@ export function useHandleEvents<T>(
     ...rest
   } = props;
 
-  let pressEventHandlers: ResponderConfig | undefined;
+  let pressEventHandlers: any = null;
   if (hasTouchableProperty(props)) {
     const pressConfig = useMemo(
       () => ({

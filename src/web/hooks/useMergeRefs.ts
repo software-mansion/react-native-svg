@@ -23,7 +23,7 @@ function mergeRefs(
         return;
       }
       if (typeof ref === 'object') {
-        ref.current = node;
+        (ref as any).current = node;
         return;
       }
       console.error(
