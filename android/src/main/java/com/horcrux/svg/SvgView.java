@@ -296,6 +296,18 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     return mCanvas.getClipBounds();
   }
 
+  float getCanvasWidth() {
+    return mCanvas.getWidth();
+  }
+
+  float getCanvasHeight() {
+    return mCanvas.getHeight();
+  }
+
+  Matrix getCtm() {
+    return mCanvas.getMatrix();
+  }
+
   synchronized void drawChildren(final Canvas canvas) {
     mRendered = true;
     mCanvas = canvas;

@@ -65,8 +65,7 @@ class FilterView extends DefinitionView {
     }
   }
 
-  public Bitmap applyFilter(
-      Bitmap source, Bitmap background, RectF renderableBounds) {
+  public Bitmap applyFilter(Bitmap source, Bitmap background, RectF renderableBounds) {
     mResultsMap.clear();
     mResultsMap.put("SourceGraphic", source);
     mResultsMap.put("SourceAlpha", FilterUtils.applySourceAlphaFilter(source));
@@ -83,7 +82,9 @@ class FilterView extends DefinitionView {
       if (node instanceof FilterPrimitiveView) {
         FilterPrimitiveView currentFilter = (FilterPrimitiveView) node;
         resultBitmap.eraseColor(Color.TRANSPARENT);
-        cropRect = currentFilter.mFilterRegion.getCropRect(currentFilter, this.mPrimitiveUnits, renderableBounds);
+        cropRect =
+            currentFilter.mFilterRegion.getCropRect(
+                currentFilter, this.mPrimitiveUnits, renderableBounds);
         canvas.drawBitmap(currentFilter.applyFilter(mResultsMap, res), cropRect, cropRect, null);
         res = resultBitmap.copy(Bitmap.Config.ARGB_8888, true);
         String resultName = currentFilter.getResult();
