@@ -70,6 +70,10 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
   [super prepareForRecycle];
+  _x = nil;
+  _y = nil;
+  _width = nil;
+  _height = nil;
   _filterUnits = kRNSVGUnitsObjectBoundingBox;
   _primitiveUnits = kRNSVGUnitsUserSpaceOnUse;
 }
