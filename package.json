@@ -134,5 +134,9 @@
     "android": {
       "javaPackageName": "com.horcrux.svg"
     }
-  }
+  },
+  "resolutions": {
+    "@react-native/codegen": "0.76.0-rc.0"
+  },
+  "packageManager": "yarn@4.1.1"
 }
