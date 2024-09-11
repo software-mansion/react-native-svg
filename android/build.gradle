@@ -126,4 +126,13 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
+    if (getReactNativeMinorVersion() >= 76) {
+        implementation('com.facebook.fresco:fresco:3.2.0') {
+            exclude group: 'com.facebook.soloader'
+        }
+        implementation('com.facebook.fresco:imagepipeline-okhttp3:3.2.0') {
+            exclude group: 'com.facebook.soloader'
+        }
+        implementation('com.facebook.fresco:middleware:3.2.0')
+    }
 }
