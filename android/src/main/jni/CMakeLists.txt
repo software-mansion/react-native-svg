@@ -38,23 +38,25 @@ target_include_directories(
 target_link_libraries(
   react_codegen_rnsvg
   fbjni
-  folly_runtime
-  glog
-  jsi
-  react_codegen_rncore
-  react_debug
-  react_nativemodule_core
-  react_render_core
-  react_render_debug
-  react_render_graphics
-  react_render_mapbuffer
-  rrc_image
-  react_render_componentregistry
-  rrc_view
-  turbomodulejsijni
-  yoga
-  react_render_imagemanager
-  react_utils
+  ReactAndroid::reactnative
+  ReactAndroid::jsi
+  # folly_runtime
+  # glog
+  # jsi
+  # react_codegen_rncore
+  # react_debug
+  # react_nativemodule_core
+  # react_render_core
+  # react_render_debug
+  # react_render_graphics
+  # react_render_mapbuffer
+  # rrc_image
+  # react_render_componentregistry
+  # rrc_view
+  # turbomodulejsijni
+  # yoga
+  # react_render_imagemanager
+  # react_utils
 )
 
 target_compile_options(
