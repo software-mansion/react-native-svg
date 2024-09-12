@@ -107,6 +107,10 @@ class GroupView extends RenderableView {
           Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
       mLayerCanvas.setBitmap(mLayerBitmap);
     }
+    // Copy current matrix from original canvas
+    int saveCount = mLayerCanvas.save();
+    mLayerCanvas.setMatrix(canvas.getMatrix());
+
     elements = new ArrayList<>();
     for (int i = 0; i < getChildCount(); i++) {
       View child = getChildAt(i);
@@ -153,8 +157,13 @@ class GroupView extends RenderableView {
       }
     }
 
+    // Restore copied canvas and temporary reset original canvas matrix to draw bitmap 1:1
+    mLayerCanvas.restoreToCount(saveCount);
+    saveCount = canvas.save();
+    canvas.setMatrix(null);
     mLayerPaint.setAlpha((int) (mOpacity * 255));
     canvas.drawBitmap(mLayerBitmap, 0, 0, mLayerPaint);
+    canvas.restoreToCount(saveCount);
     this.setClientRect(groupRect);
     popGlyphContext();
   }
