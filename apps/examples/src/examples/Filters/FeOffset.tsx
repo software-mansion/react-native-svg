@@ -28,7 +28,7 @@ class ReferenceExample extends Component {
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
-    <Filter id="iconOffset" width="200%" height="200%">
+    <Filter id="iconOffset" width="1.5" height="1.5">
       <FeOffset dx="5" dy="5" />
     </Filter>
     <Rect x="0" y="0" width="15" height="15" fill="red" />

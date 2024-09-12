@@ -136,6 +136,9 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       mBitmap = drawOutput();
     }
     if (mBitmap != null) {
+      mPaint.reset();
+      mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
+      mPaint.setTypeface(Typeface.DEFAULT);
       if (mScaleX != 1 || mScaleY != 1) {
         canvas.drawBitmap(
             mBitmap,
@@ -291,6 +294,18 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
   Rect getCanvasBounds() {
     return mCanvas.getClipBounds();
+  }
+
+  float getCanvasWidth() {
+    return mCanvas.getWidth();
+  }
+
+  float getCanvasHeight() {
+    return mCanvas.getHeight();
+  }
+
+  Matrix getCtm() {
+    return mCanvas.getMatrix();
   }
 
   synchronized void drawChildren(final Canvas canvas) {
