@@ -9,6 +9,7 @@
 package com.horcrux.svg;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -29,9 +30,13 @@ import javax.annotation.Nullable;
 class GroupView extends RenderableView {
   @Nullable ReadableMap mFont;
   private GlyphContext mGlyphContext;
+  private Bitmap mLayerBitmap;
+  private Canvas mLayerCanvas;
+  private final Paint mLayerPaint;
 
   public GroupView(ReactContext reactContext) {
     super(reactContext);
+    mLayerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
   }
 
   public void setFont(Dynamic dynamic) {
@@ -92,6 +97,20 @@ class GroupView extends RenderableView {
     final SvgView svg = getSvgView();
     final GroupView self = this;
     final RectF groupRect = new RectF();
+    if (mLayerBitmap == null) {
+      mLayerBitmap =
+          Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+      mLayerCanvas = new Canvas(mLayerBitmap);
+    } else {
+      mLayerBitmap.recycle();
+      mLayerBitmap =
+          Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+      mLayerCanvas.setBitmap(mLayerBitmap);
+    }
+    // Copy current matrix from original canvas
+    int saveCount = mLayerCanvas.save();
+    mLayerCanvas.setMatrix(canvas.getMatrix());
+
     elements = new ArrayList<>();
     for (int i = 0; i < getChildCount(); i++) {
       View child = getChildAt(i);
@@ -107,15 +126,15 @@ class GroupView extends RenderableView {
           ((RenderableView) node).mergeProperties(self);
         }
 
-        int count = node.saveAndSetupCanvas(canvas, mCTM);
-        node.render(canvas, paint, opacity * mOpacity);
+        int count = node.saveAndSetupCanvas(mLayerCanvas, mCTM);
+        node.render(mLayerCanvas, paint, opacity);
         RectF r = node.getClientRect();
 
         if (r != null) {
           groupRect.union(r);
         }
 
-        node.restoreCanvas(canvas, count);
+        node.restoreCanvas(mLayerCanvas, count);
 
         if (node instanceof RenderableView) {
           ((RenderableView) node).resetProperties();
@@ -137,6 +156,14 @@ class GroupView extends RenderableView {
         }
       }
     }
+
+    // Restore copied canvas and temporary reset original canvas matrix to draw bitmap 1:1
+    mLayerCanvas.restoreToCount(saveCount);
+    saveCount = canvas.save();
+    canvas.setMatrix(null);
+    mLayerPaint.setAlpha((int) (mOpacity * 255));
+    canvas.drawBitmap(mLayerBitmap, 0, 0, mLayerPaint);
+    canvas.restoreToCount(saveCount);
     this.setClientRect(groupRect);
     popGlyphContext();
   }
