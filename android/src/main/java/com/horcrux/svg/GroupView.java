@@ -98,7 +98,7 @@ class GroupView extends RenderableView {
     final GroupView self = this;
     final RectF groupRect = new RectF();
 
-    if (opacity != 1) {
+    if (mOpacity != 1) {
       if (mLayerBitmap == null) {
         mLayerBitmap =
             Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
@@ -162,7 +162,7 @@ class GroupView extends RenderableView {
       }
     }
 
-    if (opacity != 1) {
+    if (mOpacity != 1) {
       // Restore copied canvas and temporary reset original canvas matrix to draw bitmap 1:1
       mLayerCanvas.restore();
       int saveCount = canvas.save();
