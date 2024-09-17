@@ -66,6 +66,25 @@ def getReactNativeMinorVersion() {
   return reactNativeVersion.split("\\.")[1].toInteger()
 }
 
+def getFrescoVersion() {
+    def reactNativeRootDir = resolveReactNativeDirectory()
+    def frescoVersion = null
+    file("$reactNativeRootDir/gradle/libs.versions.toml").withInputStream { stream ->
+        stream.eachLine { line ->
+            if (line.contains("fresco") && !line.contains("ref")) {
+                def keyValue = line.split("=")
+                if (keyValue.size() == 2) {
+                    frescoVersion = keyValue[1].trim().replaceAll(/["']/, "")
+                }
+            }
+        }
+    }
+    if (!frescoVersion) {
+        return "3.2.0"
+    }
+    return frescoVersion
+}
+
 android {
     compileSdkVersion safeExtGet('compileSdkVersion', 28)
     def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
@@ -126,4 +145,14 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
+    if (getReactNativeMinorVersion() >= 76) {
+        def frescoVersion = getFrescoVersion()
+        implementation("com.facebook.fresco:fresco:${frescoVersion}") {
+            exclude group: 'com.facebook.soloader'
+        }
+        implementation("com.facebook.fresco:imagepipeline-okhttp3:${frescoVersion}") {
+            exclude group: 'com.facebook.soloader'
+        }
+        implementation("com.facebook.fresco:middleware:${frescoVersion}")
+    }
 }

@@ -104,7 +104,7 @@ public abstract class VirtualView extends ReactViewGroup {
   ArrayList<PathElement> elements;
   PointerEvents mPointerEvents;
 
-  void setPointerEvents(PointerEvents pointerEvents) {
+  public void setPointerEvents(PointerEvents pointerEvents) {
     mPointerEvents = pointerEvents;
   }
 
