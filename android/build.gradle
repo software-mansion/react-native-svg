@@ -37,6 +37,35 @@ def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
+def resolveReactNativeDirectory() {
+  def reactNativeLocation = safeExtGet("REACT_NATIVE_NODE_MODULES_DIR", null)
+  if (reactNativeLocation != null) {
+    return file(reactNativeLocation)
+  }
+
+  // monorepo workaround
+  // react-native can be hoisted or in project's own node_modules
+  def reactNativeFromProjectNodeModules = file("${rootProject.projectDir}/../node_modules/react-native")
+  if (reactNativeFromProjectNodeModules.exists()) {
+    return reactNativeFromProjectNodeModules
+  }
+
+  def reactNativeFromNodeModulesWithSVG = file("${projectDir}/../../react-native")
+  if (reactNativeFromNodeModulesWithSVG.exists()) {
+    return reactNativeFromNodeModulesWithSVG
+  }
+
+  throw new GradleException("[react-native-svg] Unable to resolve react-native location in node_modules. Your app should define `REACT_NATIVE_NODE_MODULES_DIR` extension property in `app/build.gradle` with a path to react-native in node_modules.")
+}
+
+def getReactNativeMinorVersion() {
+  def reactNativeRootDir = resolveReactNativeDirectory()
+  def reactNativeProperties = new Properties()
+  file("$reactNativeRootDir/ReactAndroid/gradle.properties").withInputStream { reactNativeProperties.load(it) }
+  def reactNativeVersion = reactNativeProperties.getProperty("VERSION_NAME")
+  return reactNativeVersion.split("\\.")[1].toInteger()
+}
+
 android {
     compileSdkVersion safeExtGet('compileSdkVersion', 28)
     def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
@@ -75,6 +104,11 @@ android {
                 srcDirs += [
                     "src/paper/java",
                 ]
+            }
+            if (getReactNativeMinorVersion() >= 73) {
+                srcDirs += "src/transformRn73/java"
+            } else {
+                srcDirs += "src/deprecated/java"
             }
         }
     }
