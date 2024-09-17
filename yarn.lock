@@ -2158,10 +2158,10 @@
   dependencies:
     react-native-codegen "0.71.6"
 
-"@react-native/codegen@0.76.0-rc.0", "@react-native/codegen@^0.72.8":
-  version "0.76.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@react-native/codegen/-/codegen-0.76.0-rc.0.tgz#1b47f75246a576a207ba13f448c9d0bbd48a625d"
-  integrity sha512-52hHhRwQU3R4pGTPE8Tn/7PFEX0WgWC0va97rySprbmPoSwedboH+QHg30BYbWUUacuRnTXgnLaGhMj0Gc369w==
+"@react-native/codegen@0.76.0-rc.1", "@react-native/codegen@^0.72.8":
+  version "0.76.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@react-native/codegen/-/codegen-0.76.0-rc.1.tgz#7631a8408c140029340ed55538d5e506f2fc52a6"
+  integrity sha512-uDRYQmq5x5/ECudIpedeKXnkOGi0SEEVLoGEAvUBcLc401yQI8zkipm8ScNosobncSUUqDb/ixOLH4tOSCK2aw==
   dependencies:
     "@babel/parser" "^7.25.3"
     glob "^7.1.1"

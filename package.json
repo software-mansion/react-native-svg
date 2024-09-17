@@ -136,6 +136,6 @@
     }
   },
   "resolutions": {
-    "@react-native/codegen": "0.76.0-rc.0"
+    "@react-native/codegen": "0.76.0-rc.1"
   }
 }
