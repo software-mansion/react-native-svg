@@ -334,12 +334,21 @@ UInt32 saturate(CGFloat value)
 #endif // [macOS]
       CGContextConcatCTM(bcontext, currentCTM);
       // Clip to mask bounds and render the mask
-      CGSize currentBoundsSize = self.pathBounds.size;
-      CGFloat x = [self relativeOnFraction:[maskNode x] relative:currentBoundsSize.width];
-      CGFloat y = [self relativeOnFraction:[maskNode y] relative:currentBoundsSize.height];
-      CGFloat w = [self relativeOnFraction:[maskNode maskwidth] relative:currentBoundsSize.width];
-      CGFloat h = [self relativeOnFraction:[maskNode maskheight] relative:currentBoundsSize.height];
-      CGRect maskBounds = CGRectApplyAffineTransform(CGRectMake(x, y, w, h), screenScaleCTM);
+      CGRect maskBounds;
+      if ([maskNode maskUnits] == RNSVGUnits::kRNSVGUnitsUserSpaceOnUse) {
+        CGFloat x = [self relativeOn:[maskNode x] relative:width];
+        CGFloat y = [self relativeOn:[maskNode y] relative:height];
+        CGFloat w = [self relativeOn:[maskNode maskwidth] relative:width];
+        CGFloat h = [self relativeOn:[maskNode maskheight] relative:height];
+        maskBounds = CGRectMake(x, y, w, h);
+      } else {
+        CGSize currentBoundsSize = self.pathBounds.size;
+        CGFloat x = [self relativeOnFraction:[maskNode x] relative:currentBoundsSize.width];
+        CGFloat y = [self relativeOnFraction:[maskNode y] relative:currentBoundsSize.height];
+        CGFloat w = [self relativeOnFraction:[maskNode maskwidth] relative:currentBoundsSize.width];
+        CGFloat h = [self relativeOnFraction:[maskNode maskheight] relative:currentBoundsSize.height];
+        maskBounds = CGRectMake(self.pathBounds.origin.x + x, self.pathBounds.origin.y + y, w, h);
+      }
       CGContextClipToRect(bcontext, maskBounds);
       [maskNode renderLayerTo:bcontext rect:bounds];
 
