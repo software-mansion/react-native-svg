@@ -6,11 +6,11 @@ const xml = `
     <style>
       #mySVG {
         --my-color: #ff0000;
-        --my-width:150px;
-        --my-height:200px;
+        --new-color: #3e3efe;
       }
     </style>
-    <rect fill="var(--my-color)" x="0" y="0" width="var(--my-width)" height="var(--my-height)" />
+    <rect fill="var(--new-color)" x="20" y="20" width="32" height="32" />
+    <text fill="var(--my-color)" x="20" y="100" font-size="16">Hello</text>
   </svg>
 `;
 
