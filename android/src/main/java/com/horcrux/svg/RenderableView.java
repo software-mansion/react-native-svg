@@ -377,7 +377,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         canvas.drawBitmap(elementBitmap, 0, 0, bitmapPaint);
         canvas.restoreToCount(saveCount);
       } else {
-        canvas.saveLayer(null, paint);
+        canvas.saveLayer(null, new Paint());
         draw(canvas, paint, opacity);
       }
 
