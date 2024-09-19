@@ -265,9 +265,6 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
   let root: XmlAST | undefined;
   const stack: XmlAST[] = [];
 
-  const cssVariables: { [key: string]: string } = {};
-  collectCssVariables(source);
-
   function error(message: string) {
     const { line, column, snippet } = locate(source, i);
     throw new Error(
@@ -438,40 +435,6 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     return name;
   }
 
-  function collectCssVariables(source: string) {
-    const styleRegex = /<style[^>]*>([\s\S]*?)<\/style>/gi;
-    let match;
-
-    while ((match = styleRegex.exec(source)) !== null) {
-      const styleContent = match[1];
-      const variableRegex = /--([^:]+):\s*([^;]+);/g;
-      let varMatch;
-      while ((varMatch = variableRegex.exec(styleContent)) !== null) {
-        const [, name, value] = varMatch;
-        cssVariables[`--${name.trim()}`] = value.trim();
-      }
-    }
-  }
-
-  function parseStyleAttribute(styleString: string): Styles {
-    const style: Styles = {};
-    const declarations = styleString.split(';').filter((v) => v.trim());
-
-    for (const declaration of declarations) {
-      const [property, value] = declaration.split(':').map((s) => s.trim());
-      if (property && value) {
-        const camelProperty = camelCase(property);
-        if (value.startsWith('var(')) {
-          const variableName = value.slice(4, -1).trim();
-          style[camelProperty] = cssVariables[variableName] || value;
-        } else {
-          style[camelProperty] = value;
-        }
-      }
-    }
-    return style;
-  }
-
   function getAttributes(props: {
     [x: string]: Styles | string | number | boolean | undefined;
     style?: string | Styles | undefined;
@@ -487,42 +450,17 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
         return;
       }
 
-      let value: boolean | number | string | Styles = true;
+      let value: boolean | number | string = true;
+
       allowSpaces();
       if (source[i] === '=') {
         i += 1;
         allowSpaces();
 
         value = getAttributeValue();
-        // Check if the value is a string and starts with 'var('
-        if (typeof value === 'string' && value.startsWith('var(')) {
-          const variableName = value.slice(4, -1).trim();
-          if (cssVariables[variableName]) {
-            value = cssVariables[variableName];
-          }
+        if (!isNaN(+value) && value.trim() !== '') {
+          value = +value;
         }
-
-        if (name === 'style' && typeof value === 'string') {
-          const parsedStyle = parseStyleAttribute(value);
-          Object.entries(parsedStyle).forEach(([key, val]) => {
-            if (typeof val === 'string' && val.startsWith('var(')) {
-              const variableName = val.slice(4, -1).trim();
-              if (cssVariables[variableName]) {
-                parsedStyle[key] = cssVariables[variableName];
-              }
-            }
-          });
-          value = parsedStyle;
-        }
-        if (typeof value === 'string') {
-          const trimmedValue = value.trim();
-          if (!isNaN(+trimmedValue) && trimmedValue !== '') {
-            value = +trimmedValue;
-          }
-        }
-      }
-      if (name.startsWith('--')) {
-        cssVariables[name] = value as string;
       }
 
       props[camelCase(name)] = value;
