@@ -43,16 +43,10 @@ def resolveReactNativeDirectory() {
     return file(reactNativeLocation)
   }
 
-  // monorepo workaround
-  // react-native can be hoisted or in project's own node_modules
-  def reactNativeFromProjectNodeModules = file("${rootProject.projectDir}/../node_modules/react-native")
-  if (reactNativeFromProjectNodeModules.exists()) {
-    return reactNativeFromProjectNodeModules
-  }
-
-  def reactNativeFromNodeModulesWithSVG = file("${projectDir}/../../react-native")
-  if (reactNativeFromNodeModulesWithSVG.exists()) {
-    return reactNativeFromNodeModulesWithSVG
+  // Fallback to node resolver for custom directory structures like monorepos.
+  def reactNativePackage = file(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim())
+  if(reactNativePackage.exists()) {
+    return reactNativePackage.parentFile
   }
 
   throw new GradleException("[react-native-svg] Unable to resolve react-native location in node_modules. Your app should define `REACT_NATIVE_NODE_MODULES_DIR` extension property in `app/build.gradle` with a path to react-native in node_modules.")
