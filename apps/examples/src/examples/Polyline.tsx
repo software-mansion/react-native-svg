@@ -1,21 +1,21 @@
 import React, {Component} from 'react';
 import {Svg, Polyline} from 'react-native-svg';
 
-class PolylineExample extends Component {
-  static title =
-    'The <Polyline> element is used to create any shape that consists of only straight lines';
-  render() {
-    return (
-      <Svg height="100" width="100">
-        <Polyline
-          points="10 10 20 12 30 20 40 60 60 70 95 90"
-          fill="none"
-          stroke="black"
-          strokeWidth="3"
-        />
-      </Svg>
-    );
-  }
+function PolylineExample() {
+  // static title =
+  //   'The <Polyline> element is used to create any shape that consists of only straight lines';
+  // render() {
+  return (
+    <Svg height="100" width="100">
+      <Polyline
+        points="10 10 20 12 30 20 40 60 60 70 95 90"
+        fill="none"
+        stroke="black"
+        strokeWidth="3"
+      />
+    </Svg>
+  );
+  // }
 }
 
 class StraightLines extends Component {
@@ -86,4 +86,4 @@ const samples = [
   PolylineFillStroke,
 ];
 
-export {icon, samples};
+export {icon, PolylineExample};

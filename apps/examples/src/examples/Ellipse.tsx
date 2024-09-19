@@ -1,23 +1,21 @@
 import React, {Component} from 'react';
 import {Svg, Ellipse} from 'react-native-svg';
 
-class EllipseExample extends Component {
-  static title = 'Ellipse';
-  render() {
-    return (
-      <Svg height="100" width="200">
-        <Ellipse
-          cx="50%"
-          cy="50%"
-          rx="45%"
-          ry="40%"
-          stroke="purple"
-          strokeWidth="2"
-          fill="yellow"
-        />
-      </Svg>
-    );
-  }
+function EllipseExample() {
+  // static title = 'Ellipse';
+  return (
+    <Svg height="100" width="200">
+      <Ellipse
+        cx="50%"
+        cy="50%"
+        rx="45%"
+        ry="40%"
+        stroke="purple"
+        strokeWidth="2"
+        fill="yellow"
+      />
+    </Svg>
+  );
 }
 
 class PileEllipses extends Component {
@@ -63,4 +61,4 @@ const icon = (
 
 const samples = [EllipseExample, PileEllipses, CombinedEllipses];
 
-export {icon, samples};
+export {icon, EllipseExample};

@@ -1,20 +1,20 @@
 import React, {Component} from 'react';
 import {Svg, G, Path, Polygon} from 'react-native-svg';
 
-class PolygonExample extends Component {
-  static title = 'The following example creates a polygon with three sides';
-  render() {
-    return (
-      <Svg height="100" width="100">
-        <Polygon
-          points="40,5 70,80 25,95"
-          fill="lime"
-          stroke="purple"
-          strokeWidth="1"
-        />
-      </Svg>
-    );
-  }
+function PolygonExample() {
+  // static title = 'The following example creates a polygon with three sides';
+  // render() {
+  return (
+    <Svg height="100" width="100">
+      <Polygon
+        points="40,5 70,80 25,95"
+        fill="lime"
+        stroke="purple"
+        strokeWidth="1"
+      />
+    </Svg>
+  );
+  // }
 }
 
 class FourSidePolygon extends Component {
@@ -88,4 +88,4 @@ const icon = (
 
 const samples = [PolygonExample, FourSidePolygon, StarPolygon, EvenOddPolygon];
 
-export {icon, samples};
+export {icon, PolygonExample};

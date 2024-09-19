@@ -1,22 +1,13 @@
 import React, {Component} from 'react';
 import {Svg, Line} from 'react-native-svg';
 
-class LineExample extends Component {
-  static title = 'Line';
-  render() {
-    return (
-      <Svg height="100" width="100">
-        <Line
-          x1="10%"
-          y1="10%"
-          x2="90%"
-          y2="90%"
-          stroke="red"
-          strokeWidth="2"
-        />
-      </Svg>
-    );
-  }
+function LineExample() {
+  // static title = 'Line';
+  return (
+    <Svg height="100" width="100">
+      <Line x1="10%" y1="10%" x2="90%" y2="90%" stroke="red" strokeWidth="2" />
+    </Svg>
+  );
 }
 
 class LineWithStrokeLinecap extends Component {
@@ -64,4 +55,4 @@ const icon = (
 
 const samples = [LineExample, LineWithStrokeLinecap];
 
-export {icon, samples};
+export {icon, LineExample};

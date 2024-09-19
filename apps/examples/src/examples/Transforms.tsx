@@ -30,69 +30,64 @@ const patternXml = `
 </svg>
 `;
 
-class PatternTransformExample extends Component {
-  static title = 'Pattern transform';
-  render() {
-    return (
-      <>
-        <Svg height="100" width="300" viewBox="0 0 200 100">
+function PatternTransformExample() {
+  // static title = 'Pattern transform';
+  // render() {
+  return (
+    <>
+      <Svg height="100" width="300" viewBox="0 0 200 100">
+        <Pattern
+          id="p1"
+          width="0.25"
+          height="0.25"
+          patternTransform={[
+            {rotate: '20'},
+            {skewX: '30'},
+            {scaleX: 1},
+            {scaleY: 0.5},
+          ]}>
+          <Circle fill="black" cx="10" cy="10" r="10" />
+        </Pattern>
+        <Pattern
+          id="p2"
+          width="0.25"
+          height="0.25"
+          patternTransform="rotate(20) skewX(30) scale(1 0.5)">
+          <Circle fill="black" cx="10" cy="10" r="10" />
+        </Pattern>
+        <Rect x="10" y="10" width="80" height="80" fill="url(#p1)" />
+        <Rect
+          x="10"
+          y="10"
+          width="80"
+          height="80"
+          fill="url(#p2)"
+          transform={[{translateX: 100}]}
+        />
+      </Svg>
+      <Svg height="100" width="100" viewBox="0 0 100 100">
+        <Defs>
           <Pattern
-            id="p1"
-            width="0.25"
-            height="0.25"
-            patternTransform={[
-              {rotate: '20'},
-              {skewX: '30'},
-              {scaleX: 1},
-              {scaleY: 0.5},
-            ]}>
-            <Circle fill="black" cx="10" cy="10" r="10" />
+            id="stripe"
+            patternUnits="userSpaceOnUse"
+            patternContentUnits="userSpaceOnUse"
+            width="8"
+            height="12"
+            patternTransform="rotate(45)">
+            <Rect width="4" height="8" fill="white" x="0" y="0"></Rect>
+            <Rect width="4" height="12" fill="black" x="4" y="0"></Rect>
           </Pattern>
-          <Pattern
-            id="p2"
-            width="0.25"
-            height="0.25"
-            patternTransform="rotate(20) skewX(30) scale(1 0.5)">
-            <Circle fill="black" cx="10" cy="10" r="10" />
-          </Pattern>
-          <Rect x="10" y="10" width="80" height="80" fill="url(#p1)" />
-          <Rect
-            x="10"
-            y="10"
-            width="80"
-            height="80"
-            fill="url(#p2)"
-            transform={[{translateX: 100}]}
-          />
-        </Svg>
-        <Svg height="100" width="100" viewBox="0 0 100 100">
-          <Defs>
-            <Pattern
-              id="stripe"
-              patternUnits="userSpaceOnUse"
-              patternContentUnits="userSpaceOnUse"
-              width="8"
-              height="12"
-              patternTransform="rotate(45)">
-              <Rect width="4" height="8" fill="white" x="0" y="0"></Rect>
-              <Rect width="4" height="12" fill="black" x="4" y="0"></Rect>
-            </Pattern>
-          </Defs>
-          <G transform="matrix(1 0 0 -1 0 140)">
-            <Rect
-              x="0"
-              y="0"
-              width="100"
-              height="100"
-              fill="url(#stripe)"></Rect>
-          </G>
-        </Svg>
-        {Platform.OS !== 'web' && (
-          <SvgXml width="100" height="100" xml={patternXml} />
-        )}
-      </>
-    );
-  }
+        </Defs>
+        <G transform="matrix(1 0 0 -1 0 140)">
+          <Rect x="0" y="0" width="100" height="100" fill="url(#stripe)"></Rect>
+        </G>
+      </Svg>
+      {Platform.OS !== 'web' && (
+        <SvgXml width="100" height="100" xml={patternXml} />
+      )}
+    </>
+  );
+  // }
 }
 
 class GradientTransformExample extends Component {
@@ -155,4 +150,4 @@ const icon = (
 
 const samples = [PatternTransformExample, GradientTransformExample];
 
-export {icon, samples};
+export {icon, PatternTransformExample};

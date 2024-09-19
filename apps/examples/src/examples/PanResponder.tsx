@@ -11,64 +11,65 @@ const AnimatedSvg = Animated.createAnimatedComponent(Svg as any);
 
 const zeroDelta = {x: 0, y: 0};
 
-class PanExample extends PureComponent {
-  static title = 'Bind PanResponder on the SVG Shape';
-  panXY: any;
-  constructor(props: {}, context: {}) {
-    super(props, context);
-    const xy = new Animated.ValueXY();
-    const {x: dx, y: dy} = xy;
-    let offset = zeroDelta;
-    xy.addListener(flatOffset => {
-      offset = flatOffset;
-    });
-    const {panHandlers} = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponderCapture: () => true,
-      onPanResponderGrant: () => {
-        xy.setOffset(offset);
-        xy.setValue(zeroDelta);
-      },
-      onPanResponderMove: Animated.event([null, {dx, dy}], {
-        useNativeDriver: false,
-      }),
-      onPanResponderRelease: () => {
-        xy.flattenOffset();
-      },
-    });
-    this.panXY = {
-      style: {
-        transform: xy.getTranslateTransform(),
-      },
-      ...panHandlers,
-    };
-  }
-  render() {
-    return (
-      <TouchableWithoutFeedback>
-        <View>
-          <AnimatedSvg height="200" width="200" {...this.panXY}>
-            <Path
-              d="M50,5L20,99L95,39L5,39L80,99z"
-              stroke={'black'}
-              fill={'red'}
-              strokeWidth="6"
-              scale="0.8"
-            />
-            <Text
-              fontSize="20"
-              fontWeight="bold"
-              fill="blue"
-              textAnchor="middle"
-              x="40"
-              y="80">
-              STAR
-            </Text>
-          </AnimatedSvg>
-        </View>
-      </TouchableWithoutFeedback>
-    );
-  }
+function PanExample() {
+  // static title = 'Bind PanResponder on the SVG Shape';
+  // panXY: any;
+  // constructor(props: {}, context: {}) {
+  //   super(props, context);
+  //   const xy = new Animated.ValueXY();
+  //   const {x: dx, y: dy} = xy;
+  //   let offset = zeroDelta;
+  //   xy.addListener(flatOffset => {
+  //     offset = flatOffset;
+  //   });
+  //   const {panHandlers} = PanResponder.create({
+  //     onStartShouldSetPanResponder: () => true,
+  //     onMoveShouldSetPanResponderCapture: () => true,
+  //     onPanResponderGrant: () => {
+  //       xy.setOffset(offset);
+  //       xy.setValue(zeroDelta);
+  //     },
+  //     onPanResponderMove: Animated.event([null, {dx, dy}], {
+  //       useNativeDriver: false,
+  //     }),
+  //     onPanResponderRelease: () => {
+  //       xy.flattenOffset();
+  //     },
+  //   });
+  //   this.panXY = {
+  //     style: {
+  //       transform: xy.getTranslateTransform(),
+  //     },
+  //     ...panHandlers,
+  //   };
+  // }
+  // render() {
+  return (
+    <TouchableWithoutFeedback>
+      <View>
+        <AnimatedSvg height="200" width="200">
+          {/* {...this.panXY} */}
+          <Path
+            d="M50,5L20,99L95,39L5,39L80,99z"
+            stroke={'black'}
+            fill={'red'}
+            strokeWidth="6"
+            scale="0.8"
+          />
+          <Text
+            fontSize="20"
+            fontWeight="bold"
+            fill="blue"
+            textAnchor="middle"
+            x="40"
+            y="80">
+            STAR
+          </Text>
+        </AnimatedSvg>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+  // }
 }
 
 const icon = (
@@ -100,4 +101,4 @@ const samples = [PanExample];
 
 const scroll = false;
 
-export {icon, samples, scroll};
+export {icon, PanExample, scroll};

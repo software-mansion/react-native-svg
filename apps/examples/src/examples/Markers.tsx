@@ -11,41 +11,41 @@ import {
   Path,
 } from 'react-native-svg';
 
-class EllipseExample extends Component {
-  static title = 'Circle shaped marker on ellipse';
-  render() {
-    return (
-      <Svg height="300" width="400">
-        <Defs>
-          <Marker
-            id="selection"
-            markerUnits="userSpaceOnUse"
-            refX="0"
-            refY="0"
-            orient="auto">
-            <Circle
-              fill="#3a6cff"
-              r={5}
-              cx={0}
-              cy={0}
-              strokeWidth={1}
-              stroke="white"
-            />
-          </Marker>
-        </Defs>
-        <Ellipse
-          cx="200"
-          cy="170"
-          rx="30%"
-          ry="10%"
-          stroke="purple"
-          strokeWidth="2"
-          fill="yellow"
-          marker="url(#selection)"
-        />
-      </Svg>
-    );
-  }
+function EllipseExample() {
+  // static title = 'Circle shaped marker on ellipse';
+  // render() {
+  return (
+    <Svg height="300" width="400">
+      <Defs>
+        <Marker
+          id="selection"
+          markerUnits="userSpaceOnUse"
+          refX="0"
+          refY="0"
+          orient="auto">
+          <Circle
+            fill="#3a6cff"
+            r={5}
+            cx={0}
+            cy={0}
+            strokeWidth={1}
+            stroke="white"
+          />
+        </Marker>
+      </Defs>
+      <Ellipse
+        cx="200"
+        cy="170"
+        rx="30%"
+        ry="10%"
+        stroke="purple"
+        strokeWidth="2"
+        fill="yellow"
+        marker="url(#selection)"
+      />
+    </Svg>
+  );
+  // }
 }
 
 class LineExample extends Component {
@@ -215,4 +215,4 @@ const samples = [
   RectExample,
   PathExample,
 ];
-export {icon, samples};
+export {icon, EllipseExample};

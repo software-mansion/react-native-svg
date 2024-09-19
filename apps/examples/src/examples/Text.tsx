@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {ScrollView, Text as RNText} from 'react-native';
 
 import {
   Svg,
@@ -12,17 +13,20 @@ import {
   Stop,
 } from 'react-native-svg';
 
-class TextExample extends Component {
-  static title = 'Text';
-  render() {
-    return (
+function TextExample() {
+  // static title = 'Text';
+  // render() {
+  return (
+    <ScrollView contentContainerStyle={{alignItems: 'center'}}>
+      <RNText>Text</RNText>
       <Svg height="30" width="100">
         <Text x="50" y="9" fill="red" textAnchor="middle">
           I love SVG!
         </Text>
       </Svg>
-    );
-  }
+    </ScrollView>
+  );
+  // }
 }
 
 class TextRotate extends Component {
@@ -188,4 +192,4 @@ const samples = [
   TSpanExample,
 ];
 
-export {icon, samples};
+export {icon, TextExample};

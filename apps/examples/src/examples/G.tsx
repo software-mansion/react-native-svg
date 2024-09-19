@@ -1,37 +1,38 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {Svg, Circle, G, Text, Line, Rect, Use} from 'react-native-svg';
 
-class GExample extends Component {
-  static title = 'G children props inherit';
-  state = {
-    fill: 'purple',
-  };
-  componentDidMount = () => {
-    setTimeout(() => {
-      if (!this._unmounted) {
-        this.setState({
-          fill: '#856',
-        });
-      }
-    }, 2000);
-  };
-  componentWillUnmount = () => {
-    this._unmounted = true;
-  };
-  private _unmounted: any;
-  render() {
-    return (
-      <Svg height="100" width="100">
-        <G fill={this.state.fill} stroke="pink" strokeWidth="3">
-          <Circle cx="25" cy="25" r="11" />
-          <Circle cx="25" cy="75" r="11" stroke="red" />
-          <Circle cx="50" cy="50" r="11" fill="green" />
-          <Circle cx="75" cy="25" r="11" stroke="red" />
-          <Circle cx="75" cy="75" r="11" />
-        </G>
-      </Svg>
-    );
-  }
+function GExample() {
+  const [fill, setFill] = useState('purple');
+  // static title = 'G children props inherit';
+  // state = {
+  //   fill: 'purple',
+  // };
+  // componentDidMount = () => {
+  //   setTimeout(() => {
+  //     if (!this._unmounted) {
+  //       this.setState({
+  //         fill: '#856',
+  //       });
+  //     }
+  //   }, 2000);
+  // };
+  // componentWillUnmount = () => {
+  //   this._unmounted = true;
+  // };
+  // private _unmounted: any;
+  // render() {
+  return (
+    <Svg height="100" width="100">
+      <G fill={fill} stroke="pink" strokeWidth="3">
+        <Circle cx="25" cy="25" r="11" />
+        <Circle cx="25" cy="75" r="11" stroke="red" />
+        <Circle cx="50" cy="50" r="11" fill="green" />
+        <Circle cx="75" cy="25" r="11" stroke="red" />
+        <Circle cx="75" cy="75" r="11" />
+      </G>
+    </Svg>
+  );
+  // }
 }
 
 class GTransform extends Component {
@@ -95,4 +96,4 @@ const icon = (
 
 const samples = [GExample, GTransform];
 
-export {icon, samples};
+export {icon, GExample};

@@ -12,31 +12,31 @@ import {
 } from 'react-native-svg';
 import {Alert} from 'react-native';
 
-class PressExample extends Component {
-  static title =
-    'Press on the red circle or long press on the blue rectangle to trigger the events';
-  render() {
-    return (
-      <Svg height="100" width="100">
-        <Circle
-          cx="50%"
-          cy="50%"
-          r="38%"
-          fill="red"
-          onPress={() => Alert.alert('Press on Circle')}
-        />
-        <Rect
-          x="20%"
-          y="20%"
-          width="60%"
-          height="60%"
-          fill="blue"
-          onLongPress={() => Alert.alert('Long press on Rect')}
-        />
-        <Path d="M50,5L20,99L95,39L5,39L80,99z" fill="pink" />
-      </Svg>
-    );
-  }
+function PressExample() {
+  // static title =
+  //   'Press on the red circle or long press on the blue rectangle to trigger the events';
+  // render() {
+  return (
+    <Svg height="100" width="100">
+      <Circle
+        cx="50%"
+        cy="50%"
+        r="38%"
+        fill="red"
+        onPress={() => Alert.alert('Press on Circle')}
+      />
+      <Rect
+        x="20%"
+        y="20%"
+        width="60%"
+        height="60%"
+        fill="blue"
+        onLongPress={() => Alert.alert('Long press on Rect')}
+      />
+      <Path d="M50,5L20,99L95,39L5,39L80,99z" fill="pink" />
+    </Svg>
+  );
+  // }
 }
 
 class HoverExample extends Component {
@@ -115,4 +115,4 @@ const icon = (
 
 const samples = [PressExample, HoverExample, GroupExample];
 
-export {icon, samples};
+export {icon, PressExample};

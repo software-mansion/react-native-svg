@@ -4,182 +4,225 @@
  */
 'use strict';
 
-import React, {Component} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {
-  Dimensions,
-  Modal,
-  Platform,
-  SafeAreaView,
-  ScrollView,
+  NavigationContainer,
+  NavigationProp,
+  NavigationState,
+  useNavigation,
+} from '@react-navigation/native';
+import {
   StyleSheet,
   Text,
-  TouchableHighlight,
-  TouchableOpacity,
   View,
+  Linking,
+  Pressable,
+  FlatList,
+  SafeAreaView,
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
-import {Circle, Line, Svg} from 'react-native-svg';
-
-import {commonStyles} from './src/commonStyles';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import E2eTestingView from './src/e2e';
-import * as examples from './src/examples';
-import {names} from './utils/names';
+import {EXAMPLES} from './src/examples';
+import {HeaderBackButton} from '@react-navigation/elements';
+import {HeaderBackButtonProps} from '@react-navigation/native-stack/lib/typescript/src/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const initialState = {
-  modal: false,
-  content: null,
-};
+// console.log('EXAMPLES: ', EXAMPLES);
 
-export default class SvgExample extends Component {
-  state: {
-    content: React.ReactNode;
-    modal: boolean;
-    scroll?: boolean;
-  } = initialState;
-
-  show = (name: keyof typeof examples) => {
-    if (this.state.modal) {
-      return;
-    }
-    let example = examples[name];
-    if (example) {
-      let samples = example.samples;
-      this.setState({
-        modal: true,
-        content: (
-          <View>
-            {samples.map((Sample, i) => (
-              <View style={commonStyles.example} key={`sample-${i}`}>
-                <Text style={commonStyles.sampleTitle}>{Sample.title}</Text>
-                <Sample />
-              </View>
-            ))}
-          </View>
-        ),
-        scroll: (example as {scroll?: boolean}).scroll !== false,
-      });
-    }
-  };
-
-  hide = () => {
-    this.setState(initialState);
-  };
-
-  getExamples = () => {
-    return names
-      .filter(el => {
-        if (el !== 'E2E') return true;
-        return Platform.OS === 'android' || Platform.OS === 'ios';
-      })
-      .map(name => {
-        var icon;
-        let example = examples[name as keyof typeof examples];
-        if (example) {
-          icon = example.icon;
-        }
-        return (
-          <TouchableHighlight
-            style={styles.link}
-            underlayColor="#ccc"
-            key={`example-${name}`}
-            onPress={() => this.show(name as keyof typeof examples)}>
-            <View style={commonStyles.cell}>
-              {icon}
-              <Text style={commonStyles.title}>{name}</Text>
-            </View>
-          </TouchableHighlight>
-        );
-      });
-  };
-
-  modalContent = () => (
-    <>
-      <SafeAreaView style={{flex: 1}}>
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
-          scrollEnabled={this.state.scroll}>
-          {this.state.content}
-        </ScrollView>
-      </SafeAreaView>
-      <SafeAreaView style={styles.close}>
-        <TouchableOpacity activeOpacity={0.7} onPress={this.hide}>
-          <Svg height="20" width="20">
-            <Circle cx="10" cy="10" r="10" fill="red" />
-            <Line x1="4" y1="4" x2="16" y2="16" stroke="#fff" strokeWidth="2" />
-            <Line x1="4" y1="16" x2="16" y2="4" stroke="#fff" strokeWidth="2" />
-          </Svg>
-        </TouchableOpacity>
-      </SafeAreaView>
-    </>
-  );
-
-  render() {
-    if (process.env.E2E) {
-      console.log(
-        'Opening E2E example, as E2E env is set to ' + process.env.E2E,
-      );
-      return <E2eTestingView />;
-    }
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={commonStyles.welcome}>SVG library for React Apps</Text>
-        <View style={styles.contentContainer}>{this.getExamples()}</View>
-        {(Platform.OS === 'windows' || Platform.OS === 'macos') &&
-        this.state.modal ? (
-          <View style={styles.scroll}>{this.modalContent()}</View>
-        ) : (
-          <Modal
-            transparent={false}
-            animationType="fade"
-            visible={this.state.modal}
-            onRequestClose={this.hide}>
-            {this.modalContent()}
-          </Modal>
-        )}
-      </SafeAreaView>
-    );
-  }
+function noop() {
+  // do nothing
 }
 
-const hairline = StyleSheet.hairlineWidth;
+const EXAMPLES_NAMES = Object.keys(EXAMPLES);
+
+const Stack = createNativeStackNavigator();
+
+type RootStackParamList = {[P in keyof typeof EXAMPLES]: undefined} & {
+  Home: undefined;
+};
+
+interface HomeScreenProps {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
+}
+
+function Home({navigation}: HomeScreenProps) {
+  const [wasClicked, setWasClicked] = useState<string[]>([]);
+
+  return (
+    <SafeAreaView>
+      <FlatList
+        data={EXAMPLES_NAMES}
+        style={styles.list}
+        initialNumToRender={EXAMPLES_NAMES.length}
+        renderItem={({item: name}) => (
+          <Item
+            icon={EXAMPLES[name].icon}
+            title={EXAMPLES[name].title}
+            onPress={() => {
+              navigation.navigate(name);
+              if (!wasClicked.includes(name)) {
+                setTimeout(() => setWasClicked([...wasClicked, name]), 500);
+              }
+            }}
+            wasClicked={wasClicked.includes(name)}
+          />
+        )}
+        ItemSeparatorComponent={ItemSeparator}
+      />
+    </SafeAreaView>
+  );
+}
+
+function ItemSeparator() {
+  return <View style={styles.separator} />;
+}
+
+function BackButton(props: HeaderBackButtonProps) {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  return (
+    <HeaderBackButton {...props} onPress={() => navigation.navigate('Home')} />
+  );
+}
+
+interface ItemProps {
+  icon?: any;
+  title: string;
+  onPress: () => void;
+  wasClicked?: boolean;
+}
+
+function Item({icon, title, onPress, wasClicked}: ItemProps) {
+  return (
+    <Pressable
+      style={[styles.button, wasClicked && styles.visitedItem]}
+      onPress={onPress}>
+      {icon && (
+        <>
+          <View>{icon}</View>
+          <Text>{'   '}</Text>
+        </>
+      )}
+
+      <Text style={styles.title}>{title}</Text>
+    </Pressable>
+  );
+}
+
+// copied from https://reactnavigation.org/docs/state-persistence/
+const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1';
+
+export default function App() {
+  const [isReady, setIsReady] = useState(!__DEV__);
+  const [initialState, setInitialState] = useState();
+
+  useEffect(() => {
+    const restoreState = async () => {
+      try {
+        const initialUrl = await Linking.getInitialURL();
+
+        if (
+          Platform.OS !== 'web' &&
+          Platform.OS !== 'macos' &&
+          initialUrl == null
+        ) {
+          // Only restore state if there's no deep link and we're not on web
+          const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
+          const state = savedStateString
+            ? JSON.parse(savedStateString)
+            : undefined;
+
+          if (state !== undefined) {
+            setInitialState(state);
+          }
+        }
+      } finally {
+        setIsReady(true);
+      }
+    };
+
+    if (!isReady) {
+      restoreState().catch(noop);
+    }
+  }, [isReady]);
+
+  const persistNavigationState = useCallback((state?: NavigationState) => {
+    AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state)).catch(noop);
+  }, []);
+
+  if (!isReady) {
+    return (
+      <View style={[styles.container, styles.center]}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  return (
+    <NavigationContainer
+      initialState={initialState}
+      onStateChange={persistNavigationState}>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            headerTitle: 'SVG library for React Apps',
+          }}
+        />
+        {EXAMPLES_NAMES.map(name => (
+          <Stack.Screen
+            key={name}
+            name={name}
+            component={EXAMPLES[name].screen}
+            options={{
+              animation: 'default',
+              headerTitle: EXAMPLES[name].title,
+              title: EXAMPLES[name].title,
+              headerLeft: Platform.OS === 'web' ? BackButton : undefined,
+            }}
+          />
+        ))}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20,
+  },
+  center: {
     alignItems: 'center',
-    overflow: 'hidden',
+    justifyContent: 'center',
   },
-  contentContainer: {
-    alignSelf: 'stretch',
-    borderTopWidth: hairline,
-    borderTopColor: '#ccc',
-    borderBottomWidth: hairline,
-    borderBottomColor: '#ccc',
-    flexWrap: 'wrap',
+  list: {
+    backgroundColor: '#EFEFF4',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#DBDBE0',
+  },
+  button: {
+    flex: 1,
+    height: 60,
+    padding: 15,
     flexDirection: 'row',
-    marginHorizontal: 10,
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
-  link: {
-    height: 40,
-    alignSelf: 'stretch',
-    width: Dimensions.get('window').width / 2 - 10,
+  disabledButton: {
+    backgroundColor: 'grey',
+    opacity: 0.5,
   },
-  close: {
-    position: 'absolute',
-    right: 20,
-    top: 20,
+  title: {
+    fontSize: 16,
+    color: 'black',
   },
-  scroll: {
-    position: 'absolute',
-    top: 30,
-    right: 10,
-    bottom: 20,
-    left: 10,
-    backgroundColor: '#fff',
-  },
-  scrollContent: {
-    borderTopWidth: hairline,
-    borderTopColor: '#ccc',
+  visitedItem: {
+    backgroundColor: '#e6f0f7',
   },
 });

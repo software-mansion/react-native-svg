@@ -14,23 +14,23 @@ import {
   ClipPath,
 } from 'react-native-svg';
 
-class UseExample extends Component {
-  static title = 'Reuse svg code';
-  render() {
-    return (
-      <Svg height="100" width="300">
-        <Defs>
-          <G id="reuse-shape">
-            <Circle cx="50" cy="50" r="50" />
-            <Rect x="50" y="50" width="50" height="50" />
-            <Circle cx="50" cy="50" r="5" fill="blue" />
-          </G>
-        </Defs>
-        <Use href="#reuse-shape" x="20" y="0" />
-        <Use href="#reuse-shape" x="170" y="0" />
-      </Svg>
-    );
-  }
+function UseExample() {
+  // static title = 'Reuse svg code';
+  // render() {
+  return (
+    <Svg height="100" width="300">
+      <Defs>
+        <G id="reuse-shape">
+          <Circle cx="50" cy="50" r="50" />
+          <Rect x="50" y="50" width="50" height="50" />
+          <Circle cx="50" cy="50" r="5" fill="blue" />
+        </G>
+      </Defs>
+      <Use href="#reuse-shape" x="20" y="0" />
+      <Use href="#reuse-shape" x="170" y="0" />
+    </Svg>
+  );
+  // }
 }
 
 class UseShapes extends Component {
@@ -166,4 +166,4 @@ const icon = (
 
 const samples = [UseExample, UseShapes, DefsExample, SymbolExample];
 
-export {icon, samples};
+export {icon, UseExample};
