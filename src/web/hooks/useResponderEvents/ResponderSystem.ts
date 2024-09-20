@@ -142,12 +142,7 @@ import {
   setResponderId,
 } from './utils';
 import { ResponderTouchHistoryStore } from './ResponderTouchHistoryStore';
-
-const canUseDOM = !!(
-  typeof window !== 'undefined' &&
-  window.document &&
-  window.document.createElement
-);
+import canUseDOM from './canUseDom';
 
 /* ------------ TYPES ------------ */
 
@@ -169,29 +164,45 @@ type ResponderInstance = ActiveResponderInstance | EmptyResponderInstance;
 
 export type ResponderConfig = {
   // Direct responder events dispatched directly to responder. Do not bubble.
-  onResponderEnd?: (e?: ResponderEvent) => void;
-  onResponderGrant?: (e?: ResponderEvent) => void | boolean;
-  onResponderMove?: (e?: ResponderEvent) => void;
-  onResponderRelease?: (e?: ResponderEvent) => void;
-  onResponderReject?: (e?: ResponderEvent) => void;
-  onResponderStart?: (e?: ResponderEvent) => void;
-  onResponderTerminate?: (e?: ResponderEvent) => void;
-  onResponderTerminationRequest?: (e?: ResponderEvent) => boolean;
+  onResponderEnd?: (e: ResponderEvent) => void | null | undefined;
+  onResponderGrant?: (
+    e: ResponderEvent
+  ) => undefined | boolean | null | undefined;
+  onResponderMove?: (e: ResponderEvent) => void | null | undefined;
+  onResponderRelease?: (e: ResponderEvent) => void | null | undefined;
+  onResponderReject?: (e: ResponderEvent) => void | null | undefined;
+  onResponderStart?: (e: ResponderEvent) => void | null | undefined;
+  onResponderTerminate?: (e: ResponderEvent) => void | null | undefined;
+  onResponderTerminationRequest?: (
+    e: ResponderEvent
+  ) => boolean | null | undefined;
   // On pointer down, should this element become the responder?
-  onStartShouldSetResponder?: (e?: ResponderEvent) => boolean;
-  onStartShouldSetResponderCapture?: (e?: ResponderEvent) => boolean;
+  onStartShouldSetResponder?: (e: ResponderEvent) => boolean | null | undefined;
+  onStartShouldSetResponderCapture?: (
+    e: ResponderEvent
+  ) => boolean | null | undefined;
   // On pointer move, should this element become the responder?
-  onMoveShouldSetResponder?: (e?: ResponderEvent) => boolean;
-  onMoveShouldSetResponderCapture?: (e?: ResponderEvent) => boolean;
+  onMoveShouldSetResponder?: (e: ResponderEvent) => boolean | null | undefined;
+  onMoveShouldSetResponderCapture?: (
+    e: ResponderEvent
+  ) => boolean | null | undefined;
   // On scroll, should this element become the responder? Do no bubble
-  onScrollShouldSetResponder?: (e?: ResponderEvent) => boolean;
-  onScrollShouldSetResponderCapture?: (e?: ResponderEvent) => boolean;
+  onScrollShouldSetResponder?: (
+    e: ResponderEvent
+  ) => boolean | null | undefined;
+  onScrollShouldSetResponderCapture?: (
+    e: ResponderEvent
+  ) => boolean | null | undefined;
   // On text selection change, should this element become the responder?
-  onSelectionChangeShouldSetResponder?: (e?: ResponderEvent) => boolean;
-  onSelectionChangeShouldSetResponderCapture?: (e?: ResponderEvent) => boolean;
+  onSelectionChangeShouldSetResponder?: (
+    e: ResponderEvent
+  ) => boolean | null | undefined;
+  onSelectionChangeShouldSetResponderCapture?: (
+    e: ResponderEvent
+  ) => boolean | null | undefined;
 };
 
-const emptyObject = {};
+const emptyObject: Record<string, any> = {};
 
 /* ------------ IMPLEMENTATION ------------ */
 
@@ -210,15 +221,15 @@ const scrollRegistration = [
   'onScrollShouldSetResponder',
   { bubbles: false },
 ];
-const shouldSetResponderEvents: any = {
+const shouldSetResponderEvents = {
   touchstart: startRegistration,
   mousedown: startRegistration,
   touchmove: moveRegistration,
   mousemove: moveRegistration,
   scroll: scrollRegistration,
-};
+} as const;
 
-const emptyResponder = { id: null, idPath: null, node: null };
+const emptyResponder = { id: null, idPath: null, node: null } as const;
 const responderListenersMap = new Map();
 
 let isEmulatingMouseEvents = false;
@@ -234,11 +245,11 @@ function changeCurrentResponder(responder: ResponderInstance) {
   currentResponder = responder;
 }
 
-function getResponderConfig(id: ResponderId): ResponderConfig {
+function getResponderConfig(id: ResponderId): ResponderConfig | any {
   const config = responderListenersMap.get(id);
   return config != null ? config : emptyObject;
 }
-
+type EventPath = { idPath: number[]; nodePath: any[] } | null;
 /**
  * Process native events
  *
@@ -320,7 +331,7 @@ function eventListener(domEvent: any) {
    * Responder System logic
    */
 
-  let eventPaths = getResponderPaths(domEvent);
+  let eventPaths: EventPath | null = getResponderPaths(domEvent);
   let wasNegotiated = false;
   let wantsResponder;
 
@@ -329,7 +340,7 @@ function eventListener(domEvent: any) {
     // If there is already a responder, prune the event paths to the lowest common ancestor
     // of the existing responder and deepest target of the event.
     const currentResponderIdPath = currentResponder.idPath;
-    const eventIdPath = eventPaths!.idPath;
+    const eventIdPath = eventPaths.idPath;
 
     if (currentResponderIdPath != null && eventIdPath != null) {
       const lowestCommonAncestor = getLowestCommonAncestor(
@@ -345,7 +356,7 @@ function eventListener(domEvent: any) {
           (lowestCommonAncestor === currentResponder.id ? 1 : 0);
         eventPaths = {
           idPath: eventIdPath.slice(index),
-          nodePath: eventPaths!.nodePath.slice(index),
+          nodePath: eventPaths.nodePath.slice(index),
         };
       } else {
         eventPaths = null;
@@ -473,12 +484,16 @@ function eventListener(domEvent: any) {
  * call "stopPropagation" on the event, stop searching for a responder.
  */
 function findWantsResponder(
-  eventPaths: any,
+  eventPaths: {
+    idPath: Array<number>;
+    nodePath: Array<any>;
+  },
   domEvent: any,
   responderEvent: any
 ) {
-  const domEventType = (domEvent as any)?.type;
-  const shouldSetCallbacks = shouldSetResponderEvents[domEventType];
+  const shouldSetCallbacks = (shouldSetResponderEvents as any)[
+    domEvent.type as any
+  ]; // for Flow
 
   if (shouldSetCallbacks != null) {
     const { idPath, nodePath } = eventPaths;
@@ -487,11 +502,7 @@ function findWantsResponder(
     const shouldSetCallbackBubbleName = shouldSetCallbacks[1];
     const { bubbles } = shouldSetCallbacks[2];
 
-    const check = function (
-      id: any,
-      node: any,
-      callbackName: keyof ResponderConfig
-    ) {
+    const check = function (id: number, node: any, callbackName: any) {
       const config = getResponderConfig(id);
       const shouldSetCallback = config[callbackName];
       if (shouldSetCallback != null) {
@@ -632,9 +643,7 @@ const documentEventsBubblePhase = [
   'selectionchange',
 ];
 export function attachListeners() {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  if (canUseDOM && window.__reactResponderSystemActive == null) {
+  if (canUseDOM && (window as any).__reactResponderSystemActive == null) {
     window.addEventListener('blur', eventListener);
     documentEventsBubblePhase.forEach((eventType) => {
       document.addEventListener(eventType, eventListener);
@@ -642,9 +651,7 @@ export function attachListeners() {
     documentEventsCapturePhase.forEach((eventType) => {
       document.addEventListener(eventType, eventListener, true);
     });
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    window.__reactResponderSystemActive = true;
+    (window as any).__reactResponderSystemActive = true;
   }
 }
 

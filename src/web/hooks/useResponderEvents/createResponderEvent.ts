@@ -3,13 +3,14 @@ import type {
   TouchHistory,
 } from './ResponderTouchHistoryStore';
 import type { TouchEvent } from './ResponderEventTypes';
+
 import getBoundingClientRect from './getBoundingClientRect';
 
 export type ResponderEvent = {
   bubbles: boolean;
   cancelable: boolean;
   currentTarget: any;
-  defaultPrevented?: boolean;
+  defaultPrevented: boolean | null | undefined;
   dispatchConfig: {
     registrationName?: string;
     phasedRegistrationNames?: {
@@ -17,30 +18,30 @@ export type ResponderEvent = {
       captured: string;
     };
   };
-  eventPhase?: number;
+  eventPhase: number | null | undefined;
   isDefaultPrevented: () => boolean;
   isPropagationStopped: () => boolean;
-  isTrusted?: boolean;
+  isTrusted: boolean | null | undefined;
   preventDefault: () => void;
   stopPropagation: () => void;
   nativeEvent: TouchEvent;
   persist: () => void;
-  target?: any;
+  target: any | null | undefined;
   timeStamp: number;
   touchHistory: TouchHistory;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const emptyFunction = () => {};
-const emptyObject = {};
-const emptyArray: any[] = [];
+const emptyObject: Record<string, any> = {};
+const emptyArray: Array<Touch> = [];
 
 /**
  * Safari produces very large identifiers that would cause the `touchBank` array
  * length to be so large as to crash the browser, if not normalized like this.
  * In the future the `touchBank` should use an object/map instead.
  */
-function normalizeIdentifier(identifier: number): number {
+function normalizeIdentifier(identifier: any) {
   return identifier > 20 ? identifier % 20 : identifier;
 }
 
@@ -54,7 +55,7 @@ export default function createResponderEvent(
 ): ResponderEvent {
   let rect: any;
   let propagationWasStopped = false;
-  let changedTouches: any;
+  let changedTouches;
   let touches;
 
   const domEventChangedTouches = domEvent.changedTouches;
@@ -175,23 +176,23 @@ export default function createResponderEvent(
     target: domEvent.target,
     timeStamp: timestamp,
     touchHistory: responderTouchHistoryStore.touchHistory,
-  };
+  } as const;
 
   // Using getters and functions serves two purposes:
   // 1) The value of `currentTarget` is not initially available.
   // 2) Measuring the clientRect may cause layout jank and should only be done on-demand.
-  function locationX(x: number) {
+  function locationX(x: any): any {
     rect = rect || getBoundingClientRect(responderEvent.currentTarget);
     if (rect) {
       return x - rect.left;
     }
   }
-  function locationY(y: number) {
+  function locationY(y: any): any {
     rect = rect || getBoundingClientRect(responderEvent.currentTarget);
     if (rect) {
       return y - rect.top;
     }
   }
 
-  return responderEvent;
+  return responderEvent as ResponderEvent;
 }

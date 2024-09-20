@@ -5,6 +5,7 @@ import type {
   NumberProp,
   TransformProps,
 } from '../lib/extract/types';
+// import { PressResponderConfig } from '../web/hooks/usePressEvents/PressResponder';
 
 export interface CreateComponentProps extends BaseProps {
   tag: keyof React.JSX.IntrinsicElements;
@@ -14,13 +15,13 @@ export interface CreateComponentProps extends BaseProps {
 export interface Props extends ResponderConfig {
   onBlur?: (e: BlurEvent) => void;
   onFocus?: (e: FocusEvent) => void;
-  onLayout?: (event: LayoutEvent) => object;
-  onLongPress?: (event: PressEvent) => object;
-  onPressMove?: (event: PressEvent) => object;
-  onClick?: (event: PressEvent) => object;
-  onPress?: (event: PressEvent) => object;
-  onPressIn?: (event: PressEvent) => object;
-  onPressOut?: (event: PressEvent) => object;
+  onLayout?: (event: LayoutEvent) => void | null | undefined;
+  onLongPress?: (event: PressEvent) => void | null | undefined;
+  onPressMove?: (event: PressEvent) => void | null | undefined;
+  onClick?: (event: PressEvent) => void | null | undefined;
+  onPress?: (event: PressEvent) => void | null | undefined;
+  onPressIn?: (event: PressEvent) => void | null | undefined;
+  onPressOut?: (event: PressEvent) => void | null | undefined;
 }
 
 type BlurEvent = object;

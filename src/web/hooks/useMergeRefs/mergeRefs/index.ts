@@ -1,16 +1,6 @@
 import * as React from 'react';
 
-export default function useMergeRefs(
-  ...args: ReadonlyArray<React.ElementRef<any>>
-): (node: HTMLElement | null) => void {
-  return React.useMemo(
-    () => mergeRefs(...args),
-    // eslint-disable-next-line
-    [...args]
-  );
-}
-
-function mergeRefs(
+export default function mergeRefs(
   ...args: ReadonlyArray<React.ElementRef<any>>
 ): (node: HTMLElement | null) => void {
   return function forwardRef(node: HTMLElement | null) {

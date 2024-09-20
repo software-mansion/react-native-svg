@@ -3,7 +3,10 @@ import {
   // @ts-ignore it is not seen in exports
   unstable_createElement as createElement,
 } from 'react-native';
-import useMergeRefs from './hooks/useMergeRefs';
+// eslint-disable-next-line import/no-unresolved, @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import useMergeRefs from 'react-native-web/dist/modules/useMergeRefs';
+// import useMergeRefs from './hooks/useMergeRefs';
 import { type CreateComponentProps } from '../types';
 import { prepare } from './utils/prepare';
 import { useHandleEvents } from './hooks/useHandleEvents';

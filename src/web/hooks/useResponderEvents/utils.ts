@@ -19,7 +19,7 @@ function getEventPath(domEvent: any): Array<any> {
 }
 
 function composedPathFallback(target: any): Array<any> {
-  const path = [];
+  const path: Array<any> = [];
   while (target != null && target !== document.body) {
     path.push(target);
     target = target.parentNode;
@@ -30,7 +30,7 @@ function composedPathFallback(target: any): Array<any> {
 /**
  * Retrieve the responderId from a host node
  */
-function getResponderId(node: any): number | null {
+function getResponderId(node: any): number | null | undefined {
   if (node != null) {
     return node[keyName];
   }
@@ -52,9 +52,9 @@ export function setResponderId(node: any, id: number) {
 export function getResponderPaths(domEvent: any): {
   idPath: Array<number>;
   nodePath: Array<any>;
-} | null {
-  const idPath = [];
-  const nodePath = [];
+} {
+  const idPath: Array<number> = [];
+  const nodePath: Array<any> = [];
   const eventPath = getEventPath(domEvent);
   for (let i = 0; i < eventPath.length; i++) {
     const node = eventPath[i];
@@ -143,7 +143,7 @@ export function hasTargetTouches(target: any, touches: any): boolean {
  */
 export function hasValidSelection(domEvent: any): boolean {
   if (domEvent.type === 'selectionchange') {
-    return isSelectionValid() || false;
+    return isSelectionValid();
   }
   return domEvent.type === 'select';
 }

@@ -47,28 +47,28 @@ export const SCROLL = 'scroll';
 export const SELECT = 'select';
 export const SELECTION_CHANGE = 'selectionchange';
 
-export function isStartish(eventType: any): boolean {
+export function isStartish(eventType: unknown): boolean {
   return eventType === TOUCH_START || eventType === MOUSE_DOWN;
 }
 
-export function isMoveish(eventType: any): boolean {
+export function isMoveish(eventType: unknown): boolean {
   return eventType === TOUCH_MOVE || eventType === MOUSE_MOVE;
 }
 
-export function isEndish(eventType: any): boolean {
+export function isEndish(eventType: unknown): boolean {
   return (
     eventType === TOUCH_END || eventType === MOUSE_UP || isCancelish(eventType)
   );
 }
 
-export function isCancelish(eventType: any): boolean {
+export function isCancelish(eventType: unknown): boolean {
   return eventType === TOUCH_CANCEL || eventType === MOUSE_CANCEL;
 }
 
-export function isScroll(eventType: any): boolean {
+export function isScroll(eventType: unknown): boolean {
   return eventType === SCROLL;
 }
 
-export function isSelectionChange(eventType: any): boolean {
+export function isSelectionChange(eventType: unknown): boolean {
   return eventType === SELECT || eventType === SELECTION_CHANGE;
 }

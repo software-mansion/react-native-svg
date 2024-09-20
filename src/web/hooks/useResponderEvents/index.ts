@@ -1,8 +1,19 @@
-import * as React from 'react';
+/**
+ * Hook for integrating the Responder System into React
+ *
+ *   function SomeComponent({ onStartShouldSetResponder }) {
+ *     const ref = useRef(null);
+ *     useResponderEvents(ref, { onStartShouldSetResponder });
+ *     return <div ref={ref} />
+ *   }
+ */
+
 import type { ResponderConfig } from './ResponderSystem';
+
+import * as React from 'react';
 import * as ResponderSystem from './ResponderSystem';
 
-const emptyObject = {};
+const emptyObject: Record<string, any> = {};
 let idCounter = 0;
 
 function useStable<T>(getInitialValue: () => T): T {

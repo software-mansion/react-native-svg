@@ -14,12 +14,12 @@ type TouchRecord = {
   touchActive: boolean;
 };
 
-export type TouchHistory = Readonly<{
+export type TouchHistory = {
   indexOfSingleActiveTouch: number;
   mostRecentTimeStamp: number;
   numberActiveTouches: number;
   touchBank: Array<TouchRecord>;
-}>;
+};
 
 /**
  * Tracks the position and time of each active touch by `touch.identifier`. We
@@ -85,7 +85,7 @@ function getTouchIdentifier({ identifier }: Touch): number {
   return identifier;
 }
 
-function recordTouchStart(touch: Touch, touchHistory: any): void {
+function recordTouchStart(touch: Touch, touchHistory: TouchHistory): void {
   const identifier = getTouchIdentifier(touch);
   const touchRecord = touchHistory.touchBank[identifier];
   if (touchRecord) {
@@ -96,7 +96,7 @@ function recordTouchStart(touch: Touch, touchHistory: any): void {
   touchHistory.mostRecentTimeStamp = timestampForTouch(touch);
 }
 
-function recordTouchMove(touch: Touch, touchHistory: any): void {
+function recordTouchMove(touch: Touch, touchHistory: TouchHistory): void {
   const touchRecord = touchHistory.touchBank[getTouchIdentifier(touch)];
   if (touchRecord) {
     touchRecord.touchActive = true;
@@ -116,7 +116,7 @@ function recordTouchMove(touch: Touch, touchHistory: any): void {
   }
 }
 
-function recordTouchEnd(touch: Touch, touchHistory: any): void {
+function recordTouchEnd(touch: Touch, touchHistory: TouchHistory): void {
   const touchRecord = touchHistory.touchBank[getTouchIdentifier(touch)];
   if (touchRecord) {
     touchRecord.touchActive = false;
@@ -145,7 +145,7 @@ function printTouch(touch: Touch): string {
   });
 }
 
-function printTouchBank(touchHistory: any): string {
+function printTouchBank(touchHistory: TouchHistory): string {
   const { touchBank } = touchHistory;
   let printed = JSON.stringify(touchBank.slice(0, MAX_TOUCH_BANK));
   if (touchBank.length > MAX_TOUCH_BANK) {
@@ -156,7 +156,7 @@ function printTouchBank(touchHistory: any): string {
 
 export class ResponderTouchHistoryStore {
   _touchHistory = {
-    touchBank: [],
+    touchBank: [], // Array<TouchRecord>
     numberActiveTouches: 0,
     // If there is only one active touch, we remember its location. This prevents
     // us having to loop through all of the touches all the time in the most
@@ -168,11 +168,11 @@ export class ResponderTouchHistoryStore {
   recordTouchTrack(topLevelType: string, nativeEvent: TouchEvent): void {
     const touchHistory = this._touchHistory;
     if (isMoveish(topLevelType)) {
-      nativeEvent.changedTouches.forEach((touch: any) =>
+      nativeEvent.changedTouches.forEach((touch) =>
         recordTouchMove(touch, touchHistory)
       );
     } else if (isStartish(topLevelType)) {
-      nativeEvent.changedTouches.forEach((touch: any) =>
+      nativeEvent.changedTouches.forEach((touch) =>
         recordTouchStart(touch, touchHistory)
       );
       touchHistory.numberActiveTouches = nativeEvent.touches.length;
@@ -181,23 +181,22 @@ export class ResponderTouchHistoryStore {
           nativeEvent.touches[0].identifier;
       }
     } else if (isEndish(topLevelType)) {
-      nativeEvent.changedTouches.forEach((touch: any) =>
+      nativeEvent.changedTouches.forEach((touch) =>
         recordTouchEnd(touch, touchHistory)
       );
       touchHistory.numberActiveTouches = nativeEvent.touches.length;
       if (touchHistory.numberActiveTouches === 1) {
-        const { touchBank } = touchHistory;
+        const { touchBank } = touchHistory as TouchHistory;
         for (let i = 0; i < touchBank.length; i++) {
-          const touchTrackToCheck: any = touchBank[i];
-          if (touchTrackToCheck != null && touchTrackToCheck?.touchActive) {
+          const touchTrackToCheck = touchBank[i];
+          if (touchTrackToCheck != null && touchTrackToCheck.touchActive) {
             touchHistory.indexOfSingleActiveTouch = i;
             break;
           }
         }
         if (__DEV__) {
-          const activeRecord: any =
-            touchBank[touchHistory.indexOfSingleActiveTouch];
-          if (!(activeRecord != null && activeRecord?.touchActive)) {
+          const activeRecord = touchBank[touchHistory.indexOfSingleActiveTouch];
+          if (!(activeRecord != null && activeRecord.touchActive)) {
             console.error('Cannot find single active touch.');
           }
         }

@@ -1,5 +1,14 @@
-'use strict';
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @flow strict-local
+ * @format
+ */
 
+'use strict';
 type ClickEvent = any;
 type KeyboardEvent = any;
 type ResponderEvent = any;
@@ -7,28 +16,28 @@ type ResponderEvent = any;
 export type PressResponderConfig = Readonly<{
   // The gesture can be interrupted by a parent gesture, e.g., scroll.
   // Defaults to true.
-  cancelable?: boolean;
+  cancelable?: boolean | null | undefined;
   // Whether to disable initialization of the press gesture.
-  disabled?: boolean;
+  disabled?: boolean | null | undefined;
   // Duration (in addition to `delayPressStart`) after which a press gesture is
   // considered a long press gesture. Defaults to 500 (milliseconds).
-  delayLongPress?: number;
+  delayLongPress?: number | null | undefined;
   // Duration to wait after press down before calling `onPressStart`.
-  delayPressStart?: number;
+  delayPressStart?: number | null | undefined;
   // Duration to wait after letting up before calling `onPressEnd`.
-  delayPressEnd?: number;
+  delayPressEnd?: number | null | undefined;
   // Called when a long press gesture has been triggered.
-  onLongPress?: (event?: ResponderEvent) => void;
+  onLongPress?: (event: ResponderEvent) => void | null | undefined;
   // Called when a press gestute has been triggered.
-  onPress?: (event?: ClickEvent) => void;
+  onPress?: (event: ClickEvent) => void | null | undefined;
   // Called when the press is activated to provide visual feedback.
-  onPressChange?: (event?: ResponderEvent) => void;
+  onPressChange?: (event: ResponderEvent) => void | null | undefined;
   // Called when the press is activated to provide visual feedback.
-  onPressStart?: (event?: ResponderEvent) => void;
+  onPressStart?: (event: ResponderEvent) => void | null | undefined;
   // Called when the press location moves. (This should rarely be used.)
-  onPressMove?: (event?: ResponderEvent) => void;
+  onPressMove?: (event: ResponderEvent) => void | null | undefined;
   // Called when the press is deactivated to undo visual feedback.
-  onPressEnd?: (event?: ResponderEvent) => void;
+  onPressEnd?: (event: ResponderEvent) => void | null | undefined;
 }>;
 
 export type EventHandlers = Readonly<{
@@ -110,21 +119,21 @@ const getElementRole = (element: any) => element.getAttribute('role');
 
 const getElementType = (element: any) => element.tagName.toLowerCase();
 
-const isActiveSignal = (signal: any) =>
+const isActiveSignal = (signal: TouchState) =>
   signal === RESPONDER_ACTIVE_PRESS_START ||
   signal === RESPONDER_ACTIVE_LONG_PRESS_START;
 
 const isButtonRole = (element: any) => getElementRole(element) === 'button';
 
-const isPressStartSignal = (signal: any) =>
+const isPressStartSignal = (signal: TouchState) =>
   signal === RESPONDER_INACTIVE_PRESS_START ||
   signal === RESPONDER_ACTIVE_PRESS_START ||
   signal === RESPONDER_ACTIVE_LONG_PRESS_START;
 
-const isTerminalSignal = (signal: any) =>
+const isTerminalSignal = (signal: TouchSignal) =>
   signal === RESPONDER_TERMINATED || signal === RESPONDER_RELEASE;
 
-const isValidKeyPress = (event: any) => {
+const isValidKeyPress = (event: KeyboardEvent) => {
   const { key, target } = event;
   const isSpacebar = key === ' ' || key === 'Spacebar';
   const isButtonish =
@@ -211,20 +220,23 @@ const DEFAULT_PRESS_DELAY_MS = 50;
  */
 export default class PressResponder {
   _config!: PressResponderConfig;
-  _eventHandlers?: EventHandlers | null = null;
-  _isPointerTouch?: boolean = false;
-  _longPressDelayTimeout?: NodeJS.Timeout | null = null;
-  _longPressDispatched?: boolean = false;
-  _pressDelayTimeout?: NodeJS.Timeout | null = null;
-  _pressOutDelayTimeout: NodeJS.Timeout | null = null;
-  _selectionTerminated?: boolean;
-  _touchActivatePosition?: Readonly<{
-    pageX: number;
-    pageY: number;
-  }> | null;
+  _eventHandlers: EventHandlers | null | undefined = null;
+  _isPointerTouch: boolean | null | undefined = false;
+  _longPressDelayTimeout: NodeJS.Timeout | null | undefined = null;
+  _longPressDispatched: boolean | null | undefined = false;
+  _pressDelayTimeout: NodeJS.Timeout | null | undefined = null;
+  _pressOutDelayTimeout: NodeJS.Timeout | null | undefined = null;
+  _selectionTerminated: boolean | null | undefined;
+  _touchActivatePosition:
+    | Readonly<{
+        pageX: number;
+        pageY: number;
+      }>
+    | null
+    | undefined;
 
   _touchState: TouchState = NOT_RESPONDER;
-  _responderElement?: HTMLElement | null = null;
+  _responderElement: HTMLElement | null | undefined = null;
 
   constructor(config: PressResponderConfig) {
     this.configure(config);
@@ -232,7 +244,6 @@ export default class PressResponder {
 
   configure(config: PressResponderConfig): void {
     this._config = config;
-    console.log(config, 'config');
   }
 
   /**
@@ -268,7 +279,7 @@ export default class PressResponder {
       this._receiveSignal(RESPONDER_GRANT, event);
 
       const delayPressStart = normalizeDelay(
-        this._config?.delayPressStart,
+        this._config.delayPressStart,
         0,
         DEFAULT_PRESS_DELAY_MS
       );
@@ -282,7 +293,7 @@ export default class PressResponder {
       }
 
       const delayLongPress = normalizeDelay(
-        this._config?.delayLongPress,
+        this._config.delayLongPress,
         10,
         DEFAULT_LONG_PRESS_DELAY_MS
       );
@@ -364,8 +375,8 @@ export default class PressResponder {
       onResponderGrant: (event) => start(event),
 
       onResponderMove: (event) => {
-        if (this._config?.onPressMove != null) {
-          this._config?.onPressMove(event);
+        if (this._config.onPressMove != null) {
+          this._config.onPressMove(event);
         }
         const touch = getTouchFromResponderEvent(event);
         if (this._touchActivatePosition != null) {
@@ -460,7 +471,7 @@ export default class PressResponder {
   _receiveSignal(signal: TouchSignal, event: ResponderEvent): void {
     const prevState = this._touchState;
     let nextState = null;
-    if (prevState && Transitions[prevState] != null) {
+    if (Transitions[prevState] != null) {
       nextState = Transitions[prevState][signal];
     }
     if (this._touchState === NOT_RESPONDER && signal === RESPONDER_RELEASE) {
@@ -470,7 +481,7 @@ export default class PressResponder {
       console.error(
         `PressResponder: Invalid signal ${signal} for state ${prevState} on responder`
       );
-    } else if (!!prevState && !!nextState && prevState !== nextState) {
+    } else if (prevState !== nextState) {
       this._performTransitionSideEffects(
         prevState,
         nextState as TouchState,
@@ -565,7 +576,7 @@ export default class PressResponder {
         onPressChange(false);
       }
     }
-    const delayPressEnd = normalizeDelay(this._config?.delayPressEnd);
+    const delayPressEnd = normalizeDelay(this._config.delayPressEnd);
     if (delayPressEnd > 0) {
       this._pressOutDelayTimeout = setTimeout(() => {
         end();
@@ -606,7 +617,7 @@ export default class PressResponder {
   }
 }
 
-function normalizeDelay(delay?: number, min = 0, fallback = 0): number {
+function normalizeDelay(delay?: number | null, min = 0, fallback = 0): number {
   return Math.max(min, delay ?? fallback);
 }
 
