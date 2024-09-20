@@ -3,8 +3,6 @@ import {Alert, Platform} from 'react-native';
 import {Svg, Circle, Text, Rect, Defs, ClipPath, Image} from 'react-native-svg';
 
 function ImageExample() {
-  // static title = 'Draw Image with preserveAspectRatio prop';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Defs>
@@ -35,12 +33,10 @@ function ImageExample() {
       </Text>
     </Svg>
   );
-  // }
 }
+ImageExample.title = 'Draw Image with preserveAspectRatio prop';
 
 function ClipImage() {
-  // static title = 'Clip Image';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Defs>
@@ -69,12 +65,10 @@ function ClipImage() {
       </Text>
     </Svg>
   );
-  // }
 }
+ClipImage.title = 'Clip Image';
 
 function DataURI() {
-  // static title = 'Data URI';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Image
@@ -87,8 +81,8 @@ function DataURI() {
       />
     </Svg>
   );
-  // }
 }
+DataURI.title = 'Data URI';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">

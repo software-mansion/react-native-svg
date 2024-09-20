@@ -20,7 +20,16 @@ export default function composeComponents(components: any[]) {
         }}>
         {components.map((Component, index) => (
           <Fragment key={index}>
-            {Component.title && <Text>{Component.title}</Text>}
+            {Component.title && (
+              <Text
+                style={{
+                  marginHorizontal: 20,
+                  textAlign: 'center',
+                  marginBottom: 5,
+                }}>
+                {Component.title}
+              </Text>
+            )}
             <Component />
             {index !== components.length - 1 && <Separator />}
           </Fragment>

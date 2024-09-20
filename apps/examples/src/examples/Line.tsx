@@ -2,17 +2,15 @@ import React, {Component} from 'react';
 import {Svg, Line} from 'react-native-svg';
 
 function LineExample() {
-  // static title = 'Line';
   return (
     <Svg height="100" width="100">
       <Line x1="10%" y1="10%" x2="90%" y2="90%" stroke="red" strokeWidth="2" />
     </Svg>
   );
 }
+LineExample.title = 'Line';
 
 function LineWithStrokeLinecap() {
-  // static title = 'Line';
-  // render() {
   return (
     <Svg height="100" width="200">
       <Line
@@ -44,8 +42,8 @@ function LineWithStrokeLinecap() {
       />
     </Svg>
   );
-  // }
 }
+LineWithStrokeLinecap.title = 'Line';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">

@@ -1,26 +1,24 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {Svg, Circle, G, Text, Line, Rect, Use} from 'react-native-svg';
 
-function GExample() {
+const GExample = () => {
   const [fill, setFill] = useState('purple');
-  // static title = 'G children props inherit';
-  // state = {
-  //   fill: 'purple',
-  // };
-  // componentDidMount = () => {
-  //   setTimeout(() => {
-  //     if (!this._unmounted) {
-  //       this.setState({
-  //         fill: '#856',
-  //       });
-  //     }
-  //   }, 2000);
-  // };
-  // componentWillUnmount = () => {
-  //   this._unmounted = true;
-  // };
-  // private _unmounted: any;
-  // render() {
+
+  useEffect(() => {
+    let mounted = true;
+
+    const timer = setTimeout(() => {
+      if (mounted) {
+        setFill('#856');
+      }
+    }, 2000);
+
+    return () => {
+      mounted = false;
+      clearTimeout(timer);
+    };
+  }, []);
+
   return (
     <Svg height="100" width="100">
       <G fill={fill} stroke="pink" strokeWidth="3">
@@ -32,12 +30,11 @@ function GExample() {
       </G>
     </Svg>
   );
-  // }
-}
+};
+
+GExample.title = 'G children props inherit';
 
 function GTransform() {
-  // static title = 'G transform';
-  // render() {
   return (
     <Svg height="100" width="200">
       <G rotation="50" origin="40, 30" id="group">
@@ -72,8 +69,8 @@ function GTransform() {
       />
     </Svg>
   );
-  // }
 }
+GTransform.title = 'G transform';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">

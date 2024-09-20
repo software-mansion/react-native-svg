@@ -12,8 +12,6 @@ import {
 } from 'react-native-svg';
 
 function EllipseExample() {
-  // static title = 'Circle shaped marker on ellipse';
-  // render() {
   return (
     <Svg height="300" width="400">
       <Defs>
@@ -45,12 +43,10 @@ function EllipseExample() {
       />
     </Svg>
   );
-  // }
 }
+EllipseExample.title = 'Circle shaped marker on ellipse';
 
 function LineExample() {
-  // static title = 'Triangle shaped marker on line';
-  // render() {
   return (
     <Svg height="200" width="200">
       <Defs>
@@ -79,12 +75,10 @@ function LineExample() {
       />
     </Svg>
   );
-  // }
 }
+LineExample.title = 'Triangle shaped marker on line';
 
 function CircleExample() {
-  // static title = 'Rect shaped marker on circle';
-  // render() {
   return (
     <Svg height="150" width="200">
       <Defs>
@@ -109,12 +103,10 @@ function CircleExample() {
       />
     </Svg>
   );
-  // }
 }
+CircleExample.title = 'Rect shaped marker on circle';
 
 function RectExample() {
-  // static title = 'Ellipse shaped marker on rect';
-  // render() {
   return (
     <Svg width="400" height="200" viewBox="0 0 100 100">
       <Defs>
@@ -147,12 +139,10 @@ function RectExample() {
       />
     </Svg>
   );
-  // }
 }
+RectExample.title = 'Ellipse shaped marker on rect';
 
 function PathExample() {
-  // static title = 'Path shaped marker on line';
-  // render() {
   return (
     <Svg height="200" width="400" viewBox="0 0 300 100">
       <Defs>
@@ -179,8 +169,8 @@ function PathExample() {
       />
     </Svg>
   );
-  // }
 }
+PathExample.title = 'Path shaped marker on line';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 3000 2500">

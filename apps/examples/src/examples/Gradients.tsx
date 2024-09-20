@@ -13,9 +13,6 @@ import {
 } from 'react-native-svg';
 
 function LinearGradientHorizontal() {
-  // static title =
-  //   'Define an ellipse with a horizontal linear gradient from yellow to red';
-  // render() {
   return (
     <Svg height="150" width="300">
       <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad-1)" />
@@ -33,13 +30,11 @@ function LinearGradientHorizontal() {
       </Defs>
     </Svg>
   );
-  // }
 }
+LinearGradientHorizontal.title =
+  'Define an ellipse with a horizontal linear gradient from yellow to red';
 
 function LinearGradientHorizontalBug() {
-  // static title =
-  //   'Define an ellipse with a horizontal linear gradient from transparent yellow to red, buggy on android';
-  // render() {
   return (
     <Svg height="150" width="300">
       <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad-1-bug)" />
@@ -57,13 +52,11 @@ function LinearGradientHorizontalBug() {
       </Defs>
     </Svg>
   );
-  // }
 }
+LinearGradientHorizontalBug.title =
+  'Define an ellipse with a horizontal linear gradient from transparent yellow to red, buggy on android';
 
 function LinearGradientRotated() {
-  // static title =
-  //   'Define an ellipse with a rotated linear gradient from yellow to red';
-  // render() {
   return (
     <Svg height="150" width="300">
       <Defs>
@@ -75,12 +68,11 @@ function LinearGradientRotated() {
       <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad-2)" />
     </Svg>
   );
-  // }
 }
+LinearGradientRotated.title =
+  'Define an ellipse with a rotated linear gradient from yellow to red';
 
 function GradientUnits() {
-  // static title = 'Compare gradientUnits="userSpaceOnUse" with default';
-  // render() {
   return (
     <View
       style={{
@@ -131,12 +123,10 @@ function GradientUnits() {
       </Svg>
     </View>
   );
-  // }
 }
+GradientUnits.title = 'Compare gradientUnits="userSpaceOnUse" with default';
 
 function LinearGradientPercent() {
-  // static title = 'Define a linear gradient in percent unit';
-  // render() {
   return (
     <Svg height="150" width="300">
       <Defs>
@@ -154,13 +144,10 @@ function LinearGradientPercent() {
       <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad-3)" />
     </Svg>
   );
-  // }
 }
+LinearGradientPercent.title = 'Define a linear gradient in percent unit';
 
 function RadialGradientExample() {
-  // static title =
-  //   'Define an ellipse with a radial gradient from yellow to purple';
-  // render() {
   return (
     <Svg height="150" width="300">
       <Defs>
@@ -181,12 +168,11 @@ function RadialGradientExample() {
       <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad-4)" />
     </Svg>
   );
-  // }
 }
+RadialGradientExample.title =
+  'Define an ellipse with a radial gradient from yellow to purple';
 
 function RadialGradientPercent() {
-  // static title = 'Define a radial gradient in percent unit';
-  // render() {
   return (
     <Svg height="150" width="300">
       <Defs>
@@ -205,13 +191,10 @@ function RadialGradientPercent() {
       <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad-5)" />
     </Svg>
   );
-  // }
 }
+RadialGradientPercent.title = 'Define a radial gradient in percent unit';
 
 function RadialGradientPart() {
-  // static title =
-  //   'Define another ellipse with a radial gradient from white to blue';
-  // render() {
   return (
     <Svg height="150" width="300">
       <Defs>
@@ -223,12 +206,11 @@ function RadialGradientPart() {
       <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad-6)" />
     </Svg>
   );
-  // }
 }
+RadialGradientPart.title =
+  'Define another ellipse with a radial gradient from white to blue';
 
 function FillGradientWithOpacity() {
-  // static title = 'Fill a radial gradient with fillOpacity prop';
-  // render() {
   return (
     <Svg height="150" width="300">
       <Defs>
@@ -247,12 +229,10 @@ function FillGradientWithOpacity() {
       />
     </Svg>
   );
-  // }
 }
+FillGradientWithOpacity.title = 'Fill a radial gradient with fillOpacity prop';
 
 function FillGradientInRect() {
-  // static title = 'Fill a radial gradient inside a rect and stroke it';
-  // render() {
   return (
     <Svg height="150" width="300">
       <Defs>
@@ -272,8 +252,8 @@ function FillGradientInRect() {
       />
     </Svg>
   );
-  // }
 }
+FillGradientInRect.title = 'Fill a radial gradient inside a rect and stroke it';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
