@@ -30,6 +30,7 @@ import com.facebook.react.views.view.ReactViewGroup;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -375,7 +376,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
     Integer quality = options.hasKey("quality") ? options.getInt("quality") : null;
     String format = options.hasKey("format") ? options.getString("format") : null;
-    if (format.equals("jpeg")) {
+    if (Objects.equals(format, "jpeg")) {
       int qualityValue = (quality != null) ? Math.round(quality * 100) : 100;
       bitmap.compress(Bitmap.CompressFormat.JPEG, qualityValue, stream);
     } else {
