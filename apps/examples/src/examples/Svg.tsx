@@ -140,17 +140,17 @@ class SvgNativeMethods extends Component {
     base64: null,
   };
 
+  size = {width: 150, height: 100};
+
   optionsWithJPEGFormat: DataUrlOptions = {
     format: 'jpeg',
-    width: 150,
-    height: 100,
     quality: 1,
+    size: {width: 150, height: 100},
   };
 
   optionsWithPNGFormat: DataUrlOptions = {
     format: 'png',
-    width: 150,
-    height: 100,
+    size: {width: 150, height: 100},
   };
 
   alert = () => {
