@@ -159,7 +159,7 @@ class SvgNativeMethods extends Component {
       this.setState({
         base64,
       });
-    }, this.optionsWithJPEGFormat);
+    });
     console.log(this.circle?.isPointInFill({x: 200, y: 100}));
     console.log(this.circle?.isPointInStroke({x: 200, y: 100}));
     console.log(this.circle?.getTotalLength());
