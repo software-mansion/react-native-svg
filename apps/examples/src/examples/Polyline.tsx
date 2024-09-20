@@ -2,9 +2,6 @@ import React from 'react';
 import {Svg, Polyline} from 'react-native-svg';
 
 function PolylineExample() {
-  // static title =
-  //   'The <Polyline> element is used to create any shape that consists of only straight lines';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Polyline
@@ -15,14 +12,11 @@ function PolylineExample() {
       />
     </Svg>
   );
-  // }
 }
 PolylineExample.title =
   'The <Polyline> element is used to create any shape that consists of only straight lines';
 
 function StraightLines() {
-  // static title = 'Another example with only straight lines';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Polyline
@@ -33,13 +27,10 @@ function StraightLines() {
       />
     </Svg>
   );
-  // }
 }
 StraightLines.title = 'Another example with only straight lines';
 
 function PolylineFill() {
-  // static title = 'Fill Polyline';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Polyline
@@ -50,13 +41,10 @@ function PolylineFill() {
       />
     </Svg>
   );
-  // }
 }
 PolylineFill.title = 'Fill Polyline';
 
 function PolylineFillStroke() {
-  // static title = 'Stroke Polyline with strokeLinecap and strokeLinejoin';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Polyline
@@ -69,7 +57,6 @@ function PolylineFillStroke() {
       />
     </Svg>
   );
-  // }
 }
 PolylineFillStroke.title =
   'Stroke Polyline with strokeLinecap and strokeLinejoin';
