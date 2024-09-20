@@ -14,9 +14,6 @@ import {
 } from 'react-native-svg';
 
 function StrokeExample() {
-  // static title =
-  //   'The stroke property defines the color of a line, text or outline of an element';
-  // render() {
   return (
     <Svg height="80" width="225">
       <G strokeWidth="1">
@@ -26,13 +23,11 @@ function StrokeExample() {
       </G>
     </Svg>
   );
-  // }
 }
+StrokeExample.title =
+  'The stroke property defines the color of a line, text or outline of an element';
 
 function StrokeLinecap() {
-  // static title =
-  //   'The strokeLinecap property defines different types of endings to an open path';
-  // render() {
   return (
     <Svg height="80" width="225">
       <G stroke="red" strokeWidth="8">
@@ -42,12 +37,11 @@ function StrokeLinecap() {
       </G>
     </Svg>
   );
-  // }
 }
+StrokeLinecap.title =
+  'The strokeLinecap property defines different types of endings to an open path';
 
 function StrokeDasharray() {
-  // static title = 'strokeDasharray';
-  // render() {
   return (
     <Svg height="80" width="225">
       <G fill="none" stroke="black" strokeWidth="4">
@@ -57,13 +51,10 @@ function StrokeDasharray() {
       </G>
     </Svg>
   );
-  // }
 }
+StrokeDasharray.title = 'strokeDasharray';
 
 function StrokeDashoffset() {
-  // static title =
-  //   'the strokeDashoffset attribute specifies the distance into the dash pattern to start the dash.';
-  // render() {
   return (
     <Svg height="80" width="200">
       <Circle
@@ -91,12 +82,11 @@ function StrokeDashoffset() {
       </Text>
     </Svg>
   );
-  // }
 }
+StrokeDashoffset.title =
+  'the strokeDashoffset attribute specifies the distance into the dash pattern to start the dash.';
 
 function StrokePattern() {
-  // static title = 'Advanced stroke example.';
-  // render() {
   return (
     <Svg height="80" width="200">
       <Defs>
@@ -136,8 +126,8 @@ function StrokePattern() {
       />
     </Svg>
   );
-  // }
 }
+StrokePattern.title = 'Advanced stroke example.';
 
 const icon = (
   <Svg

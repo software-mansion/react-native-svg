@@ -1,18 +1,40 @@
-import {View, Text, ScrollView, SafeAreaView} from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
 import React, {Fragment} from 'react';
-
-// it takes an array of components [SvgExample, SvgOpacity, SvgViewbox, SvgLayout]
-// these components have prop .title
-// e.g. SvgExample.title = 'SVG TEST';
 
 /**
  * Composes a single component from an array of components.
  * @param {Array} components - The array of React component types to compose.
  * @returns {React.Component} A new component that renders all the given components.
  */
-export default function composeComponents(components: any[]) {
+export default function composeComponents(
+  components: any[],
+  renderInView: boolean,
+) {
   return function ComposedComponent() {
-    return (
+    return renderInView ? (
+      <View
+        style={{
+          alignItems: 'center',
+          paddingVertical: 25,
+        }}>
+        {components.map((Component, index) => (
+          <Fragment key={index}>
+            {Component.title && (
+              <Text
+                style={{
+                  marginHorizontal: 20,
+                  textAlign: 'center',
+                  marginBottom: 5,
+                }}>
+                {Component.title}
+              </Text>
+            )}
+            <Component />
+            {index !== components.length - 1 && <Separator />}
+          </Fragment>
+        ))}
+      </View>
+    ) : (
       <ScrollView
         contentContainerStyle={{
           alignItems: 'center',

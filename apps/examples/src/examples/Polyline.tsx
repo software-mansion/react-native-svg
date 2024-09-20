@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Svg, Polyline} from 'react-native-svg';
 
 function PolylineExample() {
@@ -17,6 +17,8 @@ function PolylineExample() {
   );
   // }
 }
+PolylineExample.title =
+  'The <Polyline> element is used to create any shape that consists of only straight lines';
 
 function StraightLines() {
   // static title = 'Another example with only straight lines';
@@ -33,6 +35,7 @@ function StraightLines() {
   );
   // }
 }
+StraightLines.title = 'Another example with only straight lines';
 
 function PolylineFill() {
   // static title = 'Fill Polyline';
@@ -49,6 +52,7 @@ function PolylineFill() {
   );
   // }
 }
+PolylineFill.title = 'Fill Polyline';
 
 function PolylineFillStroke() {
   // static title = 'Stroke Polyline with strokeLinecap and strokeLinejoin';
@@ -67,6 +71,8 @@ function PolylineFillStroke() {
   );
   // }
 }
+PolylineFillStroke.title =
+  'Stroke Polyline with strokeLinecap and strokeLinejoin';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">

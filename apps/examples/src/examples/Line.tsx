@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Svg, Line} from 'react-native-svg';
 
 function LineExample() {

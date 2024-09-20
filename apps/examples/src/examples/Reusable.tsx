@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
   Svg,
   Circle,
@@ -15,8 +15,6 @@ import {
 } from 'react-native-svg';
 
 function UseExample() {
-  // static title = 'Reuse svg code';
-  // render() {
   return (
     <Svg height="100" width="300">
       <Defs>
@@ -32,10 +30,9 @@ function UseExample() {
   );
   // }
 }
+UseExample.title = 'Reuse svg code';
 
 function UseShapes() {
-  // static title = 'Using Shapes Outside of a Defs Element';
-  // render() {
   return (
     <Svg height="110" width="200">
       <G id="outside-shape">
@@ -61,12 +58,10 @@ function UseShapes() {
       />
     </Svg>
   );
-  // }
 }
+UseShapes.title = 'Using Shapes Outside of a Defs Element';
 
 function DefsExample() {
-  // static title = 'Basic Defs usage';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Defs>
@@ -108,12 +103,10 @@ function DefsExample() {
       <Use href="#basic-path" x="-10" y="20" fill="url(#basic-radial)" />
     </Svg>
   );
-  // }
 }
+DefsExample.title = 'Basic Defs usage';
 
 function SymbolExample() {
-  // static title = 'Symbol example, reuse elements with viewBox prop';
-  // render() {
   return (
     <Svg height="150" width="110">
       <Symbol id="example-symbol" viewBox="0 0 150 110">
@@ -139,8 +132,8 @@ function SymbolExample() {
       <Use href="#example-symbol" x="0" y="100" width="50" height="25" />
     </Svg>
   );
-  // }
 }
+SymbolExample.title = 'Symbol example, reuse elements with viewBox prop';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">

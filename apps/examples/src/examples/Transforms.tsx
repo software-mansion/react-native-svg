@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Platform} from 'react-native';
 
 import {
@@ -31,8 +31,6 @@ const patternXml = `
 `;
 
 function PatternTransformExample() {
-  // static title = 'Pattern transform';
-  // render() {
   return (
     <>
       <Svg height="100" width="300" viewBox="0 0 200 100">
@@ -87,12 +85,10 @@ function PatternTransformExample() {
       )}
     </>
   );
-  // }
 }
+PatternTransformExample.title = 'Pattern transform';
 
 function GradientTransformExample() {
-  // static title = 'Gradient transform';
-  // render() {
   return (
     <Svg height="200" width="300" viewBox="0 0 420 200">
       <RadialGradient
@@ -132,8 +128,8 @@ function GradientTransformExample() {
       />
     </Svg>
   );
-  // }
 }
+GradientTransformExample.title = 'Gradient transform';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 100 100">

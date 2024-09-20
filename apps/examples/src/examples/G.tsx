@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Svg, Circle, G, Text, Line, Rect, Use} from 'react-native-svg';
 
 const GExample = () => {

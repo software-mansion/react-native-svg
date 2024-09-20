@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {
   Svg,
@@ -26,8 +26,6 @@ const styles = StyleSheet.create({
 });
 
 function SimpleMask() {
-  // static title = 'Simple svg with mask';
-  // render() {
   return (
     <View style={styles.container}>
       <Svg viewBox="-10 -10 120 120">
@@ -44,12 +42,10 @@ function SimpleMask() {
       </Svg>
     </View>
   );
-  // }
 }
+SimpleMask.title = 'Simple svg with mask';
 
 function AnotherMask() {
-  // static title = 'Another svg with mask';
-  // render() {
   return (
     <View style={styles.container}>
       <Svg width={500} height={120}>
@@ -85,12 +81,10 @@ function AnotherMask() {
       </Svg>
     </View>
   );
-  // }
 }
+AnotherMask.title = 'Another svg with mask';
 
 function MaskWithText() {
-  // static title = 'Svg with with text and a mask with gradient';
-  // render() {
   return (
     <View style={styles.container}>
       <Svg width={500} height={120}>
@@ -125,8 +119,8 @@ function MaskWithText() {
       </Svg>
     </View>
   );
-  // }
 }
+MaskWithText.title = 'Svg with with text and a mask with gradient';
 
 const icon = (
   <Svg width="30" height="30" viewBox="-10 -10 120 120">

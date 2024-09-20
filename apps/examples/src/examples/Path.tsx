@@ -1,9 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Svg, Circle, G, Text, Path} from 'react-native-svg';
 
 function PathExample() {
-  // static title = 'Path';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Path d="M50 0 L15 100 L85 100 Z" />
@@ -17,12 +15,10 @@ function PathExample() {
       />
     </Svg>
   );
-  // }
 }
+PathExample.title = 'Path';
 
 function UnclosedPath() {
-  // static title = 'Unclosed paths';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Path
@@ -33,13 +29,10 @@ function UnclosedPath() {
       />
     </Svg>
   );
-  // }
 }
+UnclosedPath.title = 'Unclosed paths';
 
 function BezierCurve() {
-  // static title =
-  //   'The following example creates a quadratic Bézier curve, where A and C are the start and end points, B is the control point';
-  // render() {
   return (
     <Svg height="200" width="225">
       <G scale="0.5">
@@ -81,8 +74,10 @@ function BezierCurve() {
       </G>
     </Svg>
   );
-  // }
 }
+BezierCurve.title =
+  'The following example creates a quadratic Bézier curve, where A and C are the start and end points, B is the control point';
+
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
     <Path

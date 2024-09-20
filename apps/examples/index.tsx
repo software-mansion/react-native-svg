@@ -178,7 +178,10 @@ export default function App() {
           <Stack.Screen
             key={name}
             name={name}
-            component={composeComponents(EXAMPLES[name].samples)}
+            component={composeComponents(
+              EXAMPLES[name].samples,
+              EXAMPLES[name].shouldBeRenderInView ?? false,
+            )}
             options={{
               animation: 'default',
               headerTitle: EXAMPLES[name].title,

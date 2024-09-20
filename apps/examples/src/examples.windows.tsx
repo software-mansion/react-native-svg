@@ -28,6 +28,7 @@ interface Example {
   title: string;
   samples: any;
   missingOnFabric?: boolean;
+  shouldBeRenderInView?: boolean;
 }
 
 export const EXAMPLES: Record<string, Example> = {

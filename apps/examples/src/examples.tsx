@@ -28,6 +28,7 @@ interface Example {
   title: string;
   samples: any;
   missingOnFabric?: boolean;
+  shouldBeRenderInView?: boolean;
 }
 
 export const EXAMPLES: Record<string, Example> = {
@@ -115,6 +116,7 @@ export const EXAMPLES: Record<string, Example> = {
     icon: PanResponder.icon,
     title: 'PanResponder example',
     samples: PanResponder.samples,
+    shouldBeRenderInView: true,
   },
   ReanimatedExample: {
     icon: Reanimated.icon,

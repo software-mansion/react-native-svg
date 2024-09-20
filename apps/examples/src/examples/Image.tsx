@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Alert, Platform} from 'react-native';
 import {Svg, Circle, Text, Rect, Defs, ClipPath, Image} from 'react-native-svg';
 

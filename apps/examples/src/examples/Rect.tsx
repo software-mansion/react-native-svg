@@ -1,10 +1,8 @@
-import React, {Component} from 'react';
-import {ScrollView, Text as RNText} from 'react-native';
+import React from 'react';
+import {ScrollView} from 'react-native';
 import {Svg, Rect} from 'react-native-svg';
 
 function RectExample() {
-  // static title = 'Rect';
-
   return (
     <ScrollView contentContainerStyle={{alignItems: 'center'}}>
       <Svg width="200" height="60">
@@ -25,8 +23,6 @@ function RectExample() {
 RectExample.title = 'Rect';
 
 function RectStrokeFill() {
-  // static title = '`stroke` and `fill` Rect';
-  // render() {
   return (
     <Svg width="100" height="100">
       <Rect
@@ -42,7 +38,6 @@ function RectStrokeFill() {
       />
     </Svg>
   );
-  // }
 }
 RectStrokeFill.title = '`stroke` and `fill` Rect';
 
@@ -121,10 +116,6 @@ const samples = [
   RectStrokeFill,
   RoundedRect,
   EllipseRect,
-  RoundOverflowRect,
-  RoundOverflowRect,
-  RoundOverflowRect,
-  RoundOverflowRect,
   RoundOverflowRect,
 ];
 

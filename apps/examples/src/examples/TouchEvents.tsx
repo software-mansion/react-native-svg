@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 
 import {
   Svg,
@@ -13,9 +13,6 @@ import {
 import {Alert} from 'react-native';
 
 function PressExample() {
-  // static title =
-  //   'Press on the red circle or long press on the blue rectangle to trigger the events';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Circle
@@ -36,18 +33,17 @@ function PressExample() {
       <Path d="M50,5L20,99L95,39L5,39L80,99z" fill="pink" />
     </Svg>
   );
-  // }
 }
+PressExample.title =
+  'Press on the red circle or long press on the blue rectangle to trigger the events';
 
 function HoverExample() {
-  // static title = 'Hover the svg path';
-  // state = {
-  //   hover: false,
-  // };
-  // toggle = () => {
-  //   this.setState({hover: !this.state.hover});
-  // };
-  // render() {
+  const [hover, setHover] = useState(false);
+
+  const toggle = () => {
+    setHover(!hover);
+  };
+
   return (
     <Svg height="120" width="120" delayPressIn={0}>
       <Defs>
@@ -56,11 +52,11 @@ function HoverExample() {
         </ClipPath>
       </Defs>
       <Path
-        // onPressIn={this.toggle}
-        // onPressOut={this.toggle}
+        onPressIn={toggle}
+        onPressOut={toggle}
         d="M50,5L20,99L95,39L5,39L80,99z"
-        // stroke={this.state.hover ? 'rgba(10, 10, 10, 0.5)' : 'black'}
-        // fill={this.state.hover ? 'pink' : 'red'}
+        stroke={hover ? 'rgba(10, 10, 10, 0.5)' : 'black'}
+        fill={hover ? 'pink' : 'red'}
         clipPath="url(#hover-clip)"
         strokeWidth="6"
         x="0"
@@ -68,12 +64,11 @@ function HoverExample() {
       />
     </Svg>
   );
-  // }
 }
 
+HoverExample.title = 'Hover the svg path';
+
 function GroupExample() {
-  // static title = 'Bind touch events callback on Group element with viewBox';
-  // render() {
   return (
     <Svg height="120" width="120" viewBox="0 0 240 240">
       <G onPress={() => Alert.alert('Pressed on G')} scale="1.4">
@@ -91,8 +86,8 @@ function GroupExample() {
       </G>
     </Svg>
   );
-  // }
 }
+GroupExample.title = 'Bind touch events callback on Group element with viewBox';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">

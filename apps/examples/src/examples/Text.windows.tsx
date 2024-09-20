@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import {
   Svg,
@@ -12,8 +12,6 @@ import {
 } from 'react-native-svg';
 
 function TextExample() {
-  // static title = 'Text';
-  // render() {
   return (
     <Svg height="30" width="100">
       <Text x="50" y="9" fill="red" textAnchor="middle">
@@ -21,12 +19,10 @@ function TextExample() {
       </Text>
     </Svg>
   );
-  // }
 }
+TextExample.title = 'Text';
 
 function TextRotate() {
-  // static title = 'Transform the text';
-  // render() {
   return (
     <Svg height="60" width="200">
       <Text x="0" y="15" fill="red" rotate="30" origin="20,40">
@@ -40,12 +36,10 @@ function TextRotate() {
       </Text>
     </Svg>
   );
-  // }
 }
+TextRotate.title = 'Transform the text';
 
 function TextStroke() {
-  // static title = 'Stroke the text';
-  // render() {
   return (
     <Svg height="60" width="200">
       <Defs>
@@ -66,12 +60,10 @@ function TextStroke() {
       </Text>
     </Svg>
   );
-  // }
 }
+TextStroke.title = 'Stroke the text';
 
 function TextFill() {
-  // static title = 'Fill the text with LinearGradient';
-  // render() {
   return (
     <Svg height="60" width="200">
       <Defs>
@@ -94,8 +86,8 @@ function TextFill() {
       </Text>
     </Svg>
   );
-  // }
 }
+TextFill.title = 'Fill the text with LinearGradient';
 
 const path = `
 M 10 20
@@ -104,8 +96,6 @@ C 100 20 120 30 140 20
 C 160 10 180 10 180 10
 `;
 function TextPathExample() {
-  // static title = 'Draw text along path';
-  // render() {
   return (
     <Svg height="100" width="200">
       <Defs>
@@ -117,12 +107,9 @@ function TextPathExample() {
       </G>
     </Svg>
   );
-  // }
 }
 
 function TSpanExample() {
-  // static title = 'TSpan nest';
-  // render() {
   return (
     <Svg height="160" width="200">
       <Text y="20" dx="5 5" fill="black">
@@ -149,8 +136,8 @@ function TSpanExample() {
       </Text>
     </Svg>
   );
-  // }
 }
+TSpanExample.title = 'TSpan nest';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 100 100">

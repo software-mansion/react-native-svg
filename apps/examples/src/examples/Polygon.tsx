@@ -1,9 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Svg, G, Path, Polygon} from 'react-native-svg';
 
 function PolygonExample() {
-  // static title = 'The following example creates a polygon with three sides';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Polygon
@@ -14,12 +12,11 @@ function PolygonExample() {
       />
     </Svg>
   );
-  // }
 }
+PolygonExample.title =
+  'The following example creates a polygon with three sides';
 
 function FourSidePolygon() {
-  // static title = 'The following example creates a polygon with four sides';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Polygon
@@ -30,12 +27,11 @@ function FourSidePolygon() {
       />
     </Svg>
   );
-  // }
 }
+FourSidePolygon.title =
+  'The following example creates a polygon with four sides';
 
 function StarPolygon() {
-  // static title = 'Use the <Polygon /> element to create a star';
-  // render() {
   return (
     <Svg height="105" width="105">
       <G scale="0.5">
@@ -48,12 +44,10 @@ function StarPolygon() {
       </G>
     </Svg>
   );
-  // }
 }
+StarPolygon.title = 'Use the <Polygon /> element to create a star';
 
 function EvenOddPolygon() {
-  // static title = 'Change the fill-rule property to "evenodd"';
-  // render() {
   return (
     <Svg height="105" width="105">
       <G scale="0.5" fillRule="evenodd">
@@ -72,8 +66,8 @@ function EvenOddPolygon() {
       </Svg>
     </Svg>
   );
-  // }
 }
+EvenOddPolygon.title = 'Change the fill-rule property to "evenodd"';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 200 200">

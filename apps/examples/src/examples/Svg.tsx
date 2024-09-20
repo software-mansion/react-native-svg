@@ -1,12 +1,5 @@
-import React, {Component, useRef, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {StyleSheet, View, Image} from 'react-native';
 import {Svg, Circle, G, Path, Line, Rect} from 'react-native-svg';
 
 const styles = StyleSheet.create({
@@ -44,7 +37,6 @@ function SvgExample() {
     </Svg>
   );
 }
-
 SvgExample.title = 'SVG';
 
 function SvgOpacity() {
@@ -70,7 +62,6 @@ function SvgOpacity() {
     </Svg>
   );
 }
-
 SvgOpacity.title = 'SVG with `opacity` prop';
 
 function SvgViewbox() {
@@ -87,7 +78,6 @@ function SvgViewbox() {
       <Path d="M 40 60 A 10 10 0 0 0 60 60" stroke="black" />
     </Svg>
   );
-  // }
 }
 SvgViewbox.title =
   'SVG with `viewBox="40 20 100 40" and preserveAspectRatio="none"';
@@ -168,7 +158,6 @@ function SvgNativeMethods() {
     </>
   );
 }
-
 SvgNativeMethods.title =
   'Tap the shapes to render the Image below based on the base64-data of the Svg';
 

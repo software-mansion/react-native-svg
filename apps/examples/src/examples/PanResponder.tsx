@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {useRef} from 'react';
 import {
   Animated,
   PanResponder,
@@ -6,53 +6,51 @@ import {
   View,
 } from 'react-native';
 import {G, Line, Path, Polyline, Svg, Text} from 'react-native-svg';
-
-const AnimatedSvg = Animated.createAnimatedComponent(Svg as any);
+const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
 const zeroDelta = {x: 0, y: 0};
 
-function PanExample() {
-  // static title = 'Bind PanResponder on the SVG Shape';
-  // panXY: any;
-  // constructor(props: {}, context: {}) {
-  //   super(props, context);
-  //   const xy = new Animated.ValueXY();
-  //   const {x: dx, y: dy} = xy;
-  //   let offset = zeroDelta;
-  //   xy.addListener(flatOffset => {
-  //     offset = flatOffset;
-  //   });
-  //   const {panHandlers} = PanResponder.create({
-  //     onStartShouldSetPanResponder: () => true,
-  //     onMoveShouldSetPanResponderCapture: () => true,
-  //     onPanResponderGrant: () => {
-  //       xy.setOffset(offset);
-  //       xy.setValue(zeroDelta);
-  //     },
-  //     onPanResponderMove: Animated.event([null, {dx, dy}], {
-  //       useNativeDriver: false,
-  //     }),
-  //     onPanResponderRelease: () => {
-  //       xy.flattenOffset();
-  //     },
-  //   });
-  //   this.panXY = {
-  //     style: {
-  //       transform: xy.getTranslateTransform(),
-  //     },
-  //     ...panHandlers,
-  //   };
-  // }
-  // render() {
+const PanExample = () => {
+  const xy = useRef(new Animated.ValueXY()).current;
+  let offset = zeroDelta;
+
+  xy.addListener(flatOffset => {
+    offset = flatOffset;
+  });
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponderCapture: () => true,
+      onPanResponderGrant: () => {
+        xy.setOffset(offset);
+        xy.setValue(zeroDelta);
+      },
+      onPanResponderMove: Animated.event([null, {dx: xy.x, dy: xy.y}], {
+        useNativeDriver: false,
+      }),
+      onPanResponderRelease: () => {
+        xy.flattenOffset();
+      },
+    }),
+  ).current;
+
+  const panStyle = {
+    transform: xy.getTranslateTransform(),
+  };
+
   return (
     <TouchableWithoutFeedback>
       <View>
-        <AnimatedSvg height="200" width="200">
-          {/* {...this.panXY} */}
+        <AnimatedSvg
+          height="200"
+          width="200"
+          style={panStyle}
+          {...panResponder.panHandlers}>
           <Path
             d="M50,5L20,99L95,39L5,39L80,99z"
-            stroke={'black'}
-            fill={'red'}
+            stroke="black"
+            fill="red"
             strokeWidth="6"
             scale="0.8"
           />
@@ -69,8 +67,9 @@ function PanExample() {
       </View>
     </TouchableWithoutFeedback>
   );
-  // }
-}
+};
+
+PanExample.title = 'Bind PanResponder on the SVG Shape';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
@@ -87,12 +86,6 @@ const icon = (
       strokeWidth="1"
       strokeLinecap="round"
       strokeLinejoin="round"
-      d={`M6.2,9.4
-          c0,0,0-0.1,0-0.2c0-0.2,0.1-0.3,0.1-0.4c0.2-0.4,0.5-0.7,1-0.7c0.3,0,0.5,0,0.6,0h0.1v0.7V10 M8.1,8.8c0,0,0-0.1,0-0.2
-	c0-0.2,0.1-0.3,0.1-0.4c0.2-0.4,0.5-0.7,1-0.7c0.3,0,0.5,0,0.6,0h0.1v1.9 M10.1,7.5v-2c0,0,0-0.1,0-0.2c0-0.2,0.1-0.3,0.1-0.4
-	c0.2-0.4,0.5-0.6,0.9-0.7c0.4,0,0.7,0.2,0.9,0.7C12,5,12,5.2,12,5.4c0,0.1,0,0.1,0,0.2v6c1.4-1.8,2.4-1.8,2.8,0.1
-	c-1.7,1.5-2.9,3.7-3.4,6.4l-5.8,0c-0.2-0.6-0.5-1.4-0.7-2.5c-0.3-1-0.5-2.5-0.6-4.5l0-0.8c0-0.1,0-0.1,0-0.2c0-0.2,0.1-0.3,0.1-0.4
-	c0.2-0.4,0.5-0.7,1-0.7c0.3,0,0.5,0,0.6,0l0.1,0v0.5c0,0,0,0,0,0l0,1.1l0,0.2 M6.2,10.9l0-0.4`}
     />
   </Svg>
 );
