@@ -259,8 +259,8 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
 
     const rect = getBoundingClientRect(ref);
 
-    const width = Number(options.width) || rect.width;
-    const height = Number(options.height) || rect.height;
+    const width = Number(options?.size?.width) || rect.width;
+    const height = Number(options?.size?.height) || rect.height;
     const format = options.format === 'jpeg' ? 'image/jpeg' : 'image/png';
 
     let quality: number | undefined;

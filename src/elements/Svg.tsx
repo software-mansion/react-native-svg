@@ -50,17 +50,20 @@ export type DataUrlOptions = JpegOptions | PngOptions;
 interface JpegOptions {
   format: 'jpeg';
   quality?: number;
-  width?: NumberProp;
-  height?: NumberProp;
+  size?: Size;
 }
 
 interface PngOptions {
   format: 'png';
-  width?: NumberProp;
-  height?: NumberProp;
+  size?: Size;
 }
 
-function checkOptions(options?: DataUrlOptions) {
+interface Size {
+  width: number;
+  height: number;
+}
+
+function validateOptions(options?: DataUrlOptions) {
   if (options && options?.format === 'jpeg') {
     if (!validateJpegQualityParameter(options)) {
       throw new Error('toDataURL: Invalid quality parameter for JPEG format.');
@@ -111,20 +114,30 @@ export default class Svg extends Shape<SvgProps> {
     root && root.setNativeProps(props);
   };
 
-  toDataURL = (
+  /**
+   * @deprecated use size property instead
+   * @param callback
+   * @param options as { size: { width: number, height: number }, format: 'jpeg' | 'png', quality?:1 }
+   */
+  toDataURL(callback: (base64: string) => void, options: Size): void;
+  toDataURL(callback: (base64: string) => void): void;
+  toDataURL(callback: (base64: string) => void, options: DataUrlOptions): void;
+  toDataURL(
     callback: (base64: string) => void,
-    options?: DataUrlOptions
-  ) => {
+    options?: DataUrlOptions | Size
+  ): void {
     if (!callback) {
       return;
     }
-    checkOptions(options);
+    if (options && 'format' in options) {
+      validateOptions(options);
+    }
     const handle = findNodeHandle(this.root as Component);
     const RNSVGSvgViewModule: Spec =
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('../fabric/NativeSvgViewModule').default;
     RNSVGSvgViewModule.toDataURL(handle, options, callback);
-  };
+  }
 
   render() {
     const {
