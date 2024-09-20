@@ -1,5 +1,5 @@
 {
-  "version": "15.6.0",
+  "version": "15.8.0-rc.1",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -134,5 +134,8 @@
     "android": {
       "javaPackageName": "com.horcrux.svg"
     }
+  },
+  "resolutions": {
+    "@react-native/codegen": "0.76.0-rc.1"
   }
 }

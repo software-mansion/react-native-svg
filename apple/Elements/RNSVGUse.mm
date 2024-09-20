@@ -168,6 +168,7 @@ using namespace facebook::react;
   }
   CGRect bounds = definedTemplate.clientRect;
   self.clientRect = bounds;
+  self.pathBounds = definedTemplate.pathBounds;
 
   CGAffineTransform current = CGContextGetCTM(context);
   CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
