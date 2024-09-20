@@ -5,14 +5,13 @@
 
 `react-native-svg` provides SVG support to React Native on iOS, Android, macOS, Windows, and a compatibility layer for the web.
 
-[Check out the Example app](https://github.com/react-native-svg/react-native-svg/tree/main/Example)
+[Check out the Example app](https://github.com/react-native-svg/react-native-svg/tree/main/example)
 
 - [Features](#features)
 - [Installation](#installation)
 - [Troubleshooting](#troubleshooting)
 - [Opening issues](#opening-issues)
 - [Usage](#usage)
-- [TODO](#todo)
 - [Known issues](#known-issues)
 
 ## Features

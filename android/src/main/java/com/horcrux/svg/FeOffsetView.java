@@ -3,7 +3,7 @@ package com.horcrux.svg;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.graphics.RectF;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import java.util.HashMap;
@@ -42,8 +42,10 @@ class FeOffsetView extends FilterPrimitiveView {
 
     float dx = this.mDx != null ? (float) this.relativeOnWidth(this.mDx) : 0;
     float dy = this.mDy != null ? (float) this.relativeOnHeight(this.mDy) : 0;
+    RectF frame = new RectF(0, 0, dx, dy);
+    this.getSvgView().getCtm().mapRect(frame);
 
-    canvas.drawBitmap(source, dx, dy, new Paint());
+    canvas.drawBitmap(source, frame.width(), frame.height(), null);
 
     return result;
   }
