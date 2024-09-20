@@ -26,7 +26,7 @@ import * as FilterImage from './examples/FilterImage';
 interface Example {
   icon?: any;
   title: string;
-  screen: any;
+  samples: any;
   missingOnFabric?: boolean;
 }
 
@@ -34,121 +34,121 @@ export const EXAMPLES: Record<string, Example> = {
   SvgExample: {
     icon: Svg.icon,
     title: 'Svg example',
-    screen: Svg.SvgComponent,
+    samples: Svg.samples,
   },
   RectExample: {
     icon: Rect.icon,
     title: 'Rect example',
-    screen: Rect.RectExample,
+    samples: Rect.samples,
   },
   CircleExample: {
     icon: Circle.icon,
     title: 'Circle example',
-    screen: Circle.CircleExample,
+    samples: Circle.CircleExample,
   },
   EllipseExample: {
     icon: Ellipse.icon,
     title: 'Ellipse example',
-    screen: Ellipse.EllipseExample,
+    samples: Ellipse.EllipseExample,
   },
   LineExample: {
     icon: Line.icon,
     title: 'Line example',
-    screen: Line.LineExample,
+    samples: Line.LineExample,
   },
   PolygonExample: {
     icon: Polygon.icon,
     title: 'Polygon example',
-    screen: Polygon.PolygonExample,
+    samples: Polygon.PolygonExample,
   },
   PolylineExample: {
     icon: Polyline.icon,
     title: 'Polyline example',
-    screen: Polyline.PolylineExample,
+    samples: Polyline.PolylineExample,
   },
   PathExample: {
     icon: Path.icon,
     title: 'Path example',
-    screen: Path.PathExample,
+    samples: Path.PathExample,
   },
   TextExample: {
     icon: Text.icon,
     title: 'Text example',
-    screen: Text.TextExample,
+    samples: Text.TextExample,
   },
   GExample: {
     icon: G.icon,
     title: 'G example',
-    screen: G.GExample,
+    samples: G.GExample,
   },
   StrokingExample: {
     icon: Stroking.icon,
     title: 'Stroking example',
-    screen: Stroking.StrokeExample,
+    samples: Stroking.StrokeExample,
   },
   GradientsExample: {
     icon: Gradients.icon,
     title: 'Gradients example',
-    screen: Gradients.LinearGradientHorizontal,
+    samples: Gradients.LinearGradientHorizontal,
   },
   ClippingExample: {
     icon: Clipping.icon,
     title: 'Clipping example',
-    screen: Clipping.ClipPathElement,
+    samples: Clipping.ClipPathElement,
   },
   ImageExample: {
     icon: Image.icon,
     title: 'Image example',
-    screen: Image.ImageExample,
+    samples: Image.ImageExample,
   },
   ReusableExample: {
     icon: Reusable.icon,
     title: 'Reusable example',
-    screen: Reusable.UseExample,
+    samples: Reusable.UseExample,
   },
   TouchEventsExample: {
     icon: TouchEvents.icon,
     title: 'TouchEvents example',
-    screen: TouchEvents.PressExample,
+    samples: TouchEvents.PressExample,
   },
   PanResponderExample: {
     icon: PanResponder.icon,
     title: 'PanResponder example',
-    screen: PanResponder.PanExample,
+    samples: PanResponder.PanExample,
   },
   ReanimatedExample: {
     icon: Reanimated.icon,
     title: 'Reanimated example',
-    screen: Reanimated.ReanimatedRectExample,
+    samples: Reanimated.ReanimatedRectExample,
   },
   TransformsExample: {
     icon: Transforms.icon,
     title: 'Transforms example',
-    screen: Transforms.PatternTransformExample,
+    samples: Transforms.PatternTransformExample,
   },
   MarkersExample: {
     icon: Markers.icon,
     title: 'Markers example',
-    screen: Markers.EllipseExample,
+    samples: Markers.EllipseExample,
   },
   MaskExample: {
     icon: Mask.icon,
     title: 'Mask example',
-    screen: Mask.SimpleMask,
+    samples: Mask.SimpleMask,
   },
   E2EExample: {
     icon: E2E.icon,
     title: 'E2E example',
-    screen: E2E.samples[0],
+    samples: E2E.samples[0],
   },
   FiltersExample: {
     icon: Filters.icon,
     title: 'Filters example',
-    screen: Filters.samples[0],
+    samples: Filters.samples[0],
   },
   FilterImageExample: {
     icon: FilterImage.icon,
     title: 'FilterImage example',
-    screen: FilterImage.samples[0],
+    samples: FilterImage.samples[0],
   },
 };

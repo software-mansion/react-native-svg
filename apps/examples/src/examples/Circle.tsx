@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import {Svg, Circle} from 'react-native-svg';
 
 function CircleExample() {
-  // static title = 'Circle';
-
   return (
     <Svg height="100" width="140">
       <Circle cx="50%" cy="50%" r="40%" fill="pink" />
@@ -11,64 +9,60 @@ function CircleExample() {
   );
 }
 
-// class StrokeCircle extends Component {
-//   static title = 'Stroke Circle';
-//   render() {
-//     return (
-//       <Svg height="100" width="100">
-//         <Circle
-//           cx="50"
-//           cy="50"
-//           r="45"
-//           stroke="purple"
-//           strokeWidth="2.5"
-//           fill="none"
-//         />
-//       </Svg>
-//     );
-//   }
-// }
+CircleExample.title = 'Circle';
 
-// class StrokeOpacityCircle extends Component {
-//   static title = 'Circle with strokeOpacity';
-//   render() {
-//     return (
-//       <Svg height="100" width="100">
-//         <Circle
-//           cx="50"
-//           cy="50"
-//           r="40"
-//           stroke="purple"
-//           strokeOpacity="0.5"
-//           strokeWidth="10"
-//           fill="pink"
-//         />
-//       </Svg>
-//     );
-//   }
-// }
+function StrokeCircle() {
+  return (
+    <Svg height="100" width="100">
+      <Circle
+        cx="50"
+        cy="50"
+        r="45"
+        stroke="purple"
+        strokeWidth="2.5"
+        fill="none"
+      />
+    </Svg>
+  );
+}
+StrokeCircle.title = 'Stroke Circle';
 
-// class PieCircle extends Component {
-//   static title = 'Draw a Pie shape with circle';
-//   render() {
-//     return (
-//       <Svg height="100" width="100">
-//         <Circle cx="50" cy="50" r="40" fill="#ddd" />
-//         <Circle
-//           origin="50, 50"
-//           rotation="-90"
-//           cx="50"
-//           cy="50"
-//           r="20"
-//           stroke="#0074d9"
-//           strokeWidth="40"
-//           fill="none"
-//           strokeDasharray="80, 160"
-//         />
-//       </Svg>
-//     );
-//   }
-// }
+function StrokeOpacityCircle() {
+  return (
+    <Svg height="100" width="100">
+      <Circle
+        cx="50"
+        cy="50"
+        r="40"
+        stroke="purple"
+        strokeOpacity="0.5"
+        strokeWidth="10"
+        fill="pink"
+      />
+    </Svg>
+  );
+}
+StrokeOpacityCircle.title = 'Circle with strokeOpacity';
+
+function PieCircle() {
+  return (
+    <Svg height="100" width="100">
+      <Circle cx="50" cy="50" r="40" fill="#ddd" />
+      <Circle
+        origin="50, 50"
+        rotation="-90"
+        cx="50"
+        cy="50"
+        r="20"
+        stroke="#0074d9"
+        strokeWidth="40"
+        fill="none"
+        strokeDasharray="80, 160"
+      />
+    </Svg>
+  );
+}
+PieCircle.title = 'Draw a Pie shape with circle';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
@@ -76,5 +70,5 @@ const icon = (
   </Svg>
 );
 
-// const samples = [CircleExample, StrokeCircle, StrokeOpacityCircle, PieCircle];
-export {icon, CircleExample};
+const samples = [CircleExample, StrokeCircle, StrokeOpacityCircle, PieCircle];
+export {icon, samples};

@@ -18,31 +18,31 @@ function EllipseExample() {
   );
 }
 
-class PileEllipses extends Component {
-  static title =
-    'The following example creates three ellipses on top of each other';
-  render() {
-    return (
-      <Svg height="120" width="200">
-        <Ellipse cx="98" cy="60" rx="90" ry="30" fill="purple" />
-        <Ellipse cx="94" cy="45" rx="80" ry="25" fill="lime" />
-        <Ellipse cx="92" cy="30" rx="70" ry="20" fill="yellow" />
-      </Svg>
-    );
-  }
+function PileEllipses() {
+  // static title =
+  //   'The following example creates three ellipses on top of each other';
+  // render() {
+  return (
+    <Svg height="120" width="200">
+      <Ellipse cx="98" cy="60" rx="90" ry="30" fill="purple" />
+      <Ellipse cx="94" cy="45" rx="80" ry="25" fill="lime" />
+      <Ellipse cx="92" cy="30" rx="70" ry="20" fill="yellow" />
+    </Svg>
+  );
+  // }
 }
 
-class CombinedEllipses extends Component {
-  static title =
-    'The following example combines two ellipses (one yellow and one white)';
-  render() {
-    return (
-      <Svg height="100" width="200">
-        <Ellipse cx="100" cy="50" rx="90" ry="30" fill="yellow" />
-        <Ellipse cx="95" cy="50" rx="75" ry="20" fill="white" />
-      </Svg>
-    );
-  }
+function CombinedEllipses() {
+  // static title =
+  //   'The following example combines two ellipses (one yellow and one white)';
+  // render() {
+  return (
+    <Svg height="100" width="200">
+      <Ellipse cx="100" cy="50" rx="90" ry="30" fill="yellow" />
+      <Ellipse cx="95" cy="50" rx="75" ry="20" fill="white" />
+    </Svg>
+  );
+  // }
 }
 
 const icon = (
@@ -61,4 +61,4 @@ const icon = (
 
 const samples = [EllipseExample, PileEllipses, CombinedEllipses];
 
-export {icon, EllipseExample};
+export {icon, samples};

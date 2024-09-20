@@ -7,7 +7,6 @@ function RectExample() {
 
   return (
     <ScrollView contentContainerStyle={{alignItems: 'center'}}>
-      <RNText>Rect</RNText>
       <Svg width="200" height="60">
         <Rect
           x="5%"
@@ -23,89 +22,85 @@ function RectExample() {
     </ScrollView>
   );
 }
+RectExample.title = 'Rect';
 
-// class RectStrokeFill extends Component {
-//   static title = '`stroke` and `fill` Rect';
-//   render() {
-//     return (
-//       <Svg width="100" height="100">
-//         <Rect
-//           x="20"
-//           y="20"
-//           width="75"
-//           height="75"
-//           fill="blue"
-//           fillOpacity="0.5"
-//           stroke="red"
-//           strokeWidth="5"
-//           strokeOpacity="0.5"
-//         />
-//       </Svg>
-//     );
-//   }
-// }
+function RectStrokeFill() {
+  // static title = '`stroke` and `fill` Rect';
+  // render() {
+  return (
+    <Svg width="100" height="100">
+      <Rect
+        x="20"
+        y="20"
+        width="75"
+        height="75"
+        fill="blue"
+        fillOpacity="0.5"
+        stroke="red"
+        strokeWidth="5"
+        strokeOpacity="0.5"
+      />
+    </Svg>
+  );
+  // }
+}
+RectStrokeFill.title = '`stroke` and `fill` Rect';
 
-// class RoundedRect extends Component {
-//   static title = 'A rectangle with rounded corners';
-//   render() {
-//     return (
-//       <Svg width="100" height="100">
-//         <Rect
-//           x="20"
-//           y="20"
-//           rx="20"
-//           ry="20"
-//           width="75"
-//           height="75"
-//           fill="blue"
-//           stroke="pink"
-//           strokeWidth="5"
-//         />
-//       </Svg>
-//     );
-//   }
-// }
+function RoundedRect() {
+  return (
+    <Svg width="100" height="100">
+      <Rect
+        x="20"
+        y="20"
+        rx="20"
+        ry="20"
+        width="75"
+        height="75"
+        fill="blue"
+        stroke="pink"
+        strokeWidth="5"
+      />
+    </Svg>
+  );
+}
+RoundedRect.title = 'A rectangle with rounded corners';
 
-// class EllipseRect extends Component {
-//   static title = 'Rect with different `rx` and `ry`';
-//   render() {
-//     return (
-//       <Svg width="100" height="100">
-//         <Rect
-//           x="20"
-//           y="20"
-//           rx="40"
-//           ry="20"
-//           width="75"
-//           height="75"
-//           fill="blue"
-//           stroke="pink"
-//           strokeWidth="5"
-//         />
-//       </Svg>
-//     );
-//   }
-// }
+function EllipseRect() {
+  return (
+    <Svg width="100" height="100">
+      <Rect
+        x="20"
+        y="20"
+        rx="40"
+        ry="20"
+        width="75"
+        height="75"
+        fill="blue"
+        stroke="pink"
+        strokeWidth="5"
+      />
+    </Svg>
+  );
+}
+EllipseRect.title = 'Rect with different `rx` and `ry`';
 
-// class RoundOverflowRect extends Component {
-//   static title = 'Rect with `rx` or `ry` overflowed';
-//   render() {
-//     return (
-//       <Svg width="100" height="100">
-//         <Rect
-//           x="20"
-//           y="20"
-//           ry="40"
-//           width="75"
-//           height="75"
-//           fill="blue"
-//           stroke="pink"
-//           strokeWidth="5"
-//         />
-//       </Svg>
-//     );
-//   }
-// }
+function RoundOverflowRect() {
+  return (
+    <Svg width="100" height="100">
+      <Rect
+        x="20"
+        y="20"
+        ry="40"
+        width="75"
+        height="75"
+        fill="blue"
+        stroke="pink"
+        strokeWidth="5"
+      />
+    </Svg>
+  );
+}
+RoundOverflowRect.title = 'Rect with `rx` or `ry` overflowed';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
@@ -121,12 +116,16 @@ const icon = (
   </Svg>
 );
 
-// const samples = [
-//   RectExample,
-//   RectStrokeFill,
-//   RoundedRect,
-//   EllipseRect,
-//   RoundOverflowRect,
-// ];
+const samples = [
+  RectExample,
+  RectStrokeFill,
+  RoundedRect,
+  EllipseRect,
+  RoundOverflowRect,
+  RoundOverflowRect,
+  RoundOverflowRect,
+  RoundOverflowRect,
+  RoundOverflowRect,
+];
 
-export {icon, RectExample};
+export {icon, samples};

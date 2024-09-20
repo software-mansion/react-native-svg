@@ -10,41 +10,41 @@ function LineExample() {
   );
 }
 
-class LineWithStrokeLinecap extends Component {
-  static title = 'Line';
-  render() {
-    return (
-      <Svg height="100" width="200">
-        <Line
-          x1="40"
-          y1="10"
-          x2="160"
-          y2="10"
-          stroke="red"
-          strokeWidth="10"
-          strokeLinecap="round"
-        />
-        <Line
-          x1="40"
-          y1="40"
-          x2="160"
-          y2="40"
-          stroke="red"
-          strokeWidth="10"
-          strokeLinecap="butt"
-        />
-        <Line
-          x1="40"
-          y1="80"
-          x2="160"
-          y2="80"
-          stroke="red"
-          strokeWidth="10"
-          strokeLinecap="square"
-        />
-      </Svg>
-    );
-  }
+function LineWithStrokeLinecap() {
+  // static title = 'Line';
+  // render() {
+  return (
+    <Svg height="100" width="200">
+      <Line
+        x1="40"
+        y1="10"
+        x2="160"
+        y2="10"
+        stroke="red"
+        strokeWidth="10"
+        strokeLinecap="round"
+      />
+      <Line
+        x1="40"
+        y1="40"
+        x2="160"
+        y2="40"
+        stroke="red"
+        strokeWidth="10"
+        strokeLinecap="butt"
+      />
+      <Line
+        x1="40"
+        y1="80"
+        x2="160"
+        y2="80"
+        stroke="red"
+        strokeWidth="10"
+        strokeLinecap="square"
+      />
+    </Svg>
+  );
+  // }
 }
 
 const icon = (
@@ -55,4 +55,4 @@ const icon = (
 
 const samples = [LineExample, LineWithStrokeLinecap];
 
-export {icon, LineExample};
+export {icon, samples};

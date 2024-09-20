@@ -15,8 +15,6 @@ import {
 } from 'react-native-svg';
 
 function ClipPathElement() {
-  // static title = 'Clip by set clip-path with a path data';
-  // render() {
   return (
     <Svg height="100" width="100">
       <Defs>
@@ -57,66 +55,62 @@ function ClipPathElement() {
       />
     </Svg>
   );
-  // }
 }
+ClipPathElement.title = 'Clip by set clip-path with a path data';
 
-class ClipRule extends Component {
-  static title = 'Clip a group with clipRule="evenodd"';
-  render() {
-    return (
-      <Svg height="100" width="100">
-        <Defs>
-          <ClipPath id="clip-rule-clip">
-            <Path d="M50,5L20,99L95,39L5,39L80,99z" />
-          </ClipPath>
-        </Defs>
-        <G clipPath="url(#clip-rule-clip)" clipRule="evenodd">
-          <Rect x="0" y="0" width="50" height="50" fill="red" />
-          <Rect x="50" y="0" width="50" height="50" fill="blue" />
-          <Rect x="0" y="50" width="50" height="50" fill="yellow" />
-          <Rect x="50" y="50" width="50" height="50" fill="green" />
-        </G>
-      </Svg>
-    );
-  }
+function ClipRule() {
+  return (
+    <Svg height="100" width="100">
+      <Defs>
+        <ClipPath id="clip-rule-clip">
+          <Path d="M50,5L20,99L95,39L5,39L80,99z" />
+        </ClipPath>
+      </Defs>
+      <G clipPath="url(#clip-rule-clip)" clipRule="evenodd">
+        <Rect x="0" y="0" width="50" height="50" fill="red" />
+        <Rect x="50" y="0" width="50" height="50" fill="blue" />
+        <Rect x="0" y="50" width="50" height="50" fill="yellow" />
+        <Rect x="50" y="50" width="50" height="50" fill="green" />
+      </G>
+    </Svg>
+  );
 }
+ClipRule.title = 'Clip a group with clipRule="evenodd"';
 
-class TextClipping extends Component {
-  static title = 'Transform the text';
-  render() {
-    return (
-      <Svg height="60" width="200">
-        <Defs>
-          <ClipPath id="text-clipping-clip">
-            <Circle cx="-20" cy="35" r="10" />
-            <Circle cx="0" cy="35" r="10" />
-            <Circle cx="20" cy="35" r="10" />
-            <Circle cx="40" cy="35" r="10" />
-            <Circle cx="60" cy="35" r="10" />
-            <Circle cx="80" cy="35" r="10" />
-            <Circle cx="100" cy="35" r="10" />
-            <Circle cx="120" cy="35" r="10" />
-            <Circle cx="140" cy="35" r="10" />
-            <Circle cx="160" cy="35" r="10" />
-            <Circle cx="180" cy="35" r="10" />
-          </ClipPath>
-        </Defs>
-        <Text
-          x="100"
-          y="40"
-          fill="red"
-          fontSize="22"
-          fontWeight="bold"
-          stroke="blue"
-          strokeWidth="1"
-          textAnchor="middle"
-          clipPath="url(#text-clipping-clip)">
-          NOT THE FACE
-        </Text>
-      </Svg>
-    );
-  }
+function TextClipping() {
+  return (
+    <Svg height="60" width="200">
+      <Defs>
+        <ClipPath id="text-clipping-clip">
+          <Circle cx="-20" cy="35" r="10" />
+          <Circle cx="0" cy="35" r="10" />
+          <Circle cx="20" cy="35" r="10" />
+          <Circle cx="40" cy="35" r="10" />
+          <Circle cx="60" cy="35" r="10" />
+          <Circle cx="80" cy="35" r="10" />
+          <Circle cx="100" cy="35" r="10" />
+          <Circle cx="120" cy="35" r="10" />
+          <Circle cx="140" cy="35" r="10" />
+          <Circle cx="160" cy="35" r="10" />
+          <Circle cx="180" cy="35" r="10" />
+        </ClipPath>
+      </Defs>
+      <Text
+        x="100"
+        y="40"
+        fill="red"
+        fontSize="22"
+        fontWeight="bold"
+        stroke="blue"
+        strokeWidth="1"
+        textAnchor="middle"
+        clipPath="url(#text-clipping-clip)">
+        NOT THE FACE
+      </Text>
+    </Svg>
+  );
 }
+TextClipping.title = 'Transform the text';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
@@ -136,4 +130,4 @@ const icon = (
 
 const samples = [ClipPathElement, ClipRule, TextClipping];
 
-export {icon, ClipPathElement};
+export {icon, samples};

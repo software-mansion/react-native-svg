@@ -39,59 +39,59 @@ function PressExample() {
   // }
 }
 
-class HoverExample extends Component {
-  static title = 'Hover the svg path';
-  state = {
-    hover: false,
-  };
-  toggle = () => {
-    this.setState({hover: !this.state.hover});
-  };
-  render() {
-    return (
-      <Svg height="120" width="120" delayPressIn={0}>
-        <Defs>
-          <ClipPath id="hover-clip">
-            <Circle r="30" cx="50%" cy="50%" />
-          </ClipPath>
-        </Defs>
-        <Path
-          onPressIn={this.toggle}
-          onPressOut={this.toggle}
-          d="M50,5L20,99L95,39L5,39L80,99z"
-          stroke={this.state.hover ? 'rgba(10, 10, 10, 0.5)' : 'black'}
-          fill={this.state.hover ? 'pink' : 'red'}
-          clipPath="url(#hover-clip)"
-          strokeWidth="6"
-          x="0"
-          y="0"
-        />
-      </Svg>
-    );
-  }
+function HoverExample() {
+  // static title = 'Hover the svg path';
+  // state = {
+  //   hover: false,
+  // };
+  // toggle = () => {
+  //   this.setState({hover: !this.state.hover});
+  // };
+  // render() {
+  return (
+    <Svg height="120" width="120" delayPressIn={0}>
+      <Defs>
+        <ClipPath id="hover-clip">
+          <Circle r="30" cx="50%" cy="50%" />
+        </ClipPath>
+      </Defs>
+      <Path
+        // onPressIn={this.toggle}
+        // onPressOut={this.toggle}
+        d="M50,5L20,99L95,39L5,39L80,99z"
+        // stroke={this.state.hover ? 'rgba(10, 10, 10, 0.5)' : 'black'}
+        // fill={this.state.hover ? 'pink' : 'red'}
+        clipPath="url(#hover-clip)"
+        strokeWidth="6"
+        x="0"
+        y="0"
+      />
+    </Svg>
+  );
+  // }
 }
 
-class GroupExample extends Component {
-  static title = 'Bind touch events callback on Group element with viewBox';
-  render() {
-    return (
-      <Svg height="120" width="120" viewBox="0 0 240 240">
-        <G onPress={() => Alert.alert('Pressed on G')} scale="1.4">
-          <Circle cx="80" cy="80" r="30" fill="green" x="20" scale="1.2" />
-          <Text
-            fill="black"
-            fontWeight="bold"
-            fontSize="40"
-            x="100"
-            y="40"
-            onPress={() => Alert.alert('Pressed on Text')}>
-            H
-          </Text>
-          <Rect x="20" y="20" width="40" height="40" fill="yellow" />
-        </G>
-      </Svg>
-    );
-  }
+function GroupExample() {
+  // static title = 'Bind touch events callback on Group element with viewBox';
+  // render() {
+  return (
+    <Svg height="120" width="120" viewBox="0 0 240 240">
+      <G onPress={() => Alert.alert('Pressed on G')} scale="1.4">
+        <Circle cx="80" cy="80" r="30" fill="green" x="20" scale="1.2" />
+        <Text
+          fill="black"
+          fontWeight="bold"
+          fontSize="40"
+          x="100"
+          y="40"
+          onPress={() => Alert.alert('Pressed on Text')}>
+          H
+        </Text>
+        <Rect x="20" y="20" width="40" height="40" fill="yellow" />
+      </G>
+    </Svg>
+  );
+  // }
 }
 
 const icon = (
@@ -115,4 +115,4 @@ const icon = (
 
 const samples = [PressExample, HoverExample, GroupExample];
 
-export {icon, PressExample};
+export {icon, samples};

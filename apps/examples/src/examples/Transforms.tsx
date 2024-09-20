@@ -90,49 +90,49 @@ function PatternTransformExample() {
   // }
 }
 
-class GradientTransformExample extends Component {
-  static title = 'Gradient transform';
-  render() {
-    return (
-      <Svg height="200" width="300" viewBox="0 0 420 200">
-        <RadialGradient
-          id="gradient1"
-          gradientUnits="userSpaceOnUse"
-          cx="100"
-          cy="100"
-          r="100"
-          fx="100"
-          fy="100">
-          <Stop offset="0%" stopColor="darkblue" />
-          <Stop offset="50%" stopColor="skyblue" />
-          <Stop offset="100%" stopColor="darkblue" />
-        </RadialGradient>
-        <RadialGradient
-          id="gradient2"
-          gradientUnits="userSpaceOnUse"
-          cx="100"
-          cy="100"
-          r="100"
-          fx="100"
-          fy="100"
-          gradientTransform="skewX(20) translate(-35, 0)">
-          <Stop offset="0%" stopColor="darkblue" />
-          <Stop offset="50%" stopColor="skyblue" />
-          <Stop offset="100%" stopColor="darkblue" />
-        </RadialGradient>
+function GradientTransformExample() {
+  // static title = 'Gradient transform';
+  // render() {
+  return (
+    <Svg height="200" width="300" viewBox="0 0 420 200">
+      <RadialGradient
+        id="gradient1"
+        gradientUnits="userSpaceOnUse"
+        cx="100"
+        cy="100"
+        r="100"
+        fx="100"
+        fy="100">
+        <Stop offset="0%" stopColor="darkblue" />
+        <Stop offset="50%" stopColor="skyblue" />
+        <Stop offset="100%" stopColor="darkblue" />
+      </RadialGradient>
+      <RadialGradient
+        id="gradient2"
+        gradientUnits="userSpaceOnUse"
+        cx="100"
+        cy="100"
+        r="100"
+        fx="100"
+        fy="100"
+        gradientTransform="skewX(20) translate(-35, 0)">
+        <Stop offset="0%" stopColor="darkblue" />
+        <Stop offset="50%" stopColor="skyblue" />
+        <Stop offset="100%" stopColor="darkblue" />
+      </RadialGradient>
 
-        <Rect x="0" y="0" width="200" height="200" fill="url(#gradient1)" />
-        <Rect
-          x="0"
-          y="0"
-          width="200"
-          height="200"
-          fill="url(#gradient2)"
-          transform="translate(220)"
-        />
-      </Svg>
-    );
-  }
+      <Rect x="0" y="0" width="200" height="200" fill="url(#gradient1)" />
+      <Rect
+        x="0"
+        y="0"
+        width="200"
+        height="200"
+        fill="url(#gradient2)"
+        transform="translate(220)"
+      />
+    </Svg>
+  );
+  // }
 }
 
 const icon = (
@@ -150,4 +150,4 @@ const icon = (
 
 const samples = [PatternTransformExample, GradientTransformExample];
 
-export {icon, PatternTransformExample};
+export {icon, samples};

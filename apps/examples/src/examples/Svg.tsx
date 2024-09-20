@@ -1,5 +1,12 @@
 import React, {Component, useRef, useState} from 'react';
-import {StyleSheet, View, Image, Text, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  Text,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
 import {Svg, Circle, G, Path, Line, Rect} from 'react-native-svg';
 
 const styles = StyleSheet.create({
@@ -16,119 +23,109 @@ const styles = StyleSheet.create({
 
 function SvgExample() {
   return (
-    <>
-      <Text>SVG</Text>
-      <Svg height="100" width="100">
-        <Circle
-          cx="50"
-          cy="50"
-          r="45"
-          stroke="blue"
-          strokeWidth="2.5"
-          fill="green"
-        />
-        <Rect
-          x="15"
-          y="15"
-          width="70"
-          height="70"
-          stroke="red"
-          strokeWidth="2"
-          fill="yellow"
-        />
-      </Svg>
-    </>
+    <Svg height="100" width="100">
+      <Circle
+        cx="50"
+        cy="50"
+        r="45"
+        stroke="blue"
+        strokeWidth="2.5"
+        fill="green"
+      />
+      <Rect
+        x="15"
+        y="15"
+        width="70"
+        height="70"
+        stroke="red"
+        strokeWidth="2"
+        fill="yellow"
+      />
+    </Svg>
   );
 }
+
+SvgExample.title = 'SVG';
 
 function SvgOpacity() {
   return (
-    <>
-      <Text>SVG with `opacity` prop</Text>
-      <Svg height="100" width="100" opacity="0.2">
-        <Circle
-          cx="50"
-          cy="50"
-          r="45"
-          stroke="blue"
-          strokeWidth="2.5"
-          fill="green"
-        />
-        <Rect
-          x="15"
-          y="15"
-          width="70"
-          height="70"
-          stroke="red"
-          strokeWidth="2"
-          fill="yellow"
-        />
-      </Svg>
-    </>
+    <Svg height="100" width="100" opacity="0.2">
+      <Circle
+        cx="50"
+        cy="50"
+        r="45"
+        stroke="blue"
+        strokeWidth="2.5"
+        fill="green"
+      />
+      <Rect
+        x="15"
+        y="15"
+        width="70"
+        height="70"
+        stroke="red"
+        strokeWidth="2"
+        fill="yellow"
+      />
+    </Svg>
   );
 }
 
+SvgOpacity.title = 'SVG with `opacity` prop';
+
 function SvgViewbox() {
-  // static title =
-  //   'SVG with `viewBox="40 20 100 40" and preserveAspectRatio="none"`';
-  // render() {
   return (
-    <>
-      <Text>
-        SVG with `viewBox="40 20 100 40" and preserveAspectRatio="none"`
-      </Text>
-      <Svg
-        height="100"
-        width="100"
-        viewBox="40 20 100 40"
-        preserveAspectRatio="none">
-        <Rect x="0" y="0" width="100" height="100" fill="red" />
-        <Circle cx="50" cy="50" r="30" fill="yellow" />
-        <Circle cx="40" cy="40" r="4" fill="black" />
-        <Circle cx="60" cy="40" r="4" fill="black" />
-        <Path d="M 40 60 A 10 10 0 0 0 60 60" stroke="black" />
-      </Svg>
-    </>
+    <Svg
+      height="100"
+      width="100"
+      viewBox="40 20 100 40"
+      preserveAspectRatio="none">
+      <Rect x="0" y="0" width="100" height="100" fill="red" />
+      <Circle cx="50" cy="50" r="30" fill="yellow" />
+      <Circle cx="40" cy="40" r="4" fill="black" />
+      <Circle cx="60" cy="40" r="4" fill="black" />
+      <Path d="M 40 60 A 10 10 0 0 0 60 60" stroke="black" />
+    </Svg>
   );
   // }
 }
+SvgViewbox.title =
+  'SVG with `viewBox="40 20 100 40" and preserveAspectRatio="none"';
 
 function SvgLayout() {
   return (
-    <>
-      <Text>SVG with flex layout</Text>
-      <View style={styles.container}>
-        <Svg style={styles.svg}>
-          <Rect
-            width="80%"
-            height="80%"
-            x="10%"
-            y="10%"
-            fill="purple"
-            stroke="yellow"
-            strokeWidth="4"
-          />
-          <Line
-            x1="10%"
-            y1="10%"
-            x2="90%"
-            y2="90%"
-            stroke="yellow"
-            strokeWidth="4"
-          />
-          <Line
-            x1="10%"
-            y1="90%"
-            x2="90%"
-            y2="10%"
-            stroke="yellow"
-            strokeWidth="4"
-          />
-        </Svg>
-      </View>
-    </>
+    <View style={styles.container}>
+      <Svg style={styles.svg}>
+        <Rect
+          width="80%"
+          height="80%"
+          x="10%"
+          y="10%"
+          fill="purple"
+          stroke="yellow"
+          strokeWidth="4"
+        />
+        <Line
+          x1="10%"
+          y1="10%"
+          x2="90%"
+          y2="90%"
+          stroke="yellow"
+          strokeWidth="4"
+        />
+        <Line
+          x1="10%"
+          y1="90%"
+          x2="90%"
+          y2="10%"
+          stroke="yellow"
+          strokeWidth="4"
+        />
+      </Svg>
+    </View>
   );
 }
+SvgLayout.title = 'SVG with flex layout';
 
 function SvgNativeMethods() {
   const [base64, setBase64] = useState(null);
@@ -151,10 +148,6 @@ function SvgNativeMethods() {
   };
   return (
     <>
-      <Text>
-        Tap the shapes to render the Image below based on the base64-data of the
-        Svg
-      </Text>
       <Svg height="100" width="150" ref={rootRef}>
         <G x="40" onPress={alert}>
           <Circle cx="32" cy="32" r="4.167" fill="blue" ref={circleRef} />
@@ -176,25 +169,8 @@ function SvgNativeMethods() {
   );
 }
 
-function SvgComponent() {
-  return (
-    <ScrollView contentContainerStyle={{alignItems: 'center'}}>
-      <SvgExample />
-      <Separator />
-      <SvgOpacity />
-      <Separator />
-      <SvgViewbox />
-      <Separator />
-      <SvgLayout />
-      <Separator />
-      <SvgNativeMethods />
-    </ScrollView>
-  );
-}
-
-function Separator() {
-  return <View style={{height: 50}} />;
-}
+SvgNativeMethods.title =
+  'Tap the shapes to render the Image below based on the base64-data of the Svg';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
@@ -211,12 +187,12 @@ const icon = (
   </Svg>
 );
 
-// const samples = [
-//   SvgExample,
-//   SvgOpacity,
-//   SvgViewbox,
-//   SvgLayout,
-//   SvgNativeMethods,
-// ];
+const samples = [
+  SvgExample,
+  SvgOpacity,
+  SvgViewbox,
+  SvgLayout,
+  SvgNativeMethods,
+];
 
-export {icon, SvgComponent};
+export {icon, samples};

@@ -24,13 +24,11 @@ import {
 } from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import E2eTestingView from './src/e2e';
 import {EXAMPLES} from './src/examples';
 import {HeaderBackButton} from '@react-navigation/elements';
 import {HeaderBackButtonProps} from '@react-navigation/native-stack/lib/typescript/src/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// console.log('EXAMPLES: ', EXAMPLES);
+import composeComponents from './utils/composeComponent';
 
 function noop() {
   // do nothing
@@ -39,6 +37,8 @@ function noop() {
 const EXAMPLES_NAMES = Object.keys(EXAMPLES);
 
 const Stack = createNativeStackNavigator();
+
+console.log('EXAMPLES: ', EXAMPLES);
 
 type RootStackParamList = {[P in keyof typeof EXAMPLES]: undefined} & {
   Home: undefined;
@@ -171,13 +171,14 @@ export default function App() {
           component={Home}
           options={{
             headerTitle: 'SVG library for React Apps',
+            headerTintColor: '#f60',
           }}
         />
         {EXAMPLES_NAMES.map(name => (
           <Stack.Screen
             key={name}
             name={name}
-            component={EXAMPLES[name].screen}
+            component={composeComponents(EXAMPLES[name].samples)}
             options={{
               animation: 'default',
               headerTitle: EXAMPLES[name].title,

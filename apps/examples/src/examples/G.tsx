@@ -35,51 +35,44 @@ function GExample() {
   // }
 }
 
-class GTransform extends Component {
-  static title = 'G transform';
-  render() {
-    return (
-      <Svg height="100" width="200">
-        <G rotation="50" origin="40, 30" id="group">
-          <Line
-            x1="60"
-            y1="10"
-            x2="140"
-            y2="10"
-            stroke="#060"
-            strokeWidth="1"
-          />
-          <Rect
-            x="60"
-            y="20"
-            height="50"
-            width="80"
-            stroke="#060"
-            strokeWidth="1"
-            fill="#060"
-          />
-          <Text
-            x="100"
-            y="75"
-            stroke="#600"
-            strokeWidth="1"
-            fill="#600"
-            textAnchor="middle">
-            Text grouped with shapes
-          </Text>
-        </G>
-        <Use
-          href="#group"
-          x="5"
-          y="40"
-          rotation="-50"
-          scale="0.75"
-          stroke="red"
-          opacity="0.5"
+function GTransform() {
+  // static title = 'G transform';
+  // render() {
+  return (
+    <Svg height="100" width="200">
+      <G rotation="50" origin="40, 30" id="group">
+        <Line x1="60" y1="10" x2="140" y2="10" stroke="#060" strokeWidth="1" />
+        <Rect
+          x="60"
+          y="20"
+          height="50"
+          width="80"
+          stroke="#060"
+          strokeWidth="1"
+          fill="#060"
         />
-      </Svg>
-    );
-  }
+        <Text
+          x="100"
+          y="75"
+          stroke="#600"
+          strokeWidth="1"
+          fill="#600"
+          textAnchor="middle">
+          Text grouped with shapes
+        </Text>
+      </G>
+      <Use
+        href="#group"
+        x="5"
+        y="40"
+        rotation="-50"
+        scale="0.75"
+        stroke="red"
+        opacity="0.5"
+      />
+    </Svg>
+  );
+  // }
 }
 
 const icon = (
@@ -96,4 +89,4 @@ const icon = (
 
 const samples = [GExample, GTransform];
 
-export {icon, GExample};
+export {icon, samples};

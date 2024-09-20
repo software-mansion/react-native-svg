@@ -101,4 +101,4 @@ const samples = [PanExample];
 
 const scroll = false;
 
-export {icon, PanExample, scroll};
+export {icon, samples, scroll};

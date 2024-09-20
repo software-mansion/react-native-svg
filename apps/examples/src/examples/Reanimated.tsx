@@ -42,4 +42,4 @@ const samples = [ReanimatedRectExample];
 const style = StyleSheet.create({text: {width: 30, height: 30}});
 const icon = <Text style={style.text}>R</Text>;
 
-export {icon, ReanimatedRectExample};
+export {icon, samples};
