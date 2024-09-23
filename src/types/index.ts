@@ -5,10 +5,10 @@ import type {
   NumberProp,
   TransformProps,
 } from '../lib/extract/types';
-// import { PressResponderConfig } from '../web/hooks/usePressEvents/PressResponder';
 
 export interface CreateComponentProps extends BaseProps {
   tag: keyof React.JSX.IntrinsicElements;
+  currentRef?: React.MutableRefObject<SVGElement | null>;
   forwardedRef?: React.Ref<SVGElement> | React.MutableRefObject<SVGElement>;
 }
 
