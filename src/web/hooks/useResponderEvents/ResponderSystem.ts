@@ -164,42 +164,26 @@ type ResponderInstance = ActiveResponderInstance | EmptyResponderInstance;
 
 export type ResponderConfig = {
   // Direct responder events dispatched directly to responder. Do not bubble.
-  onResponderEnd?: (e: ResponderEvent) => void | null | undefined;
-  onResponderGrant?: (
-    e: ResponderEvent
-  ) => undefined | boolean | null | undefined;
-  onResponderMove?: (e: ResponderEvent) => void | null | undefined;
-  onResponderRelease?: (e: ResponderEvent) => void | null | undefined;
-  onResponderReject?: (e: ResponderEvent) => void | null | undefined;
-  onResponderStart?: (e: ResponderEvent) => void | null | undefined;
-  onResponderTerminate?: (e: ResponderEvent) => void | null | undefined;
-  onResponderTerminationRequest?: (
-    e: ResponderEvent
-  ) => boolean | null | undefined;
+  onResponderEnd?: (e: ResponderEvent) => void;
+  onResponderGrant?: (e: ResponderEvent) => void | boolean;
+  onResponderMove?: (e: ResponderEvent) => void;
+  onResponderRelease?: (e: ResponderEvent) => void;
+  onResponderReject?: (e: ResponderEvent) => void;
+  onResponderStart?: (e: ResponderEvent) => void;
+  onResponderTerminate?: (e: ResponderEvent) => void;
+  onResponderTerminationRequest?: (e: ResponderEvent) => boolean;
   // On pointer down, should this element become the responder?
-  onStartShouldSetResponder?: (e: ResponderEvent) => boolean | null | undefined;
-  onStartShouldSetResponderCapture?: (
-    e: ResponderEvent
-  ) => boolean | null | undefined;
+  onStartShouldSetResponder?: (e: ResponderEvent) => boolean;
+  onStartShouldSetResponderCapture?: (e: ResponderEvent) => boolean;
   // On pointer move, should this element become the responder?
-  onMoveShouldSetResponder?: (e: ResponderEvent) => boolean | null | undefined;
-  onMoveShouldSetResponderCapture?: (
-    e: ResponderEvent
-  ) => boolean | null | undefined;
+  onMoveShouldSetResponder?: (e: ResponderEvent) => boolean;
+  onMoveShouldSetResponderCapture?: (e: ResponderEvent) => boolean;
   // On scroll, should this element become the responder? Do no bubble
-  onScrollShouldSetResponder?: (
-    e: ResponderEvent
-  ) => boolean | null | undefined;
-  onScrollShouldSetResponderCapture?: (
-    e: ResponderEvent
-  ) => boolean | null | undefined;
+  onScrollShouldSetResponder?: (e: ResponderEvent) => boolean;
+  onScrollShouldSetResponderCapture?: (e: ResponderEvent) => boolean;
   // On text selection change, should this element become the responder?
-  onSelectionChangeShouldSetResponder?: (
-    e: ResponderEvent
-  ) => boolean | null | undefined;
-  onSelectionChangeShouldSetResponderCapture?: (
-    e: ResponderEvent
-  ) => boolean | null | undefined;
+  onSelectionChangeShouldSetResponder?: (e: ResponderEvent) => boolean;
+  onSelectionChangeShouldSetResponderCapture?: (e: ResponderEvent) => boolean;
 };
 
 const emptyObject: Record<string, any> = {};
