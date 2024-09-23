@@ -12,17 +12,6 @@ export const getBoundingClientRect = (node: SVGElement) => {
   throw new Error('Can not get boundingClientRect of ' + node || 'undefined');
 };
 
-export const remeasure = (element: HTMLElement | null) => {
-  if (!element) return;
-  const rect = element.getBoundingClientRect();
-  return {
-    width: rect.width,
-    height: rect.height,
-    top: rect.top + window.scrollY,
-    left: rect.left + window.scrollX,
-  };
-};
-
 /* Taken from here: https://gist.github.com/jennyknuth/222825e315d45a738ed9d6e04c7a88d0 */
 export function encodeSvg(svgString: string) {
   return svgString
