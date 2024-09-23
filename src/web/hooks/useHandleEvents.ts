@@ -1,18 +1,15 @@
 import { MutableRefObject, useMemo } from 'react';
 // eslint-disable-next-line import/no-unresolved, @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import usePressEvents from 'react-native-web/dist/modules/usePressEvents';
-// import usePressEvents from './usePressEvents';
-// eslint-disable-next-line import/no-unresolved, @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import useResponderEvents from 'react-native-web/dist/modules/useResponderEvents';
 // import useResponderEvents from './useResponderEvents';
 import { hasResponderEvents, hasTouchableProperty } from '../utils/hasProperty';
+import usePressEvents from './usePressEvents';
 import { CreateComponentProps } from '../../types';
 import { EventHandlers } from './usePressEvents/PressResponder';
 
-export function useHandleEvents<T>(
-  elementRef: MutableRefObject<T | null>,
+export function useHandleEvents(
+  elementRef: MutableRefObject<SVGElement | null>,
   props: CreateComponentProps
 ) {
   const {
@@ -43,7 +40,7 @@ export function useHandleEvents<T>(
     ...rest
   } = props;
 
-  let pressEventHandlers: EventHandlers | null = null;
+  let pressEventHandlers: EventHandlers | undefined;
   if (hasTouchableProperty(props)) {
     const pressConfig = useMemo(
       () => ({

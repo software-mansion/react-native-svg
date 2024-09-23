@@ -1,4 +1,4 @@
-import { memo, forwardRef, PropsWithoutRef } from 'react';
+import React, { memo, forwardRef, PropsWithoutRef } from 'react';
 import { WebShape } from './WebShape';
 import { BaseProps } from '../types';
 
