@@ -50,7 +50,7 @@ import type { TSpanProps } from './elements/TSpan';
 import type { UseProps } from './elements/Use';
 import { BaseProps } from './types';
 import { createComponent } from './web/CreateWebComponent';
-import { SvgComponent } from './web/Svg';
+import { SvgProps } from './ReactNativeSVG';
 
 export const Circle = createComponent<BaseProps & CircleProps>('circle');
 export const ClipPath = createComponent<BaseProps & ClipPathProps>('clipPath');
@@ -142,7 +142,7 @@ export const RadialGradient = createComponent<BaseProps & RadialGradientProps>(
 );
 export const Rect = createComponent<BaseProps & RectProps>('rect');
 export const Stop = createComponent<BaseProps & StopProps>('stop');
-export const Svg = SvgComponent;
+export const Svg = createComponent<SvgProps & BaseProps>('svg');
 
 export const Symbol = createComponent<BaseProps & SymbolProps>('symbol');
 export const Text = createComponent<BaseProps & TextProps>('text');
