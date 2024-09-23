@@ -1,3 +1,4 @@
+import { MutableRefObject, Ref, JSX } from 'react';
 import { ResponderConfig } from '../web/hooks/useResponderEvents/ResponderSystem';
 import type { ImageProps as RNImageProps } from 'react-native';
 import type {
@@ -7,9 +8,9 @@ import type {
 } from '../lib/extract/types';
 
 export interface CreateComponentProps extends BaseProps {
-  tag: keyof React.JSX.IntrinsicElements;
-  currentRef?: React.MutableRefObject<SVGElement | null>;
-  forwardedRef?: React.Ref<SVGElement> | React.MutableRefObject<SVGElement>;
+  tag: keyof JSX.IntrinsicElements;
+  elementRef?: MutableRefObject<SVGElement | null>;
+  forwardedRef?: Ref<SVGElement> | MutableRefObject<SVGElement>;
 }
 
 export interface Props extends ResponderConfig {

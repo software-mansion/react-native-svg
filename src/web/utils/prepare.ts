@@ -27,7 +27,7 @@ export const prepare = (props: CreateComponentProps) => {
     forwardedRef,
     gradientTransform,
     patternTransform,
-    currentRef,
+    elementRef,
     ...rest
   } = props;
 
@@ -56,13 +56,13 @@ export const prepare = (props: CreateComponentProps) => {
   }
 
   clean.ref = (el: SVGElement | null) => {
-    if (currentRef) {
-      currentRef.current = el;
+    if (elementRef) {
+      elementRef.current = el;
     }
     if (typeof forwardedRef === 'function') {
       forwardedRef(el);
     } else if (forwardedRef) {
-      (forwardedRef as any).current = el;
+      (forwardedRef as React.MutableRefObject<SVGElement | null>).current = el;
     }
   };
 
