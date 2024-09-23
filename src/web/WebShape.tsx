@@ -24,7 +24,7 @@ export const WebShape = <T,>(
     elementRef as React.MutableRefObject<SVGElement | null>,
     lastMergedProps
   );
-  const prep = prepare({ ...rest, currentRef });
+  const prep = prepare({ ...rest, elementRef });
   const setRef = useMergeRefs(prep.ref, forwardedRef);
 
   if (Tag === 'svg') {
