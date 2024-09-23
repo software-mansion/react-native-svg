@@ -411,12 +411,27 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         }
 
         // calculate mask bounds
-        float maskX = (float) relativeOnWidth(mask.mX);
-        float maskY = (float) relativeOnHeight(mask.mY);
-        float maskWidth = (float) relativeOnWidth(mask.mW);
-        float maskHeight = (float) relativeOnHeight(mask.mH);
+        RectF maskBounds;
+        if (mask.getMaskUnits() == Brush.BrushUnits.USER_SPACE_ON_USE) {
+          float maskX = (float) relativeOnWidth(mask.mX);
+          float maskY = (float) relativeOnHeight(mask.mY);
+          float maskWidth = (float) relativeOnWidth(mask.mW);
+          float maskHeight = (float) relativeOnHeight(mask.mH);
+          maskBounds = new RectF(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
+        } else { // Brush.BrushUnits.OBJECT_BOUNDING_BOX
+          RectF clientRect = this.getClientRect();
+          if (this instanceof ImageView && clientRect == null) {
+            return;
+          }
+          mInvCTM.mapRect(clientRect);
+          float maskX = (float) relativeOnFraction(mask.mX, clientRect.width());
+          float maskY = (float) relativeOnFraction(mask.mY, clientRect.height());
+          float maskWidth = (float) relativeOnFraction(mask.mW, clientRect.width());
+          float maskHeight = (float) relativeOnFraction(mask.mH, clientRect.height());
+          maskBounds = new RectF(clientRect.left + maskX, clientRect.top + maskY, clientRect.left + maskX + maskWidth, clientRect.top + maskY + maskHeight);
+        }
         // clip to mask bounds
-        canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
+        canvas.clipRect(maskBounds);
 
         mask.draw(canvas, paint, 1f);
 
@@ -426,7 +441,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         // step 2 - alpha layer
         canvas.saveLayer(null, dstInPaint);
         // clip to mask bounds
-        canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
+        canvas.clipRect(maskBounds);
 
         mask.draw(canvas, paint, 1f);
 
