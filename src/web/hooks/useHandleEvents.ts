@@ -1,12 +1,9 @@
 import { MutableRefObject, useMemo } from 'react';
-// eslint-disable-next-line import/no-unresolved, @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import useResponderEvents from 'react-native-web/dist/modules/useResponderEvents';
-// import useResponderEvents from './useResponderEvents';
-import { hasResponderEvents, hasTouchableProperty } from '../utils/hasProperty';
+import useResponderEvents from './useResponderEvents';
 import usePressEvents from './usePressEvents';
-import { CreateComponentProps } from '../../types';
-import { EventHandlers } from './usePressEvents/PressResponder';
+import { hasResponderEvents, hasTouchableProperty } from '../utils/hasProperty';
+import type { CreateComponentProps } from '../../types';
+import type { EventHandlers } from './usePressEvents/PressResponder';
 
 export function useHandleEvents(
   elementRef: MutableRefObject<SVGElement | null>,

@@ -1,6 +1,6 @@
 import React, { memo, forwardRef, PropsWithoutRef } from 'react';
 import { WebShape } from './WebShape';
-import { BaseProps } from '../types';
+import type { BaseProps } from '../types';
 
 const CreateComponent = memo(forwardRef(WebShape));
 
