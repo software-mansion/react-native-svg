@@ -3,7 +3,7 @@ import {
   // @ts-ignore it is not seen in exports
   unstable_createElement as createElement,
 } from 'react-native';
-import useMergeRefs from './hooks/useMergeRefs';
+import { useMergeRefs } from './webUtils.web';
 import type { CreateComponentProps } from '../types';
 import { prepare } from './utils/prepare';
 import { useHandleEvents } from './hooks/useHandleEvents';

@@ -1,5 +1,5 @@
 import { MutableRefObject, Ref, JSX } from 'react';
-import { ResponderConfig } from '../web/hooks/useResponderEvents/ResponderSystem';
+import { ResponderConfig } from '../web/hooks/types';
 import type { ImageProps as RNImageProps } from 'react-native';
 import type {
   NumberArray,

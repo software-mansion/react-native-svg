@@ -1,9 +1,8 @@
 import { MutableRefObject, useMemo } from 'react';
-import useResponderEvents from './useResponderEvents';
-import usePressEvents from './usePressEvents';
+import { usePressEvents, useResponderEvents } from '../webUtils.web';
 import { hasResponderEvents, hasTouchableProperty } from '../utils/hasProperty';
 import type { CreateComponentProps } from '../../types';
-import type { EventHandlers } from './usePressEvents/PressResponder';
+import { EventHandlers } from './types';
 
 export function useHandleEvents(
   elementRef: MutableRefObject<SVGElement | null>,
