@@ -23,7 +23,7 @@ class PressExample extends Component {
           cy="50%"
           r="38%"
           fill="red"
-          onPress={() => console.log('Press on Circle')}
+          onPress={() => Alert.alert('Press on Circle')}
         />
         <Rect
           x="20%"
@@ -31,7 +31,7 @@ class PressExample extends Component {
           width="60%"
           height="60%"
           fill="blue"
-          onLongPress={() => console.log('Long press on Rect')}
+          onLongPress={() => Alert.alert('Long press on Rect')}
         />
         <Path d="M50,5L20,99L95,39L5,39L80,99z" fill="pink" />
       </Svg>
