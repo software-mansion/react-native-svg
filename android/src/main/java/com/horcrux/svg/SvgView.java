@@ -364,8 +364,16 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   String toDataURL(final ReadableMap options) {
-    int width = options.hasKey("width") ? options.getInt("width") : getWidth();
-    int height = options.hasKey("height") ? options.getInt("height") : getHeight();
+    int width;
+    int height;
+    if (options.hasKey("size")) {
+      ReadableMap size = options.getMap("size");
+      width = size.hasKey("width") ? size.getInt("width") : getWidth();
+      height = size.hasKey("height") ? size.getInt("height") : getHeight();
+    } else {
+      width = getWidth();
+      height = getHeight();
+    }
     Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
     clearChildCache();
