@@ -112,7 +112,6 @@
     "react": "^18.2.0",
     "react-native": "^0.72.3",
     "react-native-builder-bob": "^0.20.4",
-    "react-native-web": "^0.19.10",
     "react-native-windows": "^0.72.4",
     "react-test-renderer": "^18.2.0",
     "release-it": "^14.12.5",
