@@ -631,6 +631,18 @@ function resolveVariables(
   );
 }
 
+const propsToResolve = ['fill', 'color', 'stroke', 'stopColor', 'floodColor'];
+const resolveElementVariables = (
+  element: XmlAST,
+  variables: Map<string, string>
+) =>
+  propsToResolve.forEach((prop) => {
+    const value = element.props[prop] as string;
+    if (value && value.startsWith('var(')) {
+      element.props[prop] = resolveVariables(value, variables);
+    }
+  });
+
 export const inlineStyles: Middleware = function inlineStyles(
   document: XmlAST
 ) {
@@ -679,33 +691,13 @@ export const inlineStyles: Middleware = function inlineStyles(
   // stable sort selectors
   const sortedSelectors = sortSelectors(selectorsPseudo).reverse();
 
-  const elementsWithFillOrColor = cssSelect(
+  const elementsWithColor = cssSelect(
     '*[fill], *[color], *[stroke], *[stopColor], *[floodColor]',
     document,
     cssSelectOpts
   );
-  for (const element of elementsWithFillOrColor) {
-    const fillValue = element.props?.fill as string;
-    if (fillValue && fillValue.startsWith('var(')) {
-      element.props.fill = resolveVariables(fillValue, variables);
-    }
-
-    const colorValue = element.props?.color as string;
-    if (colorValue && colorValue.startsWith('var(')) {
-      element.props.color = resolveVariables(colorValue, variables);
-    }
-    const strokeValue = element.props?.stroke as string;
-    if (strokeValue && strokeValue.startsWith('var(')) {
-      element.props.stroke = resolveVariables(strokeValue, variables);
-    }
-    const stopColorValue = element.props?.stopColor as string;
-    if (stopColorValue && stopColorValue.startsWith('var(')) {
-      element.props.stopColor = resolveVariables(stopColorValue, variables);
-    }
-    const floodColorValue = element.props?.floodColor as string;
-    if (floodColorValue && floodColorValue.startsWith('var(')) {
-      element.props.floodColor = resolveVariables(floodColorValue, variables);
-    }
+  for (const element of elementsWithColor) {
+    resolveElementVariables(element, variables);
   }
 
   // match selectors
