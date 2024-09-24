@@ -1410,19 +1410,18 @@ A function that receives the Base64-encoded string as its argument once the SVG 
 
 `options?: ToDataUrlOptions`
 An object specifying the format and dimensions of the output image. The options object can include the following properties:
+
 ``` ts
-format: 'png' | 'jpeg'
-Specifies the output image format. If not provided any options, the default format is PNG.
+format: 'png' | 'jpeg' // Specifies the output image format. If not provided any options, the default format is PNG.
 
-quality?: number
 (Only applicable for jpeg format)
-A value between 0 and 1 specifying the image quality, with 1 being the highest quality. The default value is 1.
+quality?: number // the default value range between 0 - 1
 
-width: number
-The desired width of the output image.
+size?: {
+  width: number
+  height: number
+}
 
-height: number
-The desired height of the output image.
 ```
 
 ## Example: 
