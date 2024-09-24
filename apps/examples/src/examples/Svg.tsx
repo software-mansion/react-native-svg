@@ -140,14 +140,6 @@ class SvgNativeMethods extends Component {
     base64: null,
   };
 
-  size = {width: 150, height: 100};
-
-  optionsWithJPEGFormat: DataUrlOptions = {
-    format: 'jpeg',
-    quality: 1,
-    size: {width: 150, height: 100},
-  };
-
   optionsWithPNGFormat: DataUrlOptions = {
     format: 'png',
     size: {width: 150, height: 100},
@@ -159,7 +151,7 @@ class SvgNativeMethods extends Component {
       this.setState({
         base64,
       });
-    });
+    }, this.optionsWithPNGFormat);
     console.log(this.circle?.isPointInFill({x: 200, y: 100}));
     console.log(this.circle?.isPointInStroke({x: 200, y: 100}));
     console.log(this.circle?.getTotalLength());
