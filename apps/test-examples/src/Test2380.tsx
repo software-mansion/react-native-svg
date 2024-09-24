@@ -1,8 +1,9 @@
 import React from 'react';
+import {View} from 'react-native';
 import {SvgCss} from 'react-native-svg/css';
 
 const xml = `
-  <svg width="200" height="200" id="mySVG" viewBox="0 0 200 200">
+<svg width="200" height="200" id="mySVG" viewBox="0 0 200 200">
     <style>
       #mySVG {
         --my-color: #ff0000;
@@ -17,7 +18,7 @@ const xml = `
         }
     </style>
     <defs>
-    <linearGradient id="myGradient" gradientTransform="rotate(90)">
+    <linearGradient id="myGradient">
       <stop offset="5%" stop-color="var(--my-gold-stop-color)" />
       <stop offset="95%" stop-color="var(--my-red-stop-color)" />
     </linearGradient>
@@ -36,7 +37,7 @@ const xml = `
     <rect fill="var(--color)" x="40" y="40" width="32" height="32" />
     <rect id="newId" x="80" y="40" width="32" height="32" />
     <text fill="var(--color)" x="20" y="100" stroke="var(--green-color)" stroke-width="1" font-size="16">Hello</text>
-    <circle cx="140" cy="55" r="15" fill="url('#myGradient')" />
+    <circle cx="140" cy="55" r="15" fill="url(#myGradient)" />
 
     <image
       href="https://static-00.iconduck.com/assets.00/mdn-icon-2048x1806-enhibj42.png"
@@ -49,5 +50,9 @@ const xml = `
 `;
 
 export default function SvgComponent() {
-  return <SvgCss xml={xml} height="100%" width="100%" />;
+  return (
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <SvgCss xml={xml} height="200" width="200" />
+    </View>
+  );
 }
