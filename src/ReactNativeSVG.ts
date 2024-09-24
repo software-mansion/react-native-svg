@@ -107,13 +107,13 @@ export type { PolylineProps } from './elements/Polyline';
 export type { RadialGradientProps } from './elements/RadialGradient';
 export type { RectProps } from './elements/Rect';
 export type { StopProps } from './elements/Stop';
-export type { SvgProps, DataUrlOptions } from './elements/Svg';
+export type { SvgProps } from './elements/Svg';
 export type { SymbolProps } from './elements/Symbol';
 export type { TextProps } from './elements/Text';
 export type { TextPathProps } from './elements/TextPath';
 export type { TSpanProps } from './elements/TSpan';
 export type { UseProps } from './elements/Use';
-
+export type { DataUrlOptions } from './lib/utils/toDataUrlUtils';
 export * from './lib/extract/types';
 
 export {

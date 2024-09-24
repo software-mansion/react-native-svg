@@ -43,12 +43,13 @@ import type { PolylineProps } from './elements/Polyline';
 import type { RadialGradientProps } from './elements/RadialGradient';
 import type { RectProps } from './elements/Rect';
 import type { StopProps } from './elements/Stop';
-import type { SvgProps, DataUrlOptions } from './elements/Svg';
+import type { SvgProps } from './elements/Svg';
 import type { SymbolProps } from './elements/Symbol';
 import type { TextProps } from './elements/Text';
 import type { TextPathProps } from './elements/TextPath';
 import type { TSpanProps } from './elements/TSpan';
 import type { UseProps } from './elements/Use';
+import type { DataUrlOptions } from './lib/utils/toDataUrlUtils';
 import type { BaseProps } from './web/types';
 import { encodeSvg, getBoundingClientRect } from './web/utils';
 import { WebShape } from './web/WebShape';
@@ -264,7 +265,12 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
     const format = options.format === 'jpeg' ? 'image/jpeg' : 'image/png';
 
     let quality: number | undefined;
-    if (options && options.format === 'jpeg' && options.quality) {
+    if (
+      options &&
+      options.format === 'jpeg' &&
+      options.quality &&
+      options.quality !== undefined
+    ) {
       quality = options.quality;
     }
 

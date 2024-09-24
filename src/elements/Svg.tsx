@@ -27,6 +27,11 @@ import type { Spec } from '../fabric/NativeSvgViewModule';
 import extractOpacity from '../lib/extract/extractOpacity';
 import { extractTransformSvgView } from '../lib/extract/extractTransform';
 import { ViewProps } from '../fabric/utils';
+import {
+  type DataUrlOptions,
+  type Size,
+  validateOptions,
+} from '../lib/utils/toDataUrlUtils';
 
 const styles = StyleSheet.create({
   svg: {
@@ -43,39 +48,6 @@ export interface SvgProps extends GProps, ViewProps, HitSlop {
   preserveAspectRatio?: string;
   color?: ColorValue;
   title?: string;
-}
-
-export type DataUrlOptions = JpegOptions | PngOptions;
-
-interface JpegOptions {
-  format: 'jpeg';
-  quality?: number;
-  size?: Size;
-}
-
-interface PngOptions {
-  format: 'png';
-  size?: Size;
-}
-
-interface Size {
-  width: number;
-  height: number;
-}
-
-function validateOptions(options?: DataUrlOptions) {
-  if (options && options?.format === 'jpeg') {
-    if (!validateJpegQualityParameter(options)) {
-      throw new Error('toDataURL: Invalid quality parameter for JPEG format.');
-    }
-  }
-}
-
-function validateJpegQualityParameter(options: JpegOptions): boolean {
-  if (options.quality && (options.quality < 0 || options.quality > 1)) {
-    return false;
-  }
-  return true;
 }
 
 export default class Svg extends Shape<SvgProps> {

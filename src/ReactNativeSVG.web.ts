@@ -42,6 +42,7 @@ export {
 };
 
 export * from './lib/extract/types';
+export type { DataUrlOptions } from './lib/utils/toDataUrlUtils';
 
 export * from './elements';
 export { default } from './elements';
