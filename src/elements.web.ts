@@ -268,7 +268,7 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
     if (
       options &&
       options.format === 'jpeg' &&
-      options.quality &&
+      options.quality !== null &&
       options.quality !== undefined
     ) {
       quality = options.quality;
