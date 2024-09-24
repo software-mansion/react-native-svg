@@ -41,8 +41,9 @@ RCT_EXPORT_MODULE()
         b64 = [svg getDataURLWithBounds:svg.boundingBox format:@"png" quality:1.0];
       } else {
         CGRect bounds;
-        id width = [options objectForKey:@"width"];
-        id height = [options objectForKey:@"height"];
+        NSDictionary *size = [options objectForKey:@"size"];
+        id width = [size objectForKey:@"width"];
+        id height = [size objectForKey:@"height"];
         if (![width isKindOfClass:NSNumber.class] && ![height isKindOfClass:NSNumber.class]) {
           bounds = svg.boundingBox;
         } else {
