@@ -87,9 +87,10 @@ export default class Svg extends Shape<SvgProps> {
   };
 
   /**
-   * @deprecated use size property instead
-   * @param callback
-   * @param options as { size: { width: number, height: number }, format: 'jpeg' | 'png', quality?:1 }
+   * @deprecated use size property instead.
+   * @description Converts the SVG component to a data URL in either JPEG or PNG format.
+   * @param {function(string): void} callback - A function that receives the base64-encoded data URL string.
+   * @param {DataUrlOptions} options - The options to specify the format (JPEG or PNG) and additional parameters.
    */
   toDataURL(callback: (base64: string) => void, options: Size): void;
   toDataURL(callback: (base64: string) => void): void;
@@ -110,6 +111,21 @@ export default class Svg extends Shape<SvgProps> {
       require('../fabric/NativeSvgViewModule').default;
     RNSVGSvgViewModule.toDataURL(handle, options, callback);
   }
+
+  /**
+   * Options specific to JPEG format.
+   * @typedef {Object} DataUrlOptions
+   * @property {'jpeg' | 'png'} format - The format of the image (jpeg | png).
+   * @property {number} [quality] - The quality only for the JPEG image (0 to 1).
+   * @property {Size} [size] - The size of the output image.
+   */
+
+  /**
+   * Size of the output image.
+   * @typedef {Object} Size
+   * @property {number} width - The width of the image.
+   * @property {number} height - The height of the image.
+   */
 
   render() {
     const {
