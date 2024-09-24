@@ -680,7 +680,7 @@ export const inlineStyles: Middleware = function inlineStyles(
   const sortedSelectors = sortSelectors(selectorsPseudo).reverse();
 
   const elementsWithFillOrColor = cssSelect(
-    '*[fill], *[color], *[stroke]',
+    '*[fill], *[color], *[stroke], *[stopColor], *[floodColor]',
     document,
     cssSelectOpts
   );
@@ -697,6 +697,14 @@ export const inlineStyles: Middleware = function inlineStyles(
     const strokeValue = element.props?.stroke as string;
     if (strokeValue && strokeValue.startsWith('var(')) {
       element.props.stroke = resolveVariables(strokeValue, variables);
+    }
+    const stopColorValue = element.props?.stopColor as string;
+    if (stopColorValue && stopColorValue.startsWith('var(')) {
+      element.props.stopColor = resolveVariables(stopColorValue, variables);
+    }
+    const floodColorValue = element.props?.floodColor as string;
+    if (floodColorValue && floodColorValue.startsWith('var(')) {
+      element.props.floodColor = resolveVariables(floodColorValue, variables);
     }
   }
 
