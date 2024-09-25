@@ -142,7 +142,7 @@ export const EXAMPLES: Record<string, Example> = {
   E2EExample: {
     icon: E2E.icon,
     title: 'E2E example',
-    samples: E2E.samples[0],
+    samples: E2E.samples,
   },
   FiltersExample: {
     icon: Filters.icon,
