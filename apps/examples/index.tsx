@@ -36,6 +36,11 @@ import {
   FeOffset,
   ReanimatedFeColorMatrix,
 } from './src/examples/Filters/examples';
+import {
+  LocalImage,
+  FilterPicker,
+  RemoteImage,
+} from './src/examples/FilterImage/examples';
 
 function noop() {
   // do nothing
@@ -200,23 +205,35 @@ export default function App() {
         ))}
         <Stack.Screen
           name="FeColorMatrix"
-          component={composeComponents(FeColorMatrix.samples, true)}
+          component={composeComponents(FeColorMatrix.samples, false)}
         />
         <Stack.Screen
           name="FeGaussianBlur"
-          component={composeComponents(FeGaussianBlur.samples, true)}
+          component={composeComponents(FeGaussianBlur.samples, false)}
         />
         <Stack.Screen
           name="FeMerge"
-          component={composeComponents(FeMerge.samples, true)}
+          component={composeComponents(FeMerge.samples, false)}
         />
         <Stack.Screen
           name="FeOffset"
-          component={composeComponents(FeOffset.samples, true)}
+          component={composeComponents(FeOffset.samples, false)}
         />
         <Stack.Screen
           name="ReanimatedFeColorMatrix"
-          component={composeComponents(ReanimatedFeColorMatrix.samples, true)}
+          component={composeComponents(ReanimatedFeColorMatrix.samples, false)}
+        />
+        <Stack.Screen
+          name="LocalImage"
+          component={composeComponents(LocalImage.samples, false)}
+        />
+        <Stack.Screen
+          name="RemoteImage"
+          component={composeComponents(RemoteImage.samples, false)}
+        />
+        <Stack.Screen
+          name="FilterPicker"
+          component={composeComponents(FilterPicker.samples, false)}
         />
       </Stack.Navigator>
     </NavigationContainer>

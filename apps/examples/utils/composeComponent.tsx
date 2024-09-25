@@ -4,6 +4,7 @@ import React, {Fragment} from 'react';
 /**
  * Composes a single component from an array of components.
  * @param {Array} components - The array of React component types to compose.
+ * @param {boolean} renderInView - Wheather to render the component in a View or in a ScrollView
  * @returns {React.Component} A new component that renders all the given components.
  */
 export default function composeComponents(
