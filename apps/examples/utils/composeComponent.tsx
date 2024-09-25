@@ -9,7 +9,7 @@ import React, {Fragment} from 'react';
  */
 export default function composeComponents(
   components: any[],
-  renderInView: boolean,
+  renderInView?: boolean,
 ) {
   return function ComposedComponent() {
     return renderInView ? (

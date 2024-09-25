@@ -50,7 +50,7 @@ const EXAMPLES_NAMES = Object.keys(EXAMPLES);
 
 const Stack = createNativeStackNavigator();
 
-console.log('EXAMPLES: ', EXAMPLES);
+console.log('EXAMPLES_NAMES: ', EXAMPLES_NAMES);
 
 type RootStackParamList = {[P in keyof typeof EXAMPLES]: undefined} & {
   Home: undefined;
@@ -196,7 +196,6 @@ export default function App() {
               EXAMPLES[name].shouldBeRenderInView ?? false,
             )}
             options={{
-              animation: 'default',
               headerTitle: EXAMPLES[name].title,
               title: EXAMPLES[name].title,
               headerLeft: Platform.OS === 'web' ? BackButton : undefined,
@@ -205,35 +204,35 @@ export default function App() {
         ))}
         <Stack.Screen
           name="FeColorMatrix"
-          component={composeComponents(FeColorMatrix.samples, false)}
+          component={composeComponents(FeColorMatrix.samples)}
         />
         <Stack.Screen
           name="FeGaussianBlur"
-          component={composeComponents(FeGaussianBlur.samples, false)}
+          component={composeComponents(FeGaussianBlur.samples)}
         />
         <Stack.Screen
           name="FeMerge"
-          component={composeComponents(FeMerge.samples, false)}
+          component={composeComponents(FeMerge.samples)}
         />
         <Stack.Screen
           name="FeOffset"
-          component={composeComponents(FeOffset.samples, false)}
+          component={composeComponents(FeOffset.samples)}
         />
         <Stack.Screen
           name="ReanimatedFeColorMatrix"
-          component={composeComponents(ReanimatedFeColorMatrix.samples, false)}
+          component={composeComponents(ReanimatedFeColorMatrix.samples)}
         />
         <Stack.Screen
           name="LocalImage"
-          component={composeComponents(LocalImage.samples, false)}
+          component={composeComponents(LocalImage.samples)}
         />
         <Stack.Screen
           name="RemoteImage"
-          component={composeComponents(RemoteImage.samples, false)}
+          component={composeComponents(RemoteImage.samples)}
         />
         <Stack.Screen
           name="FilterPicker"
-          component={composeComponents(FilterPicker.samples, false)}
+          component={composeComponents(FilterPicker.samples)}
         />
       </Stack.Navigator>
     </NavigationContainer>
