@@ -146,11 +146,11 @@ export const EXAMPLES: Record<string, Example> = {
   FiltersExample: {
     icon: Filters.icon,
     title: 'Filters example',
-    samples: Filters.samples[0],
+    samples: Filters.samples,
   },
   FilterImageExample: {
     icon: FilterImage.icon,
     title: 'FilterImage example',
-    samples: FilterImage.samples[0],
+    samples: FilterImage.samples,
   },
 };

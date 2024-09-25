@@ -29,6 +29,13 @@ import {HeaderBackButton} from '@react-navigation/elements';
 import {HeaderBackButtonProps} from '@react-navigation/native-stack/lib/typescript/src/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import composeComponents from './utils/composeComponent';
+import {
+  FeColorMatrix,
+  FeGaussianBlur,
+  FeMerge,
+  FeOffset,
+  ReanimatedFeColorMatrix,
+} from './src/examples/Filters/examples';
 
 function noop() {
   // do nothing
@@ -95,6 +102,7 @@ interface ItemProps {
   wasClicked?: boolean;
 }
 
+//todo: create share folder for Item and ItemProps
 function Item({icon, title, onPress, wasClicked}: ItemProps) {
   return (
     <Pressable
@@ -190,6 +198,26 @@ export default function App() {
             }}
           />
         ))}
+        <Stack.Screen
+          name="FeColorMatrix"
+          component={composeComponents(FeColorMatrix.samples, true)}
+        />
+        <Stack.Screen
+          name="FeGaussianBlur"
+          component={composeComponents(FeGaussianBlur.samples, true)}
+        />
+        <Stack.Screen
+          name="FeMerge"
+          component={composeComponents(FeMerge.samples, true)}
+        />
+        <Stack.Screen
+          name="FeOffset"
+          component={composeComponents(FeOffset.samples, true)}
+        />
+        <Stack.Screen
+          name="ReanimatedFeColorMatrix"
+          component={composeComponents(ReanimatedFeColorMatrix.samples, true)}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

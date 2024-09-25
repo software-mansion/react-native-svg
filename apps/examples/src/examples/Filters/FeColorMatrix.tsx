@@ -1,110 +1,101 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Svg, Circle, FeColorMatrix, Filter, G} from 'react-native-svg';
 
-class ReferenceExample extends Component {
-  static title = 'Reference';
-  render() {
-    return (
-      <Svg height="150" width="150">
+function ReferenceExample() {
+  return (
+    <Svg height="150" width="150">
+      <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
+      <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
+      <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
+    </Svg>
+  );
+}
+ReferenceExample.title = 'Reference';
+
+function IdentityExample() {
+  return (
+    <Svg height="150" width="150">
+      <Filter id="filterIdentity">
+        <FeColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" />
+      </Filter>
+      <G filter="url(#filterIdentity)">
         <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
         <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
         <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
-      </Svg>
-    );
-  }
+      </G>
+    </Svg>
+  );
 }
-class IdentityExample extends Component {
-  static title = 'Identity matrix';
-  render() {
-    return (
-      <Svg height="150" width="150">
-        <Filter id="filterIdentity">
-          <FeColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" />
-        </Filter>
-        <G filter="url(#filterIdentity)">
-          <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
-          <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
-          <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
-        </G>
-      </Svg>
-    );
-  }
-}
-class RgbToGreenExample extends Component {
-  static title = 'RGB to Green';
-  render() {
-    return (
-      <Svg height="150" width="150">
-        <Filter id="filterGreen">
-          <FeColorMatrix
-            values="0 0 0 0 0
+IdentityExample.title = 'Identity matrix';
+
+function RgbToGreenExample() {
+  return (
+    <Svg height="150" width="150">
+      <Filter id="filterGreen">
+        <FeColorMatrix
+          values="0 0 0 0 0
                     1 1 1 1 0
                     0 0 0 0 0
                     0 0 0 1 0"
-          />
-        </Filter>
-        <G filter="url(#filterGreen)">
-          <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
-          <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
-          <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
-        </G>
-      </Svg>
-    );
-  }
+        />
+      </Filter>
+      <G filter="url(#filterGreen)">
+        <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
+        <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
+        <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
+      </G>
+    </Svg>
+  );
 }
-class SaturateExample extends Component {
-  static title = 'Saturate';
-  render() {
-    return (
-      <Svg height="150" width="150">
-        <Filter id="filterSaturate">
-          <FeColorMatrix type="saturate" values="0.2" />
-        </Filter>
-        <G filter="url(#filterSaturate)">
-          <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
-          <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
-          <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
-        </G>
-      </Svg>
-    );
-  }
-}
+RgbToGreenExample.title = 'RGB to Green';
 
-class HueRotateExample extends Component {
-  static title = 'Hue Rotate';
-  render() {
-    return (
-      <Svg height="150" width="150">
-        <Filter id="filterHue">
-          <FeColorMatrix type="hueRotate" values="180" />
-        </Filter>
-        <G filter="url(#filterHue)">
-          <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
-          <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
-          <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
-        </G>
-      </Svg>
-    );
-  }
+function SaturateExample() {
+  return (
+    <Svg height="150" width="150">
+      <Filter id="filterSaturate">
+        <FeColorMatrix type="saturate" values="0.2" />
+      </Filter>
+      <G filter="url(#filterSaturate)">
+        <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
+        <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
+        <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
+      </G>
+    </Svg>
+  );
 }
+SaturateExample.title = 'Saturate';
 
-class LuminanceToAlphaExample extends Component {
-  static title = 'Luminance to alpha';
-  render() {
-    return (
-      <Svg height="150" width="150">
-        <Filter id="filterLuminance">
-          <FeColorMatrix type="luminanceToAlpha" />
-        </Filter>
-        <G filter="url(#filterLuminance)">
-          <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
-          <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
-          <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
-        </G>
-      </Svg>
-    );
-  }
+function HueRotateExample() {
+  return (
+    <Svg height="150" width="150">
+      <Filter id="filterHue">
+        <FeColorMatrix type="hueRotate" values="180" />
+      </Filter>
+      <G filter="url(#filterHue)">
+        <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
+        <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
+        <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
+      </G>
+    </Svg>
+  );
 }
+HueRotateExample.title = 'Hue Rotate';
+
+function LuminanceToAlphaExample() {
+  return (
+    <Svg height="150" width="150">
+      <Filter id="filterLuminance">
+        <FeColorMatrix type="luminanceToAlpha" />
+      </Filter>
+      <G filter="url(#filterLuminance)">
+        <Circle cx="75" cy="50" r="40" fill="blue" fillOpacity="0.5" />
+        <Circle cx="55" cy="90" r="40" fill="green" fillOpacity="0.5" />
+        <Circle cx="95" cy="90" r="40" fill="red" fillOpacity="0.5" />
+      </G>
+    </Svg>
+  );
+}
+LuminanceToAlphaExample.title = 'Luminance to alpha';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
