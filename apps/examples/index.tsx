@@ -12,7 +12,6 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import {
-  StyleSheet,
   Text,
   View,
   Linking,
@@ -29,6 +28,7 @@ import {HeaderBackButton} from '@react-navigation/elements';
 import {HeaderBackButtonProps} from '@react-navigation/native-stack/lib/typescript/src/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import composeComponents from './utils/composeComponent';
+import {commonStyles} from './src/commonStyles';
 import {
   FeColorMatrix,
   FeGaussianBlur,
@@ -50,8 +50,6 @@ const EXAMPLES_NAMES = Object.keys(EXAMPLES);
 
 const Stack = createNativeStackNavigator();
 
-console.log('EXAMPLES_NAMES: ', EXAMPLES_NAMES);
-
 type RootStackParamList = {[P in keyof typeof EXAMPLES]: undefined} & {
   Home: undefined;
 };
@@ -67,7 +65,7 @@ function Home({navigation}: HomeScreenProps) {
     <SafeAreaView>
       <FlatList
         data={EXAMPLES_NAMES}
-        style={styles.list}
+        style={commonStyles.list}
         initialNumToRender={EXAMPLES_NAMES.length}
         renderItem={({item: name}) => (
           <Item
@@ -88,8 +86,8 @@ function Home({navigation}: HomeScreenProps) {
   );
 }
 
-function ItemSeparator() {
-  return <View style={styles.separator} />;
+export function ItemSeparator() {
+  return <View style={commonStyles.separator} />;
 }
 
 function BackButton(props: HeaderBackButtonProps) {
@@ -100,18 +98,17 @@ function BackButton(props: HeaderBackButtonProps) {
   );
 }
 
-interface ItemProps {
+export interface ItemProps {
   icon?: any;
   title: string;
   onPress: () => void;
   wasClicked?: boolean;
 }
 
-//todo: create share folder for Item and ItemProps
-function Item({icon, title, onPress, wasClicked}: ItemProps) {
+export function Item({icon, title, onPress, wasClicked}: ItemProps) {
   return (
     <Pressable
-      style={[styles.button, wasClicked && styles.visitedItem]}
+      style={[commonStyles.button, wasClicked && commonStyles.visitedItem]}
       onPress={onPress}>
       {icon && (
         <>
@@ -120,7 +117,7 @@ function Item({icon, title, onPress, wasClicked}: ItemProps) {
         </>
       )}
 
-      <Text style={styles.title}>{title}</Text>
+      <Text style={commonStyles.title}>{title}</Text>
     </Pressable>
   );
 }
@@ -168,7 +165,7 @@ export default function App() {
 
   if (!isReady) {
     return (
-      <View style={[styles.container, styles.center]}>
+      <View style={[commonStyles.container, commonStyles.center]}>
         <ActivityIndicator />
       </View>
     );
@@ -238,39 +235,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  center: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  list: {
-    backgroundColor: '#EFEFF4',
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#DBDBE0',
-  },
-  button: {
-    flex: 1,
-    height: 60,
-    padding: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  disabledButton: {
-    backgroundColor: 'grey',
-    opacity: 0.5,
-  },
-  title: {
-    fontSize: 16,
-    color: 'black',
-  },
-  visitedItem: {
-    backgroundColor: '#e6f0f7',
-  },
-});

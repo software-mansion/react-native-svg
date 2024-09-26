@@ -77,6 +77,7 @@
     "react-native-gesture-handler": "^2.19.0",
     "react-native-safe-area-context": "^4.11.0",
     "react-native-screens": "^3.34.0",
+    "react-native-view-shot": "^3.8.0",
     "warn-once": "0.1.1"
   },
   "devDependencies": {

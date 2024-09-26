@@ -1,37 +1,14 @@
 import React, {useState} from 'react';
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList} from 'react-native';
 import {Circle, Svg} from 'react-native-svg';
 
 import {EXAMPLES} from './examples';
 import {commonStyles} from '../../commonStyles';
 
 import {useNavigation} from '@react-navigation/native';
+import {Item, ItemSeparator} from '../../../index';
 
 const EXAMPLES_NAMES = Object.keys(EXAMPLES);
-
-interface ItemProps {
-  icon?: any;
-  title: string;
-  onPress: () => void;
-  wasClicked?: boolean;
-}
-
-function Item({icon, title, onPress, wasClicked}: ItemProps) {
-  return (
-    <Pressable
-      style={[styles.button, wasClicked && styles.visitedItem]}
-      onPress={onPress}>
-      {icon && (
-        <>
-          <View>{icon}</View>
-          <Text>{'   '}</Text>
-        </>
-      )}
-
-      <Text style={styles.title}>{title}</Text>
-    </Pressable>
-  );
-}
 
 function FiltersList() {
   const navigation: any = useNavigation();
@@ -40,7 +17,7 @@ function FiltersList() {
   return (
     <FlatList
       data={EXAMPLES_NAMES}
-      style={styles.list}
+      style={commonStyles.list}
       initialNumToRender={EXAMPLES_NAMES.length}
       scrollEnabled={false}
       horizontal={false}
@@ -72,46 +49,4 @@ const icon = (
 
 const samples = [FiltersList];
 
-function ItemSeparator() {
-  return <View style={styles.separator} />;
-}
-
 export {icon, samples};
-
-//todo: add it to common styles
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  center: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  list: {
-    backgroundColor: '#EFEFF4',
-    width: '100%',
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#DBDBE0',
-  },
-  button: {
-    flex: 1,
-    height: 60,
-    padding: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  disabledButton: {
-    backgroundColor: 'grey',
-    opacity: 0.5,
-  },
-  title: {
-    fontSize: 16,
-    color: 'black',
-  },
-  visitedItem: {
-    backgroundColor: '#e6f0f7',
-  },
-});
