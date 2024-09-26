@@ -58,6 +58,10 @@ class MaskView extends GroupView {
     invalidate();
   }
 
+  public Brush.BrushUnits getMaskUnits() {
+    return mMaskUnits;
+  }
+
   public void setMaskUnits(int maskUnits) {
     switch (maskUnits) {
       case 0:
