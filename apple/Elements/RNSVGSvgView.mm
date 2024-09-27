@@ -43,12 +43,12 @@ using namespace facebook::react;
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
-    // We don't want the dimming effect on tint as it's used as currentColor
-    self.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
 #if !TARGET_OS_OSX // Not available on macOS
     // This is necessary to ensure that [self setNeedsDisplay] actually triggers
     // a redraw when our parent transitions between hidden and visible.
     self.contentMode = UIViewContentModeRedraw;
+    // We don't want the dimming effect on tint as it's used as currentColor
+    self.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
 #endif // TARGET_OS_OSX
     rendered = false;
 #ifdef RCT_NEW_ARCH_ENABLED
