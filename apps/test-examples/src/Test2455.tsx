@@ -18,7 +18,7 @@ const Favorite = ({color}: {color: string}): JSX.Element => {
               y="16"
               width="8"
               height="8"
-              color="purple"
+              color="gold"
               fill="currentColor"
             />
             <Circle cx="12" cy="20" r="4" fill="currentColor" />
