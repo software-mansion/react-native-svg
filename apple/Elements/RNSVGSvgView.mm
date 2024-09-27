@@ -89,9 +89,6 @@ using namespace facebook::react;
   }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
-  if (RCTUIColorFromSharedColor(newProps.tintColor)) {
-    self.tintColor = RCTUIColorFromSharedColor(newProps.tintColor);
-  }
   if (RCTUIColorFromSharedColor(newProps.color)) {
     self.tintColor = RCTUIColorFromSharedColor(newProps.color);
   }
