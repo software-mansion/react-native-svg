@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Share, Text, TouchableOpacity, View} from 'react-native';
-import {G, Path, Rect, Svg} from 'react-native-svg';
+import {Circle, G, Path, Rect, Svg} from 'react-native-svg';
 
 const Favorite = ({color}: {color: string}): JSX.Element => {
   return (
@@ -13,7 +13,15 @@ const Favorite = ({color}: {color: string}): JSX.Element => {
         <G>
           <Rect x="16" y="16" width="8" height="8" fill="currentColor" />
           <G color="pink">
-            <Rect x="0" y="16" width="8" height="8" fill="currentColor" />
+            <Rect
+              x="0"
+              y="16"
+              width="8"
+              height="8"
+              color="purple"
+              fill="currentColor"
+            />
+            <Circle cx="12" cy="20" r="4" fill="currentColor" />
           </G>
         </G>
       </G>
