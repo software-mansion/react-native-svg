@@ -103,7 +103,7 @@ public abstract class VirtualView extends ReactViewGroup {
   Region mClipRegion;
   ArrayList<PathElement> elements;
   PointerEvents mPointerEvents;
-  int mTintColor = 0;
+  int mCurrentColor = 0;
 
   public void setPointerEvents(PointerEvents pointerEvents) {
     mPointerEvents = pointerEvents;
@@ -533,21 +533,21 @@ public abstract class VirtualView extends ReactViewGroup {
     }
   }
 
-  public void setTintColor(Integer tintColor) {
-    mTintColor = tintColor != null ? tintColor : 0;
+  public void setCurrentColor(Integer color) {
+    mCurrentColor = color != null ? color : 0;
     invalidate();
     clearChildCache();
   }
 
-  int getTintColor() {
-    if (this.mTintColor != 0) {
-      return this.mTintColor;
+  int getCurrentColor() {
+    if (this.mCurrentColor != 0) {
+      return this.mCurrentColor;
     }
     ViewParent parent = this.getParent();
     if (parent instanceof VirtualView) {
-      return ((VirtualView) parent).getTintColor();
+      return ((VirtualView) parent).getCurrentColor();
     } else if (parent instanceof SvgView) {
-      return ((SvgView) parent).mTintColor;
+      return ((SvgView) parent).mCurrentColor;
     }
     return 0;
   }

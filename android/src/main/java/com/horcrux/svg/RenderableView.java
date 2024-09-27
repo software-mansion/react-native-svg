@@ -625,7 +625,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         }
       case 2:
         {
-          int color = this.getTintColor();
+          int color = this.getCurrentColor();
           int alpha = color >>> 24;
           alpha = Math.round((float) alpha * opacity);
           paint.setColor(alpha << 24 | (color & 0x00ffffff));
