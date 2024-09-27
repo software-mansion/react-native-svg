@@ -51,6 +51,9 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGGroupProps &>(*props);
 
+  if (RCTUIColorFromSharedColor(newProps.tintColor)) {
+    self.tintColor = RCTUIColorFromSharedColor(newProps.tintColor);
+  }
   setCommonGroupProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGGroupProps const>(props);
 }
