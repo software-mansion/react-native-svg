@@ -140,6 +140,9 @@ template <typename T>
 void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *renderableNode)
 {
   setCommonNodeProps(renderableProps, renderableNode);
+  if (RCTUIColorFromSharedColor(renderableProps.color)) {
+    renderableNode.tintColor = RCTUIColorFromSharedColor(renderableProps.color);
+  }
   renderableNode.fill = brushFromColorStruct(renderableProps.fill);
   renderableNode.fillOpacity = renderableProps.fillOpacity;
   renderableNode.fillRule = renderableProps.fillRule == 0 ? kRNSVGCGFCRuleEvenodd : kRNSVGCGFCRuleNonzero;
