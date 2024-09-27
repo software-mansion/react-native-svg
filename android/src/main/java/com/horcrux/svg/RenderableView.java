@@ -428,7 +428,12 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
           float maskY = (float) relativeOnFraction(mask.mY, clientRect.height());
           float maskWidth = (float) relativeOnFraction(mask.mW, clientRect.width());
           float maskHeight = (float) relativeOnFraction(mask.mH, clientRect.height());
-          maskBounds = new RectF(clientRect.left + maskX, clientRect.top + maskY, clientRect.left + maskX + maskWidth, clientRect.top + maskY + maskHeight);
+          maskBounds =
+              new RectF(
+                  clientRect.left + maskX,
+                  clientRect.top + maskY,
+                  clientRect.left + maskX + maskWidth,
+                  clientRect.top + maskY + maskHeight);
         }
         // clip to mask bounds
         canvas.clipRect(maskBounds);
@@ -620,7 +625,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         }
       case 2:
         {
-          int color = getSvgView().mTintColor;
+          int color = this.getTintColor();
           int alpha = color >>> 24;
           alpha = Math.round((float) alpha * opacity);
           paint.setColor(alpha << 24 | (color & 0x00ffffff));

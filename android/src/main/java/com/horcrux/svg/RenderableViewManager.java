@@ -739,6 +739,11 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       mDelegate = new RNSVGGroupManagerDelegate(this);
     }
 
+    @ReactProp(name = "tintColor", customType = "Color")
+    public void setTintColor(GroupView node, Integer tintColor) {
+      node.setTintColor(tintColor);
+    }
+
     public static final String REACT_CLASS = "RNSVGGroup";
   }
 
