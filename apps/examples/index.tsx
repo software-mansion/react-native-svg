@@ -28,6 +28,7 @@ import {HeaderBackButton} from '@react-navigation/elements';
 import {HeaderBackButtonProps} from '@react-navigation/native-stack/lib/typescript/src/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import composeComponents from './utils/composeComponent';
+import E2eTestingView from './src/e2e';
 import {commonStyles} from './src/commonStyles';
 import {
   FeColorMatrix,
@@ -169,6 +170,11 @@ export default function App() {
         <ActivityIndicator />
       </View>
     );
+  }
+
+  if (process.env.E2E) {
+    console.log('Opening E2E example, as E2E env is set to ' + process.env.E2E);
+    return <E2eTestingView />;
   }
 
   return (
