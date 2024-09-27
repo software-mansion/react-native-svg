@@ -42,9 +42,6 @@ export default class G<P> extends Shape<GProps & P> {
     if (hasProps(font)) {
       extractedProps.font = font;
     }
-    if (props.color) {
-      extractedProps.tintColor = props.color;
-    }
     return (
       <RNSVGGroup
         ref={(ref) => this.refMethod(ref as (G<P> & NativeMethods) | null)}
