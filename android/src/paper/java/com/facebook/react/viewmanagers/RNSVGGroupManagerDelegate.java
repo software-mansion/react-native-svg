@@ -61,8 +61,8 @@ public class RNSVGGroupManagerDelegate<T extends View, U extends BaseViewManager
       case "pointerEvents":
         mViewManager.setPointerEvents(view, value == null ? null : (String) value);
         break;
-      case "tintColor":
-        mViewManager.setTintColor(view, ColorPropConverter.getColor(value, view.getContext()));
+      case "color":
+        mViewManager.setColor(view, ColorPropConverter.getColor(value, view.getContext()));
         break;
       case "fill":
         mViewManager.setFill(view, (ReadableMap) value);
