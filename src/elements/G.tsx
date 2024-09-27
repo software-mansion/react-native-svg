@@ -10,11 +10,12 @@ import type {
 } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGGroup from '../fabric/GroupNativeComponent';
-import type { NativeMethods } from 'react-native';
+import type { ColorValue, NativeMethods } from 'react-native';
 
 export interface GProps extends CommonPathProps, FontProps {
   children?: ReactNode;
   opacity?: NumberProp;
+  color?: ColorValue;
 }
 
 export default class G<P> extends Shape<GProps & P> {
@@ -40,6 +41,9 @@ export default class G<P> extends Shape<GProps & P> {
     const font = extractFont(prop);
     if (hasProps(font)) {
       extractedProps.font = font;
+    }
+    if (props.color) {
+      extractedProps.tintColor = props.color;
     }
     return (
       <RNSVGGroup
