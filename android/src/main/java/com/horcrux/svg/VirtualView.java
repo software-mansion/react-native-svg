@@ -103,7 +103,6 @@ public abstract class VirtualView extends ReactViewGroup {
   Region mClipRegion;
   ArrayList<PathElement> elements;
   PointerEvents mPointerEvents;
-  int mCurrentColor = 0;
 
   public void setPointerEvents(PointerEvents pointerEvents) {
     mPointerEvents = pointerEvents;
@@ -531,25 +530,6 @@ public abstract class VirtualView extends ReactViewGroup {
     if (mName != null) {
       getSvgView().defineTemplate(this, mName);
     }
-  }
-
-  public void setCurrentColor(Integer color) {
-    mCurrentColor = color != null ? color : 0;
-    invalidate();
-    clearChildCache();
-  }
-
-  int getCurrentColor() {
-    if (this.mCurrentColor != 0) {
-      return this.mCurrentColor;
-    }
-    ViewParent parent = this.getParent();
-    if (parent instanceof VirtualView) {
-      return ((VirtualView) parent).getCurrentColor();
-    } else if (parent instanceof SvgView) {
-      return ((SvgView) parent).mCurrentColor;
-    }
-    return 0;
   }
 
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
