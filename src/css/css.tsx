@@ -631,7 +631,14 @@ function resolveVariables(
   );
 }
 
-const propsToResolve = ['fill', 'color', 'stroke', 'stopColor', 'floodColor'];
+const propsToResolve = [
+  'color',
+  'fill',
+  'floodColor',
+  'lightingColor',
+  'stopColor',
+  'stroke',
+];
 const resolveElementVariables = (
   element: XmlAST,
   variables: Map<string, string>
@@ -692,7 +699,7 @@ export const inlineStyles: Middleware = function inlineStyles(
   const sortedSelectors = sortSelectors(selectorsPseudo).reverse();
 
   const elementsWithColor = cssSelect(
-    '*[fill], *[color], *[stroke], *[stopColor], *[floodColor]',
+    '*[color], *[fill], *[floodColor], *[lightingColor], *[stopColor], *[stroke]',
     document,
     cssSelectOpts
   );
