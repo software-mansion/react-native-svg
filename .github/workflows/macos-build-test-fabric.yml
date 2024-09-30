@@ -36,7 +36,7 @@ jobs:
           restore-keys: ${{ runner.os }}-node-modules-svg-
 
       - name: Install react-native-svg node_modules
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Restore app node_modules from cache
         uses: actions/cache@v3
@@ -47,7 +47,7 @@ jobs:
 
       - name: Install app node_modules
         working-directory: ${{ matrix.working-directory }}
-        run: yarn install
+        run: yarn install  --frozen-lockfile
 
       - name: Restore Pods from cache
         uses: actions/cache@v3
