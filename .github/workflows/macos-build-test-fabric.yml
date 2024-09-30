@@ -15,6 +15,7 @@ on:
 
 jobs:
   build:
+    if: github.repository == 'software-mansion/react-native-svg'
     runs-on: macos-14
     strategy:
       matrix:
