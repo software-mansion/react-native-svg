@@ -9,6 +9,9 @@ on:
       - macos-example/macos/**
       - src/fabric/**
       - package.json
+  push:
+    branches:
+      - main
 
 jobs:
   build:
