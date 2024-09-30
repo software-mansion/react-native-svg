@@ -23,7 +23,6 @@ public interface RNSVGSvgViewAndroidManagerInterface<T extends View> {
   void setVbHeight(T view, float value);
   void setAlign(T view, @Nullable String value);
   void setMeetOrSlice(T view, int value);
-  void setTintColor(T view, @Nullable Integer value);
   void setColor(T view, @Nullable Integer value);
   void setPointerEvents(T view, @Nullable String value);
   void setHasTVPreferredFocus(T view, boolean value);

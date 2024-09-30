@@ -21,6 +21,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.view.ViewParent;
 import com.facebook.react.bridge.ColorPropConverter;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
@@ -83,6 +84,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   public Paint.Cap strokeLinecap = Paint.Cap.BUTT;
   public Paint.Join strokeLinejoin = Paint.Join.MITER;
 
+  private int mCurrentColor = 0;
   public @Nullable ReadableArray fill;
   public float fillOpacity = 1;
   public Path.FillType fillRule = Path.FillType.WINDING;
@@ -120,6 +122,25 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   public void setVectorEffect(int vectorEffect) {
     this.vectorEffect = vectorEffect;
     invalidate();
+  }
+
+  public void setCurrentColor(Integer color) {
+    mCurrentColor = color != null ? color : 0;
+    invalidate();
+    clearChildCache();
+  }
+
+  int getCurrentColor() {
+    if (this.mCurrentColor != 0) {
+      return this.mCurrentColor;
+    }
+    ViewParent parent = this.getParent();
+    if (parent instanceof VirtualView) {
+      return ((RenderableView) parent).getCurrentColor();
+    } else if (parent instanceof SvgView) {
+      return ((SvgView) parent).mCurrentColor;
+    }
+    return 0;
   }
 
   public void setFill(@Nullable Dynamic fill) {
@@ -625,7 +646,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         }
       case 2:
         {
-          int color = getSvgView().mTintColor;
+          int color = this.getCurrentColor();
           int alpha = color >>> 24;
           alpha = Math.round((float) alpha * opacity);
           paint.setColor(alpha << 24 | (color & 0x00ffffff));

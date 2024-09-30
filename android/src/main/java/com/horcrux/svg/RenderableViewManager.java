@@ -1680,6 +1680,11 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     node.setFilter(filter);
   }
 
+  @ReactProp(name = "color", customType = "Color")
+  public void setColor(T node, Integer color) {
+    node.setCurrentColor(color);
+  }
+
   @ReactProp(name = "fill")
   public void setFill(T node, @Nullable Dynamic fill) {
     node.setFill(fill);

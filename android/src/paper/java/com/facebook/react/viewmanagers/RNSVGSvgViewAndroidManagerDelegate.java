@@ -48,9 +48,6 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
       case "meetOrSlice":
         mViewManager.setMeetOrSlice(view, value == null ? 0 : ((Double) value).intValue());
         break;
-      case "tintColor":
-        mViewManager.setTintColor(view, ColorPropConverter.getColor(value, view.getContext()));
-        break;
       case "color":
         mViewManager.setColor(view, ColorPropConverter.getColor(value, view.getContext()));
         break;

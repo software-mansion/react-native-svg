@@ -32,6 +32,7 @@ type ColorStruct = Readonly<{
 }>;
 
 interface SvgRenderableCommonProps {
+  color?: ColorValue;
   fill?: ColorStruct;
   fillOpacity?: WithDefault<Float, 1.0>;
   fillRule?: WithDefault<Int32, 1>;

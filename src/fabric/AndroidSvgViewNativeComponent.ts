@@ -33,7 +33,6 @@ interface NativeProps extends ViewProps {
   vbHeight?: Float;
   align?: string;
   meetOrSlice?: Int32;
-  tintColor?: ColorValue;
   color?: ColorValue;
   pointerEvents?: string;
 
