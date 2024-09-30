@@ -328,11 +328,11 @@ class SvgViewManager extends ReactViewManager
   }
 
   public void setBorderRadius(ReactViewGroup view, int index, Dynamic rawBorderRadius) {
-    double test = 0;
+    double borderRadius = 0;
     if (rawBorderRadius.getType() == ReadableType.Number) {
-      test = rawBorderRadius.asDouble();
+      borderRadius = rawBorderRadius.asDouble();
     }
-    super.setBorderRadius(view, index, (float) test);
+    super.setBorderRadius(view, index, (float) borderRadius);
   }
 
   @Override
