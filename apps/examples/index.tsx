@@ -5,12 +5,7 @@
 'use strict';
 
 import {useCallback, useEffect, useState} from 'react';
-import {
-  NavigationContainer,
-  NavigationProp,
-  NavigationState,
-  useNavigation,
-} from '@react-navigation/native';
+import {NavigationContainer, NavigationState} from '@react-navigation/native';
 import {
   Text,
   View,
@@ -28,8 +23,6 @@ import {
 } from '@react-navigation/stack';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {EXAMPLES} from './src/examples';
-import {HeaderBackButton} from '@react-navigation/elements';
-import {HeaderBackButtonProps} from '@react-navigation/native-stack/lib/typescript/src/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import composeComponents from './utils/composeComponent';
 import E2eTestingView from './src/e2e';
@@ -107,14 +100,6 @@ function Home({navigation}: HomeScreenProps) {
 
 export function ItemSeparator() {
   return <View style={commonStyles.separator} />;
-}
-
-function BackButton(props: HeaderBackButtonProps) {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
-  return (
-    <HeaderBackButton {...props} onPress={() => navigation.navigate('Home')} />
-  );
 }
 
 export interface ItemProps {
