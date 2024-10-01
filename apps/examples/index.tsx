@@ -22,6 +22,10 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {EXAMPLES} from './src/examples';
 import {HeaderBackButton} from '@react-navigation/elements';
@@ -30,6 +34,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import composeComponents from './utils/composeComponent';
 import E2eTestingView from './src/e2e';
 import {commonStyles} from './src/commonStyles';
+import {GestureHandlerRootView, RectButton} from 'react-native-gesture-handler';
 import {
   FeColorMatrix,
   FeGaussianBlur,
@@ -49,14 +54,27 @@ function noop() {
 
 const EXAMPLES_NAMES = Object.keys(EXAMPLES);
 
-const Stack = createNativeStackNavigator();
+const Stack =
+  Platform.OS === 'macos'
+    ? createStackNavigator<RootStackParamList>()
+    : createNativeStackNavigator<RootStackParamList>();
 
 type RootStackParamList = {[P in keyof typeof EXAMPLES]: undefined} & {
   Home: undefined;
+  FeColorMatrix: undefined;
+  FeGaussianBlur: undefined;
+  FeMerge: undefined;
+  FeOffset: undefined;
+  ReanimatedFeColorMatrix: undefined;
+  LocalImage: undefined;
+  RemoteImage: undefined;
+  FilterPicker: undefined;
 };
 
 interface HomeScreenProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
+  navigation:
+    | StackNavigationProp<RootStackParamList, 'Home'>
+    | NativeStackNavigationProp<RootStackParamList, 'Home'>;
 }
 
 function Home({navigation}: HomeScreenProps) {
@@ -107,8 +125,9 @@ export interface ItemProps {
 }
 
 export function Item({icon, title, onPress, wasClicked}: ItemProps) {
+  const Button = Platform.OS === 'macos' ? Pressable : RectButton;
   return (
-    <Pressable
+    <Button
       style={[commonStyles.button, wasClicked && commonStyles.visitedItem]}
       onPress={onPress}>
       {icon && (
@@ -119,7 +138,7 @@ export function Item({icon, title, onPress, wasClicked}: ItemProps) {
       )}
 
       <Text style={commonStyles.title}>{title}</Text>
-    </Pressable>
+    </Button>
   );
 }
 
@@ -178,66 +197,67 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer
-      initialState={initialState}
-      onStateChange={persistNavigationState}>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerTitle: 'SVG library for React Apps',
-            headerTintColor: '#f60',
-          }}
-        />
-        {EXAMPLES_NAMES.map(name => (
+    <GestureHandlerRootView style={commonStyles.container}>
+      <NavigationContainer
+        initialState={initialState}
+        onStateChange={persistNavigationState}>
+        <Stack.Navigator>
           <Stack.Screen
-            key={name}
-            name={name}
-            component={composeComponents(
-              EXAMPLES[name].samples,
-              EXAMPLES[name].shouldBeRenderInView ?? false,
-            )}
+            name="Home"
+            component={Home}
             options={{
-              headerTitle: EXAMPLES[name].title,
-              title: EXAMPLES[name].title,
-              headerLeft: Platform.OS === 'web' ? BackButton : undefined,
+              headerTitle: 'SVG library for React Apps',
+              headerTintColor: '#f60',
             }}
           />
-        ))}
-        <Stack.Screen
-          name="FeColorMatrix"
-          component={composeComponents(FeColorMatrix.samples)}
-        />
-        <Stack.Screen
-          name="FeGaussianBlur"
-          component={composeComponents(FeGaussianBlur.samples)}
-        />
-        <Stack.Screen
-          name="FeMerge"
-          component={composeComponents(FeMerge.samples)}
-        />
-        <Stack.Screen
-          name="FeOffset"
-          component={composeComponents(FeOffset.samples)}
-        />
-        <Stack.Screen
-          name="ReanimatedFeColorMatrix"
-          component={composeComponents(ReanimatedFeColorMatrix.samples)}
-        />
-        <Stack.Screen
-          name="LocalImage"
-          component={composeComponents(LocalImage.samples)}
-        />
-        <Stack.Screen
-          name="RemoteImage"
-          component={composeComponents(RemoteImage.samples)}
-        />
-        <Stack.Screen
-          name="FilterPicker"
-          component={composeComponents(FilterPicker.samples)}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          {EXAMPLES_NAMES.map(name => (
+            <Stack.Screen
+              key={name}
+              name={name}
+              component={composeComponents(
+                EXAMPLES[name].samples,
+                EXAMPLES[name].shouldBeRenderInView ?? false,
+              )}
+              options={{
+                headerTitle: EXAMPLES[name].title,
+                title: EXAMPLES[name].title,
+              }}
+            />
+          ))}
+          <Stack.Screen
+            name="FeColorMatrix"
+            component={composeComponents(FeColorMatrix.samples)}
+          />
+          <Stack.Screen
+            name="FeGaussianBlur"
+            component={composeComponents(FeGaussianBlur.samples)}
+          />
+          <Stack.Screen
+            name="FeMerge"
+            component={composeComponents(FeMerge.samples)}
+          />
+          <Stack.Screen
+            name="FeOffset"
+            component={composeComponents(FeOffset.samples)}
+          />
+          <Stack.Screen
+            name="ReanimatedFeColorMatrix"
+            component={composeComponents(ReanimatedFeColorMatrix.samples)}
+          />
+          <Stack.Screen
+            name="LocalImage"
+            component={composeComponents(LocalImage.samples)}
+          />
+          <Stack.Screen
+            name="RemoteImage"
+            component={composeComponents(RemoteImage.samples)}
+          />
+          <Stack.Screen
+            name="FilterPicker"
+            component={composeComponents(FilterPicker.samples)}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
