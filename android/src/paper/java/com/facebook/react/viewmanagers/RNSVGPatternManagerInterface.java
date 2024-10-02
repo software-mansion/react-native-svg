@@ -28,6 +28,7 @@ public interface RNSVGPatternManagerInterface<T extends View> {
   void setResponsible(T view, boolean value);
   void setDisplay(T view, @Nullable String value);
   void setPointerEvents(T view, @Nullable String value);
+  void setColor(T view, @Nullable Integer value);
   void setFill(T view, @Nullable ReadableMap value);
   void setFillOpacity(T view, float value);
   void setFillRule(T view, int value);
