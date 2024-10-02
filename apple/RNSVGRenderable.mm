@@ -59,7 +59,7 @@ static RNSVGRenderable *_contextElement;
   self.dirty = true;
 }
 
-- (void)setColor:(UIColor *)color
+- (void)setColor:(RNSVGColor *)color
 {
   if (color == self.tintColor) {
     return;
