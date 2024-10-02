@@ -1,25 +1,5 @@
 name: Test iOS e2e
 on:
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'warning'
-        type: choice
-        options:
-          - info
-          - warning
-          - debug
-      tags:
-        description: 'Test scenario tags'
-        required: false
-        type: boolean
-      environment:
-        description: 'Environment to run tests against'
-        type: environment
-        required: true
-
   pull_request:
     paths:
       - '.github/workflows/android-e2e-test.yml'
@@ -32,7 +12,7 @@ on:
   push:
     branches:
       - main
-
+  workflow_dispatch:
 jobs:
   test:
     runs-on: macos-14
