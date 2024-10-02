@@ -65,7 +65,7 @@ public class RNSVGImageManagerDelegate<T extends View, U extends BaseViewManager
         mViewManager.setColor(view, ColorPropConverter.getColor(value, view.getContext()));
         break;
       case "fill":
-        mViewManager.setFill(view, (ReadableMap) value);
+        mViewManager.setFill(view, new DynamicFromObject(value));
         break;
       case "fillOpacity":
         mViewManager.setFillOpacity(view, value == null ? 1f : ((Double) value).floatValue());
@@ -74,7 +74,7 @@ public class RNSVGImageManagerDelegate<T extends View, U extends BaseViewManager
         mViewManager.setFillRule(view, value == null ? 1 : ((Double) value).intValue());
         break;
       case "stroke":
-        mViewManager.setStroke(view, (ReadableMap) value);
+        mViewManager.setStroke(view, new DynamicFromObject(value));
         break;
       case "strokeOpacity":
         mViewManager.setStrokeOpacity(view, value == null ? 1f : ((Double) value).floatValue());
