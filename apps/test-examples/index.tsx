@@ -27,6 +27,7 @@ import Test2327 from './src/Test2327';
 import Test2233 from './src/Test2233';
 import Test2363 from './src/Test2363';
 import Test2366 from './src/Test2366';
+import Test2380 from './src/Test2380';
 import Test2397 from './src/Test2397';
 import Test2403 from './src/Test2403';
 import Test2407 from './src/Test2407';
