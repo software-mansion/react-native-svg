@@ -141,7 +141,7 @@ void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *rendera
 {
   setCommonNodeProps(renderableProps, renderableNode);
   if (RCTUIColorFromSharedColor(renderableProps.color)) {
-    renderableNode.tintColor = RCTUIColorFromSharedColor(renderableProps.color);
+    [renderableNode setColor:RCTUIColorFromSharedColor(renderableProps.color)];
   }
   renderableNode.fill = brushFromColorStruct(renderableProps.fill);
   renderableNode.fillOpacity = renderableProps.fillOpacity;
