@@ -35,6 +35,8 @@
 @property (nonatomic, assign) CGPathRef hitArea;
 @property (nonatomic, strong) NSString *filter;
 
+- (void)setColor:(UIColor *)color;
+
 - (void)setHitArea:(CGPathRef)path;
 
 - (NSArray<NSString *> *)getAttributeList;
