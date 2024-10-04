@@ -70,5 +70,6 @@ const icon = (
   </Svg>
 );
 
+const title = 'Circle example';
 const samples = [CircleExample, StrokeCircle, StrokeOpacityCircle, PieCircle];
-export {icon, samples};
+export {icon, samples, title};

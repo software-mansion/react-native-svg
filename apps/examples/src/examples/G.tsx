@@ -84,6 +84,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'G example';
 const samples = [GExample, GTransform];
 
-export {icon, samples};
+export {icon, samples, title};

@@ -90,8 +90,10 @@ const icon = (
   </Svg>
 );
 
+const title = 'Bind PanResponder on the SVG Shape';
+const shouldBeRenderInView = true;
 const samples = [PanExample];
 
 const scroll = false;
 
-export {icon, samples, scroll};
+export {icon, samples, scroll, title, shouldBeRenderInView};

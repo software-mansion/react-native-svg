@@ -80,6 +80,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Polygon example';
 const samples = [PolygonExample, FourSidePolygon, StarPolygon, EvenOddPolygon];
 
-export {icon, samples};
+export {icon, samples, title};

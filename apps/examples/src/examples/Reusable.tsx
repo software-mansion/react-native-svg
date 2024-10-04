@@ -157,6 +157,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Reusable example';
 const samples = [UseExample, UseShapes, DefsExample, SymbolExample];
 
-export {icon, samples};
+export {icon, samples, title};

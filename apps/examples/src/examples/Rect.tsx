@@ -111,6 +111,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Rect example';
 const samples = [
   RectExample,
   RectStrokeFill,
@@ -119,4 +120,4 @@ const samples = [
   RoundOverflowRect,
 ];
 
-export {icon, samples};
+export {icon, samples, title};

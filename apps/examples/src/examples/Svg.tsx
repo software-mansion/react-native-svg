@@ -176,6 +176,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Svg example';
 const samples = [
   SvgExample,
   SvgOpacity,
@@ -184,4 +185,4 @@ const samples = [
   SvgNativeMethods,
 ];
 
-export {icon, samples};
+export {icon, samples, title};

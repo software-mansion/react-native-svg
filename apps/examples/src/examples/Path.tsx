@@ -88,6 +88,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Path example';
 const samples = [PathExample, UnclosedPath, BezierCurve];
 
-export {icon, samples};
+export {icon, samples, title};

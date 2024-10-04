@@ -55,6 +55,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Ellipse example';
 const samples = [EllipseExample, PileEllipses, CombinedEllipses];
 
-export {icon, samples};
+export {icon, samples, title};

@@ -47,6 +47,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Filters example';
 const samples = [FiltersList];
 
-export {icon, samples};
+export {icon, samples, title};

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
   Svg,
   Circle,
@@ -143,6 +143,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Stroking example';
 const samples = [
   StrokeExample,
   StrokeLinecap,
@@ -150,4 +151,4 @@ const samples = [
   StrokeDashoffset,
   StrokePattern,
 ];
-export {icon, samples};
+export {icon, samples, title};

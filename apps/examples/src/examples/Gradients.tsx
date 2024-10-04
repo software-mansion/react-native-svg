@@ -267,6 +267,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Gradients example';
 const samples = [
   LinearGradientHorizontal,
   LinearGradientHorizontalBug,
@@ -280,4 +281,4 @@ const samples = [
   FillGradientInRect,
 ];
 
-export {icon, samples};
+export {icon, samples, title};

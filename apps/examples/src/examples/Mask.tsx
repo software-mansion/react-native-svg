@@ -137,6 +137,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Mask example';
 const samples = [SimpleMask, AnotherMask, MaskWithText];
 
-export {icon, samples};
+export {icon, samples, title};

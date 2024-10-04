@@ -47,6 +47,7 @@ const icon = (
   />
 );
 
+const title = 'FilterImage example';
 const samples = [FilterImageList];
 
-export {icon, samples};
+export {icon, samples, title};

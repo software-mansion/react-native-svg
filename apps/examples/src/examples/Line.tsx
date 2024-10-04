@@ -51,6 +51,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Line example';
 const samples = [LineExample, LineWithStrokeLinecap];
 
-export {icon, samples};
+export {icon, samples, title};

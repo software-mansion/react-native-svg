@@ -144,6 +144,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Transforms example';
 const samples = [PatternTransformExample, GradientTransformExample];
 
-export {icon, samples};
+export {icon, samples, title};

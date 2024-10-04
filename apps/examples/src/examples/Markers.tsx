@@ -198,6 +198,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'Markers example';
 const samples = [
   EllipseExample,
   LineExample,
@@ -205,4 +206,4 @@ const samples = [
   RectExample,
   PathExample,
 ];
-export {icon, samples};
+export {icon, samples, title};
