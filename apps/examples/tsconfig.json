@@ -1,7 +1,0 @@
-{
-  "compilerOptions": {
-    "moduleSuffixes": [".macos", ""]
-  },
-  "extends": "../../example/tsconfig.json",
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js"]
-}

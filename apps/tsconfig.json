@@ -1,12 +1,16 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "moduleSuffixes": [".macos", ""],
     "baseUrl": ".",
     "paths": {
       "react-native-svg": ["../src"],
       "react-native-svg/css": ["../src/css/index.tsx"],
       "react-native-svg/filter-image": ["../src/filter-image/index.tsx"],
-      "react-native-reanimated": ["./node_modules/react-native-reanimated"]
+      "react-native-reanimated": [
+        "../example/node_modules/react-native-reanimated"
+      ]
     }
-  }
+  },
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js"]
 }
