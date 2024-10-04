@@ -9,12 +9,12 @@ import {
 import { LocalSvg, WithLocalSvg, loadLocalRawResource } from './LocalSvg';
 
 export {
+  LocalSvg,
   SvgCss,
   SvgCssUri,
   SvgWithCss,
   SvgWithCssUri,
-  inlineStyles,
-  LocalSvg,
   WithLocalSvg,
+  inlineStyles,
   loadLocalRawResource,
 };

@@ -1,8 +1,8 @@
 import * as React from 'react';
+import extractPolyPoints from '../lib/extract/extractPolyPoints';
+import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Path from './Path';
 import Shape from './Shape';
-import type { CommonPathProps, NumberProp } from '../lib/extract/types';
-import extractPolyPoints from '../lib/extract/extractPolyPoints';
 
 export interface PolygonProps extends CommonPathProps {
   opacity?: NumberProp;

@@ -1,9 +1,9 @@
 import * as React from 'react';
+import type { NativeMethods } from 'react-native';
+import RNSVGEllipse from '../fabric/EllipseNativeComponent';
 import { extract } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import RNSVGEllipse from '../fabric/EllipseNativeComponent';
-import type { NativeMethods } from 'react-native';
 
 export interface EllipseProps extends CommonPathProps {
   cx?: NumberProp;

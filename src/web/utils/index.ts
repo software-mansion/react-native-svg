@@ -1,9 +1,9 @@
-import { BaseProps } from '../types';
-import type { TransformProps } from '../../lib/extract/types';
 import {
   transformsArrayToProps,
   TransformsStyleArray,
 } from '../../lib/extract/extractTransform';
+import type { TransformProps } from '../../lib/extract/types';
+import { BaseProps } from '../types';
 
 export const hasTouchableProperty = (props: BaseProps) =>
   props.onPress || props.onPressIn || props.onPressOut || props.onLongPress;

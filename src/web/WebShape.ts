@@ -5,11 +5,11 @@ import {
   unstable_createElement as createElement,
 } from 'react-native';
 
-import { BaseProps } from './types';
-import { prepare } from './utils/prepare';
-import { convertInt32ColorToRGBA } from './utils/convertInt32Color';
-import { camelCaseToDashed, hasTouchableProperty, remeasure } from './utils';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
+import { BaseProps } from './types';
+import { camelCaseToDashed, hasTouchableProperty, remeasure } from './utils';
+import { convertInt32ColorToRGBA } from './utils/convertInt32Color';
+import { prepare } from './utils/prepare';
 
 export class WebShape<
   P extends BaseProps = BaseProps,

@@ -1,9 +1,9 @@
+import { idPattern } from '../util';
 import extractFill from './extractFill';
+import extractOpacity from './extractOpacity';
+import extractResponder from './extractResponder';
 import extractStroke from './extractStroke';
 import extractTransform from './extractTransform';
-import extractResponder from './extractResponder';
-import extractOpacity from './extractOpacity';
-import { idPattern } from '../util';
 import type {
   ClipProps,
   extractedProps,

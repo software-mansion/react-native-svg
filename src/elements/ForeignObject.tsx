@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
 import * as React from 'react';
+import type { NativeMethods } from 'react-native';
+import RNSVGForeignObject from '../fabric/ForeignObjectNativeComponent';
 import { withoutXY } from '../lib/extract/extractProps';
 import type { NumberProp } from '../lib/extract/types';
 import G from './G';
-import RNSVGForeignObject from '../fabric/ForeignObjectNativeComponent';
-import type { NativeMethods } from 'react-native';
 
 export interface ForeignObjectProps {
   children?: ReactNode;

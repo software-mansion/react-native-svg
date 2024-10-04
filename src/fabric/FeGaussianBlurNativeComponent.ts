@@ -1,9 +1,8 @@
+import { Float, WithDefault } from 'react-native/Libraries/Types/CodegenTypes';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import type { ViewProps } from './utils';
-
 import { NumberProp } from '../lib/extract/types';
 import type { UnsafeMixed } from './codegenUtils';
-import { Float, WithDefault } from 'react-native/Libraries/Types/CodegenTypes';
+import type { ViewProps } from './utils';
 
 type FilterEdgeMode = 'duplicate' | 'wrap' | 'none';
 

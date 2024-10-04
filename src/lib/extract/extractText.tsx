@@ -1,8 +1,8 @@
 import type { ComponentType } from 'react';
 import * as React from 'react';
 import { Children } from 'react';
-import extractLengthList from './extractLengthList';
 import { pickNotNil } from '../util';
+import extractLengthList from './extractLengthList';
 import type { NumberArray, NumberProp } from './types';
 
 const fontRegExp =

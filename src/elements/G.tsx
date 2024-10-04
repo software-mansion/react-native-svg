@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 import * as React from 'react';
+import type { NativeMethods } from 'react-native';
+import RNSVGGroup from '../fabric/GroupNativeComponent';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import { extractFont } from '../lib/extract/extractText';
 import extractTransform from '../lib/extract/extractTransform';
@@ -9,8 +11,6 @@ import type {
   NumberProp,
 } from '../lib/extract/types';
 import Shape from './Shape';
-import RNSVGGroup from '../fabric/GroupNativeComponent';
-import type { NativeMethods } from 'react-native';
 
 export interface GProps extends CommonPathProps, FontProps {
   children?: ReactNode;

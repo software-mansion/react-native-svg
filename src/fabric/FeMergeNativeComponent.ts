@@ -1,8 +1,7 @@
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import type { ViewProps } from './utils';
-
 import { NumberProp } from '../lib/extract/types';
 import type { UnsafeMixed } from './codegenUtils';
+import type { ViewProps } from './utils';
 
 interface FilterPrimitiveCommonProps {
   x?: UnsafeMixed<NumberProp>;

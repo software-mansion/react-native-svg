@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 import * as React from 'react';
+import type { NativeMethods } from 'react-native';
+import RNSVGMask from '../fabric/MaskNativeComponent';
 import { withoutXY } from '../lib/extract/extractProps';
 import type {
   CommonPathProps,
@@ -7,11 +9,9 @@ import type {
   NumberProp,
   Units,
 } from '../lib/extract/types';
+import { maskType } from '../lib/maskType';
 import units from '../lib/units';
 import Shape from './Shape';
-import RNSVGMask from '../fabric/MaskNativeComponent';
-import type { NativeMethods } from 'react-native';
-import { maskType } from '../lib/maskType';
 
 export interface MaskProps extends CommonPathProps {
   children?: ReactNode;

@@ -1,11 +1,10 @@
 import type { Component } from 'react';
 import * as React from 'react';
+import RNSVGTSpan from '../fabric/TSpanNativeComponent';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
-import extractTransform from '../lib/extract/extractTransform';
 import type { TextChild } from '../lib/extract/extractText';
 import extractText, { setTSpan } from '../lib/extract/extractText';
-import { pickNotNil } from '../lib/util';
-import Shape from './Shape';
+import extractTransform from '../lib/extract/extractTransform';
 import type {
   ColumnMajorTransformMatrix,
   CommonPathProps,
@@ -13,7 +12,8 @@ import type {
   NumberArray,
   NumberProp,
 } from '../lib/extract/types';
-import RNSVGTSpan from '../fabric/TSpanNativeComponent';
+import { pickNotNil } from '../lib/util';
+import Shape from './Shape';
 
 export interface TSpanProps extends CommonPathProps, FontProps {
   children?: TextChild;

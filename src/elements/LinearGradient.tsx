@@ -1,10 +1,10 @@
 import type { ReactElement } from 'react';
 import * as React from 'react';
+import type { NativeMethods } from 'react-native';
+import RNSVGLinearGradient from '../fabric/LinearGradientNativeComponent';
 import extractGradient from '../lib/extract/extractGradient';
 import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import Shape from './Shape';
-import RNSVGLinearGradient from '../fabric/LinearGradientNativeComponent';
-import type { NativeMethods } from 'react-native';
 
 export interface LinearGradientProps {
   children?: ReactElement[];

@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import * as React from 'react';
+import type { NativeMethods } from 'react-native';
+import RNSVGPattern from '../fabric/PatternNativeComponent';
 import extractTransform from '../lib/extract/extractTransform';
 import extractViewBox from '../lib/extract/extractViewBox';
 import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
-import RNSVGPattern from '../fabric/PatternNativeComponent';
-import type { NativeMethods } from 'react-native';
 
 export interface PatternProps extends TransformProps {
   children?: ReactNode;

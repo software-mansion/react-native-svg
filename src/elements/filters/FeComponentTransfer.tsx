@@ -1,6 +1,6 @@
 import * as React from 'react';
-import FilterPrimitive from './FilterPrimitive';
 import { warnUnimplementedFilter } from '../../lib/util';
+import FilterPrimitive from './FilterPrimitive';
 
 export interface FeComponentTransferProps {
   in?: string;

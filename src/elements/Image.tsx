@@ -1,16 +1,16 @@
 import * as React from 'react';
 import type {
-  ImageProps as RNImageProps,
+  ImageLoadEventData,
   NativeMethods,
   NativeSyntheticEvent,
-  ImageLoadEventData,
+  ImageProps as RNImageProps,
 } from 'react-native';
 import { Image } from 'react-native';
-import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
+import RNSVGImage from '../fabric/ImageNativeComponent';
 import { withoutXY } from '../lib/extract/extractProps';
+import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import RNSVGImage from '../fabric/ImageNativeComponent';
 
 const spacesRegExp = /\s+/;
 

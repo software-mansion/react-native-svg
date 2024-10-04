@@ -10,23 +10,23 @@ import type {
   ViewStyle,
 } from 'react-native';
 import { findNodeHandle, Platform, StyleSheet } from 'react-native';
+import RNSVGSvgAndroid from '../fabric/AndroidSvgViewNativeComponent';
+import RNSVGSvgIOS from '../fabric/IOSSvgViewNativeComponent';
+import type { Spec } from '../fabric/NativeSvgViewModule';
+import { ViewProps } from '../fabric/utils';
+import extractOpacity from '../lib/extract/extractOpacity';
+import extractResponder from '../lib/extract/extractResponder';
+import { extractTransformSvgView } from '../lib/extract/extractTransform';
+import extractViewBox from '../lib/extract/extractViewBox';
 import type {
   extractedProps,
   HitSlop,
   NumberProp,
   ResponderInstanceProps,
 } from '../lib/extract/types';
-import extractResponder from '../lib/extract/extractResponder';
-import extractViewBox from '../lib/extract/extractViewBox';
-import Shape from './Shape';
 import type { GProps } from './G';
 import G from './G';
-import RNSVGSvgAndroid from '../fabric/AndroidSvgViewNativeComponent';
-import RNSVGSvgIOS from '../fabric/IOSSvgViewNativeComponent';
-import type { Spec } from '../fabric/NativeSvgViewModule';
-import extractOpacity from '../lib/extract/extractOpacity';
-import { extractTransformSvgView } from '../lib/extract/extractTransform';
-import { ViewProps } from '../fabric/utils';
+import Shape from './Shape';
 
 const styles = StyleSheet.create({
   svg: {

@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
 import * as React from 'react';
+import type { NativeMethods } from 'react-native';
+import RNSVGMarker from '../fabric/MarkerNativeComponent';
 import extractViewBox from '../lib/extract/extractViewBox';
 import type { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import RNSVGMarker from '../fabric/MarkerNativeComponent';
-import type { NativeMethods } from 'react-native';
 
 export type MarkerUnits = 'strokeWidth' | 'userSpaceOnUse';
 

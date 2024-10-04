@@ -10,10 +10,9 @@ import type {
   Int32,
   WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
-import type { ViewProps } from './utils';
-
-import type { UnsafeMixed } from './codegenUtils';
 import { NumberProp } from '../lib/extract/types';
+import type { UnsafeMixed } from './codegenUtils';
+import type { ViewProps } from './utils';
 
 export type ImageLoadEventData = {
   source: {

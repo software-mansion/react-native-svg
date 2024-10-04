@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, Component } from 'react';
+import { Component, useEffect, useState } from 'react';
 import { Image, Platform, type ImageSourcePropType } from 'react-native';
 import { fetchText, type SvgProps } from 'react-native-svg';
 import { resolveAssetUri } from '../lib/resolveAssetUri';

@@ -3,10 +3,10 @@ import * as React from 'react';
 import { Children } from 'react';
 import { processColor } from 'react-native';
 
+import units from '../units';
 import extractOpacity from './extractOpacity';
 import extractTransform from './extractTransform';
 import type { TransformProps } from './types';
-import units from '../units';
 
 const percentReg = /^([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)(%?)$/;
 

@@ -1,5 +1,5 @@
-import { Platform } from 'react-native';
 import { Buffer } from 'buffer';
+import { Platform } from 'react-native';
 
 export async function fetchText(uri?: string): Promise<string | null> {
   if (!uri) {

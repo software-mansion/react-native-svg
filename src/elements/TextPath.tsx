@@ -1,7 +1,10 @@
 import type { Component } from 'react';
 import * as React from 'react';
-import extractTransform from '../lib/extract/extractTransform';
+import RNSVGTextPath from '../fabric/TextPathNativeComponent';
 import { withoutXY } from '../lib/extract/extractProps';
+import type { TextChild } from '../lib/extract/extractText';
+import extractText from '../lib/extract/extractText';
+import extractTransform from '../lib/extract/extractTransform';
 import type {
   ColumnMajorTransformMatrix,
   NumberProp,
@@ -11,12 +14,9 @@ import type {
   TextSpecificProps,
   TransformProps,
 } from '../lib/extract/types';
-import type { TextChild } from '../lib/extract/extractText';
-import extractText from '../lib/extract/extractText';
 import { idPattern, pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import TSpan from './TSpan';
-import RNSVGTextPath from '../fabric/TextPathNativeComponent';
 
 export interface TextPathProps extends TextSpecificProps {
   children?: TextChild;

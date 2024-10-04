@@ -1,14 +1,13 @@
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import type { ColorValue } from 'react-native';
 import type {
   Double,
   Float,
   Int32,
 } from 'react-native/Libraries/Types/CodegenTypes';
-import type { ViewProps } from './utils';
-
-import type { UnsafeMixed } from './codegenUtils';
+import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import { NumberProp } from '../lib/extract/types';
+import type { UnsafeMixed } from './codegenUtils';
+import type { ViewProps } from './utils';
 
 type NativeBackgroundProp = Readonly<{
   type?: string;

@@ -1,16 +1,5 @@
-import * as React from 'react';
-import { Component, useEffect, useMemo, useState } from 'react';
-import type {
-  JsxAST,
-  Middleware,
-  Styles,
-  UriProps,
-  UriState,
-  XmlAST,
-  XmlProps,
-  XmlState,
-} from 'react-native-svg';
-import { camelCase, fetchText, parse, SvgAst } from 'react-native-svg';
+import type { Options } from 'css-select';
+import cssSelect from 'css-select';
 import type {
   Atrule,
   AtrulePrelude,
@@ -24,8 +13,19 @@ import type {
   SelectorList,
 } from 'css-tree';
 import csstree, { List } from 'css-tree';
-import type { Options } from 'css-select';
-import cssSelect from 'css-select';
+import * as React from 'react';
+import { Component, useEffect, useMemo, useState } from 'react';
+import type {
+  JsxAST,
+  Middleware,
+  Styles,
+  UriProps,
+  UriState,
+  XmlAST,
+  XmlProps,
+  XmlState,
+} from 'react-native-svg';
+import { camelCase, fetchText, parse, SvgAst } from 'react-native-svg';
 
 const err = console.error.bind(console);
 

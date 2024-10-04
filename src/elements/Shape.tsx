@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Component } from 'react';
-import SvgTouchableMixin from '../lib/SvgTouchableMixin';
-import extractBrush from '../lib/extract/extractBrush';
 import type { ColorValue, NativeMethods } from 'react-native';
 import { findNodeHandle } from 'react-native';
+import type { Spec } from '../fabric/NativeSvgRenderableModule';
+import SvgTouchableMixin from '../lib/SvgTouchableMixin';
+import extractBrush from '../lib/extract/extractBrush';
 import type {
   ColumnMajorTransformMatrix,
   TransformProps,
 } from '../lib/extract/types';
-import type { Spec } from '../fabric/NativeSvgRenderableModule';
 
 export interface SVGBoundingBoxOptions {
   fill?: boolean;

@@ -1,3 +1,4 @@
+import type React from 'react';
 import type {
   ColorValue,
   GestureResponderEvent,
@@ -6,7 +7,6 @@ import type {
   LayoutChangeEvent,
   TransformsStyle,
 } from 'react-native';
-import type React from 'react';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;

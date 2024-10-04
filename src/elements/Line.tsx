@@ -1,9 +1,9 @@
 import * as React from 'react';
+import type { NativeMethods } from 'react-native';
+import RNSVGLine from '../fabric/LineNativeComponent';
 import { extract } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import RNSVGLine from '../fabric/LineNativeComponent';
-import type { NativeMethods } from 'react-native';
 
 export interface LineProps extends CommonPathProps {
   opacity?: NumberProp;

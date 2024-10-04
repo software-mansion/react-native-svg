@@ -1,9 +1,9 @@
 import * as React from 'react';
+import type { NativeMethods } from 'react-native';
+import RNSVGCircle from '../fabric/CircleNativeComponent';
 import { extract } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
-import RNSVGCircle from '../fabric/CircleNativeComponent';
-import type { NativeMethods } from 'react-native';
 
 export interface CircleProps extends CommonPathProps {
   cx?: NumberProp;

@@ -1,6 +1,6 @@
 import extractBrush from './extractBrush';
-import extractOpacity from './extractOpacity';
 import extractLengthList from './extractLengthList';
+import extractOpacity from './extractOpacity';
 import type { extractedProps, StrokeProps } from './types';
 
 const caps = {

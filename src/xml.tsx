@@ -1,8 +1,8 @@
-import type { ComponentType, ComponentProps } from 'react';
+import type { ComponentProps, ComponentType } from 'react';
 import * as React from 'react';
 import { Component, useEffect, useMemo, useState } from 'react';
-import { fetchText } from './utils/fetchData';
 import type { SvgProps } from './elements/Svg';
+import { fetchText } from './utils/fetchData';
 import { tags } from './xmlTags';
 
 function missingTag() {

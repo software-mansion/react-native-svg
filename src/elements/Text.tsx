@@ -1,7 +1,8 @@
 import type { Component, ReactNode } from 'react';
 import * as React from 'react';
-import extractText from '../lib/extract/extractText';
+import RNSVGText from '../fabric/TextNativeComponent';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
+import extractText from '../lib/extract/extractText';
 import extractTransform from '../lib/extract/extractTransform';
 import type {
   ColumnMajorTransformMatrix,
@@ -12,7 +13,6 @@ import type {
 import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import './TSpan';
-import RNSVGText from '../fabric/TextNativeComponent';
 
 export interface TextProps extends TextSpecificProps {
   children?: ReactNode;

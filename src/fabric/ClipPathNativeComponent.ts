@@ -1,14 +1,13 @@
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import type { ColorValue } from 'react-native';
 import type {
   Float,
   Int32,
   WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
-import type { ViewProps } from './utils';
-
-import { UnsafeMixed } from './codegenUtils';
+import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import { FontObject, NumberProp } from '../lib/extract/types';
+import { UnsafeMixed } from './codegenUtils';
+import type { ViewProps } from './utils';
 
 interface SvgNodeCommonProps {
   name?: string;
