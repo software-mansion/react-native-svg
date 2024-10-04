@@ -31,8 +31,11 @@ class ClipPathView extends GroupView {
 
   @Override
   void saveDefinition() {
+    boolean shouldInvalidate = getSvgView().getDefinedClipPath(mName) != null;
     getSvgView().defineClipPath(this, mName);
-    invalidate();
+    if (shouldInvalidate) {
+      invalidate();
+    }
   }
 
   @Override
