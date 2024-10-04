@@ -592,6 +592,64 @@ const parseProps = {
  * @author strarsis <strarsis@gmail.com>
  * @author modified by: msand <msand@abo.fi>
  */
+
+function extractVariables(stylesheet: CssNode): Map<string, string> {
+  const variables = new Map<string, string>();
+
+  csstree.walk(stylesheet, {
+    visit: 'Declaration',
+    enter(node) {
+      const { property, value } = node as Declaration;
+      if (property.startsWith('--')) {
+        const variableName = property.trim();
+        const variableValue = csstree.generate(value).trim();
+        variables.set(variableName, variableValue);
+      }
+    },
+  });
+
+  return variables;
+}
+
+function resolveVariables(
+  value: string | CssNode | undefined,
+  variables: Map<string, string>
+): string {
+  if (value === undefined) {
+    return '';
+  }
+  const valueStr = typeof value === 'string' ? value : csstree.generate(value);
+  return valueStr.replace(
+    /var\((--[^,)]+)(?:,\s*([^)]+))?\)/g,
+    (_, variableName, fallback) => {
+      const resolvedValue = variables.get(variableName);
+      if (resolvedValue !== undefined) {
+        return resolveVariables(resolvedValue, variables);
+      }
+      return fallback ? resolveVariables(fallback, variables) : '';
+    }
+  );
+}
+
+const propsToResolve = [
+  'color',
+  'fill',
+  'floodColor',
+  'lightingColor',
+  'stopColor',
+  'stroke',
+];
+const resolveElementVariables = (
+  element: XmlAST,
+  variables: Map<string, string>
+) =>
+  propsToResolve.forEach((prop) => {
+    const value = element.props[prop] as string;
+    if (value && value.startsWith('var(')) {
+      element.props[prop] = resolveVariables(value, variables);
+    }
+  });
+
 export const inlineStyles: Middleware = function inlineStyles(
   document: XmlAST
 ) {
@@ -604,6 +662,7 @@ export const inlineStyles: Middleware = function inlineStyles(
   }
 
   const selectors: FlatSelectorList = [];
+  let variables = new Map<string, string>();
 
   for (const element of styleElements) {
     const { children } = element;
@@ -615,7 +674,10 @@ export const inlineStyles: Middleware = function inlineStyles(
     // collect <style/>s and their css ast
     try {
       const styleString = children.join('');
-      flattenToSelectors(csstree.parse(styleString, parseProps), selectors);
+      const stylesheet = csstree.parse(styleString, parseProps);
+
+      variables = extractVariables(stylesheet);
+      flattenToSelectors(stylesheet, selectors);
     } catch (parseError) {
       console.warn(
         'Warning: Parse error of styles of <style/> element, skipped. Error details: ' +
@@ -635,6 +697,15 @@ export const inlineStyles: Middleware = function inlineStyles(
 
   // stable sort selectors
   const sortedSelectors = sortSelectors(selectorsPseudo).reverse();
+
+  const elementsWithColor = cssSelect(
+    '*[color], *[fill], *[floodColor], *[lightingColor], *[stopColor], *[stroke]',
+    document,
+    cssSelectOpts
+  );
+  for (const element of elementsWithColor) {
+    resolveElementVariables(element, variables);
+  }
 
   // match selectors
   for (const { rule, item } of sortedSelectors) {
@@ -667,7 +738,12 @@ export const inlineStyles: Middleware = function inlineStyles(
             const current = priority.get(name);
             if (current === undefined || current < important) {
               priority.set(name, important as boolean);
-              style[camel] = val;
+              // Handle if value is undefined
+              if (val !== undefined) {
+                style[camel] = val;
+              } else {
+                console.warn(`Undefined value for style property: ${camel}`);
+              }
             }
           }
         },
