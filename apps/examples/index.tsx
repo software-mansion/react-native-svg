@@ -4,7 +4,7 @@
  */
 'use strict';
 
-import {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {NavigationContainer, NavigationState} from '@react-navigation/native';
 import {
   Text,
@@ -193,6 +193,7 @@ export default function App() {
             options={{
               headerTitle: 'SVG library for React Apps',
               headerTintColor: '#f60',
+              headerTitleAlign: 'center',
             }}
           />
           {EXAMPLES_NAMES.map(name => (
