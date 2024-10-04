@@ -14,6 +14,7 @@
     "@react-native-async-storage/async-storage": "^2.0.0",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
+    "@react-navigation/stack": "^6.4.1",
     "react": "18.3.1",
     "react-native": "0.75.1",
     "react-native-gesture-handler": "^2.20.0",
