@@ -41,5 +41,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'FeOffset';
 const samples = [ReferenceExample];
-export {icon, samples};
+
+export {icon, samples, title};

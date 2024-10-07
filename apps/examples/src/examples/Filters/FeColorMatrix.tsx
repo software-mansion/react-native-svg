@@ -110,6 +110,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'FeColorMatrix';
 const samples = [
   ReferenceExample,
   IdentityExample,
@@ -118,4 +119,4 @@ const samples = [
   HueRotateExample,
   LuminanceToAlphaExample,
 ];
-export {icon, samples};
+export {icon, samples, title};

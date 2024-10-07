@@ -77,10 +77,11 @@ const icon = (
   </Svg>
 );
 
+const title = 'FeGaussianBlur';
 const samples = [
   StdDeviation3Example,
   StdDeviation7Example,
   StdDeviation150Example,
   StdDeviation025Example,
 ];
-export {icon, samples};
+export {icon, samples, title};
