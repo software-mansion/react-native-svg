@@ -4,30 +4,20 @@
  */
 'use strict';
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {NavigationContainer, NavigationState} from '@react-navigation/native';
-import {
-  Text,
-  View,
-  Linking,
-  Pressable,
-  FlatList,
-  SafeAreaView,
-  Platform,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Linking, Platform, ActivityIndicator} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
-import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {EXAMPLES} from './src/examples';
+import {createStackNavigator} from '@react-navigation/stack';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {EXAMPLES} from './src/examples';
 import composeComponents from './utils/composeComponent';
 import E2eTestingView from './src/e2e';
 import {commonStyles} from './src/commonStyles';
-import {GestureHandlerRootView, RectButton} from 'react-native-gesture-handler';
+import type {RootStackParamList} from './utils/type';
+import {names} from './utils/names';
+import {Home} from './src/components/HomeScreen';
 import {
   FeColorMatrix,
   FeGaussianBlur,
@@ -35,97 +25,17 @@ import {
   FeOffset,
   ReanimatedFeColorMatrix,
 } from './src/examples/Filters/examples';
-import {
-  LocalImage,
-  FilterPicker,
-  RemoteImage,
-} from './src/examples/FilterImage/examples';
+import {FilterImageExamples} from './src/examples/FilterImage/examples';
+const {LocalImage, FilterPicker, RemoteImage} = FilterImageExamples;
 
 function noop() {
   // do nothing
 }
 
-const EXAMPLES_NAMES = Object.keys(EXAMPLES);
-
 const Stack =
   Platform.OS === 'macos'
     ? createStackNavigator<RootStackParamList>()
     : createNativeStackNavigator<RootStackParamList>();
-
-type RootStackParamList = {[P in keyof typeof EXAMPLES]: undefined} & {
-  Home: undefined;
-  FeColorMatrix: undefined;
-  FeGaussianBlur: undefined;
-  FeMerge: undefined;
-  FeOffset: undefined;
-  ReanimatedFeColorMatrix: undefined;
-  LocalImage: undefined;
-  RemoteImage: undefined;
-  FilterPicker: undefined;
-};
-
-interface HomeScreenProps {
-  navigation:
-    | StackNavigationProp<RootStackParamList, 'Home'>
-    | NativeStackNavigationProp<RootStackParamList, 'Home'>;
-}
-
-function Home({navigation}: HomeScreenProps) {
-  const [wasClicked, setWasClicked] = useState<string[]>([]);
-
-  return (
-    <SafeAreaView>
-      <FlatList
-        data={EXAMPLES_NAMES}
-        style={commonStyles.list}
-        initialNumToRender={EXAMPLES_NAMES.length}
-        renderItem={({item: name}) => (
-          <Item
-            icon={EXAMPLES[name].icon}
-            title={EXAMPLES[name].title}
-            onPress={() => {
-              navigation.navigate(name);
-              if (!wasClicked.includes(name)) {
-                setTimeout(() => setWasClicked([...wasClicked, name]), 500);
-              }
-            }}
-            wasClicked={wasClicked.includes(name)}
-          />
-        )}
-        ItemSeparatorComponent={ItemSeparator}
-      />
-    </SafeAreaView>
-  );
-}
-
-export function ItemSeparator() {
-  return <View style={commonStyles.separator} />;
-}
-
-export interface ItemProps {
-  icon?: any;
-  title: string;
-  onPress: () => void;
-  wasClicked?: boolean;
-}
-
-export function Item({icon, title, onPress, wasClicked}: ItemProps) {
-  const Button = Platform.OS === 'macos' ? Pressable : RectButton;
-  return (
-    <Button
-      style={[commonStyles.button, wasClicked && commonStyles.visitedItem]}
-      onPress={onPress}>
-      {icon && (
-        <>
-          <View>{icon}</View>
-          <Text>{'   '}</Text>
-        </>
-      )}
-
-      <Text style={commonStyles.title}>{title}</Text>
-    </Button>
-  );
-}
 
 // copied from https://reactnavigation.org/docs/state-persistence/
 const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1';
@@ -196,20 +106,25 @@ export default function App() {
               headerTitleAlign: 'center',
             }}
           />
-          {EXAMPLES_NAMES.map(name => (
-            <Stack.Screen
-              key={name}
-              name={name}
-              component={composeComponents(
-                EXAMPLES[name].samples,
-                EXAMPLES[name].shouldBeRenderInView ?? false,
-              )}
-              options={{
-                headerTitle: EXAMPLES[name].title,
-                title: EXAMPLES[name].title,
-              }}
-            />
-          ))}
+          {names
+            .filter(el => {
+              if (el !== 'E2E') return true;
+              return Platform.OS === 'android' || Platform.OS === 'ios';
+            })
+            .map(name => (
+              <Stack.Screen
+                key={name}
+                name={name}
+                component={composeComponents(
+                  EXAMPLES[name].samples,
+                  EXAMPLES[name].shouldBeRenderInView ?? false,
+                )}
+                options={{
+                  headerTitle: EXAMPLES[name].title,
+                  title: EXAMPLES[name].title,
+                }}
+              />
+            ))}
           <Stack.Screen
             name="FeColorMatrix"
             component={composeComponents(FeColorMatrix.samples)}
