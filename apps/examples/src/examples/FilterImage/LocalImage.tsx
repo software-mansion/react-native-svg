@@ -48,9 +48,11 @@ const icon = (
   />
 );
 
+const title = 'LocalImage';
 const samples = [
   FilterImageLocalExampleStyleCSS,
   FilterImageLocalExampleStyleSVG,
   FilterImageLocalExamplePropSVG,
 ];
-export {icon, samples};
+
+export {icon, samples, title};

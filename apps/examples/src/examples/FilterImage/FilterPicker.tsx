@@ -136,5 +136,7 @@ const icon = (
   />
 );
 
+const title = 'FilterPicker';
 const samples = [FilterImagePickerExample];
-export {icon, samples};
+
+export {icon, samples, title};

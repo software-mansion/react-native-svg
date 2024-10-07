@@ -67,9 +67,11 @@ const styles = StyleSheet.create({
   },
 });
 
+const title = 'RemoteImage';
 const samples = [
   FilterImageRemoteExampleCSS,
   FilterImageRemoteExample,
   FilterImageFewFiltersExample,
 ];
-export {icon, samples};
+
+export {icon, samples, title};
