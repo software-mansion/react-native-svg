@@ -1,16 +1,17 @@
 import React, {useState} from 'react';
 import {FlatList} from 'react-native';
-
+import {useNavigation} from '@react-navigation/native';
 import {FilterImage} from 'react-native-svg/filter-image';
 import {commonStyles} from '../../commonStyles';
-import {EXAMPLES} from './examples';
-import {useNavigation} from '@react-navigation/native';
-import {Item, ItemSeparator} from '../../../index';
+import {Item} from '../../components/Item';
+import {ItemSeparator} from '../../components/ItemSeparator';
+import {FilterImageExamples as EXAMPLES} from './examples';
+import type {NavigationRoot} from '../../../utils/type';
 
 const EXAMPLES_NAMES = Object.keys(EXAMPLES);
 
 function FilterImageList() {
-  const navigation: any = useNavigation();
+  const navigation = useNavigation<NavigationRoot>();
   const [wasClicked, setWasClicked] = useState<string[]>([]);
 
   return (
