@@ -90,7 +90,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Bind PanResponder on the SVG Shape';
+const title = 'PanResponder example';
 const shouldBeRenderInView = true;
 const samples = [PanExample];
 
