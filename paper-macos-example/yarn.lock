@@ -2105,6 +2105,14 @@
   resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.31.tgz#28dd802a0787bb03fc0e5be296daf1804dbebbcf"
   integrity sha512-bUzP4Awlljx5RKEExw8WYtif8EuQni2glDaieYROKTnaxsu9kEIA515sXQgUDZU4Ob12VoL7+z70uO3qrlfXcQ==
 
+"@react-navigation/native-stack@^6.11.0":
+  version "6.11.0"
+  resolved "https://registry.yarnpkg.com/@react-navigation/native-stack/-/native-stack-6.11.0.tgz#a33f92cbd55dfe28fb0ba67df99aaa95240eb87c"
+  integrity sha512-U5EcUB9Q2NQspCFwYGGNJm0h6wBCOv7T30QjndmvlawLkNt7S7KWbpWyxS9XBHSIKF57RgWjfxuJNTgTstpXxw==
+  dependencies:
+    "@react-navigation/elements" "^1.3.31"
+    warn-once "^0.1.0"
+
 "@react-navigation/native@^6.1.18":
   version "6.1.18"
   resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-6.1.18.tgz#338fa9afa2c89feec1d3eac41c963840d8d6f106"
@@ -6088,10 +6096,10 @@ react-native-gesture-handler@^2.20.0:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-react-native-macos@^0.73.0-0:
-  version "0.73.34"
-  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.73.34.tgz#5b3d6d53339f6c231ea0432562425db914a31b63"
-  integrity sha512-kh+m+36NwWZ/xjBL3B6n+zEbGG4ynqs3bfiADPI38XDzpbWgKKvoGp66e2htc0J5A/2aRliYDFfKg++wpBx2Qw==
+react-native-macos@^0.73.35:
+  version "0.73.35"
+  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.73.35.tgz#e36f14cce35882748aefee2a88e15f92bfd42d44"
+  integrity sha512-WNrmIzHUOOPm2XjHS/sfGJX78oRTYKnhw4CLfboMdf6rqE59+pFIzMXjwCKOvmnvG/RlosrUFRYjH4NzpFfgpQ==
   dependencies:
     "@jest/create-cache-key-function" "^29.6.3"
     "@react-native-community/cli" "12.3.6"
