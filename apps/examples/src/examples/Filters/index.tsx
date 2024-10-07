@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {FlatList} from 'react-native';
 import {Circle, Svg} from 'react-native-svg';
 import {useNavigation} from '@react-navigation/native';
-import {EXAMPLES} from './examples';
+import {FilterExamples as EXAMPLES} from './examples';
 import {commonStyles} from '../../commonStyles';
 import {Item} from '../../../src/components/Item';
 import {ItemSeparator} from '../../../src/components/ItemSeparator';
