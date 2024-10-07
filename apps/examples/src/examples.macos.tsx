@@ -21,8 +21,7 @@ import * as Markers from './examples/Markers';
 import * as Mask from './examples/Mask';
 import * as Filters from './examples/Filters';
 import * as FilterImage from './examples/FilterImage';
-
-import {Examples} from '../utils/type';
+import type {Examples} from '../utils/type';
 
 export const EXAMPLES: Examples = {
   Svg,
