@@ -19,10 +19,6 @@ const styles = StyleSheet.create({
     height: 100,
     width: 200,
   },
-  svg: {
-    flex: 1,
-    alignSelf: 'stretch',
-  },
 });
 
 function SimpleMask() {
