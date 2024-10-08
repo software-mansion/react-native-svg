@@ -32,9 +32,8 @@ export function Home({navigation}: HomeScreenProps) {
       removeClippedSubviews={false}
       data={screenNames}
       style={commonStyles.list}
-      numColumns={2}
-      scrollEnabled={false}
-      initialNumToRender={screenNames.length}
+      numColumns={Platform.OS === 'macos' ? 2 : 1}
+      scrollEnabled={Platform.OS !== 'macos'}
       renderItem={({item: name}) => (
         <Item
           icon={EXAMPLES[name].icon}
