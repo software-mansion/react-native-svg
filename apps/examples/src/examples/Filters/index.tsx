@@ -16,6 +16,7 @@ function FiltersList() {
 
   return (
     <FlatList
+      removeClippedSubviews={false}
       data={EXAMPLES_NAMES}
       style={commonStyles.list}
       initialNumToRender={EXAMPLES_NAMES.length}
@@ -47,7 +48,8 @@ const icon = (
   </Svg>
 );
 
+const shouldBeRenderInView = true;
 const title = 'Filters example';
 const samples = [FiltersList];
 
-export {icon, samples, title};
+export {icon, samples, title, shouldBeRenderInView};

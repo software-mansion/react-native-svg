@@ -16,6 +16,7 @@ function FilterImageList() {
 
   return (
     <FlatList
+      removeClippedSubviews={false}
       data={EXAMPLES_NAMES}
       style={commonStyles.list}
       initialNumToRender={EXAMPLES_NAMES.length}
@@ -48,7 +49,8 @@ const icon = (
   />
 );
 
-const title = 'FilterImage example';
+const shouldBeRenderInView = true;
+const title = 'Filter Image example';
 const samples = [FilterImageList];
 
-export {icon, samples, title};
+export {icon, samples, title, shouldBeRenderInView};
