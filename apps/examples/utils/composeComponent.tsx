@@ -38,7 +38,7 @@ export default function composeComponents(
       <ScrollView
         contentContainerStyle={{
           alignItems: 'center',
-          paddingTop: 25,
+          paddingVertical: 25,
         }}>
         {components.map((Component, index) => (
           <Fragment key={index}>
