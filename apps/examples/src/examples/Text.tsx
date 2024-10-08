@@ -1,6 +1,5 @@
 import React from 'react';
 import {ScrollView, Text as RNText} from 'react-native';
-
 import {
   Svg,
   G,

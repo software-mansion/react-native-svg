@@ -28,7 +28,6 @@ function UseExample() {
       <Use href="#reuse-shape" x="170" y="0" />
     </Svg>
   );
-  // }
 }
 UseExample.title = 'Reuse svg code';
 
