@@ -18,14 +18,15 @@ import {commonStyles} from './src/commonStyles';
 import type {RootStackParamList} from './utils/type';
 import {names} from './utils/names';
 import {Home} from './src/components/HomeScreen';
-import {
+import {FilterExamples} from './src/examples/Filters/examples';
+import {FilterImageExamples} from './src/examples/FilterImage/examples';
+const {
   FeColorMatrix,
   FeGaussianBlur,
   FeMerge,
   FeOffset,
   ReanimatedFeColorMatrix,
-} from './src/examples/Filters/examples';
-import {FilterImageExamples} from './src/examples/FilterImage/examples';
+} = FilterExamples;
 const {LocalImage, FilterPicker, RemoteImage} = FilterImageExamples;
 
 function noop() {
@@ -117,7 +118,7 @@ export default function App() {
                 name={name}
                 component={composeComponents(
                   EXAMPLES[name].samples,
-                  EXAMPLES[name].shouldBeRenderInView ?? false,
+                  EXAMPLES[name].shouldBeRenderInView,
                 )}
                 options={{
                   headerTitle: EXAMPLES[name].title,
