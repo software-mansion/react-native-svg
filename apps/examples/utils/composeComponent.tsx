@@ -16,7 +16,6 @@ export default function composeComponents(
       <View
         style={{
           alignItems: 'center',
-          paddingVertical: 25,
         }}>
         {components.map((Component, index) => (
           <Fragment key={index}>
@@ -39,7 +38,7 @@ export default function composeComponents(
       <ScrollView
         contentContainerStyle={{
           alignItems: 'center',
-          paddingVertical: 25,
+          paddingTop: 25,
         }}>
         {components.map((Component, index) => (
           <Fragment key={index}>
@@ -65,9 +64,13 @@ export default function composeComponents(
 function Separator() {
   return (
     <>
-      <View style={{height: 25}} />
-      <View style={{height: 1, width: '100%', backgroundColor: 'gray'}}></View>
-      <View style={{height: 25}} />
+      <View
+        style={{
+          height: 1,
+          marginVertical: 25,
+          width: '100%',
+          backgroundColor: 'gray',
+        }}></View>
     </>
   );
 }
