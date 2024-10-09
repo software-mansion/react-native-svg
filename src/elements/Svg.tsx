@@ -91,6 +91,11 @@ export default class Svg extends Shape<SvgProps> {
    */
   toDataURL(callback: (base64: string) => void, options: Size): void;
   toDataURL(callback: (base64: string) => void): void;
+  /**
+   * @description Converts the SVG to a data URL image.
+   * @param {function(string): void} callback - A callback function that receives the base64-encoded data URL
+   * @param {DataUrlOptions} options - The options to specify the size, format (JPEG or PNG) and quality.
+   */
   toDataURL(callback: (base64: string) => void, options: DataUrlOptions): void;
   toDataURL(
     callback: (base64: string) => void,
