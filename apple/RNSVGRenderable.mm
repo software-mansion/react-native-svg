@@ -59,6 +59,15 @@ static RNSVGRenderable *_contextElement;
   self.dirty = true;
 }
 
+- (void)setColor:(RNSVGColor *)color
+{
+  if (color == self.tintColor) {
+    return;
+  }
+  [self invalidate];
+  self.tintColor = color;
+}
+
 - (void)setFill:(RNSVGBrush *)fill
 {
   if (fill == _fill) {
