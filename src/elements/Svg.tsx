@@ -118,14 +118,10 @@ export default class Svg extends Shape<SvgProps> {
   }
 
   /**
-   * Options specific to JPEG format.
    * @typedef {Object} DataUrlOptions
    * @property {'jpeg' | 'png'} format - The format of the image (jpeg | png).
    * @property {number} [quality] - The quality only for the JPEG image (0 to 1).
    * @property {Size} [size] - The size of the output image.
-   */
-
-  /**
    * Size of the output image.
    * @typedef {Object} Size
    * @property {number} width - The width of the image.
