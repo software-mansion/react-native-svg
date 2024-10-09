@@ -189,7 +189,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   final Matrix mInvViewBoxMatrix = new Matrix();
   private boolean mInvertible = true;
   private boolean mRendered = false;
-  int mTintColor = 0;
+  int mCurrentColor = 0;
 
   boolean notRendered() {
     return !mRendered;
@@ -209,8 +209,8 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
   }
 
-  public void setTintColor(Integer tintColor) {
-    mTintColor = tintColor != null ? tintColor : 0;
+  public void setCurrentColor(Integer color) {
+    mCurrentColor = color != null ? color : 0;
     invalidate();
     clearChildCache();
   }

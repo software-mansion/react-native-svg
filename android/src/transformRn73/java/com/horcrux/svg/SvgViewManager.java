@@ -13,6 +13,7 @@ import android.util.SparseArray;
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.PointerEvents;
@@ -98,16 +99,10 @@ class SvgViewManager extends ReactViewManager
     return true;
   }
 
-  @ReactProp(name = "tintColor", customType = "Color")
-  @Override
-  public void setTintColor(SvgView node, Integer tintColor) {
-    node.setTintColor(tintColor);
-  }
-
   @ReactProp(name = "color", customType = "Color")
   @Override
   public void setColor(SvgView node, Integer color) {
-    node.setTintColor(color);
+    node.setCurrentColor(color);
   }
 
   @ReactProp(name = "minX")
@@ -177,16 +172,6 @@ class SvgViewManager extends ReactViewManager
   }
 
   @Override
-  public void setBorderTopEndRadius(SvgView view, float value) {
-    super.setBorderRadius(view, 6, value);
-  }
-
-  @Override
-  public void setBorderBottomStartRadius(SvgView view, float value) {
-    super.setBorderRadius(view, 7, value);
-  }
-
-  @Override
   public void setBorderBottomColor(SvgView view, @Nullable Integer value) {
     super.setBorderColor(view, 4, value);
   }
@@ -242,11 +227,6 @@ class SvgViewManager extends ReactViewManager
   }
 
   @Override
-  public void setBorderBottomEndRadius(SvgView view, float value) {
-    super.setBorderRadius(view, 8, value);
-  }
-
-  @Override
   public void setBorderEndColor(SvgView view, @Nullable Integer value) {
     super.setBorderColor(view, 6, value);
   }
@@ -259,11 +239,6 @@ class SvgViewManager extends ReactViewManager
   @Override
   public void setNativeBackgroundAndroid(SvgView view, @Nullable ReadableMap value) {
     super.setNativeBackground(view, value);
-  }
-
-  @Override
-  public void setBorderTopStartRadius(SvgView view, float value) {
-    super.setBorderRadius(view, 5, value);
   }
 
   @Override
@@ -346,48 +321,76 @@ class SvgViewManager extends ReactViewManager
     super.setBorderColor(view, 11, value);
   }
 
-  @Override
-  public void setBorderRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 0, (float) value);
+  public void setBorderRadius(ReactViewGroup view, int index, Dynamic rawBorderRadius) {
+    double borderRadius = 0;
+    if (rawBorderRadius.getType() == ReadableType.Number) {
+      borderRadius = rawBorderRadius.asDouble();
+    }
+    super.setBorderRadius(view, index, (float) borderRadius);
   }
 
   @Override
-  public void setBorderTopLeftRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 1, (float) value);
+  public void setBorderRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 0, rawBorderRadius);
   }
 
   @Override
-  public void setBorderTopRightRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 2, (float) value);
+  public void setBorderTopLeftRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 1, rawBorderRadius);
   }
 
   @Override
-  public void setBorderBottomRightRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 3, (float) value);
+  public void setBorderTopRightRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 2, rawBorderRadius);
   }
 
   @Override
-  public void setBorderBottomLeftRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 4, (float) value);
+  public void setBorderBottomRightRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 3, rawBorderRadius);
   }
 
   @Override
-  public void setBorderEndEndRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 9, (float) value);
+  public void setBorderBottomLeftRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 4, rawBorderRadius);
   }
 
   @Override
-  public void setBorderEndStartRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 10, (float) value);
+  public void setBorderTopStartRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 5, rawBorderRadius);
   }
 
   @Override
-  public void setBorderStartEndRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 11, (float) value);
+  public void setBorderTopEndRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 6, rawBorderRadius);
   }
 
   @Override
-  public void setBorderStartStartRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 12, (float) value);
+  public void setBorderBottomStartRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 7, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderBottomEndRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 8, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderEndEndRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 9, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderEndStartRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 10, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderStartEndRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 11, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderStartStartRadius(SvgView view, Dynamic rawBorderRadius) {
+    this.setBorderRadius(view, 12, rawBorderRadius);
   }
 }
