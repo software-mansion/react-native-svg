@@ -113,7 +113,7 @@ export type { TextProps } from './elements/Text';
 export type { TextPathProps } from './elements/TextPath';
 export type { TSpanProps } from './elements/TSpan';
 export type { UseProps } from './elements/Use';
-
+export type { DataUrlOptions } from './lib/utils/toDataUrlUtils';
 export * from './lib/extract/types';
 
 export {

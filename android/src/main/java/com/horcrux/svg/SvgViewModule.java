@@ -68,7 +68,7 @@ class SvgViewModule extends NativeSvgViewModuleSpec {
             } else {
               if (options != null) {
                 successCallback.invoke(
-                    svg.toDataURL(options.getInt("width"), options.getInt("height")));
+                    svg.toDataURL(options));
               } else {
                 successCallback.invoke(svg.toDataURL());
               }

@@ -27,6 +27,11 @@ import type { Spec } from '../fabric/NativeSvgViewModule';
 import extractOpacity from '../lib/extract/extractOpacity';
 import { extractTransformSvgView } from '../lib/extract/extractTransform';
 import { ViewProps } from '../fabric/utils';
+import {
+  type DataUrlOptions,
+  type Size,
+  validateOptions,
+} from '../lib/utils/toDataUrlUtils';
 
 const styles = StyleSheet.create({
   svg: {
@@ -81,16 +86,47 @@ export default class Svg extends Shape<SvgProps> {
     root && root.setNativeProps(props);
   };
 
-  toDataURL = (callback: (base64: string) => void, options?: object) => {
+  /**
+   * @deprecated use size property instead.
+   */
+  toDataURL(callback: (base64: string) => void, options: Size): void;
+  /**
+   * @description Converts the SVG to a data URL image.
+   */
+  toDataURL(callback: (base64: string) => void): void;
+  /**
+   * @description Converts the SVG to a data URL image.
+   * @param {function(string): void} callback - A callback function that receives the base64-encoded data URL
+   * @param {DataUrlOptions} options - The options to specify the size, format (JPEG or PNG) and quality.
+   */
+  toDataURL(callback: (base64: string) => void, options: DataUrlOptions): void;
+  toDataURL(
+    callback: (base64: string) => void,
+    options?: DataUrlOptions | Size
+  ): void {
     if (!callback) {
       return;
+    }
+    if (options && 'format' in options) {
+      validateOptions(options);
     }
     const handle = findNodeHandle(this.root as Component);
     const RNSVGSvgViewModule: Spec =
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('../fabric/NativeSvgViewModule').default;
     RNSVGSvgViewModule.toDataURL(handle, options, callback);
-  };
+  }
+
+  /**
+   * @typedef {Object} DataUrlOptions
+   * @property {'jpeg' | 'png'} format - The format of the image (jpeg | png).
+   * @property {number} [quality] - The quality only for the JPEG image (0 to 1).
+   * @property {Size} [size] - The size of the output image.
+   * Size of the output image.
+   * @typedef {Object} Size
+   * @property {number} width - The width of the image.
+   * @property {number} height - The height of the image.
+   */
 
   render() {
     const {

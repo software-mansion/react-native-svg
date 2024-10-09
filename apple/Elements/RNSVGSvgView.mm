@@ -357,7 +357,7 @@ using namespace facebook::react;
   return isPointInside ? self : nil;
 }
 
-- (NSString *)getDataURLWithBounds:(CGRect)bounds
+- (NSString *)getDataURLWithBounds:(CGRect)bounds format:(NSString *)format quality:(CGFloat)quality
 {
 #if !TARGET_OS_OSX // [macOS]
   UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size];
@@ -372,12 +372,17 @@ using namespace facebook::react;
 #if !TARGET_OS_OSX // [macOS]
   }];
 #endif
-#if !TARGET_OS_OSX // [macOS]
-  NSData *imageData = UIImagePNGRepresentation(image);
+  NSData *imageData;
+#if TARGET_OS_OSX // [macOS
+  NSImage *image = UIGraphicsGetImageFromCurrentImageContext();
+#endif // macOS]
+  if ([format isEqual:@"jpeg"]) {
+    imageData = UIImageJPEGRepresentation(image, quality);
+  } else {
+    imageData = UIImagePNGRepresentation(image);
+  }
   NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
-#else // [macOS
-  NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
-  NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+#if TARGET_OS_OSX // [macOS
   UIGraphicsEndImageContext();
 #endif // macOS]
   return base64;

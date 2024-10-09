@@ -1,6 +1,14 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image} from 'react-native';
-import {Svg, Circle, G, Path, Line, Rect} from 'react-native-svg';
+import {StyleSheet, View, Image, Dimensions} from 'react-native';
+import {
+  Svg,
+  Circle,
+  G,
+  Path,
+  Line,
+  Rect,
+  DataUrlOptions,
+} from 'react-native-svg';
 
 const styles = StyleSheet.create({
   container: {
@@ -131,14 +139,19 @@ class SvgNativeMethods extends Component {
   state = {
     base64: null,
   };
+
+  optionsWithPNGFormat: DataUrlOptions = {
+    format: 'png',
+    size: {width: 150, height: 100},
+  };
+
   alert = () => {
     console.log('PRESSED');
     this.root?.toDataURL((base64: string) => {
       this.setState({
         base64,
       });
-    });
-
+    }, this.optionsWithPNGFormat);
     console.log(this.circle?.isPointInFill({x: 200, y: 100}));
     console.log(this.circle?.isPointInStroke({x: 200, y: 100}));
     console.log(this.circle?.getTotalLength());

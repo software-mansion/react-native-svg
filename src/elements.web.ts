@@ -49,6 +49,7 @@ import type { TextProps } from './elements/Text';
 import type { TextPathProps } from './elements/TextPath';
 import type { TSpanProps } from './elements/TSpan';
 import type { UseProps } from './elements/Use';
+import type { DataUrlOptions } from './lib/utils/toDataUrlUtils';
 import type { BaseProps } from './web/types';
 import { encodeSvg, getBoundingClientRect } from './web/utils';
 import { WebShape } from './web/WebShape';
@@ -250,10 +251,7 @@ export class Stop extends WebShape<BaseProps & StopProps> {
 
 export class Svg extends WebShape<BaseProps & SvgProps> {
   tag = 'svg' as const;
-  toDataURL(
-    callback: (data: string) => void,
-    options: { width?: number; height?: number } = {}
-  ) {
+  toDataURL(callback: (data: string) => void, options: DataUrlOptions) {
     const ref = this.elementRef.current;
 
     if (ref === null) {
@@ -262,8 +260,19 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
 
     const rect = getBoundingClientRect(ref);
 
-    const width = Number(options.width) || rect.width;
-    const height = Number(options.height) || rect.height;
+    const width = Number(options?.size?.width) || rect.width;
+    const height = Number(options?.size?.height) || rect.height;
+    const format = options.format === 'jpeg' ? 'image/jpeg' : 'image/png';
+
+    let quality: number | undefined;
+    if (
+      options &&
+      options.format === 'jpeg' &&
+      options.quality !== null &&
+      options.quality !== undefined
+    ) {
+      quality = options.quality;
+    }
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
@@ -278,7 +287,9 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
       canvas.height = height;
       const context = canvas.getContext('2d');
       context?.drawImage(img, 0, 0);
-      callback(canvas.toDataURL().replace('data:image/png;base64,', ''));
+      const dataURL = canvas.toDataURL(format, quality);
+      const base64Data = dataURL.replace(`data:${format};base64,`, '');
+      callback(base64Data);
     };
 
     img.src = `data:image/svg+xml;utf8,${encodeSvg(

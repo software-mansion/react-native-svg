@@ -38,21 +38,25 @@ RCT_EXPORT_MODULE()
     if ([view isKindOfClass:[RNSVGSvgView class]]) {
       RNSVGSvgView *svg = view;
       if (options == nil) {
-        b64 = [svg getDataURLWithBounds:svg.boundingBox];
+        b64 = [svg getDataURLWithBounds:svg.boundingBox format:@"png" quality:1.0];
       } else {
-        id width = [options objectForKey:@"width"];
-        id height = [options objectForKey:@"height"];
-        if (![width isKindOfClass:NSNumber.class] || ![height isKindOfClass:NSNumber.class]) {
-          RCTLogError(@"Invalid width or height given to toDataURL");
-          return;
+        CGRect bounds;
+        NSDictionary *size = [options objectForKey:@"size"];
+        id width = [size objectForKey:@"width"];
+        id height = [size objectForKey:@"height"];
+        if (![width isKindOfClass:NSNumber.class] && ![height isKindOfClass:NSNumber.class]) {
+          bounds = svg.boundingBox;
+        } else {
+          NSNumber *w = width;
+          NSInteger wi = w ? (NSInteger)[w intValue] : svg.boundingBox.size.width;
+          NSNumber *h = height;
+          NSInteger hi = h ? (NSInteger)[h intValue] : svg.boundingBox.size.height;
+          bounds = CGRectMake(0, 0, wi, hi);
         }
-        NSNumber *w = width;
-        NSInteger wi = (NSInteger)[w intValue];
-        NSNumber *h = height;
-        NSInteger hi = (NSInteger)[h intValue];
-
-        CGRect bounds = CGRectMake(0, 0, wi, hi);
-        b64 = [svg getDataURLWithBounds:bounds];
+        NSString *format = [options objectForKey:@"format"];
+        NSNumber *qualityNumber = [options objectForKey:@"quality"];
+        CGFloat quality = qualityNumber ? [qualityNumber doubleValue] : 1.0;
+        b64 = [svg getDataURLWithBounds:bounds format:format quality:quality];
       }
     } else {
       RCTLogError(@"Invalid svg returned from registry, expecting RNSVGSvgView, got: %@", view);

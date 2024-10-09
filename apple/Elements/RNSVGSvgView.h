@@ -62,7 +62,7 @@
 
 - (RNSVGFilter *)getDefinedFilter:(NSString *)filterName;
 
-- (NSString *)getDataURLWithBounds:(CGRect)bounds;
+- (NSString *)getDataURLWithBounds:(CGRect)bounds format:(NSString *)format quality:(CGFloat)quality;
 
 - (CGRect)getContextBounds;
 

@@ -22,6 +22,7 @@ import android.view.ViewParent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.ReactCompoundView;
 import com.facebook.react.uimanager.ReactCompoundViewGroup;
@@ -29,6 +30,7 @@ import com.facebook.react.views.view.ReactViewGroup;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -361,7 +363,17 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
   }
 
-  String toDataURL(int width, int height) {
+  String toDataURL(final ReadableMap options) {
+    int width;
+    int height;
+    if (options.hasKey("size")) {
+      ReadableMap size = options.getMap("size");
+      width = size.hasKey("width") ? size.getInt("width") : getWidth();
+      height = size.hasKey("height") ? size.getInt("height") : getHeight();
+    } else {
+      width = getWidth();
+      height = getHeight();
+    }
     Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
     clearChildCache();
@@ -369,7 +381,15 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     clearChildCache();
     this.invalidate();
     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+    Integer quality = options.hasKey("quality") ? options.getInt("quality") : null;
+    String format = options.hasKey("format") ? options.getString("format") : null;
+    if (Objects.equals(format, "jpeg")) {
+      int qualityValue = (quality != null) ? Math.round(quality * 100) : 100;
+      bitmap.compress(Bitmap.CompressFormat.JPEG, qualityValue, stream);
+    } else {
+      bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+    }
     bitmap.recycle();
     byte[] bitmapBytes = stream.toByteArray();
     return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);

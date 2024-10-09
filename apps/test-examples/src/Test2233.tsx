@@ -4,6 +4,7 @@ import Svg, {Path} from 'react-native-svg';
 
 const SvgLogoWelcome = () => {
   const ref = React.useRef<Svg | null>(null);
+
   return (
     <View>
       <Button
