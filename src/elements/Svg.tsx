@@ -90,6 +90,9 @@ export default class Svg extends Shape<SvgProps> {
    * @deprecated use size property instead.
    */
   toDataURL(callback: (base64: string) => void, options: Size): void;
+  /**
+   * @description Converts the SVG to a data URL image.
+   */
   toDataURL(callback: (base64: string) => void): void;
   /**
    * @description Converts the SVG to a data URL image.
