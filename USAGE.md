@@ -1409,7 +1409,7 @@ callback: (base64: string) => void
 A function that receives the Base64-encoded string as its argument once the SVG conversion is complete. The string represents the converted image data.
 
 `options?: ToDataUrlOptions`
-An object specifying the format and dimensions of the output image. The options object can include the following properties:
+An object specifying the size, format (JPEG or PNG) and quality of the output image. Object can include the following properties:
 
 ``` ts
 format: 'png' | 'jpeg' // Specifies the output image format. If not provided any options, the default format is PNG.
