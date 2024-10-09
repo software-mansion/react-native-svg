@@ -1413,15 +1413,11 @@ An object specifying the size, format (JPEG or PNG) and quality of the output im
 
 ``` ts
 format: 'png' | 'jpeg' // Specifies the output image format. If not provided any options, the default format is PNG.
-
-(Only applicable for jpeg format)
-quality?: number // the default value range between 0 - 1
-
 size?: {
   width: number
   height: number
 }
-
+quality?: number // number in range `0-1` (only applicable for jpeg format)
 ```
 
 ## Example: 
