@@ -1412,7 +1412,7 @@ A function that receives the Base64-encoded string as its argument once the SVG 
 An object specifying the size, format (JPEG or PNG) and quality of the output image. Object can include the following properties:
 
 ``` ts
-format: 'png' | 'jpeg' // Specifies the output image format. If not provided any options, the default format is PNG.
+format?: 'png' | 'jpeg' // default: 'png'.
 size?: {
   width: number
   height: number
