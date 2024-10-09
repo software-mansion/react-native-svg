@@ -1237,6 +1237,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-view-shot (4.0.0-alpha.2):
+    - React-Core
   - React-nativeconfig (0.75.1)
   - React-NativeModulesApple (0.75.1):
     - glog
@@ -1562,7 +1564,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.5.0):
+  - RNSVG (15.8.0-rc.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1582,9 +1584,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.5.0)
+    - RNSVG/common (= 15.8.0-rc.1)
     - Yoga
-  - RNSVG/common (15.5.0):
+  - RNSVG/common (15.8.0-rc.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1646,6 +1648,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
+  - react-native-view-shot (from `../node_modules/react-native-view-shot`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -1752,6 +1755,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
+  react-native-view-shot:
+    :path: "../node_modules/react-native-view-shot"
   React-nativeconfig:
     :path: "../node_modules/react-native/ReactCommon"
   React-NativeModulesApple:
@@ -1815,10 +1820,10 @@ SPEC CHECKSUMS:
   boost: 4cb898d0bf20404aab1850c656dcea009429d6c1
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   FBLazyVector: a3071c12f1650bfa84f2815e9982426256a0aae1
-  fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
-  glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
-  hermes-engine: e949b1da40409c52aa7bd79ff32cec045f5b4650
-  RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740
+  fmt: 8083860262b879fc92bca720969c91bdb88ada93
+  glog: 91ad4d651f7df0fc39ca2f142dd1ba7340f01a34
+  hermes-engine: beb837434d549761dd077be3691d019a13ff50d6
+  RCT-Folly: b81dfbb72e62e3e544fcc4935a18396977ba38b2
   RCTDeprecation: bc01aeeb7acc314fc615a092001050d2e97c353a
   RCTRequired: a511d4665e1f7ac044aad6486aa19d061bd2d365
   RCTTypeSafety: e77969bb08d920251de98b1fc1df223d7039c1ff
@@ -1847,6 +1852,7 @@ SPEC CHECKSUMS:
   React-logger: 0a81d1a40650bbdafb255fe4616edb83feed0ee9
   React-Mapbuffer: b758bec0d9994c10a2841dfd5ec70673665fd3e2
   React-microtasksnativemodule: 988e6ed065c061554ec09fdbc47c1f7c7f6478fe
+  react-native-view-shot: 8ffbe24e3b5207d66816afb5b3c2ca82731ab636
   React-nativeconfig: 7af2ccce165f86b233a9f9d63295f6207e62640e
   React-NativeModulesApple: db1c1ee9dda26c9e58d824b4100fed83add82ae9
   React-perflogger: 7c4e97b47d8bc58c03fad1a6b97d96181b59aa41
@@ -1874,10 +1880,10 @@ SPEC CHECKSUMS:
   ReactCodegen: e9156d86a166f3e10dc8fb6160764048df3528bc
   ReactCommon: 3ae48fa4cfa7052a270c2150ececfc94e541fb8a
   RNReanimated: 070deccceef093bec96ac3f87ef8c7f361caf754
-  RNSVG: 811ae7bc0e07e20acd704638214b0c5fad40f802
+  RNSVG: 08750404f92a36162a92522cc77dee437be1d257
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 06fc4b2c3664ae0e278964b8fbcb0ee9d21f0a5a
 
 PODFILE CHECKSUM: 313328930c1300de5979bee64deca30459b8453a
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

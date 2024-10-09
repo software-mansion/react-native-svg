@@ -56,38 +56,6 @@ static id RNSVGConvertFollyDynamicToId(const folly::dynamic &dyn)
 }
 
 template <typename T>
-RNSVGBrush *brushFromColorStruct(const T &fillObject)
-{
-  int type = fillObject.type;
-
-  switch (type) {
-    case -1: // empty struct
-      return nil;
-    case 0: // solid color
-    {
-      // These are probably expensive allocations since it's often the same value.
-      // We should memoize colors but look ups may be just as expensive.
-      RNSVGColor *color = RCTUIColorFromSharedColor(fillObject.payload) ?: [RNSVGColor clearColor];
-      return [[RNSVGSolidColorBrush alloc] initWithColor:color];
-    }
-    case 1: // brush
-    {
-      NSArray *arr = @[ @(type), RCTNSStringFromString(fillObject.brushRef) ];
-      return [[RNSVGPainterBrush alloc] initWithArray:arr];
-    }
-    case 2: // currentColor
-      return [[RNSVGBrush alloc] initWithArray:nil];
-    case 3: // context-fill
-      return [[RNSVGContextBrush alloc] initFill];
-    case 4: // context-stroke
-      return [[RNSVGContextBrush alloc] initStroke];
-    default:
-      RCTLogError(@"Unknown brush type: %d", type);
-      return nil;
-  }
-}
-
-template <typename T>
 void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
 {
   node.name = RCTNSStringFromStringNilIfEmpty(nodeProps.name);
@@ -140,10 +108,19 @@ template <typename T>
 void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *renderableNode)
 {
   setCommonNodeProps(renderableProps, renderableNode);
-  renderableNode.fill = brushFromColorStruct(renderableProps.fill);
+  if (RCTUIColorFromSharedColor(renderableProps.color)) {
+    [renderableNode setColor:RCTUIColorFromSharedColor(renderableProps.color)];
+  }
+  id fill = RNSVGConvertFollyDynamicToId(renderableProps.fill);
+  if (fill != nil) {
+    renderableNode.fill = [RCTConvert RNSVGBrush:fill];
+  }
   renderableNode.fillOpacity = renderableProps.fillOpacity;
   renderableNode.fillRule = renderableProps.fillRule == 0 ? kRNSVGCGFCRuleEvenodd : kRNSVGCGFCRuleNonzero;
-  renderableNode.stroke = brushFromColorStruct(renderableProps.stroke);
+  id stroke = RNSVGConvertFollyDynamicToId(renderableProps.stroke);
+  if (stroke != nil) {
+    renderableNode.stroke = [RCTConvert RNSVGBrush:stroke];
+  }
   renderableNode.strokeOpacity = renderableProps.strokeOpacity;
   id strokeWidth = RNSVGConvertFollyDynamicToId(renderableProps.strokeWidth);
   if (strokeWidth != nil) {

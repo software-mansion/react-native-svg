@@ -13,7 +13,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 
 public interface RNSVGCircleManagerInterface<T extends View> {
   void setName(T view, @Nullable String value);
@@ -28,10 +27,11 @@ public interface RNSVGCircleManagerInterface<T extends View> {
   void setResponsible(T view, boolean value);
   void setDisplay(T view, @Nullable String value);
   void setPointerEvents(T view, @Nullable String value);
-  void setFill(T view, @Nullable ReadableMap value);
+  void setColor(T view, @Nullable Integer value);
+  void setFill(T view, Dynamic value);
   void setFillOpacity(T view, float value);
   void setFillRule(T view, int value);
-  void setStroke(T view, @Nullable ReadableMap value);
+  void setStroke(T view, Dynamic value);
   void setStrokeOpacity(T view, float value);
   void setStrokeWidth(T view, Dynamic value);
   void setStrokeLinecap(T view, int value);

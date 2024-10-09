@@ -1,3 +1,4 @@
+#import "RNSVGFilterRegion.h"
 #import "RNSVGNode.h"
 
 @interface RNSVGFilterPrimitive : RNSVGNode
@@ -12,6 +13,5 @@
 - (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results
     previousFilterResult:(CIImage *)previous
                      ctm:(CGAffineTransform)ctm;
-- (CIImage *)cropResult:(CIImage *)result;
 
 @end

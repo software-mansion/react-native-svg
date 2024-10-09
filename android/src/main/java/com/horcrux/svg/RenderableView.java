@@ -21,6 +21,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.view.ViewParent;
 import com.facebook.react.bridge.ColorPropConverter;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
@@ -83,6 +84,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   public Paint.Cap strokeLinecap = Paint.Cap.BUTT;
   public Paint.Join strokeLinejoin = Paint.Join.MITER;
 
+  private int mCurrentColor = 0;
   public @Nullable ReadableArray fill;
   public float fillOpacity = 1;
   public Path.FillType fillRule = Path.FillType.WINDING;
@@ -120,6 +122,25 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   public void setVectorEffect(int vectorEffect) {
     this.vectorEffect = vectorEffect;
     invalidate();
+  }
+
+  public void setCurrentColor(Integer color) {
+    mCurrentColor = color != null ? color : 0;
+    invalidate();
+    clearChildCache();
+  }
+
+  int getCurrentColor() {
+    if (this.mCurrentColor != 0) {
+      return this.mCurrentColor;
+    }
+    ViewParent parent = this.getParent();
+    if (parent instanceof VirtualView) {
+      return ((RenderableView) parent).getCurrentColor();
+    } else if (parent instanceof SvgView) {
+      return ((SvgView) parent).mCurrentColor;
+    }
+    return 0;
   }
 
   public void setFill(@Nullable Dynamic fill) {
@@ -352,26 +373,32 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         Paint bitmapPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
         canvas.saveLayer(null, bitmapPaint);
 
-        Rect canvasBounds = this.getSvgView().getCanvasBounds();
+        Bitmap backgroundBitmap = this.getSvgView().getCurrentBitmap();
 
         // draw element to self bitmap
         Bitmap elementBitmap =
-            Bitmap.createBitmap(
-                canvasBounds.width(), canvasBounds.height(), Bitmap.Config.ARGB_8888);
+            Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas elementCanvas = new Canvas(elementBitmap);
+        elementCanvas.setMatrix(canvas.getMatrix());
 
         draw(elementCanvas, paint, opacity);
 
+        // get renderableBounds
+        this.initBounds();
+        RectF clientRect = this.getClientRect();
+        if (this instanceof ImageView && clientRect == null) {
+          return;
+        }
         // apply filters
-        Bitmap backgroundBitmap = this.getSvgView().getCurrentBitmap();
-        elementBitmap =
-            filter.applyFilter(
-                elementBitmap, backgroundBitmap, elementCanvas.getClipBounds(), canvasBounds);
+        elementBitmap = filter.applyFilter(elementBitmap, backgroundBitmap, clientRect);
 
-        // draw bitmap to canvas
+        // draw bitmap 1:1 to canvas
+        int saveCount = canvas.save();
+        canvas.setMatrix(null);
         canvas.drawBitmap(elementBitmap, 0, 0, bitmapPaint);
+        canvas.restoreToCount(saveCount);
       } else {
-        canvas.saveLayer(null, paint);
+        canvas.saveLayer(null, new Paint());
         draw(canvas, paint, opacity);
       }
 
@@ -405,12 +432,32 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         }
 
         // calculate mask bounds
-        float maskX = (float) relativeOnWidth(mask.mX);
-        float maskY = (float) relativeOnHeight(mask.mY);
-        float maskWidth = (float) relativeOnWidth(mask.mW);
-        float maskHeight = (float) relativeOnHeight(mask.mH);
+        RectF maskBounds;
+        if (mask.getMaskUnits() == Brush.BrushUnits.USER_SPACE_ON_USE) {
+          float maskX = (float) relativeOnWidth(mask.mX);
+          float maskY = (float) relativeOnHeight(mask.mY);
+          float maskWidth = (float) relativeOnWidth(mask.mW);
+          float maskHeight = (float) relativeOnHeight(mask.mH);
+          maskBounds = new RectF(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
+        } else { // Brush.BrushUnits.OBJECT_BOUNDING_BOX
+          RectF clientRect = this.getClientRect();
+          if (this instanceof ImageView && clientRect == null) {
+            return;
+          }
+          mInvCTM.mapRect(clientRect);
+          float maskX = (float) relativeOnFraction(mask.mX, clientRect.width());
+          float maskY = (float) relativeOnFraction(mask.mY, clientRect.height());
+          float maskWidth = (float) relativeOnFraction(mask.mW, clientRect.width());
+          float maskHeight = (float) relativeOnFraction(mask.mH, clientRect.height());
+          maskBounds =
+              new RectF(
+                  clientRect.left + maskX,
+                  clientRect.top + maskY,
+                  clientRect.left + maskX + maskWidth,
+                  clientRect.top + maskY + maskHeight);
+        }
         // clip to mask bounds
-        canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
+        canvas.clipRect(maskBounds);
 
         mask.draw(canvas, paint, 1f);
 
@@ -420,7 +467,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         // step 2 - alpha layer
         canvas.saveLayer(null, dstInPaint);
         // clip to mask bounds
-        canvas.clipRect(maskX, maskY, maskX + maskWidth, maskY + maskHeight);
+        canvas.clipRect(maskBounds);
 
         mask.draw(canvas, paint, 1f);
 
@@ -599,7 +646,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         }
       case 2:
         {
-          int color = getSvgView().mTintColor;
+          int color = this.getCurrentColor();
           int alpha = color >>> 24;
           alpha = Math.round((float) alpha * opacity);
           paint.setColor(alpha << 24 | (color & 0x00ffffff));

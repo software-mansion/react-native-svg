@@ -64,8 +64,6 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   public SvgView(ReactContext reactContext) {
     super(reactContext);
     mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
-    mScaleX = 1;
-    mScaleY = 1;
     mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
     mPaint.setTypeface(Typeface.DEFAULT);
 
@@ -136,15 +134,14 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       mBitmap = drawOutput();
     }
     if (mBitmap != null) {
-      if (mScaleX != 1 || mScaleY != 1) {
-        canvas.drawBitmap(
-            mBitmap,
-            -(float) (mBitmap.getWidth() - getWidth()) / 2,
-            -(float) (mBitmap.getHeight() - getHeight()) / 2,
-            mPaint);
-      } else {
-        canvas.drawBitmap(mBitmap, 0, 0, mPaint);
-      }
+      mPaint.reset();
+      mPaint.setFlags(
+          Paint.ANTI_ALIAS_FLAG
+              | Paint.DEV_KERN_TEXT_FLAG
+              | Paint.SUBPIXEL_TEXT_FLAG
+              | Paint.FILTER_BITMAP_FLAG);
+      mPaint.setTypeface(Typeface.DEFAULT);
+      canvas.drawBitmap(mBitmap, 0, 0, mPaint);
       if (toDataUrlTask != null) {
         toDataUrlTask.run();
         toDataUrlTask = null;
@@ -179,8 +176,6 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   private final Map<String, Brush> mDefinedBrushes = new HashMap<>();
   private Canvas mCanvas;
   private final float mScale;
-  private float mScaleX;
-  private float mScaleY;
   private final Paint mPaint = new Paint();
 
   private float mMinX;
@@ -194,7 +189,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   final Matrix mInvViewBoxMatrix = new Matrix();
   private boolean mInvertible = true;
   private boolean mRendered = false;
-  int mTintColor = 0;
+  int mCurrentColor = 0;
 
   boolean notRendered() {
     return !mRendered;
@@ -214,8 +209,8 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
   }
 
-  public void setTintColor(Integer tintColor) {
-    mTintColor = tintColor != null ? tintColor : 0;
+  public void setCurrentColor(Integer color) {
+    mCurrentColor = color != null ? color : 0;
     invalidate();
     clearChildCache();
   }
@@ -281,9 +276,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     if (invalid) {
       return null;
     }
-    Bitmap bitmap =
-        Bitmap.createBitmap(
-            (int) (width * mScaleX), (int) (height * mScaleY), Bitmap.Config.ARGB_8888);
+    Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_8888);
     mCurrentBitmap = bitmap;
     drawChildren(new Canvas(bitmap));
     return bitmap;
@@ -291,6 +284,18 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
   Rect getCanvasBounds() {
     return mCanvas.getClipBounds();
+  }
+
+  float getCanvasWidth() {
+    return mCanvas.getWidth();
+  }
+
+  float getCanvasHeight() {
+    return mCanvas.getHeight();
+  }
+
+  Matrix getCtm() {
+    return mCanvas.getMatrix();
   }
 
   synchronized void drawChildren(final Canvas canvas) {
@@ -386,11 +391,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
 
     float[] transformed = {touchX, touchY};
-    int width = getWidth();
-    int height = getHeight();
-    Matrix invViewBoxMatrix = new Matrix(mInvViewBoxMatrix);
-    invViewBoxMatrix.preTranslate((width * mScaleX - width) / 2, (height * mScaleY - height) / 2);
-    invViewBoxMatrix.mapPoints(transformed);
+    mInvViewBoxMatrix.mapPoints(transformed);
 
     int count = getChildCount();
     int viewTag = -1;
@@ -459,13 +460,5 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
   public Bitmap getCurrentBitmap() {
     return mCurrentBitmap;
-  }
-
-  public void setTransformProperty() {
-    mScaleX = super.getScaleX();
-    mScaleY = super.getScaleY();
-    super.setScaleX(1);
-    super.setScaleY(1);
-    invalidate();
   }
 }

@@ -36,11 +36,16 @@
                       clip:(CGRect *)clip
 {
   CGFloat scale = [self getScreenScale];
+#if TARGET_OS_OSX // [macOS
+  UIGraphicsBeginImageContextWithOptions(rect.size, NO, 1.0);
+#else // macOS]
   UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
+#endif // [macOS]
   CGContextRef cgContext = UIGraphicsGetCurrentContext();
-#if !TARGET_OS_OSX
   CGContextConcatCTM(cgContext, CGAffineTransformInvert(CGContextGetCTM(cgContext)));
-#endif
+#if TARGET_OS_OSX // [macOS
+  CGContextConcatCTM(cgContext, CGAffineTransformMakeScale(scale, scale));
+#endif // macOS]
   CGContextConcatCTM(cgContext, ctm);
 
   if (clip) {

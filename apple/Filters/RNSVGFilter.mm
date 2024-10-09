@@ -18,6 +18,12 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
@@ -66,8 +72,8 @@ using namespace facebook::react;
   [super prepareForRecycle];
   _x = nil;
   _y = nil;
-  _height = nil;
   _width = nil;
+  _height = nil;
   _filterUnits = kRNSVGUnitsObjectBoundingBox;
   _primitiveUnits = kRNSVGUnitsUserSpaceOnUse;
 }
@@ -93,14 +99,32 @@ using namespace facebook::react;
   [resultsMap setObject:backgroundImg forKey:@"BackgroundImage"];
   [resultsMap setObject:applySourceAlphaFilter(backgroundImg) forKey:@"BackgroundAlpha"];
 
+  // Setup crop filter
+  CGRect cropRect;
+  CIFilter *cropFilter = [CIFilter filterWithName:@"CIBlendWithMask"];
+  [cropFilter setDefaults];
+  [cropFilter setValue:nil forKey:@"inputBackgroundImage"];
+  CGContext *cropContext = [self openContext:canvasBounds.size];
+  CIImage *mask;
+
   CIImage *result = img;
   RNSVGFilterPrimitive *currentFilter;
   for (RNSVGNode *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGFilterPrimitive class]]) {
       currentFilter = (RNSVGFilterPrimitive *)node;
-      CGImageRef cgResult = [[RNSVGRenderUtils sharedCIContext] createCGImage:[currentFilter applyFilter:resultsMap
-                                                                                    previousFilterResult:result
-                                                                                                     ctm:ctm]
+      cropRect = [[RNSVGFilterRegion regionWithX:currentFilter.x
+                                               y:currentFilter.y
+                                           width:currentFilter.width
+                                          height:currentFilter.height] getCropRect:currentFilter
+                                                                             units:self.primitiveUnits
+                                                                  renderableBounds:renderableBounds];
+      mask = [self getMaskFromRect:cropContext rect:cropRect ctm:ctm];
+      [cropFilter setValue:[currentFilter applyFilter:resultsMap previousFilterResult:result ctm:ctm]
+                    forKey:@"inputImage"];
+      [cropFilter setValue:mask forKey:@"inputMaskImage"];
+      CGContextClearRect(cropContext, canvasBounds);
+
+      CGImageRef cgResult = [[RNSVGRenderUtils sharedCIContext] createCGImage:[cropFilter valueForKey:@"outputImage"]
                                                                      fromRect:[result extent]];
       result = [CIImage imageWithCGImage:cgResult];
       CGImageRelease(cgResult);
@@ -112,8 +136,48 @@ using namespace facebook::react;
     }
   }
 
-  return result;
-  // TODO: Crop element to filter's x, y, width, height
+  cropRect = [[RNSVGFilterRegion regionWithX:self.x y:self.y width:self.width
+                                      height:self.height] getCropRect:self
+                                                                units:self.filterUnits
+                                                     renderableBounds:renderableBounds];
+  mask = [self getMaskFromRect:cropContext rect:cropRect ctm:ctm];
+  [cropFilter setValue:result forKey:@"inputImage"];
+  [cropFilter setValue:mask forKey:@"inputMaskImage"];
+  [self endContext:cropContext];
+  return [cropFilter valueForKey:@"outputImage"];
+}
+
+- (CGContext *)openContext:(CGSize)size
+{
+  UIGraphicsBeginImageContextWithOptions(size, NO, 1.0);
+  CGContextRef cropContext = UIGraphicsGetCurrentContext();
+#if TARGET_OS_OSX
+  CGFloat scale = [RNSVGRenderUtils getScreenScale];
+  CGContextScaleCTM(cropContext, scale, scale);
+#else
+  CGContextTranslateCTM(cropContext, 0, size.height);
+  CGContextScaleCTM(cropContext, 1, -1);
+#endif
+  return cropContext;
+}
+
+- (void)endContext:(CGContext *)context
+{
+  UIGraphicsEndImageContext();
+}
+
+- (CIImage *)getMaskFromRect:(CGContext *)context rect:(CGRect)rect ctm:(CGAffineTransform)ctm
+{
+  CGPathRef path = CGPathCreateWithRect(rect, nil);
+  path = CGPathCreateCopyByTransformingPath(path, &ctm);
+
+  CGContextSetRGBFillColor(context, 255, 255, 255, 255);
+  CGContextAddPath(context, path);
+  CGContextFillPath(context);
+
+  CGImageRef maskImage = CGBitmapContextCreateImage(context);
+
+  return [CIImage imageWithCGImage:maskImage];
 }
 
 static CIFilter *sourceAlphaFilter()

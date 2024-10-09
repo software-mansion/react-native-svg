@@ -146,6 +146,44 @@ export default () => {
 };
 ```
 
+# Web configuration
+
+## Metro bundler
+
+No additional steps are required when using Metro bundler.
+
+## Webpack
+
+If you are using the Webpack bundler, the following steps are needed:
+
+- Install `@react-native/assets-registry/registry` as a project dependency.
+- Ensure that you have the proper configuration to parse flow files from `@react-native/assets-registry/registry`.
+- Configure the Webpack `module -> rules` section and include an important rule for `node_modules/@react-native/assets-registry/registry`.
+
+webpack.config.js
+
+```ts
+const babelLoaderConfiguration = {
+ include: [
+   path.resolve(
+     appDirectory,
+     // Important!
+     'node_modules/@react-native/assets-registry/registry',
+   ),
+ ],
+ ...
+};
+
+module.exports = {
+ ...config,
+ module: {
+     rules: [babelLoaderConfiguration],
+   },
+};
+```
+
+For more details on the complete Webpack configuration, you can refer to this [documentation](https://necolas.github.io/react-native-web/docs/multi-platform/#compiling-and-bundling) on how to set up a `webpack.config` file for React Native Web.
+
 # Use with svg files
 
 Try [react-native-svg-transformer](https://github.com/kristerkari/react-native-svg-transformer) to get compile time conversion and cached transformations.

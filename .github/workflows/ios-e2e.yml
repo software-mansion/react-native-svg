@@ -1,0 +1,93 @@
+name: Test iOS e2e
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/android-e2e-test.yml'
+      - 'apps/examples/**'
+      - 'example/**'
+      - 'apple/**'
+      - 'src/**'
+      - 'e2e/**'
+      - 'package.json'
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: macos-14
+    timeout-minutes: 60
+    env:
+      WORKING_DIRECTORY: example
+      DEVICE: iPhone 16 Pro
+      XCODE_VERSION: latest-stable
+    concurrency:
+      group: ios-e2e-example-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Use latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+
+      - name: Restore react-native-svg node_modules from cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
+          restore-keys: ${{ runner.os }}-node-modules-svg-
+
+      - name: Install react-native-svg node_modules
+        run: yarn install --frozen-lockfile
+
+      - name: Restore app node_modules from cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.WORKING_DIRECTORY }}/node_modules
+          key: ${{ runner.os }}-node-modules-${{ env.WORKING_DIRECTORY }}-${{ hashFiles(format('{0}/yarn.lock', env.WORKING_DIRECTORY)) }}
+          restore-keys: ${{ runner.os }}-node-modules-${{ env.WORKING_DIRECTORY }}-
+
+      - name: Install app node_modules
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: yarn install --frozen-lockfile
+
+      - name: Restore Pods from cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ env.WORKING_DIRECTORY }}/ios/Pods
+            ~/Library/Caches/CocoaPods
+            ~/.cocoapods
+          key: ${{ runner.os }}-pods-${{ env.WORKING_DIRECTORY }}-${{ hashFiles(format('{0}/ios/Podfile.lock', env.WORKING_DIRECTORY)) }}
+
+      - name: Install Pods
+        working-directory: ${{ env.WORKING_DIRECTORY }}/ios
+        run: bundle install && bundle exec pod install
+
+      - name: Restore build artifacts from cache
+        uses: actions/cache@v3
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-ios-derived-data-${{ env.WORKING_DIRECTORY }}-${{ hashFiles(format('{0}/ios/Podfile.lock', env.WORKING_DIRECTORY)) }}
+      - name: Start Metro server
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: E2E=true yarn start &> output.log &
+
+      - name: Build app
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: E2E=true npx react-native@latest run-ios --simulator="${{ env.DEVICE }}" --mode Debug --verbose
+
+      - name: Run e2e Tests
+        run: E2E=true yarn e2e
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: |
+            report.html
+            jest-html-reporters-attach/

@@ -16,6 +16,12 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
@@ -111,12 +117,12 @@ using namespace facebook::react;
   CGAffineTransform contextTransform = CGAffineTransformConcat(ctm, CGAffineTransformMakeTranslation(-ctm.tx, -ctm.ty));
 #if !TARGET_OS_OSX // [macOS]
   CGPoint translate = CGPointMake(dx, dy);
-#else
-  CGPoint translate = CGPointMake(dx, -dy);
+#else // [macOS
+  CGPoint translate = CGPointMake(dx, dy);
   CGFloat scale = [RNSVGRenderUtils getScreenScale];
   CGAffineTransform screenScaleCTM = CGAffineTransformMake(scale, 0, 0, scale, 0, 0);
   translate = CGPointApplyAffineTransform(translate, screenScaleCTM);
-#endif
+#endif // macOS]
   translate = CGPointApplyAffineTransform(translate, contextTransform);
   CGAffineTransform transform = CGAffineTransformMakeTranslation(translate.x, translate.y);
 

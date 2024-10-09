@@ -1,5 +1,5 @@
 {
-  "version": "15.6.0",
+  "version": "15.8.0-rc.1",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -58,6 +58,8 @@
     "release": "npm login && release-it",
     "test": "npm run lint && npm run tsc",
     "tsc": "tsc --noEmit",
+    "e2e": "jest e2e",
+    "generateE2eReferences": "ts-node e2e/generateReferences.ts",
     "check-archs-consistency": "node ./scripts/codegen-check-consistency.js",
     "sync-archs": "node ./scripts/codegen-sync-archs.js"
   },
@@ -78,7 +80,10 @@
     "@types/css-tree": "^1.0.3",
     "@types/jest": "^27.5.2",
     "@types/node": "*",
+    "@types/pixelmatch": "^5.2.0",
+    "@types/pngjs": "^6.0.5",
     "@types/react": "^18.2.18",
+    "@types/ws": "^8.5.10",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
     "babel-eslint": "^10.1.0",
@@ -96,18 +101,23 @@
     "eslint-plugin-standard": "^5.0.0",
     "husky": "^8.0.1",
     "jest": "^28.1.0",
+    "jest-html-reporters": "^3.1.7",
     "lint-staged": "^13.0.3",
     "peggy": "4.0.3",
     "pegjs": "^0.10.0",
+    "pixelmatch": "5.3.0",
+    "pngjs": "^7.0.0",
     "prettier": "3.0.1",
+    "puppeteer": "^22.12.1",
     "react": "^18.2.0",
     "react-native": "^0.72.3",
     "react-native-builder-bob": "^0.20.4",
     "react-native-windows": "^0.72.4",
     "react-test-renderer": "^18.2.0",
     "release-it": "^14.12.5",
-    "ts-node": "^10.8.0",
-    "typescript": "^5.1.6"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.1.6",
+    "ws": "^8.18.0"
   },
   "lint-staged": {
     "{src,Example}/**/*.{js,ts,tsx}": "yarn format-js",
@@ -124,5 +134,8 @@
     "android": {
       "javaPackageName": "com.horcrux.svg"
     }
+  },
+  "resolutions": {
+    "@react-native/codegen": "0.76.0-rc.1"
   }
 }

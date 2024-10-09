@@ -17,8 +17,8 @@
   [super prepareForRecycle];
   _x = nil;
   _y = nil;
-  _height = nil;
   _width = nil;
+  _height = nil;
   _result = nil;
 }
 #endif // RCT_NEW_ARCH_ENABLED
@@ -32,6 +32,12 @@
 {
 }
 
+- (void)invalidate
+{
+  self.dirty = false;
+  [super invalidate];
+}
+
 - (void)setX:(RNSVGLength *)x
 {
   if ([x isEqualTo:_x]) {
@@ -40,12 +46,6 @@
 
   _x = x;
   [self invalidate];
-}
-
-- (void)invalidate
-{
-  self.dirty = false;
-  [super invalidate];
 }
 
 - (void)setY:(RNSVGLength *)y
@@ -98,20 +98,6 @@
                      ctm:(CGAffineTransform)ctm
 {
   return [self applyFilter:results previousFilterResult:previous];
-}
-
-- (CIImage *)cropResult:(CIImage *)result
-{
-  CIFilter *filter = [CIFilter filterWithName:@"CICrop"];
-  [filter setDefaults];
-  [filter setValue:result forKey:@"inputImage"];
-  CGFloat x = [self relativeOnWidth:self.x];
-  CGFloat y = [self relativeOnHeight:self.y];
-  CGFloat width = [self relativeOnWidth:self.width];
-  CGFloat height = [self relativeOnHeight:self.height];
-
-  [filter setValue:[CIVector vectorWithX:x Y:y Z:width W:height] forKey:@"inputRectangle"];
-  return [filter valueForKey:@"outputImage"];
 }
 
 @end
