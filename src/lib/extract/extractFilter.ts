@@ -1,10 +1,15 @@
 import React from 'react';
+import { ColorValue, processColor } from 'react-native';
 import { FeColorMatrixProps as FeColorMatrixComponentProps } from '../../elements/filters/FeColorMatrix';
+import { FeFloodProps as FeFloodComponentProps } from '../../elements/filters/FeFlood';
 import { FeGaussianBlurProps as FeGaussianBlurComponentProps } from '../../elements/filters/FeGaussianBlur';
 import { FeMergeProps as FeMergeComponentProps } from '../../elements/filters/FeMerge';
 import { NativeProps as FeColorMatrixNativeProps } from '../../fabric/FeColorMatrixNativeComponent';
+import { NativeProps as FeFloodNativeProps } from '../../fabric/FeFloodNativeComponent';
 import { NativeProps as FeGaussianBlurNativeProps } from '../../fabric/FeGaussianBlurNativeComponent';
 import { NativeProps as FeMergeNativeProps } from '../../fabric/FeMergeNativeComponent';
+import extractBrush from './extractBrush';
+import extractOpacity from './extractOpacity';
 import { NumberProp } from './types';
 
 const spaceReg = /\s+/;
@@ -66,6 +71,28 @@ export const extractFeColorMatrix = (
 
   return extracted;
 };
+
+const defaultFill = { type: 0, payload: processColor('black') as ColorValue };
+export default function extractFeFlood(
+  props: FeFloodComponentProps
+): FeFloodNativeProps {
+  const extracted: FeFloodNativeProps = {};
+  const { floodColor, floodOpacity } = props;
+
+  if (floodColor != null) {
+    extracted.floodColor =
+      !floodColor && typeof floodColor !== 'number'
+        ? defaultFill
+        : (extractBrush(floodColor) as unknown as string);
+  } else {
+    // we want the default value of fill to be black to match the spec
+    extracted.floodColor = defaultFill;
+  }
+  if (floodOpacity != null) {
+    extracted.floodOpacity = extractOpacity(floodOpacity);
+  }
+  return extracted;
+}
 
 export const extractFeGaussianBlur = (
   props: FeGaussianBlurComponentProps
