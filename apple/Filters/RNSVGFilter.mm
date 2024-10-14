@@ -105,14 +105,16 @@ using namespace facebook::react;
   CGContext *cropContext = [self openContext:canvasBounds.size];
   CIImage *mask;
 
+  CGRect filterRegionRect = [self.filterRegion getCropRect:self units:self.filterUnits bounds:renderableBounds];
   CIImage *result = img;
   RNSVGFilterPrimitive *currentFilter;
   for (RNSVGNode *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGFilterPrimitive class]]) {
       currentFilter = (RNSVGFilterPrimitive *)node;
-      cropRect = [currentFilter.filterSubregion getCropRect:currentFilter
-                                                      units:self.primitiveUnits
-                                                     bounds:renderableBounds];
+      cropRect = [currentFilter.filterSubregion
+          getCropRect:currentFilter
+                units:self.primitiveUnits
+               bounds:self.primitiveUnits == kRNSVGUnitsUserSpaceOnUse ? filterRegionRect : renderableBounds];
       mask = [self getMaskFromRect:cropContext rect:cropRect ctm:ctm];
       [cropFilter setValue:[currentFilter applyFilter:resultsMap previousFilterResult:result ctm:ctm]
                     forKey:@"inputImage"];
@@ -131,8 +133,7 @@ using namespace facebook::react;
     }
   }
 
-  cropRect = [currentFilter.filterSubregion getCropRect:self units:self.filterUnits bounds:renderableBounds];
-  mask = [self getMaskFromRect:cropContext rect:cropRect ctm:ctm];
+  mask = [self getMaskFromRect:cropContext rect:filterRegionRect ctm:ctm];
   [cropFilter setValue:result forKey:@"inputImage"];
   [cropFilter setValue:mask forKey:@"inputMaskImage"];
   [self endContext:cropContext];
