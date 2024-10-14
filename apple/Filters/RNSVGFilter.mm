@@ -110,12 +110,9 @@ using namespace facebook::react;
   for (RNSVGNode *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGFilterPrimitive class]]) {
       currentFilter = (RNSVGFilterPrimitive *)node;
-      cropRect = [[RNSVGFilterRegion regionWithX:currentFilter.x
-                                               y:currentFilter.y
-                                           width:currentFilter.width
-                                          height:currentFilter.height] getCropRect:currentFilter
-                                                                             units:self.primitiveUnits
-                                                                            bounds:renderableBounds];
+      cropRect = [currentFilter.filterSubregion getCropRect:currentFilter
+                                                      units:self.primitiveUnits
+                                                     bounds:renderableBounds];
       mask = [self getMaskFromRect:cropContext rect:cropRect ctm:ctm];
       [cropFilter setValue:[currentFilter applyFilter:resultsMap previousFilterResult:result ctm:ctm]
                     forKey:@"inputImage"];
@@ -134,10 +131,7 @@ using namespace facebook::react;
     }
   }
 
-  cropRect = [[RNSVGFilterRegion regionWithX:self.x y:self.y width:self.width
-                                      height:self.height] getCropRect:self
-                                                                units:self.filterUnits
-                                                               bounds:renderableBounds];
+  cropRect = [currentFilter.filterSubregion getCropRect:self units:self.filterUnits bounds:renderableBounds];
   mask = [self getMaskFromRect:cropContext rect:cropRect ctm:ctm];
   [cropFilter setValue:result forKey:@"inputImage"];
   [cropFilter setValue:mask forKey:@"inputMaskImage"];
