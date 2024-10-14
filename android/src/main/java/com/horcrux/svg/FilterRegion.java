@@ -29,10 +29,10 @@ public class FilterRegion {
   public Rect getCropRect(VirtualView view, FilterProperties.Units units, RectF bounds) {
     double x, y, width, height;
     if (units == FilterProperties.Units.USER_SPACE_ON_USE) {
-      x = view.relativeOn(this.mX, view.getSvgView().getCanvasWidth());
-      y = view.relativeOn(this.mY, view.getSvgView().getCanvasHeight());
-      width = view.relativeOn(this.mW, view.getSvgView().getCanvasWidth());
-      height = view.relativeOn(this.mH, view.getSvgView().getCanvasHeight());
+      x = this.mX == null ? 0 : view.relativeOn(this.mX, view.getSvgView().getCanvasWidth());
+      y = this.mY == null ? 0 : view.relativeOn(this.mY, view.getSvgView().getCanvasHeight());
+      width = this.mW == null ? 0 : view.relativeOn(this.mW, view.getSvgView().getCanvasWidth());
+      height = this.mH == null ? 0 : view.relativeOn(this.mH, view.getSvgView().getCanvasHeight());
       return new Rect((int) x, (int) y, (int) (x + width), (int) (y + height));
     } else { // FilterProperties.Units.OBJECT_BOUNDING_BOX
       x = view.relativeOnFraction(this.mX, bounds.width());
