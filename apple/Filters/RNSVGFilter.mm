@@ -105,6 +105,7 @@ using namespace facebook::react;
   CGContext *cropContext = [self openContext:canvasBounds.size];
   CIImage *mask;
 
+  CGRect filterRegionRect = [self.filterRegion getCropRect:self units:self.filterUnits bounds:renderableBounds];
   CIImage *result = img;
   RNSVGFilterPrimitive *currentFilter;
   for (RNSVGNode *node in self.subviews) {
@@ -208,7 +209,7 @@ static CIImage *applySourceAlphaFilter(CIImage *inputImage)
     return;
   }
 
-  _x = x;
+  [_filterRegion setX:x];
   [self invalidate];
 }
 
