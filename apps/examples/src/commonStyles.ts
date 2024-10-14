@@ -1,41 +1,38 @@
 import {StyleSheet} from 'react-native';
 
-const hairline = StyleSheet.hairlineWidth;
-
 export const commonStyles = StyleSheet.create({
-  welcome: {
-    padding: 10,
-    color: '#f60',
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  container: {
+    flex: 1,
   },
-  link: {
-    height: 40,
+  center: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  list: {
+    backgroundColor: '#EFEFF4',
+    width: '100%',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#DBDBE0',
+  },
+  button: {
+    flex: 1,
+    height: 60,
+    padding: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  disabledButton: {
+    backgroundColor: 'grey',
+    opacity: 0.5,
   },
   title: {
-    marginLeft: 10,
-  },
-  cell: {
-    height: 40,
-    paddingHorizontal: 10,
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    flexDirection: 'row',
-    borderTopWidth: hairline,
-    borderTopColor: '#ccc',
-    marginTop: -hairline,
-  },
-  example: {
-    paddingVertical: 25,
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    borderBottomWidth: hairline,
-    borderBottomColor: '#ccc',
-  },
-  sampleTitle: {
-    marginHorizontal: 15,
     fontSize: 16,
-    color: '#666',
+    color: 'black',
+  },
+  visitedItem: {
+    backgroundColor: '#e6f0f7',
   },
 });

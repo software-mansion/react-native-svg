@@ -37,9 +37,10 @@ function ReanimatedRectExample() {
 }
 ReanimatedRectExample.title = 'reanimated rectangle';
 
+const title = 'Reanimated example';
 const samples = [ReanimatedRectExample];
 
 const style = StyleSheet.create({text: {width: 30, height: 30}});
 const icon = <Text style={style.text}>R</Text>;
 
-export {icon, samples};
+export {icon, samples, title};

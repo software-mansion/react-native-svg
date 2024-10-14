@@ -22,8 +22,9 @@ import * as Mask from './examples/Mask';
 import * as E2E from './e2e/TestingView';
 import * as Filters from './examples/Filters';
 import * as FilterImage from './examples/FilterImage';
+import type {Examples} from '../utils/type';
 
-export {
+export const EXAMPLES: Examples = {
   Svg,
   Rect,
   Circle,

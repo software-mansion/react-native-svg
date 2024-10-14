@@ -19,8 +19,9 @@ import * as Reanimated from './examples/Reanimated';
 import * as Transforms from './examples/Transforms';
 import * as Markers from './examples/Markers';
 import * as Mask from './examples/Mask';
+import type {Examples} from '../utils/type';
 
-export {
+export const EXAMPLES: Examples = {
   Svg,
   Rect,
   Circle,

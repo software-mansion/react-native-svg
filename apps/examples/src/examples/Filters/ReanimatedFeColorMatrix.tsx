@@ -52,5 +52,7 @@ const icon = (
   </Svg>
 );
 
+const title = 'ReanimatedFeColorMatrix';
 const samples = [ReanimatedHueRotateExample];
-export {icon, samples};
+
+export {icon, samples, title};

@@ -105,7 +105,6 @@ const FilterImagePickerExample = () => {
     </View>
   );
 };
-FilterImagePickerExample.title = 'Filter picker';
 
 const styles = StyleSheet.create({
   container: {
@@ -137,5 +136,7 @@ const icon = (
   />
 );
 
+const title = 'FilterPicker';
 const samples = [FilterImagePickerExample];
-export {icon, samples};
+
+export {icon, samples, title};

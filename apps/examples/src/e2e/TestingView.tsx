@@ -1,10 +1,4 @@
-import React, {
-  Component,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Platform, Text, View} from 'react-native';
 import * as RNSVG from 'react-native-svg';
 import ViewShot from 'react-native-view-shot';
@@ -107,14 +101,12 @@ const TestingView = () => {
   );
 };
 
-class TestingViewWrapper extends Component {
-  static title = 'E2E Testing';
-
-  render() {
-    return <TestingView />;
-  }
+function TestingViewWrapper() {
+  return <TestingView />;
 }
+TestingViewWrapper.title = 'E2E Testing';
 
+const title = 'E2E example';
 const samples = [TestingViewWrapper];
 const icon = (
   <RNSVG.Svg height="30" width="30" viewBox="0 0 20 20">
@@ -134,7 +126,7 @@ function isFabric(): boolean {
   return !!global?.nativeFabricUIManager;
 }
 
-export {samples, icon};
+export {samples, icon, title};
 
 const createElementFromObject = (
   element: keyof typeof RNSVG,

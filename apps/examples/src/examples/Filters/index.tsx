@@ -1,55 +1,44 @@
-import React from 'react';
-import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import React, {useState} from 'react';
+import {FlatList} from 'react-native';
 import {Circle, Svg} from 'react-native-svg';
-
-import * as examples from './examples';
+import {useNavigation} from '@react-navigation/native';
+import {FilterExamples as EXAMPLES} from './examples';
 import {commonStyles} from '../../commonStyles';
+import {Item} from '../../../src/components/Item';
+import {ItemSeparator} from '../../../src/components/ItemSeparator';
+import type {NavigationRoot} from '../../../utils/type';
 
-const FiltersList = () => {
-  const [example, setExample] = React.useState<keyof typeof examples | null>(
-    null,
-  );
+const EXAMPLES_NAMES = Object.keys(EXAMPLES);
 
-  if (example) {
-    return (
-      <>
-        {examples[example].samples.map((Sample, i) => (
-          <View style={commonStyles.example} key={`sample-${i}`}>
-            <Text style={commonStyles.sampleTitle}>{Sample.title}</Text>
-            <Sample />
-          </View>
-        ))}
-      </>
-    );
-  }
+function FiltersList() {
+  const navigation = useNavigation<NavigationRoot>();
+  const [wasClicked, setWasClicked] = useState<string[]>([]);
 
   return (
-    <View style={styles.container}>
-      <Text style={commonStyles.welcome}>SVG Filters</Text>
-      {Object.keys(examples).map((element, i) => {
-        const name = element as keyof typeof examples;
-        return (
-          <TouchableHighlight
-            style={styles.link}
-            underlayColor="#ccc"
-            key={`example-${name}`}
-            onPress={() => setExample(name)}>
-            <View style={commonStyles.cell}>
-              {examples[name].icon}
-              <Text style={commonStyles.title}>{name}</Text>
-            </View>
-          </TouchableHighlight>
-        );
-      })}
-    </View>
+    <FlatList
+      removeClippedSubviews={false}
+      data={EXAMPLES_NAMES}
+      style={commonStyles.list}
+      initialNumToRender={EXAMPLES_NAMES.length}
+      scrollEnabled={false}
+      horizontal={false}
+      renderItem={({item: name}) => (
+        <Item
+          icon={EXAMPLES[name].icon}
+          title={EXAMPLES[name].title}
+          onPress={() => {
+            navigation.navigate(EXAMPLES[name].title);
+            if (!wasClicked.includes(name)) {
+              setTimeout(() => setWasClicked([...wasClicked, name]), 500);
+            }
+          }}
+          wasClicked={wasClicked.includes(name)}
+        />
+      )}
+      ItemSeparatorComponent={ItemSeparator}
+    />
   );
-};
-FiltersList.title = '';
-
-const styles = StyleSheet.create({
-  container: {width: '100%'},
-  link: {height: 40},
-});
+}
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
@@ -59,6 +48,8 @@ const icon = (
   </Svg>
 );
 
+const shouldBeRenderInView = true;
+const title = 'Filters example';
 const samples = [FiltersList];
 
-export {icon, samples};
+export {icon, samples, title, shouldBeRenderInView};
