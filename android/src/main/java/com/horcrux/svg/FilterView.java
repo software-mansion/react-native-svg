@@ -90,7 +90,11 @@ class FilterView extends DefinitionView {
         resultBitmap.eraseColor(Color.TRANSPARENT);
         cropRect =
             currentFilter.mFilterSubregion.getCropRect(
-                currentFilter, this.mPrimitiveUnits, renderableBounds);
+                currentFilter,
+                this.mPrimitiveUnits,
+                this.mFilterUnits == FilterProperties.Units.USER_SPACE_ON_USE
+                    ? new RectF(filterRegionRect)
+                    : renderableBounds);
         canvas.drawBitmap(currentFilter.applyFilter(mResultsMap, res), cropRect, cropRect, null);
         res = resultBitmap.copy(Bitmap.Config.ARGB_8888, true);
         String resultName = currentFilter.getResult();
@@ -104,7 +108,6 @@ class FilterView extends DefinitionView {
 
     // crop Bitmap to filter coordinates
     resultBitmap.eraseColor(Color.TRANSPARENT);
-
     canvas.drawBitmap(res, filterRegionRect, filterRegionRect, null);
     return resultBitmap;
   }
