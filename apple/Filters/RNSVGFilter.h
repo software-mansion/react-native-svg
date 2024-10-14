@@ -3,12 +3,9 @@
 
 @interface RNSVGFilter : RNSVGNode
 
-@property (nonatomic, strong) RNSVGLength *x;
-@property (nonatomic, strong) RNSVGLength *y;
-@property (nonatomic, strong) RNSVGLength *width;
-@property (nonatomic, strong) RNSVGLength *height;
 @property (nonatomic, assign) RNSVGUnits filterUnits;
 @property (nonatomic, assign) RNSVGUnits primitiveUnits;
+@property (nonatomic, strong) RNSVGFilterRegion *filterRegion;
 
 - (CIImage *)applyFilter:(CIImage *)img
            backgroundImg:(CIImage *)backgroundImg
@@ -18,5 +15,9 @@
 - (CGContext *)openContext:(CGSize)size;
 - (void)endContext:(CGContext *)context;
 - (CIImage *)getMaskFromRect:(CGContext *)context rect:(CGRect)rect ctm:(CGAffineTransform)ctm;
+- (void)setX:(RNSVGLength *)x;
+- (void)setY:(RNSVGLength *)y;
+- (void)setWidth:(RNSVGLength *)width;
+- (void)setHeight:(RNSVGLength *)height;
 
 @end

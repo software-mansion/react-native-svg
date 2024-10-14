@@ -3,15 +3,16 @@
 
 @interface RNSVGFilterPrimitive : RNSVGNode
 
-@property (nonatomic, strong) RNSVGLength *x;
-@property (nonatomic, strong) RNSVGLength *y;
-@property (nonatomic, strong) RNSVGLength *width;
-@property (nonatomic, strong) RNSVGLength *height;
 @property (nonatomic, strong) NSString *result;
+@property (nonatomic, strong) RNSVGFilterRegion *filterSubregion;
 
 - (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results previousFilterResult:(CIImage *)previous;
 - (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results
     previousFilterResult:(CIImage *)previous
                      ctm:(CGAffineTransform)ctm;
+- (void)setX:(RNSVGLength *)x;
+- (void)setY:(RNSVGLength *)y;
+- (void)setWidth:(RNSVGLength *)width;
+- (void)setHeight:(RNSVGLength *)height;
 
 @end
