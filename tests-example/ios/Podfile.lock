@@ -1509,7 +1509,7 @@ PODS:
     - React-logger (= 0.76.0-rc.1)
     - React-perflogger (= 0.76.0-rc.1)
     - React-utils (= 0.76.0-rc.1)
-  - RNSVG (15.8.0-rc.1):
+  - RNSVG (15.8.0-rc.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1529,9 +1529,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.8.0-rc.1)
+    - RNSVG/common (= 15.8.0-rc.3)
     - Yoga
-  - RNSVG/common (15.8.0-rc.1):
+  - RNSVG/common (15.8.0-rc.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1821,9 +1821,9 @@ SPEC CHECKSUMS:
   React-utils: b7b43e44ff19de6418e6251f47a3f4d05229e8cd
   ReactCodegen: 8674b863dd9a1cae3530686628fbd5a437f76319
   ReactCommon: 137f1fde637521478643c1ffc06e294fadb35bd9
-  RNSVG: 08750404f92a36162a92522cc77dee437be1d257
+  RNSVG: 152fd8b9f921ad648799847db84f6488b8e4c926
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  Yoga: fa8c8e75d883e3ece92bb1c54150c983c3e71259
+  Yoga: b87b3a75904dbce28b6c3b1a37259c179831ce13
 
 PODFILE CHECKSUM: 54044b6482790cfb518e701f03d1471357815b1e
 
