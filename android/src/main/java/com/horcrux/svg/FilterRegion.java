@@ -26,7 +26,7 @@ public class FilterRegion {
     mH = SVGLength.from(height);
   }
 
-  public Rect getCropRect(VirtualView view, FilterProperties.Units units, RectF renderableBounds) {
+  public Rect getCropRect(VirtualView view, FilterProperties.Units units, RectF bounds) {
     double x, y, width, height;
     if (units == FilterProperties.Units.USER_SPACE_ON_USE) {
       x = view.relativeOn(this.mX, view.getSvgView().getCanvasWidth());
@@ -35,15 +35,15 @@ public class FilterRegion {
       height = view.relativeOn(this.mH, view.getSvgView().getCanvasHeight());
       return new Rect((int) x, (int) y, (int) (x + width), (int) (y + height));
     } else { // FilterProperties.Units.OBJECT_BOUNDING_BOX
-      x = view.relativeOnFraction(this.mX, renderableBounds.width());
-      y = view.relativeOnFraction(this.mY, renderableBounds.height());
-      width = view.relativeOnFraction(this.mW, renderableBounds.width());
-      height = view.relativeOnFraction(this.mH, renderableBounds.height());
+      x = view.relativeOnFraction(this.mX, bounds.width());
+      y = view.relativeOnFraction(this.mY, bounds.height());
+      width = view.relativeOnFraction(this.mW, bounds.width());
+      height = view.relativeOnFraction(this.mH, bounds.height());
       return new Rect(
-          (int) (renderableBounds.left + x),
-          (int) (renderableBounds.top + y),
-          (int) (renderableBounds.left + x + width),
-          (int) (renderableBounds.top + y + height));
+          (int) (bounds.left + x),
+          (int) (bounds.top + y),
+          (int) (bounds.left + x + width),
+          (int) (bounds.top + y + height));
     }
   }
 }
