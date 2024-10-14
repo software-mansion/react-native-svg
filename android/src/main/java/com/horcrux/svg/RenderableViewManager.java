@@ -105,6 +105,8 @@ import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeFloodManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeFloodManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeMergeManagerDelegate;
@@ -590,6 +592,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGMask,
     RNSVGFilter,
     RNSVGFeColorMatrix,
+    RNSVGFeFlood,
     RNSVGFeGaussianBlur,
     RNSVGFeMerge,
     RNSVGFeOffset,
@@ -641,6 +644,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FilterView(reactContext);
       case RNSVGFeColorMatrix:
         return new FeColorMatrixView(reactContext);
+      case RNSVGFeFlood:
+        return new FeFloodView(reactContext);
       case RNSVGFeGaussianBlur:
         return new FeGaussianBlurView(reactContext);
       case RNSVGFeMerge:
@@ -1602,6 +1607,30 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "values")
     public void setValues(FeColorMatrixView node, @Nullable ReadableArray values) {
       node.setValues(values);
+    }
+  }
+
+  static class FeFloodManager extends FilterPrimitiveManager<FeFloodView>
+      implements RNSVGFeFloodManagerInterface<FeFloodView> {
+    FeFloodManager() {
+      super(SVGClass.RNSVGFeFlood);
+      mDelegate = new RNSVGFeFloodManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeFlood";
+
+    @ReactProp(name = "floodColor")
+    public void setFloodColor(FeFloodView node, @Nullable Dynamic strokeColors) {
+      node.setFloodColor(strokeColors);
+    }
+
+    public void setFloodColor(FeFloodView view, @Nullable ReadableMap value) {
+      view.setFloodColor(value);
+    }
+
+    @ReactProp(name = "floodOpacity", defaultFloat = 1f)
+    public void setFloodOpacity(FeFloodView node, float strokeOpacity) {
+      node.setFloodOpacity(strokeOpacity);
     }
   }
 
