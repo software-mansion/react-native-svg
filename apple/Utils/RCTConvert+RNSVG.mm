@@ -72,6 +72,19 @@ RCT_ENUM_CONVERTER(
     SVG_FECOLORMATRIX_TYPE_UNKNOWN,
     intValue)
 
+RCT_ENUM_CONVERTER(
+    RNSVGCompositeOperator,
+    (@{
+      @"over" : @(SVG_FECOMPOSITE_OPERATOR_OVER),
+      @"in" : @(SVG_FECOMPOSITE_OPERATOR_IN),
+      @"out" : @(SVG_FECOMPOSITE_OPERATOR_OUT),
+      @"atop" : @(SVG_FECOMPOSITE_OPERATOR_ATOP),
+      @"xor" : @(SVG_FECOMPOSITE_OPERATOR_XOR),
+      @"arithmetic" : @(SVG_FECOMPOSITE_OPERATOR_ARITHMETIC),
+    }),
+    SVG_FECOMPOSITE_OPERATOR_UNKNOWN,
+    intValue)
+
 + (RNSVGBrush *)RNSVGBrush:(id)json
 {
   if ([json isKindOfClass:[NSNumber class]]) {

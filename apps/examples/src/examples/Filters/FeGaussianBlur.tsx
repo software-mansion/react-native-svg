@@ -72,7 +72,7 @@ class StdDeviation025Example extends Component {
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
-    <Filter id="filter5">
+    <Filter id="filter5" width="200%" height="200%">
       <FeGaussianBlur stdDeviation="3" />
     </Filter>
     <G filter="url(#filter5)">

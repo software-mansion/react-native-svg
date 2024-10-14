@@ -12,6 +12,7 @@
 #import "RCTConvert+RNSVG.h"
 #import "RNSVGCGFCRule.h"
 #import "RNSVGColorMatrixType.h"
+#import "RNSVGCompositeOperator.h"
 #import "RNSVGEdgeMode.h"
 #import "RNSVGLength.h"
 #import "RNSVGMaskType.h"
