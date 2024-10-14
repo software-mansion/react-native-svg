@@ -1301,6 +1301,7 @@ Filter effects are a way of processing an element’s rendering before it is dis
 The following filters have been implemented:
 
 - FeColorMatrix
+- FeFlood
 - FeGaussianBlur
 - FeMerge
 - FeOffset
@@ -1314,7 +1315,6 @@ Not supported yet:
 - FeDiffuseLighting
 - FeDisplacementMap
 - FeDropShadow
-- FeFlood
 - FeFuncA
 - FeFuncB
 - FeFuncG
