@@ -5,12 +5,6 @@
 - (instancetype)init
 {
   self = [super init];
-  if (self) {
-    _x = [RNSVGLength lengthWithNumber:0];
-    _y = [RNSVGLength lengthWithNumber:0];
-    _width = [RNSVGLength lengthWithNumber:0];
-    _height = [RNSVGLength lengthWithNumber:0];
-  }
   return self;
 }
 
@@ -44,15 +38,15 @@
   _height = height;
 }
 
-- (CGRect)getCropRect:(RNSVGNode *)node units:(RNSVGUnits)units renderableBounds:(CGRect)renderableBounds
+- (CGRect)getCropRect:(RNSVGNode *)node units:(RNSVGUnits)units bounds:(CGRect)bounds
 {
   CGFloat x, y, width, height;
   if (units == kRNSVGUnitsObjectBoundingBox) {
-    x = [node relativeOnFraction:self.x relative:renderableBounds.size.width];
-    y = [node relativeOnFraction:self.y relative:renderableBounds.size.height];
-    width = [node relativeOnFraction:self.width relative:renderableBounds.size.width];
-    height = [node relativeOnFraction:self.height relative:renderableBounds.size.height];
-    return CGRectMake(renderableBounds.origin.x + x, renderableBounds.origin.y + y, width, height);
+    x = [node relativeOnFraction:self.x relative:bounds.size.width];
+    y = [node relativeOnFraction:self.y relative:bounds.size.height];
+    width = [node relativeOnFraction:self.width relative:bounds.size.width];
+    height = [node relativeOnFraction:self.height relative:bounds.size.height];
+    return CGRectMake(bounds.origin.x + x, bounds.origin.y + y, width, height);
   } else { // kRNSVGUnitsUserSpaceOnUse
     x = [node relativeOnWidth:self.x];
     y = [node relativeOnHeight:self.y];

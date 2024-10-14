@@ -55,6 +55,10 @@ class FilterView extends DefinitionView {
     invalidate();
   }
 
+  public FilterRegion getFilterRegion() {
+    return mFilterRegion;
+  }
+
   @Override
   void saveDefinition() {
     if (mName != null) {
@@ -75,6 +79,8 @@ class FilterView extends DefinitionView {
     Bitmap res = source;
     Bitmap resultBitmap = Bitmap.createBitmap(res.getWidth(), res.getHeight(), res.getConfig());
     Canvas canvas = new Canvas(resultBitmap);
+    Rect filterRegionRect =
+        this.mFilterRegion.getCropRect(this, this.mFilterUnits, renderableBounds);
     Rect cropRect;
 
     for (int i = 0; i < getChildCount(); i++) {
@@ -83,7 +89,7 @@ class FilterView extends DefinitionView {
         FilterPrimitiveView currentFilter = (FilterPrimitiveView) node;
         resultBitmap.eraseColor(Color.TRANSPARENT);
         cropRect =
-            currentFilter.mFilterRegion.getCropRect(
+            currentFilter.mFilterSubregion.getCropRect(
                 currentFilter, this.mPrimitiveUnits, renderableBounds);
         canvas.drawBitmap(currentFilter.applyFilter(mResultsMap, res), cropRect, cropRect, null);
         res = resultBitmap.copy(Bitmap.Config.ARGB_8888, true);
@@ -98,8 +104,8 @@ class FilterView extends DefinitionView {
 
     // crop Bitmap to filter coordinates
     resultBitmap.eraseColor(Color.TRANSPARENT);
-    cropRect = this.mFilterRegion.getCropRect(this, this.mFilterUnits, renderableBounds);
-    canvas.drawBitmap(res, cropRect, cropRect, null);
+
+    canvas.drawBitmap(res, filterRegionRect, filterRegionRect, null);
     return resultBitmap;
   }
 }
