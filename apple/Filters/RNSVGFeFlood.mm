@@ -23,7 +23,7 @@ using namespace facebook::react;
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
-    static const auto defaultProps = std::make_shared<const RNSVGFeColorMatrixProps>();
+    static const auto defaultProps = std::make_shared<const RNSVGFeFloodProps>();
     _props = defaultProps;
   }
   return self;
@@ -33,22 +33,28 @@ using namespace facebook::react;
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
-  return concreteComponentDescriptorProvider<RNSVGFeColorMatrixComponentDescriptor>();
+  return concreteComponentDescriptorProvider<RNSVGFeFloodComponentDescriptor>();
 }
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &newProps = static_cast<const RNSVGFeColorMatrixProps &>(*props);
+  const auto &newProps = static_cast<const RNSVGFeFloodProps &>(*props);
+
+  id floodColor = RNSVGConvertFollyDynamicToId(newProps.floodColor);
+  if (floodColor != nil) {
+    self.floodColor = [RCTConvert RNSVGBrush:floodColor];
+  }
+  self.floodOpacity = newProps.floodOpacity;
 
   setCommonFilterProps(newProps, self);
-  _props = std::static_pointer_cast<RNSVGFeColorMatrixProps const>(props);
+  _props = std::static_pointer_cast<RNSVGFeFloodProps const>(props);
 }
 
 - (void)prepareForRecycle
 {
   [super prepareForRecycle];
   _floodColor = nil;
-  _floodOpacity = nil;
+  _floodOpacity = 1;
 }
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -57,8 +63,8 @@ using namespace facebook::react;
   if (floodColor == _floodColor) {
     return;
   }
-  [self invalidate];
   _floodColor = floodColor;
+  [self invalidate];
 }
 
 - (void)setFloodOpacity:(CGFloat)floodOpacity
@@ -66,16 +72,13 @@ using namespace facebook::react;
   if (floodOpacity == _floodOpacity) {
     return;
   }
-  [self invalidate];
   _floodOpacity = floodOpacity;
+  [self invalidate];
 }
 
 - (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results previousFilterResult:(CIImage *)previous
 {
-  //    [CIImage imageWithColor:[self.floodColor ]];
-  CIImage *res =
-      [CIImage imageWithColor:[CIColor colorWithCGColor:[self.floodColor getColorWithOpacity:self.floodOpacity]]];
-  return res;
+  return [CIImage imageWithColor:[CIColor colorWithCGColor:[self.floodColor getColorWithOpacity:self.floodOpacity]]];
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
