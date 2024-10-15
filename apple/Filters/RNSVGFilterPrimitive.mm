@@ -16,7 +16,7 @@
 - (void)prepareForRecycle
 {
   [super prepareForRecycle];
-  _filterSubregion = nil;
+  _filterSubregion = [[RNSVGFilterRegion alloc] init];
   _result = nil;
 }
 #endif // RCT_NEW_ARCH_ENABLED
