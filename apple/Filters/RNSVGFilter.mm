@@ -72,7 +72,7 @@ using namespace facebook::react;
   [super prepareForRecycle];
   _filterUnits = kRNSVGUnitsObjectBoundingBox;
   _primitiveUnits = kRNSVGUnitsUserSpaceOnUse;
-  _filterRegion = nil;
+  _filterRegion = [[RNSVGFilterRegion alloc] init];
 }
 #endif // RCT_NEW_ARCH_ENABLED
 
