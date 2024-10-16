@@ -103,6 +103,8 @@ import com.facebook.react.viewmanagers.RNSVGDefsManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGDefsManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeBlendManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeBlendManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeFloodManagerDelegate;
@@ -591,6 +593,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGPattern,
     RNSVGMask,
     RNSVGFilter,
+    RNSVGFeBlend,
     RNSVGFeColorMatrix,
     RNSVGFeFlood,
     RNSVGFeGaussianBlur,
@@ -642,6 +645,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new MaskView(reactContext);
       case RNSVGFilter:
         return new FilterView(reactContext);
+      case RNSVGFeBlend:
+        return new FeBlendView(reactContext);
       case RNSVGFeColorMatrix:
         return new FeColorMatrixView(reactContext);
       case RNSVGFeFlood:
@@ -1582,6 +1587,31 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "result")
     public void setResult(T node, String result) {
       node.setResult(result);
+    }
+  }
+
+  static class FeBlendManager extends FilterPrimitiveManager<FeBlendView>
+      implements RNSVGFeBlendManagerInterface<FeBlendView> {
+    FeBlendManager() {
+      super(SVGClass.RNSVGFeBlend);
+      mDelegate = new RNSVGFeBlendManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeBlend";
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeBlendView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "in2")
+    public void setIn2(FeBlendView node, String in2) {
+      node.setIn2(in2);
+    }
+
+    @ReactProp(name = "mode")
+    public void setMode(FeBlendView node, String mode) {
+      node.setMode(mode);
     }
   }
 
