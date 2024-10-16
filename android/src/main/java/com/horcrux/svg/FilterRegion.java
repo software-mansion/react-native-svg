@@ -36,18 +36,18 @@ public class FilterRegion {
 
   public Rect getCropRect(VirtualView view, FilterProperties.Units units, RectF bounds) {
     double x, y, width, height;
-    if (units == FilterProperties.Units.USER_SPACE_ON_USE) {
+    if (units == FilterProperties.Units.OBJECT_BOUNDING_BOX) {
+      x = bounds.left + view.relativeOnFraction(this.mX, bounds.width());
+      y = bounds.top + view.relativeOnFraction(this.mY, bounds.height());
+      width = view.relativeOnFraction(this.mW, bounds.width());
+      height = view.relativeOnFraction(this.mH, bounds.height());
+    } else { // FilterProperties.Units.USER_SPACE_ON_USE
       float canvasWidth = view.getSvgView().getCanvasWidth();
       float canvasHeight = view.getSvgView().getCanvasHeight();
       x = getRelativeOrDefault(view, mX, canvasWidth, bounds.left);
       y = getRelativeOrDefault(view, mY, canvasHeight, bounds.top);
       width = getRelativeOrDefault(view, mW, canvasWidth, bounds.width());
       height = getRelativeOrDefault(view, mH, canvasHeight, bounds.height());
-    } else { // FilterProperties.Units.OBJECT_BOUNDING_BOX
-      x = bounds.left + view.relativeOnFraction(this.mX, bounds.width());
-      y = bounds.top + view.relativeOnFraction(this.mY, bounds.height());
-      width = view.relativeOnFraction(this.mW, bounds.width());
-      height = view.relativeOnFraction(this.mH, bounds.height());
     }
     return new Rect((int) x, (int) y, (int) (x + width), (int) (y + height));
   }
