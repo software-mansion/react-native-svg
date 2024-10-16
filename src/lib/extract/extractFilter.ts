@@ -1,9 +1,11 @@
 import React from 'react';
 import { ColorValue, processColor } from 'react-native';
+import { FeBlendProps as FeBlendComponentProps } from '../../elements/filters/FeBlend';
 import { FeColorMatrixProps as FeColorMatrixComponentProps } from '../../elements/filters/FeColorMatrix';
 import { FeFloodProps as FeFloodComponentProps } from '../../elements/filters/FeFlood';
 import { FeGaussianBlurProps as FeGaussianBlurComponentProps } from '../../elements/filters/FeGaussianBlur';
 import { FeMergeProps as FeMergeComponentProps } from '../../elements/filters/FeMerge';
+import { NativeProps as FeBlendNativeProps } from '../../fabric/FeBlendNativeComponent';
 import { NativeProps as FeColorMatrixNativeProps } from '../../fabric/FeColorMatrixNativeComponent';
 import { NativeProps as FeFloodNativeProps } from '../../fabric/FeFloodNativeComponent';
 import { NativeProps as FeGaussianBlurNativeProps } from '../../fabric/FeGaussianBlurNativeComponent';
@@ -42,6 +44,21 @@ export const extractIn = (props: { in?: string }) => {
     return { in1: props.in };
   }
   return {};
+};
+
+export const extractFeBlend = (
+  props: FeBlendComponentProps
+): FeBlendNativeProps => {
+  const extracted: FeBlendNativeProps = {};
+
+  if (props.in2) {
+    extracted.in2 = props.in2;
+  }
+  if (props.mode) {
+    extracted.mode = props.mode;
+  }
+
+  return extracted;
 };
 
 export const extractFeColorMatrix = (
