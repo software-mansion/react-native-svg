@@ -92,7 +92,7 @@ class FilterView extends DefinitionView {
             currentFilter.mFilterSubregion.getCropRect(
                 currentFilter,
                 this.mPrimitiveUnits,
-                this.mFilterUnits == FilterProperties.Units.USER_SPACE_ON_USE
+                this.mPrimitiveUnits == FilterProperties.Units.USER_SPACE_ON_USE
                     ? new RectF(filterRegionRect)
                     : renderableBounds);
         canvas.drawBitmap(currentFilter.applyFilter(mResultsMap, res), cropRect, cropRect, null);
