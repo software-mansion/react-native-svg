@@ -72,6 +72,19 @@ RCT_ENUM_CONVERTER(
     SVG_FECOLORMATRIX_TYPE_UNKNOWN,
     intValue)
 
+RCT_ENUM_CONVERTER(
+    RNSVGBlendMode,
+    (@{
+      @"unknown" : @(SVG_FEBLEND_MODE_UNKNOWN),
+      @"normal" : @(SVG_FEBLEND_MODE_NORMAL),
+      @"multiply" : @(SVG_FEBLEND_MODE_MULTIPLY),
+      @"screen" : @(SVG_FEBLEND_MODE_SCREEN),
+      @"darken" : @(SVG_FEBLEND_MODE_DARKEN),
+      @"lighten" : @(SVG_FEBLEND_MODE_LIGHTEN),
+    }),
+    SVG_FEBLEND_MODE_UNKNOWN,
+    intValue)
+
 + (RNSVGBrush *)RNSVGBrush:(id)json
 {
   if ([json isKindOfClass:[NSNumber class]]) {
