@@ -36,6 +36,9 @@ public class FilterRegion {
 
   public Rect getCropRect(VirtualView view, FilterProperties.Units units, RectF bounds) {
     double x, y, width, height;
+    if (bounds == null) {
+      return new Rect(0, 0, 0, 0);
+    }
     if (units == FilterProperties.Units.OBJECT_BOUNDING_BOX) {
       x = bounds.left + view.relativeOnFraction(this.mX, bounds.width());
       y = bounds.top + view.relativeOnFraction(this.mY, bounds.height());
