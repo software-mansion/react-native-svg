@@ -509,8 +509,8 @@ UInt32 saturate(CGFloat value)
       self.path = CGPathRetain(path);
     }
     [self setHitArea:path];
-    self.fillBounds = CGPathGetBoundingBox(path);
-    self.strokeBounds = CGPathGetBoundingBox(self.strokePath);
+    self.fillBounds = CGPathGetPathBoundingBox(path);
+    self.strokeBounds = CGPathGetPathBoundingBox(self.strokePath);
     self.pathBounds = CGRectUnion(self.fillBounds, self.strokeBounds);
   }
   const CGRect pathBounds = self.pathBounds;
