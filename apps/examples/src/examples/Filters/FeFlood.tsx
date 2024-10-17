@@ -27,7 +27,7 @@ class BasicFlood extends Component {
             floodOpacity="0.5"
           />
         </Filter>
-        <Use href="url(#useless)" filter="url(#floodFilter)" />
+        <Rect x="0" y="0" width="1" height="1" filter="url(#floodFilter)" />
       </Svg>
     );
   }
