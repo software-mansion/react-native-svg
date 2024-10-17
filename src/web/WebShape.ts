@@ -8,7 +8,8 @@ import {
 import { BaseProps } from './types';
 import { prepare } from './utils/prepare';
 import { convertInt32ColorToRGBA } from './utils/convertInt32Color';
-import { camelCaseToDashed, hasTouchableProperty, remeasure } from './utils';
+import { camelCaseToDashed, remeasure } from './utils';
+import { hasTouchableProperty } from './utils/hasProperty';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
 
 export class WebShape<
