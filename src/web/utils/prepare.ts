@@ -4,7 +4,8 @@ import {
 } from 'react-native';
 import { BaseProps } from '../types';
 import { WebShape } from '../WebShape';
-import { hasTouchableProperty, parseTransformProp } from '.';
+import { hasTouchableProperty } from './hasProperty';
+import { parseTransformProp } from './parseTransform';
 import { resolve } from '../../lib/resolve';
 import { NumberProp } from '../../lib/extract/types';
 import { resolveAssetUri } from '../../lib/resolveAssetUri';
