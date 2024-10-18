@@ -27,6 +27,7 @@ export interface TextPathProps extends TextSpecificProps {
   spacing?: TextPathSpacing;
   midLine?: TextPathMidLine;
   side?: string;
+  textLength?: NumberProp;
 }
 
 export default class TextPath extends Shape<TextPathProps> {
@@ -57,6 +58,7 @@ export default class TextPath extends Shape<TextPathProps> {
       side,
       alignmentBaseline,
       midLine,
+      textLength,
       ...prop
     } = this.props;
     const matched = href && href.match(idPattern);
@@ -68,6 +70,7 @@ export default class TextPath extends Shape<TextPathProps> {
         extractText(
           {
             children,
+            textLength,
           },
           true
         ),
