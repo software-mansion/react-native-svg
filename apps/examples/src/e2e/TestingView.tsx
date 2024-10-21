@@ -101,12 +101,7 @@ const TestingView = () => {
   );
 };
 
-function TestingViewWrapper() {
-  return <TestingView />;
-}
-TestingViewWrapper.title = 'E2E Testing';
-
-const component = TestingViewWrapper;
+const component = TestingView;
 const icon = (
   <RNSVG.Svg height="30" width="30" viewBox="0 0 20 20">
     <RNSVG.Circle
