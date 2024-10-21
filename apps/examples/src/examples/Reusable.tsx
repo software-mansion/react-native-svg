@@ -1,17 +1,17 @@
 import React from 'react';
 import {
-  Svg,
   Circle,
-  G,
-  Path,
-  Rect,
-  Use,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
   ClipPath,
+  Defs,
+  G,
+  LinearGradient,
+  Path,
+  RadialGradient,
+  Rect,
+  Stop,
+  Svg,
+  Symbol,
+  Use,
 } from 'react-native-svg';
 
 function UseExample() {
@@ -156,7 +156,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Reusable example';
+const title = 'Reusable';
 const samples = [UseExample, UseShapes, DefsExample, SymbolExample];
 
 export {icon, samples, title};

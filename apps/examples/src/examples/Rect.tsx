@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView} from 'react-native';
-import {Svg, Rect} from 'react-native-svg';
+import {Rect, Svg} from 'react-native-svg';
 
 function RectExample() {
   return (
@@ -111,7 +111,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Rect example';
+const title = 'Rect';
 const samples = [
   RectExample,
   RectStrokeFill,

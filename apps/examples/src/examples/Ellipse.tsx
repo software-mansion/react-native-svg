@@ -1,5 +1,5 @@
 import React from 'react';
-import {Svg, Ellipse} from 'react-native-svg';
+import {Ellipse, Svg} from 'react-native-svg';
 
 function EllipseExample() {
   return (
@@ -55,7 +55,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Ellipse example';
+const title = 'Ellipse';
 const samples = [EllipseExample, PileEllipses, CombinedEllipses];
 
 export {icon, samples, title};

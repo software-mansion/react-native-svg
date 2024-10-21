@@ -1,5 +1,5 @@
 import React from 'react';
-import {Svg, Circle, G, Text, Path} from 'react-native-svg';
+import {Circle, G, Path, Svg, Text} from 'react-native-svg';
 
 function PathExample() {
   return (
@@ -88,7 +88,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Path example';
+const title = 'Path';
 const samples = [PathExample, UnclosedPath, BezierCurve];
 
 export {icon, samples, title};

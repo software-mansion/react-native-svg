@@ -1,5 +1,5 @@
 import React from 'react';
-import {Svg, Line} from 'react-native-svg';
+import {Line, Svg} from 'react-native-svg';
 
 function LineExample() {
   return (
@@ -51,7 +51,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Line example';
+const title = 'Line';
 const samples = [LineExample, LineWithStrokeLinecap];
 
 export {icon, samples, title};

@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
-import {StyleSheet, View, Image} from 'react-native';
-import {Svg, Circle, G, Path, Line, Rect} from 'react-native-svg';
+import {Image, StyleSheet, View} from 'react-native';
+import {Circle, G, Line, Path, Rect, Svg} from 'react-native-svg';
 
 const styles = StyleSheet.create({
   container: {
@@ -176,7 +176,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Svg example';
+const title = 'Svg';
 const samples = [
   SvgExample,
   SvgOpacity,

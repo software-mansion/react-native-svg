@@ -1,17 +1,17 @@
 import React from 'react';
 import {
-  Svg,
   Circle,
+  ClipPath,
+  Defs,
   Ellipse,
   G,
-  Text,
   Path,
   Polygon,
-  Rect,
-  Defs,
   RadialGradient,
+  Rect,
   Stop,
-  ClipPath,
+  Svg,
+  Text,
 } from 'react-native-svg';
 
 function ClipPathElement() {
@@ -128,7 +128,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Clipping example';
+const title = 'Clipping';
 const samples = [ClipPathElement, ClipRule, TextClipping];
 
 export {icon, samples, title};

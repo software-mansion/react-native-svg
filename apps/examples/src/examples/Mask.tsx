@@ -1,15 +1,15 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {
-  Svg,
   Circle,
-  Path,
-  Rect,
-  Mask,
-  Polygon,
   Defs,
   LinearGradient,
+  Mask,
+  Path,
+  Polygon,
+  Rect,
   Stop,
+  Svg,
   Text,
 } from 'react-native-svg';
 
@@ -133,7 +133,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Mask example';
+const title = 'Mask';
 const samples = [SimpleMask, AnotherMask, MaskWithText];
 
 export {icon, samples, title};

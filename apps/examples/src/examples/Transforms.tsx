@@ -1,16 +1,15 @@
 import React from 'react';
 import {Platform} from 'react-native';
-
 import {
-  Svg,
   Circle,
-  Rect,
-  Pattern,
-  RadialGradient,
-  Stop,
-  SvgXml,
   Defs,
   G,
+  Pattern,
+  RadialGradient,
+  Rect,
+  Stop,
+  Svg,
+  SvgXml,
 } from 'react-native-svg';
 
 const patternXml = `
@@ -144,7 +143,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Transforms example';
+const title = 'Transforms';
 const samples = [PatternTransformExample, GradientTransformExample];
 
 export {icon, samples, title};

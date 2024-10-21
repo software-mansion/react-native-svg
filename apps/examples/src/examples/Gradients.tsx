@@ -1,15 +1,15 @@
 import React from 'react';
 import {View} from 'react-native';
 import {
-  Svg,
   Circle,
-  Ellipse,
-  Text,
-  Rect,
   Defs,
+  Ellipse,
   LinearGradient,
   RadialGradient,
+  Rect,
   Stop,
+  Svg,
+  Text,
 } from 'react-native-svg';
 
 function LinearGradientHorizontal() {
@@ -267,7 +267,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Gradients example';
+const title = 'Gradients';
 const samples = [
   LinearGradientHorizontal,
   LinearGradientHorizontalBug,

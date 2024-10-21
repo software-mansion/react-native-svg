@@ -1,15 +1,15 @@
 import React from 'react';
-import {ScrollView, Text as RNText} from 'react-native';
+import {Text as RNText, ScrollView} from 'react-native';
 import {
-  Svg,
-  G,
-  Text,
-  TSpan,
-  TextPath,
-  Path,
   Defs,
+  G,
   LinearGradient,
+  Path,
   Stop,
+  Svg,
+  Text,
+  TextPath,
+  TSpan,
 } from 'react-native-svg';
 
 function TextExample() {
@@ -159,7 +159,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Text example';
+const title = 'Text';
 const samples = [
   TextExample,
   TextRotate,

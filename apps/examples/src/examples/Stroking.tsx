@@ -1,16 +1,16 @@
 import React from 'react';
 import {
-  Svg,
   Circle,
+  ClipPath,
+  Defs,
   G,
-  Text,
   Path,
   Polyline,
-  Rect,
-  Defs,
   RadialGradient,
+  Rect,
   Stop,
-  ClipPath,
+  Svg,
+  Text,
 } from 'react-native-svg';
 
 function StrokeExample() {
@@ -143,7 +143,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Stroking example';
+const title = 'Stroking';
 const samples = [
   StrokeExample,
   StrokeLinecap,

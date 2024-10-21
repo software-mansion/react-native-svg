@@ -1,5 +1,5 @@
 import React from 'react';
-import {Svg, Circle} from 'react-native-svg';
+import {Circle, Svg} from 'react-native-svg';
 
 function CircleExample() {
   return (
@@ -70,6 +70,6 @@ const icon = (
   </Svg>
 );
 
-const title = 'Circle example';
+const title = 'Circle';
 const samples = [CircleExample, StrokeCircle, StrokeOpacityCircle, PieCircle];
 export {icon, samples, title};

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Svg, Polyline} from 'react-native-svg';
+import {Polyline, Svg} from 'react-native-svg';
 
 function PolylineExample() {
   return (
@@ -72,7 +72,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Polyline example';
+const title = 'Polyline';
 const samples = [
   PolylineExample,
   StraightLines,

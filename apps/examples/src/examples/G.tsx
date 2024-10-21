@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Svg, Circle, G, Text, Line, Rect, Use} from 'react-native-svg';
+import {Circle, G, Line, Rect, Svg, Text, Use} from 'react-native-svg';
 
 const GExample = () => {
   const [fill, setFill] = useState('purple');
@@ -84,7 +84,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'G example';
+const title = 'G';
 const samples = [GExample, GTransform];
 
 export {icon, samples, title};

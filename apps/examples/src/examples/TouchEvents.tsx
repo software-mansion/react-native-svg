@@ -1,16 +1,15 @@
 import React, {useState} from 'react';
-
+import {Alert} from 'react-native';
 import {
-  Svg,
   Circle,
+  ClipPath,
+  Defs,
   G,
-  Text,
   Path,
   Rect,
-  Defs,
-  ClipPath,
+  Svg,
+  Text,
 } from 'react-native-svg';
-import {Alert} from 'react-native';
 
 function PressExample() {
   return (
@@ -108,7 +107,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'TouchEvents example';
+const title = 'TouchEvents';
 const samples = [PressExample, HoverExample, GroupExample];
 
 export {icon, samples, title};

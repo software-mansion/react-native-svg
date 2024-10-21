@@ -1,5 +1,5 @@
 import React from 'react';
-import {Svg, G, Path, Polygon} from 'react-native-svg';
+import {G, Path, Polygon, Svg} from 'react-native-svg';
 
 function PolygonExample() {
   return (
@@ -80,7 +80,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Polygon example';
+const title = 'Polygon';
 const samples = [PolygonExample, FourSidePolygon, StarPolygon, EvenOddPolygon];
 
 export {icon, samples, title};

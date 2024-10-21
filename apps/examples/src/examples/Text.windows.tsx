@@ -1,14 +1,13 @@
 import React from 'react';
-
 import {
-  Svg,
+  Defs,
   G,
+  LinearGradient,
+  Path,
+  Stop,
+  Svg,
   Text,
   TSpan,
-  Path,
-  Defs,
-  LinearGradient,
-  Stop,
 } from 'react-native-svg';
 
 function TextExample() {
@@ -147,7 +146,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Text example';
+const title = 'Text';
 const samples = [
   TextExample,
   TextRotate,

@@ -3,12 +3,12 @@ import {StyleSheet, Text} from 'react-native';
 import Reanimated, {
   useAnimatedProps,
   useSharedValue,
+  withClamp,
   withRepeat,
   withSpring,
   withTiming,
-  withClamp,
 } from 'react-native-reanimated';
-import {Svg, Rect} from 'react-native-svg';
+import {Rect, Svg} from 'react-native-svg';
 
 // @ts-ignore broken reanimated types
 const ReanimatedRect = Reanimated.createAnimatedComponent(Rect);
@@ -37,7 +37,7 @@ function ReanimatedRectExample() {
 }
 ReanimatedRectExample.title = 'reanimated rectangle';
 
-const title = 'Reanimated example';
+const title = 'Reanimated';
 const samples = [ReanimatedRectExample];
 
 const style = StyleSheet.create({text: {width: 30, height: 30}});

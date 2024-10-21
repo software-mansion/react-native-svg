@@ -1,6 +1,6 @@
 import React from 'react';
 import {Alert, Platform} from 'react-native';
-import {Svg, Circle, Text, Rect, Defs, ClipPath, Image} from 'react-native-svg';
+import {Circle, ClipPath, Defs, Image, Rect, Svg, Text} from 'react-native-svg';
 
 function ImageExample() {
   return (
@@ -96,7 +96,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Image example';
+const title = 'Image';
 const samples = [ImageExample, ClipImage, DataURI];
 
 export {icon, samples, title};

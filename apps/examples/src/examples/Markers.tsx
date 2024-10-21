@@ -1,14 +1,14 @@
 import React from 'react';
 import {
-  Svg,
   Circle,
   Defs,
-  Marker,
-  Rect,
   Ellipse,
   Line,
-  Polygon,
+  Marker,
   Path,
+  Polygon,
+  Rect,
+  Svg,
 } from 'react-native-svg';
 
 function EllipseExample() {
@@ -198,7 +198,7 @@ const icon = (
   </Svg>
 );
 
-const title = 'Markers example';
+const title = 'Markers';
 const samples = [
   EllipseExample,
   LineExample,
