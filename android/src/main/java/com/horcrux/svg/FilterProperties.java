@@ -73,6 +73,43 @@ class FilterProperties {
     }
   }
 
+  enum FeBlendMode {
+    UNKNOWN("unknown"),
+    NORMAL("normal"),
+    MULTIPLY("multiply"),
+    SCREEN("screen"),
+    DARKEN("darken"),
+    LIGHTEN("lighten"),
+    ;
+
+    private final String mode;
+
+    FeBlendMode(String mode) {
+      this.mode = mode;
+    }
+
+    static FeBlendMode getEnum(String strVal) {
+      if (!typeToEnum.containsKey(strVal)) {
+        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+      }
+      return typeToEnum.get(strVal);
+    }
+
+    private static final Map<String, FeBlendMode> typeToEnum = new HashMap<>();
+
+    static {
+      for (final FeBlendMode en : FeBlendMode.values()) {
+        typeToEnum.put(en.mode, en);
+      }
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+      return mode;
+    }
+  }
+
   enum FeColorMatrixType {
     MATRIX("matrix"),
     SATURATE("saturate"),

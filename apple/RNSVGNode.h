@@ -141,4 +141,11 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 
 - (void)clearPath;
 
+/**
+ * get canvas dimensions
+ */
+- (CGFloat)getCanvasWidth;
+
+- (CGFloat)getCanvasHeight;
+
 @end

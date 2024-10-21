@@ -1,5 +1,5 @@
 {
-  "version": "15.8.0-rc.1",
+  "version": "15.8.0",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -75,7 +75,8 @@
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.0.2",
     "@react-native-community/eslint-plugin": "^1.2.0",
-    "@react-native/babel-plugin-codegen": "^0.71.0",
+    "@react-native/babel-plugin-codegen": "^0.75.4",
+    "@react-native/babel-preset": "^0.75.4",
     "@react-native/eslint-config": "^0.72.2",
     "@types/css-tree": "^1.0.3",
     "@types/jest": "^27.5.2",
@@ -134,8 +135,5 @@
     "android": {
       "javaPackageName": "com.horcrux.svg"
     }
-  },
-  "resolutions": {
-    "@react-native/codegen": "0.76.0-rc.1"
   }
 }
