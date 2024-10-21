@@ -1,12 +1,12 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {allScreens} from '../index';
 
-export type ExamplesKey = string | 'E2E'; // FIXME: string
+export type ExamplesKey = keyof typeof allScreens;
 
 export interface Example {
-  icon?: React.JSX.Element;
-  samples: Sample[];
-  missingOnFabric?: boolean;
+  samples: Sample[] | Examples;
+  icon: React.JSX.Element;
   shouldBeRenderInView?: boolean;
 }
 
@@ -16,15 +16,10 @@ export type NavigationProp =
   | NativeStackNavigationProp<RootStackParamList>
   | StackNavigationProp<RootStackParamList>;
 export type RootStackParamList = {[P in ExamplesKey]: undefined} & {
-  Home: undefined;
-  FeColorMatrix: undefined;
-  FeGaussianBlur: undefined;
-  FeMerge: undefined;
-  FeOffset: undefined;
-  ReanimatedFeColorMatrix: undefined;
-  LocalImage: undefined;
-  RemoteImage: undefined;
-  FilterPicker: undefined;
+  RNSVG: undefined;
+  Filters: undefined;
+  'Filter Image': undefined;
+  E2E: undefined;
 };
 
 export type Sample = React.FC & {title: string};

@@ -21,7 +21,7 @@ export function ListScreen({navigation, examples}: ListScreenProps) {
   return (
     <FlatList
       removeClippedSubviews={false}
-      data={Object.keys(examples)}
+      data={Object.keys(examples) as (keyof typeof examples)[]}
       style={commonStyles.list}
       contentInsetAdjustmentBehavior="scrollableAxes"
       numColumns={Platform.OS === 'macos' ? 2 : 1}
@@ -31,7 +31,7 @@ export function ListScreen({navigation, examples}: ListScreenProps) {
           icon={examples[name].icon}
           title={name}
           onPress={() => {
-            navigation.navigate(name);
+            navigation.navigate(name as any);
             if (!wasClicked.includes(name)) {
               setTimeout(() => setWasClicked([...wasClicked, name]), 500);
             }

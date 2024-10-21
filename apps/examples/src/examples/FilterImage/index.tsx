@@ -1,11 +1,10 @@
 import React from 'react';
 import {FilterImage} from 'react-native-svg/filter-image';
-import type {Examples} from '../../utils/types';
 import * as FilterPicker from './FilterPicker';
 import * as LocalImage from './LocalImage';
 import * as RemoteImage from './RemoteImage';
 
-const examples: Examples = {
+const samples = {
   LocalImage,
   RemoteImage,
   FilterPicker,
@@ -20,4 +19,4 @@ const icon = (
   />
 );
 
-export {examples, icon};
+export {icon, samples};

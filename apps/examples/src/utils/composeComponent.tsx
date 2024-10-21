@@ -1,9 +1,9 @@
 import React, {Fragment} from 'react';
 import {ScrollView, Text, View} from 'react-native';
-import {Sample} from './types';
+import {Examples, Sample} from './types';
 
 export default function composeComponents(
-  components: Sample[],
+  components: Sample[] | Examples,
   renderInView?: boolean,
 ) {
   const Wrapper = renderInView ? View : ScrollView;
@@ -18,13 +18,15 @@ export default function composeComponents(
                 paddingVertical: 25,
               },
             })}>
-        {components.map((Component, index) => (
-          <Fragment key={index}>
-            <ComponentTitle title={Component.title} />
-            <Component />
-            {index !== components.length - 1 && <Separator />}
-          </Fragment>
-        ))}
+        {Array.isArray(components)
+          ? components.map((Component, index) => (
+              <Fragment key={index}>
+                <ComponentTitle title={Component.title} />
+                <Component />
+                {index !== components.length - 1 && <Separator />}
+              </Fragment>
+            ))
+          : null}
       </Wrapper>
     );
   };

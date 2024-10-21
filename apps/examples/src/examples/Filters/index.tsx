@@ -1,4 +1,5 @@
 import React from 'react';
+import Svg, {Circle} from 'react-native-svg';
 import * as FeBlend from './FeBlend';
 import * as FeColorMatrix from './FeColorMatrix';
 import * as FeFlood from './FeFlood';
@@ -6,10 +7,8 @@ import * as FeGaussianBlur from './FeGaussianBlur';
 import * as FeMerge from './FeMerge';
 import * as FeOffset from './FeOffset';
 import * as ReanimatedFeColorMatrix from './ReanimatedFeColorMatrix';
-import type {Examples} from '../../utils/types';
-import Svg, {Circle} from 'react-native-svg';
 
-const examples: Examples = {
+const samples = {
   FeBlend,
   FeColorMatrix,
   FeFlood,
@@ -27,4 +26,4 @@ const icon = (
   </Svg>
 );
 
-export {examples, icon};
+export {icon, samples};

@@ -10,40 +10,21 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {ActivityIndicator, Platform, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {allScreens, allScreensKeys} from './src';
 import {ListScreen} from './src/ListScreen';
+import * as E2e from './src/e2e';
 import {examples} from './src/examples';
-import * as Filters from './src/examples/Filters';
 import * as FilterImage from './src/examples/FilterImage';
+import * as Filters from './src/examples/Filters';
 import {commonStyles} from './src/utils/commonStyles';
 import composeComponents from './src/utils/composeComponent';
-import {NavigationProp, RootStackParamList} from './src/utils/types';
+import {
+  Example,
+  Examples,
+  NavigationProp,
+  RootStackParamList,
+} from './src/utils/types';
 import {usePersistNavigation} from './src/utils/usePersistNavigation';
-import * as E2e from './src/e2e';
-
-const allScreens = {...examples, ...Filters.examples, ...FilterImage.examples};
-type ScreenProps = {navigation: NavigationProp};
-const HomeList = (props: ScreenProps) => (
-  <ListScreen
-    {...props}
-    examples={{
-      ...examples,
-      Filters: Filters as any,
-      'Filter Image': FilterImage as any,
-      E2E: E2e as any,
-    }}
-  /> // FIXME: Filters as any
-);
-const FiltersList = (props: ScreenProps) => (
-  <ListScreen {...props} examples={Filters.examples} />
-);
-const FilterImageList = (props: ScreenProps) => (
-  <ListScreen {...props} examples={FilterImage.examples} />
-);
-
-const Stack =
-  Platform.OS === 'macos'
-    ? createStackNavigator<RootStackParamList>()
-    : createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   const {isReady, initialState, persistNavigationState} =
@@ -70,13 +51,13 @@ export default function App() {
           <Stack.Screen name="RNSVG" component={HomeList} />
           <Stack.Screen name="Filters" component={FiltersList} />
           <Stack.Screen name="Filter Image" component={FilterImageList} />
-          {Object.keys(allScreens).map(name => (
+          {allScreensKeys.map(name => (
             <Stack.Screen
               key={name}
               name={name}
               component={composeComponents(
                 allScreens[name].samples,
-                allScreens[name].shouldBeRenderInView,
+                (allScreens as Examples)[name].shouldBeRenderInView,
               )}
             />
           ))}
@@ -86,3 +67,27 @@ export default function App() {
     </GestureHandlerRootView>
   );
 }
+
+type ScreenProps = {navigation: NavigationProp};
+const HomeList = (props: ScreenProps) => (
+  <ListScreen
+    {...props}
+    examples={{
+      ...examples,
+      Filters,
+      'Filter Image': FilterImage,
+      E2E: E2e as unknown as Example,
+    }}
+  />
+);
+const FiltersList = (props: ScreenProps) => (
+  <ListScreen {...props} examples={Filters.samples} />
+);
+const FilterImageList = (props: ScreenProps) => (
+  <ListScreen {...props} examples={FilterImage.samples} />
+);
+
+const Stack =
+  Platform.OS === 'macos'
+    ? createStackNavigator<RootStackParamList>()
+    : createNativeStackNavigator<RootStackParamList>();

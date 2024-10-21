@@ -1,4 +1,3 @@
-import type {Examples} from '../utils/types';
 import * as Circle from './Circle';
 import * as Clipping from './Clipping';
 import * as Ellipse from './Ellipse';
@@ -21,7 +20,7 @@ import * as Text from './Text';
 import * as TouchEvents from './TouchEvents';
 import * as Transforms from './Transforms';
 
-export const examples: Examples = {
+export const examples = {
   Svg,
   Rect,
   Circle,
