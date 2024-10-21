@@ -6,7 +6,7 @@ import ViewShot from 'react-native-view-shot';
 const address = ['ios', 'web'].includes(Platform.OS) ? 'localhost' : '10.0.2.2';
 const wsUri = `ws://${address}:7123`;
 
-const TestingView = () => {
+export const TestingView = () => {
   const wrapperRef = useRef<ViewShot>(null);
   const [wsClient, setWsClient] = useState<WebSocket | null>(null);
   const [renderedContent, setRenderedContent] =
@@ -101,26 +101,10 @@ const TestingView = () => {
   );
 };
 
-const component = TestingView;
-const icon = (
-  <RNSVG.Svg height="30" width="30" viewBox="0 0 20 20">
-    <RNSVG.Circle
-      cx="10"
-      cy="10"
-      r="8"
-      stroke="purple"
-      strokeWidth="1"
-      fill="pink"
-    />
-  </RNSVG.Svg>
-);
-
 function isFabric(): boolean {
   // @ts-expect-error nativeFabricUIManager is not yet included in the RN types
   return !!global?.nativeFabricUIManager;
 }
-
-export {component, icon};
 
 const createElementFromObject = (
   element: keyof typeof RNSVG,
