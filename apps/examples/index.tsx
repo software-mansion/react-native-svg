@@ -1,83 +1,51 @@
 /**
  * Sample React Native App for react-native-svg library
- * https://github.com/magicismight/react-native-svg/tree/master/Example
+ * https://github.com/software-mansion/react-native-svg/tree/main/apps/examples
  */
 'use strict';
 
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {NavigationContainer, NavigationState} from '@react-navigation/native';
-import {View, Linking, Platform, ActivityIndicator} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createStackNavigator} from '@react-navigation/stack';
+import React from 'react';
+import {ActivityIndicator, Platform, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {EXAMPLES} from './src/examples';
-import composeComponents from './utils/composeComponent';
-import E2eTestingView from './src/e2e';
-import {commonStyles} from './src/commonStyles';
-import type {RootStackParamList} from './utils/type';
-import {names} from './utils/names';
-import {Home} from './src/components/HomeScreen';
-import {FilterExamples} from './src/examples/Filters/examples';
-import {FilterImageExamples} from './src/examples/FilterImage/examples';
-const {
-  FeColorMatrix,
-  FeGaussianBlur,
-  FeMerge,
-  FeOffset,
-  ReanimatedFeColorMatrix,
-} = FilterExamples;
-const {LocalImage, FilterPicker, RemoteImage} = FilterImageExamples;
+import {ListScreen} from './src/ListScreen';
+import {examples} from './src/examples';
+import * as Filters from './src/examples/Filters';
+import * as FilterImage from './src/examples/FilterImage';
+import {commonStyles} from './src/utils/commonStyles';
+import composeComponents from './src/utils/composeComponent';
+import {NavigationProp, RootStackParamList} from './src/utils/types';
+import {usePersistNavigation} from './src/utils/usePersistNavigation';
 
-function noop() {
-  // do nothing
-}
+const allScreens = {...examples, ...Filters.examples, ...FilterImage.examples};
+type ScreenProps = {navigation: NavigationProp};
+const HomeList = (props: ScreenProps) => (
+  <ListScreen
+    {...props}
+    examples={{
+      ...examples,
+      Filters: Filters as any,
+      'Filter Image': FilterImage as any,
+    }}
+  /> // FIXME: Filters as any
+);
+const FiltersList = (props: ScreenProps) => (
+  <ListScreen {...props} examples={Filters.examples} />
+);
+const FilterImageList = (props: ScreenProps) => (
+  <ListScreen {...props} examples={FilterImage.examples} />
+);
 
 const Stack =
   Platform.OS === 'macos'
     ? createStackNavigator<RootStackParamList>()
     : createNativeStackNavigator<RootStackParamList>();
 
-// copied from https://reactnavigation.org/docs/state-persistence/
-const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1';
-
 export default function App() {
-  const [isReady, setIsReady] = useState(!__DEV__);
-  const [initialState, setInitialState] = useState();
-
-  useEffect(() => {
-    const restoreState = async () => {
-      try {
-        const initialUrl = await Linking.getInitialURL();
-
-        if (
-          Platform.OS !== 'web' &&
-          Platform.OS !== 'macos' &&
-          initialUrl == null
-        ) {
-          // Only restore state if there's no deep link and we're not on web
-          const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
-          const state = savedStateString
-            ? JSON.parse(savedStateString)
-            : undefined;
-
-          if (state !== undefined) {
-            setInitialState(state);
-          }
-        }
-      } finally {
-        setIsReady(true);
-      }
-    };
-
-    if (!isReady) {
-      restoreState().catch(noop);
-    }
-  }, [isReady]);
-
-  const persistNavigationState = useCallback((state?: NavigationState) => {
-    AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state)).catch(noop);
-  }, []);
+  const {isReady, initialState, persistNavigationState} =
+    usePersistNavigation();
 
   if (!isReady) {
     return (
@@ -87,77 +55,26 @@ export default function App() {
     );
   }
 
-  if (process.env.E2E) {
-    console.log('Opening E2E example, as E2E env is set to ' + process.env.E2E);
-    return <E2eTestingView />;
-  }
-
   return (
     <GestureHandlerRootView style={commonStyles.container}>
       <NavigationContainer
         initialState={initialState}
         onStateChange={persistNavigationState}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{
-              headerTitle: 'SVG library for React Apps',
-              headerTintColor: '#f60',
-              headerTitleAlign: 'center',
-            }}
-          />
-          {names
-            .filter(el => {
-              if (el !== 'E2E') return true;
-              return Platform.OS === 'android' || Platform.OS === 'ios';
-            })
-            .map(name => (
-              <Stack.Screen
-                key={name}
-                name={name}
-                component={composeComponents(
-                  EXAMPLES[name].samples,
-                  EXAMPLES[name].shouldBeRenderInView,
-                )}
-                options={{
-                  headerTitle: EXAMPLES[name].title,
-                  title: EXAMPLES[name].title,
-                }}
-              />
-            ))}
-          <Stack.Screen
-            name="FeColorMatrix"
-            component={composeComponents(FeColorMatrix.samples)}
-          />
-          <Stack.Screen
-            name="FeGaussianBlur"
-            component={composeComponents(FeGaussianBlur.samples)}
-          />
-          <Stack.Screen
-            name="FeMerge"
-            component={composeComponents(FeMerge.samples)}
-          />
-          <Stack.Screen
-            name="FeOffset"
-            component={composeComponents(FeOffset.samples)}
-          />
-          <Stack.Screen
-            name="ReanimatedFeColorMatrix"
-            component={composeComponents(ReanimatedFeColorMatrix.samples)}
-          />
-          <Stack.Screen
-            name="LocalImage"
-            component={composeComponents(LocalImage.samples)}
-          />
-          <Stack.Screen
-            name="RemoteImage"
-            component={composeComponents(RemoteImage.samples)}
-          />
-          <Stack.Screen
-            name="FilterPicker"
-            component={composeComponents(FilterPicker.samples)}
-          />
+        <Stack.Navigator
+          screenOptions={{headerTintColor: '#f60', headerTitleAlign: 'center'}}>
+          <Stack.Screen name="RNSVG" component={HomeList} />
+          <Stack.Screen name="Filters" component={FiltersList} />
+          <Stack.Screen name="Filter Image" component={FilterImageList} />
+          {Object.keys(allScreens).map(name => (
+            <Stack.Screen
+              key={name}
+              name={name}
+              component={composeComponents(
+                allScreens[name].samples,
+                allScreens[name].shouldBeRenderInView,
+              )}
+            />
+          ))}
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
