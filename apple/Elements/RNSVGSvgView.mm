@@ -316,7 +316,11 @@ using namespace facebook::react;
   if ([parent isKindOfClass:[RNSVGNode class]]) {
     return;
   }
+#if TARGET_OS_OSX // [macOS
+  _boundingBox = [self bounds];
+#else // macOS]
   _boundingBox = rect;
+#endif
   CGContextRef context = UIGraphicsGetCurrentContext();
 
   [self drawToContext:context withRect:[self bounds]];
