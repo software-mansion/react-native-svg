@@ -1,3 +1,3 @@
-export default function () {
-  return null;
-}
+const component = () => null;
+const icon = () => null;
+export {component, icon};

@@ -18,6 +18,7 @@ import {commonStyles} from './src/utils/commonStyles';
 import composeComponents from './src/utils/composeComponent';
 import {NavigationProp, RootStackParamList} from './src/utils/types';
 import {usePersistNavigation} from './src/utils/usePersistNavigation';
+import * as E2e from './src/e2e';
 
 const allScreens = {...examples, ...Filters.examples, ...FilterImage.examples};
 type ScreenProps = {navigation: NavigationProp};
@@ -28,6 +29,7 @@ const HomeList = (props: ScreenProps) => (
       ...examples,
       Filters: Filters as any,
       'Filter Image': FilterImage as any,
+      E2E: E2e as any,
     }}
   /> // FIXME: Filters as any
 );
@@ -54,7 +56,10 @@ export default function App() {
       </View>
     );
   }
-
+  if (process.env.E2E) {
+    console.log('Opening E2E example, as E2E env is set to ' + process.env.E2E);
+    return <E2e.component />;
+  }
   return (
     <GestureHandlerRootView style={commonStyles.container}>
       <NavigationContainer
@@ -75,6 +80,7 @@ export default function App() {
               )}
             />
           ))}
+          <Stack.Screen name={'E2E'} component={E2e.component} />
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>

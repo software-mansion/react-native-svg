@@ -106,8 +106,7 @@ function TestingViewWrapper() {
 }
 TestingViewWrapper.title = 'E2E Testing';
 
-const title = 'E2E example';
-const samples = [TestingViewWrapper];
+const component = TestingViewWrapper;
 const icon = (
   <RNSVG.Svg height="30" width="30" viewBox="0 0 20 20">
     <RNSVG.Circle
@@ -126,7 +125,7 @@ function isFabric(): boolean {
   return !!global?.nativeFabricUIManager;
 }
 
-export {samples, icon, title};
+export {component, icon};
 
 const createElementFromObject = (
   element: keyof typeof RNSVG,
