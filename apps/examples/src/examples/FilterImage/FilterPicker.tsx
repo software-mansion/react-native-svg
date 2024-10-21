@@ -69,7 +69,9 @@ type FilterKeys =
   | 'saturated'
   | 'boring';
 const filterKeys = Object.keys(filters) as FilterKeys[];
-const FilterImagePickerExample = () => {
+
+FilterImagePickerExample.title = 'Filter picker';
+function FilterImagePickerExample() {
   const [currentFilter, setCurrentFilter] = useState<FilterKeys>('normal');
 
   return (
@@ -104,8 +106,7 @@ const FilterImagePickerExample = () => {
       </View>
     </View>
   );
-};
-FilterImagePickerExample.title = 'Filter picker';
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -136,6 +137,6 @@ const icon = (
     style={{filter: 'saturate(2.5)'}}
   />
 );
-
 const samples = [FilterImagePickerExample];
+
 export {icon, samples};
