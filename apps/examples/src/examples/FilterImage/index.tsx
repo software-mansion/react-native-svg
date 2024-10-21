@@ -19,6 +19,5 @@ const icon = (
     style={{filter: 'saturate(3.5)'}}
   />
 );
-const title = 'Filters';
 
-export {examples, icon, title};
+export {examples, icon};

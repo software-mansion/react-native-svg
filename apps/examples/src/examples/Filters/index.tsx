@@ -26,6 +26,5 @@ const icon = (
     <Circle cx="12.5" cy="12.5" r="5" fill="red" fillOpacity="0.5" />
   </Svg>
 );
-const title = 'Filters';
 
-export {examples, icon, title};
+export {examples, icon};
