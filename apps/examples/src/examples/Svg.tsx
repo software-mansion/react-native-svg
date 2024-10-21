@@ -118,13 +118,13 @@ function SvgLayout() {
 SvgLayout.title = 'SVG with flex layout';
 
 function SvgNativeMethods() {
-  const [base64, setBase64] = useState(null);
-  const rootRef = useRef<any>(null);
-  const circleRef = useRef<any>(null);
+  const [base64, setBase64] = useState('');
+  const rootRef = useRef<Svg>(null);
+  const circleRef = useRef<Circle>(null);
 
   const alert = () => {
     console.log('PRESSED');
-    rootRef.current?.toDataURL((data: any) => {
+    rootRef.current?.toDataURL(data => {
       setBase64(data);
     });
 
