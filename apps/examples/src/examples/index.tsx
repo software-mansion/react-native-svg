@@ -21,7 +21,7 @@ import * as Text from './Text';
 import * as TouchEvents from './TouchEvents';
 import * as Transforms from './Transforms';
 
-const examples: Examples = {
+export const examples: Examples = {
   Svg,
   Rect,
   Circle,
@@ -44,5 +44,3 @@ const examples: Examples = {
   Markers,
   Mask,
 };
-
-export {examples};

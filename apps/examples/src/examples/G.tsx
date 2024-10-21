@@ -83,8 +83,6 @@ const icon = (
     </G>
   </Svg>
 );
-
-const title = 'G';
 const samples = [GExample, GTransform];
 
-export {icon, samples, title};
+export {icon, samples};

@@ -69,7 +69,6 @@ const icon = (
     <Circle cx="10" cy="10" r="8" stroke="purple" strokeWidth="1" fill="pink" />
   </Svg>
 );
-
-const title = 'Circle';
 const samples = [CircleExample, StrokeCircle, StrokeOpacityCircle, PieCircle];
-export {icon, samples, title};
+
+export {icon, samples};

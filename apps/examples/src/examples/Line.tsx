@@ -50,8 +50,6 @@ const icon = (
     <Line x1="0" y1="0" x2="20" y2="20" stroke="red" strokeWidth="1" />
   </Svg>
 );
-
-const title = 'Line';
 const samples = [LineExample, LineWithStrokeLinecap];
 
-export {icon, samples, title};
+export {icon, samples};

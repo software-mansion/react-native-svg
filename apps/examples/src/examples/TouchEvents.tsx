@@ -106,8 +106,6 @@ const icon = (
     />
   </Svg>
 );
-
-const title = 'TouchEvents';
 const samples = [PressExample, HoverExample, GroupExample];
 
-export {icon, samples, title};
+export {icon, samples};

@@ -127,8 +127,6 @@ const icon = (
     </G>
   </Svg>
 );
-
-const title = 'Clipping';
 const samples = [ClipPathElement, ClipRule, TextClipping];
 
-export {icon, samples, title};
+export {icon, samples};

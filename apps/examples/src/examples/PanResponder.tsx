@@ -89,11 +89,7 @@ const icon = (
     />
   </Svg>
 );
-
-const title = 'PanResponder';
 const shouldBeRenderInView = true;
 const samples = [PanExample];
 
-const scroll = false;
-
-export {icon, samples, scroll, shouldBeRenderInView, title};
+export {icon, samples, shouldBeRenderInView};

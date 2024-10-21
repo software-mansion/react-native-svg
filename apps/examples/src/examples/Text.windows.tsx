@@ -145,8 +145,6 @@ const icon = (
     </Text>
   </Svg>
 );
-
-const title = 'Text';
 const samples = [
   TextExample,
   TextRotate,
@@ -156,4 +154,4 @@ const samples = [
   TSpanExample,
 ];
 
-export {icon, samples, title};
+export {icon, samples};

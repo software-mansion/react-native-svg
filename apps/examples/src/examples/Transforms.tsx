@@ -142,8 +142,6 @@ const icon = (
     <Rect x="10" y="10" width="80" height="80" fill="url(#p1)" />
   </Svg>
 );
-
-const title = 'Transforms';
 const samples = [PatternTransformExample, GradientTransformExample];
 
-export {icon, samples, title};
+export {icon, samples};

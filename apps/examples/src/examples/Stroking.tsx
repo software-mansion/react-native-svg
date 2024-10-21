@@ -142,8 +142,6 @@ const icon = (
     <Path strokeDasharray="4,2,1,1,1,6" d="M0 19 h20" />
   </Svg>
 );
-
-const title = 'Stroking';
 const samples = [
   StrokeExample,
   StrokeLinecap,
@@ -151,4 +149,4 @@ const samples = [
   StrokeDashoffset,
   StrokePattern,
 ];
-export {icon, samples, title};
+export {icon, samples};

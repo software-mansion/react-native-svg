@@ -47,12 +47,10 @@ const icon = (
     style={{filter: 'saturate(0.5)'}}
   />
 );
-
-const title = 'LocalImage';
 const samples = [
   FilterImageLocalExampleStyleCSS,
   FilterImageLocalExampleStyleSVG,
   FilterImageLocalExamplePropSVG,
 ];
 
-export {icon, samples, title};
+export {icon, samples};

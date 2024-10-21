@@ -1,5 +1,5 @@
 import React from 'react';
-import {Svg, Circle, FeColorMatrix, Filter, G} from 'react-native-svg';
+import {Circle, FeColorMatrix, Filter, G, Svg} from 'react-native-svg';
 
 function ReferenceExample() {
   return (
@@ -109,8 +109,6 @@ const icon = (
     </G>
   </Svg>
 );
-
-const title = 'FeColorMatrix';
 const samples = [
   ReferenceExample,
   IdentityExample,
@@ -119,4 +117,5 @@ const samples = [
   HueRotateExample,
   LuminanceToAlphaExample,
 ];
-export {icon, samples, title};
+
+export {icon, samples};

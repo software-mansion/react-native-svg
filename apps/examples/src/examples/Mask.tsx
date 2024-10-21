@@ -132,8 +132,6 @@ const icon = (
     <Circle cx={50} cy={50} r={50} fill="purple" mask="url(#myMask)" />
   </Svg>
 );
-
-const title = 'Mask';
 const samples = [SimpleMask, AnotherMask, MaskWithText];
 
-export {icon, samples, title};
+export {icon, samples};

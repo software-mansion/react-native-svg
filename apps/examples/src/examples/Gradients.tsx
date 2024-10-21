@@ -266,8 +266,6 @@ const icon = (
     <Circle cx="10" cy="10" r="10" fill="url(#icon-grad)" />
   </Svg>
 );
-
-const title = 'Gradients';
 const samples = [
   LinearGradientHorizontal,
   LinearGradientHorizontalBug,
@@ -281,4 +279,4 @@ const samples = [
   FillGradientInRect,
 ];
 
-export {icon, samples, title};
+export {icon, samples};

@@ -81,8 +81,6 @@ const icon = (
     />
   </Svg>
 );
-
-const title = 'FeMerge';
 const samples = [WithOffsetsExample, WithHueRotateExample];
 
-export {icon, samples, title};
+export {icon, samples};

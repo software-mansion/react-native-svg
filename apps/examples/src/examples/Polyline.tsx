@@ -72,7 +72,6 @@ const icon = (
   </Svg>
 );
 
-const title = 'Polyline';
 const samples = [
   PolylineExample,
   StraightLines,
@@ -80,4 +79,4 @@ const samples = [
   PolylineFillStroke,
 ];
 
-export {icon, samples, title};
+export {icon, samples};
