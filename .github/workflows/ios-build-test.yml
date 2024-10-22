@@ -72,6 +72,8 @@ jobs:
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          restore-keys: |
+            ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-
 
       - name: Build app
         working-directory: ${{ matrix.working-directory }}
