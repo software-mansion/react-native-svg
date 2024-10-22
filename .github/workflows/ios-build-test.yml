@@ -27,7 +27,7 @@ jobs:
       group: ios-${{ matrix.working-directory }}-${{ github.ref }}
       cancel-in-progress: true
     steps:
-      - name: Check out Git repository
+      - name: Checkout Git repository
         uses: actions/checkout@v4
 
       - name: Use latest stable Xcode
@@ -39,7 +39,8 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v4
+      - name: Get yarn cache
+        uses: actions/cache@v4
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -54,7 +55,7 @@ jobs:
         working-directory: ${{ matrix.working-directory }}
         run: yarn install --frozen-lockfile
 
-      - name: Restore Pods from cache
+      - name: Get Pods cache
         uses: actions/cache@v4
         with:
           path: ${{ matrix.working-directory }}/ios/Pods
@@ -66,8 +67,8 @@ jobs:
         working-directory: ${{ matrix.working-directory }}/ios
         run: bundle install && bundle exec pod install
 
-      - name: Restore build artifacts from cache
-        uses: actions/cache@v3
+      - name: Get build artifacts cache
+        uses: actions/cache@v4
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/ios/Podfile.lock', matrix.working-directory)) }}
