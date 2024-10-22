@@ -1,16 +1,16 @@
-name: Example iOS build check
+name: Example iOS check
 on:
   pull_request:
     paths:
       - .github/workflows/ios-build-test.yml
       - RNSVG.podspec
       - apple/**
+      - src/fabric/**
+      - package.json
       - example/package.json
       - example/ios/**
-      - src/fabric/**
       - fabric-example/package.json
       - fabric-example/ios/**
-      - package.json
   push:
     branches:
       - main
