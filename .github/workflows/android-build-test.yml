@@ -37,50 +37,35 @@ jobs:
       - name: Accept licenses
         run: /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
 
-      - name: Restore svg node_modules from cache
-        uses: actions/cache@v2
-        id: cache-node-modules-svg
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-svg
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
-      - name: Install svg node_modules
+      - name: Get yarn cache
+        uses: actions/cache@v4
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install react-native-svg node_modules
         run: yarn install --frozen-lockfile
-
-      - name: Restore app node_modules from cache
-        uses: actions/cache@v2
-        id: cache-node-modules-app
-        with:
-          path: |
-            ${{ matrix.working-directory }}/node_modules
-          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.working-directory)) }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
 
       - name: Install app node_modules
         working-directory: ${{ matrix.working-directory }}
         run: yarn install --frozen-lockfile
 
-      - name: Restore build from cache
-        uses: actions/cache@v3
+      - name: Get build cache
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            android/build
-            android/.cxx
-            ${{ matrix.working-directory }}/android/build
-            ${{ matrix.working-directory }}/android/.cxx
-            ${{ matrix.working-directory }}/android/.gradle
-            ${{ matrix.working-directory }}/android/app/build
-            ${{ matrix.working-directory }}/android/app/.cxx
-            ${{ matrix.working-directory }}/node_modules/react-native/ReactAndroid/build
-            ${{ matrix.working-directory }}/node_modules/react-native/ReactAndroid/hermes-engine/build
-            ${{ matrix.working-directory }}/node_modules/react-native/ReactAndroid/hermes-engine/.cxx
-          key: ${{ runner.os }}-build5-${{ matrix.working-directory }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'android/build.gradle', format('{0}/node_modules/react-native/sdks/.hermesversion', matrix.working-directory)) }}
+          key: ${{ runner.os }}-gradle-${{matrix.working-directory}}-${{ hashFiles(format('{0}/*.gradle*', matrix.working-directory), format('{0}/gradle-wrapper.properties', matrix.working-directory)) }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-${{matrix.working-directory}}-
 
       - name: Build app
         working-directory: ${{ matrix.working-directory }}/android
