@@ -35,9 +35,6 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Accept licenses
-        run: /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
-
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
