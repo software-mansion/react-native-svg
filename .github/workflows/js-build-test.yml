@@ -1,4 +1,7 @@
 name: Test JS build
+concurrency:
+  group: js-${{ github.ref }}
+  cancel-in-progress: true
 on:
   pull_request:
     branches:
@@ -9,24 +12,46 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    concurrency:
-      group: js-${{ github.ref }}
-      cancel-in-progress: true
     steps:
       - name: checkout
-        uses: actions/checkout@v2
-      - name: Use Node.js 18
-        uses: actions/setup-node@v2
+        uses: actions/checkout@v4
+
+      - name: Get react-native-svg node_modules cache
+        uses: actions/cache@v4
         with:
-          node-version: 18
-          cache: 'yarn'
-          cache-dependency-path: 'yarn.lock'
-      - name: Install node dependencies
-        run: yarn
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
+          restore-keys: ${{ runner.os }}-node-modules-svg-
+
+      - name: Install react-native-svg node_modules
+        run: yarn install --frozen-lockfile
+
       - name: Build
         run: yarn bob
+
       - name: Test and lint
         run: yarn test
-      - name: Build Example App
-        working-directory: example/
-        run: yarn && yarn tsc
+  example:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        working-directory: [example, fabric-example]
+      fail-fast: false
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Get app node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ matrix.working-directory }}/node_modules
+          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.working-directory)) }}
+          restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
+
+      - name: Install app node_modules
+        working-directory: ${{ matrix.working-directory }}
+        run: yarn install --frozen-lockfile
+
+      - name: Build ts
+        working-directory: ${{ matrix.working-directory }}
+        run: yarn tsc
