@@ -31,27 +31,3 @@ jobs:
 
       - name: Test and lint
         run: yarn test
-  example:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        working-directory: [example, fabric-example]
-      fail-fast: false
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-
-      - name: Get app node_modules cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ matrix.working-directory }}/node_modules
-          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.working-directory)) }}
-          restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
-
-      - name: Install app node_modules
-        working-directory: ${{ matrix.working-directory }}
-        run: yarn install --frozen-lockfile
-
-      - name: Build ts
-        working-directory: ${{ matrix.working-directory }}
-        run: yarn tsc
