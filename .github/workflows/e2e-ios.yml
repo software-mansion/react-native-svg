@@ -1,31 +1,28 @@
-name: Example iOS check
+name: E2E iOS
 on:
   pull_request:
     paths:
-      - .github/workflows/ios-build-test.yml
-      - RNSVG.podspec
+      - .github/workflows/ios-e2e.yml
+      - apps/examples/**
       - apple/**
-      - src/fabric/**
+      - src/**
+      - e2e/**
       - package.json
-      - example/package.json
-      - example/ios/**
-      - fabric-example/package.json
-      - fabric-example/ios/**
   push:
     branches:
       - main
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: macos-14
+    timeout-minutes: 60
     strategy:
       matrix:
-        working-directory: [example, fabric-example]
+        working-directory: [example]
       fail-fast: false
-    concurrency:
-      group: ios-${{ matrix.working-directory }}-${{ github.ref }}
-      cancel-in-progress: true
+    env:
+      DEVICE: iPhone 16 Pro
     steps:
       - name: Checkout Git repository
         uses: actions/checkout@v4
@@ -76,6 +73,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-
 
+      - name: Start Metro server
+        working-directory: ${{ matrix.working-directory }}
+        run: E2E=true yarn start &> output.log &
+
       - name: Build app
         working-directory: ${{ matrix.working-directory }}
-        run: npx react-native run-ios --simulator="iPhone 15 Pro" --mode Debug --verbose --no-packager
+        run: E2E=true npx react-native@latest run-ios --simulator="${{ env.DEVICE }}" --mode Debug --verbose
+
+      - name: Run e2e Tests
+        run: E2E=true yarn e2e
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: |
+            report.html
+            jest-html-reporters-attach/
