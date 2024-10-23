@@ -65,7 +65,6 @@ jobs:
             ${{ runner.os }}-pods-${{ matrix.working-directory }}-
 
       - name: Install Pods
-        if: matrix.working-directory == 'paper-macos-example'
         working-directory: ${{ matrix.working-directory }}/macos
         run: bundle install && bundle exec pod install
 
