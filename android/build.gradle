@@ -43,16 +43,10 @@ def resolveReactNativeDirectory() {
     return file(reactNativeLocation)
   }
 
-  // monorepo workaround
-  // react-native can be hoisted or in project's own node_modules
-  def reactNativeFromProjectNodeModules = file("${rootProject.projectDir}/../node_modules/react-native")
-  if (reactNativeFromProjectNodeModules.exists()) {
-    return reactNativeFromProjectNodeModules
-  }
-
-  def reactNativeFromNodeModulesWithSVG = file("${projectDir}/../../react-native")
-  if (reactNativeFromNodeModulesWithSVG.exists()) {
-    return reactNativeFromNodeModulesWithSVG
+  // Fallback to node resolver for custom directory structures like monorepos.
+  def reactNativePackage = file(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim())
+  if (reactNativePackage.exists()) {
+    return reactNativePackage.parentFile
   }
 
   throw new GradleException("[react-native-svg] Unable to resolve react-native location in node_modules. Your app should define `REACT_NATIVE_NODE_MODULES_DIR` extension property in `app/build.gradle` with a path to react-native in node_modules.")
@@ -64,6 +58,25 @@ def getReactNativeMinorVersion() {
   file("$reactNativeRootDir/ReactAndroid/gradle.properties").withInputStream { reactNativeProperties.load(it) }
   def reactNativeVersion = reactNativeProperties.getProperty("VERSION_NAME")
   return reactNativeVersion.split("\\.")[1].toInteger()
+}
+
+def getFrescoVersion() {
+    def reactNativeRootDir = resolveReactNativeDirectory()
+    def frescoVersion = null
+    file("$reactNativeRootDir/gradle/libs.versions.toml").withInputStream { stream ->
+        stream.eachLine { line ->
+            if (line.contains("fresco") && !line.contains("ref")) {
+                def keyValue = line.split("=")
+                if (keyValue.size() == 2) {
+                    frescoVersion = keyValue[1].trim().replaceAll(/["']/, "")
+                }
+            }
+        }
+    }
+    if (!frescoVersion) {
+        return "3.2.0"
+    }
+    return frescoVersion
 }
 
 android {
@@ -105,10 +118,10 @@ android {
                     "src/paper/java",
                 ]
             }
-            if (getReactNativeMinorVersion() >= 73) {
-                srcDirs += "src/transformRn73/java"
+            if (getReactNativeMinorVersion() >= 75) {
+                srcDirs += "src/borderRadiusRn75/java"
             } else {
-                srcDirs += "src/deprecated/java"
+                srcDirs += "src/transformRn73/java"
             }
         }
     }
@@ -126,4 +139,14 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
+    if (getReactNativeMinorVersion() >= 76) {
+        def frescoVersion = getFrescoVersion()
+        implementation("com.facebook.fresco:fresco:${frescoVersion}") {
+            exclude group: 'com.facebook.soloader'
+        }
+        implementation("com.facebook.fresco:imagepipeline-okhttp3:${frescoVersion}") {
+            exclude group: 'com.facebook.soloader'
+        }
+        implementation("com.facebook.fresco:middleware:${frescoVersion}")
+    }
 }

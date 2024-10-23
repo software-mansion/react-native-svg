@@ -26,7 +26,7 @@
   NSMutableDictionary<NSString *, RNSVGMarker *> *_markers;
   NSMutableDictionary<NSString *, RNSVGMask *> *_masks;
   NSMutableDictionary<NSString *, RNSVGFilter *> *_filters;
-  CGAffineTransform _invviewBoxTransform;
+  CGAffineTransform _invViewBoxTransform;
   bool rendered;
 }
 
@@ -47,6 +47,8 @@ using namespace facebook::react;
     // This is necessary to ensure that [self setNeedsDisplay] actually triggers
     // a redraw when our parent transitions between hidden and visible.
     self.contentMode = UIViewContentModeRedraw;
+    // We don't want the dimming effect on tint as it's used as currentColor
+    self.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
 #endif // TARGET_OS_OSX
     rendered = false;
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -87,9 +89,6 @@ using namespace facebook::react;
   }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
-  if (RCTUIColorFromSharedColor(newProps.tintColor)) {
-    self.tintColor = RCTUIColorFromSharedColor(newProps.tintColor);
-  }
   if (RCTUIColorFromSharedColor(newProps.color)) {
     self.tintColor = RCTUIColorFromSharedColor(newProps.color);
   }
@@ -121,7 +120,7 @@ using namespace facebook::react;
   _markers = nil;
   _masks = nil;
   _filters = nil;
-  _invviewBoxTransform = CGAffineTransformIdentity;
+  _invViewBoxTransform = CGAffineTransformIdentity;
   rendered = NO;
 }
 
@@ -290,11 +289,11 @@ using namespace facebook::react;
   if (self.align) {
     CGRect tRect = CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight);
     _viewBoxTransform = [RNSVGViewBox getTransform:tRect eRect:rect align:self.align meetOrSlice:self.meetOrSlice];
-    _invviewBoxTransform = CGAffineTransformInvert(_viewBoxTransform);
+    _invViewBoxTransform = CGAffineTransformInvert(_viewBoxTransform);
     CGContextConcatCTM(context, _viewBoxTransform);
   } else {
     _viewBoxTransform = CGAffineTransformIdentity;
-    _invviewBoxTransform = CGAffineTransformIdentity;
+    _invViewBoxTransform = CGAffineTransformIdentity;
   }
   for (RNSVGPlatformView *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGNode class]]) {
@@ -317,7 +316,11 @@ using namespace facebook::react;
   if ([parent isKindOfClass:[RNSVGNode class]]) {
     return;
   }
+#if TARGET_OS_OSX // [macOS
+  _boundingBox = [self bounds];
+#else // macOS]
   _boundingBox = rect;
+#endif
   CGContextRef context = UIGraphicsGetCurrentContext();
 
   [self drawToContext:context withRect:[self bounds]];
@@ -336,7 +339,7 @@ using namespace facebook::react;
 {
   CGPoint transformed = point;
   if (self.align) {
-    transformed = CGPointApplyAffineTransform(transformed, _invviewBoxTransform);
+    transformed = CGPointApplyAffineTransform(transformed, _invViewBoxTransform);
   }
   for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
     if (![node isKindOfClass:[RNSVGNode class]]) {
@@ -475,6 +478,11 @@ using namespace facebook::react;
 - (CGAffineTransform)getViewBoxTransform
 {
   return _viewBoxTransform;
+}
+
+- (CGAffineTransform)getInvViewBoxTransform
+{
+  return _invViewBoxTransform;
 }
 
 #if !RCT_NEW_ARCH_ENABLED && TARGET_OS_OSX // [macOS

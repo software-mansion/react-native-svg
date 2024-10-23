@@ -23,6 +23,24 @@
   }
 }
 
++ (RNSVGBlendMode)RNSVGBlendModeFromCppEquivalent:(react::RNSVGFeBlendMode)mode
+{
+  switch (mode) {
+    case react::RNSVGFeBlendMode::Unknown:
+      return SVG_FEBLEND_MODE_UNKNOWN;
+    case react::RNSVGFeBlendMode::Normal:
+      return SVG_FEBLEND_MODE_NORMAL;
+    case react::RNSVGFeBlendMode::Multiply:
+      return SVG_FEBLEND_MODE_MULTIPLY;
+    case react::RNSVGFeBlendMode::Screen:
+      return SVG_FEBLEND_MODE_SCREEN;
+    case react::RNSVGFeBlendMode::Darken:
+      return SVG_FEBLEND_MODE_DARKEN;
+    case react::RNSVGFeBlendMode::Lighten:
+      return SVG_FEBLEND_MODE_LIGHTEN;
+  }
+}
+
 + (RNSVGColorMatrixType)RNSVGColorMatrixTypeFromCppEquivalent:(react::RNSVGFeColorMatrixType)type
 {
   switch (type) {

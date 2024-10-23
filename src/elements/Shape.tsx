@@ -9,6 +9,7 @@ import type {
   TransformProps,
 } from '../lib/extract/types';
 import type { Spec } from '../fabric/NativeSvgRenderableModule';
+import { BrushProperties } from '../lib/extract/colors';
 
 export interface SVGBoundingBoxOptions {
   fill?: boolean;
@@ -268,9 +269,11 @@ export default class Shape<P> extends Component<P> {
       fill?: ColorValue;
     } & TransformProps
   ) => {
-    if (props.fill) {
-      // @ts-ignore TODO: native `fill` prop differs from the one passed in props
-      props.fill = extractBrush(props.fill);
+    for (const key in props) {
+      if (BrushProperties.includes(key)) {
+        // @ts-ignore TypeScript doesn't know that `key` is a key of `props`
+        props[key] = extractBrush(props[key]);
+      }
     }
     this.root?.setNativeProps(props);
   };

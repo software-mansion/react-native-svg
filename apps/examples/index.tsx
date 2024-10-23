@@ -1,185 +1,93 @@
 /**
  * Sample React Native App for react-native-svg library
- * https://github.com/magicismight/react-native-svg/tree/master/Example
+ * https://github.com/software-mansion/react-native-svg/tree/main/apps/examples
  */
 'use strict';
 
-import React, {Component} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createStackNavigator} from '@react-navigation/stack';
+import React from 'react';
+import {ActivityIndicator, Platform, View} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {allScreens, allScreensKeys} from './src';
+import {ListScreen} from './src/ListScreen';
+import * as E2e from './src/e2e';
+import {examples} from './src/examples';
+import * as FilterImage from './src/examples/FilterImage';
+import * as Filters from './src/examples/Filters';
+import {commonStyles} from './src/utils/commonStyles';
+import composeComponents from './src/utils/composeComponent';
 import {
-  Dimensions,
-  Modal,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {Circle, Line, Svg} from 'react-native-svg';
+  Example,
+  Examples,
+  NavigationProp,
+  RootStackParamList,
+} from './src/utils/types';
+import {usePersistNavigation} from './src/utils/usePersistNavigation';
 
-import {commonStyles} from './src/commonStyles';
-import E2eTestingView from './src/e2e';
-import * as examples from './src/examples';
-import {names} from './utils/names';
+export default function App() {
+  const {isReady, initialState, persistNavigationState} =
+    usePersistNavigation();
 
-const initialState = {
-  modal: false,
-  content: null,
-};
-
-export default class SvgExample extends Component {
-  state: {
-    content: React.ReactNode;
-    modal: boolean;
-    scroll?: boolean;
-  } = initialState;
-
-  show = (name: keyof typeof examples) => {
-    if (this.state.modal) {
-      return;
-    }
-    let example = examples[name];
-    if (example) {
-      let samples = example.samples;
-      this.setState({
-        modal: true,
-        content: (
-          <View>
-            {samples.map((Sample, i) => (
-              <View style={commonStyles.example} key={`sample-${i}`}>
-                <Text style={commonStyles.sampleTitle}>{Sample.title}</Text>
-                <Sample />
-              </View>
-            ))}
-          </View>
-        ),
-        scroll: (example as {scroll?: boolean}).scroll !== false,
-      });
-    }
-  };
-
-  hide = () => {
-    this.setState(initialState);
-  };
-
-  getExamples = () => {
-    return names
-      .filter(el => {
-        if (el !== 'E2E') return true;
-        return Platform.OS === 'android' || Platform.OS === 'ios';
-      })
-      .map(name => {
-        var icon;
-        let example = examples[name as keyof typeof examples];
-        if (example) {
-          icon = example.icon;
-        }
-        return (
-          <TouchableHighlight
-            style={styles.link}
-            underlayColor="#ccc"
-            key={`example-${name}`}
-            onPress={() => this.show(name as keyof typeof examples)}>
-            <View style={commonStyles.cell}>
-              {icon}
-              <Text style={commonStyles.title}>{name}</Text>
-            </View>
-          </TouchableHighlight>
-        );
-      });
-  };
-
-  modalContent = () => (
-    <>
-      <SafeAreaView style={{flex: 1}}>
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
-          scrollEnabled={this.state.scroll}>
-          {this.state.content}
-        </ScrollView>
-      </SafeAreaView>
-      <SafeAreaView style={styles.close}>
-        <TouchableOpacity activeOpacity={0.7} onPress={this.hide}>
-          <Svg height="20" width="20">
-            <Circle cx="10" cy="10" r="10" fill="red" />
-            <Line x1="4" y1="4" x2="16" y2="16" stroke="#fff" strokeWidth="2" />
-            <Line x1="4" y1="16" x2="16" y2="4" stroke="#fff" strokeWidth="2" />
-          </Svg>
-        </TouchableOpacity>
-      </SafeAreaView>
-    </>
-  );
-
-  render() {
-    if (process.env.E2E) {
-      console.log(
-        'Opening E2E example, as E2E env is set to ' + process.env.E2E,
-      );
-      return <E2eTestingView />;
-    }
+  if (!isReady) {
     return (
-      <SafeAreaView style={styles.container}>
-        <Text style={commonStyles.welcome}>SVG library for React Apps</Text>
-        <View style={styles.contentContainer}>{this.getExamples()}</View>
-        {(Platform.OS === 'windows' || Platform.OS === 'macos') &&
-        this.state.modal ? (
-          <View style={styles.scroll}>{this.modalContent()}</View>
-        ) : (
-          <Modal
-            transparent={false}
-            animationType="fade"
-            visible={this.state.modal}
-            onRequestClose={this.hide}>
-            {this.modalContent()}
-          </Modal>
-        )}
-      </SafeAreaView>
+      <View style={[commonStyles.container, commonStyles.center]}>
+        <ActivityIndicator />
+      </View>
     );
   }
+  if (process.env.E2E) {
+    console.log('Opening E2E example, as E2E env is set to ' + process.env.E2E);
+    return <E2e.component />;
+  }
+  return (
+    <GestureHandlerRootView style={commonStyles.container}>
+      <NavigationContainer
+        initialState={initialState}
+        onStateChange={persistNavigationState}>
+        <Stack.Navigator
+          screenOptions={{headerTintColor: '#f60', headerTitleAlign: 'center'}}>
+          <Stack.Screen name="RNSVG" component={HomeList} />
+          <Stack.Screen name="Filters" component={FiltersList} />
+          <Stack.Screen name="Filter Image" component={FilterImageList} />
+          {allScreensKeys.map(name => (
+            <Stack.Screen
+              key={name}
+              name={name}
+              component={composeComponents(
+                allScreens[name].samples,
+                (allScreens as Examples)[name].shouldBeRenderInView,
+              )}
+            />
+          ))}
+          <Stack.Screen name={'E2E'}>{E2e.component}</Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
+  );
 }
 
-const hairline = StyleSheet.hairlineWidth;
+type ScreenProps = {navigation: NavigationProp};
+const HomeList = (props: ScreenProps) => (
+  <ListScreen
+    {...props}
+    examples={{
+      ...examples,
+      Filters,
+      'Filter Image': FilterImage,
+      E2E: E2e as unknown as Example,
+    }}
+  />
+);
+const FiltersList = (props: ScreenProps) => (
+  <ListScreen {...props} examples={Filters.samples} />
+);
+const FilterImageList = (props: ScreenProps) => (
+  <ListScreen {...props} examples={FilterImage.samples} />
+);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 20,
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
-  contentContainer: {
-    alignSelf: 'stretch',
-    borderTopWidth: hairline,
-    borderTopColor: '#ccc',
-    borderBottomWidth: hairline,
-    borderBottomColor: '#ccc',
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    marginHorizontal: 10,
-  },
-  link: {
-    height: 40,
-    alignSelf: 'stretch',
-    width: Dimensions.get('window').width / 2 - 10,
-  },
-  close: {
-    position: 'absolute',
-    right: 20,
-    top: 20,
-  },
-  scroll: {
-    position: 'absolute',
-    top: 30,
-    right: 10,
-    bottom: 20,
-    left: 10,
-    backgroundColor: '#fff',
-  },
-  scrollContent: {
-    borderTopWidth: hairline,
-    borderTopColor: '#ccc',
-  },
-});
+const Stack =
+  Platform.OS === 'macos'
+    ? createStackNavigator<RootStackParamList>()
+    : createNativeStackNavigator<RootStackParamList>();

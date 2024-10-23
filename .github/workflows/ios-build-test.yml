@@ -1,19 +1,20 @@
-name: Test iOS build
+name: Example iOS check
 on:
   pull_request:
     paths:
       - .github/workflows/ios-build-test.yml
       - RNSVG.podspec
       - apple/**
+      - src/fabric/**
+      - package.json
       - example/package.json
       - example/ios/**
-      - src/fabric/**
       - fabric-example/package.json
       - fabric-example/ios/**
-      - package.json
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -26,16 +27,16 @@ jobs:
       group: ios-${{ matrix.working-directory }}-${{ github.ref }}
       cancel-in-progress: true
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v3
+      - name: Checkout Git repository
+        uses: actions/checkout@v4
 
       - name: Use latest stable Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
 
-      - name: Restore react-native-svg node_modules from cache
-        uses: actions/cache@v3
+      - name: Get react-native-svg node_modules cache
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
@@ -44,8 +45,8 @@ jobs:
       - name: Install react-native-svg node_modules
         run: yarn install --frozen-lockfile
 
-      - name: Restore app node_modules from cache
-        uses: actions/cache@v3
+      - name: Get app node_modules cache
+        uses: actions/cache@v4
         with:
           path: ${{ matrix.working-directory }}/node_modules
           key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.working-directory)) }}
@@ -55,25 +56,26 @@ jobs:
         working-directory: ${{ matrix.working-directory }}
         run: yarn install --frozen-lockfile
 
-      - name: Restore Pods from cache
-        uses: actions/cache@v3
+      - name: Get Pods cache
+        uses: actions/cache@v4
         with:
-          path: |
-            ${{ matrix.working-directory }}/ios/Pods
-            ~/Library/Caches/CocoaPods
-            ~/.cocoapods
+          path: ${{ matrix.working-directory }}/ios/Pods
           key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          restore-keys: |
+            ${{ runner.os }}-pods-${{ matrix.working-directory }}-
 
       - name: Install Pods
         working-directory: ${{ matrix.working-directory }}/ios
-        run: pod install
+        run: bundle install && bundle exec pod install
 
-      - name: Restore build artifacts from cache
-        uses: actions/cache@v3
+      - name: Get build artifacts cache
+        uses: actions/cache@v4
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          restore-keys: |
+            ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-
 
       - name: Build app
         working-directory: ${{ matrix.working-directory }}
-        run: npx react-native@latest run-ios --simulator="iPhone 14 Pro" --mode Debug --verbose --terminal /bin/zsh
+        run: npx react-native run-ios --simulator="iPhone 15 Pro" --mode Debug --verbose --no-packager

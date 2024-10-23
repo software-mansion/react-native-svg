@@ -21,7 +21,9 @@ import RNSVGTextPath from './TextPathNativeComponent';
 import RNSVGTSpan from './TSpanNativeComponent';
 import RNSVGUse from './UseNativeComponent';
 import RNSVGFilter from './FilterNativeComponent';
+import RNSVGFeBlend from './FeBlendNativeComponent';
 import RNSVGFeColorMatrix from './FeColorMatrixNativeComponent';
+import RNSVGFeFlood from './FeFloodNativeComponent';
 import RNSVGFeGaussianBlur from './FeGaussianBlurNativeComponent';
 import RNSVGFeMerge from './FeMergeNativeComponent';
 import RNSVGFeOffset from './FeOffsetNativeComponent';
@@ -50,7 +52,9 @@ export {
   RNSVGTSpan,
   RNSVGUse,
   RNSVGFilter,
+  RNSVGFeBlend,
   RNSVGFeColorMatrix,
+  RNSVGFeFlood,
   RNSVGFeGaussianBlur,
   RNSVGFeMerge,
   RNSVGFeOffset,

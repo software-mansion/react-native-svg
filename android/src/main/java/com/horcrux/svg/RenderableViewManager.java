@@ -103,8 +103,12 @@ import com.facebook.react.viewmanagers.RNSVGDefsManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGDefsManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGEllipseManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeBlendManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeBlendManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeFloodManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeFloodManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeMergeManagerDelegate;
@@ -589,7 +593,9 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGPattern,
     RNSVGMask,
     RNSVGFilter,
+    RNSVGFeBlend,
     RNSVGFeColorMatrix,
+    RNSVGFeFlood,
     RNSVGFeGaussianBlur,
     RNSVGFeMerge,
     RNSVGFeOffset,
@@ -639,8 +645,12 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new MaskView(reactContext);
       case RNSVGFilter:
         return new FilterView(reactContext);
+      case RNSVGFeBlend:
+        return new FeBlendView(reactContext);
       case RNSVGFeColorMatrix:
         return new FeColorMatrixView(reactContext);
+      case RNSVGFeFlood:
+        return new FeFloodView(reactContext);
       case RNSVGFeGaussianBlur:
         return new FeGaussianBlurView(reactContext);
       case RNSVGFeMerge:
@@ -1580,6 +1590,31 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
   }
 
+  static class FeBlendManager extends FilterPrimitiveManager<FeBlendView>
+      implements RNSVGFeBlendManagerInterface<FeBlendView> {
+    FeBlendManager() {
+      super(SVGClass.RNSVGFeBlend);
+      mDelegate = new RNSVGFeBlendManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeBlend";
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeBlendView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "in2")
+    public void setIn2(FeBlendView node, String in2) {
+      node.setIn2(in2);
+    }
+
+    @ReactProp(name = "mode")
+    public void setMode(FeBlendView node, String mode) {
+      node.setMode(mode);
+    }
+  }
+
   static class FeColorMatrixManager extends FilterPrimitiveManager<FeColorMatrixView>
       implements RNSVGFeColorMatrixManagerInterface<FeColorMatrixView> {
     FeColorMatrixManager() {
@@ -1602,6 +1637,30 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "values")
     public void setValues(FeColorMatrixView node, @Nullable ReadableArray values) {
       node.setValues(values);
+    }
+  }
+
+  static class FeFloodManager extends FilterPrimitiveManager<FeFloodView>
+      implements RNSVGFeFloodManagerInterface<FeFloodView> {
+    FeFloodManager() {
+      super(SVGClass.RNSVGFeFlood);
+      mDelegate = new RNSVGFeFloodManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeFlood";
+
+    @ReactProp(name = "floodColor")
+    public void setFloodColor(FeFloodView node, @Nullable Dynamic strokeColors) {
+      node.setFloodColor(strokeColors);
+    }
+
+    public void setFloodColor(FeFloodView view, @Nullable ReadableMap value) {
+      view.setFloodColor(value);
+    }
+
+    @ReactProp(name = "floodOpacity", defaultFloat = 1f)
+    public void setFloodOpacity(FeFloodView node, float strokeOpacity) {
+      node.setFloodOpacity(strokeOpacity);
     }
   }
 
@@ -1678,6 +1737,11 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
   @ReactProp(name = "filter")
   public void setFilter(T node, String filter) {
     node.setFilter(filter);
+  }
+
+  @ReactProp(name = "color", customType = "Color")
+  public void setColor(T node, Integer color) {
+    node.setCurrentColor(color);
   }
 
   @ReactProp(name = "fill")
