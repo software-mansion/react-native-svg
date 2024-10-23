@@ -23,6 +23,7 @@ export interface TSpanProps extends CommonPathProps, FontProps {
   dy?: NumberArray;
   rotate?: NumberArray;
   inlineSize?: NumberProp;
+  textLength?: NumberProp;
 }
 
 export default class TSpan extends Shape<TSpanProps> {
