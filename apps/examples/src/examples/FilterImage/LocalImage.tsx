@@ -47,10 +47,10 @@ const icon = (
     style={{filter: 'saturate(0.5)'}}
   />
 );
-
 const samples = [
   FilterImageLocalExampleStyleCSS,
   FilterImageLocalExampleStyleSVG,
   FilterImageLocalExamplePropSVG,
 ];
+
 export {icon, samples};

@@ -73,6 +73,19 @@ RCT_ENUM_CONVERTER(
     intValue)
 
 RCT_ENUM_CONVERTER(
+    RNSVGBlendMode,
+    (@{
+      @"unknown" : @(SVG_FEBLEND_MODE_UNKNOWN),
+      @"normal" : @(SVG_FEBLEND_MODE_NORMAL),
+      @"multiply" : @(SVG_FEBLEND_MODE_MULTIPLY),
+      @"screen" : @(SVG_FEBLEND_MODE_SCREEN),
+      @"darken" : @(SVG_FEBLEND_MODE_DARKEN),
+      @"lighten" : @(SVG_FEBLEND_MODE_LIGHTEN),
+    }),
+    SVG_FEBLEND_MODE_UNKNOWN,
+    intValue)
+
+RCT_ENUM_CONVERTER(
     RNSVGCompositeOperator,
     (@{
       @"over" : @(SVG_FECOMPOSITE_OPERATOR_OVER),

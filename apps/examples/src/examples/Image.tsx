@@ -1,94 +1,88 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Alert, Platform} from 'react-native';
-import {Svg, Circle, Text, Rect, Defs, ClipPath, Image} from 'react-native-svg';
+import {Circle, ClipPath, Defs, Image, Rect, Svg, Text} from 'react-native-svg';
 
-class ImageExample extends Component {
-  static title = 'Draw Image with preserveAspectRatio prop';
-  render() {
-    return (
-      <Svg height="100" width="100">
-        <Defs>
-          <ClipPath id="image-clip">
-            <Circle cx="50%" cy="50%" r="40%" />
-          </ClipPath>
-        </Defs>
-        <Rect x="0" y="0" width="100%" height="100%" fill="red" />
-        <Rect x="5%" y="5%" width="50%" height="90%" />
-        <Image
-          x="5%"
-          y="5%"
-          width="50%"
-          height="90%"
-          preserveAspectRatio="xMidYMid slice"
-          opacity="0.5"
-          href={require('../assets/image.jpg')}
-          clipPath="url(#image-clip)"
-        />
-        <Text
-          x="50"
-          y="50"
-          textAnchor="middle"
-          fontWeight="bold"
-          fontSize="16"
-          fill="blue">
-          HOGWARTS
-        </Text>
-      </Svg>
-    );
-  }
+function ImageExample() {
+  return (
+    <Svg height="100" width="100">
+      <Defs>
+        <ClipPath id="image-clip">
+          <Circle cx="50%" cy="50%" r="40%" />
+        </ClipPath>
+      </Defs>
+      <Rect x="0" y="0" width="100%" height="100%" fill="red" />
+      <Rect x="5%" y="5%" width="50%" height="90%" />
+      <Image
+        x="5%"
+        y="5%"
+        width="50%"
+        height="90%"
+        preserveAspectRatio="xMidYMid slice"
+        opacity="0.5"
+        href={require('../assets/image.jpg')}
+        clipPath="url(#image-clip)"
+      />
+      <Text
+        x="50"
+        y="50"
+        textAnchor="middle"
+        fontWeight="bold"
+        fontSize="16"
+        fill="blue">
+        HOGWARTS
+      </Text>
+    </Svg>
+  );
 }
+ImageExample.title = 'Draw Image with preserveAspectRatio prop';
 
-class ClipImage extends Component {
-  static title = 'Clip Image';
-  render() {
-    return (
-      <Svg height="100" width="100">
-        <Defs>
-          <ClipPath id="clip-image">
-            <Circle cx="50%" cy="50%" r="40%" />
-          </ClipPath>
-        </Defs>
-        <Image
-          onPress={() => Alert.alert('press on Image')}
-          x="5%"
-          y="5%"
-          width="90%"
-          height="90%"
-          href={require('../assets/image.jpg')}
-          opacity="0.6"
-          clipPath="url(#clip-image)"
-        />
-        <Text
-          x="50"
-          y="50"
-          textAnchor="middle"
-          fontWeight="bold"
-          fontSize="16"
-          fill="red">
-          HOGWARTS
-        </Text>
-      </Svg>
-    );
-  }
+function ClipImage() {
+  return (
+    <Svg height="100" width="100">
+      <Defs>
+        <ClipPath id="clip-image">
+          <Circle cx="50%" cy="50%" r="40%" />
+        </ClipPath>
+      </Defs>
+      <Image
+        onPress={() => Alert.alert('press on Image')}
+        x="5%"
+        y="5%"
+        width="90%"
+        height="90%"
+        href={require('../assets/image.jpg')}
+        opacity="0.6"
+        clipPath="url(#clip-image)"
+      />
+      <Text
+        x="50"
+        y="50"
+        textAnchor="middle"
+        fontWeight="bold"
+        fontSize="16"
+        fill="red">
+        HOGWARTS
+      </Text>
+    </Svg>
+  );
 }
+ClipImage.title = 'Clip Image';
 
-class DataURI extends Component {
-  static title = 'Data URI';
-  render() {
-    return (
-      <Svg height="100" width="100">
-        <Image
-          x="5%"
-          y="5%"
-          width="90%"
-          height="90%"
-          href={Platform.OS === 'web' ? dataUriExample : {uri: dataUriExample}}
-          opacity="0.6"
-        />
-      </Svg>
-    );
-  }
+function DataURI() {
+  return (
+    <Svg height="100" width="100">
+      <Image
+        x="5%"
+        y="5%"
+        width="90%"
+        height="90%"
+        href={Platform.OS === 'web' ? dataUriExample : {uri: dataUriExample}}
+        opacity="0.6"
+      />
+    </Svg>
+  );
 }
+DataURI.title = 'Data URI';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
@@ -101,7 +95,6 @@ const icon = (
     />
   </Svg>
 );
-
 const samples = [ImageExample, ClipImage, DataURI];
 
 export {icon, samples};

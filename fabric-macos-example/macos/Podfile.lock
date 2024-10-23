@@ -1047,6 +1047,44 @@ PODS:
     - React-jsi (= 0.73.34)
     - React-logger (= 0.73.34)
     - React-perflogger (= 0.73.34)
+  - RNCAsyncStorage (2.0.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - RNGestureHandler (2.20.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNReanimated (3.9.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1066,7 +1104,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.8.0-rc.1):
+  - RNSVG (15.8.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - RCTRequired
@@ -1084,9 +1122,9 @@ PODS:
     - React-utils
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.8.0-rc.1)
+    - RNSVG/common (= 15.8.0)
     - Yoga
-  - RNSVG/common (15.8.0-rc.1):
+  - RNSVG/common (15.8.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - RCTRequired
@@ -1161,6 +1199,8 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native-macos/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native-macos/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native-macos/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - SocketRocket (from `../node_modules/react-native-macos/third-party-podspecs/SocketRocket.podspec`)
@@ -1265,6 +1305,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-macos/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native-macos/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNSVG:
@@ -1324,8 +1368,10 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 604848395b867f8a7fc5fb617411dacb81291a5d
   React-utils: f0bb613a2b0a7f8011bdafb8ac098e30d4825256
   ReactCommon: 4afd22a8615d591e925c67434b6d947b9ae24ca8
+  RNCAsyncStorage: 85095944a808882e37b9b80f698491cd249b15bb
+  RNGestureHandler: 5cbfe24abee937b38751abe6a66c08f332fef744
   RNReanimated: 096c06ec3b073d0bb04f6dd1c99e40fad2d2fb31
-  RNSVG: 166f90ef363c2f6b97dd92664ff11d76026c9642
+  RNSVG: 0005115d1df59a79c18c65d437765b01dc244b70
   SocketRocket: f6c6249082c011e6de2de60ed641ef8bbe0cfac9
   Yoga: 35603207c576afc16e93625844f6d469ae6d5f03
 

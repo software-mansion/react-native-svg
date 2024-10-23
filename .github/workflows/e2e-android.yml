@@ -1,14 +1,14 @@
-name: Test Android e2e
+name: E2E Android
 on:
   pull_request:
     paths:
-      - '.github/workflows/android-e2e-test.yml'
-      - 'apps/examples/**'
-      - 'example/**'
-      - 'android/**'
-      - 'src/**'
-      - 'e2e/**'
-      - 'package.json'
+      - .github/workflows/e2e-android.yml
+      - apps/examples/**
+      - example/**
+      - android/**
+      - src/**
+      - e2e/**
+      - package.json
   # push:
   #   branches:
   #     - main

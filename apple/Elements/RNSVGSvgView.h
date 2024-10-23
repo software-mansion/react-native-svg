@@ -72,4 +72,6 @@
 
 - (CGAffineTransform)getViewBoxTransform;
 
+- (CGAffineTransform)getInvViewBoxTransform;
+
 @end

@@ -1,98 +1,92 @@
-import React, {Component} from 'react';
-
+import React, {useState} from 'react';
+import {Alert} from 'react-native';
 import {
-  Svg,
   Circle,
+  ClipPath,
+  Defs,
   G,
-  Text,
   Path,
   Rect,
-  Defs,
-  ClipPath,
+  Svg,
+  Text,
 } from 'react-native-svg';
-import {Alert} from 'react-native';
 
-class PressExample extends Component {
-  static title =
-    'Press on the red circle or long press on the blue rectangle to trigger the events';
-  render() {
-    return (
-      <Svg height="100" width="100">
-        <Circle
-          cx="50%"
-          cy="50%"
-          r="38%"
-          fill="red"
-          onPress={() => Alert.alert('Press on Circle')}
-        />
-        <Rect
-          x="20%"
-          y="20%"
-          width="60%"
-          height="60%"
-          fill="blue"
-          onLongPress={() => Alert.alert('Long press on Rect')}
-        />
-        <Path d="M50,5L20,99L95,39L5,39L80,99z" fill="pink" />
-      </Svg>
-    );
-  }
+function PressExample() {
+  return (
+    <Svg height="100" width="100">
+      <Circle
+        cx="50%"
+        cy="50%"
+        r="38%"
+        fill="red"
+        onPress={() => Alert.alert('Press on Circle')}
+      />
+      <Rect
+        x="20%"
+        y="20%"
+        width="60%"
+        height="60%"
+        fill="blue"
+        onLongPress={() => Alert.alert('Long press on Rect')}
+      />
+      <Path d="M50,5L20,99L95,39L5,39L80,99z" fill="pink" />
+    </Svg>
+  );
 }
+PressExample.title =
+  'Press on the red circle or long press on the blue rectangle to trigger the events';
 
-class HoverExample extends Component {
-  static title = 'Hover the svg path';
-  state = {
-    hover: false,
+function HoverExample() {
+  const [hover, setHover] = useState(false);
+
+  const toggle = () => {
+    setHover(!hover);
   };
-  toggle = () => {
-    this.setState({hover: !this.state.hover});
-  };
-  render() {
-    return (
-      <Svg height="120" width="120" delayPressIn={0}>
-        <Defs>
-          <ClipPath id="hover-clip">
-            <Circle r="30" cx="50%" cy="50%" />
-          </ClipPath>
-        </Defs>
-        <Path
-          onPressIn={this.toggle}
-          onPressOut={this.toggle}
-          d="M50,5L20,99L95,39L5,39L80,99z"
-          stroke={this.state.hover ? 'rgba(10, 10, 10, 0.5)' : 'black'}
-          fill={this.state.hover ? 'pink' : 'red'}
-          clipPath="url(#hover-clip)"
-          strokeWidth="6"
-          x="0"
-          y="0"
-        />
-      </Svg>
-    );
-  }
+
+  return (
+    <Svg height="120" width="120" delayPressIn={0}>
+      <Defs>
+        <ClipPath id="hover-clip">
+          <Circle r="30" cx="50%" cy="50%" />
+        </ClipPath>
+      </Defs>
+      <Path
+        onPressIn={toggle}
+        onPressOut={toggle}
+        d="M50,5L20,99L95,39L5,39L80,99z"
+        stroke={hover ? 'rgba(10, 10, 10, 0.5)' : 'black'}
+        fill={hover ? 'pink' : 'red'}
+        clipPath="url(#hover-clip)"
+        strokeWidth="6"
+        x="0"
+        y="0"
+      />
+    </Svg>
+  );
 }
 
-class GroupExample extends Component {
-  static title = 'Bind touch events callback on Group element with viewBox';
-  render() {
-    return (
-      <Svg height="120" width="120" viewBox="0 0 240 240">
-        <G onPress={() => Alert.alert('Pressed on G')} scale="1.4">
-          <Circle cx="80" cy="80" r="30" fill="green" x="20" scale="1.2" />
-          <Text
-            fill="black"
-            fontWeight="bold"
-            fontSize="40"
-            x="100"
-            y="40"
-            onPress={() => Alert.alert('Pressed on Text')}>
-            H
-          </Text>
-          <Rect x="20" y="20" width="40" height="40" fill="yellow" />
-        </G>
-      </Svg>
-    );
-  }
+HoverExample.title = 'Hover the svg path';
+
+function GroupExample() {
+  return (
+    <Svg height="120" width="120" viewBox="0 0 240 240">
+      <G onPress={() => Alert.alert('Pressed on G')} scale="1.4">
+        <Circle cx="80" cy="80" r="30" fill="green" x="20" scale="1.2" />
+        <Text
+          fill="black"
+          fontWeight="bold"
+          fontSize="40"
+          x="100"
+          y="40"
+          onPress={() => Alert.alert('Pressed on Text')}>
+          H
+        </Text>
+        <Rect x="20" y="20" width="40" height="40" fill="yellow" />
+      </G>
+    </Svg>
+  );
 }
+GroupExample.title = 'Bind touch events callback on Group element with viewBox';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
@@ -112,7 +106,6 @@ const icon = (
     />
   </Svg>
 );
-
 const samples = [PressExample, HoverExample, GroupExample];
 
 export {icon, samples};

@@ -120,10 +120,8 @@ android {
             }
             if (getReactNativeMinorVersion() >= 75) {
                 srcDirs += "src/borderRadiusRn75/java"
-            } else if (getReactNativeMinorVersion() >= 73) {
-                srcDirs += "src/transformRn73/java"
             } else {
-                srcDirs += "src/deprecated/java"
+                srcDirs += "src/transformRn73/java"
             }
         }
     }
