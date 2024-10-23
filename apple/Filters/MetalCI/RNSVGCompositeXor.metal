@@ -1,16 +1,8 @@
-//
-//  RNSVGCompositeXor.metal
-//  RNSVG
-//
-//  Created by Jakub Grzywacz on 28/08/2024.
-//
-
 #include <metal_stdlib>
 using namespace metal;
 #include <CoreImage/CoreImage.h>
 
-// Porter-Duff XOR composition
-extern "C" float4 compositeXor(coreimage::sample_t in1, coreimage::sample_t in2)
+extern "C" float4 RNSVGCompositeXor(coreimage::sample_t in1, coreimage::sample_t in2)
 {
     float4 result;
     
