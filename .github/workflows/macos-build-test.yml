@@ -64,11 +64,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pods-${{ matrix.working-directory }}-
 
-      - name: Install Pods with RCT_NEW_ARCH_ENABLED flag
-        if: matrix.working-directory == 'fabric-macos-example'
-        working-directory: ${{ matrix.working-directory }}/macos
-        run: bundle install && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install
-
       - name: Install Pods
         if: matrix.working-directory == 'paper-macos-example'
         working-directory: ${{ matrix.working-directory }}/macos
