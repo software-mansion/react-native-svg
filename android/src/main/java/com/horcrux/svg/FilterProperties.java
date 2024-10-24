@@ -144,4 +144,41 @@ class FilterProperties {
       return type;
     }
   }
+
+  enum FeCompositeOperator {
+    OVER("over"),
+    IN("in"),
+    OUT("out"),
+    ATOP("atop"),
+    XOR("xor"),
+    ARITHMETIC("arithmetic"),
+    ;
+
+    private final String type;
+
+    FeCompositeOperator(String type) {
+      this.type = type;
+    }
+
+    static FeCompositeOperator getEnum(String strVal) {
+      if (!typeToEnum.containsKey(strVal)) {
+        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+      }
+      return typeToEnum.get(strVal);
+    }
+
+    private static final Map<String, FeCompositeOperator> typeToEnum = new HashMap<>();
+
+    static {
+      for (final FeCompositeOperator en : FeCompositeOperator.values()) {
+        typeToEnum.put(en.type, en);
+      }
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+      return type;
+    }
+  }
 }
