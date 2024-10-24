@@ -99,7 +99,7 @@ LuminanceToAlphaExample.title = 'Luminance to alpha';
 
 const icon = (
   <Svg height="30" width="30" viewBox="0 0 20 20">
-    <Filter id="filterIcon" width="200%" height="200%">
+    <Filter id="filterIcon">
       <FeColorMatrix values="0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 0 1 0" />
     </Filter>
     <G filter="url(#filterIcon)">
