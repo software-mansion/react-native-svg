@@ -1,7 +1,6 @@
-#import <CoreImage/CoreImage.h>
+#import "RNSVGCustomFilter.h"
 
-@interface RNSVGCompositeXor : CIFilter {
-  CIImage *inputImage1;
+@interface RNSVGCompositeXor : RNSVGCustomFilter {
   CIImage *inputImage2;
 }
 

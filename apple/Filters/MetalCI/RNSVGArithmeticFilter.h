@@ -1,7 +1,6 @@
-#import <CoreImage/CoreImage.h>
+#import "RNSVGCustomFilter.h"
 
-@interface RNSVGArithmeticFilter : CIFilter {
-  CIImage *inputImage1;
+@interface RNSVGArithmeticFilter : RNSVGCustomFilter {
   CIImage *inputImage2;
   NSNumber *inputK1;
   NSNumber *inputK2;

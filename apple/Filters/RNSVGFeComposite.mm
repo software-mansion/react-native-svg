@@ -1,12 +1,12 @@
 #import "RNSVGFeComposite.h"
+#import "RNSVGArithmeticFilter.h"
+#import "RNSVGCompositeXor.h"
 
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
-#import "RNSVGArithmeticFilter.h"
-#import "RNSVGCompositeXor.h"
 #import "RNSVGConvert.h"
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
@@ -162,11 +162,9 @@ using namespace facebook::react;
       filter = [CIFilter filterWithName:@"CISourceAtopCompositing"];
       break;
     case SVG_FECOMPOSITE_OPERATOR_XOR:
-      [RNSVGCompositeXor class];
       filter = [[RNSVGCompositeXor alloc] init];
       break;
     case SVG_FECOMPOSITE_OPERATOR_ARITHMETIC:
-      [RNSVGArithmeticFilter class];
       filter = [[RNSVGArithmeticFilter alloc] init];
       break;
     default:
