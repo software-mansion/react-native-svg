@@ -2,7 +2,7 @@ import '@expo/metro-runtime';
 
 import { registerRootComponent } from 'expo';
 
-import App from '../apps';
+import App from '../common';
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
