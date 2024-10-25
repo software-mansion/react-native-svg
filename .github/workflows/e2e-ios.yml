@@ -79,7 +79,7 @@ jobs:
 
       - name: Build app
         working-directory: ${{ matrix.working-directory }}
-        run: E2E=true npx react-native@latest run-ios --simulator="${{ env.DEVICE }}" --mode Debug --verbose
+        run: E2E=true npx react-native run-ios --simulator="${{ env.DEVICE }}" --mode Debug --verbose
 
       - name: Run e2e Tests
         run: E2E=true yarn e2e
