@@ -114,7 +114,7 @@ export function extractFont(props: fontProps) {
   return { ...baseFont, ...ownedFont };
 }
 
-let TSpan: ComponentType<React.PropsWithChildren>;
+let TSpan: ComponentType<React.PropsWithChildren<{ textLength?: NumberProp }>>;
 
 export function setTSpan(TSpanImplementation: ComponentType) {
   TSpan = TSpanImplementation;
@@ -124,9 +124,9 @@ export type TextChild =
   | (undefined | string | number | ComponentType | React.ReactElement)
   | TextChild[];
 
-function getChild(child: TextChild) {
+function getChild(child: TextChild, textLength: NumberProp | undefined) {
   if (typeof child === 'string' || typeof child === 'number') {
-    return <TSpan>{String(child)}</TSpan>;
+    return <TSpan textLength={textLength}>{String(child)}</TSpan>;
   } else {
     return child;
   }
@@ -143,7 +143,44 @@ export type TextProps = {
   baselineShift?: NumberProp;
   verticalAlign?: NumberProp;
   alignmentBaseline?: string;
+  textLength?: NumberProp;
 } & fontProps;
+
+function getTextChildren(
+  children: TextChild,
+  textLength: NumberProp | undefined,
+  container: boolean
+) {
+  let textChildren;
+  if (typeof children === 'string' || typeof children === 'number') {
+    if (container) {
+      textChildren = <TSpan textLength={textLength}>{String(children)}</TSpan>;
+    } else {
+      textChildren = null;
+    }
+  } else {
+    if (Children.count(children) > 1 || Array.isArray(children)) {
+      textChildren = Children.map(children, (child: TextChild) => {
+        if (React.isValidElement<TextProps>(child)) {
+          return React.cloneElement(child, {
+            textLength: child.props.textLength || textLength,
+          });
+        } else {
+          return getChild(child, textLength);
+        }
+      });
+    } else {
+      if (React.isValidElement<TextProps>(children)) {
+        textChildren = React.cloneElement(children, {
+          textLength: children.props.textLength || textLength,
+        });
+      } else {
+        textChildren = children;
+      }
+    }
+  }
+  return textChildren;
+}
 
 export default function extractText(props: TextProps, container: boolean) {
   const {
@@ -157,19 +194,10 @@ export default function extractText(props: TextProps, container: boolean) {
     baselineShift,
     verticalAlign,
     alignmentBaseline,
+    textLength,
   } = props;
 
-  const textChildren =
-    typeof children === 'string' || typeof children === 'number' ? (
-      container ? (
-        <TSpan>{String(children)}</TSpan>
-      ) : null
-    ) : Children.count(children) > 1 || Array.isArray(children) ? (
-      Children.map(children, getChild)
-    ) : (
-      children
-    );
-
+  const textChildren = getTextChildren(children, textLength, container);
   return {
     content: textChildren === null ? String(children) : null,
     children: textChildren,

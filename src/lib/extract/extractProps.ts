@@ -54,6 +54,7 @@ export default function extractProps(
     testID?: string;
     accessibilityLabel?: string;
     accessible?: boolean;
+    textLength: string;
   } & TransformProps &
     ResponderProps &
     StrokeProps &
@@ -78,6 +79,7 @@ export default function extractProps(
     testID,
     accessibilityLabel,
     accessible,
+    textLength,
   } = props;
   const extracted: extractedProps = {};
 
@@ -179,6 +181,9 @@ export default function extractProps(
           '"'
       );
     }
+  }
+  if (textLength) {
+    extracted.textLength = textLength;
   }
 
   return extracted;
