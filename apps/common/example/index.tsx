@@ -1,6 +1,6 @@
 /**
  * Sample React Native App for react-native-svg library
- * https://github.com/software-mansion/react-native-svg/tree/main/apps/examples
+ * https://github.com/software-mansion/react-native-svg/tree/main/apps/common/example
  */
 'use strict';
 

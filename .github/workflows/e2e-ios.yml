@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        working-directory: [example]
+        working-directory: [paper-example]
       fail-fast: false
     env:
       DEVICE: iPhone 16 Pro
