@@ -9,6 +9,7 @@ import Test1374 from './src/Test1374';
 import Test1442 from './src/Test1442';
 import Test1451 from './src/Test1451';
 import Test1718 from './src/Test1718';
+import Test1719 from './src/Test1719';
 import Test1790 from './src/Test1790';
 import Test1813 from './src/Test1813';
 import Test1845 from './src/Test1845';
