@@ -7,8 +7,8 @@ on:
       - apple/**
       - src/fabric/**
       - package.json
-      - apps/example/package.json
-      - apps/example/ios/**
+      - apps/paper-example/package.json
+      - apps/paper-example/ios/**
       - apps/fabric-example/package.json
       - apps/fabric-example/ios/**
   push:
@@ -21,7 +21,7 @@ jobs:
     runs-on: macos-14
     strategy:
       matrix:
-        working-directory: [example, fabric-example]
+        working-directory: [paper-example, fabric-example]
       fail-fast: false
     concurrency:
       group: ios-${{ matrix.working-directory }}-${{ github.ref }}
