@@ -6912,7 +6912,7 @@ react-native-reanimated@3.15.4:
     convert-source-map "^2.0.0"
     invariant "^2.2.4"
 
-"react-native-svg@link:..":
+"react-native-svg@link:../..":
   version "0.0.0"
   uid ""
 
