@@ -10,21 +10,20 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {ActivityIndicator, Platform, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {allScreens, allScreensKeys} from './src';
-import {ListScreen} from './src/ListScreen';
-import * as E2e from './src/e2e';
-import {examples} from './src/examples';
-import * as FilterImage from './src/examples/FilterImage';
-import * as Filters from './src/examples/Filters';
-import {commonStyles} from './src/utils/commonStyles';
-import composeComponents from './src/utils/composeComponent';
+import {ListScreen} from './ListScreen';
+import * as E2e from './e2e/index.macos';
+import {examples} from './examples';
+import * as FilterImage from './examples/FilterImage';
+import * as Filters from './examples/Filters';
+import {commonStyles} from './utils/commonStyles';
+import composeComponents from './utils/composeComponent';
 import {
   Example,
   Examples,
   NavigationProp,
   RootStackParamList,
-} from './src/utils/types';
-import {usePersistNavigation} from './src/utils/usePersistNavigation';
+} from './utils/types';
+import {usePersistNavigation} from './utils/usePersistNavigation';
 
 export default function App() {
   const {isReady, initialState, persistNavigationState} =
@@ -91,3 +90,11 @@ const Stack =
   Platform.OS === 'macos'
     ? createStackNavigator<RootStackParamList>()
     : createNativeStackNavigator<RootStackParamList>();
+
+const allScreens = {
+  ...examples,
+  ...Filters.samples,
+  ...FilterImage.samples,
+};
+
+const allScreensKeys = Object.keys(allScreens) as (keyof typeof allScreens)[];

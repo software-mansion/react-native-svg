@@ -9,7 +9,7 @@ import {
   LocalSvg,
 } from 'react-native-svg/css';
 
-const asset = require('../assets/ruby.svg');
+const asset = require('./assets/ruby.svg');
 const normalUri =
   'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/ruby.svg';
 const uriWithCss = 'http://thenewcode.com/assets/svg/accessibility.svg';

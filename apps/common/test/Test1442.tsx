@@ -73,7 +73,7 @@ const PNGImageFromFile = () => {
         opacity="1"
         width={100}
         height={100}
-        href={require('../assets/arrow.png')}
+        href={require('./assets/arrow.png')}
         onLoad={e =>
           console.log(`${Platform.OS} load png image from file`, e.nativeEvent)
         }
@@ -107,7 +107,7 @@ const JPEGImageFromFile = () => {
         opacity="1"
         width={'100%'}
         height={'100%'}
-        href={require('../assets/earth.jpg')}
+        href={require('./assets/earth.jpg')}
         onLoad={e =>
           console.log(`${Platform.OS} load JPEG image from file`, e.nativeEvent)
         }
