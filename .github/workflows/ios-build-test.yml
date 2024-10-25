@@ -7,10 +7,10 @@ on:
       - apple/**
       - src/fabric/**
       - package.json
-      - example/package.json
-      - example/ios/**
-      - fabric-example/package.json
-      - fabric-example/ios/**
+      - apps/example/package.json
+      - apps/example/ios/**
+      - apps/fabric-example/package.json
+      - apps/fabric-example/ios/**
   push:
     branches:
       - main
@@ -48,34 +48,34 @@ jobs:
       - name: Get app node_modules cache
         uses: actions/cache@v4
         with:
-          path: ${{ matrix.working-directory }}/node_modules
-          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.working-directory)) }}
+          path: apps/${{ matrix.working-directory }}/node_modules
+          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/yarn.lock', matrix.working-directory)) }}
           restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
 
       - name: Install app node_modules
-        working-directory: ${{ matrix.working-directory }}
+        working-directory: apps/${{ matrix.working-directory }}
         run: yarn install --frozen-lockfile
 
       - name: Get Pods cache
         uses: actions/cache@v4
         with:
-          path: ${{ matrix.working-directory }}/ios/Pods
-          key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          path: apps/${{ matrix.working-directory }}/ios/Pods
+          key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/ios/Podfile.lock', matrix.working-directory)) }}
           restore-keys: |
             ${{ runner.os }}-pods-${{ matrix.working-directory }}-
 
       - name: Install Pods
-        working-directory: ${{ matrix.working-directory }}/ios
+        working-directory: apps/${{ matrix.working-directory }}/ios
         run: bundle install && bundle exec pod install
 
       - name: Get build artifacts cache
         uses: actions/cache@v4
         with:
           path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          key: ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/ios/Podfile.lock', matrix.working-directory)) }}
           restore-keys: |
             ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-
 
       - name: Build app
-        working-directory: ${{ matrix.working-directory }}
+        working-directory: apps/${{ matrix.working-directory }}
         run: npx react-native run-ios --simulator="iPhone 15 Pro" --mode Debug --verbose --no-packager

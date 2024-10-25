@@ -6,10 +6,10 @@ on:
       - 'android/**'
       - 'src/fabric/**'
       - 'package.json'
-      - 'example/android/**'
-      - 'example/package.json'
-      - 'fabric-example/android/**'
-      - 'fabric-example/package.json'
+      - 'apps/example/android/**'
+      - 'apps/example/package.json'
+      - 'apps/fabric-example/android/**'
+      - 'apps/fabric-example/package.json'
   push:
     branches:
       - main
@@ -48,12 +48,12 @@ jobs:
       - name: Get app node_modules cache
         uses: actions/cache@v4
         with:
-          path: ${{ matrix.working-directory }}/node_modules
+          path: apps/${{ matrix.working-directory }}/node_modules
           key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.working-directory)) }}
           restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
 
       - name: Install app node_modules
-        working-directory: ${{ matrix.working-directory }}
+        working-directory: apps/${{ matrix.working-directory }}
         run: yarn install --frozen-lockfile
 
       - name: Get build cache
@@ -67,5 +67,5 @@ jobs:
             ${{ runner.os }}-gradle-${{matrix.working-directory}}-
 
       - name: Build app
-        working-directory: ${{ matrix.working-directory }}/android
+        working-directory: apps/${{ matrix.working-directory }}/android
         run: ./gradlew assembleDebug --build-cache --console=plain -PreactNativeArchitectures=arm64-v8a
