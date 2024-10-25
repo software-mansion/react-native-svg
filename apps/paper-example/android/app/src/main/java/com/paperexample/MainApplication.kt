@@ -1,4 +1,4 @@
-package com.example
+package com.paperexample
 
 import android.app.Application
 import com.facebook.react.PackageList
