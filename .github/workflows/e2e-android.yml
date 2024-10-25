@@ -3,8 +3,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/e2e-android.yml
-      - apps/examples/**
-      - example/**
+      - apps/example/**
       - android/**
       - src/**
       - e2e/**
@@ -81,7 +80,7 @@ jobs:
         timeout-minutes: 10
 
       - name: Reverse TCP
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+        working-directory: apps/${{ env.WORKING_DIRECTORY }}
         run: adb devices | grep '\t' | awk '{print $1}' | sed 's/\\s//g' | xargs -I {} adb -s {} reverse tcp:8081 tcp:8081
 
       - name: Install root node dependencies
@@ -89,18 +88,18 @@ jobs:
 
       - name: Install example app node dependencies
         run: yarn
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+        working-directory: apps/${{ env.WORKING_DIRECTORY }}
 
       - name: Build Android app
-        working-directory: ${{ env.WORKING_DIRECTORY }}/android
+        working-directory: apps/${{ env.WORKING_DIRECTORY }}/android
         run: ./gradlew assembleDebug
 
       - name: Start Metro server
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+        working-directory: apps/${{ env.WORKING_DIRECTORY }}
         run: E2E=true yarn start &> output.log &
 
       - name: Install APK
-        run: adb install -r ${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
+        run: adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Launch APK
         run: 'while ! (adb shell monkey -p com.example 1 | grep -q "Events injected: 1"); do sleep 1; echo "Retrying due to errors in previous run..."; done'
