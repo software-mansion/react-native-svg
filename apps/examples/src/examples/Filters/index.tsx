@@ -2,6 +2,7 @@ import React from 'react';
 import Svg, {Circle} from 'react-native-svg';
 import * as FeBlend from './FeBlend';
 import * as FeColorMatrix from './FeColorMatrix';
+import * as FeComposite from './FeComposite';
 import * as FeFlood from './FeFlood';
 import * as FeGaussianBlur from './FeGaussianBlur';
 import * as FeMerge from './FeMerge';
@@ -11,6 +12,7 @@ import * as ReanimatedFeColorMatrix from './ReanimatedFeColorMatrix';
 const samples = {
   FeBlend,
   FeColorMatrix,
+  FeComposite,
   FeFlood,
   FeGaussianBlur,
   FeMerge,

@@ -2,11 +2,13 @@ import React from 'react';
 import { ColorValue, processColor } from 'react-native';
 import { FeBlendProps as FeBlendComponentProps } from '../../elements/filters/FeBlend';
 import { FeColorMatrixProps as FeColorMatrixComponentProps } from '../../elements/filters/FeColorMatrix';
+import { FeCompositeProps as FeCompositeComponentProps } from '../../elements/filters/FeComposite';
 import { FeFloodProps as FeFloodComponentProps } from '../../elements/filters/FeFlood';
 import { FeGaussianBlurProps as FeGaussianBlurComponentProps } from '../../elements/filters/FeGaussianBlur';
 import { FeMergeProps as FeMergeComponentProps } from '../../elements/filters/FeMerge';
 import { NativeProps as FeBlendNativeProps } from '../../fabric/FeBlendNativeComponent';
 import { NativeProps as FeColorMatrixNativeProps } from '../../fabric/FeColorMatrixNativeComponent';
+import { NativeProps as FeCompositeNativeProps } from '../../fabric/FeCompositeNativeComponent';
 import { NativeProps as FeFloodNativeProps } from '../../fabric/FeFloodNativeComponent';
 import { NativeProps as FeGaussianBlurNativeProps } from '../../fabric/FeGaussianBlurNativeComponent';
 import { NativeProps as FeMergeNativeProps } from '../../fabric/FeMergeNativeComponent';
@@ -85,6 +87,24 @@ export const extractFeColorMatrix = (
   if (props.type) {
     extracted.type = props.type;
   }
+
+  return extracted;
+};
+
+export const extractFeComposite = (
+  props: FeCompositeComponentProps
+): FeCompositeNativeProps => {
+  const extracted: FeCompositeNativeProps = {
+    in1: props.in || '',
+    in2: props.in2 || '',
+    operator1: props.operator || 'over',
+  };
+
+  (['k1', 'k2', 'k3', 'k4'] as const).forEach((key) => {
+    if (props[key] !== undefined) {
+      extracted[key] = Number(props[key]) || 0;
+    }
+  });
 
   return extracted;
 };
