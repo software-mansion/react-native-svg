@@ -2,19 +2,16 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
 /**
  * Metro configuration
- * https://facebook.github.io/metro/docs/configuration
+ * https://reactnative.dev/docs/metro
  *
  * @type {import('metro-config').MetroConfig}
  */
-
-/* eslint-disable import/no-commonjs */
-
 const path = require('path');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
 const escape = require('escape-string-regexp');
-const pack = require('../package.json');
+const pack = require('../../package.json');
 
-const root = path.resolve(__dirname, '..');
+const root = path.resolve(__dirname, '../..');
 const projectNodeModules = path.join(__dirname, 'node_modules');
 
 const modules = [...Object.keys(pack.peerDependencies)];

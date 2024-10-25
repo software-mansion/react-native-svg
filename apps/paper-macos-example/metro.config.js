@@ -11,7 +11,7 @@ const exclusionList = require('metro-config/src/defaults/exclusionList');
 
 const pack = require('../../package.json');
 
-const root = path.resolve(__dirname, '..');
+const root = path.resolve(__dirname, '../..');
 const projectNodeModules = path.join(__dirname, 'node_modules');
 
 const modules = [...Object.keys(pack.peerDependencies), 'react-native-macos'];
