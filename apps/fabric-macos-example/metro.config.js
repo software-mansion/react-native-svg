@@ -9,9 +9,9 @@ const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 const path = require('path');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
 
-const pack = require('../package.json');
+const pack = require('../../package.json');
 
-const root = path.resolve(__dirname, '..');
+const root = path.resolve(__dirname, '../..');
 const projectNodeModules = path.join(__dirname, 'node_modules');
 
 const modules = [...Object.keys(pack.peerDependencies), 'react-native-macos'];
