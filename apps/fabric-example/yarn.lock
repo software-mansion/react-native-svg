@@ -6724,7 +6724,7 @@ react-native-screens@3.35.0:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
-"react-native-svg@link:..":
+"react-native-svg@link:../..":
   version "0.0.0"
   uid ""
 
