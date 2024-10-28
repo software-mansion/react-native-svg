@@ -13,6 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
@@ -86,7 +87,11 @@ class UseView extends RenderableView {
       template.draw(canvas, paint, opacity * mOpacity);
     }
 
-    this.setClientRect(template.getClientRect());
+    // TODO: replace getMatrix with mCTM when it will be fixed
+    RectF clientRect = new RectF();
+    this.getPath(canvas, paint).computeBounds(clientRect, true);
+    canvas.getMatrix().mapRect(clientRect);
+    this.setClientRect(clientRect);
 
     template.restoreCanvas(canvas, count);
     if (template instanceof RenderableView) {
