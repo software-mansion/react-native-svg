@@ -1,5 +1,6 @@
 import * as Circle from './Circle';
 import * as Clipping from './Clipping';
+import * as Empty from './Empty';
 import * as Ellipse from './Ellipse';
 import * as G from './G';
 import * as Gradients from './Gradients';
@@ -21,6 +22,7 @@ import * as TouchEvents from './TouchEvents';
 import * as Transforms from './Transforms';
 
 export const examples = {
+  Empty,
   Svg,
   Rect,
   Circle,
