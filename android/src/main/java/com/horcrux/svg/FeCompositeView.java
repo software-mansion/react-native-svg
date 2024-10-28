@@ -90,6 +90,7 @@ class FeCompositeView extends FilterPrimitiveView {
         int[] pixels2 = new int[nPixels];
         result.getPixels(
             pixels1, 0, result.getWidth(), 0, 0, result.getWidth(), result.getHeight());
+        in2.getPixels(pixels2, 0, result.getWidth(), 0, 0, result.getWidth(), result.getHeight());
 
         for (int i = 0; i < nPixels; i++) {
           int color1 = pixels1[i];
