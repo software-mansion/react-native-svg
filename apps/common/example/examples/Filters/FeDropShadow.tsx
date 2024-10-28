@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Circle,
-  FeDropShadow,
-  FeFlood,
-  Filter,
-  Rect,
-  Svg,
-} from 'react-native-svg';
+import {Circle, FeDropShadow, Filter, Svg} from 'react-native-svg';
 
 BasicMDN.title = 'Basic MDN example';
 function BasicMDN() {
@@ -35,23 +28,17 @@ function BasicMDN() {
 }
 
 const icon = (
-  <Svg height="30" width="30" viewBox="0 0 140 140">
-    <Filter
-      id="floodFilterIcon"
-      x="50%"
-      filterUnits="userSpaceOnUse"
-      primitiveUnits="userSpaceOnUse">
-      <FeFlood
-        y="-10%"
-        x="10%"
-        width="50%"
-        height="50%"
-        floodColor="yellow"
-        floodOpacity="0.5"
-      />
+  <Svg height="30" width="30" viewBox="0 0 100 100">
+    <Filter id="dropShadowIcon" x="-1" width="3" y="-1" height="3">
+      <FeDropShadow dx="3" dy="3" stdDeviation="2" floodOpacity="0.7" />
     </Filter>
-    <Rect x="0" y="0" width="100" height="100" fill="blue" />
-    <Circle cx="50" cy="50" r="40" filter="url(#floodFilterIcon)" />
+    <Circle
+      cx="50"
+      cy="50"
+      r="30"
+      fill="lightblue"
+      filter="url(#dropShadowIcon)"
+    />
   </Svg>
 );
 const samples = [BasicMDN];
