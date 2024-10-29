@@ -19,6 +19,7 @@ struct SymbolProps : SymbolPropsT<SymbolProps, SvgGroupCommonProps> {
 
   REACT_SVG_NODE_COMMON_PROPS;
   REACT_SVG_RENDERABLE_COMMON_PROPS;
+  REACT_SVG_GROUP_COMMON_PROPS;
 
   REACT_FIELD(minX)
   float minX{0.0f};
@@ -40,8 +41,6 @@ struct SymbolView : SymbolViewT<SymbolView, RNSVG::implementation::GroupView> {
   SymbolView() = default;
 
 #ifdef USE_FABRIC
-  SymbolView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
   // IRenderableFabric
@@ -72,14 +71,11 @@ struct SymbolView : SymbolViewT<SymbolView, RNSVG::implementation::GroupView> {
   float m_vbHeight{0.0f};
   std::string m_align{""};
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
-
-#ifdef USE_FABRIC
-  com_ptr<SymbolProps> m_props;
-#endif
-
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct SymbolView : SymbolViewT<SymbolView, implementation::SymbolView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

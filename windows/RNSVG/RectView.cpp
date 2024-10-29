@@ -22,18 +22,8 @@ void RectProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-RectView::RectView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void RectView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGRect", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::RectProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::RectView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::RectProps, RectView>(L"RNSVGRect", builder);
 }
 
 void RectView::UpdateProperties(
@@ -43,14 +33,12 @@ void RectView::UpdateProperties(
     bool invalidate) noexcept {
   auto rectProps = props.try_as<RectProps>();
   if (rectProps) {
-    m_props = rectProps;
-
-    m_x = m_props->x;
-    m_y = m_props->y;
-    m_width = m_props->width;
-    m_height = m_props->height;
-    m_rx = m_props->rx;
-    m_ry = m_props->ry;
+    m_x = rectProps->x;
+    m_y = rectProps->y;
+    m_width = rectProps->width;
+    m_height = rectProps->height;
+    m_rx = rectProps->rx;
+    m_ry = rectProps->ry;
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);

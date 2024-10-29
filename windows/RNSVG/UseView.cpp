@@ -21,18 +21,8 @@ void UseProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-UseView::UseView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void UseView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGUse", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::UseProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::UseView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::UseProps, UseView>(L"RNSVGUse", builder);
 }
 
 void UseView::UpdateProperties(
@@ -42,13 +32,11 @@ void UseView::UpdateProperties(
     bool invalidate) noexcept {
   auto useProps = props.try_as<UseProps>();
   if (useProps) {
-    m_props = useProps;
-
-    m_href = winrt::to_hstring(m_props->href);
-    m_x = m_props->x;
-    m_y = m_props->y;
-    m_width = m_props->width;
-    m_height = m_props->height;
+    m_href = winrt::to_hstring(useProps->href);
+    m_x = useProps->x;
+    m_y = useProps->y;
+    m_width = useProps->width;
+    m_height = useProps->height;
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);

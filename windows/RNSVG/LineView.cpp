@@ -22,18 +22,8 @@ void LineProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-LineView::LineView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void LineView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGLine", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::LineProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::LineView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::LineProps, LineView>(L"RNSVGLine", builder);
 }
 
 void LineView::UpdateProperties(
@@ -43,12 +33,10 @@ void LineView::UpdateProperties(
     bool invalidate) noexcept {
   auto lineProps = props.try_as<LineProps>();
   if (lineProps) {
-    m_props = lineProps;
-
-    m_x1 = m_props->x1;
-    m_y1 = m_props->y1;
-    m_x2 = m_props->x2;
-    m_y2 = m_props->y2;
+    m_x1 = lineProps->x1;
+    m_y1 = lineProps->y1;
+    m_x2 = lineProps->x2;
+    m_y2 = lineProps->y2;
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);

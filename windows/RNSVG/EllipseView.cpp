@@ -21,18 +21,8 @@ void EllipseProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-EllipseView::EllipseView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void EllipseView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGEllipse", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::EllipseProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::EllipseView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::EllipseProps, EllipseView>(L"RNSVGEllipse", builder);
 }
 
 void EllipseView::UpdateProperties(
@@ -42,12 +32,10 @@ void EllipseView::UpdateProperties(
     bool invalidate) noexcept {
   auto ellipseProps = props.try_as<EllipseProps>();
   if (ellipseProps) {
-    m_props = ellipseProps;
-
-    m_cx = m_props->cx;
-    m_cy = m_props->cy;
-    m_rx = m_props->rx;
-    m_ry = m_props->ry;
+    m_cx = ellipseProps->cx;
+    m_cy = ellipseProps->cy;
+    m_rx = ellipseProps->rx;
+    m_ry = ellipseProps->ry;
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);

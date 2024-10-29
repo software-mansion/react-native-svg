@@ -33,6 +33,7 @@ struct SvgTextCommonProps : SvgTextCommonPropsT<SvgTextCommonProps, SvgGroupComm
   REACT_SVG_NODE_COMMON_PROPS;
   REACT_SVG_RENDERABLE_COMMON_PROPS;
   REACT_SVG_GROUP_COMMON_PROPS;
+  REACT_SVG_TEXT_COMMON_PROPS;
 
   std::optional<std::vector<RNSVG::SVGLength>> dx;
   std::optional<std::vector<RNSVG::SVGLength>> dy;
@@ -53,8 +54,6 @@ struct TextView : TextViewT<TextView, RNSVG::implementation::GroupView> {
   TextView() = default;
 
 #ifdef USE_FABRIC
-  TextView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
   // IRenderableFabric
@@ -83,13 +82,11 @@ struct TextView : TextViewT<TextView, RNSVG::implementation::GroupView> {
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_dx{winrt::single_threaded_vector<RNSVG::SVGLength>()};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_dy{winrt::single_threaded_vector<RNSVG::SVGLength>()};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_rotate{winrt::single_threaded_vector<RNSVG::SVGLength>()};
-
-#ifdef USE_FABRIC
-  com_ptr<SvgTextCommonProps> m_props;
-#endif
-
 };
 } // namespace winrt::RNSVG::implementation
+
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct TextView : TextViewT<TextView, implementation::TextView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

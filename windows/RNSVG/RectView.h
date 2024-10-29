@@ -40,8 +40,6 @@ struct RectView : RectViewT<RectView, RNSVG::implementation::RenderableView> {
   RectView() = default;
 
 #ifdef USE_FABRIC
-  RectView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
   // IRenderableFabric
@@ -65,13 +63,11 @@ struct RectView : RectViewT<RectView, RNSVG::implementation::RenderableView> {
   RNSVG::SVGLength m_y{};
   RNSVG::SVGLength m_rx{};
   RNSVG::SVGLength m_ry{};
-
-#ifdef USE_FABRIC
-  com_ptr<RectProps> m_props;
-#endif
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct RectView : RectViewT<RectView, implementation::RectView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

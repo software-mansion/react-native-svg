@@ -19,6 +19,7 @@ struct RadialGradientProps : RadialGradientPropsT<RadialGradientProps, SvgGroupC
 
   REACT_SVG_NODE_COMMON_PROPS;
   REACT_SVG_RENDERABLE_COMMON_PROPS;
+  REACT_SVG_GROUP_COMMON_PROPS;
 
   REACT_FIELD(fx)
   RNSVG::SVGLength fx{0, winrt::RNSVG::LengthType::Unknown};
@@ -46,8 +47,6 @@ struct RadialGradientView : RadialGradientViewT<RadialGradientView, RNSVG::imple
   RadialGradientView() = default;
 
 #ifdef USE_FABRIC
-  RadialGradientView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
   // IRenderableFabric
@@ -74,10 +73,6 @@ struct RadialGradientView : RadialGradientViewT<RadialGradientView, RNSVG::imple
   std::vector<D2D1_GRADIENT_STOP> m_stops{};
   std::string m_gradientUnits{"objectBoundingBox"};
 
-#ifdef USE_FABRIC
-  com_ptr<RadialGradientProps> m_props;
-#endif
-
   // BrushView
   void CreateBrush();
   void UpdateBounds();
@@ -85,6 +80,9 @@ struct RadialGradientView : RadialGradientViewT<RadialGradientView, RNSVG::imple
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct RadialGradientView : RadialGradientViewT<RadialGradientView, implementation::RadialGradientView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif
+

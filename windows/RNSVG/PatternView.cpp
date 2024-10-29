@@ -22,19 +22,9 @@ void PatternProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-PatternView::PatternView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void PatternView::RegisterComponent(
     const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGPattern", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::PatternProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::PatternView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::PatternProps, PatternView>(L"RNSVGPattern", builder);
 }
 
 void PatternView::UpdateProperties(
@@ -44,24 +34,22 @@ void PatternView::UpdateProperties(
     bool invalidate) noexcept {
   auto patternProps = props.try_as<PatternProps>();
   if (patternProps) {
-    m_props = patternProps;
+    m_x = patternProps->x;
+    m_y = patternProps->y;
+    m_width = patternProps->width;
+    m_height = patternProps->height;
 
-    m_x = m_props->x;
-    m_y = m_props->y;
-    m_width = m_props->width;
-    m_height = m_props->height;
+    m_minX = patternProps->minX;
+    m_minY = patternProps->minY;
+    m_vbWidth = patternProps->vbWidth;
+    m_vbHeight = patternProps->vbHeight;
+    m_align = patternProps->align;
+    m_meetOrSlice = patternProps->meetOrSlice;
 
-    m_minX = m_props->minX;
-    m_minY = m_props->minY;
-    m_vbWidth = m_props->vbWidth;
-    m_vbHeight = m_props->vbHeight;
-    m_align = m_props->align;
-    m_meetOrSlice = m_props->meetOrSlice;
+    m_patternUnits = Utils::JSValueAsBrushUnits(patternProps->patternUnits);
+    m_patternContentUnits = Utils::JSValueAsBrushUnits(patternProps->patternContentUnits, "userSpaceOnUse");
 
-    m_patternUnits = Utils::JSValueAsBrushUnits(m_props->patternUnits);
-    m_patternContentUnits = Utils::JSValueAsBrushUnits(m_props->patternContentUnits, "userSpaceOnUse");
-
-    m_transform = Utils::JSValueAsD2DTransform(m_props->patternTransform);
+    m_transform = Utils::JSValueAsD2DTransform(patternProps->patternTransform);
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);

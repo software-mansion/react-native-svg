@@ -20,18 +20,8 @@ void SymbolProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-SymbolView::SymbolView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void SymbolView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGSymbol", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::SymbolProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::SymbolView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::SymbolProps, SymbolView>(L"RNSVGSymbol", builder);
 }
 
 void SymbolView::UpdateProperties(
@@ -41,14 +31,12 @@ void SymbolView::UpdateProperties(
     bool invalidate) noexcept {
   auto symbolProps = props.try_as<SymbolProps>();
   if (symbolProps) {
-    m_props = symbolProps;
-
-    m_minX = m_props->minX;
-    m_minY = m_props->minY;
-    m_vbWidth = m_props->vbWidth;
-    m_vbHeight = m_props->vbHeight;
-    m_align = m_props->align;
-    m_meetOrSlice = m_props->meetOrSlice;
+    m_minX = symbolProps->minX;
+    m_minY = symbolProps->minY;
+    m_vbWidth = symbolProps->vbWidth;
+    m_vbHeight = symbolProps->vbHeight;
+    m_align = symbolProps->align;
+    m_meetOrSlice = symbolProps->meetOrSlice;
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);

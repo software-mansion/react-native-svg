@@ -18,18 +18,8 @@ void MaskProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-MaskView::MaskView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void MaskView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGMask", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::MaskProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::MaskView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::MaskProps, MaskView>(L"RNSVGMask", builder);
 }
 
 void MaskView::UpdateProperties(
@@ -39,7 +29,6 @@ void MaskView::UpdateProperties(
     bool invalidate) noexcept {
   auto maskProps = props.try_as<MaskProps>();
   if (maskProps) {
-    m_props = maskProps;
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);

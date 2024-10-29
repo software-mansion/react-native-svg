@@ -36,6 +36,8 @@ void UpdateRootViewSizeToAppWindow(
       winrt::Microsoft::UI::Windowing::OverlappedPresenterState::Minimized) {
     winrt::Microsoft::ReactNative::LayoutConstraints constraints;
     constraints.MaximumSize = constraints.MinimumSize = size;
+    constraints.LayoutDirection =
+        winrt::Microsoft::ReactNative::LayoutDirection::Undefined;
     rootView.Arrange(constraints, {0, 0});
   }
 }

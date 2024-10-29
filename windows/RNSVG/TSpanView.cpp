@@ -23,18 +23,8 @@ void TSpanProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-TSpanView::TSpanView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void TSpanView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGTSpan", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::TSpanProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::TSpanView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::TSpanProps, TSpanView>(L"RNSVGTSpan", builder);
 }
 
 void TSpanView::UpdateProperties(
@@ -44,8 +34,7 @@ void TSpanView::UpdateProperties(
     bool invalidate) noexcept {
   auto tspanProps = props.try_as<TSpanProps>();
   if (tspanProps) {
-    m_props = tspanProps;
-    m_content = m_props->content;
+    m_content = tspanProps->content;
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);

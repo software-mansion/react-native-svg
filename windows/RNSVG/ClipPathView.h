@@ -26,8 +26,6 @@ struct ClipPathView : ClipPathViewT<ClipPathView, RNSVG::implementation::GroupVi
   ClipPathView() = default;
 
 #ifdef USE_FABRIC
-  ClipPathView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 #endif
 
@@ -36,6 +34,8 @@ struct ClipPathView : ClipPathViewT<ClipPathView, RNSVG::implementation::GroupVi
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct ClipPathView : ClipPathViewT<ClipPathView, implementation::ClipPathView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

@@ -90,8 +90,6 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   ImageView() = default;
 
 #ifdef USE_FABRIC
-  ImageView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
   // IRenderableFabric
@@ -119,10 +117,6 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   ImageSourceType m_type{ImageSourceType::Uri};
   ImageSourceFormat m_format{ImageSourceFormat::Bitmap};
 
-#ifdef USE_FABRIC
-  com_ptr<ImageProps> m_props;
-#endif
-
   // preserveAspectRatio
   std::string m_align{""};
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
@@ -143,6 +137,8 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct ImageView : ImageViewT<ImageView, implementation::ImageView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

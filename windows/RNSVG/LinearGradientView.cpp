@@ -21,18 +21,9 @@ void LinearGradientProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-LinearGradientView::LinearGradientView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void LinearGradientView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGLinearGradient", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::LinearGradientProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::LinearGradientView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::LinearGradientProps, LinearGradientView>(
+      L"RNSVGLinearGradient", builder);
 }
 
 void LinearGradientView::UpdateProperties(
@@ -42,16 +33,14 @@ void LinearGradientView::UpdateProperties(
     bool invalidate) noexcept {
   auto linearGradientProps = props.try_as<LinearGradientProps>();
   if (linearGradientProps) {
-    m_props = linearGradientProps;
+    m_x1 = linearGradientProps->x1;
+    m_y1 = linearGradientProps->y1;
+    m_x2 = linearGradientProps->x2;
+    m_y2 = linearGradientProps->y2;
 
-    m_x1 = m_props->x1;
-    m_y1 = m_props->y1;
-    m_x2 = m_props->x2;
-    m_y2 = m_props->y2;
-
-    m_stops = Utils::JSValueAsGradientStops(m_props->gradient);
-    m_gradientUnits = Utils::JSValueAsBrushUnits(m_props->gradientUnits);
-    m_transform = Utils::JSValueAsD2DTransform(m_props->gradientTransform);
+    m_stops = Utils::JSValueAsGradientStops(linearGradientProps->gradient);
+    m_gradientUnits = Utils::JSValueAsBrushUnits(linearGradientProps->gradientUnits);
+    m_transform = Utils::JSValueAsD2DTransform(linearGradientProps->gradientTransform);
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);

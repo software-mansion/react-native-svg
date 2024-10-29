@@ -20,6 +20,7 @@
 
 #ifdef USE_FABRIC
 #include <AutoDraw.h>
+#include <winrt/Microsoft.ReactNative.Composition.Experimental.h>
 #include <CompositionSwitcher.Experimental.interop.h>
 #endif
 
@@ -31,22 +32,19 @@ namespace winrt::RNSVG::implementation {
 
 #ifdef USE_FABRIC
 SvgViewProps::SvgViewProps(
-    const winrt::Microsoft::ReactNative::ViewProps &props)
-    : m_props(props) {}
+   const winrt::Microsoft::ReactNative::ViewProps &props)
+   : m_props(props) {}
 
 void SvgViewProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
+   uint32_t hash,
+   winrt::hstring propName,
+   winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+ winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-SvgView::SvgView(const winrt::Microsoft::ReactNative::Composition::CreateCompositionComponentViewArgs &args)
-    : base_type(args),
-      m_reactContext(args.ReactContext()),
-      m_compContext(
-            args.as<winrt::Microsoft::ReactNative::Composition::Experimental::IInternalCreateComponentViewArgs>()
-                .CompositionContext()) {}
+SvgView::SvgView(const winrt::Microsoft::ReactNative::Composition::Experimental::ICompositionContext &compContext)
+ : m_compContext(compContext)
+ {}
 
 winrt::Microsoft::ReactNative::Composition::Experimental::IVisual SvgView::CreateInternalVisual() {
   m_visual = m_compContext.CreateSpriteVisual();
@@ -55,52 +53,112 @@ winrt::Microsoft::ReactNative::Composition::Experimental::IVisual SvgView::Creat
 }
 
 void SvgView::MountChildComponentView(
-    const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-    uint32_t index) noexcept {
-  auto const &group{childComponentView.try_as<RNSVG::GroupView>()};
+   const winrt::Microsoft::ReactNative::ComponentView&,
+   const winrt::Microsoft::ReactNative::MountChildComponentViewArgs& args) noexcept
+{
+  auto childUserData = args.Child().UserData();
+  childUserData.as<IRenderableFabric>().SvgParent(*this);
 
-  if (group) {
-    // Every SvgView has exactly one child - a Group that gets
-    // all of Svg's children piped through.
-    Group(group);
+  if (childUserData) {
+    auto const &group{childUserData.try_as<RNSVG::GroupView>()};
+    if (group) {
+      // Every SvgView has exactly one child - a Group that gets
+      // all of Svg's children piped through.
+      Group(group);
+    }
   }
-
-  base_type::MountChildComponentView(childComponentView, index);
 }
 
 void SvgView::UnmountChildComponentView(
-    const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-    uint32_t index) noexcept {
+   const winrt::Microsoft::ReactNative::ComponentView&,
+   const winrt::Microsoft::ReactNative::UnmountChildComponentViewArgs& args) noexcept
+{
+  auto userData = args.Child().UserData();
+  userData.as<IRenderableFabric>().SvgParent(nullptr);
+
   if (Group()) {
     Group().Unload();
   }
   Group(nullptr);
-
-  base_type::UnmountChildComponentView(childComponentView, index);
 }
 
 void SvgView::OnThemeChanged() noexcept {
   Invalidate();
-  base_type::OnThemeChanged();
 }
 
 void SvgView::UpdateProps(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::ComponentView& /*view*/,
+    const winrt::Microsoft::ReactNative::IComponentProps &newProps,
     const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept {
-  UpdateProperties(props, oldProps);
+  UpdateProperties(newProps, oldProps);
+}
+
+void SvgView::Initialize(const winrt::Microsoft::ReactNative::ComponentView &sender) noexcept {
+  auto view = sender.as<winrt::Microsoft::ReactNative::Composition::ViewComponentView>();
+  m_wkView = view;
+
+  sender.as<winrt::Microsoft::ReactNative::Composition::Experimental::IInternalCreateVisual>()
+      .CreateInternalVisualHandler([wkThis = get_weak()](const winrt::Microsoft::ReactNative::ComponentView &) {
+        return wkThis.get()->CreateInternalVisual();
+      });
+
+  sender.LayoutMetricsChanged(
+      [wkThis = get_weak()](
+          const winrt::IInspectable &, const winrt::Microsoft::ReactNative::LayoutMetricsChangedArgs &args) {
+        if (auto strongThis = wkThis.get()) {
+          strongThis->UpdateLayoutMetrics(args.NewLayoutMetrics(), args.OldLayoutMetrics());
+        }
+  });
+
+  view.ThemeChanged(
+      [wkThis = get_weak()](const winrt::IInspectable & /*sender*/, const winrt::IInspectable & /*args*/) {
+        if (auto strongThis = wkThis.get()) {
+          strongThis->OnThemeChanged();
+        }
+      });
 }
 
 void SvgView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(L"RNSVGSvgView", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-    builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-      return winrt::make<winrt::RNSVG::implementation::SvgViewProps>(props);
-    });
-    auto compBuilder = builder.as<winrt::Microsoft::ReactNative::Composition::IReactCompositionViewComponentBuilder>();
-    compBuilder.SetCreateViewComponentView([](const winrt::Microsoft::ReactNative::Composition::CreateCompositionComponentViewArgs &args) noexcept {
-      args.Features(args.Features() & ~winrt::Microsoft::ReactNative::Composition::ComponentViewFeatures::Background);
-      return winrt::make<winrt::RNSVG::implementation::SvgView>(args);
-    });
-  });
+   builder.AddViewComponent(L"RNSVGSvgView", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<SvgViewProps>(props);
+        });
+        auto compBuilder =
+            builder.as<winrt::Microsoft::ReactNative::Composition::IReactCompositionViewComponentBuilder>();
+
+        compBuilder.SetViewComponentViewInitializer(
+            [](const winrt::Microsoft::ReactNative::ComponentView &view) noexcept {
+              auto userData = winrt::make_self<SvgView>(
+                  view.as<winrt::Microsoft::ReactNative::Composition::Experimental::IInternalComponentView>()
+                      .CompositionContext());
+              userData->Initialize(view);
+              view.UserData(*userData);
+            });
+
+        builder.SetUpdatePropsHandler([](const winrt::Microsoft::ReactNative::ComponentView &view,
+                                         const winrt::Microsoft::ReactNative::IComponentProps &newProps,
+                                         const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept {
+          auto userData = view.UserData().as<SvgView>();
+          userData->UpdateProps(view, newProps, oldProps);
+        });
+
+          builder.SetMountChildComponentViewHandler(
+              [](const winrt::Microsoft::ReactNative::ComponentView &view,
+                 const winrt::Microsoft::ReactNative::MountChildComponentViewArgs &args) noexcept {
+                auto userData = view.UserData().as<SvgView>();
+                return userData->MountChildComponentView(view, args);
+              });
+
+          builder.SetUnmountChildComponentViewHandler(
+              [](const winrt::Microsoft::ReactNative::ComponentView &view,
+                 const winrt::Microsoft::ReactNative::UnmountChildComponentViewArgs &args) noexcept {
+                auto userData = view.UserData().as<SvgView>();
+                return userData->UnmountChildComponentView(view, args);
+              });
+
+      });
+
+   // TODO how to remove featureflag Background?
 }
 
 void SvgView::UpdateProperties(
@@ -153,12 +211,19 @@ void SvgView::UpdateLayoutMetrics(
     const LayoutMetrics &metrics,
     const LayoutMetrics &oldMetrics) {
   m_layoutMetrics = metrics;
-  base_type::UpdateLayoutMetrics(metrics, oldMetrics);
 
   if (metrics != oldMetrics) {
     Invalidate();
   }
 }
+
+winrt::Microsoft::ReactNative::Composition::Theme SvgView::Theme() const noexcept {
+  if (auto view = m_wkView.get()) {
+    return view.Theme();
+  }
+  return nullptr;
+}
+
 #else
 SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
   uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;

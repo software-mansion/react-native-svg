@@ -28,7 +28,15 @@ struct ColorStruct {
   std::string brushRef;
 
   bool operator==(const ColorStruct &rhs) const {
-    return type == rhs.type && payload == rhs.payload && brushRef == rhs.brushRef;
+    if (type != rhs.type || brushRef != rhs.brushRef)
+      return false;
+    
+    // When we move to a RNW version that provides Color::Equals switch to that for the payload comparison
+    auto writer = winrt::Microsoft::ReactNative::MakeJSValueTreeWriter();
+    winrt::Microsoft::ReactNative::WriteValue(writer, payload);
+    auto rhsWriter = winrt::Microsoft::ReactNative::MakeJSValueTreeWriter();
+    winrt::Microsoft::ReactNative::WriteValue(rhsWriter, rhs.payload);
+    return winrt::Microsoft::ReactNative::TakeJSValue(writer).Equals(winrt::Microsoft::ReactNative::TakeJSValue(rhsWriter));
   }
 
   bool operator!=(const ColorStruct &rhs) const {
@@ -129,22 +137,23 @@ struct RenderableView : RenderableViewT<RenderableView> {
   RenderableView() = default;
 
 #ifdef USE_FABRIC
-  RenderableView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   // IRenderableFabric
-  winrt::Microsoft::ReactNative::ComponentView SvgParent() { return Parent(); }
+  IRenderableFabric SvgParent() { return m_parent; }
+  void SvgParent(IRenderableFabric const &value) { m_parent = value; }
+
   winrt::Microsoft::ReactNative::Color Fill() { return m_fill; }
   winrt::Microsoft::ReactNative::Color Stroke() { return m_stroke; }
 
   // ComponentView
   void MountChildComponentView(
-      const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-      uint32_t index) noexcept;
+      const winrt::Microsoft::ReactNative::ComponentView &view,
+      const winrt::Microsoft::ReactNative::MountChildComponentViewArgs &args) noexcept;
   void UnmountChildComponentView(
-      const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-      uint32_t index) noexcept;
+      const winrt::Microsoft::ReactNative::ComponentView &view,
+      const winrt::Microsoft::ReactNative::UnmountChildComponentViewArgs &args) noexcept;
 
   virtual void UpdateProps(
+      const winrt::Microsoft::ReactNative::ComponentView & /*view*/,
       const winrt::Microsoft::ReactNative::IComponentProps &props,
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept;
 
@@ -154,6 +163,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
       bool forceUpdate = true,
       bool invalidate = true) noexcept;
+
+  const winrt::Windows::Foundation::Collections::IVector<IRenderable> &Children() const noexcept;
 #else
   RenderableView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {}
 
@@ -225,7 +236,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
 
  private:
 #ifdef USE_FABRIC
-  winrt::Microsoft::ReactNative::ComponentView m_parent{nullptr};
+  IRenderableFabric m_parent{nullptr};
   winrt::Microsoft::ReactNative::Color m_fill{winrt::Microsoft::ReactNative::Color::Black()};
   winrt::Microsoft::ReactNative::Color m_stroke{winrt::Microsoft::ReactNative::Color::Transparent()};
 
@@ -233,6 +244,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
     std::optional<ColorStruct> &propValue,
     winrt::Microsoft::ReactNative::Color const &fallbackColor,
     std::string propName);
+    winrt::Windows::Foundation::Collections::IVector<IRenderable> m_children{ winrt::single_threaded_vector<IRenderable>() };
 #else
   xaml::FrameworkElement m_parent{nullptr};
   Windows::UI::Color m_fill{Colors::Black()};
@@ -266,6 +278,42 @@ struct RenderableView : RenderableViewT<RenderableView> {
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifdef USE_FABRIC
+template<typename TProps, typename TUserData>
+void RegisterRenderableComponent(const winrt::hstring& name, const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      name, [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetComponentViewInitializer([](const winrt::Microsoft::ReactNative::ComponentView &view) noexcept {
+          auto userData = winrt::make_self<TUserData>();
+          view.UserData(*userData);
+        });
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<TProps>(props);
+        });
+        builder.SetUpdatePropsHandler([](const winrt::Microsoft::ReactNative::ComponentView &view,
+                                         const winrt::Microsoft::ReactNative::IComponentProps &newProps,
+                                         const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept {
+          auto userData = view.UserData().as<TUserData>();
+          userData->UpdateProps(view, newProps, oldProps);
+        });
+        builder.SetMountChildComponentViewHandler(
+            [](const winrt::Microsoft::ReactNative::ComponentView &view,
+               const winrt::Microsoft::ReactNative::MountChildComponentViewArgs &args) noexcept {
+              auto userData = view.UserData().as<TUserData>();
+              return userData->MountChildComponentView(view, args);
+            });
+        builder.SetUnmountChildComponentViewHandler(
+            [](const winrt::Microsoft::ReactNative::ComponentView &view,
+               const winrt::Microsoft::ReactNative::UnmountChildComponentViewArgs &args) noexcept {
+              auto userData = view.UserData().as<TUserData>();
+              return userData->UnmountChildComponentView(view, args);
+            });
+      });
+}
+#endif
+
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct RenderableView : RenderableViewT<RenderableView, implementation::RenderableView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

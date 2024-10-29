@@ -21,20 +21,10 @@ void RadialGradientProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-RadialGradientView::RadialGradientView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args)
-    : base_type(args) {}
-
 void RadialGradientView::RegisterComponent(
     const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGRadialGradient", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::RadialGradientProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::RadialGradientView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::RadialGradientProps, RadialGradientView>(
+      L"RNSVGRadialGradient", builder);
 }
 
 void RadialGradientView::UpdateProperties(
@@ -44,18 +34,16 @@ void RadialGradientView::UpdateProperties(
     bool invalidate) noexcept {
   auto radialGradientProps = props.try_as<RadialGradientProps>();
   if (radialGradientProps) {
-    m_props = radialGradientProps;
+    m_rx = radialGradientProps->rx;
+    m_ry = radialGradientProps->ry;
+    m_fx = radialGradientProps->fx;
+    m_fy = radialGradientProps->fy;
+    m_cx = radialGradientProps->cx;
+    m_cy = radialGradientProps->cy;
 
-    m_rx = m_props->rx;
-    m_ry = m_props->ry;
-    m_fx = m_props->fx;
-    m_fy = m_props->fy;
-    m_cx = m_props->cx;
-    m_cy = m_props->cy;
-
-    m_stops = Utils::JSValueAsGradientStops(m_props->gradient);
-    m_gradientUnits = Utils::JSValueAsBrushUnits(m_props->gradientUnits);
-    m_transform = Utils::JSValueAsD2DTransform(m_props->gradientTransform);
+    m_stops = Utils::JSValueAsGradientStops(radialGradientProps->gradient);
+    m_gradientUnits = Utils::JSValueAsBrushUnits(radialGradientProps->gradientUnits);
+    m_transform = Utils::JSValueAsD2DTransform(radialGradientProps->gradientTransform);
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);

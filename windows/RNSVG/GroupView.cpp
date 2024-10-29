@@ -26,20 +26,8 @@ void SvgGroupCommonProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-GroupView::GroupView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args)
-    : base_type(args), m_reactContext(args.ReactContext()) {}
-
 void GroupView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGGroup", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::SvgGroupCommonProps>(props);
-        });
-        builder.SetCreateComponentView(
-        [](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::GroupView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::SvgGroupCommonProps, GroupView>(L"RNSVGGroup", builder);
 }
 
 void GroupView::UpdateProperties(
@@ -50,7 +38,7 @@ void GroupView::UpdateProperties(
   auto groupProps = props.as<SvgGroupCommonProps>();
   auto oldGroupProps = oldProps ? oldProps.as<SvgGroupCommonProps>() : nullptr;
 
-  auto const &parent{Parent().try_as<RNSVG::GroupView>()};
+  auto const &parent{SvgParent().try_as<RNSVG::GroupView>()};
 
   if (!oldGroupProps || groupProps->font != oldGroupProps->font) {
     if (forceUpdate || !m_fontPropMap[RNSVG::FontProp::FontSize]) {
@@ -86,11 +74,14 @@ void GroupView::UpdateProperties(
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, false);
 
+  /*
   for (auto const &child : Children()) {
+    //auto rchild = winrt::get_self<RenderableView>(child);
     child.as<IRenderableFabric>().UpdateProperties(props, oldProps, false, false);
   }
+  */
 
-  if (invalidate && Parent()) {
+  if (invalidate && SvgParent()) {
     SvgRoot().Invalidate();
   }
 }
@@ -274,7 +265,6 @@ void GroupView::Unload() {
     child.as<IRenderable>().Unload();
   }
 
-  m_reactContext = nullptr;
   m_fontPropMap.clear();
 
 #ifndef USE_FABRIC

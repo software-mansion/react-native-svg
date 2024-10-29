@@ -85,9 +85,8 @@ struct GroupView
     : GroupViewT<GroupView, RNSVG::implementation::RenderableView> {
  public:
   GroupView() = default;
-#ifdef USE_FABRIC
-  GroupView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
+#ifdef USE_FABRIC
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
   // IRenderableFabric
@@ -97,7 +96,7 @@ struct GroupView
     bool forceUpdate = true,
     bool invalidate = true) noexcept override;
 #else
-  GroupView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {}
+  GroupView(Microsoft::ReactNative::IReactContext const & /*context*/) {}
 
   Windows::Foundation::Collections::IVector<RNSVG::IRenderable> Children() { return m_children; }
 
@@ -126,7 +125,6 @@ struct GroupView
   virtual void DrawGroup(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 
  private:
-  Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
 
 #ifndef USE_FABRIC
   Windows::Foundation::Collections::IVector<RNSVG::IRenderable> m_children{
@@ -145,6 +143,8 @@ struct GroupView
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct GroupView : GroupViewT<GroupView, implementation::GroupView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

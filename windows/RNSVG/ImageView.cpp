@@ -35,18 +35,8 @@ void ImageProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-ImageView::ImageView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void ImageView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGImage", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::ImageProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::ImageView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::ImageProps, ImageView>(L"RNSVGImage", builder);
 }
 
 void ImageView::UpdateProperties(
@@ -57,23 +47,21 @@ void ImageView::UpdateProperties(
   auto imageProps = props.try_as<ImageProps>();
   auto oldImageProps = oldProps.try_as<ImageProps>();
   if (imageProps) {
-    m_props = imageProps;
-
-    m_x = m_props->x;
-    m_y = m_props->y;
-    m_width = m_props->width;
-    m_height = m_props->height;
+    m_x = imageProps->x;
+    m_y = imageProps->y;
+    m_width = imageProps->width;
+    m_height = imageProps->height;
     
     // preserveAspectRatio
-    m_align = m_props->align;
-    m_meetOrSlice = m_props->meetOrSlice;
+    m_align = imageProps->align;
+    m_meetOrSlice = imageProps->meetOrSlice;
 
     // IamgeSource
-    m_source.uri = m_props->src.uri;
-    m_source.method = m_props->src.method;
-    m_source.width = m_props->src.width;
-    m_source.height = m_props->src.height;
-    m_source.scale = m_props->src.scale;
+    m_source.uri = imageProps->src.uri;
+    m_source.method = imageProps->src.method;
+    m_source.width = imageProps->src.width;
+    m_source.height = imageProps->src.height;
+    m_source.scale = imageProps->src.scale;
 
     if (!oldImageProps || (oldImageProps->src.uri != imageProps->src.uri)) {
       LoadImageSourceAsync(true);

@@ -30,8 +30,6 @@ struct PathView : PathViewT<PathView, RNSVG::implementation::RenderableView> {
   PathView() = default;
 
 #ifdef USE_FABRIC
-  PathView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
   // IRenderableFabric
@@ -52,10 +50,6 @@ struct PathView : PathViewT<PathView, RNSVG::implementation::RenderableView> {
   std::string m_d;
   std::vector<float> m_segmentData;
   std::vector<D2D1_SVG_PATH_COMMAND> m_commands;
-
-#ifdef USE_FABRIC
-  com_ptr<PathProps> m_props;
-#endif
 
   std::unordered_map<char, D2D1_SVG_PATH_COMMAND> m_cmds{
       {'M', D2D1_SVG_PATH_COMMAND_MOVE_ABSOLUTE},
@@ -97,6 +91,8 @@ struct PathView : PathViewT<PathView, RNSVG::implementation::RenderableView> {
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct PathView : PathViewT<PathView, implementation::PathView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

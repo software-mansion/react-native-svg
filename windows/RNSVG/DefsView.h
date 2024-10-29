@@ -19,6 +19,8 @@ struct DefsProps : DefsPropsT<DefsProps, SvgGroupCommonProps> {
 
   REACT_SVG_NODE_COMMON_PROPS;
   REACT_SVG_RENDERABLE_COMMON_PROPS;
+  REACT_SVG_GROUP_COMMON_PROPS;
+
 };
 #endif
 
@@ -27,8 +29,6 @@ struct DefsView : DefsViewT<DefsView, RNSVG::implementation::GroupView> {
   DefsView() = default;
 
 #ifdef USE_FABRIC
-  DefsView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 #endif
 
@@ -37,6 +37,8 @@ struct DefsView : DefsViewT<DefsView, RNSVG::implementation::GroupView> {
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct DefsView : DefsViewT<DefsView, implementation::DefsView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

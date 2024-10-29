@@ -36,8 +36,6 @@ struct EllipseView : EllipseViewT<EllipseView, RNSVG::implementation::Renderable
   EllipseView() = default;
 
 #ifdef USE_FABRIC
-  EllipseView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
   
   // IRenderableFabric
@@ -59,12 +57,11 @@ struct EllipseView : EllipseViewT<EllipseView, RNSVG::implementation::Renderable
   RNSVG::SVGLength m_cy{};
   RNSVG::SVGLength m_rx{};
   RNSVG::SVGLength m_ry{};
-
-#ifdef USE_FABRIC
-  com_ptr<EllipseProps> m_props;
-#endif
 };
 } // namespace winrt::RNSVG::implementation
+
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct EllipseView : EllipseViewT<EllipseView, implementation::EllipseView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

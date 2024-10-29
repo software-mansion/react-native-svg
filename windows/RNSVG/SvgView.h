@@ -5,6 +5,7 @@
 #ifdef USE_FABRIC
 #include "SvgViewProps.g.h"
 
+#include <winrt/Microsoft.ReactNative.Composition.Experimental.h>
 #include <JSValueComposition.h>
 #include "NativeModules.h"
 #endif
@@ -51,12 +52,14 @@ struct SvgViewProps : SvgViewPropsT<SvgViewProps> {
 
 struct SvgView : SvgViewT<SvgView> {
  public:
+#ifndef USE_FABRIC
   SvgView() = default;
+#endif
 
 #ifdef USE_FABRIC
-  SvgView(const winrt::Microsoft::ReactNative::Composition::CreateCompositionComponentViewArgs &args);
-
-  winrt::Microsoft::ReactNative::ComponentView SvgParent() { return Parent(); }
+  SvgView(const winrt::Microsoft::ReactNative::Composition::Experimental::ICompositionContext &compContext);
+  IRenderableFabric SvgParent() { return m_parent; }
+  void SvgParent(IRenderableFabric const &value) { m_parent = value; }
   winrt::Microsoft::ReactNative::Color CurrentColor() { return m_currentColor; }
 
   // IRenderableFabric
@@ -72,20 +75,27 @@ struct SvgView : SvgViewT<SvgView> {
 
   // ComponentView
   void UpdateProps(
-      const winrt::Microsoft::ReactNative::IComponentProps &props,
-      const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept;
+      const winrt::Microsoft::ReactNative::ComponentView & /*view*/,
+      const winrt::Microsoft::ReactNative::IComponentProps &newProps,
+      const winrt::Microsoft::ReactNative::IComponentProps & /*oldProps*/) noexcept;
   void UpdateLayoutMetrics(
       const winrt::Microsoft::ReactNative::LayoutMetrics &metrics,
       const winrt::Microsoft::ReactNative::LayoutMetrics &oldMetrics);
-  void MountChildComponentView(
-      const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-      uint32_t index) noexcept;
+    void MountChildComponentView(
+      const winrt::Microsoft::ReactNative::ComponentView& view,
+      const winrt::Microsoft::ReactNative::MountChildComponentViewArgs& args) noexcept;
   void UnmountChildComponentView(
-      const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-      uint32_t index) noexcept;
+      const winrt::Microsoft::ReactNative::ComponentView& view,
+      const winrt::Microsoft::ReactNative::UnmountChildComponentViewArgs& args) noexcept;
+
   void OnThemeChanged() noexcept;
 
+  void Initialize(const winrt::Microsoft::ReactNative::ComponentView & /*view*/) noexcept;
+
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+
+  winrt::Microsoft::ReactNative::Composition::Theme Theme() const noexcept;
+
 #else
   SvgView(winrt::Microsoft::ReactNative::IReactContext const &context);
 
@@ -140,10 +150,12 @@ struct SvgView : SvgViewT<SvgView> {
 
  private:
 #ifdef USE_FABRIC
+  IRenderableFabric m_parent{nullptr};
   winrt::Microsoft::ReactNative::Composition::Experimental::ISpriteVisual m_visual{nullptr};
   winrt::Microsoft::ReactNative::Color m_currentColor{nullptr};
   winrt::Microsoft::ReactNative::LayoutMetrics m_layoutMetrics{{0, 0, 0, 0}, 1.0};
   winrt::Microsoft::ReactNative::Composition::Experimental::ICompositionContext m_compContext{nullptr};
+  winrt::weak_ref<winrt::Microsoft::ReactNative::Composition::ViewComponentView> m_wkView;
 #else
   bool m_loaded{false};
   xaml::FrameworkElement m_parent{nullptr};
@@ -180,6 +192,8 @@ struct SvgView : SvgViewT<SvgView> {
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct SvgView : SvgViewT<SvgView, implementation::SvgView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

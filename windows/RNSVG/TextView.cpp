@@ -21,18 +21,8 @@ void SvgTextCommonProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-TextView::TextView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void TextView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGText", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::SvgTextCommonProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::TextView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::SvgTextCommonProps, TextView>(L"RNSVGText", builder);
 }
 
 void TextView::UpdateProperties(
@@ -42,8 +32,6 @@ void TextView::UpdateProperties(
     bool invalidate) noexcept {
   auto textProps = props.try_as<SvgTextCommonProps>();
   if (textProps) {
-    m_props = textProps;
-
     if (textProps->x != std::nullopt) {
       m_x.Clear();
 

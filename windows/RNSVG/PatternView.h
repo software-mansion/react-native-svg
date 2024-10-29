@@ -19,6 +19,7 @@ struct PatternProps : PatternPropsT<PatternProps, SvgGroupCommonProps> {
 
   REACT_SVG_NODE_COMMON_PROPS;
   REACT_SVG_RENDERABLE_COMMON_PROPS;
+  REACT_SVG_GROUP_COMMON_PROPS;
 
   REACT_FIELD(x)
   RNSVG::SVGLength x{0, winrt::RNSVG::LengthType::Unknown};
@@ -55,8 +56,6 @@ struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView>
   PatternView() = default;
   
 #ifdef USE_FABRIC
-  PatternView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
   // IRenderableFabric
@@ -89,10 +88,6 @@ struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView>
   std::string m_align{""};
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
   
-#ifdef USE_FABRIC
-  com_ptr<PatternProps> m_props;
-#endif
-
   // BrushView
   void CreateBrush();
   void UpdateBounds();
@@ -104,6 +99,9 @@ struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView>
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct PatternView : PatternViewT<PatternView, implementation::PatternView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif
+

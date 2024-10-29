@@ -52,8 +52,6 @@ struct MarkerView : MarkerViewT<MarkerView, RNSVG::implementation::GroupView> {
   MarkerView() = default;
 
 #ifdef USE_FABRIC
-  MarkerView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
   
   // IRenderableFabric
@@ -68,14 +66,11 @@ struct MarkerView : MarkerViewT<MarkerView, RNSVG::implementation::GroupView> {
   void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size const & /*size*/){};
 
  private:
-
-#ifdef USE_FABRIC
-  com_ptr<MarkerProps> m_props;
-#endif
-
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct MarkerView : MarkerViewT<MarkerView, implementation::MarkerView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

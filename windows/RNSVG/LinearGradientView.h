@@ -43,8 +43,6 @@ struct LinearGradientView : LinearGradientViewT<LinearGradientView, RNSVG::imple
   LinearGradientView() = default;
 
 #ifdef USE_FABRIC
-  LinearGradientView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
   // IRenderableFabric
@@ -69,10 +67,6 @@ struct LinearGradientView : LinearGradientViewT<LinearGradientView, RNSVG::imple
   std::vector<D2D1_GRADIENT_STOP> m_stops{};
   std::string m_gradientUnits{"objectBoundingBox"};
 
-#ifdef USE_FABRIC
-  com_ptr<LinearGradientProps> m_props;
-#endif
-
   // BrushView
   void CreateBrush();
   void UpdateBounds();
@@ -80,6 +74,8 @@ struct LinearGradientView : LinearGradientViewT<LinearGradientView, RNSVG::imple
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct LinearGradientView : LinearGradientViewT<LinearGradientView, implementation::LinearGradientView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

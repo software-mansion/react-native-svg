@@ -38,8 +38,6 @@ struct UseView : UseViewT<UseView, RNSVG::implementation::RenderableView> {
   UseView() = default;
 
 #ifdef USE_FABRIC
-  UseView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   // IRenderableFabric
   void UpdateProperties(
       const winrt::Microsoft::ReactNative::IComponentProps &props,
@@ -63,14 +61,12 @@ private:
   RNSVG::SVGLength m_width{};
   RNSVG::SVGLength m_height{};
 
-#ifdef USE_FABRIC
-  com_ptr<UseProps> m_props;
-#endif
-
   RNSVG::IRenderable GetRenderableTemplate();
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct UseView : UseViewT<UseView, implementation::UseView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

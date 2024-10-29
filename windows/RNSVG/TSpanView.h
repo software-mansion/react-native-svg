@@ -32,8 +32,6 @@ public:
   TSpanView() = default;
 
 #ifdef USE_FABRIC
-  TSpanView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
   // IRenderableFabric
@@ -52,14 +50,12 @@ public:
 
  private:
   std::string m_content;
-
-#ifdef USE_FABRIC
-  com_ptr<TSpanProps> m_props;
-#endif
-
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct TSpanView : TSpanViewT<TSpanView, implementation::TSpanView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif
+

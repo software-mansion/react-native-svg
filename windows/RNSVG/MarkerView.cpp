@@ -18,18 +18,8 @@ void MarkerProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-MarkerView::MarkerView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void MarkerView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGMarker", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::MarkerProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::MarkerView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::MarkerProps, MarkerView>(L"RNSVGMarker", builder);
 }
 
 void MarkerView::UpdateProperties(
@@ -39,7 +29,6 @@ void MarkerView::UpdateProperties(
     bool invalidate) noexcept {
   auto markerProps = props.try_as<MarkerProps>();
   if (markerProps) {
-    m_props = markerProps;
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);

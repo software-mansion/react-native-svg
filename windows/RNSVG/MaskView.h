@@ -40,8 +40,6 @@ struct MaskView : MaskViewT<MaskView, RNSVG::implementation::GroupView> {
   MaskView() = default;
 
 #ifdef USE_FABRIC
-  MaskView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
   // IRenderableFabric
@@ -56,14 +54,11 @@ struct MaskView : MaskViewT<MaskView, RNSVG::implementation::GroupView> {
   void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size const & /*size*/){};
 
  private:
-
-#ifdef USE_FABRIC
-  com_ptr<MaskProps> m_props;
-#endif
-
 };
 } // namespace winrt::RNSVG::implementation
 
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct MaskView : MaskViewT<MaskView, implementation::MaskView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

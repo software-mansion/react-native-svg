@@ -132,7 +132,7 @@ struct D2DHelpers {
 
   static DWRITE_FONT_WEIGHT FontWeightFrom(
 #ifdef USE_FABRIC
-      winrt::Microsoft::ReactNative::ComponentView const &parent,
+      IRenderableFabric const &parent,
 #else
       xaml::FrameworkElement const &parent,
 #endif

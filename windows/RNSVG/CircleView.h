@@ -34,8 +34,6 @@ struct CircleView : CircleViewT<CircleView, RNSVG::implementation::RenderableVie
   CircleView() = default;
 
 #ifdef USE_FABRIC
-  CircleView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-
   static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
   // IRenderableFabric
@@ -62,6 +60,9 @@ struct CircleView : CircleViewT<CircleView, RNSVG::implementation::RenderableVie
 #endif
 };
 } // namespace winrt::RNSVG::implementation
+
+#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct CircleView : CircleViewT<CircleView, implementation::CircleView> {};
 } // namespace winrt::RNSVG::factory_implementation
+#endif

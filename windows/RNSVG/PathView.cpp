@@ -25,18 +25,8 @@ void PathProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-PathView::PathView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
 void PathView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGPath", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::PathProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::PathView>(args);
-        });
-      });
+  RegisterRenderableComponent<winrt::RNSVG::implementation::PathProps, PathView>(L"RNSVGPath", builder);
 }
 
 void PathView::UpdateProperties(
@@ -47,9 +37,7 @@ void PathView::UpdateProperties(
 
     auto pathProps = props.try_as<PathProps>();
     if (pathProps) {
-      m_props = pathProps;
-
-      m_d = m_props->d;
+      m_d = pathProps->d;
       m_commands.clear();
       m_segmentData.clear();
       ParsePath();
