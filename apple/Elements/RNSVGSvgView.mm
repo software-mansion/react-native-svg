@@ -47,8 +47,6 @@ using namespace facebook::react;
     // This is necessary to ensure that [self setNeedsDisplay] actually triggers
     // a redraw when our parent transitions between hidden and visible.
     self.contentMode = UIViewContentModeRedraw;
-    // We don't want the dimming effect on tint as it's used as currentColor
-    self.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
 #endif // TARGET_OS_OSX
     rendered = false;
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -90,7 +88,7 @@ using namespace facebook::react;
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
   if (RCTUIColorFromSharedColor(newProps.color)) {
-    self.tintColor = RCTUIColorFromSharedColor(newProps.color);
+    self.color = RCTUIColorFromSharedColor(newProps.color);
   }
   [super updateProps:props oldProps:oldProps];
 }
@@ -184,10 +182,13 @@ using namespace facebook::react;
   [self setNeedsDisplay];
 }
 
-- (void)tintColorDidChange
+- (void)setColor:(RNSVGColor *)color
 {
+  if (color == _color) {
+    return;
+  }
   [self invalidate];
-  [self clearChildCache];
+  _color = color;
 }
 
 - (void)setMinX:(CGFloat)minX
