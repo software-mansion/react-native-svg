@@ -130,12 +130,9 @@ struct D2DHelpers {
     return transform;
   }
 
+#ifndef USE_FABRIC
   static DWRITE_FONT_WEIGHT FontWeightFrom(
-#ifdef USE_FABRIC
-      IRenderableFabric const &parent,
-#else
       xaml::FrameworkElement const &parent,
-#endif
       hstring const &weight) {
     if (weight == L"normal") {
       return DWRITE_FONT_WEIGHT_NORMAL;
@@ -158,6 +155,7 @@ struct D2DHelpers {
 
     return D2DHelpers::GetClosestFontWeight(std::stof(weight.c_str(), nullptr));
   }
+#endif
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight#meaning_of_relative_weights
   static DWRITE_FONT_WEIGHT Bolder(DWRITE_FONT_WEIGHT weight) {

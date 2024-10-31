@@ -3,29 +3,15 @@ import "Views.idl";
 namespace RNSVG
 {
   [experimental]
-  interface IRenderableFabric
+  [default_interface]
+  runtimeclass SvgView
   {
-    IRenderableFabric SvgParent;
-
-    void UpdateProperties(Microsoft.ReactNative.IComponentProps props, Microsoft.ReactNative.IComponentProps oldProps, Boolean forceUpdate, Boolean invalidate);
   };
 
   [experimental]
   [default_interface]
-  runtimeclass SvgView : IRenderable, IRenderableFabric, ISvgView
+  unsealed runtimeclass RenderableView
   {
-    GroupView Group;
-    Microsoft.ReactNative.Color CurrentColor{ get; };
-    Microsoft.ReactNative.Composition.Theme Theme { get; };
-  };
-
-  [experimental]
-  [default_interface]
-  unsealed runtimeclass RenderableView : IRenderable, IRenderableFabric, IRenderableView
-  {
-    SvgView SvgRoot{ get; };
-    Microsoft.ReactNative.Color Fill{ get; };
-    Microsoft.ReactNative.Color Stroke{ get; };
   };
 
   [experimental]
@@ -72,19 +58,19 @@ namespace RNSVG
 
   [experimental]
   [default_interface]
-  unsealed runtimeclass GroupView : RenderableView, IGroupView
+  unsealed runtimeclass GroupView : RenderableView
   {
   };
 
   [experimental]
   [default_interface]
-  unsealed runtimeclass TextView : GroupView, ITextView
+  unsealed runtimeclass TextView : GroupView
   {
   };
 
   [experimental]
   [default_interface]
-  runtimeclass TSpanView : TextView, ITSpanView
+  runtimeclass TSpanView : TextView
   {
   };
 
@@ -96,7 +82,7 @@ namespace RNSVG
 
   [experimental]
   [default_interface]
-  runtimeclass SymbolView : GroupView, ISymbolView
+  runtimeclass SymbolView : GroupView
   {
   };
 
@@ -120,25 +106,19 @@ namespace RNSVG
 
   [experimental]
   [default_interface]
-  unsealed runtimeclass BrushView : GroupView, IBrushView
+  runtimeclass LinearGradientView : GroupView
   {
   };
 
   [experimental]
   [default_interface]
-  runtimeclass LinearGradientView : BrushView
+  runtimeclass RadialGradientView : GroupView
   {
   };
 
   [experimental]
   [default_interface]
-  runtimeclass RadialGradientView : BrushView
-  {
-  };
-
-  [experimental]
-  [default_interface]
-  runtimeclass PatternView : BrushView
+  runtimeclass PatternView : GroupView
   {
   };
 }
