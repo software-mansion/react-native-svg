@@ -1,7 +1,6 @@
 #pragma once
 
 #include "LinearGradientProps.g.h"
-#include "LinearGradientView.g.h"
 
 #include "GroupView.h"
 
@@ -40,7 +39,7 @@ struct LinearGradientProps : LinearGradientPropsT<LinearGradientProps, SvgGroupC
   std::optional<std::vector<float>> gradientTransform;
 };
 
-struct LinearGradientView : LinearGradientViewT<LinearGradientView, RNSVG::implementation::GroupView> {
+struct LinearGradientView : winrt::implements<LinearGradientView, IInspectable, RenderableView> {
  public:
   LinearGradientView() = default;
 

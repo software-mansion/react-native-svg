@@ -1,10 +1,5 @@
 #include "pch.h"
 #include "SymbolView.h"
-#if __has_include("SymbolView.g.cpp")
-#include "SymbolView.g.cpp"
-#endif
-
-using namespace winrt;
 
 namespace winrt::RNSVG::implementation {
 

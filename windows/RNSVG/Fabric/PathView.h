@@ -1,7 +1,6 @@
 #pragma once
 
 #include "PathProps.g.h"
-#include "PathView.g.h"
 #include "RenderableView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -20,7 +19,7 @@ struct PathProps : PathPropsT<PathProps, SvgRenderableCommonProps> {
   std::wstring d;
 };
 
-struct PathView : PathViewT<PathView, RNSVG::implementation::RenderableView> {
+struct PathView : winrt::implements<PathView, IInspectable, RenderableView> {
  public:
   PathView() = default;
 

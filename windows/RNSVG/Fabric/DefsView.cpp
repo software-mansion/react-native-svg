@@ -1,10 +1,5 @@
 #include "pch.h"
 #include "DefsView.h"
-#if __has_include("DefsView.g.cpp")
-#include "DefsView.g.cpp"
-#endif
-
-using namespace winrt;
 
 namespace winrt::RNSVG::implementation {
 

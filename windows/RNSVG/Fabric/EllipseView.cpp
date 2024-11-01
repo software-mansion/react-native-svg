@@ -1,11 +1,5 @@
 #include "pch.h"
 #include "EllipseView.h"
-#if __has_include("EllipseView.g.cpp")
-#include "EllipseView.g.cpp"
-#endif
-
-using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ImageProps.g.h"
-#include "ImageView.g.h"
 #include "RenderableView.h"
 
 #include <wincodec.h>
@@ -68,7 +67,7 @@ struct ImageProps : ImagePropsT<ImageProps, SvgRenderableCommonProps> {
   RNSVG::MeetOrSlice meetOrSlice{RNSVG::MeetOrSlice::Meet};
 };
 
-struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> {
+struct ImageView : winrt::implements<ImageView, IInspectable, RenderableView> {
  public:
   ImageView() = default;
 

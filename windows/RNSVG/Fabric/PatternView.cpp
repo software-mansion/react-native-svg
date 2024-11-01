@@ -1,11 +1,5 @@
 #include "pch.h"
 #include "PatternView.h"
-#if __has_include("PatternView.g.cpp")
-#include "PatternView.g.cpp"
-#endif
-
-using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 

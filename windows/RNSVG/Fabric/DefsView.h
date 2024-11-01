@@ -1,7 +1,6 @@
 #pragma once
 
 #include "DefsProps.g.h"
-#include "DefsView.g.h"
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -19,7 +18,7 @@ struct DefsProps : DefsPropsT<DefsProps, SvgGroupCommonProps> {
 
 };
 
-struct DefsView : DefsViewT<DefsView, RNSVG::implementation::GroupView> {
+struct DefsView : winrt::implements<DefsView, IInspectable, RenderableView> {
  public:
   DefsView() = default;
 

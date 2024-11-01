@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MaskProps.g.h"
-#include "MaskView.g.h"
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -30,7 +29,7 @@ struct MaskProps : MaskPropsT<MaskProps, SvgGroupCommonProps> {
   uint32_t maskContentUnits{0};
 };
 
-struct MaskView : MaskViewT<MaskView, RNSVG::implementation::GroupView> {
+struct MaskView : winrt::implements<MaskView, IInspectable, RenderableView> {
  public:
   MaskView() = default;
 

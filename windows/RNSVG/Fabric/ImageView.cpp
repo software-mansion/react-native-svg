@@ -1,17 +1,5 @@
 #include "pch.h"
 #include "ImageView.h"
-#if __has_include("ImageView.g.cpp")
-#include "ImageView.g.cpp"
-#endif
-
-#ifndef USE_FABRIC
-#include <wincodec.h>
-#endif
-
-using namespace winrt::Microsoft::ReactNative;
-using namespace winrt::Windows::Security::Cryptography;
-using namespace winrt::Windows::Storage::Streams;
-using namespace winrt::Windows::Web::Http;
 
 namespace winrt::RNSVG::implementation {
 

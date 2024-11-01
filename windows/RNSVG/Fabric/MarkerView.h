@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MarkerProps.g.h"
-#include "MarkerView.g.h"
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -42,7 +41,7 @@ struct MarkerProps : MarkerPropsT<MarkerProps, SvgGroupCommonProps> {
   RNSVG::MeetOrSlice meetOrSlice{RNSVG::MeetOrSlice::Meet};
 };
 
-struct MarkerView : MarkerViewT<MarkerView, RNSVG::implementation::GroupView> {
+struct MarkerView : winrt::implements<MarkerView, IInspectable, RenderableView> {
  public:
   MarkerView() = default;
 

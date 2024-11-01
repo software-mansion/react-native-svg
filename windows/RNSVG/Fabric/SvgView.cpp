@@ -1,9 +1,6 @@
 #include "pch.h"
 
 #include "SvgView.h"
-#if __has_include("SvgView.g.cpp")
-#include "SvgView.g.cpp"
-#endif
 
 #include <UI.Xaml.Media.Imaging.h>
 #include <microsoft.ui.xaml.media.dxinterop.h>
@@ -19,8 +16,6 @@
 #include <CompositionSwitcher.Experimental.interop.h>
 
 #include <d3d11_4.h>
-
-using namespace winrt;
 
 namespace winrt::RNSVG::implementation {
 
@@ -171,28 +166,28 @@ void SvgView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPacka
         builder.SetUpdatePropsHandler([](const winrt::Microsoft::ReactNative::ComponentView &view,
                                          const winrt::Microsoft::ReactNative::IComponentProps &newProps,
                                          const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept {
-          auto userData = view.UserData().as<SvgView>();
+          auto userData = winrt::get_self<SvgView>(view.UserData());
           userData->UpdateProps(view, newProps, oldProps);
         });
 
         builder.SetFinalizeUpdateHandler(
             [](const winrt::Microsoft::ReactNative::ComponentView &view,
                const winrt::Microsoft::ReactNative::ComponentViewUpdateMask mask) noexcept {
-              auto userData = view.UserData().as<SvgView>();
+              auto userData = winrt::get_self<SvgView>(view.UserData());
               userData->FinalizeUpates(view, mask);
             });
 
         builder.SetMountChildComponentViewHandler(
             [](const winrt::Microsoft::ReactNative::ComponentView &view,
                const winrt::Microsoft::ReactNative::MountChildComponentViewArgs &args) noexcept {
-              auto userData = view.UserData().as<SvgView>();
+              auto userData = winrt::get_self<SvgView>(view.UserData());
               return userData->MountChildComponentView(view, args);
             });
 
         builder.SetUnmountChildComponentViewHandler(
             [](const winrt::Microsoft::ReactNative::ComponentView &view,
                const winrt::Microsoft::ReactNative::UnmountChildComponentViewArgs &args) noexcept {
-              auto userData = view.UserData().as<SvgView>();
+              auto userData = winrt::get_self<SvgView>(view.UserData());
               return userData->UnmountChildComponentView(view, args);
             });
       });

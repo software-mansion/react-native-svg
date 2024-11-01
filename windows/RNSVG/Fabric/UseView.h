@@ -1,7 +1,6 @@
 #pragma once
 
 #include "UseProps.g.h"
-#include "UseView.g.h"
 #include "RenderableView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -28,7 +27,7 @@ struct UseProps : UsePropsT<UseProps, SvgRenderableCommonProps> {
   D2D1_SVG_LENGTH height{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
 };
 
-struct UseView : UseViewT<UseView, RNSVG::implementation::RenderableView> {
+struct UseView : winrt::implements<UseView, IInspectable, RenderableView> {
  public:
   UseView() = default;
 

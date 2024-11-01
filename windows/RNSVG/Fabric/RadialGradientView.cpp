@@ -1,11 +1,5 @@
 #include "pch.h"
 #include "RadialGradientView.h"
-#if __has_include("RadialGradientView.g.cpp")
-#include "RadialGradientView.g.cpp"
-#endif
-
-using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 
@@ -45,7 +39,7 @@ void RadialGradientView::UpdateProps(
     }
   }
 
-  base_type::UpdateProps(view, newProps, oldProps);
+  RenderableView::UpdateProps(view, newProps, oldProps);
 }
 
 const wchar_t *RadialGradientView::GetSvgElementName() noexcept {

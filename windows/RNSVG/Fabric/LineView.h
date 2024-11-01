@@ -1,7 +1,6 @@
 #pragma once
 
 #include "LineProps.g.h"
-#include "LineView.g.h"
 #include "RenderableView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -26,7 +25,7 @@ struct LineProps : LinePropsT<LineProps, SvgRenderableCommonProps> {
   D2D1_SVG_LENGTH y2{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
 };
 
-struct LineView : LineViewT<LineView, RNSVG::implementation::RenderableView> {
+struct LineView : winrt::implements<LineView, IInspectable, RenderableView> {
  public:
   LineView() = default;
 

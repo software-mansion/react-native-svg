@@ -1,14 +1,8 @@
 #include "pch.h"
 #include "RenderableView.h"
-#if __has_include("RenderableView.g.cpp")
-#include "RenderableView.g.cpp"
-#endif
 
 #include "SvgView.h"
 #include "../D2DHelpers.h"
-
-using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::Microsoft::ReactNative {
 
@@ -252,10 +246,10 @@ void SvgRenderableCommonProps::SetProp(
 }
 
 void RenderableView::Invalidate(const winrt::Microsoft::ReactNative::ComponentView &view) {
-  winrt::com_ptr<winrt::RNSVG::implementation::SvgView> svgView{nullptr};
+  winrt::com_ptr<winrt::RNSVG::implementation::ISvgView> svgView{nullptr};
   auto current = view.Parent();
   while (current && !svgView) {
-    svgView = current.UserData().try_as<winrt::RNSVG::implementation::SvgView>();
+    svgView = current.UserData().try_as<winrt::RNSVG::implementation::ISvgView>();
     current = current.Parent();
   }
 

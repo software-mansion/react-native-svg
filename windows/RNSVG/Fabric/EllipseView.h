@@ -1,7 +1,6 @@
 #pragma once
 
 #include "EllipseProps.g.h"
-#include "EllipseView.g.h"
 #include "RenderableView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -26,7 +25,7 @@ struct EllipseProps : EllipsePropsT<EllipseProps, SvgRenderableCommonProps> {
   D2D1_SVG_LENGTH ry{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
 };
 
-struct EllipseView : EllipseViewT<EllipseView, RNSVG::implementation::RenderableView> {
+struct EllipseView : winrt::implements<EllipseView, IInspectable, RenderableView> {
  public:
   EllipseView() = default;
 

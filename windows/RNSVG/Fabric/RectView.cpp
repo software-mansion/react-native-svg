@@ -1,11 +1,5 @@
 #include "pch.h"
 #include "RectView.h"
-#if __has_include("RectView.g.cpp")
-#include "RectView.g.cpp"
-#endif
-
-using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 

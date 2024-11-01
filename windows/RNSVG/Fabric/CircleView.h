@@ -4,7 +4,6 @@
 #include "CircleProps.g.h"
 #endif
 
-#include "CircleView.g.h"
 #include "RenderableView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -27,7 +26,8 @@ struct CircleProps : CirclePropsT<CircleProps, SvgRenderableCommonProps> {
   D2D1_SVG_LENGTH cy{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
 };
 
-struct CircleView : CircleViewT<CircleView, RNSVG::implementation::RenderableView> {
+
+struct CircleView : winrt::implements<CircleView, IInspectable, RenderableView> {
  public: 
   CircleView() = default;
 

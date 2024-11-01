@@ -1,5 +1,4 @@
 #pragma once
-#include "GroupView.g.h"
 #include "RenderableView.h"
 
 #ifdef USE_FABRIC
@@ -81,8 +80,7 @@ struct SvgGroupCommonProps
 };
 #endif
 
-struct GroupView
-    : GroupViewT<GroupView, RNSVG::implementation::RenderableView> {
+struct GroupView : winrt::implements<GroupView, IInspectable, RenderableView> {
  public:
   GroupView() = default;
 

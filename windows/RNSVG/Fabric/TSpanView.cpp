@@ -1,11 +1,5 @@
 #include "pch.h"
 #include "TSpanView.h"
-#if __has_include("TSpanView.g.cpp")
-#include "TSpanView.g.cpp"
-#endif
-
-using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 

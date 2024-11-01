@@ -1,7 +1,6 @@
 #pragma once
 
 #include "PatternProps.g.h"
-#include "PatternView.g.h"
 
 #include "GroupView.h"
 
@@ -47,7 +46,7 @@ struct PatternProps : PatternPropsT<PatternProps, SvgGroupCommonProps> {
   RNSVG::MeetOrSlice meetOrSlice{RNSVG::MeetOrSlice::Meet};
 };
 
-struct PatternView : PatternViewT<PatternView, RNSVG::implementation::GroupView> {
+struct PatternView : winrt::implements<PatternView, IInspectable, RenderableView> {
  public:
   PatternView() = default;
   

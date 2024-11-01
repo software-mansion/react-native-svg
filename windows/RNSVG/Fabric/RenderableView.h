@@ -1,6 +1,5 @@
 #pragma once
 
-#include "RenderableView.g.h"
 #include "../SVGLength.h"
 
 #ifdef USE_FABRIC
@@ -151,8 +150,9 @@ struct SvgRenderableCommonProps
   std::optional<std::vector<std::string>> propList;
 };
 
-struct RenderableView : RenderableViewT<RenderableView> {
- public:
+struct __declspec(uuid("a03986c0-b06e-4fb8-a86e-16fcc47b2f31")) RenderableView : public ::IUnknown {
+ 
+public:
   RenderableView() = default;
 
   virtual const wchar_t* GetSvgElementName() noexcept = 0;
@@ -174,14 +174,10 @@ struct RenderableView : RenderableViewT<RenderableView> {
       const winrt::Microsoft::ReactNative::ComponentView & /*view*/,
       winrt::Microsoft::ReactNative::ComponentViewUpdateMask mask) noexcept;
 
-  const winrt::Windows::Foundation::Collections::IVector<IRenderable> &Children() const noexcept;
-
   ID2D1SvgElement &Render(const SvgView &svgView, ID2D1SvgDocument &document, ID2D1SvgElement &svgElement) noexcept;
 
   virtual void OnRender(ID2D1SvgDocument &document, ID2D1SvgElement & /*svgElement*/) noexcept;
   virtual bool IsSupported() const noexcept;
-
-  RNSVG::SvgView SvgRoot();
 
   void Invalidate(const winrt::Microsoft::ReactNative::ComponentView &view);
 
@@ -190,7 +186,6 @@ struct RenderableView : RenderableViewT<RenderableView> {
 
  private:
   winrt::com_ptr<ID2D1SvgElement> m_spD2DSvgElement;
-  Microsoft::ReactNative::IReactContext m_reactContext{nullptr}; // TODO need?
 };
 } // namespace winrt::RNSVG::implementation
 
@@ -208,25 +203,25 @@ void RegisterRenderableComponent(const winrt::hstring& name, const winrt::Micros
         builder.SetUpdatePropsHandler([](const winrt::Microsoft::ReactNative::ComponentView &view,
                                          const winrt::Microsoft::ReactNative::IComponentProps &newProps,
                                          const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept {
-          auto userData = view.UserData().as<TUserData>();
+          auto userData = winrt::get_self<TUserData>(view.UserData());
           userData->UpdateProps(view, newProps, oldProps);
         });
         builder.SetFinalizeUpdateHandler(
             [](const winrt::Microsoft::ReactNative::ComponentView &view,
                const winrt::Microsoft::ReactNative::ComponentViewUpdateMask mask) noexcept {
-              auto userData = view.UserData().as<TUserData>();
+              auto userData = winrt::get_self<TUserData>(view.UserData());
               userData->FinalizeUpates(view, mask);
             });
         builder.SetMountChildComponentViewHandler(
             [](const winrt::Microsoft::ReactNative::ComponentView &view,
                const winrt::Microsoft::ReactNative::MountChildComponentViewArgs &args) noexcept {
-              auto userData = view.UserData().as<TUserData>();
+              auto userData = winrt::get_self<TUserData>(view.UserData());
               return userData->MountChildComponentView(view, args);
             });
         builder.SetUnmountChildComponentViewHandler(
             [](const winrt::Microsoft::ReactNative::ComponentView &view,
                const winrt::Microsoft::ReactNative::UnmountChildComponentViewArgs &args) noexcept {
-              auto userData = view.UserData().as<TUserData>();
+              auto userData = winrt::get_self<TUserData>(view.UserData());
               return userData->UnmountChildComponentView(view, args);
             });
       });

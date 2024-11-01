@@ -1,11 +1,5 @@
 #include "pch.h"
 #include "UseView.h"
-#if __has_include("UseView.g.cpp")
-#include "UseView.g.cpp"
-#endif
-
-using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 

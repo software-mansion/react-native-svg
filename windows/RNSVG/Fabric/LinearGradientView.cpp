@@ -1,11 +1,5 @@
 #include "pch.h"
 #include "LinearGradientView.h"
-#if __has_include("LinearGradientView.g.cpp")
-#include "LinearGradientView.g.cpp"
-#endif
-
-using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 
@@ -45,8 +39,7 @@ void LinearGradientView::UpdateProps(
       m_stops.push_back(stop);
     }
   }
-
-  base_type::UpdateProps(view, newProps, oldProps);
+  RenderableView::UpdateProps(view, newProps, oldProps);
 }
 
 

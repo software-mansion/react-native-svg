@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SvgTextCommonProps.g.h"
-#include "TextView.g.h"
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -44,7 +43,7 @@ struct SvgTextCommonProps : SvgTextCommonPropsT<SvgTextCommonProps, SvgGroupComm
   RNSVG::SVGLength verticalAlign{0, winrt::RNSVG::LengthType::Unknown};
 };
 
-struct TextView : TextViewT<TextView, RNSVG::implementation::GroupView> {
+struct TextView : winrt::implements<TextView, IInspectable, RenderableView> {
  public:
   TextView() = default;
 

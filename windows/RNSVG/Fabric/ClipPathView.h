@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ClipPathProps.g.h"
-#include "ClipPathView.g.h"
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -18,7 +17,7 @@ struct ClipPathProps : ClipPathPropsT<ClipPathProps, SvgGroupCommonProps> {
   REACT_SVG_GROUP_COMMON_PROPS;
 };
 
-struct ClipPathView : ClipPathViewT<ClipPathView, RNSVG::implementation::GroupView> {
+struct ClipPathView : winrt::implements<ClipPathView, IInspectable, RenderableView> {
  public:
   ClipPathView() = default;
 

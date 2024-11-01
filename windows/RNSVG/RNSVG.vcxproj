@@ -275,13 +275,12 @@
     <ClCompile Include="UseViewManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="Fabric.idl" Condition="'$(UseFabric)'=='true'" />
     <Midl Include="Paper.idl" Condition="'$(UseFabric)'!='true'" />
     <Midl Include="ReactPackageProvider.idl" />
     <Midl Include="Types.idl" />
     <Midl Include="ViewManagers.idl" Condition="'$(UseFabric)'!='true'" />
     <Midl Include="ViewProps.idl" Condition="'$(UseFabric)'=='true'" />
-    <Midl Include="Views.idl" />
+    <Midl Include="Views.idl" Condition="'$(UseFabric)'!='true'"/>
   </ItemGroup>
   <ItemGroup Condition="'$(UseFabric)'!='true'">
     <None Include="PropertySheet.props" />

@@ -1,14 +1,7 @@
 #include "pch.h"
 #include "PathView.h"
-#if __has_include("PathView.g.cpp")
-#include "PathView.g.cpp"
-#endif
 
 #include "d2d1svg.h"
-#include <cctype>
-
-using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 

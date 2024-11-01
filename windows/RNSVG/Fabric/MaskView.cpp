@@ -1,10 +1,5 @@
 #include "pch.h"
 #include "MaskView.h"
-#if __has_include("MaskView.g.cpp")
-#include "MaskView.g.cpp"
-#endif
-
-using namespace winrt;
 
 namespace winrt::RNSVG::implementation {
 
@@ -28,6 +23,5 @@ bool MaskView::IsSupported() const noexcept {
 void MaskView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
   RegisterRenderableComponent<winrt::RNSVG::implementation::MaskProps, MaskView>(L"RNSVGMask", builder);
 }
-
 
 } // namespace winrt::RNSVG::implementation

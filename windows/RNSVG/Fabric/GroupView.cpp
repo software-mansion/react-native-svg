@@ -3,14 +3,6 @@
 #include "JSValueXaml.h"
 
 #include "GroupView.h"
-#if __has_include("GroupView.g.cpp")
-#include "GroupView.g.cpp"
-#endif
-
-#include "../SVGLength.h"
-
-using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 SvgGroupCommonProps::SvgGroupCommonProps(

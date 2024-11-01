@@ -1,7 +1,6 @@
 #pragma once
 
 #include "TSpanProps.g.h"
-#include "TSpanView.g.h"
 #include "TextView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -22,7 +21,7 @@ struct TSpanProps : TSpanPropsT<TSpanProps, SvgTextCommonProps> {
   std::string content{""};
 };
 
-struct TSpanView : TSpanViewT<TSpanView, RNSVG::implementation::TextView> {
+struct TSpanView : winrt::implements<TSpanView, IInspectable, RenderableView> {
 public:
   TSpanView() = default;
 

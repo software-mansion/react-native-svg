@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SymbolProps.g.h"
-#include "SymbolView.g.h"
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -31,7 +30,7 @@ struct SymbolProps : SymbolPropsT<SymbolProps, SvgGroupCommonProps> {
   RNSVG::MeetOrSlice meetOrSlice{RNSVG::MeetOrSlice::Meet};
 };
 
-struct SymbolView : SymbolViewT<SymbolView, RNSVG::implementation::GroupView> {
+struct SymbolView : winrt::implements<SymbolView, IInspectable, RenderableView> {
  public:
   SymbolView() = default;
 

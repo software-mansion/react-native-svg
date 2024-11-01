@@ -1,11 +1,5 @@
 #include "pch.h"
 #include "LineView.h"
-#if __has_include("LineView.g.cpp")
-#include "LineView.g.cpp"
-#endif
-
-using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 

@@ -1,10 +1,5 @@
 #include "pch.h"
 #include "CircleView.h"
-#if __has_include("CircleView.g.cpp")
-#include "CircleView.g.cpp"
-#endif
-
-#include "JSValueXaml.h"
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;

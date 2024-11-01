@@ -1,7 +1,6 @@
 #pragma once
 
 #include "RectProps.g.h"
-#include "RectView.g.h"
 #include "RenderableView.h"
 
 namespace winrt::RNSVG::implementation {
@@ -30,7 +29,7 @@ struct RectProps : RectPropsT<RectProps, SvgRenderableCommonProps> {
   D2D1_SVG_LENGTH ry{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
 };
 
-struct RectView : RectViewT<RectView, RNSVG::implementation::RenderableView> {
+struct RectView : winrt::implements<RectView, IInspectable, RenderableView> {
  public:
   RectView() = default;
 
