@@ -8,6 +8,8 @@
 
 namespace winrt::RNSVG::implementation {
 
+D2D1_SVG_ASPECT_ALIGN AlignToAspectAlign(const std::string &align) noexcept;
+
 REACT_STRUCT(SvgViewProps)
 struct SvgViewProps : winrt::implements<SvgViewProps, winrt::Microsoft::ReactNative::IComponentProps> {
   SvgViewProps(const winrt::Microsoft::ReactNative::ViewProps &props);

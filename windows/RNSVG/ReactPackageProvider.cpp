@@ -60,7 +60,7 @@ namespace winrt::RNSVG::implementation
     RegisterEllipseComponent(fabricPackageBuilder);
     RegisterLineComponent(fabricPackageBuilder);
     RegisterPathComponent(fabricPackageBuilder);
-    ImageView::RegisterComponent(fabricPackageBuilder);
+    RegisterImageComponent(fabricPackageBuilder);
     RegisterUseComponent(fabricPackageBuilder);
     RegisterGroupComponent(fabricPackageBuilder);
     RegisterUnsupportedSvgComponent(L"RNSVGSymbol", fabricPackageBuilder);

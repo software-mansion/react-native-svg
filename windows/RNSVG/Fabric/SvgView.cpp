@@ -62,7 +62,7 @@ void SvgView::OnUnmounted() noexcept {
   m_isMounted = false;
 }
 
-D2D1_SVG_ASPECT_ALIGN AlignToAspectAlign(const std::string &align) {
+D2D1_SVG_ASPECT_ALIGN AlignToAspectAlign(const std::string &align) noexcept {
   if (align.compare("xMinYMin") == 0)
     return D2D1_SVG_ASPECT_ALIGN::D2D1_SVG_ASPECT_ALIGN_X_MIN_Y_MIN;
   else if (align.compare("xMidYMin") == 0)
