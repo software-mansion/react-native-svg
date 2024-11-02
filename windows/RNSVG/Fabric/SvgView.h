@@ -1,7 +1,5 @@
 #pragma once
 
-#include "SvgViewProps.g.h"
-
 #include <winrt/Microsoft.ReactNative.Composition.Experimental.h>
 #include <JSValueComposition.h>
 #include "NativeModules.h"
@@ -11,7 +9,7 @@
 namespace winrt::RNSVG::implementation {
 
 REACT_STRUCT(SvgViewProps)
-struct SvgViewProps : SvgViewPropsT<SvgViewProps> {
+struct SvgViewProps : winrt::implements<SvgViewProps, winrt::Microsoft::ReactNative::IComponentProps> {
   SvgViewProps(const winrt::Microsoft::ReactNative::ViewProps &props);
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept;

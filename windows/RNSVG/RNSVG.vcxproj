@@ -209,7 +209,6 @@
     <ClCompile Include="SVGLength.cpp" />
   </ItemGroup>
     <ItemGroup Condition="'$(UseFabric)'=='true'">
-    <!--<ClCompile Include="Fabric/BrushView.cpp" />-->
     <ClCompile Include="Fabric/CircleView.cpp" />
     <ClCompile Include="Fabric/ClipPathView.cpp" />
     <ClCompile Include="Fabric/DefsView.cpp" />
@@ -218,17 +217,12 @@
     <ClCompile Include="Fabric/ImageView.cpp" />
     <ClCompile Include="Fabric/LinearGradientView.cpp" />
     <ClCompile Include="Fabric/LineView.cpp" />
-    <ClCompile Include="Fabric/MarkerView.cpp" />
-    <ClCompile Include="Fabric/MaskView.cpp" />
     <ClCompile Include="Fabric/PathView.cpp" />
-    <ClCompile Include="Fabric/PatternView.cpp" />
     <ClCompile Include="Fabric/RadialGradientView.cpp" />
     <ClCompile Include="Fabric/RectView.cpp" />
     <ClCompile Include="Fabric/RenderableView.cpp" />
     <ClCompile Include="Fabric/SvgView.cpp" />
-    <ClCompile Include="Fabric/SymbolView.cpp" />
-    <ClCompile Include="Fabric/TextView.cpp" />
-    <ClCompile Include="Fabric/TSpanView.cpp" />
+    <ClCompile Include="Fabric/UnsupportedSvgView.cpp" />
     <ClCompile Include="Fabric/UseView.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(UseFabric)'!='true'">
@@ -279,7 +273,6 @@
     <Midl Include="ReactPackageProvider.idl" />
     <Midl Include="Types.idl" />
     <Midl Include="ViewManagers.idl" Condition="'$(UseFabric)'!='true'" />
-    <Midl Include="ViewProps.idl" Condition="'$(UseFabric)'=='true'" />
     <Midl Include="Views.idl" Condition="'$(UseFabric)'!='true'"/>
   </ItemGroup>
   <ItemGroup Condition="'$(UseFabric)'!='true'">

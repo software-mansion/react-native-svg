@@ -1,9 +1,6 @@
 #pragma once
 
-#include "ImageProps.g.h"
 #include "RenderableView.h"
-
-#include <wincodec.h>
 
 namespace winrt::RNSVG::implementation {
 enum class ImageSourceType { Uri = 0, Download = 1, InlineData = 2 };
@@ -42,29 +39,27 @@ struct ImageSource {
 };
 
 REACT_STRUCT(ImageProps)
-struct ImageProps : ImagePropsT<ImageProps, SvgRenderableCommonProps> {
+struct ImageProps : winrt::implements<ImageProps, winrt::Microsoft::ReactNative::IComponentProps> {
   ImageProps(const winrt::Microsoft::ReactNative::ViewProps &props);
 
-  void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept
-      override;
+  void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept;
 
-  REACT_SVG_NODE_COMMON_PROPS;
   REACT_SVG_RENDERABLE_COMMON_PROPS;
 
   REACT_FIELD(x)
-  RNSVG::SVGLength x{0, winrt::RNSVG::LengthType::Unknown};
+  std::optional<D2D1_SVG_LENGTH> x;
   REACT_FIELD(y)
-  RNSVG::SVGLength y{0, winrt::RNSVG::LengthType::Unknown};
+  std::optional<D2D1_SVG_LENGTH> y;
   REACT_FIELD(width)
-  RNSVG::SVGLength width{0, winrt::RNSVG::LengthType::Unknown};
+  std::optional<D2D1_SVG_LENGTH> width;
   REACT_FIELD(height)
-  RNSVG::SVGLength height{0, winrt::RNSVG::LengthType::Unknown};
+  std::optional<D2D1_SVG_LENGTH> height;
   REACT_FIELD(src)
   ImageSource src;
   REACT_FIELD(align)
   std::string align{""};
   REACT_FIELD(meetOrSlice)
-  RNSVG::MeetOrSlice meetOrSlice{RNSVG::MeetOrSlice::Meet};
+  int32_t meetOrSlice{0};
 };
 
 struct ImageView : winrt::implements<ImageView, IInspectable, RenderableView> {

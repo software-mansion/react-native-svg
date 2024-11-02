@@ -1,12 +1,8 @@
 #pragma once
 #include "RenderableView.h"
 
-#ifdef USE_FABRIC
-#include "SvgGroupCommonProps.g.h"
-#endif
-
 namespace winrt::RNSVG::implementation {
-#ifdef USE_FABRIC
+
 REACT_STRUCT(FontObject)
 struct FontObject {
   REACT_FIELD(fontStyle)
@@ -56,36 +52,20 @@ struct FontObject {
 };
 
 #define REACT_SVG_GROUP_COMMON_PROPS  \
+  REACT_SVG_RENDERABLE_COMMON_PROPS \
   REACT_FIELD(fontSize)               \
+  std::string fontSize; \
   REACT_FIELD(fontWeight)             \
-  REACT_FIELD(font)
+  std::string fontWeight; \
+  REACT_FIELD(font) \
+  FontObject font; \
 
-REACT_STRUCT(SvgGroupCommonProps)
-struct SvgGroupCommonProps
-    : SvgGroupCommonPropsT<SvgGroupCommonProps, SvgRenderableCommonProps> {
-  SvgGroupCommonProps(const winrt::Microsoft::ReactNative::ViewProps &props);
+#define REACT_SVG_GROUP_COMMON_PROPS_INIT \
+  : m_props(props) 
 
-  void SetProp(
-      uint32_t hash,
-      winrt::hstring propName,
-      winrt::Microsoft::ReactNative::IJSValueReader value) noexcept;
 
-  REACT_SVG_NODE_COMMON_PROPS;
-  REACT_SVG_RENDERABLE_COMMON_PROPS;
-  REACT_SVG_GROUP_COMMON_PROPS;
 
-  std::string fontSize;
-  std::string fontWeight;
-  FontObject font;
-};
-#endif
+void RegisterGroupComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
-struct GroupView : winrt::implements<GroupView, IInspectable, RenderableView> {
- public:
-  GroupView() = default;
 
-  const wchar_t *GetSvgElementName() noexcept override;
-
-  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
-};
 } // namespace winrt::RNSVG::implementation

@@ -3,29 +3,46 @@
 
 namespace winrt::RNSVG::implementation {
 
-EllipseProps::EllipseProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
+REACT_STRUCT(EllipseProps)
+struct EllipseProps : winrt::implements<EllipseProps, winrt::Microsoft::ReactNative::IComponentProps> {
+  EllipseProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
 
-void EllipseProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
+  void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+    winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
+  }
 
-const wchar_t *EllipseView::GetSvgElementName() noexcept {
-  return L"ellipse";
-}
+  REACT_SVG_RENDERABLE_COMMON_PROPS;
 
-void EllipseView::OnRender(ID2D1SvgDocument & /* document*/, ID2D1SvgElement &svgElement) noexcept {
-  auto props = m_props.as<EllipseProps>();
-	svgElement.SetAttributeValue(SvgStrings::cxAttributeName, props->cx);
-	svgElement.SetAttributeValue(SvgStrings::cyAttributeName, props->cy);
-	svgElement.SetAttributeValue(SvgStrings::rxAttributeName, props->rx);
-	svgElement.SetAttributeValue(SvgStrings::ryAttributeName, props->ry);
-}
+  REACT_FIELD(cx)
+  D2D1_SVG_LENGTH cx{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
+  REACT_FIELD(cy)
+  D2D1_SVG_LENGTH cy{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
+  REACT_FIELD(rx)
+  D2D1_SVG_LENGTH rx{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
+  REACT_FIELD(ry)
+  D2D1_SVG_LENGTH ry{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
+};
 
-void EllipseView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  RegisterRenderableComponent<winrt::RNSVG::implementation::EllipseProps, EllipseView>(L"RNSVGEllipse", builder);
+struct EllipseView : winrt::implements<EllipseView, IInspectable, RenderableView> {
+ public:
+  EllipseView() = default;
+
+  const wchar_t *GetSvgElementName() noexcept override {
+    return L"ellipse";
+  }
+
+  void OnRender(const SvgView &svgView, ID2D1SvgDocument &document, ID2D1SvgElement &element) noexcept override {
+    auto props = m_props.as<EllipseProps>();
+    SetCommonSvgProps(svgView, document, element, *props);
+    element.SetAttributeValue(SvgStrings::cxAttributeName, props->cx);
+    element.SetAttributeValue(SvgStrings::cyAttributeName, props->cy);
+    element.SetAttributeValue(SvgStrings::rxAttributeName, props->rx);
+    element.SetAttributeValue(SvgStrings::ryAttributeName, props->ry);
+  }
+};
+
+void RegisterEllipseComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  RegisterRenderableComponent<EllipseProps, EllipseView>(L"RNSVGEllipse", builder);
 }
 
 } // namespace winrt::RNSVG::implementation

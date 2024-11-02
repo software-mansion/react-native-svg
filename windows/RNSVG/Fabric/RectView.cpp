@@ -3,42 +3,67 @@
 
 namespace winrt::RNSVG::implementation {
 
-RectProps::RectProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
+REACT_STRUCT(RectProps)
+struct RectProps : winrt::implements<RectProps, winrt::Microsoft::ReactNative::IComponentProps> {
+  RectProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
 
-void RectProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
+  void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+    winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
+  }
 
-const wchar_t *RectView::GetSvgElementName() noexcept {
-  return L"rect";
-}
+  REACT_SVG_RENDERABLE_COMMON_PROPS;
 
-void RectView::OnRender(ID2D1SvgDocument & /*document*/, ID2D1SvgElement &svgElement) noexcept {
-  auto props = m_props.as<RectProps>();
-  svgElement.SetAttributeValue(
-      SvgStrings::xAttributeName, D2D1_SVG_ATTRIBUTE_STRING_TYPE::D2D1_SVG_ATTRIBUTE_STRING_TYPE_SVG, props->x.c_str());
-  svgElement.SetAttributeValue(
-      SvgStrings::yAttributeName, D2D1_SVG_ATTRIBUTE_STRING_TYPE::D2D1_SVG_ATTRIBUTE_STRING_TYPE_SVG, props->y.c_str());
-  svgElement.SetAttributeValue(
-      SvgStrings::widthAttributeName,
-      D2D1_SVG_ATTRIBUTE_STRING_TYPE::D2D1_SVG_ATTRIBUTE_STRING_TYPE_SVG,
-      props->width.c_str());
-  svgElement.SetAttributeValue(
-      SvgStrings::heightAttributeName,
-      D2D1_SVG_ATTRIBUTE_STRING_TYPE::D2D1_SVG_ATTRIBUTE_STRING_TYPE_SVG,
-      props->height.c_str());
+  REACT_FIELD(x)
+  std::wstring x;
+  REACT_FIELD(y)
+  std::wstring y;
+  REACT_FIELD(height)
+  std::wstring height;
+  REACT_FIELD(width)
+  std::wstring width;
+  REACT_FIELD(rx)
+  D2D1_SVG_LENGTH rx{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
+  REACT_FIELD(ry)
+  D2D1_SVG_LENGTH ry{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
+};
 
-  if (props->rx.value)
-    svgElement.SetAttributeValue(SvgStrings::rxAttributeName, props->rx);
-  if (props->ry.value)
-    svgElement.SetAttributeValue(SvgStrings::ryAttributeName, props->ry);
-}
+struct RectView : winrt::implements<RectView, IInspectable, RenderableView> {
+ public:
+  RectView() = default;
 
-void RectView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  RegisterRenderableComponent<winrt::RNSVG::implementation::RectProps, RectView>(L"RNSVGRect", builder);
+  const wchar_t *GetSvgElementName() noexcept override {
+    return L"rect";
+  }
+
+  void OnRender(const SvgView &svgView, ID2D1SvgDocument &document, ID2D1SvgElement &element) noexcept override {
+    auto props = m_props.as<RectProps>();
+    SetCommonSvgProps(svgView, document, element, *props);
+    element.SetAttributeValue(
+        SvgStrings::xAttributeName,
+        D2D1_SVG_ATTRIBUTE_STRING_TYPE::D2D1_SVG_ATTRIBUTE_STRING_TYPE_SVG,
+        props->x.c_str());
+    element.SetAttributeValue(
+        SvgStrings::yAttributeName,
+        D2D1_SVG_ATTRIBUTE_STRING_TYPE::D2D1_SVG_ATTRIBUTE_STRING_TYPE_SVG,
+        props->y.c_str());
+    element.SetAttributeValue(
+        SvgStrings::widthAttributeName,
+        D2D1_SVG_ATTRIBUTE_STRING_TYPE::D2D1_SVG_ATTRIBUTE_STRING_TYPE_SVG,
+        props->width.c_str());
+    element.SetAttributeValue(
+        SvgStrings::heightAttributeName,
+        D2D1_SVG_ATTRIBUTE_STRING_TYPE::D2D1_SVG_ATTRIBUTE_STRING_TYPE_SVG,
+        props->height.c_str());
+
+    if (props->rx.value)
+      element.SetAttributeValue(SvgStrings::rxAttributeName, props->rx);
+    if (props->ry.value)
+      element.SetAttributeValue(SvgStrings::ryAttributeName, props->ry);
+  }
+};
+
+void RegisterRectComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  RegisterRenderableComponent<RectProps, RectView>(L"RNSVGRect", builder);
 }
 
 } // namespace winrt::RNSVG::implementation

@@ -3,7 +3,7 @@
 
 namespace winrt::RNSVG::implementation {
 
-ImageProps::ImageProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
+ImageProps::ImageProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
 
 void ImageProps::SetProp(
     uint32_t hash,

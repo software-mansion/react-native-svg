@@ -16,16 +16,11 @@
 #include "Fabric/ImageView.h"
 #include "Fabric/UseView.h"
 #include "Fabric/GroupView.h"
-#include "Fabric/SymbolView.h"
 #include "Fabric/DefsView.h"
 #include "Fabric/ClipPathView.h"
-#include "Fabric/MarkerView.h"
-#include "Fabric/MaskView.h"
 #include "Fabric/LinearGradientView.h"
 #include "Fabric/RadialGradientView.h"
-#include "Fabric/PatternView.h"
-#include "Fabric/TextView.h"
-#include "Fabric/TSpanView.h"
+#include "Fabric/UnsupportedSvgView.h"
 #else
 #include "SvgViewManager.h"
 #include "GroupViewManager.h"
@@ -60,24 +55,24 @@ namespace winrt::RNSVG::implementation
     auto fabricPackageBuilder = packageBuilder.as<winrt::Microsoft::ReactNative::IReactPackageBuilderFabric>();
 
     SvgView::RegisterComponent(fabricPackageBuilder);
-    RectView::RegisterComponent(fabricPackageBuilder);
-    CircleView::RegisterComponent(fabricPackageBuilder);
-    EllipseView::RegisterComponent(fabricPackageBuilder);
-    LineView::RegisterComponent(fabricPackageBuilder);
-    PathView::RegisterComponent(fabricPackageBuilder);
+    RegisterRectComponent(fabricPackageBuilder);
+    RegisterCircleComponent(fabricPackageBuilder);
+    RegisterEllipseComponent(fabricPackageBuilder);
+    RegisterLineComponent(fabricPackageBuilder);
+    RegisterPathComponent(fabricPackageBuilder);
     ImageView::RegisterComponent(fabricPackageBuilder);
-    UseView::RegisterComponent(fabricPackageBuilder);
-    GroupView::RegisterComponent(fabricPackageBuilder);
-    SymbolView::RegisterComponent(fabricPackageBuilder);
-    DefsView::RegisterComponent(fabricPackageBuilder);
-    ClipPathView::RegisterComponent(fabricPackageBuilder);
-    MarkerView::RegisterComponent(fabricPackageBuilder);
-    MaskView::RegisterComponent(fabricPackageBuilder);
-    LinearGradientView::RegisterComponent(fabricPackageBuilder);
-    RadialGradientView::RegisterComponent(fabricPackageBuilder);
-    PatternView::RegisterComponent(fabricPackageBuilder);
-    TextView::RegisterComponent(fabricPackageBuilder);
-    TSpanView::RegisterComponent(fabricPackageBuilder);
+    RegisterUseComponent(fabricPackageBuilder);
+    RegisterGroupComponent(fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGSymbol", fabricPackageBuilder);
+    RegisterDefsComponent(fabricPackageBuilder);
+    RegisterClipPathComponent(fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGMarker", fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGMask", fabricPackageBuilder);
+    RegisterLinearGradientComponent(fabricPackageBuilder);
+    RegisterRadialGradientComponent(fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGPattern", fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGText", fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGTSpan", fabricPackageBuilder);
 #else
     packageBuilder.AddViewManager(L"SvgViewManager", []() { return winrt::make<SvgViewManager>(); });
     packageBuilder.AddViewManager(L"RectViewManager", []() { return winrt::make<RectViewManager>(); });

@@ -3,34 +3,53 @@
 
 namespace winrt::RNSVG::implementation {
 
-UseProps::UseProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
+REACT_STRUCT(UseProps)
+struct UseProps : winrt::implements<UseProps, winrt::Microsoft::ReactNative::IComponentProps> {
+  UseProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
 
-void UseProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
+  void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+    winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
+  }
 
-const wchar_t *UseView::GetSvgElementName() noexcept {
-  return L"use";
-}
+  REACT_SVG_RENDERABLE_COMMON_PROPS;
 
-void UseView::OnRender(ID2D1SvgDocument & /*document*/, ID2D1SvgElement &svgElement) noexcept {
-  auto props = m_props.as<UseProps>();
-  svgElement.SetAttributeValue(
-      SvgStrings::xlinkhrefAttributeName,
-      D2D1_SVG_ATTRIBUTE_STRING_TYPE::D2D1_SVG_ATTRIBUTE_STRING_TYPE_SVG,
-      (L"#" + props->href).c_str());
+  REACT_FIELD(href)
+  std::wstring href;
+  REACT_FIELD(x)
+  D2D1_SVG_LENGTH x{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
+  REACT_FIELD(y)
+  D2D1_SVG_LENGTH y{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
+  REACT_FIELD(width)
+  D2D1_SVG_LENGTH width{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
+  REACT_FIELD(height)
+  D2D1_SVG_LENGTH height{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
+};
 
-  svgElement.SetAttributeValue(SvgStrings::xAttributeName, props->x);
-  svgElement.SetAttributeValue(SvgStrings::yAttributeName, props->y);
-  svgElement.SetAttributeValue(SvgStrings::widthAttributeName, props->width);
-  svgElement.SetAttributeValue(SvgStrings::heightAttributeName, props->height);
-}
+struct UseView : winrt::implements<UseView, IInspectable, RenderableView> {
+ public:
+  UseView() = default;
 
-void UseView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  RegisterRenderableComponent<winrt::RNSVG::implementation::UseProps, UseView>(L"RNSVGUse", builder);
+  const wchar_t *GetSvgElementName() noexcept override {
+    return L"use";
+  }
+
+  void OnRender(const SvgView &svgView, ID2D1SvgDocument &document, ID2D1SvgElement &element) noexcept override {
+    auto props = m_props.as<UseProps>();
+    SetCommonSvgProps(svgView, document, element, *props);
+    element.SetAttributeValue(
+        SvgStrings::xlinkhrefAttributeName,
+        D2D1_SVG_ATTRIBUTE_STRING_TYPE::D2D1_SVG_ATTRIBUTE_STRING_TYPE_SVG,
+        (L"#" + props->href).c_str());
+
+    element.SetAttributeValue(SvgStrings::xAttributeName, props->x);
+    element.SetAttributeValue(SvgStrings::yAttributeName, props->y);
+    element.SetAttributeValue(SvgStrings::widthAttributeName, props->width);
+    element.SetAttributeValue(SvgStrings::heightAttributeName, props->height);
+  }
+};
+
+void RegisterUseComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  RegisterRenderableComponent<UseProps, UseView>(L"RNSVGUse", builder);
 }
 
 } // namespace winrt::RNSVG::implementation

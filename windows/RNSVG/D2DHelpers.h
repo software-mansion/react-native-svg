@@ -43,7 +43,7 @@ struct D2DHelpers {
 
     deviceContext->PushLayer(layerParams, opacityLayer.get());
   }
-
+#ifndef USE_FABRIC
   static D2D1_CAP_STYLE GetLineCap(RNSVG::LineCap const &lineCap) {
     switch (lineCap) {
       case RNSVG::LineCap::Square:
@@ -77,6 +77,7 @@ struct D2DHelpers {
         return D2D1_FILL_MODE_WINDING;
     }
   }
+#endif
 
   static D2D1::ColorF AsD2DColor(winrt::Windows::UI::Color const &color) {
     return {

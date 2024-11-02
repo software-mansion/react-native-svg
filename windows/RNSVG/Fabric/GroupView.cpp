@@ -1,28 +1,36 @@
 #include "pch.h"
 
-#include "JSValueXaml.h"
-
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
-SvgGroupCommonProps::SvgGroupCommonProps(
-    const winrt::Microsoft::ReactNative::ViewProps &props)
-    : base_type(props) {}
 
-void SvgGroupCommonProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
+REACT_STRUCT(SvgGroupProps)
+struct SvgGroupProps : winrt::implements<SvgGroupProps, winrt::Microsoft::ReactNative::IComponentProps> {
+  SvgGroupProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_GROUP_COMMON_PROPS_INIT {}
 
-const wchar_t* GroupView::GetSvgElementName() noexcept
-{
-  return L"g";
-}
+  void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+    winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
+  }
 
-void GroupView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  RegisterRenderableComponent<winrt::RNSVG::implementation::SvgGroupCommonProps, GroupView>(L"RNSVGGroup", builder);
+  REACT_SVG_GROUP_COMMON_PROPS;
+};
+
+struct GroupView : winrt::implements<GroupView, IInspectable, RenderableView> {
+ public:
+  GroupView() = default;
+
+  const wchar_t *GetSvgElementName() noexcept override {
+    return L"g";
+  }
+
+  void OnRender(const SvgView &svgView, ID2D1SvgDocument &document, ID2D1SvgElement &element) noexcept override {
+    auto props = winrt::get_self<SvgGroupProps>(m_props);
+    SetCommonSvgProps(svgView, document, element, *props);
+  }
+};
+
+void RegisterGroupComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  RegisterRenderableComponent<SvgGroupProps, GroupView>(L"RNSVGGroup", builder);
 }
 
 } // namespace winrt::RNSVG::implementation
