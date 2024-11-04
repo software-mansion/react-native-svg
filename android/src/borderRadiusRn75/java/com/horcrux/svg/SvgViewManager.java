@@ -51,6 +51,7 @@ class SvgViewManager extends ReactViewManager
 
   public SvgViewManager() {
     mDelegate = new RNSVGSvgViewAndroidManagerDelegate(this);
+    SVGModule.load();
   }
 
   static void setSvgView(int tag, SvgView svg) {
