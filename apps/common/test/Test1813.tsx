@@ -1,12 +1,12 @@
 import React from 'react';
 import {SvgFromUri, SvgFromXml, SvgUri, SvgXml} from 'react-native-svg';
 import {
+  LocalSvg,
   SvgCss,
   SvgCssUri,
   SvgWithCss,
   SvgWithCssUri,
   WithLocalSvg,
-  LocalSvg,
 } from 'react-native-svg/css';
 
 const asset = require('./assets/ruby.svg');

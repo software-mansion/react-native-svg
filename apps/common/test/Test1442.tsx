@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ImageLoadEventData, Platform, Image as RNImage} from 'react-native';
-import {Svg, Image} from 'react-native-svg';
+import {Image, Svg} from 'react-native-svg';
 
 export default function Test1442() {
   return <TestWithStrictSize />;

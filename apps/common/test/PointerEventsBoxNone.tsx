@@ -45,8 +45,7 @@ export default function PointerEventsBoxNone() {
           top: 150,
           left: 75,
           transform: [{scale: 2}],
-        }}
-      >
+        }}>
         <Text style={{position: 'absolute', top: -25, left: 20, fontSize: 10}}>
           Try to touch the blue shape
         </Text>
@@ -61,8 +60,7 @@ export default function PointerEventsBoxNone() {
             top: 0,
             left: 0,
           }}
-          pointerEvents={pointerEvents}
-        >
+          pointerEvents={pointerEvents}>
           <Path
             opacity={1}
             pointerEvents={pointerEvents}
@@ -78,8 +76,7 @@ export default function PointerEventsBoxNone() {
           height={74}
           fill="none"
           pointerEvents={pointerEvents}
-          style={{top: 10, transform: [{scale: 1.5}]}}
-        >
+          style={{top: 10, transform: [{scale: 1.5}]}}>
           <Path
             opacity={1}
             pointerEvents={pointerEvents}
@@ -97,8 +94,7 @@ export default function PointerEventsBoxNone() {
           left: '50%',
           width: 150,
           transform: [{translateX: -75}],
-        }}
-      >
+        }}>
         <Button
           title="Toggle box-none property"
           onPress={() => setBoxNone(!boxNone)}

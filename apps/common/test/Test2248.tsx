@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
-import {Path, Svg} from 'react-native-svg';
 import {Animated} from 'react-native';
+import {Path, Svg} from 'react-native-svg';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path as any);
 
