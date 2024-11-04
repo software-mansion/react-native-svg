@@ -43,7 +43,7 @@ const svgXmlWithRGB = `<?xml version="1.0" encoding="UTF-8"?>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,41.248188%,70.611124%);fill-opacity:1;" d="M 95.488281 21.273438 L 92.597656 13.152344 C 96.226562 15.082031 96.421875 20.394531 95.488281 21.273438 "/>
 </g>
 </g>
-</svg>`
+</svg>`;
 
 const svgXmlWithRGBA = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="97.59pt" height="70.53pt" viewBox="0 0 97.59 70.53" version="1.1">
@@ -86,7 +86,7 @@ const svgXmlWithRGBA = `<?xml version="1.0" encoding="UTF-8"?>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgba(0%,41.248188%,70.611124%, 0.8);fill-opacity:1;" d="M 95.488281 21.273438 L 92.597656 13.152344 C 96.226562 15.082031 96.421875 20.394531 95.488281 21.273438 "/>
 </g>
 </g>
-</svg>`
+</svg>`;
 
 export default function Test2363() {
   return (
@@ -97,7 +97,7 @@ export default function Test2363() {
         justifyContent: 'center',
       }}>
       <SvgXml xml={svgXmlWithRGB} />
-      <View style={{height: 30}}/>
+      <View style={{height: 30}} />
       <SvgXml xml={svgXmlWithRGBA} />
     </View>
   );
