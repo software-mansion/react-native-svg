@@ -51,6 +51,7 @@
     "format-ios": "find apple/ common/ -iname *.h -o -iname *.m -o -iname *.cpp -o -iname *.mm | xargs clang-format -i",
     "format-java": "node ./scripts/format-java.js",
     "format-js": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md USAGE.md ./src/**/*.{ts,tsx} ./apps/**/*.{ts,tsx}",
+    "format-android-cpp": "find android/src/main/cpp -iname \"*.h\" -o -iname \"*.cpp\" | xargs clang-format -i",
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg && peggy -o src/filter-image/extract/extractFiltersString.js src/filter-image/extract/extractFiltersString.pegjs && peggy -o src/lib/extract/transformToRn.js src/lib/extract/transformToRn.pegjs",
