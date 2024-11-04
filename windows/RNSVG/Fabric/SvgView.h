@@ -1,8 +1,12 @@
 #pragma once
 
+#include <unknwn.h>
+
+#include <d2d1_3.h>
+#include <msoNativeModules.h>
 #include <winrt/Microsoft.ReactNative.Composition.Experimental.h>
+#include <winrt/Microsoft.ReactNative.h>
 #include <JSValueComposition.h>
-#include "NativeModules.h"
 
 namespace winrt::RNSVG::implementation {
 
@@ -41,7 +45,7 @@ struct __declspec(uuid("ed381ffa-461a-48Bf-a3c0-5d9a42eecd30")) ISvgView : publi
   virtual void Invalidate() = 0;
 };
 
-struct SvgView : winrt::implements<SvgView, winrt::IInspectable, ISvgView> {
+struct SvgView : winrt::implements<SvgView, winrt::Windows::Foundation::IInspectable, ISvgView> {
   //struct SvgView : SvgViewT<SvgView> {
  public:
 
@@ -85,7 +89,7 @@ struct SvgView : winrt::implements<SvgView, winrt::IInspectable, ISvgView> {
   void Draw(
       const winrt::Microsoft::ReactNative::Composition::ViewComponentView &view,
       ID2D1DeviceContext &context,
-      Windows::Foundation::Size const &size) noexcept;
+      winrt::Windows::Foundation::Size const &size) noexcept;
 
   bool m_isMounted{false};
   winrt::Microsoft::ReactNative::Composition::Experimental::ISpriteVisual m_visual{nullptr};

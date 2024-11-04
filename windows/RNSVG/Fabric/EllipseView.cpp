@@ -23,7 +23,7 @@ struct EllipseProps : winrt::implements<EllipseProps, winrt::Microsoft::ReactNat
   D2D1_SVG_LENGTH ry{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
 };
 
-struct EllipseView : winrt::implements<EllipseView, IInspectable, RenderableView> {
+struct EllipseView : winrt::implements<EllipseView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   EllipseView() = default;
 

@@ -17,7 +17,7 @@ struct SvgGroupProps : winrt::implements<SvgGroupProps, winrt::Microsoft::ReactN
   REACT_SVG_RENDERABLE_COMMON_PROPS;
 };
 
-struct GroupView : winrt::implements<GroupView, IInspectable, RenderableView> {
+struct GroupView : winrt::implements<GroupView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   GroupView() = default;
 

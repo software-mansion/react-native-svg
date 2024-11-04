@@ -2,16 +2,13 @@
 
 #include "SvgView.h"
 
-#include <UI.Xaml.Media.Imaging.h>
-#include <microsoft.ui.xaml.media.dxinterop.h>
-#include <winrt/Microsoft.Graphics.Display.h>
-
 #include "D2DHelpers.h"
 #include "GroupView.h"
 
 #include <AutoDraw.h>
 #include <winrt/Microsoft.ReactNative.Composition.Experimental.h>
 #include <CompositionSwitcher.Experimental.interop.h>
+#include <winrt/Windows.Foundation.Collections.h>
 
 #include <d3d11_4.h>
 
@@ -116,28 +113,28 @@ void SvgView::Initialize(const winrt::Microsoft::ReactNative::ComponentView &sen
 
   sender.LayoutMetricsChanged(
       [wkThis = get_weak()](
-          const winrt::IInspectable &, const winrt::Microsoft::ReactNative::LayoutMetricsChangedArgs &args) {
+          const winrt::Windows::Foundation::IInspectable &, const winrt::Microsoft::ReactNative::LayoutMetricsChangedArgs &args) {
         if (auto strongThis = wkThis.get()) {
           strongThis->UpdateLayoutMetrics(args.NewLayoutMetrics(), args.OldLayoutMetrics());
         }
       });
 
   view.ThemeChanged(
-      [wkThis = get_weak()](const winrt::IInspectable & /*sender*/, const winrt::IInspectable & /*args*/) {
+      [wkThis = get_weak()](const winrt::Windows::Foundation::IInspectable & /*sender*/, const winrt::Windows::Foundation::IInspectable & /*args*/) {
         if (auto strongThis = wkThis.get()) {
           strongThis->OnThemeChanged();
         }
       });
 
   view.Mounted([wkThis = get_weak()](
-                   const winrt::IInspectable & /*sender*/, const winrt::Microsoft::ReactNative::ComponentView &) {
+                   const winrt::Windows::Foundation::IInspectable & /*sender*/, const winrt::Microsoft::ReactNative::ComponentView &) {
     if (auto strongThis = wkThis.get()) {
       strongThis->OnMounted();
     }
   });
 
   view.Unmounted([wkThis = get_weak()](
-                     const winrt::IInspectable & /*sender*/, const winrt::Microsoft::ReactNative::ComponentView &) {
+                     const winrt::Windows::Foundation::IInspectable & /*sender*/, const winrt::Microsoft::ReactNative::ComponentView &) {
     if (auto strongThis = wkThis.get()) {
       strongThis->OnUnmounted();
     }
@@ -223,7 +220,7 @@ void RecurseRenderNode(
 void SvgView::Draw(
     const winrt::Microsoft::ReactNative::Composition::ViewComponentView &view,
     ID2D1DeviceContext &context,
-    Size const &size) noexcept {
+    winrt::Windows::Foundation::Size const &size) noexcept {
 
   com_ptr<ID2D1DeviceContext> deviceContext;
   deviceContext.copy_from(&context);
@@ -304,7 +301,7 @@ winrt::Microsoft::ReactNative::Composition::Theme SvgView::Theme() const noexcep
 
 void SvgView::Invalidate() {
   if (auto view = m_wkView.get()) {
-    Size size = winrt::Windows::Foundation::Size{m_layoutMetrics.Frame.Width, m_layoutMetrics.Frame.Height};
+    auto size = winrt::Windows::Foundation::Size{m_layoutMetrics.Frame.Width, m_layoutMetrics.Frame.Height};
 
     if (!m_isMounted) {
       return;
@@ -324,7 +321,7 @@ void SvgView::Invalidate() {
       ::Microsoft::ReactNative::Composition::AutoDrawDrawingSurface autoDraw(drawingSurface, 1.0, &offset);
       if (auto deviceContext = autoDraw.GetRenderTarget()) {
         auto transform =
-            Numerics::make_float3x2_translation({static_cast<float>(offset.x), static_cast<float>(offset.y)});
+            winrt::Windows::Foundation::Numerics::make_float3x2_translation({static_cast<float>(offset.x), static_cast<float>(offset.y)});
         deviceContext->SetTransform(D2DHelpers::AsD2DTransform(transform));
 
         deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Black, 0.0f));

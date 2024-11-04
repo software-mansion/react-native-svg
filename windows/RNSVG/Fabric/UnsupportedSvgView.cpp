@@ -12,7 +12,7 @@ struct UnsupportedProps : public winrt::implements<UnsupportedProps, winrt::Micr
   }
 };
 
-struct UnsupportedSvgView : winrt::implements<UnsupportedSvgView, IInspectable, RenderableView> {
+struct UnsupportedSvgView : winrt::implements<UnsupportedSvgView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   UnsupportedSvgView() = default;
 

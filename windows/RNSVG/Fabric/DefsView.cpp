@@ -14,7 +14,7 @@ struct DefsProps : winrt::implements<DefsProps, winrt::Microsoft::ReactNative::I
   REACT_SVG_RENDERABLE_COMMON_PROPS;
 };
 
-struct DefsView : winrt::implements<DefsView, IInspectable, RenderableView> {
+struct DefsView : winrt::implements<DefsView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   DefsView() = default;
 

@@ -21,7 +21,7 @@ struct CircleProps : public winrt::implements<CircleProps, winrt::Microsoft::Rea
   D2D1_SVG_LENGTH cy{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
 };
 
-struct CircleView : winrt::implements<CircleView, IInspectable, RenderableView> {
+struct CircleView : winrt::implements<CircleView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   CircleView() = default;
 

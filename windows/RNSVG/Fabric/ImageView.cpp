@@ -47,7 +47,7 @@ struct ImageProps : winrt::implements<ImageProps, winrt::Microsoft::ReactNative:
   std::optional<MeetOrSlice> meetOrSlice;
 };
 
-struct ImageView : winrt::implements<ImageView, IInspectable, RenderableView> {
+struct ImageView : winrt::implements<ImageView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   ImageView() = default;
 

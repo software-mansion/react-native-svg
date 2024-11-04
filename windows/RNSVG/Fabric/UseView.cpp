@@ -25,7 +25,7 @@ struct UseProps : winrt::implements<UseProps, winrt::Microsoft::ReactNative::ICo
   D2D1_SVG_LENGTH height{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
 };
 
-struct UseView : winrt::implements<UseView, IInspectable, RenderableView> {
+struct UseView : winrt::implements<UseView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   UseView() = default;
 

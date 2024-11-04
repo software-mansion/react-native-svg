@@ -23,7 +23,7 @@ struct LineProps : winrt::implements<LineProps, winrt::Microsoft::ReactNative::I
   D2D1_SVG_LENGTH y2{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
 };
 
-struct LineView : winrt::implements<LineView, IInspectable, RenderableView> {
+struct LineView : winrt::implements<LineView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   LineView() = default;
 

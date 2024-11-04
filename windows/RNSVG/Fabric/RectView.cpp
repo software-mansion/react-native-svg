@@ -27,7 +27,7 @@ struct RectProps : winrt::implements<RectProps, winrt::Microsoft::ReactNative::I
   D2D1_SVG_LENGTH ry{0, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
 };
 
-struct RectView : winrt::implements<RectView, IInspectable, RenderableView> {
+struct RectView : winrt::implements<RectView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   RectView() = default;
 

@@ -35,7 +35,7 @@ struct LinearGradientProps : winrt::implements<LinearGradientProps, winrt::Micro
   std::optional<std::vector<float>> gradientTransform;
 };
 
-struct LinearGradientView : winrt::implements<LinearGradientView, IInspectable, RenderableView> {
+struct LinearGradientView : winrt::implements<LinearGradientView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   LinearGradientView() = default;
 

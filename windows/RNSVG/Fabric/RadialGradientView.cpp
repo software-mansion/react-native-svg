@@ -39,7 +39,7 @@ struct RadialGradientProps : winrt::implements<RadialGradientProps, winrt::Micro
   std::optional<std::vector<float>> gradientTransform;
 };
 
-struct RadialGradientView : winrt::implements<RadialGradientView, IInspectable, RenderableView> {
+struct RadialGradientView : winrt::implements<RadialGradientView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   RadialGradientView() = default;
 

@@ -19,7 +19,7 @@ struct PathProps : winrt::implements<PathProps, winrt::Microsoft::ReactNative::I
   std::wstring d;
 };
 
-struct PathView : winrt::implements<PathView, IInspectable, RenderableView> {
+struct PathView : winrt::implements<PathView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   PathView() = default;
 

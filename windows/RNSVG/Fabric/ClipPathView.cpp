@@ -14,7 +14,7 @@ struct ClipPathProps : winrt::implements<ClipPathProps, winrt::Microsoft::ReactN
   REACT_SVG_RENDERABLE_COMMON_PROPS;
 };
 
-struct ClipPathView : winrt::implements<ClipPathView, IInspectable, RenderableView> {
+struct ClipPathView : winrt::implements<ClipPathView, winrt::Windows::Foundation::IInspectable, RenderableView> {
  public:
   ClipPathView() = default;
 
