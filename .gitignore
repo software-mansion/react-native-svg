@@ -54,3 +54,6 @@ experimental/
 # E2E reports
 jest-html-reporters-attach/
 report.html
+
+# CMake
+.cxx/

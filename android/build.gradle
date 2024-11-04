@@ -106,9 +106,35 @@ android {
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         consumerProguardFiles 'proguard-rules.pro'
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+    }
+    buildFeatures {
+        prefab true
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
     }
     lintOptions {
         abortOnError false
+    }
+    packagingOptions {
+        // For some reason gradle only complains about the duplicated version of libreact_render libraries
+        // while there are more libraries copied in intermediates folder of the lib build directory, we exclude
+        // only the ones that make the build fail (ideally we should only include librnscreens_modules but we
+        // are only allowed to specify exclude patterns)
+        excludes = [
+                "META-INF",
+                "META-INF/**",
+                "**/libjsi.so",
+                "**/libc++_shared.so",
+                "**/libreact_render*.so"
+        ]
     }
 
     sourceSets.main {
