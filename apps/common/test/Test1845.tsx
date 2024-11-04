@@ -1,6 +1,5 @@
 import React from 'react';
 import {SafeAreaView, useColorScheme} from 'react-native';
-import {Svg, Ellipse} from 'react-native-svg';
 import Animated, {
   createAnimatedPropAdapter,
   processColor,
@@ -9,6 +8,7 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import {Ellipse, Svg} from 'react-native-svg';
 
 const AnimatedEllipse = Animated.createAnimatedComponent(Ellipse);
 

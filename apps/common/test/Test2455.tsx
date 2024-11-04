@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Share, Text, TouchableOpacity, View} from 'react-native';
+import {Button, Share, View} from 'react-native';
 import {Circle, G, Path, Rect, Svg} from 'react-native-svg';
 
 const Favorite = ({color}: {color: string}): JSX.Element => {

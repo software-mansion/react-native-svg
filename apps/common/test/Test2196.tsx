@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Button, Text} from 'react-native';
+import {Button, Text, View} from 'react-native';
 import Svg, {Circle} from 'react-native-svg';
 import {SvgCssUri} from 'react-native-svg/css';
 

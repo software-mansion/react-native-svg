@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
+import {Button, StyleSheet, Text, View} from 'react-native';
 import Svg, {Path} from 'react-native-svg';
-import {StyleSheet, Text, View, Button} from 'react-native';
 
 export default function Test2086() {
   const [display, setDisplay] = useState(false);
@@ -15,7 +15,7 @@ export default function Test2086() {
   );
 }
 
-const MySVG = ({style, toggle}) => {
+const MySVG = ({style, toggle}: any) => {
   return (
     <Svg viewBox="0 0 32 32" style={style}>
       {toggle && (

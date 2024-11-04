@@ -1,14 +1,14 @@
 import React, {useEffect} from 'react';
 import Animated, {
-  useSharedValue,
-  withTiming,
   Easing,
-  withRepeat,
   interpolate,
-  useDerivedValue,
   useAnimatedProps,
+  useDerivedValue,
+  useSharedValue,
+  withRepeat,
+  withTiming,
 } from 'react-native-reanimated';
-import {Svg, Circle} from 'react-native-svg';
+import {Circle, Svg} from 'react-native-svg';
 
 export default () => {
   const AnimatedCircle = Animated.createAnimatedComponent(Circle);
