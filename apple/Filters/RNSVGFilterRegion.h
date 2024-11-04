@@ -12,7 +12,7 @@
 @property (nonatomic, strong) RNSVGLength *height;
 
 + (instancetype)regionWithX:(RNSVGLength *)x y:(RNSVGLength *)y width:(RNSVGLength *)width height:(RNSVGLength *)height;
-- (CGRect)getCropRect:(RNSVGNode *)node units:(RNSVGUnits)units renderableBounds:(CGRect)renderableBounds;
+- (CGRect)getCropRect:(RNSVGNode *)node units:(RNSVGUnits)units bounds:(CGRect)bounds;
 
 @end
 

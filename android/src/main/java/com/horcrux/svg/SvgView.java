@@ -11,6 +11,7 @@ package com.horcrux.svg;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -189,7 +190,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   final Matrix mInvViewBoxMatrix = new Matrix();
   private boolean mInvertible = true;
   private boolean mRendered = false;
-  int mCurrentColor = 0;
+  int mCurrentColor = Color.BLACK;
 
   boolean notRendered() {
     return !mRendered;

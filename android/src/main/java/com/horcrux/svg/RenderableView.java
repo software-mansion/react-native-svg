@@ -96,6 +96,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   private @Nullable ArrayList<Object> mOriginProperties;
   private @Nullable ArrayList<String> mPropList;
   private @Nullable ArrayList<String> mAttributeList;
+  private @Nullable RenderableView mCaller;
 
   @Nullable String mFilter;
 
@@ -133,6 +134,9 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   int getCurrentColor() {
     if (this.mCurrentColor != 0) {
       return this.mCurrentColor;
+    }
+    if (this.mCaller != null) {
+      return this.mCaller.getCurrentColor();
     }
     ViewParent parent = this.getParent();
     if (parent instanceof VirtualView) {
@@ -756,6 +760,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   }
 
   void mergeProperties(RenderableView target) {
+    mCaller = target;
     ArrayList<String> targetAttributeList = target.getAttributeList();
 
     if (targetAttributeList == null || targetAttributeList.size() == 0) {
@@ -798,6 +803,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
       mLastMergedList = null;
       mOriginProperties = null;
       mAttributeList = mPropList;
+      mCaller = null;
     }
   }
 

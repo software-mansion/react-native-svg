@@ -156,6 +156,12 @@ using namespace facebook::react;
 - (void)setupGlyphContext:(CGContextRef)context
 {
   CGRect clipBounds = CGContextGetClipBoundingBox(context);
+#if TARGET_OS_OSX // [macOS
+  RNSVGSvgView *svgView = [self svgView];
+  if (svgView != nil && (clipBounds.origin.x < 0 || clipBounds.origin.y < 0)) {
+    clipBounds = CGRectApplyAffineTransform([svgView boundingBox], [svgView getInvViewBoxTransform]);
+  }
+#endif // macOS]
   clipBounds = CGRectApplyAffineTransform(clipBounds, self.matrix);
   clipBounds = CGRectApplyAffineTransform(clipBounds, self.transforms);
   CGFloat width = CGRectGetWidth(clipBounds);

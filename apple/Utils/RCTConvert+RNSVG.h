@@ -10,8 +10,10 @@
 #import <QuartzCore/QuartzCore.h>
 #import <React/RCTConvert.h>
 #import "RCTConvert+RNSVG.h"
+#import "RNSVGBlendMode.h"
 #import "RNSVGCGFCRule.h"
 #import "RNSVGColorMatrixType.h"
+#import "RNSVGCompositeOperator.h"
 #import "RNSVGEdgeMode.h"
 #import "RNSVGLength.h"
 #import "RNSVGMaskType.h"

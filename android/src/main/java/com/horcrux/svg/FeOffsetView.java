@@ -44,8 +44,10 @@ class FeOffsetView extends FilterPrimitiveView {
     float dy = this.mDy != null ? (float) this.relativeOnHeight(this.mDy) : 0;
     RectF frame = new RectF(0, 0, dx, dy);
     this.getSvgView().getCtm().mapRect(frame);
+    dx = frame.left < 0 ? frame.left : frame.width();
+    dy = frame.top < 0 ? frame.top : frame.height();
 
-    canvas.drawBitmap(source, frame.width(), frame.height(), null);
+    canvas.drawBitmap(source, dx, dy, null);
 
     return result;
   }

@@ -51,5 +51,6 @@ experimental/
 # VS Code
 .vscode/
 
+# E2E reports
 jest-html-reporters-attach/
 report.html

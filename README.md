@@ -5,7 +5,7 @@
 
 `react-native-svg` provides SVG support to React Native on iOS, Android, macOS, Windows, and a compatibility layer for the web.
 
-[Check out the Example app](https://github.com/react-native-svg/react-native-svg/tree/main/example)
+[Check out the Example app](https://github.com/software-mansion/react-native-svg/tree/main/apps/common/example)
 
 - [Features](#features)
 - [Installation](#installation)
@@ -75,6 +75,7 @@ npx expo install react-native-svg
 | >=9              | >=0.57.4     |
 | >=12.3.0         | >=0.64.0     |
 | >=15.0.0         | >=0.70.0     |
+| >=15.8.0         | >=0.73.0     |
 
 ## Support for Fabric
 

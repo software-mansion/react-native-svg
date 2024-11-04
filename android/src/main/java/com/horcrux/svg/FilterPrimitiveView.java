@@ -9,30 +9,30 @@ import java.util.HashMap;
 @SuppressLint("ViewConstructor")
 class FilterPrimitiveView extends DefinitionView {
   private String mResult;
-  public final FilterRegion mFilterRegion;
+  public final FilterRegion mFilterSubregion;
 
   public FilterPrimitiveView(ReactContext reactContext) {
     super(reactContext);
-    mFilterRegion = new FilterRegion();
+    mFilterSubregion = new FilterRegion();
   }
 
   public void setX(Dynamic x) {
-    mFilterRegion.setX(x);
+    mFilterSubregion.setX(x);
     invalidate();
   }
 
   public void setY(Dynamic y) {
-    mFilterRegion.setY(y);
+    mFilterSubregion.setY(y);
     invalidate();
   }
 
   public void setWidth(Dynamic width) {
-    mFilterRegion.setWidth(width);
+    mFilterSubregion.setWidth(width);
     invalidate();
   }
 
   public void setHeight(Dynamic height) {
-    mFilterRegion.setHeight(height);
+    mFilterSubregion.setHeight(height);
     invalidate();
   }
 

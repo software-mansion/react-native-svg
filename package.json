@@ -1,5 +1,5 @@
 {
-  "version": "15.8.0-rc.1",
+  "version": "15.8.0",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -50,7 +50,7 @@
     "format": "yarn format-js && yarn format-ios && yarn format-java",
     "format-ios": "find apple/ common/ -iname *.h -o -iname *.m -o -iname *.cpp -o -iname *.mm | xargs clang-format -i",
     "format-java": "node ./scripts/format-java.js",
-    "format-js": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md USAGE.md ./src/**/*.{ts,tsx} ./apps/**/*.tsx ./*-example/**/*.tsx",
+    "format-js": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md USAGE.md ./src/**/*.{ts,tsx} ./apps/**/*.{ts,tsx}",
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg && peggy -o src/filter-image/extract/extractFiltersString.js src/filter-image/extract/extractFiltersString.pegjs && peggy -o src/lib/extract/transformToRn.js src/lib/extract/transformToRn.pegjs",
@@ -61,7 +61,8 @@
     "e2e": "jest e2e",
     "generateE2eReferences": "ts-node e2e/generateReferences.ts",
     "check-archs-consistency": "node ./scripts/codegen-check-consistency.js",
-    "sync-archs": "node ./scripts/codegen-sync-archs.js"
+    "sync-archs": "node ./scripts/codegen-sync-archs.js",
+    "metal-to-ci": "node ./scripts/metal.js"
   },
   "peerDependencies": {
     "react": "*",
@@ -75,7 +76,8 @@
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.0.2",
     "@react-native-community/eslint-plugin": "^1.2.0",
-    "@react-native/babel-plugin-codegen": "^0.71.0",
+    "@react-native/babel-plugin-codegen": "^0.75.4",
+    "@react-native/babel-preset": "^0.75.4",
     "@react-native/eslint-config": "^0.72.2",
     "@types/css-tree": "^1.0.3",
     "@types/jest": "^27.5.2",
@@ -121,7 +123,7 @@
     "ws": "^8.18.0"
   },
   "lint-staged": {
-    "{src,Example}/**/*.{js,ts,tsx}": "yarn format-js",
+    "{src,apps/common}/**/*.{js,ts,tsx}": "yarn format-js",
     "src/**/*.{js,ts,tsx}": "yarn lint",
     "apple/**/*.{h,m,mm,cpp}": "yarn format-ios",
     "android/src/**/*.java": "yarn format-java",
@@ -136,7 +138,5 @@
       "javaPackageName": "com.horcrux.svg"
     }
   },
-  "resolutions": {
-    "@react-native/codegen": "0.76.0-rc.1"
-  }
+  "packageManager": "yarn@1.22.22"
 }
