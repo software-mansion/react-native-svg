@@ -2,101 +2,15 @@
 
 #include "SvgView.g.h"
 
-#ifdef USE_FABRIC
-#include "SvgViewProps.g.h"
-
-#include <winrt/Microsoft.ReactNative.Composition.Experimental.h>
-#include <JSValueComposition.h>
-#include "NativeModules.h"
-#endif
-
 #include "SVGLength.h"
 #include "Utils.h"
 
 namespace winrt::RNSVG::implementation {
 
-#ifdef USE_FABRIC
-REACT_STRUCT(SvgViewProps)
-struct SvgViewProps : SvgViewPropsT<SvgViewProps> {
-  SvgViewProps(const winrt::Microsoft::ReactNative::ViewProps &props);
-
-  void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept;
-
-  REACT_FIELD(bbWidth)
-  winrt::RNSVG::SVGLength bbWidth{0.0, winrt::RNSVG::LengthType::Unknown};
-
-  REACT_FIELD(bbHeight)
-  winrt::RNSVG::SVGLength bbHeight{0.0, winrt::RNSVG::LengthType::Unknown};
-
-  REACT_FIELD(minX)
-  float minX;
-  REACT_FIELD(minY)
-  float minY;
-  REACT_FIELD(vbWidth)
-  float vbWidth;
-  REACT_FIELD(vbHeight)
-  float vbHeight;
-  REACT_FIELD(align)
-  std::string align;
-  REACT_FIELD(meetOrSlice)
-  RNSVG::MeetOrSlice meetOrSlice{RNSVG::MeetOrSlice::Meet};
-  REACT_FIELD(tintColor)
-  winrt::Microsoft::ReactNative::Color tintColor{nullptr};
-  REACT_FIELD(color)
-  winrt::Microsoft::ReactNative::Color color{nullptr};
-
- private:
-  winrt::Microsoft::ReactNative::ViewProps m_props{nullptr};
-};
-#endif
-
 struct SvgView : SvgViewT<SvgView> {
  public:
-#ifndef USE_FABRIC
   SvgView() = default;
-#endif
 
-#ifdef USE_FABRIC
-  SvgView(const winrt::Microsoft::ReactNative::Composition::Experimental::ICompositionContext &compContext);
-  IRenderableFabric SvgParent() { return m_parent; }
-  void SvgParent(IRenderableFabric const &value) { m_parent = value; }
-  winrt::Microsoft::ReactNative::Color CurrentColor() { return m_currentColor; }
-
-  // IRenderableFabric
-  void UpdateProperties(
-      const winrt::Microsoft::ReactNative::IComponentProps &props,
-      const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-      bool forceUpdate = true,
-      bool invalidate = true);
-
-  // Overrides
-  // IInternalCreateVisual
-  winrt::Microsoft::ReactNative::Composition::Experimental::IVisual CreateInternalVisual();
-
-  // ComponentView
-  void UpdateProps(
-      const winrt::Microsoft::ReactNative::ComponentView & /*view*/,
-      const winrt::Microsoft::ReactNative::IComponentProps &newProps,
-      const winrt::Microsoft::ReactNative::IComponentProps & /*oldProps*/) noexcept;
-  void UpdateLayoutMetrics(
-      const winrt::Microsoft::ReactNative::LayoutMetrics &metrics,
-      const winrt::Microsoft::ReactNative::LayoutMetrics &oldMetrics);
-    void MountChildComponentView(
-      const winrt::Microsoft::ReactNative::ComponentView& view,
-      const winrt::Microsoft::ReactNative::MountChildComponentViewArgs& args) noexcept;
-  void UnmountChildComponentView(
-      const winrt::Microsoft::ReactNative::ComponentView& view,
-      const winrt::Microsoft::ReactNative::UnmountChildComponentViewArgs& args) noexcept;
-
-  void OnThemeChanged() noexcept;
-
-  void Initialize(const winrt::Microsoft::ReactNative::ComponentView & /*view*/) noexcept;
-
-  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
-
-  winrt::Microsoft::ReactNative::Composition::Theme Theme() const noexcept;
-
-#else
   SvgView(winrt::Microsoft::ReactNative::IReactContext const &context);
 
   xaml::FrameworkElement SvgParent() { return m_parent; }
@@ -113,7 +27,6 @@ struct SvgView : SvgViewT<SvgView> {
 
   void Panel_Loaded(winrt::Windows::Foundation::IInspectable const &sender, xaml::RoutedEventArgs const &args);
   void Panel_Unloaded(winrt::Windows::Foundation::IInspectable const &sender, xaml::RoutedEventArgs const &args);
-#endif
 
   winrt::Windows::Foundation::Size CanvasSize() noexcept;
 
@@ -149,14 +62,6 @@ struct SvgView : SvgViewT<SvgView> {
   void Invalidate();
 
  private:
-#ifdef USE_FABRIC
-  IRenderableFabric m_parent{nullptr};
-  winrt::Microsoft::ReactNative::Composition::Experimental::ISpriteVisual m_visual{nullptr};
-  winrt::Microsoft::ReactNative::Color m_currentColor{nullptr};
-  winrt::Microsoft::ReactNative::LayoutMetrics m_layoutMetrics{{0, 0, 0, 0}, 1.0};
-  winrt::Microsoft::ReactNative::Composition::Experimental::ICompositionContext m_compContext{nullptr};
-  winrt::weak_ref<winrt::Microsoft::ReactNative::Composition::ViewComponentView> m_wkView;
-#else
   bool m_loaded{false};
   xaml::FrameworkElement m_parent{nullptr};
   xaml::Controls::Image m_image;
@@ -164,7 +69,6 @@ struct SvgView : SvgViewT<SvgView> {
 
   xaml::FrameworkElement::Loaded_revoker m_panelLoadedRevoker{};
   xaml::FrameworkElement::Unloaded_revoker m_panelUnloadedRevoker{};
-#endif
 
   // Shared
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
@@ -192,8 +96,6 @@ struct SvgView : SvgViewT<SvgView> {
 };
 } // namespace winrt::RNSVG::implementation
 
-#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct SvgView : SvgViewT<SvgView, implementation::SvgView> {};
 } // namespace winrt::RNSVG::factory_implementation
-#endif

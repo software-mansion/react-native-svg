@@ -2,17 +2,19 @@
 
 #include "GroupView.h"
 
+#include "RenderableView.h"
+
 namespace winrt::RNSVG::implementation {
 
 REACT_STRUCT(SvgGroupProps)
 struct SvgGroupProps : winrt::implements<SvgGroupProps, winrt::Microsoft::ReactNative::IComponentProps> {
-  SvgGroupProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_GROUP_COMMON_PROPS_INIT {}
+  SvgGroupProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
     winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
   }
 
-  REACT_SVG_GROUP_COMMON_PROPS;
+  REACT_SVG_RENDERABLE_COMMON_PROPS;
 };
 
 struct GroupView : winrt::implements<GroupView, IInspectable, RenderableView> {

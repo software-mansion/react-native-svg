@@ -44,7 +44,7 @@ struct ImageProps : winrt::implements<ImageProps, winrt::Microsoft::ReactNative:
   REACT_FIELD(align)
   std::optional<std::string> align{""};
   REACT_FIELD(meetOrSlice)
-  std::optional<RNSVG::MeetOrSlice> meetOrSlice;
+  std::optional<MeetOrSlice> meetOrSlice;
 };
 
 struct ImageView : winrt::implements<ImageView, IInspectable, RenderableView> {

@@ -12,55 +12,6 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 
-#ifdef USE_FABRIC
-PatternProps::PatternProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
-
-void PatternProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
-
-void PatternView::RegisterComponent(
-    const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  RegisterRenderableComponent<winrt::RNSVG::implementation::PatternProps, PatternView>(L"RNSVGPattern", builder);
-}
-
-void PatternView::UpdateProperties(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
-    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-    bool forceUpdate,
-    bool invalidate) noexcept {
-  auto patternProps = props.try_as<PatternProps>();
-  if (patternProps) {
-    m_x = patternProps->x;
-    m_y = patternProps->y;
-    m_width = patternProps->width;
-    m_height = patternProps->height;
-
-    m_minX = patternProps->minX;
-    m_minY = patternProps->minY;
-    m_vbWidth = patternProps->vbWidth;
-    m_vbHeight = patternProps->vbHeight;
-    m_align = patternProps->align;
-    m_meetOrSlice = patternProps->meetOrSlice;
-
-    m_patternUnits = Utils::JSValueAsBrushUnits(patternProps->patternUnits);
-    m_patternContentUnits = Utils::JSValueAsBrushUnits(patternProps->patternContentUnits, "userSpaceOnUse");
-
-    m_transform = Utils::JSValueAsD2DTransform(patternProps->patternTransform);
-  }
-
-  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
-
-  SaveDefinition();
-
-  if (auto const &root{SvgRoot()}) {
-    root.Invalidate();
-  }
-}
-#else
 void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -109,7 +60,6 @@ void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
     root.Invalidate();
   }
 }
-#endif
 
 void PatternView::UpdateBounds() {
   if (m_patternUnits == "objectBoundingBox") {

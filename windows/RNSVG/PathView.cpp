@@ -15,37 +15,6 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 
-#ifdef USE_FABRIC
-PathProps::PathProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
-
-void PathProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
-
-void PathView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  RegisterRenderableComponent<winrt::RNSVG::implementation::PathProps, PathView>(L"RNSVGPath", builder);
-}
-
-void PathView::UpdateProperties(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
-    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-    bool forceUpdate,
-    bool invalidate) noexcept {
-
-    auto pathProps = props.try_as<PathProps>();
-    if (pathProps) {
-      m_d = pathProps->d;
-      m_commands.clear();
-      m_segmentData.clear();
-      ParsePath();
-    }
-
-  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
-}
-#else
 void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -69,7 +38,6 @@ void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
-#endif
 
 void PathView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const &root{SvgRoot()};

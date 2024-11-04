@@ -3,7 +3,7 @@
 #include <JSValueComposition.h>
 
 #include <NativeModules.h>
-#include "../D2DHelpers.h"
+#include "D2DHelpers.h"
 #include "SvgStrings.h"
 #include "SvgView.h"
 

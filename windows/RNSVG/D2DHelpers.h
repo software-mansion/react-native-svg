@@ -43,7 +43,7 @@ struct D2DHelpers {
 
     deviceContext->PushLayer(layerParams, opacityLayer.get());
   }
-#ifndef USE_FABRIC
+
   static D2D1_CAP_STYLE GetLineCap(RNSVG::LineCap const &lineCap) {
     switch (lineCap) {
       case RNSVG::LineCap::Square:
@@ -77,7 +77,6 @@ struct D2DHelpers {
         return D2D1_FILL_MODE_WINDING;
     }
   }
-#endif
 
   static D2D1::ColorF AsD2DColor(winrt::Windows::UI::Color const &color) {
     return {
@@ -131,7 +130,6 @@ struct D2DHelpers {
     return transform;
   }
 
-#ifndef USE_FABRIC
   static DWRITE_FONT_WEIGHT FontWeightFrom(
       xaml::FrameworkElement const &parent,
       hstring const &weight) {
@@ -156,7 +154,6 @@ struct D2DHelpers {
 
     return D2DHelpers::GetClosestFontWeight(std::stof(weight.c_str(), nullptr));
   }
-#endif
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight#meaning_of_relative_weights
   static DWRITE_FONT_WEIGHT Bolder(DWRITE_FONT_WEIGHT weight) {

@@ -5,13 +5,13 @@ namespace winrt::RNSVG::implementation {
 
 REACT_STRUCT(DefsProps)
 struct DefsProps : winrt::implements<DefsProps, winrt::Microsoft::ReactNative::IComponentProps> {
-  DefsProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_GROUP_COMMON_PROPS_INIT {}
+  DefsProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
     winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
   }
 
-  REACT_SVG_GROUP_COMMON_PROPS;
+  REACT_SVG_RENDERABLE_COMMON_PROPS;
 };
 
 struct DefsView : winrt::implements<DefsView, IInspectable, RenderableView> {

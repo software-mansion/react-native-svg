@@ -11,13 +11,13 @@ struct SvgLinearGradientStop {
 
 REACT_STRUCT(LinearGradientProps)
 struct LinearGradientProps : winrt::implements<LinearGradientProps, winrt::Microsoft::ReactNative::IComponentProps> {
-  LinearGradientProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_GROUP_COMMON_PROPS_INIT {}
+  LinearGradientProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
     winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
   }
 
-  REACT_SVG_GROUP_COMMON_PROPS;
+  REACT_SVG_RENDERABLE_COMMON_PROPS;
 
   REACT_FIELD(x1)
   std::optional<std::wstring> x1;

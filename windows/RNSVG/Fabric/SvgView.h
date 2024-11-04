@@ -4,23 +4,20 @@
 #include <JSValueComposition.h>
 #include "NativeModules.h"
 
-#include "../SVGLength.h"
-
 namespace winrt::RNSVG::implementation {
 
 D2D1_SVG_ASPECT_ALIGN AlignToAspectAlign(const std::string &align) noexcept;
+
+enum class MeetOrSlice {
+    Meet = 0,
+    Slice = 1,
+};
 
 REACT_STRUCT(SvgViewProps)
 struct SvgViewProps : winrt::implements<SvgViewProps, winrt::Microsoft::ReactNative::IComponentProps> {
   SvgViewProps(const winrt::Microsoft::ReactNative::ViewProps &props);
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept;
-
-  REACT_FIELD(bbWidth)
-  winrt::RNSVG::SVGLength bbWidth{0.0, winrt::RNSVG::LengthType::Unknown};
-
-  REACT_FIELD(bbHeight)
-  winrt::RNSVG::SVGLength bbHeight{0.0, winrt::RNSVG::LengthType::Unknown};
 
   REACT_FIELD(minX)
   std::optional<float> minX;
@@ -33,7 +30,7 @@ struct SvgViewProps : winrt::implements<SvgViewProps, winrt::Microsoft::ReactNat
   REACT_FIELD(align)
   std::optional<std::string> align;
   REACT_FIELD(meetOrSlice)
-  std::optional<RNSVG::MeetOrSlice> meetOrSlice;
+  std::optional<MeetOrSlice> meetOrSlice;
   REACT_FIELD(color)
   winrt::Microsoft::ReactNative::Color color{nullptr};
  private:

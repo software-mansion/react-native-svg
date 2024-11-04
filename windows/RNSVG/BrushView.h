@@ -25,9 +25,7 @@ struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {
 };
 } // namespace winrt::RNSVG::implementation
 
-#ifndef USE_FABRIC
 namespace winrt::RNSVG::factory_implementation {
 struct BrushView : BrushViewT<BrushView, implementation::BrushView> {};
 } // namespace winrt::RNSVG::factory_implementation
-#endif
 

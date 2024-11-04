@@ -11,36 +11,7 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-#ifdef USE_FABRIC
-EllipseProps::EllipseProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
 
-void EllipseProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
-
-void EllipseView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  RegisterRenderableComponent<winrt::RNSVG::implementation::EllipseProps, EllipseView>(L"RNSVGEllipse", builder);
-}
-
-void EllipseView::UpdateProperties(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
-    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-    bool forceUpdate,
-    bool invalidate) noexcept {
-  auto ellipseProps = props.try_as<EllipseProps>();
-  if (ellipseProps) {
-    m_cx = ellipseProps->cx;
-    m_cy = ellipseProps->cy;
-    m_rx = ellipseProps->rx;
-    m_ry = ellipseProps->ry;
-  }
-
-  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
-}
-#else
 void EllipseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -61,7 +32,6 @@ void EllipseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
-#endif
 
 void EllipseView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const root{SvgRoot()};

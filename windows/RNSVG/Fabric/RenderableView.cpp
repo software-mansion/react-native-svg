@@ -2,7 +2,7 @@
 #include "RenderableView.h"
 
 #include "SvgView.h"
-#include "../D2DHelpers.h"
+#include "D2DHelpers.h"
 
 namespace winrt::Microsoft::ReactNative {
 

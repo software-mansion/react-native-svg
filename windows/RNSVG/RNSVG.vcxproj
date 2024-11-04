@@ -195,10 +195,6 @@
     <ClInclude Include="UseViewManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="D2DBrush.cpp" />
-    <ClCompile Include="D2DDevice.cpp" />
-    <ClCompile Include="D2DDeviceContext.cpp" />
-    <ClCompile Include="D2DGeometry.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -206,7 +202,6 @@
       <DependentUpon>ReactPackageProvider.idl</DependentUpon>
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
-    <ClCompile Include="SVGLength.cpp" />
   </ItemGroup>
     <ItemGroup Condition="'$(UseFabric)'=='true'">
     <ClCompile Include="Fabric/CircleView.cpp" />
@@ -226,6 +221,11 @@
     <ClCompile Include="Fabric/UseView.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(UseFabric)'!='true'">
+    <ClCompile Include="D2DBrush.cpp" />
+    <ClCompile Include="D2DDevice.cpp" />
+    <ClCompile Include="D2DDeviceContext.cpp" />
+    <ClCompile Include="D2DGeometry.cpp" />
+    <ClCompile Include="SVGLength.cpp" />
     <ClCompile Include="BrushView.cpp" />
     <ClCompile Include="CircleView.cpp" />
     <ClCompile Include="ClipPathView.cpp" />
@@ -271,7 +271,7 @@
   <ItemGroup>
     <Midl Include="Paper.idl" Condition="'$(UseFabric)'!='true'" />
     <Midl Include="ReactPackageProvider.idl" />
-    <Midl Include="Types.idl" />
+    <Midl Include="Types.idl" Condition="'$(UseFabric)'!='true'"/>
     <Midl Include="ViewManagers.idl" Condition="'$(UseFabric)'!='true'" />
     <Midl Include="Views.idl" Condition="'$(UseFabric)'!='true'"/>
   </ItemGroup>

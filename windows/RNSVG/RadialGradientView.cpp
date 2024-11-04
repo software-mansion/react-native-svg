@@ -11,46 +11,6 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 
-#ifdef USE_FABRIC
-RadialGradientProps::RadialGradientProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
-
-void RadialGradientProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
-
-void RadialGradientView::RegisterComponent(
-    const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  RegisterRenderableComponent<winrt::RNSVG::implementation::RadialGradientProps, RadialGradientView>(
-      L"RNSVGRadialGradient", builder);
-}
-
-void RadialGradientView::UpdateProperties(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
-    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-    bool forceUpdate,
-    bool invalidate) noexcept {
-  auto radialGradientProps = props.try_as<RadialGradientProps>();
-  if (radialGradientProps) {
-    m_rx = radialGradientProps->rx;
-    m_ry = radialGradientProps->ry;
-    m_fx = radialGradientProps->fx;
-    m_fy = radialGradientProps->fy;
-    m_cx = radialGradientProps->cx;
-    m_cy = radialGradientProps->cy;
-
-    m_stops = Utils::JSValueAsGradientStops(radialGradientProps->gradient);
-    m_gradientUnits = Utils::JSValueAsBrushUnits(radialGradientProps->gradientUnits);
-    m_transform = Utils::JSValueAsD2DTransform(radialGradientProps->gradientTransform);
-  }
-
-  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
-
-  SaveDefinition();
-}
-#else
 void RadialGradientView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -87,7 +47,6 @@ void RadialGradientView::UpdateProperties(IJSValueReader const &reader, bool for
 
   SaveDefinition();
 }
-#endif
 
 void RadialGradientView::Unload() {
   m_stops.clear();

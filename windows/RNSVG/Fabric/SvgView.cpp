@@ -6,9 +6,7 @@
 #include <microsoft.ui.xaml.media.dxinterop.h>
 #include <winrt/Microsoft.Graphics.Display.h>
 
-#include "../D2DDevice.h"
-#include "../D2DDeviceContext.h"
-#include "../D2DHelpers.h"
+#include "D2DHelpers.h"
 #include "GroupView.h"
 
 #include <AutoDraw.h>

@@ -11,43 +11,6 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 
-#ifdef USE_FABRIC
-LinearGradientProps::LinearGradientProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
-
-void LinearGradientProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
-
-void LinearGradientView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  RegisterRenderableComponent<winrt::RNSVG::implementation::LinearGradientProps, LinearGradientView>(
-      L"RNSVGLinearGradient", builder);
-}
-
-void LinearGradientView::UpdateProperties(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
-    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-    bool forceUpdate,
-    bool invalidate) noexcept {
-  auto linearGradientProps = props.try_as<LinearGradientProps>();
-  if (linearGradientProps) {
-    m_x1 = linearGradientProps->x1;
-    m_y1 = linearGradientProps->y1;
-    m_x2 = linearGradientProps->x2;
-    m_y2 = linearGradientProps->y2;
-
-    m_stops = Utils::JSValueAsGradientStops(linearGradientProps->gradient);
-    m_gradientUnits = Utils::JSValueAsBrushUnits(linearGradientProps->gradientUnits);
-    m_transform = Utils::JSValueAsD2DTransform(linearGradientProps->gradientTransform);
-  }
-
-  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
-
-  SaveDefinition();
-}
-#else
 void LinearGradientView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -80,7 +43,6 @@ void LinearGradientView::UpdateProperties(IJSValueReader const &reader, bool for
 
   SaveDefinition();
 }
-#endif
 
 void LinearGradientView::Unload() {
   m_stops.clear();
