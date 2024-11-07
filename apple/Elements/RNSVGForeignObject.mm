@@ -150,8 +150,8 @@ using namespace facebook::react;
   [self setHitArea:path];
   if (!CGRectEqualToRect(bounds, CGRectNull)) {
     self.clientRect = bounds;
-    self.fillBounds = CGPathGetBoundingBox(path);
-    self.strokeBounds = CGPathGetBoundingBox(self.strokePath);
+    self.fillBounds = CGPathGetPathBoundingBox(path);
+    self.strokeBounds = CGPathGetPathBoundingBox(self.strokePath);
     self.pathBounds = CGRectUnion(self.fillBounds, self.strokeBounds);
 
     CGAffineTransform current = CGContextGetCTM(context);
