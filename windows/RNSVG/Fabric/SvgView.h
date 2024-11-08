@@ -46,7 +46,6 @@ struct __declspec(uuid("ed381ffa-461a-48Bf-a3c0-5d9a42eecd30")) ISvgView : publi
 };
 
 struct SvgView : winrt::implements<SvgView, winrt::Windows::Foundation::IInspectable, ISvgView> {
-  //struct SvgView : SvgViewT<SvgView> {
  public:
 
   SvgView(const winrt::Microsoft::ReactNative::Composition::Experimental::ICompositionContext &compContext);
