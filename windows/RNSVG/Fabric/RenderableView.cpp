@@ -32,6 +32,8 @@ void ReadValue(IJSValueReader const &reader, /*out*/ D2D1_SVG_LENGTH &value) noe
         auto end{strLength - 2};
         auto lastTwo{str.substr(end)};
 
+        // D2D svg rendering does not yet support these additional unit types
+        // Just using them as number for now.
         if (lastTwo == "px") {
           value.units = D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER;
         } else if (lastTwo == "em") {

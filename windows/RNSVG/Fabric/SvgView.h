@@ -63,7 +63,7 @@ struct SvgView : winrt::implements<SvgView, winrt::Windows::Foundation::IInspect
   void UpdateLayoutMetrics(
       const winrt::Microsoft::ReactNative::LayoutMetrics &metrics,
       const winrt::Microsoft::ReactNative::LayoutMetrics &oldMetrics);
-    void MountChildComponentView(
+  void MountChildComponentView(
       const winrt::Microsoft::ReactNative::ComponentView& view,
       const winrt::Microsoft::ReactNative::MountChildComponentViewArgs& args) noexcept;
   void UnmountChildComponentView(
@@ -95,7 +95,7 @@ struct SvgView : winrt::implements<SvgView, winrt::Windows::Foundation::IInspect
   winrt::Microsoft::ReactNative::Composition::Experimental::ISpriteVisual m_visual{nullptr};
   winrt::Microsoft::ReactNative::LayoutMetrics m_layoutMetrics{{0, 0, 0, 0}, 1.0};
   winrt::Microsoft::ReactNative::Composition::Experimental::ICompositionContext m_compContext{nullptr};
-  winrt::weak_ref<winrt::Microsoft::ReactNative::Composition::ViewComponentView> m_wkView; // Do we have the view passed into all the methods that we need this?
+  winrt::weak_ref<winrt::Microsoft::ReactNative::Composition::ViewComponentView> m_wkView;
   D2D1_SVG_ASPECT_ALIGN m_aspectAlign;
   winrt::com_ptr<SvgViewProps> m_props;
 

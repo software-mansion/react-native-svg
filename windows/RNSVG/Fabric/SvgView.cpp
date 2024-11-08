@@ -276,20 +276,6 @@ void SvgView::Draw(
   }
 
   deviceContext5->DrawSvgDocument(spSvgDocument.get());
-
-  /*
-  winrt::com_ptr<ID2D1SolidColorBrush> textHighlightBrush;
-  winrt::check_hresult(
-      deviceContext5->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black, 1.0f), textHighlightBrush.put()));
-
-              const D2D1_RECT_F rect = {
-      10,
-      10,
-      50,
-      50};
-
-  deviceContext5->FillRectangle(rect, textHighlightBrush.get());
-  */
 }
 
 winrt::Microsoft::ReactNative::Composition::Theme SvgView::Theme() const noexcept {

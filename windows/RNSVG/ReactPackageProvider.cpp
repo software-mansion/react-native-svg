@@ -58,6 +58,8 @@ namespace winrt::RNSVG::implementation
     RegisterRectComponent(fabricPackageBuilder);
     RegisterCircleComponent(fabricPackageBuilder);
     RegisterEllipseComponent(fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGFilter", fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGForeignObject", fabricPackageBuilder);
     RegisterLineComponent(fabricPackageBuilder);
     RegisterPathComponent(fabricPackageBuilder);
     RegisterImageComponent(fabricPackageBuilder);
