@@ -61,7 +61,7 @@
 
 static char RCTGraphicsContextSizeKey;
 
-void UIGraphicsBeginImageContextWithOptions(CGSize size, __unused BOOL opaque, CGFloat scale)
+void RNSVGUIGraphicsBeginImageContextWithOptions(CGSize size, __unused BOOL opaque, CGFloat scale)
 {
   if (scale == 0.0) {
     // TODO: Assert. We can't assume a display scale on macOS
@@ -98,7 +98,7 @@ void UIGraphicsBeginImageContextWithOptions(CGSize size, __unused BOOL opaque, C
   }
 }
 
-void UIGraphicsEndImageContext(void)
+void RNSVGUIGraphicsEndImageContext(void)
 {
   RCTAssert(
       objc_getAssociatedObject([NSGraphicsContext currentContext], &RCTGraphicsContextSizeKey),
@@ -106,7 +106,7 @@ void UIGraphicsEndImageContext(void)
   [NSGraphicsContext restoreGraphicsState];
 }
 
-NSImage *UIGraphicsGetImageFromCurrentImageContext(void)
+NSImage *RNSVGUIGraphicsGetImageFromCurrentImageContext(void)
 {
   NSImage *image = nil;
   NSGraphicsContext *graphicsContext = [NSGraphicsContext currentContext];

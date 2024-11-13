@@ -406,7 +406,7 @@ UInt32 saturate(CGFloat value)
       [blendedImage drawInRect:scaledRect];
 #else // [macOS
       // Blend current element and mask
-      UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
+      RNSVGUIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
       CGContextRef newContext = UIGraphicsGetCurrentContext();
 
       CGContextSetBlendMode(newContext, kCGBlendModeCopy);
@@ -415,7 +415,7 @@ UInt32 saturate(CGFloat value)
       CGContextDrawImage(newContext, rect, contentImage);
 
       CGImageRef blendedImage = CGBitmapContextCreateImage(newContext);
-      UIGraphicsEndImageContext();
+      RNSVGUIGraphicsEndImageContext();
 
       // Invert the CTM and apply transformations to draw image in 1:1
       CGContextConcatCTM(context, CGAffineTransformInvert(currentCTM));

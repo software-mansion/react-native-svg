@@ -155,7 +155,8 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getBBox : (nonnull NSNumber *)reactTag op
       bounds = CGRectIntersection(bounds, clipBounds);
     }
   }
-  if (CGRectIsNull(bounds)) bounds = CGRectZero;
+  if (CGRectIsNull(bounds))
+    bounds = CGRectZero;
   CGPoint origin = bounds.origin;
   CGSize size = bounds.size;
   return @{@"x" : @(origin.x), @"y" : @(origin.y), @"width" : @(size.width), @"height" : @(size.height)};

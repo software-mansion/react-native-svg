@@ -37,9 +37,9 @@
 {
   CGFloat scale = [self getScreenScale];
 #if TARGET_OS_OSX // [macOS
-  UIGraphicsBeginImageContextWithOptions(rect.size, NO, 1.0);
+  RNSVGUIGraphicsBeginImageContextWithOptions(rect.size, NO, 1.0);
 #else // macOS]
-  UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
+  RNSVGUIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
 #endif // [macOS]
   CGContextRef cgContext = UIGraphicsGetCurrentContext();
   CGContextConcatCTM(cgContext, CGAffineTransformInvert(CGContextGetCTM(cgContext)));
@@ -53,7 +53,7 @@
   }
   [renderable renderLayerTo:cgContext rect:rect];
   CGImageRef contentImage = CGBitmapContextCreateImage(cgContext);
-  UIGraphicsEndImageContext();
+  RNSVGUIGraphicsEndImageContext();
   return contentImage;
 }
 
