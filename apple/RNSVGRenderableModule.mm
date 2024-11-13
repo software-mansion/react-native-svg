@@ -138,7 +138,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getBBox : (nonnull NSNumber *)reactTag op
   BOOL clipped = [[options objectForKey:@"clipped"] boolValue];
   [svg getPath:nil];
 
-  CGRect bounds = CGRectZero;
+  CGRect bounds = CGRectNull;
   if (fill) {
     bounds = CGRectUnion(bounds, svg.fillBounds);
   }
@@ -150,12 +150,13 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getBBox : (nonnull NSNumber *)reactTag op
   }
   if (clipped) {
     CGPathRef clipPath = [svg getClipPath];
-    CGRect clipBounds = CGPathGetBoundingBox(clipPath);
+    CGRect clipBounds = CGPathGetPathBoundingBox(clipPath);
     if (clipPath && !CGRectIsEmpty(clipBounds)) {
       bounds = CGRectIntersection(bounds, clipBounds);
     }
   }
-
+  if (CGRectIsNull(bounds))
+    bounds = CGRectZero;
   CGPoint origin = bounds.origin;
   CGSize size = bounds.size;
   return @{@"x" : @(origin.x), @"y" : @(origin.y), @"width" : @(size.width), @"height" : @(size.height)};

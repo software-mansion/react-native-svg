@@ -24,14 +24,10 @@ export const warnUnimplementedFilter = () => {
     `Some of the used filters are not yet supported on native platforms. Please check the USAGE.md for more info. Not implemented filters:\n`,
     JSON.stringify(
       [
-        'FeBlend',
         'FeComponentTransfer',
-        'FeComposite',
         'FeConvolveMatrix',
         'FeDiffuseLighting',
         'FeDisplacementMap',
-        'FeDropShadow',
-        'FeFlood',
         'FeFuncA',
         'FeFuncB',
         'FeFuncG',

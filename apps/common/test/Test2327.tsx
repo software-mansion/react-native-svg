@@ -1,6 +1,6 @@
 import React from 'react';
-import {SvgUri, Circle, Svg} from 'react-native-svg';
 import {Button, View} from 'react-native';
+import {Circle, Svg, SvgUri} from 'react-native-svg';
 
 export default () => {
   const [uri, setUri] = React.useState<string | null>(null);

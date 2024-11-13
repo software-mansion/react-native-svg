@@ -133,7 +133,7 @@ using namespace facebook::react;
     if (self.inlineSize != nil && self.inlineSize.value != 0) {
       if (self.fill) {
         if (self.fill.class == RNSVGBrush.class) {
-          CGColorRef color = [self.tintColor CGColor];
+          CGColorRef color = [self getCurrentColor];
           [self drawWrappedText:context gc:gc rect:rect color:color];
         } else {
           CGColorRef color = [self.fill getColorWithOpacity:self.fillOpacity];
@@ -143,7 +143,7 @@ using namespace facebook::react;
       }
       if (self.stroke) {
         if (self.stroke.class == RNSVGBrush.class) {
-          CGColorRef color = [self.tintColor CGColor];
+          CGColorRef color = [self getCurrentColor];
           [self drawWrappedText:context gc:gc rect:rect color:color];
         } else {
           CGColorRef color = [self.stroke getColorWithOpacity:self.strokeOpacity];

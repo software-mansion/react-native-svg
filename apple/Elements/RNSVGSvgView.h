@@ -19,6 +19,7 @@
 
 @interface RNSVGSvgView : RNSVGView <RNSVGContainer>
 
+@property (nonatomic, strong) RNSVGColor *color;
 @property (nonatomic, strong) RNSVGLength *bbWidth;
 @property (nonatomic, strong) RNSVGLength *bbHeight;
 @property (nonatomic, assign) CGFloat minX;

@@ -107,7 +107,6 @@ export default class Svg extends Shape<SvgProps> {
       ...extracted,
     };
     let {
-      color,
       width,
       height,
       focusable,
@@ -172,8 +171,6 @@ export default class Svg extends Shape<SvgProps> {
     }
 
     extractResponder(props, props, this as ResponderInstanceProps);
-
-    props.tintColor = color;
 
     if (onLayout != null) {
       props.onLayout = onLayout;

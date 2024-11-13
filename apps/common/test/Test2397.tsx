@@ -1,14 +1,14 @@
 import React from 'react';
-import {Svg, Circle} from 'react-native-svg';
 import Animated, {
   createAnimatedPropAdapter,
+  interpolateColor,
   processColor,
   useAnimatedProps,
   useSharedValue,
   withRepeat,
   withTiming,
-  interpolateColor,
 } from 'react-native-reanimated';
+import {Circle, Svg} from 'react-native-svg';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 

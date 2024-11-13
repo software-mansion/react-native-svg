@@ -25,6 +25,7 @@
   NSArray<RNSVGLength *> *_sourceStrokeDashArray;
   CGFloat *_strokeDashArrayData;
   CGPathRef _srcHitPath;
+  RNSVGRenderable *_caller;
 }
 
 static RNSVGRenderable *_contextElement;
@@ -61,11 +62,11 @@ static RNSVGRenderable *_contextElement;
 
 - (void)setColor:(RNSVGColor *)color
 {
-  if (color == self.tintColor) {
+  if (color == _color) {
     return;
   }
   [self invalidate];
-  self.tintColor = color;
+  _color = color;
 }
 
 - (void)setFill:(RNSVGBrush *)fill
@@ -405,7 +406,7 @@ UInt32 saturate(CGFloat value)
       [blendedImage drawInRect:scaledRect];
 #else // [macOS
       // Blend current element and mask
-      UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
+      RNSVGUIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
       CGContextRef newContext = UIGraphicsGetCurrentContext();
 
       CGContextSetBlendMode(newContext, kCGBlendModeCopy);
@@ -414,7 +415,7 @@ UInt32 saturate(CGFloat value)
       CGContextDrawImage(newContext, rect, contentImage);
 
       CGImageRef blendedImage = CGBitmapContextCreateImage(newContext);
-      UIGraphicsEndImageContext();
+      RNSVGUIGraphicsEndImageContext();
 
       // Invert the CTM and apply transformations to draw image in 1:1
       CGContextConcatCTM(context, CGAffineTransformInvert(currentCTM));
@@ -509,8 +510,8 @@ UInt32 saturate(CGFloat value)
       self.path = CGPathRetain(path);
     }
     [self setHitArea:path];
-    self.fillBounds = CGPathGetBoundingBox(path);
-    self.strokeBounds = CGPathGetBoundingBox(self.strokePath);
+    self.fillBounds = CGPathGetPathBoundingBox(path);
+    self.strokeBounds = CGPathGetPathBoundingBox(self.strokePath);
     self.pathBounds = CGRectUnion(self.fillBounds, self.strokeBounds);
   }
   const CGRect pathBounds = self.pathBounds;
@@ -560,7 +561,7 @@ UInt32 saturate(CGFloat value)
 
   if (self.fill) {
     if (self.fill.class == RNSVGBrush.class) {
-      CGContextSetFillColorWithColor(context, [self.tintColor CGColor]);
+      CGContextSetFillColorWithColor(context, [self getCurrentColor]);
       fillColor = YES;
     } else {
       fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
@@ -608,7 +609,7 @@ UInt32 saturate(CGFloat value)
     BOOL strokeColor;
 
     if (self.stroke.class == RNSVGBrush.class) {
-      CGContextSetStrokeColorWithColor(context, [self.tintColor CGColor]);
+      CGContextSetStrokeColorWithColor(context, [self getCurrentColor]);
       strokeColor = YES;
     } else {
       strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
@@ -724,6 +725,7 @@ UInt32 saturate(CGFloat value)
 
 - (void)mergeProperties:(__kindof RNSVGRenderable *)target
 {
+  _caller = target;
   NSArray<NSString *> *targetAttributeList = [target getAttributeList];
 
   if (targetAttributeList.count == 0) {
@@ -754,9 +756,28 @@ UInt32 saturate(CGFloat value)
     [self setValue:[_originProperties valueForKey:key] forKey:key];
   }
 
+  _caller = nil;
   _lastMergedList = nil;
   _attributeList = _propList;
   self.merging = false;
+}
+
+- (CGColor *)getCurrentColor
+{
+  if (self.color != nil) {
+    return [self.color CGColor];
+  }
+  if (_caller != nil) {
+    return [_caller getCurrentColor];
+  }
+  RNSVGPlatformView *parentView = [self superview];
+  if ([parentView isKindOfClass:[RNSVGRenderable class]]) {
+    return [(RNSVGRenderable *)parentView getCurrentColor];
+  } else if ([parentView isKindOfClass:[RNSVGSvgView class]]) {
+    return [[(RNSVGSvgView *)parentView color] CGColor];
+  }
+
+  return nil;
 }
 
 @end

@@ -19,6 +19,7 @@
 @interface RNSVGRenderable : RNSVGNode
 
 @property (class) RNSVGRenderable *contextElement;
+@property (nonatomic, strong) RNSVGColor *color;
 @property (nonatomic, strong) RNSVGBrush *fill;
 @property (nonatomic, assign) CGFloat fillOpacity;
 @property (nonatomic, assign) RNSVGCGFCRule fillRule;
@@ -44,5 +45,7 @@
 - (void)mergeProperties:(__kindof RNSVGRenderable *)target;
 
 - (void)resetProperties;
+
+- (CGColor *)getCurrentColor;
 
 @end
