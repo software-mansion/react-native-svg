@@ -57,24 +57,10 @@ HRESULT SetColorMode(
   std::optional<float> opacity;                                \
   REACT_FIELD(matrix)                                          \
   std::optional<std::vector<float>> matrix;                    \
-  REACT_FIELD(mask)                                            \
-  std::optional<std::string> mask;                             \
-  REACT_FIELD(markerStart)                                     \
-  std::optional<std::string> markerStart;                      \
-  REACT_FIELD(markerMid)                                       \
-  std::optional<std::string> markerMid;                        \
-  REACT_FIELD(markerEnd)                                       \
-  std::optional<std::string> markerEnd;                        \
   REACT_FIELD(clipPath)                                        \
   std::optional<std::wstring> clipPath;                        \
   REACT_FIELD(clipRule)                                        \
   std::optional<D2D1_FILL_MODE> clipRule;                      \
-  REACT_FIELD(responsible)                                     \
-  std::optional<bool> responsible;                             \
-  REACT_FIELD(display)                                         \
-  std::optional<std::string> display;                          \
-  REACT_FIELD(pointerEvents)                                   \
-  std::optional<std::string> pointerEvents;                    \
   REACT_FIELD(fill)                                            \
   std::optional<ColorStruct> fill;                             \
   REACT_FIELD(fillOpacity)                                     \
@@ -97,8 +83,6 @@ HRESULT SetColorMode(
   std::optional<float> strokeDashoffset;                       \
   REACT_FIELD(strokeMiterlimit)                                \
   std::optional<float> strokeMiterlimit;                       \
-  REACT_FIELD(vectorEffect)                                    \
-  std::optional<int32_t> vectorEffect;                         \
   REACT_FIELD(propList)                                        \
   std::optional<std::vector<std::string>> propList;            \
   std::optional<winrt::Microsoft::ReactNative::Color> color;   \
@@ -106,6 +90,30 @@ HRESULT SetColorMode(
 
 #define REACT_SVG_RENDERABLE_COMMON_PROPS_INIT \
   : m_props(props)
+
+#define REACT_BEGIN_SVG_RENDERABLE_COMMON_PROPS_CLONE(TProps) \
+     if (cloneFrom) {                                         \
+       auto cloneFromProps = cloneFrom.as<TProps>();          \
+       name = cloneFromProps->name;                           \
+       opacity = cloneFromProps->opacity;                     \
+       matrix = cloneFromProps->matrix;                       \
+       clipPath = cloneFromProps->clipPath;                   \
+       clipRule = cloneFromProps->clipRule;                   \
+       fill = cloneFromProps->fill;                           \
+       fillOpacity = cloneFromProps->fillOpacity;             \
+       fillRule = cloneFromProps->fillRule;                   \
+       stroke = cloneFromProps->stroke;                       \
+       strokeOpacity = cloneFromProps->strokeOpacity;         \
+       strokeWidth = cloneFromProps->strokeWidth;             \
+       strokeLinecap = cloneFromProps->strokeLinecap;         \
+       strokeLinejoin = cloneFromProps->strokeLinejoin;       \
+       strokeDasharray = cloneFromProps->strokeDasharray;     \
+       strokeMiterlimit = cloneFromProps->strokeMiterlimit;   \
+       propList = cloneFromProps->propList;                   \
+       color = cloneFromProps->color;
+
+#define REACT_END_SVG_RENDERABLE_COMMON_PROPS_CLONE \
+     }
 
 struct __declspec(uuid("a03986c0-b06e-4fb8-a86e-16fcc47b2f31")) RenderableView : public ::IUnknown {
  public:
@@ -266,7 +274,7 @@ void RegisterRenderableComponent(
       view.UserData(*userData);
     });
     builder.SetCreateProps(
-        [](winrt::Microsoft::ReactNative::ViewProps props) noexcept { return winrt::make<TProps>(props); });
+        [](winrt::Microsoft::ReactNative::ViewProps props, const winrt::Microsoft::ReactNative::IComponentProps &cloneFrom) noexcept { return winrt::make<TProps>(props, cloneFrom); });
     builder.SetUpdatePropsHandler([](const winrt::Microsoft::ReactNative::ComponentView &view,
                                      const winrt::Microsoft::ReactNative::IComponentProps &newProps,
                                      const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept {

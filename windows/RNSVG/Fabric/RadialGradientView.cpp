@@ -11,7 +11,20 @@ struct SvgRadialGradientStop {
 
 REACT_STRUCT(RadialGradientProps)
 struct RadialGradientProps : winrt::implements<RadialGradientProps, winrt::Microsoft::ReactNative::IComponentProps> {
-  RadialGradientProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
+  RadialGradientProps(const winrt::Microsoft::ReactNative::ViewProps &props, const winrt::Microsoft::ReactNative::IComponentProps& cloneFrom) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT
+  {
+    REACT_BEGIN_SVG_RENDERABLE_COMMON_PROPS_CLONE(RadialGradientProps)
+      fx = cloneFromProps->fx;
+      fy = cloneFromProps->fy;
+      cx = cloneFromProps->cx;
+      cy = cloneFromProps->cy;
+      rx = cloneFromProps->rx;
+      ry = cloneFromProps->ry;
+      gradient = cloneFromProps->gradient;
+      gradientUnits = cloneFromProps->gradientUnits;
+      gradientTransform = cloneFromProps->gradientTransform;
+    REACT_END_SVG_RENDERABLE_COMMON_PROPS_CLONE
+  }
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
     winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
@@ -32,7 +45,7 @@ struct RadialGradientProps : winrt::implements<RadialGradientProps, winrt::Micro
   REACT_FIELD(ry)
   std::optional<std::wstring> ry;
   REACT_FIELD(gradient)
-  std::optional<std::vector<winrt::Microsoft::ReactNative::JSValue>> gradient{};
+  std::optional<std::vector<float>> gradient{};
   REACT_FIELD(gradientUnits)
   std::optional<int32_t> gradientUnits;
   REACT_FIELD(gradientTransform)
@@ -55,9 +68,9 @@ struct RadialGradientView : winrt::implements<RadialGradientView, winrt::Windows
       while (it != props->gradient->end()) {
         SvgRadialGradientStop stop;
 
-        stop.offset = it->AsSingle();
+        stop.offset = *it;
         ++it;
-        auto clr = it->AsUInt32();
+        auto clr = static_cast<uint32_t>(*it);
         stop.color = D2D1_COLOR_F{
             ((clr & 0x00FF0000) >> 16) / 255.0f,
             ((clr & 0x0000FF00) >> 8) / 255.0f,

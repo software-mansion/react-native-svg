@@ -14,7 +14,20 @@
 
 namespace winrt::RNSVG::implementation {
 
-SvgViewProps::SvgViewProps(const winrt::Microsoft::ReactNative::ViewProps &props) : m_props(props) {}
+SvgViewProps::SvgViewProps(const winrt::Microsoft::ReactNative::ViewProps& props, const winrt::Microsoft::ReactNative::IComponentProps& cloneFrom)
+  : m_props(props)
+{
+  if (cloneFrom) {
+    auto cloneFromProps = cloneFrom.as<SvgViewProps>();
+    minX = cloneFromProps->minX;
+    minY = cloneFromProps->minY;
+    vbWidth = cloneFromProps->vbWidth;
+    vbHeight = cloneFromProps->vbHeight;
+    align = cloneFromProps->align;
+    meetOrSlice = cloneFromProps->meetOrSlice;
+    color = cloneFromProps->color;
+  }
+}
 
 void SvgViewProps::SetProp(
     uint32_t hash,
@@ -144,8 +157,10 @@ void SvgView::Initialize(const winrt::Microsoft::ReactNative::ComponentView &sen
 void SvgView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
   builder.AddViewComponent(
       L"RNSVGSvgView", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps(
-            [](winrt::Microsoft::ReactNative::ViewProps props) noexcept { return winrt::make<SvgViewProps>(props); });
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props,
+                                  const winrt::Microsoft::ReactNative::IComponentProps &cloneFrom) noexcept {
+          return winrt::make<SvgViewProps>(props, cloneFrom);
+        });
         auto compBuilder =
             builder.as<winrt::Microsoft::ReactNative::Composition::IReactCompositionViewComponentBuilder>();
 
@@ -157,6 +172,10 @@ void SvgView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPacka
               userData->Initialize(view);
               view.UserData(*userData);
             });
+
+        compBuilder.SetViewFeatures(
+            winrt::Microsoft::ReactNative::Composition::ComponentViewFeatures::Default &
+            ~winrt::Microsoft::ReactNative::Composition::ComponentViewFeatures::Background);
 
         builder.SetUpdatePropsHandler([](const winrt::Microsoft::ReactNative::ComponentView &view,
                                          const winrt::Microsoft::ReactNative::IComponentProps &newProps,
@@ -186,8 +205,6 @@ void SvgView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPacka
               return userData->UnmountChildComponentView(view, args);
             });
       });
-
-  // TODO how to remove featureflag Background?
 }
 
 void SvgView::UpdateLayoutMetrics(

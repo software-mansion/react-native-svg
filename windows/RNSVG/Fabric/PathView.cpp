@@ -7,7 +7,12 @@ namespace winrt::RNSVG::implementation {
 
 REACT_STRUCT(PathProps)
 struct PathProps : winrt::implements<PathProps, winrt::Microsoft::ReactNative::IComponentProps> {
-  PathProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
+  PathProps(const winrt::Microsoft::ReactNative::ViewProps &props, const winrt::Microsoft::ReactNative::IComponentProps& cloneFrom) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT
+  {
+    REACT_BEGIN_SVG_RENDERABLE_COMMON_PROPS_CLONE(PathProps)
+      d = cloneFromProps->d;
+    REACT_END_SVG_RENDERABLE_COMMON_PROPS_CLONE
+  }
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
     winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);

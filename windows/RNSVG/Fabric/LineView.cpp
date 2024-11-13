@@ -5,7 +5,15 @@ namespace winrt::RNSVG::implementation {
 
 REACT_STRUCT(LineProps)
 struct LineProps : winrt::implements<LineProps, winrt::Microsoft::ReactNative::IComponentProps> {
-  LineProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
+  LineProps(const winrt::Microsoft::ReactNative::ViewProps &props, const winrt::Microsoft::ReactNative::IComponentProps& cloneFrom) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT
+  {
+    REACT_BEGIN_SVG_RENDERABLE_COMMON_PROPS_CLONE(LineProps)
+      x1 = cloneFromProps->x1;
+      y1 = cloneFromProps->y1;
+      x2 = cloneFromProps->x2;
+      y2 = cloneFromProps->y2;
+    REACT_END_SVG_RENDERABLE_COMMON_PROPS_CLONE
+  }
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
     winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);

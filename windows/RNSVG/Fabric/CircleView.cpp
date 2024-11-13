@@ -5,7 +5,14 @@ namespace winrt::RNSVG::implementation {
 
 REACT_STRUCT(CircleProps)
 struct CircleProps : public winrt::implements<CircleProps, winrt::Microsoft::ReactNative::IComponentProps> {
-  CircleProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
+  CircleProps(const winrt::Microsoft::ReactNative::ViewProps &props, const winrt::Microsoft::ReactNative::IComponentProps& cloneFrom) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT
+  {
+  REACT_BEGIN_SVG_RENDERABLE_COMMON_PROPS_CLONE(CircleProps)
+    r = cloneFromProps->r;
+    cx = cloneFromProps->cx;
+    cy = cloneFromProps->cy;
+  REACT_END_SVG_RENDERABLE_COMMON_PROPS_CLONE
+  }
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
     winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);

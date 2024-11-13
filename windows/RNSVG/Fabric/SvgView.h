@@ -4,9 +4,12 @@
 
 #include <d2d1_3.h>
 #include <NativeModules.h>
+#pragma push_macro("X86")
+#undef X86
 #include <winrt/Microsoft.ReactNative.Composition.Experimental.h>
 #include <winrt/Microsoft.ReactNative.h>
 #include <JSValueComposition.h>
+#pragma pop_macro("X86")
 
 namespace winrt::RNSVG::implementation {
 
@@ -19,7 +22,7 @@ enum class MeetOrSlice {
 
 REACT_STRUCT(SvgViewProps)
 struct SvgViewProps : winrt::implements<SvgViewProps, winrt::Microsoft::ReactNative::IComponentProps> {
-  SvgViewProps(const winrt::Microsoft::ReactNative::ViewProps &props);
+  SvgViewProps(const winrt::Microsoft::ReactNative::ViewProps &props, const winrt::Microsoft::ReactNative::IComponentProps& cloneFrom);
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept;
 

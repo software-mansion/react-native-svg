@@ -23,7 +23,18 @@ struct ImageSource {
 
 REACT_STRUCT(ImageProps)
 struct ImageProps : winrt::implements<ImageProps, winrt::Microsoft::ReactNative::IComponentProps> {
-  ImageProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
+  ImageProps(const winrt::Microsoft::ReactNative::ViewProps &props, const winrt::Microsoft::ReactNative::IComponentProps& cloneFrom) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT
+  {
+    REACT_BEGIN_SVG_RENDERABLE_COMMON_PROPS_CLONE(ImageProps)
+      x = cloneFromProps->x;
+      y = cloneFromProps->y;
+      width = cloneFromProps->width;
+      height = cloneFromProps->height;
+      src = cloneFromProps->src;
+      align = cloneFromProps->align;
+      meetOrSlice = cloneFromProps->meetOrSlice;
+    REACT_END_SVG_RENDERABLE_COMMON_PROPS_CLONE
+  }
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
     winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);

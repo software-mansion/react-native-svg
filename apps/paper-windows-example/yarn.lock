@@ -1946,12 +1946,12 @@
     prompts "^2.4.2"
     semver "^7.5.2"
 
-"@react-native-windows/cli@0.74.7":
-  version "0.74.7"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/cli/-/cli-0.74.7.tgz#a9d9e75af3aca9a30a5092a2059c097a813b51c1"
-  integrity sha512-QcMBxMRH9rutS24PvxMuWNB0V5sULNBMFXo62jYnLtU7mHcEW8lB5CsPrVc1JK5kb7pNFlKs9uHrkPMDn52c+g==
+"@react-native-windows/cli@0.74.8":
+  version "0.74.8"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/cli/-/cli-0.74.8.tgz#747b6d4de9fa5e3e837b643fc1a48600d756d2d2"
+  integrity sha512-XUqoXiGDlD4BCYcEweujpV3tUYr5pGijX3mNrP1DWzY8gKXVgcmzLs6fng/EK6VsWD7H8bRraYAu9pccGLN4fw==
   dependencies:
-    "@react-native-windows/codegen" "0.74.4"
+    "@react-native-windows/codegen" "0.74.5"
     "@react-native-windows/fs" "0.74.1"
     "@react-native-windows/package-utils" "0.74.1"
     "@react-native-windows/telemetry" "0.74.2"
@@ -1973,10 +1973,10 @@
     xml-parser "^1.2.1"
     xpath "^0.0.27"
 
-"@react-native-windows/codegen@0.74.4":
-  version "0.74.4"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/codegen/-/codegen-0.74.4.tgz#b191985af9784e4041d76762fe3188f50b1413c7"
-  integrity sha512-yiUHJweF1VY87x4MrdYfy/sFJpjcog1V5ZsCGqPYBtp7L1F2/aLvqTDoth8c5VK+5JB1lkRF4aJNAmRPQ9xnDg==
+"@react-native-windows/codegen@0.74.5":
+  version "0.74.5"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/codegen/-/codegen-0.74.5.tgz#a90d6caa0c1664ce25f43457bdb72bf424918f48"
+  integrity sha512-7v2QBQH7wBBYe+OUlbEsDEEOhsRAM4th55F8r9RtyEvMc+2W79up0se3+xYdBgwjYIPHsDp+g5XwDVjBJC4m7A==
   dependencies:
     "@react-native-windows/fs" "0.74.1"
     chalk "^4.1.0"
@@ -6852,17 +6852,17 @@ react-is@^17.0.1:
   version "0.0.0"
   uid ""
 
-react-native-windows@0.74.23:
-  version "0.74.23"
-  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.74.23.tgz#50eb9494413e5efdf58045e9e573d2af398c1b25"
-  integrity sha512-r8YXuLff4fIxL8HNKquV4BYS5VZNWQzIuoRJUgsECSUCYwzd1z0oY0/cxifzNwf5c9XBVHuQZlSDjl3HMbWUgw==
+react-native-windows@0.74.24:
+  version "0.74.24"
+  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.74.24.tgz#1dfbf992d377663da0578adf7507934c363c27b2"
+  integrity sha512-Vdpmpr9JDHdZUQFfr7rPeYNkcAaP0BRR1gLd4hz80pShIOuxuVUKmccN3mtr1S4y8VF+hEnhXdMHRjk64OE4GQ==
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@jest/create-cache-key-function" "^29.6.3"
     "@react-native-community/cli" "13.6.9"
     "@react-native-community/cli-platform-android" "13.6.9"
     "@react-native-community/cli-platform-ios" "13.6.9"
-    "@react-native-windows/cli" "0.74.7"
+    "@react-native-windows/cli" "0.74.8"
     "@react-native/assets" "1.0.0"
     "@react-native/assets-registry" "0.74.87"
     "@react-native/codegen" "0.74.87"

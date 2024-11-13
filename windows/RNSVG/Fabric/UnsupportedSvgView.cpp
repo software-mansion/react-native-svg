@@ -5,7 +5,7 @@ namespace winrt::RNSVG::implementation {
 
 REACT_STRUCT(UnsupportedProps)
 struct UnsupportedProps : public winrt::implements<UnsupportedProps, winrt::Microsoft::ReactNative::IComponentProps> {
-  UnsupportedProps(const winrt::Microsoft::ReactNative::ViewProps &/*props*/) {}
+  UnsupportedProps(const winrt::Microsoft::ReactNative::ViewProps &/*props*/, const winrt::Microsoft::ReactNative::IComponentProps& /*cloneFrom*/) {}
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
     winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);

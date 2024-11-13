@@ -5,7 +5,15 @@ namespace winrt::RNSVG::implementation {
 
 REACT_STRUCT(EllipseProps)
 struct EllipseProps : winrt::implements<EllipseProps, winrt::Microsoft::ReactNative::IComponentProps> {
-  EllipseProps(const winrt::Microsoft::ReactNative::ViewProps &props) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT {}
+  EllipseProps(const winrt::Microsoft::ReactNative::ViewProps &props, const winrt::Microsoft::ReactNative::IComponentProps& cloneFrom) REACT_SVG_RENDERABLE_COMMON_PROPS_INIT
+  {
+    REACT_BEGIN_SVG_RENDERABLE_COMMON_PROPS_CLONE(EllipseProps)
+      cx = cloneFromProps->cx;
+      cy = cloneFromProps->cy;
+      rx = cloneFromProps->rx;
+      ry = cloneFromProps->ry;
+    REACT_END_SVG_RENDERABLE_COMMON_PROPS_CLONE
+  }
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
     winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);

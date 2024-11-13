@@ -15,7 +15,7 @@
     "react-dom": "^18.2.0",
     "react-native": "0.74.2",
     "react-native-svg": "link:../../",
-    "react-native-windows": "0.74.23"
+    "react-native-windows": "0.74.24"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
