@@ -19,6 +19,10 @@
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
+#if TARGET_OS_OSX // [macOS
+#import "RNSVGUIKit.h"
+#endif // macOS]
+
 @implementation RNSVGSvgView {
   NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
   NSMutableDictionary<NSString *, RNSVGNode *> *_templates;

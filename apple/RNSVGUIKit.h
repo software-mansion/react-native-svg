@@ -67,4 +67,11 @@ extern "C" {
 @property (readonly) CGPoint CGPointValue;
 @end
 
+// These functions are copied from react-native-macos to enable compatibility with react-native-macos@0.76+
+// https://github.com/microsoft/react-native-macos/blob/7361b165ef633d3d95dbdb69da58ff6119f07369/packages/react-native/React/Base/macOS/RCTUIKit.m
+// See https://github.com/software-mansion/react-native-svg/issues/2528
+void UIGraphicsBeginImageContextWithOptions(CGSize size, __unused BOOL opaque, CGFloat scale);
+void UIGraphicsEndImageContext(void);
+NSImage *UIGraphicsGetImageFromCurrentImageContext(void);
+
 #endif // ] TARGET_OS_OSX
