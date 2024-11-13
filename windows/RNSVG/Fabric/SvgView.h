@@ -3,7 +3,7 @@
 #include <unknwn.h>
 
 #include <d2d1_3.h>
-#include <msoNativeModules.h>
+#include <NativeModules.h>
 #include <winrt/Microsoft.ReactNative.Composition.Experimental.h>
 #include <winrt/Microsoft.ReactNative.h>
 #include <JSValueComposition.h>
