@@ -59,6 +59,13 @@ namespace winrt::RNSVG::implementation
     RegisterCircleComponent(fabricPackageBuilder);
     RegisterEllipseComponent(fabricPackageBuilder);
     RegisterUnsupportedSvgComponent(L"RNSVGFilter", fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGFeBlend", fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGFeColorMatrix", fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGFeComposite", fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGFeFlood", fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGFeGaussianBlur", fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGFeMerge", fabricPackageBuilder);
+    RegisterUnsupportedSvgComponent(L"RNSVGFeOffset", fabricPackageBuilder);
     RegisterUnsupportedSvgComponent(L"RNSVGForeignObject", fabricPackageBuilder);
     RegisterLineComponent(fabricPackageBuilder);
     RegisterPathComponent(fabricPackageBuilder);
