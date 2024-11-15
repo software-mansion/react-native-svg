@@ -112,15 +112,11 @@ void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *rendera
     [renderableNode setColor:RCTUIColorFromSharedColor(renderableProps.color)];
   }
   id fill = RNSVGConvertFollyDynamicToId(renderableProps.fill);
-  if (fill != nil) {
-    renderableNode.fill = [RCTConvert RNSVGBrush:fill];
-  }
+  renderableNode.fill = [RCTConvert RNSVGBrush:fill];
   renderableNode.fillOpacity = renderableProps.fillOpacity;
   renderableNode.fillRule = renderableProps.fillRule == 0 ? kRNSVGCGFCRuleEvenodd : kRNSVGCGFCRuleNonzero;
   id stroke = RNSVGConvertFollyDynamicToId(renderableProps.stroke);
-  if (stroke != nil) {
-    renderableNode.stroke = [RCTConvert RNSVGBrush:stroke];
-  }
+  renderableNode.stroke = [RCTConvert RNSVGBrush:stroke];
   renderableNode.strokeOpacity = renderableProps.strokeOpacity;
   id strokeWidth = RNSVGConvertFollyDynamicToId(renderableProps.strokeWidth);
   if (strokeWidth != nil) {
