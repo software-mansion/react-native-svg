@@ -172,9 +172,10 @@ using namespace facebook::react;
   CGContextAddPath(context, path);
   CGContextFillPath(context);
 
-  CGImageRef maskImage = CGBitmapContextCreateImage(context);
-
-  return [CIImage imageWithCGImage:maskImage];
+  CGImage *maskImage = CGBitmapContextCreateImage(context);
+  CIImage *ciMaskImage = [CIImage imageWithCGImage:maskImage];
+  CGImageRelease(maskImage);
+  return ciMaskImage;
 }
 
 static CIFilter *sourceAlphaFilter()
