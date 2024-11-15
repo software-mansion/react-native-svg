@@ -6,6 +6,7 @@ import extractOpacity from './extractOpacity';
 import { idPattern } from '../util';
 import type {
   ClipProps,
+  ColorProps,
   extractedProps,
   FillProps,
   NumberProp,
@@ -53,6 +54,7 @@ export default function extractProps(
     ResponderProps &
     StrokeProps &
     FillProps &
+    ColorProps &
     ClipProps,
   ref: object
 ) {
@@ -75,6 +77,9 @@ export default function extractProps(
   extractResponder(extracted, props, ref);
   extractFill(extracted, props, inherited);
   extractStroke(extracted, props, inherited);
+  if (props.color) {
+    extracted.color = props.color;
+  }
 
   if (inherited.length) {
     extracted.propList = inherited;

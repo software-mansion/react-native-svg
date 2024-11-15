@@ -2,11 +2,6 @@
 
 #include "pch.h"
 
-#ifdef USE_FABRIC
-#include <winrt/Microsoft.ReactNative.Composition.h>
-#include <winrt/Microsoft.ReactNative.Composition.Experimental.h>
-#endif
-
 #include <winrt/Windows.Foundation.Numerics.h>
 #include <UI.Text.h>
 #include "JSValueReader.h"
@@ -171,54 +166,6 @@ struct Utils {
     }
   }
 
-#ifdef USE_FABRIC
-  static std::string JSValueAsBrushUnits(
-      std::optional<int32_t> const &value,
-      std::string defaultValue = "objectBoundingBox") {
-    return (value.has_value() && *value == 1) ? "userSpaceOnUse" : defaultValue;
-  }
-
-  static float JSValueAsFloat(std::optional<float> const &value, float defaultValue = 0.0f) {
-    return value.has_value() ? *value : defaultValue;
-  }
-
-  static std::string JSValueAsString(std::optional<std::string> const &value, std::string defaultValue = "") {
-    return value.has_value() ? *value : defaultValue;
-  }
-
-  static D2D1::Matrix3x2F JSValueAsD2DTransform(std::optional<std::vector<float>> const &value) {
-    if (value.has_value()) {
-      auto matrix{value.value()};
-      return D2D1::Matrix3x2F(
-          matrix.at(0),
-          matrix.at(1),
-          matrix.at(2),
-          matrix.at(3),
-          matrix.at(4),
-          matrix.at(5));
-    }
-
-    return D2D1::Matrix3x2F::Identity();
-  }
-
-  static std::vector<D2D1_GRADIENT_STOP> JSValueAsGradientStops(std::optional<std::vector<float>> const &value) {
-    if (value.has_value()) {
-      auto gradient = value.value();
-      std::vector<D2D1_GRADIENT_STOP> gradientStops;
-
-      for (size_t i = 0; i < gradient.size(); ++i) {
-        D2D1_GRADIENT_STOP stop{};
-        stop.position = Utils::JSValueAsFloat(gradient.at(i));
-        stop.color = D2DHelpers::AsD2DColor(Utils::JSValueAsD2DColor(gradient.at(++i)));
-        gradientStops.emplace_back(stop);
-      }
-
-      return gradientStops;
-    }
-
-    return {};
-  }
-#else
   static std::string JSValueAsBrushUnits(JSValue const &value, std::string defaultValue = "objectBoundingBox") {
     if (value.IsNull()) {
       return defaultValue;
@@ -306,7 +253,6 @@ struct Utils {
 
     return gradientStops;
   }
-#endif
 
   static winrt::Windows::UI::Color JSValueAsD2DColor(float value) {
     auto color = static_cast<int32_t>(value);
@@ -321,11 +267,7 @@ struct Utils {
 
   static com_ptr<ID2D1Brush> GetCanvasBrush(
       hstring const &brushId,
-#ifdef USE_FABRIC
-      winrt::Microsoft::ReactNative::Color const &color,
-#else
       Windows::UI::Color const &color,
-#endif
       RNSVG::SvgView const &root,
       com_ptr<ID2D1Geometry> const &geometry,
       RNSVG::D2DDeviceContext const &context) {
@@ -337,11 +279,7 @@ struct Utils {
     if (root && brushId != L"") {
       if (brushId == L"currentColor") {
         com_ptr<ID2D1SolidColorBrush> scb;
-#ifdef USE_FABRIC
-        winColor = root.CurrentColor().AsWindowsColor(root.Theme());
-#else
         winColor = root.CurrentColor();
-#endif
         deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(winColor), scb.put());
         brush = scb.as<ID2D1Brush>();
       } else if (auto const &brushView{root.Brushes().TryLookup(brushId)}) {
@@ -360,11 +298,7 @@ struct Utils {
     if (!brush) {
       com_ptr<ID2D1SolidColorBrush> scb;
       assert(root != nullptr);
-#ifdef USE_FABRIC
-      winColor = color.AsWindowsColor(root.Theme());
-#else
       winColor = color;
-#endif
       deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(winColor), scb.put());
       brush = scb.as<ID2D1Brush>();
     }

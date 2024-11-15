@@ -14,9 +14,7 @@
 #include <d2d1effects.h>
 #include <shcore.h>
 
-#ifndef USE_FABRIC
 #include <wincodec.h>
-#endif
 
 using namespace winrt::Microsoft::ReactNative;
 using namespace winrt::Windows::Security::Cryptography;
@@ -25,64 +23,6 @@ using namespace winrt::Windows::Web::Http;
 
 namespace winrt::RNSVG::implementation {
 
-#ifdef USE_FABRIC
-ImageProps::ImageProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
-
-void ImageProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
-
-ImageView::ImageView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
-void ImageView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGImage", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::ImageProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::ImageView>(args);
-        });
-      });
-}
-
-void ImageView::UpdateProperties(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
-    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-    bool forceUpdate,
-    bool invalidate) noexcept {
-  auto imageProps = props.try_as<ImageProps>();
-  auto oldImageProps = oldProps.try_as<ImageProps>();
-  if (imageProps) {
-    m_props = imageProps;
-
-    m_x = m_props->x;
-    m_y = m_props->y;
-    m_width = m_props->width;
-    m_height = m_props->height;
-    
-    // preserveAspectRatio
-    m_align = m_props->align;
-    m_meetOrSlice = m_props->meetOrSlice;
-
-    // IamgeSource
-    m_source.uri = m_props->src.uri;
-    m_source.method = m_props->src.method;
-    m_source.width = m_props->src.width;
-    m_source.height = m_props->src.height;
-    m_source.scale = m_props->src.scale;
-
-    if (!oldImageProps || (oldImageProps->src.uri != imageProps->src.uri)) {
-      LoadImageSourceAsync(true);
-    }
-  }
-
-  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
-}
-#else
 void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -141,7 +81,6 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
-#endif
 
 void ImageView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   if (!m_wicbitmap) {
@@ -302,7 +241,6 @@ IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(
     Uri uri{winrt::to_hstring(source.uri)};
     HttpRequestMessage request{httpMethod, uri};
 
-#ifndef USE_FABRIC
     if (!source.headers.empty()) {
       for (auto const &header : source.headers) {
         if (_stricmp(to_string(header.first).c_str(), "authorization") == 0) {
@@ -312,7 +250,6 @@ IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(
         }
       }
     }
-#endif
 
     HttpClient httpClient;
     HttpResponseMessage response{co_await httpClient.SendRequestAsync(request)};

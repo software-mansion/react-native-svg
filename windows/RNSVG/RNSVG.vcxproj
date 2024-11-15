@@ -195,13 +195,40 @@
     <ClInclude Include="UseViewManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BrushView.cpp" />
-    <ClCompile Include="CircleView.cpp" />
-    <ClCompile Include="ClipPathView.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ReactPackageProvider.cpp">
+      <DependentUpon>ReactPackageProvider.idl</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+  </ItemGroup>
+    <ItemGroup Condition="'$(UseFabric)'=='true'">
+    <ClCompile Include="Fabric/CircleView.cpp" />
+    <ClCompile Include="Fabric/ClipPathView.cpp" />
+    <ClCompile Include="Fabric/DefsView.cpp" />
+    <ClCompile Include="Fabric/EllipseView.cpp" />
+    <ClCompile Include="Fabric/GroupView.cpp" />
+    <ClCompile Include="Fabric/ImageView.cpp" />
+    <ClCompile Include="Fabric/LinearGradientView.cpp" />
+    <ClCompile Include="Fabric/LineView.cpp" />
+    <ClCompile Include="Fabric/PathView.cpp" />
+    <ClCompile Include="Fabric/RadialGradientView.cpp" />
+    <ClCompile Include="Fabric/RectView.cpp" />
+    <ClCompile Include="Fabric/RenderableView.cpp" />
+    <ClCompile Include="Fabric/SvgView.cpp" />
+    <ClCompile Include="Fabric/UnsupportedSvgView.cpp" />
+    <ClCompile Include="Fabric/UseView.cpp" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseFabric)'!='true'">
     <ClCompile Include="D2DBrush.cpp" />
     <ClCompile Include="D2DDevice.cpp" />
     <ClCompile Include="D2DDeviceContext.cpp" />
     <ClCompile Include="D2DGeometry.cpp" />
+    <ClCompile Include="SVGLength.cpp" />
+    <ClCompile Include="BrushView.cpp" />
+    <ClCompile Include="CircleView.cpp" />
+    <ClCompile Include="ClipPathView.cpp" />
     <ClCompile Include="DefsView.cpp" />
     <ClCompile Include="EllipseView.cpp" />
     <ClCompile Include="GroupView.cpp" />
@@ -212,24 +239,14 @@
     <ClCompile Include="MaskView.cpp" />
     <ClCompile Include="PathView.cpp" />
     <ClCompile Include="PatternView.cpp" />
-    <ClCompile Include="pch.cpp">
-      <PrecompiledHeader>Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="RadialGradientView.cpp" />
-    <ClCompile Include="ReactPackageProvider.cpp">
-      <DependentUpon>ReactPackageProvider.idl</DependentUpon>
-    </ClCompile>
-    <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="RectView.cpp" />
     <ClCompile Include="RenderableView.cpp" />
-    <ClCompile Include="SVGLength.cpp" />
     <ClCompile Include="SvgView.cpp" />
     <ClCompile Include="SymbolView.cpp" />
     <ClCompile Include="TextView.cpp" />
     <ClCompile Include="TSpanView.cpp" />
     <ClCompile Include="UseView.cpp" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(UseFabric)'!='true'">
     <ClCompile Include="CircleViewManager.cpp" />
     <ClCompile Include="ClipPathViewManager.cpp" />
     <ClCompile Include="DefsViewManager.cpp" />
@@ -252,13 +269,11 @@
     <ClCompile Include="UseViewManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="Fabric.idl" Condition="'$(UseFabric)'=='true'" />
     <Midl Include="Paper.idl" Condition="'$(UseFabric)'!='true'" />
     <Midl Include="ReactPackageProvider.idl" />
-    <Midl Include="Types.idl" />
+    <Midl Include="Types.idl" Condition="'$(UseFabric)'!='true'"/>
     <Midl Include="ViewManagers.idl" Condition="'$(UseFabric)'!='true'" />
-    <Midl Include="ViewProps.idl" Condition="'$(UseFabric)'=='true'" />
-    <Midl Include="Views.idl" />
+    <Midl Include="Views.idl" Condition="'$(UseFabric)'!='true'"/>
   </ItemGroup>
   <ItemGroup Condition="'$(UseFabric)'!='true'">
     <None Include="PropertySheet.props" />

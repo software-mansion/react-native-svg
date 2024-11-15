@@ -52,6 +52,9 @@ yarn-error.log
 **/fastlane/screenshots
 **/fastlane/test_output
 
+# Locally installed nuget packages
+/windows/packages
+
 # Bundle artifact
 *.jsbundle
 

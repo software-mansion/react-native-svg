@@ -11,58 +11,6 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 
-#ifdef USE_FABRIC
-RadialGradientProps::RadialGradientProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
-
-void RadialGradientProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
-
-RadialGradientView::RadialGradientView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args)
-    : base_type(args) {}
-
-void RadialGradientView::RegisterComponent(
-    const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGRadialGradient", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::RadialGradientProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::RadialGradientView>(args);
-        });
-      });
-}
-
-void RadialGradientView::UpdateProperties(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
-    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-    bool forceUpdate,
-    bool invalidate) noexcept {
-  auto radialGradientProps = props.try_as<RadialGradientProps>();
-  if (radialGradientProps) {
-    m_props = radialGradientProps;
-
-    m_rx = m_props->rx;
-    m_ry = m_props->ry;
-    m_fx = m_props->fx;
-    m_fy = m_props->fy;
-    m_cx = m_props->cx;
-    m_cy = m_props->cy;
-
-    m_stops = Utils::JSValueAsGradientStops(m_props->gradient);
-    m_gradientUnits = Utils::JSValueAsBrushUnits(m_props->gradientUnits);
-    m_transform = Utils::JSValueAsD2DTransform(m_props->gradientTransform);
-  }
-
-  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
-
-  SaveDefinition();
-}
-#else
 void RadialGradientView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -99,7 +47,6 @@ void RadialGradientView::UpdateProperties(IJSValueReader const &reader, bool for
 
   SaveDefinition();
 }
-#endif
 
 void RadialGradientView::Unload() {
   m_stops.clear();

@@ -11,49 +11,6 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 
-#ifdef USE_FABRIC
-UseProps::UseProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
-
-void UseProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
-
-UseView::UseView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
-void UseView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGUse", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::UseProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::UseView>(args);
-        });
-      });
-}
-
-void UseView::UpdateProperties(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
-    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-    bool forceUpdate,
-    bool invalidate) noexcept {
-  auto useProps = props.try_as<UseProps>();
-  if (useProps) {
-    m_props = useProps;
-
-    m_href = winrt::to_hstring(m_props->href);
-    m_x = m_props->x;
-    m_y = m_props->y;
-    m_width = m_props->width;
-    m_height = m_props->height;
-  }
-
-  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
-}
-#else
 void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -76,7 +33,6 @@ void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
-#endif
 
 void UseView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   if (auto const &view{GetRenderableTemplate()}) {
@@ -129,11 +85,7 @@ void UseView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
     deviceContext->PopLayer();
 
     // Restore original template props
-#ifdef USE_FABRIC
-    auto renderable{view.try_as<RNSVG::IRenderableFabric>()};
-#else
     auto renderable{view.try_as<RNSVG::IRenderablePaper>()};
-#endif
     if (renderable) {
       if (auto const &parent{renderable.SvgParent().try_as<RNSVG::RenderableView>()}) {
         view.MergeProperties(parent);
