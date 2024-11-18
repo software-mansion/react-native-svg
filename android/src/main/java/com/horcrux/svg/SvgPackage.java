@@ -11,7 +11,7 @@ package com.horcrux.svg;
 import static com.horcrux.svg.RenderableViewManager.*;
 
 import androidx.annotation.Nullable;
-import com.facebook.react.TurboReactPackage;
+import com.facebook.react.BaseReactPackage;
 import com.facebook.react.ViewManagerOnDemandReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.ModuleSpec;
@@ -36,7 +36,7 @@ import javax.inject.Provider;
       SvgViewModule.class,
       RNSVGRenderableManager.class,
     })
-public class SvgPackage extends TurboReactPackage implements ViewManagerOnDemandReactPackage {
+public class SvgPackage extends BaseReactPackage implements ViewManagerOnDemandReactPackage {
 
   private @Nullable Map<String, ModuleSpec> mViewManagers;
 
@@ -369,7 +369,6 @@ public class SvgPackage extends TurboReactPackage implements ViewManagerOnDemand
                     moduleClass.getName(),
                     reactModule.canOverrideExistingModule(),
                     reactModule.needsEagerInit(),
-                    reactModule.hasConstants(),
                     reactModule.isCxxModule(),
                     true));
           }
