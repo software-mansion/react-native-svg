@@ -118,10 +118,21 @@ android {
                     "src/paper/java",
                 ]
             }
-            if (getReactNativeMinorVersion() >= 75) {
-                srcDirs += "src/borderRadiusRn75/java"
+
+            if (getReactNativeMinorVersion() >= 75) { // borderRadius fix https://github.com/software-mansion/react-native-svg/pull/2415
+                // Use for react-native@0.75 and above
+                srcDirs += "src/SvgViewManager75/java"
             } else {
-                srcDirs += "src/transformRn73/java"
+                // Maintain compatibility with react-native@0.73 and react-native@0.74
+                srcDirs += "src/SvgViewManager73/java"
+            }
+
+            if (getReactNativeMinorVersion() >= 74) { // new API https://github.com/software-mansion/react-native-svg/pull/2541
+                // Use for react-native@0.74 and above
+                srcDirs += "src/SvgPackage74/java"
+            } else {
+                // Maintain compatibility with react-native@0.73
+                srcDirs += "src/SvgPackage73/java"
             }
         }
     }
