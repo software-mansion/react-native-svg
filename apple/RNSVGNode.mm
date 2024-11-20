@@ -248,6 +248,16 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   }
 }
 
+- (void)setTransforms:(CGAffineTransform)transforms
+{
+  if (CGAffineTransformEqualToTransform(transforms, _transforms)) {
+    return;
+  }
+
+  _transforms = transforms;
+  [self invalidate];
+}
+
 - (void)setClientRect:(CGRect)clientRect
 {
   if (CGRectEqualToRect(_clientRect, clientRect)) {

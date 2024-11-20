@@ -55,6 +55,8 @@ static id RNSVGConvertFollyDynamicToId(const folly::dynamic &dyn)
   }
 }
 
+static const facebook::react::LayoutMetrics MinimalLayoutMetrics = {{{0, 0}, {1, 1}}};
+
 template <typename T>
 void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
 {
@@ -69,7 +71,8 @@ void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
         nodeProps.matrix.at(4),
         nodeProps.matrix.at(5));
   }
-  CATransform3D transform3d = RCTCATransform3DFromTransformMatrix(nodeProps.transform);
+  auto newTransform = nodeProps.resolveTransform(MinimalLayoutMetrics);
+  CATransform3D transform3d = RCTCATransform3DFromTransformMatrix(newTransform);
   CGAffineTransform transform = CATransform3DGetAffineTransform(transform3d);
   node.invTransform = CGAffineTransformInvert(transform);
   node.transforms = transform;
