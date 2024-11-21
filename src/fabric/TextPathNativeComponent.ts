@@ -82,4 +82,6 @@ interface NativeProps
   startOffset?: UnsafeMixed<NumberProp>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGTextPath');
+export default codegenNativeComponent<NativeProps>('RNSVGTextPath', {
+  interfaceOnly: true,
+});

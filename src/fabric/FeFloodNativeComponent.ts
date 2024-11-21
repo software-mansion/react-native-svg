@@ -28,4 +28,6 @@ export interface NativeProps extends ViewProps, FilterPrimitiveCommonProps {
   floodOpacity?: WithDefault<Float, 1.0>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGFeFlood');
+export default codegenNativeComponent<NativeProps>('RNSVGFeFlood', {
+  interfaceOnly: true,
+});
