@@ -139,13 +139,13 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getBBox : (nonnull NSNumber *)reactTag op
   [svg getPath:nil];
 
   CGRect bounds = CGRectNull;
-  if (fill) {
+  if (fill && !CGRectIsEmpty(svg.fillBounds)) {
     bounds = CGRectUnion(bounds, svg.fillBounds);
   }
-  if (stroke) {
+  if (stroke && !CGRectIsEmpty(svg.strokeBounds)) {
     bounds = CGRectUnion(bounds, svg.strokeBounds);
   }
-  if (markers) {
+  if (markers && !CGRectIsEmpty(svg.markerBounds)) {
     bounds = CGRectUnion(bounds, svg.markerBounds);
   }
   if (clipped) {
@@ -155,8 +155,9 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getBBox : (nonnull NSNumber *)reactTag op
       bounds = CGRectIntersection(bounds, clipBounds);
     }
   }
-  if (CGRectIsNull(bounds))
+  if (CGRectIsNull(bounds)) {
     bounds = CGRectZero;
+  }
   CGPoint origin = bounds.origin;
   CGSize size = bounds.size;
   return @{@"x" : @(origin.x), @"y" : @(origin.y), @"width" : @(size.width), @"height" : @(size.height)};
