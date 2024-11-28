@@ -129,8 +129,8 @@ android {
                 srcDirs += "src/RenderableViewManager73/java"
             }
 
-            if (getReactNativeMinorVersion() >= 74) { // new API https://github.com/software-mansion/react-native-svg/pull/2541
-                // Use for react-native@0.74 and above
+            if (getReactNativeMinorVersion() >= 74) { // Use for react-native@0.74 and above
+                // new API https://github.com/software-mansion/react-native-svg/pull/2541
                 srcDirs += "src/SvgPackage74/java"
             } else {
                 // Maintain compatibility with react-native@0.73
