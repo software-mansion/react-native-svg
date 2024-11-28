@@ -249,7 +249,13 @@ public abstract class VirtualView extends ReactViewGroup {
    */
   int saveAndSetupCanvas(Canvas canvas, Matrix ctm) {
     int count = canvas.save();
-    mCTM.setConcat(mMatrix, mTransform);
+    // Animated sends the last frame as native (transform) AND js parsed (matrix) update so we need
+    // to ignore one of those
+    if (mMatrix.equals(mTransform)) {
+      mCTM.set(mMatrix);
+    } else {
+      mCTM.setConcat(mMatrix, mTransform);
+    }
     canvas.concat(mCTM);
     mCTM.preConcat(ctm);
     mCTMInvertible = mCTM.invert(mInvCTM);
