@@ -1208,7 +1208,7 @@ class TSpanView extends TextView {
   }
 
   @Override
-  int hitTest(final float[] src) {
+  public int hitTest(final float[] src) {
     if (mContent == null) {
       return super.hitTest(src);
     }
