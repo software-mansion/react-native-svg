@@ -518,8 +518,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     }
 
     Matrix m = node.getMatrix();
-    node.mTransform = m;
-    node.mTransformInvertible = m.invert(node.mInvTransform);
+    node.mMatrix = m;
+    node.mInvertible = m.invert(node.mInvMatrix);
   }
 
   @ReactProp(name = "transform")

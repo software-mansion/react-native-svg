@@ -54,13 +54,11 @@ public abstract class VirtualView extends ReactViewGroup {
   float mOpacity = 1f;
   Matrix mCTM = new Matrix();
   Matrix mMatrix = new Matrix();
-  Matrix mTransform = new Matrix();
   Matrix mInvCTM = new Matrix();
   Matrix mInvMatrix = new Matrix();
   final Matrix mInvTransform = new Matrix();
   boolean mInvertible = true;
   boolean mCTMInvertible = true;
-  boolean mTransformInvertible = true;
   private RectF mClientRect;
 
   int mClipRule;
@@ -249,13 +247,7 @@ public abstract class VirtualView extends ReactViewGroup {
    */
   int saveAndSetupCanvas(Canvas canvas, Matrix ctm) {
     int count = canvas.save();
-    // Animated sends the last frame as native (transform) AND js parsed (matrix) update so we need
-    // to ignore one of those
-    if (mMatrix.equals(mTransform)) {
-      mCTM.set(mMatrix);
-    } else {
-      mCTM.setConcat(mMatrix, mTransform);
-    }
+    mCTM.set(mMatrix);
     canvas.concat(mCTM);
     mCTM.preConcat(ctm);
     mCTMInvertible = mCTM.invert(mInvCTM);
@@ -366,7 +358,6 @@ public abstract class VirtualView extends ReactViewGroup {
                 ? mClipNode.getPath(canvas, paint)
                 : mClipNode.getPath(canvas, paint, Region.Op.UNION);
         clipPath.transform(mClipNode.mMatrix);
-        clipPath.transform(mClipNode.mTransform);
         switch (mClipRule) {
           case CLIP_RULE_EVENODD:
             clipPath.setFillType(Path.FillType.EVEN_ODD);
