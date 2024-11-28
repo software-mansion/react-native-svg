@@ -48,9 +48,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGAffineTransform ctm;
 @property (nonatomic, assign) CGAffineTransform screenCTM;
 @property (nonatomic, assign) CGAffineTransform matrix;
-@property (nonatomic, assign) CGAffineTransform transforms;
 @property (nonatomic, assign) CGAffineTransform invmatrix;
-@property (nonatomic, assign) CGAffineTransform invTransform;
 @property (nonatomic, assign) BOOL active;
 @property (nonatomic, assign) BOOL dirty;
 @property (nonatomic, assign) BOOL merging;
@@ -147,5 +145,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 - (CGFloat)getCanvasWidth;
 
 - (CGFloat)getCanvasHeight;
+
+- (void)setTransforms:(CGAffineTransform)transforms;
 
 @end
