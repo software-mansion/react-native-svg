@@ -254,7 +254,7 @@ class GroupView extends RenderableView {
   }
 
   @Override
-  int hitTest(final float[] src) {
+  public int hitTest(final float[] src) {
     if (!mInvertible) {
       return -1;
     }
