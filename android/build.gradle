@@ -119,12 +119,14 @@ android {
                 ]
             }
 
-            if (getReactNativeMinorVersion() >= 75) { // borderRadius fix https://github.com/software-mansion/react-native-svg/pull/2415
-                // Use for react-native@0.75 and above
+            if (getReactNativeMinorVersion() >= 75) { // Use for react-native@0.75 and above
+                // borderRadius fix https://github.com/software-mansion/react-native-svg/pull/2415
                 srcDirs += "src/SvgViewManager75/java"
-            } else {
-                // Maintain compatibility with react-native@0.73 and react-native@0.74
+                // processTransform replacement https://github.com/software-mansion/react-native-svg/pull/2554
+                srcDirs += "src/RenderableViewManager75/java"
+            } else { // Maintain compatibility with react-native@0.73 and react-native@0.74
                 srcDirs += "src/SvgViewManager73/java"
+                srcDirs += "src/RenderableViewManager73/java"
             }
 
             if (getReactNativeMinorVersion() >= 74) { // new API https://github.com/software-mansion/react-native-svg/pull/2541
