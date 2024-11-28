@@ -1212,7 +1212,7 @@ class TSpanView extends TextView {
     if (mContent == null) {
       return super.hitTest(src);
     }
-    if (mPath == null || !mInvertible || !mTransformInvertible) {
+    if (mPath == null || !mInvertible) {
       return -1;
     }
 

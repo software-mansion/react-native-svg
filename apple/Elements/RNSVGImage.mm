@@ -356,9 +356,8 @@ using namespace facebook::react;
   self.ctm = svgToClientTransform;
   self.screenCTM = current;
 
-  CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
   CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
-  CGPoint center = CGPointApplyAffineTransform(mid, transform);
+  CGPoint center = CGPointApplyAffineTransform(mid, self.matrix);
 
   self.bounds = bounds;
   if (!isnan(center.x) && !isnan(center.y)) {

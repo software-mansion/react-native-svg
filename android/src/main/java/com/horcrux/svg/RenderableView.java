@@ -677,7 +677,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
 
   @Override
   int hitTest(final float[] src) {
-    if (mPath == null || !mInvertible || !mTransformInvertible) {
+    if (mPath == null || !mInvertible) {
       return -1;
     }
 

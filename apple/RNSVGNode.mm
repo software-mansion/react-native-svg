@@ -38,8 +38,6 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     self.opaque = false;
 #endif
     self.matrix = CGAffineTransformIdentity;
-    self.transforms = CGAffineTransformIdentity;
-    self.invTransform = CGAffineTransformIdentity;
     _merging = false;
     _dirty = false;
   }
@@ -250,11 +248,11 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (void)setTransforms:(CGAffineTransform)transforms
 {
-  if (CGAffineTransformEqualToTransform(transforms, _transforms)) {
+  if (CGAffineTransformEqualToTransform(transforms, _matrix)) {
     return;
   }
 
-  _transforms = transforms;
+  _matrix = transforms;
   [self invalidate];
 }
 
@@ -377,7 +375,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     if (_cachedClipPath) {
       CGPathRelease(_cachedClipPath);
     }
-    CGAffineTransform transform = CGAffineTransformConcat(_clipNode.matrix, _clipNode.transforms);
+    CGAffineTransform transform = _clipNode.matrix;
     _cachedClipPath = CGPathCreateCopyByTransformingPath([_clipNode getPath:context], &transform);
   }
 
@@ -630,8 +628,6 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   self.opaque = false;
 #endif
   self.matrix = CGAffineTransformIdentity;
-  self.transforms = CGAffineTransformIdentity;
-  self.invTransform = CGAffineTransformIdentity;
   _merging = false;
   _dirty = false;
 
@@ -652,9 +648,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _ctm = CGAffineTransformIdentity;
   _screenCTM = CGAffineTransformIdentity;
   _matrix = CGAffineTransformIdentity;
-  _transforms = CGAffineTransformIdentity;
   _invmatrix = CGAffineTransformIdentity;
-  _invTransform = CGAffineTransformIdentity;
   _active = NO;
   _skip = NO;
   if (_markerPath) {
