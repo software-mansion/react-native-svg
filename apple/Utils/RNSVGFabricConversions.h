@@ -55,6 +55,8 @@ static id RNSVGConvertFollyDynamicToId(const folly::dynamic &dyn)
   }
 }
 
+static const facebook::react::LayoutMetrics MinimalLayoutMetrics = {{{0, 0}, {1, 1}}};
+
 template <typename T>
 void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
 {
@@ -69,10 +71,12 @@ void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
         nodeProps.matrix.at(4),
         nodeProps.matrix.at(5));
   }
-  CATransform3D transform3d = RCTCATransform3DFromTransformMatrix(nodeProps.transform);
-  CGAffineTransform transform = CATransform3DGetAffineTransform(transform3d);
-  node.invTransform = CGAffineTransformInvert(transform);
-  node.transforms = transform;
+  if (nodeProps.transform.operations.size() > 0) {
+    auto newTransform = nodeProps.resolveTransform(MinimalLayoutMetrics);
+    CATransform3D transform3d = RCTCATransform3DFromTransformMatrix(newTransform);
+    CGAffineTransform transform = CATransform3DGetAffineTransform(transform3d);
+    node.transforms = transform;
+  }
   node.mask = RCTNSStringFromStringNilIfEmpty(nodeProps.mask);
   node.markerStart = RCTNSStringFromStringNilIfEmpty(nodeProps.markerStart);
   node.markerMid = RCTNSStringFromStringNilIfEmpty(nodeProps.markerMid);
@@ -112,15 +116,11 @@ void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *rendera
     [renderableNode setColor:RCTUIColorFromSharedColor(renderableProps.color)];
   }
   id fill = RNSVGConvertFollyDynamicToId(renderableProps.fill);
-  if (fill != nil) {
-    renderableNode.fill = [RCTConvert RNSVGBrush:fill];
-  }
+  renderableNode.fill = [RCTConvert RNSVGBrush:fill];
   renderableNode.fillOpacity = renderableProps.fillOpacity;
   renderableNode.fillRule = renderableProps.fillRule == 0 ? kRNSVGCGFCRuleEvenodd : kRNSVGCGFCRuleNonzero;
   id stroke = RNSVGConvertFollyDynamicToId(renderableProps.stroke);
-  if (stroke != nil) {
-    renderableNode.stroke = [RCTConvert RNSVGBrush:stroke];
-  }
+  renderableNode.stroke = [RCTConvert RNSVGBrush:stroke];
   renderableNode.strokeOpacity = renderableProps.strokeOpacity;
   id strokeWidth = RNSVGConvertFollyDynamicToId(renderableProps.strokeWidth);
   if (strokeWidth != nil) {

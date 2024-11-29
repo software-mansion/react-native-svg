@@ -100,6 +100,9 @@ RCT_ENUM_CONVERTER(
 
 + (RNSVGBrush *)RNSVGBrush:(id)json
 {
+  if (json == nil) {
+    return nil;
+  }
   if ([json isKindOfClass:[NSNumber class]]) {
     return [[RNSVGSolidColorBrush alloc] initWithNumber:json];
   }

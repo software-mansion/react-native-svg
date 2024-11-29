@@ -11,8 +11,7 @@
   "dependencies": {
     "react": "18.2.0",
     "react-native": "0.74.2",
-    "react-native-windows": "0.74.9",
-    "react-native-reanimated": "3.9.0",
+    "react-native-windows": "0.74.24",
     "react-native-svg": "link:../../"
   },
   "devDependencies": {

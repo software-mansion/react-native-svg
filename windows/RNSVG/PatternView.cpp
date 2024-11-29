@@ -12,67 +12,6 @@ using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 
-#ifdef USE_FABRIC
-PatternProps::PatternProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
-
-void PatternProps::SetProp(
-    uint32_t hash,
-    winrt::hstring propName,
-    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
-  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
-}
-
-PatternView::PatternView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
-void PatternView::RegisterComponent(
-    const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGPattern", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::PatternProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::PatternView>(args);
-        });
-      });
-}
-
-void PatternView::UpdateProperties(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
-    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-    bool forceUpdate,
-    bool invalidate) noexcept {
-  auto patternProps = props.try_as<PatternProps>();
-  if (patternProps) {
-    m_props = patternProps;
-
-    m_x = m_props->x;
-    m_y = m_props->y;
-    m_width = m_props->width;
-    m_height = m_props->height;
-
-    m_minX = m_props->minX;
-    m_minY = m_props->minY;
-    m_vbWidth = m_props->vbWidth;
-    m_vbHeight = m_props->vbHeight;
-    m_align = m_props->align;
-    m_meetOrSlice = m_props->meetOrSlice;
-
-    m_patternUnits = Utils::JSValueAsBrushUnits(m_props->patternUnits);
-    m_patternContentUnits = Utils::JSValueAsBrushUnits(m_props->patternContentUnits, "userSpaceOnUse");
-
-    m_transform = Utils::JSValueAsD2DTransform(m_props->patternTransform);
-  }
-
-  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
-
-  SaveDefinition();
-
-  if (auto const &root{SvgRoot()}) {
-    root.Invalidate();
-  }
-}
-#else
 void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -121,7 +60,6 @@ void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
     root.Invalidate();
   }
 }
-#endif
 
 void PatternView::UpdateBounds() {
   if (m_patternUnits == "objectBoundingBox") {

@@ -11,9 +11,9 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.73.35)
   - fmt (9.1.0)
   - glog (0.3.5)
-  - hermes-engine (0.73.10):
-    - hermes-engine/Pre-built (= 0.73.10)
-  - hermes-engine/Pre-built (0.73.10)
+  - hermes-engine (0.73.11):
+    - hermes-engine/Pre-built (= 0.73.11)
+  - hermes-engine/Pre-built (0.73.11)
   - libevent (2.1.12)
   - RCT-Folly (2022.05.16.00):
     - boost
@@ -1076,7 +1076,7 @@ PODS:
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNSVG (15.8.0):
+  - RNSVG (15.9.0):
     - React-Core
   - SocketRocket (0.7.0)
   - Yoga (1.14.0)
@@ -1262,7 +1262,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 956febc0d5ab01f66e9add48644d30aa9f9fbfcf
   fmt: 03574da4b7ba40de39da59677ca66610ce8c4a02
   glog: 3a72874c0322c7caf24931d3a2777cb7a3090529
-  hermes-engine: 42a7a4cbe3e20050fb031f64aaaffbe0c0b4a38f
+  hermes-engine: d992945b77c506e5164e6a9a77510c9d57472c59
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   RCT-Folly: 68e9c0fd4c0f05964afd447041d3ac2d67298f27
   RCTRequired: 8f165b521fb1031cdeae4e5cabaa116bbeef00a5
@@ -1308,7 +1308,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
   RNGestureHandler: bb81850add626ddd265294323310fec6e861c96b
   RNReanimated: ba95f6d26ca4b8a8f7f2b15f62a3513750762f6b
-  RNSVG: 3d518c7ae7df237f15f350dec5f8603b4e211015
+  RNSVG: 3d2bdcaef51c8071880a9c0072fe324f4423a3ba
   SocketRocket: f6c6249082c011e6de2de60ed641ef8bbe0cfac9
   Yoga: 0639c9c8a20ae8043b0b64e2ef6d7a2cd5806aac
 

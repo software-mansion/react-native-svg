@@ -1208,11 +1208,11 @@ class TSpanView extends TextView {
   }
 
   @Override
-  int hitTest(final float[] src) {
+  public int hitTest(final float[] src) {
     if (mContent == null) {
       return super.hitTest(src);
     }
-    if (mPath == null || !mInvertible || !mTransformInvertible) {
+    if (mPath == null || !mInvertible) {
       return -1;
     }
 

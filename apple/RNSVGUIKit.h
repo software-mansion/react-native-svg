@@ -17,6 +17,10 @@
 #define RNSVGView UIView
 #endif // RCT_NEW_ARCH_ENABLED
 
+#define RNSVGUIGraphicsBeginImageContextWithOptions UIGraphicsBeginImageContextWithOptions
+#define RNSVGUIGraphicsEndImageContext UIGraphicsEndImageContext
+#define RNSVGUIGraphicsGetImageFromCurrentImageContext UIGraphicsGetImageFromCurrentImageContext
+
 #else // TARGET_OS_OSX [
 
 // Due to name mangling, calling c-style functions from .mm files will fail, therefore we need to wrap them with extern
@@ -66,5 +70,12 @@ extern "C" {
 @property (readonly) CGAffineTransform CGAffineTransformValue;
 @property (readonly) CGPoint CGPointValue;
 @end
+
+// These functions are copied from react-native-macos to enable compatibility with react-native-macos@0.76+
+// https://github.com/microsoft/react-native-macos/blob/7361b165ef633d3d95dbdb69da58ff6119f07369/packages/react-native/React/Base/macOS/RCTUIKit.m
+// See https://github.com/software-mansion/react-native-svg/issues/2528
+void RNSVGUIGraphicsBeginImageContextWithOptions(CGSize size, __unused BOOL opaque, CGFloat scale);
+void RNSVGUIGraphicsEndImageContext(void);
+NSImage *RNSVGUIGraphicsGetImageFromCurrentImageContext(void);
 
 #endif // ] TARGET_OS_OSX

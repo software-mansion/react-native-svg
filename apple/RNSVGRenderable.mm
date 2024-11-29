@@ -255,7 +255,6 @@ UInt32 saturate(CGFloat value)
   // This needs to be painted on a layer before being composited.
   CGContextSaveGState(context);
   CGContextConcatCTM(context, self.matrix);
-  CGContextConcatCTM(context, self.transforms);
   CGContextSetAlpha(context, self.opacity);
 
   [self beginTransparencyLayer:context];
@@ -406,7 +405,7 @@ UInt32 saturate(CGFloat value)
       [blendedImage drawInRect:scaledRect];
 #else // [macOS
       // Blend current element and mask
-      UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
+      RNSVGUIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
       CGContextRef newContext = UIGraphicsGetCurrentContext();
 
       CGContextSetBlendMode(newContext, kCGBlendModeCopy);
@@ -415,7 +414,7 @@ UInt32 saturate(CGFloat value)
       CGContextDrawImage(newContext, rect, contentImage);
 
       CGImageRef blendedImage = CGBitmapContextCreateImage(newContext);
-      UIGraphicsEndImageContext();
+      RNSVGUIGraphicsEndImageContext();
 
       // Invert the CTM and apply transformations to draw image in 1:1
       CGContextConcatCTM(context, CGAffineTransformInvert(currentCTM));
@@ -510,8 +509,8 @@ UInt32 saturate(CGFloat value)
       self.path = CGPathRetain(path);
     }
     [self setHitArea:path];
-    self.fillBounds = CGPathGetBoundingBox(path);
-    self.strokeBounds = CGPathGetBoundingBox(self.strokePath);
+    self.fillBounds = CGPathGetPathBoundingBox(path);
+    self.strokeBounds = CGPathGetPathBoundingBox(self.strokePath);
     self.pathBounds = CGRectUnion(self.fillBounds, self.strokeBounds);
   }
   const CGRect pathBounds = self.pathBounds;
@@ -530,8 +529,7 @@ UInt32 saturate(CGFloat value)
   }
 
   CGAffineTransform vbmatrix = self.svgView.getViewBoxTransform;
-  CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
-  CGAffineTransform matrix = CGAffineTransformConcat(transform, vbmatrix);
+  CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, vbmatrix);
 
   CGRect bounds = CGRectMake(0, 0, CGRectGetWidth(clientRect), CGRectGetHeight(clientRect));
   CGPoint mid = CGPointMake(CGRectGetMidX(pathBounds), CGRectGetMidY(pathBounds));
@@ -687,7 +685,6 @@ UInt32 saturate(CGFloat value)
   }
 
   CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
-  transformed = CGPointApplyAffineTransform(transformed, self.invTransform);
 
   if (!CGRectContainsPoint(self.pathBounds, transformed) && !CGRectContainsPoint(self.markerBounds, transformed)) {
     return nil;

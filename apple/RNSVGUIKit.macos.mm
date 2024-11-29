@@ -1,4 +1,5 @@
 #import "RNSVGUIKit.h"
+#import <objc/runtime.h>
 
 @implementation RNSVGView {
 }
@@ -57,3 +58,70 @@
 }
 
 @end
+
+static char RCTGraphicsContextSizeKey;
+
+void RNSVGUIGraphicsBeginImageContextWithOptions(CGSize size, __unused BOOL opaque, CGFloat scale)
+{
+  if (scale == 0.0) {
+    // TODO: Assert. We can't assume a display scale on macOS
+    scale = 1.0;
+  }
+
+  size_t width = ceilf(size.width * scale);
+  size_t height = ceilf(size.height * scale);
+
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  CGContextRef ctx = CGBitmapContextCreate(
+      NULL,
+      width,
+      height,
+      8 /*bitsPerComponent*/,
+      width * 4 /*bytesPerRow*/,
+      colorSpace,
+      kCGImageAlphaPremultipliedFirst);
+  CGColorSpaceRelease(colorSpace);
+
+  if (ctx != NULL) {
+    // flip the context (top left at 0, 0) and scale it
+    CGContextTranslateCTM(ctx, 0.0, height);
+    CGContextScaleCTM(ctx, scale, -scale);
+
+    NSGraphicsContext *graphicsContext = [NSGraphicsContext graphicsContextWithCGContext:ctx flipped:YES];
+    objc_setAssociatedObject(
+        graphicsContext, &RCTGraphicsContextSizeKey, [NSValue valueWithSize:size], OBJC_ASSOCIATION_COPY_NONATOMIC);
+
+    [NSGraphicsContext saveGraphicsState];
+    [NSGraphicsContext setCurrentContext:graphicsContext];
+
+    CFRelease(ctx);
+  }
+}
+
+void RNSVGUIGraphicsEndImageContext(void)
+{
+  RCTAssert(
+      objc_getAssociatedObject([NSGraphicsContext currentContext], &RCTGraphicsContextSizeKey),
+      @"The current graphics context is not a React image context!");
+  [NSGraphicsContext restoreGraphicsState];
+}
+
+NSImage *RNSVGUIGraphicsGetImageFromCurrentImageContext(void)
+{
+  NSImage *image = nil;
+  NSGraphicsContext *graphicsContext = [NSGraphicsContext currentContext];
+
+  NSValue *sizeValue = objc_getAssociatedObject(graphicsContext, &RCTGraphicsContextSizeKey);
+  if (sizeValue != nil) {
+    CGImageRef cgImage = CGBitmapContextCreateImage([graphicsContext CGContext]);
+
+    if (cgImage != NULL) {
+      NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
+      image = [[NSImage alloc] initWithSize:[sizeValue sizeValue]];
+      [image addRepresentation:imageRep];
+      CFRelease(cgImage);
+    }
+  }
+
+  return image;
+}

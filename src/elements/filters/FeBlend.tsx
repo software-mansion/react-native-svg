@@ -20,6 +20,7 @@ export default class FeBlend extends FilterPrimitive<FeBlendProps> {
 
   static defaultProps = {
     ...this.defaultPrimitiveProps,
+    mode: 'normal',
   };
 
   render() {

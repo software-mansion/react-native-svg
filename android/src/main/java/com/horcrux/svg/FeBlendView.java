@@ -71,19 +71,21 @@ class FeBlendView extends FilterPrimitiveView {
     canvas.drawBitmap(in1, 0, 0, paint);
 
     switch (this.mMode) {
-      case NORMAL -> {
+      case UNKNOWN:
+      case NORMAL:
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
-      }
-      case SCREEN -> {
+        break;
+      case SCREEN:
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SCREEN));
-      }
-      case LIGHTEN -> {
+        break;
+      case LIGHTEN:
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.LIGHTEN));
-      }
-      case DARKEN -> {
+        break;
+      case DARKEN:
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DARKEN));
-      }
-      case MULTIPLY -> {}
+        break;
+      case MULTIPLY:
+        break;
     }
     canvas.drawBitmap(in2, 0, 0, paint);
 

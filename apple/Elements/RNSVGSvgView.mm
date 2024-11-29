@@ -19,6 +19,10 @@
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
+#if TARGET_OS_OSX // [macOS
+#import "RNSVGUIKit.h"
+#endif // macOS]
+
 @implementation RNSVGSvgView {
   NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
   NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
@@ -368,7 +372,7 @@ using namespace facebook::react;
   UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size];
   UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
 #else // [macOS
-  UIGraphicsBeginImageContextWithOptions(bounds.size, NO, 1);
+  RNSVGUIGraphicsBeginImageContextWithOptions(bounds.size, NO, 1);
 #endif // macOS]
     [self clearChildCache];
     [self drawRect:bounds];
@@ -381,9 +385,9 @@ using namespace facebook::react;
   NSData *imageData = UIImagePNGRepresentation(image);
   NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
 #else // [macOS
-  NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
+  NSData *imageData = UIImagePNGRepresentation(RNSVGUIGraphicsGetImageFromCurrentImageContext());
   NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
-  UIGraphicsEndImageContext();
+  RNSVGUIGraphicsEndImageContext();
 #endif // macOS]
   return base64;
 }

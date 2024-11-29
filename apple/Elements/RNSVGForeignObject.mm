@@ -150,8 +150,8 @@ using namespace facebook::react;
   [self setHitArea:path];
   if (!CGRectEqualToRect(bounds, CGRectNull)) {
     self.clientRect = bounds;
-    self.fillBounds = CGPathGetBoundingBox(path);
-    self.strokeBounds = CGPathGetBoundingBox(self.strokePath);
+    self.fillBounds = CGPathGetPathBoundingBox(path);
+    self.strokeBounds = CGPathGetPathBoundingBox(self.strokePath);
     self.pathBounds = CGRectUnion(self.fillBounds, self.strokeBounds);
 
     CGAffineTransform current = CGContextGetCTM(context);
@@ -160,9 +160,8 @@ using namespace facebook::react;
     self.ctm = svgToClientTransform;
     self.screenCTM = current;
 
-    CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
     CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
-    CGPoint center = CGPointApplyAffineTransform(mid, transform);
+    CGPoint center = CGPointApplyAffineTransform(mid, self.matrix);
 
     self.bounds = bounds;
     if (!isnan(center.x) && !isnan(center.y)) {

@@ -14,14 +14,11 @@
     "react": "18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "0.74.2",
-    "react-native-reanimated": "3.15.4",
     "react-native-svg": "link:../../",
-    "react-native-view-shot": "4.0.0-alpha.2",
-    "react-native-windows": "0.74.9"
+    "react-native-windows": "0.74.24"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@react-native/babel-preset": "0.74.84",
@@ -39,7 +36,6 @@
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "2.8.8",
-    "react-native-dotenv": "^3.4.11",
     "react-test-renderer": "18.2.0",
     "typescript": "5.0.4"
   },

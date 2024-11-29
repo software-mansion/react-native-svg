@@ -32,9 +32,7 @@ RCT_CUSTOM_VIEW_PROPERTY(transform, CATransform3D, RNSVGNode)
 {
   CATransform3D transform3d = json ? [RCTConvert CATransform3D:json] : defaultView.layer.transform;
   CGAffineTransform transform = CATransform3DGetAffineTransform(transform3d);
-  view.invTransform = CGAffineTransformInvert(transform);
   view.transforms = transform;
-  [view invalidate];
 }
 RCT_EXPORT_VIEW_PROPERTY(mask, NSString)
 RCT_EXPORT_VIEW_PROPERTY(markerStart, NSString)
