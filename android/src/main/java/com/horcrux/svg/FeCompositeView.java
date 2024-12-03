@@ -68,22 +68,22 @@ class FeCompositeView extends FilterPrimitiveView {
     canvas.drawBitmap(in1, 0, 0, paint);
 
     switch (this.mOperator) {
-      case OVER -> {
+      case OVER:
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
-      }
-      case IN -> {
+        break;
+      case IN:
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-      }
-      case OUT -> {
+        break;
+      case OUT:
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
-      }
-      case ATOP -> {
+        break;
+      case ATOP:
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_ATOP));
-      }
-      case XOR -> {
+        break;
+      case XOR:
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
-      }
-      case ARITHMETIC -> {
+        break;
+      case ARITHMETIC:
         // result = k1*i1*i2 + k2*i1 + k3*i2 + k4
         int nPixels = result.getWidth() * result.getHeight();
         int[] pixels1 = new int[nPixels];
@@ -121,7 +121,7 @@ class FeCompositeView extends FilterPrimitiveView {
 
         result.setPixels(
             pixels1, 0, result.getWidth(), 0, 0, result.getWidth(), result.getHeight());
-      }
+        break;
     }
 
     if (this.mOperator != FilterProperties.FeCompositeOperator.ARITHMETIC) {
