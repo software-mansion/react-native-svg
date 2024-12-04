@@ -1593,7 +1593,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.8.0):
+  - RNSVG (15.10.0):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.01.01.00)
@@ -1613,9 +1613,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.8.0)
+    - RNSVG/common (= 15.10.0)
     - Yoga
-  - RNSVG/common (15.8.0):
+  - RNSVG/common (15.10.0):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.01.01.00)
@@ -1908,7 +1908,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: f55cb59c9b8d254de25d48fc90bdf1ce5dc708a9
   RNGestureHandler: 4edc9c65d2f7f779eb2f25c24ccf761dcb6e50e4
   RNReanimated: d0033e3643f3dd1621cdbcd1079a7be31801d16c
-  RNSVG: fd26491d8699fc6985c8569af67b1b599dbfdaf9
+  RNSVG: bf641f781a3fef3606a0f57c53d2e292a6b37eb3
   SocketRocket: 03f7111df1a343b162bf5b06ead333be808e1e0a
   Yoga: 1d8b837dcf8275ecee7c7aa97137abc8f63a1626
 

@@ -179,10 +179,10 @@ using namespace facebook::react;
   } else if (self.operator1 == SVG_FECOMPOSITE_OPERATOR_ARITHMETIC) {
     [filter setValue:inputImage1 forKey:@"inputImage1"];
     [filter setValue:inputImage2 forKey:@"inputImage2"];
-    [filter setValue:(self.k1 != nil ? self.k1 : 0) forKey:@"inputK1"];
-    [filter setValue:(self.k2 != nil ? self.k2 : 0) forKey:@"inputK2"];
-    [filter setValue:(self.k3 != nil ? self.k3 : 0) forKey:@"inputK3"];
-    [filter setValue:(self.k4 != nil ? self.k4 : 0) forKey:@"inputK4"];
+    [filter setValue:(self.k1 != nil ? self.k1 : @0) forKey:@"inputK1"];
+    [filter setValue:(self.k2 != nil ? self.k2 : @0) forKey:@"inputK2"];
+    [filter setValue:(self.k3 != nil ? self.k3 : @0) forKey:@"inputK3"];
+    [filter setValue:(self.k4 != nil ? self.k4 : @0) forKey:@"inputK4"];
   } else {
     [filter setValue:inputImage1 forKey:@"inputImage"];
     [filter setValue:inputImage2 forKey:@"inputBackgroundImage"];

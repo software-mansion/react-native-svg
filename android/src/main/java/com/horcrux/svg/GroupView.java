@@ -58,9 +58,6 @@ class GroupView extends RenderableView {
     if (mMatrix != null) {
       mMatrix.mapRect(clipBounds);
     }
-    if (mTransform != null) {
-      mTransform.mapRect(clipBounds);
-    }
     mGlyphContext = new GlyphContext(mScale, clipBounds.width(), clipBounds.height());
   }
 
@@ -257,8 +254,8 @@ class GroupView extends RenderableView {
   }
 
   @Override
-  int hitTest(final float[] src) {
-    if (!mInvertible || !mTransformInvertible) {
+  public int hitTest(final float[] src) {
+    if (!mInvertible) {
       return -1;
     }
 

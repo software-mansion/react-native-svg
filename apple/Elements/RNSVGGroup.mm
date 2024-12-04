@@ -139,9 +139,8 @@ using namespace facebook::react;
     self.ctm = svgToClientTransform;
     self.screenCTM = current;
 
-    CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
     CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
-    CGPoint center = CGPointApplyAffineTransform(mid, transform);
+    CGPoint center = CGPointApplyAffineTransform(mid, self.matrix);
 
     self.bounds = bounds;
     if (!isnan(center.x) && !isnan(center.y)) {
@@ -163,7 +162,6 @@ using namespace facebook::react;
   }
 #endif // macOS]
   clipBounds = CGRectApplyAffineTransform(clipBounds, self.matrix);
-  clipBounds = CGRectApplyAffineTransform(clipBounds, self.transforms);
   CGFloat width = CGRectGetWidth(clipBounds);
   CGFloat height = CGRectGetHeight(clipBounds);
 
@@ -200,7 +198,7 @@ using namespace facebook::react;
   CGMutablePathRef __block path = CGPathCreateMutable();
   [self traverseSubviews:^(RNSVGNode *node) {
     if ([node isKindOfClass:[RNSVGNode class]] && ![node isKindOfClass:[RNSVGMask class]]) {
-      CGAffineTransform transform = CGAffineTransformConcat(node.matrix, node.transforms);
+      CGAffineTransform transform = node.matrix;
       CGPathAddPath(path, &transform, [node getPath:context]);
       CGPathAddPath(path, &transform, [node markerPath]);
       node.dirty = false;
@@ -216,7 +214,6 @@ using namespace facebook::react;
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
   CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
-  transformed = CGPointApplyAffineTransform(transformed, self.invTransform);
 
   if (!CGRectContainsPoint(self.pathBounds, transformed)) {
     return nil;

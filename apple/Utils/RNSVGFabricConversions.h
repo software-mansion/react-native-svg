@@ -71,11 +71,12 @@ void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
         nodeProps.matrix.at(4),
         nodeProps.matrix.at(5));
   }
-  auto newTransform = nodeProps.resolveTransform(MinimalLayoutMetrics);
-  CATransform3D transform3d = RCTCATransform3DFromTransformMatrix(newTransform);
-  CGAffineTransform transform = CATransform3DGetAffineTransform(transform3d);
-  node.invTransform = CGAffineTransformInvert(transform);
-  node.transforms = transform;
+  if (nodeProps.transform.operations.size() > 0) {
+    auto newTransform = nodeProps.resolveTransform(MinimalLayoutMetrics);
+    CATransform3D transform3d = RCTCATransform3DFromTransformMatrix(newTransform);
+    CGAffineTransform transform = CATransform3DGetAffineTransform(transform3d);
+    node.transforms = transform;
+  }
   node.mask = RCTNSStringFromStringNilIfEmpty(nodeProps.mask);
   node.markerStart = RCTNSStringFromStringNilIfEmpty(nodeProps.markerStart);
   node.markerMid = RCTNSStringFromStringNilIfEmpty(nodeProps.markerMid);

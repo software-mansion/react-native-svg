@@ -255,7 +255,6 @@ UInt32 saturate(CGFloat value)
   // This needs to be painted on a layer before being composited.
   CGContextSaveGState(context);
   CGContextConcatCTM(context, self.matrix);
-  CGContextConcatCTM(context, self.transforms);
   CGContextSetAlpha(context, self.opacity);
 
   [self beginTransparencyLayer:context];
@@ -530,8 +529,7 @@ UInt32 saturate(CGFloat value)
   }
 
   CGAffineTransform vbmatrix = self.svgView.getViewBoxTransform;
-  CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
-  CGAffineTransform matrix = CGAffineTransformConcat(transform, vbmatrix);
+  CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, vbmatrix);
 
   CGRect bounds = CGRectMake(0, 0, CGRectGetWidth(clientRect), CGRectGetHeight(clientRect));
   CGPoint mid = CGPointMake(CGRectGetMidX(pathBounds), CGRectGetMidY(pathBounds));
@@ -687,7 +685,6 @@ UInt32 saturate(CGFloat value)
   }
 
   CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
-  transformed = CGPointApplyAffineTransform(transformed, self.invTransform);
 
   if (!CGRectContainsPoint(self.pathBounds, transformed) && !CGRectContainsPoint(self.markerBounds, transformed)) {
     return nil;
