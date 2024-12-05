@@ -4,8 +4,10 @@
 
 namespace facebook::react {
 
-void rnsvg_registerComponentDescriptorsFromCodegen(
+void rnsvg_registerComponentDescriptorsFromCodegena(
     std::shared_ptr<const ComponentDescriptorProviderRegistry> registry) {
+  registry->add(
+      concreteComponentDescriptorProvider<RNSVGSvgViewComponentDescriptor>());
   registry->add(
       concreteComponentDescriptorProvider<RNSVGCircleComponentDescriptor>());
   registry->add(

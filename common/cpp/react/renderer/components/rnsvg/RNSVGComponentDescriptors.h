@@ -3,9 +3,12 @@
 #include <react/renderer/componentregistry/ComponentDescriptorProviderRegistry.h>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include "RNSVGShadowNodes.h"
+#include "RNSVGSvgViewShadowNode.h"
 
 namespace facebook::react {
 
+using RNSVGSvgViewComponentDescriptor =
+    ConcreteComponentDescriptor<RNSVGSvgViewShadowNode>;
 using RNSVGCircleComponentDescriptor =
     ConcreteComponentDescriptor<RNSVGCircleShadowNode>;
 using RNSVGClipPathComponentDescriptor =
@@ -61,7 +64,7 @@ using RNSVGTSpanComponentDescriptor =
 using RNSVGUseComponentDescriptor =
     ConcreteComponentDescriptor<RNSVGUseShadowNode>;
 
-void rnsvg_registerComponentDescriptorsFromCodegen(
+void rnsvg_registerComponentDescriptorsFromCodegena(
     std::shared_ptr<const ComponentDescriptorProviderRegistry> registry);
 
 } // namespace facebook::react
