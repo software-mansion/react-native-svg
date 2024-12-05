@@ -458,7 +458,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
         allowSpaces();
 
         value = getAttributeValue();
-        if (!isNaN(+value) && value.trim() !== '') {
+        if (name !== 'id' && !isNaN(+value) && value.trim() !== '') {
           value = +value;
         }
       }
