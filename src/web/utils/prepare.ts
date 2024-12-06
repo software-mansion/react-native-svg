@@ -1,26 +1,19 @@
-import {
-  GestureResponderEvent,
-  type ImageProps as RNImageProps,
-} from 'react-native';
-import { BaseProps } from '../types';
-import { WebShape } from '../WebShape';
-import { hasTouchableProperty, parseTransformProp } from '.';
+import type { NumberProp } from '../../lib/extract/types';
+import type { CreateComponentProps } from '../../types';
 import { resolve } from '../../lib/resolve';
-import { NumberProp } from '../../lib/extract/types';
 import { resolveAssetUri } from '../../lib/resolveAssetUri';
+import { parseTransformProp } from './parseTransform';
+
 /**
  * `react-native-svg` supports additional props that aren't defined in the spec.
  * This function replaces them in a spec conforming manner.
- *
- * @param {WebShape} self Instance given to us.
- * @param {Object?} props Optional overridden props given to us.
- * @returns {Object} Cleaned props object.
- * @private
  */
-export const prepare = <T extends BaseProps>(
-  self: WebShape<T>,
-  props = self.props
-) => {
+interface PreparedComponentProps extends CreateComponentProps {
+  'transform-origin'?: string;
+  ref?: unknown;
+}
+
+export const prepare = (props: CreateComponentProps) => {
   const {
     transform,
     origin,
@@ -34,48 +27,21 @@ export const prepare = <T extends BaseProps>(
     forwardedRef,
     gradientTransform,
     patternTransform,
-    onPress,
+    elementRef,
     ...rest
   } = props;
 
-  const clean: {
-    onStartShouldSetResponder?: (e: GestureResponderEvent) => boolean;
-    onResponderMove?: (e: GestureResponderEvent) => void;
-    onResponderGrant?: (e: GestureResponderEvent) => void;
-    onResponderRelease?: (e: GestureResponderEvent) => void;
-    onResponderTerminate?: (e: GestureResponderEvent) => void;
-    onResponderTerminationRequest?: (e: GestureResponderEvent) => boolean;
-    onClick?: (e: GestureResponderEvent) => void;
-    transform?: string;
-    gradientTransform?: string;
-    patternTransform?: string;
-    'transform-origin'?: string;
-    href?: RNImageProps['source'] | string | null;
-    style?: object;
-    ref?: unknown;
-  } = {
-    ...(hasTouchableProperty(props)
-      ? {
-          onStartShouldSetResponder:
-            self.touchableHandleStartShouldSetResponder,
-          onResponderTerminationRequest:
-            self.touchableHandleResponderTerminationRequest,
-          onResponderGrant: self.touchableHandleResponderGrant,
-          onResponderMove: self.touchableHandleResponderMove,
-          onResponderRelease: self.touchableHandleResponderRelease,
-          onResponderTerminate: self.touchableHandleResponderTerminate,
-        }
-      : null),
-    ...rest,
-  };
+  const clean: PreparedComponentProps = rest;
 
-  if (origin != null) {
+  if (origin !== null && origin !== undefined) {
     clean['transform-origin'] = origin.toString().replace(',', ' ');
-  } else if (originX != null || originY != null) {
+  } else if (
+    (originX !== null && originX !== undefined) ||
+    (originY !== null && originY !== undefined)
+  ) {
     clean['transform-origin'] = `${originX || 0} ${originY || 0}`;
   }
 
-  // we do it like this because setting transform as undefined causes error in web
   const parsedTransform = parseTransformProp(transform, props);
   if (parsedTransform) {
     clean.transform = parsedTransform;
@@ -90,11 +56,13 @@ export const prepare = <T extends BaseProps>(
   }
 
   clean.ref = (el: SVGElement | null) => {
-    self.elementRef.current = el;
+    if (elementRef) {
+      elementRef.current = el;
+    }
     if (typeof forwardedRef === 'function') {
       forwardedRef(el);
     } else if (forwardedRef) {
-      forwardedRef.current = el;
+      (forwardedRef as React.MutableRefObject<SVGElement | null>).current = el;
     }
   };
 
@@ -105,24 +73,21 @@ export const prepare = <T extends BaseProps>(
     fontWeight?: NumberProp;
   } = {};
 
-  if (fontFamily != null) {
+  if (fontFamily !== null && fontFamily !== undefined) {
     styles.fontFamily = fontFamily;
   }
-  if (fontSize != null) {
+  if (fontSize !== null && fontSize !== undefined) {
     styles.fontSize = fontSize;
   }
-  if (fontWeight != null) {
+  if (fontWeight !== null && fontWeight !== undefined) {
     styles.fontWeight = fontWeight;
   }
-  if (fontStyle != null) {
+  if (fontStyle !== null && fontStyle !== undefined) {
     styles.fontStyle = fontStyle;
-  }
-  clean.style = resolve(style, styles);
-  if (onPress !== null) {
-    clean.onClick = props.onPress;
   }
   if (props.href !== null && props.href !== undefined) {
     clean.href = resolveAssetUri(props.href)?.uri;
   }
+  clean.style = resolve(style, styles);
   return clean;
 };

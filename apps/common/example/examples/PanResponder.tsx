@@ -1,15 +1,8 @@
 import React, {useRef} from 'react';
-import {
-  Animated,
-  PanResponder,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import {Animated, PanResponder, View} from 'react-native';
 import {G, Line, Path, Polyline, Svg, Text} from 'react-native-svg';
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
-
 const zeroDelta = {x: 0, y: 0};
-
 const PanExample = () => {
   const xy = useRef(new Animated.ValueXY()).current;
   let offset = zeroDelta;
@@ -20,8 +13,7 @@ const PanExample = () => {
 
   const panResponder = useRef(
     PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponderCapture: () => true,
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         xy.setOffset(offset);
         xy.setValue(zeroDelta);
@@ -30,7 +22,7 @@ const PanExample = () => {
         useNativeDriver: false,
       }),
       onPanResponderRelease: () => {
-        xy.flattenOffset();
+        xy.extractOffset();
       },
     }),
   ).current;
@@ -40,32 +32,31 @@ const PanExample = () => {
   };
 
   return (
-    <TouchableWithoutFeedback>
-      <View>
-        <AnimatedSvg
-          height="200"
-          width="200"
-          style={panStyle}
-          {...panResponder.panHandlers}>
-          <Path
-            d="M50,5L20,99L95,39L5,39L80,99z"
-            stroke="black"
-            fill="red"
-            strokeWidth="6"
-            scale="0.8"
-          />
-          <Text
-            fontSize="20"
-            fontWeight="bold"
-            fill="blue"
-            textAnchor="middle"
-            x="40"
-            y="80">
-            STAR
-          </Text>
-        </AnimatedSvg>
-      </View>
-    </TouchableWithoutFeedback>
+    <View>
+      <AnimatedSvg
+        height="200"
+        width="200"
+        style={panStyle}
+        {...panResponder.panHandlers}>
+        <Path
+          d="M50,5L20,99L95,39L5,39L80,99z"
+          stroke="black"
+          fill="red"
+          strokeWidth="6"
+          scale="0.8"
+        />
+        <Text
+          fontSize="20"
+          fontWeight="bold"
+          fill="blue"
+          textAnchor="middle"
+          x="40"
+          y="80"
+          style={{userSelect: 'none'}}>
+          STAR
+        </Text>
+      </AnimatedSvg>
+    </View>
   );
 };
 
