@@ -8,6 +8,10 @@ RNSVGLayoutableShadowNode::RNSVGLayoutableShadowNode(
     const ShadowNodeFamily::Shared &family,
     ShadowNodeTraits traits)
     : YogaLayoutableShadowNode(fragment, family, traits) {
+  // SVG handles its layout manually on the native side and does not depend on
+  // the Yoga layout. Setting the dimensions to 0 eliminates randomly positioned
+  // views in the layout inspector when Yoga attempts to interpret SVG
+  // properties like width when viewBox scale isset.
   auto style = yogaNode_.style();
   style.setDimension(yoga::Dimension::Width, yoga::value::points(0));
   style.setDimension(yoga::Dimension::Height, yoga::value::points(0));
@@ -18,6 +22,10 @@ RNSVGLayoutableShadowNode::RNSVGLayoutableShadowNode(
     const ShadowNode &sourceShadowNode,
     const ShadowNodeFragment &fragment)
     : YogaLayoutableShadowNode(sourceShadowNode, fragment) {
+  // SVG handles its layout manually on the native side and does not depend on
+  // the Yoga layout. Setting the dimensions to 0 eliminates randomly positioned
+  // views in the layout inspector when Yoga attempts to interpret SVG
+  // properties like width when viewBox scale isset.
   auto style = yogaNode_.style();
   style.setDimension(yoga::Dimension::Width, yoga::value::points(0));
   style.setDimension(yoga::Dimension::Height, yoga::value::points(0));
