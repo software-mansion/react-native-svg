@@ -24,17 +24,6 @@ class RNSVGConcreteShadowNode : public ConcreteShadowNode<
       StateData,
       false>;
 
-  RNSVGConcreteShadowNode(
-      const ShadowNodeFragment &fragment,
-      const ShadowNodeFamily::Shared &family,
-      ShadowNodeTraits traits)
-      : BaseShadowNode(fragment, family, traits) {}
-
-  RNSVGConcreteShadowNode(
-      const ShadowNode &sourceShadowNode,
-      const ShadowNodeFragment &fragment)
-      : BaseShadowNode(sourceShadowNode, fragment) {}
-
   using ConcreteViewProps = PropsT;
 
   using BaseShadowNode::BaseShadowNode;
