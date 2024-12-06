@@ -18,4 +18,6 @@ export interface NativeProps extends ViewProps, FilterPrimitiveCommonProps {
   dy?: UnsafeMixed<NumberProp>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGFeOffset');
+export default codegenNativeComponent<NativeProps>('RNSVGFeOffset', {
+  interfaceOnly: true,
+});
