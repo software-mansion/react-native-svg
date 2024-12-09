@@ -241,6 +241,7 @@ static RNSVGRenderable *_contextElement;
   _vectorEffect = kRNSVGVectorEffectDefault;
   _propList = nil;
   _filter = nil;
+  _caller = nil;
 }
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -722,6 +723,9 @@ UInt32 saturate(CGFloat value)
 
 - (void)mergeProperties:(__kindof RNSVGRenderable *)target
 {
+  if ([target isEqual:self]) {
+    return;
+  }
   _caller = target;
   NSArray<NSString *> *targetAttributeList = [target getAttributeList];
 
