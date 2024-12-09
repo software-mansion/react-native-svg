@@ -723,9 +723,6 @@ UInt32 saturate(CGFloat value)
 
 - (void)mergeProperties:(__kindof RNSVGRenderable *)target
 {
-  if ([target isEqual:self]) {
-    return;
-  }
   _caller = target;
   NSArray<NSString *> *targetAttributeList = [target getAttributeList];
 
