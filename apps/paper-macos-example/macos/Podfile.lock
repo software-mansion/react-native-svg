@@ -1076,7 +1076,7 @@ PODS:
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNSVG (15.9.0):
+  - RNSVG (15.10.0):
     - React-Core
   - SocketRocket (0.7.0)
   - Yoga (1.14.0)
@@ -1308,7 +1308,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
   RNGestureHandler: bb81850add626ddd265294323310fec6e861c96b
   RNReanimated: ba95f6d26ca4b8a8f7f2b15f62a3513750762f6b
-  RNSVG: 3d2bdcaef51c8071880a9c0072fe324f4423a3ba
+  RNSVG: 58bad41c581b62cac6265c2899f8f943db527159
   SocketRocket: f6c6249082c011e6de2de60ed641ef8bbe0cfac9
   Yoga: 0639c9c8a20ae8043b0b64e2ef6d7a2cd5806aac
 

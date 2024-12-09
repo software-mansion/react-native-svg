@@ -40,7 +40,7 @@ class ClipPathView extends GroupView {
   }
 
   @Override
-  int hitTest(float[] src) {
+  public int hitTest(float[] src) {
     return -1;
   }
 
