@@ -22,4 +22,6 @@ export interface NativeProps extends ViewProps, FilterPrimitiveCommonProps {
   edgeMode?: WithDefault<FilterEdgeMode, 'none'>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGFeGaussianBlur');
+export default codegenNativeComponent<NativeProps>('RNSVGFeGaussianBlur', {
+  interfaceOnly: true,
+});

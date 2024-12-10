@@ -21,4 +21,6 @@ export interface NativeProps extends ViewProps, FilterPrimitiveCommonProps {
   values?: ReadonlyArray<Float>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGFeColorMatrix');
+export default codegenNativeComponent<NativeProps>('RNSVGFeColorMatrix', {
+  interfaceOnly: true,
+});

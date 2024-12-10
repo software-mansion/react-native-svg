@@ -16,4 +16,6 @@ interface NativeProps extends ViewProps {
   primitiveUnits?: WithDefault<Units, 'userSpaceOnUse'>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGFilter');
+export default codegenNativeComponent<NativeProps>('RNSVGFilter', {
+  interfaceOnly: true,
+});
