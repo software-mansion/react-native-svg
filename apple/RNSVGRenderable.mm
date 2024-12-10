@@ -241,6 +241,7 @@ static RNSVGRenderable *_contextElement;
   _vectorEffect = kRNSVGVectorEffectDefault;
   _propList = nil;
   _filter = nil;
+  _caller = nil;
 }
 #endif // RCT_NEW_ARCH_ENABLED
 
