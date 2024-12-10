@@ -59,4 +59,6 @@ interface NativeProps
   ry?: UnsafeMixed<NumberProp>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGEllipse');
+export default codegenNativeComponent<NativeProps>('RNSVGEllipse', {
+  interfaceOnly: true,
+});

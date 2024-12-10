@@ -66,4 +66,6 @@ interface NativeProps
   width?: UnsafeMixed<NumberProp>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGForeignObject');
+export default codegenNativeComponent<NativeProps>('RNSVGForeignObject', {
+  interfaceOnly: true,
+});
