@@ -231,6 +231,7 @@ static RNSVGRenderable *_contextElement;
   _strokeDashArrayData = nil;
 
   _contextElement = nil;
+  _color = nil;
   _fill = nil;
   _stroke = nil;
   _strokeLinecap = kCGLineCapButt;
