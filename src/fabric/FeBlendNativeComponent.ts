@@ -26,4 +26,6 @@ export interface NativeProps extends ViewProps, FilterPrimitiveCommonProps {
   mode?: WithDefault<BlendMode, 'normal'>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGFeBlend');
+export default codegenNativeComponent<NativeProps>('RNSVGFeBlend', {
+  interfaceOnly: true,
+});
