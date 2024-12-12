@@ -5,8 +5,26 @@
 #include <react/renderer/components/rnsvg/Props.h>
 #include "RNSVGConcreteShadowNode.h"
 #include "RNSVGImageState.h"
+#include "RNSVGSvgShadowNode.h"
 
 namespace facebook::react {
+
+JSI_EXPORT extern const char RNSVGSvgViewComponentName[];
+
+/*
+ * `ShadowNode` for <RNSVGSvgView> component.
+ */
+using RNSVGSvgViewShadowNode =
+    RNSVGSvgShadowNode<RNSVGSvgViewComponentName, RNSVGSvgViewProps>;
+
+JSI_EXPORT extern const char RNSVGSvgViewAndroidComponentName[];
+
+/*
+ * `ShadowNode` for <RNSVGSvgViewAndroid> component.
+ */
+using RNSVGSvgViewAndroidShadowNode = RNSVGSvgShadowNode<
+    RNSVGSvgViewAndroidComponentName,
+    RNSVGSvgViewAndroidProps>;
 
 JSI_EXPORT extern const char RNSVGCircleComponentName[];
 

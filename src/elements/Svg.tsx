@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
 const defaultStyle = styles.svg;
 
 export interface SvgProps extends GProps, ViewProps, HitSlop {
-  width?: NumberProp;
-  height?: NumberProp;
+  width?: NumberProp | 'auto';
+  height?: NumberProp | 'auto';
   viewBox?: string;
   preserveAspectRatio?: string;
   color?: ColorValue;
@@ -50,6 +50,8 @@ export default class Svg extends Shape<SvgProps> {
 
   static defaultProps = {
     preserveAspectRatio: 'xMidYMid meet',
+    width: 'auto',
+    height: 'auto',
   };
 
   measureInWindow = (callback: MeasureInWindowOnSuccessCallback) => {
@@ -73,8 +75,8 @@ export default class Svg extends Shape<SvgProps> {
 
   setNativeProps = (
     props: SvgProps & {
-      bbWidth?: NumberProp;
-      bbHeight?: NumberProp;
+      width?: NumberProp;
+      height?: NumberProp;
     }
   ) => {
     const { root } = this;
@@ -106,7 +108,7 @@ export default class Svg extends Shape<SvgProps> {
       ...(Array.isArray(style) ? Object.assign({}, ...style) : style),
       ...extracted,
     };
-    let {
+    const {
       width,
       height,
       focusable,
@@ -126,9 +128,6 @@ export default class Svg extends Shape<SvgProps> {
       strokeLinejoin,
       strokeMiterlimit,
     } = stylesAndProps;
-    if (width === undefined && height === undefined) {
-      width = height = '100%';
-    }
 
     const props: extractedProps = extracted as extractedProps;
     props.focusable = Boolean(focusable) && focusable !== 'false';
