@@ -83,14 +83,6 @@ class RNSVGSvgShadowNode final
     this->yogaNode_.setStyle(style);
     this->yogaNode_.setDirty(true);
   }
-
-  yoga::Style::Length parseLength(folly::dynamic length) {
-    yoga::Style::Length len;
-    PropsParserContext propsPareserContext =
-        PropsParserContext(0, ContextContainer());
-    fromRawValue(propsPareserContext, RawValue(length), len);
-    return len;
-  }
 };
 
 } // namespace facebook::react
