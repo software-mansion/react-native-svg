@@ -2,18 +2,6 @@ import React, {useRef, useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {Circle, G, Line, Path, Rect, Svg} from 'react-native-svg';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: 100,
-    width: 200,
-  },
-  svg: {
-    flex: 1,
-    alignSelf: 'stretch',
-  },
-});
-
 function SvgExample() {
   return (
     <Svg height="100" width="100">
@@ -82,10 +70,43 @@ function SvgViewbox() {
 SvgViewbox.title =
   'SVG with `viewBox="40 20 100 40" and preserveAspectRatio="none"';
 
-function SvgLayout() {
+function SvgWithoutSizingAndVb() {
   return (
-    <View style={styles.container}>
-      <Svg style={styles.svg}>
+    <Svg>
+      <Rect
+        width="80%"
+        height="80%"
+        x="10%"
+        y="10%"
+        fill="purple"
+        stroke="yellow"
+        strokeWidth="4"
+      />
+      <Line
+        x1="10%"
+        y1="10%"
+        x2="90%"
+        y2="90%"
+        stroke="yellow"
+        strokeWidth="4"
+      />
+      <Line
+        x1="10%"
+        y1="90%"
+        x2="90%"
+        y2="10%"
+        stroke="yellow"
+        strokeWidth="4"
+      />
+    </Svg>
+  );
+}
+SvgWithoutSizingAndVb.title = 'SVG  without viewBox and width/height';
+
+function SvgWithoutSizing() {
+  return (
+    <View style={{width: '90%'}}>
+      <Svg viewBox="0 0 300 100">
         <Rect
           width="80%"
           height="80%"
@@ -115,7 +136,65 @@ function SvgLayout() {
     </View>
   );
 }
-SvgLayout.title = 'SVG with flex layout';
+SvgWithoutSizing.title = 'SVG with viewBox and without width/height';
+
+function SvgAutoHeight() {
+  return (
+    <Svg
+      width="50"
+      height="auto"
+      viewBox="0 0 100 100"
+      style={{backgroundColor: 'gray'}}>
+      <Circle
+        cx="50"
+        cy="50"
+        r="45"
+        stroke="blue"
+        strokeWidth="2.5"
+        fill="green"
+      />
+      <Rect
+        x="15"
+        y="15"
+        width="70"
+        height="70"
+        stroke="red"
+        strokeWidth="2"
+        fill="yellow"
+      />
+    </Svg>
+  );
+}
+SvgAutoHeight.title = 'SVG with auto height';
+
+function SvgAutoWidth() {
+  return (
+    <Svg
+      width="auto"
+      height="75"
+      viewBox="0 0 100 100"
+      style={{backgroundColor: 'gray'}}>
+      <Circle
+        cx="50"
+        cy="50"
+        r="45"
+        stroke="blue"
+        strokeWidth="2.5"
+        fill="green"
+      />
+      <Rect
+        x="15"
+        y="15"
+        width="70"
+        height="70"
+        stroke="red"
+        strokeWidth="2"
+        fill="yellow"
+      />
+    </Svg>
+  );
+}
+SvgAutoWidth.title = 'SVG with auto width';
 
 function SvgNativeMethods() {
   const [base64, setBase64] = useState('');
@@ -179,7 +258,10 @@ const samples = [
   SvgExample,
   SvgOpacity,
   SvgViewbox,
-  SvgLayout,
+  SvgWithoutSizing,
+  SvgWithoutSizingAndVb,
+  SvgAutoHeight,
+  SvgAutoWidth,
   SvgNativeMethods,
 ];
 
