@@ -43,32 +43,41 @@ class RNSVGSvgShadowNode final
  private:
   void initialize() {
     auto style = this->yogaNode_.style();
-
     const auto &props = this->getConcreteProps();
-    auto width = parseLength(props.bbWidth);
-    auto height = parseLength(props.bbHeight);
 
     bool hasViewBox = props.vbWidth != 0 && props.vbHeight != 0;
-    bool widthIsAuto = width.unit() == yoga::Unit::Auto;
-    bool heightIsAuto = height.unit() == yoga::Unit::Auto;
+    bool isWidthEmpty = props.bbWidth.empty();
+    bool isHeightEmpty = props.bbHeight.empty();
 
     if (!hasViewBox) {
-      if (widthIsAuto) {
+      if (isWidthEmpty) {
         style.setDimension(yoga::Dimension::Width, yoga::value::points(300));
       }
-      if (heightIsAuto) {
+      if (isHeightEmpty) {
         style.setDimension(yoga::Dimension::Height, yoga::value::points(150));
       }
-    } else if (widthIsAuto || heightIsAuto) {
-      auto aspectRatio = props.vbWidth / props.vbHeight;
-      style.setAspectRatio(yoga::FloatOptional(aspectRatio));
-      if (widthIsAuto && heightIsAuto) {
+    } else if (isWidthEmpty || isHeightEmpty) {
+      auto vbAspectRatio = props.vbWidth / props.vbHeight;
+      style.setAspectRatio(yoga::FloatOptional(vbAspectRatio));
+      if (isWidthEmpty && isHeightEmpty) {
         style.setDimension(yoga::Dimension::Width, yoga::value::percent(100));
-      } else if (heightIsAuto) {
-        style.setDimension(yoga::Dimension::Height, yoga::value::undefined());
-      } else if (widthIsAuto) {
+      } else if (isWidthEmpty) {
         style.setDimension(yoga::Dimension::Width, yoga::value::undefined());
+      } else if (isHeightEmpty) {
+        style.setDimension(yoga::Dimension::Height, yoga::value::undefined());
       }
+    }
+
+    bool isWidthAuto =
+        props.bbWidth.isString() && props.bbWidth.asString() == "auto";
+    bool isHeightAuto =
+        props.bbHeight.isString() && props.bbHeight.asString() == "auto";
+
+    if (isWidthAuto) {
+      style.setDimension(yoga::Dimension::Width, yoga::value::percent(100));
+    }
+    if (isHeightAuto) {
+      style.setDimension(yoga::Dimension::Height, yoga::value::percent(100));
     }
 
     this->yogaNode_.setStyle(style);

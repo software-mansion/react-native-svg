@@ -50,8 +50,6 @@ export default class Svg extends Shape<SvgProps> {
 
   static defaultProps = {
     preserveAspectRatio: 'xMidYMid meet',
-    width: 'auto',
-    height: 'auto',
   };
 
   measureInWindow = (callback: MeasureInWindowOnSuccessCallback) => {
