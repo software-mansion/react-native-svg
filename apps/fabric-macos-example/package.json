@@ -19,7 +19,6 @@
     "react-native-gesture-handler": "https://github.com/software-mansion/react-native-gesture-handler",
     "react-native-macos": "^0.76.6",
     "react-native-reanimated": "^3.16.1",
-    "react-native-safe-area-context": "^5.0.0",
     "react-native-svg": "link:../../"
   },
   "devDependencies": {

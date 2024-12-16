@@ -6594,11 +6594,6 @@ react-native-reanimated@^3.16.1:
     convert-source-map "^2.0.0"
     invariant "^2.2.4"
 
-react-native-safe-area-context@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-5.0.0.tgz#0f28f3b406d4466c6afdaaa615198d12741e88b5"
-  integrity sha512-4K4TvEbRsTDYuSSJZfMNKuJNn1+qgrSkOBwRoreiHcuqy1egrHpkhPhoN1Zg1+b3BxcVXlKXtMIf4eVaG/DPJw==
-
 "react-native-svg@link:../..":
   version "0.0.0"
   uid ""
