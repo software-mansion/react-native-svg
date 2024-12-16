@@ -5,10 +5,10 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGConvert.h"
 #import "RNSVGFabricConversions.h"
+#import "rnsvg/RNSVGComponentDescriptors.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
 #if TARGET_OS_OSX // [macOS

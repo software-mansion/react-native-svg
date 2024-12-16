@@ -58,4 +58,6 @@ interface NativeProps
   r?: UnsafeMixed<NumberProp>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGCircle');
+export default codegenNativeComponent<NativeProps>('RNSVGCircle', {
+  interfaceOnly: true,
+});
