@@ -76,4 +76,4 @@ jobs:
 
       - name: Build app
         working-directory: apps/${{ matrix.working-directory }}
-        run: npx react-native run-macos
+        run: yarn macos
