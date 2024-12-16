@@ -68,6 +68,11 @@ export const TestingView = () => {
         `✅ Connection to Jest server has been closed. You can close this tab safely. (${event.code})`,
       );
     };
+
+    return () => {
+      setWsClient(null);
+      client.close();
+    };
   }, [wsClient]);
 
   // Create initial connection when rendering the view
