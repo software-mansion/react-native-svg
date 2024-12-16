@@ -12,7 +12,7 @@ export const TestingView = () => {
   const [renderedContent, setRenderedContent] =
     useState<React.ReactElement | null>();
   const [readyToSnapshot, setReadyToSnapshot] = useState(false);
-  const [resolution, setResolution] = useState([0, 0]); // placeholder value, later updated by incoming render requests
+  const [resolution, setResolution] = useState({width: 0, height: 0}); // placeholder value, later updated by incoming render requests
   const [message, setMessage] = useState('⏳ Connecting to Jest server...');
 
   const connect = useCallback(() => {
@@ -48,7 +48,8 @@ export const TestingView = () => {
       const message = JSON.parse(rawMessage);
       if (message.type == 'renderRequest') {
         setMessage(`✅ Rendering tests, please don't close this tab.`);
-        setResolution([message.width, message.height]);
+        const {width, height} = message;
+        setResolution({width, height});
         setRenderedContent(
           createElementFromObject(
             message.data.type || 'SvgFromXml',
@@ -66,6 +67,11 @@ export const TestingView = () => {
       setMessage(
         `✅ Connection to Jest server has been closed. You can close this tab safely. (${event.code})`,
       );
+    };
+
+    return () => {
+      setWsClient(null);
+      client.close();
     };
   }, [wsClient]);
 
@@ -93,7 +99,7 @@ export const TestingView = () => {
       <Text style={{marginLeft: 'auto', marginRight: 'auto'}}>{message}</Text>
       <ViewShot
         ref={wrapperRef}
-        style={{width: resolution[0], height: resolution[1]}}
+        style={{...resolution}}
         options={{result: 'base64'}}>
         {renderedContent}
       </ViewShot>

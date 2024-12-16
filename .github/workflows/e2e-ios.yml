@@ -22,7 +22,7 @@ jobs:
         working-directory: [paper-example]
       fail-fast: false
     env:
-      DEVICE: iPhone 16 Pro
+      DEVICE: iPhone 15 Pro
     steps:
       - name: Checkout Git repository
         uses: actions/checkout@v4
