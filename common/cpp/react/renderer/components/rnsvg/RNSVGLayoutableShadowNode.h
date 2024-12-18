@@ -14,6 +14,9 @@ class RNSVGLayoutableShadowNode : public YogaLayoutableShadowNode {
       const ShadowNodeFragment &fragment);
 
   void layout(LayoutContext layoutContext) override;
+
+ private:
+  void setZeroDimensions();
 };
 
 } // namespace facebook::react
