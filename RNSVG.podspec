@@ -2,7 +2,7 @@ require 'json'
 require_relative './scripts/rnsvg_utils'
 
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
-$config = find_config()
+svgConfig = rnsvg_find_config()
 
 fabric_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
 
@@ -27,6 +27,9 @@ Pod::Spec.new do |s|
   s.tvos.resource_bundles  = {'RNSVGFilters' => ['apple/**/*.appletvos.metallib']}
   s.visionos.resource_bundles  = {'RNSVGFilters' => ['apple/**/*.xros.metallib']}
 
+  s.xcconfig = {
+    "OTHER_CFLAGS" => "$(inherited) -DREACT_NATIVE_MINOR_VERSION=#{svgConfig[:react_native_minor_version]}",
+  }
   if fabric_enabled
     install_modules_dependencies(s)
 
@@ -35,7 +38,6 @@ Pod::Spec.new do |s|
       ss.header_dir           = "rnsvg"
       ss.pod_target_xcconfig  = { "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/common/cpp\"" }
     end
-    s.compiler_flags = "-DREACT_NATIVE_MINOR_VERSION=#{$config[:react_native_minor_version]}"
   else
     s.exclude_files      = 'apple/Utils/RNSVGFabricConversions.h'
     s.dependency           'React-Core'
