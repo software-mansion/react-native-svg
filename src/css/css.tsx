@@ -766,17 +766,29 @@ export const inlineStyles: Middleware = function inlineStyles(
 };
 
 export function SvgCss(props: XmlProps) {
-  const { xml, override, fallback, onError = err } = props;
-  try {
-    const ast = useMemo<JsxAST | null>(
-      () => (xml !== null ? parse(xml, inlineStyles) : null),
-      [xml]
-    );
-    return <SvgAst ast={ast} override={override || props} />;
-  } catch (error) {
-    onError(error);
+  const { xml, override, fallback, onError = err, onLoad } = props;
+
+  const [ast, error] = useMemo<[JsxAST | null, unknown]>(() => {
+    try {
+      const parsed = xml !== null ? parse(xml, inlineStyles) : null;
+      return [parsed, null];
+    } catch (exc) {
+      return [null, exc];
+    }
+  }, [xml]);
+
+  useEffect(() => {
+    if (!error && ast?.props) {
+      onLoad?.(ast.props);
+    } else if (error) {
+      onError(error as Error);
+    }
+  }, [ast, error, onLoad, onError]);
+
+  if (error) {
     return fallback ?? null;
   }
+  return <SvgAst ast={ast} override={override || props} />;
 }
 
 export function SvgCssUri(props: UriProps) {
@@ -788,7 +800,6 @@ export function SvgCssUri(props: UriProps) {
       ? fetchText(uri)
           .then((data) => {
             setXml(data);
-            onLoad?.();
           })
           .catch((e) => {
             onError(e);
@@ -799,7 +810,9 @@ export function SvgCssUri(props: UriProps) {
   if (isError) {
     return fallback ?? null;
   }
-  return <SvgCss xml={xml} override={props} fallback={fallback} />;
+  return (
+    <SvgCss xml={xml} override={props} fallback={fallback} onLoad={onLoad} />
+  );
 }
 
 // Extending Component is required for Animated support.
