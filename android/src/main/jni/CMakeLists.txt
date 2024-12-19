@@ -7,6 +7,11 @@ set(RNS_GENERATED_DIR ${RNS_ANDROID_DIR}/build/generated)
 set(RNS_GENERATED_JNI_DIR ${RNS_GENERATED_DIR}/source/codegen/jni)
 set(RNS_GENERATED_REACT_DIR ${RNS_GENERATED_JNI_DIR}/react/renderer/components/rnsvg)
 
+string(
+  APPEND
+  CMAKE_CXX_FLAGS
+  " -DREACT_NATIVE_MINOR_VERSION=321${REACT_NATIVE_MINOR_VERSION}")
+
 add_compile_options(
   -fexceptions
   -frtti
