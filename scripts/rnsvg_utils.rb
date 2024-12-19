@@ -1,5 +1,5 @@
 # Copied from Reanimated https://github.com/software-mansion/react-native-reanimated/blob/c6d68151644056476518241b0087b1ed900b39b6/packages/react-native-reanimated/scripts/reanimated_utils.rb
-def try_to_parse_react_native_package_json(node_modules_dir)
+def rnsvg_try_to_parse_react_native_package_json(node_modules_dir)
   react_native_package_json_path = File.join(node_modules_dir, 'react-native/package.json')
   if !File.exist?(react_native_package_json_path)
     return nil
@@ -7,7 +7,7 @@ def try_to_parse_react_native_package_json(node_modules_dir)
   return JSON.parse(File.read(react_native_package_json_path))
 end
 
-def find_config()
+def rnsvg_find_config()
   result = {
     :react_native_version => nil,
     :react_native_minor_version => nil,
@@ -15,12 +15,12 @@ def find_config()
   }
 
   react_native_node_modules_dir = File.join(File.dirname(`cd "#{Pod::Config.instance.installation_root.to_s}" && node --print "require.resolve('react-native/package.json')"`), '..')
-  react_native_json = try_to_parse_react_native_package_json(react_native_node_modules_dir)
+  react_native_json = rnsvg_try_to_parse_react_native_package_json(react_native_node_modules_dir)
 
   if react_native_json == nil
     # user configuration, just in case
     node_modules_dir = ENV["REACT_NATIVE_NODE_MODULES_DIR"]
-    react_native_json = try_to_parse_react_native_package_json(node_modules_dir)
+    react_native_json = rnsvg_try_to_parse_react_native_package_json(node_modules_dir)
   end
 
   if react_native_json == nil
