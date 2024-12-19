@@ -103,6 +103,9 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 - (void)clearChildCache
 {
   [self clearPath];
+  canvasWidth = -1;
+  canvasHeight = -1;
+  canvasDiagonal = -1;
   for (__kindof RNSVGNode *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGNode class]]) {
       [node clearChildCache];

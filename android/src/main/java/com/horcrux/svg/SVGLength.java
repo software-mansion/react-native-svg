@@ -43,6 +43,9 @@ class SVGLength {
     } else if (length.codePointAt(percentIndex) == '%') {
       unit = UnitType.PERCENTAGE;
       value = Double.valueOf(length.substring(0, percentIndex));
+    } else if (length.equals("auto")) {
+      unit = UnitType.PERCENTAGE;
+      value = 100;
     } else {
       int twoLetterUnitIndex = stringLength - 2;
       if (twoLetterUnitIndex > 0) {

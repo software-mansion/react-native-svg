@@ -2,6 +2,8 @@
 
 namespace facebook::react {
 
+extern const char RNSVGSvgViewAndroidComponentName[] = "RNSVGSvgViewAndroid";
+extern const char RNSVGSvgViewComponentName[] = "RNSVGSvgView";
 extern const char RNSVGCircleComponentName[] = "RNSVGCircle";
 extern const char RNSVGClipPathComponentName[] = "RNSVGClipPath";
 extern const char RNSVGDefsComponentName[] = "RNSVGDefs";

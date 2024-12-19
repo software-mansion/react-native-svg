@@ -29,4 +29,5 @@ interface NativeProps extends ViewProps {
 
 export default codegenNativeComponent<NativeProps>('RNSVGSvgView', {
   excludedPlatforms: ['android'],
+  interfaceOnly: true,
 });
