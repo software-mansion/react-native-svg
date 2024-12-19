@@ -52,13 +52,12 @@ def resolveReactNativeDirectory() {
   throw new GradleException("[react-native-svg] Unable to resolve react-native location in node_modules. Your app should define `REACT_NATIVE_NODE_MODULES_DIR` extension property in `app/build.gradle` with a path to react-native in node_modules.")
 }
 
-def getReactNativeMinorVersion() {
-  def reactNativeRootDir = resolveReactNativeDirectory()
-  def reactNativeProperties = new Properties()
-  file("$reactNativeRootDir/ReactAndroid/gradle.properties").withInputStream { reactNativeProperties.load(it) }
-  def reactNativeVersion = reactNativeProperties.getProperty("VERSION_NAME")
-  return reactNativeVersion.split("\\.")[1].toInteger()
-}
+def reactNativeRootDir = resolveReactNativeDirectory()
+def reactNativeProperties = new Properties()
+file("$reactNativeRootDir/ReactAndroid/gradle.properties").withInputStream { reactNativeProperties.load(it) }
+
+def REACT_NATIVE_VERSION = reactNativeProperties.getProperty("VERSION_NAME")
+def REACT_NATIVE_MINOR_VERSION = REACT_NATIVE_VERSION.startsWith("0.0.0-") ? 1000 : REACT_NATIVE_VERSION.split("\\.")[1].toInteger()
 
 def getFrescoVersion() {
     def reactNativeRootDir = resolveReactNativeDirectory()
@@ -78,6 +77,7 @@ def getFrescoVersion() {
     }
     return frescoVersion
 }
+def FRESCO_VERSION = getFrescoVersion()
 
 android {
     compileSdkVersion safeExtGet('compileSdkVersion', 28)
@@ -106,6 +106,13 @@ android {
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         consumerProguardFiles 'proguard-rules.pro'
+
+        buildConfigField("String", "REACT_NATIVE_MINOR_VERSION", "\"${REACT_NATIVE_MINOR_VERSION}\"")
+        externalNativeBuild {
+            cmake {
+                arguments "-DREACT_NATIVE_MINOR_VERSION=${REACT_NATIVE_MINOR_VERSION}"
+            }
+        }
     }
     lintOptions {
         abortOnError false
@@ -119,7 +126,7 @@ android {
                 ]
             }
 
-            if (getReactNativeMinorVersion() >= 75) { // Use for react-native@0.75 and above
+            if (REACT_NATIVE_MINOR_VERSION >= 75) { // Use for react-native@0.75 and above
                 // borderRadius fix https://github.com/software-mansion/react-native-svg/pull/2415
                 srcDirs += "src/SvgViewManager75/java"
                 // processTransform replacement https://github.com/software-mansion/react-native-svg/pull/2554
@@ -129,7 +136,7 @@ android {
                 srcDirs += "src/RenderableViewManager73/java"
             }
 
-            if (getReactNativeMinorVersion() >= 74) { // Use for react-native@0.74 and above
+            if (REACT_NATIVE_MINOR_VERSION >= 74) { // Use for react-native@0.74 and above
                 // new API https://github.com/software-mansion/react-native-svg/pull/2541
                 srcDirs += "src/SvgPackage74/java"
             } else {
@@ -152,14 +159,13 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    if (getReactNativeMinorVersion() >= 76) {
-        def frescoVersion = getFrescoVersion()
-        implementation("com.facebook.fresco:fresco:${frescoVersion}") {
+    if (REACT_NATIVE_MINOR_VERSION >= 76) {
+        implementation("com.facebook.fresco:fresco:${FRESCO_VERSION}") {
             exclude group: 'com.facebook.soloader'
         }
-        implementation("com.facebook.fresco:imagepipeline-okhttp3:${frescoVersion}") {
+        implementation("com.facebook.fresco:imagepipeline-okhttp3:${FRESCO_VERSION}") {
             exclude group: 'com.facebook.soloader'
         }
-        implementation("com.facebook.fresco:middleware:${frescoVersion}")
+        implementation("com.facebook.fresco:middleware:${FRESCO_VERSION}")
     }
 }
