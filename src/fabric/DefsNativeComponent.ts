@@ -23,4 +23,6 @@ interface SvgNodeCommonProps {
 
 interface NativeProps extends ViewProps, SvgNodeCommonProps {}
 
-export default codegenNativeComponent<NativeProps>('RNSVGDefs');
+export default codegenNativeComponent<NativeProps>('RNSVGDefs', {
+  interfaceOnly: true,
+});

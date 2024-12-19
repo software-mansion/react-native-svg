@@ -11,7 +11,7 @@ import React from 'react';
 import {ActivityIndicator, Platform, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {ListScreen} from './ListScreen';
-import * as E2e from './e2e/index.macos';
+import * as E2e from './e2e/index';
 import {examples} from './examples';
 import * as FilterImage from './examples/FilterImage';
 import * as Filters from './examples/Filters';

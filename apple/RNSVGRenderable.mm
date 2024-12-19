@@ -231,6 +231,7 @@ static RNSVGRenderable *_contextElement;
   _strokeDashArrayData = nil;
 
   _contextElement = nil;
+  _color = nil;
   _fill = nil;
   _stroke = nil;
   _strokeLinecap = kCGLineCapButt;
@@ -241,6 +242,7 @@ static RNSVGRenderable *_contextElement;
   _vectorEffect = kRNSVGVectorEffectDefault;
   _propList = nil;
   _filter = nil;
+  _caller = nil;
 }
 #endif // RCT_NEW_ARCH_ENABLED
 

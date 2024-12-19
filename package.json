@@ -1,5 +1,5 @@
 {
-  "version": "15.9.0",
+  "version": "15.10.1",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -135,6 +135,39 @@
     "jsSrcsDir": "./src/fabric",
     "android": {
       "javaPackageName": "com.horcrux.svg"
+    },
+    "ios": {
+      "componentProvider": {
+        "RNSVGCircle": "RNSVGCircle",
+        "RNSVGClipPath": "RNSVGClipPath",
+        "RNSVGDefs": "RNSVGDefs",
+        "RNSVGEllipse": "RNSVGEllipse",
+        "RNSVGFeBlend": "RNSVGFeBlend",
+        "RNSVGFeColorMatrix": "RNSVGFeColorMatrix",
+        "RNSVGFeComposite": "RNSVGFeComposite",
+        "RNSVGFeFlood": "RNSVGFeFlood",
+        "RNSVGFeGaussianBlur": "RNSVGFeGaussianBlur",
+        "RNSVGFeMerge": "RNSVGFeMerge",
+        "RNSVGFeOffset": "RNSVGFeOffset",
+        "RNSVGFilter": "RNSVGFilter",
+        "RNSVGForeignObject": "RNSVGForeignObject",
+        "RNSVGGroup": "RNSVGGroup",
+        "RNSVGImage": "RNSVGImage",
+        "RNSVGLine": "RNSVGLine",
+        "RNSVGLinearGradient": "RNSVGLinearGradient",
+        "RNSVGMarker": "RNSVGMarker",
+        "RNSVGMask": "RNSVGMask",
+        "RNSVGPath": "RNSVGPath",
+        "RNSVGPattern": "RNSVGPattern",
+        "RNSVGRadialGradient": "RNSVGRadialGradient",
+        "RNSVGRect": "RNSVGRect",
+        "RNSVGSvgView": "RNSVGSvgView",
+        "RNSVGSymbol": "RNSVGSymbol",
+        "RNSVGTSpan": "RNSVGTSpan",
+        "RNSVGText": "RNSVGText",
+        "RNSVGTextPath": "RNSVGTextPath",
+        "RNSVGUse": "RNSVGUse"
+      }
     }
   },
   "packageManager": "yarn@1.22.22"

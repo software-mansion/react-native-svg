@@ -676,7 +676,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   abstract Path getPath(Canvas canvas, Paint paint);
 
   @Override
-  int hitTest(final float[] src) {
+  public int hitTest(final float[] src) {
     if (mPath == null || !mInvertible) {
       return -1;
     }
