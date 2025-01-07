@@ -2876,7 +2876,7 @@
   dependencies:
     "@react-native/codegen" "0.76.2"
 
-"@react-native/babel-plugin-codegen@0.77.0-rc.6", "@react-native/babel-plugin-codegen@^0.77.0-rc.6":
+"@react-native/babel-plugin-codegen@0.77.0-rc.6":
   version "0.77.0-rc.6"
   resolved "https://registry.yarnpkg.com/@react-native/babel-plugin-codegen/-/babel-plugin-codegen-0.77.0-rc.6.tgz#dad6b10c61e1e5c72918817b54e78e0a91f1f26b"
   integrity sha512-gzZhyw3/erZx/IWWnckW9CJlo+Q4DmFm97m0BCmUicuEPNifKiQKea8CbFy1xwXb3PYPMcSPBslcyUjhsu+aTA==
