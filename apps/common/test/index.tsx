@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 
 import ColorTest from './ColorTest';
@@ -35,7 +34,8 @@ import Test2417 from './Test2417';
 import Test2455 from './Test2455';
 import Test2471 from './Test2471';
 import Test2520 from './Test2520';
+import SvgUriOnLoad from './SvgUriOnLoad';
 
 export default function App() {
-  return <ColorTest />;
+  return <SvgUriOnLoad />;
 }
