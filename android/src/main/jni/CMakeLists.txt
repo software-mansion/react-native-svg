@@ -10,7 +10,7 @@ set(RNS_GENERATED_REACT_DIR ${RNS_GENERATED_JNI_DIR}/react/renderer/components/r
 string(
   APPEND
   CMAKE_CXX_FLAGS
-  " -DREACT_NATIVE_MINOR_VERSION=321${REACT_NATIVE_MINOR_VERSION}")
+  " -DREACT_NATIVE_MINOR_VERSION=${ReactAndroid_VERSION_MINOR}")
 
 add_compile_options(
   -fexceptions
