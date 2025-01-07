@@ -24,6 +24,7 @@ export function isUriAnAndroidResourceIdentifier(uri?: string) {
 
 export async function loadAndroidRawResource(uri: string) {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const RNSVGRenderableModule: any =
       // neeeded for new arch
       // eslint-disable-next-line @typescript-eslint/no-var-requires
