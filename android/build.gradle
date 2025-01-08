@@ -104,13 +104,6 @@ android {
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         consumerProguardFiles 'proguard-rules.pro'
-
-        buildConfigField("String", "REACT_NATIVE_MINOR_VERSION", "\"${REACT_NATIVE_MINOR_VERSION}\"")
-        externalNativeBuild {
-            cmake {
-                arguments "-DREACT_NATIVE_MINOR_VERSION=${REACT_NATIVE_MINOR_VERSION}"
-            }
-        }
     }
     lintOptions {
         abortOnError false
