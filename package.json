@@ -23,7 +23,8 @@
     "RNSVG.podspec",
     "!android/build",
     "windows",
-    "react-native.config.js"
+    "react-native.config.js",
+    "scripts/rnsvg_utils.rb"
   ],
   "react-native-builder-bob": {
     "source": "src",
