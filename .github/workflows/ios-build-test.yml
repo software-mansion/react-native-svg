@@ -81,4 +81,4 @@ jobs:
 
       - name: Build app
         working-directory: apps/${{ matrix.working-directory }}
-        run: npx react-native run-ios --simulator="iPhone 15 Pro" --mode Debug --verbose --no-packager
+        run: npx react-native run-ios --simulator="iPhone 16 Pro" --mode Debug --verbose --no-packager
