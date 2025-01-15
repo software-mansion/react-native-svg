@@ -100,7 +100,7 @@ class UseView extends RenderableView {
   }
 
   @Override
-  public int hitTest(float[] src) {
+  int hitTest(float[] src) {
     if (!mInvertible) {
       return -1;
     }
