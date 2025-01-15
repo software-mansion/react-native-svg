@@ -36,50 +36,22 @@ jobs:
         with:
           xcode-version: latest-stable
 
-      - name: Get react-native-svg node_modules cache
-        uses: actions/cache@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v2
         with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
-          restore-keys: ${{ runner.os }}-node-modules-svg-
+          node-version: 20
+          cache: 'yarn'
 
       - name: Install react-native-svg node_modules
         run: yarn install --frozen-lockfile
-
-      - name: Get app node_modules cache
-        uses: actions/cache@v4
-        with:
-          path: apps/${{ matrix.working-directory }}/node_modules
-          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/yarn.lock', matrix.working-directory)) }}
-          restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
 
       - name: Install app node_modules
         working-directory: apps/${{ matrix.working-directory }}
         run: yarn install --frozen-lockfile
 
-      - name: Get Pods cache
-        uses: actions/cache@v4
-        with:
-          path: apps/${{ matrix.working-directory }}/ios/Pods
-          key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/ios/Podfile.lock', matrix.working-directory)) }}
-          restore-keys: |
-            ${{ runner.os }}-pods-${{ matrix.working-directory }}-
-
       - name: Install Pods
         working-directory: apps/${{ matrix.working-directory }}/ios
         run: bundle install && bundle exec pod install
-
-      - name: Get build artifacts cache
-        uses: actions/cache@v4
-        with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/ios/Podfile.lock', matrix.working-directory)) }}
-          restore-keys: |
-            ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-
-
-      - name: Doctor
-        working-directory: apps/${{ matrix.working-directory }}
-        run: npx react-native doctor
 
       - name: Build app
         working-directory: apps/${{ matrix.working-directory }}
