@@ -342,6 +342,9 @@ using namespace facebook::react;
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
+  if (point.x < 0 || point.y < 0 || point.x > self.bounds.size.width || point.y > self.bounds.size.height) {
+    return nil;
+  }
   CGPoint transformed = point;
   if (self.align) {
     transformed = CGPointApplyAffineTransform(transformed, _invViewBoxTransform);
