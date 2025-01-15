@@ -18,7 +18,8 @@ on:
 
 jobs:
   build:
-    runs-on: [self-hosted, macOS]
+    runs-on: macos-latest
+    # runs-on: [self-hosted, macOS]
     strategy:
       matrix:
         working-directory: [paper-example, fabric-example]
@@ -78,4 +79,4 @@ jobs:
 
       - name: Build app
         working-directory: apps/${{ matrix.working-directory }}
-        run: npx react-native run-ios --simulator="iPhone 15 Pro" --mode Debug --verbose --no-packager
+        run: npx react-native run-ios --simulator="iPhone 16 Pro" --mode Debug --verbose --no-packager
