@@ -1,5 +1,5 @@
 {
-  "version": "15.10.1",
+  "version": "15.11.1",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -23,7 +23,8 @@
     "RNSVG.podspec",
     "!android/build",
     "windows",
-    "react-native.config.js"
+    "react-native.config.js",
+    "scripts/rnsvg_utils.rb"
   ],
   "react-native-builder-bob": {
     "source": "src",

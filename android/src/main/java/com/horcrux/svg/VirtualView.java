@@ -393,7 +393,7 @@ public abstract class VirtualView extends ReactViewGroup {
   abstract Path getPath(Canvas canvas, Paint paint);
 
   @Nullable
-  SvgView getSvgView() {
+  public SvgView getSvgView() {
     if (svgView != null) {
       return svgView;
     }
@@ -591,10 +591,14 @@ public abstract class VirtualView extends ReactViewGroup {
     int bottom = (int) Math.ceil(mClientRect.bottom);
     setMeasuredDimension(width, height);
     if (!(this instanceof GroupView)) {
-      setLeft(left);
-      setTop(top);
-      setRight(right);
-      setBottom(bottom);
+      SvgView root = this.getSvgView();
+      // Prevent going out of the root view bounds to properly handle touch events
+      if (root != null) {
+        setLeft(Math.max(left, 0));
+        setTop(Math.max(top, 0));
+        setRight(Math.min(right, root.getWidth()));
+        setBottom(Math.min(bottom, root.getHeight()));
+      }
     }
     EventDispatcher eventDispatcher =
         UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
