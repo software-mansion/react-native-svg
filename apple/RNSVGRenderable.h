@@ -19,6 +19,7 @@
 @interface RNSVGRenderable : RNSVGNode
 
 @property (class) RNSVGRenderable *contextElement;
+@property (nonatomic, strong) RNSVGColor *color;
 @property (nonatomic, strong) RNSVGBrush *fill;
 @property (nonatomic, assign) CGFloat fillOpacity;
 @property (nonatomic, assign) RNSVGCGFCRule fillRule;
@@ -35,6 +36,8 @@
 @property (nonatomic, assign) CGPathRef hitArea;
 @property (nonatomic, strong) NSString *filter;
 
+- (void)setColor:(RNSVGColor *)color;
+
 - (void)setHitArea:(CGPathRef)path;
 
 - (NSArray<NSString *> *)getAttributeList;
@@ -42,5 +45,7 @@
 - (void)mergeProperties:(__kindof RNSVGRenderable *)target;
 
 - (void)resetProperties;
+
+- (CGColor *)getCurrentColor;
 
 @end

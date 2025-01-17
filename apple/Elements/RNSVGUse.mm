@@ -12,8 +12,8 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
+#import <rnsvg/RNSVGComponentDescriptors.h>
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -168,6 +168,7 @@ using namespace facebook::react;
   }
   CGRect bounds = definedTemplate.clientRect;
   self.clientRect = bounds;
+  self.pathBounds = definedTemplate.pathBounds;
 
   CGAffineTransform current = CGContextGetCTM(context);
   CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
@@ -175,9 +176,8 @@ using namespace facebook::react;
   self.ctm = svgToClientTransform;
   self.screenCTM = current;
 
-  CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
   CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
-  CGPoint center = CGPointApplyAffineTransform(mid, transform);
+  CGPoint center = CGPointApplyAffineTransform(mid, self.matrix);
 
   self.bounds = bounds;
   if (!isnan(center.x) && !isnan(center.y)) {
@@ -189,7 +189,6 @@ using namespace facebook::react;
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
   CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
-  transformed = CGPointApplyAffineTransform(transformed, self.invTransform);
   RNSVGNode const *definedTemplate = [self.svgView getDefinedTemplate:self.href];
   if (event) {
     self.active = NO;

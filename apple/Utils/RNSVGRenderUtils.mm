@@ -36,11 +36,16 @@
                       clip:(CGRect *)clip
 {
   CGFloat scale = [self getScreenScale];
-  UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
+#if TARGET_OS_OSX // [macOS
+  RNSVGUIGraphicsBeginImageContextWithOptions(rect.size, NO, 1.0);
+#else // macOS]
+  RNSVGUIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
+#endif // [macOS]
   CGContextRef cgContext = UIGraphicsGetCurrentContext();
-#if !TARGET_OS_OSX
   CGContextConcatCTM(cgContext, CGAffineTransformInvert(CGContextGetCTM(cgContext)));
-#endif
+#if TARGET_OS_OSX // [macOS
+  CGContextConcatCTM(cgContext, CGAffineTransformMakeScale(scale, scale));
+#endif // macOS]
   CGContextConcatCTM(cgContext, ctm);
 
   if (clip) {
@@ -48,7 +53,7 @@
   }
   [renderable renderLayerTo:cgContext rect:rect];
   CGImageRef contentImage = CGBitmapContextCreateImage(cgContext);
-  UIGraphicsEndImageContext();
+  RNSVGUIGraphicsEndImageContext();
   return contentImage;
 }
 

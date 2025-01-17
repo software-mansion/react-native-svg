@@ -1,9 +1,9 @@
 **/node_modules/
-example/examples/
-example/android/
-example/ios/
-example/windows/
-macos-example/macos/
+apps/**/node_modules/
+apps/**/android/
+apps/**/ios/
+apps/**/windows/
+apps/**/macos/
 screenshots/
 android/
 apple/

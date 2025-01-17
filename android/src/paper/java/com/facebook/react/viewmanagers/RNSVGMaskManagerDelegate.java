@@ -11,13 +11,14 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.ColorPropConverter;
 import com.facebook.react.bridge.DynamicFromObject;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
-import com.facebook.react.uimanager.BaseViewManagerInterface;
+import com.facebook.react.uimanager.LayoutShadowNode;
 
-public class RNSVGMaskManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGMaskManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+public class RNSVGMaskManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNSVGMaskManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNSVGMaskManagerDelegate(U viewManager) {
     super(viewManager);
   }
@@ -60,8 +61,11 @@ public class RNSVGMaskManagerDelegate<T extends View, U extends BaseViewManagerI
       case "pointerEvents":
         mViewManager.setPointerEvents(view, value == null ? null : (String) value);
         break;
+      case "color":
+        mViewManager.setColor(view, ColorPropConverter.getColor(value, view.getContext()));
+        break;
       case "fill":
-        mViewManager.setFill(view, (ReadableMap) value);
+        mViewManager.setFill(view, new DynamicFromObject(value));
         break;
       case "fillOpacity":
         mViewManager.setFillOpacity(view, value == null ? 1f : ((Double) value).floatValue());
@@ -70,7 +74,7 @@ public class RNSVGMaskManagerDelegate<T extends View, U extends BaseViewManagerI
         mViewManager.setFillRule(view, value == null ? 1 : ((Double) value).intValue());
         break;
       case "stroke":
-        mViewManager.setStroke(view, (ReadableMap) value);
+        mViewManager.setStroke(view, new DynamicFromObject(value));
         break;
       case "strokeOpacity":
         mViewManager.setStrokeOpacity(view, value == null ? 1f : ((Double) value).floatValue());

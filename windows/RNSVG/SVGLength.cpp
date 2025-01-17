@@ -104,4 +104,28 @@ void ReadValue(IJSValueReader const &reader, /*out*/ winrt::RNSVG::SVGLength &va
   }
 }
 
+
 } // namespace winrt::Microsoft::ReactNative
+
+namespace winrt::RNSVG {
+
+D2D1_SVG_LENGTH D2dSvgLength(const winrt::RNSVG::SVGLength &value) noexcept {
+  switch (value.Unit) {
+    case RNSVG::LengthType::Percentage:
+      return {value.Value, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_PERCENTAGE};
+    case RNSVG::LengthType::Unknown:
+    case RNSVG::LengthType::EMS:
+    case RNSVG::LengthType::EXS:
+    case RNSVG::LengthType::Centimeter:
+    case RNSVG::LengthType::Millimeter:
+    case RNSVG::LengthType::Inch:
+    case RNSVG::LengthType::Point:
+    case RNSVG::LengthType::Pica:
+    default:
+      // Unsupported unit type
+      __fallthrough;
+    case RNSVG::LengthType::Number:
+      return {value.Value, D2D1_SVG_LENGTH_UNITS::D2D1_SVG_LENGTH_UNITS_NUMBER};
+  }
+}
+} // namespace winrt::RNSVG

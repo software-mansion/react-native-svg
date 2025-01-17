@@ -131,11 +131,7 @@ struct D2DHelpers {
   }
 
   static DWRITE_FONT_WEIGHT FontWeightFrom(
-#ifdef USE_FABRIC
-      winrt::Microsoft::ReactNative::ComponentView const &parent,
-#else
       xaml::FrameworkElement const &parent,
-#endif
       hstring const &weight) {
     if (weight == L"normal") {
       return DWRITE_FONT_WEIGHT_NORMAL;

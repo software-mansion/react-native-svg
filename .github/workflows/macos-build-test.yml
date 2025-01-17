@@ -1,0 +1,79 @@
+name: Example macOS check
+on:
+  pull_request:
+    paths:
+      - .github/workflows/macos-build-test.yml
+      - RNSVG.podspec
+      - apple/**
+      - src/fabric/**
+      - package.json
+      - apps/paper-macos-example/package.json
+      - apps/paper-macos-example/ios/**
+      - apps/fabric-macos-example/package.json
+      - apps/fabric-macos-example/ios/**
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    if: github.repository == 'software-mansion/react-native-svg'
+    runs-on: macos-14
+    strategy:
+      matrix:
+        working-directory: [paper-macos-example, fabric-macos-example]
+      fail-fast: false
+    concurrency:
+      group: macos-${{ matrix.working-directory }}-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v4
+
+      - name: Use latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Get react-native-svg node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
+          restore-keys: ${{ runner.os }}-node-modules-svg-
+
+      - name: Install react-native-svg node_modules
+        run: yarn install --frozen-lockfile
+
+      - name: Get app node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: apps/${{ matrix.working-directory }}/node_modules
+          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/yarn.lock', matrix.working-directory)) }}
+          restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
+
+      - name: Install app node_modules
+        working-directory: apps/${{ matrix.working-directory }}
+        run: yarn install --frozen-lockfile
+
+      - name: Get Pods cache
+        uses: actions/cache@v4
+        with:
+          path: apps/${{ matrix.working-directory }}/macos/Pods
+          key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/macos/Podfile.lock', matrix.working-directory)) }}
+          restore-keys: |
+            ${{ runner.os }}-pods-${{ matrix.working-directory }}-
+
+      - name: Install Pods
+        working-directory: apps/${{ matrix.working-directory }}/macos
+        run: bundle install && bundle exec pod install
+
+      - name: Get build artifacts cache
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-macos-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/macos/Podfile.lock', matrix.working-directory)) }}
+
+      - name: Build app
+        working-directory: apps/${{ matrix.working-directory }}
+        run: yarn macos

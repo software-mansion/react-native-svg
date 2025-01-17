@@ -1,0 +1,47 @@
+{
+  "name": "web-example",
+  "main": "index.js",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "expo start --web",
+    "reset-project": "node ./scripts/reset-project.js",
+    "test": "jest --watchAll",
+    "lint": "expo lint"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^14.0.2",
+    "@react-native-async-storage/async-storage": "^2.0.0",
+    "@react-navigation/native": "^6.0.2",
+    "@react-navigation/native-stack": "^6.11.0",
+    "@react-navigation/stack": "^6.4.1",
+    "expo": "~51.0.2",
+    "expo-asset": "~10.0.10",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.74.0",
+    "react-native-gesture-handler": "^2.20.0",
+    "react-native-reanimated": "3.13.0",
+    "react-native-safe-area-context": "^4.11.0",
+    "react-native-svg": "link:../../",
+    "react-native-svg-transformer": "^1.4.0",
+    "react-native-view-shot": "3.8.0",
+    "react-native-web": "0.19.11"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@expo/metro-runtime": "~3.2.1",
+    "@react-native/metro-config": "^0.74.85",
+    "@types/jest": "^29.5.12",
+    "@types/react": "~18.2.45",
+    "@types/react-test-renderer": "^18.0.7",
+    "jest": "^29.2.1",
+    "jest-expo": "~51.0.3",
+    "patch-package": "^8.0.0",
+    "react-test-renderer": "18.2.0",
+    "typescript": "~5.3.3"
+  },
+  "private": true
+}

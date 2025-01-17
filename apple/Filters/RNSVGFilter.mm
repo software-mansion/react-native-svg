@@ -5,11 +5,15 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
 #import "RNSVGConvert.h"
 #import "RNSVGFabricConversions.h"
+#import "rnsvg/RNSVGComponentDescriptors.h"
 #endif // RCT_NEW_ARCH_ENABLED
+
+#if TARGET_OS_OSX // [macOS
+#import "RNSVGUIKit.h"
+#endif // macOS]
 
 @implementation RNSVGFilter {
   NSMutableDictionary<NSString *, CIImage *> *resultsMap;
@@ -70,12 +74,9 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
   [super prepareForRecycle];
-  _x = nil;
-  _y = nil;
-  _height = nil;
-  _width = nil;
   _filterUnits = kRNSVGUnitsObjectBoundingBox;
   _primitiveUnits = kRNSVGUnitsUserSpaceOnUse;
+  _filterRegion = [[RNSVGFilterRegion alloc] init];
 }
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -83,6 +84,7 @@ using namespace facebook::react;
 {
   if (self = [super init]) {
     resultsMap = [NSMutableDictionary dictionary];
+    _filterRegion = [[RNSVGFilterRegion alloc] init];
   }
   return self;
 }
@@ -99,14 +101,31 @@ using namespace facebook::react;
   [resultsMap setObject:backgroundImg forKey:@"BackgroundImage"];
   [resultsMap setObject:applySourceAlphaFilter(backgroundImg) forKey:@"BackgroundAlpha"];
 
+  // Setup crop filter
+  CGRect cropRect;
+  CIFilter *cropFilter = [CIFilter filterWithName:@"CIBlendWithMask"];
+  [cropFilter setDefaults];
+  [cropFilter setValue:nil forKey:@"inputBackgroundImage"];
+  CGContext *cropContext = [self openContext:canvasBounds.size];
+  CIImage *mask;
+
+  CGRect filterRegionRect = [self.filterRegion getCropRect:self units:self.filterUnits bounds:renderableBounds];
   CIImage *result = img;
   RNSVGFilterPrimitive *currentFilter;
   for (RNSVGNode *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGFilterPrimitive class]]) {
       currentFilter = (RNSVGFilterPrimitive *)node;
-      CGImageRef cgResult = [[RNSVGRenderUtils sharedCIContext] createCGImage:[currentFilter applyFilter:resultsMap
-                                                                                    previousFilterResult:result
-                                                                                                     ctm:ctm]
+      cropRect = [currentFilter.filterSubregion
+          getCropRect:currentFilter
+                units:self.primitiveUnits
+               bounds:self.primitiveUnits == kRNSVGUnitsUserSpaceOnUse ? filterRegionRect : renderableBounds];
+      mask = [self getMaskFromRect:cropContext rect:cropRect ctm:ctm];
+      [cropFilter setValue:[currentFilter applyFilter:resultsMap previousFilterResult:result ctm:ctm]
+                    forKey:@"inputImage"];
+      [cropFilter setValue:mask forKey:@"inputMaskImage"];
+      CGContextClearRect(cropContext, canvasBounds);
+
+      CGImageRef cgResult = [[RNSVGRenderUtils sharedCIContext] createCGImage:[cropFilter valueForKey:@"outputImage"]
                                                                      fromRect:[result extent]];
       result = [CIImage imageWithCGImage:cgResult];
       CGImageRelease(cgResult);
@@ -118,8 +137,45 @@ using namespace facebook::react;
     }
   }
 
-  return result;
-  // TODO: Crop element to filter's x, y, width, height
+  mask = [self getMaskFromRect:cropContext rect:filterRegionRect ctm:ctm];
+  [cropFilter setValue:result forKey:@"inputImage"];
+  [cropFilter setValue:mask forKey:@"inputMaskImage"];
+  [self endContext:cropContext];
+  return [cropFilter valueForKey:@"outputImage"];
+}
+
+- (CGContext *)openContext:(CGSize)size
+{
+  RNSVGUIGraphicsBeginImageContextWithOptions(size, NO, 1.0);
+  CGContextRef cropContext = UIGraphicsGetCurrentContext();
+#if TARGET_OS_OSX
+  CGFloat scale = [RNSVGRenderUtils getScreenScale];
+  CGContextScaleCTM(cropContext, scale, scale);
+#else
+  CGContextTranslateCTM(cropContext, 0, size.height);
+  CGContextScaleCTM(cropContext, 1, -1);
+#endif
+  return cropContext;
+}
+
+- (void)endContext:(CGContext *)context
+{
+  RNSVGUIGraphicsEndImageContext();
+}
+
+- (CIImage *)getMaskFromRect:(CGContext *)context rect:(CGRect)rect ctm:(CGAffineTransform)ctm
+{
+  CGPathRef path = CGPathCreateWithRect(rect, nil);
+  path = CGPathCreateCopyByTransformingPath(path, &ctm);
+
+  CGContextSetRGBFillColor(context, 255, 255, 255, 255);
+  CGContextAddPath(context, path);
+  CGContextFillPath(context);
+
+  CGImage *maskImage = CGBitmapContextCreateImage(context);
+  CIImage *ciMaskImage = [CIImage imageWithCGImage:maskImage];
+  CGImageRelease(maskImage);
+  return ciMaskImage;
 }
 
 static CIFilter *sourceAlphaFilter()
@@ -154,41 +210,41 @@ static CIImage *applySourceAlphaFilter(CIImage *inputImage)
 
 - (void)setX:(RNSVGLength *)x
 {
-  if ([x isEqualTo:_x]) {
+  if ([x isEqualTo:_filterRegion.x]) {
     return;
   }
 
-  _x = x;
+  [_filterRegion setX:x];
   [self invalidate];
 }
 
 - (void)setY:(RNSVGLength *)y
 {
-  if ([y isEqualTo:_y]) {
+  if ([y isEqualTo:_filterRegion.y]) {
     return;
   }
 
-  _y = y;
+  [_filterRegion setY:y];
   [self invalidate];
 }
 
 - (void)setWidth:(RNSVGLength *)width
 {
-  if ([width isEqualTo:_width]) {
+  if ([width isEqualTo:_filterRegion.width]) {
     return;
   }
 
-  _width = width;
+  [_filterRegion setWidth:width];
   [self invalidate];
 }
 
 - (void)setHeight:(RNSVGLength *)height
 {
-  if ([height isEqualTo:_height]) {
+  if ([height isEqualTo:_filterRegion.height]) {
     return;
   }
 
-  _height = height;
+  [_filterRegion setHeight:height];
   [self invalidate];
 }
 

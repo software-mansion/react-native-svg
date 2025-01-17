@@ -1,12 +1,7 @@
 import { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/example/',
-    '/tests-example/',
-    '/fabric-example/',
-  ],
+  testPathIgnorePatterns: ['/node_modules/', '/apps/'],
   preset: 'react-native',
   verbose: true,
   globalSetup: '<rootDir>/e2e/setupJest.ts',

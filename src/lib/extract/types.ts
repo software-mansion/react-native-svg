@@ -112,6 +112,10 @@ export interface FillProps {
   fillRule?: FillRule;
 }
 
+export interface ColorProps {
+  color?: ColorValue;
+}
+
 export interface ClipProps {
   clipRule?: FillRule;
   clipPath?: string;
@@ -259,7 +263,8 @@ export interface AccessibilityProps {
 
 // FIXME: This interface should probably be named CommonRenderableProps
 export interface CommonPathProps
-  extends FillProps,
+  extends ColorProps,
+    FillProps,
     StrokeProps,
     ClipProps,
     TransformProps,

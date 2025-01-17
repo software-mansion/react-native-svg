@@ -1,0 +1,28 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "moduleSuffixes": [".macos", ""],
+    "baseUrl": ".",
+    "paths": {
+      "react-native-svg": ["../../src"],
+      "react-native-svg/css": ["../../src/css/index.tsx"],
+      "react-native-svg/filter-image": ["../../src/filter-image/index.tsx"],
+      "react-native-reanimated": [
+        "../fabric-example/node_modules/react-native-reanimated"
+      ],
+      "react-native-view-shot": [
+        "../fabric-example/node_modules/react-native-view-shot"
+      ],
+      "@react-navigation/*": [
+        "../fabric-example/node_modules/@react-navigation/*"
+      ],
+      "react-native-gesture-handler": [
+        "../fabric-example/node_modules/react-native-gesture-handler"
+      ],
+      "@react-native-async-storage/async-storage": [
+        "../fabric-example/node_modules/@react-native-async-storage/async-storage"
+      ]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js"]
+}

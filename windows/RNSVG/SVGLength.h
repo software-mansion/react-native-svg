@@ -2,9 +2,7 @@
 
 #include <winrt/RNSVG.h>
 
-#ifndef USE_FABRIC
 #include "JSValueXaml.h"
-#endif
 
 namespace winrt::Microsoft::ReactNative {
 void WriteValue(IJSValueWriter const &writer, const winrt::RNSVG::SVGLength &value) noexcept;

@@ -1,0 +1,119 @@
+name: E2E Android
+on:
+  pull_request:
+    paths:
+      - .github/workflows/e2e-android.yml
+      - apps/common/example/**
+      - android/**
+      - src/**
+      - e2e/**
+      - package.json
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: macos-12
+    timeout-minutes: 60
+    env:
+      WORKING_DIRECTORY: paper-example
+      API_LEVEL: 34
+      SYSTEM_IMAGES: system-images;android-34;google_apis;x86_64
+      AVD_NAME: rn-svg-avd
+    concurrency:
+      group: android-e2e-example-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          cache: 'gradle'
+      - name: Install NDK
+        uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r26d
+          local-cache: true
+      - name: Set ANDROID_NDK
+        run: echo "ANDROID_NDK=$ANDROID_HOME/ndk-bundle" >> $GITHUB_ENV
+      - name: Cache SDK image
+        id: cache-sdk-img
+        uses: actions/cache@v3
+        with:
+          path: $ANDROID_HOME/system-images/
+          key: ${{ runner.os }}-build-system-images-${{ env.SYSTEM_IMAGES }}
+      - name: SKDs - download required images
+        if: ${{ steps.cache-sdd-img.outputs.cache-hit != 'true' }}
+        run: $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "system-images;android-34;google_apis;x86_64"
+      - name: Cache AVD
+        id: cache-avd
+        uses: actions/cache@v3
+        with:
+          path: ~/.android/avd/${{ env.AVD_NAME }}.avd
+          key: ${{ runner.os }}-avd-images-${{ env.SYSTEM_IMAGES }}-${{ env.AVD_NAME }}
+      - name: Emulator - Create
+        if: ${{ steps.cache-avd.outputs.cache-hit != 'true' }}
+        run: $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n ${{ env.AVD_NAME }} --device 28 --package "${{ env.SYSTEM_IMAGES }}" --sdcard 512M
+      - name: Emulator - Set screen settings
+        if: ${{ steps.cache-avd.outputs.cache-hit != 'true' }}
+        run: |
+          echo "AVD config path: $HOME/.android/avd/${{ env.AVD_NAME }}.avd/config.ini"
+          sed -i '' 's/.*hw\.lcd\.density.*/hw\.lcd\.density = 480/g' $HOME/.android/avd/${{ env.AVD_NAME }}.avd/config.ini
+          sed -i '' 's/.*hw\.lcd\.width.*/hw\.lcd\.width = 1344/g' $HOME/.android/avd/${{ env.AVD_NAME }}.avd/config.ini
+          sed -i '' 's/.*hw\.lcd\.height.*/hw\.lcd\.height = 2992/g' $HOME/.android/avd/${{ env.AVD_NAME }}.avd/config.ini
+      - name: Emulator - Boot
+        run: $ANDROID_HOME/emulator/emulator -memory 4096 -avd ${{ env.AVD_NAME }} -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim &
+
+      - name: ADB Wait For Device
+        run: adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+        timeout-minutes: 10
+
+      - name: Reverse TCP
+        working-directory: apps/${{ env.WORKING_DIRECTORY }}
+        run: adb devices | grep '\t' | awk '{print $1}' | sed 's/\\s//g' | xargs -I {} adb -s {} reverse tcp:8081 tcp:8081
+
+      - name: Install root node dependencies
+        run: yarn
+
+      - name: Install example app node dependencies
+        run: yarn
+        working-directory: apps/${{ env.WORKING_DIRECTORY }}
+
+      - name: Build Android app
+        working-directory: apps/${{ env.WORKING_DIRECTORY }}/android
+        run: ./gradlew assembleDebug
+
+      - name: Start Metro server
+        working-directory: apps/${{ env.WORKING_DIRECTORY }}
+        run: E2E=true yarn start &> output.log &
+
+      - name: Install APK
+        run: adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Launch APK
+        run: 'while ! (adb shell monkey -p com.example 1 | grep -q "Events injected: 1"); do sleep 1; echo "Retrying due to errors in previous run..."; done'
+
+      - name: Run e2e Tests
+        run: E2E=true yarn e2e
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: |
+            report.html
+            jest-html-reporters-attach/
+
+      - name: Kill emulator (so it can be cached safely)
+        run: adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done

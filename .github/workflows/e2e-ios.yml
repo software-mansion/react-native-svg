@@ -1,0 +1,93 @@
+name: E2E iOS
+on:
+  pull_request:
+    paths:
+      - .github/workflows/ios-e2e.yml
+      - apps/common/example/**
+      - apple/**
+      - src/**
+      - e2e/**
+      - package.json
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: macos-14
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        working-directory: [paper-example]
+      fail-fast: false
+    env:
+      DEVICE: iPhone 15 Pro
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v4
+
+      - name: Use latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.1'
+
+      - name: Get react-native-svg node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
+          restore-keys: ${{ runner.os }}-node-modules-svg-
+
+      - name: Install react-native-svg node_modules
+        run: yarn install --frozen-lockfile
+
+      - name: Get app node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: apps/${{ matrix.working-directory }}/node_modules
+          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/yarn.lock', matrix.working-directory)) }}
+          restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
+
+      - name: Install app node_modules
+        working-directory: apps/${{ matrix.working-directory }}
+        run: yarn install --frozen-lockfile
+
+      - name: Get Pods cache
+        uses: actions/cache@v4
+        with:
+          path: apps/${{ matrix.working-directory }}/ios/Pods
+          key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          restore-keys: |
+            ${{ runner.os }}-pods-${{ matrix.working-directory }}-
+
+      - name: Install Pods
+        working-directory: apps/${{ matrix.working-directory }}/ios
+        run: bundle install && bundle exec pod install
+
+      - name: Get build artifacts cache
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          restore-keys: |
+            ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-
+
+      - name: Start Metro server
+        working-directory: apps/${{ matrix.working-directory }}
+        run: E2E=true yarn start &> output.log &
+
+      - name: Build app
+        working-directory: apps/${{ matrix.working-directory }}
+        run: E2E=true npx react-native run-ios --simulator="${{ env.DEVICE }}" --mode Debug --verbose
+
+      - name: Run e2e Tests
+        run: E2E=true yarn e2e
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: |
+            report.html
+            jest-html-reporters-attach/

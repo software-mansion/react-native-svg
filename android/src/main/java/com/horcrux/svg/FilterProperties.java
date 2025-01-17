@@ -73,6 +73,43 @@ class FilterProperties {
     }
   }
 
+  enum FeBlendMode {
+    UNKNOWN("unknown"),
+    NORMAL("normal"),
+    MULTIPLY("multiply"),
+    SCREEN("screen"),
+    DARKEN("darken"),
+    LIGHTEN("lighten"),
+    ;
+
+    private final String mode;
+
+    FeBlendMode(String mode) {
+      this.mode = mode;
+    }
+
+    static FeBlendMode getEnum(String strVal) {
+      if (!typeToEnum.containsKey(strVal)) {
+        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+      }
+      return typeToEnum.get(strVal);
+    }
+
+    private static final Map<String, FeBlendMode> typeToEnum = new HashMap<>();
+
+    static {
+      for (final FeBlendMode en : FeBlendMode.values()) {
+        typeToEnum.put(en.mode, en);
+      }
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+      return mode;
+    }
+  }
+
   enum FeColorMatrixType {
     MATRIX("matrix"),
     SATURATE("saturate"),
@@ -97,6 +134,43 @@ class FilterProperties {
 
     static {
       for (final FeColorMatrixType en : FeColorMatrixType.values()) {
+        typeToEnum.put(en.type, en);
+      }
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+      return type;
+    }
+  }
+
+  enum FeCompositeOperator {
+    OVER("over"),
+    IN("in"),
+    OUT("out"),
+    ATOP("atop"),
+    XOR("xor"),
+    ARITHMETIC("arithmetic"),
+    ;
+
+    private final String type;
+
+    FeCompositeOperator(String type) {
+      this.type = type;
+    }
+
+    static FeCompositeOperator getEnum(String strVal) {
+      if (!typeToEnum.containsKey(strVal)) {
+        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+      }
+      return typeToEnum.get(strVal);
+    }
+
+    private static final Map<String, FeCompositeOperator> typeToEnum = new HashMap<>();
+
+    static {
+      for (final FeCompositeOperator en : FeCompositeOperator.values()) {
         typeToEnum.put(en.type, en);
       }
     }

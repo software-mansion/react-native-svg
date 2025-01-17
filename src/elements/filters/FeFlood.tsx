@@ -1,6 +1,7 @@
-import { ColorValue } from 'react-native';
+import { ColorValue, NativeMethods } from 'react-native';
+import RNSVGFeFlood from '../../fabric/FeFloodNativeComponent';
+import extractFeFlood, { extractFilter } from '../../lib/extract/extractFilter';
 import { NumberProp } from '../../lib/extract/types';
-import { warnUnimplementedFilter } from '../../lib/util';
 import FilterPrimitive from './FilterPrimitive';
 
 export interface FeFloodProps {
@@ -12,12 +13,19 @@ export interface FeFloodProps {
 export default class FeFlood extends FilterPrimitive<FeFloodProps> {
   static displayName = 'FeFlood';
 
-  static defaultProps = {
+  static defaultProps: React.ComponentProps<typeof FeFlood> = {
     ...this.defaultPrimitiveProps,
+    floodColor: 'black',
+    floodOpacity: 1,
   };
 
   render() {
-    warnUnimplementedFilter();
-    return null;
+    return (
+      <RNSVGFeFlood
+        ref={(ref) => this.refMethod(ref as (FeFlood & NativeMethods) | null)}
+        {...extractFilter(this.props)}
+        {...extractFeFlood(this.props)}
+      />
+    );
   }
 }

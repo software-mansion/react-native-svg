@@ -1,41 +1,42 @@
-name: Test iOS build
+name: Example iOS check
 on:
   pull_request:
     paths:
       - .github/workflows/ios-build-test.yml
       - RNSVG.podspec
       - apple/**
-      - example/package.json
-      - example/ios/**
       - src/fabric/**
-      - fabric-example/package.json
-      - fabric-example/ios/**
       - package.json
+      - apps/paper-example/package.json
+      - apps/paper-example/ios/**
+      - apps/fabric-example/package.json
+      - apps/fabric-example/ios/**
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: macos-14
     strategy:
       matrix:
-        working-directory: [example, fabric-example]
+        working-directory: [paper-example, fabric-example]
       fail-fast: false
     concurrency:
       group: ios-${{ matrix.working-directory }}-${{ github.ref }}
       cancel-in-progress: true
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v3
+      - name: Checkout Git repository
+        uses: actions/checkout@v4
 
       - name: Use latest stable Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable
+          xcode-version: '16.1'
 
-      - name: Restore react-native-svg node_modules from cache
-        uses: actions/cache@v3
+      - name: Get react-native-svg node_modules cache
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
@@ -44,36 +45,37 @@ jobs:
       - name: Install react-native-svg node_modules
         run: yarn install --frozen-lockfile
 
-      - name: Restore app node_modules from cache
-        uses: actions/cache@v3
+      - name: Get app node_modules cache
+        uses: actions/cache@v4
         with:
-          path: ${{ matrix.working-directory }}/node_modules
-          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.working-directory)) }}
+          path: apps/${{ matrix.working-directory }}/node_modules
+          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/yarn.lock', matrix.working-directory)) }}
           restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
 
       - name: Install app node_modules
-        working-directory: ${{ matrix.working-directory }}
+        working-directory: apps/${{ matrix.working-directory }}
         run: yarn install --frozen-lockfile
 
-      - name: Restore Pods from cache
-        uses: actions/cache@v3
+      - name: Get Pods cache
+        uses: actions/cache@v4
         with:
-          path: |
-            ${{ matrix.working-directory }}/ios/Pods
-            ~/Library/Caches/CocoaPods
-            ~/.cocoapods
-          key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          path: apps/${{ matrix.working-directory }}/ios/Pods
+          key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          restore-keys: |
+            ${{ runner.os }}-pods-${{ matrix.working-directory }}-
 
       - name: Install Pods
-        working-directory: ${{ matrix.working-directory }}/ios
-        run: pod install
+        working-directory: apps/${{ matrix.working-directory }}/ios
+        run: bundle install && bundle exec pod install
 
-      - name: Restore build artifacts from cache
-        uses: actions/cache@v3
+      - name: Get build artifacts cache
+        uses: actions/cache@v4
         with:
           path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          key: ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          restore-keys: |
+            ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-
 
       - name: Build app
-        working-directory: ${{ matrix.working-directory }}
-        run: npx react-native@latest run-ios --simulator="iPhone 14 Pro" --mode Debug --verbose --terminal /bin/zsh
+        working-directory: apps/${{ matrix.working-directory }}
+        run: npx react-native run-ios --simulator="iPhone 15 Pro" --mode Debug --verbose --no-packager

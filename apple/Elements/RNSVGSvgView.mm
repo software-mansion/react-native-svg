@@ -19,6 +19,10 @@
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
+#if TARGET_OS_OSX // [macOS
+#import "RNSVGUIKit.h"
+#endif // macOS]
+
 @implementation RNSVGSvgView {
   NSMutableDictionary<NSString *, RNSVGNode *> *_clipPaths;
   NSMutableDictionary<NSString *, RNSVGNode *> *_templates;
@@ -26,7 +30,7 @@
   NSMutableDictionary<NSString *, RNSVGMarker *> *_markers;
   NSMutableDictionary<NSString *, RNSVGMask *> *_masks;
   NSMutableDictionary<NSString *, RNSVGFilter *> *_filters;
-  CGAffineTransform _invviewBoxTransform;
+  CGAffineTransform _invViewBoxTransform;
   bool rendered;
 }
 
@@ -87,11 +91,8 @@ using namespace facebook::react;
   }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
-  if (RCTUIColorFromSharedColor(newProps.tintColor)) {
-    self.tintColor = RCTUIColorFromSharedColor(newProps.tintColor);
-  }
   if (RCTUIColorFromSharedColor(newProps.color)) {
-    self.tintColor = RCTUIColorFromSharedColor(newProps.color);
+    self.color = RCTUIColorFromSharedColor(newProps.color);
   }
   [super updateProps:props oldProps:oldProps];
 }
@@ -121,7 +122,7 @@ using namespace facebook::react;
   _markers = nil;
   _masks = nil;
   _filters = nil;
-  _invviewBoxTransform = CGAffineTransformIdentity;
+  _invViewBoxTransform = CGAffineTransformIdentity;
   rendered = NO;
 }
 
@@ -185,10 +186,13 @@ using namespace facebook::react;
   [self setNeedsDisplay];
 }
 
-- (void)tintColorDidChange
+- (void)setColor:(RNSVGColor *)color
 {
+  if (color == _color) {
+    return;
+  }
   [self invalidate];
-  [self clearChildCache];
+  _color = color;
 }
 
 - (void)setMinX:(CGFloat)minX
@@ -290,11 +294,11 @@ using namespace facebook::react;
   if (self.align) {
     CGRect tRect = CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight);
     _viewBoxTransform = [RNSVGViewBox getTransform:tRect eRect:rect align:self.align meetOrSlice:self.meetOrSlice];
-    _invviewBoxTransform = CGAffineTransformInvert(_viewBoxTransform);
+    _invViewBoxTransform = CGAffineTransformInvert(_viewBoxTransform);
     CGContextConcatCTM(context, _viewBoxTransform);
   } else {
     _viewBoxTransform = CGAffineTransformIdentity;
-    _invviewBoxTransform = CGAffineTransformIdentity;
+    _invViewBoxTransform = CGAffineTransformIdentity;
   }
   for (RNSVGPlatformView *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGNode class]]) {
@@ -317,7 +321,11 @@ using namespace facebook::react;
   if ([parent isKindOfClass:[RNSVGNode class]]) {
     return;
   }
+#if TARGET_OS_OSX // [macOS
+  _boundingBox = [self bounds];
+#else // macOS]
   _boundingBox = rect;
+#endif
   CGContextRef context = UIGraphicsGetCurrentContext();
 
   [self drawToContext:context withRect:[self bounds]];
@@ -334,9 +342,12 @@ using namespace facebook::react;
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
+  if (point.x < 0 || point.y < 0 || point.x > self.bounds.size.width || point.y > self.bounds.size.height) {
+    return nil;
+  }
   CGPoint transformed = point;
   if (self.align) {
-    transformed = CGPointApplyAffineTransform(transformed, _invviewBoxTransform);
+    transformed = CGPointApplyAffineTransform(transformed, _invViewBoxTransform);
   }
   for (RNSVGNode *node in [self.subviews reverseObjectEnumerator]) {
     if (![node isKindOfClass:[RNSVGNode class]]) {
@@ -364,7 +375,7 @@ using namespace facebook::react;
   UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size];
   UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
 #else // [macOS
-  UIGraphicsBeginImageContextWithOptions(bounds.size, NO, 1);
+  RNSVGUIGraphicsBeginImageContextWithOptions(bounds.size, NO, 1);
 #endif // macOS]
     [self clearChildCache];
     [self drawRect:bounds];
@@ -377,9 +388,9 @@ using namespace facebook::react;
   NSData *imageData = UIImagePNGRepresentation(image);
   NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
 #else // [macOS
-  NSData *imageData = UIImagePNGRepresentation(UIGraphicsGetImageFromCurrentImageContext());
+  NSData *imageData = UIImagePNGRepresentation(RNSVGUIGraphicsGetImageFromCurrentImageContext());
   NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
-  UIGraphicsEndImageContext();
+  RNSVGUIGraphicsEndImageContext();
 #endif // macOS]
   return base64;
 }
@@ -475,6 +486,11 @@ using namespace facebook::react;
 - (CGAffineTransform)getViewBoxTransform
 {
   return _viewBoxTransform;
+}
+
+- (CGAffineTransform)getInvViewBoxTransform
+{
+  return _invViewBoxTransform;
 }
 
 #if !RCT_NEW_ARCH_ENABLED && TARGET_OS_OSX // [macOS

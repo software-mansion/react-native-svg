@@ -1,5 +1,5 @@
 {
-  "version": "15.6.0",
+  "version": "15.11.1",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -23,7 +23,8 @@
     "RNSVG.podspec",
     "!android/build",
     "windows",
-    "react-native.config.js"
+    "react-native.config.js",
+    "scripts/rnsvg_utils.rb"
   ],
   "react-native-builder-bob": {
     "source": "src",
@@ -50,7 +51,7 @@
     "format": "yarn format-js && yarn format-ios && yarn format-java",
     "format-ios": "find apple/ common/ -iname *.h -o -iname *.m -o -iname *.cpp -o -iname *.mm | xargs clang-format -i",
     "format-java": "node ./scripts/format-java.js",
-    "format-js": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md USAGE.md ./src/**/*.{ts,tsx} ./apps/**/*.tsx ./*-example/**/*.tsx",
+    "format-js": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md USAGE.md ./src/**/*.{ts,tsx} ./apps/**/*.{ts,tsx}",
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
     "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg && peggy -o src/filter-image/extract/extractFiltersString.js src/filter-image/extract/extractFiltersString.pegjs && peggy -o src/lib/extract/transformToRn.js src/lib/extract/transformToRn.pegjs",
@@ -61,7 +62,8 @@
     "e2e": "jest e2e",
     "generateE2eReferences": "ts-node e2e/generateReferences.ts",
     "check-archs-consistency": "node ./scripts/codegen-check-consistency.js",
-    "sync-archs": "node ./scripts/codegen-sync-archs.js"
+    "sync-archs": "node ./scripts/codegen-sync-archs.js",
+    "metal-to-ci": "node ./scripts/metal.js"
   },
   "peerDependencies": {
     "react": "*",
@@ -73,21 +75,19 @@
     "warn-once": "0.1.1"
   },
   "devDependencies": {
-    "@react-native-community/eslint-config": "^3.0.2",
-    "@react-native-community/eslint-plugin": "^1.2.0",
-    "@react-native/babel-plugin-codegen": "^0.71.0",
-    "@react-native/eslint-config": "^0.72.2",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "@react-native/babel-preset": "^0.77.0-rc.6",
+    "@react-native/eslint-config": "^0.77.0-rc.6",
     "@types/css-tree": "^1.0.3",
     "@types/jest": "^27.5.2",
     "@types/node": "*",
     "@types/pixelmatch": "^5.2.0",
     "@types/pngjs": "^6.0.5",
-    "@types/react": "^18.2.18",
-    "@types/ws": "^8.5.10",
+    "@types/react": "^18.3.12",
+    "@types/ws": "^8.5.13",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^28.1.0",
     "babel-plugin-module-resolver": "^5.0.0",
     "clang-format": "^1.8.0",
     "eslint": "^8.44.0",
@@ -109,10 +109,10 @@
     "pngjs": "^7.0.0",
     "prettier": "3.0.1",
     "puppeteer": "^22.12.1",
-    "react": "^18.2.0",
-    "react-native": "^0.72.3",
+    "react": "^18.3.1",
+    "react-native": "^0.77.0-rc.6",
     "react-native-builder-bob": "^0.20.4",
-    "react-native-windows": "^0.72.4",
+    "react-native-windows": "^0.76.3",
     "react-test-renderer": "^18.2.0",
     "release-it": "^14.12.5",
     "ts-node": "^10.9.2",
@@ -120,7 +120,7 @@
     "ws": "^8.18.0"
   },
   "lint-staged": {
-    "{src,Example}/**/*.{js,ts,tsx}": "yarn format-js",
+    "{src,apps/common}/**/*.{js,ts,tsx}": "yarn format-js",
     "src/**/*.{js,ts,tsx}": "yarn lint",
     "apple/**/*.{h,m,mm,cpp}": "yarn format-ios",
     "android/src/**/*.java": "yarn format-java",
@@ -133,6 +133,40 @@
     "jsSrcsDir": "./src/fabric",
     "android": {
       "javaPackageName": "com.horcrux.svg"
+    },
+    "ios": {
+      "componentProvider": {
+        "RNSVGCircle": "RNSVGCircle",
+        "RNSVGClipPath": "RNSVGClipPath",
+        "RNSVGDefs": "RNSVGDefs",
+        "RNSVGEllipse": "RNSVGEllipse",
+        "RNSVGFeBlend": "RNSVGFeBlend",
+        "RNSVGFeColorMatrix": "RNSVGFeColorMatrix",
+        "RNSVGFeComposite": "RNSVGFeComposite",
+        "RNSVGFeFlood": "RNSVGFeFlood",
+        "RNSVGFeGaussianBlur": "RNSVGFeGaussianBlur",
+        "RNSVGFeMerge": "RNSVGFeMerge",
+        "RNSVGFeOffset": "RNSVGFeOffset",
+        "RNSVGFilter": "RNSVGFilter",
+        "RNSVGForeignObject": "RNSVGForeignObject",
+        "RNSVGGroup": "RNSVGGroup",
+        "RNSVGImage": "RNSVGImage",
+        "RNSVGLine": "RNSVGLine",
+        "RNSVGLinearGradient": "RNSVGLinearGradient",
+        "RNSVGMarker": "RNSVGMarker",
+        "RNSVGMask": "RNSVGMask",
+        "RNSVGPath": "RNSVGPath",
+        "RNSVGPattern": "RNSVGPattern",
+        "RNSVGRadialGradient": "RNSVGRadialGradient",
+        "RNSVGRect": "RNSVGRect",
+        "RNSVGSvgView": "RNSVGSvgView",
+        "RNSVGSymbol": "RNSVGSymbol",
+        "RNSVGTSpan": "RNSVGTSpan",
+        "RNSVGText": "RNSVGText",
+        "RNSVGTextPath": "RNSVGTextPath",
+        "RNSVGUse": "RNSVGUse"
+      }
     }
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }

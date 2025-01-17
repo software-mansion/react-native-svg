@@ -35,52 +35,59 @@ void SvgRenderableCommonProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-RenderableView::RenderableView(
-    const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args)
-    : base_type(args), m_reactContext(args.ReactContext()) {}
-
 void RenderableView::MountChildComponentView(
-    const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-    uint32_t index) noexcept {
+   const winrt::Microsoft::ReactNative::ComponentView&,
+   const winrt::Microsoft::ReactNative::MountChildComponentViewArgs& args) noexcept
+{
   const RNSVG::RenderableView &view{*this};
-  const auto &group{view.try_as<RNSVG::GroupView>()};
-  const auto &child{childComponentView.try_as<IRenderable>()};
+  if (auto userData = args.Child().UserData()) {
+    const auto &group{view.try_as<RNSVG::GroupView>()};
+    const auto &child{userData.try_as<IRenderable>()};
+    m_children.InsertAt(args.Index(), child);
 
-  if (group && child) {
-    base_type::MountChildComponentView(childComponentView, index);
-    child.MergeProperties(*this);
+    userData.as<IRenderableFabric>().SvgParent(*this);
 
-    if (child.IsResponsible() && !IsResponsible()) {
-      IsResponsible(true);
-    }
+    assert(group && child);
+    if (group && child) {
+      child.MergeProperties(*this);
 
-    if (auto const &root{SvgRoot()}) {
-      root.Invalidate();
+      if (child.IsResponsible() && !IsResponsible()) {
+        IsResponsible(true);
+      }
+
+      if (auto const &root{SvgRoot()}) {
+        root.Invalidate();
+      }
     }
   }
 }
 
 void RenderableView::UnmountChildComponentView(
-    const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-    uint32_t index) noexcept {
-  const RNSVG::RenderableView &view{*this};
-  const auto &group{view.try_as<RNSVG::GroupView>()};
-  const auto &child{childComponentView.try_as<IRenderable>()};
+    const winrt::Microsoft::ReactNative::ComponentView &,
+    const winrt::Microsoft::ReactNative::UnmountChildComponentViewArgs &args) noexcept {
+  if (auto userData = args.Child().UserData()) {
+    const RNSVG::RenderableView &view{*this};
+    const auto &group{view.try_as<RNSVG::GroupView>()};
+    const auto &child{userData.try_as<IRenderable>()};
 
-  if (group && child) {
-    if (!IsUnloaded()) {
-      child.Unload();
-    }
+    userData.as<IRenderableFabric>().SvgParent(nullptr);
 
-    base_type::UnmountChildComponentView(childComponentView, index);
+    if (group && child) {
+      if (!IsUnloaded()) {
+        child.Unload();
+      }
 
-    if (auto const &root{SvgRoot()}) {
-      root.Invalidate();
+      m_children.RemoveAt(args.Index());
+
+      if (auto const &root{SvgRoot()}) {
+        root.Invalidate();
+      }
     }
   }
 }
 
 void RenderableView::UpdateProps(
+    const winrt::Microsoft::ReactNative::ComponentView & /*view*/,
     const winrt::Microsoft::ReactNative::IComponentProps &props,
     const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept {
   if (!props && !oldProps)
@@ -98,7 +105,7 @@ void RenderableView::UpdateProperties(
   auto oldRenderableProps =
       oldProps ? oldProps.as<SvgRenderableCommonProps>() : nullptr;
 
-  auto const &parent{Parent().try_as<RNSVG::RenderableView>()};
+  auto const &parent{SvgParent().try_as<RNSVG::RenderableView>()};
 
   // propList
   /*
@@ -207,7 +214,7 @@ void RenderableView::UpdateProperties(
         std::find(renderableProps->propList->begin(), renderableProps->propList->end(), "fill") !=
             renderableProps->propList->end()};
 
-    if (forceUpdate || !m_propSetMap[RNSVG::BaseProp::Fill]) {
+    if (forceUpdate || (fillSet && !m_propSetMap[RNSVG::BaseProp::Fill])) {
       winrt::Microsoft::ReactNative::Color fallbackColor{winrt::Microsoft::ReactNative::Color::Black()};
       if (renderableProps->fill == std::nullopt && fillSet) {
         fallbackColor = winrt::Microsoft::ReactNative::Color::Transparent();
@@ -400,10 +407,15 @@ void RenderableView::UpdateProperties(
 
   m_recreateResources = true;
 
-  if (invalidate && Parent()) {
+  if (invalidate && SvgParent()) {
     SvgRoot().Invalidate();
   }
 }
+
+const winrt::Windows::Foundation::Collections::IVector<IRenderable>& RenderableView::Children() const noexcept {
+  return m_children;
+}
+
 #else
 void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
@@ -717,8 +729,8 @@ RNSVG::SvgView RenderableView::SvgRoot() {
   if (auto parent = SvgParent()) {
     if (auto const &svgView{parent.try_as<RNSVG::SvgView>()}) {
       if (auto const &svgViewParent = svgView.SvgParent()) {
-        if (auto const &parent{svgViewParent.try_as<RNSVG::RenderableView>()}) {
-          return parent.SvgRoot();
+        if (auto const &renderableParent{svgViewParent.try_as<RNSVG::RenderableView>()}) {
+          return renderableParent.SvgRoot();
         } else {
           return svgView;
         }

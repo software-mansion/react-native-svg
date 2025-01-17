@@ -1,4 +1,10 @@
-import { warnUnimplementedFilter } from '../../lib/util';
+import { NativeMethods } from 'react-native';
+import {
+  extractFeBlend,
+  extractFilter,
+  extractIn,
+} from '../../lib/extract/extractFilter';
+import RNSVGFeBlend from '../../fabric/FeBlendNativeComponent';
 import FilterPrimitive from './FilterPrimitive';
 
 type BlendMode = 'normal' | 'multiply' | 'screen' | 'darken' | 'lighten';
@@ -14,10 +20,17 @@ export default class FeBlend extends FilterPrimitive<FeBlendProps> {
 
   static defaultProps = {
     ...this.defaultPrimitiveProps,
+    mode: 'normal',
   };
 
   render() {
-    warnUnimplementedFilter();
-    return null;
+    return (
+      <RNSVGFeBlend
+        ref={(ref) => this.refMethod(ref as (FeBlend & NativeMethods) | null)}
+        {...extractFilter(this.props)}
+        {...extractIn(this.props)}
+        {...extractFeBlend(this.props)}
+      />
+    );
   }
 }

@@ -16,4 +16,6 @@ export interface NativeProps extends ViewProps, FilterPrimitiveCommonProps {
   nodes?: ReadonlyArray<string>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGFeMerge');
+export default codegenNativeComponent<NativeProps>('RNSVGFeMerge', {
+  interfaceOnly: true,
+});

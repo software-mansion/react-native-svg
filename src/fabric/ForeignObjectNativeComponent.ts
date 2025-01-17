@@ -32,10 +32,11 @@ type ColorStruct = Readonly<{
 }>;
 
 interface SvgRenderableCommonProps {
-  fill?: ColorStruct;
+  color?: ColorValue;
+  fill?: UnsafeMixed<ColorValue | ColorStruct>;
   fillOpacity?: WithDefault<Float, 1.0>;
   fillRule?: WithDefault<Int32, 1>;
-  stroke?: ColorStruct;
+  stroke?: UnsafeMixed<ColorValue | ColorStruct>;
   strokeOpacity?: WithDefault<Float, 1.0>;
   strokeWidth?: UnsafeMixed<NumberProp>;
   strokeLinecap?: WithDefault<Int32, 0>;
@@ -65,4 +66,6 @@ interface NativeProps
   width?: UnsafeMixed<NumberProp>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGForeignObject');
+export default codegenNativeComponent<NativeProps>('RNSVGForeignObject', {
+  interfaceOnly: true,
+});

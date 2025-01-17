@@ -1,11 +1,12 @@
 #import <RNSVGFilterPrimitive.h>
 #import <RNSVGNode.h>
+#import "RNSVGFilter.h"
 
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
+#import <rnsvg/RNSVGComponentDescriptors.h>
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -15,13 +16,19 @@
 - (void)prepareForRecycle
 {
   [super prepareForRecycle];
-  _x = nil;
-  _y = nil;
-  _height = nil;
-  _width = nil;
+  _filterSubregion = [[RNSVGFilterRegion alloc] init];
   _result = nil;
 }
 #endif // RCT_NEW_ARCH_ENABLED
+
+- (instancetype)init
+{
+  self = [super init];
+  if (self) {
+    _filterSubregion = [[RNSVGFilterRegion alloc] init];
+  }
+  return self;
+}
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
@@ -32,49 +39,49 @@
 {
 }
 
-- (void)setX:(RNSVGLength *)x
-{
-  if ([x isEqualTo:_x]) {
-    return;
-  }
-
-  _x = x;
-  [self invalidate];
-}
-
 - (void)invalidate
 {
   self.dirty = false;
   [super invalidate];
 }
 
-- (void)setY:(RNSVGLength *)y
+- (void)setX:(RNSVGLength *)x
 {
-  if ([y isEqualTo:_y]) {
+  if ([x isEqualTo:_filterSubregion.x]) {
     return;
   }
 
-  _y = y;
+  [_filterSubregion setX:x];
+  [self invalidate];
+}
+
+- (void)setY:(RNSVGLength *)y
+{
+  if ([y isEqualTo:_filterSubregion.y]) {
+    return;
+  }
+
+  [_filterSubregion setY:y];
   [self invalidate];
 }
 
 - (void)setWidth:(RNSVGLength *)width
 {
-  if ([width isEqualTo:_width]) {
+  if ([width isEqualTo:_filterSubregion.width]) {
     return;
   }
 
-  _width = width;
+  [_filterSubregion setWidth:width];
   [self invalidate];
 }
 
 - (void)setHeight:(RNSVGLength *)height
 {
-  if ([height isEqualTo:_height]) {
+  if ([height isEqualTo:_filterSubregion.height]) {
     return;
   }
 
-  _height = height;
+  [_filterSubregion setHeight:height];
   [self invalidate];
 }
 
@@ -98,20 +105,6 @@
                      ctm:(CGAffineTransform)ctm
 {
   return [self applyFilter:results previousFilterResult:previous];
-}
-
-- (CIImage *)cropResult:(CIImage *)result
-{
-  CIFilter *filter = [CIFilter filterWithName:@"CICrop"];
-  [filter setDefaults];
-  [filter setValue:result forKey:@"inputImage"];
-  CGFloat x = [self relativeOnWidth:self.x];
-  CGFloat y = [self relativeOnHeight:self.y];
-  CGFloat width = [self relativeOnWidth:self.width];
-  CGFloat height = [self relativeOnHeight:self.height];
-
-  [filter setValue:[CIVector vectorWithX:x Y:y Z:width W:height] forKey:@"inputRectangle"];
-  return [filter valueForKey:@"outputImage"];
 }
 
 @end

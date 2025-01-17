@@ -8,10 +8,6 @@ struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {
  public:
   BrushView() = default;
 
-#ifdef USE_FABRIC
-  BrushView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
-#endif
-
   // IRenderable
   void SaveDefinition();
 
@@ -32,3 +28,4 @@ struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {
 namespace winrt::RNSVG::factory_implementation {
 struct BrushView : BrushViewT<BrushView, implementation::BrushView> {};
 } // namespace winrt::RNSVG::factory_implementation
+
