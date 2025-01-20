@@ -8,14 +8,18 @@ RNSVGLayoutableShadowNode::RNSVGLayoutableShadowNode(
     const ShadowNodeFamily::Shared &family,
     ShadowNodeTraits traits)
     : YogaLayoutableShadowNode(fragment, family, traits) {
-  setZeroDimensions();
+  if (std::strcmp(this->getComponentName(), "RNSVGGroup") != 0) {
+    setZeroDimensions();
+  }
 }
 
 RNSVGLayoutableShadowNode::RNSVGLayoutableShadowNode(
     const ShadowNode &sourceShadowNode,
     const ShadowNodeFragment &fragment)
     : YogaLayoutableShadowNode(sourceShadowNode, fragment) {
-  setZeroDimensions();
+  if (std::strcmp(this->getComponentName(), "RNSVGGroup") != 0) {
+    setZeroDimensions();
+  }
 }
 
 void RNSVGLayoutableShadowNode::setZeroDimensions() {
