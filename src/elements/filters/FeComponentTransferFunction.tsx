@@ -1,3 +1,4 @@
+import React from 'react';
 import { NumberArray, NumberProp } from '../../lib/extract/types';
 import { warnUnimplementedFilter } from '../../lib/util';
 import FilterPrimitive from './FilterPrimitive';

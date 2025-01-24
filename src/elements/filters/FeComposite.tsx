@@ -1,3 +1,4 @@
+import React from 'react';
 import { NativeMethods } from 'react-native';
 import RNSVGFeComposite from '../../fabric/FeCompositeNativeComponent';
 import {

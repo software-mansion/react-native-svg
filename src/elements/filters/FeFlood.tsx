@@ -1,3 +1,4 @@
+import React from 'react';
 import { ColorValue, NativeMethods } from 'react-native';
 import RNSVGFeFlood from '../../fabric/FeFloodNativeComponent';
 import extractFeFlood, { extractFilter } from '../../lib/extract/extractFilter';

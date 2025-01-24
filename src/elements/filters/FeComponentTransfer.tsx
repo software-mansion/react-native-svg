@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import FilterPrimitive from './FilterPrimitive';
 import { warnUnimplementedFilter } from '../../lib/util';
 
