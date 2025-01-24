@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { NativeMethods } from 'react-native';
 import RNSVGFeGaussianBlur from '../../fabric/FeGaussianBlurNativeComponent';
 import {

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { NativeMethods } from 'react-native';
 import RNSVGFeMerge from '../../fabric/FeMergeNativeComponent';
 import { extractFeMerge, extractFilter } from '../../lib/extract/extractFilter';
