@@ -451,7 +451,7 @@
 {
   [RNSVGGlyphContext incrementIndices:mXIndices_ topIndex:mXsIndex_];
   long nextIndex = mXIndex_ + 1;
-  if (nextIndex < [(long)mXs_ count]) {
+  if (nextIndex < (long)[mXs_ count]) {
     mDX_ = 0;
     mXIndex_ = nextIndex;
     RNSVGLength *length = [mXs_ objectAtIndex:nextIndex];
