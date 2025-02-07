@@ -73,9 +73,11 @@ const HomeList = (props: ScreenProps) => (
     {...props}
     examples={{
       ...examples,
-      Filters,
-      'Filter Image': FilterImage,
-      E2E: E2e as unknown as Example,
+      ...(Platform.OS !== 'windows' && {
+        Filters,
+        'Filter Image': FilterImage,
+        E2E: E2e as unknown as Example,
+      }),
     }}
   />
 );
@@ -87,7 +89,7 @@ const FilterImageList = (props: ScreenProps) => (
 );
 
 const Stack =
-  Platform.OS === 'macos'
+  Platform.OS === 'macos' || Platform.OS === 'windows'
     ? createStackNavigator<RootStackParamList>()
     : createNativeStackNavigator<RootStackParamList>();
 

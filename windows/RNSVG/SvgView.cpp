@@ -244,6 +244,11 @@ void SvgView::Invalidate() {
 
   Size size{static_cast<float>(ActualWidth()), static_cast<float>(ActualHeight())};
 
+  // Check if the size is valid (non-zero)
+  if (size.Width <= 0 || size.Height <= 0) {
+    return;
+  }
+
   xaml::Media::Imaging::SurfaceImageSource surfaceImageSource(
       static_cast<int32_t>(size.Width), static_cast<int32_t>(size.Height));
   com_ptr<ISurfaceImageSourceNativeWithD2D> sisNativeWithD2D{surfaceImageSource.as<ISurfaceImageSourceNativeWithD2D>()};
@@ -280,5 +285,6 @@ void SvgView::Invalidate() {
   sisNativeWithD2D->EndDraw();
 
   m_image.Source(surfaceImageSource);
+  OutputDebugStringA("TEST: SvgView::Invalidate end\n");
 }
 } // namespace winrt::RNSVG::implementation
