@@ -285,6 +285,5 @@ void SvgView::Invalidate() {
   sisNativeWithD2D->EndDraw();
 
   m_image.Source(surfaceImageSource);
-  OutputDebugStringA("TEST: SvgView::Invalidate end\n");
 }
 } // namespace winrt::RNSVG::implementation
