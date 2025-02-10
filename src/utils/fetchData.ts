@@ -1,5 +1,4 @@
 import { Platform } from 'react-native';
-import { Buffer } from 'buffer';
 
 export async function fetchText(uri?: string): Promise<string | null> {
   if (!uri) {
@@ -20,6 +19,7 @@ const decodeBase64Image = (uri: string) => {
   const dataType = splitContent[0] as BufferEncoding;
   const content = splitContent.slice(1).join(',');
 
+  if (typeof Buffer === "undefined") return window.atob(content)
   return Buffer.from(content, dataType).toString('utf-8');
 };
 
