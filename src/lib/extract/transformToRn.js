@@ -2,8 +2,6 @@
 //
 // https://peggyjs.org/
 
-"use strict";
-
 
 function peg$subclass(child, parent) {
   function C() { this.constructor = child; }
@@ -1172,8 +1170,12 @@ function peg$parse(input, options) {
   }
 }
 
-module.exports = {
-  StartRules: ["start"],
-  SyntaxError: peg$SyntaxError,
-  parse: peg$parse
+const peg$allowedStartRules = [
+  "start"
+];
+
+export {
+  peg$allowedStartRules as StartRules,
+  peg$SyntaxError as SyntaxError,
+  peg$parse as parse
 };
