@@ -127,6 +127,18 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass TestViewManager
+    : Microsoft.ReactNative.IViewManager
+    , Microsoft.ReactNative.IViewManagerWithReactContext
+    , Microsoft.ReactNative.IViewManagerWithNativeProperties
+    , Microsoft.ReactNative.IViewManagerWithChildren
+    , Microsoft.ReactNative.IViewManagerWithPointerEvents
+  {
+    TestViewManager(String name);
+  };
+
+
+  [default_interface]
   runtimeclass TSpanViewManager : TextViewManager
   {
     TSpanViewManager();

@@ -73,8 +73,8 @@ const HomeList = (props: ScreenProps) => (
     {...props}
     examples={{
       ...examples,
+      Filters,
       ...(Platform.OS !== 'windows' && {
-        Filters,
         'Filter Image': FilterImage,
         E2E: E2e as unknown as Example,
       }),
