@@ -1,11 +1,11 @@
 #pragma once
 
-#include "TestViewManager.g.h"
+#include "UnsupportedSvgViewManager.g.h"
 
 namespace winrt::RNSVG::implementation {
-struct TestViewManager : TestViewManagerT<TestViewManager> {
-  TestViewManager() = default;
-  TestViewManager(hstring name);
+struct UnsupportedSvgViewManager : UnsupportedSvgViewManagerT<UnsupportedSvgViewManager> {
+  UnsupportedSvgViewManager() = default;
+  UnsupportedSvgViewManager(hstring name);
 
   // IViewManager
   hstring Name();
@@ -15,12 +15,6 @@ struct TestViewManager : TestViewManagerT<TestViewManager> {
   Microsoft::ReactNative::IReactContext ReactContext();
   void ReactContext(Microsoft::ReactNative::IReactContext const &value);
 
-  // IViewManagerWithNativeProperties
-  Windows::Foundation::Collections::IMapView<hstring, Microsoft::ReactNative::ViewManagerPropertyType> NativeProps();
-  void UpdateProperties(
-      xaml::FrameworkElement const &view,
-      Microsoft::ReactNative::IJSValueReader const &propertyMapReader);
-
   // IViewManagerWithChildren
   void AddView(xaml::FrameworkElement const &parent, xaml::UIElement const &child, int64_t index);
   void RemoveAllChildren(xaml::FrameworkElement const &parent);
@@ -28,17 +22,12 @@ struct TestViewManager : TestViewManagerT<TestViewManager> {
   void
   ReplaceChild(xaml::FrameworkElement const &parent, xaml::UIElement const &oldChild, xaml::UIElement const &newChild);
 
-  // IViewManagerWithPointerEvents
-  void OnPointerEvent(
-      Windows::Foundation::IInspectable const &view,
-      Microsoft::ReactNative::ReactPointerEventArgs const &args);
-
  private:
-  hstring m_name{L"RNSVGTestView"};
+  hstring m_name{L"RNSVGUnsupportedSvgView"};
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
 };
 } // namespace winrt::RNSVG::implementation
 
 namespace winrt::RNSVG::factory_implementation {
-struct TestViewManager : TestViewManagerT<TestViewManager, implementation::TestViewManager> {};
+struct UnsupportedSvgViewManager : UnsupportedSvgViewManagerT<UnsupportedSvgViewManager, implementation::UnsupportedSvgViewManager> {};
 } // namespace winrt::RNSVG::factory_implementation

@@ -160,7 +160,7 @@
     <ClCompile Include="TextViewManager.cpp">
       <Filter>ViewManagers\Group\Text</Filter>
     </ClCompile>
-    <ClCompile Include="TestViewManager.cpp">
+    <ClCompile Include="UnsupportedSvgViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
     <ClCompile Include="TSpanViewManager.cpp">
@@ -314,7 +314,7 @@
     <ClInclude Include="TextViewManager.h">
       <Filter>ViewManagers\Group\Text</Filter>
     </ClInclude>
-    <ClInclude Include="TestViewManager.h">
+    <ClInclude Include="UnsupportedSvgViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
     <ClInclude Include="TSpanViewManager.h">

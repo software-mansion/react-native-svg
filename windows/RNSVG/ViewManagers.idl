@@ -127,14 +127,12 @@ namespace RNSVG
   };
 
   [default_interface]
-  runtimeclass TestViewManager
+  runtimeclass UnsupportedSvgViewManager
     : Microsoft.ReactNative.IViewManager
     , Microsoft.ReactNative.IViewManagerWithReactContext
-    , Microsoft.ReactNative.IViewManagerWithNativeProperties
     , Microsoft.ReactNative.IViewManagerWithChildren
-    , Microsoft.ReactNative.IViewManagerWithPointerEvents
   {
-    TestViewManager(String name);
+    UnsupportedSvgViewManager(String name);
   };
 
 

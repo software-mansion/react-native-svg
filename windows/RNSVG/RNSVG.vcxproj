@@ -195,7 +195,7 @@
     <ClInclude Include="SvgViewManager.h" />
     <ClInclude Include="SymbolViewManager.h" />
     <ClInclude Include="TextViewManager.h" />
-    <ClInclude Include="TestViewManager.h" />
+    <ClInclude Include="UnsupportedSvgViewManager.h" />
     <ClInclude Include="TSpanViewManager.h" />
     <ClInclude Include="UseViewManager.h" />
   </ItemGroup>
@@ -270,7 +270,7 @@
     <ClCompile Include="SvgViewManager.cpp" />
     <ClCompile Include="SymbolViewManager.cpp" />
     <ClCompile Include="TextViewManager.cpp" />
-    <ClCompile Include="TestViewManager.cpp" />
+    <ClCompile Include="UnsupportedSvgViewManager.cpp" />
     <ClCompile Include="TSpanViewManager.cpp" />
     <ClCompile Include="UseViewManager.cpp" />
   </ItemGroup>
