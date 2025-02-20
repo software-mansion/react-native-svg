@@ -353,10 +353,7 @@ public abstract class VirtualView extends ReactViewGroup {
       ClipPathView mClipNode = (ClipPathView) getSvgView().getDefinedClipPath(mClipPath);
 
       if (mClipNode != null) {
-        Path clipPath =
-            mClipRule == CLIP_RULE_EVENODD
-                ? mClipNode.getPath(canvas, paint)
-                : mClipNode.getPath(canvas, paint, Region.Op.UNION);
+        Path clipPath = mClipNode.getPath(canvas, paint, Region.Op.UNION);
         clipPath.transform(mClipNode.mMatrix);
         switch (mClipRule) {
           case CLIP_RULE_EVENODD:
