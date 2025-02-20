@@ -296,7 +296,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     }
 
     if (/\S/.test(text)) {
-      children.push(text);
+      children?.push(text);
     }
 
     if (source[i] === '<') {
