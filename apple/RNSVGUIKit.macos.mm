@@ -1,6 +1,8 @@
 #import "RNSVGUIKit.h"
 #import <objc/runtime.h>
 
+#if TARGET_OS_OSX
+
 @implementation RNSVGView {
 }
 
@@ -125,3 +127,5 @@ NSImage *RNSVGUIGraphicsGetImageFromCurrentImageContext(void)
 
   return image;
 }
+
+#endif // TARGET_OS_OSX

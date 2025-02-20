@@ -1,5 +1,7 @@
 #import "RNSVGTopAlignedLabel.h"
 
+#if !TARGET_OS_OSX
+
 @implementation RNSVGTopAlignedLabel
 
 - (void)drawTextInRect:(CGRect)rect
@@ -17,3 +19,5 @@
 }
 
 @end
+
+#endif // !TARGET_OS_OSX

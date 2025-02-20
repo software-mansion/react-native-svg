@@ -373,7 +373,7 @@ using namespace facebook::react;
 {
 #if !TARGET_OS_OSX // [macOS]
   UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size];
-  UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
+  UIImage *image = [renderer imageWithActions:^(__unused UIGraphicsImageRendererContext *_Nonnull rendererContext) {
 #else // [macOS
   RNSVGUIGraphicsBeginImageContextWithOptions(bounds.size, NO, 1);
 #endif // macOS]
@@ -434,7 +434,7 @@ using namespace facebook::react;
   [_painters setObject:painter forKey:painterName];
 }
 
-- (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;
+- (RNSVGPainter *)getDefinedPainter:(NSString *)painterName
 {
   return _painters ? [_painters objectForKey:painterName] : nil;
 }
@@ -447,7 +447,7 @@ using namespace facebook::react;
   [_markers setObject:marker forKey:markerName];
 }
 
-- (RNSVGMarker *)getDefinedMarker:(NSString *)markerName;
+- (RNSVGMarker *)getDefinedMarker:(NSString *)markerName
 {
   return _markers ? [_markers objectForKey:markerName] : nil;
 }
@@ -460,7 +460,7 @@ using namespace facebook::react;
   [_masks setObject:mask forKey:maskName];
 }
 
-- (RNSVGMask *)getDefinedMask:(NSString *)maskName;
+- (RNSVGMask *)getDefinedMask:(NSString *)maskName
 {
   return _masks ? [_masks objectForKey:maskName] : nil;
 }

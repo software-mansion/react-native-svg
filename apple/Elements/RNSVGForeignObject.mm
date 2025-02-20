@@ -135,9 +135,9 @@ using namespace facebook::react;
       RNSVGSvgView *svgView = (RNSVGSvgView *)node;
       CGFloat width = [self relativeOnWidth:svgView.bbWidth];
       CGFloat height = [self relativeOnHeight:svgView.bbHeight];
-      CGRect rect = CGRectMake(0, 0, width, height);
-      CGContextClipToRect(context, rect);
-      [svgView drawToContext:context withRect:rect];
+      CGRect svgViewRect = CGRectMake(0, 0, width, height);
+      CGContextClipToRect(context, svgViewRect);
+      [svgView drawToContext:context withRect:svgViewRect];
     } else {
       node.hidden = false;
       [node.layer renderInContext:context];

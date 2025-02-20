@@ -1,4 +1,6 @@
-typedef CF_ENUM(int32_t, RNSVGColorMatrixType) {
+#import <Foundation/Foundation.h>
+
+typedef NS_ENUM(NSInteger, RNSVGColorMatrixType) {
   SVG_FECOLORMATRIX_TYPE_UNKNOWN,
   SVG_FECOLORMATRIX_TYPE_MATRIX,
   SVG_FECOLORMATRIX_TYPE_SATURATE,

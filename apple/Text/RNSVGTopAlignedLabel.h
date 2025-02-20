@@ -1,3 +1,5 @@
+#import <TargetConditionals.h>
+
 #if TARGET_OS_OSX
 #import <React/RCTTextView.h>
 @interface RNSVGTopAlignedLabel : NSTextView

@@ -153,8 +153,8 @@ static void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint be
 
           // calculate the error rate of the curve vs
           // a line segment between the start and end points
-          CGPoint ctrl1 = bez[1];
-          CGPoint ctrl2 = bez[2];
+          ctrl1 = bez[1];
+          ctrl2 = bez[2];
           CGPoint next = bez[3];
           CGFloat polyLen = distance(last, ctrl1) + distance(ctrl1, ctrl2) + distance(ctrl2, next);
           CGFloat chordLen = distance(last, next);
@@ -195,10 +195,11 @@ static void subdivideBezierAtT(const CGPoint bez[4], CGPoint bez1[4], CGPoint be
   // Investigation suggests binary search is faster at lineCount >= 16
   // https://gist.github.com/msand/4c7993319425f9d7933be58ad9ada1a4
   NSUInteger i = _lineCount < 16
-      ? [_lengths indexOfObjectPassingTest:^(NSNumber *length, NSUInteger index, BOOL *_Nonnull stop) {
-          BOOL contains = midPoint <= [length doubleValue];
-          return contains;
-        }]
+      ? [_lengths
+            indexOfObjectPassingTest:^(NSNumber *length, __unused NSUInteger index, __unused BOOL *_Nonnull stop) {
+              BOOL contains = midPoint <= [length doubleValue];
+              return contains;
+            }]
       : [_lengths indexOfObject:[NSNumber numberWithDouble:midPoint]
                   inSortedRange:NSMakeRange(0, _lineCount)
                         options:NSBinarySearchingInsertionIndex
