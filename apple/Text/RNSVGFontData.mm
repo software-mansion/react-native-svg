@@ -184,7 +184,7 @@ int lighter(int inherited)
   id letterSpacing = [font objectForKey:LETTER_SPACING];
   if ([letterSpacing isKindOfClass:NSNumber.class]) {
     NSNumber *ls = letterSpacing;
-    data->wordSpacing = (CGFloat)[ls doubleValue];
+    data->letterSpacing = (CGFloat)[ls doubleValue];
   } else {
     data->letterSpacing =
         letterSpacing ? [RNSVGFontData toAbsoluteWithNSString:letterSpacing fontSize:fontSize] : parent->letterSpacing;
