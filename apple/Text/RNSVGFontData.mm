@@ -19,13 +19,14 @@ static NSString *TEXT_DECORATION = @"textDecoration";
 static NSString *FONT_FEATURE_SETTINGS = @"fontFeatureSettings";
 static NSString *FONT_VARIANT_LIGATURES = @"fontVariantLigatures";
 
-RNSVGFontData *RNSVGFontData_Defaults;
+static RNSVGFontData *RNSVGFontData_Defaults;
 
 @implementation RNSVGFontData
 
 + (instancetype)Defaults
 {
-  if (!RNSVGFontData_Defaults) {
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
     RNSVGFontData *self = [RNSVGFontData alloc];
     self->fontData = nil;
     self->fontFamily = @"";
@@ -42,7 +43,7 @@ RNSVGFontData *RNSVGFontData_Defaults;
     self->wordSpacing = RNSVG_DEFAULT_WORD_SPACING;
     self->letterSpacing = RNSVG_DEFAULT_LETTER_SPACING;
     RNSVGFontData_Defaults = self;
-  }
+  });
   return RNSVGFontData_Defaults;
 }
 
@@ -184,7 +185,7 @@ int lighter(int inherited)
   id letterSpacing = [font objectForKey:LETTER_SPACING];
   if ([letterSpacing isKindOfClass:NSNumber.class]) {
     NSNumber *ls = letterSpacing;
-    data->wordSpacing = (CGFloat)[ls doubleValue];
+    data->letterSpacing = (CGFloat)[ls doubleValue];
   } else {
     data->letterSpacing =
         letterSpacing ? [RNSVGFontData toAbsoluteWithNSString:letterSpacing fontSize:fontSize] : parent->letterSpacing;
