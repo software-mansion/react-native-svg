@@ -4,6 +4,8 @@
 #import <React/RCTViewComponentView.h>
 #endif // RCT_NEW_ARCH_ENABLED
 
+#import <TargetConditionals.h>
+
 #if !TARGET_OS_OSX
 
 #import <UIKit/UIKit.h>

@@ -452,7 +452,7 @@
   float x = cosf(sa);
   float y = sinf(sa);
 
-  for (int i = 0; i < n; i++) {
+  for (int j = 0; (int)j < n; j++) {
     float cp1x = x - k * y;
     float cp1y = y + k * x;
 

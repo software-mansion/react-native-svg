@@ -76,7 +76,7 @@ using namespace facebook::react;
 
   CIImage *result;
 
-  for (int i = 0; i < [self.nodes count]; i++) {
+  for (int i = 0; i < (int)[self.nodes count]; i++) {
     NSString *nodeKey = [self.nodes objectAtIndex:i];
     CIImage *inputImage = [nodeKey isEqual:@""] ? previous : [results objectForKey:nodeKey];
     if (inputImage == nil) {
