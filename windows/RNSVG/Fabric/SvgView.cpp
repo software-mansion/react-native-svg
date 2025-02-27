@@ -268,11 +268,7 @@ void SvgView::Draw(
   if (m_props->color) {
     spRoot->SetAttributeValue(
         SvgStrings::colorAttributeName, D2DHelpers::AsD2DColor(m_props->color.AsWindowsColor(Theme())));
-  } else
-    spRoot->SetAttributeValue(
-        SvgStrings::colorAttributeName,
-      D2D1_SVG_ATTRIBUTE_STRING_TYPE::D2D1_SVG_ATTRIBUTE_STRING_TYPE_SVG,
-      SvgStrings::noneAttributeValue);
+  }
 
   if (m_props->align != std::nullopt || m_props->meetOrSlice != std::nullopt) {
     D2D1_SVG_PRESERVE_ASPECT_RATIO preserveAspectRatio;
@@ -304,7 +300,7 @@ winrt::Microsoft::ReactNative::Composition::Theme SvgView::Theme() const noexcep
 
 void SvgView::Invalidate() {
   if (auto view = m_wkView.get()) {
-    auto size = winrt::Windows::Foundation::Size{m_layoutMetrics.Frame.Width, m_layoutMetrics.Frame.Height};
+    auto size = winrt::Windows::Foundation::Size{ m_layoutMetrics.Frame.Width, m_layoutMetrics.Frame.Height };
 
     if (!m_isMounted) {
       return;
@@ -315,7 +311,7 @@ void SvgView::Invalidate() {
     }
 
     auto drawingSurface = m_compContext.CreateDrawingSurfaceBrush(
-        size,
+        { m_layoutMetrics.Frame.Width * m_layoutMetrics.PointScaleFactor, m_layoutMetrics.Frame.Height * m_layoutMetrics.PointScaleFactor },
         winrt::Windows::Graphics::DirectX::DirectXPixelFormat::B8G8R8A8UIntNormalized,
         winrt::Windows::Graphics::DirectX::DirectXAlphaMode::Premultiplied);
 
@@ -324,7 +320,7 @@ void SvgView::Invalidate() {
       ::Microsoft::ReactNative::Composition::AutoDrawDrawingSurface autoDraw(drawingSurface, 1.0, &offset);
       if (auto deviceContext = autoDraw.GetRenderTarget()) {
         auto transform =
-            winrt::Windows::Foundation::Numerics::make_float3x2_translation({static_cast<float>(offset.x), static_cast<float>(offset.y)});
+          winrt::Windows::Foundation::Numerics::make_float3x2_translation({static_cast<float>(offset.x / m_layoutMetrics.PointScaleFactor), static_cast<float>(offset.y / m_layoutMetrics.PointScaleFactor)});
         deviceContext->SetTransform(D2DHelpers::AsD2DTransform(transform));
 
         deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Black, 0.0f));
@@ -332,7 +328,16 @@ void SvgView::Invalidate() {
         com_ptr<ID2D1DeviceContext> spDeviceContext;
         spDeviceContext.copy_from(deviceContext);
 
+        const auto dpi = m_layoutMetrics.PointScaleFactor * 96.0f;
+        float oldDpiX, oldDpiY;
+        deviceContext->GetDpi(&oldDpiX, &oldDpiY);
+        deviceContext->SetDpi(dpi, dpi);
+
         Draw(view, *spDeviceContext, size);
+
+        // restore dpi to old state
+        deviceContext->SetDpi(oldDpiX, oldDpiY);
+
       }
     }
 
