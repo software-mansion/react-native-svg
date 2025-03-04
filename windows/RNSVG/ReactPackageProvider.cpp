@@ -41,6 +41,7 @@
 #include "PatternViewManager.h"
 #include "TextViewManager.h"
 #include "TSpanViewManager.h"
+#include "UnsupportedSvgViewManager.h"
 #endif
 
 using namespace winrt::Microsoft::ReactNative;
@@ -102,6 +103,16 @@ namespace winrt::RNSVG::implementation
     packageBuilder.AddViewManager(L"PatternViewManager", []() { return winrt::make<PatternViewManager>(); });
     packageBuilder.AddViewManager(L"TextViewManager", []() { return winrt::make<TextViewManager>(); });
     packageBuilder.AddViewManager(L"TSpanViewManager", []() { return winrt::make<TSpanViewManager>(); });
+    // Unsupported View Managers
+    packageBuilder.AddViewManager(L"RNSVGFilterViewManager", []() { return winrt::make<UnsupportedSvgViewManager>(L"RNSVGFilter"); });
+    packageBuilder.AddViewManager(L"RNSVGFeBlendViewManager", []() { return winrt::make<UnsupportedSvgViewManager>(L"RNSVGFeBlend"); });
+    packageBuilder.AddViewManager(L"RNSVGFeColorMatrixViewManager", []() { return winrt::make<UnsupportedSvgViewManager>(L"RNSVGFeColorMatrix"); });
+    packageBuilder.AddViewManager(L"RNSVGFeCompositeViewManager", []() { return winrt::make<UnsupportedSvgViewManager>(L"RNSVGFeComposite"); });
+    packageBuilder.AddViewManager(L"RNSVGFeFloodViewManager", []() { return winrt::make<UnsupportedSvgViewManager>(L"RNSVGFeFlood"); });
+    packageBuilder.AddViewManager(L"RNSVGFeGaussianBlurViewManager", []() { return winrt::make<UnsupportedSvgViewManager>(L"RNSVGFeGaussianBlur"); });
+    packageBuilder.AddViewManager(L"RNSVGFeMergeViewManager", []() { return winrt::make<UnsupportedSvgViewManager>(L"RNSVGFeMerge"); });
+    packageBuilder.AddViewManager(L"RNSVGFeOffsetViewManager", []() { return winrt::make<UnsupportedSvgViewManager>(L"RNSVGFeOffset"); });
+    packageBuilder.AddViewManager(L"RNSVGForeignObjectViewManager", []() { return winrt::make<UnsupportedSvgViewManager>(L"RNSVGForeignObject"); });
 #endif
 
   }
