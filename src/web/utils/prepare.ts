@@ -4,10 +4,10 @@ import {
 } from 'react-native';
 import { BaseProps } from '../types';
 import { WebShape } from '../WebShape';
-import { hasTouchableProperty, parseTransformProp } from '.';
 import { resolve } from '../../lib/resolve';
 import { NumberProp } from '../../lib/extract/types';
 import { resolveAssetUri } from '../../lib/resolveAssetUri';
+import { hasTouchableProperty, parseTransformProp } from './index';
 /**
  * `react-native-svg` supports additional props that aren't defined in the spec.
  * This function replaces them in a spec conforming manner.
