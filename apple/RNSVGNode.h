@@ -8,6 +8,7 @@
 
 #import "RNSVGCGFCRule.h"
 #import "RNSVGSvgView.h"
+#import "RNSVGUIKit.h"
 
 #import <React/RCTPointerEvents.h>
 #import <React/UIView+React.h>

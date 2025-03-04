@@ -35,6 +35,7 @@ static CGFloat RNSVGTSpan_radToDeg = 180 / (CGFloat)M_PI;
   CGFloat firstX;
   CGFloat firstY;
   RNSVGPathMeasure *measure;
+  RNSVGTopAlignedLabel *label;
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -156,12 +157,12 @@ using namespace facebook::react;
         NSUInteger count = [emoji count];
         CGFloat fontSize = [gc getFontSize];
         for (NSUInteger i = 0; i < count; i++) {
-          RNSVGPlatformView *label = [emoji objectAtIndex:i];
+          RNSVGPlatformView *emojiLabel = [emoji objectAtIndex:i];
           NSValue *transformValue = [emojiTransform objectAtIndex:i];
           CGAffineTransform transform = [transformValue CGAffineTransformValue];
           CGContextConcatCTM(context, transform);
           CGContextTranslateCTM(context, 0, -fontSize);
-          [label.layer renderInContext:context];
+          [emojiLabel.layer renderInContext:context];
           CGContextTranslateCTM(context, 0, fontSize);
           CGContextConcatCTM(context, CGAffineTransformInvert(transform));
         }
@@ -202,7 +203,6 @@ using namespace facebook::react;
   return attrs;
 }
 
-RNSVGTopAlignedLabel *label;
 - (void)drawWrappedText:(CGContextRef)context gc:(RNSVGGlyphContext *)gc rect:(CGRect)rect color:(CGColorRef)color
 {
   [self pushGlyphContext];
@@ -1042,34 +1042,34 @@ RNSVGTopAlignedLabel *label;
       CGFloat width = box.size.width;
 
       if (width == 0) { // Render unicode emoji
-        RNSVGTextView *label = [[RNSVGTextView alloc] init];
+        RNSVGTextView *emojiLabel = [[RNSVGTextView alloc] init];
         CFIndex startIndex = indices[g];
         long len = MAX(1, endIndex - startIndex);
         NSRange range = NSMakeRange(startIndex, len);
         NSString *currChars = [str substringWithRange:range];
 #if TARGET_OS_OSX
-        label.string = currChars;
+        emojiLabel.string = currChars;
 #else
-        label.text = currChars;
-        label.opaque = NO;
+        emojiLabel.text = currChars;
+        emojiLabel.opaque = NO;
 #endif // TARGET_OS_OSX
-        label.backgroundColor = RNSVGColor.clearColor;
+        emojiLabel.backgroundColor = RNSVGColor.clearColor;
         UIFont *customFont = [UIFont systemFontOfSize:fontSize];
 
         CGSize measuredSize = [currChars sizeWithAttributes:@{NSFontAttributeName : customFont}];
-        label.font = customFont;
+        emojiLabel.font = customFont;
         CGFloat width = ceil(measuredSize.width);
         CGFloat height = ceil(measuredSize.height);
         CGRect bounds = CGRectMake(0, 0, width, height);
-        label.frame = bounds;
+        emojiLabel.frame = bounds;
 
         CGContextConcatCTM(context, transform);
         CGContextTranslateCTM(context, 0, -fontSize);
-        [label.layer renderInContext:context];
+        [emojiLabel.layer renderInContext:context];
         CGContextTranslateCTM(context, 0, fontSize);
         CGContextConcatCTM(context, CGAffineTransformInvert(transform));
 
-        [emoji addObject:label];
+        [emoji addObject:emojiLabel];
         [emojiTransform addObject:[NSValue valueWithCGAffineTransform:transform]];
       } else {
         transform = CGAffineTransformScale(transform, 1.0, -1.0);

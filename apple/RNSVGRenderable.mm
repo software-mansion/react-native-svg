@@ -327,14 +327,9 @@ UInt32 saturate(CGFloat value)
       NSUInteger bytesPerRow = bytesPerPixel * scaledWidth;
       CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
       UInt32 *pixels = (UInt32 *)calloc(npixels, sizeof(UInt32));
+      CGBitmapInfo bitmapInfo = (CGBitmapInfo)kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big;
       CGContextRef bcontext = CGBitmapContextCreate(
-          pixels,
-          scaledWidth,
-          scaledHeight,
-          bitsPerComponent,
-          bytesPerRow,
-          colorSpace,
-          kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+          pixels, scaledWidth, scaledHeight, bitsPerComponent, bytesPerRow, colorSpace, bitmapInfo);
 #if TARGET_OS_OSX // [macOS]
       // on macOS currentCTM is not scaled properly with screen scale so we need to scale it manually
       CGContextConcatCTM(bcontext, screenScaleCTM);
