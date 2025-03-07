@@ -285,6 +285,9 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   public void setStrokeDasharray(Dynamic dynamicStrokeDasharray) {
     ArrayList<SVGLength> arrayList = SVGLength.arrayFrom(dynamicStrokeDasharray);
     if (arrayList != null) {
+      if (arrayList.size() % 2 == 1) {
+        arrayList.addAll(arrayList);
+      }
       this.strokeDasharray = arrayList.toArray(new SVGLength[0]);
     } else {
       this.strokeDasharray = null;
