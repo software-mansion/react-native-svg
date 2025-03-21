@@ -133,7 +133,7 @@ SegmentData ExtractPathElementFeatures(const CGPathElement *element)
   return data;
 }
 
-void UpdateFromPathElement(void *info, const CGPathElement *element)
+void UpdateFromPathElement(__unused void *info, const CGPathElement *element)
 {
   SegmentData segment_data = ExtractPathElementFeatures(element);
   // First update the outgoing slope for the previous element.

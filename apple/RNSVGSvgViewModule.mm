@@ -31,7 +31,7 @@ RCT_EXPORT_MODULE()
     __kindof RNSVGPlatformView *view = [viewRegistry viewForReactTag:reactTag];
 #else
   [self.bridge.uiManager
-      addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RNSVGPlatformView *> *viewRegistry) {
+      addUIBlock:^(RCTUIManager *uiManager, __unused NSDictionary<NSNumber *, RNSVGPlatformView *> *viewRegistry) {
         __kindof RNSVGPlatformView *view = [uiManager viewForReactTag:reactTag];
 #endif // RCT_NEW_ARCH_ENABLED
     NSString *b64;
