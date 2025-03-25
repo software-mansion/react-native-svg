@@ -127,6 +127,16 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass UnsupportedSvgViewManager
+    : Microsoft.ReactNative.IViewManager
+    , Microsoft.ReactNative.IViewManagerWithReactContext
+    , Microsoft.ReactNative.IViewManagerWithChildren
+  {
+    UnsupportedSvgViewManager(String name);
+  };
+
+
+  [default_interface]
   runtimeclass TSpanViewManager : TextViewManager
   {
     TSpanViewManager();

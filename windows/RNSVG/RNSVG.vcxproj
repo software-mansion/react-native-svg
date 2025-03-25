@@ -37,7 +37,7 @@
     <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove($(SolutionDir), 'node_modules\react-native-windows\package.json'))\node_modules\react-native-windows\</ReactNativeWindowsDir>
     <RunAutolinkCheck Condition="'$(UseFabric)'=='true'">false</RunAutolinkCheck>
   </PropertyGroup>
-  <Import Project="$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.WindowsSdk.Default.props" Condition="Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.WindowsSdk.Default.props')"/>
+  <Import Project="$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.WindowsSdk.Default.props" Condition="Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.WindowsSdk.Default.props')" />
   <PropertyGroup Label="Fallback Windows SDK Versions" Condition="'$(UseFabric)'!='true'">
     <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0.19041.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion Condition=" '$(WindowsTargetPlatformMinVersion)' == '' ">10.0.17763.0</WindowsTargetPlatformMinVersion>
@@ -69,6 +69,10 @@
       <Platform>ARM64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+  </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
@@ -191,6 +195,7 @@
     <ClInclude Include="SvgViewManager.h" />
     <ClInclude Include="SymbolViewManager.h" />
     <ClInclude Include="TextViewManager.h" />
+    <ClInclude Include="UnsupportedSvgViewManager.h" />
     <ClInclude Include="TSpanViewManager.h" />
     <ClInclude Include="UseViewManager.h" />
   </ItemGroup>
@@ -203,7 +208,7 @@
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
   </ItemGroup>
-    <ItemGroup Condition="'$(UseFabric)'=='true'">
+  <ItemGroup Condition="'$(UseFabric)'=='true'">
     <ClCompile Include="Fabric/CircleView.cpp" />
     <ClCompile Include="Fabric/ClipPathView.cpp" />
     <ClCompile Include="Fabric/DefsView.cpp" />
@@ -265,15 +270,16 @@
     <ClCompile Include="SvgViewManager.cpp" />
     <ClCompile Include="SymbolViewManager.cpp" />
     <ClCompile Include="TextViewManager.cpp" />
+    <ClCompile Include="UnsupportedSvgViewManager.cpp" />
     <ClCompile Include="TSpanViewManager.cpp" />
     <ClCompile Include="UseViewManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Paper.idl" Condition="'$(UseFabric)'!='true'" />
     <Midl Include="ReactPackageProvider.idl" />
-    <Midl Include="Types.idl" Condition="'$(UseFabric)'!='true'"/>
+    <Midl Include="Types.idl" Condition="'$(UseFabric)'!='true'" />
     <Midl Include="ViewManagers.idl" Condition="'$(UseFabric)'!='true'" />
-    <Midl Include="Views.idl" Condition="'$(UseFabric)'!='true'"/>
+    <Midl Include="Views.idl" Condition="'$(UseFabric)'!='true'" />
   </ItemGroup>
   <ItemGroup Condition="'$(UseFabric)'!='true'">
     <None Include="PropertySheet.props" />

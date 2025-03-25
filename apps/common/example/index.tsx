@@ -87,7 +87,7 @@ const FilterImageList = (props: ScreenProps) => (
 );
 
 const Stack =
-  Platform.OS === 'macos'
+  Platform.OS === 'macos' || Platform.OS === 'windows'
     ? createStackNavigator<RootStackParamList>()
     : createNativeStackNavigator<RootStackParamList>();
 
