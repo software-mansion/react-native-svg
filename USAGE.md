@@ -125,7 +125,7 @@ existing in a different way and `fallback` if you want to render another compone
 
 ```jsx
 import * as React from 'react';
-import { SvgUri } from 'react-native-svg/css';
+import { SvgUri } from 'react-native-svg';
 import { SvgFallback } from './components/SvgFallback';
 
 export default () => {
@@ -315,7 +315,7 @@ If xml string contains CSS in `<style>` element, use `SvgCss`:
 
 ```jsx
 import * as React from 'react';
-import { SvgCss } from 'react-native-svg';
+import { SvgCss } from 'react-native-svg/css';
 
 const xml = `
   <svg width="32" height="32" viewBox="0 0 32 32">
