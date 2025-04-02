@@ -1,4 +1,4 @@
-import type { ComponentType, ComponentProps } from 'react';
+import type { ComponentType, ComponentProps, JSX } from 'react';
 import * as React from 'react';
 import { Component, useEffect, useMemo, useState } from 'react';
 import { fetchText } from './utils/fetchData';

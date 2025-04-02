@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 import {
   GestureResponderEvent,
   // @ts-ignore it is not seen in exports
