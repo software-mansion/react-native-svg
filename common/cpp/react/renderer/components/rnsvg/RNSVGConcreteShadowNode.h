@@ -20,8 +20,7 @@ class RNSVGConcreteShadowNode : public ConcreteShadowNode<
       RNSVGLayoutableShadowNode,
       PropsT,
       ViewEventEmitter,
-      StateData,
-      false>;
+      StateData>;
 
   using ConcreteViewProps = PropsT;
 
