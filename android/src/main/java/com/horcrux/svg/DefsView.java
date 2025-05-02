@@ -9,20 +9,15 @@
 package com.horcrux.svg;
 
 import android.annotation.SuppressLint;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.view.View;
 import com.facebook.react.bridge.ReactContext;
 
 @SuppressLint("ViewConstructor")
-class DefsView extends DefinitionView {
+class DefsView extends GroupView {
 
   public DefsView(ReactContext reactContext) {
     super(reactContext);
   }
-
-  @Override
-  void draw(Canvas canvas, Paint paint, float opacity) {}
 
   void saveDefinition() {
     for (int i = 0; i < getChildCount(); i++) {
