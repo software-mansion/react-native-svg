@@ -9,14 +9,25 @@
 package com.horcrux.svg;
 
 import android.annotation.SuppressLint;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.view.View;
 import com.facebook.react.bridge.ReactContext;
 
 @SuppressLint("ViewConstructor")
-class DefsView extends GroupView {
+class DefsView extends RenderableView {
 
   public DefsView(ReactContext reactContext) {
     super(reactContext);
+  }
+
+  @Override
+  void draw(Canvas canvas, Paint paint, float opacity) {}
+
+  @Override
+  Path getPath(Canvas canvas, Paint paint) {
+    return null;
   }
 
   void saveDefinition() {

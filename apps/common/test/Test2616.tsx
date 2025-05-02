@@ -2,7 +2,7 @@ import {Defs, G, Path, Pattern, Rect, Svg} from 'react-native-svg';
 
 export default function IconWithHexAlpha() {
   return (
-    <Svg height={'50'}>
+    <Svg height={'500'} width={'500'}>
       <Defs>
         <Pattern
           id={'pattern'}
