@@ -12,7 +12,7 @@ import Svg, {Path} from 'react-native-svg';
   |       |
   SVG depicted above is a box of 7x4 (without a background) with a colored rectangle inside occupying 5x2
 
-  On iOS only the area with the actual drawing reactangle with 5x2 can be tapped.
+  On iOS only the area with the actual drawing rectangle with 5x2 can be tapped.
 
   However on Android things are different. For React Native on Android the whole SVG element will be touchable
   regardless of having or not a visible drawing in it.
