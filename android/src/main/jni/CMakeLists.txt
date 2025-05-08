@@ -19,6 +19,7 @@ add_compile_options(
   -Wall
   -Wpedantic
   -Wno-gnu-zero-variadic-macro-arguments
+  -Wno-dollar-in-identifier-extension
 )
 
 file(GLOB rnsvg_SRCS CONFIGURE_DEPENDS *.cpp ${RNS_COMMON_DIR}/react/renderer/components/rnsvg/*.cpp)
