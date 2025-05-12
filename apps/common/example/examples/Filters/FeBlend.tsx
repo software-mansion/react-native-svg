@@ -109,7 +109,7 @@ function MDNExample() {
         <FeBlend in="SourceGraphic" in2="floodFill" mode="multiply" />
       </Filter>
       <Image
-        href="https://live.mdnplay.dev/en-US/docs/Web/SVG/Element/feBlend/mdn_logo_only_color.png"
+        href="https://live.mdnplay.dev/en-US/docs/Web/SVG/Reference/Element/feBlend/mdn_logo_only_color.png"
         x="10%"
         y="10%"
         width="80%"
