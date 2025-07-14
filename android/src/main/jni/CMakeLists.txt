@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.13)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-set(RNS_ANDROID_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
-set(RNS_COMMON_DIR ${RNS_ANDROID_DIR}/../common/cpp)
-set(RNS_GENERATED_DIR ${RNS_ANDROID_DIR}/build/generated)
-set(RNS_GENERATED_JNI_DIR ${RNS_GENERATED_DIR}/source/codegen/jni)
-set(RNS_GENERATED_REACT_DIR ${RNS_GENERATED_JNI_DIR}/react/renderer/components/rnsvg)
+set(RNSVG_ANDROID_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
+set(RNSVG_COMMON_DIR ${RNSVG_ANDROID_DIR}/../common/cpp)
+set(RNSVG_GENERATED_DIR ${RNSVG_ANDROID_DIR}/build/generated)
+set(RNSVG_GENERATED_JNI_DIR ${RNSVG_GENERATED_DIR}/source/codegen/jni)
+set(RNSVG_GENERATED_REACT_DIR ${RNSVG_GENERATED_JNI_DIR}/react/renderer/components/rnsvg)
 
-file(GLOB rnsvg_SRCS CONFIGURE_DEPENDS *.cpp ${RNS_COMMON_DIR}/react/renderer/components/rnsvg/*.cpp)
-file(GLOB rnsvg_codegen_SRCS CONFIGURE_DEPENDS ${RNS_GENERATED_REACT_DIR}/*cpp)
+file(GLOB rnsvg_SRCS CONFIGURE_DEPENDS *.cpp ${RNSVG_COMMON_DIR}/react/renderer/components/rnsvg/*.cpp)
+file(GLOB rnsvg_codegen_SRCS CONFIGURE_DEPENDS ${RNSVG_GENERATED_REACT_DIR}/*cpp)
 
 add_library(
   react_codegen_rnsvg
@@ -21,9 +21,9 @@ target_include_directories(
   react_codegen_rnsvg
   PUBLIC
   .
-  ${RNS_COMMON_DIR}
-  ${RNS_GENERATED_JNI_DIR}
-  ${RNS_GENERATED_REACT_DIR}
+  ${RNSVG_COMMON_DIR}
+  ${RNSVG_GENERATED_JNI_DIR}
+  ${RNSVG_GENERATED_REACT_DIR}
 )
 
 find_package(ReactAndroid REQUIRED CONFIG)
