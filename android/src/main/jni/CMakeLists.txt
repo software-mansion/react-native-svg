@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-set(CMAKE_VERBOSE_MAKEFILE on)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set(RNS_ANDROID_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
 set(RNS_COMMON_DIR ${RNS_ANDROID_DIR}/../common/cpp)
@@ -17,15 +17,15 @@ file(GLOB rnsvg_codegen_SRCS CONFIGURE_DEPENDS ${RNS_GENERATED_REACT_DIR}/*cpp)
 
 add_library(
   react_codegen_rnsvg
-  SHARED 
+  SHARED
   ${rnsvg_SRCS}
   ${rnsvg_codegen_SRCS}
 )
 
 target_include_directories(
-  react_codegen_rnsvg 
-  PUBLIC 
-  . 
+  react_codegen_rnsvg
+  PUBLIC
+  .
   ${RNS_COMMON_DIR}
   ${RNS_GENERATED_JNI_DIR}
   ${RNS_GENERATED_REACT_DIR}
@@ -33,7 +33,7 @@ target_include_directories(
 
 find_package(ReactAndroid REQUIRED CONFIG)
 
-if (ReactAndroid_VERSION_MINOR GREATER_EQUAL 76)
+if(ReactAndroid_VERSION_MINOR GREATER_EQUAL 76)
   target_link_libraries(
     react_codegen_rnsvg
     ReactAndroid::reactnative
@@ -61,15 +61,16 @@ else()
     react_utils
   )
 endif()
+
 target_link_libraries(
   react_codegen_rnsvg
   fbjni
 )
 
 target_include_directories(
- ${CMAKE_PROJECT_NAME}
- PUBLIC
- ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_PROJECT_NAME}
+  PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 if(ReactAndroid_VERSION_MINOR GREATER_EQUAL 80)
