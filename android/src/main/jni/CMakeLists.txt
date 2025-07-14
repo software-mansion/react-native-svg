@@ -7,11 +7,6 @@ set(RNS_GENERATED_DIR ${RNS_ANDROID_DIR}/build/generated)
 set(RNS_GENERATED_JNI_DIR ${RNS_GENERATED_DIR}/source/codegen/jni)
 set(RNS_GENERATED_REACT_DIR ${RNS_GENERATED_JNI_DIR}/react/renderer/components/rnsvg)
 
-string(
-  APPEND
-  CMAKE_CXX_FLAGS
-  " -DREACT_NATIVE_MINOR_VERSION=${ReactAndroid_VERSION_MINOR}")
-
 file(GLOB rnsvg_SRCS CONFIGURE_DEPENDS *.cpp ${RNS_COMMON_DIR}/react/renderer/components/rnsvg/*.cpp)
 file(GLOB rnsvg_codegen_SRCS CONFIGURE_DEPENDS ${RNS_GENERATED_REACT_DIR}/*cpp)
 
@@ -92,4 +87,10 @@ target_compile_options(
   -Wpedantic
   -Wno-gnu-zero-variadic-macro-arguments
   -Wno-dollar-in-identifier-extension
+)
+
+target_compile_definitions(
+  react_codegen_rnsvg
+  PRIVATE
+  REACT_NATIVE_MINOR_VERSION=${ReactAndroid_VERSION_MINOR}
 )
