@@ -121,24 +121,6 @@ android {
                     "src/paper/java",
                 ]
             }
-
-            if (REACT_NATIVE_MINOR_VERSION >= 75) { // Use for react-native@0.75 and above
-                // borderRadius fix https://github.com/software-mansion/react-native-svg/pull/2415
-                srcDirs += "src/SvgViewManager75/java"
-                // processTransform replacement https://github.com/software-mansion/react-native-svg/pull/2554
-                srcDirs += "src/RenderableViewManager75/java"
-            } else { // Maintain compatibility with react-native@0.73 and react-native@0.74
-                srcDirs += "src/SvgViewManager73/java"
-                srcDirs += "src/RenderableViewManager73/java"
-            }
-
-            if (REACT_NATIVE_MINOR_VERSION >= 74) { // Use for react-native@0.74 and above
-                // new API https://github.com/software-mansion/react-native-svg/pull/2541
-                srcDirs += "src/SvgPackage74/java"
-            } else {
-                // Maintain compatibility with react-native@0.73
-                srcDirs += "src/SvgPackage73/java"
-            }
         }
     }
 }
@@ -155,13 +137,11 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    if (REACT_NATIVE_MINOR_VERSION >= 76) {
-        implementation("com.facebook.fresco:fresco:${FRESCO_VERSION}") {
-            exclude group: 'com.facebook.soloader'
-        }
-        implementation("com.facebook.fresco:imagepipeline-okhttp3:${FRESCO_VERSION}") {
-            exclude group: 'com.facebook.soloader'
-        }
-        implementation("com.facebook.fresco:middleware:${FRESCO_VERSION}")
+    implementation("com.facebook.fresco:fresco:${FRESCO_VERSION}") {
+        exclude group: 'com.facebook.soloader'
     }
+    implementation("com.facebook.fresco:imagepipeline-okhttp3:${FRESCO_VERSION}") {
+        exclude group: 'com.facebook.soloader'
+    }
+    implementation("com.facebook.fresco:middleware:${FRESCO_VERSION}")
 }
