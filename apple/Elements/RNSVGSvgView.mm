@@ -291,14 +291,18 @@ using namespace facebook::react;
   _painters = nil;
   self.initialCTM = CGContextGetCTM(context);
   self.invInitialCTM = CGAffineTransformInvert(self.initialCTM);
+  CGContextSaveGState(context);
+
   if (self.align) {
     CGRect tRect = CGRectMake(self.minX, self.minY, self.vbWidth, self.vbHeight);
     _viewBoxTransform = [RNSVGViewBox getTransform:tRect eRect:rect align:self.align meetOrSlice:self.meetOrSlice];
     _invViewBoxTransform = CGAffineTransformInvert(_viewBoxTransform);
     CGContextConcatCTM(context, _viewBoxTransform);
+    CGContextClipToRect(context, tRect);
   } else {
     _viewBoxTransform = CGAffineTransformIdentity;
     _invViewBoxTransform = CGAffineTransformIdentity;
+    CGContextClipToRect(context, rect);
   }
   for (RNSVGPlatformView *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGNode class]]) {
@@ -313,6 +317,7 @@ using namespace facebook::react;
       [node drawRect:rect];
     }
   }
+  CGContextRestoreGState(context);
 }
 
 - (void)drawRect:(CGRect)rect
