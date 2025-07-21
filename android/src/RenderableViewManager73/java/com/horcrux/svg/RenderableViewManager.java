@@ -469,7 +469,13 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     node.setClipRule(clipRule);
   }
 
-  @ReactProp(name = "opacity", defaultFloat = 1f)
+  @ReactProp(name = "opacity")
+  public void setOpacity(@Nonnull V node, @Nullable Dynamic opacity) {
+    node.setOpacity(opacity);
+  }
+  public void setOpacity(@Nonnull V node, String opacity) {
+    node.setOpacity(opacity);
+  }
   public void setOpacity(@Nonnull V node, float opacity) {
     node.setOpacity(opacity);
   }
@@ -1803,8 +1809,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     view.setFill(value);
   }
 
-  @ReactProp(name = "fillOpacity", defaultFloat = 1f)
-  public void setFillOpacity(T node, float fillOpacity) {
+  @ReactProp(name = "fillOpacity")
+  public void setFillOpacity(T node, @Nullable Dynamic fillOpacity) {
     node.setFillOpacity(fillOpacity);
   }
 
@@ -1822,8 +1828,8 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     view.setStroke(value);
   }
 
-  @ReactProp(name = "strokeOpacity", defaultFloat = 1f)
-  public void setStrokeOpacity(T node, float strokeOpacity) {
+  @ReactProp(name = "strokeOpacity")
+  public void setStrokeOpacity(T node, @Nullable Dynamic strokeOpacity) {
     node.setStrokeOpacity(strokeOpacity);
   }
 

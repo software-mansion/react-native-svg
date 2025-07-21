@@ -11,11 +11,12 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 
 public interface RNSVGDefsManagerInterface<T extends View> {
   void setName(T view, @Nullable String value);
-  void setOpacity(T view, float value);
+  void setOpacity(T view, Dynamic value);
   void setMatrix(T view, @Nullable ReadableArray value);
   void setMask(T view, @Nullable String value);
   void setMarkerStart(T view, @Nullable String value);

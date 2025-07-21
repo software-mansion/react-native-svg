@@ -28,7 +28,7 @@ public class RNSVGRadialGradientManagerDelegate<T extends View, U extends BaseVi
         mViewManager.setName(view, value == null ? null : (String) value);
         break;
       case "opacity":
-        mViewManager.setOpacity(view, value == null ? 1f : ((Double) value).floatValue());
+        mViewManager.setOpacity(view, new DynamicFromObject(value));
         break;
       case "matrix":
         mViewManager.setMatrix(view, (ReadableArray) value);
