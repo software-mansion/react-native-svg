@@ -61,7 +61,10 @@ template <typename T>
 void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
 {
   node.name = RCTNSStringFromStringNilIfEmpty(nodeProps.name);
-  node.opacity = nodeProps.opacity;
+  id opacity = RNSVGConvertFollyDynamicToId(nodeProps.opacity);
+  if (opacity != nil) {
+    node.opacity = [RCTConvert RNSVGOpacity:opacity];
+  }
   if (nodeProps.matrix.size() == 6) {
     node.matrix = CGAffineTransformMake(
         nodeProps.matrix.at(0),
