@@ -4,6 +4,7 @@ import React from 'react';
 import ColorTest from './ColorTest';
 import PointerEventsBoxNone from './PointerEventsBoxNone';
 import MountUnmount from './MountUnmount';
+import ReanimatedOpacity from './ReanimatedOpacity';
 import Test1318 from './Test1318';
 import Test1374 from './Test1374';
 import Test1442 from './Test1442';
