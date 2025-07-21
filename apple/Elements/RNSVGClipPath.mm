@@ -58,12 +58,8 @@ using namespace facebook::react;
 
 - (void)parseReference
 {
-  @try {
-    self.dirty = false;
-    [self.svgView defineClipPath:self clipPathName:self.name];
-  } @catch (NSException *exception) {
-    NSLog(@"Exception occurred: %@ - %@", exception.name, exception.reason);
-  }
+  self.dirty = false;
+  [self.svgView defineClipPath:self clipPathName:self.name];
 }
 
 - (BOOL)isSimpleClipPath

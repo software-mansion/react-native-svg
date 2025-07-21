@@ -405,7 +405,9 @@ using namespace facebook::react;
   if (!_clipPaths) {
     _clipPaths = [[NSMutableDictionary alloc] init];
   }
-  [_clipPaths setObject:clipPath forKey:clipPathName];
+  if (clipPathName) {
+    [_clipPaths setObject:clipPath forKey:clipPathName];
+  }
 }
 
 - (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathName
@@ -418,7 +420,9 @@ using namespace facebook::react;
   if (!_templates) {
     _templates = [[NSMutableDictionary alloc] init];
   }
-  [_templates setObject:definedTemplate forKey:templateName];
+  if (templateName) {
+    [_templates setObject:definedTemplate forKey:templateName];
+  }
 }
 
 - (RNSVGNode *)getDefinedTemplate:(NSString *)templateName
@@ -431,7 +435,9 @@ using namespace facebook::react;
   if (!_painters) {
     _painters = [[NSMutableDictionary alloc] init];
   }
-  [_painters setObject:painter forKey:painterName];
+  if (painterName) {
+    [_painters setObject:painter forKey:painterName];
+  }
 }
 
 - (RNSVGPainter *)getDefinedPainter:(NSString *)painterName
@@ -444,7 +450,9 @@ using namespace facebook::react;
   if (!_markers) {
     _markers = [[NSMutableDictionary alloc] init];
   }
-  [_markers setObject:marker forKey:markerName];
+  if (markerName) {
+    [_markers setObject:marker forKey:markerName];
+  }
 }
 
 - (RNSVGMarker *)getDefinedMarker:(NSString *)markerName
@@ -457,7 +465,9 @@ using namespace facebook::react;
   if (!_masks) {
     _masks = [[NSMutableDictionary alloc] init];
   }
-  [_masks setObject:mask forKey:maskName];
+  if (maskName) {
+    [_masks setObject:mask forKey:maskName];
+  }
 }
 
 - (RNSVGMask *)getDefinedMask:(NSString *)maskName
@@ -470,7 +480,9 @@ using namespace facebook::react;
   if (!_filters) {
     _filters = [[NSMutableDictionary alloc] init];
   }
-  [_filters setObject:filter forKey:filterName];
+  if (filterName) {
+    [_filters setObject:filter forKey:filterName];
+  }
 }
 
 - (RNSVGFilter *)getDefinedFilter:(NSString *)filterName
