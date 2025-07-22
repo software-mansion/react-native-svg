@@ -1813,6 +1813,12 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
   public void setFillOpacity(T node, @Nullable Dynamic fillOpacity) {
     node.setFillOpacity(fillOpacity);
   }
+  public void setFillOpacity(T node, String opacity) {
+    node.setOpacity(opacity);
+  }
+  public void setFillOpacity(T node, float opacity) {
+    node.setOpacity(opacity);
+  }
 
   @ReactProp(name = "fillRule", defaultInt = FILL_RULE_NONZERO)
   public void setFillRule(T node, int fillRule) {
@@ -1831,6 +1837,12 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
   @ReactProp(name = "strokeOpacity")
   public void setStrokeOpacity(T node, @Nullable Dynamic strokeOpacity) {
     node.setStrokeOpacity(strokeOpacity);
+  }
+  public void setStrokeOpacity(T node, String opacity) {
+      node.setStrokeOpacity(opacity);
+  }
+  public void setStrokeOpacity(T node, float opacity) {
+      node.setStrokeOpacity(opacity);
   }
 
   @ReactProp(name = "strokeDasharray")
