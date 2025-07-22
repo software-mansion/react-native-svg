@@ -16,7 +16,7 @@ import com.facebook.react.bridge.ReadableArray;
 
 public interface RNSVGGroupManagerInterface<T extends View> {
   void setName(T view, @Nullable String value);
-  void setOpacity(T view, float value);
+  void setOpacity(T view, Dynamic value);
   void setMatrix(T view, @Nullable ReadableArray value);
   void setMask(T view, @Nullable String value);
   void setMarkerStart(T view, @Nullable String value);
@@ -29,10 +29,10 @@ public interface RNSVGGroupManagerInterface<T extends View> {
   void setPointerEvents(T view, @Nullable String value);
   void setColor(T view, @Nullable Integer value);
   void setFill(T view, Dynamic value);
-  void setFillOpacity(T view, float value);
+  void setFillOpacity(T view, Dynamic value);
   void setFillRule(T view, int value);
   void setStroke(T view, Dynamic value);
-  void setStrokeOpacity(T view, float value);
+  void setStrokeOpacity(T view, Dynamic value);
   void setStrokeWidth(T view, Dynamic value);
   void setStrokeLinecap(T view, int value);
   void setStrokeLinejoin(T view, int value);

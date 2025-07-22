@@ -5,10 +5,11 @@ import type {
   WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
+import type { UnsafeMixed } from './codegenUtils';
 
 interface SvgNodeCommonProps {
   name?: string;
-  opacity?: WithDefault<Float, 1.0>;
+  opacity?: UnsafeMixed<Float | string>;
   matrix?: ReadonlyArray<Float>;
   mask?: string;
   markerStart?: string;
