@@ -57,7 +57,6 @@ def resolveReactNativeDirectory() {
     }
   }
 
-    // Fallback to node resolver for custom directory structures like monorepos.
   def reactNativePackage = file(
       providers.exec {
           workingDir(rootDir)
