@@ -41,7 +41,7 @@ class JSI_EXPORT RNSVGImageShadowNode final : public ConcreteViewShadowNode<
   /*
    * Associates a shared `ImageManager` with the node.
    */
-  void setImageManager(const SharedImageManager &imageManager);
+  void setImageManager(const std::shared_ptr<ImageManager> &imageManager);
 
   static RNSVGImageState initialStateData(
       Props::Shared const &props,
@@ -58,7 +58,7 @@ class JSI_EXPORT RNSVGImageShadowNode final : public ConcreteViewShadowNode<
  private:
   ImageSource getImageSource() const;
 
-  SharedImageManager imageManager_;
+  std::shared_ptr<ImageManager> imageManager_;
 
   void updateStateIfNeeded();
 };
