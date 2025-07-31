@@ -37,7 +37,7 @@ class RNSVGImageComponentDescriptor final
   }
 
  private:
-  const SharedImageManager imageManager_;
+  const std::shared_ptr<ImageManager> imageManager_;
 };
 
 } // namespace react
