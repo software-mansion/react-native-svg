@@ -206,21 +206,6 @@ RCT_ENUM_CONVERTER(
   }
 }
 
-+ (CGFloat)RNSVGOpacity:(id)json
-{
-  if ([json isKindOfClass:[NSNumber class]]) {
-    return [self CGFloat:json];
-  }
-  if ([json isKindOfClass:[NSString class]]) {
-    NSString *value = [self NSString:json];
-    NSString *numberString =
-        [value stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"%"]];
-
-    return [numberString floatValue] / 100.0;
-  }
-  return CGFloat(1);
-}
-
 + (CGRect)RNSVGCGRect:(id)json offset:(NSUInteger)offset
 {
   NSArray *arr = [self NSArray:json];

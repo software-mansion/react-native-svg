@@ -358,13 +358,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     node.setClipRule(clipRule);
   }
 
-  @ReactProp(name = "opacity")
-  public void setOpacity(@Nonnull V node, @Nullable Dynamic opacity) {
-    node.setOpacity(opacity);
-  }
-  public void setOpacity(@Nonnull V node, String opacity) {
-    node.setOpacity(opacity);
-  }
+  @ReactProp(name = "opacity", defaultFloat = 1f)
   public void setOpacity(@Nonnull V node, float opacity) {
     node.setOpacity(opacity);
   }
@@ -1694,15 +1688,9 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     view.setFill(value);
   }
 
-  @ReactProp(name = "fillOpacity")
-  public void setFillOpacity(T node, @Nullable Dynamic fillOpacity) {
+  @ReactProp(name = "fillOpacity", defaultFloat = 1f)
+  public void setFillOpacity(T node, float fillOpacity) {
     node.setFillOpacity(fillOpacity);
-  }
-  public void setFillOpacity(T node, String opacity) {
-    node.setOpacity(opacity);
-  }
-  public void setFillOpacity(T node, float opacity) {
-    node.setOpacity(opacity);
   }
 
   @ReactProp(name = "fillRule", defaultInt = FILL_RULE_NONZERO)
@@ -1719,15 +1707,9 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     view.setStroke(value);
   }
 
-  @ReactProp(name = "strokeOpacity")
-  public void setStrokeOpacity(T node, @Nullable Dynamic strokeOpacity) {
+  @ReactProp(name = "strokeOpacity", defaultFloat = 1f)
+  public void setStrokeOpacity(T node, float strokeOpacity) {
     node.setStrokeOpacity(strokeOpacity);
-  }
-  public void setStrokeOpacity(T node, String opacity) {
-      node.setStrokeOpacity(opacity);
-  }
-  public void setStrokeOpacity(T node, float opacity) {
-      node.setStrokeOpacity(opacity);
   }
 
   @ReactProp(name = "strokeDasharray")

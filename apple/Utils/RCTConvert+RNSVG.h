@@ -33,7 +33,6 @@
 + (RNSVGMaskType)RNSVGMaskType:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;
 + (RNSVGPathParser *)RNSVGCGPath:(NSString *)d;
-+ (CGFloat)RNSVGOpacity:(id)json;
 + (CGRect)RNSVGCGRect:(id)json offset:(NSUInteger)offset;
 + (RNSVGColor *)RNSVGColor:(id)json offset:(NSUInteger)offset;
 + (CGGradientRef)RNSVGCGGradient:(id)json;

@@ -202,30 +202,10 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  public void setFillOpacity(@Nullable Dynamic fillOpacity) {
-    if (fillOpacity == null || fillOpacity.isNull()) {
-      this.fillOpacity = 1f;
-      invalidate();
-      return;
-    }
-    ReadableType opacityType = fillOpacity.getType();
-    if (opacityType == ReadableType.Number) {
-      this.fillOpacity = (float) fillOpacity.asDouble();
-    } else if (opacityType == ReadableType.String) {
-      this.fillOpacity = Float.parseFloat(fillOpacity.asString().replace("%", "")) / 100f;
-    }
+  public void setFillOpacity(float fillOpacity) {
+    this.fillOpacity = fillOpacity;
     invalidate();
   }
-
- public void setFillOpacity(float fillOpacity) {
-   this.fillOpacity = fillOpacity;
-   invalidate();
- }
-
- public void setFillOpacity(String fillOpacity) {
-   this.fillOpacity = Float.parseFloat(fillOpacity.replace("%", "")) / 100f;
-   invalidate();
- }
 
   public void setFillRule(int fillRule) {
     switch (fillRule) {
@@ -297,26 +277,8 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     invalidate();
   }
 
-  public void setStrokeOpacity(@Nullable Dynamic strokeOpacity) {
-    if (strokeOpacity == null || strokeOpacity.isNull()) {
-      this.strokeOpacity = 1f;
-      invalidate();
-      return;
-    }
-    ReadableType opacityType = strokeOpacity.getType();
-    if (opacityType == ReadableType.Number) {
-      this.strokeOpacity = (float) strokeOpacity.asDouble();
-    } else if (opacityType == ReadableType.String) {
-      this.strokeOpacity = Float.parseFloat(strokeOpacity.asString().replace("%", "")) / 100f;
-    }
-    invalidate();
-  }
   public void setStrokeOpacity(float strokeOpacity) {
     this.strokeOpacity = strokeOpacity;
-    invalidate();
-  }
-  public void setStrokeOpacity(String strokeOpacity) {
-    this.strokeOpacity = Float.parseFloat(strokeOpacity.replace("%", "")) / 100f;
     invalidate();
   }
 

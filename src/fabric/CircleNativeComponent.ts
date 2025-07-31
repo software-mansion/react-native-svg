@@ -8,11 +8,11 @@ import type {
 import type { ViewProps } from './utils';
 
 import type { UnsafeMixed } from './codegenUtils';
-import type { NumberProp } from '../lib/extract/types';
+import { NumberProp } from '../lib/extract/types';
 
 interface SvgNodeCommonProps {
   name?: string;
-  opacity?: UnsafeMixed<Float | string>;
+  opacity?: WithDefault<Float, 1.0>;
   matrix?: ReadonlyArray<Float>;
   mask?: string;
   markerStart?: string;
@@ -34,10 +34,10 @@ type ColorStruct = Readonly<{
 interface SvgRenderableCommonProps {
   color?: ColorValue;
   fill?: UnsafeMixed<ColorValue | ColorStruct>;
-  fillOpacity?: UnsafeMixed<Float | string>;
+  fillOpacity?: WithDefault<Float, 1.0>;
   fillRule?: WithDefault<Int32, 1>;
   stroke?: UnsafeMixed<ColorValue | ColorStruct>;
-  strokeOpacity?: UnsafeMixed<Float | string>;
+  strokeOpacity?: WithDefault<Float, 1.0>;
   strokeWidth?: UnsafeMixed<NumberProp>;
   strokeLinecap?: WithDefault<Int32, 0>;
   strokeLinejoin?: WithDefault<Int32, 0>;

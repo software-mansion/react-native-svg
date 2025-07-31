@@ -29,7 +29,7 @@ public class RNSVGEllipseManagerDelegate<T extends View, U extends BaseViewManag
         mViewManager.setName(view, value == null ? null : (String) value);
         break;
       case "opacity":
-        mViewManager.setOpacity(view, new DynamicFromObject(value));
+        mViewManager.setOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "matrix":
         mViewManager.setMatrix(view, (ReadableArray) value);
@@ -68,7 +68,7 @@ public class RNSVGEllipseManagerDelegate<T extends View, U extends BaseViewManag
         mViewManager.setFill(view, new DynamicFromObject(value));
         break;
       case "fillOpacity":
-        mViewManager.setFillOpacity(view, new DynamicFromObject(value));
+        mViewManager.setFillOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "fillRule":
         mViewManager.setFillRule(view, value == null ? 1 : ((Double) value).intValue());
@@ -77,7 +77,7 @@ public class RNSVGEllipseManagerDelegate<T extends View, U extends BaseViewManag
         mViewManager.setStroke(view, new DynamicFromObject(value));
         break;
       case "strokeOpacity":
-        mViewManager.setStrokeOpacity(view, new DynamicFromObject(value));
+        mViewManager.setStrokeOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "strokeWidth":
         mViewManager.setStrokeWidth(view, new DynamicFromObject(value));
