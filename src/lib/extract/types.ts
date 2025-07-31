@@ -201,20 +201,65 @@ export type ColumnMajorTransformMatrix = [
 ];
 
 export interface TransformProps {
+  /**
+   * @deprecated Use translateX and translateY in transform prop instead.
+   */
   translate?: NumberArray;
+  /**
+   * @deprecated Use translateX in transform prop instead.
+   */
   translateX?: NumberProp;
+  /**
+   * @deprecated Use translateY in transform prop instead.
+   */
   translateY?: NumberProp;
+  /**
+   * @deprecated
+   */
   origin?: NumberArray;
+  /**
+   * @deprecated
+   */
   originX?: NumberProp;
+  /**
+   * @deprecated
+   */
   originY?: NumberProp;
+  /**
+   * @deprecated Use scaleX and scaleY in transform prop instead.
+   */
   scale?: NumberArray;
+  /**
+   * @deprecated Use scaleX in transform prop instead.
+   */
   scaleX?: NumberProp;
+  /**
+   * @deprecated Use scaleY in transform prop instead.
+   */
   scaleY?: NumberProp;
+  /**
+   * @deprecated Use skewX and skewY in transform prop instead.
+   */
   skew?: NumberArray;
+  /**
+   * @deprecated Use skewX in transform prop instead.
+   */
   skewX?: NumberProp;
+  /**
+   * @deprecated Use skewY in transform prop instead.
+   */
   skewY?: NumberProp;
+  /**
+   * @deprecated Use rotate in transform prop instead.
+   */
   rotation?: NumberProp;
+  /**
+   * @deprecated Use translateX in transform prop instead.
+   */
   x?: NumberArray;
+  /**
+   * @deprecated Use translateY in transform prop instead.
+   */
   y?: NumberArray;
   transform?:
     | ColumnMajorTransformMatrix
@@ -222,6 +267,9 @@ export interface TransformProps {
     | TransformsStyle['transform'];
 }
 
+/**
+ * @deprecated TransformedProps should no longer be used.
+ */
 export interface TransformedProps {
   rotation: number;
   originX: number;
