@@ -8,7 +8,25 @@ const currentColorBrush = { type: 2 };
 const contextFillBrush = { type: 3 };
 const contextStrokeBrush = { type: 4 };
 
+function isBrush(color: any): boolean {
+  const isObject = !!color && typeof color === 'object';
+  const hasType = () => 'type' in color && typeof color.type === 'number';
+  const hasBrushRef = () => 'brushRef' in color && typeof color.brushRef === 'string';
+  const hasPayload = () => 'payload' in color && typeof color.payload === 'number';
+
+  return (
+    isObject &&
+    hasType() &&
+    (hasBrushRef() || hasPayload())
+  );
+}
+
 export default function extractBrush(color: ColorValue) {
+  if (isBrush(color)) {
+    // If the color comes from the AST it's already a brush
+    return color;
+  }
+  
   if (color === 'none') {
     return null;
   }
