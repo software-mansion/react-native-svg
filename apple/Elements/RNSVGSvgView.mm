@@ -418,7 +418,7 @@ using namespace facebook::react;
 
 - (void)defineTemplate:(RNSVGNode *)definedTemplate templateName:(NSString *)templateName
 {
-  if (templateName) {
+  if (!templateName) {
     return;
   }
   if (!_templates) {
@@ -434,7 +434,7 @@ using namespace facebook::react;
 
 - (void)definePainter:(RNSVGPainter *)painter painterName:(NSString *)painterName
 {
-  if (painterName) {
+  if (!painterName) {
     return;
   }
   if (!_painters) {
@@ -482,7 +482,7 @@ using namespace facebook::react;
 
 - (void)defineFilter:(RNSVGFilter *)filter filterName:(NSString *)filterName
 {
-  if (filterName) {
+  if (!filterName) {
     return;
   }
   if (!_filters) {
