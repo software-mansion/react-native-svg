@@ -305,28 +305,8 @@ public abstract class VirtualView extends ReactViewGroup {
     invalidate();
   }
 
-  public void setOpacity(@Nullable Dynamic opacity) {
-    if (opacity == null || opacity.isNull()) {
-      this.mOpacity = 1f;
-      invalidate();
-      return;
-    }
-    ReadableType opacityType = opacity.getType();
-    if (opacityType == ReadableType.Number) {
-      this.mOpacity = (float) opacity.asDouble();
-    } else if (opacityType == ReadableType.String) {
-      this.mOpacity = Float.parseFloat(opacity.asString().replace("%", "")) / 100f;
-    }
-    invalidate();
-  }
-
   public void setOpacity(float opacity) {
-    this.mOpacity = opacity;
-    invalidate();
-  }
-
-  public void setOpacity(String opacity) {
-    this.mOpacity = Float.parseFloat(opacity.replace("%", "")) / 100f;
+    mOpacity = opacity;
     invalidate();
   }
 

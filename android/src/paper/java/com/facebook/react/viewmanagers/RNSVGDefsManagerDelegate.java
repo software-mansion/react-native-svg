@@ -11,7 +11,6 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
-import com.facebook.react.bridge.DynamicFromObject;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
@@ -28,7 +27,7 @@ public class RNSVGDefsManagerDelegate<T extends View, U extends BaseViewManager<
         mViewManager.setName(view, value == null ? null : (String) value);
         break;
       case "opacity":
-        mViewManager.setOpacity(view, new DynamicFromObject(value));
+        mViewManager.setOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "matrix":
         mViewManager.setMatrix(view, (ReadableArray) value);

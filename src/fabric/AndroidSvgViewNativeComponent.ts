@@ -6,8 +6,9 @@ import type {
   Int32,
 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
+
 import type { UnsafeMixed } from './codegenUtils';
-import type { NumberProp } from '../lib/extract/types';
+import { NumberProp } from '../lib/extract/types';
 
 type NativeBackgroundProp = Readonly<{
   type?: string;

@@ -61,10 +61,7 @@ template <typename T>
 void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
 {
   node.name = RCTNSStringFromStringNilIfEmpty(nodeProps.name);
-  id opacity = RNSVGConvertFollyDynamicToId(nodeProps.opacity);
-  if (opacity != nil) {
-    node.opacity = [RCTConvert RNSVGOpacity:opacity];
-  }
+  node.opacity = nodeProps.opacity;
   if (nodeProps.matrix.size() == 6) {
     node.matrix = CGAffineTransformMake(
         nodeProps.matrix.at(0),
@@ -120,17 +117,11 @@ void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *rendera
   }
   id fill = RNSVGConvertFollyDynamicToId(renderableProps.fill);
   renderableNode.fill = [RCTConvert RNSVGBrush:fill];
-  id fillOpacity = RNSVGConvertFollyDynamicToId(renderableProps.fillOpacity);
-  if (fillOpacity != nil) {
-    renderableNode.fillOpacity = [RCTConvert RNSVGOpacity:fillOpacity];
-  }
+  renderableNode.fillOpacity = renderableProps.fillOpacity;
   renderableNode.fillRule = renderableProps.fillRule == 0 ? kRNSVGCGFCRuleEvenodd : kRNSVGCGFCRuleNonzero;
   id stroke = RNSVGConvertFollyDynamicToId(renderableProps.stroke);
   renderableNode.stroke = [RCTConvert RNSVGBrush:stroke];
-  id strokeOpacity = RNSVGConvertFollyDynamicToId(renderableProps.strokeOpacity);
-  if (strokeOpacity != nil) {
-    renderableNode.strokeOpacity = [RCTConvert RNSVGOpacity:strokeOpacity];
-  }
+  renderableNode.strokeOpacity = renderableProps.strokeOpacity;
   id strokeWidth = RNSVGConvertFollyDynamicToId(renderableProps.strokeWidth);
   if (strokeWidth != nil) {
     renderableNode.strokeWidth = [RCTConvert RNSVGLength:strokeWidth];
