@@ -27,8 +27,10 @@ void RNSVGLayoutableShadowNode::setZeroDimensions() {
   // the Yoga layout. Setting the dimensions to 0 eliminates randomly positioned
   // views in the layout inspector when Yoga attempts to interpret SVG
   // properties like width when viewBox scale is set.
+  auto style = yogaNode_.style();
   style.setDimension(yoga::Dimension::Width, yoga::StyleSizeLength::points(0));
   style.setDimension(yoga::Dimension::Height, yoga::StyleSizeLength::points(0));
+  yogaNode_.setStyle(style);
 }
 
 void RNSVGLayoutableShadowNode::layout(LayoutContext layoutContext) {
