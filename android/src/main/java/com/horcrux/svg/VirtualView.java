@@ -604,7 +604,14 @@ public abstract class VirtualView extends ReactViewGroup {
     EventDispatcher eventDispatcher =
         UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
     if (eventDispatcher != null) {
-      eventDispatcher.dispatchEvent(SvgOnLayoutEvent.obtain(this.getId(), left, top, width, height));
+      eventDispatcher.dispatchEvent(
+       new SvgOnLayoutEvent(
+         UIManagerHelper.getSurfaceId(VirtualView.this),
+         this.getId(),
+         left,
+         top,
+         width,
+         height));
     }
   }
 

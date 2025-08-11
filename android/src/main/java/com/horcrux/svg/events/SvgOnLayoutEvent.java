@@ -6,23 +6,18 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.events.Event;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 public class SvgOnLayoutEvent extends Event<SvgOnLayoutEvent> {
 
+  public static final String EVENT_NAME = "topLayout";
   public int x = 0;
   public int y = 0;
   public int width = 0;
   public int height = 0;
 
-  private SvgOnLayoutEvent() {}
-
-  @Override
-  public void onDispose() {
-    EVENTS_POOL.release(this);
-  }
-
-  protected void init(int surfaceId, int viewTag, int x, int y, int width, int height) {
-    super.init(surfaceId, viewTag);
+  public SvgOnLayoutEvent(int surfaceId, int viewId, int x, int y, int width, int height) {
+    super(surfaceId, viewId);
     this.x = x;
     this.y = y;
     this.width = width;
@@ -31,11 +26,21 @@ public class SvgOnLayoutEvent extends Event<SvgOnLayoutEvent> {
 
   @Override
   public String getEventName() {
-    return "topLayout";
+    return EVENT_NAME;
   }
 
   @Override
-  public WritableMap getEventData() {
+  public short getCoalescingKey() {
+    return 0;
+  }
+
+  @Override
+  public void dispatch(RCTEventEmitter rctEventEmitter) {
+    rctEventEmitter.receiveEvent(getViewTag(), getEventName(), getEventData());
+  }
+
+  @Override
+  protected WritableMap getEventData() {
     WritableMap layout = Arguments.createMap();
     layout.putDouble("x", (double) PixelUtil.toDIPFromPixel((float) x));
     layout.putDouble("y", (double) PixelUtil.toDIPFromPixel((float) y));
@@ -46,22 +51,6 @@ public class SvgOnLayoutEvent extends Event<SvgOnLayoutEvent> {
     event.putMap("layout", layout);
     event.putInt("target", getViewTag());
 
-    return event;
-  }
-
-  private static final SynchronizedPool<SvgOnLayoutEvent> EVENTS_POOL =
-      new SynchronizedPool<SvgOnLayoutEvent>(20);
-
-  public static SvgOnLayoutEvent obtain(int viewTag, int x, int y, int width, int height) {
-    return obtain(-1, viewTag, x, y, width, height);
-  }
-
-  public static SvgOnLayoutEvent obtain(int surfaceId, int viewTag, int x, int y, int width, int height) {
-    SvgOnLayoutEvent event = EVENTS_POOL.acquire();
-    if (event == null) {
-      event = new SvgOnLayoutEvent();
-    }
-    event.init(surfaceId, viewTag, x, y, width, height);
     return event;
   }
 }
