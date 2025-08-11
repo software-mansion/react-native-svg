@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "react": "19.1.0",
-    "react-native": "0.81.0-rc.3",
+    "react-native": "0.81.0-rc.5",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-svg": "link:../../"
   },
@@ -22,10 +22,10 @@
     "@react-native-community/cli": "20.0.0-alpha.2",
     "@react-native-community/cli-platform-android": "20.0.0-alpha.2",
     "@react-native-community/cli-platform-ios": "20.0.0-alpha.2",
-    "@react-native/babel-preset": "0.81.0-rc.3",
-    "@react-native/eslint-config": "0.81.0-rc.3",
-    "@react-native/metro-config": "0.81.0-rc.3",
-    "@react-native/typescript-config": "0.81.0-rc.3",
+    "@react-native/babel-preset": "0.81.0-rc.5",
+    "@react-native/eslint-config": "0.81.0-rc.5",
+    "@react-native/metro-config": "0.81.0-rc.5",
+    "@react-native/typescript-config": "0.81.0-rc.5",
     "@types/jest": "^29.5.13",
     "@types/react": "^19.1.0",
     "@types/react-test-renderer": "^19.1.0",
