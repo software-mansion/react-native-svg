@@ -11,7 +11,7 @@ struct SvgView : SvgViewT<SvgView> {
  public:
   SvgView() = default;
 
-  SvgView(winrt::Microsoft::ReactNative::IReactContext const &context);
+  SvgView(winrt::Microsoft::ReactNative::IReactContext const &context, RNSVG::DirectXDeviceManager const &deviceManager);
 
   xaml::FrameworkElement SvgParent() { return m_parent; }
   void SvgParent(xaml::FrameworkElement const &value);
@@ -33,9 +33,9 @@ struct SvgView : SvgViewT<SvgView> {
   RNSVG::GroupView Group() { return m_group; }
   void Group(RNSVG::GroupView const &value) { m_group = value; }
 
-  RNSVG::D2DDevice Device() { return m_device; }
+  RNSVG::D2DDevice Device() { return m_deviceManager ? m_deviceManager.Device() : nullptr; }
 
-  RNSVG::D2DDeviceContext DeviceContext() { return m_deviceContext; }
+  RNSVG::D2DDeviceContext DeviceContext() { return m_deviceManager ? m_deviceManager.DeviceContext() : nullptr; }
 
   RNSVG::D2DGeometry Geometry() { return m_group ? m_group.Geometry() : nullptr; }
   void Geometry(RNSVG::D2DGeometry const & /*value*/) {}
@@ -74,8 +74,7 @@ struct SvgView : SvgViewT<SvgView> {
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   bool m_hasRendered{false};
   bool m_isResponsible{false};
-  RNSVG::D2DDevice m_device;
-  RNSVG::D2DDeviceContext m_deviceContext;
+  RNSVG::DirectXDeviceManager m_deviceManager;
   RNSVG::GroupView m_group{nullptr};
   hstring m_id{L""};
   float m_minX{0.0f};
