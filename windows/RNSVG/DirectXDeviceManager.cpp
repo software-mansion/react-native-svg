@@ -11,7 +11,7 @@
 
 namespace winrt::RNSVG::implementation {
 
-void DirectXDeviceManager::CreateDeviceResources() {
+void DirectXDeviceManager::CreateDeviceResourcesIfNeeded() {
   if (!m_hasDeviceResources) {
     uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 

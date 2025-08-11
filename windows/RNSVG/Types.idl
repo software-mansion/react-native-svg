@@ -128,7 +128,7 @@ namespace RNSVG {
     D2DDevice Device{ get; };
     D2DDeviceContext DeviceContext{ get; };
 
-    void CreateDeviceResources();
+    void CreateDeviceResourcesIfNeeded();
     void DiscardDeviceResources();
   };
 }
