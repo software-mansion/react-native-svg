@@ -4,8 +4,6 @@ import androidx.core.util.Pools.SynchronizedPool;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.common.annotations.internal.LegacyArchitectureLogLevel;
-import com.facebook.react.common.annotations.internal.LegacyArchitectureLogger;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.events.Event;
 
@@ -54,14 +52,6 @@ public class SvgOnLayoutEvent extends Event<SvgOnLayoutEvent> {
   private static final SynchronizedPool<SvgOnLayoutEvent> EVENTS_POOL =
       new SynchronizedPool<SvgOnLayoutEvent>(20);
 
-  static {
-    LegacyArchitectureLogger.assertLegacyArchitecture("SvgOnLayoutEvent", LegacyArchitectureLogLevel.WARNING);
-  }
-
-  /**
-   * @deprecated Use {@link #obtain(int,int,int,int,int,int)} instead.
-   */
-  @Deprecated
   public static SvgOnLayoutEvent obtain(int viewTag, int x, int y, int width, int height) {
     return obtain(-1, viewTag, x, y, width, height);
   }
