@@ -28,16 +28,8 @@ void RNSVGLayoutableShadowNode::setZeroDimensions() {
   // views in the layout inspector when Yoga attempts to interpret SVG
   // properties like width when viewBox scale is set.
   auto style = yogaNode_.style();
-#if REACT_NATIVE_MINOR_VERSION >= 78
   style.setDimension(yoga::Dimension::Width, yoga::StyleSizeLength::points(0));
   style.setDimension(yoga::Dimension::Height, yoga::StyleSizeLength::points(0));
-#elif REACT_NATIVE_MINOR_VERSION >= 77
-  style.setDimension(yoga::Dimension::Width, yoga::StyleLength::points(0));
-  style.setDimension(yoga::Dimension::Height, yoga::StyleLength::points(0));
-#else
-  style.setDimension(yoga::Dimension::Width, yoga::value::points(0));
-  style.setDimension(yoga::Dimension::Height, yoga::value::points(0));
-#endif
   yogaNode_.setStyle(style);
 }
 
