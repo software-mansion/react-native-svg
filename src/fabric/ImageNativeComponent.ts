@@ -81,7 +81,7 @@ interface NativeProps
   align?: string;
   meetOrSlice?: Int32;
   onLoad?: DirectEventHandler<ImageLoadEventData>;
-  onLayout?: DirectEventHandler<OnSvgLayoutEvent>;
+  onSvgLayout?: DirectEventHandler<OnSvgLayoutEvent>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGImage', {
