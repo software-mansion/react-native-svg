@@ -33,12 +33,13 @@ type ColorStruct = Readonly<{
 }>;
 
 type OnSvgLayoutEvent = Readonly<{
-  x: Int32;
-  y: Int32;
-  width: Int32;
-  height: Int32;
+  layout: {
+    x: Int32;
+    y: Int32;
+    width: Int32;
+    height: Int32;
+  };
 }>;
-
 interface SvgRenderableCommonProps {
   color?: ColorValue;
   fill?: UnsafeMixed<ColorValue | ColorStruct>;
