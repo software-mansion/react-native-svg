@@ -142,6 +142,7 @@ import com.facebook.react.viewmanagers.RNSVGTextPathManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGUseManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGUseManagerInterface;
 import com.horcrux.svg.events.SvgLoadEvent;
+import com.horcrux.svg.events.SvgOnLayoutEvent;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -589,14 +590,10 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     super(svgclass);
   }
 
-  public Map getExportedCustomBubblingEventTypeConstants() {
-    return MapBuilder.builder().put(
-        "topSvgLayout",
-        MapBuilder.of(
-            "phasedRegistrationNames",
-            MapBuilder.of("bubbled", "onSvgLayout")
-        )
-    ).build();
+  public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
+    Map<String, Object> eventTypes = new HashMap<>();
+    eventTypes.put(SvgOnLayoutEvent.EVENT_NAME, MapBuilder.of("registrationName", "onSvgLayout"));
+    return eventTypes;
   }
 
   static class GroupViewManagerAbstract<U extends GroupView> extends RenderableViewManager<U> {
