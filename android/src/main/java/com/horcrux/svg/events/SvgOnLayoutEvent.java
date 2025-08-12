@@ -6,11 +6,10 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.events.Event;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 public class SvgOnLayoutEvent extends Event<SvgOnLayoutEvent> {
 
-  public static final String EVENT_NAME = "topLayout";
+  public static final String EVENT_NAME = "topSvgLayout";
   public int x = 0;
   public int y = 0;
   public int width = 0;
@@ -32,11 +31,6 @@ public class SvgOnLayoutEvent extends Event<SvgOnLayoutEvent> {
   @Override
   public short getCoalescingKey() {
     return 0;
-  }
-
-  @Override
-  public void dispatch(RCTEventEmitter rctEventEmitter) {
-    rctEventEmitter.receiveEvent(getViewTag(), getEventName(), getEventData());
   }
 
   @Override
