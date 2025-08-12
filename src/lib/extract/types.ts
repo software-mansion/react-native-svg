@@ -304,10 +304,12 @@ export interface CommonMarkerProps {
 }
 
 type OnSvgLayoutEvent = Readonly<{
-  x: Int32;
-  y: Int32;
-  width: Int32;
-  height: Int32;
+  layout: {
+    x: Int32;
+    y: Int32;
+    width: Int32;
+    height: Int32;
+  };
 }>;
 
 export interface NativeProps {
