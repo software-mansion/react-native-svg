@@ -589,6 +589,16 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     super(svgclass);
   }
 
+  public Map getExportedCustomBubblingEventTypeConstants() {
+    return MapBuilder.builder().put(
+        "topSvgLayout",
+        MapBuilder.of(
+            "phasedRegistrationNames",
+            MapBuilder.of("bubbled", "onSvgLayout")
+        )
+    ).build();
+  }
+
   static class GroupViewManagerAbstract<U extends GroupView> extends RenderableViewManager<U> {
     GroupViewManagerAbstract(SVGClass svgClass) {
       super(svgClass);
