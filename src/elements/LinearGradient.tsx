@@ -5,6 +5,7 @@ import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGLinearGradient from '../fabric/LinearGradientNativeComponent';
 import type { NativeMethods } from 'react-native';
+import { extractTransformSvgView } from '../lib/extract/extractTransform';
 
 export interface LinearGradientProps {
   children?: ReactElement[];
@@ -31,13 +32,32 @@ export default class LinearGradient extends Shape<LinearGradientProps> {
     const { props } = this;
     const { x1, y1, x2, y2 } = props;
     const linearGradientProps = { x1, y1, x2, y2 };
+    const gradientProps = extractGradient(props, this);
+
+    if (gradientProps) {
+      const { gradientTransform, ...extractedProps } = gradientProps;
+      const transform = extractTransformSvgView({
+        transform: props.gradientTransform,
+      } as any);
+
+      return (
+        <RNSVGLinearGradient
+          ref={(ref) =>
+            this.refMethod(ref as (LinearGradient & NativeMethods) | null)
+          }
+          {...linearGradientProps}
+          {...extractedProps}
+          transform={transform}
+        />
+      );
+    }
+
     return (
       <RNSVGLinearGradient
         ref={(ref) =>
           this.refMethod(ref as (LinearGradient & NativeMethods) | null)
         }
         {...linearGradientProps}
-        {...extractGradient(props, this)}
       />
     );
   }
