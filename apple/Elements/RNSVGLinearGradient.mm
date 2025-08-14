@@ -72,15 +72,6 @@ using namespace facebook::react;
     self.gradient = gradientArray;
   }
   self.gradientUnits = newProps.gradientUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
-  if (newProps.gradientTransform.size() == 6) {
-    self.gradientTransform = CGAffineTransformMake(
-        newProps.gradientTransform.at(0),
-        newProps.gradientTransform.at(1),
-        newProps.gradientTransform.at(2),
-        newProps.gradientTransform.at(3),
-        newProps.gradientTransform.at(4),
-        newProps.gradientTransform.at(5));
-  }
 
   setCommonNodeProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGLinearGradientProps const>(props);
