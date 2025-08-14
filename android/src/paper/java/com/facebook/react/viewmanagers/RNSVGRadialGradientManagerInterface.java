@@ -17,7 +17,6 @@ import com.facebook.react.bridge.ReadableArray;
 public interface RNSVGRadialGradientManagerInterface<T extends View> {
   void setName(T view, @Nullable String value);
   void setOpacity(T view, float value);
-  void setMatrix(T view, @Nullable ReadableArray value);
   void setMask(T view, @Nullable String value);
   void setMarkerStart(T view, @Nullable String value);
   void setMarkerMid(T view, @Nullable String value);
@@ -35,5 +34,4 @@ public interface RNSVGRadialGradientManagerInterface<T extends View> {
   void setRy(T view, Dynamic value);
   void setGradient(T view, @Nullable ReadableArray value);
   void setGradientUnits(T view, int value);
-  void setGradientTransform(T view, @Nullable ReadableArray value);
 }

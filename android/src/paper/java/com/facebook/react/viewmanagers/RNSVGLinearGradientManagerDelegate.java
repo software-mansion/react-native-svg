@@ -30,9 +30,6 @@ public class RNSVGLinearGradientManagerDelegate<T extends View, U extends BaseVi
       case "opacity":
         mViewManager.setOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
-      case "matrix":
-        mViewManager.setMatrix(view, (ReadableArray) value);
-        break;
       case "mask":
         mViewManager.setMask(view, value == null ? null : (String) value);
         break;
@@ -77,9 +74,6 @@ public class RNSVGLinearGradientManagerDelegate<T extends View, U extends BaseVi
         break;
       case "gradientUnits":
         mViewManager.setGradientUnits(view, value == null ? 0 : ((Double) value).intValue());
-        break;
-      case "gradientTransform":
-        mViewManager.setGradientTransform(view, (ReadableArray) value);
         break;
       default:
         super.setProperty(view, propName, value);
