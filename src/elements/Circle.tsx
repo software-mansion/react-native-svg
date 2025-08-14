@@ -25,7 +25,7 @@ export default class Circle extends Shape<CircleProps> {
   render() {
     const { props } = this;
     const { cx, cy, r } = props;
-    const { matrix, ...circleProps } = { ...extract(this, props), cx, cy, r };
+    const circleProps = { ...extract(this, props), cx, cy, r };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transform = extractTransformSvgView(props as any);
 
@@ -33,7 +33,7 @@ export default class Circle extends Shape<CircleProps> {
       <RNSVGCircle
         ref={(ref) => this.refMethod(ref as (Circle & NativeMethods) | null)}
         {...circleProps}
-        transform={transform}
+        style={{ transform }}
       />
     );
   }

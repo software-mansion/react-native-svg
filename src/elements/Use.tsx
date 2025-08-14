@@ -58,7 +58,7 @@ export default class Use extends Shape<UseProps> {
       width,
       height,
     };
-    const { matrix, ...extractedProps } = withoutXY(this, props);
+    const extractedProps = withoutXY(this, props);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transform = extractTransformSvgView(props as any);
 
@@ -67,7 +67,7 @@ export default class Use extends Shape<UseProps> {
         ref={(ref) => this.refMethod(ref as (Use & NativeMethods) | null)}
         {...extractedProps}
         {...useProps}
-        transform={transform}>
+        style={{ transform }}>
         {children}
       </RNSVGUse>
     );

@@ -47,7 +47,7 @@ export default class TSpan extends Shape<TSpanProps> {
 
   render() {
     const prop = propsAndStyles(this.props);
-    const { matrix, ...extractedProps } = extractProps(
+    const extractedProps = extractProps(
       {
         ...prop,
         x: null,
@@ -59,7 +59,7 @@ export default class TSpan extends Shape<TSpanProps> {
     const transform = extractTransformSvgView(this.props as any);
     Object.assign(extractedProps, extractText(prop, false));
     extractedProps.ref = this.refMethod as (instance: Component | null) => void;
-    return <RNSVGTSpan {...extractedProps} transform={transform} />;
+    return <RNSVGTSpan {...extractedProps} style={{ transform }} />;
   }
 }
 

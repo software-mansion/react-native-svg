@@ -47,7 +47,7 @@ export default class Text extends Shape<TextProps> {
 
   render() {
     const prop = propsAndStyles(this.props);
-    const { matrix, ...extractedProps } = extractProps(
+    const extractedProps = extractProps(
       {
         ...prop,
         x: null,
@@ -60,6 +60,6 @@ export default class Text extends Shape<TextProps> {
 
     Object.assign(extractedProps, extractText(prop, true));
     extractedProps.ref = this.refMethod as (instance: Component | null) => void;
-    return <RNSVGText {...extractedProps} transform={transform} />;
+    return <RNSVGText {...extractedProps} style={{ transform }} />;
   }
 }

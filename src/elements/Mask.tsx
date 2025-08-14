@@ -61,7 +61,7 @@ export default class Mask extends Shape<MaskProps> {
         maskContentUnits !== undefined ? units[maskContentUnits] : 1,
       maskType: maskType[props?.maskType || style?.maskType || 'luminance'],
     };
-    const { matrix, ...extractedProps } = withoutXY(this, props);
+    const extractedProps = withoutXY(this, props);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transform = extractTransformSvgView(props as any);
 
@@ -70,7 +70,7 @@ export default class Mask extends Shape<MaskProps> {
         ref={(ref) => this.refMethod(ref as (Mask & NativeMethods) | null)}
         {...extractedProps}
         {...maskProps}
-        transform={transform}>
+        style={{ transform }}>
         {children}
       </RNSVGMask>
     );

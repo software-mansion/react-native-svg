@@ -32,7 +32,7 @@ export default class RadialGradient extends Shape<RadialGradientProps> {
 
   render() {
     const { props } = this;
-    const { rx, ry, r, cx, cy, fx = cx, fy = cy } = props;
+    const { rx, ry, r, cx, cy, fx = cx, fy = cy, gradientTransform } = props;
     const radialGradientProps = {
       fx,
       fy,
@@ -44,10 +44,9 @@ export default class RadialGradient extends Shape<RadialGradientProps> {
     const gradientProps = extractGradient(props, this);
 
     if (gradientProps) {
-      const { gradientTransform, ...extractedProps } = gradientProps;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const transform = extractTransformSvgView({
-        transform: props.gradientTransform,
+        transform: gradientTransform,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any);
 
       return (
@@ -56,8 +55,8 @@ export default class RadialGradient extends Shape<RadialGradientProps> {
             this.refMethod(ref as (RadialGradient & NativeMethods) | null)
           }
           {...radialGradientProps}
-          {...extractedProps}
-          transform={transform}
+          {...gradientProps}
+          style={{ transform }}
         />
       );
     }

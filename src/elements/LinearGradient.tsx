@@ -30,15 +30,14 @@ export default class LinearGradient extends Shape<LinearGradientProps> {
 
   render() {
     const { props } = this;
-    const { x1, y1, x2, y2 } = props;
+    const { x1, y1, x2, y2, gradientTransform } = props;
     const linearGradientProps = { x1, y1, x2, y2 };
     const gradientProps = extractGradient(props, this);
 
     if (gradientProps) {
-      const { gradientTransform, ...extractedProps } = gradientProps;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const transform = extractTransformSvgView({
-        transform: props.gradientTransform,
+        transform: gradientTransform,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any);
 
       return (
@@ -47,8 +46,8 @@ export default class LinearGradient extends Shape<LinearGradientProps> {
             this.refMethod(ref as (LinearGradient & NativeMethods) | null)
           }
           {...linearGradientProps}
-          {...extractedProps}
-          transform={transform}
+          {...gradientProps}
+          style={{ transform }}
         />
       );
     }

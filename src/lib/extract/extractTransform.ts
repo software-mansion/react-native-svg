@@ -244,21 +244,26 @@ export function stringifyTransformArrayProps(
         return `translate(${value}, 0)`;
       case 'translateY':
         return `translate(0, ${value})`;
-      case 'rotate':
+      case 'rotate': {
         const rotation = getAngleValueInDeg(value);
         return `rotate(${rotation})`;
+      }
       case 'scale':
         return `scale(${value})`;
       case 'scaleX':
         return `scale(${value}, 1)`;
       case 'scaleY':
         return `scale(1, ${value})`;
-      case 'skewX':
+      case 'skewX': {
         const skewX = getAngleValueInDeg(value);
         return `skewX(${skewX})`;
-      case 'skewY':
+      }
+      case 'skewY': {
         const skewY = getAngleValueInDeg(value);
         return `skewY(${skewY})`;
+      }
+      case 'matrix':
+        return `matrix(${value.join(', ')})`;
       default:
         return '';
     }

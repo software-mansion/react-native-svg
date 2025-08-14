@@ -38,7 +38,7 @@ export default class G<P> extends Shape<GProps & P> {
   render() {
     const { props } = this;
     const prop = propsAndStyles(props);
-    const { matrix, ...extractedProps } = extractProps(prop, this);
+    const extractedProps = extractProps(prop, this);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transform = extractTransformSvgView(props as any);
 
@@ -51,7 +51,7 @@ export default class G<P> extends Shape<GProps & P> {
       <RNSVGGroup
         ref={(ref) => this.refMethod(ref as (G<P> & NativeMethods) | null)}
         {...extractedProps}
-        transform={transform}>
+        style={{ transform }}>
         {props.children}
       </RNSVGGroup>
     );

@@ -27,7 +27,7 @@ export default class Ellipse extends Shape<EllipseProps> {
   render() {
     const { props } = this;
     const { cx, cy, rx, ry } = props;
-    const { matrix, ...ellipseProps } = {
+    const ellipseProps = {
       ...extract(this, props),
       cx,
       cy,
@@ -41,7 +41,7 @@ export default class Ellipse extends Shape<EllipseProps> {
       <RNSVGEllipse
         ref={(ref) => this.refMethod(ref as (Ellipse & NativeMethods) | null)}
         {...ellipseProps}
-        transform={transform}
+        style={{ transform }}
       />
     );
   }

@@ -70,7 +70,7 @@ export default class SvgImage extends Shape<ImageProps> {
             typeof href === 'string' ? { uri: href } : href
           ),
     };
-    const { matrix, ...extractedProps } = withoutXY(this, props);
+    const extractedProps = withoutXY(this, props);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transform = extractTransformSvgView(props as any);
 
@@ -79,7 +79,7 @@ export default class SvgImage extends Shape<ImageProps> {
         ref={(ref) => this.refMethod(ref as (SvgImage & NativeMethods) | null)}
         {...extractedProps}
         {...imageProps}
-        transform={transform}
+        style={{ transform }}
       />
     );
   }

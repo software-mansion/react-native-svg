@@ -29,7 +29,7 @@ export default class ForeignObject extends G<ForeignObjectProps> {
     const { props } = this;
     const { x, y, width, height, children } = props;
     const foreignObjectProps = { x, y, width, height };
-    const { matrix, ...extractedProps } = withoutXY(this, props);
+    const extractedProps = withoutXY(this, props);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transform = extractTransformSvgView(props as any);
 
@@ -40,7 +40,7 @@ export default class ForeignObject extends G<ForeignObjectProps> {
         }
         {...extractedProps}
         {...foreignObjectProps}
-        transform={transform}>
+        style={{ transform }}>
         {children}
       </RNSVGForeignObject>
     );

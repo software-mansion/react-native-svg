@@ -57,9 +57,9 @@ export default class Pattern extends Shape<PatternProps> {
       patternUnits: (patternUnits && units[patternUnits]) || 0,
       patternContentUnits: patternContentUnits ? units[patternContentUnits] : 1,
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const nativeTransform = extractTransformSvgView({
       transform: patternTransform || transform,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     return (
@@ -67,7 +67,7 @@ export default class Pattern extends Shape<PatternProps> {
         ref={(ref) => this.refMethod(ref as (Pattern & NativeMethods) | null)}
         {...patternProps}
         {...extractViewBox({ viewBox, preserveAspectRatio })}
-        transform={nativeTransform}>
+        style={{ transform: nativeTransform }}>
         {children}
       </RNSVGPattern>
     );

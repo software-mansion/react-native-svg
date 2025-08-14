@@ -27,7 +27,7 @@ export default class Line extends Shape<LineProps> {
   render() {
     const { props } = this;
     const { x1, y1, x2, y2 } = props;
-    const { matrix, ...lineProps } = {
+    const lineProps = {
       ...extract(this, props),
       x1,
       y1,
@@ -41,7 +41,7 @@ export default class Line extends Shape<LineProps> {
       <RNSVGLine
         ref={(ref) => this.refMethod(ref as (Line & NativeMethods) | null)}
         {...lineProps}
-        transform={transform}
+        style={{ transform }}
       />
     );
   }

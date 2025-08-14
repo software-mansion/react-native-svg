@@ -4,7 +4,6 @@ import { Children } from 'react';
 import { processColor } from 'react-native';
 
 import extractOpacity from './extractOpacity';
-import extractTransform from './extractTransform';
 import type { TransformProps } from './types';
 import units from '../units';
 
@@ -44,12 +43,11 @@ export default function extractGradient(
     id?: string;
     children?: ReactElement[];
     transform?: TransformProps['transform'];
-    gradientTransform?: TransformProps['transform'];
     gradientUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
   } & TransformProps,
   parent: unknown
 ) {
-  const { id, children, gradientTransform, transform, gradientUnits } = props;
+  const { id, children, gradientUnits } = props;
   if (!id) {
     return null;
   }
@@ -97,8 +95,5 @@ export default function extractGradient(
     gradient,
     children: childArray,
     gradientUnits: (gradientUnits && units[gradientUnits]) || 0,
-    gradientTransform: extractTransform(
-      gradientTransform || transform || props
-    ),
   };
 }

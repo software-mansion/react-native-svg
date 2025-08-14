@@ -30,7 +30,7 @@ export default class Rect extends Shape<RectProps> {
     const { props } = this;
     const { x, y, width, height, rx, ry } = props;
     const rectProps = { x, y, width, height, rx, ry };
-    const { matrix, ...extractedProps } = withoutXY(this, props);
+    const extractedProps = withoutXY(this, props);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transform = extractTransformSvgView(props as any);
 
@@ -39,7 +39,7 @@ export default class Rect extends Shape<RectProps> {
         ref={(ref) => this.refMethod(ref as (Rect & NativeMethods) | null)}
         {...extractedProps}
         {...rectProps}
-        transform={transform}
+        style={{ transform }}
       />
     );
   }

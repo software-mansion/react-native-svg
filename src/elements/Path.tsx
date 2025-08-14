@@ -17,7 +17,7 @@ export default class Path extends Shape<PathProps> {
   render() {
     const { props } = this;
     const { d } = props;
-    const { matrix, ...pathProps } = { ...extract(this, props), d };
+    const pathProps = { ...extract(this, props), d };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transform = extractTransformSvgView(props as any);
 
@@ -25,7 +25,7 @@ export default class Path extends Shape<PathProps> {
       <RNSVGPath
         ref={(ref) => this.refMethod(ref as (Path & NativeMethods) | null)}
         {...pathProps}
-        transform={transform}
+        style={{ transform }}
       />
     );
   }

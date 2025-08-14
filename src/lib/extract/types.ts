@@ -347,7 +347,6 @@ export type extractedProps = {
   name?: string;
   mask?: string;
   opacity?: number;
-  matrix?: number[];
   propList?: string[];
   onLayout?: (event: LayoutChangeEvent) => void;
   ref?: (instance: React.Component | null) => void;
