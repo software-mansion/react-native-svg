@@ -36,6 +36,7 @@ export default class LinearGradient extends Shape<LinearGradientProps> {
 
     if (gradientProps) {
       const { gradientTransform, ...extractedProps } = gradientProps;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const transform = extractTransformSvgView({
         transform: props.gradientTransform,
       } as any);
