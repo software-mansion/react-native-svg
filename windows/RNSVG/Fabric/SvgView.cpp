@@ -109,7 +109,7 @@ void SvgView::UpdateProps(
   }
 }
 
-void SvgView::FinalizeUpates(
+void SvgView::FinalizeUpdates(
     const winrt::Microsoft::ReactNative::ComponentView & /*view*/,
     winrt::Microsoft::ReactNative::ComponentViewUpdateMask) noexcept {
   Invalidate(); // Move to finalize
@@ -188,7 +188,7 @@ void SvgView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPacka
             [](const winrt::Microsoft::ReactNative::ComponentView &view,
                const winrt::Microsoft::ReactNative::ComponentViewUpdateMask mask) noexcept {
               auto userData = winrt::get_self<SvgView>(view.UserData());
-              userData->FinalizeUpates(view, mask);
+              userData->FinalizeUpdates(view, mask);
             });
 
         builder.SetMountChildComponentViewHandler(
