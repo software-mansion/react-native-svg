@@ -172,7 +172,7 @@ void PatternFunction(void *info, CGContextRef context)
   CGColorSpaceRelease(patternSpace);
 
   CGPatternRef pattern = CGPatternCreate(
-      (__bridge void *_Nullable)(self),
+      (__bridge_retained void *_Nullable)(self),
       newBounds,
       viewbox,
       size.width,
