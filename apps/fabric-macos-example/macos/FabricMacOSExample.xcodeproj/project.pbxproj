@@ -12,14 +12,14 @@
 		514201522437B4B40078DB4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 514201512437B4B40078DB4F /* Assets.xcassets */; };
 		514201552437B4B40078DB4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 514201532437B4B40078DB4F /* Main.storyboard */; };
 		514201582437B4B40078DB4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 514201572437B4B40078DB4F /* main.m */; };
-		76B8FC57EBC9F207F23DDEC6 /* libPods-FabricMacOSExample-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09FEA0DF38593291EA786DB3 /* libPods-FabricMacOSExample-macOS.a */; };
 		8C9D3995C4FF4A43AEF4F4AA /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 65EACEEA33179874AA79EA13 /* PrivacyInfo.xcprivacy */; };
+		B5BBE56A9DAF3997A2B25A15 /* libPods-FabricMacOSExample-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F040659B7DBE8B9C12EE1D0 /* libPods-FabricMacOSExample-macOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		089F9C82C9160C21C567BBC0 /* Pods-FabricMacOSExample-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FabricMacOSExample-macOS.debug.xcconfig"; path = "Target Support Files/Pods-FabricMacOSExample-macOS/Pods-FabricMacOSExample-macOS.debug.xcconfig"; sourceTree = "<group>"; };
-		09FEA0DF38593291EA786DB3 /* libPods-FabricMacOSExample-macOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FabricMacOSExample-macOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* FabricMacOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FabricMacOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F040659B7DBE8B9C12EE1D0 /* libPods-FabricMacOSExample-macOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FabricMacOSExample-macOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		40EEEE7084233A710915BA16 /* Pods-FabricMacOSExample-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FabricMacOSExample-macOS.debug.xcconfig"; path = "Target Support Files/Pods-FabricMacOSExample-macOS/Pods-FabricMacOSExample-macOS.debug.xcconfig"; sourceTree = "<group>"; };
 		514201492437B4B30078DB4F /* FabricMacOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FabricMacOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5142014B2437B4B30078DB4F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5142014C2437B4B30078DB4F /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -29,7 +29,7 @@
 		514201572437B4B40078DB4F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		514201592437B4B40078DB4F /* FabricMacOSExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FabricMacOSExample.entitlements; sourceTree = "<group>"; };
 		65EACEEA33179874AA79EA13 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		8613B15A55ABB0C7484317A1 /* Pods-FabricMacOSExample-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FabricMacOSExample-macOS.release.xcconfig"; path = "Target Support Files/Pods-FabricMacOSExample-macOS/Pods-FabricMacOSExample-macOS.release.xcconfig"; sourceTree = "<group>"; };
+		716A8CAE85BB1EEFECD54675 /* Pods-FabricMacOSExample-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FabricMacOSExample-macOS.release.xcconfig"; path = "Target Support Files/Pods-FabricMacOSExample-macOS/Pods-FabricMacOSExample-macOS.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -45,7 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76B8FC57EBC9F207F23DDEC6 /* libPods-FabricMacOSExample-macOS.a in Frameworks */,
+				B5BBE56A9DAF3997A2B25A15 /* libPods-FabricMacOSExample-macOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,7 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				09FEA0DF38593291EA786DB3 /* libPods-FabricMacOSExample-macOS.a */,
+				1F040659B7DBE8B9C12EE1D0 /* libPods-FabricMacOSExample-macOS.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -90,7 +90,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				65EACEEA33179874AA79EA13 /* PrivacyInfo.xcprivacy */,
-				F2ABBEFCFF6F8172C359F8A2 /* Pods */,
+				FC1773CB15EAC76EA1E9B8A6 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -106,11 +106,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F2ABBEFCFF6F8172C359F8A2 /* Pods */ = {
+		FC1773CB15EAC76EA1E9B8A6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				089F9C82C9160C21C567BBC0 /* Pods-FabricMacOSExample-macOS.debug.xcconfig */,
-				8613B15A55ABB0C7484317A1 /* Pods-FabricMacOSExample-macOS.release.xcconfig */,
+				40EEEE7084233A710915BA16 /* Pods-FabricMacOSExample-macOS.debug.xcconfig */,
+				716A8CAE85BB1EEFECD54675 /* Pods-FabricMacOSExample-macOS.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
@@ -141,12 +141,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5142015A2437B4B40078DB4F /* Build configuration list for PBXNativeTarget "FabricMacOSExample-macOS" */;
 			buildPhases = (
-				1A938104A937498D81B3BD3B /* [CP] Check Pods Manifest.lock */,
+				9369CACD11C4BD55628BF3CD /* [CP] Check Pods Manifest.lock */,
 				514201452437B4B30078DB4F /* Sources */,
 				514201462437B4B30078DB4F /* Frameworks */,
 				514201472437B4B30078DB4F /* Resources */,
 				381D8A6E24576A4E00465D17 /* Bundle React Native code and images */,
-				53D55339FB179BA6C00627F7 /* [CP] Copy Pods Resources */,
+				570208882C43F96B25B8608C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -229,28 +229,6 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native-macos/scripts/react-native-xcode.sh\n";
 		};
-		1A938104A937498D81B3BD3B /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FabricMacOSExample-macOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		381D8A6E24576A4E00465D17 /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -269,7 +247,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native-macos/scripts/react-native-xcode.sh\n";
 		};
-		53D55339FB179BA6C00627F7 /* [CP] Copy Pods Resources */ = {
+		570208882C43F96B25B8608C /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -297,6 +275,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FabricMacOSExample-macOS/Pods-FabricMacOSExample-macOS-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9369CACD11C4BD55628BF3CD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FabricMacOSExample-macOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -376,7 +376,7 @@
 		};
 		5142015B2437B4B40078DB4F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 089F9C82C9160C21C567BBC0 /* Pods-FabricMacOSExample-macOS.debug.xcconfig */;
+			baseConfigurationReference = 40EEEE7084233A710915BA16 /* Pods-FabricMacOSExample-macOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -400,7 +400,7 @@
 		};
 		5142015C2437B4B40078DB4F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8613B15A55ABB0C7484317A1 /* Pods-FabricMacOSExample-macOS.release.xcconfig */;
+			baseConfigurationReference = 716A8CAE85BB1EEFECD54675 /* Pods-FabricMacOSExample-macOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
