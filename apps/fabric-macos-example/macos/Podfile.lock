@@ -1209,72 +1209,6 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-safe-area-context (5.6.0):
-    - DoubleConversion
-    - glog
-    - RCT-Folly (= 2024.11.18.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - react-native-safe-area-context/common (= 5.6.0)
-    - react-native-safe-area-context/fabric (= 5.6.0)
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - react-native-safe-area-context/common (5.6.0):
-    - DoubleConversion
-    - glog
-    - RCT-Folly (= 2024.11.18.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - react-native-safe-area-context/fabric (5.6.0):
-    - DoubleConversion
-    - glog
-    - RCT-Folly (= 2024.11.18.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - react-native-safe-area-context/common
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - React-NativeModulesApple (0.78.6):
     - glog
     - React-callinvoker
@@ -1783,7 +1717,6 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native-macos/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native-macos/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native-macos/ReactCommon/react/nativemodule/microtasks`)
-  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-NativeModulesApple (from `../node_modules/react-native-macos/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native-macos/ReactCommon/reactperflogger`)
   - React-performancetimeline (from `../node_modules/react-native-macos/ReactCommon/react/performance/timeline`)
@@ -1891,8 +1824,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-macos/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native-macos/ReactCommon/react/nativemodule/microtasks"
-  react-native-safe-area-context:
-    :path: "../node_modules/react-native-safe-area-context"
   React-NativeModulesApple:
     :path: "../node_modules/react-native-macos/ReactCommon/react/nativemodule/core/platform/ios"
   React-perflogger:
@@ -1961,12 +1892,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-macos/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: 4c384cc67784d4b15fd14e25b3877c442c1d8064
-  DoubleConversion: c914223d2d29c914635ef1b0721d8a77cca6a732
+  boost: 7d49a506d1ac47358fea28558d184dd6431170ca
+  DoubleConversion: 10f51d3e1238973c033faac2d84c0ea114942f53
   fast_float: 44983b3bddb2d2ed3021a98be86f60ec8abc9ffd
   FBLazyVector: 31dd89ddefc65148109e00de4270d3ac484bd8c1
   fmt: f6af2d677a106e3e44c9536a4c0c7f03ab53c854
-  glog: 750f96a379703a2d724d2f1fc6cb3a3eff000817
+  glog: b7594b792ee4e02ed1f44b01d046ca25fa713e3d
   RCT-Folly: e8b53d8c0d2d9df4a6a8b0a368a1a91fc62a88cb
   RCTDeprecation: 9da6c2d8a3b1802142718283260fb06d702ddb07
   RCTRequired: 574f9d55bda1d50676530b6c36bab4605612dfb6
@@ -1997,7 +1928,6 @@ SPEC CHECKSUMS:
   React-logger: 4decf7656034a9a718ba347ecc1c87c79a04b58b
   React-Mapbuffer: 4ad71d8e010591048bfa792f1ad6178181b87b9f
   React-microtasksnativemodule: 06c2ee7b0abc0680ce7c32d04b1e36f58e8271e1
-  react-native-safe-area-context: 390bb2988b11c844ffa7415a17435e24584c1166
   React-NativeModulesApple: 3a407fb81694679cb400fc2504b37354e9234272
   React-perflogger: 96cceccf29bf5507b3f48339f1d7282827a5274c
   React-performancetimeline: f3f35f8a93f3788a0f920a09f0a99d58d14dcd06
