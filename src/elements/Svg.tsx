@@ -110,7 +110,7 @@ export default class Svg extends Shape<SvgProps> {
       width,
       height,
       focusable,
-      transform,
+      transform: transformProp,
 
       // Inherited G properties
       font,
@@ -126,6 +126,7 @@ export default class Svg extends Shape<SvgProps> {
       strokeLinejoin,
       strokeMiterlimit,
     } = stylesAndProps;
+    let transform;
     if (width === undefined && height === undefined) {
       width = height = '100%';
     }
@@ -177,13 +178,16 @@ export default class Svg extends Shape<SvgProps> {
     }
 
     const gStyle = Object.assign({}, StyleSheet.flatten(style));
-    if (transform) {
+    if (transformProp) {
       if (gStyle.transform) {
-        props.transform = gStyle.transform;
+        transform = gStyle.transform;
         gStyle.transform = undefined;
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      props.transform = extractTransformSvgView(props as any);
+      transform = extractTransformSvgView(props as any);
+      if (transform) {
+        props.style = [props.style, { transform }];
+      }
     }
 
     const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
