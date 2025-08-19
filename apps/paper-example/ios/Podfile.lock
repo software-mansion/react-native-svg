@@ -2126,7 +2126,7 @@ PODS:
     - React-perflogger (= 0.80.0)
     - React-utils (= 0.80.0)
     - SocketRocket
-  - RNCAsyncStorage (2.0.0):
+  - RNCAsyncStorage (2.2.0):
     - React-Core
   - RNGestureHandler (2.28.0):
     - boost
@@ -2663,7 +2663,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: cd55f820247d424280ae0b94e1ffb38963410c01
   ReactCodegen: 304f881dea867b659e4ba479608ec06f8117e0c5
   ReactCommon: 658874decaf8c4fd76cfa3a878b94a869db85b1c
-  RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
+  RNCAsyncStorage: 23e56519cc41d3bade3c8d4479f7760cb1c11996
   RNGestureHandler: 971c0e79a6a10390f90cd21901f8f890312ab28c
   RNReanimated: 0fa596406af0734a0a55059ce8f3c52b51021a4f
   RNScreens: 945c9fc4872ccc9a235e55cd643957b688ecf657
