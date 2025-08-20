@@ -65,6 +65,20 @@ jobs:
             ${{ runner.os }}-pods-${{ matrix.working-directory }}-
 
       - name: Install Pods
+        id: install_pods
+        continue-on-error: true
+        working-directory: apps/${{ matrix.working-directory }}/macos
+        run: bundle install && bundle exec pod install
+
+      - if: steps.install_pods.outcome == 'failure'
+        id: remove_pods
+        name: Remove pods
+        working-directory: apps/${{ matrix.working-directory }}/macos
+        run: rm -rf build Pods Podfile.lock
+
+      - if: steps.remove_pods.outcome == 'success'
+        id: reinstall_pods
+        name: Reinstall pods
         working-directory: apps/${{ matrix.working-directory }}/macos
         run: bundle install && bundle exec pod install
 
