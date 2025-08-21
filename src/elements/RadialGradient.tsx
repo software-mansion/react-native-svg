@@ -5,7 +5,6 @@ import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGRadialGradient from '../fabric/RadialGradientNativeComponent';
 import type { NativeMethods } from 'react-native';
-import { extractTransformSvgView } from '../lib/extract/extractTransform';
 
 export interface RadialGradientProps {
   children?: ReactElement[];
@@ -32,7 +31,7 @@ export default class RadialGradient extends Shape<RadialGradientProps> {
 
   render() {
     const { props } = this;
-    const { rx, ry, r, cx, cy, fx = cx, fy = cy, gradientTransform } = props;
+    const { rx, ry, r, cx, cy, fx = cx, fy = cy } = props;
     const radialGradientProps = {
       fx,
       fy,
@@ -41,32 +40,13 @@ export default class RadialGradient extends Shape<RadialGradientProps> {
       cx,
       cy,
     };
-    const gradientProps = extractGradient(props, this);
-
-    if (gradientProps) {
-      const transform = extractTransformSvgView({
-        transform: gradientTransform,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any);
-
-      return (
-        <RNSVGRadialGradient
-          ref={(ref) =>
-            this.refMethod(ref as (RadialGradient & NativeMethods) | null)
-          }
-          {...radialGradientProps}
-          {...gradientProps}
-          style={{ transform }}
-        />
-      );
-    }
-
     return (
       <RNSVGRadialGradient
         ref={(ref) =>
           this.refMethod(ref as (RadialGradient & NativeMethods) | null)
         }
         {...radialGradientProps}
+        {...extractGradient(props, this)}
       />
     );
   }

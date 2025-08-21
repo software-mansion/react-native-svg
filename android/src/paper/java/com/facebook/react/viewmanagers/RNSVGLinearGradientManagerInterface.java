@@ -32,4 +32,5 @@ public interface RNSVGLinearGradientManagerInterface<T extends View> {
   void setY2(T view, Dynamic value);
   void setGradient(T view, @Nullable ReadableArray value);
   void setGradientUnits(T view, int value);
+  void setGradientTransform(T view, @Nullable ReadableArray value);
 }

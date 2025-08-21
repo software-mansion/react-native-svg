@@ -75,6 +75,9 @@ public class RNSVGLinearGradientManagerDelegate<T extends View, U extends BaseVi
       case "gradientUnits":
         mViewManager.setGradientUnits(view, value == null ? 0 : ((Double) value).intValue());
         break;
+      case "gradientTransform":
+        mViewManager.setGradientTransform(view, (ReadableArray) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }
