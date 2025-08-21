@@ -22,6 +22,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.view.ViewParent;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ColorPropConverter;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
@@ -30,7 +31,9 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.touch.ReactHitSlopView;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.uimanager.PointerEvents;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -97,6 +100,14 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   private @Nullable ArrayList<String> mPropList;
   private @Nullable ArrayList<String> mAttributeList;
   private @Nullable RenderableView mCaller;
+
+  public void onReceiveNativeEvent() {
+    WritableMap event = Arguments.createMap();
+    ReactContext reactContext = (ReactContext)getContext();
+    reactContext
+        .getJSModule(RCTEventEmitter.class)
+        .receiveEvent(getId(), "topSvgLayout", event);
+  }
 
   @Nullable String mFilter;
 
