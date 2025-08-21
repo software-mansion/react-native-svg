@@ -24,44 +24,8 @@ using namespace winrt;
 
 namespace winrt::RNSVG::implementation {
 
-SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
-  uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-
-  D3D_FEATURE_LEVEL featureLevels[] = {
-      D3D_FEATURE_LEVEL_11_1,
-      D3D_FEATURE_LEVEL_11_0,
-      D3D_FEATURE_LEVEL_10_1,
-      D3D_FEATURE_LEVEL_10_0,
-      D3D_FEATURE_LEVEL_9_3,
-      D3D_FEATURE_LEVEL_9_2,
-      D3D_FEATURE_LEVEL_9_1};
-
-  // Create the Direct3D device.
-  com_ptr<ID3D11Device> d3dDevice;
-  D3D_FEATURE_LEVEL supportedFeatureLevel;
-  check_hresult(D3D11CreateDevice(
-      nullptr, // default adapter
-      D3D_DRIVER_TYPE_HARDWARE,
-      0,
-      creationFlags,
-      featureLevels,
-      ARRAYSIZE(featureLevels),
-      D3D11_SDK_VERSION,
-      d3dDevice.put(),
-      &supportedFeatureLevel,
-      nullptr));
-
-  com_ptr<IDXGIDevice> dxgiDevice{d3dDevice.as<IDXGIDevice>()};
-
-  // Create the Direct2D device and a corresponding context.
-  com_ptr<ID2D1Device> device;
-  check_hresult(D2D1CreateDevice(dxgiDevice.get(), nullptr, device.put()));
-  m_device = make<RNSVG::implementation::D2DDevice>(device);
-
-  com_ptr<ID2D1DeviceContext> deviceContext;
-  check_hresult(device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, deviceContext.put()));
-  m_deviceContext = make<RNSVG::implementation::D2DDeviceContext>(deviceContext);
-
+SvgView::SvgView(IReactContext const &context, RNSVG::DirectXDeviceManager const &deviceManager)
+    : m_reactContext(context), m_deviceManager(deviceManager) {
   m_panelLoadedRevoker = Loaded(winrt::auto_revoke, {get_weak(), &SvgView::Panel_Loaded});
   m_panelUnloadedRevoker = Unloaded(winrt::auto_revoke, {get_weak(), &SvgView::Panel_Unloaded});
 }
@@ -236,7 +200,10 @@ void SvgView::Invalidate() {
   m_brushes.Clear();
   m_templates.Clear();
 
-  if (!m_loaded) {
+  // Recreate the shared graphics device resources if necessary.
+  m_deviceManager.CreateDeviceResourcesIfNeeded();
+
+  if (!m_loaded || Device() == nullptr || DeviceContext() == nullptr) {
     return;
   }
 
@@ -281,8 +248,13 @@ void SvgView::Invalidate() {
 
   Draw(DeviceContext(), size);
 
-  deviceContext->EndDraw();
-  sisNativeWithD2D->EndDraw();
+  HRESULT endDrawResult = deviceContext->EndDraw();
+  HRESULT sisNativeEndDrawResult = sisNativeWithD2D->EndDraw();
+
+  // If either draw call failed with D2DERR_RECREATE_TARGET, then discard the current device resources.
+  if (endDrawResult == D2DERR_RECREATE_TARGET || sisNativeEndDrawResult == D2DERR_RECREATE_TARGET) {
+    m_deviceManager.DiscardDeviceResources();
+  }
 
   m_image.Source(surfaceImageSource);
 }

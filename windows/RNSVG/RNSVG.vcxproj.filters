@@ -67,6 +67,9 @@
     <ClCompile Include="D2DGeometry.cpp">
       <Filter>D2DWrappers</Filter>
     </ClCompile>
+    <ClCompile Include="DirectXDeviceManager.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
     <ClCompile Include="PathView.cpp">
       <Filter>Views</Filter>
     </ClCompile>
@@ -213,6 +216,9 @@
       <Filter>D2DWrappers</Filter>
     </ClInclude>
     <ClInclude Include="D2DGeometry.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXDeviceManager.h">
       <Filter>D2DWrappers</Filter>
     </ClInclude>
     <ClInclude Include="D2DHelpers.h">
