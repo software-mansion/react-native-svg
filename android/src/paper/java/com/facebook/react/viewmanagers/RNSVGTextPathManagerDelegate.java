@@ -95,7 +95,7 @@ public class RNSVGTextPathManagerDelegate<T extends View, U extends BaseViewMana
         mViewManager.setStrokeDashoffset(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       case "strokeMiterlimit":
-        mViewManager.setStrokeMiterlimit(view, value == null ? 0f : ((Double) value).floatValue());
+        mViewManager.setStrokeMiterlimit(view, value == null ? 4f : ((Double) value).floatValue());
         break;
       case "vectorEffect":
         mViewManager.setVectorEffect(view, value == null ? 0 : ((Double) value).intValue());
