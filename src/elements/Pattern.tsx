@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import * as React from 'react';
-import { extractTransformSvgView } from '../lib/extract/extractTransform';
+import extractTransform, {
+  extractTransformSvgView,
+} from '../lib/extract/extractTransform';
 import extractViewBox from '../lib/extract/extractViewBox';
 import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import units from '../lib/units';
@@ -48,19 +50,22 @@ export default class Pattern extends Shape<PatternProps> {
       viewBox,
       preserveAspectRatio,
     } = props;
+    const transformObj = { transform: patternTransform || transform };
+    const patternTransformMatrix = extractTransform(
+      patternTransform ? transformObj : props
+    );
     const patternProps = {
       x,
       y,
       width,
       height,
       name: id,
+      patternTransform: patternTransformMatrix,
       patternUnits: (patternUnits && units[patternUnits]) || 0,
       patternContentUnits: patternContentUnits ? units[patternContentUnits] : 1,
     };
-    const nativeTransform = extractTransformSvgView({
-      transform: patternTransform || transform,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const nativeTransform = extractTransformSvgView(transformObj as any);
 
     return (
       <RNSVGPattern
