@@ -165,7 +165,9 @@ class GroupView extends RenderableView {
       int saveCount = canvas.save();
       canvas.setMatrix(null);
       mLayerPaint.setAlpha((int) (mOpacity * 255));
-      canvas.drawBitmap(mLayerBitmap, 0, 0, mLayerPaint);
+      if (mLayerBitmap != null) {
+        canvas.drawBitmap(mLayerBitmap, 0, 0, mLayerPaint);
+      }
       canvas.restoreToCount(saveCount);
     }
     this.setClientRect(groupRect);
