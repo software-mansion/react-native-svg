@@ -87,7 +87,7 @@ using namespace facebook::react;
         newProps.gradientTransform.at(4),
         newProps.gradientTransform.at(5));
   }
-  
+
   setCommonNodeProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGRadialGradientProps const>(props);
 }
