@@ -850,6 +850,7 @@ export class SvgWithCssUri extends Component<UriProps, UriState> {
   async fetch(uri: string | null) {
     try {
       this.setState({ xml: uri ? await fetchText(uri) : null });
+      this.props.onLoad?.();
     } catch (e) {
       this.props.onError ? this.props.onError(e as Error) : console.error(e);
     }
