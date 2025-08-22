@@ -231,21 +231,6 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _opacity = opacity;
 }
 
-- (void)setMatrix:(CGAffineTransform)matrix
-{
-  if (CGAffineTransformEqualToTransform(matrix, _matrix)) {
-    return;
-  }
-  _matrix = matrix;
-  _invmatrix = CGAffineTransformInvert(matrix);
-  RNSVGPlatformView *container = self.superview;
-  // on Fabric, when the child components are added to hierarchy and their props are set,
-  // their superview is still their componentView, we change it in `mountChildComponentView` method.
-  if ([container conformsToProtocol:@protocol(RNSVGContainer)]) {
-    [(id<RNSVGContainer>)container invalidate];
-  }
-}
-
 - (void)setTransforms:(CGAffineTransform)transforms
 {
   if (CGAffineTransformEqualToTransform(transforms, _matrix)) {

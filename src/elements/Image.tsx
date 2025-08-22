@@ -11,6 +11,7 @@ import { withoutXY } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGImage from '../fabric/ImageNativeComponent';
+import { extractTransformSvgView } from '../lib/extract/extractTransform';
 
 const spacesRegExp = /\s+/;
 
@@ -69,11 +70,16 @@ export default class SvgImage extends Shape<ImageProps> {
             typeof href === 'string' ? { uri: href } : href
           ),
     };
+    const extractedProps = withoutXY(this, props);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transform = extractTransformSvgView(props as any);
+
     return (
       <RNSVGImage
         ref={(ref) => this.refMethod(ref as (SvgImage & NativeMethods) | null)}
-        {...withoutXY(this, props)}
+        {...extractedProps}
         {...imageProps}
+        style={{ transform }}
       />
     );
   }
