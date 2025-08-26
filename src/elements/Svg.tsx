@@ -125,8 +125,13 @@ export default class Svg extends Shape<SvgProps> {
       strokeLinecap,
       strokeLinejoin,
       strokeMiterlimit,
+      position,
     } = stylesAndProps;
-    if (width === undefined && height === undefined) {
+    if (
+      width === undefined &&
+      height === undefined &&
+      position !== 'absolute'
+    ) {
       width = height = '100%';
     }
 
