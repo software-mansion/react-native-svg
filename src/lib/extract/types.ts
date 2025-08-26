@@ -369,6 +369,5 @@ export interface TextSpecificProps extends CommonPathProps, FontProps {
   verticalAlign?: NumberProp;
   lengthAdjust?: LengthAdjust;
   textLength?: NumberProp;
-  fontData?: null | { [name: string]: unknown };
   fontFeatureSettings?: string;
 }

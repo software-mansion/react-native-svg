@@ -53,7 +53,6 @@ function parseFontString(font: string) {
 }
 
 interface fontProps {
-  fontData?: unknown;
   fontStyle?: string;
   fontVariant?: string;
   fontWeight?: NumberProp;
@@ -73,7 +72,6 @@ interface fontProps {
 
 export function extractFont(props: fontProps) {
   const {
-    fontData,
     fontStyle,
     fontVariant,
     fontWeight,
@@ -92,7 +90,6 @@ export function extractFont(props: fontProps) {
   } = props;
 
   const ownedFont = pickNotNil({
-    fontData,
     fontStyle,
     fontVariant,
     fontWeight,
