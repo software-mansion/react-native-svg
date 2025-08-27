@@ -54,7 +54,7 @@
     "format-js": "prettier --write README.md CONTRIBUTING.md CODE_OF_CONDUCT.md USAGE.md ./src/**/*.{ts,tsx} ./apps/**/*.{ts,tsx}",
     "jest": "jest",
     "lint": "eslint --ext .ts,.tsx src",
-    "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg && peggy -o src/filter-image/extract/extractFiltersString.js src/filter-image/extract/extractFiltersString.pegjs && peggy -o src/lib/extract/transformToRn.js src/lib/extract/transformToRn.pegjs",
+    "peg": "pegjs -o src/lib/extract/transform.js ./src/lib/extract/transform.peg && peggy -o src/filter-image/extract/extractFiltersString.js src/filter-image/extract/extractFiltersString.pegjs && peggy -o src/lib/extract/transformToRn.js src/lib/extract/transformToRn.pegjs && peggy -o src/lib/extract/verticalAlign.js src/lib/extract/verticalAlign.pegjs",
     "prepare": "npm run bob && husky install",
     "release": "npm login && release-it",
     "test": "npm run lint && npm run tsc",
