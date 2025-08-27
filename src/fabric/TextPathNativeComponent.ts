@@ -66,7 +66,6 @@ interface SvgTextCommonProps {
   baselineShift?: UnsafeMixed<NumberProp>;
   lengthAdjust?: string;
   alignmentBaseline?: string;
-  verticalAlign?: UnsafeMixed<NumberProp>;
 }
 interface NativeProps
   extends ViewProps,
