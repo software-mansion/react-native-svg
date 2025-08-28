@@ -63,4 +63,5 @@ export interface BaseProps {
   // different tranform props
   gradientTransform?: TransformProps['transform'];
   patternTransform?: TransformProps['transform'];
+  verticalAlign?: NumberProp;
 }
