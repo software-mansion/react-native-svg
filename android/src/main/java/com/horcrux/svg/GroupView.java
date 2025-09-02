@@ -116,7 +116,8 @@ class GroupView extends RenderableView {
     elements = new ArrayList<>();
     for (int i = 0; i < getChildCount(); i++) {
       View child = getChildAt(i);
-      if (child instanceof MaskView) {
+      if (child instanceof MaskView || child instanceof ClipPathView) {
+        ((RenderableView) child).mergeProperties(self);
         continue;
       }
       if (child instanceof VirtualView) {
