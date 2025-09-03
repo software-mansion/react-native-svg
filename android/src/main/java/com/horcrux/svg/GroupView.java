@@ -152,10 +152,10 @@ class GroupView extends RenderableView {
 
       } else if (child instanceof SvgView) {
         SvgView svgView = (SvgView) child;
-        // An SVG element is always created with a single child: a GroupView.
-        // All user-provided children are wrapped inside this GroupView.
+        // An SVG element is always created with a single child: a Group.
+        // All user-provided children are wrapped inside this Group.
         // Here we merge the Group properties (fill etc.)
-        // into the GroupView inside SVG so that they will apply to its children.
+        // into the Group inside SVG so that they will apply to its children.
         if (svgView.getChildCount() > 0) {
           View viewNode = svgView.getChildAt(0);
           if (viewNode instanceof GroupView) {
