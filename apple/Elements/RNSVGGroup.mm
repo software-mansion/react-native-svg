@@ -114,6 +114,17 @@ using namespace facebook::react;
       }
     } else if ([node isKindOfClass:[RNSVGSvgView class]]) {
       RNSVGSvgView *svgView = (RNSVGSvgView *)node;
+      // An SVG element is always created with a single child: a GroupView.
+      // All user-provided children are wrapped inside this GroupView.
+      // Here we merge the Group properties (fill etc.)
+      // into the GroupView inside SVG so that they will apply to its children.
+      if (svgView.subviews.count > 0) {
+        RNSVGView *viewNode = svgView.subviews[0];
+        if ([viewNode isKindOfClass:[RNSVGGroup class]]) {
+          RNSVGGroup *group = (RNSVGGroup *)viewNode;
+          [group mergeProperties:self];
+        }
+      }
       CGFloat width = [self relativeOnWidth:svgView.bbWidth];
       CGFloat height = [self relativeOnHeight:svgView.bbHeight];
       CGRect svgViewRect = CGRectMake(0, 0, width, height);
