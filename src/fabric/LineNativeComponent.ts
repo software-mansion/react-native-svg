@@ -1,6 +1,7 @@
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import type { ColorValue } from 'react-native';
 import type {
+  DirectEventHandler,
   Float,
   Int32,
   WithDefault,
@@ -31,6 +32,15 @@ type ColorStruct = Readonly<{
   brushRef?: string;
 }>;
 
+type OnSvgLayoutEvent = Readonly<{
+  layout: {
+    x: Int32;
+    y: Int32;
+    width: Int32;
+    height: Int32;
+  };
+}>;
+
 interface SvgRenderableCommonProps {
   color?: ColorValue;
   fill?: UnsafeMixed<ColorValue | ColorStruct>;
@@ -57,6 +67,7 @@ interface NativeProps
   y1?: UnsafeMixed<NumberProp>;
   x2?: UnsafeMixed<NumberProp>;
   y2?: UnsafeMixed<NumberProp>;
+  onSvgLayout?: DirectEventHandler<OnSvgLayoutEvent>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGLine', {

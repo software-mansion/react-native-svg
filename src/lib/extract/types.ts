@@ -7,6 +7,10 @@ import type {
   TransformsStyle,
 } from 'react-native';
 import type React from 'react';
+import {
+  DirectEventHandler,
+  Int32,
+} from 'react-native/Libraries/Types/CodegenTypes';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
@@ -299,6 +303,15 @@ export interface CommonMarkerProps {
   markerEnd?: string;
 }
 
+type OnSvgLayoutEvent = Readonly<{
+  layout: {
+    x: Int32;
+    y: Int32;
+    width: Int32;
+    height: Int32;
+  };
+}>;
+
 export interface NativeProps {
   onLayout?: (event: LayoutChangeEvent) => void;
 }
@@ -349,7 +362,7 @@ export type extractedProps = {
   opacity?: number;
   matrix?: number[];
   propList?: string[];
-  onLayout?: (event: LayoutChangeEvent) => void;
+  onSvgLayout?: DirectEventHandler<OnSvgLayoutEvent>;
   ref?: (instance: React.Component | null) => void;
   markerStart?: string;
   markerMid?: string;

@@ -44,6 +44,15 @@ type ColorStruct = Readonly<{
   brushRef?: string;
 }>;
 
+type OnSvgLayoutEvent = Readonly<{
+  layout: {
+    x: Int32;
+    y: Int32;
+    width: Int32;
+    height: Int32;
+  };
+}>;
+
 interface SvgRenderableCommonProps {
   color?: ColorValue;
   fill?: UnsafeMixed<ColorValue | ColorStruct>;
@@ -74,6 +83,7 @@ interface NativeProps
   align?: string;
   meetOrSlice?: Int32;
   onLoad?: DirectEventHandler<ImageLoadEventData>;
+  onSvgLayout?: DirectEventHandler<OnSvgLayoutEvent>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGImage', {

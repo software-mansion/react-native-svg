@@ -177,10 +177,6 @@ export default class Svg extends Shape<SvgProps> {
 
     extractResponder(props, props, this as ResponderInstanceProps);
 
-    if (onLayout != null) {
-      props.onLayout = onLayout;
-    }
-
     const gStyle = Object.assign({}, StyleSheet.flatten(style));
     if (transform) {
       if (gStyle.transform) {
@@ -214,6 +210,7 @@ export default class Svg extends Shape<SvgProps> {
             strokeLinecap,
             strokeLinejoin,
             strokeMiterlimit,
+            onLayout,
           }}
         />
       </RNSVGSvg>
