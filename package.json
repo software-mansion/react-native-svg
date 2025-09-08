@@ -147,6 +147,7 @@
         "RNSVGFeGaussianBlur": "RNSVGFeGaussianBlur",
         "RNSVGFeMerge": "RNSVGFeMerge",
         "RNSVGFeOffset": "RNSVGFeOffset",
+        "RNSVGFeTile": "RNSVGFeTile",
         "RNSVGFilter": "RNSVGFilter",
         "RNSVGForeignObject": "RNSVGForeignObject",
         "RNSVGGroup": "RNSVGGroup",
