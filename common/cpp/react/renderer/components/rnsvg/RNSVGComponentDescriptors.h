@@ -16,6 +16,8 @@ using RNSVGEllipseComponentDescriptor =
     ConcreteComponentDescriptor<RNSVGEllipseShadowNode>;
 using RNSVGFeBlendComponentDescriptor =
     ConcreteComponentDescriptor<RNSVGFeBlendShadowNode>;
+using RNSVGFeTileComponentDescriptor =
+    ConcreteComponentDescriptor<RNSVGFeTileShadowNode>;
 using RNSVGFeColorMatrixComponentDescriptor =
     ConcreteComponentDescriptor<RNSVGFeColorMatrixShadowNode>;
 using RNSVGFeCompositeComponentDescriptor =

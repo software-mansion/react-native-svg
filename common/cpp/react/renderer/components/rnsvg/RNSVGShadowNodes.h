@@ -48,6 +48,14 @@ JSI_EXPORT extern const char RNSVGFeBlendComponentName[];
 using RNSVGFeBlendShadowNode =
     RNSVGConcreteShadowNode<RNSVGFeBlendComponentName, RNSVGFeBlendProps>;
 
+JSI_EXPORT extern const char RNSVGFeTileComponentName[];
+
+/*
+ * `ShadowNode` for <RNSVGFeTile> component.
+ */
+using RNSVGFeTileShadowNode =
+    RNSVGConcreteShadowNode<RNSVGFeTileComponentName, RNSVGFeTileProps>;
+
 JSI_EXPORT extern const char RNSVGFeColorMatrixComponentName[];
 
 /*

@@ -107,6 +107,8 @@ import com.facebook.react.viewmanagers.RNSVGFeMergeManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeMergeManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeTileManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeTileManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFilterManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFilterManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGForeignObjectManagerDelegate;
@@ -487,6 +489,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGFeGaussianBlur,
     RNSVGFeMerge,
     RNSVGFeOffset,
+    RNSVGFeTile,
     RNSVGMarker,
     RNSVGForeignObject,
   }
@@ -547,6 +550,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FeMergeView(reactContext);
       case RNSVGFeOffset:
         return new FeOffsetView(reactContext);
+      case RNSVGFeTile:
+        return new FeTileView(reactContext);
       case RNSVGMarker:
         return new MarkerView(reactContext);
       case RNSVGForeignObject:
@@ -1666,6 +1671,21 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "dy")
     public void setDy(FeOffsetView node, Dynamic dy) {
       node.setDy(dy);
+    }
+  }
+
+  static class FeTileManager extends FilterPrimitiveManager<FeTileView>
+          implements RNSVGFeTileManagerInterface<FeTileView> {
+    FeTileManager() {
+      super(SVGClass.RNSVGFeTile);
+      mDelegate = new RNSVGFeTileManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeTile";
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeTileView node, String in1) {
+      node.setIn1(in1);
     }
   }
 
