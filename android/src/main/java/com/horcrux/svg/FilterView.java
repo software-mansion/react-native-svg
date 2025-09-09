@@ -82,6 +82,7 @@ class FilterView extends DefinitionView {
     Rect filterRegionRect =
         this.mFilterRegion.getCropRect(this, this.mFilterUnits, renderableBounds);
     Rect cropRect;
+    Bitmap prevResult = source;
 
     for (int i = 0; i < getChildCount(); i++) {
       View node = getChildAt(i);
@@ -95,7 +96,9 @@ class FilterView extends DefinitionView {
                 this.mPrimitiveUnits == FilterProperties.Units.USER_SPACE_ON_USE
                     ? new RectF(filterRegionRect)
                     : renderableBounds);
-        canvas.drawBitmap(currentFilter.applyFilter(mResultsMap, res), cropRect, cropRect, null);
+        Bitmap primitiveResult = currentFilter.applyFilter(mResultsMap, prevResult);
+        canvas.drawBitmap(primitiveResult, cropRect, cropRect, null);
+        prevResult = primitiveResult;
         res = resultBitmap.copy(Bitmap.Config.ARGB_8888, true);
         String resultName = currentFilter.getResult();
         if (resultName != null) {

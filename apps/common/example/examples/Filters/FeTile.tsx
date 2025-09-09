@@ -1,4 +1,4 @@
-import Svg, {Circle, Defs, FeTile, Filter, Image} from 'react-native-svg';
+import Svg, {FeTile, Filter, Image} from 'react-native-svg';
 
 function MDNExample() {
   return (
@@ -22,11 +22,19 @@ function MDNExample() {
 
 const icon = (
   <Svg width="30" height="30">
-    <Filter id="tileIcon" x="0" y="0" width="100%" height="100%">
-      <FeTile in="SourceGraphic" x="50" y="50" width="100" height="100" />
+    <Filter id="tile">
+      <FeTile in="SourceGraphic" x="7.5" y="7.5" width="15" height="15" />
+      <FeTile />
     </Filter>
 
-    <Circle cx="50%" cy="50%" r="40%" fill="red" filter="url(#tileIcon)" />
+    <Image
+      href="https://live.mdnplay.dev/en-US/docs/Web/SVG/Reference/Element/feTile/mdn_logo_only_color.png"
+      x="3"
+      y="3"
+      width="24"
+      height="24"
+      filter="url(#tile)"
+    />
   </Svg>
 );
 

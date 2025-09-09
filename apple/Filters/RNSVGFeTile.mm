@@ -65,7 +65,23 @@ using namespace facebook::react;
 
 - (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results previousFilterResult:(CIImage *)previous
 {
-  // TODO: implement applyFilter function
+  CIImage *inResults1 = self.in1 ? [results objectForKey:self.in1] : nil;
+  CIImage *inputImage = inResults1 ? inResults1 : previous;
+
+  if (!inputImage) {
+    return nil;
+  }
+
+  CIFilter *tileFilter = [CIFilter filterWithName:@"CIAffineTile"];
+  [tileFilter setDefaults];
+  [tileFilter setValue:inputImage forKey:kCIInputImageKey];
+
+  CGAffineTransform transform = CGAffineTransformIdentity;
+  [tileFilter setValue:[NSValue valueWithCGAffineTransform:transform] forKey:@"inputTransform"];
+
+  CIImage *outputImage = [tileFilter valueForKey:kCIOutputImageKey];
+
+  return outputImage ? outputImage : previous;
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
