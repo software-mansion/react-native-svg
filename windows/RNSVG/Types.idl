@@ -120,4 +120,15 @@ namespace RNSVG {
   runtimeclass D2DBrush {
     D2DBrush();
   };
+
+  [default_interface]
+  runtimeclass DirectXDeviceManager {
+    DirectXDeviceManager();
+
+    D2DDevice Device{ get; };
+    D2DDeviceContext DeviceContext{ get; };
+
+    void CreateDeviceResourcesIfNeeded();
+    void DiscardDeviceResources();
+  };
 }

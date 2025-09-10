@@ -4,7 +4,7 @@
 
 namespace winrt::RNSVG::implementation {
 struct SvgViewManager : SvgViewManagerT<SvgViewManager> {
-  SvgViewManager() = default;
+  SvgViewManager();
 
   // IViewManager
   hstring Name();
@@ -36,6 +36,7 @@ struct SvgViewManager : SvgViewManagerT<SvgViewManager> {
 
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
+  RNSVG::DirectXDeviceManager m_deviceManager{nullptr};
 };
 } // namespace winrt::RNSVG::implementation
 

@@ -13,13 +13,20 @@
 #include "SvgView.h"
 
 namespace winrt::RNSVG::implementation {
+
+SvgViewManager::SvgViewManager() {
+  // Create the shared DirectXDeviceManager instance and initialize the graphics device resources.
+  m_deviceManager = RNSVG::DirectXDeviceManager();
+  m_deviceManager.CreateDeviceResourcesIfNeeded();
+}
+
 // IViewManager
 hstring SvgViewManager::Name() {
   return L"RNSVGSvgView";
 }
 
 xaml::FrameworkElement SvgViewManager::CreateView() {
-  return winrt::RNSVG::SvgView(m_reactContext);
+  return winrt::RNSVG::SvgView(m_reactContext, m_deviceManager);
 }
 
 // IViewManagerWithContext
