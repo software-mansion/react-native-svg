@@ -1,7 +1,12 @@
 import React from 'react';
 import { NumberArray, NumberProp } from '../../lib/extract/types';
-import { warnUnimplementedFilter } from '../../lib/util';
 import FilterPrimitive from './FilterPrimitive';
+import { RNSVGFeComponentTransferFunction } from '../../fabric';
+import { NativeMethods } from 'react-native';
+import {
+  extractFeComponentTransferFunction,
+  extractFilter,
+} from '../../lib/extract/extractFilter';
 
 type FunctionChannel = 'R' | 'G' | 'B' | 'A' | 'UNKNOWN';
 type FunctionType = 'identity' | 'table' | 'discrete' | 'linear' | 'gamma';
@@ -31,8 +36,18 @@ export default class FeComponentTransferFunction extends FilterPrimitive<FeCompo
   };
 
   render() {
-    warnUnimplementedFilter();
-    return null;
+    return (
+      <RNSVGFeComponentTransferFunction
+        ref={(ref) =>
+          this.refMethod(
+            ref as (FeComponentTransferFunction & NativeMethods) | null
+          )
+        }
+        {...extractFilter(this.props)}
+        {...extractFeComponentTransferFunction(this.props)}
+        channel={this.channel}
+      />
+    );
   }
 }
 
