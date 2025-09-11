@@ -7,56 +7,56 @@ import java.util.ArrayList;
 
 @SuppressLint("ViewConstructor")
 class FeComponentTransferFunctionView extends FilterPrimitiveView {
-  FilterProperties.FeComponentTransferFuncChannel channel;
-  FilterProperties.FeComponentTransferFuncType type;
-  ArrayList<SVGLength> tableValues;
-  SVGLength slope;
-  SVGLength intercept;
-  SVGLength amplitude;
-  SVGLength exponent;
-  SVGLength offset;
+  FilterProperties.FeComponentTransferFuncChannel mChannel;
+  FilterProperties.FeComponentTransferFuncType mType;
+  ArrayList<SVGLength> mTableValues;
+  SVGLength mSlope;
+  SVGLength mIntercept;
+  SVGLength mAmplitude;
+  SVGLength mExponent;
+  SVGLength mOffset;
 
   public FeComponentTransferFunctionView(ReactContext reactContext) {
     super(reactContext);
   }
 
   public void setChannel(String channel) {
-    this.channel = FilterProperties.FeComponentTransferFuncChannel.getEnum(channel);
+    this.mChannel = FilterProperties.FeComponentTransferFuncChannel.getEnum(channel);
     invalidate();
   }
 
   public void setType(String type) {
-    this.type = FilterProperties.FeComponentTransferFuncType.getEnum(type);
+    this.mType = FilterProperties.FeComponentTransferFuncType.getEnum(type);
     invalidate();
   }
 
   public void setTableValues(Dynamic tableValues) {
-    this.tableValues = SVGLength.arrayFrom(tableValues);
+    this.mTableValues = SVGLength.arrayFrom(tableValues);
     invalidate();
   }
 
   public void setSlope(Dynamic length) {
-    slope = SVGLength.from(length);
+    this.mSlope = SVGLength.from(length);
     invalidate();
   }
 
   public void setIntercept(Dynamic length) {
-    intercept = SVGLength.from(length);
+    this.mIntercept = SVGLength.from(length);
     invalidate();
   }
 
   public void setAmplitude(Dynamic length) {
-    amplitude = SVGLength.from(length);
+    this.mAmplitude = SVGLength.from(length);
     invalidate();
   }
 
   public void setExponent(Dynamic length) {
-    exponent = SVGLength.from(length);
+    this.mExponent = SVGLength.from(length);
     invalidate();
   }
 
   public void setOffset(Dynamic length) {
-    offset = SVGLength.from(length);
+    this.mOffset = SVGLength.from(length);
     invalidate();
   }
 
@@ -64,41 +64,41 @@ class FeComponentTransferFunctionView extends FilterPrimitiveView {
     double C = colorValue / 255f; // normalize to [0,1]
     double Cprime = C;
 
-    switch (type) {
+    switch (mType) {
       case TABLE:
-        if (tableValues != null && !tableValues.isEmpty()) {
-          int n = tableValues.size() - 1;
+        if (mTableValues != null && !mTableValues.isEmpty()) {
+          int n = mTableValues.size() - 1;
           if (C >= 1f) {
-            Cprime = tableValues.get(n).value;
+            Cprime = mTableValues.get(n).value;
           } else {
             double pos = C * n;
             int k = (int) Math.floor(pos);
             double frac = pos - k;
             Cprime =
-                tableValues.get(k).value
-                    + frac * (tableValues.get(k + 1).value - tableValues.get(k).value);
+                mTableValues.get(k).value
+                    + frac * (mTableValues.get(k + 1).value - mTableValues.get(k).value);
           }
         }
         break;
 
       case DISCRETE:
-        if (tableValues != null && !tableValues.isEmpty()) {
-          int n = tableValues.size();
+        if (mTableValues != null && !mTableValues.isEmpty()) {
+          int n = mTableValues.size();
           if (C >= 1f) {
-            Cprime = tableValues.get(n - 1).value;
+            Cprime = mTableValues.get(n - 1).value;
           } else {
             int k = (int) Math.floor(C * n);
-            Cprime = tableValues.get(k).value;
+            Cprime = mTableValues.get(k).value;
           }
         }
         break;
 
       case LINEAR:
-        Cprime = slope.value * C + intercept.value;
+        Cprime = mSlope.value * C + mIntercept.value;
         break;
 
       case GAMMA:
-        Cprime = amplitude.value * Math.pow(C, exponent.value) + offset.value;
+        Cprime = mAmplitude.value * Math.pow(C, mExponent.value) + mOffset.value;
         break;
 
       case IDENTITY:

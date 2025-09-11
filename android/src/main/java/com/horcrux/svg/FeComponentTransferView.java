@@ -12,10 +12,10 @@ import java.util.HashMap;
 @SuppressLint("ViewConstructor")
 class FeComponentTransferView extends FilterPrimitiveView {
   String mIn1;
-  FeComponentTransferFunctionView FeFuncR;
-  FeComponentTransferFunctionView FeFuncG;
-  FeComponentTransferFunctionView FeFuncB;
-  FeComponentTransferFunctionView FeFuncA;
+  FeComponentTransferFunctionView mFeFuncR;
+  FeComponentTransferFunctionView mFeFuncG;
+  FeComponentTransferFunctionView mFeFuncB;
+  FeComponentTransferFunctionView mFeFuncA;
 
   public FeComponentTransferView(ReactContext reactContext) {
     super(reactContext);
@@ -53,11 +53,11 @@ class FeComponentTransferView extends FilterPrimitiveView {
 
       FeComponentTransferFunctionView functionView = (FeComponentTransferFunctionView) node;
 
-      switch (functionView.channel) {
-        case R -> FeFuncR = functionView;
-        case G -> FeFuncG = functionView;
-        case B -> FeFuncB = functionView;
-        case A -> FeFuncA = functionView;
+      switch (functionView.mChannel) {
+        case R -> mFeFuncR = functionView;
+        case G -> mFeFuncG = functionView;
+        case B -> mFeFuncB = functionView;
+        case A -> mFeFuncA = functionView;
       }
     }
   }
@@ -71,10 +71,10 @@ class FeComponentTransferView extends FilterPrimitiveView {
       int g = Color.green(c);
       int b = Color.blue(c);
 
-      if (FeFuncR != null) r = FeFuncR.apply(r);
-      if (FeFuncG != null) g = FeFuncG.apply(g);
-      if (FeFuncB != null) b = FeFuncB.apply(b);
-      if (FeFuncA != null) a = FeFuncA.apply(a);
+      if (mFeFuncR != null) r = mFeFuncR.apply(r);
+      if (mFeFuncG != null) g = mFeFuncG.apply(g);
+      if (mFeFuncB != null) b = mFeFuncB.apply(b);
+      if (mFeFuncA != null) a = mFeFuncA.apply(a);
 
       pixels[i] = Color.argb(a, r, g, b);
     }
