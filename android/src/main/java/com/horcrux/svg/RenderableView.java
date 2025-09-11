@@ -615,7 +615,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     paint.setStyle(Paint.Style.STROKE);
     paint.setStrokeCap(strokeLinecap);
     paint.setStrokeJoin(strokeLinejoin);
-    paint.setStrokeMiter(strokeMiterlimit * mScale);
+    paint.setStrokeMiter(strokeMiterlimit);
     paint.setStrokeWidth((float) strokeWidth);
     setupPaint(paint, opacity, stroke);
 

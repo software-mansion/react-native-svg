@@ -45,6 +45,7 @@ static RNSVGRenderable *_contextElement;
     _strokeOpacity = 1;
     _strokeWidth = [RNSVGLength lengthWithNumber:1];
     _fillRule = kRNSVGCGFCRuleNonzero;
+    _strokeMiterlimit = 4.0;
   }
   return self;
 }
@@ -236,7 +237,7 @@ static RNSVGRenderable *_contextElement;
   _stroke = nil;
   _strokeLinecap = kCGLineCapButt;
   _strokeLinejoin = kCGLineJoinMiter;
-  _strokeMiterlimit = 0;
+  _strokeMiterlimit = 4.0;
   _strokeDasharray = nil;
   _strokeDashoffset = 0;
   _vectorEffect = kRNSVGVectorEffectDefault;
@@ -585,6 +586,9 @@ UInt32 saturate(CGFloat value)
     CGContextSetLineWidth(context, width);
     CGContextSetLineCap(context, self.strokeLinecap);
     CGContextSetLineJoin(context, self.strokeLinejoin);
+    if (self.strokeLinejoin == kCGLineJoinMiter) {
+      CGContextSetMiterLimit(context, self.strokeMiterlimit);
+    }
     NSArray<RNSVGLength *> *strokeDasharray = self.strokeDasharray;
     NSUInteger count = strokeDasharray.count;
 

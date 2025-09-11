@@ -52,7 +52,7 @@ interface SvgRenderableCommonProps {
   strokeLinejoin?: WithDefault<Int32, 0>;
   strokeDasharray?: UnsafeMixed<ReadonlyArray<NumberProp> | NumberProp>;
   strokeDashoffset?: Float;
-  strokeMiterlimit?: Float;
+  strokeMiterlimit?: WithDefault<Float, 4.0>;
   vectorEffect?: WithDefault<Int32, 0>;
   propList?: ReadonlyArray<string>;
   filter?: string;
