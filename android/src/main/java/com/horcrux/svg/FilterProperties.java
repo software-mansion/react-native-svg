@@ -110,6 +110,76 @@ class FilterProperties {
     }
   }
 
+  enum FeComponentTransferFuncType {
+    IDENTITY("identity"),
+    TABLE("table"),
+    DISCRETE("discrete"),
+    LINEAR("linear"),
+    GAMMA("gamma");
+
+    private final String type;
+
+    FeComponentTransferFuncType(String type) {
+      this.type = type;
+    }
+
+    static FeComponentTransferFuncType getEnum(String strVal) {
+      if (!typeToEnum.containsKey(strVal)) {
+        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+      }
+      return typeToEnum.get(strVal);
+    }
+
+    private static final Map<String, FeComponentTransferFuncType> typeToEnum = new HashMap<>();
+
+    static {
+      for (final FeComponentTransferFuncType en : FeComponentTransferFuncType.values()) {
+        typeToEnum.put(en.type, en);
+      }
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+      return type;
+    }
+  }
+
+  enum FeComponentTransferFuncChannel {
+    R("R"),
+    G("G"),
+    B("B"),
+    A("A"),
+    UNKNOWN("UNKNOWN");
+
+    private final String channel;
+
+    FeComponentTransferFuncChannel(String channel) {
+      this.channel = channel;
+    }
+
+    static FeComponentTransferFuncChannel getEnum(String strVal) {
+      if (!channelToEnum.containsKey(strVal)) {
+        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+      }
+      return channelToEnum.get(strVal);
+    }
+
+    private static final Map<String, FeComponentTransferFuncChannel> channelToEnum = new HashMap<>();
+
+    static {
+      for (final FeComponentTransferFuncChannel en : FeComponentTransferFuncChannel.values()) {
+        channelToEnum.put(en.channel, en);
+      }
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+      return channel;
+    }
+  }
+
   enum FeColorMatrixType {
     MATRIX("matrix"),
     SATURATE("saturate"),

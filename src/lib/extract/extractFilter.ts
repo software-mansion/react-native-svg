@@ -2,12 +2,14 @@ import React from 'react';
 import { ColorValue, processColor } from 'react-native';
 import { FeBlendProps as FeBlendComponentProps } from '../../elements/filters/FeBlend';
 import { FeColorMatrixProps as FeColorMatrixComponentProps } from '../../elements/filters/FeColorMatrix';
+import { FeComponentTransferFunctionProps as FeComponentTransferFunctionComponentProps } from '../../elements/filters/FeComponentTransferFunction';
 import { FeCompositeProps as FeCompositeComponentProps } from '../../elements/filters/FeComposite';
 import { FeFloodProps as FeFloodComponentProps } from '../../elements/filters/FeFlood';
 import { FeGaussianBlurProps as FeGaussianBlurComponentProps } from '../../elements/filters/FeGaussianBlur';
 import { FeMergeProps as FeMergeComponentProps } from '../../elements/filters/FeMerge';
 import { NativeProps as FeBlendNativeProps } from '../../fabric/FeBlendNativeComponent';
 import { NativeProps as FeColorMatrixNativeProps } from '../../fabric/FeColorMatrixNativeComponent';
+import { NativeProps as FeComponentTranferFunctionNativeProps } from '../../fabric/FeComponentTransferFunctionNativeComponent';
 import { NativeProps as FeCompositeNativeProps } from '../../fabric/FeCompositeNativeComponent';
 import { NativeProps as FeFloodNativeProps } from '../../fabric/FeFloodNativeComponent';
 import { NativeProps as FeGaussianBlurNativeProps } from '../../fabric/FeGaussianBlurNativeComponent';
@@ -179,4 +181,38 @@ export const extractFeMerge = (
   }
 
   return { nodes };
+};
+
+export const extractFeComponentTransferFunction = (
+  props: FeComponentTransferFunctionComponentProps
+): Omit<FeComponentTranferFunctionNativeProps, 'channel'> => {
+  const extracted: Omit<FeComponentTranferFunctionNativeProps, 'channel'> = {
+    type: props.type,
+  };
+
+  if (props.tableValues !== undefined) {
+    extracted.tableValues = props.tableValues;
+  }
+
+  if (props.slope) {
+    extracted.slope = props.slope;
+  }
+
+  if (props.intercept) {
+    extracted.intercept = props.intercept;
+  }
+
+  if (props.amplitude) {
+    extracted.amplitude = props.amplitude;
+  }
+
+  if (props.exponent) {
+    extracted.exponent = props.exponent;
+  }
+
+  if (props.offset) {
+    extracted.offset = props.offset;
+  }
+  console.log('extracted', extracted);
+  return extracted;
 };
