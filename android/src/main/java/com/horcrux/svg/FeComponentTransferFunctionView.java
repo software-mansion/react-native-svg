@@ -62,17 +62,16 @@ class FeComponentTransferFunctionView extends FilterPrimitiveView {
 
   public int apply(int colorValue) {
     double C = colorValue / 255f; // normalize to [0,1]
-    double Cf = (colorValue & 0xFF) / 255f;
     double Cprime = C;
 
     switch (type) {
       case TABLE:
         if (tableValues != null && !tableValues.isEmpty()) {
           int n = tableValues.size() - 1;
-          if (Cf == 1f) {
+          if (C >= 1f) {
             Cprime = tableValues.get(n).value;
           } else {
-            double pos = Cf * n;
+            double pos = C * n;
             int k = (int) Math.floor(pos);
             double frac = pos - k;
             Cprime =
@@ -85,7 +84,7 @@ class FeComponentTransferFunctionView extends FilterPrimitiveView {
       case DISCRETE:
         if (tableValues != null && !tableValues.isEmpty()) {
           int n = tableValues.size();
-          if (C == 1f) {
+          if (C >= 1f) {
             Cprime = tableValues.get(n - 1).value;
           } else {
             int k = (int) Math.floor(C * n);
@@ -99,7 +98,7 @@ class FeComponentTransferFunctionView extends FilterPrimitiveView {
         break;
 
       case GAMMA:
-        Cprime = amplitude.value * Math.pow(Cf, exponent.value) + offset.value;
+        Cprime = amplitude.value * Math.pow(C, exponent.value) + offset.value;
         break;
 
       case IDENTITY:

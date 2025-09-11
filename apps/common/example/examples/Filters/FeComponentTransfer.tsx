@@ -17,7 +17,7 @@ import {
 BasicMDN.title = 'Basic MDN example';
 function BasicMDN() {
   return (
-    <Svg width="350" height="400">
+    <Svg width="350" height="320">
       <LinearGradient
         id="rainbow"
         gradientUnits="userSpaceOnUse"
@@ -168,9 +168,9 @@ function W3CExample() {
       </Filter>
       <Filter id="Linear" filterUnits="objectBoundingBox">
         <FeComponentTransfer>
-          <FeFuncR type="linear" slope=".5" intercept=".25" />
-          <FeFuncG type="linear" slope=".5" intercept="0" />
-          <FeFuncB type="linear" slope=".5" intercept=".5" />
+          <FeFuncR type="linear" slope="0.5" intercept="0.25" />
+          <FeFuncG type="linear" slope="0.5" intercept="0" />
+          <FeFuncB type="linear" slope="0.5" intercept="0.5" />
         </FeComponentTransfer>
       </Filter>
       <Filter id="Gamma" filterUnits="objectBoundingBox">
@@ -204,7 +204,31 @@ function W3CExample() {
   );
 }
 
-const icon = <Svg height="30" width="30" viewBox="0 0 100 100"></Svg>;
+const icon = (
+  <Svg width="30" height="30" viewBox="0 0 800 400">
+    <LinearGradient
+      id="MyGradient"
+      gradientUnits="userSpaceOnUse"
+      x1="100"
+      y1="0"
+      x2="600"
+      y2="0">
+      <Stop offset="0" stopColor="#ff0000" />
+      <Stop offset="0.33" stopColor="#00ff00" />
+      <Stop offset="0.67" stopColor="#0000ff" />
+      <Stop offset="1" stopColor="#000000" />
+    </LinearGradient>
+
+    <Rect
+      fill="url(#MyGradient)"
+      stroke="blue"
+      x="1"
+      y="1"
+      width="798"
+      height="398"
+    />
+  </Svg>
+);
 const samples = [BasicMDN, W3CExample];
 
 export {icon, samples};
