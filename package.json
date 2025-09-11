@@ -142,6 +142,8 @@
         "RNSVGEllipse": "RNSVGEllipse",
         "RNSVGFeBlend": "RNSVGFeBlend",
         "RNSVGFeColorMatrix": "RNSVGFeColorMatrix",
+        "RNSVGFeComponentTransfer": "RNSVGFeComponentTransfer",
+        "RNSVGFeComponentTransferFunction": "RNSVGFeComponentTransferFunction",
         "RNSVGFeComposite": "RNSVGFeComposite",
         "RNSVGFeFlood": "RNSVGFeFlood",
         "RNSVGFeGaussianBlur": "RNSVGFeGaussianBlur",
