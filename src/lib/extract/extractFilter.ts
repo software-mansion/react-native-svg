@@ -213,6 +213,6 @@ export const extractFeComponentTransferFunction = (
   if (props.offset) {
     extracted.offset = props.offset;
   }
-  console.log('extracted', extracted);
+
   return extracted;
 };
