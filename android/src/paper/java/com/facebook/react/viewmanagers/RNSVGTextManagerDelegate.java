@@ -145,9 +145,6 @@ public class RNSVGTextManagerDelegate<T extends View, U extends BaseViewManager<
       case "alignmentBaseline":
         mViewManager.setAlignmentBaseline(view, value == null ? null : (String) value);
         break;
-      case "verticalAlign":
-        mViewManager.setVerticalAlign(view, new DynamicFromObject(value));
-        break;
       default:
         super.setProperty(view, propName, value);
     }
