@@ -88,7 +88,7 @@ using namespace facebook::react;
 
   [self traverseSubviews:^(RNSVGView *node) {
     if ([node isKindOfClass:[RNSVGMask class]] || [node isKindOfClass:[RNSVGClipPath class]]) {
-      // no-op
+      [(RNSVGRenderable *)node mergeProperties:self];
     } else if ([node isKindOfClass:[RNSVGNode class]]) {
       RNSVGNode *svgNode = (RNSVGNode *)node;
       if (svgNode.display && [@"none" isEqualToString:svgNode.display]) {
