@@ -485,11 +485,19 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (CGFloat)relativeOnWidth:(RNSVGLength *)length
 {
+  if (length.unit == SVG_LENGTHTYPE_PERCENTAGE && self.svgView.vbWidth != 0) {
+    return [self relativeOn:length relative:self.svgView.vbWidth];
+  }
+
   return [self relativeOn:length relative:[self getCanvasWidth]];
 }
 
 - (CGFloat)relativeOnHeight:(RNSVGLength *)length
 {
+  if (length.unit == SVG_LENGTHTYPE_PERCENTAGE && self.svgView.vbHeight != 0) {
+    return [self relativeOn:length relative:self.svgView.vbHeight];
+  }
+
   return [self relativeOn:length relative:[self getCanvasHeight]];
 }
 
