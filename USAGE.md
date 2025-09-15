@@ -1307,6 +1307,7 @@ The following filters have been implemented:
 - FeFlood
 - FeGaussianBlur
 - FeMerge
+- FeMorphology
 - FeOffset
 
 Not supported yet:
@@ -1320,7 +1321,6 @@ Not supported yet:
 - FeFuncG
 - FeFuncR
 - FeImage
-- FeMorphology
 - FePointLight
 - FeSpecularLighting
 - FeSpotLight

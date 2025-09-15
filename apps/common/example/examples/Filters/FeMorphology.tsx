@@ -1,13 +1,5 @@
-import React, {useEffect} from 'react';
-import {
-  FeMorphology,
-  FeMorphologyProps,
-  Filter,
-  G,
-  Rect,
-  Svg,
-  Text,
-} from 'react-native-svg';
+import React from 'react';
+import {FeMorphology, Filter, G, Rect, Svg, Text} from 'react-native-svg';
 
 function MDNExample() {
   return (
