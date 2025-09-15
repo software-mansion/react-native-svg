@@ -114,10 +114,7 @@ using namespace facebook::react;
       }
     } else if ([node isKindOfClass:[RNSVGSvgView class]]) {
       RNSVGSvgView *svgView = (RNSVGSvgView *)node;
-      // An SVG element is always created with a single child: a Group.
-      // All user-provided children are wrapped inside this Group.
-      // Here we merge the Group properties (fill etc.)
-      // into the Group inside SVG so that they will apply to its children.
+      // Merge properties with inner Svg element.
       if (svgView.subviews.count > 0) {
         RNSVGView *viewNode = svgView.subviews[0];
         if ([viewNode isKindOfClass:[RNSVGGroup class]]) {
