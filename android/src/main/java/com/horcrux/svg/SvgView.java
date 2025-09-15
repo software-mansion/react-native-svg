@@ -343,7 +343,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
   }
 
-  public RectF getViewBox() {
+  RectF getViewBox() {
     return new RectF(
         mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
   }
