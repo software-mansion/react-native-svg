@@ -437,15 +437,10 @@ public abstract class VirtualView extends ReactViewGroup {
 
   double relativeOnWidth(SVGLength length) {
     SvgView svg = getSvgView();
-    float width;
-
     if (length.unit == SVGLength.UnitType.PERCENTAGE && svg != null && svg.getViewBox().width() != 0) {
-      width = svg.getViewBox().width();
-    } else {
-      width = getCanvasWidth();
+      return relativeOn(length, svg.getViewBox().width());
     }
-
-    return relativeOn(length, width);
+    return relativeOn(length, getCanvasWidth());
   }
 
   double relativeOnHeight(SVGLength length) {
