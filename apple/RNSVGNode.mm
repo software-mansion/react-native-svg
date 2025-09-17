@@ -41,7 +41,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 #if !TARGET_OS_OSX // On macOS, views are transparent by default
     self.opaque = false;
 #endif
-    _matrix = CGAffineTransformIdentity;
+    self.matrix = CGAffineTransformIdentity;
     _opacity = 1;
     _merging = false;
     _dirty = false;
@@ -641,6 +641,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 #if !TARGET_OS_OSX // On macOS, views are transparent by default
   self.opaque = false;
 #endif
+  self.matrix = CGAffineTransformIdentity;
   _merging = false;
   _dirty = false;
 
