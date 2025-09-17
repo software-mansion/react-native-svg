@@ -66,6 +66,15 @@ using RNSVGFeCompositeShadowNode = RNSVGConcreteShadowNode<
     RNSVGFeCompositeComponentName,
     RNSVGFeCompositeProps>;
 
+JSI_EXPORT extern const char RNSVGFeConvolveMatrixComponentName[];
+    
+/*
+* `ShadowNode` for <RNSVGFeConvolveMatrix> component.
+*/
+using RNSVGFeConvolveMatrixShadowNode = RNSVGConcreteShadowNode<
+    RNSVGFeConvolveMatrixComponentName,
+    RNSVGFeConvolveMatrixProps>;
+
 JSI_EXPORT extern const char RNSVGFeFloodComponentName[];
 
 /*

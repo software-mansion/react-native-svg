@@ -1,7 +1,13 @@
+import { NativeMethods } from 'react-native';
+import { RNSVGFeConvolveMatrix } from '../../fabric';
 import { BooleanProp, NumberArray, NumberProp } from '../../lib/extract/types';
-import { warnUnimplementedFilter } from '../../lib/util';
 import FilterPrimitive from './FilterPrimitive';
 import { EdgeMode } from './types';
+import {
+  extractFeConvolveMatrix,
+  extractFilter,
+  extractIn,
+} from '../../lib/extract/extractFilter';
 
 export interface FeConvolveMatrixProps {
   in?: string;
@@ -21,10 +27,21 @@ export default class FeConvolveMatrix extends FilterPrimitive<FeConvolveMatrixPr
 
   static defaultProps = {
     ...this.defaultPrimitiveProps,
+    edgeMode: 'duplicate',
+    preserveAlpha: false,
+    bias: 0,
   };
 
   render() {
-    warnUnimplementedFilter();
-    return null;
+    return (
+      <RNSVGFeConvolveMatrix
+        ref={(ref) =>
+          this.refMethod(ref as (FeConvolveMatrix & NativeMethods) | null)
+        }
+        {...extractFilter(this.props)}
+        {...extractIn(this.props)}
+        {...extractFeConvolveMatrix(this.props)}
+      />
+    );
   }
 }
