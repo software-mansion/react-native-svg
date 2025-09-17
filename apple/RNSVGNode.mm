@@ -38,11 +38,12 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 - (instancetype)init
 {
   if (self = [super init]) {
-    self.opacity = 1;
 #if !TARGET_OS_OSX // On macOS, views are transparent by default
     self.opaque = false;
 #endif
-    self.matrix = CGAffineTransformIdentity;
+    _matrix = CGAffineTransformIdentity;
+    _invmatrix = CGAffineTransformIdentity;
+    _opacity = 1;
     _merging = false;
     _dirty = false;
   }
@@ -638,11 +639,9 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 {
   [super prepareForRecycle];
 
-  self.opacity = 1;
 #if !TARGET_OS_OSX // On macOS, views are transparent by default
   self.opaque = false;
 #endif
-  self.matrix = CGAffineTransformIdentity;
   _merging = false;
   _dirty = false;
 
