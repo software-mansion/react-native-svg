@@ -21,6 +21,8 @@ export default class FeMorphology extends FilterPrimitive<FeMorphologyProps> {
 
   static defaultProps = {
     ...this.defaultPrimitiveProps,
+    operator: 'erode',
+    radius: 0,
   };
 
   render() {
