@@ -35,28 +35,28 @@ class FeComponentTransferFunctionView extends FilterPrimitiveView {
     invalidate();
   }
 
-  public void setSlope(Dynamic length) {
-    this.mSlope = SVGLength.from(length);
+  public void setSlope(Dynamic slope) {
+    this.mSlope = SVGLength.from(slope);
     invalidate();
   }
 
-  public void setIntercept(Dynamic length) {
-    this.mIntercept = SVGLength.from(length);
+  public void setIntercept(Dynamic intercept) {
+    this.mIntercept = SVGLength.from(intercept);
     invalidate();
   }
 
-  public void setAmplitude(Dynamic length) {
-    this.mAmplitude = SVGLength.from(length);
+  public void setAmplitude(Dynamic amplitude) {
+    this.mAmplitude = SVGLength.from(amplitude);
     invalidate();
   }
 
-  public void setExponent(Dynamic length) {
-    this.mExponent = SVGLength.from(length);
+  public void setExponent(Dynamic exponent) {
+    this.mExponent = SVGLength.from(exponent);
     invalidate();
   }
 
-  public void setOffset(Dynamic length) {
-    this.mOffset = SVGLength.from(length);
+  public void setOffset(Dynamic offset) {
+    this.mOffset = SVGLength.from(offset);
     invalidate();
   }
 
