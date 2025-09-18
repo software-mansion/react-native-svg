@@ -11,6 +11,6 @@
 @property (nonatomic, strong) RNSVGLength *targetX;
 @property (nonatomic, strong) RNSVGLength *targetY;
 @property (nonatomic, assign) RNSVGEdgeMode edgeMode;
-@property (nonatomic, assign) bool preserveAlpha;
+@property (nonatomic, assign) BOOL preserveAlpha;
 
 @end

@@ -88,12 +88,12 @@ using namespace facebook::react;
   _in1 = nil;
   _order = nil;
   _kernelMatrix = nil;
-  _divisor = [RNSVGLength lengthWithNumber:1];
+  _divisor = nil;
   _bias = [RNSVGLength lengthWithNumber:0];
   _targetX = nil;
   _targetY = nil;
   _edgeMode = RNSVGEdgeMode::SVG_EDGEMODE_DUPLICATE;
-  _preserveAlpha = false;
+  _preserveAlpha = NO;
 }
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -176,7 +176,7 @@ using namespace facebook::react;
   [self invalidate];
 }
 
-- (void)setPreserveAlpha:(bool)preserveAlpha
+- (void)setPreserveAlpha:(BOOL)preserveAlpha
 {
   if (preserveAlpha == _preserveAlpha) {
     return;
