@@ -266,12 +266,12 @@ class FeTurbulenceView extends FilterPrimitiveView {
         bSum = Math.max(0.0, Math.min(1.0, bSum));
         aSum = Math.max(0.0, Math.min(1.0, aSum));
 
-        int r8 = (int) Math.round(rSum * 255.0);
-        int g8 = (int) Math.round(gSum * 255.0);
-        int b8 = (int) Math.round(bSum * 255.0);
-        int a8 = (int) Math.round(aSum * 255.0);
+        int r = (int) Math.round(rSum * 255.0);
+        int g = (int) Math.round(gSum * 255.0);
+        int b = (int) Math.round(bSum * 255.0);
+        int a = (int) Math.round(aSum * 255.0);
 
-        int color = Color.argb(a8, r8, g8, b8);
+        int color = Color.argb(a, r, g, b);
         pixels[y * width + x] = color;
       }
     }
