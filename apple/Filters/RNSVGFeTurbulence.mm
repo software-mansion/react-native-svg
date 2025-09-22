@@ -318,7 +318,11 @@ using namespace facebook::react;
   
   double fSum = 0.0;
   double vec[2];
+#if TARGET_OS_OSX
+  double screenScale = [[NSScreen mainScreen] backingScaleFactor];
+#else
   double screenScale = [UIScreen mainScreen].scale;
+#endif
   vec[0] = point[0] / screenScale * baseFreqX;
   vec[1] = point[1] / screenScale * baseFreqY;
   double ratio = 1.0;
