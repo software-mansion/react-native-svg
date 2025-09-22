@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Defs,
-  FeOffset,
-  FeTurbulence,
-  Filter,
-  Rect,
-  Svg,
-  Text,
-} from 'react-native-svg';
+import {Defs, FeTurbulence, Filter, Rect, Svg, Text} from 'react-native-svg';
 
 function W3CExample() {
   return (
