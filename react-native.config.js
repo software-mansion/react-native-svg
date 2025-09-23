@@ -9,6 +9,7 @@ module.exports = {
           'RNSVGFeBlendComponentDescriptor',
           'RNSVGFeColorMatrixComponentDescriptor',
           'RNSVGFeCompositeComponentDescriptor',
+          'RNSVGFeDisplacementMapComponentDescriptor',
           'RNSVGFeFloodComponentDescriptor',
           'RNSVGFeGaussianBlurComponentDescriptor',
           'RNSVGFeMergeComponentDescriptor',

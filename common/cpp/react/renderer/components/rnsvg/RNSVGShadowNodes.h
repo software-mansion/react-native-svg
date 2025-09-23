@@ -66,6 +66,15 @@ using RNSVGFeCompositeShadowNode = RNSVGConcreteShadowNode<
     RNSVGFeCompositeComponentName,
     RNSVGFeCompositeProps>;
 
+JSI_EXPORT extern const char RNSVGFeDisplacementMapComponentName[];
+
+/*
+ * `ShadowNode` for <RNSVGFeDisplacementMap> component.
+ */
+using RNSVGFeDisplacementMapShadowNode = RNSVGConcreteShadowNode<
+    RNSVGFeDisplacementMapComponentName,
+    RNSVGFeDisplacementMapProps>;
+
 JSI_EXPORT extern const char RNSVGFeFloodComponentName[];
 
 /*

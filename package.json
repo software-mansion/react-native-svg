@@ -143,6 +143,7 @@
         "RNSVGFeBlend": "RNSVGFeBlend",
         "RNSVGFeColorMatrix": "RNSVGFeColorMatrix",
         "RNSVGFeComposite": "RNSVGFeComposite",
+        "RNSVGFeDisplacementMap": "RNSVGFeDisplacementMap",
         "RNSVGFeFlood": "RNSVGFeFlood",
         "RNSVGFeGaussianBlur": "RNSVGFeGaussianBlur",
         "RNSVGFeMerge": "RNSVGFeMerge",

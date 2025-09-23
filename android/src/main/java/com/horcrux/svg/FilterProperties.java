@@ -245,4 +245,38 @@ class FilterProperties {
       return stitchTile;
     }
   }
+
+  enum FeDisplacementMapChannelSelector {
+    R("R"),
+    G("G"),
+    B("B"),
+    A("A");
+
+    private final String channelSelector;
+
+    FeDisplacementMapChannelSelector(String channelSelector) {
+      this.channelSelector = channelSelector;
+    }
+
+    static FeDisplacementMapChannelSelector getEnum(String strVal) {
+      if (!channelSelectorToEnum.containsKey(strVal)) {
+        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+      }
+      return channelSelectorToEnum.get(strVal);
+    }
+
+    private static final Map<String, FeDisplacementMapChannelSelector> channelSelectorToEnum = new HashMap<>();
+
+    static {
+      for (final FeDisplacementMapChannelSelector en : FeDisplacementMapChannelSelector.values()) {
+        channelSelectorToEnum.put(en.channelSelector, en);
+      }
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+      return channelSelector;
+    }
+  }
 }

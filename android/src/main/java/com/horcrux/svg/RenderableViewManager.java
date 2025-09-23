@@ -99,6 +99,8 @@ import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeCompositeManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeCompositeManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeDisplacementMapManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeDisplacementMapManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeFloodManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeFloodManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerDelegate;
@@ -486,6 +488,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGFeBlend,
     RNSVGFeColorMatrix,
     RNSVGFeComposite,
+    RNSVGFeDisplacementMap,
     RNSVGFeFlood,
     RNSVGFeGaussianBlur,
     RNSVGFeMerge,
@@ -543,6 +546,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FeColorMatrixView(reactContext);
       case RNSVGFeComposite:
         return new FeCompositeView(reactContext);
+      case RNSVGFeDisplacementMap:
+        return new FeDisplacementMapView(reactContext);
       case RNSVGFeFlood:
         return new FeFloodView(reactContext);
       case RNSVGFeGaussianBlur:
@@ -1584,6 +1589,41 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "k4")
     public void setK4(FeCompositeView node, float value) {
       node.setK4(value);
+    }
+  }
+
+  static class FeDisplacementMapManager extends FilterPrimitiveManager<FeDisplacementMapView>
+          implements RNSVGFeDisplacementMapManagerInterface<FeDisplacementMapView> {
+    FeDisplacementMapManager() {
+      super(SVGClass.RNSVGFeDisplacementMap);
+      mDelegate = new RNSVGFeDisplacementMapManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeDisplacementMap";
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeDisplacementMapView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "in2")
+    public void setIn2(FeDisplacementMapView node, String in2) {
+      node.setIn2(in2);
+    }
+
+    @ReactProp(name = "scale")
+    public void setScale(FeDisplacementMapView node, Dynamic scale) {
+      node.setScale(scale);
+    }
+
+    @ReactProp(name = "xChannelSelector")
+    public void setXChannelSelector(FeDisplacementMapView node, String xChannelSelector) {
+      node.setXChannelSelector(xChannelSelector);
+    }
+
+    @ReactProp(name = "yChannelSelector")
+    public void setYChannelSelector(FeDisplacementMapView node, String yChannelSelector) {
+      node.setYChannelSelector(yChannelSelector);
     }
   }
 
