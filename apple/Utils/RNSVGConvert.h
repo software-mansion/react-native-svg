@@ -1,6 +1,7 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <react/renderer/components/rnsvg/Props.h>
 #import "RNSVGBlendMode.h"
+#import "RNSVGChannelSelector.h"
 #import "RNSVGColorMatrixType.h"
 #import "RNSVGCompositeOperator.h"
 #import "RNSVGEdgeMode.h"
@@ -20,6 +21,8 @@ namespace react = facebook::react;
 + (RNSVGEdgeMode)RNSVGEdgeModeFromCppEquivalent:(react::RNSVGFeGaussianBlurEdgeMode)edgeMode;
 + (RNSVGTurbulenceStitchTile)RNSVGTurbulenceStitchTileFromCppEquivalent:(react::RNSVGFeTurbulenceStitchTiles)stitchTiles;
 + (RNSVGTurbulenceType)RNSVGTurbulenceTypeFromCppEquivalent:(react::RNSVGFeTurbulenceType)type;
++ (RNSVGChannelSelector)RNSVGXChannelSelectorFromCppEquivalent:(react::RNSVGFeDisplacementMapXChannelSelector)type;
++ (RNSVGChannelSelector)RNSVGYChannelSelectorFromCppEquivalent:(react::RNSVGFeDisplacementMapYChannelSelector)type;
 
 @end
 

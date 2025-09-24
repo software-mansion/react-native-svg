@@ -37,7 +37,7 @@ function CustomExample() {
   return (
     <Svg viewBox="0 0 200 200">
       <Filter id="noise">
-        <FeTurbulence baseFrequency="0.01 0.4" result="NOISE" numOctaves="2" />
+        <FeTurbulence baseFrequency="0.1 0.01" result="NOISE" numOctaves="2" />
         <FeDisplacementMap
           in="SourceGraphic"
           in2="NOISE"

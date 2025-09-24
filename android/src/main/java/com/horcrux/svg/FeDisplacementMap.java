@@ -102,6 +102,11 @@ class FeDisplacementMapView extends FilterPrimitiveView {
   }
 
   private int sampleBilinear(int[] pixels, int width, int height, float fx, float fy) {
+    if (fx < 0.0f) fx = 0.0f;
+    if (fy < 0.0f) fy = 0.0f;
+    if (fx > (float) (width - 1)) fx = (float) (width - 1);
+    if (fy > (float) (height - 1)) fy = (float) (height - 1);
+
     int x0 = (int) Math.floor(fx);
     int y0 = (int) Math.floor(fy);
     int x1 = x0 + 1;
@@ -126,9 +131,11 @@ class FeDisplacementMapView extends FilterPrimitiveView {
     float[] c0 = lerpColor(c00, c10, wx);
     float[] c1 = lerpColor(c01, c11, wx);
     float[] c = new float[4];
+
     for (int i = 0; i < 4; i++) {
       c[i] = c0[i] * (1 - wy) + c1[i] * wy;
     }
+
     return ((int) c[3] << 24) | ((int) c[0] << 16) | ((int) c[1] << 8) | (int) c[2];
   }
 

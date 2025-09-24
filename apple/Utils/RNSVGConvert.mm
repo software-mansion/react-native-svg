@@ -111,6 +111,38 @@
   }
 }
 
++ (RNSVGChannelSelector)RNSVGXChannelSelectorFromCppEquivalent:(react::RNSVGFeDisplacementMapXChannelSelector)channelSelector
+{
+  switch (channelSelector) {
+    case react::RNSVGFeDisplacementMapXChannelSelector::R:
+      return SVG_CHANNEL_SELECTOR_R;
+    case react::RNSVGFeDisplacementMapXChannelSelector::G:
+      return SVG_CHANNEL_SELECTOR_G;
+    case react::RNSVGFeDisplacementMapXChannelSelector::B:
+      return SVG_CHANNEL_SELECTOR_B;
+    case react::RNSVGFeDisplacementMapXChannelSelector::A:
+      return SVG_CHANNEL_SELECTOR_A;
+    default:
+      return SVG_CHANNEL_SELECTOR_A;
+  }
+}
+
++ (RNSVGChannelSelector)RNSVGYChannelSelectorFromCppEquivalent:(react::RNSVGFeDisplacementMapYChannelSelector)channelSelector
+{
+  switch (channelSelector) {
+    case react::RNSVGFeDisplacementMapYChannelSelector::R:
+      return SVG_CHANNEL_SELECTOR_R;
+    case react::RNSVGFeDisplacementMapYChannelSelector::G:
+      return SVG_CHANNEL_SELECTOR_G;
+    case react::RNSVGFeDisplacementMapYChannelSelector::B:
+      return SVG_CHANNEL_SELECTOR_B;
+    case react::RNSVGFeDisplacementMapYChannelSelector::A:
+      return SVG_CHANNEL_SELECTOR_A;
+    default:
+      return SVG_CHANNEL_SELECTOR_A;
+  }
+}
+
 @end
 
 #endif // RCT_NEW_ARCH_ENABLED
