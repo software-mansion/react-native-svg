@@ -236,6 +236,20 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _opacity = opacity;
 }
 
+- (void)setMarkerPath:(CGPathRef)markerPath
+{
+  if (_markerPath == markerPath) {
+    return;
+  }
+  
+  if (_markerPath) {
+    CGPathRelease(_markerPath);
+  }
+  
+  _markerPath = markerPath;
+  [self invalidate];
+}
+
 - (void)setMatrix:(CGAffineTransform)matrix
 {
   if (CGAffineTransformEqualToTransform(matrix, _matrix)) {
