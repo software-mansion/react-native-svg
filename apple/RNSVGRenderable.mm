@@ -220,7 +220,6 @@ static RNSVGRenderable *_contextElement;
   _lastMergedList = nil;
   _attributeList = nil;
   _sourceStrokeDashArray = nil;
-  _strokeDashArrayData = nil;
   _srcHitPath = nil;
   CGPathRelease(_hitArea);
   _hitArea = nil;

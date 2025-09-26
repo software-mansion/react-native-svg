@@ -631,6 +631,9 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   CGPathRelease(_cachedClipPath);
   CGPathRelease(_strokePath);
   CGPathRelease(_path);
+  if (_markerPath) {
+    CGPathRelease(_markerPath);
+  }
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
