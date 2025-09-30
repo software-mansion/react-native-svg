@@ -270,12 +270,13 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 #ifdef RCT_NEW_ARCH_ENABLED
   if (_eventEmitter != nullptr) {
     static_cast<const RNSVGGroupEventEmitter &>(*_eventEmitter)
-        .onSvgLayout(
-            {.layout = {
-                 .x = static_cast<int>(_clientRect.origin.x),
-                 .y = static_cast<int>(_clientRect.origin.y),
-                 .width = static_cast<int>(_clientRect.size.width),
-                 .height = static_cast<int>(_clientRect.size.height)}});
+      .onSvgLayout(
+        {.layout = {
+            .x = static_cast<int>(_clientRect.origin.x),
+            .y = static_cast<int>(_clientRect.origin.y),
+            .width = static_cast<int>(_clientRect.size.width),
+            .height = static_cast<int>(_clientRect.size.height)
+        }});
   }
 #else
   if (self.onSvgLayout) {
